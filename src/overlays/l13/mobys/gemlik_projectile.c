@@ -145,7 +145,8 @@ void update_gemlik_projectile(struct Moby *moby) {
                     l13_moby_hit_entries[(unsigned char)ent[0xA4]].s2A =
                         *(unsigned short *)((char *)moby + 0xA6);
                     {
-                        struct L13Ent00178480 *matched_target_hit_entry = &l13_moby_hit_entries[(unsigned char)ent[0xA4]];
+                        struct L13Ent00178480 *matched_target_hit_entry =
+                            &l13_moby_hit_entries[(unsigned char)ent[0xA4]];
                         matched_target_hit_entry->i24 = hit_mask;
                     }
                 }
@@ -159,7 +160,8 @@ void update_gemlik_projectile(struct Moby *moby) {
     work.hit[0x18] = 1;
     work.hit[0x19] = 1;
     stationary = *(int *)(projectile_vars + 0x24) == 0;
-    if (*(float *)(projectile_vars + 0x28) < vector_distance_xy(&moby->pos, projectile_vars + 0x10) ||
+    if (*(float *)(projectile_vars + 0x28) <
+            vector_distance_xy(&moby->pos, projectile_vars + 0x10) ||
         fast_dec_timer(projectile_vars + 0x2C) != 0) {
         if (moby->visible != 0) {
             int i;
@@ -182,7 +184,8 @@ void update_gemlik_projectile(struct Moby *moby) {
         }
         goto remove;
     }
-    if (collision_line(&work.old_pos, &moby->pos, stationary, *(void **)(projectile_vars + 0x20), work.hit) ==
+    if (collision_line(
+            &work.old_pos, &moby->pos, stationary, *(void **)(projectile_vars + 0x20), work.hit) ==
         0)
         goto bounds;
     qcopy(&moby->pos, &coll_hit_1638.point);

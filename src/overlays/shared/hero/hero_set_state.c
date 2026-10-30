@@ -64,8 +64,10 @@ void update_hero_motion_and_collision_probes(void) {
         hero.edge_drop_depth = 0.0f;
         if (hero.grounded_frames != 0) {
             line_probe_local_y_offset = hero.edge_drop_depth;
-            transform_hero_local_offset_to_world(&line_probe_start, 1.1f, line_probe_local_y_offset, 1.0f);
-            transform_hero_local_offset_to_world(&line_probe_end, 1.1f, line_probe_local_y_offset, -20.0f);
+            transform_hero_local_offset_to_world(
+                &line_probe_start, 1.1f, line_probe_local_y_offset, 1.0f);
+            transform_hero_local_offset_to_world(
+                &line_probe_end, 1.1f, line_probe_local_y_offset, -20.0f);
             if (line_probe_end.f[2] < 0.5f) {
                 line_probe_end.f[2] = 0.5f;
             }
@@ -1477,8 +1479,12 @@ int hero_set_state(int a, int b) {
         p->unk5B8 = 0;
         p->unk5BC = 0;
         p->rail_jump_queued = 0;
-        sample_path(
-            p->rail_spline, (char *)&sampled_path_position, (char *)&i, (char *)&f, p->rail_spline_loops, 1.0f);
+        sample_path(p->rail_spline,
+                    (char *)&sampled_path_position,
+                    (char *)&i,
+                    (char *)&f,
+                    p->rail_spline_loops,
+                    1.0f);
         fast_vec_sub(&d.v, &sampled_path_position, &p->motion.pos);
         if (0.001f < fast_vec_length(&d.v)) {
             fast_vec_normalize(&d.v, &d.v, 1.0f);

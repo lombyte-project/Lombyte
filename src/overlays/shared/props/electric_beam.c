@@ -233,7 +233,8 @@ void start_electric_beam_pulse(char *moby) {
             random_vector(&beam->branch_steps[k][branch],
                           0.0f,
                           electric_beam_max_point_speed_gp * frame_time);
-            fast_vec_add(&beam->branches[k][branch], &beam->branches[k - 1][branch], &beam_geometry_scratch);
+            fast_vec_add(
+                &beam->branches[k][branch], &beam->branches[k - 1][branch], &beam_geometry_scratch);
             fast_vec_add(&beam->branches[k][branch], &beam->branches[k][branch], &delta);
         }
     }
@@ -476,8 +477,9 @@ void draw_electric_beam(char *moby) {
         for (branch_segment_index = 0; branch_segment_index < 3; branch_segment_index++) {
             qcopy(prev_offset, offset);
             if (branch_segment_index < 2) {
-                fast_vec_sub(
-                    tangent, &beam->branches[branch_segment_index][branch], &beam->branches[branch_segment_index + 2][branch]);
+                fast_vec_sub(tangent,
+                             &beam->branches[branch_segment_index][branch],
+                             &beam->branches[branch_segment_index + 2][branch]);
                 fast_vec_sub(view, &beam->branches[branch_segment_index + 1][branch], camera);
                 fast_vec_cross(offset, view, tangent);
                 fast_vec_normalize(offset, offset, 0.1f);
@@ -488,7 +490,8 @@ void draw_electric_beam(char *moby) {
                 qcopy(prev_offset, offset);
             for (corner = 0; corner < 4; corner++) {
                 if (corner < 2) {
-                    qcopy(&packet[0].vertices[corner], &beam->branches[branch_segment_index][branch]);
+                    qcopy(&packet[0].vertices[corner],
+                          &beam->branches[branch_segment_index][branch]);
                     if (corner & 1)
                         fast_vec_add(
                             &packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
@@ -496,7 +499,8 @@ void draw_electric_beam(char *moby) {
                         fast_vec_sub(
                             &packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
                 } else {
-                    qcopy(&packet[0].vertices[corner], &beam->branches[branch_segment_index + 1][branch]);
+                    qcopy(&packet[0].vertices[corner],
+                          &beam->branches[branch_segment_index + 1][branch]);
                     if (corner & 1)
                         fast_vec_add(
                             &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
@@ -507,8 +511,10 @@ void draw_electric_beam(char *moby) {
                 /* Fakematch: 32 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
                 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 packet[0]
-                    .uv[corner][0] = electric_beam_base_uv[corner][0] +
-                                     convert_integer_to_float(branch_segment_index - branch_segment_index / 4 * 4) * 0.25f;
+                    .uv[corner][0] =
+                    electric_beam_base_uv[corner][0] +
+                    convert_integer_to_float(branch_segment_index - branch_segment_index / 4 * 4) *
+                        0.25f;
             }
             draw_geometry_quad(&packet[0], world, 0);
         }

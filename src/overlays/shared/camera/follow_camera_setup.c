@@ -448,12 +448,13 @@ extern char  collision_hit_point[] __asm__("D_L00_00173E60");
 void rebuild_follow_camera_pose(int snap) __asm__("FUN_L00_002e66b8");
 
 void rebuild_follow_camera_pose(int snap) {
-    char  *cams = (char *)&l00_camera;
-    char  *camera_moby = *(char **)(cams + 0x180);
-    char  *track = cams + 0x190; /* the followed player: position at 0, up vector at 0x30 */
-    char  *follow_camera_state = *(char **)(camera_moby + 0x70);
-    char  *orbit = follow_camera_state + 0x130; /* distance at 0x2C, height at 0x30 */
-    char  *target = follow_camera_state + 0x40; /* point looked at; eye height at 0xB0, moby at 0xC0 */
+    char *cams = (char *)&l00_camera;
+    char *camera_moby = *(char **)(cams + 0x180);
+    char *track = cams + 0x190; /* the followed player: position at 0, up vector at 0x30 */
+    char *follow_camera_state = *(char **)(camera_moby + 0x70);
+    char *orbit = follow_camera_state + 0x130; /* distance at 0x2C, height at 0x30 */
+    char *target =
+        follow_camera_state + 0x40; /* point looked at; eye height at 0xB0, moby at 0xC0 */
     float  up[4], rise[4], look[4], eye[4];
     int    mask;
     float *from, *to;
@@ -1138,7 +1139,12 @@ int adjust_follow_camera_orbit_probe_for_collisions(O002e7530 *camera_moby,
 
 int adjust_follow_camera_orbit_probe_for_collisions(
 
-    O002e7530 *camera_moby, V002e7530 *orbit_probe_position, int step, float radial_adjustment_distance, float spd) {
+    O002e7530 *camera_moby,
+    V002e7530 *orbit_probe_position,
+    int        step,
+    float      radial_adjustment_distance,
+
+    float spd) {
     V002e7530 delta, probe_to_start_delta, start, hit, near, path_segment_end, path_segment_point,
         additional_collision_delta;
     V002e7530 *path;
@@ -1181,7 +1187,8 @@ int adjust_follow_camera_orbit_probe_for_collisions(
                                               radius - measure,
                                               radial_adjustment_distance);
         qcopy(orbit_probe_position, &near);
-        if (coll_sphere_2e7618(orbit_probe_position, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
+        if (coll_sphere_2e7618(
+                orbit_probe_position, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
             fast_vec_sub(&probe_to_start_delta, &start, orbit_probe_position);
             fast_vec_add(&hit, &D_L00_00173E60, &probe_to_start_delta);
             measure = resolve_level_path_segment_point(
@@ -1201,7 +1208,8 @@ int adjust_follow_camera_orbit_probe_for_collisions(
                                                       radial_adjustment_distance);
                 fast_vec_add(&delta, &delta, &additional_collision_delta);
                 qcopy(orbit_probe_position, &coll_hit_position);
-                if (coll_sphere_2e7618(orbit_probe_position, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
+                if (coll_sphere_2e7618(
+                        orbit_probe_position, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
                     fast_vec_sub(&probe_to_start_delta, &start, orbit_probe_position);
                     fast_vec_add(&hit, &D_L00_00173E60, &probe_to_start_delta);
                     measure = resolve_level_path_segment_point(
@@ -1480,7 +1488,9 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
             }
             fast_vec_sub(&moby_offset_or_camera_endpoint, nearby_moby + 0x10, (x + 0x90));
             fast_vec_scale(
-                &v20, camera_tracking_state + 0x30, fast_vec_dot(camera_tracking_state + 0x30, &moby_offset_or_camera_endpoint));
+                &v20,
+                camera_tracking_state + 0x30,
+                fast_vec_dot(camera_tracking_state + 0x30, &moby_offset_or_camera_endpoint));
             fast_vec_sub(&planar_moby_direction, &moby_offset_or_camera_endpoint, &v20);
             fast_vec_normalize(&planar_moby_direction, &planar_moby_direction, 1.0f);
             f = fast_vec_dot(&planar_moby_direction, orbit_state);
@@ -1489,9 +1499,11 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
                 fast_vec_cross(&orbit_side_direction, orbit_state, camera_tracking_state + 0x30);
                 fast_vec_normalize(&orbit_side_direction, &orbit_side_direction, 1.0f);
                 if (0.0f < fast_vec_dot(&orbit_side_direction, &moby_offset_or_camera_endpoint)) {
-                    build_look_at_matrix(orbit_state, orbit_state, camera_tracking_state + 0x20, -0.017453292f);
+                    build_look_at_matrix(
+                        orbit_state, orbit_state, camera_tracking_state + 0x20, -0.017453292f);
                 } else {
-                    build_look_at_matrix(orbit_state, orbit_state, camera_tracking_state + 0x20, 0.017453292f);
+                    build_look_at_matrix(
+                        orbit_state, orbit_state, camera_tracking_state + 0x20, 0.017453292f);
                 }
             }
         next:

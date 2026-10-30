@@ -36,12 +36,12 @@ s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
     struct PES_TBL header_skip_bit_counts;
     s32            ctx;
     s32            flag1;
-    s32            pes_header_data_length;  /* PES_header_data_length */
-    s32            header_data_start_bit_position;                    /* (s32)bs->stamp, captured before the header fields */
-    s64            now;                     /* the same stamp, re-read at the sync point */
-    s32            pts_dts_flags;           /* PTS_DTS_flags */
-    s32            header_skip_table_index; /* 4-bit length, indexes tbl */
-    s32            pes_extension_flag;      /* PES_extension_flag */
+    s32            pes_header_data_length; /* PES_header_data_length */
+    s32 header_data_start_bit_position;    /* (s32)bs->stamp, captured before the header fields */
+    s64 now;                               /* the same stamp, re-read at the sync point */
+    s32 pts_dts_flags;                     /* PTS_DTS_flags */
+    s32 header_skip_table_index;           /* 4-bit length, indexes tbl */
+    s32 pes_extension_flag;                /* PES_extension_flag */
 
     ctx = error_context;
     hdr->unk28 = (s32)bs->stamp;

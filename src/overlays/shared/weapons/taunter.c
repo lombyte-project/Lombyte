@@ -382,20 +382,28 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
                 /* Fakematch: &hero through the motion label keeps retail's &hero + 0x98 load below. */
                 player = (struct Hero *)(D_0013F3D0 - 0x80);
                 distance = vector_distance_xy(&pos, (u8 *)taunter_candidate_moby + 0x10);
-                if (distance < 12.0f && ((u16)(*(u16 *)((u8 *)taunter_candidate_moby + 0xa6) - 500) < 2 ||
-                                         *(s16 *)((u8 *)taunter_candidate_moby + 0xa6) == 0x1f9 ||
-                                         *(s16 *)((u8 *)taunter_candidate_moby + 0xa6) == 0x1ff)) {
+                if (distance < 12.0f &&
+                    ((u16)(*(u16 *)((u8 *)taunter_candidate_moby + 0xa6) - 500) < 2 ||
+                     *(s16 *)((u8 *)taunter_candidate_moby + 0xa6) == 0x1f9 ||
+                     *(s16 *)((u8 *)taunter_candidate_moby + 0xa6) == 0x1ff)) {
                     struct Hero *g = &hero;
                     angle = fast_difference_between_rotations(
                         g->motion.rot.f[2],
-                        fast_arc_tan(*(f32 *)((u8 *)taunter_candidate_moby + 0x10) - g->motion.pos.f[0],
-                                     *(f32 *)((u8 *)taunter_candidate_moby + 0x14) - g->motion.pos.f[1]));
+                        fast_arc_tan(
+                            *(f32 *)((u8 *)taunter_candidate_moby + 0x10) - g->motion.pos.f[0],
+                            *(f32 *)((u8 *)taunter_candidate_moby + 0x14) - g->motion.pos.f[1]));
                     if (angle < 0.9599311f) {
                         if (vars->pad14 == limit) {
-                            fast_vec_sub(&velocity, (u8 *)taunter_candidate_moby + 0x10, (u8 *)taunter_moby + 0x10);
+                            fast_vec_sub(&velocity,
+                                         (u8 *)taunter_candidate_moby + 0x10,
+                                         (u8 *)taunter_moby + 0x10);
                             fast_vec_normalize(&velocity, &velocity, 1.5f);
-                            spawn_nearby_effect(
-                                taunter_candidate_moby, taunter_moby, 0x10000, &g->motion.pos, &velocity, 1.0f);
+                            spawn_nearby_effect(taunter_candidate_moby,
+                                                taunter_moby,
+                                                0x10000,
+                                                &g->motion.pos,
+                                                &velocity,
+                                                1.0f);
                             vars->frame = scale_game_frames(random_int_between(5, 0x2d));
                         }
                         vars->pad14++;
@@ -403,13 +411,15 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
                 }
                 if (distance < radius) {
                     struct Hero *g = &hero;
-                    angle = fast_arc_tan(*(f32 *)((u8 *)taunter_candidate_moby + 0x10) - g->motion.pos.f[0],
-                                         *(f32 *)((u8 *)taunter_candidate_moby + 0x14) - g->motion.pos.f[1]);
+                    angle = fast_arc_tan(
+                        *(f32 *)((u8 *)taunter_candidate_moby + 0x10) - g->motion.pos.f[0],
+                        *(f32 *)((u8 *)taunter_candidate_moby + 0x14) - g->motion.pos.f[1]);
                     angle = fast_difference_between_rotations(player->motion.rot.f[2], angle);
                     if (angle < 0.9599311f) {
                         Moby *current = *(Moby **)(state + 0x18);
-                        if (current == 0 || distance < vector_distance_xy((u8 *)current + 0x10,
-                                                                          (u8 *)taunter_candidate_moby + 0x10)) {
+                        if (current == 0 ||
+                            distance < vector_distance_xy((u8 *)current + 0x10,
+                                                          (u8 *)taunter_candidate_moby + 0x10)) {
                             *(Moby **)(state + 0x18) = taunter_moby;
                             count++;
                         }
@@ -428,8 +438,9 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
             if (distance < radius) {
                 angle = fast_difference_between_rotations(
                     hero.motion.rot.f[2],
-                    fast_arc_tan(*(f32 *)((u8 *)taunter_candidate_moby + 0x10) - hero.motion.pos.f[0],
-                                 *(f32 *)((u8 *)taunter_candidate_moby + 0x14) - hero.motion.pos.f[1]));
+                    fast_arc_tan(
+                        *(f32 *)((u8 *)taunter_candidate_moby + 0x10) - hero.motion.pos.f[0],
+                        *(f32 *)((u8 *)taunter_candidate_moby + 0x14) - hero.motion.pos.f[1]));
                 if (angle < 0.9599311f) {
                     *(Moby **)((u8 *)vars + 0x78) = taunter_moby;
                     count++;

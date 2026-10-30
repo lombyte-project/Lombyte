@@ -127,17 +127,24 @@ void elevator_with_button_update(struct Moby *moby) {
             max_speed = frame_time_sq;
         }
         target = moby->state == 2 ? 1.0f : 0.0f;
-        advance_accelerated_scalar(
-            &elevator_vars->progress, &elevator_vars->speed, target, max_speed, max_speed, progress_speed_limit);
-        moby->pos.z = (elevator_vars->top - elevator_vars->bottom) * elevator_vars->progress + elevator_vars->bottom;
-        moby->rot.z =
-            fast_subtract_rotations(l05_cuboids[elevator_vars->pose].rot.z, elevator_vars->base_yaw) * elevator_vars->progress;
+        advance_accelerated_scalar(&elevator_vars->progress,
+                                   &elevator_vars->speed,
+                                   target,
+                                   max_speed,
+                                   max_speed,
+                                   progress_speed_limit);
+        moby->pos.z = (elevator_vars->top - elevator_vars->bottom) * elevator_vars->progress +
+                      elevator_vars->bottom;
+        moby->rot.z = fast_subtract_rotations(l05_cuboids[elevator_vars->pose].rot.z,
+                                              elevator_vars->base_yaw) *
+                      elevator_vars->progress;
         moby->rot.z = fast_add_rotations(moby->rot.z, elevator_vars->base_yaw);
         if (absolute_float(elevator_vars->progress - target) < 0.01f) {
             elevator_vars->timer = scale_game_frames(120);
             if (elevator_vars->sound != -1) {
                 LiftVoiceWindow *window =
-                    (LiftVoiceWindow *)((u8 *)&voice_pool + elevator_vars->sound * sizeof(LiftVoice));
+                    (LiftVoiceWindow *)((u8 *)&voice_pool +
+                                        elevator_vars->sound * sizeof(LiftVoice));
                 if (window->voice.owner == moby && window->voice.state != 0) {
                     release_voice_slot(elevator_vars->sound);
                 }
@@ -237,7 +244,8 @@ void elevator_with_button_update(struct Moby *moby) {
             }
         } else if (moby->state == 5) {
             f32 dist = vector_distance_xy(&moby->pos, &hero.motion.pos);
-            if (absolute_float(hero.ground_z.f - elevator_vars->top) < 2.0f && dist < 32.0f && dist > 5.0f) {
+            if (absolute_float(hero.ground_z.f - elevator_vars->top) < 2.0f && dist < 32.0f &&
+                dist > 5.0f) {
                 moby->command = 0;
                 moby->state = 2;
             }

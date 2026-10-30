@@ -5441,10 +5441,12 @@ void draw_dual_texture_50_quad_mesh(void) {
     first_pass_quad_packet.unk70 = 0;
     matrix_ptr = matrix;
     set_identity_matrix(matrix);
-    first_pass_quad_packet.color[0] = first_pass_quad_packet.color[1] = first_pass_quad_packet.color[2] = first_pass_quad_packet.color[3] =
-        l06_dual_texture_mesh_first_pass_vertex_color;
-    second_pass_quad_packet.color[0] = second_pass_quad_packet.color[1] = second_pass_quad_packet.color[2] = second_pass_quad_packet.color[3] =
-        dual_texture_mesh_second_pass_vertex_color_gp;
+    first_pass_quad_packet.color[0] = first_pass_quad_packet.color[1] =
+        first_pass_quad_packet.color[2] = first_pass_quad_packet.color[3] =
+            l06_dual_texture_mesh_first_pass_vertex_color;
+    second_pass_quad_packet.color[0] = second_pass_quad_packet.color[1] =
+        second_pass_quad_packet.color[2] = second_pass_quad_packet.color[3] =
+            dual_texture_mesh_second_pass_vertex_color_gp;
     i = 0;
     do {
         fast_vec_scale(transformed_quad_center_or_normal,
@@ -5491,7 +5493,8 @@ void draw_dual_texture_58_quad_mesh(void) {
     int    i, j;
     float  facing;
 
-    mesh_first_pass_quad_packet.tex = get_effect_texture(dual_texture_mesh_first_pass_texture_index_gp);
+    mesh_first_pass_quad_packet.tex =
+        get_effect_texture(dual_texture_mesh_first_pass_texture_index_gp);
     mesh_second_pass_quad_packet.tex = get_effect_texture(0x2a);
     matrix_ptr = matrix;
     flags = (long)dual_texture_mesh_blend_color_a_selector_gp |
@@ -5531,8 +5534,9 @@ void draw_dual_texture_58_quad_mesh(void) {
                 int   vertex_index = D_L06_001EF310[i][j][0];
                 int   uv_index = D_L06_001EF310[i][j][1];
                 float u, v;
-                fast_vec_scale(
-                    &mesh_first_pass_quad_packet.v[j], D_L06_001EED30[vertex_index], dual_texture_mesh_position_scale_gp);
+                fast_vec_scale(&mesh_first_pass_quad_packet.v[j],
+                               D_L06_001EED30[vertex_index],
+                               dual_texture_mesh_position_scale_gp);
                 qcopy(&mesh_second_pass_quad_packet.v[j], &mesh_first_pass_quad_packet.v[j]);
                 u = D_L06_001EF6B0[uv_index][0];
                 v = D_L06_001EF6B0[uv_index][1];
@@ -5562,7 +5566,8 @@ void draw_dual_texture_864_quad_mesh(void) {
     int           i, j;
     float         facing;
 
-    first_texture_pass_quad_packet.tex = get_effect_texture(dual_texture_mesh_first_pass_texture_index_gp);
+    first_texture_pass_quad_packet.tex =
+        get_effect_texture(dual_texture_mesh_first_pass_texture_index_gp);
     second_texture_pass_quad_packet.tex = get_effect_texture(0x2a);
     matrix_ptr = matrix;
     flags = (long)dual_texture_mesh_blend_color_a_selector_gp |
@@ -5604,8 +5609,9 @@ void draw_dual_texture_864_quad_mesh(void) {
                 int   vertex_index = D_L06_001DF6F0[i][j][0];
                 int   uv_index = D_L06_001DF6F0[i][j][1];
                 float u, v;
-                fast_vec_scale(
-                    &first_texture_pass_quad_packet.v[j], D_L06_001DBFF0[vertex_index], dual_texture_mesh_position_scale_gp);
+                fast_vec_scale(&first_texture_pass_quad_packet.v[j],
+                               D_L06_001DBFF0[vertex_index],
+                               dual_texture_mesh_position_scale_gp);
                 qcopy(&second_texture_pass_quad_packet.v[j], &first_texture_pass_quad_packet.v[j]);
                 u = D_L06_001E2CF0[uv_index][0];
                 v = D_L06_001E2CF0[uv_index][1];

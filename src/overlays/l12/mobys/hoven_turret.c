@@ -266,7 +266,8 @@ void hoven_turret_update(struct Moby *moby) {
             } else {
                 moby->pos.z = hoven_turret_state->fA0;
             }
-            if (((Hero *)(D_0013E533 + 0xE1D))->ground_moby != moby && hoven_turret_state->f98 != -1) {
+            if (((Hero *)(D_0013E533 + 0xE1D))->ground_moby != moby &&
+                hoven_turret_state->f98 != -1) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
             }
         }
@@ -320,8 +321,9 @@ void hoven_turret_update(struct Moby *moby) {
             }
         }
         if (hoven_turret_state->f94 != -1 &&
-            (signed char)((struct Moby *)((hoven_turret_state->f94 << 8) + (*(int *)&D_L12_0015FFD8_gp)))->state <
-                0) {
+            (signed char)((struct Moby *)((hoven_turret_state->f94 << 8) +
+                                          (*(int *)&D_L12_0015FFD8_gp)))
+                    ->state < 0) {
             if (D_L12_0015F5C4_macro == 2) {
                 if (hoven_turret_state->b1 != 0) {
                     detach_manipulator(moby, hoven_turret_state);
@@ -395,7 +397,8 @@ void hoven_turret_update(struct Moby *moby) {
                                hoven_turret_pitch_braking_rate * 0.017453292f *
                                    frame_time_sq_macro);
             }
-            hoven_turret_state->f74 = fast_add_rotations(hoven_turret_state->f74, hoven_turret_state->f78);
+            hoven_turret_state->f74 =
+                fast_add_rotations(hoven_turret_state->f74, hoven_turret_state->f78);
             if (hoven_turret_state->f74 > hoven_turret_pitch_max) {
                 hoven_turret_state->f74 = hoven_turret_pitch_max;
             }
@@ -415,8 +418,10 @@ void hoven_turret_update(struct Moby *moby) {
 
                 blend_moby_animation(moby, hoven_turret_state->f80 == 1 ? 4 : 3, 0, 1);
                 yaw = fast_add_rotations(moby->rot.z, 1.5707964f);
-                build_spherical_offset(
-                    firing_offset, hoven_turret_firing_offset_rate * D_0015ED6C_gp, yaw, hoven_turret_state->f74);
+                build_spherical_offset(firing_offset,
+                                       hoven_turret_firing_offset_rate * D_0015ED6C_gp,
+                                       yaw,
+                                       hoven_turret_state->f74);
                 if (hoven_turret_state->f80 == 1) {
                     hoven_turret_state->f80 = 0;
                     moby_point_position(moby, 2, muz);
@@ -647,7 +652,8 @@ void draw_hoven_turret_hud(Moby *moby) {
     uv[2] = hoven_turret_hud_health_dial_vertex_2_uv;
     uv[3] = hoven_turret_hud_health_dial_vertex_3_uv;
     if (hoven_turret_hud_state->f8C > 100.0f) {
-        color = fast_tween_color(0x6000FFFF, 0x6000FF00, (hoven_turret_hud_state->f8C - 100.0f) / 100.0f);
+        color = fast_tween_color(
+            0x6000FFFF, 0x6000FF00, (hoven_turret_hud_state->f8C - 100.0f) / 100.0f);
     } else {
         color = fast_tween_color(0x600000FF, 0x6000FFFF, hoven_turret_hud_state->f8C / 100.0f);
     }
@@ -706,15 +712,16 @@ void draw_hoven_turret_hud(Moby *moby) {
         func_L02_0020BF88_3055F8(xy, uv, colors, texture, 1);
     }
     if (scale_game_frames(0xF) < hoven_turret_hud_state->f88) {
-        color = fast_tween_color(0x5000FFFF,
-                                 0x500000FF,
-                                 convert_integer_to_float(hoven_turret_hud_state->f88 - scale_game_frames(0xF)) /
-                                     (float)scale_game_frames(0xF));
+        color = fast_tween_color(
+            0x5000FFFF,
+            0x500000FF,
+            convert_integer_to_float(hoven_turret_hud_state->f88 - scale_game_frames(0xF)) /
+                (float)scale_game_frames(0xF));
     } else {
-        color =
-            fast_tween_color(0x5000FF00,
-                             0x5000FFFF,
-                             convert_integer_to_float(hoven_turret_hud_state->f88) / (float)scale_game_frames(0xF));
+        color = fast_tween_color(0x5000FF00,
+                                 0x5000FFFF,
+                                 convert_integer_to_float(hoven_turret_hud_state->f88) /
+                                     (float)scale_game_frames(0xF));
     }
     uv[0] = hoven_turret_hud_orientation_indicator_vertex_0_uv;
     uv[1] = hoven_turret_hud_orientation_indicator_vertex_1_uv;
@@ -784,7 +791,8 @@ void draw_hoven_turret_hud(Moby *moby) {
         truncate_float_to_s32(fast_cos(angle) *
                               *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) +
         0x8000;
-    angle = fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, 1.5707964f));
+    angle =
+        fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, 1.5707964f));
     xy[1] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)
@@ -794,7 +802,8 @@ void draw_hoven_turret_hud(Moby *moby) {
         truncate_float_to_s32(fast_cos(angle) *
                               *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) +
         0x8000;
-    angle = fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, -1.5707964f));
+    angle =
+        fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, -1.5707964f));
     xy[2] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)
@@ -804,7 +813,8 @@ void draw_hoven_turret_hud(Moby *moby) {
         truncate_float_to_s32(fast_cos(angle) *
                               *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) +
         0x8000;
-    angle = fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, 3.1415927f));
+    angle =
+        fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, 3.1415927f));
     xy[3] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)

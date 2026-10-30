@@ -169,7 +169,8 @@ void blarg_trooper_update(struct Moby *moby) {
 
     flag = 0;
     blarg_trooper_pvars = (char *)moby->pvars;
-    if (*(int *)(blarg_trooper_pvars + 0x38) != 0 || *(unsigned char *)(blarg_trooper_pvars + 0xFE) != 0) {
+    if (*(int *)(blarg_trooper_pvars + 0x38) != 0 ||
+        *(unsigned char *)(blarg_trooper_pvars + 0xFE) != 0) {
         flag = 1;
     }
     pos = (float *)&moby->pos;
@@ -211,9 +212,9 @@ void blarg_trooper_update(struct Moby *moby) {
     bi = -1;
     best = 0.0f;
     qcopy(update_scratch.v50, &update_scratch.tgt[8]);
-    path = ((
-        struct Path5BD0 *)l04_paths[*(short *)(blarg_trooper_pvars + 0xE8) != 0 ? path_index_when_selector_nonzero
-                                                                 : path_index_when_selector_zero]);
+    path = ((struct Path5BD0 *)l04_paths[*(short *)(blarg_trooper_pvars + 0xE8) != 0
+                                             ? path_index_when_selector_nonzero
+                                             : path_index_when_selector_zero]);
     for (i = 0; i < path->count; i++) {
         float d = vector_distance_xy(update_scratch.v50, path->pts[i]);
         if (d > best) {
@@ -271,13 +272,17 @@ void blarg_trooper_update(struct Moby *moby) {
                 float d = frame_time * 13.0f;
                 *(float *)(blarg_trooper_pvars + 0x80) = a;
                 *(float *)(blarg_trooper_pvars + 0x88) = b;
-                *(float *)(blarg_trooper_pvars + 0x84) = fatal_knockback_horizontal_speed_adjustment;
+                *(float *)(blarg_trooper_pvars + 0x84) =
+                    fatal_knockback_horizontal_speed_adjustment;
                 *(float *)(blarg_trooper_pvars + 0x8C) = d;
             }
             *(OvlQuad *)update_scratch.w.p.v70 = *(OvlQuad *)(hit + 0x10);
-            trooper_knockback_arc(
-                update_scratch.w.p.v70, &fatal_knockback_yaw, blarg_trooper_pvars + 0x88, blarg_trooper_pvars + 0x8C);
-            trooper_start_knockback(fatal_knockback_yaw, moby, blarg_trooper_pvars + 0x70, 0xD, 1, 0);
+            trooper_knockback_arc(update_scratch.w.p.v70,
+                                  &fatal_knockback_yaw,
+                                  blarg_trooper_pvars + 0x88,
+                                  blarg_trooper_pvars + 0x8C);
+            trooper_start_knockback(
+                fatal_knockback_yaw, moby, blarg_trooper_pvars + 0x70, 0xD, 1, 0);
             *(float *)(blarg_trooper_pvars + 0xC0) = 12.0f;
             *(float *)(blarg_trooper_pvars + 0xC4) = 25.0f;
             moby->state = 0xB;
@@ -681,14 +686,15 @@ void blarg_trooper_update(struct Moby *moby) {
     case BLARG_TROOPER_STATE_BACKWARD_RECOVERY:
     case BLARG_TROOPER_STATE_KNOCKBACK_RECOVERY:
         if (*(float *)(blarg_trooper_pvars + 0xF4) > 0.0f) {
-            update_scratch.w.p.v70[0] =
-                fast_cos(fast_add_rotations(moby->rot.z, 3.1415927f)) * *(float *)(blarg_trooper_pvars + 0xF4);
-            update_scratch.w.p.v70[1] =
-                fast_sin(fast_add_rotations(moby->rot.z, 3.1415927f)) * *(float *)(blarg_trooper_pvars + 0xF4);
+            update_scratch.w.p.v70[0] = fast_cos(fast_add_rotations(moby->rot.z, 3.1415927f)) *
+                                        *(float *)(blarg_trooper_pvars + 0xF4);
+            update_scratch.w.p.v70[1] = fast_sin(fast_add_rotations(moby->rot.z, 3.1415927f)) *
+                                        *(float *)(blarg_trooper_pvars + 0xF4);
             update_scratch.w.p.v70[2] = 0.0f;
             fast_vec_add(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
             *(float *)(blarg_trooper_pvars + 0xF4) =
-                *(float *)(blarg_trooper_pvars + 0xF4) + -2.0f / (scale_time(15.0f) * scale_time(15.0f));
+                *(float *)(blarg_trooper_pvars + 0xF4) +
+                -2.0f / (scale_time(15.0f) * scale_time(15.0f));
             func_L00_002594C8_o(moby, pos, update_scratch.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 1);
         }
         if (moby->anim_flags & 2) {
@@ -733,8 +739,10 @@ void blarg_trooper_update(struct Moby *moby) {
         *(float *)(blarg_trooper_pvars + 0x178) = -*(float *)(blarg_trooper_pvars + 0x178);
         *(float *)(blarg_trooper_pvars + 0x1F8) = -*(float *)(blarg_trooper_pvars + 0x1F8);
     }
-    update_joint_animation(moby, blarg_trooper_pvars + 0x110, 5, frame_scale_sq * 0.018f, frame_scale_sq * 0.3f);
-    update_joint_animation(moby, blarg_trooper_pvars + 0x190, 6, frame_scale_sq * 0.024f, frame_scale_sq * 0.3f);
+    update_joint_animation(
+        moby, blarg_trooper_pvars + 0x110, 5, frame_scale_sq * 0.018f, frame_scale_sq * 0.3f);
+    update_joint_animation(
+        moby, blarg_trooper_pvars + 0x190, 6, frame_scale_sq * 0.024f, frame_scale_sq * 0.3f);
     if (*(char **)(blarg_trooper_pvars + 0xF8) != 0) {
         char *o;
         build_moby_bone_transform(moby, 1, (char *)update_scratch.w.m);
@@ -758,7 +766,8 @@ void blarg_trooper_update(struct Moby *moby) {
         moby_point_position(moby, 1, update_scratch.w.m);
         *(char **)(blarg_trooper_pvars + 0xF8) = spawn_moby_attachment(moby, update_scratch.w.m);
     }
-    *(float *)(blarg_trooper_pvars + 0xD0) = *(float *)(blarg_trooper_pvars + 0xD0) + frame_time_sq * 9.8f;
+    *(float *)(blarg_trooper_pvars + 0xD0) =
+        *(float *)(blarg_trooper_pvars + 0xD0) + frame_time_sq * 9.8f;
     moby->pos.z = moby->pos.z - (*(float *)(blarg_trooper_pvars + 0xD0) - 2.0f);
     {
         float g = probe_ground_height(pos, 0, 0.5f);

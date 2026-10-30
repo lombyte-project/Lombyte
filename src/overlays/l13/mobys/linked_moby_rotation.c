@@ -55,7 +55,8 @@ void update_linked_moby_rotation(struct Moby *moby) {
     case WAIT_TO_ADVANCE_ROTATION:
         if (rotation_vars->linked_index != -1 &&
             (linked = (struct Moby *)(D_L13_0015FFD8 + rotation_vars->linked_index * 0x100)) != 0 &&
-            linked->state != 0xFE && linked->state != 0xFD && linked->state != rotation_vars->active_state) {
+            linked->state != 0xFE && linked->state != 0xFD &&
+            linked->state != rotation_vars->active_state) {
             return;
         }
         if (rotation_vars->start_sound != -1) {
@@ -86,9 +87,12 @@ void update_linked_moby_rotation(struct Moby *moby) {
             moby->rot.z = fast_add_rotations(moby->rot.z, rotation_vars->angle[2] * radians * step);
             if (!(1.0f <= rotation_vars->progress))
                 return;
-            moby->rot.x = fast_add_rotations(rotation_vars->initial_rot[0], rotation_vars->angle[0] * radians);
-            moby->rot.y = fast_add_rotations(rotation_vars->initial_rot[1], rotation_vars->angle[1] * radians);
-            moby->rot.z = fast_add_rotations(rotation_vars->initial_rot[2], rotation_vars->angle[2] * radians);
+            moby->rot.x = fast_add_rotations(rotation_vars->initial_rot[0],
+                                             rotation_vars->angle[0] * radians);
+            moby->rot.y = fast_add_rotations(rotation_vars->initial_rot[1],
+                                             rotation_vars->angle[1] * radians);
+            moby->rot.z = fast_add_rotations(rotation_vars->initial_rot[2],
+                                             rotation_vars->angle[2] * radians);
             rotation_vars->progress = 1.0f;
             moby->state = 3;
             if (rotation_vars->end_sound != -1) {
@@ -113,7 +117,8 @@ void update_linked_moby_rotation(struct Moby *moby) {
     case REVERSE_ROTATION:
         if (rotation_vars->linked_index == -1 ||
             (linked = (struct Moby *)(D_L13_0015FFD8 + rotation_vars->linked_index * 0x100)) == 0 ||
-            linked->state == 0xFE || linked->state == 0xFD || linked->state == rotation_vars->active_state) {
+            linked->state == 0xFE || linked->state == 0xFD ||
+            linked->state == rotation_vars->active_state) {
             if (rotation_vars->start_sound != -1) {
                 allocate_voice_for_target_entry(rotation_vars->start_sound, 0, moby);
             }
@@ -124,9 +129,12 @@ void update_linked_moby_rotation(struct Moby *moby) {
             step = 1.0f;
             step /= rotation_vars->duration * 60.0f;
             rotation_vars->progress -= step;
-            moby->rot.x = fast_subtract_rotations(moby->rot.x, rotation_vars->angle[0] * radians * step);
-            moby->rot.y = fast_subtract_rotations(moby->rot.y, rotation_vars->angle[1] * radians * step);
-            moby->rot.z = fast_subtract_rotations(moby->rot.z, rotation_vars->angle[2] * radians * step);
+            moby->rot.x =
+                fast_subtract_rotations(moby->rot.x, rotation_vars->angle[0] * radians * step);
+            moby->rot.y =
+                fast_subtract_rotations(moby->rot.y, rotation_vars->angle[1] * radians * step);
+            moby->rot.z =
+                fast_subtract_rotations(moby->rot.z, rotation_vars->angle[2] * radians * step);
             if (!(rotation_vars->progress <= 0.0f))
                 return;
             moby->rot.x = rotation_vars->initial_rot[0];

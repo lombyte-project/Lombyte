@@ -643,14 +643,17 @@ int generate_random_points_from_shape_entries(
                     case SHAPE_INDEXED_CENTER_SPHERE: {
                         if (type < 2) {
                             qcopy(&shape_anchor, (void *)((entry + 0x10)));
-                            scale_vector(*(float *)(entity + 0x2c) * 0.0009765625f, &shape_anchor, &shape_anchor);
+                            scale_vector(*(float *)(entity + 0x2c) * 0.0009765625f,
+                                         &shape_anchor,
+                                         &shape_anchor);
                             radius = shape_anchor.f[3];
                         } else {
                             qcopy(&shape_anchor, (void *)((0x70000000 + (*(int *)list << 4))));
                             qcopy(&second, (void *)((entry + 0x10)));
                             fast_vec_add(&shape_anchor, &shape_anchor, &second);
-                            FUN_001f9a68_25aca0(
-                                *(float *)(entity + 0x2c) * 0.0009765625f, &shape_anchor, &shape_anchor);
+                            FUN_001f9a68_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f,
+                                                &shape_anchor,
+                                                &shape_anchor);
                             radius = *(float *)(entity + 0x2c);
                             radius = *(float *)(list + 8) * radius * 0.0009765625f;
                         }
@@ -660,7 +663,8 @@ int generate_random_points_from_shape_entries(
                     case SHAPE_XY_DISK_WITH_Z_EXTENT: {
                         float radius, extent;
                         qcopy(&shape_anchor, (void *)((entry + 0x10)));
-                        FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &shape_anchor, &shape_anchor);
+                        FUN_001f9a68_25aca0(
+                            *(float *)(entity + 0x2c), &shape_anchor, &shape_anchor);
                         radius = shape_anchor.f[3] * *(float *)(entity + 0x2c);
                         radius *= 0.0009765625f;
                         extent = *(float *)list * (*(float *)(entity + 0x2c) * 0.0009765625f);
@@ -757,8 +761,9 @@ int generate_random_points_from_shape_entries(
         case SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET: {
             float extent, weight;
             list = entry + 4;
-            FUN_001251e8_25aca0(
-                *(float *)(entity + 0x2c), &shape_anchor, (void *)(0x70000000 + (*(short *)list << 4)));
+            FUN_001251e8_25aca0(*(float *)(entity + 0x2c),
+                                &shape_anchor,
+                                (void *)(0x70000000 + (*(short *)list << 4)));
             FUN_001251e8_25aca0(*(float *)(entity + 0x2c),
                                 &second,
                                 (void *)(0x70000000 + (*(short *)(list + 2) << 4)));

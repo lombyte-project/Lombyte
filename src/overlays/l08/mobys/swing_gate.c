@@ -61,7 +61,8 @@ void update_swing_gate(struct Moby *moby) {
     }
     if (moby->state != 1)
         return;
-    yaw = fast_subtract_rotations(swing_gate_vars->open_deg * DEG_TO_RAD, swing_gate_vars->shut_deg * DEG_TO_RAD);
+    yaw = fast_subtract_rotations(swing_gate_vars->open_deg * DEG_TO_RAD,
+                                  swing_gate_vars->shut_deg * DEG_TO_RAD);
     yaw = fast_add_rotations(yaw * progress, swing_gate_vars->shut_deg * DEG_TO_RAD);
     if (fast_difference_between_rotations(moby->rot.y, yaw) != 0.0f) {
         moby->rot.y = yaw;
@@ -69,21 +70,24 @@ void update_swing_gate(struct Moby *moby) {
             if (!voice_is_playing(moby, swing_gate_vars->voice)) {
                 swing_gate_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
                 vendor_volume(swing_gate_vars->voice, 1);
-            } else if (((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))->volume <
-                       0x400) {
-                vendor_volume(swing_gate_vars->voice,
-                              ((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))->volume +
-                                  0x400 / scale_game_frames(60));
+            } else if (((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))
+                           ->volume < 0x400) {
+                vendor_volume(
+                    swing_gate_vars->voice,
+                    ((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))->volume +
+                        0x400 / scale_game_frames(60));
             }
         }
     } else if (moby->oclass == 0x1D4 && voice_is_playing(moby, swing_gate_vars->voice)) {
-        if (((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))->volume < 0x100) {
+        if (((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))->volume <
+            0x100) {
             release_voice_slot(swing_gate_vars->voice);
             swing_gate_vars->voice = -1;
         } else {
-            vendor_volume(swing_gate_vars->voice,
-                          ((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))->volume -
-                              0x400 / scale_game_frames(60));
+            vendor_volume(
+                swing_gate_vars->voice,
+                ((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))->volume -
+                    0x400 / scale_game_frames(60));
         }
     }
     euler_rotation_matrix(gate_rotation_matrix, &moby->rot);

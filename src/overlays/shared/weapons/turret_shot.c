@@ -177,7 +177,11 @@ void update_turret_shot(struct Moby *projectile_moby) {
         mark_moby_for_removal(projectile_moby);
         return;
     }
-    if (collision_line(&previous_projectile_position, &projectile_moby->pos, 0, projectile_vars->owner, probe) == 0)
+    if (collision_line(&previous_projectile_position,
+                       &projectile_moby->pos,
+                       0,
+                       projectile_vars->owner,
+                       probe) == 0)
         return;
 
     qcopy(&projectile_moby->pos, &l09_projectile_impact_position);

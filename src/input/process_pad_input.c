@@ -36,17 +36,8 @@ typedef struct Pad {
     u8    rep_timer; /* 0x34F */
 } Pad;
 
-<<<<<<< HEAD:src/input/process_pad_input.c
 extern volatile u8 D_0015EDB4;
 extern float       fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-=======
-extern volatile u8 draw_map51 __asm__("D_0015EDB4");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern float vector_length_xy(float *) __asm__("FUN_001f9b20");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern float convert_integer_to_float(s32) __asm__("func_001FA6C0");
->>>>>>> 03e5bcfa60 (decomp: clarify names in process_pad_input):src/input/pad/process_pad_input.c
 
 #define SWAPLR(x)                       \
     if ((x) & 0x8000) {                 \

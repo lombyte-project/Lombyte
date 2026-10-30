@@ -1281,7 +1281,8 @@ void process_hero_race_object_interactions(void) {
         green = 0xFF;
     if (*(s32 *)(state + 0x48) != -1) {
         if (hero.hoverboard_airborne == 0) {
-            get_first_moby_in_group((void **)&ground_boost_trigger_moby, *(s32 *)(state + 0x48), 0, 0);
+            get_first_moby_in_group(
+                (void **)&ground_boost_trigger_moby, *(s32 *)(state + 0x48), 0, 0);
             if (ground_boost_trigger_moby != 0) {
                 u32 color = (blue << 16) | (0x80000000U | (green << 8)) | red;
                 do {
@@ -1296,14 +1297,16 @@ void process_hero_race_object_interactions(void) {
                             if (absolute_float(delta[0]) < 2.8f &&
                                 absolute_float(delta[1]) < 1.25f &&
                                 absolute_float(delta[2]) < 1.5f) {
-                                hero.boost_pad_timer += **(s32 **)(ground_boost_trigger_moby + 0x78);
+                                hero.boost_pad_timer +=
+                                    **(s32 **)(ground_boost_trigger_moby + 0x78);
                                 ground_boost_trigger_moby[0xBC] = scale_game_frames(0x3C);
                                 if (hero.hoverboard_moby != 0)
                                     allocate_voice_for_target_entry(1, 0, hero.hoverboard_moby);
                             }
                         }
                     }
-                    get_next_moby_in_group((void **)&ground_boost_trigger_moby, ground_boost_trigger_moby, 0, 0);
+                    get_next_moby_in_group(
+                        (void **)&ground_boost_trigger_moby, ground_boost_trigger_moby, 0, 0);
                 } while (ground_boost_trigger_moby != 0);
             }
         }

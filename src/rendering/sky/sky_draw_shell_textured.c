@@ -67,8 +67,9 @@ void sky_draw_shell_textured(struct Shell *shell) {
         next_tile_index = i + 1;
         D_00160410 = 1 - D_00160410;
         if (next_tile_index < shell->count && visibility[next_tile_index] == 1) {
-            WriteDmaChannelRegisters(
-                shell->tiles[next_tile_index].address, shell->tiles[next_tile_index].unkE >> 4, D_00160408[D_00160410]);
+            WriteDmaChannelRegisters(shell->tiles[next_tile_index].address,
+                                     shell->tiles[next_tile_index].unkE >> 4,
+                                     D_00160408[D_00160410]);
         }
 
         if (visibility[i] == 1) {

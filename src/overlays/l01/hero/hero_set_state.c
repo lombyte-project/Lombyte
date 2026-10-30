@@ -1644,7 +1644,8 @@ int handle_hero_gadget_button(void) {
         if ((unsigned int)hero.state.control_mode < 2 ||
             (hero.state.control_mode == 4 && hero.rail_land_frames != 0)) {
             if (hero.on_slip_ground == 0 &&
-                pad_pressed_within(buttons, scale_game_frames(7), &wrench_button_history_age) != 0) {
+                pad_pressed_within(buttons, scale_game_frames(7), &wrench_button_history_age) !=
+                    0) {
                 moby = hero.items[0].moby;
                 if (moby != 0 && is_wrench_moby((char *)moby) != 0 && moby->state == 0) {
                     if ((controller_state.held & 0xa) != 0 ||
@@ -1737,7 +1738,8 @@ int handle_hero_gadget_button(void) {
                         start_equipped_item_animation();
                 } else if ((controller_state.held & buttons) != 0 && get_ammo(-1) == 0 &&
                            voice_is_playing(hero.items[0].moby, equipped_gadget_vars->voice) == 0) {
-                    equipped_gadget_vars->voice = allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
+                    equipped_gadget_vars->voice =
+                        allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
                 }
             }
         }
@@ -1781,7 +1783,9 @@ int handle_hero_gadget_button(void) {
             if (hero.state.current != 1) {
                 int limit = scale_game_frames(10);
                 int hold = hero.items[0].ready_frames;
-                if (pad_pressed_within(buttons, hold < limit ? hold : limit, &item_state_button_history_age) != 0 &&
+                if (pad_pressed_within(buttons,
+                                       hold < limit ? hold : limit,
+                                       &item_state_button_history_age) != 0 &&
                     hero.items[0].moby != 0) {
                     l01_hero_set_state(0x20, 1);
                     if (hero.items[0].moby != 0)

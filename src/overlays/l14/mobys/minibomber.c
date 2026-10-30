@@ -746,8 +746,12 @@ void update_minibomber_oscillation(struct Moby *moby) {
                            (float *)(minibomber_instance_vars + 0xC0),
                            (float *)(minibomber_instance_vars + 0xC4));
     }
-    FUN_L00_0025b8c0_c(
-        (float *)(minibomber_instance_vars + 0x160), (float *)(minibomber_instance_vars + 0x164), spring_target, 0.003f, 0.2f, 0.0f);
+    FUN_L00_0025b8c0_c((float *)(minibomber_instance_vars + 0x160),
+                       (float *)(minibomber_instance_vars + 0x164),
+                       spring_target,
+                       0.003f,
+                       0.2f,
+                       0.0f);
     FUN_L00_00262b80_c(moby,
                        minibomber_instance_vars + 0xC8,
                        minibomber_instance_vars + 0xCC,
@@ -764,7 +768,8 @@ void update_minibomber_target(struct Moby *moby) {
     char *minibomber_private_vars = (char *)moby->pvars;
     if (moby->state != 0 && moby->state != 9) {
         int *bound_path = ((int *)l14_paths[*(int *)(minibomber_private_vars + 0xD4)]);
-        FUN_L00_0025ff38(255.0f, moby, minibomber_private_vars + 0x70, 0, 0, bound_path + 4, *bound_path);
+        FUN_L00_0025ff38(
+            255.0f, moby, minibomber_private_vars + 0x70, 0, 0, bound_path + 4, *bound_path);
         if (*(int *)(minibomber_private_vars + 0xB0) == 0) {
             *(int *)(minibomber_private_vars + 0xB0) = *(int *)(D_0013E533 + 0x2E9D);
         }
@@ -1017,7 +1022,8 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float
     step = 0.6283f;
     for (j = 0; j < 16; j++) {
         effect_rotation_angle = randf_sym(0.0f, 0.5f);
-        build_look_at_matrix(direction, offset, small_offset, (float)j * step + effect_rotation_angle);
+        build_look_at_matrix(
+            direction, offset, small_offset, (float)j * step + effect_rotation_angle);
         effect_spawn_position[0] = original_pos[0] + randf_sym(0.0f, 0.2f);
         effect_spawn_position[1] = original_pos[1] + randf_sym(0.0f, 0.2f);
         effect_spawn_position[2] = original_pos[2] + randf_sym(0.0f, 0.2f);

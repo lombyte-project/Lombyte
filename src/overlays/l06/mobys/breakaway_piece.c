@@ -38,8 +38,8 @@ void update_breakaway_piece(char *moby) {
         } else {
             float bobbing_cycle_fraction = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
             float bobbing_sine_factor = fast_sin(bobbing_cycle_fraction * 6.28318f);
-            MOBY(moby)->pos.z =
-                *(float *)(bobbing_and_motion_vars + 0xC) + moby_bobbing_amplitude_gp * bobbing_sine_factor;
+            MOBY(moby)->pos.z = *(float *)(bobbing_and_motion_vars + 0xC) +
+                                moby_bobbing_amplitude_gp * bobbing_sine_factor;
         }
         break;
     case UPDATE_LINEAR_AND_ANGULAR_MOTION:

@@ -213,19 +213,21 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
     }
     for (pass = 0; pass < 6; pass = nextPass) {
         int parity = pass & 1;
-        uniform_color_quad.alpha = (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
-                      ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
-                      ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
-                      ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
-                      0x8000000000ULL;
-        alternating_corner_color_quad.alpha = (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
-                       ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
-                       ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
-                       ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
-                       0x8000000000ULL;
+        uniform_color_quad.alpha =
+            (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
+            ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
+            ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
+            ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
+            0x8000000000ULL;
+        alternating_corner_color_quad.alpha =
+            (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
+            ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
+            ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
+            ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
+            0x8000000000ULL;
         if (spark_emitter_data[5] != 0) {
-            alternating_corner_color_quad.col[2] =
-                fast_tween_color((float)spark_emitter_data[5] / 60.0f, spark_emitter_pass_colors[pass], 0);
+            alternating_corner_color_quad.col[2] = fast_tween_color(
+                (float)spark_emitter_data[5] / 60.0f, spark_emitter_pass_colors[pass], 0);
             alternating_corner_color_quad.col[0] = alternating_corner_color_quad.col[2];
             uniform_color_quad.col[3] = alternating_corner_color_quad.col[2];
             uniform_color_quad.col[2] = alternating_corner_color_quad.col[2];

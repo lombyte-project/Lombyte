@@ -187,7 +187,10 @@ void  compute_triggered_scene_path_pose(struct Moby *moby,
                                         void        *out1,
                                         float       *out2) __asm__("FUN_L16_002d6260");
 
-void compute_triggered_scene_path_pose(struct Moby *moby, void *position_output, float *rotation_output) {
+void compute_triggered_scene_path_pose(struct Moby *moby,
+                                       void        *position_output,
+
+                                       float *rotation_output) {
     char *triggered_scene_path_data = (char *)moby->pvars;
     float hero_offset[4];
     char *scene_reference_pose = D_L16_001600EC + (*(int *)triggered_scene_path_data << 7);
@@ -201,7 +204,10 @@ void compute_triggered_scene_path_pose(struct Moby *moby, void *position_output,
                                D_0015ED6C + D_0015ED6C,
                                (float *)(triggered_scene_path_data + 0x1C),
                                (float *)(triggered_scene_path_data + 0x20));
-    lerp_vector(position_output, position_path + 0x10, position_path + 0x20, *(float *)(triggered_scene_path_data + 0x1C));
+    lerp_vector(position_output,
+                position_path + 0x10,
+                position_path + 0x20,
+                *(float *)(triggered_scene_path_data + 0x1C));
     clear_u64_value(rotation_output);
     rotation_output[1] = triggered_scene_rotation_y_gp;
     rotation_output[2] = moby->rot.z;

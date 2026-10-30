@@ -563,10 +563,11 @@ void draw_batalia_cannon_hud(Moby *moby) {
     uv_words[2] = batalia_cannon_hud_health_dial_uv2;
     uv_words[3] = batalia_cannon_hud_health_dial_uv3;
     if ((float)cannon_instance_vars->health > 100.0f)
-        color =
-            func_001FA8A8_2E0258(0x6000FFFF, 0x6000FF00, ((float)cannon_instance_vars->health - 100.0f) / 100.0f);
+        color = func_001FA8A8_2E0258(
+            0x6000FFFF, 0x6000FF00, ((float)cannon_instance_vars->health - 100.0f) / 100.0f);
     else
-        color = func_001FA8A8_2E0258(0x600000FF, 0x6000FFFF, (float)cannon_instance_vars->health / 100.0f);
+        color = func_001FA8A8_2E0258(
+            0x600000FF, 0x6000FFFF, (float)cannon_instance_vars->health / 100.0f);
     segments = truncate_float_to_s32((1.0f - (float)cannon_instance_vars->health / 200.0f) * 32.0f);
     for (j = 0; j < 32; j++) {
         float angle, next_angle;
@@ -611,10 +612,11 @@ void draw_batalia_cannon_hud(Moby *moby) {
         FUN_L02_0020bc88_c(xy, uv_words, color_words, texture, 1);
     }
     if (scale_game_frames(15) < cannon_instance_vars->timer) {
-        color = func_001FA8A8_2E0258(0x5000FFFF,
-                                     0x500000FF,
-                                     convert_integer_to_float(cannon_instance_vars->timer - scale_game_frames(15)) /
-                                         (float)scale_game_frames(15));
+        color = func_001FA8A8_2E0258(
+            0x5000FFFF,
+            0x500000FF,
+            convert_integer_to_float(cannon_instance_vars->timer - scale_game_frames(15)) /
+                (float)scale_game_frames(15));
     } else {
         color = func_001FA8A8_2E0258(0x5000FF00,
                                      0x5000FFFF,
@@ -1050,7 +1052,8 @@ void update_batalia_cannon(Moby *moby) {
                         moby->command = 2;
                         jet_end_mount(0);
                         moby->state = 4;
-                        node = (Moby *)(D_L08_0015FFD8 + (cannon_control_vars->platform_index << 8));
+                        node =
+                            (Moby *)(D_L08_0015FFD8 + (cannon_control_vars->platform_index << 8));
                         qcopy(muzzle, (*(float(*)[4]) & node->rot));
                         muzzle[2] = fast_add_rotations(muzzle[2], 3.1415927f);
                         fast_vec_normalize(direction, (*(float(*)[16]) & node->rot_row0), 2.5f);
@@ -1063,8 +1066,9 @@ void update_batalia_cannon(Moby *moby) {
                     break;
                 }
                 if (fast_subtract_rotations_cf(&cannon_control_vars->target_timer) ||
-                    (signed char)((Moby *)D_L08_0015FFD8)[*(int *)((unsigned int)indices +
-                                                                   (cannon_control_vars->target_index << 2))]
+                    (signed char)((
+                        Moby *)D_L08_0015FFD8)[*(int *)((unsigned int)indices +
+                                                        (cannon_control_vars->target_index << 2))]
                             .state < 0) {
                     cannon_control_vars->target_timer = 1;
                     best_angle = 3.1415927f;
@@ -1088,8 +1092,8 @@ void update_batalia_cannon(Moby *moby) {
                     }
                     cannon_control_vars->target_index = best;
                 }
-                ((Moby *)
-                     D_L08_0015FFD8)[*(int *)((unsigned int)indices + (cannon_control_vars->target_index << 2))]
+                ((Moby *)D_L08_0015FFD8)[*(int *)((unsigned int)indices +
+                                                  (cannon_control_vars->target_index << 2))]
                     .command = 1;
             }
         }
@@ -1169,12 +1173,14 @@ void update_batalia_cannon(Moby *moby) {
     if (cannon_control_vars->visual) {
         transform_vector_by_basis(
             work, &batalia_cannon_visual_offset_gp, (*(float(*)[16]) & moby->rot_row0));
-        fast_vec_add((*(float(*)[4]) & cannon_control_vars->visual->pos), work, (*(float(*)[4]) & moby->pos));
+        fast_vec_add((*(float(*)[4]) & cannon_control_vars->visual->pos),
+                     work,
+                     (*(float(*)[4]) & moby->pos));
         {
             Moby *visual = cannon_control_vars->visual;
             qcopy((*(float(*)[4]) & visual->rot), (*(float(*)[4]) & moby->rot));
-            (*(float(*)[4]) & cannon_control_vars->visual->rot)[1] =
-                fast_add_rotations((*(float(*)[4]) & visual->rot)[1], cannon_control_vars->visual_angle);
+            (*(float(*)[4]) & cannon_control_vars->visual->rot)[1] = fast_add_rotations(
+                (*(float(*)[4]) & visual->rot)[1], cannon_control_vars->visual_angle);
         }
         update_entity(cannon_control_vars->visual);
     }

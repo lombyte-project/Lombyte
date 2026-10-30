@@ -365,14 +365,18 @@ void update_resident_gameplay_state(void) {
             scale_vector(&scratch_vectors[0],
                          animation_positions + playback_object->current_frame * 16,
                          1.0f - playback_object->blend);
-            scale_vector(
-                &scratch_vectors[1], animation_positions + playback_object->next_frame * 16, playback_object->blend);
+            scale_vector(&scratch_vectors[1],
+                         animation_positions + playback_object->next_frame * 16,
+                         playback_object->blend);
             fast_vec_add(&playback_object->position, &scratch_vectors[0], &scratch_vectors[1]);
-            transform_vector_by_basis(
-                &playback_object->position, &playback_object->position, level_render_state.player->transform);
-            fast_vec_add(
-                &playback_object->position, &playback_object->position, &level_render_state.player->position);
-            playback_object->rotation.components[2] = level_render_state.player->rotation.components[2];
+            transform_vector_by_basis(&playback_object->position,
+                                      &playback_object->position,
+                                      level_render_state.player->transform);
+            fast_vec_add(&playback_object->position,
+                         &playback_object->position,
+                         &level_render_state.player->position);
+            playback_object->rotation.components[2] =
+                level_render_state.player->rotation.components[2];
             playback_object->cached_selector = 0xFF;
             refresh_moby_spatial_bounds(playback_object);
             if (playback_object->class_id == 0) {
@@ -420,7 +424,8 @@ void update_resident_gameplay_state(void) {
                         level_render_state.attachment = create_moby(0x509);
                         level_render_state.attachment->selected_index = 0x40;
                         level_render_state.attachment->flags |= 0x806;
-                        level_render_state.attachment->lifetime_stamp = playback_object->lifetime_stamp;
+                        level_render_state.attachment->lifetime_stamp =
+                            playback_object->lifetime_stamp;
                         if (level_render_state.attachment->model->unk6 != 0) {
                             level_render_state.attachment->unk73 = 0x18;
                         }
@@ -440,8 +445,9 @@ void update_resident_gameplay_state(void) {
                                   80.0f) +
                             120;
                         if (playback_object->class_id == 0x215) {
-                            playback_object->color = (color_intensity >> 1) | (color_intensity << 8) |
-                                            (color_intensity << 16);
+                            playback_object->color = (color_intensity >> 1) |
+                                                     (color_intensity << 8) |
+                                                     (color_intensity << 16);
                         } else {
                             playback_object->color =
                                 color_intensity | (color_intensity << 8) | (color_intensity << 16);
@@ -454,7 +460,8 @@ void update_resident_gameplay_state(void) {
                             color_intensity = 255;
                         }
                         if (playback_object->class_id == 0x215) {
-                            playback_object->color = (color_intensity << 8) | (color_intensity << 16);
+                            playback_object->color =
+                                (color_intensity << 8) | (color_intensity << 16);
                         } else {
                             playback_object->color =
                                 color_intensity | (color_intensity << 8) | (color_intensity << 16);
@@ -493,7 +500,7 @@ void update_resident_gameplay_state(void) {
                                       120;
                     if (playback_object->class_id == 0x215) {
                         playback_object->color = (color_intensity >> 1) | (color_intensity << 8) |
-                                        (color_intensity << 16);
+                                                 (color_intensity << 16);
                     } else {
                         playback_object->color =
                             color_intensity | (color_intensity << 8) | (color_intensity << 16);
@@ -527,7 +534,7 @@ void update_resident_gameplay_state(void) {
                                           120;
                     if (playback_object->class_id == 0x215) {
                         playback_object->color = (color_intensity >> 1) | (color_intensity << 8) |
-                                        (color_intensity << 16);
+                                                 (color_intensity << 16);
                     } else {
                         playback_object->color =
                             color_intensity | (color_intensity << 8) | (color_intensity << 16);

@@ -102,10 +102,14 @@ void update_split_door(char *moby) {
             moby[0x20] = 2;
             return;
         }
-        fast_vec_normalize(position_offset, pair_transform_vars + 0x30, moby_pair_parent_fixed_distance_gp);
+        fast_vec_normalize(
+            position_offset, pair_transform_vars + 0x30, moby_pair_parent_fixed_distance_gp);
         fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
-        fast_vec_normalize(position_offset, pair_transform_vars + 0x30, -moby_pair_child_fixed_distance_gp);
-        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10, pair_transform_vars + 0x10, position_offset);
+        fast_vec_normalize(
+            position_offset, pair_transform_vars + 0x30, -moby_pair_child_fixed_distance_gp);
+        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10,
+                     pair_transform_vars + 0x10,
+                     position_offset);
         update_entity(*(char **)(pair_transform_vars + 0x40));
         moby[0x20] = 5;
         return;
@@ -142,7 +146,9 @@ void update_split_door(char *moby) {
         fast_vec_normalize(position_offset, pair_transform_vars + 0x30, parent_distance);
         fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
         fast_vec_normalize(position_offset, pair_transform_vars + 0x30, -child_distance);
-        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10, pair_transform_vars + 0x10, position_offset);
+        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10,
+                     pair_transform_vars + 0x10,
+                     position_offset);
         update_entity(*(char **)(pair_transform_vars + 0x40));
         if (absolute_float(parent_distance - moby_pair_parent_fixed_distance_gp) < 0.01f &&
             absolute_float(child_distance - moby_pair_child_fixed_distance_gp) < 0.01f)
@@ -234,7 +240,9 @@ void update_split_door(char *moby) {
         fast_vec_normalize(position_offset, pair_transform_vars + 0x30, phase_a);
         fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
         fast_vec_normalize(position_offset, pair_transform_vars + 0x30, -phase_b);
-        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10, pair_transform_vars + 0x10, position_offset);
+        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10,
+                     pair_transform_vars + 0x10,
+                     position_offset);
         update_entity(*(char **)(pair_transform_vars + 0x40));
         if (!fast_dec_timer(pair_transform_vars + 0x4c))
             return;

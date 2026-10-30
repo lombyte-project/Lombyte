@@ -932,8 +932,9 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     ripple_phase_vars->prev = ripple_phase_vars->angle;
-    ripple_phase_vars->angle = fast_add_rotations(
-        ripple_phase_vars->angle, 360.0f / scale_time(ripple_phase_period_gp) * DEG_TO_RAD * frame_time);
+    ripple_phase_vars->angle =
+        fast_add_rotations(ripple_phase_vars->angle,
+                           360.0f / scale_time(ripple_phase_period_gp) * DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
     v_scroll_factors = (Quad4 *)&uv_scroll_factors.f[1];

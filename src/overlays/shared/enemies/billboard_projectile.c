@@ -118,7 +118,8 @@ void update_billboard_projectile(char *moby) {
             FUN_0020c828(moby);
         } else {
             int duration = scale_game_frames(0x1e);
-            moby[0x23] = truncate_float_to_s32((float)motion_lifetime_vars[0] * (127.0f / (float)duration));
+            moby[0x23] =
+                truncate_float_to_s32((float)motion_lifetime_vars[0] * (127.0f / (float)duration));
         }
         break;
     }

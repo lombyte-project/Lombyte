@@ -246,9 +246,10 @@ void doom_bot_update(struct Moby *moby) {
                 blend_moby_animation(moby, 5, 0, scale_game_frames(5));
         }
         if (moby->state == 13) {
-            if (!doom_bot_vars->owner || doom_bot_vars->owner->state == 0xFE || doom_bot_vars->owner->state == 0xFD ||
-                moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f ||
-                moby->pos.y > 1021.0f || moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
+            if (!doom_bot_vars->owner || doom_bot_vars->owner->state == 0xFE ||
+                doom_bot_vars->owner->state == 0xFD || moby->pos.x < 2.0f ||
+                moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
+                moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
                 mark_moby_for_removal(moby);
                 return;
             }
@@ -271,8 +272,10 @@ void doom_bot_update(struct Moby *moby) {
                 if (absolute_float(moby->pos.z - z) > 0.6f)
                     moby->pos.z = z + 0.01f;
                 qcopy(&doom_bot_vars->velocity, &coll_hit.normal_x);
-                clamp_vector_length(&doom_bot_vars->velocity, &doom_bot_vars->velocity, frame_scale * 0.05f);
-                FUN_L00_001ff600(frame_scale * 0.05f, &doom_bot_vars->velocity, &doom_bot_vars->velocity);
+                clamp_vector_length(
+                    &doom_bot_vars->velocity, &doom_bot_vars->velocity, frame_scale * 0.05f);
+                FUN_L00_001ff600(
+                    frame_scale * 0.05f, &doom_bot_vars->velocity, &doom_bot_vars->velocity);
                 moby->state = 8;
                 if (doom_bot_vars->target_moby) {
                     doom_bot_vars->last = doom_bot_vars->target_moby;
@@ -359,8 +362,8 @@ void doom_bot_update(struct Moby *moby) {
         qcopy(&movement_and_detonation_vectors[0], &moby->pos);
         movement_and_detonation_vectors[0].f[2] += scale * 0.3f;
         if (random_integer_below(4) == 0)
-            doom_bot_vars->target_moby =
-                select_class5_target_or_hero(moby, &movement_and_detonation_vectors[0], &moby->rot, doom_bot_vars->last, 1);
+            doom_bot_vars->target_moby = select_class5_target_or_hero(
+                moby, &movement_and_detonation_vectors[0], &moby->rot, doom_bot_vars->last, 1);
         doom_bot_vars->turn_rate = frame_scale * 0.1f * speed;
         moby->state = 4;
         if (!doom_bot_vars->target_moby) {
@@ -371,22 +374,24 @@ void doom_bot_update(struct Moby *moby) {
                 float radius =
                     convert_integer_to_float(((DoomBotParams *)&hero)->damage) * 0.0009765625f;
                 doom_bot_vars->angle = select_moby_heading_by_collision_probes(moby,
-                                                                      &moby->pos,
-                                                                      angle,
-                                                                      1.84799564f,
-                                                                      range,
-                                                                      step_height,
-                                                                      4.0f,
-                                                                      0,
-                                                                      &clearance,
-                                                                      radius);
+                                                                               &moby->pos,
+                                                                               angle,
+                                                                               1.84799564f,
+                                                                               range,
+                                                                               step_height,
+                                                                               4.0f,
+                                                                               0,
+                                                                               &clearance,
+                                                                               radius);
             } else
                 clearance = 5.0f;
         }
-        if (doom_bot_vars->target_moby && doom_bot_vars->target_moby != ((DoomBotParams *)&hero)->moby &&
+        if (doom_bot_vars->target_moby &&
+            doom_bot_vars->target_moby != ((DoomBotParams *)&hero)->moby &&
             (!doom_bot_vars->target_moby || doom_bot_vars->target_moby->state == 0xFE ||
              doom_bot_vars->target_moby->state == 0xFD || !doom_bot_vars->target_moby->pclass ||
-             doom_bot_vars->target_moby->pclass->type != 5 || !(doom_bot_vars->target_moby->flags & 0x1000))) {
+             doom_bot_vars->target_moby->pclass->type != 5 ||
+             !(doom_bot_vars->target_moby->flags & 0x1000))) {
             doom_bot_vars->target_moby = 0;
             moby->state = 2;
             doom_bot_vars->turn_rate = frame_scale * 0.0273f * speed;
@@ -435,15 +440,15 @@ void doom_bot_update(struct Moby *moby) {
                 float          range = 4.0f;
                 float          radius = convert_integer_to_float(hp->damage) * 0.0009765625f;
                 doom_bot_vars->angle = select_moby_heading_by_collision_probes(moby,
-                                                                      &moby->pos,
-                                                                      moby->rot.z,
-                                                                      1.84799564f,
-                                                                      range,
-                                                                      0.35f,
-                                                                      4.0f,
-                                                                      target_pos,
-                                                                      &clearance,
-                                                                      radius);
+                                                                               &moby->pos,
+                                                                               moby->rot.z,
+                                                                               1.84799564f,
+                                                                               range,
+                                                                               0.35f,
+                                                                               4.0f,
+                                                                               target_pos,
+                                                                               &clearance,
+                                                                               radius);
             } else
                 clearance = 5.0f;
         }
@@ -459,21 +464,31 @@ void doom_bot_update(struct Moby *moby) {
         save_state_fields_to_hero((char *)doom_bot_vars);
         {
             DoomBotParams *hp = (DoomBotParams *)&hero;
-            FUN_L00_00258278(
-                moby, &doom_bot_vars->movement_speed, doom_bot_vars->angle, hp->move_k, hp->move_d, hp->move_max);
+            FUN_L00_00258278(moby,
+                             &doom_bot_vars->movement_speed,
+                             doom_bot_vars->angle,
+                             hp->move_k,
+                             hp->move_d,
+                             hp->move_max);
         }
         fast_vec_scale(&movement_and_detonation_vectors[3], &doom_bot_vars->velocity, 5.0f);
         movement_and_detonation_vectors[3].f[2] = 0;
         qcopy(&movement_and_detonation_vectors[1], &moby->pos);
         movement_and_detonation_vectors[1].f[2] += scale * 0.15f;
-        fast_vec_add(&movement_and_detonation_vectors[2], &movement_and_detonation_vectors[1], &movement_and_detonation_vectors[3]);
-        if (!collision_line(&movement_and_detonation_vectors[1], &movement_and_detonation_vectors[2], 6, moby, 0) ||
+        fast_vec_add(&movement_and_detonation_vectors[2],
+                     &movement_and_detonation_vectors[1],
+                     &movement_and_detonation_vectors[3]);
+        if (!collision_line(&movement_and_detonation_vectors[1],
+                            &movement_and_detonation_vectors[2],
+                            6,
+                            moby,
+                            0) ||
             coll_hit.moby == (s32)doom_bot_vars->target_moby ||
             (coll_hit.moby && ((struct Moby *)coll_hit.moby)->pclass &&
              ((struct Moby *)coll_hit.moby)->pclass->type == 5)) {
             z = moby->pos.z;
-            move_flags =
-                FUN_L00_00259028(moby, &((DoomBotParams *)&hero)->damage, doom_bot_vars, &doom_bot_vars->velocity);
+            move_flags = FUN_L00_00259028(
+                moby, &((DoomBotParams *)&hero)->damage, doom_bot_vars, &doom_bot_vars->velocity);
             if (absolute_float(moby->pos.z - z) > 1.0f) {
                 moby->pos.z = z;
                 if (probe_moby_raised_sphere_collision((char *)moby, 5, 0)) {
@@ -515,8 +530,8 @@ void doom_bot_update(struct Moby *moby) {
         goto Contact;
     }
     case DOOM_BOT_ALIGN_TO_TARGET: {
-        float heading =
-            fast_arc_tan(doom_bot_vars->target.f[0] - moby->pos.x, doom_bot_vars->target.f[1] - moby->pos.y);
+        float          heading = fast_arc_tan(doom_bot_vars->target.f[0] - moby->pos.x,
+                                     doom_bot_vars->target.f[1] - moby->pos.y);
         float         *velocity;
         DoomBotParams *hp;
         save_state_fields_to_hero((char *)doom_bot_vars);
@@ -572,8 +587,17 @@ void doom_bot_update(struct Moby *moby) {
             movement_and_detonation_vectors[1].f[2] += scale * 0.5f;
             count = collect_mobies_in_sphere(&moby->pos, speed, 0x15, moby, 0);
             movement_and_detonation_vectors[3].q = *(OvlQuad *)&moby->pos;
-            send_blast_hits(
-                moby, &movement_and_detonation_vectors[3], D_L00_00177F00, count, 0, 0x10000, 2, 3, 3.0f, 1.0f, 1.0f);
+            send_blast_hits(moby,
+                            &movement_and_detonation_vectors[3],
+                            D_L00_00177F00,
+                            count,
+                            0,
+                            0x10000,
+                            2,
+                            3,
+                            3.0f,
+                            1.0f,
+                            1.0f);
             if (item_text_variant[0x14])
                 allocate_voice_for_target_entry(4, 0, moby);
             else
@@ -601,7 +625,9 @@ void doom_bot_update(struct Moby *moby) {
             fast_vec_sub(&movement_and_detonation_vectors[1], coll_hit.pad30, &moby->pos);
             distance = fast_vec_length(&movement_and_detonation_vectors[1]);
             movement_and_detonation_vectors[1].f[2] = 0;
-            fast_vec_normalize(&movement_and_detonation_vectors[1], &movement_and_detonation_vectors[1], distance * 1.1f);
+            fast_vec_normalize(&movement_and_detonation_vectors[1],
+                               &movement_and_detonation_vectors[1],
+                               distance * 1.1f);
             fast_vec_add(&moby->pos, &moby->pos, &movement_and_detonation_vectors[1]);
         }
         doom_bot_vars->velocity.f[2] -= frame_time_sq * 9.0f;
@@ -614,7 +640,8 @@ void doom_bot_update(struct Moby *moby) {
             doom_bot_vars->velocity.f[2] = 0;
             fast_vec_scale(&doom_bot_vars->velocity, &doom_bot_vars->velocity, 0.5f);
         }
-        clamp_vector_length(&doom_bot_vars->velocity, &doom_bot_vars->velocity, frame_scale * 0.05f);
+        clamp_vector_length(
+            &doom_bot_vars->velocity, &doom_bot_vars->velocity, frame_scale * 0.05f);
         if (!blocked) {
             if (moby->prev_seq != 5)
                 blend_moby_animation(moby, 5, 0, scale_game_frames(5));
@@ -624,12 +651,18 @@ void doom_bot_update(struct Moby *moby) {
         /* Fakematch: the do-while(0) splits the scheduling region. */
     Falling:
         do {
-            float          direction = fast_arc_tan(doom_bot_vars->velocity.f[0], doom_bot_vars->velocity.f[1]);
+            float direction =
+                fast_arc_tan(doom_bot_vars->velocity.f[0], doom_bot_vars->velocity.f[1]);
             DoomBotParams *hp = (DoomBotParams *)&hero;
-            FUN_L00_00258278(
-                moby, &doom_bot_vars->turn_velocity, direction, hp->turn_k, hp->turn_d, hp->turn_max);
+            FUN_L00_00258278(moby,
+                             &doom_bot_vars->turn_velocity,
+                             direction,
+                             hp->turn_k,
+                             hp->turn_d,
+                             hp->turn_max);
             /* Fakematch: no-op update of data; it depends on the a1 setup, so a1 is scheduled before a0. */
-            doom_bot_vars = (DoomBotVars *)((int)doom_bot_vars | ((unsigned char)(int)doom_bot_vars >> 8));
+            doom_bot_vars =
+                (DoomBotVars *)((int)doom_bot_vars | ((unsigned char)(int)doom_bot_vars >> 8));
         } while (0);
         restore_state_fields_from_hero((char *)doom_bot_vars);
     Contact:

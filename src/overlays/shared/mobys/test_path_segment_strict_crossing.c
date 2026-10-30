@@ -62,8 +62,11 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
             transform_vector_by_basis(current, current, &direction);
             if (transformed_previous_point.f[3] != zero || transformed_current_point.f[3] != zero) {
                 if (transformed_current_point.f[1] * transformed_previous_point.f[1] < 0.0f) {
-                    crossing = (transformed_previous_point.f[0] - transformed_current_point.f[0]) / (transformed_previous_point.f[1] - transformed_current_point.f[1]) * -transformed_current_point.f[1] +
-                               transformed_current_point.f[0];
+                    crossing =
+                        (transformed_previous_point.f[0] - transformed_current_point.f[0]) /
+                            (transformed_previous_point.f[1] - transformed_current_point.f[1]) *
+                            -transformed_current_point.f[1] +
+                        transformed_current_point.f[0];
                     if (crossing > 0.0f && crossing < 1.0f)
                         return 1;
                 }
@@ -189,11 +192,13 @@ s32 resolve_point_path_segment_xy_clearance(f32      distance,
     qcopy_nc(&working, point);
     for (i = 0; i < D_L00_001B04B0_261d78[path_index]->count - 1; i++) {
         segment_path_slot = &D_L00_001B04B0_261d78[path_index];
-        if ((*segment_path_slot)->points[i].f[3] == 0.0f && (*segment_path_slot)->points[i + 1].f[3] == 0.0f)
+        if ((*segment_path_slot)->points[i].f[3] == 0.0f &&
+            (*segment_path_slot)->points[i + 1].f[3] == 0.0f)
             continue;
         fast_vec_sub(&difference, &working, &(*segment_path_slot)->points[i]);
         difference.i[2] = 0;
-        fast_vec_sub(&segment, &(*segment_path_slot)->points[i + 1], &(*segment_path_slot)->points[i]);
+        fast_vec_sub(
+            &segment, &(*segment_path_slot)->points[i + 1], &(*segment_path_slot)->points[i]);
         segment.i[2] = 0;
         fast_vec_normalize(&scaled_segment, &segment, 1.0f);
         fast_vec_cross(&cross, &difference, &scaled_segment);

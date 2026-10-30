@@ -151,10 +151,13 @@ void bolt_crank_update(struct Moby *moby) {
                                 area_clear = 1;
                                 crank->idle_frames = 0;
                                 bolt_crank_radial_correction_step_gp = 0.0f;
-                                for (clearance_candidate_moby = (struct Moby *)D_L01_0015FFE4; clearance_candidate_moby != 0;
+                                for (clearance_candidate_moby = (struct Moby *)D_L01_0015FFE4;
+                                     clearance_candidate_moby != 0;
                                      clearance_candidate_moby = clearance_candidate_moby->next) {
                                     if (clearance_candidate_moby->flags & 0x1000) {
-                                        if (vector_distance_xy(&moby->pos, &clearance_candidate_moby->pos) < 3.25f) {
+                                        if (vector_distance_xy(&moby->pos,
+                                                               &clearance_candidate_moby->pos) <
+                                            3.25f) {
                                             area_clear = 0;
                                             break;
                                         }

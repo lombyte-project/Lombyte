@@ -121,7 +121,8 @@ void draw_timed_text(LevelTextEntry *timed_text_entry, s32 frame) {
         while (*source != 0) {
             if (*source == 1) {
                 *text_write_cursor = 0;
-                draw_timed_text_line(timed_text_entry->x, y, timed_text_entry->mode, scale, alpha, formatted_text);
+                draw_timed_text_line(
+                    timed_text_entry->x, y, timed_text_entry->mode, scale, alpha, formatted_text);
                 y += 26;
                 text_write_cursor = formatted_text;
                 while (*source == 1)
@@ -134,7 +135,8 @@ void draw_timed_text(LevelTextEntry *timed_text_entry, s32 frame) {
         }
         if (text_write_cursor > formatted_text) {
             *text_write_cursor = 0;
-            draw_timed_text_line(timed_text_entry->x, y, timed_text_entry->mode, scale, alpha, formatted_text);
+            draw_timed_text_line(
+                timed_text_entry->x, y, timed_text_entry->mode, scale, alpha, formatted_text);
         }
     }
 }

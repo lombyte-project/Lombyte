@@ -162,7 +162,8 @@ char *spawn_homing_shot(
             qcopy(homing_shot_vars, target + 0x10);
             bounds = (int)get_moby_target_info(target);
             if (bounds != 0) {
-                *(float *)(homing_shot_vars + 0x8) = *(float *)(homing_shot_vars + 0x8) + *(float *)(bounds + 0x10);
+                *(float *)(homing_shot_vars + 0x8) =
+                    *(float *)(homing_shot_vars + 0x8) + *(float *)(bounds + 0x10);
             } else {
                 *(float *)(homing_shot_vars + 0x8) = *(float *)(homing_shot_vars + 0x8) + 0.5f;
             }
@@ -181,7 +182,8 @@ char *spawn_homing_shot(
         *(short *)(homing_shot_vars + 0x26) = timer;
         *(w128 *)probe = *(w128 *)(firing_moby + 0x10);
         probe[2] = start[2];
-        collision_hit_lifetime_min_and_alpha_scratch = collision_line(probe, start, 0, (int)firing_moby, 0);
+        collision_hit_lifetime_min_and_alpha_scratch =
+            collision_line(probe, start, 0, (int)firing_moby, 0);
         if (collision_hit_lifetime_min_and_alpha_scratch != 0) {
             build_spherical_offset(
                 direction, D_0015ED6C * 40.0f, *(float *)(moby + 0x48), -*(float *)(moby + 0x44));
@@ -224,8 +226,11 @@ char *spawn_homing_shot(
             *(float *)(moby + 0x44) = -fast_arc_tan(length, direction[2]);
             return moby;
         } else {
-            spawn_source_attached_fading_effect_particle(
-                moby, 0x2F4F7F7F, *(short *)(homing_shot_vars + 0x24), -1, homing_shot_attached_particle_size);
+            spawn_source_attached_fading_effect_particle(moby,
+                                                         0x2F4F7F7F,
+                                                         *(short *)(homing_shot_vars + 0x24),
+                                                         -1,
+                                                         homing_shot_attached_particle_size);
             for (i = 0; i < 17; i++) {
                 trail =
                     (char *)spawn_random_size_rotated_particle(moby + 0x10, &zero_vector, 1, 0.0f);
@@ -238,8 +243,10 @@ char *spawn_homing_shot(
                     *(float *)(trail + 0xC) =
                         *(float *)(trail + 0xC) +
                         (homing_shot_trail_size_blend_target - *(float *)(trail + 0xC)) * blend;
-                    collision_hit_lifetime_min_and_alpha_scratch = truncate_float_to_s32(blend * -64.0f + 128.0f);
-                    *(int *)(trail + 4) = (collision_hit_lifetime_min_and_alpha_scratch << 24) | 0xFFFFFF;
+                    collision_hit_lifetime_min_and_alpha_scratch =
+                        truncate_float_to_s32(blend * -64.0f + 128.0f);
+                    *(int *)(trail + 4) =
+                        (collision_hit_lifetime_min_and_alpha_scratch << 24) | 0xFFFFFF;
                     ((int *)(homing_shot_vars + 0x2C))[i] = (int)trail;
                 } else {
                     ((int *)(homing_shot_vars + 0x2C))[i] = 0;
@@ -275,7 +282,8 @@ void update_homing_shot(Moby *shot_moby) {
     shot_vars = *(ShotVars **)&shot_moby->pvars;
     shot_moby->rot.y = fast_add_rotations(shot_moby->rot.y, -homing_shot_pitch_bias[0]);
     if (fast_vec_length(shot_vars) < 0.1f) {
-        if (shot_vars->timer < scale_game_frames(0x23) - scale_game_frames(1) && shot_vars->bounces == 0) {
+        if (shot_vars->timer < scale_game_frames(0x23) - scale_game_frames(1) &&
+            shot_vars->bounces == 0) {
             yaw = shot_vars->rest_yaw;
             pitch = shot_vars->rest_pitch;
         } else {
@@ -283,7 +291,8 @@ void update_homing_shot(Moby *shot_moby) {
             pitch = shot_moby->rot.y;
         }
     } else {
-        yaw = fast_arc_tan(shot_vars->target_x - shot_moby->pos.x, shot_vars->target_y - shot_moby->pos.y);
+        yaw = fast_arc_tan(shot_vars->target_x - shot_moby->pos.x,
+                           shot_vars->target_y - shot_moby->pos.y);
         pitch = -fast_arc_tan(vector_distance_xy((Vec4A *)&shot_moby->pos, shot_vars),
                               shot_vars->target_z - shot_moby->pos.z);
     }

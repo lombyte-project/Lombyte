@@ -148,8 +148,11 @@ void update_floating_ship_piece(char *moby) {
             if (sink_level < old_z && new_z <= sink_level) {
                 allocate_voice_for_target_entry(1, 0, moby);
             }
-            reorient_position_about_pivot(
-                ((unsigned char *)&hero + 0x80), carried_pos, moby + 0x10, old_angles, floating_ship_piece_vars + 0x60);
+            reorient_position_about_pivot(((unsigned char *)&hero + 0x80),
+                                          carried_pos,
+                                          moby + 0x10,
+                                          old_angles,
+                                          floating_ship_piece_vars + 0x60);
             fast_vec_sub(
                 (unsigned char *)&hero + 0xF0, carried_pos, ((unsigned char *)&hero + 0x80));
             hero.motion.platform_delta.f[2] =
@@ -226,12 +229,13 @@ void update_floating_ship_piece(char *moby) {
                                          0.0872664601f,
                                          frame_time * 0.436332315f,
                                          frame_time * 0.541052043f);
-        *(float *)(moby + 0x40) =
-            fast_add_rotations(*(float *)(floating_ship_piece_vars + 0x60), *(float *)(moby + 0x40));
-        *(float *)(moby + 0x44) =
-            fast_add_rotations(*(float *)(floating_ship_piece_vars + 0x64), *(float *)(moby + 0x44));
+        *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(floating_ship_piece_vars + 0x60),
+                                                     *(float *)(moby + 0x40));
+        *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(floating_ship_piece_vars + 0x64),
+                                                     *(float *)(moby + 0x44));
         fast_vec_add(movement, movement, moby + 0x10);
-        update_entity_matrix(floating_ship_piece_vars + 0x20, movement, original_rotation, moby + 0x40);
+        update_entity_matrix(
+            floating_ship_piece_vars + 0x20, movement, original_rotation, moby + 0x40);
         break;
     }
 }

@@ -77,7 +77,12 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     if (moby->state == 0) {
         points = l14_splines[debris_private_vars->path].path;
         qcopy(&probe, &moby->pos);
-        sample_path(points, &moby->pos, &debris_private_vars->path_t, &debris_private_vars->path_u, 0, debris_private_vars->path_speed);
+        sample_path(points,
+                    &moby->pos,
+                    &debris_private_vars->path_t,
+                    &debris_private_vars->path_u,
+                    0,
+                    debris_private_vars->path_speed);
         fast_vec_sub(position_offset, &moby->pos, &probe);
         debris_private_vars->offset_x = position_offset[0];
         debris_private_vars->offset_y = position_offset[1];
@@ -114,12 +119,15 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     fast_vec_add(&moby->pos, &moby->pos, velocity);
     speed = absolute_float(debris_private_vars->velocity[0]);
     if (ballistic_debris_planar_damping_speed_threshold_gp * frame_scale < speed)
-        debris_private_vars->velocity[0] *= (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
+        debris_private_vars->velocity[0] *=
+            (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
     speed = absolute_float(debris_private_vars->velocity[1]);
     if (ballistic_debris_planar_damping_speed_threshold_gp * frame_scale < speed)
-        debris_private_vars->velocity[1] *= (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
+        debris_private_vars->velocity[1] *=
+            (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
     if (debris_private_vars->velocity[2] > 0.0f)
-        debris_private_vars->velocity[2] *= (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
+        debris_private_vars->velocity[2] *=
+            (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
     debris_private_vars->velocity[2] -= ballistic_debris_gravity_gp * frame_scale_sq;
     moby->rot.x = fast_add_rotations(moby->rot.x, debris_private_vars->spin_x);
     moby->rot.y = fast_add_rotations(moby->rot.y, debris_private_vars->spin_y);
@@ -131,7 +139,8 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     }
     fast_vec_normalize(position_offset, &moby->rot_row2, 0.52f);
     fast_vec_add(&probe, &moby->pos, position_offset);
-    if (fast_dec_timer(&debris_private_vars->timer) != 0 || coll_sphere(0.5f, &probe, 0, debris_private_vars->owner) != 0) {
+    if (fast_dec_timer(&debris_private_vars->timer) != 0 ||
+        coll_sphere(0.5f, &probe, 0, debris_private_vars->owner) != 0) {
         trooper_play_sound(0, 0, moby, debris_private_vars->owner->oclass);
         spawn_explosion_dfd10(moby,
                               velocity,

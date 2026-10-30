@@ -137,8 +137,9 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
                     stop_seg++;
                 }
                 next_path_point_index = i + 1;
-                length = fast_vec_dist(&((Vec4f *)(path + 0x10))[i],
-                                       &((Vec4f *)(path + 0x10))[next_path_point_index % *(int *)path]);
+                length =
+                    fast_vec_dist(&((Vec4f *)(path + 0x10))[i],
+                                  &((Vec4f *)(path + 0x10))[next_path_point_index % *(int *)path]);
                 {
                     char *point = path + i * 16;
                     *(f32 *)(point + 0x1C) = length;

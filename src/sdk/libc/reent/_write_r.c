@@ -13,7 +13,8 @@ s32 _write_r(struct _reent *reent_context, s32 file_descriptor, s32 source_buffe
     s32 write_result;
 
     SbrkErrno[0] = 0;
-    if ((write_result = write(file_descriptor, source_buffer, byte_count)) == -1 && SbrkErrno[0] != 0) {
+    if ((write_result = write(file_descriptor, source_buffer, byte_count)) == -1 &&
+        SbrkErrno[0] != 0) {
         reent_context->_errno = SbrkErrno[0];
     }
     return write_result;

@@ -166,12 +166,14 @@ void *D_L10_001DDE40[6]
                                             FUN_L00_002caf40,
                                             mine_blend_color};
 
-void *D_L10_001DDE58[6] __attribute__((section("lvl.vtbl"))) = {update_moby_grab_state,
-                                                                update_moby_suck_cannon_storage_state,
-                                                                update_moby_suck_cannon_storage_state,
-                                                                cancel_moby_suction_and_save_state,
-                                                                get_moby_data_plus_0x60,
-                                                                mine_blend_color};
+void *D_L10_001DDE58[6]
+
+    __attribute__((section("lvl.vtbl"))) = {update_moby_grab_state,
+                                            update_moby_suck_cannon_storage_state,
+                                            update_moby_suck_cannon_storage_state,
+                                            cancel_moby_suction_and_save_state,
+                                            get_moby_data_plus_0x60,
+                                            mine_blend_color};
 
 struct MobyClassUpdate moby_classes[174] __asm__("D_L10_001DD600")
 

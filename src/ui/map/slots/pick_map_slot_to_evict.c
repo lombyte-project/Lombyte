@@ -36,7 +36,8 @@ s32 pick_map_slot_to_evict(s32 unused_arg0, s32 unused_arg1) {
             if (slot_id == -1) {
                 return i;
             }
-            delta = SubtractIntegerWithClamp(find_id_in_terminated_table(slot_id & 0xFF) - selected_level_lookup_result);
+            delta = SubtractIntegerWithClamp(find_id_in_terminated_table(slot_id & 0xFF) -
+                                             selected_level_lookup_result);
             if (max < delta) {
                 max = delta;
                 best = i;

@@ -78,7 +78,13 @@ char *spawn_blarg_ship_rocket(float scale,
 
 char *spawn_blarg_ship_rocket(
 
-    float scale, void *initial_velocity, void *pos, int firing_moby, int target, int timer_duration) {
+    float scale,
+    void *initial_velocity,
+    void *pos,
+    int   firing_moby,
+    int   target,
+
+    int timer_duration) {
     char *rocket = (char *)create_moby(0x333);
     char *shot_data;
     if (rocket) {

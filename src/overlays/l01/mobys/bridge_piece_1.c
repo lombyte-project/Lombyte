@@ -59,7 +59,9 @@ void bridge_piece_1_update(BurstMoby *bridge_piece_moby) {
 
     hit_result = find_moby_hit(bridge_piece_moby, 0x830000, 0);
     if (l01_save_state.cleared[bridge_piece_moby->id] != 0 ||
-        (D_0014C190_257218[current_level_index][bridge_piece_moby->id >> 5] >> (bridge_piece_moby->id & 0x1F)) & 1) {
+        (D_0014C190_257218[current_level_index][bridge_piece_moby->id >> 5] >>
+         (bridge_piece_moby->id & 0x1F)) &
+            1) {
         mark_moby_for_removal(bridge_piece_moby);
     }
     if (hit_result != NULL && hit_result->moby->oclass == 0x2AE) {
@@ -89,7 +91,8 @@ void bridge_piece_1_update(BurstMoby *bridge_piece_moby) {
                              0.75f,
                              0);
         }
-        D_0014C190_257218[pal_mode_macro[1]][bridge_piece_moby->id >> 5] |= 1 << (bridge_piece_moby->id & 0x1F);
+        D_0014C190_257218[pal_mode_macro[1]][bridge_piece_moby->id >> 5] |=
+            1 << (bridge_piece_moby->id & 0x1F);
         moby_killed[bridge_piece_moby->id >> 5] |= 1 << (bridge_piece_moby->id & 0x1F);
         mark_moby_for_removal(bridge_piece_moby);
     } else {

@@ -47,7 +47,10 @@ extern void sceSifInitRpc(u32 mode);
 extern void sceSifWriteBackDCache(void *addr, s32 size);
 
 int sceCdInit(int init_mode) {
-    enum { CD_INIT_SHUTDOWN = 5 } ;int compatibility_result;
+    enum {
+        CD_INIT_SHUTDOWN = 5
+    };
+    int compatibility_result;
     int bind_result;
     int delay;
     int reply_status;
@@ -65,7 +68,8 @@ int sceCdInit(int init_mode) {
     *(volatile s32 *)D_00159750 = initializing_thread_id;
     {
         s32 *p0 = D_00131300, *p1 = D_001312F8, *p2 = D_00131308, *p3 = D_00131304,
-            *init_rpc_bind_state_ptr = cd_init_rpc_bind_state, *power_event_handler_state_ptr = D_001312FC, *p5 = D_001312F4;
+            *init_rpc_bind_state_ptr = cd_init_rpc_bind_state,
+            *power_event_handler_state_ptr = D_001312FC, *p5 = D_001312F4;
         /* Fakematch: retail keeps the -1 in $a0. */
         register int m __asm__("$4") = -1;
         *power_event_handler_state_ptr = m;
@@ -93,7 +97,15 @@ int sceCdInit(int init_mode) {
             cd_init_rpc_bind_state[0] = 0;
             sceSifWriteBackDCache(cd_init_mode_request, 4);
             receive_buffer = cd_scmd_result;
-            if (sceSifCallRpc(&cd_init_rpc_client, 0, 0, cd_init_mode_request, 4, receive_buffer, 0x10, 0, 0) < 0) {
+            if (sceSifCallRpc(&cd_init_rpc_client,
+                              0,
+                              0,
+                              cd_init_mode_request,
+                              4,
+                              receive_buffer,
+                              0x10,
+                              0,
+                              0) < 0) {
                 *(volatile s32 *)D_001312E4 = 0;
                 return 0;
             }

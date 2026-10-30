@@ -68,8 +68,10 @@ void update_floating_mine(struct Moby *moby) {
     int          i;
     clear_u64_value(zero_vector);
     hit_record = find_moby_hit(moby, 0x230000, 0);
-    hit_reaction(moby, hit_record, bobbing_moby_vars + 0x20, 0, &bobbing_hit_reaction_status, 0, 0, 4);
-    if (bobbing_hit_reaction_status >= 2 && hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x343) {
+    hit_reaction(
+        moby, hit_record, bobbing_moby_vars + 0x20, 0, &bobbing_hit_reaction_status, 0, 0, 4);
+    if (bobbing_hit_reaction_status >= 2 && hit_record != 0 &&
+        *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x343) {
         spawn_explosion(moby,
                         zero_vector,
                         0,

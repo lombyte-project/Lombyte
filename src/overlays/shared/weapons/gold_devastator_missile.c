@@ -446,7 +446,8 @@ unsigned char *spawn_devastator_missile(unsigned char *missile_source_moby,
         turn_period = FUN_001f96f8_2afc70(frame_time * 0.1f < x ? 0x3C : 0xF);
         *(short *)(missile_data + 0x3E) = turn_period;
         *(short *)(missile_data + 0x3C) = turn_period;
-        if (missile_source_moby != 0 && missile_source_moby[0x20] != 0xFE && missile_source_moby[0x20] != 0xFD) {
+        if (missile_source_moby != 0 && missile_source_moby[0x20] != 0xFE &&
+            missile_source_moby[0x20] != 0xFD) {
             collision_start.q = ((V_2afc70 *)(missile_source_moby + 0x10))->q;
         } else {
             qcopy(&collision_start, &hero_pos);
@@ -468,7 +469,10 @@ void select_gold_devastator_missile_target(char *self,
                                            O    *out,
                                            char *skip) __asm__("FUN_L00_002affa8");
 
-void select_gold_devastator_missile_target(char *gold_missile_moby, O *gold_missile_data, char *skip) {
+void select_gold_devastator_missile_target(char *gold_missile_moby,
+                                           O    *gold_missile_data,
+
+                                           char *skip) {
     VU    candidate_aim_position;
     VU    lv;
     char *candidate_moby;

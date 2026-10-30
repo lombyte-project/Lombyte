@@ -45,8 +45,10 @@ void copy_racer_path_node(char *moby, int path_node_index, float *output_path_no
     float perpendicular_heading;
     qcopy(output_path_node, path + 0x10 + path_node_index * 16);
     qcopy(next_path_node, path + 0x10 + ((path_node_index + 1) % *(int *)path) * 16);
-    perpendicular_heading = fast_add_rotations(
-        fast_arc_tan(next_path_node[0] - output_path_node[0], next_path_node[1] - output_path_node[1]), 1.5707964f);
+    perpendicular_heading =
+        fast_add_rotations(fast_arc_tan(next_path_node[0] - output_path_node[0],
+                                        next_path_node[1] - output_path_node[1]),
+                           1.5707964f);
     output_path_node[0] = output_path_node[0] + fast_cos(perpendicular_heading) * 0.0f;
     output_path_node[1] = output_path_node[1] + fast_sin(perpendicular_heading) * 0.0f;
 }
@@ -196,15 +198,18 @@ void blend_racer_and_child_animations(char *moby,
         ratio = *(float *)(child + 0x5C) / *(float *)(moby + 0x5C);
         child_animation_index = map_racer_animation_to_child_index(animation_index);
         child_frame_index = (float)frame_index * ratio;
-        max = (float)*(unsigned char *)(*(char **)(*(char **)(*(char **)(racer_vars + 0x268) + 0x24) -
-                                                   (-(child_animation_index * 4)) + 0x48) +
-                                        0x10);
+        max =
+            (float)*(unsigned char *)(*(char **)(*(char **)(*(char **)(racer_vars + 0x268) + 0x24) -
+                                                 (-(child_animation_index * 4)) + 0x48) +
+                                      0x10);
         if (max < child_frame_index)
             child_frame_index = max;
         else if (child_frame_index < 0.0f)
             child_frame_index = 0.0f;
-        blend_moby_animation(
-            *(char **)(racer_vars + 0x268), child_animation_index, (int)child_frame_index, blend_frames);
+        blend_moby_animation(*(char **)(racer_vars + 0x268),
+                             child_animation_index,
+                             (int)child_frame_index,
+                             blend_frames);
     }
 }
 
@@ -426,9 +431,11 @@ void skid_mcmarx_update(Moby *moby) {
         moby->rot.z = fast_arc_tan(path->points[1].x - path->points[0].x,
                                    path->points[1].y - path->points[0].y);
         racer_instance_vars->cruise_speed =
-            D_0015ED6C_gp * 17.0f + (float)racer_instance_vars->racer_index * (D_0015ED6C_gp * 1.55f);
+            D_0015ED6C_gp * 17.0f +
+            (float)racer_instance_vars->racer_index * (D_0015ED6C_gp * 1.55f);
         racer_instance_vars->launch_speed =
-            D_0015ED6C_gp * 24.0f + (float)racer_instance_vars->racer_index * (D_0015ED6C_gp * 1.55f);
+            D_0015ED6C_gp * 24.0f +
+            (float)racer_instance_vars->racer_index * (D_0015ED6C_gp * 1.55f);
         if (((unsigned char *)alternate_item_available)[0] == 0) {
             float handicap = (float)(D_0015EE38_macro - 4);
 
@@ -499,20 +506,26 @@ void skid_mcmarx_update(Moby *moby) {
                     int   i;
                     int   next_path_node_index;
 
-                    for (i = racer_instance_vars->point_index; i < racer_instance_vars->jump_point; i = next_path_node_index) {
-                        next_path_node_index = offset_path_index((char *)racer_instance_vars->path, i, 1, 1);
-                        path_length += vector_distance_xy((float(*)[4])racer_instance_vars->path + (i + 1),
-                                                          (float(*)[4])racer_instance_vars->path + (next_path_node_index + 1));
+                    for (i = racer_instance_vars->point_index; i < racer_instance_vars->jump_point;
+                         i = next_path_node_index) {
+                        next_path_node_index =
+                            offset_path_index((char *)racer_instance_vars->path, i, 1, 1);
+                        path_length += vector_distance_xy(
+                            (float(*)[4])racer_instance_vars->path + (i + 1),
+                            (float(*)[4])racer_instance_vars->path + (next_path_node_index + 1));
                     }
                     air_time = path_length / racer_instance_vars->speed;
-                    jump_speed = (racer_instance_vars->path->points[racer_instance_vars->jump_point].z -
-                                  racer_instance_vars->path->points[racer_instance_vars->point_index].z) /
-                                     air_time +
-                                 frame_time_sq_macro * 21.0f * air_time * 0.5f;
+                    jump_speed =
+                        (racer_instance_vars->path->points[racer_instance_vars->jump_point].z -
+                         racer_instance_vars->path->points[racer_instance_vars->point_index].z) /
+                            air_time +
+                        frame_time_sq_macro * 21.0f * air_time * 0.5f;
                     if (racer_instance_vars->vertical_speed < 0.0f) {
                         racer_instance_vars->vertical_speed = 0.0f;
                     }
-                    approach_value(&racer_instance_vars->vertical_speed, jump_speed, frame_time_sq_macro * 110.0f);
+                    approach_value(&racer_instance_vars->vertical_speed,
+                                   jump_speed,
+                                   frame_time_sq_macro * 110.0f);
                 }
             }
             FUN_L05_00307570_c((unsigned char *)moby);
@@ -538,8 +551,12 @@ void skid_mcmarx_update(Moby *moby) {
                 fast_vec_scale(push, step, 7.0f);
                 for (j = 0; j < hit_count; j++) {
                     if (is_moby_in_class_range_500_to_540(D_L05_00178300[j]) != 0) {
-                        spawn_nearby_effect(
-                            (void *)D_L05_00178300[j], (int)moby, 0x30000, racer_instance_vars->pos, push, 1.0f);
+                        spawn_nearby_effect((void *)D_L05_00178300[j],
+                                            (int)moby,
+                                            0x30000,
+                                            racer_instance_vars->pos,
+                                            push,
+                                            1.0f);
                     }
                 }
             }
@@ -572,10 +589,13 @@ void skid_mcmarx_update(Moby *moby) {
                 if (target < racer_instance_vars->speed) {
                     approach_value(&racer_instance_vars->speed, target, frame_time_sq_macro * 7.0f);
                 } else {
-                    approach_value(&racer_instance_vars->speed, target, frame_time_sq_macro * 15.0f);
+                    approach_value(
+                        &racer_instance_vars->speed, target, frame_time_sq_macro * 15.0f);
                 }
             } else {
-                approach_value(&racer_instance_vars->speed, racer_instance_vars->launch_speed, frame_time_sq_macro * 20.0f);
+                approach_value(&racer_instance_vars->speed,
+                               racer_instance_vars->launch_speed,
+                               frame_time_sq_macro * 20.0f);
             }
             if (height_above_ground < 0.2f && racer_instance_vars->vertical_speed < 0.0f) {
                 racer_instance_vars->pos[2] = ground;
@@ -621,7 +641,8 @@ void skid_mcmarx_update(Moby *moby) {
                              frame_scale_sq_macro * 0.3f);
             qcopy(((float *)&moby->pos), racer_instance_vars->pos);
             moby->pos.z += 0.25f;
-            racer_instance_vars->bob_phase = fast_add_rotations(racer_instance_vars->bob_phase, D_0015ED6C_gp * 6.108652f);
+            racer_instance_vars->bob_phase =
+                fast_add_rotations(racer_instance_vars->bob_phase, D_0015ED6C_gp * 6.108652f);
             moby->pos.z += fast_sin(racer_instance_vars->bob_phase) * 0.08f;
             if (racer_instance_vars->child != 0) {
                 Moby *child;

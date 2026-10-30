@@ -262,12 +262,12 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
     L16RingMatrix matrix;
     char         *moby_vars = (char *)moby->pvars;
     int           bound_index = (*(int *)((char *)moby_vars + 0xA0)) << 7;
-    char         *elevator_transform_entry = (char *)(bound_index + (int)level02_elevator_transform_table);
-    float         translation = (*(float *)((char *)moby_vars + 0xB8));
-    float         lower = (*(float *)((char *)elevator_transform_entry + 0x38));
-    float         half = (*(float *)((char *)elevator_transform_entry + 0x28));
-    float         upper = lower + half + translation;
-    int           color;
+    char *elevator_transform_entry = (char *)(bound_index + (int)level02_elevator_transform_table);
+    float translation = (*(float *)((char *)moby_vars + 0xB8));
+    float lower = (*(float *)((char *)elevator_transform_entry + 0x38));
+    float half = (*(float *)((char *)elevator_transform_entry + 0x28));
+    float upper = lower + half + translation;
+    int   color;
     float(*uv)[2];
     L16RingVector *point;
     float         *v, *u;

@@ -187,15 +187,19 @@ void steer_helicopter(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
     dy = dy - pos_y;
     dx = dx - pos_x;
     facing = fast_arc_tan(dx, dy);
-    moby->rot.z = spring_turn(&helicopter_steering_vars->facing_velocity, moby->rot.z, facing, 0.01f, 0.3f, 0.1f);
+    moby->rot.z = spring_turn(
+        &helicopter_steering_vars->facing_velocity, moby->rot.z, facing, 0.01f, 0.3f, 0.1f);
     fast_vec_sub(&delta, &moby->pos, &origin);
     helicopter_steering_vars->delta.q = delta.q;
-    angle = fast_arc_tan(helicopter_steering_vars->delta.f[0], helicopter_steering_vars->delta.f[1]);
+    angle =
+        fast_arc_tan(helicopter_steering_vars->delta.f[0], helicopter_steering_vars->delta.f[1]);
     angle = fast_subtract_rotations(angle, moby->rot.z);
     relative_heading_cosine = fast_cos(angle);
-    yaw_target = (helicopter_steering_vars->speed * 0.34906584f * relative_heading_cosine) / (frame_time * 10.0f);
+    yaw_target = (helicopter_steering_vars->speed * 0.34906584f * relative_heading_cosine) /
+                 (frame_time * 10.0f);
     relative_heading_sine = fast_sin(angle);
-    pitch_target = (helicopter_steering_vars->speed * -0.34906584f * relative_heading_sine) / (frame_time * 10.0f);
+    pitch_target = (helicopter_steering_vars->speed * -0.34906584f * relative_heading_sine) /
+                   (frame_time * 10.0f);
     moby->rot.y = spring_turn(&helicopter_steering_vars->yaw_velocity,
                               moby->rot.y,
                               yaw_target,
@@ -226,7 +230,10 @@ float compute_helicopter_flocking_steering_point(struct Moby *moby,
                                                  float       *out,
                                                  Goal_52b8    goal) __asm__("FUN_L15_002c52b8");
 
-float compute_helicopter_flocking_steering_point(struct Moby *moby, float *flocking_steering_point, Goal_52b8 goal) {
+float compute_helicopter_flocking_steering_point(struct Moby *moby,
+                                                 float       *flocking_steering_point,
+
+                                                 Goal_52b8 goal) {
     float steering_offset[4];
     float goal_distance;
     float wsum;
@@ -287,7 +294,8 @@ float compute_helicopter_flocking_steering_point(struct Moby *moby, float *flock
         qcopy(flocking_steering_point, &moby->pos);
         return fast_arc_tan(goal.pos.f[0] - moby->pos.x, goal.pos.f[1] - moby->pos.y);
     }
-    return fast_arc_tan(flocking_steering_point[0] - moby->pos.x, flocking_steering_point[1] - moby->pos.y);
+    return fast_arc_tan(flocking_steering_point[0] - moby->pos.x,
+                        flocking_steering_point[1] - moby->pos.y);
 }
 
 typedef struct {
@@ -413,7 +421,8 @@ void helicopter_update(struct Moby *moby) {
     if (helicopter_instance_vars->pilot == 0) {
         helicopter_instance_vars->pilot = create_class_55b_moby_from_source(moby);
     }
-    if (moby->state != 0 && moby->state != 0x40 && helicopter_instance_vars->unk1A4 != 0 && hero.vehicle_mode != 2) {
+    if (moby->state != 0 && moby->state != 0x40 && helicopter_instance_vars->unk1A4 != 0 &&
+        hero.vehicle_mode != 2) {
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
         helicopter_instance_vars->unk58 = 0;
@@ -436,7 +445,8 @@ void helicopter_update(struct Moby *moby) {
         LevelPath *path;
         helicopter_instance_vars->range = helicopter_instance_vars->chase_range;
         path = D_L15_001B0AB0[helicopter_instance_vars->area_path];
-        FUN_L00_0025ff38(helicopter_instance_vars->chase_range, moby, &goal, 0, 0, path->points, path->count);
+        FUN_L00_0025ff38(
+            helicopter_instance_vars->chase_range, moby, &goal, 0, 0, path->points, path->count);
     }
     if (helicopter_instance_vars->range < fast_vec_dist(&moby->pos, &goal))
         goal.status = 2;
@@ -503,9 +513,11 @@ void helicopter_update(struct Moby *moby) {
             return;
         }
         if (helicopter_instance_vars->wait_group != -1 ||
-            (is_point_inside_clip_volume(&hero.motion.pos, helicopter_instance_vars->trigger_volume) &&
+            (is_point_inside_clip_volume(&hero.motion.pos,
+                                         helicopter_instance_vars->trigger_volume) &&
              goal.status != 2)) {
-            if (helicopter_instance_vars->wait_group != -1 && count_active_moby_group_members(helicopter_instance_vars->wait_group, 0x40))
+            if (helicopter_instance_vars->wait_group != -1 &&
+                count_active_moby_group_members(helicopter_instance_vars->wait_group, 0x40))
                 break;
             moby->collision = moby->pclass->collision;
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
@@ -536,7 +548,8 @@ void helicopter_update(struct Moby *moby) {
         FUN_L00_0025df68(path, &moby->pos, &point, &segment, &fraction, 0, 999.0f, 5.0f, 0.0f);
         distance = convert_integer_to_float(segment) * path->points[0].f[3] + fraction + 2.0f;
         if (fast_vec_dist(&moby->pos, &path->points[path->count - 1]) <=
-            helicopter_instance_vars->speed * helicopter_instance_vars->speed / (frame_time_sq * 10.0f + frame_time_sq * 10.0f)) {
+            helicopter_instance_vars->speed * helicopter_instance_vars->speed /
+                (frame_time_sq * 10.0f + frame_time_sq * 10.0f)) {
             helicopter_instance_vars->speed -= frame_time_sq * 10.0f;
             if (helicopter_instance_vars->speed < 0.0f)
                 helicopter_instance_vars->speed = 0.0f;
@@ -569,12 +582,12 @@ void helicopter_update(struct Moby *moby) {
         if (segment + 1 < path->count - 8) {
             angle = fast_arc_tan(path->points[segment + 1].f[0] - moby->pos.x,
                                  path->points[segment + 1].f[1] - moby->pos.y);
-            moby->rot.z =
-                spring_turn(&helicopter_instance_vars->facing_velocity, moby->rot.z, angle, 0.01f, 0.3f, 0.1f);
+            moby->rot.z = spring_turn(
+                &helicopter_instance_vars->facing_velocity, moby->rot.z, angle, 0.01f, 0.3f, 0.1f);
         } else {
             angle = fast_arc_tan(goal.pos.f[0] - moby->pos.x, goal.pos.f[1] - moby->pos.y);
-            moby->rot.z =
-                spring_turn(&helicopter_instance_vars->facing_velocity, moby->rot.z, angle, 0.01f, 0.3f, 0.1f);
+            moby->rot.z = spring_turn(
+                &helicopter_instance_vars->facing_velocity, moby->rot.z, angle, 0.01f, 0.3f, 0.1f);
         }
         fast_vec_sub(&move, &point, &moby->pos);
         length = fast_vec_length(&move);
@@ -587,8 +600,10 @@ void helicopter_update(struct Moby *moby) {
             float tilt_y;
             float tilt_x;
             heading = fast_subtract_rotations(fast_arc_tan(move.f[0], move.f[1]), moby->rot.z);
-            tilt_y = helicopter_instance_vars->speed * 0.34906584f * fast_cos(heading) / (frame_time * 10.0f);
-            tilt_x = helicopter_instance_vars->speed * -0.34906584f * fast_sin(heading) / (frame_time * 10.0f);
+            tilt_y = helicopter_instance_vars->speed * 0.34906584f * fast_cos(heading) /
+                     (frame_time * 10.0f);
+            tilt_x = helicopter_instance_vars->speed * -0.34906584f * fast_sin(heading) /
+                     (frame_time * 10.0f);
             moby->rot.y = spring_turn(&helicopter_instance_vars->yaw_velocity,
                                       moby->rot.y,
                                       tilt_y,
@@ -658,7 +673,8 @@ void helicopter_update(struct Moby *moby) {
             compute_helicopter_flocking_steering_point(moby, move.f, *(Goal_52b8 *)&goal);
             aim.q = *(u128 *)&target->pos;
             steer_helicopter(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&aim);
-            if (fast_dec_timer_s16(&helicopter_instance_vars->fire_timer) && helicopter_instance_vars->shot == 0) {
+            if (fast_dec_timer_s16(&helicopter_instance_vars->fire_timer) &&
+                helicopter_instance_vars->shot == 0) {
                 helicopter_instance_vars->fire_timer = scale_game_frames(0x3C);
                 qcopy(&target_pos, &goal);
                 fast_vec_sub(&aim, &target_pos, &point);
@@ -691,8 +707,10 @@ void helicopter_update(struct Moby *moby) {
             float tilt_y;
             float tilt_x;
             heading = fast_subtract_rotations(fast_arc_tan(move.f[0], move.f[1]), moby->rot.z);
-            tilt_y = helicopter_instance_vars->speed * 0.34906584f * fast_cos(heading) / (frame_time * 10.0f);
-            tilt_x = helicopter_instance_vars->speed * -0.34906584f * fast_sin(heading) / (frame_time * 10.0f);
+            tilt_y = helicopter_instance_vars->speed * 0.34906584f * fast_cos(heading) /
+                     (frame_time * 10.0f);
+            tilt_x = helicopter_instance_vars->speed * -0.34906584f * fast_sin(heading) /
+                     (frame_time * 10.0f);
             moby->rot.y = spring_turn(&helicopter_instance_vars->yaw_velocity,
                                       moby->rot.y,
                                       tilt_y,
@@ -780,10 +798,12 @@ void helicopter_update(struct Moby *moby) {
         }
     }
     {
-        float z = moby->pos.z - helicopter_bob_amplitude_gp * fast_cos(helicopter_instance_vars->bob_angle);
+        float z = moby->pos.z -
+                  helicopter_bob_amplitude_gp * fast_cos(helicopter_instance_vars->bob_angle);
         float period = helicopter_bob_period_gp * 60.0f;
         moby->pos.z = z;
-        helicopter_instance_vars->bob_angle = fast_add_rotations(helicopter_instance_vars->bob_angle, 6.2831855f / scale_time(period));
+        helicopter_instance_vars->bob_angle = fast_add_rotations(
+            helicopter_instance_vars->bob_angle, 6.2831855f / scale_time(period));
     }
     moby->pos.z += helicopter_bob_amplitude_gp * fast_cos(helicopter_instance_vars->bob_angle);
     if (helicopter_instance_vars->pilot != 0) {
@@ -793,7 +813,8 @@ void helicopter_update(struct Moby *moby) {
         update_entity(helicopter_instance_vars->pilot);
         helicopter_instance_vars->pilot->flags |= 6;
     }
-    if (helicopter_instance_vars->shot == 0 || helicopter_instance_vars->shot->oclass != 0x350 || helicopter_instance_vars->shot->state == 0xFE ||
+    if (helicopter_instance_vars->shot == 0 || helicopter_instance_vars->shot->oclass != 0x350 ||
+        helicopter_instance_vars->shot->state == 0xFE ||
         helicopter_instance_vars->shot->state == 0xFD) {
         moby_point_position(moby, 0, &turret_pos);
         fast_vec_sub(&world_dir, &goal.pos, &turret_pos);
@@ -801,21 +822,27 @@ void helicopter_update(struct Moby *moby) {
         transpose_rotation_matrix(&move, &moby->rot_row0);
         transform_vector(&local_dir, &local_dir, &move);
         angle = fast_arc_tan(local_dir.f[0], local_dir.f[1]);
-        helicopter_instance_vars->turret_yaw = spring_turn(&helicopter_instance_vars->turret_yaw_velocity,
-                                       helicopter_instance_vars->turret_yaw,
-                                       angle,
-                                       frame_time_sq * 6.2831855f,
-                                       frame_time_sq * 12.566371f,
-                                       frame_time * 6.2831855f);
+        helicopter_instance_vars->turret_yaw =
+            spring_turn(&helicopter_instance_vars->turret_yaw_velocity,
+                        helicopter_instance_vars->turret_yaw,
+                        angle,
+                        frame_time_sq * 6.2831855f,
+                        frame_time_sq * 12.566371f,
+                        frame_time * 6.2831855f);
         angle = fast_arc_tan(vector_length_xy(&local_dir), local_dir.f[2]);
-        helicopter_instance_vars->turret_pitch = spring_turn(&helicopter_instance_vars->turret_pitch_velocity,
-                                         helicopter_instance_vars->turret_pitch,
-                                         -angle,
-                                         frame_time_sq * 3.1415927f,
-                                         frame_time_sq * 6.2831855f,
-                                         frame_time * 1.5707964f);
-        FUN_L00_001fff28(helicopter_instance_vars->turret_yaw_joint + 0x10, 2, helicopter_instance_vars->turret_yaw);
-        FUN_L00_001fff28(helicopter_instance_vars->turret_pitch_joint + 0x10, 2, helicopter_instance_vars->turret_pitch);
+        helicopter_instance_vars->turret_pitch =
+            spring_turn(&helicopter_instance_vars->turret_pitch_velocity,
+                        helicopter_instance_vars->turret_pitch,
+                        -angle,
+                        frame_time_sq * 3.1415927f,
+                        frame_time_sq * 6.2831855f,
+                        frame_time * 1.5707964f);
+        FUN_L00_001fff28(helicopter_instance_vars->turret_yaw_joint + 0x10,
+                         2,
+                         helicopter_instance_vars->turret_yaw);
+        FUN_L00_001fff28(helicopter_instance_vars->turret_pitch_joint + 0x10,
+                         2,
+                         helicopter_instance_vars->turret_pitch);
         helicopter_instance_vars->shot = 0;
     } else {
         moby_point_position(moby, 0, &turret_pos);
@@ -824,21 +851,27 @@ void helicopter_update(struct Moby *moby) {
         transpose_rotation_matrix(&move, &moby->rot_row0);
         transform_vector(&local_dir, &local_dir, &move);
         angle = fast_arc_tan(local_dir.f[0], local_dir.f[1]);
-        helicopter_instance_vars->turret_yaw = spring_turn(&helicopter_instance_vars->turret_yaw_velocity,
-                                       helicopter_instance_vars->turret_yaw,
-                                       angle,
-                                       frame_time_sq * 6.2831855f,
-                                       frame_time_sq * 12.566371f,
-                                       frame_time * 6.2831855f);
+        helicopter_instance_vars->turret_yaw =
+            spring_turn(&helicopter_instance_vars->turret_yaw_velocity,
+                        helicopter_instance_vars->turret_yaw,
+                        angle,
+                        frame_time_sq * 6.2831855f,
+                        frame_time_sq * 12.566371f,
+                        frame_time * 6.2831855f);
         angle = fast_arc_tan(vector_length_xy(&local_dir), local_dir.f[2]);
-        helicopter_instance_vars->turret_pitch = spring_turn(&helicopter_instance_vars->turret_pitch_velocity,
-                                         helicopter_instance_vars->turret_pitch,
-                                         -angle,
-                                         frame_time_sq * 3.1415927f,
-                                         frame_time_sq * 6.2831855f,
-                                         frame_time * 1.5707964f);
-        FUN_L00_001fff28(helicopter_instance_vars->turret_yaw_joint + 0x10, 2, helicopter_instance_vars->turret_yaw);
-        FUN_L00_001fff28(helicopter_instance_vars->turret_pitch_joint + 0x10, 2, helicopter_instance_vars->turret_pitch);
+        helicopter_instance_vars->turret_pitch =
+            spring_turn(&helicopter_instance_vars->turret_pitch_velocity,
+                        helicopter_instance_vars->turret_pitch,
+                        -angle,
+                        frame_time_sq * 3.1415927f,
+                        frame_time_sq * 6.2831855f,
+                        frame_time * 1.5707964f);
+        FUN_L00_001fff28(helicopter_instance_vars->turret_yaw_joint + 0x10,
+                         2,
+                         helicopter_instance_vars->turret_yaw);
+        FUN_L00_001fff28(helicopter_instance_vars->turret_pitch_joint + 0x10,
+                         2,
+                         helicopter_instance_vars->turret_pitch);
     }
 }
 

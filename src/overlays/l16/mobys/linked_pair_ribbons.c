@@ -80,7 +80,8 @@ void initialize_linked_pair_group(struct Moby *moby) {
     short *group_entry = D_L16_001ABCC0_c[moby->group];
     if (group_entry != 0) {
         do {
-            char *linked_pair_group_member_moby = D_L16_0015FFD8 + (((unsigned short)*group_entry & 0x7FFF) << 8);
+            char *linked_pair_group_member_moby =
+                D_L16_0015FFD8 + (((unsigned short)*group_entry & 0x7FFF) << 8);
             if (*(short *)(linked_pair_group_member_moby + 0xA6) == 0x228) {
                 int *linked_partner_slot;
                 if (moby != linked_pair_group_member_moby) {

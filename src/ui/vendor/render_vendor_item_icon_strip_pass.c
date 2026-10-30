@@ -51,10 +51,12 @@ void render_vendor_item_icon_strip_pass(void) {
         draw_framebuffer_rect(slot_x + 0xA, 4, slot_x + 0x3E, 0x38, 0x200, 0x80, 0x80000000);
         if (D_001E63C0.unk210 > 0) {
             do {
-                selection_purchase_kind_ptr = (s32 *)(void *)((u8 *)&D_001E63C0 + 0xD4 + item_index * 0x14);
-                item_icon = ((struct HudItemEntry *)(void *)((u8 *)((u8 *)menu_item_info) +
-                                                             selection_purchase_kind_ptr[-1] * 0x4C))
-                                ->unk38;
+                selection_purchase_kind_ptr =
+                    (s32 *)(void *)((u8 *)&D_001E63C0 + 0xD4 + item_index * 0x14);
+                item_icon =
+                    ((struct HudItemEntry *)(void *)((u8 *)((u8 *)menu_item_info) +
+                                                     selection_purchase_kind_ptr[-1] * 0x4C))
+                        ->unk38;
                 if (selection_purchase_kind_ptr[0] == 1) {
                     frame_index = get_icon_frame(item_icon, 2);
                 } else {

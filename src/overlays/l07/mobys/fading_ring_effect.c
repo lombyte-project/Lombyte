@@ -173,8 +173,10 @@ void draw_fading_ring_effect(struct Moby *moby) {
             angle = angle + 0.31415927f;
             *(float *)(packet + 0x34) = moby->pos.y + radius * y;
             draw_geometry_quad(packet, 0, 1);
-            *(u128_0F0D0 *)(lower_ring_quad_packet + 0) = *(u128_0F0D0 *)(lower_ring_quad_packet + 0x10);
-            *(u128_0F0D0 *)(lower_ring_quad_packet + 0x20) = *(u128_0F0D0 *)(lower_ring_quad_packet + 0x30);
+            *(u128_0F0D0 *)(lower_ring_quad_packet + 0) =
+                *(u128_0F0D0 *)(lower_ring_quad_packet + 0x10);
+            *(u128_0F0D0 *)(lower_ring_quad_packet + 0x20) =
+                *(u128_0F0D0 *)(lower_ring_quad_packet + 0x30);
             *(float *)(lower_ring_quad_packet + 0x30) = *(float *)(packet + 0x30);
             *(float *)(lower_ring_quad_packet + 0x34) = *(float *)(packet + 0x34);
             *(float *)(lower_ring_quad_packet + 0x10) = *(float *)(packet + 0x10);

@@ -21,7 +21,8 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
     if (music_stream_state.transition.handle == 0) {
         disc_table_base = (u8 *)&disc_table;
         track_location_table_offset = 0x2AA8;
-        transition_track_location_entry = (s32 *)(disc_table_base + track_location_table_offset) + transition_track;
+        transition_track_location_entry =
+            (s32 *)(disc_table_base + track_location_table_offset) + transition_track;
         if (*transition_track_location_entry != 0) {
             *(u32 *)&music_stream_state.transition.handle = 0xFFFFFFFF;
             music_stream_state.transition.poll_interval = 10;

@@ -37,7 +37,8 @@ void television_update(struct Moby *moby) {
             moby->visible = 1;
             moby->flags &= 0xFFFE;
         }
-        bobbing_phase = fast_add_rotations(*(float *)television_bobbing_state, frame_time * 0.87266463f);
+        bobbing_phase =
+            fast_add_rotations(*(float *)television_bobbing_state, frame_time * 0.87266463f);
         *(float *)television_bobbing_state = bobbing_phase;
         moby->pos.z = *(float *)(television_bobbing_state + 4) + fast_sin(bobbing_phase);
         break;

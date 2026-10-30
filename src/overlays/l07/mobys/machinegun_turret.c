@@ -81,25 +81,31 @@ void machinegun_turret_update(unsigned char *moby) {
     switch ((u8)moby[0x20]) {
     case TURRET_INITIALIZE:
         if (*(int *)(turret_instance_vars + 0x70) != -1) {
-            char *target = (char *)(*(int *)(turret_instance_vars + 0x70) * 0x100 + (int)level_mobys);
-            *(float *)(turret_instance_vars + 0x80) = fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
-                                                   *(float *)(target + 0x14) - MOBY(moby)->pos.y);
+            char *target =
+                (char *)(*(int *)(turret_instance_vars + 0x70) * 0x100 + (int)level_mobys);
+            *(float *)(turret_instance_vars + 0x80) =
+                fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
+                             *(float *)(target + 0x14) - MOBY(moby)->pos.y);
             if (*(float *)(turret_instance_vars + 0x80) < 0.0f)
                 *(float *)(turret_instance_vars + 0x80) += 6.2831855f;
         }
         if (*(int *)(turret_instance_vars + 0x74) != -1) {
-            char *target = (char *)(*(int *)(turret_instance_vars + 0x74) * 0x100 + (int)level_mobys);
-            *(float *)(turret_instance_vars + 0x84) = fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
-                                                   *(float *)(target + 0x14) - MOBY(moby)->pos.y);
+            char *target =
+                (char *)(*(int *)(turret_instance_vars + 0x74) * 0x100 + (int)level_mobys);
+            *(float *)(turret_instance_vars + 0x84) =
+                fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
+                             *(float *)(target + 0x14) - MOBY(moby)->pos.y);
             if (*(float *)(turret_instance_vars + 0x84) < 0.0f)
                 *(float *)(turret_instance_vars + 0x84) += 6.2831855f;
             if (*(float *)(turret_instance_vars + 0x84) < *(float *)(turret_instance_vars + 0x80))
                 *(float *)(turret_instance_vars + 0x84) += 6.2831855f;
         } else {
-            *(float *)(turret_instance_vars + 0x84) = *(float *)(turret_instance_vars + 0x80) + 6.2831855f;
+            *(float *)(turret_instance_vars + 0x84) =
+                *(float *)(turret_instance_vars + 0x80) + 6.2831855f;
         }
         *(float *)(turret_instance_vars + 0x88) = 0.0f;
-        *(float *)(turret_instance_vars + 0x8c) = *(float *)(turret_instance_vars + 0x84) - *(float *)(turret_instance_vars + 0x80);
+        *(float *)(turret_instance_vars + 0x8c) =
+            *(float *)(turret_instance_vars + 0x84) - *(float *)(turret_instance_vars + 0x80);
         MOBY(moby)->rot.z = normalize_angle(*(float *)(turret_instance_vars + 0x80));
         *(float *)(turret_instance_vars + 0x90) = MOBY(moby)->pos.z;
         turret_instance_vars[0x29] = 0;
@@ -113,29 +119,34 @@ void machinegun_turret_update(unsigned char *moby) {
         if ((u8)moby[0x52] != 1 && ((u8)moby[0x70] & 2) != 0 && (u8)moby[0x53] != 1)
             FUN_00212f90(moby, 1, 0, 1);
         if (*(s16 *)(turret_instance_vars + 0x7e) != 0) {
-            *(float *)(turret_instance_vars + 0x88) -= *(float *)(turret_instance_vars + 0x78) * 0.017453292f * frame_time;
+            *(float *)(turret_instance_vars + 0x88) -=
+                *(float *)(turret_instance_vars + 0x78) * 0.017453292f * frame_time;
             if (*(float *)(turret_instance_vars + 0x88) < 0.0f) {
                 *(float *)(turret_instance_vars + 0x88) = 0.0f;
                 *(s16 *)(turret_instance_vars + 0x7e) = 0;
             }
         } else {
-            *(float *)(turret_instance_vars + 0x88) += *(float *)(turret_instance_vars + 0x78) * 0.017453292f * frame_time;
+            *(float *)(turret_instance_vars + 0x88) +=
+                *(float *)(turret_instance_vars + 0x78) * 0.017453292f * frame_time;
             if (*(float *)(turret_instance_vars + 0x8c) < *(float *)(turret_instance_vars + 0x88)) {
                 *(float *)(turret_instance_vars + 0x88) = *(float *)(turret_instance_vars + 0x8c);
                 *(s16 *)(turret_instance_vars + 0x7e) = 1;
             }
         }
-        MOBY(moby)->rot.z = normalize_angle(*(float *)(turret_instance_vars + 0x80) + *(float *)(turret_instance_vars + 0x88));
+        MOBY(moby)->rot.z = normalize_angle(*(float *)(turret_instance_vars + 0x80) +
+                                            *(float *)(turret_instance_vars + 0x88));
         if (fast_dec_timer_s16(turret_instance_vars + 0x7c) == 0)
             return;
         if ((u8)moby[0xbc] == 0) {
-            if (*(int *)(turret_instance_vars + 0x98) == 0 || (*(u16 *)(turret_instance_vars + 0x9c) & 1)) {
+            if (*(int *)(turret_instance_vars + 0x98) == 0 ||
+                (*(u16 *)(turret_instance_vars + 0x9c) & 1)) {
                 FUN_L00_0024f7c8(moby, 0, position);
                 velocity[0] = fast_cos(MOBY(moby)->rot.z) * (D_0015ED6C * 15.0f);
                 velocity[1] = fast_sin(MOBY(moby)->rot.z) * (D_0015ED6C * 15.0f);
                 velocity[2] = 0.0f;
                 FUN_0022da68(0, 0, moby);
-                spawn_machinegun_turret_projectile(position, velocity, moby, (u8)turret_instance_vars[0x9e]);
+                spawn_machinegun_turret_projectile(
+                    position, velocity, moby, (u8)turret_instance_vars[0x9e]);
             }
             if (*(int *)(turret_instance_vars + 0x98) != 0) {
                 if (fast_dec_timer_s16(turret_instance_vars + 0x9c) != 0) {
@@ -184,12 +195,14 @@ void machinegun_turret_update(unsigned char *moby) {
             MOBY(moby)->pos.z -= frame_time * 5.0f;
         else
             MOBY(moby)->pos.z = *(float *)(turret_instance_vars + 0x90) - 0.7f;
-        direction = normalize_angle(*(float *)(turret_instance_vars + 0x80) + *(float *)(turret_instance_vars + 0x88));
+        direction = normalize_angle(*(float *)(turret_instance_vars + 0x80) +
+                                    *(float *)(turret_instance_vars + 0x88));
         distance = fast_difference_between_rotations(MOBY(moby)->rot.z, direction);
         if (D_0015ED6C * 12.566371f < distance)
             MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, D_0015ED6C * 12.566371f);
         else
-            MOBY(moby)->rot.z = normalize_angle(*(float *)(turret_instance_vars + 0x80) + *(float *)(turret_instance_vars + 0x88));
+            MOBY(moby)->rot.z = normalize_angle(*(float *)(turret_instance_vars + 0x80) +
+                                                *(float *)(turret_instance_vars + 0x88));
         if (fast_dec_timer_s16(turret_instance_vars + 0x7c) != 0) {
             FUN_0022da68(2, 0, moby);
             if ((u8)moby[0x53] != 3)

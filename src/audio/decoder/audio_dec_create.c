@@ -10,7 +10,11 @@ s32                             audio_dec_create(struct AudioDec *dec,
                                                  s32              buffer_size,
                                                  s32              globals_address) __asm__("FUN_0023abd0");
 
-s32 audio_dec_create(struct AudioDec *dec, s32 audio_data_buffer, s32 buffer_size, s32 globals_address) {
+s32 audio_dec_create(struct AudioDec *dec,
+                     s32              audio_data_buffer,
+                     s32              buffer_size,
+
+                     s32 globals_address) {
     s32 movie_handle;
     s32 three;
     s32 four;

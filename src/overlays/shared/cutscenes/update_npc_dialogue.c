@@ -247,7 +247,8 @@ s32 initialize_npc_dialogue(void *moby, u8 *out_p) {
     if (level_object_states[i].state != 0 && dialogue_entries->f08 == 0) {
         dialogue_trigger->f36 = dialogue_entries->f06;
     }
-    dialogue_trigger->f08 = ((u8 *)dialogue_trigger->f3C)[dialogue_trigger->f36 * 0x1C + (k = 0x10)] & 1;
+    dialogue_trigger->f08 =
+        ((u8 *)dialogue_trigger->f3C)[dialogue_trigger->f36 * 0x1C + (k = 0x10)] & 1;
     return i;
 }
 

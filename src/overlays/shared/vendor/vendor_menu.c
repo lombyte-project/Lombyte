@@ -232,7 +232,8 @@ void decompress_and_relocate_vendor_moby_assets(void) {
     for (i = 0; i < 16; i++) {
         int entry_offset = *entry_offset_cursor++;
         if (entry_offset) {
-            *(int *)(moby_asset_table_container + 0x48 + i * 4) = vendor_menu_lui.unk18 + entry_offset;
+            *(int *)(moby_asset_table_container + 0x48 + i * 4) =
+                vendor_menu_lui.unk18 + entry_offset;
             relocate_asset_entry_pointers(moby_asset_table_container, i);
         }
     }

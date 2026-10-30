@@ -111,7 +111,8 @@ void update_bomber_tank_bomb(struct Moby *moby) {
 
     if (FUN_L08_002dc9a8_collision(moby_bytes + 0x10, 0.5f, 0, moby_bytes, 0) != 0 &&
         D_L08_00174658_2DC9A8 != 0 &&
-        (D_L08_00174658_2DC9A8 != *(int *)(ballistic_projectile_vars + 0x20) || *(int *)(ballistic_projectile_vars + 0x14) != 0)) {
+        (D_L08_00174658_2DC9A8 != *(int *)(ballistic_projectile_vars + 0x20) ||
+         *(int *)(ballistic_projectile_vars + 0x14) != 0)) {
         moby_bytes[0x20] = 99;
     }
     switch ((unsigned char)moby_bytes[0x20]) {
@@ -127,11 +128,15 @@ void update_bomber_tank_bomb(struct Moby *moby) {
         collision_and_effect_record.scale = 1.0f;
         qcopy(collision_and_effect_record.velocity, ballistic_projectile_vars);
         if (FUN_L08_002dc9a8_trace(original, &collision_and_effect_record, 0, moby_bytes, 0) != 0) {
-            if (*(int *)(ballistic_projectile_vars + 0x20) != 0 && D_L08_00174640.moby != *(int *)(ballistic_projectile_vars + 0x20)) {
+            if (*(int *)(ballistic_projectile_vars + 0x20) != 0 &&
+                D_L08_00174640.moby != *(int *)(ballistic_projectile_vars + 0x20)) {
                 moby_bytes[0x20] = 99;
                 qcopy(position, D_L08_00174640.point.f);
-                FUN_L08_002dc9a8_add(ballistic_projectile_vars, ballistic_projectile_vars, &D_L08_00174640.normal_x);
-                FUN_L08_002dc9a8_scale(D_0015ED6C_lui + D_0015ED6C_lui, ballistic_projectile_vars, ballistic_projectile_vars);
+                FUN_L08_002dc9a8_add(
+                    ballistic_projectile_vars, ballistic_projectile_vars, &D_L08_00174640.normal_x);
+                FUN_L08_002dc9a8_scale(D_0015ED6C_lui + D_0015ED6C_lui,
+                                       ballistic_projectile_vars,
+                                       ballistic_projectile_vars);
             }
         } else {
             if (fast_dec_timer(ballistic_projectile_vars + 0x10) != 0)
@@ -149,7 +154,8 @@ void update_bomber_tank_bomb(struct Moby *moby) {
         collision_and_effect_record.scale = 1.0f;
         clear_u64_value(collision_and_effect_record.velocity);
         collision_and_effect_record.state = 0;
-        FUN_L08_002dc9a8_collision(moby_bytes + 0x10, 1.0f, 9, moby_bytes, collision_and_effect_record.velocity);
+        FUN_L08_002dc9a8_collision(
+            moby_bytes + 0x10, 1.0f, 9, moby_bytes, collision_and_effect_record.velocity);
         allocate_voice_for_target_entry(0, 0, moby_bytes);
         for (i = 0; i < 50; i++) {
             axis = i % 4;
@@ -163,7 +169,9 @@ void update_bomber_tank_bomb(struct Moby *moby) {
             collision_and_effect_record.pos[0] = FUN_L08_002dc9a8_sin(angle) * radius;
             collision_and_effect_record.pos[1] = FUN_L08_002dc9a8_cos(angle) * radius;
             collision_and_effect_record.pos[2] = 0.0f;
-            fast_vec_add(collision_and_effect_record.pos, collision_and_effect_record.pos, moby_bytes + 0x10);
+            fast_vec_add(collision_and_effect_record.pos,
+                         collision_and_effect_record.pos,
+                         moby_bytes + 0x10);
             frame_time = radius * D_0015ED6C_lui;
             radius *= 0.717f;
             collision_and_effect_record.pos[2] -= radius;
@@ -176,7 +184,13 @@ void update_bomber_tank_bomb(struct Moby *moby) {
                 color = FUN_L08_002dc9a8_random_color(60);
                 color2 = FUN_L08_002dc9a8_random_color(120);
                 alpha = random_int_between(color, color2);
-                FUN_L08_002dc9a8_emit(collision_and_effect_record.pos, position, 0x1f101820, 0x101010, size, alpha, 0);
+                FUN_L08_002dc9a8_emit(collision_and_effect_record.pos,
+                                      position,
+                                      0x1f101820,
+                                      0x101010,
+                                      size,
+                                      alpha,
+                                      0);
             } break;
             case DETONATION_EFFECT_TWO_COLOR_CHOICE: {
                 int color, color2, alpha;
@@ -201,7 +215,8 @@ void update_bomber_tank_bomb(struct Moby *moby) {
                 radius = random_float_between(150000.0f, 200000.0f);
                 alpha = FUN_L08_002dc9a8_random_color(60);
                 alpha = random_int_between(alpha, FUN_L08_002dc9a8_random_color(120));
-                FUN_L08_002dc9a8_emit(collision_and_effect_record.pos, position, color, color2, radius, alpha, 3);
+                FUN_L08_002dc9a8_emit(
+                    collision_and_effect_record.pos, position, color, color2, radius, alpha, 3);
             } break;
             case DETONATION_EFFECT_NO_EMISSION:
                 break;

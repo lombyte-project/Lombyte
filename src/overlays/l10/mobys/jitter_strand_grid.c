@@ -74,7 +74,8 @@ void update_jitter_strand_grid(struct Moby *moby) {
                             row * (jitter_strand_row_y_span_gp / 20.0f) -
                             jitter_strand_row_y_span_gp * 0.5f;
                         jitter_strand_grid_vars->pos[group][row][strand_column].f[3] = 1.0f;
-                        random_vector(&jitter[row][strand_column], 0.0f, D_L10_00161D54 * frame_time);
+                        random_vector(
+                            &jitter[row][strand_column], 0.0f, D_L10_00161D54 * frame_time);
                     }
                     for (row = 1; row < 19; row++) {
                         fast_vec_add(&jitter_strand_grid_vars->vel[group][row][strand_column],
@@ -83,8 +84,9 @@ void update_jitter_strand_grid(struct Moby *moby) {
                         fast_vec_add(&jitter_strand_grid_vars->vel[group][row][strand_column],
                                      &jitter_strand_grid_vars->vel[group][row][strand_column],
                                      &jitter[row + 1][strand_column]);
-                        fast_vec_scale(
-                            &jitter_strand_grid_vars->vel[group][row][strand_column], &jitter_strand_grid_vars->vel[group][row][strand_column], 0.333f);
+                        fast_vec_scale(&jitter_strand_grid_vars->vel[group][row][strand_column],
+                                       &jitter_strand_grid_vars->vel[group][row][strand_column],
+                                       0.333f);
                     }
                     jitter_strand_grid_vars->timers[group][strand_column] = D_L10_00161D64;
                 } else {

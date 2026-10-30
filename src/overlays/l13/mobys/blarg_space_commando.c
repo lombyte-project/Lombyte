@@ -215,8 +215,9 @@ void blarg_space_commando_update(struct Moby *moby) {
         blarg_space_commando_vars->ctl.unkC = 0.5f;
         blarg_space_commando_vars->ctl.unk0 = truncate_float_to_s32(D_L13_00161E58_gp * 716.8f);
         blarg_space_commando_vars->ctl.unk4 = D_L13_00161E58_gp * 0.7f;
-        blarg_space_commando_vars->ctl.unk24 = l13_blarg_space_commando_horizontal_speed_limit_base * frame_time *
-                          random_float_between(0.95f, 1.05f);
+        blarg_space_commando_vars->ctl.unk24 =
+            l13_blarg_space_commando_horizontal_speed_limit_base * frame_time *
+            random_float_between(0.95f, 1.05f);
         qcopy(&blarg_space_commando_vars->home, &moby->pos);
         moby_point_position(moby, 0, &blarg_space_commando_vars->unk1E0);
         moby->state = 1;
@@ -275,7 +276,8 @@ void blarg_space_commando_update(struct Moby *moby) {
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, scale_game_frames(20));
                 }
-                blarg_space_commando_vars->timer = scale_game_frames(blarg_space_commando_face_target_wait_frames);
+                blarg_space_commando_vars->timer =
+                    scale_game_frames(blarg_space_commando_face_target_wait_frames);
             } else {
                 moby->state = 1;
                 if (moby->prev_seq != 0) {
@@ -332,7 +334,8 @@ void blarg_space_commando_update(struct Moby *moby) {
                 shot.active = 0;
                 shot.valid = 1;
                 shot.oclass = moby->oclass;
-                sweep_hit_segment(&point, &origin, &blarg_space_commando_vars->unk1E0, &origin, moby, &shot, 5);
+                sweep_hit_segment(
+                    &point, &origin, &blarg_space_commando_vars->unk1E0, &origin, moby, &shot, 5);
             }
         }
         qcopy(&blarg_space_commando_vars->unk1E0, &point);
@@ -370,9 +373,11 @@ void blarg_space_commando_update(struct Moby *moby) {
         } else {
             blarg_space_commando_vars->unk1A8 = 0.0f;
         }
-        resolve_point_path_segment_xy_clearance(blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
+        resolve_point_path_segment_xy_clearance(
+            blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
         path_blocked = 0;
-        if (FUN_L00_00261b48(blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
+        if (FUN_L00_00261b48(
+                blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             path_blocked = 1;
         }
@@ -409,8 +414,10 @@ void blarg_space_commando_update(struct Moby *moby) {
         point.f[1] = 2.0f * fast_sin(moby->rot.z);
         point.f[2] = 0.0f;
         FUN_L00_00258b50(moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
-        resolve_point_path_segment_xy_clearance(blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
-        if (FUN_L00_00261b48(blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
+        resolve_point_path_segment_xy_clearance(
+            blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
+        if (FUN_L00_00261b48(
+                blarg_space_commando_vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             blocked = 1;
         }
@@ -445,7 +452,8 @@ void blarg_space_commando_update(struct Moby *moby) {
                 shot.active = 0;
                 shot.valid = 1;
                 shot.oclass = moby->oclass;
-                sweep_hit_segment(&point, &origin, &blarg_space_commando_vars->unk1E0, &origin, moby, &shot, 5);
+                sweep_hit_segment(
+                    &point, &origin, &blarg_space_commando_vars->unk1E0, &origin, moby, &shot, 5);
             }
         }
         qcopy(&blarg_space_commando_vars->unk1E0, &point);
@@ -457,22 +465,23 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         break;
     case BLARG_SPACE_COMMANDO_RETURN_HOME:
-        func_L00_002592B0_309330(
-            moby,
-            fast_arc_tan(blarg_space_commando_vars->home.f[0] - moby->pos.x, blarg_space_commando_vars->home.f[1] - moby->pos.y),
-            &blarg_space_commando_vars->turn,
-            0.05f,
-            0.3f,
-            frame_time * 6.2831855f);
+        func_L00_002592B0_309330(moby,
+                                 fast_arc_tan(blarg_space_commando_vars->home.f[0] - moby->pos.x,
+                                              blarg_space_commando_vars->home.f[1] - moby->pos.y),
+                                 &blarg_space_commando_vars->turn,
+                                 0.05f,
+                                 0.3f,
+                                 frame_time * 6.2831855f);
         point.f[0] = 2.0f * fast_cos(moby->rot.z);
         point.f[1] = 2.0f * fast_sin(moby->rot.z);
         point.f[2] = 0.0f;
         if (fast_difference_between_rotations(
                 moby->rot.z,
-                fast_arc_tan(blarg_space_commando_vars->home.f[0] - moby->pos.x, blarg_space_commando_vars->home.f[1] - moby->pos.y)) <
-            0.7853982f) {
+                fast_arc_tan(blarg_space_commando_vars->home.f[0] - moby->pos.x,
+                             blarg_space_commando_vars->home.f[1] - moby->pos.y)) < 0.7853982f) {
             FUN_L00_00258b50(moby, &blarg_space_commando_vars->ctl, &point, &origin, 1.0f);
-            resolve_point_path_segment_xy_clearance(blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
+            resolve_point_path_segment_xy_clearance(
+                blarg_space_commando_vars->path, &moby->pos, &moby->pos, 0.75f);
         }
         if (fast_vec_dist(&blarg_space_commando_vars->home, &moby->pos) < 1.0f) {
             moby->state = 1;
@@ -599,14 +608,15 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         GROUND_MATERIAL_KILLS_WALKER_WITH_EXPLOSION = 11,
         GROUND_MATERIAL_EXPLODES_WALKER = 13
     };
-    struct WalkerVars_8d10 *blarg_space_commando_private_data = (struct WalkerVars_8d10 *)moby->pvars;
-    char                   *hit;
-    s32                     code;
-    s32                     kind;
-    f32                     damage;
-    f32                     ground;
-    s32                    *path;
-    Vec4f                   push;
+    struct WalkerVars_8d10 *blarg_space_commando_private_data =
+        (struct WalkerVars_8d10 *)moby->pvars;
+    char *hit;
+    s32   code;
+    s32   kind;
+    f32   damage;
+    f32   ground;
+    s32  *path;
+    Vec4f push;
 
     moby->scale = moby->pclass->scale * D_L13_00161E58;
     update_gemlik_trail(moby);
@@ -618,7 +628,8 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
     fast_dec_timer(&blarg_space_commando_private_data->idle_timer);
     damage = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
-    code = resolve_moby_hit_response(moby, hit, &blarg_space_commando_private_data->health, 0, &kind, &damage, 0, 4);
+    code = resolve_moby_hit_response(
+        moby, hit, &blarg_space_commando_private_data->health, 0, &kind, &damage, 0, 4);
     if (kind != 1 && moby->state != 0x10) {
         if (hit != 0 && *(struct Moby **)(hit + 0x20) != 0 &&
             (*(struct Moby **)(hit + 0x20))->oclass == 0x4EE) {
@@ -644,8 +655,10 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         case 10:
             moby->state = 0xF;
             blarg_space_commando_private_data->stun_timer = scale_game_frames(0x3C);
-            blarg_space_commando_private_data->knock_up = blarg_space_commando_stun_horizontal_knockback_speed * frame_time;
-            blarg_space_commando_private_data->knock_back = blarg_space_commando_stun_vertical_knockback_speed * frame_time;
+            blarg_space_commando_private_data->knock_up =
+                blarg_space_commando_stun_horizontal_knockback_speed * frame_time;
+            blarg_space_commando_private_data->knock_back =
+                blarg_space_commando_stun_vertical_knockback_speed * frame_time;
             blarg_space_commando_private_data->knock_min = 8.0f;
             blarg_space_commando_private_data->knock_max = 15.0f;
             trooper_start_knockback(moby,
@@ -660,8 +673,10 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         case HIT_RESULT_DYING_KNOCKBACK:
             moby->state = 0x10;
             moby->flags &= ~0x1000;
-            blarg_space_commando_private_data->knock_up = blarg_space_commando_dying_horizontal_knockback_speed * frame_time;
-            blarg_space_commando_private_data->knock_back = blarg_space_commando_dying_vertical_knockback_speed * frame_time;
+            blarg_space_commando_private_data->knock_up =
+                blarg_space_commando_dying_horizontal_knockback_speed * frame_time;
+            blarg_space_commando_private_data->knock_back =
+                blarg_space_commando_dying_vertical_knockback_speed * frame_time;
             blarg_space_commando_private_data->knock_min = 9.0f;
             blarg_space_commando_private_data->knock_max = 17.0f;
             trooper_start_knockback(moby,
@@ -684,13 +699,22 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         blarg_space_commando_private_data->range = blarg_space_commando_private_data->near_range;
     }
     path = (s32 *)walker_paths[blarg_space_commando_private_data->path];
-    if (find_target_8d10(blarg_space_commando_private_data->range, moby, &blarg_space_commando_private_data->target, 0, 0, path + 4, *path) != 2) {
-        if (blarg_space_commando_private_data->range < vector_distance_xy(&blarg_space_commando_private_data->home, &blarg_space_commando_private_data->target) ||
+    if (find_target_8d10(blarg_space_commando_private_data->range,
+                         moby,
+                         &blarg_space_commando_private_data->target,
+                         0,
+                         0,
+                         path + 4,
+                         *path) != 2) {
+        if (blarg_space_commando_private_data->range <
+                vector_distance_xy(&blarg_space_commando_private_data->home,
+                                   &blarg_space_commando_private_data->target) ||
             absolute_float(moby->pos.z - blarg_space_commando_private_data->target.z) > 3.0f) {
             blarg_space_commando_private_data->mode = 2;
         }
         if (blarg_space_commando_private_data->target_moby != -1 &&
-            is_point_inside_clip_volume(&blarg_space_commando_private_data->target, blarg_space_commando_private_data->target_moby) == 0) {
+            is_point_inside_clip_volume(&blarg_space_commando_private_data->target,
+                                        blarg_space_commando_private_data->target_moby) == 0) {
             blarg_space_commando_private_data->mode = 2;
         } else {
             blarg_space_commando_private_data->target_moby = -1;
@@ -850,10 +874,16 @@ void update_gemlik_trail(struct Moby *moby) {
 
     i = 15;
     do {
-        fast_vec_sub(&trail_point_or_hit_direction, &gemlik_trail_vars->point[15 - i], &gemlik_trail_vars->anchor);
+        fast_vec_sub(&trail_point_or_hit_direction,
+                     &gemlik_trail_vars->point[15 - i],
+                     &gemlik_trail_vars->anchor);
         trail_point_or_hit_direction.z = 0.0f;
-        fast_vec_normalize(&trail_point_or_hit_direction, &trail_point_or_hit_direction, gemlik_trail_point_radial_speed_gp * frame_time);
-        fast_vec_add(&trail_point_or_hit_direction, &gemlik_trail_vars->point[15 - i], &trail_point_or_hit_direction);
+        fast_vec_normalize(&trail_point_or_hit_direction,
+                           &trail_point_or_hit_direction,
+                           gemlik_trail_point_radial_speed_gp * frame_time);
+        fast_vec_add(&trail_point_or_hit_direction,
+                     &gemlik_trail_vars->point[15 - i],
+                     &trail_point_or_hit_direction);
         fast_vec_sub(&work.vectors.delta, &trail_point_or_hit_direction, &moby->pos);
         dot = fast_vec_dot(&work.vectors.delta, &gemlik_trail_vars->direction);
         fast_vec_normalize(&work.vectors.scaled, &gemlik_trail_vars->direction, -dot + 0.35f);
@@ -863,10 +893,15 @@ void update_gemlik_trail(struct Moby *moby) {
         upper.z = upper.z + 1.0f;
         qcopy(&lower, &gemlik_trail_vars->point[15 - i]);
         lower.z = lower.z - 3.0f;
-        if (collision_line(&upper, &lower, 2, 0, 0) != 0 && prior_height < trail_point_or_hit_direction.z) {
-            approach_value(&trail_point_or_hit_direction.z, coll_hit_1638.point.f[2] + 0.35f, frame_time * 4.0f);
+        if (collision_line(&upper, &lower, 2, 0, 0) != 0 &&
+            prior_height < trail_point_or_hit_direction.z) {
+            approach_value(&trail_point_or_hit_direction.z,
+                           coll_hit_1638.point.f[2] + 0.35f,
+                           frame_time * 4.0f);
         }
-        if (1.0f <= gemlik_trail_vars->point[15 - i].w && collision_line(&gemlik_trail_vars->point[15 - i], &trail_point_or_hit_direction, 2, 0, 0)) {
+        if (1.0f <= gemlik_trail_vars->point[15 - i].w &&
+            collision_line(
+                &gemlik_trail_vars->point[15 - i], &trail_point_or_hit_direction, 2, 0, 0)) {
             trail_point_or_hit_direction.w = 0.98f;
         } else {
             if (trail_point_or_hit_direction.w < 1.0f)
@@ -887,7 +922,8 @@ void update_gemlik_trail(struct Moby *moby) {
             work.hit.c = (unsigned short)moby->oclass;
             work.hit.a = 0;
             work.hit.b = 1;
-            collision_line(&gemlik_trail_vars->point[j], &gemlik_trail_vars->point[j + 1], 0, moby, &work.hit);
+            collision_line(
+                &gemlik_trail_vars->point[j], &gemlik_trail_vars->point[j + 1], 0, moby, &work.hit);
         }
         j++;
     } while (j < 15);
@@ -976,13 +1012,15 @@ void draw_point_table_quads(struct Moby *moby) {
                 fast_vec_normalize(corner_inset_offset, corner_inset_offset, 0.5f);
                 fast_vec_sub(corner_position, corner_position, corner_inset_offset);
                 corner_position[2] -= 0.125f;
-                pk[0].col[j] = fast_tween_color(*(f32 *)(point_table_pvars + source_point_byte_offset + 0x21C),
-                                                D_L13_00161EA8,
-                                                D_L13_00161EAC);
+                pk[0].col[j] =
+                    fast_tween_color(*(f32 *)(point_table_pvars + source_point_byte_offset + 0x21C),
+                                     D_L13_00161EA8,
+                                     D_L13_00161EAC);
             } else {
-                pk[0].col[j] = fast_tween_color(*(f32 *)(point_table_pvars + source_point_byte_offset + 0x21C),
-                                                D_L13_00161EA0,
-                                                D_L13_00161EA4);
+                pk[0].col[j] =
+                    fast_tween_color(*(f32 *)(point_table_pvars + source_point_byte_offset + 0x21C),
+                                     D_L13_00161EA0,
+                                     D_L13_00161EA4);
             }
             pk[0].uv[j][0] = D_L13_001D9B70[j][0];
             pk[0].uv[j][1] = D_L13_001D9B70[j][1];

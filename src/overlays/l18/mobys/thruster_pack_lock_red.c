@@ -95,8 +95,10 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
             allocate_voice_for_target_entry(0, 0, (int)moby);
             index = *(int *)(thruster_pack_lock_red_private_vars + 0x70);
             if (index != -1) {
-                unsigned char *voice_slot_record = (unsigned char *)((char *)&voice_pool) + index * 0x70;
-                if (*(struct Moby **)(voice_slot_record + 0x88) == moby && voice_slot_record[0x74] != 0)
+                unsigned char *voice_slot_record =
+                    (unsigned char *)((char *)&voice_pool) + index * 0x70;
+                if (*(struct Moby **)(voice_slot_record + 0x88) == moby &&
+                    voice_slot_record[0x74] != 0)
                     release_voice_slot(index);
             }
             *(int *)(thruster_pack_lock_red_private_vars + 0x70) = -1;
@@ -138,7 +140,9 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         }
         break;
     case STATE_SETTLE_DEPRESSED_HEIGHT:
-        if (approach_value((float *)&moby->pos.z, *(float *)(thruster_pack_lock_red_private_vars + 0x64) - 1.5f, 0.15f) != 0.0f)
+        if (approach_value((float *)&moby->pos.z,
+                           *(float *)(thruster_pack_lock_red_private_vars + 0x64) - 1.5f,
+                           0.15f) != 0.0f)
             return;
         moby->state = 6;
         break;
@@ -240,7 +244,8 @@ void draw_pulsing_timer_hud(struct Moby *moby) {
     timer_text[4] =
         *(int *)(timer_state + 0x6c) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
     timer_text[5] = 0x3A;
-    timer_text[6] = *(int *)(timer_state + 0x6c) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
+    timer_text[6] =
+        *(int *)(timer_state + 0x6c) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
     timer_text[7] = truncate_float_to_s32((float)random_integer_below(10)) + 0x30;
     font_print_center_large(timer_text_x, timer_text_y, col, (int)timer_text, 8);
 }

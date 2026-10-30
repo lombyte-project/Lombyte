@@ -116,9 +116,10 @@ void construction_arm_update(struct Moby *moby) {
                     return;
                 list = (unsigned short *)slot;
                 do {
-                    group_member_moby = (struct Moby *)((*list & 0x7fff) * 0x100 + (int)l15_moby_array);
-                    if ((signed char)group_member_moby->state >= 0 && group_member_moby->oclass == moby->oclass &&
-                        group_member_moby->state != 1)
+                    group_member_moby =
+                        (struct Moby *)((*list & 0x7fff) * 0x100 + (int)l15_moby_array);
+                    if ((signed char)group_member_moby->state >= 0 &&
+                        group_member_moby->oclass == moby->oclass && group_member_moby->state != 1)
                         count++;
                 } while ((short)*list++ >= 0);
                 if (count != 0) {
@@ -175,7 +176,8 @@ void construction_arm_update(struct Moby *moby) {
             /* Retail computes the sum but passes velocity to the effect helper. */
             add_vectors(&sum, &velocity, &offset);
             moby_point_position(moby, 1, &origin);
-            minimum_effect_duration_frames = scale_game_frames(construction_arm_effect_duration_min_frames_gp);
+            minimum_effect_duration_frames =
+                scale_game_frames(construction_arm_effect_duration_min_frames_gp);
             duration = scale_game_frames(construction_arm_effect_duration_max_frames_gp);
             duration = FUN_L00_00257b90(minimum_effect_duration_frames, duration);
             spawn_burst(40000.0f, &origin, &velocity, D_L15_001619EC, D_L15_001619EC, duration, 1);

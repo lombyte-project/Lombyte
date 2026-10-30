@@ -125,7 +125,8 @@ void update_homing_mine(struct Moby *moby) {
         homing_mine_state->timer++;
         if (homing_mine_state->timer < scale_game_frames(30))
             moby->pos.z +=
-                fast_sin((f32)homing_mine_state->timer * 3.1415927f / (f32)scale_game_frames(30)) * 0.07f;
+                fast_sin((f32)homing_mine_state->timer * 3.1415927f / (f32)scale_game_frames(30)) *
+                0.07f;
         if (scale_game_frames(15) < homing_mine_state->timer)
             homing_mine_state->speed += frame_time_sq * 30.0f;
         if (scale_game_frames(30) < homing_mine_state->timer) {
@@ -145,7 +146,8 @@ void update_homing_mine(struct Moby *moby) {
         velocity[2] = 0.0f;
         fast_vec_add(&moby->pos, &moby->pos, velocity);
         if (scale_game_frames(30) < homing_mine_state->timer) {
-            homing_mine_state->bob_angle = fast_add_rotations(homing_mine_state->bob_angle, frame_time * 5.2359877f);
+            homing_mine_state->bob_angle =
+                fast_add_rotations(homing_mine_state->bob_angle, frame_time * 5.2359877f);
             moby->pos.z -= homing_mine_state->bob;
             homing_mine_state->bob = fast_sin(homing_mine_state->bob_angle) * 0.1f;
             moby->pos.z += homing_mine_state->bob;

@@ -214,8 +214,9 @@ void scenery_ship_update(char *moby) {
                     *(float *)(current + 0x10) - *(float *)(previous_path_node_base + 0x10),
                     *(float *)(current + 0x14) - *(float *)(previous_path_node_base + 0x14));
                 next_path_node_base = path + (i + 1) * 16;
-                out_angle = fast_arc_tan(*(float *)(next_path_node_base + 0x10) - *(float *)(current + 0x10),
-                                         *(float *)(next_path_node_base + 0x14) - *(float *)(current + 0x14));
+                out_angle = fast_arc_tan(
+                    *(float *)(next_path_node_base + 0x10) - *(float *)(current + 0x10),
+                    *(float *)(next_path_node_base + 0x14) - *(float *)(current + 0x14));
                 turn = fast_subtract_rotations(out_angle, in_angle);
                 *(float *)(current + 0x1C) = turn;
                 if (max_turn < func_001F9B88_2D8388(turn)) {
@@ -237,13 +238,15 @@ void scenery_ship_update(char *moby) {
                 *(float *)(point + 0x1C) = *(float *)(point + 0x1C) * turn_scale;
             }
         }
-        scenery_ship_instance_vars->fC = fast_vec_dist((float *)(path + 0x10), (float *)(path + 0x20));
+        scenery_ship_instance_vars->fC =
+            fast_vec_dist((float *)(path + 0x10), (float *)(path + 0x20));
         MOBY(moby)->state = 1;
         scenery_ship_instance_vars->f8 = (float)*(int *)path * scenery_ship_instance_vars->f4;
         break;
     }
     case SCENERY_SHIP_FOLLOW_PATH: {
-        float phase = fast_add_rotations(scenery_ship_instance_vars->f1C, D_0015ED6C * 12.566370614f);
+        float phase =
+            fast_add_rotations(scenery_ship_instance_vars->f1C, D_0015ED6C * 12.566370614f);
         float wave;
         scenery_ship_instance_vars->f1C = phase;
         wave = func_001F9FA8_2D8388(phase);
@@ -265,14 +268,18 @@ void scenery_ship_update(char *moby) {
         left_offset.f[2] = 0.45f;
         transform_vector_by_basis(&left_offset, &left_offset, moby + 0xC0);
         func_001F9BD8_2D8388(
-            (float *)&scenery_ship_instance_vars->trail[0][(short)scenery_ship_instance_vars->f322], left_offset.f, (float *)&MOBY(moby)->pos);
+            (float *)&scenery_ship_instance_vars->trail[0][(short)scenery_ship_instance_vars->f322],
+            left_offset.f,
+            (float *)&MOBY(moby)->pos);
         scenery_ship_instance_vars->trail[0][(short)scenery_ship_instance_vars->f322].w = 1.0f;
         tail_offset.q = 0;
         tail_offset.f[0] = -1.5f;
         tail_offset.f[2] = -0.3f;
         transform_vector_by_basis(&tail_offset, &tail_offset, moby + 0xC0);
         func_001F9BD8_2D8388(
-            (float *)&scenery_ship_instance_vars->trail[1][(short)scenery_ship_instance_vars->f322], tail_offset.f, (float *)&MOBY(moby)->pos);
+            (float *)&scenery_ship_instance_vars->trail[1][(short)scenery_ship_instance_vars->f322],
+            tail_offset.f,
+            (float *)&MOBY(moby)->pos);
         scenery_ship_instance_vars->trail[1][(short)scenery_ship_instance_vars->f322].w = 1.0f;
         right_offset.q = 0;
         right_offset.f[0] = -1.2f;
@@ -280,7 +287,9 @@ void scenery_ship_update(char *moby) {
         right_offset.f[2] = 0.45f;
         transform_vector_by_basis(&right_offset, &right_offset, moby + 0xC0);
         func_001F9BD8_2D8388(
-            (float *)&scenery_ship_instance_vars->trail[2][(short)scenery_ship_instance_vars->f322], right_offset.f, (float *)&MOBY(moby)->pos);
+            (float *)&scenery_ship_instance_vars->trail[2][(short)scenery_ship_instance_vars->f322],
+            right_offset.f,
+            (float *)&MOBY(moby)->pos);
         scenery_ship_instance_vars->trail[2][(short)scenery_ship_instance_vars->f322].w = 1.0f;
         if (frame_number != *scenery_ship_instance_vars->f324) {
             *scenery_ship_instance_vars->f324 = frame_number;
@@ -462,7 +471,8 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
                 int   index;
                 int   frame;
                 for (frame = 0; frame < *(short *)(scenery_ship_vars + 0x320); frame++) {
-                    trail_segment_start_index = (*(short *)(scenery_ship_vars + 0x322) - frame + 15) & 15;
+                    trail_segment_start_index =
+                        (*(short *)(scenery_ship_vars + 0x322) - frame + 15) & 15;
                     for (ribbon = 0; ribbon < 3; ribbon++) {
                         if (D_L05_001613F4 == 0) {
                             points = scenery_ship_vars + (ribbon * 0x100 + 0x20);

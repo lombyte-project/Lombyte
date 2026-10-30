@@ -41,8 +41,12 @@ void update_alien_queen_slider(unsigned char *moby) {
                                    blend_acceleration_step,
                                    blend_acceleration_step,
                                    frame_time * 20.0f);
-        lerp_vector(moby + 0x10, position_interpolation_vars, position_interpolation_vars + 0x10, *(float *)(position_interpolation_vars + 0x20));
-        if (*(float *)(position_interpolation_vars + 0x20) == *(float *)(position_interpolation_vars + 0x28))
+        lerp_vector(moby + 0x10,
+                    position_interpolation_vars,
+                    position_interpolation_vars + 0x10,
+                    *(float *)(position_interpolation_vars + 0x20));
+        if (*(float *)(position_interpolation_vars + 0x20) ==
+            *(float *)(position_interpolation_vars + 0x28))
             moby[0x20] = 1;
         break;
     }

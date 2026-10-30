@@ -122,7 +122,8 @@ void elevator_update(unsigned char *moby) {
         break;
     case ELEVATOR_STATE_MOVING:
         if (*(short *)(elevator_vars + 0xBA) != 0 ||
-            (F(elevator_vars, 0xBC) < 0.0f && vector_distance_xy((moby + 0x10), &hero.motion.pos) < 2.0f &&
+            (F(elevator_vars, 0xBC) < 0.0f &&
+             vector_distance_xy((moby + 0x10), &hero.motion.pos) < 2.0f &&
              absolute_float(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
              F(moby, 0x18) - hero.motion.pos.f[2] > 1.0f)) {
             int r;

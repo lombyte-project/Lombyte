@@ -104,7 +104,8 @@ void update_help_hints(struct Moby *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_state[9]) &&
             usage_stats.stat[3].count == 0 &&
-            !((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && tutorial_hint_state[22] == 0) {
+            !((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+            tutorial_hint_state[22] == 0) {
             tutorial_hint_state[20]++;
             tutorial_hint_state[22] = scale_game_frames(60);
         } else if (tutorial_hint_state[22] != 0 &&
@@ -114,7 +115,8 @@ void update_help_hints(struct Moby *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_state[9]) &&
             usage_stats.stat[3].count == 0 &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
-            tutorial_hint_state[20] % 6 == 0 && tutorial_hint_state[20] != 0 && l03_help_message_playback_state.state == 0 &&
+            tutorial_hint_state[20] % 6 == 0 && tutorial_hint_state[20] != 0 &&
+            l03_help_message_playback_state.state == 0 &&
             l03_help_message_playback_state.cur == -1 && help_records[0x16].id == 0) {
             help_request(0xBBA, 0x16);
         }
@@ -194,8 +196,8 @@ void update_help_hints(struct Moby *moby) {
             tutorial_hint_state[21]++;
         }
         if (usage_stats.stat[15].count == 0 &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && tutorial_hint_state[21] >= 3 &&
-            l03_help_message_playback_state.state == 0 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+            tutorial_hint_state[21] >= 3 && l03_help_message_playback_state.state == 0 &&
             l03_help_message_playback_state.cur == -1 && help_records[0x1A].id == 0) {
             help_request(0xBBE, 0x1A);
         }
@@ -238,7 +240,8 @@ void update_help_hints(struct Moby *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_state[28])) {
             alternate_item_available[0x18] = 1;
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_state[29]) && item_unlocked[3] == 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_state[29]) &&
+            item_unlocked[3] == 0) {
             item_unlocked[3] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);

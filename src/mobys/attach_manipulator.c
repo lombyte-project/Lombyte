@@ -37,7 +37,8 @@ void attach_manipulator(MobyAttachOwner *source_moby, s32 slot_index, Manipulato
         manip->unk24 = 1.0f;
         manip->unk28 = 1.0f;
 
-        slot_record = *(u8 **)((u8 *)(*(s32 *)((u8 *)source_moby->unk24 + 0x1C) + manip->unk0 * 4) + 4);
+        slot_record =
+            *(u8 **)((u8 *)(*(s32 *)((u8 *)source_moby->unk24 + 0x1C) + manip->unk0 * 4) + 4);
         {
             u8 record_byte_offset = *slot_record;
             manip->unk4 = (void *)((slot_record[record_byte_offset + 4] << 6) + 0x70000000);

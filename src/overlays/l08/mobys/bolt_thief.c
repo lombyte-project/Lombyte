@@ -154,11 +154,13 @@ void bolt_thief_update(struct Moby *moby) {
     moby->hit_slot = 0xFF;
     switch (moby->state) {
     case BOLT_THIEF_INITIALIZE:
-        bolt_thief_instance_vars->follow[0].path = l08_paths[bolt_thief_instance_vars->follow[0].path_id];
+        bolt_thief_instance_vars->follow[0].path =
+            l08_paths[bolt_thief_instance_vars->follow[0].path_id];
         qcopy(&moby->pos, &bolt_thief_instance_vars->follow[0].path->points[0]);
         bolt_thief_instance_vars->follow[0].point = 1;
         if (bolt_thief_instance_vars->follow[1].path_id >= 0) {
-            bolt_thief_instance_vars->follow[1].path = l08_paths[bolt_thief_instance_vars->follow[1].path_id];
+            bolt_thief_instance_vars->follow[1].path =
+                l08_paths[bolt_thief_instance_vars->follow[1].path_id];
             bolt_thief_instance_vars->follow[1].point = 1;
         }
         moby->flags |= 0x1000;

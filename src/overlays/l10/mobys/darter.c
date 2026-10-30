@@ -634,13 +634,15 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
     int         target_selection_status;
 
     if (class_1199_vars->f38 != 0) {
-        class_1199_vars->f184 = truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
+        class_1199_vars->f184 =
+            truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
         class_1199_vars->f38 = 0;
     }
     fast_dec_timer(&class_1199_vars->f184);
     if (moby->state != 13) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
-        resolve_moby_hit_response(moby, hit_record, &class_1199_vars->f20, 5, &hit_processing_status, 0, 0, 4);
+        resolve_moby_hit_response(
+            moby, hit_record, &class_1199_vars->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0 && hit_record->moby->oclass != moby->oclass) {
             if (class_1199_vars->f20 <= hit_record->f2C) {
                 class_1199_vars->f20 = 0.0f;
@@ -662,7 +664,8 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
                         fast_arc_tan(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
                 }
                 *(OvlQuad *)vector_scratch = *(OvlQuad *)hit_record->f10;
-                trooper_knockback_arc(vector_scratch, &knockback_angle, &class_1199_vars->f78, &class_1199_vars->f7C);
+                trooper_knockback_arc(
+                    vector_scratch, &knockback_angle, &class_1199_vars->f78, &class_1199_vars->f7C);
                 trooper_start_knockback(moby, class_1199_vars->f60, knockback_angle, 4, 1, 0);
                 class_1199_vars->f117 = 0x78;
                 trooper_anim_update(moby, class_1199_vars->f110);
@@ -719,7 +722,8 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
         target_selection_status = ahead_f(class_1199_vars->f180, moby, class_1199_vars->fC0);
     }
     if (target_selection_status != 2) {
-        if (class_1199_vars->f180 < vector_distance_xy(class_1199_vars->f130, class_1199_vars->fC0)) {
+        if (class_1199_vars->f180 <
+            vector_distance_xy(class_1199_vars->f130, class_1199_vars->fC0)) {
             class_1199_vars->f104 = 2;
         } else if (moby->visible == 0) {
             class_1199_vars->f104 = 2;

@@ -40,8 +40,9 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         initial_pose_entry = &l05_cuboids[*(int *)(slide_and_lowering_vars + 0x10)];
         qcopy(moby + 0x10, &initial_pose_entry->pos);
         MOBY(moby)->rot.z = initial_pose_entry->rot.z;
-        fast_vec_normalize(
-            slide_motion_scratch, &initial_pose_entry->axes[1], *(float *)(slide_and_lowering_vars + 0x18));
+        fast_vec_normalize(slide_motion_scratch,
+                           &initial_pose_entry->axes[1],
+                           *(float *)(slide_and_lowering_vars + 0x18));
         if (*(int *)(slide_and_lowering_vars + 0x1C) != 0) {
             fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
             MOBY(moby)->flags |= 0x8000;
@@ -51,7 +52,8 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         break;
     }
     case MOBY_WAIT_FOR_TRIGGER:
-        if ((*(unsigned char **)&D_L05_0015FFD8)[*(int *)(slide_and_lowering_vars + 0x14) * 256 + 0xBC] != 0) {
+        if ((*(unsigned char **)&D_L05_0015FFD8)[*(int *)(slide_and_lowering_vars + 0x14) * 256 +
+                                                 0xBC] != 0) {
             allocate_voice_for_target_entry(0, 0, moby);
             MOBY(moby)->state = 2;
             clear_u64_value(slide_and_lowering_vars);

@@ -394,8 +394,8 @@ void update_smoke_vent(struct Moby *moby) {
             fast_tween_color(D_L02_00162078, D_L02_0016207C, random_float_between(0.0f, 1.0f));
         color_b2_puff =
             fast_tween_color(D_L02_00162080, D_L02_00162084, random_float_between(0.0f, 1.0f));
-        time_a2_puff = truncate_float_to_s32(
-            scale_time((f32) * (s32 *)(smoke_vent_vars + 0xC8) * random_float_between(0.0f, 1.0f) + 1.0f));
+        time_a2_puff = truncate_float_to_s32(scale_time(
+            (f32) * (s32 *)(smoke_vent_vars + 0xC8) * random_float_between(0.0f, 1.0f) + 1.0f));
         time_b2_puff = truncate_float_to_s32(
             scale_time((f32)alternating_smoke_puff_second_timing_base_gp *
                        (random_float_between(-alternating_smoke_puff_timing_variation_fraction_gp,

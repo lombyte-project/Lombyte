@@ -383,7 +383,8 @@ void update_morphoray_chicken(Moby *chicken_moby) {
         chicken_moby->state = 1;
         chicken_vars->flee_timer = 0;
         chicken_vars->expire_timer = -1;
-        chicken_vars->sound_timer = random_int_between(scale_game_frames(0x78), scale_game_frames(0x12C));
+        chicken_vars->sound_timer =
+            random_int_between(scale_game_frames(0x78), scale_game_frames(0x12C));
         chicken_vars->health = 1.0f;
     }
     if (chicken_moby->state == 6) {
@@ -423,10 +424,10 @@ void update_morphoray_chicken(Moby *chicken_moby) {
         }
     }
     if (chicken_vars->gold > 0) {
-        chicken_moby->scale +=
-            ((convert_integer_to_float(chicken_vars->gold) * 3.0f + 1.0f) * chicken_moby->pclass->scale -
-             chicken_moby->scale) *
-            0.1f;
+        chicken_moby->scale += ((convert_integer_to_float(chicken_vars->gold) * 3.0f + 1.0f) *
+                                    chicken_moby->pclass->scale -
+                                chicken_moby->scale) *
+                               0.1f;
     }
     size = chicken_moby->scale / chicken_moby->pclass->scale;
     if (fast_dec_timer(&chicken_vars->hit_cooldown) != 0) {
@@ -524,7 +525,8 @@ void update_morphoray_chicken(Moby *chicken_moby) {
     }
     if (fast_dec_timer_s16(&chicken_vars->sound_timer) != 0) {
         allocate_voice_for_target_entry(random_integer_below(100) >= 75, 0, (char *)chicken_moby);
-        chicken_vars->sound_timer = random_int_between(scale_game_frames(0x78), scale_game_frames(0x12C));
+        chicken_vars->sound_timer =
+            random_int_between(scale_game_frames(0x78), scale_game_frames(0x12C));
     }
     if (chicken_vars->expire_timer >= 0) {
         speed = (frame_time + frame_time) * size;
@@ -595,7 +597,8 @@ void update_morphoray_chicken(Moby *chicken_moby) {
                        0.08726646f ||
                    vector_distance_xy(&chicken_moby->pos, &hero.motion.pos) > size * 6.0f) {
             chicken_moby->state = 1;
-            chicken_vars->flee_timer = random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
+            chicken_vars->flee_timer =
+                random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
             blend_moby_animation(
                 chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
         }
@@ -603,7 +606,8 @@ void update_morphoray_chicken(Moby *chicken_moby) {
     case CHICKEN_STATE_FLEE_FROM_HERO:
         if (vector_distance_xy(&chicken_moby->pos, &hero.motion.pos) > size * 6.0f) {
             chicken_moby->state = 1;
-            chicken_vars->flee_timer = random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
+            chicken_vars->flee_timer =
+                random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
             blend_moby_animation(
                 chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
             FUN_L00_00258490(

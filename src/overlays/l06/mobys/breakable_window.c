@@ -583,7 +583,9 @@ void update_breakable_window(char *moby) {
         moby[0x20] = 1;
         break;
     case WAIT_FOR_LINKED_MOBY_TRIGGER:
-        if ((camera_sequence_and_draw_vars[2] < 0 || (unsigned char)D_L06_0015FFD8_ffcb0[(camera_sequence_and_draw_vars[2] << 8) + 0xbc] == 0) &&
+        if ((camera_sequence_and_draw_vars[2] < 0 ||
+             (unsigned char)D_L06_0015FFD8_ffcb0[(camera_sequence_and_draw_vars[2] << 8) + 0xbc] ==
+                 0) &&
             camera_sequence_and_draw_vars[8] != -1) {
             break;
         }
@@ -660,7 +662,8 @@ void update_breakable_window(char *moby) {
             FUN_L06_00312ce8(2);
             scripted_camera_sequence_active = 0;
         } else {
-            if (*(float *)(camera_sequence_and_draw_vars + 6) >= 0.05f && camera_sequence_and_draw_vars[3] >= 0) {
+            if (*(float *)(camera_sequence_and_draw_vars + 6) >= 0.05f &&
+                camera_sequence_and_draw_vars[3] >= 0) {
                 {
                     int state;
                     int base;
@@ -673,8 +676,9 @@ void update_breakable_window(char *moby) {
                 camera_sequence_and_draw_vars[3] = -1;
             }
             if (camera_sequence_and_draw_vars[1] == 1 &&
-                vector_distance_xy(moby + 0x10, D_L06_0015FFD8_ffcb0 + (camera_sequence_and_draw_vars[8] << 8) + 0x10) >
-                    0.1f) {
+                vector_distance_xy(moby + 0x10,
+                                   D_L06_0015FFD8_ffcb0 + (camera_sequence_and_draw_vars[8] << 8) +
+                                       0x10) > 0.1f) {
                 allocate_voice_for_target_entry(0, 0, moby);
                 spawn_moby_breakup_effect(moby);
             }

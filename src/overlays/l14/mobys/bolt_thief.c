@@ -332,8 +332,12 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
         path = ((char *)l14_paths[*(int *)(bolt_thief_state + 0xDC)]);
     else
         path = ((char *)l14_paths[*(int *)(bolt_thief_state + 0xD8)]);
-    path_sample_result =
-        sample_path(path, pos, (float *)(bolt_thief_state + 0xD0), (float *)(bolt_thief_state + 0xD4), 0, path_sample_step);
+    path_sample_result = sample_path(path,
+                                     pos,
+                                     (float *)(bolt_thief_state + 0xD0),
+                                     (float *)(bolt_thief_state + 0xD4),
+                                     0,
+                                     path_sample_step);
     vendor_spring(&moby->pos.x,
                   (float *)(bolt_thief_state + 0xE4),
                   pos[0],

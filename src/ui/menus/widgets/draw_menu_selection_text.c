@@ -24,9 +24,11 @@ s32 draw_menu_selection_text(struct MenuScreen *menu) {
     struct MemoryCardState *card_state;
     card_state = &memory_card_state;
     entry_index =
-        *((s32 *)((((u8 *)card_state) - (-(menu_system.current->focus->data.save.slot * 0x1C))) + 0x20));
+        *((s32 *)((((u8 *)card_state) - (-(menu_system.current->focus->data.save.slot * 0x1C))) +
+                  0x20));
     setup_gif_paging(0);
-    if (((card_state->state < 3) && (card_state->pending_state < 0)) && (card_state->card[0].type == 2)) {
+    if (((card_state->state < 3) && (card_state->pending_state < 0)) &&
+        (card_state->card[0].type == 2)) {
         if (entry_index == (-1)) {
             height = menu->height;
             width = menu->width;

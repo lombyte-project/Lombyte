@@ -228,7 +228,8 @@ void update_ground_melee_enemy(Moby *moby) {
         Hit_2E39E0 *hit;
         damage = 0.0f;
         hit = find_moby_hit(moby, 0x330000, 0);
-        resolve_moby_hit_response(moby, hit, &ground_enemy_vars->health, 0, &hit_index, &damage, 0, 4);
+        resolve_moby_hit_response(
+            moby, hit, &ground_enemy_vars->health, 0, &hit_index, &damage, 0, 4);
         fast_dec_timer_s16(&ground_enemy_vars->cooldown);
         if (ground_enemy_vars->cooldown < scale_game_frames(45) && hit != 0) {
             if ((unsigned short)(hit->moby->oclass - 0xB0) < 2) {
@@ -362,7 +363,8 @@ void update_ground_melee_enemy(Moby *moby) {
             if (random_integer_below(0x100) & 1)
                 ground_enemy_vars->side_deg = -ground_enemy_vars->side_deg;
             ground_enemy_vars->side = ground_enemy_vars->side_deg * 0.017453292f;
-            ground_enemy_vars->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            ground_enemy_vars->side_timer =
+                scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby->state = 3;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
@@ -387,7 +389,8 @@ void update_ground_melee_enemy(Moby *moby) {
             if (random_integer_below(0x100) & 1)
                 ground_enemy_vars->side_deg = -ground_enemy_vars->side_deg;
             ground_enemy_vars->side = ground_enemy_vars->side_deg * 0.017453292f;
-            ground_enemy_vars->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            ground_enemy_vars->side_timer =
+                scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby->state = 3;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
@@ -396,7 +399,8 @@ void update_ground_melee_enemy(Moby *moby) {
             if (random_integer_below(0x100) & 1)
                 ground_enemy_vars->side_deg = -ground_enemy_vars->side_deg;
             ground_enemy_vars->side = ground_enemy_vars->side_deg * 0.017453292f;
-            ground_enemy_vars->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            ground_enemy_vars->side_timer =
+                scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby->state = 3;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
@@ -415,7 +419,8 @@ void update_ground_melee_enemy(Moby *moby) {
         else
             qcopy(&goal, &query);
         approach_w(moby,
-                   fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y) + ground_enemy_vars->side,
+                   fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y) +
+                       ground_enemy_vars->side,
                    ground_enemy_vars->turn,
                    0.05f,
                    0.3f,
@@ -426,7 +431,8 @@ void update_ground_melee_enemy(Moby *moby) {
         fast_vec_add(&goal, &moby->pos, &step);
         flags = move_w(moby, &ground_enemy_vars->steer, &goal, &step, 1.0f);
         if (fast_dec_timer(&ground_enemy_vars->side_timer)) {
-            ground_enemy_vars->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
+            ground_enemy_vars->side_timer =
+                scale_game_frames((int)random_float_between(30.0f, 90.0f));
             ground_enemy_vars->side = -ground_enemy_vars->side;
         }
         fast_vec_sub(&away, &query, &ground_enemy_vars->home);
@@ -483,7 +489,10 @@ void update_ground_melee_enemy(Moby *moby) {
     case GROUND_ENEMY_STATE_RETURN_HOME: {
         int flags;
         if (ground_enemy_vars->path != -1)
-            FUN_L01_0028b5e0_c(moby, ((char *)l09_paths[ground_enemy_vars->path]), &ground_enemy_vars->home, &goal);
+            FUN_L01_0028b5e0_c(moby,
+                               ((char *)l09_paths[ground_enemy_vars->path]),
+                               &ground_enemy_vars->home,
+                               &goal);
         else
             qcopy(&goal, &ground_enemy_vars->home);
         approach_w(moby,
@@ -569,7 +578,10 @@ void update_ground_melee_enemy(Moby *moby) {
         steep = absolute_float(moby->pos.z - query.z);
         steep /= vector_distance_xy(&moby->pos, &query);
         if (ground_enemy_vars->path != -1)
-            FUN_L01_0028b5e0_c(moby, ((char *)l09_paths[ground_enemy_vars->path]), &ground_enemy_vars->home, &goal);
+            FUN_L01_0028b5e0_c(moby,
+                               ((char *)l09_paths[ground_enemy_vars->path]),
+                               &ground_enemy_vars->home,
+                               &goal);
         else
             qcopy(&goal, &ground_enemy_vars->home);
         approach_w(moby,
@@ -613,13 +625,14 @@ void update_ground_melee_enemy(Moby *moby) {
         step.y = fast_sin(moby->rot.z) * (ground_enemy_vars->speed * frame_time);
         step.z = 0.0f;
         fast_vec_add(&goal, &moby->pos, &step);
-        for (avoidance_candidate = D_L09_00160064_2E39E0; avoidance_candidate != 0; avoidance_candidate = avoidance_candidate->next) {
+        for (avoidance_candidate = D_L09_00160064_2E39E0; avoidance_candidate != 0;
+             avoidance_candidate = avoidance_candidate->next) {
             if (avoidance_candidate != moby && (signed char)avoidance_candidate->state >= 0 &&
                 (avoidance_candidate->oclass == 0 || avoidance_candidate->oclass == 193)) {
                 if (vector_distance_xy(&goal, &avoidance_candidate->pos) < 2.0f) {
                     float old_z = moby->pos.z;
-                    float bearing =
-                        fast_arc_tan(avoidance_candidate->pos.x - moby->pos.x, avoidance_candidate->pos.y - moby->pos.y);
+                    float bearing = fast_arc_tan(avoidance_candidate->pos.x - moby->pos.x,
+                                                 avoidance_candidate->pos.y - moby->pos.y);
                     float turn_side = fast_subtract_rotations(moby->rot.z, bearing);
                     float turn = frame_time * 1.5707964f;
                     if (!(turn_side > 0.0f))
@@ -640,8 +653,9 @@ void update_ground_melee_enemy(Moby *moby) {
             ground_enemy_vars->fall = 0.0f;
             moby->pos.z = ground;
         }
-        if (ground_enemy_vars->anchor == 0 || vector_distance_xy(&moby->pos, &ground_enemy_vars->anchor->pos) >
-                                     convert_integer_to_float(ground_enemy_vars->leash)) {
+        if (ground_enemy_vars->anchor == 0 ||
+            vector_distance_xy(&moby->pos, &ground_enemy_vars->anchor->pos) >
+                convert_integer_to_float(ground_enemy_vars->leash)) {
             moby->state = 5;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));

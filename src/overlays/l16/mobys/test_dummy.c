@@ -317,8 +317,9 @@ void test_dummy_update(unsigned char *moby) {
     case TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE: { /* slider: turn toward the next node while the timer runs */
         float *yaw = (float *)&MOBY(moby)->rot.z;
         int    next_path_node_index = dummy_data->node + dummy_data->step;
-        float  angle = fast_arc_tan(((float *)(path + (next_path_node_index << 4)))[4] - MOBY(moby)->pos.x,
-                                   ((float *)(path + (next_path_node_index << 4)))[5] - MOBY(moby)->pos.y);
+        float  angle =
+            fast_arc_tan(((float *)(path + (next_path_node_index << 4)))[4] - MOBY(moby)->pos.x,
+                         ((float *)(path + (next_path_node_index << 4)))[5] - MOBY(moby)->pos.y);
         approach_angle(yaw,
                        &dummy_data->turn,
                        angle,
@@ -703,8 +704,8 @@ void update_test_dummy_group_glow_phases(struct Moby *moby) {
                 goto again;
             test_dummy_group_member_data = ((char *)MOBY(group_moby)->pvars);
             *(int *)(test_dummy_group_member_data + 0x118) = D_L16_0015F5CC;
-            *(float *)(test_dummy_group_member_data + 0x11C) =
-                fast_add_rotations(*(float *)(test_dummy_group_member_data + 0x11C), angle_increment);
+            *(float *)(test_dummy_group_member_data + 0x11C) = fast_add_rotations(
+                *(float *)(test_dummy_group_member_data + 0x11C), angle_increment);
         } while (*group_entry++ >= 0);
         add_draw_callback(draw_test_dummy_group_glows, moby);
     }

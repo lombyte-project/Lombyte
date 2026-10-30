@@ -535,8 +535,11 @@ void update_armed_transport_joint_animation(char *moby) {
     float joint_animation_secondary_control = ticks * 0.3f;
     char *transport_private_data = ((char *)MOBY(moby)->pvars);
     *(float *)(transport_private_data + 0x144) = *(float *)(transport_private_data + 0x17C);
-    update_joint_animation(
-        moby, transport_private_data + 0xE0, 2, joint_animation_smoothing_factor, joint_animation_secondary_control);
+    update_joint_animation(moby,
+                           transport_private_data + 0xE0,
+                           2,
+                           joint_animation_smoothing_factor,
+                           joint_animation_secondary_control);
 }
 
 float D_L18_001DA310[4] = {1.0f, 0.0f, -3.0f, 0.0f};

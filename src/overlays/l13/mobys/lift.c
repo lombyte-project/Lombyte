@@ -71,7 +71,8 @@ void update_lift(struct Moby *moby) {
     fast_vec_scale(delta, &moby->pos, -1.0f);
     qcopy(rot, &moby->rot);
     moby->rot.y = fast_add_rotations(
-        (1.0f - (moby->pos.z - lift_vars->bottom) / (lift_vars->top - lift_vars->bottom)) * 3.1415927f,
+        (1.0f - (moby->pos.z - lift_vars->bottom) / (lift_vars->top - lift_vars->bottom)) *
+            3.1415927f,
         lift_vars->angle * DEG_TO_RAD);
     switch (moby->state) {
     case LIFT_INITIALIZE:
@@ -97,11 +98,13 @@ void update_lift(struct Moby *moby) {
             fast_vec_scale(mount_position_work, mount_position_work, remaining_blend_ratio);
             fast_vec_add(mount_transform_work, mount_transform_work, mount_position_work);
             mount_rotation[1] = fast_add_rotations(
-                fast_subtract_rotations(*(float *)(mount_rotation_reference_base + 0x154), mount_rotation[1]) *
+                fast_subtract_rotations(*(float *)(mount_rotation_reference_base + 0x154),
+                                        mount_rotation[1]) *
                     remaining_blend_ratio,
                 mount_rotation[1]);
             mount_rotation[2] = fast_add_rotations(
-                fast_subtract_rotations(*(float *)(mount_rotation_reference_base + 0x158), mount_rotation[2]) *
+                fast_subtract_rotations(*(float *)(mount_rotation_reference_base + 0x158),
+                                        mount_rotation[2]) *
                     remaining_blend_ratio,
                 mount_rotation[2]);
             set_camera_position(mount_transform_work);
@@ -184,7 +187,8 @@ void update_lift(struct Moby *moby) {
         }
         if (moby->state == 4) {
             float d = vector_distance_xy(&moby->pos, &hero.motion.pos);
-            if (absolute_float(hero.ground_z.f - lift_vars->bottom) < 2.0f && d < 32.0f && d > 5.0f) {
+            if (absolute_float(hero.ground_z.f - lift_vars->bottom) < 2.0f && d < 32.0f &&
+                d > 5.0f) {
                 moby->command = 0;
                 moby->state = 3;
                 lift_vars->speed = -(D_0015ED6C * 5.0f);
@@ -222,6 +226,7 @@ void compute_lift_mount_transform(struct Moby *moby, float *mount_position, floa
     transform_vector_by_basis(mount_position, mount_position, &moby->rot_row0);
     fast_vec_add(mount_position, mount_position, &moby->pos);
     mount_facing_target_base = D_0013E533 + 0xE1D;
-    mount_rotation[2] = fast_arc_tan(*(float *)(mount_facing_target_base + 0xD0) - mount_position[0],
-                                     *(float *)(mount_facing_target_base + 0xD4) - mount_position[1]);
+    mount_rotation[2] =
+        fast_arc_tan(*(float *)(mount_facing_target_base + 0xD0) - mount_position[0],
+                     *(float *)(mount_facing_target_base + 0xD4) - mount_position[1]);
 }

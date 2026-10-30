@@ -56,7 +56,8 @@ void test_dummy_door_update(struct Moby *moby) {
             }
             target_height = *(float *)test_dummy_door_motion_data;
         } else {
-            target_height = *(float *)test_dummy_door_motion_data + test_dummy_door_height_offset_gp;
+            target_height =
+                *(float *)test_dummy_door_motion_data + test_dummy_door_height_offset_gp;
         }
         advance_accelerated_scalar(target_height,
                                    frame_time_sq * 10.0f,

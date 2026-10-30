@@ -59,10 +59,15 @@ void render_vendor_buy_label_pass(char *unused, int width, int height) {
             vendor_state_ptr = &vendor_state;
             if (vendor_state_ptr->entries[vendor_state_ptr->selected_entry].purchase_kind == 1) {
                 if (vendor_state_ptr->discount_ammo_pricing != 0) {
-                    price = vendor_item_prices[vendor_state_ptr->entries[vendor_state_ptr->selected_entry].item_index]
+                    price =
+                        vendor_item_prices
+                            [vendor_state_ptr->entries[vendor_state_ptr->selected_entry].item_index]
                                 .discounted_ammo_price;
                 } else {
-                    price = vendor_item_prices[vendor_state_ptr->entries[vendor_state_ptr->selected_entry].item_index].ammo_price;
+                    price =
+                        vendor_item_prices
+                            [vendor_state_ptr->entries[vendor_state_ptr->selected_entry].item_index]
+                                .ammo_price;
                 }
                 message_id = 0x5233;
                 if (current_bolt_count_macro >= price)
@@ -70,11 +75,15 @@ void render_vendor_buy_label_pass(char *unused, int width, int height) {
             } else {
                 int cost;
                 if (discount_purchase_pricing[0] != 0) {
-                    cost = vendor_item_prices[vendor_state_ptr->entries[vendor_state_ptr->selected_entry].item_index]
-                               .discounted_purchase_price;
+                    cost =
+                        vendor_item_prices
+                            [vendor_state_ptr->entries[vendor_state_ptr->selected_entry].item_index]
+                                .discounted_purchase_price;
                 } else {
                     cost =
-                        vendor_item_prices[vendor_state_ptr->entries[vendor_state_ptr->selected_entry].item_index].purchase_price;
+                        vendor_item_prices
+                            [vendor_state_ptr->entries[vendor_state_ptr->selected_entry].item_index]
+                                .purchase_price;
                 }
                 message_id = 0x5233;
                 if (current_bolt_count_macro >= cost)

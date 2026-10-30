@@ -125,7 +125,8 @@ void novalis_elevator_update(unsigned char *moby) {
             player->unk1F4 = 4;
         }
         if (*(short *)(elevator_vars + 0xBA) != 0 ||
-            (F(elevator_vars, 0xBC) < 0.0f && vector_distance_xy((moby + 0x10), &hero.motion.pos) < 2.83f &&
+            (F(elevator_vars, 0xBC) < 0.0f &&
+             vector_distance_xy((moby + 0x10), &hero.motion.pos) < 2.83f &&
              absolute_float(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
              F(moby, 0x18) - hero.motion.pos.f[2] > 0.9f)) {
             int r;

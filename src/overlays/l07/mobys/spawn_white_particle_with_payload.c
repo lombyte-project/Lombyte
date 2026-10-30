@@ -55,7 +55,13 @@ f32 select_segment_point_near_sphere_surface(Vec4f *out,
 
 f32 select_segment_point_near_sphere_surface(
 
-    Vec4f *selected_segment_point, Vec4f *ref, Vec4f *center, Vec4f *segment_start, Vec4f *segment_end, f32 radius) {
+    Vec4f *selected_segment_point,
+    Vec4f *ref,
+    Vec4f *center,
+    Vec4f *segment_start,
+    Vec4f *segment_end,
+
+    f32 radius) {
     Vec4f center_to_segment_start, segment_displacement, line_projection_point, lower_segment_point,
         upper_segment_point;
     f32 line_projection_t, lower_segment_t, upper_segment_t, intersection_t_offset, dd,
@@ -109,10 +115,12 @@ f32 select_segment_point_near_sphere_surface(
     } else {
         if (line_projection_t < 0.0f) {
             qcopy(selected_segment_point, segment_start);
-            center_distance_or_surface_error = absolute_float(fast_vec_dist(selected_segment_point, center) - radius);
+            center_distance_or_surface_error =
+                absolute_float(fast_vec_dist(selected_segment_point, center) - radius);
         } else if (1.0f < line_projection_t) {
             qcopy(selected_segment_point, segment_end);
-            center_distance_or_surface_error = absolute_float(fast_vec_dist(selected_segment_point, center) - radius);
+            center_distance_or_surface_error =
+                absolute_float(fast_vec_dist(selected_segment_point, center) - radius);
         } else {
             qcopy(selected_segment_point, &line_projection_point);
         }

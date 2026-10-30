@@ -58,7 +58,8 @@ void update_camera_transition(struct Moby *moby) {
         break;
     case STATE_PRE_TRANSITION_RAMP_UP:
         D_L18_0017EF08 = 1;
-        approach_value((float *)(transition_private_vars + 0x6C), 1.0f, (*(float *)&frame_time) * 4.0f);
+        approach_value(
+            (float *)(transition_private_vars + 0x6C), 1.0f, (*(float *)&frame_time) * 4.0f);
         {
             float t = *(float *)(transition_private_vars + 0x6C);
             if (D_L18_0015F3FC_d < t) {
@@ -68,8 +69,10 @@ void update_camera_transition(struct Moby *moby) {
                 camera_transition_active = 1;
                 clear_u64_value(transition_scratch_vectors);
                 transition_scratch_vectors[2] = *(float *)(transition_private_vars + 0x4C);
-                FUN_L00_00216f90_q(transition_private_vars + 0x40, transition_scratch_vectors, 0x72, 1);
-                FUN_L00_002eaaa0_q(transition_private_vars, transition_private_vars + 0x20, 1, 0, 0);
+                FUN_L00_00216f90_q(
+                    transition_private_vars + 0x40, transition_scratch_vectors, 0x72, 1);
+                FUN_L00_002eaaa0_q(
+                    transition_private_vars, transition_private_vars + 0x20, 1, 0, 0);
                 if (*(int *)(transition_private_vars + 0x78) == 1) {
                     help_request(0x4650, 0x85);
                     moby->state = 4;
@@ -89,21 +92,27 @@ void update_camera_transition(struct Moby *moby) {
                                        *(float *)(transition_private_vars + 0x68),
                                        *(float *)(transition_private_vars + 0x70));
         }
-        lerp_vector(transition_scratch_vectors, transition_private_vars, transition_private_vars + 0x10, *(float *)(transition_private_vars + 0x60));
+        lerp_vector(transition_scratch_vectors,
+                    transition_private_vars,
+                    transition_private_vars + 0x10,
+                    *(float *)(transition_private_vars + 0x60));
         clear_u64_value(transition_scratch_vectors + 4);
         transition_scratch_vectors[5] =
-            fast_subtract_rotations(*(float *)(transition_private_vars + 0x34), *(float *)(transition_private_vars + 0x24)) *
+            fast_subtract_rotations(*(float *)(transition_private_vars + 0x34),
+                                    *(float *)(transition_private_vars + 0x24)) *
             *(float *)(transition_private_vars + 0x60);
-        transition_scratch_vectors[5] =
-            fast_add_rotations(*(float *)(transition_private_vars + 0x24), transition_scratch_vectors[5]);
+        transition_scratch_vectors[5] = fast_add_rotations(
+            *(float *)(transition_private_vars + 0x24), transition_scratch_vectors[5]);
         transition_scratch_vectors[6] =
-            fast_subtract_rotations(*(float *)(transition_private_vars + 0x38), *(float *)(transition_private_vars + 0x28)) *
+            fast_subtract_rotations(*(float *)(transition_private_vars + 0x38),
+                                    *(float *)(transition_private_vars + 0x28)) *
             *(float *)(transition_private_vars + 0x60);
-        transition_scratch_vectors[6] =
-            fast_add_rotations(*(float *)(transition_private_vars + 0x28), transition_scratch_vectors[6]);
+        transition_scratch_vectors[6] = fast_add_rotations(
+            *(float *)(transition_private_vars + 0x28), transition_scratch_vectors[6]);
         FUN_L00_002ea9d8_q(transition_scratch_vectors);
         set_camera_rotation(transition_scratch_vectors + 4);
-        approach_value((float *)(transition_private_vars + 0x6C), 0.0f, (*(float *)&frame_time) * 4.0f);
+        approach_value(
+            (float *)(transition_private_vars + 0x6C), 0.0f, (*(float *)&frame_time) * 4.0f);
         {
             float transition_progress = *(float *)(transition_private_vars + 0x60);
             D_L18_0015F3FC_d = *(float *)(transition_private_vars + 0x6C);
@@ -111,13 +120,15 @@ void update_camera_transition(struct Moby *moby) {
                 camera_transition_active = 0;
                 clear_u64_value(transition_scratch_vectors + 8);
                 transition_scratch_vectors[10] = *(float *)(transition_private_vars + 0x4C);
-                FUN_L00_00216f90_q(transition_private_vars + 0x40, transition_scratch_vectors + 8, 0, 0);
+                FUN_L00_00216f90_q(
+                    transition_private_vars + 0x40, transition_scratch_vectors + 8, 0, 0);
                 FUN_L00_002eac18_q(2);
                 moby->state = 5;
             } else if (*(int *)(camera_secondary_mode_lui) != 0x72) {
                 clear_u64_value(transition_scratch_vectors + 8);
                 transition_scratch_vectors[10] = *(float *)(transition_private_vars + 0x4C);
-                FUN_L00_00216f90_q(transition_private_vars + 0x40, transition_scratch_vectors + 8, 0x72, 1);
+                FUN_L00_00216f90_q(
+                    transition_private_vars + 0x40, transition_scratch_vectors + 8, 0x72, 1);
                 return;
             }
         }
@@ -131,24 +142,31 @@ void update_camera_transition(struct Moby *moby) {
                                        *(float *)(transition_private_vars + 0x68),
                                        *(float *)(transition_private_vars + 0x70));
         }
-        lerp_vector(transition_scratch_vectors, transition_private_vars, transition_private_vars + 0x10, *(float *)(transition_private_vars + 0x60));
+        lerp_vector(transition_scratch_vectors,
+                    transition_private_vars,
+                    transition_private_vars + 0x10,
+                    *(float *)(transition_private_vars + 0x60));
         clear_u64_value(transition_scratch_vectors + 4);
         transition_scratch_vectors[5] =
-            fast_subtract_rotations(*(float *)(transition_private_vars + 0x34), *(float *)(transition_private_vars + 0x24)) *
+            fast_subtract_rotations(*(float *)(transition_private_vars + 0x34),
+                                    *(float *)(transition_private_vars + 0x24)) *
             *(float *)(transition_private_vars + 0x60);
-        transition_scratch_vectors[5] =
-            fast_add_rotations(*(float *)(transition_private_vars + 0x24), transition_scratch_vectors[5]);
+        transition_scratch_vectors[5] = fast_add_rotations(
+            *(float *)(transition_private_vars + 0x24), transition_scratch_vectors[5]);
         transition_scratch_vectors[6] =
-            fast_subtract_rotations(*(float *)(transition_private_vars + 0x38), *(float *)(transition_private_vars + 0x28)) *
+            fast_subtract_rotations(*(float *)(transition_private_vars + 0x38),
+                                    *(float *)(transition_private_vars + 0x28)) *
             *(float *)(transition_private_vars + 0x60);
-        transition_scratch_vectors[6] =
-            fast_add_rotations(*(float *)(transition_private_vars + 0x28), transition_scratch_vectors[6]);
+        transition_scratch_vectors[6] = fast_add_rotations(
+            *(float *)(transition_private_vars + 0x28), transition_scratch_vectors[6]);
         FUN_L00_002ea9d8_q(transition_scratch_vectors);
         set_camera_rotation(transition_scratch_vectors + 4);
         if (1.0f <= *(float *)(transition_private_vars + 0x60) ||
-            (0.2f < *(float *)(transition_private_vars + 0x60) && D_L18_00179E10[0] == 0 && D_L18_00179E10[9] == -1)) {
+            (0.2f < *(float *)(transition_private_vars + 0x60) && D_L18_00179E10[0] == 0 &&
+             D_L18_00179E10[9] == -1)) {
             float t;
-            approach_value((float *)(transition_private_vars + 0x6C), 1.0f, (*(float *)&frame_time) * 4.0f);
+            approach_value(
+                (float *)(transition_private_vars + 0x6C), 1.0f, (*(float *)&frame_time) * 4.0f);
             t = *(float *)(transition_private_vars + 0x6C);
             D_L18_0015F3FC_d = t;
             if (1.0f <= t) {
@@ -156,23 +174,27 @@ void update_camera_transition(struct Moby *moby) {
                 *(float *)(transition_private_vars + 0x60) = 1.0f;
                 clear_u64_value(transition_scratch_vectors + 8);
                 transition_scratch_vectors[10] = *(float *)(transition_private_vars + 0x4C);
-                FUN_L00_00216f90_q(transition_private_vars + 0x40, transition_scratch_vectors + 8, 0, 0);
+                FUN_L00_00216f90_q(
+                    transition_private_vars + 0x40, transition_scratch_vectors + 8, 0, 0);
                 FUN_L00_002eac18_q(3);
                 moby->state = 5;
             }
         } else if (*(int *)(camera_secondary_mode_lui) != 0x72) {
             clear_u64_value(transition_scratch_vectors + 8);
             transition_scratch_vectors[10] = *(float *)(transition_private_vars + 0x4C);
-            FUN_L00_00216f90_q(transition_private_vars + 0x40, transition_scratch_vectors + 8, 0x72, 1);
+            FUN_L00_00216f90_q(
+                transition_private_vars + 0x40, transition_scratch_vectors + 8, 0x72, 1);
             return;
         } else {
-            approach_value((float *)(transition_private_vars + 0x6C), 0.0f, (*(float *)&frame_time) * 4.0f);
+            approach_value(
+                (float *)(transition_private_vars + 0x6C), 0.0f, (*(float *)&frame_time) * 4.0f);
             D_L18_0015F3FC_d = *(float *)(transition_private_vars + 0x6C);
         }
         break;
     case STATE_POST_TRANSITION_RAMP_DOWN:
         if (0.0f < *(float *)(transition_private_vars + 0x6C)) {
-            approach_value((float *)(transition_private_vars + 0x6C), 0.0f, (*(float *)&frame_time) * 4.0f);
+            approach_value(
+                (float *)(transition_private_vars + 0x6C), 0.0f, (*(float *)&frame_time) * 4.0f);
             D_L18_0015F3FC_d = *(float *)(transition_private_vars + 0x6C);
         } else {
             moby->state = 1;
@@ -217,7 +239,8 @@ void start_camera_transition(struct Moby *moby,
     qcopy(position_rotation_transition_vars + 0x40, transition_setup_vector);
     moby->state = 2;
     *(float *)(position_rotation_transition_vars + 0x68) = frame_time_sq * 0.333f;
-    *(float *)(position_rotation_transition_vars + 0x70) = 1.0f / (float)scale_game_frames(invulnerability_duration_frames);
+    *(float *)(position_rotation_transition_vars + 0x70) =
+        1.0f / (float)scale_game_frames(invulnerability_duration_frames);
     *(int *)(position_rotation_transition_vars + 0x74) = scale_game_frames(transition_delay_frames);
     *(int *)(position_rotation_transition_vars + 0x78) = transition_mode;
     hero.invulnerable_frames = scale_game_frames(invulnerability_duration_frames);

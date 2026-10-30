@@ -139,7 +139,8 @@ Slot *allocate_moby_animation_slot(char *slot_owner_moby, int id) {
     id = (short)id;
     selected_slot->p10 = slot_buffers[i];
     selected_slot->p14 = *(int *)(slot_owner_moby + 0x24);
-    selected_record = *(unsigned char **)(*(char **)(*(char **)(slot_owner_moby + 0x24) + 0x1C) + id * 4 + 4);
+    selected_record =
+        *(unsigned char **)(*(char **)(*(char **)(slot_owner_moby + 0x24) + 0x1C) + id * 4 + 4);
     selected_slot->s2 = selected_record[2];
     selected_slot->p0C = selected_record + (selected_record[0] + 4);
     selected_slot->p1C = *(void **)(slot_owner_moby + 0x60);
@@ -363,7 +364,8 @@ void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet *anima
         animation_frame_packet->hE = selected_frame->hE;
         trailing_byte_count = selected_frame->qwc * 16 - nb * 8;
         if (trailing_byte_count != 0)
-            copy_memory_aligned(&((u64_24f440 *)animation_frame_packet)[na + 2], from, trailing_byte_count);
+            copy_memory_aligned(
+                &((u64_24f440 *)animation_frame_packet)[na + 2], from, trailing_byte_count);
     }
     ix = (unsigned char *)(*(char **)(*(char **)(animation_blend_state + 0x18) + 0x1C) + 4);
     scatter_source_cursor = selected_frame->q;

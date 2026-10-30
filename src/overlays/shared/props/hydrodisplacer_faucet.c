@@ -86,7 +86,8 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
         approach_value((float *)(faucet_pulse_vars + 0x1C), 0.0f, *(float *)&D_0015EE6C_s);
     }
     if (*(float *)(faucet_pulse_vars + 0x1C) != 0.0f) {
-        pulse_phase = fast_add_rotations(*(float *)(faucet_pulse_vars + 0x18), frame_time * 6.2831855f);
+        pulse_phase =
+            fast_add_rotations(*(float *)(faucet_pulse_vars + 0x18), frame_time * 6.2831855f);
         *(float *)(faucet_pulse_vars + 0x18) = pulse_phase;
         if (((unsigned char *)moby)[0xBC] == 1) {
             pulse_color = fast_tween_color(*(int *)&faucet_item_16_pulse_start_color_gp,
@@ -97,8 +98,8 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
                                            *(int *)&faucet_fallback_pulse_end_color_gp,
                                            (fast_sin(pulse_phase) + 1.0f) * 0.5f);
         }
-        moby->glow_color =
-            fast_tween_color(*(int *)&faucet_base_color_gp, pulse_color, *(float *)(faucet_pulse_vars + 0x1C));
+        moby->glow_color = fast_tween_color(
+            *(int *)&faucet_base_color_gp, pulse_color, *(float *)(faucet_pulse_vars + 0x1C));
     } else {
         moby->glow_color = *(int *)&faucet_base_color_gp;
     }

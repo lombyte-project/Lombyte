@@ -214,7 +214,8 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
         thrown_moby->flags |= 0x41;
     else
         thrown_moby->flags &= 0xffbe;
-    if (spawner_throw_vars->holder->oclass == 0xe5 && spawner_throw_vars->unk46 == 0 && fast_vec_length(spawner_throw_vars) > 0.0f) {
+    if (spawner_throw_vars->holder->oclass == 0xe5 && spawner_throw_vars->unk46 == 0 &&
+        fast_vec_length(spawner_throw_vars) > 0.0f) {
         if (!hero.ground_moby || !FUN_L00_002603d0((char *)hero.ground_moby))
             predict_doom_bot_spawner_landing(spawner_throw_vars, thrown_moby, 1);
         else if (!predict_doom_bot_spawner_landing(spawner_throw_vars, thrown_moby, 0))
@@ -239,8 +240,9 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
             if (!hero.unk20A5)
                 spawn_moby_bound_effect_particle(thrown_moby);
         }
-        if (!hero.vehicle_mode && spawner_throw_vars->holder && (spawner_throw_vars->holder->state & 0xf0) != 0xf0 &&
-            hero.items[0].moby && hero.items[0].moby->oclass == 0xe5)
+        if (!hero.vehicle_mode && spawner_throw_vars->holder &&
+            (spawner_throw_vars->holder->state & 0xf0) != 0xf0 && hero.items[0].moby &&
+            hero.items[0].moby->oclass == 0xe5)
             return;
         goto remove;
     }
@@ -338,7 +340,8 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
                              &thrown_moby->rot);
         if (fast_dec_timer_s16(&spawner_throw_vars->timer)) {
             live_count = 0;
-            for (population_scan_moby = (struct Moby *)D_L00_0015FFE4; population_scan_moby; population_scan_moby = population_scan_moby->next) {
+            for (population_scan_moby = (struct Moby *)D_L00_0015FFE4; population_scan_moby;
+                 population_scan_moby = population_scan_moby->next) {
                 if (population_scan_moby->oclass == 0xba) {
                     /* Fakematch: dead `last = other` (see `never`). */
                     if ((population_scan_moby->state & 0xf0) != 0xf0) {
@@ -370,7 +373,8 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
                 }
             }
         }
-        if (spawner_throw_vars->spawn_count < 2 && fast_dec_timer(&spawner_throw_vars->effect_timer)) {
+        if (spawner_throw_vars->spawn_count < 2 &&
+            fast_dec_timer(&spawner_throw_vars->effect_timer)) {
             spawner_throw_vars->effect_timer = scale_game_frames(4);
             spawn_moby_bound_effect_particle(thrown_moby);
         }

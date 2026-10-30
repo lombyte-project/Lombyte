@@ -219,8 +219,10 @@ void screamer_update(Moby *moby) {
         {
             char *linked =
                 (char *)D_L10_0015FFD0_macro[2] +
-                (screamer_data->linked[truncate_float_to_s32(
-                                  l10_paths[screamer_data->path]->points[screamer_data->node_index - 1].f[3]) -
+                (screamer_data
+                     ->linked[truncate_float_to_s32(l10_paths[screamer_data->path]
+                                                        ->points[screamer_data->node_index - 1]
+                                                        .f[3]) -
                               1]
                  << 8);
             if (linked != 0)
@@ -245,12 +247,13 @@ void screamer_update(Moby *moby) {
         float zero = 0.0f;
         float climb;
         func_L00_0025CC58_2E0630(&moby->rot.y, 0, zero, D_0015ED6C * 12.566371f);
-        approach_w(moby,
-                   fast_arc_tan(screamer_data->home.x - moby->pos.x, screamer_data->home.y - moby->pos.y),
-                   &screamer_data->yaw_speed,
-                   0.02f,
-                   0.3f,
-                   D_0015ED6C * 6.2831855f);
+        approach_w(
+            moby,
+            fast_arc_tan(screamer_data->home.x - moby->pos.x, screamer_data->home.y - moby->pos.y),
+            &screamer_data->yaw_speed,
+            0.02f,
+            0.3f,
+            D_0015ED6C * 6.2831855f);
         screamer_data->vel.x = fast_cos(moby->rot.z) * (D_0015ED6C * 6.0f);
         screamer_data->vel.y = fast_sin(moby->rot.z) * (D_0015ED6C * 6.0f);
         screamer_data->vel.z = zero;
@@ -285,13 +288,13 @@ void screamer_update(Moby *moby) {
         break;
     }
     case SCREAMER_STATE_WANDER:
-        approach_w(
-            moby,
-            fast_arc_tan(screamer_data->wander_goal.x - moby->pos.x, screamer_data->wander_goal.y - moby->pos.y),
-            &screamer_data->yaw_speed,
-            0.05f,
-            0.3f,
-            0.2f);
+        approach_w(moby,
+                   fast_arc_tan(screamer_data->wander_goal.x - moby->pos.x,
+                                screamer_data->wander_goal.y - moby->pos.y),
+                   &screamer_data->yaw_speed,
+                   0.05f,
+                   0.3f,
+                   0.2f);
         fast_vec_sub(&screamer_data->step, &screamer_data->wander_goal, &moby->pos);
         func_L00_002607A8_2E0630(&screamer_data->step, D_0015ED6C * 4.0f);
         fast_vec_add(waypoint, &screamer_data->step, &moby->pos);
@@ -390,13 +393,15 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     float            knockback_angle;
 
     if (screamer_vars->f38 != 0) {
-        screamer_vars->f184 = truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
+        screamer_vars->f184 =
+            truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
         screamer_vars->f38 = 0;
     }
     fast_dec_timer(&screamer_vars->f184);
     if (moby->state != 11) {
         hit_record = (Hit_2DFC38 *)find_moby_hit(moby, 0x330000, 0);
-        hit_update_2DFC38(moby, hit_record, &screamer_vars->f20, 5, &hit_processing_status, 0, 0, 4);
+        hit_update_2DFC38(
+            moby, hit_record, &screamer_vars->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0) {
             if (screamer_vars->f20 <= hit_record->f2C) {
                 if (screamer_death_message_gate != 0 && item_unlocked[0x10] == 0) {
@@ -457,12 +462,12 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
         }
     } else if (moby->state == 1 && screamer_vars->f18C >= 0) {
         LevelPath *path = l10_paths[screamer_vars->f18C];
-        target_selection_status =
-            activate_effect_l08(screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
+        target_selection_status = activate_effect_l08(
+            screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
     } else if (moby->state != 1 && screamer_vars->f17C >= 0) {
         LevelPath *path = l10_paths[screamer_vars->f17C];
-        target_selection_status =
-            activate_effect_l08(screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
+        target_selection_status = activate_effect_l08(
+            screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
     } else {
         target_selection_status = ahead_f(screamer_vars->f180, moby, screamer_vars->fC0);
     }
@@ -489,7 +494,8 @@ void activate_waiting_moby_group_members(struct Moby *moby) {
             do {
                 struct Moby *moby_array_base = D_L10_0015FFD0_macro[2];
                 struct Moby *listed_entity =
-                    (struct Moby *)((*(unsigned short *)group_entry & 0x7FFF) * 256 + (int)moby_array_base);
+                    (struct Moby *)((*(unsigned short *)group_entry & 0x7FFF) * 256 +
+                                    (int)moby_array_base);
                 if (listed_entity->state == 1)
                     listed_entity->state = 2;
             } while (*group_entry++ >= 0);

@@ -137,15 +137,15 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
         int parity = pass & 1;
         int shade;
         uniform_color_quad.alpha = GS_ALPHA(quad_layer_alpha_a_selectors[parity],
-                               quad_layer_alpha_b_selectors[parity],
-                               quad_layer_alpha_c_selectors[parity],
-                               quad_layer_alpha_d_selectors[parity],
-                               0x80);
+                                            quad_layer_alpha_b_selectors[parity],
+                                            quad_layer_alpha_c_selectors[parity],
+                                            quad_layer_alpha_d_selectors[parity],
+                                            0x80);
         alternating_color_quad.alpha = GS_ALPHA(quad_layer_alpha_a_selectors[parity],
-                                quad_layer_alpha_b_selectors[parity],
-                                quad_layer_alpha_c_selectors[parity],
-                                quad_layer_alpha_d_selectors[parity],
-                                0x80);
+                                                quad_layer_alpha_b_selectors[parity],
+                                                quad_layer_alpha_c_selectors[parity],
+                                                quad_layer_alpha_d_selectors[parity],
+                                                0x80);
         shade = quad_layer_colors[pass];
         alternating_color_quad.color[2] = shade;
         alternating_color_quad.color[0] = shade;

@@ -218,7 +218,10 @@ float compute_circular_saw_flock_steering(struct Moby *moby,
                                           void        *out,
                                           float        speed) __asm__("FUN_L04_002c1fb8");
 
-float compute_circular_saw_flock_steering(struct Moby *moby, void *steering_point_output, float speed) {
+float compute_circular_saw_flock_steering(struct Moby *moby,
+                                          void        *steering_point_output,
+
+                                          float speed) {
     float away[4];
     float target[4];
     float pad[4][4];
@@ -228,10 +231,12 @@ float compute_circular_saw_flock_steering(struct Moby *moby, void *steering_poin
     float weight;
     int   is_closest;
     int   is_alert = 0;
-    if (*(int *)(circular_saw_flock_pvars + 0x38) != 0 || *(short *)(circular_saw_flock_pvars + 0x136) != 0)
+    if (*(int *)(circular_saw_flock_pvars + 0x38) != 0 ||
+        *(short *)(circular_saw_flock_pvars + 0x136) != 0)
         is_alert = 1;
     if (is_alert) {
-        speed = *(float *)(circular_saw_flock_pvars + 0x140) + *(float *)(circular_saw_flock_pvars + 0x140);
+        speed = *(float *)(circular_saw_flock_pvars + 0x140) +
+                *(float *)(circular_saw_flock_pvars + 0x140);
     } else {
         speed = *(float *)(circular_saw_flock_pvars + 0x140);
     }
@@ -275,7 +280,8 @@ float compute_circular_saw_flock_steering(struct Moby *moby, void *steering_poin
         qcopy(steering_point_output, &moby->pos);
         return fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
     }
-    return fast_arc_tan(((float *)steering_point_output)[0] - moby->pos.x, ((float *)steering_point_output)[1] - moby->pos.y);
+    return fast_arc_tan(((float *)steering_point_output)[0] - moby->pos.x,
+                        ((float *)steering_point_output)[1] - moby->pos.y);
 }
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");

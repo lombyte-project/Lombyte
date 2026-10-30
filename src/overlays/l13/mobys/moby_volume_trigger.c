@@ -46,7 +46,8 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(volume_trigger_vars + 0x14) != -1 && volume_trigger_vars[0x2C] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x14), volume_trigger_vars[0x2C]);
+                set_moby_list_state(*(int *)(volume_trigger_vars + 0x14),
+                                    volume_trigger_vars[0x2C]);
             {
                 int uid = *(int *)(volume_trigger_vars + 0x8);
                 if (uid != -1) {
@@ -63,7 +64,8 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(volume_trigger_vars + 0x18) != -1 && volume_trigger_vars[0x2D] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x18), volume_trigger_vars[0x2D]);
+                set_moby_list_state(*(int *)(volume_trigger_vars + 0x18),
+                                    volume_trigger_vars[0x2D]);
             {
                 int uid = *(int *)(volume_trigger_vars + 0xC);
                 if (uid != -1) {
@@ -80,7 +82,8 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(volume_trigger_vars + 0x1C) != -1 && volume_trigger_vars[0x2E] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x1C), volume_trigger_vars[0x2E]);
+                set_moby_list_state(*(int *)(volume_trigger_vars + 0x1C),
+                                    volume_trigger_vars[0x2E]);
             {
                 int uid = *(int *)(volume_trigger_vars + 0x10);
                 if (uid != -1) {
@@ -97,7 +100,8 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(volume_trigger_vars + 0x20) != -1 && volume_trigger_vars[0x2F] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x20), volume_trigger_vars[0x2F]);
+                set_moby_list_state(*(int *)(volume_trigger_vars + 0x20),
+                                    volume_trigger_vars[0x2F]);
             if (volume_trigger_vars[0x34] != -1)
                 moby[0x20] = volume_trigger_vars[0x34];
             if (volume_trigger_vars[0x36] != -1)
@@ -122,7 +126,8 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(volume_trigger_vars + 0x14) != -1 && volume_trigger_vars[0x30] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x14), volume_trigger_vars[0x30]);
+                set_moby_list_state(*(int *)(volume_trigger_vars + 0x14),
+                                    volume_trigger_vars[0x30]);
             {
                 int uid = *(int *)(volume_trigger_vars + 0x8);
                 if (uid != -1) {
@@ -139,7 +144,8 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(volume_trigger_vars + 0x18) != -1 && volume_trigger_vars[0x31] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x18), volume_trigger_vars[0x31]);
+                set_moby_list_state(*(int *)(volume_trigger_vars + 0x18),
+                                    volume_trigger_vars[0x31]);
             {
                 int uid = *(int *)(volume_trigger_vars + 0xC);
                 if (uid != -1) {
@@ -156,7 +162,8 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(volume_trigger_vars + 0x1C) != -1 && volume_trigger_vars[0x32] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x1C), volume_trigger_vars[0x32]);
+                set_moby_list_state(*(int *)(volume_trigger_vars + 0x1C),
+                                    volume_trigger_vars[0x32]);
             {
                 int uid = *(int *)(volume_trigger_vars + 0x10);
                 if (uid != -1) {
@@ -173,7 +180,8 @@ void update_moby_volume_trigger(char *moby) {
                 }
             }
             if (*(int *)(volume_trigger_vars + 0x20) != -1 && volume_trigger_vars[0x33] != -1)
-                set_moby_list_state(*(int *)(volume_trigger_vars + 0x20), volume_trigger_vars[0x33]);
+                set_moby_list_state(*(int *)(volume_trigger_vars + 0x20),
+                                    volume_trigger_vars[0x33]);
             if (volume_trigger_vars[0x35] != -1)
                 moby[0x20] = volume_trigger_vars[0x35];
             if (volume_trigger_vars[0x37] != -1)

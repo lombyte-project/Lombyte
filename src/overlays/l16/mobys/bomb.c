@@ -180,7 +180,12 @@ unsigned char *spawn_thrown_bomb(int    owner,
 
 unsigned char *spawn_thrown_bomb(
 
-    int thrower_moby, void *spawn_position, float *initial_velocity, int fuse_frames, float gravity) {
+    int    thrower_moby,
+    void  *spawn_position,
+    float *initial_velocity,
+    int    fuse_frames,
+
+    float gravity) {
     unsigned char *moby = (unsigned char *)create_moby(0x119);
     if (moby != 0) {
         char *thrown_bomb_data = ((char *)MOBY(moby)->pvars);

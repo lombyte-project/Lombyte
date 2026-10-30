@@ -37,35 +37,45 @@ void blarg_gun_update(char *moby) {
         joint_index = *(int *)(launch_motion_vars + 4);
         if (joint_index > 0) {
             moby_point_position(moby, joint_index, rotation_workspace + 0x40);
-            MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(launch_motion_vars + 0x20));
-            MOBY(moby)->rot.y = fast_add_rotations(MOBY(moby)->rot.y, *(float *)(launch_motion_vars + 0x24));
-            MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, *(float *)(launch_motion_vars + 0x28));
+            MOBY(moby)->rot.x =
+                fast_add_rotations(MOBY(moby)->rot.x, *(float *)(launch_motion_vars + 0x20));
+            MOBY(moby)->rot.y =
+                fast_add_rotations(MOBY(moby)->rot.y, *(float *)(launch_motion_vars + 0x24));
+            MOBY(moby)->rot.z =
+                fast_add_rotations(MOBY(moby)->rot.z, *(float *)(launch_motion_vars + 0x28));
             euler_rotation_matrix(rotation_workspace, moby + 0x40);
             copy_matrix3x4(moby + 0xC0, rotation_workspace);
             moby_point_position(moby, *(int *)(launch_motion_vars + 4), rotation_workspace + 0x50);
             fast_vec_sub(
                 rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
         } else {
-            transform_vector_by_basis(rotation_workspace + 0x40, launch_motion_vars + 0x10, moby + 0xC0);
-            MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(launch_motion_vars + 0x20));
-            MOBY(moby)->rot.y = fast_add_rotations(MOBY(moby)->rot.y, *(float *)(launch_motion_vars + 0x24));
-            MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, *(float *)(launch_motion_vars + 0x28));
+            transform_vector_by_basis(
+                rotation_workspace + 0x40, launch_motion_vars + 0x10, moby + 0xC0);
+            MOBY(moby)->rot.x =
+                fast_add_rotations(MOBY(moby)->rot.x, *(float *)(launch_motion_vars + 0x20));
+            MOBY(moby)->rot.y =
+                fast_add_rotations(MOBY(moby)->rot.y, *(float *)(launch_motion_vars + 0x24));
+            MOBY(moby)->rot.z =
+                fast_add_rotations(MOBY(moby)->rot.z, *(float *)(launch_motion_vars + 0x28));
             euler_rotation_matrix(rotation_workspace, moby + 0x40);
             if (MOBY(moby)->flags & 0x8000)
                 fast_vec_scale(rotation_workspace + 0x10, rotation_workspace + 0x10, -1.0f);
             copy_matrix3x4(moby + 0xC0, rotation_workspace);
-            transform_vector_by_basis(rotation_workspace + 0x50, launch_motion_vars + 0x10, moby + 0xC0);
+            transform_vector_by_basis(
+                rotation_workspace + 0x50, launch_motion_vars + 0x10, moby + 0xC0);
             fast_vec_sub(
                 rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
             fast_vec_add(rotation_workspace + 0x50, rotation_workspace + 0x50, moby + 0x10);
         }
 
-        if (coll_sphere(convert_integer_to_float(*(int *)(launch_motion_vars + 0xC)) * 0.0009765625f,
+        if (coll_sphere(convert_integer_to_float(*(int *)(launch_motion_vars + 0xC)) *
+                            0.0009765625f,
                         rotation_workspace + 0x50,
                         0,
                         moby)) {
             hs = D_L05_00174240;
-            if (*(int *)(hs + 0x18) == 0 || *(int *)(hs + 0x18) != *(int *)(launch_motion_vars + 8)) {
+            if (*(int *)(hs + 0x18) == 0 ||
+                *(int *)(hs + 0x18) != *(int *)(launch_motion_vars + 8)) {
                 *(int *)launch_motion_vars = 0;
                 if (fast_vec_dot(launch_motion_vars + 0x30, hs + 0x40) < 0.0f) {
                     reflect_vector(launch_motion_vars + 0x30, launch_motion_vars + 0x30, hs + 0x40);
@@ -82,7 +92,8 @@ void blarg_gun_update(char *moby) {
                 mark_moby_for_removal(moby);
             }
         }
-        *(float *)(launch_motion_vars + 0x38) = *(float *)(launch_motion_vars + 0x38) - frame_time_sq * 10.8f;
+        *(float *)(launch_motion_vars + 0x38) =
+            *(float *)(launch_motion_vars + 0x38) - frame_time_sq * 10.8f;
         fast_vec_add(moby + 0x10, moby + 0x10, launch_motion_vars + 0x30);
         fast_vec_add(moby + 0x10, moby + 0x10, rotation_workspace + 0x60);
         if (MOBY(moby)->pos.z < 5.0f)

@@ -99,7 +99,8 @@ state_two: {
         candidate = 0;
         if (gun_control->targets[0] != -1) {
             struct Moby *target;
-            target = (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (gun_control->targets[0] << 8));
+            target =
+                (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (gun_control->targets[0] << 8));
             candidate =
                 (target != 0 && target->state != 0xfe && target->state != 0xfd) ? target : 0;
         }
@@ -109,8 +110,8 @@ state_two: {
             if (candidate == 0) {
                 if (gun_control->targets[1] != -1) {
                     struct Moby *candidate;
-                    candidate =
-                        (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (gun_control->targets[1] << 8));
+                    candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 +
+                                                (gun_control->targets[1] << 8));
                     if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
                         target = candidate;
                 }
@@ -121,7 +122,8 @@ state_two: {
     }
     if (target == 0) {
         if (gun_control->targets[2] != -1) {
-            candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (gun_control->targets[2] << 8));
+            candidate =
+                (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (gun_control->targets[2] << 8));
             if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
                 target = candidate;
         }
@@ -151,8 +153,8 @@ state_two: {
             if (target ==
                 (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (gun_control->targets[0] << 8)))
                 gun_control->targets[0] = -1;
-            else if (target ==
-                     (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (gun_control->targets[1] << 8)))
+            else if (target == (struct Moby *)((char *)D_L10_0015FFD0_macro[2] +
+                                               (gun_control->targets[1] << 8)))
                 gun_control->targets[1] = -1;
             else
                 gun_control->targets[2] = -1;

@@ -182,7 +182,8 @@ void build_water_render_setup_packet(void) {
     water_setup_packet_start[1].addr = 0;
     water_setup_packet_start[1].vif0 = 0;
     water_setup_packet_start[1].vif1 = 0x6C0C43A4;
-    multiply_matrix(water_setup_packet_start + 2, D_L01_00167240 - 0x100, scaled_translation_matrix);
+    multiply_matrix(
+        water_setup_packet_start + 2, D_L01_00167240 - 0x100, scaled_translation_matrix);
     multiply_matrix(water_setup_packet_start + 6, D_L01_00167240 - 0x80, scaled_translation_matrix);
     water_setup_packet_start[10].tag = 0x8000;
     water_setup_packet_start[10].addr = 0x303EC000;

@@ -480,7 +480,8 @@ void cache_path_segment_lengths(char *path_record) {
                 int point_byte_offset = i * 16;
                 int next_point_index = (i + 1) % count;
                 *(float *)(path_record + point_byte_offset + 0x1C) =
-                    fast_vec_dist(path_record + (point_byte_offset + 0x10), path_record + (next_point_index * 16 + 0x10));
+                    fast_vec_dist(path_record + (point_byte_offset + 0x10),
+                                  path_record + (next_point_index * 16 + 0x10));
                 i++;
                 count = *(int *)path_record;
             } while (i < count);
@@ -534,25 +535,30 @@ int initialize_sharkigator(char *moby, char *sharkigator_pvars) {
         stub_printf(D_L07_00211720, (moby - level_mobys) >> 8);
         return 1;
     }
-    cache_path_segment_lengths(*(char **)(sharkigator_pvars + 0x128) = D_L07_001B0530[*(int *)(sharkigator_pvars + 0x110)]);
+    cache_path_segment_lengths(*(char **)(sharkigator_pvars + 0x128) =
+                                   D_L07_001B0530[*(int *)(sharkigator_pvars + 0x110)]);
     if (*(int *)(sharkigator_pvars + 0x144) == -1) {
         stub_printf(D_L07_00211758, (moby - level_mobys) >> 8);
         return 1;
     }
-    cache_path_segment_lengths(*(char **)(sharkigator_pvars + 0x148) = D_L07_001B0530[*(int *)(sharkigator_pvars + 0x144)]);
+    cache_path_segment_lengths(*(char **)(sharkigator_pvars + 0x148) =
+                                   D_L07_001B0530[*(int *)(sharkigator_pvars + 0x144)]);
     if (*(int *)(sharkigator_pvars + 0x118) == -1) {
         stub_printf(D_L07_00211790, (moby - level_mobys) >> 8);
         return 1;
     }
-    *(char **)(sharkigator_pvars + 0x12C) = level_mobys + (*(int *)(sharkigator_pvars + 0x118) << 8) + 0x18;
+    *(char **)(sharkigator_pvars + 0x12C) =
+        level_mobys + (*(int *)(sharkigator_pvars + 0x118) << 8) + 0x18;
     moby[0xBC] = classify_sharkigator_water_height_gap(moby, sharkigator_pvars);
     if (*(int *)(sharkigator_pvars + 0x114) == -1) {
         stub_printf(D_L07_002117C0, (moby - level_mobys) >> 8);
         return 1;
     }
-    qcopy(sharkigator_pvars + 0xF0, (char *)l07_cuboids + *(int *)(sharkigator_pvars + 0x114) * 0x80 + 0x30);
+    qcopy(sharkigator_pvars + 0xF0,
+          (char *)l07_cuboids + *(int *)(sharkigator_pvars + 0x114) * 0x80 + 0x30);
     qcopy(sharkigator_pvars + 0xE0, moby + 0x10);
-    ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)(moby, sharkigator_pvars);
+    ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)(moby,
+                                                                                 sharkigator_pvars);
     *(int *)(sharkigator_pvars + 0x134) = rand() % 0x78;
     if (rand() & 1) {
         *(float *)(sharkigator_pvars + 0x140) = 0.34906584f;
@@ -564,14 +570,18 @@ int initialize_sharkigator(char *moby, char *sharkigator_pvars) {
     return 0;
 }
 
-void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData *sharkigator_navigation_state) {
+void select_sharkigator_navigation_heading(struct Moby *moby,
+
+                                           struct WalkerData *sharkigator_navigation_state) {
     float probe[4];
     float angle;
     float swept;
     float step;
 
     if (sharkigator_navigation_state->wander == 0) {
-        sharkigator_navigation_state->heading = fast_arc_tan(sharkigator_navigation_state->goal.f[0] - moby->pos.x, sharkigator_navigation_state->goal.f[1] - moby->pos.y);
+        sharkigator_navigation_state->heading =
+            fast_arc_tan(sharkigator_navigation_state->goal.f[0] - moby->pos.x,
+                         sharkigator_navigation_state->goal.f[1] - moby->pos.y);
         return;
     }
     {
@@ -579,7 +589,9 @@ void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData 
         probe[1] = fast_sin(moby->rot.z) * 5.2f;
         *(s32 *)&probe[2] = 0;
         fast_vec_add(probe, probe, &moby->pos);
-        if (point_in_path_xy(probe, sharkigator_navigation_state->path->pts, sharkigator_navigation_state->path->count) &&
+        if (point_in_path_xy(probe,
+                             sharkigator_navigation_state->path->pts,
+                             sharkigator_navigation_state->path->count) &&
             !line_blocked_30eee8(&moby->pos, probe, 0x24, moby, 0) &&
             !coll_sphere(1.5f, probe, 0x24, moby))
             return;
@@ -591,7 +603,9 @@ void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData 
             probe[1] = fast_sin(angle) * 5.2f;
             *(s32 *)&probe[2] = 0;
             fast_vec_add(probe, probe, &moby->pos);
-            if (point_in_path_xy(probe, sharkigator_navigation_state->path->pts, sharkigator_navigation_state->path->count) &&
+            if (point_in_path_xy(probe,
+                                 sharkigator_navigation_state->path->pts,
+                                 sharkigator_navigation_state->path->count) &&
                 !line_blocked_30eee8(&moby->pos, probe, 0x24, moby, 0) &&
                 !coll_sphere(1.5f, probe, 0x24, moby)) {
                 sharkigator_navigation_state->heading = angle;
@@ -599,7 +613,9 @@ void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData 
             }
         }
     }
-    sharkigator_navigation_state->heading = fast_arc_tan(sharkigator_navigation_state->goal.f[0] - moby->pos.x, sharkigator_navigation_state->goal.f[1] - moby->pos.y);
+    sharkigator_navigation_state->heading =
+        fast_arc_tan(sharkigator_navigation_state->goal.f[0] - moby->pos.x,
+                     sharkigator_navigation_state->goal.f[1] - moby->pos.y);
 }
 
 void advance_sharkigator_swim_movement(
@@ -728,7 +744,8 @@ int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper)
                         }
                     }
                 }
-                if (get_next_moby_in_group((int *)&group_candidate_moby, (int)group_candidate_moby, 0, 0))
+                if (get_next_moby_in_group(
+                        (int *)&group_candidate_moby, (int)group_candidate_moby, 0, 0))
                     break;
             } while (group_candidate_moby);
         }
@@ -790,7 +807,8 @@ void sharkigator_update(unsigned char *moby) {
         goto end;
     }
     get_target_sight(moby, &target, 30.0f);
-    handle_sharkigator_hit((char *)moby, sharkigator_instance_vars, (float *)(sharkigator_instance_vars + 0x20));
+    handle_sharkigator_hit(
+        (char *)moby, sharkigator_instance_vars, (float *)(sharkigator_instance_vars + 0x20));
     trooper_anim_finish(moby, sharkigator_instance_vars + 0x60);
     wander = fast_dec_timer((int *)(sharkigator_instance_vars + 0x134)) != 0;
     if (*(int *)(sharkigator_instance_vars + 0x110) != 0 && moby[0x20] >= 7) {
@@ -841,7 +859,9 @@ void sharkigator_update(unsigned char *moby) {
         height -= F(sharkigator_instance_vars, 0x130);
         height *= 0.5f;
         if (height < absolute_float(F(moby, 0x18) - point[2])) {
-            height = (**(float **)(sharkigator_instance_vars + 0x12C) - F(sharkigator_instance_vars, 0x130)) * 0.5f;
+            height = (**(float **)(sharkigator_instance_vars + 0x12C) -
+                      F(sharkigator_instance_vars, 0x130)) *
+                     0.5f;
         } else {
             height = absolute_float(F(moby, 0x18) - point[2]);
         }
@@ -902,9 +922,14 @@ void sharkigator_update(unsigned char *moby) {
             F(sharkigator_instance_vars, 0x13C) = random_angle_radians();
             moby[0x20] = 2;
         }
-        fast_vec_scale(sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
-        advance_sharkigator_swim_movement(
-            (char *)moby, sharkigator_instance_vars, frame_time_sq * 15.0f, frame_time_sq * 50.0f, frame_time * 8.0f);
+        fast_vec_scale(sharkigator_instance_vars + 0xD0,
+                       sharkigator_instance_vars + 0xD0,
+                       frame_scale * (0.95f - 1.0f) + 1.0f);
+        advance_sharkigator_swim_movement((char *)moby,
+                                          sharkigator_instance_vars,
+                                          frame_time_sq * 15.0f,
+                                          frame_time_sq * 50.0f,
+                                          frame_time * 8.0f);
         if (next_state != 0xFF) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
@@ -938,7 +963,8 @@ void sharkigator_update(unsigned char *moby) {
                                         frame_time_sq * stiffness,
                                         frame_time_sq * damping,
                                         frame_time * stiffness);
-            if (wander && is_point_inside_clip_volume(moby + 0x10, *(int *)(sharkigator_instance_vars + 0x114))) {
+            if (wander && is_point_inside_clip_volume(
+                              moby + 0x10, *(int *)(sharkigator_instance_vars + 0x114))) {
                 if (moby[0x53] != 0) {
                     blend_moby_animation(moby, 0, 0, 10);
                 }
@@ -946,7 +972,8 @@ void sharkigator_update(unsigned char *moby) {
                 moby[0x20] = 1;
             }
         }
-        select_sharkigator_navigation_heading((struct Moby *)moby, (struct WalkerData *)sharkigator_instance_vars);
+        select_sharkigator_navigation_heading((struct Moby *)moby,
+                                              (struct WalkerData *)sharkigator_instance_vars);
         if (update_sharkigator_horizontal_velocity_by_heading((char *)moby,
                                                               sharkigator_instance_vars,
                                                               F(sharkigator_instance_vars, 0x13C),
@@ -970,8 +997,11 @@ void sharkigator_update(unsigned char *moby) {
             }
             moby[0x20] = 5;
         }
-        advance_sharkigator_swim_movement(
-            (char *)moby, sharkigator_instance_vars, frame_time_sq * 15.0f, frame_time_sq * 50.0f, frame_time * 8.0f);
+        advance_sharkigator_swim_movement((char *)moby,
+                                          sharkigator_instance_vars,
+                                          frame_time_sq * 15.0f,
+                                          frame_time_sq * 50.0f,
+                                          frame_time * 8.0f);
         if (next_state != 0xFF) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
@@ -1005,7 +1035,9 @@ void sharkigator_update(unsigned char *moby) {
             close = 0;
         }
         if (close) {
-            fast_vec_scale(sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, frame_scale * (0.9f - 1.0f) + 1.0f);
+            fast_vec_scale(sharkigator_instance_vars + 0xD0,
+                           sharkigator_instance_vars + 0xD0,
+                           frame_scale * (0.9f - 1.0f) + 1.0f);
         }
         if (update_sharkigator_horizontal_velocity_by_heading((char *)moby,
                                                               sharkigator_instance_vars,
@@ -1030,8 +1062,11 @@ void sharkigator_update(unsigned char *moby) {
             float f;
         } *)sharkigator_instance_vars)
             ->f = target.pos[2] - 0.25f;
-        advance_sharkigator_swim_movement(
-            (char *)moby, sharkigator_instance_vars, frame_time_sq * 38.0f, frame_time_sq * 0.0f, frame_time * 38.0f);
+        advance_sharkigator_swim_movement((char *)moby,
+                                          sharkigator_instance_vars,
+                                          frame_time_sq * 38.0f,
+                                          frame_time_sq * 0.0f,
+                                          frame_time * 38.0f);
         if (!inside || *(short *)&D_0013F65C == 0) {
             if (moby[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, 10);
@@ -1068,7 +1103,10 @@ void sharkigator_update(unsigned char *moby) {
         start = sharkigator_instance_vars + 0x100;
         fast_vec_sub(delta, goal, start);
         one = 1.0f;
-        fast_vec_scale(delta, delta, F(sharkigator_instance_vars, 0x14C) < one ? F(sharkigator_instance_vars, 0x14C) : one);
+        fast_vec_scale(
+            delta,
+            delta,
+            F(sharkigator_instance_vars, 0x14C) < one ? F(sharkigator_instance_vars, 0x14C) : one);
         fast_vec_add(mpos, delta, start);
         noop_main_callback(previous, mpos);
         noop_main_callback(start, mpos);
@@ -1097,7 +1135,8 @@ void sharkigator_update(unsigned char *moby) {
         float seven = 7.0f;
         float pi = 3.14159274f;
         float pi2 = 1.57079637f;
-        select_sharkigator_navigation_heading((struct Moby *)moby, (struct WalkerData *)sharkigator_instance_vars);
+        select_sharkigator_navigation_heading((struct Moby *)moby,
+                                              (struct WalkerData *)sharkigator_instance_vars);
         update_sharkigator_horizontal_velocity_by_heading((char *)moby,
                                                           sharkigator_instance_vars,
                                                           F(sharkigator_instance_vars, 0x13C),
@@ -1107,8 +1146,11 @@ void sharkigator_update(unsigned char *moby) {
                                                           frame_time_sq * 4.0f,
                                                           frame_time * seven,
                                                           frame_time * 3.0f);
-        advance_sharkigator_swim_movement(
-            (char *)moby, sharkigator_instance_vars, frame_time_sq * 12.0f, frame_time_sq * 50.0f, frame_time * seven);
+        advance_sharkigator_swim_movement((char *)moby,
+                                          sharkigator_instance_vars,
+                                          frame_time_sq * 12.0f,
+                                          frame_time_sq * 50.0f,
+                                          frame_time * seven);
         FUN_L00_00258278((char *)moby,
                          (float *)(sharkigator_instance_vars + 0x120),
                          F(sharkigator_instance_vars, 0x13C),
@@ -1146,11 +1188,14 @@ void sharkigator_update(unsigned char *moby) {
             F(sharkigator_instance_vars, 0x13C) = random_angle_radians();
             moby[0x20] = 8;
         }
-        fast_vec_scale(sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
+        fast_vec_scale(sharkigator_instance_vars + 0xD0,
+                       sharkigator_instance_vars + 0xD0,
+                       frame_scale * (0.95f - 1.0f) + 1.0f);
         F(sharkigator_instance_vars, 0xD8) -= frame_time * 9.8f;
         if (move_moby_with_collision_integer_radius(
                 (int)moby, (int)(sharkigator_instance_vars + 0xD0), 0x400, 0x10, 1.0f, 0.0f)) {
-            fast_vec_scale(sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, 0.5f);
+            fast_vec_scale(
+                sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, 0.5f);
         }
         if (next_state != 0xFF) {
             if (moby[0x53] != next_sequence) {
@@ -1180,7 +1225,8 @@ void sharkigator_update(unsigned char *moby) {
                                         frame_time_sq * stiffness,
                                         frame_time_sq * damping,
                                         frame_time * stiffness);
-            if (wander && is_point_inside_clip_volume(moby + 0x10, *(int *)(sharkigator_instance_vars + 0x114))) {
+            if (wander && is_point_inside_clip_volume(
+                              moby + 0x10, *(int *)(sharkigator_instance_vars + 0x114))) {
                 if (moby[0x53] != 3) {
                     blend_moby_animation(moby, 3, 0, 10);
                 }
@@ -1188,7 +1234,8 @@ void sharkigator_update(unsigned char *moby) {
                 moby[0x20] = 7;
             }
         }
-        select_sharkigator_navigation_heading((struct Moby *)moby, (struct WalkerData *)sharkigator_instance_vars);
+        select_sharkigator_navigation_heading((struct Moby *)moby,
+                                              (struct WalkerData *)sharkigator_instance_vars);
         if (update_sharkigator_horizontal_velocity_by_heading((char *)moby,
                                                               sharkigator_instance_vars,
                                                               F(sharkigator_instance_vars, 0x13C),
@@ -1208,7 +1255,8 @@ void sharkigator_update(unsigned char *moby) {
         F(sharkigator_instance_vars, 0xD8) -= frame_time * 9.8f;
         if (move_moby_with_collision_integer_radius(
                 (int)moby, (int)(sharkigator_instance_vars + 0xD0), 0x400, 0x10, 1.0f, 0.0f)) {
-            fast_vec_scale(sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, 0.5f);
+            fast_vec_scale(
+                sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, 0.5f);
         }
         if (next_state != 0xFF) {
             if (moby[0x53] != next_sequence) {
@@ -1246,7 +1294,8 @@ void sharkigator_update(unsigned char *moby) {
         F(sharkigator_instance_vars, 0xD8) -= frame_time * 9.8f;
         if (move_moby_with_collision_integer_radius(
                 (int)moby, (int)(sharkigator_instance_vars + 0xD0), 0x400, 0x10, 1.0f, 0.0f)) {
-            fast_vec_scale(sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, 0.5f);
+            fast_vec_scale(
+                sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, 0.5f);
         }
         sharkigator_instance_vars[0x58] = truncate_float_to_s32(8.0f);
         sharkigator_instance_vars[0x5A] = truncate_float_to_s32(9.6f);
@@ -1257,8 +1306,19 @@ void sharkigator_update(unsigned char *moby) {
             moby[0x20] = 8;
         }
         ((void (*)(char *, float, char *, float, int, float, int, float, float, int, int, int, int))
-             handle_sharkigator_contact_attack)(
-            (char *)moby, 17.0f, sharkigator_instance_vars, 20.0f, 10, 1.0f, 5, 1.0f, 1.0f, 4, 4, 11, target.moby);
+             handle_sharkigator_contact_attack)((char *)moby,
+                                                17.0f,
+                                                sharkigator_instance_vars,
+                                                20.0f,
+                                                10,
+                                                1.0f,
+                                                5,
+                                                1.0f,
+                                                1.0f,
+                                                4,
+                                                4,
+                                                11,
+                                                target.moby);
         if (moby[0x70] & 2) {
             if (moby[0x53] != 4) {
                 blend_moby_animation(moby, 4, 0, 10);
@@ -1316,7 +1376,9 @@ void sharkigator_update(unsigned char *moby) {
         }
         goto end;
     case SHARKIGATOR_DAMPED_GRAVITY_RECOVERY:
-        fast_vec_scale(sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
+        fast_vec_scale(sharkigator_instance_vars + 0xD0,
+                       sharkigator_instance_vars + 0xD0,
+                       frame_scale * (0.95f - 1.0f) + 1.0f);
         F(sharkigator_instance_vars, 0xD8) -= frame_time * 9.8f;
         move_moby_with_collision_integer_radius(
             (int)moby, (int)(sharkigator_instance_vars + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
@@ -1326,7 +1388,9 @@ void sharkigator_update(unsigned char *moby) {
         }
         goto end;
     case SHARKIGATOR_SMALL_WATER_GAP_GRAVITY_IDLE:
-        fast_vec_scale(sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
+        fast_vec_scale(sharkigator_instance_vars + 0xD0,
+                       sharkigator_instance_vars + 0xD0,
+                       frame_scale * (0.95f - 1.0f) + 1.0f);
         F(sharkigator_instance_vars, 0xD8) -= frame_time * 9.8f;
         move_moby_with_collision_integer_radius(
             (int)moby, (int)(sharkigator_instance_vars + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
@@ -1338,7 +1402,9 @@ void sharkigator_update(unsigned char *moby) {
         }
         goto end;
     case SHARKIGATOR_DAMPED_RECOVERY:
-        fast_vec_scale(sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, frame_scale * (0.95f - 1.0f) + 1.0f);
+        fast_vec_scale(sharkigator_instance_vars + 0xD0,
+                       sharkigator_instance_vars + 0xD0,
+                       frame_scale * (0.95f - 1.0f) + 1.0f);
         if (moby[0x70] & 2) {
             ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)(
                 (char *)moby, sharkigator_instance_vars);

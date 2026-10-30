@@ -84,7 +84,9 @@ void steer_child_moby(Moby **others,
                       Steer *steer,
                       float *params) __asm__("FUN_L04_001f30e0");
 
-void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *steering_settings) {
+void steer_child_moby(
+
+    Moby **others, int other_count, Moby *moby, Steer *steer, float *steering_settings) {
     Vec_1F3010 path_hit;
     Vec_1F3010 force;
     Vec_1F3010 uninitialized_point;
@@ -180,7 +182,8 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             if (hit == 0) {
                 fast_vec_sub(&force, &force, &moby->pos);
                 length = fast_vec_length(&force);
-                fast_vec_normalize(&force, &force, length * (length * length * steering_settings[2]));
+                fast_vec_normalize(
+                    &force, &force, length * (length * length * steering_settings[2]));
                 fast_vec_add(steer, steer, &force);
             }
         }
@@ -188,7 +191,8 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             fast_vec_sub(&force, &steer->target->pos, &moby->pos);
             if (fast_vec_length(&force) < distance) {
                 length = fast_vec_length(&force);
-                fast_vec_normalize(&force, &force, length * (length * length * steering_settings[1]));
+                fast_vec_normalize(
+                    &force, &force, length * (length * length * steering_settings[1]));
                 fast_vec_add(steer, steer, &force);
             }
         }
@@ -198,7 +202,8 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             force.z = steer->point->z - moby->pos.z;
             if (fast_vec_length(&force) < distance) {
                 length = fast_vec_length(&force);
-                fast_vec_normalize(&force, &force, length * (length * length * steering_settings[1]));
+                fast_vec_normalize(
+                    &force, &force, length * (length * length * steering_settings[1]));
                 fast_vec_add(steer, steer, &force);
             }
         }
@@ -252,12 +257,14 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
                 fast_vec_scale(&surface_normal, &surface_normal, steering_settings[3]);
                 fast_vec_add(steer, steer, &surface_normal);
                 if (0.4f < length) {
-                    fast_vec_scale(
-                        &surface_normal, &surface_normal, steering_settings[3] * (length * 10000.0f));
+                    fast_vec_scale(&surface_normal,
+                                   &surface_normal,
+                                   steering_settings[3] * (length * 10000.0f));
                     fast_vec_add(steer, steer, &surface_normal);
                 }
                 if (0.2f < moby->pos.z - coll_hit.point.f[2]) {
-                    set_vector_length_xy(&surface_normal, &steer->pos, -(steering_settings[3] * 1000.0f));
+                    set_vector_length_xy(
+                        &surface_normal, &steer->pos, -(steering_settings[3] * 1000.0f));
                     fast_vec_add(steer, steer, &surface_normal);
                 }
             }
@@ -415,7 +422,11 @@ int find_closest_polygon_edge_point(float *out,
                                     float *poly,
                                     int    vertex_count) __asm__("FUN_L04_0024c7d8");
 
-int find_closest_polygon_edge_point(float *closest_polygon_edge_point, float *query_point, float *poly, int vertex_count) {
+int find_closest_polygon_edge_point(float *closest_polygon_edge_point,
+                                    float *query_point,
+                                    float *poly,
+
+                                    int vertex_count) {
     float edge_closest_point[4];
     float edge_to_query_offset[4];
     float best;
@@ -566,7 +577,8 @@ void update_butterfly_swarm(struct Moby *moby) {
         qcopy(&swarm_controller_pvars->origin, &moby->pos);
         swarm_controller_pvars->angle = 0.0f;
     } else if (swarm_controller_pvars->child_count == 0) {
-        for (population_scan_moby = (struct Moby *)D_L04_0015FFE4; population_scan_moby != 0; population_scan_moby = population_scan_moby->next) {
+        for (population_scan_moby = (struct Moby *)D_L04_0015FFE4; population_scan_moby != 0;
+             population_scan_moby = population_scan_moby->next) {
             if ((s8)population_scan_moby->state >= 0 && population_scan_moby->oclass == 0x55) {
                 swarm_controller_pvars->child_count++;
             }
@@ -574,22 +586,30 @@ void update_butterfly_swarm(struct Moby *moby) {
         D_L04_00166130[1] = convert_integer_to_float(swarm_controller_pvars->child_count) * 2.073f;
     }
     if (swarm_controller_pvars->path_index == -1) {
-        swarm_controller_pvars->angle = fast_add_rotations(swarm_controller_pvars->angle, frame_scale * 0.0034906587f);
-        moby->pos.x = swarm_controller_pvars->origin.x + swarm_controller_pvars->radius * fast_cos(swarm_controller_pvars->angle);
-        moby->pos.y = swarm_controller_pvars->origin.y + swarm_controller_pvars->radius * fast_sin(swarm_controller_pvars->angle);
+        swarm_controller_pvars->angle =
+            fast_add_rotations(swarm_controller_pvars->angle, frame_scale * 0.0034906587f);
+        moby->pos.x = swarm_controller_pvars->origin.x +
+                      swarm_controller_pvars->radius * fast_cos(swarm_controller_pvars->angle);
+        moby->pos.y = swarm_controller_pvars->origin.y +
+                      swarm_controller_pvars->radius * fast_sin(swarm_controller_pvars->angle);
     } else if (swarm_controller_pvars->initialized != 0) {
         s32 i;
         distance = 10000.0f;
         for (i = 0; i < swarm_controller_pvars->count; i++) {
-            f32 child_distance = vector_distance_xy(&moby->pos, &swarm_controller_pvars->children[i]->pos);
+            f32 child_distance =
+                vector_distance_xy(&moby->pos, &swarm_controller_pvars->children[i]->pos);
             if (child_distance < distance)
                 distance = child_distance;
         }
         speed = 0.0f;
         if (distance < 3.0f)
             speed = 3.0f - distance;
-        swarm_controller_pvars->direction = advance_moby_along_path(
-            moby, D_L04_001b0630[swarm_controller_pvars->path_index], swarm_controller_pvars->direction, 1, speed);
+        swarm_controller_pvars->direction =
+            advance_moby_along_path(moby,
+                                    D_L04_001b0630[swarm_controller_pvars->path_index],
+                                    swarm_controller_pvars->direction,
+                                    1,
+                                    speed);
     }
     if (swarm_controller_pvars->initialized == 0) {
         s32          i;
@@ -641,11 +661,12 @@ void update_butterfly_swarm(struct Moby *moby) {
             children = swarm_controller_pvars->children;
             child = children[i];
             part = child->pvars;
-            D_L04_00166130[6] = ((swarm_controller_pvars->radius * 7.753f) / 1800.0f) * frame_scale *
-                                ((child->anim_speed + 1.0f) * 0.5f) * 0.05f * frame_scale_sq *
-                                ((child->anim_speed + 1.0f) * 0.5f);
-            D_L04_00166130[7] = (((swarm_controller_pvars->radius * 7.753f) / 1800.0f) * frame_scale) *
-                                ((child->anim_speed + 1.0f) * 0.5f);
+            D_L04_00166130[6] = ((swarm_controller_pvars->radius * 7.753f) / 1800.0f) *
+                                frame_scale * ((child->anim_speed + 1.0f) * 0.5f) * 0.05f *
+                                frame_scale_sq * ((child->anim_speed + 1.0f) * 0.5f);
+            D_L04_00166130[7] =
+                (((swarm_controller_pvars->radius * 7.753f) / 1800.0f) * frame_scale) *
+                ((child->anim_speed + 1.0f) * 0.5f);
             steer_child_moby(children, swarm_controller_pvars->count, child, part, D_L04_00166130);
             update_moby_movement_with_sphere_collision(0.0f, child, part, D_L04_00166130);
         }

@@ -683,7 +683,8 @@ void update_infobot_particle_effect(char *moby) {
     v.f[2] -= 0.333000004f;
     for (i = 0; i < 4; i++) {
         {
-            float unwrapped_particle_byte_value = infobot_particle_state->a[i] + infobot_particle_state->b[i];
+            float unwrapped_particle_byte_value =
+                infobot_particle_state->a[i] + infobot_particle_state->b[i];
             infobot_particle_state->a[i] = unwrapped_particle_byte_value;
             if (255.0f <= unwrapped_particle_byte_value) {
                 infobot_particle_state->a[i] = unwrapped_particle_byte_value - 255.0f;
@@ -698,8 +699,14 @@ void update_infobot_particle_effect(char *moby) {
         f = f / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - f));
         if (D_15F5C4_2d6cd0 != 2) {
-            FUN_L00_00272f68(
-                d, col, truncate_float_to_s32(infobot_particle_state->a[i]) & 0xFF, 0x35, 1, 2, 0, infobot_particle_state->d[i]);
+            FUN_L00_00272f68(d,
+                             col,
+                             truncate_float_to_s32(infobot_particle_state->a[i]) & 0xFF,
+                             0x35,
+                             1,
+                             2,
+                             0,
+                             infobot_particle_state->d[i]);
         }
         fast_vec_add(d, d, particle_position_step);
     }

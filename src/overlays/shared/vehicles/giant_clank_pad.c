@@ -43,7 +43,8 @@ void giant_clank_pad_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        linked_vehicle_moby = (struct Moby *)((char *)l15_moby_array + (*(int *)((u8 *)linked + 0x60) << 8));
+        linked_vehicle_moby =
+            (struct Moby *)((char *)l15_moby_array + (*(int *)((u8 *)linked + 0x60) << 8));
         linked_vehicle_moby->flags |= 1;
         linked_vehicle_moby->collision = 0;
         linked_vehicle_moby->visible = 0;

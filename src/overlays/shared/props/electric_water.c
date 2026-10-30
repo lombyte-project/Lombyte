@@ -132,20 +132,25 @@ void electric_water_update(struct Moby *moby) {
     unsigned short     save_id;
     float              distance, theta, phi, radius;
 
-    if (moby->state != 0 && is_point_inside_clip_volume(D_0013F3D0, electric_water_controller_vars->active_area) == 0) {
+    if (moby->state != 0 &&
+        is_point_inside_clip_volume(D_0013F3D0, electric_water_controller_vars->active_area) == 0) {
         if (electric_water_controller_vars->owner != 0) {
             if (electric_water_controller_vars->voice0 != -1) {
                 VoicePoolWindow *voice =
-                    (VoicePoolWindow *)((unsigned char *)&voice_pool + electric_water_controller_vars->voice0 * 0x70);
-                if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner && voice->voice.state != 0) {
+                    (VoicePoolWindow *)((unsigned char *)&voice_pool +
+                                        electric_water_controller_vars->voice0 * 0x70);
+                if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner &&
+                    voice->voice.state != 0) {
                     release_voice_slot(electric_water_controller_vars->voice0);
                 }
             }
             electric_water_controller_vars->voice0 = -1;
             if (electric_water_controller_vars->voice1 != -1) {
                 VoicePoolWindow *voice =
-                    (VoicePoolWindow *)((unsigned char *)&voice_pool + electric_water_controller_vars->voice1 * 0x70);
-                if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner && voice->voice.state != 0) {
+                    (VoicePoolWindow *)((unsigned char *)&voice_pool +
+                                        electric_water_controller_vars->voice1 * 0x70);
+                if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner &&
+                    voice->voice.state != 0) {
                     release_voice_slot(electric_water_controller_vars->voice1);
                 }
             }
@@ -165,16 +170,24 @@ void electric_water_update(struct Moby *moby) {
             if (electric_water_controller_vars->switches[reset_sw] == -1) {
                 continue;
             }
-            if (l15_moby_array[electric_water_controller_vars->switches[reset_sw]].oclass == 0x33E) {
-                D_L15_001BB024[(short)l15_moby_array[electric_water_controller_vars->switches[reset_sw]].save_id] = 0;
-                D_L15_001BBC84[(short)l15_moby_array[electric_water_controller_vars->switches[reset_sw]].save_id] = 0;
-                save_id = l15_moby_array[electric_water_controller_vars->switches[reset_sw]].save_id;
+            if (l15_moby_array[electric_water_controller_vars->switches[reset_sw]].oclass ==
+                0x33E) {
+                D_L15_001BB024
+                [(short)l15_moby_array[electric_water_controller_vars->switches[reset_sw]]
+                        .save_id] = 0;
+                D_L15_001BBC84
+                [(short)l15_moby_array[electric_water_controller_vars->switches[reset_sw]]
+                        .save_id] = 0;
+                save_id =
+                    l15_moby_array[electric_water_controller_vars->switches[reset_sw]].save_id;
                 D_0014C190_257218[current_level_index_gp][(short)save_id >> 5] &=
                     ~(1 << (save_id & 0x1F));
-                save_id = l15_moby_array[electric_water_controller_vars->switches[reset_sw]].save_id;
+                save_id =
+                    l15_moby_array[electric_water_controller_vars->switches[reset_sw]].save_id;
                 D_L15_001BAAD0[(short)save_id >> 5] &= ~(1 << (save_id & 0x1F));
             } else {
-                reset_electric_water_switch((char *)&l15_moby_array[electric_water_controller_vars->switches[reset_sw]]);
+                reset_electric_water_switch(
+                    (char *)&l15_moby_array[electric_water_controller_vars->switches[reset_sw]]);
             }
         }
         electric_water_controller_vars->on_timer =
@@ -197,8 +210,10 @@ void electric_water_update(struct Moby *moby) {
             if (electric_water_controller_vars->owner != 0) {
                 if (electric_water_controller_vars->voice1 != -1) {
                     VoicePoolWindow *voice =
-                        (VoicePoolWindow *)((unsigned char *)&voice_pool + electric_water_controller_vars->voice1 * 0x70);
-                    if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner &&
+                        (VoicePoolWindow *)((unsigned char *)&voice_pool +
+                                            electric_water_controller_vars->voice1 * 0x70);
+                    if ((struct Moby *)voice->voice.owner ==
+                            electric_water_controller_vars->owner &&
                         voice->voice.state != 0) {
                         release_voice_slot(electric_water_controller_vars->voice1);
                     }
@@ -207,7 +222,8 @@ void electric_water_update(struct Moby *moby) {
             }
         }
         for (area = 0; area < 12; area++) {
-            if (is_point_inside_clip_volume(D_0013F3D0, electric_water_controller_vars->water_areas[area]) != 0) {
+            if (is_point_inside_clip_volume(
+                    D_0013F3D0, electric_water_controller_vars->water_areas[area]) != 0) {
                 inside = 1;
                 break;
             }
@@ -215,15 +231,20 @@ void electric_water_update(struct Moby *moby) {
         if (moby->state == 2) {
             for (dim_lamp = 0; dim_lamp < 3; dim_lamp++) {
                 if (electric_water_controller_vars->lamps[dim_lamp] != -1) {
-                    set_moby_color(&l15_moby_array[electric_water_controller_vars->lamps[dim_lamp]], 0x40, 0x40, 0x40);
+                    set_moby_color(&l15_moby_array[electric_water_controller_vars->lamps[dim_lamp]],
+                                   0x40,
+                                   0x40,
+                                   0x40);
                 }
             }
         } else {
             for (lamp = 0; lamp < 3; lamp++) {
                 brightness = random_int_between(0x40, 0x7F);
                 if (electric_water_controller_vars->lamps[lamp] != -1) {
-                    set_moby_color(
-                        &l15_moby_array[electric_water_controller_vars->lamps[lamp]], brightness, brightness, brightness);
+                    set_moby_color(&l15_moby_array[electric_water_controller_vars->lamps[lamp]],
+                                   brightness,
+                                   brightness,
+                                   brightness);
                 }
             }
         }
@@ -255,12 +276,19 @@ void electric_water_update(struct Moby *moby) {
                 }
                 if (length >= 2) {
                     int pick = random_int_between(0, length - 2);
-                    electric_water_controller_vars->bolt_start = *(u128 *)((D_L15_001600EC + best[pick] * 128) + 0x30);
-                    electric_water_controller_vars->bolt_aim = electric_water_controller_vars->bolt_end =
-                        *(u128 *)((D_L15_001600EC + best[pick + 1] * 128) + 0x30);
+                    electric_water_controller_vars->bolt_start =
+                        *(u128 *)((D_L15_001600EC + best[pick] * 128) + 0x30);
+                    electric_water_controller_vars->bolt_aim =
+                        electric_water_controller_vars->bolt_end =
+                            *(u128 *)((D_L15_001600EC + best[pick + 1] * 128) + 0x30);
                     if (electric_water_controller_vars->light == -1) {
                         electric_water_controller_vars->light = allocate_colored_effect_slot(
-                            &electric_water_controller_vars->bolt_start, 8.0f, 0.0f, 1.0f, 1.0f, 0.5f);
+                            &electric_water_controller_vars->bolt_start,
+                            8.0f,
+                            0.0f,
+                            1.0f,
+                            1.0f,
+                            0.5f);
                     } else {
                         Light29FF90 *light = &D_L15_001808C0[electric_water_controller_vars->light];
                         qcopy(&light->pos, &electric_water_controller_vars->bolt_start);
@@ -278,11 +306,14 @@ void electric_water_update(struct Moby *moby) {
         }
 
         if (inside && wet) {
-            if (electric_water_controller_vars->owner != 0 && electric_water_controller_vars->owner != hero.moby) {
+            if (electric_water_controller_vars->owner != 0 &&
+                electric_water_controller_vars->owner != hero.moby) {
                 if (electric_water_controller_vars->voice0 != -1) {
                     VoicePoolWindow *voice =
-                        (VoicePoolWindow *)((unsigned char *)&voice_pool + electric_water_controller_vars->voice0 * 0x70);
-                    if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner &&
+                        (VoicePoolWindow *)((unsigned char *)&voice_pool +
+                                            electric_water_controller_vars->voice0 * 0x70);
+                    if ((struct Moby *)voice->voice.owner ==
+                            electric_water_controller_vars->owner &&
                         voice->voice.state != 0) {
                         release_voice_slot(electric_water_controller_vars->voice0);
                     }
@@ -290,8 +321,10 @@ void electric_water_update(struct Moby *moby) {
                 electric_water_controller_vars->voice0 = -1;
                 if (electric_water_controller_vars->voice1 != -1) {
                     VoicePoolWindow *voice =
-                        (VoicePoolWindow *)((unsigned char *)&voice_pool + electric_water_controller_vars->voice1 * 0x70);
-                    if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner &&
+                        (VoicePoolWindow *)((unsigned char *)&voice_pool +
+                                            electric_water_controller_vars->voice1 * 0x70);
+                    if ((struct Moby *)voice->voice.owner ==
+                            electric_water_controller_vars->owner &&
                         voice->voice.state != 0) {
                         release_voice_slot(electric_water_controller_vars->voice1);
                     }
@@ -310,7 +343,8 @@ void electric_water_update(struct Moby *moby) {
                 electric_water_controller_vars->saved_fog_color[1] = l15_fog_color[1];
                 electric_water_controller_vars->saved_fog_color[2] = l15_fog_color[2];
             }
-            electric_water_controller_vars->shock_count = electric_water_controller_vars->shock_count + 1;
+            electric_water_controller_vars->shock_count =
+                electric_water_controller_vars->shock_count + 1;
             l15_fog_color[0] = 0x7F;
             l15_fog_color[1] = 0x7F;
             l15_fog_color[2] = 0x7F;
@@ -322,7 +356,9 @@ void electric_water_update(struct Moby *moby) {
             theta = random_angle_radians();
             phi = random_angle_radians();
             build_spherical_offset(&electric_water_controller_vars->bolt_aim, radius, theta, phi);
-            add_vectors(unused_vector_argument, &electric_water_controller_vars->bolt_aim, &hero.motion.body_center);
+            add_vectors(unused_vector_argument,
+                        &electric_water_controller_vars->bolt_aim,
+                        &hero.motion.body_center);
             electric_water_controller_vars->bolt_end = electric_water_controller_vars->bolt_aim;
             electric_water_controller_vars->bolt_start = hero.motion.body_center.q;
             initialize_electric_water_bolt_effect((char *)moby);
@@ -360,20 +396,25 @@ void electric_water_update(struct Moby *moby) {
             }
             if (nearest != 0) {
                 distance = vector_distance_xy(&nearest->pos, &D_L15_001673C0);
-                if (!(vector_distance_xy(&l15_moby_array[electric_water_controller_vars->lamps[near_lamp]].pos,
-                                         &D_L15_001673C0) < distance)) {
+                if (!(vector_distance_xy(
+                          &l15_moby_array[electric_water_controller_vars->lamps[near_lamp]].pos,
+                          &D_L15_001673C0) < distance)) {
                     continue;
                 }
             }
             nearest = &l15_moby_array[electric_water_controller_vars->lamps[near_lamp]];
         }
-        if (electric_water_controller_vars->owner == 0 || (distance = vector_distance_xy(&electric_water_controller_vars->owner->pos, &D_L15_001673C0),
-                                 vector_distance_xy(&nearest->pos, &D_L15_001673C0) < distance)) {
+        if (electric_water_controller_vars->owner == 0 ||
+            (distance =
+                 vector_distance_xy(&electric_water_controller_vars->owner->pos, &D_L15_001673C0),
+             vector_distance_xy(&nearest->pos, &D_L15_001673C0) < distance)) {
             if (electric_water_controller_vars->owner != 0) {
                 if (electric_water_controller_vars->voice0 != -1) {
                     VoicePoolWindow *voice =
-                        (VoicePoolWindow *)((unsigned char *)&voice_pool + electric_water_controller_vars->voice0 * 0x70);
-                    if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner &&
+                        (VoicePoolWindow *)((unsigned char *)&voice_pool +
+                                            electric_water_controller_vars->voice0 * 0x70);
+                    if ((struct Moby *)voice->voice.owner ==
+                            electric_water_controller_vars->owner &&
                         voice->voice.state != 0) {
                         release_voice_slot(electric_water_controller_vars->voice0);
                     }
@@ -381,8 +422,10 @@ void electric_water_update(struct Moby *moby) {
                 electric_water_controller_vars->voice0 = -1;
                 if (electric_water_controller_vars->voice1 != -1) {
                     VoicePoolWindow *voice =
-                        (VoicePoolWindow *)((unsigned char *)&voice_pool + electric_water_controller_vars->voice1 * 0x70);
-                    if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner &&
+                        (VoicePoolWindow *)((unsigned char *)&voice_pool +
+                                            electric_water_controller_vars->voice1 * 0x70);
+                    if ((struct Moby *)voice->voice.owner ==
+                            electric_water_controller_vars->owner &&
                         voice->voice.state != 0) {
                         release_voice_slot(electric_water_controller_vars->voice1);
                     }
@@ -391,13 +434,18 @@ void electric_water_update(struct Moby *moby) {
             }
             electric_water_controller_vars->owner = nearest;
         }
-        if (voice_is_playing(electric_water_controller_vars->owner, electric_water_controller_vars->voice0) == 0) {
-            electric_water_controller_vars->voice0 = trooper_play_sound(0, 5, electric_water_controller_vars->owner, 0x28F);
+        if (voice_is_playing(electric_water_controller_vars->owner,
+                             electric_water_controller_vars->voice0) == 0) {
+            electric_water_controller_vars->voice0 =
+                trooper_play_sound(0, 5, electric_water_controller_vars->owner, 0x28F);
         }
-        if (moby->state == 1 && voice_is_playing(electric_water_controller_vars->owner, electric_water_controller_vars->voice1) == 0) {
-            electric_water_controller_vars->voice1 = trooper_play_sound(1, 5, electric_water_controller_vars->owner, 0x28F);
+        if (moby->state == 1 && voice_is_playing(electric_water_controller_vars->owner,
+                                                 electric_water_controller_vars->voice1) == 0) {
+            electric_water_controller_vars->voice1 =
+                trooper_play_sound(1, 5, electric_water_controller_vars->owner, 0x28F);
         }
-        if (fast_dec_timer_s16(&electric_water_controller_vars->off_timer) != 0 && moby->state == 2) {
+        if (fast_dec_timer_s16(&electric_water_controller_vars->off_timer) != 0 &&
+            moby->state == 2) {
             electric_water_controller_vars->on_timer =
                 truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
             electric_water_controller_vars->off_timer = scale_game_frames(200);
@@ -406,17 +454,23 @@ void electric_water_update(struct Moby *moby) {
         }
         for (sw = 0; sw < 4; sw++) {
             /* Fakematch: the press action is written in both arms so CSE keeps the second sw load. */
-            if (electric_water_controller_vars->switches[sw] != -1 && l15_moby_array[electric_water_controller_vars->switches[sw]].oclass == 0x33E &&
+            if (electric_water_controller_vars->switches[sw] != -1 &&
+                l15_moby_array[electric_water_controller_vars->switches[sw]].oclass == 0x33E &&
                 l15_moby_array[electric_water_controller_vars->switches[sw]].state == 2) {
-                electric_water_controller_vars->off_timer = truncate_float_to_s32(scale_time(electric_water_controller_vars->off_seconds * 60.0f));
+                electric_water_controller_vars->off_timer = truncate_float_to_s32(
+                    scale_time(electric_water_controller_vars->off_seconds * 60.0f));
                 moby->state = 3;
-                trooper_play_sound(2, 0, &l15_moby_array[electric_water_controller_vars->switches[sw]], 0x28F);
+                trooper_play_sound(
+                    2, 0, &l15_moby_array[electric_water_controller_vars->switches[sw]], 0x28F);
                 electric_water_controller_vars->armed = 0;
             } else if (electric_water_controller_vars->switches[sw] != -1 &&
-                       test_linked_moby_turn_trigger(&l15_moby_array[electric_water_controller_vars->switches[sw]]) != 0) {
-                electric_water_controller_vars->off_timer = truncate_float_to_s32(scale_time(electric_water_controller_vars->off_seconds * 60.0f));
+                       test_linked_moby_turn_trigger(
+                           &l15_moby_array[electric_water_controller_vars->switches[sw]]) != 0) {
+                electric_water_controller_vars->off_timer = truncate_float_to_s32(
+                    scale_time(electric_water_controller_vars->off_seconds * 60.0f));
                 moby->state = 3;
-                trooper_play_sound(2, 0, &l15_moby_array[electric_water_controller_vars->switches[sw]], 0x28F);
+                trooper_play_sound(
+                    2, 0, &l15_moby_array[electric_water_controller_vars->switches[sw]], 0x28F);
                 electric_water_controller_vars->armed = 0;
             }
         }
@@ -425,7 +479,8 @@ void electric_water_update(struct Moby *moby) {
     case ELECTRIC_WATER_SWITCH_DISABLED:
         for (i = 0; i < 3; i++) {
             if (electric_water_controller_vars->lamps[i] != -1) {
-                set_moby_color(&l15_moby_array[electric_water_controller_vars->lamps[i]], 0x40, 0x40, 0x40);
+                set_moby_color(
+                    &l15_moby_array[electric_water_controller_vars->lamps[i]], 0x40, 0x40, 0x40);
             }
         }
         if (electric_water_controller_vars->light != -1) {
@@ -438,16 +493,20 @@ void electric_water_update(struct Moby *moby) {
         if (electric_water_controller_vars->owner != 0) {
             if (electric_water_controller_vars->voice0 != -1) {
                 VoicePoolWindow *voice =
-                    (VoicePoolWindow *)((unsigned char *)&voice_pool + electric_water_controller_vars->voice0 * 0x70);
-                if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner && voice->voice.state != 0) {
+                    (VoicePoolWindow *)((unsigned char *)&voice_pool +
+                                        electric_water_controller_vars->voice0 * 0x70);
+                if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner &&
+                    voice->voice.state != 0) {
                     release_voice_slot(electric_water_controller_vars->voice0);
                 }
             }
             electric_water_controller_vars->voice0 = -1;
             if (electric_water_controller_vars->voice1 != -1) {
                 VoicePoolWindow *voice =
-                    (VoicePoolWindow *)((unsigned char *)&voice_pool + electric_water_controller_vars->voice1 * 0x70);
-                if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner && voice->voice.state != 0) {
+                    (VoicePoolWindow *)((unsigned char *)&voice_pool +
+                                        electric_water_controller_vars->voice1 * 0x70);
+                if ((struct Moby *)voice->voice.owner == electric_water_controller_vars->owner &&
+                    voice->voice.state != 0) {
                     release_voice_slot(electric_water_controller_vars->voice1);
                 }
             }
@@ -464,19 +523,24 @@ void electric_water_update(struct Moby *moby) {
             }
             if (electric_water_controller_vars->armed != 0) {
                 remaining = electric_water_controller_vars->off_timer;
-                if (remaining < truncate_float_to_s32(scale_time(electric_water_controller_vars->off_seconds * 60.0f)) -
+                if (remaining < truncate_float_to_s32(scale_time(
+                                    electric_water_controller_vars->off_seconds * 60.0f)) -
                                     scale_game_frames(0x3C)) {
-                    electric_water_controller_vars->off_timer = truncate_float_to_s32(scale_time(electric_water_controller_vars->off_seconds * 60.0f));
-                    trooper_play_sound(2, 0, &l15_moby_array[electric_water_controller_vars->switches[i]], 0x28F);
+                    electric_water_controller_vars->off_timer = truncate_float_to_s32(
+                        scale_time(electric_water_controller_vars->off_seconds * 60.0f));
+                    trooper_play_sound(
+                        2, 0, &l15_moby_array[electric_water_controller_vars->switches[i]], 0x28F);
                 }
             }
             armed = 0;
         }
         electric_water_controller_vars->armed = armed;
         if (fast_dec_timer_s16(&electric_water_controller_vars->off_timer) == 0) {
-            if (is_point_inside_clip_volume(D_0013F3D0_lui, electric_water_controller_vars->reset_area_a) == 0 ||
+            if (is_point_inside_clip_volume(D_0013F3D0_lui,
+                                            electric_water_controller_vars->reset_area_a) == 0 ||
                 *(short *)(D_0013F3D0_lui + 0x28E) != 0) {
-                if (is_point_inside_clip_volume(D_0013F3D0_lui, electric_water_controller_vars->reset_area_b) == 0) {
+                if (is_point_inside_clip_volume(
+                        D_0013F3D0_lui, electric_water_controller_vars->reset_area_b) == 0) {
                     break;
                 }
             }
@@ -488,7 +552,8 @@ void electric_water_update(struct Moby *moby) {
             if (l15_moby_array[electric_water_controller_vars->switches[i]].oclass == 0x33E) {
                 l15_moby_array[electric_water_controller_vars->switches[i]].state = 1;
             } else {
-                reset_electric_water_switch((char *)&l15_moby_array[electric_water_controller_vars->switches[i]]);
+                reset_electric_water_switch(
+                    (char *)&l15_moby_array[electric_water_controller_vars->switches[i]]);
             }
         }
         electric_water_controller_vars->on_timer =
@@ -503,10 +568,13 @@ void electric_water_update(struct Moby *moby) {
         char        *hero_pos = D_0013F3D0;
         struct Hero *player = (struct Hero *)(hero_pos - 0x80);
         for (level_area = 0; level_area < 4; level_area++) {
-            if (is_point_inside_clip_volume(hero_pos, electric_water_controller_vars->water_level_areas[level_area]) != 0 &&
+            if (is_point_inside_clip_volume(
+                    hero_pos, electric_water_controller_vars->water_level_areas[level_area]) != 0 &&
                 hero_is_in_special_state() != 0) {
-                player->water_surface_z =
-                    *(float *)((D_L15_001600EC + electric_water_controller_vars->water_level_areas[level_area] * 128) + 0x38);
+                player->water_surface_z = *(
+                    float *)((D_L15_001600EC +
+                              electric_water_controller_vars->water_level_areas[level_area] * 128) +
+                             0x38);
             }
         }
     }
@@ -557,13 +625,16 @@ void draw_electric_water_countdown(char *moby) {
     countdown_text[0] = 0x30;
     countdown_text[1] = *(short *)(electric_water_vars + 0x12) / scale_game_frames(0xE10) + 0x30;
     countdown_text[2] = 0x3A;
-    countdown_text[3] =
-        *(short *)(electric_water_vars + 0x12) % scale_game_frames(0xE10) / scale_game_frames(0x258) + 0x30;
-    countdown_text[4] =
-        *(short *)(electric_water_vars + 0x12) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
+    countdown_text[3] = *(short *)(electric_water_vars + 0x12) % scale_game_frames(0xE10) /
+                            scale_game_frames(0x258) +
+                        0x30;
+    countdown_text[4] = *(short *)(electric_water_vars + 0x12) % scale_game_frames(0x258) /
+                            scale_game_frames(0x3C) +
+                        0x30;
     countdown_text[5] = 0x3A;
     countdown_text[6] =
-        *(short *)(electric_water_vars + 0x12) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
+        *(short *)(electric_water_vars + 0x12) % scale_game_frames(0x3C) / scale_game_frames(6) +
+        0x30;
     countdown_text[7] = truncate_float_to_s32((float)random_integer_below(10)) + 0x30;
     font_print_center_large_001f6c20(W(electric_water_countdown_text_x),
                                      W(electric_water_countdown_text_y),

@@ -210,7 +210,8 @@ void shuttle_update(struct Moby *moby) {
             voice = *(s32 *)((u8 *)shuttle_vars + 0xC4);
             if (voice != -1) {
                 u8 *shuttle_voice_entry = (u8 *)D_0013E550 + voice * 0x70;
-                if (*(struct Moby **)(shuttle_voice_entry + 0x88) == moby && shuttle_voice_entry[0x74] != 0)
+                if (*(struct Moby **)(shuttle_voice_entry + 0x88) == moby &&
+                    shuttle_voice_entry[0x74] != 0)
                     release_voice_slot(voice);
             }
             *(s32 *)((u8 *)shuttle_vars + 0xC4) = -1;
@@ -271,7 +272,8 @@ int advance_shuttle_along_path(struct Moby *moby) {
     interpolate_rotation_angle(&moby->rot.y, moby->rot.y, 0.0f, 0.02f);
     if (shuttle_path_state->dir > 0) {
         f32 v;
-        if (fast_vec_dist(&target, &moby->pos) < shuttle_path_state->speed + shuttle_path_state->speed) {
+        if (fast_vec_dist(&target, &moby->pos) <
+            shuttle_path_state->speed + shuttle_path_state->speed) {
             shuttle_path_state->node++;
             if (shuttle_path_state->node == path->count)
                 done = 1;
@@ -286,7 +288,8 @@ int advance_shuttle_along_path(struct Moby *moby) {
                                    &shuttle_path_state->speed);
     } else {
         f32 v;
-        if (fast_vec_dist(&target, &moby->pos) < shuttle_path_state->speed + shuttle_path_state->speed) {
+        if (fast_vec_dist(&target, &moby->pos) <
+            shuttle_path_state->speed + shuttle_path_state->speed) {
             shuttle_path_state->node--;
             if (shuttle_path_state->node == -1)
                 done = 1;
@@ -302,15 +305,20 @@ int advance_shuttle_along_path(struct Moby *moby) {
     }
     if (path->node[shuttle_path_state->node].f[3] == 42.0f)
         shuttle_path_state->yaw_offset = 0.0f;
-    shuttle_path_state->spin = fast_add_rotations(shuttle_path_state->spin, shuttle_path_state->speed);
+    shuttle_path_state->spin =
+        fast_add_rotations(shuttle_path_state->spin, shuttle_path_state->speed);
     FUN_L00_001fff28(shuttle_path_state->unk70, 0, shuttle_path_state->spin);
     if (vector_distance_xy(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
         vector_distance_xy(&moby->pos, &path->node[0]) > 8.0f && !random_integer_below(7)) {
         qcopy(&puff, &moby->pos);
         add_random_offset_to_vector_xyz(&puff, 0.5f);
         puff.f[2] = 25.01f;
-        spawn_moving_resizing_height_snapped_alpha_fade_particle(
-            &puff, 0, 0x40103080, shuttle_path_state->speed * 3.0f / (frame_time * 10.0f), 12600.0f);
+        spawn_moving_resizing_height_snapped_alpha_fade_particle(&puff,
+                                                                 0,
+                                                                 0x40103080,
+                                                                 shuttle_path_state->speed * 3.0f /
+                                                                     (frame_time * 10.0f),
+                                                                 12600.0f);
     }
     return done;
 }

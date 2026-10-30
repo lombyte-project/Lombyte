@@ -155,14 +155,16 @@ void update_reflection_mesh(struct Moby *moby) {
             }
             for (j = 0; j < single_reflection_mesh_vertex_counts[i]; j++) {
                 float vertex_to_center_distance;
-                single_mesh_bounding_sphere_components = (float *)(l16_single_reflection_mesh_bounds + i);
+                single_mesh_bounding_sphere_components =
+                    (float *)(l16_single_reflection_mesh_bounds + i);
                 vertex_position[0] =
                     ((float **)single_reflection_mesh_position_tables)[i][j * 3 + 0];
                 vertex_position[1] =
                     ((float **)single_reflection_mesh_position_tables)[i][j * 3 + 1];
                 vertex_position[2] =
                     ((float **)single_reflection_mesh_position_tables)[i][j * 3 + 2];
-                vertex_to_center_distance = fast_vec_dist(vertex_position, single_mesh_bounding_sphere_components);
+                vertex_to_center_distance =
+                    fast_vec_dist(vertex_position, single_mesh_bounding_sphere_components);
                 if (vertex_to_center_distance > single_mesh_bounding_sphere_components[3])
                     single_mesh_bounding_sphere_components[3] = vertex_to_center_distance;
             }

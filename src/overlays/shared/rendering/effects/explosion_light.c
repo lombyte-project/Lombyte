@@ -120,31 +120,43 @@ void update_animated_point_light_moby(unsigned char *moby) {
         *(int *)(animated_point_light_vars + 0x50) = -1;
         animated_point_light_vars[0x1C] = b1c;
         *(int *)(animated_point_light_vars + 0xC) = *(int *)(animated_point_light_vars + 0x4C);
-        *(short *)(animated_point_light_vars + 0x74) = *(unsigned short *)(animated_point_light_vars + 0x6C);
-        *(short *)(animated_point_light_vars + 0x76) = *(unsigned short *)(animated_point_light_vars + 0x6E);
-        *(short *)(animated_point_light_vars + 0x78) = *(unsigned short *)(animated_point_light_vars + 0x70);
-        *(short *)(animated_point_light_vars + 0x7A) = *(unsigned short *)(animated_point_light_vars + 0x72);
-        *(float *)(animated_point_light_vars + 0x54) = convert_integer_to_float(animated_point_light_vars[0x25]) / 100.0f;
-        *(float *)(animated_point_light_vars + 0x58) = convert_integer_to_float(animated_point_light_vars[0x2A]) / 100.0f;
+        *(short *)(animated_point_light_vars + 0x74) =
+            *(unsigned short *)(animated_point_light_vars + 0x6C);
+        *(short *)(animated_point_light_vars + 0x76) =
+            *(unsigned short *)(animated_point_light_vars + 0x6E);
+        *(short *)(animated_point_light_vars + 0x78) =
+            *(unsigned short *)(animated_point_light_vars + 0x70);
+        *(short *)(animated_point_light_vars + 0x7A) =
+            *(unsigned short *)(animated_point_light_vars + 0x72);
+        *(float *)(animated_point_light_vars + 0x54) =
+            convert_integer_to_float(animated_point_light_vars[0x25]) / 100.0f;
+        *(float *)(animated_point_light_vars + 0x58) =
+            convert_integer_to_float(animated_point_light_vars[0x2A]) / 100.0f;
         {
-            float initial_color_channel_value = convert_integer_to_float(animated_point_light_vars[0x2F]) / 100.0f;
-            *(float *)(animated_point_light_vars + 0x60) = *(float *)(animated_point_light_vars + 0x34);
+            float initial_color_channel_value =
+                convert_integer_to_float(animated_point_light_vars[0x2F]) / 100.0f;
+            *(float *)(animated_point_light_vars + 0x60) =
+                *(float *)(animated_point_light_vars + 0x34);
             *(float *)(animated_point_light_vars + 0x5C) = initial_color_channel_value;
         }
         if (*(int *)(animated_point_light_vars + 0x64) != -1) {
-            *(char **)(animated_point_light_vars + 0x20) = moby_table + (*(int *)(animated_point_light_vars + 0x64) << 8);
+            *(char **)(animated_point_light_vars + 0x20) =
+                moby_table + (*(int *)(animated_point_light_vars + 0x64) << 8);
         }
         if (*(float *)(animated_point_light_vars + 0x40) < 0.0f)
-            *(float *)(animated_point_light_vars + 0x40) = -*(float *)(animated_point_light_vars + 0x40);
+            *(float *)(animated_point_light_vars + 0x40) =
+                -*(float *)(animated_point_light_vars + 0x40);
         if (*(float *)(animated_point_light_vars + 0x44) < 0.0f)
-            *(float *)(animated_point_light_vars + 0x44) = -*(float *)(animated_point_light_vars + 0x44);
+            *(float *)(animated_point_light_vars + 0x44) =
+                -*(float *)(animated_point_light_vars + 0x44);
         moby[0x20] = 1;
     }
     if (moby[0xBC] != 0) {
         moby[0xBC] = moby[0xBC] - 1;
         return;
     }
-    if (*(int *)(animated_point_light_vars + 0x48) != -1 && fast_dec_timer((int *)(animated_point_light_vars + 0x48))) {
+    if (*(int *)(animated_point_light_vars + 0x48) != -1 &&
+        fast_dec_timer((int *)(animated_point_light_vars + 0x48))) {
         if (*(int *)(animated_point_light_vars + 0x50) != -1) {
             release_point_light_slot(*(int *)(animated_point_light_vars + 0x50));
             *(int *)(animated_point_light_vars + 0x50) = -1;
@@ -172,17 +184,23 @@ void update_animated_point_light_moby(unsigned char *moby) {
             if (*(int *)(animated_point_light_vars + 0x4C) & 0x100000) {
                 if (*(int *)(animated_point_light_vars + 0x4C) & 0x200000) {
                     position_offset.x =
-                        random_float_between(-*(float *)(animated_point_light_vars + 0x0), *(float *)(animated_point_light_vars + 0x0));
+                        random_float_between(-*(float *)(animated_point_light_vars + 0x0),
+                                             *(float *)(animated_point_light_vars + 0x0));
                     position_offset.y =
-                        random_float_between(-*(float *)(animated_point_light_vars + 0x4), *(float *)(animated_point_light_vars + 0x4));
+                        random_float_between(-*(float *)(animated_point_light_vars + 0x4),
+                                             *(float *)(animated_point_light_vars + 0x4));
                     position_offset.z =
-                        random_float_between(-*(float *)(animated_point_light_vars + 0x8), *(float *)(animated_point_light_vars + 0x8));
+                        random_float_between(-*(float *)(animated_point_light_vars + 0x8),
+                                             *(float *)(animated_point_light_vars + 0x8));
                     position_offset_ptr = &position_offset;
                 } else {
                     int   c = *(int *)(animated_point_light_vars + 0xC);
                     void *p = &position_offset;
                     *(int *)(animated_point_light_vars + 0xC) = 0;
-                    fast_vec_scale(p, animated_point_light_vars, random_float_between(*(float *)(animated_point_light_vars + 0xC), 1.0f));
+                    fast_vec_scale(
+                        p,
+                        animated_point_light_vars,
+                        random_float_between(*(float *)(animated_point_light_vars + 0xC), 1.0f));
                     *(int *)(animated_point_light_vars + 0xC) = c;
                     position_offset_ptr = p;
                 }
@@ -196,9 +214,10 @@ void update_animated_point_light_moby(unsigned char *moby) {
             }
             if (*(int *)(animated_point_light_vars + 0x4C) & 0x400000) {
                 if (*(unsigned char **)(animated_point_light_vars + 0x20) != 0) {
-                    transform_vector_by_basis(position_offset_ptr,
-                                              position_offset_ptr,
-                                              *(unsigned char **)(animated_point_light_vars + 0x20) + 0xC0);
+                    transform_vector_by_basis(
+                        position_offset_ptr,
+                        position_offset_ptr,
+                        *(unsigned char **)(animated_point_light_vars + 0x20) + 0xC0);
                 }
             }
             fast_vec_add(moby_position, base_position_ptr, position_offset_ptr);
@@ -207,10 +226,12 @@ void update_animated_point_light_moby(unsigned char *moby) {
         }
         if (*(unsigned short *)(animated_point_light_vars + 0x72) != 0) {
             if (fast_dec_timer_s16(animated_point_light_vars + 0x7A)) {
-                *(short *)(animated_point_light_vars + 0x7A) = scale_game_frames(*(unsigned short *)(animated_point_light_vars + 0x72));
+                *(short *)(animated_point_light_vars + 0x7A) =
+                    scale_game_frames(*(unsigned short *)(animated_point_light_vars + 0x72));
                 if (*(int *)(animated_point_light_vars + 0x4C) & 4) {
                     radius_reset_this_update = 1;
-                    *(float *)(animated_point_light_vars + 0x60) = *(float *)(animated_point_light_vars + 0x3C);
+                    *(float *)(animated_point_light_vars + 0x60) =
+                        *(float *)(animated_point_light_vars + 0x3C);
                     *(int *)(animated_point_light_vars + 0x4C) &= 0xFFFFFFF7;
                 }
             }
@@ -221,44 +242,56 @@ void update_animated_point_light_moby(unsigned char *moby) {
                 *(int *)(animated_point_light_vars + 0x4C) ^= 0x2;
             if (!(*(int *)(animated_point_light_vars + 0x4C) & 0x2)) {
                 if (*(int *)(animated_point_light_vars + 0x4C) & 0x8) {
-                    float t = *(float *)(animated_point_light_vars + 0x60) - *(float *)(animated_point_light_vars + 0x44) * frame_scale;
+                    float t = *(float *)(animated_point_light_vars + 0x60) -
+                              *(float *)(animated_point_light_vars + 0x44) * frame_scale;
                     *(float *)(animated_point_light_vars + 0x60) = t;
                     if (t <= *(float *)(animated_point_light_vars + 0x3C)) {
-                        *(float *)(animated_point_light_vars + 0x60) = *(float *)(animated_point_light_vars + 0x3C);
+                        *(float *)(animated_point_light_vars + 0x60) =
+                            *(float *)(animated_point_light_vars + 0x3C);
                         if (*(int *)(animated_point_light_vars + 0x4C) & 0x4) {
-                            if (scale_game_frames(*(unsigned short *)(animated_point_light_vars + 0x72)) == 0)
+                            if (scale_game_frames(
+                                    *(unsigned short *)(animated_point_light_vars + 0x72)) == 0)
                                 *(int *)(animated_point_light_vars + 0x4C) ^= 0x8;
                         }
                     }
                 } else {
-                    float t = *(float *)(animated_point_light_vars + 0x60) + *(float *)(animated_point_light_vars + 0x40) * frame_scale;
+                    float t = *(float *)(animated_point_light_vars + 0x60) +
+                              *(float *)(animated_point_light_vars + 0x40) * frame_scale;
                     *(float *)(animated_point_light_vars + 0x60) = t;
                     if (*(float *)(animated_point_light_vars + 0x38) <= t) {
-                        *(float *)(animated_point_light_vars + 0x60) = *(float *)(animated_point_light_vars + 0x38);
+                        *(float *)(animated_point_light_vars + 0x60) =
+                            *(float *)(animated_point_light_vars + 0x38);
                         if (!(*(int *)(animated_point_light_vars + 0x4C) & 0x1)) {
                             *(int *)(animated_point_light_vars + 0x4C) ^= 0x8;
                         } else {
                             *(unsigned char *)(animated_point_light_vars + 0x7F) =
-                                scale_game_frames(*(unsigned char *)(animated_point_light_vars + 0x6B));
-                            *(int *)(animated_point_light_vars + 0x4C) = (*(int *)(animated_point_light_vars + 0x4C) | 0x2) ^ 0x8;
+                                scale_game_frames(
+                                    *(unsigned char *)(animated_point_light_vars + 0x6B));
+                            *(int *)(animated_point_light_vars + 0x4C) =
+                                (*(int *)(animated_point_light_vars + 0x4C) | 0x2) ^ 0x8;
                         }
                     }
                 }
             } else {
-                if (*(unsigned char *)(animated_point_light_vars + 0x6B) != 0 && FUN_L00_001fefc8(animated_point_light_vars + 0x7F))
+                if (*(unsigned char *)(animated_point_light_vars + 0x6B) != 0 &&
+                    FUN_L00_001fefc8(animated_point_light_vars + 0x7F))
                     *(int *)(animated_point_light_vars + 0x4C) ^= 0x2;
             }
         } else {
-            if (*(unsigned short *)(animated_point_light_vars + 0x72) == 0 || radius_reset_this_update == 1) {
+            if (*(unsigned short *)(animated_point_light_vars + 0x72) == 0 ||
+                radius_reset_this_update == 1) {
                 *(float *)(animated_point_light_vars + 0x60) =
-                    random_float_between(*(float *)(animated_point_light_vars + 0x3C), *(float *)(animated_point_light_vars + 0x38));
+                    random_float_between(*(float *)(animated_point_light_vars + 0x3C),
+                                         *(float *)(animated_point_light_vars + 0x38));
             }
         }
         if (*(unsigned short *)(animated_point_light_vars + 0x6C) != 0) {
             if (fast_dec_timer_s16(animated_point_light_vars + 0x74)) {
-                *(short *)(animated_point_light_vars + 0x74) = scale_game_frames(*(unsigned short *)(animated_point_light_vars + 0x6C));
+                *(short *)(animated_point_light_vars + 0x74) =
+                    scale_game_frames(*(unsigned short *)(animated_point_light_vars + 0x6C));
                 *(int *)(animated_point_light_vars + 0x4C) &= 0xFFFFFF7F;
-                *(float *)(animated_point_light_vars + 0x54) = (float)*(unsigned char *)(animated_point_light_vars + 0x27);
+                *(float *)(animated_point_light_vars + 0x54) =
+                    (float)*(unsigned char *)(animated_point_light_vars + 0x27);
             }
         }
         if (!(*(int *)(animated_point_light_vars + 0x4C) & 0x10000)) {
@@ -288,28 +321,35 @@ void update_animated_point_light_moby(unsigned char *moby) {
                         if (!(*(int *)(animated_point_light_vars + 0x4C) & 0x10)) {
                             *(int *)(animated_point_light_vars + 0x4C) ^= 0x80;
                         } else {
-                            *(unsigned char *)(animated_point_light_vars + 0x7C) = scale_game_frames(animated_point_light_vars[0x68]);
-                            *(int *)(animated_point_light_vars + 0x4C) = (*(int *)(animated_point_light_vars + 0x4C) | 0x20) ^ 0x80;
+                            *(unsigned char *)(animated_point_light_vars + 0x7C) =
+                                scale_game_frames(animated_point_light_vars[0x68]);
+                            *(int *)(animated_point_light_vars + 0x4C) =
+                                (*(int *)(animated_point_light_vars + 0x4C) | 0x20) ^ 0x80;
                         }
                     }
                 }
             } else {
-                if (animated_point_light_vars[0x68] != 0 && FUN_L00_001fefc8(animated_point_light_vars + 0x7C))
+                if (animated_point_light_vars[0x68] != 0 &&
+                    FUN_L00_001fefc8(animated_point_light_vars + 0x7C))
                     *(int *)(animated_point_light_vars + 0x4C) ^= 0x20;
             }
         } else {
             if (*(unsigned short *)(animated_point_light_vars + 0x6C) == 0 ||
                 first_color_randomization_timer_bypass == 1) {
-                float a = (float)truncate_float_to_s32((float)animated_point_light_vars[0x27]) / 100.0f;
-                float b = (float)truncate_float_to_s32((float)animated_point_light_vars[0x26]) / 100.0f;
+                float a =
+                    (float)truncate_float_to_s32((float)animated_point_light_vars[0x27]) / 100.0f;
+                float b =
+                    (float)truncate_float_to_s32((float)animated_point_light_vars[0x26]) / 100.0f;
                 *(float *)(animated_point_light_vars + 0x54) = random_float_between(a, b);
             }
         }
         if (*(unsigned short *)(animated_point_light_vars + 0x6E) != 0) {
             if (fast_dec_timer_s16(animated_point_light_vars + 0x76)) {
-                *(short *)(animated_point_light_vars + 0x76) = scale_game_frames(*(unsigned short *)(animated_point_light_vars + 0x6E));
+                *(short *)(animated_point_light_vars + 0x76) =
+                    scale_game_frames(*(unsigned short *)(animated_point_light_vars + 0x6E));
                 *(int *)(animated_point_light_vars + 0x4C) &= 0xFFFFF7FF;
-                *(float *)(animated_point_light_vars + 0x58) = (float)animated_point_light_vars[0x2C];
+                *(float *)(animated_point_light_vars + 0x58) =
+                    (float)animated_point_light_vars[0x2C];
             }
         }
         if (!(*(int *)(animated_point_light_vars + 0x4C) & 0x20000)) {
@@ -339,28 +379,35 @@ void update_animated_point_light_moby(unsigned char *moby) {
                         if (!(*(int *)(animated_point_light_vars + 0x4C) & 0x100)) {
                             *(int *)(animated_point_light_vars + 0x4C) ^= 0x800;
                         } else {
-                            *(unsigned char *)(animated_point_light_vars + 0x7D) = scale_game_frames(animated_point_light_vars[0x69]);
-                            *(int *)(animated_point_light_vars + 0x4C) = (*(int *)(animated_point_light_vars + 0x4C) | 0x200) ^ 0x800;
+                            *(unsigned char *)(animated_point_light_vars + 0x7D) =
+                                scale_game_frames(animated_point_light_vars[0x69]);
+                            *(int *)(animated_point_light_vars + 0x4C) =
+                                (*(int *)(animated_point_light_vars + 0x4C) | 0x200) ^ 0x800;
                         }
                     }
                 }
             } else {
-                if (animated_point_light_vars[0x69] != 0 && FUN_L00_001fefc8(animated_point_light_vars + 0x7D))
+                if (animated_point_light_vars[0x69] != 0 &&
+                    FUN_L00_001fefc8(animated_point_light_vars + 0x7D))
                     *(int *)(animated_point_light_vars + 0x4C) ^= 0x200;
             }
         } else {
             if (*(unsigned short *)(animated_point_light_vars + 0x6E) == 0 ||
                 second_color_randomization_timer_bypass == 1) {
-                float a = (float)truncate_float_to_s32((float)animated_point_light_vars[0x2C]) / 100.0f;
-                float b = (float)truncate_float_to_s32((float)animated_point_light_vars[0x2B]) / 100.0f;
+                float a =
+                    (float)truncate_float_to_s32((float)animated_point_light_vars[0x2C]) / 100.0f;
+                float b =
+                    (float)truncate_float_to_s32((float)animated_point_light_vars[0x2B]) / 100.0f;
                 *(float *)(animated_point_light_vars + 0x58) = random_float_between(a, b);
             }
         }
         if (*(unsigned short *)(animated_point_light_vars + 0x70) != 0) {
             if (fast_dec_timer_s16(animated_point_light_vars + 0x78)) {
-                *(short *)(animated_point_light_vars + 0x78) = scale_game_frames(*(unsigned short *)(animated_point_light_vars + 0x70));
+                *(short *)(animated_point_light_vars + 0x78) =
+                    scale_game_frames(*(unsigned short *)(animated_point_light_vars + 0x70));
                 *(int *)(animated_point_light_vars + 0x4C) &= 0xFFFF7FFF;
-                *(float *)(animated_point_light_vars + 0x5C) = (float)animated_point_light_vars[0x31];
+                *(float *)(animated_point_light_vars + 0x5C) =
+                    (float)animated_point_light_vars[0x31];
             }
         }
         if (!(*(int *)(animated_point_light_vars + 0x4C) & 0x40000)) {
@@ -390,32 +437,38 @@ void update_animated_point_light_moby(unsigned char *moby) {
                         if (!(*(int *)(animated_point_light_vars + 0x4C) & 0x1000)) {
                             *(int *)(animated_point_light_vars + 0x4C) ^= 0x8000;
                         } else {
-                            *(unsigned char *)(animated_point_light_vars + 0x7E) = scale_game_frames(animated_point_light_vars[0x6A]);
-                            *(int *)(animated_point_light_vars + 0x4C) = (*(int *)(animated_point_light_vars + 0x4C) | 0x2000) ^ 0x8000;
+                            *(unsigned char *)(animated_point_light_vars + 0x7E) =
+                                scale_game_frames(animated_point_light_vars[0x6A]);
+                            *(int *)(animated_point_light_vars + 0x4C) =
+                                (*(int *)(animated_point_light_vars + 0x4C) | 0x2000) ^ 0x8000;
                         }
                     }
                 }
             } else {
-                if (animated_point_light_vars[0x6A] != 0 && FUN_L00_001fefc8(animated_point_light_vars + 0x7E))
+                if (animated_point_light_vars[0x6A] != 0 &&
+                    FUN_L00_001fefc8(animated_point_light_vars + 0x7E))
                     *(int *)(animated_point_light_vars + 0x4C) ^= 0x2000;
             }
         } else {
             if (*(unsigned short *)(animated_point_light_vars + 0x70) == 0 ||
                 third_color_randomization_timer_bypass == 1) {
-                float a = (float)truncate_float_to_s32((float)animated_point_light_vars[0x31]) / 100.0f;
-                float b = (float)truncate_float_to_s32((float)animated_point_light_vars[0x30]) / 100.0f;
+                float a =
+                    (float)truncate_float_to_s32((float)animated_point_light_vars[0x31]) / 100.0f;
+                float b =
+                    (float)truncate_float_to_s32((float)animated_point_light_vars[0x30]) / 100.0f;
                 *(float *)(animated_point_light_vars + 0x5C) = random_float_between(a, b);
             }
         }
         sphere_check_result_or_light_slot_index = *(int *)(animated_point_light_vars + 0x50);
         if (sphere_check_result_or_light_slot_index == -1) {
             float kk = convert_integer_to_float(animated_point_light_vars[0x24]) / 100.0f;
-            *(int *)(animated_point_light_vars + 0x50) = allocate_colored_effect_slot((float *)moby_position,
-                                                                 *(float *)(animated_point_light_vars + 0x60),
-                                                                 kk,
-                                                                 *(float *)(animated_point_light_vars + 0x54),
-                                                                 *(float *)(animated_point_light_vars + 0x58),
-                                                                 *(float *)(animated_point_light_vars + 0x5C));
+            *(int *)(animated_point_light_vars + 0x50) =
+                allocate_colored_effect_slot((float *)moby_position,
+                                             *(float *)(animated_point_light_vars + 0x60),
+                                             kk,
+                                             *(float *)(animated_point_light_vars + 0x54),
+                                             *(float *)(animated_point_light_vars + 0x58),
+                                             *(float *)(animated_point_light_vars + 0x5C));
         } else {
             PointLight *point_light = &point_lights[sphere_check_result_or_light_slot_index];
             qcopy(&point_light->position, moby_position);

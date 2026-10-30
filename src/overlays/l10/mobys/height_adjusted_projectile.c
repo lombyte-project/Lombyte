@@ -74,7 +74,8 @@ void update_height_adjusted_projectile(struct Moby *moby) {
         check[2] += 0.1f;
         raised[2] -= *(float *)(projectile_vars + 0x1c) + *(float *)(projectile_vars + 0x1c);
         if (collision_line(check, raised, 2, (int)moby, 0))
-            approach_moby_height(moby, *(float *)(D_L10_001742C0 + 0x28) + *(float *)(projectile_vars + 0x1c));
+            approach_moby_height(
+                moby, *(float *)(D_L10_001742C0 + 0x28) + *(float *)(projectile_vars + 0x1c));
         else
             approach_moby_height(moby, moby->pos.z - 0.1f);
         break;
@@ -94,14 +95,16 @@ void update_height_adjusted_projectile(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (collision_line(movement_start_position, &moby->pos, 0, *(int *)(projectile_vars + 0x20), (int)hit)) {
+    if (collision_line(
+            movement_start_position, &moby->pos, 0, *(int *)(projectile_vars + 0x20), (int)hit)) {
         char        *collision = D_L10_001742C0;
         struct Moby *impacted_moby = *(struct Moby **)(collision + 0x18);
         if (impacted_moby == 0 || impacted_moby->oclass != 0x359) {
             qcopy(&moby->pos, collision + 0x20);
             if (*(char **)(projectile_vars + 0x14) != 0) {
                 if (impacted_moby != 0) {
-                    if (impacted_moby == D_001413D0_lui && *(struct Moby **)(projectile_vars + 0x20) != 0 &&
+                    if (impacted_moby == D_001413D0_lui &&
+                        *(struct Moby **)(projectile_vars + 0x20) != 0 &&
                         (*(struct Moby **)(projectile_vars + 0x20))->state != 0xfe &&
                         (*(struct Moby **)(projectile_vars + 0x20))->state != 0xfd)
                         **(char **)(projectile_vars + 0x14) = 1;

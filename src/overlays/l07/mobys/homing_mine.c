@@ -180,7 +180,8 @@ void homing_mine_update(struct Moby *moby) {
         turn = D_0015ED6C * 6.2831855f;
         homing_mine_vars->timeout = timer;
         moby->rot.z = fast_add_rotations(moby->rot.z, turn);
-        if ((homing_mine_vars->target != NULL && vector_distance_xy(&moby->pos, &(homing_mine_vars->target)->pos) < 20.0f &&
+        if ((homing_mine_vars->target != NULL &&
+             vector_distance_xy(&moby->pos, &(homing_mine_vars->target)->pos) < 20.0f &&
              absolute_float(moby->pos.z - (homing_mine_vars->target)->pos.z) < 3.0f) ||
             (*(s32 *)(sight + 0x40) != 0 && fast_vec_dist(&moby->pos, sight) < 8.0f)) {
             homing_mine_vars->speed = 0.0f;

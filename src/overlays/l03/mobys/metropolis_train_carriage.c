@@ -32,14 +32,16 @@ void metropolis_train_carriage_update(struct Moby *moby) {
             carriage_pvars[0x68] = 4;
             *(short *)(carriage_pvars + 0x7E) = 0xD;
             moby_point_position(moby, 0, joint_zero_world_position);
-            *(float *)(carriage_pvars + 0xC4) = fast_vec_dist(current_position, joint_zero_world_position);
+            *(float *)(carriage_pvars + 0xC4) =
+                fast_vec_dist(current_position, joint_zero_world_position);
             qcopy(previous_position, current_position);
             qcopy(previous_rotation, current_rotation);
             *(int *)(carriage_pvars + 0x5C) = 3;
             moby->update_dist = moby->draw_dist = 0xFF;
         }
         fast_vec_sub(position_delta, current_position, previous_position);
-        update_entity_matrix(carriage_pvars + 0x20, position_delta, previous_rotation, current_rotation);
+        update_entity_matrix(
+            carriage_pvars + 0x20, position_delta, previous_rotation, current_rotation);
         qcopy(previous_position, current_position);
         qcopy(previous_rotation, current_rotation);
     }

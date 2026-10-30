@@ -77,13 +77,14 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
             if (cheat_menu_entry->enabled_flag != 0) {
                 enabled = *cheat_menu_entry->enabled_flag;
             }
-            font_print_large(0xC, draw_y, color, get_help_message_text(cheat_menu_entry->text_id), -1);
-            font_print_right(
-                menu->width - 0xC,
-                draw_y,
-                0x80FFA888,
-                get_help_message_text(enabled ? cheat_menu_entry->enabled_text_id : cheat_menu_entry->disabled_text_id),
-                -1);
+            font_print_large(
+                0xC, draw_y, color, get_help_message_text(cheat_menu_entry->text_id), -1);
+            font_print_right(menu->width - 0xC,
+                             draw_y,
+                             0x80FFA888,
+                             get_help_message_text(enabled ? cheat_menu_entry->enabled_text_id
+                                                           : cheat_menu_entry->disabled_text_id),
+                             -1);
             draw_y += line_spacing;
             draw_index++;
             entry_index++;

@@ -221,7 +221,8 @@ u8 *spawn_decoy(s32 owner_moby, u128 *position, u128 *other_position) {
             for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
                 u8 *listed_moby = (u8 *)(moby_table + (D_L00_001B0830_lui[i] << 8));
                 if (listed_moby != 0 &&
-                    (*(s16 *)(listed_moby + 0xa6) == 0xcb || *(s16 *)(listed_moby + 0xa6) == 0x76c) &&
+                    (*(s16 *)(listed_moby + 0xa6) == 0xcb ||
+                     *(s16 *)(listed_moby + 0xa6) == 0x76c) &&
                     listed_moby[0x20] < 5) {
                     current_value = *(s32 *)(*(u8 **)(listed_moby + 0x78) + 0x54);
                     if (best_value <= current_value) {
@@ -469,7 +470,8 @@ void update_decoy_proximity_motion(S_2c40a0 *decoy_moby) {
                   frame_scale_sq * 0.3f,
                   frame_time * 4.0f);
     if (horizontal_separation_error == 0.0f && moby_vars->f60 == 0.0f) {
-        if (FUN_001f99c0_2c40a0(decoy_moby->f18 - probe_ground_height(decoy_moby->v10, 0, 0.5f)) < 0.02f)
+        if (FUN_001f99c0_2c40a0(decoy_moby->f18 - probe_ground_height(decoy_moby->v10, 0, 0.5f)) <
+            0.02f)
             moby_vars->i68 = 0;
     }
     horizontal_separation_distance = FUN_001f9af0_2c40a0(horizontal_displacement);
@@ -562,11 +564,13 @@ void decoy_update(char *moby) {
         *(u16 *)(moby + 0x34) |= 0x41;
     else
         *(u16 *)(moby + 0x34) &= 0xffbe;
-    if (*(short *)(*(char **)(decoy_instance_vars + 0x40) + 0xa6) == 0x232 && *(short *)(decoy_instance_vars + 0x46) == 0 &&
+    if (*(short *)(*(char **)(decoy_instance_vars + 0x40) + 0xa6) == 0x232 &&
+        *(short *)(decoy_instance_vars + 0x46) == 0 &&
         FUN_001ff3d8_2c4380(decoy_instance_vars + 0x10) > 0.0f) {
         if (hero.ground_moby == 0 || !FUN_L00_002603d0((int)hero.ground_moby))
             predict_thrown_moby_landing((ThrowVars *)decoy_instance_vars, (struct Moby *)moby, 1);
-        else if (!predict_thrown_moby_landing((ThrowVars *)decoy_instance_vars, (struct Moby *)moby, 0))
+        else if (!predict_thrown_moby_landing(
+                     (ThrowVars *)decoy_instance_vars, (struct Moby *)moby, 0))
             predict_thrown_moby_landing((ThrowVars *)decoy_instance_vars, (struct Moby *)moby, 2);
     }
     switch ((u8)moby[0x20]) {
@@ -605,7 +609,8 @@ void decoy_update(char *moby) {
                 len = FUN_001ff3d8_2c4380(scratch.w);
                 if (len < 1.8f) {
                     FUN_001ff300_2c4380((1.8f - len) * 0.015f, scratch.w, scratch.w);
-                    FUN_001ff278_2c4380(decoy_instance_vars + 0x10, decoy_instance_vars + 0x10, scratch.w);
+                    FUN_001ff278_2c4380(
+                        decoy_instance_vars + 0x10, decoy_instance_vars + 0x10, scratch.w);
                 }
             }
         }
@@ -623,14 +628,18 @@ void decoy_update(char *moby) {
                     len = FUN_001ff3d8_2c4380(scratch.x);
                     if (len < 1.8f) {
                         FUN_001ff300_2c4380((1.8f - len) * 0.015f, scratch.x, scratch.x);
-                        FUN_001ff278_2c4380(decoy_instance_vars + 0x10, decoy_instance_vars + 0x10, scratch.x);
+                        FUN_001ff278_2c4380(
+                            decoy_instance_vars + 0x10, decoy_instance_vars + 0x10, scratch.x);
                     }
                 }
-                reflect_vector(decoy_instance_vars + 0x10, decoy_instance_vars + 0x10, &coll_hit.normal_x);
+                reflect_vector(
+                    decoy_instance_vars + 0x10, decoy_instance_vars + 0x10, &coll_hit.normal_x);
                 if (coll_hit.moby != 0 && coll_hit.unk1C <= 0)
-                    FUN_001ff300_2c4380(1.05f, decoy_instance_vars + 0x10, decoy_instance_vars + 0x10);
+                    FUN_001ff300_2c4380(
+                        1.05f, decoy_instance_vars + 0x10, decoy_instance_vars + 0x10);
                 else
-                    FUN_001ff300_2c4380(0.2f, decoy_instance_vars + 0x10, decoy_instance_vars + 0x10);
+                    FUN_001ff300_2c4380(
+                        0.2f, decoy_instance_vars + 0x10, decoy_instance_vars + 0x10);
                 rate = 0.01f;
                 len = FUN_001ff3d8_2c4380(decoy_instance_vars + 0x10);
                 if (len < frame_scale * rate ||
@@ -666,16 +675,16 @@ void decoy_update(char *moby) {
                             *(float *)(decoy_instance_vars + 0x50) =
                                 FUN_001ff8b0_2c4380(rotated_normal[2], rotated_normal[0]);
                             rate = 0.1f;
-                            *(float *)(moby + 0x40) =
-                                FUN_002000e8_2c4380(*(float *)(moby + 0x40),
-                                                    FUN_00200130_2c4380(*(float *)(decoy_instance_vars + 0x4c),
-                                                                        *(float *)(moby + 0x40)) *
-                                                        (frame_scale * rate));
-                            *(float *)(moby + 0x44) =
-                                FUN_002000e8_2c4380(*(float *)(moby + 0x44),
-                                                    FUN_00200130_2c4380(*(float *)(decoy_instance_vars + 0x50),
-                                                                        *(float *)(moby + 0x44)) *
-                                                        (frame_scale * rate));
+                            *(float *)(moby + 0x40) = FUN_002000e8_2c4380(
+                                *(float *)(moby + 0x40),
+                                FUN_00200130_2c4380(*(float *)(decoy_instance_vars + 0x4c),
+                                                    *(float *)(moby + 0x40)) *
+                                    (frame_scale * rate));
+                            *(float *)(moby + 0x44) = FUN_002000e8_2c4380(
+                                *(float *)(moby + 0x44),
+                                FUN_00200130_2c4380(*(float *)(decoy_instance_vars + 0x50),
+                                                    *(float *)(moby + 0x44)) *
+                                    (frame_scale * rate));
                         }
                     }
                 }
@@ -708,7 +717,8 @@ void decoy_update(char *moby) {
         fast_dec_timer_s16(decoy_instance_vars + 0x6c);
         if (hit) {
             target = (char *)hit;
-            if (*(int *)(target + 0x20) != *(int *)(decoy_instance_vars + 0x58) || *(int *)(decoy_instance_vars + 0x5c) <= 0) {
+            if (*(int *)(target + 0x20) != *(int *)(decoy_instance_vars + 0x58) ||
+                *(int *)(decoy_instance_vars + 0x5c) <= 0) {
                 *(int *)(decoy_instance_vars + 0x58) = *(int *)(target + 0x20);
                 *(int *)(decoy_instance_vars + 0x5c) = FUN_001fef20_2c4380(30);
                 /* Fakematch: the empty loop keeps the timer read below the cooldown store. */
@@ -801,7 +811,8 @@ void decoy_update(char *moby) {
                             -FUN_001ff8b0_2c4380(FUN_001ff1e0_2c4380(scratch.w[0] * scratch.w[0] +
                                                                      scratch.w[2] * scratch.w[2]),
                                                  scratch.w[1]);
-                        *(float *)(decoy_instance_vars + 0x50) = FUN_001ff8b0_2c4380(scratch.w[2], scratch.w[0]);
+                        *(float *)(decoy_instance_vars + 0x50) =
+                            FUN_001ff8b0_2c4380(scratch.w[2], scratch.w[0]);
                     }
                 } else
                     qzero(decoy_instance_vars + 0x10);

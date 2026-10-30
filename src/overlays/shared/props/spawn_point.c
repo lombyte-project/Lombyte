@@ -54,7 +54,8 @@ void spawn_point_update(struct Moby *moby) {
         pickup_vars->in_volume = 0;
         return;
     }
-    if (pickup_vars->spawn_slot != -1 && D_0014C050[pickup_vars->spawn_slot + current_level_index * 16] != 0xFF) {
+    if (pickup_vars->spawn_slot != -1 &&
+        D_0014C050[pickup_vars->spawn_slot + current_level_index * 16] != 0xFF) {
         return;
     }
     if ((pickup_vars->flags & 2) && D_001413F4 != 1) {

@@ -59,7 +59,8 @@ void update_help_hints(struct Moby *moby) {
                     0x80000000;
             } else {
             direct:
-                if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)linked_moby_volume_config) != 0) {
+                if (is_point_inside_clip_volume(&hero.motion.pos,
+                                                *(int *)linked_moby_volume_config) != 0) {
                     if (*(int *)(((char *)&statistics_level_flags)) >= 0) {
                         help_request(0x32C8, 0x6F);
                     }
@@ -67,7 +68,8 @@ void update_help_hints(struct Moby *moby) {
             }
         }
     }
-    if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(linked_moby_volume_config + 8)) != 0) {
+    if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(linked_moby_volume_config + 8)) !=
+        0) {
         hero.vent_updraft = 0;
     } else {
         hero.vent_updraft = 1;

@@ -40,8 +40,10 @@ void update_ribbon_effect_moby(struct Moby *moby) {
     int          voice_slot_index;
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
-        if (*(int *)(ribbon_effect_state + 0x1F4) == -1 || *(int *)(ribbon_effect_state + 0x1F8) == -1 ||
-            *(int *)(ribbon_effect_state + 0x1FC) == -1 || *(int *)(ribbon_effect_state + 0x200) < 0) {
+        if (*(int *)(ribbon_effect_state + 0x1F4) == -1 ||
+            *(int *)(ribbon_effect_state + 0x1F8) == -1 ||
+            *(int *)(ribbon_effect_state + 0x1FC) == -1 ||
+            *(int *)(ribbon_effect_state + 0x200) < 0) {
             mark_moby_for_removal(moby);
             return;
         }

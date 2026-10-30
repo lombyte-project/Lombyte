@@ -1847,7 +1847,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
                               (char *)core_header + core_header[1]);
         saved_sound_bank_handle = sound_bank_handle;
         flush_cache(0);
-        used = fast_decompress((char *)(level_file_base[0x14] + (s32)level_file_base), decompressed_level_asset_base);
+        used = fast_decompress((char *)(level_file_base[0x14] + (s32)level_file_base),
+                               decompressed_level_asset_base);
         D_L00_0015F40C = (s32)(decompressed_level_asset_base + core_header[0x18]);
 
         level_texture_128x128_descriptor[0] =
@@ -1925,7 +1926,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
                 D_L00_0015F40C + shrub_texture_refs[shrub_texture_ref_index].offset +
                 (log2dim(shrub_texture_refs[shrub_texture_ref_index].kind) << 28);
 
-        initialize_tfrag_render_data(decompressed_level_asset_base + core_header[2], (char *)core_header + core_header[0xD]);
+        initialize_tfrag_render_data(decompressed_level_asset_base + core_header[2],
+                                     (char *)core_header + core_header[0xD]);
         if (core_header[3])
             D_L00_0015F600_244110 = decompressed_level_asset_base + core_header[3];
         else
@@ -1937,7 +1939,9 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         resolve_level_asset_block_pointers(decompressed_level_asset_base + core_header[5]);
         for (i = 0, class_entry_cursor = (char *)core_header + core_header[7]; i < core_header[6];
              i++, class_entry_cursor += 0x20)
-            register_moby_class(*(s32 *)class_entry_cursor ? decompressed_level_asset_base + *(s32 *)class_entry_cursor : 0,
+            register_moby_class(*(s32 *)class_entry_cursor
+                                    ? decompressed_level_asset_base + *(s32 *)class_entry_cursor
+                                    : 0,
                                 (char *)core_header + core_header[0xF],
                                 class_entry_cursor + 0x10,
                                 *(s32 *)(class_entry_cursor + 4));
@@ -1946,7 +1950,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
              sq < D_L00_00197300[0]->seq_count;
              sq++, sequence_offset_cursor += 4) {
             if (*(s32 *)sequence_offset_cursor) {
-                D_L00_00197300[0]->seqs[sq] = decompressed_level_asset_base + *(s32 *)sequence_offset_cursor;
+                D_L00_00197300[0]->seqs[sq] =
+                    decompressed_level_asset_base + *(s32 *)sequence_offset_cursor;
                 relocate_asset_entry_pointers(D_L00_00197300[0], sq);
             }
         }
@@ -1962,7 +1967,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
                 decompressed_level_asset_base + *(s32 *)moby_class_reference_cursor;
             D_L00_001AFC80[moby_class_reference_index] = *(s32 *)(moby_class_reference_cursor + 8);
             {
-                s32 moby_texture_slot_map_offset = D_L00_00197BC0[*(s32 *)(moby_class_reference_cursor + 4)] * 32 + 0x10;
+                s32 moby_texture_slot_map_offset =
+                    D_L00_00197BC0[*(s32 *)(moby_class_reference_cursor + 4)] * 32 + 0x10;
                 qcopy(&l00_moby_reference_texture_slot_maps[moby_class_reference_index],
                       (char *)core_header + core_header[7] + moby_texture_slot_map_offset);
             }

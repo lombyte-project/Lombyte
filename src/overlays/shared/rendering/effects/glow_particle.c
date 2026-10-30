@@ -110,9 +110,11 @@ unsigned char *spawn_glow_particle(void *glow_source_moby,
         qcopy(glow_particle_data, initial_velocity);
         qcopy(moby + 0x40, &rot_copy);
         glow_particle_data->n = lifetime;
-        glow_particle_data->h1c = *(unsigned short *)&glow_particle_data->n - FUN_001f96f8_2ac910(4);
+        glow_particle_data->h1c =
+            *(unsigned short *)&glow_particle_data->n - FUN_001f96f8_2ac910(4);
         elapsed = convert_integer_to_float(glow_particle_data->n - glow_particle_data->h1c);
-        MOBY(moby)->scale = elapsed * glow_particle_data->f18 / convert_integer_to_float(glow_particle_data->n);
+        MOBY(moby)->scale =
+            elapsed * glow_particle_data->f18 / convert_integer_to_float(glow_particle_data->n);
         glow_particle_data->h1e = alpha;
         update_entity(moby);
     }
@@ -186,7 +188,8 @@ unsigned char *spawn_randomly_rotated_colored_moby(int           source_moby_add
         qcopy(moby + 0x40, &rotation_copy);
         *(unsigned short *)(spawned_moby_private_data + 0x1e) = alpha;
         *(int *)(spawned_moby_private_data + 0x14) = flags;
-        *(unsigned short *)(spawned_moby_private_data + 0x1c) = *(unsigned short *)(spawned_moby_private_data + 0x14);
+        *(unsigned short *)(spawned_moby_private_data + 0x1c) =
+            *(unsigned short *)(spawned_moby_private_data + 0x14);
         update_entity(moby);
     }
     return moby;

@@ -87,8 +87,8 @@ void ammocrate_update(char *moby) {
         int          target_index = pickup_private_state[0];
         int          target_base = (int)moby_base;
         struct Moby *target = (struct Moby *)(target_base + target_index * 0x100);
-        if (target != 0 && target->state != 0xfe && target->state != 0xfd && pickup_private_state[1] != -1 &&
-            target->state != pickup_private_state[1]) {
+        if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
+            pickup_private_state[1] != -1 && target->state != pickup_private_state[1]) {
             goto frame_tail;
         }
         moby[0x20] = 3;
@@ -193,7 +193,8 @@ void ammocrate_update(char *moby) {
     }
 frame_tail:
     speed = frame_time;
-    update_moby_vertical_oscillation(0.7f, speed * 1.2217305f, moby, pickup_private_state + 6, pickup_private_state + 5);
+    update_moby_vertical_oscillation(
+        0.7f, speed * 1.2217305f, moby, pickup_private_state + 6, pickup_private_state + 5);
     if (MOBY(moby)->pos.x < 20.0f)
         MOBY(moby)->pos.x = 20.0f;
     if (1003.0f < MOBY(moby)->pos.x)

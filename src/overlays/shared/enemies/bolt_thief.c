@@ -27,8 +27,8 @@ void initialize_moby_path_state(char *moby) {
     qcopy(moby + 0x10, path + 0x10);
     MOBY(moby)->rot.z = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                      *(float *)(path + 0x24) - *(float *)(path + 0x14));
-    *(float *)(moby_path_state + 0xF0) = *(float *)(moby_path_state + 0xE4) = *(float *)(moby_path_state + 0xE8) =
-        *(float *)(moby_path_state + 0xEC) = 0.0f;
+    *(float *)(moby_path_state + 0xF0) = *(float *)(moby_path_state + 0xE4) =
+        *(float *)(moby_path_state + 0xE8) = *(float *)(moby_path_state + 0xEC) = 0.0f;
     if (*(int *)(moby_path_state + 0xFC) != 1) {
         path = ((int *)l14_paths[*(int *)(moby_path_state + 0xDC)]);
         for (i = 0; i < *(int *)path - 1; i++) {

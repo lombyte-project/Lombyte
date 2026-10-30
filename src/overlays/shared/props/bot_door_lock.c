@@ -32,9 +32,11 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
     OvlVec4             expanding_quad_local_corners[4];
     OvlVec4             corners[4];
     int                 i;
-    OvlVec4            *expanding_quad_local_corner_0, *expanding_quad_local_corner_1, *expanding_quad_local_corner_2, *expanding_quad_local_corner_3;
-    OvlVec4            *rotated_quad_corner_0, *rotated_quad_corner_1, *rotated_quad_corner_2, *rotated_quad_corner_3;
-    float              *bot_door_lock_private_data = ((float *)moby->pvars);
+    OvlVec4            *expanding_quad_local_corner_0, *expanding_quad_local_corner_1,
+        *expanding_quad_local_corner_2, *expanding_quad_local_corner_3;
+    OvlVec4 *rotated_quad_corner_0, *rotated_quad_corner_1, *rotated_quad_corner_2,
+        *rotated_quad_corner_3;
+    float *bot_door_lock_private_data = ((float *)moby->pvars);
     rotation[0] = 0.0f;
     rotation[1] = 0.0f;
     rotation[2] = l06_camera.yaw;
@@ -55,34 +57,50 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
     expanding_quad_local_corner_2 = &expanding_quad_local_corners[2];
     expanding_quad_local_corner_3 = &expanding_quad_local_corners[3];
     for (i = 0; i < 4; i++) {
-        transform_vector_by_basis(rotated_quad_corner_0, &D_L06_001fe8d0[D_L06_001fe9d0[i][0]], matrix);
-        transform_vector_by_basis(rotated_quad_corner_1, &D_L06_001fe8d0[D_L06_001fe9d0[i][1]], matrix);
-        transform_vector_by_basis(rotated_quad_corner_2, &D_L06_001fe8d0[D_L06_001fe9d0[i][2]], matrix);
-        transform_vector_by_basis(rotated_quad_corner_3, &D_L06_001fe8d0[D_L06_001fe9d0[i][3]], matrix);
-        quad.positions[0].f[0] = moby->pos.x + rotated_quad_corners[0].f[0] * bot_door_lock_private_data[9];
-        quad.positions[0].f[1] = moby->pos.y + rotated_quad_corners[0].f[1] * bot_door_lock_private_data[9];
+        transform_vector_by_basis(
+            rotated_quad_corner_0, &D_L06_001fe8d0[D_L06_001fe9d0[i][0]], matrix);
+        transform_vector_by_basis(
+            rotated_quad_corner_1, &D_L06_001fe8d0[D_L06_001fe9d0[i][1]], matrix);
+        transform_vector_by_basis(
+            rotated_quad_corner_2, &D_L06_001fe8d0[D_L06_001fe9d0[i][2]], matrix);
+        transform_vector_by_basis(
+            rotated_quad_corner_3, &D_L06_001fe8d0[D_L06_001fe9d0[i][3]], matrix);
+        quad.positions[0].f[0] =
+            moby->pos.x + rotated_quad_corners[0].f[0] * bot_door_lock_private_data[9];
+        quad.positions[0].f[1] =
+            moby->pos.y + rotated_quad_corners[0].f[1] * bot_door_lock_private_data[9];
         quad.positions[0].f[2] = moby->pos.z + rotated_quad_corners[0].f[2];
-        quad.positions[1].f[0] = moby->pos.x + rotated_quad_corners[1].f[0] * bot_door_lock_private_data[9];
-        quad.positions[1].f[1] = moby->pos.y + rotated_quad_corners[1].f[1] * bot_door_lock_private_data[9];
+        quad.positions[1].f[0] =
+            moby->pos.x + rotated_quad_corners[1].f[0] * bot_door_lock_private_data[9];
+        quad.positions[1].f[1] =
+            moby->pos.y + rotated_quad_corners[1].f[1] * bot_door_lock_private_data[9];
         quad.positions[1].f[2] = moby->pos.z + rotated_quad_corners[1].f[2];
-        quad.positions[2].f[0] = moby->pos.x + rotated_quad_corners[2].f[0] * bot_door_lock_private_data[9];
-        quad.positions[2].f[1] = moby->pos.y + rotated_quad_corners[2].f[1] * bot_door_lock_private_data[9];
+        quad.positions[2].f[0] =
+            moby->pos.x + rotated_quad_corners[2].f[0] * bot_door_lock_private_data[9];
+        quad.positions[2].f[1] =
+            moby->pos.y + rotated_quad_corners[2].f[1] * bot_door_lock_private_data[9];
         quad.positions[2].f[2] = moby->pos.z + rotated_quad_corners[2].f[2];
-        quad.positions[3].f[0] = moby->pos.x + rotated_quad_corners[3].f[0] * bot_door_lock_private_data[9];
-        quad.positions[3].f[1] = moby->pos.y + rotated_quad_corners[3].f[1] * bot_door_lock_private_data[9];
+        quad.positions[3].f[0] =
+            moby->pos.x + rotated_quad_corners[3].f[0] * bot_door_lock_private_data[9];
+        quad.positions[3].f[1] =
+            moby->pos.y + rotated_quad_corners[3].f[1] * bot_door_lock_private_data[9];
         quad.positions[3].f[2] = moby->pos.z + rotated_quad_corners[3].f[2];
         quad.colors[0] = D_L06_001fe9a8[D_L06_001fe9d0[i][0]];
         quad.colors[1] = D_L06_001fe9a8[D_L06_001fe9d0[i][1]];
         quad.colors[2] = D_L06_001fe9a8[D_L06_001fe9d0[i][2]];
         quad.colors[3] = D_L06_001fe9a8[D_L06_001fe9d0[i][3]];
         quad.texture_coordinates[0][0] = D_L06_001fe960[D_L06_001fe9d0[i][0]][0];
-        quad.texture_coordinates[0][1] = D_L06_001fe960[D_L06_001fe9d0[i][0]][1] + bot_door_lock_private_data[7];
+        quad.texture_coordinates[0][1] =
+            D_L06_001fe960[D_L06_001fe9d0[i][0]][1] + bot_door_lock_private_data[7];
         quad.texture_coordinates[1][0] = D_L06_001fe960[D_L06_001fe9d0[i][1]][0];
-        quad.texture_coordinates[1][1] = D_L06_001fe960[D_L06_001fe9d0[i][1]][1] + bot_door_lock_private_data[7];
+        quad.texture_coordinates[1][1] =
+            D_L06_001fe960[D_L06_001fe9d0[i][1]][1] + bot_door_lock_private_data[7];
         quad.texture_coordinates[2][0] = D_L06_001fe960[D_L06_001fe9d0[i][2]][0];
-        quad.texture_coordinates[2][1] = D_L06_001fe960[D_L06_001fe9d0[i][2]][1] + bot_door_lock_private_data[7];
+        quad.texture_coordinates[2][1] =
+            D_L06_001fe960[D_L06_001fe9d0[i][2]][1] + bot_door_lock_private_data[7];
         quad.texture_coordinates[3][0] = D_L06_001fe960[D_L06_001fe9d0[i][3]][0];
-        quad.texture_coordinates[3][1] = D_L06_001fe960[D_L06_001fe9d0[i][3]][1] + bot_door_lock_private_data[7];
+        quad.texture_coordinates[3][1] =
+            D_L06_001fe960[D_L06_001fe9d0[i][3]][1] + bot_door_lock_private_data[7];
         draw_geometry_quad(&quad, 0, 1);
     }
     quad.texture = get_effect_texture(0x1b);
@@ -217,8 +235,9 @@ void bot_door_lock_update(char *moby) {
 
     if (*(int *)bot_door_lock_data == -1)
         return;
-    bot_door_lock_data[10] = fast_add_rotations(
-        bot_door_lock_data[10], (360.0f / bot_door_lock_color_pulse_period_gp) * 0.017453292f * frame_time);
+    bot_door_lock_data[10] = fast_add_rotations(bot_door_lock_data[10],
+                                                (360.0f / bot_door_lock_color_pulse_period_gp) *
+                                                    0.017453292f * frame_time);
     MOBY(moby)->glow_color =
         fast_tween_color((fast_cos(bot_door_lock_data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
     switch ((unsigned char)moby[0x20]) {
@@ -244,12 +263,15 @@ void bot_door_lock_update(char *moby) {
         if (0.0f < bot_door_lock_data[9]) {
             add_draw_callback((int)draw_bot_door_lock_glow, (int)moby);
             bot_door_lock_data[6] = fast_add_rotations(
-                bot_door_lock_data[6], (360.0f / bot_door_lock_number_bob_period_gp) * 0.017453292f * frame_time);
-            number_anchor_position[2] += bot_door_lock_number_bob_amplitude_gp * fast_cos(bot_door_lock_data[6]);
-            number_color_pulse_delta = truncate_float_to_s32(bot_door_lock_number_color_pulse_amplitude_gp *
-                                          fast_cos(bot_door_lock_data[10]));
+                bot_door_lock_data[6],
+                (360.0f / bot_door_lock_number_bob_period_gp) * 0.017453292f * frame_time);
+            number_anchor_position[2] +=
+                bot_door_lock_number_bob_amplitude_gp * fast_cos(bot_door_lock_data[6]);
+            number_color_pulse_delta = truncate_float_to_s32(
+                bot_door_lock_number_color_pulse_amplitude_gp * fast_cos(bot_door_lock_data[10]));
             color_channels = (number_color_pulse_delta / 2 + 120) * 0x100 | 0x20000000U;
-            color = (number_color_pulse_delta / 3 + 13) * 0x10000 | color_channels | (number_color_pulse_delta + 150U);
+            color = (number_color_pulse_delta / 3 + 13) * 0x10000 | color_channels |
+                    (number_color_pulse_delta + 150U);
             if (D_001413F4 == 1) {
                 if (idata[5] < 10) {
                     draw_number(

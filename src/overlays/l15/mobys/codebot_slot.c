@@ -86,7 +86,8 @@ int count_missing_or_dying_mobys_in_list(int moby_list_index) {
         return 0;
     moby_array_base = (int)l15_moby_array;
     do {
-        unsigned char *moby = (unsigned char *)(moby_array_base + ((moby_index_entry[0] & 0x7FFF) << 8));
+        unsigned char *moby =
+            (unsigned char *)(moby_array_base + ((moby_index_entry[0] & 0x7FFF) << 8));
         if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
             missing_or_dying_count++;
     } while ((short)*moby_index_entry++ >= 0);
@@ -141,7 +142,8 @@ void codebot_slot_update(struct Moby *moby) {
             *(OvlQuad *)position_work_vector = *(OvlQuad *)position_rotation_work_vector;
             add_vectors(position_rotation_work_vector, &moby->pos, position_work_vector);
         }
-        *(OvlQuad *)(codebot_slot_private_data + 4) = *(OvlQuad *)((char *)l15_moby_array + codebot_slot_private_data[3] * 0x100 + 0x10);
+        *(OvlQuad *)(codebot_slot_private_data + 4) =
+            *(OvlQuad *)((char *)l15_moby_array + codebot_slot_private_data[3] * 0x100 + 0x10);
     }
     switch (moby->state) {
     case CODEBOT_SLOT_INITIALIZE: {
@@ -180,8 +182,8 @@ void codebot_slot_update(struct Moby *moby) {
             clear_u64_value(position_rotation_work_vector);
             position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             position_rotation_work_vector[1] = 1.5707964f;
-            codebot_slot_private_data[1] = (int)spawn_codebot_slot_effect((char *)position_work_vector,
-                                                     (char *)position_rotation_work_vector);
+            codebot_slot_private_data[1] = (int)spawn_codebot_slot_effect(
+                (char *)position_work_vector, (char *)position_rotation_work_vector);
             codebot_slot_private_data[2] = 0;
             position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
@@ -198,8 +200,9 @@ void codebot_slot_update(struct Moby *moby) {
         break;
     case CODEBOT_SLOT_ANIMATE_EFFECT:
         if (codebot_slot_private_data[1] != 0) {
-            *(float *)&codebot_slot_private_data[2] = fast_add_rotations(*(float *)&codebot_slot_private_data[2],
-                                                    (360.0f / scale_time(360.0f)) * 0.017453292f);
+            *(float *)&codebot_slot_private_data[2] =
+                fast_add_rotations(*(float *)&codebot_slot_private_data[2],
+                                   (360.0f / scale_time(360.0f)) * 0.017453292f);
             angle = fast_cos(*(float *)&codebot_slot_private_data[2]) + 1.0f;
             position_work_vector[0] =
                 fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * angle;
@@ -234,8 +237,8 @@ void codebot_slot_update(struct Moby *moby) {
             position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             position_rotation_work_vector[1] = 1.5707964f;
             *(OvlQuad *)&position = *(OvlQuad *)&moby->pos;
-            codebot_slot_private_data[1] = (int)spawn_codebot_slot_effect((char *)&position,
-                                                     (char *)position_rotation_work_vector);
+            codebot_slot_private_data[1] = (int)spawn_codebot_slot_effect(
+                (char *)&position, (char *)position_rotation_work_vector);
         } else {
             position_work_vector[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             position_work_vector[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
@@ -244,8 +247,10 @@ void codebot_slot_update(struct Moby *moby) {
             clear_u64_value(position_rotation_work_vector);
             position_rotation_work_vector[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             position_rotation_work_vector[1] = 1.5707964f;
-            *(OvlQuad *)((char *)codebot_slot_private_data[1] + 0x10) = *(OvlQuad *)position_work_vector;
-            *(OvlQuad *)((char *)codebot_slot_private_data[1] + 0x40) = *(OvlQuad *)position_rotation_work_vector;
+            *(OvlQuad *)((char *)codebot_slot_private_data[1] + 0x10) =
+                *(OvlQuad *)position_work_vector;
+            *(OvlQuad *)((char *)codebot_slot_private_data[1] + 0x40) =
+                *(OvlQuad *)position_rotation_work_vector;
         }
         if (alternate_item_available[0x6D] == 0 &&
             count_missing_or_dying_mobys_in_list(codebot_slot_private_data[8]) > 9) {

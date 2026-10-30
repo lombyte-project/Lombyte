@@ -259,10 +259,13 @@ void batalia_deserter_update(WM *moby) {
         float pitch;
         qcopy(deserter_look_vectors.eye, moby->position);
         deserter_look_vectors.eye[2] += 1.0f;
-        fast_vec_sub(deserter_look_vectors.delta, deserter_look_vectors.target, deserter_look_vectors.eye);
-        yaw =
-            fast_subtract_rotations(FUN_001fa688_cf(deserter_look_vectors.delta[0], deserter_look_vectors.delta[1]), moby->yaw);
-        pitch = -FUN_001fa688_cf(vector_length_xy(deserter_look_vectors.delta), deserter_look_vectors.delta[2]);
+        fast_vec_sub(
+            deserter_look_vectors.delta, deserter_look_vectors.target, deserter_look_vectors.eye);
+        yaw = fast_subtract_rotations(
+            FUN_001fa688_cf(deserter_look_vectors.delta[0], deserter_look_vectors.delta[1]),
+            moby->yaw);
+        pitch = -FUN_001fa688_cf(vector_length_xy(deserter_look_vectors.delta),
+                                 deserter_look_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

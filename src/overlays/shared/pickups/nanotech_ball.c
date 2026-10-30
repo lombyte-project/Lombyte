@@ -1272,7 +1272,8 @@ void nanotech_ball_update(Moby *moby) {
         *(int *)&nanotech_ball_state->bob_offset = 0;
         nanotech_ball_state->h8 = 0;
         nanotech_ball_state->pos.z += 0.5f;
-        nanotech_ball_state->bob_phase = random_float_between(nanotech_ball_state->bob_offset, 3.1415927f);
+        nanotech_ball_state->bob_phase =
+            random_float_between(nanotech_ball_state->bob_offset, 3.1415927f);
         nanotech_ball_state->h56 = 0;
         nanotech_ball_state->hA = 0;
         for (i = 0; i < 4; i++)
@@ -1310,8 +1311,10 @@ void nanotech_ball_update(Moby *moby) {
         }
         {
             float yaw = random_float_between(0.0f, 6.2831855f);
-            build_spherical_offset(
-                &nanotech_ball_state->v20, 1.0f, yaw, random_float_between(-1.5707964f, 1.5707964f));
+            build_spherical_offset(&nanotech_ball_state->v20,
+                                   1.0f,
+                                   yaw,
+                                   random_float_between(-1.5707964f, 1.5707964f));
         }
         nanotech_ball_state->v20.w = randf_sym(0.785398006f, 1.5707964f);
     }
@@ -1358,7 +1361,8 @@ void nanotech_ball_update(Moby *moby) {
                 ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C++;
                 if (nanotech_ball_invulnerability_pickup_enabled != 0)
                     player->invulnerable_frames = func_001F9850_2D9EA0(0x258);
-                nanotech_ball_state->h54 = func_001F9850_2D9EA0(nanotech_ball_collection_lifetime_frames_gp);
+                nanotech_ball_state->h54 =
+                    func_001F9850_2D9EA0(nanotech_ball_collection_lifetime_frames_gp);
                 func_001F9C30_2D9EA0(&collection_target_or_end_tangent,
                                      &player->gravity_dir,
                                      -nanotech_ball_collection_target_gravity_offset_gp);
@@ -1414,8 +1418,10 @@ void nanotech_ball_update(Moby *moby) {
                 }
             }
         }
-        nanotech_ball_state->bob_offset = l00_nanotech_ball_bob_amplitude * func_001F9FA8_2D9EA0(nanotech_ball_state->bob_phase);
-        nanotech_ball_state->bob_phase = fast_add_rotations(nanotech_ball_state->bob_phase, nanotech_ball_bob_phase_step_gp);
+        nanotech_ball_state->bob_offset =
+            l00_nanotech_ball_bob_amplitude * func_001F9FA8_2D9EA0(nanotech_ball_state->bob_phase);
+        nanotech_ball_state->bob_phase =
+            fast_add_rotations(nanotech_ball_state->bob_phase, nanotech_ball_bob_phase_step_gp);
         if (D_L00_0015F63C == moby)
             update_nanotech_ball_slot_offsets();
         qcopy(&slot_rotation_basis_or_cull_position_or_start_tangent, &moby->pos);

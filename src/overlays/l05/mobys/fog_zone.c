@@ -113,8 +113,9 @@ void update_fog_zone(struct Moby *moby) {
     hero_position = (char *)&hero.motion.pos;
     if (is_point_inside_clip_volume(hero_position, *(int *)(fog_zone_vars + 0x38))) {
         int c;
-        fast_vec_sub(
-            hero_offset_from_volume_origin, hero_position, &l05_cuboids[*(int *)(fog_zone_vars + 0x38)].pos);
+        fast_vec_sub(hero_offset_from_volume_origin,
+                     hero_position,
+                     &l05_cuboids[*(int *)(fog_zone_vars + 0x38)].pos);
         hero_offset_from_volume_origin[3] = 0.0f;
         transform_vector_by_basis(hero_position_in_volume_space,
                                   hero_offset_from_volume_origin,

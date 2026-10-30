@@ -145,22 +145,34 @@ void draw_vendor_effects(char *vendor_effect_moby) {
     pk[1] = get_effect_texture(0x18);
 
     for (k = 0; k < 4; k++) {
-        transform_vector_by_basis(q[0], l00_vendor_sparkle_local_vertices[vendor_sparkle_quad_corners[k][0]], mtx);
-        transform_vector_by_basis(q[1], l00_vendor_sparkle_local_vertices[vendor_sparkle_quad_corners[k][1]], mtx);
-        transform_vector_by_basis(q[2], l00_vendor_sparkle_local_vertices[vendor_sparkle_quad_corners[k][2]], mtx);
-        transform_vector_by_basis(q[3], l00_vendor_sparkle_local_vertices[vendor_sparkle_quad_corners[k][3]], mtx);
+        transform_vector_by_basis(
+            q[0], l00_vendor_sparkle_local_vertices[vendor_sparkle_quad_corners[k][0]], mtx);
+        transform_vector_by_basis(
+            q[1], l00_vendor_sparkle_local_vertices[vendor_sparkle_quad_corners[k][1]], mtx);
+        transform_vector_by_basis(
+            q[2], l00_vendor_sparkle_local_vertices[vendor_sparkle_quad_corners[k][2]], mtx);
+        transform_vector_by_basis(
+            q[3], l00_vendor_sparkle_local_vertices[vendor_sparkle_quad_corners[k][3]], mtx);
 
-        qd.v[0][0] = *(float *)(vendor_effect_moby + 0x10) + q[0][0] * *(float *)(vendor_effect_vars + 0x90);
-        qd.v[0][1] = *(float *)(vendor_effect_moby + 0x14) + q[0][1] * *(float *)(vendor_effect_vars + 0x90);
+        qd.v[0][0] =
+            *(float *)(vendor_effect_moby + 0x10) + q[0][0] * *(float *)(vendor_effect_vars + 0x90);
+        qd.v[0][1] =
+            *(float *)(vendor_effect_moby + 0x14) + q[0][1] * *(float *)(vendor_effect_vars + 0x90);
         qd.v[0][2] = *(float *)(vendor_effect_moby + 0x18) + q[0][2];
-        qd.v[1][0] = *(float *)(vendor_effect_moby + 0x10) + q[1][0] * *(float *)(vendor_effect_vars + 0x90);
-        qd.v[1][1] = *(float *)(vendor_effect_moby + 0x14) + q[1][1] * *(float *)(vendor_effect_vars + 0x90);
+        qd.v[1][0] =
+            *(float *)(vendor_effect_moby + 0x10) + q[1][0] * *(float *)(vendor_effect_vars + 0x90);
+        qd.v[1][1] =
+            *(float *)(vendor_effect_moby + 0x14) + q[1][1] * *(float *)(vendor_effect_vars + 0x90);
         qd.v[1][2] = *(float *)(vendor_effect_moby + 0x18) + q[1][2];
-        qd.v[2][0] = *(float *)(vendor_effect_moby + 0x10) + q[2][0] * *(float *)(vendor_effect_vars + 0x90);
-        qd.v[2][1] = *(float *)(vendor_effect_moby + 0x14) + q[2][1] * *(float *)(vendor_effect_vars + 0x90);
+        qd.v[2][0] =
+            *(float *)(vendor_effect_moby + 0x10) + q[2][0] * *(float *)(vendor_effect_vars + 0x90);
+        qd.v[2][1] =
+            *(float *)(vendor_effect_moby + 0x14) + q[2][1] * *(float *)(vendor_effect_vars + 0x90);
         qd.v[2][2] = *(float *)(vendor_effect_moby + 0x18) + q[2][2];
-        qd.v[3][0] = *(float *)(vendor_effect_moby + 0x10) + q[3][0] * *(float *)(vendor_effect_vars + 0x90);
-        qd.v[3][1] = *(float *)(vendor_effect_moby + 0x14) + q[3][1] * *(float *)(vendor_effect_vars + 0x90);
+        qd.v[3][0] =
+            *(float *)(vendor_effect_moby + 0x10) + q[3][0] * *(float *)(vendor_effect_vars + 0x90);
+        qd.v[3][1] =
+            *(float *)(vendor_effect_moby + 0x14) + q[3][1] * *(float *)(vendor_effect_vars + 0x90);
         qd.v[3][2] = *(float *)(vendor_effect_moby + 0x18) + q[3][2];
 
         i0 = vendor_sparkle_quad_corners[k][0];
@@ -275,7 +287,8 @@ void draw_vendor_effects(char *vendor_effect_moby) {
         T[0].f[2] = 0.59f;
         transform_vector_by_basis(T[0].f, T[0].f, vendor_effect_moby + 0xC0);
         fast_vec_add(T[0].f, T[0].f, vendor_effect_moby + 0x10);
-        draw_offset_textured_effect_quad(T[0].f, *(int *)(vendor_effect_moby + 0x90) & 0xFFFF0000, 0.1333f, zero);
+        draw_offset_textured_effect_quad(
+            T[0].f, *(int *)(vendor_effect_moby + 0x90) & 0xFFFF0000, 0.1333f, zero);
     }
 }
 

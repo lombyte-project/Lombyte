@@ -128,7 +128,8 @@ void PrepareMpegPictureFieldTransfers(struct MpegFieldTransferState *state,
     state->horizontal_offset1 = secondary->horizontal_offset1;
     state->vertical_offset0 = primary->vertical_offset0;
     state->vertical_offset1 = secondary->vertical_offset1;
-    if (_isOutSizeOK(state, first_field_ref_image) && first_field_ref_image->status == 1 && second_field_ref_image->status == 1) {
+    if (_isOutSizeOK(state, first_field_ref_image) && first_field_ref_image->status == 1 &&
+        second_field_ref_image->status == 1) {
         first_field_ref_image->macroblock_height *= 2;
         if (state->decoder_initialized)
             _csc_storeRefImage(state, first_field_ref_image);

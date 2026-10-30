@@ -70,7 +70,8 @@ int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
             listed_moby[0x31] = 0;
             activated_moby_data = ((char *)MOBY(listed_moby)->pvars);
             MOBY(listed_moby)->collision = *(int *)(((char *)MOBY(listed_moby)->pclass) + 0x10);
-            *(float *)(activated_moby_data + 0x64) = random_float_between(-15.0f, 15.0f) * DEG_TO_RAD;
+            *(float *)(activated_moby_data + 0x64) =
+                random_float_between(-15.0f, 15.0f) * DEG_TO_RAD;
             *(int *)(activated_moby_data + 0x68) = scale_game_frames(0x3C);
             qcopy(listed_moby + 0x10, pos);
             MOBY(listed_moby)->pos.z -= 1.0f;

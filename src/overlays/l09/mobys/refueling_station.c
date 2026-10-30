@@ -88,10 +88,14 @@ extern void         spawn_explosion(void *,
 
 extern s32 D_L09_0015F5CC NOT_SDA;
 
-void handle_refueling_station_damage(struct Moby *moby, VendorVars *refueling_station_vars, f32 *health) {
+void handle_refueling_station_damage(struct Moby *moby,
+                                     VendorVars  *refueling_station_vars,
+
+                                     f32 *health) {
     enum {
-        DAMAGE_RESULT_UNAVAILABLE = 0
-    , DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11};
+        DAMAGE_RESULT_UNAVAILABLE = 0,
+        DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11
+    };
     VendorHitSource *damage_hit_record;
     struct Moby     *link;
     s32              hit;

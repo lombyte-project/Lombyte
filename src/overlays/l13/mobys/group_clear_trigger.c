@@ -51,10 +51,12 @@ void update_group_clear_trigger(struct Moby *moby) {
         }
     }
     clip_volume_subject_base = D_0013E533 + 0xE1D;
-    if (*(int *)(clip_volume_subject_base + 0x15F0) != 0 && *(int *)(clip_volume_subject_base + 0x2084) == 0x32)
+    if (*(int *)(clip_volume_subject_base + 0x15F0) != 0 &&
+        *(int *)(clip_volume_subject_base + 0x2084) == 0x32)
         return;
     if (*(int *)(moby_vars + 0x28) != -1 &&
-        is_point_inside_clip_volume(clip_volume_subject_base + 0x80, *(int *)(moby_vars + 0x28)) == 0)
+        is_point_inside_clip_volume(clip_volume_subject_base + 0x80, *(int *)(moby_vars + 0x28)) ==
+            0)
         return;
     if (*(int *)(moby_vars + 0x20) != -1)
         moby->state = moby_vars[0x20];

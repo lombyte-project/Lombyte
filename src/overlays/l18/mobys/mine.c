@@ -59,12 +59,15 @@ void update_mine(struct Moby *moby) {
         if (moby->pos.z < *(float *)(class_238_update_private_vars + 0x178)) {
             moby->pos.z = *(float *)(class_238_update_private_vars + 0x178);
             moby->state = 2;
-            *(float *)(class_238_update_private_vars + 0x188) = -(D_L18_00161994 * 2.0f * frame_time);
+            *(float *)(class_238_update_private_vars + 0x188) =
+                -(D_L18_00161994 * 2.0f * frame_time);
         }
         break;
     case STATE_POST_FLIGHT_SETTLING: {
         float settling_motion_step =
-            approach_value((float *)(class_238_update_private_vars + 0x188), 0.0f, D_L18_00161994 * 2.0f * frame_time_sq);
+            approach_value((float *)(class_238_update_private_vars + 0x188),
+                           0.0f,
+                           D_L18_00161994 * 2.0f * frame_time_sq);
         moby->rot.y += settling_motion_step;
         settling_displacement_or_steering_increment[0] =
             fast_cos(moby->rot.z) * settling_motion_step;
@@ -122,7 +125,8 @@ void update_mine(struct Moby *moby) {
                 fast_vec_sub(movement_step, &moby->pos, previous_position);
                 if (0.0f < *(float *)(class_238_update_private_vars + 0x48)) {
                     *(float *)(class_238_update_private_vars + 0x48) = 0.0f;
-                } else if (*(float *)(class_238_update_private_vars + 0x48) < -movement_step_limit) {
+                } else if (*(float *)(class_238_update_private_vars + 0x48) <
+                           -movement_step_limit) {
                     *(float *)(class_238_update_private_vars + 0x48) = -movement_step_limit;
                 }
                 if (*(char **)(target_search_output + 0x40) != (char *)D_001413D0[0]) {
@@ -210,7 +214,8 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
         do {
             encoded_moby_entry = *moby_list_entry;
             {
-                char *candidate_moby = moby_instance_array_base + ((encoded_moby_entry & 0x7FFF) << 8);
+                char *candidate_moby =
+                    moby_instance_array_base + ((encoded_moby_entry & 0x7FFF) << 8);
                 if (MOBY(candidate_moby)->oclass == 0x238) {
                     if (((unsigned char *)candidate_moby)[0x20] == 5) {
                         found = candidate_moby;
@@ -247,15 +252,18 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
         qcopy(class_238_private_vars + 0x170, adjusted_target_position);
         fast_vec_sub(class_238_private_vars + 0x180, adjusted_target_position, launch_position);
         *(int *)(class_238_private_vars + 0x188) = 0;
-        fast_vec_normalize(class_238_private_vars + 0x180, class_238_private_vars + 0x180, horizontal_speed);
+        fast_vec_normalize(
+            class_238_private_vars + 0x180, class_238_private_vars + 0x180, horizontal_speed);
         ballistic_gravity_magnitude = frame_time_sq * 10.0f;
         *(short *)(class_238_private_vars + 0xC8) = 0;
-        *(float *)(class_238_private_vars + 0x188) = FUN_L00_0025abf0_q(launch_position,
-                                                      adjusted_target_position,
-                                                      0,
-                                                      horizontal_speed,
-                                                      -ballistic_gravity_magnitude);
-        MOBY(moby)->rot.z = fast_arc_tan(*(float *)(class_238_private_vars + 0x180), *(float *)(class_238_private_vars + 0x184));
+        *(float *)(class_238_private_vars + 0x188) =
+            FUN_L00_0025abf0_q(launch_position,
+                               adjusted_target_position,
+                               0,
+                               horizontal_speed,
+                               -ballistic_gravity_magnitude);
+        MOBY(moby)->rot.z = fast_arc_tan(*(float *)(class_238_private_vars + 0x180),
+                                         *(float *)(class_238_private_vars + 0x184));
         *(int *)(class_238_private_vars + 0x194) = detonation_countdown;
         *(int *)(class_238_private_vars + 0x198) = launching_moby;
         *(int *)(class_238_private_vars + 0x19C) = 0;

@@ -206,7 +206,8 @@ void help_desk_lady_update(L16WatchMoby *moby) {
         qcopy(gaze_vectors.eye, moby->position);
         gaze_vectors.eye[2] += 1.5f;
         fast_vec_sub(gaze_vectors.delta, gaze_vectors.target, gaze_vectors.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(gaze_vectors.delta[0], gaze_vectors.delta[1]), moby->yaw);
+        yaw = fast_subtract_rotations(fast_arc_tan(gaze_vectors.delta[0], gaze_vectors.delta[1]),
+                                      moby->yaw);
         pitch = -fast_arc_tan(vector_length_xy(gaze_vectors.delta), gaze_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;

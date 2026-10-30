@@ -224,7 +224,8 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
         *(int *)(relocation_vars + 0x164) = -1;
         qcopy(&moby->pos, (char *)(entry_off + (int)mobys) + 0x30);
         relocation_transform_record = (char *)(entry_off + (int)mobys);
-        moby->rot.z = yaw = fast_arc_tan(*(float *)(relocation_transform_record + 0), *(float *)(relocation_transform_record + 4));
+        moby->rot.z = yaw = fast_arc_tan(*(float *)(relocation_transform_record + 0),
+                                         *(float *)(relocation_transform_record + 4));
         qcopy(fx_pos, &moby->pos);
         fx_pos[0] += fast_cos(yaw) * 1.5f;
         fx_pos[1] += fast_sin(moby->rot.z) * 1.5f;

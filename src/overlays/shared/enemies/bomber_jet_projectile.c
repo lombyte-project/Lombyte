@@ -136,7 +136,8 @@ void update_explosive_projectile(struct Moby *moby) {
             fast_vec_normalize(
                 &smoke_pos, projectile_vars, -random_float_between(D_0015ED6C * 0.1f, D_0015ED6C));
             fast_vec_add(&smoke_vel, &smoke_vel, &smoke_pos);
-            fast_vec_normalize(&smoke_pos, projectile_vars, random_float_between(0.0f, 1.0f) * step_length);
+            fast_vec_normalize(
+                &smoke_pos, projectile_vars, random_float_between(0.0f, 1.0f) * step_length);
             fast_vec_add(&smoke_pos, &smoke_pos, &(*(Vec_2F7E08 *)&moby->pos));
             spawn_effect(&smoke_pos,
                          &smoke_vel,
@@ -146,7 +147,8 @@ void update_explosive_projectile(struct Moby *moby) {
                          0x50,
                          random_int_between(0x50, 0x8C) / rate_divisor,
                          1);
-            fast_vec_normalize(&smoke_pos, projectile_vars, random_float_between(0.0f, 1.0f) * step_length);
+            fast_vec_normalize(
+                &smoke_pos, projectile_vars, random_float_between(0.0f, 1.0f) * step_length);
             fast_vec_add(&smoke_pos, &smoke_pos, &(*(Vec_2F7E08 *)&moby->pos));
             spawn_effect(&smoke_pos,
                          &smoke_vel,
@@ -163,7 +165,8 @@ void update_explosive_projectile(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (fast_vec_dist(&projectile_vars->target, &(*(Vec_2F7E08 *)&moby->pos)) < projectile_vars->f38) {
+    if (fast_vec_dist(&projectile_vars->target, &(*(Vec_2F7E08 *)&moby->pos)) <
+        projectile_vars->f38) {
         qcopy(&(*(Vec_2F7E08 *)&moby->pos), &projectile_vars->target);
         moby->state = 1;
     }
@@ -385,7 +388,8 @@ void update_explosive_projectile(struct Moby *moby) {
         for (link = 0; link < 4; link++) {
             if (cutscene_active_macro == 0 && projectile_vars->ids[link] != -1) {
                 if (((struct Moby *)ents_macro)[projectile_vars->ids[link]].oclass == 0x2BC) {
-                    Tgt *target = (*(void **)&((struct Moby *)ents_macro)[projectile_vars->ids[link]].pvars);
+                    Tgt *target =
+                        (*(void **)&((struct Moby *)ents_macro)[projectile_vars->ids[link]].pvars);
                     if (target->h4 == 0 && target->timer == 0 &&
                         is_point_inside_clip_volume(((char *)&D_0013F3D0), target->vol) != 0 &&
                         is_point_inside_clip_volume(D_L01_00167240, target->vol) != 0) {

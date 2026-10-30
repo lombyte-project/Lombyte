@@ -648,9 +648,12 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 draw_target_reticle(
                     (int)wrench_moby, 0xFF917267, 1.0f, 0.0f, 0, 0x25, -1, 90.0f, 4);
             wrench_vars->aim_hit = 0;
-            build_spherical_offset(wrench_collision_scratch.v[0], 10.0f, l00_camera.yaw, -l00_camera.pitch);
-            fast_vec_add(wrench_collision_scratch.v[0], wrench_collision_scratch.v[0], l00_camera.pos.f);
-            if (FUN_001efa68(l00_camera.pos.f, wrench_collision_scratch.v[0], 4, (int)player->moby, 0)) {
+            build_spherical_offset(
+                wrench_collision_scratch.v[0], 10.0f, l00_camera.yaw, -l00_camera.pitch);
+            fast_vec_add(
+                wrench_collision_scratch.v[0], wrench_collision_scratch.v[0], l00_camera.pos.f);
+            if (FUN_001efa68(
+                    l00_camera.pos.f, wrench_collision_scratch.v[0], 4, (int)player->moby, 0)) {
                 wrench_vars->aim_hit = player_state;
                 qcopy(wrench_vars->target, collision_hit.position);
             }
@@ -736,7 +739,9 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 yaw = fast_add_rotations(yaw, 1.5707964f);
         }
         fast_vec_sub(wrench_collision_scratch.v[0], sweep_end(), (sweep_end() - 4));
-        fast_vec_normalize(wrench_collision_scratch.v[0], wrench_collision_scratch.v[0], fast_vec_length(wrench_collision_scratch.v[0]) + 0.17f);
+        fast_vec_normalize(wrench_collision_scratch.v[0],
+                           wrench_collision_scratch.v[0],
+                           fast_vec_length(wrench_collision_scratch.v[0]) + 0.17f);
         if (sweep_hero()->move_mode != 15 && sweep_hero()->state != 112 &&
             sweep_hero()->state != 20) {
             difference = fast_difference_between_rotations(
@@ -761,8 +766,12 @@ void wrench_update(WrenchMoby *wrench_moby) {
             wrench_collision_scratch.v[2][1] = fast_sin(angle) * 1.4f;
             wrench_collision_scratch.v[2][2] = 0.0f;
             scale_wrench_collision_vector_by_heading(wrench_collision_scratch.v[2]);
-            fast_vec_add(wrench_collision_scratch.v[1], wrench_collision_scratch.v[1], wrench_collision_scratch.v[2]);
-            if (!sweep_hero()->attack_cooldown && FUN_001efa68(wrench_collision_scratch.v[0], wrench_collision_scratch.v[1], 2, 0, 0) &&
+            fast_vec_add(wrench_collision_scratch.v[1],
+                         wrench_collision_scratch.v[1],
+                         wrench_collision_scratch.v[2]);
+            if (!sweep_hero()->attack_cooldown &&
+                FUN_001efa68(
+                    wrench_collision_scratch.v[0], wrench_collision_scratch.v[1], 2, 0, 0) &&
                 collision_hit_material()) {
                 if (!collision_hit.moby ||
                     is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(
@@ -788,8 +797,10 @@ void wrench_update(WrenchMoby *wrench_moby) {
             allocate_voice_for_target_entry(2, 0, wrench_moby);
             qcopy(wrench_collision_scratch.v[0], wrench_hero()->sweep_end);
             qcopy(wrench_collision_scratch.v[1], wrench_collision_scratch.v[0]);
-            offset_hero_position_against_gravity(wrench_collision_scratch.v[0], wrench_collision_scratch.v[0], 0.7f);
-            offset_hero_position_against_gravity(wrench_collision_scratch.v[1], wrench_collision_scratch.v[1], -0.9f);
+            offset_hero_position_against_gravity(
+                wrench_collision_scratch.v[0], wrench_collision_scratch.v[0], 0.7f);
+            offset_hero_position_against_gravity(
+                wrench_collision_scratch.v[1], wrench_collision_scratch.v[1], -0.9f);
             if (FUN_001efa68(wrench_collision_scratch.v[0], wrench_collision_scratch.v[1], 2, 0, 0))
                 spawn_wrench_impact_effects((char *)wrench_moby);
         }
@@ -803,8 +814,13 @@ void wrench_update(WrenchMoby *wrench_moby) {
             wrench_collision_scratch.v[3][0] = fast_cos(yaw);
             wrench_collision_scratch.v[3][1] = fast_sin(yaw);
             wrench_collision_scratch.v[3][2] = 0.0f;
-            make_hit_descriptor(wrench_collision_scratch.v[0], wrench_moby, 0x10000, (float)count, wrench_collision_scratch.v[3]);
-            set_vector_length_xy(wrench_collision_scratch.v[0], wrench_collision_scratch.v[0], scale);
+            make_hit_descriptor(wrench_collision_scratch.v[0],
+                                wrench_moby,
+                                0x10000,
+                                (float)count,
+                                wrench_collision_scratch.v[3]);
+            set_vector_length_xy(
+                wrench_collision_scratch.v[0], wrench_collision_scratch.v[0], scale);
             wrench_collision_scratch.query.force = 1.0f;
             wrench_collision_scratch.query.range = 5627.925f;
             wrench_collision_scratch.query.enabled = 1;
@@ -831,14 +847,21 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 }
             }
             fast_vec_sub(wrench_collision_scratch.v[5], sweep_end(), (sweep_end() - 4));
-            fast_vec_normalize(wrench_collision_scratch.v[5], wrench_collision_scratch.v[5], fast_vec_length(wrench_collision_scratch.v[5]) - 0.085f);
-            fast_vec_add(wrench_collision_scratch.v[4], wrench_collision_scratch.v[5], (sweep_end() - 4));
+            fast_vec_normalize(wrench_collision_scratch.v[5],
+                               wrench_collision_scratch.v[5],
+                               fast_vec_length(wrench_collision_scratch.v[5]) - 0.085f);
+            fast_vec_add(
+                wrench_collision_scratch.v[4], wrench_collision_scratch.v[5], (sweep_end() - 4));
             radius = 0.35f;
             if (sweep_hero()->move_mode == 15)
                 radius = 0.7f;
             if (sweep_hero()->state == 20)
                 radius = 0.47f;
-            if (collide_sphere(wrench_collision_scratch.v[4], radius, 0, sweep_hero()->moby, wrench_collision_scratch.v[0]) &&
+            if (collide_sphere(wrench_collision_scratch.v[4],
+                               radius,
+                               0,
+                               sweep_hero()->moby,
+                               wrench_collision_scratch.v[0]) &&
                 (!D_L00_00177F00[0] || !D_L00_00177F00[0]->model ||
                  D_L00_00177F00[0]->model->kind != 18)) {
                 if (should_trigger_wrench_hit_reaction())
@@ -896,7 +919,8 @@ void wrench_update(WrenchMoby *wrench_moby) {
             qcopy(wrench_collision_scratch.v[1], hero_velocity());
             fast_vec_scale(wrench_collision_scratch.v[1], wrench_collision_scratch.v[1], 0.7f);
             fast_vec_add(position, position, wrench_collision_scratch.v[1]);
-            fast_vec_normalize(wrench_collision_scratch.v[1], wrench_vars->direction, wrench_vars->speed);
+            fast_vec_normalize(
+                wrench_collision_scratch.v[1], wrench_vars->direction, wrench_vars->speed);
             fast_vec_add(position, position, wrench_collision_scratch.v[1]);
             wrench_vars->acceleration += frame_time_cube * 170.0f;
             approach_value(&wrench_vars->speed, 0.0f, wrench_vars->acceleration);
@@ -906,7 +930,8 @@ void wrench_update(WrenchMoby *wrench_moby) {
             int   arrived = 0;
             float length, steps;
             process_mobies_near_returning_wrench((char *)wrench_moby);
-            fast_vec_sub(wrench_collision_scratch.v[1], ((char *)&wrench_return_position), position);
+            fast_vec_sub(
+                wrench_collision_scratch.v[1], ((char *)&wrench_return_position), position);
             wrench_vars->acceleration += frame_time_sq * 0.9f;
             wrench_vars->speed += wrench_vars->acceleration;
             length = fast_vec_length(wrench_collision_scratch.v[1]);
@@ -918,7 +943,8 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 wrench_vars->speed = length;
                 arrived = 1;
             }
-            fast_vec_normalize(wrench_collision_scratch.v[1], wrench_collision_scratch.v[1], wrench_vars->speed);
+            fast_vec_normalize(
+                wrench_collision_scratch.v[1], wrench_collision_scratch.v[1], wrench_vars->speed);
             fast_vec_add(position, position, wrench_collision_scratch.v[1]);
             if (length / wrench_vars->speed < (float)scale_game_frames(4) &&
                 wrench_hero()->selected_weapon != -1) {
@@ -949,7 +975,8 @@ void wrench_update(WrenchMoby *wrench_moby) {
             }
         }
         collided = 0;
-        if (FUN_001efa68(wrench_collision_scratch.v[0], position, 2, 0, 0) && collision_hit_material() &&
+        if (FUN_001efa68(wrench_collision_scratch.v[0], position, 2, 0, 0) &&
+            collision_hit_material() &&
             (!collision_hit.moby || !is_moby_in_class_range_500_to_540((int)collision_hit.moby)))
             collided = collision_hit.surface != 0;
         if (collided || wrench_vars->collision) {
@@ -969,22 +996,38 @@ void wrench_update(WrenchMoby *wrench_moby) {
         if (wrench_moby->state == 11)
             radius = -0.37f;
         fast_vec_normalize(wrench_collision_scratch.v[4], wrench_vars->direction, radius);
-        make_hit_descriptor(wrench_collision_scratch.v[1], wrench_moby, 0x10000, 1.0f, wrench_collision_scratch.v[4]);
+        make_hit_descriptor(wrench_collision_scratch.v[1],
+                            wrench_moby,
+                            0x10000,
+                            1.0f,
+                            wrench_collision_scratch.v[4]);
         wrench_collision_scratch.shifted.query.force = 1.0f;
         wrench_collision_scratch.shifted.query.range = 5627.925f;
         wrench_collision_scratch.shifted.query.enabled = 1;
         wrench_collision_scratch.shifted.query.class_id = wrench_hero()->hit_index + 1;
         wrench_collision_scratch.shifted.query.flags = 0;
         moby_point_position(wrench_moby, 1, wrench_collision_scratch.v[5]);
-        if (collide_sphere(wrench_collision_scratch.v[5], 0.4f, 0, wrench_hero()->moby, wrench_collision_scratch.v[1]) ||
+        if (collide_sphere(wrench_collision_scratch.v[5],
+                           0.4f,
+                           0,
+                           wrench_hero()->moby,
+                           wrench_collision_scratch.v[1]) ||
             (moby_point_position(wrench_moby, 0, wrench_collision_scratch.v[5]),
-             collide_sphere(wrench_collision_scratch.v[5], 0.4f, 0, wrench_hero()->moby, wrench_collision_scratch.v[1]))) {
+             collide_sphere(wrench_collision_scratch.v[5],
+                            0.4f,
+                            0,
+                            wrench_hero()->moby,
+                            wrench_collision_scratch.v[1]))) {
             if (!wrench_hero()->attack_cooldown && collision_hit.moby &&
                 (!collision_hit.moby->model || collision_hit.moby->model->kind != 20)) {
                 MobyHitState *hit = (MobyHitState *)get_moby_target_info(collision_hit.moby);
-                if (!hit || hit->hit_count < 2 || hit->hit_index != wrench_collision_scratch.shifted.query.class_id) {
+                if (!hit || hit->hit_count < 2 ||
+                    hit->hit_index != wrench_collision_scratch.shifted.query.class_id) {
                     wrench_collision_scratch.q[7] = *(WrenchQuad *)collision_hit.moby->position;
-                    interpolate_vector(wrench_collision_scratch.v[6], wrench_collision_scratch.v[5], wrench_collision_scratch.v[7], 0.5f);
+                    interpolate_vector(wrench_collision_scratch.v[6],
+                                       wrench_collision_scratch.v[5],
+                                       wrench_collision_scratch.v[7],
+                                       0.5f);
                     emit_randomized_sparkle_pairs(wrench_collision_scratch.v[6], 5);
                     wrench_vars->timer = scale_game_frames(30);
                     wrench_hero()->attack_cooldown = 1;

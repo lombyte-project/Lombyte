@@ -19,7 +19,8 @@ s32 sif_load_module_server_changed(void) {
     new_var = D_0012FBEC;
     if ((memcmp(D_00158428, new_var, 4) != 0) &&
         (memcmp(D_00158428, sif_load_module_version_reference[0], 4) != 0)) {
-        records_pairwise_distinct = memcmp(D_0012FBEC, sif_load_module_version_reference[0], 4) != 0;
+        records_pairwise_distinct =
+            memcmp(D_0012FBEC, sif_load_module_version_reference[0], 4) != 0;
     }
     return records_pairwise_distinct;
 }

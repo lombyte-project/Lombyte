@@ -124,7 +124,8 @@ void update_machinegun_turret_projectile(struct Moby *moby) {
         return;
     }
     if ((moby->visible != 0 || vector_distance_xy(&moby->pos, &hero.motion.pos) < 30.0f) &&
-        collision_line(&previous_projectile_position, &moby->pos, pass, bolt_vars->ignore, bolt_vars) != 0) {
+        collision_line(
+            &previous_projectile_position, &moby->pos, pass, bolt_vars->ignore, bolt_vars) != 0) {
         qcopy(&moby->pos, &D_L07_00173EE0);
         if (moby->visible != 0) {
             for (j = 0; j < 5; j++) {

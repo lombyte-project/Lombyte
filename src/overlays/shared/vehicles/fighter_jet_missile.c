@@ -141,9 +141,9 @@ unsigned char *spawn_fighter_jet_missile(char  *launching_moby,
         *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) =
             truncate_float_to_s32(travel_distance / step_length);
         MOBY(spawned_moby)->flags = 0x200;
-        MOBY(spawned_moby)->scale =
-            *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) *
-            (*(float *)(launching_moby + 0x2C) / *(float *)(*(char **)(launching_moby + 0x24) + 0x24));
+        MOBY(spawned_moby)->scale = *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) *
+                                    (*(float *)(launching_moby + 0x2C) /
+                                     *(float *)(*(char **)(launching_moby + 0x24) + 0x24));
         spawned_moby[0x23] = truncate_float_to_s32(*(float *)(moby_vars + 0x10) * 24.0f);
         set_moby_color(spawned_moby, 0xFF, 0xFF, 0xFF);
         update_entity(spawned_moby);
@@ -188,9 +188,9 @@ void update_fighter_jet_missile(struct Moby *moby) {
     if (missile_vars->target != 0) {
         copy_xyz_089d0(missile_vars->target_pos, (float *)&missile_vars->target->pos);
         speed = fast_vec_length(missile_vars);
-        yaw_off = fast_subtract_rotations(
-            fast_arc_tan(missile_vars->target->pos.x - moby->pos.x, missile_vars->target->pos.y - moby->pos.y),
-            moby->rot.z);
+        yaw_off = fast_subtract_rotations(fast_arc_tan(missile_vars->target->pos.x - moby->pos.x,
+                                                       missile_vars->target->pos.y - moby->pos.y),
+                                          moby->rot.z);
         yaw = absolute_float(yaw_off);
         pitch_off = fast_subtract_rotations(
             -fast_arc_tan(vector_distance_xy(&moby->pos, &missile_vars->target->pos),

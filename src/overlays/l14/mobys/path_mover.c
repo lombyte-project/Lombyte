@@ -96,7 +96,8 @@ void update_path_mover(struct Moby *moby) {
     {
         u16 id;
 
-        if (path_mover_vars->trigger == -1 || is_point_inside_clip_volume(&hero.motion.pos, path_mover_vars->trigger) ||
+        if (path_mover_vars->trigger == -1 ||
+            is_point_inside_clip_volume(&hero.motion.pos, path_mover_vars->trigger) ||
             D_L14_001BB930.cleared[(s16)(id = moby->save_id)] != 0 ||
             (D_0014C190_257218[current_level_index][(s16)id >> 5] >> (id & 0x1F)) & 1) {
             if (path_mover_vars->trigger != -1) {
@@ -143,7 +144,8 @@ void update_path_mover(struct Moby *moby) {
                 (far = fast_vec_dist(&hero.motion.pos, &path->points[path->count - 1]),
                  fast_vec_dist(&hero.motion.pos, &path->points[0]) < far)) {
                 moby->command = 2;
-                path_mover_vars->target_speed = -1.0f / scale_time(path_mover_vars->travel_time * 60.0f);
+                path_mover_vars->target_speed =
+                    -1.0f / scale_time(path_mover_vars->travel_time * 60.0f);
                 path_mover_vars->retrigger = 0;
             }
         }
@@ -156,7 +158,8 @@ void update_path_mover(struct Moby *moby) {
                 (near = fast_vec_dist(&hero.motion.pos, &path->points[0]),
                  fast_vec_dist(&hero.motion.pos, &path->points[path->count - 1]) < near)) {
                 moby->command = 2;
-                path_mover_vars->target_speed = 1.0f / scale_time(path_mover_vars->travel_time * 60.0f);
+                path_mover_vars->target_speed =
+                    1.0f / scale_time(path_mover_vars->travel_time * 60.0f);
                 path_mover_vars->retrigger = 0;
             }
         }
@@ -167,7 +170,8 @@ void update_path_mover(struct Moby *moby) {
             hero.unk1F4 = 4;
         }
         if (path_mover_vars->wait != 0 ||
-            (path_mover_vars->rise < 0.0f && vector_distance_xy(&moby->pos, &hero.motion.pos) < 2.0f &&
+            (path_mover_vars->rise < 0.0f &&
+             vector_distance_xy(&moby->pos, &hero.motion.pos) < 2.0f &&
              absolute_float(hero.motion.pos.f[2] - moby->pos.z) < 4.0f &&
              moby->pos.z - hero.motion.pos.f[2] > 1.0f)) {
             s32 voice;
@@ -195,7 +199,8 @@ void update_path_mover(struct Moby *moby) {
                 path_mover_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
             }
             path_mover_vars->speed += path_mover_vars->target_speed * frame_time;
-            if (absolute_float(path_mover_vars->speed) > absolute_float(path_mover_vars->target_speed)) {
+            if (absolute_float(path_mover_vars->speed) >
+                absolute_float(path_mover_vars->target_speed)) {
                 path_mover_vars->speed = path_mover_vars->target_speed;
             }
             path_mover_vars->t = path_mover_vars->t + path_mover_vars->speed;

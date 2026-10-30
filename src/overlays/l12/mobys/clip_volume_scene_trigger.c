@@ -28,7 +28,8 @@ void update_clip_volume_scene_trigger(struct Moby *moby) {
     char *destination_base;
     if (D_L12_0015F5CC != 0 && D_L12_0015F5C4 == 0) {
         scene_trigger_latch_base = alternate_item_available;
-        if (*(unsigned char *)(*(int *)(scene_trigger_config + 4) + scene_trigger_latch_base + 0x5C) != 0) {
+        if (*(unsigned char *)(*(int *)(scene_trigger_config + 4) + scene_trigger_latch_base +
+                               0x5C) != 0) {
             mark_moby_for_removal(moby);
             return;
         }

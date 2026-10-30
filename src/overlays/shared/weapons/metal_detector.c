@@ -284,7 +284,8 @@ void metal_detector_update(struct Moby *moby) {
             hero.metal_detector_target->state != 0xFE &&
             hero.metal_detector_target->state != 0xFD) {
             pitch = vector_distance_xy(&metal_detector_vars->pos, &hero.metal_detector_target->pos);
-            pitch = fast_arc_tan(pitch, hero.metal_detector_target->pos.z - metal_detector_vars->pos.f[2]);
+            pitch = fast_arc_tan(pitch,
+                                 hero.metal_detector_target->pos.z - metal_detector_vars->pos.f[2]);
             yaw = fast_arc_tan(hero.metal_detector_target->pos.x - metal_detector_vars->pos.f[0],
                                hero.metal_detector_target->pos.y - metal_detector_vars->pos.f[1]);
             yaw = fast_subtract_rotations(yaw, hero.motion.rot.f[2]);
@@ -349,7 +350,8 @@ void metal_detector_update(struct Moby *moby) {
         if ((controller_state_lui.held & 0x20) &&
             hero.items[0].ready_frames > scale_game_frames(0xF)) {
             if (hero.detector_target_dist < 10.0f) {
-                if (voice_is_playing(moby, metal_detector_vars->voice2) == 0 && metal_detector_vars->voice2 == -1) {
+                if (voice_is_playing(moby, metal_detector_vars->voice2) == 0 &&
+                    metal_detector_vars->voice2 == -1) {
                     metal_detector_vars->voice2 = allocate_voice_for_target_entry(1, 4, moby);
                 }
                 if (metal_detector_vars->voice2 != -1) {
@@ -405,7 +407,8 @@ void metal_detector_update(struct Moby *moby) {
                     allocate_voice_for_target_entry(3, 0, moby);
                     if (metal_detector_vars->voice2 != -1) {
                         VoiceSlot2d2ee8 *e =
-                            (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice2 * 0x70);
+                            (VoiceSlot2d2ee8 *)(voice_pool_lui +
+                                                metal_detector_vars->voice2 * 0x70);
 
                         if (e->owner == moby && e->active != 0) {
                             release_voice_slot(metal_detector_vars->voice2);
@@ -416,7 +419,8 @@ void metal_detector_update(struct Moby *moby) {
             } else {
                 moby->glow_color = 0x80808080;
                 if (metal_detector_vars->voice0 != -1) {
-                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice0 * 0x70);
+                    VoiceSlot2d2ee8 *e =
+                        (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice0 * 0x70);
 
                     if (e->owner == moby && e->active != 0) {
                         release_voice_slot(metal_detector_vars->voice0);
@@ -424,7 +428,8 @@ void metal_detector_update(struct Moby *moby) {
                 }
                 metal_detector_vars->voice0 = -1;
                 if (metal_detector_vars->voice1 != -1) {
-                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice1 * 0x70);
+                    VoiceSlot2d2ee8 *e =
+                        (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice1 * 0x70);
 
                     if (e->owner == moby && e->active != 0) {
                         release_voice_slot(metal_detector_vars->voice1);
@@ -432,7 +437,8 @@ void metal_detector_update(struct Moby *moby) {
                 }
                 metal_detector_vars->voice1 = -1;
                 if (metal_detector_vars->voice2 != -1) {
-                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice2 * 0x70);
+                    VoiceSlot2d2ee8 *e =
+                        (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice2 * 0x70);
 
                     if (e->owner == moby && e->active != 0) {
                         release_voice_slot(metal_detector_vars->voice2);
@@ -445,7 +451,8 @@ void metal_detector_update(struct Moby *moby) {
         }
         moby->glow_color = 0x80808080;
         if (metal_detector_vars->voice0 != -1) {
-            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice0 * 0x70);
+            VoiceSlot2d2ee8 *e =
+                (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice0 * 0x70);
 
             if (e->owner == moby && e->active != 0) {
                 release_voice_slot(metal_detector_vars->voice0);
@@ -453,7 +460,8 @@ void metal_detector_update(struct Moby *moby) {
         }
         metal_detector_vars->voice0 = -1;
         if (metal_detector_vars->voice1 != -1) {
-            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice1 * 0x70);
+            VoiceSlot2d2ee8 *e =
+                (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice1 * 0x70);
 
             if (e->owner == moby && e->active != 0) {
                 release_voice_slot(metal_detector_vars->voice1);
@@ -461,7 +469,8 @@ void metal_detector_update(struct Moby *moby) {
         }
         metal_detector_vars->voice1 = -1;
         if (metal_detector_vars->voice2 != -1) {
-            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice2 * 0x70);
+            VoiceSlot2d2ee8 *e =
+                (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice2 * 0x70);
 
             if (e->owner == moby && e->active != 0) {
                 release_voice_slot(metal_detector_vars->voice2);

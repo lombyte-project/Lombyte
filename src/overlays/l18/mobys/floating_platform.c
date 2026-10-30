@@ -106,14 +106,17 @@ void floating_platform_update(struct Moby *moby) {
         moby->state = 4;
         break;
     case STATE_WAIT_FOR_SINK_TRIGGER:
-        if (moby->visible != 0 && fast_dec_timer((int *)(floating_platform_update_private_vars + 0x8C)) != 0) {
+        if (moby->visible != 0 &&
+            fast_dec_timer((int *)(floating_platform_update_private_vars + 0x8C)) != 0) {
             spawn_floating_platform_sparks(moby);
-            *(int *)(floating_platform_update_private_vars + 0x8C) = scale_game_frames(random_int_between(0x5A, 0x78));
+            *(int *)(floating_platform_update_private_vars + 0x8C) =
+                scale_game_frames(random_int_between(0x5A, 0x78));
         }
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
             *(int *)(floating_platform_update_private_vars + 0x8C) = 0;
             moby->state = 5;
-            *(short *)(floating_platform_update_private_vars + 0x92) = allocate_voice_for_target_entry(1, 0, moby);
+            *(short *)(floating_platform_update_private_vars + 0x92) =
+                allocate_voice_for_target_entry(1, 0, moby);
         }
         if (*(int *)(floating_platform_update_private_vars + 0x80) == 0) {
             break;
@@ -121,13 +124,16 @@ void floating_platform_update(struct Moby *moby) {
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) <
             floating_platform_sink_trigger_distance_gp) {
             moby->state = 5;
-            *(short *)(floating_platform_update_private_vars + 0x92) = allocate_voice_for_target_entry(1, 0, moby);
+            *(short *)(floating_platform_update_private_vars + 0x92) =
+                allocate_voice_for_target_entry(1, 0, moby);
         }
         break;
     case STATE_SINKING:
-        if (moby->visible != 0 && fast_dec_timer((int *)(floating_platform_update_private_vars + 0x8C)) != 0) {
+        if (moby->visible != 0 &&
+            fast_dec_timer((int *)(floating_platform_update_private_vars + 0x8C)) != 0) {
             spawn_floating_platform_sparks(moby);
-            *(int *)(floating_platform_update_private_vars + 0x8C) = scale_game_frames(random_int_between(0xF, 0x1E));
+            *(int *)(floating_platform_update_private_vars + 0x8C) =
+                scale_game_frames(random_int_between(0xF, 0x1E));
         }
         sink = (convert_integer_to_float(D_L18_001623A8) -
                 floating_platform_motion_scale_input_start_gp) /
@@ -140,7 +146,8 @@ void floating_platform_update(struct Moby *moby) {
         }
         sink = 1.0f - sink * 0.333f;
         if (*(int *)(floating_platform_update_private_vars + 0x80) != 0 ||
-            (*(int *)(floating_platform_update_private_vars + 0x88) != 0 && *(int *)(floating_platform_update_private_vars + 0x84) == 0)) {
+            (*(int *)(floating_platform_update_private_vars + 0x88) != 0 &&
+             *(int *)(floating_platform_update_private_vars + 0x84) == 0)) {
             *(float *)(floating_platform_update_private_vars + 0x70) -= frame_time_sq * 15.0f;
         } else if (*(int *)(floating_platform_update_private_vars + 0x84) != 0) {
             *(float *)(floating_platform_update_private_vars + 0x70) -=
@@ -149,7 +156,8 @@ void floating_platform_update(struct Moby *moby) {
             *(float *)(floating_platform_update_private_vars + 0x70) -=
                 floating_platform_sink_acceleration_config_84_zero_gp * sink * frame_time_sq;
         }
-        *(float *)(floating_platform_update_private_vars + 0x64) += *(float *)(floating_platform_update_private_vars + 0x70);
+        *(float *)(floating_platform_update_private_vars + 0x64) +=
+            *(float *)(floating_platform_update_private_vars + 0x70);
         if (moby->pos.z < *(float *)(floating_platform_update_private_vars + 0x60) - 10.0f) {
             if (hero.ground_moby == moby && hero.air_frames.s == 0) {
                 if (hero.motion.pos.f[2] < D_L18_0015F638 && hero.state.current != 0x77) {
@@ -180,7 +188,8 @@ extern float floating_platform_bob_phase_rate_gp __asm__("D_L18_00161A4C") __att
 
 void update_floating_platform_tilt_and_bob(struct Moby *moby) {
     char *floating_platform_private_vars = (char *)moby->pvars;
-    float unclamped_rotation_y = fast_add_rotations(moby->rot.y, *(float *)(floating_platform_private_vars + 0x6C));
+    float unclamped_rotation_y =
+        fast_add_rotations(moby->rot.y, *(float *)(floating_platform_private_vars + 0x6C));
     moby->rot.y = unclamped_rotation_y;
     if (moby->state == 5) {
         if (unclamped_rotation_y > 0.5235988f) {
@@ -201,10 +210,12 @@ void update_floating_platform_tilt_and_bob(struct Moby *moby) {
             moby->rot.y = -0.034906585f;
         }
     }
-    *(float *)(floating_platform_private_vars + 0x74) = fast_add_rotations(
-        *(float *)(floating_platform_private_vars + 0x74), floating_platform_bob_phase_rate_gp * DEG_TO_RAD * frame_time);
+    *(float *)(floating_platform_private_vars + 0x74) =
+        fast_add_rotations(*(float *)(floating_platform_private_vars + 0x74),
+                           floating_platform_bob_phase_rate_gp * DEG_TO_RAD * frame_time);
     moby->pos.z = *(float *)(floating_platform_private_vars + 0x64) +
-                  floating_platform_bob_amplitude_gp * fast_sin(*(float *)(floating_platform_private_vars + 0x74));
+                  floating_platform_bob_amplitude_gp *
+                      fast_sin(*(float *)(floating_platform_private_vars + 0x74));
 }
 
 /* Ported from rac1-decomp (src/overlays/l18/vendor_002A8400.c: func_L18_002D9C48), where it is exact; names translated to the US level program. */

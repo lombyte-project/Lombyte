@@ -419,8 +419,12 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                            l08_bolt_pickup_collection_target_speed * frame_time,
                            l08_bolt_pickup_collection_acceleration * frame_time_sq);
         } else {
-            fast_vec_normalize(surface_basis_and_collection_vectors, collection_motion_reference - 0x120, vars->u70.f);
-            fast_vec_sub(surface_basis_and_collection_vectors + 4, surface_basis_and_collection_vectors, vars->velocity);
+            fast_vec_normalize(surface_basis_and_collection_vectors,
+                               collection_motion_reference - 0x120,
+                               vars->u70.f);
+            fast_vec_sub(surface_basis_and_collection_vectors + 4,
+                         surface_basis_and_collection_vectors,
+                         vars->velocity);
             FUN_L00_0025f730_c(surface_basis_and_collection_vectors + 4,
                                l08_bolt_pickup_collection_acceleration * frame_time_sq);
             fast_vec_add(vars->velocity, vars->velocity, surface_basis_and_collection_vectors + 4);
@@ -476,9 +480,14 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                     break;
                 }
                 shrink = 0.7f;
-                random_vector(surface_basis_and_collection_vectors, frame_time * shrink, frame_time);
-                fast_vec_scale(surface_basis_and_collection_vectors + 4, surface_basis_and_collection_vectors, 10.0f);
-                fast_vec_add(surface_basis_and_collection_vectors + 4, surface_basis_and_collection_vectors + 4, &moby->pos);
+                random_vector(
+                    surface_basis_and_collection_vectors, frame_time * shrink, frame_time);
+                fast_vec_scale(surface_basis_and_collection_vectors + 4,
+                               surface_basis_and_collection_vectors,
+                               10.0f);
+                fast_vec_add(surface_basis_and_collection_vectors + 4,
+                             surface_basis_and_collection_vectors + 4,
+                             &moby->pos);
                 spin = random_integer_below(2);
                 if (spin == 0) {
                     spin--;
@@ -737,15 +746,19 @@ void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby,
         break;
     }
     euler_rotation_matrix(base_rotation_matrix, (float *)(bolt_pickup_pose_vars + 0x10));
-    fast_vec_normalize(u, base_rotation_matrix, -fast_sin(*(float *)(bolt_pickup_pose_vars + 0x60)));
-    fast_vec_normalize(v, base_rotation_matrix + 4, fast_cos(*(float *)(bolt_pickup_pose_vars + 0x60)));
+    fast_vec_normalize(
+        u, base_rotation_matrix, -fast_sin(*(float *)(bolt_pickup_pose_vars + 0x60)));
+    fast_vec_normalize(
+        v, base_rotation_matrix + 4, fast_cos(*(float *)(bolt_pickup_pose_vars + 0x60)));
     fast_vec_add(planar_offset_direction, u, v);
     basis_tilt_radians = sx * DEG_TO_RAD;
     fast_vec_normalize(u, planar_offset_direction, fast_cos(basis_tilt_radians));
     fast_vec_normalize(v, base_rotation_matrix + 8, fast_sin(basis_tilt_radians));
     fast_vec_add(up, u, v);
-    fast_vec_normalize(u, base_rotation_matrix, -fast_cos(*(float *)(bolt_pickup_pose_vars + 0x60)));
-    fast_vec_normalize(v, base_rotation_matrix + 4, -fast_sin(*(float *)(bolt_pickup_pose_vars + 0x60)));
+    fast_vec_normalize(
+        u, base_rotation_matrix, -fast_cos(*(float *)(bolt_pickup_pose_vars + 0x60)));
+    fast_vec_normalize(
+        v, base_rotation_matrix + 4, -fast_sin(*(float *)(bolt_pickup_pose_vars + 0x60)));
     fast_vec_add(fwd, u, v);
     fast_vec_cross(side, up, fwd);
     fast_vec_normalize(u, side, fast_cos(*(float *)(bolt_pickup_pose_vars + 0x64)));

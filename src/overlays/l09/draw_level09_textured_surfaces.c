@@ -307,7 +307,8 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     packet = PACKET_CURSOR;
     words = (u64 *)(packet + 4);
     D_L09_001611C0 = packet + 4;
-    color = (unsigned char)surface_draw_settings[0x30] | (unsigned char)surface_draw_settings[0x31] << 8 |
+    color = (unsigned char)surface_draw_settings[0x30] |
+            (unsigned char)surface_draw_settings[0x31] << 8 |
             (unsigned char)surface_draw_settings[0x32] << 16;
     /* Retail reads the mode after the packet cursor stores. */
     if (*(volatile int *)&textured_grid_view_settings_mode == 1)

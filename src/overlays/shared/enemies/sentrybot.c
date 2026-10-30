@@ -227,12 +227,14 @@ void sentrybot_update(unsigned char *moby) {
     if (clip_volume_index != -1) {
         flag = is_point_inside_clip_volume(D_L15_001673C0, clip_volume_index) == 0;
         if (*(int *)(sentrybot_instance_data + 0x2D4) != -1) {
-            flag &= is_point_inside_clip_volume(D_L15_001673C0, *(int *)(sentrybot_instance_data + 0x2D4)) == 0;
+            flag &= is_point_inside_clip_volume(D_L15_001673C0,
+                                                *(int *)(sentrybot_instance_data + 0x2D4)) == 0;
         }
     } else if (*(int *)(sentrybot_instance_data + 0x2D8) != -1) {
         flag = is_point_inside_clip_volume(D_L15_001673C0, clip_volume_index);
         if (*(int *)(sentrybot_instance_data + 0x2DC) != -1) {
-            flag |= is_point_inside_clip_volume(D_L15_001673C0, *(int *)(sentrybot_instance_data + 0x2DC));
+            flag |= is_point_inside_clip_volume(D_L15_001673C0,
+                                                *(int *)(sentrybot_instance_data + 0x2DC));
         }
     }
     update_sentrybot_hit_response_and_target_visibility(moby, flag);
@@ -254,7 +256,8 @@ void sentrybot_update(unsigned char *moby) {
     fast_dec_timer_s16(sentrybot_instance_data + 0x154);
     fast_dec_timer_s16(sentrybot_instance_data + 0x156);
     fast_dec_timer_s16(sentrybot_instance_data + 0x19C);
-    if (*(short *)(sentrybot_instance_data + 0x156) != 0 && *(int *)(sentrybot_instance_data + 0x128) != -1) {
+    if (*(short *)(sentrybot_instance_data + 0x156) != 0 &&
+        *(int *)(sentrybot_instance_data + 0x128) != -1) {
         char *o = (char *)((*(int *)(sentrybot_instance_data + 0x128) << 8) + (int)l15_moby_array);
         if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
             set_sentrybot_alarm_duration(o, 0xB4);
@@ -263,7 +266,8 @@ void sentrybot_update(unsigned char *moby) {
         sentrybot_instance_data[0x15F] = 0;
     switch (moby[0x20]) {
     case SENTRYBOT_INITIALIZE:
-        if (*(int *)(sentrybot_instance_data + 0x120) == -1 || *D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x120)] == 0) {
+        if (*(int *)(sentrybot_instance_data + 0x120) == -1 ||
+            *D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x120)] == 0) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -316,14 +320,20 @@ void sentrybot_update(unsigned char *moby) {
                 if (moby[0x53] != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
-        } else if (*(short *)(sentrybot_instance_data + 0x156) != 0 && sentrybot_instance_data[0x15B] == 0) {
-            if (sentrybot_instance_data[0x15A] != 0 || *(int *)(sentrybot_instance_data + 0x124) == -1) {
-                begin_sentrybot_turn_toward_point(
-                    (char *)moby, sentrybot_instance_data, (float *)(target + 0x10), (void *)0x10, (void *)3);
+        } else if (*(short *)(sentrybot_instance_data + 0x156) != 0 &&
+                   sentrybot_instance_data[0x15B] == 0) {
+            if (sentrybot_instance_data[0x15A] != 0 ||
+                *(int *)(sentrybot_instance_data + 0x124) == -1) {
+                begin_sentrybot_turn_toward_point((char *)moby,
+                                                  sentrybot_instance_data,
+                                                  (float *)(target + 0x10),
+                                                  (void *)0x10,
+                                                  (void *)3);
             } else {
                 if (*(int *)(sentrybot_instance_data + 0x144) != 0) {
                     *(int *)(sentrybot_instance_data + 0x13C) =
-                        (*(int *)(sentrybot_instance_data + 0x13C) + 1) % *D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x124)];
+                        (*(int *)(sentrybot_instance_data + 0x13C) + 1) %
+                        *D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x124)];
                 }
                 *(int *)(sentrybot_instance_data + 0x144) = 0;
                 moby[0xBC] = 1;
@@ -341,29 +351,37 @@ void sentrybot_update(unsigned char *moby) {
                 }
             }
         } else if (*(short *)(sentrybot_instance_data + 0x19C) != 0) {
-            begin_sentrybot_turn_toward_point((char *)moby,
-                                              sentrybot_instance_data,
-                                              (float *)(*(char **)(sentrybot_instance_data + 0x198) + 0x10),
-                                              (void *)0xA,
-                                              (void *)0xF);
+            begin_sentrybot_turn_toward_point(
+                (char *)moby,
+                sentrybot_instance_data,
+                (float *)(*(char **)(sentrybot_instance_data + 0x198) + 0x10),
+                (void *)0xA,
+                (void *)0xF);
         } else if (fast_dec_timer_s16(sentrybot_instance_data + 0x196) != 0 &&
-                   (*(int *)(sentrybot_instance_data + 0x190) = find_sentrybot_attention_target((char *)moby)) != 0 &&
+                   (*(int *)(sentrybot_instance_data + 0x190) =
+                        find_sentrybot_attention_target((char *)moby)) != 0 &&
                    (*(short *)(sentrybot_instance_data + 0x194) != 0 ||
                     random_integer_below(scale_game_frames(0x96)) == 0)) {
-            begin_sentrybot_turn_toward_point((char *)moby,
-                                              sentrybot_instance_data,
-                                              (float *)(*(char **)(sentrybot_instance_data + 0x190) + 0x10),
-                                              (void *)0xA,
-                                              (void *)0xF);
+            begin_sentrybot_turn_toward_point(
+                (char *)moby,
+                sentrybot_instance_data,
+                (float *)(*(char **)(sentrybot_instance_data + 0x190) + 0x10),
+                (void *)0xA,
+                (void *)0xF);
         } else if (moby[0x20] == 2) {
             if (*(int *)(sentrybot_instance_data + 0x124) != -1) {
-                if (*(int *)(sentrybot_instance_data + 0x144) == 0 || can_sentrybot_advance_patrol(moby) != 0) {
-                    *(int *)(sentrybot_instance_data + 0x14C) = scale_game_frames(*(int *)(sentrybot_instance_data + 0x148));
+                if (*(int *)(sentrybot_instance_data + 0x144) == 0 ||
+                    can_sentrybot_advance_patrol(moby) != 0) {
+                    *(int *)(sentrybot_instance_data + 0x14C) =
+                        scale_game_frames(*(int *)(sentrybot_instance_data + 0x148));
                     moby[0x20] = 3;
                 }
-            } else if (*(short *)(sentrybot_instance_data + 0x158) != 0 && hero.state.current == 0x59) {
-                if (*(int *)(sentrybot_instance_data + 0x150) != -1 || *(int *)(sentrybot_instance_data + 0x12C) != -1 ||
-                    (*(short *)(sentrybot_instance_data + 0x154) == 0 && random_integer_below(0x78) == 0)) {
+            } else if (*(short *)(sentrybot_instance_data + 0x158) != 0 &&
+                       hero.state.current == 0x59) {
+                if (*(int *)(sentrybot_instance_data + 0x150) != -1 ||
+                    *(int *)(sentrybot_instance_data + 0x12C) != -1 ||
+                    (*(short *)(sentrybot_instance_data + 0x154) == 0 &&
+                     random_integer_below(0x78) == 0)) {
                     sentrybot_instance_data[0x15D] = 0;
                     sentrybot_instance_data[0x15C] = 2;
                     moby[0x20] = 5;
@@ -371,13 +389,18 @@ void sentrybot_update(unsigned char *moby) {
                         blend_moby_animation(moby, 2, 0, scale_game_frames(10));
                 }
             } else if (*(int *)(sentrybot_instance_data + 0x124) == -1) {
-                begin_sentrybot_turn_toward_heading(moby, sentrybot_instance_data, 2, 0, *(float *)(sentrybot_instance_data + 0x16C));
+                begin_sentrybot_turn_toward_heading(moby,
+                                                    sentrybot_instance_data,
+                                                    2,
+                                                    0,
+                                                    *(float *)(sentrybot_instance_data + 0x16C));
             }
         } else if (moby[0x20] == 3) {
             if (fast_dec_timer(sentrybot_instance_data + 0x14C) != 0) {
                 if (*(int *)(sentrybot_instance_data + 0x144) != 0) {
                     *(int *)(sentrybot_instance_data + 0x13C) =
-                        (*(int *)(sentrybot_instance_data + 0x13C) + 1) % *D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x124)];
+                        (*(int *)(sentrybot_instance_data + 0x13C) + 1) %
+                        *D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x124)];
                 }
                 *(int *)(sentrybot_instance_data + 0x144) = 0;
                 begin_sentrybot_turn_toward_point(
@@ -417,13 +440,13 @@ void sentrybot_update(unsigned char *moby) {
         if (moby[0x70] & 2) {
             *(short *)(sentrybot_instance_data + 0x154) = scale_game_frames(0xF0);
             if (*(int *)(sentrybot_instance_data + 0x150) != -1) {
-                mark_moby_killed_and_release_owned_voice((int)l15_moby_array +
-                                                         (*(int *)(sentrybot_instance_data + 0x150) << 8));
+                mark_moby_killed_and_release_owned_voice(
+                    (int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x150) << 8));
                 *(int *)(sentrybot_instance_data + 0x150) = -1;
             }
             if (*(int *)(sentrybot_instance_data + 0x12C) != -1) {
-                mark_moby_killed_and_release_owned_voice((int)l15_moby_array +
-                                                         (*(int *)(sentrybot_instance_data + 0x12C) << 8));
+                mark_moby_killed_and_release_owned_voice(
+                    (int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x12C) << 8));
                 *(int *)(sentrybot_instance_data + 0x12C) = -1;
             }
             moby[0x20] = sentrybot_instance_data[0x15C];
@@ -446,7 +469,8 @@ void sentrybot_update(unsigned char *moby) {
             fast_difference_between_rotations(
                 MOBY(moby)->rot.z,
                 fast_arc_tan(*(float *)(sentrybot_instance_data + 0xD0) - MOBY(moby)->pos.x,
-                             *(float *)(sentrybot_instance_data + 0xD4) - MOBY(moby)->pos.y)) < 0.5235988f) {
+                             *(float *)(sentrybot_instance_data + 0xD4) - MOBY(moby)->pos.y)) <
+                0.5235988f) {
             moby[0xBC] = 1;
             if (sentrybot_instance_data[0x15F] != 0) {
                 moby[0x20] = 0x10;
@@ -477,12 +501,14 @@ void sentrybot_update(unsigned char *moby) {
             if (moby[0x70] & 2) {
                 int k = truncate_float_to_s32(animation_end(moby[0x22], anim));
                 if (turn_heading_offsets_degrees != 0) {
-                    MOBY(moby)->rot.z = fast_add_rotations(
-                        *(float *)(sentrybot_instance_data + 0x170), turn_heading_offsets_degrees[k] * DEG_TO_RAD);
+                    MOBY(moby)->rot.z =
+                        fast_add_rotations(*(float *)(sentrybot_instance_data + 0x170),
+                                           turn_heading_offsets_degrees[k] * DEG_TO_RAD);
                 }
                 moby[0x20] = sentrybot_instance_data[0x15C];
                 if (moby[0x53] != sentrybot_instance_data[0x15D])
-                    blend_moby_animation(moby, sentrybot_instance_data[0x15D], 0, scale_game_frames(10));
+                    blend_moby_animation(
+                        moby, sentrybot_instance_data[0x15D], 0, scale_game_frames(10));
             } else if (moby[0x52] == moby[0x53] && turn_heading_offsets_degrees != 0) {
                 float t = compute_interpolated_record_value(moby);
                 int   k = truncate_float_to_s32(t);
@@ -497,10 +523,11 @@ void sentrybot_update(unsigned char *moby) {
         break;
     case SENTRYBOT_PATROL_MOVE: {
         float sp = frame_time * 2.0f;
-        if (move_sentrybot_toward_point((char *)moby,
-                                        (float *)((char *)D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x124)] +
-                                                  (*(int *)(sentrybot_instance_data + 0x13C) * 0x10 + 0x10)),
-                                        sp)) {
+        if (move_sentrybot_toward_point(
+                (char *)moby,
+                (float *)((char *)D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x124)] +
+                          (*(int *)(sentrybot_instance_data + 0x13C) * 0x10 + 0x10)),
+                sp)) {
             moby[0x20] = 2;
             *(int *)(sentrybot_instance_data + 0x144) = 1;
             if (moby[0x53] != 0)
@@ -519,10 +546,14 @@ void sentrybot_update(unsigned char *moby) {
                 if (moby[0x53] != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
-        } else if (*(short *)(sentrybot_instance_data + 0x156) != 0 && sentrybot_instance_data[0x15B] == 0) {
+        } else if (*(short *)(sentrybot_instance_data + 0x156) != 0 &&
+                   sentrybot_instance_data[0x15B] == 0) {
             if (sentrybot_instance_data[0x15A] != 0) {
-                begin_sentrybot_turn_toward_point(
-                    (char *)moby, sentrybot_instance_data, (float *)(target + 0x10), (void *)0x10, (void *)3);
+                begin_sentrybot_turn_toward_point((char *)moby,
+                                                  sentrybot_instance_data,
+                                                  (float *)(target + 0x10),
+                                                  (void *)0x10,
+                                                  (void *)3);
             } else {
                 *(int *)(sentrybot_instance_data + 0x14C) = scale_game_frames(0x3C);
                 moby[0xBC] = 1;
@@ -540,13 +571,15 @@ void sentrybot_update(unsigned char *moby) {
                 }
             }
         } else if (*(short *)(sentrybot_instance_data + 0x19C) != 0) {
-            begin_sentrybot_turn_toward_point((char *)moby,
-                                              sentrybot_instance_data,
-                                              (float *)(*(char **)(sentrybot_instance_data + 0x198) + 0x10),
-                                              (void *)0xA,
-                                              (void *)0xF);
+            begin_sentrybot_turn_toward_point(
+                (char *)moby,
+                sentrybot_instance_data,
+                (float *)(*(char **)(sentrybot_instance_data + 0x198) + 0x10),
+                (void *)0xA,
+                (void *)0xF);
         } else if (*(short *)(sentrybot_instance_data + 0x158) != 0 && hero.state.current == 0x59) {
-            if (*(int *)(sentrybot_instance_data + 0x150) != -1 || *(int *)(sentrybot_instance_data + 0x12C) != -1 ||
+            if (*(int *)(sentrybot_instance_data + 0x150) != -1 ||
+                *(int *)(sentrybot_instance_data + 0x12C) != -1 ||
                 *(short *)(sentrybot_instance_data + 0x154) == 0) {
                 sentrybot_instance_data[0x15C] = moby[0x20];
                 sentrybot_instance_data[0x15D] = 0xD;
@@ -555,28 +588,32 @@ void sentrybot_update(unsigned char *moby) {
                     blend_moby_animation(moby, 2, 0, scale_game_frames(10));
             }
         } else if (fast_dec_timer_s16(sentrybot_instance_data + 0x196) != 0 &&
-                   (*(int *)(sentrybot_instance_data + 0x190) = find_sentrybot_attention_target((char *)moby)) != 0 &&
+                   (*(int *)(sentrybot_instance_data + 0x190) =
+                        find_sentrybot_attention_target((char *)moby)) != 0 &&
                    (*(short *)(sentrybot_instance_data + 0x194) != 0 ||
                     random_integer_below(scale_game_frames(0x96)) == 0)) {
-            begin_sentrybot_turn_toward_point((char *)moby,
-                                              sentrybot_instance_data,
-                                              (float *)(*(char **)(sentrybot_instance_data + 0x190) + 0x10),
-                                              (void *)0xA,
-                                              (void *)0xF);
+            begin_sentrybot_turn_toward_point(
+                (char *)moby,
+                sentrybot_instance_data,
+                (float *)(*(char **)(sentrybot_instance_data + 0x190) + 0x10),
+                (void *)0xA,
+                (void *)0xF);
         }
         break;
     }
     case SENTRYBOT_PATROL_MOVE_FAST: {
         float sp = frame_time * 3.5f;
-        if (move_sentrybot_toward_point((char *)moby,
-                                        (float *)((char *)D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x124)] +
-                                                  (*(int *)(sentrybot_instance_data + 0x13C) * 0x10 + 0x10)),
-                                        sp)) {
+        if (move_sentrybot_toward_point(
+                (char *)moby,
+                (float *)((char *)D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x124)] +
+                          (*(int *)(sentrybot_instance_data + 0x13C) * 0x10 + 0x10)),
+                sp)) {
             moby[0x20] = 0xC;
             *(int *)(sentrybot_instance_data + 0x144) = 1;
             if (moby[0x53] != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
-        } else if (*(int *)(sentrybot_instance_data + 0x114) != 2 && sentrybot_instance_data[0x15B] == 0) {
+        } else if (*(int *)(sentrybot_instance_data + 0x114) != 2 &&
+                   sentrybot_instance_data[0x15B] == 0) {
             moby[0xBC] = 1;
             if (sentrybot_instance_data[0x15F] != 0) {
                 moby[0x20] = 0x10;
@@ -597,7 +634,8 @@ void sentrybot_update(unsigned char *moby) {
             if (moby[0x53] != 0xD)
                 blend_moby_animation(moby, 0xD, 0, scale_game_frames(10));
             if (*(int *)(sentrybot_instance_data + 0x128) != -1) {
-                char *o = (char *)((*(int *)(sentrybot_instance_data + 0x128) << 8) + (int)l15_moby_array);
+                char *o = (char *)((*(int *)(sentrybot_instance_data + 0x128) << 8) +
+                                   (int)l15_moby_array);
                 if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
                     set_sentrybot_alarm_duration(o, scale_game_frames(0x1E));
             }
@@ -619,7 +657,8 @@ void sentrybot_update(unsigned char *moby) {
                 (void *)2,
                 (void *)0);
         } else {
-            begin_sentrybot_turn_toward_heading(moby, sentrybot_instance_data, 2, 0, *(float *)(sentrybot_instance_data + 0x16C));
+            begin_sentrybot_turn_toward_heading(
+                moby, sentrybot_instance_data, 2, 0, *(float *)(sentrybot_instance_data + 0x16C));
         }
         break;
     }
@@ -639,15 +678,23 @@ void sentrybot_update(unsigned char *moby) {
                     (void *)2,
                     (void *)0);
             } else {
-                begin_sentrybot_turn_toward_heading(moby, sentrybot_instance_data, 2, 0, *(float *)(sentrybot_instance_data + 0x16C));
+                begin_sentrybot_turn_toward_heading(moby,
+                                                    sentrybot_instance_data,
+                                                    2,
+                                                    0,
+                                                    *(float *)(sentrybot_instance_data + 0x16C));
             }
         } else if (fast_difference_between_rotations(
                        MOBY(moby)->rot.z,
                        fast_arc_tan(*(float *)(sentrybot_instance_data + 0xD0) - MOBY(moby)->pos.x,
-                                    *(float *)(sentrybot_instance_data + 0xD4) - MOBY(moby)->pos.y)) > 0.7853982f &&
+                                    *(float *)(sentrybot_instance_data + 0xD4) -
+                                        MOBY(moby)->pos.y)) > 0.7853982f &&
                    sentrybot_instance_data[0x15B] == 0) {
-            begin_sentrybot_turn_toward_point(
-                (char *)moby, sentrybot_instance_data, (float *)(sentrybot_instance_data + 0xD0), (void *)0x10, (void *)3);
+            begin_sentrybot_turn_toward_point((char *)moby,
+                                              sentrybot_instance_data,
+                                              (float *)(sentrybot_instance_data + 0xD0),
+                                              (void *)0x10,
+                                              (void *)3);
         } else {
             moby[0x20] = 0xC;
             if (moby[0x53] != 0)
@@ -658,7 +705,8 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_WAIT_FOR_TRANSITION_ANIMATION:
         if (*(int *)(sentrybot_instance_data + 0x128) != -1) {
             prepare_sentrybot_alarm(
-                (unsigned char *)((int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x128) << 8)));
+                (unsigned char *)((int)l15_moby_array +
+                                  (*(int *)(sentrybot_instance_data + 0x128) << 8)));
         }
         if (moby[0x70] & 2) {
             if (hero.state.current == 0x65) {
@@ -677,22 +725,30 @@ void sentrybot_update(unsigned char *moby) {
                     if (moby[0x53] != 0xE)
                         blend_moby_animation(moby, 0xE, 0, scale_game_frames(0x14));
                 } else if (sentrybot_instance_data[0x15C] == 0x10) {
-                    begin_sentrybot_turn_toward_point(
-                        (char *)moby, sentrybot_instance_data, (float *)(target + 0x10), (void *)0x10, (void *)3);
+                    begin_sentrybot_turn_toward_point((char *)moby,
+                                                      sentrybot_instance_data,
+                                                      (float *)(target + 0x10),
+                                                      (void *)0x10,
+                                                      (void *)3);
                 } else {
                     if (sentrybot_instance_data[0x15C] != 0xFF)
                         moby[0x20] = sentrybot_instance_data[0x15C];
-                    if (sentrybot_instance_data[0x15D] != 0xFF && moby[0x53] != sentrybot_instance_data[0x15D])
-                        blend_moby_animation(moby, sentrybot_instance_data[0x15D], 0, scale_game_frames(10));
+                    if (sentrybot_instance_data[0x15D] != 0xFF &&
+                        moby[0x53] != sentrybot_instance_data[0x15D])
+                        blend_moby_animation(
+                            moby, sentrybot_instance_data[0x15D], 0, scale_game_frames(10));
                 }
             }
         }
         break;
     case SENTRYBOT_APPROACH_LINKED_MOBY:
         prepare_sentrybot_alarm(
-            (unsigned char *)((int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x128) << 8)));
+            (unsigned char *)((int)l15_moby_array +
+                              (*(int *)(sentrybot_instance_data + 0x128) << 8)));
         fast_vec_sub(
-            va, (char *)((int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x128) << 8)) + 0x10, moby + 0x10);
+            va,
+            (char *)((int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x128) << 8)) + 0x10,
+            moby + 0x10);
         fast_vec_normalize(va, va, fast_vec_length(va) - 1.5f);
         fast_vec_add(va, va, moby + 0x10);
         if (move_sentrybot_toward_point((char *)moby, va, frame_time * 4.0f)) {
@@ -704,13 +760,18 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_ACTIVATE_LINKED_MOBY:
         if (moby[0x52] == moby[0x53] && compute_interpolated_record_value(moby) >= 12.0f) {
             set_sentrybot_alarm_duration(
-                (char *)((int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x128) << 8)), 0xB4);
+                (char *)((int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x128) << 8)),
+                0xB4);
         }
         if (moby[0x70] & 2) {
             set_sentrybot_alarm_duration(
-                (char *)((int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x128) << 8)), 0xB4);
-            begin_sentrybot_turn_toward_point(
-                (char *)moby, sentrybot_instance_data, (float *)(target + 0x10), (void *)0x14, (void *)0xE);
+                (char *)((int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x128) << 8)),
+                0xB4);
+            begin_sentrybot_turn_toward_point((char *)moby,
+                                              sentrybot_instance_data,
+                                              (float *)(target + 0x10),
+                                              (void *)0x14,
+                                              (void *)0xE);
         }
         break;
     case SENTRYBOT_WAIT_FOR_ANIMATION_THEN_EMIT_WITH_POSITIVE_JOINT_AIM:
@@ -767,11 +828,15 @@ void sentrybot_update(unsigned char *moby) {
                     fast_difference_between_rotations(fast_arc_tan(vector_length_xy(va), va[2]),
                                                       fast_arc_tan(vector_length_xy(vb), vb[2])) >
                         0.7853982f) {
-                    spawn_sentrybot_projectile(
-                        (char *)moby, va, (char *)emission_origin, (char *)(sentrybot_instance_data + 0x100));
+                    spawn_sentrybot_projectile((char *)moby,
+                                               va,
+                                               (char *)emission_origin,
+                                               (char *)(sentrybot_instance_data + 0x100));
                 } else {
-                    spawn_sentrybot_projectile(
-                        (char *)moby, vb, (char *)emission_origin, (char *)(sentrybot_instance_data + 0x100));
+                    spawn_sentrybot_projectile((char *)moby,
+                                               vb,
+                                               (char *)emission_origin,
+                                               (char *)(sentrybot_instance_data + 0x100));
                 }
                 sentrybot_instance_data[0x19E] = 1;
             }
@@ -782,7 +847,8 @@ void sentrybot_update(unsigned char *moby) {
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             } else if (*(int *)(sentrybot_instance_data + 0x128) != -1 &&
-                       *(int *)(*(char **)((char *)((*(int *)(sentrybot_instance_data + 0x128) << 8) +
+                       *(int *)(*(char **)((char *)((*(int *)(sentrybot_instance_data + 0x128)
+                                                     << 8) +
                                                     (int)l15_moby_array) +
                                            0x78) +
                                 8) == 0 &&
@@ -792,11 +858,15 @@ void sentrybot_update(unsigned char *moby) {
                     blend_moby_animation(moby, 0xE, 0, scale_game_frames(0x14));
             } else if (fast_difference_between_rotations(
                            MOBY(moby)->rot.z,
-                           fast_arc_tan(*(float *)(sentrybot_instance_data + 0xD0) - MOBY(moby)->pos.x,
-                                        *(float *)(sentrybot_instance_data + 0xD4) - MOBY(moby)->pos.y)) >
+                           fast_arc_tan(
+                               *(float *)(sentrybot_instance_data + 0xD0) - MOBY(moby)->pos.x,
+                               *(float *)(sentrybot_instance_data + 0xD4) - MOBY(moby)->pos.y)) >
                        0.7853982f) {
-                begin_sentrybot_turn_toward_point(
-                    (char *)moby, sentrybot_instance_data, (float *)(sentrybot_instance_data + 0xD0), (void *)0x10, (void *)3);
+                begin_sentrybot_turn_toward_point((char *)moby,
+                                                  sentrybot_instance_data,
+                                                  (float *)(sentrybot_instance_data + 0xD0),
+                                                  (void *)0x10,
+                                                  (void *)3);
             } else if (*(int *)(sentrybot_instance_data + 0x114) == 2) {
                 moby[0x20] = 0xC;
                 if (moby[0x53] != 0)
@@ -829,11 +899,15 @@ void sentrybot_update(unsigned char *moby) {
                     fast_difference_between_rotations(fast_arc_tan(vector_length_xy(va), va[2]),
                                                       fast_arc_tan(vector_length_xy(vb), vb[2])) >
                         0.7853982f) {
-                    spawn_sentrybot_projectile(
-                        (char *)moby, va, (char *)emission_origin, (char *)(sentrybot_instance_data + 0x100));
+                    spawn_sentrybot_projectile((char *)moby,
+                                               va,
+                                               (char *)emission_origin,
+                                               (char *)(sentrybot_instance_data + 0x100));
                 } else {
-                    spawn_sentrybot_projectile(
-                        (char *)moby, vb, (char *)emission_origin, (char *)(sentrybot_instance_data + 0x100));
+                    spawn_sentrybot_projectile((char *)moby,
+                                               vb,
+                                               (char *)emission_origin,
+                                               (char *)(sentrybot_instance_data + 0x100));
                 }
                 sentrybot_instance_data[0x19E] = 1;
             }
@@ -844,7 +918,8 @@ void sentrybot_update(unsigned char *moby) {
                 if (moby[0x53] != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             } else if (*(int *)(sentrybot_instance_data + 0x128) != -1 &&
-                       *(int *)(*(char **)((char *)((*(int *)(sentrybot_instance_data + 0x128) << 8) +
+                       *(int *)(*(char **)((char *)((*(int *)(sentrybot_instance_data + 0x128)
+                                                     << 8) +
                                                     (int)l15_moby_array) +
                                            0x78) +
                                 8) == 0 &&
@@ -854,11 +929,15 @@ void sentrybot_update(unsigned char *moby) {
                     blend_moby_animation(moby, 0xE, 0, scale_game_frames(0x14));
             } else if (fast_difference_between_rotations(
                            MOBY(moby)->rot.z,
-                           fast_arc_tan(*(float *)(sentrybot_instance_data + 0xD0) - MOBY(moby)->pos.x,
-                                        *(float *)(sentrybot_instance_data + 0xD4) - MOBY(moby)->pos.y)) >
+                           fast_arc_tan(
+                               *(float *)(sentrybot_instance_data + 0xD0) - MOBY(moby)->pos.x,
+                               *(float *)(sentrybot_instance_data + 0xD4) - MOBY(moby)->pos.y)) >
                        0.7853982f) {
-                begin_sentrybot_turn_toward_point(
-                    (char *)moby, sentrybot_instance_data, (float *)(sentrybot_instance_data + 0xD0), (void *)0x12, (void *)5);
+                begin_sentrybot_turn_toward_point((char *)moby,
+                                                  sentrybot_instance_data,
+                                                  (float *)(sentrybot_instance_data + 0xD0),
+                                                  (void *)0x12,
+                                                  (void *)5);
             } else if (*(int *)(sentrybot_instance_data + 0x114) == 2) {
                 moby[0x20] = 0xC;
                 if (moby[0x53] != 0)
@@ -877,36 +956,48 @@ void sentrybot_update(unsigned char *moby) {
             if (moby[0x53] != 0xD)
                 blend_moby_animation(moby, 0xD, 0, scale_game_frames(10));
             if (*(int *)(sentrybot_instance_data + 0x128) != -1) {
-                char *o = (char *)((*(int *)(sentrybot_instance_data + 0x128) << 8) + (int)l15_moby_array);
+                char *o = (char *)((*(int *)(sentrybot_instance_data + 0x128) << 8) +
+                                   (int)l15_moby_array);
                 if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
                     set_sentrybot_alarm_duration(o, -1);
             }
         } else {
             int mode = *(int *)(sentrybot_instance_data + 0x114);
             if (mode != 2 && sentrybot_instance_data[0x15B] == 0) {
-                begin_sentrybot_turn_toward_point(
-                    (char *)moby, sentrybot_instance_data, (float *)(sentrybot_instance_data + 0xD0), (void *)0x10, (void *)3);
+                begin_sentrybot_turn_toward_point((char *)moby,
+                                                  sentrybot_instance_data,
+                                                  (float *)(sentrybot_instance_data + 0xD0),
+                                                  (void *)0x10,
+                                                  (void *)3);
             } else if (*(short *)(sentrybot_instance_data + 0x156) == 0) {
                 moby[0x20] = 9;
                 if (moby[0x53] != 0xD)
                     blend_moby_animation(moby, 0xD, 0, scale_game_frames(10));
                 if (*(int *)(sentrybot_instance_data + 0x128) != -1) {
-                    char *o = (char *)((*(int *)(sentrybot_instance_data + 0x128) << 8) + (int)l15_moby_array);
+                    char *o = (char *)((*(int *)(sentrybot_instance_data + 0x128) << 8) +
+                                       (int)l15_moby_array);
                     if (*(int *)(*(char **)(o + 0x78) + 8) != 0)
                         set_sentrybot_alarm_duration(o, scale_game_frames(0x1E));
                 }
             } else if (sentrybot_instance_data[0x15A] != 0) {
                 if (mode != 2 && sentrybot_instance_data[0x15B] == 0) {
-                    begin_sentrybot_turn_toward_point(
-                        (char *)moby, sentrybot_instance_data, (float *)(target + 0x10), (void *)0x10, (void *)3);
+                    begin_sentrybot_turn_toward_point((char *)moby,
+                                                      sentrybot_instance_data,
+                                                      (float *)(target + 0x10),
+                                                      (void *)0x10,
+                                                      (void *)3);
                 } else {
-                    begin_sentrybot_turn_toward_point(
-                        (char *)moby, sentrybot_instance_data, (float *)(target + 0x10), (void *)0xC, (void *)0);
+                    begin_sentrybot_turn_toward_point((char *)moby,
+                                                      sentrybot_instance_data,
+                                                      (float *)(target + 0x10),
+                                                      (void *)0xC,
+                                                      (void *)0);
                 }
             } else if (*(int *)(sentrybot_instance_data + 0x124) != -1) {
                 if (*(int *)(sentrybot_instance_data + 0x144) != 0) {
                     *(int *)(sentrybot_instance_data + 0x13C) =
-                        (*(int *)(sentrybot_instance_data + 0x13C) + 1) % *D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x124)];
+                        (*(int *)(sentrybot_instance_data + 0x13C) + 1) %
+                        *D_L15_001B0AB0[*(int *)(sentrybot_instance_data + 0x124)];
                 }
                 *(int *)(sentrybot_instance_data + 0x144) = 0;
                 *(int *)(sentrybot_instance_data + 0x14C) = scale_game_frames(0x3C);
@@ -954,13 +1045,13 @@ void sentrybot_update(unsigned char *moby) {
                 return;
             }
             if (*(int *)(sentrybot_instance_data + 0x12C) != -1) {
-                mark_moby_killed_and_release_owned_voice((int)l15_moby_array +
-                                                         (*(int *)(sentrybot_instance_data + 0x12C) << 8));
+                mark_moby_killed_and_release_owned_voice(
+                    (int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x12C) << 8));
                 *(int *)(sentrybot_instance_data + 0x12C) = -1;
             }
             if (*(int *)(sentrybot_instance_data + 0x150) != -1) {
-                mark_moby_killed_and_release_owned_voice((int)l15_moby_array +
-                                                         (*(int *)(sentrybot_instance_data + 0x150) << 8));
+                mark_moby_killed_and_release_owned_voice(
+                    (int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x150) << 8));
                 *(int *)(sentrybot_instance_data + 0x150) = -1;
             }
             allocate_voice_for_target_entry(0xD, 0, (int)moby);
@@ -977,13 +1068,13 @@ void sentrybot_update(unsigned char *moby) {
     case SENTRYBOT_DEATH_KNOCKBACK:
         if (step_moby_motion(moby, sentrybot_instance_data + 0x70) & 0x160) {
             if (*(int *)(sentrybot_instance_data + 0x12C) != -1) {
-                mark_moby_killed_and_release_owned_voice((int)l15_moby_array +
-                                                         (*(int *)(sentrybot_instance_data + 0x12C) << 8));
+                mark_moby_killed_and_release_owned_voice(
+                    (int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x12C) << 8));
                 *(int *)(sentrybot_instance_data + 0x12C) = -1;
             }
             if (*(int *)(sentrybot_instance_data + 0x150) != -1) {
-                mark_moby_killed_and_release_owned_voice((int)l15_moby_array +
-                                                         (*(int *)(sentrybot_instance_data + 0x150) << 8));
+                mark_moby_killed_and_release_owned_voice(
+                    (int)l15_moby_array + (*(int *)(sentrybot_instance_data + 0x150) << 8));
                 *(int *)(sentrybot_instance_data + 0x150) = -1;
             }
             allocate_voice_for_target_entry(0xD, 0, (int)moby);
@@ -1467,8 +1558,10 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
                 *(u128 *)hit_vector_or_sight_line_origin = *(u128 *)(hit + 0x10);
                 angle = heading;
             }
-            trooper_knockback_arc(
-                hit_vector_or_sight_line_origin, &angle, sentrybot_data + 0x88, sentrybot_data + 0x8C);
+            trooper_knockback_arc(hit_vector_or_sight_line_origin,
+                                  &angle,
+                                  sentrybot_data + 0x88,
+                                  sentrybot_data + 0x8C);
             trooper_start_knockback(moby, sentrybot_data + 0x70, 7, 1, 0, angle);
             moby[0x20] = 0x15;
             moby[0xBC] = 2;
@@ -1504,8 +1597,10 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
                 *(u128 *)hit_vector_or_sight_line_origin = *(u128 *)(hit + 0x10);
                 fall_angle = heading;
             }
-            trooper_knockback_arc(
-                hit_vector_or_sight_line_origin, &fall_angle, sentrybot_data + 0x88, sentrybot_data + 0x8C);
+            trooper_knockback_arc(hit_vector_or_sight_line_origin,
+                                  &fall_angle,
+                                  sentrybot_data + 0x88,
+                                  sentrybot_data + 0x8C);
             trooper_start_knockback(moby, sentrybot_data + 0x70, 8, 1, 0, fall_angle);
             moby[0x20] = 0x17;
             moby[0xBC] = 2;

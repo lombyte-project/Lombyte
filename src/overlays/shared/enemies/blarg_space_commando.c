@@ -233,7 +233,12 @@ void blarg_space_commando_update(struct Moby *moby) {
         route_destination_distance = vector_distance_xy(&moby->pos, &position_or_movement_vector);
         if (route_destination_distance < 0.25f) {
             angle = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
-            FUN_L00_00258278(moby, angle, &blarg_commando_state->turn_speed, 0.05f, 0.3f, frame_time * 5.5850534f);
+            FUN_L00_00258278(moby,
+                             angle,
+                             &blarg_commando_state->turn_speed,
+                             0.05f,
+                             0.3f,
+                             frame_time * 5.5850534f);
             if (fast_difference_between_rotations(angle, moby->rot.z) < 0.2617994f) {
                 blarg_commando_state->turn_speed = 0.0f;
                 blarg_commando_state->volume = -1;
@@ -386,7 +391,8 @@ void blarg_space_commando_update(struct Moby *moby) {
                          &position_or_movement_vector,
                          &movement_input_or_output_or_melee_origin,
                          1.0f);
-        resolve_point_path_segment_xy_clearance(blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
+        resolve_point_path_segment_xy_clearance(
+            blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
         if (FUN_L00_00261b48(blarg_commando_state->path,
                              &moby->pos,
                              &target->pos,
@@ -441,7 +447,8 @@ void blarg_space_commando_update(struct Moby *moby) {
         break;
     case BLARG_COMMANDO_STATE_RETURN_HOME:
         FUN_L00_00258278(moby,
-                         fast_arc_tan(blarg_commando_state->home.f[0] - moby->pos.x, blarg_commando_state->home.f[1] - moby->pos.y),
+                         fast_arc_tan(blarg_commando_state->home.f[0] - moby->pos.x,
+                                      blarg_commando_state->home.f[1] - moby->pos.y),
                          &blarg_commando_state->turn_speed,
                          0.05f,
                          0.3f,
@@ -451,14 +458,15 @@ void blarg_space_commando_update(struct Moby *moby) {
         position_or_movement_vector.f[2] = 0.0f;
         if (fast_difference_between_rotations(
                 moby->rot.z,
-                fast_arc_tan(blarg_commando_state->home.f[0] - moby->pos.x, blarg_commando_state->home.f[1] - moby->pos.y)) <
-            0.7853982f) {
+                fast_arc_tan(blarg_commando_state->home.f[0] - moby->pos.x,
+                             blarg_commando_state->home.f[1] - moby->pos.y)) < 0.7853982f) {
             FUN_L00_00258b50(moby,
                              &blarg_commando_state->ctl,
                              &position_or_movement_vector,
                              &movement_input_or_output_or_melee_origin,
                              1.0f);
-            resolve_point_path_segment_xy_clearance(blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
+            resolve_point_path_segment_xy_clearance(
+                blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
         }
         if (fast_vec_dist(&blarg_commando_state->home, &moby->pos) < 1.0f) {
             moby->state = 1;
@@ -728,11 +736,18 @@ void process_blarg_space_commando_hits(char *moby) {
     {
         char *q = commando_state + 0x120;
         route_record = D_L06_001B0C30[*(int *)(commando_state + 0x180)];
-        if (FUN_L00_0025ff38(
-                *(float *)(commando_state + 0x198), moby, q, 0, 0, route_record + 4, *route_record) != 2) {
-            if (*(float *)(commando_state + 0x198) < vector_distance_xy(commando_state + 0x170, commando_state + 0x120)) {
+        if (FUN_L00_0025ff38(*(float *)(commando_state + 0x198),
+                             moby,
+                             q,
+                             0,
+                             0,
+                             route_record + 4,
+                             *route_record) != 2) {
+            if (*(float *)(commando_state + 0x198) <
+                vector_distance_xy(commando_state + 0x170, commando_state + 0x120)) {
                 *(int *)(commando_state + 0x164) = 2;
-            } else if (3.0f < absolute_float(MOBY(moby)->pos.z - *(float *)(commando_state + 0x128))) {
+            } else if (3.0f <
+                       absolute_float(MOBY(moby)->pos.z - *(float *)(commando_state + 0x128))) {
                 *(int *)(commando_state + 0x164) = 2;
             }
         }
@@ -763,7 +778,9 @@ void initialize_blarg_space_commando_beam(char *moby) {
         point_offset[0] = fast_cos(fast_add_rotations(angle_offset, MOBY(moby)->rot.z)) * 0.2f;
         point_offset[1] = fast_sin(fast_add_rotations(angle_offset, MOBY(moby)->rot.z)) * 0.2f;
         point_offset[2] = 0.15f;
-        fast_vec_add((float *)(commando_beam_state + 0x230 + i * 16), (float *)(commando_beam_state + 0x210), point_offset);
+        fast_vec_add((float *)(commando_beam_state + 0x230 + i * 16),
+                     (float *)(commando_beam_state + 0x210),
+                     point_offset);
         if (i == 0 || i == 15) {
             float *endpoint_color_blend_factor = (float *)(commando_beam_state + 0x23C + i * 16);
             *endpoint_color_blend_factor = *endpoint_color_blend_factor = 0.0f;
@@ -847,7 +864,8 @@ void update_blarg_space_commando_beam(void *owner_moby) {
             point[2] = point[2] + (frame_time + frame_time);
         }
         entry = (char *)beam_state + i * 16;
-        if (1.0f <= *(float *)(entry + 0x23C) && collision_line(&beam_state->pts[i], point, 2, 0, 0)) {
+        if (1.0f <= *(float *)(entry + 0x23C) &&
+            collision_line(&beam_state->pts[i], point, 2, 0, 0)) {
             point[3] = 0.98f;
         } else if (point[3] < 1.0f) {
             approach_value(&point[3], 0.0f, frame_time + frame_time);
@@ -951,13 +969,15 @@ void draw_blarg_space_commando_beam(char *moby) {
                 fast_vec_normalize(corner_inset_vector, corner_inset_vector, 0.5f);
                 fast_vec_sub(corner_position, corner_position, corner_inset_vector);
                 corner_position[2] -= 0.125f;
-                pk[0].col[j] = fast_tween_color(*(f32 *)(beam_owner_vars + source_point_byte_offset + 0x23C),
-                                                beam_inset_corner_color_at_zero_weight_gp,
-                                                beam_inset_corner_color_at_unit_weight_gp);
+                pk[0].col[j] =
+                    fast_tween_color(*(f32 *)(beam_owner_vars + source_point_byte_offset + 0x23C),
+                                     beam_inset_corner_color_at_zero_weight_gp,
+                                     beam_inset_corner_color_at_unit_weight_gp);
             } else {
-                pk[0].col[j] = fast_tween_color(*(f32 *)(beam_owner_vars + source_point_byte_offset + 0x23C),
-                                                beam_outer_corner_color_at_zero_weight_gp,
-                                                beam_outer_corner_color_at_unit_weight_gp);
+                pk[0].col[j] =
+                    fast_tween_color(*(f32 *)(beam_owner_vars + source_point_byte_offset + 0x23C),
+                                     beam_outer_corner_color_at_zero_weight_gp,
+                                     beam_outer_corner_color_at_unit_weight_gp);
             }
             pk[0].uv[j][0] = beam_quad_corner_uvs[j][0];
             pk[0].uv[j][1] = beam_quad_corner_uvs[j][1];

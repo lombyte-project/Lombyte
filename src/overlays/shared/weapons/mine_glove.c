@@ -173,7 +173,8 @@ void mine_glove_update(struct Moby *moby) {
     fast_vec_add(&mine_glove_vars->grip, &saved, &rotatedOffset);
     if (mine_glove_vars->held != 0)
         mine_glove_vars->held->collision_disable = 1;
-    if (mine_glove_vars->held == 0 || mine_glove_vars->held->state == 0xFE || mine_glove_vars->held->state == 0xFD)
+    if (mine_glove_vars->held == 0 || mine_glove_vars->held->state == 0xFE ||
+        mine_glove_vars->held->state == 0xFD)
         mine_glove_vars->held = 0;
     if (hero.state.current == 1)
         hero_set_state(0x1E, 1);
@@ -282,7 +283,8 @@ void mine_glove_update(struct Moby *moby) {
         break;
     case MINE_GLOVE_RELEASE_HELD_MOBY:
         if (mine_glove_vars->held != 0) {
-            initialize_moby_motion_at_position(&pos, mine_glove_vars->held, mine_glove_vars->held->pvars);
+            initialize_moby_motion_at_position(
+                &pos, mine_glove_vars->held, mine_glove_vars->held->pvars);
             if (((DeliveryStats_2c1ad0 *)item_usage)->deliveries <= 0xfffe)
                 ++((DeliveryStats_2c1ad0 *)item_usage)->deliveries;
             {

@@ -67,7 +67,8 @@ void grindrail_button_update(struct Moby *button_moby) {
             hero_position = (char *)&hero.motion.pos;
             if (vector_distance_xy(&button_moby->pos, hero_position) < 4.0f) {
                 hero_instance = hero_position - 0x80;
-                if (*(int *)(hero_instance + 0x2084) == 0x28 && *(int *)(hero_instance + 0x5A8) != -1) {
+                if (*(int *)(hero_instance + 0x2084) == 0x28 &&
+                    *(int *)(hero_instance + 0x5A8) != -1) {
                     transform_vector_by_basis(
                         button_offset_from_hero, &D_L16_00161DF0, &button_moby->rot_row0);
                     fast_vec_add(
@@ -76,8 +77,10 @@ void grindrail_button_update(struct Moby *button_moby) {
                     transform_vector_by_basis(
                         button_offset_from_hero, button_offset_from_hero, hero_position - 0x40);
                     if (absolute_float(button_offset_from_hero[1]) < 0.1f) {
-                        if ((button_offset_from_hero[0] > 0.0f && *(int *)(hero_instance + 0x5A8) == 3) ||
-                            (button_offset_from_hero[0] < 0.0f && *(int *)(hero_instance + 0x5A8) == 2)) {
+                        if ((button_offset_from_hero[0] > 0.0f &&
+                             *(int *)(hero_instance + 0x5A8) == 3) ||
+                            (button_offset_from_hero[0] < 0.0f &&
+                             *(int *)(hero_instance + 0x5A8) == 2)) {
                             func_L16_002E6B48_6908(button_moby);
                             allocate_voice_for_target_entry(1, 0, button_moby);
                         }

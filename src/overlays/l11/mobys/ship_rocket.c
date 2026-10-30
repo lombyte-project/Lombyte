@@ -50,8 +50,10 @@ unsigned char *spawn_ship_rocket(struct Moby *spawning_moby,
         *(float *)(projectile_vars + 0x2C) = scale;
         *(int *)(projectile_vars + 0x30) = 0;
         *(int *)(projectile_vars + 0x34) = 0;
-        build_spherical_offset(
-            projectile_vars, scale, *(float *)(spawn_rotation + 8), -*(float *)(spawn_rotation + 4));
+        build_spherical_offset(projectile_vars,
+                               scale,
+                               *(float *)(spawn_rotation + 8),
+                               -*(float *)(spawn_rotation + 4));
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }

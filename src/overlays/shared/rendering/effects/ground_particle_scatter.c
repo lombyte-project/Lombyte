@@ -182,8 +182,9 @@ void scatter_ground_particles(Moby *moby) {
                               16.0f,
                               ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f158,
                               ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f154);
-        scatter_pass_center_position.z = ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
-                 ground_particle_scatter_reference_height_offset_gp;
+        scatter_pass_center_position.z =
+            ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
+            ground_particle_scatter_reference_height_offset_gp;
         if (pass_attempt_count > 0) {
             V_3091B0 *po = &origin_delta_or_spawn_vector;
             remaining_pass_attempts = pass_attempt_count;
@@ -250,8 +251,9 @@ void scatter_ground_particles(Moby *moby) {
         }
         pass_attempt_count = (int)((float)pass_attempt_count * 1.4f);
         *(u128_3091B0 *)&scatter_pass_center_position = *(u128_3091B0 *)D_L08_00167640_3091B0;
-        scatter_pass_center_position.z = ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
-                 ground_particle_scatter_reference_height_offset_gp;
+        scatter_pass_center_position.z =
+            ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
+            ground_particle_scatter_reference_height_offset_gp;
         if (pass_attempt_count > 0) {
             float negative_spread = -spread;
             remaining_pass_attempts = pass_attempt_count;
@@ -302,8 +304,9 @@ void scatter_ground_particles(Moby *moby) {
                                   ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f158,
                                   ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f154);
             sign = pass_attempt_count >> 31;
-            scatter_pass_center_position.z = ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
-                     ground_particle_scatter_reference_height_offset_gp;
+            scatter_pass_center_position.z =
+                ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
+                ground_particle_scatter_reference_height_offset_gp;
             if (pass_attempt_count > 0) {
                 remaining_pass_attempts = pass_attempt_count;
                 do {
@@ -323,8 +326,9 @@ void scatter_ground_particles(Moby *moby) {
                                   4.0f,
                                   ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f158,
                                   ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f154);
-            scatter_pass_center_position.z = ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
-                     ground_particle_scatter_reference_height_offset_gp;
+            scatter_pass_center_position.z =
+                ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
+                ground_particle_scatter_reference_height_offset_gp;
             h = (pass_attempt_count - sign) >> 1;
             if (h > 0) {
                 remaining_pass_attempts = h;

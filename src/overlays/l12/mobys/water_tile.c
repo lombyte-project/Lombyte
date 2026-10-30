@@ -124,7 +124,8 @@ void update_level_12_water_tile(struct Moby *moby) {
         *(u8 *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 0x1c) = 0x1c;
         *(u8 *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 0x1d) = 0x44;
         ((L12Slot *)D_L12_001CBF40_c)[water_tile_vars[3]].visibility = 0xffff;
-        pool_bind_tile(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190, D_L12_001CBE00_c + water_tile_vars[3] * 16);
+        pool_bind_tile(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190,
+                       D_L12_001CBE00_c + water_tile_vars[3] * 16);
         moby->state = 1;
         break;
     case SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT:
@@ -161,8 +162,13 @@ void update_level_12_water_tile(struct Moby *moby) {
             value += random_xy_offset;
             random_xy_offset = random_float_between(-4.0f, 4.0f);
             slot_record = D_L12_001CBF40_c + water_tile_vars[3] * 0x1190;
-            pool_splash(
-                value, *(float *)(slot_record + 4) + random_xy_offset, 1.0f, -0.05f, slot_record, 1, 1);
+            pool_splash(value,
+                        *(float *)(slot_record + 4) + random_xy_offset,
+                        1.0f,
+                        -0.05f,
+                        slot_record,
+                        1,
+                        1);
         }
         break;
     }
@@ -172,7 +178,8 @@ update_slot:
         float visible = 0.0f;
         if (FUN_L01_00275690_c(64.0f, moby) != -1)
             visible = 1.0f;
-        if (water_tile_vars[6] != -1 && is_point_inside_clip_volume(D_L12_00167240, water_tile_vars[6]) == 0)
+        if (water_tile_vars[6] != -1 &&
+            is_point_inside_clip_volume(D_L12_00167240, water_tile_vars[6]) == 0)
             visible = 0.0f;
         if (visible == 0.0f) {
             ((L12Slot *)D_L12_001CBF40_c)[water_tile_vars[3]].visibility = 0;

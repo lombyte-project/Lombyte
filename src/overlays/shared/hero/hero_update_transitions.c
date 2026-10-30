@@ -261,7 +261,8 @@ void hero_update_transitions(void) {
                     if (equipped_item_id == 8) {
                         quick_swap_target_item_id = D_00141660;
                     }
-                    if (quick_swap_target_item_id != 0 && equipped_item_id != quick_swap_default_item_id) {
+                    if (quick_swap_target_item_id != 0 &&
+                        equipped_item_id != quick_swap_default_item_id) {
                         if (usage_stats.stat[31].count < 0xFFFF) {
                             usage_stats.stat[31].count++;
                         }

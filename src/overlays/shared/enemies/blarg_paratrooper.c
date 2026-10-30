@@ -158,13 +158,14 @@ void blarg_paratrooper_update(char *moby) {
         PARATROOPER_STATE_KNOCKBACK_RECOVERY = 10,
         PARATROOPER_STATE_DEATH_EFFECTS_AND_REMOVE = 11
     };
-    Paratrooper302618 *paratrooper_private_state = (Paratrooper302618 *)(*(char **)((char *)(moby) + 0x78));
-    char              *path;
-    char              *target;
-    Hero302618        *hero;
-    float              pos[4] __attribute__((aligned(16)));
-    float              attack_vector_or_ray_endpoint[4] __attribute__((aligned(16)));
-    char               hit[0x30] __attribute__((aligned(16)));
+    Paratrooper302618 *paratrooper_private_state =
+        (Paratrooper302618 *)(*(char **)((char *)(moby) + 0x78));
+    char       *path;
+    char       *target;
+    Hero302618 *hero;
+    float       pos[4] __attribute__((aligned(16)));
+    float       attack_vector_or_ray_endpoint[4] __attribute__((aligned(16)));
+    char        hit[0x30] __attribute__((aligned(16)));
     if ((*(unsigned char *)((char *)(moby) + 0x31)) == 0 &&
         fast_vec_dist(moby + 0x10, D_L08_001675C0) > 40.0f)
         return;
@@ -232,7 +233,8 @@ void blarg_paratrooper_update(char *moby) {
             int   index;
             short direction;
             paratrooper_private_state->f20C = 2 * (random302618() & 1) - 1;
-            index = select_point_index_by_distance(moby + 0x10, path, 0.0f) + paratrooper_private_state->f20C;
+            index = select_point_index_by_distance(moby + 0x10, path, 0.0f) +
+                    paratrooper_private_state->f20C;
             direction = paratrooper_private_state->f20C;
             paratrooper_private_state->f1F4 = index;
             if (index >= (*(int *)((char *)(path) + 0)) || index < 0) {
@@ -248,7 +250,8 @@ void blarg_paratrooper_update(char *moby) {
         break;
     }
     case PARATROOPER_STATE_PATROL_PATH:
-        if (vector_distance_xy(moby + 0x10, path + 0x10 + paratrooper_private_state->f1F4 * 16) < paratrooper_private_state->fE0) {
+        if (vector_distance_xy(moby + 0x10, path + 0x10 + paratrooper_private_state->f1F4 * 16) <
+            paratrooper_private_state->fE0) {
             short direction = paratrooper_private_state->f20C;
             int   index = paratrooper_private_state->f1F4 + direction;
             paratrooper_private_state->f1F4 = index;
@@ -258,26 +261,32 @@ void blarg_paratrooper_update(char *moby) {
                 paratrooper_private_state->f1F4 = index + 2 * paratrooper_private_state->f20C;
             }
         }
-        FUN_L00_00259028_c(moby, (char *)paratrooper_private_state + 0xD0, path + 0x10 + paratrooper_private_state->f1F4 * 16, pos);
-        if (target && paratrooper_private_state->f164 != 2 && fast_dec_timer((char *)paratrooper_private_state + 0x1F0)) {
-            paratrooper_private_state->f1F4 =
-                select_point_index_by_distance(moby + 0x10, ((char *)l08_paths[paratrooper_private_state->f1D4]), 0.0f);
+        FUN_L00_00259028_c(moby,
+                           (char *)paratrooper_private_state + 0xD0,
+                           path + 0x10 + paratrooper_private_state->f1F4 * 16,
+                           pos);
+        if (target && paratrooper_private_state->f164 != 2 &&
+            fast_dec_timer((char *)paratrooper_private_state + 0x1F0)) {
+            paratrooper_private_state->f1F4 = select_point_index_by_distance(
+                moby + 0x10, ((char *)l08_paths[paratrooper_private_state->f1D4]), 0.0f);
             (*(unsigned char *)((char *)(moby) + 0x20)) = 2;
         }
         break;
     case PARATROOPER_STATE_APPROACH_WAYPOINT: {
         float distance;
-        paratrooper_private_state->f1F4 =
-            select_point_index_by_distance(moby + 0x10, ((char *)l08_paths[paratrooper_private_state->f1D4]), 0.0f);
+        paratrooper_private_state->f1F4 = select_point_index_by_distance(
+            moby + 0x10, ((char *)l08_paths[paratrooper_private_state->f1D4]), 0.0f);
         distance = vector_distance_xy(moby + 0x10,
-                                      ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 + paratrooper_private_state->f1F4 * 16);
+                                      ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 +
+                                          paratrooper_private_state->f1F4 * 16);
         if (distance < 1.0f || distance < paratrooper_private_state->fE0) {
             paratrooper_private_state->fE0 = 0.0f;
             (*(unsigned char *)((char *)(moby) + 0x20)) = 3;
         } else {
             FUN_L00_00259028_c(moby,
                                (char *)paratrooper_private_state + 0xD0,
-                               ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 + paratrooper_private_state->f1F4 * 16,
+                               ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 +
+                                   paratrooper_private_state->f1F4 * 16,
                                pos);
             if ((*(unsigned char *)((char *)(moby) + 0x53)) != 2)
                 blend_moby_animation(moby, 2, 0, random302618() % 4 + 7);
@@ -314,12 +323,15 @@ void blarg_paratrooper_update(char *moby) {
             }
             (*(unsigned char *)((char *)(moby) + 0x20)) = 9;
         } else if (target) {
-            if (paratrooper_private_state->f164 != 2 && fast_dec_timer((char *)paratrooper_private_state + 0x1F0)) {
+            if (paratrooper_private_state->f164 != 2 &&
+                fast_dec_timer((char *)paratrooper_private_state + 0x1F0)) {
                 qcopy((char *)paratrooper_private_state + 0x1C0, moby + 0x10);
                 paratrooper_private_state->f1F4 = (paratrooper_private_state->f1F4 + 1) & 1;
                 (*(unsigned char *)((char *)(moby) + 0x20)) = 4;
-                fast_vec_sub(
-                    pos, ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 + paratrooper_private_state->f1F4 * 16, moby + 0x10);
+                fast_vec_sub(pos,
+                             ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 +
+                                 paratrooper_private_state->f1F4 * 16,
+                             moby + 0x10);
                 if (fast_vec_dot(moby + 0xD0, pos) < 0.0f) {
                     if ((*(unsigned char *)((char *)(moby) + 0x53)) != 18)
                         blend_moby_animation(moby, 18, 0, scale_game_frames(5));
@@ -358,7 +370,8 @@ void blarg_paratrooper_update(char *moby) {
                 progress = 0.0f;
             lerp_vector(pos,
                         (char *)paratrooper_private_state + 0x1C0,
-                        ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 + paratrooper_private_state->f1F4 * 16,
+                        ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 +
+                            paratrooper_private_state->f1F4 * 16,
                         progress);
             arc = 2.0f * (progress - 0.5f);
             pos[2] += height302618 * (1.0f - arc * arc);
@@ -381,7 +394,8 @@ void blarg_paratrooper_update(char *moby) {
                 (*(unsigned char *)((char *)(moby) + 0x20)) = 3;
                 if ((*(unsigned char *)((char *)(moby) + 0x53)) != 0)
                     blend_moby_animation(moby, 0, 0, scale_game_frames(5));
-                paratrooper_private_state->f1F0 = truncate_float_to_s32(scale_time(random_float_between(45.0f, 90.0f)));
+                paratrooper_private_state->f1F0 =
+                    truncate_float_to_s32(scale_time(random_float_between(45.0f, 90.0f)));
             } else {
                 paratrooper_private_state->f1E8 = 1.0f;
                 (*(unsigned char *)((char *)(moby) + 0x20)) = 5;
@@ -423,7 +437,8 @@ void blarg_paratrooper_update(char *moby) {
                 if (shot)
                     (*(float *)((char *)(shot) + 0x2C)) *= 1.7f;
             }
-            paratrooper_private_state->f20E = (*(unsigned short *)&paratrooper_private_state->f20E) + 1;
+            paratrooper_private_state->f20E =
+                (*(unsigned short *)&paratrooper_private_state->f20E) + 1;
             if (paratrooper_private_state->f20E >= 5)
                 paratrooper_private_state->f20E = 0;
             if (paratrooper_private_state->f1E8 > 20.0f) {
@@ -431,8 +446,10 @@ void blarg_paratrooper_update(char *moby) {
                 (*(unsigned short *)&paratrooper_private_state->f1DA)++;
                 paratrooper_private_state->f1F4 = (paratrooper_private_state->f1F4 + 1) & 1;
                 (*(unsigned char *)((char *)(moby) + 0x20)) = 4;
-                fast_vec_sub(
-                    pos, ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 + paratrooper_private_state->f1F4 * 16, moby + 0x10);
+                fast_vec_sub(pos,
+                             ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 +
+                                 paratrooper_private_state->f1F4 * 16,
+                             moby + 0x10);
                 if (fast_vec_dot(moby + 0xD0, pos) < 0.0f) {
                     if ((*(unsigned char *)((char *)(moby) + 0x53)) != 18)
                         blend_moby_animation(moby, 18, 0, scale_game_frames(5));
@@ -456,11 +473,13 @@ void blarg_paratrooper_update(char *moby) {
                    D_0015ED6C * 12.566371f);
         frame = compute_interpolated_record_value(moby);
         if (frame > 12.0f && frame < 23.0f && (*(float *)((char *)(moby) + 0x54)) == 0.0f) {
-            fast_vec_sub(pos, ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10, moby + 0x10);
+            fast_vec_sub(
+                pos, ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10, moby + 0x10);
             FUN_L00_0025f730(pos, D_0015ED6C * 24.0f);
             FUN_L00_00258830_c(moby, pos, shove302618, shove_rate302618, 0.0f, 0);
         } else if ((*(unsigned char *)((char *)(moby) + 0x70)) & 2) {
-            paratrooper_private_state->f1F0 = truncate_float_to_s32(scale_time(random_float_between(45.0f, 90.0f)));
+            paratrooper_private_state->f1F0 =
+                truncate_float_to_s32(scale_time(random_float_between(45.0f, 90.0f)));
             (*(unsigned char *)((char *)(moby) + 0x20)) = 3;
             if ((*(unsigned char *)((char *)(moby) + 0x53)) != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));

@@ -295,7 +295,8 @@ void update_mine_group(struct Moby *moby) {
             debug_print(mine_group_not_found_message, *(int *)(boltcrate_pvars + 0x74));
             return;
         }
-        child_placement_segment_index = *(int *)(boltcrate_pvars + 0x90) = select_point_index_by_distance(&moby->pos, path, 0.0f);
+        child_placement_segment_index = *(int *)(boltcrate_pvars + 0x90) =
+            select_point_index_by_distance(&moby->pos, path, 0.0f);
         placed = 0;
         if (0 < ((MineGroupView *)boltcrate_pvars)->child_count)
             do {
@@ -309,15 +310,24 @@ void update_mine_group(struct Moby *moby) {
                 if (get_next_moby_in_group(&current, current, 1, 0)) {
                     int child_count = *(int *)(boltcrate_pvars + 0x78);
                     if (placed < child_count - 1) {
-                        debug_print(D_L07_00211580, placed + 1, *(int *)(boltcrate_pvars + 0x74), child_count);
+                        debug_print(D_L07_00211580,
+                                    placed + 1,
+                                    *(int *)(boltcrate_pvars + 0x74),
+                                    child_count);
                     } else if (placed == child_count - 1) {
-                        debug_print(
-                            mine_group_extra_mines_message, *(int *)(boltcrate_pvars + 0x74), child_count);
+                        debug_print(mine_group_extra_mines_message,
+                                    *(int *)(boltcrate_pvars + 0x74),
+                                    child_count);
                     }
                     *(int *)(boltcrate_pvars + 0x78) = placed + 1;
                     break;
                 }
-                sample_path(path, position, &child_placement_segment_index, (float *)&child_placement_segment_distance, *(float *)(boltcrate_pvars + 0x80), 1);
+                sample_path(path,
+                            position,
+                            &child_placement_segment_index,
+                            (float *)&child_placement_segment_distance,
+                            *(float *)(boltcrate_pvars + 0x80),
+                            1);
                 placed++;
             } while (placed < *(int *)(boltcrate_pvars + 0x78));
         if (!*(unsigned char *)(boltcrate_pvars + 0x94)) {

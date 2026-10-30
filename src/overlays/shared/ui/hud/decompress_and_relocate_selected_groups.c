@@ -156,7 +156,8 @@ void select_moby_context(int state) __asm__("FUN_L00_00235668");
 void select_moby_context(int state) {
     int oldState = l00_active_moby_context_selector;
     if (state != oldState) {
-        int saved_inactive_moby_array_start, saved_inactive_loaded_moby_end, saved_inactive_moby_pool_last_slot, old7C, oldDC, oldE0, oldE8;
+        int saved_inactive_moby_array_start, saved_inactive_loaded_moby_end,
+            saved_inactive_moby_pool_last_slot, old7C, oldDC, oldE0, oldE8;
         oldDC = (int)moby_table;
         saved_inactive_moby_array_start = l00_inactive_moby_array_start;
         l00_inactive_moby_array_start = oldDC;

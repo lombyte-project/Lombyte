@@ -126,7 +126,9 @@ void update_attached_rocket(struct Moby *moby) {
         *(OvlQuad *)&moby->rot_row0 = *(OvlQuad *)&source->rot_row0;
         *(OvlQuad *)&moby->rot_row1 = *(OvlQuad *)&source->rot_row1;
         *(OvlQuad *)&moby->rot_row2 = *(OvlQuad *)&source->rot_row2;
-        moby_point_position(*(struct Moby **)(attached_rocket_vars + 0x20), *(short *)(attached_rocket_vars + 0x26), &moby->pos);
+        moby_point_position(*(struct Moby **)(attached_rocket_vars + 0x20),
+                            *(short *)(attached_rocket_vars + 0x26),
+                            &moby->pos);
         qcopy(attached_rocket_vars + 0x10, &moby->pos);
         {
             struct Moby *source = *(struct Moby **)(attached_rocket_vars + 0x20);
@@ -171,7 +173,8 @@ void update_attached_rocket(struct Moby *moby) {
     make_hit_descriptor(work.hit, moby, 0x10001, 1.0f, &work.velocity);
     stationary = *(short *)(attached_rocket_vars + 0x24) == 0;
     distance = vector_distance_xy(&moby->pos, attached_rocket_vars + 0x10);
-    other_distance = vector_distance_xy(*(char **)(attached_rocket_vars + 0x2c) + 0x10, attached_rocket_vars + 0x10);
+    other_distance = vector_distance_xy(*(char **)(attached_rocket_vars + 0x2c) + 0x10,
+                                        attached_rocket_vars + 0x10);
     if (*(float *)(attached_rocket_vars + 0x28) < distance || other_distance < distance) {
         if (moby->visible != 0) {
             int i;

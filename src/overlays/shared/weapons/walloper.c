@@ -76,9 +76,9 @@ extern char                 D_0013F5E0[];
 extern float                D_L00_00166DC0[];
 extern float D_L00_0017AEBC NOT_SDA;
 extern int                  D_L00_001616CC;
-extern float                l00_walloper_arc_step_sample_bound __asm__("D_L00_001616A4") __attribute__((sda));
-extern short                D_L00_00161660_macro[] __asm__("D_L00_00161660") MACRO_ADDR;
-extern char                 walloper_effect_fade_in_duration_frames[4] __asm__("D_L00_001616A8")
+extern float l00_walloper_arc_step_sample_bound __asm__("D_L00_001616A4") __attribute__((sda));
+extern short D_L00_00161660_macro[] __asm__("D_L00_00161660") MACRO_ADDR;
+extern char  walloper_effect_fade_in_duration_frames[4] __asm__("D_L00_001616A8")
     __attribute__((sda));
 extern char walloper_effect_fade_out_duration_frames[4] __asm__("D_L00_001616AC")
     __attribute__((sda));
@@ -809,7 +809,9 @@ void walloper_update(char *walloper_moby) {
                 int   k;
                 D_L00_001DBEC0[i] = 2;
                 D_L00_001DBED8[i] = 0x40;
-                random_spherical_offset(arc_step, l00_walloper_arc_step_sample_bound, l00_walloper_arc_step_sample_bound);
+                random_spherical_offset(arc_step,
+                                        l00_walloper_arc_step_sample_bound,
+                                        l00_walloper_arc_step_sample_bound);
                 qcopy(D_L00_001DBBA0[i].point[0], arc_origin);
                 next_arc_index = i + 1;
                 sign = 1.0f;

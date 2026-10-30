@@ -127,7 +127,12 @@ void advance_wrapped_sine_pair(float *out,
 
 void advance_wrapped_sine_pair(
 
-    float *scaled_sine_pair, float *ph, float first_phase_rate, float second_phase_rate, float scale) {
+    float *scaled_sine_pair,
+    float *ph,
+    float  first_phase_rate,
+    float  second_phase_rate,
+
+    float scale) {
     ph[0] += first_phase_rate * frame_delta_time;
     if (ph[0] > 1.0f) {
         ph[0] -= 2.0f;

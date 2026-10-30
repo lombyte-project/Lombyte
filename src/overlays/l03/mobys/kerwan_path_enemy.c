@@ -49,8 +49,8 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
             }
         }
         heading_delta = fast_subtract_rotations(desired_heading, moby->rot.z);
-        if (absolute_float(heading_delta) >= 0.7853982f && *(unsigned char *)(enemy_pvars + 0x263) == 0 &&
-            moby->prev_seq != 1) {
+        if (absolute_float(heading_delta) >= 0.7853982f &&
+            *(unsigned char *)(enemy_pvars + 0x263) == 0 && moby->prev_seq != 1) {
             goto go;
         }
         if (absolute_float(heading_delta) > 1.5707964f) {
@@ -1324,8 +1324,12 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                                            path_node_rotation);
                 }
             }
-            probe_ground_height_cf(
-                (int)m, (char *)supporting_moby, (char *)m->pos, m->rot, (char *)m->pos, transformed_rotation);
+            probe_ground_height_cf((int)m,
+                                   (char *)supporting_moby,
+                                   (char *)m->pos,
+                                   m->rot,
+                                   (char *)m->pos,
+                                   transformed_rotation);
             m->rot[2] = transformed_rotation[2];
         }
     }
@@ -1496,7 +1500,8 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         moby_data->f270 = moby_data->f26C + 5.0f;
     }
     hit = find_moby_hit(moby, 0x330000, 0);
-    hit_response_code = resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
+    hit_response_code =
+        resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
     if (hit != 0 && kind != 1 && moby->state != 0xD) {
         hit_record_source_moby = *(char **)(hit + 0x20);
         if (hit_record_source_moby != 0) {

@@ -21,7 +21,13 @@ int rig_probe_setup(char         *moby,
                     float        *distance) __asm__("FUN_L01_00263a28");
 int rig_probe_setup(
 
-    char *moby, int index, unsigned int *type, float *probe_position, float *radius, float *distance) {
+    char         *moby,
+    int           index,
+    unsigned int *type,
+    float        *probe_position,
+    float        *radius,
+
+    float *distance) {
     char         *probe_entry;
     float         scale;
     u128          matrix[4];

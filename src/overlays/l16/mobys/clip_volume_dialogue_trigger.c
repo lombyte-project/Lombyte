@@ -59,7 +59,8 @@ void update_clip_volume_dialogue_trigger(struct Moby *moby) {
         struct Hero *player = &hero;
         if (player->state.current == 0x42) {
             *(int *)(trigger_data + 8) = 0;
-        } else if (is_point_inside_clip_volume(&player->motion.pos, *(int *)(trigger_data + 4)) != 0) {
+        } else if (is_point_inside_clip_volume(&player->motion.pos, *(int *)(trigger_data + 4)) !=
+                   0) {
             unsigned char *flags = (unsigned char *)item_unlocked;
             if (flags[0x19] == 0) {
                 flags[0x19] = 1;

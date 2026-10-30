@@ -331,7 +331,9 @@ extern short drek_missile_wander_radius_range_start_gp __asm__("D_L18_00162224")
     __attribute__((sda));
 extern short drek_missile_wander_radius_range_end_gp __asm__("D_L18_00162228") __attribute__((sda));
 
-void select_drek_fight_missile_wander_target(struct Moby *moby, void *output_wander_target_position) {
+void select_drek_fight_missile_wander_target(struct Moby *moby,
+
+                                             void *output_wander_target_position) {
     char *missile_private_vars = ((char *)moby->pvars);
     float wander_target_offset[3];
     float wander_radius = random_float_between(*(float *)&drek_missile_wander_radius_range_start_gp,
@@ -424,13 +426,16 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
             goto again;
         }
         missile_trail_private_vars = (char *)missile_moby->pvars;
-        for (trail_segment_index = 0; trail_segment_index < *(short *)(missile_trail_private_vars + 0x164);
+        for (trail_segment_index = 0;
+             trail_segment_index < *(short *)(missile_trail_private_vars + 0x164);
              trail_segment_index++) {
-            trail_segment_start_slot = (*(short *)(missile_trail_private_vars + 0x166) - trail_segment_index + 15) & 15;
+            trail_segment_start_slot =
+                (*(short *)(missile_trail_private_vars + 0x166) - trail_segment_index + 15) & 15;
             if (drek_missile_trail_draw_disabled_gp == 0) {
                 for (k = 0; k < 4; k++) {
                     fast_vec_add(&quads[trail_segment_index].positions[k],
-                                 missile_trail_private_vars + 0x10 + (((trail_segment_start_slot + (k >> 1)) & 15) << 4),
+                                 missile_trail_private_vars + 0x10 +
+                                     (((trail_segment_start_slot + (k >> 1)) & 15) << 4),
                                  extra + ((k & 1) << 2));
                 }
                 draw_geometry_quad(&quads[trail_segment_index], 0, 0);
@@ -523,15 +528,18 @@ void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) {
     int   current_game_frame;
     int   effect_callbacks_last_queued_frame;
     if ((game_frame & 3) == 0) {
-        *(unsigned short *)(missile_trail_vars + 0x166) = (*(unsigned short *)(missile_trail_vars + 0x166) + 1) & 0xF;
+        *(unsigned short *)(missile_trail_vars + 0x166) =
+            (*(unsigned short *)(missile_trail_vars + 0x166) + 1) & 0xF;
         if ((float)*(short *)(missile_trail_vars + 0x164) < 4.0f) {
-            *(unsigned short *)(missile_trail_vars + 0x164) = *(unsigned short *)(missile_trail_vars + 0x164) + 1;
+            *(unsigned short *)(missile_trail_vars + 0x164) =
+                *(unsigned short *)(missile_trail_vars + 0x164) + 1;
         }
     }
     trail_slot_byte_offset = *(short *)(missile_trail_vars + 0x166) << 4;
     qcopy((char *)(trail_slot_byte_offset + (int)missile_trail_vars) + 0x10, &moby->pos);
     current_game_frame = game_frame;
-    effect_callbacks_last_queued_frame = *(int *)&drek_missile_effect_callbacks_last_queued_frame_gp;
+    effect_callbacks_last_queued_frame =
+        *(int *)&drek_missile_effect_callbacks_last_queued_frame_gp;
     *(float *)(missile_trail_vars + trail_slot_byte_offset + 0x1C) = 1.0f;
     if (current_game_frame != effect_callbacks_last_queued_frame) {
         *(int *)&drek_missile_effect_callbacks_last_queued_frame_gp = current_game_frame;

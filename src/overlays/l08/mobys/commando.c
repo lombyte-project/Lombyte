@@ -234,9 +234,13 @@ void commando_update(WM *moby) {
         float pitch;
         qcopy(look_tracking_vectors.eye, moby->position);
         look_tracking_vectors.eye[2] += 1.0f;
-        fast_vec_sub(look_tracking_vectors.delta, look_tracking_vectors.target, look_tracking_vectors.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(look_tracking_vectors.delta[0], look_tracking_vectors.delta[1]), moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(look_tracking_vectors.delta), look_tracking_vectors.delta[2]);
+        fast_vec_sub(
+            look_tracking_vectors.delta, look_tracking_vectors.target, look_tracking_vectors.eye);
+        yaw = fast_subtract_rotations(
+            fast_arc_tan(look_tracking_vectors.delta[0], look_tracking_vectors.delta[1]),
+            moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy(look_tracking_vectors.delta),
+                              look_tracking_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

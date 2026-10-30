@@ -1396,7 +1396,11 @@ char *select_morphoray_target_and_adjust_aim(char  *self,
 
 char *
 
-select_morphoray_target_and_adjust_aim(char *morphoray_moby, float *position, float *heading, float *pitch) {
+select_morphoray_target_and_adjust_aim(char  *morphoray_moby,
+                                       float *position,
+                                       float *heading,
+
+                                       float *pitch) {
     float        start[4] __attribute__((aligned(16)));
     float        end[4] __attribute__((aligned(16)));
     float        target[4] __attribute__((aligned(16)));
@@ -1480,7 +1484,9 @@ select_morphoray_target_and_adjust_aim(char *morphoray_moby, float *position, fl
             if (morphoray_target_angle_threshold_degrees_gp * 0.017453292f < apparentAngle) {
                 candidate_aim_metadata = (char *)get_moby_target_info(candidate);
                 if (candidate_aim_metadata) {
-                    radius = convert_integer_to_float(*(unsigned char *)(candidate_aim_metadata + 10)) * 0.125f;
+                    radius =
+                        convert_integer_to_float(*(unsigned char *)(candidate_aim_metadata + 10)) *
+                        0.125f;
                     reduction = fast_arc_sin(radius / distance);
                     if (radius < distance) {
                         apparentAngle -= reduction;
@@ -1582,7 +1588,8 @@ void morphoray_update(Moby *moby) {
         morphoray_state->yaw = fast_arc_tan(direction.x, direction.y);
         morphoray_state->pitch = fast_arc_tan(func_001F9CE8_2BDAF0(&direction), direction.z);
         *(u128_2BDAF0 *)&points[0] = *(u128_2BDAF0 *)morphoray_state->pos;
-        hit = select_morphoray_target_and_adjust_aim(moby, &points[0], &morphoray_state->yaw, &morphoray_state->pitch);
+        hit = select_morphoray_target_and_adjust_aim(
+            moby, &points[0], &morphoray_state->yaw, &morphoray_state->pitch);
         func_001F9908_2BDAF0(&morphoray_state->delay);
         if (morphoray_state->target != 0) {
             if (morphoray_state->target->state == 0xFE) {
@@ -1605,12 +1612,12 @@ void morphoray_update(Moby *moby) {
                         morphoray_state->left = 0.0f;
                     }
                     morphoray_state->snd = queue_animation_update(4,
-                                                       0x7533,
-                                                       hud_init_particles,
-                                                       hud_update_particles,
-                                                       draw_uniform_size_hud_stars,
-                                                       &D_L00_001616EC,
-                                                       10000);
+                                                                  0x7533,
+                                                                  hud_init_particles,
+                                                                  hud_update_particles,
+                                                                  draw_uniform_size_hud_stars,
+                                                                  &D_L00_001616EC,
+                                                                  10000);
                 }
             }
             {
@@ -1622,7 +1629,8 @@ void morphoray_update(Moby *moby) {
                     morphoray_state->left = 0.0f;
                 }
             }
-            D_L00_001616EC = 10000 - func_001FA898_2BDAF0(morphoray_state->left * 10000.0f / morphoray_state->total);
+            D_L00_001616EC = 10000 - func_001FA898_2BDAF0(morphoray_state->left * 10000.0f /
+                                                          morphoray_state->total);
         }
         if (morphoray_state->target != 0 && morphoray_state->left <= 0.0f) {
             if (current_level_index == 5 && morphoray_state->target->oclass == 0x271 &&
@@ -1760,18 +1768,21 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     wave_offset.x = 0.0f;
     func_L00_002BE2A0_2BE3A8();
     D_L00_001617D0 = normalize_angle(D_L00_001617D0 + D_L00_001616F8_gp);
-    build_spherical_offset(&aim, D_L00_001617CC_macro, beam_effect_state->f48, beam_effect_state->f4C);
-    if (beam_effect_state->target != 0 && (target_aim_metadata = get_moby_target_info(beam_effect_state->target)) != 0) {
+    build_spherical_offset(
+        &aim, D_L00_001617CC_macro, beam_effect_state->f48, beam_effect_state->f4C);
+    if (beam_effect_state->target != 0 &&
+        (target_aim_metadata = get_moby_target_info(beam_effect_state->target)) != 0) {
         qcopy(&beam_end, &beam_effect_state->target->pos);
         beam_end.z = beam_end.z + target_aim_metadata->height;
     } else {
-        build_spherical_offset(&beam_end, D_L00_001616DC_gp, beam_effect_state->f48, beam_effect_state->f4C);
+        build_spherical_offset(
+            &beam_end, D_L00_001616DC_gp, beam_effect_state->f48, beam_effect_state->f4C);
         func_001F9BD8_2BE3A8(&beam_end, &beam_end, beam_effect_state);
     }
     beam_length = D_L00_001616DC_gp;
     if (beam_effect_state->target == 0) {
-        if (func_L00_001EFFF0_2BE3A8(beam_effect_state, &beam_end, 20, *(void **)((char *)&D_001413D0), 0) !=
-            0) {
+        if (func_L00_001EFFF0_2BE3A8(
+                beam_effect_state, &beam_end, 20, *(void **)((char *)&D_001413D0), 0) != 0) {
             beam_length = vector_distance(&D_L00_00173F60_2BE3A8, beam_effect_state);
         }
     } else {

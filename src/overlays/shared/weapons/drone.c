@@ -402,7 +402,8 @@ void update_drone(struct Moby *updated_moby) {
             }
             for (exclusion_clear_index = count; exclusion_clear_index < 9; exclusion_clear_index++)
                 ((DroneSlots *)&hero)->exclusions[exclusion_clear_index] = 0;
-            selected_target_moby = func_L00_002CF3D8_2CF808(&hero.motion, ((DroneSlots *)&hero)->exclusions);
+            selected_target_moby =
+                func_L00_002CF3D8_2CF808(&hero.motion, ((DroneSlots *)&hero)->exclusions);
             if (selected_target_moby != 0) {
                 char *h;
                 h = get_moby_target_info(selected_target_moby);
@@ -449,7 +450,8 @@ void update_drone(struct Moby *updated_moby) {
                 pitch_index_modulus = 1;
             drone_vars->desired_yaw =
                 convert_integer_to_float(counter) / (f32)divisor * 6.2831855f - 3.1415927f;
-            drone_vars->pitch = (convert_integer_to_float((counter * (pitch_index_modulus / 5)) % pitch_index_modulus) /
+            drone_vars->pitch = (convert_integer_to_float((counter * (pitch_index_modulus / 5)) %
+                                                          pitch_index_modulus) /
                                      (f32)divisor * 6.2831855f -
                                  3.1415927f) *
                                 0.25f;

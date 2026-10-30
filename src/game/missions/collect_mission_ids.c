@@ -41,8 +41,8 @@ int collect_mission_ids(int *mission_ids, int *mask, int *nums, int use_selected
             mission_ids[count] = mission_node_cursor->id;
             if (use_selected_ids != 0) {
                 mission_ids[count] = (mission_node_cursor->status == 2)
-                                 ? 0x523E
-                                 : mission_node_cursor->ids[mission_node_cursor->sel];
+                                         ? 0x523E
+                                         : mission_node_cursor->ids[mission_node_cursor->sel];
             }
             if (mask != 0 && mission_node_cursor->status == 2) {
                 *mask |= 1 << count;

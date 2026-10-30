@@ -451,8 +451,8 @@ void initialize_level_map_archive(void) {
         archive = (int *)((int)archive_base + 0x9A800);
         archive_transfer_qwords = file->size << 7;
         read_disc_sectors_and_wait(archive, file->sector, file->size);
-        state->file_handle =
-            stash_send_data((int)archive, archive_transfer_qwords, 0x4800, (int)map_archive_stash_tag);
+        state->file_handle = stash_send_data(
+            (int)archive, archive_transfer_qwords, 0x4800, (int)map_archive_stash_tag);
         state->transfer_bytes = archive_transfer_qwords;
         fast_decompress((int)archive, (int)archive_base);
         archive = archive_base;

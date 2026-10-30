@@ -784,7 +784,8 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     dmg = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
     {
-        s32 kind = resolve_moby_hit_response(moby, hit, &patrol_vars->hp, 0, &hit_processing_status, &dmg, 0, 4);
+        s32 kind = resolve_moby_hit_response(
+            moby, hit, &patrol_vars->hp, 0, &hit_processing_status, &dmg, 0, 4);
         if (hit_processing_status != 1 && moby->state != 0xB) {
             patrol_vars->hp -= dmg;
             if (hit->moby->oclass == 0x47) {
@@ -952,7 +953,8 @@ short count_group_puffoids_in_states_13_to_17(struct Moby *group_source_moby) {
         return 0;
     level_moby_array_base = D_L11_0015FFD8;
     for (;;) {
-        struct Moby *moby = (struct Moby *)(level_moby_array_base + ((*moby_list_entry & 0x7FFF) << 8));
+        struct Moby *moby =
+            (struct Moby *)(level_moby_array_base + ((*moby_list_entry & 0x7FFF) << 8));
         if (moby->oclass == 0x4DE) {
             if (moby->state >= 13) {
                 if (moby->state < 18)

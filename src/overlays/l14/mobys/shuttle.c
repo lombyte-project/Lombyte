@@ -120,7 +120,8 @@ void shuttle_update(struct Moby *shuttle_moby) {
     rider = &D_L14_0015FFD8_lift[shuttle_vars->rider];
     if (shuttle_vars->mode == 0x3039) {
         if (shuttle_vars->anchor != -1)
-            moby_point_position(shuttle_moby, shuttle_vars->anchor, &rider_attachment_origin_or_hero_position);
+            moby_point_position(
+                shuttle_moby, shuttle_vars->anchor, &rider_attachment_origin_or_hero_position);
         else
             qcopy(&rider_attachment_origin_or_hero_position, &shuttle_moby->pos);
         euler_rotation_matrix(shuttle_rotation_matrix, &shuttle_moby->rot);

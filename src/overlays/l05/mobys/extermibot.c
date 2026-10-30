@@ -226,7 +226,11 @@ void extermibot_update(unsigned char *moby) {
             path_goal_or_facing_vector[0] = fast_cos(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[1] = fast_sin(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[2] = 0.0f;
-            FUN_L00_00258b50(moby, moby_data + 0xD0, path_goal_or_facing_vector, movement_displacement_or_spark_vector_or_strike_position, 1.0f);
+            FUN_L00_00258b50(moby,
+                             moby_data + 0xD0,
+                             path_goal_or_facing_vector,
+                             movement_displacement_or_spark_vector_or_strike_position,
+                             1.0f);
             resolve_point_path_segment_xy_clearance(
                 *(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
@@ -259,7 +263,11 @@ void extermibot_update(unsigned char *moby) {
             path_goal_or_facing_vector[0] = fast_cos(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[1] = fast_sin(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[2] = 0.0f;
-            FUN_L00_00258b50(moby, moby_data + 0xD0, path_goal_or_facing_vector, movement_displacement_or_spark_vector_or_strike_position, 1.0f);
+            FUN_L00_00258b50(moby,
+                             moby_data + 0xD0,
+                             path_goal_or_facing_vector,
+                             movement_displacement_or_spark_vector_or_strike_position,
+                             1.0f);
             resolve_point_path_segment_xy_clearance(
                 *(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
@@ -371,7 +379,8 @@ void extermibot_update(unsigned char *moby) {
             path_goal_or_facing_vector[2] = 0.0f;
             path_goal_or_facing_vector[3] = extermibot_spark_facing_vector_w_gp;
             movement_displacement_or_spark_vector_or_strike_position[2] = 0.0f;
-            movement_displacement_or_spark_vector_or_strike_position[3] = extermibot_spark_random_vector_w_gp;
+            movement_displacement_or_spark_vector_or_strike_position[3] =
+                extermibot_spark_random_vector_w_gp;
             FUN_L00_0024f7c8(moby, 0, hit);
             for (i = 0x1D; i >= 0; i--) {
                 int c1, c2;
@@ -379,10 +388,13 @@ void extermibot_update(unsigned char *moby) {
                 spark_spawn_position[0] += random_float_between(-0.065f, 0.065f);
                 spark_spawn_position[1] += random_float_between(-0.065f, 0.065f);
                 spark_spawn_position[2] += random_float_between(-0.065f, 0.065f);
-                movement_displacement_or_spark_vector_or_strike_position[0] = random_float_between(-D_0015ED6C, D_0015ED6C);
-                movement_displacement_or_spark_vector_or_strike_position[1] = random_float_between(-D_0015ED6C, D_0015ED6C);
-                movement_displacement_or_spark_vector_or_strike_position[2] = random_float_between(-(extermibot_spark_random_z_scale_gp * D_0015ED6C),
-                                              extermibot_spark_random_z_scale_gp * D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[0] =
+                    random_float_between(-D_0015ED6C, D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[1] =
+                    random_float_between(-D_0015ED6C, D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[2] =
+                    random_float_between(-(extermibot_spark_random_z_scale_gp * D_0015ED6C),
+                                         extermibot_spark_random_z_scale_gp * D_0015ED6C);
                 c1 = truncate_float_to_s32(FUN_L04_001f1978(
                     random_float_between(extermibot_spark_lifetime_min_frames_gp,
                                          extermibot_spark_lifetime_min_frames_gp * 2.0f)));
@@ -396,22 +408,27 @@ void extermibot_update(unsigned char *moby) {
                               extermibot_primary_spark_paired_color_gp,
                               c1,
                               c2,
-                              truncate_float_to_s32(FUN_L04_001f1978(
-                                  random_float_between(l05_extermibot_spark_timing_min_frames, l05_extermibot_spark_timing_min_frames * 1.2f))),
+                              truncate_float_to_s32(FUN_L04_001f1978(random_float_between(
+                                  l05_extermibot_spark_timing_min_frames,
+                                  l05_extermibot_spark_timing_min_frames * 1.2f))),
                               -1);
             }
             path_goal_or_facing_vector[3] = extermibot_spark_facing_vector_w_gp * 0.1f;
-            movement_displacement_or_spark_vector_or_strike_position[3] = extermibot_spark_random_vector_w_gp * 0.1f;
+            movement_displacement_or_spark_vector_or_strike_position[3] =
+                extermibot_spark_random_vector_w_gp * 0.1f;
             for (j = 0x1D; j >= 0; j--) {
                 int c1, c2;
                 qcopy(spark_spawn_position, hit);
                 spark_spawn_position[0] += random_float_between(-0.065f, 0.065f);
                 spark_spawn_position[1] += random_float_between(-0.065f, 0.065f);
                 spark_spawn_position[2] += random_float_between(-0.065f, 0.065f);
-                movement_displacement_or_spark_vector_or_strike_position[0] = random_float_between(-D_0015ED6C, D_0015ED6C);
-                movement_displacement_or_spark_vector_or_strike_position[1] = random_float_between(-D_0015ED6C, D_0015ED6C);
-                movement_displacement_or_spark_vector_or_strike_position[2] = random_float_between(-(extermibot_spark_random_z_scale_gp * D_0015ED6C),
-                                              extermibot_spark_random_z_scale_gp * D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[0] =
+                    random_float_between(-D_0015ED6C, D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[1] =
+                    random_float_between(-D_0015ED6C, D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[2] =
+                    random_float_between(-(extermibot_spark_random_z_scale_gp * D_0015ED6C),
+                                         extermibot_spark_random_z_scale_gp * D_0015ED6C);
                 c1 = truncate_float_to_s32(FUN_L04_001f1978(
                     random_float_between(extermibot_spark_lifetime_min_frames_gp,
                                          extermibot_spark_lifetime_min_frames_gp * 2.0f)));
@@ -425,8 +442,9 @@ void extermibot_update(unsigned char *moby) {
                               extermibot_secondary_spark_paired_color_gp,
                               c1,
                               c2,
-                              truncate_float_to_s32(FUN_L04_001f1978(
-                                  random_float_between(l05_extermibot_spark_timing_min_frames, l05_extermibot_spark_timing_min_frames * 1.2f))),
+                              truncate_float_to_s32(FUN_L04_001f1978(random_float_between(
+                                  l05_extermibot_spark_timing_min_frames,
+                                  l05_extermibot_spark_timing_min_frames * 1.2f))),
                               -1);
             }
         }

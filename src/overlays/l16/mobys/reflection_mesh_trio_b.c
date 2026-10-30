@@ -131,7 +131,8 @@ void update_reflection_mesh_trio_b(struct Moby *moby) {
                     ((float **)reflection_mesh_trio_b_position_tables)[i][j * 3 + 1];
                 vertex_position[2] =
                     ((float **)reflection_mesh_trio_b_position_tables)[i][j * 3 + 2];
-                vertex_to_center_distance = fast_vec_dist(vertex_position, current_mesh_sphere_components);
+                vertex_to_center_distance =
+                    fast_vec_dist(vertex_position, current_mesh_sphere_components);
                 if (vertex_to_center_distance > current_mesh_sphere_components[3])
                     current_mesh_sphere_components[3] = vertex_to_center_distance;
             }

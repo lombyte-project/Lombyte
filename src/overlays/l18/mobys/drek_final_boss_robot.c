@@ -334,7 +334,8 @@ extern short l18_drek_boss_scene_2_started_gp __asm__("D_L18_00162360") __attrib
 extern short D_L18_00162390 __attribute__((sda));
 extern short l18_drek_boss_paired_transition_duration_frames_gp __asm__("D_L18_00162394")
     __attribute__((sda));
-extern short l18_drek_boss_paired_transition_frame_count_gp __asm__("D_L18_00162398") __attribute__((sda));
+extern short l18_drek_boss_paired_transition_frame_count_gp __asm__("D_L18_00162398")
+    __attribute__((sda));
 extern s32   D_L18_001623A0 __asm__("D_L18_001623A0");
 extern short l18_drek_boss_aimed_class_3d7_spawn_frame_count_gp __asm__("D_L18_0016239C")
     __attribute__((sda));
@@ -2141,7 +2142,8 @@ int advance_drek_boss_planar_position_toward_target(char *moby,
         movement_speed_limit,
         distance_progress,
         (float *)(boss_private_vars + 0x374));
-    fast_vec_normalize(planar_displacement, planar_displacement, *(float *)(boss_private_vars + 0x374));
+    fast_vec_normalize(
+        planar_displacement, planar_displacement, *(float *)(boss_private_vars + 0x374));
     fast_vec_add(boss_position, boss_position, planar_displacement);
     if (planar_target_distance < 0.1f) {
         if (*(float *)(boss_private_vars + 0x374) < 0.1f) {
@@ -2440,7 +2442,8 @@ int select_drek_boss_next_action(struct Moby *moby) {
                 ok = 0;
             } else {
                 float d = vector_distance_xy(D_0013E533 + 0xE9D,
-                                             D_L18_001600EC + *(int *)(boss_action_vars + 0x25C) * 128 + 0x30);
+                                             D_L18_001600EC +
+                                                 *(int *)(boss_action_vars + 0x25C) * 128 + 0x30);
                 if (*(float *)&D_L18_00162378_gp + 2.0f < d)
                     ok = 0;
             }

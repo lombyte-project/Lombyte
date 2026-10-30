@@ -23,7 +23,10 @@ s32 vi_buf_reset(struct ViBuf *video_input_buffer) {
         video_input_buffer->ts[i].len = 0;
     }
     for (i = 0; i < video_input_buffer->n; i++) {
-        sc_tag2(video_input_buffer->tag + i, DMA_ADDR((i << 11) + (u32)video_input_buffer->data), 3, 0x80);
+        sc_tag2(video_input_buffer->tag + i,
+                DMA_ADDR((i << 11) + (u32)video_input_buffer->data),
+                3,
+                0x80);
     }
     sc_tag2(video_input_buffer->tag + i, DMA_ADDR(video_input_buffer->tag), 2, 0);
     DPUT(0x1000B420, 0);

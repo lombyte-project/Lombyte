@@ -78,11 +78,13 @@ s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) {
     if (menu->data.stream.flags & 4) {
         uses_first_texture_buffer = state < 4;
         selected_grid_cell =
-            &menu_system.current->focus->data.grid.cells[menu->data.stream.loaded_entry[uses_first_texture_buffer ^ 1]];
+            &menu_system.current->focus->data.grid
+                 .cells[menu->data.stream.loaded_entry[uses_first_texture_buffer ^ 1]];
         if (selected_grid_cell->kind == 0 && item_available[selected_grid_cell->id] == 0) {
             return 1;
         }
-        if (selected_grid_cell->kind == 1 && alternate_item_available[selected_grid_cell->id] == 0) {
+        if (selected_grid_cell->kind == 1 &&
+            alternate_item_available[selected_grid_cell->id] == 0) {
             return 1;
         }
     }

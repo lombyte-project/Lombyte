@@ -493,18 +493,24 @@ void update_planetbuster_maximus_detached_parts(struct Moby *moby) {
             mark_moby_for_removal(slot_moby);
             D_L12_001FB688[i] = -1;
         }
-        position_or_vertical_step = *(float *)(detached_parts_owner_data + 0x338 + i * 16) -
-                                    *(float *)(detached_parts_owner_data + vertical_step_decrement_offset + 0x570);
+        position_or_vertical_step =
+            *(float *)(detached_parts_owner_data + 0x338 + i * 16) -
+            *(float *)(detached_parts_owner_data + vertical_step_decrement_offset + 0x570);
         *(float *)(detached_parts_owner_data + 0x338 + i * 16) = position_or_vertical_step;
         MOBY(slot_moby)->pos.z = MOBY(slot_moby)->pos.z + position_or_vertical_step;
         if (MOBY(slot_moby)->oclass == 0x500) {
             MOBY(slot_moby)->rot.x =
                 fast_add_rotations(MOBY(slot_moby)->rot.x, D_0015ED6C * 0.34906584f);
-            spring_angle(
-                slot_moby + 0x44, 1.5707964f, detached_parts_owner_data + 0x454 + i * 16, 0, 0.00200000009f, 0.3f, 0.0f);
+            spring_angle(slot_moby + 0x44,
+                         1.5707964f,
+                         detached_parts_owner_data + 0x454 + i * 16,
+                         0,
+                         0.00200000009f,
+                         0.3f,
+                         0.0f);
         } else if (MOBY(slot_moby)->oclass == 0x4FD) {
-            MOBY(slot_moby)->rot.x =
-                fast_add_rotations(MOBY(slot_moby)->rot.x, *(float *)(detached_parts_owner_data + 0x450 + i * 16));
+            MOBY(slot_moby)->rot.x = fast_add_rotations(
+                MOBY(slot_moby)->rot.x, *(float *)(detached_parts_owner_data + 0x450 + i * 16));
             spring_angle(slot_moby + 0x44,
                          -1.5707964f,
                          (float *)(detached_parts_owner_data + 0x450 + i * 16) + 1,
@@ -516,16 +522,16 @@ void update_planetbuster_maximus_detached_parts(struct Moby *moby) {
             float updated_rotation_angle;
             MOBY(slot_moby)->rot.x =
                 fast_add_rotations(MOBY(slot_moby)->rot.x, D_0015ED6C * -0.87266463f);
-            updated_rotation_angle =
-                fast_add_rotations(MOBY(slot_moby)->rot.y, *(float *)(detached_parts_owner_data + 0x454 + i * 16));
+            updated_rotation_angle = fast_add_rotations(
+                MOBY(slot_moby)->rot.y, *(float *)(detached_parts_owner_data + 0x454 + i * 16));
             MOBY(slot_moby)->pos.y = MOBY(slot_moby)->pos.y + D_0015ED6C * -4.0f;
             MOBY(slot_moby)->rot.y = updated_rotation_angle;
         } else {
             MOBY(slot_moby)->pos.y = MOBY(slot_moby)->pos.y + D_0015ED6C * -4.0f;
-            MOBY(slot_moby)->rot.x =
-                fast_add_rotations(MOBY(slot_moby)->rot.x, *(float *)(detached_parts_owner_data + 0x450 + i * 16));
-            MOBY(slot_moby)->rot.y =
-                fast_add_rotations(MOBY(slot_moby)->rot.y, *(float *)(detached_parts_owner_data + 0x454 + i * 16));
+            MOBY(slot_moby)->rot.x = fast_add_rotations(
+                MOBY(slot_moby)->rot.x, *(float *)(detached_parts_owner_data + 0x450 + i * 16));
+            MOBY(slot_moby)->rot.y = fast_add_rotations(
+                MOBY(slot_moby)->rot.y, *(float *)(detached_parts_owner_data + 0x454 + i * 16));
         }
         if (i == last) {
             qcopy((char *)&D_L12_00161F40, slot_moby + 0x10);
@@ -558,8 +564,10 @@ void update_planetbuster_maximus_glow_color(struct Moby *moby) {
         if (i == 17) {
             glow_target_moby = moby;
         } else {
-            glow_target_moby = (struct Moby *)((char *)(*(struct Moby **)&D_L12_0015FFD8_p) +
-                                    ((unsigned int)*(int *)(linked_parts_owner_pvars + i * 0x30 + 0x20) << 8));
+            glow_target_moby =
+                (struct Moby *)((char *)(*(struct Moby **)&D_L12_0015FFD8_p) +
+                                ((unsigned int)*(int *)(linked_parts_owner_pvars + i * 0x30 + 0x20)
+                                 << 8));
         }
         if (glow_target_moby->oclass == 0x4FE)
             continue;

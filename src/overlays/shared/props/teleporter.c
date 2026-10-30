@@ -389,7 +389,8 @@ void teleporter_update(struct Moby *moby) {
             set_race_camera(destination_position, destination_moby + 0x40, 0, 1);
             hero.unk20A5 = 1;
             if (*(int *)(teleporter_vars + 0x40) != -1 && *(int *)(teleporter_vars + 0x44) != -1) {
-                request_music_track(*(int *)(teleporter_vars + 0x40), *(int *)(teleporter_vars + 0x44));
+                request_music_track(*(int *)(teleporter_vars + 0x40),
+                                    *(int *)(teleporter_vars + 0x44));
             }
             MOBY(destination_moby)->state = 4;
             *(float *)(td + 0x34) = 0.0f;
@@ -466,7 +467,8 @@ void try_set_teleporter_help_message(struct Moby *moby) {
     int *teleporter_help_vars = ((int *)moby->pvars);
     switch (D_0015ED84) {
     case 12:
-        try_set_help_message(4, ((int *)&level_12_teleporter_help_message_ids)[teleporter_help_vars[4]]);
+        try_set_help_message(
+            4, ((int *)&level_12_teleporter_help_message_ids)[teleporter_help_vars[4]]);
         break;
     case 17:
         try_set_help_message(4, level_17_teleporter_help_message_ids[teleporter_help_vars[4]]);
@@ -477,13 +479,16 @@ void try_set_teleporter_help_message(struct Moby *moby) {
         try_set_help_message(4, shared_teleporter_help_message_ids[teleporter_help_vars[4]]);
         break;
     case 8:
-        try_set_help_message(4, ((int *)&level_8_teleporter_help_message_ids)[teleporter_help_vars[4]]);
+        try_set_help_message(
+            4, ((int *)&level_8_teleporter_help_message_ids)[teleporter_help_vars[4]]);
         break;
     case 16:
-        try_set_help_message(4, ((int *)&level_16_teleporter_help_message_ids)[teleporter_help_vars[4]]);
+        try_set_help_message(
+            4, ((int *)&level_16_teleporter_help_message_ids)[teleporter_help_vars[4]]);
         break;
     case 18:
-        try_set_help_message(4, ((int *)&level_18_teleporter_help_message_ids)[teleporter_help_vars[4]]);
+        try_set_help_message(
+            4, ((int *)&level_18_teleporter_help_message_ids)[teleporter_help_vars[4]]);
         break;
     }
 }

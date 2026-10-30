@@ -230,8 +230,10 @@ void select_shuttle_route_for_hero(struct Moby *moby) {
         *(float *)(shuttle_route_vars + 0x78) = y;
         *(float *)(shuttle_route_vars + 0xE4) = 1.0f;
         *(int *)(shuttle_route_vars + 0x104) = 0;
-        configured_path_entry_is_ff = visited_table[*(int *)(shuttle_route_vars + 0x94) + fr] == 0xFF;
-        alternate_path_entry_is_ff = visited_table[*(int *)(shuttle_route_vars + 0x98) + fr] == 0xFF;
+        configured_path_entry_is_ff =
+            visited_table[*(int *)(shuttle_route_vars + 0x94) + fr] == 0xFF;
+        alternate_path_entry_is_ff =
+            visited_table[*(int *)(shuttle_route_vars + 0x98) + fr] == 0xFF;
         if (alternate_path_entry_is_ff) {
             *(Route **)(shuttle_route_vars + 0x120) = alternate_path;
         } else if (configured_path_entry_is_ff) {
@@ -342,9 +344,11 @@ void try_set_shuttle_departure_help_message(struct Moby *moby) {
     char *shuttle_departure_vars = (char *)moby->pvars;
     if (*(float *)(shuttle_departure_vars + 0x104) > 0.9f) {
         try_set_help_message(0xA, 0x1F4D);
-    } else if (*(int *)(shuttle_departure_vars + 0x120) == ((int)l08_paths[*(int *)(shuttle_departure_vars + 0x80)])) {
+    } else if (*(int *)(shuttle_departure_vars + 0x120) ==
+               ((int)l08_paths[*(int *)(shuttle_departure_vars + 0x80)])) {
         try_set_help_message(0xA, 0x1F50);
-    } else if (*(int *)(shuttle_departure_vars + 0x120) == ((int)l08_paths[*(int *)(shuttle_departure_vars + 0x88)])) {
+    } else if (*(int *)(shuttle_departure_vars + 0x120) ==
+               ((int)l08_paths[*(int *)(shuttle_departure_vars + 0x88)])) {
         try_set_help_message(0xA, 0x1F4F);
     } else {
         try_set_help_message(0xA, 0x1F4E);

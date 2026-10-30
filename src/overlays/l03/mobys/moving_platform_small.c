@@ -103,7 +103,8 @@ void moving_platform_small_update(char *moby) {
             easing_frame_count = scale_game_frames(240) - *(int *)(platform_pvars + 0x10C);
             eased_endpoint_distance = *(float *)(platform_pvars + 0x110);
         }
-        eased_endpoint_distance += speed * 0.5f * convert_integer_to_float(easing_frame_count * easing_frame_count);
+        eased_endpoint_distance +=
+            speed * 0.5f * convert_integer_to_float(easing_frame_count * easing_frame_count);
         if (pb[4] < 0) {
             eased_endpoint_distance = *(float *)(platform_pvars + 0x110) - eased_endpoint_distance;
         }
@@ -170,7 +171,8 @@ void moving_platform_small_update(char *moby) {
                           *(char **)(pc + 0x10) + (next_path_node_byte_offset + 0x10)) <
             *(float *)(platform_pvars + 0xE4) * 2.0f) {
             *(int *)pc = next_path_node_index;
-            if ((next_path_node_index == end || *(int *)(platform_pvars + 0x108) != 0) && *(int *)(platform_pvars + 0xF0) > 0) {
+            if ((next_path_node_index == end || *(int *)(platform_pvars + 0x108) != 0) &&
+                *(int *)(platform_pvars + 0xF0) > 0) {
                 voice_slot_index = *(int *)(platform_pvars + 0x104);
                 if (voice_slot_index != -1) {
                     voice_slot_entry = (unsigned char *)&voice_pool + voice_slot_index * 0x70;
@@ -180,7 +182,8 @@ void moving_platform_small_update(char *moby) {
                 }
                 *(int *)(platform_pvars + 0x104) = -1;
                 moby[0x20] = 4;
-                *(int *)(platform_pvars + 0xE8) = scale_game_frames(*(int *)(platform_pvars + 0xF0));
+                *(int *)(platform_pvars + 0xE8) =
+                    scale_game_frames(*(int *)(platform_pvars + 0xF0));
             }
         }
         break;

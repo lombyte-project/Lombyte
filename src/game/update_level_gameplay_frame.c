@@ -293,7 +293,9 @@ void update_level_gameplay_frame(void) {
             interpolated_object->blend = blend;
             animation_positions = interpolated_object->animation_positions;
             scale_vector(&first_position, animation_positions + current_frame * 16, 1.0f - blend);
-            scale_vector(&second_position, animation_positions + next_frame * 16, interpolated_object->blend);
+            scale_vector(&second_position,
+                         animation_positions + next_frame * 16,
+                         interpolated_object->blend);
             /* Fakematch: the u16 copy gives the second 2 its own register. */
             transform_count = 2;
             fast_vec_add(interpolated_object->position, &first_position, &second_position);
@@ -302,8 +304,10 @@ void update_level_gameplay_frame(void) {
             interpolated_object->state_a = 0;
             interpolated_object->state_b = 0;
             update_moby_animation_state(interpolated_object);
-            fast_mem_copy(interpolated_object->frame_data_a + 0x10, (void *)current_frame_payload, 0x20);
-            fast_mem_copy(interpolated_object->frame_data_b + 0x10, (void *)next_frame_payload, 0x20);
+            fast_mem_copy(
+                interpolated_object->frame_data_a + 0x10, (void *)current_frame_payload, 0x20);
+            fast_mem_copy(
+                interpolated_object->frame_data_b + 0x10, (void *)next_frame_payload, 0x20);
             interpolated_object->opacity = 0xFF;
             interpolated_object->selected_index = 0x1FF;
             interpolated_object->cached_selector = 0xFF;

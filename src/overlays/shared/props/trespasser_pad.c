@@ -319,10 +319,14 @@ void tresspasser_pad_update(Moby *moby) {
                                    frame_time_sq_macro + frame_time_sq_macro,
                                    frame_time_macro + frame_time_macro);
         lerp_vector(&camera_pos, &pad_puzzle_state->vF0, &camera_pos, pad_puzzle_state->f110);
-        camera_rot.z = fast_add_rotations(
-            fast_subtract_rotations(camera_rot.z, pad_puzzle_state->v100.z) * pad_puzzle_state->f110, pad_puzzle_state->v100.z);
-        camera_rot.y = fast_add_rotations(
-            fast_subtract_rotations(camera_rot.y, pad_puzzle_state->v100.y) * pad_puzzle_state->f110, pad_puzzle_state->v100.y);
+        camera_rot.z =
+            fast_add_rotations(fast_subtract_rotations(camera_rot.z, pad_puzzle_state->v100.z) *
+                                   pad_puzzle_state->f110,
+                               pad_puzzle_state->v100.z);
+        camera_rot.y =
+            fast_add_rotations(fast_subtract_rotations(camera_rot.y, pad_puzzle_state->v100.y) *
+                                   pad_puzzle_state->f110,
+                               pad_puzzle_state->v100.y);
         set_camera_position(&camera_pos);
         set_camera_rotation(&camera_rot);
         D_L02_0017EB08_lui = 1;
@@ -340,7 +344,8 @@ void tresspasser_pad_update(Moby *moby) {
                 }
             }
             if (0.0f < pad_puzzle_state->fE4) {
-                pad_puzzle_state->fE4 = fast_add_rotations(pad_puzzle_state->fE4, frame_time_macro * 6.2831855f);
+                pad_puzzle_state->fE4 =
+                    fast_add_rotations(pad_puzzle_state->fE4, frame_time_macro * 6.2831855f);
                 if (0.5235988f < pad_puzzle_state->fE4) {
                     pad_puzzle_state->fE4 = 0.0f;
                     if (pad_puzzle_state->iE0 == 1) {
@@ -355,7 +360,8 @@ void tresspasser_pad_update(Moby *moby) {
                     }
                 }
             } else if (pad_puzzle_state->fE4 < 0.0f) {
-                pad_puzzle_state->fE4 = fast_add_rotations(pad_puzzle_state->fE4, -(frame_time_macro * 6.2831855f));
+                pad_puzzle_state->fE4 =
+                    fast_add_rotations(pad_puzzle_state->fE4, -(frame_time_macro * 6.2831855f));
                 if (pad_puzzle_state->fE4 < -0.5235988f) {
                     pad_puzzle_state->fE4 = 0.0f;
                     if (pad_puzzle_state->iE0 == 1) {
@@ -605,8 +611,9 @@ void draw_tresspasser_puzzle(char *moby) {
                     distance = (float)-tresspasser_third_ring_arrow_distance_gp;
                 else if (second_ring->slot[(index + 6) % 12] != 0)
                     distance = (float)-tresspasser_second_ring_arrow_distance_gp;
-                else if (first_ring->slot[(i + *(int *)(puzzle_state + 0x14) + second_step - first_step + 6) %
-                                     12] != 0)
+                else if (first_ring->slot[(i + *(int *)(puzzle_state + 0x14) + second_step -
+                                           first_step + 6) %
+                                          12] != 0)
                     distance = (float)-tresspasser_first_ring_arrow_distance_gp;
                 else {
                     int opposite;
@@ -652,11 +659,13 @@ void draw_tresspasser_puzzle(char *moby) {
             if (third->slot[slot] == 2) {
                 if (third->slot[(index + 6) % 12] != 0)
                     distance = (float)-tresspasser_third_ring_arrow_distance_gp;
-                else if (second_ring->slot[(i + *(int *)(puzzle_state + 0x18) + third_step - second_step + 6) %
-                                      12] != 0)
+                else if (second_ring->slot[(i + *(int *)(puzzle_state + 0x18) + third_step -
+                                            second_step + 6) %
+                                           12] != 0)
                     distance = (float)-tresspasser_second_ring_arrow_distance_gp;
-                else if (first_ring->slot[(i + *(int *)(puzzle_state + 0x14) + third_step - first_step + 6) %
-                                     12] != 0)
+                else if (first_ring->slot[(i + *(int *)(puzzle_state + 0x14) + third_step -
+                                           first_step + 6) %
+                                          12] != 0)
                     distance = (float)-tresspasser_first_ring_arrow_distance_gp;
                 else {
                     int opposite;

@@ -132,7 +132,8 @@ void rocket_update(struct Moby *moby) {
             moby->state = 2;
             break;
         }
-        if (current_level_index == 12 && camera_secondary_mode[0] == 50 && rocket_state->owner != 0) {
+        if (current_level_index == 12 && camera_secondary_mode[0] == 50 &&
+            rocket_state->owner != 0) {
             if ((signed char)rocket_state->owner->state < 0) {
                 mark_moby_for_removal(moby);
                 return;
@@ -167,7 +168,8 @@ void rocket_update(struct Moby *moby) {
                      0);
         if (collision_line(&moby->pos, old_pos, 0, moby, 0) ||
             coll_sphere(&moby->pos, 0.2f, 0, moby)) {
-            if (D_L12_001742C0_lui.moby != 0 && D_L12_001742C0_lui.moby != (int)rocket_state->owner) {
+            if (D_L12_001742C0_lui.moby != 0 &&
+                D_L12_001742C0_lui.moby != (int)rocket_state->owner) {
                 damage = 1;
                 if (current_level_index == 12 && camera_secondary_mode[0] == 50) {
                     damage = D_L12_00161F20 >= 16 ? 2 : 3;

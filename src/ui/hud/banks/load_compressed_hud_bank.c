@@ -11,7 +11,8 @@ void load_compressed_hud_bank(s32 bank, s32 raw_size) {
     size = (raw_size + 0xF) & 0xFFFFFFF0;
     if (size != 0) {
         level_archive_base = *(u32 *)0x15EE4C;
-        decompress_wad(*(s32 *)((u8 *)(level_archive_base - (-(bank * 8))) + 0x28) + level_archive_base, size);
+        decompress_wad(
+            *(s32 *)((u8 *)(level_archive_base - (-(bank * 8))) + 0x28) + level_archive_base, size);
     }
     {
         register u32 b2;

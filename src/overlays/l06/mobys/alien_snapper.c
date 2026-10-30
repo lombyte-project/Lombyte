@@ -742,7 +742,8 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     if (target != 0 && target->owner != 0 && target->owner->oclass == 0x418) {
         target = 0;
     }
-    reaction = resolve_moby_hit_response(moby, target, &snapper_vars->health, 0, &hit, &damage, 0, 4);
+    reaction =
+        resolve_moby_hit_response(moby, target, &snapper_vars->health, 0, &hit, &damage, 0, 4);
 
     if (hit != 1 && moby->state != 0x11 && moby->state != 3) {
         snapper_vars->health = snapper_vars->health - damage;
@@ -772,7 +773,8 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             snapper_vars->f8C = frame_time;
             snapper_vars->fC0 = 5.0f;
             snapper_vars->fC4 = 8.5f;
-            func_L00_0025D5B0_2FA618(moby, snapper_vars->f70, 9, 1, 0, fast_arc_tan(target->x, target->y));
+            func_L00_0025D5B0_2FA618(
+                moby, snapper_vars->f70, 9, 1, 0, fast_arc_tan(target->x, target->y));
             snapper_vars->f67 = 0xFA;
             break;
         case REACTION_DEATH:
@@ -783,7 +785,8 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             snapper_vars->f8C = frame_time * 5.0f;
             snapper_vars->fC0 = 7.5f;
             snapper_vars->fC4 = 14.5f;
-            func_L00_0025D5B0_2FA618(moby, snapper_vars->f70, 10, 1, 0, fast_arc_tan(target->x, target->y));
+            func_L00_0025D5B0_2FA618(
+                moby, snapper_vars->f70, 10, 1, 0, fast_arc_tan(target->x, target->y));
             snapper_vars->f67 = 0xFA;
             mark_moby_for_removal_cf(moby, 0, -1);
             break;
@@ -807,8 +810,8 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     }
     snapper_vars->f1C8 = fast_add_rotations(
         snapper_vars->f1C8, alien_snapper_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
-    moby->glow_color =
-        func_001FA8A8_2FA618(D_L06_00161EE8, D_L06_00161EEC, (fast_sin(snapper_vars->f1C8) + 1.0f) * 0.5f);
+    moby->glow_color = func_001FA8A8_2FA618(
+        D_L06_00161EE8, D_L06_00161EEC, (fast_sin(snapper_vars->f1C8) + 1.0f) * 0.5f);
 
     if (snapper_vars->f1AC != 0) {
         snapper_vars->f1A0 = D_L06_00161ED0 + 6.0f;
@@ -863,8 +866,9 @@ float compute_alien_snapper_target_gap_angle(char *snapper_moby) {
     }
     lo = -(*(float *)&alien_snapper_gap_angle_limit_degrees_gp * DEG_TO_RAD);
     hi = *(float *)&alien_snapper_gap_angle_limit_degrees_gp * DEG_TO_RAD;
-    owner_to_self_angle_radians = fast_arc_tan(*(float *)(snapper_moby + 0x10) - *(float *)(target_moby + 0x10),
-                                               *(float *)(snapper_moby + 0x14) - *(float *)(target_moby + 0x14));
+    owner_to_self_angle_radians =
+        fast_arc_tan(*(float *)(snapper_moby + 0x10) - *(float *)(target_moby + 0x10),
+                     *(float *)(snapper_moby + 0x14) - *(float *)(target_moby + 0x14));
     owner_to_self_distance = fast_vec_dist(target_moby + 0x10, snapper_moby + 0x10);
     translated_owner_to_self_vector[0] = fast_cos(owner_to_self_angle_radians) * 2.0f;
     translated_owner_to_self_vector[1] = fast_sin(owner_to_self_angle_radians) * 2.0f;

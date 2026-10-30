@@ -105,16 +105,26 @@ void init_once(void) {
     FlushCache(0);
     decompress_wad(compressed_archive_buffer, decompressed_archive_base);
     FlushCache(0);
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x70) + decompressed_archive_base, *(u32 *)(decompressed_archive_base + 0x74));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x78) + decompressed_archive_base, *(u32 *)(decompressed_archive_base + 0x7C));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x80) + decompressed_archive_base, *(u32 *)(decompressed_archive_base + 0x84));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x88) + decompressed_archive_base, *(u32 *)(decompressed_archive_base + 0x8C));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x90) + decompressed_archive_base, *(u32 *)(decompressed_archive_base + 0x94));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x98) + decompressed_archive_base, *(u32 *)(decompressed_archive_base + 0x9C));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x98) + decompressed_archive_base, *(u32 *)(decompressed_archive_base + 0x9C));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0xA8) + decompressed_archive_base, *(u32 *)(decompressed_archive_base + 0xAC));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0xB0) + decompressed_archive_base, *(u32 *)(decompressed_archive_base + 0xB4));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0xA0) + decompressed_archive_base, *(u32 *)(decompressed_archive_base + 0xA4));
+    load_irx_module(*(u32 *)(decompressed_archive_base + 0x70) + decompressed_archive_base,
+                    *(u32 *)(decompressed_archive_base + 0x74));
+    load_irx_module(*(u32 *)(decompressed_archive_base + 0x78) + decompressed_archive_base,
+                    *(u32 *)(decompressed_archive_base + 0x7C));
+    load_irx_module(*(u32 *)(decompressed_archive_base + 0x80) + decompressed_archive_base,
+                    *(u32 *)(decompressed_archive_base + 0x84));
+    load_irx_module(*(u32 *)(decompressed_archive_base + 0x88) + decompressed_archive_base,
+                    *(u32 *)(decompressed_archive_base + 0x8C));
+    load_irx_module(*(u32 *)(decompressed_archive_base + 0x90) + decompressed_archive_base,
+                    *(u32 *)(decompressed_archive_base + 0x94));
+    load_irx_module(*(u32 *)(decompressed_archive_base + 0x98) + decompressed_archive_base,
+                    *(u32 *)(decompressed_archive_base + 0x9C));
+    load_irx_module(*(u32 *)(decompressed_archive_base + 0x98) + decompressed_archive_base,
+                    *(u32 *)(decompressed_archive_base + 0x9C));
+    load_irx_module(*(u32 *)(decompressed_archive_base + 0xA8) + decompressed_archive_base,
+                    *(u32 *)(decompressed_archive_base + 0xAC));
+    load_irx_module(*(u32 *)(decompressed_archive_base + 0xB0) + decompressed_archive_base,
+                    *(u32 *)(decompressed_archive_base + 0xB4));
+    load_irx_module(*(u32 *)(decompressed_archive_base + 0xA0) + decompressed_archive_base,
+                    *(u32 *)(decompressed_archive_base + 0xA4));
     DebugPrint(loaded_irx_modules_message);
     sceCdDiskReady(0);
     init_pads();

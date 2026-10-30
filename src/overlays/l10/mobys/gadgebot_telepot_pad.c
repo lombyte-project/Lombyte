@@ -152,7 +152,8 @@ void gadgebot_telepot_pad_update(char *moby) {
                 func_001F9FA8_2BFBB8(func_00214158_2BFBB8()) * func_002140F8_2BFBB8(0.0f, 0.5f);
             velocity[2] = 0.0f;
             velocity[2] += func_002140F8_2BFBB8(0.0f, 0.5f);
-            add_vectors(offset, velocity, (*(char **)&D_L10_0015FFD8) + (*telepot_pad_vars << 8) + 0x10);
+            add_vectors(
+                offset, velocity, (*(char **)&D_L10_0015FFD8) + (*telepot_pad_vars << 8) + 0x10);
             func_L00_001FF4B0_2BFBB8(position, position, func_002140F8_2BFBB8(0.0f, D_0015ED6C));
             position[2] = func_002140F8_2BFBB8(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = func_001F9850_2BFBB8(func_L00_00258BC8_2BFBB8(15, 30));

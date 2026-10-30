@@ -190,7 +190,8 @@ void robot_dog_update(char *moby) {
         robot_dog_state->i244 = 0;
         robot_dog_state->i26C = 0;
         robot_dog_state->i260 = 0;
-        robot_dog_state->f1AC = robot_dog_state->f1A4 * initialization_multiplier_or_desired_heading;
+        robot_dog_state->f1AC =
+            robot_dog_state->f1A4 * initialization_multiplier_or_desired_heading;
         robot_dog_state->b58 = 8;
         robot_dog_state->b5A = 7;
         if (rand() & 1) {
@@ -253,8 +254,12 @@ void robot_dog_update(char *moby) {
     case ROBOT_DOG_TURN_TO_TARGET:
         initialization_multiplier_or_desired_heading = fast_arc_tan(
             selected_target.pos[0] - MOBY(moby)->pos.x, selected_target.pos[1] - MOBY(moby)->pos.y);
-        FUN_L00_00258278(
-            moby, robot_dog_state->v220, initialization_multiplier_or_desired_heading, 0.02f, 0.3f, 0.1f);
+        FUN_L00_00258278(moby,
+                         robot_dog_state->v220,
+                         initialization_multiplier_or_desired_heading,
+                         0.02f,
+                         0.3f,
+                         0.1f);
         if (((unsigned char *)moby)[0x70] & 2) {
             robot_dog_state->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby[0x20] = 4;
@@ -266,8 +271,12 @@ void robot_dog_update(char *moby) {
     case ROBOT_DOG_CHASE_TARGET:
         initialization_multiplier_or_desired_heading = fast_arc_tan(
             selected_target.pos[0] - MOBY(moby)->pos.x, selected_target.pos[1] - MOBY(moby)->pos.y);
-        FUN_L00_00258278(
-            moby, robot_dog_state->v220, initialization_multiplier_or_desired_heading, 0.05f, 0.3f, 0.2f);
+        FUN_L00_00258278(moby,
+                         robot_dog_state->v220,
+                         initialization_multiplier_or_desired_heading,
+                         0.05f,
+                         0.3f,
+                         0.2f);
         forward_vector_or_path_point[0] = 2.0f * fast_cos(MOBY(moby)->rot.z);
         forward_vector_or_path_point[1] = 2.0f * fast_sin(MOBY(moby)->rot.z);
         forward_vector_or_path_point[2] = 0.0f;
@@ -277,7 +286,8 @@ void robot_dog_update(char *moby) {
         }
         target_distance = vector_distance_xy(moby + 0x10, &selected_target);
         if (target_distance < robot_dog_state->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
-                                  robot_dog_state->f234 * frame_time * FUN_L04_001f1978(10.0f) + 1.5f) {
+                                  robot_dog_state->f234 * frame_time * FUN_L04_001f1978(10.0f) +
+                                  1.5f) {
             moby[0x20] = 6;
             if (((unsigned char *)moby)[0x53] != 5) {
                 blend_moby_animation(moby, 5, 0, truncate_float_to_s32(FUN_L04_001f1978(10.0f)));
@@ -334,14 +344,21 @@ void robot_dog_update(char *moby) {
     case ROBOT_DOG_MELEE_ATTACK:
         initialization_multiplier_or_desired_heading = fast_arc_tan(
             selected_target.pos[0] - MOBY(moby)->pos.x, selected_target.pos[1] - MOBY(moby)->pos.y);
-        FUN_L00_00258278(
-            moby, robot_dog_state->v220, initialization_multiplier_or_desired_heading, 0.05f, 0.3f, 0.2f);
+        FUN_L00_00258278(moby,
+                         robot_dog_state->v220,
+                         initialization_multiplier_or_desired_heading,
+                         0.05f,
+                         0.3f,
+                         0.2f);
         forward_vector_or_path_point[0] = 2.0f * fast_cos(MOBY(moby)->rot.z);
         forward_vector_or_path_point[1] = 2.0f * fast_sin(MOBY(moby)->rot.z);
         forward_vector_or_path_point[2] = 0.0f;
-        FUN_L00_00258b50(moby, &robot_dog_state->i180, forward_vector_or_path_point, robot_dog_state->v40, 1.0f);
+        FUN_L00_00258b50(
+            moby, &robot_dog_state->i180, forward_vector_or_path_point, robot_dog_state->v40, 1.0f);
         if (((unsigned char *)moby)[0x52] == 5) {
-            approach_value(&robot_dog_state->f1A4, 0.0f, robot_dog_state->f234 * frame_time / FUN_L04_001f1978(40.0f));
+            approach_value(&robot_dog_state->f1A4,
+                           0.0f,
+                           robot_dog_state->f234 * frame_time / FUN_L04_001f1978(40.0f));
         }
         if (absolute_float(compute_interpolated_record_value(moby) - 25.0f) <= 0.25f &&
             absolute_float(selected_target.pos[2] - MOBY(moby)->pos.z) < 1.0f &&
@@ -367,9 +384,14 @@ void robot_dog_update(char *moby) {
         break;
     case ROBOT_DOG_RETURN_HOME:
         initialization_multiplier_or_desired_heading =
-            fast_arc_tan(robot_dog_state->home[0] - MOBY(moby)->pos.x, robot_dog_state->home[1] - MOBY(moby)->pos.y);
-        FUN_L00_00258278(
-            moby, robot_dog_state->v220, initialization_multiplier_or_desired_heading, 0.02f, 0.3f, 0.1f);
+            fast_arc_tan(robot_dog_state->home[0] - MOBY(moby)->pos.x,
+                         robot_dog_state->home[1] - MOBY(moby)->pos.y);
+        FUN_L00_00258278(moby,
+                         robot_dog_state->v220,
+                         initialization_multiplier_or_desired_heading,
+                         0.02f,
+                         0.3f,
+                         0.1f);
         forward_vector_or_path_point[0] = 2.0f * fast_cos(MOBY(moby)->rot.z);
         forward_vector_or_path_point[1] = 2.0f * fast_sin(MOBY(moby)->rot.z);
         forward_vector_or_path_point[2] = 0.0f;
@@ -381,8 +403,9 @@ void robot_dog_update(char *moby) {
             }
         } else if (robot_dog_state->i244 == 0) {
             target_distance = vector_distance_xy(moby + 0x10, &selected_target);
-            if (target_distance < robot_dog_state->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
-                                      robot_dog_state->f234 * frame_time * FUN_L04_001f1978(10.0f) + 1.5f) {
+            if (target_distance <
+                robot_dog_state->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
+                    robot_dog_state->f234 * frame_time * FUN_L04_001f1978(10.0f) + 1.5f) {
                 moby[0x20] = 6;
                 if (((unsigned char *)moby)[0x53] != 5) {
                     blend_moby_animation(

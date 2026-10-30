@@ -491,23 +491,28 @@ void update_moving_size_alpha_tween_particle(char *part) {
     if (*(short *)(particle_tween_motion_data + 8) - *(short *)(part + 0xA) < 6) {
         int start;
         int end;
-        interpolation_factor = (float)(*(short *)(particle_tween_motion_data + 8) - *(short *)(part + 0xA)) / 5.0f;
+        interpolation_factor =
+            (float)(*(short *)(particle_tween_motion_data + 8) - *(short *)(part + 0xA)) / 5.0f;
         *(float *)(part + 0xC) =
             *(float *)(particle_tween_motion_data + 4) +
-            ((*(float *)(part + 0x20) + *(float *)(particle_tween_motion_data + 4)) * 0.5f - *(float *)(particle_tween_motion_data + 4)) *
+            ((*(float *)(part + 0x20) + *(float *)(particle_tween_motion_data + 4)) * 0.5f -
+             *(float *)(particle_tween_motion_data + 4)) *
                 interpolation_factor;
         end = (unsigned char)particle_tween_motion_data[0xB] >> 1;
         start = (unsigned char)particle_tween_motion_data[0xB];
         alpha = truncate_float_to_s32((float)start + (float)(end - start) * interpolation_factor);
     } else {
         interpolation_factor =
-            (float)*(short *)(part + 0xA) / convert_integer_to_float(*(short *)(particle_tween_motion_data + 8) - 6);
+            (float)*(short *)(part + 0xA) /
+            convert_integer_to_float(*(short *)(particle_tween_motion_data + 8) - 6);
         *(float *)(part + 0xC) =
             *(float *)(part + 0x20) +
-            ((*(float *)(part + 0x20) + *(float *)(particle_tween_motion_data + 4)) * 0.5f - *(float *)(part + 0x20)) *
+            ((*(float *)(part + 0x20) + *(float *)(particle_tween_motion_data + 4)) * 0.5f -
+             *(float *)(part + 0x20)) *
                 interpolation_factor;
-        alpha = truncate_float_to_s32(
-            (float)((unsigned char)particle_tween_motion_data[0xB] >> 1) * interpolation_factor + 0.0f);
+        alpha = truncate_float_to_s32((float)((unsigned char)particle_tween_motion_data[0xB] >> 1) *
+                                          interpolation_factor +
+                                      0.0f);
     }
     *(int *)(part + 4) = (alpha << 24) | (*(int *)(part + 4) & 0xFFFFFF);
     vcopy_273090(velocity, (float *)(particle_tween_motion_data + 0xC));
@@ -1434,7 +1439,8 @@ void update_line_collision_rgb_fading_particle(unsigned char *particle) {
     }
     if (particle_data[7] <= 0.0f || fast_dec_timer_s16(particle + 0xA) ||
         *(float *)(particle + 0xC) < 0.0f || ((float *)candidate_particle_position)[0] < 0.01f ||
-        ((float *)candidate_particle_position)[1] < 0.01f || ((float *)candidate_particle_position)[2] < 0.01f) {
+        ((float *)candidate_particle_position)[1] < 0.01f ||
+        ((float *)candidate_particle_position)[2] < 0.01f) {
         free_effect_particle(particle);
         return;
     }

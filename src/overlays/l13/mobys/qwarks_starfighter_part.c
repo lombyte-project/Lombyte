@@ -66,7 +66,8 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
         qzero(&starfighter_part_vars->unk20);
         break;
     case PART_STATE_SYNC_PARENT_SCALE:
-        moby->scale = moby->pclass->scale * starfighter_part_vars->parent->scale / starfighter_part_vars->parent->pclass->scale;
+        moby->scale = moby->pclass->scale * starfighter_part_vars->parent->scale /
+                      starfighter_part_vars->parent->pclass->scale;
         moby->spawn_frame = starfighter_part_vars->parent->spawn_frame;
         break;
     case PART_STATE_IDLE:
@@ -82,7 +83,8 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
                  hit->oclass != 0x186 && hit->oclass != 0x187 && hit->oclass != 0x188 &&
                  hit->oclass != 0x189 && hit->oclass != 0x18A && hit->oclass != 0x18B &&
                  hit->oclass != 0x18C && hit->oclass != 0x18F && hit->oclass != 0x190)) {
-                reflect_vector(&starfighter_part_vars->vel, &starfighter_part_vars->vel, coll + 0x40);
+                reflect_vector(
+                    &starfighter_part_vars->vel, &starfighter_part_vars->vel, coll + 0x40);
                 moby->state = 4;
             }
         }

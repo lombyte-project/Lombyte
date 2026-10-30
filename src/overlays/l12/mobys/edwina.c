@@ -226,9 +226,12 @@ void edwina_update(L16WatchMoby *moby) {
         float pitch;
         qcopy(edwina_look_vectors.eye, moby->position);
         edwina_look_vectors.eye[2] += 1.0f;
-        fast_vec_sub(edwina_look_vectors.delta, edwina_look_vectors.target, edwina_look_vectors.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(edwina_look_vectors.delta[0], edwina_look_vectors.delta[1]), moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(edwina_look_vectors.delta), edwina_look_vectors.delta[2]);
+        fast_vec_sub(
+            edwina_look_vectors.delta, edwina_look_vectors.target, edwina_look_vectors.eye);
+        yaw = fast_subtract_rotations(
+            fast_arc_tan(edwina_look_vectors.delta[0], edwina_look_vectors.delta[1]), moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy(edwina_look_vectors.delta),
+                              edwina_look_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

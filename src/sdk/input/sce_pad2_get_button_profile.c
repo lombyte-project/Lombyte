@@ -40,7 +40,8 @@ s32 scePad2GetButtonProfile(s32 socket, u8 *profile) {
     cmd.bits.mode = 3;
     cmd.bits.cmd = 2;
     cmd.bits.ver = 1;
-    profile_byte_count_or_error = sceDbcReceiveData(socket, cmd.word, &received_profile_byte_count, profile);
+    profile_byte_count_or_error =
+        sceDbcReceiveData(socket, cmd.word, &received_profile_byte_count, profile);
     if (profile_byte_count_or_error >= 0) {
         scePad2SetButtonOrder(profile, (u8 *)&((Pad2Info *)D_0015B550)[socket]);
         profile_byte_count_or_error = received_profile_byte_count;

@@ -34,7 +34,10 @@ void conveyor_belt_update(struct Moby *moby) {
             *(int *)(conveyor_belt_private_data + 0x48) = 0;
             break;
         }
-        update_entity_matrix(conveyor_belt_private_data + 0x60, conveyor_belt_private_data + 0x40, &moby->rot, &moby->rot);
+        update_entity_matrix(conveyor_belt_private_data + 0x60,
+                             conveyor_belt_private_data + 0x40,
+                             &moby->rot,
+                             &moby->rot);
     }
 }
 

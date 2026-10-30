@@ -26,7 +26,8 @@ void update_camera_blend(char *to_cam) {
     if (*(unsigned char *)(camera_transition_state + 2) == 0) {
         transition_complete = step_camera_blend(to_cam, camera_transition_state + 0x10);
     } else {
-        transition_complete = advance_alternate_camera_transition(to_cam, camera_transition_state + 0x70);
+        transition_complete =
+            advance_alternate_camera_transition(to_cam, camera_transition_state + 0x70);
     }
     if (transition_complete != 0) {
         if (camera_position_publication_suppressed[0] == 0) {

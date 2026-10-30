@@ -41,8 +41,10 @@ extern float                      FUN_001f96b0_c(float) __asm__("FUN_001f96b0");
 
 #include "rnc/overlay/l08/mobys/falling_debris_data/update_falling_debris_2.h"
 
-extern int l08_falling_debris_burst_initial_particle_word __asm__("D_L08_00161C04") __attribute__((sda));
-extern int l08_falling_debris_burst_second_particle_word __asm__("D_L08_00161C08") __attribute__((sda));
+extern int l08_falling_debris_burst_initial_particle_word __asm__("D_L08_00161C04")
+    __attribute__((sda));
+extern int l08_falling_debris_burst_second_particle_word __asm__("D_L08_00161C08")
+    __attribute__((sda));
 
 #include "rnc/overlay/l08/mobys/falling_debris_data/update_falling_debris.h"
 

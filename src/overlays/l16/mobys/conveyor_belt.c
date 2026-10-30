@@ -103,9 +103,11 @@ void update_conveyor_group_voice(struct Moby *moby) {
     if (group_entry == 0)
         return;
     do {
-        char *voice_target_candidate_moby = D_L16_00160098_c9a50 + (((unsigned short)*group_entry & 0x7FFF) << 8);
+        char *voice_target_candidate_moby =
+            D_L16_00160098_c9a50 + (((unsigned short)*group_entry & 0x7FFF) << 8);
         if (*(short *)(voice_target_candidate_moby + 0xA6) == 0x1D7) {
-            float candidate_distance = fast_vec_dist(D_L16_001671C0, voice_target_candidate_moby + 0x10);
+            float candidate_distance =
+                fast_vec_dist(D_L16_001671C0, voice_target_candidate_moby + 0x10);
             if (candidate_distance < best) {
                 nearest = voice_target_candidate_moby;
                 best = candidate_distance;

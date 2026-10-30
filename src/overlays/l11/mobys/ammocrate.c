@@ -41,7 +41,9 @@ int sync_ship_pickup_child_pose(struct Moby *ship_pickup_moby, char *pickup_priv
     qcopy(child + 0x40, &ship_pickup_moby->rot);
     update_entity(child);
     moby_point_position(*(char **)(pickup_private_data + 0x34), 0, pickup_private_data);
-    fast_vec_sub(pickup_private_data + 0x20, *(char **)(pickup_private_data + 0x34) + 0x10, pickup_private_data);
+    fast_vec_sub(pickup_private_data + 0x20,
+                 *(char **)(pickup_private_data + 0x34) + 0x10,
+                 pickup_private_data);
     return 1;
 missing:
     qcopy(pickup_private_data, &ship_pickup_moby->pos);

@@ -349,7 +349,8 @@ void update_colliding_effect_particle(unsigned char *particle) {
     position_or_velocity_scratch[0] = *(float *)(particle + 0x10) + *(float *)(particle_data + 0x0);
     position_or_velocity_scratch[1] = *(float *)(particle + 0x14) + *(float *)(particle_data + 0x4);
     position_or_velocity_scratch[2] = *(float *)(particle + 0x18) + *(float *)(particle_data + 0x8);
-    if ((*(unsigned int *)(update_parameters + 0x70) & 1) && particle_collision_269d20(particle + 0x10, position_or_velocity_scratch, 4, particle, 0)) {
+    if ((*(unsigned int *)(update_parameters + 0x70) & 1) &&
+        particle_collision_269d20(particle + 0x10, position_or_velocity_scratch, 4, particle, 0)) {
         velocity[0] = *(float *)(particle_data + 0x0);
         velocity[1] = *(float *)(particle_data + 0x4);
         velocity[2] = *(float *)(particle_data + 0x8);
@@ -368,7 +369,8 @@ void update_colliding_effect_particle(unsigned char *particle) {
     }
     if (*(unsigned int *)(update_parameters + 0x70) & 2) {
         red = convert_integer_to_float((particle[4] << 8) | particle_data[0x18]) / 65535.0f;
-        green = (float)truncate_float_to_s32((int)((*(unsigned int *)(particle + 4) & 0xff00) | particle_data[0x19])) /
+        green = (float)truncate_float_to_s32(
+                    (int)((*(unsigned int *)(particle + 4) & 0xff00) | particle_data[0x19])) /
                 65535.0f;
         blue = (float)truncate_float_to_s32(
                    (int)(((*(unsigned int *)(particle + 4) >> 8) & 0xff00) | particle_data[0x1a])) /
@@ -442,7 +444,8 @@ void update_colliding_effect_particle(unsigned char *particle) {
         *(int *)(particle + 4) = color;
     } else if (*(unsigned int *)(update_parameters + 0x70) & 4) {
         color = truncate_float_to_s32(*(float *)(particle_data + 0x10) * 255.0f);
-        *(unsigned int *)(particle + 4) = (*(unsigned int *)(particle + 4) & 0xffffff) | (color << 24);
+        *(unsigned int *)(particle + 4) =
+            (*(unsigned int *)(particle + 4) & 0xffffff) | (color << 24);
     }
     if (*(unsigned int *)(update_parameters + 0x70) & 4) {
         if (particle_data[0x1b] & 0x80)
@@ -472,7 +475,9 @@ void update_colliding_effect_particle(unsigned char *particle) {
             *(u128 *)matrix = *(u128 *)update_parameters;
         }
         fast_vec_add(position_or_velocity_scratch, position_or_velocity_scratch, matrix);
-        clamp_vector_length(position_or_velocity_scratch, position_or_velocity_scratch, *(float *)(update_parameters + 0x40));
+        clamp_vector_length(position_or_velocity_scratch,
+                            position_or_velocity_scratch,
+                            *(float *)(update_parameters + 0x40));
         *(float *)(particle_data + 0x0) = position_or_velocity_scratch[0];
         *(float *)(particle_data + 0x4) = position_or_velocity_scratch[1];
         *(float *)(particle_data + 0x8) = position_or_velocity_scratch[2];
@@ -488,7 +493,8 @@ void update_colliding_effect_particle(unsigned char *particle) {
         *(float *)(particle + 0x14) < *(float *)(update_parameters + 0x14) ||
         *(float *)(particle + 0x18) < *(float *)(update_parameters + 0x18) ||
         *(float *)(update_parameters + 0x20) < *(float *)(particle + 0x10) ||
-        *(float *)(update_parameters + 0x24) < *(float *)(particle + 0x14) || *(float *)(update_parameters + 0x28) < *(float *)(particle + 0x18))
+        *(float *)(update_parameters + 0x24) < *(float *)(particle + 0x14) ||
+        *(float *)(update_parameters + 0x28) < *(float *)(particle + 0x18))
         free_effect_particle(particle);
 }
 

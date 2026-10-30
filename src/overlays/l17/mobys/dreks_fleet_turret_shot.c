@@ -70,10 +70,10 @@ unsigned char *create_drone_flight_trail_record(char *position_source, int mode,
                 *(short *)(flight_trail_record + 0xA) = d;
                 if (step != 0) {
                     float a = convert_integer_to_float((short)d - 1);
-                    *(int *)(flight_trail_record + 4) =
-                        FUN_001fa6e0_q(0x603F1008,
-                                       *(int *)(flight_trail_record + 4),
-                                       a / convert_integer_to_float(*(short *)(flight_trail_record + 0xA)));
+                    *(int *)(flight_trail_record + 4) = FUN_001fa6e0_q(
+                        0x603F1008,
+                        *(int *)(flight_trail_record + 4),
+                        a / convert_integer_to_float(*(short *)(flight_trail_record + 0xA)));
                 }
             } else {
                 int d = 5 - step;
@@ -83,10 +83,10 @@ unsigned char *create_drone_flight_trail_record(char *position_source, int mode,
                 *(short *)(flight_trail_record + 0xA) = d;
                 if (step != 0) {
                     float a = convert_integer_to_float((short)d - 1);
-                    *(int *)(flight_trail_record + 4) =
-                        FUN_001fa6e0_q(0x30FFFFFF,
-                                       *(int *)(flight_trail_record + 4),
-                                       a / convert_integer_to_float(*(short *)(flight_trail_record + 0xA)));
+                    *(int *)(flight_trail_record + 4) = FUN_001fa6e0_q(
+                        0x30FFFFFF,
+                        *(int *)(flight_trail_record + 4),
+                        a / convert_integer_to_float(*(short *)(flight_trail_record + 0xA)));
                 }
             }
             flight_trail_record[1] = 0;

@@ -57,8 +57,10 @@ unsigned char *spawn_fighter_jet_rocket(struct Moby *firing_moby,
         *(float *)(rocket_private_state + 0x2C) = scale;
         *(int *)(rocket_private_state + 0x30) = 0;
         *(int *)(rocket_private_state + 0x34) = 0;
-        build_spherical_offset(
-            rocket_private_state, scale, *(float *)(initial_rotation + 8), -*(float *)(initial_rotation + 4));
+        build_spherical_offset(rocket_private_state,
+                               scale,
+                               *(float *)(initial_rotation + 8),
+                               -*(float *)(initial_rotation + 4));
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }

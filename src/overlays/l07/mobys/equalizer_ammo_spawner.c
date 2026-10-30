@@ -72,7 +72,8 @@ void update_equalizer_ammo_spawner(struct Moby *moby) {
             L07PathNode *nodes = (L07PathNode *)D_L07_001B0530[ammo_spawner_state[1]];
             ((L07PathNode *)(D_L07_001B0530[ammo_spawner_state[1]] + (i << 4)))[1].length =
                 fast_vec_dist(&nodes[i + 1], &nodes[(i + 1) % *(int *)nodes + 1]);
-            *(float *)(ammo_spawner_state + 8) += ((L07PathNode *)(D_L07_001B0530[ammo_spawner_state[1]] + (i << 4)))[1].length;
+            *(float *)(ammo_spawner_state + 8) +=
+                ((L07PathNode *)(D_L07_001B0530[ammo_spawner_state[1]] + (i << 4)))[1].length;
         }
         moby->state = 1;
     }
@@ -91,7 +92,8 @@ state_one: {
         float min_ratio = *(float *)(ammo_spawner_state + 2) / 100.0f;
         if (min_ratio <= ratio && ratio < *(float *)(ammo_spawner_state + 3) / 100.0f) {
             float amount;
-            float lower = scale * (*(float *)(ammo_spawner_state + 4) / 100.0f) - current_ammo_count;
+            float lower =
+                scale * (*(float *)(ammo_spawner_state + 4) / 100.0f) - current_ammo_count;
             float upper = scale * (*(float *)(ammo_spawner_state + 5) / 100.0f);
             int   total;
             int   batch;
@@ -126,7 +128,8 @@ state_one: {
                         if (ammo_spawner_state[9] == -1)
                             accepted = 1;
                         else if (near <
-                                 vector_distance_xy(level_mobys + ammo_spawner_state[9] * 0x100 + 0x10, position))
+                                 vector_distance_xy(
+                                     level_mobys + ammo_spawner_state[9] * 0x100 + 0x10, position))
                             accepted = 1;
                         else
                             step += retry_step;
@@ -140,7 +143,8 @@ state_one: {
                                 fptodp(position[2]),
                                 fptodp(step));
                     spawn_on_path(position, id, batch, 0);
-                    step += random_float_between(*(float *)(ammo_spawner_state + 8) / retry_step, 2.0f);
+                    step +=
+                        random_float_between(*(float *)(ammo_spawner_state + 8) / retry_step, 2.0f);
                     if (remaining < batch) {
                         batch = remaining;
                         debug_print(equalizer_ammo_batch_reduced_format, remaining);

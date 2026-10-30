@@ -165,9 +165,11 @@ void update_level01_cutscene_effects(struct Moby *moby) {
                     if (fx_cutscene.frame >= scale_game_frames(850) &&
                         fx_cutscene.frame <= scale_game_frames(1160)) {
                         color = 0x7F204080;
-                        for (spark_emitter_point_index = 1; spark_emitter_point_index < 7; spark_emitter_point_index++) {
-                            moby_point_position(
-                                cutscene_moby, spark_emitter_point_index, &effect_position_or_motion_delta);
+                        for (spark_emitter_point_index = 1; spark_emitter_point_index < 7;
+                             spark_emitter_point_index++) {
+                            moby_point_position(cutscene_moby,
+                                                spark_emitter_point_index,
+                                                &effect_position_or_motion_delta);
                             for (j = 0; j < 2; j++) {
                                 spread = random_integer_below(16);
                                 spark = spawn_spark(&effect_position_or_motion_delta,

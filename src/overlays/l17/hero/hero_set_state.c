@@ -893,8 +893,12 @@ int hero_set_state(int a, int b) {
         p->unk5B8 = 0;
         p->unk5BC = 0;
         p->rail_jump_queued = 0;
-        sample_path(
-            p->rail_spline, (char *)&sampled_path_position, (char *)&i, (char *)&f, p->rail_spline_loops, 1.0f);
+        sample_path(p->rail_spline,
+                    (char *)&sampled_path_position,
+                    (char *)&i,
+                    (char *)&f,
+                    p->rail_spline_loops,
+                    1.0f);
         fast_vec_sub(&d.v, &sampled_path_position, &p->motion.pos);
         if (0.001f < fast_vec_length(&d.v)) {
             fast_vec_normalize(&d.v, &d.v, 1.0f);

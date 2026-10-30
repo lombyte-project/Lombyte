@@ -196,8 +196,11 @@ void update_drawbridge(Moby *moby) {
         D_L06_0015F3FC = 1.0f - absolute_float(drawbridge_control_vars->fade);
         if (previous_fade < 0.0f && 0.0f <= drawbridge_control_vars->fade) {
             set_race_camera((unsigned char *)&hero + 0x80, (unsigned char *)&hero + 0x90, 0x72, 1);
-            jet_mount(
-                &l06_cuboids[drawbridge_control_vars->node_start].pos, &l06_cuboids[drawbridge_control_vars->node_start].rot, 1, 0, 0);
+            jet_mount(&l06_cuboids[drawbridge_control_vars->node_start].pos,
+                      &l06_cuboids[drawbridge_control_vars->node_start].rot,
+                      1,
+                      0,
+                      0);
         } else if (1.0f <= drawbridge_control_vars->fade) {
             moby->state = 4;
             moby->command = allocate_voice_for_target_entry(0, 4, drawbridge_control_vars->c[9]);
@@ -239,7 +242,8 @@ void update_drawbridge(Moby *moby) {
         if (20.0f <= drawbridge_extension_gp) {
             if (func_L00_0028EB98_2F69D0(drawbridge_control_vars->c[9], slot) != 0) {
                 if (slot != -1 &&
-                    ((Slot *)((char *)&voice_pool + slot * 0x70))->p88 == drawbridge_control_vars->c[9] &&
+                    ((Slot *)((char *)&voice_pool + slot * 0x70))->p88 ==
+                        drawbridge_control_vars->c[9] &&
                     ((Slot *)((char *)&voice_pool + slot * 0x70))->b74 != 0) {
                     release_voice_slot(slot);
                 }
@@ -291,7 +295,7 @@ void update_drawbridge(Moby *moby) {
 }
 
 void update_drawbridge_segment_transforms(Moby *moby) {
-    Vec_2F69D0      segment_position, segment_longitudinal_offset, staggered_segment_longitudinal_offset;
+    Vec_2F69D0 segment_position, segment_longitudinal_offset, staggered_segment_longitudinal_offset;
     DrawbridgeVars *drawbridge_vars = (DrawbridgeVars *)moby->pvars;
     int             i, j;
     float           length, angle, left, min_length, right, limit;
@@ -306,8 +310,9 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         fast_vec_add(&segment_position, &segment_position, &moby->pos);
         fast_vec_add(&segment_position, &segment_position, &segment_longitudinal_offset);
         qcopy(&drawbridge_vars->a[i]->pos, &segment_position);
-        transform_vector_by_basis(
-            &segment_position, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
+        transform_vector_by_basis(&segment_position,
+                                  (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp,
+                                  &moby->rot_row0);
         fast_vec_add(&segment_position, &segment_position, &moby->pos);
         fast_vec_add(&segment_position, &segment_position, &segment_longitudinal_offset);
         qcopy(&drawbridge_vars->b[i]->pos, &segment_position);
@@ -338,8 +343,9 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         fast_vec_add(&segment_position, &segment_position, &moby->pos);
         fast_vec_add(&segment_position, &segment_position, &segment_longitudinal_offset);
         qcopy(&drawbridge_vars->c[j]->pos, &segment_position);
-        transform_vector_by_basis(
-            &segment_position, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
+        transform_vector_by_basis(&segment_position,
+                                  (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp,
+                                  &moby->rot_row0);
         fast_vec_add(&segment_position, &segment_position, &moby->pos);
         fast_vec_add(&segment_position, &segment_position, &staggered_segment_longitudinal_offset);
         qcopy(&drawbridge_vars->d[j]->pos, &segment_position);

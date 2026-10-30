@@ -130,7 +130,8 @@ void teleporter_update(struct Moby *moby) {
                                        teleporter_parts_acceleration_gp * frame_time_sq,
                                        teleporter_parts_deceleration_gp * frame_time_sq,
                                        teleporter_parts_max_speed_gp * frame_time);
-        } else if (D_L11_0015F594 != 0xB || !(*(float *)(teleporter_instance_vars + 0x20) > 0.25f)) {
+        } else if (D_L11_0015F594 != 0xB ||
+                   !(*(float *)(teleporter_instance_vars + 0x20) > 0.25f)) {
             if (teleport_transition_status == 2) {
                 *(float *)(teleporter_instance_vars + 0x3C) = 1.95f;
                 moby->state = 3;
@@ -150,15 +151,19 @@ void teleporter_update(struct Moby *moby) {
             char *td;
             float destination_position[4];
             if (*(int *)(teleporter_instance_vars + 4) != -1 &&
-                visited52[*(int *)(teleporter_instance_vars + 0xC) + current_level_index * 16] == 0xFF)
-                destination_moby = D_L11_0015FFD8_2518 + (*(int *)(teleporter_instance_vars + 4) << 8);
+                visited52[*(int *)(teleporter_instance_vars + 0xC) + current_level_index * 16] ==
+                    0xFF)
+                destination_moby =
+                    D_L11_0015FFD8_2518 + (*(int *)(teleporter_instance_vars + 4) << 8);
             td = ((char *)MOBY(destination_moby)->pvars);
             qcopy(destination_position, destination_moby + 0x10);
             destination_position[2] += 0.2f;
             FUN_L00_00216f90_2518(destination_position, destination_moby + 0x40, 0, 1);
             D_001413F5_lui = 1;
-            if (*(int *)(teleporter_instance_vars + 0x30) != -1 && *(int *)(teleporter_instance_vars + 0x34) != -1) {
-                FUN_L01_0027a248_2518(*(int *)(teleporter_instance_vars + 0x30), *(int *)(teleporter_instance_vars + 0x34));
+            if (*(int *)(teleporter_instance_vars + 0x30) != -1 &&
+                *(int *)(teleporter_instance_vars + 0x34) != -1) {
+                FUN_L01_0027a248_2518(*(int *)(teleporter_instance_vars + 0x30),
+                                      *(int *)(teleporter_instance_vars + 0x34));
             }
             FUN_L11_002f3040_2518(destination_moby);
             MOBY(destination_moby)->state = 4;
@@ -287,7 +292,8 @@ void draw_teleporter_ring(struct Moby *moby) {
     }
     width = 0.1f;
     if (*(float *)(teleporter_ring_vars + 0x3c) < 1.15f) {
-        float v = (1.15f - *(float *)(teleporter_ring_vars + 0x3c)) + (1.15f - *(float *)(teleporter_ring_vars + 0x3c));
+        float v = (1.15f - *(float *)(teleporter_ring_vars + 0x3c)) +
+                  (1.15f - *(float *)(teleporter_ring_vars + 0x3c));
         if (v > 1.0f)
             v = 1.0f;
         else if (v < 0.0f)

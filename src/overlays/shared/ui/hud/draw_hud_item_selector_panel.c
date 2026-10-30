@@ -283,11 +283,13 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
             a = stick_angle + 3.1415927f + 3.1415927f + 1.5707964f +
                 3.1415927f / (float)D_L00_0015FA90;
             slot_position = a * ((float)D_L00_0015FA90 / 6.2831855f);
-            previous_slot_angle =
-                (float)previous_selected_slot_index * 6.2831855f / convert_integer_to_float(D_L00_0015FA90) - 3.1415927f;
-            if (previous_selected_slot_index == -1 || fast_difference_between_rotations(
-                                 previous_slot_angle,
-                                 fast_subtract_rotations(stick_angle, 1.5707964f)) > 0.58904862f) {
+            previous_slot_angle = (float)previous_selected_slot_index * 6.2831855f /
+                                      convert_integer_to_float(D_L00_0015FA90) -
+                                  3.1415927f;
+            if (previous_selected_slot_index == -1 ||
+                fast_difference_between_rotations(
+                    previous_slot_angle, fast_subtract_rotations(stick_angle, 1.5707964f)) >
+                    0.58904862f) {
                 stick_slot_index = (int)slot_position % D_L00_0015FA90;
                 if (((stick_slot_index ^ 1) & 1)) {
                     float fr = slot_position - (float)truncate_float_to_s32(slot_position);

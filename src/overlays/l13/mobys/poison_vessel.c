@@ -368,7 +368,8 @@ void poison_vessel_update(struct Moby *moby) {
                         poison_vessel_blast_damage_gp,
                         1.0f,
                         1.0f);
-        if (poison_vessel_vars->timer > scale_time((float)poison_vessel_blast_duration_frames_gp * 0.5f)) {
+        if (poison_vessel_vars->timer >
+            scale_time((float)poison_vessel_blast_duration_frames_gp * 0.5f)) {
             moby->flags |= 0x41;
             spawn_type_52_particle_near_moby(moby);
         } else {

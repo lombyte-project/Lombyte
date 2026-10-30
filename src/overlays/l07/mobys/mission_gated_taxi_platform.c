@@ -100,7 +100,8 @@ void update_mission_gated_taxi_platform(struct Moby *moby) {
                     }
                 }
                 moby->command = 2;
-                *(float *)(mission_gated_taxi_vars + 0xAC) = 1.0f / scale_time(*(float *)(mission_gated_taxi_vars + 0xB0) * 60.0f);
+                *(float *)(mission_gated_taxi_vars + 0xAC) =
+                    1.0f / scale_time(*(float *)(mission_gated_taxi_vars + 0xB0) * 60.0f);
                 *(short *)(mission_gated_taxi_vars + 0xB8) = 0;
             }
         }
@@ -129,13 +130,19 @@ void update_mission_gated_taxi_platform(struct Moby *moby) {
             float segment_fraction_work_value, t;
             char *segment_start_position;
             if (!voice_is_playing(moby, *(int *)(mission_gated_taxi_vars + 0xC4))) {
-                *(int *)(mission_gated_taxi_vars + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
+                *(int *)(mission_gated_taxi_vars + 0xC4) =
+                    allocate_voice_for_target_entry(0, 4, (int)moby);
             }
-            *(float *)(mission_gated_taxi_vars + 0xA8) += *(float *)(mission_gated_taxi_vars + 0xAC) * frame_time;
-            if (absolute_float(*(float *)(mission_gated_taxi_vars + 0xA8)) > absolute_float(*(float *)(mission_gated_taxi_vars + 0xAC))) {
-                *(float *)(mission_gated_taxi_vars + 0xA8) = *(float *)(mission_gated_taxi_vars + 0xAC);
+            *(float *)(mission_gated_taxi_vars + 0xA8) +=
+                *(float *)(mission_gated_taxi_vars + 0xAC) * frame_time;
+            if (absolute_float(*(float *)(mission_gated_taxi_vars + 0xA8)) >
+                absolute_float(*(float *)(mission_gated_taxi_vars + 0xAC))) {
+                *(float *)(mission_gated_taxi_vars + 0xA8) =
+                    *(float *)(mission_gated_taxi_vars + 0xAC);
             }
-            *(float *)(mission_gated_taxi_vars + 0xA4) = *(float *)(mission_gated_taxi_vars + 0xA4) + *(float *)(mission_gated_taxi_vars + 0xA8);
+            *(float *)(mission_gated_taxi_vars + 0xA4) =
+                *(float *)(mission_gated_taxi_vars + 0xA4) +
+                *(float *)(mission_gated_taxi_vars + 0xA8);
             if (0.5f < absolute_float(*(float *)(mission_gated_taxi_vars + 0xA4) - 0.5f)) {
                 int r;
                 if (*(int *)(mission_gated_taxi_vars + 0xC8) == 0 && is_hero_on_moby(moby)) {
@@ -160,7 +167,8 @@ void update_mission_gated_taxi_platform(struct Moby *moby) {
                 *(int *)(mission_gated_taxi_vars + 0xC4) = -1;
             }
             segment_fraction_work_value = convert_integer_to_float(*(int *)path - 1);
-            i = truncate_float_to_s32(segment_fraction_work_value * *(float *)(mission_gated_taxi_vars + 0xA4));
+            i = truncate_float_to_s32(segment_fraction_work_value *
+                                      *(float *)(mission_gated_taxi_vars + 0xA4));
             segment_fraction_work_value = convert_integer_to_float(*(int *)path - 1);
             t = convert_integer_to_float(i);
             segment_fraction_work_value *= *(float *)(mission_gated_taxi_vars + 0xA4);

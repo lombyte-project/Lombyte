@@ -224,12 +224,14 @@ update_state:
         if (moby->draw_dist < 128)
             moby->draw_dist = 128;
         if (*(struct Moby **)(blarg_helicopter_vars + 0xac) == 0) {
-            *(struct Moby **)(blarg_helicopter_vars + 0xac) = create_class_55b_moby_from_source(moby);
+            *(struct Moby **)(blarg_helicopter_vars + 0xac) =
+                create_class_55b_moby_from_source(moby);
             (*(struct Moby **)(blarg_helicopter_vars + 0xac))->update_dist = 0;
             (*(struct Moby **)(blarg_helicopter_vars + 0xac))->flags |= 0x41;
         }
         qcopy(&moby->pos, ((char *)l12_paths[*(int *)(blarg_helicopter_vars + 0xa0)]) + 0x10);
-        if (*(int *)(blarg_helicopter_vars + 0xc0) != 0 && *(int *)(blarg_helicopter_vars + 0xc4) == 0) {
+        if (*(int *)(blarg_helicopter_vars + 0xc0) != 0 &&
+            *(int *)(blarg_helicopter_vars + 0xc4) == 0) {
             a = scale_game_frames(240);
             b = scale_game_frames(400);
             a = FUN_L00_00257b90(a, b);
@@ -254,7 +256,8 @@ update_state:
         if (*(int *)(blarg_helicopter_vars + 0xc0) && D_L12_00161F00)
             triggered = fast_dec_timer((int *)(blarg_helicopter_vars + 0xc4)) != 0;
         if ((*(int *)(blarg_helicopter_vars + 0x80) != -1 &&
-             is_point_inside_clip_volume(&hero.motion.pos, *(int *)(blarg_helicopter_vars + 0x80))) ||
+             is_point_inside_clip_volume(&hero.motion.pos,
+                                         *(int *)(blarg_helicopter_vars + 0x80))) ||
             triggered) {
             blarg_helicopter_vars[0x58] = 22;
             blarg_helicopter_vars[0x59] = 1;
@@ -305,20 +308,30 @@ update_state:
                 l12_camera.focus_moby = 0;
         }
         distance = vector_distance_xy(&moby->pos, target);
-        if ((distance < 40.0f && moby->pos.z - target[2] > -2.0f) || *(int *)(blarg_helicopter_vars + 0xc0)) {
+        if ((distance < 40.0f && moby->pos.z - target[2] > -2.0f) ||
+            *(int *)(blarg_helicopter_vars + 0xc0)) {
             angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
-            moby->rot.z = spring_turn(
-                (float *)(blarg_helicopter_vars + 0x88), moby->rot.z, angle, 0.004f, 0.3f, frame_time * 0.7853982f);
+            moby->rot.z = spring_turn((float *)(blarg_helicopter_vars + 0x88),
+                                      moby->rot.z,
+                                      angle,
+                                      0.004f,
+                                      0.3f,
+                                      frame_time * 0.7853982f);
             value = vector_distance_xy(target, &moby->pos);
             angle = fast_arc_tan(value, moby->pos.z - target[2]);
-            moby->rot.y = spring_turn(
-                (float *)(blarg_helicopter_vars + 0x9c), moby->rot.y, angle, 0.004f, 0.3f, frame_time * 0.7853982f);
+            moby->rot.y = spring_turn((float *)(blarg_helicopter_vars + 0x9c),
+                                      moby->rot.y,
+                                      angle,
+                                      0.004f,
+                                      0.3f,
+                                      frame_time * 0.7853982f);
             clear_u64_value(blarg_helicopter_vars + 0x70);
             update_blarg_helicopter_motion_tilt(moby);
             if (fast_dec_timer_s16(blarg_helicopter_vars + 0x8c)) {
                 ++*(short *)(blarg_helicopter_vars + 0xbc);
                 moby_point_position(moby, *(int *)(blarg_helicopter_vars + 0xb8), &position);
-                *(int *)(blarg_helicopter_vars + 0xb8) = *(int *)(blarg_helicopter_vars + 0xb8) == 0;
+                *(int *)(blarg_helicopter_vars + 0xb8) =
+                    *(int *)(blarg_helicopter_vars + 0xb8) == 0;
                 qcopy(&aim, target + 8);
                 if (*(int *)(blarg_helicopter_vars + 0xc0)) {
                     qcopy(&aim, D_L12_00167240);
@@ -356,7 +369,8 @@ update_state:
                     if (D_L12_00161F20 > 6)
                         limit = 3;
                 }
-                if (*(short *)(blarg_helicopter_vars + 0xbc) >= limit && *(int *)(blarg_helicopter_vars + 0xa4) != -1) {
+                if (*(short *)(blarg_helicopter_vars + 0xbc) >= limit &&
+                    *(int *)(blarg_helicopter_vars + 0xa4) != -1) {
                     *(short *)(blarg_helicopter_vars + 0xbc) = 0;
                     moby->state = 4;
                 } else
@@ -367,8 +381,12 @@ update_state:
     }
     case BLARG_HELICOPTER_MOVE_BETWEEN_PATH_ENDPOINTS:
         angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
-        moby->rot.z = spring_turn(
-            (float *)(blarg_helicopter_vars + 0x88), moby->rot.z, angle, 0.004f, 0.3f, frame_time * 0.7853982f);
+        moby->rot.z = spring_turn((float *)(blarg_helicopter_vars + 0x88),
+                                  moby->rot.z,
+                                  angle,
+                                  0.004f,
+                                  0.3f,
+                                  frame_time * 0.7853982f);
         {
             char *path = ((char *)l12_paths[*(int *)(blarg_helicopter_vars + 0xa4)]);
             if (*(short *)(blarg_helicopter_vars + 0xbe) != 0)
@@ -381,13 +399,15 @@ update_state:
             approach_value(blarg_helicopter_vars + 0x94, 0.0f, frame_time_sq * 9.0f);
             if (*(float *)(blarg_helicopter_vars + 0x94) == 0.0f) {
                 *(short *)(blarg_helicopter_vars + 0x8c) = scale_game_frames(50);
-                *(short *)(blarg_helicopter_vars + 0xbe) = *(short *)(blarg_helicopter_vars + 0xbe) == 0;
+                *(short *)(blarg_helicopter_vars + 0xbe) =
+                    *(short *)(blarg_helicopter_vars + 0xbe) == 0;
                 moby->state = 3;
                 break;
             }
         } else
             approach_value(blarg_helicopter_vars + 0x94, frame_time * 10.0f, frame_time_sq * 7.0f);
-        fast_vec_normalize(blarg_helicopter_vars + 0x70, &position, *(float *)(blarg_helicopter_vars + 0x94));
+        fast_vec_normalize(
+            blarg_helicopter_vars + 0x70, &position, *(float *)(blarg_helicopter_vars + 0x94));
         fast_vec_add(&moby->pos, &moby->pos, blarg_helicopter_vars + 0x70);
         update_blarg_helicopter_motion_tilt(moby);
         break;
@@ -480,12 +500,14 @@ update_state:
 
 void update_blarg_helicopter_motion_tilt(struct Moby *moby) {
     char *blarg_helicopter_motion_vars = (char *)moby->pvars;
-    float ang = fast_subtract_rotations(
-        fast_arc_tan(*(float *)(blarg_helicopter_motion_vars + 0x70), *(float *)(blarg_helicopter_motion_vars + 0x74)), moby->rot.z);
-    float target_rotation_y =
-        *(float *)(blarg_helicopter_motion_vars + 0x94) * 0.2268928f * fast_cos(ang) / (frame_time * 10.0f);
-    float target_rotation_x =
-        *(float *)(blarg_helicopter_motion_vars + 0x94) * -0.2268928f * fast_sin(ang) / (frame_time * 10.0f);
+    float ang =
+        fast_subtract_rotations(fast_arc_tan(*(float *)(blarg_helicopter_motion_vars + 0x70),
+                                             *(float *)(blarg_helicopter_motion_vars + 0x74)),
+                                moby->rot.z);
+    float target_rotation_y = *(float *)(blarg_helicopter_motion_vars + 0x94) * 0.2268928f *
+                              fast_cos(ang) / (frame_time * 10.0f);
+    float target_rotation_x = *(float *)(blarg_helicopter_motion_vars + 0x94) * -0.2268928f *
+                              fast_sin(ang) / (frame_time * 10.0f);
     float updated_rotation_y, k0, rotation_y_damping, rotation_y_step_limit, k1, rotation_x_damping,
         rotation_x_step_limit;
     k0 = frame_time_sq * 0.5235988f;
@@ -589,8 +611,8 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
     blarg_helicopter_hit_vars = (char *)moby->pvars;
     fv = 0.0f;
     hit_record = find_moby_hit(moby, 0x330000, 0);
-    hit_reaction_code =
-        hit_reaction(moby, hit_record, blarg_helicopter_hit_vars + 0x20, 0, &hit_processing_status, &fv, 0, 4);
+    hit_reaction_code = hit_reaction(
+        moby, hit_record, blarg_helicopter_hit_vars + 0x20, 0, &hit_processing_status, &fv, 0, 4);
     if (hit_processing_status != 1 && moby->state != 6 &&
         *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0xB8 &&
         *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x199) {

@@ -408,11 +408,11 @@ f32 elevator_local_path_points[11][4] __asm__("D_L14_001E03B0") = {
 };
 
 void rebuild_elevator_world_path(u8 *moby) {
-    u8          *elevator_path_vars = ((u8 *)MOBY(moby)->pvars);
-    u8          *local_path_point_cursor = (u8 *)elevator_local_path_points;
-    u8          *world_path_point_cursor = ((u8 *)l14_paths[*(s32 *)(elevator_path_vars + 0x114)]) + 0x10;
-    s32          i = 10;
-    f32          one = 1.0f;
+    u8 *elevator_path_vars = ((u8 *)MOBY(moby)->pvars);
+    u8 *local_path_point_cursor = (u8 *)elevator_local_path_points;
+    u8 *world_path_point_cursor = ((u8 *)l14_paths[*(s32 *)(elevator_path_vars + 0x114)]) + 0x10;
+    s32 i = 10;
+    f32 one = 1.0f;
     struct Hero *x;
     do {
         transform_vector_by_basis(world_path_point_cursor, local_path_point_cursor, moby + 0xC0);
@@ -436,7 +436,8 @@ void update_elevator_idle_glow(struct Moby *moby) {
         moby->glow_color = fast_tween_color(moby->glow_color, 0x80303030, 0.1f);
     } else {
         int   i, col;
-        float a = fast_add_rotations(*(float *)(elevator_glow_vars + 0x138), frame_time * 6.2831855f);
+        float a =
+            fast_add_rotations(*(float *)(elevator_glow_vars + 0x138), frame_time * 6.2831855f);
         *(float *)(elevator_glow_vars + 0x138) = a;
         i = func_001FA898_r((fast_sin(a) * 4.0f - 3.0f) * 128.0f);
         if (i > 0x80)

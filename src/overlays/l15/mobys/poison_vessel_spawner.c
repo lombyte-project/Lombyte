@@ -18,7 +18,8 @@ void update_poison_vessel_spawner(struct Moby *moby) {
     int *spawn_timer_data = (int *)moby->pvars;
     switch (moby->state) {
     case INITIALIZE_SPAWN_TIMER:
-        spawn_timer_data[0] = truncate_float_to_s32(multiply_global_factor_ed64(*(float *)(spawn_timer_data + 1) * 60.0f));
+        spawn_timer_data[0] = truncate_float_to_s32(
+            multiply_global_factor_ed64(*(float *)(spawn_timer_data + 1) * 60.0f));
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;

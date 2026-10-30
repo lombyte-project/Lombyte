@@ -277,7 +277,8 @@ void fire_blarg_turret_projectile(struct Moby *moby) {
     blarg_turret_vars = (char *)moby->pvars;
     if (frame_count % D_L13_0016138C == 0) {
         moby_point_position(moby, 0, projectile_spawn_position);
-        target_distance = vector_distance_xy(&moby->pos, *(char **)(blarg_turret_vars + 0x40) + 0x10);
+        target_distance =
+            vector_distance_xy(&moby->pos, *(char **)(blarg_turret_vars + 0x40) + 0x10);
         x = (20.0f - target_distance) / 20.0f * 5.0f + 2.5f;
         projectile_yaw = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD, moby->rot.z);
         horizontal_offset[0] =
@@ -286,8 +287,10 @@ void fire_blarg_turret_projectile(struct Moby *moby) {
             fast_sin(projectile_yaw) * (blarg_turret_launch_displacement_scale_gp * frame_time);
         horizontal_offset[2] = 0;
         fast_vec_add(projectile_spawn_position, projectile_spawn_position, horizontal_offset);
-        spawn_gemlik_projectile(
-            *(float *)(blarg_turret_vars + 0x68), projectile_spawn_position, horizontal_offset, moby);
+        spawn_gemlik_projectile(*(float *)(blarg_turret_vars + 0x68),
+                                projectile_spawn_position,
+                                horizontal_offset,
+                                moby);
     }
 }
 

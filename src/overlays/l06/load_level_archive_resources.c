@@ -230,7 +230,8 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
                               (char *)level_header + level_header[1]);
         level_06_sound_bank_handle_snapshot = sound_bank_handle;
         flush_cache(0);
-        used = fast_decompress((char *)(level_archive[0x14] + (s32)level_archive), level_resource_base);
+        used = fast_decompress((char *)(level_archive[0x14] + (s32)level_archive),
+                               level_resource_base);
         level_06_texture_reference_base = (s32)(level_resource_base + level_header[0x18]);
 
         D_L06_00182F40[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x24]) >> 8,
@@ -323,16 +324,18 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[7];
              i < level_header[6];
              i++, class_entry_cursor += 0x20)
-            register_moby_class(*(s32 *)class_entry_cursor ? level_resource_base + *(s32 *)class_entry_cursor : 0,
-                                (char *)level_header + level_header[0xF],
-                                class_entry_cursor + 0x10,
-                                *(s32 *)(class_entry_cursor + 4));
+            register_moby_class(
+                *(s32 *)class_entry_cursor ? level_resource_base + *(s32 *)class_entry_cursor : 0,
+                (char *)level_header + level_header[0xF],
+                class_entry_cursor + 0x10,
+                *(s32 *)(class_entry_cursor + 4));
         print_moby_class_sizes((char *)level_header + level_header[7], level_header[7]);
         for (sq = 0, sequence_offset_cursor = (char *)level_header + level_header[0x1E];
              sq < level_06_moby_class_table[0]->seq_count;
              sq++, sequence_offset_cursor += 4) {
             if (*(s32 *)sequence_offset_cursor) {
-                level_06_moby_class_table[0]->seqs[sq] = level_resource_base + *(s32 *)sequence_offset_cursor;
+                level_06_moby_class_table[0]->seqs[sq] =
+                    level_resource_base + *(s32 *)sequence_offset_cursor;
                 relocate_asset_entry_pointers(level_06_moby_class_table[0], sq);
             }
         }

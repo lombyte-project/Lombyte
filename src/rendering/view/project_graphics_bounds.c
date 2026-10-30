@@ -12,7 +12,9 @@ extern s32  truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 void project_graphics_bounds(
     u128 *first, u128 *opposite, s32 *width, s32 *height, s32 *x, s32 *y) __asm__("FUN_00237a78");
 
-void project_graphics_bounds(u128 *first_world_corner, u128 *opposite, s32 *width, s32 *height, s32 *x, s32 *y) {
+void project_graphics_bounds(
+
+    u128 *first_world_corner, u128 *opposite, s32 *width, s32 *height, s32 *x, s32 *y) {
     Vec4  first_projected;
     Vec4  opposite_projected;
     Vec4 *opposite_pointer;

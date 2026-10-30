@@ -323,13 +323,17 @@ void update_rocket(M46 *moby) {
         if (D_L08_0015F5C4_macro)
             return;
         route = (RouteState46 *)&data->waypoint;
-        next_route_waypoint_index = (route->waypoint + route->path->count + route->direction) % route->path->count;
+        next_route_waypoint_index =
+            (route->waypoint + route->path->count + route->direction) % route->path->count;
         yaw =
-            fast_arc_tan(*(float *)((char *)route->path + (next_route_waypoint_index << 4) + 0x10) - moby->position[0],
-                         *(float *)((char *)route->path + (next_route_waypoint_index << 4) + 0x14) - moby->position[1]);
+            fast_arc_tan(*(float *)((char *)route->path + (next_route_waypoint_index << 4) + 0x10) -
+                             moby->position[0],
+                         *(float *)((char *)route->path + (next_route_waypoint_index << 4) + 0x14) -
+                             moby->position[1]);
         FUN_L00_00258278(moby, &data->yaw_velocity, yaw, 0.1f, 1.3f, 1.0f);
-        moby->rotation[1] = fast_arc_tan(vector_distance_xy(route->path->e[next_route_waypoint_index], moby->position),
-                                         moby->position[2] - route->path->e[next_route_waypoint_index][2]);
+        moby->rotation[1] = fast_arc_tan(
+            vector_distance_xy(route->path->e[next_route_waypoint_index], moby->position),
+            moby->position[2] - route->path->e[next_route_waypoint_index][2]);
         qcopy_nc(target, route->path->e[next_route_waypoint_index]);
         if (route->waypoint != route->path->count - 1) {
             int life0, life1, size1;

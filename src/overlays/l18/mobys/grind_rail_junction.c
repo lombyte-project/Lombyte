@@ -71,7 +71,8 @@ void update_grind_rail_junction(struct Moby *moby) {
                             &l18_splines[i].path->points[0],
                             &l18_splines[j].path->points[l18_splines[j].path->count - 1]) < 0.5f) {
                         path_junction_vars->pair[pair_or_node_index].second = &l18_splines[j];
-                        path_junction_vars->radius[pair_or_node_index].second = l18_splines[j].bounds.f[3];
+                        path_junction_vars->radius[pair_or_node_index].second =
+                            l18_splines[j].bounds.f[3];
                         l18_splines[j].bounds.f[3] = 0.0f;
                         l18_splines[i].bounds.f[3] = 0.0f;
                         pair_or_node_index++;
@@ -81,7 +82,8 @@ void update_grind_rail_junction(struct Moby *moby) {
             }
         } while (pair_or_node_index < 4);
         for (pair_or_node_index = 0; pair_or_node_index < 2; pair_or_node_index++) {
-            create_nanotech_ball(D_L18_001600EC + path_junction_vars->node[pair_or_node_index] * 0x80 + 0x30);
+            create_nanotech_ball(D_L18_001600EC +
+                                 path_junction_vars->node[pair_or_node_index] * 0x80 + 0x30);
         }
         break;
     case STATE_SELECT_NEARER_PATH:
@@ -92,15 +94,18 @@ void update_grind_rail_junction(struct Moby *moby) {
                  hero.rail_spline == (s32)path_junction_vars->pair[k].second->path)) {
                 continue;
             }
-            near_first =
-                vector_distance_xy(&hero.motion.pos, &path_junction_vars->pair[k].first->path->points[0]);
+            near_first = vector_distance_xy(&hero.motion.pos,
+                                            &path_junction_vars->pair[k].first->path->points[0]);
             if (near_first <
-                vector_distance_xy(&hero.motion.pos, &path_junction_vars->pair[k].second->path->points[0])) {
-                path_junction_vars->pair[k].first->bounds.f[3] = path_junction_vars->radius[k].first;
+                vector_distance_xy(&hero.motion.pos,
+                                   &path_junction_vars->pair[k].second->path->points[0])) {
+                path_junction_vars->pair[k].first->bounds.f[3] =
+                    path_junction_vars->radius[k].first;
                 path_junction_vars->pair[k].second->bounds.f[3] = 0.0f;
             } else {
                 path_junction_vars->pair[k].first->bounds.f[3] = 0.0f;
-                path_junction_vars->pair[k].second->bounds.f[3] = path_junction_vars->radius[k].second;
+                path_junction_vars->pair[k].second->bounds.f[3] =
+                    path_junction_vars->radius[k].second;
             }
         }
         break;

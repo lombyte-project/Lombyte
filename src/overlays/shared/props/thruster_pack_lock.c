@@ -617,7 +617,8 @@ int draw_linked_moby_trails(struct Moby *moby) {
                 ((float(*)[2])trail_quad_texture_coordinates)[j][0];
             quads[i].texture_coordinates[j][1] =
                 ((float(*)[2])trail_quad_texture_coordinates)[j][1];
-            blend = convert_integer_to_float(i - half) / *(float *)&D_L11_001623F0_gp + frame_color_blend_offset;
+            blend = convert_integer_to_float(i - half) / *(float *)&D_L11_001623F0_gp +
+                    frame_color_blend_offset;
             if (1.0f < blend) {
                 blend = 1.0f;
             } else if (blend < 0.0f) {

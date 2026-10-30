@@ -482,7 +482,8 @@ void gold_bolt_update(struct Moby *moby) {
 
     switch (moby->state) {
     case GOLD_BOLT_INITIALIZE:
-        if (gold_bolt_instance_vars->id == -1 || D_0014BEC0[gold_bolt_instance_vars->id + D_0015ED84 * 4] != 0) {
+        if (gold_bolt_instance_vars->id == -1 ||
+            D_0014BEC0[gold_bolt_instance_vars->id + D_0015ED84 * 4] != 0) {
             goto remove;
         }
         qcopy(&gold_bolt_instance_vars->home, &moby->pos);
@@ -491,15 +492,19 @@ void gold_bolt_update(struct Moby *moby) {
         moby->rot.y = random_angle_radians();
         moby->rot.z = random_angle_radians();
         moby->rot.w = random_angle_radians();
-        gold_bolt_instance_vars->unk68 = gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * frame_time_macro;
-        gold_bolt_instance_vars->unk64 = gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * frame_time_macro;
-        gold_bolt_instance_vars->unk60 = gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * frame_time_macro;
+        gold_bolt_instance_vars->unk68 =
+            gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * frame_time_macro;
+        gold_bolt_instance_vars->unk64 =
+            gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * frame_time_macro;
+        gold_bolt_instance_vars->unk60 =
+            gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * frame_time_macro;
         moby->state = 1;
         initialize_gold_bolt_data(moby);
         return;
     case GOLD_BOLT_WAIT_FOR_PICKUP:
         moby->scale = moby->pclass->scale * D_L01_00161F10_gp;
-        moby->pos.z = gold_bolt_instance_vars->home.z + D_L01_00161F14_gp + D_L01_00161F18_gp * fast_sin(moby->rot.w);
+        moby->pos.z = gold_bolt_instance_vars->home.z + D_L01_00161F14_gp +
+                      D_L01_00161F18_gp * fast_sin(moby->rot.w);
         moby->rot.x = fast_add_rotations(
             moby->rot.x, gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * frame_time_macro);
         moby->rot.y = fast_add_rotations(
@@ -625,7 +630,8 @@ void update_gold_bolt_visuals(struct Moby *moby) {
                       *(float *)&D_L01_00161F18_gp * bobbing_sine;
         moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(gold_bolt_visual_vars + 0x68));
         moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(gold_bolt_visual_vars + 0x64));
-        updated_rotation_z = fast_add_rotations(moby->rot.z, *(float *)(gold_bolt_visual_vars + 0x60));
+        updated_rotation_z =
+            fast_add_rotations(moby->rot.z, *(float *)(gold_bolt_visual_vars + 0x60));
         k = *(float *)&D_L01_00161F2C_gp * DEG_TO_RAD * frame_time;
         moby->rot.z = updated_rotation_z;
         moby->rot.w = fast_add_rotations(moby->rot.w, k);

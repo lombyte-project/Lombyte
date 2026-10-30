@@ -572,8 +572,10 @@ s32 process_hero_item_action_input(void) {
                         start_equipped_item_animation();
                     }
                 } else if ((controller_state.held & buttons) && get_ammo(-1) == 0 &&
-                           voice_is_playing(hero.items[0].moby, held_gadget_voice_state->voice) == 0) {
-                    held_gadget_voice_state->voice = allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
+                           voice_is_playing(hero.items[0].moby, held_gadget_voice_state->voice) ==
+                               0) {
+                    held_gadget_voice_state->voice =
+                        allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
                 }
             }
         }
@@ -625,7 +627,9 @@ s32 process_hero_item_action_input(void) {
 
                 limit = scale_game_frames(0xA);
                 hold = hero.items[0].ready_frames;
-                if (pad_pressed_within(buttons, hold < limit ? hold : limit, &voiced_activation_press_age_frames) != 0 &&
+                if (pad_pressed_within(buttons,
+                                       hold < limit ? hold : limit,
+                                       &voiced_activation_press_age_frames) != 0 &&
                     hero.items[0].moby != NULL) {
                     hero_set_state(0x20, 1);
                     if (hero.items[0].moby != NULL) {

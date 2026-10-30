@@ -215,8 +215,9 @@ void transition_load_wad(void) {
     texture_definition_entries = (WadTex *)(((u8 *)hdr) + hdr->x34);
     if ((tfrag_texture_definition_count = hdr->n30) > 0) {
         do {
-            tfrag_texture_size_table[i] = (((s32)texture_payload_base) + texture_definition_entries[i].offset) +
-                                          (log2dim(texture_definition_entries[i].x4) << 28);
+            tfrag_texture_size_table[i] =
+                (((s32)texture_payload_base) + texture_definition_entries[i].offset) +
+                (log2dim(texture_definition_entries[i].x4) << 28);
             i++;
         } while (i < tfrag_texture_definition_count);
     }
@@ -224,8 +225,9 @@ void transition_load_wad(void) {
     texture_definition_entries = (new_var2 = (WadTex *)(((u8 *)hdr) + hdr->x3C));
     if ((D_0015FF08 = hdr->n38) > 0) {
         do {
-            moby_texture_lookup_table[k] = (((s32)texture_payload_base) + texture_definition_entries[k].offset) +
-                                           (log2dim(texture_definition_entries[k].x4) << 28);
+            moby_texture_lookup_table[k] =
+                (((s32)texture_payload_base) + texture_definition_entries[k].offset) +
+                (log2dim(texture_definition_entries[k].x4) << 28);
             k++;
         } while (k < D_0015FF08);
     }

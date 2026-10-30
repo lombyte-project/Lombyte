@@ -41,7 +41,8 @@ void underwater_door_update(struct Moby *moby) {
     s32             next_state;
 
     reversed = moby->oclass == 0xc4 || moby->oclass == 0x7a6;
-    if (door_motion_data->trigger == -1 && (door_motion_data->start_volume == -1 || door_motion_data->stop_volume == -1)) {
+    if (door_motion_data->trigger == -1 &&
+        (door_motion_data->start_volume == -1 || door_motion_data->stop_volume == -1)) {
         mark_moby_for_removal(moby);
         return;
     }

@@ -46,7 +46,8 @@ void update_plasmabot_target(char *moby) {
                          0,
                          target_filter_record + 4,
                          *target_filter_record) != 2) {
-        if (*(float *)(plasmabot_private_vars + 0x234) < vector_distance_xy(moby + 0x10, plasmabot_private_vars + 0xD0)) {
+        if (*(float *)(plasmabot_private_vars + 0x234) <
+            vector_distance_xy(moby + 0x10, plasmabot_private_vars + 0xD0)) {
             *(int *)(plasmabot_private_vars + 0x114) = 2;
         }
     }
@@ -166,7 +167,8 @@ void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) {
                              ((*(unsigned short *)listed_moby_entry_cursor & 0x7FFF) << 8);
                 char *listed_moby_private_vars = ((char *)MOBY(moby)->pvars);
                 if (MOBY(moby)->oclass == 0x1C) {
-                    *(short *)(listed_moby_private_vars + 0x260) = scale_game_frames(plasmabot_beam_cooldown_frames);
+                    *(short *)(listed_moby_private_vars + 0x260) =
+                        scale_game_frames(plasmabot_beam_cooldown_frames);
                 }
             } while (*listed_moby_entry_cursor++ >= 0);
         }
@@ -364,7 +366,8 @@ void update_plasmabot(char *moby) {
                 return;
             }
         }
-        if (((unsigned char *)plasmabot_update_private_vars)[0x24A] != 0 && *(int *)(plasmabot_update_private_vars + 0x264) < 0) {
+        if (((unsigned char *)plasmabot_update_private_vars)[0x24A] != 0 &&
+            *(int *)(plasmabot_update_private_vars + 0x264) < 0) {
             DebugPrint(plasmabot_missing_hatch_index_format, ((short)MOBY(moby)->save_id));
             {
                 call_D678(moby);
@@ -376,7 +379,8 @@ void update_plasmabot(char *moby) {
         }
         initialize_plasmabot_path_state(moby);
         if (*(int *)(plasmabot_update_private_vars + 0x240) != -1) {
-            qcopy(moby + 0x10, (char *)l14_paths[*(int *)(plasmabot_update_private_vars + 0x240)] + 0x10);
+            qcopy(moby + 0x10,
+                  (char *)l14_paths[*(int *)(plasmabot_update_private_vars + 0x240)] + 0x10);
         }
         plasmabot_update_private_vars[0x28] = 1;
         plasmabot_update_private_vars[0x29] = 0;
@@ -420,11 +424,13 @@ void update_plasmabot(char *moby) {
             return;
         if (fast_dec_timer_s16(plasmabot_update_private_vars + 0x248) == 0)
             return;
-        if (refresh_plasmabot_hatch_reset_delay(*(int *)(plasmabot_update_private_vars + 0x264)) == 0)
+        if (refresh_plasmabot_hatch_reset_delay(*(int *)(plasmabot_update_private_vars + 0x264)) ==
+            0)
             return;
         if (call_4BF0(moby) == 0)
             return;
-        *(short *)(plasmabot_update_private_vars + 0x248) = scale_game_frames(plasmabot_path_traversal_delay_frames);
+        *(short *)(plasmabot_update_private_vars + 0x248) =
+            scale_game_frames(plasmabot_path_traversal_delay_frames);
         activate_plasmabot(moby);
         ((unsigned char *)moby)[0x20] = 2;
         set_moby_animation(moby, 1, 0);
@@ -437,9 +443,12 @@ void update_plasmabot(char *moby) {
         *(int *)(plasmabot_update_private_vars + 0x274) = 0;
         *(int *)(plasmabot_update_private_vars + 0x24C) = 0;
         *(int *)(plasmabot_update_private_vars + 0x250) = 0;
-        *(float *)(plasmabot_update_private_vars + 0x25C) = *(float *)(plasmabot_update_private_vars + 0x268);
-        *(float *)(plasmabot_update_private_vars + 0x258) = *(float *)(plasmabot_update_private_vars + 0x268);
-        *(float *)(plasmabot_update_private_vars + 0x254) = *(float *)(plasmabot_update_private_vars + 0x268);
+        *(float *)(plasmabot_update_private_vars + 0x25C) =
+            *(float *)(plasmabot_update_private_vars + 0x268);
+        *(float *)(plasmabot_update_private_vars + 0x258) =
+            *(float *)(plasmabot_update_private_vars + 0x268);
+        *(float *)(plasmabot_update_private_vars + 0x254) =
+            *(float *)(plasmabot_update_private_vars + 0x268);
         return;
     }
     case PLASMABOT_START_PATH_TRAVERSAL:
@@ -454,10 +463,18 @@ void update_plasmabot(char *moby) {
         break;
     case PLASMABOT_RETURN_TO_PATH_START: {
         float *path = (float *)l14_paths[*(int *)(plasmabot_update_private_vars + 0x240)];
-        vendor_spring(
-            (float *)&MOBY(moby)->pos, (float *)(plasmabot_update_private_vars + 0x254), path[4], 0.01f, 0.2f, 0.0f);
-        vendor_spring(
-            (float *)&MOBY(moby)->pos.y, (float *)(plasmabot_update_private_vars + 0x258), path[5], 0.01f, 0.2f, 0.0f);
+        vendor_spring((float *)&MOBY(moby)->pos,
+                      (float *)(plasmabot_update_private_vars + 0x254),
+                      path[4],
+                      0.01f,
+                      0.2f,
+                      0.0f);
+        vendor_spring((float *)&MOBY(moby)->pos.y,
+                      (float *)(plasmabot_update_private_vars + 0x258),
+                      path[5],
+                      0.01f,
+                      0.2f,
+                      0.0f);
         if ((moby[0x70] & 2) && ((unsigned char *)moby)[0x52] == ((unsigned char *)moby)[0x53]) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 1;
@@ -489,9 +506,12 @@ void update_plasmabot(char *moby) {
         *(int *)(plasmabot_update_private_vars + 0x250) = 0;
         *(float *)(plasmabot_update_private_vars + 0x27C) = 1.0f;
         *(int *)(plasmabot_update_private_vars + 0x24C) = 0;
-        *(float *)(plasmabot_update_private_vars + 0x25C) = *(float *)(plasmabot_update_private_vars + 0x250);
-        *(float *)(plasmabot_update_private_vars + 0x258) = *(float *)(plasmabot_update_private_vars + 0x250);
-        *(float *)(plasmabot_update_private_vars + 0x254) = *(float *)(plasmabot_update_private_vars + 0x250);
+        *(float *)(plasmabot_update_private_vars + 0x25C) =
+            *(float *)(plasmabot_update_private_vars + 0x250);
+        *(float *)(plasmabot_update_private_vars + 0x258) =
+            *(float *)(plasmabot_update_private_vars + 0x250);
+        *(float *)(plasmabot_update_private_vars + 0x254) =
+            *(float *)(plasmabot_update_private_vars + 0x250);
         break;
     }
     case PLASMABOT_FOLLOW_PATH_FORWARD:
@@ -509,7 +529,8 @@ void update_plasmabot(char *moby) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
                 ((unsigned char *)moby)[0x20] = 9;
             } else {
-                *(short *)(plasmabot_update_private_vars + 0x248) = scale_game_frames(plasmabot_path_traversal_delay_frames);
+                *(short *)(plasmabot_update_private_vars + 0x248) =
+                    scale_game_frames(plasmabot_path_traversal_delay_frames);
                 ((unsigned char *)moby)[0x20] = 0xD;
             }
         }
@@ -542,10 +563,13 @@ void update_plasmabot(char *moby) {
                 char *path;
                 *(int *)(plasmabot_update_private_vars + 0x24C) = index;
                 path = (char *)l14_paths[*(int *)(plasmabot_update_private_vars + 0x240)];
-                *(float *)(plasmabot_update_private_vars + 0x250) = *(float *)(path + (index << 4) + 0x1C);
+                *(float *)(plasmabot_update_private_vars + 0x250) =
+                    *(float *)(path + (index << 4) + 0x1C);
             }
             *(float *)(plasmabot_update_private_vars + 0x27C) = -1.0f;
-            *(float *)(plasmabot_update_private_vars + 0x254) = *(float *)(plasmabot_update_private_vars + 0x258) = *(float *)(plasmabot_update_private_vars + 0x25C) = 0.0f;
+            *(float *)(plasmabot_update_private_vars + 0x254) =
+                *(float *)(plasmabot_update_private_vars + 0x258) =
+                    *(float *)(plasmabot_update_private_vars + 0x25C) = 0.0f;
             release_beam_slot_by_id(moby);
             break;
         }
@@ -561,14 +585,16 @@ void update_plasmabot(char *moby) {
             break;
         if (!(aim < 0.017453292f))
             break;
-        if (test_path_segment_strict_crossing(*(int *)(plasmabot_update_private_vars + 0x244), moby + 0x10, plasmabot_aim_target_moby + 0x10) !=
-            0)
+        if (test_path_segment_strict_crossing(*(int *)(plasmabot_update_private_vars + 0x244),
+                                              moby + 0x10,
+                                              plasmabot_aim_target_moby + 0x10) != 0)
             break;
         reset_listed_plasmabot_beam_cooldowns(((unsigned char *)moby)[0x21]);
         *(float *)(plasmabot_update_private_vars + 0x278) = ang;
         ((unsigned char *)moby)[0x20] = 5;
         blend_moby_animation(moby, 4, 0, scale_game_frames(5));
-        *(short *)(plasmabot_update_private_vars + 0x262) = scale_game_frames(l14_plasmabot_aim_sweep_duration_frames);
+        *(short *)(plasmabot_update_private_vars + 0x262) =
+            scale_game_frames(l14_plasmabot_aim_sweep_duration_frames);
         break;
     }
     case PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP: {
@@ -597,8 +623,8 @@ void update_plasmabot(char *moby) {
         progress = progress / convert_integer_to_float(
                                   scale_game_frames(l14_plasmabot_aim_sweep_duration_frames));
         sweep = l14_plasmabot_aim_sweep_half_angle;
-        angle =
-            fast_subtract_rotations(*(float *)(plasmabot_update_private_vars + 0x278), -sweep + (sweep + sweep) * progress);
+        angle = fast_subtract_rotations(*(float *)(plasmabot_update_private_vars + 0x278),
+                                        -sweep + (sweep + sweep) * progress);
         if (((unsigned char *)plasmabot_update_private_vars)[0x24B] != 0) {
             if (*(float *)(plasmabot_aim_target_moby + 0x18) + 0.1f - MOBY(moby)->pos.z < 0.0f) {
                 flag = 1;
@@ -626,7 +652,8 @@ void update_plasmabot(char *moby) {
         beam_line_trace_descriptor.enabled = 1;
         beam_line_trace_descriptor.oclass = ((unsigned short)MOBY(moby)->oclass);
         beam_line_trace_descriptor.mode = 0;
-        if (collision_line(bone_transform_scratch[3], end, 0, moby, &beam_line_trace_descriptor) != 0) {
+        if (collision_line(bone_transform_scratch[3], end, 0, moby, &beam_line_trace_descriptor) !=
+            0) {
             qcopy(end, D_L14_00174560);
         }
         set_beam_origin_transform_and_endpoint(moby, bone_transform_scratch, end);
@@ -1113,13 +1140,13 @@ int follow_plasmabot_path(char *moby) {
     float pre_spring_position[4];
     float target_offset[4];
     char *plasmabot_private_state = ((char *)MOBY(moby)->pvars);
-    int   reached =
-        sample_path(((int *)l14_paths[*(int *)(plasmabot_private_state + 0x240)]),
-                    path_target_position,
-                    plasmabot_private_state + 0x24C,
-                    plasmabot_private_state + 0x250,
-                    0,
-                    plasmabot_path_traversal_speed_gp * frame_time * *(float *)(plasmabot_private_state + 0x27C));
+    int   reached = sample_path(((int *)l14_paths[*(int *)(plasmabot_private_state + 0x240)]),
+                              path_target_position,
+                              plasmabot_private_state + 0x24C,
+                              plasmabot_private_state + 0x250,
+                              0,
+                              plasmabot_path_traversal_speed_gp * frame_time *
+                                  *(float *)(plasmabot_private_state + 0x27C));
     float path_target_heading;
     float k;
     float turn_step_limit;

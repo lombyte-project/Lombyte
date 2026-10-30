@@ -127,16 +127,21 @@ void update_help_hints(Moby *moby) {
             help_request(0x2715, 0x5C);
         }
         any_active = 0;
-        for (conditional_help_list_moby = l10_conditional_help_moby_list_head; conditional_help_list_moby != 0; conditional_help_list_moby = conditional_help_list_moby->next) {
-            if (conditional_help_list_moby->oclass == 0x359 && conditional_help_list_moby->state != 1)
+        for (conditional_help_list_moby = l10_conditional_help_moby_list_head;
+             conditional_help_list_moby != 0;
+             conditional_help_list_moby = conditional_help_list_moby->next) {
+            if (conditional_help_list_moby->oclass == 0x359 &&
+                conditional_help_list_moby->state != 1)
                 any_active = 1;
         }
         if (any_active == 0)
             break;
         if (conditional_help_config->f10 != -1 &&
-            vector_distance_xy(D_0013F3D0_r, &D_L10_0015FFD0_macro[2][conditional_help_config->f10].pos) < 15.0f &&
+            vector_distance_xy(
+                D_0013F3D0_r, &D_L10_0015FFD0_macro[2][conditional_help_config->f10].pos) < 15.0f &&
             conditional_help_config->f14 != -1 &&
-            vector_distance_xy(D_0013F3D0_r, &D_L10_0015FFD0_macro[2][conditional_help_config->f14].pos) < 15.0f &&
+            vector_distance_xy(
+                D_0013F3D0_r, &D_L10_0015FFD0_macro[2][conditional_help_config->f14].pos) < 15.0f &&
             *(unsigned short *)(l10_help_message_2717_gate) == 0) {
             help_request(0x2717, 0x6A);
         }

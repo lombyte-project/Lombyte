@@ -201,7 +201,9 @@ void update_turret_rocket(char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    fast_vec_scale(direction, homing_projectile_private_state, -1.0f / homing_projectile_trail_particle_count_limit_gp);
+    fast_vec_scale(direction,
+                   homing_projectile_private_state,
+                   -1.0f / homing_projectile_trail_particle_count_limit_gp);
     qcopy(position, position_ptr);
     i = 0;
     timer_ptr = (int *)(homing_projectile_private_state + 0x18);
@@ -233,9 +235,10 @@ void update_turret_rocket(char *moby) {
                     particle_third_frame_count,
                     -1);
     }
-    MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x,
-                                           homing_projectile_spin_rate_degrees_gp * 0.017453292f *
-                                               frame_time * (float)*(int *)(homing_projectile_private_state + 0x1c));
+    MOBY(moby)->rot.x =
+        fast_add_rotations(MOBY(moby)->rot.x,
+                           homing_projectile_spin_rate_degrees_gp * 0.017453292f * frame_time *
+                               (float)*(int *)(homing_projectile_private_state + 0x1c));
     target = *(char **)(homing_projectile_private_state + 0x10);
     if (target != 0) {
         if ((unsigned char)target[0x20] == 0xfe)
@@ -247,15 +250,19 @@ void update_turret_rocket(char *moby) {
         {
             char *target_data = *(char **)(target + 0x78);
             length = fast_vec_length(homing_projectile_private_state);
-            spread = fast_vec_dist(moby + 0x10, *(char **)(homing_projectile_private_state + 0x10) + 0x10);
+            spread = fast_vec_dist(moby + 0x10,
+                                   *(char **)(homing_projectile_private_state + 0x10) + 0x10);
             fast_vec_scale(position, target_data + 0x20, spread / length);
-            fast_vec_add(position, position, *(char **)(homing_projectile_private_state + 0x10) + 0x10);
+            fast_vec_add(
+                position, position, *(char **)(homing_projectile_private_state + 0x10) + 0x10);
             fast_vec_sub(direction, position, moby + 0x10);
             fast_vec_normalize(direction, direction, length);
             fast_vec_sub(velocity, direction, homing_projectile_private_state);
             scale_vector_in_place_002e8210(frame_time * 3.7f, velocity);
-            fast_vec_add(homing_projectile_private_state, homing_projectile_private_state, velocity);
-            fast_vec_normalize(homing_projectile_private_state, homing_projectile_private_state, length);
+            fast_vec_add(
+                homing_projectile_private_state, homing_projectile_private_state, velocity);
+            fast_vec_normalize(
+                homing_projectile_private_state, homing_projectile_private_state, length);
         }
         goto target_done;
     clear_target:

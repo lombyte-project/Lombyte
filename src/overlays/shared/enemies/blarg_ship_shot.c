@@ -21,7 +21,8 @@ extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern int   projectile_trail_color_start_gp __asm__("D_L11_00161DC0") __attribute__((sda));
 int projectile_trail_color_end_gp __asm__("D_L11_00161DC4") = 0x80808020; /* RGBA, 0xAABBGGRR */
 extern int projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") __attribute__((sda));
-extern int l11_projectile_trail_initial_particle_scalar __asm__("D_L11_00161DCC") __attribute__((sda));
+extern int l11_projectile_trail_initial_particle_scalar __asm__("D_L11_00161DCC")
+    __attribute__((sda));
 float      projectile_trail_velocity_scale_gp __asm__("D_L11_00161DD0") = 0.5f;
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
@@ -111,7 +112,8 @@ void update_blarg_ship_shot(char *moby) {
                      (float)l11_projectile_trail_initial_particle_scalar);
     fast_vec_add(moby_position, moby_position, projectile_vars);
     make_hit_descriptor(hit, moby, 0x10000, *(float *)(projectile_vars + 0x20), projectile_vars);
-    if (collision_line(previous_moby_position, moby_position, 0, *(void **)(projectile_vars + 0x1C), hit)) {
+    if (collision_line(
+            previous_moby_position, moby_position, 0, *(void **)(projectile_vars + 0x1C), hit)) {
         int i;
         for (i = 0; i < 5; i++) {
             *(OvlQuad *)spark_scatter_vector = 0;

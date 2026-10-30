@@ -206,9 +206,9 @@ void update_linked_switch_group(char *moby) {
                         moby[0x20] = 3;
                     } else if (fast_dec_timer_s16(&switch_vars->unk72) != 0) {
                         allocate_voice_for_target_entry(0, 0, moby);
-                        switch_vars->unk72 =
-                            MIN(scale_game_frames(0x2D),
-                                scale_game_frames(5) + switch_vars->unk70 / scale_game_frames(0x28));
+                        switch_vars->unk72 = MIN(scale_game_frames(0x2D),
+                                                 scale_game_frames(5) +
+                                                     switch_vars->unk70 / scale_game_frames(0x28));
                     }
                 }
             }
@@ -238,8 +238,9 @@ void update_linked_switch_group(char *moby) {
                 moby[0x20] = 3;
             } else if (fast_dec_timer_s16(&switch_vars->unk72) != 0) {
                 allocate_voice_for_target_entry(0, 0, moby);
-                switch_vars->unk72 = MIN(scale_game_frames(0x2D),
-                                  scale_game_frames(5) + switch_vars->unk70 / scale_game_frames(0x28));
+                switch_vars->unk72 =
+                    MIN(scale_game_frames(0x2D),
+                        scale_game_frames(5) + switch_vars->unk70 / scale_game_frames(0x28));
             }
         }
         if (fast_dec_timer_s16(&switch_vars->unk76) != 0) {

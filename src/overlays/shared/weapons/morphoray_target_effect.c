@@ -87,5 +87,6 @@ void update_linked_moby_transform_and_lifetime(S_002d7f88 *follower_moby) {
             truncate_float_to_s32((1.0f - (moby_data->f4 - D_L00_001616DC) * 10.0f) * 127.0f);
     }
     scale_coefficient = moby_data->fC;
-    follower_moby->f2C = scale_coefficient * 0.1f + scale_coefficient * moby_data->f4 / D_L00_001616DC;
+    follower_moby->f2C =
+        scale_coefficient * 0.1f + scale_coefficient * moby_data->f4 / D_L00_001616DC;
 }

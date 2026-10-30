@@ -63,7 +63,10 @@ int select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_002
 float compute_ultramech_flocking_steering_point(
     void *m_, void *out, float target_search_range) __asm__("FUN_L15_002cf110");
 
-float compute_ultramech_flocking_steering_point(void *m_, void *steering_point, float target_search_range) {
+float compute_ultramech_flocking_steering_point(void *m_,
+                                                void *steering_point,
+
+                                                float target_search_range) {
     char *moby = m_;
     float steering_offset[4];
     float target_position[4];

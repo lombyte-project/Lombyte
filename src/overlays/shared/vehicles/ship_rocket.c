@@ -80,7 +80,8 @@ void update_ship_rocket(struct Moby *moby) {
     random.f[2] = random_float_between(-1.0f, 1.0f);
     velocity.q = random.q;
     fast_vec_normalize(&velocity, &velocity, random_float_between(0.1f, 0.2f) * frame_time);
-    fast_vec_normalize(&offset, &rocket_vars->step, -random_float_between(frame_time * 0.1f, frame_time));
+    fast_vec_normalize(
+        &offset, &rocket_vars->step, -random_float_between(frame_time * 0.1f, frame_time));
     fast_vec_add(&velocity, &velocity, &offset);
     FUN_L00_002712b8_94f8(&moby->pos,
                           &velocity,
@@ -98,7 +99,8 @@ void update_ship_rocket(struct Moby *moby) {
         unsigned char *particle;
         fast_vec_normalize(&offset,
                            &rocket_vars->step,
-                           random_float_between(fraction, fraction + 0.33333334f) * rocket_vars->speed);
+                           random_float_between(fraction, fraction + 0.33333334f) *
+                               rocket_vars->speed);
         fast_vec_add(&offset, &offset, &moby->pos);
         particle = FUN_L00_002712b8_94f8(&offset,
                                          &velocity,
@@ -128,8 +130,8 @@ void update_ship_rocket(struct Moby *moby) {
     target = rocket_vars->target;
     if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
         fast_vec_dist(&rocket_vars->target_pos, &target->pos) < 3.0f) {
-        moby->rot.z =
-            fast_arc_tan(rocket_vars->target->pos.x - moby->pos.x, rocket_vars->target->pos.y - moby->pos.y);
+        moby->rot.z = fast_arc_tan(rocket_vars->target->pos.x - moby->pos.x,
+                                   rocket_vars->target->pos.y - moby->pos.y);
         moby->rot.y = -fast_arc_tan(vector_distance_xy(pos, &rocket_vars->target->pos),
                                     rocket_vars->target->pos.z - moby->pos.z);
         qcopy(&rocket_vars->target_pos, &rocket_vars->target->pos);

@@ -69,12 +69,14 @@ void spawn_heavy_gunship_parts(struct Moby *moby) {
     *(char **)(part_hierarchy_vars + 0x74) = moby;
     *(int *)(part_hierarchy_vars + 0x78) = 0;
     child_moby->scale = *(float *)(((char *)child_moby->pclass) + 0x24) * 0.75f;
-    attachment_anchor_moby = FUN_L08_002e1c98_c2(*(char **)(part_hierarchy_vars + 0x90), 0x1BA, 1, 1);
+    attachment_anchor_moby =
+        FUN_L08_002e1c98_c2(*(char **)(part_hierarchy_vars + 0x90), 0x1BA, 1, 1);
     *(char **)(part_hierarchy_vars + 0x80) = attachment_anchor_moby;
     *(char **)(part_hierarchy_vars + 0x84) = *(char **)(part_hierarchy_vars + 0x90);
     *(int *)(part_hierarchy_vars + 0x88) = 1;
     *(int *)(part_hierarchy_vars + 0x8C) = 1;
-    *(char **)(part_hierarchy_vars + 0xA0) = FUN_L08_002e1c98_c2(attachment_anchor_moby, 0x1B9, 0, 0);
+    *(char **)(part_hierarchy_vars + 0xA0) =
+        FUN_L08_002e1c98_c2(attachment_anchor_moby, 0x1B9, 0, 0);
     *(char **)(part_hierarchy_vars + 0xA4) = *(char **)(part_hierarchy_vars + 0x80);
     *(int *)(part_hierarchy_vars + 0xA8) = 0;
     *(int *)(part_hierarchy_vars + 0xAC) = 0;
@@ -88,11 +90,13 @@ void spawn_heavy_gunship_parts(struct Moby *moby) {
     *(int *)(part_hierarchy_vars + 0xC8) = 0;
     *(int *)(part_hierarchy_vars + 0xCC) = 1;
     root_joint_attachment_moby->flags |= 0x8000;
-    *(char **)(part_hierarchy_vars + 0xD0) = FUN_L08_002e1c98_c2(*(char **)(part_hierarchy_vars + 0x80), 0x1D1, 0, 0);
+    *(char **)(part_hierarchy_vars + 0xD0) =
+        FUN_L08_002e1c98_c2(*(char **)(part_hierarchy_vars + 0x80), 0x1D1, 0, 0);
     *(char **)(part_hierarchy_vars + 0xD4) = *(char **)(part_hierarchy_vars + 0x80);
     *(int *)(part_hierarchy_vars + 0xD8) = 0;
     *(int *)(part_hierarchy_vars + 0xDC) = 0;
-    anchor_joint_attachment_moby = FUN_L08_002e1c98_c2(*(char **)(part_hierarchy_vars + 0x80), 0x1D1, 0, 0);
+    anchor_joint_attachment_moby =
+        FUN_L08_002e1c98_c2(*(char **)(part_hierarchy_vars + 0x80), 0x1D1, 0, 0);
     *(char **)(part_hierarchy_vars + 0xE0) = anchor_joint_attachment_moby;
     *(char **)(part_hierarchy_vars + 0xE4) = *(char **)(part_hierarchy_vars + 0x80);
     *(int *)(part_hierarchy_vars + 0xE8) = 0;
@@ -290,7 +294,8 @@ void update_heavy_gunship(struct Moby *moby) {
         }
         swarm_vars->follow[0].path = l08_paths[swarm_vars->follow[0].path_id];
         swarm_vars->follow[1].path = l08_paths[swarm_vars->follow[1].path_id];
-        swarm_vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
+        swarm_vars->fire_timer =
+            truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
         moby->flags |= 0x4000;
         qcopy(&moby->pos, &swarm_vars->follow[1].path->points[0]);
         spawn_heavy_gunship_parts(moby);
@@ -299,17 +304,18 @@ void update_heavy_gunship(struct Moby *moby) {
                                    swarm_vars->follow[1].path->points[1].f[1] - moby->pos.y);
         break;
     case HEAVY_GUNSHIP_FOLLOW_PRIMARY_PATH:
-        waypoint =
-            (swarm_vars->follow[0].point + swarm_vars->follow[0].path->count + swarm_vars->follow[0].direction) %
-            swarm_vars->follow[0].path->count;
+        waypoint = (swarm_vars->follow[0].point + swarm_vars->follow[0].path->count +
+                    swarm_vars->follow[0].direction) %
+                   swarm_vars->follow[0].path->count;
         target = &D_L08_0015FFD8[swarm_vars->target_index];
-        FUN_L00_00258278(moby,
-                         fast_arc_tan(swarm_vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
-                                      swarm_vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
-                         &swarm_vars->turn_speed,
-                         0.004f,
-                         0.3f,
-                         0.02f);
+        FUN_L00_00258278(
+            moby,
+            fast_arc_tan(swarm_vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
+                         swarm_vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
+            &swarm_vars->turn_speed,
+            0.004f,
+            0.3f,
+            0.02f);
         qcopy(&point, &swarm_vars->follow[0].path->points[waypoint]);
         if (fast_vec_dist(&moby->pos, &point) < 0.5f) {
             swarm_vars->follow[0].point = waypoint;
@@ -353,12 +359,13 @@ void update_heavy_gunship(struct Moby *moby) {
         follower = &swarm_vars->follow[1];
         next_waypoint = (swarm_vars->follow[1].point + 1) % follower->path->count;
         after = (swarm_vars->follow[1].point + 2) % follower->path->count;
-        heading = fast_arc_tan(
-            follower->path->points[next_waypoint].f[0] - follower->path->points[swarm_vars->follow[1].point].f[0],
-            follower->path->points[next_waypoint].f[1] - follower->path->points[swarm_vars->follow[1].point].f[1]);
-        next_heading =
-            fast_arc_tan(follower->path->points[after].f[0] - follower->path->points[next_waypoint].f[0],
-                         follower->path->points[after].f[1] - follower->path->points[next_waypoint].f[1]);
+        heading = fast_arc_tan(follower->path->points[next_waypoint].f[0] -
+                                   follower->path->points[swarm_vars->follow[1].point].f[0],
+                               follower->path->points[next_waypoint].f[1] -
+                                   follower->path->points[swarm_vars->follow[1].point].f[1]);
+        next_heading = fast_arc_tan(
+            follower->path->points[after].f[0] - follower->path->points[next_waypoint].f[0],
+            follower->path->points[after].f[1] - follower->path->points[next_waypoint].f[1]);
         turn = fast_subtract_rotations(heading, next_heading);
         distance = fast_vec_dist(&moby->pos, &follower->path->points[next_waypoint]);
         distance /= fast_vec_dist(&follower->path->points[swarm_vars->follow[1].point],
@@ -377,7 +384,8 @@ void update_heavy_gunship(struct Moby *moby) {
         if (!fast_dec_timer(&swarm_vars->fire_timer)) {
             break;
         }
-        swarm_vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
+        swarm_vars->fire_timer =
+            truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
         moby_point_position(swarm_vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();

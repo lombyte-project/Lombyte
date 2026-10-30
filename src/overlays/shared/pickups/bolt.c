@@ -551,8 +551,12 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
         rotated_axis_offset_distance, ground_collision_radius;
 
     if (*(char **)(grounded_bolt_vars + 0x5C) != 0) {
-        transform_attachment_pose(
-            (int)moby, *(char **)(grounded_bolt_vars + 0x5C), (float *)grounded_bolt_vars, (float *)(grounded_bolt_vars + 0x10), A, B);
+        transform_attachment_pose((int)moby,
+                                  *(char **)(grounded_bolt_vars + 0x5C),
+                                  (float *)grounded_bolt_vars,
+                                  (float *)(grounded_bolt_vars + 0x10),
+                                  A,
+                                  B);
     } else {
         qcopy(A, grounded_bolt_vars);
         qcopy(B, grounded_bolt_vars + 0x10);
@@ -588,12 +592,15 @@ void update_bolt_grounded_pose(char *moby, void *base_position_output, void *bas
         break;
     }
     if (*(unsigned char *)(grounded_bolt_vars + 0x55) & 1) {
-        *(float *)(grounded_bolt_vars + 0x50) = fast_add_rotations(*(float *)(grounded_bolt_vars + 0x50), rotation_angle_step);
-        *(float *)(grounded_bolt_vars + 0x58) = fast_add_rotations(*(float *)(grounded_bolt_vars + 0x58), -0.0125f);
+        *(float *)(grounded_bolt_vars + 0x50) =
+            fast_add_rotations(*(float *)(grounded_bolt_vars + 0x50), rotation_angle_step);
+        *(float *)(grounded_bolt_vars + 0x58) =
+            fast_add_rotations(*(float *)(grounded_bolt_vars + 0x58), -0.0125f);
     } else {
         *(float *)(grounded_bolt_vars + 0x50) =
             fast_subtract_rotations(*(float *)(grounded_bolt_vars + 0x50), rotation_angle_step);
-        *(float *)(grounded_bolt_vars + 0x58) = fast_subtract_rotations(*(float *)(grounded_bolt_vars + 0x58), -0.0125f);
+        *(float *)(grounded_bolt_vars + 0x58) =
+            fast_subtract_rotations(*(float *)(grounded_bolt_vars + 0x58), -0.0125f);
     }
     qcopy(local_rotation_angles, grounded_bolt_vars + 0x50);
     local_rotation_angles[1] = class_local_rotation_angle;
@@ -713,7 +720,13 @@ struct Moby *spawn_bolt_by_value(struct Moby *bolt_source,
 
 struct Moby *spawn_bolt_by_value(
 
-    struct Moby *bolt_source, void *pos, void *vel, int flags, int requested_bolt_value, int counted) {
+    struct Moby *bolt_source,
+    void        *pos,
+    void        *vel,
+    int          flags,
+    int          requested_bolt_value,
+
+    int counted) {
     enum {
         BOLT_VALUE_ONE = 1,
         BOLT_VALUE_FIVE = 5,

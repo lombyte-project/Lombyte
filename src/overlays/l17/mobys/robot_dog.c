@@ -690,7 +690,12 @@ int move_robot_dog_toward_position(struct Moby *moby, float *target, float speed
     robot_dog_motion_vars = (char *)moby->pvars;
     target_yaw = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
     turn = frame_time_sq * 12.566371f;
-    approach_angle(yaw, (float *)(robot_dog_motion_vars + 0x1DC), target_yaw, turn, turn, frame_time * 7.3303828f);
+    approach_angle(yaw,
+                   (float *)(robot_dog_motion_vars + 0x1DC),
+                   target_yaw,
+                   turn,
+                   turn,
+                   frame_time * 7.3303828f);
     approach_value((float *)(robot_dog_motion_vars + 0x1D8), speed, frame_time_sq * 13.0f);
     movement_delta[0] = fast_cos(moby->rot.z) * *(float *)(robot_dog_motion_vars + 0x1D8);
     movement_delta[1] = fast_sin(moby->rot.z) * *(float *)(robot_dog_motion_vars + 0x1D8);

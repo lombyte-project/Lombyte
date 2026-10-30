@@ -222,8 +222,9 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
             clear_u64_value(angles);
             angles[2] = fast_arc_tan(l15_camera.pos.f[0] - MOBY(group_member_moby)->pos.x,
                                      l15_camera.pos.f[1] - MOBY(group_member_moby)->pos.y);
-            angles[1] = -fast_arc_tan(vector_distance_xy(&MOBY(group_member_moby)->pos, l15_camera.pos.f),
-                                      l15_camera.pos.f[2] - MOBY(group_member_moby)->pos.z);
+            angles[1] =
+                -fast_arc_tan(vector_distance_xy(&MOBY(group_member_moby)->pos, l15_camera.pos.f),
+                              l15_camera.pos.f[2] - MOBY(group_member_moby)->pos.z);
             euler_rotation_matrix(rotation, angles);
             qcopy(position, &MOBY(group_member_moby)->pos);
             position[2] += group_moby_effect_z_offset_gp;

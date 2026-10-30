@@ -92,14 +92,16 @@ void update_taxi_platform(unsigned char *moby) {
                     }
                 }
                 moby[0xBC] = 2;
-                F(taxi_platform_vars, 0xAC) = 1.0f / scale_time(F(taxi_platform_vars, 0xB0) * 60.0f);
+                F(taxi_platform_vars, 0xAC) =
+                    1.0f / scale_time(F(taxi_platform_vars, 0xB0) * 60.0f);
                 *(short *)(taxi_platform_vars + 0xB8) = 0;
             }
         }
         break;
     case TAXI_TRAVERSE_PATH:
         if (*(short *)(taxi_platform_vars + 0xBA) != 0 ||
-            (F(taxi_platform_vars, 0xBC) < 0.0f && vector_distance_xy((moby + 0x10), &hero.motion.pos) < 2.0f &&
+            (F(taxi_platform_vars, 0xBC) < 0.0f &&
+             vector_distance_xy((moby + 0x10), &hero.motion.pos) < 2.0f &&
              absolute_float(hero.motion.pos.f[2] - F(moby, 0x18)) < 4.0f &&
              F(moby, 0x18) - hero.motion.pos.f[2] > 1.0f)) {
             int r;
@@ -120,10 +122,12 @@ void update_taxi_platform(unsigned char *moby) {
             float segment_fraction_work_value, t;
             char *segment_start_position;
             if (!voice_is_playing(moby, *(int *)(taxi_platform_vars + 0xC4))) {
-                *(int *)(taxi_platform_vars + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
+                *(int *)(taxi_platform_vars + 0xC4) =
+                    allocate_voice_for_target_entry(0, 4, (int)moby);
             }
             F(taxi_platform_vars, 0xA8) += F(taxi_platform_vars, 0xAC) * frame_time;
-            if (absolute_float(F(taxi_platform_vars, 0xA8)) > absolute_float(F(taxi_platform_vars, 0xAC))) {
+            if (absolute_float(F(taxi_platform_vars, 0xA8)) >
+                absolute_float(F(taxi_platform_vars, 0xAC))) {
                 F(taxi_platform_vars, 0xA8) = F(taxi_platform_vars, 0xAC);
             }
             F(taxi_platform_vars, 0xA4) = F(taxi_platform_vars, 0xA4) + F(taxi_platform_vars, 0xA8);

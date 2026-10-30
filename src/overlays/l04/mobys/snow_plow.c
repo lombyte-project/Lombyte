@@ -166,7 +166,8 @@ void snow_plow_update(struct Moby *moby) {
                              frame_time_sq * 1.0471976f,
                              frame_time_sq * 3.1415927f,
                              frame_time * 3.1415927f);
-            if (vector_distance_xy(&moby->pos, &l04_cuboids[*(unsigned char *)(snow_plow_vars + 0x148)].pos) <
+            if (vector_distance_xy(&moby->pos,
+                                   &l04_cuboids[*(unsigned char *)(snow_plow_vars + 0x148)].pos) <
                     1.0f &&
                 fast_difference_between_rotations(
                     moby->rot.z, l04_cuboids[*(unsigned char *)(snow_plow_vars + 0x148)].rot.z) <
@@ -174,7 +175,8 @@ void snow_plow_update(struct Moby *moby) {
                 *(unsigned char *)(snow_plow_vars + 0x149) = 2;
                 *(short *)(snow_plow_vars + 0x14a) = scale_game_frames(300);
             }
-            fast_vec_sub(&delta, &l04_cuboids[*(unsigned char *)(snow_plow_vars + 0x148)].pos, &moby->pos);
+            fast_vec_sub(
+                &delta, &l04_cuboids[*(unsigned char *)(snow_plow_vars + 0x148)].pos, &moby->pos);
             fast_vec_normalize(&delta, &delta, frame_time * 3.0f);
             fast_vec_add(&moby->pos, &moby->pos, &delta);
             break;
@@ -266,7 +268,8 @@ void snow_plow_update(struct Moby *moby) {
         }
     }
     if (*(int *)(snow_plow_vars + 0x17c) != -1) {
-        struct Moby *other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(snow_plow_vars + 0x17c) << 8));
+        struct Moby *other =
+            (struct Moby *)(D_L04_0015FFD8 + (*(int *)(snow_plow_vars + 0x17c) << 8));
         other->draw_dist = 0x7f;
         switch (moby->oclass) {
         case SNOW_PLOW_CLASS_WITH_QUARTER_TURN_LINKED_MOBY:
@@ -705,7 +708,8 @@ hit:
     moby->collision = 0;
     moby->flags |= 0x41;
     if (*(int *)(snow_plow_vars + 0x17c) != -1) {
-        struct Moby *other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(snow_plow_vars + 0x17c) << 8));
+        struct Moby *other =
+            (struct Moby *)(D_L04_0015FFD8 + (*(int *)(snow_plow_vars + 0x17c) << 8));
         other->flags |= 0x41;
     }
     moby->flags &= 0xefff;

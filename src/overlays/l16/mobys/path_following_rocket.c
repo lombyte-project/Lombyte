@@ -96,8 +96,12 @@ void update_path_following_rocket(struct Moby *moby) {
             if (fast_bsphere_check((char *)pos, 64.0f) == -1) {
                 moby->command = 0;
                 *(int *)(rocket_path_data + 0x10) = 0;
-                sample_camera_path(
-                    (int *)path, 0, &moby->pos, &moby->rot.x, 0, *(float *)(rocket_path_data + 0x10));
+                sample_camera_path((int *)path,
+                                   0,
+                                   &moby->pos,
+                                   &moby->rot.x,
+                                   0,
+                                   *(float *)(rocket_path_data + 0x10));
                 moby->visible = 1;
                 moby->flags &= ~1;
                 moby->collision = moby->pclass->collision;

@@ -206,10 +206,13 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
         float pitch;
         qcopy(bouncer_look_vectors.eye, bouncer_moby->position);
         bouncer_look_vectors.eye[2] += 1.0f;
-        fast_vec_sub(bouncer_look_vectors.delta, bouncer_look_vectors.target, bouncer_look_vectors.eye);
-        yaw = fast_subtract_rotations_c(fast_arc_tan(bouncer_look_vectors.delta[0], bouncer_look_vectors.delta[1]),
-                                        bouncer_moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy_c(bouncer_look_vectors.delta), bouncer_look_vectors.delta[2]);
+        fast_vec_sub(
+            bouncer_look_vectors.delta, bouncer_look_vectors.target, bouncer_look_vectors.eye);
+        yaw = fast_subtract_rotations_c(
+            fast_arc_tan(bouncer_look_vectors.delta[0], bouncer_look_vectors.delta[1]),
+            bouncer_moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy_c(bouncer_look_vectors.delta),
+                              bouncer_look_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

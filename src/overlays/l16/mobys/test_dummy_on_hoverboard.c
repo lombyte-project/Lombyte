@@ -35,7 +35,10 @@ void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby,
                                      int                        index,
                                      void                      *out) __asm__("FUN_L16_002cf9d0");
 
-void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby, int index, void *path_node_destination) {
+void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby,
+                                     int                        index,
+
+                                     void *path_node_destination) {
     qcopy(path_node_destination, moby->data->vectors + index * 16 + 16);
 }
 
@@ -228,7 +231,9 @@ void prepare_hoverboard_dummy_path_jump(struct Moby *moby) {
                 path_node_byte_offset = path_node_index * 16;
             }
             *(short *)(hoverboard_dummy_path_jump_data + 0x2F0) = path_node_index;
-            qcopy(hoverboard_dummy_path_jump_data + 0x270, *(char **)(hoverboard_dummy_path_jump_data + 0x2C0) + (short)path_node_index * 16 + 0x10);
+            qcopy(hoverboard_dummy_path_jump_data + 0x270,
+                  *(char **)(hoverboard_dummy_path_jump_data + 0x2C0) +
+                      (short)path_node_index * 16 + 0x10);
             *(int *)(hoverboard_dummy_path_jump_data + 0x2E4) = 1;
         }
     }
@@ -654,9 +659,11 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                 while (i < *(short *)(hoverboard_dummy_data + 0x2F0)) {
                     char *path;
 
-                    next_jump_path_node_index = offset_path_index(*(char **)(hoverboard_dummy_data + 0x2C0), i, 1, 1);
+                    next_jump_path_node_index =
+                        offset_path_index(*(char **)(hoverboard_dummy_data + 0x2C0), i, 1, 1);
                     path = *(char **)(hoverboard_dummy_data + 0x2C0);
-                    distance += vector_distance_xy(path + (i * 16 + 16), path + (next_jump_path_node_index * 16 + 16));
+                    distance += vector_distance_xy(path + (i * 16 + 16),
+                                                   path + (next_jump_path_node_index * 16 + 16));
                     i = next_jump_path_node_index;
                 }
                 {

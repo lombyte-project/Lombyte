@@ -265,15 +265,19 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
         } else {
             opacity = wind_spark_peak_alpha_gp;
             if (spark_vars->n380[i] - wind_spark_fade_in_frames_gp < spark_vars->n320[i]) {
-                spark_fade_fraction = convert_integer_to_float(spark_vars->n380[i] - spark_vars->n320[i]);
-                spark_fade_fraction = spark_fade_fraction / convert_integer_to_float(wind_spark_fade_in_frames_gp);
+                spark_fade_fraction =
+                    convert_integer_to_float(spark_vars->n380[i] - spark_vars->n320[i]);
+                spark_fade_fraction =
+                    spark_fade_fraction / convert_integer_to_float(wind_spark_fade_in_frames_gp);
             } else {
                 spark_fade_fraction = convert_integer_to_float(spark_vars->n320[i]);
-                spark_fade_fraction = spark_fade_fraction / convert_integer_to_float(spark_vars->n380[i] -
-                                                         wind_spark_fade_in_frames_gp);
+                spark_fade_fraction =
+                    spark_fade_fraction /
+                    convert_integer_to_float(spark_vars->n380[i] - wind_spark_fade_in_frames_gp);
             }
             {
-                int spark_alpha = spark_float_to_integer(((float)opacity - 0.0f) * spark_fade_fraction + 0.0f);
+                int spark_alpha =
+                    spark_float_to_integer(((float)opacity - 0.0f) * spark_fade_fraction + 0.0f);
                 *shade = spark_alpha;
                 /* Fakematch: storing the shade again is a no-op that reload's cse drops; the
                  * extra uses rank `shade` above `m` for register allocation as in retail. */

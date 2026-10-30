@@ -510,11 +510,13 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
     if (MOBY(moby)->state == 0) {
         trajectory_position[0] =
             fast_cos(fast_add_rotations(
-                -0.36196801f, fast_arc_tan(*(float *)(hero_state + 0x670), *(float *)(hero_state + 0x674)))) *
+                -0.36196801f,
+                fast_arc_tan(*(float *)(hero_state + 0x670), *(float *)(hero_state + 0x674)))) *
             0.859039f;
         trajectory_position[1] =
             fast_sin(fast_add_rotations(
-                -0.36196801f, fast_arc_tan(*(float *)(hero_state + 0x670), *(float *)(hero_state + 0x674)))) *
+                -0.36196801f,
+                fast_arc_tan(*(float *)(hero_state + 0x670), *(float *)(hero_state + 0x674)))) *
             0.859039f;
         *(int *)&trajectory_position[2] = 0;
         fast_vec_add(trajectory_position, trajectory_position, hero_state + 0x80);
@@ -703,7 +705,9 @@ void mine_update(M910 *mine_moby) {
             }
             mine_moby->pos.f[2] -= v->f6C * fast_sin(v->f70) * k;
             if (!(mine_moby->state & 4) &&
-                collision_line(&mine_pre_motion_position, &mine_moby->pos, 0x10, (int)mine_moby, (int)&q) != 0) {
+                collision_line(
+                    &mine_pre_motion_position, &mine_moby->pos, 0x10, (int)mine_moby, (int)&q) !=
+                    0) {
                 if (v->h50 == 0 && collision_hit_material() == 0 && v->vel.f[2] < 0.0f) {
                     V910 t;
                     V910 n;

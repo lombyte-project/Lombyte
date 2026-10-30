@@ -494,8 +494,14 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             hit = *(short *)(source + 0xA6) != 0x31 ? hit : 0;
         }
     }
-    response = hit_reaction(
-        commando_moby, hit, &commando_data->health, 0, &damage_reaction.status, &damage_reaction.amount, 0, 4);
+    response = hit_reaction(commando_moby,
+                            hit,
+                            &commando_data->health,
+                            0,
+                            &damage_reaction.status,
+                            &damage_reaction.amount,
+                            0,
+                            4);
     if (damage_reaction.status != 1 && commando_moby->state != 9) {
         randomize_blarg_elite_commando_group_pursuit_timers(commando_moby, 0x12C, 0x168);
         if (hit && *(char **)(hit + 0x20) && *(short *)(*(char **)(hit + 0x20) + 0xA6) != 0x47) {
@@ -707,7 +713,7 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
         group_entry = D_L16_001ABCC0[source_moby->group];
     next:
         group_member_moby = (L16GroupMoby *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) +
-                                 (int)D_L16_0015FFD8);
+                                             (int)D_L16_0015FFD8);
         if (group_member_moby->state >= 0) {
             timer_data = group_member_moby->data;
             timer_data->timer = truncate_float_to_s32(
@@ -721,7 +727,8 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 void select_blarg_elite_commando_movement_animation(char *moby) {
     char *commando_path_state = ((char *)MOBY(moby)->pvars);
-    char *target = D_L16_001B0930[*(int *)(commando_path_state + 0x120)] + (*(short *)(commando_path_state + 0x300) << 4);
+    char *target = D_L16_001B0930[*(int *)(commando_path_state + 0x120)] +
+                   (*(short *)(commando_path_state + 0x300) << 4);
     float angle = fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                *(float *)(target + 0x14) - MOBY(moby)->pos.y);
     float delta = fast_subtract_rotations(angle, MOBY(moby)->rot.z);

@@ -142,9 +142,9 @@ void platform_update(Moby *moby) {
                                  platform_return_tilt_error_gain_gp * deg_to_rad * D_0015ED70,
                                  platform_return_tilt_velocity_damping_gp * frame_scale_sq,
                                  platform_return_tilt_velocity_limit_gp * deg_to_rad * frame_time);
-        (*(Vec_2F9A50 *)&moby->pos).z =
-            (*(Vec_2F9A50 *)&moby->pos).z + platform_height_return_gain_gp * frame_time *
-                                                (platform_vars->baseZ - (*(Vec_2F9A50 *)&moby->pos).z);
+        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z +
+                                        platform_height_return_gain_gp * frame_time *
+                                            (platform_vars->baseZ - (*(Vec_2F9A50 *)&moby->pos).z);
         if (platform_vars->baseZ < (*(Vec_2F9A50 *)&moby->pos).z) {
             (*(Vec_2F9A50 *)&moby->pos).z = platform_vars->baseZ;
         }
@@ -160,8 +160,10 @@ void platform_update(Moby *moby) {
                                      0.0872664600610733f,
                                      frame_time * 0.3141592741012573f,
                                      frame_time * 0.48869219422340393f);
-    (*(Vec_2F9A50 *)&moby->rot).x = fast_add_rotations(platform_vars->ang.x, (*(Vec_2F9A50 *)&moby->rot).x);
-    (*(Vec_2F9A50 *)&moby->rot).y = fast_add_rotations(platform_vars->ang.y, (*(Vec_2F9A50 *)&moby->rot).y);
+    (*(Vec_2F9A50 *)&moby->rot).x =
+        fast_add_rotations(platform_vars->ang.x, (*(Vec_2F9A50 *)&moby->rot).x);
+    (*(Vec_2F9A50 *)&moby->rot).y =
+        fast_add_rotations(platform_vars->ang.y, (*(Vec_2F9A50 *)&moby->rot).y);
     fast_vec_add(&movement, &movement, &(*(Vec_2F9A50 *)&moby->pos));
     update_entity_matrix(platform_vars->f20, &movement, &old_rot, &(*(Vec_2F9A50 *)&moby->rot));
 }

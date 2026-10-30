@@ -69,13 +69,15 @@ void floating_platform_update(unsigned char *moby) {
                                                   DEG_TO_RAD * frame_time);
         k = floating_platform_rotation_x_phase_rate_degrees_gp * DEG_TO_RAD * frame_time;
         *(float *)(floating_platform_vars + 0x60) = rotation_y_phase;
-        *(float *)(floating_platform_vars + 0x6C) = fast_add_rotations(*(float *)(floating_platform_vars + 0x6C), k);
+        *(float *)(floating_platform_vars + 0x6C) =
+            fast_add_rotations(*(float *)(floating_platform_vars + 0x6C), k);
         MOBY(moby)->rot.y = floating_platform_rotation_y_amplitude_degrees_gp * DEG_TO_RAD *
                             fast_sin(*(float *)(floating_platform_vars + 0x60));
         MOBY(moby)->rot.x = floating_platform_rotation_x_amplitude_degrees_gp * DEG_TO_RAD *
                             fast_sin(*(float *)(floating_platform_vars + 0x6C));
         fast_vec_sub(position_delta, position, previous_position);
-        update_entity_matrix(floating_platform_vars + 0x20, position_delta, previous_rotation_ptr, current_rotation);
+        update_entity_matrix(
+            floating_platform_vars + 0x20, position_delta, previous_rotation_ptr, current_rotation);
         break;
     }
 }

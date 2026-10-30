@@ -56,16 +56,16 @@ static _CONST char zeroes[PADSIZE] = {
     '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'};
 
 s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_list ap) {
-    register char        *fmt;   /* format string */
-    register int          ch;    /* character from fmt */
-    register int          n, m;  /* handy integers (short term usage) */
-    register char        *cp;    /* handy char pointer (short term usage) */
-    register RncStdioIov *iovp;  /* for PRINT macro */
-    register int          flags; /* flags as above */
-    int                   output_byte_count;   /* return value accumulator */
-    int                   width; /* width from format (%8d), or 0 */
-    int                   prec;  /* precision from format (%.3d), or -1 */
-    char                  sign;  /* sign prefix (' ', '+', '-', or \0) */
+    register char        *fmt;               /* format string */
+    register int          ch;                /* character from fmt */
+    register int          n, m;              /* handy integers (short term usage) */
+    register char        *cp;                /* handy char pointer (short term usage) */
+    register RncStdioIov *iovp;              /* for PRINT macro */
+    register int          flags;             /* flags as above */
+    int                   output_byte_count; /* return value accumulator */
+    int                   width;             /* width from format (%8d), or 0 */
+    int                   prec;              /* precision from format (%.3d), or -1 */
+    char                  sign;              /* sign prefix (' ', '+', '-', or \0) */
     s32                   wc;
     char                 *decimal_point = *get_state_resource_wrapper();
     char                  softsign;  /* temporary negative sign for floats */
@@ -86,11 +86,11 @@ s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_li
     int   size;   /* size of converted field or string */
     char *xdigs;  /* digits for [xX] conversion */
 #define NIOV 8
-    RncStdioUio uio;       /* output information: summary */
-    RncStdioIov iov[NIOV]; /* ... and individual io vectors */
-    char        conversion_buffer[BUF];  /* space for %c, %[diouxX], %[eEfgG] */
-    char        ox[2];     /* space for 0x hex-prefix */
-    int         state = 0; /* mbtowc calls from library must not change state */
+    RncStdioUio uio;                    /* output information: summary */
+    RncStdioIov iov[NIOV];              /* ... and individual io vectors */
+    char        conversion_buffer[BUF]; /* space for %c, %[diouxX], %[eEfgG] */
+    char        ox[2];                  /* space for 0x hex-prefix */
+    int         state = 0;              /* mbtowc calls from library must not change state */
 
     /*
 	 * Choose PADSIZE to trade efficiency vs. size.  If larger printf

@@ -78,8 +78,10 @@ void energy_sphere_update(unsigned char *moby) {
         vp = previous_position;
         qcopy(vp, sphere_position);
         fast_vec_add(sphere_position, sphere_position, energy_sphere_private_vars);
-        if (fast_dec_timer(energy_sphere_private_vars + 0x20) || collision_line(vp, (char *)moby + 0x10, 0, moby, 0) ||
-            collect_mobies_in_sphere(0.333f, (char *)moby + 0x10, 0, *(void **)(energy_sphere_private_vars + 0x24), 0)) {
+        if (fast_dec_timer(energy_sphere_private_vars + 0x20) ||
+            collision_line(vp, (char *)moby + 0x10, 0, moby, 0) ||
+            collect_mobies_in_sphere(
+                0.333f, (char *)moby + 0x10, 0, *(void **)(energy_sphere_private_vars + 0x24), 0)) {
             spawn_explosion(moby,
                             energy_sphere_private_vars,
                             (char *)moby + 0x10,

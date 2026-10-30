@@ -26,7 +26,8 @@ void set_image_tag(void *tag_buffer, int texbuf, int image_w, int image_h) {
     *(long *)(tag_write_cursor + 0x8) = 0;
     *(long *)(tag_write_cursor + 0x10) = 0x1000000000000002L;
     *(long *)(tag_write_cursor + 0x18) = 0xEL;
-    *(long *)(tag_write_cursor + 0x20) = ((long)(draw_buffer_address_macro >> 8) << 32) | 0x8000000000000L;
+    *(long *)(tag_write_cursor + 0x20) =
+        ((long)(draw_buffer_address_macro >> 8) << 32) | 0x8000000000000L;
     *(long *)(tag_write_cursor + 0x28) = 0x50L;
     *(long *)(tag_write_cursor + 0x30) = 0x1000000010L;
     *(long *)(tag_write_cursor + 0x38) = 0x52L;

@@ -143,8 +143,10 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
                                                          sel);
     target_pitch_angle = *(float *)(turn_pitch_state + 8) * 0.69813168f;
     if (k == 0.0f) {
-        build_look_at_matrix(
-            turn_pitch_vector, turn_pitch_vector, reference_vector_storage + 0x20, *(float *)(turn_pitch_state + 0x20));
+        build_look_at_matrix(turn_pitch_vector,
+                             turn_pitch_vector,
+                             reference_vector_storage + 0x20,
+                             *(float *)(turn_pitch_state + 0x20));
     } else {
         build_look_at_matrix(turn_pitch_vector,
                              turn_pitch_vector,

@@ -471,7 +471,8 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 r = FUN_L00_00258b50(m, &crab_data->iD0, dir, out, 1.0f);
                 m->f48 = rot;
                 if (r & 3) {
-                    if (vector_distance_xy(m->pos, pre_movement_position) < crab_data->fF4 * 0.25f) {
+                    if (vector_distance_xy(m->pos, pre_movement_position) <
+                        crab_data->fF4 * 0.25f) {
                         crab_data->i1D8 = 1;
                     } else {
                         crab_data->i1D8 = 0;
@@ -1242,11 +1243,12 @@ float compute_toxic_crab_group_approach_angle(struct Moby *toxic_crab) {
         do {
             int listed_entity_index = *(unsigned short *)group_entry & 0x7FFF;
             if (D_L10_0015FFD0_macro[2][listed_entity_index].state == 5 ||
-                fast_vec_dist(&D_L10_0015FFD0_macro[2][listed_entity_index].pos.x, pursuit_target + 0x10) <
-                    owner_to_self_distance) {
-                float d = fast_arc_tan(
-                    D_L10_0015FFD0_macro[2][listed_entity_index].pos.x - *(float *)(pursuit_target + 0x10),
-                    D_L10_0015FFD0_macro[2][listed_entity_index].pos.y - *(float *)(pursuit_target + 0x14));
+                fast_vec_dist(&D_L10_0015FFD0_macro[2][listed_entity_index].pos.x,
+                              pursuit_target + 0x10) < owner_to_self_distance) {
+                float d = fast_arc_tan(D_L10_0015FFD0_macro[2][listed_entity_index].pos.x -
+                                           *(float *)(pursuit_target + 0x10),
+                                       D_L10_0015FFD0_macro[2][listed_entity_index].pos.y -
+                                           *(float *)(pursuit_target + 0x14));
                 float group_angle_offset = fast_subtract_rotations(d, owner_to_self_angle);
                 if (group_angle_offset > 0.0f && group_angle_offset < hi) {
                     hi = group_angle_offset;

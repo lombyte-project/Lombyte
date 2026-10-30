@@ -49,7 +49,8 @@ s32 check_memory_card(void) {
     if (format == 0) {
         return 0;
     }
-    card_command_result = sceMcGetDir(memory_card_state.card[0].port, card_state->unk4, D_0013D1D0, 0, -1, 0);
+    card_command_result =
+        sceMcGetDir(memory_card_state.card[0].port, card_state->unk4, D_0013D1D0, 0, -1, 0);
     while (sceMcSync(1, &cmd_code, &card_command_result) == 0) {
         sceGsSyncV(0);
     }

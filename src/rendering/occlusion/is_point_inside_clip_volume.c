@@ -19,7 +19,8 @@ s32 is_point_inside_clip_volume(void *point, s32 volume_index) {
     fast_vec_sub(&in, point, clip_volume_record + 0x30);
     in.w = 0.0f;
     transform_vector_by_basis(&volume_space_point, &in, clip_volume_record + 0x40);
-    if ((volume_space_point.x >= -1.0f) && (volume_space_point.x <= 1.0f) && (volume_space_point.y >= -1.0f) && (volume_space_point.y <= 1.0f) &&
+    if ((volume_space_point.x >= -1.0f) && (volume_space_point.x <= 1.0f) &&
+        (volume_space_point.y >= -1.0f) && (volume_space_point.y <= 1.0f) &&
         (volume_space_point.z >= -1.0f) && (volume_space_point.z <= 1.0f))
         return 1;
     return 0;

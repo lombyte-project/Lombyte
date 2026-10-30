@@ -462,13 +462,15 @@ void platform_update(Moby *moby) {
         if (fast_vec_length(platform_vars->vel) < D_0015ED6C * 6.0f) {
             platform_vars->vel[2] = platform_vars->vel[2] + D_0015ED70 * 6.0f;
         }
-        fast_vec_add((*(float(*)[4]) & moby->pos), (*(float(*)[4]) & moby->pos), platform_vars->vel);
+        fast_vec_add(
+            (*(float(*)[4]) & moby->pos), (*(float(*)[4]) & moby->pos), platform_vars->vel);
         if (moby->visible == 0) {
             mark_moby_for_removal(moby);
         }
         break;
     case PLATFORM_FALL_AND_TUMBLE:
-        fast_vec_add((*(float(*)[4]) & moby->pos), (*(float(*)[4]) & moby->pos), platform_vars->vel);
+        fast_vec_add(
+            (*(float(*)[4]) & moby->pos), (*(float(*)[4]) & moby->pos), platform_vars->vel);
         if (FUN_L08_002025d0((*(float(*)[4]) & moby->pos), 0x600, 0, moby, 0) &&
             platform_vars->walk.path == 0) {
             spawn_explosion(moby,
@@ -498,7 +500,8 @@ void platform_update(Moby *moby) {
         (*(float(*)[4]) & moby->rot)[1] =
             fast_add_rotations(platform_vars->fEC, (*(float(*)[4]) & moby->rot)[1]);
         if (platform_vars->walk.path != 0 &&
-            vector_distance_xy((*(float(*)[4]) & moby->pos), &platform_vars->walk.path->nodes[0]) < 0.5f) {
+            vector_distance_xy((*(float(*)[4]) & moby->pos), &platform_vars->walk.path->nodes[0]) <
+                0.5f) {
             moby->state = 0;
         }
         if ((*(float(*)[4]) & moby->pos)[2] < 0.0f) {

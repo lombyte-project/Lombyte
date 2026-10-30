@@ -36,7 +36,10 @@ void _initRefImages(unsigned int *frame0_buffer_address,
 
     pixel_count_div_512 = (width * height) / 512;
 
-    *second_field0_buffer_address = (unsigned int)UncAddr((char *)addr0 + pixel_count_div_512 * 384);
-    *second_field1_buffer_address = (unsigned int)UncAddr((char *)addr1 + pixel_count_div_512 * 384);
-    *second_field2_buffer_address = (unsigned int)UncAddr((char *)addr2 + pixel_count_div_512 * 384);
+    *second_field0_buffer_address =
+        (unsigned int)UncAddr((char *)addr0 + pixel_count_div_512 * 384);
+    *second_field1_buffer_address =
+        (unsigned int)UncAddr((char *)addr1 + pixel_count_div_512 * 384);
+    *second_field2_buffer_address =
+        (unsigned int)UncAddr((char *)addr2 + pixel_count_div_512 * 384);
 }

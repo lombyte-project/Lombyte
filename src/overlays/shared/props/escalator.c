@@ -36,7 +36,8 @@ void escalator_update(char *moby) {
     goto move;
 state0:
     clear_u64_value(escalator_motion_state + 0x40);
-    *(int *)(escalator_motion_state + 0xa0) = scale_game_frames(escalator_direction_timer_frames_gp);
+    *(int *)(escalator_motion_state + 0xa0) =
+        scale_game_frames(escalator_direction_timer_frames_gp);
     *(u32 *)(escalator_motion_state + 0x9c) |= 4;
     if (*(int *)(escalator_motion_state + 0xa4) != 0)
         MOBY(moby)->state = 3;
@@ -48,9 +49,11 @@ state1: {
 
     MOBY(moby)->anim_speed = 1.0f;
     if (fast_dec_timer((int *)(escalator_motion_state + 0xa0))) {
-        speed = fast_vec_length(escalator_motion_state + 0x40) - escalator_acceleration_gp * frame_time_sq;
+        speed = fast_vec_length(escalator_motion_state + 0x40) -
+                escalator_acceleration_gp * frame_time_sq;
         if (speed <= 0.0f) {
-            *(int *)(escalator_motion_state + 0xa0) = scale_game_frames(escalator_direction_timer_frames_gp);
+            *(int *)(escalator_motion_state + 0xa0) =
+                scale_game_frames(escalator_direction_timer_frames_gp);
             MOBY(moby)->state = 2;
         } else {
             *(float *)(escalator_motion_state + 0x40) = fast_cos(MOBY(moby)->rot.z) * -speed;
@@ -76,9 +79,11 @@ state2: {
 
     MOBY(moby)->anim_speed = -1.0f;
     if (fast_dec_timer((int *)(escalator_motion_state + 0xa0))) {
-        speed = fast_vec_length(escalator_motion_state + 0x40) - escalator_acceleration_gp * frame_time_sq;
+        speed = fast_vec_length(escalator_motion_state + 0x40) -
+                escalator_acceleration_gp * frame_time_sq;
         if (speed <= 0.0f) {
-            *(int *)(escalator_motion_state + 0xa0) = scale_game_frames(escalator_direction_timer_frames_gp);
+            *(int *)(escalator_motion_state + 0xa0) =
+                scale_game_frames(escalator_direction_timer_frames_gp);
             MOBY(moby)->state = 1;
         } else {
             *(float *)(escalator_motion_state + 0x40) = fast_cos(MOBY(moby)->rot.z) * speed;
@@ -104,7 +109,8 @@ state3:
         fast_sin(MOBY(moby)->rot.z) * -(escalator_target_speed_gp * frame_time);
     *(int *)(escalator_motion_state + 0x48) = 0;
 move:
-    update_entity_matrix(escalator_motion_state + 0x60, escalator_motion_state + 0x40, moby + 0x40, moby + 0x40);
+    update_entity_matrix(
+        escalator_motion_state + 0x60, escalator_motion_state + 0x40, moby + 0x40, moby + 0x40);
 }
 
 int   D_L12_00161964 = 0xb4;

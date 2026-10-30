@@ -54,7 +54,9 @@ void capture_linked_moby_relative_transforms(char *moby, char *arr, int entry_co
         if (linked_moby_index != -1) {
             char *linked_moby = D_L12_0015FFD8_p + (linked_moby_index << 8);
             fast_vec_sub(linked_moby_transform_record, linked_moby + 0x10, moby + 0x10);
-            transform_vector(linked_moby_transform_record, linked_moby_transform_record, inverse_moby_rotation_matrix);
+            transform_vector(linked_moby_transform_record,
+                             linked_moby_transform_record,
+                             inverse_moby_rotation_matrix);
             euler_rotation_matrix(relative_rotation_matrix, linked_moby + 0x40);
             multiply_matrix(
                 relative_rotation_matrix, inverse_moby_rotation_matrix, relative_rotation_matrix);

@@ -1477,7 +1477,7 @@ void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
     float path_target_position[4];
     float save = *(float *)(interceptor_instance_vars + 0x1CC);
     int   save2 = *(int *)(interceptor_instance_vars + 0x84);
-    int   r = FUN_L00_0025d808_2af918(((int *)l14_paths[*(int *)(interceptor_instance_vars + 0x78)]),
+    int r = FUN_L00_0025d808_2af918(((int *)l14_paths[*(int *)(interceptor_instance_vars + 0x78)]),
                                     path_target_position,
                                     (int *)(interceptor_instance_vars + 0x84),
                                     (float *)(interceptor_instance_vars + 0x1CC),
@@ -1505,7 +1505,8 @@ void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
         if (r != 0) {
             *(float *)(interceptor_instance_vars + 0x1CC) = save;
             *(int *)(interceptor_instance_vars + 0x84) = save2;
-            *(float *)(interceptor_instance_vars + 0x168) = -*(float *)(interceptor_instance_vars + 0x168);
+            *(float *)(interceptor_instance_vars + 0x168) =
+                -*(float *)(interceptor_instance_vars + 0x168);
         }
     }
 }
@@ -1528,8 +1529,8 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
     }
     source_path_distance += *(float *)(heavy_interceptor_vars + 0x1CC);
     tab = ((int *)l14_paths[*(int *)(heavy_interceptor_vars + 0x74)]);
-    destination_path_distance =
-        source_path_distance / *(float *)(heavy_interceptor_vars + 0x16C) * *(float *)(heavy_interceptor_vars + 0x190);
+    destination_path_distance = source_path_distance / *(float *)(heavy_interceptor_vars + 0x16C) *
+                                *(float *)(heavy_interceptor_vars + 0x190);
     destination_path_loop_enabled = *(short *)(heavy_interceptor_vars + 0x8A);
     destination_segment_index = 0;
     frac = 0.0f;
@@ -1674,7 +1675,8 @@ void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *
             heading_offset = blarg_heavy_interceptor_patrol_heading_offset_magnitude_gp;
             if (random_integer_below(2))
                 heading_offset = -heading_offset;
-            *(f32 *)(interceptor_private_vars + 0x1B0) = fast_add_rotations(moby->rot.z, heading_offset);
+            *(f32 *)(interceptor_private_vars + 0x1B0) =
+                fast_add_rotations(moby->rot.z, heading_offset);
         }
         vendor_spring((f32 *)&moby->rot.z,
                       (f32 *)(interceptor_private_vars + 0x1B8),
@@ -1714,7 +1716,9 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
     float bounding_sphere[4];
     float half_span_vector[4];
     float rotation_angle;
-    fast_vec_sub(half_span_vector, blarg_heavy_interceptor_private_vars + 0x170, blarg_heavy_interceptor_private_vars + 0xD0);
+    fast_vec_sub(half_span_vector,
+                 blarg_heavy_interceptor_private_vars + 0x170,
+                 blarg_heavy_interceptor_private_vars + 0xD0);
     fast_vec_scale(half_span_vector, half_span_vector, 0.5f);
     fast_vec_add(bounding_sphere, blarg_heavy_interceptor_private_vars + 0xD0, half_span_vector);
     bounding_sphere[3] = fast_vec_length(half_span_vector) + 2.0f;
@@ -1722,9 +1726,15 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
         0) {
         build_moby_bone_transform(moby, 1, blarg_heavy_interceptor_private_vars + 0xA0);
         ok = 1;
-        fast_vec_normalize(blarg_heavy_interceptor_private_vars + 0xA0, blarg_heavy_interceptor_private_vars + 0xA0, 1.0f);
-        fast_vec_normalize(blarg_heavy_interceptor_private_vars + 0xB0, blarg_heavy_interceptor_private_vars + 0xB0, 1.0f);
-        fast_vec_normalize(blarg_heavy_interceptor_private_vars + 0xC0, blarg_heavy_interceptor_private_vars + 0xC0, 1.0f);
+        fast_vec_normalize(blarg_heavy_interceptor_private_vars + 0xA0,
+                           blarg_heavy_interceptor_private_vars + 0xA0,
+                           1.0f);
+        fast_vec_normalize(blarg_heavy_interceptor_private_vars + 0xB0,
+                           blarg_heavy_interceptor_private_vars + 0xB0,
+                           1.0f);
+        fast_vec_normalize(blarg_heavy_interceptor_private_vars + 0xC0,
+                           blarg_heavy_interceptor_private_vars + 0xC0,
+                           1.0f);
         rotation_angle = fast_subtract_rotations(
             fast_arc_tan(half_span_vector[0], half_span_vector[1]), moby->rot.z);
         FUN_L00_001fff28(blarg_heavy_interceptor_private_vars + 0xF0, 2, rotation_angle);
@@ -1732,7 +1742,8 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
         rotation_angle = -fast_arc_tan(vector_length_xy(half_span_vector), half_span_vector[2]);
         FUN_L00_001fff28(blarg_heavy_interceptor_private_vars + 0x130, 1, rotation_angle);
         *(float *)(blarg_heavy_interceptor_private_vars + 0x1C0) = rotation_angle;
-        qcopy(blarg_heavy_interceptor_private_vars + 0x90, blarg_heavy_interceptor_private_vars + 0x170);
+        qcopy(blarg_heavy_interceptor_private_vars + 0x90,
+              blarg_heavy_interceptor_private_vars + 0x170);
         if (flag != 0) {
             add_draw_callback(FUN_L14_002ae260_u, moby);
             *(int *)(blarg_heavy_interceptor_private_vars + 0x20C) |= 2;

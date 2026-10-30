@@ -33,8 +33,10 @@ void step_pool_wave_simulation(char *pool_records_base, int record_count) {
         if (*(unsigned short *)(current_record + 0x1E) != 0) {
             int source_slot_offset = *(int *)&pool_wave_source_slot_index * 0x5C0 + 0x50;
             FUN_L01_00261c10((char *)0x70000000, current_record + source_slot_offset);
-            FUN_L01_00262038(
-                (char *)0x70000000, i, *(int *)&pool_wave_next_source_slot_index, pool_records_base);
+            FUN_L01_00262038((char *)0x70000000,
+                             i,
+                             *(int *)&pool_wave_next_source_slot_index,
+                             pool_records_base);
         }
     }
     {

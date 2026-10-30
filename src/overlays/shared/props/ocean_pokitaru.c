@@ -342,13 +342,18 @@ void ocean_pokitaru_update(OceanMoby *moby) {
         return;
     }
     for (k = 0; k < 2; k++) {
-        fast_vec_scale(
-            camera_wave_uv_delta, camera_displacement, (wave_speed[k] + wave_speed[k]) / (ocean_vars->scale * 5.0f));
+        fast_vec_scale(camera_wave_uv_delta,
+                       camera_displacement,
+                       (wave_speed[k] + wave_speed[k]) / (ocean_vars->scale * 5.0f));
         if (1.0f < camera_wave_uv_delta[0] || camera_wave_uv_delta[0] < 1.0f) {
-            camera_wave_uv_delta[0] = camera_wave_uv_delta[0] - convert_integer_to_float(truncate_float_to_s32(camera_wave_uv_delta[0]));
+            camera_wave_uv_delta[0] =
+                camera_wave_uv_delta[0] -
+                convert_integer_to_float(truncate_float_to_s32(camera_wave_uv_delta[0]));
         }
         if (1.0f < camera_wave_uv_delta[1] || camera_wave_uv_delta[1] < 1.0f) {
-            camera_wave_uv_delta[1] = camera_wave_uv_delta[1] - convert_integer_to_float(truncate_float_to_s32(camera_wave_uv_delta[1]));
+            camera_wave_uv_delta[1] =
+                camera_wave_uv_delta[1] -
+                convert_integer_to_float(truncate_float_to_s32(camera_wave_uv_delta[1]));
         }
         wave_offset[k].u = wave_offset[k].u + camera_wave_uv_delta[0];
         wave_offset[k].v = wave_offset[k].v + camera_wave_uv_delta[1];

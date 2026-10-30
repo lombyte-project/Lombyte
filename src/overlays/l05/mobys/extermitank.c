@@ -164,7 +164,8 @@ void extermitank_update(unsigned char *moby) {
         *(float *)(extermitank_vars + 0xAC) = 0.01f;
         *(float *)(extermitank_vars + 0xB0) = 0.3f;
         *(float *)(extermitank_vars + 0xB4) = 0.1f;
-        *(char **)(extermitank_vars + 0xD0) = ((char *)l05_paths[*(int *)(extermitank_vars + 0xD4)]);
+        *(char **)(extermitank_vars + 0xD0) =
+            ((char *)l05_paths[*(int *)(extermitank_vars + 0xD4)]);
         *(int *)(extermitank_vars + 0xC0) = 1;
         qcopy(moby + 0x10, *(char **)(extermitank_vars + 0xD0) + 0x10);
         moby[0x20] = 1;
@@ -199,8 +200,10 @@ void extermitank_update(unsigned char *moby) {
         if (dir >= 0)
             last = n - 1;
         idx = (*(int *)(extermitank_vars + 0xC0) + n + dir) % n;
-        FUN_L00_00259028(
-            (char *)moby, extermitank_vars + 0x70, (float *)(path + (idx * 16 + 0x10)), extermitank_vars + 0x40);
+        FUN_L00_00259028((char *)moby,
+                         extermitank_vars + 0x70,
+                         (float *)(path + (idx * 16 + 0x10)),
+                         extermitank_vars + 0x40);
         if (vector_distance_xy(moby + 0x10, *(char **)(pp + 0x10) + (idx * 16 + 0x10)) < 1.0f) {
             if (idx == last) {
                 char *q = *(char **)(pp + 0x10);
@@ -232,17 +235,23 @@ void extermitank_update(unsigned char *moby) {
             char *g = ((char *)&D_0013F350);
             float a = fast_arc_tan(*(float *)(g + 0x80) - MOBY(moby)->pos.x,
                                    *(float *)(g + 0x84) - MOBY(moby)->pos.y);
-            step_angle_toward_target((float *)(extermitank_vars + 0x194), 0, a, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target(
+                (float *)(extermitank_vars + 0x194), 0, a, D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
                 (float *)(extermitank_vars + 0x198), 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         } else {
+            step_angle_toward_target((float *)(extermitank_vars + 0x194),
+                                     0,
+                                     MOBY(moby)->rot.z,
+                                     D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
-                (float *)(extermitank_vars + 0x194), 0, MOBY(moby)->rot.z, D_0015ED6C_gp * 1.5707964f);
-            step_angle_toward_target((float *)(extermitank_vars + 0x198), 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
+                (float *)(extermitank_vars + 0x198), 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
         }
         FUN_L00_001fff28(extermitank_vars + 0x140, 1, *(float *)(extermitank_vars + 0x198));
         FUN_L00_001fff28(
-            extermitank_vars + 0x100, 2, fast_subtract_rotations(*(float *)(extermitank_vars + 0x194), MOBY(moby)->rot.z));
+            extermitank_vars + 0x100,
+            2,
+            fast_subtract_rotations(*(float *)(extermitank_vars + 0x194), MOBY(moby)->rot.z));
         break;
     }
     case EXTERMITANK_FIRE_PARTICLES: {
@@ -258,8 +267,10 @@ void extermitank_update(unsigned char *moby) {
         if (dir >= 0)
             last = n - 1;
         idx = (*(int *)(extermitank_vars + 0xC0) + n + dir) % n;
-        FUN_L00_00259028(
-            (char *)moby, extermitank_vars + 0x70, (float *)(path + (idx * 16 + 0x10)), extermitank_vars + 0x40);
+        FUN_L00_00259028((char *)moby,
+                         extermitank_vars + 0x70,
+                         (float *)(path + (idx * 16 + 0x10)),
+                         extermitank_vars + 0x40);
         if (vector_distance_xy(moby + 0x10, *(char **)(pp + 0x10) + (idx * 16 + 0x10)) < 1.0f) {
             if (idx == last) {
                 char *q = *(char **)(pp + 0x10);
@@ -308,8 +319,9 @@ void extermitank_update(unsigned char *moby) {
                 random_float_between(extermitank_tracked_particle_lifetime_base_frames_gp,
                                      extermitank_tracked_particle_lifetime_base_frames_gp +
                                          extermitank_tracked_particle_lifetime_base_frames_gp)));
-            b = truncate_float_to_s32(
-                scale_time(random_float_between(l05_extermitank_tracked_particle_paired_frame_count_base_gp, l05_extermitank_tracked_particle_paired_frame_count_base_gp * 1.2f)));
+            b = truncate_float_to_s32(scale_time(random_float_between(
+                l05_extermitank_tracked_particle_paired_frame_count_base_gp,
+                l05_extermitank_tracked_particle_paired_frame_count_base_gp * 1.2f)));
             e = truncate_float_to_s32(
                 scale_time(random_float_between(D_L05_00161B1C, D_L05_00161B1C * 1.2f)));
             r = ((Spawn_305778)spawn_spark_c2)(working_position,
@@ -372,8 +384,9 @@ void extermitank_update(unsigned char *moby) {
                 random_float_between(extermitank_secondary_particle_lifetime_base_frames_gp,
                                      extermitank_secondary_particle_lifetime_base_frames_gp +
                                          extermitank_secondary_particle_lifetime_base_frames_gp)));
-            b = truncate_float_to_s32(
-                scale_time(random_float_between(l05_extermitank_secondary_particle_paired_frame_count_base_gp, l05_extermitank_secondary_particle_paired_frame_count_base_gp * 1.2f)));
+            b = truncate_float_to_s32(scale_time(random_float_between(
+                l05_extermitank_secondary_particle_paired_frame_count_base_gp,
+                l05_extermitank_secondary_particle_paired_frame_count_base_gp * 1.2f)));
             e = truncate_float_to_s32(
                 scale_time(random_float_between(D_L05_00161B4C, D_L05_00161B4C * 1.2f)));
             ((Spawn_305778)spawn_spark_c2)(working_position,
@@ -404,13 +417,16 @@ void extermitank_update(unsigned char *moby) {
             char *g = ((char *)&D_0013F350);
             float a = fast_arc_tan(*(float *)(g + 0x80) - MOBY(moby)->pos.x,
                                    *(float *)(g + 0x84) - MOBY(moby)->pos.y);
-            step_angle_toward_target((float *)(extermitank_vars + 0x194), 0, a, D_0015ED6C_gp * 1.5707964f);
+            step_angle_toward_target(
+                (float *)(extermitank_vars + 0x194), 0, a, D_0015ED6C_gp * 1.5707964f);
             step_angle_toward_target(
                 (float *)(extermitank_vars + 0x198), 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         }
         FUN_L00_001fff28(extermitank_vars + 0x140, 1, *(float *)(extermitank_vars + 0x198));
         FUN_L00_001fff28(
-            extermitank_vars + 0x100, 2, fast_subtract_rotations(*(float *)(extermitank_vars + 0x194), MOBY(moby)->rot.z));
+            extermitank_vars + 0x100,
+            2,
+            fast_subtract_rotations(*(float *)(extermitank_vars + 0x194), MOBY(moby)->rot.z));
         break;
     }
     case EXTERMITANK_REMOVE:
@@ -488,11 +504,13 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
         if (*(char **)(part0 + 0x20) == moby)
             part0 = 0;
         hit_source_moby = *(char **)(part0 + 0x20);
-        if (hit_source_moby != 0 && (*(short *)(hit_source_moby + 0xa6) == 0x47 || *(short *)(hit_source_moby + 0xa6) == 0))
+        if (hit_source_moby != 0 &&
+            (*(short *)(hit_source_moby + 0xa6) == 0x47 || *(short *)(hit_source_moby + 0xa6) == 0))
             part0 = 0;
     }
     hit = part0;
-    resolve_moby_hit_response(moby, hit, extermitank_hit_sync_vars + 0x20, 0, &hit_processing_status, &remaining, 0, 4);
+    resolve_moby_hit_response(
+        moby, hit, extermitank_hit_sync_vars + 0x20, 0, &hit_processing_status, &remaining, 0, 4);
     if (hit_processing_status == 1 || (unsigned char)moby[0x20] == 3)
         goto mark_children;
     {
@@ -663,7 +681,8 @@ mark_children:
         ((unsigned char *)*(char **)(extermitank_hit_sync_vars + 0x184))[0xa4] = 0xff;
     if (*(char **)(extermitank_hit_sync_vars + 0x188) != 0)
         ((unsigned char *)*(char **)(extermitank_hit_sync_vars + 0x188))[0xa4] = 0xff;
-    if (*(int *)(extermitank_hit_sync_vars + 0x38) != 0 && *(int *)(extermitank_hit_sync_vars + 0x178) == 0) {
+    if (*(int *)(extermitank_hit_sync_vars + 0x38) != 0 &&
+        *(int *)(extermitank_hit_sync_vars + 0x178) == 0) {
         *(int *)(extermitank_hit_sync_vars + 0x178) = scale_game_frames(0xf0);
         *(int *)(extermitank_hit_sync_vars + 0x38) = 0;
         hero_turn_reference = &hero;
@@ -683,7 +702,8 @@ mark_children:
         speed /= extermitank_child_animation_speed_divisor_gp * frame_time;
         offset_scale = extermitank_child_animation_speed_offset_scale_gp;
         *(float *)(*(char **)(extermitank_hit_sync_vars + 0x184) + 0x58) = speed;
-        *(float *)(*(char **)(extermitank_hit_sync_vars + 0x184) + 0x58) += *(float *)(extermitank_hit_sync_vars + 0x84) * offset_scale;
+        *(float *)(*(char **)(extermitank_hit_sync_vars + 0x184) + 0x58) +=
+            *(float *)(extermitank_hit_sync_vars + 0x84) * offset_scale;
         first = *(char **)(extermitank_hit_sync_vars + 0x184);
         qcopy(first + 0x40, moby + 0x40);
         qcopy(first + 0x10, moby + 0x10);
@@ -695,7 +715,8 @@ mark_children:
         speed /= extermitank_child_animation_speed_divisor_gp * frame_time;
         offset_scale = extermitank_child_animation_speed_offset_scale_gp;
         *(float *)(*(char **)(extermitank_hit_sync_vars + 0x188) + 0x58) = speed;
-        *(float *)(*(char **)(extermitank_hit_sync_vars + 0x188) + 0x58) -= *(float *)(extermitank_hit_sync_vars + 0x84) * offset_scale;
+        *(float *)(*(char **)(extermitank_hit_sync_vars + 0x188) + 0x58) -=
+            *(float *)(extermitank_hit_sync_vars + 0x84) * offset_scale;
         second = *(char **)(extermitank_hit_sync_vars + 0x188);
         qcopy(second + 0x40, moby + 0x40);
         qcopy(second + 0x10, moby + 0x10);

@@ -44,7 +44,8 @@ void update_damage_causer(struct Moby *moby) {
     }
     if ((D_L09_0015F5CC & 7) == (((int)moby >> 8) & 7)) {
         if (*(s32 *)(damage_causer_vars + 0x14) == -1 ||
-            (voice_is_playing(moby, *(s32 *)(damage_causer_vars + 0x14)) == 0 && *(s32 *)(damage_causer_vars + 0x14) == -1)) {
+            (voice_is_playing(moby, *(s32 *)(damage_causer_vars + 0x14)) == 0 &&
+             *(s32 *)(damage_causer_vars + 0x14) == -1)) {
             *(s32 *)(damage_causer_vars + 0x14) = allocate_voice_for_target_entry(0, 4, moby);
         }
     }
@@ -56,12 +57,20 @@ void update_damage_causer(struct Moby *moby) {
     qcopy(sphere_query_workspace + 4, (char *)moby + 0x10);
     transform_vector_by_basis(sphere_query_workspace, sphere_query_workspace, (char *)moby + 0xc0);
     FUN_001f9bf8(F(damage_causer_vars, 0), sphere_query_workspace + 8, sphere_query_workspace);
-    fast_vec_add(sphere_query_workspace + 4, sphere_query_workspace + 4, sphere_query_workspace + 8);
-    initialize_hit_descriptor(sphere_query_workspace + 12, moby, *(s32 *)(damage_causer_vars + 0x10), *(float *)(damage_causer_vars + 0xc));
+    fast_vec_add(
+        sphere_query_workspace + 4, sphere_query_workspace + 4, sphere_query_workspace + 8);
+    initialize_hit_descriptor(sphere_query_workspace + 12,
+                              moby,
+                              *(s32 *)(damage_causer_vars + 0x10),
+                              *(float *)(damage_causer_vars + 0xc));
     i = 0;
     if (*(s32 *)(damage_causer_vars + 8) > 0)
         do {
-            if (collect_mobies_in_sphere(F(damage_causer_vars, 0), sphere_query_workspace + 4, 1, moby, sphere_query_workspace + 12) != 0) {
+            if (collect_mobies_in_sphere(F(damage_causer_vars, 0),
+                                         sphere_query_workspace + 4,
+                                         1,
+                                         moby,
+                                         sphere_query_workspace + 12) != 0) {
                 char *hit = D_L09_00173FC0.hit;
                 stub_printf(damage_causer_contact_log_format,
                             *(s16 *)((char *)moby + 0xb2),
@@ -70,6 +79,7 @@ void update_damage_causer(struct Moby *moby) {
                             F(damage_causer_vars, 0xc));
             }
             i++;
-            fast_vec_add(sphere_query_workspace + 4, sphere_query_workspace + 4, sphere_query_workspace);
+            fast_vec_add(
+                sphere_query_workspace + 4, sphere_query_workspace + 4, sphere_query_workspace);
         } while (i < *(s32 *)(damage_causer_vars + 8));
 }

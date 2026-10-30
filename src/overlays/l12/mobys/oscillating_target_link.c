@@ -201,7 +201,8 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
         } else {
             for (i = 1; i < *(int *)(oscillating_link_strip_state + 0x232c) - 1; i++) {
                 float *point = (float *)(oscillating_link_strip_state + strip * 0x460 + i * 16);
-                float *delta = (float *)(oscillating_link_strip_state + strip * 0x460 + 0x1190 + i * 16 - 16);
+                float *delta =
+                    (float *)(oscillating_link_strip_state + strip * 0x460 + 0x1190 + i * 16 - 16);
                 fast_vec_add(point, point, delta);
             }
         }
@@ -279,17 +280,23 @@ void update_oscillating_target_link(Moby *moby) {
         moby->state = 1;
         break;
     case TARGET_TRACKING_STATE_ACTIVE:
-        moby->rot.z = fast_arc_tan(D_L12_0015FFD8[oscillating_target_link_state->target].pos.x - moby->pos.x,
-                                   D_L12_0015FFD8[oscillating_target_link_state->target].pos.y - moby->pos.y);
-        oscillating_target_link_state->dist = fast_vec_dist(((float *)&moby->pos),
-                                   (char *)D_L12_0015FFD8 + (oscillating_target_link_state->target << 8) + 0x10);
-        oscillating_target_link_state->angle = fast_add_rotations(oscillating_target_link_state->angle, oscillating_target_link_state->turn * 0.017453292f * D_0015ED6C);
+        moby->rot.z =
+            fast_arc_tan(D_L12_0015FFD8[oscillating_target_link_state->target].pos.x - moby->pos.x,
+                         D_L12_0015FFD8[oscillating_target_link_state->target].pos.y - moby->pos.y);
+        oscillating_target_link_state->dist = fast_vec_dist(
+            ((float *)&moby->pos),
+            (char *)D_L12_0015FFD8 + (oscillating_target_link_state->target << 8) + 0x10);
+        oscillating_target_link_state->angle =
+            fast_add_rotations(oscillating_target_link_state->angle,
+                               oscillating_target_link_state->turn * 0.017453292f * D_0015ED6C);
         row = ((Row *)l12_paths[oscillating_target_link_state->row]);
         swing = fast_sin(oscillating_target_link_state->angle);
-        if (1.5707964f < oscillating_target_link_state->angle && oscillating_target_link_state->angle < 3.1415927f) {
+        if (1.5707964f < oscillating_target_link_state->angle &&
+            oscillating_target_link_state->angle < 3.1415927f) {
             swing = 2.0f - swing;
         }
-        if (-3.1415927f < oscillating_target_link_state->angle && oscillating_target_link_state->angle < -1.5707964f) {
+        if (-3.1415927f < oscillating_target_link_state->angle &&
+            oscillating_target_link_state->angle < -1.5707964f) {
             swing = 2.0f - swing;
         }
         half = 0.5f;
@@ -305,16 +312,20 @@ void update_oscillating_target_link(Moby *moby) {
         if (vector_distance_xy(((float *)&moby->pos), D_0013F4D0_304310) > 64.0f) {
             return;
         }
-        if (moby->visible == 0 && D_L12_0015FFD8[oscillating_target_link_state->target].visible == 0) {
-            fast_vec_add(
-                &start, ((float *)&moby->pos), ((float *)&D_L12_0015FFD8[oscillating_target_link_state->target].pos));
+        if (moby->visible == 0 &&
+            D_L12_0015FFD8[oscillating_target_link_state->target].visible == 0) {
+            fast_vec_add(&start,
+                         ((float *)&moby->pos),
+                         ((float *)&D_L12_0015FFD8[oscillating_target_link_state->target].pos));
             fast_vec_scale(&start, &start, half);
             start.f[3] = 16.0f;
             if (fast_bsphere_check(&start, 32.0f) == -1) {
                 return;
             }
         }
-        if (oscillating_target_link_state->f2330 != -1 && is_point_inside_clip_volume(D_L12_00167240, oscillating_target_link_state->f2330) != 0) {
+        if (oscillating_target_link_state->f2330 != -1 &&
+            is_point_inside_clip_volume(D_L12_00167240, oscillating_target_link_state->f2330) !=
+                0) {
             return;
         }
         if (oscillating_target_link_state->f2320 == 0) {

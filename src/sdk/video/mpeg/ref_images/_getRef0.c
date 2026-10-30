@@ -25,10 +25,10 @@ void _getRef0(struct MpegDecoder  *decoder,
     struct MpegMcFetch *fl;
     struct MpegMcFetch *fc;
     u8                 *mc;
-    int                 fetch_index, x, y, mbx, mby, ly, lx, first_span_rows, fetch_scratch_base, code, mb;
-    int                 cmvx, cmvy, ch, cmbx, cmby;
-    int                 xh, yh, cyo, luma_first_span_offset, luma_second_span_offset;
-    u8                 *data;
+    int fetch_index, x, y, mbx, mby, ly, lx, first_span_rows, fetch_scratch_base, code, mb;
+    int cmvx, cmvy, ch, cmbx, cmby;
+    int xh, yh, cyo, luma_first_span_offset, luma_second_span_offset;
+    u8 *data;
 
     fetch_index = decoder->mb_buf[decoder->mb_buf_index].fetch_count;
     mc = decoder->mc_work;
@@ -118,13 +118,17 @@ void _getRef0(struct MpegDecoder  *decoder,
     {
         int chroma_first_span_offset = (ly << 3) + 0x100;
         int chroma_second_span_offset = (ly << 3) + 0x400;
-        u8 *chroma_first_span_data = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + fetch_scratch_base + chroma_first_span_offset);
-        u8 *chroma_second_span_data = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + fetch_scratch_base + chroma_second_span_offset);
+        u8 *chroma_first_span_data = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 +
+                                            fetch_scratch_base + chroma_first_span_offset);
+        u8 *chroma_second_span_data = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 +
+                                             fetch_scratch_base + chroma_second_span_offset);
         fc->p1 = chroma_second_span_data;
         fc->p0 = chroma_first_span_data;
     }
     decoder->mb_buf[decoder->mb_buf_index].luma_ref[fetch_index] = data + mb * 0x180;
-    decoder->mb_buf[decoder->mb_buf_index].chroma_ref[fetch_index] = data + (mb + ref->mb_height) * 0x180;
-    decoder->mb_buf[decoder->mb_buf_index].chroma_func[fetch_index] = mpeg_chroma_mc_functions[(avg << 2) | (xh << 1) | yh];
+    decoder->mb_buf[decoder->mb_buf_index].chroma_ref[fetch_index] =
+        data + (mb + ref->mb_height) * 0x180;
+    decoder->mb_buf[decoder->mb_buf_index].chroma_func[fetch_index] =
+        mpeg_chroma_mc_functions[(avg << 2) | (xh << 1) | yh];
     decoder->mb_buf[decoder->mb_buf_index].fetch_count++;
 }

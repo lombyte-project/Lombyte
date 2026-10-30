@@ -113,8 +113,9 @@ calculate_volume:
         goto commit_if_audible;
     }
     volume_offset = slot_index * 0x70;
-    volume_or_slot_index = calculate_voice_volume((VoiceSlot *)(voice_volume_records + volume_offset),
-                                    (VoiceVector *)(voice_volume_records + volume_offset + 0x20));
+    volume_or_slot_index =
+        calculate_voice_volume((VoiceSlot *)(voice_volume_records + volume_offset),
+                               (VoiceVector *)(voice_volume_records + volume_offset + 0x20));
     goto check_calculated_volume;
 commit_if_audible:
     volume_or_slot_index = volume;

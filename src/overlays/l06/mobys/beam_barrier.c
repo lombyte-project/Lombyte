@@ -216,7 +216,8 @@ void update_beam_barrier(struct Moby *moby) {
                 }
             }
         } else {
-            approach_value(&beam_barrier_control_vars->fade, 0.0f, (step = frame_time_macro) + step);
+            approach_value(
+                &beam_barrier_control_vars->fade, 0.0f, (step = frame_time_macro) + step);
         }
         if (beam_barrier_control_vars->fade != 0.0f)
             add_draw_callback((s32)draw_beam_barrier_segments, (s32)moby);
@@ -406,7 +407,8 @@ void draw_beam_barrier_segments(char *moby) {
         matrix += 16;
         translation += 16;
     }
-    color = fast_tween_color(D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(beam_barrier_vars + 0x18));
+    color = fast_tween_color(
+        D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(beam_barrier_vars + 0x18));
     strand_cycle_duration_frames = D_L06_00161E50;
     points = (int *)D_L06_001DB0F0;
     strand_color_transition_threshold_frames = D_L06_00161E54;

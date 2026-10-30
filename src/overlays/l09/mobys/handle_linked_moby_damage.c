@@ -36,7 +36,10 @@ void                handle_linked_moby_damage(struct Moby *moby,
 typedef struct Moby Moby;
 extern Moby        *moby_list __asm__("D_L09_0015FFD8");
 
-void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *linked_moby_damage_vars, f32 *health) {
+void handle_linked_moby_damage(struct Moby *moby,
+                               VendorVars2 *linked_moby_damage_vars,
+
+                               f32 *health) {
     enum {
         DAMAGE_RESULT_UNAVAILABLE = 0,
         DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11

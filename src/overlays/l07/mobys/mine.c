@@ -217,7 +217,8 @@ void update_mine(struct Moby *moby) {
         clear_u64_value(&swooper_instance_vars->velocity);
         qcopy(&swooper_instance_vars->home, &moby->pos);
         moby->rot.y = 0.0f;
-        moby->rot.z = fast_arc_tan(swooper_instance_vars->goal.f[0] - moby->pos.x, swooper_instance_vars->goal.f[1] - moby->pos.y);
+        moby->rot.z = fast_arc_tan(swooper_instance_vars->goal.f[0] - moby->pos.x,
+                                   swooper_instance_vars->goal.f[1] - moby->pos.y);
         swooper_instance_vars->unk29 = 0;
         moby->state = 1;
         moby->command = 0;
@@ -225,13 +226,15 @@ void update_mine(struct Moby *moby) {
     case MINE_WAIT_AT_GOAL:
         fast_vec_sub(&swooper_instance_vars->velocity, &swooper_instance_vars->goal, &moby->pos);
         FUN_L00_00258278(moby,
-                         fast_arc_tan(swooper_instance_vars->goal.f[0] - moby->pos.x, swooper_instance_vars->goal.f[1] - moby->pos.y),
+                         fast_arc_tan(swooper_instance_vars->goal.f[0] - moby->pos.x,
+                                      swooper_instance_vars->goal.f[1] - moby->pos.y),
                          &swooper_instance_vars->turn_speed,
                          frame_time_sq * 6.2831855f,
                          D_0015ED6C * 3.1415927f,
                          D_0015ED6C * 6.2831855f);
         qcopy(&moby->pos, &swooper_instance_vars->goal);
-        if ((swooper_instance_vars->perch != NULL && vector_distance_xy(&moby->pos, &swooper_instance_vars->perch->pos) < 20.0f &&
+        if ((swooper_instance_vars->perch != NULL &&
+             vector_distance_xy(&moby->pos, &swooper_instance_vars->perch->pos) < 20.0f &&
              absolute_float(moby->pos.z - swooper_instance_vars->perch->pos.z) < 3.0f) ||
             (sight.found != 0 && fast_vec_dist(&moby->pos, &sight.pos) < spawner_vars->view_range &&
              vector_distance_xy(&moby->pos, &swooper_instance_vars->spawner->pos) > 2.0f &&
@@ -284,8 +287,11 @@ void update_mine(struct Moby *moby) {
             chase_acceleration.f[2] = 0.0f;
         }
         fast_vec_normalize(&chase_acceleration, &chase_acceleration, frame_time_sq * 30.0f);
-        fast_vec_add(&swooper_instance_vars->velocity, &swooper_instance_vars->velocity, &chase_acceleration);
-        clamp_vector_length(&swooper_instance_vars->velocity, &swooper_instance_vars->velocity, D_0015ED6C * 10.0f);
+        fast_vec_add(&swooper_instance_vars->velocity,
+                     &swooper_instance_vars->velocity,
+                     &chase_acceleration);
+        clamp_vector_length(
+            &swooper_instance_vars->velocity, &swooper_instance_vars->velocity, D_0015ED6C * 10.0f);
         fast_vec_add(&moby->pos, &moby->pos, &swooper_instance_vars->velocity);
         if (fast_vec_dist(&moby->pos, &swooper_instance_vars->home) > 64.0f) {
             mark_mine_for_removal(moby, spawner_vars);

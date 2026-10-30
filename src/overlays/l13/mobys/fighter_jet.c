@@ -1290,7 +1290,8 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
                 if (speed < cruise_speed - step) {
                     jet_flight_state->speed = speed + step;
                 } else if (cruise_speed < speed) {
-                    jet_flight_state->speed = speed + (cruise_speed - speed) * (frame_scale_gp * 0.1f);
+                    jet_flight_state->speed =
+                        speed + (cruise_speed - speed) * (frame_scale_gp * 0.1f);
                 } else {
                     jet_flight_state->speed = cruise_speed;
                 }
@@ -1336,10 +1337,10 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
                      frame_scale_sq_gp * 0.05f,
                      frame_scale_sq_gp,
                      frame_scale_gp);
-        jet_flight_state->pitch =
-            fast_subtract_rotations(jet_flight_state->pitch, jet_flight_state->steer_y * (frame_scale_gp * 0.012271847f));
-        jet_flight_state->yaw =
-            fast_subtract_rotations(jet_flight_state->yaw, jet_flight_state->steer_x * (frame_scale_gp * 0.012271847f));
+        jet_flight_state->pitch = fast_subtract_rotations(
+            jet_flight_state->pitch, jet_flight_state->steer_y * (frame_scale_gp * 0.012271847f));
+        jet_flight_state->yaw = fast_subtract_rotations(
+            jet_flight_state->yaw, jet_flight_state->steer_x * (frame_scale_gp * 0.012271847f));
         if (jet_flight_state->pitch > 1.3962634f) {
             jet_flight_state->pitch = 1.3962634f;
         } else if (jet_flight_state->pitch < -1.3962634f) {
@@ -1402,7 +1403,8 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
         -fast_arc_tan(vector_distance_xy(moby->pos, target), target[2] - moby->pos[2]),
         50.0f,
         pitch_limit);
-    build_spherical_offset(velocity, jet_flight_state->speed, jet_flight_state->yaw, -jet_flight_state->pitch);
+    build_spherical_offset(
+        velocity, jet_flight_state->speed, jet_flight_state->yaw, -jet_flight_state->pitch);
     fast_vec_normalize(jet_flight_state->direction, velocity, 1.0f);
     qcopy(old_pos, moby->pos);
     if (moby->unkBC == 0) {
@@ -1472,9 +1474,11 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
         transform_vector_by_basis(target, offset, basis);
         fast_vec_add(camera.v.pos, moby->pos, target);
         set_camera_position(camera.v.pos);
-        camera.v.rot[0] = fast_add_rotations(jet_flight_state->roll * 0.5f, jet_flight_state->steer_x * 0.03125f);
-        camera.v.rot[1] = fast_subtract_rotations(fast_add_rotations(jet_flight_state->pitch, 0.09817477f),
-                                                  jet_flight_state->steer_y * (frame_scale_gp * 0.012271847f));
+        camera.v.rot[0] =
+            fast_add_rotations(jet_flight_state->roll * 0.5f, jet_flight_state->steer_x * 0.03125f);
+        camera.v.rot[1] =
+            fast_subtract_rotations(fast_add_rotations(jet_flight_state->pitch, 0.09817477f),
+                                    jet_flight_state->steer_y * (frame_scale_gp * 0.012271847f));
         camera.v.rot[2] = jet_flight_state->yaw;
         if (moby->state == 2) {
             qcopy(&jet_flight_state->camera_roll, camera.v.rot);
@@ -1531,10 +1535,11 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
                  hit_class != 0x52 && hit_class != 0x53)) {
             qcopy(moby->pos, hit + 0x30);
             reflect_vector(velocity, velocity, hit + 0x40);
-            jet_flight_state->yaw = fast_add_rotations(
-                jet_flight_state->yaw,
-                fast_subtract_rotations(fast_arc_tan(velocity[0], velocity[1]), jet_flight_state->yaw) *
-                    (frame_scale_gp * 0.1f));
+            jet_flight_state->yaw =
+                fast_add_rotations(jet_flight_state->yaw,
+                                   fast_subtract_rotations(fast_arc_tan(velocity[0], velocity[1]),
+                                                           jet_flight_state->yaw) *
+                                       (frame_scale_gp * 0.1f));
             jet_flight_state->pitch = fast_add_rotations(
                 jet_flight_state->pitch,
                 fast_subtract_rotations(-fast_arc_tan(vector_length_xy(velocity), velocity[2]),
@@ -1606,7 +1611,8 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
         (struct Moby *)moby,
         (char *)jet_flight_state,
         fast_add_rotations(jet_flight_state->camera_yaw, -jet_flight_state->steer_x / 7.0f),
-        -fast_add_rotations(jet_flight_state->camera_pitch, -(jet_flight_state->steer_y / 7.0f) - 0.1f));
+        -fast_add_rotations(jet_flight_state->camera_pitch,
+                            -(jet_flight_state->steer_y / 7.0f) - 0.1f));
 }
 
 typedef float JetVec[4] __attribute__((aligned(16)));

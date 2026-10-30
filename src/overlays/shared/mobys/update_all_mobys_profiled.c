@@ -102,8 +102,11 @@ void update_all_mobys_profiled(void) {
                     profile_label = D_L00_00197A00[i];
                     share = FUN_L00_00200240(current_ticks) / total_ticks;
                     share = share * 100.0f;
-                    FUN_L00_001eb078(
-                        l00_moby_profile_class_report_format, profile_label, profile->count, scaled_ticks, fptodp(share));
+                    FUN_L00_001eb078(l00_moby_profile_class_report_format,
+                                     profile_label,
+                                     profile->count,
+                                     scaled_ticks,
+                                     fptodp(share));
                     profile->count = 0;
                 } else if (next_ticks < profile->ticks) {
                     next_ticks = profile->ticks;

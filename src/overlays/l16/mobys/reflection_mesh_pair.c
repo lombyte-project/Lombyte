@@ -174,7 +174,8 @@ void update_reflection_mesh_pair(struct Moby *moby) {
                     ((float **)&reflection_mesh_pair_position_tables)[i][j * 3 + 1];
                 vertex_position[2] =
                     ((float **)&reflection_mesh_pair_position_tables)[i][j * 3 + 2];
-                vertex_to_center_distance = fast_vec_dist(vertex_position, two_mesh_bounding_sphere_components);
+                vertex_to_center_distance =
+                    fast_vec_dist(vertex_position, two_mesh_bounding_sphere_components);
                 if (vertex_to_center_distance > two_mesh_bounding_sphere_components[3])
                     two_mesh_bounding_sphere_components[3] = vertex_to_center_distance;
             }

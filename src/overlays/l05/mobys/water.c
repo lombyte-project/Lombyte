@@ -404,8 +404,8 @@ void synchronize_group_water_heights(char *moby) {
                 *(float *)(linked_water_data + 4) == *(float *)(source_water_vars + 4)) {
                 linked_water_height = MOBY(moby)->pos.z;
             } else {
-                linked_water_height =
-                    *(float *)(linked_water_data + 4) + (MOBY(moby)->pos.z - *(float *)(source_water_vars + 4));
+                linked_water_height = *(float *)(linked_water_data + 4) +
+                                      (MOBY(moby)->pos.z - *(float *)(source_water_vars + 4));
             }
             MOBY(linked_water_moby)->pos.z = linked_water_height;
             water_record = &l05_water_grids[*(int *)(linked_water_data + 0x14)];

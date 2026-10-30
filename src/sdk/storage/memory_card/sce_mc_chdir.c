@@ -40,14 +40,14 @@ s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
         *(u8 *)((u8 *)&D_00159AB0 + 0x413) = 0;
         sceSifWriteBackDCache(D_00159FC0, 0x400);
         rpc_dispatch_status = sceSifCallRpc(&mc_rpc_client,
-                               MC_FUNC_CHDIR,
-                               1,
-                               &D_00159AB0,
-                               0x414,
-                               mc_rpc_result,
-                               4,
-                               &mceStorePwd,
-                               pwd);
+                                            MC_FUNC_CHDIR,
+                                            1,
+                                            &D_00159AB0,
+                                            0x414,
+                                            mc_rpc_result,
+                                            4,
+                                            &mceStorePwd,
+                                            pwd);
         if (rpc_dispatch_status == 0) {
             mc_current_func = MC_FUNC_CHDIR;
         } else {

@@ -68,15 +68,15 @@ void interpolate_wrapped_rotations_cosine_eased(float *interpolated_rotations_ou
 
                                                 float interpolation_fraction) {
     float cosine_ease_weight = (1.0f - fast_cos(interpolation_fraction * 3.1415927f)) * 0.5f;
-    interpolated_rotations_output[0] = fast_add_rotations(start_rotations[0],
-                                fast_subtract_rotations(target_rotations[0], start_rotations[0]) *
-                                    cosine_ease_weight);
-    interpolated_rotations_output[1] = fast_add_rotations(start_rotations[1],
-                                fast_subtract_rotations(target_rotations[1], start_rotations[1]) *
-                                    cosine_ease_weight);
-    interpolated_rotations_output[2] = fast_add_rotations(start_rotations[2],
-                                fast_subtract_rotations(target_rotations[2], start_rotations[2]) *
-                                    cosine_ease_weight);
+    interpolated_rotations_output[0] = fast_add_rotations(
+        start_rotations[0],
+        fast_subtract_rotations(target_rotations[0], start_rotations[0]) * cosine_ease_weight);
+    interpolated_rotations_output[1] = fast_add_rotations(
+        start_rotations[1],
+        fast_subtract_rotations(target_rotations[1], start_rotations[1]) * cosine_ease_weight);
+    interpolated_rotations_output[2] = fast_add_rotations(
+        start_rotations[2],
+        fast_subtract_rotations(target_rotations[2], start_rotations[2]) * cosine_ease_weight);
 }
 
 float spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_00258110");
@@ -444,7 +444,12 @@ extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
 s32        FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f);
 
-s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Vec4 *movement_displacement_vector_output, f32 f) {
+s32 FUN_L00_00258b50(Obj  *moby,
+                     Ctl  *movement_control,
+                     void *target_position,
+                     Vec4 *movement_displacement_vector_output,
+
+                     f32 f) {
     Vec4  save;
     Vec4  displacement;
     Vec4  probe_or_direction;

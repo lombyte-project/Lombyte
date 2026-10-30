@@ -835,9 +835,14 @@ void update_resort_owner_look_tracking(WatcherMoby *moby) {
         float pitch;
         qcopy(resort_owner_look_vectors.eye, moby->position);
         resort_owner_look_vectors.eye[2] += 1.0f;
-        fast_vec_sub(resort_owner_look_vectors.delta, resort_owner_look_vectors.target, resort_owner_look_vectors.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(resort_owner_look_vectors.delta[0], resort_owner_look_vectors.delta[1]), moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(resort_owner_look_vectors.delta), resort_owner_look_vectors.delta[2]);
+        fast_vec_sub(resort_owner_look_vectors.delta,
+                     resort_owner_look_vectors.target,
+                     resort_owner_look_vectors.eye);
+        yaw = fast_subtract_rotations(
+            fast_arc_tan(resort_owner_look_vectors.delta[0], resort_owner_look_vectors.delta[1]),
+            moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy(resort_owner_look_vectors.delta),
+                              resort_owner_look_vectors.delta[2]);
         if (yaw > 1.2217305f)
             yaw = 1.2217305f;
         else if (yaw < -1.2217305f)

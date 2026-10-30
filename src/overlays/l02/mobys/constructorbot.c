@@ -242,15 +242,20 @@ void constructorbot_update(struct Moby *moby) {
         target = bot_private_vars->target;
         angle = fast_arc_tan(*(float *)(target + 0x10) - moby->pos.x,
                              *(float *)(target + 0x14) - moby->pos.y);
-        FUN_L00_00258278(
-            (char *)moby, angle, &bot_private_vars->turn_speed, 0.02f, 0.3f, D_0015ED6C * 1.5707964f);
+        FUN_L00_00258278((char *)moby,
+                         angle,
+                         &bot_private_vars->turn_speed,
+                         0.02f,
+                         0.3f,
+                         D_0015ED6C * 1.5707964f);
         fast_vec_sub(position, &l02_cuboids[bot_private_vars->post].pos, &moby->pos);
         position[2] = 0.0f;
         FUN_L00_0025f730(position, D_0015ED6C * 6.0f);
         fast_vec_add(&moby->pos, &moby->pos, position);
         ground = probe_ground_height(&moby->pos, 0, 0.5f);
-        approach_value(
-            &bot_private_vars->velocity[2], D_0015ED6C * 40.0f, constructorbot_gravity_gp * frame_time_sq);
+        approach_value(&bot_private_vars->velocity[2],
+                       D_0015ED6C * 40.0f,
+                       constructorbot_gravity_gp * frame_time_sq);
         approach_value(&moby->pos.z, ground, bot_private_vars->velocity[2]);
         if (moby->pos.z == ground) {
             moby->state = 4;
@@ -279,14 +284,20 @@ void constructorbot_update(struct Moby *moby) {
         }
         break;
     case L02_BOT_WANDER:
-        if (FUN_L00_00259028((char *)moby, bot_private_vars->walk, bot_private_vars->wander, (char *)bot_private_vars->velocity) & 6) {
+        if (FUN_L00_00259028((char *)moby,
+                             bot_private_vars->walk,
+                             bot_private_vars->wander,
+                             (char *)bot_private_vars->velocity) &
+            6) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
             moby->state = 7;
-        } else if (fast_vec_dist(bot_private_vars->target + 0x10, &l02_cuboids[bot_private_vars->post].pos) <
+        } else if (fast_vec_dist(bot_private_vars->target + 0x10,
+                                 &l02_cuboids[bot_private_vars->post].pos) <
                        bot_private_vars->attack_range &&
-                   absolute_float(*(float *)(bot_private_vars->target + 0x18) - moby->pos.z) < 4.0f) {
+                   absolute_float(*(float *)(bot_private_vars->target + 0x18) - moby->pos.z) <
+                       4.0f) {
             moby->state = 5;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
@@ -294,13 +305,16 @@ void constructorbot_update(struct Moby *moby) {
         }
         break;
     case L02_BOT_SELECT_ATTACK_OR_WANDER:
-        if (fast_vec_dist(bot_private_vars->target + 0x10, &l02_cuboids[bot_private_vars->post].pos) < bot_private_vars->attack_range &&
+        if (fast_vec_dist(bot_private_vars->target + 0x10,
+                          &l02_cuboids[bot_private_vars->post].pos) <
+                bot_private_vars->attack_range &&
             absolute_float(*(float *)(bot_private_vars->target + 0x18) - moby->pos.z) < 4.0f) {
             if (fast_vec_dist(&moby->pos, &l02_cuboids[bot_private_vars->post].pos) < 1.0f) {
                 target = bot_private_vars->target;
                 angle = fast_arc_tan(*(float *)(target + 0x10) - moby->pos.x,
                                      *(float *)(target + 0x14) - moby->pos.y);
-                FUN_L00_00258278((char *)moby, angle, &bot_private_vars->turn_speed, 0.02f, 0.3f, 0.1f);
+                FUN_L00_00258278(
+                    (char *)moby, angle, &bot_private_vars->turn_speed, 0.02f, 0.3f, 0.1f);
                 if (fast_difference_between_rotations(moby->rot.z, angle) < 0.08726646f) {
                     moby->state = 0xB;
                     if (moby->prev_seq != 8) {
@@ -315,10 +329,14 @@ void constructorbot_update(struct Moby *moby) {
             }
         } else if (moby->anim_flags & 2) {
             wander_heading = random_angle_radians();
-            bot_private_vars->wander[0] = fast_cos(wander_heading) * random_float_between(1.0f, 2.0f);
-            bot_private_vars->wander[1] = fast_sin(wander_heading) * random_float_between(1.0f, 2.0f);
+            bot_private_vars->wander[0] =
+                fast_cos(wander_heading) * random_float_between(1.0f, 2.0f);
+            bot_private_vars->wander[1] =
+                fast_sin(wander_heading) * random_float_between(1.0f, 2.0f);
             bot_private_vars->wander[2] = 0.0f;
-            fast_vec_add(bot_private_vars->wander, bot_private_vars->wander, &l02_cuboids[bot_private_vars->post].pos);
+            fast_vec_add(bot_private_vars->wander,
+                         bot_private_vars->wander,
+                         &l02_cuboids[bot_private_vars->post].pos);
             moby->state = 6;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
@@ -348,7 +366,8 @@ void constructorbot_update(struct Moby *moby) {
     case L02_BOT_WAIT_FOR_WAKE_TRIGGER:
         triggered = 0;
         if (bot_private_vars->wake_volume >= 0) {
-            triggered = is_point_inside_clip_volume(&hero.ground_point, bot_private_vars->wake_volume) != 0;
+            triggered =
+                is_point_inside_clip_volume(&hero.ground_point, bot_private_vars->wake_volume) != 0;
         } else if (fast_vec_dist(&hero.motion.pos, &l02_cuboids[bot_private_vars->post].pos) <
                    bot_private_vars->wake_range) {
             triggered = 1;
@@ -392,8 +411,10 @@ void constructorbot_update(struct Moby *moby) {
         direction[0] = fast_cos(fast_arc_tan(position[0] - moby->pos.x, position[1] - moby->pos.y));
         direction[1] = fast_sin(fast_arc_tan(position[0] - moby->pos.x, position[1] - moby->pos.y));
         direction[2] = -0.1f;
-        effect_slots_fire(
-            bot_private_vars->shots, position, direction, constructorbot_attack_shot_nominal_length_gp);
+        effect_slots_fire(bot_private_vars->shots,
+                          position,
+                          direction,
+                          constructorbot_attack_shot_nominal_length_gp);
         direction[3] = 5627.925f;
         direction[2] = 1.0f;
         make_hit_descriptor(shot, (int)moby, 0x10001, direction, 1.0f);
@@ -419,7 +440,8 @@ void constructorbot_update(struct Moby *moby) {
                              *(float *)(target + 0x14) - moby->pos.y);
         FUN_L00_00258278((char *)moby, angle, &bot_private_vars->turn_speed, 0.02f, 0.3f, 0.1f);
         if (moby->anim_flags & 2) {
-            if (vector_distance_xy(&moby->pos, bot_private_vars->target + 0x10) < bot_private_vars->attack_range + 1.0f &&
+            if (vector_distance_xy(&moby->pos, bot_private_vars->target + 0x10) <
+                    bot_private_vars->attack_range + 1.0f &&
                 absolute_float(*(float *)(bot_private_vars->target + 0x18) - moby->pos.z) < 3.0f) {
                 moby->state = 0xC;
                 if (moby->prev_seq != 9) {

@@ -354,14 +354,30 @@ int advance_bolt_thief_path(struct Moby *moby) {
         path = D_L16_001B0930[*(int *)(bolt_thief_path_data + 0xDC)];
     else
         path = D_L16_001B0930[*(int *)(bolt_thief_path_data + 0xD8)];
-    path_sample_result = FUN_L00_0025d808_path54(
-        path, pos, (float *)(bolt_thief_path_data + 0xD0), (float *)(bolt_thief_path_data + 0xD4), 0, scaled_frame_time);
-    vendor_spring(
-        &moby->pos.x, (float *)(bolt_thief_path_data + 0xE4), pos[0], D_L16_00161D94_gp, D_L16_00161D98_gp, 0.0f);
-    vendor_spring(
-        &moby->pos.y, (float *)(bolt_thief_path_data + 0xE8), pos[1], D_L16_00161D94_gp, D_L16_00161D98_gp, 0.0f);
-    vendor_spring(
-        &moby->pos.z, (float *)(bolt_thief_path_data + 0xEC), pos[2], D_L16_00161D94_gp, D_L16_00161D98_gp, 0.0f);
+    path_sample_result = FUN_L00_0025d808_path54(path,
+                                                 pos,
+                                                 (float *)(bolt_thief_path_data + 0xD0),
+                                                 (float *)(bolt_thief_path_data + 0xD4),
+                                                 0,
+                                                 scaled_frame_time);
+    vendor_spring(&moby->pos.x,
+                  (float *)(bolt_thief_path_data + 0xE4),
+                  pos[0],
+                  D_L16_00161D94_gp,
+                  D_L16_00161D98_gp,
+                  0.0f);
+    vendor_spring(&moby->pos.y,
+                  (float *)(bolt_thief_path_data + 0xE8),
+                  pos[1],
+                  D_L16_00161D94_gp,
+                  D_L16_00161D98_gp,
+                  0.0f);
+    vendor_spring(&moby->pos.z,
+                  (float *)(bolt_thief_path_data + 0xEC),
+                  pos[2],
+                  D_L16_00161D94_gp,
+                  D_L16_00161D98_gp,
+                  0.0f);
     fast_vec_sub(delta, pos, &moby->pos);
     if (absolute_float(delta[0]) > 0.01f) {
         if (absolute_float(delta[1]) > 0.01f) {

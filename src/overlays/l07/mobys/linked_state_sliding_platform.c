@@ -88,7 +88,8 @@ void update_linked_state_sliding_platform(struct Moby *moby) {
         break;
     case PLATFORM_MOVE_OUTWARD:
         if (sliding_platform_vars->target_index != -1 &&
-            (target = (struct Moby *)(level_mobys_gp + sliding_platform_vars->target_index * 0x100)) != 0 &&
+            (target = (struct Moby *)(level_mobys_gp +
+                                      sliding_platform_vars->target_index * 0x100)) != 0 &&
             target->state != 0xfe && target->state != 0xfd &&
             target->state == sliding_platform_vars->target_state_word) {
             allocate_voice_for_target_entry(sliding_platform_vars->trigger_sound, 0, moby);
@@ -127,8 +128,10 @@ void update_linked_state_sliding_platform(struct Moby *moby) {
         break;
     case PLATFORM_RETURN_TO_ORIGIN:
         if (sliding_platform_vars->target_index == -1 ||
-            (target = (struct Moby *)(level_mobys_gp + sliding_platform_vars->target_index * 0x100)) == 0 ||
-            target->state == 0xfe || target->state == 0xfd || target->state == sliding_platform_vars->target_state) {
+            (target = (struct Moby *)(level_mobys_gp +
+                                      sliding_platform_vars->target_index * 0x100)) == 0 ||
+            target->state == 0xfe || target->state == 0xfd ||
+            target->state == sliding_platform_vars->target_state) {
             allocate_voice_for_target_entry(sliding_platform_vars->trigger_sound, 0, moby);
             moby->state = 2;
             return;

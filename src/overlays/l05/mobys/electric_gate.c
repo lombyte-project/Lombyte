@@ -65,8 +65,10 @@ void electric_gate_update(char *gate_moby) {
                                     goto after;
                             }
                             voice_position_base = voice_pool_base + 0x90;
-                            *(char **)(voice_pool_base + **(int **)(electric_gate_vars + 4) * 0x70 + 0x88) = gate_moby;
-                            qcopy(**(int **)(electric_gate_vars + 4) * 0x70 + voice_position_base, gate_position);
+                            *(char **)(voice_pool_base + **(int **)(electric_gate_vars + 4) * 0x70 +
+                                       0x88) = gate_moby;
+                            qcopy(**(int **)(electric_gate_vars + 4) * 0x70 + voice_position_base,
+                                  gate_position);
                         }
                         goto after;
                     }
@@ -76,7 +78,8 @@ void electric_gate_update(char *gate_moby) {
         }
     after:
         if (*(int *)electric_gate_vars >= 0) {
-            if ((*(unsigned char **)&D_L05_0015FFD8_d)[*(int *)electric_gate_vars * 256 + 0xBC] != 0) {
+            if ((*(unsigned char **)&D_L05_0015FFD8_d)[*(int *)electric_gate_vars * 256 + 0xBC] !=
+                0) {
                 allocate_voice_for_target_entry(1, 0, gate_moby);
                 MOBY(gate_moby)->collision = 0;
                 MOBY(gate_moby)->state = 2;
@@ -165,7 +168,8 @@ void draw_electric_gate_beams(struct Moby *moby) {
         offset = (*list & 0x7FFF) << 8;
         listed_moby = (char *)(offset + (int)*(char **)&D_L05_0015FFD8_d);
         next_moby_index_ptr = list + 1;
-        if (*(short *)(listed_moby + 0xA6) == 0x346 && *(unsigned char *)(listed_moby + 0x20) == 1) {
+        if (*(short *)(listed_moby + 0xA6) == 0x346 &&
+            *(unsigned char *)(listed_moby + 0x20) == 1) {
             copy_matrix_rotation(matrix, listed_moby + 0xC0);
             qcopy(matrix + 0x30, (char *)(offset + (int)*(char **)&D_L05_0015FFD8_d) + 0x10);
             *(float *)(matrix + 0x3C) = 1.0f;

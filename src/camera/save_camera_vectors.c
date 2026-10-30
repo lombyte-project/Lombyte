@@ -14,7 +14,8 @@ void save_camera_vectors(void) {
     if (*(unsigned char *)(camera_transition_state + 2) == 0) {
         qcopy(camera_transition_state + 0xC0, camera_transition_state + 0x50);
         if (*(unsigned char *)(camera_transition_state + 3) == 2) {
-            fast_vec_add(camera_transition_state + 0xC0, D_0013F490, camera_transition_state + 0xC0);
+            fast_vec_add(
+                camera_transition_state + 0xC0, D_0013F490, camera_transition_state + 0xC0);
         }
         qcopy(camera_transition_state + 0xD0, camera_transition_state + 0x60);
     }

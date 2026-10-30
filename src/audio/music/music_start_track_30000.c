@@ -13,7 +13,8 @@ void music_start_track_30000(s32 track, s32 flags, s32 volume) __asm__("FUN_0021
 void music_start_track_30000(s32 track, s32 flags, s32 volume) {
     s32 *dialogue_stream_location_entry;
 
-    dialogue_stream_location_entry = (s32 *)((u8 *)dialogue_stream_locations + (track * 4 + game_language * 600));
+    dialogue_stream_location_entry =
+        (s32 *)((u8 *)dialogue_stream_locations + (track * 4 + game_language * 600));
     if (*dialogue_stream_location_entry != 0 && music_stream_state.secondary.handle == 0) {
         *(u32 *)&music_stream_state.secondary.handle = 0xFFFFFFFF;
         music_stream_state.secondary.state = 1;

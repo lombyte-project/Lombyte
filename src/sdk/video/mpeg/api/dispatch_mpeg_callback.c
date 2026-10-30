@@ -31,7 +31,8 @@ s32 _dispatchMpegCallback(struct MpegContext *callback_context, struct MpegEvent
         if (callbacks != 0) {
             callback = callbacks->entries[event->type].function;
             if (callback != 0) {
-                callback_result = callback(callback_context, event, callbacks->entries[event->type].data);
+                callback_result =
+                    callback(callback_context, event, callbacks->entries[event->type].data);
             }
         }
     }

@@ -162,7 +162,8 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
         ok = !(count_unspent_gold_bolts() < current_menu_entry->unkA);
         break;
     case MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET:
-        ok = current_bolt_count >= D_001DFFB0[current_menu_entry->unkA].unk14 && count_unspent_gold_bolts() >= 4;
+        ok = current_bolt_count >= D_001DFFB0[current_menu_entry->unkA].unk14 &&
+             count_unspent_gold_bolts() >= 4;
         break;
     default:
         ok = 0;

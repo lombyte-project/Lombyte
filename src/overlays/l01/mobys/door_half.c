@@ -77,9 +77,9 @@ void door_half_update(struct Moby *door_half_moby) {
 
         progress = (f32 *)driver->pvars;
         door_half_moby->pos.x = door_half_vars->start_x +
-                      (door_half_vars->end_x - door_half_vars->start_x) * progress[0];
+                                (door_half_vars->end_x - door_half_vars->start_x) * progress[0];
         door_half_moby->pos.y = door_half_vars->start_y +
-                      (door_half_vars->end_y - door_half_vars->start_y) * progress[0];
+                                (door_half_vars->end_y - door_half_vars->start_y) * progress[0];
         if (progress[0] != door_half_vars->last_progress) {
             if (progress[0] == 1.0f || progress[0] == 0.0f) {
                 /* reached an end: stop the loop, play the stop sound */

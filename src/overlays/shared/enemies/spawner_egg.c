@@ -144,7 +144,9 @@ struct Moby *respawn_spawner_child(struct Moby *parent_spawner_moby, Vec4 *pos) 
             *(f32 *)child_aim_height_record = (f32)child_aim_height_record[2];
         }
     } else {
-        debug_print(spawner_child_respawn_failure_format, (s16)parent_spawner_moby->save_id, D_L09_0015F5CC);
+        debug_print(spawner_child_respawn_failure_format,
+                    (s16)parent_spawner_moby->save_id,
+                    D_L09_0015F5CC);
     }
     return respawned_child;
 }
@@ -188,8 +190,8 @@ void remove_spawner_egg(void *moby, char *data) __asm__("FUN_L09_0030b350");
 
 void remove_spawner_egg(void *moby, char *egg_vars) {
     char *owner_spawner = *(char **)(egg_vars + 0x10);
-    if (owner_spawner != 0 && *(short *)(owner_spawner + 0xA6) == 0x75D && (unsigned char)owner_spawner[0x20] != 0xFE &&
-        (unsigned char)owner_spawner[0x20] != 0xFD) {
+    if (owner_spawner != 0 && *(short *)(owner_spawner + 0xA6) == 0x75D &&
+        (unsigned char)owner_spawner[0x20] != 0xFE && (unsigned char)owner_spawner[0x20] != 0xFD) {
         int   index = (unsigned char)egg_vars[0x1C];
         char *indexed_spawner_vars = *(char **)(owner_spawner + 0x78);
         indexed_spawner_vars += index * 4;
@@ -243,8 +245,8 @@ void spawner_egg_update(struct Moby *moby) {
         owner = (BubbleOwnerVars *)bubble_vars->owner->pvars;
         for (i = 0; i < 20; i++) {
             other_bubble = owner->bubbles[i];
-            if (other_bubble != moby && other_bubble != NULL && other_bubble->oclass == 0x75E && other_bubble->state != 0xFE &&
-                other_bubble->state != 0xFD) {
+            if (other_bubble != moby && other_bubble != NULL && other_bubble->oclass == 0x75E &&
+                other_bubble->state != 0xFE && other_bubble->state != 0xFD) {
                 fast_vec_sub(&away, &moby->pos, &other_bubble->pos);
                 away.f[2] = 0.0f;
                 other_bubble_distance_xy = fast_vec_length(&away);
@@ -279,13 +281,14 @@ void spawner_egg_update(struct Moby *moby) {
         rate = frame_scale * 0.05f;
         moby->scale -= moby->scale * rate;
         if (bubble_vars->held != NULL && bubble_vars->unk1A != 0) {
-            bubble_vars->held->scale += (bubble_vars->held->pclass->scale - bubble_vars->held->scale) * rate;
+            bubble_vars->held->scale +=
+                (bubble_vars->held->pclass->scale - bubble_vars->held->scale) * rate;
         }
         if (moby->scale < moby->pclass->scale * (frame_scale * 0.05f)) {
             moby->scale = 0.0001f;
             held = bubble_vars->held;
-            if (held == NULL || held->state == 0xFE || held->state == 0xFD || bubble_vars->unk1A == 0 ||
-                held->pclass->scale - 0.01f <= held->scale) {
+            if (held == NULL || held->state == 0xFE || held->state == 0xFD ||
+                bubble_vars->unk1A == 0 || held->pclass->scale - 0.01f <= held->scale) {
                 remove_spawner_egg(moby, (char *)bubble_vars);
             }
         }

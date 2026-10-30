@@ -453,15 +453,19 @@ void update_seeker_damage_and_target(Moby *moby) {
         moby->state = 7;
         return;
     }
-    if (seeker_vars->timer == scale_game_frames(0xA) || seeker_vars->timer == scale_game_frames(0x14) ||
-        seeker_vars->timer == scale_game_frames(0x28) || seeker_vars->timer == scale_game_frames(0x3C) ||
-        seeker_vars->timer == scale_game_frames(0x78) || seeker_vars->timer == scale_game_frames(0xB3)) {
+    if (seeker_vars->timer == scale_game_frames(0xA) ||
+        seeker_vars->timer == scale_game_frames(0x14) ||
+        seeker_vars->timer == scale_game_frames(0x28) ||
+        seeker_vars->timer == scale_game_frames(0x3C) ||
+        seeker_vars->timer == scale_game_frames(0x78) ||
+        seeker_vars->timer == scale_game_frames(0xB3)) {
         seeker_vars->reactTime = 0xF0;
         func_L00_0025E4B0_2C73D0(moby, seeker_vars->react);
     }
     damage = 0.0f;
     source = find_moby_hit(moby, 0x330000, 0);
-    response = resolve_moby_hit_response(moby, source, &seeker_vars->health, 0, &hit, &damage, 0, 4);
+    response =
+        resolve_moby_hit_response(moby, source, &seeker_vars->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 6) {
         seeker_vars->health = seeker_vars->health - damage;
         if (seeker_vars->health <= 0.0f) {
@@ -512,7 +516,8 @@ void update_seeker_damage_and_target(Moby *moby) {
             knock_angle_fatal = fast_arc_tan(moby->pos.x - source->owner->pos.x,
                                              moby->pos.y - source->owner->pos.y);
             *(Q_2C73D0 *)hit_pos = source->pos;
-            func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle_fatal, &seeker_vars->f88, &seeker_vars->f8C);
+            func_L00_0025BBA0_2C73D0(
+                hit_pos, &knock_angle_fatal, &seeker_vars->f88, &seeker_vars->f8C);
             func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle_fatal, 4, 1, 0);
             mark_moby_for_removal_cf(moby, 0, -1);
             moby->state = 6;
@@ -546,7 +551,8 @@ void update_seeker_damage_and_target(Moby *moby) {
             seeker_vars->reach = 12.0f;
             path = ((Path *)l09_paths[seeker_vars->path]);
             goal = seeker_vars->target;
-            target_selection_status = activate_effect_l08(moby, goal, 12.0f, 0, 0, path->pts, path->count);
+            target_selection_status =
+                activate_effect_l08(moby, goal, 12.0f, 0, 0, path->pts, path->count);
             lost_state = 2;
         }
         if (target_selection_status != lost_state && seeker_vars->retreat == 0) {

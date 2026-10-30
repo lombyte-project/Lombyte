@@ -106,7 +106,8 @@ int evaluate_clip_volume_candidate(char *candidate_object,
                                    char *comparison_object) __asm__("FUN_L03_002e8870");
 
 int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_object) {
-    char *candidate_level_table_entry = (char *)(D_L03_0015EF50 + (*(short *)(candidate_object + 0x84) << 5));
+    char *candidate_level_table_entry =
+        (char *)(D_L03_0015EF50 + (*(short *)(candidate_object + 0x84) << 5));
     char *sub = *(char **)(candidate_level_table_entry + 0x1C);
     char *global_state_base;
     int   five;

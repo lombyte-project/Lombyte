@@ -174,7 +174,8 @@ void apply_gunship_path_position_offsets(char *moby, float *path_position) {
     *(OvlQuad *)unit_x_axis = 0;
     unit_x_axis[0] = 1.0f;
     gunship_path_vars = ((char *)MOBY(moby)->pvars);
-    if (*(float *)(gunship_path_vars + 0x130) != 0.0f || *(float *)(gunship_path_vars + 0x134) != 0.0f) {
+    if (*(float *)(gunship_path_vars + 0x130) != 0.0f ||
+        *(float *)(gunship_path_vars + 0x134) != 0.0f) {
         euler_rotation_matrix(rotation_matrix, (float *)&MOBY(moby)->rot);
         transform_vector(rotated_x_axis, unit_x_axis, rotation_matrix);
         *(OvlQuad *)rotated_x_axis_minus_unit_z = *(OvlQuad *)rotated_x_axis;
@@ -182,7 +183,8 @@ void apply_gunship_path_position_offsets(char *moby, float *path_position) {
         fast_vec_cross(horizontal_offset, rotated_x_axis, rotated_x_axis_minus_unit_z);
         fast_vec_cross(vertical_plane_offset, rotated_x_axis, horizontal_offset);
         fast_vec_scale(horizontal_offset, horizontal_offset, *(float *)(gunship_path_vars + 0x130));
-        fast_vec_scale(vertical_plane_offset, vertical_plane_offset, *(float *)(gunship_path_vars + 0x134));
+        fast_vec_scale(
+            vertical_plane_offset, vertical_plane_offset, *(float *)(gunship_path_vars + 0x134));
         fast_vec_add(path_position, path_position, horizontal_offset);
         fast_vec_add(path_position, path_position, vertical_plane_offset);
     }

@@ -257,7 +257,8 @@ void asteroid_update(struct Moby *moby) {
     case ASTEROID_WAIT_TO_LAUNCH:
         if (hero.state.current == 0x32 && hero.ship_moby != 0 && hero.ship_moby->oclass == 0x45 &&
             (moby->visible != 0 || distance < 40.0f)) {
-            fast_vec_normalize(asteroid_vars, asteroid_vars->dir, random_float_between(1.0f, 10.0f) * frame_time);
+            fast_vec_normalize(
+                asteroid_vars, asteroid_vars->dir, random_float_between(1.0f, 10.0f) * frame_time);
             moby->state = 2;
         }
         break;

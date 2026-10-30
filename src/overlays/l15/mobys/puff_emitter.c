@@ -24,7 +24,9 @@ void update_puff_emitter(struct Moby *moby) {
         clear_u64_value(vertical_motion_vector);
         vertical_motion_vector[2] = random_float_between(0.75f, 1.5f) *
                                     *(float *)&vertical_effect_motion_scale_gp * frame_time;
-        FUN_L00_0026f080(
-            random_float_between(0.06f, 0.12f) * 210000.0f, *effect_height_setting, pos, vertical_motion_vector);
+        FUN_L00_0026f080(random_float_between(0.06f, 0.12f) * 210000.0f,
+                         *effect_height_setting,
+                         pos,
+                         vertical_motion_vector);
     }
 }

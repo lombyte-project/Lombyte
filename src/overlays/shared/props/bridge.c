@@ -53,7 +53,8 @@ void bridge_update(u8 *moby) {
     case BRIDGE_WAIT_TO_MOVE_TO_OFFSET_POSITION:
         if (*(s32 *)(bridge_data + 0xb0) != -1) {
             linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
-            if (linked_state_moby != 0 && linked_state_moby[0x20] != 0xfe && linked_state_moby[0x20] != 0xfd &&
+            if (linked_state_moby != 0 && linked_state_moby[0x20] != 0xfe &&
+                linked_state_moby[0x20] != 0xfd &&
                 linked_state_moby[0x20] != *(u32 *)(bridge_data + 0xb4))
                 break;
         }
@@ -70,7 +71,8 @@ void bridge_update(u8 *moby) {
     case BRIDGE_MOVE_TO_OFFSET_POSITION:
         if (*(s32 *)(bridge_data + 0xb0) != -1) {
             linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
-            if (linked_state_moby != 0 && linked_state_moby[0x20] != 0xfe && linked_state_moby[0x20] != 0xfd &&
+            if (linked_state_moby != 0 && linked_state_moby[0x20] != 0xfe &&
+                linked_state_moby[0x20] != 0xfd &&
                 linked_state_moby[0x20] == *(u32 *)(bridge_data + 0xb8)) {
                 if (*(s32 *)(bridge_data + 0xd0) != -1)
                     allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd0), 0, moby);
@@ -84,7 +86,8 @@ void bridge_update(u8 *moby) {
         vectors[6] = *(f32 *)(bridge_data + 0xc4);
         *(quadword *)vectors = *(quadword *)(vectors + 4);
         transform_vector_by_basis(vectors, vectors, moby + 0xc0);
-        scale_vector_xyz_alt_31aee0(*(f32 *)(bridge_data + 0xc8) * frame_time, vectors + 4, vectors);
+        scale_vector_xyz_alt_31aee0(
+            *(f32 *)(bridge_data + 0xc8) * frame_time, vectors + 4, vectors);
         fast_vec_add(moby + 0x10, moby + 0x10, vectors + 4);
         *(f32 *)(bridge_data + 0xac) -= *(f32 *)(bridge_data + 0xc8) * frame_time;
         if (*(f32 *)(bridge_data + 0xac) < 0.0f) {
@@ -100,7 +103,8 @@ void bridge_update(u8 *moby) {
     case BRIDGE_WAIT_TO_RETURN_TO_INITIAL_POSITION:
         if (*(s32 *)(bridge_data + 0xb0) != -1) {
             linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
-            if (linked_state_moby != 0 && linked_state_moby[0x20] != 0xfe && linked_state_moby[0x20] != 0xfd &&
+            if (linked_state_moby != 0 && linked_state_moby[0x20] != 0xfe &&
+                linked_state_moby[0x20] != 0xfd &&
                 linked_state_moby[0x20] == *(u32 *)(bridge_data + 0xb8)) {
                 *(s32 *)(bridge_data + 0xac) = 0;
                 if (*(s32 *)(bridge_data + 0xd0) != -1)
@@ -111,8 +115,9 @@ void bridge_update(u8 *moby) {
         break;
     case BRIDGE_RETURN_TO_INITIAL_POSITION:
         if (*(s32 *)(bridge_data + 0xb0) == -1 ||
-            (linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100) == 0 || linked_state_moby[0x20] == 0xfe ||
-            linked_state_moby[0x20] == 0xfd || linked_state_moby[0x20] == *(u32 *)(bridge_data + 0xb4)) {
+            (linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100) == 0 ||
+            linked_state_moby[0x20] == 0xfe || linked_state_moby[0x20] == 0xfd ||
+            linked_state_moby[0x20] == *(u32 *)(bridge_data + 0xb4)) {
             if (*(s32 *)(bridge_data + 0xd0) != -1)
                 allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd0), 0, moby);
             moby[0x20] = 2;
@@ -123,7 +128,8 @@ void bridge_update(u8 *moby) {
             vectors[6] = *(f32 *)(bridge_data + 0xc4);
             *(quadword *)vectors = *(quadword *)(vectors + 4);
             distance = fast_vec_length(vectors);
-            scale_vector_xyz_alt_31aee0(-(*(f32 *)(bridge_data + 0xcc) * frame_time), vectors, vectors);
+            scale_vector_xyz_alt_31aee0(
+                -(*(f32 *)(bridge_data + 0xcc) * frame_time), vectors, vectors);
             transform_vector_by_basis(vectors + 4, vectors, moby + 0xc0);
             fast_vec_add(moby + 0x10, moby + 0x10, vectors + 4);
             *(f32 *)(bridge_data + 0xac) += *(f32 *)(bridge_data + 0xcc) * frame_time;

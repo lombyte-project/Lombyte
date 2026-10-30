@@ -278,7 +278,11 @@ int select_list_point_toward_target(char *reference_object,
                                     char *pt,
                                     char *out) __asm__("FUN_L01_0028b5e0");
 
-int select_list_point_toward_target(char *reference_object, List *list, char *pt, char *selected_point) {
+int select_list_point_toward_target(char *reference_object,
+                                    List *list,
+                                    char *pt,
+
+                                    char *selected_point) {
     int   nearest_reference_entry_index = -1;
     int   nearest_eligible_entry_index = -1;
     float best0 = 10000.0f;

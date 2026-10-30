@@ -474,7 +474,8 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     float          dmg;
     int            hit_response_code;
     dmg = 0.0f;
-    hit_response_code = resolve_moby_hit_response(moby, ship_hit_record, pvars + 0x20, 5, &ship_hit_processing_status, &dmg, 0, 4);
+    hit_response_code = resolve_moby_hit_response(
+        moby, ship_hit_record, pvars + 0x20, 5, &ship_hit_processing_status, &dmg, 0, 4);
     if (ship_hit_record != 0 && ship_hit_processing_status != 1 && moby->state != 8) {
         if ((*(float *)(pvars + 0x20) -= dmg) <= 0.0f) {
             hit_response_code = 1;

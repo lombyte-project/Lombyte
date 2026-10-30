@@ -110,7 +110,8 @@ void update_help_hints(struct Moby *moby) {
             help_state.cur == -1 && help_records[0x40].id != 0 && help_records[0x41].id == 0) {
             help_request(0x3ED, 0x41);
         }
-        if (help_records[0x42].id < 2 && is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[12]) &&
+        if (help_records[0x42].id < 2 &&
+            is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[12]) &&
             hero.state.prev == 0x3B && hero.state_timer == 0) {
             for (hint_candidate_moby = moby_list; hint_candidate_moby != 0;
                  hint_candidate_moby = hint_candidate_moby->next) {
@@ -124,13 +125,14 @@ void update_help_hints(struct Moby *moby) {
                 }
             }
         }
-        if (hero.state.control_mode == 0x12 && tutorial_hint_vars[10] == 0 && help_state.state == 0 &&
-            help_state.cur == -1 &&
+        if (hero.state.control_mode == 0x12 && tutorial_hint_vars[10] == 0 &&
+            help_state.state == 0 && help_state.cur == -1 &&
             (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[8]) ||
              is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[9]))) {
             tutorial_hint_vars[11]++;
             if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[8]) &&
-                scale_game_frames(240) < tutorial_hint_vars[11] && usage_stats.stat[22].count == 0) {
+                scale_game_frames(240) < tutorial_hint_vars[11] &&
+                usage_stats.stat[22].count == 0) {
                 help_request(0x3F0, 0x44);
                 if (usage_stats.stat[22].count < 0xFFFF) {
                     usage_stats.stat[22].count++;
@@ -142,7 +144,8 @@ void update_help_hints(struct Moby *moby) {
                 usage_stats.stat[22].level_mask =
                     usage_stats.stat[22].level_mask | (1 << current_level_index_macro) | 0x80000000;
             } else if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[9]) &&
-                       scale_game_frames(360) < tutorial_hint_vars[11] && usage_stats.stat[23].count == 0) {
+                       scale_game_frames(360) < tutorial_hint_vars[11] &&
+                       usage_stats.stat[23].count == 0) {
                 help_request(0x3F0, 0x44);
                 if (usage_stats.stat[23].count < 0xFFFF) {
                     usage_stats.stat[23].count++;

@@ -209,7 +209,8 @@ void update_chicken_relocator(struct Moby *moby) {
                 if (fast_dec_timer(target_cycle_data + 0xC)) {
                     moby->state = 2;
                     request_target_reposition(target);
-                    *(int *)(target_cycle_data + 0xC) = scale_game_frames(random_int_between(0xB4, 0x168));
+                    *(int *)(target_cycle_data + 0xC) =
+                        scale_game_frames(random_int_between(0xB4, 0x168));
                 }
             }
         }

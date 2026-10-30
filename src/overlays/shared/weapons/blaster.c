@@ -334,12 +334,16 @@ void blaster_update(struct Moby *moby) {
                     } else if (pitch < fast_add_rotations(base_pitch, -0.17453292f)) {
                         base_pitch = fast_add_rotations(base_pitch, -0.17453292f);
                     }
-                    build_spherical_offset(&camera_aim_and_effect_scratch.point, speed, base_yaw, -base_pitch);
-                    fast_vec_add(&camera_aim_and_effect_scratch.point, &camera_aim_and_effect_scratch.point, &launch);
+                    build_spherical_offset(
+                        &camera_aim_and_effect_scratch.point, speed, base_yaw, -base_pitch);
+                    fast_vec_add(&camera_aim_and_effect_scratch.point,
+                                 &camera_aim_and_effect_scratch.point,
+                                 &launch);
                     yaw = fast_arc_tan(aim_point.f.x - camera_aim_and_effect_scratch.point.f.x,
                                        aim_point.f.y - camera_aim_and_effect_scratch.point.f.y);
-                    pitch = -fast_arc_tan(vector_distance_xy(&camera_aim_and_effect_scratch.point, &aim_point),
-                                          aim_point.f.z - camera_aim_and_effect_scratch.point.f.z);
+                    pitch = -fast_arc_tan(
+                        vector_distance_xy(&camera_aim_and_effect_scratch.point, &aim_point),
+                        aim_point.f.z - camera_aim_and_effect_scratch.point.f.z);
                 } else if (hero.state.current != 30) {
                     pitch -= hero.ground_pitch.f * 0.5f;
                     base_pitch -= hero.ground_pitch.f * 0.5f;
@@ -348,15 +352,18 @@ void blaster_update(struct Moby *moby) {
                 camera_aim_and_effect_scratch.spawn.owner = moby;
                 camera_aim_and_effect_scratch.spawn.f1C = 0.25f;
                 camera_aim_and_effect_scratch.spawn.i20 = 1;
-                camera_aim_and_effect_scratch.spawn.pos.f.x = fast_cos(fast_arc_tan(hero.facing_x, hero.facing_y));
-                camera_aim_and_effect_scratch.spawn.pos.f.y = fast_sin(fast_arc_tan(hero.facing_x, hero.facing_y));
+                camera_aim_and_effect_scratch.spawn.pos.f.x =
+                    fast_cos(fast_arc_tan(hero.facing_x, hero.facing_y));
+                camera_aim_and_effect_scratch.spawn.pos.f.y =
+                    fast_sin(fast_arc_tan(hero.facing_x, hero.facing_y));
                 camera_aim_and_effect_scratch.spawn.pos.f.z = 1.0f;
                 camera_aim_and_effect_scratch.spawn.pos.f.w = 5627.9248f;
                 camera_aim_and_effect_scratch.spawn.b18 = 1;
                 camera_aim_and_effect_scratch.spawn.b19 = 1;
                 camera_aim_and_effect_scratch.spawn.cls = (*(unsigned short *)&moby->oclass);
                 transform_hero_local_offset_to_world(&inverse, 0.7f, -0.15f, 0.5f);
-                collect_mobies_in_sphere(&inverse, 0.42f, 5, hero.moby, &camera_aim_and_effect_scratch.spawn);
+                collect_mobies_in_sphere(
+                    &inverse, 0.42f, 5, hero.moby, &camera_aim_and_effect_scratch.spawn);
                 FUN_L00_002caf70_49a8(hero.moby, yaw, pitch, base_yaw, base_pitch, &launch, target);
                 blaster_vars->glow = scale_game_frames(15);
                 for (i = 0; i < 5; i++) {
@@ -364,10 +371,14 @@ void blaster_update(struct Moby *moby) {
                     camera_aim_and_effect_scratch.spray.rnd.f.x = random_float_between(-1.0f, 1.0f);
                     camera_aim_and_effect_scratch.spray.rnd.f.y = random_float_between(-1.0f, 1.0f);
                     camera_aim_and_effect_scratch.spray.rnd.f.z = random_float_between(-1.0f, 1.0f);
-                    camera_aim_and_effect_scratch.spray.v.q = camera_aim_and_effect_scratch.spray.rnd.q;
-                    fast_vec_normalize(
-                        &camera_aim_and_effect_scratch.spray.v, &camera_aim_and_effect_scratch.spray.v, fast_vec_length(&velocity) * 0.65f);
-                    fast_vec_add(&camera_aim_and_effect_scratch.spray.v, &velocity, &camera_aim_and_effect_scratch.spray.v);
+                    camera_aim_and_effect_scratch.spray.v.q =
+                        camera_aim_and_effect_scratch.spray.rnd.q;
+                    fast_vec_normalize(&camera_aim_and_effect_scratch.spray.v,
+                                       &camera_aim_and_effect_scratch.spray.v,
+                                       fast_vec_length(&velocity) * 0.65f);
+                    fast_vec_add(&camera_aim_and_effect_scratch.spray.v,
+                                 &velocity,
+                                 &camera_aim_and_effect_scratch.spray.v);
                     fast_vec_normalize(&camera_aim_and_effect_scratch.spray.v,
                                        &camera_aim_and_effect_scratch.spray.v,
                                        random_float_between(frame_time * 3.0f, frame_time * 6.0f));
@@ -410,14 +421,17 @@ void blaster_update(struct Moby *moby) {
         blaster_vars->cooldown = 0;
     }
     if (moby->seq != 2 && blaster_vars->glow > 0) {
-        red = convert_integer_to_float(blaster_vars->glow < scale_game_frames(9) ? blaster_vars->glow
-                                                                         : scale_game_frames(9)) *
+        red = convert_integer_to_float(blaster_vars->glow < scale_game_frames(9)
+                                           ? blaster_vars->glow
+                                           : scale_game_frames(9)) *
               0.7f / (float)scale_game_frames(9);
-        green = convert_integer_to_float(blaster_vars->glow < scale_game_frames(9) ? blaster_vars->glow
-                                                                           : scale_game_frames(9)) *
+        green = convert_integer_to_float(blaster_vars->glow < scale_game_frames(9)
+                                             ? blaster_vars->glow
+                                             : scale_game_frames(9)) *
                 0.7f / (float)scale_game_frames(9);
-        blue = convert_integer_to_float(blaster_vars->glow < scale_game_frames(9) ? blaster_vars->glow
-                                                                          : scale_game_frames(9)) *
+        blue = convert_integer_to_float(blaster_vars->glow < scale_game_frames(9)
+                                            ? blaster_vars->glow
+                                            : scale_game_frames(9)) *
                0.7f / (float)scale_game_frames(9);
         camera_aim_and_effect_scratch.point.f.x =
             hero.motion.pos.f[0] + fast_cos(fast_arc_tan(hero.facing_x, hero.facing_y)) * 2.0f;
@@ -425,7 +439,8 @@ void blaster_update(struct Moby *moby) {
             hero.motion.pos.f[1] + fast_sin(fast_arc_tan(hero.facing_x, hero.facing_y)) * 2.0f;
         camera_aim_and_effect_scratch.point.f.z = hero.motion.pos.f[2] + 1.0f;
         if (blaster_vars->light == -1) {
-            blaster_vars->light = allocate_colored_effect_slot(&camera_aim_and_effect_scratch.point, 6.0f, 0.0f, red, green, blue);
+            blaster_vars->light = allocate_colored_effect_slot(
+                &camera_aim_and_effect_scratch.point, 6.0f, 0.0f, red, green, blue);
         } else {
             PointLight *light = &point_lights[blaster_vars->light];
             qcopy(&light->position, &camera_aim_and_effect_scratch.point);

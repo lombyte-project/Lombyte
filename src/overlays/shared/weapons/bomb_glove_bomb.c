@@ -869,18 +869,22 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
             fast_vec_add(bomb_launch_data, bomb_launch_data, bomb_launch_data + 0x10);
         } else if (*(int *)((char *)bomb_launch_data + 0x64) != 0) {
             length = vector_length_xy(velocity);
-            fast_vec_sub(difference, &hero.motion.pos, *(char **)((char *)bomb_launch_data + 0x60) + 0x10);
+            fast_vec_sub(
+                difference, &hero.motion.pos, *(char **)((char *)bomb_launch_data + 0x60) + 0x10);
             fast_vec_normalize(difference, difference, 1.0f);
             dot = fast_vec_dot(difference, bomb_launch_data + 0x10);
             total = dot + length;
-            distance = vector_distance_xy(pos, *(char **)((char *)bomb_launch_data + 0x60) + 0x10) / total;
+            distance =
+                vector_distance_xy(pos, *(char **)((char *)bomb_launch_data + 0x60) + 0x10) / total;
             if (dot > 0.0f) {
                 scale_vector_xyz(direction, difference, distance * dot);
-                fast_vec_add(working, direction, *(char **)((char *)bomb_launch_data + 0x60) + 0x10);
+                fast_vec_add(
+                    working, direction, *(char **)((char *)bomb_launch_data + 0x60) + 0x10);
                 *(OvlQuad *)direction = *(OvlQuad *)working;
             } else {
                 scale_vector_xyz(direction, bomb_launch_data + 0x10, distance);
-                fast_vec_add(working, direction, *(char **)((char *)bomb_launch_data + 0x60) + 0x10);
+                fast_vec_add(
+                    working, direction, *(char **)((char *)bomb_launch_data + 0x60) + 0x10);
                 *(OvlQuad *)direction = *(OvlQuad *)working;
             }
             {
@@ -1232,7 +1236,8 @@ void bomb_update(BombMoby *bomb_moby) {
             if (d->h68 != 0) {
                 d->h68++;
             }
-            if (collision_line(&bomb_pre_motion_position, &bomb_moby->pos, 0x10, (int)bomb_moby, (int)&q)) {
+            if (collision_line(
+                    &bomb_pre_motion_position, &bomb_moby->pos, 0x10, (int)bomb_moby, (int)&q)) {
                 if (d->h68 == 0 && collision_hit_material() == 0 && d->v.f[2] < 0.0f) {
                     Vec_2adb30 p;
                     Vec_2adb30 splash_particle_velocity;

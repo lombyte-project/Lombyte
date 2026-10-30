@@ -64,7 +64,8 @@ void update_swinging_door(struct Moby *moby) {
                 }
                 if (is_point_inside_clip_volume(&candidate_moby->pos, door_vars->open_volume)) {
                     open = 1;
-                } else if (!is_point_inside_clip_volume(&candidate_moby->pos, door_vars->close_volume)) {
+                } else if (!is_point_inside_clip_volume(&candidate_moby->pos,
+                                                        door_vars->close_volume)) {
                     close = 1;
                 }
             }

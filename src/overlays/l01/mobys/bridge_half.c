@@ -62,7 +62,8 @@ void bridge_half_update(PendulumMoby *bridge_half_moby) {
         pendulum_vars->sound = -1;
         break;
     case BRIDGE_HALF_WAIT_FOR_TRIGGER:
-        if (bridge_half_moby->trigger == 2 || D_0014C050[bridge_half_moby->id + current_level_index * 16] == 0xFF) {
+        if (bridge_half_moby->trigger == 2 ||
+            D_0014C050[bridge_half_moby->id + current_level_index * 16] == 0xFF) {
             bridge_half_moby->state = 2;
             bridge_half_moby->trigger = 0;
         }
@@ -91,8 +92,10 @@ void bridge_half_update(PendulumMoby *bridge_half_moby) {
     arm.q = 0;
     arm.f[2] = -11.0f;
     fast_vec_add(&arm, &arm, &pendulum_vars->pivot);
-    swing_offset.f[0] = fast_cos(bridge_half_moby->rot_z) * 11.0f * fast_sin(bridge_half_moby->rot_x);
-    swing_offset.f[1] = fast_sin(bridge_half_moby->rot_z) * 11.0f * fast_sin(bridge_half_moby->rot_x);
+    swing_offset.f[0] =
+        fast_cos(bridge_half_moby->rot_z) * 11.0f * fast_sin(bridge_half_moby->rot_x);
+    swing_offset.f[1] =
+        fast_sin(bridge_half_moby->rot_z) * 11.0f * fast_sin(bridge_half_moby->rot_x);
     swing_offset.f[2] = fast_cos(bridge_half_moby->rot_x) * 11.0f;
     fast_vec_add(&bridge_half_moby->pos, &arm, &swing_offset);
 }

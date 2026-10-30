@@ -100,7 +100,8 @@ void update_bolt_thief_mine(struct Moby *moby) {
     case FLOAT_MINE_ACTIVE: {
         if (current_level_index == 16) {
             if (floating_mine_private_vars->rest_z < 0.0f)
-                floating_mine_private_vars->rest_z = probe_ground_height(0.5f, &moby->pos, 0) + 0.7f;
+                floating_mine_private_vars->rest_z =
+                    probe_ground_height(0.5f, &moby->pos, 0) + 0.7f;
             vendor_spring(&moby->pos.z,
                           &floating_mine_private_vars->z_speed,
                           floating_mine_private_vars->rest_z,
@@ -185,7 +186,8 @@ void update_bolt_thief_mine(struct Moby *moby) {
         break;
     }
     }
-    floating_mine_private_vars->phase = fast_add_rotations(floating_mine_private_vars->phase, floating_mine_glow_phase_step_gp);
+    floating_mine_private_vars->phase =
+        fast_add_rotations(floating_mine_private_vars->phase, floating_mine_glow_phase_step_gp);
     glow_pulse_sine = fast_sin(floating_mine_private_vars->phase);
     glow_red_intensity = truncate_float_to_s32(glow_pulse_sine * 48.0f) + 0xCF;
     glow_green_blue_intensity = truncate_float_to_s32(glow_pulse_sine * 32.0f) + 0x30;

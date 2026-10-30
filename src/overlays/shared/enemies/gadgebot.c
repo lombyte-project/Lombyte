@@ -613,8 +613,11 @@ void gadgebot_update(GbMoby *moby) {
                     gadgebot_vars->ctl.unk24 = frame_time * 3.0f * 1.35f;
                 }
                 if (hero_distance > 0.8f) {
-                    flags =
-                        FUN_L00_00258b50(moby, &gadgebot_vars->ctl, hero.motion.pos.f, movement_displacement_output, 1.0f);
+                    flags = FUN_L00_00258b50(moby,
+                                             &gadgebot_vars->ctl,
+                                             hero.motion.pos.f,
+                                             movement_displacement_output,
+                                             1.0f);
                 }
                 {
                     int ph = ((int)moby >> 8) % 8;
@@ -778,8 +781,11 @@ void gadgebot_update(GbMoby *moby) {
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);
                 gadgebot_vars->ctl.unk24 = frame_time * 4.5f;
-                if (FUN_L00_00258b50(
-                        moby, &gadgebot_vars->ctl, gadgebot_vars->target->pos, movement_displacement_output, 1.0f) &
+                if (FUN_L00_00258b50(moby,
+                                     &gadgebot_vars->ctl,
+                                     gadgebot_vars->target->pos,
+                                     movement_displacement_output,
+                                     1.0f) &
                     0x20) {
                     moby->state = 4;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
@@ -888,7 +894,11 @@ void gadgebot_update(GbMoby *moby) {
                                  frame_scale_sq * 0.07f,
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);
-                if (FUN_L00_00258b50(moby, &gadgebot_vars->ctl, vector_and_hit_scratch, movement_displacement_output, 1.0f) &
+                if (FUN_L00_00258b50(moby,
+                                     &gadgebot_vars->ctl,
+                                     vector_and_hit_scratch,
+                                     movement_displacement_output,
+                                     1.0f) &
                     0x20) {
                     moby->state = 4;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
@@ -1185,7 +1195,8 @@ void assign_gadgebot_attack_targets(void) {
     {
         char *gadgebot_candidate;
         for (i = 0; (gadgebot_candidate = (char *)D_L06_001AC180[i]) != 0; i++) {
-            if (*(short *)(gadgebot_candidate + 0xA6) == 0x359 && ((unsigned char *)gadgebot_candidate)[0x20] == 5 &&
+            if (*(short *)(gadgebot_candidate + 0xA6) == 0x359 &&
+                ((unsigned char *)gadgebot_candidate)[0x20] == 5 &&
                 ((unsigned char *)gadgebot_candidate)[0xBC] != 2 && moby_count != 0x32) {
                 char *current_target = ((GbSlots *)PVARS(gadgebot_candidate))->target;
                 if (current_target == 0 || ((unsigned char *)current_target)[0x20] == 0xFE ||
@@ -1408,7 +1419,9 @@ void select_nearest_gadgebot_interaction_target(void *moby_arg) {
 int process_gadgebot_interaction_candidate(
     char *ctx, char *ow, char *moby, int flag, int *out) __asm__("FUN_L06_002f2c28");
 
-int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int flag, int *interaction_status_out) {
+int process_gadgebot_interaction_candidate(
+
+    char *ctx, char *ow, char *moby, int flag, int *interaction_status_out) {
     float candidate_position[4];
     float vB[4];
     float vA[4];
@@ -1584,7 +1597,8 @@ int process_gadgebot_interactions(char *moby, int flag) {
         interaction_candidate_moby = *cursor;
         while (interaction_candidate_moby != 0) {
             moby_ref = &moby;
-            if (process_gadgebot_interaction_candidate(*moby_ref, state, interaction_candidate_moby, flag, &iter.out))
+            if (process_gadgebot_interaction_candidate(
+                    *moby_ref, state, interaction_candidate_moby, flag, &iter.out))
                 return iter.out;
             cursor++;
             interaction_candidate_moby = *cursor;
@@ -1606,7 +1620,8 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
             char *hit_source_moby = *(char **)(target + 0x20);
             float knockback_angle;
             knockback_angle = base_angle;
-            if (hit_source_moby != D_001413D0 && *(short *)(hit_source_moby + 0xA6) != MOBY(moby)->oclass) {
+            if (hit_source_moby != D_001413D0 &&
+                *(short *)(hit_source_moby + 0xA6) != MOBY(moby)->oclass) {
                 int frames_sq = scale_game_frames(0x50);
                 frames_sq *= scale_game_frames(0x50);
                 state[0xBD] = 0;

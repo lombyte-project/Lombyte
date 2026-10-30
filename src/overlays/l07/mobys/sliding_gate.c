@@ -73,8 +73,9 @@ void update_sliding_gate(struct Moby *moby) {
     case MOVING_MOBY_WAIT_AT_HOME:
         if (force_start)
             return;
-        if (!force_end && offset_motion->target != -1 && (target = &D_L07_0015FFD8[offset_motion->target]) != 0 &&
-            target->state != 0xfe && target->state != 0xfd && target->state != offset_motion->openState)
+        if (!force_end && offset_motion->target != -1 &&
+            (target = &D_L07_0015FFD8[offset_motion->target]) != 0 && target->state != 0xfe &&
+            target->state != 0xfd && target->state != offset_motion->openState)
             return;
         start.q = 0;
         start.f[0] = offset_motion->destination.x;
@@ -88,8 +89,9 @@ void update_sliding_gate(struct Moby *moby) {
         break;
     case MOVING_MOBY_MOVE_TO_OFFSET:
         if (force_start ||
-            (!force_end && offset_motion->target != -1 && (target = &D_L07_0015FFD8[offset_motion->target]) != 0 &&
-             target->state != 0xfe && target->state != 0xfd && target->state == offset_motion->shutState)) {
+            (!force_end && offset_motion->target != -1 &&
+             (target = &D_L07_0015FFD8[offset_motion->target]) != 0 && target->state != 0xfe &&
+             target->state != 0xfd && target->state == offset_motion->shutState)) {
             if (offset_motion->startSound != -1)
                 allocate_voice_for_target_entry(offset_motion->startSound, 0, moby);
             moby->state = 4;
@@ -117,8 +119,9 @@ void update_sliding_gate(struct Moby *moby) {
         return;
     case MOVING_MOBY_WAIT_AT_OFFSET:
         if (!force_start &&
-            (force_end || offset_motion->target == -1 || (target = &D_L07_0015FFD8[offset_motion->target]) == 0 ||
-             target->state == 0xfe || target->state == 0xfd || target->state != offset_motion->shutState))
+            (force_end || offset_motion->target == -1 ||
+             (target = &D_L07_0015FFD8[offset_motion->target]) == 0 || target->state == 0xfe ||
+             target->state == 0xfd || target->state != offset_motion->shutState))
             return;
         offset_motion->home.w = 0;
         if (offset_motion->startSound != -1)
@@ -127,8 +130,9 @@ void update_sliding_gate(struct Moby *moby) {
         break;
     case MOVING_MOBY_RETURN_HOME:
         if (!force_start &&
-            (force_end || offset_motion->target == -1 || (target = &D_L07_0015FFD8[offset_motion->target]) == 0 ||
-             target->state == 0xfe || target->state == 0xfd || target->state == offset_motion->openState)) {
+            (force_end || offset_motion->target == -1 ||
+             (target = &D_L07_0015FFD8[offset_motion->target]) == 0 || target->state == 0xfe ||
+             target->state == 0xfd || target->state == offset_motion->openState)) {
             if (offset_motion->startSound != -1)
                 allocate_voice_for_target_entry(offset_motion->startSound, 0, moby);
             moby->state = 2;

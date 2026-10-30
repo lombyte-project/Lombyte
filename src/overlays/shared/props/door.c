@@ -109,8 +109,9 @@ void door_update(u8 *moby) {
         if (*(s32 *)(door_data + 0x38) != -1)
             D_L07_00184528[*(s32 *)(door_data + 0x38)] = 0;
         if (*(s32 *)(door_data + 0x10) == -1 ||
-            (linked_moby = level_mobys + *(s32 *)(door_data + 0x10) * 0x100) == 0 || linked_moby[0x20] == 0xfe ||
-            linked_moby[0x20] == 0xfd || linked_moby[0x20] == *(u32 *)(door_data + 0x14)) {
+            (linked_moby = level_mobys + *(s32 *)(door_data + 0x10) * 0x100) == 0 ||
+            linked_moby[0x20] == 0xfe || linked_moby[0x20] == 0xfd ||
+            linked_moby[0x20] == *(u32 *)(door_data + 0x14)) {
             if (*(s32 *)(door_data + 0x30) != -1)
                 allocate_voice_for_target_entry(*(s32 *)(door_data + 0x30), 0, moby);
             moby[0x20] = 2;

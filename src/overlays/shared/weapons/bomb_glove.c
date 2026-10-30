@@ -201,7 +201,8 @@ void bomb_glove_update(struct Moby *moby) {
     fast_vec_add(&bomb_glove_vars->grip, &saved, &rotatedOffset);
     if (bomb_glove_vars->held != 0)
         bomb_glove_vars->held->collision_disable = 1;
-    if (bomb_glove_vars->held == 0 || bomb_glove_vars->held->state == 0xFE || bomb_glove_vars->held->state == 0xFD)
+    if (bomb_glove_vars->held == 0 || bomb_glove_vars->held->state == 0xFE ||
+        bomb_glove_vars->held->state == 0xFD)
         bomb_glove_vars->held = 0;
     if (hero.state.current == 1)
         hero_set_state(0x1E, 1);
@@ -298,7 +299,8 @@ void bomb_glove_update(struct Moby *moby) {
             hero.throw_target = 0;
             while ((candidate = D_L00_001ABA00_lui[throw_candidate_index]) != 0) {
                 u8 *candidate_aim_info = get_moby_target_info(candidate);
-                if ((s8)candidate->state >= 0 && candidate_aim_info && (candidate->flags & 0x1000)) {
+                if ((s8)candidate->state >= 0 && candidate_aim_info &&
+                    (candidate->flags & 0x1000)) {
                     f32 candidateAngle, elevation, difference;
                     qcopy(&temporary.arc, &candidate->pos);
                     temporary.arc.f[2] += *(f32 *)(candidate_aim_info + 0x10);
@@ -327,7 +329,12 @@ void bomb_glove_update(struct Moby *moby) {
         speed = (controller_state.held & 5)
                     ? scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f
                     : 8.5f;
-        aim_throw_arc((V2c2488 *)&pos, (V2c2488 *)&target, held_bomb_launch_velocity, gravity, 0.00000999999975f, speed);
+        aim_throw_arc((V2c2488 *)&pos,
+                      (V2c2488 *)&target,
+                      held_bomb_launch_velocity,
+                      gravity,
+                      0.00000999999975f,
+                      speed);
     }
     switch (moby->state) {
     case BOMB_GLOVE_INITIALIZE:

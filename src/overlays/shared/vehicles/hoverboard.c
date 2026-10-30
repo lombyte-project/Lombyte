@@ -56,8 +56,8 @@ void hoverboard_update(unsigned char *moby) {
         break;
     }
     case HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT:
-        if (*(int *)(hoverboard_vars + 0x50) == 0 && alternate_item_available[0] != 0 && D_00141938 == 0 &&
-            D_L05_0015F6A8 != 0 &&
+        if (*(int *)(hoverboard_vars + 0x50) == 0 && alternate_item_available[0] != 0 &&
+            D_00141938 == 0 && D_L05_0015F6A8 != 0 &&
             (player_hero = &hero, scale_game_frames(0x4b0) < player_hero->control_mode_timer) &&
             D_00141C60 == 0) {
             help_request(0x138f, 0x5f);

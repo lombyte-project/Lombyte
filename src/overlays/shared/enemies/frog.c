@@ -603,7 +603,8 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
                                         frog_glow_color_end_gp,
                                         (fast_sin(frog_state->glow_phase) + 1.0f) * 0.5f);
     if (frog_state->new_blink != 0) {
-        frog_state->blink_timer = truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
+        frog_state->blink_timer =
+            truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
         frog_state->new_blink = 0;
     }
     fast_dec_timer_s16(&frog_state->blink_timer);
@@ -619,7 +620,8 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         qcopy(&frog_state->target_pos, &target->pos);
     } else if (D_001413F4_e94f0[0] == 1) {
         if (level_frame_count % 8 == frog_state->frame_slot) {
-            select_hero_or_gadgebot_target((char *)moby, (char **)&frog_state->target, frog_state->range);
+            select_hero_or_gadgebot_target(
+                (char *)moby, (char **)&frog_state->target, frog_state->range);
             if (frog_state->target == 0) {
                 frog_state->target_mode = 2;
             } else {
@@ -710,7 +712,8 @@ void move_frog_with_collision_resolution(
     fast_vec_add(moby + 0x10, moby + 0x10, movement_displacement);
     fast_vec_add(end, moby + 0x10, forward);
 
-    if (threshold < fast_vec_length(movement_displacement) && collision_line(start, end, 0, moby, 0) != 0) {
+    if (threshold < fast_vec_length(movement_displacement) &&
+        collision_line(start, end, 0, moby, 0) != 0) {
         qcopy(end, &D_L06_001745E0);
         fast_vec_sub(moby + 0x10, end, forward);
     }
@@ -751,8 +754,14 @@ void destroy_frog_child_moby(struct Moby *moby) {
         *(u128 *)pos = *(u128 *)offset;
         fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
-        spawn_crate_debris(
-            *(void **)(frog_vars + 0x20C), debris_velocity, pos, D_L06_0015F580, 0x165, 0, 0.3f, 0.6f);
+        spawn_crate_debris(*(void **)(frog_vars + 0x20C),
+                           debris_velocity,
+                           pos,
+                           D_L06_0015F580,
+                           0x165,
+                           0,
+                           0.3f,
+                           0.6f);
     }
     for (j = 7; j >= 0; j--) {
         float speed = random_float_between(1.0f, 4.0f) * frame_time;
@@ -945,7 +954,13 @@ void consider_moby_target_candidate(char  *moby,
 
 void consider_moby_target_candidate(
 
-    char *moby, char *current_target, char *candidate_moby, int *best_target_out, float *best, float thresh) {
+    char  *moby,
+    char  *current_target,
+    char  *candidate_moby,
+    int   *best_target_out,
+    float *best,
+
+    float thresh) {
     float candidate_distance = vector_distance_xy(moby + 0x10, candidate_moby + 0x10);
     if (!(thresh < candidate_distance)) {
         float ang = fast_arc_tan(MOBY(candidate_moby)->pos.x - MOBY(moby)->pos.x,

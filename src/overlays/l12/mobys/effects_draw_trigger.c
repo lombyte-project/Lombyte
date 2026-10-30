@@ -34,7 +34,8 @@ void update_effects_draw_trigger(struct Moby *moby) {
         break;
     case DRAW_CALLBACK_CHECK_VOLUME_AND_REGISTER: {
         int clip_volume_index = *(int *)(draw_callback_vars + 0xC);
-        if (clip_volume_index == -1 || is_point_inside_clip_volume(D_L12_00167240, clip_volume_index)) {
+        if (clip_volume_index == -1 ||
+            is_point_inside_clip_volume(D_L12_00167240, clip_volume_index)) {
             add_draw_callback((void *)draw_level_12_effects, moby);
         }
     } break;

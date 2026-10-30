@@ -209,24 +209,29 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
             time = convert_integer_to_float(l08_effect_animation_time);
             for (remaining = 0; remaining < 8; remaining++) {
                 float *goal;
-                if (flickering_mesh_vars->noise[remaining] < *(goal = &flickering_mesh_vars->goal[remaining])) {
-                    flickering_mesh_vars->noise[remaining] += flickering_mesh_vars->jitter * flickering_mesh_vars->noise_rate;
+                if (flickering_mesh_vars->noise[remaining] <
+                    *(goal = &flickering_mesh_vars->goal[remaining])) {
+                    flickering_mesh_vars->noise[remaining] +=
+                        flickering_mesh_vars->jitter * flickering_mesh_vars->noise_rate;
                     if (!(*goal <= flickering_mesh_vars->noise[remaining]))
                         continue;
                 } else {
-                    flickering_mesh_vars->noise[remaining] -= flickering_mesh_vars->jitter * flickering_mesh_vars->noise_rate;
+                    flickering_mesh_vars->noise[remaining] -=
+                        flickering_mesh_vars->jitter * flickering_mesh_vars->noise_rate;
                     if (!(flickering_mesh_vars->noise[remaining] <= *goal))
                         continue;
                 }
                 *goal = random_float_between(1.0f - flickering_mesh_vars->jitter, 1.0f);
             }
-            alpha = truncate_float_to_s32(flickering_mesh_vars->intensity * convert_integer_to_float(flickering_mesh_vars->alpha) *
+            alpha = truncate_float_to_s32(flickering_mesh_vars->intensity *
+                                          convert_integer_to_float(flickering_mesh_vars->alpha) *
                                           convert_integer_to_float(moby->alpha) * 0.0078125f) &
                     0xFF;
             if (flickering_mesh_vars->frames) {
                 frame = l08_effect_animation_time;
                 frame /= flickering_mesh_vars->frame_ticks + 1;
-                flickering_mesh_vars->current = flickering_mesh_vars->texture + frame % flickering_mesh_vars->frames;
+                flickering_mesh_vars->current =
+                    flickering_mesh_vars->texture + frame % flickering_mesh_vars->frames;
             } else
                 flickering_mesh_vars->current = flickering_mesh_vars->texture;
             if (flickering_mesh_vars->flags & 1)
@@ -235,10 +240,13 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                 quad.gs[1] = get_effect_texture(flickering_mesh_vars->current + 0x28);
             quad.gs[0] = 0;
             quad.gs[2] = 0xFF9000000260L;
-            quad.gs[3] = (long)flickering_mesh_vars->blend0 | ((long)flickering_mesh_vars->blend1 << 2) |
-                         ((long)flickering_mesh_vars->blend2 << 4) | ((long)flickering_mesh_vars->blend3 << 6) |
+            quad.gs[3] = (long)flickering_mesh_vars->blend0 |
+                         ((long)flickering_mesh_vars->blend1 << 2) |
+                         ((long)flickering_mesh_vars->blend2 << 4) |
+                         ((long)flickering_mesh_vars->blend3 << 6) |
                          ((long)flickering_mesh_vars->alpha << 32);
-            color = (flickering_mesh_vars->alpha << 24) | (flickering_mesh_vars->blue << 16) | (flickering_mesh_vars->green << 8) | flickering_mesh_vars->red;
+            color = (flickering_mesh_vars->alpha << 24) | (flickering_mesh_vars->blue << 16) |
+                    (flickering_mesh_vars->green << 8) | flickering_mesh_vars->red;
             quad.color[0] = color;
             quad.color[1] = color;
             quad.color[2] = color;
@@ -263,7 +271,8 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
             fast_vec_scale(&left_step, &left_step, inv_y);
             fast_vec_sub(&right_step, &corner[3], &corner[1]);
             fast_vec_scale(&right_step, &right_step, inv_y);
-            phase_step = (flickering_mesh_vars->phase_end - flickering_mesh_vars->phase_start) * inv_y;
+            phase_step =
+                (flickering_mesh_vars->phase_end - flickering_mesh_vars->phase_start) * inv_y;
             amp_step = (flickering_mesh_vars->amp_end - flickering_mesh_vars->amp_start) * inv_y;
             amp2_step = (flickering_mesh_vars->amp2_end - flickering_mesh_vars->amp2_start) * inv_y;
             phase0_step = (flickering_mesh_vars->phase0_end - flickering_mesh_vars->phase0) * inv_x;
@@ -294,28 +303,33 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     phase0 += phase0_step,
                     phase1 += phase1_step,
                     i++) {
-                    float y = convert_integer_to_float(i) / convert_integer_to_float(flickering_mesh_vars->ny);
+                    float y = convert_integer_to_float(i) /
+                              convert_integer_to_float(flickering_mesh_vars->ny);
                     qcopy_nc(&point, &left);
                     j = 0;
                     fast_vec_sub(&step, &right, &left);
                     fast_vec_scale(&step, &step, inv_x);
                     row_noise = interpolate_sample_ring_data_first((char *)flickering_mesh_vars, y);
                     for (; j <= flickering_mesh_vars->nx; j++) {
-                        float x = convert_integer_to_float(j) / convert_integer_to_float(flickering_mesh_vars->nx);
+                        float x = convert_integer_to_float(j) /
+                                  convert_integer_to_float(flickering_mesh_vars->nx);
                         float theta;
                         float wave =
                             time * phase +
-                            flickering_mesh_vars->noise_amp * fast_sin(normalize_angle(flickering_mesh_vars->noise_speed * time));
-                        float noise = interpolate_sample_ring_data_first((char *)flickering_mesh_vars, x);
+                            flickering_mesh_vars->noise_amp *
+                                fast_sin(normalize_angle(flickering_mesh_vars->noise_speed * time));
+                        float noise =
+                            interpolate_sample_ring_data_first((char *)flickering_mesh_vars, x);
                         float angle0, angle1, shape, drop, a, b, normal_angle0, normal_angle1;
                         drop = z0 * x + z1 * (1.0f - x);
                         theta = x * 3.1415927f;
-                        wave += noise * flickering_mesh_vars->noise_u + row_noise * flickering_mesh_vars->noise_v +
+                        wave += noise * flickering_mesh_vars->noise_u +
+                                row_noise * flickering_mesh_vars->noise_v +
                                 bias * flickering_mesh_vars->noise_bias;
-                        angle0 =
-                            normalize_angle(wave + phase0 + flickering_mesh_vars->wave_u * x + flickering_mesh_vars->wave2_v * y);
-                        angle1 =
-                            normalize_angle(wave + phase1 + flickering_mesh_vars->wave_v * y + flickering_mesh_vars->wave2_u * x);
+                        angle0 = normalize_angle(wave + phase0 + flickering_mesh_vars->wave_u * x +
+                                                 flickering_mesh_vars->wave2_v * y);
+                        angle1 = normalize_angle(wave + phase1 + flickering_mesh_vars->wave_v * y +
+                                                 flickering_mesh_vars->wave2_u * x);
                         shape = fast_sin(theta);
                         shape = square_root(shape);
                         drop *= shape;
@@ -325,21 +339,25 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                             &sv1, &left_step, amp2 * fast_sin(angle1) * shape * noise);
                         a = fast_sin(y * 3.1415927f);
                         b = fast_sin(theta);
-                        normal_angle0 = fast_sin(normalize_angle(wave + flickering_mesh_vars->wave_u * x));
-                        normal_angle1 = fast_sin(normalize_angle(wave + flickering_mesh_vars->wave2_v * y));
-                        fast_vec_normalize(
-                            &sv3,
-                            &normal,
-                            a * b *
-                                (flickering_mesh_vars->normal_u * normal_angle0 + flickering_mesh_vars->normal_v * normal_angle1));
+                        normal_angle0 =
+                            fast_sin(normalize_angle(wave + flickering_mesh_vars->wave_u * x));
+                        normal_angle1 =
+                            fast_sin(normalize_angle(wave + flickering_mesh_vars->wave2_v * y));
+                        fast_vec_normalize(&sv3,
+                                           &normal,
+                                           a * b *
+                                               (flickering_mesh_vars->normal_u * normal_angle0 +
+                                                flickering_mesh_vars->normal_v * normal_angle1));
                         fast_vec_normalize(&sv4, &left_step, drop);
                         fast_vec_add(&sv2, &sv0, &sv1);
                         fast_vec_add(&sv2, &sv2, &sv3);
                         fast_vec_sub(&sv2, &sv2, &sv4);
                         fast_vec_add((Vec4 *)(points + i * row_bytes) + j, &point, &sv2);
                         *(float *)(points + (i * row_bytes + j * sizeof(Vec4)) + 12) =
-                            1.0f / ((1.0f - flickering_mesh_vars->alpha_u + flickering_mesh_vars->alpha_u * shape * shape * shape) *
-                                    (1.0f - flickering_mesh_vars->alpha_v + flickering_mesh_vars->alpha_v * y));
+                            1.0f / ((1.0f - flickering_mesh_vars->alpha_u +
+                                     flickering_mesh_vars->alpha_u * shape * shape * shape) *
+                                    (1.0f - flickering_mesh_vars->alpha_v +
+                                     flickering_mesh_vars->alpha_v * y));
                         fast_vec_add(&point, &point, &step);
                     }
                     fast_vec_add(&left, &left, &left_step);
@@ -351,15 +369,17 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                 float f = split_float_fraction(
                     &fraction,
                     time * flickering_mesh_vars->u_rate +
-                        flickering_mesh_vars->u_amp * fast_sin(normalize_angle(time * flickering_mesh_vars->u_phase)));
+                        flickering_mesh_vars->u_amp *
+                            fast_sin(normalize_angle(time * flickering_mesh_vars->u_phase)));
                 for (i = 0; i <= flickering_mesh_vars->nx; i++) {
                     u[i] = f;
                     f += inv_x / flickering_mesh_vars->texture_w_count;
                 }
-                f = split_float_fraction(&fraction,
-                                         time * flickering_mesh_vars->v_rate +
-                                             flickering_mesh_vars->v_amp *
-                                                 fast_sin(normalize_angle(time * flickering_mesh_vars->v_phase)));
+                f = split_float_fraction(
+                    &fraction,
+                    time * flickering_mesh_vars->v_rate +
+                        flickering_mesh_vars->v_amp *
+                            fast_sin(normalize_angle(time * flickering_mesh_vars->v_phase)));
                 for (i = 0; i <= flickering_mesh_vars->ny; i++) {
                     v[i] = f;
                     f += inv_y / flickering_mesh_vars->texture_h_count;
@@ -394,24 +414,28 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                               truncate_float_to_s32(
                                   *(float *)(points + (row_offset + (j) * sizeof(Vec4)) + 12)))
                              << 24) |
-                            (flickering_mesh_vars->blue << 16) | (flickering_mesh_vars->green << 8) | flickering_mesh_vars->red;
+                            (flickering_mesh_vars->blue << 16) |
+                            (flickering_mesh_vars->green << 8) | flickering_mesh_vars->red;
                         quad.color[1] =
                             ((alpha / truncate_float_to_s32(*(
                                           float *)(points + (row_offset + j1 * sizeof(Vec4)) + 12)))
                              << 24) |
-                            (flickering_mesh_vars->blue << 16) | (flickering_mesh_vars->green << 8) | flickering_mesh_vars->red;
+                            (flickering_mesh_vars->blue << 16) |
+                            (flickering_mesh_vars->green << 8) | flickering_mesh_vars->red;
                         quad.color[2] =
                             ((alpha /
                               truncate_float_to_s32(
                                   *(float *)(points + (next_offset + (j) * sizeof(Vec4)) + 12)))
                              << 24) |
-                            (flickering_mesh_vars->blue << 16) | (flickering_mesh_vars->green << 8) | flickering_mesh_vars->red;
+                            (flickering_mesh_vars->blue << 16) |
+                            (flickering_mesh_vars->green << 8) | flickering_mesh_vars->red;
                         quad.color[3] =
                             ((alpha /
                               truncate_float_to_s32(
                                   *(float *)(points + (next_offset + j1 * sizeof(Vec4)) + 12)))
                              << 24) |
-                            (flickering_mesh_vars->blue << 16) | (flickering_mesh_vars->green << 8) | flickering_mesh_vars->red;
+                            (flickering_mesh_vars->blue << 16) |
+                            (flickering_mesh_vars->green << 8) | flickering_mesh_vars->red;
                         draw_geometry_quad(mesh_quad, 0, 0);
                     }
                 }
@@ -471,66 +495,86 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
             }
             if (flickering_mesh_vars->flags & 2) {
                 if (fast_dec_timer(&flickering_mesh_vars->particle_timer)) {
-                    flickering_mesh_vars->particle_timer = scale_game_frames(flickering_mesh_vars->particle_ticks);
+                    flickering_mesh_vars->particle_timer =
+                        scale_game_frames(flickering_mesh_vars->particle_ticks);
                     for (i = 0; i < flickering_mesh_vars->particle_count; i++) {
                         float width = flickering_mesh_vars->size_x * 0.5f;
-                        float x = random_float_between(-1.0f, 1.0f) * flickering_mesh_vars->particle_range;
+                        float x = random_float_between(-1.0f, 1.0f) *
+                                  flickering_mesh_vars->particle_range;
                         float fraction = random_float_between(0.0f, x);
                         float size;
                         short life;
                         int   r, g, b, a;
                         Vec4 *particle_motion = &sv0;
-                        fast_vec_normalize(
-                            &sv2,
-                            &left_step,
-                            -(flickering_mesh_vars->particle_offset + square_root(fast_cos(fraction * 3.1415927f)) *
-                                                          flickering_mesh_vars->particle_height));
+                        fast_vec_normalize(&sv2,
+                                           &left_step,
+                                           -(flickering_mesh_vars->particle_offset +
+                                             square_root(fast_cos(fraction * 3.1415927f)) *
+                                                 flickering_mesh_vars->particle_height));
                         fast_vec_normalize(&sv1, &step, fraction * width);
                         fast_vec_add(&sv1, &sv1, &moby->pos);
                         fast_vec_add(&sv1, &sv1, &sv2);
-                        sv0.f[0] = random_float_between(-flickering_mesh_vars->particle_xy, flickering_mesh_vars->particle_xy) *
+                        sv0.f[0] = random_float_between(-flickering_mesh_vars->particle_xy,
+                                                        flickering_mesh_vars->particle_xy) *
                                    frame_scale;
-                        sv0.f[1] = random_float_between(-flickering_mesh_vars->particle_xy, flickering_mesh_vars->particle_xy) *
+                        sv0.f[1] = random_float_between(-flickering_mesh_vars->particle_xy,
+                                                        flickering_mesh_vars->particle_xy) *
                                    frame_scale;
-                        sv0.f[2] = random_float_between(0.0f, flickering_mesh_vars->particle_z) * frame_scale;
-                        size = random_float_between(flickering_mesh_vars->particle_size0, flickering_mesh_vars->particle_size1);
+                        sv0.f[2] = random_float_between(0.0f, flickering_mesh_vars->particle_z) *
+                                   frame_scale;
+                        size = random_float_between(flickering_mesh_vars->particle_size0,
+                                                    flickering_mesh_vars->particle_size1);
                         life = scale_game_frames(flickering_mesh_vars->particle_life);
                         r = flickering_mesh_vars->particle_r;
                         g = flickering_mesh_vars->particle_g;
                         b = flickering_mesh_vars->particle_b;
-                        a = truncate_float_to_s32(convert_integer_to_float(flickering_mesh_vars->particle_a) *
-                                                  fraction);
+                        a = truncate_float_to_s32(
+                            convert_integer_to_float(flickering_mesh_vars->particle_a) * fraction);
                         spawn_colored_effect_size_first(
                             moby, &sv1, particle_motion, size, life, r, g, b, a);
                     }
                 }
                 if (fast_dec_timer_s16(&flickering_mesh_vars->puff_timer)) {
-                    flickering_mesh_vars->puff_timer = scale_game_frames(flickering_mesh_vars->puff_ticks);
+                    flickering_mesh_vars->puff_timer =
+                        scale_game_frames(flickering_mesh_vars->puff_ticks);
                     for (i = 0; i < flickering_mesh_vars->puff_count; i++) {
-                        int puff_spawn_color = (flickering_mesh_vars->puff_c0[3] << 24) | (flickering_mesh_vars->puff_c0[2] << 16) |
-                                               (flickering_mesh_vars->puff_c0[1] << 8) | flickering_mesh_vars->puff_c0[0];
-                        int puff_payload_color = (flickering_mesh_vars->puff_c1[3] << 24) | (flickering_mesh_vars->puff_c1[2] << 16) |
-                                 (flickering_mesh_vars->puff_c1[1] << 8) | flickering_mesh_vars->puff_c1[0];
+                        int puff_spawn_color = (flickering_mesh_vars->puff_c0[3] << 24) |
+                                               (flickering_mesh_vars->puff_c0[2] << 16) |
+                                               (flickering_mesh_vars->puff_c0[1] << 8) |
+                                               flickering_mesh_vars->puff_c0[0];
+                        int puff_payload_color = (flickering_mesh_vars->puff_c1[3] << 24) |
+                                                 (flickering_mesh_vars->puff_c1[2] << 16) |
+                                                 (flickering_mesh_vars->puff_c1[1] << 8) |
+                                                 flickering_mesh_vars->puff_c1[0];
                         float width = flickering_mesh_vars->size_x * 0.5f;
-                        float size = random_float_between(flickering_mesh_vars->puff_size0, flickering_mesh_vars->puff_size1);
-                        int   life = scale_game_frames(
-                            random_int_between(flickering_mesh_vars->puff_life0, flickering_mesh_vars->puff_life1));
-                        float fraction = random_float_between(-1.0f, 1.0f) * flickering_mesh_vars->puff_range;
+                        float size = random_float_between(flickering_mesh_vars->puff_size0,
+                                                          flickering_mesh_vars->puff_size1);
+                        int   life = scale_game_frames(random_int_between(
+                            flickering_mesh_vars->puff_life0, flickering_mesh_vars->puff_life1));
+                        float fraction =
+                            random_float_between(-1.0f, 1.0f) * flickering_mesh_vars->puff_range;
                         float shape;
                         fraction = random_float_between(-fraction, fraction);
                         shape = square_root(fast_cos(fraction * 3.1415927f));
-                        fast_vec_normalize(
-                            &sv2, &left_step, -(flickering_mesh_vars->puff_offset + shape * flickering_mesh_vars->puff_height));
+                        fast_vec_normalize(&sv2,
+                                           &left_step,
+                                           -(flickering_mesh_vars->puff_offset +
+                                             shape * flickering_mesh_vars->puff_height));
                         fast_vec_normalize(&sv1, &step, fraction * width);
                         fast_vec_add(&sv1, &sv1, &moby->pos);
                         fast_vec_add(&sv1, &sv1, &sv2);
-                        sv0.f[0] =
-                            random_float_between(-flickering_mesh_vars->puff_xy, flickering_mesh_vars->puff_xy) * frame_scale;
-                        sv0.f[1] =
-                            random_float_between(-flickering_mesh_vars->puff_xy, flickering_mesh_vars->puff_xy) * frame_scale;
-                        sv0.f[2] = random_float_between(0.0f, flickering_mesh_vars->puff_z) * frame_scale;
-                        fast_vec_scale(
-                            &sv0, &sv0, 1.0f - flickering_mesh_vars->puff_blend + shape * flickering_mesh_vars->puff_blend);
+                        sv0.f[0] = random_float_between(-flickering_mesh_vars->puff_xy,
+                                                        flickering_mesh_vars->puff_xy) *
+                                   frame_scale;
+                        sv0.f[1] = random_float_between(-flickering_mesh_vars->puff_xy,
+                                                        flickering_mesh_vars->puff_xy) *
+                                   frame_scale;
+                        sv0.f[2] =
+                            random_float_between(0.0f, flickering_mesh_vars->puff_z) * frame_scale;
+                        fast_vec_scale(&sv0,
+                                       &sv0,
+                                       1.0f - flickering_mesh_vars->puff_blend +
+                                           shape * flickering_mesh_vars->puff_blend);
                         spawn_effect_particle_with_target_scalar(
                             &sv1, &sv0, puff_spawn_color, puff_payload_color, size, life);
                     }
@@ -539,22 +583,27 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     PointLight *light = &l08_point_light_slots[flickering_mesh_vars->light];
                     if (fast_vec_dist(&flickering_mesh_vars->light_pos, &light->pos) <
                         flickering_mesh_vars->light_speed * frame_scale) {
-                        float x =
-                            (random_float_between(-(int)flickering_mesh_vars->light_range_x, flickering_mesh_vars->light_range_x) +
-                             flickering_mesh_vars->size_x) *
-                            0.5f;
-                        float y =
-                            (random_float_between(-(int)flickering_mesh_vars->light_range_y, flickering_mesh_vars->light_range_y) +
-                             flickering_mesh_vars->size_y) *
-                            0.5f;
+                        float x = (random_float_between(-(int)flickering_mesh_vars->light_range_x,
+                                                        flickering_mesh_vars->light_range_x) +
+                                   flickering_mesh_vars->size_x) *
+                                  0.5f;
+                        float y = (random_float_between(-(int)flickering_mesh_vars->light_range_y,
+                                                        flickering_mesh_vars->light_range_y) +
+                                   flickering_mesh_vars->size_y) *
+                                  0.5f;
                         fast_vec_normalize(&sv0, &step, x);
                         fast_vec_normalize(&sv1, &left_step, -y);
                         fast_vec_add(&flickering_mesh_vars->light_pos, &sv0, &sv1);
-                        fast_vec_add(&flickering_mesh_vars->light_pos, &flickering_mesh_vars->light_pos, &corner[0]);
-                        fast_vec_add(&flickering_mesh_vars->light_pos, &flickering_mesh_vars->light_pos, &moby->pos);
+                        fast_vec_add(&flickering_mesh_vars->light_pos,
+                                     &flickering_mesh_vars->light_pos,
+                                     &corner[0]);
+                        fast_vec_add(&flickering_mesh_vars->light_pos,
+                                     &flickering_mesh_vars->light_pos,
+                                     &moby->pos);
                     } else {
                         fast_vec_sub(&sv0, &flickering_mesh_vars->light_pos, &light->pos);
-                        fast_vec_normalize(&sv0, &sv0, flickering_mesh_vars->light_speed * frame_scale);
+                        fast_vec_normalize(
+                            &sv0, &sv0, flickering_mesh_vars->light_speed * frame_scale);
                         fast_vec_add(&light->pos, &light->pos, &sv0);
                         light->pos.f[3] = convert_integer_to_float(flickering_mesh_vars->radius);
                     }

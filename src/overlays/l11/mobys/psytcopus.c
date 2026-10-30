@@ -332,9 +332,9 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
             psytcopus_vars->unk8C = psytcopus_hurt_knockback_base_vertical_speed_gp * frame_time;
             psytcopus_vars->unkC0 = 3.0f;
             psytcopus_vars->unkC4 = 6.0f;
-            source_to_psytcopus_heading =
-                fast_arc_tan(psytcopus->pos.x - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.x,
-                             psytcopus->pos.y - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.y);
+            source_to_psytcopus_heading = fast_arc_tan(
+                psytcopus->pos.x - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.x,
+                psytcopus->pos.y - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.y);
             *(u128 *)&projectile_and_hit_vector_scratch = *(u128 *)(psytcopus_hit_record + 0x10);
             angle1 = source_to_psytcopus_heading;
             FUN_L00_0025ab48_p(&projectile_and_hit_vector_scratch,
@@ -358,9 +358,9 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
             psytcopus_vars->unk8C = psytcopus_death_knockback_base_vertical_speed_gp * frame_time;
             psytcopus_vars->unkC0 = 4.0f;
             psytcopus_vars->unkC4 = 10.0f;
-            source_to_psytcopus_heading =
-                fast_arc_tan(psytcopus->pos.x - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.x,
-                             psytcopus->pos.y - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.y);
+            source_to_psytcopus_heading = fast_arc_tan(
+                psytcopus->pos.x - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.x,
+                psytcopus->pos.y - (*(struct Moby **)(psytcopus_hit_record + 0x20))->pos.y);
             *(u128 *)&projectile_and_hit_vector_scratch = *(u128 *)(psytcopus_hit_record + 0x10);
             angle2 = source_to_psytcopus_heading;
             FUN_L00_0025ab48_p(&projectile_and_hit_vector_scratch,

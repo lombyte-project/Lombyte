@@ -180,10 +180,14 @@ void fred_pokitaru_update(struct Moby *moby) {
         float pitch;
         qcopy(sentry_look_tracking_vectors.eye, &moby->pos);
         sentry_look_tracking_vectors.eye[2] += 1.0f;
-        fast_vec_sub(sentry_look_tracking_vectors.delta, sentry_look_tracking_vectors.target, sentry_look_tracking_vectors.eye);
-        yaw =
-            fast_subtract_rotations(fast_arc_tan(sentry_look_tracking_vectors.delta[0], sentry_look_tracking_vectors.delta[1]), moby->rot.z);
-        pitch = -fast_arc_tan(vector_length_xy(sentry_look_tracking_vectors.delta), sentry_look_tracking_vectors.delta[2]);
+        fast_vec_sub(sentry_look_tracking_vectors.delta,
+                     sentry_look_tracking_vectors.target,
+                     sentry_look_tracking_vectors.eye);
+        yaw = fast_subtract_rotations(fast_arc_tan(sentry_look_tracking_vectors.delta[0],
+                                                   sentry_look_tracking_vectors.delta[1]),
+                                      moby->rot.z);
+        pitch = -fast_arc_tan(vector_length_xy(sentry_look_tracking_vectors.delta),
+                              sentry_look_tracking_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

@@ -364,8 +364,8 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         qcopy(ceo_gaze_vectors.eye, ceo_moby->position);
         ceo_gaze_vectors.eye[2] += 1.0f;
         fast_vec_sub(ceo_gaze_vectors.delta, ceo_gaze_vectors.target, ceo_gaze_vectors.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(ceo_gaze_vectors.delta[0], ceo_gaze_vectors.delta[1]),
-                                      ceo_moby->yaw);
+        yaw = fast_subtract_rotations(
+            fast_arc_tan(ceo_gaze_vectors.delta[0], ceo_gaze_vectors.delta[1]), ceo_moby->yaw);
         pitch = -fast_arc_tan(vector_length_xy(ceo_gaze_vectors.delta), ceo_gaze_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;

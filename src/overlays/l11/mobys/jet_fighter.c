@@ -554,7 +554,8 @@ void draw_ship_hud(struct Moby *moby) {
 
     fast_dec_timer(&ship_hud_vars->ammo_hint_timer);
     if ((hero.ship_ammo < 5 && help_records[0x57].count == 0) ||
-        (hero.ship_ammo == 0 && help_records[0x57].count < 2 && ship_hud_vars->ammo_hint_timer == 0)) {
+        (hero.ship_ammo == 0 && help_records[0x57].count < 2 &&
+         ship_hud_vars->ammo_hint_timer == 0)) {
         help_request(0x2AFE, 0x57);
         ship_hud_vars->ammo_hint_timer = scale_game_frames(1200);
     }
@@ -586,7 +587,8 @@ void draw_ship_hud(struct Moby *moby) {
         /* CSM1 palette order: bits 3 and 4 of the entry swap */
         hp_bar_palette_index = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
         if (j < fill) {
-            hp_bar_palette.clut[hp_bar_palette_index] = ship_hp_bar_saved_palette[hp_bar_palette_index];
+            hp_bar_palette.clut[hp_bar_palette_index] =
+                ship_hp_bar_saved_palette[hp_bar_palette_index];
         } else {
             hp_bar_palette.clut[hp_bar_palette_index] = 0x80000000;
         }

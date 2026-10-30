@@ -53,11 +53,14 @@ void draw_pulsing_timer_display(char *moby) {
     timer_text[1] = *(int *)(timer_moby_vars + 0xB4) / scale_game_frames(0xE10) + 0x30;
     timer_text[2] = 0x3A;
     timer_text[3] =
-        *(int *)(timer_moby_vars + 0xB4) % scale_game_frames(0xE10) / scale_game_frames(0x258) + 0x30;
+        *(int *)(timer_moby_vars + 0xB4) % scale_game_frames(0xE10) / scale_game_frames(0x258) +
+        0x30;
     timer_text[4] =
-        *(int *)(timer_moby_vars + 0xB4) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
+        *(int *)(timer_moby_vars + 0xB4) % scale_game_frames(0x258) / scale_game_frames(0x3C) +
+        0x30;
     timer_text[5] = 0x3A;
-    timer_text[6] = *(int *)(timer_moby_vars + 0xB4) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
+    timer_text[6] =
+        *(int *)(timer_moby_vars + 0xB4) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
     timer_text[7] = truncate_float_to_s32((float)random_integer_below(10)) + 0x30;
     font_print_center_large(W(timer_text_center_x_gp), W(timer_text_y_gp), col, (int)timer_text, 8);
 }

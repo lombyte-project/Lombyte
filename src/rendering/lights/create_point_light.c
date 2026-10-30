@@ -88,7 +88,8 @@ void create_point_light(s32 i) {
             slot->tfrag_start = slot->tie_count;
             scale_vector(&sphere, &sphere, 1024.0f);
             object_record_cursor = D_00160E8C;
-            for (tfrag_index = 0; tfrag_index < tfrag_render_record_count; tfrag_index++, object_record_cursor++) {
+            for (tfrag_index = 0; tfrag_index < tfrag_render_record_count;
+                 tfrag_index++, object_record_cursor++) {
                 if (FUN_001f9bb0(&sphere, object_record_cursor)) {
                     *instance_index_cursor++ = tfrag_index;
                     v = object_record_cursor->lights;

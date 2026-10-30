@@ -19,7 +19,8 @@ void update_moby_list_empty_dialogue_trigger(struct Moby *moby) {
     int *dialogue_trigger_vars = (int *)moby->pvars;
     if (dialogue_trigger_vars[0] == -1) {
         mark_moby_for_removal(moby);
-    } else if (dialogue_trigger_vars[1] != -1 && count_active_moby_group_members(dialogue_trigger_vars[1], -1) == 0) {
+    } else if (dialogue_trigger_vars[1] != -1 &&
+               count_active_moby_group_members(dialogue_trigger_vars[1], -1) == 0) {
         unsigned char *dialogue_latch_base = item_unlocked;
         if (dialogue_latch_base[0x13] == 0) {
             dialogue_latch_base[0x13] = 1;

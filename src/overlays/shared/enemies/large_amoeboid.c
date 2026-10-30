@@ -273,19 +273,22 @@ void large_amoeboid_update(unsigned char *moby) {
                     if (moby[0x53] != 1)
                         blend_moby_animation(moby, 1, 0, scale_game_frames(10));
                     clear_u64_value(large_amoeboid_vars + 0x40);
-                    *(float *)(large_amoeboid_vars + 0x234) = random_float_between(-0.34906584f, 0.34906584f);
+                    *(float *)(large_amoeboid_vars + 0x234) =
+                        random_float_between(-0.34906584f, 0.34906584f);
                 } else {
                     *(int *)(large_amoeboid_vars + 0x204) = 2;
                 }
             }
         }
-        if (*(int *)(large_amoeboid_vars + 0x22c) != 0 && *(int *)(large_amoeboid_vars + 0x204) == 2) {
+        if (*(int *)(large_amoeboid_vars + 0x22c) != 0 &&
+            *(int *)(large_amoeboid_vars + 0x204) == 2) {
             moby[0x20] = 15;
             if (moby[0x53] != 1)
                 blend_moby_animation(moby, 1, 0, 5);
             return;
         }
-        *(float *)(large_amoeboid_vars + 0x194) = *(float *)(large_amoeboid_vars + 0x23c) * 0.5f * frame_time_gp;
+        *(float *)(large_amoeboid_vars + 0x194) =
+            *(float *)(large_amoeboid_vars + 0x23c) * 0.5f * frame_time_gp;
         if (moby[0x53] != 1)
             blend_moby_animation(moby, 1, 0, 5);
         moby[0x20] = 2;
@@ -325,7 +328,8 @@ void large_amoeboid_update(unsigned char *moby) {
                 *(int *)(large_amoeboid_vars + 0x204) = 2;
             }
         }
-        if (*(int *)(large_amoeboid_vars + 0x22c) != 0 && *(int *)(large_amoeboid_vars + 0x204) == 2) {
+        if (*(int *)(large_amoeboid_vars + 0x22c) != 0 &&
+            *(int *)(large_amoeboid_vars + 0x204) == 2) {
             moby[0x20] = 15;
             if (moby[0x53] != 1)
                 blend_moby_animation(moby, 1, 0, 5);
@@ -346,7 +350,8 @@ void large_amoeboid_update(unsigned char *moby) {
         move[1] = fast_sin(MOBY(moby)->rot.z);
         move[2] = 0.0f;
         FUN_L00_00258b50(moby, large_amoeboid_vars + 0x170, move, large_amoeboid_vars + 0x40, 1.0f);
-        if (FUN_L00_00261b48(*(int *)(large_amoeboid_vars + 0x240), moby + 0x10, target + 0x10, hit) != 0 &&
+        if (FUN_L00_00261b48(
+                *(int *)(large_amoeboid_vars + 0x240), moby + 0x10, target + 0x10, hit) != 0 &&
             fast_vec_dist(moby + 0x10, hit) < 1.5f)
             blocked = 1;
         if (*(int *)(large_amoeboid_vars + 0x22c) == 0) {
@@ -376,8 +381,9 @@ void large_amoeboid_update(unsigned char *moby) {
         distance = vector_distance_xy(moby + 0x10, target_position);
         if (distance < large_amoeboid_path_lunge_distance_threshold_gp) {
             moby[0x20] = 6;
-            *(float *)(large_amoeboid_vars + 0x194) =
-                (*(float *)(large_amoeboid_vars + 0x23c) + *(float *)(large_amoeboid_vars + 0x23c)) * frame_time_gp;
+            *(float *)(large_amoeboid_vars + 0x194) = (*(float *)(large_amoeboid_vars + 0x23c) +
+                                                       *(float *)(large_amoeboid_vars + 0x23c)) *
+                                                      frame_time_gp;
             if (moby[0x53] != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
             return;
@@ -412,7 +418,8 @@ void large_amoeboid_update(unsigned char *moby) {
                 move[1] = fast_sin(MOBY(moby)->rot.z);
                 move[1] += move[1];
                 move[2] = 0.0f;
-                FUN_L00_00258b50(moby, large_amoeboid_vars + 0x170, move, large_amoeboid_vars + 0x40, 1.0f);
+                FUN_L00_00258b50(
+                    moby, large_amoeboid_vars + 0x170, move, large_amoeboid_vars + 0x40, 1.0f);
             } else {
                 *(int *)(large_amoeboid_vars + 0x204) = 2;
             }
@@ -440,7 +447,8 @@ void large_amoeboid_update(unsigned char *moby) {
             move[1] = fast_sin(*rotation);
             move[1] += move[1];
             move[2] = 0.0f;
-            FUN_L00_00258b50(moby, large_amoeboid_vars + 0x170, move, large_amoeboid_vars + 0x40, 1.0f);
+            FUN_L00_00258b50(
+                moby, large_amoeboid_vars + 0x170, move, large_amoeboid_vars + 0x40, 1.0f);
         }
         if (is_value_within_interpolated_window(15.5f, moby) != 0 &&
             vector_distance_xy(moby + 0x10, (target_position = target + 0x10)) < 2.0f &&
@@ -459,7 +467,8 @@ void large_amoeboid_update(unsigned char *moby) {
             moby[0x20] = 7;
             if (moby[0x53] != 3)
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
-            *(float *)(large_amoeboid_vars + 0x194) = *(float *)(large_amoeboid_vars + 0x23c) * frame_time_gp;
+            *(float *)(large_amoeboid_vars + 0x194) =
+                *(float *)(large_amoeboid_vars + 0x23c) * frame_time_gp;
         }
         break;
     }
@@ -509,7 +518,8 @@ void large_amoeboid_update(unsigned char *moby) {
             move[1] = fast_sin(MOBY(moby)->rot.z);
             move[1] += move[1];
             move[2] = 0.0f;
-            FUN_L00_00258b50(moby, large_amoeboid_vars + 0x170, move, large_amoeboid_vars + 0x40, 1.0f);
+            FUN_L00_00258b50(
+                moby, large_amoeboid_vars + 0x170, move, large_amoeboid_vars + 0x40, 1.0f);
         }
         if (*(int *)(large_amoeboid_vars + 0x204) != 2 && (moby[0x20] = 4, moby[0x53] != 1))
             blend_moby_animation(moby, 1, 0, scale_game_frames(3));
@@ -528,7 +538,8 @@ void large_amoeboid_update(unsigned char *moby) {
                                    move);
             if (path_hit != 0) {
                 FUN_0022da68(4, 0, (char *)moby);
-                *(float *)(large_amoeboid_vars + 0x194) = *(float *)(large_amoeboid_vars + 0x23c) * frame_time_gp;
+                *(float *)(large_amoeboid_vars + 0x194) =
+                    *(float *)(large_amoeboid_vars + 0x23c) * frame_time_gp;
                 moby[0x20] = 9;
                 if (moby[0x53] != 5)
                     blend_moby_animation(moby, 5, 4, scale_game_frames(10));
@@ -939,7 +950,8 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
     f32  *origin_copy;
     u128 *source;
     f32   angle, radius, vertical, lateral, scale, scaled_radius, scaled_vertical;
-    s32   i, next_group_index, j, lower, upper, spark_header_frame_count, downward_adjustment_frame_count, duration;
+    s32   i, next_group_index, j, lower, upper, spark_header_frame_count,
+        downward_adjustment_frame_count, duration;
 
     i = 0;
     if (amoeboid_burst_group_count_gp > 0) {
@@ -948,8 +960,9 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
         origin_copy = origin;
         do {
             qcopy_nc(dest, source);
-            add_random_offset_to_vector_xyz(
-                dest, amoeboid_burst_group_position_jitter_bound_gp * *(f32 *)(burst_amoeboid_vars + 0x250));
+            add_random_offset_to_vector_xyz(dest,
+                                            amoeboid_burst_group_position_jitter_bound_gp *
+                                                *(f32 *)(burst_amoeboid_vars + 0x250));
             spawn_position[2] += 1.0f;
             angle = random_angle_radians();
             radius = random_float_between(amoeboid_burst_radial_speed_min_gp,
@@ -985,8 +998,10 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
                     fast_tween_color(random_float_between(0.0f, 1.0f),
                                      amoeboid_burst_spark_secondary_color_randomization_start_gp,
                                      amoeboid_burst_spark_secondary_color_randomization_end_gp);
-                spark_header_frame_count = scale_game_frames(amoeboid_burst_spark_header_frame_count_gp);
-                downward_adjustment_frame_count = scale_game_frames(amoeboid_burst_downward_velocity_adjustment_frames_gp);
+                spark_header_frame_count =
+                    scale_game_frames(amoeboid_burst_spark_header_frame_count_gp);
+                downward_adjustment_frame_count =
+                    scale_game_frames(amoeboid_burst_downward_velocity_adjustment_frames_gp);
                 duration = truncate_float_to_s32(FUN_00220e20(
                     random_float_between((f32)amoeboid_burst_spark_duration_base_gp * 0.5f,
                                          (f32)amoeboid_burst_spark_duration_base_gp * 2.5f)));

@@ -100,7 +100,8 @@ void append_billboard_batch(void) {
         } else if (distance < 2.0f) {
             distance = 2.0f;
         }
-        radius = billboard_record->radius_scale * (convert_integer_to_float(billboard_record->alpha + 16) * 0.015625f) *
+        radius = billboard_record->radius_scale *
+                 (convert_integer_to_float(billboard_record->alpha + 16) * 0.015625f) *
                  ((24.0f - distance) * 16.0f);
         sine_offset = truncate_float_to_s32(radius * fast_sin(billboard_record->angle));
         cosine_offset = truncate_float_to_s32(radius * fast_cos(billboard_record->angle));

@@ -98,12 +98,16 @@ void elevator_update(struct Moby *moby) {
             camera_pose_base = D_L13_001670C0_2b39e0 - 0x140;
             fast_vec_scale(camera_position_scratch, camera_position_scratch, t);
             fast_vec_add(camera_pose_scratch, camera_pose_scratch, camera_position_scratch);
-            blended_camera_rotation[1] = fast_add_rotations(
-                fast_subtract_rotations(*(float *)(camera_pose_base + 0x154), blended_camera_rotation[1]) * t,
-                blended_camera_rotation[1]);
-            blended_camera_rotation[2] = fast_add_rotations(
-                fast_subtract_rotations(*(float *)(camera_pose_base + 0x158), blended_camera_rotation[2]) * t,
-                blended_camera_rotation[2]);
+            blended_camera_rotation[1] =
+                fast_add_rotations(fast_subtract_rotations(*(float *)(camera_pose_base + 0x154),
+                                                           blended_camera_rotation[1]) *
+                                       t,
+                                   blended_camera_rotation[1]);
+            blended_camera_rotation[2] =
+                fast_add_rotations(fast_subtract_rotations(*(float *)(camera_pose_base + 0x158),
+                                                           blended_camera_rotation[2]) *
+                                       t,
+                                   blended_camera_rotation[2]);
             set_camera_position(camera_pose_scratch);
             set_camera_rotation(blended_camera_rotation);
         } else {
@@ -207,7 +211,8 @@ void elevator_update(struct Moby *moby) {
         } else if (moby->state == 5) {
             char *p = (char *)&hero.motion.pos;
             float d = vector_distance_xy(&moby->pos, p);
-            if (absolute_float(*(float *)(p + 0x258) - elevator_vars->top) < 2.0f && d < 32.0f && d > 5.0f) {
+            if (absolute_float(*(float *)(p + 0x258) - elevator_vars->top) < 2.0f && d < 32.0f &&
+                d > 5.0f) {
                 moby->command = 0;
                 moby->state = 2;
                 elevator_vars->speed = frame_time * 5.0f;

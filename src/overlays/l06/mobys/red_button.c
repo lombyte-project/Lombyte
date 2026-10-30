@@ -121,8 +121,12 @@ void red_button_update(struct Moby *moby) {
         break;
     case ROTATE_BUTTON_AND_LINKED_MOBYS: {
         float angle;
-        advance_accelerated_scalar(
-            &red_button_vars->t, &red_button_vars->vel, 1.0f, frame_time_sq, frame_time_sq, frame_time);
+        advance_accelerated_scalar(&red_button_vars->t,
+                                   &red_button_vars->vel,
+                                   1.0f,
+                                   frame_time_sq,
+                                   frame_time_sq,
+                                   frame_time);
         angle = red_button_vars->vel * 0.78539819f;
         moby->rot.x = fast_add_rotations(moby->rot.x, angle);
         D_L06_0015FFD8_304098[red_button_vars->moby1].rot.x =
@@ -184,8 +188,12 @@ void red_button_update(struct Moby *moby) {
             D_L06_0015F3FC = 1.0f - previous_value;
         }
         previous_value = red_button_vars->t;
-        advance_accelerated_scalar(
-            &red_button_vars->t, &red_button_vars->vel, 2.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f);
+        advance_accelerated_scalar(&red_button_vars->t,
+                                   &red_button_vars->vel,
+                                   2.0f,
+                                   frame_time_sq,
+                                   frame_time_sq,
+                                   frame_time * 0.5f);
         qcopy(&camera_position, &l06_cuboids[red_button_vars->cut].pos);
         camera_position.z = camera_position.z + red_button_vars->t * 18.0f;
         set_camera_position(&camera_position);
@@ -197,12 +205,16 @@ void red_button_update(struct Moby *moby) {
         for (i = 8; i >= 0; i--, particle_burst_cut_index_entry++) {
             if (previous_value < l06_cuboids[*particle_burst_cut_index_entry].rot.z &&
                 l06_cuboids[*particle_burst_cut_index_entry].rot.z < current_angle) {
-                emit_red_button_particle_burst((int)moby, &l06_cuboids[*particle_burst_cut_index_entry].pos);
+                emit_red_button_particle_burst((int)moby,
+                                               &l06_cuboids[*particle_burst_cut_index_entry].pos);
                 allocate_voice_for_group_entry(0, 0, moby);
             }
         }
         if (1.075f <= red_button_vars->t) {
-            set_race_camera(&l06_cuboids[red_button_vars->cut2].pos, &l06_cuboids[red_button_vars->cut2].rot, 0x72, 0);
+            set_race_camera(&l06_cuboids[red_button_vars->cut2].pos,
+                            &l06_cuboids[red_button_vars->cut2].rot,
+                            0x72,
+                            0);
             fade_to_black(scale_game_frames(10));
             moby->state = 6;
             jet_end_mount(3);
@@ -219,8 +231,12 @@ void red_button_update(struct Moby *moby) {
         }
         break;
     case HOLD_OFFSET_CAMERA_UNTIL_PROGRESS_COMPLETE:
-        advance_accelerated_scalar(
-            &red_button_vars->t, &red_button_vars->vel, 2.0f, frame_time_sq, frame_time_sq, frame_time + frame_time);
+        advance_accelerated_scalar(&red_button_vars->t,
+                                   &red_button_vars->vel,
+                                   2.0f,
+                                   frame_time_sq,
+                                   frame_time_sq,
+                                   frame_time + frame_time);
         qcopy(&camera_rotation, &l06_cuboids[red_button_vars->cut2].pos);
         camera_rotation.z = camera_rotation.z + 1.0f;
         camera_rotation.y = camera_rotation.y - 2.5f;
@@ -232,7 +248,10 @@ void red_button_update(struct Moby *moby) {
         if (2.0f <= red_button_vars->t) {
             moby->state = 7;
             red_button_vars->timer2 = scale_game_frames(0xE10);
-            set_race_camera(&l06_cuboids[red_button_vars->cut2].pos, &l06_cuboids[red_button_vars->cut2].rot, 0, 0);
+            set_race_camera(&l06_cuboids[red_button_vars->cut2].pos,
+                            &l06_cuboids[red_button_vars->cut2].rot,
+                            0,
+                            0);
             jet_end_mount(3);
             set_moby_state_two((unsigned char *)&D_L06_0015FFD8_304098[red_button_vars->moby3]);
         }

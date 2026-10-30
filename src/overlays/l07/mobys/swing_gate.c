@@ -46,7 +46,8 @@ void update_swing_gate(struct Moby *moby) {
         break;
     case SWING_GATE_WAIT_FOR_OPEN_CONDITION:
         if (gate_motion->target != -1 && (target = &D_L07_0015FFD8[gate_motion->target]) != 0 &&
-            target->state != 0xFE && target->state != 0xFD && target->state != gate_motion->openState)
+            target->state != 0xFE && target->state != 0xFD &&
+            target->state != gate_motion->openState)
             return;
         gate_motion->vel = gate_motion->speed * frame_time;
         moby->rot.y = gate_motion->vel;
@@ -56,8 +57,8 @@ void update_swing_gate(struct Moby *moby) {
     case SWING_GATE_HOLD_ROTATION:
         break;
     case SWING_GATE_SWINGING:
-        gate_motion->vel =
-            fast_add_rotations(gate_motion->vel, fast_cos(moby->rot.y) * (gate_motion->speed * frame_time));
+        gate_motion->vel = fast_add_rotations(
+            gate_motion->vel, fast_cos(moby->rot.y) * (gate_motion->speed * frame_time));
         moby->rot.y = fast_add_rotations(moby->rot.y, gate_motion->vel);
         gate_motion->vel = gate_motion->vel * gate_motion->damp;
         target = &D_L07_0015FFD8[gate_motion->target];
@@ -69,7 +70,8 @@ void update_swing_gate(struct Moby *moby) {
         break;
     case SWING_GATE_RETURN_TO_ZERO:
         if (gate_motion->target == -1 || (target = &D_L07_0015FFD8[gate_motion->target]) == 0 ||
-            target->state == 0xFE || target->state == 0xFD || target->state == gate_motion->openState) {
+            target->state == 0xFE || target->state == 0xFD ||
+            target->state == gate_motion->openState) {
             allocate_voice_for_target_entry(0, 0, moby);
             moby->state = 2;
             break;

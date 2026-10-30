@@ -269,7 +269,9 @@ char *select_class5_target_or_hero(
 
 char *
 
-select_class5_target_or_hero(char *reference_moby, float *position, float *angles, int unused, int mode) {
+select_class5_target_or_hero(
+
+    char *reference_moby, float *position, float *angles, int unused, int mode) {
     char *candidate;
     char *best = 0;
     float target[4] __attribute__((aligned(16)));
@@ -298,7 +300,8 @@ select_class5_target_or_hero(char *reference_moby, float *position, float *angle
             angles[1], fast_arc_tan(distance, target[2] - position[2]));
         heightError *= heightError;
         if (checkCollision) {
-            if (8.0f < FUN_001f99c0(*(float *)(candidate + 0x18) - *(float *)(reference_moby + 0x18)))
+            if (8.0f <
+                FUN_001f99c0(*(float *)(candidate + 0x18) - *(float *)(reference_moby + 0x18)))
                 valid = 1;
             else
                 valid = FUN_001efa68_2bed90(position, target, 6, candidate, 0) != 0;
@@ -528,26 +531,38 @@ void initialize_moby_hop_trajectory(unsigned char *m,
                                     unsigned char *o,
                                     u128          *src) __asm__("FUN_L00_002bf8b0");
 
-void initialize_moby_hop_trajectory(unsigned char *hopping_moby, unsigned char *hop_trajectory, u128 *landing_position) {
-    float squared_horizontal_distance, uncapped_horizontal_speed, uncapped_vertical_launch_speed, vertical_launch_speed_limit;
+void initialize_moby_hop_trajectory(unsigned char *hopping_moby,
+                                    unsigned char *hop_trajectory,
+
+                                    u128 *landing_position) {
+    float squared_horizontal_distance, uncapped_horizontal_speed, uncapped_vertical_launch_speed,
+        vertical_launch_speed_limit;
 #define F2BF(p, x) (*(float *)((p) + (x)))
     *(int *)(hop_trajectory + 0x30) = 0;
     qcopy(hop_trajectory, landing_position);
     squared_horizontal_distance = vector_distance(hopping_moby + 0x10, hop_trajectory);
     squared_horizontal_distance = squared_horizontal_distance * squared_horizontal_distance;
-    uncapped_horizontal_speed = F2BF(hop_trajectory, 0x1C) * 35.0f * F2BF(hop_trajectory, 0x20) / (FUN_001f99c0(F2BF(hop_trajectory, 8) - F2BF(hopping_moby, 0x18)) + 1.0f) *
+    uncapped_horizontal_speed =
+        F2BF(hop_trajectory, 0x1C) * 35.0f * F2BF(hop_trajectory, 0x20) /
+        (FUN_001f99c0(F2BF(hop_trajectory, 8) - F2BF(hopping_moby, 0x18)) + 1.0f) *
         (squared_horizontal_distance + 0.25f);
     F2BF(hop_trajectory, 0x14) = uncapped_horizontal_speed;
     if (F2BF(hop_trajectory, 0x20) < uncapped_horizontal_speed)
         F2BF(hop_trajectory, 0x14) = F2BF(hop_trajectory, 0x20);
-    F2BF(hop_trajectory, 0x18) = fast_arc_tan(F2BF(hop_trajectory, 0) - F2BF(hopping_moby, 0x10), F2BF(hop_trajectory, 4) - F2BF(hopping_moby, 0x14));
-    uncapped_vertical_launch_speed = FUN_L00_0025abf0(hopping_moby + 0x10, hop_trajectory, 0, F2BF(hop_trajectory, 0x14), -F2BF(hop_trajectory, 0x1C));
+    F2BF(hop_trajectory, 0x18) = fast_arc_tan(F2BF(hop_trajectory, 0) - F2BF(hopping_moby, 0x10),
+                                              F2BF(hop_trajectory, 4) - F2BF(hopping_moby, 0x14));
+    uncapped_vertical_launch_speed = FUN_L00_0025abf0(hopping_moby + 0x10,
+                                                      hop_trajectory,
+                                                      0,
+                                                      F2BF(hop_trajectory, 0x14),
+                                                      -F2BF(hop_trajectory, 0x1C));
     vertical_launch_speed_limit = frame_time * 7.0f;
     F2BF(hop_trajectory, 0x10) = uncapped_vertical_launch_speed;
     if (vertical_launch_speed_limit < uncapped_vertical_launch_speed)
         F2BF(hop_trajectory, 0x10) = vertical_launch_speed_limit;
     hop_trajectory[0x2F] = 0;
-    F2BF(hop_trajectory, 0x14) = F2BF(hop_trajectory, 0x14) * (uncapped_vertical_launch_speed / F2BF(hop_trajectory, 0x10));
+    F2BF(hop_trajectory, 0x14) =
+        F2BF(hop_trajectory, 0x14) * (uncapped_vertical_launch_speed / F2BF(hop_trajectory, 0x10));
 }
 
 /* Tries a hop of the moby toward q: probes the ground at the landing point and the path to it, and sets the jump

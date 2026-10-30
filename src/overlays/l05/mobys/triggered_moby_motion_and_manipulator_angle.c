@@ -59,7 +59,8 @@ void update_triggered_moby_motion_and_manipulator_angle(char *moby) {
         break;
     case MOBY_WAIT_FOR_TRIGGER:
     case MOBY_WAIT_TO_RETURN_TO_SAVED_POSITION: {
-        u8 trigger = ((u8 *)*(int *)&D_L05_0015FFD8)[*(int *)(motion_and_manipulator_vars + 0x58) * 256 + 0xBC];
+        u8 trigger = ((u8 *)*(
+            int *)&D_L05_0015FFD8)[*(int *)(motion_and_manipulator_vars + 0x58) * 256 + 0xBC];
         if (trigger == 0)
             return;
         if (MOBY(moby)->state == 2 && trigger != 2) {
@@ -89,7 +90,8 @@ void update_triggered_moby_motion_and_manipulator_angle(char *moby) {
                          frame_time_sq * 4.1887903f,
                          frame_time_sq * 4.1887903f,
                          frame_time * 12.566371f);
-        if (*(float *)(motion_and_manipulator_vars + 0x60) > 0.5934119f || *(float *)(motion_and_manipulator_vars + 0x60) < 0.0f) {
+        if (*(float *)(motion_and_manipulator_vars + 0x60) > 0.5934119f ||
+            *(float *)(motion_and_manipulator_vars + 0x60) < 0.0f) {
             if (*(float *)(motion_and_manipulator_vars + 0x60) > 0.5934119f)
                 *(float *)(motion_and_manipulator_vars + 0x60) = 0.5934119f;
             else if (*(float *)(motion_and_manipulator_vars + 0x60) < 0.0f)
@@ -104,7 +106,8 @@ void update_triggered_moby_motion_and_manipulator_angle(char *moby) {
                     MOBY(moby)->state = 3;
             }
         }
-        FUN_L00_001fff28(motion_and_manipulator_vars + 0x20, 0, *(float *)(motion_and_manipulator_vars + 0x60));
+        FUN_L00_001fff28(
+            motion_and_manipulator_vars + 0x20, 0, *(float *)(motion_and_manipulator_vars + 0x60));
     } break;
     case MOBY_MOVE_TO_OFFSET_POSITION:
     case MOBY_RETURN_TO_SAVED_POSITION:

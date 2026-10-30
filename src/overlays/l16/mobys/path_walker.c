@@ -311,7 +311,7 @@ void initialize_path_walker_group(struct Moby *moby) {
         selected_walker_data->period = period;
         previous = current;
         selected_walker_data->height_step = random_float_between(path_walker_height_range_start_gp,
-                                                 path_walker_height_range_end_gp);
+                                                                 path_walker_height_range_end_gp);
         selected_walker_data->speed =
             random_float_between(path_walker_speed_range_start_gp, path_walker_speed_range_end_gp) *
             frame_time;

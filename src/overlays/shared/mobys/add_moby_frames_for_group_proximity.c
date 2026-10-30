@@ -61,7 +61,8 @@ void add_moby_frames_for_group_proximity(char *moby) {
         while (proximity_candidate_moby) {
             if (MOBY(proximity_candidate_moby)->oclass == 0x474) {
                 float m[16];
-                fast_vec_sub(position_delta, proximity_candidate_moby + 0x10, proximity_moby_vars + 0x200);
+                fast_vec_sub(
+                    position_delta, proximity_candidate_moby + 0x10, proximity_moby_vars + 0x200);
                 if (!(8.0f < fast_vec_length(position_delta))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, proximity_candidate_moby + 0xC0);

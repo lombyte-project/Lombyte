@@ -217,7 +217,8 @@ void update_gemlik_scene_controller(struct Moby *moby) {
         break;
     case WAIT_TO_REMOVE_LINKED_MOBY:
         if (scene_controller_vars[4] != -1) {
-            if (D_L13_0015FC88[*(unsigned char *)(moby_base + scene_controller_vars[4] * 0x100 + 0xb0)] == 0xff) {
+            if (D_L13_0015FC88[*(unsigned char *)(moby_base + scene_controller_vars[4] * 0x100 +
+                                                  0xb0)] == 0xff) {
                 if (scene_controller_vars[8] != -1)
                     mark_moby_for_removal((char *)(moby_base + scene_controller_vars[8] * 0x100));
                 moby->state = 14;

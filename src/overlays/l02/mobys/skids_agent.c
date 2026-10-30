@@ -97,7 +97,8 @@ void skids_agent_update(struct Moby *moby) {
         break;
     case SKIDS_AGENT_IDLE_AND_TALK:
         if (*(u8 *)(skids_agent_vars + 8) == 1 &&
-            is_point_inside_clip_volume(&hero.motion.pos, *(s32 *)(skids_agent_vars + 0x154)) != 0) {
+            is_point_inside_clip_volume(&hero.motion.pos, *(s32 *)(skids_agent_vars + 0x154)) !=
+                0) {
             *(f32 *)(skids_agent_vars + 0xC) = 255.0f;
         } else {
             *(f32 *)(skids_agent_vars + 0xC) = 3.7f;
@@ -187,14 +188,19 @@ void skids_agent_update(struct Moby *moby) {
                     (char *)l02_cuboids + (*(s32 *)(skids_agent_vars + 0x158) << 7) + 0x30,
                     (char *)l02_cuboids + (*(s32 *)(skids_agent_vars + 0x15C) << 7) + 0x30,
                     *(f32 *)(skids_agent_vars + 0x180));
-        qcopy_nc(&from, (char *)((*(s32 *)(skids_agent_vars + 0x158) << 7) + (s32)l02_cuboids) + 0x70);
-        qcopy_nc(&to, (char *)((*(s32 *)(skids_agent_vars + 0x15C) << 7) + (s32)l02_cuboids) + 0x70);
-        rot.f[2] = fast_add_rotations(
-            fast_subtract_rotations(to.f[2], from.f[2]) * *(f32 *)(skids_agent_vars + 0x180), from.f[2]);
-        rot.f[1] = fast_add_rotations(
-            fast_subtract_rotations(to.f[1], from.f[1]) * *(f32 *)(skids_agent_vars + 0x180), from.f[1]);
-        rot.f[0] = fast_add_rotations(
-            fast_subtract_rotations(to.f[0], from.f[0]) * *(f32 *)(skids_agent_vars + 0x180), from.f[0]);
+        qcopy_nc(&from,
+                 (char *)((*(s32 *)(skids_agent_vars + 0x158) << 7) + (s32)l02_cuboids) + 0x70);
+        qcopy_nc(&to,
+                 (char *)((*(s32 *)(skids_agent_vars + 0x15C) << 7) + (s32)l02_cuboids) + 0x70);
+        rot.f[2] = fast_add_rotations(fast_subtract_rotations(to.f[2], from.f[2]) *
+                                          *(f32 *)(skids_agent_vars + 0x180),
+                                      from.f[2]);
+        rot.f[1] = fast_add_rotations(fast_subtract_rotations(to.f[1], from.f[1]) *
+                                          *(f32 *)(skids_agent_vars + 0x180),
+                                      from.f[1]);
+        rot.f[0] = fast_add_rotations(fast_subtract_rotations(to.f[0], from.f[0]) *
+                                          *(f32 *)(skids_agent_vars + 0x180),
+                                      from.f[0]);
         set_camera_position(&pos);
         set_camera_rotation(&rot);
         if (*(f32 *)(skids_agent_vars + 0x180) < 1.0f) {
@@ -315,8 +321,12 @@ void skids_agent_update(struct Moby *moby) {
             *(f32 *)(skids_agent_vars + 0xB0) = 2.75f;
         }
         delta = frame_scale_sq;
-        update_joint_animation(rotation_step * delta, rotation_limit * delta, moby, skids_agent_vars + 0x40, 0);
         update_joint_animation(
-            rotation_step * frame_scale_sq, rotation_limit * frame_scale_sq, moby, skids_agent_vars + 0xC0, 1);
+            rotation_step * delta, rotation_limit * delta, moby, skids_agent_vars + 0x40, 0);
+        update_joint_animation(rotation_step * frame_scale_sq,
+                               rotation_limit * frame_scale_sq,
+                               moby,
+                               skids_agent_vars + 0xC0,
+                               1);
     }
 }

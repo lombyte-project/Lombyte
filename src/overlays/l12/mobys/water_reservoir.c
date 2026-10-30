@@ -67,8 +67,8 @@ active:
         moby->command = 2;
         *(int *)&reservoir_state[1] = scale_game_frames(water_reservoir_transition_frames);
     }
-    reservoir_state[0] = fast_add_rotations(reservoir_state[0],
-                                 water_reservoir_angle_rate_degrees_gp * 0.017453292f * frame_time);
+    reservoir_state[0] = fast_add_rotations(
+        reservoir_state[0], water_reservoir_angle_rate_degrees_gp * 0.017453292f * frame_time);
 frame_active:
     frame_scale = D_L12_0015F3FC;
 update:
@@ -120,9 +120,11 @@ update:
             }
         }
         if ((moby->command & 1) && *(int *)&reservoir_state[1] == 0) {
-            approach_value(-1.0f, water_reservoir_height_approach_rate_gp * frame_time, &reservoir_state[2]);
+            approach_value(
+                -1.0f, water_reservoir_height_approach_rate_gp * frame_time, &reservoir_state[2]);
         } else if (moby->command & 2) {
-            approach_value(3.0f, water_reservoir_height_approach_rate_gp * frame_time, &reservoir_state[2]);
+            approach_value(
+                3.0f, water_reservoir_height_approach_rate_gp * frame_time, &reservoir_state[2]);
         }
     }
     add_draw_callback(draw_water_reservoir, moby);
@@ -169,8 +171,8 @@ void draw_water_reservoir(struct Moby *moby) {
     quad.g[2] = 0xFF9000000260UL;
     quad.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) | ((long)D_L12_00161A14 << 4) |
                 ((long)D_L12_00161A18 << 6) | (0x8000L << 24);
-    col =
-        fast_tween_color(D_L12_00161A1C, D_L12_00161A20, (fast_sin(*(float *)water_reservoir_vars) + 1.0f) * 0.5f);
+    col = fast_tween_color(
+        D_L12_00161A1C, D_L12_00161A20, (fast_sin(*(float *)water_reservoir_vars) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
         quad.uv[i * 2] = 0.5f;
         *(&quad.uv[i * 2] + 1) = 0.5f;

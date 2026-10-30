@@ -38,8 +38,9 @@ void spawn_forcefield_contact_effects(void *moby, void *forcefield_vars) {
     float  limit, tolerance, height_limit, height_tolerance;
 
     euler_rotation_basis(matrix, moby + 0x40);
-    max_size =
-        *(short *)(forcefield_vars + 10) < *(short *)(forcefield_vars + 8) ? *(short *)(forcefield_vars + 8) : *(short *)(forcefield_vars + 10);
+    max_size = *(short *)(forcefield_vars + 10) < *(short *)(forcefield_vars + 8)
+                   ? *(short *)(forcefield_vars + 8)
+                   : *(short *)(forcefield_vars + 10);
     radius = (float)max_size * 0.5f;
     qzero(query);
     query[2] = radius;

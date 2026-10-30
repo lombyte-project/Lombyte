@@ -806,10 +806,13 @@ void birdbot_update(PeMoby *birdbot_moby) {
             float      a;
 
             side_path_cursor = &birdbot_vars->side;
-            side_path_next_node_index = (side_path_cursor->idx + side_path_cursor->path->count + side_path_cursor->dir) %
-                   side_path_cursor->path->count;
-            a = fast_arc_tan(side_path_cursor->path->points[side_path_next_node_index].f[0] - birdbot_moby->pos.f[0],
-                             side_path_cursor->path->points[side_path_next_node_index].f[1] - birdbot_moby->pos.f[1]);
+            side_path_next_node_index =
+                (side_path_cursor->idx + side_path_cursor->path->count + side_path_cursor->dir) %
+                side_path_cursor->path->count;
+            a = fast_arc_tan(side_path_cursor->path->points[side_path_next_node_index].f[0] -
+                                 birdbot_moby->pos.f[0],
+                             side_path_cursor->path->points[side_path_next_node_index].f[1] -
+                                 birdbot_moby->pos.f[1]);
             FUN_L00_00258278_cf((char *)birdbot_moby, &birdbot_vars->f194, a, 0.01f, 0.3f, 0.1f);
             path = side_path_cursor->path;
             qcopy(&vb, &path->points[side_path_next_node_index]);
@@ -874,7 +877,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 birdbot_moby->state = 1;
             }
         }
-        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&birdbot_position_before_update);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby,
+                                         (u128 *)&birdbot_position_before_update);
         break;
     case BIRDBOT_STATE_FIRE_BURST:
         if (birdbot_vars->f1CC < 14.0f && frame >= 14.0f) {
@@ -998,7 +1002,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_vars->f1B8 = 0.0f;
         birdbot_vars->f1BC = 0.0f;
         birdbot_moby->state = 0xA;
-        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&birdbot_position_before_update);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby,
+                                         (u128 *)&birdbot_position_before_update);
         break;
     case BIRDBOT_STATE_MOVE_TO_PATH_NODE: {
         PeCursor *c;
@@ -1063,7 +1068,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
         if (fast_vec_dist(&birdbot_moby->pos, &va) < 0.25f) {
             birdbot_moby->state = 0xB;
         }
-        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&birdbot_position_before_update);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby,
+                                         (u128 *)&birdbot_position_before_update);
         break;
     }
     case BIRDBOT_STATE_BRAKE_AND_FACE_TARGET:
@@ -1113,7 +1119,8 @@ void birdbot_update(PeMoby *birdbot_moby) {
             }
             birdbot_moby->state = 1;
         }
-        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&birdbot_position_before_update);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby,
+                                         (u128 *)&birdbot_position_before_update);
         break;
     case BIRDBOT_STATE_NONFATAL_KNOCKBACK:
         if (step_moby_motion(birdbot_moby, birdbot_vars->x70) & 0x40) {

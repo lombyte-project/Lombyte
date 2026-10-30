@@ -47,7 +47,8 @@ void update_pokitaru_paired_rotation(struct Moby *moby) {
         if ((moby->flags & 0x8000) == 0)
             target_angle = fast_add_rotations(*(float *)(paired_rotation_vars + 4), 0.20769417f);
         else
-            target_angle = fast_subtract_rotations(*(float *)(paired_rotation_vars + 4), 0.20769417f);
+            target_angle =
+                fast_subtract_rotations(*(float *)(paired_rotation_vars + 4), 0.20769417f);
         if (approach_angle(&moby->rot.z,
                            target_angle,
                            (float *)paired_rotation_vars,
