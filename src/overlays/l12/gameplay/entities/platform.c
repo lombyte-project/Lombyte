@@ -1,6 +1,7 @@
 /* Level 12 moby classes: platform, miner, blarg_trooper, blarg_helicopter, edwina, helicopter, crane_arm. */
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
+#include "rnc/gameplay/state/level_object_states.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -2754,12 +2755,7 @@ typedef struct {
     int target_timer;
 } L12WatchData;
 
-typedef struct {
-    char pad[0x46C];
-    int hidden;
-} L12WatchGlobals;
 
-extern L12WatchGlobals D_0013D5B0_lui __asm__("D_0013D5B0") NOT_SDA;
 extern float D_0015ED64_b570 __asm__("D_0015ED64");
 extern void attach_shared_manipulator_to_matching_class_moby(void *) __asm__("FUN_L03_002db480");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -2777,7 +2773,7 @@ void edwina_update(L16WatchMoby *moby) {
     float head_rate;
     int tracking;
     attach_shared_manipulator_to_matching_class_moby(moby);
-    if (D_0013D5B0_lui.hidden == 0) {
+    if (level_object_states[70].state == 0) {
         if (moby->animation != 1)
             blend_moby_animation(moby, 1, 0, 2);
     } else if (moby->animation != 0) {
@@ -2858,7 +2854,7 @@ void edwina_update(L16WatchMoby *moby) {
             qcopy(scratch.target, moby_data->target);
         }
     }
-    if (D_0013D5B0_lui.hidden == 0) {
+    if (level_object_states[70].state == 0) {
         if (moby_data->turret == 0) {
             char *o = create_moby(0x4C1);
             moby_data->turret = o;

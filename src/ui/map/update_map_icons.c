@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/gameplay/state/level_object_states.h"
 #include "rnc/ui/text/text_region.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/ui/map/map_icon.h"
@@ -14,12 +15,6 @@ typedef struct {
     u8 pad26[2];
 } MapIconLink;
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-    s32 flag;
-} MapPoint;
 
 typedef struct {
     u8 pad0[0x10];
@@ -34,7 +29,6 @@ extern struct MapIcon *map_icon_lists_by_level[] __asm__("D_001A2BC0");
 extern s32 D_001A01F4[];
 extern s32 D_0015FD60 __attribute__((sda));
 extern MapWorldObject *menu_action_messages[] __asm__("D_00199478");
-extern MapPoint D_0013D5B0[];
 extern s32 D_0013D5BC[];
 extern struct {
     u8 pad0[0x10];
@@ -117,9 +111,9 @@ void update_map_icons(s32 level, s32 flag) {
                         level_map_selection.icons[icon_index].angle = menu_action_messages[icon->id]->z;
                     }
                 } else {
-                    world_to_map_coords(D_0013D5B0[icon->id].x, D_0013D5B0[icon->id].y, &icon->x,
+                    world_to_map_coords(level_object_states[icon->id].x, level_object_states[icon->id].y, &icon->x,
                                         &icon->y, level);
-                    level_map_selection.icons[icon_index].angle = D_0013D5B0[icon->id].z;
+                    level_map_selection.icons[icon_index].angle = level_object_states[icon->id].z;
                 }
             }
             icon_index++;

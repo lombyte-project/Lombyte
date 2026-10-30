@@ -1,11 +1,7 @@
 #include "types.h"
+#include "rnc/gameplay/state/level_object_states.h"
 #include "rnc/data_labels.h"
-struct Upgrade {
-    u8 pad0[0xC];
-    s32 level;
-};
 #include "rnc/gameplay/state/level_state.h"
-extern struct Upgrade D_0013D5B0[];
 #include "rnc/gameplay/state/item_state.h"
 s32 check_mission_condition(s16 kind, s32 value) __asm__("FUN_0020baf0");
 
@@ -33,12 +29,12 @@ s32 check_mission_condition(s16 kind, s32 value) {
         return items_acquired[value] != 0;
     case MISSION_CONDITION_UPGRADE_LEVEL_NONZERO:
         if (value < 121) {
-            return D_0013D5B0[value].level != 0;
+            return level_object_states[value].state != 0;
         }
         break;
     case MISSION_CONDITION_UPGRADE_LEVEL_AT_LEAST_TWO:
         if (value < 121) {
-            return D_0013D5B0[value].level >= 2;
+            return level_object_states[value].state >= 2;
         }
         break;
     case MISSION_CONDITION_ALTERNATE_ITEM_AVAILABLE:

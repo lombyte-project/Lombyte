@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/gameplay/state/level_object_states.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/globals.h"
 
@@ -10,7 +11,6 @@ struct ObjectVector {
     f32 z;
 };
 
-extern u8 D_0013D5B0[];
 extern u32 level_object_index_boundaries[] __asm__("D_001E03B8");
 
 void copy_level_object_positions(void) __asm__("FUN_00208770");
@@ -36,7 +36,7 @@ void copy_level_object_positions(void) {
         return;
     }
     source_base = ((u8 *)menu_action_messages);
-    destination = D_0013D5B0 + start * 0x10;
+    destination = (u8 *)level_object_states + start * 0x10;
     source = (u8 **)(source_base + start * 4);
     start = end - start;
     do {

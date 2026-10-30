@@ -1,8 +1,8 @@
 /* Ported from rac1-decomp (src/game/missionfunc.c, func_0020CBE0). */
 #include "sda.h"
-extern int D_0013D5B0 NOT_SDA;
+#include "rnc/gameplay/state/level_object_states.h"
 int FUN_0020bd90(void) {
-    char *base = (char *)&D_0013D5B0;
+    char *base = (char *)level_object_states;
     if (*(int *)(base + 0x40C) != 0 && *(int *)(base + 0x3FC) != 0)
         return 1;
     return 0;

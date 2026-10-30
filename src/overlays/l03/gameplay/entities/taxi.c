@@ -1,5 +1,6 @@
 /* Level 03 moby classes: mine_layer, mine, taxi, robo_shack_sign, helga, big_al, robot_qwark. */
 #include "types.h"
+#include "rnc/gameplay/state/level_object_states.h"
 #include "rnc/overlay/level_path.h"
 #include "rnc/overlay/collision.h"
 #include "rnc/globals.h"
@@ -1584,10 +1585,6 @@ struct GuideVars {
     s32 target_timer;  /* 0x168 */
 };
 
-typedef struct {
-    u8 pad0[0x14C];
-    s32 unk14C;
-} GameFlags;
 
 extern u8 D_0013D4C2[];
 extern char *D_001413D0_db558[] __asm__("D_001413D0");
@@ -1596,7 +1593,6 @@ extern void attach_shared_manipulator_to_matching_class_moby(struct Moby *) __as
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int guide_save(int, int) __asm__("FUN_0020b178");
 
-extern GameFlags race_gates __asm__("D_0013D5B0");
 /* Kerwan guide: talks when approached (turning round to face the hero first),
    releases its reward moby once the item is owned, can warp the hero, and turns
    its head toward the hero or random points while idle. */
@@ -1625,7 +1621,7 @@ void big_al_update(struct Moby *guide_moby) {
     attach_shared_manipulator_to_matching_class_moby(guide_moby);
     switch (guide_moby->state) {
     case BIG_AL_INITIALIZE:
-        if (race_gates.unk14C == 0) {
+        if (level_object_states[20].state == 0) {
             guide_moby->rot.z = fast_add_rotations(guide_moby->rot.z, 3.1415927f);
             v->turned = 0;
         } else {
