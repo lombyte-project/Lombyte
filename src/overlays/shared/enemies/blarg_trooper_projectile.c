@@ -113,7 +113,7 @@ struct Moby *spawn_blarg_trooper_projectile(struct Moby *owner,
 
 struct Moby *spawn_blarg_trooper_projectile(struct Moby *owner, void *pos, void *dir, int life) {
     struct Moby *spawned_moby;
-    ShotVars    *vars;
+    ShotVars    *projectile_state;
     OvlQuad      pos_q;
     OvlQuad      dir_q;
     Vec4f       *position_copy = (Vec4f *)&pos_q;
@@ -123,8 +123,8 @@ struct Moby *spawn_blarg_trooper_projectile(struct Moby *owner, void *pos, void 
     dir_q = *(OvlQuad *)dir;
     spawned_moby = create_moby(0xB8);
     if (spawned_moby != 0) {
-        vars = (ShotVars *)spawned_moby->pvars;
-        vars->owner = owner;
+        projectile_state = (ShotVars *)spawned_moby->pvars;
+        projectile_state->owner = owner;
         spawned_moby->update_dist = 0xFF;
         spawned_moby->draw_dist = 0xFF;
         spawned_moby->visible = 1;
@@ -134,15 +134,15 @@ struct Moby *spawn_blarg_trooper_projectile(struct Moby *owner, void *pos, void 
         spawned_moby->rot.y = 0.0f;
         spawned_moby->rot.z = fast_arc_tan(direction_copy->x, direction_copy->y);
         qcopy(&spawned_moby->pos, position_copy);
-        qcopy(&vars->dir, direction_copy);
-        vars->spin =
+        qcopy(&projectile_state->dir, direction_copy);
+        projectile_state->spin =
             random_float_between(-(frame_time_macro * 1.5707964f), frame_time_macro * 1.5707964f);
-        vars->unk14 = 0;
-        vars->time = life;
-        vars->time_max = life;
-        vars->hero_dist = fast_vec_dist(&spawned_moby->pos, &hero.motion.pos);
-        vars->unk24 = 0;
-        vars->unk28 = 0;
+        projectile_state->unk14 = 0;
+        projectile_state->time = life;
+        projectile_state->time_max = life;
+        projectile_state->hero_dist = fast_vec_dist(&spawned_moby->pos, &hero.motion.pos);
+        projectile_state->unk24 = 0;
+        projectile_state->unk28 = 0;
         if (owner->oclass == 0xFF) {
             spawn_source_attached_fading_effect_particle(
                 spawned_moby, 0x2F7F4F4F, life * 5 / 4, -1, 100000.0f);
