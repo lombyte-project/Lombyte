@@ -93,8 +93,8 @@ void shuttle_update(struct Moby *moby) {
         SHUTTLE_STATE_WAIT_FOR_DISMOUNT = 2,
         SHUTTLE_STATE_FOLLOW_PATH = 3
     };
-    PathFlyerVars_00309c08 *vars = (PathFlyerVars_00309c08 *)moby->pvars;
-    PathNodes_00309c08     *path = (PathNodes_00309c08 *)l09_paths[vars->path];
+    PathFlyerVars_00309c08 *shuttle_vars = (PathFlyerVars_00309c08 *)moby->pvars;
+    PathNodes_00309c08     *path = (PathNodes_00309c08 *)l09_paths[shuttle_vars->path];
     Vec4                   *position = &moby->pos;
     Vec4                    original;
     Vec4                    rotation;
@@ -103,132 +103,132 @@ void shuttle_update(struct Moby *moby) {
 
     scale_vector_00309c08(-1.0f, &original, position);
     qcopy(&rotation, &moby->rot);
-    if (vars == 0)
+    if (shuttle_vars == 0)
         return;
 
     switch (moby->state) {
     case SHUTTLE_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
-        vars->yaw_offset = 3.1415927f;
-        *(s32 *)((u8 *)vars + 0xC4) = -1;
-        *(s32 *)((u8 *)vars + 0xC8) = 0;
-        vars->lag = 0.0f;
-        if (*(s32 *)((u8 *)vars + 0xA0) != 0) {
+        shuttle_vars->yaw_offset = 3.1415927f;
+        *(s32 *)((u8 *)shuttle_vars + 0xC4) = -1;
+        *(s32 *)((u8 *)shuttle_vars + 0xC8) = 0;
+        shuttle_vars->lag = 0.0f;
+        if (*(s32 *)((u8 *)shuttle_vars + 0xA0) != 0) {
             PathNodes_00309c08 *path;
             Vec4               *endpoint;
-            attach_manipulator(moby, 0, (u8 *)vars + 0x60);
-            path = (PathNodes_00309c08 *)l09_paths[vars->path];
+            attach_manipulator(moby, 0, (u8 *)shuttle_vars + 0x60);
+            path = (PathNodes_00309c08 *)l09_paths[shuttle_vars->path];
             moby->state = 1;
             if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
-                vars->dir = -1;
-                vars->node = path->count - 2;
+                shuttle_vars->dir = -1;
+                shuttle_vars->node = path->count - 2;
                 endpoint = (Vec4 *)((path->count << 4) + (s32)path);
             } else {
-                vars->dir = 1;
+                shuttle_vars->dir = 1;
                 endpoint = &path->node[0];
-                vars->node = 1;
+                shuttle_vars->node = 1;
             }
             *position = *endpoint;
-            moby->rot.z = fast_arc_tan(path->node[vars->node].f[0] - moby->pos.x,
-                                       path->node[vars->node].f[1] - moby->pos.y);
+            moby->rot.z = fast_arc_tan(path->node[shuttle_vars->node].f[0] - moby->pos.x,
+                                       path->node[shuttle_vars->node].f[1] - moby->pos.y);
         }
         moby->rot.z = fast_add_rotations(moby->rot.z, 3.1415927f);
         break;
     case SHUTTLE_STATE_WAIT_FOR_DISMOUNT:
-        vars->lag += (1.0f - vars->lag) * 0.01f;
-        update_moby_vertical_oscillation(vars->lag * 0.14f,
+        shuttle_vars->lag += (1.0f - shuttle_vars->lag) * 0.01f;
+        update_moby_vertical_oscillation(shuttle_vars->lag * 0.14f,
                                          frame_time * 0.5235988f,
                                          (char *)moby,
-                                         (f32 *)((u8 *)vars + 0xD8),
-                                         (f32 *)((u8 *)vars + 0xDC));
+                                         (f32 *)((u8 *)shuttle_vars + 0xD8),
+                                         (f32 *)((u8 *)shuttle_vars + 0xDC));
         update_moby_rotation_oscillation(moby,
-                                         (char *)vars + 0xD0,
-                                         (char *)vars + 0xD4,
-                                         vars->lag * 0.08726646f,
+                                         (char *)shuttle_vars + 0xD0,
+                                         (char *)shuttle_vars + 0xD4,
+                                         shuttle_vars->lag * 0.08726646f,
                                          frame_time * 0.31415927f,
                                          frame_time * 0.4886922f);
         if (hero.ground_moby != moby)
             moby->state = 1;
         break;
     case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
-        vars->lag += (1.0f - vars->lag) * 0.01f;
-        update_moby_vertical_oscillation(vars->lag * 0.14f,
+        shuttle_vars->lag += (1.0f - shuttle_vars->lag) * 0.01f;
+        update_moby_vertical_oscillation(shuttle_vars->lag * 0.14f,
                                          frame_time * 0.5235988f,
                                          (char *)moby,
-                                         (f32 *)((u8 *)vars + 0xD8),
-                                         (f32 *)((u8 *)vars + 0xDC));
+                                         (f32 *)((u8 *)shuttle_vars + 0xD8),
+                                         (f32 *)((u8 *)shuttle_vars + 0xDC));
         update_moby_rotation_oscillation(moby,
-                                         (char *)vars + 0xD0,
-                                         (char *)vars + 0xD4,
-                                         vars->lag * 0.08726646f,
+                                         (char *)shuttle_vars + 0xD0,
+                                         (char *)shuttle_vars + 0xD4,
+                                         shuttle_vars->lag * 0.08726646f,
                                          frame_time * 0.31415927f,
                                          frame_time * 0.4886922f);
-        if (*(s32 *)((u8 *)vars + 0xC8) != 0) {
-            if ((vars->dir > 0 && *(s32 *)((u8 *)vars + 0xB4) != -1 &&
-                 is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)vars + 0xB4))) ||
-                (vars->dir < 0 && *(s32 *)((u8 *)vars + 0xB0) != -1 &&
-                 is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)vars + 0xB0)))) {
+        if (*(s32 *)((u8 *)shuttle_vars + 0xC8) != 0) {
+            if ((shuttle_vars->dir > 0 && *(s32 *)((u8 *)shuttle_vars + 0xB4) != -1 &&
+                 is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)shuttle_vars + 0xB4))) ||
+                (shuttle_vars->dir < 0 && *(s32 *)((u8 *)shuttle_vars + 0xB0) != -1 &&
+                 is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)shuttle_vars + 0xB0)))) {
                 moby->state = 3;
             }
         }
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
-            *(s32 *)((u8 *)vars + 0xC8) = 1;
+            *(s32 *)((u8 *)shuttle_vars + 0xC8) = 1;
             moby->state = 3;
         }
         break;
     case SHUTTLE_STATE_FOLLOW_PATH:
         if ((D_L09_0015F5CC & 7) == (((s32)moby >> 8) & 7)) {
-            if (*(s32 *)((u8 *)vars + 0xC4) == -1 ||
-                (!voice_is_playing(moby, *(s32 *)((u8 *)vars + 0xC4)) &&
-                 *(s32 *)((u8 *)vars + 0xC4) == -1)) {
-                *(s32 *)((u8 *)vars + 0xC4) = allocate_voice_for_target_entry(0, 4, moby);
+            if (*(s32 *)((u8 *)shuttle_vars + 0xC4) == -1 ||
+                (!voice_is_playing(moby, *(s32 *)((u8 *)shuttle_vars + 0xC4)) &&
+                 *(s32 *)((u8 *)shuttle_vars + 0xC4) == -1)) {
+                *(s32 *)((u8 *)shuttle_vars + 0xC4) = allocate_voice_for_target_entry(0, 4, moby);
             }
         }
-        if (vars->yaw_offset == 0.0f) {
-            if (vars->dir < 0) {
-                if (*(s32 *)((u8 *)vars + 0xB4) == -1 ||
-                    !is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)vars + 0xB4)))
+        if (shuttle_vars->yaw_offset == 0.0f) {
+            if (shuttle_vars->dir < 0) {
+                if (*(s32 *)((u8 *)shuttle_vars + 0xB4) == -1 ||
+                    !is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)shuttle_vars + 0xB4)))
                     goto test_forward;
                 if (!(vector_distance_xy(&moby->pos, &path->node[path->count - 1]) > 8.0f) ||
                     !(vector_distance_xy(&moby->pos, &path->node[0]) > 8.0f))
                     goto advance_path;
-                vars->dir = 1;
-                vars->yaw_offset = 3.1415927f;
+                shuttle_vars->dir = 1;
+                shuttle_vars->yaw_offset = 3.1415927f;
             } else {
             test_forward:
-                if (vars->dir > 0 && *(s32 *)((u8 *)vars + 0xB0) != -1 &&
-                    is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)vars + 0xB0)) &&
+                if (shuttle_vars->dir > 0 && *(s32 *)((u8 *)shuttle_vars + 0xB0) != -1 &&
+                    is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)shuttle_vars + 0xB0)) &&
                     vector_distance_xy(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
                     vector_distance_xy(&moby->pos, &path->node[0]) > 8.0f) {
-                    vars->dir = -1;
-                    vars->yaw_offset = 3.1415927f;
+                    shuttle_vars->dir = -1;
+                    shuttle_vars->yaw_offset = 3.1415927f;
                 }
             }
         }
     advance_path:
         if (advance_shuttle_along_path(moby)) {
-            voice = *(s32 *)((u8 *)vars + 0xC4);
+            voice = *(s32 *)((u8 *)shuttle_vars + 0xC4);
             if (voice != -1) {
-                u8 *entry = (u8 *)D_0013E550 + voice * 0x70;
-                if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
+                u8 *shuttle_voice_entry = (u8 *)D_0013E550 + voice * 0x70;
+                if (*(struct Moby **)(shuttle_voice_entry + 0x88) == moby && shuttle_voice_entry[0x74] != 0)
                     release_voice_slot(voice);
             }
-            *(s32 *)((u8 *)vars + 0xC4) = -1;
-            vars->lag = 0.0f;
-            *(s32 *)((u8 *)vars + 0xDC) = 0;
+            *(s32 *)((u8 *)shuttle_vars + 0xC4) = -1;
+            shuttle_vars->lag = 0.0f;
+            *(s32 *)((u8 *)shuttle_vars + 0xDC) = 0;
             moby->state = 2;
-            vars->yaw_offset = 3.1415927f;
-            dir = vars->dir;
-            vars->dir = -dir;
+            shuttle_vars->yaw_offset = 3.1415927f;
+            dir = shuttle_vars->dir;
+            shuttle_vars->dir = -dir;
             if ((s16)-dir > 0)
-                vars->node = 0;
+                shuttle_vars->node = 0;
             else
-                vars->node = path->count - 1;
+                shuttle_vars->node = path->count - 1;
         }
         break;
     }
     fast_vec_add(&original, &original, &moby->pos);
-    update_entity_matrix((u8 *)vars + 0x20, &original, &rotation, &moby->rot);
+    update_entity_matrix((u8 *)shuttle_vars + 0x20, &original, &rotation, &moby->rot);
 }
 
 void interpolate_rotation_angle(float *output_angle,
