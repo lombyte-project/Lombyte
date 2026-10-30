@@ -1,7 +1,7 @@
 #include "types.h"
+#include "rnc/rendering/texture/alpha_lookup_table.h"
 
-extern s32 bit_swap_lut[] __asm__("D_0018E740");
-void       initialize_alpha_lookup_table(void) __asm__("FUN_001f7a30");
+void initialize_alpha_lookup_table(void) __asm__("FUN_001f7a30");
 
 void initialize_alpha_lookup_table(void) {
     s32 i;
@@ -21,3 +21,5 @@ void initialize_alpha_lookup_table(void) {
 
 extern __typeof__(initialize_alpha_lookup_table) func_001F7A30
     __attribute__((alias("FUN_001f7a30")));
+
+s32 bit_swap_lut[256] = {0};

@@ -48,3 +48,8 @@ int build_pause_item_list(void) {
 }
 
 extern __typeof__(build_pause_item_list) func_002215F8 __attribute__((alias("FUN_002215f8")));
+
+/* Written by build_pause_item_list: at most one entry per candidate (15). */
+Item0A pause_item_list_entries[15] = {0};
+
+int pause_item_variant_values[15] = {0};

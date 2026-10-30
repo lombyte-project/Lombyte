@@ -33,3 +33,6 @@ void close_menu_system(void) {
 }
 
 extern __typeof__(close_menu_system) func_002191B8 __attribute__((alias("FUN_002191b8")));
+
+/* The 14 menu mobys; close_menu_system deletes and clears every slot. */
+void *panel_slots[14] = {0};

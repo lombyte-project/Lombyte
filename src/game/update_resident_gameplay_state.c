@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/effects/space_effect_tables.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
 #include "qcopy.h"
@@ -123,8 +124,6 @@ extern ResidentPlaybackState render_sequence __asm__("D_0018CB20");
 extern f32                   view_tan_half_fov[4] __asm__("D_0018CDB0");
 extern ScriptedPath         *resident_scripted_path_table[] __asm__("D_001CC3B0");
 extern PositionPair          resident_path_history_local_offset_pairs[] __asm__("D_001D99B0");
-extern Vector4               resident_path_companion_a_local_offsets[] __asm__("D_001D9C80");
-extern Vector4               resident_path_companion_b_local_offsets[] __asm__("D_001D9CB0");
 extern void                  build_variant_effect_quads() __asm__("FUN_0022e1b0");
 
 extern void music_pause(s32);
@@ -822,3 +821,15 @@ void update_resident_gameplay_state(void) {
 
 extern __typeof__(update_resident_gameplay_state) func_0022F778
     __attribute__((alias("FUN_0022f778")));
+
+f32 resident_path_companion_a_local_offsets[3][4] = {
+    {1.6f, 0.45f, 0.9f, 0.0f},
+    {2.0f,  0.5f, 2.1f, 0.0f},
+    {0.7f,  0.3f, 0.7f, 0.0f},
+};
+
+f32 resident_path_companion_b_local_offsets[3][4] = {
+    {1.6f, -0.45f,  1.3f, 0.0f},
+    {2.0f,  -0.5f,  2.6f, 0.0f},
+    {0.7f,  -0.3f, 1.25f, 0.0f},
+};

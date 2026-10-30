@@ -6,18 +6,13 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/math/fast_math.h"
 
-typedef float FVec4[4] __attribute__((aligned(16)));
-
-typedef struct {
-    FVec4 v;
-} FRow;
+#include "rnc/rendering/effects/draw_light_quads.h"
 
 typedef struct {
     FRow pos;
     FRow dir;
 } LightRec;
 
-extern FRow light_quad_vertex_template[4] __asm__("D_0018CAA0");
 extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
@@ -73,3 +68,10 @@ void draw_light_quads(void) {
 }
 
 extern __typeof__(draw_light_quads) func_001F4880 __attribute__((alias("FUN_001f4880")));
+
+FRow light_quad_vertex_template[4] = {
+    {{1.0f, -1.0f, 0.0f, 1.0f}},
+    {{-1.0f, -1.0f, 0.0f, 0.0f}},
+    {{1.0f, 1.0f, 1.0f, 1.0f}},
+    {{-1.0f, 1.0f, 1.0f, 0.0f}},
+};

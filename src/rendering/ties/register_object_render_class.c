@@ -154,6 +154,8 @@ void register_object_render_class(ObjectRenderClass               *render_class,
     }
 }
 
+ObjectRenderClass *object_render_classes[128] = {0};
+
 s16 object_render_class_ids[128] = {0};
 
 extern __typeof__(register_object_render_class) func_00203730

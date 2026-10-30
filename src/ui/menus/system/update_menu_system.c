@@ -156,3 +156,6 @@ void update_menu_system(void) {
 }
 
 extern __typeof__(update_menu_system) func_002192A8 __attribute__((alias("FUN_002192a8")));
+
+/* Zero at load; initialize_menu_preview_scene fills it when the menu opens. */
+struct MenuSystem menu_system = {0};

@@ -3,6 +3,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/get_moby_target_info.h"
+#include "rnc/mobys/hit_response_tables.h"
 
 typedef unsigned int u128_25a478 __attribute__((mode(TI), aligned(16)));
 
@@ -51,8 +52,6 @@ typedef struct {
 
 extern u8        D_0013E533[];
 extern f32       hit_damage_override_table[2] __asm__("D_0015FFC8") __attribute__((sda));
-extern f32       hit_vector_scale_table[][8] __asm__("D_001CC0C8");
-extern u8        hit_response_code_table[][4] __asm__("D_001CC080");
 extern Q_25a478 *get_moby_hit_state(void *);
 extern s32       scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32       fast_arc_tan(f32, f32) __asm__("func_001F9E90");
@@ -319,3 +318,31 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
 }
 
 extern __typeof__(resolve_moby_hit_response) func_00213928 __attribute__((alias("FUN_00213928")));
+
+u8 hit_response_code_table[18][4] = {
+    {1, 3, 7,   9},
+    {1, 3, 7,   9},
+    {1, 3, 7,   9},
+    {1, 3, 7,   9},
+    {1, 4, 8,   9},
+    {1, 5, 3,   9},
+    {1, 1, 5,   9},
+    {1, 1, 4,   9},
+    {1, 1, 5,   8},
+    {1, 1, 5,   8},
+    {1, 1, 1,   5},
+    {2, 6, 6, 0xa},
+    {1, 1, 1,   5},
+    {1, 1, 1,   5},
+    {1, 1, 1,   5},
+    {1, 1, 1,   1},
+    {1, 1, 1,   1},
+    {1, 1, 1,   1},
+};
+
+f32 hit_vector_scale_table[4][8] = {
+    {1.0f, 0.95f, 1.2f, 1.4f, 1.4f, 1.15f, 1.0f,  2.0f},
+    {1.0f, 0.85f, 1.1f, 1.2f, 1.2f,  1.0f, 1.0f,  1.5f},
+    {1.0f, 0.75f, 1.0f, 1.0f, 1.1f, 0.85f, 1.0f, 1.25f},
+    {1.0f, 0.65f, 0.9f, 1.0f, 1.0f, 0.75f, 1.0f,  1.0f},
+};

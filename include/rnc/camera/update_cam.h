@@ -59,4 +59,8 @@ extern struct CameraType camera_types[] __asm__("D_001E8C00");
 
 extern struct UpdateCam camera_selection_records[48] __asm__("D_00187410");
 
+/* Nonzero for each camera record that update_all_cameras may switch to
+   (one per camera_selection_records entry). */
+extern s32 camera_selectable_flags[48] __asm__("D_00189B50");
+
 #endif /* LOMBYTE_RNC_CAMERA_UPDATE_CAM_H */

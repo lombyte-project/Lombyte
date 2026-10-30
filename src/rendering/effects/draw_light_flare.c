@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/rendering/level_render_state.h"
 #include "types.h"
+#include "rnc/rendering/effects/space_effect_tables.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -16,10 +17,9 @@ typedef struct {
     long  gs_state[4];               /* 0x70 */
 } FlareQuad;
 
-extern void  draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern void  scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
-extern int   FUN_001fa820(void *, int *, float);
-extern float light_flare_corner_offsets[][4][4] __asm__("D_001D97D0");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
+extern int  FUN_001fa820(void *, int *, float);
 /* Draws a light flare quad at arg0's position (+0x00; the matrix is at
    +0xC0) when FUN_001fa820 finds it on screen, with the alpha it
    returns. In D_0015F604 mode 6 with flare set 3, the flare fades as
@@ -53,7 +53,7 @@ void draw_light_flare(char *object) {
     quad.gs_state[2] = 0xFF9000000260;
     quad.gs_state[3] = 0x8000000044;
     quad.gs_state[0] = 0;
-    fast_mem_copy(quad.texture_coordinates, D_001D97B0, 0x20);
+    fast_mem_copy(quad.texture_coordinates, unit_quad_texture_coordinates, 0x20);
     fast_vec_scale(scaled_position_copy, object, 1.0f / 1024.0f);
     depth = *(float *)(object + 0x18) + 0.1f;
     if (game_mode_macro == 6) {
@@ -75,3 +75,25 @@ void draw_light_flare(char *object) {
 }
 
 extern __typeof__(draw_light_flare) func_0022DF40 __attribute__((alias("FUN_0022df40")));
+
+f32 unit_quad_texture_coordinates[4][2] = {
+    {0.0f, 0.0f},
+    {1.0f, 0.0f},
+    {0.0f, 1.0f},
+    {1.0f, 1.0f},
+};
+
+f32 light_flare_corner_offsets[3][4][4] = {
+    {{4.0f, 1.6f, 0.0f, 0.0f},
+     {4.0f, -1.6f, 0.0f, 0.0f},
+     {-4.0f, 1.6f, 0.0f, 0.0f},
+     {-4.0f, -1.6f, 0.0f, 0.0f}},
+    {{4.0f, 2.0f, 0.0f, 0.0f},
+     {4.0f, -2.0f, 0.0f, 0.0f},
+     {-4.0f, 2.0f, 0.0f, 0.0f},
+     {-4.0f, -2.0f, 0.0f, 0.0f}},
+    {{3.5f, 1.5f, 0.0f, 0.0f},
+     {3.5f, -1.5f, 0.0f, 0.0f},
+     {-3.5f, 2.0f, 0.0f, 0.0f},
+     {-3.5f, -2.0f, 0.0f, 0.0f}},
+};

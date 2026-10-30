@@ -71,3 +71,10 @@ s32 build_filtered_menu_item_list(void) {
 
 extern __typeof__(build_filtered_menu_item_list) func_002216C0
     __attribute__((alias("FUN_002216c0")));
+
+/* Written by build_filtered_menu_item_list: at most one entry per candidate (14). */
+struct Item filtered_menu_item_records[14] = {0};
+
+s32 D_001D6248[14] = {0}; /* item unk40 per entry */
+
+s32 D_001D6280[14] = {0}; /* item unk44 per entry */

@@ -11,7 +11,7 @@ struct DrawPass {
 
 /*
  * Per-renderer switches at D_0018A2B0, read by the draw loops, the texture
- * uploads and the debug profiler. Size 0x4C as far as src/ reads it.
+ * uploads and the debug profiler. Size 0x50: reset_draw_config sets its 20 words to 1.
  */
 struct DrawConfig {
     s32             unk0;
@@ -29,6 +29,7 @@ struct DrawConfig {
     s32             unk40;
     s32             unk44;
     s32             unk48;
+    s32             unk4C;
 };
 
 extern struct DrawConfig draw_config __asm__("D_0018A2B0");

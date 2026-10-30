@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/space.c: func_0022F738). */
 #include "types.h"
+#include "rnc/rendering/effects/space_effect_tables.h"
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/globals.h"
@@ -9,13 +10,7 @@
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
-typedef struct {
-    u32 w0;
-    u32 w1;
-} ColorPair;
-
-extern ColorPair warp_trail_colors[] __asm__("D_001D9A30");
-extern f32       warp_trail_widths __asm__("D_001604D0") __attribute__((sda));
+extern f32 warp_trail_widths __asm__("D_001604D0") __attribute__((sda));
 
 extern s64  get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, s32, s32) __asm__("func_001F7D30");
@@ -188,4 +183,10 @@ f32 warp_texture_coordinates[4][2] = {
     {1.0f, 0.5f},
     {   0, 0.5f},
     {1.0f, 0.5f}
+};
+
+ColorPair warp_trail_colors[3] = {
+    {0x3880a0c0, 0x2058b0},
+    {0x3880a0c0, 0x2058b0},
+    {0x3880c080, 0x308030},
 };
