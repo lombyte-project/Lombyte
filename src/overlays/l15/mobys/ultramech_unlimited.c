@@ -998,17 +998,17 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     impact = 0.0f;
     ultramech_vars->w1C8 = 0;
     for (i = 0; i < 64; i++) {
-        char *entry = D_00178700 + i * 0x40;
-        if (*(UMoby **)(entry + 0x34) == ultramech_moby) {
-            unsigned int flags = *(unsigned int *)(entry + 0x24);
+        char *candidate_hit_record = D_00178700 + i * 0x40;
+        if (*(UMoby **)(candidate_hit_record + 0x34) == ultramech_moby) {
+            unsigned int flags = *(unsigned int *)(candidate_hit_record + 0x24);
             if (flags & 0xA0000) {
-                if (*(int *)(entry + 0x20) == D_001413D0) {
+                if (*(int *)(candidate_hit_record + 0x20) == D_001413D0) {
                     if (!(flags & 0x80000)) {
-                        *(int *)(entry + 0x34) = 0;
+                        *(int *)(candidate_hit_record + 0x34) = 0;
                         continue;
                     }
                 }
-                slot = entry;
+                slot = candidate_hit_record;
                 break;
             }
         }
