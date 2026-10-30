@@ -394,24 +394,24 @@ extern Level02GroupMoby *D_L02_0015FFD8_g __asm__("D_L02_0015FFD8");
 Level02GroupMoby *
 select_inactive_group_sand_shark_for_nest(Level02GroupMoby *owner) __asm__("FUN_L02_002dd2a8");
 
-Level02GroupMoby *select_inactive_group_sand_shark_for_nest(Level02GroupMoby *owner) {
+Level02GroupMoby *select_inactive_group_sand_shark_for_nest(Level02GroupMoby *nest_moby) {
     short            *group_ids;
     Level02GroupMoby *mobys;
-    if (owner->group == 0xFF) {
+    if (nest_moby->group == 0xFF) {
         return 0;
     }
-    group_ids = (short *)D_L02_001ABE40[owner->group];
+    group_ids = (short *)D_L02_001ABE40[nest_moby->group];
     mobys = D_L02_0015FFD8_g;
     do {
         int i = *(unsigned short *)group_ids & 0x7FFF;
         if (mobys[i].type == 0x244 && mobys[i].state == 0x1A) {
-            mobys[i].target = owner;
-            if (owner->hp < mobys[i].hp) {
-                mobys[i].hp = owner->hp;
+            mobys[i].target = nest_moby;
+            if (nest_moby->hp < mobys[i].hp) {
+                mobys[i].hp = nest_moby->hp;
             }
-            owner->hp -= D_L02_0015FFD8_g[i].hp;
-            if (owner->hp <= 0) {
-                owner->hp = 1;
+            nest_moby->hp -= D_L02_0015FFD8_g[i].hp;
+            if (nest_moby->hp <= 0) {
+                nest_moby->hp = 1;
             }
             return &D_L02_0015FFD8_g[i];
         }
