@@ -333,8 +333,8 @@ transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_
 
 void compute_hero_fixed_offset_world_position(float *out) __asm__("FUN_L00_0020d2f8");
 
-void compute_hero_fixed_offset_world_position(float *out) {
-    transform_hero_local_offset_to_world(out, 0.3f, 0.0f, 1.34f);
+void compute_hero_fixed_offset_world_position(float *world_position_output) {
+    transform_hero_local_offset_to_world(world_position_output, 0.3f, 0.0f, 1.34f);
 }
 
 typedef unsigned int u128_20d330 __attribute__((mode(TI), aligned(16)));
