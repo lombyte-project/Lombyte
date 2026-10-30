@@ -11,7 +11,7 @@ extern char *heap_break __asm__("D_0012FBF4") NOT_SDA;
    disabled; fails with ENOMEM past the end of the heap. */
 void *sbrk(s32 increment) {
     u32   status = CpuReadStatus();
-    char *next;
+    char *proposed_heap_break;
     void *previous;
 
     status &= 0x10000;
@@ -21,8 +21,8 @@ void *sbrk(s32 increment) {
             CpuSyncP();
         } while (CpuReadStatus() & 0x10000);
     }
-    next = heap_break + increment;
-    if ((char *)EndOfHeap() < next) {
+    proposed_heap_break = heap_break + increment;
+    if ((char *)EndOfHeap() < proposed_heap_break) {
         *__errno() = 12;
         if (status) {
             CpuEnableInt();
@@ -30,7 +30,7 @@ void *sbrk(s32 increment) {
         return (void *)-1;
     }
     previous = heap_break;
-    heap_break = next;
+    heap_break = proposed_heap_break;
     if (status) {
         CpuEnableInt();
     }
