@@ -1439,13 +1439,13 @@ extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 void update_hero_item_rotation_from_history(char *rotation_output_moby,
                                             u8   *entry) __asm__("FUN_L00_0020f160");
 
-void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *entry) {
+void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *joint_matrix_source) {
     V4_F7F8 vv[4];
     float   fa[16];
     int     ri;
     int     above_threshold_sample_count;
     float  *sums;
-    char   *out;
+    char   *moby_euler_angles;
     int     history_window_size, i, k, acc;
     float   mx;
 
@@ -1497,7 +1497,7 @@ void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *entr
         }
     }
 
-    out = rotation_output_moby + 0x40;
+    moby_euler_angles = rotation_output_moby + 0x40;
     above_threshold_sample_count = 0;
 
     for (i = 0; i < history_window_size; i++) {
@@ -1552,7 +1552,7 @@ void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *entr
     for (k = 0; k < 3; k++) {
         fast_vec_scale(&vv[k], &vv[k], 1.0f / (float)acc);
     }
-    matrix_to_euler(vv, out);
+    matrix_to_euler(vv, moby_euler_angles);
 }
 
 #include "rnc/overlay/hero_tables.h"
