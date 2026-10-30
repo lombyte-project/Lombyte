@@ -463,27 +463,27 @@ void update_teleporter_child_transforms(char *parent_moby) {
 /* Picks a per-stage table by the current stage number and passes the entry for the moby's index on. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030A808), where it is exact; names translated to the US level program. */
 void try_set_teleporter_help_message(struct Moby *moby) {
-    int *data = ((int *)moby->pvars);
+    int *teleporter_help_vars = ((int *)moby->pvars);
     switch (D_0015ED84) {
     case 12:
-        try_set_help_message(4, ((int *)&level_12_teleporter_help_message_ids)[data[4]]);
+        try_set_help_message(4, ((int *)&level_12_teleporter_help_message_ids)[teleporter_help_vars[4]]);
         break;
     case 17:
-        try_set_help_message(4, level_17_teleporter_help_message_ids[data[4]]);
+        try_set_help_message(4, level_17_teleporter_help_message_ids[teleporter_help_vars[4]]);
         break;
     case 1:
     case 7:
     case 13:
-        try_set_help_message(4, shared_teleporter_help_message_ids[data[4]]);
+        try_set_help_message(4, shared_teleporter_help_message_ids[teleporter_help_vars[4]]);
         break;
     case 8:
-        try_set_help_message(4, ((int *)&level_8_teleporter_help_message_ids)[data[4]]);
+        try_set_help_message(4, ((int *)&level_8_teleporter_help_message_ids)[teleporter_help_vars[4]]);
         break;
     case 16:
-        try_set_help_message(4, ((int *)&level_16_teleporter_help_message_ids)[data[4]]);
+        try_set_help_message(4, ((int *)&level_16_teleporter_help_message_ids)[teleporter_help_vars[4]]);
         break;
     case 18:
-        try_set_help_message(4, ((int *)&level_18_teleporter_help_message_ids)[data[4]]);
+        try_set_help_message(4, ((int *)&level_18_teleporter_help_message_ids)[teleporter_help_vars[4]]);
         break;
     }
 }
