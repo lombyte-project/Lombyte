@@ -154,11 +154,11 @@ char *spawn_radially_scattered_moby(void  *unused,
                                     void  *origin,
                                     float *direction) __asm__("FUN_L09_002efe48");
 
-char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity) {
+char *spawn_fading_asteroid_debris(struct Moby *debris_source_asteroid, float *inherited_velocity) {
     char *moby = create_moby(random_integer_below(4) + 0x107);
     if (moby != 0) {
         char *spawned_moby_vars = ((char *)MOBY(moby)->pvars);
-        char *owner_vars = (char *)owner->pvars;
+        char *owner_vars = (char *)debris_source_asteroid->pvars;
         char *dv;
         float reference_position_distance;
         *(float *)spawned_moby_vars = random_float_between(-2.0f, 2.0f);
@@ -175,7 +175,7 @@ char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity
         *(int *)(spawned_moby_vars + 0x4C) = 2;
         moby[0x23] = 0x7F;
         {
-            float spawned_scale = owner->scale * random_float_between(0.125f, 0.25f);
+            float spawned_scale = debris_source_asteroid->scale * random_float_between(0.125f, 0.25f);
             MOBY(moby)->scale = spawned_scale;
             *(float *)(spawned_moby_vars + 0x50) = spawned_scale;
         }
