@@ -1318,7 +1318,7 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
 void follow_camera_springs(void *cam) __asm__("FUN_L00_002e5830");
 
 void follow_camera_springs(void *camera_moby) {
-    f32 velocity[4], hero_pos[4], focus[4], up[4], lateral[4], look[4], base[4], probe[4], left[4],
+    f32 velocity[4], hero_pos[4], focus[4], up[4], lateral[4], look[4], blended_focus_or_collision_origin[4], probe[4], left[4],
         collision_resolution_delta[4], mid[4];
     u8             *view = camera_view;
     FollowCamState *camera_state = FOLLOW_CAM_STATE((struct UpdateCam *)camera_moby);
@@ -1379,10 +1379,10 @@ void follow_camera_springs(void *camera_moby) {
         }
         lerp_vector_by((f32)follow_block->blend_timer /
                            convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)),
-                       base,
+                       blended_focus_or_collision_origin,
                        follow_block,
                        camera_state->follow.offset);
-        fast_vec_add(camera_state->follow.look_target, look, base);
+        fast_vec_add(camera_state->follow.look_target, look, blended_focus_or_collision_origin);
     } else {
         fast_dec_timer_s16(&camera_state->follow.blend_timer);
         if (follow_block->blend_timer < 0) {
@@ -1390,10 +1390,10 @@ void follow_camera_springs(void *camera_moby) {
         }
         lerp_vector_by((f32)follow_block->blend_timer /
                            convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)),
-                       base,
+                       blended_focus_or_collision_origin,
                        follow_block,
                        camera_state->follow.offset);
-        fast_vec_add(camera_state->follow.look_target, look, base);
+        fast_vec_add(camera_state->follow.look_target, look, blended_focus_or_collision_origin);
     }
     follow_camera_transition(camera_moby, look);
     if (hero.vehicle_mode == 2) {
@@ -1403,7 +1403,7 @@ void follow_camera_springs(void *camera_moby) {
     } else {
         scale_vector_xyz(look, view + 0x20, 0.5f);
     }
-    fast_vec_add(base, hero_pos, look);
+    fast_vec_add(blended_focus_or_collision_origin, hero_pos, look);
     scale_vector_xyz(look, view + 0x20, camera_tail->distance);
     fast_vec_add(follow_block->eye, look, follow_block);
     up_projection_or_collision_clearance =
@@ -1411,15 +1411,15 @@ void follow_camera_springs(void *camera_moby) {
                                          FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale *
                                          (FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom - 1.0f);
     scale_vector_xyz(probe, view + 0x20, 20.0f);
-    fast_vec_add(probe, base, probe);
-    if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {
+    fast_vec_add(probe, blended_focus_or_collision_origin, probe);
+    if (collision_line(blended_focus_or_collision_origin, probe, camera_collision_mask, (s32)hero.moby, 0)) {
         qcopy(left, collision_hit_point);
     } else {
         qcopy(left, probe);
     }
     scale_vector_xyz(probe, view + 0x20, 20.0f);
-    fast_vec_sub(probe, base, probe);
-    if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {
+    fast_vec_sub(probe, blended_focus_or_collision_origin, probe);
+    if (collision_line(blended_focus_or_collision_origin, probe, camera_collision_mask, (s32)hero.moby, 0)) {
         qcopy(probe, collision_hit_point);
     }
     fast_vec_sub(collision_resolution_delta, probe, left);
