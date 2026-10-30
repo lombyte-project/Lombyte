@@ -68,8 +68,8 @@ void spawn_birdbot_movement_particles(SplashMoby_u *moby, u128 *origin) {
     f32          size;
     s32          i;
 
-    base.q = *origin;
-    bp = &base;
+    previous_moby_position.q = *origin;
+    bp = &previous_moby_position;
     for (i = 2; i >= 0; i--) {
         vector_scratch.q = 0;
         vector_scratch.f[0] = random_float_between(1.0f, -1.0f) * (frame_time * 0.2f);
