@@ -244,7 +244,7 @@ s32 resolve_point_path_segment_clearance(f32      distance,
                                          s32      path_index,
                                          OvlVec4 *point,
 
-                                         OvlVec4 *out) {
+                                         OvlVec4 *clearance_adjusted_point) {
     OvlVec4             difference;
     OvlVec4             scaled_difference;
     OvlVec4             working;
@@ -265,7 +265,7 @@ s32 resolve_point_path_segment_clearance(f32      distance,
     f32                 projection;
 
     found = 0;
-    saved_out = out;
+    saved_out = clearance_adjusted_point;
     qcopy(&working, point);
     segment_path = D_L00_001B04B0_262030[path_index];
     offset = (s32) & (*(OvlVec4 *)D_0013F5E0);
