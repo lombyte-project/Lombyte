@@ -814,13 +814,13 @@ void FUN_L00_0025f730(void *vector, float x) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607F8), where it is exact; names translated to the US level program. */
 
-extern int moby_table __asm__("D_L00_0015FFD8");
+#include "rnc/overlay/level_labels.h"
 
 /* Adds the moby index of a to the short list unless present or the list holds max. */
 void append_unique_moby_index(int moby_address, short *list, short max) __asm__("FUN_L00_0025f780");
 
 void append_unique_moby_index(int moby_address, short *list, short max) {
-    int k = ((moby_address - moby_table) << 8) >> 16;
+    int k = ((moby_address - (int)moby_table) << 8) >> 16;
     int i;
     for (i = 1; i <= list[0]; i++) {
         if (list[i] == k)
@@ -831,13 +831,12 @@ void append_unique_moby_index(int moby_address, short *list, short max) {
         list[list[0]] = k;
     }
 }
-extern s32 D_L00_0015FFD8_c2 __asm__("D_L00_0015FFD8");
 /* Removes moby p from the index list a by moving the last entry into its place. */
 void mine_spawn_drops(s32 p, s16 *a) __asm__("FUN_L00_0025f800");
 void mine_spawn_drops(s32 moby_address, s16 *moby_index_list) {
     s32 i;
     for (i = 1; i <= moby_index_list[0]; i++) {
-        if (D_L00_0015FFD8_c2 + (moby_index_list[i] << 8) == moby_address) {
+        if ((s32)moby_table + (moby_index_list[i] << 8) == moby_address) {
             moby_index_list[i] = moby_index_list[moby_index_list[0]];
             moby_index_list[0]--;
             return;
@@ -854,14 +853,13 @@ typedef struct {
     u8 pad7c[0x100 - 0x7C];
 } M25f878;
 extern s16 D_L00_001B0770[] NOT_SDA;
-extern u8 *D_L00_0015FFD8_c3 __asm__("D_L00_0015FFD8");
 /* Finds the moby in the D_L00_001B0770 index list whose data id matches id; 0 when none. */
 M25f878 *find_listed_moby_by_data_id(s32 id) __asm__("FUN_L00_0025f878");
 
 M25f878 *find_listed_moby_by_data_id(s32 id) {
     s32 i;
     for (i = 1; i <= D_L00_001B0770[0]; i++) {
-        M25f878 *candidate_moby = (M25f878 *)(D_L00_001B0770[i] * 0x100 + (s32)D_L00_0015FFD8_c3);
+        M25f878 *candidate_moby = (M25f878 *)(D_L00_001B0770[i] * 0x100 + (s32)moby_table);
         if (candidate_moby->p78->id == id)
             return candidate_moby;
     }
@@ -875,7 +873,6 @@ void add_random_offset_to_vector_xyz(f32 *inout_vector, f32 random_offset_bound)
     inout_vector[1] += random_float_between(-random_offset_bound, random_offset_bound);
     inout_vector[2] += random_float_between(-random_offset_bound, random_offset_bound);
 }
-extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFE0 __attribute__((sda));
 /* True for a moby inside the moby table whose class at 0xA6 is 0x1F4..0x21C. */
 s32 is_moby_in_class_range_500_to_540(u8 *m) __asm__("FUN_L00_0025e3b8");
@@ -885,7 +882,7 @@ s32 is_moby_in_class_range_500_to_540(u8 *moby) {
     bad:
         return 0;
     }
-    if (moby < D_L00_0015FFD8_c) {
+    if (moby < moby_table) {
         goto bad;
     }
     if (moby > D_L00_0015FFE0) {

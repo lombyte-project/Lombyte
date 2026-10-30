@@ -15,7 +15,7 @@
 
 extern Vec4 D_0013E090[2] NOT_SDA; /* camera start: position, rotation */
 extern s32 D_00141660 NOT_SDA;
-extern struct Moby *moby_table __asm__("D_L00_0015FFD8"); /* first moby */
+#include "rnc/overlay/level_labels.h"
 extern struct Moby *D_L00_0015FFDC; /* end of the moby table */
 extern s32 D_L00_00160540;
 extern struct HeroEase D_L00_0017A680[] NOT_SDA;
@@ -42,8 +42,8 @@ void initialize_hero(void) {
     for (i = 0; i < 7; i++)
         save[i] = hero.items[i].item_id;
 
-    for (i = 0; &moby_table[i] < D_L00_0015FFDC; i++) {
-        candidate_moby = &moby_table[i];
+    for (i = 0; (struct Moby *)moby_table + i < D_L00_0015FFDC; i++) {
+        candidate_moby = (struct Moby *)moby_table + i;
         if (candidate_moby->oclass == 0) {
             hero.moby = candidate_moby;
             z = probe_ground_height(&candidate_moby->pos, 0, 0.5f);

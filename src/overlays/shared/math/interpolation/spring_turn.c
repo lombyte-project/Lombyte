@@ -510,7 +510,7 @@ extern unsigned short *D_L00_001AB840_2591d0[] __asm__("D_L00_001AB840");
 extern char *D_L00_00160114;
 extern unsigned short *moby_group_entry_cursor __asm__("D_L00_0016010C");
 extern short D_L00_00160110;
-extern char *D_L00_0015FFD8_2591d0 __asm__("D_L00_0015FFD8");
+#include "rnc/overlay/level_labels.h"
 int FUN_L00_002592b8_c(char **, char *) __asm__("FUN_L00_002592b8");
 /* Looks up table entry idx and makes it current; the flag test reads the
  * current entry back, as the original did. */
@@ -532,7 +532,7 @@ int get_first_moby_in_group(char **out, int moby_group_index, int include_sign_b
     if (entry_index_list == 0) return -1;
     entry_index = *entry_index_list & 0x7FFF;
     D_L00_00160110 = entry_index;
-    entry_address = D_L00_0015FFD8_2591d0 + (entry_index << 8);
+    entry_address = moby_table + (entry_index << 8);
     D_L00_00160114 = entry_address;
     *out = entry_address;
     entry_sign_bit_set = (unsigned)(*(char *volatile *)&D_L00_00160114)[0x20] >> 31;
@@ -543,7 +543,6 @@ int get_first_moby_in_group(char **out, int moby_group_index, int include_sign_b
 }
 
 extern unsigned short *D_L00_0016010C;
-extern char *moby_table __asm__("D_L00_0015FFD8");
 extern unsigned short *D_L00_001AB840[];
 
 /* Iterator over the mobies of target's group: finds the next one whose
