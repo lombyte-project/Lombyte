@@ -2242,7 +2242,7 @@ void finalize_suck_cannon_moby(char *moby, char *suction_record, int flag) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DDEA0), where it is exact; names translated to the US level program. */
 int FUN_L00_002dc9f0(struct Moby *moby, char *vars);
 
-int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
+int FUN_L00_002dc9f0(struct Moby *moby, char *yaw_turn_state) {
     enum {
         SUCK_UPDATE_ALIGNING_FOR_SUCTION = 0,
         SUCK_UPDATE_RISING_FOR_SUCTION = 1,
@@ -2268,7 +2268,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             yaw = fast_add_rotations(fast_arc_tan(suction_and_projectile_record->x - moby->pos.x, suction_and_projectile_record->y - moby->pos.y),
                                      3.1415927f);
             approach_w(moby,
-                       vars + 0x44,
+                       yaw_turn_state + 0x44,
                        yaw,
                        frame_scale_sq_macro * 0.19634955f,
                        frame_scale_sq_macro * 0.19634955f,
