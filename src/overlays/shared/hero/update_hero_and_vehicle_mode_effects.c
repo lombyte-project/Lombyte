@@ -199,28 +199,28 @@ extern void  update_moby_vertical_oscillation(float, float, char *, float *, flo
 void update_hero_bobbing_and_target_position(void) __asm__("FUN_L15_002007d8");
 
 void update_hero_bobbing_and_target_position(void) {
-    struct Hero *base = &hero;
-    if (base->state.current == 0x6B && base->hoverboard_airborne == 0) {
+    struct Hero *hero_instance = &hero;
+    if (hero_instance->state.current == 0x6B && hero_instance->hoverboard_airborne == 0) {
         char *position_target;
         float position_offset[4];
         float rotation_matrix[16];
         update_moby_vertical_oscillation(1.1f,
                                          frame_time * 5.2359877f,
-                                         ((char *)base->moby),
-                                         (float *)(&base->unk6A8),
-                                         (float *)(&base->unk6AC));
-        position_target = ((char *)base->hoverboard_moby);
+                                         ((char *)hero_instance->moby),
+                                         (float *)(&hero_instance->unk6A8),
+                                         (float *)(&hero_instance->unk6AC));
+        position_target = ((char *)hero_instance->hoverboard_moby);
         if (position_target != 0) {
             char *hero_moby;
-            hero_moby = ((char *)base->moby);
+            hero_moby = ((char *)hero_instance->moby);
             qcopy(position_target + 0x10, hero_moby + 0x10);
             *(u128 *)position_offset = 0;
             position_offset[2] = 0.21f;
             transform_vector_by_basis(position_offset, position_offset, hero_moby + 0xC0);
             euler_rotation_matrix(rotation_matrix, &D_L15_0017ACC0_lui);
             transform_vector(position_offset, position_offset, rotation_matrix);
-            fast_vec_add(((char *)base->hoverboard_moby) + 0x10,
-                         ((char *)base->hoverboard_moby) + 0x10,
+            fast_vec_add(((char *)hero_instance->hoverboard_moby) + 0x10,
+                         ((char *)hero_instance->hoverboard_moby) + 0x10,
                          position_offset);
         }
     }
