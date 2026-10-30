@@ -7,6 +7,8 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/audio/voice_pool.h"
+#include "rnc/input/pad_state.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/vu1_registers.h"
@@ -47,9 +49,7 @@ typedef struct Devastator_2b2100 {
     short glow;
 } Devastator_2b2100;
 
-typedef struct Input { char pad0[0x1A0]; int held; } Input;
 
-typedef struct ItemVariant { unsigned char pad[0xB]; unsigned char level; } ItemVariant;
 
 typedef struct UsageStat_2b2100 { char pad0[0x58]; unsigned short uses; unsigned short longest; int levels; } UsageStat_2b2100;
 
@@ -59,8 +59,6 @@ typedef struct AimInfo { char pad0[0xA]; unsigned char radius; char padB[5]; flo
 
 typedef struct Light_2b2100 { float x, y, z, b; Vec_2b2100 pos; } Light_2b2100;
 
-extern Input pad_input_2b2100 __asm__("D_0013C940");
-extern ItemVariant item_variant_2b2100 __asm__("D_0013E520");
 extern char usage_stats_2b2100[] __asm__("D_00141680");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern char view_origin_2b2100[] __asm__("D_L00_00166DC0");
@@ -154,7 +152,7 @@ void devastator_update(struct Moby *devastator_moby) {
         data->target_height = collision_hit_z - data->target->pos.z;
     }
     if (D_L00_0015F5C4 != 2 && !data->cooldown && !hero.item_use_locked && devastator_moby->seq < 2 &&
-        (pad_input_2b2100.held & hero.items[0].button_mask) && scale_game_frames(22) < hero.items[0].ready_frames) {
+        (controller_state.held & hero.items[0].button_mask) && scale_game_frames(22) < hero.items[0].ready_frames) {
         velocity.q = 0;
         if (devastator_moby->prev_seq == 0) blend_moby_animation(devastator_moby, 1, 0, scale_game_frames(4));
         if (hero.state.current == 30 && (hero.moby->flags & 1)) {
@@ -206,7 +204,7 @@ void devastator_update(struct Moby *devastator_moby) {
                                 }
                             }
                             if (!(limit < distance)) {
-                                spread = convert_integer_to_float(item_variant_2b2100.level) * 0.6981317f;
+                                spread = convert_integer_to_float(item_text_variant[11]) * 0.6981317f;
                                 build_spherical_offset(&probe, distance, yaw, pitch + hero.ground_pitch.f * 0.5f);
                                 fast_vec_add(&probe, &probe, &launch);
                                 aim_angle_error = fast_arc_sin(fast_vec_dist(&probe, &point) / (distance + distance));
@@ -1525,7 +1523,6 @@ extern char D_L00_00166C80[];
 #include "rnc/rendering/debug/debug_menu.h"
 extern f32 D_0015ED6C;
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern int D_0013E520_49a8 __asm__("D_0013E520"); /* no foreign declaration */
 extern int D_0015ED84;
 extern int D_L00_0015F5C4; /* no foreign declaration */
 extern int D_L00_00173E58; /* no foreign declaration */
@@ -2083,8 +2080,6 @@ typedef struct Hit_2b6140 {
     V_2b6140 v60;
 } Hit_2b6140;
 typedef struct Hit2 { char p0[0x24]; Tgt *f24; } Hit2;
-typedef struct Row { char p0[0x74]; unsigned char f74; char p1[0x13]; struct Moby *f88; } Row;
-extern char voice_pool[] __asm__("D_0013E550");
 extern Hit2 *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 extern char D_L00_00177F00_2b6140[] __asm__("D_L00_00177F00");
 extern float frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
@@ -2238,9 +2233,9 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 fast_vec_normalize(&k30, &k30, frame_time_macro + frame_time_macro);
                 fast_vec_normalize(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
                 if (missile_vars->f2C != -1) {
-                    Row *e = (Row *)(voice_pool + missile_vars->f2C * 0x70);
-                    if (e->f88 == missile_moby) {
-                        if (e->f74 != 0) release_voice_slot(missile_vars->f2C);
+                    u8 *e = (u8 *)&voice_pool + missile_vars->f2C * 0x70;
+                    if (*(struct Moby **)(e + 0x88) == missile_moby) {
+                        if (e[0x74] != 0) release_voice_slot(missile_vars->f2C);
                     }
                 }
                 missile_vars->f2C = -1;
@@ -2253,9 +2248,9 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 fast_vec_normalize(&k30, &k30, frame_time_macro + frame_time_macro);
                 fast_vec_normalize(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
                 if (missile_vars->f2C != -1) {
-                    Row *e = (Row *)(voice_pool + missile_vars->f2C * 0x70);
-                    if (e->f88 == missile_moby) {
-                        if (e->f74 != 0) release_voice_slot(missile_vars->f2C);
+                    u8 *e = (u8 *)&voice_pool + missile_vars->f2C * 0x70;
+                    if (*(struct Moby **)(e + 0x88) == missile_moby) {
+                        if (e[0x74] != 0) release_voice_slot(missile_vars->f2C);
                     }
                 }
                 missile_vars->f2C = -1;
@@ -2269,9 +2264,9 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         if (controller_state.pressed & 0x20) {
             missile_moby->command = 1;
             if (missile_vars->f2C != -1) {
-                Row *e = (Row *)(voice_pool + missile_vars->f2C * 0x70);
-                if (e->f88 == missile_moby) {
-                    if (e->f74 != 0) release_voice_slot(missile_vars->f2C);
+                u8 *e = (u8 *)&voice_pool + missile_vars->f2C * 0x70;
+                if (*(struct Moby **)(e + 0x88) == missile_moby) {
+                    if (e[0x74] != 0) release_voice_slot(missile_vars->f2C);
                 }
             }
             missile_vars->f2C = -1;
@@ -2351,7 +2346,6 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) __asm__("FUN_
 
 extern s32 apply_taunter_to_nearby_mobies(Moby *, f32) __asm__("FUN_L00_002b6bc8");
 extern u32 pad_held[] __asm__("D_0013CAE0");
-extern u8 D_0013E550[];
 extern Ring D_00141680;
 extern s32 FUN_L00_00257b50_b6bc8(s32) __asm__("FUN_L00_00257b50");
 extern u8 *FUN_L00_0025c338_b6bc8(Moby *) __asm__("FUN_L00_0025c338");
@@ -2535,7 +2529,7 @@ void taunter_update(Moby *taunter_moby) {
         blend_moby_animation(taunter_moby, 1, 0, scale_game_frames(5));
     voice_slot_index = taunter_vars->anim;
     if (voice_slot_index != -1) {
-        voice_slot_window = D_0013E550 + voice_slot_index * 0x70;
+        voice_slot_window = (u8 *)&voice_pool + voice_slot_index * 0x70;
         if (*(Moby **)(voice_slot_window + 0x88) == taunter_moby && voice_slot_window[0x74] != 0)
             release_voice_slot(voice_slot_index);
     }
@@ -2915,7 +2909,7 @@ void pyrocitor_update(struct Moby *moby) {
             cancel_hero_item_animation();
             firing_voice_slot_index = pyrocitor_vars->voice;
             if (firing_voice_slot_index != -1) {
-                u8 *slot = D_0013E550 + firing_voice_slot_index * 0x70;
+                u8 *slot = (u8 *)&voice_pool + firing_voice_slot_index * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74])
                     release_voice_slot(firing_voice_slot_index);
             }
@@ -2934,7 +2928,6 @@ void pyrocitor_update(struct Moby *moby) {
     }
     update_pyrocitor_flame_effect_slots((char *)moby);
 }
-extern unsigned char D_0013E550_2b8230[] __asm__("D_0013E550");
 extern int D_0015ED84_2b8230 __asm__("D_0015ED84");
 void FUN_0020c828_2b8230(void *) __asm__("FUN_0020c828");
 void help_request(int, int) __asm__("FUN_L00_00203908");
@@ -2957,7 +2950,7 @@ void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
         }
         voice_slot_or_time_stat = *(short *)(pyrocitor_vars + 0x4A);
         if (voice_slot_or_time_stat != -1) {
-            voice = D_0013E550_2b8230 + voice_slot_or_time_stat * 0x70;
+            voice = (unsigned char *)&voice_pool + voice_slot_or_time_stat * 0x70;
             if (*(unsigned char **)(voice + 0x88) == pyrocitor_moby && voice[0x74])
                 release_voice_slot(voice_slot_or_time_stat);
         }
@@ -2993,7 +2986,6 @@ void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B9730), where it is exact; names translated to the US level program. */
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern char D_0013E520[];
 extern f32 D_0015ED6C_c2 __asm__("D_0015ED6C");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern unsigned swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
@@ -3022,7 +3014,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
     float spark_random_vector[4];
     float spark_position[4];
     char *slots_base = ((char *)MOBY(moby)->pvars) + 4;
-    unsigned char *item_variant_bytes = (unsigned char *)D_0013E520;
+    unsigned char *item_variant_bytes = item_text_variant;
     int i;
 
     for (i = 0; i < 15; i++) {
@@ -3139,7 +3131,6 @@ typedef struct Stats { char pad0[0x98]; unsigned short uses; unsigned short long
 
 typedef struct Stats2 { char pad0[0xD0]; unsigned short uses; unsigned short longest; int levels; } Stats2;
 
-typedef struct Voice { char pad0[4]; unsigned char active; char pad5[0x13]; struct Moby *owner; char pad1C[0x54]; } Voice;
 
 typedef struct Aim { char pad0[4]; short kind; } Aim;
 
@@ -3157,7 +3148,6 @@ void initialize_tesla_claw_beam(struct Moby *moby) __asm__("FUN_L00_002b9310");
 extern int D_0015ED84_2b2100 __asm__("D_0015ED84");
 extern char D_0013F350_2b2100[] __asm__("D_0013F350");
 extern float D_0015ED60_2b2100 __asm__("D_0015ED60");
-extern Voice D_0013E550_2b2100[] __asm__("D_0013E550");
 extern unsigned char D_0013E533_2b2100[] __asm__("D_0013E533");
 extern unsigned short D_00141D70_2b2100[] __asm__("D_00141D70");
 extern unsigned short D_00141918_2b2100[] __asm__("D_00141918");
@@ -3315,8 +3305,8 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
         D_L00_00161590 = 1;
         if (tesla_claw_vars->glow > 0) tesla_claw_vars->glow--;
         if (tesla_claw_vars->sound != -1) {
-            Voice *firing_voice_slot_window = &D_0013E550_2b2100[tesla_claw_vars->sound];
-            if (firing_voice_slot_window[1].owner == tesla_claw_moby && firing_voice_slot_window[1].active) release_voice_slot(tesla_claw_vars->sound);
+            VoiceSlot *firing_voice_slot_window = (VoiceSlot *)&voice_pool + tesla_claw_vars->sound;
+            if ((struct Moby *)firing_voice_slot_window[1].owner == tesla_claw_moby && firing_voice_slot_window[1].state) release_voice_slot(tesla_claw_vars->sound);
         }
         tesla_claw_vars->sound = -1;
     } else if (!FUN_L00_0028d8c0_2b2100(tesla_claw_moby, tesla_claw_vars->sound)) {
