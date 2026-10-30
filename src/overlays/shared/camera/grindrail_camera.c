@@ -364,8 +364,8 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         int   range_end = 0;
         int   j = 0;
         int   count;
-        int   base;
-        int   node;
+        int   hero_path_range_start_segment;
+        int   camera_path_sample_segment;
         float node_fraction;
         float sum;
         float hero_length;
@@ -398,19 +398,19 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         if (pathB->nodes[j].x != 0.0f) {
             lead = pathB->nodes[j].x;
         }
-        base = truncate_float_to_s32(pathB->nodes[j].w);
-        count = ((Hero *)(((char *)((char *)&hero))))->rail_segment - base;
+        hero_path_range_start_segment = truncate_float_to_s32(pathB->nodes[j].w);
+        count = ((Hero *)(((char *)((char *)&hero))))->rail_segment - hero_path_range_start_segment;
         if (count < 0) {
             count += pathD->n;
         }
         for (i = 0; i < count; i++) {
-            sum += pathD->nodes[(base + i) % pathD->n].w;
+            sum += pathD->nodes[(hero_path_range_start_segment + i) % pathD->n].w;
         }
         sum += ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;
         dist = camera_length * (sum / hero_length);
-        node = truncate_float_to_s32(pathC->nodes[j].w);
+        camera_path_sample_segment = truncate_float_to_s32(pathC->nodes[j].w);
         node_fraction = 0.0f;
-        sample_path(pathA, look_target, &node, &node_fraction, dist, 1);
+        sample_path(pathA, look_target, &camera_path_sample_segment, &node_fraction, dist, 1);
         speed_scale = pathC->nodes[j].x;
         if (speed_scale <= 0.0f) {
             speed_scale = 0.01f;
