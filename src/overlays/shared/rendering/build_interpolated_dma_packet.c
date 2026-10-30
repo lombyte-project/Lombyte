@@ -87,15 +87,15 @@ void prepare_scaled_float_table_with_target_byte(char *value_target, int val, fl
     int    i;
     float *destination;
     float *source;
-    float *base;
+    float *source_table_start;
     value_target[0x3F] = val;
     *(s32 *)(scaled_table_output + 0x0) = scaled_table_header_leading_word_gp;
     *(s32 *)(scaled_table_output + 0x4) = scaled_table_header_second_word;
     *(s32 *)(scaled_table_output + 0x8) = scaled_table_header_third_word;
     *(s32 *)(scaled_table_output + 0xC) = scaled_table_header_final_word;
     destination = (float *)(scaled_table_output + 0x10);
-    base = scaled_table_source;
-    source = base + 4;
+    source_table_start = scaled_table_source;
+    source = source_table_start + 4;
     for (i = 0xF7; i >= 0; i--) {
         *destination = *source * scale;
         destination++;
