@@ -176,13 +176,13 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby,
                                           CarrierVars *vars,
                                           OvlVec4     *grip) __asm__("FUN_L00_002c7548");
 
-void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip) {
+void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *throw_carrier_vars, OvlVec4 *grip) {
     Vec_2c7548   throw_origin;
     Mat3_2c7548  basis;
     Mat_2c7548   matrix;
     Vec_2c7548   direction, target, arc, saved, probe;
     struct Moby *held;
-    float       *out;
+    float       *held_throw_velocity;
     float        horizontal, radius, angle, vertical, slope, distance, root;
     int          hit;
     float        speed;
@@ -191,10 +191,10 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, 
     *(u128 *)pos = grip->q;
     copy_matrix3x4(basis, l00_camera.unk0);
     transpose_rotation_matrix(matrix, basis);
-    held = vars->held;
+    held = throw_carrier_vars->held;
     if (held == 0)
         return;
-    out = (float *)held->pvars;
+    held_throw_velocity = (float *)held->pvars;
     *(u128 *)direction = 0;
     direction[0] = 1.0f;
     transform_vector_by_basis(direction, direction, hero.basis);
@@ -265,7 +265,7 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, 
     }
     FUN_L00_002c7320_2c7548(pos,
                             target,
-                            out,
+                            held_throw_velocity,
                             frame_time_sq_macro * 9.0f,
                             0.00000999999975f,
                             (controller_state.held & 5) ? 3.5f : 2.5f);
