@@ -47,7 +47,7 @@ build_moby_bone_transform(EnvironmentMappedObject *, int, void *) __asm__("func_
 
 void render_environment_mapped_object(EnvironmentMappedObject *object) __asm__("FUN_002327a0");
 
-void render_environment_mapped_object(EnvironmentMappedObject *object) {
+void render_environment_mapped_object(EnvironmentMappedObject *mesh_object) {
     Vec4         quad_positions[4];
     int          colors[4];
     float        texture_coordinates[4][2];
@@ -70,7 +70,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     int          element_index;
     int          corner_index;
 
-    class_index = object->class_id - 0x212;
+    class_index = mesh_object->class_id - 0x212;
     positions = environment_mesh_positions[class_index];
     normals = environment_mesh_normals[class_index];
     indexed_quads = environment_mesh_quads[class_index];
@@ -90,10 +90,10 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     colors[2] = color;
     colors[1] = color;
     colors[0] = color;
-    build_moby_bone_transform(object, 0, object_transform);
+    build_moby_bone_transform(mesh_object, 0, object_transform);
     if (game_mode != 0 ||
-        (absolute_float(preview_camera.position.f[0] - object->position_x) < 16.0f &&
-         absolute_float(preview_camera.position.f[1] - object->position_y) < 16.0f)) {
+        (absolute_float(preview_camera.position.f[0] - mesh_object->position_x) < 16.0f &&
+         absolute_float(preview_camera.position.f[1] - mesh_object->position_y) < 16.0f)) {
         mapping_enabled = 1;
     }
     if (game_mode == 6 && ship_substate[0] == 4) {
