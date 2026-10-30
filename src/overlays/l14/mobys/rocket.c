@@ -246,9 +246,9 @@ void mark_moby_and_linked_moby_for_removal(struct Moby *moby) __asm__("FUN_L14_0
 
 void mark_moby_and_linked_moby_for_removal(struct Moby *moby) {
     char *moby_vars = ((char *)moby->pvars);
-    char *other = D_L14_0015FFD8 + (*(int *)(moby_vars + 4) << 8);
-    if (other != 0 && other[0x20] >= 0)
-        mark_moby_for_removal(other);
+    char *linked_moby = D_L14_0015FFD8 + (*(int *)(moby_vars + 4) << 8);
+    if (linked_moby != 0 && linked_moby[0x20] >= 0)
+        mark_moby_for_removal(linked_moby);
     if (((char)moby->state) >= 0)
         mark_moby_for_removal(moby);
 }
