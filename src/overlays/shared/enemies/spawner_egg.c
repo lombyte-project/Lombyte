@@ -187,13 +187,13 @@ char *spawn_spawner_egg(int           spawner_moby,
 void remove_spawner_egg(void *moby, char *data) __asm__("FUN_L09_0030b350");
 
 void remove_spawner_egg(void *moby, char *egg_vars) {
-    char *other = *(char **)(egg_vars + 0x10);
-    if (other != 0 && *(short *)(other + 0xA6) == 0x75D && (unsigned char)other[0x20] != 0xFE &&
-        (unsigned char)other[0x20] != 0xFD) {
+    char *owner_spawner = *(char **)(egg_vars + 0x10);
+    if (owner_spawner != 0 && *(short *)(owner_spawner + 0xA6) == 0x75D && (unsigned char)owner_spawner[0x20] != 0xFE &&
+        (unsigned char)owner_spawner[0x20] != 0xFD) {
         int   index = (unsigned char)egg_vars[0x1C];
-        char *base = *(char **)(other + 0x78);
-        base += index * 4;
-        *(int *)(base + 0xB0) = 0;
+        char *indexed_spawner_vars = *(char **)(owner_spawner + 0x78);
+        indexed_spawner_vars += index * 4;
+        *(int *)(indexed_spawner_vars + 0xB0) = 0;
     }
     mark_moby_for_removal(moby);
 }
