@@ -432,11 +432,11 @@ void draw_sandmouse_billboard_quads(struct Moby *moby) __asm__("FUN_L01_0030de68
 
 void draw_sandmouse_billboard_quads(struct Moby *moby) {
     char *sandmouse_instance_vars = ((char *)moby->pvars);
-    char *entry = sandmouse_instance_vars + 0x70;
+    char *billboard_quad_position = sandmouse_instance_vars + 0x70;
     int   i;
     for (i = 1; i >= 0; i--) {
-        draw_offset_textured_effect_quad(entry, 0x2528AA28, 0.1f, 0.08f);
-        entry += 0x10;
+        draw_offset_textured_effect_quad(billboard_quad_position, 0x2528AA28, 0.1f, 0.08f);
+        billboard_quad_position += 0x10;
     }
 }
 /* Attach two effect entries and register their update callback. */
