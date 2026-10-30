@@ -987,7 +987,7 @@ extern short *D_L05_001AC040_03f80[] __asm__("D_L05_001ABCC0");
 extern short  D_L05_00160098_03f80 __asm__("D_L05_0015FFD8");
 char *find_nearest_extermibot_group_target(char *self, int group_index) __asm__("FUN_L05_00303f80");
 
-char *find_nearest_extermibot_group_target(char *self, int group_index) {
+char *find_nearest_extermibot_group_target(char *search_origin_moby, int group_index) {
     short *list = D_L05_001AC040_03f80[group_index];
     float  best = 120.0f;
     char  *nearest_moby = 0;
@@ -1000,7 +1000,7 @@ char *find_nearest_extermibot_group_target(char *self, int group_index) {
             if (D_L05_0015FFD8_7920[i].flags & 0x1000) {
                 if (D_L05_0015FFD8_7920[i].state < 0x7F) {
                     float candidate_distance =
-                        fast_vec_dist(&D_L05_0015FFD8_7920[i].pos, self + 0x10);
+                        fast_vec_dist(&D_L05_0015FFD8_7920[i].pos, search_origin_moby + 0x10);
                     if (candidate_distance < best) {
                         best = candidate_distance;
                         nearest_moby = *(char **)&D_L05_00160098_03f80 + (i << 8);
