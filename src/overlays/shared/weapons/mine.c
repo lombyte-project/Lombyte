@@ -601,18 +601,18 @@ void mine_update(M910 *mine_moby) {
     B910  camera_blast_parameters = l00_mine_camera_blast_parameters;
     B910  alternate_camera_blast_parameters = l00_mine_alternate_camera_blast_parameters;
     U910  collision_response_velocity;
-    U910  old;
+    U910  mine_pre_motion_position;
     U910  up;
     W910 *v;
     M910 *hd;
     int   mine_state_snapshot;
 
     hd = 0;
-    old.q = 0;
+    mine_pre_motion_position.q = 0;
     up.q = 0;
-    old.f[2] = frame_time + frame_time;
+    mine_pre_motion_position.f[2] = frame_time + frame_time;
     up.f[2] = 1.0f;
-    collision_response_velocity.q = old.q;
+    collision_response_velocity.q = mine_pre_motion_position.q;
     v = mine_moby->v;
     if ((hero.unk20A5 != 0 || hero.unk20AF != 0) && mine_moby->state == 0) {
         mine_moby->flags |= 0x41;
@@ -666,7 +666,7 @@ void mine_update(M910 *mine_moby) {
             float gz;
 
             mine_moby->flags &= 0xFEFF;
-            qcopy(&old, &mine_moby->pos);
+            qcopy(&mine_pre_motion_position, &mine_moby->pos);
             if (!(mine_state_snapshot & 4)) {
                 fast_vec_add(&mine_moby->pos, &mine_moby->pos, v);
                 if (v->h50 == 0) {
@@ -703,7 +703,7 @@ void mine_update(M910 *mine_moby) {
             }
             mine_moby->pos.f[2] -= v->f6C * fast_sin(v->f70) * k;
             if (!(mine_moby->state & 4) &&
-                collision_line(&old, &mine_moby->pos, 0x10, (int)mine_moby, (int)&q) != 0) {
+                collision_line(&mine_pre_motion_position, &mine_moby->pos, 0x10, (int)mine_moby, (int)&q) != 0) {
                 if (v->h50 == 0 && collision_hit_material() == 0 && v->vel.f[2] < 0.0f) {
                     V910 t;
                     V910 n;
@@ -1006,7 +1006,7 @@ void mine_update(M910 *mine_moby) {
                 if (mine_moby->state & 4) {
                     V910 t;
                     {
-                        fast_vec_sub(t, &mine_moby->pos, &old);
+                        fast_vec_sub(t, &mine_moby->pos, &mine_pre_motion_position);
                         v->vel.q = *(OvlQuad *)t;
                     }
                 }
