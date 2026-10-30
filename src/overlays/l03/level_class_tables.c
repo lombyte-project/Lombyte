@@ -25,7 +25,6 @@ void FUN_L03_002da870();
 void FUN_L03_002db558();
 void FUN_L03_002dbd90();
 void FUN_L03_002dca30();
-void FUN_L03_002e01d0();
 void FUN_L03_002eb978();
 void FUN_L03_002ebd70();
 void blarg_helicopter_update() __asm__("FUN_L03_002cca00");
@@ -80,7 +79,7 @@ void qwark_rilgar_update() __asm__("FUN_L03_002dc478");
 void red_ship_1_update() __asm__("FUN_L03_0029dba8");
 void robo_shack_sign_update() __asm__("FUN_L03_002d3e58");
 void robot_arm_update() __asm__("FUN_L00_002e3d88");
-void rocket_update() __asm__("FUN_L00_002cd1f0");
+void update_ryno_rocket() __asm__("FUN_L00_002cd1f0");
 void sandmouse_house_update() __asm__("FUN_L01_002f2b68");
 void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
 void set_transform_state_three_when_outside_clip_volume() __asm__("FUN_L03_002e8980");
@@ -94,7 +93,7 @@ void taunter_update() __asm__("FUN_L00_002b6f10");
 void tesla_claw_update() __asm__("FUN_L00_002b87e0");
 void trespasser_update() __asm__("FUN_L00_002c1718");
 void update_animated_point_light_moby() __asm__("FUN_L00_002d3a10");
-void update_beam_effect_lifecycle() __asm__("FUN_L00_002b4198");
+void update_thruster_pack_flame() __asm__("FUN_L00_002b4198");
 void update_camera_pose_with_optional_collision() __asm__("FUN_L00_002eb218");
 void update_camera_position_and_orientation() __asm__("FUN_L03_002ebdb0");
 void update_camera_state_outside_clip_volume() __asm__("FUN_L03_002ebde8");
@@ -107,21 +106,22 @@ void update_hero_aligned_camera_from_input() __asm__("FUN_L00_002e9f38");
 void update_homing_rocket() __asm__("FUN_L03_002d43c8");
 void update_homing_shot() __asm__("FUN_L00_002cb418");
 void update_homing_spark_projectile() __asm__("FUN_L03_002d47c0");
+void update_kerwan_cutscene_effects() __asm__("FUN_L03_002e01d0");
 void update_kerwan_path_enemy() __asm__("FUN_L03_002c6fd0");
-void update_kerwan_tutorial_hints() __asm__("FUN_L03_002df520");
+void update_help_hints() __asm__("FUN_L03_002df520");
 void update_linked_moby_scale_and_rotation() __asm__("FUN_L00_002bb400");
 void update_linked_moby_states() __asm__("FUN_L00_002b3458");
 void update_linked_moby_transform_and_lifetime() __asm__("FUN_L00_002d7f88");
 void update_moby_camera_control() __asm__("FUN_L02_002fc298");
 void update_moby_draw_callback() __asm__("FUN_L03_002dc9b0");
 void update_morphoray_chicken() __asm__("FUN_L00_002c97e0");
-void update_music_box_exit_trigger() __asm__("FUN_L01_0031a128");
+void update_music_switch_emitter() __asm__("FUN_L01_0031a128");
 void update_nearest_area_moby_selection() __asm__("FUN_L01_002f2eb8");
 void update_parent_following_effect() __asm__("FUN_L03_002bae48");
 void update_path_mover() __asm__("FUN_L03_002db020");
 void update_path_mover_spawner() __asm__("FUN_L03_002db280");
 void update_rail_lift() __asm__("FUN_L03_002dccc0");
-void update_requested_state_from_box_position() __asm__("FUN_L01_00319f18");
+void update_reverb_box_emitter() __asm__("FUN_L01_00319f18");
 void update_sandmouse_projectile() __asm__("FUN_L01_0030c9a8");
 void update_sound_emitter_playback_by_distance() __asm__("FUN_L00_002ed950");
 void update_target_outside_zone_timeout() __asm__("FUN_L01_00302648");
@@ -181,7 +181,7 @@ struct MobyClassUpdate moby_classes[181] __asm__("D_L03_001E3880")
         { 0x9d,                         devastator_update, default_moby_methods},
         { 0xa3,                           visibomb_update, default_moby_methods},
         { 0xa6,                 update_linked_moby_states, default_moby_methods},
-        { 0xa7,              update_beam_effect_lifecycle, default_moby_methods},
+        { 0xa7,                update_thruster_pack_flame, default_moby_methods},
         { 0xa8,                            blaster_update, default_moby_methods},
         { 0xac,                          FUN_L00_002b6140, default_moby_methods},
         { 0xaf,                            taunter_update, default_moby_methods},
@@ -223,7 +223,7 @@ struct MobyClassUpdate moby_classes[181] __asm__("D_L03_001E3880")
         {0x1b1,                        noop_main_callback, default_moby_methods},
         {0x1c6,                          FUN_L00_002cc608, default_moby_methods},
         {0x1c7,                          FUN_L03_002bef68, default_moby_methods},
-        {0x1c9,                             rocket_update, default_moby_methods},
+        {0x1c9,                        update_ryno_rocket, default_moby_methods},
         {0x1df,                              update_drone, default_moby_methods},
         {0x1e3,                                         0, default_moby_methods},
         {0x1f4,                              crate_update, default_moby_methods},
@@ -285,11 +285,11 @@ struct MobyClassUpdate moby_classes[181] __asm__("D_L03_001E3880")
         {0x4e3,                     hydrodisplacer_update, default_moby_methods},
         {0x509,                        noop_main_callback, default_moby_methods},
         {0x50a,                      pilots_helmet_update, default_moby_methods},
-        {0x53e,              update_kerwan_tutorial_hints, default_moby_methods},
+        {0x53e,                         update_help_hints, default_moby_methods},
         {0x59e,                    devestator_ammo_update, default_moby_methods},
         {0x5a7,                    devestator_ammo_update, default_moby_methods},
         {0x5a9,                    devestator_ammo_update, default_moby_methods},
-        {0x60c,                          FUN_L03_002e01d0, default_moby_methods},
+        {0x60c,            update_kerwan_cutscene_effects, default_moby_methods},
         {0x637,                          robot_arm_update, default_moby_methods},
         {0x638,                          robot_arm_update, default_moby_methods},
         {0x639,                          robot_arm_update, default_moby_methods},
@@ -363,7 +363,7 @@ struct SoundHandler sound_handlers[4] __asm__("D_L03_001E4280")
 
     __attribute__((section("lvl.sndvtbl"))) = {
         { 0, update_sound_emitter_playback_by_distance},
-        { 3,  update_requested_state_from_box_position},
-        { 6,             update_music_box_exit_trigger},
+        { 3,                 update_reverb_box_emitter},
+        { 6,               update_music_switch_emitter},
         {-1,                                         0},
 };

@@ -62,7 +62,7 @@ void quad_moby_update() __asm__("FUN_0023a2c0");
 void red_orb_update() __asm__("FUN_L00_002df4f8");
 void red_plant_update() __asm__("FUN_L00_002e3ca8");
 void robot_arm_update() __asm__("FUN_L00_002e3d88");
-void rocket_update() __asm__("FUN_L00_002cd1f0");
+void update_ryno_rocket() __asm__("FUN_L00_002cd1f0");
 void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
 void suckcannon_update() __asm__("FUN_L00_002da790");
 void swingshot_hook_update() __asm__("FUN_L00_002c7070");
@@ -71,7 +71,7 @@ void taunter_update() __asm__("FUN_L00_002b6f10");
 void tesla_claw_update() __asm__("FUN_L00_002b87e0");
 void trespasser_update() __asm__("FUN_L00_002c1718");
 void update_animated_point_light_moby() __asm__("FUN_L00_002d3a10");
-void update_beam_effect_lifecycle() __asm__("FUN_L00_002b4198");
+void update_thruster_pack_flame() __asm__("FUN_L00_002b4198");
 void update_beam_slot_controller() __asm__("FUN_L00_002e1df0");
 void update_camera_pose_with_optional_collision() __asm__("FUN_L00_002eb218");
 void update_damped_falling_moby() __asm__("FUN_L00_002cc210");
@@ -80,7 +80,7 @@ void update_frame_timing_and_wrapped_value() __asm__("FUN_L00_002a4cd8");
 void update_glow_particle() __asm__("FUN_L00_002acad8");
 void update_hero_aligned_camera_from_input() __asm__("FUN_L00_002e9f38");
 void update_homing_shot() __asm__("FUN_L00_002cb418");
-void update_level_help_controller() __asm__("FUN_L00_002e0988");
+void update_help_hints() __asm__("FUN_L00_002e0988");
 void update_linked_moby_scale_and_rotation() __asm__("FUN_L00_002bb400");
 void update_linked_moby_states() __asm__("FUN_L00_002b3458");
 void update_linked_moby_transform_and_lifetime() __asm__("FUN_L00_002d7f88");
@@ -145,7 +145,7 @@ struct MobyClassUpdate moby_classes[101] __asm__("D_L00_001EA300")
         { 0x9d,                         devastator_update, default_moby_methods},
         { 0xa3,                           visibomb_update, default_moby_methods},
         { 0xa6,                 update_linked_moby_states, default_moby_methods},
-        { 0xa7,              update_beam_effect_lifecycle, default_moby_methods},
+        { 0xa7,                update_thruster_pack_flame, default_moby_methods},
         { 0xa8,                            blaster_update, default_moby_methods},
         { 0xac,                          FUN_L00_002b6140, default_moby_methods},
         { 0xaf,                            taunter_update, default_moby_methods},
@@ -183,7 +183,7 @@ struct MobyClassUpdate moby_classes[101] __asm__("D_L00_001EA300")
         {0x1ac,                update_damped_falling_moby, default_moby_methods},
         {0x1b1,                        noop_main_callback, default_moby_methods},
         {0x1c6,                          FUN_L00_002cc608, default_moby_methods},
-        {0x1c9,                             rocket_update, default_moby_methods},
+        {0x1c9,                        update_ryno_rocket, default_moby_methods},
         {0x1df,                              update_drone, default_moby_methods},
         {0x1e3,                                         0, default_moby_methods},
         {0x1f4,                              crate_update, default_moby_methods},
@@ -213,7 +213,7 @@ struct MobyClassUpdate moby_classes[101] __asm__("D_L00_001EA300")
         {0x4e3,                     hydrodisplacer_update, default_moby_methods},
         {0x509,                        noop_main_callback, default_moby_methods},
         {0x50a,                      pilots_helmet_update, default_moby_methods},
-        {0x585,              update_level_help_controller, default_moby_methods},
+        {0x585,                         update_help_hints, default_moby_methods},
         {0x59e,                    devestator_ammo_update, default_moby_methods},
         {0x5a0,                 veldin_robot_enemy_update, default_moby_methods},
         {0x5a7,                    devestator_ammo_update, default_moby_methods},

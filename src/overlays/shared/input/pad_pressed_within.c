@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Pad: press timing tests and the pad float history. */
 #include "types.h"
 #include "rnc/input/pad_state.h"
 #include "asm.h"

@@ -1,0 +1,42 @@
+/* Rotations: rotates a vector by a scaled angle between two vectors. */
+#include "types.h"
+#include "asm.h"
+
+#include "qcopy.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
+#include "rnc/math/rotations/rotate_vector_by_quaternion.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00249488.c: func_L03_0024F6D8), where it is exact; names translated to the US level program. */
+
+void rotate_vector_by_scaled_angle_between_vectors(float  rotation_scale,
+                                                   float *output_vector,
+                                                   float *source_vector,
+                                                   float *reference_vector,
+                                                   int    flag) __asm__("FUN_L03_0024e6f8");
+
+void rotate_vector_by_scaled_angle_between_vectors(float  rotation_scale,
+                                                   float *output_vector,
+                                                   float *source_vector,
+                                                   float *reference_vector,
+
+                                                   int flag) {
+    float rotation_quaternion[4];
+    float dot_product, vector_length_product, half_rotation_angle;
+    fast_vec_cross(rotation_quaternion, reference_vector, source_vector);
+    fast_vec_normalize(rotation_quaternion, rotation_quaternion, 1.0f);
+    dot_product = fast_vec_dot(source_vector, reference_vector);
+    if (flag == 0) {
+        vector_length_product = fast_vec_length(source_vector);
+        vector_length_product = vector_length_product * fast_vec_length(reference_vector);
+        if (vector_length_product == 0.0f) {
+            qcopy(output_vector, source_vector);
+            return;
+        }
+        dot_product = dot_product / vector_length_product;
+    }
+    half_rotation_angle = (1.5707964f - fast_arc_sin(dot_product)) * 0.5f * rotation_scale;
+    fast_vec_scale(rotation_quaternion, rotation_quaternion, fast_sin(half_rotation_angle));
+    rotation_quaternion[3] = fast_cos(half_rotation_angle);
+    rotate_vector_by_quaternion(output_vector, source_vector, rotation_quaternion);
+}

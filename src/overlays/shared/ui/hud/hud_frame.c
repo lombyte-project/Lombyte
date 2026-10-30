@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* HUD: the HUD frame and its sprites. */
 #include "types.h"
 #include "asm.h"
 #include "sda.h"

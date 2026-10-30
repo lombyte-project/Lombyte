@@ -1,5 +1,5 @@
+/* Camera system: init and level camera setup, camera record lookups by id, spherical offset helpers and camera movement collision. */
 #include "rnc/camera/update_cam.h"
-/* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"
@@ -148,8 +148,6 @@ void init_camera_system(void) {
     vector_copy_destination[1] = vector_copy_source[1];
     vector_copy_destination[2] = vector_copy_source[2];
 }
-
-#include "qcopy.h"
 
 /* Exact match: needs -fno-force-mem (config/func_cflags.txt). */
 /* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED6D8), where it is exact; names translated to the US level program. */
@@ -313,7 +311,6 @@ int compute_spherical_offset_from_positions(float *angles_and_distance) {
     return 0;
 }
 
-#include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
 typedef struct {

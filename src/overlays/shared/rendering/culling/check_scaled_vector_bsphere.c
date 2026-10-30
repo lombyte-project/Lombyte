@@ -1,0 +1,16 @@
+/* Culling: checks a scaled vector against a bounding sphere. */
+#include "types.h"
+#include "asm.h"
+#include "rnc/math/asm_helpers.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00276680), where it is exact; names translated to the US level program. */
+
+extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
+
+void check_scaled_vector_bsphere(char *vec, float scale) __asm__("FUN_L01_00275690");
+
+void check_scaled_vector_bsphere(char *culling_vector, float scale) {
+    char scratch[16];
+    scale_vector(scratch, culling_vector, 0.0009765625f);
+    fast_bsphere_check(scratch, scale);
+}

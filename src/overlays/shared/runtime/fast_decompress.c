@@ -1,0 +1,9 @@
+/* Runtime: fast decompression through the scratchpad (0x70000000) and the DMA channel at 0x1000D400. */
+#include "types.h"
+#include "asm.h"
+
+/* Scratchpad (0x70000000) transfer through the DMA channel at 0x1000D400; calls the two below. */
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024d8d0.s", FUN_L00_0024d8d0);
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024dba0.s", FUN_L00_0024dba0);
+/* Spins while bit 0x100 of the register at 0x1000D400 is set. */
+INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0024dbc0.s", FUN_L00_0024dbc0);

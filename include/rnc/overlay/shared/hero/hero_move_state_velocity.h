@@ -3,6 +3,7 @@
 
 #include "types.h"
 
-int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
+int  allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
+void help_queue_add(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_MOVE_STATE_VELOCITY_H */

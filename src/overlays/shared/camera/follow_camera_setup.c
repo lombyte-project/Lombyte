@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Follow camera: setup, per-frame approach and overrides, pose rebuild, and the collision probes that keep it clear of the level. */
 #include "types.h"
 #include "rnc/overlay/camera.h"
 #include "rnc/overlay/level_globals.h"
@@ -12,7 +12,7 @@
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/random.h"
 #include "rnc/weapons/suck_aim.h"
-#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 
 extern int FUN_L00_001f0d60(float, void *, int, void *);

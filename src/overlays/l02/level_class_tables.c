@@ -32,6 +32,7 @@ void camera_transition_update() __asm__("FUN_L00_002ea488");
 void cancel_suck_cannon_suction_and_set_moby_state_5() __asm__("FUN_L00_002caf10");
 void cancel_suck_cannon_suction_and_set_moby_state_9() __asm__("FUN_L00_002d57d0");
 void conditionally_set_camera_state_three() __asm__("FUN_L00_002ec7b0");
+void constructorbot_update() __asm__("FUN_L02_002d7748");
 void crane_update() __asm__("FUN_L02_002df1a8");
 void crate_update() __asm__("FUN_L00_002cf218");
 void debris_update() __asm__("FUN_L00_002af5b8");
@@ -76,7 +77,7 @@ void red_orb_update() __asm__("FUN_L00_002df4f8");
 void red_plant_update() __asm__("FUN_L00_002e3ca8");
 void robot_arm_update() __asm__("FUN_L00_002e3d88");
 void rocket_launcher_update() __asm__("FUN_L02_002df3d8");
-void rocket_update() __asm__("FUN_L00_002cd1f0");
+void update_ryno_rocket() __asm__("FUN_L00_002cd1f0");
 void rocks_update() __asm__("FUN_L02_002e0720");
 void sand_mouse_update() __asm__("FUN_L01_002e3f20");
 void sand_shark_update() __asm__("FUN_L02_002d3e50");
@@ -98,7 +99,7 @@ void tresspasser_door2_update() __asm__("FUN_L02_002e0138");
 void tresspasser_pad_update() __asm__("FUN_L02_002d8ad0");
 void tresspasser_update() __asm__("FUN_L02_002ea210");
 void update_animated_point_light_moby() __asm__("FUN_L00_002d3a10");
-void update_beam_effect_lifecycle() __asm__("FUN_L00_002b4198");
+void update_thruster_pack_flame() __asm__("FUN_L00_002b4198");
 void update_camera_pose_with_optional_collision() __asm__("FUN_L00_002eb218");
 void update_cutscene_trigger() __asm__("FUN_L01_002fb5b0");
 void update_damped_falling_moby() __asm__("FUN_L00_002cc210");
@@ -106,24 +107,23 @@ void update_drone() __asm__("FUN_L00_002ce358");
 void update_glow_particle() __asm__("FUN_L00_002acad8");
 void update_hero_aligned_camera_from_input() __asm__("FUN_L00_002e9f38");
 void update_homing_shot() __asm__("FUN_L00_002cb418");
-void update_level02_bot() __asm__("FUN_L02_002d7748");
 void update_linked_moby_scale_and_rotation() __asm__("FUN_L00_002bb400");
 void update_linked_moby_states() __asm__("FUN_L00_002b3458");
 void update_linked_moby_transform_and_lifetime() __asm__("FUN_L00_002d7f88");
 void update_moby_camera_control() __asm__("FUN_L02_002fc298");
 void update_moby_suck_cannon_state() __asm__("FUN_L02_002d61c0");
 void update_morphoray_chicken() __asm__("FUN_L00_002c97e0");
-void update_music_box_exit_trigger() __asm__("FUN_L01_0031a128");
+void update_music_switch_emitter() __asm__("FUN_L01_0031a128");
 void update_nearest_area_moby_selection() __asm__("FUN_L01_002f2eb8");
-void update_requested_state_from_box_position() __asm__("FUN_L01_00319f18");
+void update_reverb_box_emitter() __asm__("FUN_L01_00319f18");
+void update_rocket_launcher_projectile() __asm__("FUN_L02_002ebf20");
 void update_sandmouse_projectile() __asm__("FUN_L01_0030c9a8");
-void update_shard_debris() __asm__("FUN_L02_002ebf20");
 void update_smoke_vent() __asm__("FUN_L02_002ef020");
 void update_sound_emitter_playback_at_random_position() __asm__("FUN_L00_002edad8");
 void update_sound_emitter_playback_by_distance() __asm__("FUN_L00_002ed950");
 void update_target_outside_zone_timeout() __asm__("FUN_L01_00302648");
 void update_target_tracking_camera() __asm__("FUN_L00_002ec6c0");
-void update_tutorial_hint_triggers() __asm__("FUN_L02_002ee890");
+void update_help_hints() __asm__("FUN_L02_002ee890");
 void vendor_orb_update() __asm__("FUN_L00_002df730");
 void vendor_update() __asm__("FUN_L00_002a57a8");
 void visibomb_update() __asm__("FUN_L00_002b3058");
@@ -177,7 +177,7 @@ struct MobyClassUpdate moby_classes[153] __asm__("D_L02_001FAF80")
         { 0x9d,                         devastator_update, default_moby_methods},
         { 0xa3,                           visibomb_update, default_moby_methods},
         { 0xa6,                 update_linked_moby_states, default_moby_methods},
-        { 0xa7,              update_beam_effect_lifecycle, default_moby_methods},
+        { 0xa7,                update_thruster_pack_flame, default_moby_methods},
         { 0xa8,                            blaster_update, default_moby_methods},
         { 0xac,                          FUN_L00_002b6140, default_moby_methods},
         { 0xaf,                            taunter_update, default_moby_methods},
@@ -219,7 +219,7 @@ struct MobyClassUpdate moby_classes[153] __asm__("D_L02_001FAF80")
         {0x1b1,                        noop_main_callback, default_moby_methods},
         {0x1b5,                         sand_mouse_update, default_moby_methods},
         {0x1c6,                          FUN_L00_002cc608, default_moby_methods},
-        {0x1c9,                             rocket_update, default_moby_methods},
+        {0x1c9,                        update_ryno_rocket, default_moby_methods},
         {0x1df,                              update_drone, default_moby_methods},
         {0x1e3,                                         0, default_moby_methods},
         {0x1f4,                              crate_update, default_moby_methods},
@@ -232,7 +232,7 @@ struct MobyClassUpdate moby_classes[153] __asm__("D_L02_001FAF80")
         {0x25c,                    sandmouse_house_update, default_moby_methods},
         {0x25d,        update_nearest_area_moby_selection, default_moby_methods},
         {0x25f,                           helipack_update, default_moby_methods},
-        {0x264,                        update_level02_bot, default_moby_methods},
+        {0x264,                     constructorbot_update, default_moby_methods},
         {0x267,                    tresspasser_pad_update, default_moby_methods},
         {0x26a,                        noop_main_callback, default_moby_methods},
         {0x27a,                                         0, default_moby_methods},
@@ -281,13 +281,13 @@ struct MobyClassUpdate moby_classes[153] __asm__("D_L02_001FAF80")
         {0x472,                          quad_moby_update, default_moby_methods},
         {0x477,                         vendor_orb_update, default_moby_methods},
         {0x4a8,                      update_glow_particle, default_moby_methods},
-        {0x4b8,                       update_shard_debris, default_moby_methods},
+        {0x4b8,         update_rocket_launcher_projectile, default_moby_methods},
         {0x4bc,                  background_ship_1_update, default_moby_methods},
         {0x4bd,                  background_ship_2_update, default_moby_methods},
         {0x4e3,                     hydrodisplacer_update, default_moby_methods},
         {0x509,                        noop_main_callback, default_moby_methods},
         {0x50a,                      pilots_helmet_update, default_moby_methods},
-        {0x52c,             update_tutorial_hint_triggers, default_moby_methods},
+        {0x52c,                         update_help_hints, default_moby_methods},
         {0x59e,                    devestator_ammo_update, default_moby_methods},
         {0x5a7,                    devestator_ammo_update, default_moby_methods},
         {0x5a9,                    devestator_ammo_update, default_moby_methods},
@@ -338,7 +338,7 @@ struct SoundHandler sound_handlers[5] __asm__("D_L02_001FB800")
     __attribute__((section("lvl.sndvtbl"))) = {
         { 0,        update_sound_emitter_playback_by_distance},
         { 2, update_sound_emitter_playback_at_random_position},
-        { 3,         update_requested_state_from_box_position},
-        { 6,                    update_music_box_exit_trigger},
+        { 3,                        update_reverb_box_emitter},
+        { 6,                      update_music_switch_emitter},
         {-1,                                                0},
 };

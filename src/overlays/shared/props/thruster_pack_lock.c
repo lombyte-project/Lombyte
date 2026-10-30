@@ -15,7 +15,7 @@
 #include "rnc/math/random.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
-#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
@@ -43,7 +43,6 @@ void synchronize_linked_moby_heights(char *moby) {
     } while (*moby_index_cursor++ >= 0);
 }
 
-#include "rnc/mobys/moby.h"
 #include "rnc/math/vector.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003102C8), where it is exact; names translated to the US level program. */
@@ -437,7 +436,6 @@ void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yo
         truncate_float_to_s32((projected_point[1] - (float)screen_extent_data[5]) * 0.0625f) + yoff;
 }
 
-#include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
@@ -861,8 +859,6 @@ void append_scaled_screen_triangle_strip(short             *pts,
 
 extern float
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-
-#include "rnc/mobys/moby.h"
 
 void update_moby_path_transform(char *moby) __asm__("FUN_L11_0031a438");
 

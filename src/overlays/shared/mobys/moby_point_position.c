@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Mobys: the position of a moby point. */
 #include "types.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"

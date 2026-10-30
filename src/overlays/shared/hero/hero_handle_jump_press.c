@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Hero: jump press handling, locomotion state, idle fidgets, item idle animations and the forward collision height check. */
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "asm.h"
@@ -236,7 +236,6 @@ int hero_handle_jump_press(void) {
 
 typedef unsigned int u128_229910_00229910 __attribute__((mode(TI), aligned(16)));
 
-#include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 
 typedef union {

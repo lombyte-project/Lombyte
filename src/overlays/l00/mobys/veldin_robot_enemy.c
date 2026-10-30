@@ -1,15 +1,11 @@
-/* Level 00 moby classes: veldin_robot_enemy. */
+/* Level 00 moby class veldin_robot_enemy: its update, damage and targeting, and its effect quad. */
 #include "types.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "asm.h"
-#include "rnc/overlay/level_globals.h"
-#include "rnc/game/usage_stats.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/rendering/clip_volume.h"
 #include "rnc/game/interpolated_record.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
@@ -17,98 +13,17 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
-#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
+#include "rnc/overlay/shared/mobys/step_moby_motion.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/overlay/shared/mobys/cutscene_set_camera_target.h"
-#include "rnc/overlay/shared/mobys/spawn_moby_break_fragments.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/math/random/random_spherical_offset.h"
-#include "rnc/overlay/shared/mobys/draw_trail.h"
-#include "rnc/overlay/shared/mobys/manipulator_set_scale.h"
-#include "rnc/overlay/shared/vendor/vendor_orb.h"
-#include "rnc/overlay/shared/rendering/spawn_mode_controlled_rotating_alpha_fade_particle.h"
-
-typedef struct {
-    u8   pad0[0x20];
-    u8   state;
-    u8   pad21[0xF];
-    u8   alpha;
-    u8   pad31[0x47];
-    s32 *vars;
-} HelpMoby;
-
-typedef struct {
-    u8 pad0[0x20];
-    u8 state;
-} HelpTarget;
-
-extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
-extern u16  D_00141850[];
-extern u16  D_00141968[];
-
-void update_level_help_controller(HelpMoby *moby) __asm__("FUN_L00_002e0988");
-
-void update_level_help_controller(HelpMoby *moby) {
-    s32         *vars;
-    s32         *target_index_ptr;
-    s32          i;
-    HelpTarget  *target_moby;
-    struct Hero *hero_ptr;
-
-    vars = moby->vars;
-    if (moby->state == 0) {
-        moby->state = 1;
-        moby->alpha = 0xFF;
-    }
-    if (D_00141968[0x18 / 2] == 0) {
-        help_request(3, 3);
-    }
-    if (D_00141968[0x3A0 / 2] == 0) {
-        if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[4]) != 0) {
-            help_request(0x4E2A, 0x74);
-        }
-    }
-    if (D_00141968[0x48 / 2] == 0) {
-        if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[0]) != 0 &&
-            D_00141850[0] == 0) {
-            help_request(5, 9);
-        }
-    }
-    if (D_00141968[0x40 / 2] == 0 && usage_stats.stat[0].count == 0) {
-        if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[1]) != 0) {
-            help_request(4, 8);
-        }
-    }
-    if (D_00141968[0] == 0) {
-        if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[2]) != 0) {
-            help_request(0, 0);
-        }
-    }
-    if (D_00141968[0x8 / 2] == 0 && D_00141968[0x10 / 2] == 0) {
-        hero_ptr = &hero;
-        target_index_ptr = vars + 5;
-        for (i = 0; i < 4; i++) {
-            if (*target_index_ptr != -1) {
-                target_moby = (HelpTarget *)(moby_table + (*target_index_ptr << 8));
-                if (target_moby == 0 || target_moby->state == 0xFE || target_moby->state == 0xFD) {
-                    if (hero_ptr->health.hp < 4) {
-                        help_request(1, 1);
-                    } else {
-                        help_request(2, 2);
-                    }
-                }
-            }
-            target_index_ptr++;
-        }
-    }
-}
-
-#include "eetypes.h"
-#include "sda.h"
+#include "rnc/overlay/shared/rendering/effects/beam_slots.h"
+#include "rnc/overlay/shared/rendering/effects/particles.h"
 #include "qcopy.h"
-#include "rnc/math/vector.h"
 #include "rnc/overlay/collision.h"
+#include "rnc/overlay/l00/mobys/veldin_robot_enemy_globals.h"
 
 typedef union {
     u128 q;
@@ -213,8 +128,6 @@ typedef struct {
     f32            unk8C;
     s32            unk90;
 } ElectroidProbe;
-
-#include "rnc/overlay/l00/mobys/veldin_robot_enemy_globals.h"
 
 extern f32  veldin_robot_probe_length_gp __asm__("D_L00_00161BE4") __attribute__((sda));
 s32         D_L00_00161BE8 = 3;
@@ -454,13 +367,13 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         }
         break;
     case VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK:
-        if (mine_fall(moby, vars->unk70) & 0x140) {
+        if (step_moby_motion(moby, vars->unk70) & 0x140) {
             moby->state = 3;
             ELECTROID_ANIM(moby, 1, scale_game_frames_s32(10));
         }
         break;
     case VELDIN_ROBOT_STATE_DEATH_KNOCKBACK:
-        if (mine_fall(moby, vars->unk70) & 0x140) {
+        if (step_moby_motion(moby, vars->unk70) & 0x140) {
             cart_burst(moby, &moby->pos, -1, 0.75f, 13.0f);
             spawn_moby_break_fragments(moby, 0x7AB, 1, 0x7AB, 1, 4, 0);
             FUN_L00_00263fd8(moby,
@@ -500,9 +413,6 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
     }
     update_veldin_robot_effects(moby);
 }
-
-#include "eetypes.h"
-#include "qcopy.h"
 
 typedef struct {
     u8           pad0[0x10];
@@ -771,170 +681,4 @@ void draw_veldin_robot_effect_quad(GlowMoby *moby) {
         fast_vec_scale(0.2f, quad_corner++, template_corner++);
     }
     draw_geometry_quad(&quad, quad_transform, 0);
-}
-
-typedef struct {
-    u8 pad0[0x20];
-    u8 state;
-    u8 pad21[0xF];
-    u8 alpha;
-} SlotMoby;
-
-extern int  beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
-extern int  beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
-extern void release_beam_slot(s32) __asm__("FUN_L00_002e20f8");
-extern void update_slot_panes_and_effects(s32, s32) __asm__("FUN_L00_002e2250");
-extern void draw_active_beam_slots() __asm__("FUN_L00_002e2af0");
-
-void update_beam_slot_controller(SlotMoby *slot_controller) __asm__("FUN_L00_002e1df0");
-
-void update_beam_slot_controller(SlotMoby *slot_controller) {
-    enum {
-        SLOT_CONTROLLER_STATE_INITIALIZE = 0,
-        SLOT_CONTROLLER_STATE_PROCESS_SLOTS = 1
-    };
-    s32 i;
-    s32 j;
-    s32 dispatched_slot_count;
-    s32 slot_state;
-
-    switch (slot_controller->state) {
-    case SLOT_CONTROLLER_STATE_INITIALIZE:
-        for (j = 0; j < 3; j++) {
-            beam_slot_state[j] = 0;
-            beam_slot_id[j] = 0;
-        }
-        slot_controller->state = 1;
-        slot_controller->alpha = 0xFF;
-        break;
-    case SLOT_CONTROLLER_STATE_PROCESS_SLOTS:
-        dispatched_slot_count = 0;
-        for (i = 0; i < 3; i++) {
-            slot_state = beam_slot_state[i];
-            if (slot_state == 1) {
-            } else if (slot_state == 4) {
-                release_beam_slot(i);
-            } else if (slot_state != 0) {
-                dispatched_slot_count++;
-                update_slot_panes_and_effects(beam_slot_id[i], i);
-                beam_slot_state[i] = 4;
-            }
-        }
-        if (dispatched_slot_count != 0) {
-            add_draw_callback((s32)draw_active_beam_slots, (s32)slot_controller);
-        }
-        break;
-    }
-}
-
-typedef struct {
-    u8 pad0[0x20];
-    u8 state;
-    u8 pad21[0xF];
-    u8 unk30;
-} FlockMoby;
-
-typedef struct {
-    u8    pad0[0x30];
-    s32   phase;
-    s32   level;
-    u8    pad38[0x178 - 0x38];
-    void *mobys[4];
-} FlockGame;
-
-typedef struct {
-    u8  pad0[4];
-    s32 unk4;
-    u8  pad8[2];
-    u8  unkA;
-    u8  unkB;
-} FlockTail;
-
-typedef struct {
-    u8        pad0[3];
-    u8        unk3;
-    u8        pad4[4];
-    u8        unk8;
-    u8        pad9;
-    s16       unkA;
-    u8        padC[0x20 - 0xC];
-    FlockTail tail;
-} FlockPart;
-
-extern FlockGame D_L00_0016C860;
-
-extern FlockPart *
-spawn_puff(void *, s32, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_0026d000");
-
-void update_phase_effect_controller(FlockMoby *moby) __asm__("FUN_L00_002e3800");
-
-void update_phase_effect_controller(FlockMoby *moby) {
-    enum {
-        FLOCK_EFFECT_STATE_INITIALIZE = 0,
-        FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS = 1
-    };
-    f32        effect_spawn_position[4];
-    void      *effect_source_moby;
-    FlockPart *part;
-    s32        color;
-    s32        random_magnitude;
-    s32        i;
-    s32        phase;
-    s32        phase_effect_moby_index;
-    FlockTail *tail;
-
-    switch (moby->state) {
-    case FLOCK_EFFECT_STATE_INITIALIZE:
-        moby->unk30 = 0xFF;
-        moby->state = 1;
-        break;
-    case FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS:
-        if ((D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 2 &&
-             scale_game_frames_s32(0x618) <= D_L00_0016C860.level) ||
-            (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 3)) {
-            phase = D_L00_0016C860.phase;
-            phase_effect_moby_index = -1;
-            if (phase == 2) {
-                phase_effect_moby_index = 3;
-            } else if (phase == 3) {
-                phase_effect_moby_index = 2;
-            }
-            cutscene_set_camera_target(D_L00_0016C860.mobys[phase_effect_moby_index]);
-        }
-        if (D_L00_0015F5C4 == 2 && D_L00_0016C860.phase == 4) {
-            effect_source_moby = D_L00_0016C860.mobys[3];
-            if (effect_source_moby != 0 && scale_game_frames_s32(150) <= D_L00_0016C860.level &&
-                D_L00_0016C860.level <= scale_game_frames_s32(220)) {
-                moby_point_position(effect_source_moby, 0, effect_spawn_position);
-                draw_trail(effect_spawn_position,
-                           effect_spawn_position,
-                           &zero_vector,
-                           120000.0f,
-                           50000.0f);
-                for (i = 0; i < 10; i++) {
-                    color = (random_int_between(0x40, 0x80) << 24) | 0x787878;
-                    random_magnitude = random_int_between(0, 4);
-                    part = spawn_puff(effect_spawn_position,
-                                      random_integer_below(2) == 0 ? random_magnitude
-                                                                   : -random_magnitude,
-                                      &zero_vector,
-                                      color,
-                                      0.75f,
-                                      1.0f,
-                                      1.03f,
-                                      120000.0f);
-                    if (part != 0) {
-                        part->unk3 = 0x44;
-                        tail = &part->tail;
-                        part->unk8 = random_int_between(0, 0xFF);
-                        part->unkA = scale_game_frames_s32(60);
-                        tail->unk4 = 2;
-                        tail->unkA = color >> 24;
-                        tail->unkB = part->unkA;
-                    }
-                }
-            }
-        }
-        break;
-    }
 }

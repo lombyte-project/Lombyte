@@ -18,12 +18,5 @@ extern int   drek_missile_effect_blend_start_color __asm__("D_L18_00162260");
 extern int   drek_missile_effect_blend_end_color __asm__("D_L18_00162264");
 extern float drek_missile_effect_quad_scale __asm__("D_L18_00162268");
 extern float drek_missile_effect_position_offset_length __asm__("D_L18_0016226C");
-extern f32   glow_moby_phase_rate __asm__("D_L18_001622E0");
-extern int   glow_moby_phase_blend_start_color __asm__("D_L18_001622C8");
-extern int   glow_moby_phase_blend_end_color __asm__("D_L18_001622CC");
-extern f32   glow_moby_layer_z_step __asm__("D_L18_001622D0");
-extern int   lift_alternate_height_requested __asm__("D_L18_001622FC");
-extern int   next_lift_instance_index __asm__("D_L18_001622F8");
-extern float lift_texture_u_scroll_rate __asm__("D_L18_0016230C");
 
 #endif /* LOMBYTE_RNC_OVERLAY_L18_MOBYS_DREK_FIGHT_MISSILE_GLOBALS_H */

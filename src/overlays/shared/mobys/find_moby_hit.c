@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Moby hits and blasts: hit descriptors, hit lookup, blast hits and knockback, plus sound, effect, path and interpolation helpers. */
 #include "types.h"
 #include "rnc/overlay/moby_hit.h"
 #include "rnc/math/asm_helpers.h"
@@ -215,8 +215,6 @@ void record_moby_hit(struct Moby *owner_moby, L_259a88 *hit_descriptor) {
     D_L00_00173E40_lui.idx = (i + 1) & 0x3F;
 }
 
-#include "eetypes.h"
-
 typedef struct {
     char pad[0x14];
     int  idx;
@@ -308,7 +306,6 @@ void build_quaternion_from_axis_rotations(void *output_quaternion, float *axis_r
     multiply_quaternions(output_quaternion, output_quaternion, &z_axis_quaternion);
 }
 
-#include "eetypes.h"
 #include "rnc/overlay/quad.h"
 
 typedef struct {

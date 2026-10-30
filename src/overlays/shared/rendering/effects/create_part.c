@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Particles (asm): creates and frees particles in the part table, and updates one. */
 #include "types.h"
 #include "asm.h"
 

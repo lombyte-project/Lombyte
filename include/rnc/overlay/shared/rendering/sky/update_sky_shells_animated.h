@@ -4,5 +4,6 @@
 #include "types.h"
 
 void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
+void sky_shells_rotate_two(void) __asm__("FUN_L00_002899a8");
 
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_SKY_UPDATE_SKY_SHELLS_ANIMATED_H */

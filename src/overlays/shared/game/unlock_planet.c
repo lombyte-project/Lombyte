@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Planet unlocks and inventory grants, bolt drops, combat target selection and attachment pose transforms. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
@@ -15,10 +15,10 @@
 #include "rnc/math/random.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/weapons/suck_aim.h"
-#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
-#include "rnc/overlay/shared/camera/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/game/queue_planet_unlock_message.h"
 
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
@@ -262,7 +262,6 @@ int           FUN_L00_00260400(int    unused_subject_object,
     return 1;
 }
 
-#include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
 typedef float V4_2604f0[4] __attribute__((aligned(16)));
@@ -344,8 +343,6 @@ int convert_pose_to_reference_local(int    x,
 }
 
 typedef float M4[16] __attribute__((aligned(16)));
-
-#include "qcopy.h"
 
 void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) __asm__("FUN_L00_00260738");
 void update_entity_matrix(char    *out,
@@ -459,7 +456,6 @@ void grant_inventory_item(int id, int flag) {
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00261B00). */
-#include "rnc/mobys/moby.h"
 
 extern char         *toad_paths[] __asm__("D_L00_001B04B0");
 extern char          bolt_drop_scale_five_message[] __asm__("D_L00_001600A0");

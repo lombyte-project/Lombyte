@@ -1,3 +1,10 @@
+/* Level 09 moby classes 0x49e-0x4a5: airship part, its spawner and the nearest-hull search. */
+/* Its own unit: it reads the spawn counter D_L09_001613C8 through gp, where update_help_hints in help_hints.c reads it through lui. */
+#include "types.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
+#include "asm.h"
+#include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -6,17 +13,10 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/animation/get_moby_joint_matrices.h"
-
-int find_nearest_moby_by_class() __asm__("FUN_L09_002c2610");
-
-int spawn_airship_part() __asm__("FUN_L09_002c2500");
-
-/* Airship parts update. Its own unit: it reads the spawn counter D_L09_001613C8 through gp, where FUN_L09_00300888 in asteroid.c reads it through lui. */
-#include "types.h"
-#include "rnc/mobys/moby.h"
-#include "rnc/hero/hero.h"
-#include "asm.h"
-#include "qcopy.h"
+#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/overlay/quad.h"
 
 extern s32  fptodp(f32) __asm__("FUN_00120478");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -106,6 +106,71 @@ extern float airship_hull_breakup_wait_x_rotation_speed_degrees_gp __asm__("D_L0
 
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int D_L09_001613C8 __attribute__((sda));
+/* Spawns an airship part of a class at a point, placed and rotated with the hull. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C3690), where it is exact; names translated to the US level program. */
+char *spawn_airship_part(struct Moby *rotation_source_moby,
+                         char        *spawn_reference_position,
+                         int          spawned_moby_class) __asm__("FUN_L09_002c2500");
+
+/* Returns the moby of a class nearest to a point, and its distance. */
+/* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C37A0), where it is exact; names translated to the US level program. */
+char *find_nearest_moby_by_class(void  *search_position,
+                                 int    type,
+                                 float *nearest_distance_out) __asm__("FUN_L09_002c2610");
+
+char *spawn_airship_part(struct Moby *rotation_source_moby,
+                         char        *spawn_reference_position,
+
+                         int spawned_moby_class) {
+    char *spawned_moby = create_moby(spawned_moby_class);
+    if (spawned_moby) {
+        OvlQuad point_position;
+        OvlQuad position_offset;
+        char   *spawned_position = spawned_moby + 0x10;
+        char   *spawned_vars;
+        ((unsigned char *)spawned_moby)[0x30] = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
+        spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
+        spawned_moby[0x31] = 1;
+        spawned_moby[0x20] = 1;
+        qcopy(spawned_position, spawn_reference_position);
+        qcopy(spawned_vars + 0x10, spawn_reference_position);
+        *(char **)(spawned_vars + 0x2C) = rotation_source_moby;
+        update_entity(spawned_moby);
+        moby_point_position(spawned_moby, 0, &point_position);
+        fast_vec_sub(&position_offset, spawn_reference_position, &point_position);
+        transform_vector_by_basis(
+            &position_offset, &position_offset, &rotation_source_moby->rot_row0);
+        fast_vec_add(spawned_position, spawn_reference_position, &position_offset);
+        qcopy(spawned_moby + 0x40, &rotation_source_moby->rot);
+        *(OvlQuad *)&MOBY(spawned_moby)->rot_row0 = *(OvlQuad *)&rotation_source_moby->rot_row0;
+        *(OvlQuad *)&MOBY(spawned_moby)->rot_row1 = *(OvlQuad *)&rotation_source_moby->rot_row1;
+        *(OvlQuad *)&MOBY(spawned_moby)->rot_row2 = *(OvlQuad *)&rotation_source_moby->rot_row2;
+        update_entity(spawned_moby);
+    }
+    return spawned_moby;
+}
+
+char *find_nearest_moby_by_class(void *search_position, int type, float *nearest_distance_out) {
+    char *best = 0;
+    float bestd = 100000.0f;
+    char *candidate_moby;
+    for (candidate_moby = D_L09_0015FFE4; candidate_moby != 0;
+         candidate_moby = ((char *)MOBY(candidate_moby)->next)) {
+        if (MOBY(candidate_moby)->oclass == type) {
+            float candidate_distance = fast_vec_dist(search_position, candidate_moby + 0x10);
+            if (candidate_distance < bestd) {
+                bestd = candidate_distance;
+                best = candidate_moby;
+            }
+        }
+    }
+    if (nearest_distance_out != 0) {
+        *nearest_distance_out = bestd;
+    }
+    return best;
+}
+
 /* Update for the airship parts (classes 0x49E-0x4A5): attach to the hull, ride it, then break off, tumble away and fall with smoke and sparks. */
 void update_airship_part(struct Moby *moby) __asm__("FUN_L09_002c26c8");
 

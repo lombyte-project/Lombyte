@@ -35,10 +35,5 @@ extern f32 blarg_heavy_interceptor_patrol_heading_offset_magnitude __asm__("D_L1
 extern f32 blarg_heavy_interceptor_patrol_heading_error_gain __asm__("D_L14_001613C4");
 extern f32 blarg_heavy_interceptor_patrol_heading_damping_coefficient __asm__("D_L14_001613C8");
 extern f32 blarg_heavy_interceptor_patrol_heading_snap_threshold_scale __asm__("D_L14_001613CC");
-extern float minibomber_bomb_gravity __asm__("D_L14_00161568");
-extern f32   flying_debris_gravity __asm__("D_L14_001615D0");
-extern f32   flying_debris_velocity_retention_factor __asm__("D_L14_001615D4");
-extern f32   flying_debris_horizontal_drag_speed_threshold __asm__("D_L14_001615D8");
-extern s32   level14_racer_start_interpolation_duration_frames __asm__("D_L14_00161A2C");
 
 #endif /* LOMBYTE_RNC_OVERLAY_L14_MOBYS_BLARG_HEAVY_INTERCEPTOR_GLOBALS_H */

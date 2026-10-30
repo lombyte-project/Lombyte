@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Hero animation: sets and queues hero animations, blends slot 3 and mapped moby animations, and point effect emission. */
 #include "types.h"
 #include "rnc/hero/hero_state.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
@@ -12,7 +12,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
-#include "rnc/overlay/shared/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/overlay/shared/hero/hero_idle_sequence.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
@@ -21,7 +21,7 @@
 #include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/mobys/animation/update_moby_animation_state.h"
-#include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
+#include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/mobys/moby.h"
 
@@ -1048,8 +1048,6 @@ void add_hero_forward_offset(Vec4_00233708 *out, Vec4_00233708 *in, float offset
     }
 }
 
-#include "qcopy.h"
-
 typedef struct {
     f32 m[16];
 } M00233810 __attribute__((aligned(16)));
@@ -1239,8 +1237,6 @@ float predict_hero_trajectory_z(float *initial_position,
     }
     return 0.0f;
 }
-
-#include "eetypes.h"
 
 typedef union {
     u128 q;

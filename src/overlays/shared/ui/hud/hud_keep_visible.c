@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* HUD: element visibility, numeric elements, HUD particles and stars, and the text panel. */
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/hud.h"

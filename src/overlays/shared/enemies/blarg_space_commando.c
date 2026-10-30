@@ -1,12 +1,8 @@
-/* Shared moby classes: blarg_space_commando. */
-/* Mixed file: L06 moby updates and spawners; 003021d8 draws the level timer as text. */
+/* Shared moby class blarg_space_commando: its update, hit handling and beam attack. */
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/math_consts.h"
-#include "asm.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/math/vector.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
 #include "rnc/math/fast_math.h"
@@ -19,8 +15,6 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/game/interpolated_record.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/ui/frames/draw_ui_frame.h"
 
 /* Movement controller block at vars + 0xC0 (FUN_L01_0026d930 init, FUN_L00_00258b50 step). */
 typedef struct {
@@ -102,7 +96,7 @@ extern void sweep_hit_segment(
     void *, void *, void *, void *, struct Moby *, ShotInfo *, s32) __asm__("FUN_L00_00259d08");
 extern void FUN_L00_0025a120(struct Moby *);
 extern void approach_angle(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025be00");
-extern s32  mine_fall(struct Moby *, Vec4 *) __asm__("FUN_L00_0025c698");
+extern s32  step_moby_motion(struct Moby *, Vec4 *) __asm__("FUN_L00_0025c698");
 extern void spawn_explosion(struct Moby *,
                             Vec4 *,
                             void *,
@@ -474,7 +468,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         break;
     case BLARG_COMMANDO_STATE_KNOCKBACK:
-        hit = mine_fall(moby, &vars->vel);
+        hit = step_moby_motion(moby, &vars->vel);
         if (hit & 0x40) {
             moby->state = 1;
             if (moby->prev_seq != 0) {
@@ -485,7 +479,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         break;
     case BLARG_COMMANDO_STATE_DEATH_KNOCKBACK:
-        if (mine_fall(moby, &vars->vel) & 0x160) {
+        if (step_moby_motion(moby, &vars->vel) & 0x160) {
             s32 none;
 
             qcopy(&position_or_movement_vector, &moby->pos);
@@ -1075,130 +1069,6 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) {
     }
 }
 
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
-
-extern f32 D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
-
-void update_falling_spinning_moby(struct Moby *moby) __asm__("FUN_L06_00300b90");
-
-void update_falling_spinning_moby(struct Moby *moby) {
-    char *data;
-    float vertical_velocity_decrement = frame_time_sq * 15.0f;
-    moby->scale = moby->pclass->scale * *(float *)&D_L06_00162080_gp;
-    data = (char *)moby->pvars;
-    *(float *)(data + 8) -= vertical_velocity_decrement;
-    fast_vec_add(&moby->pos.x, &moby->pos.x, (float *)data);
-    fast_vec_add(&moby->rot.x, &moby->rot.x, (float *)(data + 0x10));
-    moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x10));
-    moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x14));
-    moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x18));
-    if (--moby->command == 0) {
-        mark_moby_for_removal(moby);
-    }
-}
-
-#include "eetypes.h"
-
-extern float D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
-
-/* Spawns one fragment of the break-apart at pos, flying along vel with a
- * random spin. */
-unsigned char *
-spawn_spinning_moby_fragment(char  *unused_source_moby,
-                             float *fragment_spawn_position,
-                             float *fragment_initial_velocity) __asm__("FUN_L06_00300c60");
-
-unsigned char *spawn_spinning_moby_fragment(char  *unused_source_moby,
-                                            float *fragment_spawn_position,
-
-                                            float *fragment_initial_velocity) {
-    u128           position_copy, velocity_copy;
-    u128          *pp = &position_copy;
-    u128          *saved_velocity = &velocity_copy;
-    unsigned char *fragment_moby;
-    char          *fragment_vars;
-
-    *pp = *(u128 *)fragment_spawn_position;
-    *saved_velocity = *(u128 *)fragment_initial_velocity;
-    fragment_moby = create_moby(truncate_float_to_s32(random_float_between(1085.0f, 1089.0f)));
-
-    if (fragment_moby != 0) {
-        fragment_vars = ((char *)MOBY(fragment_moby)->pvars);
-        MOBY(fragment_moby)->scale =
-            *(float *)(((char *)MOBY(fragment_moby)->pclass) + 0x24) * D_L06_00162080_gp;
-        fragment_moby[0x30] = 0xFF;
-        MOBY(fragment_moby)->draw_dist = 0x7E;
-        fragment_moby[0x31] = 1;
-        qcopy(fragment_moby + 0x10, pp);
-        qcopy(fragment_vars, saved_velocity);
-        *(float *)(fragment_vars + 0x10) =
-            random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
-        *(float *)(fragment_vars + 0x14) =
-            random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
-        *(float *)(fragment_vars + 0x18) =
-            random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
-        fragment_moby[0xBC] =
-            truncate_float_to_s32(scale_time(random_float_between(60.0f, 120.0f)));
-        update_entity(fragment_moby);
-    }
-    return fragment_moby;
-}
-
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
-
-extern int   level_frame_count __asm__("D_L06_0015F5CC");
-extern short timer_text_center_x_gp __asm__("D_L06_001620C8") __attribute__((sda));
-extern short timer_text_y_gp __asm__("D_L06_001620CC") __attribute__((sda));
-extern short timer_text_color_at_zero_blend_gp __asm__("D_L06_001620D0") __attribute__((sda));
-extern short timer_text_color_at_unit_blend_gp __asm__("D_L06_001620D4") __attribute__((sda));
-extern short timer_frame_x_addend_gp __asm__("D_L06_001620D8") __attribute__((sda));
-extern short timer_frame_y_addend_gp __asm__("D_L06_001620DC") __attribute__((sda));
-extern short timer_frame_left_x_addend_gp __asm__("D_L06_001620E0") __attribute__((sda));
-extern short timer_frame_right_x_addend_gp __asm__("D_L06_001620E4") __attribute__((sda));
-extern short timer_frame_fill_high_byte_gp __asm__("D_L06_001620E8") __attribute__((sda));
-extern int   fast_tween_color_local(int, int, float) __asm__("FUN_001fa6e0");
-extern void  font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
-extern void  font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
-
-#define W(x) (*(int *)&(x))
-
-/* Draws the level timer as "H:MM:SS.t" text with a pulsing colour. */
-void draw_pulsing_timer_display(char *moby) __asm__("FUN_L06_003021d8");
-
-void draw_pulsing_timer_display(char *moby) {
-    char  timer_text[8];
-    char *data = ((char *)MOBY(moby)->pvars);
-    float color_blend_factor;
-    int   col;
-
-    draw_ui_frame(W(timer_frame_x_addend_gp) + W(timer_text_y_gp),
-                  W(timer_frame_y_addend_gp) + W(timer_text_y_gp),
-                  W(timer_frame_left_x_addend_gp) + W(timer_text_center_x_gp),
-                  W(timer_frame_right_x_addend_gp) + W(timer_text_center_x_gp),
-                  W(timer_frame_fill_high_byte_gp));
-    color_blend_factor =
-        fast_sin(convert_integer_to_float(level_frame_count % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
-    if (color_blend_factor > 1.0f) {
-        color_blend_factor = 1.0f;
-    } else if (color_blend_factor < 0.0f) {
-        color_blend_factor = 0.0f;
-    }
-    col = fast_tween_color_local(W(timer_text_color_at_zero_blend_gp),
-                                 W(timer_text_color_at_unit_blend_gp),
-                                 color_blend_factor);
-    timer_text[0] = 0x30;
-    timer_text[1] = *(int *)(data + 0xB4) / scale_game_frames(0xE10) + 0x30;
-    timer_text[2] = 0x3A;
-    timer_text[3] =
-        *(int *)(data + 0xB4) % scale_game_frames(0xE10) / scale_game_frames(0x258) + 0x30;
-    timer_text[4] =
-        *(int *)(data + 0xB4) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
-    timer_text[5] = 0x3A;
-    timer_text[6] = *(int *)(data + 0xB4) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
-    timer_text[7] = truncate_float_to_s32((float)random_integer_below(10)) + 0x30;
-    font_print_center_large(W(timer_text_center_x_gp), W(timer_text_y_gp), col, (int)timer_text, 8);
-}
-
 f32 D_L10_001DA10C[1] __attribute__((section(".data"))) = {0};
 
 f32   D_L10_00161CB8 = 2.5f;
@@ -1234,8 +1104,6 @@ float D_L10_00161D40 = 0.75f;
 float D_L10_00161D44 = -0.065f;
 float D_L10_00161D48 = 0.125f;
 float D_L10_00161D4C = 0.25f;
-f32   D_L10_00161D6C = 0.1f;
-f32   D_L13_00161D34 = 0.1f;
 
 s32 ranged_attack_cooldown_frames_gp __asm__("D_L06_00161FC0") = 0x5a;
 int beam_duration_frames_gp __asm__("D_L06_00161FD8") = 0x96;
@@ -1251,13 +1119,3 @@ f32 beam_quad_corner_uvs[4][2] __asm__("D_L06_001F2E90") = {
     {0.5f, 0.5f},
     {0.5f, 0.0f},
 };
-
-short timer_text_center_x_gp __asm__("D_L06_001620C8") = 0xfa;
-short timer_text_y_gp __asm__("D_L06_001620CC") = 0x177;
-short timer_text_color_at_zero_blend_gp __asm__("D_L06_001620D0") = -16192;
-short timer_text_color_at_unit_blend_gp __asm__("D_L06_001620D4") = 0x40ff;
-short timer_frame_x_addend_gp __asm__("D_L06_001620D8") = -5;
-short timer_frame_y_addend_gp __asm__("D_L06_001620DC") = 0x14;
-short timer_frame_left_x_addend_gp __asm__("D_L06_001620E0") = -50;
-short timer_frame_right_x_addend_gp __asm__("D_L06_001620E4") = 0x34;
-short timer_frame_fill_high_byte_gp __asm__("D_L06_001620E8") = 0x60;

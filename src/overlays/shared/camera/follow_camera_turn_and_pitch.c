@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Follow camera: reads the stick, turns and pitches the camera, and turns it automatically. */
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"

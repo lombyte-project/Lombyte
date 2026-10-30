@@ -753,6 +753,9 @@ def main() -> int:
         for label, (types, names) in after.items():
             old_types, old_names = before.get(label, (set(), set()))
             new_types, new_names = (types, names) if label not in before else (types - old_types, names - old_names)
+            # A type or name renamed everywhere replaces the old one: only more types or names is new.
+            if label in before and len(types) <= len(old_types) and len(names) <= len(old_names):
+                continue
             if new_types or new_names:
                 problems.append(Problem("data-decls", "src", f"{label} gets another type or name "
                                         f"({', '.join(sorted(new_types | new_names))}); one name and one type per global, "
