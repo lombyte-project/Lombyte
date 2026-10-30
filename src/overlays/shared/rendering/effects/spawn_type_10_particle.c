@@ -441,7 +441,7 @@ void evaluate_cubic_hermite_segment(float segment_parameter,
                                     void *end_tangent) __asm__("FUN_L01_0028ba80");
 
 void evaluate_cubic_hermite_segment(float segment_parameter,
-                                    void *out,
+                                    void *evaluated_point,
                                     void *start_point,
                                     void *end_point,
                                     void *start_tangent,
@@ -453,13 +453,13 @@ void evaluate_cubic_hermite_segment(float segment_parameter,
     float three_times_t_squared = t_squared * 3.0f;
     float twice_t_cubed = t_cubed + t_cubed;
     float twice_t_squared = t_squared + t_squared;
-    fast_vec_scale(out, start_point, twice_t_cubed - three_times_t_squared + 1.0f);
+    fast_vec_scale(evaluated_point, start_point, twice_t_cubed - three_times_t_squared + 1.0f);
     fast_vec_scale(weighted_vector, start_tangent, t_cubed - twice_t_squared + segment_parameter);
-    fast_vec_add(out, out, weighted_vector);
+    fast_vec_add(evaluated_point, evaluated_point, weighted_vector);
     fast_vec_scale(weighted_vector, end_tangent, t_cubed - t_squared);
-    fast_vec_add(out, out, weighted_vector);
+    fast_vec_add(evaluated_point, evaluated_point, weighted_vector);
     fast_vec_scale(weighted_vector, end_point, three_times_t_squared - twice_t_cubed);
-    fast_vec_add(out, out, weighted_vector);
+    fast_vec_add(evaluated_point, evaluated_point, weighted_vector);
 }
 
 float compute_sampled_spline_path_lengths(float     tangent_tension,
