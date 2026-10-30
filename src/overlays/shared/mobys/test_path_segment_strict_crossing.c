@@ -30,11 +30,11 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
     OvlVec4              direction;
     OvlVec4              axis;
     OvlVec4              origin;
-    OvlVec4              first;
-    OvlVec4              next;
+    OvlVec4              transformed_previous_point;
+    OvlVec4              transformed_current_point;
     OvlVec4             *previous;
     OvlVec4             *current;
-    SegmentPath_261968 **entry;
+    SegmentPath_261968 **path_slot;
     s32                  i;
     s32                  offset;
     f32                  crossing;
@@ -48,22 +48,22 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
     axis.f[0] = direction.f[1];
     axis.f[1] = -direction.f[0];
     clear_u64_value(&origin);
-    entry = &D_L00_001B04B0_261968[path_index];
+    path_slot = &D_L00_001B04B0_261968[path_index];
     origin.f[2] = 1.0f;
-    fast_vec_sub(&first, &(*entry)->points[0], start);
-    transform_vector_by_basis(&first, &first, &direction);
-    previous = &first;
-    current = &next;
-    if (i < (*entry)->count) {
+    fast_vec_sub(&transformed_previous_point, &(*path_slot)->points[0], start);
+    transform_vector_by_basis(&transformed_previous_point, &transformed_previous_point, &direction);
+    previous = &transformed_previous_point;
+    current = &transformed_current_point;
+    if (i < (*path_slot)->count) {
         offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(current, (OvlVec4 *)((u8 *)*entry + offset), start);
+            fast_vec_sub(current, (OvlVec4 *)((u8 *)*path_slot + offset), start);
             transform_vector_by_basis(current, current, &direction);
-            if (first.f[3] != zero || next.f[3] != zero) {
-                if (next.f[1] * first.f[1] < 0.0f) {
-                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - next.f[1]) * -next.f[1] +
-                               next.f[0];
+            if (transformed_previous_point.f[3] != zero || transformed_current_point.f[3] != zero) {
+                if (transformed_current_point.f[1] * transformed_previous_point.f[1] < 0.0f) {
+                    crossing = (transformed_previous_point.f[0] - transformed_current_point.f[0]) / (transformed_previous_point.f[1] - transformed_current_point.f[1]) * -transformed_current_point.f[1] +
+                               transformed_current_point.f[0];
                     if (crossing > 0.0f && crossing < 1.0f)
                         return 1;
                 }
@@ -71,7 +71,7 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
             qcopy(previous, current);
             i++;
             offset += 0x10;
-        } while (i < (*entry)->count);
+        } while (i < (*path_slot)->count);
     }
     return 0;
 }
