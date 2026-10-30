@@ -166,15 +166,15 @@ extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 
 void release_moby_animation_slot(ListOwner *owner, ListNode **slot) __asm__("FUN_L00_0024f0e8");
 
-void release_moby_animation_slot(ListOwner *owner, ListNode **slot) {
+void release_moby_animation_slot(ListOwner *moby_animation_owner, ListNode **slot) {
     ListNode *list_cursor;
 
     if (*slot == 0)
         return;
-    if (owner->head == *slot) {
-        owner->head = (*slot)->next;
+    if (moby_animation_owner->head == *slot) {
+        moby_animation_owner->head = (*slot)->next;
     } else {
-        list_cursor = owner->head;
+        list_cursor = moby_animation_owner->head;
         while (list_cursor->next != 0 && list_cursor->next != *slot)
             list_cursor = list_cursor->next;
         if (list_cursor->next == *slot)
