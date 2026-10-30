@@ -44,7 +44,7 @@ void smooth_and_clamp_value_pair(float *out,
                                  float *smoothed_values,
                                  float  step) __asm__("FUN_L05_00237488");
 
-void smooth_and_clamp_value_pair(float *out, float *smoothed_values, float step) {
+void smooth_and_clamp_value_pair(float *clamped_values, float *smoothed_values, float step) {
     char *target_values_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     float target_values[2];
     target_values[0] = -*(float *)(target_values_base + 0x1D20);
@@ -54,13 +54,13 @@ void smooth_and_clamp_value_pair(float *out, float *smoothed_values, float step)
         smoothed_values[2] = 1.0f;
     if (smoothed_values[2] < -1.0f)
         smoothed_values[2] = -1.0f;
-    out[0] = smoothed_values[2];
+    clamped_values[0] = smoothed_values[2];
     approach_value(smoothed_values + 1, target_values[1], step);
     if (smoothed_values[1] > 1.0f)
         smoothed_values[1] = 1.0f;
     if (smoothed_values[1] < -1.0f)
         smoothed_values[1] = -1.0f;
-    out[1] = smoothed_values[1];
+    clamped_values[1] = smoothed_values[1];
 }
 
 #include "sda.h"
