@@ -2254,18 +2254,18 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
         SUCK_UPDATE_DEATH = 7
     };
     Frame_2DDEA0 suction_and_projectile_scratch;
-    R_2DDEA0    *record;
+    R_2DDEA0    *suction_and_projectile_record;
 
     if (moby == 0 || moby->state == 0xFE || moby->state == 0xFD)
         return 0;
-    record = func_L00_002DCD40_2DDEA0(moby);
-    if (record != 0) {
-        *(u128 *)&record->v30 = *(u128 *)&moby->pos;
-        switch ((short)(record->state - 1)) {
+    suction_and_projectile_record = func_L00_002DCD40_2DDEA0(moby);
+    if (suction_and_projectile_record != 0) {
+        *(u128 *)&suction_and_projectile_record->v30 = *(u128 *)&moby->pos;
+        switch ((short)(suction_and_projectile_record->state - 1)) {
         case SUCK_UPDATE_ALIGNING_FOR_SUCTION: {
             float yaw, tolerance;
             tolerance = 0.01f;
-            yaw = fast_add_rotations(fast_arc_tan(record->x - moby->pos.x, record->y - moby->pos.y),
+            yaw = fast_add_rotations(fast_arc_tan(suction_and_projectile_record->x - moby->pos.x, suction_and_projectile_record->y - moby->pos.y),
                                      3.1415927f);
             approach_w(moby,
                        vars + 0x44,
@@ -2275,63 +2275,63 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                        frame_scale * 0.3927f);
             if (fast_subtract_rotations(yaw, tolerance) < moby->rot.z &&
                 moby->rot.z < fast_add_rotations(yaw, tolerance)) {
-                record->state = 2;
-                record->f6C = 0.0f;
+                suction_and_projectile_record->state = 2;
+                suction_and_projectile_record->f6C = 0.0f;
             }
-            clear_u64_value(&record->vel);
+            clear_u64_value(&suction_and_projectile_record->vel);
             break;
         }
         case SUCK_UPDATE_RISING_FOR_SUCTION:
-            moby->anim_speed = record->f6C + 1.0f;
-            record->f6C = record->f6C + 1.0f / convert_integer_to_float(func_001F9850_2DDEA0(1));
-            if (1.0f < record->f6C)
-                record->f6C = 1.0f;
-            moby->pos.z += record->f6C / 100.0f * frame_scale;
-            extract_matrix_rotation_quaternion(&record->q20, &moby->rot_row0);
-            clear_u64_value(&record->vel);
+            moby->anim_speed = suction_and_projectile_record->f6C + 1.0f;
+            suction_and_projectile_record->f6C = suction_and_projectile_record->f6C + 1.0f / convert_integer_to_float(func_001F9850_2DDEA0(1));
+            if (1.0f < suction_and_projectile_record->f6C)
+                suction_and_projectile_record->f6C = 1.0f;
+            moby->pos.z += suction_and_projectile_record->f6C / 100.0f * frame_scale;
+            extract_matrix_rotation_quaternion(&suction_and_projectile_record->q20, &moby->rot_row0);
+            clear_u64_value(&suction_and_projectile_record->vel);
             break;
         case SUCK_UPDATE_BEING_PULLED_IN: {
             float one, distance, half;
             moby->visible = 1;
             moby->flags &= 0xFFFE;
             one = 1.0f;
-            if (record->f6C < one) {
-                record->f6C =
-                    record->f6C + one / convert_integer_to_float(func_001F9850_2DDEA0(30));
+            if (suction_and_projectile_record->f6C < one) {
+                suction_and_projectile_record->f6C =
+                    suction_and_projectile_record->f6C + one / convert_integer_to_float(func_001F9850_2DDEA0(30));
                 suction_and_projectile_scratch.q = 0;
                 suction_and_projectile_scratch.v[0].x = -1.5707964f;
                 suction_and_projectile_scratch.v[0].z = -1.5707964f;
                 euler_rotation_matrix(&suction_and_projectile_scratch.v[11], &suction_and_projectile_scratch.v[0]);
-                copy_matrix_rotation(&suction_and_projectile_scratch.v[3], &record->owner->rot_row0);
+                copy_matrix_rotation(&suction_and_projectile_scratch.v[3], &suction_and_projectile_record->owner->rot_row0);
                 multiply_matrix(&suction_and_projectile_scratch.v[7], &suction_and_projectile_scratch.v[3], &suction_and_projectile_scratch.v[11]);
                 matrix_to_quaternion(&suction_and_projectile_scratch.v[1], &suction_and_projectile_scratch.v[7]);
-                quaternion_nlerp(&suction_and_projectile_scratch.v[2], &record->q20, &suction_and_projectile_scratch.v[1], record->f6C);
+                quaternion_nlerp(&suction_and_projectile_scratch.v[2], &suction_and_projectile_record->q20, &suction_and_projectile_scratch.v[1], suction_and_projectile_record->f6C);
                 func_001FA6C0_2DDEA0(&suction_and_projectile_scratch.v[2], &suction_and_projectile_scratch.v[3]);
                 copy_matrix3x4(&moby->rot_row0, &suction_and_projectile_scratch.v[3]);
                 moby->flags = (moby->flags | 4) & 0x7FFF;
             } else {
-                record->f6C = one;
+                suction_and_projectile_record->f6C = one;
             }
-            moby_point_position(record->owner, 0, &suction_and_projectile_scratch.v[0]);
+            moby_point_position(suction_and_projectile_record->owner, 0, &suction_and_projectile_scratch.v[0]);
             half = 0.5f;
             distance = vector_distance_xy(&moby->pos, &suction_and_projectile_scratch.v[0]);
             moby->scale =
-                ((Cls *)moby->pclass)->f24 * (distance / (record->f64 + record->f64) + half);
-            record->f98 = record->f98 + frame_scale_sq_macro * 0.11f;
-            if (frame_scale * 0.75f < record->f98)
-                record->f98 = frame_scale * 0.75f;
-            if (distance < record->f98 * 70.0f) {
-                blend_moby_animation(record->owner, 4, 0, func_001F9850_2DDEA0(2));
+                ((Cls *)moby->pclass)->f24 * (distance / (suction_and_projectile_record->f64 + suction_and_projectile_record->f64) + half);
+            suction_and_projectile_record->f98 = suction_and_projectile_record->f98 + frame_scale_sq_macro * 0.11f;
+            if (frame_scale * 0.75f < suction_and_projectile_record->f98)
+                suction_and_projectile_record->f98 = frame_scale * 0.75f;
+            if (distance < suction_and_projectile_record->f98 * 70.0f) {
+                blend_moby_animation(suction_and_projectile_record->owner, 4, 0, func_001F9850_2DDEA0(2));
             }
             if (distance < 3.0f) {
                 D_001404FC_2DDEA0[0] = 2;
                 moby->collision = 0;
             }
-            if (distance < record->f98) {
+            if (distance < suction_and_projectile_record->f98) {
                 hero.suck_cannon_incoming--;
                 hero.sucked_moby_count++;
                 func_L00_002DB6C8_2DDEA0(moby, &suction_and_projectile_scratch.v[0]);
-                hero.unk2050[record->idx]->flags &= 0xEFFF;
+                hero.unk2050[suction_and_projectile_record->idx]->flags &= 0xEFFF;
             } else {
                 transpose_rotation_matrix(&suction_and_projectile_scratch.v[5], D_0013FA90_2DDEA0);
                 func_001F9BF0_2DDEA0(&suction_and_projectile_scratch.v[2], &moby->pos, &suction_and_projectile_scratch.v[0]);
@@ -2363,7 +2363,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 func_001F9BD8_2DDEA0(&suction_and_projectile_scratch.v[0], &suction_and_projectile_scratch.v[0], &suction_and_projectile_scratch.v[3]);
                 func_001E9768_2DDEA0(&suction_and_projectile_scratch.v[4], &suction_and_projectile_scratch.v[0]);
                 func_001F9BF0_2DDEA0(&suction_and_projectile_scratch.v[1], &suction_and_projectile_scratch.v[0], &moby->pos);
-                func_L00_001FF4B0_2DDEA0(&suction_and_projectile_scratch.v[1], &suction_and_projectile_scratch.v[1], record->f98);
+                func_L00_001FF4B0_2DDEA0(&suction_and_projectile_scratch.v[1], &suction_and_projectile_scratch.v[1], suction_and_projectile_record->f98);
                 func_001F9BD8_2DDEA0(&moby->pos, &moby->pos, &suction_and_projectile_scratch.v[1]);
                 func_0020EEE8_2DDEA0(moby);
             }
@@ -2374,8 +2374,8 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             moby->visible = 0;
             moby->collision = 0;
             if (moby->anim_flags & 2) {
-                if (moby->prev_seq != record->anims[4]) {
-                    unsigned char anim = record->anims[4];
+                if (moby->prev_seq != suction_and_projectile_record->anims[4]) {
+                    unsigned char anim = suction_and_projectile_record->anims[4];
                     blend_moby_animation(moby, anim, 0, func_001F9850_2DDEA0(3));
                 }
                 moby->scale = ((Cls *)moby->pclass)->f24 * 0.3f;
@@ -2389,24 +2389,24 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             moby->visible = 1;
             moby->flags &= 0xFFFE;
             if (moby->pos.z < 2.0f) {
-                func_L00_002DDDE8_2DDEA0(moby, record, 0);
+                func_L00_002DDDE8_2DDEA0(moby, suction_and_projectile_record, 0);
                 return 0;
             }
-            suction_and_projectile_scratch.q = *(u128 *)&record->vel;
-            moby->scale = moby->scale + ((Cls *)moby->pclass)->f24 * (record->f7C * frame_scale);
+            suction_and_projectile_scratch.q = *(u128 *)&suction_and_projectile_record->vel;
+            moby->scale = moby->scale + ((Cls *)moby->pclass)->f24 * (suction_and_projectile_record->f7C * frame_scale);
             if (((Cls *)moby->pclass)->f24 < moby->scale)
                 moby->scale = ((Cls *)moby->pclass)->f24;
-            if (record->target != 0 && record->target->state != 0xFE &&
-                record->target->state != 0xFD) {
+            if (suction_and_projectile_record->target != 0 && suction_and_projectile_record->target->state != 0xFE &&
+                suction_and_projectile_record->target->state != 0xFD) {
                 int max_life = func_001F9850_2DDEA0(0x12C);
-                if (record->i94 < max_life - func_001F9850_2DDEA0(5)) {
+                if (suction_and_projectile_record->i94 < max_life - func_001F9850_2DDEA0(5)) {
                     float speed, quad_a, quad_b, root, root1, root2, time;
-                    qcopy(&suction_and_projectile_scratch.v[3], &record->target->pos);
-                    suction_and_projectile_scratch.v[3].z = suction_and_projectile_scratch.v[3].z + record->f90;
-                    func_001F9BF0_2DDEA0(&suction_and_projectile_scratch.v[2], &suction_and_projectile_scratch.v[3], &record->v40);
+                    qcopy(&suction_and_projectile_scratch.v[3], &suction_and_projectile_record->target->pos);
+                    suction_and_projectile_scratch.v[3].z = suction_and_projectile_scratch.v[3].z + suction_and_projectile_record->f90;
+                    func_001F9BF0_2DDEA0(&suction_and_projectile_scratch.v[2], &suction_and_projectile_scratch.v[3], &suction_and_projectile_record->v40);
                     func_001F9BF0_2DDEA0(&suction_and_projectile_scratch.v[1], &suction_and_projectile_scratch.v[3], &moby->pos);
-                    qcopy(&record->v40, &suction_and_projectile_scratch.v[3]);
-                    speed = func_001F9CB8_2DDEA0(&record->vel);
+                    qcopy(&suction_and_projectile_record->v40, &suction_and_projectile_scratch.v[3]);
+                    speed = func_001F9CB8_2DDEA0(&suction_and_projectile_record->vel);
                     quad_a = speed * speed - func_L00_001FF3E0_2DDEA0(&suction_and_projectile_scratch.v[2]);
                     quad_b = (suction_and_projectile_scratch.v[2].x * suction_and_projectile_scratch.v[1].x + suction_and_projectile_scratch.v[2].y * suction_and_projectile_scratch.v[1].y +
                               suction_and_projectile_scratch.v[2].z * suction_and_projectile_scratch.v[1].z) *
@@ -2429,48 +2429,48 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                         func_001F9BD8_2DDEA0(&suction_and_projectile_scratch.v[4], &suction_and_projectile_scratch.v[4], &suction_and_projectile_scratch.v[1]);
                         func_L00_001FF4B0_2DDEA0(
                             &suction_and_projectile_scratch.v[4], &suction_and_projectile_scratch.v[4], frame_time_sq_macro * 90.0f);
-                        func_001F9BD8_2DDEA0(&record->vel, &record->vel, &suction_and_projectile_scratch.v[4]);
-                        func_L00_001FF4B0_2DDEA0(&record->vel, &record->vel, speed);
+                        func_001F9BD8_2DDEA0(&suction_and_projectile_record->vel, &suction_and_projectile_record->vel, &suction_and_projectile_scratch.v[4]);
+                        func_L00_001FF4B0_2DDEA0(&suction_and_projectile_record->vel, &suction_and_projectile_record->vel, speed);
                     } else {
                         func_L00_001FF4B0_2DDEA0(
                             &suction_and_projectile_scratch.v[1], &suction_and_projectile_scratch.v[1], frame_time_sq_macro * 90.0f);
-                        func_001F9BD8_2DDEA0(&record->vel, &record->vel, &suction_and_projectile_scratch.v[1]);
-                        func_L00_001FF4B0_2DDEA0(&record->vel, &record->vel, speed);
+                        func_001F9BD8_2DDEA0(&suction_and_projectile_record->vel, &suction_and_projectile_record->vel, &suction_and_projectile_scratch.v[1]);
+                        func_L00_001FF4B0_2DDEA0(&suction_and_projectile_record->vel, &suction_and_projectile_record->vel, speed);
                     }
                 }
             }
             one = 1.0f;
-            func_001F9BD8_2DDEA0(&moby->pos, &moby->pos, &record->vel);
-            make_hit_descriptor(&suction_and_projectile_scratch.v[1], moby, 0x430000, 2.0f, &record->vel);
+            func_001F9BD8_2DDEA0(&moby->pos, &moby->pos, &suction_and_projectile_record->vel);
+            make_hit_descriptor(&suction_and_projectile_scratch.v[1], moby, 0x430000, 2.0f, &suction_and_projectile_record->vel);
             set_vector_length_xy(&suction_and_projectile_scratch.v[1], &suction_and_projectile_scratch.v[1], one);
             suction_and_projectile_scratch.h.hit.v.w = 5627.925f;
             suction_and_projectile_scratch.h.hit.b18 = 1;
             suction_and_projectile_scratch.h.hit.b19 = 3;
             suction_and_projectile_scratch.h.hit.h1A = 0x351;
             suction_and_projectile_scratch.h.hit.v.z = one;
-            hit_wall = func_L00_001F2BE8_2DDEA0(record->f80, &moby->pos, 1, moby, &suction_and_projectile_scratch.v[1]);
-            hit_wall |= func_L00_001F10E0_2DDEA0(record->f80, &moby->pos, 0, moby);
+            hit_wall = func_L00_001F2BE8_2DDEA0(suction_and_projectile_record->f80, &moby->pos, 1, moby, &suction_and_projectile_scratch.v[1]);
+            hit_wall |= func_L00_001F10E0_2DDEA0(suction_and_projectile_record->f80, &moby->pos, 0, moby);
             if (hit_wall != 0) {
                 qcopy_nc(&moby->pos, &((Coll *)D_L00_00173E40_lui)->v30);
-                func_001F9BF0_2DDEA0(&record->v50, &((Coll *)D_L00_00173E40_lui)->v20, &moby->pos);
+                func_001F9BF0_2DDEA0(&suction_and_projectile_record->v50, &((Coll *)D_L00_00173E40_lui)->v20, &moby->pos);
             }
             if (((Coll *)D_L00_00173E40_lui)->hit != 0 &&
                 ((Coll *)D_L00_00173E40_lui)->hit->oclass == 0)
                 hit_wall = 0;
-            if (record->state == 6) {
+            if (suction_and_projectile_record->state == 6) {
                 moby->flags &= 0x7FFF;
                 moby->collision = ((Cls *)moby->pclass)->i10;
                 moby->flags |= 4;
-                record->v50.z = one;
-                record->v50.x = 0.0f;
-                record->v50.y = 0.0f;
-                record->v50.w = 0.01f;
-                spin = func_001F9CB8_2DDEA0(&suction_and_projectile_scratch.v[0]) / record->f80;
+                suction_and_projectile_record->v50.z = one;
+                suction_and_projectile_record->v50.x = 0.0f;
+                suction_and_projectile_record->v50.y = 0.0f;
+                suction_and_projectile_record->v50.w = 0.01f;
+                spin = func_001F9CB8_2DDEA0(&suction_and_projectile_scratch.v[0]) / suction_and_projectile_record->f80;
                 extract_matrix_rotation_quaternion(&suction_and_projectile_scratch.v[1], &moby->rot_row0);
-                func_L00_001FF4B0_2DDEA0(&record->v50, &record->v50, one);
+                func_L00_001FF4B0_2DDEA0(&suction_and_projectile_record->v50, &suction_and_projectile_record->v50, one);
                 normalize_angle(spin);
-                func_L00_001FF4B0_2DDEA0(&suction_and_projectile_scratch.v[4], &record->vel, -1.0f);
-                fast_vec_cross(&suction_and_projectile_scratch.v[3], &suction_and_projectile_scratch.v[4], &record->v50);
+                func_L00_001FF4B0_2DDEA0(&suction_and_projectile_scratch.v[4], &suction_and_projectile_record->vel, -1.0f);
+                fast_vec_cross(&suction_and_projectile_scratch.v[3], &suction_and_projectile_scratch.v[4], &suction_and_projectile_record->v50);
                 func_L00_001FF4B0_2DDEA0(&suction_and_projectile_scratch.v[3], &suction_and_projectile_scratch.v[3], one);
                 build_quaternion_from_axis_angle(&suction_and_projectile_scratch.v[2], &suction_and_projectile_scratch.v[3], spin);
                 multiply_quaternions(&suction_and_projectile_scratch.v[5], &suction_and_projectile_scratch.v[1], &suction_and_projectile_scratch.v[2]);
@@ -2487,42 +2487,42 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 }
                 func_L00_001FF4B0_2DDEA0(
                     &((Coll *)D_L00_00173E40_lui)->v40, &((Coll *)D_L00_00173E40_lui)->v40, 1.0f);
-                if (moby->prev_seq != record->anims[6]) {
-                    unsigned char anim = record->anims[6];
+                if (moby->prev_seq != suction_and_projectile_record->anims[6]) {
+                    unsigned char anim = suction_and_projectile_record->anims[6];
                     blend_moby_animation(moby, anim, 0, func_001F9850_2DDEA0(0x14));
                 }
-                moby->collision_disable = record->i88;
-                record->state = 6;
+                moby->collision_disable = suction_and_projectile_record->i88;
+                suction_and_projectile_record->state = 6;
                 if (0.87266463f <
                     fast_arc_tan(((Coll *)D_L00_00173E40_lui)->v40.z,
                                  vector_length_xy(&((Coll *)D_L00_00173E40_lui)->v40))) {
-                    if (record->h9E >= 0)
-                        allocate_voice_for_target_entry(record->h9E, 0, moby);
-                    func_L00_002DDDE8_2DDEA0(moby, record, 1);
+                    if (suction_and_projectile_record->h9E >= 0)
+                        allocate_voice_for_target_entry(suction_and_projectile_record->h9E, 0, moby);
+                    func_L00_002DDDE8_2DDEA0(moby, suction_and_projectile_record, 1);
                     return 0;
                 }
                 if (D_0013E629_2DDEA0[0] != 0 && surface >= 5) {
-                    if (record->h9E >= 0)
-                        allocate_voice_for_target_entry(record->h9E, 0, moby);
-                    func_L00_002DDDE8_2DDEA0(moby, record, 1);
+                    if (suction_and_projectile_record->h9E >= 0)
+                        allocate_voice_for_target_entry(suction_and_projectile_record->h9E, 0, moby);
+                    func_L00_002DDDE8_2DDEA0(moby, suction_and_projectile_record, 1);
                 }
                 qzero(&suction_and_projectile_scratch.v[1]);
                 suction_and_projectile_scratch.v[1].z = ((Coll *)D_L00_00173E40_lui)->v40.z;
-                func_L00_001FF610_2DDEA0(&record->vel, &record->vel, &suction_and_projectile_scratch.v[1]);
+                func_L00_001FF610_2DDEA0(&suction_and_projectile_record->vel, &suction_and_projectile_record->vel, &suction_and_projectile_scratch.v[1]);
             }
-            if (fast_dec_timer(&record->i94) != 0) {
-                func_L00_002DDDE8_2DDEA0(moby, record, 1);
+            if (fast_dec_timer(&suction_and_projectile_record->i94) != 0) {
+                func_L00_002DDDE8_2DDEA0(moby, suction_and_projectile_record, 1);
                 return 0;
             }
             if (60.0f < vector_distance_xy(&moby->pos, D_0013F4D0_2DDEA0)) {
-                func_L00_002DDDE8_2DDEA0(moby, record, 1);
+                func_L00_002DDDE8_2DDEA0(moby, suction_and_projectile_record, 1);
                 return 0;
             }
-            if (func_001F9CB8_2DDEA0(&record->vel) < frame_scale * 0.01f) {
-                func_L00_002DDDE8_2DDEA0(moby, record, 1);
+            if (func_001F9CB8_2DDEA0(&suction_and_projectile_record->vel) < frame_scale * 0.01f) {
+                func_L00_002DDDE8_2DDEA0(moby, suction_and_projectile_record, 1);
                 return 0;
             }
-            record->vel.z = record->vel.z - frame_scale_sq_macro * 0.00925f;
+            suction_and_projectile_record->vel.z = suction_and_projectile_record->vel.z - frame_scale_sq_macro * 0.00925f;
             spawn_effect_particle_with_transformed_random_offset(&moby->pos, &moby->rot_row0);
             break;
         }
@@ -2530,13 +2530,13 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             int landed;
             moby->visible = 1;
             moby->flags &= 0xFFFE;
-            record->vel.z = record->vel.z - frame_scale_sq_macro * 0.013f;
+            suction_and_projectile_record->vel.z = suction_and_projectile_record->vel.z - frame_scale_sq_macro * 0.013f;
             if (moby->pos.z < 2.0f) {
-                func_L00_002DDDE8_2DDEA0(moby, record, 1);
+                func_L00_002DDDE8_2DDEA0(moby, suction_and_projectile_record, 1);
                 return 0;
             }
             landed = func_L00_00259B08_2DDEA0(
-                moby, &record->vel, 0.8f, truncate_float_to_s32(record->f8C * 1024.0f), 0.0f, 0);
+                moby, &suction_and_projectile_record->vel, 0.8f, truncate_float_to_s32(suction_and_projectile_record->f8C * 1024.0f), 0.0f, 0);
             moby->rot.x = moby->rot.x / 1.5f;
             moby->rot.y = moby->rot.y / 1.5f;
             if (landed != 0) {
@@ -2546,7 +2546,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 return 1;
             }
             if (moby->anim_flags & 2) {
-                moby->anim_speed = record->f78;
+                moby->anim_speed = suction_and_projectile_record->f78;
             }
             break;
         }
@@ -2557,12 +2557,12 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
     }
     if (moby->flags & 4)
         func_0020EEE8_2DDEA0(moby);
-    if (record->state < 4) {
-        if (record->timer <= 0.0f) {
+    if (suction_and_projectile_record->state < 4) {
+        if (suction_and_projectile_record->timer <= 0.0f) {
             if (((Cls *)moby->pclass)->f2C->fC != 0)
                 ((Cls *)moby->pclass)->f2C->fC(moby);
         }
-        record->timer = record->timer - 1.0f;
+        suction_and_projectile_record->timer = suction_and_projectile_record->timer - 1.0f;
     }
     return 0;
 }
