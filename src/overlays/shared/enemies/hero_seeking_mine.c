@@ -216,16 +216,16 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
     }
     group_moby_entry = (unsigned short *)D_L15_001ABE40[MOBY(moby)->group];
     do {
-        unsigned char *other =
+        unsigned char *group_member_moby =
             (unsigned char *)((int)l15_moby_array + ((*group_moby_entry & 0x7fff) << 8));
-        if (MOBY(other)->state != 1) {
+        if (MOBY(group_member_moby)->state != 1) {
             clear_u64_value(angles);
-            angles[2] = fast_arc_tan(l15_camera.pos.f[0] - MOBY(other)->pos.x,
-                                     l15_camera.pos.f[1] - MOBY(other)->pos.y);
-            angles[1] = -fast_arc_tan(vector_distance_xy(&MOBY(other)->pos, l15_camera.pos.f),
-                                      l15_camera.pos.f[2] - MOBY(other)->pos.z);
+            angles[2] = fast_arc_tan(l15_camera.pos.f[0] - MOBY(group_member_moby)->pos.x,
+                                     l15_camera.pos.f[1] - MOBY(group_member_moby)->pos.y);
+            angles[1] = -fast_arc_tan(vector_distance_xy(&MOBY(group_member_moby)->pos, l15_camera.pos.f),
+                                      l15_camera.pos.f[2] - MOBY(group_member_moby)->pos.z);
             euler_rotation_matrix(rotation, angles);
-            qcopy(position, &MOBY(other)->pos);
+            qcopy(position, &MOBY(group_member_moby)->pos);
             position[2] += group_moby_effect_z_offset_gp;
             position[3] = 1.0f;
             for (i = 0; i < 4; i++) {
