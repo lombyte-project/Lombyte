@@ -957,14 +957,14 @@ void scatter_bomber_tank_linked_debris(struct Moby *moby) {
     float  launch_velocity_or_offset[4];
     char  *moby_vars = ((char *)moby->pvars);
     short *list = D_L08_001AC040[((Blk_7010 *)D_L08_0015FFD8 + *(int *)(moby_vars + 0x144))->group];
-    char  *other;
+    char  *linked_group_member_moby;
     unsigned short index;
     int            i;
 
     if (list == 0)
         return;
     index = *list & 0x7FFF;
-    other = (char *)((Blk_7010 *)D_L08_0015FFD8 + index);
+    linked_group_member_moby = (char *)((Blk_7010 *)D_L08_0015FFD8 + index);
     for (i = 0; i < 40 && available_moby_slot_count >= 50; i++) {
         char *spawned_debris_moby;
         if (random_integer_below(0xFF) & 1)
@@ -1003,8 +1003,8 @@ void scatter_bomber_tank_linked_debris(struct Moby *moby) {
         }
     }
     while (1) {
-        if (*(unsigned char *)(other + 0x20) < 0x7F && other != moby) {
-            unsigned short cls = *(unsigned short *)(other + 0xA6);
+        if (*(unsigned char *)(linked_group_member_moby + 0x20) < 0x7F && linked_group_member_moby != moby) {
+            unsigned short cls = *(unsigned short *)(linked_group_member_moby + 0xA6);
             if ((unsigned short)(cls - 0x24C) < 0xB) {
                 float ang;
                 float lo, hi;
@@ -1014,7 +1014,7 @@ void scatter_bomber_tank_linked_debris(struct Moby *moby) {
                 position_or_velocity_scratch[2] = 0.0f;
                 position_or_velocity_scratch[2] =
                     random_float_between(D_0015ED6C_lui * 8.0f, D_0015ED6C_lui * 12.0f);
-                switch ((short)(*(unsigned short *)(other + 0xA6) - 0x24C)) {
+                switch ((short)(*(unsigned short *)(linked_group_member_moby + 0xA6) - 0x24C)) {
                 case LINKED_CLASS_SECOND_HIGHEST_Y_LAUNCH_OFFSET:
                     *(u128_7010 *)launch_velocity_or_offset = 0;
                     launch_velocity_or_offset[0] = 1.629f;
@@ -1099,14 +1099,14 @@ void scatter_bomber_tank_linked_debris(struct Moby *moby) {
                         fast_arc_tan(l08_camera.pos.f[0] - moby->pos.x,
                                      l08_camera.pos.f[1] - moby->pos.y)) < 0.2617994f) {
                     initialize_moby_launch_motion(
-                        other,
+                        linked_group_member_moby,
                         (int)moby,
                         position_or_velocity_scratch,
                         launch_offset,
                         truncate_float_to_s32(random_float_between(10.0f, 20.0f)));
                 } else {
                     initialize_moby_launch_motion(
-                        other,
+                        linked_group_member_moby,
                         (int)moby,
                         position_or_velocity_scratch,
                         launch_offset,
@@ -1114,9 +1114,9 @@ void scatter_bomber_tank_linked_debris(struct Moby *moby) {
                 }
             } else if ((short)cls == 0x1D8) {
                 clear_u64_value(position_or_velocity_scratch);
-                spawn_explosion(other,
+                spawn_explosion(linked_group_member_moby,
                                 position_or_velocity_scratch,
-                                other + 0x10,
+                                linked_group_member_moby + 0x10,
                                 0.0f,
                                 0.0f,
                                 0x32,
@@ -1132,13 +1132,13 @@ void scatter_bomber_tank_linked_debris(struct Moby *moby) {
                                 1,
                                 -1,
                                 0);
-                mark_moby_for_removal(other);
+                mark_moby_for_removal(linked_group_member_moby);
             }
         }
         if (*list++ < -1)
             break;
         index = *list & 0x7FFF;
-        other = (char *)((Blk_7010 *)D_L08_0015FFD8 + index);
+        linked_group_member_moby = (char *)((Blk_7010 *)D_L08_0015FFD8 + index);
     }
 }
 
