@@ -1374,7 +1374,7 @@ void update_sentrybot_joint_aim(void *mv) {
     update_joint_animation(moby, moby_data + 0x220, 0, k1 * frame_scale_sq, k2 * frame_scale_sq);
 }
 
-void update_sentrybot_hit_response_and_target_visibility(void *object, int flag) {
+void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, int flag) {
     enum {
         SENTRYBOT_NO_KNOCKBACK_SETUP_RESPONSE = 0,
         LETHAL_HIT_RESPONSE = 1,
@@ -1389,7 +1389,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
         SENTRYBOT_FIRST_CHANNEL_BLEND_TARGET_HIT_RESPONSE = 10,
         SENTRYBOT_NO_KNOCKBACK_START_RESPONSE = 11
     };
-    unsigned char *moby = object;
+    unsigned char *moby = sentrybot_moby;
     unsigned char *sentrybot_data = ((unsigned char *)MOBY(moby)->pvars);
     char          *hit;
     float          impact;
