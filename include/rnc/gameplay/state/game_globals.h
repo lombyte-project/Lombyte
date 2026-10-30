@@ -22,7 +22,7 @@ extern s32 space_load __asm__("D_0015F600");
 extern s32 world_update_time __asm__("D_0015F60C");
 extern s32 space_load_in_progress __asm__("D_0015F618");
 extern s32 moby_anim_head __asm__("D_0015FF14");
-extern char *resident_object_pool __asm__("D_0015FF18");
+extern u8 *resident_object_pool __asm__("D_0015FF18");
 extern s32 active_decode_buffer __asm__("D_0015FF50");
 extern s32 moby_occl_cluster_count __asm__("D_0016119C");
 extern s32 moby_render_slots[16] __asm__("D_001B2BC0");

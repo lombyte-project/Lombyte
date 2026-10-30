@@ -102,7 +102,7 @@ extern u8 point_lights[] __asm__("D_0019C1C0");
 extern u8 point_light_data[] __asm__("D_0019C3C0");
 extern char dir_lights[] __asm__("D_0019BDC0");
 extern u8 default_directional_light_template[] __asm__("D_001D9740");
-extern u8 *resident_object_pool __asm__("D_0015FF18");
+#include "rnc/gameplay/state/game_globals.h"
 extern u8 *moby_instance_end __asm__("D_0015FF1C");
 extern u8 *moby_vars __asm__("D_0015FF28");
 extern u8 *D_001600AC;
