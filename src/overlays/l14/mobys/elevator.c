@@ -239,7 +239,7 @@ void initialize_elevator_path_state(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int  *path;
     int  *primary_path;
-    int  *first;
+    int  *primary_path_start_point;
     int   i;
 
     if (*(int *)(moby_vars + 0xA0) == -1) {
@@ -255,13 +255,13 @@ void initialize_elevator_path_state(struct Moby *moby) {
 
     *(float *)(moby_vars + 0xB4) = 0.0f;
     path = primary_path;
-    first = path + 4;
+    primary_path_start_point = path + 4;
     for (i = 0; i < *path - 1; i++) {
         ((f32 *)path)[i * 4 + 7] = fast_vec_dist(&path[i * 4 + 4], &path[i * 4 + 8]);
         *(float *)(moby_vars + 0xB4) += ((f32 *)path)[i * 4 + 7];
     }
     {
-        f32   len = fast_vec_dist(&((f32 *)primary_path)[i * 4 + 4], first);
+        f32   len = fast_vec_dist(&((f32 *)primary_path)[i * 4 + 4], primary_path_start_point);
         char *pt = (char *)primary_path + i * 16;
         *(f32 *)(pt + 0x1C) = len;
     }
