@@ -1236,8 +1236,8 @@ void process_hero_race_object_interactions(void) __asm__("FUN_L05_00253b48");
 void process_hero_race_object_interactions(void) {
     u8 *state;
     u8 *moby;
-    u8 *first;
-    u8 *second;
+    u8 *boost_trigger_moby;
+    u8 *ground_boost_trigger_moby;
     u8 *third;
     f32 delta[4];
     f32 matrix[16];
@@ -1248,25 +1248,25 @@ void process_hero_race_object_interactions(void) {
         return;
     state = *(u8 **)(hero.hoverboard_moby + 0x78);
     if (*(s32 *)(state + 0x44) != -1) {
-        get_first_moby_in_group((void **)&first, *(s32 *)(state + 0x44), 0, 0);
-        if (first != 0) {
+        get_first_moby_in_group((void **)&boost_trigger_moby, *(s32 *)(state + 0x44), 0, 0);
+        if (boost_trigger_moby != 0) {
             do {
-                if (*(s16 *)(first + 0xA6) == 0x473 &&
-                    fast_subtract_rotations_cf(first + 0xBC) != 0) {
-                    fast_vec_sub(delta, first + 0x10, &hero.motion.body_center);
+                if (*(s16 *)(boost_trigger_moby + 0xA6) == 0x473 &&
+                    fast_subtract_rotations_cf(boost_trigger_moby + 0xBC) != 0) {
+                    fast_vec_sub(delta, boost_trigger_moby + 0x10, &hero.motion.body_center);
                     set_identity_matrix(matrix);
-                    transpose_rotation_matrix(matrix, first + 0xC0);
+                    transpose_rotation_matrix(matrix, boost_trigger_moby + 0xC0);
                     transform_vector(delta, delta, matrix);
                     if (absolute_float(delta[0]) < 0.5f && absolute_float(delta[1]) < 2.9f &&
                         absolute_float(delta[2]) < 2.9f) {
-                        hero.boost_pad_timer += **(s32 **)(first + 0x78);
-                        first[0xBC] = scale_game_frames(0x3C);
+                        hero.boost_pad_timer += **(s32 **)(boost_trigger_moby + 0x78);
+                        boost_trigger_moby[0xBC] = scale_game_frames(0x3C);
                         if (hero.hoverboard_moby != 0)
                             allocate_voice_for_target_entry(1, 0, hero.hoverboard_moby);
                     }
                 }
-                get_next_moby_in_group((void **)&first, first, 0, 0);
-            } while (first != 0);
+                get_next_moby_in_group((void **)&boost_trigger_moby, boost_trigger_moby, 0, 0);
+            } while (boost_trigger_moby != 0);
         }
     }
     count = scale_game_frames(0x32);
@@ -1281,30 +1281,30 @@ void process_hero_race_object_interactions(void) {
         green = 0xFF;
     if (*(s32 *)(state + 0x48) != -1) {
         if (hero.hoverboard_airborne == 0) {
-            get_first_moby_in_group((void **)&second, *(s32 *)(state + 0x48), 0, 0);
-            if (second != 0) {
+            get_first_moby_in_group((void **)&ground_boost_trigger_moby, *(s32 *)(state + 0x48), 0, 0);
+            if (ground_boost_trigger_moby != 0) {
                 u32 color = (blue << 16) | (0x80000000U | (green << 8)) | red;
                 do {
-                    if (*(s16 *)(second + 0xA6) == 0x474) {
-                        *(u16 *)(second + 0x34) |= 0x10;
-                        *(u32 *)(second + 0x90) = color;
-                        if (fast_subtract_rotations_cf(second + 0xBC) != 0) {
-                            fast_vec_sub(delta, second + 0x10, &hero.motion.pos);
+                    if (*(s16 *)(ground_boost_trigger_moby + 0xA6) == 0x474) {
+                        *(u16 *)(ground_boost_trigger_moby + 0x34) |= 0x10;
+                        *(u32 *)(ground_boost_trigger_moby + 0x90) = color;
+                        if (fast_subtract_rotations_cf(ground_boost_trigger_moby + 0xBC) != 0) {
+                            fast_vec_sub(delta, ground_boost_trigger_moby + 0x10, &hero.motion.pos);
                             set_identity_matrix(matrix);
-                            transpose_rotation_matrix(matrix, second + 0xC0);
+                            transpose_rotation_matrix(matrix, ground_boost_trigger_moby + 0xC0);
                             transform_vector(delta, delta, matrix);
                             if (absolute_float(delta[0]) < 2.8f &&
                                 absolute_float(delta[1]) < 1.25f &&
                                 absolute_float(delta[2]) < 1.5f) {
-                                hero.boost_pad_timer += **(s32 **)(second + 0x78);
-                                second[0xBC] = scale_game_frames(0x3C);
+                                hero.boost_pad_timer += **(s32 **)(ground_boost_trigger_moby + 0x78);
+                                ground_boost_trigger_moby[0xBC] = scale_game_frames(0x3C);
                                 if (hero.hoverboard_moby != 0)
                                     allocate_voice_for_target_entry(1, 0, hero.hoverboard_moby);
                             }
                         }
                     }
-                    get_next_moby_in_group((void **)&second, second, 0, 0);
-                } while (second != 0);
+                    get_next_moby_in_group((void **)&ground_boost_trigger_moby, ground_boost_trigger_moby, 0, 0);
+                } while (ground_boost_trigger_moby != 0);
             }
         }
     }
