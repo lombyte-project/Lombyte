@@ -47,6 +47,6 @@ OFFSET_CHECK(mb_buf, struct MpegDecoder, mb_buf, 0x590);
 OFFSET_CHECK(mb_buf_index, struct MpegDecoder, mb_buf_index, 0x810);
 OFFSET_CHECK(mc_work, struct MpegDecoder, mc_work, 0x81C);
 OFFSET_CHECK(load_intra_quantiser_matrix, struct MpegDecoder, load_intra_quantiser_matrix, 0x840);
-OFFSET_CHECK(unk848, struct MpegDecoder, unk848, 0x848);
+OFFSET_CHECK(mpeg2, struct MpegDecoder, mpeg2, 0x848);
 OFFSET_CHECK(mpeg, struct MpegDecoder, mpeg, 0x858);
 SIZE_CHECK(cb_data, struct sceMpegCbData, 0x20);
