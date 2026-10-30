@@ -469,14 +469,14 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     char        *part1;
     char        *part2;
     char        *hit;
-    char        *owner;
+    char        *hit_source_moby;
     int          hit_processing_status;
     float        remaining = 0.0f;
     float        position[4] __attribute__((aligned(16)));
     char         effect_data[16] __attribute__((aligned(16)));
     float        speed;
     float        angle;
-    struct Hero *base;
+    struct Hero *hero_turn_reference;
 
     part0 = find_moby_hit(moby, 0x210000, 0);
     first = *(char **)(extermitank_hit_sync_vars + 0x184);
@@ -487,8 +487,8 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     if (part0 != 0) {
         if (*(char **)(part0 + 0x20) == moby)
             part0 = 0;
-        owner = *(char **)(part0 + 0x20);
-        if (owner != 0 && (*(short *)(owner + 0xa6) == 0x47 || *(short *)(owner + 0xa6) == 0))
+        hit_source_moby = *(char **)(part0 + 0x20);
+        if (hit_source_moby != 0 && (*(short *)(hit_source_moby + 0xa6) == 0x47 || *(short *)(hit_source_moby + 0xa6) == 0))
             part0 = 0;
     }
     hit = part0;
@@ -666,9 +666,9 @@ mark_children:
     if (*(int *)(extermitank_hit_sync_vars + 0x38) != 0 && *(int *)(extermitank_hit_sync_vars + 0x178) == 0) {
         *(int *)(extermitank_hit_sync_vars + 0x178) = scale_game_frames(0xf0);
         *(int *)(extermitank_hit_sync_vars + 0x38) = 0;
-        base = &hero;
-        angle = fast_arc_tan(base->motion.pos.f[0] - MOBY(moby)->pos.x,
-                             base->motion.pos.f[1] - MOBY(moby)->pos.y);
+        hero_turn_reference = &hero;
+        angle = fast_arc_tan(hero_turn_reference->motion.pos.f[0] - MOBY(moby)->pos.x,
+                             hero_turn_reference->motion.pos.f[1] - MOBY(moby)->pos.y);
         if (fast_difference_between_rotations(MOBY(moby)->rot.z, angle) > 1.5707964f)
             ((signed char *)extermitank_hit_sync_vars)[0xc4] *= -1;
     }
