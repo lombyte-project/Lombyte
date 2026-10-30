@@ -1173,7 +1173,7 @@ void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 
 void spawn_hero_radial_particle_burst(void) {
     V_217450 randomized_position[1];
-    V_217450 out;
+    V_217450 particle_initial_vector;
     int      scaled_frame_count;
     int      i;
     char    *position_source;
@@ -1198,11 +1198,11 @@ void spawn_hero_radial_particle_burst(void) {
         azimuth_angle = random_angle_radians();
         elevation_angle = random_float_between(0.34906584f, 1.3962634f);
         r = random_float_between(0.05f, *(float *)(g + 0x234) + 0.2f);
-        build_spherical_offset(&out, vector_magnitude, azimuth_angle, elevation_angle);
+        build_spherical_offset(&particle_initial_vector, vector_magnitude, azimuth_angle, elevation_angle);
         randomized_position[0].f[0] += FUN_001f9dc8_217450(azimuth_angle) * r;
         randomized_position[0].f[1] += FUN_001f9de0_217450(azimuth_angle) * r;
         spawn_effect(randomized_position,
-                     &out,
+                     &particle_initial_vector,
                      0x7000C0F0,
                      0x70F0,
                      scaled_frame_count,
