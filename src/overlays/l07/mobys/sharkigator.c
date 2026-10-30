@@ -478,9 +478,9 @@ void cache_path_segment_lengths(char *path_record) {
         if (count > 0) {
             do {
                 int point_byte_offset = i * 16;
-                int next = (i + 1) % count;
+                int next_point_index = (i + 1) % count;
                 *(float *)(path_record + point_byte_offset + 0x1C) =
-                    fast_vec_dist(path_record + (point_byte_offset + 0x10), path_record + (next * 16 + 0x10));
+                    fast_vec_dist(path_record + (point_byte_offset + 0x10), path_record + (next_point_index * 16 + 0x10));
                 i++;
                 count = *(int *)path_record;
             } while (i < count);
