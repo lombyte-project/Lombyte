@@ -255,7 +255,7 @@ void update_path_key_camera(char *path_key_camera) {
     float          camera_placement_parameters[4];
     float          unused[4];
     CamKey5d48    *keys;
-    int            next;
+    int            next_camera_key_index;
     float          look_direction[4];
     float          scaled_up_vector[4];
 
@@ -372,7 +372,7 @@ void update_path_key_camera(char *path_key_camera) {
     /* Unused reads (not in rac1-decomp's SN build): with them the game compiler computes the key table's
      * high half and the next key index above the three side tests, as retail does. */
     keys = D_L14_001F6488;
-    next = st->idx + 1;
+    next_camera_key_index = st->idx + 1;
     if (side == 0 && D_L14_001F6488[st->idx + 1].t24 <= D_L14_001624C0) {
         st->idx++;
     } else if (side == 1 && D_L14_001F6488[st->idx + 1].t28 <= D_L14_001624C0) {
