@@ -433,8 +433,8 @@ void process_snagglebeast_damage(char *moby, char *snagglebeast_instance_vars, f
                     if (camera_secondary_mode_lui == 0x78)
                         hero_set_state(0, 1);
                     if ((u8)moby[0x53] != 2) {
-                        int first = random_int_between(0, 2);
-                        FUN_00212f90(moby, 2, first, random_int_between(20, 22));
+                        int hit_animation_start_frame = random_int_between(0, 2);
+                        FUN_00212f90(moby, 2, hit_animation_start_frame, random_int_between(20, 22));
                     }
                     slot = *(int *)(snagglebeast_instance_vars + 0x1f8);
                     *(float *)(snagglebeast_instance_vars + 0x1c8) = 0.0f;
