@@ -149,7 +149,7 @@ char *select_blarg_bombthrower_waypoint(struct Moby *moby) {
     char        *candidate_moby;
     float        bestD, bestA;
     int          candidate_moby_index;
-    struct Hero *base;
+    struct Hero *hero_state;
     if (group_entry == 0)
         return 0;
     best = 0;
@@ -162,11 +162,11 @@ char *select_blarg_bombthrower_waypoint(struct Moby *moby) {
             float candidate_hero_heading_difference, candidate_distance, candidate_heading;
             candidate_heading = fast_arc_tan(MOBY(candidate_moby)->pos.x - moby->pos.x,
                                              MOBY(candidate_moby)->pos.y - moby->pos.y);
-            base = &hero;
+            hero_state = &hero;
             candidate_hero_heading_difference = fast_difference_between_rotations(
                 candidate_heading,
-                fast_arc_tan(base->motion.pos.f[0] - moby->pos.x,
-                             base->motion.pos.f[1] - moby->pos.y));
+                fast_arc_tan(hero_state->motion.pos.f[0] - moby->pos.x,
+                             hero_state->motion.pos.f[1] - moby->pos.y));
             candidate_distance = fast_vec_dist(&moby->pos, candidate_moby + 0x10);
             if (candidate_hero_heading_difference < 1.5707964f) {
                 if (bestA < candidate_hero_heading_difference) {
