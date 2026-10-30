@@ -36,7 +36,7 @@ extern char            D_0013F350[] NOT_SDA;
 extern int             current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern unsigned short *D_L00_001AB840_2ebe70[] __asm__("D_L00_001AB840");
 extern OvlQuad         D_L00_00173E60_2ebe70 __asm__("D_L00_00173E60");
-float D_L00_00161DD8_gp __asm__("D_L00_00161DD8") = 0.0035f;
+float                  D_L00_00161DD8_gp __asm__("D_L00_00161DD8") = 0.0035f;
 extern u8              D_L00_00166E30_lui[] __asm__("D_L00_00166E30") NOT_SDA;
 
 float D_L01_00162250 = 0.0035f;

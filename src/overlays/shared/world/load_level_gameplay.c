@@ -1758,8 +1758,6 @@ extern char  level_code_memory_end[] __asm__("D_L00_002F0CD0");
 extern s32   particle_texture_ranges[] __asm__("D_L00_001B1A80");
 extern char *D_L00_001C5800_244110[] __asm__("D_L00_001C5800");
 extern char *D_L00_001BC030_244110[] __asm__("D_L00_001BC030");
-extern char *D_L00_00160FC0_244110 __asm__("D_L00_00160FC0");
-extern char *D_L00_00160494_244110 __asm__("D_L00_00160494");
 extern char *D_L00_0015FFE8;
 extern char *D_L00_00160108;
 extern char *D_L00_0016016C;
@@ -2094,12 +2092,12 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         if (core_header[0xA])
             debug_print(D_L00_001E8958, KB(D_L00_001BC030_244110[0] - D_L00_001C5800_244110[0]));
         else
-            debug_print(D_L00_001E8958, KB(D_L00_00160FC0_244110 - D_L00_001C5800_244110[0]));
+            debug_print(D_L00_001E8958, KB((char *)D_L00_00160FC0 - D_L00_001C5800_244110[0]));
         if (core_header[0xA])
             debug_print(D_L00_001E8970, KB(D_L00_00197300[0]->seqs[0] - D_L00_001BC030_244110[0]));
-        debug_print(D_L00_001E8988, KB(D_L00_00160FC0_244110 - D_L00_00197300[0]->seqs[0]));
-        debug_print(D_L00_001E89A0, KB(D_L00_00160494_244110 - D_L00_00160FC0_244110));
-        debug_print(D_L00_001E89B8, KB((char *)moby_table - D_L00_00160494_244110));
+        debug_print(D_L00_001E8988, KB((char *)D_L00_00160FC0 - D_L00_00197300[0]->seqs[0]));
+        debug_print(D_L00_001E89A0, KB((char *)D_L00_00160494 - (char *)D_L00_00160FC0));
+        debug_print(D_L00_001E89B8, KB((char *)moby_table - (char *)D_L00_00160494));
         debug_print(D_L00_001E89D0, KB(D_L00_0015FFE8 - (char *)moby_table));
         debug_print(D_L00_001E89E8, KB(D_L00_00160108 - D_L00_0015FFE8));
         debug_print(D_L00_001E8A00, KB(D_L00_0016016C - D_L00_00160108));
@@ -3342,6 +3340,6 @@ u64 level_texture_64x64_descriptor[3] __asm__("D_L00_001827D8") = {0};
 
 char *effect_texture_data_base __asm__("D_L00_0015F420") = 0;
 
-char *D_L00_00160FC0_244110 __asm__("D_L00_00160FC0") = 0;
+TieInst *D_L00_00160FC0 = 0;
 
-char *D_L00_00160494_244110 __asm__("D_L00_00160494") = 0;
+ShrubInst *D_L00_00160494 = 0;

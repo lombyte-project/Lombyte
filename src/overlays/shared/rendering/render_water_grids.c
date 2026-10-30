@@ -26,10 +26,10 @@ extern char D_L01_00167240[];
 
 extern s32 D_L01_0015F5E0 MACRO_ADDR;
 
-u32 cached_water_texture_id_gp __asm__("D_L01_00161228") = 0xffffffff;
-u32 cached_water_second_texture_id_gp __asm__("D_L01_0016122C") = 0xffffffff;
-extern u32 D_L01_00161230 __attribute__((sda));
-u32 cached_water_alpha_1_fix_gp __asm__("D_L01_00161234") = 0xffffffff;
+u32                       cached_water_texture_id_gp __asm__("D_L01_00161228") = 0xffffffff;
+u32                       cached_water_second_texture_id_gp __asm__("D_L01_0016122C") = 0xffffffff;
+extern u32                D_L01_00161230 __attribute__((sda));
+u32                       cached_water_alpha_1_fix_gp __asm__("D_L01_00161234") = 0xffffffff;
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") MACRO_ADDR;
 extern void               FUN_L01_002b4c28(void);
 

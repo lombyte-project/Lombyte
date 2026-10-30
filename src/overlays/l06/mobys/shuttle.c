@@ -133,7 +133,7 @@ extern int D_L06_0015FDF8;
 #include "rnc/overlay/l06/mobys/shuttle_data/shuttle_update_2.h"
 
 extern float D_L06_001620F8 __attribute__((sda));
-int shuttle_forced_return_requested_gp __asm__("D_L06_00162100") = 0;
+int          shuttle_forced_return_requested_gp __asm__("D_L06_00162100") = 0;
 
 #include "rnc/overlay/l06/mobys/shuttle_data/shuttle_update.h"
 
@@ -220,7 +220,7 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern char  *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
-float shuttle_breakup_particle_max_speed_gp __asm__("D_L06_0016215C") = 4e+01f;
+float         shuttle_breakup_particle_max_speed_gp __asm__("D_L06_0016215C") = 4e+01f;
 
 #include "rnc/overlay/l06/mobys/shuttle_data/break_apart_shuttle_linked_mobys_2.h"
 

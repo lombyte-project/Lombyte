@@ -39,12 +39,12 @@ extern char *D_L06_0015FFD8_301b90 __asm__("D_L06_0015FFD8");
 extern int  *D_L06_001B0C30_301b90[] __asm__("D_L06_001B0C30");
 extern char  dialogue_playback_phase[] __asm__("D_0015172A");
 extern int   D_L06_0015F5C4 __asm__("D_L06_0015F5C4");
-float D_L06_00162098 = 0.0001f;
-float D_L06_0016209C = 1.0f;
-float D_L06_001620A0 = 0;
-float D_L06_001620A4 = 0.001f;
-float D_L06_001620A8 = 1.0f;
-float D_L06_001620B0 = 0;
+float        D_L06_00162098 = 0.0001f;
+float        D_L06_0016209C = 1.0f;
+float        D_L06_001620A0 = 0;
+float        D_L06_001620A4 = 0.001f;
+float        D_L06_001620A8 = 1.0f;
+float        D_L06_001620B0 = 0;
 extern float l06_linked_sequence_post_path_countdown_duration __asm__("D_L06_001620C4")
     __attribute__((sda));
 extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
@@ -78,6 +78,7 @@ struct TauntVoiceVars {
 };
 
 s32 chatter_variant_used_flags[1] __asm__("D_L06_001620B8") = {0};
+
 extern s32 queued_dialogue_id[] __asm__("D_001516EC");
 extern s32 FUN_00213260(s32);
 extern int D_L06_0015F5C4;

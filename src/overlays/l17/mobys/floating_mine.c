@@ -41,7 +41,7 @@ extern void  spawn_explosion(void *,
                              int,
                              int) __asm__("FUN_L00_0025e450");
 extern short D_L17_00161D2C __attribute__((sda));
-short fleet_bobbing_phase_rate_degrees __asm__("D_L17_00161D30") = 0;
+short        fleet_bobbing_phase_rate_degrees __asm__("D_L17_00161D30") = 0;
 extern void  update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 f32        resolve_camera_surface_height(struct CameraProbePosition *position,
                                          s32 optional_output) __asm__("FUN_002135f0");

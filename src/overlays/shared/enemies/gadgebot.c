@@ -284,11 +284,12 @@ extern f32                    D_0015ED6C;
 extern GbHit                  D_L06_001745C0;
 extern Moby                  *D_L06_0015FFD8;
 extern GbMoby *D_L06_001745D8 NOT_SDA;
-GbStats l06_gadgebot_command_range_stats __asm__("D_L06_0017EC58") = {0};
-extern int                    D_00141610[];
-extern int                    D_L06_001AC180[];
-extern float                  D_0015ED70;
-extern unsigned char          big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") MACRO_ADDR;
+GbStats                       l06_gadgebot_command_range_stats __asm__("D_L06_0017EC58") = {0};
+
+extern int           D_00141610[];
+extern int           D_L06_001AC180[];
+extern float         D_0015ED70;
+extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") MACRO_ADDR;
 
 GbStats D_L10_0017E958 = {0};
 

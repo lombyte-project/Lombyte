@@ -43,14 +43,14 @@ extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __as
 extern float D_0015ED6C MACRO_ADDR;
 extern void             draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern float FUN_L04_001f1978(float);
-extern s32   rand(void);
-int spiderbot_effect_spawn_count_gp __asm__("D_L15_00161558") = 0x28;
-float spiderbot_effect_scale_gp __asm__("D_L15_0016155C") = 0.75f;
-float spiderbot_effect_lifetime_range_end_gp __asm__("D_L15_00161560") = 5.0f;
-extern u8    D_L15_00174460[];
-extern void  draw_spiderbot_effect_quad() __asm__("FUN_L15_002a7628");
-void         normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
+extern float          FUN_L04_001f1978(float);
+extern s32            rand(void);
+int                   spiderbot_effect_spawn_count_gp __asm__("D_L15_00161558") = 0x28;
+float                 spiderbot_effect_scale_gp __asm__("D_L15_0016155C") = 0.75f;
+float                 spiderbot_effect_lifetime_range_end_gp __asm__("D_L15_00161560") = 5.0f;
+extern u8             D_L15_00174460[];
+extern void           draw_spiderbot_effect_quad() __asm__("FUN_L15_002a7628");
+void                  normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
 extern unsigned char *func_L00_00273F80_r(float        *pos,
                                           char         *vel,
                                           int           color,

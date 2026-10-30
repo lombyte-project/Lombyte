@@ -319,7 +319,7 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
 
 extern __typeof__(resolve_moby_hit_response) func_00213928 __attribute__((alias("FUN_00213928")));
 
-u8 hit_response_code_table[18][4] = {
+HitResponseCode hit_response_code_table[18][4] = {
     {1, 3, 7,   9},
     {1, 3, 7,   9},
     {1, 3, 7,   9},

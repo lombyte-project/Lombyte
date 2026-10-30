@@ -67,19 +67,19 @@ extern void          set_race_camera(void *, void *, int, int) __asm__("FUN_L00_
 void                 jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 void         enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern float D_L06_0015F3FC;
-float D_L06_00161D84_gp __asm__("D_L06_00161D84") = 1e+01f;
-float D_L06_00161D88_gp __asm__("D_L06_00161D88") = 3e+02f;
-float D_L06_00161D8C_gp __asm__("D_L06_00161D8C") = 3e+02f;
-float D_L06_00161D90_gp __asm__("D_L06_00161D90") = 15.0f;
-float D_L06_00161D94_gp __asm__("D_L06_00161D94") = 2e+02f;
-float D_L06_00161D98_gp __asm__("D_L06_00161D98") = 2e+02f;
+float        D_L06_00161D84_gp __asm__("D_L06_00161D84") = 1e+01f;
+float        D_L06_00161D88_gp __asm__("D_L06_00161D88") = 3e+02f;
+float        D_L06_00161D8C_gp __asm__("D_L06_00161D8C") = 3e+02f;
+float        D_L06_00161D90_gp __asm__("D_L06_00161D90") = 15.0f;
+float        D_L06_00161D94_gp __asm__("D_L06_00161D94") = 2e+02f;
+float        D_L06_00161D98_gp __asm__("D_L06_00161D98") = 2e+02f;
 
 float D_L06_00161D9C = 0;
 
-float D_L06_00161DA0_gp __asm__("D_L06_00161DA0") = 0;
-float D_L06_00161DA4_gp __asm__("D_L06_00161DA4") = 0;
-float D_L06_00161DAC_gp __asm__("D_L06_00161DAC") = 5.0f;
-float D_L06_00161DB0_gp __asm__("D_L06_00161DB0") = 3e+02f;
+float        D_L06_00161DA0_gp __asm__("D_L06_00161DA0") = 0;
+float        D_L06_00161DA4_gp __asm__("D_L06_00161DA4") = 0;
+float        D_L06_00161DAC_gp __asm__("D_L06_00161DAC") = 5.0f;
+float        D_L06_00161DB0_gp __asm__("D_L06_00161DB0") = 3e+02f;
 extern void  update_drawbridge_segment_transforms(Moby *) __asm__("FUN_L06_002f5d78");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void  jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -106,8 +106,8 @@ typedef struct DrawbridgeVars {
 
 extern char drawbridge_first_row_local_offset_gp[4] __asm__("D_L06_00161D50") __attribute__((sda));
 extern char drawbridge_second_row_local_offset_gp[4] __asm__("D_L06_00161D60") __attribute__((sda));
-float drawbridge_min_segment_distance_base_gp __asm__("D_L06_00161D70") = -0.6f;
-float drawbridge_min_segment_distance_step_gp __asm__("D_L06_00161D74") = 0.25f;
+float       drawbridge_min_segment_distance_base_gp __asm__("D_L06_00161D70") = -0.6f;
+float       drawbridge_min_segment_distance_step_gp __asm__("D_L06_00161D74") = 0.25f;
 extern float D_L06_00161D78 __attribute__((sda));
 extern float D_L06_00161D7C __attribute__((sda));
 extern float D_L06_00161D80 __attribute__((sda));

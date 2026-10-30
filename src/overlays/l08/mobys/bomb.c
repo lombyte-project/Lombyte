@@ -53,29 +53,29 @@ extern float            D_L08_00174660[];
 extern int              collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int              coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-float bomb_downward_acceleration_gp __asm__("D_L08_00161860") = 15.0f;
-extern void  FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void  jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void  spawn_explosion(void *,
-                             void *,
-                             void *,
-                             float,
-                             float,
-                             int,
-                             int,
-                             int,
-                             float,
-                             float,
-                             float,
-                             float,
-                             int,
-                             float,
-                             int,
-                             int,
-                             int,
-                             int) __asm__("FUN_L00_0025e450");
+float      bomb_downward_acceleration_gp __asm__("D_L08_00161860") = 15.0f;
+extern void FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
+extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void spawn_explosion(void *,
+                            void *,
+                            void *,
+                            float,
+                            float,
+                            int,
+                            int,
+                            int,
+                            float,
+                            float,
+                            float,
+                            float,
+                            int,
+                            float,
+                            int,
+                            int,
+                            int,
+                            int) __asm__("FUN_L00_0025e450");
 extern void
 FUN_L00_00269958_c(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") MACRO_ADDR;

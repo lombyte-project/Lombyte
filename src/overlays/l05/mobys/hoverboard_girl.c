@@ -91,7 +91,7 @@ typedef struct {
     f32 movement_sampling_scale;
 } FrameTiming;
 
-s32 breast_growth_count_gp __asm__("D_L05_00161ED0") = 0;
+s32                         breast_growth_count_gp __asm__("D_L05_00161ED0") = 0;
 extern s32                  game_mode __asm__("D_L05_0015F5C4");
 extern s32                  game_mode __asm__("D_L05_0015F5C4");
 extern s32                  frame_number __asm__("D_L05_0015F5CC");

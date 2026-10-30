@@ -35,11 +35,11 @@ extern float wobble_quad_a_base_vertices[][4] __asm__("D_L05_001D67D0");
 extern float wobble_quad_b_base_vertices[][4] __asm__("D_L05_001D6810");
 extern float D_L05_001671C0_30c220[] __asm__("D_L05_001671C0");
 
-int wobble_quad_blend_a_selector_gp __asm__("D_L05_00161CF4") = 0;
-int wobble_quad_blend_b_selector_gp __asm__("D_L05_00161CF8") = 2;
-int wobble_quad_blend_c_selector_gp __asm__("D_L05_00161CFC") = 0;
-int wobble_quad_blend_d_selector_gp __asm__("D_L05_00161D00") = 1;
-int wobble_quad_start_color_gp __asm__("D_L05_00161D04") = 0x40807070;
+int        wobble_quad_blend_a_selector_gp __asm__("D_L05_00161CF4") = 0;
+int        wobble_quad_blend_b_selector_gp __asm__("D_L05_00161CF8") = 2;
+int        wobble_quad_blend_c_selector_gp __asm__("D_L05_00161CFC") = 0;
+int        wobble_quad_blend_d_selector_gp __asm__("D_L05_00161D00") = 1;
+int        wobble_quad_start_color_gp __asm__("D_L05_00161D04") = 0x40807070;
 extern int wobble_quad_end_color_gp __asm__("D_L05_00161D08") __attribute__((sda));
 extern int wobble_quad_texture_index_gp __asm__("D_L05_00161D0C") __attribute__((sda));
 

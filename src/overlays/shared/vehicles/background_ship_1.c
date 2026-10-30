@@ -40,7 +40,7 @@ extern char  background_ship_1_missing_path_message[] __asm__("D_L02_001FAD60");
 extern char  background_ship_1_empty_path_message[] __asm__("D_L02_001FAD80");
 extern float D_0015ED60;
 extern float D_L02_0015F580;
-float background_ship_1_path_travel_speed_gp __asm__("D_L02_00161F64") = 2e+01f;
+float        background_ship_1_path_travel_speed_gp __asm__("D_L02_00161F64") = 2e+01f;
 extern float background_ship_1_color_phase_rate_degrees_gp __asm__("D_L02_00161F70")
     __attribute__((sda));
 extern short background_ship_1_color_tween_start_gp __asm__("D_L02_00161F74") __attribute__((sda));
@@ -437,7 +437,8 @@ short background_ship_1_spark_third_frame_count_base_gp __asm__("D_L02_00161F98"
 
 short background_ship_1_spark_frame_count_variation_fraction_gp __asm__("D_L02_00161F9C") = 0;
 
-short background_ship_1_first_spark_fourth_component_range_start_gp __asm__("D_L02_00161FA0") = 0x7efa;
+short background_ship_1_first_spark_fourth_component_range_start_gp __asm__("D_L02_00161FA0") =
+    0x7efa;
 
 short background_ship_1_first_spark_fourth_component_range_end_gp __asm__("D_L02_00161FA4") = 0;
 

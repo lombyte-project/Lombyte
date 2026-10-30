@@ -79,7 +79,7 @@ extern void  update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
 extern void  update_moby_hit_stats_and_state(void *) __asm__("FUN_L11_0031a1c0");
 extern void  update_moby_path_transform(void *) __asm__("FUN_L11_0031a438");
 
-short blarg_ship_shot_speed_gp __asm__("D_L11_001623D0") = 0;
+short        blarg_ship_shot_speed_gp __asm__("D_L11_001623D0") = 0;
 void         blarg_ship_update(struct Moby *moby) __asm__("FUN_L11_00319838");
 extern f32   D_L11_001677D0[];
 extern float approach_value(float *p, float target, float maxstep);

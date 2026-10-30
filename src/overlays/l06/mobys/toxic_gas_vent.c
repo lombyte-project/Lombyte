@@ -34,7 +34,7 @@ void         toxic_gas_vent_update(char *m) __asm__("FUN_L06_002f3ad8");
 extern f32  random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32  scale_time(f32) __asm__("FUN_001f96b0");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
-extern char *
+extern char     *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 f32 spark_speed_gp __asm__("D_L06_00161CEC") = 6.0f;
 
@@ -75,7 +75,7 @@ typedef struct {
 } __attribute__((aligned(16))) Vx;
 
 extern f32   spark_speed_gp __asm__("D_L06_00161CEC") __attribute__((sda));
-short toxic_gas_vent_max_collision_range_gp __asm__("D_L06_00161CF0") = 0;
+short        toxic_gas_vent_max_collision_range_gp __asm__("D_L06_00161CF0") = 0;
 extern void  release_voice_slot(int) __asm__("FUN_0022d798");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 

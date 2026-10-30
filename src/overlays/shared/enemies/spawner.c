@@ -62,7 +62,7 @@ extern void *FUN_L00_00263fd8_30ab80(char *,
                                      float *,
                                      float *) __asm__("FUN_L00_00263fd8");
 
-char *spawner_target_region_records __asm__("D_L09_001600EC") = 0;
+char        *spawner_target_region_records __asm__("D_L09_001600EC") = 0;
 extern float D_L09_0015F580[] MACRO_ADDR;
 extern f32   frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern f32   frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;

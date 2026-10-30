@@ -97,7 +97,6 @@ extern MemInfo D_001940C0;
 #include "rnc/rendering/material_templates.h"
 
 extern s32  D_0015FF08;
-extern s32  D_001B5980[];
 extern s32  D_0015FF00;
 extern s32  level_texture_payload_address __asm__("D_0015F460");
 extern u64  D_00160580;
@@ -210,7 +209,7 @@ void initialize_level_runtime(void) {
     class_entries = (ClassEntry *)((s32)header + header->classes);
     D_0015FF08 = header->classCount;
     for (i = 0; i < D_0015FF08; i++) {
-        D_001B5980[i] =
+        moby_texture_lookup_table[i] =
             class_data_base + class_entries[i].offset + (log2dim(class_entries[i].id) << 28);
     }
     fast_mem_copy(resident_indexed_textures, class_entries, D_0015FF08 * 16);

@@ -23,7 +23,7 @@ extern VendorView_5290 l14_camera_projection_state __asm__("D_L14_0016D140");
 
 extern int sample_path(char *path, float *out, void *pos, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 
-extern char *D_L14_0015EF50 __asm__("D_L14_0015EF50");
+extern char *D_L14_0015EF50;
 
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 
@@ -293,13 +293,13 @@ void update_path_camera(struct UpdateCam *path_camera) {
 
 extern int check_descriptor_hero_trigger(void *) __asm__("FUN_L10_002f5a78");
 
-extern char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50");
+extern char *D_L14_0015EF50;
 
 int check_path_camera_priority(char *camera,
                                char *control_mode_gate_object) __asm__("FUN_L14_00315920");
 
 int check_path_camera_priority(char *camera, char *control_mode_gate_object) {
-    char *rec = *(char **)(D_L14_0015F050_15920 + *(short *)(camera + 0x84) * 32 + 0x1C);
+    char *rec = *(char **)(D_L14_0015EF50 + *(short *)(camera + 0x84) * 32 + 0x1C);
     int   required_control_mode, required_hero_state;
     if (*(unsigned char *)(rec + 0x38) != 0)
         return -1;
@@ -322,4 +322,4 @@ extern char *D_L14_0015EF50;
 
 VendorView_5290 l14_camera_projection_state __asm__("D_L14_0016D140") = {0};
 
-char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50") = 0;
+char *D_L14_0015EF50 = 0;

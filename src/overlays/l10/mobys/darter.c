@@ -732,8 +732,8 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
 
 #include "rnc/overlay/l10/mobys/darter_globals.h"
 
-int moby_group_command_frames_gp __asm__("D_L10_00161E00") = 5;
-void       set_moby_group_command_frames(struct Moby *moby) __asm__("FUN_L10_002e1cb0");
+int  moby_group_command_frames_gp __asm__("D_L10_00161E00") = 5;
+void set_moby_group_command_frames(struct Moby *moby) __asm__("FUN_L10_002e1cb0");
 /* Stores a value into each table entry listed for this moby's index. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E3070), where it is exact; names translated to the US level program. */
 

@@ -1,6 +1,7 @@
 /* Camera type 0, the follow camera: builds its view, pulls back and orbits behind the hero. */
 
 #include "types.h"
+#include "rnc/game/options.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
@@ -54,20 +55,20 @@ extern u8            D_L00_00166E30[];
 extern C_2e9518      D_L00_00166E10_lui __asm__("D_L00_00166E10") NOT_SDA;
 extern char         *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern unsigned char D_001413F4_lui __asm__("D_001413F4") NOT_SDA;
-float orbit_distance_default_stiffness_gp __asm__("D_L00_00161CEC") = 0.02f;
-float orbit_distance_default_damping_gp __asm__("D_L00_00161CF0") = 0.2f;
-float orbit_distance_pull_back_stiffness_gp __asm__("D_L00_00161D14") = 0.04f;
-float orbit_distance_pull_back_damping_gp __asm__("D_L00_00161D18") = 0.3f;
-extern char  D_L00_00166E10[];
-short orbit_yaw_spring_stiffness_gp __asm__("D_L00_00161CF4") = -15729;
-short orbit_yaw_spring_damping_gp __asm__("D_L00_00161CF8") = -13107;
-short orbit_pitch_spring_stiffness_gp __asm__("D_L00_00161CFC") = -15729;
-short orbit_pitch_spring_damping_gp __asm__("D_L00_00161D00") = -13107;
-extern int  *D_L00_0015EF80_9aa0 __asm__("D_L00_0015EF80");
-extern char *D_L00_001600F4_9aa0 __asm__("D_L00_001600F4");
-extern s32   opt_cam_yaw_rate __asm__("D_0015EDE4");
+float                orbit_distance_default_stiffness_gp __asm__("D_L00_00161CEC") = 0.02f;
+float                orbit_distance_default_damping_gp __asm__("D_L00_00161CF0") = 0.2f;
+float                orbit_distance_pull_back_stiffness_gp __asm__("D_L00_00161D14") = 0.04f;
+float                orbit_distance_pull_back_damping_gp __asm__("D_L00_00161D18") = 0.3f;
+extern char          D_L00_00166E10[];
+short                orbit_yaw_spring_stiffness_gp __asm__("D_L00_00161CF4") = -15729;
+short                orbit_yaw_spring_damping_gp __asm__("D_L00_00161CF8") = -13107;
+short                orbit_pitch_spring_stiffness_gp __asm__("D_L00_00161CFC") = -15729;
+short                orbit_pitch_spring_damping_gp __asm__("D_L00_00161D00") = -13107;
+extern int          *D_L00_0015EF80_9aa0 __asm__("D_L00_0015EF80");
+extern char         *D_L00_001600F4_9aa0 __asm__("D_L00_001600F4");
 f32 follow_camera_yaw_rate_table[2] __asm__("D_L00_00161DB0") = {0.017453292f, 0.02268928f};
-extern f32   D_L00_0015EF44_gp __asm__("D_L00_0015EF44") __attribute__((sda));
+
+extern f32 D_L00_0015EF44_gp __asm__("D_L00_0015EF44") __attribute__((sda));
 
 float D_L01_00162164 = 0.02f;
 float D_L01_00162168 = 0.2f;

@@ -682,7 +682,7 @@ typedef struct {
 } PageMobyData;
 
 extern s32  pause_menu_page_render_enabled[] __asm__("D_L00_001B23C0");
-s32 pause_menu_rectangle_color_gp __asm__("D_L00_00160270") = 0x80100808;
+s32         pause_menu_rectangle_color_gp __asm__("D_L00_00160270") = 0x80100808;
 extern long capture_texture_tex0 __asm__("D_0015EED0");
 extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
 extern void append_draw_buffer_upload_packets(s32, s32, s32) __asm__("FUN_L00_002a0fc8");

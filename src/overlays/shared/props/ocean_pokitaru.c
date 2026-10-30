@@ -81,15 +81,16 @@ extern void  draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L11_001677C0_30a908[] __asm__("D_L11_001677C0");
 extern UV    wave_offset[] __asm__("D_L11_00161E08") MACRO_ADDR;
 
-extern char  render_fog_context[] __asm__("D_L11_0016D440");
-extern char  ocean_strip_orientation_basis[] __asm__("D_L11_001679D0");
-extern Pos   l11_ocean_strip_vertex_positions[] __asm__("D_L11_001D9B08");
-extern int   ocean_strip_vertex_colors[] __asm__("D_L11_001D9E08");
-extern UV    l11_ocean_strip_vertex_uvs[] __asm__("D_L11_001DA310");
-extern Pos   l11_ocean_wave_grid_vertex_positions[] __asm__("D_L11_001D9F08");
-extern int   D_L11_001DA208[];
-extern UV    l11_ocean_wave_grid_vertex_uvs[] __asm__("D_L11_001DA510");
-float wave_speed[2] __asm__("D_L11_00161DF8") = {2.0f, 3.0f};
+extern char render_fog_context[] __asm__("D_L11_0016D440");
+extern char ocean_strip_orientation_basis[] __asm__("D_L11_001679D0");
+extern Pos  l11_ocean_strip_vertex_positions[] __asm__("D_L11_001D9B08");
+extern int  ocean_strip_vertex_colors[] __asm__("D_L11_001D9E08");
+extern UV   l11_ocean_strip_vertex_uvs[] __asm__("D_L11_001DA310");
+extern Pos  l11_ocean_wave_grid_vertex_positions[] __asm__("D_L11_001D9F08");
+extern int  D_L11_001DA208[];
+extern UV   l11_ocean_wave_grid_vertex_uvs[] __asm__("D_L11_001DA510");
+float       wave_speed[2] __asm__("D_L11_00161DF8") = {2.0f, 3.0f};
+
 extern float tide_level_macro __asm__("D_L11_00161E18") MACRO_ADDR;
 
 extern float camera_pos_b358[] __asm__("D_L11_001677C0");

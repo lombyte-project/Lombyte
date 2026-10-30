@@ -104,8 +104,7 @@ extern u16          level_moby_class_reference_sound_ids[][16] __asm__("D_L18_00
 extern char         D_L18_001F0EB0[], D_L18_001F0F00[], D_L18_001F0FC0[], D_L18_001F1148[];
 
 /* "estimated mem:  %.1fM\n" */
-char D_L18_001F1178[23] = {0x65, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x65, 0x64, 0x20, 0x6d, 0x65,
-                           0x6d, 0x3a, 0x20, 0x20, 0x25, 0x2e, 0x31, 0x66, 0x4d, 0xa,  0};
+char D_L18_001F1178[23] = "estimated mem:  %.1fM\n";
 
 extern char  level_memory_report_newline[] __asm__("D_L18_0015FC80");
 extern char  level_core_code_memory_end[] __asm__("D_L18_0030A0C0");
@@ -141,7 +140,7 @@ extern char *D_L18_00160494_2463f8 __asm__("D_L18_00160494");
 extern char *D_L18_0015FFD8_2463f8 __asm__("D_L18_0015FFD8");
 extern char *D_L18_0015FFE8_2463f8 __asm__("D_L18_0015FFE8");
 extern char *D_L18_00160108_2463f8 __asm__("D_L18_00160108");
-extern char *D_L18_0016016C_2463f8 __asm__("D_L18_0016016C");
+extern char *D_L18_0016016C;
 
 typedef struct {
     u8  pad[0x10];
@@ -497,12 +496,11 @@ s32 load_level_core_data(s32 full, s32 keep) {
         debug_print(D_L18_001F10E8, KB(D_L18_0015FFD8_2463f8 - D_L18_00160494_2463f8));
         debug_print(D_L18_001F1100, KB(D_L18_0015FFE8_2463f8 - D_L18_0015FFD8_2463f8));
         debug_print(D_L18_001F1118, KB(D_L18_00160108_2463f8 - D_L18_0015FFE8_2463f8));
-        debug_print(D_L18_001F1130, KB(D_L18_0016016C_2463f8 - D_L18_00160108_2463f8));
+        debug_print(D_L18_001F1130, KB(D_L18_0016016C - D_L18_00160108_2463f8));
         debug_print(D_L18_001F1148, 128.0);
         debug_print(level_memory_report_newline);
         debug_print(D_L18_001F1160,
-                    convert_integer_to_float((s32)D_L18_0016016C_2463f8 + 0x20000) *
-                        (1.0f / 1048576.0f));
+                    convert_integer_to_float((s32)D_L18_0016016C + 0x20000) * (1.0f / 1048576.0f));
         debug_print(level_memory_report_newline);
         {
             char *lo = D_L18_00174800_2463f8.f0 - 0x2D0000;
@@ -525,4 +523,4 @@ s32 load_level_core_data(s32 full, s32 keep) {
     return 0;
 }
 
-char *D_L18_0016016C_2463f8 __asm__("D_L18_0016016C") = 0;
+char *D_L18_0016016C = 0;

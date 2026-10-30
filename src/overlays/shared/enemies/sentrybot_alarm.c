@@ -47,7 +47,7 @@ extern s32  D_L15_00161AB8;
 extern s32  D_L15_00161AC0_gp __asm__("D_L15_00161AC0") __attribute__((sda));
 extern void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
 
-int sentrybot_alarm_voice_slot_index_gp __asm__("D_L15_00161AC4") = -1;
+int   sentrybot_alarm_voice_slot_index_gp __asm__("D_L15_00161AC4") = -1;
 short sentrybot_alarm_voice_owner_gp __asm__("D_L15_00161AC8") = 0;
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3A48), where it is exact; names translated to the US level program. */

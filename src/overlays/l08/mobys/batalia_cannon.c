@@ -177,7 +177,7 @@ int D_L08_00161BE4 = 0x4000000;
 int D_L08_00161BE8 = 0x400;
 
 /* no foreign declaration */
-int D_L08_00161BEC = 0x4000400;
+int          D_L08_00161BEC = 0x4000400;
 extern s64   get_effect_texture(s32) __asm__("func_001F44B8");
 extern void  vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void  FUN_L02_0020bc88_c(void *, void *, void *, long, int) __asm__("FUN_L02_0020bc88");
@@ -255,23 +255,23 @@ char        *spawn_turret_rocket(int    owner,
                                  float *rotation,
                                  int    value) __asm__("FUN_L08_002e7eb0");
 extern float D_0015ED70;
-float D_L08_00161AE8_gp __asm__("D_L08_00161AE8") = 1.8e+02f;
-float D_L08_00161AEC_gp __asm__("D_L08_00161AEC") = 22.5f;
-float D_L08_00161AF0_gp __asm__("D_L08_00161AF0") = 45.0f;
-float D_L08_00161AF4_gp __asm__("D_L08_00161AF4") = 1.8e+02f;
-float D_L08_00161AF8_gp __asm__("D_L08_00161AF8") = 3.6e+02f;
-float D_L08_00161AFC_gp __asm__("D_L08_00161AFC") = 7.2e+02f;
-float D_L08_00161B00_gp __asm__("D_L08_00161B00") = 1.8e+02f;
+float        D_L08_00161AE8_gp __asm__("D_L08_00161AE8") = 1.8e+02f;
+float        D_L08_00161AEC_gp __asm__("D_L08_00161AEC") = 22.5f;
+float        D_L08_00161AF0_gp __asm__("D_L08_00161AF0") = 45.0f;
+float        D_L08_00161AF4_gp __asm__("D_L08_00161AF4") = 1.8e+02f;
+float        D_L08_00161AF8_gp __asm__("D_L08_00161AF8") = 3.6e+02f;
+float        D_L08_00161AFC_gp __asm__("D_L08_00161AFC") = 7.2e+02f;
+float        D_L08_00161B00_gp __asm__("D_L08_00161B00") = 1.8e+02f;
 extern s32   D_0015ED84;
 extern char  D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
 extern int   D_0015ED84;
-short D_L08_00161A90_gp __asm__("D_L08_00161A90") = 0;
-short D_L08_00161B10_gp __asm__("D_L08_00161B10") = 0x3d71;
-short D_L08_00161B20_gp __asm__("D_L08_00161B20") = 0x3d71;
-short D_L08_00161B30_gp __asm__("D_L08_00161B30") = -28836;
-short D_L08_00161B40_gp __asm__("D_L08_00161B40") = -28836;
-short D_L08_00161B50_gp __asm__("D_L08_00161B50") = 0x5e35;
-short D_L08_00161BF0_gp __asm__("D_L08_00161BF0") = -13107;
+short        D_L08_00161A90_gp __asm__("D_L08_00161A90") = 0;
+short        D_L08_00161B10_gp __asm__("D_L08_00161B10") = 0x3d71;
+short        D_L08_00161B20_gp __asm__("D_L08_00161B20") = 0x3d71;
+short        D_L08_00161B30_gp __asm__("D_L08_00161B30") = -28836;
+short        D_L08_00161B40_gp __asm__("D_L08_00161B40") = -28836;
+short        D_L08_00161B50_gp __asm__("D_L08_00161B50") = 0x5e35;
+short        D_L08_00161BF0_gp __asm__("D_L08_00161BF0") = -13107;
 extern void  func_L00_001FF328_2E16A0(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern void  func_L00_00217718_2E16A0(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void         set_batalia_cannon_platform_mode(u8 *platform, s32 mode) __asm__("FUN_L08_00306b30");

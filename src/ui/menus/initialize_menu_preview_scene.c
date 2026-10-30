@@ -41,6 +41,7 @@ extern void quad_moby_update() __asm__("FUN_0023a2c0");
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/ui/menus/initialize_menu_preview_scene_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/game/options.h"
 
 extern u8         menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
 extern u8         menu_preview_lighting_copy_source_gp __asm__("D_001601D0") __attribute__((sda));
@@ -211,18 +212,15 @@ extern struct MenuStreamEntry D_00138748[];
 extern struct MenuStreamEntry D_00138928[];
 extern struct MenuStreamEntry D_00138A18[];
 extern struct MenuStreamEntry D_00138A38[];
-extern u8                     D_0015EDDC[];
-extern u8                     D_0015EDE0[];
-extern u8                     D_0015EDE4[];
-extern u8                     D_0015EE40[];
 extern s32                    D_001601E8[];
 extern struct MenuTextItem    D_001601F0[];
 extern struct MenuTextItem    D_00160200[];
 extern struct MenuIcon        D_001D60E0[];
-extern u8                     D_001D6178[];
 extern struct MenuIcon        D_001D61B8[];
-extern u8                     D_001D6248[];
-extern u8                     D_001D6280[];
+extern s32                    D_001D6248[];
+extern s32                    D_001D6280[];
+extern int                    pause_item_variant_values[] __asm__("D_001D6178");
+extern u8                     subtitles_enabled __asm__("D_0015EE40");
 extern struct MenuTextItem    D_001D62B8[];
 
 struct MenuTextListScreen D_001D0740 = {
@@ -341,8 +339,8 @@ struct MenuStreamScreen D_001D0D68 = {
 };
 
 struct MenuLabelScreen D_001D0DD0 = {
-    {FUN_00219d80,    FUN_0021a328, FUN_0021a318},
-    {       0x110, (s32)D_001D6178,            4}
+    {FUN_00219d80,                   FUN_0021a328, FUN_0021a318},
+    {       0x110, (s32)pause_item_variant_values,            4}
 };
 
 struct MenuItemPreviewScreen D_001D0E28 = {
@@ -409,7 +407,7 @@ struct MenuLabelScreen D_001D1290 = {
 };
 
 struct MenuOption D_001D12E8[2] = {
-    {0x4F24, D_0015EE40, 0x4F5A, 0x4F5B},
+    {0x4F24, &subtitles_enabled, 0x4F5A, 0x4F5B},
     {0},
 };
 
@@ -534,9 +532,9 @@ struct MenuLabelScreen D_001D19E8 = {
 };
 
 struct MenuChoice D_001D1A40[4] = {
-    {0x4FA2, D_0015EDE0, {0x4FA5, 0x4FA4}},
-    {0x4FA3, D_0015EDDC, {0x4FA5, 0x4FA4}},
-    {0x521B, D_0015EDE4, {0x521A, 0x5219, 0x5218}},
+    {0x4FA2, (u8 *)&opt_cam_invert, {0x4FA5, 0x4FA4}},
+    {0x4FA3, (u8 *)&invert52, {0x4FA5, 0x4FA4}},
+    {0x521B, (u8 *)&opt_cam_yaw_rate, {0x521A, 0x5219, 0x5218}},
     {0},
 };
 

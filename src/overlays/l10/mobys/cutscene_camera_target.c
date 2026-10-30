@@ -14,7 +14,8 @@ struct L10Data {
 };
 
 struct L10Data l10_level_mode_dispatch_data __asm__("D_L10_0016CCE0") = {0};
-extern void           cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
+
+extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void update_cutscene_camera_target(struct Moby *moby) __asm__("FUN_L10_002eacd8");
 

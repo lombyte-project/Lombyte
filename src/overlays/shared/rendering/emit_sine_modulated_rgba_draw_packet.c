@@ -16,7 +16,7 @@
 extern signed char D_L15_00161ACF[] MACRO_ADDR;
 
 extern short sine_draw_packet_rgb_control __asm__("D_L15_00161ACC") __attribute__((sda));
-short sine_alpha_scale_amplitude __asm__("D_L15_00161AD0") = -13107;
+short        sine_alpha_scale_amplitude __asm__("D_L15_00161AD0") = -13107;
 extern short sine_alpha_period_frames __asm__("D_L15_00161AD4") __attribute__((sda));
 void         emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
 

@@ -14,12 +14,12 @@
 
 #include "rnc/overlay/l11/mobys/two_door_gate_globals.h"
 
-float gate_door_z_offset_gp __asm__("D_L11_00162308") = -4.0f;
-float gate_door_x_rotation_degrees_gp __asm__("D_L11_0016230C") = 0;
-float gate_door_y_rotation_degrees_gp __asm__("D_L11_00162310") = -9e+01f;
-extern s32   FUN_00214720(void *, s32);
-extern s32   FUN_0022da68(s32, s32, void *);
-extern f32   advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+float      gate_door_z_offset_gp __asm__("D_L11_00162308") = -4.0f;
+float      gate_door_x_rotation_degrees_gp __asm__("D_L11_0016230C") = 0;
+float      gate_door_y_rotation_degrees_gp __asm__("D_L11_00162310") = -9e+01f;
+extern s32 FUN_00214720(void *, s32);
+extern s32 FUN_0022da68(s32, s32, void *);
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 
 /* Private variables of the two-door moby FUN_L11_00316320 runs. */
 struct L11GateVars {

@@ -37,7 +37,7 @@ extern void spawn_background_ship_2_level_10_joint_sparks(char *moby,
 extern int   D_L02_0015F5CC;
 extern char *D_L02_001B0AB0[];
 extern float D_L02_0015F580;
-float background_ship_2_path_travel_speed_gp __asm__("D_L02_00161FC0") = 2e+01f;
+float        background_ship_2_path_travel_speed_gp __asm__("D_L02_00161FC0") = 2e+01f;
 extern char  background_ship_2_missing_path_message[] __asm__("D_L02_001FADB0");
 extern char  background_ship_2_empty_path_message[] __asm__("D_L02_001FADD0");
 extern float background_ship_2_color_phase_rate_degrees_gp __asm__("D_L02_00161FC4")
@@ -555,7 +555,8 @@ short background_ship_2_spark_third_frame_count_base_gp __asm__("D_L02_00161FEC"
 
 short background_ship_2_spark_frame_count_variation_fraction_gp __asm__("D_L02_00161FF0") = 0;
 
-short background_ship_2_first_spark_fourth_component_range_start_gp __asm__("D_L02_00161FF4") = 0x7efa;
+short background_ship_2_first_spark_fourth_component_range_start_gp __asm__("D_L02_00161FF4") =
+    0x7efa;
 
 short background_ship_2_first_spark_fourth_component_range_end_gp __asm__("D_L02_00161FF8") = 0;
 

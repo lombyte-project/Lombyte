@@ -31,7 +31,7 @@ extern s32  point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern void terminate_visibomb_missile(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
 
 extern struct Moby *D_L01_0015FFE4_302648 __asm__("D_L01_0015FFE4");
-s32 visibomb_outside_zone_overlay_enabled_gp __asm__("D_L01_0015F30C") = 0;
+s32                 visibomb_outside_zone_overlay_enabled_gp __asm__("D_L01_0015F30C") = 0;
 
 s32 D_L02_0015F30C = 0;
 s32 D_L03_0015F30C = 0;

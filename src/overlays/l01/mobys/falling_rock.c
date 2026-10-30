@@ -38,10 +38,10 @@ typedef struct {
     Sub *sub;
 } Obj;
 
-f32 falling_rock_camera_rotation_angle_gp __asm__("D_L01_00161C28") = 0;
-f32 falling_rock_camera_distance_gp __asm__("D_L01_00161C2C") = 7.0f;
-f32 falling_rock_camera_height_gp __asm__("D_L01_00161C30") = 2.5f;
-f32 falling_rock_camera_offset_scale_gp __asm__("D_L01_00161C34") = 3.5f;
+f32        falling_rock_camera_rotation_angle_gp __asm__("D_L01_00161C28") = 0;
+f32        falling_rock_camera_distance_gp __asm__("D_L01_00161C2C") = 7.0f;
+f32        falling_rock_camera_height_gp __asm__("D_L01_00161C30") = 2.5f;
+f32        falling_rock_camera_offset_scale_gp __asm__("D_L01_00161C34") = 3.5f;
 extern f32 falling_rock_camera_override_companion_value_gp __asm__("D_L01_00161C38")
     __attribute__((sda));
 

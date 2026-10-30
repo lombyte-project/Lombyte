@@ -573,14 +573,22 @@ extern SuckMoby                *suck_moby_list __asm__("D_L00_0015FFE4");
 extern char                     suck_fire_tuning[1] __asm__("D_L00_00161B30") __attribute__((sda));
 extern u8                      *D_001403E0_lui __asm__("D_001403E0") NOT_SDA;
 u32 suck_cannon_storage_euler_offset[1] __asm__("D_L00_00161B20") = {0xbfc90fdb};
-extern u8    D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
-extern B50   l00_suck_cannon_explosion_blast_parameters __asm__("D_L00_001EA0B0");
-I6 l00_suck_cannon_explosion_first_color_choices __asm__("D_L00_001EA100") = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-I6 l00_suck_cannon_explosion_second_color_choices __asm__("D_L00_001EA118") = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
-extern float D_0015ED6C;
-extern int  *D_L00_00177F00[];
-extern float frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
-extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+
+extern u8  D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
+extern B50 l00_suck_cannon_explosion_blast_parameters __asm__("D_L00_001EA0B0");
+
+I6 l00_suck_cannon_explosion_first_color_choices __asm__("D_L00_001EA100") = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+I6 l00_suck_cannon_explosion_second_color_choices __asm__("D_L00_001EA118") = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
+extern float                D_0015ED6C;
+extern int                 *D_L00_00177F00[];
+extern float                frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
+extern float                frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern unsigned char        D_0013E629_2DDEA0[] __asm__("D_0013E529");
 extern unsigned char        D_001404FC_2DDEA0[] __asm__("D_001403FC");
 extern char                 D_0013F4D0_2DDEA0[] __asm__("D_0013F3D0");
@@ -590,8 +598,8 @@ extern char                 D_L00_001E5EE0[] NOT_SDA;
 extern char                 D_L00_001E6020[] NOT_SDA;
 extern float                D_L00_00161B50 __attribute__((sda));
 extern short                D_L00_001E6008[] NOT_SDA;
-s32 D_L00_00161B44_gp __asm__("D_L00_00161B44") = 1;
-s32 D_L00_00161B40_gp __asm__("D_L00_00161B40") = 1;
+s32                         D_L00_00161B44_gp __asm__("D_L00_00161B44") = 1;
+s32                         D_L00_00161B40_gp __asm__("D_L00_00161B40") = 1;
 extern E04                  D_L00_001E4C80[];
 extern char                 D_L00_00161B60[] MACRO_ADDR;
 extern char                 D_L00_00161B70[] MACRO_ADDR;
@@ -608,7 +616,7 @@ extern short                D_L00_001E6008[];
 extern V41                  l00_suck_beam_ring_source_offsets[] __asm__("D_L00_001E4B40");
 extern E04                  D_L00_001E4C80_lui[] __asm__("D_L00_001E4C80");
 extern char                 D_L00_00161B60[];
-int D_L00_00161B58_gp __asm__("D_L00_00161B58") = 0;
+int                         D_L00_00161B58_gp __asm__("D_L00_00161B58") = 0;
 extern char                 D_L00_00161B70[];
 extern char                 collision_hit_point[] __asm__("D_L00_00173E60");
 extern char                 D_L00_001E5EE0[];
@@ -619,7 +627,7 @@ extern float                D_L00_00161B80;
 extern float                suck_beam_segment_turn_spring_states[] __asm__("D_L00_001E5FE0");
 extern s32                  D_L00_00161B40_gp __asm__("D_L00_00161B40") __attribute__((sda));
 extern s32                  D_L00_00161B44_gp __asm__("D_L00_00161B44") __attribute__((sda));
-f32 D_L00_00161B50_gp __asm__("D_L00_00161B50") = 0.006f;
+f32                         D_L00_00161B50_gp __asm__("D_L00_00161B50") = 0.006f;
 extern u8                   D_L00_001E5F40_lui[][16] __asm__("D_L00_001E5F40") NOT_SDA;
 
 E04 D_L00_001E4C80[200] = {0};

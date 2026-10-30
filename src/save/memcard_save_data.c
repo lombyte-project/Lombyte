@@ -13,12 +13,11 @@ extern char D_00141EC0[];
 
 #include "rnc/game/level_state.h"
 #include "rnc/save/mc_data.h"
+#include "rnc/save/memory_card_state.h"
 #include "rnc/globals.h"
 
 extern int D_0015EE24 MACRO_ADDR;
 extern int            alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
-extern u8             memcard_game_data_buffer[] __asm__("D_0014EED0");
-extern u8             memcard_level_data_buffer[] __asm__("D_001506D0");
 /* memcard_save_data(slot, flags): starts the save (sceCdReadClock/sceScfGetLocalTimefromRTC
    on D_0015EE98, copy_level_object_positions, save_map_coverage on the D_00141EC0 page for
    D_0015ED84). With no valid card slot (D_0013D290+0xC8, its record's

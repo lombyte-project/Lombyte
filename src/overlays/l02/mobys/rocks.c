@@ -30,9 +30,13 @@ typedef struct {
     u32 c[3];
 } Colors0720;
 
-int               D_L02_00161CC4 = 0x5f243632;
-int               D_L02_00161CC8 = 0x61311;
-Colors0720 l02_rocks_debris_colors __asm__("D_L02_00161CD0") = {{0x2b8, 0x2b9, 0x2ba}};
+int D_L02_00161CC4 = 0x5f243632;
+int D_L02_00161CC8 = 0x61311;
+
+Colors0720 l02_rocks_debris_colors __asm__("D_L02_00161CD0") = {
+    {0x2b8, 0x2b9, 0x2ba}
+};
+
 /* Spark emitter; the size float is declared before the int lifetime (same registers) so the calls
  * run in retail order: colour index, size, lifetime. */
 extern void

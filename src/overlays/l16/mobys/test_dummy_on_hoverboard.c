@@ -501,8 +501,8 @@ void        FUN_L16_002d0058_c(L16LeapMoby *m) __asm__("FUN_L16_002d0058");
 
 #include "rnc/overlay/l16/mobys/test_dummy_on_hoverboard_globals.h"
 
-int hoverboard_dummy_spray_initial_color_gp __asm__("D_L16_00161A08") = 0x4f0090f0;
-void       test_dummy_on_hoverboard_update(unsigned char *m) __asm__("FUN_L16_002d04a0");
+int  hoverboard_dummy_spray_initial_color_gp __asm__("D_L16_00161A08") = 0x4f0090f0;
+void test_dummy_on_hoverboard_update(unsigned char *m) __asm__("FUN_L16_002d04a0");
 
 void test_dummy_on_hoverboard_update(unsigned char *moby) {
     enum {

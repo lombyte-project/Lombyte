@@ -16,7 +16,7 @@ extern char D_L07_0016C8E0[];
 short scene_trail_velocity_length __asm__("D_L07_00161CD8") = -13107;
 short scene_trail_first_spawn_particle_value __asm__("D_L07_00161CDC") = 0x7c00;
 short scene_trail_second_spawn_particle_value __asm__("D_L07_00161CE0") = 0;
-void         update_cutscene_joint_trails(struct Moby *moby) __asm__("FUN_L07_0031f900");
+void  update_cutscene_joint_trails(struct Moby *moby) __asm__("FUN_L07_0031f900");
 
 void update_cutscene_joint_trails(struct Moby *moby) {
     enum {

@@ -16,8 +16,9 @@ typedef struct {
     u8 collected[1];
 } SaveFlags;
 
-extern SaveFlags     D_L05_001BB6B0;
-SaveFlags D_L05_001BAA50_s __asm__("D_L05_001BAA50") = {0};
+extern SaveFlags D_L05_001BB6B0;
+SaveFlags        D_L05_001BAA50_s __asm__("D_L05_001BAA50") = {0};
+
 extern unsigned char D_L05_0015FC88[] MACRO_ADDR;
 extern u8            D_0014C050[];
 

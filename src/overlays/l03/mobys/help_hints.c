@@ -36,7 +36,13 @@ struct L03ItemEntry {
     u8  rest[0x40];
 };
 
-struct L03HelpState l03_help_message_playback_state __asm__("D_L03_00179510") = {0, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff}, -1};
+struct L03HelpState l03_help_message_playback_state __asm__("D_L03_00179510") = {
+    0,
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    0,    0,    0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff},
+    -1
+};
+
 extern struct L03HelpRecord help_records[] __asm__("D_00141968");
 extern struct L03ItemEntry  D_L03_00179BC0[];
 extern struct Moby         *D_L03_0015FFE4;

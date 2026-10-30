@@ -25,7 +25,7 @@ extern int FUN_L00_001fefc8(void *);
 extern int FUN_0022da68(int, int, int);
 
 short crane_animation_speed_gp __asm__("D_L02_00161C68") = 0x3333;
-void         crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
+void  crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
 
 void crane_update(struct Moby *moby) {
     enum {

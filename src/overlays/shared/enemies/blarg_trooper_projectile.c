@@ -26,7 +26,7 @@ extern void spawn_smoke_puff_trail_with_endpoint_bursts(
     void *, void *, void *, int, float, float) __asm__("FUN_L04_002c41e0");
 
 short moby_segment_puff_scale_multiplier __asm__("D_L04_001618B0") = 0;
-void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) __asm__("FUN_L04_002c45b8");
+void  spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) __asm__("FUN_L04_002c45b8");
 
 void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) {
     float first_world_position[4], second_world_position[4];

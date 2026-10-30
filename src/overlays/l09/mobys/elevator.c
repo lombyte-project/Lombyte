@@ -22,13 +22,14 @@ typedef struct {
 } L09LevelState;
 
 L09LevelState l09_moby_collection_state __asm__("D_L09_001BB3B0") = {0};
-extern int           elevator_activation_save_id_bits[] __asm__("D_L09_001BA650");
-extern int           is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern float         scale_time(float) __asm__("FUN_001f96b0");
-extern int           is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
-extern char          D_0013E550[];
-extern s32           level_moby_killed[][64] __asm__("D_0014C190");
-void                 elevator_update(unsigned char *moby) __asm__("FUN_L09_003033a0");
+
+extern int   elevator_activation_save_id_bits[] __asm__("D_L09_001BA650");
+extern int   is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern float scale_time(float) __asm__("FUN_001f96b0");
+extern int   is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
+extern char  D_0013E550[];
+extern s32   level_moby_killed[][64] __asm__("D_0014C190");
+void         elevator_update(unsigned char *moby) __asm__("FUN_L09_003033a0");
 
 void elevator_update(unsigned char *moby) {
     enum {

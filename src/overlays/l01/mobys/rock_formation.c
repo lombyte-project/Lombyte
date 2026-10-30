@@ -15,9 +15,12 @@ typedef struct {
     f32 force;
 } DebrisHit;
 
-DebrisClassChoices l01_rock_formation_debris_oclass_choices __asm__("D_L01_00161C50") = {{0x2b8, 0x2b9, 0x2ba}};
-extern s32                FUN_0022da68(s32, s32, void *);
-extern int                FUN_L00_00257b90(int lo, int hi);
+DebrisClassChoices l01_rock_formation_debris_oclass_choices __asm__("D_L01_00161C50") = {
+    {0x2b8, 0x2b9, 0x2ba}
+};
+
+extern s32  FUN_0022da68(s32, s32, void *);
+extern int  FUN_L00_00257b90(int lo, int hi);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern struct Moby *
 spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");

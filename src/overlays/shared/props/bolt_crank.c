@@ -54,7 +54,7 @@ extern unsigned char menu_item_enabled_1_lui __asm__("D_0013D395") NOT_SDA;
 extern char  D_L01_001BAAA0[];
 extern f32   D_L01_00167258_lui __asm__("D_L01_00167258") NOT_SDA;
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") NOT_SDA;
-f32 bolt_crank_radial_correction_step_gp __asm__("D_L01_001618A0") = 0;
+f32          bolt_crank_radial_correction_step_gp __asm__("D_L01_001618A0") = 0;
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void  divide_vector_xyz(void *, void *, f32) __asm__("FUN_L00_001ff378");
 extern void  vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");

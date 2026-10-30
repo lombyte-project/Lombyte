@@ -158,26 +158,26 @@ spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("
 extern float
            approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void      spawn_explosion(void *,
-                                 void *,
-                                 void *,
-                                 float,
-                                 float,
-                                 int,
-                                 int,
-                                 int,
-                                 float,
-                                 float,
-                                 float,
-                                 float,
-                                 int,
-                                 float,
-                                 int,
-                                 int,
-                                 int,
-                                 int) __asm__("FUN_L00_0025e450");
-extern Tex       D_L13_001B2380 __asm__("D_L13_001B2380");
-V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160") = {0};
+extern void spawn_explosion(void *,
+                            void *,
+                            void *,
+                            float,
+                            float,
+                            int,
+                            int,
+                            int,
+                            float,
+                            float,
+                            float,
+                            float,
+                            int,
+                            float,
+                            int,
+                            int,
+                            int,
+                            int) __asm__("FUN_L00_0025e450");
+extern Tex  D_L13_001B2380 __asm__("D_L13_001B2380");
+V4_2E8040   D_L13_001741E0_2E8040 __asm__("D_L13_00174160") = {0};
 
 void update_fighter_jet_rocket(Moby *m) __asm__("FUN_L13_002e6c08");
 

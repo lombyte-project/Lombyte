@@ -181,12 +181,12 @@ extern int     FUN_L00_002dc9f0(void *, void *);
 extern float   D_L00_0015F5D0;
 extern float   D_L00_0015F5D4;
 extern int     chicken_manipulator_joint __asm__("D_L00_00161850") __attribute__((sda));
-float feather_pitch_deg __asm__("D_L00_00161858") = 7e+01f;
-float feather_speed_min __asm__("D_L00_0016185C") = 5.0f;
-float feather_speed_max __asm__("D_L00_00161860") = 9.0f;
-float feather_height __asm__("D_L00_00161864") = 0.25f;
-float feather_radius_min __asm__("D_L00_00161868") = 0;
-float feather_radius_max __asm__("D_L00_0016186C") = 0.35f;
+float          feather_pitch_deg __asm__("D_L00_00161858") = 7e+01f;
+float          feather_speed_min __asm__("D_L00_0016185C") = 5.0f;
+float          feather_speed_max __asm__("D_L00_00161860") = 9.0f;
+float          feather_height __asm__("D_L00_00161864") = 0.25f;
+float          feather_radius_min __asm__("D_L00_00161868") = 0;
+float          feather_radius_max __asm__("D_L00_0016186C") = 0.35f;
 extern char    D_L00_00177F00[];
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
@@ -202,7 +202,7 @@ int                  FUN_001160d8_2cbf68(void) __asm__("FUN_001160d8");
 void                 update_entity(void *) __asm__("FUN_L00_00250df8");
 void                 copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
-int feather_base_lifetime_gp __asm__("D_L00_001618A4") = 0xf0;
+int   feather_base_lifetime_gp __asm__("D_L00_001618A4") = 0xf0;
 float feather_scale_multiplier_gp __asm__("D_L00_001618A0") = 9.0f;
 
 /* 0x002c92d8, 112 bytes.

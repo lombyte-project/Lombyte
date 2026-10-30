@@ -231,8 +231,8 @@ extern char               trick_combo_two_pose_flips_format[] __asm__("D_L05_002
 #include "rnc/overlay/shared/ui/hud/draw_trick_combo_hud_data/draw_trick_combo_hud_2.h"
 
 extern s32 trick_combo_result_text_color_gp __asm__("D_L05_0015F8A0") __attribute__((sda));
-s32 trick_combo_pulsing_label_x_gp __asm__("D_L05_0015F8A4") = 0x100;
-s32 trick_combo_pulsing_label_y_gp __asm__("D_L05_0015F8A8") = 0xb4;
+s32        trick_combo_pulsing_label_x_gp __asm__("D_L05_0015F8A4") = 0x100;
+s32        trick_combo_pulsing_label_y_gp __asm__("D_L05_0015F8A8") = 0xb4;
 
 #include "rnc/overlay/shared/ui/hud/draw_trick_combo_hud_data/draw_trick_combo_hud.h"
 

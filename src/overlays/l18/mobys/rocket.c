@@ -118,9 +118,9 @@ void update_rocket_moby(struct Moby *moby) {
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Spawns a moby that travels along a path, with its heading set from the direction vector. */
-float rocket_spawn_scale_multiplier_gp __asm__("D_L18_00161960") = 5.0f;
-extern void  set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void  allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+float       rocket_spawn_scale_multiplier_gp __asm__("D_L18_00161960") = 5.0f;
+extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
+extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 char *create_rocket_moby(float *pos,
                          float *initial_movement_step,

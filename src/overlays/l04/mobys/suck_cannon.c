@@ -27,10 +27,8 @@ extern s32 D_L04_0015F5C4;
 extern u8  suck_cannon_in_inventory[] __asm__("D_0013D4F1");
 extern u8  suck_cannon_first_acquisition_recorded[] __asm__("D_0013D4C9");
 
-char suck_cannon_missing_segment_switch_warning_format[37] __asm__("D_L04_001DC760") = {
-    0x4d, 0x6f, 0x62, 0x79, 0x20, 0x31, 0x31, 0x32, 0x30, 0x20, 0x25, 0x64, 0x20,
-    0x68, 0x61, 0x73, 0x20, 0x6e, 0x6f, 0x20, 0x73, 0x65, 0x67, 0x6d, 0x65, 0x6e,
-    0x74, 0x20, 0x73, 0x77, 0x69, 0x74, 0x63, 0x68, 0x21, 0xa,  0};
+char suck_cannon_missing_segment_switch_warning_format[37] __asm__("D_L04_001DC760") =
+    "Moby 1120 %d has no segment switch!\n";
 
 extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
 extern void start_scene(int) __asm__("FUN_L00_00298840");

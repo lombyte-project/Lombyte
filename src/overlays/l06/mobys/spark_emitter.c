@@ -34,24 +34,24 @@ spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_0
 
 #include "rnc/overlay/l06/mobys/spark_emitter_globals.h"
 
-float spark_burst_vector_scale_variation_gp __asm__("D_L06_001622FC") = 0.1f;
-extern int   D_L06_00162304 __attribute__((sda));
-extern int   D_L06_00162308 __attribute__((sda));
-int          D_L06_00162320 = 0x80ffc0c0;
-int          D_L06_00162324 = 0x80ffffc0;
-int          D_L06_00162328 = 0x20c08080;
-int          D_L06_0016232C = 0x20c0c080;
-float spark_spray_z_subtraction_rate_gp __asm__("D_L06_00162338") = 5.0f;
-float spark_spray_vector_scale_variation_gp __asm__("D_L06_0016233C") = 0.6f;
-extern int   D_L06_00162348 __attribute__((sda));
-extern int   D_L06_0016234C __attribute__((sda));
-int          D_L06_00162364 = 0x804080ff;
-int          D_L06_00162368 = 0x8040ffff;
-int          D_L06_0016236C = 0x80204040;
-int          D_L06_00162370 = 0x80204080;
-int spark_spray_timer_range_start_gp __asm__("D_L06_00162374") = 0x14;
-int spark_spray_timer_range_end_gp __asm__("D_L06_00162378") = 0x28;
-int          D_L06_0016237C = 0x10019;
+float      spark_burst_vector_scale_variation_gp __asm__("D_L06_001622FC") = 0.1f;
+extern int D_L06_00162304 __attribute__((sda));
+extern int D_L06_00162308 __attribute__((sda));
+int        D_L06_00162320 = 0x80ffc0c0;
+int        D_L06_00162324 = 0x80ffffc0;
+int        D_L06_00162328 = 0x20c08080;
+int        D_L06_0016232C = 0x20c0c080;
+float      spark_spray_z_subtraction_rate_gp __asm__("D_L06_00162338") = 5.0f;
+float      spark_spray_vector_scale_variation_gp __asm__("D_L06_0016233C") = 0.6f;
+extern int D_L06_00162348 __attribute__((sda));
+extern int D_L06_0016234C __attribute__((sda));
+int        D_L06_00162364 = 0x804080ff;
+int        D_L06_00162368 = 0x8040ffff;
+int        D_L06_0016236C = 0x80204040;
+int        D_L06_00162370 = 0x80204080;
+int        spark_spray_timer_range_start_gp __asm__("D_L06_00162374") = 0x14;
+int        spark_spray_timer_range_end_gp __asm__("D_L06_00162378") = 0x28;
+int        D_L06_0016237C = 0x10019;
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 /* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */

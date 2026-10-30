@@ -80,7 +80,7 @@ void reset_frame_counters(void) {
 
 extern struct PadStateWords D_0013C940;
 
-int controller_idle_frames_gp __asm__("D_L00_00160FF0") = 0;
+int        controller_idle_frames_gp __asm__("D_L00_00160FF0") = 0;
 extern int D_L00_0015F5CC;
 extern int D_0015EEA4;
 extern int D_L00_0015F598;
@@ -891,7 +891,7 @@ extern s32 D_L00_00161054_macro __asm__("D_L00_00161054") MACRO_ADDR;
 extern s32 D_L00_00161058_macro __asm__("D_L00_00161058") MACRO_ADDR;
 extern s32 D_L00_0015F40C_macro __asm__("D_L00_0015F40C") MACRO_ADDR;
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") MACRO_ADDR;
-s32 D_L00_00173E04_lui __asm__("D_L00_00173E04") NOT_SDA = 0;
+s32        D_L00_00173E04_lui __asm__("D_L00_00173E04") NOT_SDA = 0;
 /* [0] is gs_texture_allocation_start, [4] depth_buffer_address. */
 extern s32  D_0015EE78_macro[6] __asm__("D_0015EE78") MACRO_ADDR;
 extern void flush_cache(s32) __asm__("FUN_00118a80");

@@ -92,11 +92,11 @@ extern void  add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int   FUN_L00_00257b90(int, int);
 extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
-extern int   coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void  make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void  record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
-extern void  cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-float rocket_trail_offset_z_scale_gp __asm__("D_L03_00161B28") = 0.35f;
+extern int  coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
+extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
+extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+float       rocket_trail_offset_z_scale_gp __asm__("D_L03_00161B28") = 0.35f;
 extern CollisionHit D_L03_00173F40;
 
 /* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */

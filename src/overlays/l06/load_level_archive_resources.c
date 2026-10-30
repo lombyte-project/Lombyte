@@ -143,7 +143,7 @@ extern char *D_L18_00160494_252dd0 __asm__("D_L06_00160494");
 extern char *D_L18_0015FFD8_252dd0 __asm__("D_L06_0015FFD8");
 extern char *D_L18_0015FFE8_252dd0 __asm__("D_L06_0015FFE8");
 extern char *D_L18_00160108_252dd0 __asm__("D_L06_00160108");
-extern char *D_L18_0016016C_252dd0 __asm__("D_L06_0016016C");
+extern char *D_L06_0016016C;
 
 typedef struct {
     u8  pad[0x10];
@@ -503,12 +503,11 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         debug_print(D_L06_001FFDB8, KB(D_L18_0015FFD8_252dd0 - D_L18_00160494_252dd0));
         debug_print(D_L06_001FFDD0, KB(D_L18_0015FFE8_252dd0 - D_L18_0015FFD8_252dd0));
         debug_print(D_L06_001FFDE8, KB(D_L18_00160108_252dd0 - D_L18_0015FFE8_252dd0));
-        debug_print(D_L06_001FFE00, KB(D_L18_0016016C_252dd0 - D_L18_00160108_252dd0));
+        debug_print(D_L06_001FFE00, KB(D_L06_0016016C - D_L18_00160108_252dd0));
         debug_print(D_L06_001FFE18, 128.0);
         debug_print(level_06_memory_report_newline);
         debug_print(D_L06_001FFE30,
-                    convert_integer_to_float((s32)D_L18_0016016C_252dd0 + 0x20000) *
-                        (1.0f / 1048576.0f));
+                    convert_integer_to_float((s32)D_L06_0016016C + 0x20000) * (1.0f / 1048576.0f));
         debug_print(level_06_memory_report_newline);
         {
             char *lo = D_L18_00174800_252dd0.f0 - 0x2D0000;
@@ -533,4 +532,4 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
 
 s32 D_L06_0017459C[1] __attribute__((section(".data"))) = {0};
 
-char *D_L18_0016016C_252dd0 __asm__("D_L06_0016016C") = 0;
+char *D_L06_0016016C = 0;

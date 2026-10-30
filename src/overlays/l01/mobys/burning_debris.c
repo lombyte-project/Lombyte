@@ -27,8 +27,8 @@ typedef struct {
     Vec4f normal; /* 0x40 */
 } BlobHitInfo;
 
-f32 burning_debris_gravity_coefficient_gp __asm__("D_L01_00162058") = 1e+01f;
-f32 burning_debris_velocity_multiplier_gp __asm__("D_L01_0016205C") = 0.995f;
+f32        burning_debris_gravity_coefficient_gp __asm__("D_L01_00162058") = 1e+01f;
+f32        burning_debris_velocity_multiplier_gp __asm__("D_L01_0016205C") = 0.995f;
 extern f32 burning_debris_horizontal_damping_threshold_gp __asm__("D_L01_00162060")
     __attribute__((sda));
 extern BlobHitInfo collision_hit __asm__("D_L01_001742C0");

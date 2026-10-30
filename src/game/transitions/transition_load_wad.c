@@ -129,7 +129,6 @@ extern HelpState  D_001996D0;
 
 #include "rnc/rendering/material_templates.h"
 
-extern s32 D_001B5980[];
 extern s32 D_001B6180[];
 
 #include "rnc/rendering/resident_class.h"
@@ -225,8 +224,8 @@ void transition_load_wad(void) {
     texture_definition_entries = (new_var2 = (WadTex *)(((u8 *)hdr) + hdr->x3C));
     if ((D_0015FF08 = hdr->n38) > 0) {
         do {
-            D_001B5980[k] = (((s32)base) + texture_definition_entries[k].offset) +
-                            (log2dim(texture_definition_entries[k].x4) << 28);
+            moby_texture_lookup_table[k] = (((s32)base) + texture_definition_entries[k].offset) +
+                                           (log2dim(texture_definition_entries[k].x4) << 28);
             k++;
         } while (k < D_0015FF08);
     }
