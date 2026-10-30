@@ -59,15 +59,15 @@ void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
 void trooper_anim_update(void *a, S *s) __asm__("FUN_L00_0025d458");
 
 void trooper_anim_update(void *moby, S *animation_state) {
-    int old = animation_state->cur;
-    if (old == 0 || animation_state->flag != 0) {
+    int previous_timer_frames = animation_state->cur;
+    if (previous_timer_frames == 0 || animation_state->flag != 0) {
         animation_state->cur = scale_game_frames(animation_state->lo);
         animation_state->flag = 0;
-        if (old != 0) {
+        if (previous_timer_frames != 0) {
             int scaled_duration_frames = scale_game_frames(animation_state->lo);
             animation_state->cur = truncate_float_to_s32(
                 scaled_duration_frames *
-                (old / convert_integer_to_float(scale_game_frames(animation_state->hi))));
+                (previous_timer_frames / convert_integer_to_float(scale_game_frames(animation_state->hi))));
             if (animation_state->cur <= 0)
                 animation_state->cur = 1;
         } else {
