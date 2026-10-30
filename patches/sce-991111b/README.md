@@ -52,30 +52,30 @@ gap is a patch that was dropped. The kinds:
 |---|---|---|---|
 | [0000](0000-modern-host-fixes.patch) | host | `include/obstack.h` lvalue cast; the generated `gcc/c-gperf.h` | |
 | [0001](0001-r5900-quad-saves.patch) | retail | R5900 saves and restores every GPR with `sq`/`lq` | retail game prologues |
-| [0016](0016-no-edge-lcm-default.patch) | as upstream | edge-based LCM in GCSE off by default | gcc-2.95.2 has no edge-based LCM; `textbin/fun_001fe898` |
-| [0020](0020-gas-absolute-unknown-symbol.patch) | retail | `as`: a load or store of a symbol whose size is not known yet uses `lui`/`%lo` | `textbin/fun_0023b590`, `textbin/fun_0023aba0` |
-| [0022](0022-no-sibcalls.patch) | as upstream | no sibling calls | gcc-2.95.2 has none (they came in gcc 3.0); `textbin/memcard_init` |
-| [0027](0027-gas-inline-float-literals.patch) | retail | `as`: `li.s` builds the constant inline, not in `.lit4` | `textbin/fun_00206e18`, `textbin/fun_00213308` |
+| [0016](0016-no-edge-lcm-default.patch) | as upstream | edge-based LCM in GCSE off by default | gcc-2.95.2 has no edge-based LCM; `ui/help/help_draw_prompt` |
+| [0020](0020-gas-absolute-unknown-symbol.patch) | retail | `as`: a load or store of a symbol whose size is not known yet uses `lui`/`%lo` | `movies/display/start_display`, `movies/player/proceed_audio` |
+| [0022](0022-no-sibcalls.patch) | as upstream | no sibling calls | gcc-2.95.2 has none (they came in gcc 3.0); `save/memcard_initialize` |
+| [0027](0027-gas-inline-float-literals.patch) | retail | `as`: `li.s` builds the constant inline, not in `.lit4` | `ui/map/map_filters`, `math/random/random_angle_radians` |
 | [0029](0029-call-clobber-pending.patch) | upstream | the scheduler treats call-clobbered registers as clobbers, not sets | gcc-2.95.2 `haifa-sched.c` (`sched_analyze`, same code) |
 | [0037](0037-game-no-strict-aliasing.patch) | upstream | `-O2` does not turn on strict aliasing | gcc-2.95.2, Jeff Law 1999-10-20: "Do not turn on strict aliasing by default" |
 | [0044](0044-sda-nosda-attributes.patch) | retail | SN's `sda`/`nosda` variable attributes: placement in `.sdata`/`.data` | SN's GCC 2.95.3 extension |
 | [0045](0045-encode-section-info-sda-nosda.patch) | retail | `sda`/`nosda` decide gp-relative or absolute references | SN's GCC 2.95.3 extension |
 | [0047](0047-gcc-2.95.2-reload-local-alloc-regclass.patch) | upstream | `reload1.c`, the `local-alloc.c` equivalence fixes and the `regclass.c` `'p'` constraint | gcc-2.95.2 |
-| [0048](0048-gcc-2.95.2-cse.patch) | upstream | `cse.c`, plus the helpers the 2.9 tree lacks | gcc-2.95.2; `textbin/fun_00226a70` |
-| [0049](0049-sibcall-pass-needs-placeholder.patch) | as upstream | the Cygnus sibcall pass does nothing when there is no `CALL_PLACEHOLDER` | gcc-2.95.2 has no such pass; `textbin/fun_001eb740` |
-| [0051](0051-r5900-fpr-hazard-exact.patch) | retail | `as`: an FPR hazard checks the one register, not the even/odd pair | `textbin/fun_001f2070`, `textbin/rendering/view/init_view_context` |
-| [0052](0052-r5900-dli-retail-general.patch) | retail | `as`: 64-bit `dli` constants built top-down in 16-bit fields | `textbin/fun_001f4fb8`, `textbin/fun_00200600` |
-| [0053](0053-gas-la-absolute-unknown-symbol.patch) | retail | `as`: the 0020 rule for `la` | `textbin/fun_002135f0` |
-| [0054](0054-r5900-assembler-pads-loops.patch) | retail | `cc1` does not pad R5900 short loops: `Ps2EeAs` does | `ui/hud/get_icon_frame`, `video/decoder/video_dec_flush` |
-| [0055](0055-r5900-no-second-hilo.patch) | retail | the second HI/LO pair stays fixed: no `mult1`/`div1` in game code | `textbin/fun_001fe980`, `textbin/fun_00214260` |
-| [0056](0056-sda-extern-before-use.patch) | retail | `.extern` of an `sda` variable at its first use, so `Ps2EeAs` knows its size | `textbin/fun_00206b78`, `textbin/fun_0022e8c8` |
+| [0048](0048-gcc-2.95.2-cse.patch) | upstream | `cse.c`, plus the helpers the 2.9 tree lacks | gcc-2.95.2; `ui/menus/save_data/start_memory_card_save` |
+| [0049](0049-sibcall-pass-needs-placeholder.patch) | as upstream | the Cygnus sibcall pass does nothing when there is no `CALL_PLACEHOLDER` | gcc-2.95.2 has no such pass; `game/is_active_state_entry` |
+| [0051](0051-r5900-fpr-hazard-exact.patch) | retail | `as`: an FPR hazard checks the one register, not the even/odd pair | `rendering/view/project_to_screen`, `rendering/view/init_view_context` |
+| [0052](0052-r5900-dli-retail-general.patch) | retail | `as`: 64-bit `dli` constants built top-down in 16-bit fields | `rendering/effects/draw_screen_effect`, `ui/hud/sprites/draw_rotated_sprite` |
+| [0053](0053-gas-la-absolute-unknown-symbol.patch) | retail | `as`: the 0020 rule for `la` | `camera/resolve_camera_surface_height` |
+| [0054](0054-r5900-assembler-pads-loops.patch) | retail | `cc1` does not pad R5900 short loops: `Ps2EeAs` does | `ui/hud/get_icon_frame`, `movies/decoder/video_dec_flush` |
+| [0055](0055-r5900-no-second-hilo.patch) | retail | the second HI/LO pair stays fixed: no `mult1`/`div1` in game code | `ui/help/draw_help`, `math/rotations/matrix_to_quaternion` |
+| [0056](0056-sda-extern-before-use.patch) | retail | `.extern` of an `sda` variable at its first use, so `Ps2EeAs` knows its size | `ui/map/map_filters`, `rendering/effects/draw_resident_textured_quad` |
 | [0057](0057-reorg-sticky-volatile-set.patch) | upstream | reorg keeps a volatile store's flag when a plain store follows | part of gcc-2.95.2, Mark Mitchell 1999-05-06: "Make volatil monotonically increasing" |
 | [0058](0058-reorg-trap-if-sets-volatile.patch) | upstream | reorg moves nothing across a conditional trap | gcc-2.95.2, Mark Mitchell 1999-05-04: "Handle ... TRAP_IF ... just like in mark_referenced_resources" |
 | [0060](0060-alias-static-chain-not-a-base.patch) | upstream | the static chain and struct value registers are not alias bases | gcc-2.95.3, Richard Henderson 2000-08-22 (`alias.c`) |
 | [0061](0061-copy-rtx-if-shared-virtual-mems.patch) | upstream | a stack MEM is not shared | gcc-2.95.3, Jeff Law 1999-08-30 (`emit-rtl.c`) |
 | [0062](0062-reload-reg-unavailable.patch) | upstream | reload never picks a register outside the insn's spill set | gcc-2.95.3, Bernd Schmidt 2000-01-12 (`reload1.c`) |
-| [0064](0064-r5900-timode-reload-one-register.patch) | retail | a TImode reload in general registers takes one register, as `HARD_REGNO_NREGS` already says, not two | SN's ee-gcc 2.95.2 spills only `$v0` for a TImode reload; `textbin/rendering/buffers/setup_fs_aa_buffer` |
-| [0065](0065-gcse-no-critical-edge-split.patch) | upstream | GCSE works on the flow graph as it is and does not split critical edges first, so PRE can place an expression in the block before a branch | gcc-2.95.3 `gcse.c` (`compute_preds_succs` without edge splitting; the split came with the Cygnus edge LCM that 0016 turns off); `gameplay/vendor/render_vendor_buy_label_pass` |
+| [0064](0064-r5900-timode-reload-one-register.patch) | retail | a TImode reload in general registers takes one register, as `HARD_REGNO_NREGS` already says, not two | SN's ee-gcc 2.95.2 spills only `$v0` for a TImode reload; `rendering/frame/setup_fs_aa_buffer` |
+| [0065](0065-gcse-no-critical-edge-split.patch) | upstream | GCSE works on the flow graph as it is and does not split critical edges first, so PRE can place an expression in the block before a branch | gcc-2.95.3 `gcse.c` (`compute_preds_succs` without edge splitting; the split came with the Cygnus edge LCM that 0016 turns off); `ui/vendor/render_vendor_buy_label_pass` |
 
 ### SDK assembler
 

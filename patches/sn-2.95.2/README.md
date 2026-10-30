@@ -31,11 +31,11 @@ In this order (`PATCH_ORDER` in the script):
 | [sce-991111b 0064](../sce-991111b/0064-r5900-timode-reload-one-register.patch) | retail | a TImode reload in general registers takes one register | same as the game compiler |
 | [0000](0000-host-obstack.patch) | host | `include/obstack.h` lvalue cast | the hunk of sce-991111b 0000 |
 | [0001](0001-r5900-target.patch) | host | the `mips64r5900*-*-elf*` target in `gcc/configure.in` and `gcc/configure`; the `MAX_INTEGER_COMPUTATION_MODE` fixes of the EE tree's `expr.c` | |
-| [0002](0002-vu0-registers.patch) | retail | 111 hard registers: `vf0`-`vf31` in a `VU_REGS` class, `TI_REGS` = general + VU, `movti` with a `j` (VU) alternative | the register tables of SN `cc1.exe`; 49 units, e.g. `l11/gameplay/entities/seesaw_platform` |
-| [0003](0003-no-modes-in-second-hilo.patch) | retail | no mode fits in the second HI/LO pair | 28 units, e.g. `l10/gameplay/entities/screamer` |
-| [0004](0004-quad-block-moves.patch) | retail | 16-byte aligned block moves use `lq`/`sq` | 31 units, e.g. `l07/gameplay/entities/taxi_platform` |
-| [0005](0005-aligned-array-typedef.patch) | retail | `aligned` on a typedef of an array type makes a new type instead of changing the shared one | 24 units, e.g. `l09/gameplay/entities/elevator` |
-| [0006](0006-msvcrt-float-comments.patch) | retail | float constants printed like msvcrt (`1.#INF`, 17 digits, 3-digit exponents) | 3 units, e.g. `l15/gameplay/entities/conveyor_belt` |
+| [0002](0002-vu0-registers.patch) | retail | 111 hard registers: `vf0`-`vf31` in a `VU_REGS` class, `TI_REGS` = general + VU, `movti` with a `j` (VU) alternative | the register tables of SN `cc1.exe`; 49 units, e.g. `l11/mobys/seesaw_platform` |
+| [0003](0003-no-modes-in-second-hilo.patch) | retail | no mode fits in the second HI/LO pair | 28 units, e.g. `l10/mobys/screamer` |
+| [0004](0004-quad-block-moves.patch) | retail | 16-byte aligned block moves use `lq`/`sq` | 31 units, e.g. `l07/mobys/taxi_platform` |
+| [0005](0005-aligned-array-typedef.patch) | retail | `aligned` on a typedef of an array type makes a new type instead of changing the shared one | 24 units, e.g. `l09/mobys/elevator` |
+| [0006](0006-msvcrt-float-comments.patch) | retail | float constants printed like msvcrt (`1.#INF`, 17 digits, 3-digit exponents) | 3 units, e.g. `l15/mobys/conveyor_belt` |
 | [sce-991111b 0062](../sce-991111b/0062-reload-reg-unavailable.patch) | upstream | reload never picks a register outside the insn's spill set | gcc-2.95.3, Bernd Schmidt 2000-01-12 (`reload1.c`) |
 
 Kinds as in [`../sce-991111b/README.md`](../sce-991111b/README.md). A fixture
