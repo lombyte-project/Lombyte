@@ -663,14 +663,14 @@ extern void reset_hero_follow_camera_from_preset(Camera *) __asm__("FUN_L05_0032
 extern char *D_L05_00167204 NOT_SDA;
 void reset_camera_from_source_transform(char *out) __asm__("FUN_L05_0032a6e0");
 
-void reset_camera_from_source_transform(char *out) {
+void reset_camera_from_source_transform(char *destination_camera) {
     char *source_camera_transform = D_L05_00167204;
-    qcopy(out + 0x30, source_camera_transform + 0x30);
-    qcopy(out, source_camera_transform);
-    qcopy(out + 0x10, source_camera_transform + 0x10);
-    qcopy(out + 0x20, source_camera_transform + 0x20);
-    extract_matrix_rotation_quaternion(out + 0x40, out);
-    reset_hero_follow_camera_from_preset((Camera *)out);
+    qcopy(destination_camera + 0x30, source_camera_transform + 0x30);
+    qcopy(destination_camera, source_camera_transform);
+    qcopy(destination_camera + 0x10, source_camera_transform + 0x10);
+    qcopy(destination_camera + 0x20, source_camera_transform + 0x20);
+    extract_matrix_rotation_quaternion(destination_camera + 0x40, destination_camera);
+    reset_hero_follow_camera_from_preset((Camera *)destination_camera);
 }
 
 float                D_L16_00162198 = 2.0f;
