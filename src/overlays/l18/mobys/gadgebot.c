@@ -19,11 +19,12 @@
 #include "rnc/math_consts.h"
 #include "rnc/overlay/level_labels.h"
 
-extern int  D_L18_0015F5C4;
-extern s32  random_integer_below(s32) __asm__("FUN_00213260");
-extern int  D_L18_001AC240[];
-extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
-extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern int            D_L18_0015F5C4;
+extern unsigned char *D_L18_0015FFD8;
+extern s32            random_integer_below(s32) __asm__("FUN_00213260");
+extern int            D_L18_001AC240[];
+extern void           draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
+extern int            fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FD058), where it is exact; names translated to the US level program. */
