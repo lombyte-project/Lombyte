@@ -1408,7 +1408,7 @@ void refresh_suck_cannon_slots(void) {
 
 void suckcannon_update(SuckMoby *self) __asm__("FUN_L00_002da790");
 
-void suckcannon_update(SuckMoby *self) {
+void suckcannon_update(SuckMoby *suck_cannon_moby) {
     enum {
         SUCKCANNON_STATE_INITIALIZE = 0,
         SUCKCANNON_STATE_EMPTY_IDLE = 1,
@@ -1430,12 +1430,12 @@ void suckcannon_update(SuckMoby *self) {
                            (int)hud_draw_gauge_frame,
                            (int)&((SuckHero *)&hero)->count,
                            5);
-    cannon = self->data;
+    cannon = suck_cannon_moby->data;
     slot_released = ((SuckHero *)&hero)->slot_state == 3;
-    if ((u8)self->state != 3 && (u8)self->state != 0)
-        suck_beam_queue_draw((int)self);
+    if ((u8)suck_cannon_moby->state != 3 && (u8)suck_cannon_moby->state != 0)
+        suck_beam_queue_draw((int)suck_cannon_moby);
     refresh_suck_cannon_slots();
-    switch ((u8)self->state) {
+    switch ((u8)suck_cannon_moby->state) {
     case SUCKCANNON_STATE_INITIALIZE:
         for (i = 0; i < (item_text_variant[9] == 0 ? 5 : 10); ++i) {
             if (((SuckHero *)&hero)->stored[i]) {
@@ -1446,23 +1446,23 @@ void suckcannon_update(SuckMoby *self) {
         ((SuckHero *)&hero)->firing = 0;
         if (((SuckHero *)&hero)->count > 0) {
             cannon->blocked = 1;
-            blend_moby_animation(self, 6, 0, scale_game_frames(4));
-            self->state = 4;
+            blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
+            suck_cannon_moby->state = 4;
         } else {
             cannon->cooldown = 0;
-            self->state = 1;
+            suck_cannon_moby->state = 1;
         }
-        suck_reset(self);
+        suck_reset(suck_cannon_moby);
         break;
     case SUCKCANNON_STATE_EMPTY_IDLE:
-        if (self->anim_flags & 2)
-            blend_moby_animation(self, 1, 0, scale_game_frames(0));
+        if (suck_cannon_moby->anim_flags & 2)
+            blend_moby_animation(suck_cannon_moby, 1, 0, scale_game_frames(0));
         fast_dec_timer(&cannon->cooldown);
         if (cannon->cooldown == 0)
             cancel_hero_item_animation();
         if (((SuckHero *)&hero)->count > 0) {
-            blend_moby_animation(self, 6, 0, scale_game_frames(4));
-            self->state = 4;
+            blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
+            suck_cannon_moby->state = 4;
             break;
         }
         if ((controller_state.held & ((SuckHero *)&hero)->fire_buttons) && cannon->cooldown == 0 &&
@@ -1470,7 +1470,7 @@ void suckcannon_update(SuckMoby *self) {
             scale_game_frames(15) < ((SuckHero *)&hero)->ready_frames &&
             is_suck_cannon_suction_blocked_by_hero_state() == 0) {
             start_equipped_item_animation();
-            cannon->sound = allocate_voice_for_target_entry(2, 4, (int)self);
+            cannon->sound = allocate_voice_for_target_entry(2, 4, (int)suck_cannon_moby);
             cannon->cooldown = scale_game_frames(10);
             stats = (SuckStats *)(((char *)&item_usage));
             if (stats->count < 65535)
@@ -1478,30 +1478,30 @@ void suckcannon_update(SuckMoby *self) {
             if (scale_game_frames(D_0015EEA4) / 600 > stats->longest)
                 stats->longest = scale_game_frames(D_0015EEA4) / 600;
             stats->level_mask = (stats->level_mask | (1 << current_level_index)) | 0x80000000;
-            self->state = 2;
+            suck_cannon_moby->state = 2;
         }
         break;
     case SUCKCANNON_STATE_SUCTION_STARTUP:
-        if (self->anim_flags & 2)
-            blend_moby_animation(self, 3, 0, scale_game_frames(5));
+        if (suck_cannon_moby->anim_flags & 2)
+            blend_moby_animation(suck_cannon_moby, 3, 0, scale_game_frames(5));
         if (is_suck_cannon_suction_blocked_by_hero_state() != 0 || ((SuckHero *)&hero)->unk20AC ||
             ((SuckHero *)&hero)->unk20A7) {
             sound = cannon->sound;
             if (sound != -1) {
                 SuckVoice *s = (SuckVoice *)(((char *)&voice_pool)) + sound;
-                if (s[1].owner == self && s[1].active)
+                if (s[1].owner == suck_cannon_moby && s[1].active)
                     release_voice_slot(sound);
             }
             cannon->sound = -1;
             cancel_hero_item_animation();
             ((SuckHero *)&hero)->firing = 0;
             if (((SuckHero *)&hero)->count > 0) {
-                blend_moby_animation(self, 6, 0, scale_game_frames(4));
+                blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
                 next_state = 4;
                 goto changed;
             } else {
                 cannon->cooldown = 0;
-                blend_moby_animation(self, 1, 0, scale_game_frames(4));
+                blend_moby_animation(suck_cannon_moby, 1, 0, scale_game_frames(4));
                 next_state = 1;
                 goto changed;
             }
@@ -1512,8 +1512,8 @@ void suckcannon_update(SuckMoby *self) {
         }
         break;
     case SUCKCANNON_STATE_SUCTION_ACTIVE:
-        if (self->anim_state != 3 && (self->anim_state != 0 || (self->anim_flags & 2)))
-            blend_moby_animation(self, 3, 0, scale_game_frames(5));
+        if (suck_cannon_moby->anim_state != 3 && (suck_cannon_moby->anim_state != 0 || (suck_cannon_moby->anim_flags & 2)))
+            blend_moby_animation(suck_cannon_moby, 3, 0, scale_game_frames(5));
         fast_dec_timer(&cannon->cooldown);
         if (!(((SuckHero *)&hero)->sucking ||
               (((SuckHero *)&hero)->count < (item_text_variant[9] == 0 ? 5 : 10) &&
@@ -1524,36 +1524,36 @@ void suckcannon_update(SuckMoby *self) {
             sound = cannon->sound;
             if (sound != -1) {
                 SuckVoice *s = (SuckVoice *)(((char *)&voice_pool)) + sound;
-                if (s[1].owner == self && s[1].active)
+                if (s[1].owner == suck_cannon_moby && s[1].active)
                     release_voice_slot(sound);
             }
             cannon->sound = -1;
-            stop_suck_cannon_suction_effect((int)self);
+            stop_suck_cannon_suction_effect((int)suck_cannon_moby);
             ((SuckHero *)&hero)->firing = 0;
             if (((SuckHero *)&hero)->count > 0) {
-                blend_moby_animation(self, 6, 0, scale_game_frames(4));
+                blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(4));
                 cannon->cooldown = 0;
                 cannon->blocked = 1;
-                self->state = 4;
+                suck_cannon_moby->state = 4;
                 goto done;
             } else {
                 cannon->cooldown = 0;
-                blend_moby_animation(self, 1, 0, scale_game_frames(4));
-                self->state = 1;
+                blend_moby_animation(suck_cannon_moby, 1, 0, scale_game_frames(4));
+                suck_cannon_moby->state = 1;
                 goto done;
             }
         } else {
-            if (self->anim_flags & 2)
-                blend_moby_animation(self, 3, 0, scale_game_frames(2));
-            update_suck_cannon_suction((u8 *)self, cannon);
+            if (suck_cannon_moby->anim_flags & 2)
+                blend_moby_animation(suck_cannon_moby, 3, 0, scale_game_frames(2));
+            update_suck_cannon_suction((u8 *)suck_cannon_moby, cannon);
         }
         break;
     case SUCKCANNON_STATE_LOADED_AIM:
         fast_dec_timer(&cannon->cooldown);
         if (!cannon->cooldown)
             cancel_hero_item_animation();
-        if (self->anim_flags & 2) {
-            blend_moby_animation(self, 6, 0, scale_game_frames(0));
+        if (suck_cannon_moby->anim_flags & 2) {
+            blend_moby_animation(suck_cannon_moby, 6, 0, scale_game_frames(0));
             cancel_hero_item_animation();
         }
         if (!(controller_state.held & ((SuckHero *)&hero)->fire_buttons))
@@ -1575,7 +1575,7 @@ void suckcannon_update(SuckMoby *self) {
             transpose_rotation_matrix(&aim_and_fire_scratch.aim.inverse, &aim_and_fire_scratch.aim.rotation);
             transform_vector(&aim_and_fire_scratch.aim.velocity, &aim_and_fire_scratch.aim.velocity, &aim_and_fire_scratch.aim.inverse);
             fast_vec_add(&aim_and_fire_scratch.aim.end, eye, &aim_and_fire_scratch.aim.velocity);
-            if (collision_segment_hits(eye, &aim_and_fire_scratch.aim.end, 0, (int)self, 0)) {
+            if (collision_segment_hits(eye, &aim_and_fire_scratch.aim.end, 0, (int)suck_cannon_moby, 0)) {
                 hit = (SuckHit *)D_L00_00173E40_lui;
                 if (hit->moby && (hit->moby->flags & 0x1000)) {
                     cannon->target = hit->moby;
@@ -1586,9 +1586,9 @@ void suckcannon_update(SuckMoby *self) {
             if (cannon->target && !cannon->cooldown) {
                 qcopy(&aim_and_fire_scratch.aim.point, &cannon->target->pos);
                 aim_and_fire_scratch.aim.point.f.z += cannon->target_height;
-                suck_draw_reticle((int)self, 0xFF0FFF0F, 1.0f, 0.0f, 0, 0x21, -1, 90.0f, 4);
+                suck_draw_reticle((int)suck_cannon_moby, 0xFF0FFF0F, 1.0f, 0.0f, 0, 0x21, -1, 90.0f, 4);
             } else {
-                suck_draw_reticle((int)self, 0xFF0F0FFF, 1.0f, 0.0f, 0, 0x21, -1, 90.0f, 4);
+                suck_draw_reticle((int)suck_cannon_moby, 0xFF0F0FFF, 1.0f, 0.0f, 0, 0x21, -1, 90.0f, 4);
             }
         }
         if (((SuckHero *)&hero)->aim_locked) {
@@ -1603,7 +1603,7 @@ void suckcannon_update(SuckMoby *self) {
             !((SuckHero *)&hero)->unk20AC && !((SuckHero *)&hero)->unk20A7 &&
             scale_game_frames(22) < ((SuckHero *)&hero)->ready_frames) {
             start_equipped_item_animation();
-            blend_moby_animation(self, 5, 0, scale_game_frames(2));
+            blend_moby_animation(suck_cannon_moby, 5, 0, scale_game_frames(2));
             ((SuckHero *)&hero)->firing = 2;
             cannon->cooldown = scale_game_frames(25);
             stats = (SuckStats *)(((char *)&item_usage));
@@ -1612,14 +1612,14 @@ void suckcannon_update(SuckMoby *self) {
             if (scale_game_frames(D_0015EEA4) / 600 > stats->longest)
                 stats->longest = scale_game_frames(D_0015EEA4) / 600;
             stats->level_mask = (stats->level_mask | (1 << current_level_index)) | 0x80000000;
-            self->state = 5;
+            suck_cannon_moby->state = 5;
         }
         break;
     case 6:
         break;
     case SUCKCANNON_STATE_FIRE_STORED_MOBY:
         stored = 0;
-        if (!(0.0f <= compute_interpolated_record_value(self)))
+        if (!(0.0f <= compute_interpolated_record_value(suck_cannon_moby)))
             break;
         for (i = 0; i < (item_text_variant[9] == 0 ? 5 : 10); i++) {
             if (((SuckHero *)&hero)->stored[i]) {
@@ -1651,7 +1651,7 @@ void suckcannon_update(SuckMoby *self) {
                 aim_and_fire_scratch.fire.point.q = aim_and_fire_scratch.fire.offset.q;
                 transform_vector_by_basis(
                     &aim_and_fire_scratch.fire.velocity, &aim_and_fire_scratch.fire.point, &((SuckHero *)&hero)->basis);
-                FUN_L00_0024f7c8(self, 0, &aim_and_fire_scratch.fire.launch);
+                FUN_L00_0024f7c8(suck_cannon_moby, 0, &aim_and_fire_scratch.fire.launch);
             }
             qcopy(&stored->pos, &aim_and_fire_scratch.fire.launch);
             refresh_moby_spatial_bounds_from_basis(stored);
@@ -1718,7 +1718,7 @@ void suckcannon_update(SuckMoby *self) {
                                 }
                                 if (offangle < 0.4537856f) {
                                     if (collision_segment_hits(
-                                            D_L00_00166DC0, &aim_and_fire_scratch.fire.point, 6, (int)self, 0))
+                                            D_L00_00166DC0, &aim_and_fire_scratch.fire.point, 6, (int)suck_cannon_moby, 0))
                                         break;
                                     limit = distance;
                                     pitch = -tpitch;
@@ -1735,20 +1735,20 @@ void suckcannon_update(SuckMoby *self) {
                 if (best)
                     cannon->target = best;
             }
-            compose_moby_rotation_with_euler_offset((char *)self, (char *)stored, suck_fire_tuning);
+            compose_moby_rotation_with_euler_offset((char *)suck_cannon_moby, (char *)stored, suck_fire_tuning);
             if (stored->cls->handlers->fire)
                 stored->cls->handlers->fire(
                     stored, &aim_and_fire_scratch.fire.velocity, cannon->target, cannon->target_height);
             ((SuckHero *)&hero)->count--;
             if (((SuckHero *)&hero)->count > 0) {
                 ((SuckHero *)&hero)->firing = 0;
-                self->state = 4;
+                suck_cannon_moby->state = 4;
                 goto done;
             } else {
                 cannon->cooldown = scale_game_frames(20);
                 next_state = 1;
                 ((SuckHero *)&hero)->firing = 0;
-                self->state = next_state;
+                suck_cannon_moby->state = next_state;
                 goto done;
             }
         }
@@ -1756,13 +1756,13 @@ void suckcannon_update(SuckMoby *self) {
     }
     goto done;
 changed:
-    self->state = next_state;
+    suck_cannon_moby->state = next_state;
 done:
     if (slot_released) {
         sound = cannon->sound;
         if (sound != -1) {
             SuckVoice *s = (SuckVoice *)(((char *)&voice_pool)) + sound;
-            if (s[1].owner == self && s[1].active)
+            if (s[1].owner == suck_cannon_moby && s[1].active)
                 release_voice_slot(sound);
         }
         cannon->sound = -1;
