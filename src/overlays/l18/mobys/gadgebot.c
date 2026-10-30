@@ -609,7 +609,7 @@ void draw_group_gadgebot_joint_glows(struct Moby *moby) {
     if (group_moby_entry != 0) {
         while (1) {
             unsigned char  *group_moby = D_L18_0015FFD8 + ((group_moby_entry[0] & 0x7FFF) << 8);
-            unsigned short *next = group_moby_entry + 1;
+            unsigned short *next_group_moby_entry = group_moby_entry + 1;
             if (MOBY(group_moby)->oclass == 0x772 && group_moby[0x20] != 0 &&
                 group_moby[0x20] < 6) {
                 int i;
@@ -623,7 +623,7 @@ void draw_group_gadgebot_joint_glows(struct Moby *moby) {
             }
             if (*(short *)group_moby_entry < 0)
                 break;
-            group_moby_entry = next;
+            group_moby_entry = next_group_moby_entry;
         }
     }
 }
