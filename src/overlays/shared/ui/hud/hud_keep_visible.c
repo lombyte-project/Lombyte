@@ -19,18 +19,6 @@
    func_001FFC48. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236208), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    int unk00, unk04;
-    char pad08[0x18];
-    int unk20, unk24;
-    char pad28[0x3C];
-    int unk64, unk68, unk6C;
-    char pad70[0xC];
-    int unk7C;
-    char pad80[0x10];
-} HudBank;
-
-extern HudBank hud_elements[] __asm__("D_L00_0017DC50");
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
 
@@ -183,28 +171,19 @@ void reset_numeric_hud_element_32x32_base(HudElem *hud_element) {
     hud_element->h = 0x20;
     initialize_numeric_hud_values_and_dimensions(hud_element);
 }
-typedef struct {
-    u8 pad[0x64];
-    s32 key;
-    s32 f68;
-    u8 pad2[0x7C - 0x6C];
-    s32 v;
-    u8 pad3[0x90 - 0x80];
-} T_235e18;
-extern T_235e18 D_L00_0017DC50_lui[] __asm__("D_L00_0017DC50") NOT_SDA;
 s32 hud_keep_visible(s32 key, s32 val) __asm__("FUN_L00_00235e18");
 s32 hud_keep_visible(s32 key, s32 val) {
     s32 i;
     s32 r;
-    T_235e18 *hud_element;
+    HudElem *hud_element;
     r = 1;
     for (i = 0; i < 13; i++) {
-        if (D_L00_0017DC50_lui[i].key == key)
+        if (hud_elements[i].key == key)
             break;
     }
-    if (i < 13 && D_L00_0017DC50_lui[i].f68 == 0) {
-        hud_element = D_L00_0017DC50_lui + i;
-        hud_element->v = (val < hud_element->v) ? hud_element->v : val;
+    if (i < 13 && hud_elements[i].unk68 == 0) {
+        hud_element = hud_elements + i;
+        hud_element->unk7C = (val < hud_element->unk7C) ? hud_element->unk7C : val;
         return 0;
     }
     return 1;
