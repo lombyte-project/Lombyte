@@ -91,9 +91,9 @@ int set_voice_position(int index, const void *vector) __asm__("FUN_L13_002982e8"
 
 int set_voice_position(int index, const void *vector) {
     int                       offset = index * 0x70;
-    char                     *base = D_0013E533 + 0x1D;
-    char                     *vector_base = base + 0xA0;
-    Level13SoundEffectTarget *effect = (Level13SoundEffectTarget *)(base + offset);
+    char                     *voice_table = D_0013E533 + 0x1D;
+    char                     *vector_base = voice_table + 0xA0;
+    Level13SoundEffectTarget *effect = (Level13SoundEffectTarget *)(voice_table + offset);
     effect->flags |= 0x40;
     qcopy(vector_base + offset, vector);
     return 1;
