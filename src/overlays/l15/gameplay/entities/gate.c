@@ -33,7 +33,7 @@
 /* Nudge a moby's field 0x48 toward a signed step depending on a linked moby's state. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E5AA0), where it is exact; names translated to the US level program. */
 
-extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
+extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 
 extern short linked_state_yaw_rate_degrees_gp __asm__("D_L15_00161EC0") __attribute__((sda));
 void update_moby_yaw_from_linked_state(struct Moby *moby) __asm__("FUN_L15_002e46b0");
@@ -41,7 +41,7 @@ void update_moby_yaw_from_linked_state(struct Moby *moby) __asm__("FUN_L15_002e4
 void update_moby_yaw_from_linked_state(struct Moby *moby) {
     int linked_moby_index = *(int *)moby->pvars;
     if (linked_moby_index != -1) {
-        char *other = (char *)(linked_moby_index * 256 + *(int *)&D_L15_0015FFD8_d);
+        char *other = (char *)(linked_moby_index * 256 + (int)l15_moby_array);
         char *linked_moby_vars = *(char **)(other + 0x78);
         int linked_moby_state = (unsigned char)other[0x20];
         float step;
@@ -113,7 +113,7 @@ void update_sliding_gate(struct Moby *gate_moby)
         trigger_active = 0;
         gate_vars->travel = 0;
         if (gate_vars->trigger != -1) {
-            struct Moby *other = (struct Moby *)((char *)*(s32 *)&D_L15_0015FFD8_d + gate_vars->trigger * 0x100);
+            struct Moby *other = (struct Moby *)((char *)l15_moby_array + gate_vars->trigger * 0x100);
             if (other->oclass == 0x4b9) {
                 if (other->state == 4) {
                     trigger_active = 1;
@@ -275,7 +275,7 @@ void update_vertical_gate(GateMoby *gate_moby)
             D_L15_00184AA8_lui = 0;
         }
         if (gate_vars->trigger != -1) {
-            struct Moby *trigger_moby = (struct Moby *)((char *)*(int *)&D_L15_0015FFD8_d + (gate_vars->trigger << 8));
+            struct Moby *trigger_moby = (struct Moby *)((char *)l15_moby_array + (gate_vars->trigger << 8));
             if (trigger_moby == 0 || trigger_moby->state == 0xFE || trigger_moby->state == 0xFD) {
                 if (D_L15_00161AC0 == 0) {
                     gate_moby->state = 2;
@@ -408,7 +408,7 @@ typedef struct {
 } DoorVars;
 
 extern char *D_L15_0015FFE4;
-extern struct Moby *D_L15_0015FFD8;
+extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 extern f32 swinging_door_swing_angle_degrees_gp __asm__("D_L15_001614FC") __attribute__((sda));
 extern f32 swinging_door_swing_duration_gp __asm__("D_L15_00161500") __attribute__((sda));
 
@@ -451,8 +451,8 @@ void update_swinging_door(struct Moby *moby) {
             }
         }
     } else {
-        if (D_L15_0015FFD8[vars->trigger].oclass == 0x49B) {
-            open = D_L15_0015FFD8[vars->trigger].state == 2;
+        if (l15_moby_array[vars->trigger].oclass == 0x49B) {
+            open = l15_moby_array[vars->trigger].state == 2;
         }
     }
     if (open) {
@@ -898,7 +898,7 @@ void construction_arm_update(struct Moby *moby)
                 if (slot == 0) return;
                 list = (unsigned short *)slot;
                 do {
-                    other = (struct Moby *)((*list & 0x7fff) * 0x100 + (int)D_L15_0015FFD8);
+                    other = (struct Moby *)((*list & 0x7fff) * 0x100 + (int)l15_moby_array);
                     if ((signed char)other->state >= 0 && other->oclass == moby->oclass && other->state != 1)
                         count++;
                 } while ((short)*list++ >= 0);

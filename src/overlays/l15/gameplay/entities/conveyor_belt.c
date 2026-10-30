@@ -696,7 +696,7 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
 #include "rnc/overlay/quad.h"
 /* Cutscene trigger moby: waits for the hero in its clip volume, then steps through the scene stages and saves at the end. */
 extern int D_L15_00161AC0 __asm__("D_L15_00161AC0");
-extern unsigned char *D_L15_0015FFD8_v __asm__("D_L15_0015FFD8");
+extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern unsigned char D_0014C050_v[] __asm__("D_0014C050");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -729,7 +729,7 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
             break;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)trigger_data) == 0)
             break;
-        if (D_L15_0015FFD8_v[(*(int *)(trigger_data + 8) << 8) + 0x20] != 3)
+        if (((unsigned char *)l15_moby_array)[(*(int *)(trigger_data + 8) << 8) + 0x20] != 3)
             break;
         start_scene(3);
         moby->state = 2;
@@ -895,7 +895,7 @@ char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) {
 /* Shows or hides every listed moby. */
 
 extern int D_L15_001ABE40[];
-extern int D_L15_0015FFD8;
+extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 
 void set_moby_list_visibility(int moby_list_index, int show) __asm__("FUN_L15_002ebf28");
 
@@ -904,7 +904,7 @@ void set_moby_list_visibility(int moby_list_index, int show) {
     if (moby_index_entry == 0)
         return;
     while (1) {
-        unsigned char *moby = (unsigned char *)(D_L15_0015FFD8 + ((*moby_index_entry & 0x7FFF) << 8));
+        unsigned char *moby = (unsigned char *)((int)l15_moby_array + ((*moby_index_entry & 0x7FFF) << 8));
         if (show) {
             MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
             moby[0x31] = 1;
@@ -929,7 +929,7 @@ int count_missing_or_dying_mobys_in_list(int moby_list_index) {
     int base;
     if (moby_index_entry == 0)
         return 0;
-    base = D_L15_0015FFD8;
+    base = (int)l15_moby_array;
     do {
         unsigned char *moby = (unsigned char *)(base + ((moby_index_entry[0] & 0x7FFF) << 8));
         if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
@@ -972,11 +972,11 @@ void codebot_slot_update(struct Moby *moby) {
     char *effect;
     if (data[3] != -1) {
         if (moby->state != 0) {
-            fast_vec_sub(position_rotation_work_vector, (char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10, data + 4);
+            fast_vec_sub(position_rotation_work_vector, (char *)l15_moby_array + data[3] * 0x100 + 0x10, data + 4);
             *(OvlQuad *)position_work_vector = *(OvlQuad *)position_rotation_work_vector;
             add_vectors(position_rotation_work_vector, &moby->pos, position_work_vector);
         }
-        *(OvlQuad *)(data + 4) = *(OvlQuad *)((char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10);
+        *(OvlQuad *)(data + 4) = *(OvlQuad *)((char *)l15_moby_array + data[3] * 0x100 + 0x10);
     }
     switch (moby->state) {
     case CODEBOT_SLOT_INITIALIZE: {
@@ -1123,7 +1123,7 @@ void ultramech_scientist_update(struct Moby *moby) {
     {
         char *player = D_0013E533 + 0xE1D;
         if (*(unsigned char *)(player + 0x20A4) != 2) {
-            int mobys = D_L15_0015FFD8;
+            int mobys = (int)l15_moby_array;
             *(int *)((*(int *)(data + 0x14C) << 8) + mobys + 0x94) = 0;
             *(unsigned short *)((*(int *)(data + 0x14C) << 8) + mobys + 0x34) |= 0x41;
         }
@@ -1249,7 +1249,7 @@ void ultramech_scientist_update(struct Moby *moby) {
             }
         }
         if (*(int *)(data + 0x158) != -1) {
-            char *spawned = (char *)D_L15_0015FFD8 + (*(int *)(data + 0x158) << 8);
+            char *spawned = (char *)l15_moby_array + (*(int *)(data + 0x158) << 8);
             if (spawned != 0) {
                 int state = *(unsigned char *)(spawned + 0x20);
                 if (state != 0xFE) {
@@ -1274,7 +1274,7 @@ void ultramech_scientist_update(struct Moby *moby) {
             break;
         }
         restore_saved_hero_moby_and_clear_vehicle_mode();
-        set_moby_animation((char *)D_L15_0015FFD8 + (*(int *)(data + 0x14C) << 8), 0, 0);
+        set_moby_animation((char *)l15_moby_array + (*(int *)(data + 0x14C) << 8), 0, 0);
         *(int *)(data + 0x140) = 1;
         *(short *)(data + 0x36) = 1;
         *(unsigned char *)(data + 0x8) = 1;
@@ -1442,7 +1442,7 @@ typedef struct Items {
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern unsigned char D_0013D4DF_2ed398[] __asm__("D_0013D4DF");
 extern int D_L15_00161AC0_macro __asm__("D_L15_00161AC0") MACRO_ADDR;
-extern char *moby_array __asm__("D_L15_0015FFD8") MACRO_ADDR;
+extern struct Moby *l15_moby_array_macro __asm__("D_L15_0015FFD8") MACRO_ADDR;
 extern char D_00141968_2ed398[] __asm__("D_00141968");
 extern unsigned char D_0013D388_2ed398[] __asm__("D_0013D388");
 
@@ -1473,7 +1473,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
         break;
     case HINT_DIALOGUE_CHECK_TRIGGERS:
         if (hint_dialogue_data->npc[0] != -1) {
-            npc_moby = (struct Moby *)(moby_array + (hint_dialogue_data->npc[0] << 8));
+            npc_moby = (struct Moby *)((char *)l15_moby_array_macro + (hint_dialogue_data->npc[0] << 8));
             if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE && npc_moby->state != 0xFD && npc_moby->state != 3
                 && is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->zone[3]) != 0
                 && (hero.state.control_mode < 2u || hero.state.control_mode == 9)
@@ -1541,7 +1541,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             hint_dialogue_data->last = -1;
         }
         if (npc != -1) {
-            npc_moby = (struct Moby *)(moby_array + (npc << 8));
+            npc_moby = (struct Moby *)((char *)l15_moby_array_macro + (npc << 8));
             if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE && npc_moby->state != 0xFD && npc_moby->state != 3
                 && hint_dialogue_data->hold3C > hint_dialogue_data->wait && pick != -1 && pick != hint_dialogue_data->last
                 && (hero.state.control_mode < 2u || hero.state.control_mode == 9)

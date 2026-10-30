@@ -118,7 +118,7 @@ typedef struct { float f[4]; } __attribute__((aligned(16))) V2d8e48;
 
 /* Fakematch: a second name for the hero position in the state 3 reset test keeps that address out of the reload register rotation. */
 extern char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
-extern struct Moby *moby_array __asm__("D_L15_0015FFD8");
+extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/electric_water_globals.h"
@@ -207,15 +207,15 @@ void electric_water_update(struct Moby *moby) {
             if (vars->switches[reset_sw] == -1) {
                 continue;
             }
-            if (moby_array[vars->switches[reset_sw]].oclass == 0x33E) {
-                D_L15_001BB024[(short)moby_array[vars->switches[reset_sw]].save_id] = 0;
-                D_L15_001BBC84[(short)moby_array[vars->switches[reset_sw]].save_id] = 0;
-                save_id = moby_array[vars->switches[reset_sw]].save_id;
+            if (l15_moby_array[vars->switches[reset_sw]].oclass == 0x33E) {
+                D_L15_001BB024[(short)l15_moby_array[vars->switches[reset_sw]].save_id] = 0;
+                D_L15_001BBC84[(short)l15_moby_array[vars->switches[reset_sw]].save_id] = 0;
+                save_id = l15_moby_array[vars->switches[reset_sw]].save_id;
                 D_0014C190_257218[current_level_index_gp][(short)save_id >> 5] &= ~(1 << (save_id & 0x1F));
-                save_id = moby_array[vars->switches[reset_sw]].save_id;
+                save_id = l15_moby_array[vars->switches[reset_sw]].save_id;
                 D_L15_001BAAD0[(short)save_id >> 5] &= ~(1 << (save_id & 0x1F));
             } else {
-                reset_electric_water_switch((char *)&moby_array[vars->switches[reset_sw]]);
+                reset_electric_water_switch((char *)&l15_moby_array[vars->switches[reset_sw]]);
             }
         }
         vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
@@ -252,14 +252,14 @@ void electric_water_update(struct Moby *moby) {
         if (moby->state == 2) {
             for (dim_lamp = 0; dim_lamp < 3; dim_lamp++) {
                 if (vars->lamps[dim_lamp] != -1) {
-                    set_moby_color(&moby_array[vars->lamps[dim_lamp]], 0x40, 0x40, 0x40);
+                    set_moby_color(&l15_moby_array[vars->lamps[dim_lamp]], 0x40, 0x40, 0x40);
                 }
             }
         } else {
             for (lamp = 0; lamp < 3; lamp++) {
                 brightness = random_int_between(0x40, 0x7F);
                 if (vars->lamps[lamp] != -1) {
-                    set_moby_color(&moby_array[vars->lamps[lamp]], brightness, brightness, brightness);
+                    set_moby_color(&l15_moby_array[vars->lamps[lamp]], brightness, brightness, brightness);
                 }
             }
         }
@@ -388,11 +388,11 @@ void electric_water_update(struct Moby *moby) {
             }
             if (nearest != 0) {
                 distance = vector_distance_xy(&nearest->pos, &D_L15_001673C0);
-                if (!(vector_distance_xy(&moby_array[vars->lamps[near_lamp]].pos, &D_L15_001673C0) < distance)) {
+                if (!(vector_distance_xy(&l15_moby_array[vars->lamps[near_lamp]].pos, &D_L15_001673C0) < distance)) {
                     continue;
                 }
             }
-            nearest = &moby_array[vars->lamps[near_lamp]];
+            nearest = &l15_moby_array[vars->lamps[near_lamp]];
         }
         if (vars->owner == 0 || (distance = vector_distance_xy(&vars->owner->pos, &D_L15_001673C0),
                                vector_distance_xy(&nearest->pos, &D_L15_001673C0) < distance)) {
@@ -428,15 +428,15 @@ void electric_water_update(struct Moby *moby) {
         }
         for (sw = 0; sw < 4; sw++) {
             /* Fakematch: the press action is written in both arms so CSE keeps the second sw load. */
-            if (vars->switches[sw] != -1 && moby_array[vars->switches[sw]].oclass == 0x33E && moby_array[vars->switches[sw]].state == 2) {
+            if (vars->switches[sw] != -1 && l15_moby_array[vars->switches[sw]].oclass == 0x33E && l15_moby_array[vars->switches[sw]].state == 2) {
                 vars->off_timer = truncate_float_to_s32(scale_time(vars->off_seconds * 60.0f));
                 moby->state = 3;
-                trooper_play_sound(2, 0, &moby_array[vars->switches[sw]], 0x28F);
+                trooper_play_sound(2, 0, &l15_moby_array[vars->switches[sw]], 0x28F);
                 vars->armed = 0;
-            } else if (vars->switches[sw] != -1 && test_linked_moby_turn_trigger(&moby_array[vars->switches[sw]]) != 0) {
+            } else if (vars->switches[sw] != -1 && test_linked_moby_turn_trigger(&l15_moby_array[vars->switches[sw]]) != 0) {
                 vars->off_timer = truncate_float_to_s32(scale_time(vars->off_seconds * 60.0f));
                 moby->state = 3;
-                trooper_play_sound(2, 0, &moby_array[vars->switches[sw]], 0x28F);
+                trooper_play_sound(2, 0, &l15_moby_array[vars->switches[sw]], 0x28F);
                 vars->armed = 0;
             }
         }
@@ -445,7 +445,7 @@ void electric_water_update(struct Moby *moby) {
     case ELECTRIC_WATER_SWITCH_DISABLED:
         for (i = 0; i < 3; i++) {
             if (vars->lamps[i] != -1) {
-                set_moby_color(&moby_array[vars->lamps[i]], 0x40, 0x40, 0x40);
+                set_moby_color(&l15_moby_array[vars->lamps[i]], 0x40, 0x40, 0x40);
             }
         }
         if (vars->light != -1) {
@@ -476,14 +476,14 @@ void electric_water_update(struct Moby *moby) {
             if (vars->switches[i] == -1) {
                 continue;
             }
-            if (hero.ground_moby != &moby_array[vars->switches[i]] || hero.ground_moby->oclass != 0x33E || hero.air_frames.s != 0) {
+            if (hero.ground_moby != &l15_moby_array[vars->switches[i]] || hero.ground_moby->oclass != 0x33E || hero.air_frames.s != 0) {
                 continue;
             }
             if (vars->armed != 0) {
                 remaining = vars->off_timer;
                 if (remaining < truncate_float_to_s32(scale_time(vars->off_seconds * 60.0f)) - scale_game_frames(0x3C)) {
                     vars->off_timer = truncate_float_to_s32(scale_time(vars->off_seconds * 60.0f));
-                    trooper_play_sound(2, 0, &moby_array[vars->switches[i]], 0x28F);
+                    trooper_play_sound(2, 0, &l15_moby_array[vars->switches[i]], 0x28F);
                 }
             }
             armed = 0;
@@ -500,10 +500,10 @@ void electric_water_update(struct Moby *moby) {
             if (vars->switches[i] == -1) {
                 continue;
             }
-            if (moby_array[vars->switches[i]].oclass == 0x33E) {
-                moby_array[vars->switches[i]].state = 1;
+            if (l15_moby_array[vars->switches[i]].oclass == 0x33E) {
+                l15_moby_array[vars->switches[i]].state = 1;
             } else {
-                reset_electric_water_switch((char *)&moby_array[vars->switches[i]]);
+                reset_electric_water_switch((char *)&l15_moby_array[vars->switches[i]]);
             }
         }
         vars->on_timer = truncate_float_to_s32(scale_time(electric_water_on_duration_seconds_gp * 60.0f));
