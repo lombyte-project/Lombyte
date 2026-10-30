@@ -143,7 +143,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         BLARG_COMMANDO_STATE_KNOCKBACK = 15,
         BLARG_COMMANDO_STATE_DEATH_KNOCKBACK = 16
     };
-    Moby1068Vars *vars = (Moby1068Vars *)moby->pvars;
+    Moby1068Vars *blarg_commando_state = (Moby1068Vars *)moby->pvars;
     struct Moby  *target;
     s32          *route;
     Vec4          position_or_movement_vector;
@@ -158,8 +158,8 @@ void blarg_space_commando_update(struct Moby *moby) {
     f32           cur_frame;
 
     FUN_L06_002feb40_u(moby);
-    target = vars->target;
-    FUN_L00_00263ac8(moby, 1, vars->unk420, 2.5f);
+    target = blarg_commando_state->target;
+    FUN_L00_00263ac8(moby, 1, blarg_commando_state->unk420, 2.5f);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L06_00167540) < 27.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x15;
@@ -167,26 +167,26 @@ void blarg_space_commando_update(struct Moby *moby) {
     moby->anim_speed = 1.0f;
     switch (moby->state) {
     case BLARG_COMMANDO_STATE_INITIALIZE:
-        vars->unk28 = 1;
-        vars->unk20 = 2.0f;
-        vars->unk30 = 2.0f;
-        vars->unk29 = 1;
-        vars->unk24 = 2;
-        vars->unk58 = truncate_float_to_s32(12.0f);
-        vars->unk5A = truncate_float_to_s32(13.6f);
-        FUN_L01_0026d930(&vars->ctl);
-        vars->ctl.unk8 = 2.0f;
-        vars->ctl.unkC = 0.5f;
-        vars->ctl.unk0 = truncate_float_to_s32(D_L06_00161FA8 * 307.2f);
-        vars->ctl.unk4 = D_L06_00161FA8 * 0.3f;
-        vars->ctl.unk24 = movement_max_horizontal_speed_gp * frame_time;
-        vars->ctl.flags |= 8;
-        qcopy(&vars->home, &moby->pos);
+        blarg_commando_state->unk28 = 1;
+        blarg_commando_state->unk20 = 2.0f;
+        blarg_commando_state->unk30 = 2.0f;
+        blarg_commando_state->unk29 = 1;
+        blarg_commando_state->unk24 = 2;
+        blarg_commando_state->unk58 = truncate_float_to_s32(12.0f);
+        blarg_commando_state->unk5A = truncate_float_to_s32(13.6f);
+        FUN_L01_0026d930(&blarg_commando_state->ctl);
+        blarg_commando_state->ctl.unk8 = 2.0f;
+        blarg_commando_state->ctl.unkC = 0.5f;
+        blarg_commando_state->ctl.unk0 = truncate_float_to_s32(D_L06_00161FA8 * 307.2f);
+        blarg_commando_state->ctl.unk4 = D_L06_00161FA8 * 0.3f;
+        blarg_commando_state->ctl.unk24 = movement_max_horizontal_speed_gp * frame_time;
+        blarg_commando_state->ctl.flags |= 8;
+        qcopy(&blarg_commando_state->home, &moby->pos);
         moby->state = 1;
         break;
     case BLARG_COMMANDO_STATE_SELECT_ACTION:
-        if (vars->volume != -1 && vars->route != -1) {
-            if (is_point_inside_clip_volume(&hero.motion.pos, vars->volume) != 0) {
+        if (blarg_commando_state->volume != -1 && blarg_commando_state->route != -1) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, blarg_commando_state->volume) != 0) {
                 moby->state = 14;
                 break;
             }
@@ -196,11 +196,11 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         approach_angle(&moby->rot.z,
                        fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
-                       &vars->turn_speed,
+                       &blarg_commando_state->turn_speed,
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
-        if (vars->unk164 != 2) {
+        if (blarg_commando_state->unk164 != 2) {
             if (melee_attack_distance_threshold_gp < vector_distance_xy(&moby->pos, &target->pos)) {
                 if (fast_difference_between_rotations(
                         moby->rot.z,
@@ -217,7 +217,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                     blend_moby_animation(moby, 6, 0, scale_game_frames(10));
                 }
             }
-        } else if (vars->unk188 != 0) {
+        } else if (blarg_commando_state->unk188 != 0) {
             moby->state = 11;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
@@ -228,15 +228,15 @@ void blarg_space_commando_update(struct Moby *moby) {
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(12));
         }
-        route = D_L06_001B0C30[vars->route];
+        route = D_L06_001B0C30[blarg_commando_state->route];
         qcopy(&position_or_movement_vector, &route[*route * 4]);
         route_destination_distance = vector_distance_xy(&moby->pos, &position_or_movement_vector);
         if (route_destination_distance < 0.25f) {
             angle = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
-            FUN_L00_00258278(moby, angle, &vars->turn_speed, 0.05f, 0.3f, frame_time * 5.5850534f);
+            FUN_L00_00258278(moby, angle, &blarg_commando_state->turn_speed, 0.05f, 0.3f, frame_time * 5.5850534f);
             if (fast_difference_between_rotations(angle, moby->rot.z) < 0.2617994f) {
-                vars->turn_speed = 0.0f;
-                vars->volume = -1;
+                blarg_commando_state->turn_speed = 0.0f;
+                blarg_commando_state->volume = -1;
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(18));
                 }
@@ -246,7 +246,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             FUN_L00_00258278(moby,
                              fast_arc_tan(position_or_movement_vector.f[0] - moby->pos.x,
                                           position_or_movement_vector.f[1] - moby->pos.y),
-                             &vars->turn_speed,
+                             &blarg_commando_state->turn_speed,
                              0.025f,
                              0.3f,
                              frame_time * 5.5850534f);
@@ -259,7 +259,7 @@ void blarg_space_commando_update(struct Moby *moby) {
                 fast_sin(moby->rot.z) * route_destination_distance;
             movement_input_or_output_or_melee_origin.f[2] = 0.0f;
             FUN_L00_00258b50(moby,
-                             &vars->ctl,
+                             &blarg_commando_state->ctl,
                              &movement_input_or_output_or_melee_origin,
                              &movement_output_or_hit_vector_or_path_point,
                              1.0f);
@@ -268,7 +268,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     case BLARG_COMMANDO_STATE_RANGED_ATTACK_WINDUP:
         approach_angle(&moby->rot.z,
                        fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
-                       &vars->turn_speed,
+                       &blarg_commando_state->turn_speed,
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
@@ -282,12 +282,12 @@ void blarg_space_commando_update(struct Moby *moby) {
         break;
     case BLARG_COMMANDO_STATE_RANGED_ATTACK_RECOVERY:
         if (moby->anim_flags & 2) {
-            if (vars->unk164 != 2) {
+            if (blarg_commando_state->unk164 != 2) {
                 moby->state = 4;
                 if (moby->prev_seq != 4) {
                     blend_moby_animation(moby, 4, 0, scale_game_frames(20));
                 }
-                vars->timer = scale_game_frames(ranged_attack_cooldown_frames_gp);
+                blarg_commando_state->timer = scale_game_frames(ranged_attack_cooldown_frames_gp);
             } else {
                 moby->state = 1;
                 if (moby->prev_seq != 0) {
@@ -299,11 +299,11 @@ void blarg_space_commando_update(struct Moby *moby) {
     case BLARG_COMMANDO_STATE_RANGED_ATTACK_COOLDOWN:
         approach_angle(&moby->rot.z,
                        fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
-                       &vars->turn_speed,
+                       &blarg_commando_state->turn_speed,
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
-        if (fast_dec_timer(&vars->timer) != 0) {
+        if (fast_dec_timer(&blarg_commando_state->timer) != 0) {
             FUN_L06_002ff100_u(moby);
             moby->state = 3;
             if (moby->prev_seq != 5) {
@@ -315,7 +315,7 @@ void blarg_space_commando_update(struct Moby *moby) {
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
-        } else if (vars->unk188 != 0) {
+        } else if (blarg_commando_state->unk188 != 0) {
             moby->state = 11;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
@@ -325,7 +325,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     case BLARG_COMMANDO_STATE_MELEE_ATTACK:
         approach_angle(&moby->rot.z,
                        fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
-                       &vars->turn_speed,
+                       &blarg_commando_state->turn_speed,
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
@@ -347,13 +347,13 @@ void blarg_space_commando_update(struct Moby *moby) {
             shot.oclass = moby->oclass;
             sweep_hit_segment(&position_or_movement_vector,
                               &movement_input_or_output_or_melee_origin,
-                              &vars->unk200,
+                              &blarg_commando_state->unk200,
                               &movement_input_or_output_or_melee_origin,
                               moby,
                               &shot,
                               5);
         }
-        qcopy(&vars->unk200, &position_or_movement_vector);
+        qcopy(&blarg_commando_state->unk200, &position_or_movement_vector);
         if (moby->anim_flags & 2) {
             moby->state = 6;
             moby->command = 1;
@@ -374,7 +374,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         near = 0;
         FUN_L00_00258278(moby,
                          fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
-                         &vars->turn_speed,
+                         &blarg_commando_state->turn_speed,
                          0.05f,
                          0.3f,
                          frame_time * 6.2831855f);
@@ -382,19 +382,19 @@ void blarg_space_commando_update(struct Moby *moby) {
         position_or_movement_vector.f[1] = 2.0f * fast_sin(moby->rot.z);
         position_or_movement_vector.f[2] = 0.0f;
         FUN_L00_00258b50(moby,
-                         &vars->ctl,
+                         &blarg_commando_state->ctl,
                          &position_or_movement_vector,
                          &movement_input_or_output_or_melee_origin,
                          1.0f);
-        resolve_point_path_segment_xy_clearance(vars->path, &moby->pos, &moby->pos, 0.75f);
-        if (FUN_L00_00261b48(vars->path,
+        resolve_point_path_segment_xy_clearance(blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
+        if (FUN_L00_00261b48(blarg_commando_state->path,
                              &moby->pos,
                              &target->pos,
                              &movement_output_or_hit_vector_or_path_point) != 0 &&
             fast_vec_dist(&moby->pos, &movement_output_or_hit_vector_or_path_point) < 0.8f) {
             near = 1;
         }
-        if (vars->unk188 == 0) {
+        if (blarg_commando_state->unk188 == 0) {
             moby->state = 13;
         } else if (near != 0) {
             moby->state = 12;
@@ -425,13 +425,13 @@ void blarg_space_commando_update(struct Moby *moby) {
             shot.oclass = moby->oclass;
             sweep_hit_segment(&position_or_movement_vector,
                               &movement_input_or_output_or_melee_origin,
-                              &vars->unk200,
+                              &blarg_commando_state->unk200,
                               &movement_input_or_output_or_melee_origin,
                               moby,
                               &shot,
                               5);
         }
-        qcopy(&vars->unk200, &position_or_movement_vector);
+        qcopy(&blarg_commando_state->unk200, &position_or_movement_vector);
         if (moby->anim_flags & 2) {
             moby->state = 11;
             if (moby->prev_seq != 1) {
@@ -441,8 +441,8 @@ void blarg_space_commando_update(struct Moby *moby) {
         break;
     case BLARG_COMMANDO_STATE_RETURN_HOME:
         FUN_L00_00258278(moby,
-                         fast_arc_tan(vars->home.f[0] - moby->pos.x, vars->home.f[1] - moby->pos.y),
-                         &vars->turn_speed,
+                         fast_arc_tan(blarg_commando_state->home.f[0] - moby->pos.x, blarg_commando_state->home.f[1] - moby->pos.y),
+                         &blarg_commando_state->turn_speed,
                          0.05f,
                          0.3f,
                          frame_time * 6.2831855f);
@@ -451,16 +451,16 @@ void blarg_space_commando_update(struct Moby *moby) {
         position_or_movement_vector.f[2] = 0.0f;
         if (fast_difference_between_rotations(
                 moby->rot.z,
-                fast_arc_tan(vars->home.f[0] - moby->pos.x, vars->home.f[1] - moby->pos.y)) <
+                fast_arc_tan(blarg_commando_state->home.f[0] - moby->pos.x, blarg_commando_state->home.f[1] - moby->pos.y)) <
             0.7853982f) {
             FUN_L00_00258b50(moby,
-                             &vars->ctl,
+                             &blarg_commando_state->ctl,
                              &position_or_movement_vector,
                              &movement_input_or_output_or_melee_origin,
                              1.0f);
-            resolve_point_path_segment_xy_clearance(vars->path, &moby->pos, &moby->pos, 0.75f);
+            resolve_point_path_segment_xy_clearance(blarg_commando_state->path, &moby->pos, &moby->pos, 0.75f);
         }
-        if (fast_vec_dist(&vars->home, &moby->pos) < 1.0f) {
+        if (fast_vec_dist(&blarg_commando_state->home, &moby->pos) < 1.0f) {
             moby->state = 1;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(20));
@@ -468,7 +468,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         break;
     case BLARG_COMMANDO_STATE_KNOCKBACK:
-        hit = step_moby_motion(moby, &vars->vel);
+        hit = step_moby_motion(moby, &blarg_commando_state->vel);
         if (hit & 0x40) {
             moby->state = 1;
             if (moby->prev_seq != 0) {
@@ -479,14 +479,14 @@ void blarg_space_commando_update(struct Moby *moby) {
         }
         break;
     case BLARG_COMMANDO_STATE_DEATH_KNOCKBACK:
-        if (step_moby_motion(moby, &vars->vel) & 0x160) {
+        if (step_moby_motion(moby, &blarg_commando_state->vel) & 0x160) {
             s32 none;
 
             qcopy(&position_or_movement_vector, &moby->pos);
             position_or_movement_vector.f[2] += 1.0f;
             none = -1;
             spawn_explosion(moby,
-                            &vars->unk40,
+                            &blarg_commando_state->unk40,
                             &position_or_movement_vector,
                             0.0f,
                             0.0f,
