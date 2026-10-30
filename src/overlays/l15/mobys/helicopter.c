@@ -226,7 +226,7 @@ float compute_helicopter_flocking_steering_point(struct Moby *moby,
                                                  float       *out,
                                                  Goal_52b8    goal) __asm__("FUN_L15_002c52b8");
 
-float compute_helicopter_flocking_steering_point(struct Moby *moby, float *out, Goal_52b8 goal) {
+float compute_helicopter_flocking_steering_point(struct Moby *moby, float *flocking_steering_point, Goal_52b8 goal) {
     float steering_offset[4];
     float goal_distance;
     float wsum;
@@ -235,7 +235,7 @@ float compute_helicopter_flocking_steering_point(struct Moby *moby, float *out, 
     char *other_moby;
     goal_distance = vector_distance_xy(&moby->pos, &goal);
     clear = 1;
-    clear_u64_value(out);
+    clear_u64_value(flocking_steering_point);
     wsum = 0.0f;
     for (other_moby = D_L15_0015FFE4; other_moby != 0;
          other_moby = ((char *)MOBY(other_moby)->next)) {
@@ -249,7 +249,7 @@ float compute_helicopter_flocking_steering_point(struct Moby *moby, float *out, 
             wsum += 6.0f;
             fast_vec_sub(steering_offset, &moby->pos, other_moby + 0x10);
             scale_vector_xyz_52b8(steering_offset, steering_offset, 6.0f);
-            fast_vec_add(out, out, steering_offset);
+            fast_vec_add(flocking_steering_point, flocking_steering_point, steering_offset);
         }
         if (vector_distance_xy(other_moby + 0x10, &goal) < goal_distance)
             clear = 0;
@@ -265,9 +265,9 @@ float compute_helicopter_flocking_steering_point(struct Moby *moby, float *out, 
         }
         wsum += 10.0f;
         normalize_vector_xyz(steering_offset, steering_offset, k * 10.0f);
-        fast_vec_add(out, out, steering_offset);
-        scale_vector_xyz_52b8(out, out, 1.0f / wsum);
-        fast_vec_add(out, out, &moby->pos);
+        fast_vec_add(flocking_steering_point, flocking_steering_point, steering_offset);
+        scale_vector_xyz_52b8(flocking_steering_point, flocking_steering_point, 1.0f / wsum);
+        fast_vec_add(flocking_steering_point, flocking_steering_point, &moby->pos);
     } else {
         fast_vec_sub(steering_offset, &moby->pos, &goal);
         if (goal_distance < 9.5f) {
@@ -279,15 +279,15 @@ float compute_helicopter_flocking_steering_point(struct Moby *moby, float *out, 
         }
         wsum += 10.0f;
         normalize_vector_xyz(steering_offset, steering_offset, k * 10.0f);
-        fast_vec_add(out, out, steering_offset);
-        scale_vector_xyz_52b8(out, out, 1.0f / wsum);
-        fast_vec_add(out, out, &moby->pos);
+        fast_vec_add(flocking_steering_point, flocking_steering_point, steering_offset);
+        scale_vector_xyz_52b8(flocking_steering_point, flocking_steering_point, 1.0f / wsum);
+        fast_vec_add(flocking_steering_point, flocking_steering_point, &moby->pos);
     }
-    if (vector_distance_xy(&moby->pos, out) < 1.0f) {
-        qcopy(out, &moby->pos);
+    if (vector_distance_xy(&moby->pos, flocking_steering_point) < 1.0f) {
+        qcopy(flocking_steering_point, &moby->pos);
         return fast_arc_tan(goal.pos.f[0] - moby->pos.x, goal.pos.f[1] - moby->pos.y);
     }
-    return fast_arc_tan(out[0] - moby->pos.x, out[1] - moby->pos.y);
+    return fast_arc_tan(flocking_steering_point[0] - moby->pos.x, flocking_steering_point[1] - moby->pos.y);
 }
 
 typedef struct {
