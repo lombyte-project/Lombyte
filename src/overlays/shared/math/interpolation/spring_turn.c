@@ -444,7 +444,7 @@ extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
 s32        FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f);
 
-s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Vec4 *out, f32 f) {
+s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Vec4 *movement_displacement_vector_output, f32 f) {
     Vec4  save;
     Vec4  displacement;
     Vec4  probe_or_direction;
@@ -560,7 +560,7 @@ done:
                 moby->pos.q = save.q;
             }
         }
-        qcopy(out, &displacement);
+        qcopy(movement_displacement_vector_output, &displacement);
     } else {
         if ((movement_control->i38 ^ 1) & 1)
             movement_control->f18 = frame_scale * -0.01f;
