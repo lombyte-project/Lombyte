@@ -345,7 +345,7 @@ int convert_pose_to_reference_local(int    x,
 typedef float M4[16] __attribute__((aligned(16)));
 
 void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) __asm__("FUN_L00_00260738");
-void update_entity_matrix(char    *out,
+void update_entity_matrix(char    *pose_delta_output,
                           OvlQuad *position_delta,
                           void    *previous_rotation,
 
@@ -357,8 +357,8 @@ void update_entity_matrix(char    *out,
     euler_rotation_matrix(current_rotation_matrix, current_rotation);
     multiply_matrix(
         relative_rotation_matrix, transposed_previous_rotation_matrix, current_rotation_matrix);
-    matrix_to_euler(relative_rotation_matrix, out);
-    qcopy(out + 0x10, position_delta);
+    matrix_to_euler(relative_rotation_matrix, pose_delta_output);
+    qcopy(pose_delta_output + 0x10, position_delta);
 }
 
 extern u8  level_available[] __asm__("D_0013DD40");
