@@ -9,12 +9,12 @@
 
 void pool_bind_tile(float *in, int *out) __asm__("FUN_L01_002b7c68");
 
-void pool_bind_tile(float *in, int *out) {
-    out[0] = truncate_float_to_s32((in[0] + pool_light[2]) * 1024.0f);
-    out[1] = truncate_float_to_s32((in[1] + pool_light[3]) * 1024.0f);
-    out[2] = truncate_float_to_s32((in[2] - 1.0f) * 1024.0f);
-    ((short *)out)[6] = truncate_float_to_s32(pool_light[0] * 1024.0f);
-    ((short *)out)[7] = truncate_float_to_s32(pool_light[0] * 1024.0f);
+void pool_bind_tile(float *in, int *tile_fixed_point_binding) {
+    tile_fixed_point_binding[0] = truncate_float_to_s32((in[0] + pool_light[2]) * 1024.0f);
+    tile_fixed_point_binding[1] = truncate_float_to_s32((in[1] + pool_light[3]) * 1024.0f);
+    tile_fixed_point_binding[2] = truncate_float_to_s32((in[2] - 1.0f) * 1024.0f);
+    ((short *)tile_fixed_point_binding)[6] = truncate_float_to_s32(pool_light[0] * 1024.0f);
+    ((short *)tile_fixed_point_binding)[7] = truncate_float_to_s32(pool_light[0] * 1024.0f);
 }
 
 /* Ported from rac1-decomp src/overlays/shared/vuchain_002B8C00.c (func_L01_002B8C00) */
