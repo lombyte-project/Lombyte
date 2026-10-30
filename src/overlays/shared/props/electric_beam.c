@@ -530,11 +530,11 @@ typedef struct {
 extern u8 D_L14_00174560[];
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */
-void apply_electric_beam_damage(char *self) {
-    struct Moby    *beam_moby = (struct Moby *)self;
+void apply_electric_beam_damage(char *source_moby) {
+    struct Moby    *beam_moby = (struct Moby *)source_moby;
     D1224          *beam_vars = (D1224 *)beam_moby->pvars;
     ElectricBeamReq req;
-    Vec4 damage_push_direction, to_hero, base, end_a, end_b, from, to, beam_radius_offset;
+    Vec4 damage_push_direction, to_hero, beam_origin, end_a, end_b, from, to, beam_radius_offset;
     f32  dot, collision_offset_length;
 
     if (beam_vars->radius == 0.0f)
@@ -561,26 +561,26 @@ void apply_electric_beam_damage(char *self) {
         req.v[0] = damage_push_direction.f[0];
         req.v[1] = damage_push_direction.f[1];
     }
-    qcopy_nc(&base, &l14_cuboids[beam_vars->w0].pos);
+    qcopy_nc(&beam_origin, &l14_cuboids[beam_vars->w0].pos);
     if (beam_vars->s8) {
-        fast_vec_add(&end_a, &base, &l14_cuboids[beam_vars->w0].axes[1]);
-        if (collision_line(&base, &end_a, 0, beam_moby, 0)) {
-            fast_vec_sub(&from, D_L14_00174560, &base);
+        fast_vec_add(&end_a, &beam_origin, &l14_cuboids[beam_vars->w0].axes[1]);
+        if (collision_line(&beam_origin, &end_a, 0, beam_moby, 0)) {
+            fast_vec_sub(&from, D_L14_00174560, &beam_origin);
             collision_offset_length = fast_vec_length(&from);
             fast_vec_scale(&from, &from, collision_offset_length * 0.98f / collision_offset_length);
-            fast_vec_add(&beam_vars->end_a, &base, &from);
+            fast_vec_add(&beam_vars->end_a, &beam_origin, &from);
             beam_vars->s8 = 0;
         } else {
             qcopy(&beam_vars->end_a, &end_a);
         }
     }
     if (beam_vars->sA) {
-        fast_vec_sub(&end_b, &base, &l14_cuboids[beam_vars->w0].axes[1]);
-        if (collision_line(&base, &end_b, 0, beam_moby, 0)) {
-            fast_vec_sub(&from, D_L14_00174560, &base);
+        fast_vec_sub(&end_b, &beam_origin, &l14_cuboids[beam_vars->w0].axes[1]);
+        if (collision_line(&beam_origin, &end_b, 0, beam_moby, 0)) {
+            fast_vec_sub(&from, D_L14_00174560, &beam_origin);
             collision_offset_length = fast_vec_length(&from);
             fast_vec_scale(&from, &from, collision_offset_length * 0.98f / collision_offset_length);
-            fast_vec_add(&beam_vars->end_b, &base, &from);
+            fast_vec_add(&beam_vars->end_b, &beam_origin, &from);
             beam_vars->sA = 0;
         } else {
             qcopy(&beam_vars->end_b, &end_b);
