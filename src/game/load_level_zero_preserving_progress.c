@@ -78,8 +78,8 @@ void load_level_zero_preserving_progress(s32 slot) {
     copy_memory_aligned(weapon_ammo_counts, (void *)0x70000060, 0x94);
     copy_memory_aligned(D_0014BEC0, (void *)0x70000100, 0x50);
     for (i = 0; i < 8; i++) {
-        s32 item = items[i];
-        pause_iop_sprite_lists[i] = item_available[item] ? item : 0;
+        s32 saved_item_index = items[i];
+        pause_iop_sprite_lists[i] = item_available[saved_item_index] ? saved_item_index : 0;
     }
     copy_memory_aligned(D_0015EDD0_macro, (void *)0x70000170, 0xC);
     copy_memory_aligned(item_unlocked, (void *)0x70000180, 0x20);
