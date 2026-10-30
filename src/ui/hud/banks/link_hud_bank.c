@@ -3,7 +3,7 @@
 
 void link_hud_bank(s32 bank, u32 base) __asm__("FUN_001fefc0");
 
-void link_hud_bank(s32 bank, u32 base) {
+void link_hud_bank(s32 bank, u32 bank_source_address) {
     s32 i;
     s32 end;
     s32 start;
@@ -11,19 +11,19 @@ void link_hud_bank(s32 bank, u32 base) {
     if (hud_state.header.counts->loaded[bank] != 0) {
         return;
     }
-    base = (base + 15) & ~15;
-    hud_state.header.counts->loaded[bank] = base;
+    bank_source_address = (bank_source_address + 15) & ~15;
+    hud_state.header.counts->loaded[bank] = bank_source_address;
     start = bank != 0 ? hud_state.header.counts->mid_ends[bank - 1] : 0;
     end = hud_state.header.counts->mid_ends[bank];
     for (i = start; i < end; i++) {
         hud_state.palette_pages[i].source_address &= 0x7FFFFFFF;
-        hud_state.palette_pages[i].source_address += base;
+        hud_state.palette_pages[i].source_address += bank_source_address;
     }
     start = bank != 0 ? hud_state.header.counts->ends[bank - 1] : 0;
     end = hud_state.header.counts->ends[bank];
     for (i = start; i < end; i++) {
         hud_state.image_pages[i].source_address &= 0x7FFFFFFF;
-        hud_state.image_pages[i].source_address += base;
+        hud_state.image_pages[i].source_address += bank_source_address;
     }
 }
 
