@@ -1,8 +1,8 @@
 /* Shared moby classes: veldin_ship, decoy_glove, metal_detector, helipack, horny_toad, infobot, particle_spawner_smoke__fire. */
 #include "types.h"
 #include "rnc/overlay/point_light.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
@@ -12,8 +12,8 @@
 #include "rnc/math/fast_math.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
-#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
+#include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -802,7 +802,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
         }
     } while (chain_cursor != 0);
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D2E60), where it is exact; names translated to the US level program. */
 
@@ -952,7 +952,7 @@ void veldin_ship_update(M2d1e80 *moby) {
         add_draw_callback(veldin_ship_draw, moby);
 }
 #include "rnc/input/pad_state.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Same camera step as func_L00_002C88A8, writing the following vector in the target data. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D3608), where it is exact; names translated to the US level program. */
@@ -1116,7 +1116,7 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da
 extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 extern u8 D_0013E539_lui __asm__("D_0013E539") NOT_SDA;
 extern char D_0013CAE4[];
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 
 void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
 void decoy_glove_update(unsigned char *moby) {
@@ -1387,7 +1387,7 @@ void increment_metal_detector_collection_counter(unsigned char *moby) {
 }
 #include "qcopy.h"
 #include "qzero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/input/pad_state.h"
 
 /* metal_detector_update: update for a moby that tracks hero.metal_detector_target, the nearest
@@ -2708,7 +2708,7 @@ void update_infobot_slot_path_motion(Obj *moby, Path_2d5988 *path, s32 arrival_s
 }
 #include "types.h"
 #include "sda.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Infobot (class 750) update: flies the path set D_L00_001B04B0 between
    planets, then plays the unlock sequence. */

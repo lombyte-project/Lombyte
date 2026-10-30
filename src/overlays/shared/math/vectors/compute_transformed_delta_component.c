@@ -4,17 +4,17 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/entities/suck_aim.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/world/collision/ground_probe.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 
 

@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/camera/camera_globals.h"
 extern f32 clamp_float(f32, f32, f32) __asm__("FUN_001f99e8");
 s32 calculate_voice_pan(s32 unused, f32 *position, void *listener_matrix) __asm__("FUN_0022c830");
 

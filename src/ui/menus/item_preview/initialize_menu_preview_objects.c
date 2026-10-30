@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
-#include "rnc/gameplay/gadgets/hand_gadget.h"
+#include "rnc/weapons/hand_gadget.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/ui/menus/item_preview/clear_preview_animation_queue.h"
 

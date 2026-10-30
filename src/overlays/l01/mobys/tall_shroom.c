@@ -4,11 +4,11 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
@@ -61,10 +61,10 @@ void set_moby_flags_and_queue_draw_callback(FlagMoby *moby) {
     moby->b30 = flag_init_value;
     add_draw_callback(draw_level01_scroll_layers, moby);
 }
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/state/usage_stats.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/state/level_state.h"
+#include "rnc/hero/hero.h"
+#include "rnc/game/usage_stats.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/game/level_state.h"
 #include "sda.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
@@ -224,7 +224,7 @@ void update_level01_tutorial_hints(struct Moby *moby) {
         break;
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* pvars of the lava blob FUN_L01_0030ba18 moves */
 typedef struct {

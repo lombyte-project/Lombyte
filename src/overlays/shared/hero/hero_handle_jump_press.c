@@ -1,6 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "asm.h"
 #include "qcopy.h"
 

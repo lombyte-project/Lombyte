@@ -2,7 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "moby_update.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/level_labels.h"

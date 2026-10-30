@@ -6,13 +6,13 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/gameplay/animation/update_moby_animation_state.h"
-#include "rnc/gameplay/entities/detach_manipulator.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/animation/update_moby_animation_state.h"
+#include "rnc/mobys/detach_manipulator.h"
+#include "rnc/mobys/moby.h"
 
 typedef struct {
     s32 count;

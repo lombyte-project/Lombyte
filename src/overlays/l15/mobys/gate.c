@@ -2,8 +2,8 @@
 #include "types.h"
 #include "rnc/overlay/level_save_state.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -11,14 +11,14 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/entities/suck_aim.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/enemies/trooper_play_sound.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/mobys/spawn_moby_break_fragments.h"
@@ -395,7 +395,7 @@ void update_vertical_gate(GateMoby *gate_moby)
         break;
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 /* pvars of the swinging door FUN_L15_002a3ba8 updates */
 typedef struct {
     f32 closed_yaw;   /* 0x00: yaw when shut */

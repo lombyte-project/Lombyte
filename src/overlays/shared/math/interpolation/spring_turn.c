@@ -5,7 +5,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/globals.h"
 #include "sda.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/sdk/library/sceVu0Normalize.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
@@ -20,7 +20,7 @@ float interpolate_wrapped_angle_cosine_eased(float x, float y, float z) {
     return fast_add_rotations(x, wrapped_angle_delta * ((1.0f - phase_cosine) * 0.5f));
 }
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Vector cosine interpolation: dst = a + (b - a) * ((1 - cos(t * pi)) * 0.5).
    Scalar analogue matched at src/game/mobyutil.c:func_00214220. */

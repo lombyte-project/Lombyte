@@ -6,8 +6,8 @@
 #include "rnc/math/asm_helpers.h"
 
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/gameplay/camera/update_cam.h"
-#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/camera/update_cam.h"
+#include "rnc/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
 extern u8 D_0018CD00[];
 extern u8 sky_view_mtx[] __asm__("D_0018CF80");

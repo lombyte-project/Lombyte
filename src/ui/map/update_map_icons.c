@@ -1,11 +1,11 @@
 #include "types.h"
-#include "rnc/gameplay/state/level_object_states.h"
+#include "rnc/game/level_object_states.h"
 #include "rnc/ui/text/text_region.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/ui/map/map_icon.h"
 #include "rnc/ui/map/map_state.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Map screen icon refresh: places the fixed icons (-1..-9), projects the
    others through world_to_map_coords, then sizes each label box. */
@@ -17,7 +17,7 @@ typedef struct {
 } MapIconLink;
 
 
-#include "rnc/gameplay/state/level_state.h"
+#include "rnc/game/level_state.h"
 extern struct MapIcon *map_icon_lists_by_level[] __asm__("D_001A2BC0");
 extern s32 D_001A01F4[];
 extern s32 D_0015FD60 __attribute__((sda));

@@ -1,10 +1,10 @@
 /* Shared moby classes: novalis_elevator, bolt_crank, gold_weapon_case, sand_mouse, large_amoeboid, sandmouse_house. */
 #include "types.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero_state.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero_state.h"
 
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
@@ -15,16 +15,16 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/weapons/suck_aim.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -557,9 +557,9 @@ void set_novalis_bolt_crank_completion_flags(char *moby)
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002E1FE0). */
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/state/game_globals.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/game/game_globals.h"
+#include "rnc/game/options.h"
 
 typedef struct {
     f32 progress;          /* 0x00: turned / (turns * 2 pi), 0..1 */
@@ -858,7 +858,7 @@ done:
     set_novalis_bolt_crank_completion_flags((char *)moby);
 }
 #include "sda.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Bought-item price entry (0x18 bytes). */
 typedef struct {
@@ -2380,7 +2380,7 @@ char *find_nearest_class_26f_moby_in_list(char *self, int candidate_list_index) 
         }
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 extern int amoeboid_first_movement_particle_spawn_gate_modulus_plus_one_gp __asm__("D_L01_001619E0") __attribute__((sda));
 extern int amoeboid_second_movement_particle_spawn_gate_modulus_plus_one_gp __asm__("D_L01_001619E4") __attribute__((sda));
 extern float amoeboid_movement_particle_max_spawn_radius_gp __asm__("D_L01_001619E8") __attribute__((sda));
@@ -2679,7 +2679,7 @@ void sandmouse_house_update(unsigned char *moby) {
 }
 #include "sda.h"
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* pvars of the moby run by FUN_L01_002f2eb8 */
 typedef struct {
@@ -2792,7 +2792,7 @@ void apply_gunship_path_position_offsets(char *moby, float *out) {
         fast_vec_add(out, out, vertical_plane_offset);
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 typedef union { u128 q; f32 f[4]; struct { f32 x, y, z, w; } v; } QVec;
 

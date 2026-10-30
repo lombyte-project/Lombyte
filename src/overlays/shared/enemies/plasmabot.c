@@ -2,8 +2,8 @@
 #include "types.h"
 #include "rnc/overlay/level_spline.h"
 #include "rnc/overlay/level_path.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
@@ -12,9 +12,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
-#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
+#include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
@@ -22,13 +22,13 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/animation/set_moby_animation.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/set_moby_animation.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/enemies/trooper_play_sound.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/gameplay/entities/random_spherical_offset.h"
+#include "rnc/math/random/random_spherical_offset.h"
 #include "rnc/overlay/shared/vendor/vendor_orb.h"
 #include "rnc/overlay/shared/rendering/spawn_mode_controlled_rotating_alpha_fade_particle.h"
 
@@ -242,7 +242,7 @@ unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) {
 }
 
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Plasmabot update: validates its path and target, walks the path, turns to aim at its owner's target and fires, dies or despawns. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B2A28), where it is exact; names translated to the US level program. */
@@ -677,7 +677,7 @@ void update_plasmabot(char *moby) {
     FUN_L14_002b2600_c((struct Moby *)moby);
 }
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 typedef struct {
     u8 pad0[0x1E0];
@@ -919,7 +919,7 @@ void draw_plasmabot_effect_quads(struct Moby *moby) {
     fast_draw_quad_real(&pk, 0, 0);
 }
 #include "sda.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* pvars of the moby FUN_L14_002b2ed8 updates */
 typedef struct {

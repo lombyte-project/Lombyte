@@ -2,7 +2,7 @@
 #include "sda.h"
 #include "rnc/ui/menus/menu_system.h"
 
-#include "rnc/gameplay/camera/update_cam.h"
+#include "rnc/camera/update_cam.h"
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"

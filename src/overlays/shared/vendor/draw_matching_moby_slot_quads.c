@@ -4,7 +4,7 @@
 
 #include "sda.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
 

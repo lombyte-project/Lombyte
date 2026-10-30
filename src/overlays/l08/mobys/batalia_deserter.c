@@ -1,28 +1,28 @@
 /* Level 08 moby classes: batalia_deserter, the_plumber_batalia. */
 #include "types.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/watch.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"
 
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/hero/hero_check_damage.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"
 #include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
 #include "rnc/overlay/shared/game/jet_reset_camera.h"
@@ -543,7 +543,7 @@ typedef struct {
     u32 flags;
 } VendorEventRecord;
 
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 extern VendorEventRecord help_records[] __asm__("D_00141968");
 extern u8 D_0013D413 NOT_SDA;
 extern u8 D_0013D3B7 NOT_SDA;

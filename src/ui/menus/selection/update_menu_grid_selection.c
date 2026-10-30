@@ -1,6 +1,6 @@
 #include "types.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/hero/hero.h"
+#include "rnc/game/item_state.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/ui/menus/menu_screen.h"

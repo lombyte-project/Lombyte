@@ -3,7 +3,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/weapons/suck_aim.h"
 
 
 

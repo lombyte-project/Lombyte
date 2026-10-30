@@ -3,11 +3,11 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/vendor_menu.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
-#include "rnc/gameplay/state/scene_trigger.h"
-#include "rnc/gameplay/state/overlay_game_state.h"
+#include "rnc/game/scene_trigger.h"
+#include "rnc/game/overlay_game_state.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -19,17 +19,17 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/world/collision/ground_probe.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/hero/hero_check_damage.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/rendering/transitions/fade_to_black.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/animation/set_animation_parameter.h"
-#include "rnc/gameplay/animation/set_moby_animation.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/set_animation_parameter.h"
+#include "rnc/mobys/animation/set_moby_animation.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/vendor/set_camera_rotation.h"
@@ -42,10 +42,10 @@
 #include "rnc/audio/voices/snd_continue_all_sounds_in_group.h"
 #include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"
 #include "rnc/audio/voices/sound_stop_all_sounds.h"
-#include "rnc/gameplay/animation/update_moby_animation_state.h"
-#include "rnc/gameplay/entities/detach_manipulator.h"
-#include "rnc/gameplay/entities/init_moby_instance.h"
-#include "rnc/gameplay/entities/update_visible_resident_objects.h"
+#include "rnc/mobys/animation/update_moby_animation_state.h"
+#include "rnc/mobys/detach_manipulator.h"
+#include "rnc/mobys/init_moby_instance.h"
+#include "rnc/mobys/update_visible_resident_objects.h"
 #include "rnc/overlay/shared/ui/hud/hud_update_counter.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/runtime/relocation/relocate_asset_entry_pointers.h"
@@ -76,7 +76,7 @@ void reset_frame_counters(void) {
     D_L00_0015F2F4 = 0;
 }
 #include "rnc/input/pad_state.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 extern struct PadStateWords D_0013C940;
 #include "rnc/overlay/shared/cutscenes/00295100_globals.h"
 extern int controller_idle_frames_gp __asm__("D_L00_00160FF0") __attribute__((sda));
@@ -151,7 +151,7 @@ extern s32 game_frame __asm__("D_L00_0015F5CC");
 extern s32 D_L00_001B9DE0 NOT_SDA;
 extern P_297f78 *D_L00_00166E00 NOT_SDA;
 extern s32 D_0013D384 NOT_SDA;
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_L00_00184214 NOT_SDA;
 extern s32 D_0015EEA4;

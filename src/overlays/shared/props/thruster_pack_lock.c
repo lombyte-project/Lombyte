@@ -1,8 +1,8 @@
 /* Shared moby classes: thruster_pack_lock. */
 #include "types.h"
-#include "rnc/gameplay/state/item_state.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/game/item_state.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
@@ -11,15 +11,15 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/rendering/view/project_to_screen.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
@@ -41,7 +41,7 @@ void synchronize_linked_moby_heights(char *moby) {
         *(float *)(destination_record + 8) = MOBY(moby)->pos.z;
     } while (*moby_index_cursor++ >= 0);
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math/vector.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003102C8), where it is exact; names translated to the US level program. */
@@ -684,7 +684,7 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
 }
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 void update_moby_path_transform(char *moby) __asm__("FUN_L11_0031a438");
 

@@ -4,12 +4,12 @@
 
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/overlay/level_labels.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/mobys/cutscene_set_camera_target.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 extern char D_0013F3D0[];
 extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA, D_001413DC NOT_SDA, D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;

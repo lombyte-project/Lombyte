@@ -2,9 +2,9 @@
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/gameplay/animation/advance_moby_animation.h"
-#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
-#include "rnc/gameplay/entities/refresh_moby_spatial_bounds.h"
+#include "rnc/mobys/animation/advance_moby_animation.h"
+#include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/mobys/refresh_moby_spatial_bounds.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern char preview_binding_table_alias[] __asm__("D_001863D0");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");

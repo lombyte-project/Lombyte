@@ -4,9 +4,9 @@
 #include "rnc/overlay/level_save_state.h"
 
 #include "rnc/overlay/level_globals.h"
-#include "rnc/gameplay/state/item_state.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/game/item_state.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -17,12 +17,12 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/game/interpolated_record.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -34,7 +34,7 @@
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/spawn_spark.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/world/collision/collision_hit_material.h"
@@ -1162,7 +1162,7 @@ extern float l10_toxic_crab_size_scale __asm__("D_L10_00161E24") __attribute__((
 extern f32 D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
 #include "rnc/overlay/l10/mobys/screamer_data/toxic_crab_update.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
                               float *);
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");

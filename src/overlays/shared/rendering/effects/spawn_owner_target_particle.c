@@ -14,7 +14,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 #include "rnc/ui/text/load_display_text_resource_entry.h"
-#include "rnc/gameplay/entities/pack_vector_xyz_with_shared_scale.h"
+#include "rnc/math/pack_vector_xyz_with_shared_scale.h"
 extern int owner_target_particle_frame_count_gp __asm__("D_L15_001601FC") __attribute__((sda));
 
 /* Spawns particle type 0x1F of colour `color` at `pos`, starting a quarter of the way from `owner` towards it. */

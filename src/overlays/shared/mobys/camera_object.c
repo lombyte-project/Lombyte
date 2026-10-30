@@ -1,18 +1,18 @@
 /* Shared moby classes: camera_object, vendor, bolt, wrench. */
 #include "types.h"
-#include "rnc/gameplay/state/bolt_sources.h"
-#include "rnc/gameplay/entities/moby_class_id.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/game/bolt_sources.h"
+#include "rnc/mobys/moby_class_id.h"
+#include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "sda.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/hero/hero_move_state_velocity.h"
@@ -20,8 +20,8 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
@@ -30,7 +30,7 @@
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility.h"
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/world/collision/collision_hit_material.h"
-#include "rnc/gameplay/animation/update_moby_animation_state.h"
+#include "rnc/mobys/animation/update_moby_animation_state.h"
 #include "rnc/overlay/shared/mobys/open_vendor_menu.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
 
@@ -669,7 +669,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
 }
 #include "qcopy.h"
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/overlay/collision.h"
 
 typedef struct {
@@ -1702,7 +1702,7 @@ void scale_wrench_collision_vector_by_heading(float *in_out_vector) {
         clamped_heading_difference = k;
     fast_vec_normalize(in_out_vector, in_out_vector, fast_vec_length(in_out_vector) * ((k - clamped_heading_difference) / k * 0.3f + 0.7f));
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 #include "sda.h"
 

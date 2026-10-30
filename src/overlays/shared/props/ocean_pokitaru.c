@@ -1,8 +1,8 @@
 /* Shared moby classes: rocket, ocean_pokitaru. */
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
@@ -11,7 +11,7 @@
 #include "sda.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
@@ -131,7 +131,7 @@ unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float 
     return spawned_moby;
 }
 #include "rnc/overlay/quad.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 typedef struct {
     float x, y, z;

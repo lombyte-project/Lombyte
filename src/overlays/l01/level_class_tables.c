@@ -3,8 +3,8 @@
    lvl.sndvtbl). */
 #include "types.h"
 #include "rnc/audio/sound_handlers.h"
-#include "rnc/gameplay/camera/update_cam.h"
-#include "rnc/gameplay/entities/moby_class_tables.h"
+#include "rnc/camera/update_cam.h"
+#include "rnc/mobys/moby_class_tables.h"
 
 void FUN_L00_002b6140();
 void FUN_L00_002c89e8();

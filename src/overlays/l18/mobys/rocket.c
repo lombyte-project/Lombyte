@@ -2,14 +2,14 @@
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/level_labels.h"
@@ -2310,7 +2310,7 @@ extern void spawn_particle(void *, void *, int, int, float, int, int, float, int
 extern void spawn_particle_alt_9768(float, void *, void *, int, int, int) __asm__("FUN_L00_0026a4c8");
 extern int D_L18_0015F580;
 extern float D_0013F3D0[4];
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 
 extern unsigned char D_L18_001F29A0_9768[] __asm__("D_L18_001F29A0");
 extern unsigned char D_L18_001F29B8_9768[] __asm__("D_L18_001F29B8");

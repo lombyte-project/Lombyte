@@ -1,7 +1,7 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
-#include "rnc/gameplay/hero_state.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero_state.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/hero.h"
@@ -13,10 +13,10 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/item_state.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/game/item_state.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/interpolation.h"
-#include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/weapons/suck_aim.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_hit_material.h"
@@ -66,11 +66,11 @@ void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, 
         request_grouped_voice(voice_group_index, voice_pair_index, flag, 0, *(int *)(hero_state_base + 0x2080));
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 extern int level_frame_count __asm__("D_L01_0015F5CC");
 extern unsigned char D_0013D4DC[];
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 extern float D_L01_0017C04C[];
 extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
@@ -1352,7 +1352,7 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
 }
 #include "eetypes.h"
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/input/pad_state.h"
 
 typedef struct {

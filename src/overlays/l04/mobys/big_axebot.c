@@ -1,25 +1,25 @@
 /* Level 04 moby classes: big_axebot, circular_saw_enemy, blarg_trooper, eudora_bridge, platform_booster. */
 #include "types.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
-#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/attach_manipulator.h"
+#include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/gameplay/animation/update_moby_animation_state.h"
+#include "rnc/mobys/animation/update_moby_animation_state.h"
 #include "rnc/math/vectors/normalize_vector_triplet.h"
 #include "rnc/overlay/shared/mobys/manipulator_set_scale.h"
 #include "rnc/overlay/shared/enemies/trooper_set_knockback.h"
@@ -2836,7 +2836,7 @@ void blarg_trooper_update(struct Moby *moby) {
     }
     *(float *)(data + 0xD8) = alive;
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Pvars of a moby that follows a linked switch moby. */
 typedef struct {
@@ -2956,7 +2956,7 @@ void eudora_bridge_update(struct Moby *moby) {
         break;
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Pvars of a door driven by a lever (platform_booster_update update): follows the lever's travel and plays its sounds. */
 typedef struct {

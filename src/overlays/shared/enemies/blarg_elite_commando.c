@@ -1,7 +1,7 @@
 /* Shared moby classes: rocket, blarg_elite_commando. */
 #include "types.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -11,8 +11,8 @@
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 #include "sda.h"
-#include "rnc/gameplay/state/item_state.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/game/item_state.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/overlay/shared/mobys/manipulator_set_scale.h"
 
@@ -167,7 +167,7 @@ extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 #include "rnc/overlay/shared/enemies/blarg_elite_commando_data/blarg_elite_commando_update.h"
 extern int D_L16_0015F5C4;
 extern int D_L16_0016CC90 NOT_SDA;

@@ -3,8 +3,8 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/animation/get_moby_joint_matrices.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/animation/get_moby_joint_matrices.h"
+#include "rnc/mobys/moby.h"
 
 
 

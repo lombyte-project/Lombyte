@@ -1,7 +1,7 @@
 /* Shared moby classes: mine, nanotech_crate_fragment, gold_devastator_missile. */
 #include "types.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
@@ -11,13 +11,13 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/world/collision/ground_probe.h"
+#include "rnc/weapons/suck_aim.h"
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Mine (moby class 74) update: falls and bounces, sticks to what it hits, homes on a nearby target and explodes. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002AB910), where it is exact; names translated to the US level program. */

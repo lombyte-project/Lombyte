@@ -1,4 +1,4 @@
-#include "rnc/gameplay/entities/moby_class_tables.h"
+#include "rnc/mobys/moby_class_tables.h"
 #include "types.h"
 #include "rnc/rendering/resident_class.h"
 #include "asm.h"

@@ -2,7 +2,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/rendering/view.h"
-#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/camera/camera_globals.h"
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");

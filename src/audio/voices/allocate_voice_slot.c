@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "asm.h"
 
 #include "eetypes.h"

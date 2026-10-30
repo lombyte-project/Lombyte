@@ -1,8 +1,8 @@
 /* Level 13 moby classes: elevator, blarg_turret, blarg_gunner, robosquawker, fighter_jet. */
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
@@ -11,13 +11,13 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -205,7 +205,7 @@ void update_moby_volume_trigger(char *moby) {
     }
 }
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Variables of the class-1380 lift (moby->pvars). */
 typedef struct {
@@ -641,7 +641,7 @@ void update_blarg_turret_target_and_state(struct Moby *moby) {
         moby->state = moby->command;
 }
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 
 /* pvars of the child spawned by FUN_L13_002b4958 */
@@ -2883,7 +2883,7 @@ typedef struct { char pad0[0xA]; unsigned short palette; char padC[4]; } JetText
 typedef struct { char pad0[0x10]; JetVec velocity; Jet *source; int pad24,pad28; float damage; int flags; } JetHit;
 extern JetPlayer jet_player47 __asm__("D_0013F350");
 extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/overlay/l13/mobys/elevator_data/fighter_jet_update.h"
 extern JetTexture l13_texture_descriptors[] __asm__("D_L13_0016D480");
 extern unsigned int l13_texture_palette_data_base __asm__("D_L13_0015F420");

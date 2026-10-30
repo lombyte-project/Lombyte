@@ -3,10 +3,10 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/mobys/spawn_moby_break_fragments.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");

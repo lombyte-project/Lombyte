@@ -1,23 +1,23 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "rnc/overlay/level_globals.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/item_state.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/item_state.h"
+#include "rnc/game/options.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/gameplay/entities/suck_aim.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
-#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/world/collision/ground_probe.h"
+#include "rnc/weapons/suck_aim.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
+#include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/hero/hero_check_damage.h"
@@ -349,7 +349,7 @@ void update_hero_rotation_targets_and_random_manipulators(void) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205FF0). */
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "qcopy.h"
 /* hero + 0xEF0: four more manipulators after manipulators[7], then a random-delay timer */
 struct HeroExtraManipulators { u8 pad[0xEF0]; struct HeroManipulator m[4]; u8 pad2[0xC]; s16 delay; s16 timer; };
@@ -1558,7 +1558,7 @@ void FUN_L00_00208038(u128 *glow_position, int b, float x, float y) {
     enqueue_hero_glow_draw_callback_once();
     hero_glow_queue_owner->n++;
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 typedef int u128_2080b0 __attribute__((mode(TI)));
 typedef union { u128_2080b0 q; float f[4]; } Vec4_2080b0 __attribute__((aligned(16)));
@@ -3199,7 +3199,7 @@ void apply_hero_selected_flags_and_state_transitions(void) {
 }
 #undef P
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* the ledge probe of the hero: looks for an edge ahead to grab, and where it finds one stores the grab point and direction */
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020C568), where it is exact; names translated to the US level program. */

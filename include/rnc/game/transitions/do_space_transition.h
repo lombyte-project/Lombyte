@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_GAME_TRANSITIONS_DO_SPACE_TRANSITION_H
+#define LOMBYTE_RNC_GAME_TRANSITIONS_DO_SPACE_TRANSITION_H
+
+#include "types.h"
+
+void do_space_transition(void) __asm__("FUN_00231ff0");
+
+#endif /* LOMBYTE_RNC_GAME_TRANSITIONS_DO_SPACE_TRANSITION_H */

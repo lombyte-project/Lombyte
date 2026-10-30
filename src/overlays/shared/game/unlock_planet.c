@@ -1,8 +1,8 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 
@@ -11,10 +11,10 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/weapons/suck_aim.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
@@ -390,7 +390,7 @@ void grant_inventory_item(int id, int flag) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00261B00). */
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 extern char *toad_paths[] __asm__("D_L00_001B04B0");
 extern char bolt_drop_scale_five_message[] __asm__("D_L00_001600A0");

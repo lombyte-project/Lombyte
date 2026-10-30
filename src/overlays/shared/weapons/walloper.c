@@ -1,37 +1,37 @@
 /* Shared moby classes: walloper, morphoray. */
 #include "types.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/overlay/point_light.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/overlay/beam_vector.h"
 #include "sda.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/game/interpolated_record.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/hero/hero_check_damage.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_hit_material.h"
-#include "rnc/gameplay/entities/random_spherical_offset.h"
+#include "rnc/math/random/random_spherical_offset.h"
 #include "rnc/ui/hud/remove_hud_item.h"
 extern float D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
 extern float D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
@@ -1233,7 +1233,7 @@ void draw_walloper_camera_facing_quad(void *mv) {
     draw_geometry_quad(&quad, 0, 0);
 }
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BD6B8), where it is exact; names translated to the US level program. */
 
@@ -1356,7 +1356,7 @@ done:
     return (char *)selected_target[0];
 }
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/overlay/hud.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BDAF0), where it is exact; names translated to the US level program. */

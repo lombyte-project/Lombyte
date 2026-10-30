@@ -1,10 +1,10 @@
 /* Shared moby classes: gadgebot_spawn_container, gadgebot_spawn_pad, frog, gadgebot, energy_sphere_holder, energy_sphere. */
 #include "types.h"
-#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/camera/camera_globals.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/entities/moby_class_id.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/mobys/moby_class_id.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
@@ -15,10 +15,10 @@
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/entities/detach_manipulator.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/mobys/detach_manipulator.h"
 #include "rnc/math/rotations/extract_matrix_rotation_quaternion.h"
 #include "rnc/overlay/l06/hero/hero_set_state.h"
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"
@@ -664,7 +664,7 @@ void frog_update(unsigned char *moby) {
         break;
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 struct MobyHit {
     u8 pad0[0x10];
@@ -915,7 +915,7 @@ void move_frog_with_collision_resolution(float scale, float threshold, char *mob
         resolve_point_path_segment_xy_clearance(0.5f, *(int *)(((char *)MOBY(moby)->pvars) + 0x1EC), moby + 0x10, moby + 0x10);
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
@@ -1058,7 +1058,7 @@ void spawn_moby_death_effect_burst(char *moby) {
         spawn_effect(spawn_position, spherical_offset, 0x7000A0FF, 0xFF, random_frame_count, 0x1E, random_effect_parameter, 1);
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
@@ -1293,7 +1293,7 @@ extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("
 extern int FUN_L06_002f32f0_u(void *, int) __asm__("FUN_L06_002f32f0");
 extern int scale_game_frames(int);
 #include "rnc/overlay/shared/enemies/gadgebot_spawn_container_data/gadgebot_update.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #define GB_FLAG (*(unsigned char *)0x15EDB3)
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
@@ -2710,8 +2710,8 @@ void update_gadgebot_glow_effects(char *moby) {
     }
 }
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 
 #include "qcopy.h"
 
@@ -2861,7 +2861,7 @@ void update_energy_sphere_holder_beam_effects(char *moby) __asm__("FUN_L06_002f7
 
 void update_energy_sphere_holder_beam_effects(char *m) __asm__("FUN_L06_002f7628");
 extern char D_0014171B_86b8[] __asm__("D_0014C190");
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 
 void energy_sphere_holder_update(char *m) __asm__("FUN_L06_002f7288");
 void energy_sphere_holder_update(char *holder_moby) {

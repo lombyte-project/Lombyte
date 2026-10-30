@@ -9,7 +9,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
 

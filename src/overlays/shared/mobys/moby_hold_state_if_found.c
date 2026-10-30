@@ -7,7 +7,7 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 
 extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");

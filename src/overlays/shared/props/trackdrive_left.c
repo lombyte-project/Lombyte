@@ -1,24 +1,24 @@
 /* Shared moby classes: trackdrive_left, tresspasser_pad, escalator, swingshot_versatarget, tresspasser. */
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/text/font_state.h"
-#include "rnc/gameplay/state/item_state.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/item_state.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/interpolation.h"
-#include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/world/collision/ground_probe.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/hero/air_accel.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
@@ -363,7 +363,7 @@ void compute_tresspasser_pad_camera_transform(float *pos, float *camera_rotation
     }
 }
 
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002D9F08), where it is exact; names translated to the US level program. */
 
@@ -1145,7 +1145,7 @@ typedef struct {
 } Level02MobyList;
 
 extern int level_game_mode __asm__("D_L02_0015F5C4");
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 extern unsigned char l02_big_head_cheat_manipulator[] __asm__("D_L02_0017CA40");
 
 extern Level02MobyList talk_camera __asm__("D_L02_0016CE60");

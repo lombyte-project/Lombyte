@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/ui/hud/get_icon_frame.h"
 
 typedef struct {
@@ -24,7 +24,7 @@ typedef struct {
 #include "rnc/ui/menus/menu_screen.h"
 
 extern ItemInfo menu_grid_item_slot_records[] __asm__("D_001863D8");
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 extern f32 D_00160290 __attribute__((sda));
 extern f32 D_00160294 __attribute__((sda));
 

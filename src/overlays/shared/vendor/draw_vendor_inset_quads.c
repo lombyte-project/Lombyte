@@ -5,7 +5,7 @@
 #include "rnc/storage/disc_table.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 
 #include "qcopy.h"

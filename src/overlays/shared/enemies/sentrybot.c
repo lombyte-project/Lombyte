@@ -2,9 +2,9 @@
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
 #include "rnc/overlay/level_save_state.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
@@ -12,16 +12,16 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
-#include "rnc/gameplay/camera/camera_globals.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/camera/camera_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/enemies/trooper_play_sound.h"
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
@@ -2451,7 +2451,7 @@ int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
     } while (*group_moby_entry++ > -1);
     return 0;
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 typedef struct {
     float v[4][4];
     int col[4];
@@ -2772,7 +2772,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
         }
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 typedef struct {
     u8 pad[0x454];

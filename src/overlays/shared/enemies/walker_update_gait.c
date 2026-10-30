@@ -4,10 +4,10 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/world/collision/ground_probe.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/moby.h"
 
 int walker_gait_mask(float *a, float v) __asm__("FUN_L00_002a13f0");
 int walker_gait_mask(float *gait_record, float interval_value) {

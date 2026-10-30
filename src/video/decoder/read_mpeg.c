@@ -4,7 +4,7 @@
 #include "rnc/video/decoder/read_mpeg.h"
 #include "rnc/video/decoder/decoder_globals.h"
 #include "rnc/video/player/movie_player.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 #include "rnc/audio/mixer/snd_set_master_volume.h"
 #include "rnc/audio/voice_pool.h"
 

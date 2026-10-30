@@ -1,4 +1,4 @@
-#include "rnc/gameplay/entities/moby_class_tables.h"
+#include "rnc/mobys/moby_class_tables.h"
 #include "sda.h"
 #include "types.h"
 #include "rnc/rendering/material_templates.h"

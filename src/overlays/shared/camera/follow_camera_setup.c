@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/overlay/camera.h"
 #include "rnc/overlay/level_globals.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "asm.h"
 #include "eetypes.h"
 #include "qcopy.h"
@@ -11,7 +11,7 @@
 #include "rnc/globals.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/weapons/suck_aim.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 extern int FUN_L00_001f0d60(float, void *, int, void *);
@@ -35,7 +35,7 @@ float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_
 
 void follow_camera_approach(unsigned char *moby) __asm__("FUN_L00_002e5e38");
 #include "rnc/overlay/shared/camera/follow_camera_setup_globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 extern float follow_camera_orbit_distance_damping_gp __asm__("D_L00_00161D04") __attribute__((sda));
 extern float follow_camera_orbit_height_damping_gp __asm__("D_L00_00161D08") __attribute__((sda));
 void follow_camera_approach(unsigned char *moby)

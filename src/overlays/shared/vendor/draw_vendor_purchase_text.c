@@ -5,7 +5,7 @@
 #include "sda.h"
 
 #include "rnc/ui/vendor/vendor_item_info.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/help/get_help_message_text.h"

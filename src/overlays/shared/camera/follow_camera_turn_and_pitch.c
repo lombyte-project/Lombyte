@@ -3,10 +3,10 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 #include "sda.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 

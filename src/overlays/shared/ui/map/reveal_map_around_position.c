@@ -3,7 +3,7 @@
 #include "asm.h"
 
 #include "rnc/globals.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "sda.h"
 #include "rnc/overlay/shared/ui/menus/ensure_menu_cache_entry.h"
 

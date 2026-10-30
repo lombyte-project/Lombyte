@@ -4,9 +4,9 @@
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 
 typedef struct {
     s32 values[6];

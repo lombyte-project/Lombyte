@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 #include "rnc/ui/text/font/font_print_right.h"
 
 typedef struct {

@@ -4,10 +4,10 @@
 #include "sda.h"
 #include "rnc/globals.h"
 #include "rnc/storage/disc_table.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/gameplay/state/do_space_transition.h"
+#include "rnc/game/transitions/do_space_transition.h"
 
 typedef struct {
     s32 off;

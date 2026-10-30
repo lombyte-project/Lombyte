@@ -1,4 +1,4 @@
-#include "rnc/gameplay/entities/moby_class_tables.h"
+#include "rnc/mobys/moby_class_tables.h"
 #include "rnc/rendering/level_render_state.h"
 #include "types.h"
 #include "asm.h"
@@ -102,7 +102,7 @@ extern u8 point_lights[] __asm__("D_0019C1C0");
 extern u8 point_light_data[] __asm__("D_0019C3C0");
 extern char dir_lights[] __asm__("D_0019BDC0");
 extern u8 default_directional_light_template[] __asm__("D_001D9740");
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern u8 *moby_instance_end __asm__("D_0015FF1C");
 extern u8 *moby_vars __asm__("D_0015FF28");
 extern u8 *D_001600AC;
@@ -115,7 +115,7 @@ extern s32 occl_fog_count __asm__("D_0015FF30");
 extern s32 part_clip_dist __asm__("D_001600BC");
 extern s64 D_001604E0 __attribute__((sda));
 extern s64 D_001604F0 __attribute__((sda));
-#include "rnc/gameplay/state/level_state.h"
+#include "rnc/game/level_state.h"
 extern SceneInfo render_sequence __asm__("D_0018CB20");
 extern u8 D_00186310[];
 extern u8 D_00186350[];

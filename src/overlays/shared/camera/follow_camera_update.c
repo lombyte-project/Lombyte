@@ -1,16 +1,16 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "rnc/overlay/camera.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 #include "rnc/math/random.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 extern u8 camera_view[] __asm__("D_L00_00166E10");
 extern u8 D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
@@ -1609,7 +1609,7 @@ void conditionally_set_camera_state_three(char *camera_object) {
  * (clip volumes and the FUN_L00_0025fa38 / FUN_L00_0025faf0 / path tests),
  * then end the camera with FUN_L00_002e8388 and set `done`.
  */
-#include "rnc/gameplay/camera/follow_cam.h"
+#include "rnc/camera/follow_cam.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/math/fast_math.h"
 

@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 #include "qcopy.h"
 #include "qzero.h"

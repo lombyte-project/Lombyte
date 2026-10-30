@@ -1,8 +1,8 @@
 /* Level 17 moby classes: blarg_ship. */
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -12,20 +12,20 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/mobys/spawn_moby_break_fragments.h"
 #include "rnc/ui/fonts/font_queue_vu_state.h"
@@ -52,7 +52,7 @@ extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680
 extern void set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FUN_L00_002e8970");
 extern char fleet_dwell_help_gate_value[] __asm__("D_00141D54");
 extern char fleet_clip_volume_help_suppression_flags[] __asm__("D_00141D7C");
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 
 void update_fleet_camera_box_watcher(struct Moby *moby) __asm__("FUN_L17_002f26d0");
 

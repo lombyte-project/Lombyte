@@ -27,7 +27,7 @@ typedef struct {
 
 extern RotatedSpriteQueue rotated_sprite_queue __asm__("D_00189300");
 
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/rendering/screen.h"
 
 extern void project_to_screen(f32 *, void *) __asm__("func_001F2070");

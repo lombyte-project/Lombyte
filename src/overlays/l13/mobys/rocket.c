@@ -1,8 +1,8 @@
 /* Level 13 moby classes: rocket, poison_vessel, blarg_space_commando, blarg_ship. */
 #include "types.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 
@@ -13,10 +13,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -25,7 +25,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/pickups/nanotech_ball.h"
@@ -2497,7 +2497,7 @@ collision:
     FUN_0020c828(moby);
 }
 #include "types.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 extern float D_L13_0015F580[] MACRO_ADDR;
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");

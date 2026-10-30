@@ -2,15 +2,15 @@
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
 #include "rnc/overlay/level_save_state.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/camera/follow_cam.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/camera/follow_cam.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -954,7 +954,7 @@ extern char *spawn_codebot_slot_effect(char *, char *) __asm__("FUN_L15_002eb9e0
 /* Bind this call to its checked overlay instance rather than a duplicate. */
 extern float scale_time(float) __asm__("FUN_L15_001f8648");
 
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 
 void codebot_slot_update(struct Moby *moby) __asm__("FUN_L15_002ec030");
 void codebot_slot_update(struct Moby *moby) {
@@ -1095,8 +1095,8 @@ extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void apply_npc_big_head_cheat(void *) __asm__("FUN_L12_002e6b60");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
-#include "rnc/gameplay/state/game_globals.h"
-#include "rnc/gameplay/state/level_state.h"
+#include "rnc/game/game_globals.h"
+#include "rnc/game/level_state.h"
 
 void ultramech_scientist_update(struct Moby *moby) __asm__("FUN_L15_002ec760");
 void ultramech_scientist_update(struct Moby *moby) {

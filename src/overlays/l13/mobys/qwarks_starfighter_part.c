@@ -3,9 +3,9 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/rendering/level_render_state.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "asm.h"
 
 #include "qcopy.h"
@@ -13,16 +13,16 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
-#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/mobys/animation/set_animation_parameter.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
@@ -486,7 +486,7 @@ extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
 extern void FUN_L06_00249738();
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern char D_0013F350[];
 extern void func_L13_002E9F90_2(void *, void *) __asm__("FUN_L13_002e8b58");
 extern char *D_L13_00160058_m __asm__("D_L13_0015FFD8");

@@ -2,13 +2,13 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/ui/fonts/font_queue_vu_state.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 
 

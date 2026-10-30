@@ -6,16 +6,16 @@
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/gameplay/entities/prune_moby_references.h"
+#include "rnc/mobys/prune_moby_references.h"
 
 struct LevelProjectionState {
     u8 pad_0[0xB0];
     f32 projection_scale;
 };
 #include "rnc/storage/memory_card/memory_card_state.h"
-#include "rnc/gameplay/state/level_state.h"
+#include "rnc/game/level_state.h"
 #include "rnc/rendering/screen.h"
 extern s32 D_0018CB54[];
 extern s32 D_0018CC98[];

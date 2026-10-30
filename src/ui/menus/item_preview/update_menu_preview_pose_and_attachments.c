@@ -3,7 +3,7 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_002260A8). */
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
-#include "rnc/gameplay/gadgets/hand_gadget.h"
+#include "rnc/weapons/hand_gadget.h"
 #include "rnc/ui/menus/menu_globals.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 /* Second name for the same table: the two arms below differ only in which name

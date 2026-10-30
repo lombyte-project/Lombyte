@@ -2,7 +2,7 @@
 #include "rnc/rendering/draw_config.h"
 #include "sda.h"
 #include "rnc/rendering/ties/light_ties.h"
-#include "rnc/gameplay/entities/prune_moby_references.h"
+#include "rnc/mobys/prune_moby_references.h"
 #include "rnc/rendering/texture/patch_tie_texture_fields.h"
 #include "rnc/rendering/tfrags/light_tfrags.h"
 #include "rnc/math/asm_helpers.h"

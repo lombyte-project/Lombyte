@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_MOBYS_UPDATE_VISIBLE_RESIDENT_OBJECTS_H
+#define LOMBYTE_RNC_MOBYS_UPDATE_VISIBLE_RESIDENT_OBJECTS_H
+
+#include "types.h"
+
+void update_visible_resident_objects(void) __asm__("FUN_00212e28");
+
+#endif /* LOMBYTE_RNC_MOBYS_UPDATE_VISIBLE_RESIDENT_OBJECTS_H */

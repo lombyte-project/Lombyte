@@ -1,8 +1,8 @@
 /* Level 14 moby classes: platform, blarg_heavy_interceptor, machinegun_turret, minibomber, plasmabot. */
 #include "types.h"
 #include "rnc/overlay/level_spline.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "qcopy.h"
@@ -10,12 +10,12 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
-#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
+#include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
@@ -96,7 +96,7 @@ void remove_flying_debris(u8 *self) {
     FUN_0020c828(self);
 }
 
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/overlay/level_path.h"
 

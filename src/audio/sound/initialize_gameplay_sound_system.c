@@ -3,7 +3,7 @@
 #include "eetypes.h"
 #include "qzero.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 #include "rnc/audio/mixer/snd_set_master_volume.h"
 #include "rnc/audio/mixer/snd_set_playback_mode.h"
 

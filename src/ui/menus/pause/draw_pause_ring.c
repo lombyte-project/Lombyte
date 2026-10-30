@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 
 /* Draws the pause menu's ring of 8 icons and the quick-select overlay.
    arg0 is the pause-state object: unk20/unk24 give the viewport
@@ -25,7 +25,7 @@ struct PauseState {
     s32 sel;
 };
 
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 extern u8 pause_ring_left_label_text[] __asm__("D_001602D8");
 extern u8 pause_ring_right_label_text[] __asm__("D_001602E0");
 extern u8 D_001863D0[];

@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
-#include "rnc/gameplay/entities/delete_moby.h"
+#include "rnc/mobys/delete_moby.h"
 void close_menu_system(void) __asm__("FUN_002191b8");
 
 void close_menu_system(void) {

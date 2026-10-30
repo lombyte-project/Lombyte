@@ -5,12 +5,12 @@
    compiler on its own. */
 #include "types.h"
 #include "qcopy.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/math/vector.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 extern unsigned int pad_held_lui __asm__("D_0013CAE0")NOT_SDA;
 extern void queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void hud_init_particles(void) __asm__("FUN_L00_00236268");

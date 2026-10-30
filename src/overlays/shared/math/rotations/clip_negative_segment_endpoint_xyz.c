@@ -12,7 +12,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 typedef union {
     u128 q;
     f32 f[4];

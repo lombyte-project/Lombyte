@@ -3,7 +3,7 @@
 #include "asm.h"
 
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 

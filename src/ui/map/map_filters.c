@@ -7,7 +7,7 @@
 #include "sda.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/math/vector.h"
 

@@ -1,6 +1,6 @@
-#include "rnc/gameplay/entities/moby_class_tables.h"
+#include "rnc/mobys/moby_class_tables.h"
 #include "types.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 struct PreviewMobyResource {
     u8 pad0[6];
     u8 class_flags;

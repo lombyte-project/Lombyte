@@ -2,20 +2,20 @@
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/world/collision/ground_probe.h"
+#include "rnc/game/interpolated_record.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -27,7 +27,7 @@
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/spawn_spark.h"
-#include "rnc/gameplay/fun_00213928.h"
+#include "rnc/game/fun_00213928.h"
 #include "rnc/overlay/shared/props/trackdrive_left.h"
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
@@ -1996,7 +1996,7 @@ typedef struct {
     float e[1][4];
 } Route;
 
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern int D_L08_0015F5CC; /* no foreign declaration */
 
 void select_shuttle_route_for_hero(struct Moby *moby) {

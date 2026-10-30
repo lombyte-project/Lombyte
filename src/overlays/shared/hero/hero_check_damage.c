@@ -1,10 +1,10 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "rnc/overlay/moby_hit.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/hero_state.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero_state.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "qcopy.h"
@@ -13,8 +13,8 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_spline.h"
 #include "sda.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/hero/hero_idle_sequence.h"
 #include "rnc/overlay/shared/hero/hero_move_state_velocity.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
@@ -23,9 +23,9 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/rendering/transitions/fade_to_black.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/animation/set_animation_parameter.h"
-#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/set_animation_parameter.h"
+#include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_hit_material.h"
@@ -1093,8 +1093,8 @@ void update_hero_held_items_and_orientation(void) {
     }
 }
 #include "types.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 
 /* spawn_hero_item_mobies: spawns the hero item mobies (wrench into items[0] /
  * its own slot, items[3] and its second moby, items[2], items[1], and the
@@ -2068,7 +2068,7 @@ void hero_switch_item(int i) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210E00), where it is exact; names translated to the US level program. */
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 extern void update_hero_easing_record(void *) __asm__("FUN_L00_00205168");
 extern s32 D_L00_0015F3F8;
 
@@ -3462,7 +3462,7 @@ void resolve_hero_collisions_with_history(void) {
         qcopy(hero_position, &table[base->pos_history_index]);
     }
 }
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 #include "eetypes.h"
 #include "qcopy.h"
 /*
@@ -3832,7 +3832,7 @@ void air_accel(f32 step) {
     }
 }
 #include "types.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/math/fast_math.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 

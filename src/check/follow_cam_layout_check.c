@@ -6,7 +6,7 @@
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
-#include "rnc/gameplay/camera/follow_cam.h"
+#include "rnc/camera/follow_cam.h"
 
 OFFSET_CHECK(reset, FollowCamState, reset, 0x20);
 OFFSET_CHECK(reset_distance, FollowCamState, reset.distance, 0x28);

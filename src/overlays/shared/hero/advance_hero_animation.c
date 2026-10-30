@@ -2,12 +2,12 @@
    through $gp, while the functions there reach it with lui. */
 #include "types.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/game/interpolated_record.h"
 
 struct AnimSeq670 {
     u8 pad0[0x10];

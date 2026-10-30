@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_MATH_RANDOM_RANDOM_SPHERICAL_OFFSET_H
+#define LOMBYTE_RNC_MATH_RANDOM_RANDOM_SPHERICAL_OFFSET_H
+
+#include "types.h"
+
+void random_spherical_offset(void *, f32, f32) __asm__("FUN_00213358");
+
+#endif /* LOMBYTE_RNC_MATH_RANDOM_RANDOM_SPHERICAL_OFFSET_H */

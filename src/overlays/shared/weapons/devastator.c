@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/overlay/point_light.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_globals.h"
@@ -11,10 +11,10 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/weapons/suck_aim.h"
 #include "rnc/overlay/shared/audio/voices/play_voice.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
 #include "rnc/rendering/geometry/transform_scaled_vertex_batch.h"
@@ -23,13 +23,13 @@
 /* Devastator (class 157) update: tracks the aimed target, draws the reticle, picks a target and fires,
    keeps its usage statistics and moves the muzzle light. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B33E8), where it is exact; names translated to the US level program. */
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "qcopy.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/game_globals.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/game_globals.h"
+#include "rnc/game/item_state.h"
 typedef unsigned int Quad_2b2100 __attribute__((mode(TI)));
 
 typedef union { struct { float x, y, z, w; } f; Quad_2b2100 q; } Vec_2b2100 __attribute__((aligned(16)));
@@ -526,7 +526,7 @@ void update_linked_moby_states(unsigned char *source_moby) {
         break;
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 typedef struct {
     f32 x;
     f32 y;

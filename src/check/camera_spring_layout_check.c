@@ -5,7 +5,7 @@
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
-#include "rnc/gameplay/camera/camera_spring.h"
+#include "rnc/camera/camera_spring.h"
 
 SIZE_CHECK(spring, CameraSpring, 0x20);
 OFFSET_CHECK(dist, CameraSpring, dist, 0);

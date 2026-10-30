@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 
 
 int pause_stage_sprite_lists(u32 *mode) __asm__("FUN_0021ca60");

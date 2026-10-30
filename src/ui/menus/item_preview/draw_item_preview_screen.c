@@ -7,7 +7,7 @@ struct Descriptor {
     s16 h;
     u8 pad14[0xC];
 };
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 extern void PackImageDescriptor(struct Descriptor *, struct MenuScreen *);
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");

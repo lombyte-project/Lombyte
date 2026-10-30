@@ -1,21 +1,21 @@
 /* Level 08 moby classes: bolt_thief, shrub. */
 #include "types.h"
-#include "rnc/gameplay/state/bolt_sources.h"
-#include "rnc/gameplay/entities/moby_class_id.h"
+#include "rnc/game/bolt_sources.h"
+#include "rnc/mobys/moby_class_id.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/math/vector.h"
 #include "rnc/overlay/level_camera.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/interpolation.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
@@ -25,7 +25,7 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/vendor/set_camera_rotation.h"
@@ -256,7 +256,7 @@ void update_commando_parts(struct Moby *parent_moby) {
     }
 }
 
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 
 /* Draws the Batalia cannon's HUD: a four-part frame, markers for the eight linked and four indexed targets
    (relative to the cannon's heading), the inner frame, a 32-segment health dial and two rotating needles. */
@@ -1166,7 +1166,7 @@ void spawn_gunship_parts(struct Moby *moby) {
         vars->slots[26 + i].pjoint = i + 2;
     }
 }
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 extern float gunship_part_spin_speed_degrees_gp __asm__("D_L08_00161C3C") __attribute__((sda));
 
 typedef struct {

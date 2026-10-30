@@ -3,7 +3,7 @@
 #include "asm.h"
 #include "sda.h"
 
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "moby_update.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 

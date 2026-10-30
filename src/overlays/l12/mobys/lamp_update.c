@@ -3,8 +3,8 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/mobys/spawn_moby_break_fragments.h"

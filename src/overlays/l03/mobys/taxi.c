@@ -1,6 +1,6 @@
 /* Level 03 moby classes: mine_layer, mine, taxi, robo_shack_sign, helga, big_al, robot_qwark. */
 #include "types.h"
-#include "rnc/gameplay/state/level_object_states.h"
+#include "rnc/game/level_object_states.h"
 #include "rnc/overlay/level_camera.h"
 #include "rnc/overlay/level_path.h"
 #include "rnc/overlay/collision.h"
@@ -8,13 +8,13 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
 #include "rnc/overlay/shared/mobys/initialize_moby_grounding.h"
 #include "rnc/overlay/shared/mobys/record_moby_context_bytes.h"
@@ -71,7 +71,7 @@ void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) {
                      taxi_rocking_first_phase_rate_degrees_gp * DEG_TO_RAD * frame_time,
                      taxi_rocking_second_phase_rate_degrees_gp * DEG_TO_RAD * frame_time);
 }
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "qcopy.h"
 #include "rnc/audio/voice_pool.h"
 
@@ -685,7 +685,7 @@ s32 is_taxi_in_round_trip_phase(u8 *object) {
     }
     return (u32)(object[0x20] - 2) < 5;
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Pvars of a rail taxi: up to five routes, each called by a trigger volume and
    made of an outbound path, a return path and an optional onward path. */
@@ -1001,7 +1001,7 @@ char *FUN_L03_002d4288(char *heading_vector, char *pos, struct Moby *parent, int
     return spawned_moby;
 }
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Pvars of a homing rocket. */
 typedef struct {
@@ -1127,7 +1127,7 @@ typedef struct {
 } G_2da710;
 
 extern int D_L03_0015F5C4;
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 extern G_2da710 D_L03_0016C960;
 extern char D_L03_0017C540[];
 extern float helga_big_head_attachment_uniform_value_gp __asm__("D_L03_00161BB4") __attribute__((sda));
@@ -1203,7 +1203,7 @@ extern struct Moby *D_L03_0015FFD8;
 extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
 extern s32 helga_helper_flag_context_records[] __asm__("D_L03_001BA720");
 extern char helga_dialogue_script[] __asm__("D_L03_00161BB8");
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern u8 mission_collection_recording_filter[] __asm__("D_L03_0015FC88");
 extern LevelSaveState l03_moby_collection_state __asm__("D_L03_001BA6D0");
 #include "rnc/overlay/cuboid.h"
@@ -1575,7 +1575,7 @@ struct GuideVars {
 
 extern u8 D_0013D4C2[];
 extern char *D_001413D0_db558[] __asm__("D_001413D0");
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern void attach_shared_manipulator_to_matching_class_moby(struct Moby *) __asm__("FUN_L03_002db480");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int guide_save(int, int) __asm__("FUN_0020b178");

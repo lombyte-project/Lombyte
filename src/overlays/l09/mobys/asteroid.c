@@ -1,6 +1,6 @@
 /* Level 09 moby classes: asteroid, display, platform. */
 #include "types.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
@@ -8,9 +8,9 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
@@ -536,7 +536,7 @@ char *spawn_falling_asteroid(void) {
     return moby;
 }
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Variables of the pebble mobys the l09 rockfall spawner creates (moby->pvars). */
 typedef struct {
@@ -1280,7 +1280,7 @@ char *spawn_class_11c_moby(char *owner, void *position, float angle) {
 }
 #include "rnc/globals.h"
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/overlay/quad.h"
 
 extern char D_L09_00166F40_2ef430[] __asm__("D_L09_00166F40");
@@ -1399,7 +1399,7 @@ struct Moby *spawn_tumbling_debris(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 k
 }
 #include "rnc/globals.h"
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/overlay/quad.h"
 
 extern char D_L09_00166F40_2ef9b0[] __asm__("D_L09_00166F40");
@@ -1544,7 +1544,7 @@ void update_drifting_moby(struct Moby *moby) {
         mark_moby_for_removal(moby);
     }
 }
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 
 #include "qzero.h"
 

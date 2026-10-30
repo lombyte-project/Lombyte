@@ -2,9 +2,9 @@
 
 #include "sda.h"
 #include "rnc/rendering/level_render_state.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "types.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 
 extern void FlushCache(int);
 

@@ -4,7 +4,7 @@
 #include "asm.h"
 
 #include "sda.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* clears two moby flags and refreshes its linked value */
 /* Ported from rac1-decomp (src/overlays/shared/space_002A3680.c: func_L01_002A3680), where it is exact; names translated to the US level program. */

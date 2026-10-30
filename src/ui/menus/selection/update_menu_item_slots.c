@@ -3,9 +3,9 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");

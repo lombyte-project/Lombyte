@@ -4,13 +4,13 @@
 #include "types.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern Vec4 D_0013E090[2] NOT_SDA; /* camera start: position, rotation */

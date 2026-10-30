@@ -21,7 +21,7 @@ extern struct Slot D_001CEC20[];
 extern struct Slot D_001CEC60[];
 extern struct Slot D_001CEC80[];
 extern struct Slot D_001CECA0[];
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/ui/menus/menu_globals.h"
 extern struct Item filtered_menu_item_records[] __asm__("D_001D61B8");
 extern s32 D_001D6248[];

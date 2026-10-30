@@ -5,7 +5,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/gameplay/camera/follow_cam.h"
+#include "rnc/camera/follow_cam.h"
 /* Stores f at +0x1CC of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
 void FUN_L00_002e8540(float stored_value) {
     char *camera_record = current_follow_cam;

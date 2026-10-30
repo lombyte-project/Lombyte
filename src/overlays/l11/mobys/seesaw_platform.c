@@ -1,29 +1,29 @@
 /* Level 11 moby classes: seesaw_platform, ammocrate, psytcopus, jet_fighter, puffoid. */
 #include "types.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
 #include "qcopy.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/gameplay/state/usage_stats.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/usage_stats.h"
+#include "rnc/game/item_state.h"
 #include "sda.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/animation/set_animation_parameter.h"
-#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/world/collision/ground_probe.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/set_animation_parameter.h"
+#include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
@@ -799,7 +799,7 @@ void populate_water_tile_neighbor_indices(int selected_tile_index) {
 
 #include "qcopy.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030FE40), where it is exact; names translated to the US level program. */
@@ -981,7 +981,7 @@ void update_link_triggered_moby_turn(struct Moby *turning_moby) {
 }
 #include "qcopy.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 #include "sda.h"
 
 
@@ -1688,7 +1688,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 #include "sda.h"
 #include "qzero.h"
 typedef struct {
@@ -1890,8 +1890,8 @@ void update_ship_lock_on_target(void *self, char *moby) {
         }
     }
 }
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/game/usage_stats.h"
 #include "sda.h"
 #include "rnc/rendering/screen.h"
 

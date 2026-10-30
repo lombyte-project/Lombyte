@@ -9,7 +9,7 @@ typedef struct __attribute__((packed)) {
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 extern volatile u16 D_0013E05A[];
 extern s32 D_0015EE24;
 extern Unaligned64 D_0015EE98[1];

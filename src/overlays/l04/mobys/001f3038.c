@@ -27,8 +27,8 @@ int find_nearest_point_index_xy(char *moby, char *points, int count) {
     }
     return best;
 }
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 
 #include "qcopy.h"
 #include "rnc/overlay/level_path.h"

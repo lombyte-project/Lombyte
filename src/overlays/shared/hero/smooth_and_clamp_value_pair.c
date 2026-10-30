@@ -5,12 +5,12 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "rnc/overlay/hero_tables.h"
 #include "qcopy.h"
 #include "rnc/overlay/collision.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "asm.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
@@ -21,8 +21,8 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/set_animation_parameter.h"
 #include "rnc/overlay/shared/input/pad_pressed_within.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
@@ -594,7 +594,7 @@ int try_apply_hero_water_and_ground_transitions(void) {
     return water_state_requested;
 }
 #include "rnc/input/pad_state.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002523C8), where it is exact; names translated to the US level program. */

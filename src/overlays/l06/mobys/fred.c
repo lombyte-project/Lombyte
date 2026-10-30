@@ -1,11 +1,11 @@
 /* Level 06 moby classes: fred, shuttle, red_button. */
 #include "types.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_camera.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 
@@ -15,7 +15,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/l06/mobys/hangar_door.h"
 #include "rnc/overlay/l06/hero/hero_set_state.h"
 #include "rnc/overlay/shared/mobys/jet_game_state.h"
@@ -6065,7 +6065,7 @@ void begin_moby_linear_and_angular_motion(char *moby, void *linear_velocity, voi
     qcopy(motion_vars, linear_velocity);
     qcopy(motion_vars + 0x10, angular_velocity);
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 extern char *D_L06_0015FFD8_301070 __asm__("D_L06_0015FFD8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 typedef float Vec_301070[4] __attribute__((aligned(16)));
@@ -6363,7 +6363,7 @@ void fred_update(struct Moby *moby) {
     update_joint_animation(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, fred_vars->f40, 0);
     update_joint_animation(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, fred_vars->fC0, 2);
 }
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern char *D_L06_0015FFD8_301b90 __asm__("D_L06_0015FFD8");
 extern int *D_L06_001B0C30_301b90[] __asm__("D_L06_001B0C30");
 extern char dialogue_playback_phase[] __asm__("D_0015172A");
@@ -6553,7 +6553,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         return;
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 struct TauntVoiceVars {
     u8 pad0[0x38];
@@ -6658,7 +6658,7 @@ typedef struct {
     char pad4[0x20];
     int f24;
 } Busy_302578;
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern int D_0015EE1D;
 extern int D_0015EE1C;
 extern int D_L06_0015F5C4;
@@ -6960,7 +6960,7 @@ void shuttle_update(struct Moby *moby) {
 /* Picks the next selection state from the menu mode, then queues the matching sound. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00304418), where it is exact; names translated to the US level program. */
 
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern unsigned short D_00141C00 NOT_SDA;
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
@@ -7301,7 +7301,7 @@ void mark_shuttle_linked_mobys_for_removal(char *moby) {
         mark_moby_for_removal(D_L06_0015FFD8_u + ((*moby_list_entry & 0x7FFF) << 8));
     } while (*moby_list_entry++ >= 0);
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vector_304098;

@@ -6,7 +6,7 @@
 #include "sda.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 /* Recognize the active vendor object state. */
 
 int test_linked_moby_turn_trigger(struct Moby *moby) __asm__("FUN_L11_0030f270");

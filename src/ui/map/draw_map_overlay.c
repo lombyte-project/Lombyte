@@ -4,7 +4,7 @@
 #include "rnc/ui/text/text_region.h"
 #include "sda.h"
 
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/ui/hud/hud_state.h"

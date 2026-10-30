@@ -1,9 +1,9 @@
 /* Shared moby classes: nanotech_ball, suckcannon, red_orb. */
 #include "types.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/overlay/level_globals.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
@@ -13,12 +13,12 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/gameplay/entities/suck_aim.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/game/interpolated_record.h"
+#include "rnc/weapons/suck_aim.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/hero/hero_check_damage.h"
@@ -384,7 +384,7 @@ void update_nanotech_ball_slot_offsets(void) {
 }
 #include "rnc/math/vector.h"
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002D9EA0), where it is exact; names translated to the US level program. */
 
@@ -1392,7 +1392,7 @@ extern void stop_suck_cannon_suction_effect(int) __asm__("FUN_L00_002df048");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("func_0020E098");
 float absolute_float(float input) __asm__("func_001F99C0");
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern SuckHero suck_hero __asm__("D_0013F350");
 extern SuckItemVariant suck_item_variant __asm__("D_0013E520");
 extern SuckInput controller_state __asm__("D_0013C940");

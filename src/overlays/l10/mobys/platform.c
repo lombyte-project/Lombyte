@@ -2,9 +2,9 @@
 #include "types.h"
 #include "rnc/overlay/cuboid.h"
 #include "rnc/overlay/level_save_state.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
@@ -13,13 +13,13 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/camera/follow_cam.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/camera/follow_cam.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -316,7 +316,7 @@ void magnetboots_update(struct Moby *moby) {
         break;
     }
 }
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 
 typedef struct {
     int target;
@@ -1177,8 +1177,8 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
 }
 #ifndef NON_MATCHING
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 
 
 
@@ -1639,7 +1639,7 @@ int test_point_in_lab_door_local_xy_bounds(struct Moby *moby, float *world_point
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA468), where it is exact; names translated to the US level program. */
 
 
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 char D_L10_001DD160[] = "Moby Class %d Instance %d has no pVars!  May be in the art file.\n\tMobyDeleted\n";
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");

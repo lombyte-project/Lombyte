@@ -1,17 +1,17 @@
 /* Level 05 moby classes: sharkigator, scenery_ship, amoeboid, extermibot, extermitank, skid_mcmarx, floating_platform, box, water. */
 #include "types.h"
 #include "rnc/overlay/level_path.h"
-#include "rnc/gameplay/state/item_state.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/game/item_state.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "macros.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/overlay/moby_anim.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/overlay/shared/mobys/manipulator_set_scale.h"
 #include "rnc/overlay/shared/props/pool_set_scale.h"
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"
@@ -1726,7 +1726,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
     update_joint_animation(moby, moby_data->f170, 1, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f);
     update_joint_animation(moby, moby_data->f1F0, 2, frame_scale_sq * 0.04f, frame_scale_sq * 0.3f);
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Pvars of a path-walking moby (only the fields this walker touches). */
 typedef struct {

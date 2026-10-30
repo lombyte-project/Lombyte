@@ -8,7 +8,7 @@
 #include "rnc/ui/text/font_metrics.h"
 
 #include "rnc/input/pad_state.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/rendering/vu1_registers.h"

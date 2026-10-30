@@ -1,12 +1,12 @@
-#include "rnc/gameplay/entities/moby_class_tables.h"
+#include "rnc/mobys/moby_class_tables.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/ui/menus/item_preview/item_preview_placement.h"
-#include "rnc/gameplay/state/game_globals.h"
-#include "rnc/gameplay/entities/delete_moby.h"
+#include "rnc/game/game_globals.h"
+#include "rnc/mobys/delete_moby.h"
 
 struct ItemPreviewVars {
     void *owner;
@@ -45,7 +45,7 @@ struct PreviewClassResource {
 extern struct PreviewItemDefinition menu_item_info[] __asm__("D_001863D0");
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
 extern u8 item_text_variant[] __asm__("D_0013E520");
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 extern void update_item_preview_transform() __asm__("FUN_0021e698");
 
 extern void noop_callback_q(s32, s32) __asm__("func_001E9470");

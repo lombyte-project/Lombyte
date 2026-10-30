@@ -5,7 +5,7 @@
 #include "qzero.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 
 struct P {

@@ -11,14 +11,14 @@
 #include "sda.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/rendering/view/project_to_screen.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 #include "rnc/overlay/level_camera.h"
 extern OvlVec4 D_L06_001fe8d0[];

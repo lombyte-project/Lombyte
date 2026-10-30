@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/gameplay/state/level_object_states.h"
+#include "rnc/game/level_object_states.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/globals.h"
 

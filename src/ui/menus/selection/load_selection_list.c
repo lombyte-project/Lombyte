@@ -1,4 +1,4 @@
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 /* Ported from rac1-decomp (src/game/pause.c, func_0021D9C8). */
 typedef struct {
     char pad[0x30];

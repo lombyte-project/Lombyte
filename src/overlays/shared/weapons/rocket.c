@@ -1,14 +1,14 @@
 /* Shared moby classes: rocket. */
 #include "types.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
@@ -94,7 +94,7 @@ char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, i
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 typedef int Q_cc2e8 __attribute__((mode(TI), aligned(16)));
 

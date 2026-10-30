@@ -1,16 +1,16 @@
 /* Level 07 moby classes: purple_ship, ocean_umbris, taxi_platform, boltcrate_possibly_for_metal_detector, bomb, water, bombomatic, sharkigator. */
 #include "types.h"
 
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 
 /* Taxi command byte (+0xBC); distinct from Moby.state (+0x20). */
 enum TaxiCommand {
@@ -929,7 +929,7 @@ void update_umbris_scene_progression(struct Moby *moby)
         break;
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 struct SpawnClassView {
     u8 pad0[0x10];
@@ -1165,7 +1165,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
     jet_animate(moby, 1.5f);
 }
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Pvars of a flying bolt. */
 typedef struct {
@@ -2222,7 +2222,7 @@ void update_growing_ballistic_moby(struct Moby *moby) {
         mark_moby_for_removal(moby);
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Knockback/launch parameters handed to trooper_start_knockback. */
 typedef struct {

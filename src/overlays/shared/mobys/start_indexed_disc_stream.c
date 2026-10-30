@@ -2,7 +2,7 @@
 /* A disc stream starter and a moby state helper; filed with its sibling FUN_L00_00299460. */
 #include "types.h"
 #include "rnc/storage/disc_table.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 
@@ -33,7 +33,7 @@ void start_indexed_disc_stream(s32 i) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");

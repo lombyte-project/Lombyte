@@ -2,15 +2,15 @@
 #include "types.h"
 #include "asm.h"
 
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/game/usage_stats.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -101,7 +101,7 @@ void update_level06_help_hints(struct Moby *moby) {
         }
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "qcopy.h"
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");

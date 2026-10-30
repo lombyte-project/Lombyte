@@ -1,7 +1,7 @@
 /* FUN_L00_00215340 split out of 00214658.c so it builds with the SN
    compiler on its own. */
 #include "types.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

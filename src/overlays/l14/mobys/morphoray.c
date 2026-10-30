@@ -1,12 +1,12 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
@@ -20,9 +20,9 @@ int initialize_morphoray_private_state() __asm__("FUN_L14_00305a38");
 #include "rnc/overlay/level_camera.h"
 #include "rnc/overlay/level_spline.h"
 #include "rnc/overlay/level_globals.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "asm.h"
 
 typedef struct {
@@ -1361,7 +1361,7 @@ void initialize_path_camera(char *camera) {
     ((float *)&stand)[3] = 1.0f;
     set_race_camera(path, &stand, 0x72, 0);
 }
-#include "rnc/gameplay/camera/update_cam.h"
+#include "rnc/camera/update_cam.h"
 /* Runs the vendor camera along its slot path: on the first frame it starts at the path head looking at the
  * slot target; then it advances along the path, blends the field of view between the path stops, and keeps
  * looking at the target (a moby offset or the look path). At the end it hands the view back behind the hero. */

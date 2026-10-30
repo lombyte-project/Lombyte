@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00222640). */
 #include "sda.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 typedef struct {

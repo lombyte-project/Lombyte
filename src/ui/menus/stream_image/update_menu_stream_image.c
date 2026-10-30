@@ -8,7 +8,7 @@
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/audio/streaming/start_audio_stream_read.h"
 #include "rnc/rendering/gs/log2dim.h"
 #include "rnc/ui/menus/stream_buffers/get_menu_stream_buffer_size.h"

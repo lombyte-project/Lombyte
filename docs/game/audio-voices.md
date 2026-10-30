@@ -49,7 +49,7 @@ negative indices but does not check the upper slot bound.
   Its `voice` begins at `+0x70`; it is not an array element to increment.
 - `MobyAudioView` and `MobyClassAudioView` are local partial views.
   The `+0x24` class pointer and class `+0x28` sound definitions agree with
-  `include/rnc/gameplay/entities/moby.h`. The count at class `+0x0D`
+  `include/rnc/mobys/moby.h`. The count at class `+0x0D`
   is inferred from the bounds check.
 - Definition `+0x1A` is the sound index and `+0x1C` the bank handle passed by
   `sound_update` to `snd_play_sound_vol_pan_pmpb`.

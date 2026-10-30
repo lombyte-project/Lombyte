@@ -1,9 +1,9 @@
 /* Shared moby classes: vendor_orb, hydrodisplacer, pilots_helmet, pterodactyl, red_plant, robot_arm. */
 #include "types.h"
 #include "rnc/overlay/point_light.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/camera/camera_modes.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/camera/camera_modes.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/vendor/vendor_orb_globals.h"
 #include "sda.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/interpolation.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
@@ -21,8 +21,8 @@
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
@@ -31,7 +31,7 @@
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/gameplay/entities/random_spherical_offset.h"
+#include "rnc/math/random/random_spherical_offset.h"
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"
 extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -110,7 +110,7 @@ unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position
     return moby;
 }
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E0E50), where it is exact; names translated to the US level program. */
 
@@ -765,7 +765,7 @@ s32 set_beam_origin_transform_and_endpoint(s32 id, void *beam_origin_transform, 
     return 0;
 }
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Per-frame update of one beam slot: lays out the two 20-point strips between the slot's ends
    (a sine wave and a noisy one), spawns sparks at both ends and keeps the two looping sounds
@@ -2235,7 +2235,7 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E6CE0); names and data translated to the US level program. */
 
-#include "rnc/gameplay/camera/follow_cam.h"
+#include "rnc/camera/follow_cam.h"
 
 /* The camera view: +0x20 its forward axis, +0x30 its up axis. */
 extern u8 camera_view[] __asm__("D_L00_00166E10");

@@ -5,7 +5,7 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/hud/get_icon_frame.h"
-#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/mobys/animation/set_animation_parameter.h"
 #include "rnc/ui/help/get_help_message_text.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
@@ -52,7 +52,7 @@ void initialize_trick_combo_hud(HudElemX *hud_element) {
     }
     initialize_numeric_hud_values_and_dimensions(hud_element);
 }
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 
 typedef struct {
     u8 pad0[0xC];

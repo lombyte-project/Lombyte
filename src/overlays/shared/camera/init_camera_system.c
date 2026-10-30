@@ -1,16 +1,16 @@
-#include "rnc/gameplay/camera/update_cam.h"
+#include "rnc/camera/update_cam.h"
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/gameplay/camera/backup_current_cam.h"
-#include "rnc/gameplay/camera/camera_run_setup_to_new_cam.h"
-#include "rnc/gameplay/camera/update_camera_tracking_state.h"
+#include "rnc/camera/backup_current_cam.h"
+#include "rnc/camera/camera_run_setup_to_new_cam.h"
+#include "rnc/camera/update_camera_tracking_state.h"
 
 typedef struct {
     char pad09[0x86];

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_MOBYS_DRAW_MOBY_LIST_H
+#define LOMBYTE_RNC_RENDERING_MOBYS_DRAW_MOBY_LIST_H
+
+#include "types.h"
+
+void draw_moby_list(void *, s32) __asm__("FUN_0020d330");
+
+#endif /* LOMBYTE_RNC_RENDERING_MOBYS_DRAW_MOBY_LIST_H */

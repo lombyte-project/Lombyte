@@ -1,34 +1,34 @@
 /* Shared moby classes: bomb, morphoray_chicken, ryno, rocket, drone, bolt_crate. */
 #include "types.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "asm.h"
 
 #include "rnc/overlay/quad.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/overlay/collision.h"
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/gameplay/entities/suck_aim.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/world/collision/ground_probe.h"
+#include "rnc/weapons/suck_aim.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/hero/hero_check_damage.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
-#include "rnc/gameplay/animation/update_moby_animation_state.h"
-#include "rnc/gameplay/fun_00213928.h"
+#include "rnc/mobys/animation/update_moby_animation_state.h"
+#include "rnc/game/fun_00213928.h"
 #include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
 
 /* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
@@ -1086,7 +1086,7 @@ extern void *FUN_L00_0026dd20(void *, void *, unsigned, int, float);
 extern void FUN_L00_002cbcc0_c(unsigned char *, int) __asm__("FUN_L00_002cbcc0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 
 char *spawn_homing_shot(char *owner, char *spawn_pos, char *target, float vx, float vy, float yaw, float pitch) __asm__("FUN_L00_002caf70");
 
@@ -1680,7 +1680,7 @@ M_2cc360 *select_ryno_target(float *pos, float *aim_rotation, M_2cc360 **excl, f
 }
 #include "rnc/input/pad_state.h"
 
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 typedef struct { float m[3][4]; } __attribute__((aligned(16))) Mat3_2cc608;
 typedef struct { float m[4][4]; } __attribute__((aligned(16))) Mat4_2cc608;
 typedef struct {

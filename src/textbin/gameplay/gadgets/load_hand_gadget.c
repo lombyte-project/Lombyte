@@ -1,15 +1,15 @@
-#include "rnc/gameplay/entities/moby_class_tables.h"
+#include "rnc/mobys/moby_class_tables.h"
 #include "types.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "rnc/ui/menus/menu_system.h"
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/gadgets/hand_gadget.h"
+#include "rnc/hero/hero.h"
+#include "rnc/weapons/hand_gadget.h"
 #include "asm.h"
 
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/game_globals.h"
-#include "rnc/gameplay/entities/delete_moby.h"
+#include "rnc/game/game_globals.h"
+#include "rnc/mobys/delete_moby.h"
 
 typedef struct Moby {
     u8 pad00[0x20];

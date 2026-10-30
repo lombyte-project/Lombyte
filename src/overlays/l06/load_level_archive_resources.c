@@ -5,12 +5,12 @@
 
 /* Level load: relocates sky, uploads textures, loads HUD banks, flushes cache; many DebugPrints. */
 #include "types.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "asm.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "rnc/audio/sound_state.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
@@ -18,7 +18,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/rendering/gs/log2dim.h"
-#include "rnc/gameplay/state/clear_scene_state_buffers.h"
+#include "rnc/game/clear_scene_state_buffers.h"
 #include "rnc/overlay/shared/mobys/link_and_update_all_mobys.h"
 #include "rnc/overlay/shared/rendering/load_two_int_two_float_header.h"
 #include "rnc/overlay/shared/runtime/dma/fast_decompress.h"

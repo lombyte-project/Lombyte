@@ -5,9 +5,9 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/rendering/effects/update_fog.h"
 #include "rnc/runtime/dma/calculate_dma_transfer_address.h"
 

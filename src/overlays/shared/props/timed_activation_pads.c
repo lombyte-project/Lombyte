@@ -3,11 +3,11 @@
 #include "asm.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/props/trackdrive_left.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
@@ -39,7 +39,7 @@ void update_moby_draw_registration(unsigned char *moby) {
 }
 /* Ported from rac1-decomp src/overlays/shared/vendor_002F9438.c (func_L07_0030D370) */
 #include "sda.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 extern int set_moby_color() __asm__("FUN_L00_002502f0");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");

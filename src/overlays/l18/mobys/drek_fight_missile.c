@@ -3,9 +3,9 @@
 #include "rnc/overlay/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "qcopy.h"
@@ -13,8 +13,8 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
-#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
+#include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -23,9 +23,9 @@
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/animation/set_animation_parameter.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/set_animation_parameter.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/game/jet_reset_camera.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
@@ -46,7 +46,7 @@ enum DrekMissileState {
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 
 /* State machine for the class 1355 moby: dispatches on moby state (0 init, 2 wander, 3 dive, 4 land). */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F0F78), where it is exact; names translated to the US level program. */

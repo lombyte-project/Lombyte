@@ -3,10 +3,10 @@
 #include "rnc/overlay/level_camera.h"
 #include "rnc/overlay/level_spline.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/hero_state.h"
+#include "rnc/hero/hero_state.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/math/vector.h"
 #include "rnc/data_labels.h"
@@ -14,7 +14,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/overlay/shared/hero/air_accel.h"
@@ -68,7 +68,7 @@ s32 find_first_nearby_registered_path(Vec4 *from, s32 **outOwner, Vec4 *to, s32 
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/math/fast_math.h"
 
 struct MobyView {

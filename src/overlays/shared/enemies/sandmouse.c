@@ -1,9 +1,9 @@
 /* Shared moby classes: sandmouse. */
 #include "types.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 
@@ -16,12 +16,12 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/entities/suck_aim.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/weapons/suck_aim.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
-#include "rnc/gameplay/entities/detach_manipulator.h"
+#include "rnc/mobys/detach_manipulator.h"
 #include "rnc/overlay/l01/hero/hero_set_state.h"
 #include "rnc/overlay/shared/audio/voices/play_voice.h"
 #include "rnc/overlay/shared/vendor/vendor_volume.h"
@@ -406,7 +406,7 @@ void compute_sandmouse_follow_goal(void *unused, float *destination_position) {
 }
 #include "qcopy.h"
 #include "rnc/overlay/collision.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* The part of a moby class FUN_L01_0030d308 reads */
 typedef struct {
@@ -1157,7 +1157,7 @@ typedef struct {
     u8 pad2E[0x22];
 } CameraView;
 
-#include "rnc/gameplay/camera/camera_spring.h"
+#include "rnc/camera/camera_spring.h"
 
 typedef struct {
     Vec4 vel;           /* 0x00 */

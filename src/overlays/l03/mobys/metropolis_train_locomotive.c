@@ -1,26 +1,26 @@
 /* Level 03 moby classes: metropolis_train_locomotive, moving_platform_small, metropolis_train_carriage, red_ship_1, robot_dog. */
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
-#include "rnc/gameplay/entities/moby_class_id.h"
+#include "rnc/mobys/moby_class_id.h"
 #include "rnc/overlay/collision.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/game/interpolated_record.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
@@ -367,7 +367,7 @@ void update_metropolis_train_idle_motion(struct Moby *moby) {
     *(unsigned short *)(D_L03_0015FFD8_292d10 + (*(int *)(data + 0xC4) << 8) + 0x34) |= 6;
 }
 
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 
 typedef struct {

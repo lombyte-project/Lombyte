@@ -4,7 +4,7 @@
 
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* updates matching objects in the selected object range */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/mobyutil_00266128.c: func_L13_00266128), where it is exact; names translated to the US level program. */

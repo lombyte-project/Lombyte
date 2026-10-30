@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_MOBYS_REFRESH_MOBY_SPATIAL_BOUNDS_FROM_BASIS_H
+#define LOMBYTE_RNC_MOBYS_REFRESH_MOBY_SPATIAL_BOUNDS_FROM_BASIS_H
+
+#include "types.h"
+
+void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
+
+#endif /* LOMBYTE_RNC_MOBYS_REFRESH_MOBY_SPATIAL_BOUNDS_FROM_BASIS_H */

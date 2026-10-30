@@ -1,9 +1,9 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00226380). */
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
-#include "rnc/gameplay/animation/advance_moby_animation.h"
-#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
-#include "rnc/gameplay/entities/refresh_moby_spatial_bounds.h"
+#include "rnc/mobys/animation/advance_moby_animation.h"
+#include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/mobys/refresh_moby_spatial_bounds.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void normalize_vector_triplet(void *) __asm__("func_00214128");

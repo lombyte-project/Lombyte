@@ -6,20 +6,20 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/world/collision/ground_probe.h"
+#include "rnc/weapons/suck_aim.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/pickups/nanotech_ball.h"
 #include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
@@ -547,7 +547,7 @@ void remove_spawner_egg(void *moby, char *data) {
 /* Bubble update: drifts, bounces off level geometry and other bubbles, settles on the ground, then shrinks away. */
 #include "rnc/math/vector.h"
 #include "rnc/overlay/collision.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 
 /* pvars of the class 0x75E bubble FUN_L09_0030b218 spawns */

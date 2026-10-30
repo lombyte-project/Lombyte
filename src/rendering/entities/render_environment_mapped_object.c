@@ -27,8 +27,8 @@ typedef struct {
 
 #include "rnc/rendering/entities/render_environment_mapped_object_globals.h"
 #include "rnc/rendering/entities/render_environment_mapped_object_globals.h"
-#include "rnc/gameplay/state/game_globals.h"
-#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/game/game_globals.h"
+#include "rnc/camera/camera_globals.h"
 extern s32 environment_mapping_was_active_gp __asm__("D_001604A8") __attribute__((sda));
 extern s32 D_001604AC __attribute__((sda));
 extern s32 environment_mesh_colors[2] __asm__("D_00160520") __attribute__((sda));

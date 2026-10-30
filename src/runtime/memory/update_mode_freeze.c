@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/audio/voices/snd_continue_all_sounds_in_group.h"
 

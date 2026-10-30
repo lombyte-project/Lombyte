@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 struct MenuPreviewObject {
     u8 pad0[0x50];
     u64 tag;

@@ -13,7 +13,7 @@ typedef struct {
 } McChunk;
 
 #include "rnc/storage/memory_card/memory_card_state.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/storage/memory_card/mc_data.h"
 extern char D_0013D1D0[];

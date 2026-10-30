@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/camera/camera_globals.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/view/project_to_screen.h"
 #include "rnc/math/fast_math.h"

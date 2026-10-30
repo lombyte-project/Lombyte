@@ -1,23 +1,23 @@
 /* Level 02 moby classes: sand_shark, constructorbot, elevator, bulldozer, sand_shark_nest, grab_crane, platform, transport_pod, crane, rocket_launcher, rocket_door1, tresspasser_door1, tresspasser_door2, sandshark_egg, rocks. */
 #include "types.h"
-#include "rnc/gameplay/state/bolt_sources.h"
+#include "rnc/game/bolt_sources.h"
 #include "rnc/audio/voice_pool.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/vector.h"
 #include "rnc/overlay/moby_anim.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "sda.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/vendor/set_camera_rotation.h"
@@ -2449,7 +2449,7 @@ void platform_update(struct Moby *moby)
     moby->rot.z = fast_add_rotations(moby->rot.z, D_0015ED6C * 0.08726646f);
     update_entity_matrix(data + 0x20, zero, previous_rotation, &moby->rot);
 }
-#include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/game/usage_stats.h"
 
 /* pvars of the class transport_pod_update updates (the lift: two rail mobys 0x421/0x422 ride with it). */
 typedef struct {
@@ -3120,7 +3120,7 @@ void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) {
         }
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Pvars of a moby that turns from its spawn rotation to a goal rotation. */
 typedef struct {

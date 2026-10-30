@@ -1,10 +1,10 @@
 /* Level 12 moby classes: platform, miner, blarg_trooper, blarg_helicopter, edwina, helicopter, crane_arm. */
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
-#include "rnc/gameplay/state/level_object_states.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/game/level_object_states.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/overlay/watch.h"
@@ -12,7 +12,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/initialize_moby_grounding.h"
 #include "rnc/overlay/shared/mobys/manipulator_set_scale.h"
 #include "rnc/overlay/shared/props/pool_set_scale.h"
@@ -804,7 +804,7 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
     return move_result;
 }
 #include "rnc/overlay/level_globals.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 
 int D_L12_0016183C = 0xa;
 int D_L12_00161840 = 8;
@@ -895,7 +895,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
 }
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math/vector.h"
 
 /* Variables of the Hoven anklebiter (moby->pvars); the l00 ElectroidVars damage layout moved by 0xB0. */
@@ -2297,7 +2297,7 @@ extern unsigned char D_001413F4 NOT_SDA;
 extern int D_L12_00161F00 MACRO_ADDR;
 extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_001619A0 __attribute__((sda));
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/audio/voice_pool.h"
 extern unsigned char D_0013E550[];
 extern unsigned char D_0013D4CB NOT_SDA;

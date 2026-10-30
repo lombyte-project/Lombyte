@@ -6,7 +6,7 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/world/collision/collision_hit_material.h"
 
 void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
@@ -73,7 +73,7 @@ void make_hit_descriptor(char *hit_descriptor, int source_moby, int hit_mask, fl
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 int play_entity_sound(void *moby, void *position, int c, float d, float e, float f, int g, int h, int i) __asm__("FUN_L00_002598b0");
 int play_entity_sound(void *moby, void *position, int hit_mask, float sphere_radius, float hit_priority, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) {

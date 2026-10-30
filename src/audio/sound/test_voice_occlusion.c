@@ -1,5 +1,5 @@
 #include "rnc/math/fast_math.h"
-#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/camera/camera_globals.h"
 /* Ported from rac1-decomp (src/game/sound.c, func_0022D970). */
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");

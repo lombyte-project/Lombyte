@@ -5,7 +5,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/gameplay/state/level_state.h"
+#include "rnc/game/level_state.h"
 extern s32 D_001CF874[];
 extern s32 D_001CF758[];
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");

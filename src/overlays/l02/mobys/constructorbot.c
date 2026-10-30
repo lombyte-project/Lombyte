@@ -1,17 +1,17 @@
 /* Level 02 moby classes: constructorbot. */
 #include "types.h"
 #include "rnc/overlay/level_camera.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
@@ -139,9 +139,9 @@ typedef struct {
 
 extern Entry_L02_0017A140 D_L02_0017A0C0[];
 
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 extern unsigned char D_0014C050[][16];
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 extern int D_0015EEA4;
 extern unsigned short D_001417A2 NOT_SDA;
 extern unsigned short D_00141888 NOT_SDA;

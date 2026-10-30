@@ -112,7 +112,7 @@ void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");

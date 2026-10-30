@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_MOBYS_DRAW_MOBYS_CLEAN_UP_H
+#define LOMBYTE_RNC_RENDERING_MOBYS_DRAW_MOBYS_CLEAN_UP_H
+
+#include "types.h"
+
+void draw_mobys_clean_up(void) __asm__("FUN_0020d3b0");
+
+#endif /* LOMBYTE_RNC_RENDERING_MOBYS_DRAW_MOBYS_CLEAN_UP_H */

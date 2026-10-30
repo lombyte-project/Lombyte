@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 
 
 

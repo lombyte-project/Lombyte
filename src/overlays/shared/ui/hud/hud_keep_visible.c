@@ -9,7 +9,7 @@
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 #include "rnc/ui/text/font/measure_text_width_regular.h"
-#include "rnc/gameplay/animation/apply_pending_animation.h"
+#include "rnc/mobys/animation/apply_pending_animation.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
 #include "rnc/textbin/ui/frames/draw_framed_text.h"
 
@@ -597,7 +597,7 @@ void mine_blend_color(void) {
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/globals.h"
 extern s32 l00_hud_text_panel_base_y __asm__("D_L00_0015F770") __attribute__((sda));
 extern s32 D_L00_0015F648_macro __asm__("D_L00_0015F648") MACRO_ADDR;

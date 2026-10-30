@@ -1,8 +1,8 @@
 /* Level 01 moby classes: birdbot, peckbot, water_current, cave_door, fighter_jet, door_half, stationary_ship, bomber_jet, water_lily, falling_rock, piston_platform. */
 #include "types.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/overlay/level_camera.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -11,12 +11,12 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
@@ -2491,7 +2491,7 @@ typedef struct {
 } CarrierOffsets;
 
 /* struct Moby fields this function uses (the unit keeps a file-local struct Moby of its own, so
-   rnc/gameplay/entities/moby.h cannot be included here). */
+   rnc/mobys/moby.h cannot be included here). */
 typedef struct {
     u8 pad0[0x10];
     Vec4f pos;                /* 0x10 */

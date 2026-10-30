@@ -1,7 +1,7 @@
 #include "sda.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 
 void save_card_state_prompt_create_save(void) __asm__("FUN_00208ca8");
 

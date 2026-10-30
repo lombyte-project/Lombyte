@@ -10,7 +10,7 @@ extern u8 occl_visibility_merged[] __asm__("D_00194040");
 extern f32 *occl_oct __asm__("D_0015F644");
 extern s32 occl_invalid_grid __asm__("D_0015F64C");
 extern u8 *occl_previous_grid __asm__("D_0015F650");
-#include "rnc/gameplay/camera/update_cam.h"
+#include "rnc/camera/update_cam.h"
 
 extern u8 *get_occlusion_grid_from_pair(s32, s32, s32, s32, s32, s32, f32) __asm__("FUN_001f2768");
 extern void fast_mem_or16(u8 *, u8 *, u8 *, s32) __asm__("FUN_001f98f8");

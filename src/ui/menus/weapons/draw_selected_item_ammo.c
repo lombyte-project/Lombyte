@@ -2,7 +2,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 extern char D_001602A0[];
 extern u8 ammo_count_decimal_format[] __asm__("D_001602B8");
 extern u8 ammo_count_grouped_decimal_format[] __asm__("D_001602C0");

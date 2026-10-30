@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/ui/hud/hud_state.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/math/asm_helpers.h"
 
 #define ALIGN64(x) (((x) + 0x3F) & ~0x3FU)

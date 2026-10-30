@@ -1,7 +1,7 @@
 /* Shared moby classes: hoverboard_ring, lamp. */
 #include "types.h"
-#include "rnc/gameplay/entities/moby.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/mobys/moby.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 
@@ -14,10 +14,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
@@ -62,7 +62,7 @@ void hoverboard_ring_update(char *moby) {
     }
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/math/vector.h"
 
 /* Vars of the level 5 mine FUN_L05_0031c8e0 drives. */
@@ -401,7 +401,7 @@ void build_hero_follow_camera_transform(char *camera) {
     qcopy(camera + 0x40, camera);
 }
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 typedef struct {
     Vec4 pos;           /* 0x00 */
@@ -429,7 +429,7 @@ typedef struct {
     u8 pad44[0xC];
 } CameraView;
 
-#include "rnc/gameplay/camera/camera_spring.h"
+#include "rnc/camera/camera_spring.h"
 
 typedef struct {
     Vec4 vel;           /* 0x00 */

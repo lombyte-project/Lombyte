@@ -12,7 +12,7 @@
    focused row highlighted, scrolling the box to keep it visible.
    Returns 1 once after flag 0x8000 is consumed, else 2. */
 
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/ui/text/font_metrics.h"
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");

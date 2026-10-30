@@ -9,7 +9,7 @@ extern void sceScfGetLocalTimefromRTC(void *);
 extern void save_map_coverage(void *) __asm__("func_00207B08");
 extern char D_0015EE98[] MACRO_ADDR;
 extern char D_00141EC0[];
-#include "rnc/gameplay/state/level_state.h"
+#include "rnc/game/level_state.h"
 #include "rnc/storage/memory_card/mc_data.h"
 #include "rnc/globals.h"
 extern int D_0015EE24 MACRO_ADDR;

@@ -4,7 +4,7 @@
 
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/state/options.h"
+#include "rnc/game/options.h"
 
 struct LoadMenuControllerState {
     u8 pad_0[0x1B4];

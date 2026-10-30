@@ -138,10 +138,10 @@ ROUTE_EXCEPTIONS = {
     # argument instead of w1 >> 32, and 0x20 is OR-ed with (w1 & 0x1C) in the
     # mode>=0 branch but with (prim << 6) in the two negative branches.
     "rendering/packets/set_up_vis_gif_viewer": "cc_sn_padless",
-    "gameplay/animation/update_moby_animation_state": "cc_sn_padless",
+    "mobys/animation/update_moby_animation_state": "cc_sn_padless",
     # patch_moby_gifs: patch moby class GIF tex words through the texture remap
     # table
-    "gameplay/entities/draw/patch_moby_gifs": "cc_sn_padless",
+    "rendering/mobys/patch_moby_gifs": "cc_sn_padless",
     # fun_00221460: A dead `p = m->items;` statement that cc1 deletes still
     # perturbs the local hard-register order into retail's, and declaring
     # func_001F6530 void removes the unused-return pseudo so its argument copies
@@ -400,7 +400,7 @@ RODATA_OVERLAYS = {
     # .rodata via section attributes, in source order) and its switch table.
     "sdk/libc/stdio/_vfprintf_r": (0x1524E0, 0x53460, 516),
     "dispatch_game_state_update": (0x1E8960, 0xE98E0, 36),  # retail switch table
-    "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310, 40),  # unlock-condition switch table
+    "game/missions/check_mission_condition": (0x1E8390, 0xE9310, 40),  # unlock-condition switch table
     "draw_menu_preview_objects": (0x1E87A0, 0xE9720, 48),  # item-handle release switch table
     "update_resident_gameplay_state": (0x1E8930, 0xE98B0, 36),  # gameplay-state switch table
     "draw_menu_text_box": (0x1E8860, 0xE97E0, 80),  # switch table
@@ -411,7 +411,7 @@ RODATA_OVERLAYS = {
     "ui/menus/system/process_menu_entry": (0x1E86A0, 0xE9620, 24),  # retail switch table (jtbl_001E86A0)
     "draw_sky_shells": (0x1E8910, 0xE9890, 24),  # switch table
     "ui/menus/system/update_timed_menu_sequence": (0x1E8810, 0xE9790, 80),  # switch table
-    "gameplay/vendor/update_resident_dialogue_animation_state": (0x1E8A90, 0xE9A10, 52),  # switch table
+    "mobys/animation/update_resident_dialogue_animation_state": (0x1E8A90, 0xE9A10, 52),  # switch table
     "update_help_state": (0x1E7A40, 0xE89C0, 36),  # switch table
     "memcard_update_state": (0x1E8200, 0xE9180, 348),  # switch table
     "init_once": (0x1E7B30, 0xE8AB0, 20),  # switch table
@@ -456,19 +456,19 @@ SDATA_OVERLAYS = {
     "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0, 24),
     "runtime/time/set_video_timing": (0x15ED60, 0x5FCE0, 32),
     "ui/fonts/load_debug_font": (0x15EEC8, 0x5FE48, 8),
-    "gameplay/state/service_level_archive_load": (0x15EE50, 0x5FDD0, 8),
+    "game/service_level_archive_load": (0x15EE50, 0x5FDD0, 8),
     "rendering/debug/draw_debug_profiler": (0x15EE40, 0x5FDC0, 1),
-    "gameplay/camera/camera_activation_check_priority": (0x15EF40, 0x5FEC0, 4),
-    "gameplay/camera/execute_camera_post_update_callbacks": (0x15EF8C, 0x5FF0C, 4),
-    "gameplay/camera/refresh_camera_control_flags": (0x15EF98, 0x5FF18, 12),
+    "camera/camera_activation_check_priority": (0x15EF40, 0x5FEC0, 4),
+    "camera/execute_camera_post_update_callbacks": (0x15EF8C, 0x5FF0C, 4),
+    "camera/refresh_camera_control_flags": (0x15EF98, 0x5FF18, 12),
     "audio/voices/pause_all_sounds": (0x15F674, 0x605F4, 4),
-    "gameplay/entities/create_moby": (0x15FEFC, 0x60E7C, 4),
+    "mobys/create_moby": (0x15FEFC, 0x60E7C, 4),
     "rendering/vu1/vu1_chain": (0x160EE0, 0x61E60, 4),
     "runtime/dma/initialize_streaming_state": (0x15EF20, 0x5FEA0, 4),
     "textbin/gameplay/state/load_level_zero_preserving_progress": (0x15EDA0, 0x5FD20, 4),
-    "gameplay/state/tick_space_transition": (0x15F5EC, 0x6056C, 4),
-    "gameplay/state/initialize_level_render_state": (0x1603D0, 0x61350, 4),
-    "gameplay/entities/resolve_camera_surface_height": (0x1611A0, 0x62120, 4),
+    "game/transitions/tick_space_transition": (0x15F5EC, 0x6056C, 4),
+    "rendering/frame/initialize_level_render_state": (0x1603D0, 0x61350, 4),
+    "camera/resolve_camera_surface_height": (0x1611A0, 0x62120, 4),
     "rendering/view/update_fog": (0x1610C4, 0x62044, 3),
     "rendering/texture/dma_shrub_textures": (0x1603F8, 0x61378, 4),
     "rendering/texture/dma_tfrag_textures": (0x160EC4, 0x61E44, 4),
@@ -487,21 +487,21 @@ DATA_OVERLAYS = {
     "video/display/set_pal_mode": (0x13D100, 0x3E080, 8),
     "rendering/texture/append_palette_transfer_packet": (0x151B60, 0x52AE0, 656),
     "textbin/render_queued_rotated_sprites": (0x189300, 0x8A280, 196),
-    "gameplay/camera/backup_current_cam": (0x1893D0, 0x8A350, 1920),
+    "camera/backup_current_cam": (0x1893D0, 0x8A350, 1920),
     "textbin/append_billboard_batch": (0x18ED00, 0x8FC80, 512),
     "ui/map/map_filters": (0x1A03B0, 0xA1330, 4),
     "textbin/gameplay/state/initialize_level_runtime": (0x1CAAC0, 0xCBA40, 4096),
     "textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60, 1152),
-    "gameplay/state/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
+    "rendering/effects/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
     "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
     "ui/menus/item_preview/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
     "rendering/shrubs/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
-    "gameplay/build_variant_effect_quads": (0x1D9890, 0xDA810, 384),
+    "rendering/effects/build_variant_effect_quads": (0x1D9890, 0xDA810, 384),
     "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
     "ui/map/level_selection/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
     "rendering/ties/register_object_render_class": (0x1E1900, 0xE2880, 256),
-    "gameplay/vendor/render_capture_scrolling_text": (0x1E6018, 0xE6F98, 512),
-    "gameplay/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),
+    "ui/vendor/render_capture_scrolling_text": (0x1E6018, 0xE6F98, 512),
+    "ui/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),
     "textbin/render_vendor_capture_texture_overlays_pass": (0x1E6620, 0xE75A0, 64),
     "textbin/rebuild_configured_text_label_list": (0x1E8728, 0xE96A8, 60),
     "ui/menus/system/update_menu_resource_stream": (0x1E87D0, 0xE9750, 24),
@@ -509,7 +509,7 @@ DATA_OVERLAYS = {
     "rendering/view/update_view_context": (0x18CFC0, 0x8DF40, 64),
     "input/pad/init_pads": (0x1CD760, 0xCE6E0, 16),
     "ui/menus/system/update_timed_menu_sequence": (0x1D5298, 0xD6218, 3),
-    "gameplay/vendor/update_resident_dialogue_animation_state": (0x1E63FC, 0xE737C, 4),
+    "mobys/animation/update_resident_dialogue_animation_state": (0x1E63FC, 0xE737C, 4),
     "ui/text/draw_dialog_text": (0x1E78F0, 0xE8870, 48),
     "audio/rpc/snd_send_iop_command_no_wait": (0x133100, 0x34080, 16),
     "rendering/state/reset_gs_registers_pr": (0x151788, 0x52708, 24),
@@ -517,7 +517,7 @@ DATA_OVERLAYS = {
     "ui/menus/audio/set_pause_sound_volume": (0x13E5A0, 0x3F520, 4),
     "ui/menus/selection/update_menu_item_slots": (0x141848, 0x427C8, 288),
     "textbin/audio/snd_start_sound_system": (0x133280, 0x34200, 8192),
-    "gameplay/camera/update_all_cameras": (0x187410, 0x88390, 7680),
+    "camera/update_all_cameras": (0x187410, 0x88390, 7680),
     "world/loaders/register_moby_class": (0x1B3900, 0xB4880, 448),
     "rendering/tfrags/set_tfrag_dists": (0x1DE7F0, 0xDF770, 64),
 }

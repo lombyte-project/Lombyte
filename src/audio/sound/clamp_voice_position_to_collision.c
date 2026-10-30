@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/camera/camera_globals.h"
 extern s32 sound_probe_ignore[] __asm__("D_0013E5BC");
 extern char D_00194120[];
 extern s32 collision_line() __asm__("func_001EFA68");

@@ -1,7 +1,7 @@
 /* Level 18 moby classes: deplanetizer_gun, gadgebot. */
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "asm.h"
 
 #include "rnc/math/vector.h"
@@ -9,17 +9,17 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/mobys/draw_trail.h"
@@ -1089,7 +1089,7 @@ void gadgebot_update(unsigned char *moby) {
         add_draw_callback(draw_gadgebot_launch_glow_quad, moby);
     }
 }
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/math_consts.h"
 extern int *D_L18_001B0EB0[] __asm__("D_L18_001B0EB0");
 void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
@@ -1272,7 +1272,7 @@ float move_gadgebot_toward_target(char *self, float *target_position_source) {
     return initial_target_distance_xy;
 }
 #include "qcopy.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 extern struct Moby *moby_table __asm__("D_L18_0015FFD8");
 
 /* Pvars fields set when a group moby is launched. */

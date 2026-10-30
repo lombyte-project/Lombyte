@@ -1,7 +1,7 @@
 /* Level 09 moby classes: elevator, refueling_station, airship_part, turret, barrier, shuttle. */
 #include "types.h"
-#include "rnc/gameplay/state/options.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/game/options.h"
+#include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
 
@@ -17,8 +17,8 @@
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
@@ -220,7 +220,7 @@ void elevator_update(unsigned char *moby) {
         }
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
 /* Damage source returned by find_moby_hit. */
 typedef struct {
@@ -506,8 +506,8 @@ char *find_nearby_chain_attachment(char *self, char *search_position, int bone) 
     return 0;
 }
 #ifndef NON_MATCHING
-#include "rnc/gameplay/hero.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 
 
 

@@ -1,9 +1,9 @@
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/audio/voice_pool.h"
 #include "types.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/globals.h"
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 #include "asm.h"
 #include "rnc/overlay/entities.h"
 
@@ -13,20 +13,20 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/gameplay/state/item_state.h"
+#include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
-#include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/gameplay/entities/suck_aim.h"
-#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/weapons/suck_aim.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
@@ -544,7 +544,7 @@ extern int D_L12_0015F404 MACRO_ADDR;
 
 #include "rnc/overlay/l12/mobys/update_planetbuster_maximus_guns_data/planetbuster_maximus_part_update.h"
 extern float planetbuster_maximus_rotation_oscillation_amplitude_gp __asm__("D_L12_00161F30") __attribute__((sda));
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
 extern void vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
@@ -945,9 +945,9 @@ void update_homing_mine_spawner_target(struct Moby *spawner) {
         }
     }
 }
-#include "rnc/gameplay/entities/moby.h"
+#include "rnc/mobys/moby.h"
 
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
 
 extern int check_scaled_vector_bsphere(void *, float) __asm__("FUN_L01_00275690");
 extern int FUN_0022da68(int, int, void *);
