@@ -543,7 +543,7 @@ extern float fast_sin(float);
 void update_butterfly_swarm(struct Moby *moby) {
     PVars        *swarm_controller_pvars = (PVars *)moby->pvars;
     struct Moby **children;
-    struct Moby  *other;
+    struct Moby  *population_scan_moby;
     f32           distance;
     f32           angle;
     f32           angle2;
@@ -566,8 +566,8 @@ void update_butterfly_swarm(struct Moby *moby) {
         qcopy(&swarm_controller_pvars->origin, &moby->pos);
         swarm_controller_pvars->angle = 0.0f;
     } else if (swarm_controller_pvars->child_count == 0) {
-        for (other = (struct Moby *)D_L04_0015FFE4; other != 0; other = other->next) {
-            if ((s8)other->state >= 0 && other->oclass == 0x55) {
+        for (population_scan_moby = (struct Moby *)D_L04_0015FFE4; population_scan_moby != 0; population_scan_moby = population_scan_moby->next) {
+            if ((s8)population_scan_moby->state >= 0 && population_scan_moby->oclass == 0x55) {
                 swarm_controller_pvars->child_count++;
             }
         }
