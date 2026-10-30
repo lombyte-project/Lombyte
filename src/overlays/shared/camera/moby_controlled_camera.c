@@ -52,7 +52,7 @@ int test_moby_camera_control_activation(char *moby) {
     char *special = D_L02_001674DC;
     char *camera_control_entry = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1c);
     char *target = *(char **)(camera_control_entry + 0x48);
-    int  *entry;
+    int  *activation_path_record;
     int   hero_containment_result;
 
     if (special != 0 && special == target) {
@@ -88,8 +88,8 @@ int test_moby_camera_control_activation(char *moby) {
     if (*(int *)(camera_control_entry + 0x14) < 0) {
         goto rejected;
     }
-    entry = (int *)D_L02_001B0AB0[*(int *)(camera_control_entry + 0x14)];
-    hero_containment_result = point_in_path_xy(&hero.motion.pos, entry + 4, *entry);
+    activation_path_record = (int *)D_L02_001B0AB0[*(int *)(camera_control_entry + 0x14)];
+    hero_containment_result = point_in_path_xy(&hero.motion.pos, activation_path_record + 4, *activation_path_record);
     if (hero_containment_result == 0) {
         goto rejected;
     }
