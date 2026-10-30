@@ -879,7 +879,8 @@ void probe_frog_local_z_collision(char *moby) {
 extern void resolve_point_path_segment_xy_clearance(float, int, void *, void *) __asm__("FUN_L00_00261d78");
 extern f32 D_0015ED6C;
 extern u128 D_L06_001745E0 NOT_SDA;
-extern u128 D_L06_001745F0 NOT_SDA;
+#include "rnc/overlay/quad.h"
+extern OvlVec4 coll_hit_pos __asm__("D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
 
 void move_frog_with_collision_resolution(float scale, float threshold, char *moby, float *out, int follow_path) __asm__("FUN_L06_002e9b60");
 
@@ -905,7 +906,7 @@ void move_frog_with_collision_resolution(float scale, float threshold, char *mob
     }
     for (i = 0; i < 6; i++) {
         if (coll_sphere(end, threshold, 4, moby) != 0) {
-            qcopy(end, &D_L06_001745F0);
+            qcopy(end, &coll_hit_pos);
             fast_vec_sub(moby + 0x10, end, forward);
         } else {
             break;

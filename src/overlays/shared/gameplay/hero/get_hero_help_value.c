@@ -514,7 +514,7 @@ typedef union {
     u128_22a1d0 q;
     f32 f[4];
 } V_22a1d0;
-extern u128_22a1d0 coll[] __asm__("D_L06_001745F0") NOT_SDA;
+extern OvlVec4 coll_hit_pos __asm__("D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
 extern void f2347c0_22a1d0(void) __asm__("FUN_L00_002347c0");
 extern void f233810_22a1d0(void *, void *, f32) __asm__("FUN_L00_00233810");
 extern void f2334d0_22a1d0(void *, void *, f32) __asm__("FUN_L00_002334d0");
@@ -529,7 +529,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     V_22a1d0 position_displacement;
     s32 mask;
     s32 i;
-    u128_22a1d0 *collision_result_position;
+    OvlVec4 *collision_result_position;
     f32 query_height_or_displacement_length;
     if (hero.collision_off_frames != 0) {
         return 1;
@@ -572,7 +572,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
             if (!(collision_query_result | coll3_22a1d0(&hero.motion.pos.q, hero.capsule_radius)))
                 break;
         }
-        collision_result_position = coll;
+        collision_result_position = &coll_hit_pos;
         qcopy(&hero.motion.pos.q, collision_result_position);
         qcopy(&hero.wall_contact_normal.q, collision_result_position + 1);
         qcopy(&hero.wall_contact_point.q, collision_result_position - 1);
