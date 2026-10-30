@@ -926,7 +926,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
     Vec4          differences[5];
     WalloperBeam *beam_state = ((WalloperBeam *)beam_owner_moby->pvars);
     int           i;
-    struct Moby  *best = 0, *second = 0, *candidate, **list;
+    struct Moby  *best = 0, *secondary_beam_target_candidate = 0, *candidate, **list;
     char         *beam_target_aim_metadata;
     float         best_score = 0.0f, second_score = 0.0f;
     int           enabled = (u8)D_0013E533[0];
@@ -1000,12 +1000,12 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
                         (D_L00_00161594 - distance_w16) / D_L00_00161594;
                 if (best_score < score) {
                     second_score = best_score;
-                    second = best;
+                    secondary_beam_target_candidate = best;
                     best_score = score;
                     best = candidate;
                 } else if (second_score < score) {
                     second_score = score;
-                    second = candidate;
+                    secondary_beam_target_candidate = candidate;
                 }
             next_candidate:;
             }
@@ -1013,19 +1013,19 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
     }
     if (best) {
         if (beam_state->target)
-            second = best;
+            secondary_beam_target_candidate = best;
         else {
             beam_state->target = best;
             beam_state->target_timer = 0;
             FUN_0022da68(1, 0, beam_owner_moby);
         }
     }
-    if (second && enabled) {
+    if (secondary_beam_target_candidate && enabled) {
         distance_w17 = fast_vec_dist(beam_state, &best->pos);
         if (distance_w17 < D_L00_00161594) {
-            angle = fast_vec_dist(&best->pos, &second->pos);
+            angle = fast_vec_dist(&best->pos, &secondary_beam_target_candidate->pos);
             if (distance_w17 + angle < D_L00_00161594) {
-                beam_state->second_target = second;
+                beam_state->second_target = secondary_beam_target_candidate;
                 beam_state->second_timer = 0;
             }
         }
