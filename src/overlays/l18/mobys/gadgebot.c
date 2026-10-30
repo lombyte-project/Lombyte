@@ -408,20 +408,20 @@ extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void
 resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
 
-float move_gadgebot_toward_target(char *self, float *target_position_source) {
+float move_gadgebot_toward_target(char *gadgebot_moby, float *target_position_source) {
     QVec  target_position;
     float v[4];
     float movement_distance_scratch[4];
     float z = 0.0f;
     float movement_clearance = 0.5f;
-    char *moby_vars = *(char **)(self + 0x78);
+    char *moby_vars = *(char **)(gadgebot_moby + 0x78);
     float initial_target_distance_xy;
     *(u128 *)&target_position = *(u128 *)target_position_source;
     {
-        float d = fast_add_rotations(fast_arc_tan(target_position.v[0] - *(float *)(self + 0x10),
-                                                  target_position.v[1] - *(float *)(self + 0x14)),
+        float d = fast_add_rotations(fast_arc_tan(target_position.v[0] - *(float *)(gadgebot_moby + 0x10),
+                                                  target_position.v[1] - *(float *)(gadgebot_moby + 0x14)),
                                      *(float *)(moby_vars + 0x1EC));
-        approach_angle((float *)(self + 0x48),
+        approach_angle((float *)(gadgebot_moby + 0x48),
                        (float *)(moby_vars + 0x1E8),
                        d,
                        frame_time_sq * 6.2831855f,
@@ -429,19 +429,19 @@ float move_gadgebot_toward_target(char *self, float *target_position_source) {
                        frame_time * 6.2831855f);
     }
     movement_distance_scratch[0] = z;
-    initial_target_distance_xy = vector_distance_xy((float *)(self + 0x10), target_position.v);
+    initial_target_distance_xy = vector_distance_xy((float *)(gadgebot_moby + 0x10), target_position.v);
     advance_accelerated_scalar(movement_distance_scratch,
                                (float *)(moby_vars + 0x1F0),
                                initial_target_distance_xy,
                                frame_time_sq * 6.0f,
                                frame_time_sq * 6.0f,
                                frame_time * 5.0f);
-    v[0] = fast_cos(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
-    v[1] = fast_sin(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
+    v[0] = fast_cos(*(float *)(gadgebot_moby + 0x48)) * *(float *)(moby_vars + 0x1F0);
+    v[1] = fast_sin(*(float *)(gadgebot_moby + 0x48)) * *(float *)(moby_vars + 0x1F0);
     v[2] = -(frame_time + frame_time);
-    FUN_L00_00258830((int)self, (int)v, movement_clearance, movement_clearance, z, 0);
+    FUN_L00_00258830((int)gadgebot_moby, (int)v, movement_clearance, movement_clearance, z, 0);
     resolve_point_path_segment_xy_clearance(
-        movement_clearance, *(void **)(moby_vars + 0x1E0), self + 0x10, self + 0x10);
+        movement_clearance, *(void **)(moby_vars + 0x1E0), gadgebot_moby + 0x10, gadgebot_moby + 0x10);
     return initial_target_distance_xy;
 }
 
