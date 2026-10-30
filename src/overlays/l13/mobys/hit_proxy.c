@@ -38,11 +38,11 @@ void forward_moby_hits_to_owner(struct Moby *moby) __asm__("FUN_L13_0030c060");
 
 void forward_moby_hits_to_owner(struct Moby *moby) {
     char *owner_tracking_vars = (char *)moby->pvars;
-    char *owner = *(char **)(owner_tracking_vars + 0x60);
+    char *hit_recipient_moby = *(char **)(owner_tracking_vars + 0x60);
     char *hit_record;
     char  forwarded_hit_descriptor[0x30];
-    if (owner == 0 || *(short *)(owner + 0xA6) != *(int *)(owner_tracking_vars + 0x64) ||
-        (unsigned char)owner[0x20] == 0xFE || (unsigned char)owner[0x20] == 0xFD) {
+    if (hit_recipient_moby == 0 || *(short *)(hit_recipient_moby + 0xA6) != *(int *)(owner_tracking_vars + 0x64) ||
+        (unsigned char)hit_recipient_moby[0x20] == 0xFE || (unsigned char)hit_recipient_moby[0x20] == 0xFD) {
         mark_moby_for_removal(moby);
         return;
     }
