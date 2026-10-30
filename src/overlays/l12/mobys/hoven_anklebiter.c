@@ -674,14 +674,14 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby,
 
 int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
     char *moby_vars = (char *)moby->pvars;
-    float old[4] __attribute__((aligned(16)));
+    float pre_move_position[4] __attribute__((aligned(16)));
     float forward_movement_vector[4];
     float hit[4];
     float path_corrected_position[4] __attribute__((aligned(16)));
     float path_test_position[4];
     float path_test_offset[4];
     int   move_result;
-    *(OvlQuad *)old = *(OvlQuad *)&moby->pos;
+    *(OvlQuad *)pre_move_position = *(OvlQuad *)&moby->pos;
     ease_hoven_anklebiter_height_to_ground(moby);
     approach_w(moby, (float *)(moby_vars + 0x2A0), speed, 0.05f, 0.3f, 0.2f);
     forward_movement_vector[0] = fast_cos(moby->rot.z) * 2.0f;
@@ -689,9 +689,9 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
     forward_movement_vector[2] = 0.0f;
     move_result = move_w(moby, moby_vars + 0x180, forward_movement_vector, hit, 1.0f);
     if (*(int *)(moby_vars + 0x2D0) != -1) {
-        fast_vec_sub(path_test_offset, old, &moby->pos);
+        fast_vec_sub(path_test_offset, pre_move_position, &moby->pos);
         fast_vec_normalize(path_test_offset, path_test_offset, 0.05f);
-        fast_vec_add(path_test_position, old, path_test_offset);
+        fast_vec_add(path_test_position, pre_move_position, path_test_offset);
         if (path_w(*(int *)(moby_vars + 0x2D0),
                    &moby->pos,
                    path_test_position,
@@ -699,7 +699,7 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
             char *path = ((char *)l12_paths[*(int *)(moby_vars + 0x2D0)]);
             if (point_in_path_xy(&moby->pos, path + 0x10, *(int *)path) == 0)
                 *(OvlQuad *)&moby->pos = *(OvlQuad *)path_corrected_position;
-            if (fast_vec_dist(&moby->pos, old) < frame_time * 0.5f) {
+            if (fast_vec_dist(&moby->pos, pre_move_position) < frame_time * 0.5f) {
                 *(int *)(moby_vars + 0x2D4) += 1;
                 if (scale_game_frames(10) < *(int *)(moby_vars + 0x2D4))
                     move_result = 2;
