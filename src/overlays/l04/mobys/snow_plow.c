@@ -83,7 +83,7 @@ void snow_plow_update(struct Moby *moby) {
         SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ZERO = 0x20,
         SNOW_PLOW_CLASS_OFFSET_WITH_TARGET_VOICE_SELECTOR_ZERO = 0x59
     };
-    Vec4 old;
+    Vec4 update_start_position;
     Vec4 delta, *return_delta_ptr;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
     Vec4 sphere_pos;
@@ -107,7 +107,7 @@ void snow_plow_update(struct Moby *moby) {
     int           i, *p, *path;
     float         amount, length, step, speed;
     int           timer;
-    qcopy(&old, &moby->pos);
+    qcopy(&update_start_position, &moby->pos);
     if (!snow_plow_vars)
         return;
     path = (int *)(snow_plow_vars + 0x60);
