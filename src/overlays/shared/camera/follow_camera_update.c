@@ -501,9 +501,9 @@ void follow_camera_orbit(int camera_moby) {
     float tb[4];
     float x, bc, dot_product, reference_up_component, y, current_up_component, orbit_angle_scratch,
         i, yaw_rotation_sign, current_orbit_length;
-    char *base = D_L00_00166E10;
-    char *up = base + 0x20;
-    char *base2;
+    char *orbit_reference_basis = D_L00_00166E10;
+    char *up = orbit_reference_basis + 0x20;
+    char *clamp_reference_basis;
     char *fw;
     char *reference_orbit_offset = camera_state + 0x130;
     char *current_orbit_offset = camera_state + 0x140;
@@ -542,8 +542,8 @@ void follow_camera_orbit(int camera_moby) {
     fast_vec_cross(orbit_cross_scratch, projected_current_offset, up);
     yaw_rotation_sign =
         (fast_vec_dot(orbit_cross_scratch, projected_reference_offset) >= 0.0f) ? 1.0f : -1.0f;
-    base2 = D_L00_00166E10;
-    fw = base2 + 0x30;
+    clamp_reference_basis = D_L00_00166E10;
+    fw = clamp_reference_basis + 0x30;
     build_look_at_matrix(rotated_orbit_offset, projected_current_offset, up, x * yaw_rotation_sign);
     fast_vec_cross(orbit_cross_scratch, up, rotated_orbit_offset);
     build_look_at_matrix(rotated_orbit_offset, rotated_orbit_offset, orbit_cross_scratch, i);
