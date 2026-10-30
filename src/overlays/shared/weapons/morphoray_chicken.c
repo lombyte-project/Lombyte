@@ -213,20 +213,20 @@ float feather_scale_multiplier_gp __asm__("D_L00_001618A0") = 9.0f;
 
 void reset_morphoray_chicken_slot_defaults(char *record) __asm__("FUN_L00_002c92d8");
 
-void reset_morphoray_chicken_slot_defaults(char *record) {
-    if (record != 0) {
-        *(int *)(record + 0x78) = 0;
-        *(float *)(record + 0x7C) = 0.05f;
-        *(float *)(record + 0x80) = 0.863f;
-        *(int *)(record + 0x84) = 4;
-        *(int *)(record + 0x88) = 3;
-        *(float *)(record + 0x8C) = 0.625f;
-        *(short *)(record + 0x9C) = -1;
-        *(short *)(record + 0x9E) = -1;
-        *(int *)(record + 0xA0) = -1;
-        *(int *)(record + 0xA4) = -1;
-        *(int *)(record + 0xA8) = -1;
-        *(int *)(record + 0xAC) = -1;
+void reset_morphoray_chicken_slot_defaults(char *morphoray_chicken_slot_record) {
+    if (morphoray_chicken_slot_record != 0) {
+        *(int *)(morphoray_chicken_slot_record + 0x78) = 0;
+        *(float *)(morphoray_chicken_slot_record + 0x7C) = 0.05f;
+        *(float *)(morphoray_chicken_slot_record + 0x80) = 0.863f;
+        *(int *)(morphoray_chicken_slot_record + 0x84) = 4;
+        *(int *)(morphoray_chicken_slot_record + 0x88) = 3;
+        *(float *)(morphoray_chicken_slot_record + 0x8C) = 0.625f;
+        *(short *)(morphoray_chicken_slot_record + 0x9C) = -1;
+        *(short *)(morphoray_chicken_slot_record + 0x9E) = -1;
+        *(int *)(morphoray_chicken_slot_record + 0xA0) = -1;
+        *(int *)(morphoray_chicken_slot_record + 0xA4) = -1;
+        *(int *)(morphoray_chicken_slot_record + 0xA8) = -1;
+        *(int *)(morphoray_chicken_slot_record + 0xAC) = -1;
     }
 }
 
