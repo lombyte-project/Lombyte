@@ -1,5 +1,6 @@
 /* Shared moby classes: sentrybot, rocket, mine, spiderbot, door, sentrybot_alarm. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/overlay/level_save_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -1665,11 +1666,6 @@ extern Tbl_29E8A0 l15_missile_camera_blast_parameter_template __asm__("D_L15_001
 extern int D_L15_00178500[];
 extern char *spawn_debris(char *, char *, int, int, int) __asm__("FUN_L00_002af450");
 extern char D_0013E533[];
-typedef struct {
-    char pad[0x140];
-    float position[4];
-} LevelView;
-extern LevelView D_L15_00167280;
 extern char D_L15_00174440[];
 extern char missile_drop_spawn_parameters[] __asm__("D_L15_001B0D70");
 extern float D_0015ED64;
@@ -2004,7 +2000,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
             ((void (*)(void *, void *, void *, float, int, int, int, int, int))FUN_L00_002ac910)(missile_moby, missile_moby->pos, burst_drift_velocity, 4.0f, scale_game_frames(0x14), 0x7F, 0x7F, 0, 0x30);
             ((void (*)(void *, void *, void *, float, int, int, int, int, int))FUN_L00_002ac910)(missile_moby, missile_moby->pos, burst_drift_velocity, 2.0f, scale_game_frames(0x13), 0xFF, 0xFF, 0xFF, 0x20);
             missile_movement_delta[0] = 0.0f;
-            blast_attenuation_view = (char *)&D_L15_00167280;
+            blast_attenuation_view = (char *)&l15_camera;
             missile_moby->bc = 0;
             if (effect_reference_distance < 20.0f) {
                 *(float *)(blast_attenuation_view + 0x160) = 0.4f - effect_reference_distance * 0.0175f;
@@ -2013,7 +2009,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
             }
             {
                 int sh = scale_game_frames(0x19);
-                char *blast_timing_view = (char *)&D_L15_00167280;
+                char *blast_timing_view = (char *)&l15_camera;
                 *(int *)(blast_timing_view + 0x168) = sh;
             }
             allocate_voice_for_target_entry(0, 0, (int)missile_moby);
@@ -2503,10 +2499,10 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
         unsigned char *other = (unsigned char *)((int)l15_moby_array + ((*group_moby_entry & 0x7fff) << 8));
         if (MOBY(other)->state != 1) {
             clear_u64_value(angles);
-            angles[2] = fast_arc_tan(D_L15_00167280.position[0] - MOBY(other)->pos.x,
-                                   D_L15_00167280.position[1] - MOBY(other)->pos.y);
-            angles[1] = -fast_arc_tan(vector_distance_xy(&MOBY(other)->pos, D_L15_00167280.position),
-                                    D_L15_00167280.position[2] - MOBY(other)->pos.z);
+            angles[2] = fast_arc_tan(l15_camera.pos.f[0] - MOBY(other)->pos.x,
+                                   l15_camera.pos.f[1] - MOBY(other)->pos.y);
+            angles[1] = -fast_arc_tan(vector_distance_xy(&MOBY(other)->pos, l15_camera.pos.f),
+                                    l15_camera.pos.f[2] - MOBY(other)->pos.z);
             euler_rotation_matrix(rotation, angles);
             qcopy(position, &MOBY(other)->pos);
             position[2] += group_moby_effect_z_offset_gp;

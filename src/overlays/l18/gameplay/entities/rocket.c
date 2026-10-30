@@ -1,5 +1,6 @@
 /* Level 18 moby classes: rocket, mine, thruster_pack_lock_green, thruster_pack_lock_red, floating_platform. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -2532,15 +2533,7 @@ typedef struct {
     long d;
 } Pkt;
 
-typedef struct {
-    char pad[0x140];
-    float position[4];
-    char pad150[0x10];
-    float shake_amplitude;
-    float shake_offset;
-    int shake_frames;
-} L18FlareView;
-extern L18FlareView D_L18_00167680 NOT_SDA;
+extern LevelCamera l18_camera_lui __asm__("D_L18_00167680") NOT_SDA;
 extern float D_L18_001D9B50[][2];
 extern float D_L18_001D9B70[][4][4];
 extern s32 fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
@@ -2561,8 +2554,8 @@ void homing_spark_draw(char *moby) {
     char *data = ((char *)MOBY(moby)->pvars);
 
     clear_u64_value(rot);
-    rot[2] = fast_arc_tan(D_L18_00167680.position[0] - MOBY(moby)->pos.x, D_L18_00167680.position[1] - MOBY(moby)->pos.y);
-    rot[1] = -fast_arc_tan(vector_distance_xy(moby + 0x10, &D_L18_00167680.position[0]), D_L18_00167680.position[2] - MOBY(moby)->pos.z);
+    rot[2] = fast_arc_tan(l18_camera_lui.pos.f[0] - MOBY(moby)->pos.x, l18_camera_lui.pos.f[1] - MOBY(moby)->pos.y);
+    rot[1] = -fast_arc_tan(vector_distance_xy(moby + 0x10, &l18_camera_lui.pos.f[0]), l18_camera_lui.pos.f[2] - MOBY(moby)->pos.z);
     euler_rotation_matrix(m[0][0], rot);
     euler_rotation_matrix(m[1][0], rot);
     fast_vec_scale(m[1][1], m[1][1], *(float *)(data + 0x24));
@@ -2709,7 +2702,7 @@ void spawn_explosion_burst(void *source_moby) {
     struct Moby *moby = source_moby;
     int i = 0;
     int j;
-    L18FlareView *camera;
+    LevelCamera *camera;
     *(Q128 *)velocity = *(Q128 *)&moby->pos;
     spawn_timed_projected_sprite_effect(velocity, scale_game_frames(30), 0x80806060, 0x801010);
     trooper_play_sound(0x10, 0, (int)source_moby, 0x58E);
@@ -2779,8 +2772,8 @@ void spawn_explosion_burst(void *source_moby) {
         spawn_glow_particle(source_moby, pos, &D_L18_0015F580, explosion_burst_third_glow_scale_multiplier_gp, duration, l18_explosion_burst_third_glow_color_channel, D_L18_00161FE1[0], D_L18_00161FE1[1], D_L18_00161FE1[2]);
     }
     if (explosion_burst_camera_shake_amplitude_gp > 0.0f) {
-        camera = &D_L18_00167680;
-        camera->shake_amplitude = explosion_burst_camera_shake_amplitude_gp;
+        camera = &l18_camera_lui;
+        camera->shake_amount = explosion_burst_camera_shake_amplitude_gp;
         camera->shake_frames = scale_game_frames(explosion_burst_camera_shake_duration_frames_gp);
     }
 }
