@@ -47,7 +47,7 @@ void update_linked_state_sliding_platform(struct Moby *moby) {
         PLATFORM_RETURN_TO_ORIGIN = 4
     };
     extern char           *level_mobys_gp __asm__("D_L07_0015FFD8") __attribute__((sda));
-    FUN_L07_0030cf90_Vars *vars = (FUN_L07_0030cf90_Vars *)moby->pvars;
+    FUN_L07_0030cf90_Vars *sliding_platform_vars = (FUN_L07_0030cf90_Vars *)moby->pvars;
     f32                    origin[4];
     Vec4                   rotated;
     Vec4                   step;
@@ -56,51 +56,51 @@ void update_linked_state_sliding_platform(struct Moby *moby) {
     f32                    distance;
     f32                    step_size;
 
-    origin[0] = vars->origin_x;
-    origin[1] = vars->origin_y;
-    origin[2] = vars->origin_z;
+    origin[0] = sliding_platform_vars->origin_x;
+    origin[1] = sliding_platform_vars->origin_y;
+    origin[2] = sliding_platform_vars->origin_z;
     origin[3] = 0.0f;
     if (moby->mission != 0xff && visited52[moby->mission + (current_level_index << 4)] == 0xff)
-        vars->target_index = -1;
+        sliding_platform_vars->target_index = -1;
 
     switch (moby->state) {
     case PLATFORM_INITIALIZE: {
         Vec4f *position = &moby->pos;
-        vars->origin_x = position->x;
-        vars->origin_y = position->y;
-        vars->origin_z = position->z;
-        vars->sound_slot = -1;
-        if (vars->flag_index != -1)
-            D_L07_00184528[vars->flag_index] = 0;
+        sliding_platform_vars->origin_x = position->x;
+        sliding_platform_vars->origin_y = position->y;
+        sliding_platform_vars->origin_z = position->z;
+        sliding_platform_vars->sound_slot = -1;
+        if (sliding_platform_vars->flag_index != -1)
+            D_L07_00184528[sliding_platform_vars->flag_index] = 0;
         moby->state = 1;
         break;
     }
     case PLATFORM_WAIT_TO_MOVE_OUTWARD:
-        if (vars->target_index != -1) {
-            target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100);
+        if (sliding_platform_vars->target_index != -1) {
+            target = (struct Moby *)(level_mobys_gp + sliding_platform_vars->target_index * 0x100);
             if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
-                target->state != vars->target_state)
+                target->state != sliding_platform_vars->target_state)
                 return;
         }
-        if (vars->trigger_sound != -1)
-            allocate_voice_for_target_entry(vars->trigger_sound, 0, moby);
+        if (sliding_platform_vars->trigger_sound != -1)
+            allocate_voice_for_target_entry(sliding_platform_vars->trigger_sound, 0, moby);
         moby->state = 2;
         break;
     case PLATFORM_MOVE_OUTWARD:
-        if (vars->target_index != -1 &&
-            (target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100)) != 0 &&
+        if (sliding_platform_vars->target_index != -1 &&
+            (target = (struct Moby *)(level_mobys_gp + sliding_platform_vars->target_index * 0x100)) != 0 &&
             target->state != 0xfe && target->state != 0xfd &&
-            target->state == vars->target_state_word) {
-            allocate_voice_for_target_entry(vars->trigger_sound, 0, moby);
+            target->state == sliding_platform_vars->target_state_word) {
+            allocate_voice_for_target_entry(sliding_platform_vars->trigger_sound, 0, moby);
             moby->state = 4;
             break;
         }
         distance = vector_distance_xy(&moby->pos, origin);
-        if (vars->radius < distance) {
-            if (vars->arrival_sound != -1)
-                allocate_voice_for_target_entry(vars->arrival_sound, 0, moby);
-            if (vars->flag_index != -1)
-                D_L07_00184528[vars->flag_index] = 1;
+        if (sliding_platform_vars->radius < distance) {
+            if (sliding_platform_vars->arrival_sound != -1)
+                allocate_voice_for_target_entry(sliding_platform_vars->arrival_sound, 0, moby);
+            if (sliding_platform_vars->flag_index != -1)
+                D_L07_00184528[sliding_platform_vars->flag_index] = 1;
             moby->state = 3;
         } else {
             step.q = 0;
@@ -114,22 +114,22 @@ void update_linked_state_sliding_platform(struct Moby *moby) {
         }
         break;
     case PLATFORM_WAIT_TO_RETURN:
-        if (vars->target_index != -1) {
-            target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100);
+        if (sliding_platform_vars->target_index != -1) {
+            target = (struct Moby *)(level_mobys_gp + sliding_platform_vars->target_index * 0x100);
             if (target != 0 && target->state != 0xfe && target->state != 0xfd) {
-                if (target->state != vars->target_state_word)
+                if (target->state != sliding_platform_vars->target_state_word)
                     return;
-                if (vars->trigger_sound != -1)
-                    allocate_voice_for_target_entry(vars->trigger_sound, 0, moby);
+                if (sliding_platform_vars->trigger_sound != -1)
+                    allocate_voice_for_target_entry(sliding_platform_vars->trigger_sound, 0, moby);
                 moby->state = 4;
             }
         }
         break;
     case PLATFORM_RETURN_TO_ORIGIN:
-        if (vars->target_index == -1 ||
-            (target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100)) == 0 ||
-            target->state == 0xfe || target->state == 0xfd || target->state == vars->target_state) {
-            allocate_voice_for_target_entry(vars->trigger_sound, 0, moby);
+        if (sliding_platform_vars->target_index == -1 ||
+            (target = (struct Moby *)(level_mobys_gp + sliding_platform_vars->target_index * 0x100)) == 0 ||
+            target->state == 0xfe || target->state == 0xfd || target->state == sliding_platform_vars->target_state) {
+            allocate_voice_for_target_entry(sliding_platform_vars->trigger_sound, 0, moby);
             moby->state = 2;
             return;
         }
@@ -137,21 +137,21 @@ void update_linked_state_sliding_platform(struct Moby *moby) {
         step_size = frame_scale * 0.01f;
         if (distance <= step_size) {
             Vec4f *position = &moby->pos;
-            position->x = vars->origin_x;
-            position->y = vars->origin_y;
-            position->z = vars->origin_z;
+            position->x = sliding_platform_vars->origin_x;
+            position->y = sliding_platform_vars->origin_y;
+            position->z = sliding_platform_vars->origin_z;
             position->w = 0.0f;
-            voice = vars->sound_slot;
+            voice = sliding_platform_vars->sound_slot;
             if (voice != -1) {
                 u8 *slot = (u8 *)D_0013E550 + voice * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && slot[0x74] != 0)
                     release_voice_slot(voice);
             }
-            vars->sound_slot = -1;
-            if (vars->arrival_sound != -1)
-                allocate_voice_for_target_entry(vars->arrival_sound, 0, moby);
-            if (vars->flag_index != -1)
-                D_L07_00184528[vars->flag_index] = 0;
+            sliding_platform_vars->sound_slot = -1;
+            if (sliding_platform_vars->arrival_sound != -1)
+                allocate_voice_for_target_entry(sliding_platform_vars->arrival_sound, 0, moby);
+            if (sliding_platform_vars->flag_index != -1)
+                D_L07_00184528[sliding_platform_vars->flag_index] = 0;
             moby->state = 1;
             break;
         }
