@@ -241,7 +241,7 @@ void process_gunship_part_hits(struct Moby *moby) {
     int   score = 0;
     int   state = -1;
     int   chosen = 0;
-    char *base;
+    char *gunship_part_table;
     for (i = 0; i < 34; i++, part_entry_cursor += 16) {
         char *part_moby = *(char **)part_entry_cursor;
         if (part_moby != 0 && FUN_L00_0025a420(part_moby, 0x10000, 0) != 0) {
@@ -273,8 +273,8 @@ void process_gunship_part_hits(struct Moby *moby) {
             int   off = chosen * 16;
             char *entry;
             char *v;
-            base = entries;
-            entry = base + off;
+            gunship_part_table = entries;
+            entry = gunship_part_table + off;
             v = *(char **)(*(char **)entry + 0x78);
             cart_burst(moby, *(char **)entry + 0x10, -1, 2.0f, 13.0f);
             fast_vec_sub(v, *(char **)entry + 0x10, *(char **)(gunship_instance_vars + off + 0x64) + 0x10);
@@ -288,8 +288,8 @@ void process_gunship_part_hits(struct Moby *moby) {
                 int   off = ((i + start) % 24 + 10) * 16;
                 char *entry;
                 char *v;
-                base = entries;
-                entry = base + off;
+                gunship_part_table = entries;
+                entry = gunship_part_table + off;
                 if (*(char **)entry != 0) {
                     v = *(char **)(*(char **)entry + 0x78);
                     cart_burst(moby, *(char **)entry + 0x10, -1, 2.0f, 13.0f);
