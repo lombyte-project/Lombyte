@@ -1217,13 +1217,16 @@ typedef struct {
 } CameraPath;
 
 typedef struct {
-    u8 pad0[0x20];
+    f32 lead;           /* 0x00 */
+    u8 pad4[0x1C];
     s32 track_path;     /* 0x20: D_L01_001B0930 path the first path is measured along */
     s32 target;         /* 0x24: row of D_L01_0015F70C */
     s32 path;           /* 0x28: D_L01_001B0930 path */
     s32 look_path;      /* 0x2C: D_L01_001B0930 path measured along the target's path */
     s32 kind;           /* 0x30 */
     s16 ready;          /* 0x34: paths prepared */
+    s16 unk36;          /* 0x36: 1 when the camera starts on the far side of a kind 3 path */
+    f32 unk38;          /* 0x38 */
 } CameraPreset;
 
 typedef struct {
@@ -1402,30 +1405,6 @@ typedef struct {
 } Data;
 
 typedef struct {
-    float unk0;
-    char p04[0x1C];
-    int unk20;
-    int unk24;
-    int unk28;
-    int unk2C;
-    int unk30;
-    short unk34;
-    short unk36;
-    float unk38;
-} Parm;
-
-typedef struct {
-    char p00[0x1C];
-    Parm *unk1C;
-} Ent50;
-
-typedef struct {
-    char p00[0x10];
-    Path *unk10;
-    char p14[0xC];
-} Ent7EC;
-
-typedef struct {
     float unk0[4];
     float unk10[4];
     float unk20[4];
@@ -1437,8 +1416,8 @@ typedef struct {
     short unk84;
 } Cam;
 
-extern Ent50 *D_L01_0015EF50_macro __asm__("D_L01_0015EF50") MACRO_ADDR;
-extern Ent7EC *D_L01_0015F70C_macro __asm__("D_L01_0015F70C") MACRO_ADDR;
+extern CameraPresetRow *D_L01_0015EF50_macro __asm__("D_L01_0015EF50") MACRO_ADDR;
+extern CameraTarget *D_L01_0015F70C_macro __asm__("D_L01_0015F70C") MACRO_ADDR;
 extern float camera_basis_reference_direction[] __asm__("D_L01_001672B0");
 extern float cam_interp_values(float a, float b, float *p, float c, float d, float e);
 extern int sample_path(void *, void *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
@@ -1460,11 +1439,11 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     SubA *look = &data->a;
     SubB *follow = &data->b;
     SubC *progress = &data->c;
-    Parm *params = D_L01_0015EF50_macro[camera_to_update->unk84].unk1C;
+    CameraPreset *params = D_L01_0015EF50_macro[camera_to_update->unk84].preset;
     float rate = 0.01f;
-    int mode = params->unk30;
-    int path_index = params->unk20;
-    float lead = params->unk0;
+    int mode = params->kind;
+    int path_index = params->track_path;
+    float lead = params->lead;
     float pitch_error;
     float look_length;
     float pitch_step;
@@ -1489,9 +1468,9 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
     } else if (mode == 2) {
         Path *pathA = ((Path *)l01_paths[path_index]);
-        Path *pathD = D_L01_0015F70C_macro[params->unk24].unk10;
-        Path *pathC = ((Path *)l01_paths[params->unk28]);
-        Path *pathB = ((Path *)l01_paths[params->unk2C]);
+        Path *pathD = (Path *)D_L01_0015F70C_macro[params->target].path;
+        Path *pathC = ((Path *)l01_paths[params->path]);
+        Path *pathB = ((Path *)l01_paths[params->look_path]);
         int i;
         int previous_path_node_index = 0;
         int range_start = 0;
@@ -1563,7 +1542,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     } else {
         Path *path = ((Path *)l01_paths[path_index]);
 
-        if (params->unk24 < 0) {
+        if (params->target < 0) {
             float lead_offset;
 
             FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, path_point, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
@@ -1587,11 +1566,11 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         camera_to_update->pos[1] = cam_interp_values(camera_to_update->pos[1], camera_goal[1], &data->vel[1], rate, 0.175f, 0.0f);
         camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], camera_goal[2], &data->vel[2], rate, 0.175f, 0.0f);
     }
-    if (params->unk24 < 0) {
-        Path *path = ((Path *)l01_paths[params->unk20]);
+    if (params->target < 0) {
+        Path *path = ((Path *)l01_paths[params->track_path]);
 
         FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, look_target, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
-        if (current_level_index_macro == 0xE && params->unk30 == 0) {
+        if (current_level_index_macro == 0xE && params->kind == 0) {
             sample_path(path, delta, &segment, &fraction, lead, 0);
         } else {
             sample_path(path, delta, &segment, &fraction, lead, 1);
@@ -1662,7 +1641,7 @@ void initialize_camera_transform_and_paths(Camera *destination_camera) {
         }
     }
 
-    *(s16 *)((char *)camera_preset + 0x36) = 0;
+    camera_preset->unk36 = 0;
     if (camera_preset->kind == 3) {
         CameraPath *path;
         s32 next;
@@ -1679,34 +1658,13 @@ void initialize_camera_transform_and_paths(Camera *destination_camera) {
                 fast_vec_normalize(&delta, &delta, 1.0f);
                 fast_vec_sub(&to_camera, (char *)destination_camera + 0x30, &D_0013F3D0_315de0);
                 if (0.0f < fast_vec_dot(&to_camera, &delta))
-                    *(s16 *)((char *)camera_preset + 0x36) = 1;
+                    camera_preset->unk36 = 1;
             }
         }
     }
     reset_camera_state_and_prepare_preset_paths(destination_camera);
 }
 #include "sda.h"
-
-/* Camera data reached through D_L01_0015EF50 */
-typedef struct {
-    u8 pad00[0x24];
-    s32 target;    /* 0x24: index into D_L01_0015F70C, -1 none */
-    u8 pad28[8];
-    s32 kind;      /* 0x30 */
-} CamData;
-
-/* One 32-byte entry of D_L01_0015EF50 */
-typedef struct {
-    u8 pad00[0x1C];
-    CamData *data; /* 0x1C */
-} CamSlot;
-
-/* One 32-byte entry of D_L01_0015F70C */
-typedef struct {
-    u8 pad00[0x10];
-    s32 unk10;     /* 0x10: compared with hero.rail_spline */
-    u8 pad14[0xC];
-} CamTarget;
 
 /* The object FUN_L01_00316030 updates */
 typedef struct {
@@ -1717,19 +1675,17 @@ typedef struct {
     s16 unk86;     /* 0x86: compared with hero.unk2284 */
 } CamUser;
 
-extern CamSlot *D_L01_0015EF50_316030 __asm__("D_L01_0015EF50");
-extern CamTarget *D_L01_0015F70C_316030 __asm__("D_L01_0015F70C");
 
 void update_camera_mode_from_preset(CamUser *camera_user) __asm__("FUN_L01_00316030");
 
 void update_camera_mode_from_preset(CamUser *camera_user) {
-    CamData *camera_preset = D_L01_0015EF50_316030[camera_user->slot].data;
+    CameraPreset *camera_preset = D_L01_0015EF50[camera_user->slot].preset;
 
     if (hero.unk2284 == camera_user->unk86) {
         if (camera_preset->target < 0) {
             return;
         }
-        if (hero.rail_spline == D_L01_0015F70C_316030[camera_preset->target].unk10 && hero.rail_off_frames == 0) {
+        if (hero.rail_spline == (s32)D_L01_0015F70C[camera_preset->target].path && hero.rail_off_frames == 0) {
             return;
         }
     }
