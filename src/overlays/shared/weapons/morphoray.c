@@ -1814,7 +1814,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                 Vec_2BE3A8 fwd;
                 Vec_2BE3A8 out;
                 Vec_2BE3A8 up;
-                Vec_2BE3A8 node;
+                Vec_2BE3A8 beam_node_position;
 
                 for (ring_index = 0; ring_index < 20; ring_index++) {
                     build_look_at_matrix(&ring,
@@ -1824,7 +1824,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                     func_001F9BD8_2BE3A8(
                         &D_L00_001DC1A0_2BE3A8[i][ring_index], &ring, &beam_nodes[i]);
                 }
-                qcopy(&node, &beam_nodes[i]);
+                qcopy(&beam_node_position, &beam_nodes[i]);
                 func_L00_001FF4B0_2BE3A8(&fwd, &beam_segment_direction, 1.0f);
                 func_L00_001FF4B0_2BE3A8(&out, &side, 1.0f);
                 func_001F9CA0_2BE3A8(&up, &out, &fwd);
