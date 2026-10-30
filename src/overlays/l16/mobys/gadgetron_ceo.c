@@ -172,7 +172,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         GADGETRON_CEO_MONITOR_CHALLENGE_EVENTS = 3,
         GADGETRON_CEO_WAIT_TO_SAVE = 4
     };
-    L16ChallengeScratch     scratch;
+    L16ChallengeScratch     ceo_gaze_vectors;
     L16ChallengeData       *ceo_data = ceo_moby->data;
     L16ChallengeActivation *activation = (L16ChallengeActivation *)ceo_data->activation;
     float                   rate, head_rate;
@@ -351,22 +351,22 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
             fast_vec_add(ceo_data->target, ceo_data->target, ceo_moby->position);
         }
         if (ceo_data->moving_timer) {
-            qcopy(scratch.target, (char *)&D_0013E633_challenge + 0xEED);
+            qcopy(ceo_gaze_vectors.target, (char *)&D_0013E633_challenge + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, ceo_data->target);
+            qcopy(ceo_gaze_vectors.target, ceo_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, ceo_moby->position);
-        scratch.eye[2] += 1.0f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]),
+        qcopy(ceo_gaze_vectors.eye, ceo_moby->position);
+        ceo_gaze_vectors.eye[2] += 1.0f;
+        fast_vec_sub(ceo_gaze_vectors.delta, ceo_gaze_vectors.target, ceo_gaze_vectors.eye);
+        yaw = fast_subtract_rotations(fast_arc_tan(ceo_gaze_vectors.delta[0], ceo_gaze_vectors.delta[1]),
                                       ceo_moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
+        pitch = -fast_arc_tan(vector_length_xy(ceo_gaze_vectors.delta), ceo_gaze_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)
