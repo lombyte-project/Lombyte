@@ -409,7 +409,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
     L16Hit_e hit;
     char    *transport_data = (char *)transport_moby->pvars;
     float    zero;
-    char    *record;
+    char    *hit_record;
     int      response;
 
     transport_moby->scale = transport_moby->pclass->scale * D_L16_00161D78_gp;
@@ -426,9 +426,9 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
         *(int *)(transport_data + 0x190) = -1;
     }
     hit.amount = zero = 0.0f;
-    record = find_moby_hit(transport_moby, 0x330000, 0);
+    hit_record = find_moby_hit(transport_moby, 0x330000, 0);
     response = hit_reaction(
-        transport_moby, record, transport_data + 0x20, 0, &hit.status, &hit.amount, 0, 4);
+        transport_moby, hit_record, transport_data + 0x20, 0, &hit.status, &hit.amount, 0, 4);
     if (hit.status != 1 && transport_moby->state != 8) {
         *(float *)(transport_data + 0x20) -= hit.amount;
         if (*(float *)(transport_data + 0x20) <= zero ||
