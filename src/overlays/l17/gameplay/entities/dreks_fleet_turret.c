@@ -10,6 +10,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
@@ -71,20 +72,16 @@ void process_dreks_fleet_turret_hits(char *turret_moby) {
 
 
 extern char *D_L17_0015FFD8;
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
 extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_L17_0015FFD8_t; /* no foreign declaration */
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern short fleet_beam_endpoint_axis_offset __asm__("D_L17_00161498") __attribute__((sda));
 extern unsigned char *spawn_trail_particle(char *parent, void *pos, float *vec) __asm__("FUN_L17_0026fb60");
-extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 
@@ -354,12 +351,9 @@ typedef struct {
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char *spawn_class_558_moby_toward_target(char *src, char *pos, float *v, float f) __asm__("FUN_L17_002e94d8");
 extern char *try_activate_blarg_ship_from_list(int list) __asm__("FUN_L17_002f4fb8");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -418,7 +412,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
         } else if (g->state.current == 0x32) {
             char *hero_ship_moby = ((char *)g->ship_moby);
             if (hero_ship_moby != 0 && *(short *)(hero_ship_moby + 0xA6) == 0x563) {
-                if (vector_distance(&turret_moby->pos, &g->motion.pos) < 254.0f) {
+                if (vector_distance_xy(&turret_moby->pos, &g->motion.pos) < 254.0f) {
                     turret_moby->state = 3;
                 }
             }
@@ -616,9 +610,7 @@ struct Blk {
     int pad[3];
 };
 
-extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float fast_normalize_angle(float) __asm__("func_001FA610");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int rand(void);
 extern int random_integer_below(int);
@@ -633,14 +625,11 @@ extern short fleet_radial_particle_lifetime_range_end __asm__("D_L17_00161B90") 
 extern short fleet_radial_particle_color __asm__("D_L17_00161B94") __attribute__((sda));
 extern unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel, int color, unsigned char life,
                                        unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
-extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 
 void update_fleet_rotating_radial_effect(char *moby) __asm__("FUN_L17_002d77f0");
 
@@ -792,18 +781,15 @@ typedef struct {
 
 extern float D_L17_00161B80_gp __asm__("D_L17_00161B80") __attribute__((sda));
 extern RingUV l17_fleet_radial_quad_base_uvs[4] __asm__("D_L17_001D3F70");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 #include "rnc/overlay/l17/gameplay/entities/dreks_fleet_turret_globals.h"
 extern float fleet_radial_uv_scroll_rate_gp __asm__("D_L17_00161BBC") __attribute__((sda));
 extern float FUN_L00_00200260(float, float);
-extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 extern int fleet_radial_alpha_base_value_gp __asm__("D_L17_00161B98") __attribute__((sda));
 #include "rnc/overlay/l17/gameplay/entities/dreks_fleet_turret_data/draw_fleet_scrolling_radial_quads.h"
 extern int fleet_radial_quad_rgba_gp __asm__("D_L17_00161BB8") __attribute__((sda));
 extern RingStep D_L17_00161BC0 NOT_SDA;
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern RingStep D_L17_00161BC8 NOT_SDA;
-extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void draw_geometry_quad(void *, void *, int);
 
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
@@ -877,7 +863,6 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
 extern short D_L17_00161D2C __attribute__((sda));
 extern short fleet_bobbing_phase_rate_degrees __asm__("D_L17_00161D30") __attribute__((sda));
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 f32 resolve_camera_surface_height(struct CameraProbePosition *position,
                                   s32 optional_output) __asm__("FUN_002135f0");
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");

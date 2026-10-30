@@ -9,17 +9,15 @@
 #include "rnc/overlay/collision.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
 extern s32 D_L00_0015F5CC;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 extern void apply_hero_motion_and_resolve_collisions(void) __asm__("FUN_L00_00213880");
 extern s32 probe_hero_forward_collision(f32 *, f32, f32) __asm__("FUN_L00_0020a240");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void transform_hero_local_offset_to_world(Vec4 *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
-extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 coll_sphere(f32, Vec4 *, s32, s32) __asm__("FUN_L00_001f0d60");
 
 void update_hero_motion_and_collision_probes(void) __asm__("FUN_L00_00221310");
@@ -107,7 +105,6 @@ extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") NOT_SDA;
 
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_2215c8(s32 *) __asm__("FUN_001f9740");
-extern s16 fast_dec_timer(s16 *) __asm__("FUN_001f9770");
 extern void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 extern s32 FUN_001f96f8_2215c8(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00266d60_2215c8(s32, s32, s32) __asm__("FUN_L00_00266d60");
@@ -115,7 +112,6 @@ extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a28_2215c8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -144,30 +140,30 @@ void update_hero_timers_and_reach_state(void) {
     hero.anim_seq_frames++;
     FUN_001f9740_2215c8(&hero.move_lock_timer);
     FUN_001f9740_2215c8(&hero.invulnerable_frames);
-    fast_dec_timer(&hero.unk1B2);
+    fast_dec_timer_s16(&hero.unk1B2);
     FUN_001f9740_2215c8(&hero.long_jump_lockout);
-    fast_dec_timer(&hero.jump_lockout_timer);
-    fast_dec_timer(&hero.unk1DE);
+    fast_dec_timer_s16(&hero.jump_lockout_timer);
+    fast_dec_timer_s16(&hero.unk1DE);
     FUN_001f9740_2215c8(&hero.wall_jump_window);
-    fast_dec_timer(&hero.unk1F0);
-    fast_dec_timer(&hero.ledge_probe_cooldown);
-    fast_dec_timer(&hero.unk1C8);
-    fast_dec_timer(&hero.rail_catch_grace);
-    fast_dec_timer(&hero.rail_grab_cooldown);
-    fast_dec_timer(&hero.grapple_lockout_timer);
+    fast_dec_timer_s16(&hero.unk1F0);
+    fast_dec_timer_s16(&hero.ledge_probe_cooldown);
+    fast_dec_timer_s16(&hero.unk1C8);
+    fast_dec_timer_s16(&hero.rail_catch_grace);
+    fast_dec_timer_s16(&hero.rail_grab_cooldown);
+    fast_dec_timer_s16(&hero.grapple_lockout_timer);
     FUN_001f9740_2215c8(&hero.collision_off_frames);
     FUN_001f9740_2215c8(&hero.unk1D0);
     FUN_001f9740_2215c8(&hero.jump_buffer_lockout);
-    fast_dec_timer(&hero.fidget_cooldown);
-    fast_dec_timer(&hero.unk1E0);
-    fast_dec_timer(&hero.unk1EE);
-    fast_dec_timer(&hero.unk1EA);
-    fast_dec_timer(&hero.unk1F4);
-    fast_dec_timer(&hero.jump_lock_timer);
-    fast_dec_timer(&hero.unk1DC);
-    fast_dec_timer(&hero.unk1F6);
-    fast_dec_timer(&hero.unk1DA);
-    fast_dec_timer(&hero.unk1F8);
+    fast_dec_timer_s16(&hero.fidget_cooldown);
+    fast_dec_timer_s16(&hero.unk1E0);
+    fast_dec_timer_s16(&hero.unk1EE);
+    fast_dec_timer_s16(&hero.unk1EA);
+    fast_dec_timer_s16(&hero.unk1F4);
+    fast_dec_timer_s16(&hero.jump_lock_timer);
+    fast_dec_timer_s16(&hero.unk1DC);
+    fast_dec_timer_s16(&hero.unk1F6);
+    fast_dec_timer_s16(&hero.unk1DA);
+    fast_dec_timer_s16(&hero.unk1F8);
     if (!(D_0013C940_2215c8.held & 5)) {
         hero.unk1EC = 0;
     }
@@ -183,7 +179,7 @@ void update_hero_timers_and_reach_state(void) {
         hero.stick_idle_frames = 0;
         hero.stick_held_frames++;
     }
-    if (hero.vehicle_toggle_timer != 0 && fast_dec_timer(&hero.vehicle_toggle_timer) != 0 &&
+    if (hero.vehicle_toggle_timer != 0 && fast_dec_timer_s16(&hero.vehicle_toggle_timer) != 0 &&
         hero.health.hp != 0 && D_L00_0015F5C4_2215c8 == 0) {
         if (hero.vehicle_mode == 3) {
             exit_hero_vehicle_mode();
@@ -206,7 +202,7 @@ void update_hero_timers_and_reach_state(void) {
         }
     }
     if (hero.vehicle_mode == 2) {
-        fast_dec_timer(&hero.vehicle_triangle_cooldown);
+        fast_dec_timer_s16(&hero.vehicle_triangle_cooldown);
     }
     for (i = 0; i < 5; i++) {
         FUN_001f9740_2215c8(&l00_hero_countdown_records[i].w0);
@@ -273,10 +269,8 @@ skip:
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_002222F0), where it is exact; names translated to the US level program. */
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
@@ -303,7 +297,7 @@ void update_hero_planar_distance_spring_motion(void) {
     }
     hero_base = (char *)D_0013E533 + 0xE1D;
     if (*(short *)(hero_base + 0x1EA) != 0) {
-        xy_distance = vector_distance(hero_base + 0x80, hero_base + 0x210);
+        xy_distance = vector_distance_xy(hero_base + 0x80, hero_base + 0x210);
         xy_distance_threshold = *(float *)(hero_base + 0x234) * 0.9f;
         if (xy_distance < xy_distance_threshold) {
             spring_projection_yaw = fast_arc_tan(*(float *)(hero_base + 0x80) - *(float *)(hero_base + 0x210),
@@ -342,7 +336,6 @@ int get_hero_high_jump_input_window_frames(void) {
 }
 extern char D_0013F350[];
 void stick_target(int, float) __asm__("FUN_L00_002118c8");
-float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 int stick_direction_vs_facing(void) {
@@ -403,7 +396,6 @@ typedef struct M_221ee0 {
 } M_221ee0;
 extern G_221ee0 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 extern M_221ee0 *D_L00_0015FFE4_221ee0 __asm__("D_L00_0015FFE4");
-f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 f32 FUN_L00_0020d6b0_221ee0(M_221ee0 *, s32 *, f32, f32, f32, f32) __asm__("FUN_L00_0020d6b0");
 s32 FUN_00214720_221ee0(void *, s32) __asm__("FUN_00214720");
 s32 FUN_001efa68_221ee0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
@@ -479,7 +471,6 @@ void select_hero_grapple_swing_target(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_002228E0), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_0015FFE4;
-extern float FUN_001f9b48(void *, void *);
 extern float score_hero_target_candidate(void *, int *, float, float, float, float) __asm__("FUN_L00_0020d6b0");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
@@ -514,7 +505,7 @@ int select_hero_grapple_target(void) {
         if (*(int *)candidate_data != 0)
             continue;
         if (*(float *)(candidate_data + 0x20) != 0.0f &&
-            *(float *)(candidate_data + 0x20) < FUN_001f9b48((char *)(&hero.motion.pos), candidate_moby + 0x10))
+            *(float *)(candidate_data + 0x20) < fast_vec_dist((char *)(&hero.motion.pos), candidate_moby + 0x10))
             continue;
         hero_angle_state_base = (char *)((char *)&D_0013F350);
         k = *(int *)(hero_angle_state_base + 0x2084);
@@ -535,7 +526,7 @@ int select_hero_grapple_target(void) {
         if (out != 0)
             continue;
         gb += 0x80;
-        if (vector_distance(gb, candidate_moby + 0x10) < 4.0f)
+        if (vector_distance_xy(gb, candidate_moby + 0x10) < 4.0f)
             continue;
         if (*(unsigned char *)(candidate_moby + 0x31) == 0)
             target_score += 10.0f;
@@ -598,13 +589,11 @@ extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 #include "rnc/gameplay/state/game_globals.h"
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L00_0017BDF0[][25];
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int D_0015EEA4;
@@ -621,7 +610,6 @@ extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern s32 D_L00_0015F688 __attribute__((sda));
 extern short hero_run_start_frame_by_speed_step __asm__("D_L00_0015F6D8") __attribute__((sda));
 extern unsigned char D_0013E533[];
@@ -654,7 +642,6 @@ extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern char D_0013F350[];
@@ -1343,7 +1330,7 @@ int hero_set_state(int a, int b) {
         p->item_use_locked = 1;
         *(int *)&p->grapple_pull_speed = 0;
         p->grapple_pull_ending = 0;
-        p->tether_radius = FUN_001f9b48(&p->motion.pos, ((char *)p->grapple_target) + 0x10);
+        p->tether_radius = fast_vec_dist(&p->motion.pos, ((char *)p->grapple_target) + 0x10);
         if (b)
             set_hero_animation(0x30, 1, (float)scale_game_frames(5));
         break;
@@ -1395,7 +1382,7 @@ int hero_set_state(int a, int b) {
             q->swing_yaw =
                 fast_arc_tan(*(float *)(((char *)q->swing_target_moby) + 0x10) - q->motion.pos.f[0],
                              *(float *)(((char *)q->swing_target_moby) + 0x14) - q->motion.pos.f[1]);
-            q->unk9A4 = FUN_001f9b48(&q->motion.pos, ((char *)q->swing_target_moby) + 0x10);
+            q->unk9A4 = fast_vec_dist(&q->motion.pos, ((char *)q->swing_target_moby) + 0x10);
             q->swing_gravity = frame_time_sq * 27.0f;
             if (q->state.prev_control_mode == 4) {
                 q->swing_gravity = q->jump_gravity;
@@ -1836,7 +1823,7 @@ int hero_set_state(int a, int b) {
                     d.v.x = 331.0f;
                     d.v.y = 104.0f;
                     d.v.z = 145.0f;
-                    if (FUN_001f9b48(&u->motion.pos, &d.v) < 10.0f) {
+                    if (fast_vec_dist(&u->motion.pos, &d.v) < 10.0f) {
                         h = 0.7f;
                         u->unk430 += h;
                         u->jump_height_start += h;
@@ -3300,7 +3287,6 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int f_fun_l00_00266d60_227fa0(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int f_fun_001f9740_227fa0(int *) __asm__("FUN_001f9740");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state_data/process_hero_equipped_item_input.h"
 extern s32 D_00141660 NOT_SDA;

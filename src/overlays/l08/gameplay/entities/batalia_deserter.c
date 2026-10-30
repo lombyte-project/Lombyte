@@ -12,6 +12,7 @@
 #include "rnc/math/fast_math.h"
 
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
 
 /* triggers objects matching the moby's class */
@@ -792,7 +793,6 @@ extern s32 D_L08_001F8528[];
 extern char batalia_effect_sine_offsets[] __asm__("D_L08_001F8550");
 #include "rnc/overlay/l08/gameplay/entities/batalia_deserter_globals.h"
 extern int D_L08_001623F0;
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32();
 extern short batalia_effect_reference_position_x __asm__("D_L08_00162380") __attribute__((sda));
 int D_L08_001623C4 = 0;
