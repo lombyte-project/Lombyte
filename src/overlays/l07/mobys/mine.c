@@ -157,7 +157,7 @@ void update_mine(struct Moby *moby) {
         MINE_CHASE_TARGET = 2,
         MINE_EXPLODE = 3
     };
-    MineVars        *vars;
+    MineVars        *swooper_instance_vars;
     MineSpawnerVars *spawner_vars;
     MineSight        sight;
     MobyHit         *hit;
@@ -172,12 +172,12 @@ void update_mine(struct Moby *moby) {
     if (moby == NULL) {
         return;
     }
-    vars = (MineVars *)moby->pvars;
-    if (vars == NULL || vars->spawner == NULL) {
+    swooper_instance_vars = (MineVars *)moby->pvars;
+    if (swooper_instance_vars == NULL || swooper_instance_vars->spawner == NULL) {
         return;
     }
-    collision = vars->collision;
-    spawner_vars = (MineSpawnerVars *)vars->spawner->pvars;
+    collision = swooper_instance_vars->collision;
+    spawner_vars = (MineSpawnerVars *)swooper_instance_vars->spawner->pvars;
     FUN_L07_002886d8(moby, &sight, spawner_vars->view_range);
     if (moby->visible && fast_vec_dist(&moby->pos, &D_L07_00166E40) < 27.0f) {
         FUN_L00_0025a120(moby);
@@ -188,7 +188,7 @@ void update_mine(struct Moby *moby) {
     if (touching >= 2 && hit != NULL && hit->moby->oclass != 0x363 && hit->moby->oclass != 0x458 &&
         hit->moby->oclass != 0x367) {
         spawn_explosion(moby,
-                        &vars->velocity,
+                        &swooper_instance_vars->velocity,
                         NULL,
                         0.0f,
                         0.0f,
@@ -214,27 +214,27 @@ void update_mine(struct Moby *moby) {
             break;
         }
         moby->flags |= 0x1000;
-        clear_u64_value(&vars->velocity);
-        qcopy(&vars->home, &moby->pos);
+        clear_u64_value(&swooper_instance_vars->velocity);
+        qcopy(&swooper_instance_vars->home, &moby->pos);
         moby->rot.y = 0.0f;
-        moby->rot.z = fast_arc_tan(vars->goal.f[0] - moby->pos.x, vars->goal.f[1] - moby->pos.y);
-        vars->unk29 = 0;
+        moby->rot.z = fast_arc_tan(swooper_instance_vars->goal.f[0] - moby->pos.x, swooper_instance_vars->goal.f[1] - moby->pos.y);
+        swooper_instance_vars->unk29 = 0;
         moby->state = 1;
         moby->command = 0;
         break;
     case MINE_WAIT_AT_GOAL:
-        fast_vec_sub(&vars->velocity, &vars->goal, &moby->pos);
+        fast_vec_sub(&swooper_instance_vars->velocity, &swooper_instance_vars->goal, &moby->pos);
         FUN_L00_00258278(moby,
-                         fast_arc_tan(vars->goal.f[0] - moby->pos.x, vars->goal.f[1] - moby->pos.y),
-                         &vars->turn_speed,
+                         fast_arc_tan(swooper_instance_vars->goal.f[0] - moby->pos.x, swooper_instance_vars->goal.f[1] - moby->pos.y),
+                         &swooper_instance_vars->turn_speed,
                          frame_time_sq * 6.2831855f,
                          D_0015ED6C * 3.1415927f,
                          D_0015ED6C * 6.2831855f);
-        qcopy(&moby->pos, &vars->goal);
-        if ((vars->perch != NULL && vector_distance_xy(&moby->pos, &vars->perch->pos) < 20.0f &&
-             absolute_float(moby->pos.z - vars->perch->pos.z) < 3.0f) ||
+        qcopy(&moby->pos, &swooper_instance_vars->goal);
+        if ((swooper_instance_vars->perch != NULL && vector_distance_xy(&moby->pos, &swooper_instance_vars->perch->pos) < 20.0f &&
+             absolute_float(moby->pos.z - swooper_instance_vars->perch->pos.z) < 3.0f) ||
             (sight.found != 0 && fast_vec_dist(&moby->pos, &sight.pos) < spawner_vars->view_range &&
-             vector_distance_xy(&moby->pos, &vars->spawner->pos) > 2.0f &&
+             vector_distance_xy(&moby->pos, &swooper_instance_vars->spawner->pos) > 2.0f &&
              fast_difference_between_rotations(
                  moby->rot.z,
                  fast_arc_tan(sight.pos.f[0] - moby->pos.x, sight.pos.f[1] - moby->pos.y)) <
@@ -242,10 +242,10 @@ void update_mine(struct Moby *moby) {
             if (moby->prev_seq != 1) {
                 blend_moby_animation((MobyAnim *)moby, 1, 0, 10);
             }
-            vars->dive_speed = spawner_vars->speed * D_0015ED6C;
-            vars->life_timer = scale_game_frames(600);
+            swooper_instance_vars->dive_speed = spawner_vars->speed * D_0015ED6C;
+            swooper_instance_vars->life_timer = scale_game_frames(600);
             moby->command = 1;
-            vars->bob_timer = scale_game_frames(7);
+            swooper_instance_vars->bob_timer = scale_game_frames(7);
             moby->state = 2;
         }
         break;
@@ -255,25 +255,25 @@ void update_mine(struct Moby *moby) {
         }
         if (moby->command == 1) {
             moby->pos.z += frame_scale * 0.1f;
-            if (fast_dec_timer(&vars->bob_timer)) {
-                vars->bob_timer = scale_game_frames(7);
+            if (fast_dec_timer(&swooper_instance_vars->bob_timer)) {
+                swooper_instance_vars->bob_timer = scale_game_frames(7);
                 moby->command = 2;
             }
         } else if (moby->command == 2) {
             moby->pos.z -= frame_scale * 0.1f;
-            if (fast_dec_timer(&vars->bob_timer)) {
+            if (fast_dec_timer(&swooper_instance_vars->bob_timer)) {
                 moby->command = 0;
             }
         }
         FUN_L00_00258278(moby,
                          fast_arc_tan(sight.pos.f[0] - moby->pos.x, sight.pos.f[1] - moby->pos.y),
-                         &vars->turn_speed,
+                         &swooper_instance_vars->turn_speed,
                          frame_time_sq * 3.1415927f,
                          D_0015ED6C * 3.1415927f,
                          D_0015ED6C * 6.2831855f);
         pitch =
             fast_arc_tan(vector_distance_xy(&moby->pos, &sight.pos), sight.pos.f[2] - moby->pos.z);
-        moby->rot.y = spring_turn(&vars->pitch_speed,
+        moby->rot.y = spring_turn(&swooper_instance_vars->pitch_speed,
                                   moby->rot.y,
                                   pitch,
                                   frame_time_sq * 3.1415927f,
@@ -284,13 +284,13 @@ void update_mine(struct Moby *moby) {
             chase_acceleration.f[2] = 0.0f;
         }
         fast_vec_normalize(&chase_acceleration, &chase_acceleration, frame_time_sq * 30.0f);
-        fast_vec_add(&vars->velocity, &vars->velocity, &chase_acceleration);
-        clamp_vector_length(&vars->velocity, &vars->velocity, D_0015ED6C * 10.0f);
-        fast_vec_add(&moby->pos, &moby->pos, &vars->velocity);
-        if (fast_vec_dist(&moby->pos, &vars->home) > 64.0f) {
+        fast_vec_add(&swooper_instance_vars->velocity, &swooper_instance_vars->velocity, &chase_acceleration);
+        clamp_vector_length(&swooper_instance_vars->velocity, &swooper_instance_vars->velocity, D_0015ED6C * 10.0f);
+        fast_vec_add(&moby->pos, &moby->pos, &swooper_instance_vars->velocity);
+        if (fast_vec_dist(&moby->pos, &swooper_instance_vars->home) > 64.0f) {
             mark_mine_for_removal(moby, spawner_vars);
         }
-        make_hit_descriptor(contact, moby, 0x10001, 1.0f, &vars->velocity);
+        make_hit_descriptor(contact, moby, 0x10001, 1.0f, &swooper_instance_vars->velocity);
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.75f;
         if (collect_mobies_in_sphere(0.75f, &probe, 0x10, moby, contact) && debris_target != NULL &&
@@ -298,7 +298,7 @@ void update_mine(struct Moby *moby) {
             debris_target->oclass != 0x458 && debris_target->oclass != 0x365 &&
             debris_target->oclass != 0x367) {
             spawn_explosion(moby,
-                            &vars->velocity,
+                            &swooper_instance_vars->velocity,
                             NULL,
                             0.0f,
                             0.0f,
@@ -323,13 +323,13 @@ void update_mine(struct Moby *moby) {
             fast_vec_sub(&push, &l07_sphere_collision_resolved_center, &probe);
             fast_vec_add(&moby->pos, &moby->pos, &push);
         }
-        if (vars->life_timer == 0) {
+        if (swooper_instance_vars->life_timer == 0) {
             mark_mine_for_removal(moby, spawner_vars);
         }
         break;
     case MINE_EXPLODE:
         spawn_explosion(moby,
-                        &vars->velocity,
+                        &swooper_instance_vars->velocity,
                         NULL,
                         0.0f,
                         0.0f,
