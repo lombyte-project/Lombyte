@@ -92,7 +92,7 @@ float follow_camera_input_damping_gp __asm__("D_L00_00161CB0") = 1.0f;
 void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float in) {
     V_2e8bb8       axis;
     unsigned char *camera_data;
-    unsigned char *base;
+    unsigned char *reference_vector_storage;
     unsigned char *turn_pitch_state;
     unsigned char *turn_pitch_vector;
     float          smoothed_turn_input;
@@ -104,7 +104,7 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     float          z;
 
     camera_data = *(unsigned char **)(camera_object + 0x70);
-    base = D_L00_00166E10_2e8bb8;
+    reference_vector_storage = D_L00_00166E10_2e8bb8;
     turn_pitch_state = camera_data + 0x1A8;
     turn_pitch_vector = camera_data + 0x130;
     smoothed_turn_input = cam_interp_values(camera_data + 0x1AC,
@@ -144,16 +144,16 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     target_pitch_angle = *(float *)(turn_pitch_state + 8) * 0.69813168f;
     if (k == 0.0f) {
         build_look_at_matrix(
-            turn_pitch_vector, turn_pitch_vector, base + 0x20, *(float *)(turn_pitch_state + 0x20));
+            turn_pitch_vector, turn_pitch_vector, reference_vector_storage + 0x20, *(float *)(turn_pitch_state + 0x20));
     } else {
         build_look_at_matrix(turn_pitch_vector,
                              turn_pitch_vector,
-                             base + 0x20,
+                             reference_vector_storage + 0x20,
                              *(float *)(turn_pitch_vector + 0x34));
     }
-    reference_dot_product = fast_vec_dot(turn_pitch_vector, base + 0x20);
+    reference_dot_product = fast_vec_dot(turn_pitch_vector, reference_vector_storage + 0x20);
     turn_pitch_vector_length = fast_vec_length(turn_pitch_vector);
-    fast_vec_cross(axis, base + 0x20, turn_pitch_vector);
+    fast_vec_cross(axis, reference_vector_storage + 0x20, turn_pitch_vector);
     fast_vec_normalize(axis, axis, 1.0f);
     current_pitch_angle = fast_arc_tan(turn_pitch_vector_length, reference_dot_product);
     if (absolute_float(current_pitch_angle) < absolute_float(target_pitch_angle) &&
