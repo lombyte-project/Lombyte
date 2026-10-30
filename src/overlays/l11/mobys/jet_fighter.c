@@ -856,7 +856,7 @@ void update_player_ship_flight(struct Moby   *ship_moby,
                                ShipVars_2838 *ship_vars) __asm__("FUN_L11_00312838");
 
 void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
-    W4_2838          old;
+    W4_2838          ship_position_before_movement;
     W4_2838          death_explosion_velocity;
     UQ_2838          up;
     W4_2838          ship_movement_vector;
@@ -975,7 +975,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
 
     build_spherical_offset(ship_movement_vector, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
     fast_vec_normalize(ship_vars->v10, ship_movement_vector, 1.0f);
-    qcopy(old, &ship_moby->pos);
+    qcopy(ship_position_before_movement, &ship_moby->pos);
     fast_vec_add(&ship_moby->pos, &ship_moby->pos, ship_movement_vector);
     {
         float lo = D_L11_00161FF4_gp;
