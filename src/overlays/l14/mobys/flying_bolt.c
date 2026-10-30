@@ -87,7 +87,7 @@ void update_flying_bolt(struct Moby *projectile_moby) __asm__("FUN_L14_002ece00"
 
 void update_flying_bolt(struct Moby *projectile_moby) {
     L14BoltVars *bolt_vars = (L14BoltVars *)projectile_moby->pvars;
-    Vec4         old;
+    Vec4         collision_line_start;
     Vec4         target;
     L14BoltSweep sweep;
     Vec4         aim;
@@ -100,7 +100,7 @@ void update_flying_bolt(struct Moby *projectile_moby) {
     int          i;
     int          j;
 
-    qcopy(&old, &projectile_moby->pos);
+    qcopy(&collision_line_start, &projectile_moby->pos);
     fast_vec_add(&projectile_moby->pos, &projectile_moby->pos, &bolt_vars->vel);
     qcopy(&target, &projectile_moby->pos);
     ignore = bolt_vars->ignore;
@@ -135,15 +135,15 @@ void update_flying_bolt(struct Moby *projectile_moby) {
         mark_moby_for_removal(projectile_moby);
         return;
     }
-    while (tries < 3 && collision_line(&old, &target, pass, ignore, 0) != 0) {
+    while (tries < 3 && collision_line(&collision_line_start, &target, pass, ignore, 0) != 0) {
         hit = D_L14_00174540.moby;
         tries++;
         if (hit != 0 && hit->oclass == 0xFC) {
-            qcopy(&old, &D_L14_00174540.pos);
+            qcopy(&collision_line_start, &D_L14_00174540.pos);
             ignore = hit;
             continue;
         }
-        collision_line(&old, &target, pass, ignore, &sweep);
+        collision_line(&collision_line_start, &target, pass, ignore, &sweep);
         qcopy(&projectile_moby->pos, &D_L14_00174540.pos);
         if (projectile_moby->visible != 0) {
             for (j = 0; j < 5; j++) {
