@@ -109,7 +109,7 @@ extern s32   random_integer_below(s32) __asm__("FUN_00213260");
 extern char *create_moby(int);
 extern int   FUN_L00_00257b90(int, int);
 extern int   hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void  set_background_color(s32 arg0, unsigned long arg1, unsigned long arg2);
+extern void  set_background_color(s32 red, unsigned long green, unsigned long blue);
 int          FUN_L00_002603d0_2b58d8(void *) __asm__("FUN_L00_002603d0");
 void         FUN_L00_002b56d0_2b58d8(void *) __asm__("FUN_L00_002b56d0");
 void         FUN_L00_00250df8_2b58d8(void *) __asm__("FUN_L00_00250df8");

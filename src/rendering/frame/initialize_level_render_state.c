@@ -130,7 +130,7 @@ extern char               too_many_directional_lights_message[] __asm__("D_001E7
 
 extern void DebugPrint(char *fmt, ...);
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void set_background_color(s32 arg0, u64 arg1, u64 arg2);
+extern void set_background_color(s32 red, u64 green, u64 blue);
 extern void update_fog(void) __asm__("func_001F2588");
 extern void reset_draw_globals(void) __asm__("func_001F37E8");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
