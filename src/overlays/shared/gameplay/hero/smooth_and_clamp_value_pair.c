@@ -98,7 +98,7 @@ typedef struct {
 
 extern char D_0013C940[];
 extern char D_00141660[];
-extern unsigned char item_available[] __asm__("D_0013D4C0");
+extern u8 item_available_lui[35] __asm__("D_0013D4C0") NOT_SDA;
 extern int D_0015ED8C;
 extern int D_0015ED90;
 extern int D_0015ED94;
@@ -203,7 +203,7 @@ void apply_hero_item_slot_selection(int i) {
             }
         }
         g = &hero;
-        if (g->state.control_mode == 0xF && item_available[0x1D] != 0) {
+        if (g->state.control_mode == 0xF && item_available_lui[0x1D] != 0) {
             if (*(int *)(D_00141660 + 4) != 0x1D || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
                 int v;
                 g->pending_item[1] = 0x1D;
@@ -216,7 +216,7 @@ void apply_hero_item_slot_selection(int i) {
             }
         }
         g = &hero;
-        if (*(unsigned char *)((char *)g + 0x12E7) != 0 && item_available[0x1C] != 0) {
+        if (*(unsigned char *)((char *)g + 0x12E7) != 0 && item_available_lui[0x1C] != 0) {
             if (*(int *)(D_00141660 + 4) != 0x1C || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
                 int v;
                 g->pending_item[1] = 0x1C;
@@ -240,7 +240,7 @@ void apply_hero_item_slot_selection(int i) {
                 (equipped_item_check_hero = &hero, *(int *)((char *)equipped_item_check_hero + i * 0x50 + 0x10B8) == 0)) {
                 h = &hero;
                 if (*(int *)((char *)h + i * 0x50 + 0x10B8) != 6 && h->selected_item[i] != 6 &&
-                    item_available[6] != 0) {
+                    item_available_lui[6] != 0) {
                     int v;
                     h->pending_item[i] = 6;
                     flag6 = 1;
@@ -264,7 +264,7 @@ void apply_hero_item_slot_selection(int i) {
                 int v;
                 g = &hero;
                 v = *(int *)((char *)g + 0x11A8);
-                if (v != 4 && item_available[4] != 0) {
+                if (v != 4 && item_available_lui[4] != 0) {
                     g->saved_item[3] = v;
                     flag4 = 1;
                     g->pending_item[3] = 4;

@@ -1734,7 +1734,6 @@ extern char *D_L00_001C5800_244110[] __asm__("D_L00_001C5800");
 extern char *D_L00_001BC030_244110[] __asm__("D_L00_001BC030");
 extern char *D_L00_00160FC0_244110 __asm__("D_L00_00160FC0");
 extern char *D_L00_00160494_244110 __asm__("D_L00_00160494");
-extern char *D_L00_0015FFD8_244110 __asm__("D_L00_0015FFD8");
 extern char *D_L00_0015FFE8;
 extern char *D_L00_00160108;
 extern char *D_L00_0016016C;
@@ -1994,8 +1993,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
             debug_print(D_L00_001E8970, KB(D_L00_00197300[0]->seqs[0] - D_L00_001BC030_244110[0]));
         debug_print(D_L00_001E8988, KB(D_L00_00160FC0_244110 - D_L00_00197300[0]->seqs[0]));
         debug_print(D_L00_001E89A0, KB(D_L00_00160494_244110 - D_L00_00160FC0_244110));
-        debug_print(D_L00_001E89B8, KB(D_L00_0015FFD8_244110 - D_L00_00160494_244110));
-        debug_print(D_L00_001E89D0, KB(D_L00_0015FFE8 - D_L00_0015FFD8_244110));
+        debug_print(D_L00_001E89B8, KB((char *)moby_table - D_L00_00160494_244110));
+        debug_print(D_L00_001E89D0, KB(D_L00_0015FFE8 - (char *)moby_table));
         debug_print(D_L00_001E89E8, KB(D_L00_00160108 - D_L00_0015FFE8));
         debug_print(D_L00_001E8A00, KB(D_L00_0016016C - D_L00_00160108));
         debug_print(D_L00_001E8A18, 128.0);

@@ -41,7 +41,7 @@ typedef struct {
 
 extern s32 pal_mode_macro __asm__("D_0015ED80")MACRO_ADDR;
 extern s32 D_0015ED88 __attribute__((sda));
-extern volatile s32 gs_texture_allocation_base __asm__("D_0015EE8C");
+#include "rnc/rendering/render_globals.h"
 extern s32 intro_overlay_timer_macro __asm__("D_0015EF58") MACRO_ADDR;
 extern f32 sequence_macro __asm__("D_0015F43C") MACRO_ADDR;
 extern s32 game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
@@ -202,9 +202,10 @@ void transition_do_transition(void) {
         game_frame_counter_macro++;
     }
     if (pal_mode_macro == 0) {
-        gs_texture_allocation_base = 0x280000;
+        *(volatile s32 *)&gs_texture_allocation_base = 0x280000;
     }
-    gs_texture_allocation_cursor = gs_texture_allocation_start = gs_texture_allocation_base;
+    /* Volatile: retail stores the base and loads it again. */
+    gs_texture_allocation_cursor = gs_texture_allocation_start = *(volatile s32 *)&gs_texture_allocation_base;
 }
 
 extern __typeof__(transition_do_transition) func_001EB798 __attribute__((alias("FUN_001eb798")));

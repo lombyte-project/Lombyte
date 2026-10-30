@@ -20,6 +20,7 @@ extern LevelPath *l05_paths[] __asm__("D_L05_001B0930");
 extern LevelPath *l08_paths[] __asm__("D_L08_001B0CB0");
 extern LevelPath *l09_paths[] __asm__("D_L09_001B0630");
 extern LevelPath *l10_paths[] __asm__("D_L10_001B0930");
+extern LevelPath *l11_paths[] __asm__("D_L11_001B0EB0");
 extern LevelPath *l12_paths[] __asm__("D_L12_001B0930");
 extern LevelPath *l14_paths[] __asm__("D_L14_001B0BB0");
 

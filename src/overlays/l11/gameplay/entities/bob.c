@@ -863,14 +863,14 @@ struct TgtData {
     int idx;
 };
 
-extern int *path_table[] __asm__("D_L11_001B0EB0");
+#include "rnc/overlay/level_path.h"
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
 
 int try_update_resort_owner_path_target(struct Moby *moby, char *other) {
     struct TgtData *moby_vars = (struct TgtData *)moby->pvars;
     int *leg_path_ids = moby_vars->a;
-    int *ent = path_table[*(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)))];
+    int *ent = (int *)l11_paths[*(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)))];
     int path_ids[8];
     int path_id_count;
     if (point_in_path_xy(other, ent + 4, *ent) == 0)
@@ -966,7 +966,7 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *out) {
             fast_vec_normalize(candidate_position, candidate_position, 4.0f);
         fast_vec_add(candidate_position, candidate_position, pos);
         {
-            int *path_entry = path_table[*(int *)(pvars - (-(*(int *)(pvars + 0x158) * 4)) + 0x60)];
+            int *path_entry = (int *)l11_paths[*(int *)(pvars - (-(*(int *)(pvars + 0x158) * 4)) + 0x60)];
             if (point_in_path_xy(candidate_position, path_entry + 4, *path_entry)) {
                 candidate_position[2] += 5.0f;
                 landing_ground_height = func_L00_0025A748_f(candidate_position);
@@ -1715,14 +1715,14 @@ void pokitaru_boat_update(struct Moby *moby) {
         if (moby->prev_seq != 1) {
             blend_moby_animation_309378((MobyAnim_309378 *)moby, 1, 0, 1);
         }
-        tab_a8 = path_table[boat_vars->idx_a8];
-        tab_ac = path_table[boat_vars->idx_ac];
+        tab_a8 = (int *)l11_paths[boat_vars->idx_a8];
+        tab_ac = (int *)l11_paths[boat_vars->idx_ac];
         transpose_rotation_matrix(target, &moby->rot_row0);
         for (n = 0; n < tab_a8[0]; n++) {
             fast_vec_sub(point_offset_from_boat, (char *)tab_a8 + 0x10 + n * 16, &moby->pos);
             transform_vector((char *)tab_ac + 0x10 + n * 16, point_offset_from_boat, target);
         }
-        path = path_table[boat_vars->path_a0];
+        path = (int *)l11_paths[boat_vars->path_a0];
         boat_vars->path_c4 = path;
         qcopy(&moby->pos, (char *)path + 0x10);
         boat_vars->seg_d4 = 1;
@@ -1737,7 +1737,7 @@ void pokitaru_boat_update(struct Moby *moby) {
     }
     case POKITARU_BOAT_WAIT_FOR_ACTIVATION:
         if (boat_vars->flag_b8 != 0) {
-            int *path = path_table[boat_vars->path_a0];
+            int *path = (int *)l11_paths[boat_vars->path_a0];
             int n;
             float *last;
 
@@ -1825,8 +1825,8 @@ void pokitaru_boat_update(struct Moby *moby) {
             follow_camera_set_distance(0, pokitaru_boat_camera_distance_gp, 0.003f);
             follow_camera_set_height(pokitaru_boat_camera_height_gp, 0.003f);
         }
-        tab_a8 = path_table[boat_vars->idx_a8];
-        tab_ac = path_table[boat_vars->idx_ac];
+        tab_a8 = (int *)l11_paths[boat_vars->idx_a8];
+        tab_ac = (int *)l11_paths[boat_vars->idx_ac];
         for (i = 0; i < tab_a8[0]; i++) {
             transform_vector_by_basis((char *)tab_a8 + 0x10 + i * 16, (char *)tab_ac + 0x10 + i * 16, &moby->rot_row0);
             fast_vec_add((char *)tab_a8 + 0x10 + i * 16, (char *)tab_a8 + 0x10 + i * 16, &moby->pos);

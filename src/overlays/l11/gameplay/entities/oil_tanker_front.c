@@ -39,7 +39,7 @@
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
-extern char *path_table[] __asm__("D_L11_001B0EB0");
+#include "rnc/overlay/level_path.h"
 extern float D_L11_001622CC __attribute__((sda));
 #include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_puffoid_damage_and_path_goal_3.h"
 #include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_globals.h"
@@ -109,7 +109,7 @@ extern void FUN_00212f90(void *, s32, s32, s32);
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern s32 FUN_L00_0025ff38(void *, void *, s32, s32, void *, s32, float);
 
-/* Path patroller update: rides its carrier moby until dropped, takes hits (hit and death states), and follows its D_L11_001B0EB0 path toward the hero. */
+/* Path patroller update: rides its carrier moby until dropped, takes hits (hit and death states), and follows its l11_paths path toward the hero. */
 void update_puffoid_damage_and_path_goal(struct Moby *moby) __asm__("FUN_L11_00315968");
 
 void update_puffoid_damage_and_path_goal(struct Moby *moby) {
@@ -250,11 +250,11 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     } else {
         patrol_vars->reach = patrol_vars->range;
     }
-    path = path_table[patrol_vars->path_index];
+    path = (char *)l11_paths[patrol_vars->path_index];
     if (FUN_L00_0025ff38(moby, &patrol_vars->goal, 0, 0, path + 0x10, *(s32 *)path, patrol_vars->reach) != 2) {
         Vec4f *goal_check_position;
         if (moby->state == 1) {
-            goal_check_position = (Vec4f *)(path_table[patrol_vars->path2_index] + 0x20);
+            goal_check_position = (Vec4f *)((char *)l11_paths[patrol_vars->path2_index] + 0x20);
         } else {
             goal_check_position = &moby->pos;
         }
@@ -523,7 +523,7 @@ void update_two_door_gate(struct Moby *moby) {
 /* Private variables of the chained moby class 0x527 (oil_tanker_front_update and its helpers). */
 struct L11ChainVars {
     u8 pad0[0x60];
-    s32 path_index;          /* 0x60: index into D_L11_001B0EB0 */
+    s32 path_index;          /* 0x60: index into l11_paths */
     s32 count;               /* 0x64: live links */
     s32 point;               /* 0x68: current path point */
     f32 t;                   /* 0x6C: progress between points */
@@ -534,7 +534,7 @@ struct L11ChainVars {
     f32 health;              /* 0xE0 */
     s16 group;               /* 0xE4 */
     u8 padE6[6];
-    s32 path_sel;            /* 0xEC: index into D_L11_001B0EB0 on spawn */
+    s32 path_sel;            /* 0xEC: index into l11_paths on spawn */
     char *path;              /* 0xF0 */
     s32 sound;               /* 0xF4 */
 };
@@ -573,7 +573,7 @@ void oil_tanker_front_update(struct Moby *moby) {
         }
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x200;
-        chain_vars->path = path_table[chain_vars->path_sel];
+        chain_vars->path = (char *)l11_paths[chain_vars->path_sel];
         qcopy(&moby->pos, chain_vars->path + 0x10);
         chain_vars->health = 80.0f;
         chain_vars->count = 8;
@@ -603,7 +603,7 @@ void oil_tanker_front_update(struct Moby *moby) {
             int i;
 
             moby->state = 2;
-            chain_vars->path = path_table[chain_vars->path_index];
+            chain_vars->path = (char *)l11_paths[chain_vars->path_index];
             chain_vars->point = 0;
             for (i = 0; i < 8; i++) {
                 chain_vars->offsets[i] = *(u16 *)chain_vars->path - 100;
@@ -672,7 +672,7 @@ void update_oil_tanker_front_path_pose(struct Moby *moby) {
 #include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_oil_tanker_link_path_poses.h"
 extern s32 D_L11_0015F5C4;
 
-/* A chain path in D_L11_001B0EB0: a point count, then the points (w = 42 marks a sound point). */
+/* A chain path in l11_paths: a point count, then the points (w = 42 marks a sound point). */
 struct L11ChainPath {
     s32 count;
     u8 pad4[0xC];
@@ -844,7 +844,6 @@ int collect_oil_tanker_chain_mobys(struct Moby *moby, void **out) {
     }
     return count;
 }
-extern char D_L11_001B0EB0[];
 
 /* Spreads the 0x527 chain mobys of a D_L11_001AC240 group evenly along path table_index: each gets a start point and its path index. */
 /* idx is shared by both loops (one multi-block pseudo), which gives the second loop retail's register choice. */
@@ -868,7 +867,7 @@ void distribute_group_class_527_mobys_along_path(struct Moby *moby, int table_in
         list++;
     } while ((short)entry >= 0);
 
-    table = *(char **)(D_L11_001B0EB0 + table_index * 4);
+    table = (char *)l11_paths[table_index];
     stride = *(int *)table / count;
     list = (u16 *)D_L11_001AC240[group];
     do {
@@ -1264,12 +1263,12 @@ void blarg_ship_update(struct Moby *moby) {
         if (*(float *)(moby_vars + 0x68) > 1.0f) {
             *(float *)(moby_vars + 0x68) -= 1.0f;
             *(int *)(moby_vars + 0x64) =
-                (*(int *)(moby_vars + 0x64) + 1) % **(int **)(D_L11_001B0EB0 + *(int *)(moby_vars + 0x60) * 4);
+                (*(int *)(moby_vars + 0x64) + 1) % l11_paths[*(int *)(moby_vars + 0x60)]->count;
         } else if (*(float *)(moby_vars + 0x68) < 0.0f) {
             *(float *)(moby_vars + 0x68) += 1.0f;
             *(int *)(moby_vars + 0x64) =
-                (*(int *)(moby_vars + 0x64) + **(int **)(D_L11_001B0EB0 + *(int *)(moby_vars + 0x60) * 4) - 1) %
-                **(int **)(D_L11_001B0EB0 + *(int *)(moby_vars + 0x60) * 4);
+                (*(int *)(moby_vars + 0x64) + l11_paths[*(int *)(moby_vars + 0x60)]->count - 1) %
+                l11_paths[*(int *)(moby_vars + 0x60)]->count;
         }
         fast_add_rotations(*(float *)(moby_vars + 0x70), *(float *)(moby_vars + 0x74));
         update_moby_path_transform(moby);

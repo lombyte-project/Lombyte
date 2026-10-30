@@ -54,6 +54,7 @@ struct GsTextureAllocation {
     s32 cursor;
     s32 start;
 };
+extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74");
 
 extern f32 warp_texture_coordinates[4][2] __asm__("D_001D9A10");
 
