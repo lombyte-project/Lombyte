@@ -450,7 +450,7 @@ void                    transform_vector(void *, void *, void *) __asm__("FUN_00
 float                   square_root(float) __asm__("FUN_001f9988");
 void compute_rotated_vector_angles(Vec4 *input_vector, float *out) __asm__("FUN_L00_00216078");
 
-void compute_rotated_vector_angles(Vec4 *input_vector, float *out) {
+void compute_rotated_vector_angles(Vec4 *input_vector, float *output_angles) {
     Vec4  rotation_matrix[4];
     Vec4  transposed_rotation_matrix[4];
     Vec4  transformed_vector;
@@ -459,10 +459,10 @@ void compute_rotated_vector_angles(Vec4 *input_vector, float *out) {
     euler_rotation_matrix(rotation_matrix, D_001413D0 + 0x40);
     transpose_rotation_matrix(transposed_rotation_matrix, rotation_matrix);
     transform_vector(tp, tp, transposed_rotation_matrix);
-    out[0] = fast_arc_tan(square_root(transformed_vector.f[0] * transformed_vector.f[0] +
+    output_angles[0] = fast_arc_tan(square_root(transformed_vector.f[0] * transformed_vector.f[0] +
                                       transformed_vector.f[2] * transformed_vector.f[2]),
                           transformed_vector.f[1]);
-    out[1] = -fast_arc_tan(transformed_vector.f[2], transformed_vector.f[0]);
+    output_angles[1] = -fast_arc_tan(transformed_vector.f[2], transformed_vector.f[0]);
 }
 
 typedef struct {
