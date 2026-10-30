@@ -228,9 +228,9 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     float  matrix[12];
     float  offset[4];
     u64    color;
-    int   *scratch;
+    int   *scratchpad_colors;
     int    scratch_color;
-    float *old = (float *)0x001612f8;
+    float *saved_fog_near_distance_pointer = (float *)0x001612f8;
     float *current = level09_view_context;
     float  saved0 = current[0x218 / 4];
     float  saved1 = current[0x21c / 4];
@@ -339,20 +339,20 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
         words[15] = 0x47;
         D_L09_001611C0 = (int *)(words + 16);
     }
-    scratch = (int *)0x70000000;
+    scratchpad_colors = (int *)0x70000000;
     for (i = 255; i >= 0; i--)
-        scratch[i] = scratch_color;
+        scratchpad_colors[i] = scratch_color;
     i = 0;
     if (count > 0)
         do {
-            char *entry;
+            char *scaled_surface_entry;
             int   visible;
             entry_offset = i * 32;
-            entry = (char *)((int)list + entry_offset);
-            visible = fast_bsphere_check(entry, 256.0f);
+            scaled_surface_entry = (char *)((int)list + entry_offset);
+            visible = fast_bsphere_check(scaled_surface_entry, 256.0f);
             if (visible != -1) {
-                int    float_pair_count = *(int *)(entry + 0x1c);
-                float *source = *(float **)(entry + 0x14);
+                int    float_pair_count = *(int *)(scaled_surface_entry + 0x1c);
+                float *source = *(float **)(scaled_surface_entry + 0x14);
                 float *destination = (float *)0x70001000;
                 if (float_pair_count > 0) {
                     j = float_pair_count;
