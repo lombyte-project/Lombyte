@@ -28,18 +28,18 @@ extern struct RotatingPreviewMoby *create_menu_preview_moby(s32) __asm__("func_0
 extern void rotate_preview_moby_x(struct RotatingPreviewMoby *) __asm__("FUN_0021f120");
 s32 create_rotating_preview_moby(struct RotatingPreviewOwner *owner) __asm__("FUN_0021ea48");
 
-s32 create_rotating_preview_moby(struct RotatingPreviewOwner *owner) {
+s32 create_rotating_preview_moby(struct RotatingPreviewOwner *preview_owner) {
     struct RotatingPreviewMoby *moby = create_menu_preview_moby(0x46E);
 
     if (moby != 0) {
-        owner->preview_moby = moby;
+        preview_owner->preview_moby = moby;
         moby->flags = 0;
         moby->x = preview_camera.position.f[0] + 8.0f;
         moby->y = preview_camera.position.f[1] + 0.5f;
         moby->z = preview_camera.position.f[2] - 0.1f;
         moby->rotation_y = -1.9f;
         moby->update = rotate_preview_moby_x;
-        *moby->preview_vars = owner;
+        *moby->preview_vars = preview_owner;
     }
     return 0;
 }
