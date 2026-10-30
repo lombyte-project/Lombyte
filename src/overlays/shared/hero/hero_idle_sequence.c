@@ -2961,13 +2961,13 @@ void update_hero_idle_random_rotation_targets(void) {
                 motion_timers[2] =
                     FUN_L00_00257b90(scale_game_frames(0x28), scale_game_frames(0x5A));
             } else {
-                float old, nw;
+                float previous_idle_rotation_angle, nw;
                 *(float *)(hero_state_base + i * 0x10 + 0x1024) =
                     random_float_between(-0.08726646f, 0.5235988f);
-                old = *(float *)(hero_state_base + i * 0x10 + 0x1028);
+                previous_idle_rotation_angle = *(float *)(hero_state_base + i * 0x10 + 0x1028);
                 nw = FUN_L00_00257c48(0.34906584f, 0.95993108f);
                 *(float *)(hero_state_base + i * 0x10 + 0x1028) = nw;
-                if ((old <= 0 && nw <= 0) || (old >= 0 && nw >= 0))
+                if ((previous_idle_rotation_angle <= 0 && nw <= 0) || (previous_idle_rotation_angle >= 0 && nw >= 0))
                     *(float *)(hero_state_base + i * 0x10 + 0x1028) =
                         -*(float *)(hero_state_base + i * 0x10 + 0x1028);
                 motion_timers[i] =
