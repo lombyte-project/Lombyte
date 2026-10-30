@@ -383,7 +383,7 @@ unsigned char *spawn_devastator_missile(unsigned char *owner,
                                         float          initial_yaw,
                                         float          initial_pitch) __asm__("FUN_L00_002afc70");
 
-unsigned char *spawn_devastator_missile(unsigned char *owner,
+unsigned char *spawn_devastator_missile(unsigned char *missile_source_moby,
                                         V_2afc70      *spawn_position,
                                         unsigned char *target_moby,
                                         float          guidance_yaw,
@@ -409,7 +409,7 @@ unsigned char *spawn_devastator_missile(unsigned char *owner,
         MOBY(missile_moby)->rot.z = initial_yaw;
         MOBY(missile_moby)->rot.y = initial_pitch;
         missile_moby[0x20] = 0;
-        *(unsigned char **)(missile_data + 0x10) = owner;
+        *(unsigned char **)(missile_data + 0x10) = missile_source_moby;
         qcopy(missile_moby + 0x10, spawn_position);
         default_desired_speed = frame_time * 20.0f;
         *(int *)(missile_data + 0x38) = 1;
@@ -446,8 +446,8 @@ unsigned char *spawn_devastator_missile(unsigned char *owner,
         turn_period = FUN_001f96f8_2afc70(frame_time * 0.1f < x ? 0x3C : 0xF);
         *(short *)(missile_data + 0x3E) = turn_period;
         *(short *)(missile_data + 0x3C) = turn_period;
-        if (owner != 0 && owner[0x20] != 0xFE && owner[0x20] != 0xFD) {
-            collision_start.q = ((V_2afc70 *)(owner + 0x10))->q;
+        if (missile_source_moby != 0 && missile_source_moby[0x20] != 0xFE && missile_source_moby[0x20] != 0xFD) {
+            collision_start.q = ((V_2afc70 *)(missile_source_moby + 0x10))->q;
         } else {
             qcopy(&collision_start, &hero_pos);
             collision_start.f[2] += 0.6f;
