@@ -13,9 +13,9 @@
   "c_fuzzy_percent_of_recoverable": 100.0,
   "data": {
     "bytes_total": 12433372,
-    "bytes_matching_c": 5231278,
-    "c_exact_percent": 42.0745,
-    "bytes_matching_c_zero": 4814187
+    "bytes_matching_c": 7809078,
+    "c_exact_percent": 62.8074,
+    "bytes_matching_c_zero": 4877299
   },
   "boot": {
     "units_total": 1425,
@@ -2028,8 +2028,8 @@
     ],
     "data": {
       "bytes_total": 699136,
-      "bytes_matching_c": 33597,
-      "c_exact_percent": 4.8055
+      "bytes_matching_c": 188645,
+      "c_exact_percent": 26.9826
     }
   },
   "overlays": {
@@ -9122,9 +9122,9 @@
     ],
     "data": {
       "bytes_total": 11734236,
-      "bytes_matching_c": 5197681,
-      "c_exact_percent": 44.295,
-      "bytes_matching_c_zero": 4814187
+      "bytes_matching_c": 7620433,
+      "c_exact_percent": 64.9419,
+      "bytes_matching_c_zero": 4877299
     }
   },
   "total": {
@@ -9140,9 +9140,9 @@
     "c_fuzzy_percent_of_recoverable": 100.0,
     "data": {
       "bytes_total": 12433372,
-      "bytes_matching_c": 5231278,
-      "c_exact_percent": 42.0745,
-      "bytes_matching_c_zero": 4814187
+      "bytes_matching_c": 7809078,
+      "c_exact_percent": 62.8074,
+      "bytes_matching_c_zero": 4877299
     }
   }
 }
