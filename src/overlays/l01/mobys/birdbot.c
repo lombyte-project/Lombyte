@@ -157,7 +157,7 @@ int select_birdbot_path_node(void *path_follower_entity, int *selected_path_node
     PathFollow    *f;
     s32            fast;
     s32            preceding_node_index;
-    s32            next;
+    s32            successor_node_index;
     s32            best;
     s32            last;
     s32            i;
@@ -176,7 +176,7 @@ int select_birdbot_path_node(void *path_follower_entity, int *selected_path_node
     }
     target_search_radius = fast ? path_pick_vars->radius * 2.0f : path_pick_vars->radius;
     preceding_node_index = 0;
-    next = 0;
+    successor_node_index = 0;
     find_point_ahead(path_follower_moby, &target, target_search_radius);
     best_d = 10000.0f;
     best_a = 0.0f;
@@ -202,14 +202,14 @@ int select_birdbot_path_node(void *path_follower_entity, int *selected_path_node
                 best_d = node_follower_distance;
                 best = i;
             } else if (last == best) {
-                next = i;
+                successor_node_index = i;
             }
             last = i;
         }
     }
     i = best;
     if (i == f->path->count - 1) {
-        next = 0;
+        successor_node_index = 0;
     } else if (i == 0) {
         preceding_node_index = f->path->count - 1;
     }
@@ -221,7 +221,7 @@ int select_birdbot_path_node(void *path_follower_entity, int *selected_path_node
     *selected_path_node_index = 0;
     for (;;) {
         if (*selected_path_node_index == preceding_node_index || *selected_path_node_index == i ||
-            *selected_path_node_index == next) {
+            *selected_path_node_index == successor_node_index) {
             if (fast) {
                 qcopy(&pt, &f->path->pts[*selected_path_node_index]);
                 candidate_node_distance = fast_vec_dist(&target, &pt);
