@@ -14,7 +14,7 @@ extern s32   sceSifCallRpc(void *, u32, u32, void *, s32, void *, s32, void (*)(
 void         snd_send_current_batch(void) __asm__("FUN_0012e9d8");
 
 void snd_send_current_batch(void) {
-    s32 next;
+    s32 next_batch_index;
 
     snd_prepare_return_buffer(snd_batch_return_buffers[snd_batch_index],
                               *snd_batch_command_buffers[snd_batch_index],
@@ -32,10 +32,10 @@ void snd_send_current_batch(void) {
                   (*snd_batch_command_buffers[snd_batch_index] << 2) + 8,
                   0,
                   0);
-    next = snd_batch_index != 1;
-    snd_batch_index = next;
-    *snd_batch_command_buffers[next] = 0;
-    snd_batch_free_bytes[next] = 0xFFC;
+    next_batch_index = snd_batch_index != 1;
+    snd_batch_index = next_batch_index;
+    *snd_batch_command_buffers[next_batch_index] = 0;
+    snd_batch_free_bytes[next_batch_index] = 0xFFC;
 }
 
 extern __typeof__(snd_send_current_batch) func_0012E9D8 __attribute__((alias("FUN_0012e9d8")));
