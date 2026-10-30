@@ -372,7 +372,7 @@ void draw_beam_barrier_segments(char *moby) {
     float       *first_matrix;
     int         *segment_params;
     unsigned int color;
-    int          first, second, fourth;
+    int          strand_cycle_duration_frames, strand_color_transition_threshold_frames, fourth;
     int         *points, *sequence;
     float        seventh, eighth;
     int          i;
@@ -407,16 +407,16 @@ void draw_beam_barrier_segments(char *moby) {
         translation += 16;
     }
     color = fast_tween_color(D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(beam_barrier_vars + 0x18));
-    first = D_L06_00161E50;
+    strand_cycle_duration_frames = D_L06_00161E50;
     points = (int *)D_L06_001DB0F0;
-    second = D_L06_00161E54;
+    strand_color_transition_threshold_frames = D_L06_00161E54;
     fourth = D_L06_00161DF4;
     seventh = beam_barrier_texture_u_step_gp;
     eighth = D_L06_00161DFC;
     sequence = D_L06_00161E40;
-    beam_segment_draw_params[0] = first;
+    beam_segment_draw_params[0] = strand_cycle_duration_frames;
     beam_segment_draw_params[2] = (int)sequence;
-    beam_segment_draw_params[1] = second;
+    beam_segment_draw_params[1] = strand_color_transition_threshold_frames;
     beam_segment_draw_params[3] = color;
     beam_segment_draw_params[4] = fourth;
     *(float *)&beam_segment_draw_params[7] = seventh;
