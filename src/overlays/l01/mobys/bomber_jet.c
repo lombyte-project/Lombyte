@@ -508,7 +508,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                         gunship_vars->trigger_volume != -1);
                     if (bm != 0) {
                         int  k = 0;
-                        int *out = (int *)((char *)bm->vars + 0x20);
+                        int *beam_guard_moby_indices = (int *)((char *)bm->vars + 0x20);
                         {
                             unsigned char *t = gunship_vars->stop_nodes;
                             gunship_vars->last_fire_node = t[found];
@@ -524,7 +524,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                                         is_point_inside_clip_volume(&hero.motion.pos,
                                                                     guard_vars->f8) &&
                                         is_point_inside_clip_volume(camera_pos, guard_vars->f8)) {
-                                        out[k] = gunship_vars->guards[i];
+                                        beam_guard_moby_indices[k] = gunship_vars->guards[i];
                                         k++;
                                     }
                                     if (k >= 4)
