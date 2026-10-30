@@ -1019,9 +1019,9 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
     u8      *vars = (u8 *)moby->vars;
     V2d09b8  position, away, rotation, basis[3], launch, spawn_pos, spin;
     s32      kind;
-    M2d1428 *self;
+    M2d1428 *broken_crate_moby;
     s32      close, count, trail_count, particle, i, choice;
-    s32      first, second, first_color, second_color;
+    s32      random_range_lower_bound, random_range_upper_bound, first_color, second_color;
     f32      angle, distance, height, speed, rise;
     u32      colors[6], other_colors[6];
     void    *spawned;
@@ -1051,7 +1051,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         *(u32 *)(*(u8 **)(*(u8 **)(vars + 0xA4) + 0x78) + 0xAC) |= 4;
     }
     /* Fakematch: the self copy and the two empty tests on angle give retail's spill slots. */
-    self = moby;
+    broken_crate_moby = moby;
     {
         s32 i;
         qcopy(&position, &moby->pos);
@@ -1167,7 +1167,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             spawn_crate_debris(moby, &launch, &spawn_pos, &spin, kind + 1, particle, 0.25f, 0.5f);
         }
     }
-    *(u32 *)((u8 *)self + 0x94) = 0;
+    *(u32 *)((u8 *)broken_crate_moby + 0x94) = 0;
     moby->state = 3;
     *(u16 *)((u8 *)moby + 0x34) |= 1;
     moby->bBC = FUN_001fef20_2d09b8(15);
@@ -1196,12 +1196,12 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             rise = speed * frame_time - height * frame_time;
             effect = colors + random_integer_below(6);
             velocity = other_colors + random_integer_below(6);
-            first = FUN_001fef20_2d09b8(15);
-            second = FUN_001fef20_2d09b8(20);
-            first_color = random_int_between(first, second);
-            first = FUN_001fef20_2d09b8(25);
-            second = FUN_001fef20_2d09b8(30);
-            second_color = random_int_between(first, second);
+            random_range_lower_bound = FUN_001fef20_2d09b8(15);
+            random_range_upper_bound = FUN_001fef20_2d09b8(20);
+            first_color = random_int_between(random_range_lower_bound, random_range_upper_bound);
+            random_range_lower_bound = FUN_001fef20_2d09b8(25);
+            random_range_upper_bound = FUN_001fef20_2d09b8(30);
+            second_color = random_int_between(random_range_lower_bound, random_range_upper_bound);
             spawn_particle(&launch,
                            &spin,
                            *effect,
