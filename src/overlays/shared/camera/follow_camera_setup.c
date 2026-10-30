@@ -1138,9 +1138,9 @@ int adjust_follow_camera_orbit_probe_for_collisions(O002e7530 *camera_moby,
 
 int adjust_follow_camera_orbit_probe_for_collisions(
 
-    O002e7530 *camera_moby, V002e7530 *out, int step, float radial_adjustment_distance, float spd) {
+    O002e7530 *camera_moby, V002e7530 *orbit_probe_position, int step, float radial_adjustment_distance, float spd) {
     V002e7530 delta, probe_to_start_delta, start, hit, near, path_segment_end, path_segment_point,
-        next;
+        additional_collision_delta;
     V002e7530 *path;
     V002e7530 *orbit;
     u8        *range;
@@ -1159,7 +1159,7 @@ int adjust_follow_camera_orbit_probe_for_collisions(
                                          *(float *)(active_camera_state + 0x20c) *
                                          (*(float *)(active_camera_state + 0x210) - 1.0f);
     clear_u64_value(&delta);
-    qcopy(&start, out);
+    qcopy(&start, orbit_probe_position);
     qcopy(&hit, &D_L00_00173E60);
     qcopy(&near, &coll_hit_position);
     path = (V002e7530 *)(m + 0x90);
@@ -1180,9 +1180,9 @@ int adjust_follow_camera_orbit_probe_for_collisions(
                                               &start,
                                               radius - measure,
                                               radial_adjustment_distance);
-        qcopy(out, &near);
-        if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
-            fast_vec_sub(&probe_to_start_delta, &start, out);
+        qcopy(orbit_probe_position, &near);
+        if (coll_sphere_2e7618(orbit_probe_position, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
+            fast_vec_sub(&probe_to_start_delta, &start, orbit_probe_position);
             fast_vec_add(&hit, &D_L00_00173E60, &probe_to_start_delta);
             measure = resolve_level_path_segment_point(
                 &path_segment_point, &hit, path, &path_segment_end, 0.0f);
@@ -1193,16 +1193,16 @@ int adjust_follow_camera_orbit_probe_for_collisions(
                      0.75f;
             if (measure < radius) {
                 compute_follow_camera_collision_delta(camera_moby,
-                                                      &next,
+                                                      &additional_collision_delta,
                                                       &path_segment_point,
                                                       &hit,
                                                       &start,
                                                       radius - measure,
                                                       radial_adjustment_distance);
-                fast_vec_add(&delta, &delta, &next);
-                qcopy(out, &coll_hit_position);
-                if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
-                    fast_vec_sub(&probe_to_start_delta, &start, out);
+                fast_vec_add(&delta, &delta, &additional_collision_delta);
+                qcopy(orbit_probe_position, &coll_hit_position);
+                if (coll_sphere_2e7618(orbit_probe_position, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
+                    fast_vec_sub(&probe_to_start_delta, &start, orbit_probe_position);
                     fast_vec_add(&hit, &D_L00_00173E60, &probe_to_start_delta);
                     measure = resolve_level_path_segment_point(
                         &path_segment_point, &hit, path, &path_segment_end, 0.0f);
@@ -1213,19 +1213,19 @@ int adjust_follow_camera_orbit_probe_for_collisions(
                              0.75f;
                     if (measure < radius) {
                         compute_follow_camera_collision_delta(camera_moby,
-                                                              &next,
+                                                              &additional_collision_delta,
                                                               &path_segment_point,
                                                               &hit,
                                                               &start,
                                                               radius - measure,
                                                               radial_adjustment_distance);
-                        fast_vec_add(&delta, &delta, &next);
+                        fast_vec_add(&delta, &delta, &additional_collision_delta);
                     }
                 }
             }
         }
     }
-    fast_vec_add(out, &start, &delta);
+    fast_vec_add(orbit_probe_position, &start, &delta);
     return found;
 }
 
