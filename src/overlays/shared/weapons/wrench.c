@@ -453,7 +453,7 @@ void emit_randomized_sparkle_pairs(float *sparkle_spawn_position,
 
 void emit_randomized_sparkle_pairs(float *sparkle_spawn_position, int emission_pair_count) {
     OvlQuad sparkle_initial_velocity[1];
-    OvlQuad old[1];
+    OvlQuad pre_offset_spawn_position[1];
     int     i;
     for (i = 0; i < emission_pair_count; i++) {
         float base_sparkle_size = random_float_between(0.1f, 2.0f);
@@ -467,7 +467,7 @@ void emit_randomized_sparkle_pairs(float *sparkle_spawn_position, int emission_p
                                random_float_between(0.05f, 0.1f),
                                azimuth_angle,
                                elevation_angle);
-        qcopy(old, sparkle_spawn_position);
+        qcopy(pre_offset_spawn_position, sparkle_spawn_position);
         sparkle_spawn_position[0] += randf_sym(0.0f, 0.15f);
         sparkle_spawn_position[1] += randf_sym(0.0f, 0.15f);
         sparkle_spawn_position[2] += randf_sym(0.0f, 0.15f);
