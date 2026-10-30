@@ -588,9 +588,9 @@ int draw_linked_moby_trails(struct Moby *moby) {
     short    *list, *next_list;
     int i, j, segment, side, slot, more, next_segment, next_side, own_class, other_class, visible,
         half, corner;
-    float base, blend;
+    float frame_color_blend_offset, blend;
     long  skip;
-    char *other, *trail;
+    char *trail_moby, *trail;
     int   never = 0;
 
     if (moby->group == 0xFF) {
@@ -609,7 +609,7 @@ int draw_linked_moby_trails(struct Moby *moby) {
         quad->packet[2] = 0xFF9000000260L;
         quad->packet[0] = 0;
         quad->packet[3] = 0x8000000048L;
-        base =
+        frame_color_blend_offset =
             convert_integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_gp * 4.0f);
         for (j = 0; j < 4; j++) {
             half = (j >> 1) - 1;
@@ -617,7 +617,7 @@ int draw_linked_moby_trails(struct Moby *moby) {
                 ((float(*)[2])trail_quad_texture_coordinates)[j][0];
             quads[i].texture_coordinates[j][1] =
                 ((float(*)[2])trail_quad_texture_coordinates)[j][1];
-            blend = convert_integer_to_float(i - half) / *(float *)&D_L11_001623F0_gp + base;
+            blend = convert_integer_to_float(i - half) / *(float *)&D_L11_001623F0_gp + frame_color_blend_offset;
             if (1.0f < blend) {
                 blend = 1.0f;
             } else if (blend < 0.0f) {
@@ -640,10 +640,10 @@ int draw_linked_moby_trails(struct Moby *moby) {
             draw_geometry_quad(0, 0, 0);
         }
         skip = 1;
-        other = (char *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
-        other_class = *(short *)(other + 0xA6);
+        trail_moby = (char *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
+        other_class = *(short *)(trail_moby + 0xA6);
         own_class = moby->oclass;
-        visible = *(unsigned char *)(other + 0x31);
+        visible = *(unsigned char *)(trail_moby + 0x31);
         if ((other_class ^ own_class) == 0) {
             skip = 0;
         }
@@ -651,7 +651,7 @@ int draw_linked_moby_trails(struct Moby *moby) {
             skip = 1;
         }
         if (!skip) {
-            trail = *(char **)(other + 0x78);
+            trail = *(char **)(trail_moby + 0x78);
             segment = 0;
             if (*(int *)(trail + 0x2C0) > 0) {
                 do {
