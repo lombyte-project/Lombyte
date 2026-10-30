@@ -551,7 +551,7 @@ typedef struct {
 float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 float FUN_L00_0025abf0(float *start_position,
                        float *target_position,
-                       float *out,
+                       float *output_travel_time,
                        float  speed,
 
                        float vertical_acceleration) {
@@ -559,8 +559,8 @@ float FUN_L00_0025abf0(float *start_position,
     float travel_time;
     fast_vec_sub(&displacement, target_position, start_position);
     travel_time = vector_length_xy(&displacement) / speed;
-    if (out) {
-        *out = travel_time;
+    if (output_travel_time) {
+        *output_travel_time = travel_time;
     }
     if (travel_time == 0.0f) {
         return 0.0f;
