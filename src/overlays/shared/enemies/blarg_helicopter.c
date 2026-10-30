@@ -356,8 +356,8 @@ void blarg_helicopter_update(HMob49 *moby) {
         fast_vec_scale(helicopter_update_scratch.projected, helicopter_update_scratch.projected, helicopter_update_scratch.fraction_a);
         fast_vec_add(helicopter_update_scratch.projected, helicopter_update_scratch.projected, path->points + helicopter_update_scratch.segment_a);
         if (helicopter_update_scratch.segment_a + 1 < path->count - 8) {
-            float *next = (float *)((char *)path + ((helicopter_update_scratch.segment_a + 1) << 4));
-            angle = fast_arc_tan(next[4] - moby->position[0], next[5] - moby->position[1]);
+            float *activation_segment_start = (float *)((char *)path + ((helicopter_update_scratch.segment_a + 1) << 4));
+            angle = fast_arc_tan(activation_segment_start[4] - moby->position[0], activation_segment_start[5] - moby->position[1]);
             moby->rotation[2] =
                 spring_turn(&data->yaw_velocity, moby->rotation[2], angle, 0.01f, 0.3f, 0.1f);
         } else {
