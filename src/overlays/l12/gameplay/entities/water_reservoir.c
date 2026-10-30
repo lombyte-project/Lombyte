@@ -7,6 +7,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/collision.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
@@ -239,8 +240,7 @@ typedef struct {
     int pad20[4];
 } ShotHit;
 
-typedef struct { char pad0[0x18]; int moby; } ShotColl;
-extern ShotColl D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
+extern CollisionHit D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
 extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");

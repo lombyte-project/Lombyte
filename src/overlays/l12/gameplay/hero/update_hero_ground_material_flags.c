@@ -163,7 +163,6 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern u8 D_L12_001742C0[] NOT_SDA;
 extern u8 D_L12_001742E0[] NOT_SDA;
 
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
@@ -181,9 +180,7 @@ void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 
-extern CollisionHit HH __asm__("D_L12_001742C0") NOT_SDA;
-#define HI(o) (*(s32 *)(D_L12_001742C0 + (o)))
-#define HF(o) (*(f32 *)(D_L12_001742C0 + (o)))
+extern CollisionHit D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
 
 void update_hero_ground_contact_and_gravity(void) __asm__("FUN_L12_00233e80");
 
@@ -244,29 +241,29 @@ void update_hero_ground_contact_and_gravity(void) {
         hero.ground_sound_class = collision_sound_class;
     }
     if (hero.ground_type == 0xD) {
-        hero.water_surface_z = HH.point.f[2];
-        ground_ray_first_endpoint.f[2] = HH.point.f[2] - 0.01f;
+        hero.water_surface_z = D_L12_001742C0_lui.point.f[2];
+        ground_ray_first_endpoint.f[2] = D_L12_001742C0_lui.point.f[2] - 0.01f;
         if (FUN_001efa68_u(&ground_ray_first_endpoint, &collision_ray_second_endpoint, 4, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
     }
-    if (HH.moby != 0) {
-        if (is_moby_in_class_range_500_to_540(HH.moby)) {
+    if (D_L12_001742C0_lui.moby != 0) {
+        if (is_moby_in_class_range_500_to_540(D_L12_001742C0_lui.moby)) {
             hero.on_flagged_ground_moby = 1;
         }
-        hit_moby_flag_data = suck_get_aim_height(HH.moby);
+        hit_moby_flag_data = suck_get_aim_height(D_L12_001742C0_lui.moby);
         if (hit_moby_flag_data != 0 && (*(u16 *)(hit_moby_flag_data + 0x1E) & 8)) {
             hero.on_flagged_ground_moby = 1;
         }
     }
-    if (HH.unk1C > 0) {
-        qcopy((u8 *)&hero.ground_point, &HH.point);
-        hero.ground_z.f = HH.point.f[2];
+    if (D_L12_001742C0_lui.unk1C > 0) {
+        qcopy((u8 *)&hero.ground_point, &D_L12_001742C0_lui.point);
+        hero.ground_z.f = D_L12_001742C0_lui.point.f[2];
         hero.ground_distance = fast_vec_dist((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
-        hero.ground_moby = (struct Moby *)HH.moby;
-        sceVu0Normalize((u8 *)&hero.ground_normal, (u8 *)&HH.normal_x);
-        hero.ground_slope.f = compute_gravity_relative_vector_inclination((u8 *)&HH.normal_x);
-        hero.downhill_yaw = fast_arc_tan(HH.normal_x, HH.normal_y);
+        hero.ground_moby = (struct Moby *)D_L12_001742C0_lui.moby;
+        sceVu0Normalize((u8 *)&hero.ground_normal, (u8 *)&D_L12_001742C0_lui.normal_x);
+        hero.ground_slope.f = compute_gravity_relative_vector_inclination((u8 *)&D_L12_001742C0_lui.normal_x);
+        hero.downhill_yaw = fast_arc_tan(D_L12_001742C0_lui.normal_x, D_L12_001742C0_lui.normal_y);
         fast_vec_sub(&ground_geometry_scratch, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&ground_geometry_scratch, (u8 *)&hero.ground_normal)) {
             hero.ground_distance = -hero.ground_distance;
@@ -275,7 +272,7 @@ void update_hero_ground_contact_and_gravity(void) {
             hero.frames_off_ground.s = 0;
             if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 || hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
-                hero.last_landed_moby = HH.moby;
+                hero.last_landed_moby = D_L12_001742C0_lui.moby;
             }
         }
     }
@@ -334,12 +331,12 @@ d1:
         transform_hero_polar_offset_to_world(&ground_probe_first_endpoint, 0.2f, ground_probe_angle, 0.45f);
         transform_hero_polar_offset_to_world(&unused_ground_probe_output, 0.2f, ground_probe_angle, -0.45f);
         if (FUN_001efa68_u(&ground_probe_first_endpoint, &collision_ray_second_endpoint, 0x22, (s32)hero.moby, 0)) {
-            f = HH.point.f[2] - hero.ground_z.f;
+            f = D_L12_001742C0_lui.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < absolute_float(f)) {
                 hero.unk2C0.f[i] = 0.0f;
             }
-            sceVu0Normalize(&normalized_hit_normal, (u8 *)&HH.normal_x);
+            sceVu0Normalize(&normalized_hit_normal, (u8 *)&D_L12_001742C0_lui.normal_x);
             compute_rotated_vector_angles(&normalized_hit_normal, &hit_surface_angles);
             if (-0.78539819f < hit_surface_angles.f[1] && hit_surface_angles.f[1] < 0.78539819f) {
                 hero.unk2C8.f[i] = hit_surface_angles.f[1];
