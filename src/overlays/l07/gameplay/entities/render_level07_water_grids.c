@@ -9,6 +9,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/water_grid.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
@@ -19,7 +20,7 @@
 void render_level07_water_grids(void) __asm__("FUN_L07_0030cd20");
 
 void render_level07_water_grids(void) {
-    render_water_grids(D_L07_001DCE40, 0x24);
+    render_water_grids(l07_water_grids, 0x24);
 }
 struct L07MovingVars {
     Vec4f home;

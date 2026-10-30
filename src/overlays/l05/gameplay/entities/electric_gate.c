@@ -54,47 +54,39 @@ enum TaxiStop {
 /* records, for entry arg, which of the 48 entries sit one grid step away */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030EB68), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    float x;
-    float y;
-    int pad;
-    char n[0x14];
-    char rest[0x1170];
-} Ent;
-
-extern Ent water_records[] __asm__("D_L05_001D6880");
+#include "rnc/overlay/water_grid.h"
 
 void record_grid_entry_neighbor_indices(int selected_entry_index) __asm__("FUN_L05_0030d6a0");
 
 void record_grid_entry_neighbor_indices(int selected_entry_index) {
     int i;
-    Ent *entry_table = water_records;
+    WaterGrid *entry_table = l05_water_grids;
     for (i = 0; i < 48; i++) {
         if (selected_entry_index != i) {
-            Ent *selected_entry = &entry_table[selected_entry_index];
+            WaterGrid *selected_entry = &entry_table[selected_entry_index];
             float x = selected_entry->x - entry_table[i].x;
             float y = selected_entry->y - entry_table[i].y;
             if (absolute_float(x) < 0.1f) {
                 if (absolute_float(y - 16.0f) < 0.1f)
-                    selected_entry->n[0] = i;
+                    selected_entry->neighbors[0] = i;
                 if (absolute_float(y + 16.0f) < 0.1f)
-                    selected_entry->n[2] = i;
+                    selected_entry->neighbors[2] = i;
             } else if (absolute_float(y) < 0.1f) {
                 if (absolute_float(x - 16.0f) < 0.1f)
-                    selected_entry->n[1] = i;
+                    selected_entry->neighbors[1] = i;
                 if (absolute_float(x + 16.0f) < 0.1f)
-                    selected_entry->n[3] = i;
+                    selected_entry->neighbors[3] = i;
             } else {
                 if (absolute_float(x - 16.0f) < 0.1f) {
                     if (absolute_float(x - 16.0f) < 0.1f)
-                        selected_entry->n[5] = i;
+                        selected_entry->neighbors[5] = i;
                     if (absolute_float(x + 16.0f) < 0.1f)
-                        selected_entry->n[7] = i;
+                        selected_entry->neighbors[7] = i;
                 } else if (absolute_float(x + 16.0f) < 0.1f) {
                     if (absolute_float(x - 16.0f) < 0.1f)
-                        selected_entry->n[4] = i;
+                        selected_entry->neighbors[4] = i;
                     if (absolute_float(x + 16.0f) < 0.1f)
-                        selected_entry->n[6] = i;
+                        selected_entry->neighbors[6] = i;
                 }
             }
         }

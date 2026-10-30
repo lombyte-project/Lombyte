@@ -5,6 +5,7 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/water_grid.h"
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
 
 /* Register this level's vendor data set. */
@@ -13,5 +14,5 @@
 void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
 void render_level_water_grids(void) {
-    render_water_grids(water_records, 0x30);
+    render_water_grids(l05_water_grids, 0x30);
 }

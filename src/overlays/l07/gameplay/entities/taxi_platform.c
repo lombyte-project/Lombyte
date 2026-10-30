@@ -1321,16 +1321,7 @@ void update_tumbling_ballistic_moby(struct Moby *moby) {
 }
 /* Ported from rac1-decomp src/overlays/l07_umbris/vendor_002CE470.c (func_L07_0030D8E8) */
 
-typedef struct {
-    float x;                   /* 0x00 */
-    float y;                   /* 0x04 */
-    float z;                   /* 0x08 */
-    char padC[0x10];
-    unsigned char b1C;         /* 0x1C */
-    unsigned char b1D;         /* 0x1D */
-    short h1E;                 /* 0x1E */
-    char rest[0x1170];
-} Rec;
+#include "rnc/overlay/water_grid.h"
 
 typedef struct {
     float f0;                  /* 0x00 */
@@ -1386,7 +1377,7 @@ typedef struct {
 
 extern Cab l07_water_grid_parameters __asm__("D_L07_001CA900");
 extern Dir l07_water_direction_source __asm__("D_L07_0017FF40");
-extern Rec *D_L07_001612D0;
+extern WaterGrid *D_L07_001612D0;
 extern char D_0013D4EC[];
 extern float D_0015ED6C;
 extern char D_0013D4C0[];
@@ -1418,7 +1409,6 @@ void pool_flush(char *p, int n) __asm__("FUN_L01_002b7fe0");
 void pool_ripple(void *a, int b) __asm__("FUN_L01_002b8288");
 void render_level07_water_grids(void) __asm__("FUN_L07_0030cd20");
 void initialize_level07_water_grid_neighbors(int arg) __asm__("FUN_L07_0030cd48");
-extern Rec D_L07_001DCE40_2cd2b0[] __asm__("D_L07_001DCE40");
 extern void FUN_L01_002b7a48_2cd2b0(void *, int) __asm__("FUN_L01_002b7a48");
 extern void pool_set_scale(float) __asm__("FUN_L01_002b7ef0");
 extern void FUN_L01_002b7c68_2cd2b0(void *, void *) __asm__("FUN_L01_002b7c68");
@@ -1467,7 +1457,7 @@ void water_update(Moby_30D8E8 *water_moby) {
             Cab *cab;
             Dir *water_direction_source;
             int (*p)[4];
-            FUN_L01_002b7a48_2cd2b0(D_L07_001DCE40_2cd2b0, 0x24);
+            FUN_L01_002b7a48_2cd2b0(l07_water_grids, 0x24);
             pool_set_scale(1.0f);
             cab = &l07_water_grid_parameters;
             water_direction_source = &l07_water_direction_source;
@@ -1492,16 +1482,16 @@ void water_update(Moby_30D8E8 *water_moby) {
             D_L07_00161214 = 48.0f;
             cab->b3C = 0x40;
             cab->b3D = 0x40;
-            D_L07_001612D0 = D_L07_001DCE40_2cd2b0;
+            D_L07_001612D0 = l07_water_grids;
             l07_water_grid_geometry_descriptor_base = p;
             D_L07_00161208 = 0;
             for (i = 0; i < 0x24; i++) {
-                FUN_L01_002b7c68_2cd2b0(&D_L07_001DCE40_2cd2b0[i], p[i]);
-                D_L07_001DCE40_2cd2b0[water_data->idx].h1E = l07_water_grid_saved_control_values[water_data->idx];
+                FUN_L01_002b7c68_2cd2b0(&l07_water_grids[i], p[i]);
+                l07_water_grids[water_data->idx].draw_value = l07_water_grid_saved_control_values[water_data->idx];
             }
             for (k = 0; k < 0x24; k++) {
-                Rec *water_records = D_L07_001DCE40_2cd2b0;
-                Rec *r = &water_records[k];
+                WaterGrid *water_records = l07_water_grids;
+                WaterGrid *r = &water_records[k];
                 for (j = 0; j < 2; j++) {
                     float x = r->x + random_float_between(-6.0f, 6.0f);
                     float y = r->y + random_float_between(-6.0f, 6.0f);
@@ -1516,7 +1506,7 @@ void water_update(Moby_30D8E8 *water_moby) {
             water_moby->state = 3;
             water_data->timer = scale_game_frames(0x3C);
             if (water_moby->pos[2] < water_data->lo) {
-                D_L07_001DCE40_2cd2b0[water_data->idx].h1E = 0;
+                l07_water_grids[water_data->idx].draw_value = 0;
             }
         } else if (water_data->f8 != 0) {
             water_moby->state = 1;
@@ -1534,9 +1524,9 @@ void water_update(Moby_30D8E8 *water_moby) {
             FUN_00213ed8_2cd2b0(&water_moby->pos[2], water_data->lo, D_0015ED6C * 4.0f);
         }
         if (random_integer_below(200) == 0) {
-            float x = D_L07_001DCE40_2cd2b0[water_data->idx].x + random_float_between(-4.0f, 4.0f);
+            float x = l07_water_grids[water_data->idx].x + random_float_between(-4.0f, 4.0f);
             float y = random_float_between(-4.0f, 4.0f);
-            Rec *r = &D_L07_001DCE40_2cd2b0[water_data->idx];
+            WaterGrid *r = &l07_water_grids[water_data->idx];
             FUN_L00_002a3ec8_2cd2b0(r, 1, 1, x, r->y + y, 1.0f, -0.05f);
         }
         break;
@@ -1550,9 +1540,9 @@ void water_update(Moby_30D8E8 *water_moby) {
             FUN_00213ed8_2cd2b0(&water_moby->pos[2], water_data->hi, D_0015ED6C * 4.0f);
         }
         if (random_integer_below(200) == 0) {
-            float x = D_L07_001DCE40_2cd2b0[water_data->idx].x + random_float_between(-4.0f, 4.0f);
+            float x = l07_water_grids[water_data->idx].x + random_float_between(-4.0f, 4.0f);
             float y = random_float_between(-4.0f, 4.0f);
-            Rec *r = &D_L07_001DCE40_2cd2b0[water_data->idx];
+            WaterGrid *r = &l07_water_grids[water_data->idx];
             FUN_L00_002a3ec8_2cd2b0(r, 1, 1, x, r->y + y, 1.0f, -0.05f);
         }
         break;
@@ -1582,7 +1572,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         break;
     case WATER_REMOVE_ABOVE_HIGH_HEIGHT:
         if (water_data->hi < water_moby->pos[2]) {
-            D_L07_001DCE40_2cd2b0[water_data->idx].h1E = 0;
+            l07_water_grids[water_data->idx].draw_value = 0;
             mark_moby_for_removal(water_moby);
             return;
         }
@@ -1593,10 +1583,10 @@ void water_update(Moby_30D8E8 *water_moby) {
     }
     {
         Cab *cab = &l07_water_grid_parameters;
-        D_L07_001DCE40_2cd2b0[water_data->idx].b1C = cab->b3C;
-        D_L07_001DCE40_2cd2b0[water_data->idx].b1D = cab->b3D;
+        l07_water_grids[water_data->idx].unk1C = cab->b3C;
+        l07_water_grids[water_data->idx].unk1D = cab->b3D;
     }
-    D_L07_001DCE40_2cd2b0[water_data->idx].z = water_moby->pos[2];
+    l07_water_grids[water_data->idx].z = water_moby->pos[2];
     on = 0.0f;
     if (water_moby->f94 != 0 && FUN_L01_00275690_2cd2b0(water_moby, 48.0f) != -1) {
         if (!(water_moby->state >= 3 && water_moby->state <= 7) || (water_moby->pos[2] > water_data->lo && water_moby->pos[2] < water_data->hi)) {
@@ -1604,16 +1594,16 @@ void water_update(Moby_30D8E8 *water_moby) {
         }
     }
     if (on == 0.0f) {
-        D_L07_001DCE40_2cd2b0[water_data->idx].h1E = 0;
+        l07_water_grids[water_data->idx].draw_value = 0;
     } else {
-        D_L07_001DCE40_2cd2b0[water_data->idx].h1E = l07_water_grid_saved_control_values[water_data->idx];
+        l07_water_grids[water_data->idx].draw_value = l07_water_grid_saved_control_values[water_data->idx];
     }
     if (water_data->idx == 0) {
-        FUN_L01_002b7fe0_2cd2b0(D_L07_001DCE40_2cd2b0, 0x24);
+        FUN_L01_002b7fe0_2cd2b0(l07_water_grids, 0x24);
         enqueue_callback_list_1_c(render_level07_water_grids, water_moby);
     }
     if (water_data->idx == water_grid_override_index) {
-        D_L07_001DCE40_2cd2b0[water_data->idx].h1E = l07_water_grid_override_control_value;
+        l07_water_grids[water_data->idx].draw_value = l07_water_grid_override_control_value;
         l07_water_grid_saved_control_values[water_data->idx] = l07_water_grid_override_control_value;
     }
 }
@@ -1622,53 +1612,43 @@ void water_update(Moby_30D8E8 *water_moby) {
 /* records, for entry arg, which of the 48 entries sit one grid step away */
 /* Same routine as FUN_L05_0030d6a0, with this level's table and entry count. */
 
-typedef struct {
-    float x;
-    float y;
-    int pad;
-    unsigned char n[0x14];
-    char rest[0x1170];
-} Ent;
-
-extern Ent D_L07_001DCE40[];
-
 void initialize_level07_water_grid_neighbors(int selected_entry_index) {
     int i;
-    D_L07_001DCE40[selected_entry_index].n[0] = 0xFF;
-    D_L07_001DCE40[selected_entry_index].n[2] = 0xFF;
-    D_L07_001DCE40[selected_entry_index].n[1] = 0xFF;
-    D_L07_001DCE40[selected_entry_index].n[3] = 0xFF;
-    D_L07_001DCE40[selected_entry_index].n[4] = 0xFF;
-    D_L07_001DCE40[selected_entry_index].n[5] = 0xFF;
-    D_L07_001DCE40[selected_entry_index].n[6] = 0xFF;
-    D_L07_001DCE40[selected_entry_index].n[7] = 0xFF;
+    l07_water_grids[selected_entry_index].neighbors[0] = 0xFF;
+    l07_water_grids[selected_entry_index].neighbors[2] = 0xFF;
+    l07_water_grids[selected_entry_index].neighbors[1] = 0xFF;
+    l07_water_grids[selected_entry_index].neighbors[3] = 0xFF;
+    l07_water_grids[selected_entry_index].neighbors[4] = 0xFF;
+    l07_water_grids[selected_entry_index].neighbors[5] = 0xFF;
+    l07_water_grids[selected_entry_index].neighbors[6] = 0xFF;
+    l07_water_grids[selected_entry_index].neighbors[7] = 0xFF;
     for (i = 0; i < 36; i++) {
         if (selected_entry_index != i) {
-            Ent *entry_table = D_L07_001DCE40;
-            Ent *selected_entry = &entry_table[selected_entry_index];
+            WaterGrid *entry_table = l07_water_grids;
+            WaterGrid *selected_entry = &entry_table[selected_entry_index];
             float x = selected_entry->x - entry_table[i].x;
             float y = selected_entry->y - entry_table[i].y;
             if (absolute_float(x) < 0.1f) {
                 if (absolute_float(y - 16.0f) < 0.1f)
-                    selected_entry->n[0] = i;
+                    selected_entry->neighbors[0] = i;
                 if (absolute_float(y + 16.0f) < 0.1f)
-                    selected_entry->n[2] = i;
+                    selected_entry->neighbors[2] = i;
             } else if (absolute_float(y) < 0.1f) {
                 if (absolute_float(x - 16.0f) < 0.1f)
-                    selected_entry->n[1] = i;
+                    selected_entry->neighbors[1] = i;
                 if (absolute_float(x + 16.0f) < 0.1f)
-                    selected_entry->n[3] = i;
+                    selected_entry->neighbors[3] = i;
             } else {
                 if (absolute_float(x + 16.0f) < 0.1f) {
                     if (absolute_float(y - 16.0f) < 0.1f)
-                        selected_entry->n[5] = i;
+                        selected_entry->neighbors[5] = i;
                     if (absolute_float(y + 16.0f) < 0.1f)
-                        selected_entry->n[7] = i;
+                        selected_entry->neighbors[7] = i;
                 } else if (absolute_float(x - 16.0f) < 0.1f) {
                     if (absolute_float(y - 16.0f) < 0.1f)
-                        selected_entry->n[4] = i;
+                        selected_entry->neighbors[4] = i;
                     if (absolute_float(y + 16.0f) < 0.1f)
-                        selected_entry->n[6] = i;
+                        selected_entry->neighbors[6] = i;
                 }
             }
         }
@@ -2628,7 +2608,7 @@ struct WalkerTarget {
     int kind;
 };
 
-extern Rec * D_L07_001612D0;
+extern WaterGrid * D_L07_001612D0;
 extern char D_0013E533[];
 extern char D_L07_002117F8[];
 extern char sharkigator_unexpected_init_message[] __asm__("D_L07_00211838");
