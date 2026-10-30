@@ -296,13 +296,13 @@ void update_hoverboard_dummy_jump_animation_and_pitch(L16LeapMoby_u *leap_moby) 
     L16LeapData_u *leap_data = leap_moby->data;
     pitch = 0.0f;
     if (leap_data->timer == 0) {
-        int   next;
+        int   next_path_node_byte_offset;
         float distance;
-        next = offset_path_index(leap_data->path, leap_data->node, 1, 1) * 16;
+        next_path_node_byte_offset = offset_path_index(leap_data->path, leap_data->node, 1, 1) * 16;
         distance = vector_distance_xy(leap_data->path + (leap_data->node * 16 + 0x10),
-                                      leap_data->path + (next + 0x10));
+                                      leap_data->path + (next_path_node_byte_offset + 0x10));
         pitch = fast_arc_tan(distance,
-                             *(float *)(leap_data->path + next + 0x18) -
+                             *(float *)(leap_data->path + next_path_node_byte_offset + 0x18) -
                                  ((L16LeapPath *)leap_data->path)->points[leap_data->node][2]);
     }
     spring_angle(&leap_moby->pitch,
