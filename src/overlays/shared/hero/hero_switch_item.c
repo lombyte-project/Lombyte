@@ -641,14 +641,14 @@ char *find_best_hero_heading_target(float range_limit,
         float *candidate_eligibility_value = get_moby_target_info(candidate_moby);
         if (candidate_eligibility_value != 0 && *candidate_eligibility_value != 0.0f &&
             (MOBY(candidate_moby)->flags & 0x1000)) {
-            int   out;
+            int   candidate_rejected;
             float candidate_score = score_hero_target_candidate(candidate_moby,
                                                                 reference_yaw,
                                                                 range_limit,
                                                                 angular_error_limit,
                                                                 elevation_angle_limit,
-                                                                &out);
-            if (out == 0 && candidate_score < bd) {
+                                                                &candidate_rejected);
+            if (candidate_rejected == 0 && candidate_score < bd) {
                 bd = candidate_score;
                 best = candidate_moby;
             }
