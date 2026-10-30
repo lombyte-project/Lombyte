@@ -3,7 +3,6 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
 
-extern volatile s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
 extern u8 shrub_textures_label[] __asm__("D_001603B0");
 extern u8 shrub_draw_label[] __asm__("D_001603C0");
 struct ShrubDrawState {
