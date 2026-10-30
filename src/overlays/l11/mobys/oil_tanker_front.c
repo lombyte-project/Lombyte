@@ -437,18 +437,18 @@ void distribute_group_blarg_ships_along_path(struct Moby *moby, int table_index)
     short offset = 0;
     short stride;
     char *table;
-    u16   entry;
+    u16   encoded_moby_list_entry;
     int   moby_array_index;
 
     if (list == 0)
         return;
     do {
-        entry = *list;
-        moby_array_index = entry & 0x7FFF;
+        encoded_moby_list_entry = *list;
+        moby_array_index = encoded_moby_list_entry & 0x7FFF;
         if (((struct Moby *)D_L11_0015FFD8)[moby_array_index].oclass == 0x527)
             count++;
         list++;
-    } while ((short)entry >= 0);
+    } while ((short)encoded_moby_list_entry >= 0);
 
     table = (char *)l11_paths[table_index];
     stride = *(int *)table / count;
