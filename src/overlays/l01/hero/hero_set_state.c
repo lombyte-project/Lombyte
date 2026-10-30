@@ -69,7 +69,7 @@ extern char level_01_transform_trail_jump_velocity_keys[] __asm__("D_L01_0017C3A
 extern char level_01_water_surface_jump_velocity_keys[] __asm__("D_L01_0017C3E0");
 
 int l01_hero_set_state(int a, int b) {
-    int   old2088;
+    int   saved_state_step;
     char *moby;
     int   old20A7;
     {
@@ -88,7 +88,7 @@ int l01_hero_set_state(int a, int b) {
     }
     {
         struct Hero *p = &hero;
-        old2088 = p->state.step;
+        saved_state_step = p->state.step;
         moby = ((char *)p->moby);
         old20A7 = p->item_select_blocked;
         p->state.prev2 = p->state.prev;
@@ -808,7 +808,7 @@ int l01_hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
             p->state.current = p->state.prev;
-            p->state.step = old2088;
+            p->state.step = saved_state_step;
             p->state_timer = p->state.prev_timer;
             return 0;
         }
