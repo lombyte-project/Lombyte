@@ -463,7 +463,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         ROBOSQUAWKER_STATE_DEATH_KNOCKBACK = 0x63
     };
     RsVars       *robosquawker_vars;
-    RsVec         old;
+    RsVec         previous_position;
     RsTarget      selected_target_record;
     RsVec         va;
     RsVec         vb;
@@ -472,7 +472,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     float         dmg;
     float         knockback_yaw;
     float         flight_step_length;
-    float         out;
+    float         home_hop_travel_duration;
     RsHit        *hit;
     RsTargetMoby *tm;
 
@@ -501,7 +501,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         tm = 0;
         qzero(&selected_target_record);
     }
-    qcopy(&old, &robosquawker_moby->pos);
+    qcopy(&previous_position, &robosquawker_moby->pos);
     if (robosquawker_vars->w38 != 0) {
         robosquawker_vars->h214 = scale_game_frames(0xF0);
     }
@@ -917,7 +917,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             robosquawker_vars->f13C =
                 FUN_L00_0025abf0(&robosquawker_moby->pos,
                                  &robosquawker_vars->v1D0,
-                                 &out,
+                                 &home_hop_travel_duration,
                                  robosquawker_home_hop_horizontal_speed_gp * frame_time,
                                  -robosquawker_home_hop_gravity_gp);
             robosquawker_vars->w144 = 0xD;
@@ -1038,8 +1038,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             }
         } else {
             if (r > 1.0f || (res & 2)) {
-                robosquawker_moby->pos.f[0] = old.f[0];
-                robosquawker_moby->pos.f[1] = old.f[1];
+                robosquawker_moby->pos.f[0] = previous_position.f[0];
+                robosquawker_moby->pos.f[1] = previous_position.f[1];
             }
             if (fast_vec_length(&vc) < robosquawker_vars->f1FC + 4.0f &&
                 absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]) <
@@ -1147,8 +1147,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
                 blend_moby_animation(robosquawker_moby, 5, 0, scale_game_frames(3));
             }
         } else if (res & 2) {
-            robosquawker_moby->pos.f[0] = old.f[0];
-            robosquawker_moby->pos.f[1] = old.f[1];
+            robosquawker_moby->pos.f[0] = previous_position.f[0];
+            robosquawker_moby->pos.f[1] = previous_position.f[1];
             robosquawker_moby->state = 0xC;
             if (robosquawker_moby->b53 != 4) {
                 blend_moby_animation(robosquawker_moby, 4, 0, scale_game_frames(3));
