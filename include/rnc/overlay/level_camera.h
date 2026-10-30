@@ -26,8 +26,11 @@ typedef struct {
     u8 pad17C[0xE0];
     struct Moby *focus_moby;        /* 0x25C: a moby that takes the camera's attention (blarg helicopter); 0: none */
     s32 focus_time;                 /* 0x260: reset to 0 when focus_moby is set */
+    u8 pad264[0xEC];
+    f32 unk350[4];                  /* 0x350: basis the hero's input direction is turned by */
 } LevelCamera;
 
+extern LevelCamera l01_camera __asm__("D_L01_00167100");
 extern LevelCamera l06_camera __asm__("D_L06_00167400");
 extern LevelCamera l08_camera __asm__("D_L08_00167480");
 extern LevelCamera l12_camera __asm__("D_L12_00167100");

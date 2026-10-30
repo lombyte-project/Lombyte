@@ -1,6 +1,7 @@
 /* Level 01 moby classes: birdbot, peckbot, water_current, cave_door, fighter_jet, door_half, stationary_ship, bomber_jet, water_lily, falling_rock, piston_platform. */
 #include "types.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
@@ -2478,14 +2479,6 @@ typedef struct {
 } CarrierCamVars;
 
 typedef struct {
-    u8 pad0[0x140];
-    f32 x;                    /* 0x140 */
-    f32 y;                    /* 0x144 */
-    u8 pad148[0x10];
-    f32 yaw;                  /* 0x158 */
-} CarrierCamera;
-
-typedef struct {
     u8 pad0[0x1D0];
     Vec4 drop;                /* 0x1D0 */
     u8 pad1E0[8];
@@ -2524,7 +2517,6 @@ typedef struct {
 } CarrierMoby;
 
 extern CarrierMoby *D_L01_0015FFD8_m __asm__("D_L01_0015FFD8");
-extern CarrierCamera D_L01_00167100_c __asm__("D_L01_00167100");
 extern CarrierOffsets l01_carrier_rider_local_offsets __asm__("D_L01_0020B360");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
@@ -2594,7 +2586,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
         gunship_follow_path((char *)carrier_moby);
         if (v->camera != -1) {
             cv = (CarrierCamVars *)D_L01_0015FFD8_m[v->camera].pvars;
-            camera_target_yaw = fast_arc_tan(carrier_moby->pos.x - D_L01_00167100_c.x, carrier_moby->pos.y - D_L01_00167100_c.y);
+            camera_target_yaw = fast_arc_tan(carrier_moby->pos.x - l01_camera.pos.f[0], carrier_moby->pos.y - l01_camera.pos.f[1]);
             camera_node_yaw_delta = fast_subtract_rotations(l01_cuboids[cv->node].rot.z, camera_target_yaw);
             if (camera_node_yaw_delta < 0.0f) {
                 camera_target_yaw = l01_cuboids[cv->node].rot.z;
@@ -2603,7 +2595,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
             }
             cv->x = l01_cuboids[cv->node].rot.x;
             cv->y = l01_cuboids[cv->node].rot.y;
-            cv->yaw = spring_turn(&v->turn, D_L01_00167100_c.yaw, camera_target_yaw, frame_time_sq * 12.566371f,
+            cv->yaw = spring_turn(&v->turn, l01_camera.yaw, camera_target_yaw, frame_time_sq * 12.566371f,
                                        frame_time_sq * 125.6637039f, frame_time * 3.1415927f);
         }
         if (v->path != -1) {
@@ -3439,15 +3431,7 @@ typedef struct {
     f32 x, y, z;
 } CapVec3;
 
-typedef struct {
-    u8 pad0[0x160];
-    f32 shake;
-    u8 pad164[4];
-    s32 shake_time;
-} CapCamera;
-
 #include "rnc/overlay/level_save_state.h"
-extern CapCamera D_L01_00167100;
 CapColors D_L01_00161C40 = {{0x2b8, 0x2b9, 0x2ba}};
 extern s32 D_0014C190[][64];
 extern s32 cutscene_active __asm__("D_L01_0015F404");
@@ -3512,8 +3496,8 @@ void falling_rock_update(CapMoby *falling_rock) {
                 falling_rock_vars->wait = random_int_between(scale_game_frames(300), scale_game_frames(600));
                 falling_rock_vars->rise = scale_game_frames(falling_rock_vars->rise_len);
                 falling_rock->state = 2;
-                D_L01_00167100.shake = 0.4f;
-                D_L01_00167100.shake_time = scale_game_frames(30);
+                l01_camera.shake_amount = 0.4f;
+                l01_camera.shake_frames = scale_game_frames(30);
                 allocate_voice_for_target_entry(1, 0, falling_rock);
             }
         }
@@ -3535,8 +3519,8 @@ void falling_rock_update(CapMoby *falling_rock) {
         falling_rock_vars->rot.f[2] -= frame_time_sq * 30.0f;
         fast_vec_add(&falling_rock->pos, &falling_rock->pos, &falling_rock_vars->rot);
         if (fast_dec_timer_s16(&falling_rock_vars->hold) && 20.0f < falling_rock_vars->home.f[2] - falling_rock->pos.f[2]) {
-            D_L01_00167100.shake = 0.1f;
-            D_L01_00167100.shake_time = scale_game_frames(20);
+            l01_camera.shake_amount = 0.1f;
+            l01_camera.shake_frames = scale_game_frames(20);
             clear_u64_value(&falling_rock_vars->rot);
             falling_rock->state = 4;
             allocate_voice_for_target_entry(0, 0, falling_rock);
