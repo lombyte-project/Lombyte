@@ -378,7 +378,7 @@ extern unsigned char *spawn_burst(void *pos, void *dir, int c, int d, int n, int
 extern float approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern Tex D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
+extern Tex D_L13_001B2380 __asm__("D_L13_001B2380");
 extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");
 
 void update_ship_rocket(Moby *m) __asm__("FUN_L13_002e6c08");
@@ -411,7 +411,7 @@ void update_ship_rocket(Moby *rocket) {
         fast_vec_add(&effect_scratch_vector, &effect_scratch_vector, &*(V4_2E8040 *)&rocket->pos);
         spawned_effect = spawn_particle(&effect_scratch_vector, (float *)&particle_velocity, scale_game_frames(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (spawned_effect != 0) {
-            Tex *trail_particle_attribute_source = &D_L13_001B2680_2E8040;
+            Tex *trail_particle_attribute_source = &D_L13_001B2380;
             spawned_effect[2] = *trail_particle_attribute_source->p5C;
             spawned_effect[3] = 0x48;
         }

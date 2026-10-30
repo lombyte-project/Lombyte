@@ -500,7 +500,7 @@ typedef struct {
     f32 unk3C;          /* 0x3C */
     f32 unk40;          /* 0x40 */
     f32 unk44;          /* 0x44 */
-    s32 unk48;          /* 0x48 */
+    f32 height_vel;     /* 0x48: spring velocity of the camera height */
 } CameraPreset;
 
 typedef struct {
@@ -523,7 +523,7 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     CameraTrack *track;
     CameraView *view;
 
-    preset->unk48 = 0;
+    preset->height_vel = 0;
     orbit_state = camera_to_reset->orbit;
     orbit_state->spring_dist = preset->spring_dist;
     orbit_state->spring_height = preset->spring_height;
@@ -726,14 +726,10 @@ typedef struct {
     short preset;
 } Camera_32B1F8;
 
-typedef struct { char pad0[0x48]; float vel; } Preset;
-
-typedef struct { char pad0[0x1C]; Preset *preset; } Row;
-
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
 extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
-extern Row *D_L05_0015EF50_macro __asm__("D_L05_0015EF50") MACRO_ADDR;
+extern CameraPresetRow *D_L05_0015EF50_macro __asm__("D_L05_0015EF50") MACRO_ADDR;
 extern float D_L05_001621A8_gp __asm__("D_L05_001621A8") __attribute__((sda));
 extern float spring_32B1F8(float, float, float *, float, float, float) __asm__("FUN_001ebd78");
 
@@ -753,7 +749,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     V_32B1F8 step;
     Orbit_32B1F8 *orbit = camera->orbit;
     char *up_axis = D_0013E633_32B1F8;
-    Preset *preset;
+    CameraPreset *preset;
     Focus *focus_state;
     Track *track;
     float focus_distance;
@@ -794,7 +790,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
         fast_vec_scale(&step, &step, 0.16666667f);
         while (probe_step < 6) {
             if (coll_sphere(0.5f, &probe, 18, 0) != 0) {
-                spring->height = spring_32B1F8(spring->height, D_L05_00174278 - focus.z, &preset->vel, 0.05f, 0.2f, 0.0f);
+                spring->height = spring_32B1F8(spring->height, D_L05_00174278 - focus.z, &preset->height_vel, 0.05f, 0.2f, 0.0f);
                 break;
             }
             probe_step++;
@@ -804,7 +800,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
             orbit->bias.x = spring_32B1F8(orbit->bias.x, 0.0f, &orbit->bias_vel[0], 0.02f, 0.2f, 0.05f);
             orbit->bias.y = spring_32B1F8(orbit->bias.y, 0.0f, &orbit->bias_vel[1], 0.02f, 0.2f, 0.05f);
             orbit->bias.z = spring_32B1F8(orbit->bias.z, 0.0f, &orbit->bias_vel[2], 0.02f, 0.2f, 0.05f);
-            spring->height = spring_32B1F8(spring->height, orbit->spring_height, &preset->vel, 0.005f, 0.2f, 0.0f);
+            spring->height = spring_32B1F8(spring->height, orbit->spring_height, &preset->height_vel, 0.005f, 0.2f, 0.0f);
         }
         if (((Hero *)(D_0013E633_32B1F8 - 0x290))->air_frames.s != 0 && 2.0f < ((Hero *)(D_0013E633_32B1F8 - 0x290))->ground_distance) {
             if (absolute_float(spring->dist - orbit->spring_dist2) < 0.015f) spring->dist = orbit->spring_dist2;

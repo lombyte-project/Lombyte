@@ -311,7 +311,6 @@ void handle_refueling_station_damage(struct Moby *moby, VendorVars *vars, f32 *h
 extern char D_0013D388[];
 extern float D_L09_00166F40[];
 extern int D_L09_0015F5CC;
-extern int D_L09_0015FFD8_u __asm__("D_L09_0015FFD8");
 extern int FUN_L00_0025e450_u() __asm__("FUN_L00_0025e450");
 extern unsigned char voice_pool[] __asm__("D_0013E550");
 s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags,
@@ -352,7 +351,7 @@ void refueling_station_update(struct Moby *moby) {
         }
         if (moby->command == 1) {
             if (*(int *)(station_vars + 0x78) != -1) {
-                unsigned char *o = (unsigned char *)(D_L09_0015FFD8_u + (*(int *)(station_vars + 0x78) << 8));
+                unsigned char *o = (unsigned char *)((char *)moby_list + (*(int *)(station_vars + 0x78) << 8));
                 if (o[0x20] == 1)
                     o[0xBC] = o[0x20];
             }
@@ -371,7 +370,7 @@ void refueling_station_update(struct Moby *moby) {
     case REFUELING_STATION_STATE_EXPLOSION_DELAY:
         if (fast_dec_timer_s16(station_vars + 0x74)) {
             if (*(int *)(station_vars + 0x70) != -1) {
-                unsigned char *o = (unsigned char *)(D_L09_0015FFD8_u + (*(int *)(station_vars + 0x70) << 8));
+                unsigned char *o = (unsigned char *)((char *)moby_list + (*(int *)(station_vars + 0x70) << 8));
                 if (o != 0 && o[0x20] != 0xFE && o[0x20] != 0xFD &&
                     (*(short *)(o + 0xA6) == 0x494 || *(short *)(o + 0xA6) == 0x49D ||
                      *(short *)(o + 0xA6) == 0x4A0)) {
@@ -753,7 +752,7 @@ case 1:
         link2 = 0;
         index = *(int *)(data + 0x60);
         if (index != -1) {
-            link = (unsigned char *)((char *)D_L09_0015FFD8_u + (index << 8));
+            link = (unsigned char *)((char *)moby_list + (index << 8));
             if (link == 0 || link[0x20] == 0xfe || link[0x20] == 0xfd) link = 0;
         }
         index = *(int *)(data + 0x64);
@@ -818,7 +817,7 @@ case 2:
         moby[0x30] = 0xff;
         index = *(int *)(data + 0x60);
         if (index != -1) {
-            link = (unsigned char *)((char *)D_L09_0015FFD8_u + (index << 8));
+            link = (unsigned char *)((char *)moby_list + (index << 8));
             if (link == 0 || link[0x20] == 0xfe || link[0x20] == 0xfd) link = 0;
         }
         if (link != 0) {
@@ -1379,7 +1378,6 @@ typedef struct {
     float z;
 } Mpos_30A560;
 
-extern int D_L09_0015FFD8_c __asm__("D_L09_0015FFD8");
 extern float floating_ship_piece_hero_offset_tilt_gain_gp __asm__("D_L09_00161DC4") __attribute__((sda));
 extern float floating_ship_piece_sink_speed_gp __asm__("D_L09_00161DC8") __attribute__((sda));
 extern float floating_ship_piece_height_return_rate_gp __asm__("D_L09_00161DCC") __attribute__((sda));
@@ -1443,7 +1441,7 @@ void update_floating_ship_piece(char *moby) {
         }
         break;
     case PLATFORM_STATE_WAIT_FOR_LINK_REMOVAL:
-        linked = (char *)(D_L09_0015FFD8_c + (*(int *)(data + 0x8C) << 8));
+        linked = (char *)((char *)moby_list + (*(int *)(data + 0x8C) << 8));
         if (linked == 0) {
             goto set2;
         }

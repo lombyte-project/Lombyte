@@ -2058,7 +2058,6 @@ extern int get_effect_texture_dc4b8(int) __asm__("FUN_001f44b8");
 extern void draw_quad_dc4b8(void *, void *, int) __asm__("FUN_001f7d30");
 extern int tween_color_dc4b8(int, int, float) __asm__("FUN_001fa6e0");
 extern float class_274_ring_quad_uvs[] __asm__("D_L18_001D4330");
-extern int D_L18_00161C9C_v __asm__("D_L18_00161C9C") __attribute__((sda));
 
 #include "rnc/overlay/l18/gameplay/entities/rocket_data/draw_class_274_ring_effect.h"
 extern int class_274_ring_color_start_gp __asm__("D_L18_00161CB8") __attribute__((sda));
@@ -2098,7 +2097,7 @@ void draw_class_274_ring_effect(char *moby) {
         if (color_fade_weight > 1.0f) color_fade_weight = 1.0f;
         layer_color = tween_color_dc4b8(layer_color & 0xFFFFFF, layer_color, color_fade_weight);
         countdown_ticks_float = convert_integer_to_float(((int *)moby_vars)[2]);
-        color_fade_weight = countdown_ticks_float / (float)scale_game_frames(D_L18_00161C9C_v);
+        color_fade_weight = countdown_ticks_float / (float)scale_game_frames(D_L18_00161C9C_gp);
         if (color_fade_weight > 1.0f) {
             color_fade_weight = 1.0f;
         } else if (color_fade_weight < 0.0f) {
@@ -2804,7 +2803,7 @@ void spawn_explosion_burst(void *source_moby) {
 extern int D_L18_00162008_gp __asm__("D_L18_00162008") __attribute__((sda));
 extern int D_L18_00162010_gp __asm__("D_L18_00162010") __attribute__((sda));
 extern int D_L18_00162024_gp __asm__("D_L18_00162024") __attribute__((sda));
-extern int D_L18_00162054_q __asm__("D_L18_00162054");
+extern int D_L18_00162054_lui __asm__("D_L18_00162054");
 extern short D_L18_001620B8_b[4] __asm__("D_L18_001620B8");
 extern short electric_bolt_side_arc_reset_frames[4] __asm__("D_L18_001620C8");
 extern short electric_bolt_side_arc_timer_distance_references[4] __asm__("D_L18_001620D0");
@@ -2829,7 +2828,7 @@ void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
         electric_bolt_initialization_requested_gp = 0;
         D_L18_001620DC = 0;
         electric_bolt_scaled_initial_frame_count = scale_game_frames(electric_bolt_initial_frame_count_gp);
-        D_L18_00162054_q = 0x7F2020;
+        D_L18_00162054_lui = 0x7F2020;
         fast_vec_sub(arc_endpoint_displacement, moby_vars + 0x10, &moby->pos);
         norm_q(step, arc_endpoint_displacement, electric_bolt_initial_length_scale_gp / 20.0f);
         qcopy(D_L18_001D9D00_q, &moby->pos);
@@ -3089,7 +3088,7 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Qec130;
 extern unsigned int l18_billboard_quad_pair_first_color __asm__("D_L18_001620A0") __attribute__((sda));
-extern unsigned int D_L18_00162054 __asm__("D_L18_00162054") __attribute__((sda));
+extern int D_L18_00162054 __asm__("D_L18_00162054") __attribute__((sda));
 extern float l18_billboard_quad_pair_first_corner_scale_base __asm__("D_L18_001620A8") __attribute__((sda));
 extern float l18_billboard_quad_pair_second_corner_scale_base __asm__("D_L18_001620AC") __attribute__((sda));
 extern Vec130 D_L18_001677C0 __asm__("D_L18_001677C0") NOT_SDA;

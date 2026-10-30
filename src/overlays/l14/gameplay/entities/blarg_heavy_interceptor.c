@@ -1297,8 +1297,6 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
 
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
                                 float eps) __asm__("FUN_L00_0025b8c0");
-extern f32 D_L14_001613A0_d __asm__("D_L14_001613A0") __attribute__((sda));
-extern f32 D_L14_001613A4_d __asm__("D_L14_001613A4") __attribute__((sda));
 extern int FUN_L00_0025d808_2af918(int *tab, float *out, int *a, float *b, int c,
                                     float d) __asm__("FUN_L00_0025d808");
 
@@ -1311,11 +1309,11 @@ void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
                                      (float *)(data + 0x1CC), *(short *)(data + 0x8A),
                                      *(float *)(data + 0x168));
     FUN_L00_0025b8c0_c((float *)(data + 0x170), (float *)(data + 0x180), path_target_position[0],
-                       *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
+                       *(float *)&D_L14_001613A0_gp, *(float *)&D_L14_001613A4_gp, 0.0f);
     FUN_L00_0025b8c0_c((float *)(data + 0x174), (float *)(data + 0x184), path_target_position[1],
-                       *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
+                       *(float *)&D_L14_001613A0_gp, *(float *)&D_L14_001613A4_gp, 0.0f);
     FUN_L00_0025b8c0_c((float *)(data + 0x178), (float *)(data + 0x188), path_target_position[2],
-                       *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
+                       *(float *)&D_L14_001613A0_gp, *(float *)&D_L14_001613A4_gp, 0.0f);
     if (*(short *)(data + 0x8A) == 0) {
         if (r != 0) {
             *(float *)(data + 0x1CC) = save;
@@ -1349,11 +1347,11 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
     frac = 0.0f;
     FUN_L00_0025d808_2af918(tab, out, &destination_segment_index, &frac, destination_path_loop_enabled, destination_path_distance);
     FUN_L00_0025b8c0_c(&moby->pos.x, (float *)(data + 0x194), out[0],
-                       *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
+                       *(float *)&D_L14_001613A0_gp, *(float *)&D_L14_001613A4_gp, 0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.y, (float *)(data + 0x198), out[1],
-                       *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
+                       *(float *)&D_L14_001613A0_gp, *(float *)&D_L14_001613A4_gp, 0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.z, (float *)(data + 0x19C), out[2],
-                       *(float *)&D_L14_001613A0_d, *(float *)&D_L14_001613A4_d, 0.0f);
+                       *(float *)&D_L14_001613A0_gp, *(float *)&D_L14_001613A4_gp, 0.0f);
 }
 /* Picks a target point from a list or searches for one, then eases the moby's position toward it per axis. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AFB40), where it is exact; names translated to the US level program. */

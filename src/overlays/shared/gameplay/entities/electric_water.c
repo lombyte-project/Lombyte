@@ -569,7 +569,7 @@ void draw_electric_water_countdown(char *moby) {
 extern int D_L15_00161C14_gp __asm__("D_L15_00161C14") __attribute__((sda));
 extern int D_L15_00161C1C_gp __asm__("D_L15_00161C1C") __attribute__((sda));
 extern int D_L15_00161C30_gp __asm__("D_L15_00161C30") __attribute__((sda));
-extern int D_L15_00161C60_r __asm__("D_L15_00161C60");
+extern int D_L15_00161C60_lui __asm__("D_L15_00161C60");
 extern short D_L15_00161CD0_r __asm__("D_L15_00161CD0");
 extern short D_L15_00161CD8_r __asm__("D_L15_00161CD8");
 extern short D_L15_00161CC0_a[4] __asm__("D_L15_00161CC0");
@@ -602,7 +602,7 @@ void initialize_electric_water_bolt_effect(char *moby) {
         electric_water_bolt_init_requested_gp = 0;
         D_L15_00161CE4 = 0;
         electric_water_bolt_initial_scaled_frame_count = scale_game_frames(electric_water_bolt_initial_frame_count_gp);
-        D_L15_00161C60_r = 0x7F2020;
+        D_L15_00161C60_lui = 0x7F2020;
         fast_vec_sub(bolt_displacement, moby_vars + 0x100, moby_vars + 0xF0);
         fast_vec_normalize(step, bolt_displacement, electric_water_bolt_initial_length_scale_gp / 20.0f);
         qcopy(D_L15_001D3750_r, moby_vars + 0xF0);
@@ -913,7 +913,7 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Q2d8e48;
 extern unsigned int l15_electric_water_bolt_start_first_quad_color __asm__("D_L15_00161CAC") __attribute__((sda));
-extern unsigned int D_L15_00161C60 __asm__("D_L15_00161C60") __attribute__((sda));
+extern int D_L15_00161C60 __asm__("D_L15_00161C60") __attribute__((sda));
 extern float l15_electric_water_bolt_start_first_quad_base_scale __asm__("D_L15_00161CB4") __attribute__((sda));
 extern float l15_electric_water_bolt_start_second_quad_base_scale __asm__("D_L15_00161CB8") __attribute__((sda));
 extern V2d8e48 D_L15_001673C0 __asm__("D_L15_001673C0") NOT_SDA;
