@@ -246,7 +246,7 @@ int           FUN_L00_00260400(int    unused_subject_object,
                                void  *input_rotation,
                                float *output_position,
 
-                               void *out) {
+                               void *output_rotation) {
     M4_260400 basis_rotation_matrix, composed_rotation_matrix;
     char     *transform_record = FUN_L00_002603d0_c(reference_object);
     if (transform_record == 0)
@@ -258,7 +258,7 @@ int           FUN_L00_00260400(int    unused_subject_object,
     fast_vec_add(output_position, output_position, reference_object + 0x10);
     euler_rotation_matrix(composed_rotation_matrix, input_rotation);
     multiply_matrix(composed_rotation_matrix, basis_rotation_matrix, composed_rotation_matrix);
-    matrix_to_euler(composed_rotation_matrix, out);
+    matrix_to_euler(composed_rotation_matrix, output_rotation);
     return 1;
 }
 
