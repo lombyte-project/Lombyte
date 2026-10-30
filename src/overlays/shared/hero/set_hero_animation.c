@@ -1739,7 +1739,7 @@ void update_hero_slot4_and_slot5_mobys(int moby_override) __asm__("FUN_L00_00234
 
 void update_hero_slot4_and_slot5_mobys(int moby_override) {
     char        *moby_collection_base;
-    struct Hero *base;
+    struct Hero *hero_slot_moby_flag_state;
     char        *listed_moby;
     char        *item_moby;
     int          i;
@@ -1754,16 +1754,16 @@ void update_hero_slot4_and_slot5_mobys(int moby_override) {
         update_hero_world_matrices(moby_override);
         update_hero_item_mobys();
         animate_hero_slot4_and_slot5_visuals();
-        base = &hero;
-        item_moby = ((char *)base->items[4].moby);
+        hero_slot_moby_flag_state = &hero;
+        item_moby = ((char *)hero_slot_moby_flag_state->items[4].moby);
         if (item_moby != 0) {
             MOBY(item_moby)->flags &= 0xFFFE;
         }
-        item_moby = ((char *)base->items[4].moby2);
+        item_moby = ((char *)hero_slot_moby_flag_state->items[4].moby2);
         if (item_moby != 0) {
             MOBY(item_moby)->flags &= 0xFFFE;
         }
-        item_moby = ((char *)base->items[5].moby);
+        item_moby = ((char *)hero_slot_moby_flag_state->items[5].moby);
         if (item_moby != 0) {
             MOBY(item_moby)->flags &= 0xFFFE;
         }
