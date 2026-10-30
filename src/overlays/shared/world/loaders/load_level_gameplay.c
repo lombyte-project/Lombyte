@@ -3,6 +3,7 @@
 #include "rnc/storage/disc_table.h"
 #include "rnc/overlay/point_light.h"
 #include "rnc/overlay/texture_ref.h"
+#include "rnc/overlay/level_spline.h"
 #include "asm.h"
 
 #include "sda.h"
@@ -335,12 +336,6 @@ typedef struct {
     int f1C;
 } Cuboid;
 
-typedef struct {
-    Qword f0;
-    char *f10;
-    int f14;
-    char pad18[8];
-} Spline;
 
 
 typedef struct {
@@ -379,7 +374,7 @@ extern ShrubClass *D_L00_001BC030[];
 extern ShrubInst *D_L00_00160494 MACRO_ADDR;
 extern ShrubInst *D_L00_00160498 MACRO_ADDR;
 extern ShrubMatrix *D_L00_0016049C MACRO_ADDR;
-extern Spline *D_L00_0015F70C MACRO_ADDR;
+extern LevelSpline *l00_splines_macro __asm__("D_L00_0015F70C") MACRO_ADDR;
 extern TextHeader D_L00_00179410;
 extern TextTable *D_L00_0015F660  MACRO_ADDR;
 extern Tfrag *D_L00_00160F4C MACRO_ADDR;
@@ -1283,18 +1278,18 @@ char *load_level_gameplay(int skip_gameplay_read) {
         D_L00_0015F710 = n;
         src = q + *(int *)(q + 4);
         size = *(int *)(q + 8);
-        D_L00_0015F70C = (Spline *)mem;
+        l00_splines_macro = (LevelSpline *)mem;
         mem += n << 5;
         q += 0x10;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         if (n > 0) {
-            Spline *e = D_L00_0015F70C;
+            LevelSpline *e = l00_splines_macro;
 
             i = n;
             do {
                 qcopy(e, q);
                 q += 0x10;
-                e->f14 = *(int *)q;
+                e->kind = *(int *)q;
                 q += 0x10;
                 e++;
             } while (--i != 0);
@@ -1306,7 +1301,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             fast_mem_copy(base, src, size);
         }
         for (i = 0; i < D_L00_0015F710; i++) {
-            D_L00_0015F70C[i].f10 = base + *(int *)q;
+            l00_splines_macro[i].path = (LevelPath *)(base + *(int *)q);
             q += 4;
         }
     }

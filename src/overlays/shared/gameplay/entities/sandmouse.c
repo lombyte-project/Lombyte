@@ -179,6 +179,7 @@ extern char D_L01_00167240[];
 extern GlowVec_bfa8 D_0013F5E0[];
 #include "rnc/overlay/shared/gameplay/entities/sandmouse_globals.h"
 #include "rnc/overlay/level_path.h"
+#include "rnc/overlay/level_spline.h"
 extern f32 moby_quad_c0_offset_scale_gp __asm__("D_L01_00162064") __attribute__((sda));
 extern f32 moby_quad_e0_offset_scale_gp __asm__("D_L01_0016206C") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
@@ -1219,7 +1220,7 @@ typedef struct {
     f32 lead;           /* 0x00 */
     u8 pad4[0x1C];
     s32 track_path;     /* 0x20: D_L01_001B0930 path the first path is measured along */
-    s32 target;         /* 0x24: row of D_L01_0015F70C */
+    s32 target;         /* 0x24: row of l01_splines */
     s32 path;           /* 0x28: D_L01_001B0930 path */
     s32 look_path;      /* 0x2C: D_L01_001B0930 path measured along the target's path */
     s32 kind;           /* 0x30 */
@@ -1233,14 +1234,7 @@ typedef struct {
     CameraPreset *preset; /* 0x1C */
 } CameraPresetRow;
 
-typedef struct {
-    u8 pad0[0x10];
-    CameraPath *path;   /* 0x10 */
-    u8 pad14[0xC];
-} CameraTarget;
-
 extern CameraPresetRow *D_L01_0015EF50;
-extern CameraTarget *D_L01_0015F70C;
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
 /* Resets the camera's orbit, focus, spring, view and track from fixed values; for a kind 2 preset it
@@ -1304,7 +1298,7 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     blend->unk10 = 1;
     if (preset->kind == 2 && preset->ready == 0) {
         track_path = ((CameraPath *)l01_paths[preset->track_path]);
-        target_path = D_L01_0015F70C[preset->target].path;
+        target_path = (CameraPath *)l01_splines[preset->target].path;
         preset_path = ((CameraPath *)l01_paths[preset->path]);
         look_path = ((CameraPath *)l01_paths[preset->look_path]);
         preset->ready = 1;
@@ -1416,7 +1410,7 @@ typedef struct {
 } Cam;
 
 extern CameraPresetRow *D_L01_0015EF50_macro __asm__("D_L01_0015EF50") MACRO_ADDR;
-extern CameraTarget *D_L01_0015F70C_macro __asm__("D_L01_0015F70C") MACRO_ADDR;
+extern LevelSpline *l01_splines_macro __asm__("D_L01_0015F70C") MACRO_ADDR;
 extern float camera_basis_reference_direction[] __asm__("D_L01_001672B0");
 extern float cam_interp_values(float a, float b, float *p, float c, float d, float e);
 extern int sample_path(void *, void *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
@@ -1467,7 +1461,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
     } else if (mode == 2) {
         Path *pathA = ((Path *)l01_paths[path_index]);
-        Path *pathD = (Path *)D_L01_0015F70C_macro[params->target].path;
+        Path *pathD = (Path *)l01_splines_macro[params->target].path;
         Path *pathC = ((Path *)l01_paths[params->path]);
         Path *pathB = ((Path *)l01_paths[params->look_path]);
         int i;
@@ -1684,7 +1678,7 @@ void update_camera_mode_from_preset(CamUser *camera_user) {
         if (camera_preset->target < 0) {
             return;
         }
-        if (hero.rail_spline == (s32)D_L01_0015F70C[camera_preset->target].path && hero.rail_off_frames == 0) {
+        if (hero.rail_spline == (s32)l01_splines[camera_preset->target].path && hero.rail_off_frames == 0) {
             return;
         }
     }
@@ -2052,7 +2046,7 @@ short D_L05_0016200C = 0;
 short D_L05_00162010 = 0;
 short D_L05_00162014 = 0xff;
 short D_L05_00162018 = 0;
-CameraTarget *D_L05_0015F71C = 0;
+s32 D_L05_0015F71C = 0;
 float D_L06_00162384 = 2e+01f;
 float D_L06_00162388 = 1.8e+02f;
 float D_L06_0016238C = 9e+01f;
@@ -2111,7 +2105,7 @@ short D_L08_0016244C = 0;
 short D_L08_00162450 = 0;
 short D_L08_00162454 = 0xff;
 short D_L08_00162458 = 0;
-CameraTarget *D_L08_0015F70C = 0;
+LevelSpline *l08_splines __asm__("D_L08_0015F70C") = 0;
 float D_L11_0016245C = 2e+01f;
 float D_L11_00162460 = 1.8e+02f;
 float D_L11_00162464 = 9e+01f;
@@ -2203,8 +2197,8 @@ short D_L14_001622EC = 0xff;
 short D_L14_001622F0 = 0;
 f32 D_L15_00161A8C = -0.258f;
 f32 D_L15_00161A94 = 0.448f;
-CameraTarget *D_L16_0015F71C = 0;
-CameraTarget *D_L17_0015F70C = 0;
+s32 D_L16_0015F71C = 0;
+LevelSpline *l17_splines __asm__("D_L17_0015F70C") = 0;
 
 int D_L01_00162080_gp __asm__("D_L01_00162080") = 8;
 
