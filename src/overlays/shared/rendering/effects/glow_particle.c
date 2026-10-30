@@ -151,7 +151,7 @@ unsigned char *spawn_randomly_rotated_colored_moby(int           owner,
                                                    unsigned char alpha,
                                                    float         scale) __asm__("FUN_L00_002df808");
 
-unsigned char *spawn_randomly_rotated_colored_moby(int           owner,
+unsigned char *spawn_randomly_rotated_colored_moby(int           source_moby_address,
                                                    V_2df808     *position,
                                                    V_2df808     *vector,
                                                    int           flags,
@@ -180,7 +180,7 @@ unsigned char *spawn_randomly_rotated_colored_moby(int           owner,
         set_moby_color(moby, red, green, blue);
         *(float *)(spawned_moby_private_data + 0x18) = MOBY(moby)->scale * scale;
         *(int *)(moby + 0x2c) = 0;
-        *(int *)(spawned_moby_private_data + 0x10) = owner;
+        *(int *)(spawned_moby_private_data + 0x10) = source_moby_address;
         qcopy(moby + 0x10, position);
         qcopy(spawned_moby_private_data, vector);
         qcopy(moby + 0x40, &rotation_copy);
