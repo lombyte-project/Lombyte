@@ -59,7 +59,7 @@ void init_level_runtime_state(void) {
     D_0015EE24 += 0xB4;
 }
 extern int D_L00_001C3E98[];
-extern unsigned char D_0015EDD0[] __attribute__((sda));
+extern u8 D_0015EDD0[] __attribute__((sda));
 extern int D_00141660_23d028[] __asm__("D_00141660");
 void append_level_item_if_absent(int i) __asm__("FUN_L00_0023d3d8");
 void init_level_item_inventory(void) {

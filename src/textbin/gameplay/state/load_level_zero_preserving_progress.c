@@ -41,7 +41,7 @@ extern void memcard_make_whole_save(s32) __asm__("func_0020ABB0");
 extern s32 sceCdReadClock(u8 *clock);
 extern void sceScfGetLocalTimefromRTC(u8 *clock);
 
-extern u8 D_0015EDD0_257218_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
+extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 void load_level_zero_preserving_progress(s32 slot) __asm__("FUN_00226b08");
 
 void load_level_zero_preserving_progress(s32 slot) {
@@ -59,7 +59,7 @@ void load_level_zero_preserving_progress(s32 slot) {
     copy_memory_aligned((void *)0x70000060, weapon_ammo_counts, 0x94);
     copy_memory_aligned((void *)0x70000100, D_0014BEC0, 0x50);
     copy_memory_aligned((void *)0x70000150, pause_iop_sprite_lists, 0x20);
-    copy_memory_aligned((void *)0x70000170, D_0015EDD0_257218_macro, 0xC);
+    copy_memory_aligned((void *)0x70000170, D_0015EDD0_macro, 0xC);
     copy_memory_aligned((void *)0x70000180, item_unlocked, 0x20);
     saved = current_bolt_count;
     count = alternate_animation_sequence;
@@ -77,7 +77,7 @@ void load_level_zero_preserving_progress(s32 slot) {
         s32 item = items[i];
         pause_iop_sprite_lists[i] = item_available[item] ? item : 0;
     }
-    copy_memory_aligned(D_0015EDD0_257218_macro, (void *)0x70000170, 0xC);
+    copy_memory_aligned(D_0015EDD0_macro, (void *)0x70000170, 0xC);
     copy_memory_aligned(item_unlocked, (void *)0x70000180, 0x20);
     current_bolt_count = saved;
     if (flag4) {
