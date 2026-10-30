@@ -630,7 +630,7 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) __asm
 
 void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
     float x, y, input_magnitude, selection_angle;
-    int   old, pad_slot_index, slot_count, next_slot_index;
+    int   previous_slot_index, pad_slot_index, slot_count, next_slot_index;
     u8   *counters = &hud_element->b70;
 
     hud_element->w7C = scale_game_frames(0xB4);
@@ -650,7 +650,7 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
             hud_element->w78 = 0x10000FF;
         }
     }
-    old = hud_element->w74;
+    previous_slot_index = hud_element->w74;
     if (*((s8 *)hud_element + 0x7B) == 1) {
         if (0.9f < input_magnitude) {
             slot_count = D_L00_0015FA90;
@@ -692,7 +692,7 @@ void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
             hud_element->w74 = pad_slot_index;
         }
     }
-    if (hud_element->w74 != old) {
+    if (hud_element->w74 != previous_slot_index) {
         counters[1] = 0;
     } else if (counters[1] < D_L00_0015F780_gp) {
         counters[1]++;
