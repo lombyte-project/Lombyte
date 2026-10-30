@@ -2644,22 +2644,22 @@ void emit_hero_timed_effects(void) {
     OvlQuad  hero_position_copy[1];
     OvlQuad  effect_vector[1];
     char    *hero_effect_timer_anchor;
-    char    *base;
+    char    *hero_effect_state_base;
     float    lateral_angle, spherical_offset_scale, planar_scale, alpha_fraction, theta, phi;
     int      frame_count, alpha, col, life, small_effect_sample, large_effect_sample, k;
     OvlQuad *pt;
     hero_effect_timer_anchor = D_0013F7EE;
     if (fast_dec_timer_s16(hero_effect_timer_anchor)) {
         qcopy(hero_position_copy, hero_effect_timer_anchor - 0x41E);
-        base = hero_effect_timer_anchor - 0x49E;
-        lateral_angle = fast_add_rotations(*(float *)(base + 0x98), 1.5707963705062866f);
+        hero_effect_state_base = hero_effect_timer_anchor - 0x49E;
+        lateral_angle = fast_add_rotations(*(float *)(hero_effect_state_base + 0x98), 1.5707963705062866f);
         planar_scale = randf_sym(D_0015ED6C * 0.2f, D_0015ED6C * 0.7f);
         ((float *)effect_vector)[0] = fast_cos(lateral_angle) * planar_scale;
         ((float *)effect_vector)[1] = fast_sin(lateral_angle) * planar_scale;
         ((int *)effect_vector)[2] = 0;
         ((float *)effect_vector)[3] = frame_time_sq * -8.0f;
         spawn_color_decaying_effect_particle(hero_position_copy, effect_vector, 0);
-        *(short *)(base + 0x49E) = random_int_between(2, 3);
+        *(short *)(hero_effect_state_base + 0x49E) = random_int_between(2, 3);
     }
     if (!fast_dec_timer_s16(hero_effect_timer_anchor - 2))
         return;
