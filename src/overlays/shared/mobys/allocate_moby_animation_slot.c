@@ -330,7 +330,7 @@ extern void flush_cache(int) __asm__("FUN_00118a80");
  * with a generic prototype for its callers. */
 void FUN_L00_0024f440_c(char *obj, int i, int j, Packet *out) __asm__("FUN_L00_0024f440");
 
-void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet *out) {
+void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet *animation_frame_packet) {
     char          *frame_table_container = *(char **)(animation_blend_state + 0x18);
     char          *output_layout_source = *(char **)(animation_blend_state + 0x14);
     int            nb = (unsigned char)frame_table_container[8];
@@ -349,21 +349,21 @@ void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet *out) 
         Frame_24f440 **ss = (Frame_24f440 **)(r + 0x1C);
         selected_frame = ss[j];
     }
-    fast_mem_zero16(out, ((na + 3) * 8) & 0xFF0);
+    fast_mem_zero16(animation_frame_packet, ((na + 3) * 8) & 0xFF0);
     k = na + selected_frame->hA;
     k += selected_frame->hE;
-    out->h8 = na * 8;
+    animation_frame_packet->h8 = na * 8;
     {
         void *from = &((u64_24f440 *)selected_frame)[nb + 2];
 
-        out->h6 = (k + 1) >> 1;
+        animation_frame_packet->h6 = (k + 1) >> 1;
         frame_header_a = selected_frame->hA;
-        out->hA = frame_header_a;
-        out->hC = (frame_header_a + na) * 8;
-        out->hE = selected_frame->hE;
+        animation_frame_packet->hA = frame_header_a;
+        animation_frame_packet->hC = (frame_header_a + na) * 8;
+        animation_frame_packet->hE = selected_frame->hE;
         trailing_byte_count = selected_frame->qwc * 16 - nb * 8;
         if (trailing_byte_count != 0)
-            copy_memory_aligned(&((u64_24f440 *)out)[na + 2], from, trailing_byte_count);
+            copy_memory_aligned(&((u64_24f440 *)animation_frame_packet)[na + 2], from, trailing_byte_count);
     }
     ix = (unsigned char *)(*(char **)(*(char **)(animation_blend_state + 0x18) + 0x1C) + 4);
     scatter_source_cursor = selected_frame->q;
@@ -371,12 +371,12 @@ void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet *out) 
         int remaining_scatter_count = nb;
         do {
             remaining_scatter_count--;
-            ((u64_24f440 *)out)[*ix + 2] = *scatter_source_cursor;
+            ((u64_24f440 *)animation_frame_packet)[*ix + 2] = *scatter_source_cursor;
             ix++;
             scatter_source_cursor++;
         } while (remaining_scatter_count != 0);
     }
-    q = (u64_24f440 *)((char *)out + out->h6 * 16);
+    q = (u64_24f440 *)((char *)animation_frame_packet + animation_frame_packet->h6 * 16);
     if (*q == 0)
         *q = 1;
     flush_cache(0);
