@@ -255,10 +255,10 @@ void update_mine(struct Moby *mine_moby) {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 
 void handle_mine_hit(unsigned char *mine_moby) {
-    char *item = find_moby_hit(mine_moby, 0x130000, 0);
-    if (item != 0) {
-        char *other = *(char **)(item + 0x20);
-        if (other != 0 && *(short *)(other + 0xA6) != MOBY(mine_moby)->oclass) {
+    char *mine_hit_record = find_moby_hit(mine_moby, 0x130000, 0);
+    if (mine_hit_record != 0) {
+        char *hit_source_moby = *(char **)(mine_hit_record + 0x20);
+        if (hit_source_moby != 0 && *(short *)(hit_source_moby + 0xA6) != MOBY(mine_moby)->oclass) {
             mine_moby[0x20] = 4;
         }
     }
