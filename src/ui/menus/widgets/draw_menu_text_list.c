@@ -32,7 +32,7 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
     s32                  focused;
     u8                  *font;
     s32                  item_count;
-    struct MenuTextItem *item;
+    struct MenuTextItem *item_count_cursor;
     s32                  row_height;
     s32                  glyph_texture;
     s32                  i;
@@ -62,9 +62,9 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
     setup_gif_paging(0);
 
     item_count = 0;
-    item = menu->data.list.items;
-    while (item->text != 0) {
-        item++;
+    item_count_cursor = menu->data.list.items;
+    while (item_count_cursor->text != 0) {
+        item_count_cursor++;
         item_count++;
     }
     if (menu->data.list.flags & 0x10) {
