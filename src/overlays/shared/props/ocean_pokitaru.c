@@ -322,7 +322,7 @@ void ocean_pokitaru_update(OceanMoby *moby) __asm__("FUN_L11_0030b358");
 void ocean_pokitaru_update(OceanMoby *moby) {
     OceanVars *ocean_vars = moby->vars;
     float      camera_displacement[4];
-    float      out[4];
+    float      camera_wave_uv_delta[4];
     int        k;
 
     if (moby->state == 0) {
@@ -343,15 +343,15 @@ void ocean_pokitaru_update(OceanMoby *moby) {
     }
     for (k = 0; k < 2; k++) {
         fast_vec_scale(
-            out, camera_displacement, (wave_speed[k] + wave_speed[k]) / (ocean_vars->scale * 5.0f));
-        if (1.0f < out[0] || out[0] < 1.0f) {
-            out[0] = out[0] - convert_integer_to_float(truncate_float_to_s32(out[0]));
+            camera_wave_uv_delta, camera_displacement, (wave_speed[k] + wave_speed[k]) / (ocean_vars->scale * 5.0f));
+        if (1.0f < camera_wave_uv_delta[0] || camera_wave_uv_delta[0] < 1.0f) {
+            camera_wave_uv_delta[0] = camera_wave_uv_delta[0] - convert_integer_to_float(truncate_float_to_s32(camera_wave_uv_delta[0]));
         }
-        if (1.0f < out[1] || out[1] < 1.0f) {
-            out[1] = out[1] - convert_integer_to_float(truncate_float_to_s32(out[1]));
+        if (1.0f < camera_wave_uv_delta[1] || camera_wave_uv_delta[1] < 1.0f) {
+            camera_wave_uv_delta[1] = camera_wave_uv_delta[1] - convert_integer_to_float(truncate_float_to_s32(camera_wave_uv_delta[1]));
         }
-        wave_offset[k].u = wave_offset[k].u + out[0];
-        wave_offset[k].v = wave_offset[k].v + out[1];
+        wave_offset[k].u = wave_offset[k].u + camera_wave_uv_delta[0];
+        wave_offset[k].v = wave_offset[k].v + camera_wave_uv_delta[1];
         if (1.0f < wave_offset[k].u) {
             wave_offset[k].u = wave_offset[k].u - 1.0f;
         }
