@@ -1942,16 +1942,16 @@ extern char *D_L14_ffd0_e[] __asm__("D_L14_0015FFD0") MACRO_ADDR;
 int is_turret_group_activated_or_empty(int index) {
     unsigned short *list = (unsigned short *)D_L14_001AC2C0_2B0168[index];
     int             count = 0;
-    char           *base;
+    char           *moby_pool_base;
     if (list)
         goto scan;
 success:
     return 1;
 scan:
-    base = D_L14_ffd0_e[2];
+    moby_pool_base = D_L14_ffd0_e[2];
     do {
         unsigned short id = *list;
-        char          *moby = base + ((id & 0x7FFF) << 8);
+        char          *moby = moby_pool_base + ((id & 0x7FFF) << 8);
         int            state = ((signed char)MOBY(moby)->state);
         char          *group_member_vars = ((char *)MOBY(moby)->pvars);
         if (state >= 0)
