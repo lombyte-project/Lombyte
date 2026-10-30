@@ -1,6 +1,7 @@
 /* Shared moby classes: walloper, morphoray. */
 #include "types.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/overlay/point_light.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -1391,11 +1392,6 @@ typedef struct Stats {
 } Stats;
 
 
-typedef struct Light {
-    float col[4];
-    float pos[3];
-    float radius;
-} Light;
 
 typedef struct Voice {
     char p0[0x74];
@@ -1436,7 +1432,6 @@ void FUN_L00_00263d40(int a, int b);
 extern char D_0013A5E0_2BDAF0[] __asm__("D_0013CAE0");
 extern unsigned char D_0013E633_2BDAF0[] __asm__("D_0013E533");
 extern char voice_pool[] __asm__("D_0013E550");
-extern char D_L00_001803C0_2BDAF0[] __asm__("D_L00_001802C0");
 extern char D_L00_00166C80[];
 extern int func_001F9938_2BDAF0(void *) __asm__("FUN_001f9770");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
@@ -1578,10 +1573,10 @@ void morphoray_update(Moby *moby) {
             morphoray_light_fade_countdown = func_001F9850_2BDAF0(20);
             func_L00_001FF4B0_2BDAF0(&points[0], &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[1], data, &points[0]);
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[0] = points[1].x;
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[1] = points[1].y;
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[1].z;
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
+            point_lights[morphoray_point_light_slot].position.f[0] = points[1].x;
+            point_lights[morphoray_point_light_slot].position.f[1] = points[1].y;
+            point_lights[morphoray_point_light_slot].position.f[2] = points[1].z;
+            point_lights[morphoray_point_light_slot].position.f[3] = 7.5f;
         }
         if (voice_is_playing(moby, D_L00_001617C8) == 0) {
             D_L00_001617C8 = allocate_voice_for_target_entry(0, 4, moby);
@@ -1599,14 +1594,14 @@ void morphoray_update(Moby *moby) {
             float brightness;
             func_L00_001FF4B0_2BDAF0(&direction, &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[0], data, &direction);
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[0] = points[0].x;
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[1] = points[0].y;
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[0].z;
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
+            point_lights[morphoray_point_light_slot].position.f[0] = points[0].x;
+            point_lights[morphoray_point_light_slot].position.f[1] = points[0].y;
+            point_lights[morphoray_point_light_slot].position.f[2] = points[0].z;
+            point_lights[morphoray_point_light_slot].position.f[3] = 7.5f;
             brightness = func_001FA888_2BDAF0(morphoray_light_fade_countdown) * 0.05f;
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[0] = brightness;
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[1] = brightness;
-            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[2] = brightness * 0.25f;
+            point_lights[morphoray_point_light_slot].color[0] = brightness;
+            point_lights[morphoray_point_light_slot].color[1] = brightness;
+            point_lights[morphoray_point_light_slot].color[2] = brightness * 0.25f;
             if (func_001F9908_2BDAF0(&morphoray_light_fade_countdown) != 0) {
                 release_point_light_slot(morphoray_point_light_slot);
                 morphoray_point_light_slot = -1;

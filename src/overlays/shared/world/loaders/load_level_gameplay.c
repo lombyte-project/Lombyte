@@ -1,6 +1,7 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/overlay/point_light.h"
 #include "rnc/overlay/texture_ref.h"
 #include "asm.h"
 
@@ -455,7 +456,6 @@ extern short D_L00_001B0830[];
 extern u8 D_00100AE0[];
 extern unsigned char *D_L00_001604A0 MACRO_ADDR;
 extern unsigned char mission_state[] __asm__("D_L00_0015FC88") MACRO_ADDR;
-extern unsigned char D_L00_001802C0[];
 extern unsigned char D_L00_001804C0[];
 extern unsigned char D_L00_001BC1B0[];
 extern unsigned char D_L00_001C5B00[];
@@ -559,7 +559,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_0016017C = 0x1F4000;
     PackDmaTag(D_L00_0016CA40.f23C, D_L00_0016CA40.f240, D_L00_0016CA40.f244);
     vu0_load_micro_program(D_00100AE0);
-    fast_mem_zero16(D_L00_001802C0, 0x100);
+    fast_mem_zero16(point_lights, 0x100);
     fast_mem_zero16(D_L00_001804C0, 0x180);
     fast_mem_zero16(level_directional_lights, 0x400);
     {

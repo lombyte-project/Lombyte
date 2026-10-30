@@ -1,5 +1,6 @@
 /* Shared moby classes: vendor_orb, hydrodisplacer, pilots_helmet, pterodactyl, red_plant, robot_arm. */
 #include "types.h"
+#include "rnc/overlay/point_light.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/camera/camera_modes.h"
 #include "rnc/gameplay/hero.h"
@@ -797,8 +798,6 @@ typedef struct {
     PartSub sub;
 } Part;
 
-typedef struct { char pad0[0x10]; float v10[3]; float f1C; } Snd;
-
 /* The origin row of a BeamTransform, read through its own label. */
 typedef struct {
     f32 origin[4];
@@ -828,7 +827,6 @@ extern BeamOrigin beam_origins[] __asm__("D_L00_001E6D50");
 extern Q_2E3700 D_L00_001E7130_2E3700[] __asm__("D_L00_001E6DE0");
 extern Q_2E3700 D_L00_001E7160_2E3700[] __asm__("D_L00_001E6E10");
 extern BeamStrand beam_strands[] __asm__("D_L00_001E6E40");
-extern Snd D_L00_001803C0_2E3700[] __asm__("D_L00_001802C0");
 extern char D_0013E633_2E3700[] __asm__("D_0013F5E0");
 extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 extern int beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
@@ -995,10 +993,10 @@ void update_slot_panes_and_effects(int unused, int beam) {
                 beam_endpoint_light[beam] = allocate_colored_effect_slot(first_endpoint_effect_position, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
             }
             if (beam_endpoint_light[beam] >= 0) {
-                Snd *light = &D_L00_001803C0_2E3700[beam_endpoint_light[beam]];
+                PointLight *light = &point_lights[beam_endpoint_light[beam]];
 
-                qcopy(light->v10, first_endpoint_effect_position);
-                light->f1C = D_L00_00161BF0_gp;
+                qcopy(&light->position, first_endpoint_effect_position);
+                light->position.f[3] = D_L00_00161BF0_gp;
             }
         }
         if (beam_endpoint_effect_flags[beam] & 2) {
@@ -1007,10 +1005,10 @@ void update_slot_panes_and_effects(int unused, int beam) {
                 beam_tip_light[beam] = allocate_colored_effect_slot(tip, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
             }
             if (beam_tip_light[beam] >= 0) {
-                Snd *light = &D_L00_001803C0_2E3700[beam_tip_light[beam]];
+                PointLight *light = &point_lights[beam_tip_light[beam]];
 
-                qcopy(light->v10, tip);
-                light->f1C = D_L00_00161BF0_gp;
+                qcopy(&light->position, tip);
+                light->position.f[3] = D_L00_00161BF0_gp;
             }
         }
     }

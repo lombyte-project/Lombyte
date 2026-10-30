@@ -1,5 +1,6 @@
 /* Shared moby classes: veldin_ship, decoy_glove, metal_detector, helipack, horny_toad, infobot, particle_spawner_smoke__fire. */
 #include "types.h"
+#include "rnc/overlay/point_light.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -1756,7 +1757,6 @@ extern char *moby_table __asm__("D_L00_0015FFD8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int FUN_L00_001fefc8(void *);
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern unsigned char D_L00_001802C0[];
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 void update_animated_point_light_moby(unsigned char *moby) __asm__("FUN_L00_002d3a10");
@@ -2055,13 +2055,13 @@ void update_animated_point_light_moby(unsigned char *moby) {
             float kk = convert_integer_to_float(vars[0x24]) / 100.0f;
             *(int *)(vars + 0x50) = allocate_colored_effect_slot((float *)moby_position, *(float *)(vars + 0x60), kk, *(float *)(vars + 0x54), *(float *)(vars + 0x58), *(float *)(vars + 0x5C));
         } else {
-            unsigned char *point_light_entry = D_L00_001802C0 + (sphere_check_result_or_light_slot_index << 5);
-            qcopy(point_light_entry + 0x10, moby_position);
-            *(float *)(point_light_entry + 0x1C) = *(float *)(vars + 0x60);
-            *(float *)(point_light_entry + 0x0) = *(float *)(vars + 0x54);
-            *(float *)(point_light_entry + 0x4) = *(float *)(vars + 0x58);
-            *(float *)(point_light_entry + 0x8) = *(float *)(vars + 0x5C);
-            *(float *)(point_light_entry + 0xC) = convert_integer_to_float(vars[0x24]) / 100.0f;
+            PointLight *point_light = &point_lights[sphere_check_result_or_light_slot_index];
+            qcopy(&point_light->position, moby_position);
+            point_light->position.f[3] = *(float *)(vars + 0x60);
+            point_light->color[0] = *(float *)(vars + 0x54);
+            point_light->color[1] = *(float *)(vars + 0x58);
+            point_light->color[2] = *(float *)(vars + 0x5C);
+            point_light->unkC = convert_integer_to_float(vars[0x24]) / 100.0f;
         }
     } else {
         if (*(int *)(vars + 0x50) != -1) {

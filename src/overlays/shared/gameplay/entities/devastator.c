@@ -1,5 +1,6 @@
 /* Shared moby classes: devastator, visibomb, blaster, visibomb_missile, taunter, pyrocitor, tesla_claw. */
 #include "types.h"
+#include "rnc/overlay/point_light.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
@@ -57,15 +58,12 @@ typedef struct Hit_2b2100 { char pad0[0x18]; struct Moby *moby; char pad1C[4]; V
 
 typedef struct AimInfo { char pad0[0xA]; unsigned char radius; char padB[5]; float height; } AimInfo;
 
-typedef struct Light_2b2100 { float x, y, z, b; Vec_2b2100 pos; } Light_2b2100;
-
 extern char usage_stats_2b2100[] __asm__("D_00141680");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern char view_origin_2b2100[] __asm__("D_L00_00166DC0");
 extern char coll_hit[] __asm__("D_L00_00173E40");
 extern float collision_hit_z __asm__("D_L00_00173E68") NOT_SDA;
 extern struct Moby *D_L00_001ABA00_2b2100[] __asm__("D_L00_001ABA00");
-extern Light_2b2100 lights_2b2100[] __asm__("D_L00_001802C0");
 extern int D_L00_0015F5CC_2b2100 __asm__("D_L00_0015F5CC");
 extern int D_0015EEA4;
 extern void emit_object_offset_particles(struct Moby *) __asm__("FUN_L00_002b1af0");
@@ -303,12 +301,12 @@ void devastator_update(struct Moby *devastator_moby) {
         if (data->light == -1) {
             data->light = allocate_colored_effect_slot(&velocity, 7.0f, 0.0f, muzzle_light_color_x, muzzle_light_color_y, muzzle_light_color_z);
         } else {
-            Light_2b2100 *muzzle_light = &lights_2b2100[data->light];
-            qcopy(&muzzle_light->pos, &velocity);
-            muzzle_light->pos.f.w = 7.0f;
-            muzzle_light->x = muzzle_light_color_x;
-            muzzle_light->y = muzzle_light_color_y;
-            muzzle_light->z = muzzle_light_color_z;
+            PointLight *muzzle_light = &point_lights[data->light];
+            qcopy(&muzzle_light->position, &velocity);
+            muzzle_light->position.f[3] = 7.0f;
+            muzzle_light->color[0] = muzzle_light_color_x;
+            muzzle_light->color[1] = muzzle_light_color_y;
+            muzzle_light->color[2] = muzzle_light_color_z;
         }
         fast_dec_timer_s16(&data->glow);
     } else if (data->light != -1) {
@@ -1496,8 +1494,6 @@ typedef struct BlasterUsage { char pad0[0x78]; unsigned short uses; unsigned sho
 
 typedef struct AimTarget { char pad0[0x10]; float height; } AimTarget;
 
-typedef struct PointLight { float red, green, blue, pad_C; BlasterVec pos; } PointLight;
-
 typedef struct ShotSpawn {
     BlasterVec pos;
     struct Moby *owner;
@@ -1527,7 +1523,6 @@ extern int D_0015ED84;
 extern int D_L00_0015F5C4; /* no foreign declaration */
 extern int D_L00_00173E58; /* no foreign declaration */
 extern float D_L00_0017ACF4 NOT_SDA;
-extern unsigned char D_L00_001802C0[];
 extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_00233db8(int, int);
 extern int FUN_L00_00233e98();
@@ -1731,12 +1726,12 @@ void blaster_update(struct Moby *moby) {
         if (data->light == -1) {
             data->light = allocate_colored_effect_slot(&work.point, 6.0f, 0.0f, red, green, blue);
         } else {
-            PointLight *light = &((PointLight *)D_L00_001802C0)[data->light];
-            qcopy(&light->pos, &work.point);
-            light->pos.f.w = 6.0f;
-            light->red = red;
-            light->green = green;
-            light->blue = blue;
+            PointLight *light = &point_lights[data->light];
+            qcopy(&light->position, &work.point);
+            light->position.f[3] = 6.0f;
+            light->color[0] = red;
+            light->color[1] = green;
+            light->color[2] = blue;
         }
         fast_dec_timer(&data->glow);
     } else if (data->light != -1) {
@@ -2791,8 +2786,8 @@ void pyrocitor_update(struct Moby *moby) {
             }
         }
         if (pyrocitor_vars->light != -1) {
-            lerp_vector(&lights_2b2100[pyrocitor_vars->light], &lights_2b2100[pyrocitor_vars->light], &zero_vector, 0.1f);
-            if (fast_vec_length(&lights_2b2100[pyrocitor_vars->light]) < 0.001f) {
+            lerp_vector(&point_lights[pyrocitor_vars->light], &point_lights[pyrocitor_vars->light], &zero_vector, 0.1f);
+            if (fast_vec_length(&point_lights[pyrocitor_vars->light]) < 0.001f) {
                 release_point_light_slot(pyrocitor_vars->light);
                 /* Fakematch: the dead test on moby keeps the s6/s7 assignment of retail. */
                 if (moby) pyrocitor_vars->light = -1; else pyrocitor_vars->light = -1;
@@ -2816,11 +2811,11 @@ void pyrocitor_update(struct Moby *moby) {
             light_offset_and_flame_velocity.f.x = 2.0f;
             light_offset_and_flame_velocity.f.z = 2.0f;
             transform_vector_by_basis(&light_offset_and_flame_velocity, &light_offset_and_flame_velocity, hero.basis);
-            fast_vec_add(&lights_2b2100[pyrocitor_vars->light].pos, &hero.motion.pos, &light_offset_and_flame_velocity);
-            lights_2b2100[pyrocitor_vars->light].pos.f.w = 7.5f;
+            fast_vec_add(&point_lights[pyrocitor_vars->light].position, &hero.motion.pos, &light_offset_and_flame_velocity);
+            point_lights[pyrocitor_vars->light].position.f[3] = 7.5f;
             lerp_vector(&scratch, &pyrocitor_light_color_start_x_gp, &pyrocitor_light_color_end_x_gp,
                 fast_sin(((f32)(D_L00_0015F5CC % 120) / 120.0f) * 6.28318f - 3.14159f) * 0.5f + 0.5f);
-            lerp_vector(&lights_2b2100[pyrocitor_vars->light], &lights_2b2100[pyrocitor_vars->light], &scratch, 0.1f);
+            lerp_vector(&point_lights[pyrocitor_vars->light], &point_lights[pyrocitor_vars->light], &scratch, 0.1f);
         }
         pos_out = vel_out = 0.0f;
         speed = convert_integer_to_float(item_text_variant[16]) * 4.0f;
@@ -3134,8 +3129,6 @@ typedef struct Stats2 { char pad0[0xD0]; unsigned short uses; unsigned short lon
 
 typedef struct Aim { char pad0[4]; short kind; } Aim;
 
-typedef struct Light { float x, y, z, b; V_2B9AD8 pos; } Light;
-
 extern char D_0013E533[];
 extern int D_00141918; /* no foreign declaration */
 extern int D_00141D70; /* no foreign declaration */
@@ -3152,7 +3145,6 @@ extern unsigned char D_0013E533_2b2100[] __asm__("D_0013E533");
 extern unsigned short D_00141D70_2b2100[] __asm__("D_00141D70");
 extern unsigned short D_00141918_2b2100[] __asm__("D_00141918");
 extern int D_L00_00161590 __asm__("D_L00_00161590");
-extern Light D_L00_001802C0_2b2100[] __asm__("D_L00_001802C0");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern int FUN_L00_00233db8_2b2100a(int, int) __asm__("FUN_L00_00233db8");
 extern int FUN_L00_0023e5e0_2b2100(void *, float, float, int) __asm__("FUN_L00_0023e5e0");
@@ -3391,15 +3383,15 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
         transformed_offset.f.x = 2.0f;
         transformed_offset.f.z = 2.0f;
         transform_vector_by_basis(&transformed_offset, &transformed_offset, D_0013F350_2b2100 + 0x640);
-        D_L00_001802C0_2b2100[tesla_claw_vars->light].pos.f.x = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0] + transformed_offset.f.x;
-        D_L00_001802C0_2b2100[tesla_claw_vars->light].pos.f.y = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1] + transformed_offset.f.y;
-        D_L00_001802C0_2b2100[tesla_claw_vars->light].pos.f.z = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[2] + transformed_offset.f.z;
-        D_L00_001802C0_2b2100[tesla_claw_vars->light].pos.f.w = 7.5f;
+        point_lights[tesla_claw_vars->light].position.f[0] = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0] + transformed_offset.f.x;
+        point_lights[tesla_claw_vars->light].position.f[1] = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1] + transformed_offset.f.y;
+        point_lights[tesla_claw_vars->light].position.f[2] = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[2] + transformed_offset.f.z;
+        point_lights[tesla_claw_vars->light].position.f[3] = 7.5f;
         k = convert_integer_to_float(tesla_claw_vars->glow) / (float)scale_game_frames(10);
-        D_L00_001802C0_2b2100[tesla_claw_vars->light].z = k;
+        point_lights[tesla_claw_vars->light].color[2] = k;
         k = k * 0.7f;
-        D_L00_001802C0_2b2100[tesla_claw_vars->light].y = k;
-        D_L00_001802C0_2b2100[tesla_claw_vars->light].x = D_L00_001802C0_2b2100[tesla_claw_vars->light].y;
+        point_lights[tesla_claw_vars->light].color[1] = k;
+        point_lights[tesla_claw_vars->light].color[0] = point_lights[tesla_claw_vars->light].color[1];
         if (done && tesla_claw_vars->light != -1) {
             release_point_light_slot(tesla_claw_vars->light);
             tesla_claw_vars->light = -1;
