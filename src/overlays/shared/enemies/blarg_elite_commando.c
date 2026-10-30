@@ -752,7 +752,7 @@ void emit_blarg_elite_commando_death_particles(void *moby) __asm__("FUN_L16_002d
 
 void emit_blarg_elite_commando_death_particles(void *moby) {
     float              delta[4], velocity[4], position[4];
-    L16ParticleChoices first, second;
+    L16ParticleChoices first_particle_choices, second_particle_choices;
     float              distance, range, delay;
     int                count;
     void              *origin;
@@ -778,11 +778,11 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
             int  *first_choice, *second_choice, duration1, duration2;
             remaining--;
             sample = random_float_between(8.0f, 10.0f);
-            first = D_L16_001E8300;
-            second = D_L16_001E8318;
+            first_particle_choices = D_L16_001E8300;
+            second_particle_choices = D_L16_001E8318;
             delay = sample * frame_time - range * frame_time;
-            first_choice = &first.values[random_integer_below(6)];
-            second_choice = &second.values[random_integer_below(6)];
+            first_choice = &first_particle_choices.values[random_integer_below(6)];
+            second_choice = &second_particle_choices.values[random_integer_below(6)];
             {
                 int lo = scale_game_frames(15), hi = scale_game_frames(20);
                 duration1 = random_int_between(lo, hi);
