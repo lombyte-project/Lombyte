@@ -237,13 +237,13 @@ int activate_state_15_moby_at_position(void *m_, void *activation_position) {
 
 int check_all_listed_frog_states_fe_fd_or_10(int index) {
     unsigned short *moby_index_cursor = (unsigned short *)D_L06_001ABFC0[index];
-    char           *base;
+    char           *moby_array_base;
     char           *moby;
     if (moby_index_cursor == 0)
         return 1;
-    base = (char *)D_L06_0015FFD8_d;
+    moby_array_base = (char *)D_L06_0015FFD8_d;
     for (;;) {
-        moby = base + ((*moby_index_cursor & 0x7FFF) << 8);
+        moby = moby_array_base + ((*moby_index_cursor & 0x7FFF) << 8);
         if (moby != 0 && MOBY(moby)->oclass == 0x33B) {
             unsigned char moby_state = moby[0x20];
             if (moby_state != 0xFE) {
