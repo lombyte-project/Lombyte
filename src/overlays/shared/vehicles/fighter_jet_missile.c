@@ -163,8 +163,8 @@ static inline void copy_xyz_089d0(float *dst, float *src) {
 void update_fighter_jet_missile(struct Moby *moby) __asm__("FUN_L11_003089d0");
 
 void update_fighter_jet_missile(struct Moby *moby) {
-    MissileVars *vars = (MissileVars *)moby->pvars;
-    float        old[4];
+    MissileVars *missile_vars = (MissileVars *)moby->pvars;
+    float        previous_missile_position[4];
     float        look[4];
     MissileHit   hit;
     float        spark_velocity[4];
@@ -174,27 +174,27 @@ void update_fighter_jet_missile(struct Moby *moby) {
     int          i;
 
     moby->scale += (moby->pclass->scale - moby->scale) * 0.1f;
-    qcopy(old, &moby->pos);
+    qcopy(previous_missile_position, &moby->pos);
     if (level_frame % 6 == (((char *)moby - D_L11_0015FFD8_089d0) >> 8) % 6)
-        vars->target = 0;
-    moby->alpha = truncate_float_to_s32(vars->size * 24.0f);
-    copy_xyz_089d0(look, vars->target_pos);
+        missile_vars->target = 0;
+    moby->alpha = truncate_float_to_s32(missile_vars->size * 24.0f);
+    copy_xyz_089d0(look, missile_vars->target_pos);
     ((int *)look)[3] = 0;
-    target = vars->target;
+    target = missile_vars->target;
     if (target == 0 || target->state == 0xFE || target->state == 0xFD ||
         fast_vec_dist(&target->pos, look) > 3.0f)
-        vars->target = (struct Moby *)select_homing_missile_target(
+        missile_vars->target = (struct Moby *)select_homing_missile_target(
             (float *)&moby->pos, (float *)&moby->rot, 0.2617994f, 0.2617994f, 60.0f);
-    if (vars->target != 0) {
-        copy_xyz_089d0(vars->target_pos, (float *)&vars->target->pos);
-        speed = fast_vec_length(vars);
+    if (missile_vars->target != 0) {
+        copy_xyz_089d0(missile_vars->target_pos, (float *)&missile_vars->target->pos);
+        speed = fast_vec_length(missile_vars);
         yaw_off = fast_subtract_rotations(
-            fast_arc_tan(vars->target->pos.x - moby->pos.x, vars->target->pos.y - moby->pos.y),
+            fast_arc_tan(missile_vars->target->pos.x - moby->pos.x, missile_vars->target->pos.y - moby->pos.y),
             moby->rot.z);
         yaw = absolute_float(yaw_off);
         pitch_off = fast_subtract_rotations(
-            -fast_arc_tan(vector_distance_xy(&moby->pos, &vars->target->pos),
-                          vars->target->pos.z - moby->pos.z),
+            -fast_arc_tan(vector_distance_xy(&moby->pos, &missile_vars->target->pos),
+                          missile_vars->target->pos.z - moby->pos.z),
             moby->rot.y);
         pitch = absolute_float(pitch_off);
         if (yaw < 0.2617994f && pitch < 0.2617994f) {
@@ -210,13 +210,13 @@ void update_fighter_jet_missile(struct Moby *moby) {
                 pitch_off *= max_pitch;
             }
             moby->rot.y = fast_add_rotations(moby->rot.y, pitch_off);
-            build_spherical_offset(vars, speed, moby->rot.z, -moby->rot.y);
-            noop_main_callback(&moby->pos, &vars->target->pos);
+            build_spherical_offset(missile_vars, speed, moby->rot.z, -moby->rot.y);
+            noop_main_callback(&moby->pos, &missile_vars->target->pos);
         } else {
-            vars->target = 0;
+            missile_vars->target = 0;
         }
     }
-    fast_vec_add(&moby->pos, &moby->pos, vars);
+    fast_vec_add(&moby->pos, &moby->pos, missile_vars);
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f ||
         moby->pos.y > 1021.0f || moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
         mark_moby_for_removal(moby);
@@ -224,14 +224,14 @@ void update_fighter_jet_missile(struct Moby *moby) {
     }
     initialize_hit_descriptor(1.0f, &hit, moby, 0x10000);
     hit.oclass = moby->oclass;
-    if (collision_line(old, &moby->pos, 0, vars->owner, &hit)) {
+    if (collision_line(previous_missile_position, &moby->pos, 0, missile_vars->owner, &hit)) {
         for (i = 0; i < 5; i++) {
             *(OvlQuad *)spark_scatter_vector = 0;
             spark_scatter_vector[0] = random_float_between(-1.0f, 1.0f);
             spark_scatter_vector[1] = random_float_between(-1.0f, 1.0f);
             spark_scatter_vector[2] = random_float_between(-1.0f, 1.0f);
             *(OvlQuad *)spark_velocity = *(OvlQuad *)spark_scatter_vector;
-            reflect_vector(spark_scatter_vector, vars, D_L11_00174880);
+            reflect_vector(spark_scatter_vector, missile_vars, D_L11_00174880);
             fast_vec_normalize(
                 spark_velocity, spark_velocity, fast_vec_length(spark_scatter_vector) * 0.5f);
             fast_vec_add(spark_velocity, spark_scatter_vector, spark_velocity);
@@ -247,9 +247,9 @@ void update_fighter_jet_missile(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (fast_dec_timer(&vars->timer)) {
-        vars->size *= 0.74f;
-        if (vars->size < 0.02f)
+    if (fast_dec_timer(&missile_vars->timer)) {
+        missile_vars->size *= 0.74f;
+        if (missile_vars->size < 0.02f)
             mark_moby_for_removal(moby);
     }
 }
