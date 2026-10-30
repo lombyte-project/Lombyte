@@ -29,7 +29,7 @@ typedef struct {
 
 void update_smoke_emitter(SmokeMoby *self) __asm__("FUN_L01_002ffb28");
 
-void update_smoke_emitter(SmokeMoby *self) {
+void update_smoke_emitter(SmokeMoby *smoke_emitter_moby) {
     SmokeVars *smoke_vars;
     Vec4       pos;
     Vec4       particle_velocity;
@@ -37,9 +37,9 @@ void update_smoke_emitter(SmokeMoby *self) {
     f32        size;
     s32        i;
 
-    smoke_vars = self->vars;
-    if (voice_is_playing(self, smoke_vars->sound) == 0) {
-        smoke_vars->sound = FUN_0022da68(0, 4, self);
+    smoke_vars = smoke_emitter_moby->vars;
+    if (voice_is_playing(smoke_emitter_moby, smoke_vars->sound) == 0) {
+        smoke_vars->sound = FUN_0022da68(0, 4, smoke_emitter_moby);
     }
     for (i = 0; i < 2; i++) {
         pos.q = 0;
@@ -49,8 +49,8 @@ void update_smoke_emitter(SmokeMoby *self) {
         local_velocity.f[0] = random_float_between(0.8f, 1.2f) * (frame_time * 3.0f);
         local_velocity.f[2] = random_float_between(0.8f, 1.2f) * (frame_time + frame_time);
         particle_velocity.q = local_velocity.q;
-        transform_vector_by_basis(&particle_velocity, &particle_velocity, self->mtx);
-        fast_vec_add(&pos, &pos, &self->pos);
+        transform_vector_by_basis(&particle_velocity, &particle_velocity, smoke_emitter_moby->mtx);
+        fast_vec_add(&pos, &pos, &smoke_emitter_moby->pos);
         size = random_float_between(125000.0f, 175000.0f);
         spawn_effect_particle_with_target_scalar(&pos,
                                                  &particle_velocity,
