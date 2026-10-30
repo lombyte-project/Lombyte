@@ -18,7 +18,7 @@ void _printf(const char *fmt, char *ap) {
     s32           zero_pad_width;
     unsigned long hex_digit;
     u8            ch;
-    char          second;
+    char          width_ones_character;
     s64           integer_value;
     s32           ie;
 
@@ -33,10 +33,10 @@ void _printf(const char *fmt, char *ap) {
             switch ((char)(*fmt - '0')) {
             case FORMAT_ZERO_PAD_WIDTH:
                 zero_pad_width = fmt[1] - '0';
-                second = fmt[2];
+                width_ones_character = fmt[2];
                 if ((u8)zero_pad_width < 10) {
-                    if ((u32)(second - '0') < 10) {
-                        zero_pad_width = zero_pad_width * 10 + (second - '0');
+                    if ((u32)(width_ones_character - '0') < 10) {
+                        zero_pad_width = zero_pad_width * 10 + (width_ones_character - '0');
                         fmt += 2;
                         if (zero_pad_width >= 32) {
                             zero_pad_width = 31;
