@@ -47,7 +47,7 @@ extern char *spawn_randomly_rotated_colored_moby(void *,
 void spawn_poison_vessel_destruction_effects(struct Moby *moby,
                                              void        *vars) __asm__("FUN_L13_003073c8");
 
-void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *vars) {
+void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *poison_vessel_private_data) {
     struct {
         OvlVec4 direction, velocity, axis, offset, pos, random_direction, random_vector;
     } work;
