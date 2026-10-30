@@ -162,7 +162,7 @@ void  compute_platform_target_tilt(struct Moby *moby,
                                    float       *out,
                                    int          on) __asm__("FUN_L12_002e3e28");
 
-void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
+void compute_platform_target_tilt(struct Moby *moby, float *target_tilt_angles, int on) {
     float inverse_yaw_angles[4];
     float reference_offset[4];
     float inverse_yaw_matrix[4];
@@ -175,11 +175,11 @@ void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
         euler_rotation_matrix(inverse_yaw_matrix, inverse_yaw_angles);
         transform_vector(reference_offset, reference_offset, inverse_yaw_matrix);
         offset_scale_divisor = platform_tilt_offset_divisor_gp;
-        out[1] = reference_offset[0] / offset_scale_divisor;
-        out[0] = -reference_offset[1] / offset_scale_divisor;
+        target_tilt_angles[1] = reference_offset[0] / offset_scale_divisor;
+        target_tilt_angles[0] = -reference_offset[1] / offset_scale_divisor;
     } else {
-        out[0] = 0;
-        out[1] = 0;
+        target_tilt_angles[0] = 0;
+        target_tilt_angles[1] = 0;
     }
 }
 /* Update of the Hoven flying platform (class 240): follows or eases along its path, bobs, falls, and reports its motion. */
