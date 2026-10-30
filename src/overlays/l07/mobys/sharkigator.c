@@ -716,21 +716,21 @@ int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) {
 }
 
 int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) {
-    unsigned char *other = 0;
-    if (!get_first_moby_in_group((int *)&other, moby[0x21], 0, 0)) {
-        if (other) {
+    unsigned char *group_candidate_moby = 0;
+    if (!get_first_moby_in_group((int *)&group_candidate_moby, moby[0x21], 0, 0)) {
+        if (group_candidate_moby) {
             do {
-                if (other != moby) {
-                    int state = other[0x20];
+                if (group_candidate_moby != moby) {
+                    int state = group_candidate_moby[0x20];
                     if (state >= lower) {
                         if (state <= upper) {
                             goto found;
                         }
                     }
                 }
-                if (get_next_moby_in_group((int *)&other, (int)other, 0, 0))
+                if (get_next_moby_in_group((int *)&group_candidate_moby, (int)group_candidate_moby, 0, 0))
                     break;
-            } while (other);
+            } while (group_candidate_moby);
         }
     }
     return 0;
