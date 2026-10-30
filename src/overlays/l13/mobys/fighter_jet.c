@@ -18,6 +18,7 @@
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/overlay/shared/vendor/vendor_spring.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/rendering/effect_texture.h"
 
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
@@ -175,8 +176,6 @@ void jet_group_switch(short *ids,
     }
 }
 
-/* Same texture lookup as get_effect_texture, declared with the int result this draw uses. */
-extern s32  get_effect_texture_index(s32) __asm__("FUN_001f44b8");
 extern void append_rotated_textured_screen_quad(float,
                                                 float,
                                                 float,
@@ -213,7 +212,7 @@ void draw_fighter_jet_lock_marker(float         x,
                                   unsigned char alpha) {
     int   effect_texture;
     float quad_size;
-    effect_texture = get_effect_texture_index(0x37);
+    effect_texture = ((s32(*)(s32))get_effect_texture)(0x37);
     quad_size = size_scale * 20.0f;
     append_rotated_textured_screen_quad(x,
                                         y,
@@ -375,8 +374,6 @@ typedef struct {
 } IconEC5D0;
 
 extern IconEC5D0 l13_fighter_jet_radar_icon_definitions[] __asm__("D_L13_001CBDB8");
-
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 
 extern unsigned char frame_size[] __asm__("D_0013E504");
 
@@ -863,8 +860,6 @@ extern char fighter_jet_ammo_icon_vertices[] __asm__("D_L13_001CBC60");
 
 extern int fighter_jet_health_palette_backup[] __asm__("D_L13_001CBE70");
 
-extern s32 get_effect_texture_c(s32) __asm__("func_001F44B8");
-
 int *hp_bar_clut[1] __asm__("D_L13_001613C0") = {0};
 
 extern unsigned char D_0013F350[];
@@ -971,7 +966,7 @@ void draw_fighter_jet_hud(struct Moby *moby) {
     }
     ex = *(int *)(moby_vars + 0xE0);
     ey = *(int *)(moby_vars + 0xE4);
-    aim_reticle_texture = get_effect_texture_c(0x11);
+    aim_reticle_texture = ((s32(*)(s32))get_effect_texture)(0x11);
     append_rotated_sprite_quad(ex,
                                ey,
                                40.0f,
@@ -993,7 +988,7 @@ void draw_fighter_jet_hud(struct Moby *moby) {
                                0.0f,
                                0x3F,
                                0x3F,
-                               get_effect_texture_c(0x12),
+                               ((s32(*)(s32))get_effect_texture)(0x12),
                                0xFFFFF3,
                                0xFF20FF20,
                                0,
@@ -1007,7 +1002,7 @@ void draw_fighter_jet_hud(struct Moby *moby) {
                                0.0f,
                                0x1F,
                                0x1F,
-                               get_effect_texture_c(8),
+                               ((s32(*)(s32))get_effect_texture)(8),
                                0xFFFFF3,
                                0xFF20FF20,
                                0,

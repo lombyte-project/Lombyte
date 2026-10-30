@@ -18,6 +18,7 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/overlay/cuboid.h"
+#include "rnc/rendering/effect_texture.h"
 #include "rnc/overlay/shared/props/trespasser_pad_data/draw_tresspasser_puzzle_radial_strip.h"
 #include "rnc/overlay/shared/props/trespasser_pad_data/draw_tresspasser_puzzle.h"
 
@@ -124,7 +125,6 @@ extern int  tresspasser_ring_arc_third_vertex_uv_gp __asm__("D_L02_00161B14") __
 extern int  tresspasser_ring_arc_fourth_vertex_uv_gp __asm__("D_L02_00161B18") __attribute__((sda));
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern int tresspasser_arrow_newly_reached_first_vertex_uv_gp __asm__("D_L02_00161ABC")
     __attribute__((sda));
 extern int tresspasser_arrow_newly_reached_second_vertex_uv_gp __asm__("D_L02_00161AC0")
@@ -166,10 +166,8 @@ extern char *tresspasser_radial_strip_fixed_third_vertex_uv_gp __asm__("D_L02_00
 extern char *tresspasser_radial_strip_fixed_fourth_vertex_uv_gp __asm__("D_L02_00161B08")
     __attribute__((sda));
 
-extern s32  FUN_001f44b8(s32);
 extern void FUN_L02_0020bc88_u(void *, void *, void *, s32, s32) __asm__("FUN_L02_0020bc88");
 
-int             tex_2dae88(int) __asm__("FUN_001f44b8");
 void            f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
 extern Q_2dae88 l02_tresspasser_textured_quad_packed_vertices[] __asm__("D_L02_001D3310");
 extern int      tresspasser_textured_quad_color_gp __asm__("D_L02_00161B94") __attribute__((sda));
@@ -470,7 +468,6 @@ void align_hero_to_tresspasser_pad(struct Moby *moby) {
         (dst) += (u64_t)q_;      \
     }
 
-#define get_effect_texture ((u64(*)(int))get_effect_texture)
 #define draw_tresspasser_puzzle_ring_arc \
     ((void (*)(u64, float, float, float, float, u32))draw_tresspasser_puzzle_ring_arc)
 #define draw_tresspasser_puzzle_arrow \
@@ -858,7 +855,6 @@ void draw_tresspasser_puzzle(char *moby) {
     vu1_add_g_sregister(0x47, 0x5360b);
 }
 
-#undef get_effect_texture
 #undef draw_tresspasser_puzzle_ring_arc
 #undef draw_tresspasser_puzzle_arrow
 #undef draw_tresspasser_puzzle_radial_strip
@@ -1059,7 +1055,8 @@ void draw_tresspasser_puzzle_radial_strip(
     NEG20(packed_vertices[3], truncate_float_to_s32(end_cosine_component));
     LO4(packed_vertices[3], truncate_float_to_s32(end_sine_component));
 
-    strip_texture_tex0 = FUN_001f44b8(tresspasser_radial_strip_texture_index_gp);
+    strip_texture_tex0 =
+        ((s32(*)(s32))get_effect_texture)(tresspasser_radial_strip_texture_index_gp);
     FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
 
     vertex_uvs[0] = (s32)tresspasser_radial_strip_fixed_first_vertex_uv_gp;
@@ -1121,8 +1118,11 @@ void draw_tresspasser_puzzle_textured_quads(void) {
         vertex_colors[0] = vertex_colors[1] = vertex_colors[2] = vertex_colors[3] =
             tresspasser_textured_quad_color_gp;
         packed_vertices = *vertex_quad_cursor++;
-        f20bc88_2dae88(
-            &packed_vertices, vertex_uvs, vertex_colors, tex_2dae88(D_L02_00161B1C_gp + 0x28), 1);
+        f20bc88_2dae88(&packed_vertices,
+                       vertex_uvs,
+                       vertex_colors,
+                       ((int (*)(int))get_effect_texture)(D_L02_00161B1C_gp + 0x28),
+                       1);
     }
 }
 

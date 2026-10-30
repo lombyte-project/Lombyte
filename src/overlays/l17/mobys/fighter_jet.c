@@ -15,6 +15,9 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/audio/voice_pool.h"
+#include "rnc/game/game_globals.h"
+#include "rnc/rendering/effect_texture.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
@@ -64,7 +67,6 @@ typedef struct {
     char             padA8[0x58];
 } Level17Moby;
 
-extern Level17Moby *l17_moby_array_first __asm__("D_L17_0015FFD8");
 extern Level17Moby *l17_moby_array_last __asm__("D_L17_0015FFE0");
 
 void set_class_mobys_flags_and_collision(int class_id,
@@ -74,7 +76,7 @@ void set_class_mobys_flags_and_collision(int class_id,
 
 void set_class_mobys_flags_and_collision(int class_id, int flag2, int flag1, int collision) {
     Level17Moby *moby;
-    for (moby = l17_moby_array_first; moby <= l17_moby_array_last; moby++) {
+    for (moby = (Level17Moby *)D_L17_0015FFD8; moby <= l17_moby_array_last; moby++) {
         if (moby->class_id == class_id && moby->state >= 0) {
             if (flag2 != -1) {
                 if (flag2 != 0)
@@ -116,7 +118,6 @@ typedef struct {
 } IconEC5D0;
 
 extern IconEC5D0     l17_fighter_jet_radar_contact_icon_definitions[] __asm__("D_L17_001D9B38");
-extern s64           get_effect_texture(s32) __asm__("func_001F44B8");
 extern unsigned char frame_size[] __asm__("D_0013E504");
 extern unsigned char D_0015EDB4[4];
 extern void
@@ -543,8 +544,6 @@ int select_fighter_jet_target_and_draw_contacts(int   ship_moby,
 
 extern int D_L17_0015F5C4;
 
-/* Same texture lookup as get_effect_texture, declared with the int result this draw uses. */
-extern s32  get_effect_texture_index(s32) __asm__("FUN_001f44b8");
 extern void append_rotated_textured_screen_quad(float,
                                                 float,
                                                 float,
@@ -581,7 +580,7 @@ void draw_fighter_jet_lock_marker(float         x,
                                   unsigned char alpha) {
     int   texture_handle;
     float quad_size;
-    texture_handle = get_effect_texture_index(0x2E);
+    texture_handle = ((s32(*)(s32))get_effect_texture)(0x2E);
     quad_size = scale * 20.0f;
     append_rotated_textured_screen_quad(x,
                                         y,
@@ -1164,7 +1163,6 @@ void        adjust_fighter_jet_steering_for_flight_bounds(char  *moby,
                                                           float *a,
                                                           float *b) __asm__("FUN_L17_002edf10");
 extern char D_0013C940[];
-extern char D_0013E550[];
 extern void func_L00_0025F4A8_alt(void *,
                                   void *,
                                   void *,
@@ -1228,7 +1226,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
             if (*(int *)(pad + 0x1B4) & 0x40) {
                 voice_slot_index = ship_vars->i10C;
                 if (voice_slot_index != -1) {
-                    e = (char *)((char *)&D_0013E550) + voice_slot_index * 0x70;
+                    e = (char *)&voice_pool + voice_slot_index * 0x70;
                     if (*(char **)(e + 0x88) == (char *)ship_moby &&
                         *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(voice_slot_index);
@@ -1239,7 +1237,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
             } else if (*(int *)(pad + 0x1B8) & 0x40) {
                 voice_slot_index = ship_vars->i10C;
                 if (voice_slot_index != -1) {
-                    e = (char *)((char *)&D_0013E550) + voice_slot_index * 0x70;
+                    e = (char *)&voice_pool + voice_slot_index * 0x70;
                     if (*(char **)(e + 0x88) == (char *)ship_moby &&
                         *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(voice_slot_index);
@@ -1671,9 +1669,7 @@ typedef struct {
     int   flags;
 } ShipHit;
 
-extern char          voice_pool[] __asm__("D_0013E550");
-extern unsigned char visited52[][16] __asm__("D_0014C050");
-extern char          D_0013CAE4_ed[] __asm__("D_0013CAE4");
+extern char D_0013CAE4_ed[] __asm__("D_0013CAE4");
 
 typedef struct {
     char           pad0[0xA];
@@ -1859,7 +1855,7 @@ void fighter_jet_update(ShipMoby *moby) {
             hp_bar_saved = 1;
             ship_vars->timerF8 = 1;
             ship_vars->iE8 = 1;
-            if (moby->bB0 != 0xFF && visited52[current_level_index][moby->bB0] == 0xFF) {
+            if (moby->bB0 != 0xFF && visited52[moby->bB0 + current_level_index * 16] == 0xFF) {
                 moby->state = 9;
             }
             if (ship_vars->i11C > 0) {
@@ -1952,7 +1948,7 @@ void fighter_jet_update(ShipMoby *moby) {
         case FIGHTER_JET_STATE_PILOTED_FLIGHT:
             force_help_message(6, 0);
             D_L17_0015F608 = 2;
-            e = voice_pool + ship_vars->voice * 0x70;
+            e = (char *)&voice_pool + ship_vars->voice * 0x70;
             if (*(ShipMoby **)(e + 0x88) != moby || *(unsigned char *)(e + 0x74) == 0) {
                 ship_vars->voice = -1;
                 ship_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
@@ -1990,7 +1986,7 @@ void fighter_jet_update(ShipMoby *moby) {
             request_music_track(0, 5);
             idx = ship_vars->voice;
             if (idx != -1) {
-                char *e = voice_pool + idx * 0x70;
+                char *e = (char *)&voice_pool + idx * 0x70;
                 if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(idx);
                 }
@@ -1998,7 +1994,7 @@ void fighter_jet_update(ShipMoby *moby) {
             ship_vars->voice = -1;
             idx = ship_vars->voice2;
             if (idx != -1) {
-                char *e = voice_pool + idx * 0x70;
+                char *e = (char *)&voice_pool + idx * 0x70;
                 if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(idx);
                 }
@@ -2024,7 +2020,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 refresh_moby_spatial_bounds_from_basis(moby);
                 idx = ship_vars->voice;
                 if (idx != -1) {
-                    char *e = voice_pool + idx * 0x70;
+                    char *e = (char *)&voice_pool + idx * 0x70;
                     if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(idx);
                     }
@@ -2032,7 +2028,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 ship_vars->voice = -1;
                 idx = ship_vars->voice2;
                 if (idx != -1) {
-                    char *e = voice_pool + idx * 0x70;
+                    char *e = (char *)&voice_pool + idx * 0x70;
                     if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(idx);
                     }
@@ -2085,7 +2081,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 }
                 idx = ship_vars->voice;
                 if (idx != -1) {
-                    char *e = voice_pool + idx * 0x70;
+                    char *e = (char *)&voice_pool + idx * 0x70;
                     if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(idx);
                     }
@@ -2093,7 +2089,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 ship_vars->voice = -1;
                 idx = ship_vars->voice2;
                 if (idx != -1) {
-                    char *e = voice_pool + idx * 0x70;
+                    char *e = (char *)&voice_pool + idx * 0x70;
                     if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(idx);
                     }
