@@ -31,11 +31,11 @@ void blend_big_axebot_and_axe_animation(char *moby,
 
                                         void *blend_frames) {
     char *axebot_pvars = ((char *)MOBY(moby)->pvars);
-    void *other;
+    void *linked_axe_moby;
     blend_moby_animation(moby, new_seq, frame_index, blend_frames);
-    other = *(void **)(axebot_pvars + 0x424);
-    if (other != 0) {
-        blend_moby_animation(other, new_seq, frame_index, blend_frames);
+    linked_axe_moby = *(void **)(axebot_pvars + 0x424);
+    if (linked_axe_moby != 0) {
+        blend_moby_animation(linked_axe_moby, new_seq, frame_index, blend_frames);
     }
 }
 /* Sets the float at 0x58 on the moby and on the linked moby at data+0x424, if any. */
