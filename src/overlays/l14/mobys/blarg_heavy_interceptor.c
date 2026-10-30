@@ -1515,7 +1515,7 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
     char *seg = (char *)l14_paths[*(int *)(heavy_interceptor_vars + 0x78)];
     int   source_segment_index = *(int *)(heavy_interceptor_vars + 0x84);
     float source_path_distance = 0.0f;
-    float out[4];
+    float destination_path_target_position[4];
     int   destination_segment_index;
     float frac;
     int   i;
@@ -1534,26 +1534,26 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
     destination_segment_index = 0;
     frac = 0.0f;
     FUN_L00_0025d808_2af918(tab,
-                            out,
+                            destination_path_target_position,
                             &destination_segment_index,
                             &frac,
                             destination_path_loop_enabled,
                             destination_path_distance);
     FUN_L00_0025b8c0_c(&moby->pos.x,
                        (float *)(heavy_interceptor_vars + 0x194),
-                       out[0],
+                       destination_path_target_position[0],
                        *(float *)&D_L14_001613A0_gp,
                        *(float *)&D_L14_001613A4_gp,
                        0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.y,
                        (float *)(heavy_interceptor_vars + 0x198),
-                       out[1],
+                       destination_path_target_position[1],
                        *(float *)&D_L14_001613A0_gp,
                        *(float *)&D_L14_001613A4_gp,
                        0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.z,
                        (float *)(heavy_interceptor_vars + 0x19C),
-                       out[2],
+                       destination_path_target_position[2],
                        *(float *)&D_L14_001613A0_gp,
                        *(float *)&D_L14_001613A4_gp,
                        0.0f);
