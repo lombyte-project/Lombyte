@@ -202,7 +202,7 @@ void drain_cover_update(DrainCoverMoby *moby) {
     int             r, g, bl, particle_configuration, b;
     int             i;
     int             index;
-    char           *entry;
+    char           *drain_cover_voice_slot;
     DrainCoverHero *hero;
     DrainCoverLid  *lid;
     float           minimum_rise_height;
@@ -217,9 +217,9 @@ void drain_cover_update(DrainCoverMoby *moby) {
     } else if (voice_is_playing(moby, drain_cover_data->sound) != 0) {
         index = drain_cover_data->sound;
         if (index != -1) {
-            entry = D_0013E550 + index * 0x70;
-            if (*(DrainCoverMoby **)(entry + 0x88) == moby &&
-                *(unsigned char *)(entry + 0x74) != 0) {
+            drain_cover_voice_slot = D_0013E550 + index * 0x70;
+            if (*(DrainCoverMoby **)(drain_cover_voice_slot + 0x88) == moby &&
+                *(unsigned char *)(drain_cover_voice_slot + 0x74) != 0) {
                 release_voice_slot(index);
             }
         }
