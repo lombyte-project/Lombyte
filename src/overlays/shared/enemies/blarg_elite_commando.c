@@ -630,12 +630,12 @@ void set_blarg_elite_commando_parent_transform(char *moby,
                                                char *vector) __asm__("FUN_L16_002d3dc0");
 
 void set_blarg_elite_commando_parent_transform(char *moby,
-                                               void *owner,
+                                               void *parent_moby,
                                                void *position,
 
                                                char *vector) {
     char *commando_data = ((char *)MOBY(moby)->pvars);
-    *(void **)(commando_data + 0x2D0) = owner;
+    *(void **)(commando_data + 0x2D0) = parent_moby;
     qcopy(commando_data + 0x2C0, position);
     *(float *)(commando_data + 0x2CC) = *(float *)(vector + 8);
 }
