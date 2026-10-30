@@ -40,11 +40,11 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
     f32                         first_vector[4];
     f32                         second_vector[4];
     f32                         direction[4];
-    struct GraphicsSetupRecord *record;
+    struct GraphicsSetupRecord *setup_record;
     s32                         command_index;
 
     append_fullscreen_setup_strips();
-    record = (struct GraphicsSetupRecord *)command_stream;
+    setup_record = (struct GraphicsSetupRecord *)command_stream;
     *(u32 *)(render_packet_bytes + 0) = 0x30000007;
     *(u32 *)(render_packet_bytes + 4) =
         (u32)(pal_mode.v != 0 ? pal_graphics_setup_packet : ntsc_graphics_setup_packet);
@@ -53,20 +53,20 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
     /* Remaining vector components are filled from each setup record. */
     second_vector[1] = first_vector[1] = second_vector[0] = first_vector[0] = 0.0f;
     render_packet_bytes += 16;
-    while (record->command_count != 0) {
+    while (setup_record->command_count != 0) {
         command_stream += 0x20;
-        *(u128 *)direction = record->direction;
+        *(u128 *)direction = setup_record->direction;
         prepare_scaled_direction_and_perpendicular(direction, 1000.0f);
-        first_vector[2] = record->first_depth;
-        second_vector[2] = record->second_depth;
-        for (command_index = 0; command_index < record->command_count; command_index++) {
+        first_vector[2] = setup_record->first_depth;
+        second_vector[2] = setup_record->second_depth;
+        for (command_index = 0; command_index < setup_record->command_count; command_index++) {
             command_stream = parse_typed_resource_record(command_stream);
             func_00228520(first_vector, second_vector);
-            func_00227A08(0x70000000, graphics_setup_word, record->command_flags);
+            func_00227A08(0x70000000, graphics_setup_word, setup_record->command_flags);
             emit_selected_graphics_dma_packets(2, 1, 2);
             emit_selected_graphics_dma_packets(1, 0, 2);
         }
-        record = (struct GraphicsSetupRecord *)command_stream;
+        setup_record = (struct GraphicsSetupRecord *)command_stream;
     }
     if (pal_mode.v) {
         vu1_add_g_sregister(0x4C, 0x80080);
