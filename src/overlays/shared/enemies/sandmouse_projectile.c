@@ -21,7 +21,7 @@ char *spawn_sandmouse_projectile(char *owner,
                                  float initial_yaw,
                                  float initial_pitch) __asm__("FUN_L01_0030c898");
 
-char *spawn_sandmouse_projectile(char *owner,
+char *spawn_sandmouse_projectile(char *firing_moby,
                                  char *spawn_position,
                                  float target_yaw,
                                  float target_pitch,
@@ -36,11 +36,11 @@ char *spawn_sandmouse_projectile(char *owner,
     if (spawned_moby) {
         char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         int   lifetime_frames;
-        *(char **)(moby_vars + 0x10) = owner;
+        *(char **)(moby_vars + 0x10) = firing_moby;
         ((unsigned char *)spawned_moby)[0x30] = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0x7F;
         spawned_moby[0x31] = 1;
-        MOBY(spawned_moby)->spawn_frame = *(long *)(owner + 0x38);
+        MOBY(spawned_moby)->spawn_frame = *(long *)(firing_moby + 0x38);
         MOBY(spawned_moby)->rot.y = initial_pitch;
         MOBY(spawned_moby)->rot.z = initial_yaw;
         *(int *)(spawned_moby + 0x40) = 0;
