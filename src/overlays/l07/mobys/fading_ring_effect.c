@@ -99,7 +99,7 @@ unsigned char *spawn_fading_ring_effect(int   spawning_moby,
 
 void draw_fading_ring_effect(struct Moby *moby) {
     char         packet[0x90] __attribute__((aligned(16)));
-    char         second[0x90] __attribute__((aligned(16)));
+    char         lower_ring_quad_packet[0x90] __attribute__((aligned(16)));
     char         phase_work[0x10] __attribute__((aligned(16)));
     unsigned int alpha = (unsigned int)moby->alpha / 5u;
     int          index = 0;
@@ -153,9 +153,9 @@ void draw_fading_ring_effect(struct Moby *moby) {
         *(float *)(packet + 0x5C) = zero;
         *(float *)(packet + 0x08) = side + moby->pos.z;
         *(float *)(packet + 0x28) = moby->pos.z;
-        *(Pkt_0F0D0 *)second = *(Pkt_0F0D0 *)packet;
-        *(float *)(second + 0x18) = moby->pos.z - 5.0f;
-        *(float *)(second + 8) = *(float *)(second + 0x18);
+        *(Pkt_0F0D0 *)lower_ring_quad_packet = *(Pkt_0F0D0 *)packet;
+        *(float *)(lower_ring_quad_packet + 0x18) = moby->pos.z - 5.0f;
+        *(float *)(lower_ring_quad_packet + 8) = *(float *)(lower_ring_quad_packet + 0x18);
         angle = -2.8274336f;
         do {
             float x, y, rr;
@@ -173,13 +173,13 @@ void draw_fading_ring_effect(struct Moby *moby) {
             angle = angle + 0.31415927f;
             *(float *)(packet + 0x34) = moby->pos.y + radius * y;
             draw_geometry_quad(packet, 0, 1);
-            *(u128_0F0D0 *)(second + 0) = *(u128_0F0D0 *)(second + 0x10);
-            *(u128_0F0D0 *)(second + 0x20) = *(u128_0F0D0 *)(second + 0x30);
-            *(float *)(second + 0x30) = *(float *)(packet + 0x30);
-            *(float *)(second + 0x34) = *(float *)(packet + 0x34);
-            *(float *)(second + 0x10) = *(float *)(packet + 0x10);
-            *(float *)(second + 0x14) = *(float *)(packet + 0x14);
-            draw_geometry_quad(second, 0, 1);
+            *(u128_0F0D0 *)(lower_ring_quad_packet + 0) = *(u128_0F0D0 *)(lower_ring_quad_packet + 0x10);
+            *(u128_0F0D0 *)(lower_ring_quad_packet + 0x20) = *(u128_0F0D0 *)(lower_ring_quad_packet + 0x30);
+            *(float *)(lower_ring_quad_packet + 0x30) = *(float *)(packet + 0x30);
+            *(float *)(lower_ring_quad_packet + 0x34) = *(float *)(packet + 0x34);
+            *(float *)(lower_ring_quad_packet + 0x10) = *(float *)(packet + 0x10);
+            *(float *)(lower_ring_quad_packet + 0x14) = *(float *)(packet + 0x14);
+            draw_geometry_quad(lower_ring_quad_packet, 0, 1);
         } while (angle < pi);
         index++;
         band = band + 0.1f;
