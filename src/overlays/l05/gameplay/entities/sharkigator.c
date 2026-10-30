@@ -1816,16 +1816,7 @@ int test_extermibot_offset_path_clearance(char *moby, float *goal, float probe_o
     FUN_001f9a10_c(offset_probe_position, offset_probe_position, (float *)&MOBY(moby)->pos);
     return test_path_segment_strict_crossing(*(int *)(moby_data + 0x2C0), probe_position, offset_probe_position) == 0;
 }
-typedef struct {
-    char p0[0x10];
-    char pos[0x10];
-    unsigned char state;
-    char p1[0x13];
-    unsigned short flags;
-    char p2[0xCA];
-} Ent;
 extern short *D_L05_001AC040_03f80[] __asm__("D_L05_001ABCC0");
-extern Ent *D_L05_00160098_m_03f80 __asm__("D_L05_0015FFD8");
 extern short D_L05_00160098_03f80 __asm__("D_L05_0015FFD8");
 char *find_nearest_extermibot_group_target(char *self, int group_index) __asm__("FUN_L05_00303f80");
 
@@ -1839,9 +1830,9 @@ char *find_nearest_extermibot_group_target(char *self, int group_index) {
     {
         do {
             int i = *(unsigned short *)list & 0x7FFF;
-            if (D_L05_00160098_m_03f80[i].flags & 0x1000) {
-                if (D_L05_00160098_m_03f80[i].state < 0x7F) {
-                    float candidate_distance = fast_vec_dist(D_L05_00160098_m_03f80[i].pos, self + 0x10);
+            if (D_L05_0015FFD8_7920[i].flags & 0x1000) {
+                if (D_L05_0015FFD8_7920[i].state < 0x7F) {
+                    float candidate_distance = fast_vec_dist(&D_L05_0015FFD8_7920[i].pos, self + 0x10);
                     if (candidate_distance < best) {
                         best = candidate_distance;
                         nearest_moby = *(char **)&D_L05_00160098_03f80 + (i << 8);

@@ -1368,21 +1368,11 @@ typedef struct {
     int f2C[5];
     int f40;
 } Data;
-typedef struct {
-    char pad0[0x10];
-    float pos[4];
-    char pad20[0x10];
-    unsigned char f30;
-    char pad31[0xBC - 0x31];
-    unsigned char fBC;
-    char padBD[0x43];
-} Ent;
 typedef struct { char pad0[9]; unsigned char f9; } Flags;
 
 extern unsigned char alternate_item_available_lui[] __asm__("D_0013D388") NOT_SDA;
 extern unsigned char item_unlocked_lui[] __asm__("D_0013D408") NOT_SDA;
 extern unsigned char D_0013D4DF_lui __asm__("D_0013D4DF") NOT_SDA;
-extern Ent *D_L05_0015FFD8_254608 __asm__("D_L05_0015FFD8") MACRO_ADDR;
 extern int D_0015EE38_macro __asm__("D_0015EE38") MACRO_ADDR;
 extern int D_0015EE3C_macro __asm__("D_0015EE3C") MACRO_ADDR;
 extern int freeze_stats_time_ref_macro[2] __asm__("D_0015EE58") MACRO_ADDR;
@@ -1516,7 +1506,7 @@ void update_hero_hoverboard_race_progress(void) {
         n1 = path->n + 1;
         next = (i + n1) % path->n;
         path_segment_heading = fast_arc_tan(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
-        qcopy(world_position_scratch, D_L05_0015FFD8_254608[race_pvars->f2C[j]].pos);
+        qcopy(world_position_scratch, &D_L05_0015FFD8_macro[race_pvars->f2C[j]].pos);
         if (fast_difference_between_rotations(path_segment_heading, fast_arc_tan(world_position_scratch[0] - path->p[i].x, world_position_scratch[1] - path->p[i].y)) < 1.5707964f) {
             hero.racer_path_point[j] = next;
             if (next == 0) {
@@ -1571,9 +1561,9 @@ void update_hero_hoverboard_race_progress(void) {
             return;
         }
         if (*(alternate_item_available_lui) == 0 && hero.race_position == 1) {
-            D_L05_0015FFD8_254608[race_pvars->f28].fBC = 1;
+            D_L05_0015FFD8_macro[race_pvars->f28].command = 1;
         } else {
-            hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[race_pvars->f28]);
+            hero.unk890 = (u8 *)(&D_L05_0015FFD8_macro[race_pvars->f28]);
             mode_freeze_init(0, 0);
         }
         if (freeze_stats_time_ref_macro[0] == 0) {
@@ -1587,7 +1577,7 @@ void update_hero_hoverboard_race_progress(void) {
             freeze_stats_score_ref_a_macro[0] = hero.race_score;
             current_bolt_count_macro += 0x3E8;
         }
-        D_L05_0015FFD8_254608[race_pvars->f28].f30 = 0xFF;
+        D_L05_0015FFD8_macro[race_pvars->f28].update_dist = 0xFF;
         if (hero.trick_hud_handle != -1) {
             set_animation_parameter(hero.trick_hud_handle, 0);
             hero.trick_hud_handle = -1;
@@ -1598,9 +1588,9 @@ void update_hero_hoverboard_race_progress(void) {
             return;
         }
         if (D_0013D4DF_lui == 0 && hero.race_position == 1) {
-            D_L05_0015FFD8_254608[race_pvars->f28].fBC = 1;
+            D_L05_0015FFD8_macro[race_pvars->f28].command = 1;
         } else {
-            hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[race_pvars->f28]);
+            hero.unk890 = (u8 *)(&D_L05_0015FFD8_macro[race_pvars->f28]);
             mode_freeze_init(0, 0);
         }
         if (freeze_stats_time_ref_macro[1] == 0) {
@@ -1614,7 +1604,7 @@ void update_hero_hoverboard_race_progress(void) {
             freeze_stats_score_ref_a_macro[1] = hero.race_score;
             current_bolt_count_macro += 0x3E8;
         }
-        D_L05_0015FFD8_254608[race_pvars->f28].f30 = 0xFF;
+        D_L05_0015FFD8_macro[race_pvars->f28].update_dist = 0xFF;
         if (hero.trick_hud_handle != -1) {
             set_animation_parameter(hero.trick_hud_handle, 0);
             hero.trick_hud_handle = -1;
