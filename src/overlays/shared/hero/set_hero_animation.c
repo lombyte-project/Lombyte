@@ -1058,14 +1058,14 @@ typedef struct {
 
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z);
 
-void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
+void FUN_L00_00233810(f32 *gravity_offset_adjusted_vector, f32 *in, f32 z) {
     struct Hero *hero_base = &hero;
     M00233810    moby_rotation_matrix;
     V00233810    offset_vector;
     switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
-        qcopy(out, in);
-        out[2] += z;
+        qcopy(gravity_offset_adjusted_vector, in);
+        gravity_offset_adjusted_vector[2] += z;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
@@ -1073,7 +1073,7 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
         offset_vector.v[2] = z;
         euler_rotation_matrix(&moby_rotation_matrix, ((u8 *)hero_base->moby) + 0x40);
         transform_vector(&offset_vector, &offset_vector, &moby_rotation_matrix);
-        fast_vec_add(out, in, &offset_vector);
+        fast_vec_add(gravity_offset_adjusted_vector, in, &offset_vector);
         break;
     }
 }
