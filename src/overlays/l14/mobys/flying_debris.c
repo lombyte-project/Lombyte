@@ -258,13 +258,13 @@ unsigned char *spawn_flying_debris(struct Moby *debris_source_moby, float angle,
     return spawned_moby;
 }
 
-void remove_flying_debris(u8 *self) {
-    u8 *debris_vars = *(u8 **)(self + 0x78);
+void remove_flying_debris(u8 *debris_moby) {
+    u8 *debris_vars = *(u8 **)(debris_moby + 0x78);
     s16 light_index = *(s16 *)(debris_vars + 0x12);
 
     if (light_index != -1) {
         release_point_light_slot(light_index);
         *(s16 *)(debris_vars + 0x12) = -1;
     }
-    FUN_0020c828(self);
+    FUN_0020c828(debris_moby);
 }
