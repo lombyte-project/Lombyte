@@ -39,16 +39,16 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void copy_racer_path_node(char *moby, int path_node_index, float *out) __asm__("FUN_L05_00306d30");
 
-void copy_racer_path_node(char *moby, int path_node_index, float *out) {
+void copy_racer_path_node(char *moby, int path_node_index, float *output_path_node) {
     char *path = *(char **)(((char *)MOBY(moby)->pvars) + 0x244);
     float next_path_node[4];
     float perpendicular_heading;
-    qcopy(out, path + 0x10 + path_node_index * 16);
+    qcopy(output_path_node, path + 0x10 + path_node_index * 16);
     qcopy(next_path_node, path + 0x10 + ((path_node_index + 1) % *(int *)path) * 16);
     perpendicular_heading = fast_add_rotations(
-        fast_arc_tan(next_path_node[0] - out[0], next_path_node[1] - out[1]), 1.5707964f);
-    out[0] = out[0] + fast_cos(perpendicular_heading) * 0.0f;
-    out[1] = out[1] + fast_sin(perpendicular_heading) * 0.0f;
+        fast_arc_tan(next_path_node[0] - output_path_node[0], next_path_node[1] - output_path_node[1]), 1.5707964f);
+    output_path_node[0] = output_path_node[0] + fast_cos(perpendicular_heading) * 0.0f;
+    output_path_node[1] = output_path_node[1] + fast_sin(perpendicular_heading) * 0.0f;
 }
 
 extern int   offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
