@@ -112,7 +112,7 @@ void blend_hero_slot3_mapped_animation_pair(int   id,
                                             float blend_frames) __asm__("FUN_L00_00231e78");
 
 void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend_frames) {
-    struct Hero *base = &hero;
+    struct Hero *hero_slot3_mapped_animation_state = &hero;
     struct Hero *blk2;
     struct Hero *blk3;
     char        *slot3_moby;
@@ -122,11 +122,11 @@ void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend
     int          ok;
     int          seq;
 
-    if (base->items[3].state != 2) {
+    if (hero_slot3_mapped_animation_state->items[3].state != 2) {
         return;
     }
-    slot3_moby = ((char *)base->items[3].moby);
-    slot3_secondary_moby = ((char *)base->items[3].moby2);
+    slot3_moby = ((char *)hero_slot3_mapped_animation_state->items[3].moby);
+    slot3_secondary_moby = ((char *)hero_slot3_mapped_animation_state->items[3].moby2);
     if (slot3_moby == 0 || slot3_secondary_moby == 0) {
         return;
     }
