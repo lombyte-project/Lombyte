@@ -1,5 +1,6 @@
 /* Level 08 moby classes: bolt_thief, shrub. */
 #include "types.h"
+#include "rnc/gameplay/state/bolt_sources.h"
 #include "rnc/gameplay/entities/moby_class_id.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -1858,16 +1859,10 @@ typedef struct {
 } BoltSource_4BE8;
 
 typedef struct {
-    u16 unk0;
-    u16 bolts;
-} BoltSourceStats_4BE8;
-
-typedef struct {
     unsigned char pad[0x454];
     unsigned char killed[1];
 } KillFlags_4BE8;
 
-extern BoltSourceStats_4BE8 bolt_source_stats[][64] __asm__("D_0014D590");
 typedef struct {
     float pos[4];              /* 0x00 */
     char pad10[0x10];

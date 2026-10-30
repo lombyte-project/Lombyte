@@ -1,5 +1,6 @@
 /* Level 02 moby classes: sand_shark, constructorbot, elevator, bulldozer, sand_shark_nest, grab_crane, platform, transport_pod, crane, rocket_launcher, rocket_door1, tresspasser_door1, tresspasser_door2, sandshark_egg, rocks. */
 #include "types.h"
+#include "rnc/gameplay/state/bolt_sources.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
@@ -2155,7 +2156,7 @@ typedef struct {
     int i150;
 } Spawnercb38;
 
-extern unsigned short D_0014D590_lui[][64][2] __asm__("D_0014D590") NOT_SDA;
+extern BoltSourceStats bolt_source_stats_lui[][64] __asm__("D_0014D590") NOT_SDA;
 extern int D_0014EE90[];
 extern int D_L02_0015FFD8;
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
@@ -2193,7 +2194,7 @@ void sand_shark_nest_update(unsigned char *moby) {
     }
     switch (moby[0x20]) {
     case SAND_SHARK_NEST_INITIALIZE:
-        MOBY(moby)->unkB4 -= D_0014D590_lui[2][moby[0xB1]][1];
+        MOBY(moby)->unkB4 -= bolt_source_stats_lui[2][moby[0xB1]].bolts;
         if (MOBY(moby)->unkB4 <= 0) {
             MOBY(moby)->unkB4 = 1;
         }

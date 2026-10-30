@@ -1,5 +1,6 @@
 /* Shared moby classes: camera_object, vendor, bolt, wrench. */
 #include "types.h"
+#include "rnc/gameplay/state/bolt_sources.h"
 #include "rnc/gameplay/entities/moby_class_id.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
@@ -1033,15 +1034,9 @@ typedef struct {
     u8 id;                         /* 0x80 set: no id */
 } BoltSource;
 
-/* Per-level, per-source collection counts. */
-typedef struct {
-    u16 unk0;
-    u16 bolts;
-} BoltSourceStats;
 
 extern s32 D_0015EE2C;                       /* bolts counted when the bolt's pvars[0x40] is set or it is an early moby */
 /* second name for D_0015ED84: retail loads the level index again here */
-extern BoltSourceStats bolt_source_stats[][64] __asm__("D_0014D590");
 extern s32 level_bolts[] __asm__("D_0013DF38");  /* bolts collected per level */
 extern s32 D_L00_0015F598;
 extern void *D_L00_0015FFDC_u __asm__("D_L00_0015FFDC");
