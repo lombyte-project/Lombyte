@@ -10,6 +10,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/level_labels.h"
 #define MOBY(p) ((struct Moby *)(p))
 
 
@@ -174,7 +175,6 @@ int request_floating_platform_sink(Level18State *platform_moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD650), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern int game_frame __asm__("D_L18_0015F5CC");
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void record_moby_hit(int, void *) __asm__("FUN_L00_00259a88");

@@ -7,6 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/text/font_state.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 extern u8 scaled_table_output[] __asm__("D_L02_001CB9C0");
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
@@ -1068,7 +1069,6 @@ move:
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002E1888), where it is exact; names translated to the US level program. */
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern unsigned char D_0014C050_a[] __asm__("D_0014C050");
 extern int D_L02_0015F5CC; /* no foreign declaration */
 extern int D_L02_0015FFD8; /* no foreign declaration */
 extern int approach_angle() __asm__("FUN_L00_0025be00");
@@ -1144,7 +1144,7 @@ void swingshot_versatarget_update(char *moby) {
         }
         break;
     case VERSATARGET_STATE_INACTIVE:
-        if (D_0014C050_a[*(int *)(moby_data + 0x30) + (current_level_index << 4)] != 0 ||
+        if (visited52[*(int *)(moby_data + 0x30) + (current_level_index << 4)] != 0 ||
             (*(int *)(moby_data + 0x3C) != -1 &&
              ((linked_moby = (char *)(D_L02_0015FFD8 + (*(int *)(moby_data + 0x3C) << 8))) == 0 ||
               ((unsigned char *)linked_moby)[0x20] == 0xFE || ((unsigned char *)linked_moby)[0x20] == 0xFD))) {

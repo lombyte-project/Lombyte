@@ -9,6 +9,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 
 
@@ -3032,7 +3033,6 @@ typedef struct {
     float f14;
 } Cam;
 
-extern unsigned char mission_states_30ca80[] __asm__("D_0014C050");
 extern WaterRecord water_records[] __asm__("D_L05_001D6880");
 extern void *D_L05_001612D0_macro __asm__("D_L05_001612D0") MACRO_ADDR;
 extern void pool_init_tiles(void *, int) __asm__("FUN_L01_002b7a48");
@@ -3151,7 +3151,7 @@ void water_update(struct Moby *moby) {
                     }
                 }
             }
-            if (mission_states_30ca80[moby->mission + (current_level_index << 4)] == 0xFF) {
+            if (visited52[moby->mission + (current_level_index << 4)] == 0xFF) {
                 moby->state = 7;
                 moby->pos.z = 44.0f;
             } else {
@@ -3187,7 +3187,7 @@ void water_update(struct Moby *moby) {
             water_vars->moving = 1;
             set_moby_list_state(moby->group, 1);
         } else if (water_vars->f10 >= 0) {
-            if (mission_states_30ca80[moby->mission + (current_level_index << 4)] == 0xFF) {
+            if (visited52[moby->mission + (current_level_index << 4)] == 0xFF) {
                 moby->state = 1;
                 moby->pos.z = water_vars->raised_z;
             }

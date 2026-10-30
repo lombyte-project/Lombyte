@@ -12,6 +12,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/camera/follow_cam.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 
 
@@ -616,7 +617,6 @@ extern BfState D_L10_001BB6B0_bf __asm__("D_L10_001BB6B0");
 extern int D_0015ED84_bf __asm__("D_0015ED84");
 extern float D_0015ED6C_bf __asm__("D_0015ED6C");
 extern unsigned char D_0014C190_bf[] __asm__("D_0014C190");
-extern unsigned char D_0014C050_bf[] __asm__("D_0014C050");
 
 extern BfState l10_gate_completion_records __asm__("D_L10_001BAA50");
 extern unsigned char l10_gate_persistence_eligibility_by_mission[8] __asm__("D_L10_0015FC88");
@@ -642,7 +642,7 @@ void gate_update(unsigned char *gate_moby) {
         *(float *)(gate_moby + 0x14) += D_0015ED6C_bf * -1.0f;
         if (*(float *)(gate_moby + 0x14) <= saved_position[1] + -3.75f) {
             l10_gate_completion_records.collected[*(short *)(gate_moby + 0xB2)] = gate_moby[0xB0] + 2;
-            if (gate_moby[0xB0] == 0xFF || (l10_gate_persistence_eligibility_by_mission[gate_moby[0xB0]] != 0xFF && D_0014C050_bf[gate_moby[0xB0] + (D_0015ED84_bf << 4)] == 0xFF)) {
+            if (gate_moby[0xB0] == 0xFF || (l10_gate_persistence_eligibility_by_mission[gate_moby[0xB0]] != 0xFF && visited52[gate_moby[0xB0] + (D_0015ED84_bf << 4)] == 0xFF)) {
                 D_L10_001BB6B0_bf.collected[*(short *)(gate_moby + 0xB2)] = gate_moby[0xB0] + 2;
             }
             gate_moby[0x20] = 2;
@@ -812,7 +812,6 @@ extern int FUN_001fa6d0_2c9c70(float) __asm__("FUN_001fa6d0");
 extern int FUN_001f9740_2c9c70(int *) __asm__("FUN_001f9740");
 extern int D_0015ED84;
 extern unsigned char D_0014C190_2c9c70[] __asm__("D_0014C190");
-extern unsigned char D_0014C050_2c9c70[] __asm__("D_0014C050");
 
 extern char linked_moby_warning[] __asm__("D_L10_001DCDA0");
 extern char linked_moby_present_message[] __asm__("D_L10_001DCDD0");
@@ -837,7 +836,7 @@ void update_linked_moby_hitbox(struct Moby *moby) {
         target = &D_L10_0015FFD8[*(int *)(linked_hitbox_vars + 0x10)];
     }
     if ((moby->mission == 0xff ||
-         D_0014C050_2c9c70[moby->mission + (D_0015ED84 << 4)] != 0xff) &&
+         visited52[moby->mission + (D_0015ED84 << 4)] != 0xff) &&
         moby->state != 0) {
         int i;
         for (i = 0; i < 5; i++) {

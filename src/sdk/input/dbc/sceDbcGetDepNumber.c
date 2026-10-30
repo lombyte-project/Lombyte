@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/library/sdk_globals.h"
 struct DbCBlob {
     u8 data[0x40];
 };
@@ -14,7 +15,6 @@ struct DbCState {
     s32 unk2C;
 };
 extern u8 dbc_get_dep_number_rpc_error_message[] __asm__("D_001535B8");
-extern u8 RpcQueueData[] __asm__("D_0015B008");
 extern u8 D_0015B480[];
 extern u8 D_0015B500[];
 extern s32 DIntr();

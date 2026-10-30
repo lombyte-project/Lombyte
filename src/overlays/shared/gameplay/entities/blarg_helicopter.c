@@ -11,6 +11,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/gameplay/state/item_state.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_00292AC0), where it is exact; names translated to the US level program. */
 
@@ -971,7 +973,6 @@ void manipulator_set_scale(char *p, float x) __asm__("FUN_L00_00263b38");
 void handle_blarg_helicopter_hits(char *m) __asm__("FUN_L03_002ce238");
 extern int D_L03_001BA5D0[] __asm__("D_L03_001BA5D0");
 extern HPath49 *D_L03_001B08B0_2CDDC8[] __asm__("D_L03_001B05B0");
-extern unsigned char D_0014171B_2CDDC8[] __asm__("D_0014C050");
 extern int select_moby_target_with_hero_fallback(void*,void*,float) __asm__("FUN_L03_0024e830");
 extern void func_L00_00263950_2CDDC8(char*,char*,int,float,float) __asm__("FUN_L00_002628d8");
 extern void handle_blarg_helicopter_hits(char*) __asm__("FUN_L03_002ce238");
@@ -1049,7 +1050,7 @@ void blarg_helicopter_update(HMob49 *moby) {
             HMob49 *child=(HMob49*)(D_L03_0015FFD8_c+(data->child_index<<8));
             blend_moby_animation(child,8,0,0); child->alpha=0; child->animation=0; child->flags&=0xFFBE;
         }
-        if (D_0014171B_2CDDC8[moby->persistent+(frame_scale_inv_macro[7]<<4)]!=255 && data->activation_path!=-1 && data->activation_region!=-1) {
+        if (visited52[moby->persistent+(frame_scale_inv_macro[7]<<4)]!=255 && data->activation_path!=-1 && data->activation_region!=-1) {
             HPath49 *path=paths[data->activation_path];
             int i;
             for (i=0; i<path->count-2; i++)
@@ -1883,7 +1884,6 @@ typedef struct {
 
 extern LevelCollected D_L03_001BB330;
 
-extern s32 level_moby_killed[][64] __asm__("D_0014C190");
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 /*
  * Rises once its moby (unkB2) is collected: waits in state 0 (keeping the
@@ -1909,7 +1909,7 @@ void garage_door_update(struct Moby *door_moby)
         id = door_moby->save_id;
         save_id_index = id;
         if (D_L03_001BB330.collected[save_id_index] == 0) {
-            if (!((level_moby_killed[current_level_index_gp][save_id_index >> 5] >> (id & 0x1F)) & 1))
+            if (!((D_0014C190_257218[current_level_index_gp][save_id_index >> 5] >> (id & 0x1F)) & 1))
                 return;
         }
         door_moby->state = 1;

@@ -10,6 +10,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/state/options.h"
 
 extern s32 D_L00_0015F5CC;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
@@ -99,7 +100,6 @@ typedef struct {
     u8 pad4[0x70 - 4];
 } Entry70;
 
-extern struct PadState D_0013C940_2215c8 __asm__("D_0013C940");
 extern s32 D_L00_0015F5C4_2215c8 __asm__("D_L00_0015F5C4");
 extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") NOT_SDA;
 
@@ -163,7 +163,7 @@ void update_hero_timers_and_reach_state(void) {
     fast_dec_timer_s16(&hero.unk1F6);
     fast_dec_timer_s16(&hero.unk1DA);
     fast_dec_timer_s16(&hero.unk1F8);
-    if (!(D_0013C940_2215c8.held & 5)) {
+    if (!(controller_state.held & 5)) {
         hero.unk1EC = 0;
     }
     if (hero.item_anim_active != 0) {
@@ -171,7 +171,7 @@ void update_hero_timers_and_reach_state(void) {
     } else {
         hero.item_anim_frames = 0;
     }
-    if (D_0013C940_2215c8.no_direction != 0) {
+    if (controller_state.no_direction != 0) {
         hero.stick_held_frames = 0;
         hero.stick_idle_frames++;
     } else {
@@ -579,7 +579,6 @@ typedef struct {
 
 extern char hero_pal_timed_jump_keys[4] __asm__("D_L00_0015F6E8") __attribute__((sda));
 extern char D_L00_0017BF60_e[] __asm__("D_L00_0017BF60");
-extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
 extern T2C attack_records[] __asm__("D_L00_0017BC28");
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 #include "rnc/gameplay/state/game_globals.h"

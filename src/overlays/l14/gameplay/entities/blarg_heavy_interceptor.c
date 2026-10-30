@@ -427,7 +427,6 @@ extern char D_L14_001674C0[];
 extern f32 blarg_heavy_interceptor_culling_sphere_radius_gp __asm__("D_L14_0016139C") __attribute__((sda));
 extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern char D_L14_0015F580[] MACRO_ADDR;
-extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
 #include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_data/update_blarg_heavy_interceptor.h"
 extern f32 D_L14_001613A0_gp __asm__("D_L14_001613A0") __attribute__((sda));
 extern f32 D_L14_001613A4_gp __asm__("D_L14_001613A4") __attribute__((sda));
@@ -727,11 +726,11 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         FUN_L00_0025e450_c618(moby, moby_vars + 0x40, &moby->pos, 0.0f, 0.0f, 5, 2, 4, 4.0f, 2.0f, 9.0f, 1.0f, 1, 15.0f, 1, 5, -1, 0);
         fast_vec_sub(vector_scratch, &moby->pos, &hero.motion.pos);
         vector_scratch[2] = 0.0f;
-        normalize_vector_c618(vector_scratch, vector_scratch, random_float_between(blarg_heavy_interceptor_death_launch_vector_magnitude_range_start_gp * D_0015ED60_c618, blarg_heavy_interceptor_death_launch_vector_magnitude_range_end_gp * D_0015ED60_c618));
+        normalize_vector_c618(vector_scratch, vector_scratch, random_float_between(blarg_heavy_interceptor_death_launch_vector_magnitude_range_start_gp * frame_scale, blarg_heavy_interceptor_death_launch_vector_magnitude_range_end_gp * frame_scale));
         fast_vec_cross(secondary_vector_scratch, &hero.gravity_dir, vector_scratch);
         death_launch_angle = randf_sym(0.6981317f, 1.2217305f);
         build_look_at_matrix(moby_vars + 0x1E0, vector_scratch, &hero.gravity_dir, death_launch_angle);
-        *(float *)(moby_vars + 0x1E8) = random_float_between(blarg_heavy_interceptor_death_launch_vertical_velocity_range_start_gp * D_0015ED60_c618, blarg_heavy_interceptor_death_launch_vertical_velocity_range_end_gp * D_0015ED60_c618);
+        *(float *)(moby_vars + 0x1E8) = random_float_between(blarg_heavy_interceptor_death_launch_vertical_velocity_range_start_gp * frame_scale, blarg_heavy_interceptor_death_launch_vertical_velocity_range_end_gp * frame_scale);
         moby->scale *= 0.1f;
         *(float *)(moby_vars + 0x140) = 10.0f;
         *(float *)(moby_vars + 0x144) = 10.0f;
@@ -749,14 +748,14 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         int i;
 
         fast_vec_add(&moby->pos, &moby->pos, moby_vars + 0x1E0);
-        if (absolute_float(*(float *)(moby_vars + 0x1E0)) > blarg_heavy_interceptor_death_fall_horizontal_drag_speed_threshold_gp * D_0015ED60_c618) {
-            *(float *)(moby_vars + 0x1E0) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * D_0015ED60_c618 + 1.0f;
+        if (absolute_float(*(float *)(moby_vars + 0x1E0)) > blarg_heavy_interceptor_death_fall_horizontal_drag_speed_threshold_gp * frame_scale) {
+            *(float *)(moby_vars + 0x1E0) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
         }
-        if (absolute_float(*(float *)(moby_vars + 0x1E4)) > blarg_heavy_interceptor_death_fall_horizontal_drag_speed_threshold_gp * D_0015ED60_c618) {
-            *(float *)(moby_vars + 0x1E4) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * D_0015ED60_c618 + 1.0f;
+        if (absolute_float(*(float *)(moby_vars + 0x1E4)) > blarg_heavy_interceptor_death_fall_horizontal_drag_speed_threshold_gp * frame_scale) {
+            *(float *)(moby_vars + 0x1E4) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
         }
         if (*(float *)(moby_vars + 0x1E8) > 0.0f) {
-            *(float *)(moby_vars + 0x1E8) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * D_0015ED60_c618 + 1.0f;
+            *(float *)(moby_vars + 0x1E8) *= (blarg_heavy_interceptor_death_fall_velocity_retention_factor_gp - 1.0f) * frame_scale + 1.0f;
         }
         *(float *)(moby_vars + 0x1E8) -= blarg_heavy_interceptor_death_fall_gravity_gp * frame_scale_sq;
         moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(moby_vars + 0x1FC));

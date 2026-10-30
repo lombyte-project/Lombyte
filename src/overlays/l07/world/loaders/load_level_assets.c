@@ -122,7 +122,6 @@ extern char *D_L18_001C6200_26b768[] __asm__("D_L07_001C5880");
 extern char *D_L18_001BCA30_26b768[] __asm__("D_L07_001BC0B0");
 extern char *D_L18_00160FC0_26b768 __asm__("D_L07_00160FC0");
 extern char *D_L18_00160494_26b768 __asm__("D_L07_00160494");
-extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern char *D_L18_0015FFE8_26b768 __asm__("D_L07_0015FFE8");
 extern char *D_L18_00160108_26b768 __asm__("D_L07_00160108");
 extern char *D_L18_0016016C_26b768 __asm__("D_L07_0016016C");

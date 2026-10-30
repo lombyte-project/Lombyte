@@ -5,6 +5,9 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/state/item_state.h"
+#include "rnc/globals.h"
+#include "rnc/rendering/render_globals.h"
 typedef struct {
     s32 a, b, c, off;
 } Ent;
@@ -497,7 +500,6 @@ extern void load(void *, int, int) __asm__("FUN_00216828");
 extern GameState137B80 D_00137B80;
 
 char *load_level_gameplay(int skip_gameplay_read) __asm__("FUN_L00_00241940");
-extern s32 level_moby_killed[][64] __asm__("D_0014C190");
 extern unsigned char l00_moby_load_exclusion_flags_by_uid[] __asm__("D_L00_001BB684");
 extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
@@ -978,7 +980,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                         }
                     } else {
                         if (flags & 1) {
-                            if ((level_moby_killed[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
+                            if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
                                 adjusted_bolt_count = (bolts + 1) / 2;
                             }
                         } else {
@@ -990,7 +992,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                         skip = 1;
                     }
                 } else if ((flags & 0xC) == 4) {
-                    if ((level_moby_killed[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
+                    if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
                         skip = 1;
                     }
                 }
@@ -1705,13 +1707,11 @@ extern Load244110 D_L00_00173E00_244110 __asm__("D_L00_00173E00");
 extern char *D_L00_00173E40_244110[] __asm__("D_L00_00173E40");
 typedef struct { s16 a; s16 b; s32 *file; } Ldg244110;
 extern Ldg244110 D_0015EE48;
-extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_0014C050[];
 extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern s32 D_L00_0015F40C;
 extern s32 sound_bank_handle __asm__("D_0015ED5C");
 #include "rnc/overlay/shared/world/loaders/load_level_gameplay_globals.h"
-extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 level_texture_128x128_descriptor[3] __asm__("D_L00_001827C0");
 extern u64 level_texture_64x64_descriptor[3] __asm__("D_L00_001827D8");
 extern u64 D_L00_001827F0[3];

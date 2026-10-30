@@ -13,6 +13,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/effect_00313D28.c: func_L07_00313D28). */
 
@@ -621,7 +622,6 @@ typedef struct {
 } L07MobyList;
 
 extern L07MobyList D_L07_0016C8E0;
-extern int scene_state __asm__("D_L07_0015F5C4");
 extern unsigned char l07_snagglebeast_big_head_manipulator[] __asm__("D_L07_0020C6C0");
 extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
@@ -661,7 +661,6 @@ typedef struct {
 #include "rnc/overlay/swarm_path.h"
 typedef struct { char pad[0x1D4]; unsigned char path_points[4]; int linked_mobys[6]; } ChaserPathPoints;
 typedef struct { char pad[0x3C]; short count; char pad2[0xE]; } ChaserSpawnRecord;
-extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern Vec4 D_L07_00166E40;
 int D_L07_00161B64 = 0;
 extern ChaserSpawnRecord l07_ammo_transfer_records[] __asm__("D_L07_00179B40");

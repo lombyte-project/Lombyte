@@ -213,7 +213,6 @@ void timed_activation_pads_update(unsigned char *moby)
         break;
     }
 }
-extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");

@@ -1355,7 +1355,6 @@ typedef struct {
     V_26c860 v10;
     R_26c860 r;
 } M_26c860;
-extern f32 D_0015ED60_26c860 __asm__("D_0015ED60");
 f32 FUN_001f9de0_26c860(f32) __asm__("FUN_001f9de0");
 f32 FUN_001f9dc8_26c860(f32) __asm__("FUN_001f9dc8");
 void FUN_001f9a28_26c860(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1381,13 +1380,13 @@ void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) {
         position_offset_scratch.w = zero;
         transform_vector(&transformed_position_offset, &position_offset_scratch, &position_offset_matrix);
         FUN_001f9a28_26c860(&particle->v10, &particle->v10, &transformed_position_offset);
-        r->f1C += D_0015ED60_26c860 * 0.06001f;
+        r->f1C += frame_scale * 0.06001f;
         moby_point_position(r->p18, 0, &reference_position);
         FUN_001f9a28_26c860(&position_offset_scratch, &reference_position, &particle->v10);
         FUN_L00_001ff500_26c860(&position_offset_scratch, &position_offset_scratch, r->f1C);
         FUN_001f9a10_26c860(&particle->v10, &particle->v10, &position_offset_scratch);
-        r->f14 = fast_add_rotations(r->f14, D_0015ED60_26c860 * 0.5235988f);
-        r->f10 *= D_0015ED60_26c860 * -0.10000002384185791f + 1.0f;
+        r->f14 = fast_add_rotations(r->f14, frame_scale * 0.5235988f);
+        r->f10 *= frame_scale * -0.10000002384185791f + 1.0f;
         position_offset_scratch.y = FUN_001f9de0_26c860(r->f14) * r->f10;
         position_offset_scratch.z = FUN_001f9dc8_26c860(r->f14) * r->f10;
         position_offset_scratch.x = zero;
@@ -1399,18 +1398,18 @@ void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) {
             return;
         }
     }
-    r->f4 += D_0015ED60_26c860 * 0.011f * r->fC;
+    r->f4 += frame_scale * 0.011f * r->fC;
     if (r->f4 <= 0.0f || fast_dec_timer_s16(&particle->hA)) {
         FUN_L00_00267a08_26c860(particle);
         return;
     }
     if (1.0f <= r->f4) {
         r->fC = -r->fC;
-        r->f4 += D_0015ED60_26c860 * 0.011f * r->fC;
+        r->f4 += frame_scale * 0.011f * r->fC;
     }
-    particle->fC += D_0015ED60_26c860 * -2940.0f;
+    particle->fC += frame_scale * -2940.0f;
     particle->i4 = (particle->i4 & 0xFFFFFF) | (truncate_float_to_s32(r->f4 * 255.0f) << 24);
-    r->f8 += D_0015ED60_26c860 * 0.006f;
+    r->f8 += frame_scale * 0.006f;
     if (1.0f < r->f8)
         r->f8 -= 1.0f;
     particle->b8 = r->f8 * 255.0f;
@@ -2371,7 +2370,6 @@ typedef struct {
 } Part_26ed28;
 extern void *FUN_L00_002678b8_0026ed28(s32) __asm__("FUN_L00_002678b8");
 extern s32 FUN_L00_0025bfe0_0026ed28(f32, f32, f32, f32) __asm__("FUN_L00_0025bfe0");
-extern f32 D_0015ED60_0026ed28 __asm__("D_0015ED60");
 extern u8 *D_L00_001B20A0_lui[] __asm__("D_L00_001B20A0") NOT_SDA;
 Part_26ed28 *spawn_moby_bound_effect_particle(u8 *a) __asm__("FUN_L00_0026ed28");
 
@@ -2383,7 +2381,7 @@ Part_26ed28 *spawn_moby_bound_effect_particle(u8 *a) {
         particle_data = &particle->body;
         particle_data->a = a;
         particle_data->f4 = 0.0f;
-        particle_data->f8 = D_0015ED60_0026ed28 * 0.016f;
+        particle_data->f8 = frame_scale * 0.016f;
         particle_data->fC = random_float_between(particle_data->f4, 1.0f);
         particle_data->f10 = 1.0f;
         particle_data->f14 = 1.0f;
@@ -2935,7 +2933,6 @@ typedef struct {
 } S_26ff10;
 
 extern u8 *D_L00_001B20B0_26ff10 __asm__("D_L00_001B20B0") NOT_SDA;
-extern f32 D_0015ED60_26ff10 __asm__("D_0015ED60");
 
 extern void FUN_001f9a68_26ff10(void *, void *, f32) __asm__("FUN_001f9a68");
 extern Moby_26ff10 *FUN_L00_0026fd28_26ff10(void *, void *, s32,
@@ -3046,7 +3043,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         qcopy(particle->posv.f, v0u.f);
     }
     if (pv->f18 & 8) {
-        f32 d = D_0015ED60_26ff10;
+        f32 d = frame_scale;
         f32 decayed_particle_scalar;
         kk2 = 8.0f / (d * 0.443f);
         pv->f16++;
@@ -3058,13 +3055,13 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
             return;
         }
     } else {
-        f32 d = D_0015ED60_26ff10;
+        f32 d = frame_scale;
         kk2 = 8.0f / (d * 0.443f);
         particle->f0C = particle->f0C + 260000.0f / (f32)kk2 * d;
     }
     f = convert_integer_to_float(pv->f14);
     {
-        f32 d = D_0015ED60_26ff10;
+        f32 d = frame_scale;
         f32 kk;
         kk2 = 8.0f / (d * 0.443f);
         kk = (f32)kk2;
@@ -3091,9 +3088,9 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
     if (fm & 8) {
         pv->z = pv->z + frame_scale_sq * 0.008f;
         f = convert_integer_to_float(pv->f16);
-        pv->t = pv->t + rotation_direction_sign * (D_0015ED60_26ff10 * -0.01f) / f;
+        pv->t = pv->t + rotation_direction_sign * (frame_scale * -0.01f) / f;
     } else {
-        pv->t = pv->t + rotation_direction_sign * (D_0015ED60_26ff10 * -0.01f);
+        pv->t = pv->t + rotation_direction_sign * (frame_scale * -0.01f);
     }
     if (1.0f < pv->t)
         pv->t = pv->t - 1.0f;

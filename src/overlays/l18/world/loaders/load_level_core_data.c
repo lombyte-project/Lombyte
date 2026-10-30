@@ -12,6 +12,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/overlay/level_labels.h"
 
 typedef struct {
     char *f0;     /* 0x00 */
@@ -422,7 +423,6 @@ s32 load_level_core_data(s32 full, s32 keep) {
 }
 #include "sda.h"
 
-extern int game_frame __asm__("D_L18_0015F5CC");
 int timer_text_x __asm__("D_L18_00161A1C") = 260;
 int timer_text_y __asm__("D_L18_00161A20") = 80;
 int timer_color_dim __asm__("D_L18_00161A24") = 0x80c0c0c0;

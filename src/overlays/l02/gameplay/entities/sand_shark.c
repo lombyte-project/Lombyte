@@ -11,6 +11,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "sda.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/overlay/level_labels.h"
 
 
 
@@ -2486,7 +2488,6 @@ extern float D_L02_00161C60 __attribute__((sda));
 extern float D_L02_00161C30_gp __asm__("D_L02_00161C30") __attribute__((sda));
 extern float D_L02_00161C34_gp __asm__("D_L02_00161C34") __attribute__((sda));
 extern int *D_L02_001B0AB0_dc88[] __asm__("D_L02_001B0AB0");
-extern unsigned char D_0014C050_dc88[] __asm__("D_0014C050");
 extern unsigned int D_00141BAC NOT_SDA;
 extern float FUN_00213f38(float *, float *, float, float, float, float);
 extern void sample_camera_path(void *, int, void *, void *, int, float) __asm__("FUN_00214e58");
@@ -2592,7 +2593,7 @@ void transport_pod_update(unsigned char *moby) {
         snap_transport_pod_rails_to_offsets((struct Moby *)moby);
         break;
     case TRANSPORT_POD_WAIT_FOR_GEAR_MOVEMENT_TRIGGER:
-        if (D_0014C050_dc88[moby[0xB0] + current_level_index * 16] == 0xFF) {
+        if (visited52[moby[0xB0] + current_level_index * 16] == 0xFF) {
             transport_pod_vars->timer = scale_game_frames(30);
             moby[0x20] = 2;
         }
@@ -3148,7 +3149,6 @@ typedef struct {
     f32 t;              /* 0x24: 0..1 along the turn */
 } TurnerVars;
 
-extern s32 level_game_mode __asm__("D_L02_0015F5C4");
 extern s32 D_0015ED84;
 extern u8 D_0014C050[][16];
 extern void FUN_L00_001fff28(void *, int, float);

@@ -9,6 +9,7 @@
 #include "rnc/overlay/quad.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/level_labels.h"
 typedef struct {
     unsigned char h[0x404];
     unsigned char f[0x7FF];
@@ -73,7 +74,6 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
     }
 }
 extern char D_L00_001BA5D0[] NOT_SDA;
-extern u8 *moby_table __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFDC;
 extern unsigned short D_00151708 NOT_SDA;
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");

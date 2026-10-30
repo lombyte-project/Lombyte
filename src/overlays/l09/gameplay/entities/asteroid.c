@@ -549,7 +549,6 @@ typedef struct {
 
 extern PebblePath *D_L09_001B0630_2eaa50[] __asm__("D_L09_001B0630");
 extern char D_L09_00166F40_2eaa50[] __asm__("D_L09_00166F40");
-extern f32 D_0015ED6C_2eaa50 __asm__("D_0015ED6C");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void set_moby_color(struct Moby *, s32, s32, s32) __asm__("FUN_L00_002502f0");
@@ -605,7 +604,7 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
             fast_vec_sub(&spawned_moby->pos, &spawned_moby->pos, &vars->offset);
             vars->speed = lateral_scatter_distance / 20.0f + 10.0f;
             spawned_moby->scale *= lateral_scatter_distance / 100.0f + 1.0f;
-            vars->speed *= D_0015ED6C_2eaa50;
+            vars->speed *= frame_time;
         }
         upd_a(spawned_moby);
     }

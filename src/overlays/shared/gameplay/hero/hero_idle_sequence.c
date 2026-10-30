@@ -9,6 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00204130), where it is exact; names translated to the US level program. */
 
@@ -1441,7 +1442,6 @@ void apply_hero_and_item_scale_sequence(void) {
 extern int hero_scalar_pulse_active_gp __asm__("D_L00_0015F680") __attribute__((sda));
 extern int hero_scalar_pulse_phase_gp __asm__("D_L00_0015F684") __attribute__((sda));
 extern float hero_scalar_pulse_step_gp __asm__("D_L00_0015F67C") __attribute__((sda));
-extern float fade_level __asm__("D_L00_0015F3FC");
 float FUN_00213ed8(float *, float, float);
 void update_hero_scalar_pulse(void) {
     if (hero_scalar_pulse_active_gp == 0)
@@ -1746,7 +1746,6 @@ void update_hero_and_equipped_item_glows(void) {
     }
     }
 }
-extern unsigned char D_0015EDB5_208820 __asm__("D_0015EDB5");
 extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_002330d0(void);
 extern void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
@@ -1794,7 +1793,7 @@ void update_hero_moby(void) {
     }
     hero_moby = ((unsigned char *)hero.moby);
     if (*(short *)(hero_moby + 0xA6) == 0) {
-        if (D_0015EDB5_208820) {
+        if (opt_mirror_anim) {
             *(unsigned short *)(hero_moby + 0x34) |= 0x8000;
         } else {
             *(unsigned short *)(hero_moby + 0x34) &= 0x7FFF;

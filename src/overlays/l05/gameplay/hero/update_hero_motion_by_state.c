@@ -131,7 +131,6 @@ struct LevelTable_QS {
     s32 i168;
 };
 
-extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 extern s32 D_L05_0015F688 __attribute__((sda));
 s32 D_L05_0015F68C = 0;
 extern u8 D_L05_001671D8[];
@@ -2176,8 +2175,8 @@ void update_hero_motion_by_state(void) {
                 if (hero.unk5AC.f > frame_time * 12.0f) {
                     hero.unk5AC.f = frame_time * 12.0f;
                 }
-                if (hero.unk5AC.f < D_0015ED6C_a * -2.5f) {
-                    hero.unk5AC.f = D_0015ED6C_a * -2.5f;
+                if (hero.unk5AC.f < frame_time * -2.5f) {
+                    hero.unk5AC.f = frame_time * -2.5f;
                 }
                 hero.unk574 = hero.grind_base_speed + hero.unk5AC.f;
                 if (hero.unk574 < 0.0f) {
@@ -2524,9 +2523,9 @@ void update_hero_motion_by_state(void) {
                 hero.target_speed = D_L05_0017C218.x18 * frame_time;
             }
             if (hero.vehicle_mode == 3) {
-                hero.target_speed = D_0015ED6C_a * 1.5f;
+                hero.target_speed = frame_time * 1.5f;
             } else if (hero.vehicle_mode == 1) {
-                hero.target_speed = D_0015ED6C_a * 0.9f;
+                hero.target_speed = frame_time * 0.9f;
             }
         } else {
             hero.stick_magnitude = 0.5f;

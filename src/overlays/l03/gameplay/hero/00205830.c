@@ -184,7 +184,6 @@ struct LevelTable_QS {
     s32 i168;
 };
 
-extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
@@ -2036,9 +2035,9 @@ void update_hero_motion_for_current_state(void) {
                 hero.target_speed = D_L03_0017BEB8.x18 * frame_time;
             }
             if (hero.vehicle_mode == 3) {
-                hero.target_speed = D_0015ED6C_a * 1.5f;
+                hero.target_speed = frame_time * 1.5f;
             } else if (hero.vehicle_mode == 1) {
-                hero.target_speed = D_0015ED6C_a * 0.9f;
+                hero.target_speed = frame_time * 0.9f;
             }
         } else {
             hero.stick_magnitude = 0.5f;

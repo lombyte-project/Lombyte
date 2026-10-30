@@ -8,6 +8,7 @@
 #include "sda.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/globals.h"
+#include "rnc/input/pad_globals.h"
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
 /* Resets the follow camera to its defaults: springs the orbit and target
@@ -111,7 +112,6 @@ extern A_2e6000 player_camera[] __asm__("D_L00_00166C80");
 extern C_2e6000 D_0013C940_2e6000 __asm__("D_0013C940");
 extern L_2e6000 D_0013F3D0_2e6000 __asm__("D_0013F3D0");
 extern s32 D_L00_00177F00[];
-extern s32 pad_held[] __asm__("D_0013CAE0");
 extern f32 D_L00_00166E10[];
 extern f32 D_L00_0015EF40;
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_setup_data/follow_camera_apply_overrides_2.h"

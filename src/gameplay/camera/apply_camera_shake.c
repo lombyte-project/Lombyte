@@ -13,7 +13,6 @@ struct CameraShake {
 };
 
 extern struct UpdateCam *cur_cam[] __asm__("D_001870C0");
-extern u8 camera_position[] __asm__("D_00187080");
 extern u8 D_001872B0[];
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");

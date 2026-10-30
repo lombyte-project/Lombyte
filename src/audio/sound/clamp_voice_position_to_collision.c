@@ -1,6 +1,6 @@
 #include "types.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 extern s32 sound_probe_ignore[] __asm__("D_0013E5BC");
-extern u8 camera_position[] __asm__("D_00187080");
 extern char D_00194120[];
 extern s32 collision_line() __asm__("func_001EFA68");
 extern void fast_vec_add() __asm__("func_001F9A10");

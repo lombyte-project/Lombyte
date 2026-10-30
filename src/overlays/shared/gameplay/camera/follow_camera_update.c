@@ -6,6 +6,7 @@
 #include "rnc/overlay/level_globals.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/state/options.h"
 
 extern u8 camera_view[] __asm__("D_L00_00166E10");
 extern u8 D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
@@ -458,7 +459,6 @@ typedef struct {
 } G680;
 extern C940 D_0013C940;
 extern G680 D_L00_00166C80_c __asm__("D_L00_00166C80");
-extern int invert52 __asm__("D_0015EDDC");
 extern float hero_aligned_camera_rotation_gain_at_zero_input_gp __asm__("D_L00_00161DC0") __attribute__((sda));
 extern float hero_aligned_camera_rotation_gain_at_unit_input_gp __asm__("D_L00_00161DC4") __attribute__((sda));
 extern float hero_aligned_camera_input_stiffness_gp __asm__("D_L00_00161DC8") __attribute__((sda));

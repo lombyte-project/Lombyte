@@ -15,6 +15,7 @@
 #include "rnc/audio/voice_pool.h"
 #include "sda.h"
 #include "rnc/input/pad_globals.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Hoven vendor draw: builds the two strip matrices, then draws the four rings as quads lit by their phase. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00303CA8), where it is exact; names translated to the US level program. */
@@ -505,7 +506,6 @@ extern void detach_manipulator(void *, void *);
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 extern char D_0013E533[];
-extern unsigned char D_0014171B_304920[] __asm__("D_0014C050");
 extern int invert52_macro[] __asm__("D_0015EDDC") MACRO_ADDR;
 extern Moby *D_L12_0015FFD8_gp __asm__("D_L12_0015FFD8") MACRO_ADDR;
 extern char D_L12_00167180_304920[] __asm__("D_L12_00167100");
@@ -531,7 +531,7 @@ void hoven_turret_update(struct Moby *moby) {
     case HOVEN_TURRET_STATE_INITIALIZE:
         D_L12_00161F00 = 0;
         D_L12_00161F04 = 0;
-        if (D_0014171B_304920[moby->mission + (current_level_index << 4)] == 0xFF) {
+        if (visited52[moby->mission + (current_level_index << 4)] == 0xFF) {
             moby->state = 6;
         } else {
             attach_manipulator(moby, 0, data);

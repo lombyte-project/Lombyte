@@ -4,6 +4,8 @@
 #include "sda.h"
 #include "rnc/globals.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 typedef struct {
     s32 off;
@@ -37,8 +39,6 @@ extern char loading_boot_sound_bank_message[] __asm__("D_001E76C0");
 extern volatile SoundSlot boot_sound_defs_b[] __asm__("D_001861E0");
 extern volatile SoundSlot * volatile level_sound_defs __asm__("D_0015F634");
 extern volatile s32 level_sound_def_count __asm__("D_0015F630");
-extern u8 requested_video_mode __asm__("D_0016034C");
-extern s32 space_load __asm__("D_0015F600");
 
 extern void init_once(void) __asm__("func_00201650");
 extern void InitializeStreamingState(void);

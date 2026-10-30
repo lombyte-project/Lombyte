@@ -11,6 +11,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Sentrybot update: runs the patrol, alert and attack state machine, then sets the alert level and the eye colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_00298BB8), where it is exact; names translated to the US level program. */
@@ -2543,7 +2544,6 @@ typedef struct { unsigned char pad[0x454]; unsigned char killed[1]; } KillFlags_
 typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char pad75[0x13]; char *owner; } Voice;
 
 extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
-extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
 extern unsigned char D_0014C190[];
 extern int D_0015ED84;
 extern int draw_spark_emitter_effect_quads() __asm__("FUN_L15_002a3138");
@@ -2588,7 +2588,7 @@ void update_spark_emitter_moby(unsigned char *moby) {
     case EMIT_SPARKS: {
         int linked_moby_index = *(int *)(moby_data + 0x10);
         if ((linked_moby_index != -1 && (*(struct Moby **)&D_L15_0015FFD8_d)[linked_moby_index].state == 2)
-            || D_0014C050_c[(unsigned char)moby[0xB0] + (D_0015ED84 << 4)] == 0xFF) {
+            || visited52[(unsigned char)moby[0xB0] + (D_0015ED84 << 4)] == 0xFF) {
             func_L15_002A47B8_2A3DD0(moby);
         } else {
             Voice *e = (Voice *)(D_0013E650_2A3DD0 + moby[0xBC] * 0x70);

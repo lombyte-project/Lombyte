@@ -14,6 +14,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
 typedef struct {
@@ -94,7 +95,6 @@ extern f32 D_L02_0015F3FC;
 extern f32 skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
 extern struct UsageStat D_00141968[] NOT_SDA; /* usage records 36 on (usage_stats + 0x120) */
 extern u8 item_available[] __asm__("D_0013D4C0") NOT_SDA; /* by item id */
-extern s32 level_game_mode __asm__("D_L02_0015F5C4");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void start_indexed_disc_stream(int) __asm__("FUN_L02_00298c68");
 extern void advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");

@@ -4,6 +4,7 @@
 
 #include "rnc/gameplay/camera/update_cam.h"
 #include "rnc/globals.h"
+#include "rnc/ui/menus/menu_globals.h"
 extern s32 D_0015F674 MACRO_ADDR;
 extern s32 D_00141660[];
 extern u8 D_0014161B NOT_SDA;
@@ -12,7 +13,6 @@ extern s32 alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
 extern char pause_menu_chain_head[] __asm__("D_001CE5B8");
 extern char pause_menu_chain_tail[] __asm__("D_001CE748");
 extern char D_001CE798[];
-extern s32 selected_level_index[] __asm__("D_001A0314");
 extern s32 D_001D0398[];
 
 extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");

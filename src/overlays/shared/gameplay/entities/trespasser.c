@@ -118,8 +118,6 @@ typedef struct {
     s16 h1E2;
 } P_2c40a0;
 extern P_2c40a0 D_0013F350_2c40a0 __asm__("D_0013F350");
-extern f32 D_0015ED6C_2c40a0 __asm__("D_0015ED6C");
-extern f32 D_0015ED70_2c40a0 __asm__("D_0015ED70");
 f32 FUN_001f9b80_2c40a0(void *, void *) __asm__("FUN_001f9b80");
 f32 FUN_001f99c0_2c40a0(f32) __asm__("FUN_001f99c0");
 void FUN_001f9a28_2c40a0(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -154,7 +152,7 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
     if (proximity_response_gate == 0)
         horizontal_separation_error = 0.0f;
     vendor_spring(&horizontal_separation_error, 0.0f, &moby_vars->f60, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
-                            D_0015ED6C_2c40a0 * 4.0f);
+                            frame_time * 4.0f);
     if (horizontal_separation_error == 0.0f && moby_vars->f60 == 0.0f) {
         if (FUN_001f99c0_2c40a0(self->f18 - FUN_00213508_2c40a0(self->v10, 0.5f, 0)) < 0.02f)
             moby_vars->i68 = 0;
@@ -171,7 +169,7 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
         moby_vars->f64 = 0.0f;
         return;
     }
-    moby_vars->f64 -= D_0015ED70_2c40a0 * 24.0f;
+    moby_vars->f64 -= frame_time_sq * 24.0f;
     self->f18 += moby_vars->f64;
     if (self->f18 < ground_height)
         self->f18 = ground_height;
@@ -533,7 +531,6 @@ typedef union {
     s32 i[4];
 } V2c7320;
 extern s32 pad_held[] __asm__("D_0013CAE0") NOT_SDA;
-extern f32 D_0015ED6C_2c7320 __asm__("D_0015ED6C");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void sub_2c7320(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -571,7 +568,7 @@ void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position, V2c7320 *ta
         effective_target_position.f[0] = u.f[0];
         effective_target_position.f[1] = u.f[1];
     }
-    horizontal_speed = D_0015ED6C_2c7320 * 8.5f;
+    horizontal_speed = frame_time * 8.5f;
     out[0] = fast_cos(launch_heading) * horizontal_speed;
     out[1] = fast_sin(launch_heading) * horizontal_speed;
     *(s32 *)&out[2] = 0;
@@ -1193,7 +1190,7 @@ typedef struct {
 extern DeliveryStats_2c1ad0 D_00141680_2c1ad0 __asm__("D_00141680");
 extern u8 D_0013E531;
 extern f32 D_0015ED68;
-extern f32 D_0015ED6C MACRO_ADDR;
+extern f32 frame_time MACRO_ADDR;
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern s32 D_0015EEA4;
 extern u32 D_0013CAE4 NOT_SDA;
@@ -1443,7 +1440,6 @@ typedef union {
 } V2c2488;
 extern s32 pad_held_lui[] __asm__("D_0013CAE0") NOT_SDA;
 extern u8 bomb_glove_aimed_range_modifier[] __asm__("D_0013E52A");
-extern f32 D_0015ED6C __asm__("D_0015ED6C");
 extern void sub_2c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 scale_ticks(s32) __asm__("FUN_001fa6c0");
 extern f32 FUN_L00_0025abf0(void *, void *, f32, f32, s32);
@@ -1475,7 +1471,7 @@ void aim_throw_arc(V2c2488 *origin_position, V2c2488 *target_position, f32 *out,
         effective_target_position.f[0] = u.f[0];
         effective_target_position.f[1] = u.f[1];
     }
-    horizontal_speed = D_0015ED6C * 8.5f;
+    horizontal_speed = frame_time * 8.5f;
     out[0] = fast_cos(launch_heading) * horizontal_speed;
     out[1] = fast_sin(launch_heading) * horizontal_speed;
     *(s32 *)&out[2] = 0;
@@ -1846,7 +1842,7 @@ typedef struct {
 } ThrowVars;
 
 extern s32 D_L00_0015F5C4;                          /* nonzero: no throws */
-extern f32 D_0015ED6C MACRO_ADDR;   /* frame-rate scale */
+extern f32 frame_time MACRO_ADDR;   /* frame-rate scale */
 /* coll_hit's normal as a whole quadword (CollisionHit names only x/y/z) */
 extern Vec4 coll_hit_normal __asm__("D_L00_00173E80") NOT_SDA;
 extern Vec4 D_L00_00166DC0 NOT_SDA;
@@ -1903,7 +1899,7 @@ s32 predict_thrown_moby_landing(ThrowVars *throw_vars, struct Moby *thrown_moby,
                 throw_vars->unk46 = 1;
         }
     }
-    predicted_velocity.f[2] -= D_0015ED6C * 0.5f;
+    predicted_velocity.f[2] -= frame_time * 0.5f;
     q.q = ((Vec4 *)&hero.moby->pos)->q;
     q.f[2] = predicted_position.f[2];
     if (collision_line(&q, &predicted_position, 0x10, hero.moby, 0) && (collision_hit_material() || 0.0f < predicted_velocity.f[2])) {
@@ -2606,7 +2602,7 @@ typedef struct Data {
 
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float D_0015ED6C;
+extern float frame_time;
 extern int FUN_L00_00205000();
 extern int hero_set_state() __asm__("FUN_L00_002223f8");
 extern int FUN_L00_002323b8();

@@ -164,7 +164,6 @@ typedef union {
     s32 i[4];
 } V_210ce8;
 
-extern s32 D_0015ED84_210ce8 __asm__("D_0015ED84");
 
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
@@ -214,7 +213,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     } else if ((response_record->i24 ^ 1) & 1) {
         return 0;
     }
-    D_0013DF88[D_0015ED84_210ce8]++;
+    D_0013DF88[current_level_index]++;
     hero.damage_source_moby = (struct Moby *)response_record->p20;
     D_0015EEA8++;
     if (hero.state.control_mode == 0xF) {
@@ -271,7 +270,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
                 id = 0x82;
                 goto call_ret;
             }
-            if (D_0015ED84_210ce8 == 0xF || D_0015ED84_210ce8 == 0x11) {
+            if (current_level_index == 0xF || current_level_index == 0x11) {
                 mob = ((u8 *)hero.damage_source_moby);
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {

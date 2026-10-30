@@ -874,7 +874,6 @@ typedef struct {
     s32 slot;     /* 0x40: -1 none, else index into D_L01_001DEB10 */
 } SaleVars;
 
-extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 initialize_npc_dialogue(struct Moby *, SaleVars *) __asm__("FUN_L00_002668a0");
 extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars *) __asm__("FUN_L00_00266448");
@@ -2089,7 +2088,6 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 
 extern float fast_vec_dist(void *, void *);
 extern char *D_L01_0015FFD8;
-extern int pool_draw_tiles __asm__("D_L01_001612D0");
 extern float D_L01_001619A0;
 extern float D_L01_001619A4;
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);

@@ -15,6 +15,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_pool.h"
 #include "sda.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -2226,7 +2227,6 @@ void taxi_update(struct Moby *moby) {
 }
 #include "qcopy.h"
 extern char *D_L05_001600EC_19208 __asm__("D_L05_001600EC");
-extern unsigned char D_0014C050_19208[] __asm__("D_0014C050");
 
 void initialize_taxi_stop_state(void *moby_v) {
     char *moby = moby_v;
@@ -2244,8 +2244,8 @@ void initialize_taxi_stop_state(void *moby_v) {
     switch (*(short *)(data + 0xB4)) {
     case TAXI_BRANCHING_STOP: {
         int k = current_level_index << 4;
-        if (D_0014C050_19208[*(int *)(data + 0xB8) + k] != 0xFF &&
-            D_0014C050_19208[*(int *)(data + 0xBC) + k] != 0xFF) {
+        if (visited52[*(int *)(data + 0xB8) + k] != 0xFF &&
+            visited52[*(int *)(data + 0xBC) + k] != 0xFF) {
             moby[0x20] = 6;
             *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) | 1;
             moby[0x31] = 0;

@@ -4,10 +4,10 @@
 #include "rnc/video/decoder/read_mpeg.h"
 #include "rnc/video/decoder/decoder_globals.h"
 #include "rnc/video/player/movie_player.h"
+#include "rnc/gameplay/state/options.h"
 
 extern struct Globals_0013E550 voice_pool __asm__("D_0013E550");
 extern struct PadStateWords pad_words __asm__("D_0013C940");
-extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_0015EEA0;
 /* Movie skip mode (decode_mode): -1 no skipping, 2 any new button. Read
    through a volatile view because retail loads it once for the -1 and 2

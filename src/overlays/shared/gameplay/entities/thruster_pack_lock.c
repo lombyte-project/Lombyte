@@ -8,6 +8,7 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
@@ -63,7 +64,6 @@ typedef struct {
 extern unsigned char D_00141968_r[] __asm__("D_00141968");
 extern unsigned char D_0014C190_r[] __asm__("D_0014C190");
 extern unsigned char D_0013F350_r[] __asm__("D_0013F350");
-extern unsigned char D_0014C050_r[] __asm__("D_0014C050");
 extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
 extern int D_0014C050; /* no foreign declaration */
 extern int D_L11_0015FC88; /* no foreign declaration */
@@ -114,7 +114,7 @@ void thruster_pack_lock_update(Lock *moby)
                 group = moby->bB0;
                 group_index = group & 0xFF;
                 if (group == 0xFF || (D_L11_0015FD08_3102C8[group_index] != 0xFF &&
-                                  (D_0014C050_r)[group_index + (current_level_index << 4)] == 0xFF)) {
+                                  (visited52)[group_index + (current_level_index << 4)] == 0xFF)) {
                     D_L11_001BBF40_3102C8.collected[(short)moby->uid] = group + 2;
                 }
             }
@@ -415,7 +415,6 @@ extern float trail_quad_texture_coordinates[] __asm__("D_L11_001F1490");
 extern short D_L11_001623F0_gp __asm__("D_L11_001623F0") __attribute__((sda));
 extern void memset(void *, int, int) __asm__("FUN_001153fc");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
-extern int level_frame __asm__("D_L11_0015F5CC");
 extern int D_L11_0015FFD8;
 
 typedef struct {

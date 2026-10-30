@@ -772,7 +772,6 @@ void exit_hero_vehicle_mode_and_restore_moby(void) {
     }
     hero_set_state(HERO_STATE_IDLE, 1);
 }
-extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern s32 D_0013DF88[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8 __asm__("D_0015EEA8");
 

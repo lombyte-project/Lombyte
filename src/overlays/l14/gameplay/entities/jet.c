@@ -412,7 +412,6 @@ extern char shuttle_missing_target_error_format[] __asm__("D_L14_001FC840");
 extern s32 shuttle_enter_riding_transition_frames_gp __asm__("D_L14_00161B8C") __attribute__((sda));
 extern s32 shuttle_exit_riding_transition_frames_gp __asm__("D_L14_00161B90") __attribute__((sda));
 extern f32 shuttle_horizontal_rider_correction_limit_scale_gp __asm__("D_L14_00161B88") __attribute__((sda));
-extern f32 D_0015ED6C_lift __asm__("D_0015ED6C");
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -512,7 +511,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
                 fast_vec_sub(&delta, &rider->pos, &base);
                 delta.f[2] = 0.0f;
                 horizontal_rider_correction_distance = fast_vec_length(&delta);
-                max = shuttle_horizontal_rider_correction_limit_scale_gp * D_0015ED6C_lift;
+                max = shuttle_horizontal_rider_correction_limit_scale_gp * frame_time;
                 if (max < horizontal_rider_correction_distance)
                     horizontal_rider_correction_distance = max;
                 fast_vec_normalize(&hero.motion.platform_delta, &delta, horizontal_rider_correction_distance);
@@ -549,7 +548,6 @@ typedef struct {
     f32 period_inv;  /* 0x50C */
 } L14WindVars;
 extern char *D_L14_001600EC_w __asm__("D_L14_001600EC");
-extern f32 D_0015ED6C_w __asm__("D_0015ED6C");
 /* wind applied to the sparks: direction scaled by strength, and a weight */
 extern struct { f32 v; } D_L14_00162230, D_L14_00162234;
 extern s32 D_L14_00162238;
@@ -607,8 +605,8 @@ void update_wind_control(struct Moby *wind_control_moby) {
     }
     pos = (char *)&hero.motion.pos;
     if (is_point_inside_clip_volume(pos, wind_vars->clip_area) != 0) {
-        D_L14_00162230.v = fast_cos(wind_control_moby->rot.z) * (wind_effect_strength_gp * D_0015ED6C_w);
-        D_L14_00162234.v = fast_sin(wind_control_moby->rot.z) * (wind_effect_strength_gp * D_0015ED6C_w);
+        D_L14_00162230.v = fast_cos(wind_control_moby->rot.z) * (wind_effect_strength_gp * frame_time);
+        D_L14_00162234.v = fast_sin(wind_control_moby->rot.z) * (wind_effect_strength_gp * frame_time);
         D_L14_00162238 = 0;
         D_L14_00162240 = 1.0f;
         /* Fakematch: storing the weight again is a no-op that reload's cse drops, but the
@@ -626,7 +624,7 @@ void update_wind_control(struct Moby *wind_control_moby) {
             fast_dec_timer_s16(&wind_vars->period_timer);
             t = convert_integer_to_float(wind_vars->period_timer) * wind_vars->period_inv;
             wind_vars->pushing = 1;
-            k = D_0015ED6C_w;
+            k = frame_time;
             t = 1.0f - t;
             t = t * (wind_vars->push * k);
             wind_direction_or_push_delta[0] = fast_cos(wind_control_moby->rot.z) * t;
@@ -651,7 +649,7 @@ void update_wind_control(struct Moby *wind_control_moby) {
                 wind_vars->push_inv = 1.0f / (float)wind_vars->push_timer;
             }
         }
-        t = (wind_vars->push * D_0015ED6C_w - 0.0f) * (convert_integer_to_float(wind_vars->push_timer) * wind_vars->push_inv) + 0.0f;
+        t = (wind_vars->push * frame_time - 0.0f) * (convert_integer_to_float(wind_vars->push_timer) * wind_vars->push_inv) + 0.0f;
         wind_direction_or_push_delta[0] = fast_cos(wind_control_moby->rot.z) * t;
         wind_direction_or_push_delta[1] = fast_sin(wind_control_moby->rot.z) * t;
         wind_direction_or_push_delta[2] = 0.0f;
@@ -886,7 +884,6 @@ extern char looping_path_moby_missing_path_error_format[] __asm__("D_L14_001FCA9
 extern char looping_path_moby_empty_path_error_format[] __asm__("D_L14_001FCAD8");
 extern f32 mine_path_step_rate_gp __asm__("D_L14_00161C44") __attribute__((sda));
 extern f32 mine_glow_pulse_phase_step_gp __asm__("D_L14_00161C48") __attribute__((sda));
-extern f32 D_0015ED6C_mine __asm__("D_0015ED6C");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float FUN_L00_00257c48(float, float);
 extern int FUN_L00_0025d808_mine(void *, float *, int *, float *, int, float) __asm__("FUN_L00_0025d808");
@@ -947,7 +944,7 @@ void update_looping_path_moby(struct Moby *moby) {
         break;
     case MINE_STATE_FOLLOW_PATH:
         FUN_L00_0025d808_mine(D_L14_001B0BB0_mine[mine_vars->path], path_target_position, &mine_vars->segment, &mine_vars->along, 1,
-                              mine_path_step_rate_gp * D_0015ED6C_mine * mine_vars->dir);
+                              mine_path_step_rate_gp * frame_time * mine_vars->dir);
         FUN_L00_0025b8c0(&moby->pos.x, &mine_vars->vel[0], path_target_position[0], 0.02f, 0.2f, 0.0f);
         FUN_L00_0025b8c0(&moby->pos.y, &mine_vars->vel[1], path_target_position[1], 0.02f, 0.2f, 0.0f);
         FUN_L00_0025b8c0(&moby->pos.z, &mine_vars->vel[2], path_target_position[2], 0.02f, 0.2f, 0.0f);

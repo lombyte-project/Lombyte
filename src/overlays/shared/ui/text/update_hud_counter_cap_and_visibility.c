@@ -9,6 +9,8 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/gameplay/state/item_state.h"
 
 extern unsigned char D_0013E529[];
 void hud_update_counter(char *) __asm__("FUN_L00_00235ea0");
@@ -143,7 +145,6 @@ extern s32 D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern s32 D_L00_0015F72C __attribute__((sda));
 extern D00237ae8 l00_eight_slot_hud_selector_entries[] __asm__("D_L00_0017DAC0");
 extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
-extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
 void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) __asm__("FUN_L00_00237ae8");
 
 void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
@@ -887,7 +888,6 @@ extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern int pal_mode __asm__("D_0015ED80");
-extern s32 hero_max_health __asm__("D_0015EDA0");
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility_data/draw_health_hud_panel_2.h"
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility_data/draw_health_hud_panel.h"
 extern s32 health_hud_default_icon_offsets[1] __asm__("D_L00_0015F7F8") __attribute__((sda));

@@ -463,7 +463,6 @@ typedef struct P2d1428 {
 } P2d1428;
 extern s32 D_L00_0015F5CC;
 extern f32 D_0015ED70_alt __asm__("FUN_0015ED70");
-extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
 typedef struct G2d1428 {
     u8 p0[0x80];
     V2d1428 v80;
@@ -490,7 +489,6 @@ typedef union {
 extern s32 D_L00_001618D4_2d09b8 __asm__("D_L00_001618D4");
 extern s32 D_L00_001618D8_2d09b8 __asm__("D_L00_001618D8");
 extern s32 D_L00_0015FFBC __asm__("D_L00_0015FFBC");
-extern f32 D_0015ED6C_2d09b8 __asm__("D_0015ED6C");
 extern f32 D_L00_0015F5D0 __asm__("D_L00_0015F5D0");
 extern s32 D_001413DC_lui __asm__("D_001413DC") NOT_SDA;
 extern int D_001413D0[] NOT_SDA;
@@ -620,8 +618,8 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             fast_vec_sub(&launch, &spawn_pos, &moby->pos);
             launch.f[2] = 0.0f;
             speed = random_float_between(1.0f, 5.0f);
-            FUN_001ff500_2d09b8(speed * D_0015ED6C_2d09b8, &launch, &launch);
-            launch.f[2] = random_float_between(4.0f, 9.0f) * D_0015ED6C_2d09b8;
+            FUN_001ff500_2d09b8(speed * frame_time, &launch, &launch);
+            launch.f[2] = random_float_between(4.0f, 9.0f) * frame_time;
             particle = random_integer_below(2);
             spawned = spawn_crate_debris(moby, &launch, &spawn_pos, &spin, kind, particle, 1.0f, 1.0f);
             if (spawned) {
@@ -635,7 +633,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             spawn_pos.f[1] = random_float_between(-0.5f, 0.5f);
             spawn_pos.f[2] = random_float_between(0.0f, 1.0f);
             FUN_001ff278_2d09b8(&spawn_pos, &spawn_pos, &moby->pos);
-            speed = random_float_between(6.0f, 12.0f) * D_0015ED6C_2d09b8;
+            speed = random_float_between(6.0f, 12.0f) * frame_time;
             random_vector(speed, speed, &launch);
             if (launch.f[2] < 0.0f) launch.f[2] = -launch.f[2];
             spin.f[0] = random_angle_radians();
@@ -669,7 +667,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             speed = random_float_between(8.0f, 10.0f);
             __builtin_memcpy(colors, D_L00_001E9E80_2d09b8, sizeof(colors));
             __builtin_memcpy(other_colors, D_L00_001E9E98_2d09b8, sizeof(other_colors));
-            rise = speed * D_0015ED6C_2d09b8 - height * D_0015ED6C_2d09b8;
+            rise = speed * frame_time - height * frame_time;
             effect = colors + random_integer_below(6);
             velocity = other_colors + random_integer_below(6);
             first = FUN_001fef20_2d09b8(15);
@@ -785,7 +783,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
         }
         if (hit != 0) {
             acceleration_scale_or_speed = fast_vec_length(&vars->vel);
-            if (D_0015ED6C_c * 0.5f < acceleration_scale_or_speed) {
+            if (frame_time * 0.5f < acceleration_scale_or_speed) {
                 if (moby->oclass == 0x1F9 && moby->state == 1) {
                     moby->bBC = 0;
                     moby->state = 5;
@@ -2376,7 +2374,6 @@ void horny_toad_update(Moby *moby) {
     }
 }
 extern s32 D_L00_0015F5C4_2d5160 __asm__("D_L00_0015F5C4");
-extern f32 D_0015ED6C_2d5160 __asm__("D_0015ED6C");
 extern f32 D_L00_00161970_gp __asm__("D_L00_00161970") __attribute__((sda));
 extern f32 D_L00_00161974_gp __asm__("D_L00_00161974") __attribute__((sda));
 extern f32 D_L00_00161978_gp __asm__("D_L00_00161978") __attribute__((sda));
@@ -2429,7 +2426,7 @@ void process_horny_toad_hit_reaction(unsigned char *m) {
         /* Fakematch: register pins give retail's choices: 41 in $t0, the frame time and
            later 0.75 in $f4, the squared frame time first in $f0. */
         register s32 hit_state __asm__("$8") = 0x29;
-        register f32 frame_time_reg __asm__("$f4") = D_0015ED6C_2d5160;
+        register f32 frame_time_reg __asm__("$f4") = frame_time;
         register f32 knockback_scale __asm__("$f4");
         register f32 frame_time_sq_reg __asm__("$f0") = D_0015ED70;
         forceX = D_L00_00161970_gp * frame_time_sq_reg;
@@ -2438,7 +2435,7 @@ void process_horny_toad_hit_reaction(unsigned char *m) {
         forceW = D_L00_0016197C_gp * frame_time_reg;
         health = *(f32 *)(v + 0x20) - damage;
         v[0xAD] = 0;
-        duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
+        duration = frame_time + frame_time;
         *(s32 *)(v + 0x94) = hit_state;
         *(s32 *)(v + 0x90) = 0x200;
         knockback_scale = 0.75f;

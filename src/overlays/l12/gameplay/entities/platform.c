@@ -950,7 +950,6 @@ typedef struct {
     Vec4 pos;
 } AnklebiterHit;
 
-extern f32 D_0015ED6C_e3528 __asm__("D_0015ED6C");
 extern s32 D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
@@ -1010,8 +1009,8 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
             vars->health -= dmg;
             vars->unk130 = 0.008f;
             vars->unk134 = 0.0005f;
-            vars->unk138 = hoven_anklebiter_nonlethal_knockback_scale_gp * D_0015ED6C_e3528;
-            vars->unk13C = hoven_anklebiter_nonlethal_knockback_z_scale_gp * D_0015ED6C_e3528;
+            vars->unk138 = hoven_anklebiter_nonlethal_knockback_scale_gp * frame_time;
+            vars->unk13C = hoven_anklebiter_nonlethal_knockback_z_scale_gp * frame_time;
             vars->unk15D = 0;
             vars->unk144 = 9;
             vars->unk150 = 1.0f;
@@ -1019,8 +1018,8 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
             vars->unk158 = 1.0f;
             if (vars->health <= 0.0f) {
                 moby->flags &= ~0x1000;
-                vars->unk138 = D_0015ED6C_e3528 * 8.0f;
-                vars->unk13C = D_0015ED6C_e3528 * 10.0f;
+                vars->unk138 = frame_time * 8.0f;
+                vars->unk13C = frame_time * 10.0f;
                 help_direction_or_hit_position.q = coll->pos.q;
                 trooper_knockback_arc(&help_direction_or_hit_position, &angle, &vars->unk138, &vars->unk13C);
                 start_fall_e3528(moby, vars->fall, 6, 1, 0, angle);
@@ -2060,8 +2059,6 @@ typedef struct {
 } BlargTrooperHit;
 
 extern s32 D_001413D0_e81e0 __asm__("D_001413D0") NOT_SDA;
-extern f32 D_0015ED6C_e81e0 __asm__("D_0015ED6C");
-extern f32 D_0015ED70_e81e0 __asm__("D_0015ED70");
 extern void alert_group_e81e0(s32, s32) __asm__("FUN_L01_0026e090");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern BlargTrooperHit *find_hit_e81e0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
@@ -2123,7 +2120,7 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
             alert_group_e81e0(moby->group, 1);
         }
         vars->health -= dmg;
-        vars->unk80 = D_0015ED70_e81e0 * 30.0f;
+        vars->unk80 = frame_time_sq * 30.0f;
         vars->unkAD = 0;
         vars->unk94 = 9;
         vars->unkA0 = 1.0f;
@@ -2131,8 +2128,8 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
         vars->unkA8 = 1.0f;
         if (vars->health <= 0.0f) {
             moby->flags &= ~0x1000;
-            vars->unk88 = D_0015ED6C_e81e0 * 12.0f;
-            vars->unk8C = D_0015ED6C_e81e0 * 9.0f;
+            vars->unk88 = frame_time * 12.0f;
+            vars->unk8C = frame_time * 9.0f;
             help_direction_or_hit_position.q = coll->pos.q;
             trooper_knockback_arc(&help_direction_or_hit_position, &angle, &vars->unk88, &vars->unk8C);
             start_fall_e81e0(moby, vars->fall, 9, 1, 0, angle);
@@ -2142,8 +2139,8 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
             vars->unk67 = 0x78;
             anim_reset_e81e0(moby, vars->anim);
         } else {
-            vars->unk88 = D_0015ED6C_e81e0 * 4.7f;
-            vars->unk8C = D_0015ED6C_e81e0 * 7.7f;
+            vars->unk88 = frame_time * 4.7f;
+            vars->unk8C = frame_time * 7.7f;
             help_direction_or_hit_position.q = coll->pos.q;
             trooper_knockback_arc(&help_direction_or_hit_position, &unused, &vars->unk88, &vars->unk8C);
             start_fall_e81e0(moby, vars->fall, 6, 1, 0, unused);

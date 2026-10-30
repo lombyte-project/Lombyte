@@ -1266,7 +1266,6 @@ void spawn_forcefield_contact_effects(void *moby, void *data) {
     }
 }
 /* Fades the moby in, waits for its linked moby to be collected or gone, fades out and kills it; spins it all the while. */
-extern int D_L13_0015FFD8_n __asm__("D_L13_0015FFD8");
 extern int D_0015ED84_n __asm__("D_0015ED84");
 extern void stub_printf(char *, int, int) __asm__("FUN_001e93b0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
@@ -1295,7 +1294,7 @@ void forcefield_update(unsigned char *moby) {
         break;
     case FORCEFIELD_STATE_MONITOR_LINKED_MOBY:
         if (*(int *)forcefield_data != -1) {
-            unsigned char *linked_moby = (unsigned char *)(D_L13_0015FFD8_n + (*(int *)forcefield_data << 8));
+            unsigned char *linked_moby = (unsigned char *)(moby_base + (*(int *)forcefield_data << 8));
             if (linked_moby == 0 || linked_moby[0x20] == 0xFE || linked_moby[0x20] == 0xFD ||
                 (D_0014C190_257218[D_0015ED84_n][*(short *)(linked_moby + 0xB2) >> 5] >> (*(unsigned short *)(linked_moby + 0xB2) & 0x1F)) & 1) {
                 *(float *)(forcefield_data + 4) = 1.0f;
@@ -1361,7 +1360,6 @@ void purple_ship_update(Level13VendorMoby *moby) {
 /* Per-frame update: awards a stat/flag when its linked moby is gone, then sets a flag byte from a test. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4C10), where it is exact; names translated to the US level program. */
 
-extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern int help_request_state[] __asm__("D_L13_00179710");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -1383,7 +1381,7 @@ void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) {
             int linked_moby_index = *(int *)(data + 4);
             char *linked_moby;
             if (linked_moby_index != -1) {
-                linked_moby = D_L13_0015FFD8_m + (linked_moby_index << 8);
+                linked_moby = moby_base + (linked_moby_index << 8);
                 if (linked_moby != 0 && *(short *)(linked_moby + 0xA6) == 0xAA) {
                     int linked_moby_state = (unsigned char)linked_moby[0x20];
                     if (linked_moby_state == 0xFE)
@@ -1470,7 +1468,7 @@ void update_moby_state_relay(char *moby) {
     int found;
     int i;
     if (monitored_moby_index != -1) {
-        monitored_moby = D_L13_0015FFD8_m + (monitored_moby_index << 8);
+        monitored_moby = moby_base + (monitored_moby_index << 8);
     }
     switch (data[0x1C]) {
     case STATE_RELAY_INITIALIZE:
@@ -1494,7 +1492,7 @@ void update_moby_state_relay(char *moby) {
         if (found) {
             int idx2 = *(int *)(data + 0x10);
             if (idx2 != -1) {
-                char *o = *(char **)&D_L13_0015FFD8_m + (idx2 << 8);
+                char *o = *(char **)&moby_base + (idx2 << 8);
                 if (data[0x15] != -1)
                     o[0x20] = data[0x15];
                 if (data[0x17] != -1)
@@ -1518,7 +1516,7 @@ void update_moby_state_relay(char *moby) {
         if (found) {
             int idx2 = *(int *)(data + 0x10);
             if (idx2 != -1) {
-                char *o = *(char **)&D_L13_0015FFD8_m + (idx2 << 8);
+                char *o = *(char **)&moby_base + (idx2 << 8);
                 if (data[0x14] != -1)
                     o[0x20] = data[0x14];
                 if (data[0x16] != -1)

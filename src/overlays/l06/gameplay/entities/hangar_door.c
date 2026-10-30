@@ -297,7 +297,6 @@ void activate_listed_state_15_mobys_at_raised_positions(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC6D8), where it is exact; names translated to the US level program. */
 
 extern char D_L06_00167540[] NOT_SDA;
-extern f32 D_0015ED70_s __asm__("D_0015ED70");
 extern float FUN_00213f38(float *, float *, float, float, float, float);
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
@@ -316,7 +315,7 @@ int update_alien_queen_intro_camera(char *moby) {
         qcopy(output_position, D_L06_00167540);
         pos = moby + 0x10;
     } else {
-        blend_acceleration_step = *(float *)&D_0015ED70_s * 3.0f;
+        blend_acceleration_step = *(float *)&frame_time_sq * 3.0f;
         FUN_00213f38((float *)(data + 0x118), (float *)(data + 0x11C), 1.0f, blend_acceleration_step, blend_acceleration_step,
                      frame_time + frame_time);
         fast_vec_normalize(moby_offset_position, moby + 0xC0, 8.0f);
@@ -998,7 +997,6 @@ void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239
 extern unsigned char D_0013E633_2F69D0[] __asm__("D_0013F350");
 extern char D_0013E650_2F69D0[] __asm__("D_0013E550");
 extern unsigned char D_0013D5DD_2F69D0[] __asm__("D_001413F4");
-extern unsigned char D_0014C150_2F69D0[] __asm__("D_0014C050");
 extern int D_0015EE84_2F69D0 __asm__("D_0015ED84");
 extern char *D_L06_0016016C_2F69D0 __asm__("D_L06_001600EC");
 extern float D_0015EE70_2F69D0 __asm__("D_0015ED70");
@@ -1045,7 +1043,7 @@ void update_drawbridge(Moby *moby) {
 
     switch (moby->state) {
     case INITIALIZE_DRAWBRIDGE_SEGMENTS: {
-        int status = D_0014C150_2F69D0[moby->mission + (D_0015EE84_2F69D0 << 4)];
+        int status = visited52[moby->mission + (D_0015EE84_2F69D0 << 4)];
         if (status == 0xFF) {
             moby->state = 6;
             D_L06_00161D78_gp = 20.0f;

@@ -5,6 +5,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/panel_slots.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 /* Retail 0x002196b8..0x00219d77: draws the level-effect moby lists, then
    projects each enabled menu panel slot to the screen, renders panel
@@ -40,7 +41,6 @@ struct RenderPanel {
 };
 
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
-extern s32 panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
 
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void draw_mobys_setup(void) __asm__("FUN_0020d278");
@@ -154,7 +154,7 @@ void render_level_effects_and_screen_sprites(void) {
         projected_frame->projected_width = projected_width;
         projected_frame->projected_height = projected_height;
         append_screen_rect_packet(screen_x + 1, screen_y + 1, screen_x + projected_width - 1,
-                                  screen_y + projected_height - 1, panel_clear_color_gp, 0);
+                                  screen_y + projected_height - 1, panel_clear_color, 0);
     }
 
     for (pass = 0; pass < 2; pass++) {
@@ -206,7 +206,7 @@ void render_level_effects_and_screen_sprites(void) {
             configure_graphics_render_target_and_projection(texture_width_log2, texture_height_log2, pass != 0, 1.0f);
             texture_width = 1 << texture_width_log2;
             texture_height = 1 << texture_height_log2;
-            draw_hud_rect_depth(0, 0, texture_width, texture_height, panel_clear_color_gp, 0, 0);
+            draw_hud_rect_depth(0, 0, texture_width, texture_height, panel_clear_color, 0, 0);
             draw_result = panels[draw_slot_index]->draw(panels[draw_slot_index]);
             begin_draw_frame();
             if (draw_result & 1) {

@@ -4,6 +4,7 @@
 
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/gameplay/state/options.h"
 
 struct LoadMenuControllerState {
     u8 pad_0[0x1B4];
@@ -32,9 +33,6 @@ extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
 #include "rnc/storage/memory_card/memory_card_state.h"
 extern s16 D_0013E05A[];
 extern struct LoadMenuMixerState voice_pool __asm__("D_0013E550");
-extern s32 music_volume __asm__("D_0015EDEC");
-extern s32 sound_volume __asm__("D_0015EDF0");
-extern s32 selected_save_slot __asm__("D_0015EE34");
 extern void InitializeGlobalStateEntry(s32);
 extern s32 mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");

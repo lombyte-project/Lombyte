@@ -9,6 +9,7 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/state/options.h"
 
 
 
@@ -615,7 +616,6 @@ extern Hero52 hero52 __asm__("D_0013F350");
 extern char D_0013E633_2E16A0[] __asm__("D_0013CAE0");
 extern char D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
 extern unsigned char visited52[][16] __asm__("D_0014C050");
-extern int invert52 __asm__("D_0015EDDC");
 extern int D_0015ED84;
 extern CannonCamera52 camera_state_bytes __asm__("D_L08_00167480");
 extern short D_L08_00161A90_gp __asm__("D_L08_00161A90") __attribute__((sda));
@@ -1907,7 +1907,6 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int transform_attachment_pose(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern int queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern s32 level_bolts[] __asm__("D_0013DF38");
-extern s32 current_bolt_count __asm__("D_0015ED98");
 extern unsigned char *FUN_L00_002603d0(int);
 extern unsigned char *FUN_L00_00272060(float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
 extern unsigned char D_0014BEC0[][4];

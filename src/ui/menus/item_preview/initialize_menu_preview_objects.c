@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/gameplay/gadgets/hand_gadget.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 extern u8 D_00186310[];
-extern char preview_camera[] __asm__("D_00186F40");
 extern int active_class_resource_index __asm__("D_0015FF4C");
 extern void gadget_moby_update_noop() __asm__("FUN_00224b60");
 extern int noop_callback_e() __asm__("func_001E9410");

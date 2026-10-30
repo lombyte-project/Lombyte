@@ -13,6 +13,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */
@@ -161,7 +162,6 @@ extern int D_L04_00179590[] NOT_SDA;
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern unsigned char D_0013D4D4 NOT_SDA;
-extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
 extern unsigned short D_001417C2 NOT_SDA;
 extern unsigned short D_00141892 NOT_SDA;
 extern unsigned short D_001418D0 NOT_SDA;
@@ -193,7 +193,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
     case TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS:
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f0) != 0
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1
-            && D_0014C050_c[moby->mission + (current_level_index_macro << 4)] != 0xFF) {
+            && visited52[moby->mission + (current_level_index_macro << 4)] != 0xFF) {
             if (data->f14 == -1) {
                 struct UsageStat *usage = usage_stats.stat;
                 data->f14 = D_0015EEAC_macro;
