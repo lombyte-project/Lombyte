@@ -19,6 +19,15 @@
 #include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/entities/copy_hero_moby_field_38.h"
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball.h"
+#include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* pvars of the projectile moby FUN_L09_00307ba8 spawns */
 typedef struct {
@@ -35,7 +44,6 @@ typedef struct {
 
 extern OvlVec4 D_0013F3D0_307ba8 __asm__("D_0013F3D0");
 extern u8 *spawn_source_attached_fading_effect_particle(f32, struct Moby *, u32, s32, s32) __asm__("FUN_L00_0026daa0");
-extern void FUN_L00_00250df8_307ba8(struct Moby *) __asm__("FUN_L00_00250df8");
 
 struct Moby *spawn_class_4ea_projectile(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life) __asm__("FUN_L09_00307ba8");
 
@@ -77,7 +85,7 @@ struct Moby *spawn_class_4ea_projectile(void *owner, OvlVec4 *pos, OvlVec4 *vel,
         spawned_moby->alpha = 0x40;
         spawn_source_attached_fading_effect_particle(400000.0f, spawned_moby, 0x2F7F4F4F, trail, -1);
         spawn_source_attached_fading_effect_particle(160000.0f, spawned_moby, 0x4F7F7F7F, trail, -1);
-        FUN_L00_00250df8_307ba8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -96,8 +104,6 @@ typedef struct {
 extern OvlVec4 D_0013F3D0_307d68 __asm__("D_0013F3D0");
 extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
 extern char D_L09_00174000[] __asm__("D_L09_00174000");
-extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe *) __asm__("FUN_001efa68");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_0026dd20_307d68(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32,
                                     f32, s32, f32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
@@ -164,7 +170,7 @@ void update_class_4ea_projectile(struct Moby *projectile_moby)
         mark_moby_for_removal(projectile_moby);
         return;
     }
-    if (collision_line_307d68(&old, &projectile_moby->pos, 0, projectile_vars->owner, probe) == 0)
+    if (collision_line(&old, &projectile_moby->pos, 0, projectile_vars->owner, probe) == 0)
         return;
 
     qcopy(&projectile_moby->pos, &l09_projectile_impact_position);
@@ -187,11 +193,6 @@ void update_class_4ea_projectile(struct Moby *projectile_moby)
     collect_mobies_in_sphere(1.1f, &projectile_moby->pos, 0x10, projectile_moby, probe);
     mark_moby_for_removal(projectile_moby);
 }
-extern s32 get_first_moby_in_group(struct Moby **, s32, s32, s32) __asm__("FUN_L00_002591d0");
-extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
-extern struct Moby *get_moby_suck_cannon_record(struct Moby *) __asm__("FUN_L00_002db890");
-extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
-extern void FUN_L00_00250df8_30a778(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
 extern char spawner_child_respawn_failure_format[] __asm__("D_L09_00209280");
 
@@ -257,7 +258,7 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos)
             target->collision = target->pclass->collision;
         }
         copy_hero_moby_field_38(spawned_moby);
-        FUN_L00_00250df8_30a778(spawned_moby);
+        update_entity(spawned_moby);
         result = spawned_moby;
         data = suck_get_aim_height(result);
         if (data != 0) {
@@ -304,7 +305,6 @@ void process_spawner_hit_record(unsigned char *moby, char *spawner_vars) {
 /* Counts the live level-0x75E mobys among the 20 slots at +0xB0 and returns the last slot not counted. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030BEE8), where it is exact; names translated to the US level program. */
 
-extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 
 int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars) __asm__("FUN_L09_0030aae0");
 
@@ -503,7 +503,6 @@ void spawner_update(char *moby)
 /* Spawns a moby of class 0x75E and initialises its data. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030C658), where it is exact; names translated to the US level program. */
 
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_spawner_egg(int owner, void *initial_position, void *initial_velocity, unsigned char grow_held_moby, unsigned char owner_slot_index) {
     char *spawned_moby = (char *)create_moby(0x75E);
@@ -568,8 +567,6 @@ typedef struct {
 
 extern CollisionHit D_L09_00173FC0;
 
-extern s32 collision_line(void *, void *, s32, struct Moby *, s32) __asm__("FUN_001efa68");
-extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001fefc8(void *);
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");

@@ -34,6 +34,7 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/rendering/font_queue_vu_state.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/gameplay/trooper_take_damage.h"
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
@@ -96,7 +97,6 @@ struct L11HitInfo {
     struct Moby *moby;  /* 0x20: the moby that hit */
 };
 
-extern s32 trooper_take_damage(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void spawn_color_swapped_explosion_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f3e8");
 extern s32 is_moby_in_state_five(void *) __asm__("FUN_L11_0030a830");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");

@@ -7,6 +7,7 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259868), where it is exact; names translated to the US level program. */
 
@@ -14,7 +15,6 @@ typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
 
 extern Vec4 D_L00_00173E70;
 extern int D_L00_00173E40[];
-extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern Vec4 collision_hit_point __asm__("D_L00_00173E60");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
@@ -39,7 +39,7 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
         fast_vec_normalize(&reach, velocity, radius);
         fast_vec_add(&ray_end, &reach, pos);
         ray_end.a[2] += step_height;
-        if (collision_line(&ray_start, &ray_end, coll_flags, (int)moby, 0)) {
+        if (collision_line(&ray_start, &ray_end, coll_flags, moby, 0)) {
             fast_vec_sub(pos, (char *)&collision_hit_point, &reach);
             result = 1;
             *(float *)(moby + 0x18) -= step_height;
@@ -61,7 +61,7 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
     qcopy(&ray_end, position);
     ray_start.a[2] += step_height;
     ray_end.a[2] = radius - 0.05f;
-    if (collision_line(&ray_start, &ray_end, coll_flags | 2, (int)moby, 0)) {
+    if (collision_line(&ray_start, &ray_end, coll_flags | 2, moby, 0)) {
         if (D_L00_00173E40[7] > 0) {
             float surface;
             result |= 2;

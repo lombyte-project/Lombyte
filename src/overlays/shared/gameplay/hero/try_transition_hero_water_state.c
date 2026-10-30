@@ -1,5 +1,6 @@
 #include "sda.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/world/collision/collision_line.h"
 /* FUN_L00_00227778 split out of hero_set_state.c so it builds with the SN
    compiler on its own. */
 #include "types.h"
@@ -15,7 +16,6 @@ extern void queue_animation_update(int, int, void *, void *, void *, void *, int
 extern void hud_init_particles(void) __asm__("FUN_L00_00236268");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
 extern void draw_hud_stars(void) __asm__("FUN_L00_002365a8");
-extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 /* The same function under a void-returning prototype, as an older
    declaration of it would have read; see the 0x33 call below. */
 extern void hero_set_state_v(int, int) __asm__("FUN_L00_002223f8");

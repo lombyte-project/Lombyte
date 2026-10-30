@@ -8,6 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/overlay/shared/gameplay/entities/cutscene_set_camera_target.h"
 extern char D_0013F3D0[];
 extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA, D_001413DC NOT_SDA, D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
@@ -220,7 +221,6 @@ typedef struct {
 } G;
 
 extern G D_L05_0016CC60;
-extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void update_selected_moby_effects(unsigned char *m) __asm__("FUN_L05_0031d5c8");
 
@@ -245,7 +245,7 @@ void update_selected_moby_effects(unsigned char *m) {
                 int k = 3;
                 if (object_state < range_offset)
                     k = 0;
-                cutscene_set_camera_target((int)camera_target_table->m[k]);
+                cutscene_set_camera_target(camera_target_table->m[k]);
             }
         }
         break;

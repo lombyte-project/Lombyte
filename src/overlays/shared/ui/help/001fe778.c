@@ -13,6 +13,7 @@
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/overlay/shared/world/collision/find_camera_collision_volume_for_point.h"
 #include "rnc/sdk/library/sceVu0Normalize.h"
+#include "rnc/world/collision/collision_line.h"
 
 typedef struct {
     char pad[0x24];
@@ -74,7 +75,6 @@ extern u8 D_L15_00174440[] NOT_SDA;
 extern u8 D_L15_00174460[] NOT_SDA;
 
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
-s32 FUN_001efa68_c(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
@@ -125,7 +125,7 @@ void update_hero_ground_contact(void) {
         ground_ray_endpoint_offset = hero.capsule_radius * 2.9f;
     }
     hero_get_collision_ray_endpoints(&ground_ray_endpoint, &shared_ray_endpoint, k, ground_ray_endpoint_offset, -48.0f);
-    if (FUN_001efa68_c(&ground_ray_endpoint, &shared_ray_endpoint, 2, (s32)hero.moby, 0) == 0) {
+    if (collision_line(&ground_ray_endpoint, &shared_ray_endpoint, 2, hero.moby, 0) == 0) {
         goto tail;
     }
     collision_sound_class = coll_sound_class();
@@ -139,7 +139,7 @@ void update_hero_ground_contact(void) {
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
             hero.in_water_frames = 1;
         }
-        if (FUN_001efa68_c(&ground_ray_endpoint, &shared_ray_endpoint, 0x24, (s32)hero.moby, 0) == 0) {
+        if (collision_line(&ground_ray_endpoint, &shared_ray_endpoint, 0x24, hero.moby, 0) == 0) {
             goto d1;
         }
         collision_sound_class = coll_sound_class();
@@ -151,7 +151,7 @@ void update_hero_ground_contact(void) {
     if (hero.ground_type == 0x3) {
         hero.sink_surface_z = HH.point.f[2];
         ground_ray_endpoint.f[2] = HH.point.f[2] - 0.01f;
-        if (FUN_001efa68_c(&ground_ray_endpoint, &shared_ray_endpoint, 4, (s32)hero.moby, 0) == 0) {
+        if (collision_line(&ground_ray_endpoint, &shared_ray_endpoint, 4, hero.moby, 0) == 0) {
             goto d1;
         }
     }
@@ -242,7 +242,7 @@ d1:
         }
         transform_hero_polar_offset_to_world(&surface_probe_endpoint, 0.2f, surface_probe_angle, 0.45f);
         transform_hero_polar_offset_to_world(&unused_probe_vector, 0.2f, surface_probe_angle, -0.45f);
-        if (FUN_001efa68_c(&surface_probe_endpoint, &shared_ray_endpoint, 0x22, (s32)hero.moby, 0)) {
+        if (collision_line(&surface_probe_endpoint, &shared_ray_endpoint, 0x22, hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < absolute_float(f)) {

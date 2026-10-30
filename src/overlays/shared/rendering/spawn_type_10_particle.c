@@ -43,7 +43,6 @@ void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocit
 #endif
 #ifndef
 #endif
-extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L01_001B2538 NOT_SDA;
 char *spawn_type_14_particle(int particle_value, char *position_source) __asm__("FUN_L01_00280970");
 
@@ -64,7 +63,7 @@ char *spawn_type_14_particle(int particle_value, char *position_source) {
         *(float *)(particle + 0xC) = 29400.0f;
         particle[8] = random_integer_below(0xFF);
         particle[2] = *D_L01_001B2538;
-        *(short *)(particle + 0xA) = func_001F9850_80970(6);
+        *(short *)(particle + 0xA) = scale_game_frames(6);
         particle_data = (int *)(particle + 0x20);
         particle_data[2] = (int)position_source;
         particle_data[1] = 1;
@@ -221,7 +220,6 @@ typedef struct {
     float e[1][4];
 } List;
 
-float absolute_float(float input) __asm__("func_001F99C0");
 
 int select_point_index_by_distance(void *reference_point, List *point_list, float target) __asm__("FUN_L01_0028b510");
 int select_point_index_by_distance(void *reference_point, List *point_list, float target) {

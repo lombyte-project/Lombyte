@@ -20,6 +20,12 @@
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/l05/gameplay/hero/hero_set_state.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/ui/help/try_set_help_message.h"
 extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
 char *create_class_5c3_moby(int owner, char *initial_position, int arg, float initial_rotation_z, float initial_rotation_y) __asm__("FUN_L05_002d4168");
 
@@ -187,7 +193,6 @@ void update_moby_spatial_trigger(struct Moby *trigger_moby) {
 
 extern short D_L05_0015FFD8;
 extern void update_hydrodisplacer_faucet_pulse_color(void *) __asm__("FUN_L05_002f81b8");
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void hydrodisplacer_faucet_update(char *m) __asm__("FUN_L05_002f8080");
 void hydrodisplacer_faucet_update(char *faucet_moby) {
@@ -370,8 +375,6 @@ void hoverboard_update(unsigned char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0FC8), where it is exact; names translated to the US level program. */
 
-extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
-extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 
 void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 
@@ -416,7 +419,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
                     }
                 }
             }
-            get_next_moby_in_group((int *)&group_member_moby, (int)group_member_moby, 0, 0);
+            get_next_moby_in_group((int *)&group_member_moby, group_member_moby, 0, 0);
         }
     }
     if (*(int *)(od + 0x48) != -1) {
@@ -436,7 +439,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
                     }
                 }
             }
-            get_next_moby_in_group((int *)&proximity_candidate_moby, (int)proximity_candidate_moby, 0, 0);
+            get_next_moby_in_group((int *)&proximity_candidate_moby, proximity_candidate_moby, 0, 0);
         }
     }
 }
@@ -444,11 +447,9 @@ void add_moby_frames_for_group_proximity(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_001fff28(void *, int, float);
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 void draw_moby_wobble_quads(struct Moby *moby) __asm__("FUN_L05_0030c220");
 
 extern void draw_moby_wobble_quads(struct Moby *m) __asm__("FUN_L05_0030c220");
-void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void update_moby_wobble(unsigned char *moby) __asm__("FUN_L05_0030c0a8");
 
@@ -740,7 +741,6 @@ void initialize_moby_launch_motion(char *moby, int unused_source_moby, void *ini
 
 extern char D_L05_00174240[];
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 
 void blarg_gun_update(char *moby) __asm__("FUN_L05_003186f8");
 void blarg_gun_update(char *moby)
@@ -884,7 +884,6 @@ int advance_moby_path(char *moby) {
 /* Plays the sound that goes with the moby's current variant. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ABA0), where it is exact; names translated to the US level program. */
 
-s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void request_moby_variant_help_message(char *moby) __asm__("FUN_L05_00319690");
 

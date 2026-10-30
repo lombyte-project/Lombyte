@@ -19,6 +19,7 @@
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/gameplay/trooper_take_damage.h"
 
 /* Per-instance variables of the oClass 52 moby (moby->pvars). */
 typedef struct {
@@ -328,7 +329,6 @@ extern float D_0015ED70;
 #include "rnc/overlay/shared/gameplay/entities/seeker_data/update_seeker_damage_and_target.h"
 extern float D_L09_0016140C __attribute__((sda));
 extern int scale_time() __asm__("FUN_001f96b0");
-extern int fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -338,7 +338,6 @@ void trooper_knockback_arc(void *v, float *ang, float *s1, float *s2) __asm__("F
 void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void FUN_L01_0026e090_c(int i, int v) __asm__("FUN_L01_0026e090");
 extern void func_L00_0025E4B0_2C73D0(void *, void *) __asm__("FUN_L00_0025d458");
-extern int func_L00_0025B4D0_2C73D0(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void func_L00_0025BBA0_2C73D0(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void func_L00_0025D5B0_2C73D0(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void func_L01_0026F040_2C73D0(int, int) __asm__("FUN_L01_0026e090");
@@ -387,7 +386,7 @@ void update_seeker_damage_and_target(Moby *moby) {
     }
     damage = 0.0f;
     source = find_moby_hit(moby, 0x330000, 0);
-    response = func_L00_0025B4D0_2C73D0(moby, source, &data->health, 0, &hit, &damage, 0, 4);
+    response = trooper_take_damage(moby, source, &data->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 6) {
         data->health = data->health - damage;
         if (data->health <= 0.0f) {
@@ -591,7 +590,6 @@ extern Moby *D_L09_00160064_2E39E0 __asm__("D_L09_0015FFE4");
 extern float impulse __asm__("D_L09_001618C8") __attribute__((sda));
 extern float lift_2E39E0 __asm__("D_L09_001618CC") __attribute__((sda));
 extern unsigned char settings_2E39E0 __asm__("D_L09_001618D8") __attribute__((sda));
-extern int trooper_take_damage(Moby *, Hit_2E39E0 *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void FUN_L01_0026e090(int, int);
 extern void knock_2E39E0(Moby *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void explode_2E39E0(Moby *, int, int) __asm__("FUN_L00_00257470");

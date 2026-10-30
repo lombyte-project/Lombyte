@@ -16,6 +16,9 @@
 #include "rnc/overlay/shared/ui/text/print_text_with_texture_3.h"
 #include "rnc/ui/hud/remove_hud_item.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
+#include "rnc/overlay/shared/ui/hud/hud_frame.h"
+#include "rnc/overlay/shared/ui/text/draw_weapon_ammo_hud_panel.h"
+#include "rnc/ui/help/get_help_message_text.h"
 
 extern unsigned char D_0013E529[];
 void hud_update_counter(char *) __asm__("FUN_L00_00235ea0");
@@ -62,7 +65,6 @@ typedef struct {
 extern int D_L00_0015F760 __attribute__((sda));
 extern int D_L00_0015F764 __attribute__((sda));
 extern void apply_hud_slide_offset(HudElem_237840 *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
-extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 int hud_screen_position(HudElem_237840 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 
@@ -338,7 +340,6 @@ typedef struct { int id; char pad[0x14]; int item; } E_238C30;
 typedef struct { char pad[0x46]; short h46, h48; char pad4A[2]; } TI_238C30;
 
 extern unsigned char D_00141EA0[];
-extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 #include "rnc/overlay/level_labels.h"
 extern char D_L00_0015F7C8[];
 extern void * D_L00_0015FAC0;
@@ -675,7 +676,6 @@ extern Ent_239918 **D_L00_0015FAC0_c2 __asm__("D_L00_0015FAC0");
 extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
 extern Ids D_L00_0015F8C0_239918 __asm__("D_L00_0015F7E0");
 extern char D_L00_0017E5D8_239918[] __asm__("D_L00_0017E4D8");
-extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 extern int strlen_alt(int) __asm__("FUN_001166cc");
 extern int func_001FA8A8_239918(int, int, float) __asm__("FUN_001fa6e0");
 
@@ -800,7 +800,6 @@ typedef struct {
     short unk6;
 } HudCounter;
 
-extern int update_hud_animation_frame(char *) __asm__("FUN_L00_0023aaa8");
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 
 void update_health_hud_animation_and_visibility(HudElem *hud_element) __asm__("FUN_L00_00239630");
@@ -1256,7 +1255,6 @@ out:
     return hud_element->ret;
 }
 extern short D_00140986 NOT_SDA;
-void draw_cropped_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023b6c0");
 int draw_hud_cropped_gauge_panel(char *rec) __asm__("FUN_L00_0023a640");
 
 int draw_hud_cropped_gauge_panel(char *rec) {

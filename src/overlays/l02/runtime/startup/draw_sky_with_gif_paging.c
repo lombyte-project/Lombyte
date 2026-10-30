@@ -6,9 +6,9 @@
 #include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated.h"
 #include "rnc/rendering/sky/do_sky_gif_paging.h"
 #include "rnc/rendering/sky/setup_sky_gif_paging.h"
+#include "rnc/overlay/shared/rendering/sky/sky_particle_effects.h"
 
 
-extern void draw_four_sky_shells_with_animated_particles(void) __asm__("FUN_L00_002895a0");
 
 void draw_sky_with_gif_paging(void) __asm__("FUN_L02_00240048");
 

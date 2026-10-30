@@ -4,6 +4,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/world/collision/collision_line.h"
 
 
 
@@ -77,7 +78,6 @@ int find_closest_polygon_edge_point(float *out, float *p, float *poly, int n) __
 extern PathEl *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
 extern Coll D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
-extern int func_L00_001EFFF0_1F3010(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
 void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *params) __asm__("FUN_L04_001f30e0");
 
@@ -241,7 +241,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
         fast_vec_add(&ray_end, &moby->pos, &steer->pos);
         ray_start.z = ray_start.z + 1.5f;
         ray_end.z = 0.01f;
-        if (func_L00_001EFFF0_1F3010(&ray_start, &ray_end, 2, moby, 0) != 0) {
+        if (collision_line(&ray_start, &ray_end, 2, moby, 0) != 0) {
             if (D_L04_00174040_1F3010.hit > 0 && D_L04_00174040_1F3010.z > moby->pos.z) {
                 qcopy(&surface_normal, &D_L04_00174040_1F3010.normal);
                 length = fast_arc_tan(D_L04_00174040_1F3010.normal.z, vector_length_xy(&D_L04_00174040_1F3010.normal));

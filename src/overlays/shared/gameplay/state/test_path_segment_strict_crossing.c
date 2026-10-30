@@ -20,9 +20,6 @@ typedef struct {
 } SegmentPath_261968;
 
 extern SegmentPath_261968 *D_L00_001B04B0_261968[] __asm__("D_L00_001B04B0");
-extern void FUN_001ff2a8_261968(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
-extern f32 FUN_001ff3d8_261968(OvlVec4 *) __asm__("FUN_001f9af0");
-extern void FUN_001ff500_261968(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
 
 s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *end) __asm__("FUN_L00_00261968");
 
@@ -41,16 +38,16 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
     f32 zero;
 
     i = 1;
-    FUN_001ff2a8_261968(&direction, end, start);
+    fast_vec_sub(&direction, end, start);
     direction.i[2] = 0;
-    FUN_001ff500_261968(&direction, &direction, 1.0f / FUN_001ff3d8_261968(&direction));
+    fast_vec_normalize(&direction, &direction, 1.0f / fast_vec_length(&direction));
     clear_u64_value(&axis);
     axis.f[0] = direction.f[1];
     axis.f[1] = -direction.f[0];
     clear_u64_value(&origin);
     entry = &D_L00_001B04B0_261968[path_index];
     origin.f[2] = 1.0f;
-    FUN_001ff2a8_261968(&first, &(*entry)->points[0], start);
+    fast_vec_sub(&first, &(*entry)->points[0], start);
     transform_vector_by_basis(&first, &first, &direction);
     previous = &first;
     current = &next;
@@ -58,7 +55,7 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
         offset = 0x20;
         zero = 0.0f;
         do {
-            FUN_001ff2a8_261968(current, (OvlVec4 *)((u8 *)*entry + offset), start);
+            fast_vec_sub(current, (OvlVec4 *)((u8 *)*entry + offset), start);
             transform_vector_by_basis(current, current, &direction);
             if (first.f[3] != zero || next.f[3] != zero) {
                 if (next.f[1] * first.f[1] < 0.0f) {
@@ -163,12 +160,6 @@ typedef struct {
 } SegmentPath_261d78;
 
 extern SegmentPath_261d78 *D_L00_001B04B0_261d78[] __asm__("D_L00_001B04B0");
-extern void FUN_001ff278_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
-extern void FUN_001ff2a8_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
-extern f32 FUN_001ff398_261d78(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ab0");
-extern void FUN_001ff3c0_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ad8");
-extern f32 FUN_001ff3d8_261d78(OvlVec4 *) __asm__("FUN_001f9af0");
-extern void FUN_001ff500_261d78(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
 
 s32 resolve_point_path_segment_xy_clearance(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) __asm__("FUN_L00_00261d78");
 
@@ -190,31 +181,31 @@ s32 resolve_point_path_segment_xy_clearance(f32 distance, s32 path_index, OvlVec
         entry = &D_L00_001B04B0_261d78[path_index];
         if ((*entry)->points[i].f[3] == 0.0f && (*entry)->points[i + 1].f[3] == 0.0f)
             continue;
-        FUN_001ff2a8_261d78(&difference, &working, &(*entry)->points[i]);
+        fast_vec_sub(&difference, &working, &(*entry)->points[i]);
         difference.i[2] = 0;
-        FUN_001ff2a8_261d78(&segment, &(*entry)->points[i + 1], &(*entry)->points[i]);
+        fast_vec_sub(&segment, &(*entry)->points[i + 1], &(*entry)->points[i]);
         segment.i[2] = 0;
-        FUN_001ff500_261d78(&scaled_segment, &segment, 1.0f);
-        FUN_001ff3c0_261d78(&cross, &difference, &scaled_segment);
+        fast_vec_normalize(&scaled_segment, &segment, 1.0f);
+        fast_vec_cross(&cross, &difference, &scaled_segment);
         if (distance < absolute_float(cross.f[2]))
             continue;
         {
-            f32 segment_length = FUN_001ff3d8_261d78(&segment);
-            f32 projection = FUN_001ff398_261d78(&difference, &scaled_segment);
+            f32 segment_length = fast_vec_length(&segment);
+            f32 projection = fast_vec_dot(&difference, &scaled_segment);
             if (segment_length < projection || projection < 0.0f) {
-                if (!(FUN_001ff3d8_261d78(&difference) < distance))
+                if (!(fast_vec_length(&difference) < distance))
                     continue;
                 found = 1;
-                FUN_001ff500_261d78(&scaled_difference, &difference, distance);
-                FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[i]);
+                fast_vec_normalize(&scaled_difference, &difference, distance);
+                fast_vec_add(&working, &scaled_difference, &(*entry)->points[i]);
                 working.f[2] = point->f[2];
             } else {
                 found = 1;
-                FUN_001ff500_261d78(&scaled_cross, &scaled_segment, projection);
-                FUN_001ff2a8_261d78(&scaled_difference, &difference, &scaled_cross);
-                FUN_001ff500_261d78(&scaled_difference, &scaled_difference, distance);
-                FUN_001ff278_261d78(&scaled_difference, &scaled_difference, &scaled_cross);
-                FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[i]);
+                fast_vec_normalize(&scaled_cross, &scaled_segment, projection);
+                fast_vec_sub(&scaled_difference, &difference, &scaled_cross);
+                fast_vec_normalize(&scaled_difference, &scaled_difference, distance);
+                fast_vec_add(&scaled_difference, &scaled_difference, &scaled_cross);
+                fast_vec_add(&working, &scaled_difference, &(*entry)->points[i]);
                 working.f[2] = point->f[2];
             }
         }
@@ -233,11 +224,6 @@ typedef struct {
 
 extern SegmentPath_262030 *D_L00_001B04B0_262030[] __asm__("D_L00_001B04B0");
 extern char D_0013F5E0[];
-extern void FUN_001ff278_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
-extern void FUN_001ff2a8_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
-extern f32 FUN_001ff398_262030(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ab0");
-extern void FUN_001ff3c0_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ad8");
-extern f32 FUN_001ff3d8_262030(OvlVec4 *) __asm__("FUN_001f9af0");
 extern void FUN_001ff500_262030(f32, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9bf8");
 
 s32 resolve_point_path_segment_clearance(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) __asm__("FUN_L00_00262030");
@@ -267,7 +253,7 @@ s32 resolve_point_path_segment_clearance(f32 distance, s32 path_index, OvlVec4 *
     qcopy(&working, point);
     entry = D_L00_001B04B0_262030[path_index];
     offset = (s32)&(*(OvlVec4 *)D_0013F5E0);
-    original_height = FUN_001ff398_262030(&working, (OvlVec4 *)offset);
+    original_height = fast_vec_dot(&working, (OvlVec4 *)offset);
     i = 0;
     if (entry->count - 1 > found) {
         height_axis = (OvlVec4 *)offset;
@@ -276,35 +262,35 @@ s32 resolve_point_path_segment_clearance(f32 distance, s32 path_index, OvlVec4 *
             next = i + 1;
             if (((OvlVec4 *)((u8 *)entry + offset + 0x10))->f[3] != 0.0f || entry->points[next].f[3] != 0.0f) {
                 current = (OvlVec4 *)((u8 *)entry + (offset + 0x10));
-                FUN_001ff2a8_262030(&difference, &working, current);
-                FUN_001ff2a8_262030(&segment, (OvlVec4 *)((u8 *)entry + (offset + 0x20)), current);
-                projection = FUN_001ff398_262030(&difference, height_axis);
+                fast_vec_sub(&difference, &working, current);
+                fast_vec_sub(&segment, (OvlVec4 *)((u8 *)entry + (offset + 0x20)), current);
+                projection = fast_vec_dot(&difference, height_axis);
                 FUN_001ff500_262030(projection, &scaled_cross, height_axis);
-                FUN_001ff2a8_262030(&difference, &difference, &scaled_cross);
-                projection = FUN_001ff398_262030(&segment, height_axis);
+                fast_vec_sub(&difference, &difference, &scaled_cross);
+                projection = fast_vec_dot(&segment, height_axis);
                 FUN_001ff500_262030(projection, &scaled_cross, height_axis);
-                FUN_001ff2a8_262030(&segment, &segment, &scaled_cross);
+                fast_vec_sub(&segment, &segment, &scaled_cross);
                 FUN_001ff500_262030(1.0f, &scaled_segment, &segment);
-                FUN_001ff3c0_262030(&cross, &difference, &scaled_segment);
-                segment_length = absolute_float(FUN_001ff398_262030(&cross, height_axis));
+                fast_vec_cross(&cross, &difference, &scaled_segment);
+                segment_length = absolute_float(fast_vec_dot(&cross, height_axis));
                 if (distance < segment_length)
                     goto next_segment_262030;
-                segment_length = FUN_001ff3d8_262030(&segment);
-                projection = FUN_001ff398_262030(&difference, &scaled_segment);
+                segment_length = fast_vec_length(&segment);
+                projection = fast_vec_dot(&difference, &scaled_segment);
                 if (segment_length < projection || projection < 0.0f) {
-                    segment_length = FUN_001ff3d8_262030(&difference);
+                    segment_length = fast_vec_length(&difference);
                     if (!(segment_length < distance))
                         goto next_segment_262030;
                     FUN_001ff500_262030(distance, &scaled_difference, &difference);
-                    FUN_001ff278_262030(&working, &scaled_difference, current);
+                    fast_vec_add(&working, &scaled_difference, current);
                     found = 1;
                 } else {
                     found = 1;
                     FUN_001ff500_262030(projection, &scaled_cross, &scaled_segment);
-                    FUN_001ff2a8_262030(&scaled_difference, &difference, &scaled_cross);
+                    fast_vec_sub(&scaled_difference, &difference, &scaled_cross);
                     FUN_001ff500_262030(distance, &scaled_difference, &scaled_difference);
-                    FUN_001ff278_262030(&scaled_difference, &scaled_difference, &scaled_cross);
-                    FUN_001ff278_262030(&working, &scaled_difference, current);
+                    fast_vec_add(&scaled_difference, &scaled_difference, &scaled_cross);
+                    fast_vec_add(&working, &scaled_difference, current);
                 }
             }
 next_segment_262030:
@@ -312,9 +298,9 @@ next_segment_262030:
         } while (i < entry->count - 1);
     }
     if ((i = found)) {
-        projection = FUN_001ff398_262030(&working, &(*(OvlVec4 *)D_0013F5E0));
+        projection = fast_vec_dot(&working, &(*(OvlVec4 *)D_0013F5E0));
         FUN_001ff500_262030(original_height - projection, &segment, &(*(OvlVec4 *)D_0013F5E0));
-        FUN_001ff278_262030(saved_out, &working, &segment);
+        fast_vec_add(saved_out, &working, &segment);
     }
     return found;
 }
@@ -532,7 +518,6 @@ void clear_moby_transform_history(char *history_state) {
         *(int *)(history_state + 0x13C) = 0;
     }
 }
-float absolute_float(float) __asm__("FUN_001f99c0");
 float spring_angle(void *, void *, float, float, float, float,
                               int) __asm__("FUN_L00_0025bc98");
 void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");

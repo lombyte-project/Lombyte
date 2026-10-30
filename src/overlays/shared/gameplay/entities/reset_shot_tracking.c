@@ -5,6 +5,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E58), where it is exact; names translated to the US level program. */
 
@@ -33,7 +34,6 @@ extern float D_L02_00174460[];
 extern float FUN_L04_001f1978(float);
 extern float fast_vec_dist(void *, void *);
 extern int D_L02_0015F5CC MACRO_ADDR;
-extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern float D_L02_001600D0 __attribute__((sda));
 extern int D_L02_001600D4 __attribute__((sda));
 extern int D_L02_001600D8 __attribute__((sda));

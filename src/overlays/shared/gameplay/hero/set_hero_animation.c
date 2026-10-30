@@ -22,6 +22,7 @@
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/gameplay/animation/update_moby_animation_state.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
+#include "rnc/world/collision/collision_line.h"
 extern int lookup_s16_pair_value(int, int *) __asm__("FUN_L00_002321c0");
 
 /* With both objects at hero +0x1180 and +0x1184 present and the
@@ -522,7 +523,6 @@ typedef union {
 extern u8 coll_hit_normal[] __asm__("D_L00_00173E80") NOT_SDA;
 extern f32 collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
 extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_0025d238");
-extern s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
 
@@ -784,16 +784,14 @@ typedef union {
     u128_2332d0 q;
     float f[4];
 } Vec4_2332d0;
-float FUN_001f9dc8_002332d0(float) __asm__("FUN_001f9dc8");
-float FUN_001f9de0_002332d0(float) __asm__("FUN_001f9de0");
 float compute_hero_ground_aligned_heading(void) __asm__("FUN_L00_002332d0");
 
 float compute_hero_ground_aligned_heading(void) {
     float heading_rotation_matrix[16] __attribute__((aligned(16)));
     Vec4_2332d0 heading_direction, z_rotation_angles, y_rotation_angles, y_alignment_reference_vector;
     struct Hero *P;
-    heading_direction.f[0] = FUN_001f9dc8_002332d0(0.0f);
-    heading_direction.f[1] = FUN_001f9de0_002332d0(0.0f);
+    heading_direction.f[0] = fast_cos(0.0f);
+    heading_direction.f[1] = fast_sin(0.0f);
     heading_direction.f[2] = 0.0f;
     euler_rotation_matrix(heading_rotation_matrix, &hero.motion.rot);
     P = &hero;
@@ -815,7 +813,6 @@ float compute_hero_ground_aligned_heading(void) {
     }
     return fast_arc_tan(heading_direction.f[0], heading_direction.f[1]);
 }
-extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233CC0), where it is exact; names translated to the US level program. */
 
@@ -830,7 +827,7 @@ int resolve_hero_gravity_mode(void) {
 
     if (state == 0x3F || state == 0x71 || state == 0x70 ||
         (base->on_magnet_ground != 0 && D_0013D4DC[0] != 0 && state == 0 &&
-         base->air_frames.s < scale_ticks(4))) {
+         base->air_frames.s < scale_game_frames(4))) {
         return_value = 1;
     }
     return return_value;
@@ -916,8 +913,6 @@ struct G_00233708 {
     char pad2[0x20B3 - 0x2084];
     unsigned char mode;
 };
-float FUN_001f9dc8_00233708(float) __asm__("FUN_001f9dc8");
-float FUN_001f9de0_00233708(float) __asm__("FUN_001f9de0");
 void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Mtx *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *,
@@ -931,13 +926,13 @@ void add_hero_forward_offset(Vec4_00233708 *out, Vec4_00233708 *in, float offset
     switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         *(u128_00233708 *)out = *(u128_00233708 *)in;
-        out->x += FUN_001f9dc8_00233708(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
-        out->y += FUN_001f9de0_00233708(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
+        out->x += fast_cos(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
+        out->y += fast_sin(*(float *)(((char *)hero_base->moby) + 0x48)) * offset_scale;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        offset_vector.x = FUN_001f9dc8_00233708(0.0f) * offset_scale;
-        offset_vector.y = FUN_001f9de0_00233708(0.0f) * offset_scale;
+        offset_vector.x = fast_cos(0.0f) * offset_scale;
+        offset_vector.y = fast_sin(0.0f) * offset_scale;
         offset_vector.z = 0.0f;
         euler_rotation_matrix(&moby_rotation_matrix, ((char *)hero_base->moby) + 0x40);
         FUN_001f9d20_00233708(&offset_vector, &offset_vector, &moby_rotation_matrix);
@@ -1271,7 +1266,6 @@ typedef struct {
     int i3C;
 } Plat;
 extern char hero_233f80[] __asm__("D_0013F350");
-extern int scale_game_frames_233f80(int) __asm__("FUN_001f96f8");
 extern void scale_game_frames_v_233f80(int) __asm__("FUN_001f96f8");
 extern Plat *f_L00_002603d0(void *) __asm__("FUN_L00_002603d0");
 extern void probe_ground_height_cf(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
@@ -1314,7 +1308,7 @@ void update_hero_attachment(void) {
         mode = 1;
     } else if (((Hero_234800 *)hero_233f80)->p360 != 0) {
         mode = 1;
-        convert_integer_to_float(scale_game_frames_233f80(120) - ((Hero_234800 *)hero_233f80)->h30E);
+        convert_integer_to_float(scale_game_frames(120) - ((Hero_234800 *)hero_233f80)->h30E);
         scale_game_frames_v_233f80(120);
         amt = ((Hero_234800 *)hero_233f80)->h30E;
     } else {
@@ -1616,10 +1610,8 @@ typedef unsigned int u128_00234d40 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     float x, y, z, w_00234d40;
 } __attribute__((aligned(16))) Vec4_00234d40;
-void FUN_001f9a68_00234d40(Vec4_00234d40 *, void *, float) __asm__("FUN_001f9a68");
 void FUN_001f9a10_00234d40(Vec4_00234d40 *, Vec4_00234d40 *,
                            Vec4_00234d40 *) __asm__("FUN_001f9a10");
-float absolute_float(float) __asm__("FUN_001f99c0");
 void request_hero_target_pose(void *, float, int) __asm__("FUN_L00_00233ee8");
 void try_reposition_hero_on_nearby_ground(void) __asm__("FUN_L00_00234d40");
 
@@ -1627,7 +1619,7 @@ void try_reposition_hero_on_nearby_ground(void) {
     Vec4_00234d40 candidate_ground_position;
     struct Hero *hero_base = &hero;
     Vec4_00234d40 *pos = (Vec4_00234d40 *)&hero_base->motion.pos;
-    FUN_001f9a68_00234d40(&candidate_ground_position, hero_base->rot_matrix, -0.75f);
+    fast_vec_scale(&candidate_ground_position, hero_base->rot_matrix, -0.75f);
     FUN_001f9a10_00234d40(&candidate_ground_position, &candidate_ground_position, pos);
     candidate_ground_position.z += 0.5f;
     candidate_ground_position.z = probe_ground_height(&candidate_ground_position, 0, 0.5f);

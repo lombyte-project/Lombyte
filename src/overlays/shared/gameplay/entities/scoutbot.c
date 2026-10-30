@@ -32,6 +32,7 @@
 #include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/gameplay/trooper_take_damage.h"
 
 /* Scoutbot update: hovers at its post, flies to its target and back, calls reinforcements, shoots, dies. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D3DF8), where it is exact; names translated to the US level program. */
@@ -1100,7 +1101,6 @@ extern char paratrooper_invalid_jump_path_format[] __asm__("D_L08_001FC630");
 extern float D_L08_0015F580[4] MACRO_ADDR;
 extern float D_L08_0015F5D0;
 extern float D_L08_0015F5D4;
-extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00259888();
@@ -1130,7 +1130,6 @@ extern void FUN_L00_0025a120_c(void *) __asm__("FUN_L00_0025a120");
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
 extern void FUN_L01_0026d930_c(void *) __asm__("FUN_L01_0026d930");
 extern void FUN_L00_00259028_c(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
-extern int ray302618(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void FUN_L00_0025f730(void *, float);
 extern void FUN_L00_00258830_c(void *, void *, float, float, float, int) __asm__("FUN_L00_00258830");
 extern int damage302618(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -1302,7 +1301,7 @@ void blarg_paratrooper_update(char *moby) {
         } else if((*(unsigned char *)((char *)(moby)+0x70))&2) {
             qcopy(pos,moby+0x10); qcopy(attack_vector_or_ray_endpoint,target+0x10);
             pos[2]+=1.0f; attack_vector_or_ray_endpoint[2]+=0.75f;
-            ray302618(pos,attack_vector_or_ray_endpoint,0,moby,0);
+            collision_line(pos,attack_vector_or_ray_endpoint,0,moby,0);
             if(hops302618<data->f1DA) {
                 data->f1DA=0;
                 if((*(unsigned char *)((char *)(moby)+0x53))!=10) {
@@ -1440,7 +1439,6 @@ delete_moby:
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00303998), where it is exact; names translated to the US level program. */
-extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, void *, float *, float *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");

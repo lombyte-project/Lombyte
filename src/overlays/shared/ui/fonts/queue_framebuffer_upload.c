@@ -2,12 +2,12 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/rendering/vu1/vu1_tex_flush.h"
 
 /* Ported from rac1-decomp (src/game/draw.c: func_001F7680), where it is exact; names translated to the US level program. */
 
 extern unsigned char *D_L00_001611C0;
 extern int frame_size[] __asm__("D_0013E504");
-extern void vu1_tex_flush(void) __asm__("func_00233B68");
 
 #define PK ((unsigned char *)(*(int * *)&D_L00_001611C0))
 

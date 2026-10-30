@@ -31,6 +31,7 @@
 #include "rnc/overlay/shared/gameplay/hero/air_accel.h"
 #include "rnc/overlay/shared/input/pad/pad_pressed_within.h"
 #include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
+#include "rnc/overlay/shared/gameplay/entities/open_vendor_menu.h"
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/help_0023D688.c: func_L01_0023D688), where it is exact; names translated to the US level program. */
 
@@ -1605,7 +1606,6 @@ extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
-extern void open_vendor_menu(int) __asm__("FUN_L00_0029a6b0");
 
 int handle_hero_gadget_button(void) __asm__("FUN_L01_00240ed8");
 

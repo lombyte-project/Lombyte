@@ -8,10 +8,9 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 
 
-extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
-extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 
 /* Same routine as FUN_L05_00307010, with this level's data offsets. */
 void accumulate_moby_frames_in_group_bounds(struct Moby *moby) __asm__("FUN_L16_002cfc00");
@@ -57,7 +56,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
                     }
                 }
             }
-            get_next_moby_in_group((int *)&enumerated_moby, (int)enumerated_moby, 0, 0);
+            get_next_moby_in_group((int *)&enumerated_moby, enumerated_moby, 0, 0);
         }
     }
     if (*(int *)(od + 0x48) != -1) {
@@ -77,7 +76,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
                     }
                 }
             }
-            get_next_moby_in_group((int *)&group_candidate_moby, (int)group_candidate_moby, 0, 0);
+            get_next_moby_in_group((int *)&group_candidate_moby, group_candidate_moby, 0, 0);
         }
     }
 }

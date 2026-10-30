@@ -11,6 +11,7 @@
 #include "rnc/runtime/dma/calculate_dma_transfer_address.h"
 #include "rnc/textbin/world/data/select_world_object_resource_tables.h"
 #include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/overlay/shared/ui/text/draw_weapon_ammo_hud_panel.h"
 
 /* Opens the vendor screen for moby m in level lvl: sets up its camera, resets the screen state and runs it until it closes. */
 /* Ported from rac1-decomp (src/overlays/shared/update_002AFD00.c: func_L01_002AFD00), where it is exact; names translated to the US level program. */
@@ -36,7 +37,6 @@ extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
 extern void clear_hero_item_slot(int, int) __asm__("FUN_L00_0020fca8");
 extern void FUN_L00_00232fe8(void);
-extern void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 extern void load_scene_chunks_with_fade(int) __asm__("FUN_L00_002454c8");
 extern void fill_transfer_words() __asm__("FUN_001f97e8");
 extern void music_pause(s32);

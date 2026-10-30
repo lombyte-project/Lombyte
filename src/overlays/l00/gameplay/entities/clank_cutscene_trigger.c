@@ -22,16 +22,15 @@
 #include "rnc/rendering/sky/do_sky_gif_paging.h"
 #include "rnc/rendering/sky/setup_sky_gif_paging.h"
 #include "rnc/rendering/sky/sky_sprite_proc.h"
+#include "rnc/overlay/shared/rendering/sky/sky_particle_effects.h"
+#include "rnc/overlay/shared/rendering/sky/sky_shells_rotate_two.h"
 
 void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
 
 extern void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
 extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
-extern void draw_four_sky_shells_with_animated_particles(void) __asm__("FUN_L00_002895a0");
-extern void sky_shells_rotate_two(void) __asm__("FUN_L00_002899a8");
 extern void draw_sky_shells_with_fast_and_slow_rotation(void) __asm__("FUN_L00_00289a90");
 extern void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_00289bd8");
-extern void draw_three_sky_shells_with_three_particle_types(void) __asm__("FUN_L00_00289cb8");
 extern void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_0028a208");
 extern void draw_sky_shells_with_modulo_40000_rotation(void) __asm__("FUN_L00_0028a2f0");
 extern void draw_sky_shells_with_modulo_25000_rotation(void) __asm__("FUN_L00_0028a3a8");
@@ -42,7 +41,6 @@ extern void FUN_L00_0028ab08(void);
 extern void draw_three_sky_shells_with_particles(void) __asm__("FUN_L00_0028a920");
 extern void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) __asm__("FUN_L00_0028a998");
 extern void draw_two_sky_shells_with_particles(void) __asm__("FUN_L00_0028aa98");
-extern void render_three_shell_particle_sky(void) __asm__("FUN_L00_0028ac88");
 extern void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) __asm__("FUN_L00_0028b080");
 extern void draw_sky_shells_with_rotation_and_scaling(void) __asm__("FUN_L00_0028b1a0");
 

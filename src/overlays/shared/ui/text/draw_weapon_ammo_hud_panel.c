@@ -13,6 +13,8 @@
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/overlay/shared/gameplay/animation/hud_update_counter.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
+#include "rnc/gameplay/animation/apply_pending_animation.h"
+#include "rnc/overlay/shared/ui/hud/hud_frame.h"
 
 /* Draws the weapon HUD tile: three-part frame, weapon icon and ammo text with shadow, faded by the slide-in timers. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B140), where it is exact; names translated to the US level program. */
@@ -22,7 +24,6 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern s32 D_L00_0015F91C_gp __asm__("D_L00_0015F91C") __attribute__((sda));
 extern s32 D_L00_0015F920_gp __asm__("D_L00_0015F920") __attribute__((sda));
-extern void hud_frame(char *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 void font_print_right(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6940");
 
 extern short ammo_hud_frame_width_below_100 __asm__("D_L00_0015F924") __attribute__((sda));
@@ -186,7 +187,6 @@ extern H_23ac78 D_L00_0017E4D8 NOT_SDA;
 void update_weapon_hud_state(void) __asm__("FUN_L00_0023adb8");
 
 extern void update_weapon_hud_state(void) __asm__("FUN_L00_0023adb8");
-extern void apply_pending_animation(void *) __asm__("FUN_001ff418");
 
 int update_hud_elements(int call) __asm__("FUN_L00_0023ac78");
 

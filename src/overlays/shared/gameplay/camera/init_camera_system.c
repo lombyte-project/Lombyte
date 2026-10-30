@@ -38,7 +38,6 @@ s32 find_camera_record_by_id(s32 id) {
         return camera_record_address;
     }
 }
-float absolute_float(float) __asm__("FUN_001f99c0");
 float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_001eb328");
 float rope_spring_turn(float *spring_state, float current_angle, float target_angle, float response_gain, float damping_factor, float spring_state_limit) {
     float angle_difference = fast_subtract_rotations(target_angle, current_angle);
@@ -302,7 +301,6 @@ extern C_1ed6a8 D_L00_00166C80_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern OvlQuad D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
 extern OvlQuad g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
 extern int g_debug_menu_lui[] __asm__("D_L00_0016C058") NOT_SDA;
-extern float f9af0_1ed6a8(void *) __asm__("FUN_001f9af0");
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern int coll_sphere(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
@@ -329,7 +327,7 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
         return;
     }
     fast_vec_sub(step_delta, camera_position, camera_movement_origin_snapshot);
-    step_count = truncate_float_to_s32(f9af0_1ed6a8(step_delta) / (collision_radius * 0.9f)) + 1;
+    step_count = truncate_float_to_s32(fast_vec_length(step_delta) / (collision_radius * 0.9f)) + 1;
     divide_vector_xyz(step_delta, step_delta, convert_integer_to_float(step_count));
     qcopy(camera_position, camera_movement_origin_snapshot);
     for (i = 0; i < step_count; i++) {

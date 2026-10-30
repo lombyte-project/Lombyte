@@ -32,6 +32,10 @@
 #include "rnc/rendering/vu1/vu1_init_chain.h"
 #include "rnc/storage/memory_card/memcard_update_state.h"
 #include "rnc/ui/menus/save_data/run_state_handler.h"
+#include "rnc/gameplay/state/do_space_transition.h"
+#include "rnc/gameplay/state/tick_space_transition.h"
+#include "rnc/storage/stash/init_stash.h"
+#include "rnc/ui/hud/init_hud.h"
 
 /* Level main loop (shared by every level): clears the level's work area, sets up the level and counts the visit
    and play time of the planet, then runs one frame per pass, dispatching on the game mode, until the level asks to
@@ -49,12 +53,10 @@ extern long frm_clock_time __asm__("D_0015ED40");
 extern float D_L00_0015F5A8_macro[] __asm__("D_L00_0015F5A8") MACRO_ADDR;
 
 extern int debug_print(void *) __asm__("FUN_001e93b0");
-extern void init_stash(void) __asm__("FUN_00232d00");
 extern void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
 extern int load_level_assets_and_gameplay(int, int) __asm__("FUN_L00_00244110");
 extern void clear_dma_queue_entry(void) __asm__("FUN_001f0b88");
 extern void initialize_level_map_archive(void) __asm__("FUN_L00_002464a8");
-extern void init_hud(void) __asm__("FUN_001fee88");
 extern void load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
 extern void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
 extern int sce_gs_sync_v(int) __asm__("FUN_00122298");
@@ -84,11 +86,9 @@ extern long get_frame_texture(int) __asm__("FUN_001ffa10");
 extern void draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
 extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
 extern void reset_gs_registers_pr(void) __asm__("FUN_001f3958");
-extern void do_space_transition(void) __asm__("FUN_00231ff0");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern void music_pause(int) __asm__("FUN_00216050");
 extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
-extern void tick_space_transition(void) __asm__("FUN_00226e08");
 
 extern char level_startup_clear_end[] __asm__("D_L00_00165FB0");
 extern char level_startup_clear_start[] __asm__("D_L00_00161E00");

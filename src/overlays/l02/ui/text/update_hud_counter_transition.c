@@ -5,6 +5,7 @@
 #include "rnc/ui/hud/get_icon_frame.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
+#include "rnc/overlay/shared/ui/hud/hud_frame.h"
 
 
 
@@ -37,7 +38,6 @@ void update_hud_counter_transition(char *transition_state) {
 
 extern int hud_screen_position(HudElem *, int *, int *) __asm__("FUN_L00_00235a70");
 extern int sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
-extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_right(s32, s32, s32, char *, s32) __asm__("FUN_001f6940");
 extern s32 frame_size[] __asm__("D_0013E504");

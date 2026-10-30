@@ -43,6 +43,7 @@
 #include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
 #include "rnc/overlay/shared/gameplay/state/record_moby_context_bytes.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* A path of points: the point count, then 16-byte points whose w is the length of the segment to the next one */
 typedef struct {
@@ -491,7 +492,6 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
 #include "rnc/overlay/collision.h"
 
 extern CollisionHit collision_hit __asm__("D_L01_001742C0");
-extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern s32 FUN_L00_00257b90(s32, s32);
 
