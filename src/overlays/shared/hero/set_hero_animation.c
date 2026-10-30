@@ -748,20 +748,20 @@ void FUN_L00_00232fe8(void) {
 void FUN_L00_002330d0(void);
 
 void FUN_L00_002330d0(void) {
-    struct Hero *base = &hero;
+    struct Hero *hero_item_flag_clear_state = &hero;
     struct Hero *blk2;
     struct Hero *blk3;
     struct Hero *blk4;
     char        *hero_flag_target;
     int          i;
 
-    *(unsigned short *)(*(char **)&base->unkA88 + 0x34) &= ~1;
+    *(unsigned short *)(*(char **)&hero_item_flag_clear_state->unkA88 + 0x34) &= ~1;
     for (i = 0; i < 7; i++) {
-        if (*(char **)&base->items[i].moby != 0) {
-            *(unsigned short *)(*(char **)&base->items[i].moby + 0x34) &= ~1;
+        if (*(char **)&hero_item_flag_clear_state->items[i].moby != 0) {
+            *(unsigned short *)(*(char **)&hero_item_flag_clear_state->items[i].moby + 0x34) &= ~1;
         }
-        if (*(char **)&base->items[i].moby2 != 0) {
-            *(unsigned short *)(*(char **)&base->items[i].moby2 + 0x34) &= ~1;
+        if (*(char **)&hero_item_flag_clear_state->items[i].moby2 != 0) {
+            *(unsigned short *)(*(char **)&hero_item_flag_clear_state->items[i].moby2 + 0x34) &= ~1;
         }
     }
     blk2 = &hero;
