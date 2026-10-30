@@ -8,6 +8,9 @@
 #include "asm.h"
 #include "rnc/globals.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002DA990), where it is exact; names translated to the US level program. */
 
@@ -125,8 +128,6 @@ extern float D_L15_0015F448;
 extern float D_L15_0015F44C;
 extern float D_L15_0015F450;
 extern float D_L15_0015F454;
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int hero_is_near_ground(void) __asm__("FUN_L15_002d6770");
@@ -146,7 +147,6 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");

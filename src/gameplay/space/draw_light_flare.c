@@ -5,6 +5,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 extern void fast_mem_copy(void *, void *, int) __asm__("FUN_001f98d0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 typedef struct {
@@ -16,7 +17,6 @@ typedef struct {
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 extern int FUN_001fa820(void *, int *, float);
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float light_flare_corner_offsets[][4][4] __asm__("D_001D97D0");
 /* Draws a light flare quad at arg0's position (+0x00; the matrix is at
    +0xC0) when FUN_001fa820 finds it on screen, with the alpha it

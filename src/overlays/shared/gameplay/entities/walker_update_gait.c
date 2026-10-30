@@ -4,6 +4,8 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 int walker_gait_mask(float *a, float v) __asm__("FUN_L00_002a13f0");
 int walker_gait_mask(float *gait_record, float interval_value) {
@@ -158,8 +160,6 @@ extern float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float
 extern int walker_gait_animation_index_by_state[] __asm__("D_L00_001CA760");
 extern int find_nearest_animation_sequence_entry(char *a, float time) __asm__("FUN_L00_0024ed18");
 extern void debug_print() __asm__("FUN_001e93b0");
-f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
-f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 float compute_walker_time_to_landing(char *a, char *b) __asm__("FUN_L00_002a15c8");
 void reset_walker_gait_helpers(u8 *a0) __asm__("FUN_L00_002a1538");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");

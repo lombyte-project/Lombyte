@@ -17,6 +17,10 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
 typedef struct {
@@ -75,7 +79,6 @@ extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758")
 extern void initialize_npc_dialogue(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
 extern s32 update_npc_dialogue(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
@@ -83,8 +86,6 @@ extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
-extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void update_joint_animation(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
 
 extern WatcherReward talk_camera __asm__("D_L02_0016CE60") NOT_SDA; /* dialogue camera spot */
@@ -471,7 +472,6 @@ void skid_mcmarx_update(struct Moby *moby) {
 #include "qcopy.h"
 extern char *D_L02_001600EC_n __asm__("D_L02_001600EC");
 extern char *D_L02_0015FFD8_n __asm__("D_L02_0015FFD8");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -543,8 +543,6 @@ extern struct Moby *D_L02_0015FFD8;
 extern unsigned char D_0014C050[][16];
 extern char voice_pool[] __asm__("D_0013E550");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 /* Lift platform carried by an animated driver moby: follows the driver's joint 0, waits at an end (3/5) for the

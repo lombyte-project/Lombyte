@@ -15,6 +15,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/math/interpolation.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 /* Looks up the value of the current help record, or 0/0x54 in the special cases. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
@@ -415,7 +417,6 @@ extern CollisionHit coll_hit __asm__("D_L01_001742C0") NOT_SDA;
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void predict_position_with_vertical_drop(void *, void *, void *, int, float) __asm__("FUN_L00_00259508");
 extern char *FUN_L00_002603d0(char *);
-extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 
 /* Probes for a reachable ledge ahead of the hero and records its edge. */
@@ -912,7 +913,6 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
    FUN_L00_00211380; L01 has only the mode-0 and mode-3 cases and no b12E2 branch. */
 
 extern f32 D_0013F570[] __asm__("D_0013F570");
-f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void update_hero_collision_dimensions(void) {
     switch (hero.vehicle_mode) {
@@ -1079,7 +1079,6 @@ s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
-u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");

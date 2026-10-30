@@ -11,6 +11,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/rendering/clip_volume.h"
 typedef struct {
     Vec4f vel;
     s32 timer;
@@ -135,7 +136,6 @@ extern Entry_L02_0017A140 D_L02_0017A0C0[];
 
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern unsigned char D_0014C050[][16];
 extern unsigned char invert52[4] __asm__("D_0015EDDC");

@@ -10,6 +10,9 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/interpolation.h"
+#include "rnc/math/spherical_offset.h"
 
 
 
@@ -17,7 +20,6 @@
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E15A0), where it is exact; names translated to the US level program. */
 
 extern char D_L08_001675C0[];
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 int find_batalia_cannon_aim_target(struct Moby *moby) __asm__("FUN_L08_002e0228");
 
@@ -573,7 +575,6 @@ typedef struct CannonCamera52 { char pad0[0x160]; float mag0; int pad164, timer0
 char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
 char *create_moby_with_particles(int owner, float *position, float *rotation, int value) __asm__("FUN_L08_002e7eb0");
 extern char D_0013CAE0[];
-extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED70;
 extern int D_0013CAE4 NOT_SDA; /* no foreign declaration */
@@ -599,7 +600,6 @@ extern int divide_vector_xyz() __asm__("FUN_L00_001ff378");
 extern int FUN_L00_00211250();
 extern int FUN_L00_00257b90(int, int);
 extern s32 D_0015ED84;
-extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern u8 D_0014C050[];
 extern void FUN_L08_00230b38(int, int);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");

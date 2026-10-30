@@ -8,6 +8,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
@@ -272,7 +274,6 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_moby_bone_transform_c(char *, int, void *) __asm__("build_moby_bone_transform");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float update_plasmabot_aim_quaternion(char *moby, int flag, float angle) __asm__("FUN_L14_002b35d8");
 int follow_plasmabot_path(char *moby) __asm__("FUN_L14_002b3418");
 int count_listed_plasmabots_preparing_or_sweeping_beam(int index) __asm__("FUN_L14_002b3920");
@@ -1845,7 +1846,6 @@ extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/update_floating_mine.h"
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
 extern int trooper_take_damage(struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void explode_ff640(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
                           int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 

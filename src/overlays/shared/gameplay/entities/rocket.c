@@ -6,6 +6,8 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 
 typedef struct {
     float pad0[4];
@@ -114,12 +116,10 @@ typedef struct {
 
 extern unsigned char D_0013F350_cc2e8[] __asm__("D_0013F350");
 extern float lensq_cc2e8(void *) __asm__("FUN_L00_001ff430");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float spring_turn(float, float, float, float, float, float *) __asm__("FUN_L00_00258110");
 extern void build_spherical_offset(float, float, float, void *) __asm__("FUN_00214db0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void spawn_nearby_effect(float, int, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");

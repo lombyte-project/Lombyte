@@ -11,8 +11,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effect_texture.h"
 
-extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
@@ -100,10 +102,8 @@ extern char D_0013E533[];
 extern int FUN_L00_001fefc8(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int queue_starfighter_voice_line(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern unsigned char *fire_class_53_projectile(char *, char *) __asm__("FUN_L13_002ea6b8");
 extern void fire_starfighter_homing_rocket(void *, void *) __asm__("FUN_L13_002ea540");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern char voice_pool[] __asm__("D_0013E550");
 extern char D_0013F3D0[];
 extern char D_00140940[];
@@ -1362,7 +1362,6 @@ void purple_ship_update(Level13VendorMoby *moby) {
 
 extern int help_request_state[] __asm__("D_L13_00179710");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 extern unsigned char menu_item_enabled_115[] __asm__("D_0013D407");
 extern char D_00141968[];

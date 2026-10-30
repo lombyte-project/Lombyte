@@ -5,6 +5,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/math/spherical_offset.h"
 
 
 
@@ -15,7 +16,6 @@ extern char D_L03_0016C960[];
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void emit_level3_state5_moby_effects(void) __asm__("FUN_L03_0022c728");
 

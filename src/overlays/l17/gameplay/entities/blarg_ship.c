@@ -12,6 +12,10 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
@@ -25,7 +29,6 @@ extern int fleet_help_request_gate_state[] __asm__("D_L17_00179D10");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 extern unsigned char D_0013D408[];
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
@@ -325,7 +328,6 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 float D_L17_001623C0[4] __attribute__((section(".sdata"))) = {-0.5f, -1.0f, 1.0f, 1.0f};
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
-void vu1_add_g_sregister(s32 register_id, s64 value) __asm__("FUN_00233980");
 
 extern float D_L17_0016D3E4 NOT_SDA;
 extern float backdrop_quad_side_lengths[] __asm__("D_L17_001DDFF8");
@@ -448,7 +450,6 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
 extern float backdrop_shared_radius_numerator_gp __asm__("D_L17_001623D0") __attribute__((sda));
 extern float backdrop_offset_radius_divisor_gp __asm__("D_L17_001623D8") __attribute__((sda));
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 extern float backdrop_quad_uv_rotation_rate_factors[] __asm__("D_L17_001DDFE0");
 extern float backdrop_quad_color_blend_direction_multipliers[] __asm__("D_L17_001DE058");
@@ -847,7 +848,6 @@ void update_hit_triggered_fragment_spawner(struct Moby *moby) {
 /* Update moby 1876: waits for a trigger, then plays an effect and finishes. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6ED0), where it is exact; names translated to the US level program. */
 
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                               float *v11, float scale, float *v12);
 
@@ -940,7 +940,6 @@ extern char reflection_strip_uv_buffer[] __asm__("D_L17_001DE8A0");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 void compute_reflection_sphere_map_uvs(int n, V3 *b, V3 *a, int unused, float *out) __asm__("FUN_L17_002f54d8");
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 int D_L17_001623F0[2] = {26, 26};
 extern float D_L17_001DE150[];

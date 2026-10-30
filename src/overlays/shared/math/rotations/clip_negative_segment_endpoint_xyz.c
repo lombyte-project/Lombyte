@@ -9,6 +9,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/math/random.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
 typedef union {
     u128 q;
     f32 f[4];
@@ -480,7 +482,6 @@ extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern S6 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
 extern S6 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
@@ -490,7 +491,6 @@ extern void *spawn_debris(void *, void *, int, int, int) __asm__("FUN_L00_002af4
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
 extern char default_explosion_flash_descriptor[] __asm__("D_L00_001B0250");

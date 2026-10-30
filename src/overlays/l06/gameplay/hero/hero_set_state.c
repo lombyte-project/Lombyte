@@ -14,6 +14,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/voice_alloc.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00235E08.c: func_L06_00235E08), where it is exact; names translated to the US level program. */
 
@@ -44,7 +45,6 @@ extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int get_hero_help_value(int a) __asm__("FUN_L06_0021d0a0");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 struct HeroVelocityKey D_L06_0015F6E8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
 extern s32 D_L06_0015F688 __attribute__((sda));
 int D_L06_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};

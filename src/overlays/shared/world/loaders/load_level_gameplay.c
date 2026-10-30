@@ -8,6 +8,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 typedef struct {
     s32 a, b, c, off;
 } Ent;
@@ -430,7 +431,6 @@ extern float D_L00_0015F638  MACRO_ADDR;
 extern float D_L00_001604A4 MACRO_ADDR;
 extern float D_L00_00160F80 MACRO_ADDR;
 extern float D_L00_00160FE0 MACRO_ADDR;
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_0015ED84 MACRO_ADDR;
 extern int D_L00_0015EF54 MACRO_ADDR;
 extern char *level_root[2] __asm__("D_0015EE4C") MACRO_ADDR;

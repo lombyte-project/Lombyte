@@ -12,6 +12,10 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* Spawns a Gemlik moby that copies its look and transform from a source moby. */
 
@@ -317,7 +321,6 @@ extern char D_0013E533[];
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float fast_vec_dist(void *, void *);
 extern int FUN_L00_00257b90(int, int);
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern struct L13Ent00178480 l13_moby_hit_entries[] __asm__("D_L13_00178400");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 
@@ -797,7 +800,6 @@ extern void FUN_L00_00263ac8(float, struct Moby *, int, void *);
 extern void FUN_L01_0026d930(void *);
 extern void FUN_L13_00308d10_c(struct Moby *) __asm__("FUN_L13_00308d10");
 extern void FUN_L13_00309370_c(char *m) __asm__("FUN_L13_00309370");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 extern void func_L00_0025A8C0_30A9B0(void *, void *, int, void *, float) __asm__("FUN_L13_00265990");
 extern float D_L13_00161E58_gp __asm__("D_L13_00161E58") __attribute__((sda));
 extern float l13_blarg_space_commando_probe_trigger_distance_xy __asm__("D_L13_00161E74") __attribute__((sda));
@@ -1162,8 +1164,6 @@ extern f32 FUN_001f96b0_8d10(f32) __asm__("FUN_001f96b0");
 extern void trooper_start_knockback(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void stop_moby_sound_8d10(struct Moby *, s32, s32) __asm__("FUN_L00_00257470");
 extern s32 find_target_8d10(f32, struct Moby *, void *, s32, s32, s32 *, s32) __asm__("FUN_L00_0025ff38");
-extern s32 FUN_00214720_8d10(void *, s32) __asm__("FUN_00214720");
-extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 
 /* Walker update: takes hits (knocked back, or dies at no health), picks its target and falls onto or slides off the ground. */
@@ -1262,7 +1262,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
             || absolute_float(moby->pos.z - vars->target.z) > 3.0f) {
             vars->mode = 2;
         }
-        if (vars->target_moby != -1 && FUN_00214720_8d10(&vars->target, vars->target_moby) == 0) {
+        if (vars->target_moby != -1 && is_point_inside_clip_volume(&vars->target, vars->target_moby) == 0) {
             vars->mode = 2;
         } else {
             vars->target_moby = -1;
@@ -1321,7 +1321,6 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030A828), where it is exact; names translated to the US level program. */
 
 extern char gemlik_trail_direction_source[] __asm__("D_L13_00174180");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float gemlik_trail_spread_degrees_gp __asm__("D_L13_00161E80") __attribute__((sda));
 int D_L13_00161E84 = 150;
 
@@ -1694,7 +1693,6 @@ extern float D_0015ED70;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
@@ -1900,7 +1898,6 @@ int count_eligible_mobies_in_list(int moby_list_index, int excluded_moby_state) 
 /* Checks the moby's trigger lists and copies the configured state bytes into it. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C408), where it is exact; names translated to the US level program. */
 
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 void apply_configured_moby_state_and_command(struct Moby *moby) __asm__("FUN_L13_0030af50");
 

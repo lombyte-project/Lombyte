@@ -11,12 +11,13 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/interpolation.h"
+#include "rnc/rendering/clip_volume.h"
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void *FUN_00218888_72(void *, float *, float *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float approach_value(float, float, float *) __asm__("FUN_00213ed8");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 void draw_water_reservoir(struct Moby *moby) __asm__("FUN_L12_002ecac0");
 
@@ -337,7 +338,6 @@ void rocket_update(struct Moby *moby) {
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern char D_00141968_h[] __asm__("D_00141968");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");

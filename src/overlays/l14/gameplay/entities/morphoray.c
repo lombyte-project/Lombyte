@@ -3,6 +3,9 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
 int initialize_morphoray_private_state() __asm__("FUN_L14_00305a38");
 
 /* Level 14 moby classes: morphoray, button, blarg_heavy_interceptor. */
@@ -118,7 +121,6 @@ extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0
 extern char *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 void update_bouncing_spark(struct Moby *spark_moby) __asm__("FUN_L14_00300e00");
@@ -458,7 +460,6 @@ extern void update_morphoray_particles(struct Moby *) __asm__("FUN_L14_00305b18"
 extern f32 morphoray_ground_height_offset_gp __asm__("D_L14_001621E8") __attribute__((sda));
 extern f32 morphoray_yaw_step_gp __asm__("D_L14_001621EC") __attribute__((sda));
 extern f32 morphoray_position_offset_scale_gp __asm__("D_L14_001621F0") __attribute__((sda));
-extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
@@ -642,12 +643,10 @@ extern float helper_sequence_first_slot_offset __asm__("D_L14_001621FC") __attri
 extern float helper_sequence_owner_final_angle_degrees __asm__("D_L14_00162200") __attribute__((sda)); /* no foreign declaration */
 extern int helper_sequence_slot_animation_duration_frames __asm__("D_L14_00162204") __attribute__((sda)); /* no foreign declaration */
 extern int helper_sequence_owner_animation_duration_frames __asm__("D_L14_0016220C") __attribute__((sda)); /* no foreign declaration */
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 f32 interpolate_scalar_linear(f32 a, f32 b, f32 t) __asm__("FUN_L00_0025b6a8");
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 extern float interpolate_scalar_linear(float, float, float) __asm__("FUN_L00_0025b6a8");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern char D_0013E633_3071B0[] __asm__("D_0013E550");
 
 void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) __asm__("FUN_L14_00305d28");
@@ -897,7 +896,6 @@ extern void FUN_L14_00307510_6ee0(void *) __asm__("FUN_L14_00307510");
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern int FUN_L14_00307620_6ee0(void *) __asm__("FUN_L14_00307620");
 extern void FUN_L00_002502f0_6ee0(void *, int, int, int) __asm__("FUN_L00_002502f0");
@@ -1102,7 +1100,6 @@ extern int sample_path(char *path, float *out, void *pos, void *t, int dir, floa
 extern void cart_burst(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
 
 int update_flying_car_path_motion(struct Moby *moby) __asm__("FUN_L14_00307620");
 

@@ -5,6 +5,7 @@
 
 #include "eetypes.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* GIF packets that program the GS for the NTSC and PAL video modes. */
 extern u8 ntsc_graphics_setup_packet[0x70] __asm__("D_001D7E50");
@@ -28,7 +29,6 @@ extern u8 *parse_typed_resource_record(u8 *) __asm__("func_002270E8");
 extern void func_00228520(f32 *, f32 *);
 extern void func_00227A08(u32, s32, s32);
 extern void emit_selected_graphics_dma_packets(s32, s32, s32) __asm__("func_00227140");
-extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 extern void append_fullscreen_clear_strips(s64) __asm__("func_00227378");
 void submit_graphics_setup_command_stream(u8 *command_stream) __asm__("FUN_00227548");
 

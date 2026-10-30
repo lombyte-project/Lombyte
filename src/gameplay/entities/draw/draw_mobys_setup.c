@@ -4,6 +4,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/rendering/vu1_registers.h"
 
 extern u8 moby_draw_vu0_micro_program[] __asm__("D_00100080");
 extern u8 moby_texture_label[] __asm__("D_0015FED0");
@@ -11,7 +12,6 @@ extern s32 vu1_chain_limit __asm__("D_00160F08");
 extern void noop_core_callback_secondary() __asm__("func_001F21B8");
 extern void vu0_load_micro_program() __asm__("func_002334D8");
 extern void vu1_add_data_ref() __asm__("func_00233830");
-extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
 void draw_mobys_setup(void) __asm__("FUN_0020d278");
 

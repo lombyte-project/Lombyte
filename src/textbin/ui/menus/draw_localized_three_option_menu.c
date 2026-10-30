@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/ui/text/font_metrics.h"
+#include "rnc/rendering/effect_texture.h"
 
 struct ThreeOptionMenu {
     u8 pad0[0x20];
@@ -20,7 +21,6 @@ extern void disable_global_flag(void) __asm__("func_001F61F8");
 extern void enable_global_flag(void) __asm__("func_001F61E8");
 extern void font_print_center(s32, s32, u64, char *, s32) __asm__("func_001F6AF0");
 extern void draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");
-extern u64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void font_print(s32, s32, u64, char *, s32, s64, u8 *) __asm__("func_001F62B0");
 
 s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) __asm__("FUN_00222a98");

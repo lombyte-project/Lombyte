@@ -14,6 +14,10 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* Shuttle destination selection shared by its route helpers. */
 enum ShuttleStop {
@@ -44,11 +48,8 @@ enum RobotDogState {
 
 extern char D_L17_001676C0[];
 extern int D_L17_0015F5C4;
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern unsigned char D_0013E633[] __asm__("D_0013F3D0");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void door_update(struct Moby *m) __asm__("FUN_L17_002e87d8");
@@ -253,7 +254,6 @@ extern unsigned char D_00141968_x_q[] __asm__("D_00141968");
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
                                int) __asm__("FUN_L00_002598b0");
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale,
                                     void *src) __asm__("FUN_L00_00259888");
 
@@ -1544,7 +1544,6 @@ extern void emit_type_74_particles_from_moby_joints(void *, void *) __asm__("FUN
 extern void jet_group_state(int, int, int, int) __asm__("FUN_L13_002650a8");
 extern void FUN_L17_0021e530(int, int);
 extern void update_moby_class_flags_and_link(int, int, int, int) __asm__("FUN_L17_00253a90");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 #include "rnc/overlay/l17/gameplay/entities/door_data/fighter_jet_update.h"
 extern int D_L17_0015F608;
@@ -2297,7 +2296,6 @@ void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
 
 void update_robot_dog_glow_effects(struct Moby *moby) __asm__("FUN_L17_002f0210");
 
-f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") MACRO_ADDR;

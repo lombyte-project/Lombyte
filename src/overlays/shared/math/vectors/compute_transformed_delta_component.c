@@ -6,6 +6,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 
 
@@ -55,7 +59,6 @@ typedef struct {
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int generate_random_points_from_shape_entries(void *, int, void *, void *, float) __asm__("FUN_L00_0025aca0");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 void spawn_particles_at_shape_points(void *source_object, void *base_vector, void *point_source_mask) __asm__("FUN_L00_0025c398");
 
@@ -107,7 +110,6 @@ typedef struct {
     f32 f40;
     int w44;
 } B_25c558;
-float *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
@@ -149,8 +151,6 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 int solve_quadratic_equation(float *r0, float *r1, float a, float b, float c) __asm__("FUN_L00_002595a0");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_00259710(void *a);

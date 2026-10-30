@@ -16,6 +16,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* Gate states shared by the paired gate update callbacks. */
 enum GateState {
@@ -70,7 +75,6 @@ extern char *D_L10_0015FFD0_macro[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
@@ -93,7 +97,6 @@ extern float func_L00_0025CE58_2E0630(float *, float, float *, float, float, flo
 extern void func_L00_002607A8_2E0630(void *, float) __asm__("FUN_L00_0025f730");
 extern int func_L00_00259B08_2E0630(void *, void *, float, int, float, int) __asm__("FUN_L00_00258ad0");
 extern void func_00213DE0_2E0630(void *, int, int, int) __asm__("FUN_00212f90");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void func_L10_002E14F8_2E0630(void *) __asm__("FUN_L10_002e0138");
 extern float func_L00_0025CC58_2E0630(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern void approach_w(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
@@ -487,7 +490,6 @@ extern int D_L10_001600EC_2e01a8; /* no foreign declaration */
 extern int coll_sphere_mobys(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_001efa68_2e01a8(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_001fefc8(void *);
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void blend_moby_animation_2e01a8(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -500,7 +502,6 @@ void FUN_L00_00263ac8_2e01a8(float x, int a, int b, unsigned char *p) __asm__("F
 void update_class_1199_hit_reactions_and_targeting(Moby *moby) __asm__("FUN_L10_002e17c0");
 void FUN_L10_002e1cb0_2e01a8(unsigned char *moby) __asm__("FUN_L10_002e1cb0");
 extern Anim *D_L10_001600EC_2E1568 __asm__("D_L10_001600EC");
-extern int func_0022ED80_2E1568(int, int, void *) __asm__("FUN_0022da68");
 extern int func_L00_001EFFF0_2E1568(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 void FUN_L10_002e01a8(Moby *moby) {
@@ -656,7 +657,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         func_L00_0025CC58_2E0630(&moby->rot.y, 0, -fast_arc_tan(vector_length_xy(&vars->velocity), vars->velocity.z), frame_time * 6.2831855f);
         if (vector_distance_xy(&moby->pos, &target->pos) < D_L10_00161DFC) {
             if (absolute_float(moby->pos.z - ((Hero_2e01a8 *)((char *)&hero))->motion.pos.f[2]) < 2.0f) {
-                func_0022ED80_2E1568(0, 0, moby);
+                allocate_voice_for_target_entry(0, 0, moby);
                 moby->state = 8;
                 clear_u64_value(&vars->velocity);
                 if (moby->prev_seq != 2) func_00213DE0_2E0630(moby, 2, 4, scale_game_frames(5));
@@ -762,7 +763,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         func_L00_00259B08_2E0630(moby, &vars->velocity, 0.5f, 0x200, 0.0f, 0);
         if (dist < D_L10_00161DFC
             && absolute_float(D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z) < 1.0f) {
-            func_0022ED80_2E1568(0, 0, moby);
+            allocate_voice_for_target_entry(0, 0, moby);
             moby->state = 11;
             if (moby->prev_seq != 2) func_00213DE0_2E0630(moby, 2, 0, scale_game_frames(2));
             break;
@@ -928,7 +929,6 @@ void FUN_L00_0025ab48(OvlQuad *v, float *ang, float *s1, float *s2);
 void FUN_L00_0025d538(s32 id, void *s);
 extern Hit_2E2B80 *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern int func_0022ED80_2E2B80(int, int, void *) __asm__("FUN_0022da68");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 extern Path_2E2B80 *D_L10_001B0C30_2E2B80[] __asm__("D_L10_001B0930");
@@ -965,7 +965,7 @@ void update_class_1199_hit_reactions_and_targeting(struct Moby *moby)
                 data->f74 = 0.0005f;
                 data->f78 = D_0015ED6C * 7.0f;
                 data->f7C = D_0015ED6C * 10.0f;
-                func_0022ED80_2E2B80(2, 0, moby);
+                allocate_voice_for_target_entry(2, 0, moby);
                 if (hit_record->f30 & 1) {
                     knockback_angle = fast_arc_tan(hit_record->f10[0], hit_record->f10[1]);
                 } else {
@@ -1179,7 +1179,6 @@ float compute_toxic_crab_group_approach_angle(struct Moby *self) __asm__("FUN_L1
 
 extern float compute_toxic_crab_group_approach_angle(struct Moby *self) __asm__("FUN_L10_002e4840");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern int D_L10_0015F5CC;
@@ -2317,7 +2316,6 @@ extern char blarg_ship_missing_path_error_format[] __asm__("D_L10_001DD390");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float fast_vec_dist(void *, void *);
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 D_0015ED84;
 extern int D_L10_00161EE4 __attribute__((sda));
 extern float blarg_ship_rocket_speed_gp __asm__("D_L10_00161EE8") __attribute__((sda));
@@ -2333,7 +2331,6 @@ extern void FUN_L00_0025f730_c(void *, float) __asm__("FUN_L00_0025f730");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void FUN_L10_002e5968_c(char *m) __asm__("FUN_L10_002e5968");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern int D_0015ED84;
 
 void blarg_ship_update(Ship_5E48 *m) __asm__("FUN_L10_002e4a88");
@@ -2459,7 +2456,7 @@ void blarg_ship_update(Ship_5E48 *ship) {
             int far = is_value_within_interpolated_window((char *)ship, 16.0f);
             if (near || far) {
                 FUN_L00_0024f7c8(ship, far == 0, &C);
-                build_spherical_offset_c(&B, 1.0f, ship->f48, -ship->f44);
+                build_spherical_offset(&B, 1.0f, ship->f48, -ship->f44);
                 add_vectors(&D, &C, &B);
                 fast_vec_sub(&B, &A, &C);
                 fast_vec_normalize(&B, &B, blarg_ship_rocket_speed_gp * D_0015ED6C);
@@ -2657,7 +2654,6 @@ extern f32 directional_particle_speed_range_start_gp __asm__("D_L10_00161EFC") _
 extern s32 directional_particle_variant_threshold_percent_gp __asm__("D_L10_00161F04") __attribute__((sda));
 extern f32 frame_time_absolute __asm__("D_L10_0015ED6C") MACRO_ADDR;
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_L10_001f2578");
-extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
 extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern unsigned char *spawn_gravity_floor_burst_particle(void *, void *, s32, f32, f32, f32, s32, s32, s32) __asm__("FUN_L00_002738e8");
 
@@ -2866,7 +2862,6 @@ extern int hero_inside_conditional_help_volume __asm__("D_L10_00161F38") __attri
 extern unsigned char D_0013D504[];
 extern unsigned char D_00141B20[];
 s32 FUN_L00_00203908(s32 a, s32 b);
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern char D_0013E633_2E9978[] __asm__("D_00141B20");
 extern unsigned char D_0014171B_2E9978[] __asm__("D_0013D504");
 extern unsigned char D_0013D5CA_2E9978[] __asm__("D_0015EEA4") __attribute__((sda));
@@ -3157,7 +3152,6 @@ extern LevelState D_L10_001BB6B0_e9648 __asm__("D_L10_001BB6B0");
 extern int D_0014C190_e9648[][64] __asm__("D_0014C190");
 extern unsigned char D_001413F4_e9648[] __asm__("D_001413F4");
 extern unsigned char D_0013DD4C_e9648[] __asm__("D_0013DD4C");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 
 /* Level 10 door: swings open once the hero enters its clip volume and sets its save bit; starts open when the bit is already set. */

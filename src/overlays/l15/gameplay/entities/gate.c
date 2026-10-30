@@ -10,6 +10,11 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 
 
@@ -67,9 +72,6 @@ typedef struct {
 } CollectedFlags;
 
 extern CollectedFlags D_L15_001BB830_29aff0 __asm__("D_L15_001BB830");
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern u8 D_0013F3D0[];
 extern char D_L15_001673C0[];
 extern char voice_pool[] __asm__("D_0013E550");
@@ -228,8 +230,6 @@ extern float D_0015ED6C;
 extern float vertical_gate_travel_distance_gp __asm__("D_L15_001614F8") __attribute__((sda));
 extern int D_L15_00161AC0;
 extern unsigned char D_001413F4[];
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern unsigned char D_0013DD50 NOT_SDA;
 extern unsigned char D_0013F3D0_2A48B0[] __asm__("D_0013F3D0");
 extern char D_L15_00167440_2A48B0[] __asm__("D_L15_001673C0");
@@ -401,7 +401,6 @@ typedef struct {
     s32 sound;        /* 0x18 */
 } DoorVars;
 
-extern void *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern char *D_L15_0015FFE4;
 extern struct Moby *D_L15_0015FFD8;
 extern f32 swinging_door_swing_angle_degrees_gp __asm__("D_L15_001614FC") __attribute__((sda));
@@ -1868,10 +1867,8 @@ extern float spring_turn(float *vel, float cur, float target, float k, float d, 
 extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g);
 extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
 extern float compute_ultramech_flocking_steering_point(void *, void *, float) __asm__("FUN_L15_002cf110");
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
 extern int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, void *f, int n) __asm__("FUN_L00_00259d08");

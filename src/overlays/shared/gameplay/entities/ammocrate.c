@@ -6,6 +6,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002BB2F8), where it is exact; names translated to the US level program. */
 
@@ -282,9 +284,7 @@ frame_tail:
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E7E90), where it is exact; names translated to the US level program. */
 
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
-extern void *suck_get_aim_height(char *) __asm__("FUN_002141f8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *target, char *initial_rotation, int lifetime_frames,
                                 float scale) __asm__("FUN_L13_002e6a58");

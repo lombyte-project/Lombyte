@@ -12,6 +12,9 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 /* Record suck_get_aim_height returns for a moby: collision size and aim height. */
 typedef struct MobyBound {
@@ -23,8 +26,6 @@ typedef struct MobyBound {
 
 extern struct Moby *suck_moby_list __asm__("D_L00_0015FFE4");
 extern u8 D_L00_00166DC0[];
-void build_spherical_offset(Vec4 *, float, float, float) __asm__("FUN_00214db0");
-MobyBound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 int collision_line(void *, Vec4 *, int, void *, int) __asm__("FUN_001efa68");
 
 /* Picks the best auto-aim target moby (kind 5) for a shot from pos along dir:
@@ -160,7 +161,6 @@ typedef struct {
     u64 a, b, c, d;
 } Pk;
 extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
-u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L00_001B0470[4][4] NOT_SDA;
 void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) __asm__("FUN_L00_00263618");

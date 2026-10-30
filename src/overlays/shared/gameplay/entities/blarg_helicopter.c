@@ -13,6 +13,12 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/interpolation.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_00292AC0), where it is exact; names translated to the US level program. */
 
@@ -142,7 +148,6 @@ extern char spawner_spawn_failure_format[] __asm__("D_L03_001E2FA0");
 extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 extern SpawnTarget *get_moby_suck_cannon_record(struct Moby *) __asm__("FUN_L00_002db890");
 extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
-extern SpawnSound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern void debug_print() __asm__("FUN_001e93b0");
 
 /* Spawner: revives the first free pooled child (of class oclass, -1 = any) at a copy of at, counts the live children, returns the revived one or NULL. */
@@ -301,7 +306,6 @@ typedef struct {
     float f2C;
 } Hit_2C0330;
 extern void FUN_L00_0025a120_2bef68(void *) __asm__("FUN_L00_0025a120");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -311,7 +315,6 @@ extern void FUN_L00_00263fd8_2bef68(void *, int, void *, void *, int, int, float
 extern void memset(void *, int, int) __asm__("FUN_001153fc");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int rand(void) __asm__("FUN_001160d8");
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void FUN_L00_001ff290_2bef68(void *, void *, void *) __asm__("FUN_L00_001ff290");
@@ -941,7 +944,6 @@ typedef struct {
 
 char *spawn_homing_spark_projectile(char *a, char *pos, int c, int d, float f) __asm__("FUN_L03_002d5208");
 extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8") __attribute__((sda));
-extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern float D_0015ED6C;
 extern float D_0015ED70;
@@ -954,7 +956,6 @@ extern float blarg_helicopter_bob_amplitude __asm__("D_L03_00161998") __attribut
 extern float blarg_helicopter_path_min_speed_gp __asm__("D_L03_0016199C") __attribute__((sda));
 extern int FUN_L00_001fff28();
 extern int FUN_L00_00258110();
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
@@ -966,7 +967,6 @@ extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void attach_manipulator(int, int, void *) __asm__("FUN_0020cb10");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void detach_manipulator(int, void *) __asm__("func_0020CB88");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 s32 FUN_L00_0025df68(s32 *path, void *point, void *nearest, f32 *fraction, s32 *segment, s32 wrap, f32 limit, f32 step, f32 height_tolerance);
 void record_moby_hit(unsigned char *m, void *src) __asm__("FUN_L00_00259a88");
 void manipulator_set_scale(char *p, float x) __asm__("FUN_L00_00263b38");
@@ -982,12 +982,10 @@ extern float spring_turn(float*,float,float,float,float,float) __asm__("FUN_L00_
 extern void func_L00_001FFED8_2CDDC8(void*,int,float) __asm__("FUN_L00_001fff28");
 extern float func_00214D28_2CDDC8(float*,float,float) __asm__("FUN_00213ed8");
 extern float func_001F9878_2CDDC8(float) __asm__("FUN_001f96b0");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern char *spawn_homing_spark_projectile(char*,char*,int,int,float) __asm__("FUN_L03_002d5208");
 extern void func_L00_002514B8_2CDDC8(void*) __asm__("FUN_0020d580");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern char D_0013E633_2CDDC8[] __asm__("D_0013E533");
 extern void func_L00_001FF240_2CDDC8(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void func_L00_002584A8_2CDDC8(void *, int, int) __asm__("FUN_L00_00257470");
@@ -1280,7 +1278,6 @@ void blarg_helicopter_update(HMob49 *moby) {
 /* Moby update: advance a timer from a collision query, switch state, aim head angles. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002CF600), where it is exact; names translated to the US level program. */
 
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 
 void handle_blarg_helicopter_hits(char *helicopter_moby) {
@@ -1735,7 +1732,6 @@ extern unsigned char *D_L03_0015FFD8 __attribute__((sda));
 extern char D_L03_001E3628[], D_L03_001E3660[], D_L03_001E3690[];
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void debug_print(void *) __asm__("FUN_001e93b0");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void attach_cutscene_fixed_scale_manipulator(void *) __asm__("FUN_L01_002fb4b8");

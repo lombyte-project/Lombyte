@@ -15,6 +15,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */
@@ -161,7 +162,6 @@ typedef struct {
 
 extern int D_L04_00179590[] NOT_SDA;
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern unsigned char D_0013D4D4 NOT_SDA;
 extern unsigned short D_001417C2 NOT_SDA;
 extern unsigned short D_00141892 NOT_SDA;

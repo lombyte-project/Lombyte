@@ -10,6 +10,7 @@
 #include "rnc/globals.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/random.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
 /* Resets the follow camera to its defaults: springs the orbit and target
@@ -122,7 +123,6 @@ extern f32 follow_camera_vehicle_orbit_height_gp __asm__("D_L00_00161DA0") __att
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_setup_data/follow_camera_apply_overrides.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 collect_mobies_in_sphere(void *, s32, s32, s32, f32) __asm__("FUN_L00_001f2868");
 extern void set_follow_camera_angle_blend_from_direction(f32 *, f32, f32) __asm__("FUN_L00_002e8918");
 extern void set_follow_camera_angle_blend_from_position(void *, f32, f32) __asm__("FUN_L00_002e8970");

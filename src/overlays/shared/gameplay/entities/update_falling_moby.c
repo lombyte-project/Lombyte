@@ -7,6 +7,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/rendering/clip_volume.h"
 
 
 
@@ -115,7 +116,6 @@ void smooth_transform_orientation_toward_hero(char *transform_state) {
     fast_vec_normalize(transform_state + 0x10, transform_state + 0x10, 1.0f);
     fast_vec_cross(transform_state + 0x20, transform_state + 0x10, transform_state);
 }
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 
 int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_object) __asm__("FUN_L03_002e8870");
 

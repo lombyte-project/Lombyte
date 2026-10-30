@@ -8,6 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* Runs the two per-entry update calls over a 13-entry table. */
 
@@ -52,7 +53,6 @@ extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void queue_batalia_eight_textured_batches(int) __asm__("FUN_L08_00308db8");
 extern void queue_batalia_six_textured_batches(int) __asm__("FUN_L08_00308e90");
 extern void queue_batalia_offset_textured_batches(int) __asm__("FUN_L08_00308f68");
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void queue_batalia_textured_batch_passes(void) __asm__("FUN_L08_00309030");
 

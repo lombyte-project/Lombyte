@@ -11,6 +11,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
@@ -165,7 +167,6 @@ typedef struct {
     Vec v40;         /* 0x40 */
 } StTab;
 
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 float probe_leg_rig_ground_height(float *pos) __asm__("FUN_L04_002922d0");
 extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
 
@@ -336,7 +337,6 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
 }
 typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) RigVec;
 
-extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 extern s32 rig_pick_mode(struct Moby *, LegRig *, f32) __asm__("FUN_L04_002927d0");
 extern f32 spring_turn(f32 cur, f32 target, f32 k, f32 d, f32 max, f32 *vel) __asm__("FUN_L00_00258110");
 extern void rig_animate(struct Moby *, LegRig *, s32, f32) __asm__("FUN_L04_00292d48");
@@ -518,7 +518,6 @@ u8 D_L04_001CA938[13][4] = {
     {0xf, 0, 0, 0},
     {0x14, 0, 0, 0},
 };
-extern float compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 extern int rig_pick_mode(struct Moby *m, LegRig *rig, float t) __asm__("FUN_L04_002927d0");
 
 void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_00295de8");

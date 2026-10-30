@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/audio/voice_alloc.h"
 struct MobyVoiceFlags {
     u8 pad_0[0x7C];
     u8 unk7C;
@@ -12,7 +13,6 @@ struct MobyVoiceEntry {
 };
 
 extern u8 voice_pool[] __asm__("D_0013E550");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 void update_moby_voice(struct MobyVoiceFlags *moby) __asm__("FUN_0020c940");

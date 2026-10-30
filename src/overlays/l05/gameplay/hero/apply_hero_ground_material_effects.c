@@ -8,6 +8,7 @@
 #include "rnc/overlay/collision.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 int FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
 int FUN_001f0b58_239fc0(void) __asm__("FUN_001f0b58");
@@ -128,7 +129,6 @@ s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
-u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");

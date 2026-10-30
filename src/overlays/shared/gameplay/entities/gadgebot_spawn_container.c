@@ -10,7 +10,11 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 extern unsigned char *spawn_spinning_fade_in_out_effect_particle(void *, int, int, float, float, float, float, float) __asm__("FUN_L00_0026b790");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -334,7 +338,6 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_0015ED70 MACRO_ADDR;
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int *D_L06_001B0C30[];
 extern int D_L06_0015F5C4 MACRO_ADDR;
 extern int D_L06_0015FDF8 MACRO_ADDR;
@@ -353,7 +356,6 @@ extern void blend_frog_rotation_to_facing_frame(char *, float *, float *) __asm_
 extern void probe_frog_local_z_collision(char *) __asm__("FUN_L06_002e9aa8");
 extern void FUN_L06_002e9b60_c(void *, void *, int, float, float) __asm__("FUN_L06_002e9b60");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void update_frog_health_respawn_and_target(struct Moby *moby) __asm__("FUN_L06_002e94f0");
 void destroy_frog_child_moby(struct Moby *moby) __asm__("FUN_L06_002e9f30");
@@ -1028,7 +1030,6 @@ void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_dir
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void spawn_moby_death_effect_burst(char *moby) __asm__("FUN_L06_002ea498");
 
@@ -1272,9 +1273,7 @@ extern char *spawn_source_attached_fading_effect_particle(float, char *, int, in
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_add_rotations(float, float);
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float vector_length_xy(void *);
 extern int D_00141610[];
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
@@ -1285,7 +1284,6 @@ extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("
 extern int compute_clear_path_point_mask(float, int *, int, int, void *) __asm__("FUN_L01_00276a48");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
 extern int FUN_L06_002f32f0_u(void *, int) __asm__("FUN_L06_002f32f0");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 #include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/gadgebot_update.h"
 #include "rnc/gameplay/state/game_globals.h"
@@ -3078,7 +3076,6 @@ extern float energy_sphere_rotation_rate_z_degrees_gp __asm__("D_L06_00161E7C") 
 extern float D_L06_00161E80 __attribute__((sda));
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_energy_sphere_destruction_particles(char *m) __asm__("FUN_L06_002f7c68");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void energy_sphere_update(struct Moby *m) __asm__("FUN_L06_002f7ab8");
 void energy_sphere_update(struct Moby *sphere_moby) {

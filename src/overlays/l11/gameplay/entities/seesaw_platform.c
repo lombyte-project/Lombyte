@@ -16,6 +16,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 typedef struct {
     int link;
@@ -49,7 +53,6 @@ extern int D_L11_001600EC_c788 __asm__("D_L11_001600EC");
 extern int test_linked_moby_turn_trigger(void *) __asm__("FUN_L11_0030f270");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_0022da68_c788(int, int, struct Moby *) __asm__("FUN_0022da68");
@@ -1297,7 +1300,6 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_003114F0), where it is exact; names translated to the US level program. */
 
 void handle_owner_linked_moby_hits(struct Moby *m, unsigned char *d, float *t) __asm__("FUN_L11_0030fe50");
-f32 compute_interpolated_record_value(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 
 void update_owner_linked_moby_state(struct Moby *moby) __asm__("FUN_L11_00310028");
 
@@ -2110,11 +2112,9 @@ void draw_ship_hud(struct Moby *moby) {
     }
     vars->hp_bar_fill = fill;
 }
-extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
 extern int spawn_class_3f1_moby(void *, void *, void *, float, float) __asm__("FUN_L11_00308848");
 extern f32 D_L11_00162090_gp __asm__("D_L11_00162090") __attribute__((sda));
 extern unsigned char D_0013A4E0[];
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 extern short ship_shot_direction_base_scale_gp __asm__("D_L11_0016205C") __attribute__((sda));
 int D_L11_00162060 = 4;
@@ -2136,7 +2136,7 @@ void update_ship_shot_firing_and_reticle(struct Moby *moby, char *ship_vars, flo
         spawn_class_3f1_moby(moby, shot_direction, projectile_spawn_position, 200.0f, -1.0f);
         *(int *)(ship_vars + 0x80) = D_L11_00162060;
         ship_vars[0x61] ^= 1;
-        FUN_0022da68_c(3, 0, (int)moby);
+        allocate_voice_for_target_entry(3, 0, (int)moby);
     }
     fast_vec_normalize(shot_direction, shot_direction, 23.0f);
     fast_vec_add(reticle_world_position, shot_direction, &moby->pos);
@@ -2147,7 +2147,6 @@ void update_ship_shot_firing_and_reticle(struct Moby *moby, char *ship_vars, flo
 
 extern int spawn_ship_projectile(void *, void *, int, void *, float, int) __asm__("FUN_L11_00309378");
 extern void FUN_0022da68(int, int, int);
-extern int func_0022ED80_i(int, int, int) __asm__("FUN_0022da68");
 
 extern short ship_projectile_base_scale_gp __asm__("D_L11_00162064") __attribute__((sda));
 int D_L11_00162068 = 30;
@@ -2169,7 +2168,7 @@ void try_fire_ship_projectile(struct Moby *moby, char *ship_vars) {
             if (spawn_ship_projectile(moby, projectile_spawn_position, projectile_target, &moby->rot,
                                  *(float *)&ship_projectile_base_scale_gp * *(float *)&D_L11_00162090_gp,
                                  scale_game_frames(300))) {
-                func_0022ED80_i(2, 0, (int)moby);
+                allocate_voice_for_target_entry(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
                 *(int *)(ship_vars + 0x84) = D_L11_00162068;
             }
@@ -2561,8 +2560,6 @@ unsigned char l11_jet_fighter_max_ammo __asm__("D_L11_00162058") = 0x14;
 extern float D_L11_00162078 __attribute__((sda));
 int D_L11_00162168 = 180;
 extern float D_L11_0016D4F0_a[] __asm__("D_L11_0016D4F0");
-extern int alloc_voice_3290(int, int, struct Moby *) __asm__("FUN_0022da68");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void print_3290(char *) __asm__("FUN_001e93b0");
 extern void FUN_L11_0024db50(int, int);
 extern float jet_distance(void *, void *) __asm__("FUN_L00_00250430");
@@ -2887,7 +2884,7 @@ void jet_fighter_update(struct Moby *moby) {
         if (moby->state == 3 || moby->state == 4) {
             emit_type_74_particles_from_moby_joints(moby, ship_vars);
             if (voice_is_playing(moby, ship_vars->voice) == 0) {
-                ship_vars->voice = alloc_voice_3290(0, 4, moby);
+                ship_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
             }
         } else {
             idx = ship_vars->voice;

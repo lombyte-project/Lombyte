@@ -9,6 +9,9 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/rendering/vu1_registers.h"
 typedef struct { char pad[0x30]; int state; int n; char pad38[0x140]; struct Moby *objects[8]; } L18SequenceState;
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int D_L18_0015F5C4;
@@ -352,8 +355,6 @@ typedef struct {
 } Pk_9780;
 typedef struct { char pad[0x30]; int state; int n; } ML_9780;
 extern ML_9780 D_L18_0016D260_9780 __asm__("D_L18_0016D260");
-extern unsigned long get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 #include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/draw_three_scaled_camera_facing_quads_2.h"
 extern volatile float l18_deplanetizer_camera_quad_local_offset_y __asm__("D_L18_00162554");
@@ -917,7 +918,6 @@ extern char D_L18_001625F0[4] __attribute__((sda));
 extern char D_L18_00162608 __attribute__((sda));
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int spawn_explosion() __asm__("FUN_L00_0025e450");

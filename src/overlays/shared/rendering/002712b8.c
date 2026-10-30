@@ -13,6 +13,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L00_001B2130 NOT_SDA;
@@ -615,7 +617,6 @@ void update_expanding_alpha_pulse_particle(unsigned char *particle) {
     else
         *(int *)(particle + 4) = (*(short *)(particle + 0xa) << 24) | 0x808080;
 }
-void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern unsigned char *D_L00_001B2168 NOT_SDA;
 unsigned char *spawn_color_tween_emitter_particle(void *initial_position, unsigned char particle_mode, unsigned char b, unsigned char emission_duration_frames,
                                 unsigned char particles_per_update, unsigned char emitted_lifetime_frames, int g, float x, float y) __asm__("FUN_L00_002729c8");
@@ -1850,7 +1851,6 @@ void update_moving_lifetime_scaled_alpha_particle(O00275860 *particle) {
     if (fast_dec_timer_s16(&particle->h))
         free_effect_particle(particle);
 }
-extern unsigned char *suck_get_aim_height(int) __asm__("FUN_002141f8");
 
 extern unsigned char *D_L00_001B21B8 NOT_SDA;
 unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(OvlQuad *pos, int lifetime_frames, int col, int mode, int rotation_increment, float *initial_velocity, int lookup_object_reference,

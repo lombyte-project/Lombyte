@@ -10,10 +10,12 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/vu1_registers.h"
 
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 extern void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
 void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
 
@@ -162,7 +164,6 @@ typedef union {
 } VeldinVec;
 
 void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern void glow_quads_draw() __asm__("FUN_L00_0023db30");
 extern void FUN_L00_002935b8();
 extern void emit_moby_particle_pairs(VeldinMoby *) __asm__("FUN_L00_0023e008");
@@ -296,7 +297,6 @@ extern s16 D_00141628[];
 extern s32 initialize_npc_dialogue(DoorMoby *, void *) __asm__("FUN_L00_002668a0");
 extern s32 update_npc_dialogue(DoorMoby *, void *) __asm__("FUN_L00_00266448");
 extern void initialize_global_state_entry(s32) __asm__("FUN_0022e188");
-s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 void clank_cutscene_trigger_update(DoorMoby *m) __asm__("FUN_L00_002d9dc8");
 void clank_cutscene_trigger_update(DoorMoby *moby) {

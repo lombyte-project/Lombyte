@@ -4,6 +4,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
 int find_nearest_moby_by_class() __asm__("FUN_L09_002c2610");
 
 int spawn_airship_part() __asm__("FUN_L09_002c2500");
@@ -52,7 +53,6 @@ extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 

@@ -11,11 +11,12 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/rendering/clip_volume.h"
 
 extern struct UsageStat help_records[] __asm__("D_00141968");
 extern char *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
 extern u8 level06_help_hint_variant_selector[] __asm__("D_0013D4CE");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 
@@ -321,7 +322,6 @@ typedef struct {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *create_moby(int);
 extern float D_L06_0015F580[] MACRO_ADDR;
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");

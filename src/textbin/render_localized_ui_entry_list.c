@@ -4,10 +4,10 @@
 #include "rnc/ui/text/font_metrics.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
+#include "rnc/rendering/vu1_registers.h"
 
 
 
-extern void vu1_add_g_sregister(s32, long) __asm__("FUN_00233980");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 

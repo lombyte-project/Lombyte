@@ -10,6 +10,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* State of the level's message box (D_00193300). */
 typedef struct {
@@ -52,7 +53,6 @@ extern s64 get_frame_texture(s32) __asm__("func_001FFA10");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 /* Same registers as (w, h, tex, x, y, cx, cy, angle); floats are listed first so they are evaluated first. */
 extern void draw_rotated_sprite(f32 x, f32 y, f32 cx, f32 cy, f32 angle, s32 w, s32 h, s64 tex) __asm__("FUN_00200600");
-extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 
 #define SCRATCHPAD ((u8 *)0x70000000)
 

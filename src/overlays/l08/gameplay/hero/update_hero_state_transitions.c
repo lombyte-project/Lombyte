@@ -15,6 +15,7 @@
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/math/random.h"
+#include "rnc/audio/voice_alloc.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 08 build). */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/help_00237818.c: func_L08_00237818), where it is exact; names translated to the US level program. */
@@ -123,7 +124,6 @@ extern void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 

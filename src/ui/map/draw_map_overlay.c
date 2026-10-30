@@ -10,6 +10,7 @@
 #include "rnc/ui/hud/hud_state.h"
 #include "rnc/ui/map/map_icon.h"
 #include "rnc/ui/map/map_state.h"
+#include "rnc/rendering/vu1_registers.h"
 
 typedef struct {
     s32 x0;
@@ -48,7 +49,6 @@ extern void format_menu_item_text(s32, void *) __asm__("func_00208280");
 extern void world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y,
                                 s32 level) __asm__("func_00208408");
 extern void draw_map_markers(s32, s32, s32, s32) __asm__("func_00208508");
-extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void *memset(void *, s32, u32);
 
 void draw_map_overlay(void) __asm__("FUN_00205640");

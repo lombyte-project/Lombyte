@@ -11,6 +11,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/rendering/vu1_registers.h"
 extern int panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
 extern int text_shadow_x_gp __asm__("D_001601B8") __attribute__((sda));
 extern int text_shadow_y_gp __asm__("D_001601BC") __attribute__((sda));
@@ -33,7 +34,6 @@ extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern char *get_help_message_text(int) __asm__("func_001FDD10");
 extern int find_help_entry(short, int, u16 *) __asm__("func_001FECC8");
 extern s32 fade_menu_color(s32, s32, s32) __asm__("func_0021B6D8");
-extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern void *memset(void *, int, unsigned int);
 extern int sprintf(char *, const char *, ...);
 

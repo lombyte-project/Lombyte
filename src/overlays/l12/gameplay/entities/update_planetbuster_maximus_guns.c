@@ -16,6 +16,10 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 typedef struct Moby Moby;
 
@@ -68,8 +72,6 @@ extern void update_joint_animation(char *, char *, int, float, float) __asm__("F
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
 extern int D_L12_00161F04_gp __asm__("D_L12_00161F04") MACRO_ADDR;
@@ -533,7 +535,6 @@ extern int D_L12_001619A0 MACRO_ADDR;
 extern int D_L12_001619B4 MACRO_ADDR;
 extern int D_L12_001B0930;
 extern int D_L12_0015F404 MACRO_ADDR;
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 
 #include "rnc/overlay/l12/gameplay/entities/update_planetbuster_maximus_guns_data/planetbuster_maximus_part_update.h"
 extern float planetbuster_maximus_rotation_oscillation_amplitude_gp __asm__("D_L12_00161F30") __attribute__((sda));
@@ -548,7 +549,6 @@ extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void apply_linked_moby_relative_transforms(char *, char *, int) __asm__("FUN_L12_0027b370");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int current_level_index_gp __asm__("D_0015ED84") MACRO_ADDR;
 extern char D_0013F3D0[];
 
@@ -789,7 +789,6 @@ void planetbuster_maximus_part_update(char *moby) {
 /* Spawns the next linked moby at this one's spot, sets it up and gives it a random spin. */
 extern void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 extern void spawn_jittered_effect_particle_with_optional_basis(char *, int, float) __asm__("FUN_L00_0026de90");
-extern short *suck_get_aim_height(unsigned char *) __asm__("FUN_002141f8");
 
 void spawn_next_linked_moby(struct Moby *spawner) __asm__("FUN_L12_003076e0");
 
@@ -952,7 +951,6 @@ void update_homing_mine_spawner_target(struct Moby *spawner) {
 
 extern int check_scaled_vector_bsphere(void *, float) __asm__("FUN_L01_00275690");
 extern int FUN_0022da68(int, int, void *);
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 void draw_hoven_jittered_quad_layers(struct Moby *moby) __asm__("FUN_L12_00308350");
@@ -1140,7 +1138,6 @@ typedef struct {
 
 extern char scene_trigger_saved_hero_data[] __asm__("D_L12_0016CCF0");
 extern int D_L12_0015F5C4;
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 void trigger_scene_once_in_clip_volume(struct Moby *moby) __asm__("FUN_L12_003093c8");
 

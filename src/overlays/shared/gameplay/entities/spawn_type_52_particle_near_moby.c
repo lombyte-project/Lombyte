@@ -5,6 +5,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
@@ -218,7 +219,6 @@ void activate_descriptor(int i) {
     descriptor_record[0x39] = 0;
 }
 extern char *D_L10_001B0930_5a78[] __asm__("D_L10_001B0930");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
 extern int test_point_in_transformed_unit_sphere(float *, int) __asm__("FUN_L00_0025faf0");
 extern int point_in_path_xy(float *, float *, int) __asm__("FUN_L00_00259740");

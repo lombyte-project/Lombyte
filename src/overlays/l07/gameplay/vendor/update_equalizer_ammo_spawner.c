@@ -8,10 +8,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/rendering/clip_volume.h"
 
 
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int sample_path(int *, float *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
 extern void spawn_on_path(float *, int, int, int) __asm__("FUN_L00_002c52a8");
 extern int fptodp(float) __asm__("FUN_00120478");

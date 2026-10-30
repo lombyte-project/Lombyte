@@ -10,6 +10,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
@@ -18,7 +23,6 @@
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 extern int debug_print() __asm__("FUN_001e93b0");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char *moby_base __asm__("D_L13_0015FFD8");
 extern char moby_volume_trigger_missing_volume_format[] __asm__("D_L13_001F41F8");
@@ -205,8 +209,6 @@ typedef struct {
 extern char D_L13_001670C0_2b39e0[] __asm__("D_L13_001670C0");
 extern float D_0015ED70_2b39e0 __asm__("D_0015ED70");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-extern s32 allocate_voice_2b39e0(s32, s32, void *) __asm__("FUN_0022da68");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
@@ -273,7 +275,7 @@ void elevator_update(struct Moby *moby) {
     case ELEVATOR_STATE_MOVE_TO_BOTTOM: {
         float target;
         if (!voice_is_playing(moby, vars->voice)) {
-            vars->voice = allocate_voice_2b39e0(0, 4, moby);
+            vars->voice = allocate_voice_for_target_entry(0, 4, moby);
         }
         if (moby->command != 0) {
             compute_elevator_camera_pose(moby, camera_position_scratch, camera_pose_scratch);
@@ -902,7 +904,6 @@ void release_robosquawker_particle(Level13VendorMoby *moby) {
 /* adjusts moby height toward the sampled ground height */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B61A0), where it is exact; names translated to the US level program. */
 
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern f32 D_0015ED70;
 
 void update_robosquawker_ground_height(struct Moby *moby, char *moby_vars) __asm__("FUN_L13_002b4ff0");
@@ -1093,7 +1094,6 @@ extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L0
 extern int select_list_point_toward_target(void *, void *, void *, void *) __asm__("FUN_L01_0028b5e0");
 extern int reserve_expired_frame_slot(int *, int, int) __asm__("FUN_L01_002efbf8");
 extern int select_robosquawker_target(void *, void *, float) __asm__("FUN_L13_0026bd00");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 rand(void);
 short D_L13_001613A0 = 0x505;
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
@@ -1105,7 +1105,6 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void FUN_L00_0025f730(void *, float);
 extern void FUN_L01_0026d930(char *p);
 extern void FUN_L01_0026e090(int, int);
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 void update_robosquawker_ground_height(struct Moby *m, char *d) __asm__("FUN_L13_002b4ff0");
 
 void robosquawker_update(RsMoby *m) __asm__("FUN_L13_002b50d8");
@@ -2470,10 +2469,8 @@ void draw_fighter_jet_hud(char *moby) {
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002BB068), where it is exact; names translated to the US level program. */
 
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int spawn_class_3f1_moby(void *, void *, void *, float, float) __asm__("FUN_L11_00308848");
 extern unsigned char D_0013A4E0[];
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void update_fighter_jet_gun_and_aim(struct Moby *moby, char *flight_data, float azimuth_angle, float elevation_angle) __asm__("FUN_L13_002b9df8");
 
@@ -2898,7 +2895,6 @@ extern int D_L13_0015F608;
 extern JetPath *D_L13_001600EC;
 extern char D_L13_001F4470[], D_L13_001F44A8[];
 extern JetHit *jet_find_hit(void *,int,int) __asm__("FUN_L00_0025a420");
-extern void build_spherical_offset(float *,float,float,float) __asm__("FUN_00214db0");
 extern void jet_group_state(int,int,int,int) __asm__("FUN_L13_002650a8");
 extern void jet_group_switch(void *,int,int,int) __asm__("FUN_L13_002651c8");
 extern void jet_group_flag(int,int) __asm__("FUN_L13_00265170");
@@ -2913,14 +2909,11 @@ extern void jet_game_state(int,int) __asm__("FUN_L01_0027a248");
 extern void jet_set_hero_state(int,int) __asm__("FUN_L00_002223f8");
 extern void set_animation_parameter(int,int) __asm__("FUN_001ff570");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *,void *) __asm__("FUN_L00_00284e50");
 extern void force_help_message(int,int) __asm__("FUN_002151d8");
 extern int try_set_help_message(int,int) __asm__("FUN_00215130");
-extern int jet_allocate_voice(int,int,int) __asm__("FUN_0022da68");
-extern int is_point_inside_clip_volume(void *,int) __asm__("FUN_00214720");
 
 void fighter_jet_update(Jet *m) __asm__("FUN_L13_002bb068");
 void fighter_jet_update(Jet *jet_moby) {
@@ -3044,7 +3037,7 @@ void fighter_jet_update(Jet *jet_moby) {
             if (jet_data->group_b>0) jet_group_state(jet_data->group_b,1,1,1);
             jet_group_switch(fighter_jet_hidden_moby_classes,0,0,-1); jet_group_switch(&D_L13_00161440,0,-1,-1); jet_group_flag(0x102,0);
             jet_moby->position[2]+=3.0f; jet_moby->scale=jet_moby->model->scale*0.25f; ((JetPlayer*)(&jet_player47))->in_craft=1;
-            if (jet_data->engine_sound==-1) jet_data->engine_sound=jet_allocate_voice(0,4,(int)jet_moby);
+            if (jet_data->engine_sound==-1) jet_data->engine_sound=allocate_voice_for_target_entry(0,4,(int)jet_moby);
             D_L13_0015F608=2; update_fighter_jet_flight(jet_moby,jet_data); jet_camera_mode(); jet_game_state(2,4); jet_moby->state=4;
         }
         break;
@@ -3053,7 +3046,7 @@ void fighter_jet_update(Jet *jet_moby) {
         if (jet_data->blend!=0.0f) { approach_value(&jet_data->blend,0.0f,frame_time*4.0f); D_L13_0015F3FC=jet_data->blend; }
         force_help_message(6,0); D_L13_0015F608=2;
         audio=voice_pool+jet_data->engine_sound*0x70;
-        if (*(Jet**)(audio+0x88)!=jet_moby || !audio[0x74]) { jet_data->engine_sound=-1; jet_data->engine_sound=jet_allocate_voice(0,4,(int)jet_moby); }
+        if (*(Jet**)(audio+0x88)!=jet_moby || !audio[0x74]) { jet_data->engine_sound=-1; jet_data->engine_sound=allocate_voice_for_target_entry(0,4,(int)jet_moby); }
         update_fighter_jet_flight(jet_moby,jet_data);
         if (((JetPlayer*)(&jet_player47))->pad160F&1) jet_moby->state=5;
         if (jet_data->energy<=0) { jet_data->wait_timer=scale_game_frames(1200); jet_moby->state=8; }

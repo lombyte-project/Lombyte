@@ -15,6 +15,7 @@
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/math/random.h"
+#include "rnc/audio/voice_alloc.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 17's build of the shared func_L00_0022A340, without states 90-97). */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/help_002260F0.c: func_L17_002260F0), where it is exact; names translated to the US level program. */
@@ -128,7 +129,6 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void emit_randomized_sparkle_pairs(void *, int) __asm__("FUN_L00_002a7e20");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 

@@ -7,11 +7,11 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/audio/voice_alloc.h"
 
 /* gp-relative here, so not the plain rnc/globals.h spellings. */
 
 extern void mode_freeze_init(s32, s32) __asm__("func_001FBAB8");
-extern s32 allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 
 /*
  * Per-frame update of a menu list: fades the entry highlights, handles

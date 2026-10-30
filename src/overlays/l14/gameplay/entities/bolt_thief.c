@@ -14,6 +14,8 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Spawns the effect pieces for a moby: two sparks, the ring of three and a final coloured one. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_002FF358), where it is exact; names translated to the US level program. */
@@ -154,7 +156,6 @@ void mark_moby_and_linked_moby_for_removal(char *moby) {
 
 #include "qcopy.h"
 
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 typedef struct {
     char pad00[0x60];
@@ -524,7 +525,6 @@ typedef struct {
 } L14Player;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 typedef struct {
     u8 pad0[0x454];

@@ -3,6 +3,7 @@
 #include "qcopy.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/sky_shell.h"
+#include "rnc/rendering/vu1_registers.h"
 struct SkyShellSet {
     u8 pad_0[4];
     u16 relocation_state;
@@ -22,7 +23,6 @@ extern void euler_to_matrix_ee(void *, f32 *) __asm__("FUN_001fa070");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern void setup_sky_gif_paging(void) __asm__("func_0022B4C8");
 extern void do_sky_gif_paging(void) __asm__("func_0022B558");
-extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
 /* Draws the sky layers (shells) one by one, always starting with shell 0.
  * Later shells are drawn on top of earlier ones. Shells 0 and 1 are drawn

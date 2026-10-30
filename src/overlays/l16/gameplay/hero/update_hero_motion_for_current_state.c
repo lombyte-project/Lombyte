@@ -17,6 +17,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
 
 struct MobyView {
     u8 pad0[0xC];
@@ -163,7 +165,6 @@ extern void clip_hero_horizontal_velocity(s32) __asm__("FUN_L01_00232978");
 extern void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");
 extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 extern void update_entity(struct MobyView *) __asm__("FUN_L00_00250df8");
-extern s32 allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__("FUN_0022da68");
 extern s32 FUN_L00_001ff600(f32, void *, void *);
 extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
 extern f32 predict_hero_trajectory_intercept_time(f32, f32, f32) __asm__("FUN_L00_00232b90");
@@ -191,7 +192,6 @@ extern u8 voice_pool[] __asm__("D_0013E550");
 extern u8 swim_animation_speed_profile[] __asm__("D_L16_0017C420");
 
 extern void release_voice_slot_cf(s32, struct MobyView *, s32) __asm__("FUN_L00_00216e48");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void emit_hero_randomized_motion_effects(s32, s32) __asm__("FUN_L00_00209a40");
 extern void emit_hero_surface_effect_burst(s32, s32, s32) __asm__("FUN_L00_00209ca8");
 extern void pool_splash(s32, s32, s32, f32, f32, f32, f32) __asm__("FUN_L00_002a3ec8");
@@ -200,7 +200,6 @@ extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00
 extern u8 *FUN_L00_0026f080(void *, void *, f32, f32);
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_00262cf0(void *, void *, f32, f32, f32);
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern f32 FUN_L00_00209018(void *, s32);
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");

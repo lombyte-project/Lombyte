@@ -14,6 +14,11 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* Sentrybot update: runs the patrol, alert and attack state machine, then sets the alert level and the eye colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_00298BB8), where it is exact; names translated to the US level program. */
@@ -36,9 +41,7 @@ extern float sentrybot_positive_heading_delta_offsets_degrees[] __asm__("D_L15_0
 extern float sentrybot_negative_heading_delta_offsets_degrees[] __asm__("D_L15_001CC060");
 extern float sentrybot_turn_around_heading_offsets_degrees[] __asm__("D_L15_001CC0E0");
 extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_sin(float);
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float vector_length_xy(void *);
 extern int *D_L15_001B0AB0[];
 extern int D_L15_0015F5C4;
@@ -58,8 +61,6 @@ extern int find_sentrybot_attention_target(char *m) __asm__("FUN_L15_00299dd8");
 int can_sentrybot_advance_patrol(void *input_moby) __asm__("FUN_L15_00299ff8");
 
 extern int can_sentrybot_advance_patrol(void *) __asm__("FUN_L15_00299ff8");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/sentrybot_update.h"
@@ -1694,7 +1695,6 @@ extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_
 extern void FUN_L00_002ac910(char *, char *, int, int, float, int, int, int, int);
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern char D_0013F490[];
 extern char D_0013F350[];
 
@@ -2545,7 +2545,6 @@ unsigned char *create_type_47_particle(void *pos, float *p, float *c, int d, int
 extern KillFlags_2A3DD0 D_L15_001BBB40_2A3DD0 __asm__("D_L15_001BB830");
 extern unsigned char D_0013E650_2A3DD0[] __asm__("D_0013E550");
 extern void func_L15_002A47B8_2A3DD0(void *) __asm__("FUN_L15_002a35d8");
-extern int func_0022ED80_2A3DD0(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L15_002A4318_2A3DD0(void) __asm__("FUN_L15_002a3138");
 extern unsigned char *func_L15_002655D0_2A3DD0(void *, void *, void *, int, int, int, int, int, void *) __asm__("FUN_L15_002647f0");
 
@@ -2589,7 +2588,7 @@ void update_spark_emitter_moby(unsigned char *moby) {
             float lo, hi, z, one;
             int i;
             if (e->owner != (char *)moby || e->active == 0) {
-                moby[0xBC] = func_0022ED80_2A3DD0(0, 4, moby);
+                moby[0xBC] = allocate_voice_for_target_entry(0, 4, moby);
             }
             fast_vec_sub(V, D_0013F420, moby + 0x10);
             transpose_rotation_matrix(W, moby + 0xC0);
@@ -2799,7 +2798,6 @@ extern KillFlags D_L15_001BB830 NOT_SDA;
 extern u8 secondary_kill_record_gate_by_mission[8] __asm__("D_L15_0015FC88");
 extern u8 D_0014C050[][16] NOT_SDA;
 extern u8 D_0013E550[] NOT_SDA;
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 /* Marks the moby as killed in the level's spawn tables and releases the voice slot it still owns. */
 void mark_moby_killed_and_release_owned_voice(int addr) {

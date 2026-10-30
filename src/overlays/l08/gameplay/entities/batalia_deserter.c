@@ -15,6 +15,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
 
 
 /* triggers objects matching the moby's class */
@@ -149,7 +151,6 @@ extern void FUN_L00_0025a120(void *);
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern struct {
     char pad[0x2FC];
     int f2FC;
@@ -545,7 +546,6 @@ typedef struct {
 extern VendorEventRecord help_records[] __asm__("D_00141968");
 extern u8 D_0013D413 NOT_SDA;
 extern u8 D_0013D3B7 NOT_SDA;
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");

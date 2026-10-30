@@ -13,6 +13,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effect_texture.h"
 extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
 char *create_class_5c3_moby(int owner, char *initial_position, int arg, float initial_rotation_z, float initial_rotation_y) __asm__("FUN_L05_002d4168");
 
@@ -124,7 +127,6 @@ typedef struct {
 extern Vec4 D_L05_001671C0_2f5200 __asm__("D_L05_001671C0");
 extern s32 *D_L05_001B0930_2f5200[] __asm__("D_L05_001B0930");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 
 void update_moby_spatial_trigger(struct Moby *trigger_moby) __asm__("FUN_L05_002f5200");
 
@@ -490,7 +492,6 @@ void update_moby_wobble(unsigned char *moby) {
     }
     }
 }
-extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, float *, int) __asm__("FUN_001f7d30");
 extern float wobble_quad_texcoords[][2] __asm__("D_L05_001D67B0");
 extern float wobble_quad_a_base_vertices[][4] __asm__("D_L05_001D67D0");
@@ -602,7 +603,6 @@ extern SaveFlags D_L05_001BAA50_s __asm__("D_L05_001BAA50");
 extern unsigned char D_L05_0015FC88[] MACRO_ADDR;
 extern char *D_L05_001B0930[];
 extern u8 D_0014C050[];
-extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
 void floor_button_update(struct Moby *moby) __asm__("FUN_L05_0030c5b0");
 void floor_button_update(struct Moby *moby) {

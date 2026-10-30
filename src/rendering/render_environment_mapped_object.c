@@ -3,6 +3,7 @@
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/globals.h"
+#include "rnc/rendering/effect_texture.h"
 
 typedef float FloatVector4[4] __attribute__((aligned(16)));
 
@@ -46,7 +47,6 @@ extern Vec4 environment_mapping_transformed_vertex_positions[] __asm__("D_001DC4
 extern float environment_mapping_vertex_uvs[][2] __asm__("D_001DCB40");
 extern float environment_mapping_saved_vertex_uvs[][2] __asm__("D_001DCE70");
 
-extern u64 get_effect_texture(int) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern int scale_game_frames(int) __asm__("func_001F96F8");
 extern void fast_dec_timer(s32 *) __asm__("func_001F9740");

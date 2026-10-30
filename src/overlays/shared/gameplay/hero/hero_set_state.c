@@ -13,6 +13,8 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/rendering/clip_volume.h"
 
 extern s32 D_L00_0015F5CC;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
@@ -392,7 +394,6 @@ typedef struct M_221ee0 {
 extern G_221ee0 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 extern M_221ee0 *D_L00_0015FFE4_221ee0 __asm__("D_L00_0015FFE4");
 f32 score_hero_target_candidate(M_221ee0 *, s32 *, f32, f32, f32, f32) __asm__("FUN_L00_0020d6b0");
-s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 s32 FUN_001efa68_221ee0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 #define G D_0013F350_lui
 void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
@@ -466,7 +467,6 @@ void select_hero_grapple_swing_target(void) {
 
 extern char *D_L00_0015FFE4;
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 
 int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 
@@ -597,7 +597,6 @@ extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern s32 D_L00_0015F688 __attribute__((sda));
 extern short hero_run_start_frame_by_speed_step __asm__("D_L00_0015F6D8") __attribute__((sda));
 extern unsigned char l00_hero_run_jump_animation_by_run_frame[] __asm__("D_L00_0017BDD8");

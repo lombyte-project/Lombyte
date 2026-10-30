@@ -13,6 +13,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 
 
@@ -76,11 +80,9 @@ void process_dreks_fleet_turret_hits(char *turret_moby) {
 extern char *D_L17_0015FFD8;
 extern float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
 extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_cos(float);
 extern int D_L17_0015FFD8_t; /* no foreign declaration */
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern short fleet_beam_endpoint_axis_offset __asm__("D_L17_00161498") __attribute__((sda));
 extern unsigned char *spawn_trail_particle(char *parent, void *pos, float *vec) __asm__("FUN_L17_0026fb60");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
@@ -353,7 +355,6 @@ extern char *spawn_class_558_moby_toward_target(char *src, char *pos, float *v, 
 extern char *try_activate_blarg_ship_from_list(int list) __asm__("FUN_L17_002f4fb8");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float vector_length_xy(void *);
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern char fleet_turret_aim_vertex_indices[4] __asm__("D_L17_00161980") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9,
                               float scale, float *v10, float *v11, float *v12);
@@ -622,7 +623,6 @@ extern unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos,
                                        unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 
 void update_fleet_rotating_radial_effect(char *moby) __asm__("FUN_L17_002d77f0");

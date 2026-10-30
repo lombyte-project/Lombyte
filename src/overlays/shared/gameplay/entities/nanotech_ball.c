@@ -12,6 +12,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 typedef struct {
     u8 pad[0x20];
     u8 b20;
@@ -447,7 +451,6 @@ extern unsigned char D_0013F5E0[];
 extern volatile unsigned char nanotech_ball_invulnerability_pickup_enabled __asm__("D_0015EDB6");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_look_at_matrix_c(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void enqueue_callback_list_1_alt(void (*)(void), int) __asm__("FUN_001f4600");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -472,7 +475,6 @@ extern void func_L00_001FF4B0_2D9EA0(void *, void *, float) __asm__("FUN_001f9bf
 extern void func_001F9BD8_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void func_001F9BF0_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float func_001F9FA8_2D9EA0(float) __asm__("FUN_001f9de0");
 extern int func_L00_002D9E30_2D9EA0(void *) __asm__("FUN_L00_002d8980");
@@ -1373,7 +1375,6 @@ extern char D_L00_00166C80[];
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_L00_00173E40_lui[];
 extern int collision_segment_hits(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int allocate_voice_for_target_entry(int,int,int) __asm__("FUN_0022da68");
 extern int queue_animation_update(int,int,int,int,int,int,int) __asm__("FUN_001ff308");
 extern s32 D_0015EEA4;
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
@@ -1391,8 +1392,6 @@ void stop_suck_cannon_suction_effect(int callback_context) __asm__("FUN_L00_002d
 extern void stop_suck_cannon_suction_effect(int) __asm__("FUN_L00_002df048");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("func_0020E098");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
 #include "rnc/gameplay/state/game_globals.h"
 extern char voice_pool[] __asm__("D_0013E550");
@@ -1404,7 +1403,6 @@ extern char suck_fire_tuning[1] __asm__("D_L00_00161B30") __attribute__((sda));
 extern void suck_delete_callback(void) __asm__("FUN_L00_00237798");
 extern void suck_reset(SuckMoby *) __asm__("FUN_L00_002ddca0");
 extern void suck_draw_reticle(int,int,float,float,int,int,int,float,int) __asm__("FUN_L00_001edf60");
-extern SuckAimHeight *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern float D_L00_00173E68 NOT_SDA;
 void suckcannon_update(SuckMoby *self) __asm__("FUN_L00_002da790");
 void suckcannon_update(SuckMoby *self) {
@@ -1862,7 +1860,6 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
 }
 extern u8 D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
 u8 *FUN_L00_002db890_002dbc30(u8 *) __asm__("FUN_L00_002db890");
-u8 *FUN_002141f8_002dbc30(u8 *) __asm__("FUN_002141f8");
 void FUN_0022da68_002dbc30(s32, s32, void *) __asm__("FUN_0022da68");
 s32 FUN_001f96f8_002dbc30(s32) __asm__("FUN_001f96f8");
 void FUN_001f9a10_002dbc30(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1896,7 +1893,7 @@ s32 launch_suck_cannon_projectile(u8 *moby, u8 *launch_velocity, u8 *target, f32
     *(s32 *)(projectile_record + 0x94) = FUN_001f96f8_002dbc30(300);
     *(u8 **)(projectile_record + 0x74) = target;
     if (target != 0) {
-        x = FUN_002141f8_002dbc30(target);
+        x = suck_get_aim_height(target);
         if (x != 0)
             *(u16 *)(x + 0x1E) |= 0x80;
         qcopy(projectile_record + 0x40, target + 0x10);
@@ -2268,7 +2265,6 @@ extern int func_L00_001F2BE8_2DDEA0(float, void *, int, void *, void *) __asm__(
 extern int func_L00_001F10E0_2DDEA0(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN_00214530");
-extern int func_0022ED80_2DDEA0(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_001FF610_2DDEA0(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void spawn_effect_particle_with_transformed_random_offset(void *, void *) __asm__("FUN_L00_0026c3d0");
 extern int func_L00_00259B08_2DDEA0(void *, void *, float, int, float, int) __asm__("FUN_L00_00258ad0");
@@ -2495,12 +2491,12 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 moby->collision_disable = record->i88;
                 record->state = 6;
                 if (0.87266463f < fast_arc_tan(((Coll *)D_L00_00173E40_lui)->v40.z, vector_length_xy(&((Coll *)D_L00_00173E40_lui)->v40))) {
-                    if (record->h9E >= 0) func_0022ED80_2DDEA0(record->h9E, 0, moby);
+                    if (record->h9E >= 0) allocate_voice_for_target_entry(record->h9E, 0, moby);
                     func_L00_002DDDE8_2DDEA0(moby, record, 1);
                     return 0;
                 }
                 if (D_0013E629_2DDEA0[0] != 0 && surface >= 5) {
-                    if (record->h9E >= 0) func_0022ED80_2DDEA0(record->h9E, 0, moby);
+                    if (record->h9E >= 0) allocate_voice_for_target_entry(record->h9E, 0, moby);
                     func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 }
                 qzero(&work.v[1]);

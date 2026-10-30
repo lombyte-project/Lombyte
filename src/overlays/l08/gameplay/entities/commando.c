@@ -20,6 +20,9 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/vu1_registers.h"
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
@@ -39,7 +42,6 @@ extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8;
 
 extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
-extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
@@ -213,7 +215,6 @@ void update_path_following_moby_swarm(struct Moby *moby) {
 }
 
 extern char *D_L08_0015FFD8_g __asm__("D_L08_0015FFD8");
-extern int FUN_0022da68_c(int, int, char *) __asm__("FUN_0022da68");
 extern void FUN_00213ed8_c(char *, float, float) __asm__("FUN_00213ed8");
 
 void update_moby_height_from_driver(char *moby) __asm__("FUN_L08_002ea398");
@@ -240,7 +241,7 @@ void update_moby_height_from_driver(char *moby)
         if (*(short *)(driver_moby + 0xA6) == 0x267 || *(short *)(driver_moby + 0xA6) == 0x23F) {
             if (*(u8 *)(driver_moby + 0x20) != 4) break;
             menu_item_enabled_41 = 1;
-            FUN_0022da68_c(0, 0, moby);
+            allocate_voice_for_target_entry(0, 0, moby);
             *(u8 *)(moby + 0x20) = 2;
         } else {
             FUN_00213ed8_c(moby + 0x18, (*(float *)position_vars - *(float *)(position_vars + 4)) * **(float **)(driver_moby + 0x78) + *(float *)(position_vars + 4), frame_time * 10.0f);
@@ -269,7 +270,6 @@ typedef struct {
 } VoiceView;
 extern char voice_pool[] __asm__("D_0013E550");
 extern u8 D_0013D388[];
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void vendor_volume(s32, s32) __asm__("FUN_L01_002a1968");
 
 /* Swings the gate to its driver's progress, fading a creak in while it
@@ -344,7 +344,6 @@ extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void draw_scrolled_mesh_batch(int) __asm__("FUN_L08_002f0b40");
 extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");
 
@@ -1185,7 +1184,6 @@ extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("
 extern void FUN_L00_0025a120(void *);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 /* Watcher update, same routine as batalia_deserter_update with two more states and the joint pose copy. */
 void commando_update(WM *m) __asm__("FUN_L08_00302ce8");

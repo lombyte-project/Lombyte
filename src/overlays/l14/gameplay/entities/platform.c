@@ -15,6 +15,8 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Finds the path segments nearest to the two target points and sums the segment lengths between them. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D7668), where it is exact; names translated to the US level program. */
@@ -430,7 +432,6 @@ float D_L14_001DE540[4][4] = {
     {0.0f, 1.0f, 1.0f, 1.0f},
     {0.0f, 1.0f, -1.0f, 1.0f},
 };
-extern unsigned long get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
 void draw_racer_glow_quads(struct Moby *m) __asm__("FUN_L14_002d71f0");
@@ -696,7 +697,6 @@ extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("
 extern void initialize_ribbon_effect_state(char *) __asm__("FUN_L14_002df080");
 extern void animate_ribbon_effect_paths(char *) __asm__("FUN_L14_002df138");
 extern void register_hero_hit_in_clip_volume(char *) __asm__("FUN_L14_002dfc58");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 void update_ribbon_effect_moby(struct Moby *moby) __asm__("FUN_L14_002dee28");
 

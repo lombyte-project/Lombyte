@@ -13,6 +13,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 /* pvars of the projectile moby FUN_L09_00307ba8 spawns */
 typedef struct {
@@ -90,7 +93,6 @@ typedef struct {
 extern OvlVec4 D_0013F3D0_307d68 __asm__("D_0013F3D0");
 extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
 extern char D_L09_00174000[] __asm__("D_L09_00174000");
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
@@ -188,7 +190,6 @@ extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 extern struct Moby *get_moby_suck_cannon_record(struct Moby *) __asm__("FUN_L00_002db890");
 extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern void FUN_L00_00250df8_30a778(struct Moby *) __asm__("FUN_L00_00250df8");
-extern s16 *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern void debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
 extern char spawner_child_respawn_failure_format[] __asm__("D_L09_00209280");
 
@@ -326,7 +327,6 @@ extern int activate_effect_l08(void *, void *, float, void *, int, void *, int) 
 extern int refresh_spawner_population_and_find_free_slot(int, char *) __asm__("FUN_L09_0030aae0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void generate_random_scaled_vector2(float *, float) __asm__("FUN_L09_00277758");
-extern float FUN_00213508_30ab80(void *, int, float) __asm__("FUN_00213508");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_random_offset_to_vector_xyz(float *, float) __asm__("FUN_L00_0025f8e0");
 extern float FUN_L00_0025abf0_30ab80(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
@@ -463,7 +463,7 @@ void spawner_update(char *moby)
             fast_vec_add(target, target, launch_velocity);
         }
         {
-            float ground = FUN_00213508_30ab80(target, 0, 0.5f);
+            float ground = probe_ground_height(target, 0, 0.5f);
             if (ground != 0.0f)
                 target[2] = ground;
         }
@@ -571,7 +571,6 @@ extern CollisionHit D_L09_00173FC0;
 
 extern s32 collision_line(void *, void *, s32, struct Moby *, s32) __asm__("FUN_001efa68");
 extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
-extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001fefc8(void *);
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");

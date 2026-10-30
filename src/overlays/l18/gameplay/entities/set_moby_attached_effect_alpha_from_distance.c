@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 
 
@@ -19,7 +20,6 @@ typedef struct {
     unsigned char alpha;
 } Level18Effect;
 
-extern Level18Effect *suck_get_aim_height(Level18Moby *) __asm__("FUN_002141f8");
 
 void set_moby_attached_effect_alpha_from_distance(Level18Moby *moby, float scale) __asm__("FUN_L18_00265ff8");
 

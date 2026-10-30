@@ -13,6 +13,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/camera/follow_cam.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/effect_texture.h"
 
 
 
@@ -21,10 +25,8 @@
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int spawn_bombthrower_grass_projectile() __asm__("FUN_L10_002d8058");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 int D_L10_00161BF0 = 240;
 int D_L10_00161BF4 = 600;
@@ -667,7 +669,6 @@ extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern void *spawn_splitting_effect_particle_with_collision_response_and_fade(char *a, char *b, unsigned char c, int d) __asm__("FUN_L00_0026fd28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int tick_countdown_32(void *) __asm__("func_001F9740");
 
 void update_timed_effect_emitter(struct Moby *moby) __asm__("FUN_L10_002c7a20");
@@ -1091,7 +1092,6 @@ int spawn_bombthrower_grass_projectile(int owner, char *initial_position, char *
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float FUN_001f9e90_u(float, float) __asm__("FUN_001f9e90");
 extern float step_rotation_toward_target(float, float, float) __asm__("FUN_L00_00200510");
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float square_root(float) __asm__("func_001F9988");
 
 int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *previous_position) __asm__("FUN_L10_002d8170");
@@ -2014,7 +2014,6 @@ extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 
 void render_data_processor_linked_effect(u8 *moby) {

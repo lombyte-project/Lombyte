@@ -9,7 +9,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/rendering/vu1_registers.h"
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L06_00167400[];
 extern OvlVec4 D_L06_001fe8d0[];
@@ -408,7 +409,6 @@ void spawn_timed_projected_sprite_effect(char *world_position, int duration_upda
         effect_moby[0x20] = 1;
     }
 }
-extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);

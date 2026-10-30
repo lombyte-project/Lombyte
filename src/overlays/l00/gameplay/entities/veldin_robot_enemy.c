@@ -8,6 +8,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -23,7 +25,6 @@ typedef struct {
     u8 state;
 } HelpTarget;
 
-s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern u16 D_00141850[];
 extern u16 D_00141968[];
@@ -220,7 +221,6 @@ extern s32 register_beam_slot(ElectroidMoby *, s32, s32) __asm__("FUN_L00_002e1f
 extern void build_moby_bone_transform(ElectroidMoby *, s32, void *) __asm__("FUN_0020cca8");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern f32 compute_interpolated_record_value(ElectroidMoby *) __asm__("FUN_0020c9e0");
 extern s32 collision_line(void *, void *, s32, ElectroidMoby *, ElectroidProbe *) __asm__("FUN_001efa68");
 extern s32 release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
 extern s32 set_beam_origin_transform_and_endpoint(ElectroidMoby *, void *, void *) __asm__("FUN_L00_002e2190");

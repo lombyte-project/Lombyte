@@ -12,6 +12,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/math/random.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/interpolation.h"
+#include "rnc/math/spherical_offset.h"
 
 typedef union {
     u128 q;
@@ -23,7 +26,6 @@ extern float FUN_001f9dc8_214658(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_214658(float) __asm__("FUN_001f9de0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
@@ -789,7 +791,6 @@ void update_hero_planar_movement_velocity(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217570), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 /* In mode 3 allocates a voice for the object at D_0013F350+0xA88, else for the one at +0x2080. */
 int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
@@ -1027,7 +1028,6 @@ typedef union {
 } V_217450;
 extern int FUN_001f96f8_217450(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern float FUN_001f9dc8_217450(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_217450(float) __asm__("FUN_001f9de0");
 extern void spawn_effect(void *, void *, int, int, int, int, int,
@@ -1088,7 +1088,6 @@ extern float FUN_001f9e90_c2(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");

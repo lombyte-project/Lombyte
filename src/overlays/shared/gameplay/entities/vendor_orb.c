@@ -11,6 +11,8 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/interpolation.h"
 extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -124,14 +126,12 @@ typedef struct {
 extern char D_0013F350[] NOT_SDA;
 extern char D_L00_00166DC0[] NOT_SDA;
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern int FUN_001f96b0_c() __asm__("FUN_001f96b0");
 extern int FUN_001f9a40_c() __asm__("FUN_001f9a40");
 extern int hero_set_state() __asm__("FUN_L00_002223f8");
 extern int FUN_L00_00266d60();
-extern int allocate_voice_for_target_entry(int,int,int) __asm__("FUN_0022da68");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_002323b8(int,int);
 extern void clear_u64_value(void *) __asm__("func_001F99F8");

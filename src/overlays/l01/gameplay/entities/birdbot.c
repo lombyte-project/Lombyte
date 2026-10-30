@@ -10,6 +10,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* One scrolling two-texture overlay layer (0x60 bytes). */
 typedef struct {
@@ -40,7 +44,6 @@ typedef struct {
 
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") MACRO_ADDR;
 extern u8 D_L01_001CAC80[];
-extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void FUN_L01_00262618(ScrollLayer *);
 extern void FUN_L01_0021fa98(s32, s32, s32, s32, s32, s32);
 
@@ -645,7 +648,6 @@ extern int FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int,
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern int select_birdbot_path_node(void *, int *) __asm__("FUN_L01_002e6790");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(void *) __asm__("func_001F9740");
 extern short birdbot_projectile_speed_gp __asm__("D_L01_00161950") __attribute__((sda));
@@ -672,7 +674,6 @@ extern void FUN_L01_0026d930_u(char *p) __asm__("FUN_L01_0026d930");
 extern void set_range_centered_on_value(char *arg, float value) __asm__("FUN_L01_0026eff8");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void birdbot_update(PeMoby *m) __asm__("FUN_L01_002e6bf0");
@@ -2379,8 +2380,6 @@ struct VoicePoolWindow {
 extern u8 voice_pool[] __asm__("D_0013E550");
 /* nonzero while voice `handle` plays (state 1 or 2) for `moby` */
 extern int voice_is_playing(void *moby, int handle) __asm__("FUN_L00_0028d8c0");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 
 void door_half_update(Moby *self) __asm__("FUN_L01_002f4710");
 void door_half_update(Moby *self)
@@ -2931,7 +2930,6 @@ extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern void spawn_debris(char *, void *, f32) __asm__("FUN_L01_0030be70");
 extern int debug_print() __asm__("FUN_001e93b0");
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 hero_set_state(s32, s32) __asm__("FUN_L01_0023cf98");
 extern void jet_mount(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
 extern void jet_end_mount(s32) __asm__("FUN_L00_002eac18");

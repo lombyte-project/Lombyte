@@ -10,6 +10,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 extern int lookup_s16_pair_value(int, int *) __asm__("FUN_L00_002321c0");
 
 /* With both objects at hero +0x1180 and +0x1184 present and the
@@ -1619,7 +1620,6 @@ typedef struct {
 void FUN_001f9a68_00234d40(Vec4_00234d40 *, void *, float) __asm__("FUN_001f9a68");
 void FUN_001f9a10_00234d40(Vec4_00234d40 *, Vec4_00234d40 *,
                            Vec4_00234d40 *) __asm__("FUN_001f9a10");
-float probe_ground_height(Vec4_00234d40 *, int, float) __asm__("FUN_00213508");
 float absolute_float(float) __asm__("FUN_001f99c0");
 void request_hero_target_pose(void *, float, int) __asm__("FUN_L00_00233ee8");
 void try_reposition_hero_on_nearby_ground(void) __asm__("FUN_L00_00234d40");

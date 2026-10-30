@@ -14,6 +14,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
@@ -90,7 +92,6 @@ extern char *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern struct Moby *spawn_debris_c8e0(f32, struct Moby *, s32, void *, void *, s32, s32, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void spawn_proximity_gated_bolts(struct Moby *) __asm__("FUN_L01_002787a0");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void spawn_trail_c8e0(void *, s32, f32, f32, s32, s32, s32, void *, f32) __asm__("FUN_L00_00272060");
 extern struct Spark_c8e0 *spawn_puff(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
@@ -227,7 +228,6 @@ typedef struct {
 
 extern float glow_sprite_local_vertices[4][4] __asm__("D_L05_00215C70");
 extern void draw_geometry_quad(void *, void *, int);
-u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
 extern short glow_sprite_camera_offset_distance __asm__("D_L05_00161FCC") __attribute__((sda));
 extern char D_L05_001671C0_lui[] __asm__("D_L05_001671C0") NOT_SDA;

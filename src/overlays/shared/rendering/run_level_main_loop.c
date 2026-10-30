@@ -14,6 +14,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* Level main loop (shared by every level): clears the level's work area, sets up the level and counts the visit
    and play time of the planet, then runs one frame per pass, dispatching on the game mode, until the level asks to
@@ -75,7 +76,6 @@ extern void music_stop(void) __asm__("FUN_00215ee8");
 extern void memcard_update_state(void) __asm__("FUN_002093d8");
 extern void run_state_handler(void) __asm__("FUN_00208840");
 extern void setup_gif_paging(int) __asm__("FUN_001f4280");
-extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 extern long get_frame_texture(int) __asm__("FUN_001ffa10");

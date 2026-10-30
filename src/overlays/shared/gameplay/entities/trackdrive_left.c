@@ -10,6 +10,8 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/math/interpolation.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 
 extern u8 scaled_table_output[] __asm__("D_L02_001CB9C0");
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
@@ -1191,7 +1193,6 @@ void attach_big_head_cheat_manipulator_to_matching_moby(char *moby) {
 }
 extern void FUN_L02_002ea7d0_c(struct Moby *) __asm__("FUN_L02_002ea7d0");
 extern void FUN_L02_002ea8b0_c(struct Moby *) __asm__("FUN_L02_002ea8b0");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -1201,7 +1202,6 @@ extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90"
 extern void ea210_approach(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
 extern void FUN_L00_002ea9d8_c(void *) __asm__("FUN_L00_002ea9d8");
 extern void FUN_L00_002eaa30_c(void *) __asm__("FUN_L00_002eaa30");
-extern float approach_value(float, float, void *) __asm__("FUN_00213ed8");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int D_L02_0015F5CC;
 extern unsigned char D_001413F4 NOT_SDA;

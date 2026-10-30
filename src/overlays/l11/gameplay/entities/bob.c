@@ -13,6 +13,10 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 /* Moby.state for the resort-owner callbacks; path progression is separate. */
 enum ResortOwnerState {
@@ -939,7 +943,6 @@ int classify_resort_owner_target_proximity(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D37A8), where it is exact; names translated to the US level program. */
 
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void FUN_L00_00259710(void *a);
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 
@@ -1219,7 +1222,6 @@ extern void FUN_L11_002f3040_2518(char *) __asm__("FUN_L11_002f3040");
 extern void FUN_L11_002f2cd0_2518(char *) __asm__("FUN_L11_002f2cd0");
 extern void FUN_L11_002f2d58_2518(char *) __asm__("FUN_L11_002f2d58");
 extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern int get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
@@ -1589,10 +1591,8 @@ typedef struct {
 } MobyAnim_309378;
 
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
-extern void *suck_get_aim_height(char *) __asm__("FUN_002141f8");
 void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2,
                                  int arg3) __asm__("FUN_00212f90");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int arg,
                                 float scale) __asm__("FUN_L11_00309378");
@@ -1665,7 +1665,6 @@ struct PokPv {
 extern unsigned char D_0013E550_309ac0[] __asm__("D_0013E550");
 extern void *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void scale_vec_309ac0(float *, float) __asm__("FUN_L00_0025f730");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");

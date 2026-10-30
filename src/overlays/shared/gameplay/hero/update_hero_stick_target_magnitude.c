@@ -6,6 +6,8 @@
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/interpolation.h"
 
 extern float D_L02_0017C3B8[];
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
@@ -204,7 +206,6 @@ typedef union {
     f32 f[4];
 } HopVec;
 
-extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
@@ -346,7 +347,6 @@ extern HeroTableRow2C D_L02_0017C228[];
 #include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude_globals.h"
 extern s32 hero_button_8_double_press_countdown_gp __asm__("D_L02_0015F674") __attribute__((sda));
 
-extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 hero_set_state(s32, s32) __asm__("FUN_L02_0022b728");
 extern u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");

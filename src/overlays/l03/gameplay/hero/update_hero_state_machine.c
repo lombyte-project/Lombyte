@@ -14,6 +14,7 @@
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/math/random.h"
+#include "rnc/audio/voice_alloc.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 03 build). */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/help_0021CDA8.c: func_L03_0021CDA8), where it is exact; names translated to the US level program. */
@@ -116,7 +117,6 @@ extern void hero_speed_from_table(void) __asm__("FUN_L01_00232290");
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 

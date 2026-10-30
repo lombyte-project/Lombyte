@@ -5,6 +5,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/globals.h"
 #include "sda.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
 
@@ -366,7 +367,6 @@ extern Glob D_L00_00173E40_c __asm__("D_L00_00173E40");
 
 extern s32 FUN_L00_002583f0_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002583f0");
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
-extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
 s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f);

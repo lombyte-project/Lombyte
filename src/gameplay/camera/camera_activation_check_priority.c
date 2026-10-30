@@ -3,6 +3,7 @@
 #include "rnc/gameplay/camera/camera_modes.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/clip_volume.h"
 typedef struct {
     char unk_00[0x10];
     int unk10;
@@ -11,7 +12,6 @@ typedef struct {
 } CamRec20;
 extern CamRec20 *D_0015EF90 MACRO_ADDR;
 extern CamRec20 *D_0015EF40 MACRO_ADDR;
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 typedef struct {
     char unk_00[4];
     int (*fn_04)(void *, void *);

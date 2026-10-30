@@ -19,6 +19,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_00299108), where it is exact; names translated to the US level program. */
 
@@ -460,7 +462,6 @@ extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void update_view_context(void) __asm__("FUN_001f2d98");
-float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
 void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void process_menu_entry(F_298b18 *, void *, int) __asm__("FUN_00216c48");
@@ -1336,7 +1337,6 @@ extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32)
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void fade_to_black(s32) __asm__("FUN_001f4a58");
 extern s32 hero_set_state(s32, s32) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00232fe8_29a6b0(void) __asm__("FUN_L00_00232fe8");
@@ -1925,7 +1925,6 @@ extern s32 vendor_purchase_confirmed_gp __asm__("D_L00_00161E0C") __attribute__(
 extern s32 vendor_ammo_quantity_adjustment_enabled_gp __asm__("D_L00_00161E10") __attribute__((sda));
 extern void FUN_L00_00250df8_2ba78(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_0020d4f0_2ba78(void *, int, int, int, int) __asm__("FUN_0020d4f0");
-extern s32 allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern s32 add_ammo(u32, int) __asm__("FUN_L00_00233e40");
 extern void handle_vendor_auxiliary_moby_event(int) __asm__("FUN_L00_0029b4d8");
 extern void build_vendor_menu_rows(int) __asm__("FUN_L00_0029a400");

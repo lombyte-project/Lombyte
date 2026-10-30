@@ -10,6 +10,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/random.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00302A58), where it is exact; names translated to the US level program. */
 
@@ -329,7 +330,6 @@ typedef struct {
     u64 gs_state;
 } VendorBeamStripPacket;
 
-extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") __attribute__((sda));

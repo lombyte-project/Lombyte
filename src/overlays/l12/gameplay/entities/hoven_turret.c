@@ -18,6 +18,9 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Hoven vendor draw: builds the two strip matrices, then draws the four rings as quads lit by their phase. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00303CA8), where it is exact; names translated to the US level program. */
@@ -234,10 +237,8 @@ extern int D_0013F3D0; /* no foreign declaration */
 extern int D_L12_001B0930; /* no foreign declaration */
 extern int collision_line() __asm__("FUN_001efa68");
 extern int FUN_L00_00259888();
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) __asm__("FUN_L00_0025b6b8");
 extern void func_L00_0025C710_304310(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int func_L00_001EFFF0_304310(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -502,7 +503,6 @@ extern void draw_hoven_turret_destruction_fade() __asm__("FUN_L12_00304d98");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void attach_manipulator(void *, int, void *);
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void detach_manipulator(void *, void *);
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
@@ -981,7 +981,6 @@ extern void find_point_ahead(struct Moby *, void *, float) __asm__("FUN_L01_0027
 extern void *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(struct Moby *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void blend_moby_animation(struct Moby *, int, int, int) __asm__("FUN_00212f90");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int collect_mobies_in_sphere(void *, int, struct Moby *, void *, float) __asm__("FUN_L00_001f2868");
 extern int coll_sphere(void *, int, struct Moby *, float) __asm__("FUN_L00_001f0d60");
 extern void vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");

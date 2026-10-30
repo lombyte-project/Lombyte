@@ -13,6 +13,9 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/interpolation.h"
+#include "rnc/math/spherical_offset.h"
 
 /*
  * Hero movement step: clamps the velocity, moves the hero by it (plus the
@@ -186,7 +189,6 @@ typedef union {
 } HopVec;
 
 extern f32 hero_air_control_speed_reference[] __asm__("D_L01_0017C250");
-extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
@@ -412,15 +414,12 @@ extern int get_hero_idle_animation_index(int) __asm__("FUN_L01_00226f10");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern int scale_game_frames(int);
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern s32 D_L01_0015F688 __attribute__((sda));
 extern s32 D_L01_0015F68C __attribute__((sda));
 extern unsigned char *pool_draw_tiles __asm__("D_L01_001612D0");
 extern unsigned char *spawn_random_alpha_rotated_particle(void *, void *, float) __asm__("FUN_L00_00271b18");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern void FUN_001efa68_cf(float *, float *, float) __asm__("FUN_L00_00233810");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void emit_hero_periodic_surface_effect(int, int) __asm__("FUN_L00_00209540");
 extern void emit_hero_periodic_surface_particles(int, int) __asm__("FUN_L00_00209848");

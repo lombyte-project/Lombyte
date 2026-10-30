@@ -15,6 +15,7 @@
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/math/random.h"
+#include "rnc/audio/voice_alloc.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 16 build). */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00227818.c: func_L16_00227818), where it is exact; names translated to the US level program. */
@@ -129,7 +130,6 @@ extern void process_hero_race_object_interactions(void) __asm__("FUN_L05_00253b4
 extern void update_hero_hoverboard_trick_score(void) __asm__("FUN_L05_00254058");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 

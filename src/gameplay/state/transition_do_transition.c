@@ -5,6 +5,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/audio/voice_alloc.h"
 
 typedef struct {
     s32 off;
@@ -68,7 +69,6 @@ extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
 extern s32 memcard_update_state() __asm__("func_002093D8");
 extern s32 load(u8 *dst, s32 a, s32 b) __asm__("func_00216828");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) __asm__("FUN_0022dba0");
 extern void initialize_sif_rpc(void) __asm__("FUN_00232ce0");
 extern void init_stash(void) __asm__("FUN_00232d00");

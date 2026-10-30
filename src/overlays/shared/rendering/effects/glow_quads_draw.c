@@ -9,6 +9,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/math/spherical_offset.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/initonce_0023E4C8.c: func_L00_0023E4C8). */
 
@@ -167,7 +168,6 @@ void glow_quads_draw(char *moby) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, int, int,
                                   void *);

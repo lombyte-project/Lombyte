@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/rendering/vu1_registers.h"
 extern s32 update_sky_effects() __asm__("func_0022AE70");
 extern s32 setup_sky_gif_paging() __asm__("func_0022B4C8");
 extern s32 do_sky_gif_paging() __asm__("func_0022B558");
-extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
 void transition_draw_sky(void) __asm__("FUN_001e9ab8");
 

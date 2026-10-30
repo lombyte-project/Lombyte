@@ -12,6 +12,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
 
@@ -95,7 +97,6 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
     *(int *)(target_output + 0x44) = target_selection_status;
     return target_selection_status;
 }
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv);
 int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *list, int exclusion_list_bound, float *target_region_vertices, int nv) {
@@ -406,7 +407,6 @@ extern int D_0015EE28_macro __asm__("D_0015EE28") MACRO_ADDR;
 extern s32 D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
 extern int D_L00_0015F598;
 extern unsigned char D_L00_0015FC88_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
-extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void debug_print() __asm__("FUN_001e93b0");
 extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern int FUN_L00_00261b48(int, void *, void *, void *);

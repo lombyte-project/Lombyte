@@ -12,6 +12,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
+#include "rnc/rendering/clip_volume.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
 struct L03HelpState {
@@ -40,7 +41,6 @@ extern struct L03HelpRecord help_records[] __asm__("D_00141968");
 extern struct L03ItemEntry D_L03_00179BC0[];
 extern struct Moby *D_L03_0015FFE4;
 
-extern s32 is_point_inside_clip_volume(void *point, s32 volume) __asm__("FUN_00214720");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern s32 allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
@@ -474,7 +474,6 @@ void update_camera_position_and_orientation(void *camera) {
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
 
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 void update_camera_state_outside_clip_volume(char *moby) __asm__("FUN_L03_002ebde8");
 

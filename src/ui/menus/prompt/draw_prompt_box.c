@@ -2,10 +2,10 @@
 #include "types.h"
 #include "rnc/ui/text/text_region.h"
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/rendering/vu1_registers.h"
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void *get_help_message_text(int) __asm__("func_001FDD10");
-extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern char fallback_prompt_text[] __asm__("D_001602E8");
 extern void font_print_window_small(struct TextRegion *, long, char *,
                                     int) __asm__("func_001F75F0");

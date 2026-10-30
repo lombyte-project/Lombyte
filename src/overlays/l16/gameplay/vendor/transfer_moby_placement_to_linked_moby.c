@@ -8,6 +8,7 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/rendering/vu1_registers.h"
 #ifndef __attribute__((section(".data")))
 #endif
 #ifndef __attribute__((section(".sdata")))
@@ -187,7 +188,6 @@ float *D_L16_00161FB0[2] = {D_L16_001DF0C0, D_L16_001DF278};
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void compute_level16_reflection_map_coordinates(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
-extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void draw_level16_visible_textured_batches(void) __asm__("FUN_L16_002e97a0");
 

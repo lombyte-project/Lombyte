@@ -7,6 +7,7 @@
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
 #include "sda.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 typedef struct {
     char pad[0x24];
@@ -74,7 +75,6 @@ s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
-u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");

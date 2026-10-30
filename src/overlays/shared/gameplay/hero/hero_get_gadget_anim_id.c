@@ -7,6 +7,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/interpolation.h"
 
 
 
@@ -52,7 +53,6 @@ typedef union {
     f32 f[4];
 } HopVec;
 
-extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");

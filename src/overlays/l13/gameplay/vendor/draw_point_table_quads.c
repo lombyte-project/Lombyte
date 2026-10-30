@@ -7,6 +7,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* GS quad packet for draw_quad_packet: four corners, their colours and
    texture coordinates, then the giftag and register words. */
@@ -35,8 +37,6 @@ f32 D_L13_001D9B70[4][2] = {
     {1.0f, 0.0f},
 };
 
-extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
-extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void draw_quad_packet(void *, void *, s32) __asm__("FUN_001f7d30");
 

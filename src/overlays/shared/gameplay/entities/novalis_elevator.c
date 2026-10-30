@@ -16,6 +16,13 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 /* Bolt-crank Moby.state, including the callback-only state. */
 enum BoltCrankState {
@@ -226,15 +233,12 @@ typedef struct {
     u8 collected[1];
 } L01PathLevelState;
 extern L01PathLevelState D_L01_001BB6B0;
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char voice_pool[] __asm__("D_0013E550");
 
@@ -429,7 +433,6 @@ extern float D_L01_001742C0[];
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void spawn_two_point_effect_particle(char *, char *) __asm__("FUN_L00_0026c6e8");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void spawn_collision_particle_bursts(void) __asm__("FUN_L01_002c72c8");
 
@@ -572,7 +575,6 @@ extern char D_L01_001BAAA0[];
 extern f32 D_L01_00167258_lui __asm__("D_L01_00167258") NOT_SDA;
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") NOT_SDA;
 extern f32 bolt_crank_radial_correction_step_gp __asm__("D_L01_001618A0") __attribute__((sda));
-extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void divide_vector_xyz(void *, void *, f32) __asm__("FUN_L00_001ff378");
 extern void set_hero_animation(int, int, f32) __asm__("FUN_L00_002323b8");
@@ -1003,7 +1005,6 @@ s32 update_sand_mouse_fall_motion(void *ctx, struct Moby *movement_state) {
 
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern char D_L01_00174340_h[] __asm__("D_L01_001742C0");
 extern int func_L00_001EFFF0_t(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
@@ -1128,7 +1129,6 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
 }
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/update_hover_moby_steering.h"
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
-extern f32 probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int rand(void) __asm__("FUN_001160d8");
 
@@ -1607,7 +1607,6 @@ typedef struct {
     char pad1C[0x14];
 } Hit_2eedd8;
 
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -1692,7 +1691,6 @@ extern int FUN_00214720(void *, int);
 extern void FUN_0022da68(int, int, char *);
 extern int FUN_00213260(int);
 extern float FUN_00213308(void);
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float frame_time_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_0015ED70 MACRO_ADDR;
 extern float D_0013F420[4];
@@ -2705,7 +2703,6 @@ typedef struct {
 
 extern s32 *D_L01_001B0930_2f2eb8[] __asm__("D_L01_001B0930");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 
 extern s32 D_L01_00161AF0 __attribute__((sda));
 void update_nearest_area_moby_selection(struct Moby *moby) __asm__("FUN_L01_002f2eb8");
@@ -2887,7 +2884,6 @@ extern s32 check_scaled_vector_bsphere(struct Moby *, f32) __asm__("FUN_L01_0027
 extern s32 get_first_moby_in_group(struct Moby **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern s32 get_next_moby_in_group(struct Moby **, struct Moby *, s32, s32) __asm__("FUN_L00_002592b8");
 extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern s32 FUN_00213260(s32);
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern s32 FUN_001e93b0(const char *, ...);
@@ -3251,7 +3247,6 @@ void gunship_follow_path(struct Moby *moby) {
 extern void FUN_L01_00261c10(void *, void *) __asm__("FUN_L01_00261c10");
 extern void FUN_L01_00261df8(f32 *) __asm__("FUN_L01_00261df8");
 extern void update_animated_offset_pairs(f32 *) __asm__("FUN_L01_002b80d0");
-extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
 void render_water_grids(f32 *water_record, s32 count) __asm__("FUN_L01_002b91c8");
 

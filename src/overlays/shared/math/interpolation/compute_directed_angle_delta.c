@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/interpolation.h"
 
 
 
@@ -62,7 +63,6 @@ float spring_angle(float *current_angle, float *angular_velocity, int rotation_d
     }
     return angle_error;
 }
-extern float approach_value(float, float, float *) __asm__("FUN_00213ed8");
 extern void step_angle_toward_target(float *, void *, float, float) __asm__("FUN_L00_0025bc00");
 
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");

@@ -15,6 +15,11 @@
 #include "qcopy.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* UpdateMoby_584 */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D4960), where it is exact; names translated to the US level program. */
@@ -48,7 +53,6 @@ extern float D_L04_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/l04/gameplay/entities/snow_plow_globals.h"
 extern int snow_plow_hit_count_gp __asm__("D_L04_0015EDF8") __attribute__((sda));
 extern void debug_print() __asm__("FUN_001e93b0");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
 extern void FUN_L00_00258278(void *, float, void *, float, float, float);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
@@ -62,7 +66,6 @@ extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
@@ -466,7 +469,6 @@ hit:
 extern int D_L04_0015FFD8; /* no foreign declaration */
 extern short floating_platform_ring_rotation_rate_degrees __asm__("D_L04_0016195C") __attribute__((sda));
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 
 void floating_platform_update(char *moby) __asm__("FUN_L04_002cdda0");
 void floating_platform_update(char *moby) {
@@ -720,8 +722,6 @@ WBJoints D_L04_001DC450 = {{0, 2, 1, 3, 4, 5}};
 extern char D_L04_00166F40[];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float spring_turn(float, float, void *, float, float, float) __asm__("FUN_L00_00258110");
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
@@ -747,7 +747,6 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 void emit_woodcut_bot_death_effects(void *m) __asm__("FUN_L04_002d1608");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void woodcut_bot_update(WBMoby *m) __asm__("FUN_L04_002d16b8");
 void woodcut_bot_update(WBMoby *m) {

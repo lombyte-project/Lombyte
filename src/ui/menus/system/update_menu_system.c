@@ -6,6 +6,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/audio/voice_alloc.h"
 
 struct Ent3 {
     u8 pad0[0x10];
@@ -27,7 +28,6 @@ struct Ent {
 extern void reset_active_camera_position_and_basis(void) __asm__("func_00218D10");
 extern void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
 extern void update_visible_resident_objects() __asm__("FUN_00212e28");
-extern s32 allocate_voice_for_target_entry(s32, s32, struct Ent *) __asm__("func_0022DA68");
 extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 extern void update_fog(void) __asm__("FUN_001f2588");

@@ -15,13 +15,17 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029E370), where it is exact; names translated to the US level program. */
 
 extern char D_L03_00166EC0[];
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 void update_emitter_intermittent_sound(struct Moby *moby) __asm__("FUN_L03_0029d1b8");
@@ -73,7 +77,6 @@ int is_moby_class_23d_in_state_5(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8068), where it is exact; names translated to the US level program. */
 
-f32 compute_interpolated_record_value(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 
 int can_release_linked_robot_dog(struct Moby *moby) __asm__("FUN_L03_002c6ca0");
 
@@ -181,7 +184,6 @@ extern char D_L03_001E2410[];
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern void debug_print(void *, int) __asm__("FUN_001e93b0");
 extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 typedef struct {
     char p00[0x60];
@@ -434,13 +436,11 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int is_hero_on_moby(char *) __asm__("FUN_L01_00277fb8");
 extern int is_moby_class_23e_in_state_14(char *) __asm__("FUN_L03_002c6c60");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void set_moby_state_14(char *) __asm__("FUN_L03_002c6c90");
 extern void debug_printf_292e98(char *, ...) __asm__("FUN_001e93b0");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 /* Heading of a path's first segment. */
 #define PATH_HEADING(p) \
@@ -2134,10 +2134,8 @@ extern char *D_L03_001B05B0[];
 extern CollisionHit D_L03_00173F40;
 extern char sphere_collision_resolved_position[] __asm__("D_L03_00173F70");
 extern char D_L03_00173F80[];
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern float truncate_float_to_s32_cf(float) __asm__("FUN_001f96b0");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int D_L03_0015F5C4;
 extern int D_L03_0015F5CC;

@@ -2,6 +2,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 typedef unsigned int u128_25a478 __attribute__((mode(TI), aligned(16)));
 typedef union { u128_25a478 q; f32 f[4]; } V_25a478;
 typedef struct { u8 pad0[0xA6]; s16 hA6; } T_25a478;
@@ -31,7 +32,6 @@ extern u8 D_0013E533[];
 extern f32 hit_damage_override_table[2] __asm__("D_0015FFC8") __attribute__((sda));
 extern f32 hit_vector_scale_table[][8] __asm__("D_001CC0C8");
 extern u8 hit_response_code_table[][4] __asm__("D_001CC080");
-extern Q_25a478 *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern Q_25a478 *ReadStateField(void *);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");

@@ -18,6 +18,9 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
@@ -254,7 +257,6 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
 }
 extern float D_6C_e[] __asm__("D_0015ED68") MACRO_ADDR;
 extern void approach_angle(char *, char *, float, float, float, float) __asm__("FUN_L00_0025be00");
-extern float FUN_0020c9e0_c(char *) __asm__("FUN_0020c9e0");
 extern void FUN_L00_00258b50_c(char *, char *, float *, float *, float) __asm__("FUN_L00_00258b50");
 
 void update_moby_target_heading_and_conditional_movement(char *moby, float *target_position) __asm__("FUN_L11_00315f58");
@@ -267,7 +269,7 @@ void update_moby_target_heading_and_conditional_movement(char *moby, float *targ
     float target_heading_or_record_value;
     target_heading_or_record_value = fast_add_rotations(fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14)), *(float *)(moby_vars + 0x24C));
     approach_angle(moby + 0x48, moby_vars + 0x250, target_heading_or_record_value, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f, D_6C_e[1] * 12.566371f);
-    target_heading_or_record_value = FUN_0020c9e0_c(moby);
+    target_heading_or_record_value = compute_interpolated_record_value(moby);
     if (*(u8 *)(moby + 0x52) == *(u8 *)(moby + 0x53) && 8.0f < target_heading_or_record_value && target_heading_or_record_value < 22.0f) {
         *(float *)(moby_vars + 0x1A4) = D_L11_001622FC_gp * frame_time;
         planar_heading_vector[0] = fast_cos(*(float *)(moby + 0x48)) * 2.0f;
@@ -1721,7 +1723,6 @@ extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
 extern void queue_oil_tanker_front_texture_2b_batches(int) __asm__("FUN_L11_0031e858");
 extern void emit_oil_tanker_render_batches_with_pair_offset(int) __asm__("FUN_L11_0031e780");
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 extern unsigned char D_L11_0016258C[] MACRO_ADDR;
 void draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
@@ -1868,7 +1869,6 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_0031EFC0.c: func_L11_0031FDA0), where it is exact; names translated to the US level program. */
 
 extern int D_L11_00162610; /* no foreign declaration */
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern char distance_faded_effect_texture_2c_fixed_alpha_gp[4] __asm__("D_L11_001625C8") __attribute__((sda));
 extern char distance_faded_effect_texture_2a_pair_zero_fixed_alpha_gp[4] __asm__("D_L11_001625E8") __attribute__((sda));
 extern char distance_faded_effect_texture_2b_fixed_alpha_gp[4] __asm__("D_L11_001625F8") __attribute__((sda));

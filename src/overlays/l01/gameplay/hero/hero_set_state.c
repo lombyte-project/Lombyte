@@ -17,6 +17,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "sda.h"
+#include "rnc/audio/voice_alloc.h"
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/help_0023D688.c: func_L01_0023D688), where it is exact; names translated to the US level program. */
 
@@ -1603,7 +1604,6 @@ struct HeldGadgetVars {
 
 extern int D_00141660 NOT_SDA;
 int r1_double_tap_timer __asm__("D_L01_0015F674") = 0;
-extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern unsigned int pad_pressed_within(unsigned int, int, int *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_0020d498(int);
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");

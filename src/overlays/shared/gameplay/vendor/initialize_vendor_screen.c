@@ -4,6 +4,7 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "asm.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 
 /* Opens the vendor screen for moby m in level lvl: sets up its camera, resets the screen state and runs it until it closes. */
 /* Ported from rac1-decomp (src/overlays/shared/update_002AFD00.c: func_L01_002AFD00), where it is exact; names translated to the US level program. */
@@ -38,7 +39,6 @@ extern void fill_transfer_words() __asm__("FUN_001f97e8");
 extern void music_pause(s32);
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void transform_vector_by_basis(void *, void *, void *);
-f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");
 void snd_pause_all_sounds_in_group(s32 arg0) __asm__("FUN_0012e3e8");

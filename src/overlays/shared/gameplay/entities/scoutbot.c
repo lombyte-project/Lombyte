@@ -14,6 +14,10 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* Scoutbot update: hovers at its post, flies to its target and back, calls reinforcements, shoots, dies. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D3DF8), where it is exact; names translated to the US level program. */
@@ -60,7 +64,6 @@ typedef struct Data_3DF8 {
 extern char D_L08_0016D2E8[];
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int fast_tween_color() __asm__("FUN_001fa6e0");
 extern int FUN_L00_0024f7c8();
 extern int FUN_L00_002dc9f0();
@@ -69,7 +72,6 @@ extern short D_L08_00161888 __attribute__((sda));
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
@@ -82,10 +84,7 @@ void update_scoutbot_movement(char *m) __asm__("FUN_L08_002d3d78");
 void draw_scoutbot_glow_quad(char *arg) __asm__("FUN_L08_002d4108");
 extern void sound_3DF8(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
 extern void wake_3DF8(void *) __asm__("FUN_L00_0025a120");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void turn_3DF8(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern void explode_3DF8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -358,7 +357,6 @@ typedef struct {
     float uv[8];
     u64 tag[4];
 } Packet_002d3878 __attribute__((aligned(16)));
-extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void scale_vector_002d3878(float, void *) __asm__("FUN_L00_0025f730");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L08_00161894_lui __asm__("D_L08_00161894") NOT_SDA;
@@ -551,7 +549,6 @@ typedef struct {
     u64 a, b, c, d;
 } Pk;
 extern u8 D_L08_001675C0_lui[] __asm__("D_L08_001675C0") NOT_SDA;
-u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 
 extern float D_L08_001D1D80[4][4] NOT_SDA;

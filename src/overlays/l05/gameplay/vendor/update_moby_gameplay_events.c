@@ -7,6 +7,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/rendering/clip_volume.h"
 extern char D_0013F3D0[];
 extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA, D_001413DC NOT_SDA, D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
@@ -15,7 +16,6 @@ extern int D_001417E0[];
 extern int D_0014EE90[];
 extern unsigned char D_0014C050[];
 extern f32 D_0013F3D8, D_0013F3DC;
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void collect_moby_and_clear_path_keys(void *) __asm__("FUN_L00_002d5830");
 typedef unsigned int L05Vector __attribute__((mode(TI), aligned(16)));

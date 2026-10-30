@@ -7,6 +7,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/rendering/vu1_registers.h"
 
 struct LevelProjectionState {
     u8 pad_0[0xB0];
@@ -40,7 +41,6 @@ extern void draw_resident_textured_quad() __asm__("func_0022E8C8");
 extern void draw_resident_textured_banner(s32) __asm__("FUN_0022ea08");
 extern void render_environment_mapped_object(s32) __asm__("func_002327A0");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
-extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 
 void render_level_frame(void) __asm__("FUN_0022f288");
 

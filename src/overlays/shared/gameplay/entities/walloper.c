@@ -11,6 +11,10 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 extern float D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
 extern float D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
 extern float D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
@@ -493,7 +497,6 @@ typedef struct {
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_and_arc_two_pass_quads.h"
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
-extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second_pass_alpha, int point_count, float sx, float sy, float sz) {
     char *point_bytes = mv;
@@ -807,7 +810,6 @@ extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float D_L00_00166DC0[];
 extern float D_L00_0017AEBC NOT_SDA;
 extern float FUN_L00_00257c48(float lo, float hi);
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern int D_L00_001616CC;
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/walloper_update.h"
 extern int fast_dec_timer() __asm__("func_001F9740");
@@ -1236,7 +1238,6 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L00_00173E40[];
 extern float D_L00_001616DC __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/select_morphoray_target_and_adjust_aim.h"
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 char *select_morphoray_target_and_adjust_aim(char *self, float *position, float *heading, float *pitch) __asm__("FUN_L00_002bc3b0");
@@ -1416,12 +1417,10 @@ extern s32 queue_animation_update() __asm__("func_001FF308");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 extern void tick_countdown_32_c(s32 *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 int allocate_packed_color_point_light_slot(void *v, float a, float b, int col) __asm__("FUN_L00_0023e5e0");
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
@@ -1459,10 +1458,8 @@ extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void func_L00_002BE3A8_2BDAF0(void *) __asm__("FUN_L00_002bd0a0");
 extern void func_L00_001FF4B0_2BDAF0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_2BDAF0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int remove_hud_item(int) __asm__("FUN_001ff480");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
 
@@ -1784,7 +1781,6 @@ extern Vec_2BE3A8 D_L00_00173F60_2BE3A8 __asm__("D_L00_00173E60");
 extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F580") MACRO_ADDR;
 #include "rnc/data_labels.h"
 extern void func_L00_002BE2A0_2BE3A8(void) __asm__("FUN_L00_002bcf98");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void func_001F9BD8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_L00_001EFFF0_2BE3A8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void func_001F9BF0_2BE3A8(void *, void *, void *) __asm__("FUN_001f9a28");

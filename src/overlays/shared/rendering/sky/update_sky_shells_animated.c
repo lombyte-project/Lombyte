@@ -9,6 +9,7 @@
 #include "rnc/overlay/quad.h"
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/vu1_registers.h"
 
 extern char D_L00_001BD7E0[];
 extern char *D_L00_0016051C;
@@ -285,7 +286,6 @@ void draw_sky_shells_with_slow_medium_and_fast_rotation(void) {
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028BBF8), where it is exact; names translated to the US level program. */
 
 extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
-extern void vu1_add_g_sregister(s32 register_id, s64 value) __asm__("FUN_00233980");
 
 void draw_three_sky_shells_with_particles(void) __asm__("FUN_L00_0028a920");
 

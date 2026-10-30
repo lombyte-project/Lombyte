@@ -3,6 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* Draws a vertical text menu: picks the font size from the flags, sizes
    the rows, then prints each item (and its optional subtitle) with the
@@ -12,7 +13,6 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/ui/text/font_metrics.h"
 
-extern void vu1_add_g_sregister(s32, long) __asm__("FUN_00233980");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");

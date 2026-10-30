@@ -8,10 +8,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EB5B0), where it is exact; names translated to the US level program. */
 
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void emit_burst_spark_particle(void *,short *,short *) __asm__("FUN_L10_002ea4e8");
 extern void emit_timed_spark_particle(void *,short *) __asm__("FUN_L10_002ea7b0");
 void FUN_L10_002eaa08_c(void *pos, short *timer, short *burst, float height) __asm__("FUN_L10_002eaa08");
@@ -311,7 +312,6 @@ void update_level_mode_dispatcher(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECAB0), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 

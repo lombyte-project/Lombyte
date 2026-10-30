@@ -9,6 +9,7 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/math/interpolation.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_001FFED0), where it is exact; names translated to the US level program. */
 
@@ -255,7 +256,6 @@ void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
     }
 }
 extern f32 D_0013F570[] __asm__("D_0013F570");
-f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void update_hero_smoothing_parameters(void) __asm__("FUN_L15_00209450");
 

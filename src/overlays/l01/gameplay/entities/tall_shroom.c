@@ -9,6 +9,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/vu1_registers.h"
 
 typedef struct {
     u8 pad0[0x5C];
@@ -78,7 +81,6 @@ extern s32 cutscene_mode_macro __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern s32 D_L01_0015F688 MACRO_ADDR;
 extern s32 D_L01_0015F68C MACRO_ADDR;
 extern struct Moby *moby_list __asm__("D_L01_0015FFE4") MACRO_ADDR;
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 is_moby_in_state_one(void *) __asm__("FUN_L00_002d8128");
 extern s32 check_scaled_vector_bsphere(f32, void *) __asm__("FUN_L01_00275690");
@@ -579,7 +581,6 @@ typedef struct {
 } TriggerMoby;
 
 void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
@@ -663,7 +664,6 @@ extern s32 level01_environment_mesh_normal_addresses[] __asm__("D_L01_00208138")
 extern s32 level01_environment_mesh_vertex_attribute_addresses[] __asm__("D_L01_00208150");
 extern u8 level01_environment_mesh_uv_scratch[] __asm__("D_L01_00208170");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 void generate_level01_environment_map_uvs();
 void FUN_L00_001fde98(s32, s32, s32, void *, s32);

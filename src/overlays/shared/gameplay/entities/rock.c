@@ -13,6 +13,12 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* A path of points: the point count, then 16-byte points whose w is the length of the segment to the next one */
 typedef struct {
@@ -203,8 +209,6 @@ extern int cutscene_active_macro __asm__("D_L01_0015F404") MACRO_ADDR;
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void FUN_L00_0026a4c8(void *, void *, int, int, int, float);
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
@@ -622,7 +626,6 @@ extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 void FUN_L01_002fb4b8_c(void) __asm__("FUN_L01_002fb4b8");
 extern void func_L01_002FC890_m(char *) __asm__("FUN_L01_002fb4b8");
 extern TpLevelState_fc988 D_L01_001BB9C0_s __asm__("D_L01_001BB6B0");
@@ -831,7 +834,6 @@ typedef struct {
 } L01Player;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L00_0025a120(void *);
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern int D_0015ED84_c __asm__("D_0015ED84");
@@ -1040,7 +1042,6 @@ extern s32 moby_killed[] __asm__("D_L01_001BA950");
 extern u8 D_0014C050[];
 extern u8 D_001413F4 NOT_SDA;
 extern u32 D_001413DC NOT_SDA;
-extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
 void spawn_point_update(struct Moby *moby) __asm__("FUN_L01_00300220");
 void spawn_point_update(struct Moby *moby) {
@@ -1107,7 +1108,6 @@ void spawn_point_update(struct Moby *moby) {
     }
 }
 #include "rnc/rendering/screen.h"
-extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64,
                                u64) __asm__("FUN_001f5450");
 
@@ -1169,7 +1169,6 @@ typedef struct {
 extern struct Moby *D_L01_0015FFE4_302648 __asm__("D_L01_0015FFE4");
 extern s32 *D_L01_001B0930_302648[] __asm__("D_L01_001B0930");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void enqueue_callback_list_1(void (*)(char *), void *) __asm__("FUN_001f4600");
 extern void terminate_visibomb_missile(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
 
@@ -1447,7 +1446,6 @@ extern int gold_bolt_glow_ring_particle_use_flags_44_gp __asm__("D_L01_00161F48"
 extern int gold_bolt_glow_ring_particle_texture_index_gp __asm__("D_L01_00161F4C") __attribute__((sda));
 extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern float func_0020D830_m(void *) __asm__("FUN_0020c9e0");
 
 void update_gold_bolt_glow_rings(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
@@ -1464,7 +1462,7 @@ void update_gold_bolt_glow_rings(char *moby) {
         fast_vec_scale(glow_origin_position, moby, 0.0009765625f);
     } else {
         moby_point_position(moby, 0, glow_origin_position);
-        scale = (160.0f - func_0020D830_m(moby)) / 160.0f * 16.0f;
+        scale = (160.0f - compute_interpolated_record_value(moby)) / 160.0f * 16.0f;
         if (1.0f < scale)
             scale = 1.0f;
     }
@@ -1502,7 +1500,6 @@ typedef struct {
 
 #include "qcopy.h"
 
-extern f32 compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern u8 *D_L01_001600EC;
 
 void update_gold_bolt_pickup_camera(char *moby) __asm__("FUN_L01_003087e0");

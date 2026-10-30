@@ -9,6 +9,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 
 typedef struct {
     s16 timer;
@@ -32,7 +34,6 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int get_first_moby_in_group(struct Moby **, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
-extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern u8 D_0013F3D0[];
 extern u8 D_L15_001BB830[];
 extern u32 D_0014C190[];
@@ -279,7 +280,6 @@ extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");
 

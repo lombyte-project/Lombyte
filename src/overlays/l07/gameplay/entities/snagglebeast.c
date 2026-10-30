@@ -14,19 +14,23 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/effect_00313D28.c: func_L07_00313D28). */
 
 extern s32 level_frame_count __asm__("D_L07_0015F5CC");
 /* [4] is depth_buffer_address. */
 extern s32 gs_texture_allocation_start_macro[6] __asm__("D_0015EE78") MACRO_ADDR;
-extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern float split_float_fraction(void *, float) __asm__("FUN_L00_00200228");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 
 static inline int tint_color(int color) {
     int tinted = color | 0x404040;
@@ -307,7 +311,6 @@ extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_0026685
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L00_00200228(float, void *);
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int FUN_0022da68(int, int, void *);
 extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA;
 extern char *scene_points __asm__("D_L07_001600EC");
@@ -668,7 +671,6 @@ extern int snagglebeast_ammo_drain_entries[][4] __asm__("D_L07_0020C600");
 #include "rnc/gameplay/state/item_state.h"
 extern void FUN_L00_00263ac8(float, int, int, void *);
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_0025a120(struct Moby *);
 extern int get_target_sight(void *, void *, float) __asm__("FUN_L07_002886d8");
 extern int FUN_L00_001fefc8(void *);
@@ -691,9 +693,7 @@ extern void configure_timed_point_light(void *, void *, int, void *, short, unsi
 extern void FUN_00214db0(void *, float, float, float);
 extern void spawn_white_particle_with_payload(void *, void *) __asm__("FUN_L07_0029c4e8");
 extern void rumble_by_distance(char *) __asm__("FUN_L07_003120d8");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void draw_collision_clipped_moby_beam(void) __asm__("FUN_L07_00312420");
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern void *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void get_moby_joint_matrices(void *, int, void *, void *) __asm__("FUN_00210850");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
@@ -2249,7 +2249,6 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
 /* Pulls each pending moby toward its target point and smooths its velocity. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031A268), where it is exact; names translated to the US level program. */
 
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void suck_beam_queue_draw(int draw_callback_context) __asm__("FUN_L00_002defe0");
 
 void detach_snagglebeast_rope_particles(int target_entry) {

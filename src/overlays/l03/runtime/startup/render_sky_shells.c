@@ -2,13 +2,13 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/rendering/vu1_registers.h"
 
 
 extern void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
 extern void sky_shells_rotate_two(void) __asm__("FUN_L00_002899a8");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void render_sky_shells(void) __asm__("FUN_L03_0022c6a8");
 

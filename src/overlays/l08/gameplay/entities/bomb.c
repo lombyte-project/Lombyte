@@ -8,6 +8,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 
 
@@ -96,7 +100,6 @@ extern int D_L08_00174658;
 extern int D_L08_0015F5CC;
 extern int reflect_vector() __asm__("FUN_L00_001ff660");
 extern int FUN_L08_002025d0(void*,int,int,void*,int);
-extern int allocate_voice_for_target_entry(int,int,void*) __asm__("FUN_0022da68");
 extern s32 queue_animation_update() __asm__("func_001FF308");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -468,7 +471,6 @@ s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_0021
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern unsigned short D_00141C38 NOT_SDA;
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 void update_bomber_tank_damage_and_aim(Moby *moby) __asm__("FUN_L08_002d4ca0");
 void advance_bomber_tank_along_path(struct Moby *moby, int path_id) __asm__("FUN_L08_002d55c8");
@@ -935,10 +937,8 @@ extern char voice_pool[] __asm__("D_0013E550");
 extern float bomber_tank_part_reference_speed_gp __asm__("D_L08_001618A0") __attribute__((sda));
 extern float approach_angle_l08(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void approach_value_l08(float *, float, float) __asm__("FUN_00213ed8");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void vendor_volume(int, int) __asm__("FUN_L01_002a1968");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 typedef struct {
     u8 pad0[0x80];
@@ -1517,7 +1517,6 @@ extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm_
 extern void FUN_L00_0025f730(void*,float);
 extern void FUN_L01_0026d930(char *p);
 extern void spawn_moby_table_puff_pattern(void *) __asm__("FUN_L04_002c46d0");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 extern void FUN_00212f90(struct Moby *, int, int, int);
 extern void explode_2D5FA8_c(struct Moby *, int, int) __asm__("FUN_L00_00257470");
@@ -2175,7 +2174,6 @@ extern int FUN_L08_002dc9a8_random_color(int) __asm__("FUN_001f96f8");
 extern int FUN_L08_002dc9a8_blend(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L08_002dc9a8_color(float, int, int) __asm__("FUN_L08_00264930");
 extern void FUN_L08_002dc9a8_emit(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
-extern void FUN_L08_002dc9a8_special(void *, float, float, float) __asm__("FUN_00214db0");
 #include "rnc/overlay/collision.h"
 extern int D_L08_00174658_2DC9A8 __asm__("D_L08_00174658") NOT_SDA;
 
@@ -2305,7 +2303,7 @@ void update_ballistic_projectile(struct Moby *moby) {
                 color2 = FUN_L08_002dc9a8_color(FUN_L08_002dc9a8_random(0.5f, 1.0f),
                                                    0, 0x5f5f5f);
                 radius = FUN_L08_002dc9a8_random(0.0f, 1.0f) * D_0015ED6C_lui;
-                FUN_L08_002dc9a8_special(position, radius, angle,
+                build_spherical_offset(position, radius, angle,
                                           FUN_L08_002dc9a8_random_word());
                 radius = FUN_L08_002dc9a8_random(150000.0f, 200000.0f);
                 alpha = FUN_L08_002dc9a8_random_color(60);
@@ -2382,7 +2380,6 @@ extern void cart_burst(void*,void*,int,float,float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00262cf0(void*,void*,float,float,float);
 extern void spawn_effect(void*,void*,int,int,int,int,int,int) __asm__("FUN_L00_00269958");
 extern void FUN_L08_002de528_u(void*,int,int,int) __asm__("FUN_L08_002de528");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern Route_2dd4f8_2dd3c0 *D_L08_001B0FB0_r_c[] __asm__("D_L08_001B0CB0");
 
 void update_rocket(M46 *moby) __asm__("FUN_L08_002dd3c0");

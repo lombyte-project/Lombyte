@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* Ported from rac1-decomp (src/game/draw.c:func_001F7A50), which matched our retail at the instruction level before the address space was translated. */
 
@@ -9,7 +10,6 @@
 extern void setup_render_target(s32 arg0, s32 arg1, s32 arg2) __asm__("FUN_001fb440");
 extern void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 horizontal_fov, f32 fog_near_distance, f32 fog_far_distance, f32 fog_near_intensity, f32 fog_far_intensity) __asm__("FUN_001f33b8");
 extern s16 fixed_render_target_framebuffer_page[] __asm__("D_001518EE");
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void configure_graphics_render_target_and_projection(s32 tw, s32 th, s32 fixed, f32 scale) __asm__("FUN_001f7888");
 

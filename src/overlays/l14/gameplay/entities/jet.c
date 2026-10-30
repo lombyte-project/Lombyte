@@ -14,6 +14,10 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/camera/follow_cam.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -151,7 +155,6 @@ void animate_ribbon_effect_paths(u8 *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002E0858), where it is exact; names translated to the US level program. */
 
 extern void draw_ribbon_effect_path(struct Moby *, void *, int, int, int) __asm__("FUN_L14_002df510");
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void draw_ribbon_effect(struct Moby *ribbon_moby) {
     char *moby_vars = (char *)ribbon_moby->pvars;
@@ -335,7 +338,6 @@ void draw_ribbon_effect_path(struct Moby *ribbon_moby, void *path, int outer_alp
         layer_quads[0].uv[3][1] = 1.0f;
     }
 }
-extern s32 is_point_inside_clip_volume(u8 *base, s32 arg) __asm__("FUN_00214720");
 extern void record_moby_hit(s32, void *) __asm__("FUN_L00_00259a88");
 
 typedef struct {
@@ -417,7 +419,6 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
@@ -795,7 +796,6 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_m;
 extern char D_L14_001674C0_m[] __asm__("D_L14_001674C0");
-extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
 extern int wind_spark_base_color_gp __asm__("D_L14_00161C0C") __attribute__((sda));
@@ -1584,7 +1584,6 @@ void draw_branched_lightning_arc(void) {
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern unsigned char * FUN_L00_00272060(float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 
 extern short lightning_arc_particle_speed_range_start_gp __asm__("D_L14_00161CA0") __attribute__((sda));
 extern short lightning_arc_particle_speed_range_end_gp __asm__("D_L14_00161CA4") __attribute__((sda));
@@ -1632,7 +1631,6 @@ extern struct L14VendorLevel D_L14_001BB930_v __asm__("D_L14_001BB930");
 extern char *D_L14_001B0BB0_v[] __asm__("D_L14_001B0BB0");
 extern char voice_pool[] __asm__("D_0013E550");
 extern void vendor_volume(s32 voice, s32 volume) __asm__("FUN_L01_002a1968");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int vendor_ftoi(float) __asm__("FUN_001fa6d0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern float vendor_spring(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
@@ -2552,7 +2550,6 @@ typedef struct {
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int FUN_001fa6d0(float);
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L00_0025a120(void *);
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
@@ -2719,7 +2716,6 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
 extern void cart_burst(float, float, struct Moby *, void *, int) __asm__("FUN_L00_0025f090");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
 
 extern void initialize_flight_path_state(struct Moby *) __asm__("FUN_L14_002fc890");

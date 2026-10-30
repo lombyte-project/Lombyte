@@ -9,6 +9,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/vu1_registers.h"
 
 extern union PacketCursor l09_packet __asm__("D_L09_001611C0") MACRO_ADDR;
 extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") MACRO_ADDR;
@@ -19,7 +23,6 @@ extern char level09_strip_texture_entry_table[] __asm__("D_L09_0016D300");
 extern long level09_strip_texture_transfer_packet[] __asm__("D_L09_00161FC0");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int);
-extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 typedef struct {
     char unused[8];
@@ -465,7 +468,6 @@ char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EBA58), where it is exact; names translated to the US level program. */
 
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 
 char *spawn_falling_asteroid(void) __asm__("FUN_L09_002ea778");
@@ -1079,7 +1081,6 @@ extern char *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_001fefc8(u8 *);
 extern void mark_moby_for_removal_cf(struct Moby *, int, int) __asm__("FUN_L00_00257470");
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
-extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void scale_vector_edc30(void *, void *, float) __asm__("FUN_001f9a68");
 extern struct Moby *spawn_tumbling_debris(struct Moby *, Vec4 *, Vec4 *, s32, f32) __asm__("FUN_L09_002ef868");
 extern void cart_burst(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -1683,7 +1684,6 @@ extern unsigned char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
 extern unsigned char D_00141968_lui[] __asm__("D_00141968") NOT_SDA;
 extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
-s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 void update_level09_item_unlock_and_frame_record(struct Moby *moby) __asm__("FUN_L09_00300888");
 

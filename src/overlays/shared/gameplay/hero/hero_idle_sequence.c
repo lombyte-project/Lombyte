@@ -12,6 +12,10 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00204130), where it is exact; names translated to the US level program. */
 
@@ -510,7 +514,6 @@ void update_hero_bolt_exclamation_hud(void) {
 }
 extern void request_grouped_voice(int, char *, int, int, int) __asm__("FUN_L00_0028de68");
 extern void moby_point_position(int, char *, float *) __asm__("FUN_L00_0024f7c8");
-extern float probe_ground_height(float *, int, float) __asm__("FUN_00213508");
 extern void spawn_texture_indexed_rotated_particle(float *, int, float) __asm__("FUN_L00_00274cf8");
 
 void emit_hero_animation_voice_and_ground_particle(int record_group_index, char *joint_index_offset, int enable_record_dispatch) __asm__("FUN_L00_00205f60");
@@ -893,7 +896,6 @@ void update_hero_in_vehicle_mode(void) {
 }
 #include "rnc/audio/voice_pool.h"
 
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 /* Stops the sounds the hero still owns in its 8 sound slots and clears them. */
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
@@ -2411,7 +2413,6 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
 }
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 void spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
-void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 void FUN_L00_00269958(void *, void *, int, int, int, int, int,
                              int);
 extern char D_0013F7EE[] NOT_SDA;
@@ -2761,7 +2762,6 @@ extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char D_L00_0017A780[] __asm__("D_L00_0017A680");
 extern int D_L00_0015F6B0 __asm__("D_L00_0015F5CC");
 extern int FUN_001efa68_ac98(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int suck_get_aim_height(char *) __asm__("FUN_002141f8");
 extern unsigned char hero_pos[] __asm__("D_0013F3D0");
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 void set_fourth_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a228");

@@ -18,6 +18,11 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effect_texture.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -161,7 +166,6 @@ void electric_gate_update(char *gate_moby) {
     }
 }
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern int l05_electric_gate_outer_color_blend_start __asm__("D_L05_00161D3C") __attribute__((sda));
 extern int l05_electric_gate_outer_color_blend_end __asm__("D_L05_00161D40") __attribute__((sda));
@@ -245,7 +249,6 @@ extern float D_L05_0015F44C;
 extern float D_L05_0015F450;
 extern float D_L05_0015F454;
 extern int D_L05_001600EC; /* no foreign declaration */
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern unsigned char D_L05_0015F444;
 extern unsigned char D_L05_0015F445;
 extern unsigned char D_L05_0015F446;
@@ -433,7 +436,6 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) __
 
 void update_drain_cover_tilt(char *, float, float) __asm__("FUN_L05_0030f408");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
@@ -1112,7 +1114,6 @@ extern LiftPose *D_L05_001600EC_l __asm__("D_L05_001600EC");
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 approach_with_speed(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
@@ -1337,7 +1338,6 @@ void FUN_L05_00315f70(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317538), where it is exact; names translated to the US level program. */
 
 extern f32 D_L05_00211B20[];
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void draw_textured_grid(char *) __asm__("FUN_L03_00291918");
 
 void draw_ocean_grid_outside_clip_volumes(char *moby) __asm__("FUN_L05_00316070");
@@ -1681,7 +1681,6 @@ extern char qwarks_bouncer_dialogue_name[] __asm__("D_L05_00161EF0");
 extern void attach_big_head_cheat_manipulator(void *) __asm__("FUN_L05_00317398");
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 extern unsigned char D_0013DD47 NOT_SDA;
 /* Watcher moby update (variant of shady_salesman_update): turns its head toward the hero or a random target. */
@@ -1852,7 +1851,6 @@ typedef struct {
 
 extern unsigned char D_0013D4FF NOT_SDA;
 extern void FUN_L00_0025a120(void *);
-extern f32 probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 
 extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[];
 extern float fast_add_rotations(float, float);

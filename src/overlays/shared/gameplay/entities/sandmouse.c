@@ -12,7 +12,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/sound_state.h"
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void interpolate_vector(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
 extern s32 allocate_colored_effect_slot(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
@@ -290,7 +293,6 @@ typedef struct {
 } DropProbe;
 
 extern f32 spring_turn(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
-extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
 extern s32 collision_line_30c9a8(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 extern f32 D_L01_00167240_30c9a8[] __asm__("D_L01_00167240");
@@ -401,7 +403,6 @@ typedef struct {
     s16 kind;      /* 0x46: 5 for lock-on targets */
 } TargetClass;
 
-extern f32 *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern s32 collision_line_30d308(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 
 extern struct Moby *l01_sandmouse_projectile_target_candidates[] __asm__("D_L01_001ABE80");
@@ -462,7 +463,6 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
 #include "sda.h"
 
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, struct VoiceTarget *target) __asm__("FUN_0022da68");
 struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
                               f32 range, f32 near, f32 nearYaw, f32 nearPitch) __asm__("FUN_L01_0030d308");
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
@@ -760,7 +760,6 @@ extern int debug_print() __asm__("FUN_001e93b0");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00259028(void *, void *, void *, void *);
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
-extern int is_point_inside_clip_volume(void *point, int volume) __asm__("func_00214720");
 extern s32 collision_line(void *, void *, s32, void *, s32);
 extern s32 rand(void);
 extern short sandmouse_follow_duration_frames_gp __asm__("D_L01_00162098") __attribute__((sda));
@@ -784,7 +783,6 @@ extern void FUN_L01_0026d930(void *);
 extern void compute_sand_mouse_approach_target(void *, void *) __asm__("FUN_L01_002e30b8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void compute_sandmouse_follow_goal(void *unused, float *p) __asm__("FUN_L01_0030d260");
 void emit_sandmouse_particles(char *m) __asm__("FUN_L01_0030dda0");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
@@ -1762,7 +1760,6 @@ extern char *D_L00_0015F5F4;
 extern char D_0013E550[];
 extern int calculate_voice_distance_volume(float, float, float, void *) __asm__("FUN_0022c6f8");
 extern int play_voice(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int vendor_volume(int, int) __asm__("FUN_L01_002a1968");
 

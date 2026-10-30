@@ -8,6 +8,8 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "asm.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/entities/ground_probe.h"
 
 /* Steps two floats of arg toward a target and clamps them to [-1, 1]. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00237B00), where it is exact; names translated to the US level program. */
@@ -614,7 +616,6 @@ extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern unsigned short D_00141920[] NOT_SDA;
 extern unsigned short D_00141D80[] NOT_SDA;
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
@@ -1292,7 +1293,6 @@ void update_hero_hoverboard_trick_score(void) {
 /* Finds the nearest path node ahead of the hero (behind the facing test) and returns its position and heading. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00254B38), where it is exact; names translated to the US level program. */
 
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern char *D_L05_001B0930[]; /* no foreign declaration */
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F3D0[];

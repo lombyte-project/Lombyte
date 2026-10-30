@@ -13,6 +13,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/rendering/clip_volume.h"
+#include "rnc/rendering/effect_texture.h"
+#include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/state/interpolated_record.h"
 
 /* Movement controller block at vars + 0xC0 (FUN_L01_0026d930 init, FUN_L00_00258b50 step). */
 typedef struct {
@@ -83,9 +88,7 @@ extern Vec4f D_L06_00167540;
 extern s32 *D_L06_001B0C30[];
 extern f32 D_L06_0015F580[] MACRO_ADDR;
 
-extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
-extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern s32 FUN_L00_00258b50(struct Moby *, MoveCtl *, void *, void *, f32);
@@ -604,7 +607,6 @@ void process_blarg_space_commando_hits(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300530), where it is exact; names translated to the US level program. */
 
 extern char D_L06_00174600_lui[] __asm__("D_L06_00174600") NOT_SDA;
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 
 extern float beam_spread_degrees_gp __asm__("D_L06_00161FD4") __attribute__((sda));
 extern int beam_duration_frames_gp __asm__("D_L06_00161FD8") __attribute__((sda));
@@ -761,8 +763,6 @@ extern s32 beam_inset_corner_color_at_unit_weight_gp __asm__("D_L06_00162000") _
 /* Scrolling texture coordinates of the four corners. */
 extern f32 beam_quad_corner_uvs[4][2] __asm__("D_L06_001F2E90");
 
-extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
-extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 

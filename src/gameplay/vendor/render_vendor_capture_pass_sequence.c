@@ -4,6 +4,7 @@
 #include "eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/rendering/vu1_registers.h"
 
 typedef u128 CaptureVector;
 extern int capture_primary_transition __asm__("D_00161298") MACRO_ADDR;
@@ -23,7 +24,6 @@ extern void project_graphics_bounds_float(void *, void *, float *, float *, floa
                                           float *) __asm__("func_00237C80");
 extern void configure_capture_target(int, int, float) __asm__("FUN_00239690");
 extern void draw_centered_capture_background(int, int) __asm__("func_001FB740");
-extern void vu1_add_g_sregister(int, long) __asm__("func_00233980");
 extern void update_scrolling_status_message(char *) __asm__("FUN_00238520");
 extern void render_vendor_item_details_pass(char *) __asm__("func_002389E0");
 extern void render_capture_effect_pass(char *) __asm__("FUN_00238630");

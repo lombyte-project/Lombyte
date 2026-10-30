@@ -7,6 +7,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/rendering/vu1_registers.h"
 
 extern int FUN_00116248_b7(void *, void *) __asm__("FUN_00116248");
 extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
@@ -142,7 +144,6 @@ typedef struct {
 
 extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
 extern char D_L11_00174880[];
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
 extern void initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -467,7 +468,6 @@ typedef struct {
 typedef struct { char pad[0x140]; float x, y, z; } Cam;
 typedef struct { char pad[0x228]; float f228, f22C; } Fog;
 
-extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void func_L00_001FDE48_30a908(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");

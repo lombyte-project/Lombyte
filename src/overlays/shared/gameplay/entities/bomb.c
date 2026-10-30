@@ -16,6 +16,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/entities/suck_aim.h"
 
 /* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
 typedef struct {
@@ -172,7 +176,6 @@ extern void spawn_moby_bound_effect_particle(struct Moby *) __asm__("FUN_L00_002
 extern void spawn_moby_collision_particles(struct Moby *) __asm__("FUN_L00_002c8078");
 extern void spawn_doom_bot(struct Moby *, void *, void *) __asm__("FUN_L00_002bfe08");
 extern void FUN_L00_00260400(struct Moby *, s32, void *, void *, void *, void *);
-extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 
 /* Six checked switch entries: state 5 shares the default state reset.
  * Case 2/3 shaped after rac1-decomp (nonmatching/shared/func_L00_002C9DC8.c). */
@@ -482,10 +485,8 @@ extern u32 D_L00_00161840[1] __attribute__((sda));
 
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern s32 FUN_0022da68_c(s32, s32, void *) __asm__("FUN_0022da68");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern void FUN_L00_00257470(void *, int, int);
-extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void set_moby_color(void *, u8, u8, u8) __asm__("FUN_L00_002502f0");
 extern void spawn_particle(void *, int, int, int, int, f32, f32) __asm__("FUN_L00_00269b70");
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
@@ -542,7 +543,7 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
             spawned_moby->rot.y = fast_arc_tan(loc.t3, loc.t1);
         }
         spawned_moby->collision = ((Part *)spawned_moby->pclass)->unk10;
-        FUN_0022da68_c(1, 0, spawned_moby);
+        allocate_voice_for_target_entry(1, 0, spawned_moby);
         spawned_moby->state = 1;
         moby_vars->unk66 = 0;
         moby_vars->unk64 = FUN_L00_00257b90(scale_game_frames(0x78), scale_game_frames(0x12C));
@@ -637,8 +638,6 @@ typedef struct {
 } ChickenVars;
 
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern int allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 extern Contact *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void blend_moby_animation(Moby *, int, int, int) __asm__("FUN_00212f90");
@@ -1082,7 +1081,6 @@ extern unsigned char D_L00_00173E80[];
 extern void *FUN_L00_0026dd20(void *, void *, unsigned, int, float);
 extern void FUN_L00_002cbcc0_c(unsigned char *, int) __asm__("FUN_L00_002cbcc0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 #include "rnc/gameplay/state/item_state.h"
 
@@ -1250,7 +1248,6 @@ extern void FUN_L00_002cbcc0_2cb418(Moby *, s32) __asm__("FUN_L00_002cbcc0");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void spawn_spark_2cb418(void *, void *, s32, s32, f32) __asm__("FUN_L00_0026dd20");
 extern f32 spring_turn(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void build_look_at_matrix(void *, void *, void *, f32) __asm__("FUN_00214890");
 extern void scale_vector_xyz_2cb418(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
@@ -1611,7 +1608,6 @@ typedef struct M_2cc360 {
     unsigned short h34;
 } M_2cc360;
 extern M_2cc360 *D_L00_0015FFE4_2cc360 __asm__("D_L00_0015FFE4");
-extern float *c338_2cc360(void *) __asm__("FUN_002141f8");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int coll_2cc360(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 M_2cc360 *select_ryno_target(float *pos, float *aim_rotation, M_2cc360 **excl, float maxYaw, float maxPitch,
@@ -1643,7 +1639,7 @@ M_2cc360 *select_ryno_target(float *pos, float *aim_rotation, M_2cc360 **excl, f
         } else if (!candidate_moby->b31) {
             continue;
         }
-        info = c338_2cc360(candidate_moby);
+        info = suck_get_aim_height(candidate_moby);
         if (!info)
             continue;
         if (info[0] < 0.0f)
@@ -1713,7 +1709,6 @@ extern struct UsageStats item_usage __asm__("D_00141680");
 extern void moby_point_position(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
 extern struct Moby *FUN_L00_002cc360_c(float *, float *, struct Moby **, float, float, float) __asm__("FUN_L00_002cc360");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern Bounds *bounds_2cc608(struct Moby *) __asm__("FUN_002141f8");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern int use_ammo(int, int) __asm__("FUN_L00_00233db8");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
@@ -1764,7 +1759,7 @@ void ryno_update(struct Moby *ryno_moby) {
             ryno_vars->target = acquired_target;
             ryno_vars->lock_timer = scale_game_frames(20);
             ryno_vars->life = 1.0f;
-            target_bounds = bounds_2cc608(ryno_vars->target);
+            target_bounds = suck_get_aim_height(ryno_vars->target);
             if (target_bounds != 0) {
                 ryno_vars->height = target_bounds->height;
                 ryno_vars->life = target_bounds->radius;
@@ -1894,7 +1889,7 @@ void ryno_update(struct Moby *ryno_moby) {
             ryno_vars->height = 0;
             ryno_vars->lock_timer = scale_game_frames(20);
             ryno_vars->life = 1.0f;
-            target_bounds = bounds_2cc608(ryno_vars->target);
+            target_bounds = suck_get_aim_height(ryno_vars->target);
             if (target_bounds != 0) {
                 ryno_vars->height = target_bounds->height;
                 ryno_vars->life = target_bounds->radius;
@@ -1920,12 +1915,10 @@ typedef union {
 extern unsigned char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern unsigned char D_L00_00173E60_2ccee0[] __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
-extern unsigned char *FUN_002141f8_2ccee0(void *) __asm__("FUN_002141f8");
 extern int FUN_001f96f8_2ccee0(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8_2ccee0(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_0022da68_2ccee0(int, int, void *) __asm__("FUN_0022da68");
 extern int FUN_001efa68_2ccee0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void FUN_00214db0_2ccee0(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_001f9bf8_2ccee0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_0025e450_2ccee0(void *, void *, void *, float, float, int, int, int, float,
                                     float, float, float, int, float, int, int, int,
@@ -1966,7 +1959,7 @@ unsigned char *spawn_ryno_rocket(int owner_moby, V_2ccee0 *spawn_position, unsig
         *(float *)(spawned_moby + 0x2C) = *(float *)(*(unsigned char **)(spawned_moby + 0x24) + 0x24) * 0.25f;
         if (target_moby != 0) {
             *(int *)(rocket_vars + 0x58) = *(short *)(target_moby + 0xA6);
-            target_aim_data = FUN_002141f8_2ccee0(target_moby);
+            target_aim_data = suck_get_aim_height(target_moby);
             if (target_aim_data != 0) {
                 *(unsigned short *)(target_aim_data + 0x1E) |= 0x80;
             }
@@ -1997,7 +1990,7 @@ unsigned char *spawn_ryno_rocket(int owner_moby, V_2ccee0 *spawn_position, unsig
         if (FUN_001efa68_2ccee0(&collision_start, spawn_position, 0, collision_ignore_moby, 0)) {
             spawned_moby[0xBC] = 2;
             qcopy(spawned_moby + 0x10, D_L00_00173E60_2ccee0);
-            FUN_00214db0_2ccee0(&forward_step, *(float *)(rocket_vars + 0x30), *(float *)(spawned_moby + 0x48),
+            build_spherical_offset(&forward_step, *(float *)(rocket_vars + 0x30), *(float *)(spawned_moby + 0x48),
                                 -*(float *)(spawned_moby + 0x44));
             reflect_vector(&explosion_direction, &forward_step, D_L00_00173E60_2ccee0 + 0x20);
             FUN_001f9bf8_2ccee0(&explosion_direction, &explosion_direction, D_0015ED6C_lui + D_0015ED6C_lui);
@@ -2317,7 +2310,6 @@ void ensure_drone_attached_particles(char *owner_moby) {
 /* Exact match: tools/ps2eeas_nops.py keeps the hazard nop after the label the branch lands on. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CF3D8), where it is exact; names translated to the US level program. */
 
-extern int FUN_002141f8_c(char *) __asm__("FUN_002141f8");
 extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 char *select_nearest_drone_target(char *search_position, int *excl) __asm__("FUN_L00_002cdf28");
@@ -2390,7 +2382,7 @@ char *select_nearest_drone_target(char *search_position, int *excl) {
         class_callback_data = get_moby_suck_cannon_record(candidate_moby);
         if (class_callback_data != 0 && *(short *)(class_callback_data + 0x68) > 0)
             continue;
-        x = (char *)FUN_002141f8_c(candidate_moby);
+        x = (char *)suck_get_aim_height(candidate_moby);
         qcopy(candidate_position_scratch, candidate_moby + 0x10);
         if (x != 0)
             candidate_position_scratch[2] = candidate_position_scratch[2] + (*(float *)(x + 0x10) + 0.05f);
