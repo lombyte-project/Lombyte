@@ -127,7 +127,7 @@ SlotBuffer slot_buffers_l18[6] __asm__("D_L18_00187740") = {{0}};
 
 Slot *allocate_moby_animation_slot(char *owner, int id) __asm__("FUN_L00_0024f028");
 
-Slot *allocate_moby_animation_slot(char *owner, int id) {
+Slot *allocate_moby_animation_slot(char *slot_owner_moby, int id) {
     int            i = 0;
     Slot          *selected_slot;
     unsigned char *selected_record;
@@ -138,12 +138,12 @@ Slot *allocate_moby_animation_slot(char *owner, int id) {
     selected_slot->id = id;
     id = (short)id;
     selected_slot->p10 = slot_buffers[i];
-    selected_slot->p14 = *(int *)(owner + 0x24);
-    selected_record = *(unsigned char **)(*(char **)(*(char **)(owner + 0x24) + 0x1C) + id * 4 + 4);
+    selected_slot->p14 = *(int *)(slot_owner_moby + 0x24);
+    selected_record = *(unsigned char **)(*(char **)(*(char **)(slot_owner_moby + 0x24) + 0x1C) + id * 4 + 4);
     selected_slot->s2 = selected_record[2];
     selected_slot->p0C = selected_record + (selected_record[0] + 4);
-    selected_slot->p1C = *(void **)(owner + 0x60);
-    *(Slot **)(owner + 0x60) = selected_slot;
+    selected_slot->p1C = *(void **)(slot_owner_moby + 0x60);
+    *(Slot **)(slot_owner_moby + 0x60) = selected_slot;
     return selected_slot;
 }
 
