@@ -25,10 +25,10 @@ extern void  moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8"
 
 int sync_ship_pickup_child_pose(struct Moby *owner, char *data) __asm__("FUN_L11_0030f660");
 
-int sync_ship_pickup_child_pose(struct Moby *owner, char *pickup_private_data) {
+int sync_ship_pickup_child_pose(struct Moby *ship_pickup_moby, char *pickup_private_data) {
     char *child;
     if (!*(char **)(pickup_private_data + 0x34)) {
-        *(char **)(pickup_private_data + 0x34) = FUN_L11_0030fd98_c(owner);
+        *(char **)(pickup_private_data + 0x34) = FUN_L11_0030fd98_c(ship_pickup_moby);
         if (!*(char **)(pickup_private_data + 0x34))
             goto missing;
     }
@@ -37,14 +37,14 @@ int sync_ship_pickup_child_pose(struct Moby *owner, char *pickup_private_data) {
         goto missing;
     if (*(unsigned char *)(child + 0x20) == 0xFD)
         goto missing;
-    qcopy(child + 0x10, &owner->pos);
-    qcopy(child + 0x40, &owner->rot);
+    qcopy(child + 0x10, &ship_pickup_moby->pos);
+    qcopy(child + 0x40, &ship_pickup_moby->rot);
     update_entity(child);
     moby_point_position(*(char **)(pickup_private_data + 0x34), 0, pickup_private_data);
     fast_vec_sub(pickup_private_data + 0x20, *(char **)(pickup_private_data + 0x34) + 0x10, pickup_private_data);
     return 1;
 missing:
-    qcopy(pickup_private_data, &owner->pos);
+    qcopy(pickup_private_data, &ship_pickup_moby->pos);
     qzero(pickup_private_data + 0x20);
     return 0;
 }
