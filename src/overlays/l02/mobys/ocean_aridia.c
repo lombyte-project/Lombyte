@@ -58,20 +58,20 @@ void begin_animated_frame_rendering(float x,
                                     int   frame_count,
 
                                     void *frame_packet) {
-    char scratch[0x40];
-    scratch[0x30] = fog_red;
-    scratch[0x31] = fog_green;
-    scratch[0x32] = fog_blue;
-    *(float *)(scratch + 0x20) = x;
-    *(float *)(scratch + 0x24) = y;
-    *(float *)(scratch + 0x28) = z;
-    *(float *)(scratch + 0x2C) = w;
-    *(short *)(scratch + 0x3C) = frame_table_start_index;
-    scratch[0x3E] = frame_count;
-    scratch[0x33] = ticks_per_frame;
-    ((unsigned char *)scratch)[0x3F] = 0x80;
-    *(void **)(scratch + 0x1C) = frame_packet;
-    build_interpolated_dma_packet(scratch);
+    char animated_frame_draw_parameters[0x40];
+    animated_frame_draw_parameters[0x30] = fog_red;
+    animated_frame_draw_parameters[0x31] = fog_green;
+    animated_frame_draw_parameters[0x32] = fog_blue;
+    *(float *)(animated_frame_draw_parameters + 0x20) = x;
+    *(float *)(animated_frame_draw_parameters + 0x24) = y;
+    *(float *)(animated_frame_draw_parameters + 0x28) = z;
+    *(float *)(animated_frame_draw_parameters + 0x2C) = w;
+    *(short *)(animated_frame_draw_parameters + 0x3C) = frame_table_start_index;
+    animated_frame_draw_parameters[0x3E] = frame_count;
+    animated_frame_draw_parameters[0x33] = ticks_per_frame;
+    ((unsigned char *)animated_frame_draw_parameters)[0x3F] = 0x80;
+    *(void **)(animated_frame_draw_parameters + 0x1C) = frame_packet;
+    build_interpolated_dma_packet(animated_frame_draw_parameters);
     FUN_L02_002101b8(animated_frame_scratchpad_dma_source, 0x70002800, 0xF8);
 }
 
