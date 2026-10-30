@@ -537,7 +537,7 @@ void collect_bolt(struct Moby *bolt) {
 
 void update_bolt_grounded_pose(char *moby, void *out1, void *out2) __asm__("FUN_L00_002a6de8");
 
-void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
+void update_bolt_grounded_pose(char *moby, void *base_position_output, void *base_rotation_output) {
     char *grounded_bolt_vars = ((char *)MOBY(moby)->pvars);
     float local_rotation_basis[12];
     float base_rotation_basis[12];
@@ -604,10 +604,10 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
     fast_vec_scale(rotated_position_offset, moby + 0xC0, rotated_axis_offset_distance);
     fast_vec_add(moby + 0x10, moby + 0x10, rotated_position_offset);
     fast_vec_add(moby + 0x10, moby + 0x10, A);
-    if (out1 != 0)
-        qcopy(out1, A);
-    if (out2 != 0)
-        qcopy(out2, B);
+    if (base_position_output != 0)
+        qcopy(base_position_output, A);
+    if (base_rotation_output != 0)
+        qcopy(base_rotation_output, B);
     if (MOBY(moby)->state == 3) {
         char *ground_moby = *(char **)(grounded_bolt_vars + 0x5C);
         if (ground_moby != 0 && *(unsigned char *)(grounded_bolt_vars + 0x57) == 0) {
