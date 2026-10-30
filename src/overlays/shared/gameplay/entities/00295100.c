@@ -366,7 +366,7 @@ extern char D_L00_0017C3C0_lui[] __asm__("D_L00_0017C3C0") NOT_SDA;
 extern struct {
     int x0, x4, x8;
 } D_L00_00173E00_298840 __asm__("D_L00_00173E00") __attribute__((section(".data")));
-extern int D_L00_0015F5A0_298840 __asm__("D_L00_0015F5A0");
+extern float D_L00_0015F5A0 __asm__("D_L00_0015F5A0");
 extern float fade_level __asm__("D_L00_0015F3FC");
 extern int D_L00_0015F400 __asm__("D_L00_0015F400");
 extern O_298840 *D_L00_0015FFDC_298840 __asm__("D_L00_0015FFDC");
@@ -403,7 +403,7 @@ void start_scene(int scene_id) {
     scene_buffer_base = D_L00_001611CC - 0x3C000;
     D_L00_0016C860_lui.x30 = scene_id;
     D_L00_0015F59C = 1.0f;
-    D_L00_0015F5A0_298840 = 0;
+    D_L00_0015F5A0 = 0;
     D_L00_0016C860_lui.x34 = 0;
     D_L00_0016C860_lui.x3c = 0;
     D_L00_001611CC = scene_buffer_base;
@@ -1170,10 +1170,11 @@ typedef struct {
 } VendorList;
 typedef struct {
     s32 sound;
-    s32 pad[4];
+    u8 pad4[0xC];
+    s32 message;
 } VendorSound;
 extern VendorList vendor_list __asm__("D_L00_001CA4C0") NOT_SDA;
-extern VendorSound vendor_sound[] __asm__("D_L00_001C2108") NOT_SDA;
+extern VendorSound vendor_sound_lui[] __asm__("D_L00_001C2108") NOT_SDA;
 /* Stocked item ids (low 6 bits; bit 0x40 = listed as selected), 0xFF-terminated. */
 
 extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
@@ -1195,7 +1196,7 @@ void build_vendor_menu_rows(s32 skip_unflagged) {
         if (value & 0x40) {
             s32 sound;
             if (D_L00_001C40B0[item].h8 == 0) continue;
-            sound = vendor_sound[item].sound;
+            sound = vendor_sound_lui[item].sound;
             vendor_list.entries[vendor_list.count].item = item;
             vendor_list.entries[vendor_list.count].selected = 1;
             vendor_list.entries[vendor_list.count].state = 0;
@@ -1204,7 +1205,7 @@ void build_vendor_menu_rows(s32 skip_unflagged) {
         } else {
             s32 sound;
             if (skip_unflagged) continue;
-            sound = vendor_sound[item].sound;
+            sound = vendor_sound_lui[item].sound;
             vendor_list.entries[vendor_list.count].item = item;
             vendor_list.entries[vendor_list.count].selected = 0;
             vendor_list.entries[vendor_list.count].state = 0;
@@ -1220,7 +1221,7 @@ void build_vendor_menu_rows(s32 skip_unflagged) {
             if (vendor_list.entries[j].item == k) break;
         }
         if (j < vendor_list.count) continue;
-        sound = vendor_sound[k].sound;
+        sound = vendor_sound_lui[k].sound;
         vendor_list.entries[vendor_list.count].item = k;
         vendor_list.entries[vendor_list.count].selected = 1;
         vendor_list.entries[vendor_list.count].state = 0;
@@ -1290,7 +1291,7 @@ typedef struct {
 
 extern Vendor vendor_29a6b0 __asm__("D_L00_001CA4C0");
 extern VendorItem_29a6b0 vendor_items_29a6b0[] __asm__("D_L00_001C40B0");
-extern VendorSlot vendor_slots_29a6b0[4] __asm__("D_L00_00165E80");
+extern VendorSlot vendor_slots[4] __asm__("D_L00_00165E80");
 typedef struct { u8 p[0x140]; f32 x; f32 y; f32 z; } VendorCam;
 extern VendorCam D_L00_00166C80_29a6b0 __asm__("D_L00_00166C80");
 extern s32 D_L00_00161E18;
@@ -1418,22 +1419,22 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     qzero(vector_destination_cursor);
     qzero(&D_L00_00180260_29a6b0);
     for (i = 0; i < 4; i++) {
-        slot = &vendor_slots_29a6b0[i];
+        slot = &vendor_slots[i];
         if (slot->hidden == 0) {
             attach_manipulator(vendor_29a6b0.moby, i + 0x14, slot);
         }
     }
     if (vendor_29a6b0.count < 8) {
         k = 7 - vendor_29a6b0.count;
-        vendor_slots_29a6b0[0].offset = k * 0x681;
-        vendor_slots_29a6b0[1].offset = k * -0x681;
-        vendor_slots_29a6b0[2].offset = k * 0x681;
-        vendor_slots_29a6b0[3].offset = k * -0x681;
+        vendor_slots[0].offset = k * 0x681;
+        vendor_slots[1].offset = k * -0x681;
+        vendor_slots[2].offset = k * 0x681;
+        vendor_slots[3].offset = k * -0x681;
     } else {
-        vendor_slots_29a6b0[0].offset = 0;
-        vendor_slots_29a6b0[1].offset = 0;
-        vendor_slots_29a6b0[2].offset = 0;
-        vendor_slots_29a6b0[3].offset = 0;
+        vendor_slots[0].offset = 0;
+        vendor_slots[1].offset = 0;
+        vendor_slots[2].offset = 0;
+        vendor_slots[3].offset = 0;
     }
     D_L00_00161188 = 0;
     D_L00_0016118C = 0;
@@ -1802,18 +1803,16 @@ typedef struct {
     s32 f210;            /* 0x210: row count */
 } VendorMenu;
 
-typedef struct { char pad[0x10]; s32 sound; } VendorItemSound;
 typedef struct { char pad0[0x10]; f32 f10; f32 f14; char pad18[8]; Vec4 v20; char pad30[0x10]; } VendorItemSlot40;
 typedef struct { f32 f0; f32 f4; f32 f8; char padC[4]; f32 f10; f32 f14; char pad18[8]; Vec4 v20; } VendorItemSlot30;
-typedef struct { char pad0; u8 b1; char pad2[0x3E]; } VendorRow;
 typedef struct { char pad0[0x140]; Vec4 pos; char pad150[0x200]; f32 basis[12]; } ViewCamera;
 
 extern VendorMenu vendor_menu __asm__("D_L00_001CA4C0");
 extern struct PadState controller_state __asm__("D_0013C940");
-extern VendorItemSound D_L00_001C2108[];
+extern VendorSound vendor_sound[] __asm__("D_L00_001C2108");
 extern VendorItemSlot40 D_L00_001C8FF0[];
 extern VendorItemSlot30 l00_vendor_item_display_transform_parameters[] __asm__("D_L00_001C9930");
-extern VendorRow D_L00_00165E80[];
+extern VendorSlot vendor_slots[4] __asm__("D_L00_00165E80");
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern u8 vendor_moby_update_label[] __asm__("D_L00_00161128");
 extern u8 vendor_hero_update_label[] __asm__("D_L00_00161138");
@@ -2101,7 +2100,7 @@ void update_vendor_menu(void) {
     f32 k3;
     f32 camera_world_z_rotation;
     f32 one;
-    VendorRow *row;
+    VendorSlot *row;
     VendorCutscene *cs;
     CutsceneCameraKey *current_camera_key;
     f32 *rot;
@@ -2158,9 +2157,9 @@ void update_vendor_menu(void) {
             vendor_menu.f4++;
             if (vendor_menu.f4 >= scale_game_frames(40) || vendor_menu.f40 != 0) {
                 FUN_00212f90(vendor_menu.f1c, 1, 0, 8);
-                row = D_L00_00165E80;
+                row = vendor_slots;
                 for (k = 0; k < 4; k++) {
-                    if (row->b1 == 1) {
+                    if (row->hidden == 1) {
                         detach_manipulator(vendor_menu.f1c, row);
                     }
                     row++;
@@ -2270,7 +2269,7 @@ void update_vendor_menu(void) {
                         handle_vendor_auxiliary_moby_event(0);
                         vendor_menu.f58++;
                         allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
-                        FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
+                        FUN_00237e90(FUN_001fdd10(vendor_sound[CUR_ITEM.fD0].message));
                         if (vendor_menu.f50 != -1) {
                             set_animation_parameter(vendor_menu.f50, 0);
                         }
@@ -2287,7 +2286,7 @@ void update_vendor_menu(void) {
                         handle_vendor_auxiliary_moby_event(0);
                         vendor_menu.f58--;
                         allocate_voice_for_target_entry(1, 0, vendor_menu.f1c);
-                        FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
+                        FUN_00237e90(FUN_001fdd10(vendor_sound[CUR_ITEM.fD0].message));
                         if (vendor_menu.f50 != -1) {
                             set_animation_parameter(vendor_menu.f50, 0);
                         }
@@ -2310,7 +2309,7 @@ void update_vendor_menu(void) {
                         } else {
                             vendor_menu.f58 = 0;
                         }
-                        FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
+                        FUN_00237e90(FUN_001fdd10(vendor_sound[CUR_ITEM.fD0].message));
                         if (vendor_menu.f50 != -1) {
                             set_animation_parameter(vendor_menu.f50, 0);
                         }
@@ -2332,7 +2331,7 @@ void update_vendor_menu(void) {
                         } else {
                             vendor_menu.f58 = vendor_menu.f210 - 1;
                         }
-                        FUN_00237e90(FUN_001fdd10(D_L00_001C2108[CUR_ITEM.fD0].sound));
+                        FUN_00237e90(FUN_001fdd10(vendor_sound[CUR_ITEM.fD0].message));
                         if (vendor_menu.f50 != -1) {
                             set_animation_parameter(vendor_menu.f50, 0);
                         }
@@ -2647,7 +2646,7 @@ int D_L01_001622B8 __attribute__((section(".bss")));
 float D_L01_001C8DA0 NOT_SDA = 0;
 float D_L01_001C8D80 NOT_SDA = 0;
 int D_L01_00161090 = 0;
-VendorItemSound D_L01_001C2588 = {0};
+VendorSound D_L01_001C2588 = {0};
 
 Vec4 D_L01_00166400[3] __attribute__((section(".bss")));
 
@@ -2719,7 +2718,7 @@ int D_L02_00162438 __attribute__((section(".bss")));
 float D_L02_001C8F20 NOT_SDA = 0;
 float D_L02_001C8F00 NOT_SDA = 0;
 int D_L02_00161090 = 0;
-VendorItemSound D_L02_001C2708 = {0};
+VendorSound D_L02_001C2708 = {0};
 
 Vec4 D_L02_00166580[3] __attribute__((section(".bss")));
 
@@ -2792,7 +2791,7 @@ int D_L03_00161F38 __attribute__((section(".bss")));
 float D_L03_001C8A20 NOT_SDA = 0;
 float D_L03_001C8A00 NOT_SDA = 0;
 int D_L03_00161090 = 0;
-VendorItemSound D_L03_001C2208 = {0};
+VendorSound D_L03_001C2208 = {0};
 
 Vec4 D_L03_00166080[3] __attribute__((section(".bss")));
 
@@ -2868,7 +2867,7 @@ int D_L04_00161FB8 __attribute__((section(".bss")));
 float D_L04_001C8AA0 NOT_SDA = 0;
 float D_L04_001C8A80 NOT_SDA = 0;
 int D_L04_00161090 = 0;
-VendorItemSound D_L04_001C2288 = {0};
+VendorSound D_L04_001C2288 = {0};
 
 Vec4 D_L04_00166100[3] __attribute__((section(".bss")));
 
@@ -2939,7 +2938,7 @@ int D_L05_00162238 __attribute__((section(".bss")));
 float D_L05_001C8DA0 NOT_SDA = 0;
 float D_L05_001C8D80 NOT_SDA = 0;
 int D_L05_00161090 = 0;
-VendorItemSound D_L05_001C2588 = {0};
+VendorSound D_L05_001C2588 = {0};
 
 Vec4 D_L05_00166380[3] __attribute__((section(".bss")));
 
@@ -3010,7 +3009,7 @@ int D_L06_001625B8 __attribute__((section(".bss")));
 float D_L06_001C90A0 NOT_SDA = 0;
 float D_L06_001C9080 NOT_SDA = 0;
 int D_L06_00161090 = 0;
-VendorItemSound D_L06_001C2888 = {0};
+VendorSound D_L06_001C2888 = {0};
 
 Vec4 D_L06_00166700[3] __attribute__((section(".bss")));
 
@@ -3081,7 +3080,7 @@ int D_L07_00161EB8 __attribute__((section(".bss")));
 float D_L07_001C89A0 NOT_SDA = 0;
 float D_L07_001C8980 NOT_SDA = 0;
 int D_L07_00161090 = 0;
-VendorItemSound D_L07_001C2188 = {0};
+VendorSound D_L07_001C2188 = {0};
 
 Vec4 D_L07_00166000[3] __attribute__((section(".bss")));
 
@@ -3149,7 +3148,7 @@ int D_L08_00162638 __attribute__((section(".bss")));
 float D_L08_001C9120 NOT_SDA = 0;
 float D_L08_001C9100 NOT_SDA = 0;
 int D_L08_00161090 = 0;
-VendorItemSound D_L08_001C2908 = {0};
+VendorSound D_L08_001C2908 = {0};
 
 Vec4 D_L08_00166780[3] __attribute__((section(".bss")));
 
@@ -3226,7 +3225,7 @@ int D_L09_00161FB8 __attribute__((section(".bss")));
 float D_L09_001C8AA0 NOT_SDA = 0;
 float D_L09_001C8A80 NOT_SDA = 0;
 int D_L09_00161090 = 0;
-VendorItemSound D_L09_001C2288 = {0};
+VendorSound D_L09_001C2288 = {0};
 
 Vec4 D_L09_00166100[3] __attribute__((section(".bss")));
 
@@ -3300,7 +3299,7 @@ int D_L10_001622B8 __attribute__((section(".bss")));
 float D_L10_001C8DA0 NOT_SDA = 0;
 float D_L10_001C8D80 NOT_SDA = 0;
 int D_L10_00161090 = 0;
-VendorItemSound D_L10_001C2588 = {0};
+VendorSound D_L10_001C2588 = {0};
 
 Vec4 D_L10_00166400[3] __attribute__((section(".bss")));
 
@@ -3374,7 +3373,7 @@ int D_L11_00162838 __attribute__((section(".bss")));
 float D_L11_001C9320 NOT_SDA = 0;
 float D_L11_001C9300 NOT_SDA = 0;
 int D_L11_00161090 = 0;
-VendorItemSound D_L11_001C2B08 = {0};
+VendorSound D_L11_001C2B08 = {0};
 
 Vec4 D_L11_001669C0[3] __attribute__((section(".bss")));
 
@@ -3447,7 +3446,7 @@ int D_L12_001622B8 __attribute__((section(".bss")));
 float D_L12_001C8DA0 NOT_SDA = 0;
 float D_L12_001C8D80 NOT_SDA = 0;
 int D_L12_00161090 = 0;
-VendorItemSound D_L12_001C2588 = {0};
+VendorSound D_L12_001C2588 = {0};
 
 Vec4 D_L12_00166400[3] __attribute__((section(".bss")));
 
@@ -3521,7 +3520,7 @@ int D_L13_00162138 __attribute__((section(".bss")));
 float D_L13_001C8C20 NOT_SDA = 0;
 float D_L13_001C8C00 NOT_SDA = 0;
 int D_L13_00161090 = 0;
-VendorItemSound D_L13_001C2408 = {0};
+VendorSound D_L13_001C2408 = {0};
 
 Vec4 D_L13_00166280[3] __attribute__((section(".bss")));
 
@@ -3595,7 +3594,7 @@ int D_L14_00162538 __attribute__((section(".bss")));
 float D_L14_001C9020 NOT_SDA = 0;
 float D_L14_001C9000 NOT_SDA = 0;
 int D_L14_00161090 = 0;
-VendorItemSound D_L14_001C2808 = {0};
+VendorSound D_L14_001C2808 = {0};
 
 Vec4 D_L14_00166680[3] __attribute__((section(".bss")));
 
@@ -3668,7 +3667,7 @@ int D_L15_00162438 __attribute__((section(".bss")));
 float D_L15_001C8F20 NOT_SDA = 0;
 float D_L15_001C8F00 NOT_SDA = 0;
 int D_L15_00161090 = 0;
-VendorItemSound D_L15_001C2708 = {0};
+VendorSound D_L15_001C2708 = {0};
 
 Vec4 D_L15_00166580[3] __attribute__((section(".bss")));
 
@@ -3743,7 +3742,7 @@ int D_L16_00162238 __attribute__((section(".bss")));
 float D_L16_001C8DA0 NOT_SDA = 0;
 float D_L16_001C8D80 NOT_SDA = 0;
 int D_L16_00161090 = 0;
-VendorItemSound D_L16_001C2588 = {0};
+VendorSound D_L16_001C2588 = {0};
 
 Vec4 D_L16_001663C0[3] __attribute__((section(".bss")));
 
@@ -3816,7 +3815,7 @@ int D_L17_00162738 __attribute__((section(".bss")));
 float D_L17_001C9220 NOT_SDA = 0;
 float D_L17_001C9200 NOT_SDA = 0;
 int D_L17_00161090 = 0;
-VendorItemSound D_L17_001C2A08 = {0};
+VendorSound D_L17_001C2A08 = {0};
 
 Vec4 D_L17_00166880[3] __attribute__((section(".bss")));
 
@@ -3887,7 +3886,7 @@ int D_L18_00162838 __attribute__((section(".bss")));
 float D_L18_001C9320 NOT_SDA = 0;
 float D_L18_001C9300 NOT_SDA = 0;
 int D_L18_00161090 = 0;
-VendorItemSound D_L18_001C2B08 = {0};
+VendorSound D_L18_001C2B08 = {0};
 
 Vec4 D_L18_00166980[3] __attribute__((section(".bss")));
 
