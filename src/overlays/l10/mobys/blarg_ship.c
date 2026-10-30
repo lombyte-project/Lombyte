@@ -470,12 +470,12 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     };
     unsigned char *pvars = moby->pvars;
     char          *ship_hit_record = find_moby_hit(moby, 0x370000, 0);
-    int            out;
+    int            ship_hit_processing_status;
     float          dmg;
     int            hit_response_code;
     dmg = 0.0f;
-    hit_response_code = resolve_moby_hit_response(moby, ship_hit_record, pvars + 0x20, 5, &out, &dmg, 0, 4);
-    if (ship_hit_record != 0 && out != 1 && moby->state != 8) {
+    hit_response_code = resolve_moby_hit_response(moby, ship_hit_record, pvars + 0x20, 5, &ship_hit_processing_status, &dmg, 0, 4);
+    if (ship_hit_record != 0 && ship_hit_processing_status != 1 && moby->state != 8) {
         if ((*(float *)(pvars + 0x20) -= dmg) <= 0.0f) {
             hit_response_code = 1;
         }
