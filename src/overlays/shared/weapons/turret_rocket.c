@@ -86,7 +86,7 @@ char *spawn_turret_rocket(int    owner,
                           float *rotation,
                           int    value) __asm__("FUN_L08_002e7eb0");
 
-char *spawn_turret_rocket(int owner, float *position, float *rotation, int target_moby) {
+char *spawn_turret_rocket(int firing_moby, float *position, float *rotation, int target_moby) {
     float position_copy[4] __attribute__((aligned(16)));
     float rotation_copy[4] __attribute__((aligned(16)));
     float matrix[4][4] __attribute__((aligned(16)));
@@ -106,7 +106,7 @@ char *spawn_turret_rocket(int owner, float *position, float *rotation, int targe
     moby = create_moby(0x1ca);
     if (moby != 0) {
         created_moby_private_state = ((char *)MOBY(moby)->pvars);
-        *(int *)(created_moby_private_state + 0x14) = owner;
+        *(int *)(created_moby_private_state + 0x14) = firing_moby;
         *(int *)(created_moby_private_state + 0x10) = target_moby;
         set_moby_color(moby, 0xa0, 0xa0, 0xa0);
         *(volatile int *)(moby + 0x40) = 0;
