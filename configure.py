@@ -1062,7 +1062,7 @@ def hoist_sda_externs(assembly, source):
         source = re.sub(r"^(#ifndef NON_MATCHING\n(?:INCLUDE_ASM[^\n]*\n)*)#else\n.*?^#endif",
                         r"\1#endif", source, flags=re.M | re.S)
     sda = {}
-    for match in re.finditer(r"^extern[^;]*__attribute__\(\(sda\)\)[^;]*;", source, re.M):
+    for match in re.finditer(r"^extern[^;]*__attribute__\s*\(\(\s*sda\s*\)\)[^;]*;", source, re.M):
         decl = match.group(0)
         label = re.search(r'__asm__\s*\(\s*"([\w.$]+)"', decl)
         name = re.search(r"([A-Za-z_]\w*)\s*(?:\[[^\]]*\]\s*)*(?:__asm__|__attribute__)", decl)

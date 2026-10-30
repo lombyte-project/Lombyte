@@ -163,6 +163,19 @@ edit fails at once.
   byte arrays of more than 16 values.
 - A variable defined in C is removed from `config/us/symbol_addrs.txt`.
 
+## Formatting
+
+Human first: code should read well at first glance. `python3 scripts/format.py`
+formats every C file the same way (`.clang-format`: struct fields in columns,
+one statement per line, long calls one argument per line, one blank line
+between top-level blocks). Formatting never changes the bytes. CI fails a pull
+request whose changed `.c`/`.h` files are not formatted;
+`python3 scripts/format.py --check` shows them.
+
+Inside a file keep this order: includes, types, externs, data, functions.
+When a match needs a declaration further down (a first declaration can change
+register allocation), keep it there.
+
 ## Moving files
 
 See [menu stream buffers](../game/menu-stream-buffers.md) for a small module example
@@ -172,8 +185,8 @@ while retaining their existing type and calling-convention views.
 [VU1 packets and VIF1 DMA](../game/vu1-chain.md) shows a module move that also
 preserves a source-owned small-data placement entry.
 
-- Folders follow the subsystem, for example `ui/menus/<screen>` or
-  `gameplay/...`.
+- Folders follow what the code is in the game ([src/README.md](../../src/README.md)),
+  for example `ui/menus/<screen>`, `overlays/shared/enemies` or `lNN/mobys`.
 - In the same commit, update the unit path in `config/us/rnc1.us.yaml`, or in
   `config/overlays/us/functions.tsv` for level code.
 - The config decides the link order, so a correct move can't change the

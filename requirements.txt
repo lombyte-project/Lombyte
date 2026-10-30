@@ -19,3 +19,6 @@ crunch64
 
 # Decompilation progress map (scripts/generate_treemap.py)
 squarify==0.4.4
+
+# C formatting (scripts/format.py, .clang-format); pinned so every machine formats the same
+clang-format==18.1.3
