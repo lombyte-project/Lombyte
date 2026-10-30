@@ -1,5 +1,6 @@
 /* Shared moby classes: walloper, morphoray. */
 #include "types.h"
+#include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -1389,10 +1390,6 @@ typedef struct Stats {
     int levels;
 } Stats;
 
-typedef struct Skill {
-    char p0[8];
-    unsigned char f8;
-} Skill;
 
 typedef struct Light {
     float col[4];
@@ -1437,7 +1434,6 @@ void hud_init_particles(HudElem *e) __asm__("FUN_L00_00236268");
 void hud_update_particles(void) __asm__("FUN_L00_00236458");
 void FUN_L00_00263d40(int a, int b);
 extern char D_0013A5E0_2BDAF0[] __asm__("D_0013CAE0");
-extern char item_unlocked[] __asm__("D_0013D408");
 extern unsigned char D_0013E633_2BDAF0[] __asm__("D_0013E533");
 extern char voice_pool[] __asm__("D_0013E550");
 extern char D_L00_001803C0_2BDAF0[] __asm__("D_L00_001802C0");
@@ -1566,8 +1562,8 @@ void morphoray_update(Moby *moby) {
             D_L00_001616EC = 10000 - func_001FA898_2BDAF0(data->left * 10000.0f / data->total);
         }
         if (data->target != 0 && data->left <= 0.0f) {
-            if (current_level_index == 5 && data->target->oclass == 0x271 && ((Skill *)item_unlocked)->f8 == 0) {
-                ((Skill *)item_unlocked)->f8 = 1;
+            if (current_level_index == 5 && data->target->oclass == 0x271 && item_unlocked[8] == 0) {
+                item_unlocked[8] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }

@@ -18,7 +18,6 @@ int FUN_L00_0027a6e0(char *menu) {
 
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00284410), where it is exact; names translated to the US level program. */
 
-extern char D_0013D408[];
 extern char D_0013D4C0[];
 extern char D_0013D388[];
 extern short unlock_code_input_count __asm__("D_L00_001603F8") __attribute__((sda));
@@ -79,7 +78,7 @@ void process_unlock_code_input(void) {
             char *code_flags = D_0013D388;
             code_flags[vb] = 1;
         } else if ((unsigned)vc < 0x1e) {
-            unsigned char *selected_code_flag = (unsigned char *)D_0013D408 + vc;
+            unsigned char *selected_code_flag = item_unlocked + vc;
             if (!*selected_code_flag) {
                 *selected_code_flag = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);

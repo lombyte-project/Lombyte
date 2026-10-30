@@ -2940,7 +2940,6 @@ void edwina_update(L16WatchMoby *moby) {
     update_joint_animation(rate * D_0015ED64_b570, head_rate * D_0015ED64_b570, moby, moby_data->head, 0);
 }
 /* Hit handler: counts hits toward a help message, bursts debris and blinks the moby until its timer runs out. */
-extern char D_0013D408[];
 extern int helicopter_help_message_hit_count_gp __asm__("D_0015EE04") __attribute__((sda));
 extern s32 D_L12_001619B4 __attribute__((sda));
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
@@ -2960,7 +2959,7 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
         if (hero.state.current != 0x32) {
             helicopter_help_message_hit_count_gp += 1;
             if (helicopter_help_message_hit_count_gp >= 5) {
-                help_message_state = (unsigned char *)(D_0013D408);
+                help_message_state = item_unlocked;
                 if (help_message_state[0x15] == 0) {
                     help_message_state[0x15] = 1;
                     allocate_voice_for_bank_entry(1, 0, 0);

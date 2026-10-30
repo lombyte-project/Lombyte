@@ -312,8 +312,6 @@ extern void func_L00_00261B00_2E2B80(void *, int, int, int, int) __asm__("FUN_L0
 extern int ahead_f(float, void *, void *) __asm__("FUN_L01_00274b78");
 extern int activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern unsigned char D_0013D418 NOT_SDA;
-typedef struct EventRecord { unsigned char pad[0x10]; unsigned char flag; } EventRecord;
-extern EventRecord D_0013D408_2DFC38 __asm__("D_0013D408");
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/update_screamer_hit_reactions_and_targeting.h"
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void hit_update_2DFC38(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
@@ -340,8 +338,8 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
         hit_update_2DFC38(moby, hit_record, &data->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0) {
             if (data->f20 <= hit_record->f2C) {
-                if (screamer_death_message_gate != 0 && D_0013D408_2DFC38.flag == 0) {
-                    D_0013D408_2DFC38.flag = 1;
+                if (screamer_death_message_gate != 0 && item_unlocked[0x10] == 0) {
+                    item_unlocked[0x10] = 1;
                     allocate_voice_for_bank_entry_2DFC38(1, 0, 0);
                     queue_dialogue_message(0x53d6, -1);
                 }
@@ -1932,14 +1930,12 @@ typedef struct Hit_2E52B0 {
     unsigned short h2A;
 } Hit_2E52B0;
 
-typedef struct { char p0[0x11]; unsigned char b11; } Flags;
 
 extern char *FUN_L00_0025a420(void *,int,int);
 extern float toxic_crab_hit_knockback_gravity_gp __asm__("D_L10_00161E2C") __attribute__((sda));
 extern float D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
 extern int FUN_00213928_c(void *,void *,void *,int,int *,float *,int,int) __asm__("FUN_00213928");
 extern int FUN_L00_0025ff38_c(float,char *,void *,int,int,void *,int) __asm__("FUN_L00_0025ff38");
-extern unsigned char D_0013D408[];
 extern void trooper_anim_finish(void *,void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L10_002e0138_c(unsigned char *m) __asm__("FUN_L10_002e0138");
 int find_point_ahead(char *a, char *o, float best) __asm__("FUN_L01_00274b78");
@@ -1952,7 +1948,6 @@ extern void func_0022EE28_2E52B0(int, int, int) __asm__("FUN_0022db10");
 extern void trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250a78");
 extern void func_L00_0025D5B0_2E52B0(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern int func_L00_00260D30_2E52B0(void *, void *, float) __asm__("FUN_L01_00274b78");
-extern char D_0013D50F_2E52B0[] __asm__("D_0013D408");
 extern V_2E52B0 D_L10_00174380_2E52B0 __asm__("D_L10_00174300");
 
 void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
@@ -2003,8 +1998,8 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     fast_dec_timer_s16(&moby_data->h26);
     if ((unsigned int)A >= 2 && moby->state != 0xB && moby->state != 0xC) {
         if (current_level_index == 10 && hit_record != 0 && hit_record->f20 != 0 && hit_record->f20->oclass == 0x31A) {
-            if (moby_data->f1AC != 0 && ((Flags *)D_0013D50F_2E52B0)->b11 == 0) {
-                ((Flags *)D_0013D50F_2E52B0)->b11 = 1;
+            if (moby_data->f1AC != 0 && item_unlocked[0x11] == 0) {
+                item_unlocked[0x11] = 1;
                 func_0022EE28_2E52B0(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }

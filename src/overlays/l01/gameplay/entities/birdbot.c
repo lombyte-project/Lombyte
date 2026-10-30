@@ -1,5 +1,6 @@
 /* Level 01 moby classes: birdbot, peckbot, water_current, cave_door, fighter_jet, door_half, stationary_ship, bomber_jet, water_lily, falling_rock, piston_platform. */
 #include "types.h"
+#include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
@@ -2273,7 +2274,6 @@ void cave_door_update(Moby *self) {
 
 
 extern char D_L01_00167240[];
-extern unsigned char D_0013D408 NOT_SDA;
 extern short D_L01_0015FFD8_c __asm__("D_L01_0015FFD8");
 extern short fighter_jet_minimum_distance_scale_gp __asm__("D_L01_00161AF4") __attribute__((sda));
 extern short fighter_jet_minimum_scale_camera_distance_gp __asm__("D_L01_00161AF8") __attribute__((sda));
@@ -2311,8 +2311,8 @@ void fighter_jet_update(char *moby) {
         int i;
         int *child_ids;
         if (((unsigned char *)moby)[0x20] == 0x65) return;
-        if (D_0013D408 == 0) {
-            D_0013D408 = 1;
+        if (item_unlocked[0] == 0) {
+            item_unlocked[0] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             FUN_L00_00263d40(0x53D6, -1);
         }
@@ -2899,7 +2899,6 @@ extern f32 gunship_far_dist __asm__("D_L01_00161BD4") __attribute__((sda));
 extern f32 gunship_near_dist __asm__("D_L01_00161BD8") __attribute__((sda));
 GunshipTargets gunship_no_targets __asm__("D_L01_00161BE0") = {{-1, -1, -1, -1}};
 extern char camera_pos[] __asm__("D_L01_00167240");
-extern u8 item_unlocked __asm__("D_0013D408") NOT_SDA;
 extern char gunship_no_path_fmt[] __asm__("D_L01_0020B4A0");
 extern u8 moby_collected[] __asm__("D_L01_001BBB04");
 extern GunshipHit collision_hit __asm__("D_L01_001742C0");
@@ -2943,8 +2942,8 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
     hit = find_moby_hit(bomber_jet_moby, 0x800000, 0);
     bomber_jet_moby->bA4 = 0xFF;
     if (hit != 0) {
-        if (item_unlocked == 0) {
-            item_unlocked = 1;
+        if (item_unlocked[0] == 0) {
+            item_unlocked[0] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
         }

@@ -2474,7 +2474,6 @@ extern char *D_L06_001B0C30_c __asm__("D_L06_001B0C30");
 extern char D_L06_001678D0[];
 extern float D_0015ED6C_c3 __asm__("D_0015ED6C");
 extern int *D_L06_0015F5C4_c[] __asm__("D_L06_0015F5C4");
-extern int D_0013D408; /* no foreign declaration */
 extern int D_0013D40F; /* no foreign declaration */
 extern int D_0013D505; /* no foreign declaration */
 extern int D_L06_0015FFD8_c2 __asm__("D_L06_0015FFD8");
