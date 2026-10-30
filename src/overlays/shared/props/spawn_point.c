@@ -41,48 +41,48 @@ extern unsigned char  D_0014C050[];
 void spawn_point_update(struct Moby *moby) __asm__("FUN_L01_00300220");
 
 void spawn_point_update(struct Moby *moby) {
-    PickupVars *vars = (PickupVars *)moby->pvars;
+    PickupVars *pickup_vars = (PickupVars *)moby->pvars;
     s32         armed = 0;
     Vec4f       pos;
     u32         state;
 
-    if (vars->flags & 8) {
+    if (pickup_vars->flags & 8) {
         return;
     }
     if (moby->command == 0) {
         moby->command = 1;
-        vars->in_volume = 0;
+        pickup_vars->in_volume = 0;
         return;
     }
-    if (vars->spawn_slot != -1 && D_0014C050[vars->spawn_slot + current_level_index * 16] != 0xFF) {
+    if (pickup_vars->spawn_slot != -1 && D_0014C050[pickup_vars->spawn_slot + current_level_index * 16] != 0xFF) {
         return;
     }
-    if ((vars->flags & 2) && D_001413F4 != 1) {
+    if ((pickup_vars->flags & 2) && D_001413F4 != 1) {
         return;
     }
-    if ((vars->flags & 4) && D_001413F4 != 3 && D_001413F4 != 0) {
+    if ((pickup_vars->flags & 4) && D_001413F4 != 3 && D_001413F4 != 0) {
         return;
     }
-    if (vars->flags & 0x10) {
+    if (pickup_vars->flags & 0x10) {
         state = D_001413DC;
         if (state > 1 && state != 9) {
             return;
         }
     }
-    if (is_point_inside_clip_volume(&hero.motion.pos, vars->volume)) {
-        if (vars->in_volume == 0) {
+    if (is_point_inside_clip_volume(&hero.motion.pos, pickup_vars->volume)) {
+        if (pickup_vars->in_volume == 0) {
             armed = 1;
         }
-        vars->in_volume = 1;
+        pickup_vars->in_volume = 1;
     } else {
-        vars->in_volume = 0;
+        pickup_vars->in_volume = 0;
     }
     if (armed || l01_save_state.cleared[(s16)moby->save_id] != 0 ||
         ((D_0014C190[current_level_index][(s16)moby->save_id >> 5] >> (moby->save_id & 0x1F)) &
          1)) {
-        if (vars->armed == 0 || vars->rearm != 0) {
+        if (pickup_vars->armed == 0 || pickup_vars->rearm != 0) {
             armed = 1;
-            vars->armed = armed;
+            pickup_vars->armed = armed;
             jet_clear_persistent(moby->mission);
             qcopy(&pos, &moby->pos);
             pos.z = probe_ground_height(&pos, 0, 0.5f);
@@ -97,7 +97,7 @@ void spawn_point_update(struct Moby *moby) {
             moby_killed[(s16)moby->save_id >> 5] &= ~(armed << (moby->save_id & 0x1F));
         }
     } else {
-        vars->armed = 0;
+        pickup_vars->armed = 0;
     }
     if (moby->state == 0 && D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
         moby->state = 1;
