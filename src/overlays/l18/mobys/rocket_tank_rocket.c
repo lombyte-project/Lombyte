@@ -166,7 +166,7 @@ char *create_class_29_moby(struct Moby *owner,
                            float       *initial_movement_step,
                            int          homing_enabled) __asm__("FUN_L18_002a75f0");
 
-char *create_class_29_moby(struct Moby *owner,
+char *create_class_29_moby(struct Moby *projectile_firing_moby,
                            float       *spawn_position,
                            float       *initial_movement_step,
 
@@ -178,14 +178,14 @@ char *create_class_29_moby(struct Moby *owner,
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        MOBY(moby)->spawn_frame = owner->spawn_frame;
+        MOBY(moby)->spawn_frame = projectile_firing_moby->spawn_frame;
         MOBY(moby)->scale = MOBY(moby)->scale * 3.0f;
         qcopy(moby + 0x10, spawn_position);
         class_29_private_vars = ((char *)MOBY(moby)->pvars);
         qcopy(class_29_private_vars, initial_movement_step);
         *(short *)(class_29_private_vars + 0x10) = scale_game_frames(0xF0);
         *(short *)(class_29_private_vars + 0x12) = homing_enabled;
-        *(char **)(class_29_private_vars + 0x14) = owner;
+        *(char **)(class_29_private_vars + 0x14) = projectile_firing_moby;
         MOBY(moby)->rot.z = fast_arc_tan(initial_movement_step[0], initial_movement_step[1]);
         MOBY(moby)->rot.y =
             -fast_arc_tan(vector_length_xy(initial_movement_step), initial_movement_step[2]);
