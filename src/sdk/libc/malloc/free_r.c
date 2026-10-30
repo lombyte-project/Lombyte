@@ -101,7 +101,7 @@ void _free_r(struct _reent *reent_context, void *mem) {
     u32                  hd;
     u32                  sz;
     s32                  free_bin_index;
-    struct malloc_chunk *next;
+    struct malloc_chunk *adjacent_chunk;
     u32                  nextsz;
     u32                  prevsz;
     struct malloc_chunk *bck;
@@ -117,10 +117,10 @@ void _free_r(struct _reent *reent_context, void *mem) {
     hd = free_chunk->size;
 
     sz = hd & ~PREV_INUSE;
-    next = chunk_at_offset(free_chunk, sz);
-    nextsz = chunksize(next);
+    adjacent_chunk = chunk_at_offset(free_chunk, sz);
+    nextsz = chunksize(adjacent_chunk);
 
-    if (next == top) {
+    if (adjacent_chunk == top) {
         sz += nextsz;
 
         if (!(hd & PREV_INUSE)) {
@@ -138,7 +138,7 @@ void _free_r(struct _reent *reent_context, void *mem) {
         return;
     }
 
-    set_head(next, nextsz);
+    set_head(adjacent_chunk, nextsz);
 
     islr = 0;
 
@@ -153,14 +153,14 @@ void _free_r(struct _reent *reent_context, void *mem) {
             unlink(free_chunk, bck, fwd);
     }
 
-    if (!(inuse_bit_at_offset(next, nextsz))) {
+    if (!(inuse_bit_at_offset(adjacent_chunk, nextsz))) {
         sz += nextsz;
 
-        if (!islr && next->fd == last_remainder) {
+        if (!islr && adjacent_chunk->fd == last_remainder) {
             islr = 1;
             link_last_remainder(free_chunk);
         } else
-            unlink(next, bck, fwd);
+            unlink(adjacent_chunk, bck, fwd);
     }
 
     set_head(free_chunk, sz | PREV_INUSE);
