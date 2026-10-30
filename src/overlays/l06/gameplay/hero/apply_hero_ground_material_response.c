@@ -1434,8 +1434,8 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.past_apex != 0.0f && hero.air_frames.s == 0) {
             if (hero.rise_fall_land_frames == 0) {
-                l06_camera.shake = 0.2f;
-                l06_camera.shake_time = scale_game_frames(40);
+                l06_camera.shake_amount = 0.2f;
+                l06_camera.shake_frames = scale_game_frames(40);
             }
             hero.rise_fall_land_frames++;
         }
@@ -2056,11 +2056,11 @@ void update_hero_motion_for_current_state(void) {
             if (hero.stick_magnitude > 0.5f && !flag) {
                 f32 a;
                 FUN_L00_002118c8_c(1.0f, 0);
-                a = fast_difference_between_rotations(hero.motion.move_yaw, l06_camera.rot.z);
+                a = fast_difference_between_rotations(hero.motion.move_yaw, l06_camera.yaw);
                 if (fast_difference_between_rotations(a, 1.5707964f) < 1.2217305f ||
                     fast_difference_between_rotations(a, -1.5707964f) < 1.2217305f) {
                     hero.grind_pose = fast_difference_between_rotations(
-                                 fast_subtract_rotations(hero.motion.move_yaw, l06_camera.rot.z), 1.5707964f) < 0.7853982f
+                                 fast_subtract_rotations(hero.motion.move_yaw, l06_camera.yaw), 1.5707964f) < 0.7853982f
                                  ? 2
                                  : 3;
                 }

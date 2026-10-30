@@ -1,5 +1,6 @@
 /* Level 08 moby classes: bomb, bomber_tank, blarg_bombthrower, shuttle, rocket. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -1107,9 +1108,6 @@ typedef int u128_7010 __attribute__((mode(TI)));
 
 typedef struct { char pad0[0x21]; unsigned char group; char pad22[0xDE]; } Blk_7010;
 
-typedef struct { char pad0[0x140]; float x,y,z,w; } Camera46;
-
-extern Camera46 D_L08_00167480;
 extern char *D_L08_001600EC;
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern short *D_L08_001AC040[];
@@ -1214,8 +1212,8 @@ void scatter_bomber_tank_linked_debris(struct Moby *moby) {
                     qcopy(launch_offset, launch_velocity_or_offset); break;
                 }
                 if (fast_difference_between_rotations(fast_arc_tan(position_or_velocity_scratch[0], position_or_velocity_scratch[1]),
-                                  fast_arc_tan(D_L08_00167480.x - moby->pos.x,
-                                                    D_L08_00167480.y - moby->pos.y)) < 0.2617994f) {
+                                  fast_arc_tan(l08_camera.pos.f[0] - moby->pos.x,
+                                                    l08_camera.pos.f[1] - moby->pos.y)) < 0.2617994f) {
                     initialize_moby_launch_motion(other, (int)moby, position_or_velocity_scratch, launch_offset, truncate_float_to_s32(random_float_between(10.0f, 20.0f)));
                 } else {
                     initialize_moby_launch_motion(other, (int)moby, position_or_velocity_scratch, launch_offset, truncate_float_to_s32(random_float_between(30.0f, 45.0f)));
@@ -1443,7 +1441,6 @@ char *select_blarg_bombthrower_waypoint(struct Moby *moby) {
 
 typedef struct { char pad0[0x20]; struct Moby *moby; } Hit_2D5FA8_c;
 
-typedef struct { char pad0[0x140]; float x, y; char pad148[0x10]; float f158; } Cam;
 
 typedef struct { char pad0[0x40]; struct Moby *target; int result; } Look;
 
@@ -1491,7 +1488,6 @@ typedef struct {
     char blk160[0x10];
 } Data_DBF68;
 
-typedef struct { char pad0[0x140]; float x,y,z,w; } Camera46_c;
 
 char *spawn_bomb_with_velocity(int arg, char *pos, char *vec) __asm__("FUN_L08_002d22e0");
 char *FUN_L08_002daa10_c(struct Moby *moby) __asm__("FUN_L08_002daa10");
@@ -1520,7 +1516,6 @@ extern void explode_2D5FA8_c(struct Moby *, int, int) __asm__("FUN_L00_00257470"
 extern void func_L00_00264B40_x(struct Moby *, int, float, char *) __asm__("FUN_L00_00263ac8");
 extern float FUN_0020c9e0(struct Moby *);
 extern void func_L00_002592B0_x(float, void *, void *, float, float, float) __asm__("FUN_L00_00258278");
-extern char camera_state_bytes[] __asm__("D_L08_00167480");
 
 void blarg_bombthrower_update(struct Moby *moby) __asm__("FUN_L08_002dabf0");
 void blarg_bombthrower_update(struct Moby *moby) {
@@ -1704,8 +1699,8 @@ void blarg_bombthrower_update(struct Moby *moby) {
         func_L00_002592B0_x(fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                             moby, vars->blk12C, 0.02f, 0.3f, 0.2f);
         if (target_distance_xy < 20.0f && 8.0f < target_distance_xy && fast_dec_timer(&vars->i128) != 0) {
-            Cam *cam = (Cam *)camera_state_bytes;
-            if (fast_difference_between_rotations(cam->f158, fast_arc_tan(moby->pos.x - cam->x, moby->pos.y - cam->y)) < 0.55850536f) {
+            LevelCamera *cam = &l08_camera;
+            if (fast_difference_between_rotations(cam->yaw, fast_arc_tan(moby->pos.x - cam->pos.f[0], moby->pos.y - cam->pos.f[1])) < 0.55850536f) {
                 goto attack;
             }
         }
@@ -1731,10 +1726,10 @@ void blarg_bombthrower_update(struct Moby *moby) {
             FUN_L00_00259028((char *)moby, vars->blkD0, point, (char *)vars->v40);
         }
         if (moby->anim_flags & 2) {
-            Cam *cam;
+            LevelCamera *cam;
             if (vector_distance_xy(&moby->pos, &target->pos) < 6.0f
-                || (cam = (Cam *)camera_state_bytes,
-                    0.55850536f < fast_difference_between_rotations(cam->f158, fast_arc_tan(moby->pos.x - cam->x, moby->pos.y - cam->y)))) {
+                || (cam = &l08_camera,
+                    0.55850536f < fast_difference_between_rotations(cam->yaw, fast_arc_tan(moby->pos.x - cam->pos.f[0], moby->pos.y - cam->pos.f[1])))) {
                 old_waypoint = vars->waypoint;
                 if ((vars->waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby)) == 0) {
                     vars->waypoint = old_waypoint;
@@ -2545,7 +2540,7 @@ void update_rocket(M46 *moby) {
                             velocity_correction_or_effect_velocity[2]=random_float_between(D_0015ED6C*8.0f,D_0015ED6C*12.0f);
                             other->animation=0;
                             launch_yaw=fast_arc_tan(velocity_correction_or_effect_velocity[0],velocity_correction_or_effect_velocity[1]);
-                            center_yaw=fast_arc_tan(D_L08_00167480.x-moby->position[0],D_L08_00167480.y-moby->position[1]);
+                            center_yaw=fast_arc_tan(l08_camera.pos.f[0]-moby->position[0],l08_camera.pos.f[1]-moby->position[1]);
                             angle_delta=fast_difference_between_rotations(launch_yaw,center_yaw);
                             launch_offset=effect;
                             if (angle_delta<0.7853982f) { min_frames=10.0f; max_frames=20.0f; }

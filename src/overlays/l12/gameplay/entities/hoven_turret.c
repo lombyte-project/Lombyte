@@ -1,6 +1,7 @@
 /* Level 12 moby classes: hoven_turret, mine, planetbuster_maximus_part, homing_mine_spawner. */
 #include "rnc/gameplay/hero.h"
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -352,15 +353,6 @@ void update_hoven_turret_camera(struct Moby *moby) {
     set_camera_rotation(position_and_rotation + 4);
 }
 
-/* The view the targets are checked against: position, pitch and yaw. */
-typedef struct {
-    u8 pad0[0x140];
-    Vec4 position;
-    f32 unk150;
-    f32 pitch;
-    f32 yaw;
-} View_303370;
-extern View_303370 view_303370 __asm__("D_L12_00167100");
 
 typedef struct {
     u8 pad0[0x40];
@@ -396,10 +388,10 @@ void update_hoven_turret_target_alignment_timer(void *moby) {
                 pitch_limit = 0.05235988f;
                 position.f[2] += 1.5f;
             }
-            yaw = fast_arc_tan(position.f[0] - view_303370.position.f[0], position.f[1] - view_303370.position.f[1]);
-            pitch = fast_arc_tan(vector_distance_xy(&view_303370.position, &position), position.f[2] - view_303370.position.f[2]);
-            if (fast_difference_between_rotations(yaw, view_303370.yaw) < yaw_limit &&
-                fast_difference_between_rotations(pitch, -view_303370.pitch) < pitch_limit)
+            yaw = fast_arc_tan(position.f[0] - l12_camera.pos.f[0], position.f[1] - l12_camera.pos.f[1]);
+            pitch = fast_arc_tan(vector_distance_xy(&l12_camera.pos, &position), position.f[2] - l12_camera.pos.f[2]);
+            if (fast_difference_between_rotations(yaw, l12_camera.yaw) < yaw_limit &&
+                fast_difference_between_rotations(pitch, -l12_camera.pitch) < pitch_limit)
                 found = 1;
         }
     }
@@ -445,21 +437,6 @@ typedef struct {
     short fAE;
 } Data_304920;
 
-typedef struct {
-    char pad0[0x140];
-    float f140[4];
-    char pad150[4];
-    float f154;
-    float f158;
-    char pad15C[4];
-    float f160;
-    char pad164[4];
-    int f168;
-    char pad16C[4];
-    float f170;
-    char pad174[4];
-    int f178;
-} Cam;
 
 typedef struct {
     char pad0[0x6C];
@@ -507,7 +484,6 @@ extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 extern char D_0013E533[];
 extern int invert52_macro[] __asm__("D_0015EDDC") MACRO_ADDR;
 extern Moby *D_L12_0015FFD8_gp __asm__("D_L12_0015FFD8") MACRO_ADDR;
-extern char D_L12_00167180_304920[] __asm__("D_L12_00167100");
 extern int func_0020BFC8_304920(int, int) __asm__("FUN_0020b178");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
@@ -709,10 +685,10 @@ void hoven_turret_update(struct Moby *moby) {
                 fast_vec_add(muz, muz, firing_offset);
                 create_moby_with_particles(moby, muz, firing_offset, 0);
                 allocate_voice_for_target_entry(0, 0, (int)moby);
-                ((Cam *)D_L12_00167180_304920)->f160 = 0.03f;
-                ((Cam *)D_L12_00167180_304920)->f168 = scale_game_frames(0xA);
-                ((Cam *)D_L12_00167180_304920)->f170 = 0.03f;
-                ((Cam *)D_L12_00167180_304920)->f178 = scale_game_frames(7);
+                l12_camera.shake_amount = 0.03f;
+                l12_camera.shake_frames = scale_game_frames(0xA);
+                l12_camera.shake2_amount = 0.03f;
+                l12_camera.shake2_frames = scale_game_frames(7);
                 data->f70 = scale_game_frames(0x14);
                 for (i = 0; i < 5; i++) {
                     Vec_304920 randomized_firing_direction;
@@ -746,9 +722,9 @@ void hoven_turret_update(struct Moby *moby) {
             float t;
 
             randomized_view_offset_distance = random_float_between(hoven_turret_destruction_view_offset_distance_min, hoven_turret_destruction_view_offset_distance_max);
-            randomized_view_yaw = fast_add_rotations(((Cam *)D_L12_00167180_304920)->f158, randf_sym(0.0f, 0.5235988f));
-            randomized_view_pitch = fast_add_rotations(((Cam *)D_L12_00167180_304920)->f154, randf_sym(0.0f, 0.5235988f));
-            qcopy(explosion_position, ((Cam *)D_L12_00167180_304920)->f140);
+            randomized_view_yaw = fast_add_rotations(l12_camera.yaw, randf_sym(0.0f, 0.5235988f));
+            randomized_view_pitch = fast_add_rotations(l12_camera.pitch, randf_sym(0.0f, 0.5235988f));
+            qcopy(explosion_position, &l12_camera.pos);
             FUN_L00_00262cf0(explosion_position, explosion_position, randomized_view_offset_distance, randomized_view_yaw, randomized_view_pitch);
             t = random_float_between(0.5f, 1.3f);
             spawn_explosion(moby, D_L12_0015F580_macro, explosion_position, 0.0f, 0.0f, 7, 0xF, 0x19, t, t * 0.57f, 10.0f, 3, 0.7f, 0.0f, 0, 0, -1, 0);

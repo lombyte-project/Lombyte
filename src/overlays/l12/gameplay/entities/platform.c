@@ -1,5 +1,6 @@
 /* Level 12 moby classes: platform, miner, blarg_trooper, blarg_helicopter, edwina, helicopter, crane_arm. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -2295,8 +2296,6 @@ extern unsigned char D_001413F4 NOT_SDA;
 extern int D_L12_00161F00 MACRO_ADDR;
 extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_001619A0 __attribute__((sda));
-typedef struct { char pad[0x25c]; struct Moby *moby; int count; } Tracking;
-extern Tracking D_L12_00167100;
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/audio/voice_pool.h"
 extern unsigned char D_0013E550[];
@@ -2352,7 +2351,7 @@ void blarg_helicopter_update(struct Moby *moby) {
     index = *(int *)(data + 0xc0);
     if (current_level_index == 12 && D_L12_00161F00 != 0) {
         if (index == 0) {
-            if (D_L12_00167100.moby == moby) D_L12_00167100.moby = 0;
+            if (l12_camera.focus_moby == moby) l12_camera.focus_moby = 0;
             if (!moby->visible) {
                 if (*(struct Moby **)(data + 0xac)) {
                     mark_moby_for_removal(*(struct Moby **)(data + 0xac));
@@ -2444,9 +2443,9 @@ update_state:
         break;
     }
     case BLARG_HELICOPTER_FOLLOW_INITIAL_PATH:
-        if (*(int *)(data + 0xc0) == 0 && D_L12_00167100.moby == 0) {
-            D_L12_00167100.moby = moby;
-            D_L12_00167100.count = 0;
+        if (*(int *)(data + 0xc0) == 0 && l12_camera.focus_moby == 0) {
+            l12_camera.focus_moby = moby;
+            l12_camera.focus_time = 0;
         }
         if (*(int *)(data + 0xc0)) {
             count = *(short *)(data + 0x8c);
@@ -2465,10 +2464,10 @@ update_state:
         distance = vector_distance_xy(&moby->pos, &hero.motion.pos);
         if (*(int *)(data + 0xc0) == 0) {
             if (distance < 21.0f && moby->pos.z - hero.motion.pos.f[2] > 1.0f) {
-                if (D_L12_00167100.moby == 0) {
-                    D_L12_00167100.moby = moby; D_L12_00167100.count = 0;
+                if (l12_camera.focus_moby == 0) {
+                    l12_camera.focus_moby = moby; l12_camera.focus_time = 0;
                 }
-            } else if (D_L12_00167100.moby == moby) D_L12_00167100.moby = 0;
+            } else if (l12_camera.focus_moby == moby) l12_camera.focus_moby = 0;
         }
         distance = vector_distance_xy(&moby->pos, target);
         if ((distance < 40.0f && moby->pos.z - target[2] > -2.0f) || *(int *)(data + 0xc0)) {
@@ -2562,7 +2561,7 @@ update_state:
         break;
     case BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET: {
         int index;
-        if (D_L12_00167100.moby == moby) D_L12_00167100.moby = 0;
+        if (l12_camera.focus_moby == moby) l12_camera.focus_moby = 0;
         if (*(struct Moby **)(data + 0xac)) {
             start_blarg_commander_knockback(moby, *(struct Moby **)(data + 0xac));
             *(struct Moby **)(data + 0xac) = 0;

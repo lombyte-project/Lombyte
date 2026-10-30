@@ -37,7 +37,7 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
     OvlVec4 *pos0, *pos1, *pos2, *pos3;
     OvlVec4 *result0, *result1, *result2, *result3;
     float *data = ((float *)moby->pvars);
-    rotation[0] = 0.0f; rotation[1] = 0.0f; rotation[2] = l06_camera.rot.z;
+    rotation[0] = 0.0f; rotation[1] = 0.0f; rotation[2] = l06_camera.yaw;
     euler_rotation_basis(matrix, rotation);
     data[7] += 0.01f;
     if (1.0f < data[7]) data[7] -= 1.0f;
@@ -112,7 +112,7 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
     pos[3].q = corners[3].q;
     pos[1].q = corners[1].q;
     pos[2].q = corners[2].q;
-    rotation[2] = l06_camera.rot.z; rotation[0] = 0.0f; rotation[1] = 0.0f;
+    rotation[2] = l06_camera.yaw; rotation[0] = 0.0f; rotation[1] = 0.0f;
     euler_rotation_basis(matrix, rotation);
     transform_vector_by_basis(result0, pos0, matrix);
     transform_vector_by_basis(result1, pos1, matrix);

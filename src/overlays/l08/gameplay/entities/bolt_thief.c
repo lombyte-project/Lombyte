@@ -5,6 +5,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/math/vector.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
@@ -585,7 +586,6 @@ typedef struct Hero52 {
     char pad1610[0x710]; float input[2]; char pad1D28[0x358]; Moby *moby;
 } Hero52;
 
-typedef struct CannonCamera52 { char pad0[0x160]; float mag0; int pad164, timer0, pad16C; float mag1; int pad174, timer1; } CannonCamera52;
 
 char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
 char *create_moby_with_particles(int owner, float *position, float *rotation, int value) __asm__("FUN_L08_002e7eb0");
@@ -609,7 +609,6 @@ extern int D_L08_00161B30 __attribute__((sda));
 extern int D_L08_00161B40 __attribute__((sda));
 extern int D_L08_00161B50 __attribute__((sda));
 extern int D_L08_00161BF0 __attribute__((sda));
-extern int D_L08_00167480;
 extern int FUN_L00_001fefc8();
 extern int divide_vector_xyz() __asm__("FUN_L00_001ff378");
 extern int FUN_L00_00211250();
@@ -626,7 +625,6 @@ extern char D_0013E633_2E16A0[] __asm__("D_0013CAE0");
 extern char D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
 extern unsigned char visited52[][16] __asm__("D_0014C050");
 extern int D_0015ED84;
-extern CannonCamera52 camera_state_bytes __asm__("D_L08_00167480");
 extern short D_L08_00161A90_gp __asm__("D_L08_00161A90") __attribute__((sda));
 extern short D_L08_00161B10_gp __asm__("D_L08_00161B10") __attribute__((sda));
 extern short D_L08_00161B20_gp __asm__("D_L08_00161B20") __attribute__((sda));
@@ -780,10 +778,10 @@ void update_batalia_cannon(Moby *moby) {
                 fast_vec_add(muzzle, (*(float (*)[4])&moby->pos), muzzle);
                 create_moby_with_particles(moby, muzzle, direction, target);
                 allocate_voice_for_target_entry(0,0,moby);
-                camera_state_bytes.mag0 = 0.03f;
-                camera_state_bytes.timer0 = scale_game_frames(10);
-                camera_state_bytes.mag1 = 0.03f;
-                camera_state_bytes.timer1 = scale_game_frames(7);
+                l08_camera.shake_amount = 0.03f;
+                l08_camera.shake_frames = scale_game_frames(10);
+                l08_camera.shake2_amount = 0.03f;
+                l08_camera.shake2_frames = scale_game_frames(7);
                 data->barrel = 0; data->fire_timer = scale_game_frames(20);
                 count = 4;
                 do {
@@ -809,10 +807,10 @@ void update_batalia_cannon(Moby *moby) {
                 fast_vec_add(muzzle, (*(float (*)[4])&moby->pos), muzzle);
                 create_moby_with_particles(moby, muzzle, direction, find_batalia_cannon_aim_target((char *)moby));
                 allocate_voice_for_target_entry(0,0,moby);
-                camera_state_bytes.mag0 = 0.03f;
-                camera_state_bytes.timer0 = scale_game_frames(10);
-                camera_state_bytes.mag1 = 0.03f;
-                camera_state_bytes.timer1 = scale_game_frames(7);
+                l08_camera.shake_amount = 0.03f;
+                l08_camera.shake_frames = scale_game_frames(10);
+                l08_camera.shake2_amount = 0.03f;
+                l08_camera.shake2_frames = scale_game_frames(7);
                 data->barrel = 1; data->fire_timer = scale_game_frames(20);
                 count = 4;
                 do {

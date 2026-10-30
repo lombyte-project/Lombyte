@@ -219,8 +219,8 @@ void draw_gadgebot_spawn_container(char *moby) {
     container_position_snapshot[2] = MOBY(moby)->pos.z;
     container_position_snapshot[3] = 1.0f;
     near = 0;
-    if (absolute_float(l06_camera.pos.x - container_position_snapshot[0]) < 16.0f &&
-        absolute_float(l06_camera.pos.y - MOBY(moby)->pos.y) < 16.0f) {
+    if (absolute_float(l06_camera.pos.f[0] - container_position_snapshot[0]) < 16.0f &&
+        absolute_float(l06_camera.pos.f[1] - MOBY(moby)->pos.y) < 16.0f) {
         near = 1;
     }
     if (near) {
@@ -2063,7 +2063,7 @@ float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) __as
 float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) {
     float r = vector_distance_xy(moby + 0x10, b + 0x10);
     float t = fast_difference_between_rotations(
-        l06_camera.rot.z, fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
+        l06_camera.yaw, fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
                               *(float *)(b + 0x14) - MOBY(moby)->pos.y));
     float u = fast_difference_between_rotations(
         MOBY(moby)->rot.z, fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
