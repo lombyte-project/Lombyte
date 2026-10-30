@@ -74,9 +74,9 @@ void gate_2_update(GateMoby *moby) {
             opening_offset[0] = fast_cos(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
             opening_offset[1] = fast_sin(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
             opening_offset[2] = 0.0f;
-            fast_vec_add(&out, &vars->home, opening_offset);
+            fast_vec_add(&opening_position, &vars->home, opening_offset);
             moby->state = 3;
-            moby->pos = out;
+            moby->pos = opening_position;
         } else {
             if (vars->door > 0) {
                 (*(GateMoby **)&D_L10_0015FFD8_gp)[vars->door].flags |= 2;
@@ -121,8 +121,8 @@ void gate_2_update(GateMoby *moby) {
             convert_integer_to_float(truncate_float_to_s32(FUN_L04_001f1978(90.0f)) - vars->timer) /
             FUN_L04_001f1978(90.0f);
         opening_offset[2] = 0.0f;
-        fast_vec_add(&out, &vars->home, opening_offset);
-        moby->pos = out;
+        fast_vec_add(&opening_position, &vars->home, opening_offset);
+        moby->pos = opening_position;
         if (fast_dec_timer(&vars->timer)) {
             moby->state = 3;
         }
