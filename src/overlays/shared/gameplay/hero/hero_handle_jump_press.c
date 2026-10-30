@@ -216,7 +216,7 @@ typedef union {
     u128_229910_00229910 q_00229910;
     float f[4];
 } V_229910_00229910;
-extern float D_L00_00173E68_lui __asm__("D_L00_00173E68") NOT_SDA;
+#include "rnc/overlay/collision.h"
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
 int check_hero_forward_collision_height(void) __asm__("FUN_L00_00229910");
@@ -238,7 +238,7 @@ int check_hero_forward_collision_height(void) {
     collision_line_start.f[2] += 0.47f;
     collision_line_end.f[2] -= 1.0f;
     if (collision_line(&collision_line_start, &collision_line_end, 2, ((void *)hero_ptr->moby), 0)) {
-        height_delta = D_L00_00173E68_lui - hero_ptr->motion.pos.f[2];
+        height_delta = collision_hit_z - hero_ptr->motion.pos.f[2];
         if (height_delta < 0.37f && -1.0f < height_delta)
             return 1;
     }

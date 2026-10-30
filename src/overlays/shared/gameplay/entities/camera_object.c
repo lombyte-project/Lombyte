@@ -1554,27 +1554,25 @@ void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A9030), where it is exact; names translated to the US level program. */
 
 extern char *suck_get_aim_height(void *) __asm__("FUN_002141f8");
-extern void *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 
-/* True when the record for D_L00_00173E58 (suck_get_aim_height) has byte 9 equal to 1. */
+/* True when the record for coll_hit_moby (suck_get_aim_height) has byte 9 equal to 1. */
 int get_wrench_hit_sound_variant(void) __asm__("FUN_L00_002a7d90");
 
 int get_wrench_hit_sound_variant(void) {
     int record_byte_9_is_one = 0;
     char *x = 0;
-    if (D_L00_00173E58_lui != 0)
-        x = suck_get_aim_height(D_L00_00173E58_lui);
+    if (coll_hit_moby != 0)
+        x = suck_get_aim_height(coll_hit_moby);
     if (x != 0)
         record_byte_9_is_one = *(unsigned char *)(x + 9) == 1;
     return record_byte_9_is_one;
 }
-extern int D_L00_00173E58 NOT_SDA;
 char *FUN_L00_0025c338(int);
-/* True when FUN_L00_0025c338(D_L00_00173E58) is set and has flag 2 at 0x1E. */
+/* True when FUN_L00_0025c338((int)coll_hit_moby) is set and has flag 2 at 0x1E. */
 int should_trigger_wrench_hit_reaction(void) __asm__("FUN_L00_002a7de0");
 
 int should_trigger_wrench_hit_reaction(void) {
-    char *flag_record = FUN_L00_0025c338(D_L00_00173E58);
+    char *flag_record = FUN_L00_0025c338((int)coll_hit_moby);
     if (flag_record && (*(unsigned short *)(flag_record + 0x1e) & 2))
         return 1;
     return 0;
@@ -2486,9 +2484,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position, N_2aa008 *
 
 extern V D_L00_00166DC0;
 extern char *FUN_L00_002603d0_u(void *) __asm__("FUN_L00_002603d0");
-extern float coll_hit_normal[] __asm__("D_L00_00173E80");
 extern int D_L00_0015F5C4_c __asm__("D_L00_0015F5C4");
-extern void *D_L00_00173E58_c[] __asm__("D_L00_00173E58");
 extern void FUN_L00_002a9c50_c(void) __asm__("FUN_L00_002a9c50");
 
 int predict_mine_impact(char *trajectory_state, char *moby, int mode) __asm__("FUN_L00_002aa2a8");
@@ -2554,16 +2550,16 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
     }
     if (x != 0) {
         if (mode == 0) {
-            if (D_L00_00173E58_c[0] == 0) return 0;
-            if (FUN_L00_002603d0_u(D_L00_00173E58_c[0]) == 0) return 0;
+            if (coll_hit_moby == 0) return 0;
+            if (FUN_L00_002603d0_u(coll_hit_moby) == 0) return 0;
         }
-        if (mode != 2 || D_L00_00173E58_c[0] == 0 || FUN_L00_002603d0_u(D_L00_00173E58_c[0]) == 0) {
+        if (mode != 2 || coll_hit_moby == 0 || FUN_L00_002603d0_u(coll_hit_moby) == 0) {
             add_draw_callback(FUN_L00_002a9c50_c, moby);
         }
         {
             char *camera_position = (char *)&D_L00_00166DC0;
             char *hit_position = trajectory_state + 0x10;
-            *(u128 *)(trajectory_state + 0x20) = *(u128 *)coll_hit_normal;
+            *(u128 *)(trajectory_state + 0x20) = *(u128 *)&coll_hit_normal;
             fast_vec_sub(C, hit_position, camera_position);
             fast_vec_scale(C, C, 0.95f);
             fast_vec_add(hit_position, C, camera_position);

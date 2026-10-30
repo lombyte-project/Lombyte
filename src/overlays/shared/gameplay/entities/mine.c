@@ -160,14 +160,12 @@ extern B910 l00_mine_camera_blast_parameters __asm__("D_L00_001E9830");
 extern B910 l00_mine_alternate_camera_blast_parameters __asm__("D_L00_001E9880");
 extern Cam910 D_L00_00166C80;
 extern E D_0013E520;
-extern M910 *D_L00_00173E58 NOT_SDA;
+#include "rnc/overlay/collision.h"
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char *mine_debris(char *, char *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
-extern char D_L00_00173E70[];
 extern s16 D_L00_001B07B0[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_L00_00173E68[];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float step_rotation_toward_target(float, float, float) __asm__("FUN_L00_00200510");
 extern float FUN_L00_00259710(void *);
@@ -348,7 +346,7 @@ void mine_update(M910 *mine_moby) {
                         v->vel.f[2] = frame_time * -1.5f;
                         t[0] = mine_moby->pos.f[0];
                         t[1] = mine_moby->pos.f[1];
-                        t[2] = D_L00_00173E68[0];
+                        t[2] = coll_hit.pos.f[2];
                         p = spawn_burst_moby(t, 2.0f);
                         if (p != 0) {
                             p[0x23] = 0x70;
@@ -472,8 +470,8 @@ void mine_update(M910 *mine_moby) {
                     if (!(v->p4C != 0 && v->p4C->state != 0xFE && v->p4C->state != 0xFD)) {
                         mine_moby->bBC = 1;
                         v->p4C = 0;
-                    } else if (D_L00_00173E58 != 0) {
-                        hd = (M910 *)FUN_002141f8_cf((unsigned char *)D_L00_00173E58);
+                    } else if (coll_hit_moby != 0) {
+                        hd = (M910 *)FUN_002141f8_cf((unsigned char *)coll_hit_moby);
                         if (hd != 0) {
                             FUN_L00_00260400(mine_moby, v->p4C, &mine_moby->pos, &mine_moby->rx, &mine_moby->pos, &mine_moby->rx);
                         }
@@ -589,15 +587,15 @@ void mine_update(M910 *mine_moby) {
                         qcopy(&probe, &mine_moby->pos);
                         probe.f[2] += 0.35f;
                         if (collect_mobies_in_sphere(&probe, 0x10, mine_moby, &homing_hit_descriptor, 0.35f) != 0 &&
-                            D_L00_00173E58 != 0 && D_L00_00173E58->cls != 0x363 &&
-                            D_L00_00173E58->cls != 0x4A && D_L00_00173E58->cls != 0x458 &&
-                            D_L00_00173E58->cls != 0x365 && D_L00_00173E58->cls != 0x367) {
+                            coll_hit_moby != 0 && ((M910 *)coll_hit_moby)->cls != 0x363 &&
+                            ((M910 *)coll_hit_moby)->cls != 0x4A && ((M910 *)coll_hit_moby)->cls != 0x458 &&
+                            ((M910 *)coll_hit_moby)->cls != 0x365 && ((M910 *)coll_hit_moby)->cls != 0x367) {
                             mine_moby->bBC = 1;
                         }
                         qcopy(&probe, &mine_moby->pos);
                         probe.f[2] += 0.25f;
                         if (FUN_L00_001f0d60(0.25f, &probe, 0, mine_moby) != 0) {
-                            fast_vec_sub(&collision_correction, D_L00_00173E70, &probe);
+                            fast_vec_sub(&collision_correction, &coll_hit_position, &probe);
                             fast_vec_add(&mine_moby->pos, &mine_moby->pos, &collision_correction);
                         }
                         if (fast_dec_timer(&v->i58) != 0) {
@@ -1277,7 +1275,6 @@ typedef struct {
 } LandingVars;
 
 extern float D_0015ED70_2ad410 __asm__("D_0015ED70");
-extern U910 D_L00_00173E80_2ad410 __asm__("D_L00_00173E80");
 extern int ray_hits(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int FUN_L00_002603d0_2ad410(M910 *) __asm__("FUN_L00_002603d0");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
@@ -1431,7 +1428,7 @@ check_surface:
         v->last_hit = 0;
     }
 keep_hit:
-    v->normal.q = D_L00_00173E80_2ad410.q;
+    v->normal.q = coll_hit_normal.q;
     fast_vec_sub(&previous, &v->landing, D_L00_00166DC0);
     fast_vec_scale(0.95f, &previous, &previous);
     fast_vec_add(&v->landing, &previous, D_L00_00166DC0);
@@ -1494,7 +1491,6 @@ extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int D_L00_0015F5CC_2adb30 __asm__("D_L00_0015F5CC");
 extern Cam910 player_camera __asm__("D_L00_00166C80");
 extern s32 g_debug_camera[] __asm__("D_L00_00166DC0");
-extern float D_L00_00173E68_2adb30[] __asm__("D_L00_00173E68");
 extern int *D_L00_00177F00_2adb30[] __asm__("D_L00_00177F00");
 extern unsigned char *D_L00_001B2080_2adb30[] __asm__("D_L00_001B2080");
 extern G910 D_G910 __asm__("D_0013F350");
@@ -1669,7 +1665,7 @@ void bomb_update(BombMoby *bomb_moby) {
                     d->v.f[2] = frame_time_macro * -1.5f;
                     p.f[0] = bomb_moby->pos.f[0];
                     p.f[1] = bomb_moby->pos.f[1];
-                    p.f[2] = D_L00_00173E68_2adb30[0];
+                    p.f[2] = coll_hit.pos.f[2];
                     s = spawn_burst_moby(&p, 2.0f);
                     if (s != 0) {
                         s[0x23] = 0x70;
@@ -2108,7 +2104,6 @@ typedef struct {
 } M_2afa48;
 extern f32 D_L00_00161470_gp __asm__("D_L00_00161470") __attribute__((sda));
 extern s32 D_L00_00161474_gp __asm__("D_L00_00161474") __attribute__((sda));
-extern u128 coll_hit_normal[] __asm__("D_L00_00173E80") NOT_SDA;
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void vscl_2afa48(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -2133,7 +2128,7 @@ void nanotech_crate_fragment_update(M_2afa48 *fragment_moby) {
         if (fragment_moby->pos[2] < pv->f4 - 3.0f) {
             fragment_moby->b20 = 1;
         } else if (fast_dec_timer_s16(&pv->hE) && pv->hC != 0 && coll_sphere(fragment_moby->pos, 2, 0, pv->f8)) {
-            hit_normal = coll_hit_normal;
+            hit_normal = (u128 *)&coll_hit_normal;
             if (fast_vec_dot(pv->vel, hit_normal) < 0.0f) {
                 qcopy(fragment_moby->pos, hit_normal - 1);
                 pv->hC--;

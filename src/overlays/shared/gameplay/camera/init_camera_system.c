@@ -298,7 +298,7 @@ typedef struct {
     char *o;
 } C_1ed6a8;
 extern C_1ed6a8 D_L00_00166C80_lui __asm__("D_L00_00166C80") NOT_SDA;
-extern OvlQuad D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
+#include "rnc/overlay/collision.h"
 extern OvlQuad g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
 extern int g_debug_menu_lui[] __asm__("D_L00_0016C058") NOT_SDA;
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
@@ -333,7 +333,7 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
     for (i = 0; i < step_count; i++) {
         fast_vec_add(camera_position, camera_position, step_delta);
         for (j = 0; j < 6 && coll_sphere(camera_position, D_L00_0015EF5C_gp, ((int)hero.moby), collision_radius); j++) {
-            qcopy(camera_position, &D_L00_00173E70_lui);
+            qcopy(camera_position, &coll_hit_position);
             {
                 char *current_camera_record = D_L00_00166C80_lui.o;
                 if (*(unsigned char *)(current_camera_record + 0x89) == 0) {

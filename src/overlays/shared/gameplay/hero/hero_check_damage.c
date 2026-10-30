@@ -3077,7 +3077,6 @@ typedef union {
 } V;
 extern u8 D_L00_00173E40[] NOT_SDA;
 extern V D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
-extern f32 D_L00_00173E68 NOT_SDA;
 
 s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
@@ -3150,21 +3149,21 @@ void update_hero_ground_contact_and_surface_slopes(void) {
         hero.ground_sound_class = collision_sound_class;
     }
     if (hero.ground_type == 0xD) {
-        hero.water_surface_z = D_L00_00173E68;
-        ground_ray_start.f[2] = D_L00_00173E68 - 0.01f;
+        hero.water_surface_z = collision_hit_z;
+        ground_ray_start.f[2] = collision_hit_z - 0.01f;
         if (collision_line(&ground_ray_start, &collision_ray_end, 4, hero.moby, 0) == 0) {
             goto d1;
         }
     }
     if (hero.ground_type == 3) {
-        hero.sink_surface_z = D_L00_00173E68;
-        ground_ray_start.f[2] = D_L00_00173E68 - 0.01f;
+        hero.sink_surface_z = collision_hit_z;
+        ground_ray_start.f[2] = collision_hit_z - 0.01f;
         if (collision_line(&ground_ray_start, &collision_ray_end, 4, hero.moby, 0) == 0) {
             goto d1;
         }
     }
     if (hero.ground_type == 0xB) {
-        hero.sink_surface_z = D_L00_00173E68;
+        hero.sink_surface_z = collision_hit_z;
         goto d1;
     }
     if (hero.ground_type == 1 && (u32)(hero.state.current - 0x7C) < 2) {
@@ -3377,7 +3376,6 @@ typedef union {
     u128_2133a8 q;
     f32 f[4];
 } V_2133a8;
-extern u128_2133a8 coll[] __asm__("D_L00_00173E70") NOT_SDA;
 extern void FUN_L00_002347c0(void);
 extern void FUN_L00_00233810(void *, void *, f32);
 extern void FUN_L00_002334d0(void *, void *, f32);
@@ -3439,7 +3437,7 @@ s32 resolve_hero_current_position_collisions(s32 mode) {
             if (!(collision_query_result | FUN_L00_001f3170(&hero.motion.pos.q, hero.capsule_radius)))
                 break;
         }
-        collision_result = coll;
+        collision_result = (u128_2133a8 *)&coll_hit_position;
         qcopy(&hero.motion.pos.q, collision_result);
         qcopy(&hero.wall_contact_normal.q, collision_result + 1);
         qcopy(&hero.wall_contact_point.q, collision_result - 1);

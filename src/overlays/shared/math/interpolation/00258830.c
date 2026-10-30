@@ -14,7 +14,7 @@
 
 typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
 
-extern Vec4 D_L00_00173E70;
+#include "rnc/overlay/collision.h"
 extern int D_L00_00173E40[];
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern Vec4 collision_hit_point __asm__("D_L00_00173E60");
@@ -50,7 +50,7 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
         qcopy(&ray_start, position);
         ray_start.a[2] += step_height;
         if (func_L00_001F10E0_l(&ray_start, radius, coll_flags | 4, moby)) {
-            qcopy(position, &D_L00_00173E70);
+            qcopy(position, &coll_hit_position);
             result |= 1;
             MOBY(moby)->pos.z -= step_height;
         } else {

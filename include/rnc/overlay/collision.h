@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "rnc/overlay/quad.h"
+#include "sda.h"
 
 /*
  * Collision hit record filled by the overlay collision queries
@@ -24,5 +25,13 @@ typedef struct {
     f32 normal_y;                  /* 0x44: fast_arc_tan (atan2) of normal_x, normal_y is stored in the hero */
     f32 normal_z;                  /* 0x48: ledge probes compare atan2(normal_z, xy length) with 20 degrees */
 } CollisionHit;
+
+struct Moby;
+
+/* Fields of the L00 hit record (D_L00_00173E40), read through their own labels. */
+extern struct Moby *coll_hit_moby __asm__("D_L00_00173E58") NOT_SDA; /* coll_hit.moby */
+extern f32 collision_hit_z __asm__("D_L00_00173E68") NOT_SDA;        /* coll_hit.point.f[2] */
+extern OvlVec4 coll_hit_position __asm__("D_L00_00173E70") NOT_SDA;  /* position after push-out */
+extern OvlVec4 coll_hit_normal __asm__("D_L00_00173E80") NOT_SDA;    /* coll_hit.normal_x .. normal_z */
 
 #endif /* LOMBYTE_RNC_OVERLAY_COLLISION_H */

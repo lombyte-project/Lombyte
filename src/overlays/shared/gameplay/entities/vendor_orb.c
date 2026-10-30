@@ -1402,7 +1402,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern int func_L00_001F10E0_s(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
-extern float coll_hit_normal[] __asm__("D_L00_00173E80") NOT_SDA;
+#include "rnc/overlay/collision.h"
 void robot_arm_update(char *m) __asm__("FUN_L00_002e3d88");
 void robot_arm_update(char *moby) {
     enum {
@@ -1468,7 +1468,7 @@ void robot_arm_update(char *moby) {
     fast_vec_add(collision_probe_position, collision_probe_position, moby + 0x10);
     if (func_L00_001F10E0_s(collision_probe_position, collision_radius, 0, moby)) {
         float speed, approach;
-        collision_normal = coll_hit_normal;
+        collision_normal = coll_hit_normal.f;
         normalize_vector_xyz(collision_normal, collision_normal, 1.0f);
         speed = fast_vec_length(moby_data);
         approach = fast_vec_dot(moby_data, collision_normal);
@@ -1495,7 +1495,6 @@ typedef struct {
     char b[0x80];
 } M_2e4180_002e4180;
 extern M_2e4180_002e4180 *D_L00_001600F4_002e4180 __asm__("D_L00_001600F4");
-extern char D_L00_00173E70_002e4180[] __asm__("D_L00_00173E70");
 extern char *FUN_L00_001ee1b0_002e4180(void *) __asm__("FUN_L00_001ee1b0");
 extern void FUN_001f9a28_002e4180(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float FUN_001f9af0_002e4180(void *) __asm__("FUN_001f9af0");
@@ -1522,7 +1521,7 @@ int compute_follow_camera_radial_collision_positions(u128 *input_position, float
     FUN_001f9a28_002e4180(&position_delta, input_position, reference_position);
     selected_record_vector_length = FUN_001f9af0_002e4180(selected_record);
     inv = 1.0f / FUN_001f9af0_002e4180(&position_delta);
-    extended_position = D_L00_00173E70_002e4180;
+    extended_position = (char *)&coll_hit_position;
     FUN_001f9a68_002e4180(extended_position, &position_delta, (selected_record_vector_length + radial_distance_extension) * inv);
     FUN_001f9a68_002e4180(extended_position - 0x10, &position_delta, selected_record_vector_length * inv);
     FUN_001f9a10_002e4180(extended_position, extended_position, reference_position);

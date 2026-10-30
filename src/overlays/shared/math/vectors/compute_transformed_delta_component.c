@@ -145,7 +145,7 @@ void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_
 /* Steps moby MOBY's motion from state ST and returns the flag bits it set. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D6F0), where it is exact; names translated to the US level program. */
 
-extern Vec4 D_L00_00173E70;
+#include "rnc/overlay/collision.h"
 extern float approach_value(float *p, float target, float maxstep);
 extern int *D_L00_00177F00[];
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60"); /* no foreign declaration */
@@ -317,7 +317,7 @@ int mine_fall(char *moby, char *motion_state) {
     }
     if (func_L00_001F10E0_l(collision_probe_position, convert_integer_to_float(*(int *)(motion_state + 0x20)) * sc, 36, moby) != 0) {
         flags |= 2;
-        collision_result_position = &D_L00_00173E70;
+        collision_result_position = (Vec4 *)&coll_hit_position;
         qcopy((moby + 0x10), collision_result_position);
         one = 1.0f;
         MOBY(moby)->pos.z = MOBY(moby)->pos.z - *(float *)(motion_state + 0x28);

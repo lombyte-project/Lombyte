@@ -2579,7 +2579,6 @@ typedef struct {
     Hit *unk18;
 } XD;
 
-extern Hit *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 extern VU D_L00_00173E60;
 
 extern s32 FUN_001fa6d0_c(f32) __asm__("FUN_001fa6d0");
@@ -2644,8 +2643,8 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
             *out = horizontal_probe_distance;
         }
     } else {
-        if (D_L00_00173E58_lui == x->p38 || (D_L00_00173E58_lui != 0 && D_L00_00173E58_lui->p24 != 0 &&
-                                            D_L00_00173E58_lui->p24->h46 == 5)) {
+        if (coll_hit_moby == x->p38 || (coll_hit_moby != 0 && coll_hit_moby->pclass != 0 &&
+                                            coll_hit_moby->pclass->type == 5)) {
             *out = 100.0f;
             return preferred_heading;
         }
@@ -2718,9 +2717,9 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
     probe_end.f[0] += fast_cos(best) * horizontal_probe_distance;
     probe_end.f[2] += 0.12f;
     if (FUN_001efa68_c(&probe_start, &probe_end, 4, moby, 0) != 0) {
-        if (D_L00_00173E58_lui != x->p38 &&
-            !(D_L00_00173E58_lui != 0 && D_L00_00173E58_lui->p24 != 0 &&
-              D_L00_00173E58_lui->p24->h46 == 5)) {
+        if (coll_hit_moby != x->p38 &&
+            !(coll_hit_moby != 0 && coll_hit_moby->pclass != 0 &&
+              coll_hit_moby->pclass->type == 5)) {
             hit_distance = fast_vec_dist(&probe_start, &D_L00_00173E60);
             best = fast_add_rotations(best, (horizontal_probe_distance - hit_distance) * 3.1415927f / (horizontal_probe_distance * 3.0f));
         }
@@ -2735,9 +2734,9 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
     probe_end.f[0] += fast_cos(best) * horizontal_probe_distance;
     probe_end.f[2] += 0.12f;
     if (FUN_001efa68_c(&probe_start, &probe_end, 4, moby, 0) != 0) {
-        if (D_L00_00173E58_lui != x->p38 &&
-            !(D_L00_00173E58_lui != 0 && D_L00_00173E58_lui->p24 != 0 &&
-              D_L00_00173E58_lui->p24->h46 == 5)) {
+        if (coll_hit_moby != x->p38 &&
+            !(coll_hit_moby != 0 && coll_hit_moby->pclass != 0 &&
+              coll_hit_moby->pclass->type == 5)) {
             hit_distance = fast_vec_dist(&probe_start, &D_L00_00173E60);
             best = fast_subtract_rotations(best, (horizontal_probe_distance - hit_distance) * 3.1415927f / (horizontal_probe_distance * 3.0f));
         }
@@ -2844,8 +2843,6 @@ extern void func_L00_001FF4B0_2C0CF8(void *, void *, float) __asm__("FUN_001f9bf
 extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void func_L00_002C0B18_2C0CF8(void *a, void *b, int n, int c, int d, int e, float g, int f) __asm__("FUN_L00_002bf810");
 extern int func_L00_001EFFF0_2C0CF8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern char D_L00_00173F80_2C0CF8[] __asm__("D_L00_00173E80");
-extern void *D_L00_00173F58_2C0CF8[] __asm__("D_L00_00173E58");
 extern char D_0013E633_2C0CF8[] __asm__("D_00141260");
 
 int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_line) __asm__("FUN_L00_002bf9f0");
@@ -2886,7 +2883,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
         }
         return 0;
     }
-    qcopy(mid, D_L00_00173F80_2C0CF8);
+    qcopy(mid, &coll_hit_normal);
     func_L00_001FF4B0_2C0CF8(mid, mid, 1.0f);
     sum = absolute_float(mid[0]);
     sum = sum + absolute_float(mid[1]);
@@ -2926,13 +2923,13 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
     mid[2] = calculate_triangular_corrected_scalar(moby->pos, up, 0, *(float *)(D_0013E633_2C0CF8 + 0x1C));
     func_L00_002C0B18_2C0CF8(from, mid, 10, 0, 32, 32, 40000.0f, 60);
     func_L00_002C0B18_2C0CF8(to, mid, 10, 0, 32, 32, 40000.0f, 60);
-    if (func_L00_001EFFF0_2C0CF8(from, mid, 6, moby, 0) != 0 && D_L00_00173F58_2C0CF8[0] != block->p38) {
+    if (func_L00_001EFFF0_2C0CF8(from, mid, 6, moby, 0) != 0 && coll_hit_moby != block->p38) {
         if (can_halve) {
             return try_start_moby_hop(moby, block, half, 1);
         }
         return 0;
     }
-    if (func_L00_001EFFF0_2C0CF8(mid, to, 6, moby, 0) != 0 && D_L00_00173F58_2C0CF8[0] != block->p38) {
+    if (func_L00_001EFFF0_2C0CF8(mid, to, 6, moby, 0) != 0 && coll_hit_moby != block->p38) {
         if (can_halve) {
             return try_start_moby_hop(moby, block, half, 1);
         }
@@ -2965,7 +2962,6 @@ unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initi
     return spawned_moby;
 }
 #include "rnc/math/vector.h"
-extern char *D_L00_00173E58 NOT_SDA;
 int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 int compute_moby_state_from_vertical_probe(unsigned char *moby) __asm__("FUN_L00_002bfec8");
 
@@ -2980,7 +2976,7 @@ int compute_moby_state_from_vertical_probe(unsigned char *moby) {
     lower_probe_point.f[2] -= 0.3f;
     upper_probe_point.f[2] += 1.0f;
     if (FUN_001efa68(&upper_probe_point, &lower_probe_point, 6, moby, 0)) {
-        char *hit_moby = D_L00_00173E58;
+        char *hit_moby = (char *)coll_hit_moby;
         if (hit_moby && ((char *)MOBY(hit_moby)->pclass) && *(short *)(((char *)MOBY(hit_moby)->pclass) + 0x46) == 5) {
             resulting_moby_state = 11;
         } else {

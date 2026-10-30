@@ -62,7 +62,7 @@ extern char usage_stats_2b2100[] __asm__("D_00141680");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern char view_origin_2b2100[] __asm__("D_L00_00166DC0");
 extern char coll_hit[] __asm__("D_L00_00173E40");
-extern float collision_hit_z __asm__("D_L00_00173E68") NOT_SDA;
+#include "rnc/overlay/collision.h"
 extern struct Moby *D_L00_001ABA00_2b2100[] __asm__("D_L00_001ABA00");
 extern int D_L00_0015F5CC_2b2100 __asm__("D_L00_0015F5CC");
 extern int D_0015EEA4;
@@ -1521,7 +1521,6 @@ extern f32 D_0015ED6C;
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int D_0015ED84;
 extern int D_L00_0015F5C4; /* no foreign declaration */
-extern int D_L00_00173E58; /* no foreign declaration */
 extern float D_L00_0017ACF4 NOT_SDA;
 extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_00233db8(int, int);
@@ -1541,7 +1540,6 @@ void transform_hero_local_offset_to_world(float *out, float x, float y, float z)
 void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4");
-extern struct Moby *coll_hit_moby __asm__("D_L00_00173E58") NOT_SDA;
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_001edf60_49a8(int, int, float, void *, float, int, int, float, int) __asm__("FUN_L00_001edf60");
 extern struct Moby *FUN_L00_002b46a8_49a8(struct Moby *, void *, float *, float *) __asm__("FUN_L00_002b46a8");
@@ -2074,8 +2072,6 @@ typedef struct Hit_2b6140 {
     V_2b6140 v50;
     V_2b6140 v60;
 } Hit_2b6140;
-typedef struct Hit2 { char p0[0x24]; Tgt *f24; } Hit2;
-extern Hit2 *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 extern char D_L00_00177F00_2b6140[] __asm__("D_L00_00177F00");
 extern float frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 extern void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
@@ -2185,7 +2181,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
     if (scale_game_frames(0xBB8) - scale_game_frames(0x3C) < missile_vars->f10) {
         float t = probe_ground_height(&missile_moby->pos, 0, 0.5f) + missile_vars->f44;
         if (missile_moby->pos.z < t) {
-            if (D_L00_00173E58_lui == 0 || (D_L00_00173E58_lui->f24 != 0 && D_L00_00173E58_lui->f24->h46 == 5)) {
+            if (coll_hit_moby == 0 || (coll_hit_moby->pclass != 0 && coll_hit_moby->pclass->type == 5)) {
                 float ground_clearance_pitch_adjustment = fast_arc_tan(missile_vars->f4, approach_value(&missile_moby->pos.z, t, frame_time_macro * 6.0f));
                 if (frame_time_macro * 1.57079637f < ground_clearance_pitch_adjustment) ground_clearance_pitch_adjustment = frame_time_macro * 1.57079637f;
                 missile_moby->rot.y -= ground_clearance_pitch_adjustment;

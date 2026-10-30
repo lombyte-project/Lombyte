@@ -1394,7 +1394,7 @@ extern int FUN_001f0d60_2ebe70(float, void *, int, int) __asm__("FUN_L00_001f0d6
 extern unsigned short *D_L00_001AB840_2ebe70[] __asm__("D_L00_001AB840");
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern OvlQuad D_L00_00173E60_2ebe70 __asm__("D_L00_00173E60");
-extern float D_L00_00173E70_2ebe70[] __asm__("D_L00_00173E70");
+#include "rnc/overlay/collision.h"
 extern float D_L00_00161DD8_gp __asm__("D_L00_00161DD8") __attribute__((sda));
 
 void update_target_tracking_camera_position(char *camera_object) __asm__("FUN_L00_002ebe70");

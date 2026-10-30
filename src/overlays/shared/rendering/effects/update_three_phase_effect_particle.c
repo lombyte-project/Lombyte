@@ -296,7 +296,7 @@ extern void subtract_homogeneous_scaled_vector_xyz(float, void *, void *, void *
 extern void particle_matrix_269d20(float, void *, void *) __asm__("FUN_001f9bf8");
 extern float D_0015ED60_269d20 __asm__("D_0015ED60");
 
-extern f32 D_L00_00173E80_26ff10[] __asm__("D_L00_00173E80");
+#include "rnc/overlay/collision.h"
 
 void update_colliding_effect_particle(unsigned char *m) __asm__("FUN_L00_00269d20");
 void update_colliding_effect_particle(unsigned char *m) {
@@ -317,12 +317,12 @@ void update_colliding_effect_particle(unsigned char *m) {
         velocity[0] = *(float *)(p + 0x0);
         velocity[1] = *(float *)(p + 0x4);
         velocity[2] = *(float *)(p + 0x8);
-        subtract_homogeneous_scaled_vector_xyz(*(float *)(e + 0x3c), matrix, velocity, D_L00_00173E80_26ff10);
+        subtract_homogeneous_scaled_vector_xyz(*(float *)(e + 0x3c), matrix, velocity, coll_hit_normal.f);
         *(float *)(p + 0x0) = matrix[0];
         *(float *)(p + 0x4) = matrix[1];
         *(float *)(p + 0x8) = matrix[2];
-        particle_matrix_269d20(0.055f, collision, D_L00_00173E80_26ff10);
-        fast_vec_add(m + 0x10, D_L00_00173E80_26ff10 - 8, collision);
+        particle_matrix_269d20(0.055f, collision, coll_hit_normal.f);
+        fast_vec_add(m + 0x10, coll_hit_normal.f - 8, collision);
     } else {
         /* Fakematch: retail reads $s0 on this path before setting it, so reorg sees it
            live at the else label and fills the beqz delay slot like retail. */
@@ -2181,9 +2181,7 @@ struct O_26e670_26e670 {
     u8 p40[4];
     s32 x44;
 };
-extern V_26e670_26e670 D_L00_00173E70_26e670 __asm__("D_L00_00173E70");
 extern V_26e670_26e670 D_L00_00166DC0_26e670 __asm__("D_L00_00166DC0");
-extern V_26e670_26e670 D_L00_00173E80_26e670 __asm__("D_L00_00173E80");
 s32 FUN_L00_001f0d60_x(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 void FUN_L00_001ff660_x(void *, void *, void *) __asm__("FUN_L00_001ff660");
 void FUN_L00_00267a08_x(O_26e670_26e670 *) __asm__("FUN_L00_00267a08");
@@ -2241,7 +2239,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
         }
         if (FUN_L00_001f0d60_x(&next_position, 0, 0, 0.15f)) {
             if (P->h1C == 0)
-                qcopy(&next_position, &D_L00_00173E70_26e670);
+                qcopy(&next_position, &coll_hit_position);
             else
                 qcopy(&next_position, &particle->pos);
             P->h1C = 1;
@@ -2257,7 +2255,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
         fast_vec_sub(&acc, &acc, &projected_next_position);
         particle->b08 = truncate_float_to_s32(fast_arc_tan(acc.f[0], acc.f[1]) * 128.0f / 3.1415927f) - 0x20;
         if (P->h1C) {
-            FUN_L00_001ff660_x(P, P, &D_L00_00173E80_26e670);
+            FUN_L00_001ff660_x(P, P, &coll_hit_normal);
             fast_vec_scale(P, P, 0.95f);
         } else {
             fast_vec_sub(&position_displacement, &next_position, &particle->pos);
@@ -2979,11 +2977,11 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
     }
     hit = FUN_001efa68_26ff10(pa, pb, mode, col, aux) != 0;
     if (hit) {
-        fast_vec_normalize(collision_offset, D_L00_00173E80_26ff10, 1.0f);
-        reflect_vector(pv, pv, D_L00_00173E80_26ff10);
+        fast_vec_normalize(collision_offset, coll_hit_normal.f, 1.0f);
+        reflect_vector(pv, pv, coll_hit_normal.f);
         fast_vec_scale(pv, pv, 0.02f);
-        fast_vec_normalize(collision_offset, D_L00_00173E80_26ff10, 0.055f);
-        fast_vec_add(particle->posv.f, D_L00_00173E80_26ff10 - 8, collision_offset);
+        fast_vec_normalize(collision_offset, coll_hit_normal.f, 0.055f);
+        fast_vec_add(particle->posv.f, coll_hit_normal.f - 8, collision_offset);
         if (particle->f0C < 200000.0f && (pv->f18 & 8) == 0) {
             particle->f0C = particle->f0C + particle->f0C;
         }

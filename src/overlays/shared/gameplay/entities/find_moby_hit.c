@@ -234,7 +234,7 @@ typedef struct {
     u128 b;
 } E_259fe8_00259fe8;
 extern int D_L00_0015F434 __asm__("D_L00_0015F434");
-extern u128 D_L00_00173E80_lui __asm__("D_L00_00173E80") NOT_SDA;
+#include "rnc/overlay/collision.h"
 extern float FUN_00213508_00259fe8(void *, int, float) __asm__("FUN_00213508");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
 
@@ -251,7 +251,7 @@ void jet_animate(unsigned char *moby, float output_scale) {
     if (collision_hit_material() == 0)
         return;
     D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[2] = ground_height + 0.025f;
-    qcopy(&D_L00_0016E080[D_L00_0015F434].b, &D_L00_00173E80_lui);
+    qcopy(&D_L00_0016E080[D_L00_0015F434].b, &coll_hit_normal);
     y = (8.0f - absolute_float(MOBY(moby)->pos.z - ground_height)) * 0.125f;
     if (y < 0.25f)
         y = 0.25f;

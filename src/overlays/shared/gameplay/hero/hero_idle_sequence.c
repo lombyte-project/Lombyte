@@ -2497,7 +2497,7 @@ s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_rad
 
 extern V collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
 extern struct HeroEase hero_eases_lui[] __asm__("D_L00_0017A680") NOT_SDA;
-extern void *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
+#include "rnc/overlay/collision.h"
 
 void update_hero_collision_ease_target(void) {
     char *hero_state_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
@@ -2527,8 +2527,8 @@ void update_hero_collision_ease_target(void) {
     if (probe_hero_forward_collision(0, probe_z_offset, probe_end_radius) == 0)
         return;
     if (*(unsigned char *)(hero_state_base + 0x20A8) != 0) {
-        if (D_L00_00173E58_lui != 0) {
-            if (is_moby_in_class_range_500_to_540(D_L00_00173E58_lui) != 0)
+        if (coll_hit_moby != 0) {
+            if (is_moby_in_class_range_500_to_540(coll_hit_moby) != 0)
                 return;
         }
     }
@@ -2927,7 +2927,6 @@ typedef struct {
     f32 x, y;
 } S2;
 
-extern V4_20b5b8 coll_hit_normal[] __asm__("D_L00_00173E80");
 
 extern s32 probe_hero_ledge_edge(void *, void *) __asm__("FUN_L00_0020c758");
 extern s32 FUN_001efa68_20b5b8(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
@@ -2999,7 +2998,7 @@ void probe_hero_airborne_wall_contact(void) {
     if (hit_material == 0xC) {
         return;
     }
-    pz = (u8 *)coll_hit_normal;
+    pz = (u8 *)&coll_hit_normal;
     if (compute_gravity_relative_vector_inclination(pz) < 1.3089969f) {
         return;
     }

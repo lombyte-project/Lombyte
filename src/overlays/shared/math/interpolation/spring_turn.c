@@ -143,7 +143,7 @@ typedef union {
 extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
     __attribute__((section(".data")));
 extern V_258490 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
-extern V_258490 D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
+#include "rnc/overlay/collision.h"
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern int FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60_258490(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
@@ -217,7 +217,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
             ang = fast_arc_tan(vector_distance_xy(pos, q60),
                                       *(float *)(q40 + 0x28) - pos->f[2]);
             if (*(int *)(q40 + 0x18) != 0 || slope < ang) {
-                qcopy(pos, &D_L00_00173E70_lui);
+                qcopy(pos, &coll_hit_position);
                 ok = 0;
                 pos->f[2] -= zz;
             }
@@ -251,7 +251,6 @@ typedef union {
     float f[4];
 } V_94C8;
 
-extern V_94C8 D_L00_00173E70;
 extern float vector_length_xy(void *);
 extern int D_L00_00173E40[];
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -290,7 +289,7 @@ int FUN_L00_00258830_c(char *moving_object, char *movement_displacement, int fla
         qcopy(&raised_position, collision_position);
         raised_position.a[2] += a;
         if (func_L00_001F10E0_l(&raised_position, b, fl | 4, moving_object)) {
-            qcopy(collision_position, &D_L00_00173E70);
+            qcopy(collision_position, &coll_hit_position);
             r |= 1;
             *(float *)(moving_object + 0x18) -= a;
         } else {

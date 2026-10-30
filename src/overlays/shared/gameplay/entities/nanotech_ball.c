@@ -157,7 +157,7 @@ typedef struct {
     float f28;
 } G_2d81b8;
 extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
-extern float D_L00_00173E68_lui __asm__("D_L00_00173E68") NOT_SDA;
+#include "rnc/overlay/collision.h"
 extern float frame_time_sq __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 void update_nanotech_ball_grounding_and_fall(unsigned char *moby) __asm__("FUN_L00_002d81b8");
@@ -172,7 +172,7 @@ void update_nanotech_ball_grounding_and_fall(unsigned char *moby) {
     qcopy(&probe_end_position, &probe_start_position);
     probe_end_position.f[2] -= 1.5f;
     if (FUN_001efa68_2d81b8(&probe_start_position, &probe_end_position, 2, moby, 0)) {
-        z = D_L00_00173E68_lui;
+        z = collision_hit_z;
         hit = 1;
     } else {
         z = probe_end_position.f[2];
@@ -1401,7 +1401,6 @@ extern char suck_fire_tuning[1] __asm__("D_L00_00161B30") __attribute__((sda));
 extern void suck_delete_callback(void) __asm__("FUN_L00_00237798");
 extern void suck_reset(SuckMoby *) __asm__("FUN_L00_002ddca0");
 extern void suck_draw_reticle(int,int,float,float,int,int,int,float,int) __asm__("FUN_L00_001edf60");
-extern float D_L00_00173E68 NOT_SDA;
 void suckcannon_update(SuckMoby *self) __asm__("FUN_L00_002da790");
 void suckcannon_update(SuckMoby *self) {
     enum {
@@ -1566,7 +1565,7 @@ void suckcannon_update(SuckMoby *self) {
         if(suck_hero.aim_locked) {
             cannon->target=suck_hero.aim_target;
             cannon->target_timer=scale_game_frames(20);
-            cannon->target_height=D_L00_00173E68-cannon->target->pos.f.z;
+            cannon->target_height=collision_hit_z-cannon->target->pos.f.z;
         }
         if(!cannon->blocked && suck_hero.count>0 && !cannon->cooldown &&
             (controller_state.held&suck_hero.fire_buttons) && suck_hero.control_mode!=7 && suck_hero.control_mode!=3 &&

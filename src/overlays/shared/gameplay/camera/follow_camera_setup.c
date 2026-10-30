@@ -296,7 +296,7 @@ typedef float V[4] __attribute__((aligned(16)));
 
 extern V D_L00_00173E60;
 extern char D_L00_00166C80[];
-extern char D_L00_00173E70_c[] __asm__("D_L00_00173E70");
+#include "rnc/overlay/collision.h"
 extern float D_L00_00166E40[];
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern f32 D_L00_00161CC8;
@@ -349,7 +349,7 @@ void rebuild_follow_camera_pose(int snap) {
                 qcopy(start, eye);
                 for (i = 0; i < 3; i++) {
                     if (FUN_L00_001f0d60(radius, eye, 4, 0)) {
-                        qcopy(eye, D_L00_00173E70_c);
+                        qcopy(eye, &coll_hit_position);
                     } else if (i == 0) {
                         radius += 0.25f;
                     } else {
@@ -843,7 +843,6 @@ typedef struct G002e7318 {
 } G002e7318;
 extern G002e7318 D_L00_00166E10_c __asm__("D_L00_00166E10");
 extern f32 follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
-extern V002e7318 D_L00_00173E70;
 extern s32 compute_follow_camera_radial_collision_positions(V002e7318 *, f32) __asm__("FUN_L00_002e4180");
 extern s32 coll_sphere(V002e7318 *, f32, s32, s32) __asm__("FUN_L00_001f0d60");
 s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) __asm__("FUN_L00_002e7318");
@@ -890,7 +889,7 @@ s32 resolve_follow_camera_endpoint_collisions(O002e7318 *camera_moby) {
             else
                 x->s38 = 0;
         }
-        qcopy(&candidate_camera_position, &D_L00_00173E70);
+        qcopy(&candidate_camera_position, &coll_hit_position);
         i++;
     }
     r = update_follow_camera_orbit_after_collision(camera_moby, &candidate_camera_position, ha, hb);
@@ -956,7 +955,7 @@ int adjust_follow_camera_orbit_probe_for_collisions(O002e7530 *camera_moby, V002
     clear_u64_value(&delta);
     qcopy(&start, out);
     qcopy(&hit, &D_L00_00173E60);
-    qcopy(&near, &D_L00_00173E70);
+    qcopy(&near, &coll_hit_position);
     path = (V002e7530 *)(m + 0x90);
     fast_vec_add(&path_segment_end, path, orbit);
     measure = resolve_level_path_segment_point(&path_segment_point, &hit, path, &path_segment_end, 0.0f);
@@ -977,7 +976,7 @@ int adjust_follow_camera_orbit_probe_for_collisions(O002e7530 *camera_moby, V002
             if (measure < radius) {
                 compute_follow_camera_collision_delta(camera_moby, &next, &path_segment_point, &hit, &start, radius - measure, radial_adjustment_distance);
                 fast_vec_add(&delta, &delta, &next);
-                qcopy(out, &D_L00_00173E70);
+                qcopy(out, &coll_hit_position);
                 if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
                     fast_vec_sub(&probe_to_start_delta, &start, out);
                     fast_vec_add(&hit, &D_L00_00173E60, &probe_to_start_delta);

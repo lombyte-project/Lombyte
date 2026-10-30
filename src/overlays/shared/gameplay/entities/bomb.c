@@ -48,7 +48,6 @@ extern float D_0015ED6C MACRO_ADDR;   /* frame-rate scale */
 extern float D_0015ED70 MACRO_ADDR;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 /* coll_hit_2c8440's normal as a whole quadword (CollisionHit names only x/y/z) */
-extern Vec4 coll_hit_normal __asm__("D_L00_00173E80") NOT_SDA;
 extern Vec4 g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");                        /* cos */
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");                        /* sin */
@@ -1083,7 +1082,6 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 #include "rnc/overlay/shared/gameplay/entities/bomb_data/spawn_homing_shot.h"
 extern unsigned char *spawn_random_size_rotated_particle(char *a, void *b, int c, float f) __asm__("FUN_L00_00275158");
 extern unsigned char D_0013E05A[];
-extern unsigned char D_L00_00173E80[];
 extern void *FUN_L00_0026dd20(void *, void *, unsigned, int, float);
 extern void FUN_L00_002cbcc0_c(unsigned char *, int) __asm__("FUN_L00_002cbcc0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1164,7 +1162,7 @@ char *spawn_homing_shot(char *owner, char *spawn_pos, char *target, float vx, fl
                 spark[1] = random_float_between(-1.0f, 1.0f);
                 spark[2] = random_float_between(-1.0f, 1.0f);
                 *(w128 *)scaled = *(w128 *)spark;
-                reflect_vector(spark, direction, D_L00_00173E80);
+                reflect_vector(spark, direction, (unsigned char *)&coll_hit_normal);
                 length = fast_vec_length(spark);
                 fast_vec_normalize(start, start, length * 0.5f);
                 add_vector_xyz(spark, spark, start);
@@ -1186,7 +1184,7 @@ char *spawn_homing_shot(char *owner, char *spawn_pos, char *target, float vx, fl
                 mark_moby_for_removal(moby);
                 return 0;
             }
-            reflect_vector(direction, direction, D_L00_00173E80);
+            reflect_vector(direction, direction, (unsigned char *)&coll_hit_normal);
             *(float *)(moby + 0x48) = fast_arc_tan(direction[0], direction[1]);
             length = vector_length_xy(direction);
             *(float *)(moby + 0x44) = -fast_arc_tan(length, direction[2]);
@@ -2489,7 +2487,6 @@ typedef struct {
     f32 amount;               /* 0x1C: read back after the hit */
 } BombHit;
 
-extern Vec4 D_L00_00173E70;
 extern s32 func_L00_00259868_2CF808(f32, f32, f32, void *, void *, s32) __asm__("FUN_L00_00258830");
 extern void initialize_hit_descriptor(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
@@ -2726,7 +2723,7 @@ state3:
             if (coll_sphere(0.25f, &collision_data[0], 0, updated_moby)) {
                 struct Moby *hm = (struct Moby *)coll_hit.moby;
                 if (!hm || hm->state == 0xFE || hm->state == 0xFD || hm != drone_vars->target || hm->oclass == 0) {
-                    qcopy(&updated_moby->pos, &D_L00_00173E70);
+                    qcopy(&updated_moby->pos, &coll_hit_position);
                 } else {
                     s32 cat2 = hm->pclass ? *(u8 *)((u8 *)hm->pclass + 0x46) : 0;
                     initialize_hit_descriptor(((BombHit *)&direction), updated_moby, 0x10000, 1.0f);

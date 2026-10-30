@@ -1118,7 +1118,6 @@ Contact:
         moby->pos.z<2.0f || moby->pos.z>1021.0f) mark_moby_for_removal(moby);
     return;
 }
-extern float D_L00_00173E68_lui __asm__("D_L00_00173E68") NOT_SDA;
 extern int D_L00_0015F5CC_2c1778[1] __asm__("D_L00_0015F5CC");
 void FUN_00213508_2c1778(void *, int, float) __asm__("FUN_00213508");
 float FUN_001fa580_2c1778(float, float) __asm__("FUN_001fa580");
@@ -1142,7 +1141,7 @@ void update_trespasser_pickup(void *mv) {
         FUN_00213508_2c1778(trespasser_moby + 0x10, 0, 0.5f);
         *(float *)(trespasser_moby + 0x40) = 1.5707964f;
         *(float *)(trespasser_moby + 0x44) = 3.1415927f;
-        *(float *)(trespasser_moby + 0x18) = D_L00_00173E68_lui + l00_trespasser_pickup_initial_height_offset;
+        *(float *)(trespasser_moby + 0x18) = collision_hit_z + l00_trespasser_pickup_initial_height_offset;
         trespasser_moby[0x20] = 1;
         break;
     case TRESPASSER_WAIT_FOR_HERO_PROXIMITY: {
@@ -1829,7 +1828,6 @@ typedef struct {
 extern s32 D_L00_0015F5C4;                          /* nonzero: no throws */
 extern f32 frame_time MACRO_ADDR;   /* frame-rate scale */
 /* coll_hit's normal as a whole quadword (CollisionHit names only x/y/z) */
-extern Vec4 coll_hit_normal __asm__("D_L00_00173E80") NOT_SDA;
 extern Vec4 D_L00_00166DC0 NOT_SDA;
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");                        /* cos */
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");                        /* sin */
@@ -2310,7 +2308,6 @@ typedef struct {
     char pad2[0x14];
 } FxAmmoRecord;
 extern char item_defs[] __asm__("D_L00_00179AC0");
-extern FxVec D_L00_00173E70_2c53c0 __asm__("D_L00_00173E70");
 extern FxVec D_L00_00173E60_2c53c0 __asm__("D_L00_00173E60");
 extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int FUN_001f9740_2c53c0(int *) __asm__("FUN_001f9740");
@@ -2364,7 +2361,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
             qcopy(&position, &pickup_moby->pos);
             position.z += 0.5f;
             if (FUN_L00_001f0d60_2c53c0(0.4f, &position, 2, 0)) {
-                qcopy(&pickup_moby->pos, &D_L00_00173E70_2c53c0);
+                qcopy(&pickup_moby->pos, &coll_hit_position);
                 pickup_moby->pos.z -= 0.5f;
             }
         }

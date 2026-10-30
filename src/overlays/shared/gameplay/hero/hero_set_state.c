@@ -2999,7 +2999,6 @@ int try_start_hero_weapon_fire_state(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00228180), where it is exact; names translated to the US level program. */
 
-extern float D_L00_00173E68 NOT_SDA;
 extern int D_L00_0015F5CC;
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
@@ -3075,7 +3074,7 @@ int try_enter_hero_water_state(void) {
             int hit_material = collision_hit_material();
             hero_collision_check_ptr->ground_type = hit_material;
             if ((short)hit_material == 0) {
-                ray_start[2] = D_L00_00173E68 - 0.01f;
+                ray_start[2] = collision_hit_z - 0.01f;
                 if (collision_line(ray_start, ray_end, 2, hero_collision_check_ptr->moby, 0) == 0) {
                     hero_set_state(0x34, 1);
                     return 1;

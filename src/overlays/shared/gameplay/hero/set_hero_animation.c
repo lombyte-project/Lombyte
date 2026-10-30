@@ -521,7 +521,7 @@ typedef union {
     f32 f[4];
 } V4;
 
-extern u8 coll_hit_normal[] __asm__("D_L00_00173E80") NOT_SDA;
+#include "rnc/overlay/collision.h"
 extern f32 collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
 extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_0025d238");
 extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
@@ -547,8 +547,8 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
             clip_negative_segment_endpoint_xyz(&collision_start_or_gravity_vector, trajectory_endpoint);
             qcopy(&collision_start_or_gravity_vector, &hero.motion.pos);
             if (collision_line(&collision_start_or_gravity_vector, trajectory_endpoint, 0x24, 0, 0) != 0) {
-                if (FUN_L00_00233d30_32b90((f32 *)coll_hit_normal) <= 0.87266463f) {
-                    target_height = *(f32 *)(coll_hit_normal - 0x18);
+                if (FUN_L00_00233d30_32b90(coll_hit_normal.f) <= 0.87266463f) {
+                    target_height = *(f32 *)((u8 *)&coll_hit_normal - 0x18);
                 }
             }
         }
