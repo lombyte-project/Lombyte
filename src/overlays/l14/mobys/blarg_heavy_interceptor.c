@@ -1860,15 +1860,15 @@ int count_moby_group_members(struct Moby *moby) {
 
 void activate_waiting_turrets_in_group(s32 index) {
     u16 *list_entry = D_L14_001ABF40_u[index];
-    u8  *base;
+    u8  *moby_array_base;
     u8  *listed_moby;
 
     if (list_entry == 0) {
         return;
     }
-    base = D_L14_0015FFD8;
+    moby_array_base = D_L14_0015FFD8;
     do {
-        listed_moby = base + ((*list_entry & 0x7FFF) << 8);
+        listed_moby = moby_array_base + ((*list_entry & 0x7FFF) << 8);
         if (listed_moby[0x20] == 1) {
             *(s16 *)(((u8 *)MOBY(listed_moby)->pvars) + 0x88) = 1;
         }
