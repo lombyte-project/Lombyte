@@ -46,7 +46,7 @@ void suck_cannon_update(struct Moby *moby) {
         SUCK_CANNON_WAIT_TO_RESET_CAMERA = 2,
         SUCK_CANNON_REMOVE = 3
     };
-    struct PortalVars *vars = (struct PortalVars *)moby->pvars;
+    struct PortalVars *suck_cannon_vars = (struct PortalVars *)moby->pvars;
     struct Moby       *exit;
 
     moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
@@ -81,8 +81,8 @@ void suck_cannon_update(struct Moby *moby) {
             queue_dialogue_message(0x53DF, -1);
         dialogue_message_duration_frames = 0xB4;
         grant_inventory_item(9, 1);
-        if (vars->exitMoby != -1) {
-            exit = &((struct Moby *)moby_array)[vars->exitMoby];
+        if (suck_cannon_vars->exitMoby != -1) {
+            exit = &((struct Moby *)moby_array)[suck_cannon_vars->exitMoby];
             jet_reset_camera(&exit->pos, &exit->rot);
         } else {
             debug_print(suck_cannon_missing_segment_switch_warning_format,
