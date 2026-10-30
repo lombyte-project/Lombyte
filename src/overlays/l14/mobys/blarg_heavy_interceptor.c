@@ -1791,7 +1791,7 @@ extern void draw_blarg_heavy_interceptor_light_ring(char *) __asm__("FUN_L14_002
 void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int   i;
-    int  *out;
+    int  *selected_id_slot;
     {
         int unused_id_sentinel = -1;
         for (i = 19; i >= 0; i--)
@@ -1800,11 +1800,11 @@ void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
     i = 0;
     if (*(short *)(moby_vars + 0x20A) > 0) {
         int *ids = blarg_heavy_interceptor_drawn_save_ids_b;
-        out = ids;
+        selected_id_slot = ids;
         do {
             char *selected_moby = select_farthest_unselected_group_moby(moby->group, ids);
             char *md;
-            *out++ = ((short)MOBY(selected_moby)->save_id);
+            *selected_id_slot++ = ((short)MOBY(selected_moby)->save_id);
             md = ((char *)MOBY(selected_moby)->pvars);
             if (*(int *)(md + 0x20C) & 8)
                 draw_blarg_heavy_interceptor_spinning_beam(selected_moby);
