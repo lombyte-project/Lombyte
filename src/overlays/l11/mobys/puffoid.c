@@ -754,7 +754,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     };
     struct L11PatrolVars *patrol_vars = (struct L11PatrolVars *)moby->pvars;
     Vec4                  position_scratch;
-    s32                   out;
+    s32                   hit_processing_status;
     float                 dmg;
     struct L11HitInfo    *hit;
     char                 *path;
@@ -784,8 +784,8 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     dmg = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
     {
-        s32 kind = resolve_moby_hit_response(moby, hit, &patrol_vars->hp, 0, &out, &dmg, 0, 4);
-        if (out != 1 && moby->state != 0xB) {
+        s32 kind = resolve_moby_hit_response(moby, hit, &patrol_vars->hp, 0, &hit_processing_status, &dmg, 0, 4);
+        if (hit_processing_status != 1 && moby->state != 0xB) {
             patrol_vars->hp -= dmg;
             if (hit->moby->oclass == 0x47) {
                 kind = 3;
