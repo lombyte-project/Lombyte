@@ -874,13 +874,8 @@ void update_hero_item_slot_blends(void) {
         }
     }
 }
-typedef struct {
-    u8 pad_0[0x28];
-    s32 animation;         /* 0x28 */
-    s32 animation_mode_12; /* 0x2C: used while state.control_mode is 12 */
-    u8 pad_30[0x1C];
-} R_0020e360;
-extern R_0020e360 item_defs_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
+#include "rnc/overlay/item_defs.h"
+extern ItemDef item_defs_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 s32 FUN_L00_0020d498_0020e360(s32) __asm__("FUN_L00_0020d498");
 void create_missing_hero_item_slot_animations(s32 suppress_slot_animation_creation, s32 enable_slot_animation_creation) __asm__("FUN_L00_0020e360");
 
@@ -920,20 +915,7 @@ void create_missing_hero_item_slot_animations(s32 suppress_slot_animation_creati
     }
 }
 
-typedef struct {
-    u8 p0[0xC];
-    s32 joint;             /* hero.joint_matrices index the item moby follows */
-    u8 p10[0x18 - 0x10];
-    s32 slot_anim_count;    /* copied to hero.item_slot_anim_count: 0 none, 1 slot 0, 2 both slots */
-    u8 p1[0x24 - 0x1C];
-    s32 unk24;
-    s32 animation;         /* 0x28 */
-    s32 animation_mode_12; /* 0x2C: used while state.control_mode is 12 */
-    s32 unk30;             /* copied to hero.unk20AA */
-    u8 p2[0x4C - 0x34];
-} ID_20e4c8;
 
-extern ID_20e4c8 D_L00_00179AC0_c[] __asm__("D_L00_00179AC0");
 extern s32 FUN_L00_0020d498_c(s32) __asm__("FUN_L00_0020d498");
 
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
@@ -946,17 +928,17 @@ void start_equipped_item_animation(void) {
         return;
     P = &hero;
     P->item_anim_item_id = item_id;
-    hero_animation_id = D_L00_00179AC0_c[item_id].unk24;
-    slot_animation_id = D_L00_00179AC0_c[item_id].animation;
+    hero_animation_id = item_defs[item_id].hero_animation;
+    slot_animation_id = item_defs[item_id].animation;
     if ((s32)P->state.control_mode == 12)
-        slot_animation_id = D_L00_00179AC0_c[item_id].animation_mode_12;
+        slot_animation_id = item_defs[item_id].animation_mode_12;
     P->item_anim_active = 1;
     {
-        s32 k = D_L00_00179AC0_c[item_id].unk30;
+        s32 k = item_defs[item_id].unk30;
         P->unk20AA = k;
     }
     animation_step_divisor = scale_game_frames(10);
-    if (D_L00_00179AC0_c[item_id].slot_anim_count == 0)
+    if (item_defs[item_id].slot_anim_count == 0)
         animation_step_divisor = scale_game_frames(11);
     if (P->state.control_mode == 0 && P->unk22C8 == 0) {
         P->item_hold_anim = hero_animation_id;
@@ -1119,18 +1101,7 @@ void update_hero_held_items_and_orientation(void) {
  * items[4]/[5] gadgets) when their slots are empty.
  *
  * Item definition table (0x4C bytes per item id). */
-typedef struct {
-    u8 pad0[0x8];
-    s32 slot;      /* 0x08: hero item slot the item goes into */
-    u8 padC[0x4];
-    s32 cls;       /* 0x10: moby class of the item */
-    s32 cls2;      /* 0x14: moby class of its second moby */
-    s32 slot_anim_count; /* 0x18: read as a word and stored as a byte; the codegen
-                    * (address formed base + offset first) needs a word field */
-    u8 pad1C[0x30];
-} ItemDef_ea80;
 
-extern ItemDef_ea80 item_defs_ea80[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern s32 D_L00_0015F3F8_ea80 __asm__("D_L00_0015F3F8");
 extern s32 D_0015ED90;
 extern s32 D_0015ED94;
@@ -1163,15 +1134,15 @@ void spawn_hero_item_mobies(void) {
             else
                 id = fallback_item_id;
         }
-        select_world_object_resource_tables(item_defs_ea80[id].cls, -1);
+        select_world_object_resource_tables(item_defs_lui[id].cls, -1);
         for (i = 0; i < 3; i++) {
             fill_transfer_words(&hero.item_eases[i], 0, sizeof(struct HeroEase));
             hero.item_eases[i].attach_joint = -1;
         }
         hero.items[0].item_id = id;
-        slot = item_defs_ea80[id].slot;
+        slot = item_defs_lui[id].slot;
         slot_owner = (struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot));
-        created_moby = create_moby(item_defs_ea80[slot_owner->items[0].item_id].cls);
+        created_moby = create_moby(item_defs_lui[slot_owner->items[0].item_id].cls);
         if (created_moby != 0) {
             created_moby->draw_dist = 0x20;
             created_moby->visible = 1;
@@ -1188,7 +1159,7 @@ void spawn_hero_item_mobies(void) {
             }
             /* The slot address is rebuilt here instead of reusing h; using h
              * changes the register allocation away from retail. */
-            hero.item_slot_anim_count = item_defs_ea80[((struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot)))->items[0].item_id].slot_anim_count;
+            hero.item_slot_anim_count = item_defs_lui[((struct Hero *)((char *)&hero + slot * sizeof(struct HeroItemSlot)))->items[0].item_id].slot_anim_count;
         }
     }
 
@@ -1200,7 +1171,7 @@ void spawn_hero_item_mobies(void) {
                 id3 = D_0015ED94 != 0 ? 3 : 2;
         }
         hero.items[3].item_id = id3;
-        created_moby = create_moby(item_defs_ea80[id3].cls);
+        created_moby = create_moby(item_defs_lui[id3].cls);
         if (created_moby != 0) {
             created_moby->draw_dist = 0x20;
             created_moby->visible = 1;
@@ -1219,7 +1190,7 @@ void spawn_hero_item_mobies(void) {
     }
 
     if (hero.items[3].moby2 == 0) {
-        created_moby = create_moby(item_defs_ea80[1].cls);
+        created_moby = create_moby(item_defs_lui[1].cls);
         if (created_moby != 0) {
             created_moby->draw_dist = 0x20;
             created_moby->visible = 1;
@@ -1238,7 +1209,7 @@ void spawn_hero_item_mobies(void) {
             hero.items[2].item_id = hero.selected_item[2];
         else
             hero.items[2].item_id = D_00141660_lui[2];
-        slot_two_moby = create_moby(item_defs_ea80[hero.items[2].item_id].cls);
+        slot_two_moby = create_moby(item_defs_lui[hero.items[2].item_id].cls);
         if (slot_two_moby != 0) {
             slot_two_moby->draw_dist = 0x20;
             slot_two_moby->visible = 1;
@@ -1255,7 +1226,7 @@ void spawn_hero_item_mobies(void) {
 
     if (hero.items[1].moby == 0 && D_00141660_lui[1] != 0) {
         hero.items[1].item_id = D_00141660_lui[1];
-        created_moby = create_moby(item_defs_ea80[D_00141660_lui[1]].cls);
+        created_moby = create_moby(item_defs_lui[D_00141660_lui[1]].cls);
         if (created_moby != 0) {
             created_moby->draw_dist = 0x20;
             created_moby->visible = 1;
@@ -1265,7 +1236,7 @@ void spawn_hero_item_mobies(void) {
             hero.items[1].moby = created_moby;
             hero.items[1].state = 2;
         }
-        created_moby = create_moby(item_defs_ea80[D_00141660_lui[1]].cls2);
+        created_moby = create_moby(item_defs_lui[D_00141660_lui[1]].cls2);
         if (created_moby != 0) {
             created_moby->draw_dist = 0x20;
             created_moby->visible = 1;
@@ -1278,7 +1249,7 @@ void spawn_hero_item_mobies(void) {
     }
 
     if (hero.items[4].moby == 0 && item_available[0x21] != 0) {
-        slot_four_moby = create_moby(item_defs_ea80[0x21].cls);
+        slot_four_moby = create_moby(item_defs_lui[0x21].cls);
         hero.items[4].item_id = 0x21;
         if (slot_four_moby != 0) {
             slot_four_moby->draw_dist = 0x20;
@@ -1292,7 +1263,7 @@ void spawn_hero_item_mobies(void) {
     }
 
     if (hero.items[4].moby2 == 0 && item_available[0x22] != 0) {
-        slot_four_secondary_moby = create_moby(item_defs_ea80[0x22].cls);
+        slot_four_secondary_moby = create_moby(item_defs_lui[0x22].cls);
         hero.items[4].item_id = 0x22;
         if (slot_four_secondary_moby != 0) {
             slot_four_secondary_moby->draw_dist = 0x20;
@@ -1304,7 +1275,7 @@ void spawn_hero_item_mobies(void) {
     }
 
     if (hero.items[5].moby == 0 && item_available[0x23] != 0) {
-        slot_five_moby = create_moby(item_defs_ea80[0x23].cls);
+        slot_five_moby = create_moby(item_defs_lui[0x23].cls);
         hero.items[5].item_id = 0x23;
         if (slot_five_moby != 0) {
             slot_five_moby->draw_dist = 0x20;
@@ -1531,7 +1502,7 @@ void update_hero_item_mobys(void)
             {
                 *((u64 *)&MOBY(moby)->spawn_frame) = *((u64 *) (((u8 *) hero.moby) + 0x38));
                 item_id = *((s32 *) (slot + 0x10b8));
-                joint = D_L00_00179AC0_c[item_id].joint;
+                joint = item_defs[item_id].joint;
                 if ((i == 1) && (j == 1))
                     joint = 3;
                 if ((*((u8 *) (slot + 0x10aa))) != 0)
@@ -1547,7 +1518,7 @@ void update_hero_item_mobys(void)
                 else
                 {
                     qcopy(moby + 0x10, (((u8 *) (&hero)) + 0xaf0) + (joint * 0x40));
-                    if ((large_font_height == 0) || (D_L00_00179AC0_c[item_id].slot_anim_count == 0))
+                    if ((large_font_height == 0) || (item_defs[item_id].slot_anim_count == 0))
                     {
                         first = is_hero_slot_item_id_10_17_20_or_25(i);
                         second = is_hero_slot_item_id_5_to_7(i);
@@ -1775,11 +1746,6 @@ s32 can_select_hero_item_31(void) {
 /* Applies the wrench/item selection for slot i: resolves pending, queued and requested items and refreshes the slot when it changes. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210558), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char pad[0x20];
-    int unk20;
-    char pad2[0x28];
-} ItemDef;
 
 extern char D_0013C940[];
 extern char D_00141660[];
@@ -1787,7 +1753,6 @@ extern unsigned char D_0013D4C0[];
 extern int D_0015ED8C;
 extern int D_0015ED90;
 extern int D_0015ED94;
-extern ItemDef item_defs[] __asm__("D_L00_00179AC0");
 extern int hero_is_in_special_state() __asm__("FUN_L00_0020d568");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");

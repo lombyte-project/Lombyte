@@ -84,13 +84,8 @@ void reset_hero_to_idle(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205618), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char pad[0x24];
-    int v;
-    char pad2[0x24];
-} Rec;
 
-extern Rec item_defs[] __asm__("D_L00_00179AC0");
+#include "rnc/overlay/item_defs.h"
 
 int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 int hero_idle_sequence(int allow_item_idle_sequence) {
@@ -122,7 +117,7 @@ int hero_idle_sequence(int allow_item_idle_sequence) {
     }
     {
         int i = hero_slot_item_id(0);
-        return item_defs[i].v;
+        return item_defs[i].hero_animation;
     }
 }
 /* Returns its argument unchanged. */
@@ -941,11 +936,6 @@ void release_and_clear_hero_voice_slots(void) {
 #include "sda.h"
 #include "rnc/overlay/quad.h"
 typedef struct {
-    u8 p[8];
-    s32 x8;
-    u8 pc[0x40];
-} E00206cf8;
-typedef struct {
     u8 p[0x280];
     u16 x280;
     u8 p282[0x13E];
@@ -953,7 +943,6 @@ typedef struct {
 } G00206cf8;
 extern G00206cf8 help_records __asm__("D_00141968");
 extern s32 D_L00_0015F5CC_00206cf8 __asm__("D_L00_0015F5CC");
-extern E00206cf8 D_L00_00179AC0_00206cf8[] __asm__("D_L00_00179AC0");
 s32 hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern u16 D_001418F0 NOT_SDA;
 void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
@@ -974,7 +963,7 @@ void check_hero_item_reward_conditions(void) {
         return;
     qualifying_item_count = 0;
     for (i = 0; i < 0x25; i++) {
-        if (D_L00_00179AC0_00206cf8[i].x8 == 0 && i != 8 && i != 0x18 &&
+        if (item_defs[i].slot == 0 && i != 8 && i != 0x18 &&
             item_available[i] != 0)
             qualifying_item_count++;
     }

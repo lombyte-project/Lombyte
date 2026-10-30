@@ -244,12 +244,7 @@ int check_hero_forward_collision_height(void) {
     }
     return 0;
 }
-typedef struct {
-    u8 p[0x24];
-    s32 x24;
-    u8 p2[0x24];
-} E00229a98;
-extern E00229a98 item_defs[] __asm__("D_L00_00179AC0");
+#include "rnc/overlay/item_defs.h"
 s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 s32 try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
@@ -264,7 +259,7 @@ s32 try_start_hero_item_idle_animation(void) {
         cancel_hero_item_animation();
         return 0;
     }
-    k = item_defs[id].x24;
+    k = item_defs[id].hero_animation;
     if (hero_set_state(HERO_STATE_IDLE, 0) == 0)
         return 0;
     set_hero_animation(k, 0, (f32)scale_game_frames(0xB));

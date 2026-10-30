@@ -318,13 +318,9 @@ void unlock_planet(s32 id) {
 /* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char pad[8];
-    int t;
-    char pad2[0x40];
-} ItemDef;
 
-extern ItemDef item_defs[] __asm__("D_L00_00179AC0") NOT_SDA;
+#include "rnc/overlay/item_defs.h"
+extern ItemDef item_defs_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern int D_L00_001B0340[] NOT_SDA;
 extern int D_L00_001C3E98[] NOT_SDA;
 extern int D_00141408 NOT_SDA;
@@ -375,7 +371,7 @@ void grant_inventory_item(int id, int flag) {
             }
         }
         if (flag != 0) {
-            int t = item_defs[id].t;
+            int t = item_defs_lui[id].slot;
             if (t == 0) {
                 D_00141408 = id;
             } else if (t == 3) {
@@ -384,7 +380,7 @@ void grant_inventory_item(int id, int flag) {
                 D_00141410 = id;
             }
         }
-        if (item_defs[id].t == 0) {
+        if (item_defs_lui[id].slot == 0) {
             for (i = 0; i < 8 && pause_iop_sprite_lists[i] != 0; i++) {
             }
             if (i < 8) {

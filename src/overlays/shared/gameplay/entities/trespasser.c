@@ -217,21 +217,16 @@ void destroy_decoy_on_selected_materials(void *moby) {
 }
 #include "eetypes.h"
 #include "qcopy.h"
-typedef struct {
-    u8 pad[0x3A];
-    s16 h3A;
-    u8 pad2[0x10];
-} S179AC0;
-extern S179AC0 D_L00_00179AC0_002c52a8[] __asm__("D_L00_00179AC0")
-    __attribute__((section(".data")));
+#include "rnc/overlay/item_defs.h"
+extern ItemDef item_defs_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 int FUN_001f96f8_002c52a8(int) __asm__("FUN_001f96f8");
 unsigned char *spawn_on_path(u128 *a, int b, int c, int d) __asm__("FUN_L00_002c52a8");
 unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_amount, int d) {
     unsigned char *spawned_moby = 0;
     {
-        S179AC0 *spawn_config_entry = (S179AC0 *)(weapon_index * 0x4C + (u8 *)D_L00_00179AC0_002c52a8);
-        if (spawn_config_entry->h3A > 0)
-            spawned_moby = create_moby(spawn_config_entry->h3A);
+        ItemDef *spawn_config_entry = (ItemDef *)(weapon_index * 0x4C + (u8 *)item_defs_lui);
+        if (spawn_config_entry->ammo_pickup_cls > 0)
+            spawned_moby = create_moby(spawn_config_entry->ammo_pickup_cls);
     }
     if (spawned_moby) {
         int *moby_vars;
@@ -255,13 +250,6 @@ unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_am
     }
     return spawned_moby;
 }
-typedef struct {
-    char pad[0x34];
-    short h34;
-    short h36;
-    char pad2[0x14];
-} E_2c5be8;
-extern E_2c5be8 D_L00_00179AC0_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern float D_0015ED60_2c5be8 __asm__("D_0015ED60");
 extern float D_0015ED6C_2c5be8 __asm__("D_0015ED6C");
 extern int D_15F5CC_2c5be8 __asm__("D_L00_0015F5CC");
@@ -291,8 +279,8 @@ int try_collect_ammo_pickup(struct Moby *pickup_moby) {
         goto fail;
     }
     ammo_added = weapon_ammo_counts[pickup_vars[2]] - before;
-    queue_formatted_dialogue_message(ammo_added == 1 ? ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_L00_00179AC0_lui))->h36
-                         : ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_L00_00179AC0_lui))->h34,
+    queue_formatted_dialogue_message(ammo_added == 1 ? ((ItemDef *)(pickup_vars[2] * 0x4C + (char *)item_defs_lui))->pickup_message_single
+                         : ((ItemDef *)(pickup_vars[2] * 0x4C + (char *)item_defs_lui))->pickup_message_multiple,
                   ammo_added, -1);
     if (excess_ammo_amount < (float)pickup_vars[0]) {
         weapon_ammo_pickup_totals[pickup_vars[2]] += weapon_ammo_counts[pickup_vars[2]] - before;
@@ -2301,13 +2289,6 @@ typedef struct {
     float z;
     float w;
 } __attribute__((aligned(16))) FxVec;
-typedef struct {
-    char pad[0x34];
-    short sound_multiple;
-    short sound_single;
-    char pad2[0x14];
-} FxAmmoRecord;
-extern char item_defs[] __asm__("D_L00_00179AC0");
 extern FxVec D_L00_00173E60_2c53c0 __asm__("D_L00_00173E60");
 extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int FUN_001f9740_2c53c0(int *) __asm__("FUN_001f9740");
@@ -2437,9 +2418,9 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
             if (before < after) {
                 difference = after - before;
                 if (difference == 1) {
-                    sound = ((FxAmmoRecord *)(item_defs + sound_idx * sizeof(FxAmmoRecord)))->sound_single;
+                    sound = ((ItemDef *)((char *)item_defs + sound_idx * sizeof(ItemDef)))->pickup_message_single;
                 } else {
-                    sound = ((FxAmmoRecord *)(item_defs + sound_idx * sizeof(FxAmmoRecord)))->sound_multiple;
+                    sound = ((ItemDef *)((char *)item_defs + sound_idx * sizeof(ItemDef)))->pickup_message_multiple;
                 }
                 queue_formatted_dialogue_message(sound, difference, -1);
             }

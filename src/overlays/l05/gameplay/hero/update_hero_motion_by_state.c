@@ -258,7 +258,7 @@ extern s32 sample_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_
 extern s32 offset_path_index(void *, s32, s32, s32) __asm__("FUN_L00_0025d7a0");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
-extern struct HeroAnimRow D_L00_00179AC0_t[] __asm__("D_L00_00179AC0");
+#include "rnc/overlay/item_defs.h"
 extern void spawn_random_alpha_rotated_particle(void *, void *, f32) __asm__("FUN_L00_00271b18");
 extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
@@ -1933,7 +1933,7 @@ void update_hero_motion_by_state(void) {
                 spawn_color_decaying_effect_particle(&vector_and_hit_scratch, &v10, 0);
             }
             t = hero.items[0].item_id;
-            has = D_L00_00179AC0_t[t].unk18 != 0;
+            has = item_defs[t].slot_anim_count != 0;
             if (t == 0xC) {
                 has = 0;
             }

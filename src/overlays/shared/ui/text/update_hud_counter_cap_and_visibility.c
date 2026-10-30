@@ -137,11 +137,6 @@ typedef struct {
     u8 p[0x14];
     s32 x18;
 } D00237ae8;
-typedef struct {
-    u8 p[0x38];
-    u16 x38;
-    u8 p2[0x12];
-} E00237ae8;
 extern s32 D_L00_0015FA90;
 extern void *D_L00_0015FAC0;
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility_globals.h"
@@ -150,14 +145,14 @@ extern s32 D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern s32 D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern s32 D_L00_0015F72C __attribute__((sda));
 extern D00237ae8 l00_eight_slot_hud_selector_entries[] __asm__("D_L00_0017DAC0");
-extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
+#include "rnc/overlay/item_defs.h"
 void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) __asm__("FUN_L00_00237ae8");
 
 void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
     s32 i;
     D00237ae8 *slot_entry;
     s32 *item_id_cursor;
-    E00237ae8 *tab;
+    ItemDef *tab;
     D_L00_0015FA90 = 8;
     D_L00_0015FAC0 = &eight_slot_hud_selector_table_pointer_gp;
     hud_element->x48 = 0;
@@ -173,7 +168,7 @@ void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
     item_id_cursor = pause_iop_sprite_lists;
     for (i = 7; i >= 0; i--) {
         slot_entry->x18 = *item_id_cursor;
-        slot_entry->x0 = tab[*item_id_cursor].x38;
+        slot_entry->x0 = tab[*item_id_cursor].unk38;
         item_id_cursor++;
         slot_entry++;
     }
@@ -337,7 +332,6 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
 
 typedef struct { int id; char pad[0x14]; int item; } E_238C30;
 
-typedef struct { char pad[0x46]; short h46, h48; char pad4A[2]; } TI_238C30;
 
 extern unsigned char D_00141EA0[];
 #include "rnc/overlay/level_labels.h"
@@ -453,9 +447,9 @@ int draw_hud_item_selector_panel(HudElem *rec) {
             int item, id;
             item = *(int *)(((char **)D_L00_0015FAC0)[D_L00_0015F72C_gp] + selected * 0x1C + 0x18);
             if (((unsigned char *)((unsigned char *)item_text_variant))[item])
-                id = ((TI_238C30 *)item_defs)[item].h48;
+                id = item_defs[item].name_text_variant;
             else
-                id = ((TI_238C30 *)item_defs)[item].h46;
+                id = item_defs[item].name_text;
             text = get_help_message_text(id);
         }
         if (text == 0) return rec->w;

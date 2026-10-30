@@ -440,15 +440,7 @@ typedef struct {
 } LevelViewContext;
 extern u8 D_L00_0016CA40[];
 #define level_view_context (*(LevelViewContext *)D_L00_0016CA40)
-typedef struct {
-    u8 pad0[0x3E];
-    union {
-        s16 value;
-        u8 low_byte;
-    } variant_limit;
-    u8 pad40[0xC];
-} ItemDef;
-extern ItemDef item_defs[] __asm__("D_L00_00179AC0");
+#include "rnc/overlay/item_defs.h"
 /* 13 item ids, declared as 8 bytes: the most gas reaches through $gp, as retail does. */
 extern u8 debug_menu_item_ids[8] __asm__("D_L00_0015EFD0") __attribute__((sda));
 /* Declared as 1 byte so the add_sample path forms its address through $gp, as retail does. */

@@ -1458,8 +1458,7 @@ extern s32 vendor_exit_cutscene_ids_by_item[] __asm__("D_L00_001CA020");
 extern s32 D_L00_001CA580[];
 extern s32 vendor_exit_hero_local_offset_gp __asm__("D_L00_00161100") __attribute__((sda));
 extern s32 vendor_exit_cutscene_local_offset_gp __asm__("D_L00_001610F0") __attribute__((sda));
-struct T_29ad08 { char p0[0x10]; s32 id; char p1[0x38]; };
-extern struct T_29ad08 D_L00_00179AC0_29ad08[] __asm__("D_L00_00179AC0");
+#include "rnc/overlay/item_defs.h"
 extern float f213508_29ad08(float, void *, s32) __asm__("FUN_00213508");
 extern void clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");
 extern void parse_space_scene_chunk(s32, s32) __asm__("FUN_002049f0");
@@ -1514,7 +1513,7 @@ void start_vendor_exit_cutscene(void) {
     hero.pending_item[0] = vendor_menu.purchased_item;
     if (hero.pending_item[0] == 0x18)
         hero.pending_item[0] = 0;
-    select_world_object_resource_tables(D_L00_00179AC0_29ad08[vendor_menu.purchased_item].id, -1);
+    select_world_object_resource_tables(item_defs[vendor_menu.purchased_item].cls, -1);
     load_scene_chunks_with_fade(item);
     state = &music_stream_state;
     state->queued_secondary_track = 0x2734;
@@ -1623,12 +1622,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
     }
 }
 typedef float V_29b680[4] __attribute__((aligned(16)));
-typedef struct {
-    char p0[0x10];
-    int id;
-    char p1[0x4C - 0x14];
-} T_29b680;
-extern T_29b680 D_L00_00179AC0_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
+extern ItemDef item_defs_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern int D_L00_001C8FF0_lui[][16] __asm__("D_L00_001C8FF0") NOT_SDA;
 extern int D_L00_00161E38;
 extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f0");
@@ -1645,7 +1639,7 @@ void initialize_vendor_selected_item_mobys(void) {
     int x;
 
     k = vendor_menu_lui.rows[vendor_menu_lui.cursor].item;
-    id = D_L00_00179AC0_lui[k].id;
+    id = item_defs_lui[k].cls;
     if (k == 0x18) {
         id = 0x1DF;
     } else {

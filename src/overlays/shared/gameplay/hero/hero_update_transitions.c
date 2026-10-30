@@ -37,7 +37,7 @@ typedef struct {
 } Row13E650;
 
 extern HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
-extern HeroAnimRow item_defs[] __asm__("D_L00_00179AC0");
+#include "rnc/overlay/item_defs.h"
 extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890");
 #include "rnc/overlay/level_camera.h"
 extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
@@ -335,7 +335,7 @@ void hero_update_transitions(void) {
                         if (id != hero.item_anim_item_id) {
                             cancel_hero_item_animation();
                         } else {
-                            int anim = item_defs[id].anim;
+                            int anim = item_defs[id].hero_animation;
                             if (((unsigned char *)hero.moby)[0x53] != anim) {
                                 if (hero.held_item_anim_blend[0] != 0) {
                                     hero.unkD14 = 1;
