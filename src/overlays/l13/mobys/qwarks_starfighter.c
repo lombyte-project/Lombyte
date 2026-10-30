@@ -946,21 +946,21 @@ void predict_hero_ship_projectile_lead_position(char *predicted_target_position,
                                                 char *projectile_origin_position,
 
                                                 float projectile_speed) {
-    char *base = D_0013E533 + 0xE1D;
-    char *vehicle_data = *(char **)(*(char **)(base + 0x15F0) + 0x78);
-    float y = fast_add_rotations(*(float *)(*(char **)(base + 0x15F0) + 0x48),
+    char *hero_state_bytes = D_0013E533 + 0xE1D;
+    char *vehicle_data = *(char **)(*(char **)(hero_state_bytes + 0x15F0) + 0x78);
+    float y = fast_add_rotations(*(float *)(*(char **)(hero_state_bytes + 0x15F0) + 0x48),
                                  *(float *)(vehicle_data + 0x90));
-    float x = fast_add_rotations(*(float *)(*(char **)(base + 0x15F0) + 0x44),
+    float x = fast_add_rotations(*(float *)(*(char **)(hero_state_bytes + 0x15F0) + 0x44),
                                  *(float *)(vehicle_data + 0x94));
     float projectile_origin_to_vehicle_distance =
-        fast_vec_dist(projectile_origin_position, *(char **)(base + 0x15F0) + 0x10);
+        fast_vec_dist(projectile_origin_position, *(char **)(hero_state_bytes + 0x15F0) + 0x10);
     float k = *(float *)(vehicle_data + 0x64);
     build_spherical_offset(predicted_target_position,
                            projectile_origin_to_vehicle_distance / (k + projectile_speed) * k,
                            y,
                            -x);
     fast_vec_add(
-        predicted_target_position, predicted_target_position, *(char **)(base + 0x15F0) + 0x10);
+        predicted_target_position, predicted_target_position, *(char **)(hero_state_bytes + 0x15F0) + 0x10);
 }
 
 extern void
