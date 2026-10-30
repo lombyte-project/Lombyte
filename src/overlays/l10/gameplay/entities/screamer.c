@@ -1,5 +1,6 @@
 /* Level 10 moby classes: screamer, toxic_crab, blarg_ship, nanotech_upgrade_vendor, gun, gate_1, gate_2. */
 #include "types.h"
+#include "rnc/overlay/level_volume.h"
 #include "rnc/overlay/level_save_state.h"
 
 #include "rnc/overlay/level_globals.h"
@@ -89,7 +90,8 @@ typedef struct D_2E0630 {
     char sound_state[4];
 } D_2E0630;
 
-extern char *D_L10_0015FFD0_macro[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
+/* Entry 2 is the moby array D_L10_0015FFD8. Retail reaches it with the lui/lw macro in some functions and through $gp in toxic_crab_update; going through this table 8 bytes lower keeps the macro form under SN. */
+extern struct Moby *D_L10_0015FFD0_macro[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float D_0015ED6C;
 extern float D_0015ED70;
@@ -222,7 +224,7 @@ void screamer_update(Moby *moby) {
             D_0015ED70 * 25.132742f, D_0015ED70 * 25.132742f, D_0015ED6C * 50.265484f);
         if ((moby->anim_flags & 2) == 0) break;
         {
-            char *linked = D_L10_0015FFD0_macro[2] + (data->linked[truncate_float_to_s32(((Path_2E0630 *)l10_paths[data->path])->nodes[data->node_index - 1].w) - 1] << 8);
+            char *linked = (char *)D_L10_0015FFD0_macro[2] + (data->linked[truncate_float_to_s32(((Path_2E0630 *)l10_paths[data->path])->nodes[data->node_index - 1].w) - 1] << 8);
             if (linked != 0) func_L10_002E14F8_2E0630(linked);
         }
         if (data->node_index == ((Path_2E0630 *)l10_paths[data->path])->count) {
@@ -299,9 +301,7 @@ void screamer_update(Moby *moby) {
 }
 typedef struct Hit_2DFC38 { float x, y; char pad8[8]; float f10[4]; struct Moby *moby; char pad24[8]; float f2C; int f30; } Hit_2DFC38;
 typedef struct MobyData_2DFC38 { char pad0[0x20]; float f20; char pad24[2]; short f26; char pad28[0x10]; int f38; char pad3C[0x24]; char f60[0x10]; float f70, f74, f78, f7C; char pad80[4]; int f84; char pad88[0x15]; unsigned char f9D; char pad9E[0x22]; char fC0[0x40]; int f100, f104; char pad108[8]; char f110[7]; unsigned char f117; char pad118[0x18]; char f130[0x44]; int f174; float f178; int f17C; float f180; int f184; float f188; int f18C; char pad190[4]; int f194; } MobyData_2DFC38;
-typedef struct Anim_2DFC38 { char pad0[0x30]; float f30[4], f40[4]; char pad50[0x30]; } Anim_2DFC38;
 typedef struct Path { int count; char pad4[0xC]; float pts[4]; } Path;
-extern Anim_2DFC38 *D_L10_001600EC_2DFC38 __asm__("D_L10_001600EC");
 extern char D_0013F3D0[];
 extern int D_001413D0[];
 extern float D_0015ED6C, D_0015ED70;
@@ -379,10 +379,10 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     if (data->f174 == 2) {
         target_selection_status = ahead_f(data->f180, moby, data->fC0);
         if (target_selection_status != 2) {
-            Anim_2DFC38 *bp = &D_L10_001600EC_2DFC38[data->f194];
-            fast_vec_sub(relative_offset, D_0013F3D0, bp->f30);
+            LevelVolume *bp = &l10_volumes[data->f194];
+            fast_vec_sub(relative_offset, D_0013F3D0, &bp->origin);
             relative_offset[3] = 0.0f;
-            transform_vector_by_basis(transformed_offset, relative_offset, bp->f40);
+            transform_vector_by_basis(transformed_offset, relative_offset, bp->inv_axis);
             if (transformed_offset[0] <= -1.0f || 0.0f <= transformed_offset[0] || transformed_offset[1] <= -1.0f || 1.0f <= transformed_offset[1] || transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2]) data->f104 = 2;
         }
     } else if (moby->state == 1 && data->f18C >= 0) {
@@ -405,17 +405,6 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
 /* Sets every listed entity in state 1 to state 2. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E14F8), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char p0[0x10];
-    float x;
-    float y;
-    char p1[8];
-    unsigned char state;
-    char p2[0xDF];
-} Ent;
-
-/* Retail reaches D_L10_0015FFD8 here with the lui/lw macro; toxic_crab_update reaches it through $gp. An alias 8 bytes lower keeps the macro form under SN. */
-extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern short *moby_group_member_lists[] __asm__("D_L10_001ABCC0");
 
 void activate_waiting_moby_group_members(struct Moby *moby) __asm__("FUN_L10_002e0138");
@@ -426,8 +415,8 @@ void activate_waiting_moby_group_members(struct Moby *moby) {
         group_entry = moby_group_member_lists[moby->group];
         if (group_entry != 0) {
             do {
-                Ent *base = D_L10_0015FFD0_e[2];
-                Ent *listed_entity = (Ent *)((*(unsigned short *)group_entry & 0x7FFF) * 256 + (int)base);
+                struct Moby *base = D_L10_0015FFD0_macro[2];
+                struct Moby *listed_entity = (struct Moby *)((*(unsigned short *)group_entry & 0x7FFF) * 256 + (int)base);
                 if (listed_entity->state == 1)
                     listed_entity->state = 2;
             } while (*group_entry++ >= 0);
@@ -478,11 +467,6 @@ typedef struct Vars_2e01a8 {
     char a270[4];
 } Vars_2e01a8;
 
-typedef struct Anim {
-    char pad0[0x38];
-    float f38;
-    char pad3C[0x44];
-} Anim;
 
 extern OvlQuad_2e01a8 D_L10_00167240_2e01a8 __asm__("D_L10_00167240");
 extern float D_L10_00161DFC __attribute__((sda));
@@ -494,7 +478,6 @@ extern float D_L10_00161E14 __attribute__((sda));
 extern float D_L10_00161E18 __attribute__((sda));
 extern float D_L10_00161E1C __attribute__((sda));
 extern float D_L10_00161E20 __attribute__((sda));
-extern int D_L10_001600EC_2e01a8; /* no foreign declaration */
 extern int coll_sphere_mobys(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_001efa68_2e01a8(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_001fefc8(void *);
@@ -507,7 +490,6 @@ void FUN_L00_0025f3e8_2e01a8(char *owner, char *pos, float scale, float flash) _
 void FUN_L00_00263ac8_2e01a8(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
 void update_class_1199_hit_reactions_and_targeting(Moby *moby) __asm__("FUN_L10_002e17c0");
 void FUN_L10_002e1cb0_2e01a8(unsigned char *moby) __asm__("FUN_L10_002e1cb0");
-extern Anim *D_L10_001600EC_2E1568 __asm__("D_L10_001600EC");
 
 void FUN_L10_002e01a8(Moby *moby) {
     float scratch[20];
@@ -553,7 +535,7 @@ void FUN_L10_002e01a8(Moby *moby) {
             scratch[1] = fast_sin(random_angle_radians()) * 10.0f;
             moby->state = 9;
             scratch[2] = 0.0f;
-            moby->pos.z = D_L10_001600EC_2E1568[vars->f194].f38;
+            moby->pos.z = l10_volumes[vars->f194].origin.f[2];
             add_vectors(&scratch[4], &moby->pos, scratch);
             vars->height_offset = random_float_between(0.0f, D_L10_00161E14);
             vars->height_timer = truncate_float_to_s32(scale_time(D_L10_00161E18 * 60.0f) * random_float_between(0.75f, 1.25f));
@@ -733,7 +715,7 @@ void FUN_L10_002e01a8(Moby *moby) {
             vars->height_offset = random_float_between(0.0f, D_L10_00161E14);
             vars->height_timer = truncate_float_to_s32(scale_time(D_L10_00161E18 * 60.0f) * random_float_between(0.75f, 1.25f));
         }
-        climb = D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z - vars->height_offset;
+        climb = l10_volumes[vars->f194].origin.f[2] - moby->pos.z - vars->height_offset;
         if (frame_time + frame_time < climb) {
             climb = frame_time + frame_time;
         } else if (climb < frame_time * -2.0f) {
@@ -758,7 +740,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.z = 0.0f;
-        climb = D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z;
+        climb = l10_volumes[vars->f194].origin.f[2] - moby->pos.z;
         if (frame_time * 4.0f < climb) {
             climb = frame_time * 4.0f;
         } else if (climb < frame_time * -4.0f) {
@@ -767,7 +749,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         vars->velocity.z = climb;
         func_L00_00259B08_2E0630(moby, &vars->velocity, 0.5f, 0x200, 0.0f, 0);
         if (dist < D_L10_00161DFC
-            && absolute_float(D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z) < 1.0f) {
+            && absolute_float(l10_volumes[vars->f194].origin.f[2] - moby->pos.z) < 1.0f) {
             allocate_voice_for_target_entry(0, 0, moby);
             moby->state = 11;
             if (moby->prev_seq != 2) blend_moby_animation(moby, 2, 0, scale_game_frames(2));
@@ -789,7 +771,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 6.0f);
         vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 6.0f);
         vars->velocity.z = 0.0f;
-        climb = D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z;
+        climb = l10_volumes[vars->f194].origin.f[2] - moby->pos.z;
         if (frame_time * 3.0f < climb) {
             climb = frame_time * 3.0f;
         } else if (climb < frame_time * -3.0f) {
@@ -826,7 +808,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.z = 0.0f;
-        climb = D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z;
+        climb = l10_volumes[vars->f194].origin.f[2] - moby->pos.z;
         if (frame_time * 3.0f < climb) {
             climb = frame_time * 3.0f;
         } else if (climb < frame_time * -3.0f) {
@@ -908,14 +890,7 @@ typedef struct MobyData {
     int f194;
 } MobyData;
 
-typedef struct Anim_2E2B80 {
-    char pad0[0x30];
-    float f30[4];
-    float f40[4];
-    char pad50[0x30];
-} Anim_2E2B80;
 
-extern Anim_2E2B80 *D_L10_001600EC;
 
 typedef struct Path_2E2B80 {
     int count;
@@ -1001,10 +976,10 @@ void update_class_1199_hit_reactions_and_targeting(struct Moby *moby)
     if (data->f174 == 2) {
         target_selection_status = ahead_f(data->f180, moby, data->fC0);
         if (target_selection_status != 2) {
-            Anim_2E2B80 *bp = &D_L10_001600EC[data->f194];
-            fast_vec_sub(vector_scratch, D_0013F3D0, bp->f30);
+            LevelVolume *bp = &l10_volumes[data->f194];
+            fast_vec_sub(vector_scratch, D_0013F3D0, &bp->origin);
             vector_scratch[3] = 0.0f;
-            transform_vector_by_basis(transformed_offset, vector_scratch, bp->f40);
+            transform_vector_by_basis(transformed_offset, vector_scratch, bp->inv_axis);
             if (transformed_offset[0] <= -1.0f || 1.0f <= transformed_offset[0] || transformed_offset[1] <= -1.0f || 1.0f <= transformed_offset[1] || transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2]) {
                 data->f104 = 2;
             }
@@ -1041,7 +1016,7 @@ void set_moby_group_command_frames(struct Moby *moby) {
         if (group_entry != 0) {
             do {
                 int listed_entity_index = *(unsigned short *)group_entry & 0x7FFF;
-                ((char *)D_L10_0015FFD0_e[2])[(listed_entity_index << 8) + 0xBC] =
+                ((char *)D_L10_0015FFD0_macro[2])[(listed_entity_index << 8) + 0xBC] =
                     scale_game_frames(moby_group_command_frames_gp);
             } while (*group_entry++ >= 0);
         }
@@ -1184,7 +1159,6 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern int D_L10_0015F5CC;
 extern int D_L10_0015FFD8;
-extern char *D_L10_0015FFD0_w[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern float l10_toxic_crab_size_scale __asm__("D_L10_00161E24") __attribute__((sda));
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/toxic_crab_update_2.h"
@@ -1288,7 +1262,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         {
             int k = crab_data->i1BC;
             if (k != -1) {
-                Moby2E30F8 *p = (Moby2E30F8 *)(D_L10_0015FFD0_w[2] + (k << 8));
+                Moby2E30F8 *p = (Moby2E30F8 *)((char *)D_L10_0015FFD0_macro[2] + (k << 8));
                 if (p == 0 || p->state == 0xFE || p->state == 0xFD ||
                     (((*(int *)(((char *)&D_0014C190) +
                                 (((short)p->id >> 5) * 4 + (current_level_index << 8))) >>
@@ -2209,10 +2183,10 @@ float compute_toxic_crab_group_approach_angle(struct Moby *self) {
     if (group_entry != 0) {
         do {
             int listed_entity_index = *(unsigned short *)group_entry & 0x7FFF;
-            if (D_L10_0015FFD0_e[2][listed_entity_index].state == 5 ||
-                fast_vec_dist(&D_L10_0015FFD0_e[2][listed_entity_index].x, owner + 0x10) < owner_to_self_distance) {
-                float d = fast_arc_tan(D_L10_0015FFD0_e[2][listed_entity_index].x - *(float *)(owner + 0x10),
-                                       D_L10_0015FFD0_e[2][listed_entity_index].y - *(float *)(owner + 0x14));
+            if (D_L10_0015FFD0_macro[2][listed_entity_index].state == 5 ||
+                fast_vec_dist(&D_L10_0015FFD0_macro[2][listed_entity_index].pos.x, owner + 0x10) < owner_to_self_distance) {
+                float d = fast_arc_tan(D_L10_0015FFD0_macro[2][listed_entity_index].pos.x - *(float *)(owner + 0x10),
+                                       D_L10_0015FFD0_macro[2][listed_entity_index].pos.y - *(float *)(owner + 0x14));
                 float group_angle_offset = fast_subtract_rotations(d, owner_to_self_angle);
                 if (group_angle_offset > 0.0f && group_angle_offset < hi) {
                     hi = group_angle_offset;
@@ -2838,7 +2812,6 @@ extern unsigned char D_00141B28_r[] __asm__("D_00141B28");
 extern unsigned char D_0013D504_r[] __asm__("D_0013D504");
 extern unsigned char D_00141968_r[] __asm__("D_00141968");
 extern Moby *D_L10_0015FFD8_c2 __asm__("D_L10_0015FFD8");
-extern Moby *D_L10_0015FFD0_m[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern int D_0013D388; /* no foreign declaration */
 extern int D_00141B28; /* no foreign declaration */
 extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda)); /* no foreign declaration */
@@ -2920,9 +2893,9 @@ void update_conditional_help_messages(Moby *moby)
         }
         if (any_active == 0) break;
         if (data->f10 != -1
-            && vector_distance_xy(D_0013F3D0_r, &D_L10_0015FFD0_m[2][data->f10].pos) < 15.0f
+            && vector_distance_xy(D_0013F3D0_r, &D_L10_0015FFD0_macro[2][data->f10].pos) < 15.0f
             && data->f14 != -1
-            && vector_distance_xy(D_0013F3D0_r, &D_L10_0015FFD0_m[2][data->f14].pos) < 15.0f
+            && vector_distance_xy(D_0013F3D0_r, &D_L10_0015FFD0_macro[2][data->f14].pos) < 15.0f
             && *(unsigned short *)(l10_help_message_2717_gate) == 0) {
             help_request(0x2717, 0x6A);
         }
@@ -3021,7 +2994,7 @@ state_two:
             candidate = 0;
             if (vars->targets[0] != -1) {
                 struct Moby *target;
-                target = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
+                target = (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (vars->targets[0] << 8));
                 candidate = (target != 0 && target->state != 0xfe && target->state != 0xfd) ? target : 0;
             }
             {
@@ -3062,9 +3035,9 @@ state_two:
                     fast_arc_tan(target->pos.x - position[0], target->pos.y - position[1]),
                     fast_arc_tan(vector_distance_xy(position, &target->pos), target->pos.z - position[2]));
                 spawn_class_4ea_projectile(moby, position, rotation, scale_game_frames(30));
-                if (target == (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8)))
+                if (target == (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (vars->targets[0] << 8)))
                     vars->targets[0] = -1;
-                else if (target == (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[1] << 8)))
+                else if (target == (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (vars->targets[1] << 8)))
                     vars->targets[1] = -1;
                 else
                     vars->targets[2] = -1;
@@ -3090,7 +3063,7 @@ state_three:
         struct Moby *candidate;
         target = 0;
         if (vars->targets[0] != -1) {
-            struct Moby *candidate = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
+            struct Moby *candidate = (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (vars->targets[0] << 8));
             if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
                 target = candidate;
         }

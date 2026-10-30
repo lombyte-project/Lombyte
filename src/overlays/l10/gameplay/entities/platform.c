@@ -1,5 +1,6 @@
 /* Level 10 moby classes: bombthrower_grass, platform, magnetboots, gadgebot_telepot_pad, gate, bomb, lab_door, button, block_cave. */
 #include "types.h"
+#include "rnc/overlay/level_volume.h"
 #include "rnc/overlay/level_save_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -334,7 +335,6 @@ extern u8 D_0014C050_98b68[] __asm__("D_0014C050");
 extern int level_moby_killed[][64] __asm__("D_0014C190");
 extern int D_L10_001BA950[];
 extern u8 D_001413F4_98b68[] __asm__("D_001413F4");
-extern char *D_L10_001600EC_98b68 __asm__("D_L10_001600EC");
 extern int try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");
@@ -404,11 +404,11 @@ void update_hero_relocation_trigger(struct Moby *moby) {
         target = (struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68);
         target->collision = *(u32 *)((char *)target->pclass + 0x10);
         if (D_0014C050_98b68[moby->mission + current_level_index * 16] == 0xFF || vars->spot_alt == -1) {
-            set_race_camera(D_L10_001600EC_98b68 + vars->spot_alt * 128 + 0x30,
-                                   D_L10_001600EC_98b68 + vars->spot_alt * 128 + 0x70, 0, 1);
+            set_race_camera(&l10_volumes[vars->spot_alt].origin,
+                            &l10_volumes[vars->spot_alt].rotation, 0, 1);
         } else {
-            set_race_camera(D_L10_001600EC_98b68 + vars->spot * 128 + 0x30,
-                                   D_L10_001600EC_98b68 + vars->spot * 128 + 0x70, 0, 1);
+            set_race_camera(&l10_volumes[vars->spot].origin,
+                            &l10_volumes[vars->spot].rotation, 0, 1);
         }
         enter_hero_vehicle_mode(1, 0x43, (struct Moby *)(D_L10_0015FFD8_98b68 + (vars->target << 8)));
         jet_game_state(2, 4);
@@ -416,8 +416,8 @@ void update_hero_relocation_trigger(struct Moby *moby) {
     }
     if (hero.vehicle_mode == 1) {
         exit_hero_vehicle_mode();
-        set_race_camera(D_L10_001600EC_98b68 + vars->vehicle_spot * 128 + 0x30,
-                               D_L10_001600EC_98b68 + vars->vehicle_spot * 128 + 0x70, 0, 1);
+        set_race_camera(&l10_volumes[vars->vehicle_spot].origin,
+                        &l10_volumes[vars->vehicle_spot].rotation, 0, 1);
         jet_game_state(0, 5);
         ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 1;
         ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 2;
