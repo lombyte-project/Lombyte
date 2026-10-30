@@ -221,19 +221,19 @@ void decompress_and_relocate_vendor_moby_assets(void) __asm__("FUN_L00_0029a330"
 void decompress_and_relocate_vendor_moby_assets(void) {
     int   i;
     int  *entry_offset_cursor;
-    char *base;
+    char *moby_asset_table_container;
     int   compressed_source_address;
     compressed_source_address = vendor_menu_lui.unk18 + 0x80000;
     FlushCache(0);
     fast_decompress(compressed_source_address, vendor_menu_lui.unk18);
     FlushCache(0);
     entry_offset_cursor = (int *)vendor_menu_lui.unk18;
-    base = D_L00_00197300_lui[D_L00_00197BCC];
+    moby_asset_table_container = D_L00_00197300_lui[D_L00_00197BCC];
     for (i = 0; i < 16; i++) {
         int entry_offset = *entry_offset_cursor++;
         if (entry_offset) {
-            *(int *)(base + 0x48 + i * 4) = vendor_menu_lui.unk18 + entry_offset;
-            relocate_asset_entry_pointers(base, i);
+            *(int *)(moby_asset_table_container + 0x48 + i * 4) = vendor_menu_lui.unk18 + entry_offset;
+            relocate_asset_entry_pointers(moby_asset_table_container, i);
         }
     }
 }
