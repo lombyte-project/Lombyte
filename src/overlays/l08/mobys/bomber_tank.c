@@ -743,7 +743,7 @@ typedef struct {
 } PathMoverVars;
 
 void advance_bomber_tank_along_path(struct Moby *moby, int path_id) {
-    PathMoverVars *vars = (PathMoverVars *)moby->pvars;
+    PathMoverVars *bomber_tank_path_vars = (PathMoverVars *)moby->pvars;
     int           *path = (int *)l08_paths[path_id];
     float          point[4];
     float          step[3];
@@ -752,62 +752,62 @@ void advance_bomber_tank_along_path(struct Moby *moby, int path_id) {
     float          speed;
     float         *heading;
 
-    qcopy(point, path + 4 + vars->point * 4);
+    qcopy(point, path + 4 + bomber_tank_path_vars->point * 4);
     heading = &moby->rot.z;
     angle = fast_arc_tan(point[0] - moby->pos.x, point[1] - moby->pos.y);
     approach_angle(heading,
-                   &vars->turn_speed,
+                   &bomber_tank_path_vars->turn_speed,
                    angle,
                    frame_time_sq * 4.712389f,
                    frame_time_sq * 4.712389f,
                    frame_time * 3.1415927f);
-    approach_value(&vars->speed, vars->target_speed, frame_time_sq + frame_time_sq);
-    step[0] = fast_cos(moby->rot.z) * vars->speed;
-    step[1] = fast_sin(moby->rot.z) * vars->speed;
+    approach_value(&bomber_tank_path_vars->speed, bomber_tank_path_vars->target_speed, frame_time_sq + frame_time_sq);
+    step[0] = fast_cos(moby->rot.z) * bomber_tank_path_vars->speed;
+    step[1] = fast_sin(moby->rot.z) * bomber_tank_path_vars->speed;
     step[2] = 0.0f;
     fast_vec_add(&moby->pos, &moby->pos, step);
     moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f);
     if (vector_distance_xy(&moby->pos, point) < 0.5f) {
-        vars->point = (vars->point + 1) % *path;
+        bomber_tank_path_vars->point = (bomber_tank_path_vars->point + 1) % *path;
     }
-    scale = vars->speed / (bomber_tank_part_reference_speed_gp * frame_time);
+    scale = bomber_tank_path_vars->speed / (bomber_tank_part_reference_speed_gp * frame_time);
     if (scale > 2.0f) {
         scale = 2.0f;
     } else if (scale < 0.0f) {
         scale = 0.0f;
     }
-    if (vars->linked[0] != 0) {
+    if (bomber_tank_path_vars->linked[0] != 0) {
         char *linked;
 
-        *(float *)((char *)vars->linked[0] + 0x58) = scale;
-        linked = vars->linked[0];
+        *(float *)((char *)bomber_tank_path_vars->linked[0] + 0x58) = scale;
+        linked = bomber_tank_path_vars->linked[0];
         qcopy(linked + 0x40, (char *)moby + 0x40);
         qcopy(linked + 0x10, &moby->pos);
     }
-    if (vars->linked[1] != 0) {
+    if (bomber_tank_path_vars->linked[1] != 0) {
         char *linked;
 
-        *(float *)((char *)vars->linked[1] + 0x58) = scale;
-        linked = vars->linked[1];
+        *(float *)((char *)bomber_tank_path_vars->linked[1] + 0x58) = scale;
+        linked = bomber_tank_path_vars->linked[1];
         qcopy(linked + 0x40, (char *)moby + 0x40);
         qcopy(linked + 0x10, &moby->pos);
     }
-    speed = fast_vec_length(vars->velocity);
+    speed = fast_vec_length(bomber_tank_path_vars->velocity);
     if (frame_time * 0.1f < speed) {
-        if (voice_is_playing(moby, vars->sound) == 0) {
-            vars->sound = allocate_voice_for_target_entry(1, 4, moby);
-            vendor_volume(vars->sound, 1);
-        } else if (SOUND_SLOT_2d55c8(vars->sound)->volume < 0x400) {
-            vendor_volume(vars->sound,
-                          SOUND_SLOT_2d55c8(vars->sound)->volume + 0x400 / scale_game_frames(60));
+        if (voice_is_playing(moby, bomber_tank_path_vars->sound) == 0) {
+            bomber_tank_path_vars->sound = allocate_voice_for_target_entry(1, 4, moby);
+            vendor_volume(bomber_tank_path_vars->sound, 1);
+        } else if (SOUND_SLOT_2d55c8(bomber_tank_path_vars->sound)->volume < 0x400) {
+            vendor_volume(bomber_tank_path_vars->sound,
+                          SOUND_SLOT_2d55c8(bomber_tank_path_vars->sound)->volume + 0x400 / scale_game_frames(60));
         }
-    } else if (voice_is_playing(moby, vars->sound) != 0) {
-        if (SOUND_SLOT_2d55c8(vars->sound)->volume < 0x100) {
-            release_voice_slot(vars->sound);
-            vars->sound = -1;
+    } else if (voice_is_playing(moby, bomber_tank_path_vars->sound) != 0) {
+        if (SOUND_SLOT_2d55c8(bomber_tank_path_vars->sound)->volume < 0x100) {
+            release_voice_slot(bomber_tank_path_vars->sound);
+            bomber_tank_path_vars->sound = -1;
         } else {
-            vendor_volume(vars->sound,
-                          SOUND_SLOT_2d55c8(vars->sound)->volume - 0x400 / scale_game_frames(60));
+            vendor_volume(bomber_tank_path_vars->sound,
+                          SOUND_SLOT_2d55c8(bomber_tank_path_vars->sound)->volume - 0x400 / scale_game_frames(60));
         }
     }
 }
