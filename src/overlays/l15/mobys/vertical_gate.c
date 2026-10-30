@@ -55,7 +55,7 @@ extern unsigned char D_0013F3D0_2A48B0[] __asm__("D_0013F3D0");
 
 extern char D_L15_00167440_2A48B0[] __asm__("D_L15_001673C0");
 
-int D_L15_00184AA8_lui __asm__("D_L15_00184AA8") NOT_SDA = 0;
+extern int l15_key_gate_open_lui __asm__("D_L15_00184AA8") NOT_SDA;
 
 void update_vertical_gate(GateMoby *gate_moby) __asm__("FUN_L15_002a36d0");
 
@@ -87,7 +87,7 @@ void update_vertical_gate(GateMoby *gate_moby) {
     case GATE_WAIT_TO_OPEN:
         gate_vars->travel = 0;
         if (gate_vars->key != -1) {
-            D_L15_00184AA8_lui = 0;
+            l15_key_gate_open_lui = 0;
         }
         if (gate_vars->trigger != -1) {
             struct Moby *trigger_moby =
@@ -145,7 +145,7 @@ void update_vertical_gate(GateMoby *gate_moby) {
         break;
     case GATE_OPEN:
         if (gate_vars->key != -1) {
-            D_L15_00184AA8_lui = 1;
+            l15_key_gate_open_lui = 1;
         }
         if (is_point_inside_clip_volume(D_0013F3D0_2A48B0, gate_vars->vol_trigger) != 0 ||
             is_point_inside_clip_volume(D_L15_00167440_2A48B0, gate_vars->vol_trigger) != 0) {
@@ -178,7 +178,7 @@ void update_vertical_gate(GateMoby *gate_moby) {
             gate_moby->state = 1;
             if (gate_vars->key != -1) {
                 gate_moby->state = 5;
-                D_L15_00184AA8_lui = 0;
+                l15_key_gate_open_lui = 0;
             }
         }
         {
@@ -201,14 +201,14 @@ void update_vertical_gate(GateMoby *gate_moby) {
     case GATE_POSITION_OVERRIDE:
         if (D_0013DD50 != 0) {
             gate_moby->pos.z = gate_vars->home.z - vertical_gate_travel_distance_gp;
-            D_L15_00184AA8_lui = 1;
+            l15_key_gate_open_lui = 1;
         } else {
             if (D_001413F4[0] == 2) {
                 break;
             }
             gate_moby->pos.z = gate_vars->home.z;
             gate_moby->state = 1;
-            D_L15_00184AA8_lui = 0;
+            l15_key_gate_open_lui = 0;
         }
         break;
     }

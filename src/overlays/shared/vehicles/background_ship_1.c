@@ -423,23 +423,32 @@ short background_ship_1_second_spark_color_tween_end_gp __asm__("D_L02_00161FBC"
 
 float background_ship_1_color_phase_rate_degrees_gp __asm__("D_L02_00161F70") = 3.6e+02f;
 
-short background_ship_1_first_spark_position_delta_scale_gp __asm__("D_L02_00161F84") = 0x7efa;
+extern short background_ship_1_first_spark_position_delta_scale_gp __asm__("D_L02_00161F84")
+    __attribute__((sda));
 
-short background_ship_1_second_spark_position_delta_scale_gp __asm__("D_L02_00161F88") = 0x7efa;
+extern short background_ship_1_second_spark_position_delta_scale_gp __asm__("D_L02_00161F88")
+    __attribute__((sda));
 
-short background_ship_1_spark_random_offset_radius_scale_gp __asm__("D_L02_00161F8C") = 0;
+extern short background_ship_1_spark_random_offset_radius_scale_gp __asm__("D_L02_00161F8C")
+    __attribute__((sda));
 
-short background_ship_1_spark_frame_count_random_span_gp __asm__("D_L02_00161F90") = 0x17;
+extern short background_ship_1_spark_frame_count_random_span_gp __asm__("D_L02_00161F90")
+    __attribute__((sda));
 
-short background_ship_1_spark_second_frame_count_base_gp __asm__("D_L02_00161F94") = 0xb;
+extern short background_ship_1_spark_second_frame_count_base_gp __asm__("D_L02_00161F94")
+    __attribute__((sda));
 
-short background_ship_1_spark_third_frame_count_base_gp __asm__("D_L02_00161F98") = 0xb;
+extern short background_ship_1_spark_third_frame_count_base_gp __asm__("D_L02_00161F98")
+    __attribute__((sda));
 
-short background_ship_1_spark_frame_count_variation_fraction_gp __asm__("D_L02_00161F9C") = 0;
+extern short background_ship_1_spark_frame_count_variation_fraction_gp __asm__("D_L02_00161F9C")
+    __attribute__((sda));
 
-short background_ship_1_first_spark_fourth_component_range_start_gp __asm__("D_L02_00161FA0") =
-    0x7efa;
+extern short background_ship_1_first_spark_fourth_component_range_start_gp __asm__("D_L02_00161FA0")
+    __attribute__((sda));
 
-short background_ship_1_first_spark_fourth_component_range_end_gp __asm__("D_L02_00161FA4") = 0;
+extern short background_ship_1_first_spark_fourth_component_range_end_gp __asm__("D_L02_00161FA4")
+    __attribute__((sda));
 
-short background_ship_1_second_spark_fourth_component_range_end_gp __asm__("D_L02_00161FAC") = 0;
+extern short background_ship_1_second_spark_fourth_component_range_end_gp __asm__("D_L02_00161FAC")
+    __attribute__((sda));

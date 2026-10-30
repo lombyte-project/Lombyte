@@ -52,28 +52,36 @@ extern L16SingleSphere l16_single_reflection_mesh_bounds[] __asm__("D_L16_00161F
 extern void            vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 extern char D_L16_001DDC80[] NOT_SDA;
-int         D_L16_00161F40[2] = {125, 0};
+int         single_reflection_mesh_vertex_counts[2] __asm__("D_L16_00161F40") = {125, 0};
 
-extern float D_L16_001DCAE0[375]; /* 125 points x 3 floats */
-float       *D_L16_00161F60[2] = {D_L16_001DCAE0, 0};
+extern float
+    single_reflection_mesh_positions[375] __asm__("D_L16_001DCAE0"); /* 125 points x 3 floats */
+
+float *single_reflection_mesh_position_tables[2] __asm__("D_L16_00161F60") = {
+    single_reflection_mesh_positions, 0};
 
 extern float D_L16_001DD0C0[];
-float       *D_L16_00161F68[2] = {D_L16_001DD0C0, 0};
+float *single_reflection_mesh_unused_pair_tables[2] __asm__("D_L16_00161F68") = {D_L16_001DD0C0, 0};
 
-extern float D_L16_001DD4A8[375]; /* 125 points x 3 floats */
-float       *D_L16_00161F70[2] = {D_L16_001DD4A8, 0};
+extern float
+    single_reflection_mesh_directions[375] __asm__("D_L16_001DD4A8"); /* 125 points x 3 floats */
 
-extern u32 D_L16_001DDA88[125]; /* 125 RGBA words, one per point */
-u32       *D_L16_00161F78[2] = {D_L16_001DDA88, 0};
+float *single_reflection_mesh_direction_tables[2] __asm__("D_L16_00161F70") = {
+    single_reflection_mesh_directions, 0};
+
+extern u32 single_reflection_mesh_colours[125] __asm__("D_L16_001DDA88"); /* 125 RGBA words, one per point */
+
+u32 *single_reflection_mesh_colour_tables[2] __asm__("D_L16_00161F78") = {
+    single_reflection_mesh_colours, 0};
 
 void draw_level16_visible_single_reflection_mesh(void) __asm__("FUN_L16_002e9270");
 
 void draw_level16_visible_single_reflection_mesh(void) {
-    int *point_counts = (int *)D_L16_00161F40;
-    int *point_positions = (int *)D_L16_00161F60;
-    int *unused_reflection_arguments = (int *)D_L16_00161F68;
-    int *direction_vectors = (int *)D_L16_00161F70;
-    int *point_word_streams = (int *)D_L16_00161F78;
+    int *point_counts = (int *)single_reflection_mesh_vertex_counts;
+    int *point_positions = (int *)single_reflection_mesh_position_tables;
+    int *unused_reflection_arguments = (int *)single_reflection_mesh_unused_pair_tables;
+    int *direction_vectors = (int *)single_reflection_mesh_direction_tables;
+    int *point_word_streams = (int *)single_reflection_mesh_colour_tables;
     int  i;
 
     vu1_add_g_sregister(6, get_effect_texture(0x29));
@@ -118,9 +126,9 @@ void update_reflection_mesh(struct Moby *moby) {
             minx = miny = minz = 1024.0f;
             {
                 int k;
-                for (k = 0; k < D_L16_00161F40[i]; k++) {
+                for (k = 0; k < single_reflection_mesh_vertex_counts[i]; k++) {
                     float x, y, z;
-                    verts = ((float **)D_L16_00161F60)[i] + k * 3;
+                    verts = ((float **)single_reflection_mesh_position_tables)[i] + k * 3;
                     x = verts[0];
                     if (x > maxx)
                         maxx = x;
@@ -145,12 +153,15 @@ void update_reflection_mesh(struct Moby *moby) {
                 sphere->y = (maxy + miny) * 0.5f;
                 sphere->z = (maxz + minz) * 0.5f;
             }
-            for (j = 0; j < D_L16_00161F40[i]; j++) {
+            for (j = 0; j < single_reflection_mesh_vertex_counts[i]; j++) {
                 float vertex_to_center_distance;
                 out = (float *)(l16_single_reflection_mesh_bounds + i);
-                vertex_position[0] = ((float **)D_L16_00161F60)[i][j * 3 + 0];
-                vertex_position[1] = ((float **)D_L16_00161F60)[i][j * 3 + 1];
-                vertex_position[2] = ((float **)D_L16_00161F60)[i][j * 3 + 2];
+                vertex_position[0] =
+                    ((float **)single_reflection_mesh_position_tables)[i][j * 3 + 0];
+                vertex_position[1] =
+                    ((float **)single_reflection_mesh_position_tables)[i][j * 3 + 1];
+                vertex_position[2] =
+                    ((float **)single_reflection_mesh_position_tables)[i][j * 3 + 2];
                 vertex_to_center_distance = fast_vec_dist(vertex_position, out);
                 if (vertex_to_center_distance > out[3])
                     out[3] = vertex_to_center_distance;
@@ -166,7 +177,7 @@ void update_reflection_mesh(struct Moby *moby) {
     }
 }
 
-float D_L16_001DCAE0[375] = {
+float single_reflection_mesh_positions[375] __asm__("D_L16_001DCAE0") = {
     136.15062f,  128.2639f,   128.84532f,  137.99428f,  130.5911f,   128.84532f,  136.15062f,
     128.2639f,   132.56856f,  137.99428f,  130.5911f,   132.56856f,  136.15062f,  128.2639f,
     132.56856f,  137.99428f,  130.5911f,   136.29181f,  136.15062f,  128.2639f,   132.56856f,
@@ -222,7 +233,7 @@ float D_L16_001DCAE0[375] = {
     128.2639f,   132.56856f,  157.84938f,  128.2639f,   136.29181f,  159.05333f,  125.22769f,
     132.56856f,  159.05333f,  125.22769f,  136.29181f};
 
-float D_L16_001DD4A8[375] = {
+float single_reflection_mesh_directions[375] __asm__("D_L16_001DD4A8") = {
     -0.857413f, 0.493004f,  0.0f, -0.783833f, 0.620971f,  0.0f, -0.857413f, 0.493004f,  0.0f,
     -0.783833f, 0.620971f,  0.0f, -0.857413f, 0.493004f,  0.0f, -0.783833f, 0.620971f,  0.0f,
     -0.857413f, 0.493004f,  0.0f, -0.857413f, 0.493004f,  0.0f, -0.857413f, 0.493004f,  0.0f,
@@ -266,7 +277,7 @@ float D_L16_001DD4A8[375] = {
     0.783831f,  0.620974f,  0.0f, 0.856708f,  0.494792f,  0.0f, 0.856708f,  0.494792f,  0.0f,
     0.959476f,  0.257021f,  0.0f, 0.959476f,  0.257021f,  0.0f};
 
-u32 D_L16_001DDA88[125] = {
+u32 single_reflection_mesh_colours[125] __asm__("D_L16_001DDA88") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,

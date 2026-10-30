@@ -39,7 +39,7 @@ int        wobble_quad_blend_a_selector_gp __asm__("D_L05_00161CF4") = 0;
 int        wobble_quad_blend_b_selector_gp __asm__("D_L05_00161CF8") = 2;
 int        wobble_quad_blend_c_selector_gp __asm__("D_L05_00161CFC") = 0;
 int        wobble_quad_blend_d_selector_gp __asm__("D_L05_00161D00") = 1;
-int        wobble_quad_start_color_gp __asm__("D_L05_00161D04") = 0x40807070;
+int        wobble_quad_start_color_gp __asm__("D_L05_00161D04") = 0x40807070; /* RGBA, 0xAABBGGRR */
 extern int wobble_quad_end_color_gp __asm__("D_L05_00161D08") __attribute__((sda));
 extern int wobble_quad_texture_index_gp __asm__("D_L05_00161D0C") __attribute__((sda));
 

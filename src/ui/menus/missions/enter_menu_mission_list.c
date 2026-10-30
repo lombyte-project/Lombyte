@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_pages.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 
@@ -20,8 +21,8 @@ s32 enter_menu_mission_list(struct Obj *mission_list_menu) {
     slot = mission_list_menu->slots;
     slot += selected_level_index[0];
     if (*slot != -1) {
-        D_001CF874[0] = ((s32 *)0x70000000)[*slot];
-        D_001CF758[0] = ((s32 *)0x70000100)[*slot];
+        missions_description_label.label.text_id = ((s32 *)0x70000000)[*slot];
+        missions_picture_screen.stream.fixed_entry = ((s32 *)0x70000100)[*slot];
     }
     return 0;
 }

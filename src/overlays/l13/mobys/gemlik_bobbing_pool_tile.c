@@ -171,10 +171,11 @@ extern Light_9e88 D_L13_001CAB80;
 
 extern float D_L13_001801C0[];
 
-/* Each pool tile's saved draw value, indexed by tile index (22 tiles). */
-unsigned short D_L13_001F1E20[22] = {0xffff, 0x3310, 0xffff, 0x33,   0xffff, 0x3311, 0xffff, 0x3333,
-                                     0xffff, 0x1133, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
-                                     0xffff, 0xffff, 0xffff, 0xc000, 0xcc0,  0xffff};
+/* Each pool tile's WaterGrid.visible_subtiles while it is in view: bit i = sub-tile i of the
+   tile's 4x4 grid. */
+u16 gemlik_pool_tile_visible_subtiles[22] __asm__("D_L13_001F1E20") = {
+    0xffff, 0x3310, 0xffff, 0x33,   0xffff, 0x3311, 0xffff, 0x3333, 0xffff, 0x1133, 0xffff,
+    0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xc000, 0xcc0,  0xffff};
 
 /* One fixed-point bounds record (pool_bind_tile: x, y, z, two scale shorts) per tile, 16 bytes
    apart, 22 of them (gemlik_pool_tile_count = 22). */
@@ -192,9 +193,10 @@ extern void *D_L13_001612D0;
 
 extern void *D_L13_001612D4;
 
-int D_L13_00161EF0 = -1;
+/* The tile whose mask is replaced by gemlik_pool_override_tile_visible_subtiles; -1: none. */
+int gemlik_pool_override_tile_index __asm__("D_L13_00161EF0") = -1;
 
-unsigned short D_L13_00161EF4 = 0xffff;
+u16 gemlik_pool_override_tile_visible_subtiles __asm__("D_L13_00161EF4") = 0xffff;
 
 extern void pool_init_tiles(void *, int) __asm__("FUN_L01_002b7a48");
 
@@ -277,8 +279,8 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             D_L13_00161208 = 0;
             for (i = 0; i < 22; i++) {
                 pool_bind_tile(&l13_water_grids[i], tb + i * 16);
-                l13_water_grids[bobbing_platform_vars->idx].draw_value =
-                    D_L13_001F1E20[bobbing_platform_vars->idx];
+                l13_water_grids[bobbing_platform_vars->idx].visible_subtiles =
+                    gemlik_pool_tile_visible_subtiles[bobbing_platform_vars->idx];
             }
             for (k = 0; k < 22; k++) {
                 for (j = 0; j < 2; j++) {
@@ -309,8 +311,8 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             hero_context->state.current != 0x7C)
             bobbing_platform_vars->angle =
                 fast_add_rotations(bobbing_platform_vars->angle, bobbing_platform_vars->speed);
-        l13_water_grids[bobbing_platform_vars->idx].unk1C = D_L13_001CAB80.c3C;
-        l13_water_grids[bobbing_platform_vars->idx].unk1D = D_L13_001CAB80.c3D;
+        l13_water_grids[bobbing_platform_vars->idx].alpha_2_fix = D_L13_001CAB80.c3C;
+        l13_water_grids[bobbing_platform_vars->idx].alpha_1_fix = D_L13_001CAB80.c3D;
         if (random_integer_below(200) == 0) {
             float x =
                 l13_water_grids[bobbing_platform_vars->idx].x + random_float_between(-4.0f, 4.0f);
@@ -327,17 +329,19 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
         if (check_scaled_vector_bsphere(48.0f, moby) != -1)
             height_half_span_or_tile_enabled = 1.0f;
         if (height_half_span_or_tile_enabled == 0.0f)
-            l13_water_grids[bobbing_platform_vars->idx].draw_value = 0;
+            l13_water_grids[bobbing_platform_vars->idx].visible_subtiles = 0;
         else
-            l13_water_grids[bobbing_platform_vars->idx].draw_value =
-                D_L13_001F1E20[bobbing_platform_vars->idx];
+            l13_water_grids[bobbing_platform_vars->idx].visible_subtiles =
+                gemlik_pool_tile_visible_subtiles[bobbing_platform_vars->idx];
         if (bobbing_platform_vars->idx == 0) {
             pool_flush(l13_water_grids, 22);
             add_draw_callback(render_level13_water_grids, moby);
         }
-        if (bobbing_platform_vars->idx == D_L13_00161EF0) {
-            l13_water_grids[bobbing_platform_vars->idx].draw_value = D_L13_00161EF4;
-            D_L13_001F1E20[bobbing_platform_vars->idx] = D_L13_00161EF4;
+        if (bobbing_platform_vars->idx == gemlik_pool_override_tile_index) {
+            l13_water_grids[bobbing_platform_vars->idx].visible_subtiles =
+                gemlik_pool_override_tile_visible_subtiles;
+            gemlik_pool_tile_visible_subtiles[bobbing_platform_vars->idx] =
+                gemlik_pool_override_tile_visible_subtiles;
         }
     }
 }

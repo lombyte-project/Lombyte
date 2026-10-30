@@ -7,7 +7,7 @@
 
 extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 
-short linked_state_yaw_rate_degrees_gp __asm__("D_L15_00161EC0") = 0;
+extern short linked_state_yaw_rate_degrees_gp __asm__("D_L15_00161EC0") __attribute__((sda));
 
 void update_linked_turning_moby(struct Moby *moby) __asm__("FUN_L15_002e46b0");
 

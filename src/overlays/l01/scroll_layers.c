@@ -88,23 +88,31 @@ void update_and_draw_level01_scrolling_layers(void) {
     update_and_draw_scrolling_overlay_layers(8, l01_scrolling_overlay_layers);
 }
 
-Vec4f D_L01_00161B20 = {80.123f, 174.636f, 39.481f, 40.523f};
+Vec4f l01_scrolling_overlay_layer_0_bounds __asm__("D_L01_00161B20") = {
+    80.123f, 174.636f, 39.481f, 40.523f};
 
-Vec4f D_L01_00161B30 = {136.629f, 189.593f, 39.111f, 47.158f};
+Vec4f l01_scrolling_overlay_layer_1_bounds __asm__("D_L01_00161B30") = {
+    136.629f, 189.593f, 39.111f, 47.158f};
 
-Vec4f D_L01_00161B40 = {74.516f, 177.786f, 39.329f, 45.293f};
+Vec4f l01_scrolling_overlay_layer_2_bounds __asm__("D_L01_00161B40") = {
+    74.516f, 177.786f, 39.329f, 45.293f};
 
-Vec4f D_L01_00161B50 = {137.608f, 194.1f, 38.944f, 46.423f};
+Vec4f l01_scrolling_overlay_layer_3_bounds __asm__("D_L01_00161B50") = {
+    137.608f, 194.1f, 38.944f, 46.423f};
 
-Vec4f D_L01_00161B60 = {60.978f, 252.36f, 49.69f, 51.723f};
+Vec4f l01_scrolling_overlay_layer_4_bounds __asm__("D_L01_00161B60") = {
+    60.978f, 252.36f, 49.69f, 51.723f};
 
-Vec4f D_L01_00161B70 = {138.586f, 198.607f, 38.88f, 45.699f};
+Vec4f l01_scrolling_overlay_layer_5_bounds __asm__("D_L01_00161B70") = {
+    138.586f, 198.607f, 38.88f, 45.699f};
 
-Vec4f D_L01_00161B80 = {63.362f, 259.476f, 49.549f, 53.105f};
+Vec4f l01_scrolling_overlay_layer_6_bounds __asm__("D_L01_00161B80") = {
+    63.362f, 259.476f, 49.549f, 53.105f};
 
-Vec4f D_L01_00161B90 = {139.564f, 203.114f, 38.815f, 44.986f};
+Vec4f l01_scrolling_overlay_layer_7_bounds __asm__("D_L01_00161B90") = {
+    139.564f, 203.114f, 38.815f, 44.986f};
 
-Vec4f D_L01_001E1640[38] = {
+Vec4f l01_scrolling_overlay_layer_0_verts[38] __asm__("D_L01_001E1640") = {
     {74.872f, 137.227f,   39.5f,   39.5f},
     {64.988f, 137.046f,   39.5f,   39.5f},
     {75.929f, 141.717f, 39.502f, 39.502f},
@@ -145,7 +153,7 @@ Vec4f D_L01_001E1640[38] = {
     {95.259f, 212.226f, 39.462f, 39.462f},
 };
 
-f32 D_L01_001E18A0[38][2] = {
+f32 l01_scrolling_overlay_layer_0_uvs[38][2] __asm__("D_L01_001E18A0") = {
     {0.0f,  -3.0f},
     {1.0f,  -3.0f},
     {0.0f, -2.75f},
@@ -186,7 +194,7 @@ f32 D_L01_001E18A0[38][2] = {
     {1.0f,   1.5f},
 };
 
-Vec4f D_L01_001E19D0[30] = {
+Vec4f l01_scrolling_overlay_layer_1_verts[30] __asm__("D_L01_001E19D0") = {
     { 93.303f, 207.471f, 39.744f, 39.744f},
     { 95.259f, 212.226f, 39.462f, 39.462f},
     {100.511f, 207.208f, 39.572f, 39.572f},
@@ -219,7 +227,7 @@ Vec4f D_L01_001E19D0[30] = {
     {  178.1f,  171.22f, 39.195f,   39.0f},
 };
 
-f32 D_L01_001E1BB0[30][2] = {
+f32 l01_scrolling_overlay_layer_1_uvs[30][2] __asm__("D_L01_001E1BB0") = {
     {0.0f,  -1.5f},
     {1.0f,  -1.5f},
     {0.0f, -1.25f},
@@ -252,7 +260,7 @@ f32 D_L01_001E1BB0[30][2] = {
     {1.0f,   2.0f},
 };
 
-Vec4f D_L01_001E1CA0[38] = {
+Vec4f l01_scrolling_overlay_layer_2_verts[38] __asm__("D_L01_001E1CA0") = {
     {64.988f, 137.046f,   39.5f,   39.5f},
     {55.103f, 136.865f,   39.5f,   39.5f},
     {66.324f, 142.433f, 39.503f, 39.503f},
@@ -293,7 +301,7 @@ Vec4f D_L01_001E1CA0[38] = {
     {97.215f,  216.98f,  39.18f,  39.18f},
 };
 
-f32 D_L01_001E1F00[38][2] = {
+f32 l01_scrolling_overlay_layer_2_uvs[38][2] __asm__("D_L01_001E1F00") = {
     {0.0f,  -3.0f},
     {1.0f,  -3.0f},
     {0.0f, -2.75f},
@@ -334,7 +342,7 @@ f32 D_L01_001E1F00[38][2] = {
     {1.0f,   1.5f},
 };
 
-Vec4f D_L01_001E2030[30] = {
+Vec4f l01_scrolling_overlay_layer_3_verts[30] __asm__("D_L01_001E2030") = {
     { 95.259f, 212.226f, 39.462f, 39.462f},
     { 97.215f,  216.98f,  39.18f,  39.18f},
     {102.311f, 211.764f, 39.311f, 39.311f},
@@ -367,7 +375,7 @@ Vec4f D_L01_001E2030[30] = {
     {  178.1f,  175.48f,   39.0f,   39.0f},
 };
 
-f32 D_L01_001E2210[30][2] = {
+f32 l01_scrolling_overlay_layer_3_uvs[30][2] __asm__("D_L01_001E2210") = {
     {0.0f,  -1.5f},
     {1.0f,  -1.5f},
     {0.0f, -1.25f},
@@ -400,7 +408,7 @@ f32 D_L01_001E2210[30][2] = {
     {1.0f,   2.0f},
 };
 
-Vec4f D_L01_001E2300[38] = {
+Vec4f l01_scrolling_overlay_layer_4_verts[38] __asm__("D_L01_001E2300") = {
     { 21.93f, 278.262f,   60.2f,   60.2f},
     {24.742f,  287.74f,   60.2f,   60.2f},
     {28.224f, 276.519f, 59.215f, 59.215f},
@@ -441,7 +449,7 @@ Vec4f D_L01_001E2300[38] = {
     {99.171f, 221.734f, 38.897f, 38.897f},
 };
 
-f32 D_L01_001E2560[38][2] = {
+f32 l01_scrolling_overlay_layer_4_uvs[38][2] __asm__("D_L01_001E2560") = {
     {0.0f,  -3.0f},
     {1.0f,  -3.0f},
     {0.0f, -2.75f},
@@ -482,7 +490,7 @@ f32 D_L01_001E2560[38][2] = {
     {1.0f,   1.5f},
 };
 
-Vec4f D_L01_001E2690[30] = {
+Vec4f l01_scrolling_overlay_layer_5_verts[30] __asm__("D_L01_001E2690") = {
     { 97.215f,  216.98f,  39.18f,  39.18f},
     { 99.171f, 221.734f, 38.897f, 38.897f},
     {104.111f,  216.32f, 39.049f, 39.049f},
@@ -515,7 +523,7 @@ Vec4f D_L01_001E2690[30] = {
     {  178.1f,  179.74f,   39.0f,   39.0f},
 };
 
-f32 D_L01_001E2870[30][2] = {
+f32 l01_scrolling_overlay_layer_5_uvs[30][2] __asm__("D_L01_001E2870") = {
     {0.0f,  -1.5f},
     {1.0f,  -1.5f},
     {0.0f, -1.25f},
@@ -548,7 +556,7 @@ f32 D_L01_001E2870[30][2] = {
     {1.0f,   2.0f},
 };
 
-Vec4f D_L01_001E2960[38] = {
+Vec4f l01_scrolling_overlay_layer_6_verts[38] __asm__("D_L01_001E2960") = {
     { 24.742f,  287.74f,   60.2f,   60.2f},
     { 27.554f, 297.218f,   60.2f,   60.2f},
     {  31.14f,  285.97f, 59.087f, 59.087f},
@@ -589,7 +597,7 @@ Vec4f D_L01_001E2960[38] = {
     {101.127f, 226.488f, 38.615f, 38.615f},
 };
 
-f32 D_L01_001E2BC0[38][2] = {
+f32 l01_scrolling_overlay_layer_6_uvs[38][2] __asm__("D_L01_001E2BC0") = {
     {0.0f,  -3.0f},
     {1.0f,  -3.0f},
     {0.0f, -2.75f},
@@ -630,7 +638,7 @@ f32 D_L01_001E2BC0[38][2] = {
     {1.0f,   1.5f},
 };
 
-Vec4f D_L01_001E2CF0[30] = {
+Vec4f l01_scrolling_overlay_layer_7_verts[30] __asm__("D_L01_001E2CF0") = {
     { 99.171f, 221.734f, 38.897f, 38.897f},
     {101.127f, 226.488f, 38.615f, 38.615f},
     {105.911f, 220.876f, 38.787f, 38.787f},
@@ -663,7 +671,7 @@ Vec4f D_L01_001E2CF0[30] = {
     {  178.1f,   184.0f,   39.0f,   39.0f},
 };
 
-f32 D_L01_001E2ED0[30][2] = {
+f32 l01_scrolling_overlay_layer_7_uvs[30][2] __asm__("D_L01_001E2ED0") = {
     {0.0f,  -1.5f},
     {1.0f,  -1.5f},
     {0.0f, -1.25f},
@@ -697,124 +705,140 @@ f32 D_L01_001E2ED0[30][2] = {
 };
 
 ScrollLayer l01_scrolling_overlay_layers[8] = {
-    {&D_L01_001E1640,
-     &D_L01_001E18A0,
-     &D_L01_00161B20,
-     0x26, 0.0025f,
-     0.0012f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2c,
-     0x2c, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_001E19D0,
-     &D_L01_001E1BB0,
-     &D_L01_00161B30,
-     0x1e, 0.0025f,
-     0.0012f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2c,
-     0x2c, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_001E1CA0,
-     &D_L01_001E1F00,
-     &D_L01_00161B40,
-     0x26, 0.0025f,
-     0.0012f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2c,
-     0x2c, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_001E2030,
-     &D_L01_001E2210,
-     &D_L01_00161B50,
-     0x1e, 0.0025f,
-     0.0012f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2c,
-     0x2c, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_001E2300,
-     &D_L01_001E2560,
-     &D_L01_00161B60,
-     0x26, 0.0025f,
-     0.0012f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2c,
-     0x2c, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_001E2690,
-     &D_L01_001E2870,
-     &D_L01_00161B70,
-     0x1e, 0.0025f,
-     0.0012f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2c,
-     0x2c, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_001E2960,
-     &D_L01_001E2BC0,
-     &D_L01_00161B80,
-     0x26, 0.0025f,
-     0.0012f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2c,
-     0x2c, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_001E2CF0,
-     &D_L01_001E2ED0,
-     &D_L01_00161B90,
-     0x1e, 0.0025f,
-     0.0012f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2c,
-     0x2c, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
+    {.verts = l01_scrolling_overlay_layer_0_verts,
+     .uvs = l01_scrolling_overlay_layer_0_uvs,
+     .bounds = &l01_scrolling_overlay_layer_0_bounds,
+     .count = 38,
+     .rate0 = 0.0025f,
+     .rate1 = 0.0012f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
+    {.verts = l01_scrolling_overlay_layer_1_verts,
+     .uvs = l01_scrolling_overlay_layer_1_uvs,
+     .bounds = &l01_scrolling_overlay_layer_1_bounds,
+     .count = 30,
+     .rate0 = 0.0025f,
+     .rate1 = 0.0012f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
+    {.verts = l01_scrolling_overlay_layer_2_verts,
+     .uvs = l01_scrolling_overlay_layer_2_uvs,
+     .bounds = &l01_scrolling_overlay_layer_2_bounds,
+     .count = 38,
+     .rate0 = 0.0025f,
+     .rate1 = 0.0012f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
+    {.verts = l01_scrolling_overlay_layer_3_verts,
+     .uvs = l01_scrolling_overlay_layer_3_uvs,
+     .bounds = &l01_scrolling_overlay_layer_3_bounds,
+     .count = 30,
+     .rate0 = 0.0025f,
+     .rate1 = 0.0012f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
+    {.verts = l01_scrolling_overlay_layer_4_verts,
+     .uvs = l01_scrolling_overlay_layer_4_uvs,
+     .bounds = &l01_scrolling_overlay_layer_4_bounds,
+     .count = 38,
+     .rate0 = 0.0025f,
+     .rate1 = 0.0012f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
+    {.verts = l01_scrolling_overlay_layer_5_verts,
+     .uvs = l01_scrolling_overlay_layer_5_uvs,
+     .bounds = &l01_scrolling_overlay_layer_5_bounds,
+     .count = 30,
+     .rate0 = 0.0025f,
+     .rate1 = 0.0012f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
+    {.verts = l01_scrolling_overlay_layer_6_verts,
+     .uvs = l01_scrolling_overlay_layer_6_uvs,
+     .bounds = &l01_scrolling_overlay_layer_6_bounds,
+     .count = 38,
+     .rate0 = 0.0025f,
+     .rate1 = 0.0012f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
+    {.verts = l01_scrolling_overlay_layer_7_verts,
+     .uvs = l01_scrolling_overlay_layer_7_uvs,
+     .bounds = &l01_scrolling_overlay_layer_7_bounds,
+     .count = 30,
+     .rate0 = 0.0025f,
+     .rate1 = 0.0012f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
 };

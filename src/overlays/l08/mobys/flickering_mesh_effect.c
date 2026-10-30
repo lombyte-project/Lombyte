@@ -667,5 +667,3 @@ void update_flickering_mesh_effect(struct Moby *moby) {
     }
     light_vars->flags |= 2;
 }
-
-int l08_effect_animation_time __asm__("D_L08_0015F3F8") = 0;

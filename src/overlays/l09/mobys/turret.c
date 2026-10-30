@@ -71,7 +71,7 @@ f32                 turret_camera_z_offset_gp __asm__("D_L09_00161CB4") = 0.2f;
 f32                 turret_beam_local_offset_gp[2] __asm__("D_L09_00161CC0") = {0.0f, -0.3f};
 
 /* a vector; declared small so Ps2EeAs reaches it through $gp */
-TurretShake l09_turret_shot_response_state __asm__("D_L09_00166E00") = {0};
+extern TurretShake l09_turret_shot_response_state __asm__("D_L09_00166E00");
 
 extern TurretBeam l09_turret_beam_light_slots[] __asm__("D_L09_00180440");
 /* turret_base.c defines it with a third float argument that it never reads. */

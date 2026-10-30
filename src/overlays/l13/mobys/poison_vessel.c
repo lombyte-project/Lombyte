@@ -236,7 +236,7 @@ char D_L13_001F5590[] = "Moby class %d UID:%d  Damage Received: %f\n";
 
 extern char sphere_hits_ed158[] __asm__("D_L13_00178200");
 
-int poison_vessel_blast_duration_frames_gp __asm__("D_L13_00161E2C") = 0x14;
+int poison_vessel_blast_duration_frames_gp __asm__("D_L13_00161E2C") = 20;
 
 f32 poison_vessel_blast_start_radius_gp __asm__("D_L13_00161E30") = 0.5f;
 

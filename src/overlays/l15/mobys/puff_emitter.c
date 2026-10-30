@@ -10,7 +10,7 @@ extern void FUN_L00_0026f080(float, float, char *, float *);
 
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-short vertical_effect_motion_scale_gp __asm__("D_L15_00162198") = 0;
+extern short vertical_effect_motion_scale_gp __asm__("D_L15_00162198") __attribute__((sda));
 
 int D_L15_0016219C = 3;
 

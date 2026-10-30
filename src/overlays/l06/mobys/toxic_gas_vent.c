@@ -43,9 +43,9 @@ int spark_color0 __asm__("D_L06_00161CFC") = 0x6070ff90;
 int spark_color1 __asm__("D_L06_00161D00") = 0x10b0ffc0;
 
 int spark_life_min __asm__("D_L06_00161D04") = 1;
-int spark_life_max __asm__("D_L06_00161D08") = 0x14;
-int spark_fade_min __asm__("D_L06_00161D0C") = 0x14;
-int spark_fade_max __asm__("D_L06_00161D10") = 0x28;
+int spark_life_max __asm__("D_L06_00161D08") = 20;
+int spark_fade_min __asm__("D_L06_00161D0C") = 20;
+int spark_fade_max __asm__("D_L06_00161D10") = 40;
 
 int spark_frames __asm__("D_L06_00161D14") = 0x1e;
 
@@ -75,7 +75,7 @@ typedef struct {
 } __attribute__((aligned(16))) Vx;
 
 extern f32   spark_speed_gp __asm__("D_L06_00161CEC") __attribute__((sda));
-short        toxic_gas_vent_max_collision_range_gp __asm__("D_L06_00161CF0") = 0;
+extern short toxic_gas_vent_max_collision_range_gp __asm__("D_L06_00161CF0") __attribute__((sda));
 extern void  release_voice_slot(int) __asm__("FUN_0022d798");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 

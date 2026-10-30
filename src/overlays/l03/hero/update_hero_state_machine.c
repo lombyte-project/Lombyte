@@ -70,7 +70,7 @@ extern float          fast_cos(float);
 extern float          fast_sin(float);
 extern float          vector_length_xy(void *);
 extern int D_00141660 NOT_SDA;
-extern int            D_L03_0015F6DC;
+extern int            l03_hero_run_start_frame __asm__("D_L03_0015F6DC");
 extern int            D_L03_0015F594 __attribute__((sda));
 extern int            D_L03_0015F73C;
 extern int D_L03_0016C880 NOT_SDA;
@@ -1509,7 +1509,7 @@ void update_hero_state_machine(void) {
                         hero_set_state(HERO_STATE_RUN, 0);
                         if (hero.state.current == HERO_STATE_RUN) {
                             hero.state.step = 1;
-                            set_hero_animation(4, D_L03_0015F6DC, scale_game_frames(0xC));
+                            set_hero_animation(4, l03_hero_run_start_frame, scale_game_frames(0xC));
                         }
                         configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 1, 0);
                         break;
@@ -2095,5 +2095,3 @@ void update_hero_state_machine(void) {
         hero.anim_seq_frames = 0;
     }
 }
-
-int D_L03_0015F6DC = 0;

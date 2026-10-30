@@ -214,19 +214,19 @@ void startlevel(void) {
 extern __typeof__(startlevel) func_001E9658 __attribute__((alias("FUN_001e9658")));
 
 volatile SoundDef l00_primary_sound_defs[7] = {
-    {      {0, 0x43000000, 0, 0x400, 0, 0, 0}, 0},
-    {      {0, 0x43000000, 0, 0x400, 0, 0, 0}, 0},
-    {{0, 0x43000000, 0, 0x400, 0, 0, 0x80000}, 0},
-    {{0, 0x43000000, 0, 0x400, 0, 0, 0x90000}, 0},
-    {{0, 0x43000000, 0, 0x400, 0, 0, 0x20000}, 0},
-    {{0, 0x43000000, 0, 0x400, 0, 0, 0x30000}, 0},
-    {{0, 0x43000000, 0, 0x400, 0, 0, 0x40000}, 0},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 8},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 9},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 2},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 3},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 4},
 };
 
 volatile SoundDef boot_sound_defs_b[5] = {
-    {      {0, 0x43000000, 0, 0x400, 0, 0, 0}, 0},
-    {{0, 0x43000000, 0, 0x400, 0, 0, 0x10000}, 0},
-    {{0, 0x43000000, 0, 0x400, 0, 0, 0x50000}, 0},
-    {{0, 0x43000000, 0, 0x400, 0, 0, 0x60000}, 0},
-    {{0, 0x43000000, 0, 0x400, 0, 0, 0x70000}, 0},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 1},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 5},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 6},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 7},
 };

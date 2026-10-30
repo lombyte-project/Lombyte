@@ -51,7 +51,7 @@ typedef struct Data_304098 {
 
 extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
 extern char         D_0013F3D0[] NOT_SDA;
-LevelCamera         l06_camera_lui __asm__("D_L06_00167400") = {0};
+extern LevelCamera  l06_camera_lui __asm__("D_L06_00167400") NOT_SDA;
 
 extern void
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");

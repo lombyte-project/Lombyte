@@ -31,27 +31,14 @@ typedef struct {
 
 extern PairB D_L11_00217758[];
 extern PairB D_L11_00162618[] MACRO_ADDR;
+
 /* The 17-batch set (emit_render_batches_with_pair_offset, loop of 0x11) and the 9-batch
    oil tanker set (loop of 9); stream element sizes: rnc/overlay/mesh_batch.h. */
-s32 D_L11_00200728[9] = {0x94, 0x89, 0x67, 4, 0x51, 0x7a, 0x5a, 0x65, 0xc};
+s32 oil_tanker_render_batch_vertex_counts[9] __asm__("D_L11_00200728") = {
+    148, 137, 103, 4, 81, 122, 90, 101, 12};
 
-s32 D_L11_00207900[17] = {0x94,
-                          0x94,
-                          0xf,
-                          0x1b,
-                          0x7a,
-                          0x91,
-                          0x94,
-                          0x94,
-                          0x43,
-                          0xd,
-                          0x13,
-                          0x1b,
-                          0x94,
-                          0x94,
-                          0x4f,
-                          0x29,
-                          0x50};
+s32 distance_faded_effect_batch_vertex_counts[17] __asm__("D_L11_00207900") = {
+    148, 148, 15, 27, 122, 145, 148, 148, 67, 13, 19, 27, 148, 148, 79, 41, 80};
 
 extern char D_L11_00217770[];
 extern void FUN_L00_001fde98(int, void *, void *, void *, int);
@@ -3513,23 +3500,24 @@ u32 distance_faded_effect_batch_colors_16[80] __asm__("D_L11_00215008") = {
     0xff03007f, 0xff03007f, 0xff03007f, 0x8003007f, 0xff03007f, 0x8003007f, 0xff03007f, 0xff03007f,
     0xff03007f, 0xff03007f, 0xff03007f, 0xff03007f, 0xff03007f, 0xff03007f, 0xff03007f, 0xff03007f};
 
-u32 *D_L11_00215220[17] = {&distance_faded_effect_batch_colors_0,
-                           &distance_faded_effect_batch_colors_1,
-                           &distance_faded_effect_batch_colors_2,
-                           &distance_faded_effect_batch_colors_3,
-                           &distance_faded_effect_batch_colors_4,
-                           &distance_faded_effect_batch_colors_5,
-                           &distance_faded_effect_batch_colors_6,
-                           &distance_faded_effect_batch_colors_7,
-                           &distance_faded_effect_batch_colors_8,
-                           &distance_faded_effect_batch_colors_9,
-                           &distance_faded_effect_batch_colors_10,
-                           &distance_faded_effect_batch_colors_11,
-                           &distance_faded_effect_batch_colors_12,
-                           &distance_faded_effect_batch_colors_13,
-                           &distance_faded_effect_batch_colors_14,
-                           &distance_faded_effect_batch_colors_15,
-                           &distance_faded_effect_batch_colors_16};
+u32 *distance_faded_effect_batch_color_tables[17] __asm__("D_L11_00215220") = {
+    distance_faded_effect_batch_colors_0,
+    distance_faded_effect_batch_colors_1,
+    distance_faded_effect_batch_colors_2,
+    distance_faded_effect_batch_colors_3,
+    distance_faded_effect_batch_colors_4,
+    distance_faded_effect_batch_colors_5,
+    distance_faded_effect_batch_colors_6,
+    distance_faded_effect_batch_colors_7,
+    distance_faded_effect_batch_colors_8,
+    distance_faded_effect_batch_colors_9,
+    distance_faded_effect_batch_colors_10,
+    distance_faded_effect_batch_colors_11,
+    distance_faded_effect_batch_colors_12,
+    distance_faded_effect_batch_colors_13,
+    distance_faded_effect_batch_colors_14,
+    distance_faded_effect_batch_colors_15,
+    distance_faded_effect_batch_colors_16};
 
 f32 oil_tanker_render_batch_positions_0[148][3] __asm__("D_L11_002007E0") = {
     {423.09406f,  512.0156f, 230.08984f},
@@ -5335,15 +5323,16 @@ u32 oil_tanker_render_batch_colors_8[12] __asm__("D_L11_00207830") = {0x8203007f
                                                                       0x8203007f,
                                                                       0x8203007f};
 
-u32 *D_L11_002078D8[9] = {&oil_tanker_render_batch_colors_0,
-                          &oil_tanker_render_batch_colors_1,
-                          &oil_tanker_render_batch_colors_2,
-                          &oil_tanker_render_batch_colors_3,
-                          &oil_tanker_render_batch_colors_4,
-                          &oil_tanker_render_batch_colors_5,
-                          &oil_tanker_render_batch_colors_6,
-                          &oil_tanker_render_batch_colors_7,
-                          &oil_tanker_render_batch_colors_8};
+u32 *oil_tanker_render_batch_color_tables[9] __asm__("D_L11_002078D8") = {
+    oil_tanker_render_batch_colors_0,
+    oil_tanker_render_batch_colors_1,
+    oil_tanker_render_batch_colors_2,
+    oil_tanker_render_batch_colors_3,
+    oil_tanker_render_batch_colors_4,
+    oil_tanker_render_batch_colors_5,
+    oil_tanker_render_batch_colors_6,
+    oil_tanker_render_batch_colors_7,
+    oil_tanker_render_batch_colors_8};
 
 /* The 5-batch set queued by FUN_L11_0031e858 (loop of 5); its position and UV tables
    (D_L11_002176F8, D_L11_00217710) are declared by that shared file. */
@@ -5889,51 +5878,6 @@ f32 oil_tanker_front_texture_2b_batch_uvs_4[35][2] __asm__("D_L11_002165D0") = {
     { 0.334036f,  0.132363f},
 };
 
-u32 oil_tanker_front_texture_2b_batch_colors_0[46] __asm__("D_L11_002172F0") = {
-    0x3007f,    0x3007f,    0x3007f,    0x3007f,    0x8003007f, 0x3007f,   0xff03007f, 0x3007f,
-    0x3007f,    0x3007f,    0x3007f,    0x3007f,    0x3007f,    0x3007f,   0x3007f,    0x3007f,
-    0x3007f,    0x3007f,    0x3007f,    0x3007f,    0x8003007f, 0x3007f,   0xff03007f, 0x3007f,
-    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0x8003007f, 0x3007f,   0x8003007f, 0x3007f,
-    0x8003007f, 0x8003007f, 0xff03007f, 0xff03007f, 0xff03007f, 0x3007f,   0xff03007f, 0x3007f,
-    0xff03007f, 0x3007f,    0xff03007f, 0x8003007f, 0x8003007f, 0xff03007f};
-
-u32 oil_tanker_front_texture_2b_batch_colors_1[33] __asm__("D_L11_002173A8") = {
-    0x3007f,    0x3007f,    0x3007f,    0x3007f,    0x3007f,    0x3007f,    0x3007f,
-    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f,
-    0xff03007f, 0xff03007f, 0x8003007f, 0xff03007f, 0x8003007f, 0x3007f,    0x8003007f,
-    0x3007f,    0x8003007f, 0x3007f,    0x8003007f, 0x3007f,    0xff03007f, 0x3007f,
-    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0x3007f};
-
-u32 oil_tanker_front_texture_2b_batch_colors_2[98] __asm__("D_L11_00217430") = {
-    0x3007f,    0x3007f,    0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f,
-    0x3007f,    0x8003007f, 0x3007f,    0x8003007f, 0x3007f,    0xff03007f, 0x3007f,    0x8003007f,
-    0x3007f,    0xff03007f, 0x3007f,    0x8003007f, 0x3007f,    0x8003007f, 0x3007f,    0x8003007f,
-    0x3007f,    0x8003007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f,
-    0x3007f,    0x8003007f, 0x3007f,    0x8003007f, 0x3007f,    0x8003007f, 0x3007f,    0x8003007f,
-    0x3007f,    0x8003007f, 0xff03007f, 0xff03007f, 0xff03007f, 0x8003007f, 0xff03007f, 0x8003007f,
-    0xff03007f, 0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f,
-    0xff03007f, 0x8003007f, 0xff03007f, 0x8003007f, 0xff03007f, 0x8003007f, 0xff03007f, 0xff03007f,
-    0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x8003007f, 0x8003007f,
-    0x8003007f, 0xff03007f, 0x8003007f, 0x8003007f, 0x8003007f, 0xff03007f, 0x3007f,    0xff03007f,
-    0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x8003007f, 0x8003007f, 0x8003007f, 0xff03007f,
-    0xff03007f, 0x8003007f, 0xff03007f, 0x8003007f, 0xff03007f, 0xff03007f, 0xff03007f, 0x3007f,
-    0x8003007f, 0x3007f};
-
-u32 oil_tanker_front_texture_2b_batch_colors_3[44] __asm__("D_L11_002175B8") = {
-    0x3007f,    0x3007f,    0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f,
-    0x3007f,    0x8003007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f,
-    0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0x8003007f, 0x3007f,    0x8003007f,
-    0x3007f,    0x8003007f, 0x3007f,    0x8003007f, 0xff03007f, 0xff03007f, 0xff03007f, 0xff03007f,
-    0x8003007f, 0x8003007f, 0x8003007f, 0xff03007f, 0x8003007f, 0xff03007f, 0x8003007f, 0x3007f,
-    0x8003007f, 0x3007f,    0xff03007f, 0x3007f};
-
-u32 oil_tanker_front_texture_2b_batch_colors_4[35] __asm__("D_L11_00217668") = {
-    0x3007f,    0x3007f,    0x3007f,    0x8003007f, 0x3007f,    0xff03007f, 0x3007f,
-    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f,
-    0x3007f,    0xff03007f, 0x3007f,    0x8003007f, 0x3007f,    0x8003007f, 0x3007f,
-    0x8003007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f, 0x3007f,    0xff03007f,
-    0x8003007f, 0xff03007f, 0xff03007f, 0xff03007f, 0xff03007f, 0x8003007f, 0xff03007f};
-
 /* Emits the 17 render batches offset by one pair entry (the oil tanker variant below emits 9). */
 void emit_render_batches_with_pair_offset(int pair_index) __asm__("FUN_L11_0031e6a8");
 
@@ -5942,11 +5886,11 @@ void emit_render_batches_with_pair_offset(int pair_index) {
     for (i = 0; i < 0x11; i++) {
         FUN_L08_00258090(D_L11_00217770,
                          render_batch_pair_sources[i],
-                         D_L11_00207900[i],
+                         distance_faded_effect_batch_vertex_counts[i],
                          &D_L11_00217758[pair_index]);
-        FUN_L00_001fde98(D_L11_00207900[i],
+        FUN_L00_001fde98(distance_faded_effect_batch_vertex_counts[i],
                          render_batch_triplet_sources[i],
-                         D_L11_00215220[i],
+                         distance_faded_effect_batch_color_tables[i],
                          D_L11_00217770,
                          1);
     }
@@ -5957,11 +5901,11 @@ void emit_oil_tanker_render_batches_with_pair_offset(int pair_index) {
     for (i = 0; i < 0x9; i++) {
         FUN_L08_00258090(D_L11_00217770,
                          oil_tanker_render_batch_pair_sources[i],
-                         D_L11_00200728[i],
+                         oil_tanker_render_batch_vertex_counts[i],
                          &D_L11_00162618[pair_index]);
-        FUN_L00_001fde98(D_L11_00200728[i],
+        FUN_L00_001fde98(oil_tanker_render_batch_vertex_counts[i],
                          oil_tanker_render_batch_triplet_sources[i],
-                         D_L11_002078D8[i],
+                         oil_tanker_render_batch_color_tables[i],
                          D_L11_00217770,
                          1);
     }
@@ -6038,7 +5982,7 @@ void draw_level11_distance_faded_effect_batches(struct Moby *moby) {
 /* triggers objects matching the moby's class */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003065F8), where it is exact; names translated to the US level program. */
 
-extern int D_L11_00162630[2] MACRO_ADDR;
+extern int distance_faded_effect_sine_phases[2] __asm__("D_L11_00162630") MACRO_ADDR;
 
 typedef struct {
     float f;
@@ -6073,17 +6017,38 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
     switch (moby->state) {
     case EFFECT_INITIALIZE:
         if (distance_faded_effect_color_tables_initialized_gp == 0) {
-            scale_rgba_tables(D_L11_00215220, 17, D_L11_00207900, 0.7f, 1.0f, 0.9f, 0.5f, 1);
-            scale_rgba_tables(D_L11_00217740, 5, D_L11_00215268, 0.5f, 0.5f, 0.5f, 1.0f, 1);
-            scale_rgba_tables(D_L11_002078D8, 9, D_L11_00200728, 0.25f, 0.25f, 0.25f, 0.7f, 1);
+            scale_rgba_tables(distance_faded_effect_batch_color_tables,
+                              17,
+                              distance_faded_effect_batch_vertex_counts,
+                              0.7f,
+                              1.0f,
+                              0.9f,
+                              0.5f,
+                              1);
+            scale_rgba_tables(oil_tanker_front_texture_2b_batch_color_tables,
+                              5,
+                              oil_tanker_front_texture_2b_batch_vertex_counts,
+                              0.5f,
+                              0.5f,
+                              0.5f,
+                              1.0f,
+                              1);
+            scale_rgba_tables(oil_tanker_render_batch_color_tables,
+                              9,
+                              oil_tanker_render_batch_vertex_counts,
+                              0.25f,
+                              0.25f,
+                              0.25f,
+                              0.7f,
+                              1);
             distance_faded_effect_color_tables_initialized_gp = 1;
         }
         moby->state = 1;
         for (i = 0; i < 3; i++) {
             D_L11_00217758[i].a = 0;
             D_L11_00217758[i].b = 0;
-            D_L11_00162630[0] = 0;
-            D_L11_00162630[1] = 0;
+            distance_faded_effect_sine_phases[0] = 0;
+            distance_faded_effect_sine_phases[1] = 0;
         }
         for (i = 0; i < 2; i++) {
             D_L11_00162618[i].a = 0;
@@ -6119,7 +6084,7 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
                                       0.52f,
                                       0.62f,
                                       0.06f,
-                                      (void *)D_L11_00162630);
+                                      (void *)distance_faded_effect_sine_phases);
             advance_scroll_offsets(2);
             if (effect_distance < 80.0f) {
                 D_L11_00162610_c = 0xFF;
@@ -6138,12 +6103,4 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
     }
 }
 
-int D_L11_00162630[2] = {0};
-
-s32 D_L11_00215268[5] = {0x2e, 0x21, 0x62, 0x2c, 0x23};
-
-u32 *D_L11_00217740[5] = {&oil_tanker_front_texture_2b_batch_colors_0,
-                          &oil_tanker_front_texture_2b_batch_colors_1,
-                          &oil_tanker_front_texture_2b_batch_colors_2,
-                          &oil_tanker_front_texture_2b_batch_colors_3,
-                          &oil_tanker_front_texture_2b_batch_colors_4};
+int distance_faded_effect_sine_phases[2] __asm__("D_L11_00162630") = {0};

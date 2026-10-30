@@ -412,7 +412,7 @@ typedef struct {
 extern char          D_L00_00196D00[] NOT_SDA;
 extern unsigned char D_0015EDB4_macro[4] __asm__("D_0015EDB4") MACRO_ADDR;
 extern int           FUN_L00_0024f698(void *);
-short                hero_blend_curve_frame_counts __asm__("D_L00_0015F6E0") = 0xb;
+extern short         hero_blend_curve_frame_counts __asm__("D_L00_0015F6E0") __attribute__((sda));
 extern void          clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 extern void          clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
 extern void blend_hero_slot3_mapped_animation_pair(int, int, float) __asm__("FUN_L00_00231e78");

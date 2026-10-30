@@ -1683,11 +1683,11 @@ typedef struct {
     char           padC[4];
 } ShipLevelEntry;
 
-/* "no final place for jet during victory, so use init pos\n" and its NUL. */
 char fighter_jet_missing_victory_placement_message[56] __asm__("D_L17_001E6E00") =
     "no final place for jet during victory, so use init pos\n";
 
-char D_L17_001E6E38[] = "no final place for hero during victory, so just fall\n";
+char fighter_jet_missing_victory_hero_placement_message[] __asm__("D_L17_001E6E38") =
+    "no final place for hero during victory, so just fall\n";
 
 #include "rnc/overlay/l17/mobys/fighter_jet_globals.h"
 
@@ -2075,7 +2075,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 moby->scale = *(float *)(moby->pclass + 0x24);
                 refresh_moby_spatial_bounds_from_basis(moby);
                 if (ship_vars->exit_path == -1) {
-                    debug_print(D_L17_001E6E38);
+                    debug_print(fighter_jet_missing_victory_hero_placement_message);
                 } else {
                     if (ship_vars->i11C > 0) {
                         jet_group_state(ship_vars->i11C, 0, 0, 0);

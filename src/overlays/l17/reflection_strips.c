@@ -68,16 +68,18 @@ extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 void        compute_reflection_sphere_map_uvs(int n, V3 *b, V3 *a, int unused, float *out) __asm__("FUN_L17_002f54d8");
 
-int D_L17_001623F0[2] = {26, 26};
+int reflection_strip_pair0_vertex_counts[2] __asm__("D_L17_001623F0") = {26, 26};
 
 /* Strip meshes. Each strip i has counts[i] vertices: a position (MeshPoint,
    read as x, y, z with a 12-byte stride by compute_reflection_sphere_map_uvs
    and as 3 words per vertex by FUN_L00_001fde98), a direction (MeshPoint, read
    the same way) and an RGBA colour word (one word per vertex in
-   FUN_L00_001fde98). The vertex counts come from the strips' count tables
-   (D_L17_001623F0 = {26, 26}, D_L17_00162420 = {66, 0}); the code at the two
-   other copies of each draw function reads its own tables, listed below. */
-f32 D_L17_001DE150[26][3] = {
+   FUN_L00_001fde98). reflection_strip_pair0_* are draw_reflection_strips' tables
+   (two strips), reflection_strip0_* draw_reflection_strip's (one strip); the
+   code at the two other copies of each draw function reads its own tables,
+   listed below. The *_unused_pair_tables (2 floats per vertex) are passed as
+   compute_reflection_sphere_map_uvs's unused fourth argument. */
+f32 reflection_strip_pair0_positions_0[26][3] __asm__("D_L17_001DE150") = {
     { 674.8834f, 541.42615f, 174.65663f},
     {674.67725f, 541.51013f, 169.23643f},
     {676.72876f,  545.3363f, 174.65668f},
@@ -106,7 +108,7 @@ f32 D_L17_001DE150[26][3] = {
     {716.08606f, 541.51013f, 169.23643f},
 };
 
-f32 D_L17_001DE288[26][3] = {
+f32 reflection_strip_pair0_positions_1[26][3] __asm__("D_L17_001DE288") = {
     { 676.6713f, 540.69055f, 180.74506f},
     { 675.4068f,  541.2112f, 176.10654f},
     {678.35925f,  544.2676f, 180.74507f},
@@ -135,13 +137,16 @@ f32 D_L17_001DE288[26][3] = {
     { 715.3114f,  541.1921f, 176.10652f},
 };
 
-MeshPoint *D_L17_001623F8[2] = {D_L17_001DE150, D_L17_001DE288};
+MeshPoint *reflection_strip_pair0_position_tables[2] __asm__("D_L17_001623F8") = {
+    reflection_strip_pair0_positions_0, reflection_strip_pair0_positions_1};
 
 extern float D_L17_001DE3C0[];
 extern float D_L17_001DE490[];
-float       *D_L17_00162400[2] = {D_L17_001DE3C0, D_L17_001DE490};
 
-f32 D_L17_001DE560[26][3] = {
+float *reflection_strip_pair0_unused_pair_tables[2] __asm__("D_L17_00162400") = {D_L17_001DE3C0,
+                                                                                 D_L17_001DE490};
+
+f32 reflection_strip_pair0_directions_0[26][3] __asm__("D_L17_001DE560") = {
     {-0.903587f, 0.426433f, 0.041043f},
     {-0.903587f, 0.426433f, 0.041043f},
     {-0.844697f, 0.521747f, 0.041391f},
@@ -170,7 +175,7 @@ f32 D_L17_001DE560[26][3] = {
     { 0.902928f, 0.426137f, 0.055925f},
 };
 
-f32 D_L17_001DE698[26][3] = {
+f32 reflection_strip_pair0_directions_1[26][3] __asm__("D_L17_001DE698") = {
     {-0.867531f, 0.409369f, 0.282502f},
     {-0.867531f, 0.409369f, 0.282502f},
     {-0.810818f, 0.500773f, 0.283248f},
@@ -199,21 +204,23 @@ f32 D_L17_001DE698[26][3] = {
     { 0.869938f, 0.410513f, 0.273289f},
 };
 
-MeshPoint *D_L17_00162408[2] = {D_L17_001DE560, D_L17_001DE698};
+MeshPoint *reflection_strip_pair0_direction_tables[2] __asm__("D_L17_00162408") = {
+    reflection_strip_pair0_directions_0, reflection_strip_pair0_directions_1};
 
-u32 D_L17_001DE7D0[26] = {0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f};
+u32 reflection_strip_pair0_colours_0[26] __asm__("D_L17_001DE7D0") = {
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 D_L17_001DE838[26] = {0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f};
+u32 reflection_strip_pair0_colours_1[26] __asm__("D_L17_001DE838") = {
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 *D_L17_00162410[2] = {D_L17_001DE7D0, D_L17_001DE838};
+u32 *reflection_strip_pair0_colour_tables[2] __asm__("D_L17_00162410") = {
+    reflection_strip_pair0_colours_0, reflection_strip_pair0_colours_1};
 
 void draw_reflection_strips(void) __asm__("FUN_L17_002f5690");
 
@@ -227,14 +234,14 @@ void draw_reflection_strips(void) {
     font_queue_vu_state();
     reflection_uv_coordinates = (float *)reflection_strip_uv_buffer;
     for (i = 0; i < 2; i++) {
-        compute_reflection_sphere_map_uvs(D_L17_001623F0[i],
-                                          ((int *)D_L17_00162408)[i],
-                                          ((int *)D_L17_001623F8)[i],
-                                          ((int *)D_L17_00162400)[i],
+        compute_reflection_sphere_map_uvs(reflection_strip_pair0_vertex_counts[i],
+                                          ((int *)reflection_strip_pair0_direction_tables)[i],
+                                          ((int *)reflection_strip_pair0_position_tables)[i],
+                                          ((int *)reflection_strip_pair0_unused_pair_tables)[i],
                                           reflection_uv_coordinates);
-        FUN_L00_001fde98(D_L17_001623F0[i],
-                         ((int *)D_L17_001623F8)[i],
-                         ((int *)D_L17_00162410)[i],
+        FUN_L00_001fde98(reflection_strip_pair0_vertex_counts[i],
+                         ((int *)reflection_strip_pair0_position_tables)[i],
+                         ((int *)reflection_strip_pair0_colour_tables)[i],
                          reflection_uv_coordinates,
                          1);
     }
@@ -243,7 +250,7 @@ void draw_reflection_strips(void) {
 
 extern char reflection_sphere_map_uv_buffer[] __asm__("D_L17_001DF6A0");
 
-f32 D_L17_001DED50[66][3] = {
+f32 reflection_strip0_positions[66][3] __asm__("D_L17_001DED50") = {
     {  527.208f, 619.89685f, 152.49997f},
     { 524.0342f, 619.89685f, 160.56702f},
     { 527.0433f,  621.5328f, 152.49997f},
@@ -312,9 +319,10 @@ f32 D_L17_001DED50[66][3] = {
     { 524.0342f, 611.92413f, 160.56702f},
 };
 
-MeshPoint *D_L17_00162440[2] = {D_L17_001DED50, 0};
+MeshPoint *reflection_strip0_position_tables[2] __asm__("D_L17_00162440") = {
+    reflection_strip0_positions, 0};
 
-f32 D_L17_001DF280[66][3] = {
+f32 reflection_strip0_directions[66][3] __asm__("D_L17_001DF280") = {
     { 0.926455f,  0.093292f, 0.364662f},
     { 0.926455f,  0.093292f, 0.364662f},
     { 0.908762f,    0.1818f, 0.364628f},
@@ -383,9 +391,10 @@ f32 D_L17_001DF280[66][3] = {
     { 0.924356f, -0.115368f,  0.36367f},
 };
 
-MeshPoint *D_L17_00162450[2] = {D_L17_001DF280, 0};
+MeshPoint *reflection_strip0_direction_tables[2] __asm__("D_L17_00162450") = {
+    reflection_strip0_directions, 0};
 
-u32 D_L17_001DF598[66] = {
+u32 reflection_strip0_colours[66] __asm__("D_L17_001DF598") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
@@ -396,12 +405,12 @@ u32 D_L17_001DF598[66] = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 *D_L17_00162458[2] = {D_L17_001DF598, 0};
+u32 *reflection_strip0_colour_tables[2] __asm__("D_L17_00162458") = {reflection_strip0_colours, 0};
 
-int D_L17_00162420[2] = {66, 0};
+int reflection_strip0_vertex_counts[2] __asm__("D_L17_00162420") = {66, 0};
 
 extern float D_L17_001DF070[];
-float       *D_L17_00162448[2] = {D_L17_001DF070, 0};
+float *reflection_strip0_unused_pair_tables[2] __asm__("D_L17_00162448") = {D_L17_001DF070, 0};
 
 void draw_reflection_strip(void) __asm__("FUN_L17_002f59a8");
 
@@ -415,14 +424,14 @@ void draw_reflection_strip(void) {
     font_queue_vu_state();
     sphere_map_uv_coordinates = (float *)reflection_sphere_map_uv_buffer;
     for (i = 0; i < 1; i++) {
-        compute_reflection_sphere_map_uvs(D_L17_00162420[i],
-                                          (V3 *)((int *)D_L17_00162450)[i],
-                                          (V3 *)((int *)D_L17_00162440)[i],
-                                          ((int *)D_L17_00162448)[i],
+        compute_reflection_sphere_map_uvs(reflection_strip0_vertex_counts[i],
+                                          (V3 *)((int *)reflection_strip0_direction_tables)[i],
+                                          (V3 *)((int *)reflection_strip0_position_tables)[i],
+                                          ((int *)reflection_strip0_unused_pair_tables)[i],
                                           sphere_map_uv_coordinates);
-        FUN_L00_001fde98(D_L17_00162420[i],
-                         ((int *)D_L17_00162440)[i],
-                         ((int *)D_L17_00162458)[i],
+        FUN_L00_001fde98(reflection_strip0_vertex_counts[i],
+                         ((int *)reflection_strip0_position_tables)[i],
+                         ((int *)reflection_strip0_colour_tables)[i],
                          sphere_map_uv_coordinates,
                          1);
     }
@@ -474,17 +483,18 @@ void compute_vertex_to_reference_sphere_map_uvs(
 }
 
 /* Tables and strip meshes of the other two copies of draw_reflection_strips
-   (at 0x2F5CC0 and 0x2F62F0) and of draw_reflection_strip (at 0x2F5FD8 and
-   0x2F6608): the same code reading its own count, position, uv, direction and
-   colour tables. Vertex counts from those count tables: {14, 28}, {119, 77},
-   {46} and {66}; draw_reflection_strip's loop reads entry 0 only. */
-s32 D_L17_00162460[2] = {0xe, 0x1c};
+   (pair1: the copy at 0x2F5CC0, pair2: 0x2F62F0) and of draw_reflection_strip
+   (strip1: 0x2F5FD8, strip2: 0x2F6608): the same code reading its own count,
+   position, unused pair, direction and colour tables. */
+s32 reflection_strip_pair1_vertex_counts[2] __asm__("D_L17_00162460") = {14, 28};
 
 extern float D_L17_001DFD70[];
 extern float D_L17_001DFDE0[];
-float       *D_L17_00162470[2] = {&D_L17_001DFD70, &D_L17_001DFDE0};
 
-f32 D_L17_001DFB70[14][3] = {
+float *reflection_strip_pair1_unused_pair_tables[2] __asm__("D_L17_00162470") = {D_L17_001DFD70,
+                                                                                 D_L17_001DFDE0};
+
+f32 reflection_strip_pair1_positions_0[14][3] __asm__("D_L17_001DFB70") = {
     { 515.7769f, 351.20242f,  139.9068f},
     {515.38245f, 351.61414f, 146.90398f},
     { 517.1812f, 352.95706f,  139.9068f},
@@ -501,7 +511,7 @@ f32 D_L17_001DFB70[14][3] = {
     {518.62286f, 373.37268f, 146.90398f},
 };
 
-f32 D_L17_001DFC18[28][3] = {
+f32 reflection_strip_pair1_positions_1[28][3] __asm__("D_L17_001DFC18") = {
     { 509.7719f, 346.21225f,  139.9068f},
     {509.46198f, 346.59586f, 146.90398f},
     {507.67697f,  345.1571f,  139.9068f},
@@ -532,9 +542,10 @@ f32 D_L17_001DFC18[28][3] = {
     {480.52225f, 373.37268f, 146.90398f},
 };
 
-MeshPoint *D_L17_00162468[2] = {&D_L17_001DFB70, &D_L17_001DFC18};
+MeshPoint *reflection_strip_pair1_position_tables[2] __asm__("D_L17_00162468") = {
+    reflection_strip_pair1_positions_0, reflection_strip_pair1_positions_1};
 
-f32 D_L17_001DFEC0[14][3] = {
+f32 reflection_strip_pair1_directions_0[14][3] __asm__("D_L17_001DFEC0") = {
     {0.777701f,  -0.62242f, 0.088173f},
     {0.777701f,  -0.62242f, 0.088173f},
     {0.828881f, -0.546417f, 0.076497f},
@@ -551,7 +562,7 @@ f32 D_L17_001DFEC0[14][3] = {
     { 0.96378f,  0.257076f, 0.070988f},
 };
 
-f32 D_L17_001DFF68[28][3] = {
+f32 reflection_strip_pair1_directions_1[28][3] __asm__("D_L17_001DFF68") = {
     { 0.448766f, -0.891003f, 0.068725f},
     { 0.448766f, -0.891003f, 0.068725f},
     { 0.369142f, -0.922696f, 0.070827f},
@@ -582,37 +593,39 @@ f32 D_L17_001DFF68[28][3] = {
     {-0.963478f,  0.256974f, 0.075331f},
 };
 
-MeshPoint *D_L17_00162478[2] = {&D_L17_001DFEC0, &D_L17_001DFF68};
+MeshPoint *reflection_strip_pair1_direction_tables[2] __asm__("D_L17_00162478") = {
+    reflection_strip_pair1_directions_0, reflection_strip_pair1_directions_1};
 
-u32 D_L17_001E00B8[14] = {0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f};
+u32 reflection_strip_pair1_colours_0[14] __asm__("D_L17_001E00B8") = {0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f,
+                                                                      0x7f7f7f7f};
 
-u32 D_L17_001E00F0[28] = {0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
-                          0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
+u32 reflection_strip_pair1_colours_1[28] __asm__("D_L17_001E00F0") = {
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
+    0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 *D_L17_00162480[2] = {&D_L17_001E00B8, &D_L17_001E00F0};
+u32 *reflection_strip_pair1_colour_tables[2] __asm__("D_L17_00162480") = {
+    reflection_strip_pair1_colours_0, reflection_strip_pair1_colours_1};
 
-s32 D_L17_00162490[1] = {0x2e};
+s32 reflection_strip1_vertex_counts[1] __asm__("D_L17_00162490") = {46};
 
 extern float D_L17_001E0840[];
-float       *D_L17_001624B8[1] = {&D_L17_001E0840};
+float       *reflection_strip1_unused_pair_tables[1] __asm__("D_L17_001624B8") = {D_L17_001E0840};
 
-f32 D_L17_001E0610[46][3] = {
+f32 reflection_strip1_positions[46][3] __asm__("D_L17_001E0610") = {
     {351.31015f, 302.03717f, 180.51582f},
     {350.56842f,   301.991f, 173.53543f},
     {351.31015f, 307.33096f, 180.51582f},
@@ -661,9 +674,10 @@ f32 D_L17_001E0610[46][3] = {
     { 384.1732f,   301.991f, 173.53543f},
 };
 
-MeshPoint *D_L17_001624B0[1] = {&D_L17_001E0610};
+MeshPoint *reflection_strip1_position_tables[1] __asm__("D_L17_001624B0") = {
+    reflection_strip1_positions};
 
-f32 D_L17_001E09B0[46][3] = {
+f32 reflection_strip1_directions[46][3] __asm__("D_L17_001E09B0") = {
     { 0.994402f,       0.0f, -0.105664f},
     { 0.994402f,       0.0f, -0.105664f},
     {  0.99383f, -0.015621f, -0.108652f},
@@ -712,9 +726,10 @@ f32 D_L17_001E09B0[46][3] = {
     {-0.994402f,       0.0f,  -0.10566f},
 };
 
-MeshPoint *D_L17_001624C0[1] = {&D_L17_001E09B0};
+MeshPoint *reflection_strip1_direction_tables[1] __asm__("D_L17_001624C0") = {
+    reflection_strip1_directions};
 
-u32 D_L17_001E0BD8[46] = {
+u32 reflection_strip1_colours[46] __asm__("D_L17_001E0BD8") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
@@ -722,15 +737,17 @@ u32 D_L17_001E0BD8[46] = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 *D_L17_001624C8[1] = {&D_L17_001E0BD8};
+u32 *reflection_strip1_colour_tables[1] __asm__("D_L17_001624C8") = {reflection_strip1_colours};
 
-s32 D_L17_001624D0[2] = {0x77, 0x4d};
+s32 reflection_strip_pair2_vertex_counts[2] __asm__("D_L17_001624D0") = {119, 77};
 
 extern float D_L17_001E1AA0[];
 extern float D_L17_001E1E60[];
-float       *D_L17_001624E0[2] = {&D_L17_001E1AA0, &D_L17_001E1E60};
 
-f32 D_L17_001E1160[119][3] = {
+float *reflection_strip_pair2_unused_pair_tables[2] __asm__("D_L17_001624E0") = {D_L17_001E1AA0,
+                                                                                 D_L17_001E1E60};
+
+f32 reflection_strip_pair2_positions_0[119][3] __asm__("D_L17_001E1160") = {
     { 333.5018f,  536.7269f, 156.07521f},
     {332.18622f,  537.2214f, 158.25644f},
     { 333.9643f,  539.3643f, 156.07506f},
@@ -852,7 +869,7 @@ f32 D_L17_001E1160[119][3] = {
     {330.11508f, 538.16437f, 160.43881f},
 };
 
-f32 D_L17_001E16F8[77][3] = {
+f32 reflection_strip_pair2_positions_1[77][3] __asm__("D_L17_001E16F8") = {
     {304.73425f,  563.2344f, 161.98314f},
     {304.93796f, 560.63025f,  164.8313f},
     {307.12097f,  563.2594f, 161.91696f},
@@ -932,9 +949,10 @@ f32 D_L17_001E16F8[77][3] = {
     {307.50775f,  555.6929f, 169.60574f},
 };
 
-MeshPoint *D_L17_001624D8[2] = {&D_L17_001E1160, &D_L17_001E16F8};
+MeshPoint *reflection_strip_pair2_position_tables[2] __asm__("D_L17_001624D8") = {
+    reflection_strip_pair2_positions_0, reflection_strip_pair2_positions_1};
 
-f32 D_L17_001E20C8[119][3] = {
+f32 reflection_strip_pair2_directions_0[119][3] __asm__("D_L17_001E20C8") = {
     {-0.832169f,  0.145898f, -0.534985f},
     { -0.75591f,  0.238733f, -0.586767f},
     {-0.865414f,   0.19174f, -0.454716f},
@@ -1056,7 +1074,7 @@ f32 D_L17_001E20C8[119][3] = {
     {-0.605954f,  0.336896f, -0.720639f},
 };
 
-f32 D_L17_001E2660[77][3] = {
+f32 reflection_strip_pair2_directions_1[77][3] __asm__("D_L17_001E2660") = {
     {-0.010955f, -0.738362f, -0.674315f},
     {-0.010251f, -0.723455f, -0.689957f},
     {-0.011019f, -0.738702f, -0.673942f},
@@ -1136,9 +1154,10 @@ f32 D_L17_001E2660[77][3] = {
     { -0.00785f, -0.674565f, -0.738168f},
 };
 
-MeshPoint *D_L17_001624E8[2] = {&D_L17_001E20C8, &D_L17_001E2660};
+MeshPoint *reflection_strip_pair2_direction_tables[2] __asm__("D_L17_001624E8") = {
+    reflection_strip_pair2_directions_0, reflection_strip_pair2_directions_1};
 
-u32 D_L17_001E2A00[119] = {
+u32 reflection_strip_pair2_colours_0[119] __asm__("D_L17_001E2A00") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
@@ -1155,7 +1174,7 @@ u32 D_L17_001E2A00[119] = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 D_L17_001E2BE0[77] = {
+u32 reflection_strip_pair2_colours_1[77] __asm__("D_L17_001E2BE0") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
@@ -1167,14 +1186,15 @@ u32 D_L17_001E2BE0[77] = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 *D_L17_001624F0[2] = {&D_L17_001E2A00, &D_L17_001E2BE0};
+u32 *reflection_strip_pair2_colour_tables[2] __asm__("D_L17_001624F0") = {
+    reflection_strip_pair2_colours_0, reflection_strip_pair2_colours_1};
 
-s32 D_L17_00162500[1] = {0x42};
+s32 reflection_strip2_vertex_counts[1] __asm__("D_L17_00162500") = {66};
 
 extern float D_L17_001E34F0[];
-float       *D_L17_00162528[1] = {&D_L17_001E34F0};
+float       *reflection_strip2_unused_pair_tables[1] __asm__("D_L17_00162528") = {D_L17_001E34F0};
 
-f32 D_L17_001E31D0[66][3] = {
+f32 reflection_strip2_positions[66][3] __asm__("D_L17_001E31D0") = {
     { 554.8556f, 441.49615f, 147.95636f},
     {555.89044f, 441.49615f, 153.63228f},
     { 554.5512f, 444.58636f, 147.95636f},
@@ -1243,9 +1263,10 @@ f32 D_L17_001E31D0[66][3] = {
     {555.89044f, 441.49615f, 153.63228f},
 };
 
-MeshPoint *D_L17_00162520[1] = {&D_L17_001E31D0};
+MeshPoint *reflection_strip2_position_tables[1] __asm__("D_L17_00162520") = {
+    reflection_strip2_positions};
 
-f32 D_L17_001E3700[66][3] = {
+f32 reflection_strip2_directions[66][3] __asm__("D_L17_001E3700") = {
     { 0.979196f,      -0.0f, -0.178529f},
     { 0.979196f,      -0.0f, -0.178529f},
     { 0.960382f,  0.191034f, -0.178527f},
@@ -1314,9 +1335,10 @@ f32 D_L17_001E3700[66][3] = {
     { 0.979196f,      -0.0f, -0.178529f},
 };
 
-MeshPoint *D_L17_00162530[1] = {&D_L17_001E3700};
+MeshPoint *reflection_strip2_direction_tables[1] __asm__("D_L17_00162530") = {
+    reflection_strip2_directions};
 
-u32 D_L17_001E3A18[66] = {
+u32 reflection_strip2_colours[66] __asm__("D_L17_001E3A18") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
@@ -1327,4 +1349,4 @@ u32 D_L17_001E3A18[66] = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 *D_L17_00162538[1] = {&D_L17_001E3A18};
+u32 *reflection_strip2_colour_tables[1] __asm__("D_L17_00162538") = {reflection_strip2_colours};

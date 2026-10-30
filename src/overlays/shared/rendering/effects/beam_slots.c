@@ -185,7 +185,7 @@ extern BeamOrigin    beam_origins[] __asm__("D_L00_001E6D50");
 extern Q_2E3700      D_L00_001E7130_2E3700[] __asm__("D_L00_001E6DE0");
 extern Q_2E3700      D_L00_001E7160_2E3700[] __asm__("D_L00_001E6E10");
 extern char          D_0013E633_2E3700[] __asm__("D_0013F5E0");
-float                D_L00_00161BF0_gp __asm__("D_L00_00161BF0") = 5.0f;
+float                beam_endpoint_light_radius_gp __asm__("D_L00_00161BF0") = 5.0f;
 extern float         beam_scroll[] __asm__("D_L00_00161C78") MACRO_ADDR;
 extern TrailSlot     l00_beam_strand_axis_and_origin_slots[] __asm__("D_L00_001E6D30");
 extern f32           D_L00_001E6E10_e3388[][4] __asm__("D_L00_001E6E10");
@@ -467,27 +467,32 @@ void update_slot_panes_and_effects(int unused, int beam) {
             qcopy(first_endpoint_effect_position, &beam_origins[beam]);
             first_endpoint_effect_position[2] -= 0.25f;
             if (beam_endpoint_light[beam] == -1) {
-                beam_endpoint_light[beam] = allocate_colored_effect_slot(
-                    first_endpoint_effect_position, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
+                beam_endpoint_light[beam] =
+                    allocate_colored_effect_slot(first_endpoint_effect_position,
+                                                 beam_endpoint_light_radius_gp,
+                                                 0.0f,
+                                                 1.0f,
+                                                 1.0f,
+                                                 2.0f);
             }
             if (beam_endpoint_light[beam] >= 0) {
                 PointLight *light = &point_lights[beam_endpoint_light[beam]];
 
                 qcopy(&light->position, first_endpoint_effect_position);
-                light->position.f[3] = D_L00_00161BF0_gp;
+                light->position.f[3] = beam_endpoint_light_radius_gp;
             }
         }
         if (beam_endpoint_effect_flags[beam] & 2) {
             tip[2] += 0.5f;
             if (beam_tip_light[beam] == -1) {
-                beam_tip_light[beam] =
-                    allocate_colored_effect_slot(tip, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
+                beam_tip_light[beam] = allocate_colored_effect_slot(
+                    tip, beam_endpoint_light_radius_gp, 0.0f, 1.0f, 1.0f, 2.0f);
             }
             if (beam_tip_light[beam] >= 0) {
                 PointLight *light = &point_lights[beam_tip_light[beam]];
 
                 qcopy(&light->position, tip);
-                light->position.f[3] = D_L00_00161BF0_gp;
+                light->position.f[3] = beam_endpoint_light_radius_gp;
             }
         }
     }

@@ -45,22 +45,33 @@ typedef struct {
     float x, y, z, radius;
 } L16SingleSphere_2ea128;
 
-int D_L16_00162008[4] __attribute__((section(".sdata"))) = {148, 75, 45, 0};
+int reflection_mesh_trio_b_vertex_counts[4] __asm__("D_L16_00162008")
+    __attribute__((section(".sdata"))) = {148, 75, 45, 0};
 
-extern float D_L16_001E2DB0[444]; /* 148 points x 3 floats */
-extern float D_L16_001E34A0[225]; /* 75 points x 3 floats */
-extern float D_L16_001E3828[135]; /* 45 points x 3 floats */
-float       *D_L16_00162018[4]
-    __attribute__((section(".sdata"))) = {D_L16_001E2DB0, D_L16_001E34A0, D_L16_001E3828, 0};
+extern float
+    reflection_mesh_trio_b_positions_0[444] __asm__("D_L16_001E2DB0"); /* 148 points x 3 floats */
+extern float
+    reflection_mesh_trio_b_positions_1[225] __asm__("D_L16_001E34A0"); /* 75 points x 3 floats */
+extern float
+       reflection_mesh_trio_b_positions_2[135] __asm__("D_L16_001E3828"); /* 45 points x 3 floats */
+float *reflection_mesh_trio_b_position_tables[4] __asm__("D_L16_00162018")
+
+    __attribute__((section(".sdata"))) = {reflection_mesh_trio_b_positions_0,
+                                          reflection_mesh_trio_b_positions_1,
+                                          reflection_mesh_trio_b_positions_2,
+                                          0};
 
 /* Direction and colour streams of the three meshes (tables D_L16_00162038 / D_L16_00162048,
    read by FUN_L16_002e8d40). */
-extern float D_L16_001E42B8[444]; /* 148 points x 3 floats */
-extern float D_L16_001E49A8[225]; /* 75 points x 3 floats */
-extern float D_L16_001E4D30[135]; /* 45 points x 3 floats */
-extern u32   D_L16_001E4F50[148]; /* 148 RGBA words, one per point */
-extern u32   D_L16_001E51A0[75];  /* 75 RGBA words, one per point */
-extern u32   D_L16_001E52D0[45];  /* 45 RGBA words, one per point */
+extern float
+    reflection_mesh_trio_b_directions_0[444] __asm__("D_L16_001E42B8"); /* 148 points x 3 floats */
+extern float
+    reflection_mesh_trio_b_directions_1[225] __asm__("D_L16_001E49A8"); /* 75 points x 3 floats */
+extern float
+    reflection_mesh_trio_b_directions_2[135] __asm__("D_L16_001E4D30"); /* 45 points x 3 floats */
+extern u32 reflection_mesh_trio_b_colours_0[148] __asm__("D_L16_001E4F50"); /* 148 RGBA words, one per point */
+extern u32 reflection_mesh_trio_b_colours_1[75] __asm__("D_L16_001E51A0"); /* 75 RGBA words, one per point */
+extern u32 reflection_mesh_trio_b_colours_2[45] __asm__("D_L16_001E52D0"); /* 45 RGBA words, one per point */
 
 extern L16SingleSphere_2ea128 D_L16_001E5390[] NOT_SDA;
 void update_reflection_mesh_trio_b(struct Moby *moby) __asm__("FUN_L16_002ea128");
@@ -83,9 +94,9 @@ void update_reflection_mesh_trio_b(struct Moby *moby) {
             minx = miny = minz = 1024.0f;
             {
                 int k;
-                for (k = 0; k < D_L16_00162008[i]; k++) {
+                for (k = 0; k < reflection_mesh_trio_b_vertex_counts[i]; k++) {
                     float x, y, z;
-                    verts = ((float **)D_L16_00162018)[i] + k * 3;
+                    verts = ((float **)reflection_mesh_trio_b_position_tables)[i] + k * 3;
                     x = verts[0];
                     if (x > maxx)
                         maxx = x;
@@ -111,12 +122,15 @@ void update_reflection_mesh_trio_b(struct Moby *moby) {
                 sphere->y = (maxy + miny) * 0.5f;
                 sphere->z = (maxz + minz) * 0.5f;
             }
-            for (j = 0; j < D_L16_00162008[i]; j++) {
+            for (j = 0; j < reflection_mesh_trio_b_vertex_counts[i]; j++) {
                 float vertex_to_center_distance;
                 out = (float *)(D_L16_001E5390 + i);
-                vertex_position[0] = ((float **)D_L16_00162018)[i][j * 3 + 0];
-                vertex_position[1] = ((float **)D_L16_00162018)[i][j * 3 + 1];
-                vertex_position[2] = ((float **)D_L16_00162018)[i][j * 3 + 2];
+                vertex_position[0] =
+                    ((float **)reflection_mesh_trio_b_position_tables)[i][j * 3 + 0];
+                vertex_position[1] =
+                    ((float **)reflection_mesh_trio_b_position_tables)[i][j * 3 + 1];
+                vertex_position[2] =
+                    ((float **)reflection_mesh_trio_b_position_tables)[i][j * 3 + 2];
                 vertex_to_center_distance = fast_vec_dist(vertex_position, out);
                 if (vertex_to_center_distance > out[3])
                     out[3] = vertex_to_center_distance;
@@ -132,9 +146,12 @@ void update_reflection_mesh_trio_b(struct Moby *moby) {
     }
 }
 
-s32 D_L16_0016CDE4[1] __attribute__((section(".data"))) = {0};
+/* Word 0x184 of the cutscene state (D_L16_0016CC60): the moby whose joints
+   update_cutscene_joint_trails draws trails from. */
+char *l16_cutscene_joint_trail_source_moby __asm__("D_L16_0016CDE4")
+    __attribute__((section(".data"))) = 0;
 
-float D_L16_001E2DB0[444] = {
+float reflection_mesh_trio_b_positions_0[444] __asm__("D_L16_001E2DB0") = {
     308.75183f,  212.93814f,  123.24388f,  308.35938f, 212.7756f,  124.76073f,  307.07635f,
     216.07294f,  123.24388f,  306.72314f,  215.83693f, 124.76073f, 304.82147f,  218.82074f,
     123.24388f,  304.5211f,   218.52037f,  124.76073f, 302.0738f,  221.07578f,  123.24388f,
@@ -200,7 +217,7 @@ float D_L16_001E2DB0[444] = {
     126.277565f, 285.76266f,  221.05785f,  127.7361f,  285.46664f, 221.77246f,  126.277565f,
     282.9448f,   219.55162f,  127.7361f};
 
-float D_L16_001E34A0[225] = {
+float reflection_mesh_trio_b_positions_1[225] __asm__("D_L16_001E34A0") = {
     285.46664f,  221.77246f,  126.277565f, 282.9448f,   219.55162f,  127.7361f,   285.46664f,
     221.77246f,  126.277565f, 282.51505f,  220.19476f,  126.277565f, 285.22363f,  222.35907f,
     124.76073f,  282.51505f,  220.19476f,  126.277565f, 282.1623f,   220.72269f,  124.76073f,
@@ -235,7 +252,7 @@ float D_L16_001E34A0[225] = {
     194.47437f,  127.7361f,   277.80563f,  196.5144f,   126.277565f, 278.44873f,  196.94417f,
     127.7361f};
 
-float D_L16_001E3828[135] = {
+float reflection_mesh_trio_b_positions_2[135] __asm__("D_L16_001E3828") = {
     308.7511f,   199.06007f,  123.24388f,  307.07532f,  195.92543f, 123.24388f, 308.35867f,
     199.22267f,  124.76073f,  306.7221f,   196.16144f,  124.76073f, 307.77206f, 199.46568f,
     126.277565f, 306.19418f,  196.51425f,  126.277565f, 307.05746f, 199.76175f, 127.7361f,
@@ -257,7 +274,7 @@ float D_L16_001E3828[135] = {
     301.48352f,  191.80428f,  126.277565f, 304.5198f,   193.47827f, 124.76073f, 301.83624f,
     191.2763f,   124.76073f};
 
-float D_L16_001E42B8[444] = {
+float reflection_mesh_trio_b_directions_0[444] __asm__("D_L16_001E42B8") = {
     0.849555f,  0.454068f,  0.268475f,  0.831834f,  0.444599f,  0.326513f,  0.797105f,  0.532571f,
     0.268474f,  0.780479f,  0.521463f,  0.326515f,  0.677885f,  0.677847f,  0.268474f,  0.663746f,
     0.663709f,  0.326513f,  0.532612f,  0.797077f,  0.268473f,  0.521504f,  0.780453f,  0.32651f,
@@ -315,7 +332,7 @@ float D_L16_001E42B8[444] = {
     -0.344187f, 0.830929f,  0.425652f,  -0.326521f, 0.788278f,  0.512016f,  -0.344187f, 0.830929f,
     0.425652f,  -0.474036f, 0.709429f,  0.512014f};
 
-float D_L16_001E49A8[225] = {
+float reflection_mesh_trio_b_directions_1[225] __asm__("D_L16_001E49A8") = {
     -0.344187f, 0.830929f,  0.425652f,  -0.474036f, 0.709429f,  0.512014f,  -0.344187f, 0.830929f,
     0.425652f,  -0.499685f, 0.747813f,  0.425653f,  -0.359211f, 0.867201f,  0.326512f,  -0.499685f,
     0.747813f,  0.425653f,  -0.521496f, 0.780457f,  0.326513f,  -0.499685f, 0.747813f,  0.425653f,
@@ -346,7 +363,7 @@ float D_L16_001E49A8[225] = {
     -0.603289f, -0.603359f, 0.512014f,  -0.747792f, -0.49972f,  0.425651f,  -0.709408f, -0.47407f,
     0.512012f};
 
-float D_L16_001E4D30[135] = {
+float reflection_mesh_trio_b_directions_2[135] __asm__("D_L16_001E4D30") = {
     0.849515f,  -0.454151f, 0.268462f,  0.797053f,  -0.532651f, 0.268468f,  0.831793f,  -0.444681f,
     0.326507f,  0.780427f,  -0.521541f, 0.326512f,  0.796998f,  -0.426085f, 0.425654f,  0.747783f,
     -0.49973f,  0.425654f,  0.75609f,   -0.404214f, 0.512015f,  0.7094f,    -0.47408f,  0.512015f,
@@ -365,7 +382,7 @@ float D_L16_001E4D30[135] = {
     0.473974f,  -0.709471f, 0.512015f,  0.63592f,   -0.636013f, 0.425654f,  0.499616f,  -0.747858f,
     0.425655f,  0.663678f,  -0.663775f, 0.326516f,  0.521424f,  -0.780503f, 0.326515f};
 
-u32 D_L16_001E4F50[148] = {
+u32 reflection_mesh_trio_b_colours_0[148] __asm__("D_L16_001E4F50") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
@@ -386,7 +403,7 @@ u32 D_L16_001E4F50[148] = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 D_L16_001E51A0[75] = {
+u32 reflection_mesh_trio_b_colours_1[75] __asm__("D_L16_001E51A0") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
@@ -398,7 +415,7 @@ u32 D_L16_001E51A0[75] = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 D_L16_001E52D0[45] = {
+u32 reflection_mesh_trio_b_colours_2[45] __asm__("D_L16_001E52D0") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,

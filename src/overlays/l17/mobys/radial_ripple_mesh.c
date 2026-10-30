@@ -61,14 +61,14 @@ typedef struct {
     P2 p[2];
 } T4;
 
-T4 D_L17_00162268 = {
+T4 ripple_pair_uv_scroll_factors __asm__("D_L17_00162268") = {
     {{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}
 };
 
 extern float FUN_L00_00200260(float, float);
-int          D_L17_00162248 = 128;
-int          D_L17_0016224C = 45;
-int          D_L17_00162250 = 64;
+int          ripple_pair_alpha_1_fix __asm__("D_L17_00162248") = 128;
+int          ripple_pair_effect_texture_id __asm__("D_L17_0016224C") = 45;
+int          ripple_pair_vertex_alpha __asm__("D_L17_00162250") = 64;
 
 #include "rnc/overlay/l17/mobys/radial_ripple_mesh_globals.h"
 
@@ -80,33 +80,36 @@ extern float ripple_pair_uv_scroll_rate_gp __asm__("D_L17_00162260") __attribute
 extern void  FUN_L00_001fde98(int, int, int, void *, int);
 void         font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
-/* The two strips: D_L17_00162210 holds their vertex counts (148 and 11) and
+/* The two strips: ripple_pair_vertex_counts holds their vertex counts (148 and 11) and
    each table below one stream per strip. draw_moby_radial_ripple_mesh_pair
    reads 3 floats per template vertex (12-byte stride) and 2 per template uv
    (8-byte stride), writes 3 floats per world vertex, 2 per scrolled uv and
    one colour word per vertex, for j < count; FUN_L00_001fde98 reads the same
    streams with the same strides. */
-int D_L17_00162210[2] = {0x94, 0xb};
+int ripple_pair_vertex_counts[2] __asm__("D_L17_00162210") = {148, 11};
 
-f32 D_L17_001DAF30[148][3] = {0};
+f32 ripple_pair_world_vertices_0[148][3] __asm__("D_L17_001DAF30") = {0};
 
-f32 D_L17_001DBD10[11][3] = {0};
+f32 ripple_pair_world_vertices_1[11][3] __asm__("D_L17_001DBD10") = {0};
 
-int D_L17_00162218[2] = {(int)D_L17_001DAF30, (int)D_L17_001DBD10};
+int ripple_pair_world_vertex_tables[2] __asm__("D_L17_00162218") = {
+    (int)ripple_pair_world_vertices_0, (int)ripple_pair_world_vertices_1};
 
-f32 D_L17_001DB620[148][2] = {0};
+f32 ripple_pair_scrolled_uvs_0[148][2] __asm__("D_L17_001DB620") = {0};
 
-f32 D_L17_001DBD98[11][2] = {0};
+f32 ripple_pair_scrolled_uvs_1[11][2] __asm__("D_L17_001DBD98") = {0};
 
-int D_L17_00162220[2] = {(int)D_L17_001DB620, (int)D_L17_001DBD98};
+int ripple_pair_scrolled_uv_tables[2] __asm__("D_L17_00162220") = {(int)ripple_pair_scrolled_uvs_0,
+                                                                   (int)ripple_pair_scrolled_uvs_1};
 
-u32 D_L17_001DBAC0[148] = {0};
+u32 ripple_pair_colours_0[148] __asm__("D_L17_001DBAC0") = {0};
 
-u32 D_L17_001DBDF0[11] = {0};
+u32 ripple_pair_colours_1[11] __asm__("D_L17_001DBDF0") = {0};
 
-int D_L17_00162228[2] = {(int)D_L17_001DBAC0, (int)D_L17_001DBDF0};
+int ripple_pair_colour_tables[2] __asm__("D_L17_00162228") = {(int)ripple_pair_colours_0,
+                                                              (int)ripple_pair_colours_1};
 
-f32 D_L17_001DA040[148][3] = {
+f32 ripple_pair_template_vertices_0[148][3] __asm__("D_L17_001DA040") = {
     {-17.275997f,  17.276007f,    0.0f},
     {-13.571114f,  20.310587f,    0.0f},
     {-20.310606f,  13.571103f,    0.0f},
@@ -257,7 +260,7 @@ f32 D_L17_001DA040[148][3] = {
     {       0.0f,        0.0f,    0.0f},
 };
 
-f32 D_L17_001DA730[11][3] = {
+f32 ripple_pair_template_vertices_1[11][3] __asm__("D_L17_001DA730") = {
     {-5.537441f,       0.0f,    0.0f},
     {      0.0f,       0.0f,    0.0f},
     { -5.34586f, -5.345845f,    0.0f},
@@ -271,9 +274,10 @@ f32 D_L17_001DA730[11][3] = {
     {  5.34586f,  5.345848f, -2e-06f},
 };
 
-int D_L17_00162230[2] = {(int)D_L17_001DA040, (int)D_L17_001DA730};
+int ripple_pair_template_vertex_tables[2] __asm__("D_L17_00162230") = {
+    (int)ripple_pair_template_vertices_0, (int)ripple_pair_template_vertices_1};
 
-f32 D_L17_001DA7B8[148][2] = {
+f32 ripple_pair_template_uvs_0[148][2] __asm__("D_L17_001DA7B8") = {
     { 3.639759f,  3.639754f},
     { 4.191267f,  2.966426f},
     { 2.966426f,  4.191267f},
@@ -424,7 +428,7 @@ f32 D_L17_001DA7B8[148][2] = {
     {      0.5f,       0.5f},
 };
 
-f32 D_L17_001DAC58[11][2] = {
+f32 ripple_pair_template_uvs_1[11][2] __asm__("D_L17_001DAC58") = {
     {      0.5f,  1.506379f},
     {      0.5f,       0.5f},
     {-0.471559f,  1.471561f},
@@ -438,7 +442,8 @@ f32 D_L17_001DAC58[11][2] = {
     {  1.47156f, -0.471561f},
 };
 
-int D_L17_00162238[2] = {(int)D_L17_001DA7B8, (int)D_L17_001DAC58};
+int ripple_pair_template_uv_tables[2] __asm__("D_L17_00162238") = {(int)ripple_pair_template_uvs_0,
+                                                                   (int)ripple_pair_template_uvs_1};
 
 void draw_moby_radial_ripple_mesh_pair(struct Moby *moby) __asm__("FUN_L17_002f04d0");
 
@@ -450,8 +455,8 @@ void draw_moby_radial_ripple_mesh_pair(struct Moby *moby) {
     int         i, j, uv_strip_index, uv_vertex_index, draw_strip_index;
 
     scale = convert_integer_to_float(D_L17_0015F5CC) * (ripple_pair_uv_scroll_rate_gp * frame_time);
-    vu1_add_g_sregister(6, get_effect_texture(D_L17_0016224C));
-    vu1_add_g_sregister(0x42, ((long)D_L17_00162248 << 32) | 0x44);
+    vu1_add_g_sregister(6, get_effect_texture(ripple_pair_effect_texture_id));
+    vu1_add_g_sregister(0x42, ((long)ripple_pair_alpha_1_fix << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
     ripple_vars->f0 = ripple_vars->f4;
@@ -459,10 +464,10 @@ void draw_moby_radial_ripple_mesh_pair(struct Moby *moby) {
                                          360.0f / scale_time(ripple_pair_phase_period_gp) *
                                              DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
-    color = (D_L17_00162250 << 24) | (b << 16) | (g << 8) | r;
+    color = (ripple_pair_vertex_alpha << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 2; i++) {
-        for (j = 0; j < D_L17_00162210[i]; j++) {
-            int   *template_vertex_array_slot = D_L17_00162230 + i;
+        for (j = 0; j < ripple_pair_vertex_counts[i]; j++) {
+            int   *template_vertex_array_slot = ripple_pair_template_vertex_tables + i;
             float *p = (float *)(*template_vertex_array_slot + j * 12);
             float  t = ripple_pair_z_amplitude_gp *
                       fast_sin(fast_add_rotations(
@@ -471,31 +476,33 @@ void draw_moby_radial_ripple_mesh_pair(struct Moby *moby) {
                                                ripple_pair_radial_phase_distance_scale_gp) *
                               6.2831855f / ripple_pair_radial_phase_distance_scale_gp),
                           ripple_vars->f4));
-            *(float *)(j * 12 + D_L17_00162218[i]) = p[0] + moby->pos.x;
-            *(float *)(j * 12 + D_L17_00162218[i] + 4) = p[1] + moby->pos.y;
-            *(float *)(j * 12 + D_L17_00162218[i] + 8) = p[2] + moby->pos.z + t;
-            *(int *)(j * 4 + D_L17_00162228[i]) = color;
+            *(float *)(j * 12 + ripple_pair_world_vertex_tables[i]) = p[0] + moby->pos.x;
+            *(float *)(j * 12 + ripple_pair_world_vertex_tables[i] + 4) = p[1] + moby->pos.y;
+            *(float *)(j * 12 + ripple_pair_world_vertex_tables[i] + 8) = p[2] + moby->pos.z + t;
+            *(int *)(j * 4 + ripple_pair_colour_tables[i]) = color;
         }
     }
     for (i = 0; i < 2; i++) {
         for (uv_strip_index = 0; uv_strip_index < 2; uv_strip_index++) {
-            for (uv_vertex_index = 0; uv_vertex_index < D_L17_00162210[uv_strip_index];
+            for (uv_vertex_index = 0; uv_vertex_index < ripple_pair_vertex_counts[uv_strip_index];
                  uv_vertex_index++) {
-                T4 uv_scroll_factors = D_L17_00162268;
-                *(float *)(uv_vertex_index * 8 + D_L17_00162220[uv_strip_index]) =
-                    *(float *)(uv_vertex_index * 8 + D_L17_00162238[uv_strip_index]) +
+                T4 uv_scroll_factors = ripple_pair_uv_scroll_factors;
+                *(float *)(uv_vertex_index * 8 + ripple_pair_scrolled_uv_tables[uv_strip_index]) =
+                    *(float *)(uv_vertex_index * 8 +
+                               ripple_pair_template_uv_tables[uv_strip_index]) +
                     FUN_L00_00200260(scale * uv_scroll_factors.p[i].v[0], 1.0f);
-                *(float *)(uv_vertex_index * 8 + D_L17_00162220[uv_strip_index] + 4) =
-                    *(float *)(uv_vertex_index * 8 + D_L17_00162238[uv_strip_index] + 4) +
-                    FUN_L00_00200260(scale * uv_scroll_factors.p[i].v[1], 1.0f);
+                *(float *)(uv_vertex_index * 8 + ripple_pair_scrolled_uv_tables[uv_strip_index] +
+                           4) = *(float *)(uv_vertex_index * 8 +
+                                           ripple_pair_template_uv_tables[uv_strip_index] + 4) +
+                                FUN_L00_00200260(scale * uv_scroll_factors.p[i].v[1], 1.0f);
             }
         }
         font_queue_vu_state();
         for (draw_strip_index = 0; draw_strip_index < 2; draw_strip_index++) {
-            FUN_L00_001fde98(D_L17_00162210[draw_strip_index],
-                             D_L17_00162218[draw_strip_index],
-                             D_L17_00162228[draw_strip_index],
-                             (void *)D_L17_00162220[draw_strip_index],
+            FUN_L00_001fde98(ripple_pair_vertex_counts[draw_strip_index],
+                             ripple_pair_world_vertex_tables[draw_strip_index],
+                             ripple_pair_colour_tables[draw_strip_index],
+                             (void *)ripple_pair_scrolled_uv_tables[draw_strip_index],
                              1);
         }
     }
@@ -523,7 +530,7 @@ typedef struct {
     float z;
 } RingPt;
 
-/* The ring has D_L17_00162280[0] = 89 vertices: draw_ripple_ring's loops run
+/* The ring has ring_ripple_vertex_counts[0] = 89 vertices: draw_ripple_ring's loops run
    i < 89 over each of these streams. */
 RingPt l17_ripple_ring_template_vertices[89] __asm__("D_L17_001DBE20") = {
     {-3.744727f,  12.785391f,  2e-06f},
@@ -619,7 +626,7 @@ RingPt l17_ripple_ring_template_vertices[89] __asm__("D_L17_001DBE20") = {
 
 RingPt l17_ripple_ring_world_vertices[89] __asm__("D_L17_001DC680") = {0};
 
-T4_c D_L17_001622D0 = {
+T4_c ring_ripple_uv_scroll_factors __asm__("D_L17_001622D0") = {
     {{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}
 };
 
@@ -719,19 +726,21 @@ float ring_template_uvs[89][2] __asm__("D_L17_001DC250") = {
 
 float ring_scrolled_uvs[89][2] __asm__("D_L17_001DCAB0") = {0};
 
-int D_L17_00162280[2] = {0x59, 0};
+int ring_ripple_vertex_counts[2] __asm__("D_L17_00162280") = {89, 0};
 
-int D_L17_001622A0[2] = {(int)l17_ripple_ring_world_vertices, 0};
+int ring_ripple_world_vertex_tables[2] __asm__("D_L17_001622A0") = {
+    (int)l17_ripple_ring_world_vertices, 0};
 
-int D_L17_001622A8[2] = {(int)ring_scrolled_uvs, 0};
+int ring_ripple_scrolled_uv_tables[2] __asm__("D_L17_001622A8") = {(int)ring_scrolled_uvs, 0};
 
 int ring_vertex_colors[89] __asm__("D_L17_001DCD78") = {0};
 
-int D_L17_001622B0[2] = {(int)ring_vertex_colors, 0x80};
+/* draw_ripple_ring reads entry 0 only. */
+int ring_ripple_colour_tables[2] __asm__("D_L17_001622B0") = {(int)ring_vertex_colors, 0x80};
 
-int D_L17_001622B4 = 128;
-int D_L17_001622B8 = 45;
-int D_L17_001622BC = 64;
+int ring_ripple_alpha_1_fix __asm__("D_L17_001622B4") = 128;
+int ring_ripple_effect_texture_id __asm__("D_L17_001622B8") = 45;
+int ring_ripple_vertex_alpha __asm__("D_L17_001622BC") = 64;
 
 #include "rnc/overlay/l17/mobys/radial_ripple_mesh_data/draw_ripple_ring.h"
 
@@ -746,8 +755,8 @@ void draw_ripple_ring(struct Moby *moby) {
     int           i, j, ring_uv_vertex_index, k;
 
     scale = convert_integer_to_float(D_L17_0015F5CC) * (ring_ripple_uv_scroll_rate_gp * frame_time);
-    vu1_add_g_sregister(6, get_effect_texture(D_L17_001622B8));
-    vu1_add_g_sregister(0x42, ((long)D_L17_001622B4 << 32) | 0x44);
+    vu1_add_g_sregister(6, get_effect_texture(ring_ripple_effect_texture_id));
+    vu1_add_g_sregister(0x42, ((long)ring_ripple_alpha_1_fix << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, ((long)0xFF90 << 32) | 0x260);
     ring_ripple_vars->f0 = ring_ripple_vars->f4;
@@ -755,8 +764,8 @@ void draw_ripple_ring(struct Moby *moby) {
                                               360.0f / scale_time(ring_ripple_phase_period_gp) *
                                                   DEG_TO_RAD * frame_time);
     get_moby_color(moby, &r, &g, &b);
-    color = (D_L17_001622BC << 24) | (b << 16) | (g << 8) | r;
-    for (i = 0; i < D_L17_00162280[0]; i++) {
+    color = (ring_ripple_vertex_alpha << 24) | (b << 16) | (g << 8) | r;
+    for (i = 0; i < ring_ripple_vertex_counts[0]; i++) {
         RingPt *p = &l17_ripple_ring_template_vertices[i];
         float   w =
             ring_ripple_z_amplitude_gp *
@@ -771,9 +780,9 @@ void draw_ripple_ring(struct Moby *moby) {
         ring_vertex_colors[i] = color;
     }
     for (j = 0; j < 2; j++) {
-        for (ring_uv_vertex_index = 0; ring_uv_vertex_index < D_L17_00162280[0];
+        for (ring_uv_vertex_index = 0; ring_uv_vertex_index < ring_ripple_vertex_counts[0];
              ring_uv_vertex_index++) {
-            ring_uv_scroll_factors = D_L17_001622D0;
+            ring_uv_scroll_factors = ring_ripple_uv_scroll_factors;
             ring_scrolled_uvs[ring_uv_vertex_index][0] =
                 ring_template_uvs[ring_uv_vertex_index][0] +
                 FUN_L00_00200260(scale * ring_uv_scroll_factors.p[j].v[0], 1.0f);
@@ -783,10 +792,10 @@ void draw_ripple_ring(struct Moby *moby) {
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {
-            FUN_L00_001fde98(D_L17_00162280[k],
-                             D_L17_001622A0[k],
-                             D_L17_001622B0[k],
-                             (void *)D_L17_001622A8[k],
+            FUN_L00_001fde98(ring_ripple_vertex_counts[k],
+                             ring_ripple_world_vertex_tables[k],
+                             ring_ripple_colour_tables[k],
+                             (void *)ring_ripple_scrolled_uv_tables[k],
                              1);
         }
     }
@@ -804,13 +813,13 @@ typedef struct {
     float angle;
 } RingVars;
 
-Quad4 D_L17_00162390 = {
+Quad4 radial_ripple_uv_scroll_factors __asm__("D_L17_00162390") = {
     {1.0f, -0.62831855f, 1.0f, 0.62831855f}
 };
 
 extern float ripple_uv_scroll_rate_gp __asm__("D_L17_0016238C") __attribute__((sda));
 
-float D_L17_001DD760[135] = {
+float radial_ripple_template_vertices[135] __asm__("D_L17_001DD760") = {
     -7.788906f, -7.788906f, 0.005259f,  -7.788906f, -3.894453f, 0.005259f,  -3.894453f, -7.788906f,
     0.005259f,  -3.894453f, -3.894453f, 0.005259f,  0.0f,       -7.788906f, 0.005259f,  0.0f,
     -3.894453f, 0.005259f,  3.894453f,  -7.788906f, 0.005259f,  3.894453f,  -3.894453f, 0.005259f,
@@ -829,7 +838,7 @@ float D_L17_001DD760[135] = {
     3.894453f,  3.894453f,  0.005259f,  0.0f,       0.0f,       0.005259f,  0.0f,       3.894453f,
     0.005259f,  -3.894453f, 0.0f,       0.005259f,  -3.894453f, 3.894453f,  0.005259f};
 
-float D_L17_001DD980[45][2] = {
+float radial_ripple_template_uvs[45][2] __asm__("D_L17_001DD980") = {
     { 0.0f,  0.0f},
     { 0.0f, 0.25f},
     {0.25f,  0.0f},
@@ -877,23 +886,25 @@ float D_L17_001DD980[45][2] = {
     {0.25f, 0.75f},
 };
 
-float D_L17_001DDBA0[135] = {0};
+float radial_ripple_world_vertices[135] __asm__("D_L17_001DDBA0") = {0};
 
-float D_L17_001DDDC0[45][2] = {0};
+float radial_ripple_scrolled_uvs[45][2] __asm__("D_L17_001DDDC0") = {0};
 
-int D_L17_00162340[2] = {0x2d, 0};
+int radial_ripple_vertex_counts[2] __asm__("D_L17_00162340") = {45, 0};
 
-int D_L17_00162360[2] = {(int)D_L17_001DDBA0, 0};
+int radial_ripple_world_vertex_tables[2] __asm__("D_L17_00162360") = {
+    (int)radial_ripple_world_vertices, 0};
 
-int D_L17_00162368[2] = {(int)D_L17_001DDDC0, 0};
+int radial_ripple_scrolled_uv_tables[2] __asm__("D_L17_00162368") = {
+    (int)radial_ripple_scrolled_uvs, 0};
 
-int D_L17_001DDF28[45] = {0};
+int radial_ripple_colours[45] __asm__("D_L17_001DDF28") = {0};
 
-int D_L17_00162370[1] = {(int)D_L17_001DDF28};
+int radial_ripple_colour_tables[1] __asm__("D_L17_00162370") = {(int)radial_ripple_colours};
 
-int          D_L17_00162374 = 128;
-int          D_L17_00162378 = 45;
-int          D_L17_0016237C = 64;
+int          radial_ripple_alpha_1_fix __asm__("D_L17_00162374") = 128;
+int          radial_ripple_effect_texture_id __asm__("D_L17_00162378") = 45;
+int          radial_ripple_vertex_alpha __asm__("D_L17_0016237C") = 64;
 extern float ripple_radial_phase_distance_scale_gp __asm__("D_L17_00162380") __attribute__((sda));
 extern float ripple_phase_period_gp __asm__("D_L17_00162384") __attribute__((sda));
 extern float ripple_z_amplitude_gp __asm__("D_L17_00162388") __attribute__((sda));
@@ -916,8 +927,8 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     Quad4       *v_scroll_factors;
     float       *output_vertex;
     scale = convert_integer_to_float(D_L17_0015F5CC) * (ripple_uv_scroll_rate_gp * frame_time);
-    vu1_add_g_sregister(6, get_effect_texture(D_L17_00162378));
-    vu1_add_g_sregister(0x42, ((long)D_L17_00162374 << 32) | 0x44);
+    vu1_add_g_sregister(6, get_effect_texture(radial_ripple_effect_texture_id));
+    vu1_add_g_sregister(0x42, ((long)radial_ripple_alpha_1_fix << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     data->prev = data->angle;
@@ -926,10 +937,10 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     get_moby_color(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
     v_scroll_factors = (Quad4 *)&uv_scroll_factors.f[1];
-    color = (D_L17_0016237C << 24) | (b << 16) | (g << 8) | r;
-    output_vertex = D_L17_001DDBA0;
+    color = (radial_ripple_vertex_alpha << 24) | (b << 16) | (g << 8) | r;
+    output_vertex = radial_ripple_world_vertices;
     do {
-        float *template_vertex = &D_L17_001DD760[i * 3];
+        float *template_vertex = &radial_ripple_template_vertices[i * 3];
         float  x = template_vertex[0];
         float  y = template_vertex[1];
         float  rad = square_root(x * x + y * y);
@@ -938,49 +949,54 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
                                        ripple_radial_phase_distance_scale_gp);
         float  z = fast_sin(fast_add_rotations(w, data->angle));
         output_vertex[0] = template_vertex[0] + moby->pos.x;
-        *(float *)((char *)D_L17_001DDBA0 + 4 + output_vertex_byte_offset) =
+        *(float *)((char *)radial_ripple_world_vertices + 4 + output_vertex_byte_offset) =
             template_vertex[1] + moby->pos.y;
         output_vertex[2] = template_vertex[2] + moby->pos.z + ripple_z_amplitude_gp * z;
-        D_L17_001DDF28[i] = color;
+        radial_ripple_colours[i] = color;
         i++;
         output_vertex_byte_offset += 12;
         output_vertex += 3;
     } while (i < 45);
     for (j = 0; j < 2; j++) {
         for (uv_vertex_index = 0; uv_vertex_index < 45; uv_vertex_index++) {
-            uv_scroll_factors = D_L17_00162390;
-            D_L17_001DDDC0[uv_vertex_index][0] =
-                D_L17_001DD980[uv_vertex_index][0] +
+            uv_scroll_factors = radial_ripple_uv_scroll_factors;
+            radial_ripple_scrolled_uvs[uv_vertex_index][0] =
+                radial_ripple_template_uvs[uv_vertex_index][0] +
                 FUN_L00_00200260(scale * uv_scroll_factors.f[j * 2], 1.0f);
-            D_L17_001DDDC0[uv_vertex_index][1] =
-                D_L17_001DD980[uv_vertex_index][1] +
+            radial_ripple_scrolled_uvs[uv_vertex_index][1] =
+                radial_ripple_template_uvs[uv_vertex_index][1] +
                 FUN_L00_00200260(scale * v_scroll_factors->f[j * 2], 1.0f);
         }
         font_queue_vu_state();
         for (k = 0; k < 1; k++) {
-            FUN_L00_001fde98(D_L17_00162340[k],
-                             D_L17_00162360[k],
-                             D_L17_00162370[k],
-                             (void *)D_L17_00162368[k],
+            FUN_L00_001fde98(radial_ripple_vertex_counts[k],
+                             radial_ripple_world_vertex_tables[k],
+                             radial_ripple_colour_tables[k],
+                             (void *)radial_ripple_scrolled_uv_tables[k],
                              1);
         }
     }
 }
 
 /* The second copy of draw_ripple_ring (at 0x2F0D08) runs the same code over
-   its own tables: vertex count D_L17_001622E0[0] = 45, world vertices,
-   scrolled uvs and colours through D_L17_00162300 / 00162308 / 00162310, and
-   templates and template uvs at the addresses the copy loads. The k < 1 draw
-   loop reads entry 0 of each table. */
-int D_L17_001622E0[1] = {0x2d};
+   its own tables (ring_ripple_copy2_*): 45 vertices, the world vertex,
+   scrolled uv and colour tables, and the templates and template uvs at the
+   addresses the copy loads. The k < 1 draw loop reads entry 0 of each table. */
+int ring_ripple_copy2_vertex_counts[1] __asm__("D_L17_001622E0") = {45};
 
-int D_L17_00162300[1] = {0x1dd320};
+extern RingPt ring_ripple_copy2_world_vertices[45] __asm__("D_L17_001DD320");
+extern float  ring_ripple_copy2_scrolled_uvs[45][2] __asm__("D_L17_001DD540");
+extern int    ring_ripple_copy2_colours[45] __asm__("D_L17_001DD6A8");
 
-int D_L17_00162308[1] = {0x1dd540};
+int ring_ripple_copy2_world_vertex_tables[1] __asm__("D_L17_00162300") = {
+    (int)ring_ripple_copy2_world_vertices};
 
-int D_L17_00162310[1] = {0x1dd6a8};
+int ring_ripple_copy2_scrolled_uv_tables[1] __asm__("D_L17_00162308") = {
+    (int)ring_ripple_copy2_scrolled_uvs};
 
-RingPt D_L17_001DCEE0[45] = {
+int ring_ripple_copy2_colour_tables[1] __asm__("D_L17_00162310") = {(int)ring_ripple_copy2_colours};
+
+RingPt ring_ripple_copy2_template_vertices[45] __asm__("D_L17_001DCEE0") = {
     {-7.788906f, -7.788906f, 0.005259f},
     {-7.788906f, -3.894453f, 0.005259f},
     {-3.894453f, -7.788906f, 0.005259f},
@@ -1028,7 +1044,7 @@ RingPt D_L17_001DCEE0[45] = {
     {-3.894453f,  3.894453f, 0.005259f},
 };
 
-float D_L17_001DD100[45][2] = {
+float ring_ripple_copy2_template_uvs[45][2] __asm__("D_L17_001DD100") = {
     { 0.0f,  0.0f},
     { 0.0f, 0.25f},
     {0.25f,  0.0f},
@@ -1076,8 +1092,8 @@ float D_L17_001DD100[45][2] = {
     {0.25f, 0.75f},
 };
 
-RingPt D_L17_001DD320[45] = {0};
+RingPt ring_ripple_copy2_world_vertices[45] __asm__("D_L17_001DD320") = {0};
 
-float D_L17_001DD540[45][2] = {0};
+float ring_ripple_copy2_scrolled_uvs[45][2] __asm__("D_L17_001DD540") = {0};
 
-int D_L17_001DD6A8[45] = {0};
+int ring_ripple_copy2_colours[45] __asm__("D_L17_001DD6A8") = {0};

@@ -284,7 +284,7 @@ extern f32                    D_0015ED6C;
 extern GbHit                  D_L06_001745C0;
 extern Moby                  *D_L06_0015FFD8;
 extern GbMoby *D_L06_001745D8 NOT_SDA;
-GbStats                       l06_gadgebot_command_range_stats __asm__("D_L06_0017EC58") = {0};
+extern GbStats                l06_gadgebot_command_range_stats __asm__("D_L06_0017EC58");
 
 extern int           D_00141610[];
 extern int           D_L06_001AC180[];

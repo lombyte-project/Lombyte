@@ -41,8 +41,8 @@ struct RiserVars {
     s32 timer;
 };
 
-extern s32     level_completed_save_id_bits[] __asm__("D_L04_001BA650");
-LevelCollected l04_save_id_collection_state __asm__("D_L04_001BB3B0") = {0};
+extern s32            level_completed_save_id_bits[] __asm__("D_L04_001BA650");
+extern LevelCollected l04_save_id_collection_state __asm__("D_L04_001BB3B0");
 
 extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 

@@ -45,7 +45,7 @@ extern void             draw_geometry_quad(void *, void *, int) __asm__("FUN_001
 
 extern float          FUN_L04_001f1978(float);
 extern s32            rand(void);
-int                   spiderbot_effect_spawn_count_gp __asm__("D_L15_00161558") = 0x28;
+int                   spiderbot_effect_spawn_count_gp __asm__("D_L15_00161558") = 40;
 float                 spiderbot_effect_scale_gp __asm__("D_L15_0016155C") = 0.75f;
 float                 spiderbot_effect_lifetime_range_end_gp __asm__("D_L15_00161560") = 5.0f;
 extern u8             D_L15_00174460[];

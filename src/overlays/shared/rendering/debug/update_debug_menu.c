@@ -20,7 +20,7 @@ typedef struct {
 
 #include "rnc/overlay/shared/rendering/debug/update_debug_menu_globals.h"
 
-s32              debug_text_queue_count_gp __asm__("D_L00_0015EFC4") = 0;
+extern s32       debug_text_queue_count_gp __asm__("D_L00_0015EFC4") __attribute__((sda));
 extern void     *D_L00_0015EFC0 __attribute__((sda));
 extern E001f36f8 l00_debug_text_queue_entries[] __asm__("D_L00_0016A840");
 u8               D_L00_0016A040[0x800] = {0};
@@ -464,7 +464,7 @@ extern char  add_sample_format[] __asm__("D_L00_001E7970");
 extern char  start_point_format[] __asm__("D_L00_001E7990");
 extern u8    mission_state[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern s32   occlusion_sample_count __asm__("D_L00_0015F614");
-f32         *occlusion_samples __asm__("D_L00_00173E20") NOT_SDA = 0;
+extern f32  *occlusion_samples __asm__("D_L00_00173E20") NOT_SDA;
 extern u8    D_L00_0015F444;
 extern f32   D_L00_0015F448;
 extern char *D_L00_0015F600;

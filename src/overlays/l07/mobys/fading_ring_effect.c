@@ -235,5 +235,3 @@ void update_fading_ring_effect(unsigned char *moby) {
         FUN_L07_0030e0e0_c(affected_moby, moby, moby_data);
     }
 }
-
-char *ring_hit_candidate_list_head __asm__("D_L07_0015FFE4") = 0;

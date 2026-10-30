@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_pages.h"
 #include "rnc/ui/map/map_state.h"
 #include "rnc/globals.h"
 
@@ -7,8 +8,6 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/game/level_state.h"
 
-extern s32  D_001CF874[];
-extern s32  D_001CF758[];
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 extern void update_mission_list(void) __asm__("func_0020B950");
 extern s32  collect_mission_ids(void *, s32, void *, s32) __asm__("func_0020BC00");
@@ -80,8 +79,8 @@ s32 update_menu_mission_list(struct MenuScreen *menu_screen) {
             menu_screen->data.missions.count =
                 collect_mission_ids((void *)0x70000000, 0, (void *)0x70000100, 1);
             mission_choice_ptr = &ch[level_map_selection.level];
-            D_001CF874[0] = ((u32 *)0x70000000)[*mission_choice_ptr];
-            D_001CF758[0] = ((u32 *)0x70000100)[*mission_choice_ptr];
+            missions_description_label.label.text_id = ((u32 *)0x70000000)[*mission_choice_ptr];
+            missions_picture_screen.stream.fixed_entry = ((u32 *)0x70000100)[*mission_choice_ptr];
         }
     }
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {

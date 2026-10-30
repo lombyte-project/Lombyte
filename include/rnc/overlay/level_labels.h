@@ -161,8 +161,6 @@ extern int            D_L16_0015F5CC;
 extern s32            D_L16_0015F688 __attribute__((sda));
 extern s32            D_L16_001612D0;
 extern s32            D_L16_001612D8;
-extern short          D_L16_00161F90 __attribute__((sda));
-extern short          D_L16_00161F98 __attribute__((sda));
 extern u8             D_L16_001671D8[];
 extern s32            D_L16_00178300[];
 extern char          *D_L16_001B0930[];

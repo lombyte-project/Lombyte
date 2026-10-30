@@ -9,7 +9,7 @@
 
 extern s32 level_frame_count __asm__("D_L01_0015F5CC") MACRO_ADDR;
 
-s32        D_L01_00161CE0 = 0;
+s32        rippling_scroll_layers_vertices_rippled __asm__("D_L01_00161CE0") = 0;
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 void       update_and_draw_scrolling_overlay_layers(s32, void *) __asm__("FUN_L01_002b96e0");
 
@@ -35,8 +35,8 @@ void update_rippling_scroll_layers(void *callback_argument) {
     Vec4f *ripple_vertex_pair;
     f32    glow_factor;
 
-    if (D_L01_00161CE0 == 0) {
-        D_L01_00161CE0 = 1;
+    if (rippling_scroll_layers_vertices_rippled == 0) {
+        rippling_scroll_layers_vertices_rippled = 1;
         for (i = 0; i < 4; i++) {
             lowered_vertex = (rippling_scroll_layers + i)->verts;
             for (j = 0; j < (rippling_scroll_layers + i)->count; j++) {
@@ -76,15 +76,19 @@ void update_rippling_scroll_layers(void *callback_argument) {
     add_draw_callback(draw_rippling_scroll_layers, callback_argument);
 }
 
-Vec4f D_L01_00161CF0 = {204.202f, 131.949f, 64.022f, 33.691f};
+Vec4f rippling_scroll_layer_0_bounds __asm__("D_L01_00161CF0") = {
+    204.202f, 131.949f, 64.022f, 33.691f};
 
-Vec4f D_L01_00161D00 = {262.251f, 129.584f, 70.353f, 28.613f};
+Vec4f rippling_scroll_layer_1_bounds __asm__("D_L01_00161D00") = {
+    262.251f, 129.584f, 70.353f, 28.613f};
 
-Vec4f D_L01_00161D10 = {300.714f, 148.496f, 76.373f, 25.605f};
+Vec4f rippling_scroll_layer_2_bounds __asm__("D_L01_00161D10") = {
+    300.714f, 148.496f, 76.373f, 25.605f};
 
-Vec4f D_L01_00161D20 = {289.864f, 187.932f, 86.91f, 27.57f};
+Vec4f rippling_scroll_layer_3_bounds __asm__("D_L01_00161D20") = {
+    289.864f, 187.932f, 86.91f, 27.57f};
 
-Vec4f D_L01_001FAB40[48] = {
+Vec4f rippling_scroll_layer_0_verts[48] __asm__("D_L01_001FAB40") = {
     {171.372f, 138.258f,      60.2f, 0.0f},
     { 170.82f,  130.06f,      60.2f, 0.0f},
     {175.603f, 137.459f,    60.212f, 0.0f},
@@ -135,7 +139,7 @@ Vec4f D_L01_001FAB40[48] = {
     {237.069f, 125.844f,    68.042f, 0.0f},
 };
 
-f32 D_L01_001FAE40[48][2] = {
+f32 rippling_scroll_layer_0_uvs[48][2] __asm__("D_L01_001FAE40") = {
     {0.0f,  -8.0f},
     {1.0f,  -8.0f},
     {0.0f, -7.75f},
@@ -186,7 +190,7 @@ f32 D_L01_001FAE40[48][2] = {
     {1.0f, -2.25f},
 };
 
-Vec4f D_L01_001FAFC0[48] = {
+Vec4f rippling_scroll_layer_1_verts[48] __asm__("D_L01_001FAFC0") = {
     {233.742f, 130.659f, 68.042f, 0.0f},
     {237.069f, 125.844f, 68.042f, 0.0f},
     {236.025f, 131.934f, 68.217f, 0.0f},
@@ -237,7 +241,7 @@ Vec4f D_L01_001FAFC0[48] = {
     {290.433f, 125.348f, 72.755f, 0.0f},
 };
 
-f32 D_L01_001FB2C0[48][2] = {
+f32 rippling_scroll_layer_1_uvs[48][2] __asm__("D_L01_001FB2C0") = {
     {0.0f, -7.25f},
     {1.0f, -7.25f},
     {0.0f,  -7.0f},
@@ -288,7 +292,7 @@ f32 D_L01_001FB2C0[48][2] = {
     {1.0f,  -1.5f},
 };
 
-Vec4f D_L01_001FB440[48] = {
+Vec4f rippling_scroll_layer_2_verts[48] __asm__("D_L01_001FB440") = {
     {290.773f, 130.649f, 72.755f, 0.0f},
     {290.433f, 125.348f, 72.755f, 0.0f},
     {293.212f, 130.033f, 72.936f, 0.0f},
@@ -339,7 +343,7 @@ Vec4f D_L01_001FB440[48] = {
     {310.996f, 171.682f, 80.493f, 0.0f},
 };
 
-f32 D_L01_001FB740[48][2] = {
+f32 rippling_scroll_layer_2_uvs[48][2] __asm__("D_L01_001FB740") = {
     {0.0f,  -7.5f},
     {1.0f,  -7.5f},
     {0.0f, -7.25f},
@@ -390,7 +394,7 @@ f32 D_L01_001FB740[48][2] = {
     {1.0f, -1.75f},
 };
 
-Vec4f D_L01_001FB8C0[40] = {
+Vec4f rippling_scroll_layer_3_verts[40] __asm__("D_L01_001FB8C0") = {
     {306.765f, 167.302f, 80.493f, 0.0f},
     {310.996f, 171.682f, 80.493f, 0.0f},
     {304.354f,  169.95f, 81.046f, 0.0f},
@@ -433,7 +437,7 @@ Vec4f D_L01_001FB8C0[40] = {
     {268.839f, 204.323f, 94.089f, 0.0f},
 };
 
-f32 D_L01_001FBB40[40][2] = {
+f32 rippling_scroll_layer_3_uvs[40][2] __asm__("D_L01_001FBB40") = {
     {0.0f, -7.75f},
     {1.0f, -7.75f},
     {0.0f,  -7.5f},
@@ -477,64 +481,72 @@ f32 D_L01_001FBB40[40][2] = {
 };
 
 ScrollLayer rippling_scroll_layers[4] = {
-    {&D_L01_001FAB40,
-     &D_L01_001FAE40,
-     &D_L01_00161CF0,
-     0x30, 0.007f,
-     0.004f, 0.025f,
-     1, -0.1f,
-     0.9f, 0.1f,
-     0.9f, 0x808080,
-     0x2c, 0x2c,
-     0x28, 0x28,
-     {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_001FAFC0,
-     &D_L01_001FB2C0,
-     &D_L01_00161D00,
-     0x30, 0.007f,
-     0.004f, 0.025f,
-     1, -0.1f,
-     0.9f, 0.1f,
-     0.9f, 0x808080,
-     0x2c, 0x2c,
-     0x28, 0x28,
-     {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_001FB440,
-     &D_L01_001FB740,
-     &D_L01_00161D10,
-     0x30, 0.007f,
-     0.004f, 0.025f,
-     1, -0.1f,
-     0.9f, 0.1f,
-     0.9f, 0x808080,
-     0x2c, 0x2c,
-     0x28, 0x28,
-     {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_001FB8C0,
-     &D_L01_001FBB40,
-     &D_L01_00161D20,
-     0x28, 0.007f,
-     0.004f, 0.025f,
-     1, -0.1f,
-     0.9f, 0.1f,
-     0.9f, 0x808080,
-     0x2c, 0x2c,
-     0x28, 0x28,
-     {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
+    {.verts = rippling_scroll_layer_0_verts,
+     .uvs = rippling_scroll_layer_0_uvs,
+     .bounds = &rippling_scroll_layer_0_bounds,
+     .count = 48,
+     .rate0 = 0.007f,
+     .rate1 = 0.004f,
+     .unk18 = 0.025f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = 0.9f,
+     .du1 = 0.1f,
+     .dv1 = 0.9f,
+     .color = 0x808080,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x28,
+     .alpha1 = 0x28},
+    {.verts = rippling_scroll_layer_1_verts,
+     .uvs = rippling_scroll_layer_1_uvs,
+     .bounds = &rippling_scroll_layer_1_bounds,
+     .count = 48,
+     .rate0 = 0.007f,
+     .rate1 = 0.004f,
+     .unk18 = 0.025f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = 0.9f,
+     .du1 = 0.1f,
+     .dv1 = 0.9f,
+     .color = 0x808080,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x28,
+     .alpha1 = 0x28},
+    {.verts = rippling_scroll_layer_2_verts,
+     .uvs = rippling_scroll_layer_2_uvs,
+     .bounds = &rippling_scroll_layer_2_bounds,
+     .count = 48,
+     .rate0 = 0.007f,
+     .rate1 = 0.004f,
+     .unk18 = 0.025f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = 0.9f,
+     .du1 = 0.1f,
+     .dv1 = 0.9f,
+     .color = 0x808080,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x28,
+     .alpha1 = 0x28},
+    {.verts = rippling_scroll_layer_3_verts,
+     .uvs = rippling_scroll_layer_3_uvs,
+     .bounds = &rippling_scroll_layer_3_bounds,
+     .count = 40,
+     .rate0 = 0.007f,
+     .rate1 = 0.004f,
+     .unk18 = 0.025f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = 0.9f,
+     .du1 = 0.1f,
+     .dv1 = 0.9f,
+     .color = 0x808080,
+     .tex0 = 0x2c,
+     .tex1 = 0x2c,
+     .alpha0 = 0x28,
+     .alpha1 = 0x28},
 };

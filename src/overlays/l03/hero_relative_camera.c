@@ -147,9 +147,9 @@ void update_smoothed_hero_relative_camera_position(void *camera_instance) {
 /* smooths the moby's data floats and rebuilds its orientation axes */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED020), where it is exact; names translated to the US level program. */
 
-extern char camera_look_offset_direction[] __asm__("D_L03_00166F40");
-short       camera_target_height_stiffness __asm__("D_L03_00161E70") = -10486;
-short       camera_target_height_damping __asm__("D_L03_00161E74") = -13107;
+extern char  camera_look_offset_direction[] __asm__("D_L03_00166F40");
+extern short camera_target_height_stiffness __asm__("D_L03_00161E70") __attribute__((sda));
+extern short camera_target_height_damping __asm__("D_L03_00161E74") __attribute__((sda));
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__("FUN_001ebd78");
 
 void rebuild_camera_orientation_axes(void *camera_instance) __asm__("FUN_L03_002ebc58");

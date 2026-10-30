@@ -13,61 +13,63 @@
 #include "rnc/overlay/l08/mobys/batalia_textured_effect_globals.h"
 #include "rnc/overlay/l08/mesh_batches.h"
 
-s32 batalia_six_batch_vertex_counts[6] __asm__("D_L08_001F01C8") = {
-    0x59, 0x59, 0x7e, 0xa, 0x86, 0x4b};
+s32 batalia_six_batch_vertex_counts[6] __asm__("D_L08_001F01C8") = {89, 89, 126, 10, 134, 75};
 
 MeshPoint *batalia_six_batch_packet_triplet_sources[6] __asm__("D_L08_001F4C00") = {
-    &D_L08_001F0240,
-    &D_L08_001F0670,
-    &D_L08_001F0AA0,
-    &D_L08_001F1088,
-    &D_L08_001F1100,
-    &D_L08_001F1748};
+    batalia_six_batch_0_positions,
+    batalia_six_batch_1_positions,
+    batalia_six_batch_2_positions,
+    batalia_six_batch_3_positions,
+    batalia_six_batch_4_positions,
+    batalia_six_batch_5_positions};
 
-MeshUv *batalia_six_batch_offset_source_streams[6] __asm__("D_L08_001F4C18") = {&D_L08_001F1AD0,
-                                                                                &D_L08_001F1DA0,
-                                                                                &D_L08_001F2070,
-                                                                                &D_L08_001F2460,
-                                                                                &D_L08_001F24B0,
-                                                                                &D_L08_001F28E0};
+MeshUv *batalia_six_batch_offset_source_streams[6] __asm__("D_L08_001F4C18") = {
+    batalia_six_batch_0_uvs,
+    batalia_six_batch_1_uvs,
+    batalia_six_batch_2_uvs,
+    batalia_six_batch_3_uvs,
+    batalia_six_batch_4_uvs,
+    batalia_six_batch_5_uvs};
 
-u32 *batalia_six_batch_colour_tables[6] __asm__("D_L08_001F4C48") = {&D_L08_001F43C8,
-                                                                     &D_L08_001F4530,
-                                                                     &D_L08_001F4698,
-                                                                     &D_L08_001F4890,
-                                                                     &D_L08_001F48B8,
-                                                                     &D_L08_001F4AD0};
+u32 *batalia_six_batch_colour_tables[6] __asm__("D_L08_001F4C48") = {batalia_six_batch_0_colours,
+                                                                     batalia_six_batch_1_colours,
+                                                                     batalia_six_batch_2_colours,
+                                                                     batalia_six_batch_3_colours,
+                                                                     batalia_six_batch_4_colours,
+                                                                     batalia_six_batch_5_colours};
 
 s32 batalia_eight_batch_vertex_counts[8] __asm__("D_L08_001F4C60") = {
-    0x5e, 0x44, 0x23, 0xa, 0x5b, 0x41, 0x16, 0xa};
+    94, 68, 35, 10, 91, 65, 22, 10};
 
 MeshPoint *batalia_eight_batch_packet_triplet_sources[8] __asm__("D_L08_001F84C8") = {
-    &D_L08_001F4D00,
-    &D_L08_001F5168,
-    &D_L08_001F5498,
-    &D_L08_001F5640,
-    &D_L08_001F56B8,
-    &D_L08_001F5B00,
-    &D_L08_001F5E10,
-    &D_L08_001F5F18};
+    batalia_eight_batch_0_positions,
+    batalia_eight_batch_1_positions,
+    batalia_eight_batch_2_positions,
+    batalia_eight_batch_3_positions,
+    batalia_eight_batch_4_positions,
+    batalia_eight_batch_5_positions,
+    batalia_eight_batch_6_positions,
+    batalia_eight_batch_7_positions};
 
-MeshUv *batalia_eight_batch_offset_source_streams[8] __asm__("D_L08_001F84E8") = {&D_L08_001F5F90,
-                                                                                  &D_L08_001F6280,
-                                                                                  &D_L08_001F64A0,
-                                                                                  &D_L08_001F65C0,
-                                                                                  &D_L08_001F6610,
-                                                                                  &D_L08_001F68F0,
-                                                                                  &D_L08_001F6B00,
-                                                                                  &D_L08_001F6BB0};
+MeshUv *batalia_eight_batch_offset_source_streams[8] __asm__("D_L08_001F84E8") = {
+    batalia_eight_batch_0_uvs,
+    batalia_eight_batch_1_uvs,
+    batalia_eight_batch_2_uvs,
+    batalia_eight_batch_3_uvs,
+    batalia_eight_batch_4_uvs,
+    batalia_eight_batch_5_uvs,
+    batalia_eight_batch_6_uvs,
+    batalia_eight_batch_7_uvs};
 
-u32 *batalia_eight_batch_colour_tables[8] __asm__("D_L08_001F8528") = {&D_L08_001F7E90,
-                                                                       &D_L08_001F8008,
-                                                                       &D_L08_001F8118,
-                                                                       &D_L08_001F81A8,
-                                                                       &D_L08_001F81D0,
-                                                                       &D_L08_001F8340,
-                                                                       &D_L08_001F8448,
-                                                                       &D_L08_001F84A0};
+u32 *batalia_eight_batch_colour_tables[8] __asm__("D_L08_001F8528") = {
+    batalia_eight_batch_0_colours,
+    batalia_eight_batch_1_colours,
+    batalia_eight_batch_2_colours,
+    batalia_eight_batch_3_colours,
+    batalia_eight_batch_4_colours,
+    batalia_eight_batch_5_colours,
+    batalia_eight_batch_6_colours,
+    batalia_eight_batch_7_colours};
 
 /* Builds and queues the eight textured batches for scroll pair `pair_index`. */
 
@@ -116,29 +118,32 @@ void queue_batalia_six_textured_batches(int pair_index) {
 extern Pair D_L08_00162408[] MACRO_ADDR;
 extern char D_L08_001F8560[];
 
-int D_L08_001623C8[2] = {0x23, 0x23};
+int batalia_offset_batch_vertex_counts[2] __asm__("D_L08_001623C8") = {35, 35};
 
-int *D_L08_001623E8[2] = {D_L08_001F00A8, D_L08_001F0138};
+int *batalia_offset_batch_colour_tables[2] __asm__("D_L08_001623E8") = {
+    batalia_offset_batch_0_colours, batalia_offset_batch_1_colours};
 
 /* The batch routines of the functions above, declared with the table pointer types this one passes. */
 extern void FUN_L00_001fde98_tables(int, float *, int *, void *, int) __asm__("FUN_L00_001fde98");
 extern void FUN_L08_00258090_tables(void *, float *, int, void *) __asm__("FUN_L08_00258090");
 
-float *D_L08_001623D0[2] = {D_L08_001EF7D0, D_L08_001EF978};
+float *batalia_offset_batch_position_tables[2] __asm__("D_L08_001623D0") = {
+    batalia_offset_batch_0_positions[0], batalia_offset_batch_1_positions[0]};
 
-float *D_L08_001623D8[2] = {D_L08_001EFB20, D_L08_001EFC40};
+float *batalia_offset_batch_uv_tables[2] __asm__("D_L08_001623D8") = {
+    batalia_offset_batch_0_uvs[0], batalia_offset_batch_1_uvs[0]};
 
 void queue_batalia_offset_textured_batches(int x) __asm__("FUN_L08_00308f68");
 
-extern int *D_L08_001623E8[2] __attribute__((sda));
-extern int  D_L08_001623C8[2] __attribute__((sda));
+extern int *batalia_offset_batch_colour_tables[2] __asm__("D_L08_001623E8") __attribute__((sda));
+extern int  batalia_offset_batch_vertex_counts[2] __asm__("D_L08_001623C8") __attribute__((sda));
 
 void queue_batalia_offset_textured_batches(int x) {
     int     i;
-    int    *element_counts = D_L08_001623C8;
-    float **float_pair_tables = D_L08_001623D8;
-    float **float_triplet_tables = D_L08_001623D0;
-    int   **element_word_tables = D_L08_001623E8;
+    int    *element_counts = batalia_offset_batch_vertex_counts;
+    float **float_pair_tables = batalia_offset_batch_uv_tables;
+    float **float_triplet_tables = batalia_offset_batch_position_tables;
+    int   **element_word_tables = batalia_offset_batch_colour_tables;
 
     for (i = 0; i < 2; i++) {
         FUN_L08_00258090_tables(
@@ -193,10 +198,10 @@ extern Pair D_L08_001F8548[];
 extern char D_L08_001675C0[];
 extern char batalia_effect_sine_offsets[] __asm__("D_L08_001F8550");
 
-extern int D_L08_001623F0;
-short      batalia_effect_reference_position_x __asm__("D_L08_00162380") = -32768;
+extern int   D_L08_001623F0;
+extern short batalia_effect_reference_position_x __asm__("D_L08_00162380") __attribute__((sda));
 
-int D_L08_001623C4 = 0;
+int batalia_rgba_tables_initialized __asm__("D_L08_001623C4") = 0;
 
 extern void
 scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
@@ -219,7 +224,7 @@ void update_batalia_textured_effect(struct Moby *moby) {
 
     switch (moby->state) {
     case MOBY_INITIALIZE:
-        if (D_L08_001623C4 == 0) {
+        if (batalia_rgba_tables_initialized == 0) {
             scale_rgba_tables(batalia_eight_batch_colour_tables,
                               8,
                               batalia_eight_batch_vertex_counts,
@@ -228,7 +233,14 @@ void update_batalia_textured_effect(struct Moby *moby) {
                               0.65f,
                               0.5f,
                               1);
-            scale_rgba_tables(D_L08_001623E8, 2, D_L08_001623C8, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            scale_rgba_tables(batalia_offset_batch_colour_tables,
+                              2,
+                              batalia_offset_batch_vertex_counts,
+                              0.5f,
+                              0.5f,
+                              0.5f,
+                              1.0f,
+                              1);
             scale_rgba_tables(batalia_six_batch_colour_tables,
                               6,
                               batalia_six_batch_vertex_counts,
@@ -237,7 +249,7 @@ void update_batalia_textured_effect(struct Moby *moby) {
                               0.25f,
                               1.0f,
                               1);
-            D_L08_001623C4 = 1;
+            batalia_rgba_tables_initialized = 1;
         }
         moby->state = 1;
         for (i = 0; i < 3; i++) {
@@ -296,7 +308,7 @@ int batalia_texture_3b_pair_two_blend_factor_base = 0x40;
 
 int batalia_texture_3c_pair_one_blend_factor = 0x22;
 
-f32 D_L08_001F0240[89][3] = {
+f32 batalia_six_batch_0_positions[89][3] __asm__("D_L08_001F0240") = {
     { 367.3764f, 166.31042f, 10.173538f},
     { 367.0834f, 165.43439f,  17.12513f},
     {366.57053f, 167.64337f, 10.187197f},
@@ -388,7 +400,7 @@ f32 D_L08_001F0240[89][3] = {
     {363.47385f, 161.11798f, 31.291006f},
 };
 
-f32 D_L08_001F0670[89][3] = {
+f32 batalia_six_batch_1_positions[89][3] __asm__("D_L08_001F0670") = {
     {343.69238f, 145.06297f, 10.173538f},
     { 344.5987f, 144.84189f,  17.12513f},
     { 342.4565f, 143.42052f, 10.187197f},
@@ -480,7 +492,7 @@ f32 D_L08_001F0670[89][3] = {
     {349.31186f, 140.32834f, 31.291006f},
 };
 
-f32 D_L08_001F0AA0[126][3] = {
+f32 batalia_six_batch_2_positions[126][3] __asm__("D_L08_001F0AA0") = {
     {357.50534f,  146.90434f,  42.94708f},
     {357.44162f,  142.83183f,  42.94708f},
     {354.24414f,  144.69876f,  42.94708f},
@@ -609,7 +621,7 @@ f32 D_L08_001F0AA0[126][3] = {
     {348.97565f,  137.25218f,  26.45649f},
 };
 
-f32 D_L08_001F1088[10][3] = {
+f32 batalia_six_batch_3_positions[10][3] __asm__("D_L08_001F1088") = {
     {348.18015f,  128.78023f,  41.08102f},
     {347.96432f,  128.14261f, 26.456486f},
     {348.20132f,  125.00759f, 41.081028f},
@@ -622,7 +634,7 @@ f32 D_L08_001F1088[10][3] = {
     {349.33524f,   122.6246f, 41.837273f},
 };
 
-f32 D_L08_001F1100[134][3] = {
+f32 batalia_six_batch_4_positions[134][3] __asm__("D_L08_001F1100") = {
     {360.75235f, 144.75244f,  42.94708f},
     { 357.4416f, 142.83182f, 42.947075f},
     { 360.6515f, 148.94373f,  42.94708f},
@@ -759,7 +771,7 @@ f32 D_L08_001F1100[134][3] = {
     {  363.371f, 160.50072f, 42.495605f},
 };
 
-f32 D_L08_001F1748[75][3] = {
+f32 batalia_six_batch_5_positions[75][3] __asm__("D_L08_001F1748") = {
     {364.49582f,  165.2123f, 15.033933f},
     {364.30807f, 165.42603f,  9.455524f},
     {365.30762f, 168.94197f, 15.028526f},
@@ -837,7 +849,7 @@ f32 D_L08_001F1748[75][3] = {
     {365.92166f, 167.57227f, 21.997849f},
 };
 
-f32 D_L08_001F1AD0[89][2] = {
+f32 batalia_six_batch_0_uvs[89][2] __asm__("D_L08_001F1AD0") = {
     {-0.922058f, -3.338661f},
     {-0.867511f,   -2.9861f},
     {-0.094427f, -3.298162f},
@@ -929,7 +941,7 @@ f32 D_L08_001F1AD0[89][2] = {
     { 0.194723f, -0.997137f},
 };
 
-f32 D_L08_001F1DA0[89][2] = {
+f32 batalia_six_batch_1_uvs[89][2] __asm__("D_L08_001F1DA0") = {
     {-0.922058f, -3.338661f},
     {-0.867511f,   -2.9861f},
     {-0.094427f, -3.298162f},
@@ -1021,7 +1033,7 @@ f32 D_L08_001F1DA0[89][2] = {
     { 0.194723f, -0.997137f},
 };
 
-f32 D_L08_001F2070[126][2] = {
+f32 batalia_six_batch_2_uvs[126][2] __asm__("D_L08_001F2070") = {
     {0.780825f,  -0.77271f},
     {1.197137f, -0.839723f},
     {0.946773f, -1.080486f},
@@ -1150,7 +1162,7 @@ f32 D_L08_001F2070[126][2] = {
     {1.825386f, -2.488376f},
 };
 
-f32 D_L08_001F2460[10][2] = {
+f32 batalia_six_batch_3_uvs[10][2] __asm__("D_L08_001F2460") = {
     {2.679202f, -2.072122f},
     {2.740587f, -2.711367f},
     {3.066336f, -2.127455f},
@@ -1163,7 +1175,7 @@ f32 D_L08_001F2460[10][2] = {
     { 3.33314f, -2.029207f},
 };
 
-f32 D_L08_001F24B0[134][2] = {
+f32 batalia_six_batch_4_uvs[134][2] __asm__("D_L08_001F24B0") = {
     {-0.915715f, -0.161043f},
     {-0.476065f, -0.044346f},
     {-0.938415f, -0.449095f},
@@ -1300,7 +1312,7 @@ f32 D_L08_001F24B0[134][2] = {
     {-1.384309f, -1.246961f},
 };
 
-f32 D_L08_001F28E0[75][2] = {
+f32 batalia_six_batch_5_uvs[75][2] __asm__("D_L08_001F28E0") = {
     { 2.260796f, -2.601762f},
     { 2.644685f, -2.860808f},
     { 1.484197f, -2.598017f},
@@ -1378,7 +1390,7 @@ f32 D_L08_001F28E0[75][2] = {
     { 1.326554f, -2.137501f},
 };
 
-u32 D_L08_001F43C8[89] = {
+u32 batalia_six_batch_0_colours[89] __asm__("D_L08_001F43C8") = {
     0xff07,     0xff07,     0x670600ff, 0x670600ff, 0x800eff00, 0x800eff00, 0x610600ff, 0x610600ff,
     0xff07,     0x610600ff, 0xff07,     0x610600ff, 0xff07,     0x550600ff, 0xff07,     0x550600ff,
     0xff07,     0x550600ff, 0xff07,     0x6a0600ff, 0xff07,     0x6a0600ff, 0xff07,     0x380600ff,
@@ -1392,7 +1404,7 @@ u32 D_L08_001F43C8[89] = {
     0x550600ff, 0x800eff00, 0x6a0600ff, 0x800eff00, 0x380600ff, 0x800eff00, 0x800eff00, 0x380600ff,
     0x800eff00};
 
-u32 D_L08_001F4530[89] = {
+u32 batalia_six_batch_1_colours[89] __asm__("D_L08_001F4530") = {
     0xff07,     0xff07,     0x670600ff, 0x670600ff, 0x800eff00, 0x800eff00, 0x610600ff, 0x610600ff,
     0xff07,     0x610600ff, 0xff07,     0x610600ff, 0xff07,     0x550600ff, 0xff07,     0x550600ff,
     0xff07,     0x550600ff, 0xff07,     0x6a0600ff, 0xff07,     0x6a0600ff, 0xff000000, 0x380600ff,
@@ -1406,7 +1418,7 @@ u32 D_L08_001F4530[89] = {
     0x550600ff, 0x800eff00, 0x6a0600ff, 0x800eff00, 0x380600ff, 0x800eff00, 0x800eff00, 0x380600ff,
     0x800eff00};
 
-u32 D_L08_001F4698[126] = {
+u32 batalia_six_batch_2_colours[126] __asm__("D_L08_001F4698") = {
     0x7e7d7f00, 0x787f,     0x7e7d7f00, 0x787f,     0x7e7d7f00, 0x3400787f, 0x7e7d7f00, 0x7e7d7f00,
     0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00,
     0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00,
@@ -1424,18 +1436,18 @@ u32 D_L08_001F4698[126] = {
     0x7e7d7f00, 0x4c00787f, 0x7e7d7f00, 0x4c00787f, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00,
     0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x4c00787f, 0x7e7d7f00};
 
-u32 D_L08_001F4890[10] = {0x7e7d7f00,
-                          0x7e7d7f00,
-                          0x4c00787f,
-                          0x7e7d7f00,
-                          0x4c00787f,
-                          0x7e7d7f00,
-                          0x4c00787f,
-                          0x7e7d7f00,
-                          0x4c00787f,
-                          0x7e7d7f00};
+u32 batalia_six_batch_3_colours[10] __asm__("D_L08_001F4890") = {0x7e7d7f00,
+                                                                 0x7e7d7f00,
+                                                                 0x4c00787f,
+                                                                 0x7e7d7f00,
+                                                                 0x4c00787f,
+                                                                 0x7e7d7f00,
+                                                                 0x4c00787f,
+                                                                 0x7e7d7f00,
+                                                                 0x4c00787f,
+                                                                 0x7e7d7f00};
 
-u32 D_L08_001F48B8[134] = {
+u32 batalia_six_batch_4_colours[134] __asm__("D_L08_001F48B8") = {
     0x787f,     0x787f,     0x787f,     0x7e7d7f00, 0x787f,     0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00,
     0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00,
     0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00,
@@ -1454,7 +1466,7 @@ u32 D_L08_001F48B8[134] = {
     0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00, 0x7e7d7f00,
     0x7e7d7f00, 0x3400787f, 0x7e7d7f00, 0x3400787f, 0x7e7d7f00, 0x3400787f};
 
-u32 D_L08_001F4AD0[75] = {
+u32 batalia_six_batch_5_colours[75] __asm__("D_L08_001F4AD0") = {
     0xff07,     0xff07,     0x610600ff, 0x610600ff, 0x800eff00, 0x800eff00, 0x610600ff, 0x670600ff,
     0x610600ff, 0xff07,     0x610600ff, 0xff07,     0x610600ff, 0xff07,     0x550600ff, 0xff07,
     0x550600ff, 0xff07,     0x380600ff, 0x2b00ff,   0x800eff00, 0x2b00ff,   0x800eff00, 0x2b00ff,
@@ -1466,7 +1478,7 @@ u32 D_L08_001F4AD0[75] = {
     0x380600ff, 0x2b00ff,   0x380600ff, 0xff07,     0x6a0600ff, 0xff07,     0x6a0600ff, 0xff07,
     0x550600ff, 0xff07,     0x550600ff};
 
-f32 D_L08_001F4D00[94][3] = {
+f32 batalia_eight_batch_0_positions[94][3] __asm__("D_L08_001F4D00") = {
     { 374.6877f, 135.08017f,  42.94708f},
     {372.68768f,  131.9436f,  42.94708f},
     {376.17877f, 138.57848f, 42.947083f},
@@ -1563,7 +1575,7 @@ f32 D_L08_001F4D00[94][3] = {
     {377.17242f, 142.28589f,  42.94708f},
 };
 
-f32 D_L08_001F5168[68][3] = {
+f32 batalia_eight_batch_1_positions[68][3] __asm__("D_L08_001F5168") = {
     {374.21072f, 143.91417f,  42.94708f},
     {370.88455f, 141.90651f,  42.94708f},
     {374.20377f, 147.73494f,  42.94708f},
@@ -1634,7 +1646,7 @@ f32 D_L08_001F5168[68][3] = {
     {367.02914f, 147.89383f,  42.94708f},
 };
 
-f32 D_L08_001F5498[35][3] = {
+f32 batalia_eight_batch_2_positions[35][3] __asm__("D_L08_001F5498") = {
     {369.83945f, 153.40906f,  42.94708f},
     { 366.6997f,  152.0568f,  42.94708f},
     {369.33795f,  157.5012f,  42.94708f},
@@ -1672,7 +1684,7 @@ f32 D_L08_001F5498[35][3] = {
     {360.57394f,  157.6687f,  42.94708f},
 };
 
-f32 D_L08_001F5640[10][3] = {
+f32 batalia_eight_batch_3_positions[10][3] __asm__("D_L08_001F5640") = {
     {360.49054f, 158.55124f, 42.495605f},
     {357.51443f, 156.23004f,  42.49561f},
     { 360.2763f, 158.97525f,  41.83727f},
@@ -1685,7 +1697,7 @@ f32 D_L08_001F5640[10][3] = {
     {363.03696f, 161.30933f, 40.964195f},
 };
 
-f32 D_L08_001F56B8[91][3] = {
+f32 batalia_eight_batch_4_positions[91][3] __asm__("D_L08_001F56B8") = {
     {373.32968f,   135.9777f,  42.94708f},
     {372.68768f,   131.9436f,  42.94708f},
     {370.55725f,  133.54147f,  42.94708f},
@@ -1779,7 +1791,7 @@ f32 D_L08_001F56B8[91][3] = {
     { 367.6432f,  126.97455f,  42.94708f},
 };
 
-f32 D_L08_001F5B00[65][3] = {
+f32 batalia_eight_batch_5_positions[65][3] __asm__("D_L08_001F5B00") = {
     {364.61426f,  134.09297f,  42.94708f},
     {364.74478f,  129.73335f,  42.94708f},
     {361.57715f,  132.81665f,  42.94708f},
@@ -1847,7 +1859,7 @@ f32 D_L08_001F5B00[65][3] = {
     {357.78696f,  135.21643f,  42.94708f},
 };
 
-f32 D_L08_001F5E10[22][3] = {
+f32 batalia_eight_batch_6_positions[22][3] __asm__("D_L08_001F5E10") = {
     {353.90115f,  133.2294f,  42.94708f},
     {354.15527f, 129.83084f,  42.94708f},
     {349.76077f, 131.47537f,  42.94708f},
@@ -1872,7 +1884,7 @@ f32 D_L08_001F5E10[22][3] = {
     {349.53043f, 142.43578f,  41.08102f},
 };
 
-f32 D_L08_001F5F18[10][3] = {
+f32 batalia_eight_batch_7_positions[10][3] __asm__("D_L08_001F5F18") = {
     {348.96054f,  133.46324f,  41.83727f},
     {348.66492f,  132.99892f,  41.08102f},
     { 348.4642f,  129.37303f, 41.837265f},
@@ -1885,7 +1897,7 @@ f32 D_L08_001F5F18[10][3] = {
     { 349.1197f,  127.12366f,  42.49561f},
 };
 
-f32 D_L08_001F5F90[94][2] = {
+f32 batalia_eight_batch_0_uvs[94][2] __asm__("D_L08_001F5F90") = {
     {-2.871753f,  0.566149f},
     {-2.589373f,  0.772256f},
     {-3.092122f,  0.332902f},
@@ -1982,7 +1994,7 @@ f32 D_L08_001F5F90[94][2] = {
     {-3.250663f,  0.083038f},
 };
 
-f32 D_L08_001F6280[68][2] = {
+f32 batalia_eight_batch_1_uvs[68][2] __asm__("D_L08_001F6280") = {
     {-2.885788f, -0.042187f},
     {-2.443426f,  0.080414f},
     {-2.917348f, -0.304387f},
@@ -2053,7 +2065,7 @@ f32 D_L08_001F6280[68][2] = {
     {-1.914775f, -0.347989f},
 };
 
-f32 D_L08_001F64A0[35][2] = {
+f32 batalia_eight_batch_2_uvs[35][2] __asm__("D_L08_001F64A0") = {
     { -2.40748f,  -0.71362f},
     { -1.90801f,  -0.63514f},
     {-2.378111f, -0.996696f},
@@ -2091,7 +2103,7 @@ f32 D_L08_001F64A0[35][2] = {
     {-1.002601f, -1.048131f},
 };
 
-f32 D_L08_001F65C0[10][2] = {
+f32 batalia_eight_batch_3_uvs[10][2] __asm__("D_L08_001F65C0") = {
     {-0.999432f, -1.126322f},
     {-0.599171f, -0.980611f},
     {-0.973396f, -1.163408f},
@@ -2104,7 +2116,7 @@ f32 D_L08_001F65C0[10][2] = {
     { -1.32579f, -1.373555f},
 };
 
-f32 D_L08_001F6610[91][2] = {
+f32 batalia_eight_batch_4_uvs[91][2] __asm__("D_L08_001F6610") = {
     {2.762564f,  0.251458f},
     {3.164272f,   0.13637f},
     {2.961173f, -0.018687f},
@@ -2198,7 +2210,7 @@ f32 D_L08_001F6610[91][2] = {
     {3.635591f, -0.363278f},
 };
 
-f32 D_L08_001F68F0[65][2] = {
+f32 batalia_eight_batch_5_uvs[65][2] __asm__("D_L08_001F68F0") = {
     {2.559845f, -0.530975f},
     {3.168758f, -0.565375f},
     {2.618381f, -0.805827f},
@@ -2266,7 +2278,7 @@ f32 D_L08_001F68F0[65][2] = {
     {1.984186f, -0.925955f},
 };
 
-f32 D_L08_001F6B00[22][2] = {
+f32 batalia_eight_batch_6_uvs[22][2] __asm__("D_L08_001F6B00") = {
     {2.209923f, -1.332952f},
     {2.681711f, -1.475477f},
     {2.432067f, -1.820318f},
@@ -2291,7 +2303,7 @@ f32 D_L08_001F6B00[22][2] = {
     { 1.30423f, -1.751793f},
 };
 
-f32 D_L08_001F6BB0[10][2] = {
+f32 batalia_eight_batch_7_uvs[10][2] __asm__("D_L08_001F6BB0") = {
     {2.215125f, -1.896651f},
     {2.255671f, -1.967474f},
     {2.625273f,  -2.00033f},
@@ -2304,7 +2316,7 @@ f32 D_L08_001F6BB0[10][2] = {
     {2.866351f, -1.959011f},
 };
 
-u32 D_L08_001F7E90[94] = {
+u32 batalia_eight_batch_0_colours[94] __asm__("D_L08_001F7E90") = {
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
@@ -2318,7 +2330,7 @@ u32 D_L08_001F7E90[94] = {
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07};
 
-u32 D_L08_001F8008[68] = {
+u32 batalia_eight_batch_1_colours[68] __asm__("D_L08_001F8008") = {
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
@@ -2329,25 +2341,25 @@ u32 D_L08_001F8008[68] = {
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07};
 
-u32 D_L08_001F8118[35] = {0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
-                          0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
-                          0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
-                          0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
-                          0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
-                          0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07};
+u32 batalia_eight_batch_2_colours[35] __asm__("D_L08_001F8118") = {
+    0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
+    0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
+    0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
+    0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
+    0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07};
 
-u32 D_L08_001F81A8[10] = {0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07};
+u32 batalia_eight_batch_3_colours[10] __asm__("D_L08_001F81A8") = {0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07};
 
-u32 D_L08_001F81D0[91] = {
+u32 batalia_eight_batch_4_colours[91] __asm__("D_L08_001F81D0") = {
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
@@ -2361,7 +2373,7 @@ u32 D_L08_001F81D0[91] = {
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07};
 
-u32 D_L08_001F8340[65] = {
+u32 batalia_eight_batch_5_colours[65] __asm__("D_L08_001F8340") = {
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
@@ -2372,87 +2384,184 @@ u32 D_L08_001F8340[65] = {
     0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
     0xff00ff07};
 
-u32 D_L08_001F8448[22] = {0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
-                          0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
-                          0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
-                          0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07};
+u32 batalia_eight_batch_6_colours[22] __asm__("D_L08_001F8448") = {
+    0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
+    0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07,
+    0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07, 0xff00ff07};
 
-u32 D_L08_001F84A0[10] = {0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07,
-                          0xff00ff07};
+u32 batalia_eight_batch_7_colours[10] __asm__("D_L08_001F84A0") = {0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07,
+                                                                   0xff00ff07};
 
-f32 D_L08_001EF7D0[105] = {
-    374.9964f,  163.75423f, 15.397618f, 371.20972f, 163.89746f, 15.397347f, 373.80347f, 168.97197f,
-    15.397631f, 369.57352f, 169.99069f, 15.397335f, 375.47882f, 172.25693f, 15.397684f, 368.0555f,
-    174.97394f, 15.397281f, 379.46304f, 176.62506f, 15.395724f, 368.0555f,  174.97394f, 15.397281f,
-    369.92545f, 181.18317f, 15.395724f, 360.75647f, 174.35443f, 15.397684f, 357.5211f,  180.4111f,
-    15.395724f, 355.35733f, 170.50188f, 15.397281f, 348.7171f,  172.90059f, 15.395724f, 355.35733f,
-    170.50188f, 15.397281f, 347.59323f, 160.67953f, 15.395724f, 355.35733f, 170.50188f, 15.397281f,
-    352.35925f, 162.79335f, 15.397684f, 359.952f,   166.90067f, 15.397335f, 357.21744f, 162.9975f,
-    15.397631f, 359.952f,   166.90067f, 15.397335f, 361.39297f, 157.49072f, 15.397618f, 359.952f,
-    166.90067f, 15.397335f, 363.56396f, 160.46288f, 15.397347f, 364.2023f,  169.29066f, 15.397631f,
-    367.07904f, 162.78969f, 15.397618f, 364.2023f,  169.29066f, 15.397631f, 371.20972f, 163.89746f,
-    15.397347f, 364.2023f,  169.29066f, 15.397631f, 369.57352f, 169.99069f, 15.397335f, 364.2023f,
-    169.29066f, 15.397631f, 368.0555f,  174.97394f, 15.397281f, 364.2023f,  169.29066f, 15.397631f,
-    360.75647f, 174.35443f, 15.397684f, 359.952f,   166.90067f, 15.397335f, 355.35733f, 170.50188f,
-    15.397281f};
+f32 batalia_offset_batch_0_positions[35][3] __asm__("D_L08_001EF7D0") = {
+    { 374.9964f, 163.75423f, 15.397618f},
+    {371.20972f, 163.89746f, 15.397347f},
+    {373.80347f, 168.97197f, 15.397631f},
+    {369.57352f, 169.99069f, 15.397335f},
+    {375.47882f, 172.25693f, 15.397684f},
+    { 368.0555f, 174.97394f, 15.397281f},
+    {379.46304f, 176.62506f, 15.395724f},
+    { 368.0555f, 174.97394f, 15.397281f},
+    {369.92545f, 181.18317f, 15.395724f},
+    {360.75647f, 174.35443f, 15.397684f},
+    { 357.5211f,  180.4111f, 15.395724f},
+    {355.35733f, 170.50188f, 15.397281f},
+    { 348.7171f, 172.90059f, 15.395724f},
+    {355.35733f, 170.50188f, 15.397281f},
+    {347.59323f, 160.67953f, 15.395724f},
+    {355.35733f, 170.50188f, 15.397281f},
+    {352.35925f, 162.79335f, 15.397684f},
+    {  359.952f, 166.90067f, 15.397335f},
+    {357.21744f,  162.9975f, 15.397631f},
+    {  359.952f, 166.90067f, 15.397335f},
+    {361.39297f, 157.49072f, 15.397618f},
+    {  359.952f, 166.90067f, 15.397335f},
+    {363.56396f, 160.46288f, 15.397347f},
+    { 364.2023f, 169.29066f, 15.397631f},
+    {367.07904f, 162.78969f, 15.397618f},
+    { 364.2023f, 169.29066f, 15.397631f},
+    {371.20972f, 163.89746f, 15.397347f},
+    { 364.2023f, 169.29066f, 15.397631f},
+    {369.57352f, 169.99069f, 15.397335f},
+    { 364.2023f, 169.29066f, 15.397631f},
+    { 368.0555f, 174.97394f, 15.397281f},
+    { 364.2023f, 169.29066f, 15.397631f},
+    {360.75647f, 174.35443f, 15.397684f},
+    {  359.952f, 166.90067f, 15.397335f},
+    {355.35733f, 170.50188f, 15.397281f},
+};
 
-f32 D_L08_001EF978[105] = {
-    351.99194f,  141.1519f,  15.397685f, 350.59683f, 138.14389f,  15.397393f,  345.78757f,
-    141.64828f,  15.397697f, 344.2803f,  138.39842f, 15.397381f,  345.2831f,   145.22377f,
-    15.397756f,  340.0634f,  139.52545f, 15.397324f, 344.4128f,   150.45262f,  15.395653f,
-    340.0634f,   139.52545f, 15.397324f, 335.5384f,  143.26622f,  15.395653f,  338.41125f,
-    133.36652f,  15.397756f, 332.3037f,  132.87625f, 15.395653f,  340.03757f,  127.977936f,
-    15.397324f,  335.81226f, 123.45581f, 15.395653f, 340.03757f,  127.977936f, 15.397324f,
-    342.99713f,  119.45665f, 15.395653f, 340.03757f, 127.977936f, 15.397324f,  344.00626f,
-    123.914024f, 15.397756f, 344.5694f,  130.42654f, 15.397381f,  347.56003f,  126.17938f,
-    15.397697f,  344.5694f,  130.42654f, 15.397381f, 353.71588f,  126.74293f,  15.397685f,
-    344.5694f,   130.42654f, 15.397381f, 350.8644f,  130.76527f,  15.397393f,  343.7673f,
-    134.37474f,  15.397697f, 350.12198f, 134.41965f, 15.397685f,  343.7673f,   134.37474f,
-    15.397697f,  350.59683f, 138.14389f, 15.397393f, 343.7673f,   134.37474f,  15.397697f,
-    344.2803f,   138.39842f, 15.397381f, 343.7673f,  134.37474f,  15.397697f,  340.0634f,
-    139.52545f,  15.397324f, 343.7673f,  134.37474f, 15.397697f,  338.41125f,  133.36652f,
-    15.397756f,  344.5694f,  130.42654f, 15.397381f, 340.03757f,  127.977936f, 15.397324f};
+f32 batalia_offset_batch_1_positions[35][3] __asm__("D_L08_001EF978") = {
+    {351.99194f,   141.1519f, 15.397685f},
+    {350.59683f,  138.14389f, 15.397393f},
+    {345.78757f,  141.64828f, 15.397697f},
+    { 344.2803f,  138.39842f, 15.397381f},
+    { 345.2831f,  145.22377f, 15.397756f},
+    { 340.0634f,  139.52545f, 15.397324f},
+    { 344.4128f,  150.45262f, 15.395653f},
+    { 340.0634f,  139.52545f, 15.397324f},
+    { 335.5384f,  143.26622f, 15.395653f},
+    {338.41125f,  133.36652f, 15.397756f},
+    { 332.3037f,  132.87625f, 15.395653f},
+    {340.03757f, 127.977936f, 15.397324f},
+    {335.81226f,  123.45581f, 15.395653f},
+    {340.03757f, 127.977936f, 15.397324f},
+    {342.99713f,  119.45665f, 15.395653f},
+    {340.03757f, 127.977936f, 15.397324f},
+    {344.00626f, 123.914024f, 15.397756f},
+    { 344.5694f,  130.42654f, 15.397381f},
+    {347.56003f,  126.17938f, 15.397697f},
+    { 344.5694f,  130.42654f, 15.397381f},
+    {353.71588f,  126.74293f, 15.397685f},
+    { 344.5694f,  130.42654f, 15.397381f},
+    { 350.8644f,  130.76527f, 15.397393f},
+    { 343.7673f,  134.37474f, 15.397697f},
+    {350.12198f,  134.41965f, 15.397685f},
+    { 343.7673f,  134.37474f, 15.397697f},
+    {350.59683f,  138.14389f, 15.397393f},
+    { 343.7673f,  134.37474f, 15.397697f},
+    { 344.2803f,  138.39842f, 15.397381f},
+    { 343.7673f,  134.37474f, 15.397697f},
+    { 340.0634f,  139.52545f, 15.397324f},
+    { 343.7673f,  134.37474f, 15.397697f},
+    {338.41125f,  133.36652f, 15.397756f},
+    { 344.5694f,  130.42654f, 15.397381f},
+    {340.03757f, 127.977936f, 15.397324f},
+};
 
-f32 D_L08_001EFB20[70] = {
-    1.141033f, 0.028994f,  0.987506f, 0.290088f, 0.889127f, -0.028604f, 0.719879f, 0.22938f,
-    0.674371f, -0.077333f, 0.52473f,  0.165159f, 0.37745f,  -0.184908f, 0.52473f,  0.165159f,
-    0.232602f, 0.09629f,   0.44873f,  0.483029f, 0.186813f, 0.467597f,  0.48636f,  0.777654f,
-    0.235938f, 0.87614f,   0.48636f,  0.777654f, 0.37469f,  1.15494f,   0.48636f,  0.777654f,
-    0.646413f, 1.079807f,  0.723847f, 0.730581f, 0.846134f, 1.037428f,  0.723847f, 0.730581f,
-    1.110418f, 1.048828f,  0.723847f, 0.730581f, 0.967404f, 0.726252f,  0.680886f, 0.462469f,
-    0.951414f, 0.50583f,   0.680886f, 0.462469f, 0.987506f, 0.290088f,  0.680886f, 0.462469f,
-    0.719879f, 0.22938f,   0.680886f, 0.462469f, 0.52473f,  0.165159f,  0.680886f, 0.462469f,
-    0.44873f,  0.483029f,  0.723847f, 0.730581f, 0.48636f,  0.777654f};
+f32 batalia_offset_batch_0_uvs[35][2] __asm__("D_L08_001EFB20") = {
+    {1.141033f,  0.028994f},
+    {0.987506f,  0.290088f},
+    {0.889127f, -0.028604f},
+    {0.719879f,   0.22938f},
+    {0.674371f, -0.077333f},
+    { 0.52473f,  0.165159f},
+    { 0.37745f, -0.184908f},
+    { 0.52473f,  0.165159f},
+    {0.232602f,   0.09629f},
+    { 0.44873f,  0.483029f},
+    {0.186813f,  0.467597f},
+    { 0.48636f,  0.777654f},
+    {0.235938f,   0.87614f},
+    { 0.48636f,  0.777654f},
+    { 0.37469f,   1.15494f},
+    { 0.48636f,  0.777654f},
+    {0.646413f,  1.079807f},
+    {0.723847f,  0.730581f},
+    {0.846134f,  1.037428f},
+    {0.723847f,  0.730581f},
+    {1.110418f,  1.048828f},
+    {0.723847f,  0.730581f},
+    {0.967404f,  0.726252f},
+    {0.680886f,  0.462469f},
+    {0.951414f,   0.50583f},
+    {0.680886f,  0.462469f},
+    {0.987506f,  0.290088f},
+    {0.680886f,  0.462469f},
+    {0.719879f,   0.22938f},
+    {0.680886f,  0.462469f},
+    { 0.52473f,  0.165159f},
+    {0.680886f,  0.462469f},
+    { 0.44873f,  0.483029f},
+    {0.723847f,  0.730581f},
+    { 0.48636f,  0.777654f},
+};
 
-f32 D_L08_001EFC40[70] = {
-    1.141033f, 0.028994f,  0.987506f, 0.290088f, 0.889127f, -0.028604f, 0.719879f, 0.22938f,
-    0.674371f, -0.077333f, 0.52473f,  0.165159f, 0.37745f,  -0.184908f, 0.52473f,  0.165159f,
-    0.232602f, 0.09629f,   0.44873f,  0.483029f, 0.186813f, 0.467597f,  0.48636f,  0.777654f,
-    0.235938f, 0.87614f,   0.48636f,  0.777654f, 0.37469f,  1.15494f,   0.48636f,  0.777654f,
-    0.646413f, 1.079807f,  0.723847f, 0.730581f, 0.846134f, 1.037428f,  0.723847f, 0.730581f,
-    1.110418f, 1.048828f,  0.723847f, 0.730581f, 0.967404f, 0.726252f,  0.680886f, 0.462469f,
-    0.951414f, 0.50583f,   0.680886f, 0.462469f, 0.987506f, 0.290088f,  0.680886f, 0.462469f,
-    0.719879f, 0.22938f,   0.680886f, 0.462469f, 0.52473f,  0.165159f,  0.680886f, 0.462469f,
-    0.44873f,  0.483029f,  0.723847f, 0.730581f, 0.48636f,  0.777654f};
+f32 batalia_offset_batch_1_uvs[35][2] __asm__("D_L08_001EFC40") = {
+    {1.141033f,  0.028994f},
+    {0.987506f,  0.290088f},
+    {0.889127f, -0.028604f},
+    {0.719879f,   0.22938f},
+    {0.674371f, -0.077333f},
+    { 0.52473f,  0.165159f},
+    { 0.37745f, -0.184908f},
+    { 0.52473f,  0.165159f},
+    {0.232602f,   0.09629f},
+    { 0.44873f,  0.483029f},
+    {0.186813f,  0.467597f},
+    { 0.48636f,  0.777654f},
+    {0.235938f,   0.87614f},
+    { 0.48636f,  0.777654f},
+    { 0.37469f,   1.15494f},
+    { 0.48636f,  0.777654f},
+    {0.646413f,  1.079807f},
+    {0.723847f,  0.730581f},
+    {0.846134f,  1.037428f},
+    {0.723847f,  0.730581f},
+    {1.110418f,  1.048828f},
+    {0.723847f,  0.730581f},
+    {0.967404f,  0.726252f},
+    {0.680886f,  0.462469f},
+    {0.951414f,   0.50583f},
+    {0.680886f,  0.462469f},
+    {0.987506f,  0.290088f},
+    {0.680886f,  0.462469f},
+    {0.719879f,   0.22938f},
+    {0.680886f,  0.462469f},
+    { 0.52473f,  0.165159f},
+    {0.680886f,  0.462469f},
+    { 0.44873f,  0.483029f},
+    {0.723847f,  0.730581f},
+    { 0.48636f,  0.777654f},
+};
 
-int D_L08_001F00A8[35] = {0x90ff000c, 0x90ff000c, 0x300ff,    0xff7f0078, 0x300ff,    0x90ff000c,
-                          0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c,
-                          0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0xff7f0078, 0xff7f0078, 0xff7f0078, 0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0xff7f0078, 0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c};
+int batalia_offset_batch_0_colours[35] __asm__("D_L08_001F00A8") = {
+    0x90ff000c, 0x90ff000c, 0x300ff,    0xff7f0078, 0x300ff,    0x90ff000c, 0x300ff,
+    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c,
+    0x300ff,    0x90ff000c, 0x300ff,    0xff7f0078, 0x90ff000c, 0xff7f0078, 0xff7f0078,
+    0xff7f0078, 0xff7f0078, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078,
+    0xff7f0078, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c};
 
-int D_L08_001F0138[35] = {0x90ff000c, 0x90ff000c, 0x300ff,    0xff7f0078, 0x300ff,    0x90ff000c,
-                          0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c,
-                          0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0xff7f0078, 0xff7f0078, 0xff7f0078, 0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0xff7f0078, 0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c};
+int batalia_offset_batch_1_colours[35] __asm__("D_L08_001F0138") = {
+    0x90ff000c, 0x90ff000c, 0x300ff,    0xff7f0078, 0x300ff,    0x90ff000c, 0x300ff,
+    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c,
+    0x300ff,    0x90ff000c, 0x300ff,    0xff7f0078, 0x90ff000c, 0xff7f0078, 0xff7f0078,
+    0xff7f0078, 0xff7f0078, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078,
+    0xff7f0078, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c};

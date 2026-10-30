@@ -6,7 +6,7 @@
 
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 
-short poison_vessel_spawn_interval __asm__("D_L15_0016207C") = 0;
+extern short poison_vessel_spawn_interval __asm__("D_L15_0016207C");
 
 void update_poison_vessel_spawner(struct Moby *moby) __asm__("FUN_L15_002eabd8");
 

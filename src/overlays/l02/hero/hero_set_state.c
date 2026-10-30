@@ -1799,7 +1799,7 @@ extern float          fast_cos(float);
 extern float          fast_sin(float);
 extern int D_00141660 NOT_SDA;
 int                   r1_repeat_timer __asm__("D_L02_0015F678") = 0;
-extern int            D_L02_0015F6DC;
+extern int            l02_hero_run_start_frame __asm__("D_L02_0015F6DC");
 extern int D_L02_0016CD80 NOT_SDA;
 extern int                get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int                try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
@@ -3081,7 +3081,7 @@ void update_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_RUN, 0);
                         if (hero.state.current == HERO_STATE_RUN) {
                             hero.state.step = 1;
-                            set_hero_animation(4, D_L02_0015F6DC, scale_game_frames(0xC));
+                            set_hero_animation(4, l02_hero_run_start_frame, scale_game_frames(0xC));
                         }
                         configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 1, 0);
                         break;
@@ -3673,5 +3673,3 @@ void enter_hero_idle_or_stop(void) {
         hero_set_state(HERO_STATE_STOP, 1);
     }
 }
-
-int D_L02_0015F6DC = 0;

@@ -70,7 +70,7 @@ extern float          fast_cos(float);
 extern float          fast_sin(float);
 extern float          vector_length_xy(void *);
 extern int D_00141660 NOT_SDA;
-int                   D_L00_0015F678_gp __asm__("D_L00_0015F678") = 0;
+int                   hero_transition_r1_double_press_timer_gp __asm__("D_L00_0015F678") = 0;
 extern int            D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int            D_L00_0015F594 __attribute__((sda));
 extern int D_L00_0016C780 NOT_SDA;
@@ -1974,15 +1974,15 @@ void hero_update_transitions(void) {
                     {
                         int both = 0;
 
-                        fast_dec_timer(&D_L00_0015F678_gp);
-                        if (D_L00_0015F678_gp != 0) {
+                        fast_dec_timer(&hero_transition_r1_double_press_timer_gp);
+                        if (hero_transition_r1_double_press_timer_gp != 0) {
                             both = 1;
                             if (!((controller_state.held & 8) && (controller_state.pressed & 8))) {
                                 both = 0;
                             }
                         }
                         if (controller_state.pressed & 8) {
-                            D_L00_0015F678_gp = scale_game_frames(0x1E);
+                            hero_transition_r1_double_press_timer_gp = scale_game_frames(0x1E);
                         }
                         if (!(hero.state_timer > scale_game_frames(0x14))) {
                             break;

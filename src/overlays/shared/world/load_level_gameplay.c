@@ -381,7 +381,7 @@ extern MobyInst *D_L00_0015FFE0 MACRO_ADDR;
 #include "rnc/rendering/level_render_state.h"
 
 extern ShrubClass                 *D_L00_001BC030[];
-extern ShrubInst *D_L00_00160494   MACRO_ADDR;
+extern ShrubInst                  *level_shrub_instances __asm__("D_L00_00160494") MACRO_ADDR;
 extern ShrubInst *D_L00_00160498   MACRO_ADDR;
 extern ShrubMatrix *D_L00_0016049C MACRO_ADDR;
 extern LevelSpline                *l00_splines_macro __asm__("D_L00_0015F70C") MACRO_ADDR;
@@ -389,7 +389,7 @@ extern TextHeader                  D_L00_00179410;
 extern TextTable *D_L00_0015F660   MACRO_ADDR;
 extern Tfrag *D_L00_00160F4C       MACRO_ADDR;
 extern TieClass                   *D_L00_001C5800[];
-extern TieInst *D_L00_00160FC0     MACRO_ADDR;
+extern TieInst                    *level_tie_instances __asm__("D_L00_00160FC0") MACRO_ADDR;
 extern TieInst *D_L00_00160FC4     MACRO_ADDR;
 extern TieMatrix *D_L00_00160FC8   MACRO_ADDR;
 extern char *D_L00_0015F310        MACRO_ADDR;
@@ -664,12 +664,12 @@ char *load_level_gameplay(int skip_gameplay_read) {
         int   i;
         int   last;
 
-        D_L00_00160FC0 = (TieInst *)mem;
+        level_tie_instances = (TieInst *)mem;
         p += 0x10;
         D_L00_00160FCC = n;
         mem += n << 5;
         if (n != 0) {
-            FillTransferWords(D_L00_00160FC0, 0, n << 5);
+            FillTransferWords(level_tie_instances, 0, n << 5);
         }
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         D_L00_00160FC8 = (TieMatrix *)mem;
@@ -678,9 +678,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
             FillTransferWords(D_L00_00160FC8, 0, D_L00_00160FCC * 0x1C0);
         }
         last = -1;
-        D_L00_00160FC4 = D_L00_00160FC0 + D_L00_00160FCC;
+        D_L00_00160FC4 = level_tie_instances + D_L00_00160FCC;
         for (i = 0; i < D_L00_00160FCC; i++) {
-            TieInst   *inst = D_L00_00160FC0 + i;
+            TieInst   *inst = level_tie_instances + i;
             TieMatrix *mtx = D_L00_00160FC8 + i;
             int        id;
             float      scale;
@@ -736,12 +736,12 @@ char *load_level_gameplay(int skip_gameplay_read) {
         int   last;
         int   i;
 
-        D_L00_00160494 = (ShrubInst *)mem;
+        level_shrub_instances = (ShrubInst *)mem;
         p += 0x10;
         D_L00_00160490 = n;
         mem += n << 5;
         if (n != 0) {
-            FillTransferWords(D_L00_00160494, 0, n << 5);
+            FillTransferWords(level_shrub_instances, 0, n << 5);
         }
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         D_L00_0016049C = (ShrubMatrix *)mem;
@@ -757,9 +757,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
         }
         last = -1;
         shrub_color_buffer_descriptor[1] = (int)D_L00_001604A0;
-        D_L00_00160498 = D_L00_00160494 + D_L00_00160490;
+        D_L00_00160498 = level_shrub_instances + D_L00_00160490;
         for (i = 0; i < D_L00_00160490; i++) {
-            ShrubInst   *inst = D_L00_00160494 + i;
+            ShrubInst   *inst = level_shrub_instances + i;
             ShrubMatrix *mtx = D_L00_0016049C + i;
             int          shrub_class_index = D_L00_001BC1B0[*(int *)p];
             float        scale;
@@ -1513,14 +1513,14 @@ char *load_level_gameplay(int skip_gameplay_read) {
             q += tfrag_mapping_count * 2;
         }
         bad2 = 1;
-        if (D_L00_00160FC4 - D_L00_00160FC0 == n2) {
+        if (D_L00_00160FC4 - level_tie_instances == n2) {
             int i;
 
             bad2 = 0;
             for (i = 0; i < n2; i++) {
                 int id = (unsigned short)q[1];
 
-                if (D_L00_00160FC0[i].f18 != id) {
+                if (level_tie_instances[i].f18 != id) {
                     bad2 = 1;
                 }
                 q += 2;
@@ -1584,7 +1584,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             int      k = 0;
 
             q = &object_mapping_header[tfrag_mapping_count * 2 + 4];
-            for (t = D_L00_00160FC0; t != D_L00_00160FC4; t++) {
+            for (t = level_tie_instances; t != D_L00_00160FC4; t++) {
                 int id = t->f18;
                 int j;
 
@@ -1611,7 +1611,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             for (i = 0; i < n2; i++) {
                 int w = q[0];
 
-                D_L00_00160FC0[i].f18 = ((w >> 3) << 8) | (1 << (w & 7));
+                level_tie_instances[i].f18 = ((w >> 3) << 8) | (1 << (w & 7));
                 q += 2;
             }
         }
@@ -1625,7 +1625,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         for (m = moby_table; m != D_L00_0015FFE0; m++) {
             m->f36 = 0x7F80;
         }
-        for (t = D_L00_00160FC0; t != D_L00_00160FC4; t++) {
+        for (t = level_tie_instances; t != D_L00_00160FC4; t++) {
             t->f18 = 0x7F80;
         }
         for (i = 0; i < D_L00_00160F50; i++) {
@@ -2092,12 +2092,13 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         if (core_header[0xA])
             debug_print(D_L00_001E8958, KB(D_L00_001BC030_244110[0] - D_L00_001C5800_244110[0]));
         else
-            debug_print(D_L00_001E8958, KB((char *)D_L00_00160FC0 - D_L00_001C5800_244110[0]));
+            debug_print(D_L00_001E8958, KB((char *)level_tie_instances - D_L00_001C5800_244110[0]));
         if (core_header[0xA])
             debug_print(D_L00_001E8970, KB(D_L00_00197300[0]->seqs[0] - D_L00_001BC030_244110[0]));
-        debug_print(D_L00_001E8988, KB((char *)D_L00_00160FC0 - D_L00_00197300[0]->seqs[0]));
-        debug_print(D_L00_001E89A0, KB((char *)D_L00_00160494 - (char *)D_L00_00160FC0));
-        debug_print(D_L00_001E89B8, KB((char *)moby_table - (char *)D_L00_00160494));
+        debug_print(D_L00_001E8988, KB((char *)level_tie_instances - D_L00_00197300[0]->seqs[0]));
+        debug_print(D_L00_001E89A0,
+                    KB((char *)level_shrub_instances - (char *)level_tie_instances));
+        debug_print(D_L00_001E89B8, KB((char *)moby_table - (char *)level_shrub_instances));
         debug_print(D_L00_001E89D0, KB(D_L00_0015FFE8 - (char *)moby_table));
         debug_print(D_L00_001E89E8, KB(D_L00_00160108 - D_L00_0015FFE8));
         debug_print(D_L00_001E8A00, KB(D_L00_0016016C - D_L00_00160108));
@@ -3329,17 +3330,3 @@ char *D_L00_0015F318 = 0;
 int   D_L00_00160104 = 0;
 int   D_L00_00160490 = 0;
 int   D_L00_00160FCC = 0;
-
-Tbl *l00_level_asset_entry_table __asm__("D_L00_0015F618") = 0;
-
-LevelSpline *l00_splines_macro __asm__("D_L00_0015F70C") = 0;
-
-u64 level_texture_128x128_descriptor[3] __asm__("D_L00_001827C0") = {0};
-
-u64 level_texture_64x64_descriptor[3] __asm__("D_L00_001827D8") = {0};
-
-char *effect_texture_data_base __asm__("D_L00_0015F420") = 0;
-
-TieInst *D_L00_00160FC0 = 0;
-
-ShrubInst *D_L00_00160494 = 0;

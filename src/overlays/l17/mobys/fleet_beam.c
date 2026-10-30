@@ -64,7 +64,7 @@ extern float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
 extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
 extern float fast_cos(float);
 extern int   D_L17_0015FFD8_t; /* no foreign declaration */
-short        fleet_beam_endpoint_axis_offset __asm__("D_L17_00161498") = -13107;
+extern short fleet_beam_endpoint_axis_offset __asm__("D_L17_00161498") __attribute__((sda));
 void         draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 
 extern void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");

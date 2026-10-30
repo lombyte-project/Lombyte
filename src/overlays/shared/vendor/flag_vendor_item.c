@@ -35,5 +35,3 @@ void flag_vendor_item(int slot) {
     if (moby->class_id == VENDOR_CLASS_ID)
         item->field39 = 1;
 }
-
-Level13VendorRecord *l13_vendor_item_records __asm__("D_L13_0015EF50") = 0;

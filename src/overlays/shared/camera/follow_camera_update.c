@@ -60,10 +60,10 @@ float                orbit_distance_default_damping_gp __asm__("D_L00_00161CF0")
 float                orbit_distance_pull_back_stiffness_gp __asm__("D_L00_00161D14") = 0.04f;
 float                orbit_distance_pull_back_damping_gp __asm__("D_L00_00161D18") = 0.3f;
 extern char          D_L00_00166E10[];
-short                orbit_yaw_spring_stiffness_gp __asm__("D_L00_00161CF4") = -15729;
-short                orbit_yaw_spring_damping_gp __asm__("D_L00_00161CF8") = -13107;
-short                orbit_pitch_spring_stiffness_gp __asm__("D_L00_00161CFC") = -15729;
-short                orbit_pitch_spring_damping_gp __asm__("D_L00_00161D00") = -13107;
+extern short         orbit_yaw_spring_stiffness_gp __asm__("D_L00_00161CF4") __attribute__((sda));
+extern short         orbit_yaw_spring_damping_gp __asm__("D_L00_00161CF8") __attribute__((sda));
+extern short         orbit_pitch_spring_stiffness_gp __asm__("D_L00_00161CFC") __attribute__((sda));
+extern short         orbit_pitch_spring_damping_gp __asm__("D_L00_00161D00") __attribute__((sda));
 extern int          *D_L00_0015EF80_9aa0 __asm__("D_L00_0015EF80");
 extern char         *D_L00_001600F4_9aa0 __asm__("D_L00_001600F4");
 f32 follow_camera_yaw_rate_table[2] __asm__("D_L00_00161DB0") = {0.017453292f, 0.02268928f};

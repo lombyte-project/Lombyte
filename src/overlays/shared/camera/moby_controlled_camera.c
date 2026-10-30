@@ -429,5 +429,3 @@ int update_moby_camera_control(char *moby) {
 }
 
 char *D_L02_001674DC NOT_SDA = 0;
-
-char *target_reference_table __asm__("D_L06_0015EF50") = 0;

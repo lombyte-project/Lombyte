@@ -8,21 +8,20 @@ typedef struct __attribute__((packed)) {
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/ui/menus/menu_pages.h"
 #include "rnc/save/memory_card_state.h"
 #include "rnc/game/options.h"
 
-extern volatile u16    D_0013E05A[];
-extern s32             D_0015EE24;
-extern Unaligned64     D_0015EE98[1];
-extern s32             D_001D2640[];
-extern struct MenuPage D_001D4E38[];
-extern struct MenuPage D_001D4F98[];
-extern void            request_space_load(s32 value);
-extern void            mode_freeze_init() __asm__("func_001FBAB8");
-extern s32             load_and_initialize_level_chunk() __asm__("func_00209370");
-extern void            start_memory_card_save(s32 save_data, s32 slot) __asm__("FUN_00226a70");
-extern s32             load_level_zero_preserving_progress() __asm__("FUN_00226b08");
-extern s32             allocate_voice_for_target_entry() __asm__("func_0022DA68");
+extern volatile u16 D_0013E05A[];
+extern s32          D_0015EE24;
+extern Unaligned64  D_0015EE98[1];
+extern s32          D_001D2640[];
+extern void         request_space_load(s32 value);
+extern void         mode_freeze_init() __asm__("func_001FBAB8");
+extern s32          load_and_initialize_level_chunk() __asm__("func_00209370");
+extern void         start_memory_card_save(s32 save_data, s32 slot) __asm__("FUN_00226a70");
+extern s32          load_level_zero_preserving_progress() __asm__("FUN_00226b08");
+extern s32          allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 saving_data_menu2(struct MenuScreen *w) __asm__("FUN_002235b8");
 
@@ -38,11 +37,11 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         return 0;
     }
     old = w->data.save.slot;
-    if (w->data.save.step == 0 && menu_system.previous == D_001D4E38 &&
+    if (w->data.save.step == 0 && menu_system.previous == &new_game_confirm_page &&
         menu_system.previous->confirmed != 0) {
         w->data.save.step = 1;
     }
-    if (w->data.save.step == 0 && menu_system.previous == D_001D4F98 &&
+    if (w->data.save.step == 0 && menu_system.previous == &challenge_confirm_page &&
         menu_system.previous->confirmed != 0) {
         w->data.save.step = 1;
     }
@@ -121,7 +120,8 @@ s32 saving_data_menu2(struct MenuScreen *w) {
     selected_save_slot = cursor;
     if ((pad & 0x40) && memory_card_state.card[0].type == 2) {
         if (*(s32 *)((u8 *)&memory_card_state + cursor * 0x1C + 0x20) != -1) {
-            menu_system.next = (w->data.save.flags & 0x2000) ? D_001D4F98 : D_001D4E38;
+            menu_system.next =
+                (w->data.save.flags & 0x2000) ? &challenge_confirm_page : &new_game_confirm_page;
             menu_system.unkD4 = (w->data.save.flags & 0x2000) ? 2 : 1;
             D_001D2640[0] = w->data.save.slot;
         } else {

@@ -193,8 +193,8 @@ void update_enabled_item_tint_from_hero(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_00200D70), where it is exact; names translated to the US level program. */
 
-float       D_L15_0017ACC0_lui __asm__("D_L15_0017ACC0") NOT_SDA = 0;
-extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern float D_L15_0017ACC0_lui __asm__("D_L15_0017ACC0") NOT_SDA;
+extern void  update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 
 void update_hero_bobbing_and_target_position(void) __asm__("FUN_L15_002007d8");
 

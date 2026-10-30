@@ -656,7 +656,7 @@ typedef struct {
 
 extern H_ec290 l18_electric_bolt_side_arc_predecessor_view[] __asm__("D_L18_001DA150");
 /* Four side arcs (k < 4) of five points. */
-P_ec290 l18_electric_bolt_side_arc_points[4] __asm__("D_L18_001DA160") = {0};
+extern P_ec290 l18_electric_bolt_side_arc_points[4] __asm__("D_L18_001DA160");
 
 extern V_ec290 D_L18_001D9CF0[];
 /* The 20-point bolt (row 0) and its mirror (row 1); the per-point tables below have one entry per point. */

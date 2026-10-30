@@ -283,5 +283,3 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         break;
     }
 }
-
-char *fleet_moby_array_end __asm__("D_L17_0015FFDC") = 0;

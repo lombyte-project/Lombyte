@@ -77,7 +77,8 @@ extern Cam   l05_water_light_heading_source __asm__("D_L05_00180340");
 extern Light light __asm__("D_L05_001CAD00");
 int          water_grid_fixed_point_bounds[48][4] __asm__("D_L05_0020B440") = {0};
 
-unsigned short record_draw_values[48] __asm__("D_L05_0020B380") = {
+/* Each grid's WaterGrid.visible_subtiles while it is in view: bit i = sub-tile i of its 4x4 grid. */
+u16 l05_water_grid_visible_subtiles[48] __asm__("D_L05_0020B380") = {
     0xfff0, 0x3100, 0xffff, 0x1331, 0xc800, 0xfff0, 0x8ccc, 0xffff, 0xfec8, 0xf531, 0xffff, 0x37f,
     0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
     0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
@@ -99,8 +100,9 @@ extern int D_L05_00161208   MACRO_ADDR;
 extern float D_L05_0016120C MACRO_ADDR;
 extern float D_L05_00161210 MACRO_ADDR;
 extern float D_L05_00161214 MACRO_ADDR;
-int                         D_L05_00161D10 = -1;
-extern unsigned short       l05_water_record_draw_value_override __asm__("D_L05_00161D14")
+/* The grid whose mask is replaced by l05_water_grid_override_visible_subtiles; -1: none. */
+int                   l05_water_grid_override_index __asm__("D_L05_00161D10") = -1;
+extern unsigned short l05_water_grid_override_visible_subtiles __asm__("D_L05_00161D14")
     __attribute__((sda));
 int                       hero_hits __asm__("D_L05_00161D1C") = 0;
 int                       rise_step __asm__("D_L05_00161D20") = 0;
@@ -165,8 +167,8 @@ void water_update(struct Moby *moby) {
             D_L05_00161214 = 26.0f;
             for (i = 0; i < 0x30; i++) {
                 pool_bind_tile(&l05_water_grids[i].x, water_grid_fixed_point_bounds[i]);
-                l05_water_grids[water_vars->record_index].draw_value =
-                    record_draw_values[water_vars->record_index];
+                l05_water_grids[water_vars->record_index].visible_subtiles =
+                    l05_water_grid_visible_subtiles[water_vars->record_index];
             }
             for (j = 0; j < 0x30; j++) {
                 record_grid_entry_neighbor_indices(j);
@@ -196,7 +198,7 @@ void water_update(struct Moby *moby) {
                 moby->state = 3;
                 water_vars->timer = scale_game_frames(0x3C);
                 if (moby->pos.z < water_vars->lowered_z) {
-                    l05_water_grids[water_vars->record_index].draw_value = 0;
+                    l05_water_grids[water_vars->record_index].visible_subtiles = 0;
                 }
             }
         } else {
@@ -310,7 +312,7 @@ void water_update(struct Moby *moby) {
                 hero_hits++;
             }
         } else if (water_vars->raised_z < moby->pos.z) {
-            l05_water_grids[water_vars->record_index].draw_value = 0;
+            l05_water_grids[water_vars->record_index].visible_subtiles = 0;
             mark_moby_for_removal(moby);
             return;
         }
@@ -354,29 +356,30 @@ void water_update(struct Moby *moby) {
     }
     if (water_vars->record_index >= 0) {
         WaterGrid *e = &l05_water_grids[water_vars->record_index];
-        float      restore_record_draw_value;
+        float      grid_in_view;
 
         e->z = moby->pos.z;
-        restore_record_draw_value = 0.0f;
+        grid_in_view = 0.0f;
         if (check_scaled_vector_bsphere((char *)moby, 48.0f) != -1 &&
             (!(moby->state >= 3 && moby->state <= 7) ||
              (moby->pos.z > water_vars->lowered_z && moby->pos.z < water_vars->raised_z))) {
-            restore_record_draw_value = 1.0f;
+            grid_in_view = 1.0f;
         }
-        if (restore_record_draw_value == 0.0f) {
-            l05_water_grids[water_vars->record_index].draw_value = 0;
+        if (grid_in_view == 0.0f) {
+            l05_water_grids[water_vars->record_index].visible_subtiles = 0;
         } else {
-            l05_water_grids[water_vars->record_index].draw_value =
-                record_draw_values[water_vars->record_index];
+            l05_water_grids[water_vars->record_index].visible_subtiles =
+                l05_water_grid_visible_subtiles[water_vars->record_index];
         }
         if (water_vars->record_index == 0) {
             pool_flush((char *)l05_water_grids, 0x30);
             add_draw_callback(render_level_water_grids, moby);
         }
-        if (water_vars->record_index == D_L05_00161D10) {
-            l05_water_grids[water_vars->record_index].draw_value =
-                l05_water_record_draw_value_override;
-            record_draw_values[water_vars->record_index] = l05_water_record_draw_value_override;
+        if (water_vars->record_index == l05_water_grid_override_index) {
+            l05_water_grids[water_vars->record_index].visible_subtiles =
+                l05_water_grid_override_visible_subtiles;
+            l05_water_grid_visible_subtiles[water_vars->record_index] =
+                l05_water_grid_override_visible_subtiles;
         }
     }
 }

@@ -98,8 +98,8 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
             entry = (MenuItem *)(menu->unk3C + linked_entry_index * 0x1C);
             menu->unk8 = *(u8 *)&entry->unk10 & 1;
             if (flags & 4) {
-                D_001993C0[2] = (s32)callback_context;
-                D_001993C0[3] = (s32)menu;
+                menu_entry_context[2] = (s32)callback_context;
+                menu_entry_context[3] = (s32)menu;
                 if (entry->unk4 & 0x4000) {
                     noop_callback_n((s16)(entry->unk4 ^ 0x4000));
                 } else {
@@ -113,7 +113,7 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
     if (menu->unk36 == -1) {
         return;
     }
-    D_001993C0[5] = entry->unk0;
+    menu_entry_context[5] = entry->unk0;
     kind = entry->unk8;
     if (kind == 6) {
         sfx = menu_bolt_threshold_thousands_separators;
@@ -132,7 +132,7 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
     } else {
         sprintf(formatted_help_text, get_help_message_text(entry->unk0));
     }
-    if (D_001993C0[5] != 0) {
+    if (menu_entry_context[5] != 0) {
         copy_text_to_shared_buffer(formatted_help_text);
     } else if (menu_help_hud_item_gp != -1) {
         remove_hud_item(menu_help_hud_item_gp);
@@ -184,4 +184,4 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
 
 extern __typeof__(process_menu_entry) func_00216C48 __attribute__((alias("FUN_00216c48")));
 
-s32 D_001993C0[6] = {0};
+s32 menu_entry_context[6] = {0};

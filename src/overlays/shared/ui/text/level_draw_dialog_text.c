@@ -30,7 +30,7 @@ typedef struct {
     s32   unk24;  /* 0x24 */
 } MessageBox;
 
-MessageBox l00_message_box __asm__("D_L00_00173040") = {0};
+extern MessageBox l00_message_box __asm__("D_L00_00173040");
 
 #include "rnc/overlay/shared/ui/text/level_draw_dialog_text_globals.h"
 #include "rnc/math/fast_math.h"

@@ -264,7 +264,3 @@ void initialize_level_12_slot_grid_neighbors(int selected_slot_index) {
         }
     }
 }
-
-float water_tile_direction_inputs[8] __asm__("D_L12_00180340") = {0};
-
-void *l12_water_tile_position_records __asm__("D_L12_001612D4") = 0;

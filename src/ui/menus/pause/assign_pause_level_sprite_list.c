@@ -3,13 +3,15 @@
 #include "types.h"
 #include "rnc/globals.h"
 
-extern int pause_level_sprite_lists[] __asm__("D_001D4528");
-/* `D_001D4528[(unsigned)D_0015ED84 % 19]`; the older near-miss
+#include "rnc/ui/menus/menu_pages.h"
+
+/* `in_level_movie_lists[(unsigned)D_0015ED84 % 19]`; the older near-miss
    predated MACRO_ADDR. */
 int assign_pause_level_sprite_list(char *destination) __asm__("FUN_00221d28");
 
 int assign_pause_level_sprite_list(char *destination) {
-    *(int *)(destination + 0x34) = pause_level_sprite_lists[(unsigned int)current_level_index % 19];
+    *(int *)(destination + 0x34) =
+        (int)in_level_movie_lists[(unsigned int)current_level_index % 19];
     return 0;
 }
 

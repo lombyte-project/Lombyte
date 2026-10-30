@@ -47,7 +47,7 @@ struct Spark_c8e0 {
     } draw;
 };
 
-f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") = 4.0f;
+f32 breakable_lamp_tip_distance_gp __asm__("D_L05_00161FC8") = 4.0f;
 
 f32         debris_axis_launch_speed_gp __asm__("D_L05_00161FD0") = 0.075f;
 f32         debris_upward_launch_speed_gp __asm__("D_L05_00161FD4") = 0.08f;
@@ -117,7 +117,7 @@ void update_moby_glow_and_contact_explosion(struct Moby *moby) {
     if (hit == 0) {
         return;
     }
-    fast_vec_scale(&tip, &moby->rot_row2, D_L05_00161FC8_gp);
+    fast_vec_scale(&tip, &moby->rot_row2, breakable_lamp_tip_distance_gp);
     fast_vec_add(&tip, &moby->pos, &tip);
     if (!(*(s32 *)(hit + 0x24) & 0x800000) && !(fast_vec_dist(&tip, hit) <= 0.8f)) {
         if ((*(struct Moby **)(hit + 0x20))->oclass != 0x47) {
@@ -241,8 +241,8 @@ typedef struct {
 extern float glow_sprite_local_vertices[4][4] __asm__("D_L05_00215C70");
 extern void  draw_geometry_quad(void *, void *, int);
 
-short       glow_sprite_camera_offset_distance __asm__("D_L05_00161FCC") = -13107;
-extern char D_L05_001671C0_lui[] __asm__("D_L05_001671C0") NOT_SDA;
+extern short glow_sprite_camera_offset_distance __asm__("D_L05_00161FCC") __attribute__((sda));
+extern char  D_L05_001671C0_lui[] __asm__("D_L05_001671C0") NOT_SDA;
 
 void draw_moby_glow_sprite(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -268,7 +268,7 @@ void draw_moby_glow_sprite(char *m) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    fast_vec_scale(sprite_offset, m + 0xE0, *(float *)&D_L05_00161FC8_gp);
+    fast_vec_scale(sprite_offset, m + 0xE0, *(float *)&breakable_lamp_tip_distance_gp);
     fast_vec_add(M[3], m + 0x10, sprite_offset);
     fast_vec_sub(M[0], D_L05_001671C0_lui, M[3]);
     fast_vec_normalize(M[0], M[0], 1.0f);

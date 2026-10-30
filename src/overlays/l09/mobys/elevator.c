@@ -21,7 +21,7 @@ typedef struct {
     u8 collected[1];
 } L09LevelState;
 
-L09LevelState l09_moby_collection_state __asm__("D_L09_001BB3B0") = {0};
+extern L09LevelState l09_moby_collection_state __asm__("D_L09_001BB3B0");
 
 extern int   elevator_activation_save_id_bits[] __asm__("D_L09_001BA650");
 extern int   is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");

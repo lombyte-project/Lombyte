@@ -41,13 +41,16 @@ void update_pulsing_scroll_layers(FlagMoby *moby) {
     add_draw_callback(draw_pulsing_scroll_layers, moby);
 }
 
-Vec4f D_L01_00162010 = {103.123f, 65.636f, 65.481f, 4e+01f};
+Vec4f l01_sine_modulated_scroll_layer_0_bounds __asm__("D_L01_00162010") = {
+    103.123f, 65.636f, 65.481f, 4e+01f};
 
-Vec4f D_L01_00162020 = {113.462036f, 73.64154f, 59.622814f, 4e+01f};
+Vec4f l01_sine_modulated_scroll_layer_1_bounds __asm__("D_L01_00162020") = {
+    113.462036f, 73.64154f, 59.622814f, 4e+01f};
 
-Vec4f D_L01_00162030 = {96.322075f, 76.454475f, 62.6544f, 4e+01f};
+Vec4f l01_sine_modulated_scroll_layer_2_bounds __asm__("D_L01_00162030") = {
+    96.322075f, 76.454475f, 62.6544f, 4e+01f};
 
-Vec4f D_L01_00201660[94] = {
+Vec4f l01_sine_modulated_scroll_layer_0_verts[94] __asm__("D_L01_00201660") = {
     { 103.74609f,  65.57346f,  65.75458f,  65.58994f},
     { 101.10969f,  64.05052f,  65.73995f,  65.60249f},
     { 106.12196f, 62.322308f,  65.73715f,  65.76699f},
@@ -144,7 +147,7 @@ Vec4f D_L01_00201660[94] = {
     { 105.35325f,  71.62522f,  65.64716f,  65.63626f},
 };
 
-f32 D_L01_00201C40[94][2] = {
+f32 l01_sine_modulated_scroll_layer_0_uvs[94][2] __asm__("D_L01_00201C40") = {
     {0.0f, -1.0f},
     {1.0f, -1.0f},
     {0.0f,  0.0f},
@@ -241,7 +244,7 @@ f32 D_L01_00201C40[94][2] = {
     {0.0f, -1.0f},
 };
 
-Vec4f D_L01_00201F30[70] = {
+Vec4f l01_sine_modulated_scroll_layer_1_verts[70] __asm__("D_L01_00201F30") = {
     {113.462036f,  73.64154f, 59.622814f, 59.775475f},
     { 114.45262f, 70.989975f, 59.761353f, 59.786304f},
     {117.769066f, 75.113655f, 59.686657f,  59.65637f},
@@ -314,7 +317,7 @@ Vec4f D_L01_00201F30[70] = {
     { 112.34432f,   82.7102f, 59.804096f, 59.668118f},
 };
 
-f32 D_L01_00202390[70][2] = {
+f32 l01_sine_modulated_scroll_layer_1_uvs[70][2] __asm__("D_L01_00202390") = {
     {1.0f, -1.0f},
     {1.0f,  0.0f},
     {0.0f, -1.0f},
@@ -387,7 +390,7 @@ f32 D_L01_00202390[70][2] = {
     {0.0f, -1.0f},
 };
 
-Vec4f D_L01_002025C0[82] = {
+Vec4f l01_sine_modulated_scroll_layer_2_verts[82] __asm__("D_L01_002025C0") = {
     { 96.322075f, 76.454475f,   62.6544f,   62.7969f},
     { 93.461266f,  75.41247f, 62.728157f, 62.702423f},
     {   98.0973f,  72.84013f, 62.622635f, 62.790962f},
@@ -472,7 +475,7 @@ Vec4f D_L01_002025C0[82] = {
     {  98.95569f,  82.13521f,  62.64664f,  62.77297f},
 };
 
-f32 D_L01_00202AE0[82][2] = {
+f32 l01_sine_modulated_scroll_layer_2_uvs[82][2] __asm__("D_L01_00202AE0") = {
     {0.0f, -1.0f},
     {1.0f, -1.0f},
     {0.0f,  0.0f},
@@ -558,49 +561,55 @@ f32 D_L01_00202AE0[82][2] = {
 };
 
 ScrollLayer l01_sine_modulated_scroll_layers[3] = {
-    {&D_L01_00201660,
-     &D_L01_00201C40,
-     &D_L01_00162010,
-     0x5e, 0.0014f,
-     0.0008f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2b,
-     0x2b, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_00201F30,
-     &D_L01_00202390,
-     &D_L01_00162020,
-     0x46, 0.0014f,
-     0.0008f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2b,
-     0x2b, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
-    {&D_L01_002025C0,
-     &D_L01_00202AE0,
-     &D_L01_00162030,
-     0x52, 0.0014f,
-     0.0008f, 0.007f,
-     1, -0.1f,
-     -0.9f,
-     0.1f, -0.9f,
-     0xb8a0a0, 0x2b,
-     0x2b, 0x30,
-     0x30, {0},
-     0.0f, 0.0f,
-     0.0f, 0.0f,
-     0, {0},
-     0.0f},
+    {.verts = l01_sine_modulated_scroll_layer_0_verts,
+     .uvs = l01_sine_modulated_scroll_layer_0_uvs,
+     .bounds = &l01_sine_modulated_scroll_layer_0_bounds,
+     .count = 94,
+     .rate0 = 0.0014f,
+     .rate1 = 0.0008f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2b,
+     .tex1 = 0x2b,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
+    {.verts = l01_sine_modulated_scroll_layer_1_verts,
+     .uvs = l01_sine_modulated_scroll_layer_1_uvs,
+     .bounds = &l01_sine_modulated_scroll_layer_1_bounds,
+     .count = 70,
+     .rate0 = 0.0014f,
+     .rate1 = 0.0008f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2b,
+     .tex1 = 0x2b,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
+    {.verts = l01_sine_modulated_scroll_layer_2_verts,
+     .uvs = l01_sine_modulated_scroll_layer_2_uvs,
+     .bounds = &l01_sine_modulated_scroll_layer_2_bounds,
+     .count = 82,
+     .rate0 = 0.0014f,
+     .rate1 = 0.0008f,
+     .unk18 = 0.007f,
+     .frame_step = 1,
+     .du0 = -0.1f,
+     .dv0 = -0.9f,
+     .du1 = 0.1f,
+     .dv1 = -0.9f,
+     .color = 0xb8a0a0,
+     .tex0 = 0x2b,
+     .tex1 = 0x2b,
+     .alpha0 = 0x30,
+     .alpha1 = 0x30},
 };

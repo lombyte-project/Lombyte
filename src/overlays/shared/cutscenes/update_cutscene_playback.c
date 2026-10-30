@@ -580,7 +580,6 @@ extern char          D_L00_0016CA40_lui[] __asm__("D_L00_0016CA40") NOT_SDA;
 extern unsigned char D_0015EDB0_298de8 __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB0_298de8b __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB4_298de8 __asm__("D_0015EDB4");
-extern float         D_L00_0015F5A0 __asm__("D_L00_0015F5A0");
 
 #include "rnc/overlay/level_camera.h"
 
@@ -891,7 +890,7 @@ extern s32 D_L00_00161054_macro __asm__("D_L00_00161054") MACRO_ADDR;
 extern s32 D_L00_00161058_macro __asm__("D_L00_00161058") MACRO_ADDR;
 extern s32 D_L00_0015F40C_macro __asm__("D_L00_0015F40C") MACRO_ADDR;
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") MACRO_ADDR;
-s32        D_L00_00173E04_lui __asm__("D_L00_00173E04") NOT_SDA = 0;
+extern s32 D_L00_00173E04_lui __asm__("D_L00_00173E04") NOT_SDA;
 /* [0] is gs_texture_allocation_start, [4] depth_buffer_address. */
 extern s32  D_0015EE78_macro[6] __asm__("D_0015EE78") MACRO_ADDR;
 extern void flush_cache(s32) __asm__("FUN_00118a80");

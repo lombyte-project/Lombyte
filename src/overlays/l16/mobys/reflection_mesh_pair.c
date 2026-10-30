@@ -41,8 +41,12 @@ typedef struct {
     float x, y, z, radius;
 } L16SingleSphere_2e98e0;
 
-short                         D_L16_00161F90_gp __asm__("D_L16_00161F90") = 0x6e;
-short                         D_L16_00161F98_gp __asm__("D_L16_00161F98") = -7856;
+/* The code reads both as int tables of two entries (counts {110, 13}, positions
+   {reflection_mesh_pair_positions_0, reflection_mesh_pair_positions_1}); only
+   their first halfword is in C so far. */
+extern short reflection_mesh_pair_vertex_counts __asm__("D_L16_00161F90") __attribute__((sda));
+extern short reflection_mesh_pair_position_tables __asm__("D_L16_00161F98")
+    __attribute__((sda)); /* low half of &reflection_mesh_pair_positions_0 (0x001DE150) */
 extern L16SingleSphere_2e98e0 D_L16_00161F60_bounds_2e98e0[] __asm__("D_L16_001DF2B0")
     __attribute__((section(".data")));
 
@@ -53,32 +57,43 @@ void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 /* Sets up the draw state, then draws the two entries of the level's table. */
 
 extern char D_L16_001DF2D0[] NOT_SDA;
-/* Point positions of the two meshes (table D_L16_00161F98, counts 110 and 13 at D_L16_00161F90). */
-extern float D_L16_001DE150[330]; /* 110 points x 3 floats */
-extern float D_L16_001DE678[39];  /* 13 points x 3 floats */
+/* Point positions of the two meshes. */
+extern float
+    reflection_mesh_pair_positions_0[330] __asm__("D_L16_001DE150"); /* 110 points x 3 floats */
+extern float
+    reflection_mesh_pair_positions_1[39] __asm__("D_L16_001DE678"); /* 13 points x 3 floats */
 extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float D_L16_001DE720[];
 extern float D_L16_001DEA90[];
-float       *D_L16_00161FA0[2] = {D_L16_001DE720, D_L16_001DEA90};
 
-extern float D_L16_001DEAF8[330]; /* 110 points x 3 floats */
-extern float D_L16_001DF020[39];  /* 13 points x 3 floats */
-float       *D_L16_00161FA8[2] = {D_L16_001DEAF8, D_L16_001DF020};
+float *reflection_mesh_pair_unused_pair_tables[2] __asm__("D_L16_00161FA0") = {D_L16_001DE720,
+                                                                               D_L16_001DEA90};
 
-extern u32 D_L16_001DF0C0[110]; /* 110 RGBA words, one per point */
-extern u32 D_L16_001DF278[13];  /* 13 RGBA words, one per point */
-u32       *D_L16_00161FB0[2] = {D_L16_001DF0C0, D_L16_001DF278};
+extern float
+    reflection_mesh_pair_directions_0[330] __asm__("D_L16_001DEAF8"); /* 110 points x 3 floats */
+extern float
+    reflection_mesh_pair_directions_1[39] __asm__("D_L16_001DF020"); /* 13 points x 3 floats */
+
+float *reflection_mesh_pair_direction_tables[2] __asm__("D_L16_00161FA8") = {
+    reflection_mesh_pair_directions_0, reflection_mesh_pair_directions_1};
+
+extern u32 reflection_mesh_pair_colours_0[110] __asm__("D_L16_001DF0C0"); /* 110 RGBA words, one per point */
+extern u32
+    reflection_mesh_pair_colours_1[13] __asm__("D_L16_001DF278"); /* 13 RGBA words, one per point */
+
+u32 *reflection_mesh_pair_colour_tables[2] __asm__("D_L16_00161FB0") = {
+    reflection_mesh_pair_colours_0, reflection_mesh_pair_colours_1};
 
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 
 void draw_level16_visible_textured_batches(void) __asm__("FUN_L16_002e97a0");
 
 void draw_level16_visible_textured_batches(void) {
-    int *element_counts = (int *)&D_L16_00161F90_gp;
-    int *packet_vector_tables = (int *)&D_L16_00161F98_gp;
-    int *unused_reflection_argument_tables = (int *)D_L16_00161FA0;
-    int *input_vector_tables = (int *)D_L16_00161FA8;
-    int *packet_word_tables = (int *)D_L16_00161FB0;
+    int *element_counts = (int *)&reflection_mesh_pair_vertex_counts;
+    int *packet_vector_tables = (int *)&reflection_mesh_pair_position_tables;
+    int *unused_reflection_argument_tables = (int *)reflection_mesh_pair_unused_pair_tables;
+    int *input_vector_tables = (int *)reflection_mesh_pair_direction_tables;
+    int *packet_word_tables = (int *)reflection_mesh_pair_colour_tables;
     int  i;
 
     vu1_add_g_sregister(6, get_effect_texture(0x29));
@@ -122,9 +137,9 @@ void update_reflection_mesh_pair(struct Moby *moby) {
             minx = miny = minz = 1024.0f;
             {
                 int k;
-                for (k = 0; k < ((int *)&D_L16_00161F90_gp)[i]; k++) {
+                for (k = 0; k < ((int *)&reflection_mesh_pair_vertex_counts)[i]; k++) {
                     float x, y, z;
-                    verts = ((float **)&D_L16_00161F98_gp)[i] + k * 3;
+                    verts = ((float **)&reflection_mesh_pair_position_tables)[i] + k * 3;
                     x = verts[0];
                     if (x > maxx)
                         maxx = x;
@@ -150,12 +165,15 @@ void update_reflection_mesh_pair(struct Moby *moby) {
                 sphere->y = (maxy + miny) * 0.5f;
                 sphere->z = (maxz + minz) * 0.5f;
             }
-            for (j = 0; j < ((int *)&D_L16_00161F90_gp)[i]; j++) {
+            for (j = 0; j < ((int *)&reflection_mesh_pair_vertex_counts)[i]; j++) {
                 float vertex_to_center_distance;
                 out = (float *)(D_L16_00161F60_bounds_2e98e0 + i);
-                vertex_position[0] = ((float **)&D_L16_00161F98_gp)[i][j * 3 + 0];
-                vertex_position[1] = ((float **)&D_L16_00161F98_gp)[i][j * 3 + 1];
-                vertex_position[2] = ((float **)&D_L16_00161F98_gp)[i][j * 3 + 2];
+                vertex_position[0] =
+                    ((float **)&reflection_mesh_pair_position_tables)[i][j * 3 + 0];
+                vertex_position[1] =
+                    ((float **)&reflection_mesh_pair_position_tables)[i][j * 3 + 1];
+                vertex_position[2] =
+                    ((float **)&reflection_mesh_pair_position_tables)[i][j * 3 + 2];
                 vertex_to_center_distance = fast_vec_dist(vertex_position, out);
                 if (vertex_to_center_distance > out[3])
                     out[3] = vertex_to_center_distance;
@@ -179,31 +197,50 @@ extern void FUN_L00_001fde98(int, int, int, char *, int);
 
 extern char level16_reflection_mesh_coordinate_scratch[] __asm__("D_L16_001E28D0");
 
-int D_L16_00161FB8[4] __attribute__((section(".sdata"))) = {148, 148, 53, 0};
+int reflection_mesh_batch_vertex_counts[4] __asm__("D_L16_00161FB8")
+    __attribute__((section(".sdata"))) = {148, 148, 53, 0};
 
-extern float D_L16_001DF7B0[444]; /* 148 points x 3 floats */
-extern float D_L16_001DFEA0[444]; /* 148 points x 3 floats */
-extern float D_L16_001E0590[159]; /* 53 points x 3 floats */
-float       *D_L16_00161FC8[4]
-    __attribute__((section(".sdata"))) = {D_L16_001DF7B0, D_L16_001DFEA0, D_L16_001E0590, 0};
+extern float
+    reflection_mesh_batch_positions_0[444] __asm__("D_L16_001DF7B0"); /* 148 points x 3 floats */
+extern float
+    reflection_mesh_batch_positions_1[444] __asm__("D_L16_001DFEA0"); /* 148 points x 3 floats */
+extern float
+       reflection_mesh_batch_positions_2[159] __asm__("D_L16_001E0590"); /* 53 points x 3 floats */
+float *reflection_mesh_batch_position_tables[4] __asm__("D_L16_00161FC8")
+
+    __attribute__((section(".sdata"))) = {reflection_mesh_batch_positions_0,
+                                          reflection_mesh_batch_positions_1,
+                                          reflection_mesh_batch_positions_2,
+                                          0};
 
 extern float D_L16_001E0810[];
 extern float D_L16_001E0CB0[];
 extern float D_L16_001E1150[];
-float       *D_L16_00161FD8[4]
+float       *reflection_mesh_batch_unused_pair_tables[4] __asm__("D_L16_00161FD8")
     __attribute__((section(".sdata"))) = {D_L16_001E0810, D_L16_001E0CB0, D_L16_001E1150, 0};
 
-extern float D_L16_001E12F8[444]; /* 148 points x 3 floats */
-extern float D_L16_001E19E8[444]; /* 148 points x 3 floats */
-extern float D_L16_001E20D8[159]; /* 53 points x 3 floats */
-float       *D_L16_00161FE8[4]
-    __attribute__((section(".sdata"))) = {D_L16_001E12F8, D_L16_001E19E8, D_L16_001E20D8, 0};
+extern float
+    reflection_mesh_batch_directions_0[444] __asm__("D_L16_001E12F8"); /* 148 points x 3 floats */
+extern float
+    reflection_mesh_batch_directions_1[444] __asm__("D_L16_001E19E8"); /* 148 points x 3 floats */
+extern float
+       reflection_mesh_batch_directions_2[159] __asm__("D_L16_001E20D8"); /* 53 points x 3 floats */
+float *reflection_mesh_batch_direction_tables[4] __asm__("D_L16_00161FE8")
 
-extern u32 D_L16_001E2358[148]; /* 148 RGBA words, one per point */
-extern u32 D_L16_001E25A8[148]; /* 148 RGBA words, one per point */
-extern u32 D_L16_001E27F8[53];  /* 53 RGBA words, one per point */
-u32       *D_L16_00161FF8[4]
-    __attribute__((section(".sdata"))) = {D_L16_001E2358, D_L16_001E25A8, D_L16_001E27F8, 0};
+    __attribute__((section(".sdata"))) = {reflection_mesh_batch_directions_0,
+                                          reflection_mesh_batch_directions_1,
+                                          reflection_mesh_batch_directions_2,
+                                          0};
+
+extern u32 reflection_mesh_batch_colours_0[148] __asm__("D_L16_001E2358"); /* 148 RGBA words, one per point */
+extern u32 reflection_mesh_batch_colours_1[148] __asm__("D_L16_001E25A8"); /* 148 RGBA words, one per point */
+extern u32 reflection_mesh_batch_colours_2[53] __asm__("D_L16_001E27F8"); /* 53 RGBA words, one per point */
+u32 *reflection_mesh_batch_colour_tables[4] __asm__("D_L16_00161FF8")
+
+    __attribute__((section(".sdata"))) = {reflection_mesh_batch_colours_0,
+                                          reflection_mesh_batch_colours_1,
+                                          reflection_mesh_batch_colours_2,
+                                          0};
 
 void draw_level16_reflection_mesh_batch(void) __asm__("FUN_L16_002e9ce0");
 
@@ -215,20 +252,21 @@ void draw_level16_reflection_mesh_batch(void) {
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     font_queue_vu_state();
     for (i = 0; i < 3; i++) {
-        compute_level16_reflection_map_coordinates(D_L16_00161FB8[i],
-                                                   ((int *)D_L16_00161FE8)[i],
-                                                   ((int *)D_L16_00161FC8)[i],
-                                                   ((int *)D_L16_00161FD8)[i],
-                                                   level16_reflection_mesh_coordinate_scratch);
-        FUN_L00_001fde98(D_L16_00161FB8[i],
-                         ((int *)D_L16_00161FC8)[i],
-                         ((int *)D_L16_00161FF8)[i],
+        compute_level16_reflection_map_coordinates(
+            reflection_mesh_batch_vertex_counts[i],
+            ((int *)reflection_mesh_batch_direction_tables)[i],
+            ((int *)reflection_mesh_batch_position_tables)[i],
+            ((int *)reflection_mesh_batch_unused_pair_tables)[i],
+            level16_reflection_mesh_coordinate_scratch);
+        FUN_L00_001fde98(reflection_mesh_batch_vertex_counts[i],
+                         ((int *)reflection_mesh_batch_position_tables)[i],
+                         ((int *)reflection_mesh_batch_colour_tables)[i],
                          level16_reflection_mesh_coordinate_scratch,
                          1);
     }
 }
 
-float D_L16_001DE150[330] = {
+float reflection_mesh_pair_positions_0[330] __asm__("D_L16_001DE150") = {
     263.5638f,  246.82368f, 126.79665f, 263.96344f, 244.11322f, 126.79665f, 263.5638f,  246.82368f,
     130.23242f, 263.96344f, 244.11322f, 130.23242f, 263.5638f,  246.82368f, 133.6682f,  263.96344f,
     244.11322f, 130.23242f, 263.96344f, 244.11322f, 133.6682f,  263.96344f, 244.11322f, 130.23242f,
@@ -272,14 +310,14 @@ float D_L16_001DE150[330] = {
     130.23242f, 240.43959f, 237.94736f, 133.6682f,  240.90564f, 234.94664f, 130.23242f, 240.90564f,
     234.94664f, 133.6682f};
 
-float D_L16_001DE678[39] = {
+float reflection_mesh_pair_positions_1[39] __asm__("D_L16_001DE678") = {
     244.98363f, 247.09302f, 126.79665f, 247.2971f,  248.56071f, 126.79665f, 244.98363f, 247.09302f,
     130.23242f, 247.2971f,  248.56071f, 130.23242f, 244.98363f, 247.09302f, 133.6682f,  247.2971f,
     248.56071f, 130.23242f, 247.2971f,  248.56071f, 133.6682f,  247.2971f,  248.56071f, 130.23242f,
     249.93573f, 249.29828f, 133.6682f,  247.2971f,  248.56071f, 130.23242f, 249.93573f, 249.29828f,
     130.23242f, 247.2971f,  248.56071f, 126.79665f, 249.93573f, 249.29828f, 126.79665f};
 
-float D_L16_001DEAF8[330] = {
+float reflection_mesh_pair_directions_0[330] __asm__("D_L16_001DEAF8") = {
     0.989305f,  0.145862f,  0.0f, 0.989293f,  -8.4e-05f,  0.0f, 0.989305f,  0.145862f,  0.0f,
     0.989293f,  -8.4e-05f,  0.0f, 0.989305f,  0.145862f,  0.0f, 0.989293f,  -8.4e-05f,  0.0f,
     0.989293f,  -8.4e-05f,  0.0f, 0.989293f,  -8.4e-05f,  0.0f, 0.992939f,  -0.031802f, 0.0f,
@@ -318,14 +356,14 @@ float D_L16_001DEAF8[330] = {
     -0.989959f, 0.141357f,  0.0f, -0.989056f, -0.006058f, 0.0f, -0.989056f, -0.006058f, 0.0f,
     -0.95831f,  -0.262443f, 0.0f, -0.95831f,  -0.262443f, 0.0f};
 
-float D_L16_001DF020[39] = {
+float reflection_mesh_pair_directions_1[39] __asm__("D_L16_001DF020") = {
     -0.535702f, 0.844407f,  0.0f,       -0.402454f, 0.903745f,  0.0f,       -0.535702f, 0.844407f,
     0.0f,       -0.402454f, 0.903745f,  0.0f,       -0.535702f, 0.844407f,  0.0f,       -0.402454f,
     0.903745f,  0.0f,       -0.402454f, 0.903745f,  0.0f,       -0.402454f, 0.903745f,  0.0f,
     -0.269206f, 0.963082f,  0.0f,       -0.402454f, 0.903745f,  0.0f,       -0.269206f, 0.963083f,
     0.0f,       -0.402454f, 0.903745f,  0.0f,       -0.269206f, 0.963083f,  0.0f};
 
-u32 D_L16_001DF0C0[110] = {
+u32 reflection_mesh_pair_colours_0[110] __asm__("D_L16_001DF0C0") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
@@ -341,21 +379,21 @@ u32 D_L16_001DF0C0[110] = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 D_L16_001DF278[13] = {0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f,
-                          0x7f7f7f7f};
+u32 reflection_mesh_pair_colours_1[13] __asm__("D_L16_001DF278") = {0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f,
+                                                                    0x7f7f7f7f};
 
-float D_L16_001DF7B0[444] = {
+float reflection_mesh_batch_positions_0[444] __asm__("D_L16_001DF7B0") = {
     129.0f,      275.25998f,  123.79044f,  129.0f,      273.15128f,  119.68145f,  123.35012f,
     275.25998f,  123.79044f,  123.35012f,  273.15128f,  119.68145f,  118.7275f,   275.26f,
     123.79044f,  118.7275f,   273.1513f,   119.68145f,  116.16972f,  275.48563f,  123.79044f,
@@ -421,7 +459,7 @@ float D_L16_001DF7B0[444] = {
     124.30547f,  123.35012f,  298.73978f,  123.79044f,  119.75738f,  299.46008f,  124.30547f,
     123.91656f,  299.46008f,  124.30547f};
 
-float D_L16_001DFEA0[444] = {
+float reflection_mesh_batch_positions_1[444] __asm__("D_L16_001DFEA0") = {
     119.75738f,  299.46008f,  124.30547f,  123.91656f,  299.46008f,  124.30547f,  119.75738f,
     297.56284f,  128.00253f,  123.91656f,  297.56284f,  128.00253f,  120.79606f,  298.05978f,
     128.63208f,  124.48783f,  298.05978f,  128.63208f,  120.79606f,  296.37573f,  131.91367f,
@@ -487,7 +525,7 @@ float D_L16_001DFEA0[444] = {
     128.00253f,  109.75806f,  286.99988f,  128.63208f,  109.15681f,  284.93918f,  128.00253f,
     109.75806f,  286.99988f,  128.63208f};
 
-float D_L16_001E0590[159] = {
+float reflection_mesh_batch_positions_2[159] __asm__("D_L16_001E0590") = {
     109.15681f,  284.93918f,  128.00253f,  109.75806f, 286.99988f, 128.63208f,  109.97057f,
     284.8422f,   128.63208f,  111.206635f, 286.99988f, 131.91367f, 109.97057f,  284.8422f,
     128.63208f,  111.386795f, 285.17075f,  131.91367f, 109.97057f, 284.8422f,   128.63208f,
@@ -512,7 +550,7 @@ float D_L16_001E0590[159] = {
     118.6603f,   276.15253f,  128.63208f,  118.75335f, 277.80423f, 131.91367f,  116.585526f,
     276.78186f,  128.63208f,  116.9945f,   278.33774f, 131.91367f};
 
-float D_L16_001E12F8[444] = {
+float reflection_mesh_batch_directions_0[444] __asm__("D_L16_001E12F8") = {
     0.0f,       -0.735665f, -0.178431f, 0.0f,       -0.889683f, 0.456578f,  -2e-06f,    -0.735666f,
     -0.178431f, -3e-06f,    -0.889683f, 0.456578f,  -0.035994f, -0.747453f, -0.168701f, -0.044101f,
     -0.88795f,  0.455689f,  -0.16209f,  -0.795342f, -0.105275f, -0.174429f, -0.872792f, 0.447368f,
@@ -570,7 +608,7 @@ float D_L16_001E12F8[444] = {
     -0.036408f, 0.752221f,  -0.166457f, 0.0f,       0.735657f,  -0.178437f, -0.036408f, 0.752221f,
     -0.166457f, 0.0f,       0.73566f,   -0.178442f};
 
-float D_L16_001E19E8[444] = {
+float reflection_mesh_batch_directions_1[444] __asm__("D_L16_001E19E8") = {
     -0.036408f, 0.752221f,  -0.166457f, 0.0f,       0.73566f,   -0.178442f, -0.040911f, 0.854077f,
     -0.057426f, 0.0f,       0.837305f,  -0.081514f, -0.040913f, 0.854077f,  -0.057426f, 0.0f,
     0.837304f,  -0.081512f, -0.042608f, 0.896156f,  0.016526f,  0.0f,       0.882993f,  -0.012599f,
@@ -628,7 +666,7 @@ float D_L16_001E19E8[444] = {
     -0.763206f, -2e-06f,    0.594094f,  -0.763207f, -1e-06f,    0.594093f,  -0.754156f, -0.150598f,
     0.589666f,  -0.763207f, -1e-06f,    0.594093f};
 
-float D_L16_001E20D8[159] = {
+float reflection_mesh_batch_directions_2[159] __asm__("D_L16_001E20D8") = {
     -0.754156f, -0.150598f, 0.589666f,  -0.763207f, -1e-06f,    0.594093f,  -0.754156f, -0.150599f,
     0.589664f,  -0.759934f, -2e-06f,    0.596657f,  -0.754156f, -0.150599f, 0.589664f,  -0.750237f,
     -0.149744f, 0.592923f,  -0.754156f, -0.150599f, 0.589664f,  -0.721465f, -0.300038f, 0.579985f,
@@ -650,7 +688,7 @@ float D_L16_001E20D8[159] = {
     -0.042328f, -0.892974f, 0.011346f,  -0.177049f, -0.881226f, 0.043044f,  -0.180056f, -0.905533f,
     0.125052f,  -0.358411f, -0.86586f,  0.218297f,  -0.355667f, -0.863252f, 0.291695f};
 
-u32 D_L16_001E2358[148] = {
+u32 reflection_mesh_batch_colours_0[148] __asm__("D_L16_001E2358") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
@@ -671,7 +709,7 @@ u32 D_L16_001E2358[148] = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 D_L16_001E25A8[148] = {
+u32 reflection_mesh_batch_colours_1[148] __asm__("D_L16_001E25A8") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
@@ -692,7 +730,7 @@ u32 D_L16_001E25A8[148] = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f};
 
-u32 D_L16_001E27F8[53] = {
+u32 reflection_mesh_batch_colours_2[53] __asm__("D_L16_001E27F8") = {
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,
     0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f, 0x7f7f7f7f,

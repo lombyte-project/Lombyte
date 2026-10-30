@@ -321,8 +321,9 @@ extern void               draw_geometry_quad(void *, int, int) __asm__("FUN_001f
 
 #include "rnc/overlay/l18/mobys/rocket_data/draw_rocket_target_pulse_quad.h"
 
-int rocket_target_pulse_color_start_gp __asm__("D_L18_00161980") = 0x800020f0;
-int rocket_target_pulse_color_end_gp __asm__("D_L18_00161984") = 0x8000f0f0;
+int rocket_target_pulse_color_start_gp __asm__("D_L18_00161980") =
+    0x800020f0;                                                              /* RGBA, 0xAABBGGRR */
+int rocket_target_pulse_color_end_gp __asm__("D_L18_00161984") = 0x8000f0f0; /* RGBA, 0xAABBGGRR */
 
 void draw_rocket_target_pulse_quad(struct Moby *m) {
     Pk           pk;

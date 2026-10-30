@@ -11,7 +11,7 @@ typedef struct {
     char *save_data;
 } Level18PauseState;
 
-Level18PauseState l18_whole_save_serialization_state __asm__("D_L18_001BA6F0") = {0};
+extern Level18PauseState l18_whole_save_serialization_state __asm__("D_L18_001BA6F0");
 
 /* Starts a whole memory card save of save_data unless one is already pending. */
 void serialize_whole_save_once(char *save_data) __asm__("FUN_L18_00281fa8");

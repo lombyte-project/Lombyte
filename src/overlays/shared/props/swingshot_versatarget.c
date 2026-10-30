@@ -18,8 +18,8 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int   D_L02_0015F5CC; /* no foreign declaration */
 extern int   D_L02_0015FFD8; /* no foreign declaration */
 float        versatarget_particle_base_lifetime_gp __asm__("D_L02_00161CB0") = 3e+01f;
-int          versatarget_particle_color_gp __asm__("D_L02_00161CB4") = 0x60408080;
-float        versatarget_particle_scale_gp __asm__("D_L02_00161CB8") = 1.25f;
+int   versatarget_particle_color_gp __asm__("D_L02_00161CB4") = 0x60408080; /* RGBA, 0xAABBGGRR */
+float versatarget_particle_scale_gp __asm__("D_L02_00161CB8") = 1.25f;
 extern float D_L02_00161CBC;
 extern void  spawn_moving_hero_relative_alpha_fade_particle(
      void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");

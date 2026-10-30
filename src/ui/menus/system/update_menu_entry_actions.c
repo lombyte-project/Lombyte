@@ -25,18 +25,6 @@ extern s32  game_language_gp __asm__("D_0015ED88") __attribute__((sda));
 extern s32 *menu_level_indices_gp __asm__("D_001601E0") __attribute__((sda));
 
 s32 update_menu_entry_actions(struct MenuScreen *menu) {
-    enum {
-        MENU_ACTION_DISABLED = 0,
-        MENU_ACTION_NO_OP = 1,
-        MENU_ACTION_ALLOCATE_VOICE = 2,
-        MENU_ACTION_SET_NEXT_PAGE = 3,
-        MENU_ACTION_SET_NEXT_PAGE_OR_INITIALIZE_FREEZE = 4,
-        MENU_ACTION_SET_NEXT_PAGE_OR_INITIALIZE_TIMED_FREEZE = 5,
-        MENU_ACTION_REQUEST_CLOSE_WITH_OPTIONAL_MESSAGE = 6,
-        MENU_ACTION_REQUEST_CLOSE_WITH_WORD_PAYLOAD = 7,
-        MENU_ACTION_SET_LANGUAGE = 9,
-        MENU_ACTION_REQUEST_CLOSE_PRESERVING_PAYLOAD = 11
-    };
     s32 focused;
     s32 entry_index;
     s32 entry_count;
@@ -132,14 +120,14 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             menu_system.unkE4 = menu->data.list.items[menu->data.list.selected].param.value;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
-        case 8:
+        case MENU_ACTION_REQUEST_CLOSE_4_WITH_WORD_PAYLOAD:
             menu_system.unkF4 = 2;
             menu_system.unkF0 = menu_system.current;
             menu_system.close_request = 4;
             menu_system.unkE4 = menu->data.list.items[menu->data.list.selected].param.value;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
-        case 10:
+        case MENU_ACTION_REQUEST_CLOSE_6_WITH_WORD_PAYLOAD:
             menu_system.unkF4 = 2;
             menu_system.unkF0 = menu_system.current;
             menu_system.close_request = 6;

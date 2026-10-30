@@ -87,7 +87,7 @@ extern int        D_L07_001612D8;
 extern int water_grid_override_index __asm__("D_L07_00161B30") __attribute__((sda));
 
 /* no foreign declaration */
-extern unsigned short l07_water_grid_override_control_value __asm__("D_L07_00161B34")
+extern unsigned short l07_water_grid_override_visible_subtiles __asm__("D_L07_00161B34")
     __attribute__((sda));
 
 /* no foreign declaration */
@@ -98,7 +98,8 @@ int water_grid_geometry_descriptors[36][4] __asm__("D_L07_00204700") = {0};
 
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 
-unsigned short l07_water_grid_saved_control_values[36] __asm__("D_L07_00204680") = {
+/* Each grid's WaterGrid.visible_subtiles while it is in view: bit i = sub-tile i of its 4x4 grid. */
+u16 l07_water_grid_visible_subtiles[36] __asm__("D_L07_00204680") = {
     0xeeff, 0x17ff, 0xff,   0x77,   0xec00, 0x7300, 0xfff0, 0x7ff0, 0x8cf,  0x133,  0xff77, 0x7700,
     0xeecc, 0xffff, 0x17ff, 0x4ee,  0x17,   0xfecc, 0x7731, 0xefff, 0xffff, 0x133,  0xffff, 0xffff,
     0x3333, 0xec00, 0xff00, 0x1000, 0xffff, 0xffff, 0xffff, 0x133,  0xffff, 0xffff, 0xffff, 0xffff};
@@ -203,8 +204,8 @@ void water_update(Moby_30D8E8 *water_moby) {
             D_L07_00161208 = 0;
             for (i = 0; i < 0x24; i++) {
                 FUN_L01_002b7c68_2cd2b0(&l07_water_grids[i], p[i]);
-                l07_water_grids[water_data->idx].draw_value =
-                    l07_water_grid_saved_control_values[water_data->idx];
+                l07_water_grids[water_data->idx].visible_subtiles =
+                    l07_water_grid_visible_subtiles[water_data->idx];
             }
             for (k = 0; k < 0x24; k++) {
                 WaterGrid *water_records = l07_water_grids;
@@ -223,7 +224,7 @@ void water_update(Moby_30D8E8 *water_moby) {
             water_moby->state = 3;
             water_data->timer = scale_game_frames(0x3C);
             if (water_moby->pos[2] < water_data->lo) {
-                l07_water_grids[water_data->idx].draw_value = 0;
+                l07_water_grids[water_data->idx].visible_subtiles = 0;
             }
         } else if (water_data->f8 != 0) {
             water_moby->state = 1;
@@ -292,7 +293,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         break;
     case WATER_REMOVE_ABOVE_HIGH_HEIGHT:
         if (water_data->hi < water_moby->pos[2]) {
-            l07_water_grids[water_data->idx].draw_value = 0;
+            l07_water_grids[water_data->idx].visible_subtiles = 0;
             mark_moby_for_removal(water_moby);
             return;
         }
@@ -303,8 +304,8 @@ void water_update(Moby_30D8E8 *water_moby) {
     }
     {
         Cab *cab = &l07_water_grid_parameters;
-        l07_water_grids[water_data->idx].unk1C = cab->b3C;
-        l07_water_grids[water_data->idx].unk1D = cab->b3D;
+        l07_water_grids[water_data->idx].alpha_2_fix = cab->b3C;
+        l07_water_grids[water_data->idx].alpha_1_fix = cab->b3D;
     }
     l07_water_grids[water_data->idx].z = water_moby->pos[2];
     on = 0.0f;
@@ -315,19 +316,19 @@ void water_update(Moby_30D8E8 *water_moby) {
         }
     }
     if (on == 0.0f) {
-        l07_water_grids[water_data->idx].draw_value = 0;
+        l07_water_grids[water_data->idx].visible_subtiles = 0;
     } else {
-        l07_water_grids[water_data->idx].draw_value =
-            l07_water_grid_saved_control_values[water_data->idx];
+        l07_water_grids[water_data->idx].visible_subtiles =
+            l07_water_grid_visible_subtiles[water_data->idx];
     }
     if (water_data->idx == 0) {
         FUN_L01_002b7fe0_2cd2b0(l07_water_grids, 0x24);
         add_draw_callback(render_level07_water_grids, water_moby);
     }
     if (water_data->idx == water_grid_override_index) {
-        l07_water_grids[water_data->idx].draw_value = l07_water_grid_override_control_value;
-        l07_water_grid_saved_control_values[water_data->idx] =
-            l07_water_grid_override_control_value;
+        l07_water_grids[water_data->idx].visible_subtiles =
+            l07_water_grid_override_visible_subtiles;
+        l07_water_grid_visible_subtiles[water_data->idx] = l07_water_grid_override_visible_subtiles;
     }
 }
 

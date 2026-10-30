@@ -31,11 +31,11 @@ void queue_oil_tanker_front_texture_2b_batches(int pair_index) {
     for (i = 0; i < 0x5; i++) {
         FUN_L08_00258090(D_L11_00217770,
                          oil_tanker_front_texture_2b_batch_pair_sources[i],
-                         D_L11_00215268[i],
+                         oil_tanker_front_texture_2b_batch_vertex_counts[i],
                          &D_L11_00162628[pair_index]);
-        FUN_L00_001fde98(D_L11_00215268[i],
+        FUN_L00_001fde98(oil_tanker_front_texture_2b_batch_vertex_counts[i],
                          oil_tanker_front_texture_2b_batch_triplet_sources[i],
-                         D_L11_00217740[i],
+                         oil_tanker_front_texture_2b_batch_color_tables[i],
                          D_L11_00217770,
                          1);
     }

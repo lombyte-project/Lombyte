@@ -62,17 +62,17 @@ void draw_layered_mesh_effect(void) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
 
-extern Pair D_L08_00161E10[] MACRO_ADDR;
-extern Pair D_L08_00161E14[] MACRO_ADDR;
-extern Pair D_L08_00161E24[] MACRO_ADDR;
-extern Pair D_L08_001E8348[];
-extern Pair l08_layered_mesh_effect_sine_phase_pair __asm__("D_L08_00161E28");
-extern char D_L08_001675C0[];
-extern char layered_mesh_effect_sine_output_pair[] __asm__("D_L08_001E8350");
-extern int  D_L08_00161E08;
-short       layered_mesh_effect_center_x __asm__("D_L08_00161DC0") = -30441;
-short       layered_mesh_rgba_tables_initialized __asm__("D_L08_00161E04") = 0;
-extern void draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");
+extern Pair  D_L08_00161E10[] MACRO_ADDR;
+extern Pair  D_L08_00161E14[] MACRO_ADDR;
+extern Pair  D_L08_00161E24[] MACRO_ADDR;
+extern Pair  D_L08_001E8348[];
+extern Pair  l08_layered_mesh_effect_sine_phase_pair __asm__("D_L08_00161E28");
+extern char  D_L08_001675C0[];
+extern char  layered_mesh_effect_sine_output_pair[] __asm__("D_L08_001E8350");
+extern int   D_L08_00161E08;
+extern short layered_mesh_effect_center_x __asm__("D_L08_00161DC0") __attribute__((sda));
+extern short layered_mesh_rgba_tables_initialized __asm__("D_L08_00161E04") __attribute__((sda));
+extern void  draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");
 extern void
 scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
 extern void
@@ -180,7 +180,7 @@ Pair l08_layered_mesh_effect_sine_phase_pair __asm__("D_L08_00161E28") = {0};
 
 unsigned char layered_mesh_effect_fade_alpha __asm__("D_L08_00161E08") = 0;
 
-f32 D_L08_001DB5C0[41][3] = {
+f32 pair_offset_batch_0_positions[41][3] __asm__("D_L08_001DB5C0") = {
     {300.19287f, 250.73393f,   30.3089f},
     {298.75723f, 250.66078f, 30.317019f},
     { 300.7845f, 252.48225f, 30.308899f},
@@ -224,7 +224,7 @@ f32 D_L08_001DB5C0[41][3] = {
     {270.13055f,  258.7663f, 30.103268f},
 };
 
-f32 D_L08_001DB7B0[18][3] = {
+f32 pair_offset_batch_1_positions[18][3] __asm__("D_L08_001DB7B0") = {
     { 286.5276f, 249.76245f,  30.35183f},
     {287.69293f, 250.04558f, 30.338537f},
     {285.63046f, 249.91687f, 30.345932f},
@@ -245,7 +245,7 @@ f32 D_L08_001DB7B0[18][3] = {
     { 275.2761f, 249.55911f, 30.350088f},
 };
 
-f32 D_L08_001DB888[45][3] = {
+f32 pair_offset_batch_2_positions[45][3] __asm__("D_L08_001DB888") = {
     { 297.7294f, 250.60298f, 30.322712f},
     {295.62894f, 250.60263f,  30.32401f},
     {297.41873f, 249.50783f, 30.695309f},
@@ -293,7 +293,7 @@ f32 D_L08_001DB888[45][3] = {
     {297.62805f, 226.34769f, 35.294086f},
 };
 
-f32 D_L08_001DBAA8[40][3] = {
+f32 pair_offset_batch_3_positions[40][3] __asm__("D_L08_001DBAA8") = {
     {293.17508f, 225.21645f, 35.453262f},
     {293.87024f, 227.29703f, 35.504112f},
     { 292.5923f, 226.63664f, 35.517593f},
@@ -336,7 +336,7 @@ f32 D_L08_001DBAA8[40][3] = {
     {287.69293f, 250.04558f, 30.338531f},
 };
 
-f32 D_L08_001DBC88[38][3] = {
+f32 pair_offset_batch_4_positions[38][3] __asm__("D_L08_001DBC88") = {
     {275.45187f, 226.95651f, 25.978088f},
     { 275.8648f, 227.34744f, 26.086649f},
     { 275.2539f, 227.07437f, 26.312347f},
@@ -377,7 +377,7 @@ f32 D_L08_001DBC88[38][3] = {
     { 275.2761f, 249.55911f, 30.350088f},
 };
 
-f32 D_L08_001DBE50[37][3] = {
+f32 pair_offset_batch_5_positions[37][3] __asm__("D_L08_001DBE50") = {
     {264.13052f, 234.96605f, 27.166372f},
     {263.31757f, 231.21948f, 26.731096f},
     {264.94888f, 234.78857f, 27.194817f},
@@ -417,7 +417,7 @@ f32 D_L08_001DBE50[37][3] = {
     {269.53235f, 252.24313f, 30.160444f},
 };
 
-f32 D_L08_001DC010[35][3] = {
+f32 pair_offset_batch_6_positions[35][3] __asm__("D_L08_001DC010") = {
     {268.49164f,  225.4526f, 15.089121f},
     {270.10306f, 225.44847f, 15.088979f},
     {269.53415f, 222.61308f, 15.089127f},
@@ -455,7 +455,7 @@ f32 D_L08_001DC010[35][3] = {
     {276.73746f, 222.85487f, 15.088945f},
 };
 
-f32 D_L08_001DC1B8[35][3] = {
+f32 pair_offset_batch_7_positions[35][3] __asm__("D_L08_001DC1B8") = {
     {262.86517f, 231.23811f, 15.089121f},
     {262.93173f,  229.9774f, 15.088979f},
     { 260.6349f,  230.3024f, 15.089127f},
@@ -493,7 +493,7 @@ f32 D_L08_001DC1B8[35][3] = {
     {261.14102f,  224.6778f, 15.088945f},
 };
 
-f32 D_L08_001DC360[41][2] = {
+f32 pair_offset_batch_0_uvs[41][2] __asm__("D_L08_001DC360") = {
     {1.191779f,  4.490226f},
     {0.958372f,  4.278035f},
     {1.208663f,  4.163685f},
@@ -537,7 +537,7 @@ f32 D_L08_001DC360[41][2] = {
     {1.948528f, -3.173137f},
 };
 
-f32 D_L08_001DC4B0[18][2] = {
+f32 pair_offset_batch_1_uvs[18][2] __asm__("D_L08_001DC4B0") = {
     {3.644654f,  2.787837f},
     {3.216682f,  2.786705f},
     {3.850152f,  2.213157f},
@@ -558,7 +558,7 @@ f32 D_L08_001DC4B0[18][2] = {
     {3.999493f, -1.471846f},
 };
 
-f32 D_L08_001DC540[45][2] = {
+f32 pair_offset_batch_2_uvs[45][2] __asm__("D_L08_001DC540") = {
     {3.030585f, -2.154285f},
     {2.518401f,  -2.20916f},
     {2.923935f, -1.893176f},
@@ -606,7 +606,7 @@ f32 D_L08_001DC540[45][2] = {
     {1.992865f,  3.618997f},
 };
 
-f32 D_L08_001DC6B0[40][2] = {
+f32 pair_offset_batch_3_uvs[40][2] __asm__("D_L08_001DC6B0") = {
     {3.913534f,  3.767571f},
     {3.395852f,   3.31758f},
     {3.897286f,  3.434401f},
@@ -649,7 +649,7 @@ f32 D_L08_001DC6B0[40][2] = {
     {4.199444f, -2.290112f},
 };
 
-f32 D_L08_001DC7F0[38][2] = {
+f32 pair_offset_batch_4_uvs[38][2] __asm__("D_L08_001DC7F0") = {
     {1.765883f, -1.749782f},
     {1.871234f, -1.599774f},
     {1.718524f, -1.652678f},
@@ -690,7 +690,7 @@ f32 D_L08_001DC7F0[38][2] = {
     {1.191527f,  4.529037f},
 };
 
-f32 D_L08_001DC920[37][2] = {
+f32 pair_offset_batch_5_uvs[37][2] __asm__("D_L08_001DC920") = {
     { 0.302486f, -1.870165f},
     {-0.102374f, -1.871757f},
     { 0.286218f, -1.433735f},
@@ -730,7 +730,7 @@ f32 D_L08_001DC920[37][2] = {
     {-0.197163f,  3.723222f},
 };
 
-f32 D_L08_001DCA50[35][2] = {
+f32 pair_offset_batch_6_uvs[35][2] __asm__("D_L08_001DCA50") = {
     {1.141033f,  0.028994f},
     {0.987506f,  0.290088f},
     {0.889127f, -0.028604f},
@@ -768,7 +768,7 @@ f32 D_L08_001DCA50[35][2] = {
     { 0.48636f,  0.777654f},
 };
 
-f32 D_L08_001DCB70[35][2] = {
+f32 pair_offset_batch_7_uvs[35][2] __asm__("D_L08_001DCB70") = {
     {1.141033f,  0.028994f},
     {0.987506f,  0.290088f},
     {0.889127f, -0.028604f},
@@ -806,34 +806,34 @@ f32 D_L08_001DCB70[35][2] = {
     { 0.48636f,  0.777654f},
 };
 
-u32 D_L08_001DDA28[41] = {0x200ff,    0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
-                          0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
-                          0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
-                          0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
-                          0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
-                          0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
-                          0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01};
+u32 pair_offset_batch_0_colours[41] __asm__("D_L08_001DDA28") = {
+    0x200ff,    0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01,
+    0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,
+    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01,
+    0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,
+    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01,
+    0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01};
 
-u32 D_L08_001DDAD0[18] = {0xff00ff01,
-                          0x200ff,
-                          0xff00ff01,
-                          0x200ff,
-                          0xff00ff01,
-                          0x200ff,
-                          0xff00ff01,
-                          0x200ff,
-                          0xff00ff01,
-                          0x200ff,
-                          0xff00ff01,
-                          0x200ff,
-                          0xff00ff01,
-                          0x200ff,
-                          0xff00ff01,
-                          0x200ff,
-                          0xff00ff01,
-                          0x200ff};
+u32 pair_offset_batch_1_colours[18] __asm__("D_L08_001DDAD0") = {0xff00ff01,
+                                                                 0x200ff,
+                                                                 0xff00ff01,
+                                                                 0x200ff,
+                                                                 0xff00ff01,
+                                                                 0x200ff,
+                                                                 0xff00ff01,
+                                                                 0x200ff,
+                                                                 0xff00ff01,
+                                                                 0x200ff,
+                                                                 0xff00ff01,
+                                                                 0x200ff,
+                                                                 0xff00ff01,
+                                                                 0x200ff,
+                                                                 0xff00ff01,
+                                                                 0x200ff,
+                                                                 0xff00ff01,
+                                                                 0x200ff};
 
-u32 D_L08_001DDB18[45] = {
+u32 pair_offset_batch_2_colours[45] __asm__("D_L08_001DDB18") = {
     0x200ff,    0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,
     0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,
     0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,
@@ -841,44 +841,44 @@ u32 D_L08_001DDB18[45] = {
     0x70f400ff, 0x70f400ff, 0x70f400ff, 0x70f400ff, 0x70f400ff, 0x70f400ff, 0x70f400ff, 0x70f400ff,
     0x70f400ff, 0x70f400ff, 0x70f400ff, 0x70f400ff, 0x70f400ff};
 
-u32 D_L08_001DDBD0[40] = {
+u32 pair_offset_batch_3_colours[40] __asm__("D_L08_001DDBD0") = {
     0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
     0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
     0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
     0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
     0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff};
 
-u32 D_L08_001DDC70[38] = {
+u32 pair_offset_batch_4_colours[38] __asm__("D_L08_001DDC70") = {
     0xff00ff01, 0xff00ff01, 0xff00ff01, 0xff00ff01, 0xff00ff01, 0xff00ff01, 0x200ff, 0xff00ff01,
     0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff, 0xff00ff01,
     0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff, 0xff00ff01,
     0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff, 0xff00ff01,
     0x200ff,    0xff00ff01, 0x200ff,    0xff00ff01, 0x200ff,    0x200ff};
 
-u32 D_L08_001DDD08[37] = {
+u32 pair_offset_batch_5_colours[37] __asm__("D_L08_001DDD08") = {
     0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
     0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
     0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
     0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff,
     0xff00ff01, 0x200ff, 0xff00ff01, 0x200ff, 0x200ff};
 
-u32 D_L08_001DDDA0[35] = {0x90ff000c, 0x90ff000c, 0x300ff,    0xff7f0078, 0x300ff,    0x90ff000c,
-                          0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c,
-                          0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0xff7f0078, 0xff7f0078, 0xff7f0078, 0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0xff7f0078, 0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c};
+u32 pair_offset_batch_6_colours[35] __asm__("D_L08_001DDDA0") = {
+    0x90ff000c, 0x90ff000c, 0x300ff,    0xff7f0078, 0x300ff,    0x90ff000c, 0x300ff,
+    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c,
+    0x300ff,    0x90ff000c, 0x300ff,    0xff7f0078, 0x90ff000c, 0xff7f0078, 0xff7f0078,
+    0xff7f0078, 0xff7f0078, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078,
+    0xff7f0078, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c};
 
-u32 D_L08_001DDE30[35] = {0x90ff000c, 0x90ff000c, 0x300ff,    0xff7f0078, 0x300ff,    0x90ff000c,
-                          0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c,
-                          0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0xff7f0078, 0xff7f0078, 0xff7f0078, 0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0xff7f0078, 0xff7f0078,
-                          0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c};
+u32 pair_offset_batch_7_colours[35] __asm__("D_L08_001DDE30") = {
+    0x90ff000c, 0x90ff000c, 0x300ff,    0xff7f0078, 0x300ff,    0x90ff000c, 0x300ff,
+    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c, 0x300ff,    0x90ff000c,
+    0x300ff,    0x90ff000c, 0x300ff,    0xff7f0078, 0x90ff000c, 0xff7f0078, 0xff7f0078,
+    0xff7f0078, 0xff7f0078, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078,
+    0xff7f0078, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c, 0xff7f0078, 0x90ff000c};
 
-s32 pair_offset_batch_vertex_counts[8] = {0x29, 0x12, 0x2d, 0x28, 0x26, 0x25, 0x23, 0x23};
+s32 pair_offset_batch_vertex_counts[8] = {41, 18, 45, 40, 38, 37, 35, 35};
 
-f32 D_L08_001DE020[90][3] = {
+f32 eleven_entry_batch_0_positions[90][3] __asm__("D_L08_001DE020") = {
     {298.17676f, 228.46861f,  35.43223f},
     {297.38434f, 230.27946f, 35.147144f},
     {297.73938f,  228.3515f, 35.573284f},
@@ -971,7 +971,7 @@ f32 D_L08_001DE020[90][3] = {
     {296.49353f, 232.01384f, 34.988014f},
 };
 
-f32 D_L08_001DE458[8][3] = {
+f32 eleven_entry_batch_1_positions[8][3] __asm__("D_L08_001DE458") = {
     {  295.957f, 231.84941f, 34.876778f},
     {295.88287f,  231.1643f, 35.147144f},
     { 295.3383f,  231.6837f, 34.897114f},
@@ -982,7 +982,7 @@ f32 D_L08_001DE458[8][3] = {
     {293.48212f, 231.18661f,  34.95812f},
 };
 
-f32 D_L08_001DE4B8[7][3] = {
+f32 eleven_entry_batch_2_positions[7][3] __asm__("D_L08_001DE4B8") = {
     {293.94864f,  230.6598f, 35.147144f},
     { 294.3966f,  230.1256f, 35.147144f},
     {294.88538f, 230.89896f, 35.278713f},
@@ -992,7 +992,7 @@ f32 D_L08_001DE4B8[7][3] = {
     {295.88287f,  231.1643f, 35.147144f},
 };
 
-f32 D_L08_001DE510[62][3] = {
+f32 eleven_entry_batch_3_positions[62][3] __asm__("D_L08_001DE510") = {
     { 270.0525f,  221.6987f, 13.707942f},
     {269.66797f, 222.11429f, 15.110624f},
     {272.75336f, 222.75586f, 13.707878f},
@@ -1057,7 +1057,7 @@ f32 D_L08_001DE510[62][3] = {
     { 272.1769f, 223.95943f, 18.155962f},
 };
 
-f32 D_L08_001DE7F8[95][3] = {
+f32 eleven_entry_batch_4_positions[95][3] __asm__("D_L08_001DE7F8") = {
     { 273.8834f,  229.6994f, 26.798838f},
     { 275.4728f, 229.64114f, 26.748425f},
     {272.04514f, 228.57855f, 26.558777f},
@@ -1155,7 +1155,7 @@ f32 D_L08_001DE7F8[95][3] = {
     {272.82764f, 225.65778f,  25.65107f},
 };
 
-f32 D_L08_001DEC70[89][3] = {
+f32 eleven_entry_batch_5_positions[89][3] __asm__("D_L08_001DEC70") = {
     {260.48114f, 232.07188f, 14.313229f},
     { 261.0258f, 231.97316f, 18.437931f},
     {260.57278f, 231.69804f, 14.321333f},
@@ -1247,7 +1247,7 @@ f32 D_L08_001DEC70[89][3] = {
     {264.74298f, 230.11024f, 26.843208f},
 };
 
-f32 D_L08_001DF0A0[13][3] = {
+f32 eleven_entry_batch_6_positions[13][3] __asm__("D_L08_001DF0A0") = {
     { 295.6702f, 230.44574f, 35.147144f},
     {295.81216f, 229.82033f, 35.147144f},
     {295.05115f, 230.27992f, 35.278713f},
@@ -1263,7 +1263,7 @@ f32 D_L08_001DF0A0[13][3] = {
     {296.41574f,   227.997f,  35.54009f},
 };
 
-f32 D_L08_001DF140[95][3] = {
+f32 eleven_entry_batch_7_positions[95][3] __asm__("D_L08_001DF140") = {
     { 272.2951f,  257.7833f, 30.265781f},
     { 271.2826f, 255.89177f, 30.265743f},
     {271.66476f,  257.9266f, 30.265781f},
@@ -1361,7 +1361,7 @@ f32 D_L08_001DF140[95][3] = {
     {270.65692f, 253.75827f, 30.470743f},
 };
 
-f32 D_L08_001DF5B8[33][3] = {
+f32 eleven_entry_batch_8_positions[33][3] __asm__("D_L08_001DF5B8") = {
     { 270.1586f, 252.24425f, 30.161415f},
     {269.53235f, 252.24313f,  30.11735f},
     { 269.6803f,  253.6391f, 30.126999f},
@@ -1397,7 +1397,7 @@ f32 D_L08_001DF5B8[33][3] = {
     {268.73688f, 252.82433f,  29.51683f},
 };
 
-f32 D_L08_001DF748[7][3] = {
+f32 eleven_entry_batch_9_positions[7][3] __asm__("D_L08_001DF748") = {
     {268.47598f, 254.87163f, 25.686523f},
     {267.55856f, 254.50551f, 24.283838f},
     { 267.9781f, 255.19922f, 24.283838f},
@@ -1407,7 +1407,7 @@ f32 D_L08_001DF748[7][3] = {
     {265.72977f,   256.629f, 20.727194f},
 };
 
-f32 D_L08_001DF7A0[5][3] = {
+f32 eleven_entry_batch_10_positions[5][3] __asm__("D_L08_001DF7A0") = {
     {269.03558f, 253.89247f, 29.787773f},
     {269.03912f, 255.05128f, 29.790174f},
     { 269.3602f, 253.66261f, 29.929218f},
@@ -1415,7 +1415,7 @@ f32 D_L08_001DF7A0[5][3] = {
     { 269.6803f,  253.6391f, 30.126999f},
 };
 
-f32 D_L08_001DF7E0[90][2] = {
+f32 eleven_entry_batch_0_uvs[90][2] __asm__("D_L08_001DF7E0") = {
     {-0.340314f,  1.705471f},
     {-0.293976f,  1.042128f},
     {-0.163851f,   1.69222f},
@@ -1508,7 +1508,7 @@ f32 D_L08_001DF7E0[90][2] = {
     {-0.231538f,  0.306125f},
 };
 
-f32 D_L08_001DFAB0[8][2] = {
+f32 eleven_entry_batch_1_uvs[8][2] __asm__("D_L08_001DFAB0") = {
     {0.018101f, 0.257664f},
     {0.137904f, 0.607188f},
     {0.267738f, 0.245025f},
@@ -1519,7 +1519,7 @@ f32 D_L08_001DFAB0[8][2] = {
     {1.016643f, 0.207128f},
 };
 
-f32 D_L08_001DFAF0[7][2] = {
+f32 eleven_entry_batch_2_uvs[7][2] __asm__("D_L08_001DFAF0") = {
     {0.916486f, 0.544497f},
     {0.824153f, 0.756033f},
     {0.540129f, 0.613377f},
@@ -1529,7 +1529,7 @@ f32 D_L08_001DFAF0[7][2] = {
     {0.137904f, 0.607188f},
 };
 
-f32 D_L08_001DFB30[62][2] = {
+f32 eleven_entry_batch_3_uvs[62][2] __asm__("D_L08_001DFB30") = {
     {0.442312f,  2.32936f},
     {0.447039f, 2.485509f},
     {0.962215f, 2.329167f},
@@ -1594,7 +1594,7 @@ f32 D_L08_001DFB30[62][2] = {
     {0.956209f,  3.18466f},
 };
 
-f32 D_L08_001DFD20[95][2] = {
+f32 eleven_entry_batch_4_uvs[95][2] __asm__("D_L08_001DFD20") = {
     {1.735869f,  1.320092f},
     {2.187696f,  1.350911f},
     {1.427446f,  1.073802f},
@@ -1692,7 +1692,7 @@ f32 D_L08_001DFD20[95][2] = {
     {1.427426f,  -0.07716f},
 };
 
-f32 D_L08_001E0020[89][2] = {
+f32 eleven_entry_batch_5_uvs[89][2] __asm__("D_L08_001E0020") = {
     {-0.922058f, -3.338661f},
     {-0.867511f,   -2.9861f},
     {-0.094427f, -3.298162f},
@@ -1784,7 +1784,7 @@ f32 D_L08_001E0020[89][2] = {
     { 0.194723f, -0.997137f},
 };
 
-f32 D_L08_001E02F0[13][2] = {
+f32 eleven_entry_batch_6_uvs[13][2] __asm__("D_L08_001E02F0") = {
     {0.313126f, 0.800957f},
     {0.345495f, 1.006024f},
     {0.562894f, 0.819166f},
@@ -1800,7 +1800,7 @@ f32 D_L08_001E02F0[13][2] = {
     {0.370208f, 1.682422f},
 };
 
-f32 D_L08_001E0360[95][2] = {
+f32 eleven_entry_batch_7_uvs[95][2] __asm__("D_L08_001E0360") = {
     {0.685772f,  2.870405f},
     {1.138287f,  2.871175f},
     {0.663285f,  2.619945f},
@@ -1898,7 +1898,7 @@ f32 D_L08_001E0360[95][2] = {
     {1.807691f,  1.862578f},
 };
 
-f32 D_L08_001E0660[33][2] = {
+f32 eleven_entry_batch_8_uvs[33][2] __asm__("D_L08_001E0660") = {
     { 2.22785f, 2.210368f},
     {2.259983f, 1.895833f},
     {1.830521f, 1.664129f},
@@ -1934,7 +1934,7 @@ f32 D_L08_001E0660[33][2] = {
     {2.278579f, 1.562365f},
 };
 
-f32 D_L08_001E0770[7][2] = {
+f32 eleven_entry_batch_9_uvs[7][2] __asm__("D_L08_001E0770") = {
     { 1.48212f, 1.039878f},
     {1.871459f, 0.689898f},
     {1.481245f, 0.881812f},
@@ -1944,7 +1944,7 @@ f32 D_L08_001E0770[7][2] = {
     {1.471919f, 0.399026f},
 };
 
-f32 D_L08_001E07B0[5][2] = {
+f32 eleven_entry_batch_10_uvs[5][2] __asm__("D_L08_001E07B0") = {
     {1.897351f, 1.432863f},
     { 1.48098f,  1.68318f},
     { 1.88574f, 1.537686f},
@@ -1952,7 +1952,7 @@ f32 D_L08_001E07B0[5][2] = {
     {1.830521f, 1.664129f},
 };
 
-u32 D_L08_001E1F98[90] = {
+u32 eleven_entry_batch_0_colours[90] __asm__("D_L08_001E1F98") = {
     0xffff0000, 0xe00ff,    0xffff0000, 0xff0e00ff, 0xe00ff,    0xff0e00ff, 0xe00ff,    0xff0e00ff,
     0xe00ff,    0xff0e00ff, 0xff0e00ff, 0xe00ff,    0xff0e00ff, 0xe00ff,    0xff0e00ff, 0xe00ff,
     0xff0e00ff, 0xb90e00ff, 0xe00ff,    0xb90e00ff, 0xe00ff,    0xb90e00ff, 0x790e00ff, 0xb90e00ff,
@@ -1966,12 +1966,13 @@ u32 D_L08_001E1F98[90] = {
     0x970e00ff, 0xb90e00ff, 0x970e00ff, 0x380e00ff, 0x380e00ff, 0x790e00ff, 0x790e00ff, 0x790e00ff,
     0x970e00ff, 0xb90e00ff};
 
-u32 D_L08_001E2100[8] = {
+u32 eleven_entry_batch_1_colours[8] __asm__("D_L08_001E2100") = {
     0x790e00ff, 0xe00ff, 0x380e00ff, 0xb90e00ff, 0xb90e00ff, 0xe00ff, 0x970e00ff, 0x380e00ff};
 
-u32 D_L08_001E2120[7] = {0xe00ff, 0xe00ff, 0xb90e00ff, 0xff0e00ff, 0xb90e00ff, 0xe00ff, 0xe00ff};
+u32 eleven_entry_batch_2_colours[7] __asm__("D_L08_001E2120") = {
+    0xe00ff, 0xe00ff, 0xb90e00ff, 0xff0e00ff, 0xb90e00ff, 0xe00ff, 0xe00ff};
 
-u32 D_L08_001E2140[62] = {
+u32 eleven_entry_batch_3_colours[62] __asm__("D_L08_001E2140") = {
     0x511500ff, 0x511500ff, 0x511500ff, 0x6300ff07, 0x511500ff, 0x511500ff, 0x511500ff, 0x511500ff,
     0xff07,     0x6300ff07, 0xff07,     0x7c04ff00, 0xff07,     0x7c04ff00, 0xff07,     0x7c04ff00,
     0xff07,     0x7c04ff00, 0xff07,     0x7c04ff00, 0xff07,     0x1500ff,   0xff07,     0x1500ff,
@@ -1981,7 +1982,7 @@ u32 D_L08_001E2140[62] = {
     0x6300ff07, 0xcf00ff07, 0x511500ff, 0xcf00ff07, 0x6300ff07, 0xcf00ff07, 0x7c04ff00, 0xcf00ff07,
     0x7c04ff00, 0xcf00ff07, 0x7c04ff00, 0x7c04ff00, 0x7c04ff00, 0x7c04ff00};
 
-u32 D_L08_001E2238[95] = {
+u32 eleven_entry_batch_4_colours[95] __asm__("D_L08_001E2238") = {
     0xff00f6,   0xff00f6,   0xff,       0xffff0506, 0x800eff00, 0xffff0506, 0x800eff00, 0xff07,
     0x800eff00, 0xff07,     0xcf00ff07, 0xff07,     0xcf00ff07, 0xff07,     0xaf00ff07, 0xff07,
     0x800eff00, 0xff07,     0x800eff00, 0xff07,     0x800eff00, 0xff07,     0x6a0600ff, 0x800eff00,
@@ -1995,7 +1996,7 @@ u32 D_L08_001E2238[95] = {
     0xcf00ff07, 0x800eff00, 0xcf00ff07, 0x800eff00, 0x800eff00, 0x800eff00, 0x800eff00, 0x800eff00,
     0x800eff00, 0x800eff00, 0x380600ff, 0x800eff00, 0x380600ff, 0x800eff00, 0x380600ff};
 
-u32 D_L08_001E23B8[89] = {
+u32 eleven_entry_batch_5_colours[89] __asm__("D_L08_001E23B8") = {
     0x800eff00, 0x800eff00, 0x670600ff, 0x670600ff, 0x800eff00, 0x800eff00, 0x610600ff, 0x7900ff07,
     0x800eff00, 0x7900ff07, 0xff07,     0x7900ff07, 0xff07,     0xcf00ff07, 0xff07,     0x7900ff07,
     0xff07,     0x7900ff07, 0xff07,     0x7900ff07, 0xffff0002, 0x7900ff07, 0xff000000, 0x380600ff,
@@ -2009,21 +2010,21 @@ u32 D_L08_001E23B8[89] = {
     0x7900ff07, 0x800eff00, 0x7900ff07, 0x800eff00, 0x380600ff, 0x800eff00, 0x800eff00, 0x380600ff,
     0x800eff00};
 
-u32 D_L08_001E2520[13] = {0xe00ff,
-                          0xe00ff,
-                          0xff0e00ff,
-                          0xff0e00ff,
-                          0xe00ff,
-                          0xff0e00ff,
-                          0xe00ff,
-                          0xff0e00ff,
-                          0xe00ff,
-                          0xff0e00ff,
-                          0xffff0000,
-                          0xe00ff,
-                          0xffff0000};
+u32 eleven_entry_batch_6_colours[13] __asm__("D_L08_001E2520") = {0xe00ff,
+                                                                  0xe00ff,
+                                                                  0xff0e00ff,
+                                                                  0xff0e00ff,
+                                                                  0xe00ff,
+                                                                  0xff0e00ff,
+                                                                  0xe00ff,
+                                                                  0xff0e00ff,
+                                                                  0xe00ff,
+                                                                  0xff0e00ff,
+                                                                  0xffff0000,
+                                                                  0xe00ff,
+                                                                  0xffff0000};
 
-u32 D_L08_001E2558[95] = {
+u32 eleven_entry_batch_7_colours[95] __asm__("D_L08_001E2558") = {
     0x600ff,    0x600ff,    0x600ff,    0x82ff00fd, 0x600ff,    0x82ff00fd, 0xffff0010, 0xffff0002,
     0xffff0010, 0xdfff00fd, 0xffff0002, 0xdfff00fd, 0xffff0002, 0xdfff00fd, 0xffff0002, 0xffff0002,
     0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002,
@@ -2037,19 +2038,20 @@ u32 D_L08_001E2558[95] = {
     0x600ff,    0xffff0010, 0x600ff,    0xffff0002, 0x600ff,    0x82ff00fd, 0x600ff,    0xffff0002,
     0x82ff00fd, 0xffff0002, 0x82ff00fd, 0xffff0002, 0xffff0002, 0x82ff00fd, 0xffff0002};
 
-u32 D_L08_001E26D8[33] = {0xe00ff,    0xe00ff,    0xffff0002, 0x82ff00fd, 0xffff0002, 0xe00ff,
-                          0xffff0002, 0xe00ff,    0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002,
-                          0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002,
-                          0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002,
-                          0xe00ff,    0xffff0002, 0xe00ff,    0xffff0002, 0xe00ff,    0xffff0002,
-                          0xe00ff,    0xffff0002, 0xe00ff};
+u32 eleven_entry_batch_8_colours[33] __asm__("D_L08_001E26D8") = {
+    0xe00ff,    0xe00ff,    0xffff0002, 0x82ff00fd, 0xffff0002, 0xe00ff,    0xffff0002,
+    0xe00ff,    0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002,
+    0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002,
+    0xffff0002, 0xffff0002, 0xffff0002, 0xe00ff,    0xffff0002, 0xe00ff,    0xffff0002,
+    0xe00ff,    0xffff0002, 0xe00ff,    0xffff0002, 0xe00ff};
 
-u32 D_L08_001E2760[7] = {
+u32 eleven_entry_batch_9_colours[7] __asm__("D_L08_001E2760") = {
     0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002};
 
-u32 D_L08_001E2780[5] = {0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002};
+u32 eleven_entry_batch_10_colours[5] __asm__("D_L08_001E2780") = {
+    0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002, 0xffff0002};
 
-f32 D_L08_001E2960[13][3] = {
+f32 scrolled_mesh_batch_0_positions[13][3] __asm__("D_L08_001E2960") = {
     { 269.3431f, 225.74034f, 23.564857f},
     {269.46454f, 225.24525f, 25.028246f},
     { 270.7373f, 225.73055f,  21.70928f},
@@ -2065,7 +2067,7 @@ f32 D_L08_001E2960[13][3] = {
     {275.68713f,  227.8859f, 23.508207f},
 };
 
-f32 D_L08_001E2A00[13][3] = {
+f32 scrolled_mesh_batch_1_positions[13][3] __asm__("D_L08_001E2A00") = {
     { 275.8085f,  227.3908f, 24.971596f},
     { 275.8648f, 227.34744f,  25.98665f},
     { 275.3354f, 226.61029f, 24.234789f},
@@ -2081,7 +2083,7 @@ f32 D_L08_001E2A00[13][3] = {
     {269.46454f, 225.24525f, 25.028246f},
 };
 
-f32 D_L08_001E2AA0[21][3] = {
+f32 scrolled_mesh_batch_2_positions[21][3] __asm__("D_L08_001E2AA0") = {
     {269.52087f, 225.20187f, 26.043304f},
     {269.55148f, 225.34296f, 26.326334f},
     {270.91504f, 225.19206f, 26.015093f},
@@ -2105,7 +2107,7 @@ f32 D_L08_001E2AA0[21][3] = {
     {269.55148f, 225.34296f, 26.326334f},
 };
 
-f32 D_L08_001E2BA0[7][3] = {
+f32 scrolled_mesh_batch_3_positions[7][3] __asm__("D_L08_001E2BA0") = {
     { 264.1212f, 226.83199f, 26.333158f},
     {268.42477f, 228.23215f, 26.412075f},
     {263.41245f, 229.00502f, 26.529839f},
@@ -2115,7 +2117,7 @@ f32 D_L08_001E2BA0[7][3] = {
     {264.13052f, 234.96605f, 27.066372f},
 };
 
-f32 D_L08_001E2BF8[76][3] = {
+f32 scrolled_mesh_batch_4_positions[76][3] __asm__("D_L08_001E2BF8") = {
     {264.94888f, 234.78857f, 27.094816f},
     { 265.7672f, 234.61107f,  27.25667f},
     {265.52832f, 231.00706f, 26.828129f},
@@ -2194,7 +2196,7 @@ f32 D_L08_001E2BF8[76][3] = {
     { 265.7672f, 234.61107f,  27.25667f},
 };
 
-f32 D_L08_001E2F88[44][3] = {
+f32 scrolled_mesh_batch_5_positions[44][3] __asm__("D_L08_001E2F88") = {
     {266.62238f,  234.4194f, 27.197906f},
     { 267.4775f, 234.22777f, 27.044945f},
     { 268.2777f, 232.36365f,  26.99538f},
@@ -2241,7 +2243,7 @@ f32 D_L08_001E2F88[44][3] = {
     {273.02786f, 249.92952f, 30.362526f},
 };
 
-f32 D_L08_001E3198[24][3] = {
+f32 scrolled_mesh_batch_6_positions[24][3] __asm__("D_L08_001E3198") = {
     { 270.8483f, 248.42519f, 30.249357f},
     {269.05878f, 248.49226f,  30.23234f},
     {270.62418f, 246.90923f, 29.880362f},
@@ -2268,7 +2270,7 @@ f32 D_L08_001E3198[24][3] = {
     { 267.4775f, 234.22777f, 27.044945f},
 };
 
-f32 D_L08_001E32B8[37][3] = {
+f32 scrolled_mesh_batch_7_positions[37][3] __asm__("D_L08_001E32B8") = {
     { 265.0979f, 225.82129f, 25.477701f},
     { 265.2588f,   225.965f, 23.630259f},
     {263.76746f,  226.9404f, 24.478987f},
@@ -2308,7 +2310,7 @@ f32 D_L08_001E32B8[37][3] = {
     {263.41245f, 229.00502f,  26.52984f},
 };
 
-f32 D_L08_001E3478[41][3] = {
+f32 scrolled_mesh_batch_8_positions[41][3] __asm__("D_L08_001E3478") = {
     {270.14127f, 252.25125f, 20.727194f},
     { 271.6969f,  252.2513f, 14.000004f},
     {269.68735f, 255.04181f, 20.727194f},
@@ -2352,7 +2354,7 @@ f32 D_L08_001E3478[41][3] = {
     {  269.619f, 258.77197f,  29.24832f},
 };
 
-f32 D_L08_001E3668[148][3] = {
+f32 scrolled_mesh_batch_9_positions[148][3] __asm__("D_L08_001E3668") = {
     { 300.1929f, 254.18027f, 30.208899f},
     { 299.0832f, 255.29112f, 30.217009f},
     { 300.7845f, 252.48225f, 30.208899f},
@@ -2503,7 +2505,7 @@ f32 D_L08_001E3668[148][3] = {
     { 275.2761f, 249.55911f, 30.250088f},
 };
 
-f32 D_L08_001E3D58[8][3] = {
+f32 scrolled_mesh_batch_10_positions[8][3] __asm__("D_L08_001E3D58") = {
     {276.24908f, 250.15776f,  30.25009f},
     { 275.2761f, 249.55911f, 30.250088f},
     {276.24908f, 250.15776f,  30.25009f},
@@ -2514,7 +2516,7 @@ f32 D_L08_001E3D58[8][3] = {
     {279.46844f, 248.67996f,  30.25009f},
 };
 
-f32 D_L08_001E3DB8[71][3] = {
+f32 scrolled_mesh_batch_11_positions[71][3] __asm__("D_L08_001E3DB8") = {
     { 297.7294f, 250.60298f, 30.222712f},
     {297.41873f, 249.50783f,  30.59531f},
     {295.62894f, 250.60263f,  30.22401f},
@@ -2588,7 +2590,7 @@ f32 D_L08_001E3DB8[71][3] = {
     {298.08795f, 230.13875f,  35.15808f},
 };
 
-f32 D_L08_001E4110[126][3] = {
+f32 scrolled_mesh_batch_12_positions[126][3] __asm__("D_L08_001E4110") = {
     {295.62662f,  227.9327f, 35.328506f},
     { 295.7022f, 225.74243f, 35.219727f},
     {293.87024f, 227.29703f, 35.404114f},
@@ -2717,7 +2719,7 @@ f32 D_L08_001E4110[126][3] = {
     {  292.339f, 231.22404f, 34.941185f},
 };
 
-f32 D_L08_001E4700[13][2] = {
+f32 scrolled_mesh_batch_0_uvs[13][2] __asm__("D_L08_001E4700") = {
     {0.126151f, -2.661367f},
     {0.158323f,  -2.41937f},
     {0.649386f, -3.101757f},
@@ -2733,7 +2735,7 @@ f32 D_L08_001E4700[13][2] = {
     {1.948272f, -2.240569f},
 };
 
-f32 D_L08_001E4770[13][2] = {
+f32 scrolled_mesh_batch_1_uvs[13][2] __asm__("D_L08_001E4770") = {
     {1.980434f, -1.998571f},
     {1.993974f, -1.599774f},
     {1.875079f, -2.315261f},
@@ -2749,7 +2751,7 @@ f32 D_L08_001E4770[13][2] = {
     {0.158323f,  -2.41937f},
 };
 
-f32 D_L08_001E47E0[21][2] = {
+f32 scrolled_mesh_batch_2_uvs[21][2] __asm__("D_L08_001E47E0") = {
     {0.171872f, -2.020575f},
     {0.178023f, -1.917784f},
     {0.713295f, -2.049755f},
@@ -2773,7 +2775,7 @@ f32 D_L08_001E47E0[21][2] = {
     {0.178023f, -1.917784f},
 };
 
-f32 D_L08_001E4890[7][2] = {
+f32 scrolled_mesh_batch_3_uvs[7][2] __asm__("D_L08_001E4890") = {
     { 0.625133f, -1.911741f},
     { 0.523154f, -1.643728f},
     { 0.272228f, -1.927404f},
@@ -2783,7 +2785,7 @@ f32 D_L08_001E4890[7][2] = {
     {-0.455399f, -1.870165f},
 };
 
-f32 D_L08_001E48D0[76][2] = {
+f32 scrolled_mesh_batch_4_uvs[76][2] __asm__("D_L08_001E48D0") = {
     {-0.437531f, -1.433735f},
     {-0.397804f, -1.001237f},
     { 0.018113f, -1.410511f},
@@ -2862,7 +2864,7 @@ f32 D_L08_001E48D0[76][2] = {
     {-0.397804f, -1.001237f},
 };
 
-f32 D_L08_001E4B30[44][2] = {
+f32 scrolled_mesh_batch_5_uvs[44][2] __asm__("D_L08_001E4B30") = {
     {-0.331769f, -0.609874f},
     {-0.223584f,  -0.03896f},
     { 0.117135f, -0.677969f},
@@ -2909,7 +2911,7 @@ f32 D_L08_001E4B30[44][2] = {
     {  0.90953f,  4.167949f},
 };
 
-f32 D_L08_001E4C90[24][2] = {
+f32 scrolled_mesh_batch_6_uvs[24][2] __asm__("D_L08_001E4C90") = {
     {  0.45578f,  3.442266f},
     { 0.087173f,  3.257866f},
     { 0.466505f,  3.180875f},
@@ -2936,7 +2938,7 @@ f32 D_L08_001E4C90[24][2] = {
     {-0.223584f,  -0.03896f},
 };
 
-f32 D_L08_001E4D50[37][2] = {
+f32 scrolled_mesh_batch_7_uvs[37][2] __asm__("D_L08_001E4D50") = {
     { 0.872673f, 0.823175f},
     { 0.871898f,  0.58821f},
     { 0.622279f, 0.689392f},
@@ -2976,7 +2978,7 @@ f32 D_L08_001E4D50[37][2] = {
     { 0.275966f, 1.079182f},
 };
 
-f32 D_L08_001E4E80[41][2] = {
+f32 scrolled_mesh_batch_8_uvs[41][2] __asm__("D_L08_001E4E80") = {
     {1.921823f,  0.410281f},
     {1.916488f, -0.140153f},
     {1.377072f,  0.399026f},
@@ -3020,7 +3022,7 @@ f32 D_L08_001E4E80[41][2] = {
     {0.526087f,  1.574749f},
 };
 
-f32 D_L08_001E4FD0[148][2] = {
+f32 scrolled_mesh_batch_9_uvs[148][2] __asm__("D_L08_001E4FD0") = {
     {-2.573275f,  2.474669f},
     {-2.437512f,  2.242444f},
     {-2.433024f,   2.60286f},
@@ -3171,7 +3173,7 @@ f32 D_L08_001E4FD0[148][2] = {
     { 1.314481f, -1.471846f},
 };
 
-f32 D_L08_001E5470[8][2] = {
+f32 scrolled_mesh_batch_10_uvs[8][2] __asm__("D_L08_001E5470") = {
     {1.372652f,  -1.04353f},
     {1.314481f, -1.471846f},
     {1.372652f,  -1.04353f},
@@ -3182,7 +3184,7 @@ f32 D_L08_001E5470[8][2] = {
     {1.739778f, -0.483375f},
 };
 
-f32 D_L08_001E54B0[71][2] = {
+f32 scrolled_mesh_batch_11_uvs[71][2] __asm__("D_L08_001E54B0") = {
     {-0.763223f,  -2.14832f},
     {-0.676013f, -1.893176f},
     {-0.287104f, -2.188282f},
@@ -3256,7 +3258,7 @@ f32 D_L08_001E54B0[71][2] = {
     {-0.265718f,  2.784084f},
 };
 
-f32 D_L08_001E56F0[126][2] = {
+f32 scrolled_mesh_batch_12_uvs[126][2] __asm__("D_L08_001E56F0") = {
     { 0.296049f,  3.215345f},
     { 0.641906f,  3.707053f},
     { 0.710842f,   3.31758f},
@@ -3385,43 +3387,43 @@ f32 D_L08_001E56F0[126][2] = {
     { 0.954939f,  2.361843f},
 };
 
-u32 D_L08_001E7878[13] = {0x1500ff,
-                          0x1500ff,
-                          0x1500ff,
-                          0x751500ff,
-                          0x1500ff,
-                          0x751500ff,
-                          0x1500ff,
-                          0x751500ff,
-                          0x1500ff,
-                          0x1500ff,
-                          0x1500ff,
-                          0x1500ff,
-                          0x1500ff};
+u32 scrolled_mesh_batch_0_colours[13] __asm__("D_L08_001E7878") = {0x1500ff,
+                                                                   0x1500ff,
+                                                                   0x1500ff,
+                                                                   0x751500ff,
+                                                                   0x1500ff,
+                                                                   0x751500ff,
+                                                                   0x1500ff,
+                                                                   0x751500ff,
+                                                                   0x1500ff,
+                                                                   0x1500ff,
+                                                                   0x1500ff,
+                                                                   0x1500ff,
+                                                                   0x1500ff};
 
-u32 D_L08_001E78B0[13] = {0x1500ff,
-                          0x1500ff,
-                          0x1500ff,
-                          0xff00e9ff,
-                          0x751500ff,
-                          0xff00e9ff,
-                          0x751500ff,
-                          0xff00e9ff,
-                          0x751500ff,
-                          0xff00e9ff,
-                          0x751500ff,
-                          0x1500ff,
-                          0x1500ff};
+u32 scrolled_mesh_batch_1_colours[13] __asm__("D_L08_001E78B0") = {0x1500ff,
+                                                                   0x1500ff,
+                                                                   0x1500ff,
+                                                                   0xff00e9ff,
+                                                                   0x751500ff,
+                                                                   0xff00e9ff,
+                                                                   0x751500ff,
+                                                                   0xff00e9ff,
+                                                                   0x751500ff,
+                                                                   0xff00e9ff,
+                                                                   0x751500ff,
+                                                                   0x1500ff,
+                                                                   0x1500ff};
 
-u32 D_L08_001E78E8[21] = {0x1500ff,   0x1500ff,   0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0x1500ff,   0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0x1500ff};
+u32 scrolled_mesh_batch_2_colours[21] __asm__("D_L08_001E78E8") = {
+    0x1500ff,   0x1500ff,   0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0x1500ff,   0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0x1500ff};
 
-u32 D_L08_001E7940[7] = {
+u32 scrolled_mesh_batch_3_colours[7] __asm__("D_L08_001E7940") = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
 
-u32 D_L08_001E7960[76] = {
+u32 scrolled_mesh_batch_4_colours[76] __asm__("D_L08_001E7960") = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
@@ -3433,7 +3435,7 @@ u32 D_L08_001E7960[76] = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
 
-u32 D_L08_001E7A90[44] = {
+u32 scrolled_mesh_batch_5_colours[44] __asm__("D_L08_001E7A90") = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
@@ -3441,27 +3443,27 @@ u32 D_L08_001E7A90[44] = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
 
-u32 D_L08_001E7B40[24] = {0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
+u32 scrolled_mesh_batch_6_colours[24] __asm__("D_L08_001E7B40") = {
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
 
-u32 D_L08_001E7BA0[37] = {
+u32 scrolled_mesh_batch_7_colours[37] __asm__("D_L08_001E7BA0") = {
     0x1500ff,   0x1500ff,   0x1500ff,   0x1500ff,   0x5a1500ff, 0x1500ff,   0x5a1500ff, 0x1500ff,
     0x5a1500ff, 0x1500ff,   0x5a1500ff, 0x1500ff,   0x751500ff, 0x751500ff, 0x751500ff, 0xff00e9ff,
     0x751500ff, 0xff00e9ff, 0x751500ff, 0xff00e9ff, 0x751500ff, 0x751500ff, 0x5a1500ff, 0x751500ff,
     0x5a1500ff, 0x751500ff, 0x1500ff,   0x751500ff, 0x1500ff,   0x751500ff, 0xff00e9ff, 0x751500ff,
     0xff00e9ff, 0x751500ff, 0xff00e9ff, 0x751500ff, 0xff00e9ff};
 
-u32 D_L08_001E7C38[41] = {0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
-                          0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
+u32 scrolled_mesh_batch_8_colours[41] __asm__("D_L08_001E7C38") = {
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
+    0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
 
-u32 D_L08_001E7CE0[148] = {
+u32 scrolled_mesh_batch_9_colours[148] __asm__("D_L08_001E7CE0") = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
@@ -3482,10 +3484,10 @@ u32 D_L08_001E7CE0[148] = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
 
-u32 D_L08_001E7F30[8] = {
+u32 scrolled_mesh_batch_10_colours[8] __asm__("D_L08_001E7F30") = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
 
-u32 D_L08_001E7F50[71] = {
+u32 scrolled_mesh_batch_11_colours[71] __asm__("D_L08_001E7F50") = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
@@ -3496,7 +3498,7 @@ u32 D_L08_001E7F50[71] = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
 
-u32 D_L08_001E8070[126] = {
+u32 scrolled_mesh_batch_12_colours[126] __asm__("D_L08_001E8070") = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
@@ -3514,112 +3516,111 @@ u32 D_L08_001E8070[126] = {
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff,
     0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff, 0xff00e9ff};
 
-s32 eleven_entry_batch_vertex_counts[11] = {0x5a, 8, 7, 0x3e, 0x5f, 0x59, 0xd, 0x5f, 0x21, 7, 5};
+s32 eleven_entry_batch_vertex_counts[11] = {90, 8, 7, 62, 95, 89, 13, 95, 33, 7, 5};
 
-s32 scrolled_mesh_batch_vertex_counts[13] = {
-    0xd, 0xd, 0x15, 7, 0x4c, 0x2c, 0x18, 0x25, 0x29, 0x94, 8, 0x47, 0x7e};
+s32 scrolled_mesh_batch_vertex_counts[13] = {13, 13, 21, 7, 76, 44, 24, 37, 41, 148, 8, 71, 126};
 
-MeshPoint *pair_offset_batch_packet_triplet_streams[8] = {&D_L08_001DB5C0,
-                                                          &D_L08_001DB7B0,
-                                                          &D_L08_001DB888,
-                                                          &D_L08_001DBAA8,
-                                                          &D_L08_001DBC88,
-                                                          &D_L08_001DBE50,
-                                                          &D_L08_001DC010,
-                                                          &D_L08_001DC1B8};
+MeshPoint *pair_offset_batch_packet_triplet_streams[8] = {pair_offset_batch_0_positions,
+                                                          pair_offset_batch_1_positions,
+                                                          pair_offset_batch_2_positions,
+                                                          pair_offset_batch_3_positions,
+                                                          pair_offset_batch_4_positions,
+                                                          pair_offset_batch_5_positions,
+                                                          pair_offset_batch_6_positions,
+                                                          pair_offset_batch_7_positions};
 
-MeshUv *pair_offset_batch_input_pair_streams[8] = {&D_L08_001DC360,
-                                                   &D_L08_001DC4B0,
-                                                   &D_L08_001DC540,
-                                                   &D_L08_001DC6B0,
-                                                   &D_L08_001DC7F0,
-                                                   &D_L08_001DC920,
-                                                   &D_L08_001DCA50,
-                                                   &D_L08_001DCB70};
+MeshUv *pair_offset_batch_input_pair_streams[8] = {pair_offset_batch_0_uvs,
+                                                   pair_offset_batch_1_uvs,
+                                                   pair_offset_batch_2_uvs,
+                                                   pair_offset_batch_3_uvs,
+                                                   pair_offset_batch_4_uvs,
+                                                   pair_offset_batch_5_uvs,
+                                                   pair_offset_batch_6_uvs,
+                                                   pair_offset_batch_7_uvs};
 
-u32 *pair_offset_batch_colour_tables[8] = {&D_L08_001DDA28,
-                                           &D_L08_001DDAD0,
-                                           &D_L08_001DDB18,
-                                           &D_L08_001DDBD0,
-                                           &D_L08_001DDC70,
-                                           &D_L08_001DDD08,
-                                           &D_L08_001DDDA0,
-                                           &D_L08_001DDE30};
+u32 *pair_offset_batch_colour_tables[8] = {pair_offset_batch_0_colours,
+                                           pair_offset_batch_1_colours,
+                                           pair_offset_batch_2_colours,
+                                           pair_offset_batch_3_colours,
+                                           pair_offset_batch_4_colours,
+                                           pair_offset_batch_5_colours,
+                                           pair_offset_batch_6_colours,
+                                           pair_offset_batch_7_colours};
 
-MeshPoint *eleven_entry_scrolled_vertex_position_tables[11] = {&D_L08_001DE020,
-                                                               &D_L08_001DE458,
-                                                               &D_L08_001DE4B8,
-                                                               &D_L08_001DE510,
-                                                               &D_L08_001DE7F8,
-                                                               &D_L08_001DEC70,
-                                                               &D_L08_001DF0A0,
-                                                               &D_L08_001DF140,
-                                                               &D_L08_001DF5B8,
-                                                               &D_L08_001DF748,
-                                                               &D_L08_001DF7A0};
+MeshPoint *eleven_entry_scrolled_vertex_position_tables[11] = {eleven_entry_batch_0_positions,
+                                                               eleven_entry_batch_1_positions,
+                                                               eleven_entry_batch_2_positions,
+                                                               eleven_entry_batch_3_positions,
+                                                               eleven_entry_batch_4_positions,
+                                                               eleven_entry_batch_5_positions,
+                                                               eleven_entry_batch_6_positions,
+                                                               eleven_entry_batch_7_positions,
+                                                               eleven_entry_batch_8_positions,
+                                                               eleven_entry_batch_9_positions,
+                                                               eleven_entry_batch_10_positions};
 
-MeshUv *eleven_entry_scrolled_base_uv_tables[11] = {&D_L08_001DF7E0,
-                                                    &D_L08_001DFAB0,
-                                                    &D_L08_001DFAF0,
-                                                    &D_L08_001DFB30,
-                                                    &D_L08_001DFD20,
-                                                    &D_L08_001E0020,
-                                                    &D_L08_001E02F0,
-                                                    &D_L08_001E0360,
-                                                    &D_L08_001E0660,
-                                                    &D_L08_001E0770,
-                                                    &D_L08_001E07B0};
+MeshUv *eleven_entry_scrolled_base_uv_tables[11] = {eleven_entry_batch_0_uvs,
+                                                    eleven_entry_batch_1_uvs,
+                                                    eleven_entry_batch_2_uvs,
+                                                    eleven_entry_batch_3_uvs,
+                                                    eleven_entry_batch_4_uvs,
+                                                    eleven_entry_batch_5_uvs,
+                                                    eleven_entry_batch_6_uvs,
+                                                    eleven_entry_batch_7_uvs,
+                                                    eleven_entry_batch_8_uvs,
+                                                    eleven_entry_batch_9_uvs,
+                                                    eleven_entry_batch_10_uvs};
 
-u32 *eleven_entry_batch_colour_tables[11] = {&D_L08_001E1F98,
-                                             &D_L08_001E2100,
-                                             &D_L08_001E2120,
-                                             &D_L08_001E2140,
-                                             &D_L08_001E2238,
-                                             &D_L08_001E23B8,
-                                             &D_L08_001E2520,
-                                             &D_L08_001E2558,
-                                             &D_L08_001E26D8,
-                                             &D_L08_001E2760,
-                                             &D_L08_001E2780};
+u32 *eleven_entry_batch_colour_tables[11] = {eleven_entry_batch_0_colours,
+                                             eleven_entry_batch_1_colours,
+                                             eleven_entry_batch_2_colours,
+                                             eleven_entry_batch_3_colours,
+                                             eleven_entry_batch_4_colours,
+                                             eleven_entry_batch_5_colours,
+                                             eleven_entry_batch_6_colours,
+                                             eleven_entry_batch_7_colours,
+                                             eleven_entry_batch_8_colours,
+                                             eleven_entry_batch_9_colours,
+                                             eleven_entry_batch_10_colours};
 
-MeshPoint *scrolled_mesh_position_streams[13] = {&D_L08_001E2960,
-                                                 &D_L08_001E2A00,
-                                                 &D_L08_001E2AA0,
-                                                 &D_L08_001E2BA0,
-                                                 &D_L08_001E2BF8,
-                                                 &D_L08_001E2F88,
-                                                 &D_L08_001E3198,
-                                                 &D_L08_001E32B8,
-                                                 &D_L08_001E3478,
-                                                 &D_L08_001E3668,
-                                                 &D_L08_001E3D58,
-                                                 &D_L08_001E3DB8,
-                                                 &D_L08_001E4110};
+MeshPoint *scrolled_mesh_position_streams[13] = {scrolled_mesh_batch_0_positions,
+                                                 scrolled_mesh_batch_1_positions,
+                                                 scrolled_mesh_batch_2_positions,
+                                                 scrolled_mesh_batch_3_positions,
+                                                 scrolled_mesh_batch_4_positions,
+                                                 scrolled_mesh_batch_5_positions,
+                                                 scrolled_mesh_batch_6_positions,
+                                                 scrolled_mesh_batch_7_positions,
+                                                 scrolled_mesh_batch_8_positions,
+                                                 scrolled_mesh_batch_9_positions,
+                                                 scrolled_mesh_batch_10_positions,
+                                                 scrolled_mesh_batch_11_positions,
+                                                 scrolled_mesh_batch_12_positions};
 
-MeshUv *scrolled_mesh_uv_source_streams[13] = {&D_L08_001E4700,
-                                               &D_L08_001E4770,
-                                               &D_L08_001E47E0,
-                                               &D_L08_001E4890,
-                                               &D_L08_001E48D0,
-                                               &D_L08_001E4B30,
-                                               &D_L08_001E4C90,
-                                               &D_L08_001E4D50,
-                                               &D_L08_001E4E80,
-                                               &D_L08_001E4FD0,
-                                               &D_L08_001E5470,
-                                               &D_L08_001E54B0,
-                                               &D_L08_001E56F0};
+MeshUv *scrolled_mesh_uv_source_streams[13] = {scrolled_mesh_batch_0_uvs,
+                                               scrolled_mesh_batch_1_uvs,
+                                               scrolled_mesh_batch_2_uvs,
+                                               scrolled_mesh_batch_3_uvs,
+                                               scrolled_mesh_batch_4_uvs,
+                                               scrolled_mesh_batch_5_uvs,
+                                               scrolled_mesh_batch_6_uvs,
+                                               scrolled_mesh_batch_7_uvs,
+                                               scrolled_mesh_batch_8_uvs,
+                                               scrolled_mesh_batch_9_uvs,
+                                               scrolled_mesh_batch_10_uvs,
+                                               scrolled_mesh_batch_11_uvs,
+                                               scrolled_mesh_batch_12_uvs};
 
-u32 *scrolled_mesh_batch_colour_tables[13] = {&D_L08_001E7878,
-                                              &D_L08_001E78B0,
-                                              &D_L08_001E78E8,
-                                              &D_L08_001E7940,
-                                              &D_L08_001E7960,
-                                              &D_L08_001E7A90,
-                                              &D_L08_001E7B40,
-                                              &D_L08_001E7BA0,
-                                              &D_L08_001E7C38,
-                                              &D_L08_001E7CE0,
-                                              &D_L08_001E7F30,
-                                              &D_L08_001E7F50,
-                                              &D_L08_001E8070};
+u32 *scrolled_mesh_batch_colour_tables[13] = {scrolled_mesh_batch_0_colours,
+                                              scrolled_mesh_batch_1_colours,
+                                              scrolled_mesh_batch_2_colours,
+                                              scrolled_mesh_batch_3_colours,
+                                              scrolled_mesh_batch_4_colours,
+                                              scrolled_mesh_batch_5_colours,
+                                              scrolled_mesh_batch_6_colours,
+                                              scrolled_mesh_batch_7_colours,
+                                              scrolled_mesh_batch_8_colours,
+                                              scrolled_mesh_batch_9_colours,
+                                              scrolled_mesh_batch_10_colours,
+                                              scrolled_mesh_batch_11_colours,
+                                              scrolled_mesh_batch_12_colours};

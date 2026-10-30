@@ -13,8 +13,8 @@ struct L04MissionState {
     int  slot[4];
 };
 
-extern int             D_L04_0015F5C4;
-struct L04MissionState l04_mode_slot_dispatch_state __asm__("D_L04_0016C9E0") = {0};
+extern int                    D_L04_0015F5C4;
+extern struct L04MissionState l04_mode_slot_dispatch_state __asm__("D_L04_0016C9E0");
 
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 

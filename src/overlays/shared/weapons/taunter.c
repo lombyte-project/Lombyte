@@ -113,16 +113,16 @@ extern E8690          D_L00_001DB440[];
 extern int            D_L00_001614D0;
 extern float          D_L00_001614DC;
 extern char           D_L00_001614E0[] MACRO_ADDR;
-int                   taunter_effect_spawn_interval_frames_gp __asm__("D_L00_001614B0") = 0xa;
+int                   taunter_effect_spawn_interval_frames_gp __asm__("D_L00_001614B0") = 10;
 float                 taunter_effect_travel_distance_gp __asm__("D_L00_001614B4") = 1e+01f;
 float                 taunter_effect_travel_speed_gp __asm__("D_L00_001614B8") = 2e+01f;
-extern unsigned short D_L00_001614BC __attribute__((sda));
+extern unsigned short taunter_effect_quad_alpha __asm__("D_L00_001614BC") __attribute__((sda));
 extern int            D_L00_001614D0_macro[] __asm__("D_L00_001614D0") MACRO_ADDR;
 extern E_2b7568       D_L00_001DB440_lui[] __asm__("D_L00_001DB440") NOT_SDA;
 extern V_2b7568       D_L00_001614E0_2b7568[] __asm__("D_L00_001614E0")
     __attribute__((section(".sdata")));
 extern f32      D_L00_001614DC;
-s32             D_L00_001614BC_gp __asm__("D_L00_001614BC") = 0x14;
+s32             taunter_effect_quad_alpha_gp __asm__("D_L00_001614BC") = 20;
 extern V_2b7568 D_0013F5E0_2b7568 __asm__("D_0013F5E0");
 extern V_2b7568 D_L00_001DB400[] NOT_SDA;
 f32             taunter_effect_quad_final_scale_gp __asm__("D_L00_001614C8") = 1e+01f;
@@ -578,7 +578,7 @@ void update_taunter_effect_slots(void *source_moby) {
                 if (effect_slot->c == 0) {
                     D_L00_001614D0 = scale_game_frames(taunter_effect_spawn_interval_frames_gp);
                     av = *(unsigned short *)&D_L00_001614D0_macro[2];
-                    effect_slot->b = D_L00_001614BC;
+                    effect_slot->b = taunter_effect_quad_alpha;
                     effect_slot->c = 1;
                     effect_slot->a = av;
                     effect_slot->f = 0;
@@ -646,7 +646,8 @@ void draw_taunter_effect_quads(u8 *source_moby) {
                  fade_factor;
         col = (taunter_effect_quad_rgb_gp & 0xFFFFFF) |
               (truncate_float_to_s32(
-                   (convert_integer_to_float(D_L00_001614BC_gp) - 0.0f) * fade_factor + 0.0f)
+                   (convert_integer_to_float(taunter_effect_quad_alpha_gp) - 0.0f) * fade_factor +
+                   0.0f)
                << 24);
         quad.color[3] = col;
         quad.color[2] = col;

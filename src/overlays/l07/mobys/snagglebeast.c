@@ -2213,8 +2213,9 @@ void draw_rope_strips(void) {
     vu1_add_g_sregister(0x47, 0x5360b);
 }
 
-int          D_L07_00161B6C_gp __asm__("D_L07_00161B6C") = 1;
-int          D_L07_00161B70_gp __asm__("D_L07_00161B70") = 1;
+extern int snagglebeast_rope_reset_pending_gp __asm__("D_L07_00161B6C") __attribute__((sda));
+extern int snagglebeast_rope_particles_reset_pending_gp __asm__("D_L07_00161B70")
+    __attribute__((sda));
 extern float row_phase_step_gp __asm__("D_L07_00161B7C") __attribute__((sda));
 
 int D_L07_00161B80 = 0;
@@ -2257,10 +2258,10 @@ void initialize_snagglebeast_rope(char *moby, void *anchor) {
     RopeQuad *pc;
     RopeQuad *pd;
 
-    if (D_L07_00161B6C_gp == 0) {
+    if (snagglebeast_rope_reset_pending_gp == 0) {
         return;
     }
-    D_L07_00161B6C_gp = 0;
+    snagglebeast_rope_reset_pending_gp = 0;
     fast_vec_normalize(step, moby + 0xC0, 2.8f);
     fast_vec_normalize(up, moby + 0xE0, 1.0f);
     qcopy(rope_points, anchor);
@@ -2284,8 +2285,8 @@ void initialize_snagglebeast_rope(char *moby, void *anchor) {
     row_phase_step_gp = 0.006f;
     D_L07_00161B80 = 0;
     D_L07_00161B84 = 0;
-    if (D_L07_00161B70_gp != 0) {
-        D_L07_00161B70_gp = 0;
+    if (snagglebeast_rope_particles_reset_pending_gp != 0) {
+        snagglebeast_rope_particles_reset_pending_gp = 0;
         for (j = 199; j >= 0; j--) {
             rope_particles[j].particle = 0;
         }
@@ -2670,8 +2671,8 @@ void detach_snagglebeast_rope_particles(int target_entry) {
     int           i;
     char         *base;
 
-    D_L07_00161B6C_gp = 1;
-    D_L07_00161B70_gp = 1;
+    snagglebeast_rope_reset_pending_gp = 1;
+    snagglebeast_rope_particles_reset_pending_gp = 1;
     row_phase_step_gp = row_phase_step_gp * 0.5f;
     allocate_voice_for_target_entry(10, 0, target_entry);
     base = (char *)rope_particles;

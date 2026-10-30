@@ -183,9 +183,9 @@ typedef struct {
     int   i504;
 } Spk_k;
 
-int wind_spark_speed_range_start_gp __asm__("D_L14_00161C30") = 0xf;
+int wind_spark_speed_range_start_gp __asm__("D_L14_00161C30") = 15;
 
-int wind_spark_speed_range_end_gp __asm__("D_L14_00161C34") = 0x28;
+int wind_spark_speed_range_end_gp __asm__("D_L14_00161C34") = 40;
 
 float wind_spark_size_range_start_gp __asm__("D_L14_00161C38") = 2.0f;
 
@@ -234,7 +234,7 @@ void draw_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb810");
 
 extern int wind_spark_peak_alpha_gp __asm__("D_L14_00161C10") __attribute__((sda));
 
-int wind_spark_fade_in_frames_gp __asm__("D_L14_00161C2C") = 0x1e;
+int wind_spark_fade_in_frames_gp __asm__("D_L14_00161C2C") = 30;
 
 void update_wind_sparks(struct Moby *wind_control_moby) {
     Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;

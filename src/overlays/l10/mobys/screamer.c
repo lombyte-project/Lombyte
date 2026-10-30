@@ -79,7 +79,7 @@ extern void  mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_0025747
 extern void
 spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern AlignedVec4f D_L10_00167240;
-AlignedVec4f        D_L10_00174360_2E0630 __asm__("D_L10_001742E0") = {0};
+extern AlignedVec4f D_L10_00174360_2E0630 __asm__("D_L10_001742E0");
 
 void         screamer_update(Moby *moby) __asm__("FUN_L10_002df270");
 extern float D_0015ED6C, D_0015ED70;

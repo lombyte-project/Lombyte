@@ -202,7 +202,7 @@ int                  FUN_001160d8_2cbf68(void) __asm__("FUN_001160d8");
 void                 update_entity(void *) __asm__("FUN_L00_00250df8");
 void                 copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
-int   feather_base_lifetime_gp __asm__("D_L00_001618A4") = 0xf0;
+int   feather_base_lifetime_gp __asm__("D_L00_001618A4") = 240;
 float feather_scale_multiplier_gp __asm__("D_L00_001618A0") = 9.0f;
 
 /* 0x002c92d8, 112 bytes.

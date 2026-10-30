@@ -97,7 +97,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
             Light_e088 *water_tile_light;
             float       light_direction_angle;
             for (i = 19; i >= 0; i--) {
-                l11_water_grids[i].draw_value = 0;
+                l11_water_grids[i].visible_subtiles = 0;
             }
             pool_init_tiles(l11_water_grids, 20);
             pool_set_scale(1.0f);
@@ -132,9 +132,9 @@ void update_water_tile(struct Moby *water_tile_moby) {
         l11_water_grids[water_tile_vars[1]].z = water_tile_moby->pos.z;
         l11_water_grids[water_tile_vars[1]].texture_id = 0x38;
         l11_water_grids[water_tile_vars[1]].second_texture_id = 0x39;
-        l11_water_grids[water_tile_vars[1]].unk1C = 0x1C;
-        l11_water_grids[water_tile_vars[1]].unk1D = 0x44;
-        l11_water_grids[water_tile_vars[1]].draw_value = 0xFFFF;
+        l11_water_grids[water_tile_vars[1]].alpha_2_fix = 0x1C;
+        l11_water_grids[water_tile_vars[1]].alpha_1_fix = 0x44;
+        l11_water_grids[water_tile_vars[1]].visible_subtiles = 0xFFFF;
         pool_bind_tile(&l11_water_grids[water_tile_vars[1]],
                        water_tile_binding_records[water_tile_vars[1]]);
         water_tile_moby->state = 1;
@@ -195,9 +195,9 @@ void update_water_tile(struct Moby *water_tile_moby) {
             tile_query_has_result = 1.0f;
         }
         if (tile_query_has_result == 0.0f) {
-            l11_water_grids[water_tile_vars[1]].draw_value = 0;
+            l11_water_grids[water_tile_vars[1]].visible_subtiles = 0;
         } else {
-            l11_water_grids[water_tile_vars[1]].draw_value = 0xFFFF;
+            l11_water_grids[water_tile_vars[1]].visible_subtiles = 0xFFFF;
         }
         if (water_tile_vars[1] == 0) {
             pool_flush(l11_water_grids, 20);
@@ -257,25 +257,5 @@ void populate_water_tile_neighbor_indices(int selected_tile_index) {
         }
     }
 }
-
-Light_e088 l11_water_tile_light __asm__("D_L11_001CB280") = {32.0f,
-                                                             32.0f,
-                                                             -16.0f,
-                                                             -16.0f,
-                                                             2.0f,
-                                                             2.0f,
-                                                             0.95f,
-                                                             0.16f,
-                                                             0.1f,
-                                                             0.0f,
-                                                             0,
-                                                             0,
-                                                             0.0f,
-                                                             0.0f,
-                                                             0.0f,
-                                                             0,
-                                                             0};
-
-void *l11_water_tile_binding_record_base __asm__("D_L11_001612D4") = 0;
 
 WaterGrid l11_water_grids[20] = {0};

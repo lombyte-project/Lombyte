@@ -39,7 +39,7 @@ typedef struct {
     unsigned short h34;
 } M_2310;
 
-f32 D_L18_00162308_gp __asm__("D_L18_00162308") = 0;
+f32 lift_texture_u_offset_gp __asm__("D_L18_00162308") = 0;
 extern float
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 void synchronize_lift_group_height(void *source_moby) __asm__("FUN_L18_002f2598");
@@ -138,9 +138,10 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
     }
     switch (*(int *)(lift_vars + 0x14)) {
     case LIFT_DRAW_25_QUAD_MESH:
-        D_L18_00162308_gp = D_L18_00162308_gp + lift_texture_u_scroll_rate_gp * frame_time;
-        if (1.0f < D_L18_00162308_gp) {
-            D_L18_00162308_gp -= 1.0f;
+        lift_texture_u_offset_gp =
+            lift_texture_u_offset_gp + lift_texture_u_scroll_rate_gp * frame_time;
+        if (1.0f < lift_texture_u_offset_gp) {
+            lift_texture_u_offset_gp -= 1.0f;
         }
         add_draw_callback(draw_lift_25_quad_mesh, lift_moby);
         break;
@@ -203,14 +204,14 @@ typedef struct {
     FVec4 v;
 } FRow;
 
-short      lift_mesh_blend_minuend_selector_gp __asm__("D_L18_00162310") = 0;
-short      lift_mesh_blend_subtrahend_selector_gp __asm__("D_L18_00162314") = 1;
-short      lift_mesh_blend_factor_selector_gp __asm__("D_L18_00162318") = 0;
-short      lift_mesh_blend_addend_selector_gp __asm__("D_L18_0016231C") = 1;
-short      lift_mesh_blend_upper_word_gp __asm__("D_L18_00162320") = 0x80;
-short      lift_mesh_effect_texture_index_gp __asm__("D_L18_00162324") = 0x2b;
-short      lift_mesh_quad_color_gp __asm__("D_L18_00162328") = 0x5050;
-extern f32 D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
+extern short lift_mesh_blend_minuend_selector_gp __asm__("D_L18_00162310") __attribute__((sda));
+extern short lift_mesh_blend_subtrahend_selector_gp __asm__("D_L18_00162314") __attribute__((sda));
+extern short lift_mesh_blend_factor_selector_gp __asm__("D_L18_00162318") __attribute__((sda));
+extern short lift_mesh_blend_addend_selector_gp __asm__("D_L18_0016231C") __attribute__((sda));
+extern short lift_mesh_blend_upper_word_gp __asm__("D_L18_00162320") __attribute__((sda));
+extern short lift_mesh_effect_texture_index_gp __asm__("D_L18_00162324") __attribute__((sda));
+extern short lift_mesh_quad_color_gp __asm__("D_L18_00162328") __attribute__((sda));
+extern f32   lift_texture_u_offset_gp __asm__("D_L18_00162308") __attribute__((sda));
 
 /* The three lift meshes. Each quad table holds one {vertex, uv} index pair per corner for every quad the
  * draw loop walks (25, 38, 22 quads); the vertex and uv tables hold every index those quads name
@@ -313,7 +314,7 @@ void draw_lift_25_quad_mesh(struct Moby *moby) {
     colors[1] = (*(int *)&lift_mesh_quad_color_gp);
     colors[0] = (*(int *)&lift_mesh_quad_color_gp);
     for (i = 0; i < 25; i++) {
-        float ofs = *(float *)&D_L18_00162308_gp;
+        float ofs = *(float *)&lift_texture_u_offset_gp;
         for (j = 0; j < 4; j++) {
             int vertex_index = lift_25_quad_mesh_quads[i][j][0];
             int uv_index = lift_25_quad_mesh_quads[i][j][1];
@@ -457,7 +458,7 @@ void draw_lift_38_quad_mesh(struct Moby *moby) {
     colors[1] = (*(int *)&lift_mesh_quad_color_gp);
     colors[0] = (*(int *)&lift_mesh_quad_color_gp);
     for (i = 0; i < 38; i++) {
-        float ofs = *(float *)&D_L18_00162308_gp;
+        float ofs = *(float *)&lift_texture_u_offset_gp;
         for (j = 0; j < 4; j++) {
             int vertex_index = lift_38_quad_mesh_quads[i][j][0];
             int uv_index = lift_38_quad_mesh_quads[i][j][1];
@@ -561,7 +562,7 @@ void draw_lift_22_quad_mesh(struct Moby *moby) {
     colors[1] = (*(int *)&lift_mesh_quad_color_gp);
     colors[0] = (*(int *)&lift_mesh_quad_color_gp);
     for (i = 0; i < 22; i++) {
-        float ofs = *(float *)&D_L18_00162308_gp;
+        float ofs = *(float *)&lift_texture_u_offset_gp;
         for (j = 0; j < 4; j++) {
             int vertex_index = lift_22_quad_mesh_quads[i][j][0];
             int uv_index = lift_22_quad_mesh_quads[i][j][1];

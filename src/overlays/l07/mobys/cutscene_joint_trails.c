@@ -13,10 +13,10 @@ extern char D_L07_0016C8E0[];
  * Matched using lever: g - (-(idx * 4)) + 0x178 fixes addu operand order. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320CD0), where it is exact; names translated to the US level program. */
 
-short scene_trail_velocity_length __asm__("D_L07_00161CD8") = -13107;
-short scene_trail_first_spawn_particle_value __asm__("D_L07_00161CDC") = 0x7c00;
-short scene_trail_second_spawn_particle_value __asm__("D_L07_00161CE0") = 0;
-void  update_cutscene_joint_trails(struct Moby *moby) __asm__("FUN_L07_0031f900");
+extern short scene_trail_velocity_length __asm__("D_L07_00161CD8") __attribute__((sda));
+extern short scene_trail_first_spawn_particle_value __asm__("D_L07_00161CDC") __attribute__((sda));
+extern short scene_trail_second_spawn_particle_value __asm__("D_L07_00161CE0") __attribute__((sda));
+void         update_cutscene_joint_trails(struct Moby *moby) __asm__("FUN_L07_0031f900");
 
 void update_cutscene_joint_trails(struct Moby *moby) {
     enum {

@@ -26,12 +26,12 @@ typedef struct {
 } MapBitGrid;
 
 extern s32 D_L00_00184218 NOT_SDA;
-s32                       rotated_map_transform_enabled __asm__("D_L00_0015FDF8") = 0;
-extern MapBitGrid         D_L00_001841F0_lui __asm__("D_L00_001841F0") NOT_SDA;
-extern MapFilter          D_L00_00182BA0[19][16] NOT_SDA;
-extern MapFilterCallback  D_L00_00183F90[19][8] NOT_SDA;
-extern s32                D_L00_001844A8[] NOT_SDA;
-extern void               world_to_map_coords(f32, f32, f32 *, f32 *, s32) __asm__("FUN_00208408");
+extern s32        rotated_map_transform_enabled __asm__("D_L00_0015FDF8") __attribute__((sda));
+extern MapBitGrid D_L00_001841F0_lui __asm__("D_L00_001841F0") NOT_SDA;
+extern MapFilter  D_L00_00182BA0[19][16] NOT_SDA;
+extern MapFilterCallback D_L00_00183F90[19][8] NOT_SDA;
+extern s32               D_L00_001844A8[] NOT_SDA;
+extern void              world_to_map_coords(f32, f32, f32 *, f32 *, s32) __asm__("FUN_00208408");
 
 void reveal_map_around_position(f32 *position) __asm__("FUN_L00_002484e0");
 

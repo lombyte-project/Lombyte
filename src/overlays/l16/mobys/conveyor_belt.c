@@ -179,13 +179,14 @@ typedef struct {
 extern float D_L16_001D2FF0[][2], D_L16_001D32E0[][2], D_L16_001D3300[][4];
 extern float D_L16_001D32C0[][2], D_L16_001D3010[][2], D_L16_001D3300[][4];
 extern float D_L16_001D32C0[][2], D_L16_001D32E0[][2], D_L16_001D3030[][4];
-int          conveyor_belt_pulse_texture_id_gp __asm__("D_L16_00161990") = 0x13;
-int          conveyor_belt_scrolling_texture_id_gp __asm__("D_L16_00161994") = 0x10;
+int          conveyor_belt_pulse_texture_id_gp __asm__("D_L16_00161990") = 19;
+int          conveyor_belt_scrolling_texture_id_gp __asm__("D_L16_00161994") = 16;
 
 #include "rnc/overlay/l16/mobys/conveyor_belt_data/draw_conveyor_belt_strips.h"
 
-int         conveyor_belt_pulse_color_start_gp __asm__("D_L16_001619A8") = 0x10e08020;
-int         conveyor_belt_pulse_color_end_gp __asm__("D_L16_001619AC") = 0x30e08020;
+int conveyor_belt_pulse_color_start_gp __asm__("D_L16_001619A8") =
+    0x10e08020;                                                              /* RGBA, 0xAABBGGRR */
+int conveyor_belt_pulse_color_end_gp __asm__("D_L16_001619AC") = 0x30e08020; /* RGBA, 0xAABBGGRR */
 extern int  conveyor_belt_scrolling_vertex_color_gp __asm__("D_L16_001619B0") __attribute__((sda));
 extern int  D_L16_001600EC_m __asm__("D_L16_001600EC");
 extern s64  get_effect_texture(s32) __asm__("func_001F44B8");

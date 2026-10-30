@@ -231,17 +231,17 @@ extern char               trick_combo_two_pose_flips_format[] __asm__("D_L05_002
 #include "rnc/overlay/shared/ui/hud/draw_trick_combo_hud_data/draw_trick_combo_hud_2.h"
 
 extern s32 trick_combo_result_text_color_gp __asm__("D_L05_0015F8A0") __attribute__((sda));
-s32        trick_combo_pulsing_label_x_gp __asm__("D_L05_0015F8A4") = 0x100;
-s32        trick_combo_pulsing_label_y_gp __asm__("D_L05_0015F8A8") = 0xb4;
+s32        trick_combo_pulsing_label_x_gp __asm__("D_L05_0015F8A4") = 256;
+s32        trick_combo_pulsing_label_y_gp __asm__("D_L05_0015F8A8") = 180;
 
 #include "rnc/overlay/shared/ui/hud/draw_trick_combo_hud_data/draw_trick_combo_hud.h"
 
-s32 trick_combo_rotation_text_center_x_gp __asm__("D_L05_0015F8B4") = 0x15e;
-s32 trick_combo_rotation_text_y_gp __asm__("D_L05_0015F8B8") = 0x1b;
-s32 trick_combo_pose_count_center_x_gp __asm__("D_L05_0015F8BC") = 0x15e;
-s32 trick_combo_pose_count_y_gp __asm__("D_L05_0015F8C0") = 0x2f;
-s32 trick_combo_reward_text_x_gp __asm__("D_L05_0015F8C4") = 0xfa;
-s32 trick_combo_reward_label_y_gp __asm__("D_L05_0015F8C8") = 0x7d;
+s32 trick_combo_rotation_text_center_x_gp __asm__("D_L05_0015F8B4") = 350;
+s32 trick_combo_rotation_text_y_gp __asm__("D_L05_0015F8B8") = 27;
+s32 trick_combo_pose_count_center_x_gp __asm__("D_L05_0015F8BC") = 350;
+s32 trick_combo_pose_count_y_gp __asm__("D_L05_0015F8C0") = 47;
+s32 trick_combo_reward_text_x_gp __asm__("D_L05_0015F8C4") = 250;
+s32 trick_combo_reward_label_y_gp __asm__("D_L05_0015F8C8") = 125;
 
 s32 draw_trick_combo_hud(char *element) __asm__("FUN_L05_00262f50");
 

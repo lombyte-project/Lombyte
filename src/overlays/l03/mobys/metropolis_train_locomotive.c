@@ -24,11 +24,11 @@
  * car behind the previous one along ang, updating their motion deltas, and enables the coupling moby. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_00293720), where it is exact; names translated to the US level program. */
 
-extern int  D_L03_0015FFD8; /* no foreign declaration */
-short       metropolis_train_carriage_spacing __asm__("D_L03_00161368") = 0;
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
+extern int   D_L03_0015FFD8; /* no foreign declaration */
+extern short metropolis_train_carriage_spacing __asm__("D_L03_00161368") __attribute__((sda));
+extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
+extern void  update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern void  advance_moby_animation(void *) __asm__("FUN_0020d580");
 
 void place_metropolis_train(struct Moby *moby,
                             float       *pos,

@@ -20,12 +20,12 @@ extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FU
 
 extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
 
-extern char *D_L14_0015EF50 __asm__("D_L14_0015EF50");
+extern char *l14_camera_preset_rows __asm__("D_L14_0015EF50");
 
-extern char *D_L14_0015EF50_59d8 __asm__("D_L14_0015EF50");
+extern char *l14_camera_preset_rows __asm__("D_L14_0015EF50");
 
 /* Running length along each of the three rail splines (side 0..2), one entry per segment; [999] is read as the total. */
-float D_L14_001F6C80[3][1000] = {0};
+float path_key_camera_rail_distances[3][1000] __asm__("D_L14_001F6C80") = {0};
 
 extern float D_L14_001F6488_59d8[] __asm__("D_L14_001F6488");
 
@@ -41,7 +41,7 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
     float        pad[4]; /* unused; keeps the frame layout */
     float        hero_look_direction[4];
     float        up[4];
-    char        *rec = *(char **)(D_L14_0015EF50_59d8 + cam->descriptor_index * 32 + 0x1C);
+    char        *rec = *(char **)(l14_camera_preset_rows + cam->descriptor_index * 32 + 0x1C);
     char        *path;
     LevelSpline *path_record_table;
     char        *camera_saved_state;
@@ -61,25 +61,25 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
     path = (char *)path_record_table[*(int *)(rec + 0x34)].path;
     sum = 0.0f;
     for (i = 0; i < *(int *)path - 1; i++) {
-        D_L14_001F6C80[0][i] = sum;
+        path_key_camera_rail_distances[0][i] = sum;
         sum += *(float *)(path + i * 16 + 0x1C);
     }
-    D_L14_001F6C80[0][i] = sum;
+    path_key_camera_rail_distances[0][i] = sum;
     path = (char *)l14_splines[*(int *)(rec + 0x38)].path;
     sum = 0.0f;
     for (i = 0; i < *(int *)path - 1; i++) {
-        D_L14_001F6C80[1][i] = sum;
+        path_key_camera_rail_distances[1][i] = sum;
         sum += *(float *)(path + i * 16 + 0x1C);
     }
-    D_L14_001F6C80[1][i] = sum;
+    path_key_camera_rail_distances[1][i] = sum;
     /* retail reloads the spline table for the third path */
     path = (char *)(*(LevelSpline *volatile *)&l14_splines)[*(int *)(rec + 0x3C)].path;
     sum = 0.0f;
     for (i = 0; i < *(int *)path - 1; i++) {
-        D_L14_001F6C80[2][i] = sum;
+        path_key_camera_rail_distances[2][i] = sum;
         sum += *(float *)(path + i * 16 + 0x1C);
     }
-    D_L14_001F6C80[2][i] = sum;
+    path_key_camera_rail_distances[2][i] = sum;
     camera_saved_state = cam->saved_state;
     *(int *)(camera_saved_state + 0x88) = 1;
     camera_state_block = (int *)(camera_saved_state + 0x88);
@@ -202,7 +202,7 @@ typedef struct {
 
 #define MOBYDATA_5d48(m) ((CamMobyData5d48 *)(m)->pvars)
 
-extern CamSlot5d48 *D_L14_0015EF50_macro __asm__("D_L14_0015EF50") MACRO_ADDR;
+extern CamSlot5d48 *l14_camera_preset_rows_macro __asm__("D_L14_0015EF50") MACRO_ADDR;
 
 extern LevelSpline *l14_splines_macro __asm__("D_L14_0015F70C") MACRO_ADDR;
 
@@ -242,7 +242,7 @@ void update_path_key_camera(char *cam) __asm__("FUN_L14_00315d48");
 void update_path_key_camera(char *path_key_camera) {
     CamData5d48   *data = ((CamObj5d48 *)path_key_camera)->data;
     CamState5d48  *st = &data->st;
-    CamRec5d48    *rec = D_L14_0015EF50_macro[((CamObj5d48 *)path_key_camera)->slot].rec;
+    CamRec5d48    *rec = l14_camera_preset_rows_macro[((CamObj5d48 *)path_key_camera)->slot].rec;
     CamAngles5d48 *cur = &data->cur;
     float         *vel = data->vel;
     int            side;
@@ -269,7 +269,8 @@ void update_path_key_camera(char *path_key_camera) {
         side = 2;
     }
     D_L14_001624C0 =
-        (D_L14_001F6C80[side][hero.rail_segment] + hero.rail_seg_frac) / D_L14_001F6C80[side][999];
+        (path_key_camera_rail_distances[side][hero.rail_segment] + hero.rail_seg_frac) /
+        path_key_camera_rail_distances[side][999];
     if (rec->n32 < 2 &&
         path_key_camera_angle_override_progress_thresholds[rec->n32][side] <= D_L14_001624C0) {
         rec->n32++;
@@ -490,12 +491,12 @@ void update_path_key_camera(char *path_key_camera) {
     st->count++;
 }
 
-extern char *D_L14_0015EF50;
+extern char *l14_camera_preset_rows __asm__("D_L14_0015EF50");
 
 int check_path_key_camera_priority(char *moby, char *other) __asm__("FUN_L14_00316748");
 
 int check_path_key_camera_priority(char *moby, char *other) {
-    char *slot_record = *(char **)(D_L14_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    char *slot_record = *(char **)(l14_camera_preset_rows + *(short *)(moby + 0x84) * 32 + 0x1C);
     if (*(int *)(slot_record + 0x20) == 0 && *(short *)(D_L14_00167500 + 0x86) == 0x14) {
         *(int *)(slot_record + 0x20) = 1;
     } else if (*(int *)(slot_record + 0x20) == 1) {

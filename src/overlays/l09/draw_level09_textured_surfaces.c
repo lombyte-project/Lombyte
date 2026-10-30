@@ -15524,5 +15524,3 @@ void draw_level09_textured_surfaces(void) {
     build_packet_and_draw_scaled_entries(
         level09_textured_surface_draw_settings, level09_scaled_surface_entries, 10);
 }
-
-u64 scaled_entries_texture_register_value __asm__("D_L09_001612F0") = 0;

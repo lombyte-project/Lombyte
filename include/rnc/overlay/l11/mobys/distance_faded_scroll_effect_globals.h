@@ -15,7 +15,7 @@ extern int   distance_faded_effect_color_tables_initialized __asm__("D_L11_00162
 
 /* The oil tanker front texture 2b batches (5): vertex counts and colour tables,
    also read by queue_oil_tanker_front_texture_2b_batches. */
-extern s32  D_L11_00215268[5];
-extern u32 *D_L11_00217740[5];
+extern s32  oil_tanker_front_texture_2b_batch_vertex_counts[5] __asm__("D_L11_00215268");
+extern u32 *oil_tanker_front_texture_2b_batch_color_tables[5] __asm__("D_L11_00217740");
 
 #endif /* LOMBYTE_RNC_OVERLAY_L11_MOBYS_DISTANCE_FADED_SCROLL_EFFECT_GLOBALS_H */

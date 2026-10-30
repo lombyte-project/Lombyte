@@ -45,7 +45,7 @@
 #include "rnc/overlay/shared/mobys/attach_big_head_cheat_manipulator.h"
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002DF780), where it is exact; names translated to the US level program. */
 
-float challenge_layout_param __asm__("D_L16_00161C74") = 0;
+extern float challenge_layout_param __asm__("D_L16_00161C74");
 
 void challenge_set_layout_param(float new_value) __asm__("FUN_L16_002de3b8");
 

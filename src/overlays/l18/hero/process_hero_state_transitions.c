@@ -76,7 +76,7 @@ extern float          fast_sin(float);
 extern float          vector_length_xy(void *);
 extern int D_00141660 NOT_SDA;
 int                   r1_repeat_timer __asm__("D_L18_0015F678") = 0;
-extern int            D_L18_0015F6DC;
+extern int            l18_hero_run_start_frame __asm__("D_L18_0015F6DC");
 
 #include "rnc/overlay/l18/hero/process_hero_state_transitions_globals.h"
 
@@ -1958,7 +1958,7 @@ void process_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_RUN, 0);
                         if (hero.state.current == HERO_STATE_RUN) {
                             hero.state.step = 1;
-                            set_hero_animation(4, D_L18_0015F6DC, scale_game_frames(0xC));
+                            set_hero_animation(4, l18_hero_run_start_frame, scale_game_frames(0xC));
                         }
                         configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 1, 0);
                         break;
@@ -2808,5 +2808,3 @@ void process_hero_state_transitions(void) {
         hero.anim_seq_frames = 0;
     }
 }
-
-int D_L18_0015F6DC = 0;

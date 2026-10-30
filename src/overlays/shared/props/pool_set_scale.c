@@ -22,7 +22,7 @@ void pool_set_scale(float requested_scale) {
 extern void FUN_L01_00261c10(char *a, char *b);
 extern void FUN_L01_00262038(char *a, int i, int c, char *base);
 
-short        pool_wave_source_slot_index __asm__("D_L01_00161218") = 0;
+extern short pool_wave_source_slot_index __asm__("D_L01_00161218") __attribute__((sda));
 extern short pool_wave_next_source_slot_index __asm__("D_L01_0016121C") __attribute__((sda));
 void         step_pool_wave_simulation(char *base, int record_count) __asm__("FUN_L01_002b7f30");
 

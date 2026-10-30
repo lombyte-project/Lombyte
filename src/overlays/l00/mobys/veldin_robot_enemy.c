@@ -130,7 +130,7 @@ typedef struct {
 } ElectroidProbe;
 
 f32                 veldin_robot_probe_length_gp __asm__("D_L00_00161BE4") = 5.0f;
-s32                 D_L00_00161BE8 = 3;
+s32                 veldin_robot_beam_hit_frames __asm__("D_L00_00161BE8") = 3;
 f32                 veldin_robot_probe_heading_offset_gp __asm__("D_L00_00161BEC") = -0.15f;
 extern Vec4         D_L00_00166DC0;
 extern s32          D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
@@ -347,7 +347,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         }
         set_beam_origin_transform_and_endpoint(moby, mtx, &dir);
         if (moby->unk70 & 2) {
-            if (vars->timer++ == D_L00_00161BE8) {
+            if (vars->timer++ == veldin_robot_beam_hit_frames) {
                 release_beam_slot_by_id(moby);
                 moby->state = 6;
                 ELECTROID_ANIM(moby, 12, scale_game_frames_s32(10));

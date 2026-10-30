@@ -11,9 +11,9 @@
 extern char  D_L04_00166F40[];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
-extern int  collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-float       leaf_motion_parameters[6] __asm__("D_L04_001CB940") = {0};
+extern int   collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern void  reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern float leaf_motion_parameters[6] __asm__("D_L04_001CB940");
 
 extern char D_L04_00173FE0[];
 

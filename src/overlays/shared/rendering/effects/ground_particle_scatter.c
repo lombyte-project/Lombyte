@@ -371,9 +371,11 @@ float ground_particle_scatter_spawn_vector_xy_bias[2] __asm__("D_L08_00162360") 
 
 int ground_particle_scatter_distant_spawn_argument_gp __asm__("D_L08_00162358") = 1;
 
-short ground_particle_scatter_count_interpolation_start_override_gp __asm__("D_L08_0016234C") = 0;
+extern short ground_particle_scatter_count_interpolation_start_override_gp __asm__("D_L08_0016234C")
+    __attribute__((sda));
 
-short ground_particle_scatter_count_interpolation_end_override_gp __asm__("D_L08_00162350") = 0;
+extern short ground_particle_scatter_count_interpolation_end_override_gp __asm__("D_L08_00162350")
+    __attribute__((sda));
 
 float ground_particle_scatter_minimum_z_scale_gp __asm__("D_L08_00162340") = 0.5f;
 

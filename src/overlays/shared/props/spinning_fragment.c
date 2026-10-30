@@ -12,7 +12,7 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
 
-f32 D_L06_00162080_gp __asm__("D_L06_00162080") = 0.1f;
+f32 spinning_fragment_scale_factor_gp __asm__("D_L06_00162080") = 0.1f;
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
@@ -21,7 +21,7 @@ void update_falling_spinning_moby(struct Moby *moby) __asm__("FUN_L06_00300b90")
 void update_falling_spinning_moby(struct Moby *moby) {
     char *data;
     float vertical_velocity_decrement = frame_time_sq * 15.0f;
-    moby->scale = moby->pclass->scale * *(float *)&D_L06_00162080_gp;
+    moby->scale = moby->pclass->scale * *(float *)&spinning_fragment_scale_factor_gp;
     data = (char *)moby->pvars;
     *(float *)(data + 8) -= vertical_velocity_decrement;
     fast_vec_add(&moby->pos.x, &moby->pos.x, (float *)data);
@@ -57,8 +57,8 @@ unsigned char *spawn_spinning_moby_fragment(char  *unused_source_moby,
 
     if (fragment_moby != 0) {
         fragment_vars = ((char *)MOBY(fragment_moby)->pvars);
-        MOBY(fragment_moby)->scale =
-            *(float *)(((char *)MOBY(fragment_moby)->pclass) + 0x24) * D_L06_00162080_gp;
+        MOBY(fragment_moby)->scale = *(float *)(((char *)MOBY(fragment_moby)->pclass) + 0x24) *
+                                     spinning_fragment_scale_factor_gp;
         fragment_moby[0x30] = 0xFF;
         MOBY(fragment_moby)->draw_dist = 0x7E;
         fragment_moby[0x31] = 1;

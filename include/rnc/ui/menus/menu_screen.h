@@ -102,7 +102,7 @@ struct MenuIconListData {
 /* Save slot screen (saving_data_menu, saving_data_menu2, loading_data_menu,
    draw_save_slot_list). Enter enter_save_slot_screen takes a stream buffer into
    save_data and sets step 0; leave leave_save_slot_screen gives the buffer back.
-   flags 0x2000 is the second variant (FUN_00226b08, page D_001D4F98). */
+   flags 0x2000 is the second variant (FUN_00226b08, page challenge_confirm_page). */
 struct MenuSaveSlotData {
     s32 flags; /* 0x30: bit 0 pad repeat mask, 0x2000 second variant */
     u8  pad_34[0xC];
@@ -143,9 +143,28 @@ struct MenuCycleData {
  * 0x4F54. FUN_00221d68 steps `selected` modulo 30 with pad 0x40/0x20;
  * FUN_002220f0 reads items[selected].param.value of the focus list.
  */
+/* MenuTextItem.action: what confirm does (update_menu_entry_actions). The
+   REQUEST_CLOSE actions set menu_system.close_request: 6 -> 5, 7 -> 3,
+   8 -> 4, 10 -> 6, 11 -> 7, with param in menu_system.unkE4. */
+enum MenuTextAction {
+    MENU_ACTION_LOCKED = -1,  /* goodies entry not unlocked yet: confirm does nothing */
+    MENU_ACTION_DISABLED = 0, /* dimmed and skipped */
+    MENU_ACTION_NO_OP = 1,
+    MENU_ACTION_ALLOCATE_VOICE = 2,                           /* denied sound */
+    MENU_ACTION_SET_NEXT_PAGE = 3,                            /* param: the page */
+    MENU_ACTION_SET_NEXT_PAGE_OR_INITIALIZE_FREEZE = 4,       /* param: the page (save) */
+    MENU_ACTION_SET_NEXT_PAGE_OR_INITIALIZE_TIMED_FREEZE = 5, /* param: the page (load) */
+    MENU_ACTION_REQUEST_CLOSE_WITH_OPTIONAL_MESSAGE = 6,      /* param.half */
+    MENU_ACTION_REQUEST_CLOSE_WITH_WORD_PAYLOAD = 7,
+    MENU_ACTION_REQUEST_CLOSE_4_WITH_WORD_PAYLOAD = 8,
+    MENU_ACTION_SET_LANGUAGE = 9, /* param: game_language */
+    MENU_ACTION_REQUEST_CLOSE_6_WITH_WORD_PAYLOAD = 10,
+    MENU_ACTION_REQUEST_CLOSE_PRESERVING_PAYLOAD = 11
+};
+
 struct MenuTextItem {
     s16 text;   /* 0x0: help text id; 0 ends the list */
-    s16 action; /* 0x2: confirm action, see above */
+    s16 action; /* 0x2: enum MenuTextAction */
     union {
         s32 value; /* page, close value, level or language */
         struct {
@@ -219,6 +238,76 @@ struct MenuLabelData {
     s32 cached_value;  /* 0x48: value shown while fading */
     s32 value_variant; /* 0x4C */
 };
+
+/* MenuScreen.unk10: how the page draws the screen (port docs/port/rerac/plan/menus.md). */
+#define MENU_SCREEN_DRAW_DIRECT 0x1
+#define MENU_SCREEN_DRAW_3D     0x2 /* drawn in the first, 3D pass */
+#define MENU_SCREEN_HIDDEN      0x4
+
+/* MenuLabelData.flags (render_configured_text_label). Without a BY_ flag the
+   value is the item id of the focus grid's selected cell. */
+#define MENU_LABEL_CENTER_X          0x1
+#define MENU_LABEL_CENTER_Y          0x2
+#define MENU_LABEL_FIXED_TEXT        0x4 /* text_id is the text itself */
+#define MENU_LABEL_LARGE_FONT        0x8
+#define MENU_LABEL_SMALL_FONT        0x10
+#define MENU_LABEL_BY_CURRENT_LEVEL  0x20 /* value current_level_index - 1 */
+#define MENU_LABEL_BY_SELECTED_LEVEL 0x40 /* value selected_level_index[0] - 1 */
+#define MENU_LABEL_BY_LIST_SELECTION 0x80 /* value: the focus list's selected entry */
+#define MENU_LABEL_BY_GRID_CELL      0x100
+#define MENU_LABEL_PLANET_PREFIX     0x200 /* "Planet %s" (text 0x4ECC) around the text */
+#define MENU_LABEL_SCROLLING         0x400 /* set while the text overflows */
+#define MENU_LABEL_LOCKED_TEXT       0x800 /* text 0x4F54 while the item is locked */
+#define MENU_LABEL_BY_HELP_ENTRY     0x1000
+#define MENU_LABEL_NO_SCROLL         0x2000
+#define MENU_LABEL_CENTER_TEXT_523E  0x4000 /* with FIXED_TEXT: text 0x523E centred, y 12 */
+#define MENU_LABEL_VIDEO_MODE_VARIANT \
+    0x8000 /* with BY_LIST_SELECTION: second table column when pal_mode is set */
+#define MENU_LABEL_FULL_HEIGHT 0x10000
+
+/* MenuTextListData.flags (update_menu_entry_actions, render_localized_ui_entry_list,
+   draw_menu_text_list). */
+#define MENU_LIST_BUTTONS_ONLY      0x1 /* cursor keys from the buttons, not the stick */
+#define MENU_LIST_FIXED_COLOR       0x2 /* no highlight */
+#define MENU_LIST_LARGE_FONT        0x4
+#define MENU_LIST_SMALL_FONT        0x8
+#define MENU_LIST_FIXED_STEP        0x10 /* rows font size + 3 apart, not spread over the height */
+#define MENU_LIST_SETS_LEVEL        0x20 /* moving sets selected_level_index */
+#define MENU_LIST_LEFT_ALIGNED      0x40
+#define MENU_LIST_NO_COLOR_CODES    0x80
+#define MENU_LIST_SHOULDER_KEYS     0x100 /* L1 / R1 move the cursor too */
+#define MENU_LIST_SKILL_POINT_MARKS 0x200 /* check mark per entry: item_unlocked[i] */
+#define MENU_LIST_CENTERED          0x400 /* draw_menu_text_list */
+#define MENU_LIST_LANGUAGE_MARKS    0x800 /* check mark on the entry of game_language */
+#define MENU_LIST_WRAP              0x1000
+#define MENU_LIST_CENTER_WIDEST     0x4000 /* left edge of the widest entry centred */
+#define MENU_LIST_SCROLL_ONCE       0x8000
+#define MENU_LIST_NO_SCROLL         0x10000
+#define MENU_LIST_SHRINK_TO_FIT     0x20000 /* switches to the small font when too wide */
+
+/* MenuItemGridData.flags (update_menu_grid_selection, draw_menu_item_grid). */
+#define MENU_GRID_NO_CONFIRM         0x1
+#define MENU_GRID_FIXED_ROW_STEP     0x2
+#define MENU_GRID_HIDDEN_WITH_UNK138 0x4 /* skipped, cells locked while menu_system.unk138 */
+#define MENU_GRID_HIDDEN_WITH_UNK134 0x8 /* skipped, cells locked while menu_system.unk134 */
+#define MENU_GRID_NO_EQUIPPED_FRAME  0x20
+#define MENU_GRID_NO_WRAP            0x8000
+
+/* MenuStreamData.flags (update_menu_resource_stream, update_menu_stream_image). */
+#define MENU_STREAM_FIXED_ENTRY       0x1
+#define MENU_STREAM_BY_SELECTED_LEVEL 0x2
+#define MENU_STREAM_BY_GRID_CELL      0x4
+#define MENU_STREAM_BY_CELL_ENTRY     0x8  /* the focus grid cell's stream_entry */
+#define MENU_STREAM_UNPACK            0x20 /* read to the buffer end, then decompress_wad */
+#define MENU_STREAM_BY_SAVE_SLOT      0x100
+#define MENU_STREAM_BUFFER_ARG        0x200 /* acquire_menu_stream_buffer argument */
+#define MENU_STREAM_CYCLE             0x400 /* 19 entries by elapsed_frames */
+#define MENU_STREAM_BY_LANGUAGE       0x1000
+#define MENU_STREAM_SKILL_POINT_LOCK  0x2000 /* entry 0x1E while item_unlocked[entry] is 0 */
+#define MENU_STREAM_DENIED_ENTRY      0x4000 /* entry 9 for a list entry with action 2 */
+
+/* MenuOption.flags (update_menu_option_list). */
+#define MENU_OPTION_FADE_TOGGLE 0x1 /* fade out and toggle D_0016034C instead */
 
 /*
  * One screen of a menu page (MenuPage.screens). update_menu_system calls update

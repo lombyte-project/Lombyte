@@ -14,10 +14,10 @@ extern void  update_hydrodisplacer_faucet_pulse_color(void *) __asm__("FUN_L05_0
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern short faucet_base_color_gp __asm__("D_L05_001618C0") __attribute__((sda));
-short        faucet_item_16_pulse_start_color_gp __asm__("D_L05_001618C4") = -32640;
-short        faucet_item_16_pulse_end_color_gp __asm__("D_L05_001618C8") = -16288;
-short        faucet_fallback_pulse_start_color_gp __asm__("D_L05_001618CC") = -32640;
-short        faucet_fallback_pulse_end_color_gp __asm__("D_L05_001618D0") = 0x60c0;
+extern short faucet_item_16_pulse_start_color_gp __asm__("D_L05_001618C4") __attribute__((sda));
+extern short faucet_item_16_pulse_end_color_gp __asm__("D_L05_001618C8") __attribute__((sda));
+extern short faucet_fallback_pulse_start_color_gp __asm__("D_L05_001618CC") __attribute__((sda));
+extern short faucet_fallback_pulse_end_color_gp __asm__("D_L05_001618D0") __attribute__((sda));
 extern short D_0015EE6C_s __asm__("D_0015ED6C");
 
 /* Moby update: plays an animation when its state and a flag allow, then calls the next stage. */

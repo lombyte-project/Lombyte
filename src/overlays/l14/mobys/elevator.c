@@ -287,7 +287,7 @@ extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
 extern int
 FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 
-short elevator_path_step_rate_gp __asm__("D_L14_00161D14") = 0;
+extern short elevator_path_step_rate_gp __asm__("D_L14_00161D14") __attribute__((sda));
 
 int advance_elevator_along_path(struct Moby *elevator_moby) {
     char *moby_vars = (char *)elevator_moby->pvars;

@@ -12,9 +12,10 @@ typedef struct {
     u8  neighbors[8];      /* 0x0C: index of the grid 16 units away in each direction, 0xFF: none */
     u32 texture_id;        /* 0x14 */
     u32 second_texture_id; /* 0x18 */
-    u8  unk1C;             /* 0x1C */
-    u8  unk1D;             /* 0x1D */
-    u16 draw_value;        /* 0x1E */
+    u8  alpha_2_fix;       /* 0x1C: FIX of the GS ALPHA_2 register */
+    u8  alpha_1_fix;       /* 0x1D: FIX of the GS ALPHA_1 register */
+    u16 visible_subtiles;  /* 0x1E: bit i = sub-tile i of the 4x4 grid (row i >> 2, column i & 3)
+                              that render_water_grids draws; 0: grid not drawn */
     u8  rest[0x1170];
 } WaterGrid;
 

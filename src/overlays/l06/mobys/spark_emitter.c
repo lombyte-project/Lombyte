@@ -37,21 +37,24 @@ spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_0
 float      spark_burst_vector_scale_variation_gp __asm__("D_L06_001622FC") = 0.1f;
 extern int D_L06_00162304 __attribute__((sda));
 extern int D_L06_00162308 __attribute__((sda));
-int        D_L06_00162320 = 0x80ffc0c0;
-int        D_L06_00162324 = 0x80ffffc0;
-int        D_L06_00162328 = 0x20c08080;
-int        D_L06_0016232C = 0x20c0c080;
+/* Spark colours are RGBA words (0xAABBGGRR); each spark gets a random blend
+   between the _from and _to colour. */
+int        spark_burst_start_color_from __asm__("D_L06_00162320") = 0x80ffc0c0;
+int        spark_burst_start_color_to __asm__("D_L06_00162324") = 0x80ffffc0;
+int        spark_burst_end_color_from __asm__("D_L06_00162328") = 0x20c08080;
+int        spark_burst_end_color_to __asm__("D_L06_0016232C") = 0x20c0c080;
 float      spark_spray_z_subtraction_rate_gp __asm__("D_L06_00162338") = 5.0f;
 float      spark_spray_vector_scale_variation_gp __asm__("D_L06_0016233C") = 0.6f;
 extern int D_L06_00162348 __attribute__((sda));
 extern int D_L06_0016234C __attribute__((sda));
-int        D_L06_00162364 = 0x804080ff;
-int        D_L06_00162368 = 0x8040ffff;
-int        D_L06_0016236C = 0x80204040;
-int        D_L06_00162370 = 0x80204080;
-int        spark_spray_timer_range_start_gp __asm__("D_L06_00162374") = 0x14;
-int        spark_spray_timer_range_end_gp __asm__("D_L06_00162378") = 0x28;
-int        D_L06_0016237C = 0x10019;
+int        spark_spray_start_color_from __asm__("D_L06_00162364") = 0x804080ff;
+int        spark_spray_start_color_to __asm__("D_L06_00162368") = 0x8040ffff;
+int        spark_spray_end_color_from __asm__("D_L06_0016236C") = 0x80204040;
+int        spark_spray_end_color_to __asm__("D_L06_00162370") = 0x80204080;
+int        spark_spray_timer_range_start_gp __asm__("D_L06_00162374") = 20;
+int        spark_spray_timer_range_end_gp __asm__("D_L06_00162378") = 40;
+int        spark_spray_lookup_index_and_flags __asm__("D_L06_0016237C") =
+    0x10000 | 25; /* spawn_spark: low half the spark lookup index, bit 16 its 0x48 blend */
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 /* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */
@@ -135,10 +138,12 @@ void update_spark_emitter(struct Moby *emitter) {
             z_adjusted_spark_vector.w =
                 random_float_between(spark_burst_z_adjusted_vector_w_range_start,
                                      spark_burst_z_adjusted_vector_w_range_end);
-            c19 =
-                fast_tween_color(D_L06_00162320, D_L06_00162324, random_float_between(0.0f, 1.0f));
-            c18 =
-                fast_tween_color(D_L06_00162328, D_L06_0016232C, random_float_between(0.0f, 1.0f));
+            c19 = fast_tween_color(spark_burst_start_color_from,
+                                   spark_burst_start_color_to,
+                                   random_float_between(0.0f, 1.0f));
+            c18 = fast_tween_color(spark_burst_end_color_from,
+                                   spark_burst_end_color_to,
+                                   random_float_between(0.0f, 1.0f));
             c17 = truncate_float_to_s32(scale_time(
                 (float)spark_burst_emission_random_span * random_float_between(0.0f, 1.0f) + 1.0f));
             c16 = truncate_float_to_s32(
@@ -202,10 +207,12 @@ void update_spark_emitter(struct Moby *emitter) {
                 z_adjusted_spark_vector.w =
                     random_float_between(spark_spray_z_adjusted_vector_w_range_start,
                                          spark_spray_z_adjusted_vector_w_range_end);
-                c19 = fast_tween_color(
-                    D_L06_00162364, D_L06_00162368, random_float_between(0.0f, 1.0f));
-                c18 = fast_tween_color(
-                    D_L06_0016236C, D_L06_00162370, random_float_between(0.0f, 1.0f));
+                c19 = fast_tween_color(spark_spray_start_color_from,
+                                       spark_spray_start_color_to,
+                                       random_float_between(0.0f, 1.0f));
+                c18 = fast_tween_color(spark_spray_end_color_from,
+                                       spark_spray_end_color_to,
+                                       random_float_between(0.0f, 1.0f));
                 c17 = truncate_float_to_s32(scale_time((float)spark_spray_emission_random_span *
                                                            random_float_between(0.0f, 1.0f) +
                                                        1.0f));
@@ -227,7 +234,7 @@ void update_spark_emitter(struct Moby *emitter) {
                             c17,
                             c16,
                             c2,
-                            D_L06_0016237C);
+                            spark_spray_lookup_index_and_flags);
             }
         }
         break;

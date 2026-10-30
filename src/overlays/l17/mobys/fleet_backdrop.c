@@ -50,6 +50,7 @@ float        backdrop_quad_uv_rotation_angles[5] __asm__("D_L17_001DE0D0") = {0}
 float backdrop_scrolling_quad_base_uv_coordinates[8] __asm__("D_L17_001E6FA0") = {
     -8.0f, 0.0f, -8.0f, 1.0f, 8.0f, 0.0f, 8.0f, 1.0f};
 
+/* RGBA words, 0xAABBGGRR. */
 int backdrop_quad_color_blend_source_colors[5] __asm__("D_L17_001DE010") = {
     0x80252525, 0x80202020, 0x80252525, 0x80101010, 0x80151515};
 
@@ -57,8 +58,8 @@ int backdrop_quad_color_blend_target_colors[5] __asm__("D_L17_001DE028") = {
     0x80101030, 0x80301010, 0x80101015, 0x80151010, 0x80151015};
 
 extern int backdrop_scrolling_quad_texture_indices[] __asm__("D_L17_001DE088");
-int        D_L17_001623B8 = 0x807e4931;
-void       draw_fleet_backdrop_quads(struct Moby *moby) __asm__("FUN_L17_002f32f0");
+int  backdrop_scrolling_quad_color __asm__("D_L17_001623B8") = 0x807e4931; /* RGBA, 0xAABBGGRR */
+void draw_fleet_backdrop_quads(struct Moby *moby) __asm__("FUN_L17_002f32f0");
 
 void draw_fleet_backdrop_quads(struct Moby *moby) {
     Pkt      pkt;
@@ -89,10 +90,10 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         *(long *)&pkt.q[4] = 0x0000FF9000000260LL;
         *(long *)&pkt.q[6] = 0x0000008000000048LL;
         *(long *)&pkt.q[0] = 0;
-        pkt.col[3] = D_L17_001623B8;
-        pkt.col[2] = D_L17_001623B8;
-        pkt.col[1] = D_L17_001623B8;
-        pkt.col[0] = D_L17_001623B8;
+        pkt.col[3] = backdrop_scrolling_quad_color;
+        pkt.col[2] = backdrop_scrolling_quad_color;
+        pkt.col[1] = backdrop_scrolling_quad_color;
+        pkt.col[0] = backdrop_scrolling_quad_color;
         {
             float *qu = &pkt.uv[0];
             float *qv = &pkt.uv[1];

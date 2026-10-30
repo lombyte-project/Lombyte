@@ -224,7 +224,7 @@ float         shuttle_breakup_particle_max_speed_gp __asm__("D_L06_0016215C") = 
 
 #include "rnc/overlay/l06/mobys/shuttle_data/break_apart_shuttle_linked_mobys_2.h"
 
-int shuttle_breakup_particles_per_piece_gp __asm__("D_L06_00162190") = 0x14;
+int shuttle_breakup_particles_per_piece_gp __asm__("D_L06_00162190") = 20;
 
 #include "rnc/overlay/l06/mobys/shuttle_data/break_apart_shuttle_linked_mobys.h"
 

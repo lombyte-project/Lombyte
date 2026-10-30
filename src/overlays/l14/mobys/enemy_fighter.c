@@ -36,7 +36,7 @@ extern struct {
     unsigned char flag;
 } D_0013D408;
 
-s32 enemy_fighter_respawn_delay_frames_gp __asm__("D_L14_00161F5C") = 0x1f4;
+s32 enemy_fighter_respawn_delay_frames_gp __asm__("D_L14_00161F5C") = 500;
 
 char D_L14_001FCE10[] = "Enemy Fighter (moby908) with no flyPath. UID: %d - RAR\n";
 
@@ -270,15 +270,15 @@ FUN_L00_0025d808_c(int a, char *pos, char *b, char *c, int d, float f) __asm__("
 
 float absolute_float(float input) __asm__("func_001F99C0");
 
-short enemy_fighter_path_step_rate_gp __asm__("D_L14_00161F48") = 0;
+extern short enemy_fighter_path_step_rate_gp __asm__("D_L14_00161F48") __attribute__((sda));
 
-short enemy_fighter_flight_spring_strength_gp __asm__("D_L14_00161F4C") = -10486;
+extern short enemy_fighter_flight_spring_strength_gp __asm__("D_L14_00161F4C") __attribute__((sda));
 
-short enemy_fighter_flight_spring_damping_gp __asm__("D_L14_00161F50") = -13107;
+extern short enemy_fighter_flight_spring_damping_gp __asm__("D_L14_00161F50") __attribute__((sda));
 
-short enemy_fighter_bank_angle_scale_gp __asm__("D_L14_00161F54") = 0x66f3;
+extern short enemy_fighter_bank_angle_scale_gp __asm__("D_L14_00161F54") __attribute__((sda));
 
-short enemy_fighter_bank_yaw_error_scale_gp __asm__("D_L14_00161F58") = 0x5134;
+extern short enemy_fighter_bank_yaw_error_scale_gp __asm__("D_L14_00161F58") __attribute__((sda));
 
 void advance_enemy_fighter_along_flight_path(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;

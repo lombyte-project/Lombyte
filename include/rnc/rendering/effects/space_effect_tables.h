@@ -18,8 +18,8 @@ extern f32 unit_quad_texture_coordinates[4][2] __asm__("D_001D97B0");
 /* Corner offsets of the light flare quad, per content variant. */
 extern f32 light_flare_corner_offsets[3][4][4] __asm__("D_001D97D0");
 
-/* Two GS colours of the warp trail per content variant; w0's top byte is the alpha
-   update_level_gameplay_frame fades for all three. */
+/* Two GS colours of the warp trail per content variant, as RGBA words 0xAABBGGRR;
+   w0's alpha is the one update_level_gameplay_frame fades for all three. */
 typedef struct ColorPair {
     u32 w0;
     u32 w1;

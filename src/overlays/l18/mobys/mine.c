@@ -177,7 +177,7 @@ typedef struct {
 extern float FUN_L00_0025abf0_q(float *a, float *b, float *out, float speed, float g) __asm__("FUN_L00_0025abf0");
 extern int *D_L18_001AC240_lui[] __asm__("D_L18_001AC240") NOT_SDA;
 extern int  D_L18_0015FFD8_m __asm__("D_L18_0015FFD8");
-f32         D_L18_00161994_gp __asm__("D_L18_00161994") = 2.5f;
+f32         mine_launch_pitch_and_setback_gp __asm__("D_L18_00161994") = 2.5f;
 
 char *launch_class_238_moby_from_list(float  horizontal_speed,
                                       int    launching_moby,
@@ -233,7 +233,7 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
             blend_moby_animation(moby, 0, 0, 1);
         }
         qcopy(moby + 0x10, launch_position);
-        pitch_and_target_setback_scalar = *(float *)&D_L18_00161994_gp;
+        pitch_and_target_setback_scalar = *(float *)&mine_launch_pitch_and_setback_gp;
         *(int *)(moby + 0x40) = 0;
         MOBY(moby)->rot.y = -pitch_and_target_setback_scalar;
         target_position[2] = target_position[2] + 0.75f;
@@ -241,7 +241,7 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
         set_vector_length_xy(adjusted_target_position,
                              adjusted_target_position,
                              vector_length_xy(adjusted_target_position) -
-                                 *(float *)&D_L18_00161994_gp);
+                                 *(float *)&mine_launch_pitch_and_setback_gp);
         fast_vec_add(adjusted_target_position, adjusted_target_position, launch_position);
         data = ((char *)MOBY(moby)->pvars);
         qcopy(data + 0x170, adjusted_target_position);

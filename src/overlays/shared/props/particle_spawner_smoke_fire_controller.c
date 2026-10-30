@@ -7,7 +7,7 @@
 #include "qcopy.h"
 
 extern int configured_unscaled_frame_count_gp __asm__("D_L00_00161368") __attribute__((sda));
-int        configured_reciprocal_frame_count_gp __asm__("D_L00_0016136C") = 0x3c;
+int        configured_reciprocal_frame_count_gp __asm__("D_L00_0016136C") = 60;
 
 extern int   D_L00_0016137C_gp __asm__("D_L00_0016137C") __attribute__((sda));
 extern int   D_L00_00161380 __attribute__((sda));
