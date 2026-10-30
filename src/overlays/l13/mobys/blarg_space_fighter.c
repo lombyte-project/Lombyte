@@ -267,18 +267,18 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 void predict_hero_vehicle_position(char *out, float scale) __asm__("FUN_L13_002c3f08");
 
-void predict_hero_vehicle_position(char *out, float scale) {
+void predict_hero_vehicle_position(char *predicted_hero_position, float scale) {
     char *x = D_0013E533 + 0xE1D;
     if (*(char **)(x + 0x15F0) == 0) {
-        qcopy(out, x + 0x80);
+        qcopy(predicted_hero_position, x + 0x80);
     } else {
         char *vehicle_data = *(char **)(*(char **)(x + 0x15F0) + 0x78);
         float a = fast_add_rotations(*(float *)(*(char **)(x + 0x15F0) + 0x48),
                                      *(float *)(vehicle_data + 0x90));
         float b = fast_add_rotations(*(float *)(*(char **)(x + 0x15F0) + 0x44),
                                      *(float *)(vehicle_data + 0x94));
-        build_spherical_offset(out, scale * *(float *)(vehicle_data + 0x64), a, -b);
-        fast_vec_add(out, out, *(char **)(x + 0x15F0) + 0x10);
+        build_spherical_offset(predicted_hero_position, scale * *(float *)(vehicle_data + 0x64), a, -b);
+        fast_vec_add(predicted_hero_position, predicted_hero_position, *(char **)(x + 0x15F0) + 0x10);
     }
 }
 
