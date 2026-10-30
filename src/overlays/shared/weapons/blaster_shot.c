@@ -263,7 +263,7 @@ void update_homing_shot(Moby *shot_moby) {
     Vec4A     vector_scratch;
     Vec4A     spark_and_pushout_scratch;
     Vec4A     spark_velocity;
-    ShotVars *vars;
+    ShotVars *shot_vars;
     float     yaw;
     float     pitch;
     float     speed;
@@ -272,42 +272,42 @@ void update_homing_shot(Moby *shot_moby) {
     int       j;
     int       left;
 
-    vars = *(ShotVars **)&shot_moby->pvars;
+    shot_vars = *(ShotVars **)&shot_moby->pvars;
     shot_moby->rot.y = fast_add_rotations(shot_moby->rot.y, -homing_shot_pitch_bias[0]);
-    if (fast_vec_length(vars) < 0.1f) {
-        if (vars->timer < scale_game_frames(0x23) - scale_game_frames(1) && vars->bounces == 0) {
-            yaw = vars->rest_yaw;
-            pitch = vars->rest_pitch;
+    if (fast_vec_length(shot_vars) < 0.1f) {
+        if (shot_vars->timer < scale_game_frames(0x23) - scale_game_frames(1) && shot_vars->bounces == 0) {
+            yaw = shot_vars->rest_yaw;
+            pitch = shot_vars->rest_pitch;
         } else {
             yaw = shot_moby->rot.z;
             pitch = shot_moby->rot.y;
         }
     } else {
-        yaw = fast_arc_tan(vars->target_x - shot_moby->pos.x, vars->target_y - shot_moby->pos.y);
-        pitch = -fast_arc_tan(vector_distance_xy((Vec4A *)&shot_moby->pos, vars),
-                              vars->target_z - shot_moby->pos.z);
+        yaw = fast_arc_tan(shot_vars->target_x - shot_moby->pos.x, shot_vars->target_y - shot_moby->pos.y);
+        pitch = -fast_arc_tan(vector_distance_xy((Vec4A *)&shot_moby->pos, shot_vars),
+                              shot_vars->target_z - shot_moby->pos.z);
     }
-    if (fast_vec_length(vars) < 0.1f) {
-        shot_moby->rot.z = spring_turn(&vars->yaw_rate,
+    if (fast_vec_length(shot_vars) < 0.1f) {
+        shot_moby->rot.z = spring_turn(&shot_vars->yaw_rate,
                                        shot_moby->rot.z,
                                        yaw,
                                        D_0015ED70_lui * 6.2831855f,
                                        D_0015ED70_lui * 3.1415927f,
                                        D_0015ED6C_lui * 6.2831855f);
-        shot_moby->rot.y = spring_turn(&vars->pitch_rate,
+        shot_moby->rot.y = spring_turn(&shot_vars->pitch_rate,
                                        shot_moby->rot.y,
                                        pitch,
                                        D_0015ED70_lui * 6.2831855f,
                                        D_0015ED70_lui * 3.1415927f,
                                        D_0015ED6C_lui * 6.2831855f);
     } else {
-        shot_moby->rot.z = spring_turn(&vars->yaw_rate,
+        shot_moby->rot.z = spring_turn(&shot_vars->yaw_rate,
                                        shot_moby->rot.z,
                                        yaw,
                                        D_0015ED70_lui * 6.2831855f,
                                        D_0015ED70_lui * 3.1415927f,
                                        D_0015ED6C_lui * 4.712389f);
-        shot_moby->rot.y = spring_turn(&vars->pitch_rate,
+        shot_moby->rot.y = spring_turn(&shot_vars->pitch_rate,
                                        shot_moby->rot.y,
                                        pitch,
                                        D_0015ED70_lui * 6.2831855f,
@@ -334,15 +334,15 @@ void update_homing_shot(Moby *shot_moby) {
     query.b19 = 1;
     query.dir.w = 5627.9248f;
     query.oclass = shot_moby->oclass;
-    if (fast_dec_timer_s16(&vars->timer) != 0) {
+    if (fast_dec_timer_s16(&shot_vars->timer) != 0) {
         FUN_L00_002cbcc0_2cb418(shot_moby, 0);
         mark_moby_for_removal(shot_moby);
         return;
     }
-    if (collide_line_2cb418(&start, (Vec4A *)&shot_moby->pos, 0, vars->ignore, &query) != 0) {
+    if (collide_line_2cb418(&start, (Vec4A *)&shot_moby->pos, 0, shot_vars->ignore, &query) != 0) {
         if (FUN_001f0b58_2cb418() == 0) {
-            if (vars->timer > scale_game_frames(3)) {
-                vars->timer = scale_game_frames(3);
+            if (shot_vars->timer > scale_game_frames(3)) {
+                shot_vars->timer = scale_game_frames(3);
             }
         } else {
             qcopy((Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60));
@@ -373,7 +373,7 @@ void update_homing_shot(Moby *shot_moby) {
                 mark_moby_for_removal(shot_moby);
                 return;
             }
-            vars->bounces++;
+            shot_vars->bounces++;
             switch (FUN_001f0b58_2cb418()) {
             case 0:
             case 1:
@@ -382,10 +382,10 @@ void update_homing_shot(Moby *shot_moby) {
             case 7:
             case 11:
             case 13:
-                vars->bounces = 1000;
+                shot_vars->bounces = 1000;
                 break;
             }
-            if (item_text_variant[15] + 5 < vars->bounces) {
+            if (item_text_variant[15] + 5 < shot_vars->bounces) {
                 FUN_L00_002cbcc0_2cb418(shot_moby, 1);
                 mark_moby_for_removal(shot_moby);
                 return;
@@ -393,8 +393,8 @@ void update_homing_shot(Moby *shot_moby) {
             reflect_vector(&vector_scratch, &step, ((char *)D_L00_00173E60) + 0x20);
             shot_moby->rot.z = fast_arc_tan(vector_scratch.x, vector_scratch.y);
             shot_moby->rot.y = -fast_arc_tan(vector_length_xy(&vector_scratch), vector_scratch.z);
-            vars->yaw_rate = 0.0f;
-            vars->pitch_rate = 0.0f;
+            shot_vars->yaw_rate = 0.0f;
+            shot_vars->pitch_rate = 0.0f;
             fast_vec_normalize(&spark_and_pushout_scratch, ((char *)D_L00_00173E60) + 0x20, 0.05f);
             add_vector_xyz_2cb418(
                 (Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60), &spark_and_pushout_scratch);
@@ -405,7 +405,7 @@ void update_homing_shot(Moby *shot_moby) {
         }
     }
     shot_moby->rot.y = fast_add_rotations(shot_moby->rot.y, D_L00_00161890[1]);
-    left = vars->life - vars->timer;
+    left = shot_vars->life - shot_vars->timer;
     if (left < scale_game_frames(13)) {
         speed = convert_integer_to_float(left);
         speed = speed / convert_integer_to_float(scale_game_frames(13));
@@ -416,11 +416,11 @@ void update_homing_shot(Moby *shot_moby) {
     fast_vec_sub(&step, &start, (Vec4A *)&shot_moby->pos);
     fast_vec_normalize(&step, &step, speed);
     qcopy(&vector_scratch, (Vec4A *)&shot_moby->pos);
-    if (vars->follower != 0) {
-        qcopy((Vec4A *)&vars->follower->pos, &vector_scratch);
+    if (shot_vars->follower != 0) {
+        qcopy((Vec4A *)&shot_vars->follower->pos, &vector_scratch);
     }
     for (j = 0; j < 16; j++) {
-        Moby *trail_moby = vars->trail[j];
+        Moby *trail_moby = shot_vars->trail[j];
         if (trail_moby != 0) {
             add_vector_xyz_2cb418((Vec4A *)&trail_moby->pos, &vector_scratch, &step);
             qcopy(&vector_scratch, (Vec4A *)&trail_moby->pos);
