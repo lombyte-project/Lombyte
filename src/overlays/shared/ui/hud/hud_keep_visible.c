@@ -502,11 +502,11 @@ int draw_hud_stars(HudElem *element) {
         float limit0 = star_init_limit0_gp;
         float limit1 = star_init_limit1_gp;
         float limit2 = star_init_limit2_gp;
-        float first = limit0 * sixteen;
+        float first_band_inset_subpixels = limit0 * sixteen;
         limit0 = limit1 - limit0;
         limit2 = limit2 - limit1;
-        first_step[0] = first;
-        first_step[1] = first;
+        first_step[0] = first_band_inset_subpixels;
+        first_step[1] = first_band_inset_subpixels;
         limit0 = limit0 * sixteen;
         second_step[0] = limit0;
         second_step[1] = limit0;
