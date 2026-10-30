@@ -910,13 +910,13 @@ extern unsigned char D_0013D4DC[];
 int resolve_hero_gravity_mode(void) __asm__("FUN_L00_00233440");
 
 int resolve_hero_gravity_mode(void) {
-    struct Hero *base = &hero;
-    int          state = base->state.current;
-    int          return_value = base->unk308;
+    struct Hero *hero_gravity_mode_state = &hero;
+    int          state = hero_gravity_mode_state->state.current;
+    int          return_value = hero_gravity_mode_state->unk308;
 
     if (state == 0x3F || state == 0x71 || state == 0x70 ||
-        (base->on_magnet_ground != 0 && D_0013D4DC[0] != 0 && state == 0 &&
-         base->air_frames.s < scale_game_frames(4))) {
+        (hero_gravity_mode_state->on_magnet_ground != 0 && D_0013D4DC[0] != 0 && state == 0 &&
+         hero_gravity_mode_state->air_frames.s < scale_game_frames(4))) {
         return_value = 1;
     }
     return return_value;
