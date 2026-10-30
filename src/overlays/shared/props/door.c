@@ -24,7 +24,7 @@ void door_update(u8 *moby) {
         DOOR_RETURN_TO_INITIAL_POSITION = 4
     };
     u8         *door_data = ((u8 *)MOBY(moby)->pvars);
-    u8         *other;
+    u8         *linked_moby;
     f32         vectors[8];
     f32         distance;
     u8          state;
@@ -46,9 +46,9 @@ void door_update(u8 *moby) {
         if (*(s32 *)(door_data + 0x38) != -1)
             D_L07_00184528[*(s32 *)(door_data + 0x38)] = 0;
         if (*(s32 *)(door_data + 0x10) != -1) {
-            other = level_mobys + *(s32 *)(door_data + 0x10) * 0x100;
-            if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
-                other[0x20] != *(u32 *)(door_data + 0x14))
+            linked_moby = level_mobys + *(s32 *)(door_data + 0x10) * 0x100;
+            if (linked_moby != 0 && linked_moby[0x20] != 0xfe && linked_moby[0x20] != 0xfd &&
+                linked_moby[0x20] != *(u32 *)(door_data + 0x14))
                 return;
         }
         *(quadword *)(vectors + 4) = 0;
@@ -65,9 +65,9 @@ void door_update(u8 *moby) {
         if (*(s32 *)(door_data + 0x38) != -1)
             D_L07_00184528[*(s32 *)(door_data + 0x38)] = 1;
         if (*(s32 *)(door_data + 0x10) != -1) {
-            other = level_mobys + *(s32 *)(door_data + 0x10) * 0x100;
-            if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
-                other[0x20] == *(u32 *)(door_data + 0x18)) {
+            linked_moby = level_mobys + *(s32 *)(door_data + 0x10) * 0x100;
+            if (linked_moby != 0 && linked_moby[0x20] != 0xfe && linked_moby[0x20] != 0xfd &&
+                linked_moby[0x20] == *(u32 *)(door_data + 0x18)) {
                 if (*(s32 *)(door_data + 0x30) != -1)
                     allocate_voice_for_target_entry(*(s32 *)(door_data + 0x30), 0, moby);
                 moby[0x20] = 4;
@@ -96,9 +96,9 @@ void door_update(u8 *moby) {
             D_L07_00184528[*(s32 *)(door_data + 0x38)] = 1;
         if (*(s32 *)(door_data + 0x10) == -1)
             return;
-        other = level_mobys + *(s32 *)(door_data + 0x10) * 0x100;
-        if (other == 0 || other[0x20] == 0xfe || other[0x20] == 0xfd ||
-            other[0x20] != *(u32 *)(door_data + 0x18))
+        linked_moby = level_mobys + *(s32 *)(door_data + 0x10) * 0x100;
+        if (linked_moby == 0 || linked_moby[0x20] == 0xfe || linked_moby[0x20] == 0xfd ||
+            linked_moby[0x20] != *(u32 *)(door_data + 0x18))
             return;
         *(s32 *)(door_data + 0x0c) = 0;
         if (*(s32 *)(door_data + 0x30) != -1)
@@ -109,8 +109,8 @@ void door_update(u8 *moby) {
         if (*(s32 *)(door_data + 0x38) != -1)
             D_L07_00184528[*(s32 *)(door_data + 0x38)] = 0;
         if (*(s32 *)(door_data + 0x10) == -1 ||
-            (other = level_mobys + *(s32 *)(door_data + 0x10) * 0x100) == 0 || other[0x20] == 0xfe ||
-            other[0x20] == 0xfd || other[0x20] == *(u32 *)(door_data + 0x14)) {
+            (linked_moby = level_mobys + *(s32 *)(door_data + 0x10) * 0x100) == 0 || linked_moby[0x20] == 0xfe ||
+            linked_moby[0x20] == 0xfd || linked_moby[0x20] == *(u32 *)(door_data + 0x14)) {
             if (*(s32 *)(door_data + 0x30) != -1)
                 allocate_voice_for_target_entry(*(s32 *)(door_data + 0x30), 0, moby);
             moby[0x20] = 2;
