@@ -2,7 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds_from_basis/FUN_0020e098.s", FUN_0020e098);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/frame/ssp_load_tex/FUN_0022bec4.s", FUN_0022bec4);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

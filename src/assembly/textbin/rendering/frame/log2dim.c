@@ -2,8 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/gs/write_setup_block/FUN_001f82e4.s",
-            write_setup_block);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/frame/log2dim/FUN_001f97a0.s", FUN_001f97a0);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

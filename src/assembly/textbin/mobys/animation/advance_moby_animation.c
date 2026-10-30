@@ -2,8 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/gs/fast_draw_quad_real/FUN_001f7d30.s",
-            draw_geometry_quad);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/mobys/animation/advance_moby_animation/FUN_0020d580.s", FUN_0020d580);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

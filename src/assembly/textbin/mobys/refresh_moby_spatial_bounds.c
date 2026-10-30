@@ -2,7 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/gs/log2dim/FUN_001f97a0.s", FUN_001f97a0);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/mobys/refresh_moby_spatial_bounds/FUN_0020def8.s", FUN_0020def8);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

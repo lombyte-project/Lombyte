@@ -2,7 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/gs/write_gs_header/FUN_001f8364.s", FUN_001f8364);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/mobys/get_moby_light_direction/FUN_0020d510.s", FUN_0020d510);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

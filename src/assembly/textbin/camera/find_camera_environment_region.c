@@ -2,7 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/rendering/gs/ssp_load_tex/FUN_0022bec4.s", FUN_0022bec4);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/camera/find_camera_environment_region/FUN_00212c28.s", FUN_00212c28);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public
