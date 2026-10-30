@@ -116,7 +116,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             /* This action passes the low halfword; the other indexed actions pass the full word. */
             message_index = menu->data.list.items[menu->data.list.selected].param.half.hi;
             if (message_index != 0) {
-                menu_system.unkEC = menu_action_messages[message_index];
+                menu_system.unkEC = (s32)menu_action_messages[message_index];
             }
             menu_system.close_request = 5;
             menu_system.unkF0 = menu_system.current;

@@ -19,7 +19,8 @@ extern u8 requested_video_mode __asm__("D_0016034C");
 extern s32 preview_request_count __asm__("D_00160350");
 /* One record per item id. */
 typedef struct MenuItemInfo {
-    u8 pad0[0x8];
+    s32 help_text_id; /* 0x00: message id for get_help_message_text */
+    u8 pad4[4];
     s32 slot; /* 0x08: equip slot the item goes in */
     u8 padC[0x2C];
     u16 unk38;          /* 0x38: copied into the pause item list */
@@ -27,12 +28,15 @@ typedef struct MenuItemInfo {
     u8 pad3C[4];
     s16 unk40;          /* 0x40: pause list value for the plain text */
     s16 unk42;          /* 0x42: pause list value when item_text_variant is set */
-    u8 pad44[8];
+    s16 unk44;          /* 0x44: copied into the filtered item list */
+    u8 pad46[6];
 } MenuItemInfo;
 
 extern MenuItemInfo menu_item_info[] __asm__("D_001863D0");
 extern char preview_camera[] __asm__("D_00186F40");
-extern s32 menu_action_messages[] __asm__("D_00199478");
+/* Level object mobys, indexed by map icon id (copy_level_object_positions, update_map_icons). */
+struct Moby;
+extern struct Moby *menu_action_messages[] __asm__("D_00199478");
 extern s32 help_msg_count[] __asm__("D_001996FC");
 extern s32 selected_level_index[] __asm__("D_001A0314");
 extern u8 preview_resource_bindings[] __asm__("D_001D59D8");

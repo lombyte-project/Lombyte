@@ -19,11 +19,6 @@ typedef struct {
 } Menu;
 
 typedef struct {
-    s32 text;
-    u8 pad_4[0x48];
-} TextEntry;
-
-typedef struct {
     s32 a;
     s32 b;
     u16 c;
@@ -32,7 +27,7 @@ typedef struct {
 } StatEntry;
 
 extern Menu D_001E63C0;
-extern TextEntry menu_item_info[] __asm__("D_001863D0");
+#include "rnc/ui/menus/menu_globals.h"
 extern StatEntry D_001DFFB0[];
 #include "rnc/gameplay/state/item_state.h"
 /* discount_purchase_pricing[0] (D_0013D4E3), read off the item_available base as retail does. */
@@ -58,7 +53,7 @@ void render_vendor_item_details_pass(void) {
     if (D_001E63C0.items[D_001E63C0.sel].type == 1) {
         font_print_small(
             6, 8, 0x80F0F0F0,
-            get_help_message_text(menu_item_info[D_001E63C0.items[D_001E63C0.sel].id].text), -1);
+            get_help_message_text(menu_item_info[D_001E63C0.items[D_001E63C0.sel].id].help_text_id), -1);
         font_print_small(0x18, 0x18, 0x80F0F0F0, get_help_message_text(0x4F5D), -1);
         format_scaled_display_value(text, D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].c);
         font_print_right_small(0x76, 0x65, 0x80F0F0F0, text, -1);
@@ -79,7 +74,7 @@ void render_vendor_item_details_pass(void) {
     } else {
         font_print_small(
             6, 8, 0x80F0F0F0,
-            get_help_message_text(menu_item_info[D_001E63C0.items[D_001E63C0.sel].id].text), -1);
+            get_help_message_text(menu_item_info[D_001E63C0.items[D_001E63C0.sel].id].help_text_id), -1);
         format_scaled_display_value(text, D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].a);
         font_print_right_small(0x76, 0x65, ITEM_DISCOUNT_FLAG ? 0x80808080 : 0x80F0F0F0, text, -1);
         if (ITEM_DISCOUNT_FLAG != 0) {

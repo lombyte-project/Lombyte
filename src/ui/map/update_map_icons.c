@@ -5,6 +5,7 @@
 #include "rnc/ui/map/map_icon.h"
 #include "rnc/ui/map/map_state.h"
 #include "rnc/globals.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Map screen icon refresh: places the fixed icons (-1..-9), projects the
    others through world_to_map_coords, then sizes each label box. */
@@ -16,19 +17,11 @@ typedef struct {
 } MapIconLink;
 
 
-typedef struct {
-    u8 pad0[0x10];
-    f32 x;
-    f32 y;
-    u8 pad18[0x30];
-    f32 z;
-} MapWorldObject;
-
 #include "rnc/gameplay/state/level_state.h"
 extern struct MapIcon *map_icon_lists_by_level[] __asm__("D_001A2BC0");
 extern s32 D_001A01F4[];
 extern s32 D_0015FD60 __attribute__((sda));
-extern MapWorldObject *menu_action_messages[] __asm__("D_00199478");
+#include "rnc/ui/menus/menu_globals.h"
 extern s32 D_0013D5BC[];
 extern struct {
     u8 pad0[0x10];
@@ -106,9 +99,9 @@ void update_map_icons(s32 level, s32 flag) {
             } else {
                 if (level == current_level_index) {
                     if (menu_action_messages[icon->id] != 0) {
-                        world_to_map_coords(menu_action_messages[icon->id]->x, menu_action_messages[icon->id]->y,
+                        world_to_map_coords(menu_action_messages[icon->id]->pos.x, menu_action_messages[icon->id]->pos.y,
                                             &icon->x, &icon->y, level);
-                        level_map_selection.icons[icon_index].angle = menu_action_messages[icon->id]->z;
+                        level_map_selection.icons[icon_index].angle = menu_action_messages[icon->id]->rot.z;
                     }
                 } else {
                     world_to_map_coords(level_object_states[icon->id].x, level_object_states[icon->id].y, &icon->x,

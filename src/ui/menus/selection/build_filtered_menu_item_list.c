@@ -6,15 +6,6 @@ struct Slot {
     s16 id;
     s16 f8;
 };
-struct Info {
-    u8 pad[0x38];
-    u16 icon;
-    u8 pad3a[6];
-    s16 a;
-    u8 pad42[2];
-    s16 b;
-    u8 pad46[6];
-};
 struct Item {
     u16 icon;
     s16 unk2;
@@ -31,7 +22,7 @@ extern struct Slot D_001CEC60[];
 extern struct Slot D_001CEC80[];
 extern struct Slot D_001CECA0[];
 #include "rnc/gameplay/state/item_state.h"
-extern struct Info menu_item_info[] __asm__("D_001863D0");
+#include "rnc/ui/menus/menu_globals.h"
 extern struct Item filtered_menu_item_records[] __asm__("D_001D61B8");
 extern s32 D_001D6248[];
 extern s32 D_001D6280[];
@@ -43,7 +34,7 @@ s32 build_filtered_menu_item_list(void) {
     s32 filtered_item_count;
     s32 i;
     s32 id;
-    struct Info *item_info;
+    MenuItemInfo *item_info;
 
     filtered_item_count = 0;
     for (i = 0; i < 14; i++) {
@@ -58,12 +49,12 @@ s32 build_filtered_menu_item_list(void) {
         }
         if (item_available[id] != 0) {
             item_info = &menu_item_info[id];
-            filtered_menu_item_records[filtered_item_count].icon = item_info->icon;
+            filtered_menu_item_records[filtered_item_count].icon = item_info->unk38;
             filtered_menu_item_records[filtered_item_count].unk2 = 0;
             filtered_menu_item_records[filtered_item_count].unk4 = 0;
             filtered_menu_item_records[filtered_item_count].id = id;
-            D_001D6248[filtered_item_count] = item_info->a;
-            D_001D6280[filtered_item_count] = item_info->b;
+            D_001D6248[filtered_item_count] = item_info->unk40;
+            D_001D6280[filtered_item_count] = item_info->unk44;
             filtered_menu_item_records[filtered_item_count].index = i;
             filtered_item_count++;
         }
