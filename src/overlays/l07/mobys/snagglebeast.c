@@ -2669,13 +2669,13 @@ void detach_snagglebeast_rope_particles(int target_entry) {
     float         segment_length;
     int           off;
     int           i;
-    char         *base;
+    char         *rope_particle_array_start;
 
     snagglebeast_rope_reset_pending_gp = 1;
     snagglebeast_rope_particles_reset_pending_gp = 1;
     row_phase_step_gp = row_phase_step_gp * 0.5f;
     allocate_voice_for_target_entry(10, 0, target_entry);
-    base = (char *)rope_particles;
+    rope_particle_array_start = (char *)rope_particles;
     for (i = 0; i < 200; i++) {
         particle = rope_particles[i].particle;
         if (particle != 0) {
