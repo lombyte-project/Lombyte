@@ -245,7 +245,7 @@ void interpolate_rotation_angle(float *output_angle,
  * toward it, steps the node at each arrival and now and then drops a puff.
  * Returns nonzero once it has run off the end of the path. */
 int advance_shuttle_along_path(struct Moby *moby) {
-    PathFlyerVars *vars = (PathFlyerVars *)moby->pvars;
+    PathFlyerVars *shuttle_path_state = (PathFlyerVars *)moby->pvars;
     PathNodes     *path;
     f32            endpoint_distance;
     Vec4           target;
@@ -253,27 +253,27 @@ int advance_shuttle_along_path(struct Moby *moby) {
     Vec4           puff;
     int            done = 0;
 
-    path = (PathNodes *)l09_paths[vars->path];
-    vars->lag += (0.0f - vars->lag) * 0.005f;
-    qcopy(&target, &path->node[vars->node]);
-    target.f[2] += vars->speed * D_L09_00161DF8;
+    path = (PathNodes *)l09_paths[shuttle_path_state->path];
+    shuttle_path_state->lag += (0.0f - shuttle_path_state->lag) * 0.005f;
+    qcopy(&target, &path->node[shuttle_path_state->node]);
+    target.f[2] += shuttle_path_state->speed * D_L09_00161DF8;
     fast_vec_sub(&step, &target, &moby->pos);
-    fast_vec_normalize(&step, &step, vars->speed);
+    fast_vec_normalize(&step, &step, shuttle_path_state->speed);
     fast_vec_add(&moby->pos, &moby->pos, &step);
     interpolate_rotation_angle(
         &moby->rot.z,
         moby->rot.z,
-        fast_add_rotations(fast_arc_tan(path->node[vars->node].f[0] - moby->pos.x,
-                                        path->node[vars->node].f[1] - moby->pos.y),
-                           vars->yaw_offset),
-        (1.0f - vars->lag) * 0.02f);
+        fast_add_rotations(fast_arc_tan(path->node[shuttle_path_state->node].f[0] - moby->pos.x,
+                                        path->node[shuttle_path_state->node].f[1] - moby->pos.y),
+                           shuttle_path_state->yaw_offset),
+        (1.0f - shuttle_path_state->lag) * 0.02f);
     interpolate_rotation_angle(&moby->rot.x, moby->rot.x, 0.0f, 0.02f);
     interpolate_rotation_angle(&moby->rot.y, moby->rot.y, 0.0f, 0.02f);
-    if (vars->dir > 0) {
+    if (shuttle_path_state->dir > 0) {
         f32 v;
-        if (fast_vec_dist(&target, &moby->pos) < vars->speed + vars->speed) {
-            vars->node++;
-            if (vars->node == path->count)
+        if (fast_vec_dist(&target, &moby->pos) < shuttle_path_state->speed + shuttle_path_state->speed) {
+            shuttle_path_state->node++;
+            if (shuttle_path_state->node == path->count)
                 done = 1;
         }
         endpoint_distance = fast_vec_dist(&moby->pos, &path->node[path->count - 1]);
@@ -283,12 +283,12 @@ int advance_shuttle_along_path(struct Moby *moby) {
                                    frame_time_sq * 3.0f,
                                    frame_time * 10.0f,
                                    &v,
-                                   &vars->speed);
+                                   &shuttle_path_state->speed);
     } else {
         f32 v;
-        if (fast_vec_dist(&target, &moby->pos) < vars->speed + vars->speed) {
-            vars->node--;
-            if (vars->node == -1)
+        if (fast_vec_dist(&target, &moby->pos) < shuttle_path_state->speed + shuttle_path_state->speed) {
+            shuttle_path_state->node--;
+            if (shuttle_path_state->node == -1)
                 done = 1;
         }
         endpoint_distance = fast_vec_dist(&moby->pos, &path->node[0]);
@@ -298,19 +298,19 @@ int advance_shuttle_along_path(struct Moby *moby) {
                                    frame_time_sq * 3.0f,
                                    frame_time * 10.0f,
                                    &v,
-                                   &vars->speed);
+                                   &shuttle_path_state->speed);
     }
-    if (path->node[vars->node].f[3] == 42.0f)
-        vars->yaw_offset = 0.0f;
-    vars->spin = fast_add_rotations(vars->spin, vars->speed);
-    FUN_L00_001fff28(vars->unk70, 0, vars->spin);
+    if (path->node[shuttle_path_state->node].f[3] == 42.0f)
+        shuttle_path_state->yaw_offset = 0.0f;
+    shuttle_path_state->spin = fast_add_rotations(shuttle_path_state->spin, shuttle_path_state->speed);
+    FUN_L00_001fff28(shuttle_path_state->unk70, 0, shuttle_path_state->spin);
     if (vector_distance_xy(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
         vector_distance_xy(&moby->pos, &path->node[0]) > 8.0f && !random_integer_below(7)) {
         qcopy(&puff, &moby->pos);
         add_random_offset_to_vector_xyz(&puff, 0.5f);
         puff.f[2] = 25.01f;
         spawn_moving_resizing_height_snapped_alpha_fade_particle(
-            &puff, 0, 0x40103080, vars->speed * 3.0f / (frame_time * 10.0f), 12600.0f);
+            &puff, 0, 0x40103080, shuttle_path_state->speed * 3.0f / (frame_time * 10.0f), 12600.0f);
     }
     return done;
 }
