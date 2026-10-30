@@ -39,7 +39,7 @@
 #include "rnc/overlay/shared/game/jet_reset_camera.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/ui/fonts/font_queue_vu_state.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
 #include "rnc/overlay/shared/mobys/draw_trail.h"
 #include "rnc/overlay/shared/props/trackdrive_left.h"

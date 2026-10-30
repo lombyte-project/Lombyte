@@ -4,7 +4,7 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/runtime/data/read_global_table_entry.h"
+#include "rnc/runtime/read_global_table_entry.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 
 typedef union {

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_EFFECTS_FADE_TO_BLACK_H
+#define LOMBYTE_RNC_RENDERING_EFFECTS_FADE_TO_BLACK_H
+
+#include "types.h"
+
+void fade_to_black(s32 n) __asm__("FUN_001f4a58");
+
+#endif /* LOMBYTE_RNC_RENDERING_EFFECTS_FADE_TO_BLACK_H */

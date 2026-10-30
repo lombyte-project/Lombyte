@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_FRAME_SETUP_RENDER_TARGET_H
+#define LOMBYTE_RNC_RENDERING_FRAME_SETUP_RENDER_TARGET_H
+
+#include "types.h"
+
+void setup_render_target(s32, s32, s32) __asm__("FUN_001fb440");
+
+#endif /* LOMBYTE_RNC_RENDERING_FRAME_SETUP_RENDER_TARGET_H */

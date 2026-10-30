@@ -30,7 +30,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
-#include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 
 
 

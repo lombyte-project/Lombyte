@@ -21,7 +21,7 @@
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/ui/fonts/font_queue_vu_state.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/runtime/callbacks/noop_main_callback.h"
 #include "rnc/world/collision/collision_line.h"
 

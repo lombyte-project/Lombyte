@@ -3,7 +3,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/globals.h"
-#include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 #include "rnc/audio/banks/snd_resolve_bank_xrefs.h"
 #include "rnc/audio/streaming/submit_audio_stream_io_request.h"
 #include "rnc/rendering/view/init_view_context.h"
@@ -11,7 +11,7 @@
 #include "rnc/runtime/memory/init_mem_slots.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/banks/snd_bank_load_from_ee_cb.h"
-#include "rnc/rendering/state/reset_draw_globals.h"
+#include "rnc/rendering/frame/reset_draw_globals.h"
 
 void initialize_level_runtime(void) __asm__("FUN_00230f60");
 

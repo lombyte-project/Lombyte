@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_RENDERING_STATE_RESET_GS_REGISTERS_H
-#define LOMBYTE_RNC_RENDERING_STATE_RESET_GS_REGISTERS_H
-
-#include "types.h"
-
-void reset_gs_registers(void) __asm__("FUN_001f3868");
-
-#endif /* LOMBYTE_RNC_RENDERING_STATE_RESET_GS_REGISTERS_H */

@@ -26,7 +26,7 @@
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
-#include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/animation/set_animation_parameter.h"
 #include "rnc/mobys/animation/set_moby_animation.h"

@@ -31,7 +31,7 @@
 #include "rnc/overlay/shared/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
-#include "rnc/ui/fonts/font_queue_vu_state.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/shared/mobys/capture_linked_moby_relative_transforms.h"
 #include "rnc/overlay/level_path.h"
 

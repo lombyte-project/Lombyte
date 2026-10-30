@@ -26,13 +26,13 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
-#include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 #include "rnc/overlay/shared/hero/set_second_hero_easing_parameters.h"
 #include "rnc/overlay/shared/math/rotations/split_float_fraction.h"
 #include "rnc/overlay/shared/rendering/commands/get_moby_color.h"
 #include "rnc/overlay/shared/hero/advance_hero_animation.h"
 #include "rnc/overlay/shared/ui/map/reveal_map_around_position.h"
-#include "rnc/rendering/state/begin_draw_frame.h"
+#include "rnc/rendering/frame/begin_draw_frame.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00204130), where it is exact; names translated to the US level program. */
 

@@ -146,7 +146,7 @@ ROUTE_EXCEPTIONS = {
     # perturbs the local hard-register order into retail's, and declaring
     # func_001F6530 void removes the unused-return pseudo so its argument copies
     # emit in retail's order a2<-s0, a3<-v0, a1<-s2.
-    "ui/menus/choice_list/draw_menu_choice_list": "cc_sn_padless",
+    "ui/menus/widgets/draw_menu_choice_list": "cc_sn_padless",
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
     "streaming/stash/init_stash": "cc_sn_padless",
@@ -452,10 +452,10 @@ RODATA_OVERLAYS = {
 SDATA_OVERLAYS = {
     "audio/rpc/snd_returns": (0x15EC80, 0x5FC00, 8),
     "rendering/debug/print_debug_text": (0x15F000, 0x5FF80, 8),
-    "runtime/resources/update_resource_counter": (0x15F8F8, 0x60878, 4),
+    "runtime/update_resource_counter": (0x15F8F8, 0x60878, 4),
     "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0, 24),
-    "runtime/time/set_video_timing": (0x15ED60, 0x5FCE0, 32),
-    "ui/fonts/load_debug_font": (0x15EEC8, 0x5FE48, 8),
+    "runtime/set_video_timing": (0x15ED60, 0x5FCE0, 32),
+    "ui/text/font/load_debug_font": (0x15EEC8, 0x5FE48, 8),
     "game/service_level_archive_load": (0x15EE50, 0x5FDD0, 8),
     "rendering/debug/draw_debug_profiler": (0x15EE40, 0x5FDC0, 1),
     "camera/camera_activation_check_priority": (0x15EF40, 0x5FEC0, 4),
@@ -464,7 +464,7 @@ SDATA_OVERLAYS = {
     "audio/voices/pause_all_sounds": (0x15F674, 0x605F4, 4),
     "mobys/create_moby": (0x15FEFC, 0x60E7C, 4),
     "rendering/vu1/vu1_chain": (0x160EE0, 0x61E60, 4),
-    "runtime/dma/initialize_streaming_state": (0x15EF20, 0x5FEA0, 4),
+    "streaming/initialize_streaming_state": (0x15EF20, 0x5FEA0, 4),
     "textbin/gameplay/state/load_level_zero_preserving_progress": (0x15EDA0, 0x5FD20, 4),
     "game/transitions/tick_space_transition": (0x15F5EC, 0x6056C, 4),
     "rendering/frame/initialize_level_render_state": (0x1603D0, 0x61350, 4),
@@ -472,7 +472,7 @@ SDATA_OVERLAYS = {
     "rendering/view/update_fog": (0x1610C4, 0x62044, 3),
     "rendering/texture/dma_shrub_textures": (0x1603F8, 0x61378, 4),
     "rendering/texture/dma_tfrag_textures": (0x160EC4, 0x61E44, 4),
-    "rendering/buffers/swap_render_buffer_chain": (0x160F04, 0x61E84, 4),
+    "rendering/frame/swap_render_buffer_chain": (0x160F04, 0x61E84, 4),
     "rendering/texture/dma_tie_textures": (0x160F74, 0x61EF4, 4),
     "ui/hud/update_hud": (0x15F688, 0x60608, 4),
 }
@@ -507,14 +507,14 @@ DATA_OVERLAYS = {
     "ui/menus/system/update_menu_resource_stream": (0x1E87D0, 0xE9750, 24),
     "textbin/video/player/init_all": (0x1E8AF0, 0xE9A70, 18),
     "rendering/view/update_view_context": (0x18CFC0, 0x8DF40, 64),
-    "input/pad/init_pads": (0x1CD760, 0xCE6E0, 16),
+    "input/init_pads": (0x1CD760, 0xCE6E0, 16),
     "ui/menus/system/update_timed_menu_sequence": (0x1D5298, 0xD6218, 3),
     "mobys/animation/update_resident_dialogue_animation_state": (0x1E63FC, 0xE737C, 4),
     "ui/text/draw_dialog_text": (0x1E78F0, 0xE8870, 48),
     "audio/rpc/snd_send_iop_command_no_wait": (0x133100, 0x34080, 16),
-    "rendering/state/reset_gs_registers_pr": (0x151788, 0x52708, 24),
+    "rendering/frame/reset_gs_registers_pr": (0x151788, 0x52708, 24),
     "ui/help/find_help_entry": (0x199710, 0x9A690, 600),
-    "ui/menus/audio/set_pause_sound_volume": (0x13E5A0, 0x3F520, 4),
+    "ui/menus/options/set_pause_sound_volume": (0x13E5A0, 0x3F520, 4),
     "ui/menus/selection/update_menu_item_slots": (0x141848, 0x427C8, 288),
     "textbin/audio/snd_start_sound_system": (0x133280, 0x34200, 8192),
     "camera/update_all_cameras": (0x187410, 0x88390, 7680),

@@ -26,7 +26,7 @@
 #include "rnc/audio/streaming/register_audio_stream_callback.h"
 #include "rnc/audio/voices/sound_stop_all_sounds.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
-#include "rnc/rendering/buffers/swap_render_buffer_chain.h"
+#include "rnc/rendering/frame/swap_render_buffer_chain.h"
 #include "rnc/rendering/packets/put_draw_buffer_large.h"
 #include "rnc/rendering/packets/put_draw_buffer_small.h"
 #include "rnc/rendering/texture/append_palette_transfer_packet.h"

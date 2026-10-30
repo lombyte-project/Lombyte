@@ -9,7 +9,7 @@
 #include "rnc/audio/streaming/start_audio_stream_read.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
-#include "rnc/runtime/relocation/relocate_asset_entry_pointers.h"
+#include "rnc/world/loaders/relocate_asset_entry_pointers.h"
 #include "rnc/ui/menus/stream_buffers/mark_menu_stream_buffer_read_active.h"
 
 typedef struct {

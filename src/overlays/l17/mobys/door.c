@@ -31,7 +31,7 @@
 #include "rnc/overlay/shared/vendor/vendor_spring.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
-#include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 #include "rnc/overlay/l17/hero/hero_set_state.h"
 #include "rnc/overlay/shared/mobys/manipulator_set_scale.h"
 #include "rnc/overlay/shared/rendering/commands/get_moby_color.h"

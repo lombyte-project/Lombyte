@@ -3,7 +3,7 @@
 #include "rnc/streaming/disc_table.h"
 #include "asm.h"
 #include "rnc/globals.h"
-#include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 
 typedef struct {
     u8 pad[0x5C];

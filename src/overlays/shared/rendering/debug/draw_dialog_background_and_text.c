@@ -8,7 +8,7 @@
 #include "rnc/rendering/debug/draw_debug_profiler.h"
 #include "rnc/rendering/packets/append_gif_transfer_packet.h"
 #include "rnc/rendering/packets/emit_rgba_draw_packet.h"
-#include "rnc/rendering/state/reset_gs_registers.h"
+#include "rnc/rendering/frame/reset_gs_registers.h"
 #include "rnc/overlay/shared/ui/menus/initialize_pause_menu.h"
 
 extern int D_L00_0015F5D8;

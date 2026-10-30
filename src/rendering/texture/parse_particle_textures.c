@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/rendering/gs/log2dim.h"
+#include "rnc/rendering/frame/log2dim.h"
 
 struct ParticleHdr {
     s32 count;

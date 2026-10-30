@@ -26,7 +26,7 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
-#include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"

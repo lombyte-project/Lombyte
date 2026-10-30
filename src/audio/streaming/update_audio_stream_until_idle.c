@@ -1,7 +1,7 @@
 #include "types.h"
 
 #include "rnc/audio/music/music_stream_state.h"
-#include "rnc/runtime/data/read_global_table_entry.h"
+#include "rnc/runtime/read_global_table_entry.h"
 
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32 snd_reset_state_and_flush_commands() __asm__("func_0012EB00");

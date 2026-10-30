@@ -15,7 +15,7 @@
 #include "rnc/rendering/mobys/draw_moby_list.h"
 #include "rnc/rendering/mobys/draw_mobys_clean_up.h"
 #include "rnc/rendering/mobys/draw_mobys_setup.h"
-#include "rnc/rendering/state/begin_draw_frame.h"
+#include "rnc/rendering/frame/begin_draw_frame.h"
 #include "rnc/rendering/view/update_camera_view_matrices.h"
 #include "rnc/rendering/view/reset_active_camera_position_and_basis.h"
 #include "rnc/rendering/view/configure_graphics_render_target_and_projection.h"

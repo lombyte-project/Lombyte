@@ -25,7 +25,7 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/hero/hero_check_damage.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
-#include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/animation/set_animation_parameter.h"
 #include "rnc/mobys/animation/set_moby_animation.h"
@@ -48,7 +48,7 @@
 #include "rnc/mobys/update_visible_resident_objects.h"
 #include "rnc/overlay/shared/ui/hud/hud_update_counter.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
-#include "rnc/runtime/relocation/relocate_asset_entry_pointers.h"
+#include "rnc/world/loaders/relocate_asset_entry_pointers.h"
 #include "rnc/save/memcard_update_state.h"
 #include "rnc/textbin/world/data/select_world_object_resource_tables.h"
 

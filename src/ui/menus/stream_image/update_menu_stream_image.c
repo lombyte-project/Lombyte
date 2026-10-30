@@ -10,7 +10,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/audio/streaming/start_audio_stream_read.h"
-#include "rnc/rendering/gs/log2dim.h"
+#include "rnc/rendering/frame/log2dim.h"
 #include "rnc/ui/menus/stream_buffers/get_menu_stream_buffer_size.h"
 #include "rnc/rendering/texture/register_8bit_texture.h"
 #include "rnc/ui/menus/stream_buffers/clear_menu_stream_buffer_read_active.h"

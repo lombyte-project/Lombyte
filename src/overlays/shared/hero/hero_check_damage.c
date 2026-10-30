@@ -22,7 +22,7 @@
 #include "rnc/overlay/shared/vendor/vendor_spring.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
-#include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/animation/set_animation_parameter.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"

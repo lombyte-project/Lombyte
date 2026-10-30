@@ -7,7 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/mobys/attach_manipulator.h"
-#include "rnc/ui/fonts/font_queue_vu_state.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/mobys/moby.h"
 
 

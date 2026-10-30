@@ -3,7 +3,7 @@
 #include "rnc/rendering/texture_upload.h"
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/rendering/gs/log2dim.h"
+#include "rnc/rendering/frame/log2dim.h"
 
 typedef struct {
     char *clut; /* 0x00 */

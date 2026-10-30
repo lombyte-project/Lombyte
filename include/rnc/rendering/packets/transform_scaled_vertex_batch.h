@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_PACKETS_TRANSFORM_SCALED_VERTEX_BATCH_H
+#define LOMBYTE_RNC_RENDERING_PACKETS_TRANSFORM_SCALED_VERTEX_BATCH_H
+
+#include "types.h"
+
+void transform_scaled_vertex_batch(void *, s32, void *, void *) __asm__("FUN_0020cd48");
+
+#endif /* LOMBYTE_RNC_RENDERING_PACKETS_TRANSFORM_SCALED_VERTEX_BATCH_H */

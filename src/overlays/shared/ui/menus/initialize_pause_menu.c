@@ -33,7 +33,7 @@
 #include "rnc/overlay/shared/mobys/queue_scene_movie_with_game_language.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/rendering/packets/emit_rgba_draw_packet.h"
-#include "rnc/rendering/state/begin_draw_frame.h"
+#include "rnc/rendering/frame/begin_draw_frame.h"
 #include "rnc/rendering/effects/update_fog.h"
 #include "rnc/rendering/view/update_camera_view_matrices.h"
 #include "rnc/rendering/vu1/vu1_init_chain.h"

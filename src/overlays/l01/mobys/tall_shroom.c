@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/mobys/cutscene_set_camera_target.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/ui/fonts/font_queue_vu_state.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/overlay/shared/mobys/draw_trail.h"
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"
 

@@ -3,10 +3,10 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/rendering/effects/fade_to_black.h"
 #include "rnc/overlay/shared/hero/advance_hero_animation.h"
 #include "rnc/overlay/shared/ui/map/reveal_map_around_position.h"
-#include "rnc/rendering/state/begin_draw_frame.h"
+#include "rnc/rendering/frame/begin_draw_frame.h"
 
 
 

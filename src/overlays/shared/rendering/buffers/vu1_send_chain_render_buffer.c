@@ -3,7 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
 #include "sda.h"
-#include "rnc/rendering/state/reset_graphics.h"
+#include "rnc/rendering/frame/reset_graphics.h"
 
 extern volatile int D_L00_001611A0_gp __asm__("D_L00_001611A0") __attribute__((sda));
 extern int D_L00_001611C0_002a08c8 __asm__("D_L00_001611C0");

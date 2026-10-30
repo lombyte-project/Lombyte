@@ -16,7 +16,7 @@
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
-#include "rnc/rendering/geometry/transform_scaled_vertex_batch.h"
+#include "rnc/rendering/packets/transform_scaled_vertex_batch.h"
 #include "rnc/overlay/shared/mobys/animation_start.h"
 #include "rnc/world/collision/collision_line.h"
 

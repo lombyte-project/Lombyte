@@ -17,7 +17,7 @@
 #include "rnc/weapons/suck_aim.h"
 #include "rnc/overlay/shared/audio/voices/play_voice.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
-#include "rnc/rendering/geometry/transform_scaled_vertex_batch.h"
+#include "rnc/rendering/packets/transform_scaled_vertex_batch.h"
 #include "rnc/ui/help/force_help_message.h"
 
 /* Devastator (class 157) update: tracks the aimed target, draws the reticle, picks a target and fires,

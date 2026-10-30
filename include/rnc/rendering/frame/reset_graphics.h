@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_FRAME_RESET_GRAPHICS_H
+#define LOMBYTE_RNC_RENDERING_FRAME_RESET_GRAPHICS_H
+
+#include "types.h"
+
+void reset_graphics(void) __asm__("FUN_001f21c0");
+
+#endif /* LOMBYTE_RNC_RENDERING_FRAME_RESET_GRAPHICS_H */

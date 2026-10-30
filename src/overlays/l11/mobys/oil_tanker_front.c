@@ -33,7 +33,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/ui/fonts/font_queue_vu_state.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/game/fun_00213928.h"
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;

@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/rendering/tfrag/set_tfrag_dists_globals.h"
+#include "rnc/rendering/tfrags/set_tfrag_dists_globals.h"
 #include "rnc/math/asm_helpers.h"
 
 extern f32 tfrag_render_ranges[3] __asm__("D_00160EA0");

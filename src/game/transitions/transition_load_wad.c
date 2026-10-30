@@ -6,7 +6,7 @@
 #include "rnc/rendering/view/init_view_context.h"
 #include "rnc/rendering/vu1/vu1_init_chain.h"
 #include "rnc/runtime/dma/calculate_dma_transfer_address.h"
-#include "rnc/runtime/memory/decompress_wad.h"
+#include "rnc/streaming/decompress_wad.h"
 #include "rnc/runtime/memory/init_mem_slots.h"
 #include "rnc/world/loaders/register_moby_class.h"
 #include "rnc/world/loaders/relocate_sky_definition.h"
