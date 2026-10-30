@@ -705,7 +705,7 @@ void set_batalia_bolt_pickup_surface_rotation(struct Moby *moby, float *directio
 }
 
 void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby,
-                                              float       *out,
+                                              float       *output_position,
 
                                               float *output_euler_angles) {
     float output_rotation_matrix[16];
@@ -761,9 +761,9 @@ void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby,
     matrix_to_euler(output_rotation_matrix, output_euler_angles);
     output_euler_angles[3] = 0.0f;
     fast_vec_normalize(u, base_rotation_matrix + 8, sy);
-    fast_vec_add(out, bolt_pickup_pose_vars, u);
+    fast_vec_add(output_position, bolt_pickup_pose_vars, u);
     fast_vec_normalize(v, planar_offset_direction, sz);
-    fast_vec_add(out, out, v);
+    fast_vec_add(output_position, output_position, v);
 }
 
 void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) {
