@@ -1335,9 +1335,9 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
     lenB = 500.0f;
     if (ship_vars->i110 != -1) {
         int   target_record_byte_offset = ship_vars->i110 << 7;
-        char *base = D_L17_001600EC;
-        qcopy(target, ((char(*)[128])base)[ship_vars->i110] + 0x30);
-        lenA = fast_vec_length(base + target_record_byte_offset + 0x20);
+        char *target_record_array = D_L17_001600EC;
+        qcopy(target, ((char(*)[128])target_record_array)[ship_vars->i110] + 0x30);
+        lenA = fast_vec_length(target_record_array + target_record_byte_offset + 0x20);
         fast_vec_add(target_record_sum_or_camera_local_offset,
                      (ship_vars->i110 << 7) + D_L17_001600EC,
                      (ship_vars->i110 << 7) + D_L17_001600EC + 0x10);
@@ -1383,7 +1383,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
         lenA);
     build_spherical_offset(movement_delta.v, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
     fast_vec_normalize(ship_vars->v10, movement_delta.v, 1.0f);
-    qcopy(old, ship_moby->pos);
+    qcopy(pre_movement_ship_position, ship_moby->pos);
     if (ship_moby->bc == 0) {
         fast_vec_add(ship_moby->pos, ship_moby->pos, movement_delta.v);
     }
