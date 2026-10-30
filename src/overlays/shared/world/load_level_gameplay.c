@@ -923,7 +923,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         int   n2;
         int   count = 0;
         int   n;
-        char *next;
+        char *next_moby_record;
         int   i;
 
         n = *(int *)p;
@@ -943,7 +943,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             unsigned char vis = 0xFE;
             int           skip = 0;
 
-            next = p + ((*(int *)p >> 2) << 2);
+            next_moby_record = p + ((*(int *)p >> 2) << 2);
             p += 4;
             mission = *(int *)p;
             p += 4;
@@ -1083,7 +1083,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 }
                 count++;
             }
-            p = next;
+            p = next_moby_record;
         }
         D_L00_0015FFDC = moby_table + count;
         D_L00_0015FFDC->f20 = 0xFF;
