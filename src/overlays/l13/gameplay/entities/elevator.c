@@ -39,7 +39,7 @@
 #endif
 extern int debug_print() __asm__("FUN_001e93b0");
 extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
-extern char *moby_base __asm__("D_L13_0015FFD8");
+#include "rnc/overlay/level_labels.h"
 extern char moby_volume_trigger_missing_volume_format[] __asm__("D_L13_001F41F8");
 void update_moby_volume_trigger(char *moby) __asm__("FUN_L13_002b0e80");
 
@@ -1078,7 +1078,6 @@ typedef struct {
     float f2C;
 } RsHit;
 
-extern char *walker_paths[] __asm__("D_L13_001B07B0");
 extern char *level13_moby_list_head __asm__("D_L13_0015FFE4");
 extern char *FUN_L00_0025a420(void *, int, int);
 extern float D_L13_0015F62C;

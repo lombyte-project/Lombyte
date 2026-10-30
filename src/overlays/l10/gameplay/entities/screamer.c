@@ -1147,8 +1147,7 @@ typedef struct Moby2E30F8 {
 } Moby2E30F8;
 
 extern char D_L10_00167240[];
-extern char ground_hit[] __asm__("D_L10_001742C0");
-extern float D_L10_0015F580[] MACRO_ADDR;
+#include "rnc/overlay/level_labels.h"
 float compute_toxic_crab_group_approach_angle(struct Moby *self) __asm__("FUN_L10_002e4840");
 
 extern float compute_toxic_crab_group_approach_angle(struct Moby *self) __asm__("FUN_L10_002e4840");

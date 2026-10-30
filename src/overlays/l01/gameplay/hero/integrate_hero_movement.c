@@ -418,9 +418,8 @@ extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern int scale_game_frames(int);
-extern s32 D_L01_0015F688 __attribute__((sda));
+#include "rnc/overlay/level_labels.h"
 extern s32 D_L01_0015F68C __attribute__((sda));
-extern unsigned char *pool_draw_tiles __asm__("D_L01_001612D0");
 extern void FUN_001efa68_cf(float *, float *, float) __asm__("FUN_L00_00233810");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void emit_hero_periodic_surface_effect(int, int) __asm__("FUN_L00_00209540");
@@ -454,7 +453,7 @@ extern void add_hero_forward_offset(void *, void *, float) __asm__("FUN_L00_0023
 extern void FUN_L00_002338d0(float *, float *);
 extern void FUN_L00_00233b20(float *, float *, float);
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void pool_splash(void *, int, int, float, float, float,
+extern void pool_splash(int, int, int, float, float, float,
                                 float) __asm__("FUN_L00_002a3ec8");
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern void FUN_L00_0025f730(void *, float);
