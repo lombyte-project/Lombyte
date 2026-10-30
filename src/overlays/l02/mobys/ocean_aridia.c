@@ -19,7 +19,7 @@ extern void prepare_scaled_table_with_byte_128(void *, f32) __asm__("FUN_L02_002
 void prepare_scaled_table_on_stack(f32 scale) __asm__("FUN_L02_002a47f8");
 
 void prepare_scaled_table_on_stack(f32 scale) {
-    char scratch[0x40];
+    char scaled_table_buffer[0x40];
     prepare_scaled_table_with_byte_128(scratch, scale);
 }
 
