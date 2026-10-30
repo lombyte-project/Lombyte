@@ -231,7 +231,7 @@ void metal_detector_update(struct Moby *moby) {
         METAL_DETECTOR_ACTIVE = 1,
         METAL_DETECTOR_TRACK_AND_COLLECT = 2
     };
-    Vars2d2ee8       *vars;
+    Vars2d2ee8       *metal_detector_vars;
     struct Moby      *target_moby;
     TargetVars2d2ee8 *tv;
     Vec2d2ee8         u;
@@ -252,22 +252,22 @@ void metal_detector_update(struct Moby *moby) {
     if (moby == 0) {
         return;
     }
-    vars = (Vars2d2ee8 *)moby->pvars;
-    if (vars == 0) {
+    metal_detector_vars = (Vars2d2ee8 *)moby->pvars;
+    if (metal_detector_vars == 0) {
         return;
     }
-    moby_point_position(moby, 0, &vars->pos);
+    moby_point_position(moby, 0, &metal_detector_vars->pos);
     switch (moby->state) {
     case METAL_DETECTOR_INITIALIZE:
         hero.detector_target_dist = 100000.0f;
         hero.metal_detector_target = 0;
-        vars->voice0 = -1;
-        vars->voice1 = -1;
-        vars->voice2 = -1;
-        vars->unk8 = 0x7FFF;
-        vars->unk20 = controller_state_lui.unk189;
-        vars->unk24 = 0;
-        vars->unk28 = 0;
+        metal_detector_vars->voice0 = -1;
+        metal_detector_vars->voice1 = -1;
+        metal_detector_vars->voice2 = -1;
+        metal_detector_vars->unk8 = 0x7FFF;
+        metal_detector_vars->unk20 = controller_state_lui.unk189;
+        metal_detector_vars->unk24 = 0;
+        metal_detector_vars->unk28 = 0;
         qzero(&D_L00_001E1160);
         attach_manipulator(moby, 3, &D_L00_001E1160);
         moby->state = 1;
@@ -283,10 +283,10 @@ void metal_detector_update(struct Moby *moby) {
         if (hero.metal_detector_target != 0 && hero.metal_detector_target->oclass == 0x25D &&
             hero.metal_detector_target->state != 0xFE &&
             hero.metal_detector_target->state != 0xFD) {
-            pitch = vector_distance_xy(&vars->pos, &hero.metal_detector_target->pos);
-            pitch = fast_arc_tan(pitch, hero.metal_detector_target->pos.z - vars->pos.f[2]);
-            yaw = fast_arc_tan(hero.metal_detector_target->pos.x - vars->pos.f[0],
-                               hero.metal_detector_target->pos.y - vars->pos.f[1]);
+            pitch = vector_distance_xy(&metal_detector_vars->pos, &hero.metal_detector_target->pos);
+            pitch = fast_arc_tan(pitch, hero.metal_detector_target->pos.z - metal_detector_vars->pos.f[2]);
+            yaw = fast_arc_tan(hero.metal_detector_target->pos.x - metal_detector_vars->pos.f[0],
+                               hero.metal_detector_target->pos.y - metal_detector_vars->pos.f[1]);
             yaw = fast_subtract_rotations(yaw, hero.motion.rot.f[2]);
             pitch = fast_subtract_rotations(pitch, -1.5707964f);
             abs_yaw = absolute_float(yaw);
@@ -305,8 +305,8 @@ void metal_detector_update(struct Moby *moby) {
             yaw = fast_add_rotations(yaw, hero.motion.rot.f[2]);
             pitch = fast_add_rotations(pitch, -1.5707964f);
             build_spherical_offset(v, -3.0f, yaw, pitch);
-            fast_vec_add(scratch_vector, &vars->pos, v);
-            noop_main_callback(&vars->pos, scratch_vector);
+            fast_vec_add(scratch_vector, &metal_detector_vars->pos, v);
+            noop_main_callback(&metal_detector_vars->pos, scratch_vector);
             fast_vec_normalize(aim_basis[metal_detector_aim_direction_row_index_gp],
                                v,
                                (f32)metal_detector_aim_direction_normalization_length_gp);
@@ -338,23 +338,23 @@ void metal_detector_update(struct Moby *moby) {
             *(u128 *)scratch_vector = 0;
             build_quaternion_from_axis_rotations(u, scratch_vector);
         }
-        qcopy(&vars->unk30, v);
+        qcopy(&metal_detector_vars->unk30, v);
         quaternion_nlerp(D_L00_001E1170, D_L00_001E1170, u, 0.1f);
         build_moby_bone_transform(moby, 3, scratch_vector);
-        qcopy(&vars->unk30, scratch_vector);
+        qcopy(&metal_detector_vars->unk30, scratch_vector);
         if (controller_state_lui.pressed & 0x20) {
-            vars->unk24 = 0;
-            vars->unk28 = 0;
+            metal_detector_vars->unk24 = 0;
+            metal_detector_vars->unk28 = 0;
         }
         if ((controller_state_lui.held & 0x20) &&
             hero.items[0].ready_frames > scale_game_frames(0xF)) {
             if (hero.detector_target_dist < 10.0f) {
-                if (voice_is_playing(moby, vars->voice2) == 0 && vars->voice2 == -1) {
-                    vars->voice2 = allocate_voice_for_target_entry(1, 4, moby);
+                if (voice_is_playing(moby, metal_detector_vars->voice2) == 0 && metal_detector_vars->voice2 == -1) {
+                    metal_detector_vars->voice2 = allocate_voice_for_target_entry(1, 4, moby);
                 }
-                if (vars->voice2 != -1) {
+                if (metal_detector_vars->voice2 != -1) {
                     engine_voice_set_pitch(
-                        vars->voice2,
+                        metal_detector_vars->voice2,
                         truncate_float_to_s32(
                             (10.0f - (hero.detector_target_dist + hero.detector_target_dist)) *
                             32767.0f / 60.0f) -
@@ -380,14 +380,14 @@ void metal_detector_update(struct Moby *moby) {
                         {
                             Vec4f *target_position = &hero.metal_detector_target->pos;
 
-                            qcopy(target_position, &vars->pos);
+                            qcopy(target_position, &metal_detector_vars->pos);
                             add_random_offset_to_vector_xyz(target_position, 0.2f);
                         }
                         target_moby = hero.metal_detector_target;
                         spawn_bolt_by_value(
                             target_moby, &target_moby->pos, scratch_vector, 0x13, 5, 0);
                         target_moby = hero.metal_detector_target;
-                        qcopy(&target_moby->pos, &vars->pos);
+                        qcopy(&target_moby->pos, &metal_detector_vars->pos);
                         if (tv != 0) {
                             if (tv->count > 0) {
                                 tv->count -= 5;
@@ -401,73 +401,73 @@ void metal_detector_update(struct Moby *moby) {
                     mark_moby_for_removal(hero.metal_detector_target);
                     hero.metal_detector_target = 0;
                     hero.detector_target_dist = 100000.0f;
-                    vars->unk8 = 0x7FFF;
+                    metal_detector_vars->unk8 = 0x7FFF;
                     allocate_voice_for_target_entry(3, 0, moby);
-                    if (vars->voice2 != -1) {
+                    if (metal_detector_vars->voice2 != -1) {
                         VoiceSlot2d2ee8 *e =
-                            (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice2 * 0x70);
+                            (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice2 * 0x70);
 
                         if (e->owner == moby && e->active != 0) {
-                            release_voice_slot(vars->voice2);
+                            release_voice_slot(metal_detector_vars->voice2);
                         }
                     }
-                    vars->voice2 = -1;
+                    metal_detector_vars->voice2 = -1;
                 }
             } else {
                 moby->glow_color = 0x80808080;
-                if (vars->voice0 != -1) {
-                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice0 * 0x70);
+                if (metal_detector_vars->voice0 != -1) {
+                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice0 * 0x70);
 
                     if (e->owner == moby && e->active != 0) {
-                        release_voice_slot(vars->voice0);
+                        release_voice_slot(metal_detector_vars->voice0);
                     }
                 }
-                vars->voice0 = -1;
-                if (vars->voice1 != -1) {
-                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice1 * 0x70);
+                metal_detector_vars->voice0 = -1;
+                if (metal_detector_vars->voice1 != -1) {
+                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice1 * 0x70);
 
                     if (e->owner == moby && e->active != 0) {
-                        release_voice_slot(vars->voice1);
+                        release_voice_slot(metal_detector_vars->voice1);
                     }
                 }
-                vars->voice1 = -1;
-                if (vars->voice2 != -1) {
-                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice2 * 0x70);
+                metal_detector_vars->voice1 = -1;
+                if (metal_detector_vars->voice2 != -1) {
+                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice2 * 0x70);
 
                     if (e->owner == moby && e->active != 0) {
-                        release_voice_slot(vars->voice2);
+                        release_voice_slot(metal_detector_vars->voice2);
                     }
                 }
-                vars->voice2 = -1;
+                metal_detector_vars->voice2 = -1;
             }
             add_draw_callback(FUN_L00_002d2a90_u, moby);
             return;
         }
         moby->glow_color = 0x80808080;
-        if (vars->voice0 != -1) {
-            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice0 * 0x70);
+        if (metal_detector_vars->voice0 != -1) {
+            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice0 * 0x70);
 
             if (e->owner == moby && e->active != 0) {
-                release_voice_slot(vars->voice0);
+                release_voice_slot(metal_detector_vars->voice0);
             }
         }
-        vars->voice0 = -1;
-        if (vars->voice1 != -1) {
-            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice1 * 0x70);
+        metal_detector_vars->voice0 = -1;
+        if (metal_detector_vars->voice1 != -1) {
+            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice1 * 0x70);
 
             if (e->owner == moby && e->active != 0) {
-                release_voice_slot(vars->voice1);
+                release_voice_slot(metal_detector_vars->voice1);
             }
         }
-        vars->voice1 = -1;
-        if (vars->voice2 != -1) {
-            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice2 * 0x70);
+        metal_detector_vars->voice1 = -1;
+        if (metal_detector_vars->voice2 != -1) {
+            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + metal_detector_vars->voice2 * 0x70);
 
             if (e->owner == moby && e->active != 0) {
-                release_voice_slot(vars->voice2);
+                release_voice_slot(metal_detector_vars->voice2);
             }
         }
-        vars->voice2 = -1;
+        metal_detector_vars->voice2 = -1;
         break;
     }
 }
