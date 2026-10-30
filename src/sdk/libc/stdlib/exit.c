@@ -20,7 +20,7 @@
 /* exit x1: newlib exit.c with the game reent and JumpToRfuStatus as _exit. */
 
 #include "types.h"
-#include "sda.h"
+#include "rnc/sdk/library/stdio.h"
 
 struct _atexit {
     struct _atexit *_next;
@@ -28,27 +28,18 @@ struct _atexit {
     void (*_fns[32])(void);
 };
 
-typedef struct ExitReent {
-    u8 reserved0[0x38];
-    int __sdidinit;
-    void (*__cleanup)(struct ExitReent *);
-    u8 reserved1[0x148 - 0x40];
-    struct _atexit *_atexit;
-} ExitReent;
-
-extern ExitReent *_impure_ptr_lui __asm__("D_0012F76C")NOT_SDA;
 extern void JumpToRfuStatus(int code);
 
 void exit(int code) {
     struct _atexit *atexit_block;
     int callback_index;
 
-    for (atexit_block = _impure_ptr_lui->_atexit; atexit_block != 0; atexit_block = atexit_block->_next)
+    for (atexit_block = _impure_ptr->_atexit; atexit_block != 0; atexit_block = atexit_block->_next)
         for (callback_index = atexit_block->_ind; --callback_index >= 0;)
             (*atexit_block->_fns[callback_index])();
 
-    if (_impure_ptr_lui->__cleanup != 0)
-        (*_impure_ptr_lui->__cleanup)(_impure_ptr_lui);
+    if (_impure_ptr->__cleanup != 0)
+        (*_impure_ptr->__cleanup)(_impure_ptr);
 
     JumpToRfuStatus(code);
 }

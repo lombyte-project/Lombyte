@@ -1,26 +1,16 @@
-#include "rnc/runtime/core_state.h"
+#include "rnc/sdk/library/stdio.h"
 typedef char *va_list;
 
-typedef struct PrintFile {
-    unsigned char unused[0x54];
-    void *data;
-} PrintFile;
-
-typedef struct PrintReent {
-    unsigned char unused[8];
-    PrintFile *stdout_file;
-} PrintReent;
-
-extern int vfprintf(PrintFile *file, const char *format,
+extern int vfprintf(RncFile *file, const char *format,
                     va_list arguments) __asm__("func_00116DA8");
 
 int Printf(const char *format, ...) __asm__("printf");
 
 int Printf(const char *format, ...) {
     va_list arguments;
-    PrintReent *reent = _impure_ptr;
+    RncReent *reent = _impure_ptr;
 
-    reent->stdout_file->data = reent;
+    reent->_stdout->_data = reent;
     arguments = __builtin_next_arg(format) - 0x38;
-    return vfprintf(reent->stdout_file, format, arguments);
+    return vfprintf(reent->_stdout, format, arguments);
 }

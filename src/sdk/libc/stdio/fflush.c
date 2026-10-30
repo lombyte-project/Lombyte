@@ -56,13 +56,12 @@ No supporting OS subroutines are required.
 
 #define FILE                       RncFile
 #define _DEFUN(name, args, params) name(params)
-#define _REENT                     D_0012F76C
+#define _REENT                     _impure_ptr
 #define __SWR                      8
 #define __SLBF                     1
 #define __SNBF                     2
 #define __SERR                     0x40
 #define EOF                        (-1)
-extern RncReent *D_0012F76C NOT_SDA;
 extern s32 _fwalk(RncReent *, s32 (*)(RncFile *));
 extern void __sinit(RncReent *);
 #define CHECK_INIT(fp)                                                                             \

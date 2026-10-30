@@ -1,20 +1,13 @@
 #include "types.h"
-struct _reent {
-    u8 pad0[0x38];
-    s32 __sdidinit;
-};
-typedef struct {
-    u8 pad0[0x54];
-    struct _reent *_data;
-} FILE;
-extern struct _reent *_impure_ptr[] __asm__("D_0012F76C");
-extern void __sinit(struct _reent *);
-extern s32 _vfprintf_r(struct _reent *, FILE *, const char *, void *);
+#include "rnc/sdk/library/stdio.h"
+#define FILE RncFile
+extern void __sinit(RncReent *);
+extern s32 _vfprintf_r(RncReent *, FILE *, const char *, void *);
 /* newlib local.h */
 #define CHECK_INIT(fp) \
     do { \
         if ((fp)->_data == 0) { \
-            (fp)->_data = _impure_ptr[0]; \
+            (fp)->_data = _impure_ptr; \
         } \
         if (!(fp)->_data->__sdidinit) { \
             __sinit((fp)->_data); \

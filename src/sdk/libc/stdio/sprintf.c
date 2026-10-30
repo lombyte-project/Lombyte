@@ -9,7 +9,6 @@
 
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
-#include "rnc/runtime/core_state.h"
 
 typedef char *va_list;
 

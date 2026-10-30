@@ -1,8 +1,8 @@
 /* newlib strtol: _strtol_r with _impure_ptr. */
 
-#include "rnc/runtime/core_state.h"
+#include "rnc/sdk/library/stdio.h"
 
-extern int _strtol_r(int resource, int first, int second,
+extern int _strtol_r(RncReent *data, int first, int second,
                              int third) __asm__("func_00116A38");
 
 int strtol(int resource, int first, int second) __asm__("CallGlobalStateResource");

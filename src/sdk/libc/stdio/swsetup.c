@@ -13,8 +13,6 @@
  *    note also makes the compiler 8-byte-align the following label, whose
  *    p2align padding is the retail no-op between the `__sdidinit` reload
  *    and the branch.
- *
- * The SDK reentrant pointer global is named D_0012F76C in the oracle.
  */
 
 #include "types.h"
@@ -53,11 +51,7 @@ struct SwFile {
 #define __SEOF 0x0020 /* found EOF */
 #define EOF    (-1)
 
-/* Reentrancy anchor; named D_0012F76C in the retail oracle.  The
-   unknown-size array spelling keeps absolute %hi/%lo addressing (a plain
-   pointer object would be treated as small data and go gp-relative). */
-#define _REENT D_0012F76C[0]
-extern RncReent *D_0012F76C[];
+#define _REENT _impure_ptr
 extern void __sinit(RncReent *);
 extern void __smakebuf(struct SwFile *);
 extern void _free_r(RncReent *, void *);

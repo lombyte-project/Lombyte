@@ -3,7 +3,7 @@
 #include "rnc/sdk/library/stdio.h"
 
 typedef char *va_list;
-#define _REENT D_0012F76C[0]
+#define _REENT _impure_ptr
 #define MB_CUR_MAX D_0012F770[0]
 #define _POINTER_INT int
 #define EOF (-1)
@@ -30,7 +30,6 @@ typedef char *va_list;
 #define FPT 0x100
 #define FILE RncFile
 #define _CONST const
-extern RncReent *D_0012F76C[];
 extern s32 D_0012F770[];
 extern char **get_state_resource_wrapper(void) __asm__("GetStateResourceWrapper");
 extern s32 convert_multibyte_character(RncReent *, s32 *, const char *, s32, s32 *) __asm__("ConvertMultibyteCharacter");
