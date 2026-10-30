@@ -63,7 +63,7 @@ float D_L11_00161EF4 = 0;
 float D_L11_00161EF8 = 0;
 extern float D_L11_0015F3FC;
 extern int D_L11_0015FFD8_c788 __asm__("D_L11_0015FFD8");
-extern int D_L11_001600EC_c788 __asm__("D_L11_001600EC");
+#include "rnc/overlay/cuboid.h"
 extern int test_linked_moby_turn_trigger(void *) __asm__("FUN_L11_0030f270");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
@@ -74,7 +74,7 @@ void update_child_set_poses(struct Moby *parent_moby) __asm__("FUN_L11_0030d1b0"
 void update_child_set_poses(struct Moby *m) __asm__("FUN_L11_0030d1b0");
 
 /* Controller for the child moby sets laid out by FUN_L11_0030d1b0: spawns them, waits for its linked
-   moby, fades in, then unfolds the sets one after another while blending between two D_L11_001600EC points. */
+   moby, fades in, then unfolds the sets one after another while blending between two l11_cuboids points. */
 void update_child_sets_controller(struct Moby *child_sets_controller) __asm__("FUN_L11_0030c788");
 
 void update_child_sets_controller(struct Moby *child_sets_controller) {
@@ -172,8 +172,8 @@ void update_child_sets_controller(struct Moby *child_sets_controller) {
             clear_u64_value(&rot);
             rot.z = fast_arc_tan(child_sets_controller->pos.x - pos.x, child_sets_controller->pos.y - pos.y);
             set_race_camera(&pos, &rot, 0x72, 1);
-            jet_mount((char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->from << 7)) + 0x30,
-                             (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->to << 7)) + 0x70, 1, 0, 0);
+            jet_mount((char *)((int)l11_cuboids + (child_sets_controller_vars->from << 7)) + 0x30,
+                             (char *)((int)l11_cuboids + (child_sets_controller_vars->to << 7)) + 0x70, 1, 0, 0);
             for (j = 0; j < 6; j++) {
                 l11_three_per_side_child_mobys[j]->flags &= ~1;
                 l11_three_per_side_child_mobys[j]->visible = 1;
@@ -239,10 +239,10 @@ void update_child_sets_controller(struct Moby *child_sets_controller) {
         D_L11_0015F3FC = child_sets_controller_vars->fade;
         advance_accelerated_scalar(&D_L11_00161EDC, &D_L11_00161EF8, 1.0f, frame_time_sq * 0.2f, frame_time_sq * 0.2f,
                       frame_time * 0.2f);
-        lerp_vector(&pos, (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->from << 7)) + 0x30,
-                         (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->to << 7)) + 0x30, D_L11_00161EDC);
-        lerp_vector(&rot, (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->from << 7)) + 0x70,
-                         (char *)(D_L11_001600EC_c788 + (child_sets_controller_vars->to << 7)) + 0x70, D_L11_00161EDC);
+        lerp_vector(&pos, (char *)((int)l11_cuboids + (child_sets_controller_vars->from << 7)) + 0x30,
+                         (char *)((int)l11_cuboids + (child_sets_controller_vars->to << 7)) + 0x30, D_L11_00161EDC);
+        lerp_vector(&rot, (char *)((int)l11_cuboids + (child_sets_controller_vars->from << 7)) + 0x70,
+                         (char *)((int)l11_cuboids + (child_sets_controller_vars->to << 7)) + 0x70, D_L11_00161EDC);
         set_camera_position(&pos);
         set_camera_rotation(&rot);
         if (1.0f <= child_sets_controller_vars->fade) {
@@ -375,7 +375,6 @@ typedef struct {
 } GridVars_d800;
 
 extern int D_L11_0015FFD8_d800 __asm__("D_L11_0015FFD8");
-extern int D_L11_001600EC_d800 __asm__("D_L11_001600EC");
 int D_L11_00161F54 = 0;
 extern float child_grid_pose_blend_acceleration_gp __asm__("D_L11_00161F58") __attribute__((sda));
 extern float child_grid_pose_blend_deceleration_gp __asm__("D_L11_00161F5C") __attribute__((sda));
@@ -385,7 +384,7 @@ void update_child_grid_poses(struct Moby *grid_controller) __asm__("FUN_L11_0030
 
 void update_child_grid_poses(struct Moby *m) __asm__("FUN_L11_0030dd18");
 
-/* Spawns the 4x6 child grid, waits for its linked moby, then fades and blends between two D_L11_001600EC
+/* Spawns the 4x6 child grid, waits for its linked moby, then fades and blends between two l11_cuboids
    points (pos at 0x30, rotation at 0x70) before handing back to the hero. */
 void update_child_grid_controller(struct Moby *grid_controller) __asm__("FUN_L11_0030d800");
 
@@ -442,7 +441,7 @@ void update_child_grid_controller(struct Moby *grid_controller) {
             struct Moby *link = (struct Moby *)(D_L11_0015FFD8_d800 + (grid_controller_vars->link << 8));
             char *source_pose_point;
             set_race_camera(&link->pos, &link->rot, 0x72, 1);
-            source_pose_point = (char *)(D_L11_001600EC_d800 + (grid_controller_vars->from << 7));
+            source_pose_point = (char *)((int)l11_cuboids + (grid_controller_vars->from << 7));
             jet_mount(source_pose_point + 0x30, source_pose_point + 0x70, 1, 0, 0);
         } else if (1.0f <= grid_controller_vars->fade) {
             grid_controller->state = 3;
@@ -452,18 +451,18 @@ void update_child_grid_controller(struct Moby *grid_controller) {
         grid_controller_vars->prev = grid_controller_vars->t;
         advance_accelerated_scalar(&grid_controller_vars->t, &grid_controller_vars->vel, 1.0f, child_grid_pose_blend_acceleration_gp * frame_time_sq, child_grid_pose_blend_deceleration_gp * frame_time_sq,
                       child_grid_pose_blend_max_speed_gp * frame_time);
-        lerp_vector(&pos, (char *)(D_L11_001600EC_d800 + (grid_controller_vars->from << 7)) + 0x30,
-                         (char *)(D_L11_001600EC_d800 + (grid_controller_vars->to << 7)) + 0x30, grid_controller_vars->t);
+        lerp_vector(&pos, (char *)((int)l11_cuboids + (grid_controller_vars->from << 7)) + 0x30,
+                         (char *)((int)l11_cuboids + (grid_controller_vars->to << 7)) + 0x30, grid_controller_vars->t);
         clear_u64_value(&rot);
-        rot.x = fast_subtract_rotations(((float *)((grid_controller_vars->to << 7) + D_L11_001600EC_d800))[28],
-                             ((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[28]) * grid_controller_vars->t;
-        rot.x = fast_add_rotations(((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[28], rot.x);
-        rot.y = fast_subtract_rotations(((float *)((grid_controller_vars->to << 7) + D_L11_001600EC_d800))[29],
-                             ((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[29]) * grid_controller_vars->t;
-        rot.y = fast_add_rotations(((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[29], rot.y);
-        rot.z = fast_subtract_rotations(((float *)((grid_controller_vars->to << 7) + D_L11_001600EC_d800))[30],
-                             ((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[30]) * grid_controller_vars->t;
-        rot.z = fast_add_rotations(((float *)((grid_controller_vars->from << 7) + D_L11_001600EC_d800))[30], rot.z);
+        rot.x = fast_subtract_rotations(((float *)((grid_controller_vars->to << 7) + (int)l11_cuboids))[28],
+                             ((float *)((grid_controller_vars->from << 7) + (int)l11_cuboids))[28]) * grid_controller_vars->t;
+        rot.x = fast_add_rotations(((float *)((grid_controller_vars->from << 7) + (int)l11_cuboids))[28], rot.x);
+        rot.y = fast_subtract_rotations(((float *)((grid_controller_vars->to << 7) + (int)l11_cuboids))[29],
+                             ((float *)((grid_controller_vars->from << 7) + (int)l11_cuboids))[29]) * grid_controller_vars->t;
+        rot.y = fast_add_rotations(((float *)((grid_controller_vars->from << 7) + (int)l11_cuboids))[29], rot.y);
+        rot.z = fast_subtract_rotations(((float *)((grid_controller_vars->to << 7) + (int)l11_cuboids))[30],
+                             ((float *)((grid_controller_vars->from << 7) + (int)l11_cuboids))[30]) * grid_controller_vars->t;
+        rot.z = fast_add_rotations(((float *)((grid_controller_vars->from << 7) + (int)l11_cuboids))[30], rot.z);
         set_camera_position(&pos);
         set_camera_rotation(&rot);
         if (1.0f <= grid_controller_vars->t) {
@@ -2546,7 +2545,6 @@ typedef struct {
 
 extern ShipLevelEntry_3290 D_L11_0016DA80[];
 extern char *ship_hp_bar_palette_address_base __asm__("D_L11_0015F420");
-extern char *D_L11_001600EC;
 extern unsigned char D_0014C050[][16];
 extern char jet_fighter_missing_victory_jet_destination_message[] __asm__("D_L11_0021B610");
 extern char jet_fighter_missing_victory_hero_destination_message[] __asm__("D_L11_0021B648");
@@ -2777,7 +2775,7 @@ void jet_fighter_update(struct Moby *moby) {
             qcopy_nc(&moby->rot, ship_vars->home_rot);
             moby->scale = *(float *)((char *)moby->pclass + 0x24);
             refresh_moby_spatial_bounds_from_basis(moby);
-            p = D_L11_001600EC + (ship_vars->exit_path << 7);
+            p = (char *)l11_cuboids + (ship_vars->exit_path << 7);
             set_race_camera(p + 0x30, p + 0x70, 0, 1);
             idx = ship_vars->voice;
             if (idx != -1) {
@@ -2828,14 +2826,14 @@ void jet_fighter_update(struct Moby *moby) {
                         qcopy_nc(&moby->pos, ship_vars->home_pos);
                         qcopy_nc(&moby->rot, ship_vars->home_rot);
                     } else {
-                        qcopy_nc(&moby->pos, ((char (*)[128])D_L11_001600EC)[ship_vars->exit_path2] + 0x30);
-                        qcopy_nc(&moby->rot, ((char (*)[128])D_L11_001600EC)[ship_vars->exit_path2] + 0x70);
+                        qcopy_nc(&moby->pos, ((char (*)[128])(char *)l11_cuboids)[ship_vars->exit_path2] + 0x30);
+                        qcopy_nc(&moby->rot, ((char (*)[128])(char *)l11_cuboids)[ship_vars->exit_path2] + 0x70);
                     }
                     refresh_moby_spatial_bounds_from_basis(moby);
                     if (ship_vars->exit_path == -1) {
                         print_3290(jet_fighter_missing_victory_hero_destination_message);
                     } else {
-                        p = D_L11_001600EC + (ship_vars->exit_path << 7);
+                        p = (char *)l11_cuboids + (ship_vars->exit_path << 7);
                         set_race_camera(p + 0x30, p + 0x70, 0, 1);
                     }
                     if (moby->mission != 0xFF) {
@@ -2896,7 +2894,7 @@ void jet_fighter_update(struct Moby *moby) {
 #include "sda.h"
 /* Same source as the exact FUN_L17_002edf10, with its path index at 0x104 and a fixed floor of 250. */
 
-extern char (*D_L17_001600EC_t)[128] __asm__("D_L11_001600EC") MACRO_ADDR;
+extern LevelCuboid *l11_cuboids_macro __asm__("D_L11_001600EC") MACRO_ADDR;
 
 void adjust_ship_steering_for_flight_bounds(struct Moby *moby, float *horizontal_steering_input, float *vertical_steering_input) {
     char *ship_vars = (char *)moby->pvars;
@@ -2905,11 +2903,11 @@ void adjust_ship_steering_for_flight_bounds(struct Moby *moby, float *horizontal
     fast_vec_scale(predicted_position_scratch, ship_vars + 0x10, *(float *)(ship_vars + 0x64) * (float)scale_game_frames(0x3C));
     fast_vec_add(predicted_position_scratch, predicted_position_scratch, &moby->pos);
     zz = predicted_position_scratch[2];
-    fast_vec_sub(predicted_position_scratch, predicted_position_scratch, (*(int *)(ship_vars + 0x104) << 7) + D_L11_001600EC + 0x30);
+    fast_vec_sub(predicted_position_scratch, predicted_position_scratch, (*(int *)(ship_vars + 0x104) << 7) + (char *)l11_cuboids + 0x30);
     predicted_boundary_distance_xy = vector_length_xy(predicted_position_scratch);
-    boundary_radius = vector_length_xy((*(int *)(ship_vars + 0x104) << 7) + D_L11_001600EC);
-    hi = *(float *)(D_L17_001600EC_t[*(int *)(ship_vars + 0x104)] + 0x28);
-    lo = *(float *)(D_L17_001600EC_t[*(int *)(ship_vars + 0x104)] + 0x38);
+    boundary_radius = vector_length_xy((*(int *)(ship_vars + 0x104) << 7) + (char *)l11_cuboids);
+    hi = l11_cuboids_macro[*(int *)(ship_vars + 0x104)].axes[2].z;
+    lo = l11_cuboids_macro[*(int *)(ship_vars + 0x104)].pos.z;
     upper_altitude_limit = hi + lo;
     boundary_center_heading = fast_add_rotations(fast_arc_tan(predicted_position_scratch[0], predicted_position_scratch[1]), 3.141590118408203f);
     if (boundary_radius - 10.0f < predicted_boundary_distance_xy) {

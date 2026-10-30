@@ -511,14 +511,7 @@ extern unsigned char D_0013D4EE NOT_SDA;
 extern unsigned char D_0013D3DC NOT_SDA;
 extern int D_0015ED84;
 extern unsigned char D_0014C050[];
-/* One of the level's path/spawn points (D_L11_001600EC, 0x80 bytes each). */
-struct PokPathPoint {
-    u8 pad00[0x30];
-    Vec4f pos;
-    u8 pad40[0x30];
-    Vec4f rot;
-};
-extern struct PokPathPoint *path_points_14b0 __asm__("D_L11_001600EC");
+#include "rnc/overlay/cuboid.h"
 extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern char resort_owner_completion_dialogue_pose[] __asm__("D_L11_0016D270");
 #include "rnc/overlay/l11/gameplay/entities/bob_globals.h"
@@ -601,8 +594,8 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         } else {
             if (D_0014C050[moby_vars->unk10C + D_0015ED84 * 16] == 0xFF) {
                 moby_vars->leg = 3;
-                qcopy_nc(&moby->pos, &path_points_14b0[moby_vars->points[3]].pos);
-                qcopy_nc(&moby->rot, &path_points_14b0[moby_vars->points[3]].rot);
+                qcopy_nc(&moby->pos, &l11_cuboids[moby_vars->points[3]].pos);
+                qcopy_nc(&moby->rot, &l11_cuboids[moby_vars->points[3]].rot);
                 trigger_pokitaru_paired_rotation((struct Moby *)(D_L11_0015FFD8 + (moby_vars->unk104 << 8)));
                 FUN_L11_002d2088_c(moby, 0xE);
                 moby_vars->talk_range = 10.0f;
@@ -612,17 +605,17 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             }
         }
         if (D_0014C050[moby_vars->unk108 + D_0015ED84 * 16] == 0xFF &&
-            fast_vec_dist(&hero.motion.pos, &path_points_14b0[moby_vars->points[1]].pos) < 12.0f) {
+            fast_vec_dist(&hero.motion.pos, &l11_cuboids[moby_vars->points[1]].pos) < 12.0f) {
             moby_vars->leg = 1;
-            qcopy_nc(&moby->pos, &path_points_14b0[moby_vars->points[1]].pos);
-            qcopy_nc(&moby->rot, &path_points_14b0[moby_vars->points[1]].rot);
+            qcopy_nc(&moby->pos, &l11_cuboids[moby_vars->points[1]].pos);
+            qcopy_nc(&moby->rot, &l11_cuboids[moby_vars->points[1]].rot);
             FUN_L11_002d2088_c(moby, 6);
-            path_points_14b0[moby_vars->unk114].pos.z -= 500.0f;
+            l11_cuboids[moby_vars->unk114].pos.z -= 500.0f;
             FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8)));
             break;
         }
-        path_points_14b0[moby_vars->unk110].pos.z -= 500.0f;
-        path_points_14b0[moby_vars->unk114].pos.z -= 500.0f;
+        l11_cuboids[moby_vars->unk110].pos.z -= 500.0f;
+        l11_cuboids[moby_vars->unk114].pos.z -= 500.0f;
         moby_vars->leg = 0;
         moby_vars->talk_range = 5.0f;
         FUN_L11_002d2088_c(moby, 1);
@@ -661,7 +654,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             FUN_L11_002d2088_c(moby, 4);
         break;
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
-        try_update_resort_owner_path_target(moby, (char *)&path_points_14b0[moby_vars->points[moby_vars->leg]].pos);
+        try_update_resort_owner_path_target(moby, (char *)&l11_cuboids[moby_vars->points[moby_vars->leg]].pos);
         if (vector_distance_xy(&moby->pos, &moby_vars->target) < 1.0f) {
             switch (moby_vars->leg) {
             case RESORT_OWNER_FIRST_PATH_LEG: {
@@ -686,7 +679,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
                 fast_vec_normalize(position_scratch, &o->rot_row2, resort_owner_gate_jump_target_local_z_offset_gp);
                 fast_vec_add(&moby_vars->target, &moby_vars->target, position_scratch);
-                path_points_14b0[moby_vars->unk110].pos.z += 500.0f;
+                l11_cuboids[moby_vars->unk110].pos.z += 500.0f;
                 moby_vars->next_state = 8;
                 FUN_L11_002d2088_c(moby, 7);
                 break;
@@ -695,7 +688,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                 FUN_L11_002d2088_c(moby, 0xB);
                 break;
             case RESORT_OWNER_FINAL_PATH_LEG:
-                path_points_14b0[moby_vars->unk114].pos.z += 500.0f;
+                l11_cuboids[moby_vars->unk114].pos.z += 500.0f;
                 FUN_L11_002d2088_c(moby, 0xC);
                 break;
             }
@@ -707,8 +700,8 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             jet_clear_persistent(moby_vars->unk10C);
             D_0013D3DC = 1;
             set_moby_dialogue_record_value(moby, 2);
-            qcopy_nc(&moby->pos, &path_points_14b0[moby_vars->points[moby_vars->leg]].pos);
-            qcopy_nc(&moby->rot, &path_points_14b0[moby_vars->points[moby_vars->leg]].rot);
+            qcopy_nc(&moby->pos, &l11_cuboids[moby_vars->points[moby_vars->leg]].pos);
+            qcopy_nc(&moby->rot, &l11_cuboids[moby_vars->points[moby_vars->leg]].rot);
             euler_rotation_basis(&moby->rot_row0, &moby->rot);
             fast_vec_normalize(position_scratch, &moby->rot_row0, 2.0f);
             fast_vec_add(position_scratch, position_scratch, &moby->pos);
@@ -745,7 +738,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
     case RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET:
         if (vector_distance_xy(&moby->pos, &moby_vars->target) < 0.5f) {
             int next_leg_index = ++moby_vars->leg;
-            qcopy(&moby_vars->target, &path_points_14b0[moby_vars->unkD0[next_leg_index]].pos);
+            qcopy(&moby_vars->target, &l11_cuboids[moby_vars->unkD0[next_leg_index]].pos);
             moby_vars->next_state = 4;
             FUN_L11_002d2088_c(moby, 7);
         }
@@ -1080,7 +1073,6 @@ struct PokSentryVars {
 };
 
 extern unsigned char D_0013D50B NOT_SDA;
-extern char *D_L11_001600EC;
 extern struct UsageStat help_records[] __asm__("D_00141968") NOT_SDA;
 
 void fred_pokitaru_update(struct Moby *moby) __asm__("FUN_L11_002f0e40");
@@ -1133,7 +1125,7 @@ void fred_pokitaru_update(struct Moby *moby) {
             absolute_float(hero.motion.pos.f[2] - moby->pos.z) < 4.0f) {
             char *entry;
             jet_clear_persistent(moby->mission);
-            entry = D_L11_001600EC + moby_vars->slot * 128;
+            entry = (char *)l11_cuboids + moby_vars->slot * 128;
             jet_reset_camera(entry + 0x30, entry + 0x70);
         }
         break;

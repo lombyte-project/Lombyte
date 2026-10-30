@@ -25,6 +25,7 @@ extern LevelCuboid *l05_cuboids __asm__("D_L05_001600EC");
 extern LevelCuboid *l06_cuboids __asm__("D_L06_001600EC");
 extern LevelCuboid *l07_cuboids __asm__("D_L07_001600EC");
 extern LevelCuboid *l10_cuboids __asm__("D_L10_001600EC");
+extern LevelCuboid *l11_cuboids __asm__("D_L11_001600EC");
 extern LevelCuboid *l13_cuboids __asm__("D_L13_001600EC");
 
 #endif /* LOMBYTE_RNC_OVERLAY_CUBOID_H */
