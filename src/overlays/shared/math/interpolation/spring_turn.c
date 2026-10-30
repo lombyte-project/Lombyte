@@ -743,7 +743,7 @@ float calculate_triangular_corrected_scalar(
 
 float calculate_triangular_corrected_scalar(float *base_values,
                                             float *linear_term_values,
-                                            int   *out,
+                                            int   *truncated_ratio_output,
 
                                             float triangular_correction_coefficient) {
     int truncated_ratio =
@@ -753,8 +753,8 @@ float calculate_triangular_corrected_scalar(float *base_values,
         base_values[2] + linear_term_values[2] * truncated_ratio_float -
         convert_integer_to_float((truncated_ratio * truncated_ratio + truncated_ratio) >> 1) *
             triangular_correction_coefficient;
-    if (out) {
-        *out = truncated_ratio;
+    if (truncated_ratio_output) {
+        *truncated_ratio_output = truncated_ratio;
     }
     return corrected_scalar_value;
 }
