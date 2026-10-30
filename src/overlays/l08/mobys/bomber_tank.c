@@ -141,107 +141,107 @@ void update_bomber_tank(Moby *moby) {
     float           old_rot[4];
     float           velocity[4];
     float           muzzle[4];
-    BomberTankVars *vars = (BomberTankVars *)moby->pvars;
+    BomberTankVars *bomber_tank_update_vars = (BomberTankVars *)moby->pvars;
     Moby           *target;
     /* Fakematch: hidden zero for the case 12 test below. */
     int never = 0;
 
     qcopy(old_pos, &moby->pos);
     qcopy(old_rot, &moby->rot);
-    if (vars->unk2E == 2) {
-        if (vars->part_a != 0)
-            mark_moby_for_removal(vars->part_a);
-        if (vars->part_b != 0)
-            mark_moby_for_removal(vars->part_b);
+    if (bomber_tank_update_vars->unk2E == 2) {
+        if (bomber_tank_update_vars->part_a != 0)
+            mark_moby_for_removal(bomber_tank_update_vars->part_a);
+        if (bomber_tank_update_vars->part_b != 0)
+            mark_moby_for_removal(bomber_tank_update_vars->part_b);
         mark_moby_for_removal(moby);
         return;
     }
     update_bomber_tank_damage_and_aim(moby);
-    target = vars->target;
+    target = bomber_tank_update_vars->target;
     switch (moby->state) {
     case BOMBER_TANK_STATE_INITIALIZE:
-        if (vars->part_a == 0) {
+        if (bomber_tank_update_vars->part_a == 0) {
             Moby *part;
-            vars->part_a = create_moby(0x14B);
-            vars->part_a->update_dist = 0x40;
-            vars->part_a->draw_dist = 0x40;
-            vars->part_a->visible = 1;
-            vars->part_a->spawn_frame = (*(Moby **)(D_001413D0))->spawn_frame;
-            vars->part_a->flags = 0x4000;
-            part = vars->part_a;
+            bomber_tank_update_vars->part_a = create_moby(0x14B);
+            bomber_tank_update_vars->part_a->update_dist = 0x40;
+            bomber_tank_update_vars->part_a->draw_dist = 0x40;
+            bomber_tank_update_vars->part_a->visible = 1;
+            bomber_tank_update_vars->part_a->spawn_frame = (*(Moby **)(D_001413D0))->spawn_frame;
+            bomber_tank_update_vars->part_a->flags = 0x4000;
+            part = bomber_tank_update_vars->part_a;
             qcopy(&part->pos, &moby->pos);
             part->collision = 0;
-            blend_moby_animation(vars->part_a, 0, 0, 0);
-            update_entity(vars->part_a);
+            blend_moby_animation(bomber_tank_update_vars->part_a, 0, 0, 0);
+            update_entity(bomber_tank_update_vars->part_a);
         }
-        if (vars->part_b == 0) {
+        if (bomber_tank_update_vars->part_b == 0) {
             Moby *part;
-            vars->part_b = create_moby(0x14B);
-            vars->part_b->update_dist = 0x40;
-            vars->part_b->draw_dist = 0x40;
-            vars->part_b->visible = 1;
-            vars->part_b->spawn_frame = (*(Moby **)(D_001413D0))->spawn_frame;
-            vars->part_b->flags = 0xC000;
-            part = vars->part_b;
+            bomber_tank_update_vars->part_b = create_moby(0x14B);
+            bomber_tank_update_vars->part_b->update_dist = 0x40;
+            bomber_tank_update_vars->part_b->draw_dist = 0x40;
+            bomber_tank_update_vars->part_b->visible = 1;
+            bomber_tank_update_vars->part_b->spawn_frame = (*(Moby **)(D_001413D0))->spawn_frame;
+            bomber_tank_update_vars->part_b->flags = 0xC000;
+            part = bomber_tank_update_vars->part_b;
             qcopy(&part->pos, &moby->pos);
             part->collision = 0;
-            blend_moby_animation(vars->part_b, 0, 0, 0);
-            update_entity(vars->part_b);
+            blend_moby_animation(bomber_tank_update_vars->part_b, 0, 0, 0);
+            update_entity(bomber_tank_update_vars->part_b);
         }
-        attach_manipulator(moby, 0, vars->manipulator);
+        attach_manipulator(moby, 0, bomber_tank_update_vars->manipulator);
         moby->flags |= 0x1000;
-        vars->unk16C = frame_time + frame_time;
-        if (vars->trigger_moby > 0) {
+        bomber_tank_update_vars->unk16C = frame_time + frame_time;
+        if (bomber_tank_update_vars->trigger_moby > 0) {
             moby->state = 11;
             moby->flags = (moby->flags & 0xEFFF) | 0x41;
-            vars->part_a->flags |= 0x41;
-            vars->part_b->flags |= 0x41;
+            bomber_tank_update_vars->part_a->flags |= 0x41;
+            bomber_tank_update_vars->part_b->flags |= 0x41;
             moby->collision = 0;
-            vars->part_a->collision = 0;
-            vars->part_b->collision = 0;
+            bomber_tank_update_vars->part_a->collision = 0;
+            bomber_tank_update_vars->part_b->collision = 0;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, 0);
-        } else if (vars->unk144 > 0) {
+        } else if (bomber_tank_update_vars->unk144 > 0) {
             if (D_0013D3B6 == 0) {
                 moby->state = 14;
                 moby->flags |= 0x41;
-                vars->part_a->flags |= 0x41;
-                vars->part_b->flags |= 0x41;
+                bomber_tank_update_vars->part_a->flags |= 0x41;
+                bomber_tank_update_vars->part_b->flags |= 0x41;
                 moby->collision = 0;
-                vars->part_a->collision = 0;
-                vars->part_b->collision = 0;
+                bomber_tank_update_vars->part_a->collision = 0;
+                bomber_tank_update_vars->part_b->collision = 0;
                 if (moby->prev_seq != 0)
                     blend_moby_animation(moby, 0, 0, 0);
             } else {
                 remove_bomber_tank_linked_debris(moby);
-                qcopy(&moby->pos, (char *)l08_paths[vars->path] + 0x10);
+                qcopy(&moby->pos, (char *)l08_paths[bomber_tank_update_vars->path] + 0x10);
                 moby->state = 6;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, 0);
             }
         } else {
-            qcopy(&moby->pos, (char *)l08_paths[vars->path] + 0x10);
+            qcopy(&moby->pos, (char *)l08_paths[bomber_tank_update_vars->path] + 0x10);
             moby->state = 6;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, 0);
         }
-        clear_u64_value(&vars->unk40);
-        vars->unk29 = 0;
-        vars->unk28 = 3;
-        vars->unk30 = 3.0f;
-        vars->health = 9.0f;
-        vars->unk2A = 12;
-        vars->unk2E = 1;
-        vars->flags |= 2;
-        clear_u64_value(&vars->unk40);
-        vars->pitch = 0.0f;
-        vars->yaw = moby->rot.z;
-        vars->unk58 = truncate_float_to_s32(D_L08_001618CC);
-        vars->unk5A = truncate_float_to_s32(D_L08_001618D0 * 8.0f);
+        clear_u64_value(&bomber_tank_update_vars->unk40);
+        bomber_tank_update_vars->unk29 = 0;
+        bomber_tank_update_vars->unk28 = 3;
+        bomber_tank_update_vars->unk30 = 3.0f;
+        bomber_tank_update_vars->health = 9.0f;
+        bomber_tank_update_vars->unk2A = 12;
+        bomber_tank_update_vars->unk2E = 1;
+        bomber_tank_update_vars->flags |= 2;
+        clear_u64_value(&bomber_tank_update_vars->unk40);
+        bomber_tank_update_vars->pitch = 0.0f;
+        bomber_tank_update_vars->yaw = moby->rot.z;
+        bomber_tank_update_vars->unk58 = truncate_float_to_s32(D_L08_001618CC);
+        bomber_tank_update_vars->unk5A = truncate_float_to_s32(D_L08_001618D0 * 8.0f);
         break;
     case BOMBER_TANK_STATE_FOLLOW_PATH:
-        advance_bomber_tank_along_path(moby, vars->path);
-        if (vars->mode != 2 && vector_distance_xy(&moby->pos, &target->pos) < 20.0f) {
+        advance_bomber_tank_along_path(moby, bomber_tank_update_vars->path);
+        if (bomber_tank_update_vars->mode != 2 && vector_distance_xy(&moby->pos, &target->pos) < 20.0f) {
             if (D_00141C38 == 0 && D_0013D4CB == 0) {
                 help_request(0x1F44, 0x5A);
             }
@@ -251,8 +251,8 @@ void update_bomber_tank(Moby *moby) {
         }
         break;
     case BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE:
-        advance_bomber_tank_along_path(moby, vars->path);
-        if (vars->mode == 2 || vector_distance_xy(&moby->pos, &target->pos) > 22.0f) {
+        advance_bomber_tank_along_path(moby, bomber_tank_update_vars->path);
+        if (bomber_tank_update_vars->mode == 2 || vector_distance_xy(&moby->pos, &target->pos) > 22.0f) {
             moby->state = 6;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -267,30 +267,30 @@ void update_bomber_tank(Moby *moby) {
                 moby_point_position(moby, 2, muzzle);
             }
             shot_speed = bomber_tank_projectile_speed_gp * frame_time;
-            velocity[0] = fast_cos(fast_add_rotations(vars->yaw, moby->rot.z)) *
-                          (fast_cos(vars->pitch) * shot_speed);
-            velocity[1] = fast_sin(fast_add_rotations(vars->yaw, moby->rot.z)) *
-                          (fast_cos(vars->pitch) * shot_speed);
+            velocity[0] = fast_cos(fast_add_rotations(bomber_tank_update_vars->yaw, moby->rot.z)) *
+                          (fast_cos(bomber_tank_update_vars->pitch) * shot_speed);
+            velocity[1] = fast_sin(fast_add_rotations(bomber_tank_update_vars->yaw, moby->rot.z)) *
+                          (fast_cos(bomber_tank_update_vars->pitch) * shot_speed);
             velocity[2] = 0.0f;
-            velocity[2] = -fast_sin(vars->pitch) * shot_speed;
+            velocity[2] = -fast_sin(bomber_tank_update_vars->pitch) * shot_speed;
             shot = spawn_bomber_tank_bomb((char *)moby, (char *)muzzle, (char *)velocity);
             if (shot != 0)
                 shot[0x20] = 1;
         }
         break;
     case BOMBER_TANK_STATE_WAIT_FOR_TRIGGER:
-        if (*(float *)((Moby *)D_L08_0015FFD8 + vars->trigger_moby)->pvars == 1.0f) {
-            qcopy(&moby->pos, (char *)l08_paths[vars->start_point] + 0x10);
-            qcopy(&vars->part_a->pos, &moby->pos);
-            qcopy(&vars->part_b->pos, &moby->pos);
+        if (*(float *)((Moby *)D_L08_0015FFD8 + bomber_tank_update_vars->trigger_moby)->pvars == 1.0f) {
+            qcopy(&moby->pos, (char *)l08_paths[bomber_tank_update_vars->start_point] + 0x10);
+            qcopy(&bomber_tank_update_vars->part_a->pos, &moby->pos);
+            qcopy(&bomber_tank_update_vars->part_b->pos, &moby->pos);
             moby->flags &= 0xFFBE;
-            vars->part_a->flags &= 0xFFBE;
-            vars->part_b->flags &= 0xFFBE;
+            bomber_tank_update_vars->part_a->flags &= 0xFFBE;
+            bomber_tank_update_vars->part_b->flags &= 0xFFBE;
             moby->collision = moby->pclass->collision;
-            vars->part_a->collision = vars->part_a->pclass->collision;
-            vars->part_b->collision = vars->part_b->pclass->collision;
+            bomber_tank_update_vars->part_a->collision = bomber_tank_update_vars->part_a->pclass->collision;
+            bomber_tank_update_vars->part_b->collision = bomber_tank_update_vars->part_b->pclass->collision;
             moby->flags |= 0x1000;
-            if (vars->mode != 2) {
+            if (bomber_tank_update_vars->mode != 2) {
                 moby->state = 6;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -298,23 +298,23 @@ void update_bomber_tank(Moby *moby) {
         }
         break;
     case BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE:
-        if (vars->mode != 2) {
+        if (bomber_tank_update_vars->mode != 2) {
             unsigned char *event_flags;
             scatter_bomber_tank_linked_debris((char *)moby);
             event_flags = (unsigned char *)D_0013D388;
             if (event_flags[0x2E] != 0)
                 allocate_voice_for_target_entry(6, 0, moby);
             event_flags[0x2E] = 1;
-            qcopy(&vars->part_a->pos, &moby->pos);
-            qcopy(&vars->part_b->pos, &moby->pos);
+            qcopy(&bomber_tank_update_vars->part_a->pos, &moby->pos);
+            qcopy(&bomber_tank_update_vars->part_b->pos, &moby->pos);
             moby->flags &= 0xFFBE;
-            vars->part_a->flags &= 0xFFBE;
-            vars->part_b->flags &= 0xFFBE;
+            bomber_tank_update_vars->part_a->flags &= 0xFFBE;
+            bomber_tank_update_vars->part_b->flags &= 0xFFBE;
             moby->collision = moby->pclass->collision;
-            vars->part_a->collision = vars->part_a->pclass->collision;
-            vars->part_b->collision = vars->part_b->pclass->collision;
+            bomber_tank_update_vars->part_a->collision = bomber_tank_update_vars->part_a->pclass->collision;
+            bomber_tank_update_vars->part_b->collision = bomber_tank_update_vars->part_b->pclass->collision;
             moby->flags |= 0x1000;
-            if (vars->mode != 2) {
+            if (bomber_tank_update_vars->mode != 2) {
                 moby->state = 6;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -324,11 +324,11 @@ void update_bomber_tank(Moby *moby) {
     case 12:
         /* Fakematch: a never-true test keeps case 12 a block of its own until gcse, which then puts the default path's copies where retail has them. */
         if (never)
-            vars->unk2E = 0;
+            bomber_tank_update_vars->unk2E = 0;
         break;
     case BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH: {
         float frame;
-        advance_bomber_tank_along_path(moby, vars->path);
+        advance_bomber_tank_along_path(moby, bomber_tank_update_vars->path);
         frame = compute_interpolated_record_value(moby);
         if ((59.0f <= frame && frame <= 60.0f) || (119.0f <= frame && frame <= 120.0f)) {
             spawn_bomber_tank_joint_particles((char *)moby, 4, 10);
@@ -339,7 +339,7 @@ void update_bomber_tank(Moby *moby) {
     }
     }
     fast_vec_sub(velocity, &moby->pos, old_pos);
-    FUN_L00_00260738(vars->unk60, velocity, &moby->rot, old_rot);
+    FUN_L00_00260738(bomber_tank_update_vars->unk60, velocity, &moby->rot, old_rot);
 }
 
 /* Per-frame update of a batalia turret moby: damage, its death state and its two helper parts. */
