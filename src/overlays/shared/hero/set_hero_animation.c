@@ -928,16 +928,16 @@ typedef struct {
 
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k);
 
-void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
+void FUN_L00_002334d0(f32 *gravity_adjusted_vector, f32 *in, f32 k) {
     struct Hero *hero_base = &hero;
     V002334d0    offset_vector;
     switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
-        out[2] = in[2] - k;
+        gravity_adjusted_vector[2] = in[2] - k;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
         fast_vec_normalize(&offset_vector, &hero_base->ground_normal, -k);
-        fast_vec_add(out, in, &offset_vector);
+        fast_vec_add(gravity_adjusted_vector, in, &offset_vector);
         break;
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         if (hero_base->state.current == 0x3E && hero_base->air_frames.s == 0) {
@@ -945,7 +945,7 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
         } else {
             fast_vec_normalize(&offset_vector, &hero.gravity_dir, k);
         }
-        fast_vec_add(out, in, &offset_vector);
+        fast_vec_add(gravity_adjusted_vector, in, &offset_vector);
         break;
     }
 }
