@@ -183,7 +183,7 @@ void update_fighter_jet_rocket(Moby *m) __asm__("FUN_L13_002e6c08");
 
 void update_fighter_jet_rocket(Moby *rocket) {
     Rocket        *rocket_data = *(void **)&rocket->pvars;
-    V4_2E8040      old;
+    V4_2E8040      rocket_position_before_move;
     V4_2E8040      hitpos;
     V4_2E8040      effect_scratch_vector;
     V4_2E8040      particle_velocity;
@@ -191,7 +191,7 @@ void update_fighter_jet_rocket(Moby *rocket) {
     unsigned char *spawned_effect;
     float          trail_segment_fraction;
 
-    qcopy(&old, &*(V4_2E8040 *)&rocket->pos);
+    qcopy(&rocket_position_before_move, &*(V4_2E8040 *)&rocket->pos);
     rocket->scale += (((Cls *)rocket->pclass)->scale - rocket->scale) * 0.1f;
     *(Q_2E8040 *)&trail_direction = 0;
     trail_direction.x = random_float_between(-1.0f, 1.0f);
@@ -296,7 +296,7 @@ void update_fighter_jet_rocket(Moby *rocket) {
         return;
     }
     moby_point_position(rocket, 1, &hitpos);
-    if (collision_line(&old, &hitpos, 0, rocket_data->owner, 0) != 0) {
+    if (collision_line(&rocket_position_before_move, &hitpos, 0, rocket_data->owner, 0) != 0) {
         qcopy(&effect_scratch_vector, &fighter_jet_rocket_explosion_effect_vector);
         spawn_explosion(rocket,
                         rocket_data,
