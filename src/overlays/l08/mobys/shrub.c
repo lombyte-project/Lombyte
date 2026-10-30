@@ -182,10 +182,10 @@ void process_shrub_part_hits(struct Moby *parent_moby) {
 void update_shrub_parts(struct Moby *parent_moby) {
     char *shrub_vars = (char *)parent_moby->pvars;
     float part_joint_position[4], anchor_joint_position[4], joint_alignment_offset[4];
-    char *base = shrub_vars + 0x60;
+    char *shrub_part_table = shrub_vars + 0x60;
     int   i;
     for (i = 0; i < 12; i++) {
-        int  *anchor_joint_cursor = (int *)(base + 0x1C + i * 16);
+        int  *anchor_joint_cursor = (int *)(shrub_part_table + 0x1C + i * 16);
         char *m = (char *)anchor_joint_cursor[-3];
         if (m != 0) {
             *(float *)(m + 0x48) = parent_moby->rot.z;
@@ -203,7 +203,7 @@ void update_shrub_parts(struct Moby *parent_moby) {
                                shrub_part_spin_speed_degrees_gp * DEG_TO_RAD * D_0015ED6C);
     }
     for (i = 0; i < 12; i++) {
-        char *m = *(char **)(base + 0x10 + i * 16);
+        char *m = *(char **)(shrub_part_table + 0x10 + i * 16);
         if (m != 0)
             update_entity(m);
     }
