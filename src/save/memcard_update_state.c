@@ -23,8 +23,6 @@ extern char D_0013D200[];
 extern char D_0013D220[];
 extern char D_0013D240[];
 extern char D_0013D270[];
-extern u8   D_0014EED0[];
-extern u8   D_001506D0[];
 extern char memcard_delete_entry_path_format[] __asm__("D_0015FE98");
 extern char memcard_deleting_entry_message[] __asm__("D_0015FEA0");
 extern u8   D_001A0880[];
@@ -635,20 +633,20 @@ void memcard_update_state(void) {
             break;
         case MEMCARD_READ_SAVE_REQUEST_MAIN_DATA_READ:
             MC.size = CARD.main_size;
-            if (MC.size > 0x1800) {
+            if (MC.size > MEMCARD_GAME_DATA_SIZE) {
                 RaiseKernelTrap();
             }
-            if (sceMcRead(MC.fd, D_0014EED0, MC.size) == 0) {
+            if (sceMcRead(MC.fd, memcard_game_data_buffer, MC.size) == 0) {
                 MC.sub = 5;
             }
             break;
         case MEMCARD_READ_SAVE_PROCESS_MAIN_DATA_READ_RESULT:
             if (MC.result == MC.size) {
                 if (MC.state == 23) {
-                    memcard_restore_info(D_0014EED0, MC.cur, CARD.scan_save_index);
+                    memcard_restore_info(memcard_game_data_buffer, MC.cur, CARD.scan_save_index);
                     MC.sub = 8;
                 } else {
-                    CARD.errors = memcard_restore_data(D_0014EED0, 0, mc_gamedata);
+                    CARD.errors = memcard_restore_data(memcard_game_data_buffer, 0, mc_gamedata);
                     MC.sub = 6;
                 }
                 MC.busy = 0;
@@ -681,16 +679,17 @@ void memcard_update_state(void) {
             break;
         case MEMCARD_READ_SAVE_REQUEST_RECORD_READ:
             MC.size = CARD.record_size;
-            if (MC.size > 0x1000) {
+            if (MC.size > MEMCARD_LEVEL_DATA_SIZE) {
                 RaiseKernelTrap();
             }
-            if (sceMcRead(MC.fd, D_001506D0, MC.size) == 0) {
+            if (sceMcRead(MC.fd, memcard_level_data_buffer, MC.size) == 0) {
                 MC.sub = 7;
             }
             break;
         case MEMCARD_READ_SAVE_PROCESS_RECORD_READ_RESULT:
             if (MC.result == MC.size) {
-                CARD.errors += memcard_restore_data(D_001506D0, MC.record_index, mc_leveldata);
+                CARD.errors +=
+                    memcard_restore_data(memcard_level_data_buffer, MC.record_index, mc_leveldata);
                 if (++MC.record_index < 20) {
                     MC.sub = 6;
                 } else {
@@ -802,7 +801,8 @@ void memcard_update_state(void) {
             }
             break;
         case MEMCARD_UPDATE_SAVE_REQUEST_MAIN_DATA_WRITE:
-            if (sceMcWrite(MC.fd, D_0014EED0, memcard_get_data_size(mc_gamedata)) == 0) {
+            if (sceMcWrite(MC.fd, memcard_game_data_buffer, memcard_get_data_size(mc_gamedata)) ==
+                0) {
                 MC.sub = 5;
             }
             break;
@@ -855,7 +855,8 @@ void memcard_update_state(void) {
             }
             break;
         case MEMCARD_UPDATE_SAVE_REQUEST_RECORD_WRITE:
-            if (sceMcWrite(MC.fd, D_001506D0, memcard_get_data_size(mc_leveldata)) == 0) {
+            if (sceMcWrite(MC.fd, memcard_level_data_buffer, memcard_get_data_size(mc_leveldata)) ==
+                0) {
                 MC.sub = 9;
             }
             break;
@@ -1011,3 +1012,7 @@ void memcard_update_state(void) {
 }
 
 extern __typeof__(memcard_update_state) func_002093D8 __attribute__((alias("FUN_002093d8")));
+
+u8 memcard_game_data_buffer[MEMCARD_GAME_DATA_SIZE] = {0};
+
+u8 memcard_level_data_buffer[MEMCARD_LEVEL_DATA_SIZE] = {0};

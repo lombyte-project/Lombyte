@@ -2,21 +2,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 
-typedef struct {
-    s16 f00;
-    u8  f02;
-    u8  f03;
-    s16 f04;
-    u16 f06;
-    s16 f08;
-    s16 f0a;
-    s16 f0c;
-    u8  f0e;
-    u8  f0f;
-} L00Entry;
-
-extern L00Entry actuator_wave[8] __asm__("D_00165480");
-extern f32      fast_cos(f32) __asm__("func_001F9DC8");
+#include "rnc/input/actuator_calc_power.h"
 
 s32 actuator_calc_power(s32 *output_power) __asm__("FUN_001e8d08");
 
@@ -45,10 +31,10 @@ s32 actuator_calc_power(s32 *output_power) {
         aa[2][i] = 0;
     }
     for (i = 0; i < 8; i++) {
-        L00Entry *wave_entry;
-        s32       rem;
-        s32       waveform_value;
-        u16       wave_countdown;
+        ActuatorWave *wave_entry;
+        s32           rem;
+        s32           waveform_value;
+        u16           wave_countdown;
 
         if (actuator_wave[i].f00 == 0) {
             continue;
@@ -148,3 +134,5 @@ s32 actuator_calc_power(s32 *output_power) {
 }
 
 extern __typeof__(actuator_calc_power) func_001E8D08 __attribute__((alias("FUN_001e8d08")));
+
+ActuatorWave actuator_wave[8] = {0};

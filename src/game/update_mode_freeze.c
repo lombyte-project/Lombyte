@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/game/freeze_mode_state.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
@@ -7,40 +8,25 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/audio/voices/snd_continue_all_sounds_in_group.h"
 
-struct FreezeModeState {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-};
-
-extern u16                    D_0013E05A[];
-extern u8                     saved_camera_vectors[] __asm__("D_00141050");
-extern s32                    D_0015EE38;
-extern s32                    D_0015EE3C;
-extern s32                    D_0015F648;
-extern struct FreezeModeState freeze __asm__("D_00193300");
-extern s32                    pause_current_action_list[] __asm__("D_001D5BF8");
-extern char                   sound_update() __asm__("func_0022CA50");
-extern s32                    scale_game_frames(s32) __asm__("func_001F96F8");
-extern void                   memcard_save_data(s32, s32) __asm__("func_0020B178");
-extern void                   noop_main_callback() __asm__("func_001E93E8");
-extern void                   noop_callback_k(u8 *, u8 *, s32, s32) __asm__("func_001E9440");
-extern void                   fade_to_black(s32) __asm__("func_001F4A58");
-extern void                   set_animation_parameter(s32, s32) __asm__("func_001FF570");
-extern void                   decrement_resource_counter(void) __asm__("UpdateResourceCounter");
-extern void                   load_and_initialize_level_chunk() __asm__("func_00209370");
-extern void                   request_space_load(s32 value);
-extern void                   music_unpause();
-extern void                   snd_flush_sound_commands() __asm__("func_0012DC80");
-void                          update_mode_freeze(void) __asm__("FUN_001fce28");
+extern u16  D_0013E05A[];
+extern u8   saved_camera_vectors[] __asm__("D_00141050");
+extern s32  D_0015EE38;
+extern s32  D_0015EE3C;
+extern s32  D_0015F648;
+extern s32  pause_current_action_list[] __asm__("D_001D5BF8");
+extern char sound_update() __asm__("func_0022CA50");
+extern s32  scale_game_frames(s32) __asm__("func_001F96F8");
+extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
+extern void noop_main_callback() __asm__("func_001E93E8");
+extern void noop_callback_k(u8 *, u8 *, s32, s32) __asm__("func_001E9440");
+extern void fade_to_black(s32) __asm__("func_001F4A58");
+extern void set_animation_parameter(s32, s32) __asm__("func_001FF570");
+extern void decrement_resource_counter(void) __asm__("UpdateResourceCounter");
+extern void load_and_initialize_level_chunk() __asm__("func_00209370");
+extern void request_space_load(s32 value);
+extern void music_unpause();
+extern void snd_flush_sound_commands() __asm__("func_0012DC80");
+void        update_mode_freeze(void) __asm__("FUN_001fce28");
 
 void update_mode_freeze(void) {
     enum {
@@ -77,12 +63,12 @@ void update_mode_freeze(void) {
     s32 video_mode;
     s32 step;
     sound_update();
-    if (freeze.unk4 != 0) {
-        freeze.unk4--;
+    if (freeze.timer != 0) {
+        freeze.timer--;
     }
-    switch (freeze.unk0) {
+    switch (freeze.state) {
     case FREEZE_MODE_DELAYED_CONTINUE: {
-        struct FreezeModeState *state = &freeze;
+        FreezeModeState *state = &freeze;
         state->unk20++;
         if (scale_game_frames(0x5A) < state->unk20) {
             if (state->unk24 != 0) {
@@ -116,24 +102,24 @@ void update_mode_freeze(void) {
         break;
 
     case FREEZE_MODE_VIDEO_MODE_TEST:
-        switch (freeze.unk1C) {
+        switch (freeze.choice) {
         case VIDEO_MODE_TEST_INPUT_DELAY:
-            if (freeze.unk4 != 0) {
-                if ((--freeze.unk4) == 0) {
-                    freeze.unk1C = 1;
+            if (freeze.timer != 0) {
+                if ((--freeze.timer) == 0) {
+                    freeze.choice = 1;
                 }
             } else {
-                freeze.unk1C = 1;
+                freeze.choice = 1;
             }
             break;
 
         case VIDEO_MODE_TEST_AWAIT_START:
             if (controller_state.pressed & PAD_TRIANGLE) {
-                game_mode = freeze.unk14;
+                game_mode = freeze.return_game_mode;
             } else if (controller_state.pressed & PAD_CROSS) {
                 fade_to_black(4);
                 requested_video_mode = 0;
-                freeze.unk1C = 2;
+                freeze.choice = 2;
                 freeze.unk20 = scale_game_frames(0x258);
             }
             break;
@@ -141,25 +127,25 @@ void update_mode_freeze(void) {
         case VIDEO_MODE_TEST_PREVIEW_ACTIVE:
             if ((freeze.unk20 == 0) || ((--freeze.unk20) == 0)) {
                 requested_video_mode = 1;
-                freeze.unk1C = 3;
+                freeze.choice = 3;
             } else if (controller_state.pressed & PAD_TRIANGLE) {
                 fade_to_black(4);
                 requested_video_mode = 1;
-                game_mode = freeze.unk14;
+                game_mode = freeze.return_game_mode;
             } else if (controller_state.pressed & PAD_CROSS) {
                 requested_video_mode = 0;
-                game_mode = freeze.unk14;
+                game_mode = freeze.return_game_mode;
             }
             break;
 
         case VIDEO_MODE_TEST_AWAIT_TIMEOUT_ACK:
             if (controller_state.pressed & PAD_CROSS) {
-                game_mode = freeze.unk14;
+                game_mode = freeze.return_game_mode;
             }
             break;
 
         default:
-            game_mode = freeze.unk14;
+            game_mode = freeze.return_game_mode;
             break;
         }
 
@@ -183,22 +169,22 @@ void update_mode_freeze(void) {
         break;
 
     case FREEZE_MODE_CONFIRM_CANCEL_CHOICE:
-        switch (freeze.unk1C) {
+        switch (freeze.choice) {
         case FREEZE_CHOICE_PREPARE_INPUT:
             if (freeze.unk20 < 8) {
                 freeze.unk20++;
             } else if (freeze.unk24 < 8) {
                 freeze.unk24++;
             } else {
-                freeze.unk1C = 1;
+                freeze.choice = 1;
             }
             break;
 
         case FREEZE_CHOICE_AWAIT_INPUT:
             if (controller_state.pressed & PAD_CROSS) {
-                freeze.unk1C = 2;
+                freeze.choice = 2;
             } else if (controller_state.pressed & (PAD_CIRCLE | PAD_START)) {
-                freeze.unk1C = 3;
+                freeze.choice = 3;
             }
             /* Fakematch: this always-true test gives case 2/3 a second predecessor. */
             video_mode = requested_video_mode;
@@ -212,12 +198,12 @@ void update_mode_freeze(void) {
             } else if (freeze.unk20 != 0) {
                 freeze.unk20--;
             } else {
-                step = freeze.unk1C;
+                step = freeze.choice;
                 /* Fakematch: a never-true test that combine folds away; it makes step
                    live in two blocks, so global-alloc gives it a1. */
                 video_mode = requested_video_mode;
                 if (video_mode < 0) {
-                    freeze.unk1C = step;
+                    freeze.choice = step;
                 } else if (step == 2) {
                     if (hero.trick_hud_handle != (-1)) {
                         set_animation_parameter(hero.trick_hud_handle, 0);
@@ -254,10 +240,10 @@ void update_mode_freeze(void) {
         }
         switch (mode_freeze_state) {
         case MODE_FREEZE_AWAIT_CROSS_RESUME:
-            if (freeze.unk4 == 0) {
+            if (freeze.timer == 0) {
                 if (controller_state.pressed & PAD_CROSS) {
                     mode_freeze_flags &= ~1;
-                    game_mode = freeze.unk14;
+                    game_mode = freeze.return_game_mode;
                 }
             }
             break;
@@ -270,7 +256,7 @@ void update_mode_freeze(void) {
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
                 if (boot_level_active == 0) {
-                    game_mode = freeze.unk14;
+                    game_mode = freeze.return_game_mode;
                 }
             }
             break;
@@ -283,7 +269,7 @@ void update_mode_freeze(void) {
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
                 if (boot_level_active == 0) {
-                    game_mode = freeze.unk14;
+                    game_mode = freeze.return_game_mode;
                 }
             }
             break;
@@ -299,13 +285,13 @@ void update_mode_freeze(void) {
                 mode_freeze_flags = mode_freeze_flags ^ 0x40;
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
-                game_mode = freeze.unk14;
+                game_mode = freeze.return_game_mode;
             }
             break;
 
         case MODE_FREEZE_RESUME_WITH_ACTION_LIST:
-            game_mode = freeze.unk14;
-            pause_current_action_list[0] = freeze.unk18;
+            game_mode = freeze.return_game_mode;
+            pause_current_action_list[0] = freeze.context;
             break;
 
         case MODE_FREEZE_FLAG_GATED_TRIANGLE_RESUME:
@@ -319,7 +305,7 @@ void update_mode_freeze(void) {
             if (controller_state.pressed & PAD_TRIANGLE) {
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
-                game_mode = freeze.unk14;
+                game_mode = freeze.return_game_mode;
             }
             break;
 
@@ -335,12 +321,12 @@ void update_mode_freeze(void) {
                 } else if (controller_state.pressed & PAD_TRIANGLE) {
                     mode_freeze_flags = mode_freeze_flags & (~2);
                     mode_freeze_flags = mode_freeze_flags & (~4);
-                    game_mode = freeze.unk14;
+                    game_mode = freeze.return_game_mode;
                 }
             } else if (controller_state.pressed & PAD_TRIANGLE) {
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
-                game_mode = freeze.unk14;
+                game_mode = freeze.return_game_mode;
             }
             break;
 
@@ -356,7 +342,7 @@ void update_mode_freeze(void) {
                 D_0013E05A[0] = 1;
             } else if (controller_state.pressed & PAD_TRIANGLE) {
                 mode_freeze_flags |= 0x20;
-                game_mode = freeze.unk14;
+                game_mode = freeze.return_game_mode;
             }
             break;
 
@@ -375,30 +361,30 @@ void update_mode_freeze(void) {
                         mode_freeze_flags = mode_freeze_flags | 0x20;
                         mode_freeze_flags = mode_freeze_flags & (~2);
                         mode_freeze_flags = mode_freeze_flags & (~4);
-                        game_mode = freeze.unk14;
+                        game_mode = freeze.return_game_mode;
                     }
                 } else if (mode_freeze_flags & 4) {
                     if (controller_state.pressed & PAD_TRIANGLE) {
                         mode_freeze_flags = mode_freeze_flags | 0x20;
                         mode_freeze_flags = mode_freeze_flags & (~2);
                         mode_freeze_flags = mode_freeze_flags & (~4);
-                        game_mode = freeze.unk14;
+                        game_mode = freeze.return_game_mode;
                     }
                 } else {
-                    game_mode = freeze.unk14;
+                    game_mode = freeze.return_game_mode;
                 }
             } else if (controller_state.pressed & PAD_TRIANGLE) {
                 mode_freeze_flags = mode_freeze_flags | 0x20;
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
-                game_mode = freeze.unk14;
+                game_mode = freeze.return_game_mode;
             }
             break;
 
         case MODE_FREEZE_BOOT_AWAIT_CLEAR_FLAGS_RESUME:
             if (boot_level_active != 0) {
                 if (!(mode_freeze_flags & 6)) {
-                    game_mode = freeze.unk14;
+                    game_mode = freeze.return_game_mode;
                 }
             }
             break;

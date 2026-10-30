@@ -285,7 +285,7 @@ s32 map_filter_l07_2(s32 px, s32 py) {
     }
 }
 
-extern u32 D_001A03BC[];
+extern s32 D_001A03BC NOT_SDA;
 s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) __asm__("func_00207100");
 
 s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
@@ -295,7 +295,7 @@ s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_v
                                              hero_ptr->state.control_mode == 18 ||
                                              hero_ptr->base_condition == 1;
 
-        if (!hero_state_blocks_low_y_reveal && D_001A03BC[0] != 0) {
+        if (!hero_state_blocks_low_y_reveal && D_001A03BC != 0) {
             return 1;
         }
         return 0;
@@ -307,7 +307,7 @@ s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_v
     return 0;
 }
 
-extern s32 D_001A03B4[];
+extern s32 D_001A03B4 NOT_SDA;
 
 s32 map_filter_l07_4(s32 point_x, s32 point_y) __asm__("func_002071C0");
 
@@ -318,7 +318,7 @@ s32 map_filter_l07_4(s32 point_x, s32 point_y) {
     point_clockwise_of_first_edge = point_is_clockwise(point_x, point_y, 0x99, 0xED, 0x160, 0x117);
     point_clockwise_of_second_edge =
         point_is_clockwise(point_x, point_y, 0x10E, 0xF7, 0x13D, 0x119);
-    if (D_001A03B4[0] == 0) {
+    if (D_001A03B4 == 0) {
         return 0;
     }
     if (point_clockwise_of_first_edge == 0) {
@@ -812,3 +812,11 @@ int                  map_filter_l18_0(void) __asm__("func_00207AF8");
 int map_filter_l18_0(void) {
     return menu_item_enabled_115 != 0;
 }
+
+/* Four more one-word flags of the region callbacks above, after
+   region_enabled in retail order. Scalars: the compiler 8-aligns arrays,
+   and retail has them 4 bytes apart. */
+s32 D_001A03B4 NOT_SDA = 0;
+int D_001A03B8 NOT_SDA = 0;
+s32 D_001A03BC NOT_SDA = 0;
+int D_001A03C0 NOT_SDA = 0;

@@ -35,9 +35,13 @@ extern void (*draw_callback_funcs[])(s32) __asm__("D_0018DB40");
 extern s32 draw_callback_args[] __asm__("D_0018DC40");
 extern void (*draw_callback2_funcs[])(s32) __asm__("D_0018DD40");
 extern s32 draw_callback2_args[] __asm__("D_0018DE40");
-extern u8  occl_visibility[] __asm__("D_00193FC0");
-extern u8  hud_chan_slots[] __asm__("D_00199B60");
-extern u8  point_light_data[] __asm__("D_0019C3C0");
-extern u8  tie_light_data[] __asm__("D_001E3200");
+/* Occlusion visibility bits for this frame (0x400 cells), and the OR of
+   the grids around the camera they are built from: build_occlusion_visibility
+   fills both with 0x80-byte copies, zeroes and ORs. */
+extern u8 occl_visibility[0x80] __asm__("D_00193FC0");
+extern u8 occl_visibility_merged[0x80] __asm__("D_00194040");
+extern u8 hud_chan_slots[] __asm__("D_00199B60");
+extern u8 point_light_data[] __asm__("D_0019C3C0");
+extern u8 tie_light_data[] __asm__("D_001E3200");
 
 #endif /* LOMBYTE_RNC_RENDERING_RENDER_GLOBALS_H */

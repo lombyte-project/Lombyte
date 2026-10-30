@@ -14,6 +14,7 @@
 #include "rnc/streaming/stash/init_stash.h"
 #include "rnc/ui/hud/banks/hud_heap_reset.h"
 #include "rnc/ui/hud/init_hud.h"
+#include "rnc/game/transitions/transition_do_transition.h"
 
 typedef struct {
     s32 off;
@@ -24,13 +25,6 @@ typedef struct {
     char  pad0[0x20];
     Chunk chunk[6];
 } WadHeader;
-
-typedef struct {
-    s32 start;
-    s32 end;
-    s32 sound;
-    s32 voice;
-} SoundCue;
 
 typedef struct {
     char pad0[0x34];
@@ -48,7 +42,6 @@ extern s32           intro_overlay_timer_macro __asm__("D_0015EF58") MACRO_ADDR;
 extern f32           sequence_macro __asm__("D_0015F43C") MACRO_ADDR;
 extern s32           game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
 extern s32           game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
-extern SoundCue      D_001862B0[];
 extern TransferState render_sequence __asm__("D_0018CB20");
 extern WadHeader *volatile D_001940C8[];
 
@@ -164,28 +157,31 @@ void transition_do_transition(void) {
         update_primary_pad_state();
         load_help_message_group(D_0015ED88);
         space_load_in_progress = 0;
-        for (i = 0; D_001862B0[i].start != -1; i++) {
-            if (D_001862B0[i].end == -1) {
-                if (render_sequence.time < D_001862B0[i].start) {
-                    D_001862B0[i].voice = -1;
+        for (i = 0; transition_sound_cues[i].start != -1; i++) {
+            if (transition_sound_cues[i].end == -1) {
+                if (render_sequence.time < transition_sound_cues[i].start) {
+                    transition_sound_cues[i].voice = -1;
                     continue;
                 }
-                if (D_001862B0[i].voice != -1) {
+                if (transition_sound_cues[i].voice != -1) {
                     continue;
                 }
-            } else if (render_sequence.time < D_001862B0[i].start ||
-                       D_001862B0[i].end < render_sequence.time) {
+            } else if (render_sequence.time < transition_sound_cues[i].start ||
+                       transition_sound_cues[i].end < render_sequence.time) {
                 goto stop;
-            } else if (is_voice_active(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
+            } else if (is_voice_active(transition_sound_cues[i].voice,
+                                       transition_sound_cues[i].sound) != 0) {
                 continue;
             }
-            D_001862B0[i].voice = allocate_voice_for_group_entry(D_001862B0[i].sound, 0, 0);
+            transition_sound_cues[i].voice =
+                allocate_voice_for_group_entry(transition_sound_cues[i].sound, 0, 0);
             continue;
         stop:
-            if (is_voice_active(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
-                release_voice_slot(D_001862B0[i].voice);
+            if (is_voice_active(transition_sound_cues[i].voice, transition_sound_cues[i].sound) !=
+                0) {
+                release_voice_slot(transition_sound_cues[i].voice);
             }
-            D_001862B0[i].voice = -1;
+            transition_sound_cues[i].voice = -1;
         }
         update_gameplay_frame();
         transition_default_draw();
@@ -228,3 +224,12 @@ void transition_do_transition(void) {
 }
 
 extern __typeof__(transition_do_transition) func_001EB798 __attribute__((alias("FUN_001eb798")));
+
+SoundCue transition_sound_cues[6] = {
+    {    0, 99999999, 2, -1},
+    {    0, 99999999, 3, -1},
+    {    0, 99999999, 0, -1},
+    {0x2e4,    0x4d8, 4, -1},
+    {0x114,    0x12c, 1, -1},
+    {   -1,        0, 0,  0},
+};

@@ -5,11 +5,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/mobys/resident_packed_direction.h"
 
-extern float D_001CAA80[] NOT_SDA;
-extern char  coll_output[] __asm__("D_00194100");
+extern char coll_output[] __asm__("D_00194100");
 /* Shadow range probe: cast a ray down (8 units) from the moby position
-   shifted against the light direction D_001CAA80 by its size, then a
+   shifted against the light direction resident_packed_direction by its size, then a
    second one along the light from just above; +0x84/+0x88 get the lower
    and upper hit height (at most 4 apart), or 0 when nothing is below. */
 void update_moby_shadow_range(char *m) __asm__("FUN_00213700");
@@ -24,7 +24,7 @@ void update_moby_shadow_range(char *moby) {
     float padded_upper_height;
     char *hit;
 
-    qcopy(shadow_probe_direction, D_001CAA80);
+    qcopy(shadow_probe_direction, &resident_packed_direction);
     set_vector_length_xy(shadow_probe_direction, shadow_probe_direction, 1.0f);
     fast_vec_scale(scaled_position, moby, 0.0009765625f);
     qcopy(segment_start, scaled_position);

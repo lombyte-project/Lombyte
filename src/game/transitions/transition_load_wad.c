@@ -121,7 +121,6 @@ extern s32        registered_shrub_render_class_count __asm__("D_001603CC");
 #include "rnc/game/transitions/transition_load_wad_globals.h"
 
 extern s32        registered_object_render_class_count __asm__("D_00160F4C");
-extern u8         boot_sound_defs_b[] __asm__("D_001861E0");
 extern u8         D_00186310[];
 extern SoundBanks render_sequence __asm__("D_0018CB20");
 extern LoadState  D_001940C0;
@@ -135,6 +134,7 @@ extern s32 D_001B6180[];
 
 #include "rnc/rendering/resident_class.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/game/startlevel.h"
 
 extern s32           shrub_render_texture_lookup_table[] __asm__("D_001D84B0");
 extern s32           tfrag_texture_size_table[] __asm__("D_001E0900");
@@ -341,7 +341,7 @@ void transition_load_wad(void) {
     sound_entry_count_or_moby_class_slot = (new_var = resident_class_slot_by_id[0x472]);
     if (sound_entry_count_or_moby_class_slot >= 0) {
         ((MobyClass *)moby_class_resources[sound_entry_count_or_moby_class_slot])->x28 =
-            boot_sound_defs_b;
+            (void *)boot_sound_defs_b;
         ((MobyClass *)moby_class_resources[sound_entry_count_or_moby_class_slot])->xD = 5;
     }
 }

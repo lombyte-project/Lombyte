@@ -16,5 +16,9 @@ s32 find_or_allocate_moby_render_slot(s32 id) {
     return -1;
 }
 
+/* The render slot ids this allocator hands out (prune_moby_references
+   frees them). */
+s32 moby_render_slots[16] __asm__("D_001B2BC0") = {0};
+
 extern __typeof__(find_or_allocate_moby_render_slot) func_0020CC18
     __attribute__((alias("FUN_0020cc18")));

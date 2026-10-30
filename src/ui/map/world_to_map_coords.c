@@ -8,7 +8,7 @@ struct LevelMapTransform {
     f32 scale_y;
 };
 
-extern struct LevelMapTransform level_map_transforms[] __asm__("D_0019E970");
+extern struct LevelMapTransform level_map_transforms[19] __asm__("D_0019E970");
 void world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y, s32 level) __asm__("FUN_00208408");
 
 void world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y, s32 level) {
@@ -38,5 +38,11 @@ void world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y, s32 level) {
     *map_y = (level_map_transforms[level].offset_y + level_map_transforms[level].scale_y * y) *
              0.001953125f;
 }
+
+/* One transform per level (the index is clamped below 19). Only the first
+   is set in the executable. */
+struct LevelMapTransform level_map_transforms[19] __asm__("D_0019E970") = {
+    {256.0f, 0.0f, 256.0f, 0.0f},
+};
 
 extern __typeof__(world_to_map_coords) func_00208408 __attribute__((alias("FUN_00208408")));

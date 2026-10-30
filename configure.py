@@ -1047,7 +1047,7 @@ DATA_OVERLAYS = {
     "rendering/effects/render_queued_rotated_sprites": (0x189300, 0x8A280, 196),
     "camera/backup_current_cam": (0x1893D0, 0x8A350, 1920),
     "rendering/effects/append_billboard_batch": (0x18ED00, 0x8FC80, 512),
-    "ui/map/map_filters": (0x1A03B0, 0xA1330, 4),
+    "ui/map/map_filters": (0x1A03B0, 0xA1330, 20),
     "game/initialize_level_runtime": (0x1CAAC0, 0xCBA40, 4096),
     "world/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60, 1152),
     "rendering/effects/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
@@ -1066,7 +1066,7 @@ DATA_OVERLAYS = {
     "movies/player/init_all": (0x1E8AF0, 0xE9A70, 18),
     "rendering/view/update_view_context": (0x18CFC0, 0x8DF40, 64),
     "input/init_pads": (0x1CD760, 0xCE6E0, 16),
-    "ui/menus/system/update_timed_menu_sequence": (0x1D5298, 0xD6218, 3),
+    "ui/menus/system/update_timed_menu_sequence": (0x1D5098, 0xD6018, 588),
     "mobys/animation/update_resident_dialogue_animation_state": (0x1E63FC, 0xE737C, 4),
     "ui/text/draw_dialog_text": (0x1E78F0, 0xE8870, 48),
     "audio/rpc/snd_send_iop_command_no_wait": (0x133100, 0x34080, 16),
@@ -1074,10 +1074,32 @@ DATA_OVERLAYS = {
     "ui/help/find_help_entry": (0x199710, 0x9A690, 600),
     "ui/menus/options/set_pause_sound_volume": (0x13E5A0, 0x3F520, 4),
     "ui/menus/selection/update_menu_item_slots": (0x141848, 0x427C8, 288),
-    "audio/snd_start_sound_system": (0x133280, 0x34200, 8192),
+    "ui/help/update_help_state": (0x141968, 0x428E8, 1184),
+    "ui/help/push_help_history": (0x141E08, 0x42D88, 150),
+    "save/memcard_update_state": (0x14EED0, 0x4FE50, 10240),
+    "rendering/frame/reset_gs_registers": (0x13CFC0, 0x3DF40, 304),
+    "audio/snd_start_sound_system": (0x133280, 0x34200, 18504),
     "camera/update_all_cameras": (0x187410, 0x88390, 7680),
     "world/loaders/register_moby_class": (0x1B3200, 0xB4180, 4288),
     "rendering/tfrags/set_tfrag_dists": (0x1DE7F0, 0xDF770, 64),
+    "rendering/frame/initialize_level_render_state": (0x1B76E0, 0xB8660, 65632),
+    "rendering/mobys/prepare_resident_class_render_data": (0x1B6880, 0xB7800, 3584),
+    "runtime/startup/init_once": (0x1941C0, 0x95140, 4096),
+    "game/mode_freeze_init": (0x193300, 0x94280, 44),
+    "mobys/update_resident_packed_direction": (0x1CAA80, 0xCBA00, 16),
+    "ui/menus/system/process_menu_entry": (0x1993C0, 0x9A340, 24),
+    "rendering/occlusion/build_occlusion_visibility": (0x193FC0, 0x94F40, 256),
+    "input/actuator_calc_power": (0x165480, 0x66400, 128),
+    "game/startlevel": (0x186100, 0x87080, 384),
+    "game/transitions/transition_do_transition": (0x1862B0, 0x87230, 96),
+    "rendering/effects/draw_lens_flare": (0x187300, 0x88280, 272),
+    "ui/help/get_help_message_text": (0x199968, 0x9A8E8, 37),
+    "ui/map/world_to_map_coords": (0x19E970, 0x9F8F0, 304),
+    "ui/text/copy_text_to_shared_buffer": (0x19A440, 0x9B3C0, 80),
+    "ui/menus/save_data/run_state_handler": (0x1A0438, 0xA13B8, 100),
+    "mobys/find_or_allocate_moby_render_slot": (0x1B2BC0, 0xB3B40, 64),
+    "mobys/stash_moby_class_dists": (0x1B2E80, 0xB3E00, 896),
+    "ui/menus/pause/assign_heli_pack_label_text_table": (0x1D06D0, 0xD1650, 112),
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the
@@ -1148,7 +1170,11 @@ def preserved_data_sections(config_dir: Path, out_name: str, blob: str, vram: in
     asm = config_dir / "asm" / "data" / f"{blob}.s"
     labels = [line for line in asm.read_text().splitlines() if line.startswith("glabel ")]
     if labels and pieces[0][0] != 0:
-        raise SystemExit(f"{blob}: C data at its start would drop {labels[0]}")
+        # The blob's only label is its start address, which the C unit owning
+        # its first bytes defines.
+        if labels != [f"glabel D_{vram:08X}"]:
+            raise SystemExit(f"{blob}: C data at its start would drop {labels[0]}")
+        labels = []
     lines, sections = ['.include "macro.inc"', ""], []
     for index, (offset, length) in enumerate(pieces):
         single = len(pieces) == 1

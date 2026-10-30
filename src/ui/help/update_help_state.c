@@ -251,3 +251,5 @@ void update_help_state(void) {
 }
 
 extern __typeof__(update_help_state) func_001FDE90 __attribute__((alias("FUN_001fde90")));
+
+HelpRecord D_00141968[HELP_RECORD_COUNT] = {{0}};

@@ -10,6 +10,7 @@
 #include "rnc/rendering/tie_instance.h"
 #include "rnc/rendering/object_render_class.h"
 #include "rnc/rendering/image_clear_buffer.h"
+#include "rnc/rendering/mobys/moby_grids.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/camera/camera_globals.h"
 #include "rnc/game/game_globals.h"
@@ -122,8 +123,6 @@ extern u8                 D_00194180[];
 extern char               dir_lights[] __asm__("D_0019BDC0");
 extern u8                 point_lights[] __asm__("D_0019C1C0");
 extern u8                 D_001AAA40[];
-extern u8                 moby_grids[] __asm__("D_001B76E0");
-extern u8                 D_001C76E0[];
 extern u8                 D_001CD780[];
 extern u8                 object_render_class_slot_by_id[] __asm__("D_001E1A00");
 extern char               too_many_directional_lights_message[] __asm__("D_001E76D8");
@@ -200,8 +199,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     coll_output.xC = 0;
     coll_output.x10 = 0;
     coll_output.x14 = 0;
-    fast_mem_zero16(moby_grids, 0x10000);
-    fast_mem_zero16(D_001C76E0, 0x60);
+    fast_mem_zero16(&moby_grids, 0x10000);
+    fast_mem_zero16(moby_grid_block_bitmap, 0x60);
 
     environment = (u8 *)header + header->x0;
     D_0018CD00.x23C = *(s32 *)environment;
@@ -479,3 +478,7 @@ extern __typeof__(initialize_level_render_state) func_001E9B10
     __attribute__((alias("FUN_001e9b10")));
 
 s32 shrub_count = 0;
+
+MobyGrids moby_grids = {0};
+
+u32 moby_grid_block_bitmap[24] = {0};

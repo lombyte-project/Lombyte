@@ -162,3 +162,5 @@ void init_once(void) {
 }
 
 extern __typeof__(init_once) func_00201650 __attribute__((alias("FUN_00201650")));
+
+u8 image_clear_buffer[4096] = {0};

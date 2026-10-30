@@ -204,3 +204,5 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header,
 
 extern __typeof__(prepare_resident_class_render_data) func_00203338
     __attribute__((alias("FUN_00203338")));
+
+MaterialMap resident_class_material_maps[224] = {0};

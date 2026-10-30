@@ -6,7 +6,6 @@
 
 #include "rnc/ui/menus/menu_globals.h"
 
-extern u8   occl_visibility_merged[] __asm__("D_00194040");
 extern f32 *occl_oct __asm__("D_0015F644");
 extern s32  occl_invalid_grid __asm__("D_0015F64C");
 extern u8  *occl_previous_grid __asm__("D_0015F650");
@@ -119,3 +118,7 @@ void build_occlusion_visibility(void) {
 }
 
 extern __typeof__(build_occlusion_visibility) func_001F2820 __attribute__((alias("FUN_001f2820")));
+
+u8 occl_visibility[128] = {0};
+
+u8 occl_visibility_merged[128] = {0};

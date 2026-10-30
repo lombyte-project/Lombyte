@@ -27,3 +27,5 @@ void push_help_history(s32 id) {
 }
 
 extern __typeof__(push_help_history) func_001FED30 __attribute__((alias("FUN_001fed30")));
+
+u8 active_message_records[HELP_ENTRY_COUNT] = {0};
