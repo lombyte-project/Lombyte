@@ -71,7 +71,7 @@ extern void  func_L00_0025F4A8_309688(void *,
                                       int) __asm__("FUN_L00_0025e450");
 void         barrier_update(Moby *moby) __asm__("FUN_L09_003082d8");
 
-char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) {
+char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class) {
     char *moby = create_moby(spawned_moby_class);
     if (moby != 0) {
         unsigned char state;
@@ -80,14 +80,14 @@ char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) {
         *(short *)(moby + 0x32) = state;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        qcopy(moby + 0x10, &owner->pos);
-        qcopy(moby + 0x40, &owner->rot);
+        qcopy(moby + 0x10, &source_moby->pos);
+        qcopy(moby + 0x40, &source_moby->rot);
         moby[0xBC] = scale_game_frames(10);
         update_entity(moby);
         copy_hero_moby_field_38(moby);
-        *(float *)(moby + 0x2C) = owner->scale;
-        *(unsigned short *)(moby + 0x34) = owner->flags;
-        **(int **)(moby + 0x78) = *(int *)owner->pvars;
+        *(float *)(moby + 0x2C) = source_moby->scale;
+        *(unsigned short *)(moby + 0x34) = source_moby->flags;
+        **(int **)(moby + 0x78) = *(int *)source_moby->pvars;
     }
     return moby;
 }
