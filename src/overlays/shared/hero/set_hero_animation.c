@@ -277,20 +277,20 @@ void blend_hero_mapped_moby_animation(int   animation_id,
                                       float blend_frames) __asm__("FUN_L00_00232220");
 
 void blend_hero_mapped_moby_animation(int animation_id, int frame_index, float blend_frames) {
-    struct Hero *base = &hero;
+    struct Hero *hero_mapped_animation_state = &hero;
     int          mapped_animation_id[4];
     int          ok;
 
-    if (((void *)base->unk2278) != 0) {
-        if (base->unk227C != 0) {
+    if (((void *)hero_mapped_animation_state->unk2278) != 0) {
+        if (hero_mapped_animation_state->unk227C != 0) {
             ok = lookup_s16_pair_value(animation_id, mapped_animation_id);
             if (ok != 0) {
-                blend_moby_animation(((void *)base->unk2278),
+                blend_moby_animation(((void *)hero_mapped_animation_state->unk2278),
                                      mapped_animation_id[0],
                                      frame_index,
                                      (int)blend_frames);
-            } else if (*(unsigned char *)(((char *)base->unk2278) + 0x53) != 0) {
-                blend_moby_animation(((void *)base->unk2278), 0, 0, scale_game_frames(7));
+            } else if (*(unsigned char *)(((char *)hero_mapped_animation_state->unk2278) + 0x53) != 0) {
+                blend_moby_animation(((void *)hero_mapped_animation_state->unk2278), 0, 0, scale_game_frames(7));
             }
         }
     }
