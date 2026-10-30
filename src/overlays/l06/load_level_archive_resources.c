@@ -188,7 +188,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
     Load252dd0   *ld = &D_L18_00174800_252dd0;
     s32          *level_header = ld->f4;
     s32          *level_archive = D_0015EE48.file;
-    char         *base;
+    char         *level_resource_base;
     s32           used;
     char         *sound_remap_cursor;
     char         *free;
@@ -219,7 +219,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
 
     if (full)
         load_hud_banks();
-    base = ld->f14;
+    level_resource_base = ld->f14;
     if (full) {
         fast_mem_copy(
             level_header, (char *)(level_archive[4] + (s32)level_archive), level_archive[5]);
@@ -230,8 +230,8 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
                               (char *)level_header + level_header[1]);
         level_06_sound_bank_handle_snapshot = sound_bank_handle;
         flush_cache(0);
-        used = fast_decompress((char *)(level_archive[0x14] + (s32)level_archive), base);
-        level_06_texture_reference_base = (s32)(base + level_header[0x18]);
+        used = fast_decompress((char *)(level_archive[0x14] + (s32)level_archive), level_resource_base);
+        level_06_texture_reference_base = (s32)(level_resource_base + level_header[0x18]);
 
         D_L06_00182F40[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x24]) >> 8,
                                     2,
@@ -309,21 +309,21 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
                 level_06_texture_reference_base + shrub_texture_refs[shrub_texture_index].offset +
                 (log2dim(shrub_texture_refs[shrub_texture_index].kind) << 28);
 
-        initialize_tfrag_render_data(base + level_header[2],
+        initialize_tfrag_render_data(level_resource_base + level_header[2],
                                      (char *)level_header + level_header[0xD]);
         if (level_header[3])
-            D_L18_0015F600_252dd0 = base + level_header[3];
+            D_L18_0015F600_252dd0 = level_resource_base + level_header[3];
         else
             D_L18_0015F600_252dd0 = 0;
         if (level_header[4])
-            relocate_sky_definition(base + level_header[4]);
+            relocate_sky_definition(level_resource_base + level_header[4]);
         else
             level_06_sky_definition_base = 0;
-        resolve_level_asset_block_pointers(base + level_header[5]);
+        resolve_level_asset_block_pointers(level_resource_base + level_header[5]);
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[7];
              i < level_header[6];
              i++, class_entry_cursor += 0x20)
-            register_moby_class(*(s32 *)class_entry_cursor ? base + *(s32 *)class_entry_cursor : 0,
+            register_moby_class(*(s32 *)class_entry_cursor ? level_resource_base + *(s32 *)class_entry_cursor : 0,
                                 (char *)level_header + level_header[0xF],
                                 class_entry_cursor + 0x10,
                                 *(s32 *)(class_entry_cursor + 4));
@@ -332,7 +332,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
              sq < level_06_moby_class_table[0]->seq_count;
              sq++, sequence_offset_cursor += 4) {
             if (*(s32 *)sequence_offset_cursor) {
-                level_06_moby_class_table[0]->seqs[sq] = base + *(s32 *)sequence_offset_cursor;
+                level_06_moby_class_table[0]->seqs[sq] = level_resource_base + *(s32 *)sequence_offset_cursor;
                 relocate_asset_entry_pointers(level_06_moby_class_table[0], sq);
             }
         }
@@ -345,7 +345,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
             level_06_class_mapping_class_numbers[class_mapping_index] =
                 *(s32 *)(class_mapping_entry_cursor + 4);
             level_06_class_mapping_data_bases[class_mapping_index] =
-                base + *(s32 *)class_mapping_entry_cursor;
+                level_resource_base + *(s32 *)class_mapping_entry_cursor;
             D_L06_001B0400[class_mapping_index] = *(s32 *)(class_mapping_entry_cursor + 8);
             {
                 s32 moby_class_texture_indices_offset =
@@ -359,7 +359,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[9];
              i < level_header[8];
              i++, class_entry_cursor += 0x20)
-            register_object_render_class(base + *(s32 *)class_entry_cursor,
+            register_object_render_class(level_resource_base + *(s32 *)class_entry_cursor,
                                          (char *)level_header + level_header[0x11],
                                          class_entry_cursor + 0x10,
                                          *(s32 *)(class_entry_cursor + 4));
@@ -367,22 +367,22 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[0xB];
              i < level_header[0xA];
              i++, class_entry_cursor += 0x30)
-            register_shrub_render_class(base + *(s32 *)class_entry_cursor,
+            register_shrub_render_class(level_resource_base + *(s32 *)class_entry_cursor,
                                         (char *)level_header + level_header[0x13],
                                         class_entry_cursor + 0x10,
                                         class_entry_cursor + 0x20,
                                         *(s32 *)(class_entry_cursor + 4));
-        level_06_effects_texture_data_base = base + level_header[0x1A];
+        level_06_effects_texture_data_base = level_resource_base + level_header[0x1A];
         unpack_point_records((char *)level_header + level_header[0x17], level_header[0x16]);
         if (level_header[0x28]) {
-            relocate_counted_pointer_table(base + level_header[0x28]);
+            relocate_counted_pointer_table(level_resource_base + level_header[0x28]);
         } else {
             level_06_counted_pointer_table_entry_count = 0;
             level_06_counted_pointer_table_records_base = 0;
             level_06_counted_pointer_table_entries_base = 0;
         }
         if (level_header[0x29]) {
-            load_two_int_two_float_header(base + level_header[0x29]);
+            load_two_int_two_float_header(level_resource_base + level_header[0x29]);
         } else {
             D_L06_0015FC98 = 0;
             D_L06_0015FC9C = 0;
@@ -391,11 +391,11 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
             level_06_two_int_two_float_payload_base = 0;
         }
         if (level_header[0x2A])
-            D_L06_0015F604 = base + level_header[0x2A];
+            D_L06_0015F604 = level_resource_base + level_header[0x2A];
         else
             D_L06_0015F604 = 0;
         {
-            char *x1 = base + level_header[0x19];
+            char *x1 = level_resource_base + level_header[0x19];
             char *x2 = (char *)level_header + level_header[0x15];
             parse_particle_textures(
                 (char *)level_header + level_header[0x1B], x1, x2, level_header[0x14]);
@@ -403,7 +403,7 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
 
         sound_table_base = (char *)level_header + level_header[0x1C];
         span = (Span252dd0 *)sound_table_base;
-        free = (char *)((u32)(base + used + 0x3F) & ~0x3F);
+        free = (char *)((u32)(level_resource_base + used + 0x3F) & ~0x3F);
         sound_slot_count = span->count;
         D_L06_0015F5F4 = (Slot252dd0 *)free;
         level_06_sound_slot_count = sound_slot_count;
