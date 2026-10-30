@@ -1,27 +1,20 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+#include "rnc/input/pad_state.h"
 #include "asm.h"
 
-typedef struct {
-    u8 p[0x18E];
-    s16 h;
-    s32 n;
-    u8 p2[0x1E0 - 0x194];
-    u32 t[30];
-} S_266d60;
-extern S_266d60 D_0013C940_266d60 __asm__("D_0013C940");
 u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");
 u32 pad_pressed_within(u32 mask, s32 n, s32 *out) {
-    s32 history_search_limit = D_0013C940_266d60.n;
+    s32 history_search_limit = controller_state.hist_count;
     s32 i;
     if (history_search_limit >= n)
         history_search_limit = n;
     for (i = 1; i < history_search_limit + 1; i++) {
-        s32 k = (D_0013C940_266d60.h - i + 30) % 30;
-        if (D_0013C940_266d60.t[k] & mask) {
+        s32 k = (controller_state.hist_idx - i + 30) % 30;
+        if (controller_state.pressed_history[k] & mask) {
             if (out)
                 *out = i - 1;
-            return D_0013C940_266d60.t[k] & mask;
+            return controller_state.pressed_history[k] & mask;
         }
     }
     return 0;
@@ -45,20 +38,12 @@ int check_pad_press_separation(int first_button_mask, int second_button_mask, in
     }
     return presses_within_limit;
 }
-typedef struct {
-    char pad[0x18E];
-    s16 head;
-    s32 count;
-    char pad2[0x2D0 - 0x194];
-    f32 v[30];
-} Hist;
-extern Hist D_0013C940;
 /* The value n entries back in the 30-entry history ring (n is capped at the count). */
 f32 read_pad_float_history(s32 history_offset) __asm__("FUN_L00_00266e80");
 
 f32 read_pad_float_history(s32 history_offset) {
     s32 m;
-    if (D_0013C940.count < history_offset)
-        history_offset = D_0013C940.count;
-    return D_0013C940.v[(D_0013C940.head - history_offset + 30) % 30];
+    if (controller_state.hist_count < history_offset)
+        history_offset = controller_state.hist_count;
+    return controller_state.float_history[(controller_state.hist_idx - history_offset + 30) % 30];
 }

@@ -59,6 +59,9 @@ struct PadState {
     s32 no_direction;                   /* 0x1D4: (held & 0xF000) == 0 */
     s32 stick_moved;                    /* 0x1D8: analog[2] or analog[3] nonzero */
     s32 unk1DC;                         /* 0x1DC: 0x79 if the button profile is all ones, else 0; l01 picks pressure input on 0x79 */
+    u32 pressed_history[30];            /* 0x1E0: ring indexed by hist_idx, searched by pad_pressed_within */
+    u8 pad_258[0x78];
+    f32 float_history[30];              /* 0x2D0: ring indexed by hist_idx, read by read_pad_float_history */
 };
 
 extern struct PadState controller_state __asm__("D_0013C940");

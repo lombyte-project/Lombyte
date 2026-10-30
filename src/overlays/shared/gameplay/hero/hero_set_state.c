@@ -3229,13 +3229,7 @@ typedef struct {
     short f22DC;
     short f22DE;
 } Hero_228770;
-typedef struct {
-    char p0[0x1A0] __attribute__((aligned(16)));
-    int f1A0;
-    int f1A4;
-} Pad;
 extern Hero_228770 D_0013F450_h228770 __asm__("D_0013F350");
-extern Pad D_0013CA40_p228770 __asm__("D_0013C940");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
@@ -3293,7 +3287,7 @@ int process_hero_equipped_item_input(void) {
             if (equipped_item_moby->state != 0) {
                 break;
             }
-            if ((D_0013CA40_p228770.f1A0 & 0xA) || ((D_0013F450_h228770.f2084 == 1 || D_0013F450_h228770.f2084 == 0x1E) && D_0013F450_h228770.f198 > scale_game_frames(0x14))) {
+            if ((controller_state.held & 0xA) || ((D_0013F450_h228770.f2084 == 1 || D_0013F450_h228770.f2084 == 0x1E) && D_0013F450_h228770.f198 > scale_game_frames(0x14))) {
                 if ((D_0013F450_h228770.f2084 == 1 || D_0013F450_h228770.f2084 == 0x1E) && D_0013F450_h228770.f198 > scale_game_frames(0x14)) {
                     launch_hero_wrench();
                     break;
@@ -3345,7 +3339,7 @@ int process_hero_equipped_item_input(void) {
                     if (D_0013F450_h228770.fA9C != 0) {
                         break;
                     }
-                    if (D_0013F450_h228770.fAA8 >= (float)rec->f10 && (D_0013CA40_p228770.f1A0 & 0xA) && pad_pressed_within(mask, scale_game_frames(0xF), 0)) {
+                    if (D_0013F450_h228770.fAA8 >= (float)rec->f10 && (controller_state.held & 0xA) && pad_pressed_within(mask, scale_game_frames(0xF), 0)) {
                         hero_set_state(0x15, 1);
                         break;
                     }
@@ -3370,7 +3364,7 @@ int process_hero_equipped_item_input(void) {
             if (!pad_pressed_within(mask, t, 0)) {
                 break;
             }
-            if (D_0013CA40_p228770.f1A0 & 0xA) {
+            if (controller_state.held & 0xA) {
                 hero_set_state(0x15, 1);
                 break;
             }
@@ -3393,7 +3387,7 @@ int process_hero_equipped_item_input(void) {
             }
             if (D_0013F450_h228770.f208C < 2U || D_0013F450_h228770.f208C == 4 || D_0013F450_h228770.f208C == 2 || D_0013F450_h228770.f208C == 0xF
                 || D_0013F450_h228770.f208C == 5 || D_0013F450_h228770.f2084 == 0x1E) {
-                if (pad_pressed_within(mask, t, 0) || ((D_0013CA40_p228770.f1A0 & mask) && D_0013F450_h228770.f10B0 > scale_game_frames(0xF))) {
+                if (pad_pressed_within(mask, t, 0) || ((controller_state.held & mask) && D_0013F450_h228770.f10B0 > scale_game_frames(0xF))) {
                     if (D_0013F450_h228770.f99E != 0) {
                         if (D_0013F450_h228770.f968 != 0) {
                             if (D_0013F450_h228770.f998 < D_0013F450_h228770.f984) {
@@ -3453,7 +3447,7 @@ int process_hero_equipped_item_input(void) {
                 break;
             }
             equipped_item_vars = *(PVar **)&D_0013F450_h228770.f1090->pvars;
-            if (((D_0013CA40_p228770.f1A0 & mask) && D_0013F450_h228770.f10B0 > scale_game_frames(5)) || (D_0013CA40_p228770.f1A4 & mask)) {
+            if (((controller_state.held & mask) && D_0013F450_h228770.f10B0 > scale_game_frames(5)) || (controller_state.pressed & mask)) {
                 if (get_ammo(-1)) {
                     if (D_0013F450_h228770.f20A8 == 0) {
                         start_equipped_item_animation();
@@ -3461,7 +3455,7 @@ int process_hero_equipped_item_input(void) {
                     break;
                 }
             }
-            if (D_0013CA40_p228770.f1A0 & mask) {
+            if (controller_state.held & mask) {
                 if (!get_ammo(-1)) {
                     if (!voice_is_playing(D_0013F450_h228770.f1090, equipped_item_vars->fC)) {
                         equipped_item_vars->fC = allocate_voice_for_target_entry(0, 0, (int)D_0013F450_h228770.f1090);
@@ -3487,7 +3481,7 @@ int process_hero_equipped_item_input(void) {
             t = scale_game_frames(7);
             n = D_0013F450_h228770.f10B0;
             if (pad_pressed_within(mask, t <= n ? t : n, &out[1])
-                || ((D_0013CA40_p228770.f1A0 & 0x20) && n > scale_game_frames(8) && n < scale_game_frames(0x11))) {
+                || ((controller_state.held & 0x20) && n > scale_game_frames(8) && n < scale_game_frames(0x11))) {
                 if (get_ammo(-1)) {
                     if (D_0013F450_h228770.f208C == 0xC || D_0013F450_h228770.f208C == 0 || D_0013F450_h228770.f2084 == 3
                         || (D_0013F450_h228770.f208C == 1 && D_0013F450_h228770.f229C < 0.7f)) {
@@ -3522,7 +3516,7 @@ int process_hero_equipped_item_input(void) {
         break;
     case 21:
         if (D_0013F450_h228770.f1090 != 0) {
-            if (D_0013CA40_p228770.f1A4 & mask) {
+            if (controller_state.pressed & mask) {
                 start_equipped_item_animation();
             }
         }
@@ -3535,12 +3529,12 @@ int process_hero_equipped_item_input(void) {
             if (hero_repeat_press_window_frames != 0) {
                 if (D_0013F450_h228770.f208C < 2U || D_0013F450_h228770.f208C == 0xC
                     || ((D_0013F450_h228770.f208C == 2 || D_0013F450_h228770.f208C == 4) && D_0013F450_h228770.f300 != 0)) {
-                    if ((D_0013CA40_p228770.f1A0 & 8) && (D_0013CA40_p228770.f1A4 & 8)) {
+                    if ((controller_state.held & 8) && (controller_state.pressed & 8)) {
                         hero_set_state(0x81, 1);
                     }
                 }
             }
-            if ((D_0013CA40_p228770.f1A4 & 8) && D_0013F450_h228770.f2084 != 0x81) {
+            if ((controller_state.pressed & 8) && D_0013F450_h228770.f2084 != 0x81) {
                 hero_repeat_press_window_frames = scale_game_frames(0x1E);
             }
         } else if (D_0013F450_h228770.f2084 != 0x13 && D_0013F450_h228770.f2084 != 0x81 && D_0013F450_h228770.f2084 != 0x15 && D_0013F450_h228770.f2084 != 0x16) {

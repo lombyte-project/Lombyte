@@ -21,3 +21,5 @@ OFFSET_CHECK(pressed_unmasked, struct PadState, pressed_unmasked, 0x1C4);
 OFFSET_CHECK(mode, struct PadState, mode, 0x1CC);
 OFFSET_CHECK(no_direction, struct PadState, no_direction, 0x1D4);
 OFFSET_CHECK(unk1DC, struct PadState, unk1DC, 0x1DC);
+OFFSET_CHECK(pressed_history, struct PadState, pressed_history, 0x1E0);
+OFFSET_CHECK(float_history, struct PadState, float_history, 0x2D0);
