@@ -1789,7 +1789,7 @@ void emit_randomized_sparkle_pairs(float *pos, int n) __asm__("FUN_L00_002a7e20"
 void spawn_wrench_impact_effects(u8 *o) __asm__("FUN_L00_002a8028");
 void process_mobies_near_returning_wrench(unsigned char *m) __asm__("FUN_L00_002a82c0");
 void scale_wrench_collision_vector_by_heading(float *v) __asm__("FUN_L00_002a8418");
-extern char pad_held[] __asm__("D_0013CAE0");
+#include "rnc/input/pad_globals.h"
 extern char thrown_wrench_transform_history[] __asm__("D_00140B00");
 extern char wrench_return_position[] __asm__("D_001403C0");
 extern PlayerCamera player_camera __asm__("D_L00_00166C80");
@@ -1829,7 +1829,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         wrench_moby->parent=player->moby;
         player_state=player->state;
         if (player_state==1) {
-            if (*(int*)(((char *)&pad_held))&0xA)
+            if (pad_held[0] & 0xA)
                 draw_target_reticle((int)wrench_moby,0xFF917267,1.0f,0.0f,0,0x25,-1,90.0f,4);
             wrench_vars->aim_hit=0;
             build_spherical_offset(work.v[0],10.0f,player_camera.yaw,-player_camera.pitch);

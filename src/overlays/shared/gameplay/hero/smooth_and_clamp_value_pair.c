@@ -1034,7 +1034,7 @@ typedef struct {
 } SndPair;
 
 extern SndPair l05_hoverboard_trick_animation_frame_bounds[] __asm__("D_L05_00179BC0");
-extern char pad_held[] __asm__("D_0013CAE0");
+#include "rnc/input/pad_globals.h"
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -1047,7 +1047,7 @@ void update_hero_hoverboard_trick_animations(void) {
     int pad;
     hero_ptr->board_jump_land_frames =
         truncate_float_to_s32(predict_hero_trajectory_intercept_time(60.0f, hero_ptr->board_gravity, -1.0f));
-    if (hero_ptr->trick_input != 0 && ((pad = *(int *)(pad_held)) & 0xF) != 0) {
+    if (hero_ptr->trick_input != 0 && ((pad = pad_held[0]) & 0xF) != 0) {
         hero_ptr->air_pose_index = 0;
         if (pad & 8)
             hero_ptr->air_pose_index = 1;
@@ -1070,7 +1070,7 @@ void update_hero_hoverboard_trick_animations(void) {
     }
     {
         struct Hero *k = &hero;
-        if ((k->air_frames.s == 0 || (*(int *)(pad_held) & 0xF) == 0) &&
+        if ((k->air_frames.s == 0 || (pad_held[0] & 0xF) == 0) &&
             (unsigned int)(((unsigned char *)((char *)k->moby))[0x53] - 0x69) < 4 &&
             k->anim_changing == 0 &&
             k->anim_loop_frame < ((unsigned char *)((char *)k->moby))[0x51] &&

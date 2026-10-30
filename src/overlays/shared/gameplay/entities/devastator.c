@@ -2345,7 +2345,7 @@ extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) __asm__("FUN_L00_002b6bc8");
 
 extern s32 apply_taunter_to_nearby_mobies(Moby *, f32) __asm__("FUN_L00_002b6bc8");
-extern u32 pad_held[] __asm__("D_0013CAE0");
+#include "rnc/input/pad_globals.h"
 extern Ring D_00141680;
 extern s32 FUN_L00_00257b50_b6bc8(s32) __asm__("FUN_L00_00257b50");
 extern u8 *FUN_L00_0025c338_b6bc8(Moby *) __asm__("FUN_L00_0025c338");
