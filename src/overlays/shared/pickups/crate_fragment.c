@@ -189,9 +189,9 @@ void nanotech_crate_fragment_update(M_2afa48 *fragment_moby) {
         NANOTECH_CRATE_FRAGMENT_FADING = 1
     };
     PV   *pv = fragment_moby->pv;
-    u128  old;
+    u128  pre_motion_position;
     u128 *hit_normal;
-    qcopy(&old, fragment_moby->pos);
+    qcopy(&pre_motion_position, fragment_moby->pos);
     pv->vel[2] -= frame_time_sq * 20.0f;
     fast_vec_add(fragment_moby->pos, fragment_moby->pos, pv->vel);
     fragment_moby->f40 = fast_add_rotations(fragment_moby->f40, pv->f20);
