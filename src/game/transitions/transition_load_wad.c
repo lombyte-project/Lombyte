@@ -160,14 +160,14 @@ void transition_load_wad(void) {
     u8           li[0x60];
     WadHeader   *hdr;
     u8          *data;
-    u8          *base;
+    u8          *texture_payload_base;
     s32          size;
     s32          i;
     s32          j;
     s32          k;
     s32          sound_entry_count_or_moby_class_slot;
     s32          v;
-    s32         *out;
+    s32         *render_data_slot;
     int          new_var;
     WadTex      *texture_definition_entries;
     s32          new_var4;
@@ -208,14 +208,14 @@ void transition_load_wad(void) {
         ((s64)((gs_texture_allocation_base + hdr->x70) >> 8)) | 0x1D308000;
     u = (((s64)((gs_texture_allocation_base + hdr->x74) >> 8)) << 37) | (((s64)0xB800) << 19);
     data = ((u8 *)hdr) + hdr->data;
-    base = data + hdr->x60;
+    texture_payload_base = data + hdr->x60;
     special_material_template[0] = (special_texture_state_base_bits | u) | (((s64)(-1)) << 63);
     special_material_template[1] = 0xFFA0000000E0;
     special_material_template[2] = 0x0040000400004000;
     texture_definition_entries = (WadTex *)(((u8 *)hdr) + hdr->x34);
     if ((tfrag_texture_definition_count = hdr->n30) > 0) {
         do {
-            tfrag_texture_size_table[i] = (((s32)base) + texture_definition_entries[i].offset) +
+            tfrag_texture_size_table[i] = (((s32)texture_payload_base) + texture_definition_entries[i].offset) +
                                           (log2dim(texture_definition_entries[i].x4) << 28);
             i++;
         } while (i < tfrag_texture_definition_count);
@@ -224,7 +224,7 @@ void transition_load_wad(void) {
     texture_definition_entries = (new_var2 = (WadTex *)(((u8 *)hdr) + hdr->x3C));
     if ((D_0015FF08 = hdr->n38) > 0) {
         do {
-            moby_texture_lookup_table[k] = (((s32)base) + texture_definition_entries[k].offset) +
+            moby_texture_lookup_table[k] = (((s32)texture_payload_base) + texture_definition_entries[k].offset) +
                                            (log2dim(texture_definition_entries[k].x4) << 28);
             k++;
         } while (k < D_0015FF08);
@@ -234,7 +234,7 @@ void transition_load_wad(void) {
     if ((object_render_texture_definition_count = hdr->n40) > 0) {
         do {
             object_render_texture_lookup_table[k] =
-                (((s32)base) + texture_definition_entries[k].offset) +
+                (((s32)texture_payload_base) + texture_definition_entries[k].offset) +
                 (log2dim(texture_definition_entries[k].x4) << 28);
             k++;
         } while (k < object_render_texture_definition_count);
@@ -244,7 +244,7 @@ void transition_load_wad(void) {
     if ((shrub_render_texture_definition_count = hdr->n48) > 0) {
         do {
             shrub_render_texture_lookup_table[k] =
-                (((s32)base) + texture_definition_entries[k].offset) +
+                (((s32)texture_payload_base) + texture_definition_entries[k].offset) +
                 (log2dim(texture_definition_entries[k].x4) << 28);
             k++;
         } while (k < shrub_render_texture_definition_count);
@@ -307,12 +307,12 @@ void transition_load_wad(void) {
     snd = (WadSound *)(data + hdr->x80);
     sound_entry_count_or_moby_class_slot = 0;
     if (snd->size != 0) {
-        out = render_sequence.x60;
+        render_data_slot = render_sequence.x60;
         do {
             sound_entry_count_or_moby_class_slot++;
-            *out = ((s32)(data + hdr->x80)) + (snd->offset + k_800);
+            *render_data_slot = ((s32)(data + hdr->x80)) + (snd->offset + k_800);
             snd++;
-            out++;
+            render_data_slot++;
         } while ((sound_entry_count_or_moby_class_slot < 0x46) && (snd->size != 0));
     }
     parse_space_scene_chunk(0);
