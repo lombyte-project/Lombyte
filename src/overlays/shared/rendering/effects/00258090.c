@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00258090.s", FUN_L08_00258090);
@@ -11,9 +12,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00258090.s", FUN_L08_00258090);
 
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L08_001B2880 NOT_SDA;
 void spawn_span_particle(float *span_start_position, int kind, float *span_direction, float scale) __asm__("FUN_L08_00272cb8");
@@ -64,7 +63,7 @@ void spawn_span_particle(float *span_start_position, int kind, float *span_direc
         *(short *)(particle + 0xA) = k2;
         *(int *)(particle + 4) = ((color_high_byte >> 2) << 24) | 0x606060;
         *(int *)(particle + 0xC) = (color_high_byte << 24) | 0x907070;
-        particle[9] = func_001FA898_r(4.0f) + 0x60;
+        particle[9] = truncate_float_to_s32(4.0f) + 0x60;
         particle[3] = 0x44;
         particle[1] = 3;
         particle[2] = D_L08_001B2880[k];

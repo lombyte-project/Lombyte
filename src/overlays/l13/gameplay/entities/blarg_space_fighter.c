@@ -14,6 +14,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 /* Rotation-axis selection shared by the asteroid update helpers. */
@@ -941,7 +942,6 @@ void predict_hero_vehicle_position(char *out, float scale) {
 }
 extern char *D_L13_0015FFD8;
 extern char D_0013F3D0[];
-extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 
 int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int aim) __asm__("FUN_L13_002c3fc0");
@@ -2057,7 +2057,6 @@ extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 rand_1638(void) __asm__("FUN_001160d8");
 extern void clamp_vector_length(void *, void *, f32) __asm__("FUN_001f9c90");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern s32 tick_countdown_32_1638(s32 *) __asm__("FUN_001f9740");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern s32 FUN_001fa728_1638(f32, void *) __asm__("FUN_001fa728");

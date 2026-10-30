@@ -7,18 +7,15 @@
 #include "rnc/math/vector.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 typedef struct { char pad[0x30]; int state; int n; char pad38[0x140]; struct Moby *objects[8]; } L18SequenceState;
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int D_L18_0015F5C4;
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void enqueue_callback_list_1_overlay(void *, void *) __asm__("FUN_L18_002020c8");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *second_position_source, void *effect_velocity_source, float f0, float f1) __asm__("FUN_L18_002fa250");
 
 extern void spawn_deplanetizer_gun_trail_effects(void *, void *, void *, float, float) __asm__("FUN_L18_002fa250");
@@ -61,9 +58,6 @@ extern Vec4 D_L18_00162540 MACRO_ADDR;
 typedef struct { float radius[5]; } EffectRadii;
 extern EffectRadii l18_deplanetizer_object_trail_base_radii __asm__("D_L18_001F2C20");
 extern char D_L18_0015F580[] MACRO_ADDR;
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void update_beam_ring_rail_and_pulse_effects(void *) __asm__("FUN_L00_002bd0a0");
 
@@ -277,8 +271,8 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
                 moby_point_position(target, 2, &scratch.vectors.velocity);
                 for (i = 0; i < 12; i++) {
                     fraction = convert_integer_to_float(i) / 12.0f;
-                    interpolate_vector(&interpolated_joint_zero_position, &scratch.vectors.pos, &D_L18_00162530, fraction);
-                    interpolate_vector(&interpolated_joint_two_position, &scratch.vectors.velocity, &D_L18_00162540, fraction);
+                    lerp_vector(&interpolated_joint_zero_position, &scratch.vectors.pos, &D_L18_00162530, fraction);
+                    lerp_vector(&interpolated_joint_two_position, &scratch.vectors.velocity, &D_L18_00162540, fraction);
                     spawn_deplanetizer_gun_trail_effects(&interpolated_joint_zero_position, &interpolated_joint_zero_position, D_L18_0015F580, deplanetizer_joint_trail_base_size_gp, deplanetizer_joint_trail_base_size_gp * 0.4f);
                     spawn_deplanetizer_gun_trail_effects(&interpolated_joint_two_position, &interpolated_joint_two_position, D_L18_0015F580, deplanetizer_joint_trail_base_size_gp, deplanetizer_joint_trail_base_size_gp * 0.4f);
                 }
@@ -360,7 +354,6 @@ typedef struct { char pad[0x30]; int state; int n; } ML_9780;
 extern ML_9780 D_L18_0016D260_9780 __asm__("D_L18_0016D260");
 extern unsigned long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 #include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/draw_three_scaled_camera_facing_quads_2.h"
 extern volatile float l18_deplanetizer_camera_quad_local_offset_y __asm__("D_L18_00162554");
@@ -452,13 +445,11 @@ void draw_three_scaled_camera_facing_quads(void) {
 
 extern float D_L18_00162454;
 extern float D_L18_00162450;
-extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int game_frame __asm__("D_L18_0015F5CC");
 extern int D_L18_00162458;
 extern int D_L18_0016245C;
 extern int D_L18_00162460;
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern float D_L18_00162454 ;
@@ -666,7 +657,6 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
 
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi,
                                 float size);
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float,
                                  int) __asm__("FUN_L00_0026d000");
 
@@ -687,7 +677,7 @@ void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *sec
         effect_data = random_magnitude_or_effect + 0x20;
         if (random_magnitude_or_effect) {
             *(short *)(random_magnitude_or_effect + 0xA) = scale_game_frames(15);
-            random_magnitude_or_effect[9] = func_001FA898_r(4.0f) + 0x40;
+            random_magnitude_or_effect[9] = truncate_float_to_s32(4.0f) + 0x40;
             *(int *)(effect_data + 4) = 2;
             effect_data[0xA] = 0x7F;
             effect_data[0xB] = random_magnitude_or_effect[0xA];
@@ -703,7 +693,7 @@ void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *sec
         random_magnitude_or_effect = func_L00_0026DEA0_c(second_effect_position, y, effect_velocity_source, 0.0f, 1.0f, 0.97f, second_effect_size, 0x7FFFFFFF);
         effect_data = random_magnitude_or_effect + 0x20;
         if (random_magnitude_or_effect) {
-            random_magnitude_or_effect[9] = func_001FA898_r(4.0f) + 0x40;
+            random_magnitude_or_effect[9] = truncate_float_to_s32(4.0f) + 0x40;
             *(short *)(random_magnitude_or_effect + 0xA) = scale_game_frames(4);
             random_magnitude_or_effect[8] = random_integer_below(0xFF);
             *(int *)(effect_data + 4) = k2;
@@ -717,7 +707,6 @@ void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *sec
 /* State machine: waits for level flags, then turns the moby around and back. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBAA0), where it is exact; names translated to the US level program. */
 
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 
 void update_moby_visibility_and_half_turn(struct Moby *moby) __asm__("FUN_L18_002fa640");
@@ -927,7 +916,6 @@ typedef unsigned int QVd058 __attribute__((mode(TI), aligned(16)));
 
 extern char D_L18_001625F0[4] __attribute__((sda));
 extern char D_L18_00162608 __attribute__((sda));
-extern float vector_distance_xy(float *, float *) __asm__("FUN_001f9b80");
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
@@ -944,13 +932,10 @@ extern void update_gadgebot_damage_target_and_glow(struct Moby *) __asm__("FUN_L
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
 
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 float move_gadgebot_toward_target(char *self, float *src) __asm__("FUN_L18_002fc4e0");
 extern float FUN_L18_002fc4e0_c(void *, void *) __asm__("FUN_L18_002fc4e0");
-extern float f9d48_i(void *, void *) __asm__("FUN_001f9b80");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
@@ -1024,7 +1009,7 @@ void gadgebot_update(unsigned char *moby) {
         break;
     case GADGEBOT_WAIT_TO_APPROACH:
         if (*(int *)(moby_vars + 0x1C4) == 2) {
-            if (!(10.0f < f9d48_i(moby + 0x10, moby_vars + 0x180)))
+            if (!(10.0f < vector_distance_xy(moby + 0x10, moby_vars + 0x180)))
                 break;
         }
         moby[0x20] = 3;
@@ -1068,7 +1053,7 @@ void gadgebot_update(unsigned char *moby) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(10));
                 break;
             }
-            if (!(2.5f < f9d48_i(moby + 0x10, moby_vars + 0x180)))
+            if (!(2.5f < vector_distance_xy(moby + 0x10, moby_vars + 0x180)))
                 break;
             moby[0x20] = 3;
             if (moby[0x53] != 1)
@@ -1111,7 +1096,6 @@ extern int *D_L18_001B0EB0[] __asm__("D_L18_001B0EB0");
 void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
 
 extern void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -1259,7 +1243,6 @@ typedef struct {
 } __attribute__((aligned(16))) QVec;
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern float fast_cos(float) __asm__("func_001F9DC8");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
 

@@ -6,9 +6,9 @@
 #include "qcopy.h"
 #include "qzero.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
 extern char *moby_base __asm__("D_L13_0015FFD8");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 extern short D_L13_001B0B30[] NOT_SDA;
 extern char *D_L13_001D1E90[] NOT_SDA;
@@ -42,7 +42,7 @@ int select_robosquawker_target(char *source_object, char *selection_output, floa
             continue;
         if (*(unsigned char *)(candidate_object + 0x20) != 3)
             continue;
-        candidate_metric = vector_distance(source_object + 0x10, candidate_object + 0x10);
+        candidate_metric = vector_distance_xy(source_object + 0x10, candidate_object + 0x10);
         if (candidate_metric < best) {
             selected_object = candidate_object;
             best = candidate_metric;
@@ -61,7 +61,7 @@ int select_robosquawker_target(char *source_object, char *selection_output, floa
             continue;
         if (*(unsigned char *)(candidate_object + 0xBC) == 0)
             continue;
-        candidate_metric = vector_distance(source_object + 0x10, candidate_object + 0x10);
+        candidate_metric = vector_distance_xy(source_object + 0x10, candidate_object + 0x10);
         if (candidate_metric < best) {
             selected_object = candidate_object;
             best = candidate_metric;

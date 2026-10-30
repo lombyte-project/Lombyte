@@ -1,4 +1,5 @@
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 int initialize_morphoray_private_state() __asm__("FUN_L14_00305a38");
 
@@ -112,20 +113,14 @@ extern float D_L14_001620A0 __attribute__((sda));
 extern Rgb_0e00 l14_spark_rolling_fade_source_rgb __asm__("D_L14_001620A8");
 extern char D_L14_0015F580[] MACRO_ADDR;
 extern int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
-extern int timer_done_0e00(int *) __asm__("FUN_001f9740");
-extern int timer_tick_0e00(short *) __asm__("FUN_001f9770");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern char *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern int sound_0e00(int, int, void *) __asm__("FUN_0022da68");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void update_bouncing_spark(struct Moby *spark_moby) __asm__("FUN_L14_00300e00");
 
@@ -148,7 +143,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
   {
     spark_moby->state = 3;
   }
-  if (timer_done_0e00(&spark_data->fade) != 0)
+  if (fast_dec_timer(&spark_data->fade) != 0)
   {
     spark_moby->state = 3;
   }
@@ -164,7 +159,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
       {
         spark_moby->state = 0;
       }
-      timer_tick_0e00(&spark_data->trail);
+      fast_dec_timer_s16(&spark_data->trail);
       if (spark_data->trail != 0)
       {
         int i;
@@ -309,7 +304,6 @@ void update_bouncing_spark(struct Moby *spark_moby)
 #include "sda.h"
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00302968), where it is exact; names translated to the US level program. */
 extern char *FUN_0020c4f8_c(int) __asm__("FUN_0020c4f8");
-extern float FUN_001f9e90_a(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
 extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
 
@@ -336,7 +330,7 @@ char *create_bouncing_spark(int owner, float *spawn_position, float *initial_vel
         *(short *)(spark_data + 0x2A) = 0;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        initial_yaw = FUN_001f9e90_a(initial_velocity[0], initial_velocity[1]);
+        initial_yaw = fast_arc_tan(initial_velocity[0], initial_velocity[1]);
         scaled_moby_value = *(float *)(moby + 0x2C) * spark_initial_moby_value_multiplier_gp;
         *(float *)(moby + 0x48) = initial_yaw;
         *(float *)(moby + 0x2C) = scaled_moby_value;
@@ -353,7 +347,6 @@ typedef struct {
 extern char *D_L14_0015FFD8;
 extern L14LevelState D_L14_001BB930;
 extern int D_L14_001BABD0[];
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 void save_and_lower_unlock_sequence_mobys(struct Moby *moby) __asm__("FUN_L14_00305600");
 
@@ -468,8 +461,6 @@ extern f32 morphoray_ground_height_offset_gp __asm__("D_L14_001621E8") __attribu
 extern f32 morphoray_yaw_step_gp __asm__("D_L14_001621EC") __attribute__((sda));
 extern f32 morphoray_position_offset_scale_gp __asm__("D_L14_001621F0") __attribute__((sda));
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
@@ -513,7 +504,7 @@ void morphoray_update(struct Moby *moby) {
         update_morphoray_particles(moby);
         if (D_L14_0015F5CC % 10 != 0)
             return;
-        if (!(vector_distance(moby_bytes + 0x10, hero.motion.pos.f) < 1.0f))
+        if (!(vector_distance_xy(moby_bytes + 0x10, hero.motion.pos.f) < 1.0f))
             return;
         if (!(absolute_float(*(f32 *)(moby_bytes + 0x18) - hero.motion.pos.f[2]) < 2.0f))
             return;
@@ -563,16 +554,9 @@ typedef struct {
     float c[4];
 } FxData14;
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_00272f68(float f, void *pos, int a1, unsigned char a2, int idx,
                                        int flag, int s, int mode);
-extern void tick_countdown_32(void *) __asm__("func_001F9740");
-float absolute_float(float input) __asm__("func_001F99C0");
-extern int func_001F9908_r(int *arg0) __asm__("FUN_001f9740");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_morphoray_particles(struct Moby *morphoray_moby) {
     float particle_position_and_step[8];
@@ -598,14 +582,14 @@ void update_morphoray_particles(struct Moby *morphoray_moby) {
         } else if (unwrapped_particle_value <= 0.0f) {
             *a = unwrapped_particle_value + 255.0f;
         }
-        if (func_001F9908_r(t)) {
+        if (fast_dec_timer(t)) {
             effect_data->t[j] = scale_game_frames(255);
         }
         t++;
         elapsed_timer_fraction = convert_integer_to_float(scale_game_frames(255) - effect_data->t[j]);
         elapsed_timer_fraction = elapsed_timer_fraction / (float)scale_game_frames(255);
         c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - elapsed_timer_fraction));
-        k = func_001FA898_r(*a++);
+        k = truncate_float_to_s32(*a++);
         FUN_L00_00272f68(effect_data->c[j], particle_position_and_step, c, k, 0x35, 1, 2, 0);
         j++;
         fast_vec_add(particle_position_and_step, particle_position_and_step, &particle_position_and_step[4]);
@@ -660,7 +644,6 @@ extern float helper_sequence_first_slot_offset __asm__("D_L14_001621FC") __attri
 extern float helper_sequence_owner_final_angle_degrees __asm__("D_L14_00162200") __attribute__((sda)); /* no foreign declaration */
 extern int helper_sequence_slot_animation_duration_frames __asm__("D_L14_00162204") __attribute__((sda)); /* no foreign declaration */
 extern int helper_sequence_owner_animation_duration_frames __asm__("D_L14_0016220C") __attribute__((sda)); /* no foreign declaration */
-extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 f32 interpolate_scalar_linear(f32 a, f32 b, f32 t) __asm__("FUN_L00_0025b6a8");
@@ -669,7 +652,6 @@ int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 u8 *FUN_L14_00306158_c(u8 *self) __asm__("FUN_L14_00306158");
 extern Moby_3071B0 *func_L14_003075E0_3071B0(Moby_3071B0 *owner) __asm__("FUN_L14_00306158");
 extern int func_L00_0028EF68_3071B0(int i, int a1, Moby_3071B0 *v, int k) __asm__("FUN_L00_0028dc90");
-extern int func_001F9938_3071B0(void *) __asm__("FUN_001f9770");
 extern int func_L00_0028EB98_3071B0(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int func_0022ED80_3071B0(int, int, Moby_3071B0 *) __asm__("FUN_0022da68");
 extern float func_L00_0025C700_3071B0(float, float, float) __asm__("FUN_L00_0025b6a8");
@@ -722,7 +704,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
     case HELPER_SEQUENCE_ANIMATE_SLOTS: {
         Slots *slots = &data->slots;
         Moby_3071B0 *current_slot_moby = slots->m[data->cur];
-        func_001F9938_3071B0(&data->timer);
+        fast_dec_timer_s16(&data->timer);
         current_slot_moby->f44 = interpolate_angle(1.5707964f, 0.0f, convert_integer_to_float(data->timer) * data->rate);
         if (data->timer == 0) {
             data->timer = scale_game_frames(helper_sequence_slot_animation_duration_frames);
@@ -745,7 +727,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         if (!func_L00_0028EB98_3071B0(moby, data->voice)) {
             data->voice = func_0022ED80_3071B0(0, 4, moby);
         }
-        func_001F9938_3071B0(&data->timer);
+        fast_dec_timer_s16(&data->timer);
         slots = data->slots.m;
         remaining_timer_fraction = convert_integer_to_float(data->timer) * data->rate;
         owner->f44 = func_L00_0025C700_3071B0(helper_sequence_owner_final_angle_degrees * 0.017453292f, 0.0f, remaining_timer_fraction);
@@ -930,10 +912,7 @@ extern void FUN_L00_0025d458_6ee0(void *, void *) __asm__("FUN_L00_0025d458");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern int FUN_L14_00307620_6ee0(void *) __asm__("FUN_L14_00307620");
-extern int tick_6ee0(void *) __asm__("FUN_001f9740");
-extern int tick_done_6ee0(void *) __asm__("FUN_001f9770");
 extern void FUN_L00_002502f0_6ee0(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int FUN_L00_0028d8c0_6ee0(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int play_sound_6ee0(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L14_003135b8_6ee0(void *) __asm__("FUN_L14_003135b8");
@@ -1048,7 +1027,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
                     FUN_L14_003135b8_6ee0(flying_car_moby);
                     flying_car_data->fCC = scale_game_frames(0x1E);
                 } else {
-                    tick_6ee0(&flying_car_data->fCC);
+                    fast_dec_timer(&flying_car_data->fCC);
                     if (flying_car_data->fCC != 0) {
                         ((Part_6ee0 *)o->pvars)->f20 = 2.0f;
                     } else {
@@ -1066,7 +1045,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
         }
         break;
     case FLYING_CAR_WAIT_FOR_PATH_RESET:
-        if (tick_done_6ee0(&flying_car_data->timer)) {
+        if (fast_dec_timer_s16(&flying_car_data->timer)) {
             Path_6ee0 *path = D_L14_001B0BB0_6ee0[flying_car_data->path];
             FUN_L00_002502f0_6ee0(flying_car_moby, flying_car_data->effect[4], flying_car_data->effect[5], flying_car_data->effect[6]);
             flying_car_moby->flags &= 0xFFBE;
@@ -1107,7 +1086,6 @@ void update_flying_car(struct Moby *flying_car_moby) {
 /* Precomputes per-point segment values of a path and snaps the moby to its first point. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00308998), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 void initialize_flying_car_path(struct Moby *moby) __asm__("FUN_L14_00307510");
 
@@ -1140,8 +1118,6 @@ extern void cart_burst(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025f090"
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 
 int update_flying_car_path_motion(struct Moby *moby) __asm__("FUN_L14_00307620");
 
@@ -1304,8 +1280,6 @@ typedef struct {
     char *start;
 } VendorSet_4f00;
 extern VendorSet_4f00 D_L14_00167380 __asm__("D_L14_00167380");
-extern float FUN_001f9b48(void *, void *);
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 
 typedef struct {
@@ -1371,7 +1345,7 @@ void initialize_path_camera(char *camera) {
                 fov_stops->seg[fov_stop_count] = i;
                 fov_stop_count++;
             }
-            segment_length = FUN_001f9b48(path + (i * 16 + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
+            segment_length = fast_vec_dist(path + (i * 16 + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
             *(float *)(seg + 0x1C) = segment_length;
             if (i < *(int *)path - 1)
                 *(float *)(camera_run + 2) += segment_length;
@@ -1385,7 +1359,7 @@ void initialize_path_camera(char *camera) {
         path = D_L14_001B0BB0[*(int *)(rec + 0x24)];
         for (i = 0; i < *(int *)path; i++) {
             char *seg;
-            segment_length = FUN_001f9b48(path + (i * 16 + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
+            segment_length = fast_vec_dist(path + (i * 16 + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
             seg = path + i * 16;
             *(float *)(seg + 0x1C) = segment_length;
             if (i < *(int *)path - 1)
@@ -1437,12 +1411,9 @@ extern char path_camera_target_offset_basis[] __asm__("D_L14_001676D0");
 extern float D_L14_001675D8 NOT_SDA;
 extern float D_0013F5E0_5290[] __asm__("D_0013F5E0");
 extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void reset_racer_group_to_hero_path_position(struct Moby *m) __asm__("FUN_L14_002d6570");
-extern float FUN_001f9b48_5290(void *, void *) __asm__("FUN_001f9b48");
-extern s32 tick_countdown_16_5290(s16 *) __asm__("FUN_001f9770");
 
 void update_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L14_00315290");
 
@@ -1492,7 +1463,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
     path = D_L14_001B0BB0_5290[*(int *)(rec + 0x20)];
     qcopy(initial_look_direction_or_previous_position, &path_camera->pos);
     done = sample_path(path, &path_camera->pos.x, &camera_run->seg, &camera_run->t, 0, *(float *)(rec + 0x3C) * frame_time);
-    if (camera_run->timer != 0 && tick_countdown_16_5290(&camera_run->timer) != 0)
+    if (camera_run->timer != 0 && fast_dec_timer_s16(&camera_run->timer) != 0)
         done = 1;
     if (*(u8 *)(rec + 0x39) != 0)
         done = 1;
@@ -1542,7 +1513,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
             update_view_context();
         }
     }
-    camera_run->dist += FUN_001f9b48_5290(initial_look_direction_or_previous_position, &path_camera->pos);
+    camera_run->dist += fast_vec_dist(initial_look_direction_or_previous_position, &path_camera->pos);
     if (*(int *)(rec + 0x28) >= 0) {
         struct Moby *o = (struct Moby *)(D_L14_0015FFD8_5290 + *(int *)(rec + 0x28) * 256);
         float *ofs = (float *)(rec + 0x2C);
@@ -1784,8 +1755,6 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");

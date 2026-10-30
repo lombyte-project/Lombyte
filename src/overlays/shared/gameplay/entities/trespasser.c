@@ -711,6 +711,7 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released
 
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002C12B0.c: func_L00_002C12B0). */
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 typedef struct { char pad0[10]; unsigned char radius; char padB[5]; float height; } AimInfo;
 typedef struct {
     OvlVec4 target,velocity,previous_position;
@@ -751,7 +752,6 @@ extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void *memset(void *,int,unsigned int) __asm__("FUN_001153fc");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern void clamp_vector_length(void *,void *,f32) __asm__("FUN_001f9c90");
 extern f32 probe_ground_height(void *,s32,f32) __asm__("FUN_00213508");
 extern int suck_get_aim_height(char *) __asm__("FUN_002141f8");

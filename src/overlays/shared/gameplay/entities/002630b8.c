@@ -8,6 +8,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 /* Record suck_get_aim_height returns for a moby: collision size and aim height. */
@@ -20,11 +21,6 @@ typedef struct MobyBound {
 
 extern struct Moby *suck_moby_list __asm__("D_L00_0015FFE4");
 extern u8 D_L00_00166DC0[];
-float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-float vector_length_xy(void *) __asm__("FUN_001f9b20");
-float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-float fast_arc_sin(float) __asm__("FUN_001f9df8");
 void build_spherical_offset(Vec4 *, float, float, float) __asm__("FUN_00214db0");
 MobyBound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 int collision_line(void *, Vec4 *, int, void *, int) __asm__("FUN_001efa68");
@@ -61,7 +57,7 @@ struct Moby *select_auto_aim_target_moby(void *ignore, Vec4 *pos_in, Vec4 *dir_i
         if (!(candidate_moby->flags & 0x1000) || !candidate_moby || !candidate_moby->pclass || candidate_moby->pclass->type != 5)
             continue;
         t_yaw = fast_arc_tan(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
-        t_pitch = fast_arc_tan(vector_distance(pp, &target), target.f[2] - pp->f[2]);
+        t_pitch = fast_arc_tan(vector_distance_xy(pp, &target), target.f[2] - pp->f[2]);
         target_distance = fast_vec_dist(pp, &target);
         if (target_distance < 7.5f &&
             fast_difference_between_rotations(hero.moby->rot.z,
@@ -131,7 +127,6 @@ extern Vec4_2634f8 D_L00_00173E60_002634f8 __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
 float FUN_L00_00263468_002634f8(Vec4_2634f8 *) __asm__("FUN_L00_00263468");
 int FUN_001efa68_002634f8(Vec4_2634f8 *, Vec4_2634f8 *, int, void *, int) __asm__("FUN_001efa68");
-float vector_length_xy(void *) __asm__("FUN_001f9b20");
 void spawn_timed_effect_particle(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
 void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) __asm__("FUN_L00_002634f8");
 
@@ -165,7 +160,6 @@ typedef struct {
 } Pk;
 extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
 u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L00_001B0470[4][4] NOT_SDA;
 void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) __asm__("FUN_L00_00263618");
@@ -336,7 +330,6 @@ typedef struct {
     T_263b70 tail;
 } P_263b70;
 int FUN_00213260_263b70(int) __asm__("FUN_00213260");
-int FUN_001fa6d0_263b70(float) __asm__("FUN_001fa6d0");
 P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float,
                                   int) __asm__("FUN_L00_0026d000");
 void draw_trail(void *first_spawn_position, void *second_spawn_position, void *particle_velocity, float first_spawn_particle_value, float second_spawn_particle_value) __asm__("FUN_L00_00263b70");
@@ -351,7 +344,7 @@ void draw_trail(void *first_spawn_position, void *second_spawn_position, void *p
         if (part) {
             tail = &part->tail;
             part->hA = scale_game_frames(0x1E);
-            part->b9 = FUN_001fa6d0_263b70(4.0f) + 0x40;
+            part->b9 = truncate_float_to_s32(4.0f) + 0x40;
             tail->w4 = 2;
             tail->bA = 0x7F;
             tail->bB = part->hA;
@@ -363,7 +356,7 @@ void draw_trail(void *first_spawn_position, void *second_spawn_position, void *p
         alternating_spawn_value = -alternating_spawn_value;
         if (part) {
             tail = &part->tail;
-            part->b9 = FUN_001fa6d0_263b70(4.0f) + 0x40;
+            part->b9 = truncate_float_to_s32(4.0f) + 0x40;
             part->hA = scale_game_frames(6);
             part->b8 = FUN_00213260_263b70(0xFF);
             tail->w4 = 2;
@@ -401,7 +394,6 @@ extern unsigned char D_L00_0015F580_263e30[] __asm__("D_L00_0015F580")
 void FUN_L00_00263fd8_263e30(void *, int, void *, void *, int, int, void *, void *, float,
                              void *) __asm__("FUN_L00_00263fd8");
 int generate_random_points_from_shape_entries(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
-void clear_u64_value(void *) __asm__("FUN_001f99f8");
 float random_angle_radians(void) __asm__("FUN_00213308");
 int FUN_00213260_263e30(int) __asm__("FUN_00213260");
 void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) __asm__("FUN_L00_00263e30");
@@ -483,12 +475,9 @@ extern float frame_time_gp[] __asm__("D_0015ED6C") __attribute__((sda));
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
@@ -514,7 +503,7 @@ void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *fragment_sp
         *(int *)(fragment_moby + 0x94) = 0;
         if (random_default_override == 0)
             *(int *)(fragment_pvars + 0x30) =
-                func_001FA898_r(scale_time(random_float_between(60.0f, 120.0f)));
+                truncate_float_to_s32(scale_time(random_float_between(60.0f, 120.0f)));
         else
             *(int *)(fragment_pvars + 0x30) = random_default_override;
         *(int *)(fragment_pvars + 0x34) = fragment_mode;

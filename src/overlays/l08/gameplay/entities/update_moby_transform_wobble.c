@@ -7,10 +7,10 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void update_moby_transform_wobble(struct Moby *moby) __asm__("FUN_L08_002dc4a0");
 

@@ -13,6 +13,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00235E08.c: func_L06_00235E08), where it is exact; names translated to the US level program. */
 
@@ -30,12 +31,9 @@ typedef struct {
 extern T2C D_L06_0017C3A8[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float level06_hero_animation_blend_curves[][25] __asm__("D_L06_0017C570");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern int D_L06_0015F5C4;
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
@@ -47,7 +45,6 @@ extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int get_hero_help_value(int a) __asm__("FUN_L06_0021d0a0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 struct HeroVelocityKey D_L06_0015F6E8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
 extern s32 D_L06_0015F688 __attribute__((sda));
 int D_L06_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
@@ -73,7 +70,6 @@ extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("
 extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");

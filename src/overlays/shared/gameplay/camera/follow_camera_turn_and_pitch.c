@@ -82,6 +82,7 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) __asm__("FUN_L00_002e8bb8");
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_turn_and_pitch_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 extern float follow_camera_input_stiffness_gp __asm__("D_L00_00161CAC") __attribute__((sda));
 extern float follow_camera_input_damping_gp __asm__("D_L00_00161CB0") __attribute__((sda));
 void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float in) {
@@ -166,7 +167,6 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EA3F0), where it is exact; names translated to the US level program. */
 
-extern void lerp_vector(float, void *, void *, void *) __asm__("FUN_001f9a40");
 
 void follow_camera_auto_turn(int m) __asm__("FUN_L00_002e8f40");
 void follow_camera_auto_turn(int camera_object) {
@@ -178,7 +178,7 @@ void follow_camera_auto_turn(int camera_object) {
         float vector_length;
         float maximum_length;
         fast_vec_sub(position_difference, (float *)camera_data, (float *)(camera_data + 0x90));
-        lerp_vector(D_L00_0015EF40, auto_turn_vector, auto_turn_vector, position_difference);
+        lerp_vector(auto_turn_vector, auto_turn_vector, position_difference, D_L00_0015EF40);
         vector_length = fast_vec_length(auto_turn_vector);
         maximum_length = *(float *)(auto_turn_vector + 0x2C);
         if (maximum_length < vector_length) {

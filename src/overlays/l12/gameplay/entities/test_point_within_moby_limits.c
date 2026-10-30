@@ -4,15 +4,13 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
 /* tests whether a point lies within height, distance and heading limits of a moby */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C8D8), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-float absolute_float(float input) __asm__("func_001F99C0");
 
 int test_point_within_moby_limits(char *moby, float *point_position, float x, float y, float z) __asm__("FUN_L12_0027b8e0");
 
@@ -41,7 +39,6 @@ extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C9B8), where it is exact; names translated to the US level program. */
 
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 

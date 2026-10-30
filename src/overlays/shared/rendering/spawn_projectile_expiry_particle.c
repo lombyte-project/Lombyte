@@ -7,12 +7,11 @@
 #include "qcopy.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0029B070.c: func_L07_0029B070), where it is exact; names translated to the US level program. */
 
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void *create_part(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L07_001B21CC NOT_SDA;
 unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position, char *particle_motion_vector) __asm__("FUN_L07_0029a2a0");
@@ -25,7 +24,7 @@ unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position, c
         qcopy(particle_position, particle_spawn_position);
         qcopy(particle_vector, particle_motion_vector);
         *(int *)(particle + 4) = 0x5E806040;
-        particle[9] = func_001FA898_r(4.0f) + 0x40;
+        particle[9] = truncate_float_to_s32(4.0f) + 0x40;
         particle[3] = 0x48;
         particle[1] = 0;
         particle[8] = 0;
@@ -61,14 +60,14 @@ unsigned char *spawn_moby_point_offset_particle(void *moby, short index, float a
         }
         particle[8] = rand();
         *(int *)(particle + 4) = 0x7f7f7f;
-        *(volatile unsigned char *)(particle + 9) = func_001FA898_r(4.0f) + 0x40;
+        *(volatile unsigned char *)(particle + 9) = truncate_float_to_s32(4.0f) + 0x40;
         *(volatile unsigned char *)(particle + 3) = 0x48;
         *(volatile unsigned char *)(particle + 1) = 0;
         *(volatile float *)(particle + 0xc) = amount;
         particle[2] = D_L07_001B21F4[*(short *)(particle_payload + 0xc)];
         *(float *)(particle_payload + 0x10) = frame_scale * 0.015f;
         *(short *)(particle_payload + 0xe) = index;
-        particle[8] = func_001FA898_r(*(float *)(particle_payload + 8) * 255.0f);
+        particle[8] = truncate_float_to_s32(*(float *)(particle_payload + 8) * 255.0f);
         moby_point_position(*(void **)particle_payload, *(short *)(particle_payload + 0xe), moby_point_world_position);
         fast_vec_sub(position_offset, debris_far_point, moby_point_world_position);
         fast_vec_normalize(position_offset, position_offset, *(float *)(particle_payload + 0x14));

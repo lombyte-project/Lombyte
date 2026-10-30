@@ -10,11 +10,10 @@
 #include "sda.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 /* Builds two scaled offset vectors from the moby's matrix and adds them to out. */
 
 
-extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void FUN_001fa050_q(float *, float *) __asm__("FUN_001fa050");
 
 void add_moby_rotation_based_offsets(struct Moby *moby, float *out) __asm__("FUN_L03_0029c8a8");
 
@@ -30,8 +29,8 @@ void add_moby_rotation_based_offsets(struct Moby *moby, float *out) {
     unit_x_axis[0] = 1.0f;
     data = (char *)moby->pvars;
     if (*(float *)(data + 0x140) != 0.0f || *(float *)(data + 0x144) != 0.0f) {
-        FUN_001fa050_q(rotation_matrix, (float *)&moby->rot);
-        FUN_001f9d20_q(transformed_x_axis, unit_x_axis, rotation_matrix);
+        euler_rotation_matrix(rotation_matrix, (float *)&moby->rot);
+        transform_vector(transformed_x_axis, unit_x_axis, rotation_matrix);
         *(OvlQuad *)z_shifted_x_axis = *(OvlQuad *)transformed_x_axis;
         z_shifted_x_axis[2] = z_shifted_x_axis[2] - 1.0f;
         fast_vec_cross(first_offset, transformed_x_axis, z_shifted_x_axis);

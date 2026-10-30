@@ -3,6 +3,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -14,8 +15,6 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) __asm__("FUN_L08_00307190");
@@ -48,14 +47,11 @@ extern char D_L08_00174640[];
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 void update_fire_bolt(char *fire_bolt) __asm__("FUN_L08_00307298");
 
@@ -97,7 +93,7 @@ void update_fire_bolt(char *fire_bolt) {
                 fire_bolt[0x20] = 2;
             }
         }
-        if (func_001F9908_i(bolt_data + 0x18) != 0)
+        if (fast_dec_timer(bolt_data + 0x18) != 0)
             fire_bolt[0x20] = 2;
         break;
     case FIRE_BOLT_STATE_BURST_AND_REMOVE:
@@ -164,10 +160,7 @@ typedef struct { char p0[0x148]; float f148; char p14C[8]; float f154; float f15
 typedef struct { char p0[0x30]; V_3091B0 v30; } Obj;
 
 extern char D_L08_001675C0[];
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_L08_00160260 __attribute__((sda));
 extern float ground_particle_scatter_minimum_z_scale_gp __asm__("D_L08_00162340") __attribute__((sda));
 extern float ground_particle_scatter_reference_height_offset_gp __asm__("D_L08_00162344") __attribute__((sda));
@@ -188,7 +181,6 @@ extern void randomize_ground_particle_scatter_parameters(int) __asm__("FUN_L08_0
 extern int update_float_countdown(float *) __asm__("FUN_L08_00211b08");
 extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern float func_002140F8_3091B0(float, float) __asm__("FUN_002132a8");
-extern float func_001F9CE8_3091B0(void *) __asm__("FUN_001f9b20");
 extern float func_L00_002644E0_3091B0(void *) __asm__("FUN_L00_00263468");
 extern void func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN_L08_00272cb8");
 extern void func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN_L08_0027f5f0");
@@ -280,7 +272,7 @@ void scatter_ground_particles(Moby *moby) {
                 w = w * func_002140F8_3091B0(0.0f, ground_particle_scatter_xy_offset_random_range_gp);
                 pt.y += w;
                 fast_vec_sub(po, &pt, D_L08_00167640_3091B0);
-                origin_distance_xy = func_001F9CE8_3091B0(po);
+                origin_distance_xy = vector_length_xy(po);
                 if (origin_distance_xy <= 8.0f) {
                     w = -spread;
                     par.x = ground_particle_scatter_spawn_vector_xy_bias[0] + func_002140F8_3091B0(w, spread);
@@ -397,8 +389,6 @@ void scatter_ground_particles(Moby *moby) {
 /* While the player is within range, scatters spawned particles around the moby on a random disc. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309AB0), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("func_001F9DC8");
-extern float fast_sin(float) __asm__("func_001F9DE0");
 
 void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
 

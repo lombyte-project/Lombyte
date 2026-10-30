@@ -7,6 +7,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
 
@@ -14,7 +15,6 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
 
 extern char moby_segment_puff_local_endpoint_table[] __asm__("D_L04_001D2C90");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void spawn_smoke_puff_trail_with_endpoint_bursts(void *, void *, void *, int, float, float) __asm__("FUN_L04_002c41e0");
 
 extern short moby_segment_puff_scale_multiplier __asm__("D_L04_001618B0") __attribute__((sda));
@@ -84,9 +84,7 @@ typedef struct {
 } ShotVars;
 
 extern struct Moby *create_moby(int oclass) __asm__("FUN_0020c4f8");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");  /* distance between two points */
 extern void spawn_source_attached_fading_effect_particle(struct Moby *, int color, int life, int, float size) __asm__("FUN_L00_0026daa0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
@@ -160,10 +158,7 @@ typedef struct {
 extern f32 D_L04_00166F40[];                             /* arena centre */
 extern u128 D_L04_00173FE0;                              /* hit position of the last collision_line */
 extern u8 D_L04_00174000[];
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
-extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
-extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");                          /* counts a s16 down, nonzero at 0 */
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 collision_line(void *, void *, s32, struct Moby *, CollisionProbe *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
@@ -206,7 +201,7 @@ void update_class_b8_projectile(struct Moby *moby)
         v->unk24 = 1;
     v->hero_dist = hero_distance;
     if (moby->pos.x < 0.0f || moby->pos.y < 0.0f || moby->pos.z < 0.0f
-        || range < vector_distance(&moby->pos, D_L04_00166F40)) {
+        || range < vector_distance_xy(&moby->pos, D_L04_00166F40)) {
         mark_moby_for_removal(moby);
         return;
     }

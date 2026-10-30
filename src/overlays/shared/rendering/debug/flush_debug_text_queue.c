@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef struct {
     s32 a, b, c, d;
@@ -142,12 +143,6 @@ typedef struct {
 } DebugCameraBlock;
 extern DebugCameraBlock player_camera __asm__("D_L00_00166C80");
 extern void update_all_cameras(void) __asm__("FUN_001ec420");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
-extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void reset_follow_camera_state_from_position(void *) __asm__("FUN_L00_002e6bf8");
 
 static inline void copy_vector3(f32 *dst, f32 *src) {
@@ -401,9 +396,6 @@ typedef struct {
     f32 x84, x88, x8c, x90;
 } B001f4490;
 extern B001f4490 D_L00_0016C058;
-f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 void update_entity(void *) __asm__("FUN_L00_00250df8");
 void update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
 
@@ -477,8 +469,6 @@ extern f32 D_L00_0015F448;
 extern char *D_L00_0015F600;
 extern s32 sound_update(void) __asm__("FUN_0022ca50");
 extern void set_background_color(s32, s32, s32) __asm__("FUN_001fb280");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void update_fog(void) __asm__("FUN_001f2588");
 extern s32 sprintf(char *, const char *, ...);

@@ -3,6 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
@@ -45,9 +46,6 @@ void spawn_type_52_particle_near_moby(char *moby) {
  * D_0014171B. Then queues func_L10_002EA578. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002EA3E8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b48(void *, void *);
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void draw_moby_animated_quad_layers(unsigned char *m) __asm__("FUN_L10_002e91b8");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
@@ -70,7 +68,7 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
         break;
     case MOBY_UPDATE_ACTIVE:
         player = (&hero.motion.pos);
-        if (FUN_001f9b48(moby + 0x10, player) < 8.0f) {
+        if (fast_vec_dist(moby + 0x10, player) < 8.0f) {
             fast_vec_sub(hero_point_local_offset, player + 0x50, moby + 0x10);
             transpose_rotation_matrix(mtx, moby + 0xC0);
             transform_vector(hero_point_local_offset, hero_point_local_offset, mtx);
@@ -105,20 +103,17 @@ typedef struct {
 
 extern QuadCorner l10_animated_quad_second_base_corners[] __asm__("D_L10_001DA310");
 extern QuadCorner l10_animated_quad_first_base_corners[] __asm__("D_L10_001DA350");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float quad_layer_uv_phase_divisors[][2] __asm__("D_L10_001DA270");
 extern float quad_corner_base_uvs[][2] __asm__("D_L10_001DA2F0");
 #include "rnc/overlay/shared/gameplay/entities/spawn_type_52_particle_near_moby_globals.h"
 extern int quad_layer_colors[] __asm__("D_L10_001DA250");
 extern int quad_layer_uv_cosine_selectors[][2] __asm__("D_L10_001DA2B0");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern int quad_layer_count_gp __asm__("D_L10_00161F40") __attribute__((sda));
 extern int quad_layer_alpha_a_selectors[2] __asm__("D_L10_00161F48") __attribute__((sda));
 extern int quad_layer_alpha_b_selectors[2] __asm__("D_L10_00161F50") __attribute__((sda));
 extern int quad_layer_alpha_c_selectors[2] __asm__("D_L10_00161F58") __attribute__((sda));
 extern int quad_layer_alpha_d_selectors[2] __asm__("D_L10_00161F60") __attribute__((sda));
-extern void copy_matrix_rotation(void *, void *) __asm__("func_001FA298");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 #define GS_ALPHA(a, b, k, d, fix) \
@@ -279,9 +274,6 @@ typedef struct {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/gameplay/camera/update_cam.h"
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* Retail retains this global base and loads the four-block source at +0x184. */
 extern struct { char pad0[0x184]; char *source; } D_L10_00167100;
@@ -398,11 +390,8 @@ extern char D_L10_00167450[];
 extern float D_L10_00167358 NOT_SDA;
 extern float D_0013F5E0_5f18[] __asm__("D_0013F5E0");
 extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
-extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_002223f8(s32, s32);
 extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 extern void debug_line_5f18(void *, void *) __asm__("FUN_001e93e8");

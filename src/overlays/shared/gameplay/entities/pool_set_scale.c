@@ -2,6 +2,8 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 extern float pool_uv_pairs[] __asm__("D_L01_001CAE60");
 
@@ -75,10 +77,7 @@ void pool_flush(char *records_base, int record_count) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B9288), where it is exact; names translated to the US level program. */
 
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float pool_base_uv_pairs[] __asm__("D_L01_001CAFE0");
-extern float fast_cos(float) __asm__("func_001F9DC8");
-extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int pool_uv_offset_selectors[] __asm__("D_L01_001CB1B0");
 
 void update_animated_offset_pairs(float *offset_animation_state) __asm__("FUN_L01_002b80d0");

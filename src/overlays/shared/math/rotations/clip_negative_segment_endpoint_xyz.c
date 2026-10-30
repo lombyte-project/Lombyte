@@ -6,6 +6,7 @@
 
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 typedef union {
     u128 q;
@@ -42,7 +43,6 @@ typedef struct {
     short lo;
     short hi;
 } S;
-int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
 void trooper_anim_update(void *a, S *s) __asm__("FUN_L00_0025d458");
 void trooper_anim_update(void *moby, S *animation_state) {
@@ -73,8 +73,6 @@ typedef struct {
     s16 d0;
     s16 d1;
 } S_25d538;
-s32 FUN_001fa6d0_25d538(f32) __asm__("FUN_001fa6d0");
-s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
 void set_moby_color(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void trooper_anim_finish(s32 id, S_25d538 *s) __asm__("FUN_L00_0025d538");
 void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
@@ -82,7 +80,7 @@ void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
     s32 r, g, b;
     if (animation_state->t == 0)
         return;
-    if (fast_dec_timer(animation_state)) {
+    if (fast_dec_timer_s16(animation_state)) {
         if (animation_state->phase != 0) {
             set_moby_color(id, animation_state->r0, animation_state->g0, animation_state->b0);
             return;
@@ -94,30 +92,30 @@ void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
         phase_duration_frames = convert_integer_to_float(scale_game_frames(animation_state->d0));
         phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
         if (animation_state->r1 != 0)
-            r = FUN_001fa6d0_25d538(animation_state->r0 + (animation_state->r1 - animation_state->r0) * phase_progress);
+            r = truncate_float_to_s32(animation_state->r0 + (animation_state->r1 - animation_state->r0) * phase_progress);
         else
             r = animation_state->r0;
         if (animation_state->g1 != 0)
-            g = FUN_001fa6d0_25d538(animation_state->g0 + (animation_state->g1 - animation_state->g0) * phase_progress);
+            g = truncate_float_to_s32(animation_state->g0 + (animation_state->g1 - animation_state->g0) * phase_progress);
         else
             g = animation_state->g0;
         if (animation_state->b1 != 0)
-            b = FUN_001fa6d0_25d538(animation_state->b0 + (animation_state->b1 - animation_state->b0) * phase_progress);
+            b = truncate_float_to_s32(animation_state->b0 + (animation_state->b1 - animation_state->b0) * phase_progress);
         else
             b = animation_state->b0;
     } else {
         phase_duration_frames = convert_integer_to_float(scale_game_frames(animation_state->d1));
         phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
         if (animation_state->r1 != 0)
-            r = FUN_001fa6d0_25d538(animation_state->r1 + (animation_state->r0 - animation_state->r1) * phase_progress);
+            r = truncate_float_to_s32(animation_state->r1 + (animation_state->r0 - animation_state->r1) * phase_progress);
         else
             r = animation_state->r0;
         if (animation_state->g1 != 0)
-            g = FUN_001fa6d0_25d538(animation_state->g1 + (animation_state->g0 - animation_state->g1) * phase_progress);
+            g = truncate_float_to_s32(animation_state->g1 + (animation_state->g0 - animation_state->g1) * phase_progress);
         else
             g = animation_state->g0;
         if (animation_state->b1 != 0)
-            b = FUN_001fa6d0_25d538(animation_state->b1 + (animation_state->b0 - animation_state->b1) * phase_progress);
+            b = truncate_float_to_s32(animation_state->b1 + (animation_state->b0 - animation_state->b1) * phase_progress);
         else
             b = animation_state->b0;
     }
@@ -218,8 +216,6 @@ typedef unsigned int u128_0025da70 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     float x, y, z, w_0025da70;
 } __attribute__((aligned(16))) Vec4_0025da70;
-void FUN_001f9b80_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b80");
-void FUN_001f9b48_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b48");
 void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, float z_difference_threshold) {
     Vec4_0025da70 point_copies[2];
     Vec4_0025da70 *pa = &point_copies[0];
@@ -227,15 +223,13 @@ void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, f
     *(u128_0025da70 *)pa = *first_point;
     *(u128_0025da70 *)pb = *second_point;
     if (0.0f < z_difference_threshold && absolute_float(pa->z - pb->z) < z_difference_threshold) {
-        FUN_001f9b80_0025da70(pa, pb);
+        vector_distance_xy(pa, pb);
     } else {
-        FUN_001f9b48_0025da70(pa, pb);
+        fast_vec_dist(pa, pb);
     }
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
 float project_level_path_point_onto_segment(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *segment_end) __asm__("FUN_L00_0025db00");
 
 float project_level_path_point_onto_segment(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *segment_end) {
@@ -265,7 +259,7 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
             break;
     }
     if (i < 2) {
-        if (FUN_001f9b80_25db00(out, segment_start) < FUN_001f9b80_25db00(out, segment_end)) {
+        if (vector_distance_xy(out, segment_start) < vector_distance_xy(out, segment_end)) {
             qcopy(out, segment_start);
             *(int *)&out[2] = 0;
         } else {
@@ -273,11 +267,9 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
             *(int *)&out[2] = 0;
         }
     }
-    return FUN_001f9b80_25db00(query_point, out);
+    return vector_distance_xy(query_point, out);
 }
 extern float FUN_L00_0025db00_c(void *, void *, void *, void *) __asm__("FUN_L00_0025db00");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern float FUN_L00_0025da70_c(void *, void *, float) __asm__("FUN_L00_0025da70");
 float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
@@ -294,8 +286,8 @@ float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQu
     if (r > 0.0f && absolute_float(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
         absolute_float(((float *)query_point)[2] - ((float *)b)[2]) < r) {
         planar_distance = FUN_L00_0025db00_c(out, query_point, segment_start, b);
-        r = vector_distance(segment_start, out);
-        segment_length_or_start_direction_dot = vector_distance(segment_start, b);
+        r = vector_distance_xy(segment_start, out);
+        segment_length_or_start_direction_dot = vector_distance_xy(segment_start, b);
         segment_workspace[0] = *segment_start;
         segment_workspace[1] = *b;
         interpolate_vector(out, &segment_workspace[0], &segment_workspace[1], r / segment_length_or_start_direction_dot);
@@ -335,7 +327,6 @@ float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQu
     return FUN_L00_0025da70_c(query_point_copy, g, 0.0f);
 }
 extern f32 path_distance_25df68(void *, void *, f32) __asm__("FUN_L00_0025da70");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, f32, s32)
     __asm__("FUN_L00_0025d808");
 
@@ -491,7 +482,6 @@ extern S6 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
 extern S6 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
@@ -499,12 +489,10 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
-extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void *spawn_debris(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
-extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int allocate_voice_for_target_entry_25e450(int, int, void *) __asm__("FUN_0022da68");
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
@@ -715,9 +703,7 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float explosion_flash_descriptor[] __asm__("D_L00_001B02F0");
 extern int FUN_L00_00257b90(int, int);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
@@ -746,12 +732,12 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
         first_particle_color_palette = D_L00_001E9030;
         second_particle_color_palette = D_L00_001E9048;
         spawn_particle(burst_position, &particle_velocity, first_particle_color_palette.v[random_integer_below(6)], second_particle_color_palette.v[random_integer_below(6)],
-            big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
-            FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
+            big, FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14)),
+            FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, sp * scale);
     }
     if (owner != 0) {
-        spawn_glow_particle(owner, burst_position, &particle_velocity, scale * 4.0f, scale_game_frames_c(0x14), 0x7F, 0x40, 0, 0x30);
-        spawn_glow_particle(owner, burst_position, &particle_velocity, scale * 3.0f, scale_game_frames_c(0x1D), 0x60, 0x20, 0, 0x20);
+        spawn_glow_particle(owner, burst_position, &particle_velocity, scale * 4.0f, scale_game_frames(0x14), 0x7F, 0x40, 0, 0x30);
+        spawn_glow_particle(owner, burst_position, &particle_velocity, scale * 3.0f, scale_game_frames(0x1D), 0x60, 0x20, 0, 0x20);
     }
     {
         Vy10 at;
@@ -759,7 +745,7 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
         at.w = 2.0f;
         if (fast_bsphere_check(&at, 10.0f) != -1) {
             D_L00_00166C80.scale = scale * 0.1f;
-            D_L00_00166C80.frames = scale_game_frames_c(0x14);
+            D_L00_00166C80.frames = scale_game_frames(0x14);
         }
     }
     if (owner != 0 && owner[0x20] != 0xFE && owner[0x20] != 0xFD && sound != -1) {
@@ -798,18 +784,18 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
         first_particle_color_palette = D_L00_001E9030;
         second_particle_color_palette = D_L00_001E9048;
         spawn_particle(effect_position, &zero_vec, swap_packed_color_channels(first_particle_color_palette.v[random_integer_below(6)], 1), swap_packed_color_channels(second_particle_color_palette.v[random_integer_below(6)], 1),
-            big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
-            FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
+            big, FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14)),
+            FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, sp * scale);
     }
     if (owner != 0) {
         rgb[0] = 0x7F; rgb[1] = 0x40; rgb[2] = 0;
         swap_color_channel_words(&rgb[0], &rgb[1], &rgb[2], 1);
         first_glow_scale = scale * 4.0f;
-        spawn_glow_particle(owner, effect_position, &zero_vec, first_glow_scale, scale_game_frames_c(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
+        spawn_glow_particle(owner, effect_position, &zero_vec, first_glow_scale, scale_game_frames(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
         rgb[0] = 0x60; rgb[1] = 0x20; rgb[2] = 0;
         swap_color_channel_words(&rgb[0], &rgb[1], &rgb[2], 1);
         second_glow_scale = scale * 3.0f;
-        spawn_glow_particle(owner, effect_position, &zero_vec, second_glow_scale, scale_game_frames_c(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
+        spawn_glow_particle(owner, effect_position, &zero_vec, second_glow_scale, scale_game_frames(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {

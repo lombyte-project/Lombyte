@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/camera/follow_cam.h"
 
 
@@ -13,8 +14,6 @@
 /* Updates a moby: initialises its vector, then applies an angle-based offset. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E87B0), where it is exact; names translated to the US level program. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 
 void conveyor_belt_update(struct Moby *moby) __asm__("FUN_L15_002e73c0");
@@ -336,11 +335,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
  * is no longer 2, starts the exit sequence and goes to state 3. State 3: deletes the moby. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBB38), where it is exact; names translated to the US level program. */
 
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L15_0015F5C4;
 extern int D_L15_0015F640;
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D4FD[];
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -372,7 +368,7 @@ void bolt_grabber_update(struct Moby *moby) {
         break;
     case BOLT_GRABBER_WAIT_FOR_PROXIMITY:
         emit_moby_sprite_particles((char *)moby);
-        if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
+        if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 3.0f) {
             moby->flags |= 0x41;
             start_scene(5);
             moby->state = 2;
@@ -397,10 +393,7 @@ void bolt_grabber_update(struct Moby *moby) {
 
 extern char *spawn_poison_vessel(void *, void *) __asm__("FUN_L15_002e7ed8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short poison_vessel_spawn_interval __asm__("D_L15_0016207C");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_poison_vessel_spawner(struct Moby *moby) __asm__("FUN_L15_002eabd8");
 
@@ -412,13 +405,13 @@ void update_poison_vessel_spawner(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     switch (moby->state) {
     case INITIALIZE_SPAWN_TIMER:
-        data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)(data + 1) * 60.0f));
+        data[0] = truncate_float_to_s32(multiply_global_factor_ed64(*(float *)(data + 1) * 60.0f));
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
     case WAIT_FOR_SPAWN_TIMER:
         if (fast_dec_timer(data)) {
-            data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)&poison_vessel_spawn_interval * 60.0f));
+            data[0] = truncate_float_to_s32(multiply_global_factor_ed64(*(float *)&poison_vessel_spawn_interval * 60.0f));
             spawn_poison_vessel(moby, &moby->pos);
         }
         break;
@@ -443,12 +436,8 @@ typedef struct {
 } T4;
 
 T4 D_L15_00162108 = {{{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}};
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_L00_00200260(float, float);
 extern float fast_add_rotations(float, float);
-extern float fast_normalize_angle(float) __asm__("func_001FA610");
 extern int D_L15_0015F5CC;
 int D_L15_001620EC = 128;
 int D_L15_001620F0 = 45;
@@ -1013,7 +1002,7 @@ void codebot_slot_update(struct Moby *moby) {
         break;
     }
     case CODEBOT_SLOT_WAIT_FOR_PROXIMITY:
-        if (alternate_item_available[2] != 0 && vector_distance(D_0013F3D0, &moby->pos) < 3.0f && *((unsigned char *)D_0013F3D0 + 0x2024) == 0) {
+        if (alternate_item_available[2] != 0 && vector_distance_xy(D_0013F3D0, &moby->pos) < 3.0f && *((unsigned char *)D_0013F3D0 + 0x2024) == 0) {
             FUN_L15_002f78b8(data[0]);
             moby->state = 2;
         }
@@ -1098,9 +1087,6 @@ void codebot_slot_update(struct Moby *moby) {
 
 extern char *D_L15_0015FFE4 MACRO_ADDR;
 extern char D_0013E533[];
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 frame_scale_sq_gp __asm__("D_0015ED64") MACRO_ADDR;
 extern s32 current_level_index_gp __asm__("D_0015ED84") MACRO_ADDR;
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
@@ -1359,7 +1345,7 @@ void ultramech_scientist_update(struct Moby *moby) {
     ease_rate = 0.02f;
     ease_limit = 0.3f;
     aim = 1;
-    value = vector_distance(&moby->pos, D_0013E533 + 0xE9D);
+    value = vector_distance_xy(&moby->pos, D_0013E533 + 0xE9D);
     if (value < 8.0f) {
         player = D_0013E533 + 0xE1D;
         value = fast_arc_tan(*(float *)(player + 0xD0) - moby->pos.x, *(float *)(player + 0xD4) - moby->pos.y);
@@ -1672,9 +1658,7 @@ void emit_cutscene_mode_moby_effects(struct Moby *moby) {
 extern int FUN_001f44b8_2edbe0(int) __asm__("FUN_001f44b8");
 extern void FUN_00233980_2edbe0(int, long) __asm__("FUN_00233980");
 extern float FUN_001f96b0_2edbe0(float) __asm__("FUN_001f96b0");
-extern float FUN_001fa580_2edbe0(float, float) __asm__("FUN_001fa580");
 extern float FUN_L00_00200260_2edbe0(float, float) __asm__("FUN_L00_00200260");
-extern float FUN_001fa610_2edbe0(float x) __asm__("FUN_001fa610");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98_2edbe0(int, int, int, void *, int) __asm__("FUN_L00_001fde98");
 extern float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
@@ -1817,7 +1801,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     FUN_00233980_2edbe0(8, 0);
     FUN_00233980_2edbe0(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = FUN_001fa580_2edbe0(data->angle, 360.0f / FUN_001f96b0_2edbe0(scaled_ripple_phase_advance_divisor_gp) * 0.017453292f * frame_time_macro);
+    data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0_2edbe0(scaled_ripple_phase_advance_divisor_gp) * 0.017453292f * frame_time_macro);
     get_moby_color(moby, &r, &g, &b);
     color = (D_L15_001621EC << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 46; i++) {
@@ -1826,8 +1810,8 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
         float y = template_vertex[1];
         float rad = square_root(x * x + y * y);
         float radius_remainder = FUN_L00_00200260_2edbe0(rad, scaled_ripple_radial_wavelength_gp);
-        float w = FUN_001fa610_2edbe0(radius_remainder * 6.2831855f / scaled_ripple_radial_wavelength_gp);
-        float z = fast_sin(FUN_001fa580_2edbe0(w, data->angle));
+        float w = fast_normalize_angle(radius_remainder * 6.2831855f / scaled_ripple_radial_wavelength_gp);
+        float z = fast_sin(fast_add_rotations(w, data->angle));
         D_L15_001DECB0[i][0] = scaled_ripple_template_vertex_scale_gp * template_vertex[0] + moby->pos.x;
         D_L15_001DECB0[i][1] = scaled_ripple_template_vertex_scale_gp * template_vertex[1] + moby->pos.y;
         D_L15_001DECB0[i][2] = scaled_ripple_template_vertex_scale_gp * template_vertex[2] + moby->pos.z + scaled_ripple_z_amplitude_gp * z;
@@ -1849,9 +1833,6 @@ extern float D_0015ED6C_2edfc0 __asm__("D_0015ED6C") MACRO_ADDR;
 extern int FUN_001f44b8_2edfc0(int) __asm__("FUN_001f44b8");
 extern void FUN_001f76a0_2edfc0(void) __asm__("FUN_001f76a0");
 extern float FUN_001f96b0_2edfc0(float) __asm__("FUN_001f96b0");
-extern float FUN_001f9988_2edfc0(float) __asm__("FUN_001f9988");
-extern float FUN_001fa580_2edfc0(float, float) __asm__("FUN_001fa580");
-extern float FUN_001fa610_2edfc0(float x) __asm__("FUN_001fa610");
 extern void FUN_00233980_2edfc0(int, long) __asm__("FUN_00233980");
 extern void FUN_L00_001fde98_2edfc0(int, int, int, void *, int) __asm__("FUN_L00_001fde98");
 extern float FUN_L00_00200260_2edfc0(float, float) __asm__("FUN_L00_00200260");
@@ -2078,17 +2059,17 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
     FUN_00233980_2edfc0(8, 0);
     FUN_00233980_2edfc0(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = FUN_001fa580_2edfc0(data->angle, 360.0f / FUN_001f96b0_2edfc0(ripple_88_phase_advance_divisor_gp) * 0.017453292f * D_0015ED6C_2edfc0);
+    data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0_2edfc0(ripple_88_phase_advance_divisor_gp) * 0.017453292f * D_0015ED6C_2edfc0);
     FUN_L00_00250320_2edfc0(moby, &r, &g, &b);
     color = (D_L15_0016225C << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 88; i++) {
         float *template_vertex = D_L15_001DF100[i];
         float x = template_vertex[0];
         float y = template_vertex[1];
-        float rad = FUN_001f9988_2edfc0(x * x + y * y);
+        float rad = square_root(x * x + y * y);
         float radius_remainder = FUN_L00_00200260_2edfc0(rad, ripple_88_radial_wavelength_gp);
-        float w = FUN_001fa610_2edfc0(radius_remainder * 6.2831855f / ripple_88_radial_wavelength_gp);
-        float z = fast_sin(FUN_001fa580_2edfc0(w, data->angle));
+        float w = fast_normalize_angle(radius_remainder * 6.2831855f / ripple_88_radial_wavelength_gp);
+        float z = fast_sin(fast_add_rotations(w, data->angle));
         D_L15_001DF940[i][0] = ripple_88_template_vertex_scale_gp * template_vertex[0] + moby->pos.x;
         D_L15_001DF940[i][1] = ripple_88_template_vertex_scale_gp * template_vertex[1] + moby->pos.y;
         D_L15_001DF940[i][2] = ripple_88_template_vertex_scale_gp * template_vertex[2] + moby->pos.z + ripple_88_z_amplitude_gp * z;
@@ -2164,7 +2145,6 @@ int is_hero_in_moby_follow_camera_region(char *moby) {
 
 extern char angular_limit_projection_axis_record[] __asm__("D_L15_00167410");
 extern char D_L15_00167280[];
-extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 
 int check_moby_target_angular_limits(char *moby, float projected_angle_limit_degrees, float b) __asm__("FUN_L15_002f8698");
 

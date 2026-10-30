@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
 #include "rnc/math/vector.h"
@@ -33,12 +34,9 @@ typedef struct {
     Vec4 rotation;
 } VendorBeamFrame;
 
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern VendorBeamFrame *D_L14_001600EC;
 extern int D_L14_001620C8;   /* no foreign declaration */
 extern int D_L14_001620D8_t; /* no foreign declaration */
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void start_vendor_beam_pulse(char *) __asm__("FUN_L14_003017f8");
 void update_vendor_beam_animation(char *moby) __asm__("FUN_L14_00301de8");
 
@@ -119,7 +117,7 @@ void update_vendor_beam(unsigned char *moby) {
         break;
     }
     if (vendor_beam_damage_disabled_gp == 0) {
-        if (vector_distance(moby + 0x10, &hero.motion.pos) < 10.0f) {
+        if (vector_distance_xy(moby + 0x10, &hero.motion.pos) < 10.0f) {
             apply_vendor_beam_damage((char *)moby);
         }
     }
@@ -138,11 +136,7 @@ void update_vendor_beam(unsigned char *moby) {
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern int spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int vendor_beam_min_pulse_duration_frames_gp __asm__("D_L14_001620BC") __attribute__((sda));
 extern int vendor_beam_max_pulse_duration_frames_gp __asm__("D_L14_001620C0") __attribute__((sda));
@@ -243,7 +237,7 @@ void start_vendor_beam_pulse(char *moby) {
         }
     }
 
-    if (vector_distance(&D_L14_001600EC[beam->frame].origin, D_L14_001674C0) >= 4.0f) {
+    if (vector_distance_xy(&D_L14_001600EC[beam->frame].origin, D_L14_001674C0) >= 4.0f) {
         int color;
         int point;
         int never = 0;
@@ -336,8 +330,6 @@ typedef struct {
     u64 gs_state;
 } VendorBeamStripPacket;
 
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
@@ -476,7 +468,6 @@ typedef struct {
 } VendorBeamReq;
 
 extern u8 D_L14_00174560[];
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */

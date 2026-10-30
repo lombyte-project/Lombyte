@@ -6,6 +6,7 @@
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
@@ -51,8 +52,6 @@ typedef union {
     f32 f[4];
 } HopVec;
 
-extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
@@ -63,7 +62,6 @@ extern f32 spring_angle(float *, float *, int, float, float, float,
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
-extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 
 #define ED64 frame_scale_sq

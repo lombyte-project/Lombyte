@@ -8,10 +8,10 @@
 
 #include "qcopy.h"
 
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 #include "rnc/overlay/shared/rendering/spawn_owner_target_particle_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 extern int owner_target_particle_frame_count_gp __asm__("D_L15_001601FC") __attribute__((sda));
 
 /* Spawns particle type 0x1F of colour `color` at `pos`, starting a quarter of the way from `owner` towards it. */
@@ -53,7 +53,6 @@ void spawn_owner_target_particle(int color, u128 *target_position, char *owner) 
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void pack_vector_xyz_with_shared_scale(float *, int *) __asm__("FUN_00214a98");
 void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214bc0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern int *D_L15_001B2770 NOT_SDA;
 unsigned char *create_type_47_particle(void *particle_position, float *p_vector, float *c_vector, int particle_color, int e, int particle_frame_count, int g, int h,
@@ -69,10 +68,10 @@ unsigned char *create_type_47_particle(void *particle_position, float *p_vector,
         packed_p_vector = (int *)(particle + 0x20);
         packed_c_vector = (int *)(particle + 0x24);
         *(int *)(particle + 4) = particle_color;
-        particle[9] = func_001FA898_r(4.0f) + 0x40;
+        particle[9] = truncate_float_to_s32(4.0f) + 0x40;
         particle[3] = 0x44;
         particle[1] = 0;
-        *(float *)(particle + 0xC) = func_001FA898_r(p_vector[3] * 210000.0f);
+        *(float *)(particle + 0xC) = truncate_float_to_s32(p_vector[3] * 210000.0f);
         particle[8] = random_integer_below(0xFF);
         particle[2] = *(unsigned char *)D_L15_001B2770;
         *(short *)(particle + 0xA) = particle_frame_count;

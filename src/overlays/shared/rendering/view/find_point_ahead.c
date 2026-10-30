@@ -7,8 +7,8 @@
 #include "qzero.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 extern short D_L01_001B0CB0[] NOT_SDA;
 extern char *D_L01_001DD580[] NOT_SDA;
@@ -43,7 +43,7 @@ int find_point_ahead(char *source_entity, char *target_out, float best) {
             continue;
         if (*(unsigned char *)(candidate_entity + 0x20) != 3)
             continue;
-        candidate_metric = vector_distance(source_entity + 0x10, candidate_entity + 0x10);
+        candidate_metric = vector_distance_xy(source_entity + 0x10, candidate_entity + 0x10);
         if (candidate_metric < best) {
             selected_entity = candidate_entity;
             best = candidate_metric;
@@ -62,7 +62,7 @@ int find_point_ahead(char *source_entity, char *target_out, float best) {
             continue;
         if (*(unsigned char *)(candidate_entity + 0xBC) == 0)
             continue;
-        candidate_metric = vector_distance(source_entity + 0x10, candidate_entity + 0x10);
+        candidate_metric = vector_distance_xy(source_entity + 0x10, candidate_entity + 0x10);
         if (candidate_metric < best) {
             selected_entity = candidate_entity;
             best = candidate_metric;

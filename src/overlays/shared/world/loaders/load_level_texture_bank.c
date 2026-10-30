@@ -7,6 +7,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Offsets of the bank's four packed images, from the bank start. */
 typedef struct ImageBank {
@@ -29,7 +30,6 @@ extern TexEntry texture_table_23fa00[] __asm__("D_L00_001AEBC0");
 #define first_record_23fa00 ((TexRecord *)&first_record)
 #define second_record_23fa00 ((TexRecord *)&second_record)
 extern u32 texture_addresses_23fa00[] __asm__("D_L00_00199A80");
-extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 extern s32 sceGsSetDefLoadImage_23fa00(void *, s16, s16, s16, s16, s16, s16, s16) __asm__("FUN_00122330");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32 sceGsExecLoadImage_23fa00(void *, void *) __asm__("FUN_00122658");

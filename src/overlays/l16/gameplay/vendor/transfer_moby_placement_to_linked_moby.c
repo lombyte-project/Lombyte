@@ -86,6 +86,7 @@ int advance_moby_path(struct Moby *moby) {
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 /* Plays the sound that goes with the moby's current variant. */
 
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
@@ -116,7 +117,6 @@ void request_moby_help_message(struct Moby *moby) {
 }
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void apply_moby_wobble(struct Moby *moby) __asm__("FUN_L16_002e4d88");
 
@@ -151,7 +151,6 @@ void apply_moby_wobble(struct Moby *moby) {
 /* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
 
 extern char table_entry_source_vectors[] __asm__("D_L16_001D96E0");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void transform_moby_table_entry_vectors(struct Moby *moby) __asm__("FUN_L16_002e4f30");
 
@@ -175,7 +174,6 @@ void transform_moby_table_entry_vectors(struct Moby *moby) {
 /* Sets up the draw state, then draws the three entries of the level's table. */
 
 extern char D_L16_001DF2D0[] NOT_SDA;
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float D_L16_001DE720[];
 extern float D_L16_001DEA90[];

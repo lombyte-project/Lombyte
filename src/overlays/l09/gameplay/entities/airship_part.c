@@ -1,5 +1,6 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 int find_nearest_moby_by_class() __asm__("FUN_L09_002c2610");
 
@@ -45,14 +46,9 @@ typedef union { float m[4][4]; Pair_2c26c8 pair; } Buf;
 extern int debug_print() __asm__("FUN_001e93b0");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -61,7 +57,6 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 extern char airship_part_missing_parent_format[] __asm__("D_L09_002082A0");
 extern Pair_2c26c8 D_L09_001613D0 NOT_SDA;

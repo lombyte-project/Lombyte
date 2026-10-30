@@ -50,13 +50,9 @@ extern S166D80 player_camera __asm__("D_L00_00166C80");
 extern S17A780 D_L00_0017A680;
 extern S17BEB8 D_L00_0017BDB8;
 extern char voice_pool[] __asm__("D_0013E550");
-extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L00_0015F638;
 extern float D_L00_00166DD8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
@@ -66,7 +62,6 @@ extern float calculate_triangular_corrected_scalar(float *a, float *b, int *out,
 extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g);
 extern float read_pad_float_history(int) __asm__("FUN_L00_00266e80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
@@ -77,12 +72,12 @@ extern int D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int D_L00_0015F594 __attribute__((sda));
 extern int D_L00_0016C780 NOT_SDA;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int probe_hero_ledge_edge(float *, float *) __asm__("FUN_L00_0020c758");
 #include "rnc/overlay/path.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int hero_check_damage(int) __asm__("FUN_L00_00210ce8");
@@ -105,7 +100,6 @@ extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, 
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int check_pad_press_separation(int, int, int, int) __asm__("FUN_L00_00266e00");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern void *spawn_class_593_moby(int unused, void *pos, int c, float scale, float a, float b) __asm__("FUN_L00_002a99b0");
 extern void emit_hero_animation_voice_and_ground_particle(int a0, int a1, int a2) __asm__("FUN_L00_00205f60");
@@ -141,14 +135,10 @@ extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void emit_randomized_sparkle_pairs(void *, int) __asm__("FUN_L00_002a7e20");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void fast_dec_timer(int *arg0) __asm__("func_001F9740");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
-extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void hero_update_transitions(void) __asm__("FUN_L00_00229b70");
 void hero_update_transitions(void) {
@@ -340,7 +330,7 @@ void hero_update_transitions(void) {
                     }
                     if (scale_game_frames(0xA) < hero.state_timer) {
                         if (((unsigned char *)hero.items[3].moby2) != 0 && ((unsigned char *)hero.items[3].moby2)[0x53] == 1) {
-                            if (func_001F9908_r(&hero.slot3_anim_timer)) {
+                            if (fast_dec_timer(&hero.slot3_anim_timer)) {
                                 if (0.55850536f > D_L00_0017A680.f258 &&
                                     D_L00_0017A680.f254 < 0.34906584f && hero.items[3].state == 2) {
                                     hero.slot3_anim_timer = random_int_between(scale_game_frames(0x6E),
@@ -991,7 +981,7 @@ void hero_update_transitions(void) {
                     }
                     break;
                 case HERO_STATE_APPROACH_TARGET_POSE:
-                    if (vector_distance(hero.motion.pos.f, hero.target_pose.f) < 0.2f) {
+                    if (vector_distance_xy(hero.motion.pos.f, hero.target_pose.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
                                     hero.motion.rot.f[2], hero.target_pose.f[3]) < 0.034906585f) {
@@ -1015,7 +1005,7 @@ void hero_update_transitions(void) {
                     if ((hero.anim_flags & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
-                    if (0.2f < vector_distance(hero.motion.pos.f, hero.target_pose.f)) {
+                    if (0.2f < vector_distance_xy(hero.motion.pos.f, hero.target_pose.f)) {
                         hero_set_state(0x65, 1);
                     }
                     break;
@@ -1869,7 +1859,7 @@ void hero_update_transitions(void) {
                     {
                         int both = 0;
 
-                        func_001F9908_r(&D_L00_0015F678_gp);
+                        fast_dec_timer(&D_L00_0015F678_gp);
                         if (D_L00_0015F678_gp != 0) {
                             both = 1;
                             if (!((controller_state.held & 8) && (controller_state.pressed & 8))) {

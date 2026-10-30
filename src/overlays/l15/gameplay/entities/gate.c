@@ -6,6 +6,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 
@@ -1902,7 +1903,6 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int rand(void);
 extern int scale_game_frames(int);
-extern int fast_dec_timer(int *) __asm__("func_001F9740");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short ultramech_path_horizontal_speed_gp __asm__("D_L15_00161B14") __attribute__((sda));
 extern short ultramech_path_gravity_gp __asm__("D_L15_00161B18") __attribute__((sda));

@@ -3,6 +3,8 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd108.s", FUN_L00_001fd108);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fd1c8.s", FUN_L00_001fd1c8);
@@ -46,7 +48,6 @@ typedef struct {
 } P;
 
 extern P glints[16] __asm__("D_L00_0016EA40");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 
 void update_glints(void) __asm__("FUN_L00_001fea18");

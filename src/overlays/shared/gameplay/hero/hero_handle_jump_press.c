@@ -211,12 +211,12 @@ int hero_handle_jump_press(void) {
 typedef unsigned int u128_229910_00229910 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 typedef union {
     u128_229910_00229910 q_00229910;
     float f[4];
 } V_229910_00229910;
 extern float D_L00_00173E68_lui __asm__("D_L00_00173E68") NOT_SDA;
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
 int check_hero_forward_collision_height(void) __asm__("FUN_L00_00229910");

@@ -6,6 +6,8 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
@@ -63,10 +65,8 @@ extern unsigned char D_0014C190_r[] __asm__("D_0014C190");
 extern unsigned char D_0013F350_r[] __asm__("D_0013F350");
 extern unsigned char D_0014C050_r[] __asm__("D_0014C050");
 extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int D_0014C050; /* no foreign declaration */
 extern int D_L11_0015FC88; /* no foreign declaration */
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern unsigned char D_0013F350[];
 s32 FUN_L00_00203908(s32 a, s32 b);
@@ -77,7 +77,6 @@ extern LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
 extern void func_0022ED80_3102C8(int, int, void *) __asm__("FUN_0022da68");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern int func_001F9850_3102C8(int) __asm__("FUN_001f96f8");
 
 void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
 void thruster_pack_lock_update(Lock *moby)
@@ -127,44 +126,44 @@ void thruster_pack_lock_update(Lock *moby)
         if (moby->bB0 == 0xFF) {
             return;
         }
-        if (!(vector_distance(moby->pos, D_0013F3D0_r) < 4.0f)) {
+        if (!(vector_distance_xy(moby->pos, D_0013F3D0_r) < 4.0f)) {
             return;
         }
         if (!((unsigned int)*(int *)(D_0013F3D0_r + 0x200C) < 2)) {
             return;
         }
         if (item_available[3] == 0) {
-            int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats *)(D_00141968_r))->best2 * 600;
-            if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < elapsed ||
+            int elapsed = scale_game_frames(D_0015EEA4) - ((Stats *)(D_00141968_r))->best2 * 600;
+            if ((int)((float)scale_game_frames(0x12) * 60.0f) < elapsed ||
                 ((Stats *)(D_00141968_r))->best2 * 600 == 0) {
                 help_request(0x2B02, 0x71);
                 return;
             }
             {
-                int now = func_001F9850_3102C8(D_0015EEA4) / 600;
+                int now = scale_game_frames(D_0015EEA4) / 600;
                 if (((Stats *)(D_00141968_r))->best2 < now) {
-                    ((Stats *)(D_00141968_r))->best2 = func_001F9850_3102C8(D_0015EEA4) / 600;
+                    ((Stats *)(D_00141968_r))->best2 = scale_game_frames(D_0015EEA4) / 600;
                 }
             }
         } else if (((Stats *)(D_00141968_r))->count != 0) {
-            int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats *)(D_00141968_r))->best * 600;
-            if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < elapsed ||
+            int elapsed = scale_game_frames(D_0015EEA4) - ((Stats *)(D_00141968_r))->best * 600;
+            if ((int)((float)scale_game_frames(0x12) * 60.0f) < elapsed ||
                 ((Stats *)(D_00141968_r))->best * 600 == 0) {
                 help_request(0x2B01, 0x6C);
                 return;
             }
             {
-                int now = func_001F9850_3102C8(D_0015EEA4) / 600;
+                int now = scale_game_frames(D_0015EEA4) / 600;
                 if (((Stats *)(D_00141968_r))->best < now) {
-                    ((Stats *)(D_00141968_r))->best = func_001F9850_3102C8(D_0015EEA4) / 600;
+                    ((Stats *)(D_00141968_r))->best = scale_game_frames(D_0015EEA4) / 600;
                 }
             }
         } else {
             ((Stats *)(D_00141968_r))->count += 1;
             {
-                int now = func_001F9850_3102C8(D_0015EEA4) / 600;
+                int now = scale_game_frames(D_0015EEA4) / 600;
                 if (((Stats *)(D_00141968_r))->best < now) {
-                    ((Stats *)(D_00141968_r))->best = func_001F9850_3102C8(D_0015EEA4) / 600;
+                    ((Stats *)(D_00141968_r))->best = scale_game_frames(D_0015EEA4) / 600;
                 }
             }
             ((Stats *)(D_00141968_r))->levels =
@@ -180,11 +179,6 @@ void thruster_pack_lock_update(Lock *moby)
 
 extern int D_L11_001611C0 MACRO_ADDR;
 extern unsigned char screen_extent_c[] __asm__("D_0013E500");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
 void append_rotated_textured_screen_quad(float x, float y, float width, float height, float angle, int texture_width,
                        int texture_height, long texture, int z_and_fog, int red, int green, int blue,
@@ -301,7 +295,6 @@ void append_rotated_textured_screen_quad(float x, float y, float width, float he
 /* Draws four quads with the angle advanced by a quarter turn each time. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312510), where it is exact; names translated to the US level program. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 
 void draw_quarter_turn_textured_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
@@ -324,9 +317,7 @@ void draw_quarter_turn_textured_quads(unsigned char red, unsigned char green, un
 /* Projects a world point to screen and stores its x and y in 1/16 units, y plus an offset. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003126D8), where it is exact; names translated to the US level program. */
 
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yoff) __asm__("FUN_L11_00311210");
 
@@ -335,8 +326,8 @@ void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yo
     int *screen_extent_data;
     project_to_screen(projected_point, pt);
     screen_extent_data = (int *)(D_0013E05A + 0x4A6);
-    *outx = func_001FA898_r((projected_point[0] - (float)screen_extent_data[4]) * 0.0625f);
-    *outy = func_001FA898_r((projected_point[1] - (float)screen_extent_data[5]) * 0.0625f) + yoff;
+    *outx = truncate_float_to_s32((projected_point[0] - (float)screen_extent_data[4]) * 0.0625f);
+    *outy = truncate_float_to_s32((projected_point[1] - (float)screen_extent_data[5]) * 0.0625f) + yoff;
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -424,7 +415,6 @@ extern unsigned char linked_moby_trail_long_span_enabled __asm__("D_0015EDB2");
 extern float trail_quad_texture_coordinates[] __asm__("D_L11_001F1490");
 extern short D_L11_001623F0_gp __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void memset(void *, int, int) __asm__("FUN_001153fc");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern int level_frame __asm__("D_L11_0015F5CC");
@@ -535,7 +525,6 @@ int draw_linked_moby_trails(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 
 extern int draw_linked_moby_trails();
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern void f49(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L11_003192c8_c(void) __asm__("FUN_L11_003192c8");
@@ -586,7 +575,6 @@ void update_moby_trail_points(char *moby) {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 #include "rnc/overlay/shared/gameplay/entities/thruster_pack_lock_globals.h"
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern unsigned char D_00141968[];
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -699,13 +687,6 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
     }
     D_L11_001611C0 += ((point_count + 1) / 2) * 16;
 }
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern float vector_distance_xyz(void *, void *) __asm__("FUN_001f9b48");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
 #include "rnc/gameplay/entities/moby.h"
@@ -732,8 +713,8 @@ void update_moby_path_transform(char *moby) {
     clear_u64_value(turn);
     angle_a = fast_arc_tan(current_path_point[0] - next_path_point[0], current_path_point[1] - next_path_point[1]);
     angle_b = fast_arc_tan(next_path_point[0] - lookahead_path_point[0], next_path_point[1] - lookahead_path_point[1]);
-    slope_a = fast_arc_tan(vector_distance(current_path_point, next_path_point), next_path_point[2] - current_path_point[2]);
-    slope_b = fast_arc_tan(vector_distance(next_path_point, lookahead_path_point), lookahead_path_point[2] - next_path_point[2]);
+    slope_a = fast_arc_tan(vector_distance_xy(current_path_point, next_path_point), next_path_point[2] - current_path_point[2]);
+    slope_b = fast_arc_tan(vector_distance_xy(next_path_point, lookahead_path_point), lookahead_path_point[2] - next_path_point[2]);
     turn[1] = fast_add_rotations(fast_subtract_rotations(slope_b, slope_a) * *(float *)(moby_vars + 0x68), slope_a);
     turn[2] = fast_add_rotations(fast_subtract_rotations(angle_b, angle_a) * *(float *)(moby_vars + 0x68), angle_a);
     qcopy(&MOBY(moby)->rot, turn);
@@ -748,7 +729,7 @@ void update_moby_path_transform(char *moby) {
     fast_vec_normalize(direction, matrix + 8, *(float *)(moby_vars + 0x78) * fast_cos(*(float *)(moby_vars + 0x70)));
     fast_vec_add(point, point, direction);
     speed = 0.0f;
-    distance = vector_distance_xyz(&MOBY(moby)->pos, point);
+    distance = fast_vec_dist(&MOBY(moby)->pos, point);
     advance_accelerated_scalar(&speed, (float *)(moby_vars + 0x80), distance, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f);
     fast_vec_sub(direction, point, &MOBY(moby)->pos);
     fast_vec_normalize(direction, direction, *(float *)(moby_vars + 0x80));

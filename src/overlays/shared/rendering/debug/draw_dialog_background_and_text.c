@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/asm_helpers.h"
 
 extern int D_L00_0015F5D8;
 int FUN_L00_00201720(void);
@@ -39,7 +40,6 @@ extern volatile s32 D_L00_0015F628;
 #include "rnc/overlay/shared/rendering/debug/draw_dialog_background_and_text_globals.h"
 extern u8 timed_text_entries[] __asm__("D_L00_00173080");
 void queue_framebuffer_upload(s32) __asm__("FUN_L00_001fc558");
-s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_001f5210_c(s32, s32, s32, s32) __asm__("FUN_001f5210");
 void reset_gs_registers(void) __asm__("FUN_001f3868");
 void setup_gif_paging(s32) __asm__("FUN_001f4280");

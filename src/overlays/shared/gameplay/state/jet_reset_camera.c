@@ -8,6 +8,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/asm_helpers.h"
 typedef struct {
     unsigned char h[0x404];
     unsigned char f[0x7FF];
@@ -19,7 +20,6 @@ extern char D_L00_001BB230[] NOT_SDA;
 extern unsigned char D_0014C050[][16];
 extern char D_001516D0[];
 extern char voice_pool[] __asm__("D_0013E550");
-extern void copy_memory_aligned(int, void *, unsigned short) __asm__("FUN_001f9838");
 
 void jet_reset_camera(OvlQuad *a, OvlQuad *b) __asm__("FUN_L00_00284e50");
 void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
@@ -80,7 +80,6 @@ extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void enter_hero_vehicle_mode(s32, s32, void *) __asm__("FUN_L00_00210a08");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
 extern void FUN_L00_002852c0(void);
 

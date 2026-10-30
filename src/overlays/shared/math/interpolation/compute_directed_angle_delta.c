@@ -3,13 +3,12 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025CB90), where it is exact; names translated to the US level program. */
 
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-float absolute_float(float input) __asm__("func_001F99C0");
 
 float compute_directed_angle_delta(int rotation_direction, float x, float y) __asm__("FUN_L00_0025bb38");
 
@@ -24,7 +23,6 @@ float compute_directed_angle_delta(int rotation_direction, float x, float y) {
     return angle_delta + 6.2831855f;
 }
 extern float FUN_L00_0025bb38_c(float, void *, float) __asm__("FUN_L00_0025bb38");
-float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void step_angle_toward_target(float *current_angle, void *rotation_direction, float target_angle, float angle_step_limit) __asm__("FUN_L00_0025bc00");
 
 void step_angle_toward_target(float *current_angle, void *rotation_direction, float target_angle, float angle_step_limit) {
@@ -39,7 +37,6 @@ void step_angle_toward_target(float *current_angle, void *rotation_direction, fl
 extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025bb38");
 extern void advance_damped_scalar_velocity(float *, float, float, float,
                                       float) __asm__("FUN_L00_0025b798");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 float spring_angle(float *current_angle, float *angular_velocity, int rotation_direction, float x, float angle_error_gain, float angular_velocity_damping, float angular_velocity_limit) __asm__("FUN_L00_0025bc98");
@@ -65,8 +62,6 @@ float spring_angle(float *current_angle, float *angular_velocity, int rotation_d
     }
     return angle_error;
 }
-extern float FUN_001fa580_25be00(float, float) __asm__("FUN_001fa580");
-extern float square_root(float) __asm__("FUN_001f9988");
 extern float approach_value(float, float, float *) __asm__("FUN_00213ed8");
 extern void step_angle_toward_target(float *, void *, float, float) __asm__("FUN_L00_0025bc00");
 
@@ -108,10 +103,9 @@ float approach_angle(float *current_angle, float *angular_velocity, float target
     } else {
         step_angle_toward_target(angular_velocity, 0, 0.0f, angular_braking_step);
     }
-    *current_angle = FUN_001fa580_25be00(*angular_velocity, *current_angle);
+    *current_angle = fast_add_rotations(*angular_velocity, *current_angle);
     return *angular_velocity;
 }
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D038), where it is exact; names translated to the US level program. */
 

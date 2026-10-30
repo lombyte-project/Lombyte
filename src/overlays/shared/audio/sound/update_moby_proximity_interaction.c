@@ -6,13 +6,10 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_L00_0015F5C4;
 extern char ship_proximity_local_offsets[] __asm__("D_L00_001BD880");
 extern int D_L00_0015F630 __asm__("D_L00_0015F630");
@@ -25,7 +22,6 @@ extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void draw_light_flare() __asm__("func_0022DF40");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void update_moby_proximity_interaction(unsigned char *moby) __asm__("FUN_L00_0028e180");
@@ -51,7 +47,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
                 *(int *)(moby + 0x90) = color_pulse_intensity | (color_pulse_intensity << 8) | (color_pulse_intensity << 16);
             }
             add_draw_callback(render_environment_mapped_object, moby);
-            if (vector_distance(moby + 0x10, g_debug_camera) < 32.0f) {
+            if (vector_distance_xy(moby + 0x10, g_debug_camera) < 32.0f) {
                 add_draw_callback(draw_light_flare, moby);
             }
         }
@@ -64,7 +60,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
             }
         } else {
             hero_position_or_scene_flags = (unsigned char *)(&hero.motion.pos);
-            if (vector_distance(moby_position, hero_position_or_scene_flags) < 6.0f) {
+            if (vector_distance_xy(moby_position, hero_position_or_scene_flags) < 6.0f) {
                 transform_vector_by_basis(proximity_test_position, ship_proximity_local_offsets + ship_index[0] * 16, moby + 0xC0);
                 fast_vec_add(proximity_test_position, proximity_test_position, moby_position);
                 if (fast_vec_dist(proximity_test_position, hero_position_or_scene_flags) < 4.0f) {

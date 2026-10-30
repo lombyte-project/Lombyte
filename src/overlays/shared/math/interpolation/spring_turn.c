@@ -2,13 +2,12 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/globals.h"
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Cosine-eased rotation from x toward y at z. */
 float interpolate_wrapped_angle_cosine_eased(float x, float y, float z) __asm__("FUN_L00_00257ef0");
@@ -55,8 +54,6 @@ void interpolate_wrapped_rotations_cosine_eased(float *out, float *start_rotatio
     out[1] = fast_add_rotations(start_rotations[1], fast_subtract_rotations(target_rotations[1], start_rotations[1]) * cosine_ease_weight);
     out[2] = fast_add_rotations(start_rotations[2], fast_subtract_rotations(target_rotations[2], start_rotations[2]) * cosine_ease_weight);
 }
-float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 float spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_00258110");
 float spring_turn(float *turn_step, float current_angle, float target_angle, float spring_strength, float damping_factor, float max_turn_step) {
     float angle_delta = fast_subtract_rotations(target_angle, current_angle);
@@ -146,9 +143,6 @@ extern V_258490 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern V_258490 D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern int FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern float FUN_001f9b20_258490(void *) __asm__("FUN_001f9b20");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float FUN_001f9e90_258490(float, float) __asm__("FUN_001f9e90");
 extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 extern int FUN_L00_001f0d60_258490(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
@@ -192,7 +186,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
         c = D_L00_00173E40_258490;
         if (*(int *)(c + 0x1C) > 0) {
             nrm = (float *)(c + 0x40);
-            if (slope <= FUN_001f9e90_258490(*(float *)(c + 0x48), FUN_001f9b20_258490(nrm))) {
+            if (slope <= fast_arc_tan(*(float *)(c + 0x48), vector_length_xy(nrm))) {
                 *(int *)(c + 0x48) = 0;
                 sceVu0Normalize(nrm, nrm);
                 {
@@ -218,7 +212,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
             if (!FUN_L00_001f0d60_258490(&t, r, 0x24, ign)) {
                 break;
             }
-            ang = FUN_001f9e90_258490(vector_distance(pos, q60),
+            ang = fast_arc_tan(vector_distance_xy(pos, q60),
                                       *(float *)(q40 + 0x28) - pos->f[2]);
             if (*(int *)(q40 + 0x18) != 0 || slope < ang) {
                 qcopy(pos, &D_L00_00173E70_lui);
@@ -256,12 +250,10 @@ typedef union {
 } V_94C8;
 
 extern V_94C8 D_L00_00173E70;
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_length_xy(void *);
 extern int D_L00_00173E40[];
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern V_94C8 D_94C8_60 __asm__("D_L00_00173E60");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
@@ -372,9 +364,7 @@ typedef struct {
 
 extern Glob D_L00_00173E40_c __asm__("D_L00_00173E40");
 
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern s32 FUN_L00_002583f0_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002583f0");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
@@ -485,12 +475,8 @@ done:
         mask |= 4;
     return mask;
 }
-void clear_u64_value(void *) __asm__("FUN_001f99f8");
-float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-float FUN_001f9e90_259028(float, float) __asm__("FUN_001f9e90");
 void approach_w(unsigned char *, float *, float, float, float,
                              float) __asm__("FUN_L00_00258278");
-int fast_dec_timer(void *) __asm__("FUN_001f9740");
 int move_w(unsigned char *, char *, float *, void *,
                             float) __asm__("FUN_L00_00258b50");
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
@@ -500,7 +486,7 @@ int FUN_L00_00259028(unsigned char *moby, char *movement_control, float *target_
     clear_u64_value(out);
     if (fast_vec_dist(moby + 0x10, target_position) < *(float *)(movement_control + 0x2C))
         navigation_result_flags = 4;
-    target_heading = FUN_001f9e90_259028(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
+    target_heading = fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
     approach_w(moby, (float *)(movement_control + 0x14), target_heading, *(float *)(movement_control + 0x3C), *(float *)(movement_control + 0x40),
                             *(float *)(movement_control + 0x44));
     heading_error = fast_difference_between_rotations(target_heading, *(float *)(moby + 0x48));
@@ -619,8 +605,6 @@ int decrement_packed_countdown(int *packed_countdown, int decrement_amount) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A4A0), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 float calculate_triangular_corrected_scalar(float *base_values, float *b, int *out, float triangular_correction_coefficient) __asm__("FUN_L00_00259468");
 
@@ -644,7 +628,6 @@ void predict_position_with_vertical_drop(void *destination, void *base_position,
     displacement[2] -= convert_integer_to_float((frame_count * frame_count + frame_count) >> 1) * vertical_drop_coefficient;
     fast_vec_add(destination, base_position, displacement);
 }
-float square_root(float) __asm__("FUN_001f9988");
 int solve_quadratic_equation(float *larger_root_output, float *smaller_root_output, float quadratic_coefficient, float linear_coefficient, float constant_coefficient) __asm__("FUN_L00_002595a0");
 
 int solve_quadratic_equation(float *larger_root_output, float *smaller_root_output, float quadratic_coefficient, float linear_coefficient, float constant_coefficient) {

@@ -5,15 +5,13 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 typedef struct { f32 f[0x300]; } T_215340;
 extern T_215340 D_L00_0017A680;
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
 extern void set_third_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a210");
 extern void set_fourth_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a228");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 
 #define TF(o) (D_L00_0017A680.f[(o) / 4])
 

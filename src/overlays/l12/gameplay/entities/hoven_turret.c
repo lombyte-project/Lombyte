@@ -11,6 +11,7 @@
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_pool.h"
 #include "sda.h"
 #include "rnc/input/pad_globals.h"
@@ -42,20 +43,15 @@ typedef struct Data_303CA8 {
 } Data_303CA8;
 
 extern Moby *D_L12_0015FFD8;
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float oscillating_link_strip_quad_vertex_offsets[][4] __asm__("D_L12_001FB530");
 extern float oscillating_link_strip_transform_rotations[][4] __asm__("D_L12_001FB5B0");
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_oscillating_target_link_strips.h"
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_globals.h"
 extern float oscillating_link_strip_segment_u_step_gp __asm__("D_L12_00161DF4") __attribute__((sda));
 extern float oscillating_link_strip_scroll_phase_gp __asm__("D_L12_00161DF8") __attribute__((sda));
-extern int euler_rotation_matrix() __asm__("FUN_001fa050");
-extern int multiply_matrix() __asm__("FUN_001fa378");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern void func_001FA218_303CA8(void *, void *) __asm__("FUN_001fa050");
-extern void func_001FA540_303CA8(void *, void *, void *) __asm__("FUN_001fa378");
 extern int func_001F4868_303CA8(int) __asm__("FUN_001f44b8");
 extern void func_L00_001FD1D8_303CA8(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L12_001FB7D0_303CA8[] __asm__("D_L12_001FB510");
@@ -75,14 +71,14 @@ void draw_oscillating_target_link_strips(Moby *moby) {
     int i, segment, uv_index, vertex, pass, ring;
 
     data = *(Data_303CA8 **)&moby->pvars;
-    func_001FA218_303CA8(rotation_matrix, ((float *)&moby->rot));
+    euler_rotation_matrix(rotation_matrix, ((float *)&moby->rot));
     pos = ((float *)&moby->pos);
     translation = &matrices[0][12];
     for (i = 0; i < 2; i++) {
         float *matrix = matrices[i];
 
-        func_001FA218_303CA8(matrix, oscillating_link_strip_transform_rotations[i]);
-        func_001FA540_303CA8(matrix, rotation_matrix, matrix);
+        euler_rotation_matrix(matrix, oscillating_link_strip_transform_rotations[i]);
+        multiply_matrix(matrix, rotation_matrix, matrix);
         if (!(i & 1) && data->target != -1) {
             qcopy(anchor, ((float *)&D_L12_0015FFD8[data->target].pos));
         } else {
@@ -130,9 +126,6 @@ void draw_oscillating_target_link_strips(Moby *moby) {
         }
     }
 }
-extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern float oscillating_link_strip_scroll_rate_gp __asm__("D_L12_00161DFC") __attribute__((sda));
@@ -152,7 +145,7 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
         int i;
         float *points;
         float *intermediate;
-        if (tick_countdown_32_alt((int *)(data + 0x2300 + strip * 4))) {
+        if (fast_dec_timer((int *)(data + 0x2300 + strip * 4))) {
             int vector_count = *(int *)(data + 0x232c);
             float intermediate_storage[vector_count][4];
             char *timers = data + 0x2300;
@@ -232,26 +225,16 @@ typedef struct Row {
 } Row;
 
 extern char D_L12_00167240[];
-extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C;
 extern float D_L12_0015F580[] MACRO_ADDR;
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_0013F3D0; /* no foreign declaration */
 extern int D_L12_001B0930; /* no foreign declaration */
 extern int collision_line() __asm__("FUN_001efa68");
-extern int fast_bsphere_check() __asm__("FUN_001fa728");
 extern int FUN_L00_00259888();
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-float absolute_float(float input) __asm__("func_001F99C0");
 void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) __asm__("FUN_L00_0025b6b8");
 void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
-extern float func_001F9D10_304310(void *, void *) __asm__("FUN_001f9b48");
-extern float func_001FA748_304310(float, float) __asm__("FUN_001fa580");
 extern void func_L00_0025C710_304310(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
-extern int func_L00_00200290_304310(void *, float) __asm__("FUN_001fa728");
 extern int func_00215570_304310(void *, int) __asm__("FUN_00214720");
 extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
@@ -292,8 +275,8 @@ void update_oscillating_target_link(Moby *moby) {
     case TARGET_TRACKING_STATE_ACTIVE:
         moby->rot.z = fast_arc_tan(D_L12_0015FFD8[data->target].pos.x - moby->pos.x,
                                              D_L12_0015FFD8[data->target].pos.y - moby->pos.y);
-        data->dist = func_001F9D10_304310(((float *)&moby->pos), (char *)D_L12_0015FFD8 + (data->target << 8) + 0x10);
-        data->angle = func_001FA748_304310(data->angle, data->turn * 0.017453292f * D_0015ED6C);
+        data->dist = fast_vec_dist(((float *)&moby->pos), (char *)D_L12_0015FFD8 + (data->target << 8) + 0x10);
+        data->angle = fast_add_rotations(data->angle, data->turn * 0.017453292f * D_0015ED6C);
         row = D_L12_001B0C30_304310[data->row];
         swing = fast_sin(data->angle);
         if (1.5707964f < data->angle && data->angle < 3.1415927f) {
@@ -312,14 +295,14 @@ void update_oscillating_target_link(Moby *moby) {
         start.q = row->v10;
         end.q = row->v20;
         func_L00_0025C710_304310(((float *)&moby->pos), &start, &end, swing);
-        if (vector_distance(((float *)&moby->pos), D_0013F4D0_304310) > 64.0f) {
+        if (vector_distance_xy(((float *)&moby->pos), D_0013F4D0_304310) > 64.0f) {
             return;
         }
         if (moby->visible == 0 && D_L12_0015FFD8[data->target].visible == 0) {
             fast_vec_add(&start, ((float *)&moby->pos), ((float *)&D_L12_0015FFD8[data->target].pos));
             fast_vec_scale(&start, &start, half);
             start.f[3] = 16.0f;
-            if (func_L00_00200290_304310(&start, 32.0f) == -1) {
+            if (fast_bsphere_check(&start, 32.0f) == -1) {
                 return;
             }
         }
@@ -345,8 +328,6 @@ void update_oscillating_target_link(Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L08_00313ba8(void *);
@@ -412,14 +393,14 @@ void update_hoven_turret_target_alignment_timer(void *moby) {
                 position.f[2] += 1.5f;
             }
             yaw = fast_arc_tan(position.f[0] - view_303370.position.f[0], position.f[1] - view_303370.position.f[1]);
-            pitch = fast_arc_tan(vector_distance(&view_303370.position, &position), position.f[2] - view_303370.position.f[2]);
+            pitch = fast_arc_tan(vector_distance_xy(&view_303370.position, &position), position.f[2] - view_303370.position.f[2]);
             if (fast_difference_between_rotations(yaw, view_303370.yaw) < yaw_limit &&
                 fast_difference_between_rotations(pitch, -view_303370.pitch) < pitch_limit)
                 found = 1;
         }
     }
     if (!found) {
-        tick_countdown_32_alt(&data->timer);
+        fast_dec_timer(&data->timer);
     } else {
         data->timer += 2;
         if (scale_game_frames(30) < data->timer)
@@ -488,7 +469,6 @@ typedef struct {
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char *FUN_L00_0026dd20(void *, void *, int, int, float);
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/hoven_turret_update.h"
@@ -501,7 +481,6 @@ extern int D_L12_00161F00 __attribute__((sda));
 extern int D_L12_00161F04 __attribute__((sda));
 extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_00161F24 MACRO_ADDR;
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int hero_set_state(int, int) __asm__("FUN_L12_002400d0");
 extern void FUN_L00_001fff28(void *, int, float);
@@ -526,14 +505,12 @@ extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0
 extern void detach_manipulator(void *, void *);
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
-extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 void FUN_L12_003032e8_c(struct Moby *moby) __asm__("FUN_L12_003032e8");
 extern char D_0013E533[];
 extern unsigned char D_0014171B_304920[] __asm__("D_0014C050");
 extern int invert52_macro[] __asm__("D_0015EDDC") MACRO_ADDR;
 extern Moby *D_L12_0015FFD8_gp __asm__("D_L12_0015FFD8") MACRO_ADDR;
 extern char D_L12_00167180_304920[] __asm__("D_L12_00167100");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int func_0020BFC8_304920(int, int) __asm__("FUN_0020b178");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
@@ -579,7 +556,7 @@ void hoven_turret_update(struct Moby *moby) {
 
             moby_point_position(moby, 3, out);
         }
-        if (vector_distance(((float *)&moby->pos), ((Hero *)(D_0013E533 + 0xE1D))->motion.pos.f) < 7.0f
+        if (vector_distance_xy(((float *)&moby->pos), ((Hero *)(D_0013E533 + 0xE1D))->motion.pos.f) < 7.0f
             || ((Hero *)(D_0013E533 + 0xE1D))->ground_moby == moby) {
             moby->pos.z = moby->pos.z + ((data->fA0 - 1.2f) - moby->pos.z) * 0.11f;
             data->fA4 = fast_add_rotations(data->fA4, fast_add_rotations(fast_subtract_rotations(fast_arc_tan(((Hero *)(D_0013E533 + 0xE1D))->motion.pos.f[0] - moby->pos.x, ((Hero *)(D_0013E533 + 0xE1D))->motion.pos.f[1] - moby->pos.y), moby->rot.z), 1.5707964f) * 0.01f) * 0.9f;
@@ -594,7 +571,7 @@ void hoven_turret_update(struct Moby *moby) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
             }
         }
-        if (vector_distance(((float *)&moby->pos), ((float *)&((Hero *)(D_0013E533 + 0xE1D))->moby->pos)) < 1.3f) {
+        if (vector_distance_xy(((float *)&moby->pos), ((float *)&((Hero *)(D_0013E533 + 0xE1D))->moby->pos)) < 1.3f) {
             if (scale_game_frames(0xF) < ((Hero *)(D_0013E533 + 0xE1D))->grounded_frames) {
                 jet_mount(((float *)&moby->pos), ((float *)&moby->rot), 1, 0, 0);
                 if (moby->prev_seq != 5) {
@@ -814,9 +791,6 @@ typedef struct {
     float f8C;
 } Data;
 
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short hoven_turret_hud_gauge_center_x __asm__("D_L12_00161E14") __attribute__((sda));
 extern short hoven_turret_hud_gauge_center_y __asm__("D_L12_00161E18") __attribute__((sda));
 extern short hoven_turret_hud_frame_half_width __asm__("D_L12_00161E1C") __attribute__((sda));
@@ -830,8 +804,6 @@ extern short hoven_turret_hud_orientation_indicator_radius_y __asm__("D_L12_0016
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
 extern long func_001F4868_3055F8(int) __asm__("FUN_001f44b8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float func_001FA7D8_3055F8(float) __asm__("FUN_001fa610");
 extern void func_L02_0020BF88_3055F8(void *, void *, void *, long, int) __asm__("FUN_L02_0020bc88");
 
 void draw_hoven_turret_hud(Moby *moby) __asm__("FUN_L12_00304218");
@@ -912,7 +884,7 @@ void draw_hoven_turret_hud(Moby *moby) {
             colors[1] = dim_color;
             colors[0] = dim_color;
         }
-        start_angle = func_001FA7D8_3055F8((float)j * 0.19634955f);
+        start_angle = fast_normalize_angle((float)j * 0.19634955f);
         end_angle = fast_add_rotations(start_angle, 0.19634955f);
         x0 = truncate_float_to_s32(*(float *)&hoven_turret_hud_health_dial_radius_x * fast_sin(start_angle));
         y0 = truncate_float_to_s32(*(float *)&hoven_turret_hud_health_dial_radius_y * -fast_cos(start_angle));
@@ -949,16 +921,16 @@ void draw_hoven_turret_hud(Moby *moby) {
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
-    angle = func_001FA7D8_3055F8(fast_add_rotations(moby->rot.z * 4.0f, 0.0f));
+    angle = fast_normalize_angle(fast_add_rotations(moby->rot.z * 4.0f, 0.0f));
     xy[0] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
     xy[0] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
-    angle = func_001FA7D8_3055F8(fast_add_rotations(moby->rot.z * 4.0f, 1.5707964f));
+    angle = fast_normalize_angle(fast_add_rotations(moby->rot.z * 4.0f, 1.5707964f));
     xy[1] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
     xy[1] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
-    angle = func_001FA7D8_3055F8(fast_add_rotations(moby->rot.z * 4.0f, -1.5707964f));
+    angle = fast_normalize_angle(fast_add_rotations(moby->rot.z * 4.0f, -1.5707964f));
     xy[2] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
     xy[2] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
-    angle = func_001FA7D8_3055F8(fast_add_rotations(moby->rot.z * 4.0f, 3.1415927f));
+    angle = fast_normalize_angle(fast_add_rotations(moby->rot.z * 4.0f, 3.1415927f));
     xy[3] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
     xy[3] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
     func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(hoven_turret_hud_yaw_indicator_texture_index), 1);
@@ -966,16 +938,16 @@ void draw_hoven_turret_hud(Moby *moby) {
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
-    angle = func_001FA7D8_3055F8(fast_add_rotations(data->f74 * 8.0f, 0.0f));
+    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, 0.0f));
     xy[0] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
     xy[0] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
-    angle = func_001FA7D8_3055F8(fast_add_rotations(data->f74 * 8.0f, 1.5707964f));
+    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, 1.5707964f));
     xy[1] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
     xy[1] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
-    angle = func_001FA7D8_3055F8(fast_add_rotations(data->f74 * 8.0f, -1.5707964f));
+    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, -1.5707964f));
     xy[2] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
     xy[2] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
-    angle = func_001FA7D8_3055F8(fast_add_rotations(data->f74 * 8.0f, 3.1415927f));
+    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, 3.1415927f));
     xy[3] += (u32)((truncate_float_to_s32(fast_sin(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f) << 16) - (int)0x80000000);
     xy[3] += truncate_float_to_s32(fast_cos(angle) * *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) + 0x8000;
     func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(hoven_turret_hud_pitch_indicator_texture_index), 1);
@@ -1063,7 +1035,7 @@ void update_homing_mine(struct Moby *moby) {
     find_point_ahead(moby, target, 8.0f);
     source = find_moby_hit(moby, 0x230000, 0);
     trooper_take_damage(moby, source, damage, 0, &hits, 0, 0, 4);
-    if (vector_distance(&moby->pos, target) < 0.25f ||
+    if (vector_distance_xy(&moby->pos, target) < 0.25f ||
         (hits >= 2 && source != NULL && source->moby->oclass != 0x4F5)) {
         spawn_explosion_304e00(moby, D_L12_0015F580, 0, 0.0f, 0.0f, 3, 3, 5,
             1.0f, 0.5f, 4.0f, 0.7f, 2, 7.0f, 0, 0, -1, 0);
@@ -1097,7 +1069,7 @@ void update_homing_mine(struct Moby *moby) {
             data->speed = frame_time * 5.75f;
         angle = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
         turn = angle;
-        if (vector_distance(&moby->pos, target) < 7.0f)
+        if (vector_distance_xy(&moby->pos, target) < 7.0f)
             turn = fast_add_rotations(angle, data->turn);
         velocity[0] = fast_cos(turn) * data->speed;
         velocity[1] = fast_sin(turn) * data->speed;

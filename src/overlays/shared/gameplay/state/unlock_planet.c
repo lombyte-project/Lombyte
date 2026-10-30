@@ -9,10 +9,10 @@
 #include "qzero.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 extern short D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")NOT_SDA;
@@ -45,7 +45,7 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
             continue;
         if (*(unsigned char *)(candidate_moby + 0x20) != 3)
             continue;
-        candidate_distance_score = vector_distance(query_moby + 0x10, candidate_moby + 0x10);
+        candidate_distance_score = vector_distance_xy(query_moby + 0x10, candidate_moby + 0x10);
         if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
             best = candidate_distance_score;
@@ -64,7 +64,7 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
             continue;
         if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
             continue;
-        candidate_distance_score = vector_distance(query_moby + 0x10, candidate_moby + 0x10);
+        candidate_distance_score = vector_distance_xy(query_moby + 0x10, candidate_moby + 0x10);
         if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
             best = candidate_distance_score;
@@ -136,7 +136,7 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         if (*(unsigned char *)(indexed_candidate + 0x20) == 0xFD) continue;
         if (*(unsigned char *)(indexed_candidate + 0x20) != 3) continue;
         ok = 1;
-        candidate_distance_score = vector_distance(query_moby + 0x10, indexed_candidate + 0x10);
+        candidate_distance_score = vector_distance_xy(query_moby + 0x10, indexed_candidate + 0x10);
         if (best <= candidate_distance_score) {
             ok = 0;
         } else if (exclusion_list_bound > 0) {
@@ -163,7 +163,7 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         if (*(unsigned char *)(listed_candidate + 0x20) == 0xFD) continue;
         if (*(unsigned char *)(listed_candidate + 0xBC) == 0) continue;
         ok = 1;
-        candidate_distance_score = vector_distance(query_moby + 0x10, listed_candidate + 0x10);
+        candidate_distance_score = vector_distance_xy(query_moby + 0x10, listed_candidate + 0x10);
         if (best <= candidate_distance_score) {
             ok = 0;
         } else if (exclusion_list_bound > 0) {
@@ -207,9 +207,6 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
 }
 typedef float M4_260400[16] __attribute__((aligned(16)));
 extern char *FUN_L00_002603d0_c(char *) __asm__("FUN_L00_002603d0");
-void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
 int FUN_L00_00260400(int unused_subject_object, char *reference_object, void *input_position, void *input_rotation, float *output_position, void *out) {
@@ -231,10 +228,6 @@ int FUN_L00_00260400(int unused_subject_object, char *reference_object, void *in
 #include "rnc/overlay/quad.h"
 typedef float V4_2604f0[4] __attribute__((aligned(16)));
 u8 *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
-void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
-void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *,
                                void *) __asm__("FUN_L00_00260668");
@@ -271,10 +264,6 @@ int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002616E0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002603d0(char *);
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
 int convert_pose_to_reference_local(int x, char *o, float *a, float *c, float *b, float *d) __asm__("FUN_L00_00260668");
@@ -294,9 +283,6 @@ int convert_pose_to_reference_local(int x, char *reference_object, float *input_
     return 1;
 }
 typedef float M4[16] __attribute__((aligned(16)));
-void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 #include "qcopy.h"
 void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) __asm__("FUN_L00_00260738");
@@ -426,7 +412,6 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void debug_print() __asm__("FUN_001e93b0");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern void spawn_bolt_by_value(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");

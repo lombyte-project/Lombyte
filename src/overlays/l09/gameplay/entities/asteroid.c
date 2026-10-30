@@ -7,6 +7,7 @@
 
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 
 extern union PacketCursor l09_packet __asm__("D_L09_001611C0") MACRO_ADDR;
@@ -116,7 +117,6 @@ typedef struct {
 extern char level09_scrolling_strip_gs_setup_packet[] __asm__("D_L09_0016EAA0");
 extern int *D_L09_001611C0;
 extern int D_L09_0015F5CC;
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
 extern void queue_level09_strip_texture_packets(int, int) __asm__("FUN_L09_0021e560");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -171,7 +171,6 @@ void draw_level09_scrolling_textured_strips(char *list, int count, float unused,
 }
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
-extern void set_scale_matrix(float, void *) __asm__("FUN_001f9ff8");
 extern void setup_offset_vector(float, void *, void *) __asm__("FUN_001f9a68");
 extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
@@ -231,7 +230,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     }
     update_view_context();
     update_camera_view_matrices();
-    set_scale_matrix(1024.0f, matrix);
+    set_scale_matrix(matrix, 1024.0f);
     setup_offset_vector(-1024.0f, offset, D_L09_00166F40);
     offset[3] = 1.0f;
     vu1_add_data_ref(scaled_entries_vu1_setup_data, l09_scaled_entries_vu1_setup_qword_count[0]);
@@ -938,7 +937,6 @@ extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern int FUN_L09_002eaea8_c() __asm__("FUN_L09_002eaea8");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void update_fading_asteroid_debris(unsigned char *m) __asm__("FUN_L09_002ead30");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1608,7 +1606,6 @@ extern float platform_sink_speed_gp __asm__("D_L09_001619F8") __attribute__((sda
 extern float platform_height_return_gain_gp __asm__("D_L09_001619FC") __attribute__((sda));
 #include "rnc/overlay/l09/gameplay/entities/asteroid_data/platform_update.h"
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");

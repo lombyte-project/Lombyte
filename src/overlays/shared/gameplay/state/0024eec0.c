@@ -6,6 +6,7 @@ int advance_moby_animation_blend() __asm__("FUN_L00_0024f190");
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 typedef struct {
     float m[16];
 } __attribute__((aligned(16))) Mtx;
@@ -22,8 +23,6 @@ typedef struct {
     char h[0x10];
     Ent32 e[1];
 } Tbl;
-void transpose_rotation_matrix(Mtx *, void *) __asm__("FUN_001fa2d8");
-void transform_vector(Vec4 *, Vec4 *, Mtx *) __asm__("FUN_001f9d20");
 void set_moby_local_table_entry(char *p, int idx, void *v, float a, float b) __asm__("FUN_L00_0024eed8");
 void set_moby_local_table_entry(char *moby, int table_entry_index, void *v, float unscaled_entry_w, float b) {
     Mtx transposed_rotation;
@@ -277,8 +276,6 @@ typedef struct {
     u64_24f440 q[1];  /* 0x10 */
 } Packet;
 
-extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
-extern void copy_memory_aligned(void *, void *, int) __asm__("FUN_001f9838");
 extern void flush_cache(int) __asm__("FUN_00118a80");
 
 /* Defined under a local name: this unit already declares FUN_L00_0024f440
@@ -303,7 +300,7 @@ void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet *out) 
         Frame_24f440 **ss = (Frame_24f440 **)(r + 0x1C);
         selected_frame = ss[j];
     }
-    clear_blocks_16(out, ((na + 3) * 8) & 0xFF0);
+    fast_mem_zero16(out, ((na + 3) * 8) & 0xFF0);
     k = na + selected_frame->hA;
     k += selected_frame->hE;
     out->h8 = na * 8;

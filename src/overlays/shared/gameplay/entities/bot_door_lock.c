@@ -7,10 +7,9 @@
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L06_00167400[];
 extern OvlVec4 D_L06_001fe8d0[];
@@ -172,10 +171,7 @@ extern float bot_door_lock_max_effect_horizontal_scale_gp __asm__("D_L06_001622E
 extern unsigned char D_001413F4 NOT_SDA;
 extern unsigned char D_0015EDB4;
 extern unsigned char D_0014C050[];
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void add_draw_callback(int, int) __asm__("FUN_001f4600");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
@@ -417,7 +413,6 @@ void spawn_timed_projected_sprite_effect(char *world_position, int duration_upda
 }
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern s32 D_0013E500[];

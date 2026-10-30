@@ -3,6 +3,8 @@
 #include "asm.h"
 #include "rnc/overlay/quad.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
@@ -10,10 +12,7 @@
 
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L08_001B29A4 NOT_SDA;
 void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_override) __asm__("FUN_L08_0027f5f0");
@@ -41,7 +40,7 @@ void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_ov
         }
         *(short *)(particle + 0xA) = scale_game_frames(0x37);
         *(int *)(particle + 4) = (packed_high_byte << 24) | 0xFFFFFF;
-        particle[9] = func_001FA898_r(4.0f) + 0x20;
+        particle[9] = truncate_float_to_s32(4.0f) + 0x20;
         particle[3] = 0x48;
         particle[1] = 0;
         particle[2] = D_L08_001B29A4[kind];

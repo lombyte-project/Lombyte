@@ -7,10 +7,11 @@
 #include "rnc/overlay/hud.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 extern unsigned char D_0013E529[];
 void hud_update_counter(char *) __asm__("FUN_L00_00235ea0");
-int scale_game_frames(int) __asm__("FUN_001f96f8");
 /* Sets p+8 to 10 or 5 by D_0013E529, then sets or caps the 0x7C timer by the hero mode. */
 void update_hud_counter_cap_and_visibility(char *hud_element) __asm__("FUN_L00_002377b8");
 
@@ -143,7 +144,6 @@ extern s32 D_L00_0015F72C __attribute__((sda));
 extern D00237ae8 l00_eight_slot_hud_selector_entries[] __asm__("D_L00_0017DAC0");
 extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
 extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
-s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) __asm__("FUN_L00_00237ae8");
 
 void initialize_eight_slot_hud_selector(O00237ae8 *hud_element) {
@@ -212,9 +212,6 @@ extern int D_00141610[];
 extern int D_L00_0015FA98 MACRO_ADDR;
 extern int D_L00_0015FA94;
 extern int D_L00_0015F3F8;
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern float square_root(float) __asm__("FUN_001f9988");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int remove_hud_item(int) __asm__("FUN_001ff480");
 typedef struct {
     u8 p0[0x10B8];
@@ -233,12 +230,6 @@ extern int D_L00_0017DC1C NOT_SDA;
 extern int D_L00_0017DC20 NOT_SDA;
 extern int D_L00_0017DC24 NOT_SDA;
 extern int D_0015EEA4;
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern int FUN_001fa6d0(float);
-extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 /* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
@@ -276,7 +267,7 @@ void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
             if (old == -1 || fast_difference_between_rotations(previous_slot_angle, fast_subtract_rotations(stick_angle, 1.5707964f)) > 0.58904862f) {
                 stick_slot_index = (int)slot_position % D_L00_0015FA90;
                 if (((stick_slot_index ^ 1) & 1)) {
-                    float fr = slot_position - (float)FUN_001fa6d0(slot_position);
+                    float fr = slot_position - (float)truncate_float_to_s32(slot_position);
                     if (fr > 1.0f - hud_item_selector_even_slot_edge_fraction_gp) stick_slot_index++;
                     else if (fr < hud_item_selector_even_slot_edge_fraction_gp) stick_slot_index--;
                     stick_slot_index = (stick_slot_index + D_L00_0015FA90) % D_L00_0015FA90;
@@ -346,15 +337,10 @@ extern unsigned char D_00141EA0[];
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 #include "rnc/overlay/level_labels.h"
 extern char D_L00_0015F7C8[];
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern void * D_L00_0015FAC0;
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
 extern s32 sprintf(char *, const char *, ...);
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern int D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern int D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern int D_L00_0015F720_gp __asm__("D_L00_0015F720") __attribute__((sda));
@@ -524,7 +510,6 @@ int draw_hud_item_selector_panel(HudElem *rec) {
 }
 extern int D_L00_0015F72C __attribute__((sda));
 extern int four_slot_hud_selector_table_pointer_gp __asm__("D_L00_0015F740") __attribute__((sda));
-int scale_game_frames(int) __asm__("FUN_001f96f8");
 void initialize_four_slot_hud_selector(char *hud_element) __asm__("FUN_L00_00238b18");
 
 void initialize_four_slot_hud_selector(char *hud_element) {
@@ -674,7 +659,6 @@ typedef struct {
     int sel;
 } Elem;
 
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern int D_L00_0015F5CC;
 extern int D_L00_0015F720 __attribute__((sda)); /* no foreign declaration */
 extern int D_L00_0015F724 __attribute__((sda)); /* no foreign declaration */
@@ -690,11 +674,6 @@ extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
 int FUN_L00_00235a70_c(HudElem_238f88 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 extern Ids D_L00_0015F8C0_239918 __asm__("D_L00_0015F7E0");
 extern char D_L00_0017E5D8_239918[] __asm__("D_L00_0017E4D8");
-extern float func_001FA888_239918(int) __asm__("FUN_001fa6c0");
-extern float func_001F9FA8_239918(float) __asm__("FUN_001f9de0");
-extern int func_001FA898_239918(float) __asm__("FUN_001fa6d0");
-extern float func_001F9F90_239918(float) __asm__("FUN_001f9dc8");
-extern float func_001FA748_239918(float, float) __asm__("FUN_001fa580");
 extern int func_00200198_239918(int, int) __asm__("FUN_001ff960");
 extern void func_00200468_239918(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
@@ -715,8 +694,8 @@ int draw_hud_radial_selector_panel(Elem *element) {
 
     counters = element->cnt;
     {
-        float frames = func_001FA888_239918(element->cnt[0]);
-        open_fade = frames / func_001FA888_239918(D_L00_0015F780_gp);
+        float frames = convert_integer_to_float(element->cnt[0]);
+        open_fade = frames / convert_integer_to_float(D_L00_0015F780_gp);
     }
     if (1.0f < open_fade) {
         open_fade = 1.0f;
@@ -724,8 +703,8 @@ int draw_hud_radial_selector_panel(Elem *element) {
         open_fade = 0.0f;
     }
     {
-        float frames = func_001FA888_239918(counters[1]);
-        text_fade = frames / func_001FA888_239918(D_L00_0015F780_gp);
+        float frames = convert_integer_to_float(counters[1]);
+        text_fade = frames / convert_integer_to_float(D_L00_0015F780_gp);
     }
     if (1.0f < text_fade) {
         text_fade = 1.0f;
@@ -733,17 +712,17 @@ int draw_hud_radial_selector_panel(Elem *element) {
         text_fade = 0.0f;
     }
     {
-        float phase = func_001FA888_239918(D_L00_0015F5CC % D_L00_0015F7B0);
+        float phase = convert_integer_to_float(D_L00_0015F5CC % D_L00_0015F7B0);
         float wave;
         float max_alpha;
-        phase = phase / func_001FA888_239918(D_L00_0015F7B0);
+        phase = phase / convert_integer_to_float(D_L00_0015F7B0);
         phase = phase * 6.2831802f;
-        wave = func_001F9FA8_239918(phase - 3.1415901f);
+        wave = fast_sin(phase - 3.1415901f);
         max_alpha = open_fade * 128.0f;
-        frame_alpha = func_001FA898_239918(max_alpha);
+        frame_alpha = truncate_float_to_s32(max_alpha);
         wave = wave * 0.125f;
         wave = wave + 0.875f;
-        pulse_alpha = func_001FA898_239918(max_alpha * wave);
+        pulse_alpha = truncate_float_to_s32(max_alpha * wave);
     }
     x = element->x;
     y = element->y;
@@ -756,15 +735,15 @@ int draw_hud_radial_selector_panel(Elem *element) {
     func_00200468_239918(func_00200198_239918(0xE934, 1), x, y + D_L00_0015F71C_gp, half_width, -half_height, frame_alpha);
     for (i = 0; i < D_L00_0015FA90; i++) {
         int icon_x, icon_y;
-        float angle = func_001FA748_239918((float)i * 2.0f * 3.1415927f / (float)D_L00_0015FA90 - 3.1415927f, 1.5707964f);
-        icon_x = x + D_L00_0015F720 + (int)(D_L00_0015F78C * func_001F9F90_239918(angle) * D_L00_0015F7C4);
-        icon_y = y + D_L00_0015F724 + (int)(D_L00_0015F78C * func_001F9FA8_239918(angle));
+        float angle = fast_add_rotations((float)i * 2.0f * 3.1415927f / (float)D_L00_0015FA90 - 3.1415927f, 1.5707964f);
+        icon_x = x + D_L00_0015F720 + (int)(D_L00_0015F78C * fast_cos(angle) * D_L00_0015F7C4);
+        icon_y = y + D_L00_0015F724 + (int)(D_L00_0015F78C * fast_sin(angle));
         if (element->sel == i && D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0 != 0) {
             func_00200468_239918(func_00200198_239918(0xE99C, 0), icon_x - 0x13, icon_y - 0x13, 0x26, 0x26, pulse_alpha);
         }
         if (D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0 != 0) {
             if (i != element->sel) {
-                alpha = func_001FA898_239918((float)frame_alpha * D_L00_0015F7C0);
+                alpha = truncate_float_to_s32((float)frame_alpha * D_L00_0015F7C0);
             } else {
                 alpha = frame_alpha;
             }
@@ -796,7 +775,6 @@ typedef struct {
     short a, b, c, d;
 } Q2395b0;
 extern Q2395b0 l00_hud_element_counter_state __asm__("D_L00_0015FAB0");
-int scale_game_frames(int) __asm__("FUN_001f96f8");
 void initialize_numeric_hud_values_and_dimensions() __asm__("FUN_L00_00235c80");
 /* Sets 0x7C, 0x58/0x5C = 64, 0x48 = 32, calls 00235c80 and links D_L00_0015FAB0. */
 void initialize_hud_element_with_counters(char *hud_element) __asm__("FUN_L00_002395b0");
@@ -910,8 +888,6 @@ typedef struct {
     s16 *p;
 } Hud;
 
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_001ff960_c(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern void FUN_001ffc30_c(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
@@ -1055,7 +1031,6 @@ typedef struct T00239d00 {
 } T00239d00;
 extern s32 bolt_panel_open_steps_gp __asm__("D_L00_0015F824") __attribute__((sda));
 extern s32 bolt_text_fade_steps_gp __asm__("D_L00_0015F828") __attribute__((sda));
-extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) __asm__("FUN_L00_00239d00");
 
 void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
@@ -1066,9 +1041,9 @@ void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
     *(volatile s16 *)hud_element->ctr = (*hud_element->ctr + 1) % icon_cycle_period;
     if (hud_element->frame != bolt_count_snapshot) {
         hud_element->frame = bolt_count_snapshot;
-        hud_element->thr = FUN_001f96f8_c(90);
+        hud_element->thr = scale_game_frames(90);
     }
-    if (FUN_001f96f8_c(5) <= hud_element->thr) {
+    if (scale_game_frames(5) <= hud_element->thr) {
         if (hud_element->a < bolt_panel_open_steps_gp) {
             hud_element->a++;
         } else if (visibility_counters[1] < bolt_text_fade_steps_gp) {
@@ -1103,7 +1078,6 @@ extern s32 digit_width __asm__("D_L00_0015F84C") __attribute__((sda));
 /* "%d" */
 extern char bolt_count_format[] __asm__("D_L00_0015F850") NOT_SDA;
 
-extern f32 convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 /* int return and no prototype are load-bearing */
@@ -1192,7 +1166,6 @@ int draw_bolt_counter_hud_panel(HudElem *hud_element)
 }
 #include "sda.h"
 extern s32 D_00141398 NOT_SDA;
-s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void update_hud_panel_visibility(u8 *hud_element) __asm__("FUN_L00_0023a218");
 
 void update_hud_panel_visibility(u8 *hud_element) {
@@ -1229,8 +1202,6 @@ extern s32 bolt_exclamation_label_y_offset_gp __asm__("D_L00_0015F908") __attrib
 extern s32 bolt_exclamation_label_color_from_gp __asm__("D_L00_0015F90C") __attribute__((sda));
 extern s32 bolt_exclamation_label_color_to_gp __asm__("D_L00_0015F910") __attribute__((sda));
 extern s32 bolt_exclamation_label_pulse_base_period_frames_gp __asm__("D_L00_0015F914") __attribute__((sda));
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void print_text_with_texture_3(s32, s32, s32, char *, s32) __asm__("FUN_L00_001fb470");
 
 /* Draws the short counter panel, its spinning icon, and a pulsing label. */

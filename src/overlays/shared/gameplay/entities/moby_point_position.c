@@ -2,12 +2,12 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_00250800), where it is exact; names translated to the US level program. */
 
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void get_moby_joint_matrices(void *, int, int *, void *) __asm__("FUN_00210850");
 
 /* Writes into arg2 the 0x30 point of joint arg1, scaled by 0x2C/1024 and moved to world space. */

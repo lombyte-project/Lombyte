@@ -12,6 +12,8 @@
 #include "rnc/gameplay/state/level_state.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Level main loop (shared by every level): clears the level's work area, sets up the level and counts the visit
    and play time of the planet, then runs one frame per pass, dispatching on the game mode, until the level asks to
@@ -28,7 +30,6 @@ extern long frm_clock_time __asm__("D_0015ED40");
 /* lower alias of D_L00_0015F5AC: retail stores the float view with lui, the int view through $gp */
 extern float D_L00_0015F5A8_macro[] __asm__("D_L00_0015F5A8") MACRO_ADDR;
 
-extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern int debug_print(void *) __asm__("FUN_001e93b0");
 extern void init_stash(void) __asm__("FUN_00232d00");
 extern void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
@@ -81,8 +82,6 @@ extern long get_frame_texture(int) __asm__("FUN_001ffa10");
 extern void draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
 extern void do_gif_paging(void) __asm__("FUN_001f4398");
 extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void reset_gs_registers_pr(void) __asm__("FUN_001f3958");
 extern void do_space_transition(void) __asm__("FUN_00231ff0");
 extern void music_unpause(void) __asm__("FUN_00216088");
@@ -114,7 +113,7 @@ void run_level_main_loop(void) {
     int per;
 
     if (((level_startup_clear_end - level_startup_clear_start) & 0xF) == 0 && ((unsigned int)level_startup_clear_start & 0xF) == 0) {
-        clear_blocks_16(level_startup_clear_start, level_startup_clear_end - level_startup_clear_start);
+        fast_mem_zero16(level_startup_clear_start, level_startup_clear_end - level_startup_clear_start);
     } else {
         debug_print(level_bss_clear_args);
         for (i = 0; i < level_startup_clear_end - level_startup_clear_start; i++) {
@@ -378,7 +377,6 @@ extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern unsigned char D_0014161B[];
 extern unsigned char l00_map_outside_circle_mask[] __asm__("D_L00_00184394");
 extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
-extern void fast_mem_copy(void *, void *, int) __asm__("FUN_001f98d0");
 extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
 s32 load(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
 s32 stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");

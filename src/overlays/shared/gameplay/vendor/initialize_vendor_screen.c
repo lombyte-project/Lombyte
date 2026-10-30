@@ -3,6 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "asm.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Opens the vendor screen for moby m in level lvl: sets up its camera, resets the screen state and runs it until it closes. */
 /* Ported from rac1-decomp (src/overlays/shared/update_002AFD00.c: func_L01_002AFD00), where it is exact; names translated to the US level program. */
@@ -18,7 +19,6 @@ extern char fx_cutscene[] __asm__("D_L01_0016CCE0");
 extern char D_L01_0017C7C0[];
 extern char vendor_screen_state_storage[] __asm__("D_L01_001CA940");
 extern float D_L01_0015F3FC;
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
 #include "rnc/overlay/shared/gameplay/vendor/initialize_vendor_screen_globals.h"
 extern int vendor_relocation_offsets[] __asm__("D_L01_00174280");
@@ -36,11 +36,8 @@ extern void load_scene_chunks_with_fade(int) __asm__("FUN_L00_002454c8");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void fill_transfer_words() __asm__("FUN_001f97e8");
 extern void music_pause(s32);
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void transform_vector_by_basis(void *, void *, void *);
-extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");

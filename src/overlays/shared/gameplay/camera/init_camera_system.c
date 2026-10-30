@@ -5,6 +5,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 typedef struct {
@@ -282,10 +283,8 @@ void compute_position_from_spherical_offset(float *output_position, float *angle
 
 typedef float W[4] __attribute__((aligned(16)));
 
-extern float vector_length_xy(float *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void subtract_vector_xyz(float *) __asm__("FUN_001f9a28");
-extern void fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Fills a from a subtract_vector_xyz result: two fast_arc_tan angles and its length. */
 int compute_spherical_offset_from_positions(float *angles_and_distance) __asm__("FUN_L00_001ed630");

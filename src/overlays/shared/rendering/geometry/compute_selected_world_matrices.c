@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef struct {
     float m[16];
@@ -10,9 +11,7 @@ typedef struct {
     float r[12];
     float t[4];
 } __attribute__((aligned(16))) M4;
-void copy_matrix_rotation(Mtx *, void *) __asm__("FUN_001fa298");
 void get_moby_joint_matrices(char *, int, int, M4 *) __asm__("FUN_00210850");
-void multiply_matrix(void *, Mtx *, void *) __asm__("FUN_001fa378");
 void compute_selected_world_matrices(char *transform_source, int matrix_count, int matrix_selection_indices, M4 *out) __asm__("FUN_L00_0024f8f0");
 
 void compute_selected_world_matrices(char *transform_source, int matrix_count, int matrix_selection_indices, M4 *out) {

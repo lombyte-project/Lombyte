@@ -1,8 +1,7 @@
 #include "types.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 extern f32 camera_position[4] __asm__("D_00187080");
-extern void transform_vector(f32 *, f32 *, void *) __asm__("FUN_001f9d20");
-extern f32 vector_length_xy(f32 *) __asm__("FUN_001f9b20");
 extern f32 clamp_float(f32, f32, f32) __asm__("FUN_001f99e8");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");

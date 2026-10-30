@@ -9,12 +9,11 @@
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_starfighter_tractor_beam(struct Moby *moby) __asm__("FUN_L13_002ea8c8");
@@ -98,12 +97,10 @@ void draw_starfighter_tractor_beam(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002EC038), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern int FUN_L00_001fefc8(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int queue_starfighter_voice_line(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern unsigned char *fire_class_53_projectile(char *, char *) __asm__("FUN_L13_002ea6b8");
 extern void fire_starfighter_homing_rocket(void *, void *) __asm__("FUN_L13_002ea540");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -441,17 +438,10 @@ extern char jet_camera47[] __asm__("D_L13_00166F80");
 extern char qwarks_starfighter_boss_start_time_format[] __asm__("D_L13_001F4EF0");
 extern char level13_point_light_slots[] __asm__("D_L13_001805C0");
 extern char qwarks_starfighter_tractor_offscreen_abort_message[] __asm__("D_L13_001F4F18");
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_L13_00160660[] MACRO_ADDR;
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84;
 extern int D_0015EEA4;
 extern int D_L13_0015FFD8; /* no foreign declaration */
@@ -461,8 +451,6 @@ extern int qwarks_starfighter_command_path_slots[] __asm__("D_L13_001D3448");
 extern int qwarks_starfighter_attachment_class_ids[] __asm__("D_L13_001D34D8");
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int advance_moby_along_selected_path(void *, void *, int, int) __asm__("FUN_L13_002e9160");
@@ -470,7 +458,6 @@ extern int update_moby_path_following_away_from_hero(void *, void *, int, int) _
 extern int continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short dialogue_playback_phase[] __asm__("D_0015172A");
 extern void reset_numeric_hud_element() __asm__("FUN_L00_00235d80");
 extern void hud_update_counter() __asm__("FUN_L00_00235ea0");
@@ -491,14 +478,11 @@ extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L06_00249738();
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-float absolute_float(float input) __asm__("func_001F99C0");
 void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
 void set_animation_parameter(s32 anim_id, s32 value) __asm__("FUN_001ff570");
 #include "rnc/gameplay/state/game_globals.h"
 extern char D_0013F350[];
 extern char D_001516D0[];
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void func_L13_002E9F90_2(void *, void *) __asm__("FUN_L13_002e8b58");
 extern char *D_L13_00160058_m __asm__("D_L13_0015FFD8");
 extern char D_0013E633_snd[] __asm__("D_0013E533");
@@ -525,12 +509,12 @@ void update_qwarks_starfighter(Moby388 *moby) {
     float probe[4];
     int i;
 
-    data->i108 = func_001FA898_r(data->f20 * 16.0f) & 0xFFF0;
-    if (data->i108 >= func_001FA898_r(((float)data->s24 - 0.5f) * 16.0f)) {
+    data->i108 = truncate_float_to_s32(data->f20 * 16.0f) & 0xFFF0;
+    if (data->i108 >= truncate_float_to_s32(((float)data->s24 - 0.5f) * 16.0f)) {
         data->i108 |= 0xF;
     }
     if (0.5f < data->f20) {
-        int segment = ((func_001FA898_r(data->f20) % (data->s24 / 6)) * 16) / (data->s24 / 6);
+        int segment = ((truncate_float_to_s32(data->f20) % (data->s24 / 6)) * 16) / (data->s24 / 6);
         if (segment < 0) segment = 0;
         data->i108 += segment & 0xF;
     } else {
@@ -747,7 +731,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             char *hero = ((char *)&D_0013F350);
             float yaw, pitch, distance;
             yaw = fast_arc_tan(*(float *)(hero + 0x80) - moby->pos[0], *(float *)(hero + 0x84) - moby->pos[1]);
-            pitch = -fast_arc_tan(vector_distance(moby->pos, hero + 0x80), *(float *)(hero + 0x88) - moby->pos[2]);
+            pitch = -fast_arc_tan(vector_distance_xy(moby->pos, hero + 0x80), *(float *)(hero + 0x88) - moby->pos[2]);
             update_moby_spring_steering_and_banking(moby, data, yaw, pitch);
             if (*(Moby388 **)(hero + 0x15F0) != 0 && (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45) {
                 (*(Moby388 **)(hero + 0x15F0))->bBC = 1;
@@ -774,7 +758,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
                     ship = (char *)ship_moby->d;
                     yaw_error = fast_subtract_rotations(fast_arc_tan(moby->pos[0] - ship_moby->pos[0], moby->pos[1] - ship_moby->pos[1]), *(float *)(ship + 0x38));
                     abs_yaw_error = absolute_float(yaw_error);
-                    pitch_error = fast_subtract_rotations(-fast_arc_tan(vector_distance((*(Moby388 **)(hero + 0x15F0))->pos, moby->pos),
+                    pitch_error = fast_subtract_rotations(-fast_arc_tan(vector_distance_xy((*(Moby388 **)(hero + 0x15F0))->pos, moby->pos),
                                                          moby->pos[2] - (*(Moby388 **)(hero + 0x15F0))->pos[2]),
                                       *(float *)(ship + 0x34));
                     abs_pitch_error = absolute_float(pitch_error);
@@ -845,7 +829,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             char *path = walker_paths[data->paths[data->b13B]];
             int i = data->s9C;
             int n = *(int *)path;
-            float flat_distance = vector_distance(path + (i * 16 + 0x10), path + (((i + 3 >= n - 1) ? n - 1 : i + 3) * 16 + 0x10));
+            float flat_distance = vector_distance_xy(path + (i * 16 + 0x10), path + (((i + 3 >= n - 1) ? n - 1 : i + 3) * 16 + 0x10));
             Path388 *path2 = (Path388 *)walker_paths[data->paths[data->b13B]];
             int i2 = data->s9C;
             int path_point_count = path2->n;
@@ -1110,7 +1094,6 @@ void update_qwarks_starfighter(Moby388 *moby) {
 
 
 extern char *create_moby(int);
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
@@ -1141,7 +1124,6 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
 }
 extern int coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void remove_ece00(struct Moby *) __asm__("FUN_0020c828");
 extern char coll_hit_1638[] __asm__("D_L13_00174140");
 
@@ -1222,10 +1204,6 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
     }
 }
 #include "types.h"
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void spawn_nearby_effect_without_direction(float, void *, void *, int, void *) __asm__("FUN_L10_0024c7f0");
 extern void *memcpy(void *, const void *, unsigned int);
@@ -1569,7 +1547,6 @@ extern char gate_missing_controller_format[] __asm__("D_L13_001F51E0");
 extern int D_L13_0015FFD8; /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern void offset_moby_class_point_pairs(unsigned char *, int, int) __asm__("FUN_L00_0024efb0");
-extern int func_001FA898_d(float) __asm__("FUN_001fa6d0");
 
 void update_controller_linked_gate(char *moby) __asm__("FUN_L13_002f8a78");
 
@@ -1668,7 +1645,7 @@ void update_controller_linked_gate(char *moby) {
         }
         break;
     }
-    moby[0x23] = func_001FA898_d(*(float *)(gate_data + 0x10) * 20.0f);
+    moby[0x23] = truncate_float_to_s32(*(float *)(gate_data + 0x10) * 20.0f);
     step = 0xC0;
     *(int *)(gate_data + 0x14) += step;
     if (*(int *)(gate_data + 0x14) > 0x1000) {

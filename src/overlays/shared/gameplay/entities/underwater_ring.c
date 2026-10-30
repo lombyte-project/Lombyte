@@ -7,6 +7,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef struct {
     s16 timer;
@@ -25,10 +26,6 @@ typedef struct {
     s32 enabled;
 } VendorVars;
 
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern s16 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern void moby_point_position(struct Moby *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int get_first_moby_in_group(struct Moby **, int, int, int) __asm__("FUN_L00_002591d0");
@@ -213,10 +210,7 @@ typedef struct {
     int f90;
 } Obj;
 
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int D_L15_0015F5C4;
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D388_bd78[] __asm__("D_0013D388");
 extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 extern void start_scene(int) __asm__("FUN_L00_00298840");

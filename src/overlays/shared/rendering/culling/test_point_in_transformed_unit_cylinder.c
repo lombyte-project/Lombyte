@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
@@ -12,8 +13,6 @@ typedef struct {
     float x, y, z, w;
 } Vp __attribute__((aligned(16)));
 
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 int test_point_in_transformed_unit_cylinder(void *point, int i) __asm__("FUN_L00_0025fa38");
 

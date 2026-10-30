@@ -17,6 +17,7 @@ void reset_shot_tracking(char *moby) {
 }
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E88), where it is exact; names translated to the US level program. */
 
@@ -31,8 +32,6 @@ extern float FUN_L04_001f1978(float);
 extern float fast_vec_dist(void *, void *);
 extern int D_L02_0015F5CC MACRO_ADDR;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern float D_L02_001600D0 __attribute__((sda));
 extern int D_L02_001600D4 __attribute__((sda));
 extern int D_L02_001600D8 __attribute__((sda));
@@ -41,7 +40,6 @@ extern float D_L02_001600E0 __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
 extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 
 void effect_slots_fire(char *slots, float *position, float *direction, float distance) __asm__("FUN_L02_00264e70");
 void effect_slots_fire(char *slots, float *position, float *direction, float distance) {

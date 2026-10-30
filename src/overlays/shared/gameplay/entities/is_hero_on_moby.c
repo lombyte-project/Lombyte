@@ -6,6 +6,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 /* 1 when m is the hero's current moby of interest: unk4F8 in control mode 3
@@ -41,8 +42,6 @@ typedef struct {
 } GG_q;
 
 extern GG_q D_L01_0016CCE0_lui __asm__("D_L01_0016CCE0") NOT_SDA;
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void begin_dialogue_camera_transition(float scale, char *moby) __asm__("FUN_L01_002783a8");
 void begin_dialogue_camera_transition(float scale, char *moby) {
@@ -57,14 +56,13 @@ void begin_dialogue_camera_transition(float scale, char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
 
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 
 void spawn_proximity_gated_bolts(char *moby) __asm__("FUN_L01_002787a0");
 
 void spawn_proximity_gated_bolts(char *moby) {
     int bolt_spawn_flags = 0;
-    if (vector_distance(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
+    if (vector_distance_xy(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
         bolt_spawn_flags = 2;
     }
     spawn_randomized_bolt_drop(moby, 4, 7, bolt_spawn_flags, -1);

@@ -11,6 +11,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
@@ -44,7 +45,6 @@ extern char D_L04_00166F40[];
 extern u8 D_0014C050[];
 struct ShopCamera l04_lieutenant_shop_camera __asm__("D_L04_0016C9F0") = {0};
 extern s32 D_L04_0015F5C4;
-extern float FUN_001f9b48(void *, void *);
 extern void FUN_L00_0025a120(struct Moby *);
 extern void attach_big_head_cheat_manipulator_to_matching_moby(struct Moby *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_002668a0");
@@ -52,7 +52,6 @@ extern int FUN_00214720(char *, s32);
 extern int update_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_00266448");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void lieutenant_update(struct Moby *moby) __asm__("FUN_L04_002e3078");
@@ -68,7 +67,7 @@ void lieutenant_update(struct Moby *moby) {
     Vec4 *rotation_ptr;
     struct VendorVars *vars = (struct VendorVars *)moby->pvars;
 
-    if (moby->visible != 0 && FUN_001f9b48(&moby->pos, D_L04_00166F40) < 30.0f) {
+    if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L04_00166F40) < 30.0f) {
         FUN_L00_0025a120(moby);
         ((struct VendorMobyView *)moby)->unk7F = 0x18;
     }
@@ -158,7 +157,6 @@ typedef struct {
     unsigned int mask;
 } Help;
 
-extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern int D_L04_00179590[] NOT_SDA;
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
@@ -440,8 +438,6 @@ typedef struct {
 extern f32 D_L04_00161D78_gp __asm__("D_L04_00161D78") __attribute__((sda));
 extern f32 D_L04_00161D7C_gp __asm__("D_L04_00161D7C") __attribute__((sda));
 extern u128 tgt[] __asm__("D_L04_00174000") NOT_SDA;
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");

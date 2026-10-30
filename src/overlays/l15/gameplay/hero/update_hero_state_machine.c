@@ -51,19 +51,17 @@ extern S167300 D_L15_00167280;
 extern S17AD00 D_L15_0017AC80;
 extern S17C438 D_L15_0017C3B8;
 extern char voice_pool[] __asm__("D_0013E550");
-extern float absolute_float(float) __asm__("func_001F99C0");
 #include "rnc/overlay/l15/gameplay/hero/update_hero_state_machine_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 extern float D_L15_001673D8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 extern float predict_hero_trajectory_z(float *pos, float *vel, int *steps, float step) __asm__("FUN_L00_00233c30");
 extern float read_pad_float_history(int) __asm__("FUN_L00_00266e80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
@@ -73,7 +71,6 @@ int r1_repeat_timer __asm__("D_L15_0015F678") = 0;
 extern int D_L15_0015F6DC_d __asm__("D_L15_0015F6DC");
 extern int D_L15_0015F594 __attribute__((sda));
 extern int D_L15_0016CD80 NOT_SDA;
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
@@ -95,7 +92,6 @@ extern int get_hero_help_value(int a) __asm__("FUN_L06_0021d0a0");
 extern int process_hero_incoming_hit(int) __asm__("FUN_L15_00208e10");
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern void *spawn_class_593_moby(int unused, void *pos, int c, float scale, float a, float b) __asm__("FUN_L00_002a99b0");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
@@ -129,10 +125,8 @@ extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void set_hero_state_for_vehicle_mode(void) __asm__("FUN_L15_0021ab60");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void fast_dec_timer(int *arg0) __asm__("func_001F9740");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
-extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
 void update_hero_state_machine(void) __asm__("FUN_L15_0021d040");
 
@@ -301,7 +295,7 @@ void update_hero_state_machine(void) {
                     }
                     if (scale_game_frames(0xA) < hero.state_timer) {
                         if (((unsigned char *)hero.items[3].moby2) != 0 && ((unsigned char *)hero.items[3].moby2)[0x53] == 1) {
-                            if (func_001F9908_r(&hero.slot3_anim_timer)) {
+                            if (fast_dec_timer(&hero.slot3_anim_timer)) {
                                 if (0.55850536f > D_L15_0017AC80.f258 &&
                                     D_L15_0017AC80.f254 < 0.34906584f && hero.items[3].state == 2) {
                                     hero.slot3_anim_timer = random_int_between(scale_game_frames(0x6E),
@@ -867,7 +861,7 @@ void update_hero_state_machine(void) {
                     }
                     break;
                 case HERO_STATE_APPROACH_TARGET_POSE:
-                    if (vector_distance(hero.motion.pos.f, hero.target_pose.f) < 0.2f) {
+                    if (vector_distance_xy(hero.motion.pos.f, hero.target_pose.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
                                     hero.motion.rot.f[2], hero.target_pose.f[3]) < 0.034906585f) {
@@ -891,7 +885,7 @@ void update_hero_state_machine(void) {
                     if ((hero.anim_flags & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
-                    if (0.2f < vector_distance(hero.motion.pos.f, hero.target_pose.f)) {
+                    if (0.2f < vector_distance_xy(hero.motion.pos.f, hero.target_pose.f)) {
                         hero_set_state(0x65, 1);
                     }
                     break;
@@ -1350,7 +1344,7 @@ void update_hero_state_machine(void) {
                     {
                         int both = 0;
 
-                        func_001F9908_r(&r1_repeat_timer);
+                        fast_dec_timer(&r1_repeat_timer);
                         if (r1_repeat_timer != 0) {
                             both = 1;
                             if (!((controller_state.held & 8) && (controller_state.pressed & 8))) {

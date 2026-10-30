@@ -30,7 +30,6 @@ int find_first_positive_polygon_edge_cross_xy(float *query_point, float *poly, i
 /* closest point on a line to a point: writes the point, returns the parameter */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D618), where it is exact; names translated to the US level program. */
 
-float absolute_float(float input) __asm__("func_001F99C0");
 
 float find_closest_point_on_segment_xy(float *closest_point, float *segment_start, float *segment_end, float *query_point) __asm__("FUN_L04_0024c660");
 

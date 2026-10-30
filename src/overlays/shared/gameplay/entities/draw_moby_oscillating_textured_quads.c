@@ -7,6 +7,8 @@
 #include "qcopy.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 typedef union {
     u128 q_002acbf0;
     f32 f[4];
@@ -29,15 +31,7 @@ typedef struct {
     u8 pad0[0x78];
     PV_2acbf0_002acbf0 *pv;
 } M_2acbf0_002acbf0;
-extern f32 square_root(f32) __asm__("FUN_001f9988");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-int scale_game_frames(int) __asm__("FUN_001f96f8");
-float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern f32 fast_normalize_angle(f32) __asm__("FUN_001fa610");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) __asm__("FUN_L00_002c31c0");

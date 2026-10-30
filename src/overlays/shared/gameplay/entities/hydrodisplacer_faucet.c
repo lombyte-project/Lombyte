@@ -10,6 +10,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
 char *create_class_5c3_moby(int owner, char *initial_position, int arg, float initial_rotation_z, float initial_rotation_y) __asm__("FUN_L05_002d4168");
@@ -122,7 +123,6 @@ typedef struct {
 
 extern Vec4 D_L05_001671C0_2f5200 __asm__("D_L05_001671C0");
 extern s32 *D_L05_001B0930_2f5200[] __asm__("D_L05_001B0930");
-extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 absolute_float_cf(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void FUN_L05_002f5190_2f5200(struct Moby *, TriggerVars *, s32, s32) __asm__("FUN_L05_002f5190");
@@ -225,7 +225,6 @@ void hydrodisplacer_faucet_update(char *faucet_moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F95B0), where it is exact; names translated to the US level program. */
 
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern short faucet_base_color_gp __asm__("D_L05_001618C0") __attribute__((sda));
 extern short faucet_item_16_pulse_start_color_gp __asm__("D_L05_001618C4") __attribute__((sda));
@@ -267,7 +266,6 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
     }
 }
 #include "rnc/gameplay/state/item_state.h"
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -372,13 +370,8 @@ void hoverboard_update(unsigned char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0FC8), where it is exact; names translated to the US level program. */
 
-extern float absolute_float(float) __asm__("func_001F99C0");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern int fast_dec_timer(int *) __asm__("func_001F9740");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 
@@ -500,8 +493,6 @@ void update_moby_wobble(unsigned char *moby) {
     }
     }
 }
-extern void clear_u64_value(float *) __asm__("FUN_001f99f8");
-extern void rotation_vector_30c220(float *, float *) __asm__("FUN_001fa050");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, float *, int) __asm__("FUN_001f7d30");
 extern float wobble_quad_texcoords[][2] __asm__("D_L05_001D67B0");
@@ -548,7 +539,7 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     rotation[2] = moby->rot.z;
     rotation[1] = fast_sin(*(float *)(vars + 0x48)) * 0.5235988f + 0.5235988f;
     side = matrix;
-    rotation_vector_30c220(side, rotation);
+    euler_rotation_matrix(side, rotation);
     direction = matrix + 4;
     fast_vec_sub(direction, D_L05_001671C0_30c220, position);
     fast_vec_normalize(direction, direction, 1.0f);
@@ -615,8 +606,6 @@ extern unsigned char D_L05_0015FC88[] MACRO_ADDR;
 extern char *D_L05_001B0930[];
 extern u8 D_0014C050[];
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
 void floor_button_update(struct Moby *moby) __asm__("FUN_L05_0030c5b0");
@@ -756,16 +745,9 @@ void initialize_moby_launch_motion(char *moby, int unused_source_moby, void *ini
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_00319C08), where it is exact; names translated to the US level program. */
 
 extern char D_L05_00174240[];
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
 void blarg_gun_update(char *moby) __asm__("FUN_L05_003186f8");
 void blarg_gun_update(char *moby)
@@ -974,7 +956,6 @@ void apply_moby_position_and_rotation_wobble(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
 
 extern char moby_vector_table_local_vectors[] __asm__("D_L05_00215C00");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void transform_moby_vector_table_to_world_space(char *moby) __asm__("FUN_L05_003198e8");
 

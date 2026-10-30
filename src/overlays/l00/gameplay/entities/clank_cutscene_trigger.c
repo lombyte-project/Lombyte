@@ -161,7 +161,6 @@ typedef union {
 } VeldinVec;
 
 void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -242,15 +241,14 @@ void apply_level_specific_cutscene_moby_effects(void) {
 }
 #include "qzero.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef union {
     u128 q;
     f32 f[4];
 } SkyRotVec;
 
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
-extern void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void draw_sky_shells_with_particles_and_rotating_shell(void) {

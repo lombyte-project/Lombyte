@@ -3,6 +3,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
@@ -13,7 +14,6 @@
 #include "qcopy.h"
 extern int func_002140B0_6fb60(int) __asm__("FUN_00213260");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r_6fb60(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
 unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) __asm__("FUN_L17_0026fb60");
 unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) {
@@ -35,7 +35,7 @@ unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *recor
         }
         *(char **)(record_data + 0x1C) = parent;
         *(int *)(record + 4) = 0x604040FF;
-        record[9] = func_001FA898_r_6fb60(1.0f) + 0x20;
+        record[9] = truncate_float_to_s32(1.0f) + 0x20;
         record[3] = 0x48;
         *(float *)(record + 0xC) = 42000.0f;
         record[8] = header_byte_value;
@@ -50,12 +50,9 @@ unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *recor
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/partupd_00270A28.c: func_L17_00270C98), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
 
 unsigned char *create_drone_flight_trail_record(char *position_source, int mode, int step) __asm__("FUN_L17_0026fdd0");
 
@@ -70,7 +67,7 @@ unsigned char *create_drone_flight_trail_record(char *position_source, int mode,
         record = FUN_L00_002678b8_q(0x50);
         if (record != 0) {
             qcopy(record + 0x10, position_source);
-            record[9] = func_001FA898_r_q(1.0f) + 0x70;
+            record[9] = truncate_float_to_s32(1.0f) + 0x70;
             *(int *)(record + 0x20) = mode;
             if (mode == 0) {
                 int d = 0xF - step;

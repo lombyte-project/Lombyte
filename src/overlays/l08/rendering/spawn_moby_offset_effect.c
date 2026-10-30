@@ -5,14 +5,12 @@
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Spawns an effect moby at the position of moby a. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027ACC8), where it is exact; names translated to the US level program. */
 
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern short moby_offset_effect_size_gp __asm__("D_L08_00160200") __attribute__((sda));
 extern short moby_offset_effect_color_gp __asm__("D_L08_00160204") __attribute__((sda));
@@ -32,7 +30,7 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) {
         fast_vec_normalize(position_offset, position_offset, *(float *)&moby_offset_effect_offset_length_gp);
         fast_vec_add(effect + 0x10, source_position, position_offset);
         *(int *)(effect + 4) = *(int *)&moby_offset_effect_color_gp;
-        effect[9] = func_001FA898_r(4.0f) + 0x40;
+        effect[9] = truncate_float_to_s32(4.0f) + 0x40;
         effect[3] = 0x48;
         effect[1] = 0;
         effect[2] = *D_L08_001B291C;
@@ -53,7 +51,6 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027C218), where it is exact; names translated to the US level program. */
 
 extern s32 rand(void);
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 unsigned char *D_L08_001B292C NOT_SDA = 0;
 
 unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *vec, short ticks, unsigned char r,
@@ -72,7 +69,7 @@ unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *initi
         effect_data[0x16] = b;
         effect_data[0x17] = a;
         *(int *)(effect + 4) = (b << 16) | (g << 8) | r;
-        effect[9] = func_001FA898_r(4.0f) + 0x40;
+        effect[9] = truncate_float_to_s32(4.0f) + 0x40;
         effect[3] = 0x48;
         effect[1] = 0;
         effect[8] = rand();
@@ -85,8 +82,6 @@ unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *initi
     return effect;
 }
 #include "eetypes.h"
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 unsigned char *D_L08_001B29B4 NOT_SDA = 0;
 
 void spawn_effect_with_initial_motion(u128 *spawn_position, u128 *initial_motion_vector, int life, float scale) __asm__("FUN_L08_0027fe00");

@@ -10,6 +10,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Register this level's vendor data set. */
 
@@ -34,7 +35,6 @@ struct L07MovingVars {
 };
 
 extern struct Moby *D_L07_0015FFD8;
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void update_moby_offset_motion(struct Moby *moby) __asm__("FUN_L07_0031a9e8");
 
@@ -183,8 +183,6 @@ struct SwingGateVars {
 };
 
 extern int FUN_0022da68(int, int, struct Moby *);
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 void update_swing_gate(struct Moby *moby) __asm__("FUN_L07_0031b3f0");
 

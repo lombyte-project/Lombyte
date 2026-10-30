@@ -5,16 +5,13 @@
 #include "sda.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CD118), where it is exact; names translated to the US level program. */
 
-extern float fast_sin(float) __asm__("func_001F9DE0");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern signed char D_L15_00161ACF[] MACRO_ADDR;
 void emit_rgba_draw_packet(s32 r, s32 g, s32 b, s32 a) __asm__("FUN_001f5210");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern short sine_draw_packet_rgb_control __asm__("D_L15_00161ACC") __attribute__((sda));
 extern short sine_alpha_scale_amplitude __asm__("D_L15_00161AD0") __attribute__((sda));
@@ -30,7 +27,7 @@ void emit_sine_modulated_rgba_draw_packet(void) {
     int k;
     if (alpha_scale < 0.0f)
         alpha_scale = 0.0f;
-    alpha = func_001FA898_r((float)D_L15_00161ACF[0] * alpha_scale);
+    alpha = truncate_float_to_s32((float)D_L15_00161ACF[0] * alpha_scale);
     k = *(int *)&sine_draw_packet_rgb_control;
     emit_rgba_draw_packet(k & 0xFF, k >= 9, k >= 17, alpha);
 }

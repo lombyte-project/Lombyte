@@ -2,6 +2,8 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
@@ -12,10 +14,8 @@ extern char D_L03_0016C960[];
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void emit_level3_state5_moby_effects(void) __asm__("FUN_L03_0022c728");

@@ -3,14 +3,13 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D288), where it is exact; names translated to the US level program. */
 
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 /* Returns component d of c - a transformed by the matrix transpose_rotation_matrix builds from b. */
 float compute_transformed_delta_component(void *subtrahend_vector, void *rotation_matrix_source, void *minuend_vector, int component_index) __asm__("FUN_L00_0025c230");
@@ -56,7 +55,6 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int generate_random_points_from_shape_entries(void *, int, void *, void *, float) __asm__("FUN_L00_0025aca0");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 void spawn_particles_at_shape_points(void *source_object, void *base_vector, void *point_source_mask) __asm__("FUN_L00_0025c398");
@@ -109,7 +107,6 @@ typedef struct {
     f32 f40;
     int w44;
 } B_25c558;
-float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 float *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -144,10 +141,6 @@ void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_
 
 extern Vec4 D_L00_00173E70;
 extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
-extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float approach_value(float *p, float target, float maxstep);
 extern int *D_L00_00177F00[];
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60"); /* no foreign declaration */
@@ -156,11 +149,8 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
-extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
-float absolute_float(float input) __asm__("func_001F99C0");
 int solve_quadratic_equation(float *r0, float *r1, float a, float b, float c) __asm__("FUN_L00_002595a0");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_00259710(void *a);

@@ -12,9 +12,9 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
@@ -80,8 +80,8 @@ s32 handle_hero_hit(s32 apply_response) {
     } else if (hero_moby_entry->target != 0) {
         fast_vec_sub(&response_vector, (u8 *)&G + 0x80, hero_moby_entry->target + 0x10);
     } else {
-        response_vector.f[0] = fast_cos(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
-        response_vector.f[1] = fast_sin(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        response_vector.f[0] = fast_cos(fast_add_rotations(G.motion.rot.f[2], 3.1415927f));
+        response_vector.f[1] = fast_sin(fast_add_rotations(G.motion.rot.f[2], 3.1415927f));
         response_vector.i[2] = 0;
     }
     switch (G.vehicle_mode) {

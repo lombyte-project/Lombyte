@@ -6,6 +6,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
@@ -55,7 +56,6 @@ extern char D_0013E633[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_vec_dist(void *) __asm__("FUN_001f9b48");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
@@ -744,7 +744,7 @@ extern float advance_accelerated_scalar(float *, float *, float, float, float,
 float advance_blarg_elite_commando_base_position(char *moby, float *target) {
     char *data = *(char **)(moby + 0x78);
     char *base_position = data + 0x2C0;
-    float distance = fast_vec_dist(base_position);
+    float distance = fast_vec_dist(base_position, target);
     float acceleration_braking_step = frame_time_sq * 4.0f;
     int zero[1];
     float movement_step[4];

@@ -2,22 +2,21 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
 /* Converts a float vector to fixed-point ints, relative to the grid origin, plus two scale shorts. */
 /* Ported from rac1-decomp (src/overlays/shared/vuchain_002B8C00.c: func_L01_002B8E20), where it is exact; names translated to the US level program. */
 
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void pool_bind_tile(float *in, int *out) __asm__("FUN_L01_002b7c68");
 void pool_bind_tile(float *in, int *out) {
-    out[0] = func_001FA898_r((in[0] + pool_light[2]) * 1024.0f);
-    out[1] = func_001FA898_r((in[1] + pool_light[3]) * 1024.0f);
-    out[2] = func_001FA898_r((in[2] - 1.0f) * 1024.0f);
-    ((short *)out)[6] = func_001FA898_r(pool_light[0] * 1024.0f);
-    ((short *)out)[7] = func_001FA898_r(pool_light[0] * 1024.0f);
+    out[0] = truncate_float_to_s32((in[0] + pool_light[2]) * 1024.0f);
+    out[1] = truncate_float_to_s32((in[1] + pool_light[3]) * 1024.0f);
+    out[2] = truncate_float_to_s32((in[2] - 1.0f) * 1024.0f);
+    ((short *)out)[6] = truncate_float_to_s32(pool_light[0] * 1024.0f);
+    ((short *)out)[7] = truncate_float_to_s32(pool_light[0] * 1024.0f);
 }
 
 /* Ported from rac1-decomp src/overlays/shared/vuchain_002B8C00.c (func_L01_002B8C00) */

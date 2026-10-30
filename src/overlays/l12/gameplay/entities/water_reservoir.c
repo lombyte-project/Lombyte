@@ -9,17 +9,12 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void subtract_vector_72(float *, float *, float *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(float *, float *, float) __asm__("FUN_001f9a68");
-extern void add_vector_72(float *, float *, float *) __asm__("FUN_001f9a10");
 extern void *FUN_00218888_72(void *, float *, float *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float approach_value(float, float, float *) __asm__("FUN_00213ed8");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
@@ -84,14 +79,14 @@ update:
                 random_vector(pos, 0.0f, water_reservoir_random_offset_radius_gp);
                 random_vector(offset0, 0.0f, water_reservoir_random_offset_radius_gp);
                 random_vector(offset1, 0.0f, water_reservoir_random_offset_radius_gp);
-                subtract_vector_72(pos_offset_delta, pos, offset0);
+                fast_vec_sub(pos_offset_delta, pos, offset0);
                 pos_offset_delta[2] += water_reservoir_effect_delta_z_reference_gp - water_reservoir_unmirrored_effect_spawn_z_offset_gp;
-                subtract_vector_72(offset_pair_delta, offset0, offset1);
+                fast_vec_sub(offset_pair_delta, offset0, offset1);
                 offset_pair_delta[2] += water_reservoir_mirrored_effect_spawn_z_offset_gp - water_reservoir_effect_delta_z_reference_gp;
                 scaled = water_reservoir_effect_delta_scale_divisor_gp;
                 fast_vec_scale(pos_offset_delta, pos_offset_delta, 2.0f / (float)scaled);
                 fast_vec_scale(offset_pair_delta, offset_pair_delta, 2.0f / (float)scaled);
-                add_vector_72(pos, pos, (float *)&moby->pos);
+                fast_vec_add(pos, pos, (float *)&moby->pos);
                 if (moby->command & 1) {
                     pos[2] += water_reservoir_mirrored_effect_spawn_z_offset_gp;
                     pos_offset_delta[2] = -pos_offset_delta[2];
@@ -140,7 +135,6 @@ int D_L12_00161A18 = 1;
 int D_L12_00161A1C = 0x40602020;
 int D_L12_00161A20 = 0x40681818;
 extern short water_reservoir_segment_cosine_scale_gp __asm__("D_L12_00161A24") __attribute__((sda));
-extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, void *, int);
 
 void draw_water_reservoir(struct Moby *moby) {
@@ -191,8 +185,6 @@ void draw_water_reservoir(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EE068), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) __asm__("FUN_L12_002ecce8");
@@ -245,17 +237,12 @@ extern ShotColl D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
 extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern char *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern int collision_line(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
 extern int coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_descriptor(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void record_moby_hit(int, void *) __asm__("FUN_L00_00259a88");
 extern void spawn_explosion(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
                              int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -351,7 +338,6 @@ extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern char D_00141968_h[] __asm__("D_00141968");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -376,8 +362,8 @@ void update_hoven_help_and_dialogue(struct Moby *moby) {
             if (q->state.current == 0x81) {
                 *(unsigned short *)(h + 0x368) = *(unsigned short *)(h + 0x368) + 1;
             }
-            if (scale_game_frames_c(D_0015EEA4) / 600 > *(unsigned short *)(h + 0x36A)) {
-                *(unsigned short *)(h + 0x36A) = scale_game_frames_c(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0x36A)) {
+                *(unsigned short *)(h + 0x36A) = scale_game_frames(D_0015EEA4) / 600;
             }
             *(unsigned int *)(h + 0x36C) = *(unsigned int *)(h + 0x36C) | (1 << current_level_index) | 0x80000000;
             if (is_point_inside_clip_volume(&q->motion.pos, moby_vars[0])) {
@@ -389,7 +375,7 @@ void update_hoven_help_and_dialogue(struct Moby *moby) {
         char *h = D_00141968_h;
         if (*(unsigned short *)(h + 0x370) == 0
             || (*(unsigned short *)(h + 0x370) < 2
-                && scale_game_frames_c(D_0015EEA4) - *(unsigned short *)(h + 0x372) * 600 > scale_game_frames_c(72000))) {
+                && scale_game_frames(D_0015EEA4) - *(unsigned short *)(h + 0x372) * 600 > scale_game_frames(72000))) {
             struct Hero *q = &hero;
             if (q->state.current == 0x81) {
                 moby_vars[1]++;
@@ -398,20 +384,20 @@ void update_hoven_help_and_dialogue(struct Moby *moby) {
                 } else {
                     moby_vars[2] = 0;
                 }
-                if (scale_game_frames_c(0x28) < moby_vars[2]) {
+                if (scale_game_frames(0x28) < moby_vars[2]) {
                     char *help_records = D_00141968_h;
                     moby_vars[1] = 0;
                     if (*(unsigned short *)(help_records + 0x370) <= 0xFFFE) {
                         *(unsigned short *)(help_records + 0x370) = *(unsigned short *)(help_records + 0x370) + 1;
                     }
-                    if (scale_game_frames_c(D_0015EEA4) / 600 > *(unsigned short *)(help_records + 0x372)) {
-                        *(unsigned short *)(help_records + 0x372) = scale_game_frames_c(D_0015EEA4) / 600;
+                    if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(help_records + 0x372)) {
+                        *(unsigned short *)(help_records + 0x372) = scale_game_frames(D_0015EEA4) / 600;
                     }
                     *(unsigned int *)(help_records + 0x374) = *(unsigned int *)(help_records + 0x374) | (1 << current_level_index) | 0x80000000;
                 }
                 {
-                    int help_threshold_step_frames = scale_game_frames_c(0x1C20);
-                    int help_threshold_base_frames = scale_game_frames_c(0x708);
+                    int help_threshold_step_frames = scale_game_frames(0x1C20);
+                    int help_threshold_base_frames = scale_game_frames(0x708);
                     char *k = D_00141968_h;
                     if (*(unsigned short *)(k + 0x370) * help_threshold_step_frames + help_threshold_base_frames < moby_vars[1]) {
                         help_request(0x2EE4, 0x6E);

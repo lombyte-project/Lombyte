@@ -5,9 +5,9 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
-extern float FUN_001f9b48_b7(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_00116248_b7(void *, void *) __asm__("FUN_00116248");
 extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
 
@@ -18,7 +18,7 @@ extern char raritanium_acquired_text[] __asm__("D_L11_0021A900");
 void remove_moby_when_near_hero(char *moby) __asm__("FUN_L11_002cb790");
 
 void remove_moby_when_near_hero(char *moby) {
-    if (FUN_001f9b48_b7(moby + 0x10, &hero.motion.pos) < 2.0f) {
+    if (fast_vec_dist(moby + 0x10, &hero.motion.pos) < 2.0f) {
         l11_proximity_removal_flag[0] = 1;
         FUN_00116248_b7(D_L11_00179B18, raritanium_acquired_text);
         proximity_removal_frame_count = scale_game_frames(0xB4);
@@ -31,10 +31,6 @@ void remove_moby_when_near_hero(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309A40), where it is exact; names translated to the US level program. */
 
 extern char *target_search_moby_list_head __asm__("D_L11_0015FFE4");
-extern float square_root(float) __asm__("FUN_001f9988");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 char *select_homing_missile_target(float *targeting_origin, float *aim, float max_yaw_error, float max_pitch_error, float maxd) __asm__("FUN_L11_00308670");
 
@@ -48,7 +44,7 @@ char *select_homing_missile_target(float *targeting_origin, float *aim, float ma
             *(short *)(*(char **)(candidate_moby + 0x24) + 0x46) == 5) {
             float distance_xy;
             candidate_position = candidate_moby + 0x10;
-            distance_xy = vector_distance(targeting_origin, candidate_position);
+            distance_xy = vector_distance_xy(targeting_origin, candidate_position);
             if (distance_xy < maxd) {
                 float adjusted_target_position[4];
                 float ra, rb, y, score;
@@ -82,11 +78,8 @@ char *select_homing_missile_target(float *targeting_origin, float *aim, float ma
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309C18), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float *spawn_position, float travel_distance, float step_length) __asm__("FUN_L11_00308848");
 
@@ -97,7 +90,7 @@ unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float 
         float direction_length_xy;
         *(char **)(moby_vars + 0x1C) = owner;
         spawned_moby[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = func_001FA898_r(travel_distance);
+        *(short *)(spawned_moby + 0x32) = truncate_float_to_s32(travel_distance);
         *(int *)(spawned_moby + 0x40) = 0;
         spawned_moby[0x31] = 1;
         direction_length_xy = vector_length_xy(launch_direction);
@@ -111,12 +104,12 @@ unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float 
             step_length = fast_vec_length(launch_direction);
         }
         qcopy(spawned_moby + 0x10, spawn_position);
-        *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) = func_001FA898_r(travel_distance / step_length);
+        *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) = truncate_float_to_s32(travel_distance / step_length);
         *(short *)(spawned_moby + 0x34) = 0x200;
         *(float *)(spawned_moby + 0x2C) =
             *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) *
             (*(float *)(owner + 0x2C) / *(float *)(*(char **)(owner + 0x24) + 0x24));
-        spawned_moby[0x23] = func_001FA898_r(*(float *)(moby_vars + 0x10) * 24.0f);
+        spawned_moby[0x23] = truncate_float_to_s32(*(float *)(moby_vars + 0x10) * 24.0f);
         set_moby_color(spawned_moby, 0xFF, 0xFF, 0xFF);
         update_entity(spawned_moby);
     }
@@ -149,9 +142,6 @@ typedef struct {
 
 extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
 extern char D_L11_00174880[];
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
 extern void initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
@@ -161,7 +151,6 @@ extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern char *FUN_L00_0026dd20_c(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 char *select_homing_missile_target(float *pos, float *aim, float r1, float r2, float maxd) __asm__("FUN_L11_00308670");
 
 static inline void copy_xyz_089d0(float *dst, float *src) {
@@ -201,7 +190,7 @@ void update_homing_missile(struct Moby *moby) {
         speed = fast_vec_length(vars);
         yaw_off = fast_subtract_rotations(fast_arc_tan(vars->target->pos.x - moby->pos.x, vars->target->pos.y - moby->pos.y), moby->rot.z);
         yaw = absolute_float(yaw_off);
-        pitch_off = fast_subtract_rotations(-fast_arc_tan(vector_distance(&moby->pos, &vars->target->pos), vars->target->pos.z - moby->pos.z), moby->rot.y);
+        pitch_off = fast_subtract_rotations(-fast_arc_tan(vector_distance_xy(&moby->pos, &vars->target->pos), vars->target->pos.z - moby->pos.z), moby->rot.y);
         pitch = absolute_float(pitch_off);
         if (yaw < 0.2617994f && pitch < 0.2617994f) {
             max_yaw = frame_time * 0.87266463f;
@@ -298,7 +287,6 @@ extern int projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") __attribute
 extern int D_L11_00161DCC __attribute__((sda));
 extern float projectile_trail_velocity_scale_gp __asm__("D_L11_00161DD0") __attribute__((sda));
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
@@ -364,7 +352,6 @@ typedef struct {
 } Missile_94f8;
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void FUN_L00_0026cbb0_94f8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern unsigned char *FUN_L00_002712b8_94f8(void *, void *, int, int, int, int,
@@ -425,7 +412,7 @@ void rocket_update(struct Moby *moby) {
     if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
         fast_vec_dist(&data->target_pos, &target->pos) < 3.0f) {
         moby->rot.z = fast_arc_tan(data->target->pos.x - moby->pos.x, data->target->pos.y - moby->pos.y);
-        moby->rot.y = -fast_arc_tan(vector_distance(pos, &data->target->pos), data->target->pos.z - moby->pos.z);
+        moby->rot.y = -fast_arc_tan(vector_distance_xy(pos, &data->target->pos), data->target->pos.z - moby->pos.z);
         qcopy(&data->target_pos, &data->target->pos);
     } else {
         FUN_L00_0025be00_94f8(&moby->rot.z, &data->turn_speed, moby->rot.z, frame_time_sq * 251.32741f,

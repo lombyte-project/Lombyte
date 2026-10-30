@@ -2,8 +2,8 @@
 #include "types.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
+#include "rnc/math/asm_helpers.h"
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 extern void append_rotated_textured_screen_quad(float, float, float, float, float, int, int, int, int, int, int, int,
                              int) __asm__("FUN_L11_00310cf8");

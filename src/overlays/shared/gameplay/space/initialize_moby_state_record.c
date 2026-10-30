@@ -330,7 +330,6 @@ typedef struct {
     char pad[0x22];
     short h26;
 } G_28efc8;
-void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 long get_effect_texture(int) __asm__("FUN_001f44b8");
 int random_integer_below(int) __asm__("FUN_00213260");
 void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");

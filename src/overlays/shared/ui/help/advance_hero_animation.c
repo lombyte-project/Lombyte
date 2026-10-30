@@ -4,6 +4,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/asm_helpers.h"
 
 struct AnimSeq670 {
     u8 pad0[0x10];
@@ -33,7 +34,6 @@ extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void sync_hero_mapped_moby_animation_frames(void) __asm__("FUN_L00_00232320");
 extern void sync_hero_slot3_animation_speed(void) __asm__("FUN_L00_00232128");
 extern void sync_hero_mapped_moby_animation_speed(void) __asm__("FUN_L00_002322c8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");

@@ -6,12 +6,12 @@
 #include "asm.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int *D_L14_001B0BB0[];
 extern int FUN_L00_0025ff38(char *, char *, float, int, int, int *, int);
 
@@ -21,7 +21,7 @@ void update_plasmabot_target(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int *target_filter_record = D_L14_001B0BB0[*(int *)(data + 0x244)];
     if (FUN_L00_0025ff38(moby, data + 0xD0, *(float *)(data + 0x234), 0, 0, target_filter_record + 4, *target_filter_record) != 2) {
-        if (*(float *)(data + 0x234) < vector_distance(moby + 0x10, data + 0xD0)) {
+        if (*(float *)(data + 0x234) < vector_distance_xy(moby + 0x10, data + 0xD0)) {
             *(int *)(data + 0x114) = 2;
         }
     }
@@ -58,7 +58,6 @@ void activate_plasmabot(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B45A8), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 void initialize_plasmabot_path_state(char *moby) __asm__("FUN_L14_002b3358");
 
@@ -97,8 +96,6 @@ void scale_and_apply_plasmabot_planar_velocity(char *moby) {
 /* steers the pitch angle of a moby toward a target and updates the joint */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4A00), where it is exact; names translated to the US level program. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_001fff28(void *, int, float);
 
@@ -148,7 +145,6 @@ void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) {
 /* Recomputes a path's segment lengths, aims the moby along its first segment, and recomputes a second path. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002FFD88), where it is exact; names translated to the US level program. */
 
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 void initialize_moby_path_state(char *moby) __asm__("FUN_L14_002fe900");
 
@@ -251,17 +247,10 @@ extern char plasmabot_empty_intro_path_format[] __asm__("D_L14_001FBBA0");
 extern char plasmabot_missing_bound_path_format[] __asm__("D_L14_001FBBF8");
 extern char plasmabot_empty_bound_path_format[] __asm__("D_L14_001FBC38");
 extern char plasmabot_missing_hatch_index_format[] __asm__("D_L14_001FBC90");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height(float, void *, int);
 extern int D_L14_0015F5C4;
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int register_beam_slot(void *, int, int) __asm__("FUN_L00_002e1f28");
@@ -269,8 +258,6 @@ extern int release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
 extern int set_beam_origin_transform_and_endpoint(void *, void *, void *) __asm__("FUN_L00_002e2190");
 extern int FUN_L14_002b39a0_c(unsigned char *) __asm__("FUN_L14_002b39a0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern float l14_plasmabot_beam_trace_endpoint_distance __asm__("D_L14_001614E4") __attribute__((sda));
 extern float l14_plasmabot_aim_sweep_half_angle __asm__("D_L14_001614E8") __attribute__((sda));
 extern int l14_plasmabot_aim_sweep_duration_frames __asm__("D_L14_001614EC") __attribute__((sda));
@@ -803,10 +790,7 @@ extern float D_L14_001614AC __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001614BC __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001614C0 __attribute__((sda)); /* no foreign declaration */
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void fast_draw_quad_real(void *, void *, s32) __asm__("FUN_001f7d30");
-extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
-extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern float D_L14_001614AC_lui __asm__("D_L14_001614AC");
 extern float D_L14_001614BC_lui __asm__("D_L14_001614BC");
 extern float D_L14_001614C0_lui __asm__("D_L14_001614C0");
@@ -947,8 +931,6 @@ typedef struct {
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 tick_countdown_2b2ed8(s32 *) __asm__("FUN_001f9740");
 
 extern f32 plasmabot_base_target_range_gp __asm__("D_L14_001614C4") __attribute__((sda));
 void update_plasmabot_target_range(struct Moby *moby) __asm__("FUN_L14_002b2ed8");
@@ -961,7 +943,7 @@ void update_plasmabot_target_range(struct Moby *moby) {
             scale_time(random_float_between(180.0f, 240.0f)));
         delay_state->restart = 0;
     }
-    tick_countdown_2b2ed8(&delay_state->delay);
+    fast_dec_timer(&delay_state->delay);
     if (delay_state->delay != 0) {
         delay_state->unk234 = plasmabot_base_target_range_gp + 6.0f;
     } else {
@@ -974,11 +956,8 @@ void update_plasmabot_target_range(struct Moby *moby) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_0013E533[];
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern float plasmabot_stagger_motion_z_scale_gp __asm__("D_L14_001614C8") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -1103,10 +1082,6 @@ int follow_plasmabot_path(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4828), where it is exact; names translated to the US level program. */
 
-extern f32 fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern float func_L00_0025CE58_2B4828(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 
 /* Eases the moby's yaw offset toward target_angle (clamped to about 70 degrees); with `flag` also eases the pitch toward its owner.
@@ -1114,7 +1089,7 @@ extern float func_L00_0025CE58_2B4828(float *, float, float *, float, float, flo
 float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) {
     char *state = *(char **)(moby + 0x78);
     char *owner = *(char **)(state + 0x110);
-    float turn = fast_subtract_rotations_c(target_angle, *(float *)(moby + 0x48));
+    float turn = fast_subtract_rotations(target_angle, *(float *)(moby + 0x48));
     if (turn > 1.2217304706573486f) turn = 1.2217304706573486f;
     else if (turn < -1.2217304706573486f) turn = -1.2217304706573486f;
     {
@@ -1201,7 +1176,6 @@ extern float plasmabot_glow_quad_scale_gp __asm__("D_L14_001614F8") __attribute_
 extern float plasmabot_glow_camera_pull_distance_limit_gp __asm__("D_L14_001614FC") __attribute__((sda));
 extern float plasmabot_glow_camera_clearance_distance_gp __asm__("D_L14_00161500") __attribute__((sda));
 extern u32 plasmabot_glow_vertex_color_gp __asm__("D_L14_00161504") __attribute__((sda));
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void draw_geometry_quad(void *, void *, int);
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 unsigned long get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
@@ -1259,7 +1233,6 @@ void draw_plasmabot_glow_quad(char *m) {
 }
 
 extern u8 *D_L14_00167500 NOT_SDA;
-extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 
 void plasmabot_hatch_update(struct Moby *moby) __asm__("FUN_L14_002d96e0");
 void plasmabot_hatch_update(struct Moby *moby) {
@@ -1369,7 +1342,6 @@ extern void *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern void FUN_L14_002dec40(struct Moby *);
 extern void add_draw_callback(void (*)(struct Moby *), struct Moby *) __asm__("FUN_001f4600");
 extern f32 fast_add_rotations(f32, f32);
-extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -1455,10 +1427,8 @@ void update_spinning_moby_with_particle_trail(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002DFE98), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_00257c48(float lo, float hi);
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 
 extern float plasmabot_debris_launch_magnitude_range_start_gp __asm__("D_L14_00161B08") __attribute__((sda));
 extern float plasmabot_debris_launch_magnitude_range_end_gp __asm__("D_L14_00161B0C") __attribute__((sda));
@@ -1499,8 +1469,6 @@ unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
 }
 extern void emit_debris_trail_particles(struct Moby *) __asm__("FUN_L14_002e03b8");
 extern s32 D_001413D0_dfd10 __asm__("D_001413D0") NOT_SDA;
-extern s32 tick_countdown_dfd10(s32 *) __asm__("FUN_001f9740");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void spawn_explosion_dfd10(struct Moby *, void *, void *, f32, f32, s32, s32, s32,
     f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -1552,7 +1520,7 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
         data->offset_x = position_offset[0];
         data->offset_y = position_offset[1];
         emit_debris_trail_particles(moby);
-        if (tick_countdown_dfd10(&data->timer) == 0)
+        if (fast_dec_timer(&data->timer) == 0)
             return;
         fast_vec_normalize(position_offset, position_offset, 0.5f);
         qcopy(&probe, &moby->pos);
@@ -1585,7 +1553,7 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     }
     fast_vec_normalize(position_offset, &moby->rot_row2, 0.52f);
     fast_vec_add(&probe, &moby->pos, position_offset);
-    if (tick_countdown_dfd10(&data->timer) != 0 || coll_sphere(0.5f, &probe, 0, data->owner) != 0) {
+    if (fast_dec_timer(&data->timer) != 0 || coll_sphere(0.5f, &probe, 0, data->owner) != 0) {
         trooper_play_sound(0, 0, moby, data->owner->oclass);
         spawn_explosion_dfd10(moby, velocity, &moby->pos, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 15.0f, 0, 3, -1, 0);
         coll_sphere(1.0f, &moby->pos, 0, (void *)D_001413D0_dfd10);
@@ -1715,9 +1683,6 @@ typedef struct {
 
 char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern P_eca8 *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int D_L14_0015F580_c __asm__("D_L14_0015F580");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -1904,16 +1869,11 @@ extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
 extern void ease_ff640(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern MobyHit *find_moby_hit_ff640(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
-extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern int trooper_take_damage(struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void explode_ff640(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
                           int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void remove_moby_ff640(struct Moby *) __asm__("FUN_0020c828");
-extern int fast_bsphere_check(float *, float) __asm__("FUN_001fa728");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 /* Floating mine: spins and pulses (and bobs in level 16); blows up on a hit and respawns once out of view. */
 void update_floating_mine(struct Moby *moby) __asm__("FUN_L14_002ff640");
@@ -1958,7 +1918,7 @@ void update_floating_mine(struct Moby *moby) {
                 goto remove;
         }
         hit = find_moby_hit_ff640(moby, 0x230000, 0);
-        clear_blocks_16(&scratch.info, 0x40);
+        fast_mem_zero16(&scratch.info, 0x40);
         scratch.info.unk4 = 1;
         scratch.info.damage = 1.0f;
         scratch.info.unk10 = 0.5f;

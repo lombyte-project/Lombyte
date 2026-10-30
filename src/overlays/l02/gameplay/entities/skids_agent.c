@@ -12,6 +12,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
@@ -78,20 +79,11 @@ extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
-extern s32 count_down_16(s16 *) __asm__("FUN_001f9770");
-extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void blend_anim(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void update_joint_animation(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
 
@@ -109,14 +101,11 @@ extern s32 update_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_00266448"
 extern void start_indexed_disc_stream(int) __asm__("FUN_L02_00298c68");
 extern void advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
-extern void lerp_vector(void *out, void *a, void *b, f32 t) __asm__("FUN_001f9a40");
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
-extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 /* Aridia NPC with a carried prop moby (data+0x178): dialogue state machine (the hint in state 1 is usage
@@ -162,7 +151,7 @@ void skids_agent_update(struct Moby *moby) {
         if (update_npc_dialogue(moby, data) != 0) {
             begin_dialogue_camera_transition(moby, 2.2f);
             moby->state = 2;
-        } else if (item_available[0x5] == 0 && vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
+        } else if (item_available[0x5] == 0 && vector_distance_xy(&moby->pos, &hero.motion.pos) < 3.0f) {
             if (D_00141968[14].count != 0) {
                 usage_time_value = scale_game_frames(D_0015EEA4) - D_00141968[14].unk2 * 600;
                 if ((int)(scale_game_frames(0x12) * 60.0f) < usage_time_value || D_00141968[14].unk2 * 600 == 0) {
@@ -182,7 +171,7 @@ void skids_agent_update(struct Moby *moby) {
                 D_00141968[14].level_mask = D_00141968[14].level_mask | (1 << current_level_index) | 0x80000000;
             }
         }
-        if (moby->prev_seq == 0 && count_down_16((s16 *)(data + 0x172)) != 0) {
+        if (moby->prev_seq == 0 && fast_dec_timer_s16((s16 *)(data + 0x172)) != 0) {
             *(s16 *)(data + 0x172) = truncate_float_to_s32(scale_time(random_float_between(1200.0f, 2400.0f)));
             if (moby->prev_seq != 1) {
                 blend_anim(moby, 1, 0, scale_game_frames(10));
@@ -299,20 +288,20 @@ void skids_agent_update(struct Moby *moby) {
         look_enabled = 0;
         if (moby->prev_seq == 0) {
             look_enabled = 1;
-            if (vector_distance(&moby->pos, &hero.motion.pos) < 8.0f &&
+            if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 8.0f &&
                 fast_difference_between_rotations(moby->rot.z, fast_arc_tan(hero.motion.body_center.f[0] - moby->pos.x,
                                                                      hero.motion.body_center.f[1] - moby->pos.y)) <
                     1.5707964f) {
                 if (fast_vec_length(&hero.motion.displacement) > 0.01f) {
                     *(s16 *)(data + 0x174) = scale_game_frames(120);
                 } else {
-                    count_down_16((s16 *)(data + 0x174));
+                    fast_dec_timer_s16((s16 *)(data + 0x174));
                 }
             } else if (*(s16 *)(data + 0x174) != 0) {
                 *(s16 *)(data + 0x174) = 0;
                 qcopy(data + 0x160, &hero.motion.body_center);
             }
-            if (count_down_16((s16 *)(data + 0x176))) {
+            if (fast_dec_timer_s16((s16 *)(data + 0x176))) {
                 *(s16 *)(data + 0x176) = truncate_float_to_s32(scale_time(random_float_between(180.0f, 300.0f)));
                 heading = fast_add_rotations(moby->rot.z, random_float_between(-90.0f, 90.0f) * 0.017453292f);
                 pitch = random_float_between(0.0f, 30.0f) * 0.017453292f;
@@ -402,7 +391,7 @@ void skid_mcmarx_update(struct Moby *moby) {
             delete_moby(moby);
             return;
         }
-        if (moby->prev_seq == 0 && count_down_16(&watcher_vars->idle_timer)) {
+        if (moby->prev_seq == 0 && fast_dec_timer_s16(&watcher_vars->idle_timer)) {
             s32 idle_animation = 1;
             watcher_vars->idle_timer = truncate_float_to_s32(scale_time(random_float_between(1200.0f, 2400.0f)));
             if (random_integer_below(2) == 0)
@@ -432,7 +421,7 @@ void skid_mcmarx_update(struct Moby *moby) {
     tracking = 0;
     if (moby->prev_seq == 0) {
         tracking = 1;
-        if (vector_distance(&moby->pos, &hero.motion.pos) < 8.0f
+        if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 8.0f
             && fast_difference_between_rotations(moby->rot.z, fast_arc_tan(hero.motion.body_center.f[0] - moby->pos.x,
                                                 hero.motion.body_center.f[1] - moby->pos.y)) < 1.5707964f) {
             if (fast_vec_length(&hero.motion.displacement) > 0.01f)
@@ -488,10 +477,7 @@ extern char *D_L02_001600EC_n __asm__("D_L02_001600EC");
 extern char *D_L02_0015FFD8_n __asm__("D_L02_0015FFD8");
 extern int FUN_00214720_n(void *, int) __asm__("FUN_00214720");
 extern void FUN_001ff570_n(int, int) __asm__("FUN_001ff570");
-extern int tick_n(int *) __asm__("FUN_001f9770");
 extern void FUN_001f4a58_n(int) __asm__("FUN_001f4a58");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_L00_00216f90_n(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int FUN_001ff308_n(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
@@ -519,7 +505,7 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
         }
         if (*(int *)(data + 0x14C) != 0 || *(int *)(data + 0x150) != 0)
             return;
-        if (tick_n((int *)(data + 0x168)) == 0)
+        if (fast_dec_timer_s16((int *)(data + 0x168)) == 0)
             return;
         *(int *)(data + 0x180) = 2;
         FUN_001f4a58_n(scale_game_frames(0x10));
@@ -560,7 +546,6 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
 extern struct Moby *D_L02_0015FFD8;
 extern unsigned char D_0014C050[][16];
 extern char voice_pool[] __asm__("D_0013E550");
-extern float distance_xyz(void *a, void *b) __asm__("FUN_001f9b80");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -610,7 +595,7 @@ void liftcar_platform_update(struct Moby *moby) {
         ride = 0;
         if (hero.ground_moby == moby && hero.air_frames.s == 0 && moby->command == 0) {
             ride = 1;
-        } else if (distance_xyz(&moby->pos, &hero.motion.pos) < 16.0f) {
+        } else if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 16.0f) {
             if (moby->state == 5 && hero.motion.pos.f[2] < moby->pos.z - 5.0f) {
                 ride = 1;
             } else if (moby->state == 3 && moby->pos.z + 5.0f < hero.motion.pos.f[2]) {
@@ -635,7 +620,7 @@ void liftcar_platform_update(struct Moby *moby) {
     case LIFTCAR_PLATFORM_ANIMATE_THEN_WAIT_FOR_RIDER_OR_HERO_BELOW:
         build_moby_bone_transform(driver, 0, joint_mtx);
         moby->rot.z = fast_arc_tan(joint_mtx[0], joint_mtx[1]);
-        if (distance_xyz(&moby->pos, &hero.motion.pos) < 1.5f && hero.motion.pos.f[2] < moby->pos.z - 1.5f) {
+        if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 1.5f && hero.motion.pos.f[2] < moby->pos.z - 1.5f) {
             driver->anim_speed = 0.0f;
             voice = *(int *)(data + 0xA4);
             if (voice != -1) {
@@ -647,7 +632,7 @@ void liftcar_platform_update(struct Moby *moby) {
             *(int *)(data + 0xA4) = -1;
         }
         if (driver->anim_speed == 0.0f &&
-            (distance_xyz(&moby->pos, &hero.motion.pos) > 2.0f || moby->pos.z - 1.25f < hero.motion.pos.f[2])) {
+            (vector_distance_xy(&moby->pos, &hero.motion.pos) > 2.0f || moby->pos.z - 1.25f < hero.motion.pos.f[2])) {
             driver->anim_speed = 1.0f;
             if (moby->state == 2) {
                 *(int *)(data + 0xA4) = allocate_voice_for_target_entry(2, 4, driver);

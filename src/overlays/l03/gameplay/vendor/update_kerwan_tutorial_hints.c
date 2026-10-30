@@ -9,6 +9,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
@@ -39,8 +40,6 @@ extern struct L03ItemEntry D_L03_00179BC0[];
 extern struct Moby *D_L03_0015FFE4;
 
 extern s32 is_point_inside_clip_volume(void *point, s32 volume) __asm__("FUN_00214720");
-extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern s32 allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
@@ -122,7 +121,7 @@ void update_kerwan_tutorial_hints(u8 *moby) {
         count = 0;
         for (candidate_moby = D_L03_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
             if (candidate_moby->pclass != 0 && *(s16 *)((u8 *)candidate_moby->pclass + 0x46) == 5 &&
-                vector_distance(&candidate_moby->pos, &hero.motion.pos) < 8.0f) {
+                vector_distance_xy(&candidate_moby->pos, &hero.motion.pos) < 8.0f) {
                 count++;
             }
         }
@@ -320,8 +319,6 @@ void rebuild_hero_relative_camera_transform(char *camera) {
     fast_vec_cross(camera + 0x20, camera + 0x10, camera);
 }
 #include "sda.h"
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern s32 D_L03_00167074 NOT_SDA;
 /* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
 void initialize_hero_relative_camera(void *camera_instance) __asm__("FUN_L03_002eb978");

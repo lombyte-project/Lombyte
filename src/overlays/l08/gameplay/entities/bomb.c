@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 
@@ -782,7 +783,6 @@ void *select_candidate_by_max_float_2c(void *a, void *b, void *c, void *d) __asm
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
-extern int multiply_quaternions() __asm__("FUN_001fa3c0");
 extern s32 fun_00213928(void *, void *, void *, u32, s32 *, f32 *, s32 *, s32) __asm__("FUN_00213928");
 extern int FUN_L00_001fff28();
 extern int allocate_voice_for_target_entry_alt(int,int,void*) __asm__("FUN_0022da68");

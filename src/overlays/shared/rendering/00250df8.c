@@ -7,6 +7,8 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250df8.s", FUN_L00_00250df8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250e30.s", FUN_L00_00250e30);
@@ -83,8 +85,6 @@ extern S_257470 D_L00_001BB230_lui __asm__("D_L00_001BB230") NOT_SDA;
 extern unsigned char D_L00_0015FC88_257470[] __asm__("D_L00_0015FC88")
     __attribute__((section(".data")));
 extern void debug_print(void *, ...) __asm__("FUN_001e93b0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 
 extern unsigned char D_L00_001E8F00[] NOT_SDA;

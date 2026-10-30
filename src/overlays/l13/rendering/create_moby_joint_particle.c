@@ -5,14 +5,13 @@
 #include "sda.h"
 
 #include "qcopy.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Allocates and fills a particle-process record attached to a moby. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/partupd_002811B0.c: func_L13_002811B0), where it is exact; names translated to the US level program. */
 
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *D_L13_001B2490 NOT_SDA = 0;
 unsigned char *create_moby_joint_particle(char *moby, unsigned char joint_index, int b, int c, unsigned char d, float x,
@@ -29,7 +28,7 @@ unsigned char *create_moby_joint_particle(char *moby, unsigned char joint_index,
         *(int *)(particle + 4) = b;
         *(int *)(particle + 0xC) = c;
         world_position = (char *)particle + 0x10;
-        particle_bias = func_001FA898_r(0.4f);
+        particle_bias = truncate_float_to_s32(0.4f);
         particle[9] = (((short)*(unsigned short *)(moby + 0x32) >> 5) << 4) + particle_bias;
         particle[3] = 0x48;
         particle[1] = 3;

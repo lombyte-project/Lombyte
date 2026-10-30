@@ -6,6 +6,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"
@@ -22,20 +23,13 @@ char *spawn_class_32_moby(char *owner, char *vec, void *pos, void *vel, int c) _
 extern char *D_L16_0015FFD8;
 extern char *D_L16_001B0930[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L16_0015F580[] MACRO_ADDR;
 extern float armed_transport_passenger_attachment_offset[4] __asm__("D_L16_001D9680");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_vec_dist(void *) __asm__("FUN_001f9b48");
-extern float fast_add_rotations(float, float) __asm__("func_001FA580");
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_L16_0015F5C4;
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 int advance_armed_transport_along_path(char *transport_moby, char *path) __asm__("FUN_L16_002e2e88");
 
 extern int advance_armed_transport_along_path(char *, char *) __asm__("FUN_L16_002e2e88");
-extern int fast_dec_timer(int*) __asm__("FUN_001f9740");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short armed_transport_spawn_direction_scale __asm__("D_L16_00161D7C") __attribute__((sda));
 extern short D_L16_00161D80;
 extern short armed_transport_bob_phase_speed_degrees __asm__("D_L16_00161D88") __attribute__((sda));
@@ -54,13 +48,10 @@ void update_armed_transport_joint_animation(char *moby) __asm__("FUN_L16_002e305
 
 extern void update_armed_transport_joint_animation(char *) __asm__("FUN_L16_002e3050");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 void set_blarg_elite_commando_parent_transform(char *moby, void *owner, void *position, char *vector) __asm__("FUN_L16_002d3dc0");
 void start_blarg_elite_commando_return_to_initial_position(char *moby, int arg) __asm__("FUN_L16_002d3de0");
 extern int func_0022ED80_update(int, int, void *) __asm__("FUN_0022da68");
-extern float func_001F9D10_update(void *, void *) __asm__("FUN_001f9b48");
 
 void armed_transport_update(char *m) __asm__("FUN_L16_002e22d8");
 void armed_transport_update(char *transport_moby) {
@@ -101,7 +92,7 @@ void armed_transport_update(char *transport_moby) {
             break;
         }
         path = D_L16_001B0930[*(int *)(transport_data + 0xD8)];
-        *(float *)(transport_data + 0x174) = func_001F9D10_update(path + 0x10, path + 0x20);
+        *(float *)(transport_data + 0x174) = fast_vec_dist(path + 0x10, path + 0x20);
         qcopy(transport_moby + 0x10, path + 0x10);
         transport_moby[0x20] = 1;
         transport_moby[0x31] = 0;
@@ -358,12 +349,10 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
 /* Advance a path segment and ease the remaining travel distance. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E42F0), where it is exact; names translated to the US level program. */
 
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 D_0015ED70_u __asm__("D_0015ED70");
 extern short D_L16_00161E44, D_L16_00161D80_gp __asm__("D_L16_00161D80") __attribute__((sda));
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 extern void func_00215CA8_path42_q(float, void *, int, void *, void *, int) __asm__("FUN_00214e58");
-extern float func_001F9D10_path42_q(void *, void *) __asm__("FUN_001f9b48");
 extern float func_00214D88_path42_q(float, float, float, float, float *,
                                     float *) __asm__("FUN_00213f38");
 
@@ -384,7 +373,7 @@ int advance_armed_transport_along_path(char *transport_moby, char *path) {
         func_00215CA8_path42_q(progress, path, 0, position, transport_moby + 0x40, 0);
         *(float *)(transport_data + 0x194) = *(float *)(transport_moby + 0x18);
         speed = 0.0f;
-        distance = func_001F9D10_path42_q(position, path + (*(int *)path << 4));
+        distance = fast_vec_dist(position, path + (*(int *)path << 4));
         rate = armed_transport_path_acceleration_coefficient_gp * *(float *)&D_0015ED70_u;
         func_00214D88_path42_q(distance, rate, rate, *(float *)&D_L16_00161D80_gp * frame_time,
                                &speed, (float *)(transport_data + 0x170));
@@ -506,8 +495,6 @@ typedef struct {
 
 typedef struct { char pad00[8]; float yaw, phase; float cardinal_angles[4]; } RingData;
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern float grindrail_barrier_ring_uvs[4][2] __asm__("D_L16_001D9780");
 extern float D_L16_001D9A70[4][2];
 extern float grindrail_barrier_ring_vertex_positions[4][4] __asm__("D_L16_001D97C0");
@@ -520,7 +507,6 @@ extern float grindrail_barrier_accent_vertex_positions[4][4] __asm__("D_L16_001D
 extern int fast_tween_color(int,int,float) __asm__("FUN_001fa6e0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 
 void draw_grindrail_barrier_effect(char *barrier_moby) __asm__("FUN_L16_002e58d8");
 
@@ -624,9 +610,7 @@ int check_grindrail_barrier_release_condition(int moby_list_index) {
    here retail loads it absolute: reach it from a neighbour, past whose size the
    assembler no longer uses $gp. */
 #define D_L16_0015FFD8 (((char **)&D_L16_00161D78)[-(0x161D78 - 0x15FFD8) / 4])
-extern float fast_vec_dist(void *) __asm__("FUN_001f9b48");
 extern short *D_L16_001ABCC0[];
-extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
 
 extern float D_L16_00161D78;
 void group_trigger_nearest(int moby_list_index) __asm__("FUN_L16_002e5d30");
@@ -638,7 +622,7 @@ void group_trigger_nearest(int moby_list_index) {
         do {
             char *candidate_moby = D_L16_0015FFD8 + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8);
             if (*(short *)(candidate_moby + 0xA6) != 0x5A3) {
-                float candidate_distance = func_001F9D10_2E7198(D_0013E533 + 0xE9D, candidate_moby + 0x10);
+                float candidate_distance = fast_vec_dist(D_0013E533 + 0xE9D, candidate_moby + 0x10);
                 if (candidate_distance < bestd) {
                     bestd = candidate_distance;
                     best = candidate_moby;

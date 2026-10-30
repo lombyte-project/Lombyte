@@ -5,12 +5,10 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -116,7 +114,7 @@ state_one:
                             sample_path((int *)path, position, &segment, &fraction, step, 1);
                             if (data[9] == -1)
                                 accepted = 1;
-                            else if (near < vector_distance(level_mobys + data[9] * 0x100 + 0x10, position))
+                            else if (near < vector_distance_xy(level_mobys + data[9] * 0x100 + 0x10, position))
                                 accepted = 1;
                             else
                                 step += retry_step;
@@ -151,7 +149,6 @@ extern char D_L07_0016C8E0[];
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi,

@@ -2,13 +2,13 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
 /* index of the nearest of n vectors to a + 0x10 */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F2F68), where it is exact; names translated to the US level program. */
 
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 int find_nearest_point_index_xy(char *moby, char *points, int count) __asm__("FUN_L04_001f3038");
 
@@ -17,7 +17,7 @@ int find_nearest_point_index_xy(char *moby, char *points, int count) {
     int i;
     float best_distance = 32767.0f;
     for (i = 0; i < count; i++) {
-        float distance = vector_distance(moby + 0x10, points + i * 0x10);
+        float distance = vector_distance_xy(moby + 0x10, points + i * 0x10);
         if (distance < best_distance) {
             best_distance = distance;
             best = i;
@@ -70,29 +70,16 @@ typedef struct {
 } Coll;
 
 extern s32 D_L04_00173FF0[];
-extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_line() __asm__("FUN_001efa68");
-extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
-extern int set_vector_length_xy() __asm__("FUN_001f9c48");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
 int FUN_L04_001f3038_c(char *a, char *b, int n) __asm__("FUN_L04_001f3038");
 int find_closest_polygon_edge_point(float *out, float *p, float *poly, int n) __asm__("FUN_L04_0024c7d8");
 extern PathEl *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
 extern Coll D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float func_001F9D10_1F3010(void *, void *) __asm__("FUN_001f9b48");
 extern int func_L00_001EFFF0_1F3010(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern float func_001F9CE8_1F3010(void *) __asm__("FUN_001f9b20");
-extern void func_L00_001FF500_1F3010(void *, void *, float) __asm__("FUN_001f9c48");
-extern int func_001F9938_1F3010(void *) __asm__("FUN_001f9770");
 extern float func_002140F8_1F3010(float, float) __asm__("FUN_002132a8");
-extern int func_001FA898_1F3010(float) __asm__("FUN_001fa6d0");
 extern int func_L04_001F2F68_1F3010(Moby *, void *, int) __asm__("FUN_L04_001f3038");
 extern int func_L04_0024D790_1F3010(void *, void *, void *, int) __asm__("FUN_L04_0024c7d8");
 
@@ -122,7 +109,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
     float repulsion;
 
     clear_u64_value(steer);
-    distance = func_001F9D10_1F3010(&moby->pos, &uninitialized_point);
+    distance = fast_vec_dist(&moby->pos, &uninitialized_point);
     nearest_index = 0;
     path = 0;
     hit = 0;
@@ -162,12 +149,12 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
     } else {
         if (steer->path != -1) {
             best_index = nearest_index;
-            length = func_001F9D10_1F3010(&path[nearest_index + 1], &uninitialized_point);
+            length = fast_vec_dist(&path[nearest_index + 1], &uninitialized_point);
             next_index = 0;
             if (nearest_index + 1 < path[0].n) {
                 next_index = nearest_index + 1;
             }
-            next_distance = func_001F9D10_1F3010(&path[next_index + 1], &uninitialized_point);
+            next_distance = fast_vec_dist(&path[next_index + 1], &uninitialized_point);
             if (length < next_distance) {
                 best_index = next_index;
                 length = next_distance;
@@ -176,7 +163,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             if (next_index < 0) {
                 next_index = path[0].n - 1;
             }
-            if (length < func_001F9D10_1F3010(&path[next_index + 1], &uninitialized_point)) {
+            if (length < fast_vec_dist(&path[next_index + 1], &uninitialized_point)) {
                 best_index = next_index;
             }
             next_index = 0;
@@ -226,7 +213,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             if ((*(signed char *)&other->state) < 0 || moby == other) {
                 continue;
             }
-            length = func_001F9D10_1F3010(&moby->pos, &other->pos);
+            length = fast_vec_dist(&moby->pos, &other->pos);
             if (steer->near < length) {
                 continue;
             }
@@ -261,8 +248,8 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
         if (func_L00_001EFFF0_1F3010(&ray_start, &ray_end, 2, moby, 0) != 0) {
             if (D_L04_00174040_1F3010.hit > 0 && D_L04_00174040_1F3010.z > moby->pos.z) {
                 qcopy(&surface_normal, &D_L04_00174040_1F3010.normal);
-                length = fast_arc_tan(D_L04_00174040_1F3010.normal.z, func_001F9CE8_1F3010(&D_L04_00174040_1F3010.normal));
-                func_L00_001FF500_1F3010(&surface_normal, &surface_normal, 1.0f);
+                length = fast_arc_tan(D_L04_00174040_1F3010.normal.z, vector_length_xy(&D_L04_00174040_1F3010.normal));
+                set_vector_length_xy(&surface_normal, &surface_normal, 1.0f);
                 fast_vec_scale(&surface_normal, &surface_normal, params[3]);
                 fast_vec_add(steer, steer, &surface_normal);
                 if (0.4f < length) {
@@ -270,7 +257,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
                     fast_vec_add(steer, steer, &surface_normal);
                 }
                 if (0.2f < moby->pos.z - D_L04_00174040_1F3010.z) {
-                    func_L00_001FF500_1F3010(&surface_normal, &steer->pos, -(params[3] * 1000.0f));
+                    set_vector_length_xy(&surface_normal, &steer->pos, -(params[3] * 1000.0f));
                     fast_vec_add(steer, steer, &surface_normal);
                 }
             }
@@ -284,14 +271,14 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
         }
     }
     if (steer->f48 == 0.0f) {
-        func_L00_001FF500_1F3010(steer, steer, params[6]);
+        set_vector_length_xy(steer, steer, params[6]);
         steer->vel.z = 0.0f;
     } else {
         fast_vec_normalize(steer, steer, params[6]);
         steer->vel.z = steer->vel.z / steer->f48;
     }
-    if (func_001F9938_1F3010(&steer->timer) != 0) {
-        steer->timer = func_001FA898_1F3010(func_002140F8_1F3010(45.0f, 90.0f));
+    if (fast_dec_timer_s16(&steer->timer) != 0) {
+        steer->timer = truncate_float_to_s32(func_002140F8_1F3010(45.0f, 90.0f));
         steer->drift.x = func_002140F8_1F3010(0.0f, steer->range) - steer->range * 0.5f;
         steer->drift.y = func_002140F8_1F3010(0.0f, steer->range) - steer->range * 0.5f;
         if (steer->f48 != 0.0f) {
@@ -306,7 +293,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
         if (steer->f48 != 0.0f) {
             fast_vec_normalize(steer, &force, params[6]);
         } else {
-            func_L00_001FF500_1F3010(steer, &force, params[6]);
+            set_vector_length_xy(steer, &force, params[6]);
         }
     }
 }
@@ -318,8 +305,6 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
 /* steps a moby's position out of collision and aims it */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F39B0), where it is exact; names translated to the US level program. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 
 void update_moby_movement_with_sphere_collision(char *moby, char *movement_state, char *movement_params, float collision_z_offset) __asm__("FUN_L04_001f3a80");
 

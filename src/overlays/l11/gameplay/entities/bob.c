@@ -12,6 +12,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Moby.state for the resort-owner callbacks; path progression is separate. */
 enum ResortOwnerState {
@@ -48,8 +49,6 @@ enum ResortOwnerPathLeg {
 /* Per-frame update of a pickup moby: waits for the player to come near, then grants the item. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC828), where it is exact; names translated to the US level program. */
 
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4E3[];
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
@@ -77,7 +76,7 @@ void update_pokitaru_pickup(struct Moby *moby) {
         break;
     case PICKUP_CHECK_PROXIMITY:
         fast_add_rotations(moby->rot.z, frame_time * 4.7123890f);
-        if (vector_distance(&moby->pos, D_0013E533 + 0xE9D) < 2.0f) {
+        if (vector_distance_xy(&moby->pos, D_0013E533 + 0xE9D) < 2.0f) {
             D_0013D4C2[4] = 1;
             D_0013D4E3[0xB] = 1;
             memcard_save_data(0, -1);
@@ -92,9 +91,7 @@ void update_pokitaru_pickup(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC9D0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
-extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 
 void update_pokitaru_paired_rotation(struct Moby *moby) __asm__("FUN_L11_002cb810");
 
@@ -212,13 +209,8 @@ extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern unsigned char D_0013D4C3 NOT_SDA;
 extern int D_L11_0015F5C4;
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void FUN_00214db0(void *, float, float, float);
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
@@ -273,7 +265,7 @@ void bob_update(WM11 *moby) {
     if (moby->animation == 0) {
         char *player = D_0013E533 + 0xE9D;
         tracking = 1;
-        if (vector_distance(moby->position, player) < 8.0f &&
+        if (vector_distance_xy(moby->position, player) < 8.0f &&
             fast_difference_between_rotations(
                 moby->yaw, fast_arc_tan(((WP11 *)(D_0013E533 + 0xE1D))->aim[0] - moby->position[0],
                                      ((WP11 *)(D_0013E533 + 0xE1D))->aim[1] - moby->position[1])) <
@@ -327,7 +319,6 @@ void bob_update(WM11 *moby) {
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_vars->head, 1);
 }
 
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */
 
@@ -361,7 +352,6 @@ extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214
 extern float FUN_L00_0025abf0(void *, void *, float, int, float);
 extern void transform_attachment_pose(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern void FUN_00212f90(void *, int, int, int);
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float D_0015ED70;
 extern float D_0015ED6C;
 float D_L11_001613E0 = 3.2f;
@@ -504,7 +494,6 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *out) __asm__("FU
 extern int try_find_resort_owner_jump_target(struct Moby *m, float *out) __asm__("FUN_L11_002d25e8");
 extern void FUN_L11_002d2088_c(struct Moby *moby, int state) __asm__("FUN_L11_002d2088");
 extern float ground_height_14b0(void *) __asm__("FUN_L00_00259710");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void build_symmetric_adjacency_masks(void *, int, int) __asm__("FUN_L05_0028be78");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
@@ -636,7 +625,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
                 begin_dialogue_camera_transition(moby, 2.5f);
                 FUN_L11_002d2088_c(moby, 2);
             }
-        } else if (vector_distance(&moby->pos, &hero.motion.pos) < 6.0f) {
+        } else if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 6.0f) {
             FUN_L11_002d2088_c(moby, 3);
         }
         break;
@@ -645,27 +634,27 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             FUN_L11_002d2088_c(moby, 3);
         break;
     case RESORT_OWNER_WAIT_TO_FOLLOW_HERO:
-        if (vector_distance(&moby->pos, &hero.motion.pos) > 6.0f &&
+        if (vector_distance_xy(&moby->pos, &hero.motion.pos) > 6.0f &&
             try_update_resort_owner_path_target(moby, (char *)&hero.motion.pos) && proximity == 1)
             FUN_L11_002d2088_c(moby, 4);
         break;
     case RESORT_OWNER_FOLLOW_HERO:
-        if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f ||
+        if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 3.0f ||
             !try_update_resort_owner_path_target(moby, (char *)&hero.motion.pos) || proximity == 2)
             FUN_L11_002d2088_c(moby, 3);
-        else if (vector_distance(&moby->pos, &hero.motion.pos) > 8.0f)
+        else if (vector_distance_xy(&moby->pos, &hero.motion.pos) > 8.0f)
             FUN_L11_002d2088_c(moby, 5);
         break;
     case RESORT_OWNER_FOLLOW_DISTANT_HERO:
-        if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f ||
+        if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 3.0f ||
             !try_update_resort_owner_path_target(moby, (char *)&hero.motion.pos) || proximity == 2)
             FUN_L11_002d2088_c(moby, 3);
-        else if (vector_distance(&moby->pos, &hero.motion.pos) < 4.0f)
+        else if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 4.0f)
             FUN_L11_002d2088_c(moby, 4);
         break;
     case RESORT_OWNER_MOVE_TO_PATH_POINT:
         try_update_resort_owner_path_target(moby, (char *)&path_points_14b0[moby_vars->points[moby_vars->leg]].pos);
-        if (vector_distance(&moby->pos, &moby_vars->target) < 1.0f) {
+        if (vector_distance_xy(&moby->pos, &moby_vars->target) < 1.0f) {
             switch (moby_vars->leg) {
             case RESORT_OWNER_FIRST_PATH_LEG: {
                 struct Moby *o = (struct Moby *)(D_L11_0015FFD8 + (moby_vars->gates[0] << 8));
@@ -735,7 +724,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
             FUN_L11_002d2088_c(moby, moby_vars->next_state);
         break;
     case RESORT_OWNER_MOVE_TO_GATE_TARGET:
-        if (vector_distance(&moby->pos, &moby_vars->target) < 0.5f)
+        if (vector_distance_xy(&moby->pos, &moby_vars->target) < 0.5f)
             FUN_L11_002d2088_c(moby, 9);
         break;
     case RESORT_OWNER_WAIT_AT_GATE:
@@ -746,7 +735,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         }
         break;
     case RESORT_OWNER_MOVE_TO_GATE_DEPARTURE_TARGET:
-        if (vector_distance(&moby->pos, &moby_vars->target) < 0.5f) {
+        if (vector_distance_xy(&moby->pos, &moby_vars->target) < 0.5f) {
             int next_leg_index = ++moby_vars->leg;
             qcopy(&moby_vars->target, &path_points_14b0[moby_vars->unkD0[next_leg_index]].pos);
             moby_vars->next_state = 4;
@@ -776,7 +765,6 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         break;
     }
 }
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float resort_owner_follow_hero_speed_gp __asm__("D_L11_001613D0") __attribute__((sda));
 extern float resort_owner_distant_follow_and_path_speed_gp __asm__("D_L11_001613D4") __attribute__((sda));
 float D_L11_00161400 = -3.0f;
@@ -952,7 +940,6 @@ int classify_resort_owner_target_proximity(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D37A8), where it is exact; names translated to the US level program. */
 
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-float absolute_float(float input) __asm__("func_001F99C0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void FUN_L00_00259710(void *a);
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
@@ -1165,7 +1152,7 @@ void fred_pokitaru_update(struct Moby *moby) {
     if (moby->prev_seq == 1) {
         char *player = D_0013E533 + 0xE9D;
         tracking = 1;
-        if (vector_distance(&moby->pos, player) < 8.0f &&
+        if (vector_distance_xy(&moby->pos, player) < 8.0f &&
             fast_difference_between_rotations(
                 moby->rot.z, fast_arc_tan(((WP11 *)(D_0013E533 + 0xE1D))->aim[0] - moby->pos.x,
                                           ((WP11 *)(D_0013E533 + 0xE1D))->aim[1] - moby->pos.y)) <
@@ -1433,7 +1420,6 @@ typedef struct {
     unsigned long long tag[4];
 } QuadPacket;
 
-extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern unsigned long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
@@ -1683,8 +1669,6 @@ extern unsigned char D_0013E550_309ac0[] __asm__("D_0013E550");
 extern void *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void scale_vec_309ac0(float *, float) __asm__("FUN_L00_0025f730");
@@ -1969,7 +1953,7 @@ void update_pokitaru_boat_joint_effects(struct Moby *moby) {
             FUN_L00_001fff28(moby_vars->parts[i].joint, 0, moby_vars->angle[i]);
         }
     }
-    if (vector_distance(&moby->pos, camera_pos_b358) > 38.0f)
+    if (vector_distance_xy(&moby->pos, camera_pos_b358) > 38.0f)
         return;
     if (moby->state == 1 && (level_frame & 1))
         return;

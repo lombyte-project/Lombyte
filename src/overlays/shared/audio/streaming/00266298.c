@@ -9,6 +9,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /*
  * Scene trigger attached to a moby: when the hero comes close enough (and,
@@ -61,9 +62,7 @@ extern s32 bolt_hud_item __asm__("D_L00_00160130") __attribute__((sda));
 extern struct MobyRecord race_gates[] __asm__("D_0013D5B0");
 
 extern void FUN_L00_002668a0_c(struct Moby *, struct SceneTrigger *) __asm__("FUN_L00_002668a0");
-extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");                    /* distance */
 extern void SCRATCH(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern s32 FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
 extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
 extern void remove_hud_item(s32) __asm__("FUN_001ff480");

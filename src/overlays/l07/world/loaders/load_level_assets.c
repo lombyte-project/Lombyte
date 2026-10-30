@@ -61,6 +61,7 @@ typedef struct { s16 a; s16 b; s32 *file; } Ldg26b768;
 extern Ldg26b768 D_0015EE48;
 #include "rnc/overlay/l07/world/loaders/load_level_assets_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 extern u64 D_L07_00182840[3];
 extern u64 l07_64x64_texture_state[3] __asm__("D_L07_00182858");
 extern u64 D_L07_00182870[3];
@@ -129,8 +130,6 @@ typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una2
 extern u8 D_L07_00179180[];
 
 extern void load_hud_banks(void) __asm__("FUN_00202a98");
-extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
-extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32 fast_decompress(void *, char *) __asm__("FUN_L00_0024d8d0");

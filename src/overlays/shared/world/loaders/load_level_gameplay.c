@@ -3,6 +3,8 @@
 #include "asm.h"
 
 #include "sda.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 typedef struct {
     s32 a, b, c, off;
 } Ent;
@@ -37,10 +39,8 @@ typedef struct {
 } MobyClassSize;
 
 extern char moby_class_size_format[] __asm__("D_L00_001E8640");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
 extern int fptodp(float) __asm__("FUN_00120478");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
 void print_moby_class_sizes(int *record, int n) __asm__("FUN_L00_00241788");
 void print_moby_class_sizes(int *record, int n) {
@@ -419,7 +419,6 @@ extern char level_gameplay_moby_occlusion_outdated_format[] __asm__("D_L00_001E8
 extern char level_gameplay_tfrag_occlusion_outdated_message[] __asm__("D_L00_001E86E0");
 extern char level_gameplay_tie_occlusion_outdated_format[] __asm__("D_L00_001E8708");
 extern char level_gameplay_no_occlusion_message[] __asm__("D_L00_001E8740");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float D_L00_0015F448 MACRO_ADDR;
 extern float D_L00_0015F44C MACRO_ADDR;
 extern float D_L00_0015F450 MACRO_ADDR;
@@ -428,7 +427,6 @@ extern float D_L00_0015F638  MACRO_ADDR;
 extern float D_L00_001604A4 MACRO_ADDR;
 extern float D_L00_00160F80 MACRO_ADDR;
 extern float D_L00_00160FE0 MACRO_ADDR;
-extern float max_float(float, float) __asm__("FUN_001f99c8");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_0015ED84 MACRO_ADDR;
 extern int D_L00_0015EF54 MACRO_ADDR;
@@ -470,7 +468,6 @@ extern unsigned char D_L00_001804C0[];
 extern unsigned char D_L00_001BC1B0[];
 extern unsigned char D_L00_001C5B00[];
 extern void enable_global_flag(void) __asm__("func_001F61E8");
-extern void copy_memory_aligned(void *, void *, int) __asm__("FUN_001f9838");
 extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 extern void FUN_0022a5e0(void *);
 extern void light_tfrags(void *) __asm__("FUN_00234f98");
@@ -487,13 +484,9 @@ extern void FillTransferWords(void *, s32, s32);
 extern void FlushCache(s32);
 extern void PackDmaTag(unsigned long, unsigned long, unsigned long);
 extern void PackRenderCommandFields(void *, s32, s32, s32, s32);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void clear_blocks_16(void *, s32) __asm__("func_001F9810");
-extern void fast_mem_copy(void *dst, void *src, s32 size) __asm__("func_001F98D0");
 extern void reset_draw_globals(void) __asm__("FUN_001f37e8");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 extern void set_video_timing(s32) __asm__("func_00214970");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern void update_camera(void) __asm__("func_001EDAA8");
 extern void update_fog(void) __asm__("func_001F2588");
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
@@ -547,8 +540,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     coll_hit.fC = 0;
     coll_hit.f10 = 0;
     coll_hit.f14 = 0;
-    clear_blocks_16(D_L00_0019B7E0, 0x10000);
-    clear_blocks_16(D_L00_001AB7E0, 0x60);
+    fast_mem_zero16(D_L00_0019B7E0, 0x10000);
+    fast_mem_zero16(D_L00_001AB7E0, 0x60);
     {
         int *p = (int *)((char *)hdr + hdr->f0);
         int *ship_spawn_settings;
@@ -579,9 +572,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_0016017C = 0x1F4000;
     PackDmaTag(D_L00_0016CA40.f23C, D_L00_0016CA40.f240, D_L00_0016CA40.f244);
     vu0_load_micro_program(D_00100AE0);
-    clear_blocks_16(D_L00_001802C0, 0x100);
-    clear_blocks_16(D_L00_001804C0, 0x180);
-    clear_blocks_16(level_directional_lights, 0x400);
+    fast_mem_zero16(D_L00_001802C0, 0x100);
+    fast_mem_zero16(D_L00_001804C0, 0x180);
+    fast_mem_zero16(level_directional_lights, 0x400);
     {
         char *p = (char *)hdr + hdr->f4;
         int n = *(int *)p;
@@ -1455,7 +1448,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_00160174 = -1;
     D_L00_00160170 = 0;
     D_L00_00160178 = 0;
-    clear_blocks_16(D_L00_001B1880, 0x200);
+    fast_mem_zero16(D_L00_001B1880, 0x200);
     level_render_state.f0 = 0;
     if (0.0f < ship[0]) {
         MobyInst *m;
@@ -1778,8 +1771,6 @@ extern u8 D_L00_00179100[];
 extern s32 game_frame __asm__("D_L00_0015F5CC");
 
 extern void load_hud_banks(void) __asm__("FUN_00202a98");
-extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
-extern void FUN_001f9838_244110(void *, void *, s32) __asm__("FUN_001f9838");
 extern void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32 FUN_L00_0024d8d0_244110(void *, char *) __asm__("FUN_L00_0024d8d0");
@@ -1799,7 +1790,6 @@ extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_00
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *load_level_texture_bank(char *, s32 *) __asm__("FUN_L00_0023fa00");
 extern char *FUN_L00_00241940_244110(s32) __asm__("FUN_L00_00241940");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
 extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
@@ -1861,7 +1851,7 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
     if (full) {
         fast_mem_copy(core_header, (char *)(level_file_base[4] + (s32)level_file_base), level_file_base[5]);
         D_L00_0015F40C = 0;
-        FUN_001f9838_244110(mission_state_macro, D_0014C050 + current_level_index * 16, 0x10);
+        copy_memory_aligned(mission_state_macro, D_0014C050 + current_level_index * 16, 0x10);
         upload_texture_images((char *)(level_file_base[6] + (s32)level_file_base), core_header[0], (char *)core_header + core_header[1]);
         saved_sound_bank_handle = sound_bank_handle;
         flush_cache(0);
@@ -1968,7 +1958,7 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         sound_slot_count = span->count;
         D_L00_0015F5F4 = (Slot244110 *)free;
         D_L00_0015F5F0 = sound_slot_count;
-        FUN_001f9838_244110(free, sound_table_base + span->off, sound_slot_count * 32);
+        copy_memory_aligned(free, sound_table_base + span->off, sound_slot_count * 32);
         span++;
         free += sound_slot_count * 32;
         sound_reference_cursor = sound_table_base + span->off;

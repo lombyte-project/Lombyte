@@ -5,6 +5,7 @@
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef union {
     OvlQuad q;
@@ -12,8 +13,6 @@ typedef union {
     s32 i[4];
 } V;
 
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
 extern char camera_collision_grid_out_of_bounds_warning[] __asm__("D_L00_001E78B0");
 extern s32 FUN_L00_001ee318_c(V *, s32 *, f32) __asm__("FUN_L00_001ee318");
@@ -63,9 +62,6 @@ typedef union {
 extern unsigned char *D_L00_001600EC_1ee318 __asm__("D_L00_001600EC");
 extern unsigned char *D_L00_001600FC_1ee318 __asm__("D_L00_001600FC");
 extern unsigned char *D_L00_001600F4_1ee318 __asm__("D_L00_001600F4");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern float FUN_001f9b20_1ee318(void *) __asm__("FUN_001f9b20");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) __asm__("FUN_L00_001ee318");
 
@@ -103,7 +99,7 @@ int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) {
         fast_vec_sub(&volume_delta, pt, e + 0x30);
         volume_delta.i[3] = 0;
         transform_vector_by_basis(&transformed_test_vector, &volume_delta, e + 0x40);
-        if (FUN_001f9b20_1ee318(&transformed_test_vector) < 1.0f && -1.0f <= transformed_test_vector.f[2] && transformed_test_vector.f[2] <= 1.0f) {
+        if (vector_length_xy(&transformed_test_vector) < 1.0f && -1.0f <= transformed_test_vector.f[2] && transformed_test_vector.f[2] <= 1.0f) {
             is_inside_cylinder = 1;
         }
         return is_inside_cylinder;
@@ -123,7 +119,7 @@ int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) {
         fast_vec_sub(&volume_delta, pt, e + 0x30);
         volume_delta.i[3] = 0;
         transform_vector_by_basis(&transformed_test_vector, &volume_delta, e + 0x40);
-        if (FUN_001f9b20_1ee318(&transformed_test_vector) < 1.0f && -1.0f <= transformed_test_vector.f[2] && transformed_test_vector.f[2] <= 1.0f) {
+        if (vector_length_xy(&transformed_test_vector) < 1.0f && -1.0f <= transformed_test_vector.f[2] && transformed_test_vector.f[2] <= 1.0f) {
             return 1;
         }
         endpoint_test_vector.i[0] = 0;

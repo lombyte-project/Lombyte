@@ -68,6 +68,7 @@ void make_hit_descriptor(char *hit_descriptor, int source_moby, int hit_mask, fl
 }
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 int play_entity_sound(void *moby, void *position, int c, float d, float e, float f, int g, int h, int i) __asm__("FUN_L00_002598b0");
 int play_entity_sound(void *moby, void *position, int hit_mask, float sphere_radius, float hit_priority, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) {
@@ -381,7 +382,6 @@ extern f32 D_L00_00160080[2] __attribute__((sda));
 extern f32 D_L00_001B01C8[][8];
 extern u8 D_L00_001B0180[][4];
 extern Q_25a478 *suck_get_aim_height(void *) __asm__("FUN_002141f8");
-extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern f32 FUN_001f9af0_c(void *) __asm__("FUN_001f9af0");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");

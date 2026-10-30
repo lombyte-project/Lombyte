@@ -3,17 +3,11 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Builds a matrix that rolls by roll around the direction dir and writes it to out. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/mobyutil_0026B0E8.c: func_L08_0026B0E8), where it is exact; names translated to the US level program. */
 
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void copy_matrix3x4(void *, void *);
 
 void build_axis_roll_matrix(void *out, void *roll_axis_direction, float roll) __asm__("FUN_L08_0026a0f8");

@@ -3,6 +3,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 int walker_gait_mask(float *a, float v) __asm__("FUN_L00_002a13f0");
 int walker_gait_mask(float *gait_record, float interval_value) {
@@ -60,7 +61,6 @@ void reset_walker_gait_helpers(u8 *gait_data) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vuchain_002A21A8.c: func_L00_002A2858), where it is exact; names translated to the US level program. */
 
-extern float square_root(float) __asm__("FUN_001f9988");
 
 float compute_walker_time_to_landing(char *walker_moby, char *gait_data) __asm__("FUN_L00_002a15c8");
 
@@ -154,17 +154,10 @@ typedef struct WalkData {
 } WalkData;
 
 extern char walker_jump_distance_debug_format[] __asm__("D_L00_001611E0");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
-extern float fast_cos(float) __asm__("func_001F9DC8");
-extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int walker_gait_animation_index_by_state[] __asm__("D_L00_001CA760");
 extern int find_nearest_animation_sequence_entry(char *a, float time) __asm__("FUN_L00_0024ed18");
 extern int FUN_L00_002a13f0_c(WalkAnim *a, float t) __asm__("FUN_L00_002a13f0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void debug_print() __asm__("FUN_001e93b0");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
@@ -834,7 +827,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
         break;
     case WALKER_GAIT_TAKEOFF_ANIMATION:
         if (flags & 0x30) {
-            float dist = vector_distance(walker_moby->pos, gait_data->v60);
+            float dist = vector_distance_xy(walker_moby->pos, gait_data->v60);
             debug_print(walker_jump_distance_debug_format, dist);
             gait_data->fD8 = FUN_L00_0025abf0(walker_moby->pos, gait_data->v60, 0, gait_data->fC0, -gait_data->fDC);
             gait_data->uEE |= 4;

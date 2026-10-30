@@ -9,6 +9,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 typedef union {
@@ -31,7 +32,6 @@ extern f32 FUN_L00_0025bc98_214658(float *, float *, int, float, float, float,
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00233ba0_214658(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
-extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 
 #define ED64 frame_scale_sq

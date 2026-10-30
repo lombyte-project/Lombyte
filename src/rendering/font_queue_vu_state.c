@@ -6,10 +6,9 @@
 #include "rnc/ui/text/font_state.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
-extern void set_scale_matrix(f32 (*)[4], f32) __asm__("FUN_001f9ff8");
-extern void multiply_matrix(void *, u8 *, f32 (*)[4]) __asm__("FUN_001fa378");
 extern void vu1_add_data_ref(u8 *, s32) __asm__("func_00233830");
 extern void vu1_gs_regs_font(void) __asm__("func_00233C90");
 

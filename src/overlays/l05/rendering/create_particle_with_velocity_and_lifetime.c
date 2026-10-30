@@ -4,9 +4,9 @@
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 unsigned char *D_L05_001B25C0 __attribute__((section(".data"))) = 0;
 
@@ -42,8 +42,6 @@ unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particl
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/partupd_0029CA28.c: func_L05_0029CCB8), where it is exact; names translated to the US level program. */
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L05_001B25C8 NOT_SDA;

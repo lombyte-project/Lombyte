@@ -6,10 +6,10 @@
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00249488.c: func_L03_0024F6D8), where it is exact; names translated to the US level program. */
 
-extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 void rotate_vector_by_quaternion(void *arg0, void *arg1, void *arg2) __asm__("FUN_00214800");
 
 void rotate_vector_by_scaled_angle_between_vectors(float rotation_scale, float *output_vector, float *source_vector, float *reference_vector, int flag) __asm__("FUN_L03_0024e6f8");

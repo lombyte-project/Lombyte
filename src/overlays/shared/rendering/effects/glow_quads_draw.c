@@ -7,6 +7,7 @@
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/initonce_0023E4C8.c: func_L00_0023E4C8). */
 
@@ -25,7 +26,6 @@ extern float D_L00_0015FB08 NOT_SDA;
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_moby_bone_transform(char *moby, int bone, char *out);
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_draw_quad_real(void *quads, void *matrix, int count) __asm__("FUN_001f7d30");
 
 /* Builds the object's tilted frame and emits three batches of four quads offset around it. */
@@ -173,7 +173,6 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, int, int,
                                   void *);
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 void emit_moby_particle_pairs(void *moby) __asm__("FUN_L00_0023e008");
 
@@ -224,7 +223,6 @@ typedef struct {
 } T_0023e5e0;
 extern T_0023e5e0 D_L00_001804C0_0023e5e0[] __asm__("D_L00_001804C0");
 extern P_0023e5e0 D_L00_001802C0_0023e5e0[] __asm__("D_L00_001802C0");
-void FUN_001f9810_0023e5e0(void *, int) __asm__("FUN_001f9810");
 u8 D_L00_00180640[8][1024] = {0};
 u8 D_L01_00180AC0[8][1024] = {0};
 u8 D_L02_00180C40[8][1024] = {0};
@@ -265,7 +263,7 @@ int allocate_packed_color_point_light_slot(u128 *position, float radius, float b
     parameter_entry->y = convert_integer_to_float((col >> 8) & 0xFF) * 0.0078125f;
     parameter_entry->z = convert_integer_to_float((col >> 16) & 0xFF) * 0.0078125f;
     parameter_entry->b_0023e5e0 = b;
-    FUN_001f9810_0023e5e0(slot_state, 0x30);
+    fast_mem_zero16(slot_state, 0x30);
     slot_state->used = 1;
     slot_state->buf = (char *)D_L00_00180640[i];
     return i;
@@ -288,7 +286,6 @@ typedef struct {
 } T_0023e738;
 extern T_0023e738 D_L00_001804C0_0023e738[] __asm__("D_L00_001804C0");
 extern P_0023e738 D_L00_001802C0_0023e738[] __asm__("D_L00_001802C0");
-void FUN_001f9810_0023e738(void *, int) __asm__("FUN_001f9810");
 int allocate_colored_effect_slot(u128 *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
 int allocate_colored_effect_slot(u128 *position, float position_w, float b_0023e738, float color_component_x, float color_component_y, float color_component_z) {
     int i;
@@ -309,7 +306,7 @@ int allocate_colored_effect_slot(u128 *position, float position_w, float b_0023e
     parameter_entry->y = color_component_y;
     parameter_entry->z = color_component_z;
     parameter_entry->b_0023e738 = b_0023e738;
-    FUN_001f9810_0023e738(slot_state, 0x30);
+    fast_mem_zero16(slot_state, 0x30);
     slot_state->used = 1;
     slot_state->buf = (char *)D_L00_00180640[i];
     return i;
@@ -317,13 +314,12 @@ int allocate_colored_effect_slot(u128 *position, float position_w, float b_0023e
 extern char D_L00_001802C0[];
 extern char D_L00_001804C0[];
 void detach_point_light() __asm__("FUN_00201f88");
-void clear_blocks_16() __asm__("FUN_001f9810");
 /* Detaches the point light and clears entry i of D_L00_001802C0 and D_L00_001804C0. */
 void release_point_light_slot(int i) __asm__("FUN_L00_0023e838");
 void release_point_light_slot(int i) {
     detach_point_light();
-    clear_blocks_16(D_L00_001802C0 + i * 32, 32);
-    clear_blocks_16(D_L00_001804C0 + i * 48, 48);
+    fast_mem_zero16(D_L00_001802C0 + i * 32, 32);
+    fast_mem_zero16(D_L00_001804C0 + i * 48, 48);
 }
 
 char D_L01_00180940 NOT_SDA = 0;

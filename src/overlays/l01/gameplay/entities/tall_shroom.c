@@ -6,6 +6,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef struct {
     u8 pad0[0x5C];
@@ -75,9 +76,7 @@ extern s32 cutscene_mode_macro __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern s32 D_L01_0015F688 MACRO_ADDR;
 extern s32 D_L01_0015F68C MACRO_ADDR;
 extern struct Moby *moby_list __asm__("D_L01_0015FFE4") MACRO_ADDR;
-extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 is_moby_in_state_one(void *) __asm__("FUN_L00_002d8128");
 extern s32 check_scaled_vector_bsphere(f32, void *) __asm__("FUN_L01_00275690");
@@ -240,10 +239,8 @@ extern BlobHitInfo collision_hit __asm__("D_L01_001742C0");
 extern s32 D_L01_0015F580;
 extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32,
                              s32, s32, s32, s32);
 extern void spawn_burst(void *, void *, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026cbb0");
@@ -422,7 +419,6 @@ extern void cutscene_set_camera_target(struct Moby *) __asm__("FUN_L00_002637f8"
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern char *spawn_splash(f32, f32, void *, void *, void *) __asm__("FUN_L00_002718d0");
 extern char *spawn_burst_moby(void *, f32) __asm__("FUN_L00_002d7e90");
 extern void spawn_debris_chunk(void *, void *, s32, s32) __asm__("FUN_L00_0026f548");

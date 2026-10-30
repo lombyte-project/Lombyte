@@ -6,6 +6,7 @@
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 extern void update_falling_effect_particle() __asm__("FUN_L00_00268d48");
@@ -248,7 +249,6 @@ void update_falling_effect_particle(FallingParticle *particle)
 }
 extern unsigned char *D_L00_001B2084 NOT_SDA;
 unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 void spawn_timed_effect_particle(Vec4 *spawn_position, int initial_high_byte) __asm__("FUN_L00_00268f10");
 
 void spawn_timed_effect_particle(Vec4 *spawn_position, int initial_high_byte) {
@@ -267,7 +267,6 @@ void spawn_timed_effect_particle(Vec4 *spawn_position, int initial_high_byte) {
         *(int *)(particle + 0x20) = initial_high_byte;
     }
 }
-int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08(unsigned char *);
 void update_timed_effect_particle(unsigned char *particle) {
     int high_byte_duration_frames = scale_game_frames(0x1b);

@@ -3,9 +3,8 @@
 #include "asm.h"
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "qcopy.h"
-extern void euler_rotation_matrix(void *matrix, void *rotation) __asm__("FUN_001fa050");
-extern void transform_vector(void *out, void *in, void *matrix) __asm__("FUN_001f9d20");
 extern void scale_vector(float scale, void *out, void *joint) __asm__("FUN_001f9a80");
 extern void compute_moby_joint_matrices(void *moby, short joint, int flags) __asm__("FUN_0020fa90");
 

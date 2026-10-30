@@ -8,6 +8,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
@@ -17,7 +18,6 @@ extern char *fleet_moby_array_end __asm__("D_L17_0015FFDC");
 extern char D_0013E52B[];
 extern char D_L17_00167580[];
 extern char fleet_camera_box_configuration_error_format[] __asm__("D_L17_001E6F60");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_00141DC4 NOT_SDA;
 extern int fleet_help_request_gate_state[] __asm__("D_L17_00179D10");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
@@ -25,7 +25,6 @@ extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
-extern int fast_dec_timer() __asm__("func_001F9740");
 extern unsigned char D_0013D408[];
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern unsigned char D_0013D4DF NOT_SDA;
@@ -40,7 +39,6 @@ extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern char fleet_dwell_help_gate_value[] __asm__("D_00141D54");
 extern char fleet_clip_volume_help_suppression_flags[] __asm__("D_00141D7C");
 #include "rnc/gameplay/state/game_globals.h"
-extern int func_001F9908_i(int *) __asm__("FUN_001f9740");
 
 void update_fleet_camera_box_watcher(struct Moby *moby) __asm__("FUN_L17_002f26d0");
 
@@ -252,7 +250,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
     }
     case CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET:
         set_follow_camera_blend_output_flags();
-        if (func_001F9908_i((int *)(pvars + 0x5C))) {
+        if (fast_dec_timer((int *)(pvars + 0x5C))) {
             char *cam;
             set_follow_camera_angle_blend_from_position((int)(D_L17_001600EC + (*(int *)(pvars + 0x40) << 7) + 0x30), 0.02617994f,
                              0.0f);
@@ -320,7 +318,6 @@ typedef struct {
 } Pkt;
 
 extern char D_L17_001676C0[];
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float frame_delta_time __asm__("D_0015ED7C");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
@@ -534,26 +531,18 @@ extern char blarg_ship_positive_y_launch_offset[] __asm__("D_L17_001DE110");
 extern char blarg_ship_negative_y_launch_offset[] __asm__("D_L17_001DE120");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
-extern float fast_cos(float) __asm__("func_001F9DC8");
-extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int FUN_0022da68(int, int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
 extern void update_moby_hit_stats_and_state(void *) __asm__("FUN_L11_0031a1c0");
 extern void update_moby_path_transform(void *) __asm__("FUN_L11_0031a438");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 extern float blarg_ship_firing_speed_gp __asm__("D_L17_001623E8") __attribute__((sda));
@@ -769,8 +758,6 @@ void blarg_ship_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6AF8), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 

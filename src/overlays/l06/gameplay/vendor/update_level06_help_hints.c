@@ -8,6 +8,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
 
@@ -96,21 +97,16 @@ void update_level06_help_hints(struct Moby *moby) {
 }
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) SparkVector;
 typedef struct SparkData { int f0; int f4; char pad8[0x18]; int f20; int f24; int f28; } SparkData;
 
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 
 
 
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
@@ -243,9 +239,7 @@ void update_spark_emitter(struct Moby *emitter) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A680), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015FFD8;
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short *D_L06_001ABFC0[];
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void activate_listed_class_5e8_mobys(int moby_list_index) __asm__("FUN_L06_00309240");
 
@@ -265,7 +259,7 @@ void activate_listed_class_5e8_mobys(int moby_list_index) {
                     data = *(char **)(moby + 0x78);
                     moby[0x20] = 2;
                     *(int *)(data + 0x28) =
-                        func_001FA898_r(scale_time(random_float_between(30.0f, 60.0f)));
+                        truncate_float_to_s32(scale_time(random_float_between(30.0f, 60.0f)));
                 }
             }
         } while (*moby_index_entry++ >= 0);

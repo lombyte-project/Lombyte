@@ -5,6 +5,7 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* GS quad packet for draw_quad_packet: four corners, their colours and
    texture coordinates, then the giftag and register words. */
@@ -35,7 +36,6 @@ f32 D_L13_001D9B70[4][2] = {
 
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void draw_quad_packet(void *, void *, s32) __asm__("FUN_001f7d30");
@@ -116,10 +116,7 @@ void draw_point_table_quads(struct Moby *moby) {
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float fast_cos(float) __asm__("func_001F9DC8");
-extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 int D_L13_00161EB0 = 0x800040ff;
 int D_L13_00161EB4 = 0x4000cc80;
 extern short point_spark_first_vector_w __asm__("D_L13_00161EB8") __attribute__((sda));
@@ -136,8 +133,6 @@ extern short point_spark_z_range_start __asm__("D_L13_00161EE0") __attribute__((
 extern short point_spark_z_range_end __asm__("D_L13_00161EE4") __attribute__((sda));
 extern short point_spark_spawn_random_threshold __asm__("D_L13_00161EE8") __attribute__((sda));
 int D_L13_00161EEC = 24;
-extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void spawn_point_table_sparks(struct Moby *moby) __asm__("FUN_L13_00309bc8");
 
@@ -173,11 +168,11 @@ void spawn_point_table_sparks(struct Moby *moby) {
         second_vector[2] = 0;
         first_vector[2] = random_float_between(*(float *)&point_spark_z_range_start, *(float *)&point_spark_z_range_end);
         second_vector[2] = random_float_between(*(float *)&point_spark_z_range_start, *(float *)&point_spark_z_range_end);
-        frame_count = func_001FA898_r(scale_time(
+        frame_count = truncate_float_to_s32(scale_time(
             random_float_between(*(float *)&point_spark_frame_count_range_start, *(float *)&point_spark_frame_count_range_end)));
-        second_frame_count = func_001FA898_r(scale_time(
+        second_frame_count = truncate_float_to_s32(scale_time(
             random_float_between(*(float *)&point_spark_second_frame_count_range_start, *(float *)&point_spark_second_frame_count_range_end)));
-        third_frame_count = func_001FA898_r(scale_time(
+        third_frame_count = truncate_float_to_s32(scale_time(
             random_float_between(*(float *)&point_spark_third_frame_count_range_start, *(float *)&point_spark_third_frame_count_range_end)));
         fast_vec_scale(first_vector, first_vector, 1.0f / (float)frame_count);
         first_vector[3] = *(float *)&point_spark_first_vector_w;

@@ -12,6 +12,7 @@
 #include "rnc/math/circle_offset.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 
 /* Looks up the value of the current help record, or 0/0x54 in the special cases. */
@@ -61,9 +62,7 @@ void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, 
 }
 #include "rnc/gameplay/entities/moby.h"
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int level_frame_count __asm__("D_L01_0015F5CC");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned char D_0013D4DC[];
 #include "rnc/gameplay/state/options.h"
 extern float D_L01_0017C04C[];
@@ -306,7 +305,6 @@ void update_hero_blink_and_gold_weapon_tint(void)
 #endif
 #ifndef
 #endif
-extern void func_001F99D8_2cd48(void *, int) __asm__("FUN_001f9810");
 extern int func_L00_001F10E0_2cd48(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
@@ -317,7 +315,7 @@ void update_hero_ground_material_effects(void) {
     int x;
     unsigned char saved = hero_ptr->ground_sound_class;
     saved_ground_type = hero_ptr->ground_type;
-    func_001F99D8_2cd48(&hero_ptr->ground_type, 0x10);
+    fast_mem_zero16(&hero_ptr->ground_type, 0x10);
     hero_ptr->ground_sound_class = saved;
     hero_ptr->ground_type = -1;
     hero_ptr->wading = 0;
@@ -414,9 +412,6 @@ void update_hero_ground_material_effects(void) {
 }
 extern CollisionHit coll_hit __asm__("D_L01_001742C0") NOT_SDA;
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void predict_position_with_vertical_drop(void *, void *, void *, int, float) __asm__("FUN_L00_00259508");
 extern char *FUN_L00_002603d0(char *);
 extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
@@ -782,7 +777,6 @@ extern s32 D_0013DF88[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8 __asm__("D_0015EEA8");
 
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
@@ -843,8 +837,8 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     } else if (hero_moby_entry->target != 0) {
         fast_vec_sub(&motion_delta, (u8 *)&G + 0x80, hero_moby_entry->target + 0x10);
     } else {
-        motion_delta.f[0] = fast_cos(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
-        motion_delta.f[1] = fast_sin(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        motion_delta.f[0] = fast_cos(fast_add_rotations(G.motion.rot.f[2], 3.1415927f));
+        motion_delta.f[1] = fast_sin(fast_add_rotations(G.motion.rot.f[2], 3.1415927f));
         motion_delta.i[2] = 0;
     }
     switch (G.vehicle_mode) {
@@ -919,7 +913,6 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
    FUN_L00_00211380; L01 has only the mode-0 and mode-3 cases and no b12E2 branch. */
 
 extern f32 D_0013F570[] __asm__("D_0013F570");
-f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void update_hero_collision_dimensions(void) {
@@ -949,7 +942,7 @@ void update_hero_collision_dimensions(void) {
         hero.capsule_radius_target = 0.8f;
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
-        vector_distance(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
+        vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
         f32 *smoothed_values = D_0013F570;
         struct Hero *hero_base = (struct Hero *)((u8 *)smoothed_values - 0x220);
         approach_value(hero_base->capsule_top_target, frame_scale * 0.02f, smoothed_values);
@@ -990,8 +983,6 @@ void hero_speed_from_table(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00232F90), where it is exact; names translated to the US level program. */
 
 extern char D_L01_001742C0_lui[] __asm__("D_L01_001742C0") NOT_SDA;
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
@@ -1084,7 +1075,6 @@ typedef union {
 extern u8 D_L01_001742C0[] NOT_SDA;
 extern u8 D_L01_001742E0[] NOT_SDA;
 
-void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68_c(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
@@ -1092,10 +1082,8 @@ s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
-f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
-f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 
@@ -1123,7 +1111,7 @@ void update_hero_ground_contact_and_gravity(void) {
     hero.ground_normal.i[1] = 0;
     hero.ground_slope.i = 0;
     hero.ground_z.i = 0;
-    FUN_001f99f8_c((u8 *)&hero.ground_point);
+    clear_u64_value((u8 *)&hero.ground_point);
     hero.on_flagged_ground_moby = 0;
     hero.ground_distance = 32.0f;
     hero.ground_moby = 0;
@@ -1188,7 +1176,7 @@ void update_hero_ground_contact_and_gravity(void) {
         hero.ground_moby = (struct Moby *)HH.moby;
         FUN_00125180_c((u8 *)&hero.ground_normal, (u8 *)&HH.normal_x);
         hero.ground_slope.f = compute_gravity_relative_vector_inclination((u8 *)&HH.normal_x);
-        hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
+        hero.downhill_yaw = fast_arc_tan(HH.normal_x, HH.normal_y);
         fast_vec_sub(&ground_delta_or_angles, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
         if (0.0f < fast_vec_dot(&ground_delta_or_angles, (u8 *)&hero.ground_normal)) {
             hero.ground_distance = -hero.ground_distance;
@@ -1212,7 +1200,7 @@ tail:
         hero.in_water_frames = 0;
     }
 d1:
-    FUN_001f99f8_c((u8 *)&hero.gravity_dir);
+    clear_u64_value((u8 *)&hero.gravity_dir);
     switch (hero.gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         hero.gravity_dir.f[2] = -1.0f;
@@ -1281,7 +1269,6 @@ typedef union {
     u128_233940 q;
     f32 f[4];
 } V_233940;
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void f2347c0_233940(void) __asm__("FUN_L00_002347c0");
 extern void f233810_233940(void *, void *, f32) __asm__("FUN_L00_00233810");
 extern void f2334d0_233940(void *, void *, f32) __asm__("FUN_L00_002334d0");
@@ -1386,8 +1373,6 @@ extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern u8 item_available[] __asm__("D_0013D4C0");
 
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
-extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
-extern s16 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");

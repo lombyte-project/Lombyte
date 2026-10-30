@@ -10,6 +10,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 
 /* Spawns the effect pieces for a moby: two sparks, the ring of three and a final coloured one. */
@@ -228,7 +229,6 @@ extern char *D_L14_001B0BB0[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *spawn_floating_mine(void *, void *) __asm__("FUN_L14_002ffaf8");
 extern char D_L14_001FCF20[], D_L14_001FCF58[], D_L14_001FCFA0[], D_L14_001FCFD8[], D_L14_001FD020[];
-extern float fast_arc_tan(float,float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int debug_print() __asm__("FUN_001e93b0");
 extern int mine_fall(void *,void *) __asm__("FUN_L00_0025c698");
@@ -428,8 +428,6 @@ void bolt_thief_update(L16CrateMoby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5408), where it is exact; names translated to the US level program. */
 
-extern float absolute_float(float) __asm__("func_001F99C0");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float bolt_thief_default_path_sample_rate_gp __asm__("D_L14_00161FB8") __attribute__((sda));
 extern void FUN_L00_00258278(char *, float, float *, float, float, float);
@@ -465,7 +463,6 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
     }
     return path_sample_result;
 }
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 #include "sda.h"
 extern unsigned char D_0015EDB0;
 #include "qcopy.h"
@@ -528,12 +525,7 @@ typedef struct {
 } L14Player;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 typedef struct {
@@ -555,7 +547,6 @@ extern struct {
     char pad2C[0x1A];
     short h46;
 } D_L14_0016CF60;
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
@@ -648,7 +639,7 @@ void sam_update(L14WatchMoby *moby) {
         char *hero_position = (char *)&hero.motion.pos;
         L14Player *hero_aim_view;
         tracking = 1;
-        if (vector_distance(moby->position, hero_position) < 8.0f &&
+        if (vector_distance_xy(moby->position, hero_position) < 8.0f &&
             (hero_aim_view = (L14Player *)(hero_position - 0x80),
              fast_difference_between_rotations(
                  moby->yaw, fast_arc_tan(hero_aim_view->aim[0] - moby->position[0], hero_aim_view->aim[1] - moby->position[1]))) <

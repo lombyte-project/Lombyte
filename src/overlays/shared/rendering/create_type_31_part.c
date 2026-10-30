@@ -5,12 +5,11 @@
 
 
 #include "qcopy.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00260EE8.c: func_L03_00260EE8), where it is exact; names translated to the US level program. */
 
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void create_type_31_part(int part_word_3c, int *part_quadword_20_source, int *source_quadword, float *source_floats, int part_halfword_0a) __asm__("FUN_L03_00260130");
 
@@ -20,7 +19,7 @@ void create_type_31_part(int part_word_3c, int *part_quadword_20_source, int *so
         float *destination_floats;
         *(int *)(created_part + 0x4) = 0x7FFFFFFF;
         *(int *)(created_part + 0xC) = 0xFFFFFFF;
-        created_part[0x9] = func_001FA898_r(2.0f) + 0x70;
+        created_part[0x9] = truncate_float_to_s32(2.0f) + 0x70;
         created_part[0x3] = 0x44;
         destination_floats = (float *)(created_part + 0x30);
         created_part[0x1] = 2;

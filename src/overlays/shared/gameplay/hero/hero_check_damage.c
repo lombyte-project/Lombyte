@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/hero_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -1358,7 +1359,6 @@ extern float sum_basis_absolute_differences(float *a, float *b) __asm__("FUN_L00
 #include "rnc/overlay/shared/gameplay/hero/hero_check_damage_globals.h"
 extern int hero_item_rotation_history_target_window_size_gp __asm__("D_L00_0015F694") __attribute__((sda));
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void copy_matrix3x4() __asm__("FUN_001fa2b8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
@@ -1378,7 +1378,7 @@ void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *entr
 
     {
     char *b = ((char *)((char *)&hero_lui));
-    copy_matrix3x4(((char *)((char *)&hero_lui)) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
+    copy_matrix3x4(((char *)((char *)&hero_lui)) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30, entry);
     normalize_vector_triplet(((char *)((char *)&hero_lui)) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
 
     *(int *)(b + 0x21B8) = (*(int *)(b + 0x21B8) + 1) % 16;
@@ -1496,7 +1496,6 @@ extern u8 opt_mirror_anim __asm__("D_0015EDB5");
 extern s32 large_font_height __asm__("D_L00_0015F690") __attribute__((sda));
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void FUN_0025c170_f580(void *) __asm__("FUN_00214128");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -2326,7 +2325,6 @@ void exit_hero_vehicle_mode(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211338), where it is exact; names translated to the US level program. */
 
-extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 
 /* Scales x/y by s and sets or scales z, per component or through set_vector_length_xy. */
 void hero_knockback(float *v, int each, float s, float z) __asm__("FUN_L00_00210c80");

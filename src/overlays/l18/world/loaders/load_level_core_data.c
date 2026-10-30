@@ -10,6 +10,7 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 typedef struct {
@@ -126,8 +127,6 @@ extern u8 D_L18_00179B00[];
 extern s32 game_frame __asm__("D_L18_0015F5CC");
 
 extern void load_hud_banks(void) __asm__("FUN_00202a98");
-extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
-extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32 fast_decompress(void *, char *) __asm__("FUN_L00_0024d8d0");
@@ -436,7 +435,6 @@ int D_L18_00161A3C = 96;
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
 extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 
@@ -467,7 +465,7 @@ void draw_pulsing_timer_hud(struct Moby *moby) {
     timer_text[4] = *(int *)(data + 0x6c) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
     timer_text[5] = 0x3A;
     timer_text[6] = *(int *)(data + 0x6c) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
-    timer_text[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
+    timer_text[7] = truncate_float_to_s32((float)random_integer_below(10)) + 0x30;
     font_print_center_large_001f6c20(timer_text_x, timer_text_y, col, (int)timer_text, 8);
 }
 

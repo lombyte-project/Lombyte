@@ -5,6 +5,8 @@
 
 #include "rnc/ui/vendor/vendor_item_info.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_0029FD68). */
 
@@ -140,8 +142,6 @@ typedef struct { u8 pad_0[8]; f32 origin_x, origin_z, cell_width, cell_height; }
 extern HeightGridLayout D_L00_001CA880;
 extern s32 D_L00_00161218 __attribute__((sda));
 extern s32 D_L00_00161220 __attribute__((sda));
-extern f32 square_root(f32) __asm__("func_001F9988");
-float absolute_float(float input) __asm__("func_001F99C0");
 
 /* Splash on the pool height tiles: raises the heights around (x, z) and copies the edges into the neighbour tiles. */
 void pool_splash(HeightTile *tile, int count, int mode, float x, float z, float radius, float amount) __asm__("FUN_L00_002a3ec8");

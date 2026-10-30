@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EB5B0), where it is exact; names translated to the US level program. */
 
@@ -77,11 +78,8 @@ void update_configurable_particle_emitter(char *moby) {
 }
 #include "qcopy.h"
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 #include "rnc/overlay/l10/gameplay/vendor/update_configurable_particle_emitter_data/emit_burst_spark_particle.h"
 #include "rnc/overlay/l10/gameplay/vendor/update_configurable_particle_emitter_globals.h"
@@ -100,8 +98,6 @@ extern int burst_spark_active_duration_max_gp __asm__("D_L10_00161FB0") __attrib
 extern int burst_spark_pause_duration_min_gp __asm__("D_L10_00161FB4") __attribute__((sda));
 extern int burst_spark_pause_duration_max_gp __asm__("D_L10_00161FB8") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void emit_burst_spark_particle(void *emission_position, short *timer, short *burst) {
     float visibility_sphere[4];
@@ -113,10 +109,10 @@ void emit_burst_spark_particle(void *emission_position, short *timer, short *bur
         if (++*burst != 0)
             return;
         *burst =
-            func_001FA898_r(random_float_between((float)burst_spark_active_duration_min_gp, (float)burst_spark_active_duration_max_gp));
+            truncate_float_to_s32(random_float_between((float)burst_spark_active_duration_min_gp, (float)burst_spark_active_duration_max_gp));
     } else if (fast_dec_timer_s16(burst)) {
         *burst =
-            -func_001FA898_r(random_float_between((float)burst_spark_pause_duration_min_gp, (float)burst_spark_pause_duration_max_gp));
+            -truncate_float_to_s32(random_float_between((float)burst_spark_pause_duration_min_gp, (float)burst_spark_pause_duration_max_gp));
         return;
     }
     if (32.0f < fast_vec_dist(D_L10_00167240, emission_position))
@@ -134,14 +130,14 @@ void emit_burst_spark_particle(void *emission_position, short *timer, short *bur
     burst_spark_vertical_vector[3] = random_float_between(burst_spark_vertical_vector_fourth_component_min_gp, burst_spark_vertical_vector_fourth_component_max_gp);
     acc[3] = random_float_between(burst_spark_random_vector_fourth_component_min_gp, burst_spark_random_vector_fourth_component_max_gp);
     frame_count_scale = random_float_between(1.0f - burst_spark_frame_count_scale_spread_gp, burst_spark_frame_count_scale_spread_gp + 1.0f);
-    frame_count = func_001FA898_r((float)burst_spark_base_frame_count_gp * frame_count_scale);
-    second_frame_count = func_001FA898_r((float)burst_spark_base_second_frame_count_gp * frame_count_scale);
-    third_frame_count = func_001FA898_r((float)burst_spark_base_third_frame_count_gp * frame_count_scale);
+    frame_count = truncate_float_to_s32((float)burst_spark_base_frame_count_gp * frame_count_scale);
+    second_frame_count = truncate_float_to_s32((float)burst_spark_base_second_frame_count_gp * frame_count_scale);
+    third_frame_count = truncate_float_to_s32((float)burst_spark_base_third_frame_count_gp * frame_count_scale);
     initial_spark_color = fast_tween_color(D_L10_00161F94, D_L10_00161F98, random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position, burst_spark_vertical_vector, acc, initial_spark_color,
                  fast_tween_color(D_L10_00161F9C, D_L10_00161FA0, random_float_between(0.0f, 1.0f)), frame_count,
                  second_frame_count, third_frame_count, -1);
-    *timer = func_001FA898_r(random_float_between((float)burst_spark_timer_reset_min_gp, (float)burst_spark_timer_reset_max_gp));
+    *timer = truncate_float_to_s32(random_float_between((float)burst_spark_timer_reset_min_gp, (float)burst_spark_timer_reset_max_gp));
 }
 
 
@@ -151,7 +147,6 @@ void emit_burst_spark_particle(void *emission_position, short *timer, short *bur
 /* Emits a smoke particle from pos on its timer, when the camera is near and the spot is visible. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EBB70), where it is exact; names translated to the US level program. */
 
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern float timed_spark_vertical_vector_z_scale_gp __asm__("D_L10_00161FBC") __attribute__((sda));
 extern float timed_spark_random_vector_z_bias_scale_gp __asm__("D_L10_00161FC0") __attribute__((sda));
 extern float timed_spark_random_vector_radius_scale_gp __asm__("D_L10_00161FC4") __attribute__((sda));
@@ -193,14 +188,14 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
     spark_vertical_vector[3] = random_float_between(timed_spark_vertical_vector_fourth_component_min_gp, timed_spark_vertical_vector_fourth_component_max_gp);
     acc[3] = random_float_between(timed_spark_random_vector_fourth_component_min_gp, timed_spark_random_vector_fourth_component_max_gp);
     frame_count_scale = random_float_between(1.0f - timed_spark_frame_count_scale_spread_gp, timed_spark_frame_count_scale_spread_gp + 1.0f);
-    frame_count = func_001FA898_r((float)timed_spark_base_frame_count_gp * frame_count_scale);
-    second_frame_count = func_001FA898_r((float)timed_spark_base_second_frame_count_gp * frame_count_scale);
-    third_frame_count = func_001FA898_r((float)timed_spark_base_third_frame_count_gp * frame_count_scale);
+    frame_count = truncate_float_to_s32((float)timed_spark_base_frame_count_gp * frame_count_scale);
+    second_frame_count = truncate_float_to_s32((float)timed_spark_base_second_frame_count_gp * frame_count_scale);
+    third_frame_count = truncate_float_to_s32((float)timed_spark_base_third_frame_count_gp * frame_count_scale);
     initial_spark_color = fast_tween_color(D_L10_00161FE8, D_L10_00161FEC, random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position, spark_vertical_vector, acc, initial_spark_color,
                  fast_tween_color(D_L10_00161FF0, D_L10_00161FF4, random_float_between(0.0f, 1.0f)), frame_count,
                  second_frame_count, third_frame_count, -1);
-    *timer = func_001FA898_r(random_float_between((float)timed_spark_timer_reset_min_gp, (float)timed_spark_timer_reset_max_gp));
+    *timer = truncate_float_to_s32(random_float_between((float)timed_spark_timer_reset_min_gp, (float)timed_spark_timer_reset_max_gp));
 }
 
 
@@ -210,7 +205,6 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EBDC8), where it is exact; names translated to the US level program. */
 
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float square_root(float) __asm__("FUN_001f9988");
 extern short height_adjusted_spark_vector_z_adjustment_scale_gp __asm__("D_L10_00162000") __attribute__((sda));
 extern short height_adjusted_spark_random_vector_radius_scale_gp __asm__("D_L10_00162004") __attribute__((sda));
 extern short height_adjusted_spark_first_vector_fourth_component_min_gp __asm__("D_L10_00162008") __attribute__((sda));
@@ -243,12 +237,12 @@ void emit_height_adjusted_burst_spark_particle(void *emission_position, short *t
     int frame_count, third_frame_count, second_frame_count, initial_spark_color;
     if (*burst >= 0) {
         if (fast_dec_timer_s16(burst)) {
-            *burst = -func_001FA898_r(random_float_between((float)*(int *)&height_adjusted_spark_pause_duration_min_gp, (float)*(int *)&height_adjusted_spark_pause_duration_max_gp));
+            *burst = -truncate_float_to_s32(random_float_between((float)*(int *)&height_adjusted_spark_pause_duration_min_gp, (float)*(int *)&height_adjusted_spark_pause_duration_max_gp));
             return;
         }
     } else {
         if (++*burst != 0) return;
-        *burst = func_001FA898_r(random_float_between((float)*(int *)&height_adjusted_spark_active_duration_min_gp, (float)*(int *)&height_adjusted_spark_active_duration_max_gp));
+        *burst = truncate_float_to_s32(random_float_between((float)*(int *)&height_adjusted_spark_active_duration_min_gp, (float)*(int *)&height_adjusted_spark_active_duration_max_gp));
     }
     qcopy(visibility_sphere, emission_position);
     visibility_sphere[3] = 3.0f;
@@ -256,9 +250,9 @@ void emit_height_adjusted_burst_spark_particle(void *emission_position, short *t
     if (fast_bsphere_check((char *)visibility_sphere, 32.0f) == -1) return;
     if (!fast_dec_timer_s16(timer)) return;
     frame_count_scale = random_float_between(1.0f - *(float *)&height_adjusted_spark_frame_count_scale_spread_gp, *(float *)&height_adjusted_spark_frame_count_scale_spread_gp + 1.0f);
-    frame_count = func_001FA898_r((float)*(int *)&height_adjusted_spark_base_frame_count_gp * frame_count_scale);
-    third_frame_count = func_001FA898_r((float)*(int *)&height_adjusted_spark_base_third_frame_count_gp * frame_count_scale);
-    second_frame_count = func_001FA898_r(square_root((height + height) / (*(float *)&height_adjusted_spark_vector_z_adjustment_scale_gp * frame_time_sq)) * *(float *)&height_adjusted_spark_height_derived_frame_count_scale_gp * frame_count_scale);
+    frame_count = truncate_float_to_s32((float)*(int *)&height_adjusted_spark_base_frame_count_gp * frame_count_scale);
+    third_frame_count = truncate_float_to_s32((float)*(int *)&height_adjusted_spark_base_third_frame_count_gp * frame_count_scale);
+    second_frame_count = truncate_float_to_s32(square_root((height + height) / (*(float *)&height_adjusted_spark_vector_z_adjustment_scale_gp * frame_time_sq)) * *(float *)&height_adjusted_spark_height_derived_frame_count_scale_gp * frame_count_scale);
     clear_u64_value(spark_first_vector);
     random_vector(acc, 0.0f, *(float *)&height_adjusted_spark_random_vector_radius_scale_gp * frame_time);
     acc[2] -= *(float *)&height_adjusted_spark_vector_z_adjustment_scale_gp * frame_time_sq * (float)second_frame_count;
@@ -266,7 +260,7 @@ void emit_height_adjusted_burst_spark_particle(void *emission_position, short *t
     acc[3] = random_float_between(*(float *)&height_adjusted_spark_random_vector_fourth_component_min_gp, *(float *)&height_adjusted_spark_random_vector_fourth_component_max_gp);
     initial_spark_color = fast_tween_color(D_L10_00162024, D_L10_00162028, random_float_between(0.0f, 1.0f));
     spawn_spark(emission_position, spark_first_vector, acc, initial_spark_color, fast_tween_color(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)), frame_count, second_frame_count, third_frame_count, D_L10_0016204C);
-    *timer = func_001FA898_r(random_float_between((float)*(int *)&height_adjusted_spark_timer_reset_min_gp, (float)*(int *)&height_adjusted_spark_timer_reset_max_gp));
+    *timer = truncate_float_to_s32(random_float_between((float)*(int *)&height_adjusted_spark_timer_reset_min_gp, (float)*(int *)&height_adjusted_spark_timer_reset_max_gp));
 }
 
 

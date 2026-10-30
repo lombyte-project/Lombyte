@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 
@@ -23,7 +24,6 @@ extern float vendor_quad_inset_parameters[][4] __asm__("D_L00_001CA318");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void project_graphics_bounds_float(void *, void *, float *, float *, float *,
                                           float *) __asm__("FUN_00237c80");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void draw_geometry_quad(void *, void *, int);
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
@@ -176,7 +176,6 @@ extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
 extern float vendor_hologram_v_scroll_offset_gp __asm__("D_L00_00161184") __attribute__((sda));
 extern struct Quad D_L00_001CA480[] NOT_SDA;
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
 void draw_vendor_hologram_cone(void) __asm__("FUN_L00_0029ff58");
 
@@ -289,7 +288,6 @@ extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
-extern void clear_blocks_16(void *, s32) __asm__("FUN_001f9810");
 extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void append_draw_buffer_upload_packets(s32, u32, u32) __asm__("FUN_L00_002a0fc8");
 extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
@@ -376,7 +374,7 @@ void draw_vendor_screen(void) {
         pack_render_command_fields(p->f20 + 0x500, 0x202020, 0xE, 0xE, 0);
         initialize_vendor_selected_item_mobys();
         p->f2C = p->f14 + 0x1400;
-        clear_blocks_16(p->f2C, 0x400);
+        fast_mem_zero16(p->f2C, 0x400);
         p->f18 = p->f2C + 0x400;
         if (cd_read_active[0] == 0) {
             if (start_audio_stream_read(p->f18 + 0x80000, disc_table.animation_streams[48].sector,

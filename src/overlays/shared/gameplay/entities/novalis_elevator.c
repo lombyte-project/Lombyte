@@ -12,6 +12,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 
 /* Bolt-crank Moby.state, including the callback-only state. */
@@ -153,7 +154,6 @@ extern u32 cached_water_second_texture_id_gp __asm__("D_L01_0016122C") __attribu
 extern u32 D_L01_00161230 __attribute__((sda));
 extern u32 cached_water_alpha_1_fix_gp __asm__("D_L01_00161234") __attribute__((sda));
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") MACRO_ADDR;
-extern void set_scale_matrix(f32 (*)[4], f32) __asm__("FUN_001f9ff8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void vu1_add_data_ref(void *, s32) __asm__("FUN_00233830");
 extern void vu1_gs_regs_font(void) __asm__("FUN_00233c90");
@@ -589,7 +589,6 @@ extern f32 D_L01_00167258_lui __asm__("D_L01_00167258") NOT_SDA;
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") NOT_SDA;
 extern f32 bolt_crank_radial_correction_step_gp __asm__("D_L01_001618A0") __attribute__((sda));
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern void euler_rotation_matrix(float *, void *) __asm__("FUN_001fa050");
 extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");

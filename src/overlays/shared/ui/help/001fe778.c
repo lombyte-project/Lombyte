@@ -53,6 +53,7 @@ int FUN_L15_001fe778(int allow_item_lookup) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #define GI(o) (*(s32 *)(hero_lui + (o)))
 #define GF(o) (*(f32 *)(hero_lui + (o)))
 #define GH(o) (*(s16 *)(hero_lui + (o)))
@@ -67,7 +68,6 @@ typedef union {
 extern u8 D_L15_00174440[] NOT_SDA;
 extern u8 D_L15_00174460[] NOT_SDA;
 
-void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68_c(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
@@ -75,10 +75,8 @@ s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
-f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
-f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 
@@ -112,7 +110,7 @@ void update_hero_ground_contact(void) {
     hero.ground_normal.i[1] = 0;
     *(s32 *)&hero.ground_slope = 0;
     *(s32 *)&hero.ground_z = 0;
-    FUN_001f99f8_c(&hero.ground_point);
+    clear_u64_value(&hero.ground_point);
     hero.on_flagged_ground_moby = 0;
     hero.ground_distance = 32.0f;
     hero.ground_moby = 0;
@@ -177,7 +175,7 @@ void update_hero_ground_contact(void) {
         hero.ground_moby = (struct Moby *)HH.moby;
         FUN_00125180_c(&hero.ground_normal, (u8 *)&HH.normal_x);
         hero.ground_slope.f = compute_gravity_relative_vector_inclination((u8 *)&HH.normal_x);
-        hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
+        hero.downhill_yaw = fast_arc_tan(HH.normal_x, HH.normal_y);
         fast_vec_sub(&ground_displacement_or_angles, &hero.ground_point, &hero.motion.pos);
         if (0.0f < fast_vec_dot(&ground_displacement_or_angles, &hero.ground_normal)) {
             hero.ground_distance = -hero.ground_distance;
@@ -201,7 +199,7 @@ tail:
         hero.in_water_frames = 0;
     }
 d1:
-    FUN_001f99f8_c(&hero.gravity_dir);
+    clear_u64_value(&hero.gravity_dir);
     switch (hero.gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         hero.gravity_dir.f[2] = -1.0f;

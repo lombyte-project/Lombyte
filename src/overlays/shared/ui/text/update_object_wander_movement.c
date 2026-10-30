@@ -6,15 +6,13 @@
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 void step_angle_toward_target(void *, s32, f32, f32) __asm__("FUN_L00_0025bc00");
-s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 FUN_L00_00258490_261630(void *, void *, void *, s32, f32, f32, f32,
                             f32) __asm__("FUN_L00_00258490");
 f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
-f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 f32 interpolate_angle(f32, f32, f32) __asm__("FUN_L00_0025b750");
 void update_object_wander_movement(u8 *moving_object, u8 *movement_state, f32 a, f32 b) __asm__("FUN_L00_00261630");
 
@@ -39,7 +37,7 @@ void update_object_wander_movement(u8 *moving_object, u8 *movement_state, f32 co
     ((f32 *)proposed_position)[1] += fast_sin(*(f32 *)(moving_object + 0x48)) * *(f32 *)(movement_state + 0x14);
     movement_unconstrained = FUN_L00_00258490_261630(moving_object, pos, proposed_position, 0, collision_height_offset, *(f32 *)(movement_state + 0x10), ground_height_difference_limit, 0.52359879f);
     *(f32 *)(moving_object + 0x18) = probe_ground_height(pos, 0, 0.5f);
-    planar_distance = vector_distance(pos, movement_state);
+    planar_distance = vector_distance_xy(pos, movement_state);
     if (movement_unconstrained == 0 || *(f32 *)(movement_state + 0x1C) < planar_distance) {
         *(f32 *)(movement_state + 0x24) = fast_arc_tan(*(f32 *)(movement_state + 0) - *(f32 *)(moving_object + 0x10),
                                                  *(f32 *)(movement_state + 4) - *(f32 *)(moving_object + 0x14));
@@ -47,7 +45,7 @@ void update_object_wander_movement(u8 *moving_object, u8 *movement_state, f32 co
         *(s16 *)(movement_state + 0x2A) = random_int_between(countdown_lower_bound, scale_game_frames(0x5A));
         *(s16 *)(movement_state + 0x28) = 1;
     } else {
-        planar_distance = vector_distance(pos, &hero.motion.pos.f[0]);
+        planar_distance = vector_distance_xy(pos, &hero.motion.pos.f[0]);
         if (planar_distance < *(f32 *)(movement_state + 0x20)) {
             planar_distance = planar_distance / *(f32 *)(movement_state + 0x20);
             *(f32 *)(movement_state + 0x24) = interpolate_angle(

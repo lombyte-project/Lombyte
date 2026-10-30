@@ -8,6 +8,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
@@ -98,8 +99,6 @@ extern HoverboardGirlVector race_camera_vectors[] __asm__("D_L05_00215BC0");
 extern HoverboardGirlVector saved_camera_vectors[] __asm__("D_00141050");
 
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void blend_moby_animation(HoverboardGirlMoby *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -116,12 +115,7 @@ extern void set_race_camera(HoverboardGirlVector *, HoverboardGirlVector *, s32,
 extern void jet_game_state(s32, s32) __asm__("FUN_L01_0027a248");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void memcard_save_data(s32, s64) __asm__("FUN_0020b178");
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void build_spherical_offset(f32, f32, f32, void *) __asm__("FUN_00214db0");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void update_joint_animation(HoverboardGirlMoby *, HoverboardGirlJoint *, s32, f32,
                                    f32) __asm__("FUN_L00_002628d8");
 extern void
@@ -268,7 +262,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
     look_enabled = 0;
     if (moby->animation == 0 || moby->animation == 2) {
         look_enabled = 1;
-        if (vector_distance(&moby->position, &hero.motion.pos) < 8.0f &&
+        if (vector_distance_xy(&moby->position, &hero.motion.pos) < 8.0f &&
             fast_difference_between_rotations(
                 moby->yaw,
                 fast_arc_tan(hero.motion.body_center.f[0] - moby->position.component[0],
@@ -320,7 +314,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
 
     /* The easter egg only counts flips within 15 units and a 70-degree
      * facing cone. Retail increments at action 11, frame 15; no debounce. */
-    if (vector_distance(&moby->position, &hero.motion.pos) < 15.0f &&
+    if (vector_distance_xy(&moby->position, &hero.motion.pos) < 15.0f &&
         fast_difference_between_rotations(
             moby->yaw,
             fast_arc_tan(hero.motion.pos.f[0] - moby->position.component[0],

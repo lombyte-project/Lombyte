@@ -4,10 +4,10 @@
 #include "asm.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 extern char *FUN_0020c4f8_8670(int) __asm__("FUN_0020c4f8");
-extern void FUN_001f9810_8670(void *, int) __asm__("FUN_001f9810");
 extern void FUN_L00_00250df8_8670(void *) __asm__("FUN_L00_00250df8");
 
 char *create_class_55b_moby_from_source(char *source_object) __asm__("FUN_L12_00308670");
@@ -23,7 +23,7 @@ char *create_class_55b_moby_from_source(char *source_object) {
         *(OvlQuad *)(allocated_object + 0x10) = *(OvlQuad *)(source_object + 0x10);
         *(OvlQuad *)(allocated_object + 0x40) = *(OvlQuad *)(source_object + 0x40);
         *(char **)(allocated_object + 0xB8) = source_object;
-        FUN_001f9810_8670(object_data, 0x20);
+        fast_mem_zero16(object_data, 0x20);
         *(int *)(object_data + 0x10) = (int)(object_data + 0x20);
         FUN_L00_00250df8_8670(allocated_object);
     }
@@ -31,9 +31,6 @@ char *create_class_55b_moby_from_source(char *source_object) {
 }
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float square_root(float) __asm__("FUN_001f9988");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -111,7 +108,6 @@ typedef struct {
     float vx, vy;
 } MO;
 
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,

@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 extern float D_L02_0017C3B8[];
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
@@ -56,8 +57,6 @@ extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern f32 forward_component(void *) __asm__("FUN_L00_00213350");  /* dot with (cos, sin) of the hero yaw */
 
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
 extern void update_hero_ground_contact(void) __asm__("FUN_L02_002216a0");
@@ -205,7 +204,6 @@ typedef union {
     f32 f[4];
 } HopVec;
 
-extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
@@ -215,7 +213,6 @@ extern f32 spring_angle(float *, float *, int, float, float, float,
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00233ba0_223450(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
-extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern void air_accel(f32) __asm__("FUN_L01_00234358");
 
 #define ED64 frame_scale_sq
@@ -350,8 +347,6 @@ extern HeroTableRow2C D_L02_0017C228[];
 #include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude_globals.h"
 extern s32 hero_button_8_double_press_countdown_gp __asm__("D_L02_0015F674") __attribute__((sda));
 
-extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 hero_set_state(s32, s32) __asm__("FUN_L02_0022b728");
 extern u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");

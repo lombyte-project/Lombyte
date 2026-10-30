@@ -11,6 +11,7 @@
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
 
@@ -45,11 +46,6 @@ typedef struct {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 extern char D_L12_00167240[];
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float frame_scale_sq_macro __asm__("D_0015ED64")MACRO_ADDR;
@@ -57,9 +53,6 @@ extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float FUN_L00_00257c48(float, float);
 extern float step_angle_toward_target(float *, float, int, float) __asm__("FUN_L00_0025bc00");
 extern float spring_angle(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
-extern float fast_add_rotations(float, float) __asm__("func_001FA580");
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L12_00161F00;
 extern int D_L12_00161F04;
 extern int D_L12_00161F20 MACRO_ADDR;
@@ -67,12 +60,8 @@ extern int D_L12_00161F24 MACRO_ADDR;
 extern int D_L12_00161F34 __attribute__((sda));
 extern int planetbuster_maximus_gun_part_slots[] __asm__("D_L12_001FB670");
 extern int D_L12_001FB688[];
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_001fefc8(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void *spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
@@ -81,11 +70,8 @@ extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, f
 extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
-float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L12_00306350_c2(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int func_001F9908_304920(void *) __asm__("FUN_001f9740");
-extern int func_001FA898_3055F8(float) __asm__("FUN_001fa6d0");
 extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
 extern int D_L12_00161F04_gp __asm__("D_L12_00161F04") MACRO_ADDR;
 extern int D_L12_00161F20 __attribute__((sda));
@@ -125,7 +111,7 @@ void update_planetbuster_maximus_guns(char *moby) {
         position_buffer[2] -= 0.7f;
         qcopy_nc(gun_position_copy_destination, gun_moby + 0x10);
         scratch_vector[2] += 1.5f;
-        md->f60 = fast_arc_tan(vector_distance(scratch_vector, position_buffer), position_buffer[2] - scratch_vector[2]);
+        md->f60 = fast_arc_tan(vector_distance_xy(scratch_vector, position_buffer), position_buffer[2] - scratch_vector[2]);
         update_joint_animation(gun_moby, (char *)md, 0, frame_scale_sq_macro * 0.008f, frame_scale_sq_macro * 0.3f);
         yaw = fast_subtract_rotations(fast_add_rotations(fast_arc_tan(((Hero *)((char *)&hero))->motion.pos.f[0] - *(float *)(gun_moby + 0x10),
                                                             ((Hero *)((char *)&hero))->motion.pos.f[1] - *(float *)(gun_moby + 0x14)),
@@ -150,7 +136,7 @@ void update_planetbuster_maximus_guns(char *moby) {
         }
         flag = 0;
         hp = (float *)(((char *)&hero) + 0x80);
-        owner_to_hero_distance_xy = vector_distance(moby + 0x10, hp);
+        owner_to_hero_distance_xy = vector_distance_xy(moby + 0x10, hp);
         dz = absolute_float(hp[2] - *(float *)(moby + 0x18));
         if (scale_game_frames(0x4B0) < D_L12_00161F34) {
             if (owner_to_hero_distance_xy < 80.0f && dz < 4.0f) {
@@ -196,7 +182,7 @@ void update_planetbuster_maximus_guns(char *moby) {
                             n = 0;
                         }
                         aim_target_position[2] += random_float_between((float)n * -0.3f, (float)n * 0.3f);
-                        pitch = fast_arc_tan(vector_distance(position_buffer, aim_target_position), aim_target_position[2] - position_buffer[2]);
+                        pitch = fast_arc_tan(vector_distance_xy(position_buffer, aim_target_position), aim_target_position[2] - position_buffer[2]);
                         build_spherical_offset(scratch_vector, D_0015ED6C_gp * 80.0f, rz, pitch);
                         if (spawn_class_b8_projectile(gun_moby, position_buffer, scratch_vector, scale_game_frames(0x96)) != 0) {
                             int j;
@@ -229,7 +215,7 @@ void update_planetbuster_maximus_guns(char *moby) {
             }
         }
         if (D_L12_00161F04_gp == 0 && md->f80 > 0.0f) {
-            if (func_001F9908_304920(&md->w84) != 0) {
+            if (fast_dec_timer(&md->w84) != 0) {
                 float dmg = 1.0f;
                 char *r = find_moby_hit(gun_moby, 0x50000, 0);
                 if (r == 0) {
@@ -312,7 +298,7 @@ void update_planetbuster_maximus_guns(char *moby) {
             ((unsigned char *)gun_moby)[0xA4] = 0xFF;
         }
         if (md->f80 > 0.0f && md->f80 < 10.0f) {
-            int lvl = (9 - func_001FA898_3055F8(md->f80)) / 2;
+            int lvl = (9 - truncate_float_to_s32(md->f80)) / 2;
             int j;
             int n = lvl + 3;
             for (j = 0; j < n; j++) {
@@ -566,8 +552,6 @@ extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void apply_linked_moby_relative_transforms(char *, char *, int) __asm__("FUN_L12_0027b370");
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L12_003054b0_u(void *moby) __asm__("FUN_L12_003054b0");
 void FUN_L12_00306350_c(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
@@ -707,7 +691,7 @@ void planetbuster_maximus_part_update(char *moby) {
                               *(float *)((char *)path + (nx << 4) + 0x14) - *(float *)((char *)path + (*(short *)(moby_data + 0x5F8) << 4) + 0x14));
         if (*(int *)path - 20 < *(short *)(moby_data + 0x5F8)) target_yaw = 3.0543261f;
         FUN_L00_00258278(moby, target_yaw, (float *)(moby_data + 0x5F4), frame_scale_sq_macro * 0.0015f, frame_scale_sq_macro * 0.3f, D_0015ED6C_gp * 0.17453292f);
-        if (vector_distance(moby + 0x10, &path[*(short *)(moby_data + 0x5F8) + 1]) < 5.0f
+        if (vector_distance_xy(moby + 0x10, &path[*(short *)(moby_data + 0x5F8) + 1]) < 5.0f
             || fast_difference_between_rotations(*(float *)(moby + 0x48),
                              fast_arc_tan(*(float *)((char *)path + (*(short *)(moby_data + 0x5F8) << 4) + 0x10) - *(float *)(moby + 0x10),
                                                *(float *)((char *)path + (*(short *)(moby_data + 0x5F8) << 4) + 0x14) - *(float *)(moby + 0x14))) > 1.5707964f) {
@@ -891,7 +875,7 @@ void homing_mine_spawner_update(struct Moby *spawner) {
         break;
     case HOMING_MINE_SPAWNER_WAIT_FOR_PROXIMITY:
         if (*(int *)(spawner_data + 0xB4) != 2) {
-            if (vector_distance(&spawner->pos, spawner_data + 0x70) < *(float *)(spawner_data + 0xF8)) {
+            if (vector_distance_xy(&spawner->pos, spawner_data + 0x70) < *(float *)(spawner_data + 0xF8)) {
                 spawner->state = 2;
             }
         }
@@ -943,7 +927,6 @@ void homing_mine_spawner_update(struct Moby *spawner) {
 
 extern char D_0013E533[];
 extern int select_moby_combat_target(char *, char *, float) __asm__("FUN_L00_0025fcb8");
-float absolute_float(float input) __asm__("func_001F99C0");
 
 void update_homing_mine_spawner_target(struct Moby *spawner) {
     char *spawner_data = (char *)spawner->pvars;
@@ -1074,7 +1057,6 @@ VendorQuadCorner D_L12_001FB730[4] = {
     {0.0f, 5.0f, -0.2f, 1.0f},
     {0.0f, 5.0f, 0.2f, 1.0f},
 };
-extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 

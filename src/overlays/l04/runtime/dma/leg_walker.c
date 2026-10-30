@@ -9,6 +9,7 @@
 #include "qcopy.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
@@ -52,7 +53,6 @@ extern float animation_end(int, int) __asm__("FUN_L04_00241910");
 extern float FUN_L04_001f1978(float);
 extern void transform_scaled_vertex_batch(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
 extern void build_moby_bone_transform(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void attach_manipulator(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
 
 void initialize_leg_rig(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_002923b8");
@@ -165,15 +165,8 @@ typedef struct {
     Vec v40;         /* 0x40 */
 } StTab;
 
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-float absolute_float(float input) __asm__("func_001F99C0");
 float probe_leg_rig_ground_height(float *pos) __asm__("FUN_L04_002922d0");
-extern void func_001F9BC0_2939E8(float *) __asm__("FUN_001f99f8");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
 
 int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state) __asm__("FUN_L04_00292828");
@@ -207,7 +200,7 @@ int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
         }
         steer_state->tilt = 0.0f;
     } else {
-        func_001F9BC0_2939E8(push);
+        clear_u64_value(push);
         sum = 0.0f;
         for (j = 0; j < 4; j++) {
             Vec *probe_point = &steer_state->pts[j];
@@ -282,11 +275,8 @@ int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
     return excessive_tilt_flags;
 }
 extern void build_moby_bone_transform(struct Moby *, int, float *) __asm__("FUN_0020cca8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float rig_turn_2d48(float, float, float *, float, float, float) __asm__("FUN_L00_00258110");
 extern void axis_rotation_2d48(float *, int, float) __asm__("FUN_L00_001fff28");
-extern void multiply_quaternions(float *, float *, float *) __asm__("FUN_001fa3c0");
 
 void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
     float joint[16];
@@ -350,7 +340,6 @@ extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e
 extern s32 rig_pick_mode(struct Moby *, LegRig *, f32) __asm__("FUN_L04_002927d0");
 extern f32 spring_turn(f32 cur, f32 target, f32 k, f32 d, f32 max, f32 *vel) __asm__("FUN_L00_00258110");
 extern void rig_animate(struct Moby *, LegRig *, s32, f32) __asm__("FUN_L04_00292d48");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void divide_vector_xyz(void *, void *, f32) __asm__("FUN_L00_001ff378");
 extern s32 FUN_L04_00292828_c(struct Moby *, LegRig *) __asm__("FUN_L04_00292828");
 extern void rig_step(struct Moby *, LegRig *, f32, f32, f32, s32) __asm__("FUN_L00_002a1670");

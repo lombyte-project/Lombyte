@@ -32,6 +32,7 @@ int expand_path_mask_to_intersection(int path_index, int from_mask, int mask) {
 #include "rnc/overlay/quad.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* A path in D_L01_001B0930: point count, then the points. */
 typedef struct {
@@ -87,7 +88,6 @@ s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_i
     }
     return mask;
 }
-extern f32 vector_distance(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9b80");
 
 s32 follow_path(s32 *ids, s32 n, s32 path_index, f32 radius,
                        OvlVec4 *pos, OvlVec4 *target, OvlVec4 *out) __asm__("FUN_L01_00276fe8");
@@ -136,7 +136,7 @@ s32 follow_path(s32 *ids, s32 id_count, s32 path_index, f32 radius,
             best = -1;
             for (i = 0; i < path->count; i++) {
                 if ((mask >> i) & 1) {
-                    f32 distance = vector_distance(&path->pts[i], target);
+                    f32 distance = vector_distance_xy(&path->pts[i], target);
                     if (distance < nearest) {
                         nearest = distance;
                         best = i;

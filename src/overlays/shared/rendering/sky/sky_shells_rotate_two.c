@@ -5,12 +5,11 @@
 
 #include "qzero.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/asm_helpers.h"
 
 /* refreshes two rotating shrub transform layers */
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028AC80), where it is exact; names translated to the US level program. */
 
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-void euler_to_matrix_ee(void *,void *) __asm__("FUN_001fa070");
 
 void sky_shells_rotate_two(void) __asm__("FUN_L00_002899a8");
 void sky_shells_rotate_two(void) {

@@ -2,12 +2,13 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_00242868.c: func_L04_00242868), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
 float animation_start(int class_slot, unsigned int animation_id) {

@@ -3,6 +3,7 @@
 #include "rnc/gameplay/camera/update_cam.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 struct CameraShake {
     f32 unk0;
@@ -15,7 +16,6 @@ extern struct UpdateCam *cur_cam[] __asm__("D_001870C0");
 extern u8 camera_position[] __asm__("D_00187080");
 extern u8 D_001872B0[];
 
-extern s32 fast_dec_timer(s32 *) __asm__("func_001F9740");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");

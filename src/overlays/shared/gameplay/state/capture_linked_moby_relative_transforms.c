@@ -3,14 +3,12 @@
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C368), where it is exact; names translated to the US level program. */
 
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
-extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
@@ -41,8 +39,6 @@ void apply_linked_moby_relative_transforms(char *parent, char *list, int entry_c
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C260), where it is exact; names translated to the US level program. */
 
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 
 void capture_linked_moby_relative_transforms(char *moby, char *arr, int entry_count) __asm__("FUN_L12_0027b268");
 

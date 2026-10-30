@@ -7,6 +7,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 
 
@@ -45,15 +46,6 @@ extern float D_L04_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/l04/gameplay/entities/snow_plow_globals.h"
 extern int snow_plow_hit_count_gp __asm__("D_L04_0015EDF8") __attribute__((sda));
 extern void debug_print() __asm__("FUN_001e93b0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern void fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
 extern void FUN_L00_00258278(void *, float, void *, float, float, float);
@@ -175,7 +167,7 @@ void snow_plow_update(struct Moby *moby) {
         case SNOW_PLOW_MOVE_TO_CLIP_VOLUME:
             FUN_L00_00258278(moby, *(float *)(D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x78),
                 data + 0x7c, frame_time_sq * 1.0471976f, frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
-            if (vector_distance(&moby->pos, D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x30) < 1.0f &&
+            if (vector_distance_xy(&moby->pos, D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x30) < 1.0f &&
                 fast_difference_between_rotations(moby->rot.z, *(float *)(D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x78)) < 0.17453292f) {
                 *(unsigned char *)(data + 0x149) = 2;
                 *(short *)(data + 0x14a) = scale_game_frames(300);
@@ -193,7 +185,7 @@ void snow_plow_update(struct Moby *moby) {
         case SNOW_PLOW_RETURN_TO_SAVED_TRANSFORM:
             FUN_L00_00258278(moby, *(float *)(data + 0x14c), data + 0x7c,
                 frame_time_sq * 1.0471976f, frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
-            if (vector_distance(&moby->pos, data + 0x160) < 1.0f &&
+            if (vector_distance_xy(&moby->pos, data + 0x160) < 1.0f &&
                 fast_difference_between_rotations(moby->rot.z, *(float *)(data + 0x14c)) < 0.034906585f) {
                 *(unsigned char *)(data + 0x149) = 0;
                 *(short *)(data + 0x14a) = scale_game_frames(600);
@@ -469,11 +461,8 @@ hit:
  * its three rings. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002CF180), where it is exact; names translated to the US level program. */
 
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int D_L04_0015FFD8; /* no foreign declaration */
 extern short floating_platform_ring_rotation_rate_degrees __asm__("D_L04_0016195C") __attribute__((sda));
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
@@ -731,7 +720,6 @@ typedef struct WBQuery {
 WBAngles D_L04_001DC468 = {{0.5235988f, 0.7853982f, 0.2617994f, 1.0471976f, 0.0f}};
 WBJoints D_L04_001DC450 = {{0, 2, 1, 3, 4, 5}};
 extern char D_L04_00166F40[];
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float spring_turn(float, float, void *, float, float, float) __asm__("FUN_L00_00258110");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
@@ -744,10 +732,8 @@ extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int leg_walker_update(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void *memset(void *, int, unsigned int);
 extern void coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
@@ -762,7 +748,6 @@ extern void reset_walker_gait_helpers(void *) __asm__("FUN_L00_002a1538");
 extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
 extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void initialize_woodcut_bot_movement_data(void *) __asm__("FUN_L04_002d1418");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
@@ -822,7 +807,7 @@ void woodcut_bot_update(WBMoby *m) {
     }
     adiff = fast_difference_between_rotations(m->rot[2],
                                               fast_arc_tan(selected_target_position[0] - m->pos[0], selected_target_position[1] - m->pos[1]));
-    target_distance = vector_distance(pos, selected_target_position);
+    target_distance = vector_distance_xy(pos, selected_target_position);
     hd = compute_interpolated_record_value(m);
     qcopy(position_snapshot, pos);
     qcopy(duplicate_position_snapshot, pos);
@@ -1030,7 +1015,7 @@ void woodcut_bot_update(WBMoby *m) {
                 }
             }
             if (!excited) {
-                if (vector_distance(pos, d->f3B0) > 2.0f) {
+                if (vector_distance_xy(pos, d->f3B0) > 2.0f) {
                     if (d->f3E8 < target_distance ||
                         (d->f3DC != -1 && point_in_path_xy(selected_target_position, D_L04_001B0630[d->f3DC] + 4,
                                                            *D_L04_001B0630[d->f3DC]) == 0)) {
@@ -1183,7 +1168,7 @@ void woodcut_bot_update(WBMoby *m) {
                 m->fBC &= ~8;
                 reset_leg_rig_from_animation(m, d->f160);
             }
-            if (vector_distance(pos, d->f3B0) < 2.0f) {
+            if (vector_distance_xy(pos, d->f3B0) < 2.0f) {
                 m->state = 7;
             } else {
                 leg_walker_update(m, d->f160, frame_time * 4.0f,
@@ -1401,10 +1386,7 @@ void woodcut_bot_update(WBMoby *m) {
 /* update: blend two keyframes of a path and write the result to a position */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D8348), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_L00_00200260(float, float);
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern char *D_L04_0015FFD0[] MACRO_ADDR;
 void interpolate_moby_and_linked_moby_positions_on_path(char *moby) __asm__("FUN_L04_002d6f68");
@@ -1426,7 +1408,7 @@ void interpolate_moby_and_linked_moby_positions_on_path(char *moby) {
     path_interpolation_factor = convert_integer_to_float(path_data[0] - 1);
     path_point_coordinate = (one - source_moby_vars[0]) * path_interpolation_factor;
     path_interpolation_factor = FUN_L00_00200260(path_point_coordinate, one);
-    first_point_index = func_001FA898_r(path_point_coordinate);
+    first_point_index = truncate_float_to_s32(path_point_coordinate);
     if (path_interpolation_factor == 0.0f)
         second_point_index = 0;
     second_point_index += first_point_index;
@@ -1435,8 +1417,6 @@ void interpolate_moby_and_linked_moby_positions_on_path(char *moby) {
     fast_vec_add(moby + 0x10, weighted_first_point, weighted_second_point);
     qcopy(destination_moby + 0x10, moby + 0x10);
 }
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
@@ -1477,7 +1457,7 @@ void leaf_update(struct Moby *moby) {
         moby->state = 1;
         break;
     case LEAF_WAIT_FOR_ACTIVATION:
-        if (!(vector_distance(&moby->pos, D_L04_00166F40) < 32.0f))
+        if (!(vector_distance_xy(&moby->pos, D_L04_00166F40) < 32.0f))
             return;
         if (!fast_dec_timer((int *)(data + 0x44)))
             return;
@@ -1693,7 +1673,7 @@ void suck_cannon_update(struct Moby *moby) {
         break;
     case SUCK_CANNON_WAIT_FOR_HERO:
         FUN_L04_002e1d00_m(moby);
-        if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f) {
+        if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 3.0f) {
             moby->flags |= 0x41;
             start_scene(2);
             moby->state = 2;
@@ -1730,11 +1710,9 @@ typedef struct {
     int c[4];
     float d[4];
 } L10SpriteData;
-extern int func_001F9908_298940(int *) __asm__("FUN_001f9740");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, int, int, int,
                                                float) __asm__("FUN_L00_00272f68");
-extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
 extern char D_L10_00167240_298940[] __asm__("D_L04_00166F40");
 extern int D_L04_0015F5C4;
 void update_suck_cannon_particles(char *moby) __asm__("FUN_L04_002e1d00");
@@ -1760,14 +1738,14 @@ void update_suck_cannon_particles(char *moby) {
         } else if (sprite_attribute_sum <= 0.0f) {
             sprite_data->a[i] = sprite_attribute_sum + 255.0f;
         }
-        if (func_001F9908_298940(&sprite_data->c[i])) {
+        if (fast_dec_timer(&sprite_data->c[i])) {
             sprite_data->c[i] = scale_game_frames(0xFF);
         }
         timer_progress = convert_integer_to_float(scale_game_frames(0xFF) - sprite_data->c[i]);
         timer_progress = timer_progress / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - timer_progress));
         if (D_L04_0015F5C4 != 2)
-            func_L00_00273E08_298940(d, col, func_001FA898_298940(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
+            func_L00_00273E08_298940(d, col, truncate_float_to_s32(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                      sprite_data->d[i]);
         fast_vec_add(d, d, particle_position_step);
     }

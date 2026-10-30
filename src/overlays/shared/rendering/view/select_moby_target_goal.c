@@ -6,9 +6,9 @@
 #include "qcopy.h"
 #include "qzero.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
 extern char *D_L00_0015FFD8_25fcb8 __asm__("D_L02_0015FFD8");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 extern short D_L02_001B0E30[] NOT_SDA;
 extern char *D_L02_001D1B80[] NOT_SDA;
@@ -42,7 +42,7 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
             continue;
         if (*(unsigned char *)(candidate_moby + 0x20) != 3)
             continue;
-        candidate_metric = vector_distance(comparison_source + 0x10, candidate_moby + 0x10);
+        candidate_metric = vector_distance_xy(comparison_source + 0x10, candidate_moby + 0x10);
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
@@ -61,7 +61,7 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
             continue;
         if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
             continue;
-        candidate_metric = vector_distance(comparison_source + 0x10, candidate_moby + 0x10);
+        candidate_metric = vector_distance_xy(comparison_source + 0x10, candidate_moby + 0x10);
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;

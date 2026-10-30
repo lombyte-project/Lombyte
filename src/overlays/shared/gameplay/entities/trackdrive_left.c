@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #include "rnc/ui/text/font_state.h"
 #include "rnc/gameplay/state/item_state.h"
 
@@ -79,7 +80,6 @@ typedef struct QuadFrame { char pad0[8]; unsigned short a; unsigned short b; cha
 
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
-extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
 extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int, float);
@@ -430,7 +430,6 @@ extern float D_0015ED70 MACRO_ADDR;
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84; /* no foreign declaration */
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
-extern int lerp_vector() __asm__("FUN_001f9a40");
 extern int FUN_L00_002323b8();
 extern int FUN_L02_0022b728();
 extern s32 force_help_message(s32 owner, s32 message_id) __asm__("FUN_002151d8");
@@ -1001,7 +1000,6 @@ extern float escalator_target_speed_gp __asm__("D_L02_00161C14") __attribute__((
 extern float escalator_acceleration_gp __asm__("D_L02_00161C1C") __attribute__((sda));
 extern float D_0015ED70_2dc6b0 __asm__("D_0015ED70");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");

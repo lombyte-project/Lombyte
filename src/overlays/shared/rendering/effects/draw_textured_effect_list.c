@@ -4,6 +4,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
@@ -15,7 +16,6 @@ struct Pkt611c0 {
     int *p;
 };
 extern struct Pkt611c0 l12_render_packet_cursor __asm__("D_L12_001611C0");
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
 extern void FUN_L12_002667fc(int, int, int, int);

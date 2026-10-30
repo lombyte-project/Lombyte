@@ -63,12 +63,12 @@ int select_hero_help_value(int allow_slot_item_help) {
 }
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #define G hero
 
 /* Same source as the exact FUN_L08_00222800, with a mode 1 case (animation 0x46). */
 
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
@@ -134,8 +134,8 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     } else if (hero_moby_entry->target != 0) {
         fast_vec_sub(&motion_delta, (u8 *)&G + 0x80, hero_moby_entry->target + 0x10);
     } else {
-        motion_delta.f[0] = fast_cos(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
-        motion_delta.f[1] = fast_sin(FUN_001fa580_8(G.motion.rot.f[2], 3.1415927f));
+        motion_delta.f[0] = fast_cos(fast_add_rotations(G.motion.rot.f[2], 3.1415927f));
+        motion_delta.f[1] = fast_sin(fast_add_rotations(G.motion.rot.f[2], 3.1415927f));
         motion_delta.i[2] = 0;
     }
     switch (G.vehicle_mode) {
@@ -213,7 +213,6 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
 
 /* Adapted from the exact FUN_L00_00211380 (src/overlays/shared/gameplay/hero/hero_check_damage.c); L17 has no mode-2 case in the b20A4 switch. */
 
-f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void update_hero_smoothing(void) __asm__("FUN_L17_0020e1c0");
@@ -253,7 +252,7 @@ void update_hero_smoothing(void) {
         hero.capsule_radius_target = 0.8f;
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
-        vector_distance(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
+        vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
         f32 *smoothing_state = D_0013F570;
         struct Hero *hero_for_smoothing_targets = (struct Hero *)((u8 *)smoothing_state - 0x220);
         approach_value(hero_for_smoothing_targets->capsule_top_target, frame_scale * 0.02f, smoothing_state);

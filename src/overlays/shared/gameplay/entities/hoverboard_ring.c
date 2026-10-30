@@ -11,12 +11,11 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char *spawn_mode_controlled_orbiting_trail_particle(float f0, float f1, int a0, void *pos, int timer, int flag,
                                        int col, float *vel) __asm__("FUN_L00_002743a8");
 
@@ -85,15 +84,11 @@ extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/hoverboard_ring_globals.h"
 extern f32 debris_axis_launch_speed_gp __asm__("D_L05_00161FD0") __attribute__((sda));
 extern f32 debris_upward_launch_speed_gp __asm__("D_L05_00161FD4") __attribute__((sda));
-extern f32 vector_distance_c8e0(void *, void *) __asm__("FUN_001f9b80");
-extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void add_draw_callback(void (*)(char *), struct Moby *) __asm__("FUN_001f4600");
 extern char *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern struct Moby *spawn_debris_c8e0(f32, struct Moby *, s32, void *, void *, s32, s32, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void spawn_proximity_gated_bolts(struct Moby *) __asm__("FUN_L01_002787a0");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
@@ -138,7 +133,7 @@ void update_moby_glow_and_contact_explosion(struct Moby *moby) {
         moby->glow_color = (0x7F000000 | vars->glow_b << 16 | vars->glow_g << 8) | vars->glow_r;
         vars->color = vars->spark_b << 16 | vars->spark_g << 8 | vars->spark_r;
     }
-    distance = vector_distance_c8e0(D_L05_001671C0, &moby->pos);
+    distance = vector_distance_xy(D_L05_001671C0, &moby->pos);
     if (48.0f <= distance) {
         return;
     }
@@ -236,9 +231,6 @@ typedef struct {
 
 extern float glow_sprite_local_vertices[4][4] __asm__("D_L05_00215C70");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, void *, int);
 u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
@@ -312,7 +304,6 @@ char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
 /* Sets up a moby's vector from the level table and clamps its height for the current state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
 
-extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 
 void update_hero_follow_camera_focus(char *moby) __asm__("FUN_L05_00329358");
 
@@ -332,7 +323,7 @@ void update_hero_follow_camera_focus(char *moby) {
         height_reference_position[1] = 447.82f;
         height_reference_position[2] = 63.37f;
         height_reference_position[3] = 1.0f;
-        if (vector_distance(height_reference_position, focus_position) < 48.0f) {
+        if (vector_distance_xy(height_reference_position, focus_position) < 48.0f) {
             if (focus_position[2] < 62.4f) {
                 focus_position[2] = 62.4f;
             }
@@ -522,7 +513,6 @@ typedef struct {
 } CameraPresetRow;
 
 extern CameraPresetRow *D_L05_0015EF50;
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Resets the camera from its preset (row cam->preset of D_L05_0015EF50): distances,
    angle limits and damping, cleared velocities, then places it. */
@@ -585,7 +575,6 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     camera_to_reset->unk7E = 0;
 }
 
-extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern void build_look_at_matrix(void *out, void *v, void *axis, f32 ang) __asm__("FUN_00214890");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float FUN_001ebd78(void *, float, float, float, float, float);
@@ -747,10 +736,8 @@ typedef struct { char pad0[0x48]; float vel; } Preset;
 
 typedef struct { char pad0[0x1C]; Preset *preset; } Row;
 
-extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
-float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
 extern Row *D_L05_0015EF50_macro __asm__("D_L05_0015EF50") MACRO_ADDR;
 extern float D_L05_001621A8_gp __asm__("D_L05_001621A8") __attribute__((sda));

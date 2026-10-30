@@ -9,6 +9,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 #define MOBY(p) ((struct Moby *)(p))
 
 
@@ -176,7 +177,6 @@ int request_floating_platform_sink(Level18State *platform_moby) {
 extern char D_0013E533[];
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int game_frame __asm__("D_L18_0015F5CC");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void record_moby_hit(int, void *) __asm__("FUN_L00_00259a88");
@@ -1721,7 +1721,6 @@ extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern float probe_ground_height(void *, int, float);
 extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
-extern int fast_dec_timer(int *) __asm__("func_001F9740");
 extern int truncate_float_to_s32_p() __asm__("FUN_001fa6d0");
 extern short D_L18_00161BFC __attribute__((sda));
 extern int ballistic_ring_glow_color_end_gp __asm__("D_L18_00161C00") __attribute__((sda));
@@ -2024,7 +2023,6 @@ void process_expanding_ring_collisions(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD4B8), where it is exact; names translated to the US level program. */
 
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
@@ -2606,7 +2604,6 @@ extern int D_L18_00161EF0 __attribute__((sda));
 extern int D_L18_00161EF8 __attribute__((sda));
 extern int D_L18_00161F08 __attribute__((sda));
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 
