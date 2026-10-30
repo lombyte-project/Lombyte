@@ -481,7 +481,7 @@ typedef struct { int v[6]; } S6;
 typedef struct { char pad[0x160]; float f160; int f164; int f168; } Cam;
 typedef struct { float f[11]; } Fl;
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
-extern char player_camera[] __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern S6 burst_first_color_palette __asm__("D_L00_001E9030");
 extern S6 burst_second_color_palette __asm__("D_L00_001E9048");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
@@ -659,8 +659,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         *(u128_25e450 *)&v = *(u128_25e450 *)explosion_position;
         v.f[3] = 2.0f;
         if (fast_bsphere_check(&v, 10.0f) != -1) {
-            ((Cam *)player_camera)->f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
-            ((Cam *)player_camera)->f168 = scale_game_frames(0x19);
+            l00_camera.shake_amount = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
+            l00_camera.shake_frames = scale_game_frames(0x19);
         }
     }
     }
@@ -705,7 +705,6 @@ typedef struct {
     s32 frames;     /* 0x168 */
 } Shake0025f090;
 
-extern Shake0025f090 D_L00_00166C80;
 
 /* Explosion burst at `pos`: three random-coloured particles, two tinted particles on `owner`, a camera shake when the
    spot is in view, the owner's sound unless it is dying, and a light flash of intensity `flash` (13 if negative). */
@@ -735,8 +734,8 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
         *(u128 *)&at = *burst_position;
         at.w = 2.0f;
         if (fast_bsphere_check(&at, 10.0f) != -1) {
-            D_L00_00166C80.scale = scale * 0.1f;
-            D_L00_00166C80.frames = scale_game_frames(0x14);
+            l00_camera.shake_amount = scale * 0.1f;
+            l00_camera.shake_frames = scale_game_frames(0x14);
         }
     }
     if (owner != 0 && owner[0x20] != 0xFE && owner[0x20] != 0xFD && sound != -1) {

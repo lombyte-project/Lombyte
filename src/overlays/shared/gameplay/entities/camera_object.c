@@ -253,21 +253,22 @@ typedef struct {
     char p1[0x180 - 0x15C];
     char *c;
 } C_2a4e48;
-extern C_2a4e48 D_L00_00166C80_lui __asm__("D_L00_00166C80") NOT_SDA;
+#include "rnc/overlay/level_camera.h"
+extern LevelCamera l00_camera_lui __asm__("D_L00_00166C80") NOT_SDA;
 
 void camera_object_update(char *o) __asm__("FUN_L00_002a4e48");
 void camera_object_update(char *camera_object) {
     OvlQuad difference_vector[1];
     OvlQuad scaled_vector[1];
-    C_2a4e48 *C = &D_L00_00166C80_lui;
+    LevelCamera *C = &l00_camera_lui;
     char *object_position;
     char *pos;
     G_2a4e48 *P;
     float dot_product_or_threshold;
 
-    if (C->c != 0) {
+    if (C->unk180 != 0) {
         object_position = camera_object + 0x10;
-        qcopy(object_position, C->c + 0x30);
+        qcopy(object_position, (char *)C->unk180 + 0x30);
         pos = (char *)&hero.motion.pos;
         fast_vec_sub(difference_vector, object_position, pos);
         P = (G_2a4e48 *)(pos - 0x80);
@@ -276,7 +277,7 @@ void camera_object_update(char *camera_object) {
         fast_vec_sub(difference_vector, difference_vector, scaled_vector);
         if (absolute_float(dot_product_or_threshold) < 2.5f) {
             dot_product_or_threshold = 0.1f;
-            if (fast_vec_length(difference_vector) < dot_product_or_threshold || fast_difference_between_rotations(P->f98, C->f158) < 2.3561945f ||
+            if (fast_vec_length(difference_vector) < dot_product_or_threshold || fast_difference_between_rotations(P->f98, C->yaw) < 2.3561945f ||
                 P->f164 < frame_time * dot_product_or_threshold) {
                 *(float *)(camera_object + 0x18) = 15.0f;
                 *(float *)(camera_object + 0x14) = 15.0f;
@@ -341,7 +342,7 @@ void draw_vendor_effects(char *m) {
     register float *d0_arg __asm__("$5");
     int k, i, i0, i1, i2, i3, col;
 
-    h = (char *)&D_L00_00166C80_lui;
+    h = (char *)&l00_camera_lui;
     d0[2] = *(float *)(h + 0x158);
     d0[0] = 0.0f;
     d0[1] = 0.0f;
@@ -437,7 +438,7 @@ void draw_vendor_effects(char *m) {
         M[3].q = T[3].q;
     }
 
-    g = (char *)&D_L00_00166C80_lui;
+    g = (char *)&l00_camera_lui;
     off = *(float *)(g + 0x158);
     d0[0] = 0.0f;
     d0[2] = off;
@@ -1790,7 +1791,6 @@ void scale_wrench_collision_vector_by_heading(float *v) __asm__("FUN_L00_002a841
 #include "rnc/input/pad_globals.h"
 extern char thrown_wrench_transform_history[] __asm__("D_00140B00");
 extern char wrench_return_position[] __asm__("D_001403C0");
-extern PlayerCamera player_camera __asm__("D_L00_00166C80");
 extern WrenchHit collision_hit __asm__("D_L00_00173E40");
 extern void draw_target_reticle(int,int,float,float,int,int,int,float,int) __asm__("FUN_L00_001edf60");
 extern int collide_sphere(void*,float,int,void*,void*) __asm__("FUN_L00_001f2868");
@@ -1830,9 +1830,9 @@ void wrench_update(WrenchMoby *wrench_moby) {
             if (pad_held[0] & 0xA)
                 draw_target_reticle((int)wrench_moby,0xFF917267,1.0f,0.0f,0,0x25,-1,90.0f,4);
             wrench_vars->aim_hit=0;
-            build_spherical_offset(work.v[0],10.0f,player_camera.yaw,-player_camera.pitch);
-            fast_vec_add(work.v[0],work.v[0],player_camera.position);
-            if (FUN_001efa68(player_camera.position,work.v[0],4,(int)player->moby,0)) {
+            build_spherical_offset(work.v[0],10.0f,l00_camera.yaw,-l00_camera.pitch);
+            fast_vec_add(work.v[0],work.v[0],l00_camera.pos.f);
+            if (FUN_001efa68(l00_camera.pos.f,work.v[0],4,(int)player->moby,0)) {
                 wrench_vars->aim_hit=player_state; qcopy(wrench_vars->target,collision_hit.position);
             }
         }

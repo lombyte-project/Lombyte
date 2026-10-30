@@ -1095,7 +1095,8 @@ typedef struct {
     char p1[0x350 - 0x15C];
     char m350[0x40];
 } C_002da250;
-extern char D_L00_00166C80[] NOT_SDA;
+#include "rnc/overlay/level_camera.h"
+extern LevelCamera l00_camera_lui __asm__("D_L00_00166C80") NOT_SDA;
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_002da250;
@@ -1105,13 +1106,13 @@ void compute_suck_cannon_suction_aim_and_origin(struct Moby *cannon_moby, f32 *o
     moby_point_position(cannon_moby, 0, out_suction_origin);
     if (hero_data.state.current == 1 || hero_data.state.current == 0x1E) {
         V_002da250 suction_origin_offset;
-        C_002da250 *suction_aim_camera = &(*(C_002da250 *)D_L00_00166C80);
+        LevelCamera *suction_aim_camera = &l00_camera_lui;
         suction_origin_offset.y = 0;
         suction_origin_offset.x = 1.2f;
-        *out_suction_yaw = suction_aim_camera->f158;
+        *out_suction_yaw = suction_aim_camera->yaw;
         suction_origin_offset.z = 0;
-        *out_suction_pitch = -suction_aim_camera->f154;
-        transform_vector_by_basis(&suction_origin_offset, &suction_origin_offset, suction_aim_camera->m350);
+        *out_suction_pitch = -suction_aim_camera->pitch;
+        transform_vector_by_basis(&suction_origin_offset, &suction_origin_offset, suction_aim_camera->unk350);
         out_suction_origin[2] = suction_origin_offset.z + cannon_moby->pos.z;
         out_suction_origin[0] = suction_origin_offset.x + hero_data.motion.pos.f[0];
         out_suction_origin[1] = suction_origin_offset.y + hero_data.motion.pos.f[1];
@@ -1371,7 +1372,6 @@ typedef struct SuckHit {
 typedef struct { u8 pad[9]; u8 gold; } SuckItemVariant; /* item 9 (Suck Cannon) is gold */
 
 typedef struct { u8 pad[0x10]; float height; } SuckAimHeight;
-extern char D_L00_00166C80[];
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_L00_00173E40_lui[];
 extern int collision_segment_hits(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -1536,13 +1536,13 @@ void suckcannon_update(SuckMoby *self) {
             (cannon->target && ((u8)cannon->target->state&0x80))) cannon->target=0;
         if (suck_hero.state==1) hero_set_state(30,1);
         if (suck_hero.state==30 && (suck_hero.moby->flags&1) && !suck_hero.unk20AC) {
-            char *camera=D_L00_00166C80;
+            LevelCamera *camera=&l00_camera;
             SuckVec *eye;
             SuckHit *hit;
             work.aim.velocity.q=0;
             work.aim.velocity.f.z=50.0f;
-            copy_matrix3x4(&work.aim.rotation,camera);
-            eye=(SuckVec *)(camera+0x140);
+            copy_matrix3x4(&work.aim.rotation,camera->unk0);
+            eye=(SuckVec *)&camera->pos;
             transpose_rotation_matrix(&work.aim.inverse,&work.aim.rotation);
             transform_vector(&work.aim.velocity,&work.aim.velocity,&work.aim.inverse);
             fast_vec_add(&work.aim.end,eye,&work.aim.velocity);
@@ -1599,7 +1599,7 @@ void suckcannon_update(SuckMoby *self) {
             SuckMoby *best,*candidate_target;
             float yaw,pitch,limit;
             work.fire.velocity.q=0;
-            copy_matrix3x4(&work.fire.rotation,D_L00_00166C80);
+            copy_matrix3x4(&work.fire.rotation,l00_camera.unk0);
             transpose_rotation_matrix(&work.fire.inverse,&work.fire.rotation);
             if(suck_hero.state==30 && (suck_hero.moby->flags&1)) {
                 work.fire.offset.q=0;
@@ -1611,7 +1611,7 @@ void suckcannon_update(SuckMoby *self) {
                 work.fire.offset.f.y=0.3f;
                 work.fire.offset.f.z=1.0f;
                 transform_vector(&work.fire.launch,&work.fire.offset,&work.fire.inverse);
-                fast_vec_add(&work.fire.launch,&work.fire.launch,D_L00_00166C80+0x140);
+                fast_vec_add(&work.fire.launch,&work.fire.launch,&l00_camera.pos);
             } else {
                 work.fire.offset.q=0;
                 work.fire.offset.f.x=frame_scale*0.4462f;
@@ -2131,8 +2131,8 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
         float s = variant_effect_scale * 3.0f;
         func_L00_002E0CB8_DD3D8(s, self, self + 0x10, spray_bias_vector, scale_game_frames_c(29), r1, g1, b1, 0x20);
     }
-    (*(Cam *)D_L00_00166C80).f160 = (camera_distance < 20.0f) ? 0.4f - camera_distance * 0.0175f : 0.050000012f;
-    (*(Cam *)D_L00_00166C80).i168 = scale_game_frames_c(25);
+    l00_camera.shake_amount = (camera_distance < 20.0f) ? 0.4f - camera_distance * 0.0175f : 0.050000012f;
+    l00_camera.shake_frames = scale_game_frames_c(25);
     mine_camera_blast((char *)&blk, self + 0x10, 0, 0);
     if ((&D_0013E520)->b9) {
         k = func_L00_001F2BE8_DD3D8(3.0f, self + 0x10, 0x10, self, 0);
