@@ -1303,21 +1303,21 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
     }
     if (moby_data->i280 != -1) {
         {
-            float        out[4];
-            Moby2C8398  *base;
-            Moby2C8398  *other;
+            float        transformed_rotation[4];
+            Moby2C8398  *moby_instances;
+            Moby2C8398  *supporting_moby;
             PathF2C8398 *pf;
             int          i;
-            *(OvlQuad *)out = 0;
-            base = D_L03_0015FFD8_m;
-            other = &base[moby_data->i280];
+            *(OvlQuad *)transformed_rotation = 0;
+            moby_instances = D_L03_0015FFD8_m;
+            supporting_moby = &moby_instances[moby_data->i280];
             pf = &moby_data->pf;
-            if ((short)other->cls == 0x335 || (short)other->cls == 0x4BA) {
+            if ((short)supporting_moby->cls == 0x335 || (short)supporting_moby->cls == 0x4BA) {
                 for (i = 0; i < *(int *)pf->path; i++) {
                     float path_node_rotation[4];
                     *(OvlQuad *)path_node_rotation = 0;
                     probe_ground_height_cf((int)m,
-                                           (char *)other,
+                                           (char *)supporting_moby,
                                            pf->path + 0x10 + i * 0x10,
                                            path_node_rotation,
                                            pf->path + 0x10 + i * 0x10,
@@ -1325,8 +1325,8 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 }
             }
             probe_ground_height_cf(
-                (int)m, (char *)other, (char *)m->pos, m->rot, (char *)m->pos, out);
-            m->rot[2] = out[2];
+                (int)m, (char *)supporting_moby, (char *)m->pos, m->rot, (char *)m->pos, transformed_rotation);
+            m->rot[2] = transformed_rotation[2];
         }
     }
     if (!(m->state >= 0xB && m->state <= 0xE)) {
