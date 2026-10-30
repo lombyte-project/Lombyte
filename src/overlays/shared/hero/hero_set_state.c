@@ -33,10 +33,10 @@ extern s32 coll_sphere(f32, Vec4 *, s32, s32) __asm__("FUN_L00_001f0d60");
 void update_hero_motion_and_collision_probes(void) __asm__("FUN_L00_00221310");
 
 void update_hero_motion_and_collision_probes(void) {
-    Vec4 first;
-    Vec4 second;
+    Vec4 line_probe_start;
+    Vec4 line_probe_end;
     Vec4 probe;
-    f32  base;
+    f32  line_probe_local_y_offset;
     f32  line_probe_hit_distance;
     f32  probe_local_x_offset;
     s32  hit;
@@ -63,16 +63,16 @@ void update_hero_motion_and_collision_probes(void) {
         hero.edge_ahead = 0;
         hero.edge_drop_depth = 0.0f;
         if (hero.grounded_frames != 0) {
-            base = hero.edge_drop_depth;
-            transform_hero_local_offset_to_world(&first, 1.1f, base, 1.0f);
-            transform_hero_local_offset_to_world(&second, 1.1f, base, -20.0f);
-            if (second.f[2] < 0.5f) {
-                second.f[2] = 0.5f;
+            line_probe_local_y_offset = hero.edge_drop_depth;
+            transform_hero_local_offset_to_world(&line_probe_start, 1.1f, line_probe_local_y_offset, 1.0f);
+            transform_hero_local_offset_to_world(&line_probe_end, 1.1f, line_probe_local_y_offset, -20.0f);
+            if (line_probe_end.f[2] < 0.5f) {
+                line_probe_end.f[2] = 0.5f;
             }
             line_probe_hit_distance = 20.0f;
-            hit = collision_line(&first, &second, 2, hero.moby, 0);
+            hit = collision_line(&line_probe_start, &line_probe_end, 2, hero.moby, 0);
             if (hit != 0) {
-                line_probe_hit_distance = fast_vec_dist(&first, &coll_hit.point);
+                line_probe_hit_distance = fast_vec_dist(&line_probe_start, &coll_hit.point);
                 if (!(3.0f < line_probe_hit_distance)) {
                     return;
                 }
