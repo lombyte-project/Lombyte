@@ -23,6 +23,7 @@ extern LevelCuboid *l03_cuboids __asm__("D_L03_001600EC");
 extern LevelCuboid *l04_cuboids __asm__("D_L04_001600EC");
 extern LevelCuboid *l05_cuboids __asm__("D_L05_001600EC");
 extern LevelCuboid *l06_cuboids __asm__("D_L06_001600EC");
+extern LevelCuboid *l07_cuboids __asm__("D_L07_001600EC");
 extern LevelCuboid *l10_cuboids __asm__("D_L10_001600EC");
 extern LevelCuboid *l13_cuboids __asm__("D_L13_001600EC");
 

@@ -751,17 +751,10 @@ typedef struct {
     int points_1c;
 } Class436Vars;
 
-typedef struct {
-    char pad0[0x30];
-    float unk30[4];
-    char pad40[0x30];
-    float unk70[4];
-} ScenePoints;
-
 extern u8 umbris_open_volume_triggered[] __asm__("D_0013D3B1");
 extern struct Moby *level_mobys __asm__("D_L07_0015FFD8");
 extern int scene_state __asm__("D_L07_0015F5C4");
-extern ScenePoints *scene_points __asm__("D_L07_001600EC");
+#include "rnc/overlay/cuboid.h"
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -856,7 +849,7 @@ void update_umbris_scene_progression(struct Moby *moby)
     case CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE:
         if (scene_state == 2) break;
         if (data->points_18 != -1) {
-            set_race_camera(scene_points[data->points_18].unk30, scene_points[data->points_18].unk70, 0, 1);
+            set_race_camera(&l07_cuboids[data->points_18].pos, &l07_cuboids[data->points_18].rot, 0, 1);
         }
         moby->state = 7;
         break;
@@ -878,7 +871,7 @@ void update_umbris_scene_progression(struct Moby *moby)
             if (data->moby_0c == -1 || (e = &level_mobys[data->moby_0c]) == 0 || e->state == 0xFE || e->state == 0xFD) {
                 if (data->finish_volume != -1) {
                     if (is_point_inside_clip_volume(&hero.motion.pos, data->finish_volume) != 0) {
-                        set_race_camera(scene_points[data->points_1c].unk30, scene_points[data->points_1c].unk70, 0x72, 1);
+                        set_race_camera(&l07_cuboids[data->points_1c].pos, &l07_cuboids[data->points_1c].rot, 0x72, 1);
                         alternate_item_available[0x2A] = 1;
                         moby->state = 9;
                         start_scene(3);
@@ -907,7 +900,7 @@ void update_umbris_scene_progression(struct Moby *moby)
     case CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET:
         if (scene_state == 2) break;
         if (data->points_1c != -1) {
-            set_race_camera(scene_points[data->points_1c].unk30, scene_points[data->points_1c].unk70, 0, 1);
+            set_race_camera(&l07_cuboids[data->points_1c].pos, &l07_cuboids[data->points_1c].rot, 0, 1);
         }
         if (data->moby_10 != -1) {
             struct Moby *e = &level_mobys[data->moby_10];
@@ -2411,7 +2404,6 @@ void cache_path_segment_lengths(char *data) {
 }
 
 extern char *D_L07_0015FFD8_30ed30 __asm__("D_L07_0015FFD8");
-extern char *D_L07_001600EC_30ed30 __asm__("D_L07_001600EC");
 char D_L07_00211720[] = "Illegal Bounding path for moby 1059 instance #%d.\n";
 char D_L07_00211758[] = "Illegal Hero Detect path for moby 1059 instance #%d.\n";
 char D_L07_00211790[] = "Illegal water moby for moby 1059 instance #%d.\n";
@@ -2443,7 +2435,7 @@ int initialize_sharkigator(char *moby, char *data) {
         stub_printf(D_L07_002117C0, (moby - D_L07_0015FFD8_30ed30) >> 8);
         return 1;
     }
-    qcopy(data + 0xF0, &D_L07_001600EC_30ed30[*(int *)(data + 0x114) * 0x80 + 0x30]);
+    qcopy(data + 0xF0, (char *)l07_cuboids + *(int *)(data + 0x114) * 0x80 + 0x30);
     qcopy(data + 0xE0, moby + 0x10);
     ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)(moby, data);
     *(int *)(data + 0x134) = rand() % 0x78;

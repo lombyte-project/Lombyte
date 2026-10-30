@@ -327,7 +327,7 @@ extern void hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00200228(float, void *);
 extern int FUN_0022da68(int, int, void *);
 extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA;
-extern char *scene_points __asm__("D_L07_001600EC");
+#include "rnc/overlay/cuboid.h"
 extern char voice_slot_state_base[] __asm__("D_0013E5C4");
 
 void process_snagglebeast_damage(char *moby, char *data, float *health) __asm__("FUN_L07_00313420");
@@ -384,7 +384,7 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
                     set_moby_dialogue_record_value(moby, 1);
                     FUN_L00_00257470(moby, 0, -1);
                     jet_clear_persistent((u8)moby[0xb0]);
-                    owner = scene_points + (*(int *)(data + 0x1f0) << 7);
+                    owner = (char *)l07_cuboids + (*(int *)(data + 0x1f0) << 7);
                     jet_reset_camera(owner + 0x30, owner + 0x70);
                 }
                 moby[0x20] = 10;
@@ -1358,16 +1358,16 @@ void snagglebeast_update(unsigned char *moby) {
                 char *linked_moby_vars = *(char **)(level_mobys + (((ChaserPathPoints *)data)->linked_mobys[k] << 8) + 0x78);
                 char *paired_linked_moby_vars = *(char **)(level_mobys + (((ChaserPathPoints *)data)->linked_mobys[k2] << 8) + 0x78);
                 if (*(int *)(linked_moby_vars + 0x28) != -1 && *(int *)(paired_linked_moby_vars + 0x28) != -1) {
-                    float d1 = vector_distance_xy(((char *)&hero) + 0x80, scene_points + (*(int *)(linked_moby_vars + 0x28) << 7) + 0x30);
+                    float d1 = vector_distance_xy(((char *)&hero) + 0x80, (char *)l07_cuboids + (*(int *)(linked_moby_vars + 0x28) << 7) + 0x30);
                     int sel;
-                    if (vector_distance_xy(((char *)&hero) + 0x80, scene_points + (*(int *)(paired_linked_moby_vars + 0x28) << 7) + 0x30) < d1) {
+                    if (vector_distance_xy(((char *)&hero) + 0x80, (char *)l07_cuboids + (*(int *)(paired_linked_moby_vars + 0x28) << 7) + 0x30) < d1) {
                         sel = *(int *)(paired_linked_moby_vars + 0x28);
                         k = k2;
                     } else {
                         sel = *(int *)(linked_moby_vars + 0x28);
                     }
-                    MOBY(moby)->rot.z = fast_arc_tan(*(float *)(scene_points + sel * 0x80 + 0x30) - MOBY(moby)->pos.x,
-                                                             *(float *)(scene_points + sel * 0x80 + 0x34) - MOBY(moby)->pos.y);
+                    MOBY(moby)->rot.z = fast_arc_tan(*(float *)((char *)l07_cuboids + sel * 0x80 + 0x30) - MOBY(moby)->pos.x,
+                                                             *(float *)((char *)l07_cuboids + sel * 0x80 + 0x34) - MOBY(moby)->pos.y);
                 }
             }
             *(unsigned char *)(level_mobys + ((ChaserPathPoints *)data)->linked_mobys[k] * 0x100 + 0xBC) = 1;
@@ -1429,7 +1429,7 @@ void snagglebeast_update(unsigned char *moby) {
                         set_moby_dialogue_record_value(moby, 1);
                         FUN_L00_00257470(moby, 0, -1);
                         jet_clear_persistent(moby[0xB0]);
-                        jet_reset_camera(scene_points + (*(int *)(data + 0x1F0) << 7) + 0x30, scene_points + (*(int *)(data + 0x1F0) << 7) + 0x70);
+                        jet_reset_camera((char *)l07_cuboids + (*(int *)(data + 0x1F0) << 7) + 0x30, (char *)l07_cuboids + (*(int *)(data + 0x1F0) << 7) + 0x70);
                     }
                     moby[0x20] = 0xA;
                 } else {
