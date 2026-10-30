@@ -578,7 +578,7 @@ def changes(base: str) -> tuple[dict[str, str | None], set[str]]:
     """Map each changed working-tree path to its base path (None when new), plus deleted paths."""
     changed: dict[str, str | None] = {}
     deleted = set()
-    out = git("diff", "-M", "--name-status", "-z", base, "--")
+    out = git("-c", "diff.renameLimit=0", "diff", "-M", "--name-status", "-z", base, "--")
     fields = out.split("\0")
     i = 0
     while i < len(fields) and fields[i]:
@@ -663,6 +663,18 @@ def main() -> int:
         export(base, base_root)
         base_tree = Tree(base_root)
         rename = {new: old for new, old in changed.items() if old}
+        # A file moved and edited past git's rename threshold shows up as
+        # deleted + added: pair the two when the file name is unique on both sides.
+        gone = collections.defaultdict(list)
+        for old in deleted:
+            gone[Path(old).name].append(old)
+        added = collections.defaultdict(list)
+        for new, old in changed.items():
+            if old is None:
+                added[Path(new).name].append(new)
+        for name, news in added.items():
+            if len(news) == 1 and len(gone.get(name, [])) == 1:
+                rename[news[0]] = gone[name][0]
 
         # Per-file problems are pooled over all changed files, so code moved between files stays old.
         head, before = [], []

@@ -286,7 +286,7 @@ INPUT(
     build/link/asm/data/text_gap_0011b8f0_post_sdk_worker.s.o
     build/link/src/sdk/storage/fileio/_sceFsWaitS.c.o
     build/link/asm/data/text_gap_0011b940_post_sdk_worker.s.o
-    build/link/src/runtime/queues/read_queue_status.c.o
+    build/link/src/runtime/read_queue_status.c.o
     build/link/asm/data/text_gap_0011b97c_prefix_0011b97c.s.o
     build/link/src/sdk/callbacks/invoke_sif_file_command_callback.c.o
     build/link/asm/data/text_gap_0011b97c_tail_0011b9ac.s.o
@@ -392,7 +392,7 @@ INPUT(
     build/link/src/sdk/soft_float/__unpack_f.c.o
     build/link/asm/data/text_gap_001203b0_post_sdk_worker.s.o
     build/link/src/sdk/soft_float/fptodp.c.o
-    build/link/src/assembly/textbin/rendering/gs/reset_vif1_gif.c.o
+    build/link/src/assembly/textbin/rendering/frame/reset_vif1_gif.c.o
     build/link/src/sdk/graph/sce_gs_sync_path.c.o
     build/link/asm/data/text_gap_001205e4_after_fun_00120558_prefix_001205e4.s.o
     build/link/src/sdk/storage/cdvd/signal_native_cd_delay_alarm.c.o
@@ -732,11 +732,11 @@ INPUT(
     build/link/src/assembly/sdk/library/entry.c.o
     build/link/src/sdk/syscalls/jump_to_rfu_status.c.o
     build/link/asm/data/text_gap_0012d8f0_before_fun_0012d8f8.s.o
-    build/link/src/gameplay/state/parse_bin.c.o
+    build/link/src/game/parse_bin.c.o
     build/link/asm/data/text_gap_0012d9d4_before_fun_0012d9d8.s.o
-    build/link/src/gameplay/state/run_game_main_loop.c.o
+    build/link/src/game/run_game_main_loop.c.o
     build/link/asm/data/text_gap_0012da24_after_fun_0012d9d8.s.o
-    build/link/src/textbin/audio/snd_start_sound_system.c.o
+    build/link/src/audio/snd_start_sound_system.c.o
     build/link/src/audio/rpc/snd_flush_sound_commands.c.o
     build/link/asm/data/text_gap_0012de60_before_fun_0012de70.s.o
     build/link/src/audio/rpc/snd_returns.c.o
@@ -774,7 +774,7 @@ INPUT(
     build/link/src/audio/rpc/snd_post_message.c.o
     build/link/src/audio/rpc/snd_send_current_batch.c.o
     build/link/asm/data/text_gap_0012eaec_after_fun_0012e9d8.s.o
-    build/link/src/runtime/data/read_global_table_entry.c.o
+    build/link/src/runtime/read_global_table_entry.c.o
     build/link/asm/data/text_gap_0012eafc_before_fun_0012eb00.s.o
     build/link/src/audio/rpc/snd_reset_state_and_flush_commands.c.o
     build/link/src/audio/streaming/vag/snd_init_vag_streaming_ex.c.o
@@ -816,101 +816,101 @@ INPUT(
     build/link/src/audio/sound/snd_get_doppler_pitch_mod.c.o
     build/link/asm/data/text_gap_0012f1c4_before_fun_0012f208.s.o
     build/link/src/runtime/callbacks/count_vsync.c.o
-    build/link/src/storage/wad/wad_get_sectors.c.o
+    build/link/src/streaming/wad_get_sectors.c.o
     build/link/asm/data/text_gap_0012f2b4_before_fun_0012f2b8.s.o
-    build/link/src/storage/cd/load_disc_sectors_into_global_buffer.c.o
-    build/link/src/storage/cd/read_file_entry_with_retry.c.o
+    build/link/src/streaming/load_disc_sectors_into_global_buffer.c.o
+    build/link/src/streaming/read_file_entry_with_retry.c.o
     build/link/asm/data/text_gap_0012f434_after_fun_0012f368.s.o
     build/link/asm/data/text_pre.s.o
-    build/link/src/input/pad/actuator_calc_power.c.o
+    build/link/src/input/actuator_calc_power.c.o
     build/link/asm/data/text_gap_001e911c_after_fun_001e8d08.s.o
-    build/link/src/runtime/dma/initialize_streaming_state.c.o
+    build/link/src/streaming/initialize_streaming_state.c.o
     build/link/asm/data/text_gap_001e9140_before_fun_001e9168.s.o
     build/link/src/rendering/texture/load_pif_as_psmt8_h.c.o
-    build/link/src/ui/fonts/load_debug_font.c.o
+    build/link/src/ui/text/font/load_debug_font.c.o
     build/link/asm/data/text_gap_001e93a4_after_fun_001e9338.s.o
     build/link/src/sdk/debug/debug_print.c.o
     build/link/src/runtime/callbacks/noop_main_callback.c.o
-    build/link/src/rendering/callbacks/noop_callback_a.c.o
-    build/link/src/rendering/callbacks/noop_callback_b.c.o
-    build/link/src/rendering/callbacks/noop_callback_c.c.o
-    build/link/src/rendering/callbacks/noop_callback_d.c.o
-    build/link/src/rendering/callbacks/noop_callback_e.c.o
-    build/link/src/rendering/callbacks/noop_callback_f.c.o
-    build/link/src/rendering/callbacks/noop_callback_g.c.o
-    build/link/src/rendering/callbacks/noop_callback_h.c.o
-    build/link/src/rendering/callbacks/noop_callback_i.c.o
-    build/link/src/rendering/callbacks/noop_callback_j.c.o
-    build/link/src/rendering/callbacks/noop_callback_k.c.o
-    build/link/src/rendering/callbacks/noop_callback_l.c.o
-    build/link/src/rendering/callbacks/noop_callback_m.c.o
-    build/link/src/rendering/callbacks/noop_callback_n.c.o
-    build/link/src/rendering/callbacks/noop_callback_o.c.o
-    build/link/src/rendering/callbacks/noop_callback_p.c.o
-    build/link/src/rendering/callbacks/noop_callback_q.c.o
-    build/link/src/rendering/callbacks/noop_callback_r.c.o
-    build/link/src/rendering/callbacks/noop_callback_s.c.o
-    build/link/src/gameplay/state/start_level.c.o
-    build/link/src/textbin/world/startlevel.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_a.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_b.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_c.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_d.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_e.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_f.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_g.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_h.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_i.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_j.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_k.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_l.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_m.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_n.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_o.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_p.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_q.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_r.c.o
+    build/link/src/rendering/frame/callbacks/noop_callback_s.c.o
+    build/link/src/game/start_level.c.o
+    build/link/src/game/startlevel.c.o
     build/link/asm/data/text_gap_001e9ab4_before_fun_001e9ab8.s.o
-    build/link/src/gameplay/state/transition_draw_sky.c.o
-    build/link/src/gameplay/state/initialize_level_render_state.c.o
+    build/link/src/game/transitions/transition_draw_sky.c.o
+    build/link/src/rendering/frame/initialize_level_render_state.c.o
     build/link/asm/data/text_gap_001ea82c_before_fun_001ea830.s.o
-    build/link/src/gameplay/state/transition_load_wad.c.o
+    build/link/src/game/transitions/transition_load_wad.c.o
     build/link/asm/data/text_gap_001eaf4c_after_fun_001ea830.s.o
     build/link/src/runtime/dma/queue_dma_transfer.c.o
-    build/link/src/gameplay/camera/transition_update_movie_camera.c.o
+    build/link/src/camera/transition_update_movie_camera.c.o
     build/link/asm/data/text_gap_001eb0a4_after_fun_001eaf88.s.o
-    build/link/src/gameplay/state/update_gameplay_frame.c.o
+    build/link/src/game/update_gameplay_frame.c.o
     build/link/asm/data/text_gap_001eb40c_before_fun_001eb410.s.o
-    build/link/src/gameplay/state/transition_default_draw.c.o
-    build/link/src/gameplay/state/is_active_state_entry.c.o
-    build/link/src/gameplay/state/transition_do_transition.c.o
+    build/link/src/game/transitions/transition_default_draw.c.o
+    build/link/src/game/is_active_state_entry.c.o
+    build/link/src/game/transitions/transition_do_transition.c.o
     build/link/asm/data/text_gap_001ebc88_before_fun_001ebc90.s.o
-    build/link/src/gameplay/camera/backup_current_cam.c.o
+    build/link/src/camera/backup_current_cam.c.o
     build/link/asm/data/text_gap_001ebcec_after_fun_001ebc90.s.o
-    build/link/src/gameplay/camera/execute_camera_post_update_callbacks.c.o
+    build/link/src/camera/execute_camera_post_update_callbacks.c.o
     build/link/asm/data/text_gap_001ebd5c_after_fun_001ebcf0.s.o
-    build/link/src/gameplay/camera/cam_interp_values.c.o
+    build/link/src/camera/cam_interp_values.c.o
     build/link/asm/data/text_gap_001ebe5c_before_fun_001ebe68.s.o
-    build/link/src/gameplay/camera/handle_camera_collision_with_hero.c.o
-    build/link/src/gameplay/camera/camera_run_setup_to_new_cam.c.o
+    build/link/src/camera/handle_camera_collision_with_hero.c.o
+    build/link/src/camera/camera_run_setup_to_new_cam.c.o
     build/link/asm/data/text_gap_001ebf0c_after_fun_001ebec8.s.o
-    build/link/src/gameplay/camera/switch_active_camera_record.c.o
-    build/link/src/gameplay/camera/camera_activation_check_priority.c.o
+    build/link/src/camera/switch_active_camera_record.c.o
+    build/link/src/camera/camera_activation_check_priority.c.o
     build/link/asm/data/text_gap_001ec3d4_before_fun_001ec3d8.s.o
-    build/link/src/gameplay/camera/camera_exit.c.o
+    build/link/src/camera/camera_exit.c.o
     build/link/asm/data/text_gap_001ec41c_after_fun_001ec3d8.s.o
-    build/link/src/gameplay/camera/update_all_cameras.c.o
-    build/link/src/gameplay/camera/compute_camera_angles.c.o
+    build/link/src/camera/update_all_cameras.c.o
+    build/link/src/camera/compute_camera_angles.c.o
     build/link/asm/data/text_gap_001ec70c_before_fun_001ec710.s.o
-    build/link/src/gameplay/camera/capture_camera_orientation.c.o
+    build/link/src/camera/capture_camera_orientation.c.o
     build/link/asm/data/text_gap_001ec7ec_before_fun_001ec7f0.s.o
-    build/link/src/gameplay/camera/save_camera_vectors.c.o
+    build/link/src/camera/save_camera_vectors.c.o
     build/link/asm/data/text_gap_001ec864_before_fun_001ec868.s.o
-    build/link/src/gameplay/camera/restore_camera_vectors.c.o
-    build/link/src/gameplay/camera/start_camera_blend.c.o
+    build/link/src/camera/restore_camera_vectors.c.o
+    build/link/src/camera/start_camera_blend.c.o
     build/link/asm/data/text_gap_001ecaf4_before_fun_001ecaf8.s.o
-    build/link/src/gameplay/camera/step_camera_blend.c.o
-    build/link/src/gameplay/camera/advance_alternate_camera_transition.c.o
-    build/link/src/gameplay/camera/update_camera_blend.c.o
-    build/link/src/gameplay/camera/apply_camera_shake.c.o
+    build/link/src/camera/step_camera_blend.c.o
+    build/link/src/camera/advance_alternate_camera_transition.c.o
+    build/link/src/camera/update_camera_blend.c.o
+    build/link/src/camera/apply_camera_shake.c.o
     build/link/asm/data/text_gap_001ed46c_after_fun_001ed360.s.o
-    build/link/src/gameplay/camera/update_camera_tracking_state.c.o
+    build/link/src/camera/update_camera_tracking_state.c.o
     build/link/asm/data/text_gap_001ed7ec_before_fun_001ed7f0.s.o
-    build/link/src/gameplay/camera/update_camera_underwater_flag.c.o
+    build/link/src/camera/update_camera_underwater_flag.c.o
     build/link/asm/data/text_gap_001ed93c_before_fun_001ed940.s.o
-    build/link/src/gameplay/camera/refresh_camera_control_flags.c.o
-    build/link/src/gameplay/camera/advance_timed_camera_control.c.o
-    build/link/src/gameplay/camera/update_camera.c.o
+    build/link/src/camera/refresh_camera_control_flags.c.o
+    build/link/src/camera/advance_timed_camera_control.c.o
+    build/link/src/camera/update_camera.c.o
     build/link/asm/data/text_gap_001edc30_after_fun_001edaa8.s.o
     build/link/src/rendering/effects/draw_lens_flare.c.o
     build/link/asm/data/text_gap_001ee004_before_fun_001ee008.s.o
     build/link/src/rendering/effects/spawn_particle_burst.c.o
     build/link/asm/data/text_gap_001ee324_before_fun_001ee338.s.o
-    build/link/src/textbin/render_queued_rotated_sprites.c.o
+    build/link/src/rendering/effects/render_queued_rotated_sprites.c.o
     build/link/asm/data/text_gap_001ee4a4_before_fun_001ee4b0.s.o
-    build/link/src/textbin/update_camera_environment_from_regions.c.o
+    build/link/src/camera/update_camera_environment_from_regions.c.o
     build/link/asm/data/text_gap_001ee63c_after_fun_001ee4b0.s.o
     build/link/src/assembly/textbin/fun_001ee650.c.o
     build/link/src/assembly/textbin/fun_001ef9c8.c.o
@@ -926,7 +926,7 @@ INPUT(
     build/link/asm/data/text_gap_001f21a4_after_fun_001f2070.s.o
     build/link/src/runtime/callbacks/noop_core_callback.c.o
     build/link/src/runtime/callbacks/noop_core_callback_secondary.c.o
-    build/link/src/rendering/state/reset_graphics.c.o
+    build/link/src/rendering/frame/reset_graphics.c.o
     build/link/asm/data/text_gap_001f225c_after_fun_001f21c0.s.o
     build/link/src/rendering/view/update_camera_view_matrices.c.o
     build/link/src/rendering/view/update_fog.c.o
@@ -941,12 +941,12 @@ INPUT(
     build/link/src/rendering/view/update_view_context.c.o
     build/link/asm/data/text_gap_001f33b4_before_fun_001f33b8.s.o
     build/link/src/rendering/view/configure_graphics_projection.c.o
-    build/link/src/video/display/set_pal_mode.c.o
-    build/link/src/rendering/state/reset_draw_globals.c.o
+    build/link/src/movies/display/set_pal_mode.c.o
+    build/link/src/rendering/frame/reset_draw_globals.c.o
     build/link/asm/data/text_gap_001f3864_after_fun_001f37e8.s.o
-    build/link/src/rendering/state/reset_gs_registers.c.o
+    build/link/src/rendering/frame/reset_gs_registers.c.o
     build/link/asm/data/text_gap_001f3954_before_fun_001f3958.s.o
-    build/link/src/rendering/state/reset_gs_registers_pr.c.o
+    build/link/src/rendering/frame/reset_gs_registers_pr.c.o
     build/link/src/rendering/debug/draw_debug_profiler.c.o
     build/link/src/rendering/debug/prepare_debug_profiler_render.c.o
     build/link/asm/data/text_gap_001f427c_after_fun_001f4248.s.o
@@ -955,14 +955,14 @@ INPUT(
     build/link/src/rendering/texture/do_gif_paging.c.o
     build/link/asm/data/text_gap_001f44b4_before_fun_001f44b8.s.o
     build/link/src/rendering/effects/get_effect_texture.c.o
-    build/link/src/gameplay/callbacks/add_draw_callback.c.o
-    build/link/src/gameplay/callbacks/dispatch_callback_list_1.c.o
-    build/link/src/gameplay/callbacks/dispatch_callback_list_2.c.o
-    build/link/src/gameplay/callbacks/dispatch_callback_list_3.c.o
-    build/link/src/gameplay/callbacks/enqueue_callback_list_4.c.o
-    build/link/src/gameplay/callbacks/dispatch_callback_list_4.c.o
+    build/link/src/runtime/callbacks/add_draw_callback.c.o
+    build/link/src/runtime/callbacks/dispatch_callback_list_1.c.o
+    build/link/src/runtime/callbacks/dispatch_callback_list_2.c.o
+    build/link/src/runtime/callbacks/dispatch_callback_list_3.c.o
+    build/link/src/runtime/callbacks/enqueue_callback_list_4.c.o
+    build/link/src/runtime/callbacks/dispatch_callback_list_4.c.o
     build/link/src/rendering/effects/draw_light_quads.c.o
-    build/link/src/rendering/transitions/fade_to_black.c.o
+    build/link/src/rendering/effects/fade_to_black.c.o
     build/link/src/ui/text/draw_subtitles.c.o
     build/link/src/rendering/effects/draw_letterbox_bars.c.o
     build/link/src/rendering/effects/draw_screen_effect.c.o
@@ -972,7 +972,7 @@ INPUT(
     build/link/asm/data/text_gap_001f5448_before_fun_001f5450.s.o
     build/link/src/rendering/texture/draw_textured_quad.c.o
     build/link/asm/data/text_gap_001f55d4_after_fun_001f5450.s.o
-    build/link/src/textbin/append_subpixel_textured_screen_quad.c.o
+    build/link/src/rendering/packets/append_subpixel_textured_screen_quad.c.o
     build/link/src/rendering/packets/emit_textured_rectangle.c.o
     build/link/src/rendering/packets/append_rotated_sprite_quad.c.o
     build/link/asm/data/text_gap_001f5f0c_before_fun_001f5f18.s.o
@@ -1014,27 +1014,27 @@ INPUT(
     build/link/asm/data/text_gap_001f75ec_before_fun_001f75f0.s.o
     build/link/src/ui/text/font/font_print_window_small.c.o
     build/link/asm/data/text_gap_001f765c_after_fun_001f75f0.s.o
-    build/link/src/ui/fonts/font_set_window.c.o
-    build/link/src/ui/fonts/font_queue_vu_state.c.o
-    build/link/src/rendering/targets/configure_graphics_render_target_and_projection.c.o
+    build/link/src/ui/text/font/font_set_window.c.o
+    build/link/src/ui/text/font/font_queue_vu_state.c.o
+    build/link/src/rendering/frame/configure_graphics_render_target_and_projection.c.o
     build/link/asm/data/text_gap_001f7974_before_fun_001f7978.s.o
-    build/link/src/rendering/state/begin_draw_frame.c.o
+    build/link/src/rendering/frame/begin_draw_frame.c.o
     build/link/asm/data/text_gap_001f79a4_after_fun_001f7978.s.o
-    build/link/src/ui/fonts/draw_debug_font.c.o
+    build/link/src/ui/text/font/draw_debug_font.c.o
     build/link/src/rendering/texture/initialize_alpha_lookup_table.c.o
     build/link/asm/data/text_gap_001f7a84_after_fun_001f7a30.s.o
     build/link/src/assembly/textbin/math/geometry/fast_intersect_vert.c.o
     build/link/asm/data/text_gap_001f7c10_after_fun_001f7a98.s.o
     build/link/asm/data/text_gap_001f7cd0.s.o
-    build/link/src/assembly/textbin/rendering/gs/fast_draw_quad_real.c.o
-    build/link/src/assembly/textbin/rendering/gs/write_setup_block.c.o
-    build/link/src/assembly/textbin/rendering/gs/write_gs_header.c.o
-    build/link/src/assembly/textbin/rendering/gs/scis_and_render.c.o
+    build/link/src/assembly/textbin/rendering/frame/fast_draw_quad_real.c.o
+    build/link/src/assembly/textbin/rendering/frame/write_setup_block.c.o
+    build/link/src/assembly/textbin/rendering/frame/write_gs_header.c.o
+    build/link/src/assembly/textbin/rendering/frame/scis_and_render.c.o
     build/link/asm/data/text_gap_001f89a0_before_fun_001f89a4.s.o
     build/link/src/assembly/textbin/fun_001f89a4.c.o
     build/link/src/assembly/textbin/fun_001f8ff0.c.o
     build/link/asm/data/text_gap_001f92a8_after_fun_001f8ff0.s.o
-    build/link/src/textbin/append_billboard_batch.c.o
+    build/link/src/rendering/effects/append_billboard_batch.c.o
     build/link/asm/data/text_gap_001f9648_after_fun_001f92b0.s.o
     build/link/src/assembly/math/multiply_global_factor_ed64.c.o
     build/link/asm/data/text_gap_001f96c0.s.o
@@ -1044,7 +1044,7 @@ INPUT(
     build/link/src/assembly/math/multiply_global_factor_ed70.c.o
     build/link/src/assembly/textbin/runtime/time/fast_dec_timer.c.o
     build/link/src/assembly/textbin/runtime/time/fast_dec_timer_s16.c.o
-    build/link/src/assembly/textbin/rendering/gs/log2dim.c.o
+    build/link/src/assembly/textbin/rendering/frame/log2dim.c.o
     build/link/src/assembly/runtime/exceptions/raise_kernel_trap.c.o
     build/link/src/assembly/runtime/scheduling/spin_wait.c.o
     build/link/src/assembly/runtime/memory/fill_transfer_words.c.o
@@ -1111,15 +1111,15 @@ INPUT(
     build/link/src/assembly/textbin/math/rotations/fast_difference_between_rotations.c.o
     build/link/src/assembly/math/convert_integer_to_float.c.o
     build/link/src/assembly/math/conversion/truncate_float_to_s32.c.o
-    build/link/src/assembly/textbin/rendering/gs/fast_tween_color.c.o
+    build/link/src/assembly/textbin/rendering/frame/fast_tween_color.c.o
     build/link/src/assembly/textbin/math/geometry/fast_bsphere_check.c.o
     build/link/src/assembly/textbin/fun_001fa820.c.o
     build/link/asm/data/text_gap_001fa85c_after_fun_001fa820.s.o
     build/link/src/assembly/textbin/fun_001fa860.c.o
     build/link/asm/data/text_gap_001fa958_after_fun_001fa860.s.o
-    build/link/src/rendering/buffers/setup_fs_aa_buffer.c.o
+    build/link/src/rendering/frame/setup_fs_aa_buffer.c.o
     build/link/asm/data/text_gap_001fb27c_after_fun_001fa978.s.o
-    build/link/src/rendering/color/set_background_color.c.o
+    build/link/src/rendering/frame/set_background_color.c.o
     build/link/src/rendering/packets/put_disp_buffer.c.o
     build/link/asm/data/text_gap_001fb2cc_after_fun_001fb2a8.s.o
     build/link/src/rendering/packets/put_draw_buffer_large.c.o
@@ -1127,19 +1127,19 @@ INPUT(
     build/link/src/rendering/packets/append_gif_transfer_packet.c.o
     build/link/src/rendering/packets/put_draw_buffer_small.c.o
     build/link/asm/data/text_gap_001fb43c_after_fun_001fb3d0.s.o
-    build/link/src/rendering/targets/setup_render_target.c.o
+    build/link/src/rendering/frame/setup_render_target.c.o
     build/link/asm/data/text_gap_001fb67c_before_fun_001fb680.s.o
     build/link/src/rendering/effects/aa_blur_pass.c.o
     build/link/asm/data/text_gap_001fb6dc_before_fun_001fb6e0.s.o
     build/link/src/rendering/texture/append_palette_transfer_packet.c.o
     build/link/asm/data/text_gap_001fb73c_after_fun_001fb6e0.s.o
-    build/link/src/gameplay/vendor/draw_centered_capture_background.c.o
-    build/link/src/rendering/framebuffer/draw_framebuffer_rect.c.o
+    build/link/src/ui/vendor/draw_centered_capture_background.c.o
+    build/link/src/rendering/frame/draw_framebuffer_rect.c.o
     build/link/asm/data/text_gap_001fbab0_before_fun_001fbab8.s.o
-    build/link/src/textbin/runtime/memory/mode_freeze_init.c.o
+    build/link/src/game/mode_freeze_init.c.o
     build/link/src/ui/text/draw_dialog_text.c.o
     build/link/asm/data/text_gap_001fce24_before_fun_001fce28.s.o
-    build/link/src/runtime/memory/update_mode_freeze.c.o
+    build/link/src/game/update_mode_freeze.c.o
     build/link/src/runtime/memory/calculate_ring_buffer_bounds.c.o
     build/link/asm/data/text_gap_001fd744_after_fun_001fd6e0.s.o
     build/link/src/ui/map/level_selection/draw_level_selection_map.c.o
@@ -1172,22 +1172,22 @@ INPUT(
     build/link/src/ui/hud/banks/hud_heap_reset.c.o
     build/link/src/ui/hud/banks/hud_heap_alloc.c.o
     build/link/asm/data/text_gap_001ff2fc_after_fun_001ff288.s.o
-    build/link/src/gameplay/animation/queue_animation_update.c.o
+    build/link/src/mobys/animation/queue_animation_update.c.o
     build/link/asm/data/text_gap_001ff414_before_fun_001ff418.s.o
-    build/link/src/gameplay/animation/apply_pending_animation.c.o
+    build/link/src/mobys/animation/apply_pending_animation.c.o
     build/link/src/ui/hud/remove_hud_item.c.o
-    build/link/src/gameplay/animation/load_animation_definition.c.o
+    build/link/src/mobys/animation/load_animation_definition.c.o
     build/link/asm/data/text_gap_001ff568_after_fun_001ff500.s.o
-    build/link/src/gameplay/animation/set_animation_parameter.c.o
+    build/link/src/mobys/animation/set_animation_parameter.c.o
     build/link/asm/data/text_gap_001ff5e4_before_fun_001ff658.s.o
     build/link/src/ui/text/copy_text_to_shared_buffer.c.o
     build/link/asm/data/text_gap_001ff6d8_after_fun_001ff658.s.o
-    build/link/src/runtime/resources/update_resource_counter.c.o
+    build/link/src/runtime/update_resource_counter.c.o
     build/link/src/ui/hud/update_hud.c.o
     build/link/asm/data/text_gap_001ff954_before_fun_001ff960.s.o
     build/link/src/ui/hud/get_icon_frame.c.o
     build/link/asm/data/text_gap_001ffa0c_after_fun_001ff960.s.o
-    build/link/src/textbin/gameplay/animation/get_frame_texture.c.o
+    build/link/src/rendering/texture/get_frame_texture.c.o
     build/link/src/ui/hud/sprites/draw_hud_sprite.c.o
     build/link/src/ui/hud/sprites/draw_hud_sprite_flipped.c.o
     build/link/asm/data/text_gap_00200074_before_fun_00200080.s.o
@@ -1206,9 +1206,9 @@ INPUT(
     build/link/src/ui/hud/sprites/draw_hud_rect_depth.c.o
     build/link/asm/data/text_gap_00201110_before_fun_00201128.s.o
     build/link/src/ui/frames/draw_stretchable_ui_frame.c.o
-    build/link/src/textbin/ui/frames/draw_framed_text.c.o
+    build/link/src/ui/frames/draw_framed_text.c.o
     build/link/asm/data/text_gap_002012a8_after_fun_00201200.s.o
-    build/link/src/textbin/draw_boot_image.c.o
+    build/link/src/ui/loading/draw_boot_image.c.o
     build/link/asm/data/text_gap_0020151c_before_fun_00201520.s.o
     build/link/src/runtime/iop/load_irx_module.c.o
     build/link/asm/data/text_gap_002015d4_before_fun_002015d8.s.o
@@ -1234,8 +1234,8 @@ INPUT(
     build/link/src/rendering/packets/set_up_vis_gif_viewer.c.o
     build/link/asm/data/text_gap_0020311c_before_fun_00203120.s.o
     build/link/src/world/loaders/upload_texture_images.c.o
-    build/link/src/runtime/relocation/relocate_asset_entry_pointers.c.o
-    build/link/src/textbin/prepare_resident_class_render_data.c.o
+    build/link/src/world/loaders/relocate_asset_entry_pointers.c.o
+    build/link/src/rendering/mobys/prepare_resident_class_render_data.c.o
     build/link/asm/data/text_gap_0020363c_before_fun_00203640.s.o
     build/link/src/world/loaders/register_moby_class.c.o
     build/link/asm/data/text_gap_0020372c_after_fun_00203640.s.o
@@ -1244,13 +1244,13 @@ INPUT(
     build/link/src/rendering/shrubs/register_shrub_render_class.c.o
     build/link/asm/data/text_gap_002040dc_before_fun_002040e0.s.o
     build/link/src/rendering/tfrags/initialize_tfrag_render_data.c.o
-    build/link/src/world/streaming/load_level_chunk_from_disc.c.o
-    build/link/src/gameplay/state/service_level_archive_load.c.o
+    build/link/src/streaming/load_level_chunk_from_disc.c.o
+    build/link/src/game/service_level_archive_load.c.o
     build/link/asm/data/text_gap_00204788_before_fun_00204790.s.o
-    build/link/src/world/animation/update_world_object_animation.c.o
+    build/link/src/world/update_world_object_animation.c.o
     build/link/asm/data/text_gap_002049e4_before_fun_002049f0.s.o
     build/link/src/world/loaders/parse_space_scene_chunk.c.o
-    build/link/src/textbin/world/data/select_world_object_resource_tables.c.o
+    build/link/src/world/select_world_object_resource_tables.c.o
     build/link/asm/data/text_gap_00204cec_before_fun_00204cf0.s.o
     build/link/src/rendering/texture/load_texture_file.c.o
     build/link/src/rendering/texture/register_8bit_texture.c.o
@@ -1288,71 +1288,71 @@ INPUT(
     build/link/src/ui/map/copy_level_object_positions.c.o
     build/link/asm/data/text_gap_0020880c_after_fun_00208770.s.o
     build/link/src/runtime/callbacks/noop_memory_callback.c.o
-    build/link/src/math/geometry/point_is_clockwise.c.o
+    build/link/src/math/point_is_clockwise.c.o
     build/link/asm/data/text_gap_0020883c_before_fun_00208840.s.o
     build/link/src/ui/menus/save_data/run_state_handler.c.o
     build/link/asm/data/text_gap_002088a4_after_fun_00208840.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_init.c.o
+    build/link/src/ui/menus/save_data/save_card_state_init.c.o
     build/link/asm/data/text_gap_002088cc_after_fun_002088a8.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_good_save.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_warning.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_no_card.c.o
+    build/link/src/ui/menus/save_data/save_card_state_good_save.c.o
+    build/link/src/ui/menus/save_data/save_card_state_warning.c.o
+    build/link/src/ui/menus/save_data/save_card_state_no_card.c.o
     build/link/asm/data/text_gap_002089cc_after_fun_002089a8.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_wait_for_card.c.o
+    build/link/src/ui/menus/save_data/save_card_state_wait_for_card.c.o
     build/link/asm/data/text_gap_00208a34_after_fun_002089d0.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_unformatted.c.o
+    build/link/src/ui/menus/save_data/save_card_state_unformatted.c.o
     build/link/asm/data/text_gap_00208a74_after_fun_00208a38.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_prompt_format.c.o
+    build/link/src/ui/menus/save_data/save_card_state_prompt_format.c.o
     build/link/asm/data/text_gap_00208af4_after_fun_00208a78.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_format_pending.c.o
+    build/link/src/ui/menus/save_data/save_card_state_format_pending.c.o
     build/link/asm/data/text_gap_00208b24_after_fun_00208af8.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_formatting.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_formatted.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_check_save.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_checking_save.c.o
+    build/link/src/ui/menus/save_data/save_card_state_formatting.c.o
+    build/link/src/ui/menus/save_data/save_card_state_formatted.c.o
+    build/link/src/ui/menus/save_data/save_card_state_check_save.c.o
+    build/link/src/ui/menus/save_data/save_card_state_checking_save.c.o
     build/link/asm/data/text_gap_00208c6c_after_fun_00208c00.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_no_save.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_prompt_create_save.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_create_save_pending.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_creating_save.c.o
+    build/link/src/ui/menus/save_data/save_card_state_no_save.c.o
+    build/link/src/ui/menus/save_data/save_card_state_prompt_create_save.c.o
+    build/link/src/ui/menus/save_data/save_card_state_create_save_pending.c.o
+    build/link/src/ui/menus/save_data/save_card_state_creating_save.c.o
     build/link/asm/data/text_gap_00208dd4_after_fun_00208d60.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_new_card.c.o
+    build/link/src/ui/menus/save_data/save_card_state_new_card.c.o
     build/link/asm/data/text_gap_00208e64_after_fun_00208dd8.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_format_failed.c.o
+    build/link/src/ui/menus/save_data/save_card_state_format_failed.c.o
     build/link/asm/data/text_gap_00208e8c_after_fun_00208e68.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_create_failed.c.o
+    build/link/src/ui/menus/save_data/save_card_state_create_failed.c.o
     build/link/asm/data/text_gap_00208eb4_after_fun_00208e90.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_no_room.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_load_failed.c.o
+    build/link/src/ui/menus/save_data/save_card_state_no_room.c.o
+    build/link/src/ui/menus/save_data/save_card_state_load_failed.c.o
     build/link/asm/data/text_gap_00208efc_after_fun_00208ed8.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_save_failed.c.o
+    build/link/src/ui/menus/save_data/save_card_state_save_failed.c.o
     build/link/asm/data/text_gap_00208f24_after_fun_00208f00.s.o
-    build/link/src/ui/menus/save_data/states/save_card_state_saving.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_prompt_begin_unformatted.c.o
-    build/link/src/ui/menus/save_data/states/save_card_state_prompt_begin_no_save.c.o
+    build/link/src/ui/menus/save_data/save_card_state_saving.c.o
+    build/link/src/ui/menus/save_data/save_card_state_prompt_begin_unformatted.c.o
+    build/link/src/ui/menus/save_data/save_card_state_prompt_begin_no_save.c.o
     build/link/asm/data/text_gap_0020902c_after_fun_00208fe8.s.o
-    build/link/src/storage/memory_card/memcard_get_name.c.o
+    build/link/src/save/memcard_get_name.c.o
     build/link/asm/data/text_gap_00209164_before_fun_00209168.s.o
-    build/link/src/storage/memory_card/check_memory_card.c.o
+    build/link/src/save/check_memory_card.c.o
     build/link/asm/data/text_gap_00209294_before_fun_00209298.s.o
-    build/link/src/storage/memory_card/memcard_restore_game.c.o
+    build/link/src/save/memcard_restore_game.c.o
     build/link/asm/data/text_gap_0020936c_before_fun_00209370.s.o
-    build/link/src/world/streaming/load_and_initialize_level_chunk.c.o
-    build/link/src/storage/memory_card/memcard_update_state.c.o
+    build/link/src/streaming/load_and_initialize_level_chunk.c.o
+    build/link/src/save/memcard_update_state.c.o
     build/link/asm/data/text_gap_0020abac_before_fun_0020abb0.s.o
-    build/link/src/storage/memory_card/memcard_make_whole_save.c.o
-    build/link/src/storage/memory_card/memcard_initialize.c.o
-    build/link/src/storage/memory_card/memcard_get_data_size.c.o
-    build/link/src/storage/memory_card/data/calculate_crc16.c.o
+    build/link/src/save/memcard_make_whole_save.c.o
+    build/link/src/save/memcard_initialize.c.o
+    build/link/src/save/memcard_get_data_size.c.o
+    build/link/src/save/calculate_crc16.c.o
     build/link/asm/data/text_gap_0020ad34_before_fun_0020ad38.s.o
-    build/link/src/storage/memory_card/data/validate_data_crc.c.o
+    build/link/src/save/validate_data_crc.c.o
     build/link/asm/data/text_gap_0020ad74_after_fun_0020ad38.s.o
-    build/link/src/storage/memory_card/data/memcard_prepare_data.c.o
-    build/link/src/storage/memory_card/data/memcard_restore_info.c.o
+    build/link/src/save/memcard_prepare_data.c.o
+    build/link/src/save/memcard_restore_info.c.o
     build/link/asm/data/text_gap_0020af1c_after_fun_0020ae60.s.o
-    build/link/src/textbin/storage/memory_card/data/memcard_restore_data.c.o
+    build/link/src/save/memcard_restore_data.c.o
     build/link/asm/data/text_gap_0020b174_before_fun_0020b178.s.o
-    build/link/src/storage/memory_card/memcard_save_data.c.o
+    build/link/src/save/memcard_save_data.c.o
     build/link/asm/data/text_gap_0020b3bc_after_fun_0020b178.s.o
     build/link/src/assembly/runtime/dma/dma_to_spr.c.o
     build/link/src/assembly/textbin/rendering/dma_to_spr_sync.c.o
@@ -1361,113 +1361,113 @@ INPUT(
     build/link/src/assembly/textbin/fun_0020b4a8.c.o
     build/link/src/assembly/textbin/runtime/memory/fast_decompress.c.o
     build/link/asm/data/text_gap_0020b94c_before_fun_0020b950.s.o
-    build/link/src/gameplay/missions/update_mission_list.c.o
-    build/link/src/gameplay/missions/check_mission_condition.c.o
-    build/link/src/gameplay/missions/collect_mission_ids.c.o
+    build/link/src/game/missions/update_mission_list.c.o
+    build/link/src/game/missions/check_mission_condition.c.o
+    build/link/src/game/missions/collect_mission_ids.c.o
     build/link/asm/data/text_gap_0020bd2c_after_fun_0020bc00.s.o
-    build/link/src/gameplay/missions/fun_0020bd30.c.o
-    build/link/src/gameplay/missions/fun_0020bd58.c.o
-    build/link/src/gameplay/missions/fun_0020bd90.c.o
+    build/link/src/game/missions/fun_0020bd30.c.o
+    build/link/src/game/missions/fun_0020bd58.c.o
+    build/link/src/game/missions/fun_0020bd90.c.o
     build/link/asm/data/text_gap_0020bdbc_after_fun_0020bd90.s.o
-    build/link/src/gameplay/missions/fun_0020bdc0.c.o
-    build/link/src/gameplay/missions/fun_0020bde8.c.o
-    build/link/src/gameplay/missions/fun_0020be10.c.o
-    build/link/src/gameplay/missions/fun_0020be38.c.o
+    build/link/src/game/missions/fun_0020bdc0.c.o
+    build/link/src/game/missions/fun_0020bde8.c.o
+    build/link/src/game/missions/fun_0020be10.c.o
+    build/link/src/game/missions/fun_0020be38.c.o
     build/link/asm/data/text_gap_0020be64_after_fun_0020be38.s.o
-    build/link/src/gameplay/missions/is_item_available.c.o
-    build/link/src/gameplay/missions/get_map_point_mission_status.c.o
+    build/link/src/game/missions/is_item_available.c.o
+    build/link/src/game/missions/get_map_point_mission_status.c.o
     build/link/asm/data/text_gap_0020bed4_after_fun_0020be80.s.o
-    build/link/src/gameplay/missions/fun_0020bed8.c.o
+    build/link/src/game/missions/fun_0020bed8.c.o
     build/link/asm/data/text_gap_0020bf04_after_fun_0020bed8.s.o
-    build/link/src/gameplay/missions/fun_0020bf08.c.o
-    build/link/src/gameplay/missions/get_morph_o_ray_status.c.o
+    build/link/src/game/missions/fun_0020bf08.c.o
+    build/link/src/game/missions/get_morph_o_ray_status.c.o
     build/link/asm/data/text_gap_0020bf54_after_fun_0020bf30.s.o
-    build/link/src/gameplay/missions/has_hologuise.c.o
-    build/link/src/gameplay/missions/mission_get_hologuise_or_map_status.c.o
+    build/link/src/game/missions/has_hologuise.c.o
+    build/link/src/game/missions/mission_get_hologuise_or_map_status.c.o
     build/link/src/ui/map/update_map_icons.c.o
     build/link/asm/data/text_gap_0020c4f0_before_fun_0020c4f8.s.o
-    build/link/src/gameplay/entities/create_moby.c.o
-    build/link/src/gameplay/entities/init_moby_instance.c.o
-    build/link/src/gameplay/entities/mark_moby_for_removal.c.o
-    build/link/src/gameplay/animation/update_moby_animation_state.c.o
+    build/link/src/mobys/create_moby.c.o
+    build/link/src/mobys/init_moby_instance.c.o
+    build/link/src/mobys/mark_moby_for_removal.c.o
+    build/link/src/mobys/animation/update_moby_animation_state.c.o
     build/link/asm/data/text_gap_0020c93c_before_fun_0020c940.s.o
-    build/link/src/gameplay/entities/update_moby_voice.c.o
+    build/link/src/mobys/update_moby_voice.c.o
     build/link/asm/data/text_gap_0020c9d8_after_fun_0020c940.s.o
-    build/link/src/gameplay/state/compute_interpolated_record_value.c.o
+    build/link/src/game/compute_interpolated_record_value.c.o
     build/link/asm/data/text_gap_0020cad4_before_fun_0020cb10.s.o
-    build/link/src/gameplay/entities/attach_manipulator.c.o
-    build/link/src/gameplay/entities/detach_manipulator.c.o
-    build/link/src/gameplay/entities/find_or_allocate_id_slot.c.o
+    build/link/src/mobys/attach_manipulator.c.o
+    build/link/src/mobys/detach_manipulator.c.o
+    build/link/src/mobys/find_or_allocate_id_slot.c.o
     build/link/asm/data/text_gap_0020cc5c_before_fun_0020cc60.s.o
-    build/link/src/gameplay/entities/prune_moby_references.c.o
-    build/link/src/gameplay/entities/build_moby_bone_transform.c.o
-    build/link/src/rendering/geometry/transform_scaled_vertex_batch.c.o
+    build/link/src/mobys/prune_moby_references.c.o
+    build/link/src/mobys/animation/build_moby_bone_transform.c.o
+    build/link/src/rendering/packets/transform_scaled_vertex_batch.c.o
     build/link/asm/data/text_gap_0020cde8_after_fun_0020cd48.s.o
     build/link/src/rendering/texture/dma_moby_textures.c.o
-    build/link/src/gameplay/entities/draw/patch_moby_gifs.c.o
-    build/link/src/gameplay/entities/update_resident_packed_direction.c.o
-    build/link/src/gameplay/entities/configure_graphics_setup_dma_chain.c.o
+    build/link/src/rendering/mobys/patch_moby_gifs.c.o
+    build/link/src/mobys/update_resident_packed_direction.c.o
+    build/link/src/rendering/frame/configure_graphics_setup_dma_chain.c.o
     build/link/asm/data/text_gap_0020d1a4_before_fun_0020d1a8.s.o
-    build/link/src/gameplay/entities/process_moby_anim_data.c.o
+    build/link/src/mobys/animation/process_moby_anim_data.c.o
     build/link/asm/data/text_gap_0020d1ec_before_fun_0020d1f0.s.o
-    build/link/src/gameplay/entities/class_dists/init_moby_class_dists.c.o
-    build/link/src/gameplay/entities/class_dists/stash_moby_class_dists.c.o
+    build/link/src/mobys/init_moby_class_dists.c.o
+    build/link/src/mobys/stash_moby_class_dists.c.o
     build/link/asm/data/text_gap_0020d244_before_fun_0020d248.s.o
-    build/link/src/gameplay/entities/class_dists/restore_moby_class_dists.c.o
+    build/link/src/mobys/restore_moby_class_dists.c.o
     build/link/asm/data/text_gap_0020d274_after_fun_0020d248.s.o
-    build/link/src/gameplay/entities/draw/draw_mobys_setup.c.o
-    build/link/src/gameplay/entities/draw/draw_moby_list.c.o
-    build/link/src/gameplay/entities/draw/draw_mobys_clean_up.c.o
+    build/link/src/rendering/mobys/draw_mobys_setup.c.o
+    build/link/src/rendering/mobys/draw_moby_list.c.o
+    build/link/src/rendering/mobys/draw_mobys_clean_up.c.o
     build/link/asm/data/text_gap_0020d45c_before_fun_0020d460.s.o
-    build/link/src/gameplay/entities/draw/draw_mobys.c.o
+    build/link/src/rendering/mobys/draw_mobys.c.o
     build/link/asm/data/text_gap_0020d4e0_after_fun_0020d460.s.o
-    build/link/src/rendering/commands/pack_render_command_fields.c.o
-    build/link/src/assembly/textbin/gameplay/entities/get_moby_light_direction.c.o
-    build/link/src/assembly/textbin/gameplay/animation/advance_moby_animation.c.o
-    build/link/src/assembly/textbin/gameplay/entities/build_resident_visibility_list.c.o
+    build/link/src/rendering/packets/pack_render_command_fields.c.o
+    build/link/src/assembly/textbin/mobys/get_moby_light_direction.c.o
+    build/link/src/assembly/textbin/mobys/animation/advance_moby_animation.c.o
+    build/link/src/assembly/textbin/mobys/build_resident_visibility_list.c.o
     build/link/src/assembly/textbin/fun_0020db40.c.o
     build/link/src/assembly/textbin/fun_0020dba0.c.o
     build/link/src/assembly/textbin/rendering/mobys/update_moby_grids.c.o
-    build/link/src/assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds.c.o
-    build/link/src/assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds_from_basis.c.o
+    build/link/src/assembly/textbin/mobys/refresh_moby_spatial_bounds.c.o
+    build/link/src/assembly/textbin/mobys/refresh_moby_spatial_bounds_from_basis.c.o
     build/link/src/assembly/textbin/fun_0020e0e0.c.o
     build/link/asm/data/text_gap_0020ede4_before_fun_0020ede8.s.o
     build/link/src/assembly/textbin/fun_0020ede8.c.o
-    build/link/src/assembly/textbin/gameplay/animation/compute_moby_joint_matrices.c.o
+    build/link/src/assembly/textbin/mobys/animation/compute_moby_joint_matrices.c.o
     build/link/src/assembly/textbin/fun_002106f8.c.o
     build/link/asm/data/text_gap_0021084c_before_fun_00210850.s.o
-    build/link/src/assembly/textbin/gameplay/animation/get_moby_joint_matrices.c.o
+    build/link/src/assembly/textbin/mobys/animation/get_moby_joint_matrices.c.o
     build/link/asm/data/text_gap_002109b4_after_fun_00210850.s.o
     build/link/src/assembly/textbin/fun_002109b8.c.o
     build/link/src/assembly/textbin/fun_00211408.c.o
     build/link/src/assembly/textbin/fun_002116b8.c.o
     build/link/src/assembly/textbin/rendering/mobys/moby_anim_proc.c.o
     build/link/src/assembly/textbin/rendering/mobys/moby_proc.c.o
-    build/link/src/assembly/textbin/gameplay/camera/find_camera_environment_region.c.o
+    build/link/src/assembly/textbin/camera/find_camera_environment_region.c.o
     build/link/asm/data/text_gap_00212d5c_before_fun_00212d68.s.o
-    build/link/src/gameplay/entities/assign_moby_class_data.c.o
+    build/link/src/mobys/assign_moby_class_data.c.o
     build/link/asm/data/text_gap_00212e1c_before_fun_00212e28.s.o
-    build/link/src/gameplay/entities/update_visible_resident_objects.c.o
+    build/link/src/mobys/update_visible_resident_objects.c.o
     build/link/asm/data/text_gap_00212ebc_after_fun_00212e28.s.o
-    build/link/src/gameplay/animation/set_moby_animation.c.o
-    build/link/src/gameplay/animation/blend_moby_animation.c.o
-    build/link/src/gameplay/animation/blend_moby_animation_ex.c.o
+    build/link/src/mobys/animation/set_moby_animation.c.o
+    build/link/src/mobys/animation/blend_moby_animation.c.o
+    build/link/src/mobys/animation/blend_moby_animation_ex.c.o
     build/link/asm/data/text_gap_0021322c_before_fun_00213260.s.o
     build/link/src/math/random/random_integer_below.c.o
     build/link/asm/data/text_gap_0021329c_before_fun_002132a8.s.o
     build/link/src/math/random/random_float_between.c.o
     build/link/asm/data/text_gap_00213304_before_fun_00213308.s.o
     build/link/src/math/random/random_angle_radians.c.o
-    build/link/src/gameplay/entities/random_spherical_offset.c.o
+    build/link/src/math/random/random_spherical_offset.c.o
     build/link/src/math/interpolation/cosine_interpolate.c.o
     build/link/asm/data/text_gap_00213464_before_fun_00213508.s.o
-    build/link/src/gameplay/entities/probe_ground_height.c.o
+    build/link/src/world/collision/probe_ground_height.c.o
     build/link/asm/data/text_gap_0021357c_after_fun_00213508.s.o
-    build/link/src/gameplay/entities/resolve_camera_surface_height.c.o
+    build/link/src/camera/resolve_camera_surface_height.c.o
     build/link/asm/data/text_gap_002136e8_after_fun_002135f0.s.o
-    build/link/src/gameplay/entities/update_moby_shadow_range.c.o
+    build/link/src/mobys/update_moby_shadow_range.c.o
     build/link/asm/data/text_gap_00213920_before_fun_00213ed8.s.o
-    build/link/src/gameplay/fun_00213928.c.o
+    build/link/src/game/fun_00213928.c.o
     build/link/asm/data/text_gap_00213ea8_after_fun_00213928.s.o
     build/link/src/math/interpolation/approach_value.c.o
     build/link/asm/data/text_gap_00213f2c_after_fun_00213ed8.s.o
@@ -1475,7 +1475,7 @@ INPUT(
     build/link/asm/data/text_gap_00214100_before_fun_00214128.s.o
     build/link/src/math/vectors/normalize_vector_triplet.c.o
     build/link/asm/data/text_gap_002141e4_after_fun_00214128.s.o
-    build/link/src/gameplay/entities/suck_get_aim_height.c.o
+    build/link/src/weapons/suck_get_aim_height.c.o
     build/link/src/runtime/state/read_state_field.c.o
     build/link/asm/data/text_gap_00214258_before_fun_00214260.s.o
     build/link/src/math/rotations/matrix_to_quaternion.c.o
@@ -1486,24 +1486,24 @@ INPUT(
     build/link/asm/data/text_gap_00214594_after_fun_00214530.s.o
     build/link/src/math/rotations/matrix_to_euler.c.o
     build/link/asm/data/text_gap_002146bc_before_fun_00214720.s.o
-    build/link/src/rendering/culling/is_point_inside_clip_volume.c.o
+    build/link/src/rendering/occlusion/is_point_inside_clip_volume.c.o
     build/link/asm/data/text_gap_002147f8_before_fun_00214800.s.o
     build/link/src/math/rotations/rotate_vector_by_quaternion.c.o
     build/link/asm/data/text_gap_0021488c_after_fun_00214800.s.o
     build/link/src/rendering/view/build_look_at_matrix.c.o
     build/link/asm/data/text_gap_00214938_after_fun_00214890.s.o
-    build/link/src/runtime/time/set_video_timing.c.o
+    build/link/src/runtime/set_video_timing.c.o
     build/link/asm/data/text_gap_00214a90_before_fun_00214a98.s.o
-    build/link/src/gameplay/entities/pack_vector_xyz_with_shared_scale.c.o
+    build/link/src/math/pack_vector_xyz_with_shared_scale.c.o
     build/link/src/ui/text/load_display_text_resource_entry.c.o
     build/link/asm/data/text_gap_00214c44_before_fun_00214c48.s.o
-    build/link/src/math/conversion/round_float_to_decimal_places.c.o
+    build/link/src/math/round_float_to_decimal_places.c.o
     build/link/asm/data/text_gap_00214cc4_before_fun_00214cc8.s.o
-    build/link/src/gameplay/state/is_value_within_interpolated_window.c.o
+    build/link/src/game/is_value_within_interpolated_window.c.o
     build/link/asm/data/text_gap_00214d54_before_fun_00214db0.s.o
-    build/link/src/gameplay/camera/build_spherical_offset.c.o
+    build/link/src/camera/build_spherical_offset.c.o
     build/link/asm/data/text_gap_00214e4c_after_fun_00214db0.s.o
-    build/link/src/gameplay/entities/sample_camera_path.c.o
+    build/link/src/camera/sample_camera_path.c.o
     build/link/asm/data/text_gap_002150d0_before_fun_00215130.s.o
     build/link/src/ui/help/try_set_help_message.c.o
     build/link/asm/data/text_gap_002151d4_before_fun_002151d8.s.o
@@ -1541,7 +1541,7 @@ INPUT(
     build/link/src/audio/music/music_unpause.c.o
     build/link/asm/data/text_gap_002160a4_before_fun_002160a8.s.o
     build/link/src/audio/music/music_update_stream.c.o
-    build/link/src/textbin/audio/music/music_update.c.o
+    build/link/src/audio/music/music_update.c.o
     build/link/asm/data/text_gap_002166e4_before_fun_002166e8.s.o
     build/link/src/audio/streaming/request_audio_stream_break.c.o
     build/link/src/audio/streaming/submit_audio_stream_io_request.c.o
@@ -1567,13 +1567,13 @@ INPUT(
     build/link/src/ui/menus/system/process_menu_entry.c.o
     build/link/src/runtime/state/reset_global_state.c.o
     build/link/asm/data/text_gap_00217034_before_fun_00217048.s.o
-    build/link/src/input/pad/init_pads.c.o
-    build/link/src/input/pad/poll_pad_device_state.c.o
+    build/link/src/input/init_pads.c.o
+    build/link/src/input/poll_pad_device_state.c.o
     build/link/asm/data/text_gap_002172bc_before_fun_002172c0.s.o
-    build/link/src/input/pad/clear_pad_input.c.o
+    build/link/src/input/clear_pad_input.c.o
     build/link/asm/data/text_gap_00217324_after_fun_002172c0.s.o
-    build/link/src/input/pad/process_pad_input.c.o
-    build/link/src/input/pad/update_primary_pad_state.c.o
+    build/link/src/input/process_pad_input.c.o
+    build/link/src/input/update_primary_pad_state.c.o
     build/link/src/assembly/textbin/rendering/particles/create_part.c.o
     build/link/asm/data/text_gap_00217b80_before_fun_00217b88.s.o
     build/link/src/assembly/textbin/rendering/particles/update_parts.c.o
@@ -1592,7 +1592,7 @@ INPUT(
     build/link/src/ui/menus/system/close_menu_system.c.o
     build/link/src/ui/menus/system/update_menu_system.c.o
     build/link/asm/data/text_gap_002196b4_after_fun_002192a8.s.o
-    build/link/src/gameplay/state/render_level_effects_and_screen_sprites.c.o
+    build/link/src/rendering/effects/render_level_effects_and_screen_sprites.c.o
     build/link/asm/data/text_gap_00219d7c_before_fun_00219d80.s.o
     build/link/src/ui/menus/system/handle_menu_screen_buttons.c.o
     build/link/asm/data/text_gap_00219e0c_after_fun_00219d80.s.o
@@ -1602,15 +1602,15 @@ INPUT(
     build/link/asm/data/text_gap_0021a1ac_before_fun_0021a1e0.s.o
     build/link/src/ui/menus/pause/set_pause_action_list.c.o
     build/link/asm/data/text_gap_0021a1dc_after_fun_0021a1b0.s.o
-    build/link/src/textbin/rebuild_configured_text_label_list.c.o
+    build/link/src/ui/text/rebuild_configured_text_label_list.c.o
     build/link/asm/data/text_gap_0021a304_after_fun_0021a1e0.s.o
-    build/link/src/ui/menus/choice_list/enter_menu_choice_list.c.o
-    build/link/src/ui/menus/choice_list/leave_menu_choice_list.c.o
+    build/link/src/ui/menus/widgets/enter_menu_choice_list.c.o
+    build/link/src/ui/menus/widgets/leave_menu_choice_list.c.o
     build/link/src/ui/menus/system/clear_menu_selected_index.c.o
     build/link/src/ui/menus/widgets/render_configured_text_label.c.o
     build/link/asm/data/text_gap_0021abf4_before_fun_0021abf8.s.o
     build/link/src/ui/menus/system/update_menu_entry_actions.c.o
-    build/link/src/textbin/render_localized_ui_entry_list.c.o
+    build/link/src/ui/text/render_localized_ui_entry_list.c.o
     build/link/asm/data/text_gap_0021b6d4_before_fun_0021b6d8.s.o
     build/link/src/ui/menus/widgets/fade_menu_color.c.o
     build/link/src/ui/menus/pause/find_next_pause_page.c.o
@@ -1633,16 +1633,16 @@ INPUT(
     build/link/src/ui/menus/save_data/reset_pause_memory_card_state.c.o
     build/link/asm/data/text_gap_0021cadc_after_fun_0021cac8.s.o
     build/link/src/ui/menus/system/reset_menu_graphics_buffers.c.o
-    build/link/src/ui/menus/audio/set_pause_sound_volume.c.o
-    build/link/src/textbin/ui/menus/audio/sound_options_menu.c.o
-    build/link/src/textbin/ui/menus/audio/draw_sound_menu.c.o
+    build/link/src/ui/menus/options/set_pause_sound_volume.c.o
+    build/link/src/ui/menus/options/sound_options_menu.c.o
+    build/link/src/ui/menus/options/draw_sound_menu.c.o
     build/link/asm/data/text_gap_0021d168_before_fun_0021d1f8.s.o
     build/link/src/ui/menus/system/menu_leave_noop.c.o
-    build/link/src/ui/menus/help_text/enter_menu_help_text.c.o
+    build/link/src/ui/menus/widgets/enter_menu_help_text.c.o
     build/link/asm/data/text_gap_0021d2c4_before_fun_0021d2c8.s.o
-    build/link/src/ui/menus/help_text/restore_menu_help_text.c.o
+    build/link/src/ui/menus/widgets/restore_menu_help_text.c.o
     build/link/asm/data/text_gap_0021d334_after_fun_0021d2c8.s.o
-    build/link/src/ui/menus/help_text/update_menu_help_text_load.c.o
+    build/link/src/ui/menus/widgets/update_menu_help_text_load.c.o
     build/link/asm/data/text_gap_0021d4a4_after_fun_0021d338.s.o
     build/link/src/ui/menus/widgets/draw_menu_text_list.c.o
     build/link/src/ui/menus/widgets/draw_menu_item_grid.c.o
@@ -1662,12 +1662,12 @@ INPUT(
     build/link/src/ui/menus/item_preview/update_item_preview_binding.c.o
     build/link/src/ui/menus/item_preview/draw_available_item_preview_mobys.c.o
     build/link/asm/data/text_gap_0021e694_after_fun_0021e608.s.o
-    build/link/src/textbin/ui/menus/item_preview/update_item_preview_transform.c.o
+    build/link/src/ui/menus/item_preview/update_item_preview_transform.c.o
     build/link/asm/data/text_gap_0021e7c8_before_fun_0021e890.s.o
     build/link/src/ui/menus/pause/draw_quit_game_menu.c.o
     build/link/src/ui/menus/item_preview/create_rotating_preview_moby.c.o
     build/link/src/ui/menus/item_preview/release_item_preview_moby.c.o
-    build/link/src/textbin/ui/menus/inventory/draw_items_menu.c.o
+    build/link/src/ui/menus/weapons/draw_items_menu.c.o
     build/link/asm/data/text_gap_0021ef74_before_fun_0021ef78.s.o
     build/link/src/ui/menus/system/setup_menu_display_text.c.o
     build/link/src/ui/menus/item_preview/rotate_preview_moby_x.c.o
@@ -1681,7 +1681,7 @@ INPUT(
     build/link/src/ui/menus/widgets/draw_menu_selection_marker.c.o
     build/link/asm/data/text_gap_0021f98c_after_fun_0021f8e8.s.o
     build/link/src/ui/menus/stream_image/update_menu_stream_image.c.o
-    build/link/src/rendering/transitions/draw_transition_overlay.c.o
+    build/link/src/rendering/effects/draw_transition_overlay.c.o
     build/link/asm/data/text_gap_0021fcdc_before_fun_0021fce0.s.o
     build/link/src/ui/menus/stream_image/enter_menu_stream_image.c.o
     build/link/asm/data/text_gap_0021fd74_before_fun_0021fd78.s.o
@@ -1699,10 +1699,10 @@ INPUT(
     build/link/asm/data/text_gap_00220e24_before_fun_00220e28.s.o
     build/link/src/ui/menus/selection/update_menu_option_list.c.o
     build/link/asm/data/text_gap_0022102c_before_fun_00221030.s.o
-    build/link/src/textbin/ui/menus/draw_cheats_menu.c.o
+    build/link/src/ui/menus/options/draw_cheats_menu.c.o
     build/link/asm/data/text_gap_002212b4_before_fun_002212b8.s.o
-    build/link/src/ui/menus/choice_list/update_menu_choice_list.c.o
-    build/link/src/ui/menus/choice_list/draw_menu_choice_list.c.o
+    build/link/src/ui/menus/widgets/update_menu_choice_list.c.o
+    build/link/src/ui/menus/widgets/draw_menu_choice_list.c.o
     build/link/asm/data/text_gap_002215f4_before_fun_002216c0.s.o
     build/link/src/ui/menus/pause/build_pause_item_list.c.o
     build/link/src/ui/menus/selection/build_filtered_menu_item_list.c.o
@@ -1713,13 +1713,13 @@ INPUT(
     build/link/src/ui/map/level_selection/draw_level_selection_map_screen.c.o
     build/link/src/ui/menus/system/handle_menu_action_buttons.c.o
     build/link/asm/data/text_gap_00221a44_before_fun_00221a48.s.o
-    build/link/src/ui/menus/prompt/enter_menu_prompt.c.o
+    build/link/src/ui/menus/widgets/enter_menu_prompt.c.o
     build/link/asm/data/text_gap_00221a84_before_fun_00221a88.s.o
-    build/link/src/ui/menus/prompt/leave_menu_prompt.c.o
+    build/link/src/ui/menus/widgets/leave_menu_prompt.c.o
     build/link/asm/data/text_gap_00221ab8_after_fun_00221a88.s.o
     build/link/src/ui/menus/selection/update_menu_confirm_page.c.o
     build/link/asm/data/text_gap_00221b4c_after_fun_00221af0.s.o
-    build/link/src/ui/menus/prompt/draw_prompt_box.c.o
+    build/link/src/ui/menus/widgets/draw_prompt_box.c.o
     build/link/asm/data/text_gap_00221d24_before_fun_00221d68.s.o
     build/link/src/ui/menus/pause/assign_pause_level_sprite_list.c.o
     build/link/asm/data/text_gap_00221d64_after_fun_00221d28.s.o
@@ -1729,14 +1729,14 @@ INPUT(
     build/link/src/ui/menus/widgets/draw_menu_side_indicator.c.o
     build/link/src/ui/menus/widgets/draw_selected_menu_item_text.c.o
     build/link/asm/data/text_gap_0022228c_before_fun_00222290.s.o
-    build/link/src/gameplay/state/process_global_state_flags.c.o
+    build/link/src/game/process_global_state_flags.c.o
     build/link/asm/data/text_gap_002223d4_after_fun_00222290.s.o
-    build/link/src/gameplay/state/enter_timed_menu_sequence.c.o
+    build/link/src/game/enter_timed_menu_sequence.c.o
     build/link/asm/data/text_gap_002223ec_after_fun_002223d8.s.o
     build/link/src/ui/menus/system/update_timed_menu_sequence.c.o
     build/link/src/ui/menus/widgets/draw_menu_text_box.c.o
     build/link/src/ui/menus/weapons/obtain_all_gold_weapons_menu.c.o
-    build/link/src/textbin/ui/menus/draw_localized_three_option_menu.c.o
+    build/link/src/ui/menus/widgets/draw_localized_three_option_menu.c.o
     build/link/asm/data/text_gap_00222d94_before_fun_00222d98.s.o
     build/link/src/ui/menus/widgets/draw_menu_selection_text.c.o
     build/link/asm/data/text_gap_00222f14_before_fun_00222f18.s.o
@@ -1744,7 +1744,7 @@ INPUT(
     build/link/asm/data/text_gap_00222f54_before_fun_00222f58.s.o
     build/link/src/ui/menus/save_data/leave_save_slot_screen.c.o
     build/link/src/ui/menus/save_data/saving_data_menu.c.o
-    build/link/src/textbin/ui/menus/save_data/loading_data_menu.c.o
+    build/link/src/ui/menus/save_data/loading_data_menu.c.o
     build/link/asm/data/text_gap_002235b4_after_fun_002232d8.s.o
     build/link/src/ui/menus/save_data/saving_data_menu2.c.o
     build/link/src/ui/menus/save_data/draw_save_slot_list.c.o
@@ -1753,9 +1753,9 @@ INPUT(
     build/link/src/ui/menus/item_preview/initialize_menu_preview_objects.c.o
     build/link/asm/data/text_gap_002242b4_before_fun_002242b8.s.o
     build/link/src/ui/menus/item_preview/release_menu_preview_objects.c.o
-    build/link/src/textbin/gameplay/gadgets/load_hand_gadget.c.o
-    build/link/src/gameplay/entities/gadget_moby_update_noop.c.o
-    build/link/src/gameplay/entities/attachment_update_callback.c.o
+    build/link/src/weapons/load_hand_gadget.c.o
+    build/link/src/weapons/gadget_moby_update_noop.c.o
+    build/link/src/mobys/attachment_update_callback.c.o
     build/link/src/ui/menus/item_preview/update_menu_preview_class_pose.c.o
     build/link/asm/data/text_gap_00224d24_before_fun_00224d28.s.o
     build/link/src/ui/menus/item_preview/update_menu_preview_animation_transform.c.o
@@ -1765,15 +1765,15 @@ INPUT(
     build/link/src/ui/menus/item_preview/update_menu_preview_class_transform.c.o
     build/link/src/ui/menus/item_preview/update_ammo_preview_transform.c.o
     build/link/src/ui/menus/item_preview/create_menu_preview_moby.c.o
-    build/link/src/gameplay/entities/delete_moby.c.o
+    build/link/src/mobys/delete_moby.c.o
     build/link/asm/data/text_gap_00225574_after_fun_00225530.s.o
     build/link/src/ui/menus/streamed_moby/enter_streamed_moby_screen.c.o
     build/link/src/ui/menus/streamed_moby/leave_streamed_moby_screen.c.o
     build/link/asm/data/text_gap_002256e4_after_fun_00225660.s.o
     build/link/src/ui/menus/streamed_moby/update_streamed_moby_animation.c.o
     build/link/asm/data/text_gap_00225a64_before_fun_00225a68.s.o
-    build/link/src/rendering/entities/draw_moby_entries_from_object.c.o
-    build/link/src/gameplay/entities/helper_moby_update_noop.c.o
+    build/link/src/rendering/mobys/draw_moby_entries_from_object.c.o
+    build/link/src/mobys/helper_moby_update_noop.c.o
     build/link/src/ui/menus/stream_buffers/initialize_menu_stream_buffers.c.o
     build/link/asm/data/text_gap_00225c14_before_fun_00225c18.s.o
     build/link/src/ui/menus/stream_buffers/acquire_menu_stream_buffer.c.o
@@ -1792,17 +1792,17 @@ INPUT(
     build/link/asm/data/text_gap_00226714_before_fun_00226718.s.o
     build/link/src/ui/menus/item_preview/clear_preview_animation_queue.c.o
     build/link/asm/data/text_gap_00226774_after_fun_00226718.s.o
-    build/link/src/rendering/image/pack_image_descriptor.c.o
+    build/link/src/rendering/texture/pack_image_descriptor.c.o
     build/link/src/ui/menus/item_preview/clear_preview_resource_bindings.c.o
     build/link/src/ui/menus/item_preview/load_preview_resource_bindings.c.o
     build/link/src/ui/menus/save_data/prepare_save_game.c.o
     build/link/src/ui/menus/save_data/start_memory_card_save.c.o
-    build/link/src/textbin/gameplay/state/load_level_zero_preserving_progress.c.o
+    build/link/src/game/load_level_zero_preserving_progress.c.o
     build/link/asm/data/text_gap_00226e04_before_fun_00226e08.s.o
-    build/link/src/gameplay/state/tick_space_transition.c.o
+    build/link/src/game/transitions/tick_space_transition.c.o
     build/link/src/ui/menus/weapons/update_skill_point_and_gold_weapon_menu_entries.c.o
     build/link/asm/data/text_gap_00226f44_before_fun_00226f50.s.o
-    build/link/src/gameplay/state/clear_scene_state_buffers.c.o
+    build/link/src/game/clear_scene_state_buffers.c.o
     build/link/asm/data/text_gap_00226fa0_after_fun_00226f50.s.o
     build/link/src/rendering/view/prepare_scaled_direction_and_perpendicular.c.o
     build/link/src/world/data/parse_typed_resource_record.c.o
@@ -1849,7 +1849,7 @@ INPUT(
     build/link/src/rendering/sky/sky_draw_shell_gouraud.c.o
     build/link/asm/data/text_gap_0022bb9c_after_fun_0022b928.s.o
     build/link/src/assembly/textbin/rendering/sky/sky_sprite_proc.c.o
-    build/link/src/assembly/textbin/rendering/gs/ssp_load_tex.c.o
+    build/link/src/assembly/textbin/rendering/frame/ssp_load_tex.c.o
     build/link/src/assembly/textbin/rendering/sky/sky_transform_vertices.c.o
     build/link/src/assembly/textbin/rendering/sky/sky_build_gif_gouraud.c.o
     build/link/src/assembly/textbin/fun_0022c208.c.o
@@ -1888,40 +1888,40 @@ INPUT(
     build/link/asm/data/text_gap_0022ddd4_after_fun_0022dd90.s.o
     build/link/src/audio/sound/voice_update_callback.c.o
     build/link/asm/data/text_gap_0022de04_after_fun_0022ddd8.s.o
-    build/link/src/world/transforms/build_object_rotation_matrix.c.o
-    build/link/src/gameplay/space/draw_light_flare.c.o
+    build/link/src/world/build_object_rotation_matrix.c.o
+    build/link/src/rendering/effects/draw_light_flare.c.o
     build/link/asm/data/text_gap_0022e16c_after_fun_0022df40.s.o
     build/link/src/runtime/state/initialize_global_state_entry.c.o
     build/link/asm/data/text_gap_0022e1a4_before_fun_0022e420.s.o
-    build/link/src/gameplay/build_variant_effect_quads.c.o
+    build/link/src/rendering/effects/build_variant_effect_quads.c.o
     build/link/src/rendering/effects/build_resident_indexed_texture_warp_meshes.c.o
     build/link/asm/data/text_gap_0022e8c4_before_fun_0022e8c8.s.o
-    build/link/src/gameplay/space/draw_resident_textured_quad.c.o
+    build/link/src/rendering/effects/draw_resident_textured_quad.c.o
     build/link/asm/data/text_gap_0022ea04_before_fun_0022ea08.s.o
-    build/link/src/gameplay/space/draw_resident_textured_banner.c.o
-    build/link/src/gameplay/state/update_level_gameplay_frame.c.o
+    build/link/src/rendering/effects/draw_resident_textured_banner.c.o
+    build/link/src/game/update_level_gameplay_frame.c.o
     build/link/asm/data/text_gap_0022f284_before_fun_0022f288.s.o
-    build/link/src/textbin/render_level_frame.c.o
+    build/link/src/rendering/frame/render_level_frame.c.o
     build/link/src/rendering/effects/emit_six_spark_effects.c.o
-    build/link/src/gameplay/state/update_resident_gameplay_state.c.o
+    build/link/src/game/update_resident_gameplay_state.c.o
     build/link/asm/data/text_gap_00230ee4_before_fun_00230ee8.s.o
-    build/link/src/gameplay/state/dispatch_game_state_update.c.o
-    build/link/src/textbin/gameplay/state/initialize_level_runtime.c.o
-    build/link/src/gameplay/space/play_level_transition_movie.c.o
+    build/link/src/game/dispatch_game_state_update.c.o
+    build/link/src/game/initialize_level_runtime.c.o
+    build/link/src/game/transitions/play_level_transition_movie.c.o
     build/link/src/ui/loading/append_scrolling_textured_quad.c.o
     build/link/asm/data/text_gap_00231874_after_fun_002316e8.s.o
     build/link/src/ui/loading/prepare_loading_slide_textures.c.o
     build/link/asm/data/text_gap_00231bd4_before_fun_00231bd8.s.o
-    build/link/src/textbin/ui/loading/play_level_loading_slides.c.o
-    build/link/src/gameplay/state/do_space_transition.c.o
-    build/link/src/rendering/entities/render_environment_mapped_object.c.o
-    build/link/src/runtime/rpc/initialize_sif_rpc.c.o
+    build/link/src/ui/loading/play_level_loading_slides.c.o
+    build/link/src/game/transitions/do_space_transition.c.o
+    build/link/src/rendering/mobys/render_environment_mapped_object.c.o
+    build/link/src/runtime/iop/initialize_sif_rpc.c.o
     build/link/asm/data/text_gap_00232cfc_after_fun_00232ce0.s.o
-    build/link/src/storage/stash/init_stash.c.o
+    build/link/src/streaming/stash/init_stash.c.o
     build/link/asm/data/text_gap_00232e3c_before_fun_00232e40.s.o
-    build/link/src/storage/stash/stash_send_data.c.o
-    build/link/src/storage/stash/stash_receive_data.c.o
-    build/link/src/storage/stash/stash_get_reserved_qwords.c.o
+    build/link/src/streaming/stash/stash_send_data.c.o
+    build/link/src/streaming/stash/stash_receive_data.c.o
+    build/link/src/streaming/stash/stash_get_reserved_qwords.c.o
     build/link/asm/data/text_gap_00233060_before_fun_00233068.s.o
     build/link/src/rendering/tfrags/set_tfrag_dists.c.o
     build/link/src/rendering/texture/dma_tfrag_textures.c.o
@@ -1930,12 +1930,12 @@ INPUT(
     build/link/asm/data/text_gap_002333a4_after_fun_00233308.s.o
     build/link/src/rendering/tfrags/draw_tfrag.c.o
     build/link/asm/data/text_gap_002334d0_before_fun_002334d8.s.o
-    build/link/src/rendering/vu0/vu0_load_micro_program.c.o
+    build/link/src/rendering/vu1/vu0_load_micro_program.c.o
     build/link/src/runtime/dma/calculate_dma_transfer_address.c.o
     build/link/asm/data/text_gap_002335cc_before_fun_002335d0.s.o
     build/link/src/rendering/vu1/vu1_init_chain.c.o
     build/link/asm/data/text_gap_0023362c_after_fun_002335d0.s.o
-    build/link/src/rendering/buffers/swap_render_buffer_chain.c.o
+    build/link/src/rendering/frame/swap_render_buffer_chain.c.o
     build/link/src/rendering/vu1/vu1_chain.c.o
     build/link/src/rendering/vu1/vu1_add_data_ref.c.o
     build/link/asm/data/text_gap_0023387c_after_fun_00233830.s.o
@@ -1958,7 +1958,7 @@ INPUT(
     build/link/src/rendering/vu1/dmac_vif1_disable.c.o
     build/link/src/rendering/vu1/vif1_dma_interrupt_handler.c.o
     build/link/asm/data/text_gap_00233efc_after_fun_00233e00.s.o
-    build/link/src/runtime/diagnostics/print_register_values_and_halt.c.o
+    build/link/src/runtime/debug/print_register_values_and_halt.c.o
     build/link/asm/data/text_gap_00233f74_after_fun_00233f00.s.o
     build/link/src/runtime/dma/append_dma_tag.c.o
     build/link/asm/data/text_gap_00233fac_before_fun_00233fb0.s.o
@@ -1971,9 +1971,9 @@ INPUT(
     build/link/src/rendering/texture/dma_tie_textures.c.o
     build/link/asm/data/text_gap_0023577c_before_fun_00235780.s.o
     build/link/src/rendering/texture/patch_tie_texture_fields.c.o
-    build/link/src/rendering/buffers/copy_render_buffer_pair.c.o
+    build/link/src/rendering/frame/copy_render_buffer_pair.c.o
     build/link/asm/data/text_gap_00235894_before_fun_00235898.s.o
-    build/link/src/rendering/entities/register_entity_render_resources.c.o
+    build/link/src/rendering/mobys/register_entity_render_resources.c.o
     build/link/asm/data/text_gap_002358c4_after_fun_00235898.s.o
     build/link/src/rendering/ties/draw_ties_1.c.o
     build/link/src/rendering/ties/draw_ties_2.c.o
@@ -1983,57 +1983,57 @@ INPUT(
     build/link/asm/data/text_gap_0023736c_after_fun_002370c0.s.o
     build/link/src/assembly/textbin/rendering/ties/light_ties.c.o
     build/link/asm/data/text_gap_00237a6c_after_fun_00237370.s.o
-    build/link/src/rendering/callbacks/noop_graphics_callback.c.o
+    build/link/src/rendering/frame/callbacks/noop_graphics_callback.c.o
     build/link/src/rendering/view/project_graphics_bounds.c.o
     build/link/asm/data/text_gap_00237c7c_before_fun_00237c80.s.o
     build/link/src/rendering/view/project_graphics_bounds_float.c.o
     build/link/asm/data/text_gap_00237e64_before_fun_00237e90.s.o
     build/link/src/ui/text/set_scrolling_status_message.c.o
     build/link/asm/data/text_gap_00237ecc_after_fun_00237e90.s.o
-    build/link/src/gameplay/vendor/update_resident_dialogue_animation_state.c.o
+    build/link/src/mobys/animation/update_resident_dialogue_animation_state.c.o
     build/link/asm/data/text_gap_002382f4_before_fun_00238310.s.o
-    build/link/src/gameplay/vendor/render_capture_scrolling_text.c.o
+    build/link/src/ui/vendor/render_capture_scrolling_text.c.o
     build/link/src/ui/text/update_scrolling_status_message.c.o
     build/link/asm/data/text_gap_0023862c_before_fun_00238630.s.o
-    build/link/src/gameplay/vendor/render_capture_effect_pass.c.o
+    build/link/src/ui/vendor/render_capture_effect_pass.c.o
     build/link/src/ui/menus/widgets/format_scaled_display_value.c.o
-    build/link/src/gameplay/vendor/render_vendor_item_icon_strip_pass.c.o
+    build/link/src/ui/vendor/render_vendor_item_icon_strip_pass.c.o
     build/link/asm/data/text_gap_002389dc_after_fun_002386e8.s.o
-    build/link/src/gameplay/vendor/render_vendor_item_details_pass.c.o
+    build/link/src/ui/vendor/render_vendor_item_details_pass.c.o
     build/link/asm/data/text_gap_00238f04_before_fun_00238f08.s.o
-    build/link/src/gameplay/vendor/render_vendor_buy_label_pass.c.o
+    build/link/src/ui/vendor/render_vendor_buy_label_pass.c.o
     build/link/asm/data/text_gap_0023915c_before_fun_00239160.s.o
-    build/link/src/gameplay/vendor/render_vendor_purchase_prompt_pass.c.o
+    build/link/src/ui/vendor/render_vendor_purchase_prompt_pass.c.o
     build/link/asm/data/text_gap_0023931c_after_fun_00239160.s.o
-    build/link/src/textbin/render_vendor_capture_texture_overlays_pass.c.o
+    build/link/src/ui/vendor/render_vendor_capture_texture_overlays_pass.c.o
     build/link/asm/data/text_gap_0023968c_before_fun_00239690.s.o
-    build/link/src/gameplay/vendor/configure_capture_target.c.o
+    build/link/src/ui/vendor/configure_capture_target.c.o
     build/link/asm/data/text_gap_0023974c_before_fun_00239750.s.o
-    build/link/src/gameplay/vendor/setup_view_context.c.o
+    build/link/src/rendering/view/setup_view_context.c.o
     build/link/asm/data/text_gap_0023977c_after_fun_00239750.s.o
-    build/link/src/gameplay/vendor/render_vendor_capture_pass_sequence.c.o
+    build/link/src/ui/vendor/render_vendor_capture_pass_sequence.c.o
     build/link/asm/data/text_gap_00239d4c_before_fun_00239d60.s.o
-    build/link/src/gameplay/vendor/find_zone_at_point.c.o
+    build/link/src/world/find_zone_at_point.c.o
     build/link/asm/data/text_gap_00239f24_after_fun_00239d60.s.o
-    build/link/src/gameplay/camera/sample_surface_height_map.c.o
+    build/link/src/camera/sample_surface_height_map.c.o
     build/link/asm/data/text_gap_0023a24c_before_fun_0023a318.s.o
-    build/link/src/gameplay/entities/quad_moby_update.c.o
+    build/link/src/mobys/quad_moby_update.c.o
     build/link/asm/data/text_gap_0023a314_after_fun_0023a2c0.s.o
-    build/link/src/gameplay/vendor/update_instance_attachment_points_and_lengths.c.o
+    build/link/src/mobys/update_instance_attachment_points_and_lengths.c.o
     build/link/asm/data/text_gap_0023a3b4_after_fun_0023a318.s.o
-    build/link/src/video/decoder/play_mpeg_movie.c.o
-    build/link/src/video/decoder/read_mpeg.c.o
-    build/link/src/runtime/threads/switch_thread.c.o
+    build/link/src/movies/decoder/play_mpeg_movie.c.o
+    build/link/src/movies/decoder/read_mpeg.c.o
+    build/link/src/runtime/switch_thread.c.o
     build/link/asm/data/text_gap_0023a78c_before_fun_0023a790.s.o
     build/link/src/audio/decoder/is_audio_ok.c.o
     build/link/asm/data/text_gap_0023a7bc_after_fun_0023a790.s.o
-    build/link/src/textbin/video/player/init_all.c.o
+    build/link/src/movies/player/init_all.c.o
     build/link/asm/data/text_gap_0023aa64_before_fun_0023aa68.s.o
-    build/link/src/video/player/term_all.c.o
+    build/link/src/movies/player/term_all.c.o
     build/link/asm/data/text_gap_0023ab74_before_fun_0023ab78.s.o
-    build/link/src/video/player/err_message.c.o
+    build/link/src/movies/player/err_message.c.o
     build/link/asm/data/text_gap_0023ab9c_before_fun_0023aba0.s.o
-    build/link/src/video/player/proceed_audio.c.o
+    build/link/src/movies/player/proceed_audio.c.o
     build/link/asm/data/text_gap_0023abcc_after_fun_0023aba0.s.o
     build/link/src/audio/decoder/audio_dec_create.c.o
     build/link/asm/data/text_gap_0023ac8c_before_fun_0023ac90.s.o
@@ -2051,99 +2051,99 @@ INPUT(
     build/link/src/audio/decoder/send_to_spu.c.o
     build/link/src/audio/decoder/send_adpcm.c.o
     build/link/asm/data/text_gap_0023b20c_before_fun_0023b210.s.o
-    build/link/src/video/display/set_image_tag.c.o
+    build/link/src/movies/display/set_image_tag.c.o
     build/link/asm/data/text_gap_0023b3d4_before_fun_0023b3d8.s.o
-    build/link/src/assembly/textbin/rendering/gs/vblank_handler.c.o
-    build/link/src/video/display/handler_end_image.c.o
+    build/link/src/assembly/textbin/rendering/frame/vblank_handler.c.o
+    build/link/src/movies/display/handler_end_image.c.o
     build/link/asm/data/text_gap_0023b58c_before_fun_0023b590.s.o
-    build/link/src/video/display/start_display.c.o
+    build/link/src/movies/display/start_display.c.o
     build/link/asm/data/text_gap_0023b5dc_after_fun_0023b590.s.o
-    build/link/src/video/display/end_display.c.o
-    build/link/src/video/decoder/callbacks/video_callback.c.o
+    build/link/src/movies/display/end_display.c.o
+    build/link/src/movies/decoder/callbacks/video_callback.c.o
     build/link/src/audio/decoder/callbacks/pcm_callback.c.o
     build/link/asm/data/text_gap_0023b80c_after_fun_0023b728.s.o
-    build/link/src/video/decoder/buffers/cpy2area.c.o
-    build/link/src/video/decoder/buffers/read_buf_create.c.o
-    build/link/src/video/decoder/buffers/read_buf_delete.c.o
-    build/link/src/video/decoder/buffers/read_buf_begin_put.c.o
-    build/link/src/video/decoder/buffers/read_buf_end_put.c.o
+    build/link/src/movies/decoder/buffers/cpy2area.c.o
+    build/link/src/movies/decoder/buffers/read_buf_create.c.o
+    build/link/src/movies/decoder/buffers/read_buf_delete.c.o
+    build/link/src/movies/decoder/buffers/read_buf_begin_put.c.o
+    build/link/src/movies/decoder/buffers/read_buf_end_put.c.o
     build/link/asm/data/text_gap_0023b9d4_after_fun_0023b990.s.o
-    build/link/src/video/decoder/buffers/read_buf_begin_get.c.o
-    build/link/src/video/decoder/buffers/read_buf_end_get.c.o
+    build/link/src/movies/decoder/buffers/read_buf_begin_get.c.o
+    build/link/src/movies/decoder/buffers/read_buf_end_get.c.o
     build/link/asm/data/text_gap_0023ba44.s.o
-    build/link/src/video/decoder/mpeg_cd_stream_open.c.o
-    build/link/src/video/decoder/mpeg_cd_stream_close.c.o
-    build/link/src/video/decoder/read_cd_stream_sectors.c.o
-    build/link/src/video/decoder/buffers/get_fifo_index.c.o
+    build/link/src/movies/decoder/mpeg_cd_stream_open.c.o
+    build/link/src/movies/decoder/mpeg_cd_stream_close.c.o
+    build/link/src/movies/decoder/read_cd_stream_sectors.c.o
+    build/link/src/movies/decoder/buffers/get_fifo_index.c.o
     build/link/asm/data/text_gap_0023bb3c_after_fun_0023baf8.s.o
-    build/link/src/video/decoder/dma/set_d3_chcr.c.o
+    build/link/src/movies/decoder/dma/set_d3_chcr.c.o
     build/link/asm/data/text_gap_0023bbac_before_fun_0023bbb0.s.o
-    build/link/src/video/decoder/dma/set_d4_chcr.c.o
+    build/link/src/movies/decoder/dma/set_d4_chcr.c.o
     build/link/asm/data/text_gap_0023bc1c_after_fun_0023bbb0.s.o
-    build/link/src/video/decoder/dma/sc_tag2.c.o
+    build/link/src/movies/decoder/dma/sc_tag2.c.o
     build/link/asm/data/text_gap_0023bc44_before_fun_0023bc48.s.o
-    build/link/src/video/decoder/video_input/vi_buf_create.c.o
-    build/link/src/video/decoder/video_input/vi_buf_reset.c.o
-    build/link/src/video/decoder/video_input/vi_buf_begin_put.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_create.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_reset.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_begin_put.c.o
     build/link/asm/data/text_gap_0023bf14_before_fun_0023bf18.s.o
-    build/link/src/video/decoder/video_input/vi_buf_end_put.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_end_put.c.o
     build/link/asm/data/text_gap_0023bf6c_after_fun_0023bf18.s.o
-    build/link/src/video/decoder/video_input/vi_buf_add_dma.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_add_dma.c.o
     build/link/asm/data/text_gap_0023c16c_before_fun_0023c170.s.o
-    build/link/src/video/decoder/video_input/vi_buf_stop_dma.c.o
-    build/link/src/video/decoder/video_input/vi_buf_restart_dma.c.o
-    build/link/src/video/decoder/video_input/vi_buf_delete.c.o
-    build/link/src/video/decoder/video_input/vi_buf_count.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_stop_dma.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_restart_dma.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_delete.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_count.c.o
     build/link/asm/data/text_gap_0023c65c_before_fun_0023c660.s.o
-    build/link/src/video/decoder/video_input/vi_buf_flush.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_flush.c.o
     build/link/asm/data/text_gap_0023c6b4_after_fun_0023c660.s.o
-    build/link/src/video/decoder/video_input/vi_buf_modify_pts.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_modify_pts.c.o
     build/link/asm/data/text_gap_0023c80c_before_fun_0023c810.s.o
-    build/link/src/video/decoder/video_input/vi_buf_put_ts.c.o
-    build/link/src/video/decoder/video_input/vi_buf_get_ts.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_put_ts.c.o
+    build/link/src/movies/decoder/video_input/vi_buf_get_ts.c.o
     build/link/asm/data/text_gap_0023cac4_before_fun_0023cac8.s.o
-    build/link/src/video/decoder/video_dec_create.c.o
+    build/link/src/movies/decoder/video_dec_create.c.o
     build/link/asm/data/text_gap_0023cbc8_before_fun_0023cbd0.s.o
-    build/link/src/video/decoder/video_dec_set_stream.c.o
-    build/link/src/video/decoder/video_dec_begin_put.c.o
+    build/link/src/movies/decoder/video_dec_set_stream.c.o
+    build/link/src/movies/decoder/video_dec_begin_put.c.o
     build/link/asm/data/text_gap_0023cc0c_before_fun_0023cc10.s.o
-    build/link/src/video/decoder/video_dec_end_put.c.o
+    build/link/src/movies/decoder/video_dec_end_put.c.o
     build/link/asm/data/text_gap_0023cc2c_after_fun_0023cc10.s.o
-    build/link/src/video/decoder/video_dec_reset.c.o
-    build/link/src/video/decoder/video_dec_delete.c.o
+    build/link/src/movies/decoder/video_dec_reset.c.o
+    build/link/src/movies/decoder/video_dec_delete.c.o
     build/link/asm/data/text_gap_0023cc6c_after_fun_0023cc38.s.o
-    build/link/src/video/decoder/video_dec_abort.c.o
+    build/link/src/movies/decoder/video_dec_abort.c.o
     build/link/asm/data/text_gap_0023cc70.s.o
-    build/link/src/video/decoder/video_dec_get_state.c.o
-    build/link/src/video/decoder/video_dec_set_state.c.o
+    build/link/src/movies/decoder/video_dec_get_state.c.o
+    build/link/src/movies/decoder/video_dec_set_state.c.o
     build/link/asm/data/text_gap_0023cc94_before_fun_0023cc98.s.o
-    build/link/src/video/decoder/video_dec_put_ts.c.o
-    build/link/src/video/decoder/video_dec_input_count.c.o
+    build/link/src/movies/decoder/video_dec_put_ts.c.o
+    build/link/src/movies/decoder/video_dec_input_count.c.o
     build/link/asm/data/text_gap_0023ccfc_after_fun_0023cce0.s.o
-    build/link/src/video/decoder/video_dec_flush.c.o
-    build/link/src/video/decoder/video_dec_is_flushed.c.o
-    build/link/src/video/decoder/video_dec_main.c.o
+    build/link/src/movies/decoder/video_dec_flush.c.o
+    build/link/src/movies/decoder/video_dec_is_flushed.c.o
+    build/link/src/movies/decoder/video_dec_main.c.o
     build/link/asm/data/text_gap_0023cec4_after_fun_0023ce28.s.o
-    build/link/src/video/decoder/dec_bs0.c.o
+    build/link/src/movies/decoder/dec_bs0.c.o
     build/link/asm/data/text_gap_0023d07c_before_fun_0023d080.s.o
-    build/link/src/video/decoder/callbacks/mpeg_error.c.o
-    build/link/src/video/decoder/callbacks/mpeg_nodata.c.o
-    build/link/src/video/decoder/mpeg_stop_dma.c.o
-    build/link/src/video/decoder/mpeg_restart_video_dma.c.o
-    build/link/src/video/decoder/callbacks/get_mpeg_timestamp.c.o
-    build/link/src/video/decoder/video_output/vo_buf_create.c.o
+    build/link/src/movies/decoder/callbacks/mpeg_error.c.o
+    build/link/src/movies/decoder/callbacks/mpeg_nodata.c.o
+    build/link/src/movies/decoder/mpeg_stop_dma.c.o
+    build/link/src/movies/decoder/mpeg_restart_video_dma.c.o
+    build/link/src/movies/decoder/callbacks/get_mpeg_timestamp.c.o
+    build/link/src/movies/decoder/video_output/vo_buf_create.c.o
     build/link/asm/data/text_gap_0023d1dc_after_fun_0023d190.s.o
-    build/link/src/video/decoder/video_output/vo_buf_delete.c.o
-    build/link/src/video/decoder/video_output/vo_buf_reset.c.o
-    build/link/src/video/decoder/video_output/vo_buf_is_full.c.o
+    build/link/src/movies/decoder/video_output/vo_buf_delete.c.o
+    build/link/src/movies/decoder/video_output/vo_buf_reset.c.o
+    build/link/src/movies/decoder/video_output/vo_buf_is_full.c.o
     build/link/asm/data/text_gap_0023d20c_before_fun_0023d210.s.o
-    build/link/src/video/decoder/video_output/vo_buf_inc_count.c.o
-    build/link/src/video/decoder/video_output/vo_buf_get_data.c.o
-    build/link/src/video/decoder/video_output/vo_buf_is_empty.c.o
+    build/link/src/movies/decoder/video_output/vo_buf_inc_count.c.o
+    build/link/src/movies/decoder/video_output/vo_buf_get_data.c.o
+    build/link/src/movies/decoder/video_output/vo_buf_is_empty.c.o
     build/link/asm/data/text_gap_0023d2d4_before_fun_0023d2d8.s.o
-    build/link/src/video/decoder/video_output/vo_buf_get_tag.c.o
+    build/link/src/movies/decoder/video_output/vo_buf_get_tag.c.o
     build/link/asm/data/text_gap_0023d33c_after_fun_0023d2d8.s.o
-    build/link/src/video/decoder/video_output/vo_buf_dec_count.c.o
+    build/link/src/movies/decoder/video_output/vo_buf_dec_count.c.o
 )
 
 ENTRY(entry)
@@ -3602,7 +3602,7 @@ SECTIONS
 
     core.text.0287 0x11B970 : AT(0x1C8F0) SUBALIGN(4)
     {
-        *(.text.lnk0287); /* build/src/runtime/queues/read_queue_status.c.o */
+        *(.text.lnk0287); /* build/src/runtime/read_queue_status.c.o */
     } :text
 
     core.text.0288 0x11B97C : AT(0x1C8FC) SUBALIGN(4)
@@ -4132,7 +4132,7 @@ SECTIONS
 
     core.text.0393 0x1204B8 : AT(0x21438) SUBALIGN(4)
     {
-        *(.text.lnk0393); /* build/src/assembly/textbin/rendering/gs/reset_vif1_gif.c.o */
+        *(.text.lnk0393); /* build/src/assembly/textbin/rendering/frame/reset_vif1_gif.c.o */
     } :text
 
     core.text.0394 0x120558 : AT(0x214D8) SUBALIGN(4)
@@ -5832,7 +5832,7 @@ SECTIONS
 
     core.text.0733 0x12D8F8 : AT(0x2E878) SUBALIGN(4)
     {
-        *(.text.lnk0733); /* build/src/gameplay/state/parse_bin.c.o */
+        *(.text.lnk0733); /* build/src/game/parse_bin.c.o */
     } :text
 
     core.text.0734 0x12D9D4 : AT(0x2E954) SUBALIGN(4)
@@ -5842,7 +5842,7 @@ SECTIONS
 
     core.text.0735 0x12D9D8 : AT(0x2E958) SUBALIGN(4)
     {
-        *(.text.lnk0735); /* build/src/gameplay/state/run_game_main_loop.c.o */
+        *(.text.lnk0735); /* build/src/game/run_game_main_loop.c.o */
     } :text
 
     core.text.0736 0x12DA24 : AT(0x2E9A4) SUBALIGN(4)
@@ -5852,7 +5852,7 @@ SECTIONS
 
     core.text.0737 0x12DA28 : AT(0x2E9A8) SUBALIGN(4)
     {
-        *(.text.lnk0737); /* build/src/textbin/audio/snd_start_sound_system.c.o */
+        *(.text.lnk0737); /* build/src/audio/snd_start_sound_system.c.o */
     } :text
 
     core.text.0738 0x12DC80 : AT(0x2EC00) SUBALIGN(4)
@@ -6042,7 +6042,7 @@ SECTIONS
 
     core.text.0775 0x12EAF0 : AT(0x2FA70) SUBALIGN(4)
     {
-        *(.text.lnk0775); /* build/src/runtime/data/read_global_table_entry.c.o */
+        *(.text.lnk0775); /* build/src/runtime/read_global_table_entry.c.o */
     } :text
 
     core.text.0776 0x12EAFC : AT(0x2FA7C) SUBALIGN(4)
@@ -6252,7 +6252,7 @@ SECTIONS
 
     core.text.0817 0x12F208 : AT(0x30188) SUBALIGN(4)
     {
-        *(.text.lnk0817); /* build/src/storage/wad/wad_get_sectors.c.o */
+        *(.text.lnk0817); /* build/src/streaming/wad_get_sectors.c.o */
     } :text
 
     core.text.0818 0x12F2B4 : AT(0x30234) SUBALIGN(4)
@@ -6262,12 +6262,12 @@ SECTIONS
 
     core.text.0819 0x12F2B8 : AT(0x30238) SUBALIGN(4)
     {
-        *(.text.lnk0819); /* build/src/storage/cd/load_disc_sectors_into_global_buffer.c.o */
+        *(.text.lnk0819); /* build/src/streaming/load_disc_sectors_into_global_buffer.c.o */
     } :text
 
     core.text.0820 0x12F368 : AT(0x302E8) SUBALIGN(4)
     {
-        *(.text.lnk0820); /* build/src/storage/cd/read_file_entry_with_retry.c.o */
+        *(.text.lnk0820); /* build/src/streaming/read_file_entry_with_retry.c.o */
     } :text
 
     core.text.0821 0x12F434 : AT(0x303B4) SUBALIGN(4)
@@ -6282,7 +6282,7 @@ SECTIONS
 
     .text.0823 0x1E8D08 : AT(0xE9C88) SUBALIGN(4)
     {
-        *(.text.lnk0823); /* build/src/input/pad/actuator_calc_power.c.o */
+        *(.text.lnk0823); /* build/src/input/actuator_calc_power.c.o */
     } :text
 
     .text.0824 0x1E911C : AT(0xEA09C) SUBALIGN(4)
@@ -6292,7 +6292,7 @@ SECTIONS
 
     .text.0825 0x1E9128 : AT(0xEA0A8) SUBALIGN(4)
     {
-        *(.text.lnk0825); /* build/src/runtime/dma/initialize_streaming_state.c.o */
+        *(.text.lnk0825); /* build/src/streaming/initialize_streaming_state.c.o */
     } :text
 
     .text.0826 0x1E9140 : AT(0xEA0C0) SUBALIGN(4)
@@ -6307,7 +6307,7 @@ SECTIONS
 
     .text.0828 0x1E9338 : AT(0xEA2B8) SUBALIGN(4)
     {
-        *(.text.lnk0828); /* build/src/ui/fonts/load_debug_font.c.o */
+        *(.text.lnk0828); /* build/src/ui/text/font/load_debug_font.c.o */
     } :text
 
     .text.0829 0x1E93A4 : AT(0xEA324) SUBALIGN(4)
@@ -6327,107 +6327,107 @@ SECTIONS
 
     .text.0832 0x1E93F0 : AT(0xEA370) SUBALIGN(4)
     {
-        *(.text.lnk0832); /* build/src/rendering/callbacks/noop_callback_a.c.o */
+        *(.text.lnk0832); /* build/src/rendering/frame/callbacks/noop_callback_a.c.o */
     } :text
 
     .text.0833 0x1E93F8 : AT(0xEA378) SUBALIGN(4)
     {
-        *(.text.lnk0833); /* build/src/rendering/callbacks/noop_callback_b.c.o */
+        *(.text.lnk0833); /* build/src/rendering/frame/callbacks/noop_callback_b.c.o */
     } :text
 
     .text.0834 0x1E9400 : AT(0xEA380) SUBALIGN(4)
     {
-        *(.text.lnk0834); /* build/src/rendering/callbacks/noop_callback_c.c.o */
+        *(.text.lnk0834); /* build/src/rendering/frame/callbacks/noop_callback_c.c.o */
     } :text
 
     .text.0835 0x1E9408 : AT(0xEA388) SUBALIGN(4)
     {
-        *(.text.lnk0835); /* build/src/rendering/callbacks/noop_callback_d.c.o */
+        *(.text.lnk0835); /* build/src/rendering/frame/callbacks/noop_callback_d.c.o */
     } :text
 
     .text.0836 0x1E9410 : AT(0xEA390) SUBALIGN(4)
     {
-        *(.text.lnk0836); /* build/src/rendering/callbacks/noop_callback_e.c.o */
+        *(.text.lnk0836); /* build/src/rendering/frame/callbacks/noop_callback_e.c.o */
     } :text
 
     .text.0837 0x1E9418 : AT(0xEA398) SUBALIGN(4)
     {
-        *(.text.lnk0837); /* build/src/rendering/callbacks/noop_callback_f.c.o */
+        *(.text.lnk0837); /* build/src/rendering/frame/callbacks/noop_callback_f.c.o */
     } :text
 
     .text.0838 0x1E9420 : AT(0xEA3A0) SUBALIGN(4)
     {
-        *(.text.lnk0838); /* build/src/rendering/callbacks/noop_callback_g.c.o */
+        *(.text.lnk0838); /* build/src/rendering/frame/callbacks/noop_callback_g.c.o */
     } :text
 
     .text.0839 0x1E9428 : AT(0xEA3A8) SUBALIGN(4)
     {
-        *(.text.lnk0839); /* build/src/rendering/callbacks/noop_callback_h.c.o */
+        *(.text.lnk0839); /* build/src/rendering/frame/callbacks/noop_callback_h.c.o */
     } :text
 
     .text.0840 0x1E9430 : AT(0xEA3B0) SUBALIGN(4)
     {
-        *(.text.lnk0840); /* build/src/rendering/callbacks/noop_callback_i.c.o */
+        *(.text.lnk0840); /* build/src/rendering/frame/callbacks/noop_callback_i.c.o */
     } :text
 
     .text.0841 0x1E9438 : AT(0xEA3B8) SUBALIGN(4)
     {
-        *(.text.lnk0841); /* build/src/rendering/callbacks/noop_callback_j.c.o */
+        *(.text.lnk0841); /* build/src/rendering/frame/callbacks/noop_callback_j.c.o */
     } :text
 
     .text.0842 0x1E9440 : AT(0xEA3C0) SUBALIGN(4)
     {
-        *(.text.lnk0842); /* build/src/rendering/callbacks/noop_callback_k.c.o */
+        *(.text.lnk0842); /* build/src/rendering/frame/callbacks/noop_callback_k.c.o */
     } :text
 
     .text.0843 0x1E9448 : AT(0xEA3C8) SUBALIGN(4)
     {
-        *(.text.lnk0843); /* build/src/rendering/callbacks/noop_callback_l.c.o */
+        *(.text.lnk0843); /* build/src/rendering/frame/callbacks/noop_callback_l.c.o */
     } :text
 
     .text.0844 0x1E9450 : AT(0xEA3D0) SUBALIGN(4)
     {
-        *(.text.lnk0844); /* build/src/rendering/callbacks/noop_callback_m.c.o */
+        *(.text.lnk0844); /* build/src/rendering/frame/callbacks/noop_callback_m.c.o */
     } :text
 
     .text.0845 0x1E9458 : AT(0xEA3D8) SUBALIGN(4)
     {
-        *(.text.lnk0845); /* build/src/rendering/callbacks/noop_callback_n.c.o */
+        *(.text.lnk0845); /* build/src/rendering/frame/callbacks/noop_callback_n.c.o */
     } :text
 
     .text.0846 0x1E9460 : AT(0xEA3E0) SUBALIGN(4)
     {
-        *(.text.lnk0846); /* build/src/rendering/callbacks/noop_callback_o.c.o */
+        *(.text.lnk0846); /* build/src/rendering/frame/callbacks/noop_callback_o.c.o */
     } :text
 
     .text.0847 0x1E9468 : AT(0xEA3E8) SUBALIGN(4)
     {
-        *(.text.lnk0847); /* build/src/rendering/callbacks/noop_callback_p.c.o */
+        *(.text.lnk0847); /* build/src/rendering/frame/callbacks/noop_callback_p.c.o */
     } :text
 
     .text.0848 0x1E9470 : AT(0xEA3F0) SUBALIGN(4)
     {
-        *(.text.lnk0848); /* build/src/rendering/callbacks/noop_callback_q.c.o */
+        *(.text.lnk0848); /* build/src/rendering/frame/callbacks/noop_callback_q.c.o */
     } :text
 
     .text.0849 0x1E9478 : AT(0xEA3F8) SUBALIGN(4)
     {
-        *(.text.lnk0849); /* build/src/rendering/callbacks/noop_callback_r.c.o */
+        *(.text.lnk0849); /* build/src/rendering/frame/callbacks/noop_callback_r.c.o */
     } :text
 
     .text.0850 0x1E9480 : AT(0xEA400) SUBALIGN(4)
     {
-        *(.text.lnk0850); /* build/src/rendering/callbacks/noop_callback_s.c.o */
+        *(.text.lnk0850); /* build/src/rendering/frame/callbacks/noop_callback_s.c.o */
     } :text
 
     .text.0851 0x1E9488 : AT(0xEA408) SUBALIGN(4)
     {
-        *(.text.lnk0851); /* build/src/gameplay/state/start_level.c.o */
+        *(.text.lnk0851); /* build/src/game/start_level.c.o */
     } :text
 
     .text.0852 0x1E9658 : AT(0xEA5D8) SUBALIGN(4)
     {
-        *(.text.lnk0852); /* build/src/textbin/world/startlevel.c.o */
+        *(.text.lnk0852); /* build/src/game/startlevel.c.o */
     } :text
 
     .text.0853 0x1E9AB4 : AT(0xEAA34) SUBALIGN(4)
@@ -6437,12 +6437,12 @@ SECTIONS
 
     .text.0854 0x1E9AB8 : AT(0xEAA38) SUBALIGN(4)
     {
-        *(.text.lnk0854); /* build/src/gameplay/state/transition_draw_sky.c.o */
+        *(.text.lnk0854); /* build/src/game/transitions/transition_draw_sky.c.o */
     } :text
 
     .text.0855 0x1E9B10 : AT(0xEAA90) SUBALIGN(4)
     {
-        *(.text.lnk0855); /* build/src/gameplay/state/initialize_level_render_state.c.o */
+        *(.text.lnk0855); /* build/src/rendering/frame/initialize_level_render_state.c.o */
     } :text
 
     .text.0856 0x1EA82C : AT(0xEB7AC) SUBALIGN(4)
@@ -6452,7 +6452,7 @@ SECTIONS
 
     .text.0857 0x1EA830 : AT(0xEB7B0) SUBALIGN(4)
     {
-        *(.text.lnk0857); /* build/src/gameplay/state/transition_load_wad.c.o */
+        *(.text.lnk0857); /* build/src/game/transitions/transition_load_wad.c.o */
     } :text
 
     .text.0858 0x1EAF4C : AT(0xEBECC) SUBALIGN(4)
@@ -6467,7 +6467,7 @@ SECTIONS
 
     .text.0860 0x1EAF88 : AT(0xEBF08) SUBALIGN(4)
     {
-        *(.text.lnk0860); /* build/src/gameplay/camera/transition_update_movie_camera.c.o */
+        *(.text.lnk0860); /* build/src/camera/transition_update_movie_camera.c.o */
     } :text
 
     .text.0861 0x1EB0A4 : AT(0xEC024) SUBALIGN(4)
@@ -6477,7 +6477,7 @@ SECTIONS
 
     .text.0862 0x1EB0A8 : AT(0xEC028) SUBALIGN(4)
     {
-        *(.text.lnk0862); /* build/src/gameplay/state/update_gameplay_frame.c.o */
+        *(.text.lnk0862); /* build/src/game/update_gameplay_frame.c.o */
     } :text
 
     .text.0863 0x1EB40C : AT(0xEC38C) SUBALIGN(4)
@@ -6487,17 +6487,17 @@ SECTIONS
 
     .text.0864 0x1EB410 : AT(0xEC390) SUBALIGN(4)
     {
-        *(.text.lnk0864); /* build/src/gameplay/state/transition_default_draw.c.o */
+        *(.text.lnk0864); /* build/src/game/transitions/transition_default_draw.c.o */
     } :text
 
     .text.0865 0x1EB740 : AT(0xEC6C0) SUBALIGN(4)
     {
-        *(.text.lnk0865); /* build/src/gameplay/state/is_active_state_entry.c.o */
+        *(.text.lnk0865); /* build/src/game/is_active_state_entry.c.o */
     } :text
 
     .text.0866 0x1EB798 : AT(0xEC718) SUBALIGN(4)
     {
-        *(.text.lnk0866); /* build/src/gameplay/state/transition_do_transition.c.o */
+        *(.text.lnk0866); /* build/src/game/transitions/transition_do_transition.c.o */
     } :text
 
     .text.0867 0x1EBC88 : AT(0xECC08) SUBALIGN(4)
@@ -6507,7 +6507,7 @@ SECTIONS
 
     .text.0868 0x1EBC90 : AT(0xECC10) SUBALIGN(4)
     {
-        *(.text.lnk0868); /* build/src/gameplay/camera/backup_current_cam.c.o */
+        *(.text.lnk0868); /* build/src/camera/backup_current_cam.c.o */
     } :text
 
     .text.0869 0x1EBCEC : AT(0xECC6C) SUBALIGN(4)
@@ -6517,7 +6517,7 @@ SECTIONS
 
     .text.0870 0x1EBCF0 : AT(0xECC70) SUBALIGN(4)
     {
-        *(.text.lnk0870); /* build/src/gameplay/camera/execute_camera_post_update_callbacks.c.o */
+        *(.text.lnk0870); /* build/src/camera/execute_camera_post_update_callbacks.c.o */
     } :text
 
     .text.0871 0x1EBD5C : AT(0xECCDC) SUBALIGN(4)
@@ -6527,7 +6527,7 @@ SECTIONS
 
     .text.0872 0x1EBD78 : AT(0xECCF8) SUBALIGN(4)
     {
-        *(.text.lnk0872); /* build/src/gameplay/camera/cam_interp_values.c.o */
+        *(.text.lnk0872); /* build/src/camera/cam_interp_values.c.o */
     } :text
 
     .text.0873 0x1EBE5C : AT(0xECDDC) SUBALIGN(4)
@@ -6537,12 +6537,12 @@ SECTIONS
 
     .text.0874 0x1EBE68 : AT(0xECDE8) SUBALIGN(4)
     {
-        *(.text.lnk0874); /* build/src/gameplay/camera/handle_camera_collision_with_hero.c.o */
+        *(.text.lnk0874); /* build/src/camera/handle_camera_collision_with_hero.c.o */
     } :text
 
     .text.0875 0x1EBEC8 : AT(0xECE48) SUBALIGN(4)
     {
-        *(.text.lnk0875); /* build/src/gameplay/camera/camera_run_setup_to_new_cam.c.o */
+        *(.text.lnk0875); /* build/src/camera/camera_run_setup_to_new_cam.c.o */
     } :text
 
     .text.0876 0x1EBF0C : AT(0xECE8C) SUBALIGN(4)
@@ -6552,12 +6552,12 @@ SECTIONS
 
     .text.0877 0x1EBF10 : AT(0xECE90) SUBALIGN(4)
     {
-        *(.text.lnk0877); /* build/src/gameplay/camera/switch_active_camera_record.c.o */
+        *(.text.lnk0877); /* build/src/camera/switch_active_camera_record.c.o */
     } :text
 
     .text.0878 0x1EC210 : AT(0xED190) SUBALIGN(4)
     {
-        *(.text.lnk0878); /* build/src/gameplay/camera/camera_activation_check_priority.c.o */
+        *(.text.lnk0878); /* build/src/camera/camera_activation_check_priority.c.o */
     } :text
 
     .text.0879 0x1EC3D4 : AT(0xED354) SUBALIGN(4)
@@ -6567,7 +6567,7 @@ SECTIONS
 
     .text.0880 0x1EC3D8 : AT(0xED358) SUBALIGN(4)
     {
-        *(.text.lnk0880); /* build/src/gameplay/camera/camera_exit.c.o */
+        *(.text.lnk0880); /* build/src/camera/camera_exit.c.o */
     } :text
 
     .text.0881 0x1EC41C : AT(0xED39C) SUBALIGN(4)
@@ -6577,12 +6577,12 @@ SECTIONS
 
     .text.0882 0x1EC420 : AT(0xED3A0) SUBALIGN(4)
     {
-        *(.text.lnk0882); /* build/src/gameplay/camera/update_all_cameras.c.o */
+        *(.text.lnk0882); /* build/src/camera/update_all_cameras.c.o */
     } :text
 
     .text.0883 0x1EC530 : AT(0xED4B0) SUBALIGN(4)
     {
-        *(.text.lnk0883); /* build/src/gameplay/camera/compute_camera_angles.c.o */
+        *(.text.lnk0883); /* build/src/camera/compute_camera_angles.c.o */
     } :text
 
     .text.0884 0x1EC70C : AT(0xED68C) SUBALIGN(4)
@@ -6592,7 +6592,7 @@ SECTIONS
 
     .text.0885 0x1EC710 : AT(0xED690) SUBALIGN(4)
     {
-        *(.text.lnk0885); /* build/src/gameplay/camera/capture_camera_orientation.c.o */
+        *(.text.lnk0885); /* build/src/camera/capture_camera_orientation.c.o */
     } :text
 
     .text.0886 0x1EC7EC : AT(0xED76C) SUBALIGN(4)
@@ -6602,7 +6602,7 @@ SECTIONS
 
     .text.0887 0x1EC7F0 : AT(0xED770) SUBALIGN(4)
     {
-        *(.text.lnk0887); /* build/src/gameplay/camera/save_camera_vectors.c.o */
+        *(.text.lnk0887); /* build/src/camera/save_camera_vectors.c.o */
     } :text
 
     .text.0888 0x1EC864 : AT(0xED7E4) SUBALIGN(4)
@@ -6612,12 +6612,12 @@ SECTIONS
 
     .text.0889 0x1EC868 : AT(0xED7E8) SUBALIGN(4)
     {
-        *(.text.lnk0889); /* build/src/gameplay/camera/restore_camera_vectors.c.o */
+        *(.text.lnk0889); /* build/src/camera/restore_camera_vectors.c.o */
     } :text
 
     .text.0890 0x1EC8A0 : AT(0xED820) SUBALIGN(4)
     {
-        *(.text.lnk0890); /* build/src/gameplay/camera/start_camera_blend.c.o */
+        *(.text.lnk0890); /* build/src/camera/start_camera_blend.c.o */
     } :text
 
     .text.0891 0x1ECAF4 : AT(0xEDA74) SUBALIGN(4)
@@ -6627,22 +6627,22 @@ SECTIONS
 
     .text.0892 0x1ECAF8 : AT(0xEDA78) SUBALIGN(4)
     {
-        *(.text.lnk0892); /* build/src/gameplay/camera/step_camera_blend.c.o */
+        *(.text.lnk0892); /* build/src/camera/step_camera_blend.c.o */
     } :text
 
     .text.0893 0x1ECCD8 : AT(0xEDC58) SUBALIGN(4)
     {
-        *(.text.lnk0893); /* build/src/gameplay/camera/advance_alternate_camera_transition.c.o */
+        *(.text.lnk0893); /* build/src/camera/advance_alternate_camera_transition.c.o */
     } :text
 
     .text.0894 0x1ED2B0 : AT(0xEE230) SUBALIGN(4)
     {
-        *(.text.lnk0894); /* build/src/gameplay/camera/update_camera_blend.c.o */
+        *(.text.lnk0894); /* build/src/camera/update_camera_blend.c.o */
     } :text
 
     .text.0895 0x1ED360 : AT(0xEE2E0) SUBALIGN(4)
     {
-        *(.text.lnk0895); /* build/src/gameplay/camera/apply_camera_shake.c.o */
+        *(.text.lnk0895); /* build/src/camera/apply_camera_shake.c.o */
     } :text
 
     .text.0896 0x1ED46C : AT(0xEE3EC) SUBALIGN(4)
@@ -6652,7 +6652,7 @@ SECTIONS
 
     .text.0897 0x1ED470 : AT(0xEE3F0) SUBALIGN(4)
     {
-        *(.text.lnk0897); /* build/src/gameplay/camera/update_camera_tracking_state.c.o */
+        *(.text.lnk0897); /* build/src/camera/update_camera_tracking_state.c.o */
     } :text
 
     .text.0898 0x1ED7EC : AT(0xEE76C) SUBALIGN(4)
@@ -6662,7 +6662,7 @@ SECTIONS
 
     .text.0899 0x1ED7F0 : AT(0xEE770) SUBALIGN(4)
     {
-        *(.text.lnk0899); /* build/src/gameplay/camera/update_camera_underwater_flag.c.o */
+        *(.text.lnk0899); /* build/src/camera/update_camera_underwater_flag.c.o */
     } :text
 
     .text.0900 0x1ED93C : AT(0xEE8BC) SUBALIGN(4)
@@ -6672,17 +6672,17 @@ SECTIONS
 
     .text.0901 0x1ED940 : AT(0xEE8C0) SUBALIGN(4)
     {
-        *(.text.lnk0901); /* build/src/gameplay/camera/refresh_camera_control_flags.c.o */
+        *(.text.lnk0901); /* build/src/camera/refresh_camera_control_flags.c.o */
     } :text
 
     .text.0902 0x1EDA60 : AT(0xEE9E0) SUBALIGN(4)
     {
-        *(.text.lnk0902); /* build/src/gameplay/camera/advance_timed_camera_control.c.o */
+        *(.text.lnk0902); /* build/src/camera/advance_timed_camera_control.c.o */
     } :text
 
     .text.0903 0x1EDAA8 : AT(0xEEA28) SUBALIGN(4)
     {
-        *(.text.lnk0903); /* build/src/gameplay/camera/update_camera.c.o */
+        *(.text.lnk0903); /* build/src/camera/update_camera.c.o */
     } :text
 
     .text.0904 0x1EDC30 : AT(0xEEBB0) SUBALIGN(4)
@@ -6712,7 +6712,7 @@ SECTIONS
 
     .text.0909 0x1EE338 : AT(0xEF2B8) SUBALIGN(4)
     {
-        *(.text.lnk0909); /* build/src/textbin/render_queued_rotated_sprites.c.o */
+        *(.text.lnk0909); /* build/src/rendering/effects/render_queued_rotated_sprites.c.o */
     } :text
 
     .text.0910 0x1EE4A4 : AT(0xEF424) SUBALIGN(4)
@@ -6722,7 +6722,7 @@ SECTIONS
 
     .text.0911 0x1EE4B0 : AT(0xEF430) SUBALIGN(4)
     {
-        *(.text.lnk0911); /* build/src/textbin/update_camera_environment_from_regions.c.o */
+        *(.text.lnk0911); /* build/src/camera/update_camera_environment_from_regions.c.o */
     } :text
 
     .text.0912 0x1EE63C : AT(0xEF5BC) SUBALIGN(4)
@@ -6802,7 +6802,7 @@ SECTIONS
 
     .text.0927 0x1F21C0 : AT(0xF3140) SUBALIGN(4)
     {
-        *(.text.lnk0927); /* build/src/rendering/state/reset_graphics.c.o */
+        *(.text.lnk0927); /* build/src/rendering/frame/reset_graphics.c.o */
     } :text
 
     .text.0928 0x1F225C : AT(0xF31DC) SUBALIGN(4)
@@ -6877,12 +6877,12 @@ SECTIONS
 
     .text.0942 0x1F34E8 : AT(0xF4468) SUBALIGN(4)
     {
-        *(.text.lnk0942); /* build/src/video/display/set_pal_mode.c.o */
+        *(.text.lnk0942); /* build/src/movies/display/set_pal_mode.c.o */
     } :text
 
     .text.0943 0x1F37E8 : AT(0xF4768) SUBALIGN(4)
     {
-        *(.text.lnk0943); /* build/src/rendering/state/reset_draw_globals.c.o */
+        *(.text.lnk0943); /* build/src/rendering/frame/reset_draw_globals.c.o */
     } :text
 
     .text.0944 0x1F3864 : AT(0xF47E4) SUBALIGN(4)
@@ -6892,7 +6892,7 @@ SECTIONS
 
     .text.0945 0x1F3868 : AT(0xF47E8) SUBALIGN(4)
     {
-        *(.text.lnk0945); /* build/src/rendering/state/reset_gs_registers.c.o */
+        *(.text.lnk0945); /* build/src/rendering/frame/reset_gs_registers.c.o */
     } :text
 
     .text.0946 0x1F3954 : AT(0xF48D4) SUBALIGN(4)
@@ -6902,7 +6902,7 @@ SECTIONS
 
     .text.0947 0x1F3958 : AT(0xF48D8) SUBALIGN(4)
     {
-        *(.text.lnk0947); /* build/src/rendering/state/reset_gs_registers_pr.c.o */
+        *(.text.lnk0947); /* build/src/rendering/frame/reset_gs_registers_pr.c.o */
     } :text
 
     .text.0948 0x1F39D0 : AT(0xF4950) SUBALIGN(4)
@@ -6947,32 +6947,32 @@ SECTIONS
 
     .text.0956 0x1F4600 : AT(0xF5580) SUBALIGN(4)
     {
-        *(.text.lnk0956); /* build/src/gameplay/callbacks/add_draw_callback.c.o */
+        *(.text.lnk0956); /* build/src/runtime/callbacks/add_draw_callback.c.o */
     } :text
 
     .text.0957 0x1F4650 : AT(0xF55D0) SUBALIGN(4)
     {
-        *(.text.lnk0957); /* build/src/gameplay/callbacks/dispatch_callback_list_1.c.o */
+        *(.text.lnk0957); /* build/src/runtime/callbacks/dispatch_callback_list_1.c.o */
     } :text
 
     .text.0958 0x1F46C8 : AT(0xF5648) SUBALIGN(4)
     {
-        *(.text.lnk0958); /* build/src/gameplay/callbacks/dispatch_callback_list_2.c.o */
+        *(.text.lnk0958); /* build/src/runtime/callbacks/dispatch_callback_list_2.c.o */
     } :text
 
     .text.0959 0x1F4740 : AT(0xF56C0) SUBALIGN(4)
     {
-        *(.text.lnk0959); /* build/src/gameplay/callbacks/dispatch_callback_list_3.c.o */
+        *(.text.lnk0959); /* build/src/runtime/callbacks/dispatch_callback_list_3.c.o */
     } :text
 
     .text.0960 0x1F47B8 : AT(0xF5738) SUBALIGN(4)
     {
-        *(.text.lnk0960); /* build/src/gameplay/callbacks/enqueue_callback_list_4.c.o */
+        *(.text.lnk0960); /* build/src/runtime/callbacks/enqueue_callback_list_4.c.o */
     } :text
 
     .text.0961 0x1F4808 : AT(0xF5788) SUBALIGN(4)
     {
-        *(.text.lnk0961); /* build/src/gameplay/callbacks/dispatch_callback_list_4.c.o */
+        *(.text.lnk0961); /* build/src/runtime/callbacks/dispatch_callback_list_4.c.o */
     } :text
 
     .text.0962 0x1F4880 : AT(0xF5800) SUBALIGN(4)
@@ -6982,7 +6982,7 @@ SECTIONS
 
     .text.0963 0x1F4A58 : AT(0xF59D8) SUBALIGN(4)
     {
-        *(.text.lnk0963); /* build/src/rendering/transitions/fade_to_black.c.o */
+        *(.text.lnk0963); /* build/src/rendering/effects/fade_to_black.c.o */
     } :text
 
     .text.0964 0x1F4BE0 : AT(0xF5B60) SUBALIGN(4)
@@ -7032,7 +7032,7 @@ SECTIONS
 
     .text.0973 0x1F55D8 : AT(0xF6558) SUBALIGN(4)
     {
-        *(.text.lnk0973); /* build/src/textbin/append_subpixel_textured_screen_quad.c.o */
+        *(.text.lnk0973); /* build/src/rendering/packets/append_subpixel_textured_screen_quad.c.o */
     } :text
 
     .text.0974 0x1F5808 : AT(0xF6788) SUBALIGN(4)
@@ -7242,17 +7242,17 @@ SECTIONS
 
     .text.1015 0x1F7668 : AT(0xF85E8) SUBALIGN(4)
     {
-        *(.text.lnk1015); /* build/src/ui/fonts/font_set_window.c.o */
+        *(.text.lnk1015); /* build/src/ui/text/font/font_set_window.c.o */
     } :text
 
     .text.1016 0x1F76A0 : AT(0xF8620) SUBALIGN(4)
     {
-        *(.text.lnk1016); /* build/src/ui/fonts/font_queue_vu_state.c.o */
+        *(.text.lnk1016); /* build/src/ui/text/font/font_queue_vu_state.c.o */
     } :text
 
     .text.1017 0x1F7888 : AT(0xF8808) SUBALIGN(4)
     {
-        *(.text.lnk1017); /* build/src/rendering/targets/configure_graphics_render_target_and_projection.c.o */
+        *(.text.lnk1017); /* build/src/rendering/frame/configure_graphics_render_target_and_projection.c.o */
     } :text
 
     .text.1018 0x1F7974 : AT(0xF88F4) SUBALIGN(4)
@@ -7262,7 +7262,7 @@ SECTIONS
 
     .text.1019 0x1F7978 : AT(0xF88F8) SUBALIGN(4)
     {
-        *(.text.lnk1019); /* build/src/rendering/state/begin_draw_frame.c.o */
+        *(.text.lnk1019); /* build/src/rendering/frame/begin_draw_frame.c.o */
     } :text
 
     .text.1020 0x1F79A4 : AT(0xF8924) SUBALIGN(4)
@@ -7272,7 +7272,7 @@ SECTIONS
 
     .text.1021 0x1F79A8 : AT(0xF8928) SUBALIGN(4)
     {
-        *(.text.lnk1021); /* build/src/ui/fonts/draw_debug_font.c.o */
+        *(.text.lnk1021); /* build/src/ui/text/font/draw_debug_font.c.o */
     } :text
 
     .text.1022 0x1F7A30 : AT(0xF89B0) SUBALIGN(4)
@@ -7302,22 +7302,22 @@ SECTIONS
 
     .text.1027 0x1F7D30 : AT(0xF8CB0) SUBALIGN(4)
     {
-        *(.text.lnk1027); /* build/src/assembly/textbin/rendering/gs/fast_draw_quad_real.c.o */
+        *(.text.lnk1027); /* build/src/assembly/textbin/rendering/frame/fast_draw_quad_real.c.o */
     } :text
 
     .text.1028 0x1F82E4 : AT(0xF9264) SUBALIGN(4)
     {
-        *(.text.lnk1028); /* build/src/assembly/textbin/rendering/gs/write_setup_block.c.o */
+        *(.text.lnk1028); /* build/src/assembly/textbin/rendering/frame/write_setup_block.c.o */
     } :text
 
     .text.1029 0x1F8364 : AT(0xF92E4) SUBALIGN(4)
     {
-        *(.text.lnk1029); /* build/src/assembly/textbin/rendering/gs/write_gs_header.c.o */
+        *(.text.lnk1029); /* build/src/assembly/textbin/rendering/frame/write_gs_header.c.o */
     } :text
 
     .text.1030 0x1F83A4 : AT(0xF9324) SUBALIGN(4)
     {
-        *(.text.lnk1030); /* build/src/assembly/textbin/rendering/gs/scis_and_render.c.o */
+        *(.text.lnk1030); /* build/src/assembly/textbin/rendering/frame/scis_and_render.c.o */
     } :text
 
     .text.1031 0x1F89A0 : AT(0xF9920) SUBALIGN(4)
@@ -7342,7 +7342,7 @@ SECTIONS
 
     .text.1035 0x1F92B0 : AT(0xFA230) SUBALIGN(4)
     {
-        *(.text.lnk1035); /* build/src/textbin/append_billboard_batch.c.o */
+        *(.text.lnk1035); /* build/src/rendering/effects/append_billboard_batch.c.o */
     } :text
 
     .text.1036 0x1F9648 : AT(0xFA5C8) SUBALIGN(4)
@@ -7392,7 +7392,7 @@ SECTIONS
 
     .text.1045 0x1F97A0 : AT(0xFA720) SUBALIGN(4)
     {
-        *(.text.lnk1045); /* build/src/assembly/textbin/rendering/gs/log2dim.c.o */
+        *(.text.lnk1045); /* build/src/assembly/textbin/rendering/frame/log2dim.c.o */
     } :text
 
     .text.1046 0x1F97B0 : AT(0xFA730) SUBALIGN(4)
@@ -7727,7 +7727,7 @@ SECTIONS
 
     .text.1112 0x1FA6E0 : AT(0xFB660) SUBALIGN(4)
     {
-        *(.text.lnk1112); /* build/src/assembly/textbin/rendering/gs/fast_tween_color.c.o */
+        *(.text.lnk1112); /* build/src/assembly/textbin/rendering/frame/fast_tween_color.c.o */
     } :text
 
     .text.1113 0x1FA728 : AT(0xFB6A8) SUBALIGN(4)
@@ -7757,7 +7757,7 @@ SECTIONS
 
     .text.1118 0x1FA978 : AT(0xFB8F8) SUBALIGN(4)
     {
-        *(.text.lnk1118); /* build/src/rendering/buffers/setup_fs_aa_buffer.c.o */
+        *(.text.lnk1118); /* build/src/rendering/frame/setup_fs_aa_buffer.c.o */
     } :text
 
     .text.1119 0x1FB27C : AT(0xFC1FC) SUBALIGN(4)
@@ -7767,7 +7767,7 @@ SECTIONS
 
     .text.1120 0x1FB280 : AT(0xFC200) SUBALIGN(4)
     {
-        *(.text.lnk1120); /* build/src/rendering/color/set_background_color.c.o */
+        *(.text.lnk1120); /* build/src/rendering/frame/set_background_color.c.o */
     } :text
 
     .text.1121 0x1FB2A8 : AT(0xFC228) SUBALIGN(4)
@@ -7807,7 +7807,7 @@ SECTIONS
 
     .text.1128 0x1FB440 : AT(0xFC3C0) SUBALIGN(4)
     {
-        *(.text.lnk1128); /* build/src/rendering/targets/setup_render_target.c.o */
+        *(.text.lnk1128); /* build/src/rendering/frame/setup_render_target.c.o */
     } :text
 
     .text.1129 0x1FB67C : AT(0xFC5FC) SUBALIGN(4)
@@ -7837,12 +7837,12 @@ SECTIONS
 
     .text.1134 0x1FB740 : AT(0xFC6C0) SUBALIGN(4)
     {
-        *(.text.lnk1134); /* build/src/gameplay/vendor/draw_centered_capture_background.c.o */
+        *(.text.lnk1134); /* build/src/ui/vendor/draw_centered_capture_background.c.o */
     } :text
 
     .text.1135 0x1FB8F0 : AT(0xFC870) SUBALIGN(4)
     {
-        *(.text.lnk1135); /* build/src/rendering/framebuffer/draw_framebuffer_rect.c.o */
+        *(.text.lnk1135); /* build/src/rendering/frame/draw_framebuffer_rect.c.o */
     } :text
 
     .text.1136 0x1FBAB0 : AT(0xFCA30) SUBALIGN(4)
@@ -7852,7 +7852,7 @@ SECTIONS
 
     .text.1137 0x1FBAB8 : AT(0xFCA38) SUBALIGN(4)
     {
-        *(.text.lnk1137); /* build/src/textbin/runtime/memory/mode_freeze_init.c.o */
+        *(.text.lnk1137); /* build/src/game/mode_freeze_init.c.o */
     } :text
 
     .text.1138 0x1FBC50 : AT(0xFCBD0) SUBALIGN(4)
@@ -7867,7 +7867,7 @@ SECTIONS
 
     .text.1140 0x1FCE28 : AT(0xFDDA8) SUBALIGN(4)
     {
-        *(.text.lnk1140); /* build/src/runtime/memory/update_mode_freeze.c.o */
+        *(.text.lnk1140); /* build/src/game/update_mode_freeze.c.o */
     } :text
 
     .text.1141 0x1FD6E0 : AT(0xFE660) SUBALIGN(4)
@@ -8032,7 +8032,7 @@ SECTIONS
 
     .text.1173 0x1FF308 : AT(0x100288) SUBALIGN(4)
     {
-        *(.text.lnk1173); /* build/src/gameplay/animation/queue_animation_update.c.o */
+        *(.text.lnk1173); /* build/src/mobys/animation/queue_animation_update.c.o */
     } :text
 
     .text.1174 0x1FF414 : AT(0x100394) SUBALIGN(4)
@@ -8042,7 +8042,7 @@ SECTIONS
 
     .text.1175 0x1FF418 : AT(0x100398) SUBALIGN(4)
     {
-        *(.text.lnk1175); /* build/src/gameplay/animation/apply_pending_animation.c.o */
+        *(.text.lnk1175); /* build/src/mobys/animation/apply_pending_animation.c.o */
     } :text
 
     .text.1176 0x1FF480 : AT(0x100400) SUBALIGN(4)
@@ -8052,7 +8052,7 @@ SECTIONS
 
     .text.1177 0x1FF500 : AT(0x100480) SUBALIGN(4)
     {
-        *(.text.lnk1177); /* build/src/gameplay/animation/load_animation_definition.c.o */
+        *(.text.lnk1177); /* build/src/mobys/animation/load_animation_definition.c.o */
     } :text
 
     .text.1178 0x1FF568 : AT(0x1004E8) SUBALIGN(4)
@@ -8062,7 +8062,7 @@ SECTIONS
 
     .text.1179 0x1FF570 : AT(0x1004F0) SUBALIGN(4)
     {
-        *(.text.lnk1179); /* build/src/gameplay/animation/set_animation_parameter.c.o */
+        *(.text.lnk1179); /* build/src/mobys/animation/set_animation_parameter.c.o */
     } :text
 
     .text.1180 0x1FF5E4 : AT(0x100564) SUBALIGN(4)
@@ -8082,7 +8082,7 @@ SECTIONS
 
     .text.1183 0x1FF768 : AT(0x1006E8) SUBALIGN(4)
     {
-        *(.text.lnk1183); /* build/src/runtime/resources/update_resource_counter.c.o */
+        *(.text.lnk1183); /* build/src/runtime/update_resource_counter.c.o */
     } :text
 
     .text.1184 0x1FF780 : AT(0x100700) SUBALIGN(4)
@@ -8107,7 +8107,7 @@ SECTIONS
 
     .text.1188 0x1FFA10 : AT(0x100990) SUBALIGN(4)
     {
-        *(.text.lnk1188); /* build/src/textbin/gameplay/animation/get_frame_texture.c.o */
+        *(.text.lnk1188); /* build/src/rendering/texture/get_frame_texture.c.o */
     } :text
 
     .text.1189 0x1FFC30 : AT(0x100BB0) SUBALIGN(4)
@@ -8202,7 +8202,7 @@ SECTIONS
 
     .text.1207 0x201200 : AT(0x102180) SUBALIGN(4)
     {
-        *(.text.lnk1207); /* build/src/textbin/ui/frames/draw_framed_text.c.o */
+        *(.text.lnk1207); /* build/src/ui/frames/draw_framed_text.c.o */
     } :text
 
     .text.1208 0x2012A8 : AT(0x102228) SUBALIGN(4)
@@ -8212,7 +8212,7 @@ SECTIONS
 
     .text.1209 0x2012B8 : AT(0x102238) SUBALIGN(4)
     {
-        *(.text.lnk1209); /* build/src/textbin/draw_boot_image.c.o */
+        *(.text.lnk1209); /* build/src/ui/loading/draw_boot_image.c.o */
     } :text
 
     .text.1210 0x20151C : AT(0x10249C) SUBALIGN(4)
@@ -8342,12 +8342,12 @@ SECTIONS
 
     .text.1235 0x2032E0 : AT(0x104260) SUBALIGN(4)
     {
-        *(.text.lnk1235); /* build/src/runtime/relocation/relocate_asset_entry_pointers.c.o */
+        *(.text.lnk1235); /* build/src/world/loaders/relocate_asset_entry_pointers.c.o */
     } :text
 
     .text.1236 0x203338 : AT(0x1042B8) SUBALIGN(4)
     {
-        *(.text.lnk1236); /* build/src/textbin/prepare_resident_class_render_data.c.o */
+        *(.text.lnk1236); /* build/src/rendering/mobys/prepare_resident_class_render_data.c.o */
     } :text
 
     .text.1237 0x20363C : AT(0x1045BC) SUBALIGN(4)
@@ -8392,12 +8392,12 @@ SECTIONS
 
     .text.1245 0x2043B0 : AT(0x105330) SUBALIGN(4)
     {
-        *(.text.lnk1245); /* build/src/world/streaming/load_level_chunk_from_disc.c.o */
+        *(.text.lnk1245); /* build/src/streaming/load_level_chunk_from_disc.c.o */
     } :text
 
     .text.1246 0x204428 : AT(0x1053A8) SUBALIGN(4)
     {
-        *(.text.lnk1246); /* build/src/gameplay/state/service_level_archive_load.c.o */
+        *(.text.lnk1246); /* build/src/game/service_level_archive_load.c.o */
     } :text
 
     .text.1247 0x204788 : AT(0x105708) SUBALIGN(4)
@@ -8407,7 +8407,7 @@ SECTIONS
 
     .text.1248 0x204790 : AT(0x105710) SUBALIGN(4)
     {
-        *(.text.lnk1248); /* build/src/world/animation/update_world_object_animation.c.o */
+        *(.text.lnk1248); /* build/src/world/update_world_object_animation.c.o */
     } :text
 
     .text.1249 0x2049E4 : AT(0x105964) SUBALIGN(4)
@@ -8422,7 +8422,7 @@ SECTIONS
 
     .text.1251 0x204A40 : AT(0x1059C0) SUBALIGN(4)
     {
-        *(.text.lnk1251); /* build/src/textbin/world/data/select_world_object_resource_tables.c.o */
+        *(.text.lnk1251); /* build/src/world/select_world_object_resource_tables.c.o */
     } :text
 
     .text.1252 0x204CEC : AT(0x105C6C) SUBALIGN(4)
@@ -8612,7 +8612,7 @@ SECTIONS
 
     .text.1289 0x208818 : AT(0x109798) SUBALIGN(4)
     {
-        *(.text.lnk1289); /* build/src/math/geometry/point_is_clockwise.c.o */
+        *(.text.lnk1289); /* build/src/math/point_is_clockwise.c.o */
     } :text
 
     .text.1290 0x20883C : AT(0x1097BC) SUBALIGN(4)
@@ -8632,7 +8632,7 @@ SECTIONS
 
     .text.1293 0x2088A8 : AT(0x109828) SUBALIGN(4)
     {
-        *(.text.lnk1293); /* build/src/ui/menus/save_data/states/save_card_state_init.c.o */
+        *(.text.lnk1293); /* build/src/ui/menus/save_data/save_card_state_init.c.o */
     } :text
 
     .text.1294 0x2088CC : AT(0x10984C) SUBALIGN(4)
@@ -8642,17 +8642,17 @@ SECTIONS
 
     .text.1295 0x2088D0 : AT(0x109850) SUBALIGN(4)
     {
-        *(.text.lnk1295); /* build/src/ui/menus/save_data/states/save_card_state_good_save.c.o */
+        *(.text.lnk1295); /* build/src/ui/menus/save_data/save_card_state_good_save.c.o */
     } :text
 
     .text.1296 0x208980 : AT(0x109900) SUBALIGN(4)
     {
-        *(.text.lnk1296); /* build/src/ui/menus/save_data/states/save_card_state_warning.c.o */
+        *(.text.lnk1296); /* build/src/ui/menus/save_data/save_card_state_warning.c.o */
     } :text
 
     .text.1297 0x2089A8 : AT(0x109928) SUBALIGN(4)
     {
-        *(.text.lnk1297); /* build/src/ui/menus/save_data/states/save_card_state_no_card.c.o */
+        *(.text.lnk1297); /* build/src/ui/menus/save_data/save_card_state_no_card.c.o */
     } :text
 
     .text.1298 0x2089CC : AT(0x10994C) SUBALIGN(4)
@@ -8662,7 +8662,7 @@ SECTIONS
 
     .text.1299 0x2089D0 : AT(0x109950) SUBALIGN(4)
     {
-        *(.text.lnk1299); /* build/src/ui/menus/save_data/states/save_card_state_wait_for_card.c.o */
+        *(.text.lnk1299); /* build/src/ui/menus/save_data/save_card_state_wait_for_card.c.o */
     } :text
 
     .text.1300 0x208A34 : AT(0x1099B4) SUBALIGN(4)
@@ -8672,7 +8672,7 @@ SECTIONS
 
     .text.1301 0x208A38 : AT(0x1099B8) SUBALIGN(4)
     {
-        *(.text.lnk1301); /* build/src/ui/menus/save_data/states/save_card_state_unformatted.c.o */
+        *(.text.lnk1301); /* build/src/ui/menus/save_data/save_card_state_unformatted.c.o */
     } :text
 
     .text.1302 0x208A74 : AT(0x1099F4) SUBALIGN(4)
@@ -8682,7 +8682,7 @@ SECTIONS
 
     .text.1303 0x208A78 : AT(0x1099F8) SUBALIGN(4)
     {
-        *(.text.lnk1303); /* build/src/ui/menus/save_data/states/save_card_state_prompt_format.c.o */
+        *(.text.lnk1303); /* build/src/ui/menus/save_data/save_card_state_prompt_format.c.o */
     } :text
 
     .text.1304 0x208AF4 : AT(0x109A74) SUBALIGN(4)
@@ -8692,7 +8692,7 @@ SECTIONS
 
     .text.1305 0x208AF8 : AT(0x109A78) SUBALIGN(4)
     {
-        *(.text.lnk1305); /* build/src/ui/menus/save_data/states/save_card_state_format_pending.c.o */
+        *(.text.lnk1305); /* build/src/ui/menus/save_data/save_card_state_format_pending.c.o */
     } :text
 
     .text.1306 0x208B24 : AT(0x109AA4) SUBALIGN(4)
@@ -8702,22 +8702,22 @@ SECTIONS
 
     .text.1307 0x208B28 : AT(0x109AA8) SUBALIGN(4)
     {
-        *(.text.lnk1307); /* build/src/ui/menus/save_data/states/save_card_state_formatting.c.o */
+        *(.text.lnk1307); /* build/src/ui/menus/save_data/save_card_state_formatting.c.o */
     } :text
 
     .text.1308 0x208B88 : AT(0x109B08) SUBALIGN(4)
     {
-        *(.text.lnk1308); /* build/src/ui/menus/save_data/states/save_card_state_formatted.c.o */
+        *(.text.lnk1308); /* build/src/ui/menus/save_data/save_card_state_formatted.c.o */
     } :text
 
     .text.1309 0x208BC0 : AT(0x109B40) SUBALIGN(4)
     {
-        *(.text.lnk1309); /* build/src/ui/menus/save_data/states/save_card_state_check_save.c.o */
+        *(.text.lnk1309); /* build/src/ui/menus/save_data/save_card_state_check_save.c.o */
     } :text
 
     .text.1310 0x208C00 : AT(0x109B80) SUBALIGN(4)
     {
-        *(.text.lnk1310); /* build/src/ui/menus/save_data/states/save_card_state_checking_save.c.o */
+        *(.text.lnk1310); /* build/src/ui/menus/save_data/save_card_state_checking_save.c.o */
     } :text
 
     .text.1311 0x208C6C : AT(0x109BEC) SUBALIGN(4)
@@ -8727,22 +8727,22 @@ SECTIONS
 
     .text.1312 0x208C70 : AT(0x109BF0) SUBALIGN(4)
     {
-        *(.text.lnk1312); /* build/src/ui/menus/save_data/states/save_card_state_no_save.c.o */
+        *(.text.lnk1312); /* build/src/ui/menus/save_data/save_card_state_no_save.c.o */
     } :text
 
     .text.1313 0x208CA8 : AT(0x109C28) SUBALIGN(4)
     {
-        *(.text.lnk1313); /* build/src/ui/menus/save_data/states/save_card_state_prompt_create_save.c.o */
+        *(.text.lnk1313); /* build/src/ui/menus/save_data/save_card_state_prompt_create_save.c.o */
     } :text
 
     .text.1314 0x208D20 : AT(0x109CA0) SUBALIGN(4)
     {
-        *(.text.lnk1314); /* build/src/ui/menus/save_data/states/save_card_state_create_save_pending.c.o */
+        *(.text.lnk1314); /* build/src/ui/menus/save_data/save_card_state_create_save_pending.c.o */
     } :text
 
     .text.1315 0x208D60 : AT(0x109CE0) SUBALIGN(4)
     {
-        *(.text.lnk1315); /* build/src/ui/menus/save_data/states/save_card_state_creating_save.c.o */
+        *(.text.lnk1315); /* build/src/ui/menus/save_data/save_card_state_creating_save.c.o */
     } :text
 
     .text.1316 0x208DD4 : AT(0x109D54) SUBALIGN(4)
@@ -8752,7 +8752,7 @@ SECTIONS
 
     .text.1317 0x208DD8 : AT(0x109D58) SUBALIGN(4)
     {
-        *(.text.lnk1317); /* build/src/ui/menus/save_data/states/save_card_state_new_card.c.o */
+        *(.text.lnk1317); /* build/src/ui/menus/save_data/save_card_state_new_card.c.o */
     } :text
 
     .text.1318 0x208E64 : AT(0x109DE4) SUBALIGN(4)
@@ -8762,7 +8762,7 @@ SECTIONS
 
     .text.1319 0x208E68 : AT(0x109DE8) SUBALIGN(4)
     {
-        *(.text.lnk1319); /* build/src/ui/menus/save_data/states/save_card_state_format_failed.c.o */
+        *(.text.lnk1319); /* build/src/ui/menus/save_data/save_card_state_format_failed.c.o */
     } :text
 
     .text.1320 0x208E8C : AT(0x109E0C) SUBALIGN(4)
@@ -8772,7 +8772,7 @@ SECTIONS
 
     .text.1321 0x208E90 : AT(0x109E10) SUBALIGN(4)
     {
-        *(.text.lnk1321); /* build/src/ui/menus/save_data/states/save_card_state_create_failed.c.o */
+        *(.text.lnk1321); /* build/src/ui/menus/save_data/save_card_state_create_failed.c.o */
     } :text
 
     .text.1322 0x208EB4 : AT(0x109E34) SUBALIGN(4)
@@ -8782,12 +8782,12 @@ SECTIONS
 
     .text.1323 0x208EB8 : AT(0x109E38) SUBALIGN(4)
     {
-        *(.text.lnk1323); /* build/src/ui/menus/save_data/states/save_card_state_no_room.c.o */
+        *(.text.lnk1323); /* build/src/ui/menus/save_data/save_card_state_no_room.c.o */
     } :text
 
     .text.1324 0x208ED8 : AT(0x109E58) SUBALIGN(4)
     {
-        *(.text.lnk1324); /* build/src/ui/menus/save_data/states/save_card_state_load_failed.c.o */
+        *(.text.lnk1324); /* build/src/ui/menus/save_data/save_card_state_load_failed.c.o */
     } :text
 
     .text.1325 0x208EFC : AT(0x109E7C) SUBALIGN(4)
@@ -8797,7 +8797,7 @@ SECTIONS
 
     .text.1326 0x208F00 : AT(0x109E80) SUBALIGN(4)
     {
-        *(.text.lnk1326); /* build/src/ui/menus/save_data/states/save_card_state_save_failed.c.o */
+        *(.text.lnk1326); /* build/src/ui/menus/save_data/save_card_state_save_failed.c.o */
     } :text
 
     .text.1327 0x208F24 : AT(0x109EA4) SUBALIGN(4)
@@ -8807,17 +8807,17 @@ SECTIONS
 
     .text.1328 0x208F28 : AT(0x109EA8) SUBALIGN(4)
     {
-        *(.text.lnk1328); /* build/src/ui/menus/save_data/states/save_card_state_saving.c.o */
+        *(.text.lnk1328); /* build/src/ui/menus/save_data/save_card_state_saving.c.o */
     } :text
 
     .text.1329 0x208FA0 : AT(0x109F20) SUBALIGN(4)
     {
-        *(.text.lnk1329); /* build/src/ui/menus/save_data/states/save_card_state_prompt_begin_unformatted.c.o */
+        *(.text.lnk1329); /* build/src/ui/menus/save_data/save_card_state_prompt_begin_unformatted.c.o */
     } :text
 
     .text.1330 0x208FE8 : AT(0x109F68) SUBALIGN(4)
     {
-        *(.text.lnk1330); /* build/src/ui/menus/save_data/states/save_card_state_prompt_begin_no_save.c.o */
+        *(.text.lnk1330); /* build/src/ui/menus/save_data/save_card_state_prompt_begin_no_save.c.o */
     } :text
 
     .text.1331 0x20902C : AT(0x109FAC) SUBALIGN(4)
@@ -8827,7 +8827,7 @@ SECTIONS
 
     .text.1332 0x209030 : AT(0x109FB0) SUBALIGN(4)
     {
-        *(.text.lnk1332); /* build/src/storage/memory_card/memcard_get_name.c.o */
+        *(.text.lnk1332); /* build/src/save/memcard_get_name.c.o */
     } :text
 
     .text.1333 0x209164 : AT(0x10A0E4) SUBALIGN(4)
@@ -8837,7 +8837,7 @@ SECTIONS
 
     .text.1334 0x209168 : AT(0x10A0E8) SUBALIGN(4)
     {
-        *(.text.lnk1334); /* build/src/storage/memory_card/check_memory_card.c.o */
+        *(.text.lnk1334); /* build/src/save/check_memory_card.c.o */
     } :text
 
     .text.1335 0x209294 : AT(0x10A214) SUBALIGN(4)
@@ -8847,7 +8847,7 @@ SECTIONS
 
     .text.1336 0x209298 : AT(0x10A218) SUBALIGN(4)
     {
-        *(.text.lnk1336); /* build/src/storage/memory_card/memcard_restore_game.c.o */
+        *(.text.lnk1336); /* build/src/save/memcard_restore_game.c.o */
     } :text
 
     .text.1337 0x20936C : AT(0x10A2EC) SUBALIGN(4)
@@ -8857,12 +8857,12 @@ SECTIONS
 
     .text.1338 0x209370 : AT(0x10A2F0) SUBALIGN(4)
     {
-        *(.text.lnk1338); /* build/src/world/streaming/load_and_initialize_level_chunk.c.o */
+        *(.text.lnk1338); /* build/src/streaming/load_and_initialize_level_chunk.c.o */
     } :text
 
     .text.1339 0x2093D8 : AT(0x10A358) SUBALIGN(4)
     {
-        *(.text.lnk1339); /* build/src/storage/memory_card/memcard_update_state.c.o */
+        *(.text.lnk1339); /* build/src/save/memcard_update_state.c.o */
     } :text
 
     .text.1340 0x20ABAC : AT(0x10BB2C) SUBALIGN(4)
@@ -8872,22 +8872,22 @@ SECTIONS
 
     .text.1341 0x20ABB0 : AT(0x10BB30) SUBALIGN(4)
     {
-        *(.text.lnk1341); /* build/src/storage/memory_card/memcard_make_whole_save.c.o */
+        *(.text.lnk1341); /* build/src/save/memcard_make_whole_save.c.o */
     } :text
 
     .text.1342 0x20AC58 : AT(0x10BBD8) SUBALIGN(4)
     {
-        *(.text.lnk1342); /* build/src/storage/memory_card/memcard_initialize.c.o */
+        *(.text.lnk1342); /* build/src/save/memcard_initialize.c.o */
     } :text
 
     .text.1343 0x20AC88 : AT(0x10BC08) SUBALIGN(4)
     {
-        *(.text.lnk1343); /* build/src/storage/memory_card/memcard_get_data_size.c.o */
+        *(.text.lnk1343); /* build/src/save/memcard_get_data_size.c.o */
     } :text
 
     .text.1344 0x20ACC0 : AT(0x10BC40) SUBALIGN(4)
     {
-        *(.text.lnk1344); /* build/src/storage/memory_card/data/calculate_crc16.c.o */
+        *(.text.lnk1344); /* build/src/save/calculate_crc16.c.o */
     } :text
 
     .text.1345 0x20AD34 : AT(0x10BCB4) SUBALIGN(4)
@@ -8897,7 +8897,7 @@ SECTIONS
 
     .text.1346 0x20AD38 : AT(0x10BCB8) SUBALIGN(4)
     {
-        *(.text.lnk1346); /* build/src/storage/memory_card/data/validate_data_crc.c.o */
+        *(.text.lnk1346); /* build/src/save/validate_data_crc.c.o */
     } :text
 
     .text.1347 0x20AD74 : AT(0x10BCF4) SUBALIGN(4)
@@ -8907,12 +8907,12 @@ SECTIONS
 
     .text.1348 0x20AD78 : AT(0x10BCF8) SUBALIGN(4)
     {
-        *(.text.lnk1348); /* build/src/storage/memory_card/data/memcard_prepare_data.c.o */
+        *(.text.lnk1348); /* build/src/save/memcard_prepare_data.c.o */
     } :text
 
     .text.1349 0x20AE60 : AT(0x10BDE0) SUBALIGN(4)
     {
-        *(.text.lnk1349); /* build/src/storage/memory_card/data/memcard_restore_info.c.o */
+        *(.text.lnk1349); /* build/src/save/memcard_restore_info.c.o */
     } :text
 
     .text.1350 0x20AF1C : AT(0x10BE9C) SUBALIGN(4)
@@ -8922,7 +8922,7 @@ SECTIONS
 
     .text.1351 0x20AF20 : AT(0x10BEA0) SUBALIGN(4)
     {
-        *(.text.lnk1351); /* build/src/textbin/storage/memory_card/data/memcard_restore_data.c.o */
+        *(.text.lnk1351); /* build/src/save/memcard_restore_data.c.o */
     } :text
 
     .text.1352 0x20B174 : AT(0x10C0F4) SUBALIGN(4)
@@ -8932,7 +8932,7 @@ SECTIONS
 
     .text.1353 0x20B178 : AT(0x10C0F8) SUBALIGN(4)
     {
-        *(.text.lnk1353); /* build/src/storage/memory_card/memcard_save_data.c.o */
+        *(.text.lnk1353); /* build/src/save/memcard_save_data.c.o */
     } :text
 
     .text.1354 0x20B3BC : AT(0x10C33C) SUBALIGN(4)
@@ -8977,17 +8977,17 @@ SECTIONS
 
     .text.1362 0x20B950 : AT(0x10C8D0) SUBALIGN(4)
     {
-        *(.text.lnk1362); /* build/src/gameplay/missions/update_mission_list.c.o */
+        *(.text.lnk1362); /* build/src/game/missions/update_mission_list.c.o */
     } :text
 
     .text.1363 0x20BAF0 : AT(0x10CA70) SUBALIGN(4)
     {
-        *(.text.lnk1363); /* build/src/gameplay/missions/check_mission_condition.c.o */
+        *(.text.lnk1363); /* build/src/game/missions/check_mission_condition.c.o */
     } :text
 
     .text.1364 0x20BC00 : AT(0x10CB80) SUBALIGN(4)
     {
-        *(.text.lnk1364); /* build/src/gameplay/missions/collect_mission_ids.c.o */
+        *(.text.lnk1364); /* build/src/game/missions/collect_mission_ids.c.o */
     } :text
 
     .text.1365 0x20BD2C : AT(0x10CCAC) SUBALIGN(4)
@@ -8997,17 +8997,17 @@ SECTIONS
 
     .text.1366 0x20BD30 : AT(0x10CCB0) SUBALIGN(4)
     {
-        *(.text.lnk1366); /* build/src/gameplay/missions/fun_0020bd30.c.o */
+        *(.text.lnk1366); /* build/src/game/missions/fun_0020bd30.c.o */
     } :text
 
     .text.1367 0x20BD58 : AT(0x10CCD8) SUBALIGN(4)
     {
-        *(.text.lnk1367); /* build/src/gameplay/missions/fun_0020bd58.c.o */
+        *(.text.lnk1367); /* build/src/game/missions/fun_0020bd58.c.o */
     } :text
 
     .text.1368 0x20BD90 : AT(0x10CD10) SUBALIGN(4)
     {
-        *(.text.lnk1368); /* build/src/gameplay/missions/fun_0020bd90.c.o */
+        *(.text.lnk1368); /* build/src/game/missions/fun_0020bd90.c.o */
     } :text
 
     .text.1369 0x20BDBC : AT(0x10CD3C) SUBALIGN(4)
@@ -9017,22 +9017,22 @@ SECTIONS
 
     .text.1370 0x20BDC0 : AT(0x10CD40) SUBALIGN(4)
     {
-        *(.text.lnk1370); /* build/src/gameplay/missions/fun_0020bdc0.c.o */
+        *(.text.lnk1370); /* build/src/game/missions/fun_0020bdc0.c.o */
     } :text
 
     .text.1371 0x20BDE8 : AT(0x10CD68) SUBALIGN(4)
     {
-        *(.text.lnk1371); /* build/src/gameplay/missions/fun_0020bde8.c.o */
+        *(.text.lnk1371); /* build/src/game/missions/fun_0020bde8.c.o */
     } :text
 
     .text.1372 0x20BE10 : AT(0x10CD90) SUBALIGN(4)
     {
-        *(.text.lnk1372); /* build/src/gameplay/missions/fun_0020be10.c.o */
+        *(.text.lnk1372); /* build/src/game/missions/fun_0020be10.c.o */
     } :text
 
     .text.1373 0x20BE38 : AT(0x10CDB8) SUBALIGN(4)
     {
-        *(.text.lnk1373); /* build/src/gameplay/missions/fun_0020be38.c.o */
+        *(.text.lnk1373); /* build/src/game/missions/fun_0020be38.c.o */
     } :text
 
     .text.1374 0x20BE64 : AT(0x10CDE4) SUBALIGN(4)
@@ -9042,12 +9042,12 @@ SECTIONS
 
     .text.1375 0x20BE68 : AT(0x10CDE8) SUBALIGN(4)
     {
-        *(.text.lnk1375); /* build/src/gameplay/missions/is_item_available.c.o */
+        *(.text.lnk1375); /* build/src/game/missions/is_item_available.c.o */
     } :text
 
     .text.1376 0x20BE80 : AT(0x10CE00) SUBALIGN(4)
     {
-        *(.text.lnk1376); /* build/src/gameplay/missions/get_map_point_mission_status.c.o */
+        *(.text.lnk1376); /* build/src/game/missions/get_map_point_mission_status.c.o */
     } :text
 
     .text.1377 0x20BED4 : AT(0x10CE54) SUBALIGN(4)
@@ -9057,7 +9057,7 @@ SECTIONS
 
     .text.1378 0x20BED8 : AT(0x10CE58) SUBALIGN(4)
     {
-        *(.text.lnk1378); /* build/src/gameplay/missions/fun_0020bed8.c.o */
+        *(.text.lnk1378); /* build/src/game/missions/fun_0020bed8.c.o */
     } :text
 
     .text.1379 0x20BF04 : AT(0x10CE84) SUBALIGN(4)
@@ -9067,12 +9067,12 @@ SECTIONS
 
     .text.1380 0x20BF08 : AT(0x10CE88) SUBALIGN(4)
     {
-        *(.text.lnk1380); /* build/src/gameplay/missions/fun_0020bf08.c.o */
+        *(.text.lnk1380); /* build/src/game/missions/fun_0020bf08.c.o */
     } :text
 
     .text.1381 0x20BF30 : AT(0x10CEB0) SUBALIGN(4)
     {
-        *(.text.lnk1381); /* build/src/gameplay/missions/get_morph_o_ray_status.c.o */
+        *(.text.lnk1381); /* build/src/game/missions/get_morph_o_ray_status.c.o */
     } :text
 
     .text.1382 0x20BF54 : AT(0x10CED4) SUBALIGN(4)
@@ -9082,12 +9082,12 @@ SECTIONS
 
     .text.1383 0x20BF58 : AT(0x10CED8) SUBALIGN(4)
     {
-        *(.text.lnk1383); /* build/src/gameplay/missions/has_hologuise.c.o */
+        *(.text.lnk1383); /* build/src/game/missions/has_hologuise.c.o */
     } :text
 
     .text.1384 0x20BF68 : AT(0x10CEE8) SUBALIGN(4)
     {
-        *(.text.lnk1384); /* build/src/gameplay/missions/mission_get_hologuise_or_map_status.c.o */
+        *(.text.lnk1384); /* build/src/game/missions/mission_get_hologuise_or_map_status.c.o */
     } :text
 
     .text.1385 0x20BF90 : AT(0x10CF10) SUBALIGN(4)
@@ -9102,22 +9102,22 @@ SECTIONS
 
     .text.1387 0x20C4F8 : AT(0x10D478) SUBALIGN(4)
     {
-        *(.text.lnk1387); /* build/src/gameplay/entities/create_moby.c.o */
+        *(.text.lnk1387); /* build/src/mobys/create_moby.c.o */
     } :text
 
     .text.1388 0x20C5F0 : AT(0x10D570) SUBALIGN(4)
     {
-        *(.text.lnk1388); /* build/src/gameplay/entities/init_moby_instance.c.o */
+        *(.text.lnk1388); /* build/src/mobys/init_moby_instance.c.o */
     } :text
 
     .text.1389 0x20C828 : AT(0x10D7A8) SUBALIGN(4)
     {
-        *(.text.lnk1389); /* build/src/gameplay/entities/mark_moby_for_removal.c.o */
+        *(.text.lnk1389); /* build/src/mobys/mark_moby_for_removal.c.o */
     } :text
 
     .text.1390 0x20C880 : AT(0x10D800) SUBALIGN(4)
     {
-        *(.text.lnk1390); /* build/src/gameplay/animation/update_moby_animation_state.c.o */
+        *(.text.lnk1390); /* build/src/mobys/animation/update_moby_animation_state.c.o */
     } :text
 
     .text.1391 0x20C93C : AT(0x10D8BC) SUBALIGN(4)
@@ -9127,7 +9127,7 @@ SECTIONS
 
     .text.1392 0x20C940 : AT(0x10D8C0) SUBALIGN(4)
     {
-        *(.text.lnk1392); /* build/src/gameplay/entities/update_moby_voice.c.o */
+        *(.text.lnk1392); /* build/src/mobys/update_moby_voice.c.o */
     } :text
 
     .text.1393 0x20C9D8 : AT(0x10D958) SUBALIGN(4)
@@ -9137,7 +9137,7 @@ SECTIONS
 
     .text.1394 0x20C9E0 : AT(0x10D960) SUBALIGN(4)
     {
-        *(.text.lnk1394); /* build/src/gameplay/state/compute_interpolated_record_value.c.o */
+        *(.text.lnk1394); /* build/src/game/compute_interpolated_record_value.c.o */
     } :text
 
     .text.1395 0x20CAD4 : AT(0x10DA54) SUBALIGN(4)
@@ -9147,17 +9147,17 @@ SECTIONS
 
     .text.1396 0x20CB10 : AT(0x10DA90) SUBALIGN(4)
     {
-        *(.text.lnk1396); /* build/src/gameplay/entities/attach_manipulator.c.o */
+        *(.text.lnk1396); /* build/src/mobys/attach_manipulator.c.o */
     } :text
 
     .text.1397 0x20CB88 : AT(0x10DB08) SUBALIGN(4)
     {
-        *(.text.lnk1397); /* build/src/gameplay/entities/detach_manipulator.c.o */
+        *(.text.lnk1397); /* build/src/mobys/detach_manipulator.c.o */
     } :text
 
     .text.1398 0x20CC18 : AT(0x10DB98) SUBALIGN(4)
     {
-        *(.text.lnk1398); /* build/src/gameplay/entities/find_or_allocate_id_slot.c.o */
+        *(.text.lnk1398); /* build/src/mobys/find_or_allocate_id_slot.c.o */
     } :text
 
     .text.1399 0x20CC5C : AT(0x10DBDC) SUBALIGN(4)
@@ -9167,17 +9167,17 @@ SECTIONS
 
     .text.1400 0x20CC60 : AT(0x10DBE0) SUBALIGN(4)
     {
-        *(.text.lnk1400); /* build/src/gameplay/entities/prune_moby_references.c.o */
+        *(.text.lnk1400); /* build/src/mobys/prune_moby_references.c.o */
     } :text
 
     .text.1401 0x20CCA8 : AT(0x10DC28) SUBALIGN(4)
     {
-        *(.text.lnk1401); /* build/src/gameplay/entities/build_moby_bone_transform.c.o */
+        *(.text.lnk1401); /* build/src/mobys/animation/build_moby_bone_transform.c.o */
     } :text
 
     .text.1402 0x20CD48 : AT(0x10DCC8) SUBALIGN(4)
     {
-        *(.text.lnk1402); /* build/src/rendering/geometry/transform_scaled_vertex_batch.c.o */
+        *(.text.lnk1402); /* build/src/rendering/packets/transform_scaled_vertex_batch.c.o */
     } :text
 
     .text.1403 0x20CDE8 : AT(0x10DD68) SUBALIGN(4)
@@ -9192,17 +9192,17 @@ SECTIONS
 
     .text.1405 0x20CEF8 : AT(0x10DE78) SUBALIGN(4)
     {
-        *(.text.lnk1405); /* build/src/gameplay/entities/draw/patch_moby_gifs.c.o */
+        *(.text.lnk1405); /* build/src/rendering/mobys/patch_moby_gifs.c.o */
     } :text
 
     .text.1406 0x20CFD0 : AT(0x10DF50) SUBALIGN(4)
     {
-        *(.text.lnk1406); /* build/src/gameplay/entities/update_resident_packed_direction.c.o */
+        *(.text.lnk1406); /* build/src/mobys/update_resident_packed_direction.c.o */
     } :text
 
     .text.1407 0x20D060 : AT(0x10DFE0) SUBALIGN(4)
     {
-        *(.text.lnk1407); /* build/src/gameplay/entities/configure_graphics_setup_dma_chain.c.o */
+        *(.text.lnk1407); /* build/src/rendering/frame/configure_graphics_setup_dma_chain.c.o */
     } :text
 
     .text.1408 0x20D1A4 : AT(0x10E124) SUBALIGN(4)
@@ -9212,7 +9212,7 @@ SECTIONS
 
     .text.1409 0x20D1A8 : AT(0x10E128) SUBALIGN(4)
     {
-        *(.text.lnk1409); /* build/src/gameplay/entities/process_moby_anim_data.c.o */
+        *(.text.lnk1409); /* build/src/mobys/animation/process_moby_anim_data.c.o */
     } :text
 
     .text.1410 0x20D1EC : AT(0x10E16C) SUBALIGN(4)
@@ -9222,12 +9222,12 @@ SECTIONS
 
     .text.1411 0x20D1F0 : AT(0x10E170) SUBALIGN(4)
     {
-        *(.text.lnk1411); /* build/src/gameplay/entities/class_dists/init_moby_class_dists.c.o */
+        *(.text.lnk1411); /* build/src/mobys/init_moby_class_dists.c.o */
     } :text
 
     .text.1412 0x20D218 : AT(0x10E198) SUBALIGN(4)
     {
-        *(.text.lnk1412); /* build/src/gameplay/entities/class_dists/stash_moby_class_dists.c.o */
+        *(.text.lnk1412); /* build/src/mobys/stash_moby_class_dists.c.o */
     } :text
 
     .text.1413 0x20D244 : AT(0x10E1C4) SUBALIGN(4)
@@ -9237,7 +9237,7 @@ SECTIONS
 
     .text.1414 0x20D248 : AT(0x10E1C8) SUBALIGN(4)
     {
-        *(.text.lnk1414); /* build/src/gameplay/entities/class_dists/restore_moby_class_dists.c.o */
+        *(.text.lnk1414); /* build/src/mobys/restore_moby_class_dists.c.o */
     } :text
 
     .text.1415 0x20D274 : AT(0x10E1F4) SUBALIGN(4)
@@ -9247,17 +9247,17 @@ SECTIONS
 
     .text.1416 0x20D278 : AT(0x10E1F8) SUBALIGN(4)
     {
-        *(.text.lnk1416); /* build/src/gameplay/entities/draw/draw_mobys_setup.c.o */
+        *(.text.lnk1416); /* build/src/rendering/mobys/draw_mobys_setup.c.o */
     } :text
 
     .text.1417 0x20D330 : AT(0x10E2B0) SUBALIGN(4)
     {
-        *(.text.lnk1417); /* build/src/gameplay/entities/draw/draw_moby_list.c.o */
+        *(.text.lnk1417); /* build/src/rendering/mobys/draw_moby_list.c.o */
     } :text
 
     .text.1418 0x20D3B0 : AT(0x10E330) SUBALIGN(4)
     {
-        *(.text.lnk1418); /* build/src/gameplay/entities/draw/draw_mobys_clean_up.c.o */
+        *(.text.lnk1418); /* build/src/rendering/mobys/draw_mobys_clean_up.c.o */
     } :text
 
     .text.1419 0x20D45C : AT(0x10E3DC) SUBALIGN(4)
@@ -9267,7 +9267,7 @@ SECTIONS
 
     .text.1420 0x20D460 : AT(0x10E3E0) SUBALIGN(4)
     {
-        *(.text.lnk1420); /* build/src/gameplay/entities/draw/draw_mobys.c.o */
+        *(.text.lnk1420); /* build/src/rendering/mobys/draw_mobys.c.o */
     } :text
 
     .text.1421 0x20D4E0 : AT(0x10E460) SUBALIGN(4)
@@ -9277,22 +9277,22 @@ SECTIONS
 
     .text.1422 0x20D4F0 : AT(0x10E470) SUBALIGN(4)
     {
-        *(.text.lnk1422); /* build/src/rendering/commands/pack_render_command_fields.c.o */
+        *(.text.lnk1422); /* build/src/rendering/packets/pack_render_command_fields.c.o */
     } :text
 
     .text.1423 0x20D510 : AT(0x10E490) SUBALIGN(4)
     {
-        *(.text.lnk1423); /* build/src/assembly/textbin/gameplay/entities/get_moby_light_direction.c.o */
+        *(.text.lnk1423); /* build/src/assembly/textbin/mobys/get_moby_light_direction.c.o */
     } :text
 
     .text.1424 0x20D580 : AT(0x10E500) SUBALIGN(4)
     {
-        *(.text.lnk1424); /* build/src/assembly/textbin/gameplay/animation/advance_moby_animation.c.o */
+        *(.text.lnk1424); /* build/src/assembly/textbin/mobys/animation/advance_moby_animation.c.o */
     } :text
 
     .text.1425 0x20D868 : AT(0x10E7E8) SUBALIGN(4)
     {
-        *(.text.lnk1425); /* build/src/assembly/textbin/gameplay/entities/build_resident_visibility_list.c.o */
+        *(.text.lnk1425); /* build/src/assembly/textbin/mobys/build_resident_visibility_list.c.o */
     } :text
 
     .text.1426 0x20DB40 : AT(0x10EAC0) SUBALIGN(4)
@@ -9312,12 +9312,12 @@ SECTIONS
 
     .text.1429 0x20DEF8 : AT(0x10EE78) SUBALIGN(4)
     {
-        *(.text.lnk1429); /* build/src/assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds.c.o */
+        *(.text.lnk1429); /* build/src/assembly/textbin/mobys/refresh_moby_spatial_bounds.c.o */
     } :text
 
     .text.1430 0x20E098 : AT(0x10F018) SUBALIGN(4)
     {
-        *(.text.lnk1430); /* build/src/assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds_from_basis.c.o */
+        *(.text.lnk1430); /* build/src/assembly/textbin/mobys/refresh_moby_spatial_bounds_from_basis.c.o */
     } :text
 
     .text.1431 0x20E0E0 : AT(0x10F060) SUBALIGN(4)
@@ -9337,7 +9337,7 @@ SECTIONS
 
     .text.1434 0x20FA90 : AT(0x110A10) SUBALIGN(4)
     {
-        *(.text.lnk1434); /* build/src/assembly/textbin/gameplay/animation/compute_moby_joint_matrices.c.o */
+        *(.text.lnk1434); /* build/src/assembly/textbin/mobys/animation/compute_moby_joint_matrices.c.o */
     } :text
 
     .text.1435 0x2106F8 : AT(0x111678) SUBALIGN(4)
@@ -9352,7 +9352,7 @@ SECTIONS
 
     .text.1437 0x210850 : AT(0x1117D0) SUBALIGN(4)
     {
-        *(.text.lnk1437); /* build/src/assembly/textbin/gameplay/animation/get_moby_joint_matrices.c.o */
+        *(.text.lnk1437); /* build/src/assembly/textbin/mobys/animation/get_moby_joint_matrices.c.o */
     } :text
 
     .text.1438 0x2109B4 : AT(0x111934) SUBALIGN(4)
@@ -9387,7 +9387,7 @@ SECTIONS
 
     .text.1444 0x212C28 : AT(0x113BA8) SUBALIGN(4)
     {
-        *(.text.lnk1444); /* build/src/assembly/textbin/gameplay/camera/find_camera_environment_region.c.o */
+        *(.text.lnk1444); /* build/src/assembly/textbin/camera/find_camera_environment_region.c.o */
     } :text
 
     .text.1445 0x212D5C : AT(0x113CDC) SUBALIGN(4)
@@ -9397,7 +9397,7 @@ SECTIONS
 
     .text.1446 0x212D68 : AT(0x113CE8) SUBALIGN(4)
     {
-        *(.text.lnk1446); /* build/src/gameplay/entities/assign_moby_class_data.c.o */
+        *(.text.lnk1446); /* build/src/mobys/assign_moby_class_data.c.o */
     } :text
 
     .text.1447 0x212E1C : AT(0x113D9C) SUBALIGN(4)
@@ -9407,7 +9407,7 @@ SECTIONS
 
     .text.1448 0x212E28 : AT(0x113DA8) SUBALIGN(4)
     {
-        *(.text.lnk1448); /* build/src/gameplay/entities/update_visible_resident_objects.c.o */
+        *(.text.lnk1448); /* build/src/mobys/update_visible_resident_objects.c.o */
     } :text
 
     .text.1449 0x212EBC : AT(0x113E3C) SUBALIGN(4)
@@ -9417,17 +9417,17 @@ SECTIONS
 
     .text.1450 0x212ED8 : AT(0x113E58) SUBALIGN(4)
     {
-        *(.text.lnk1450); /* build/src/gameplay/animation/set_moby_animation.c.o */
+        *(.text.lnk1450); /* build/src/mobys/animation/set_moby_animation.c.o */
     } :text
 
     .text.1451 0x212F90 : AT(0x113F10) SUBALIGN(4)
     {
-        *(.text.lnk1451); /* build/src/gameplay/animation/blend_moby_animation.c.o */
+        *(.text.lnk1451); /* build/src/mobys/animation/blend_moby_animation.c.o */
     } :text
 
     .text.1452 0x2130D8 : AT(0x114058) SUBALIGN(4)
     {
-        *(.text.lnk1452); /* build/src/gameplay/animation/blend_moby_animation_ex.c.o */
+        *(.text.lnk1452); /* build/src/mobys/animation/blend_moby_animation_ex.c.o */
     } :text
 
     .text.1453 0x21322C : AT(0x1141AC) SUBALIGN(4)
@@ -9462,7 +9462,7 @@ SECTIONS
 
     .text.1459 0x213358 : AT(0x1142D8) SUBALIGN(4)
     {
-        *(.text.lnk1459); /* build/src/gameplay/entities/random_spherical_offset.c.o */
+        *(.text.lnk1459); /* build/src/math/random/random_spherical_offset.c.o */
     } :text
 
     .text.1460 0x2133D0 : AT(0x114350) SUBALIGN(4)
@@ -9477,7 +9477,7 @@ SECTIONS
 
     .text.1462 0x213508 : AT(0x114488) SUBALIGN(4)
     {
-        *(.text.lnk1462); /* build/src/gameplay/entities/probe_ground_height.c.o */
+        *(.text.lnk1462); /* build/src/world/collision/probe_ground_height.c.o */
     } :text
 
     .text.1463 0x21357C : AT(0x1144FC) SUBALIGN(4)
@@ -9487,7 +9487,7 @@ SECTIONS
 
     .text.1464 0x2135F0 : AT(0x114570) SUBALIGN(4)
     {
-        *(.text.lnk1464); /* build/src/gameplay/entities/resolve_camera_surface_height.c.o */
+        *(.text.lnk1464); /* build/src/camera/resolve_camera_surface_height.c.o */
     } :text
 
     .text.1465 0x2136E8 : AT(0x114668) SUBALIGN(4)
@@ -9497,7 +9497,7 @@ SECTIONS
 
     .text.1466 0x213700 : AT(0x114680) SUBALIGN(4)
     {
-        *(.text.lnk1466); /* build/src/gameplay/entities/update_moby_shadow_range.c.o */
+        *(.text.lnk1466); /* build/src/mobys/update_moby_shadow_range.c.o */
     } :text
 
     .text.1467 0x213920 : AT(0x1148A0) SUBALIGN(4)
@@ -9507,7 +9507,7 @@ SECTIONS
 
     .text.1468 0x213928 : AT(0x1148A8) SUBALIGN(4)
     {
-        *(.text.lnk1468); /* build/src/gameplay/fun_00213928.c.o */
+        *(.text.lnk1468); /* build/src/game/fun_00213928.c.o */
     } :text
 
     .text.1469 0x213EA8 : AT(0x114E28) SUBALIGN(4)
@@ -9547,7 +9547,7 @@ SECTIONS
 
     .text.1476 0x2141F8 : AT(0x115178) SUBALIGN(4)
     {
-        *(.text.lnk1476); /* build/src/gameplay/entities/suck_get_aim_height.c.o */
+        *(.text.lnk1476); /* build/src/weapons/suck_get_aim_height.c.o */
     } :text
 
     .text.1477 0x214228 : AT(0x1151A8) SUBALIGN(4)
@@ -9602,7 +9602,7 @@ SECTIONS
 
     .text.1487 0x214720 : AT(0x1156A0) SUBALIGN(4)
     {
-        *(.text.lnk1487); /* build/src/rendering/culling/is_point_inside_clip_volume.c.o */
+        *(.text.lnk1487); /* build/src/rendering/occlusion/is_point_inside_clip_volume.c.o */
     } :text
 
     .text.1488 0x2147F8 : AT(0x115778) SUBALIGN(4)
@@ -9632,7 +9632,7 @@ SECTIONS
 
     .text.1493 0x214970 : AT(0x1158F0) SUBALIGN(4)
     {
-        *(.text.lnk1493); /* build/src/runtime/time/set_video_timing.c.o */
+        *(.text.lnk1493); /* build/src/runtime/set_video_timing.c.o */
     } :text
 
     .text.1494 0x214A90 : AT(0x115A10) SUBALIGN(4)
@@ -9642,7 +9642,7 @@ SECTIONS
 
     .text.1495 0x214A98 : AT(0x115A18) SUBALIGN(4)
     {
-        *(.text.lnk1495); /* build/src/gameplay/entities/pack_vector_xyz_with_shared_scale.c.o */
+        *(.text.lnk1495); /* build/src/math/pack_vector_xyz_with_shared_scale.c.o */
     } :text
 
     .text.1496 0x214BC0 : AT(0x115B40) SUBALIGN(4)
@@ -9657,7 +9657,7 @@ SECTIONS
 
     .text.1498 0x214C48 : AT(0x115BC8) SUBALIGN(4)
     {
-        *(.text.lnk1498); /* build/src/math/conversion/round_float_to_decimal_places.c.o */
+        *(.text.lnk1498); /* build/src/math/round_float_to_decimal_places.c.o */
     } :text
 
     .text.1499 0x214CC4 : AT(0x115C44) SUBALIGN(4)
@@ -9667,7 +9667,7 @@ SECTIONS
 
     .text.1500 0x214CC8 : AT(0x115C48) SUBALIGN(4)
     {
-        *(.text.lnk1500); /* build/src/gameplay/state/is_value_within_interpolated_window.c.o */
+        *(.text.lnk1500); /* build/src/game/is_value_within_interpolated_window.c.o */
     } :text
 
     .text.1501 0x214D54 : AT(0x115CD4) SUBALIGN(4)
@@ -9677,7 +9677,7 @@ SECTIONS
 
     .text.1502 0x214DB0 : AT(0x115D30) SUBALIGN(4)
     {
-        *(.text.lnk1502); /* build/src/gameplay/camera/build_spherical_offset.c.o */
+        *(.text.lnk1502); /* build/src/camera/build_spherical_offset.c.o */
     } :text
 
     .text.1503 0x214E4C : AT(0x115DCC) SUBALIGN(4)
@@ -9687,7 +9687,7 @@ SECTIONS
 
     .text.1504 0x214E58 : AT(0x115DD8) SUBALIGN(4)
     {
-        *(.text.lnk1504); /* build/src/gameplay/entities/sample_camera_path.c.o */
+        *(.text.lnk1504); /* build/src/camera/sample_camera_path.c.o */
     } :text
 
     .text.1505 0x2150D0 : AT(0x116050) SUBALIGN(4)
@@ -9877,7 +9877,7 @@ SECTIONS
 
     .text.1542 0x216290 : AT(0x117210) SUBALIGN(4)
     {
-        *(.text.lnk1542); /* build/src/textbin/audio/music/music_update.c.o */
+        *(.text.lnk1542); /* build/src/audio/music/music_update.c.o */
     } :text
 
     .text.1543 0x2166E4 : AT(0x117664) SUBALIGN(4)
@@ -10007,12 +10007,12 @@ SECTIONS
 
     .text.1568 0x217048 : AT(0x117FC8) SUBALIGN(4)
     {
-        *(.text.lnk1568); /* build/src/input/pad/init_pads.c.o */
+        *(.text.lnk1568); /* build/src/input/init_pads.c.o */
     } :text
 
     .text.1569 0x2170C8 : AT(0x118048) SUBALIGN(4)
     {
-        *(.text.lnk1569); /* build/src/input/pad/poll_pad_device_state.c.o */
+        *(.text.lnk1569); /* build/src/input/poll_pad_device_state.c.o */
     } :text
 
     .text.1570 0x2172BC : AT(0x11823C) SUBALIGN(4)
@@ -10022,7 +10022,7 @@ SECTIONS
 
     .text.1571 0x2172C0 : AT(0x118240) SUBALIGN(4)
     {
-        *(.text.lnk1571); /* build/src/input/pad/clear_pad_input.c.o */
+        *(.text.lnk1571); /* build/src/input/clear_pad_input.c.o */
     } :text
 
     .text.1572 0x217324 : AT(0x1182A4) SUBALIGN(4)
@@ -10032,12 +10032,12 @@ SECTIONS
 
     .text.1573 0x217328 : AT(0x1182A8) SUBALIGN(4)
     {
-        *(.text.lnk1573); /* build/src/input/pad/process_pad_input.c.o */
+        *(.text.lnk1573); /* build/src/input/process_pad_input.c.o */
     } :text
 
     .text.1574 0x217A10 : AT(0x118990) SUBALIGN(4)
     {
-        *(.text.lnk1574); /* build/src/input/pad/update_primary_pad_state.c.o */
+        *(.text.lnk1574); /* build/src/input/update_primary_pad_state.c.o */
     } :text
 
     .text.1575 0x217A30 : AT(0x1189B0) SUBALIGN(4)
@@ -10132,7 +10132,7 @@ SECTIONS
 
     .text.1593 0x2196B8 : AT(0x11A638) SUBALIGN(4)
     {
-        *(.text.lnk1593); /* build/src/gameplay/state/render_level_effects_and_screen_sprites.c.o */
+        *(.text.lnk1593); /* build/src/rendering/effects/render_level_effects_and_screen_sprites.c.o */
     } :text
 
     .text.1594 0x219D7C : AT(0x11ACFC) SUBALIGN(4)
@@ -10182,7 +10182,7 @@ SECTIONS
 
     .text.1603 0x21A1E0 : AT(0x11B160) SUBALIGN(4)
     {
-        *(.text.lnk1603); /* build/src/textbin/rebuild_configured_text_label_list.c.o */
+        *(.text.lnk1603); /* build/src/ui/text/rebuild_configured_text_label_list.c.o */
     } :text
 
     .text.1604 0x21A304 : AT(0x11B284) SUBALIGN(4)
@@ -10192,12 +10192,12 @@ SECTIONS
 
     .text.1605 0x21A308 : AT(0x11B288) SUBALIGN(4)
     {
-        *(.text.lnk1605); /* build/src/ui/menus/choice_list/enter_menu_choice_list.c.o */
+        *(.text.lnk1605); /* build/src/ui/menus/widgets/enter_menu_choice_list.c.o */
     } :text
 
     .text.1606 0x21A310 : AT(0x11B290) SUBALIGN(4)
     {
-        *(.text.lnk1606); /* build/src/ui/menus/choice_list/leave_menu_choice_list.c.o */
+        *(.text.lnk1606); /* build/src/ui/menus/widgets/leave_menu_choice_list.c.o */
     } :text
 
     .text.1607 0x21A318 : AT(0x11B298) SUBALIGN(4)
@@ -10222,7 +10222,7 @@ SECTIONS
 
     .text.1611 0x21B1C8 : AT(0x11C148) SUBALIGN(4)
     {
-        *(.text.lnk1611); /* build/src/textbin/render_localized_ui_entry_list.c.o */
+        *(.text.lnk1611); /* build/src/ui/text/render_localized_ui_entry_list.c.o */
     } :text
 
     .text.1612 0x21B6D4 : AT(0x11C654) SUBALIGN(4)
@@ -10337,17 +10337,17 @@ SECTIONS
 
     .text.1634 0x21CB00 : AT(0x11DA80) SUBALIGN(4)
     {
-        *(.text.lnk1634); /* build/src/ui/menus/audio/set_pause_sound_volume.c.o */
+        *(.text.lnk1634); /* build/src/ui/menus/options/set_pause_sound_volume.c.o */
     } :text
 
     .text.1635 0x21CB30 : AT(0x11DAB0) SUBALIGN(4)
     {
-        *(.text.lnk1635); /* build/src/textbin/ui/menus/audio/sound_options_menu.c.o */
+        *(.text.lnk1635); /* build/src/ui/menus/options/sound_options_menu.c.o */
     } :text
 
     .text.1636 0x21CE00 : AT(0x11DD80) SUBALIGN(4)
     {
-        *(.text.lnk1636); /* build/src/textbin/ui/menus/audio/draw_sound_menu.c.o */
+        *(.text.lnk1636); /* build/src/ui/menus/options/draw_sound_menu.c.o */
     } :text
 
     .text.1637 0x21D168 : AT(0x11E0E8) SUBALIGN(4)
@@ -10362,7 +10362,7 @@ SECTIONS
 
     .text.1639 0x21D1F8 : AT(0x11E178) SUBALIGN(4)
     {
-        *(.text.lnk1639); /* build/src/ui/menus/help_text/enter_menu_help_text.c.o */
+        *(.text.lnk1639); /* build/src/ui/menus/widgets/enter_menu_help_text.c.o */
     } :text
 
     .text.1640 0x21D2C4 : AT(0x11E244) SUBALIGN(4)
@@ -10372,7 +10372,7 @@ SECTIONS
 
     .text.1641 0x21D2C8 : AT(0x11E248) SUBALIGN(4)
     {
-        *(.text.lnk1641); /* build/src/ui/menus/help_text/restore_menu_help_text.c.o */
+        *(.text.lnk1641); /* build/src/ui/menus/widgets/restore_menu_help_text.c.o */
     } :text
 
     .text.1642 0x21D334 : AT(0x11E2B4) SUBALIGN(4)
@@ -10382,7 +10382,7 @@ SECTIONS
 
     .text.1643 0x21D338 : AT(0x11E2B8) SUBALIGN(4)
     {
-        *(.text.lnk1643); /* build/src/ui/menus/help_text/update_menu_help_text_load.c.o */
+        *(.text.lnk1643); /* build/src/ui/menus/widgets/update_menu_help_text_load.c.o */
     } :text
 
     .text.1644 0x21D4A4 : AT(0x11E424) SUBALIGN(4)
@@ -10482,7 +10482,7 @@ SECTIONS
 
     .text.1663 0x21E698 : AT(0x11F618) SUBALIGN(4)
     {
-        *(.text.lnk1663); /* build/src/textbin/ui/menus/item_preview/update_item_preview_transform.c.o */
+        *(.text.lnk1663); /* build/src/ui/menus/item_preview/update_item_preview_transform.c.o */
     } :text
 
     .text.1664 0x21E7C8 : AT(0x11F748) SUBALIGN(4)
@@ -10507,7 +10507,7 @@ SECTIONS
 
     .text.1668 0x21EB20 : AT(0x11FAA0) SUBALIGN(4)
     {
-        *(.text.lnk1668); /* build/src/textbin/ui/menus/inventory/draw_items_menu.c.o */
+        *(.text.lnk1668); /* build/src/ui/menus/weapons/draw_items_menu.c.o */
     } :text
 
     .text.1669 0x21EF74 : AT(0x11FEF4) SUBALIGN(4)
@@ -10577,7 +10577,7 @@ SECTIONS
 
     .text.1682 0x21FC68 : AT(0x120BE8) SUBALIGN(4)
     {
-        *(.text.lnk1682); /* build/src/rendering/transitions/draw_transition_overlay.c.o */
+        *(.text.lnk1682); /* build/src/rendering/effects/draw_transition_overlay.c.o */
     } :text
 
     .text.1683 0x21FCDC : AT(0x120C5C) SUBALIGN(4)
@@ -10667,7 +10667,7 @@ SECTIONS
 
     .text.1700 0x221030 : AT(0x121FB0) SUBALIGN(4)
     {
-        *(.text.lnk1700); /* build/src/textbin/ui/menus/draw_cheats_menu.c.o */
+        *(.text.lnk1700); /* build/src/ui/menus/options/draw_cheats_menu.c.o */
     } :text
 
     .text.1701 0x2212B4 : AT(0x122234) SUBALIGN(4)
@@ -10677,12 +10677,12 @@ SECTIONS
 
     .text.1702 0x2212B8 : AT(0x122238) SUBALIGN(4)
     {
-        *(.text.lnk1702); /* build/src/ui/menus/choice_list/update_menu_choice_list.c.o */
+        *(.text.lnk1702); /* build/src/ui/menus/widgets/update_menu_choice_list.c.o */
     } :text
 
     .text.1703 0x221460 : AT(0x1223E0) SUBALIGN(4)
     {
-        *(.text.lnk1703); /* build/src/ui/menus/choice_list/draw_menu_choice_list.c.o */
+        *(.text.lnk1703); /* build/src/ui/menus/widgets/draw_menu_choice_list.c.o */
     } :text
 
     .text.1704 0x2215F4 : AT(0x122574) SUBALIGN(4)
@@ -10737,7 +10737,7 @@ SECTIONS
 
     .text.1714 0x221A48 : AT(0x1229C8) SUBALIGN(4)
     {
-        *(.text.lnk1714); /* build/src/ui/menus/prompt/enter_menu_prompt.c.o */
+        *(.text.lnk1714); /* build/src/ui/menus/widgets/enter_menu_prompt.c.o */
     } :text
 
     .text.1715 0x221A84 : AT(0x122A04) SUBALIGN(4)
@@ -10747,7 +10747,7 @@ SECTIONS
 
     .text.1716 0x221A88 : AT(0x122A08) SUBALIGN(4)
     {
-        *(.text.lnk1716); /* build/src/ui/menus/prompt/leave_menu_prompt.c.o */
+        *(.text.lnk1716); /* build/src/ui/menus/widgets/leave_menu_prompt.c.o */
     } :text
 
     .text.1717 0x221AB8 : AT(0x122A38) SUBALIGN(4)
@@ -10767,7 +10767,7 @@ SECTIONS
 
     .text.1720 0x221B50 : AT(0x122AD0) SUBALIGN(4)
     {
-        *(.text.lnk1720); /* build/src/ui/menus/prompt/draw_prompt_box.c.o */
+        *(.text.lnk1720); /* build/src/ui/menus/widgets/draw_prompt_box.c.o */
     } :text
 
     .text.1721 0x221D24 : AT(0x122CA4) SUBALIGN(4)
@@ -10817,7 +10817,7 @@ SECTIONS
 
     .text.1730 0x222290 : AT(0x123210) SUBALIGN(4)
     {
-        *(.text.lnk1730); /* build/src/gameplay/state/process_global_state_flags.c.o */
+        *(.text.lnk1730); /* build/src/game/process_global_state_flags.c.o */
     } :text
 
     .text.1731 0x2223D4 : AT(0x123354) SUBALIGN(4)
@@ -10827,7 +10827,7 @@ SECTIONS
 
     .text.1732 0x2223D8 : AT(0x123358) SUBALIGN(4)
     {
-        *(.text.lnk1732); /* build/src/gameplay/state/enter_timed_menu_sequence.c.o */
+        *(.text.lnk1732); /* build/src/game/enter_timed_menu_sequence.c.o */
     } :text
 
     .text.1733 0x2223EC : AT(0x12336C) SUBALIGN(4)
@@ -10852,7 +10852,7 @@ SECTIONS
 
     .text.1737 0x222A98 : AT(0x123A18) SUBALIGN(4)
     {
-        *(.text.lnk1737); /* build/src/textbin/ui/menus/draw_localized_three_option_menu.c.o */
+        *(.text.lnk1737); /* build/src/ui/menus/widgets/draw_localized_three_option_menu.c.o */
     } :text
 
     .text.1738 0x222D94 : AT(0x123D14) SUBALIGN(4)
@@ -10892,7 +10892,7 @@ SECTIONS
 
     .text.1745 0x2232D8 : AT(0x124258) SUBALIGN(4)
     {
-        *(.text.lnk1745); /* build/src/textbin/ui/menus/save_data/loading_data_menu.c.o */
+        *(.text.lnk1745); /* build/src/ui/menus/save_data/loading_data_menu.c.o */
     } :text
 
     .text.1746 0x2235B4 : AT(0x124534) SUBALIGN(4)
@@ -10937,17 +10937,17 @@ SECTIONS
 
     .text.1754 0x224368 : AT(0x1252E8) SUBALIGN(4)
     {
-        *(.text.lnk1754); /* build/src/textbin/gameplay/gadgets/load_hand_gadget.c.o */
+        *(.text.lnk1754); /* build/src/weapons/load_hand_gadget.c.o */
     } :text
 
     .text.1755 0x224B60 : AT(0x125AE0) SUBALIGN(4)
     {
-        *(.text.lnk1755); /* build/src/gameplay/entities/gadget_moby_update_noop.c.o */
+        *(.text.lnk1755); /* build/src/weapons/gadget_moby_update_noop.c.o */
     } :text
 
     .text.1756 0x224B68 : AT(0x125AE8) SUBALIGN(4)
     {
-        *(.text.lnk1756); /* build/src/gameplay/entities/attachment_update_callback.c.o */
+        *(.text.lnk1756); /* build/src/mobys/attachment_update_callback.c.o */
     } :text
 
     .text.1757 0x224B70 : AT(0x125AF0) SUBALIGN(4)
@@ -10997,7 +10997,7 @@ SECTIONS
 
     .text.1766 0x225530 : AT(0x1264B0) SUBALIGN(4)
     {
-        *(.text.lnk1766); /* build/src/gameplay/entities/delete_moby.c.o */
+        *(.text.lnk1766); /* build/src/mobys/delete_moby.c.o */
     } :text
 
     .text.1767 0x225574 : AT(0x1264F4) SUBALIGN(4)
@@ -11032,12 +11032,12 @@ SECTIONS
 
     .text.1773 0x225A68 : AT(0x1269E8) SUBALIGN(4)
     {
-        *(.text.lnk1773); /* build/src/rendering/entities/draw_moby_entries_from_object.c.o */
+        *(.text.lnk1773); /* build/src/rendering/mobys/draw_moby_entries_from_object.c.o */
     } :text
 
     .text.1774 0x225AB8 : AT(0x126A38) SUBALIGN(4)
     {
-        *(.text.lnk1774); /* build/src/gameplay/entities/helper_moby_update_noop.c.o */
+        *(.text.lnk1774); /* build/src/mobys/helper_moby_update_noop.c.o */
     } :text
 
     .text.1775 0x225AC0 : AT(0x126A40) SUBALIGN(4)
@@ -11132,7 +11132,7 @@ SECTIONS
 
     .text.1793 0x226778 : AT(0x1276F8) SUBALIGN(4)
     {
-        *(.text.lnk1793); /* build/src/rendering/image/pack_image_descriptor.c.o */
+        *(.text.lnk1793); /* build/src/rendering/texture/pack_image_descriptor.c.o */
     } :text
 
     .text.1794 0x2267B8 : AT(0x127738) SUBALIGN(4)
@@ -11157,7 +11157,7 @@ SECTIONS
 
     .text.1798 0x226B08 : AT(0x127A88) SUBALIGN(4)
     {
-        *(.text.lnk1798); /* build/src/textbin/gameplay/state/load_level_zero_preserving_progress.c.o */
+        *(.text.lnk1798); /* build/src/game/load_level_zero_preserving_progress.c.o */
     } :text
 
     .text.1799 0x226E04 : AT(0x127D84) SUBALIGN(4)
@@ -11167,7 +11167,7 @@ SECTIONS
 
     .text.1800 0x226E08 : AT(0x127D88) SUBALIGN(4)
     {
-        *(.text.lnk1800); /* build/src/gameplay/state/tick_space_transition.c.o */
+        *(.text.lnk1800); /* build/src/game/transitions/tick_space_transition.c.o */
     } :text
 
     .text.1801 0x226E58 : AT(0x127DD8) SUBALIGN(4)
@@ -11182,7 +11182,7 @@ SECTIONS
 
     .text.1803 0x226F50 : AT(0x127ED0) SUBALIGN(4)
     {
-        *(.text.lnk1803); /* build/src/gameplay/state/clear_scene_state_buffers.c.o */
+        *(.text.lnk1803); /* build/src/game/clear_scene_state_buffers.c.o */
     } :text
 
     .text.1804 0x226FA0 : AT(0x127F20) SUBALIGN(4)
@@ -11417,7 +11417,7 @@ SECTIONS
 
     .text.1850 0x22BEC4 : AT(0x12CE44) SUBALIGN(4)
     {
-        *(.text.lnk1850); /* build/src/assembly/textbin/rendering/gs/ssp_load_tex.c.o */
+        *(.text.lnk1850); /* build/src/assembly/textbin/rendering/frame/ssp_load_tex.c.o */
     } :text
 
     .text.1851 0x22BF94 : AT(0x12CF14) SUBALIGN(4)
@@ -11612,12 +11612,12 @@ SECTIONS
 
     .text.1889 0x22DE10 : AT(0x12ED90) SUBALIGN(4)
     {
-        *(.text.lnk1889); /* build/src/world/transforms/build_object_rotation_matrix.c.o */
+        *(.text.lnk1889); /* build/src/world/build_object_rotation_matrix.c.o */
     } :text
 
     .text.1890 0x22DF40 : AT(0x12EEC0) SUBALIGN(4)
     {
-        *(.text.lnk1890); /* build/src/gameplay/space/draw_light_flare.c.o */
+        *(.text.lnk1890); /* build/src/rendering/effects/draw_light_flare.c.o */
     } :text
 
     .text.1891 0x22E16C : AT(0x12F0EC) SUBALIGN(4)
@@ -11637,7 +11637,7 @@ SECTIONS
 
     .text.1894 0x22E1B0 : AT(0x12F130) SUBALIGN(4)
     {
-        *(.text.lnk1894); /* build/src/gameplay/build_variant_effect_quads.c.o */
+        *(.text.lnk1894); /* build/src/rendering/effects/build_variant_effect_quads.c.o */
     } :text
 
     .text.1895 0x22E420 : AT(0x12F3A0) SUBALIGN(4)
@@ -11652,7 +11652,7 @@ SECTIONS
 
     .text.1897 0x22E8C8 : AT(0x12F848) SUBALIGN(4)
     {
-        *(.text.lnk1897); /* build/src/gameplay/space/draw_resident_textured_quad.c.o */
+        *(.text.lnk1897); /* build/src/rendering/effects/draw_resident_textured_quad.c.o */
     } :text
 
     .text.1898 0x22EA04 : AT(0x12F984) SUBALIGN(4)
@@ -11662,12 +11662,12 @@ SECTIONS
 
     .text.1899 0x22EA08 : AT(0x12F988) SUBALIGN(4)
     {
-        *(.text.lnk1899); /* build/src/gameplay/space/draw_resident_textured_banner.c.o */
+        *(.text.lnk1899); /* build/src/rendering/effects/draw_resident_textured_banner.c.o */
     } :text
 
     .text.1900 0x22EAA8 : AT(0x12FA28) SUBALIGN(4)
     {
-        *(.text.lnk1900); /* build/src/gameplay/state/update_level_gameplay_frame.c.o */
+        *(.text.lnk1900); /* build/src/game/update_level_gameplay_frame.c.o */
     } :text
 
     .text.1901 0x22F284 : AT(0x130204) SUBALIGN(4)
@@ -11677,7 +11677,7 @@ SECTIONS
 
     .text.1902 0x22F288 : AT(0x130208) SUBALIGN(4)
     {
-        *(.text.lnk1902); /* build/src/textbin/render_level_frame.c.o */
+        *(.text.lnk1902); /* build/src/rendering/frame/render_level_frame.c.o */
     } :text
 
     .text.1903 0x22F5B0 : AT(0x130530) SUBALIGN(4)
@@ -11687,7 +11687,7 @@ SECTIONS
 
     .text.1904 0x22F778 : AT(0x1306F8) SUBALIGN(4)
     {
-        *(.text.lnk1904); /* build/src/gameplay/state/update_resident_gameplay_state.c.o */
+        *(.text.lnk1904); /* build/src/game/update_resident_gameplay_state.c.o */
     } :text
 
     .text.1905 0x230EE4 : AT(0x131E64) SUBALIGN(4)
@@ -11697,17 +11697,17 @@ SECTIONS
 
     .text.1906 0x230EE8 : AT(0x131E68) SUBALIGN(4)
     {
-        *(.text.lnk1906); /* build/src/gameplay/state/dispatch_game_state_update.c.o */
+        *(.text.lnk1906); /* build/src/game/dispatch_game_state_update.c.o */
     } :text
 
     .text.1907 0x230F60 : AT(0x131EE0) SUBALIGN(4)
     {
-        *(.text.lnk1907); /* build/src/textbin/gameplay/state/initialize_level_runtime.c.o */
+        *(.text.lnk1907); /* build/src/game/initialize_level_runtime.c.o */
     } :text
 
     .text.1908 0x231608 : AT(0x132588) SUBALIGN(4)
     {
-        *(.text.lnk1908); /* build/src/gameplay/space/play_level_transition_movie.c.o */
+        *(.text.lnk1908); /* build/src/game/transitions/play_level_transition_movie.c.o */
     } :text
 
     .text.1909 0x2316E8 : AT(0x132668) SUBALIGN(4)
@@ -11732,22 +11732,22 @@ SECTIONS
 
     .text.1913 0x231BD8 : AT(0x132B58) SUBALIGN(4)
     {
-        *(.text.lnk1913); /* build/src/textbin/ui/loading/play_level_loading_slides.c.o */
+        *(.text.lnk1913); /* build/src/ui/loading/play_level_loading_slides.c.o */
     } :text
 
     .text.1914 0x231FF0 : AT(0x132F70) SUBALIGN(4)
     {
-        *(.text.lnk1914); /* build/src/gameplay/state/do_space_transition.c.o */
+        *(.text.lnk1914); /* build/src/game/transitions/do_space_transition.c.o */
     } :text
 
     .text.1915 0x2327A0 : AT(0x133720) SUBALIGN(4)
     {
-        *(.text.lnk1915); /* build/src/rendering/entities/render_environment_mapped_object.c.o */
+        *(.text.lnk1915); /* build/src/rendering/mobys/render_environment_mapped_object.c.o */
     } :text
 
     .text.1916 0x232CE0 : AT(0x133C60) SUBALIGN(4)
     {
-        *(.text.lnk1916); /* build/src/runtime/rpc/initialize_sif_rpc.c.o */
+        *(.text.lnk1916); /* build/src/runtime/iop/initialize_sif_rpc.c.o */
     } :text
 
     .text.1917 0x232CFC : AT(0x133C7C) SUBALIGN(4)
@@ -11757,7 +11757,7 @@ SECTIONS
 
     .text.1918 0x232D00 : AT(0x133C80) SUBALIGN(4)
     {
-        *(.text.lnk1918); /* build/src/storage/stash/init_stash.c.o */
+        *(.text.lnk1918); /* build/src/streaming/stash/init_stash.c.o */
     } :text
 
     .text.1919 0x232E3C : AT(0x133DBC) SUBALIGN(4)
@@ -11767,17 +11767,17 @@ SECTIONS
 
     .text.1920 0x232E40 : AT(0x133DC0) SUBALIGN(4)
     {
-        *(.text.lnk1920); /* build/src/storage/stash/stash_send_data.c.o */
+        *(.text.lnk1920); /* build/src/streaming/stash/stash_send_data.c.o */
     } :text
 
     .text.1921 0x232F20 : AT(0x133EA0) SUBALIGN(4)
     {
-        *(.text.lnk1921); /* build/src/storage/stash/stash_receive_data.c.o */
+        *(.text.lnk1921); /* build/src/streaming/stash/stash_receive_data.c.o */
     } :text
 
     .text.1922 0x233038 : AT(0x133FB8) SUBALIGN(4)
     {
-        *(.text.lnk1922); /* build/src/storage/stash/stash_get_reserved_qwords.c.o */
+        *(.text.lnk1922); /* build/src/streaming/stash/stash_get_reserved_qwords.c.o */
     } :text
 
     .text.1923 0x233060 : AT(0x133FE0) SUBALIGN(4)
@@ -11822,7 +11822,7 @@ SECTIONS
 
     .text.1931 0x2334D8 : AT(0x134458) SUBALIGN(4)
     {
-        *(.text.lnk1931); /* build/src/rendering/vu0/vu0_load_micro_program.c.o */
+        *(.text.lnk1931); /* build/src/rendering/vu1/vu0_load_micro_program.c.o */
     } :text
 
     .text.1932 0x2335A0 : AT(0x134520) SUBALIGN(4)
@@ -11847,7 +11847,7 @@ SECTIONS
 
     .text.1936 0x233630 : AT(0x1345B0) SUBALIGN(4)
     {
-        *(.text.lnk1936); /* build/src/rendering/buffers/swap_render_buffer_chain.c.o */
+        *(.text.lnk1936); /* build/src/rendering/frame/swap_render_buffer_chain.c.o */
     } :text
 
     .text.1937 0x2336A0 : AT(0x134620) SUBALIGN(4)
@@ -11962,7 +11962,7 @@ SECTIONS
 
     .text.1959 0x233F00 : AT(0x134E80) SUBALIGN(4)
     {
-        *(.text.lnk1959); /* build/src/runtime/diagnostics/print_register_values_and_halt.c.o */
+        *(.text.lnk1959); /* build/src/runtime/debug/print_register_values_and_halt.c.o */
     } :text
 
     .text.1960 0x233F74 : AT(0x134EF4) SUBALIGN(4)
@@ -12027,7 +12027,7 @@ SECTIONS
 
     .text.1972 0x235840 : AT(0x1367C0) SUBALIGN(4)
     {
-        *(.text.lnk1972); /* build/src/rendering/buffers/copy_render_buffer_pair.c.o */
+        *(.text.lnk1972); /* build/src/rendering/frame/copy_render_buffer_pair.c.o */
     } :text
 
     .text.1973 0x235894 : AT(0x136814) SUBALIGN(4)
@@ -12037,7 +12037,7 @@ SECTIONS
 
     .text.1974 0x235898 : AT(0x136818) SUBALIGN(4)
     {
-        *(.text.lnk1974); /* build/src/rendering/entities/register_entity_render_resources.c.o */
+        *(.text.lnk1974); /* build/src/rendering/mobys/register_entity_render_resources.c.o */
     } :text
 
     .text.1975 0x2358C4 : AT(0x136844) SUBALIGN(4)
@@ -12087,7 +12087,7 @@ SECTIONS
 
     .text.1984 0x237A70 : AT(0x1389F0) SUBALIGN(4)
     {
-        *(.text.lnk1984); /* build/src/rendering/callbacks/noop_graphics_callback.c.o */
+        *(.text.lnk1984); /* build/src/rendering/frame/callbacks/noop_graphics_callback.c.o */
     } :text
 
     .text.1985 0x237A78 : AT(0x1389F8) SUBALIGN(4)
@@ -12122,7 +12122,7 @@ SECTIONS
 
     .text.1991 0x237ED0 : AT(0x138E50) SUBALIGN(4)
     {
-        *(.text.lnk1991); /* build/src/gameplay/vendor/update_resident_dialogue_animation_state.c.o */
+        *(.text.lnk1991); /* build/src/mobys/animation/update_resident_dialogue_animation_state.c.o */
     } :text
 
     .text.1992 0x2382F4 : AT(0x139274) SUBALIGN(4)
@@ -12132,7 +12132,7 @@ SECTIONS
 
     .text.1993 0x238310 : AT(0x139290) SUBALIGN(4)
     {
-        *(.text.lnk1993); /* build/src/gameplay/vendor/render_capture_scrolling_text.c.o */
+        *(.text.lnk1993); /* build/src/ui/vendor/render_capture_scrolling_text.c.o */
     } :text
 
     .text.1994 0x238520 : AT(0x1394A0) SUBALIGN(4)
@@ -12147,7 +12147,7 @@ SECTIONS
 
     .text.1996 0x238630 : AT(0x1395B0) SUBALIGN(4)
     {
-        *(.text.lnk1996); /* build/src/gameplay/vendor/render_capture_effect_pass.c.o */
+        *(.text.lnk1996); /* build/src/ui/vendor/render_capture_effect_pass.c.o */
     } :text
 
     .text.1997 0x238688 : AT(0x139608) SUBALIGN(4)
@@ -12157,7 +12157,7 @@ SECTIONS
 
     .text.1998 0x2386E8 : AT(0x139668) SUBALIGN(4)
     {
-        *(.text.lnk1998); /* build/src/gameplay/vendor/render_vendor_item_icon_strip_pass.c.o */
+        *(.text.lnk1998); /* build/src/ui/vendor/render_vendor_item_icon_strip_pass.c.o */
     } :text
 
     .text.1999 0x2389DC : AT(0x13995C) SUBALIGN(4)
@@ -12167,7 +12167,7 @@ SECTIONS
 
     .text.2000 0x2389E0 : AT(0x139960) SUBALIGN(4)
     {
-        *(.text.lnk2000); /* build/src/gameplay/vendor/render_vendor_item_details_pass.c.o */
+        *(.text.lnk2000); /* build/src/ui/vendor/render_vendor_item_details_pass.c.o */
     } :text
 
     .text.2001 0x238F04 : AT(0x139E84) SUBALIGN(4)
@@ -12177,7 +12177,7 @@ SECTIONS
 
     .text.2002 0x238F08 : AT(0x139E88) SUBALIGN(4)
     {
-        *(.text.lnk2002); /* build/src/gameplay/vendor/render_vendor_buy_label_pass.c.o */
+        *(.text.lnk2002); /* build/src/ui/vendor/render_vendor_buy_label_pass.c.o */
     } :text
 
     .text.2003 0x23915C : AT(0x13A0DC) SUBALIGN(4)
@@ -12187,7 +12187,7 @@ SECTIONS
 
     .text.2004 0x239160 : AT(0x13A0E0) SUBALIGN(4)
     {
-        *(.text.lnk2004); /* build/src/gameplay/vendor/render_vendor_purchase_prompt_pass.c.o */
+        *(.text.lnk2004); /* build/src/ui/vendor/render_vendor_purchase_prompt_pass.c.o */
     } :text
 
     .text.2005 0x23931C : AT(0x13A29C) SUBALIGN(4)
@@ -12197,7 +12197,7 @@ SECTIONS
 
     .text.2006 0x239328 : AT(0x13A2A8) SUBALIGN(4)
     {
-        *(.text.lnk2006); /* build/src/textbin/render_vendor_capture_texture_overlays_pass.c.o */
+        *(.text.lnk2006); /* build/src/ui/vendor/render_vendor_capture_texture_overlays_pass.c.o */
     } :text
 
     .text.2007 0x23968C : AT(0x13A60C) SUBALIGN(4)
@@ -12207,7 +12207,7 @@ SECTIONS
 
     .text.2008 0x239690 : AT(0x13A610) SUBALIGN(4)
     {
-        *(.text.lnk2008); /* build/src/gameplay/vendor/configure_capture_target.c.o */
+        *(.text.lnk2008); /* build/src/ui/vendor/configure_capture_target.c.o */
     } :text
 
     .text.2009 0x23974C : AT(0x13A6CC) SUBALIGN(4)
@@ -12217,7 +12217,7 @@ SECTIONS
 
     .text.2010 0x239750 : AT(0x13A6D0) SUBALIGN(4)
     {
-        *(.text.lnk2010); /* build/src/gameplay/vendor/setup_view_context.c.o */
+        *(.text.lnk2010); /* build/src/rendering/view/setup_view_context.c.o */
     } :text
 
     .text.2011 0x23977C : AT(0x13A6FC) SUBALIGN(4)
@@ -12227,7 +12227,7 @@ SECTIONS
 
     .text.2012 0x239780 : AT(0x13A700) SUBALIGN(4)
     {
-        *(.text.lnk2012); /* build/src/gameplay/vendor/render_vendor_capture_pass_sequence.c.o */
+        *(.text.lnk2012); /* build/src/ui/vendor/render_vendor_capture_pass_sequence.c.o */
     } :text
 
     .text.2013 0x239D4C : AT(0x13ACCC) SUBALIGN(4)
@@ -12237,7 +12237,7 @@ SECTIONS
 
     .text.2014 0x239D60 : AT(0x13ACE0) SUBALIGN(4)
     {
-        *(.text.lnk2014); /* build/src/gameplay/vendor/find_zone_at_point.c.o */
+        *(.text.lnk2014); /* build/src/world/find_zone_at_point.c.o */
     } :text
 
     .text.2015 0x239F24 : AT(0x13AEA4) SUBALIGN(4)
@@ -12247,7 +12247,7 @@ SECTIONS
 
     .text.2016 0x239F58 : AT(0x13AED8) SUBALIGN(4)
     {
-        *(.text.lnk2016); /* build/src/gameplay/camera/sample_surface_height_map.c.o */
+        *(.text.lnk2016); /* build/src/camera/sample_surface_height_map.c.o */
     } :text
 
     .text.2017 0x23A24C : AT(0x13B1CC) SUBALIGN(4)
@@ -12257,7 +12257,7 @@ SECTIONS
 
     .text.2018 0x23A2C0 : AT(0x13B240) SUBALIGN(4)
     {
-        *(.text.lnk2018); /* build/src/gameplay/entities/quad_moby_update.c.o */
+        *(.text.lnk2018); /* build/src/mobys/quad_moby_update.c.o */
     } :text
 
     .text.2019 0x23A314 : AT(0x13B294) SUBALIGN(4)
@@ -12267,7 +12267,7 @@ SECTIONS
 
     .text.2020 0x23A318 : AT(0x13B298) SUBALIGN(4)
     {
-        *(.text.lnk2020); /* build/src/gameplay/vendor/update_instance_attachment_points_and_lengths.c.o */
+        *(.text.lnk2020); /* build/src/mobys/update_instance_attachment_points_and_lengths.c.o */
     } :text
 
     .text.2021 0x23A3B4 : AT(0x13B334) SUBALIGN(4)
@@ -12277,17 +12277,17 @@ SECTIONS
 
     .text.2022 0x23A3B8 : AT(0x13B338) SUBALIGN(4)
     {
-        *(.text.lnk2022); /* build/src/video/decoder/play_mpeg_movie.c.o */
+        *(.text.lnk2022); /* build/src/movies/decoder/play_mpeg_movie.c.o */
     } :text
 
     .text.2023 0x23A460 : AT(0x13B3E0) SUBALIGN(4)
     {
-        *(.text.lnk2023); /* build/src/video/decoder/read_mpeg.c.o */
+        *(.text.lnk2023); /* build/src/movies/decoder/read_mpeg.c.o */
     } :text
 
     .text.2024 0x23A770 : AT(0x13B6F0) SUBALIGN(4)
     {
-        *(.text.lnk2024); /* build/src/runtime/threads/switch_thread.c.o */
+        *(.text.lnk2024); /* build/src/runtime/switch_thread.c.o */
     } :text
 
     .text.2025 0x23A78C : AT(0x13B70C) SUBALIGN(4)
@@ -12307,7 +12307,7 @@ SECTIONS
 
     .text.2028 0x23A7C0 : AT(0x13B740) SUBALIGN(4)
     {
-        *(.text.lnk2028); /* build/src/textbin/video/player/init_all.c.o */
+        *(.text.lnk2028); /* build/src/movies/player/init_all.c.o */
     } :text
 
     .text.2029 0x23AA64 : AT(0x13B9E4) SUBALIGN(4)
@@ -12317,7 +12317,7 @@ SECTIONS
 
     .text.2030 0x23AA68 : AT(0x13B9E8) SUBALIGN(4)
     {
-        *(.text.lnk2030); /* build/src/video/player/term_all.c.o */
+        *(.text.lnk2030); /* build/src/movies/player/term_all.c.o */
     } :text
 
     .text.2031 0x23AB74 : AT(0x13BAF4) SUBALIGN(4)
@@ -12327,7 +12327,7 @@ SECTIONS
 
     .text.2032 0x23AB78 : AT(0x13BAF8) SUBALIGN(4)
     {
-        *(.text.lnk2032); /* build/src/video/player/err_message.c.o */
+        *(.text.lnk2032); /* build/src/movies/player/err_message.c.o */
     } :text
 
     .text.2033 0x23AB9C : AT(0x13BB1C) SUBALIGN(4)
@@ -12337,7 +12337,7 @@ SECTIONS
 
     .text.2034 0x23ABA0 : AT(0x13BB20) SUBALIGN(4)
     {
-        *(.text.lnk2034); /* build/src/video/player/proceed_audio.c.o */
+        *(.text.lnk2034); /* build/src/movies/player/proceed_audio.c.o */
     } :text
 
     .text.2035 0x23ABCC : AT(0x13BB4C) SUBALIGN(4)
@@ -12427,7 +12427,7 @@ SECTIONS
 
     .text.2052 0x23B210 : AT(0x13C190) SUBALIGN(4)
     {
-        *(.text.lnk2052); /* build/src/video/display/set_image_tag.c.o */
+        *(.text.lnk2052); /* build/src/movies/display/set_image_tag.c.o */
     } :text
 
     .text.2053 0x23B3D4 : AT(0x13C354) SUBALIGN(4)
@@ -12437,12 +12437,12 @@ SECTIONS
 
     .text.2054 0x23B3D8 : AT(0x13C358) SUBALIGN(4)
     {
-        *(.text.lnk2054); /* build/src/assembly/textbin/rendering/gs/vblank_handler.c.o */
+        *(.text.lnk2054); /* build/src/assembly/textbin/rendering/frame/vblank_handler.c.o */
     } :text
 
     .text.2055 0x23B540 : AT(0x13C4C0) SUBALIGN(4)
     {
-        *(.text.lnk2055); /* build/src/video/display/handler_end_image.c.o */
+        *(.text.lnk2055); /* build/src/movies/display/handler_end_image.c.o */
     } :text
 
     .text.2056 0x23B58C : AT(0x13C50C) SUBALIGN(4)
@@ -12452,7 +12452,7 @@ SECTIONS
 
     .text.2057 0x23B590 : AT(0x13C510) SUBALIGN(4)
     {
-        *(.text.lnk2057); /* build/src/video/display/start_display.c.o */
+        *(.text.lnk2057); /* build/src/movies/display/start_display.c.o */
     } :text
 
     .text.2058 0x23B5DC : AT(0x13C55C) SUBALIGN(4)
@@ -12462,12 +12462,12 @@ SECTIONS
 
     .text.2059 0x23B5E0 : AT(0x13C560) SUBALIGN(4)
     {
-        *(.text.lnk2059); /* build/src/video/display/end_display.c.o */
+        *(.text.lnk2059); /* build/src/movies/display/end_display.c.o */
     } :text
 
     .text.2060 0x23B5F0 : AT(0x13C570) SUBALIGN(4)
     {
-        *(.text.lnk2060); /* build/src/video/decoder/callbacks/video_callback.c.o */
+        *(.text.lnk2060); /* build/src/movies/decoder/callbacks/video_callback.c.o */
     } :text
 
     .text.2061 0x23B728 : AT(0x13C6A8) SUBALIGN(4)
@@ -12482,27 +12482,27 @@ SECTIONS
 
     .text.2063 0x23B810 : AT(0x13C790) SUBALIGN(4)
     {
-        *(.text.lnk2063); /* build/src/video/decoder/buffers/cpy2area.c.o */
+        *(.text.lnk2063); /* build/src/movies/decoder/buffers/cpy2area.c.o */
     } :text
 
     .text.2064 0x23B940 : AT(0x13C8C0) SUBALIGN(4)
     {
-        *(.text.lnk2064); /* build/src/video/decoder/buffers/read_buf_create.c.o */
+        *(.text.lnk2064); /* build/src/movies/decoder/buffers/read_buf_create.c.o */
     } :text
 
     .text.2065 0x23B958 : AT(0x13C8D8) SUBALIGN(4)
     {
-        *(.text.lnk2065); /* build/src/video/decoder/buffers/read_buf_delete.c.o */
+        *(.text.lnk2065); /* build/src/movies/decoder/buffers/read_buf_delete.c.o */
     } :text
 
     .text.2066 0x23B960 : AT(0x13C8E0) SUBALIGN(4)
     {
-        *(.text.lnk2066); /* build/src/video/decoder/buffers/read_buf_begin_put.c.o */
+        *(.text.lnk2066); /* build/src/movies/decoder/buffers/read_buf_begin_put.c.o */
     } :text
 
     .text.2067 0x23B990 : AT(0x13C910) SUBALIGN(4)
     {
-        *(.text.lnk2067); /* build/src/video/decoder/buffers/read_buf_end_put.c.o */
+        *(.text.lnk2067); /* build/src/movies/decoder/buffers/read_buf_end_put.c.o */
     } :text
 
     .text.2068 0x23B9D4 : AT(0x13C954) SUBALIGN(4)
@@ -12512,12 +12512,12 @@ SECTIONS
 
     .text.2069 0x23B9D8 : AT(0x13C958) SUBALIGN(4)
     {
-        *(.text.lnk2069); /* build/src/video/decoder/buffers/read_buf_begin_get.c.o */
+        *(.text.lnk2069); /* build/src/movies/decoder/buffers/read_buf_begin_get.c.o */
     } :text
 
     .text.2070 0x23BA20 : AT(0x13C9A0) SUBALIGN(4)
     {
-        *(.text.lnk2070); /* build/src/video/decoder/buffers/read_buf_end_get.c.o */
+        *(.text.lnk2070); /* build/src/movies/decoder/buffers/read_buf_end_get.c.o */
     } :text
 
     .text.2071 0x23BA44 : AT(0x13C9C4) SUBALIGN(4)
@@ -12527,22 +12527,22 @@ SECTIONS
 
     .text.2072 0x23BA48 : AT(0x13C9C8) SUBALIGN(4)
     {
-        *(.text.lnk2072); /* build/src/video/decoder/mpeg_cd_stream_open.c.o */
+        *(.text.lnk2072); /* build/src/movies/decoder/mpeg_cd_stream_open.c.o */
     } :text
 
     .text.2073 0x23BA58 : AT(0x13C9D8) SUBALIGN(4)
     {
-        *(.text.lnk2073); /* build/src/video/decoder/mpeg_cd_stream_close.c.o */
+        *(.text.lnk2073); /* build/src/movies/decoder/mpeg_cd_stream_close.c.o */
     } :text
 
     .text.2074 0x23BA60 : AT(0x13C9E0) SUBALIGN(4)
     {
-        *(.text.lnk2074); /* build/src/video/decoder/read_cd_stream_sectors.c.o */
+        *(.text.lnk2074); /* build/src/movies/decoder/read_cd_stream_sectors.c.o */
     } :text
 
     .text.2075 0x23BAF8 : AT(0x13CA78) SUBALIGN(4)
     {
-        *(.text.lnk2075); /* build/src/video/decoder/buffers/get_fifo_index.c.o */
+        *(.text.lnk2075); /* build/src/movies/decoder/buffers/get_fifo_index.c.o */
     } :text
 
     .text.2076 0x23BB3C : AT(0x13CABC) SUBALIGN(4)
@@ -12552,7 +12552,7 @@ SECTIONS
 
     .text.2077 0x23BB40 : AT(0x13CAC0) SUBALIGN(4)
     {
-        *(.text.lnk2077); /* build/src/video/decoder/dma/set_d3_chcr.c.o */
+        *(.text.lnk2077); /* build/src/movies/decoder/dma/set_d3_chcr.c.o */
     } :text
 
     .text.2078 0x23BBAC : AT(0x13CB2C) SUBALIGN(4)
@@ -12562,7 +12562,7 @@ SECTIONS
 
     .text.2079 0x23BBB0 : AT(0x13CB30) SUBALIGN(4)
     {
-        *(.text.lnk2079); /* build/src/video/decoder/dma/set_d4_chcr.c.o */
+        *(.text.lnk2079); /* build/src/movies/decoder/dma/set_d4_chcr.c.o */
     } :text
 
     .text.2080 0x23BC1C : AT(0x13CB9C) SUBALIGN(4)
@@ -12572,7 +12572,7 @@ SECTIONS
 
     .text.2081 0x23BC20 : AT(0x13CBA0) SUBALIGN(4)
     {
-        *(.text.lnk2081); /* build/src/video/decoder/dma/sc_tag2.c.o */
+        *(.text.lnk2081); /* build/src/movies/decoder/dma/sc_tag2.c.o */
     } :text
 
     .text.2082 0x23BC44 : AT(0x13CBC4) SUBALIGN(4)
@@ -12582,17 +12582,17 @@ SECTIONS
 
     .text.2083 0x23BC48 : AT(0x13CBC8) SUBALIGN(4)
     {
-        *(.text.lnk2083); /* build/src/video/decoder/video_input/vi_buf_create.c.o */
+        *(.text.lnk2083); /* build/src/movies/decoder/video_input/vi_buf_create.c.o */
     } :text
 
     .text.2084 0x23BCC0 : AT(0x13CC40) SUBALIGN(4)
     {
-        *(.text.lnk2084); /* build/src/video/decoder/video_input/vi_buf_reset.c.o */
+        *(.text.lnk2084); /* build/src/movies/decoder/video_input/vi_buf_reset.c.o */
     } :text
 
     .text.2085 0x23BE20 : AT(0x13CDA0) SUBALIGN(4)
     {
-        *(.text.lnk2085); /* build/src/video/decoder/video_input/vi_buf_begin_put.c.o */
+        *(.text.lnk2085); /* build/src/movies/decoder/video_input/vi_buf_begin_put.c.o */
     } :text
 
     .text.2086 0x23BF14 : AT(0x13CE94) SUBALIGN(4)
@@ -12602,7 +12602,7 @@ SECTIONS
 
     .text.2087 0x23BF18 : AT(0x13CE98) SUBALIGN(4)
     {
-        *(.text.lnk2087); /* build/src/video/decoder/video_input/vi_buf_end_put.c.o */
+        *(.text.lnk2087); /* build/src/movies/decoder/video_input/vi_buf_end_put.c.o */
     } :text
 
     .text.2088 0x23BF6C : AT(0x13CEEC) SUBALIGN(4)
@@ -12612,7 +12612,7 @@ SECTIONS
 
     .text.2089 0x23BF70 : AT(0x13CEF0) SUBALIGN(4)
     {
-        *(.text.lnk2089); /* build/src/video/decoder/video_input/vi_buf_add_dma.c.o */
+        *(.text.lnk2089); /* build/src/movies/decoder/video_input/vi_buf_add_dma.c.o */
     } :text
 
     .text.2090 0x23C16C : AT(0x13D0EC) SUBALIGN(4)
@@ -12622,22 +12622,22 @@ SECTIONS
 
     .text.2091 0x23C170 : AT(0x13D0F0) SUBALIGN(4)
     {
-        *(.text.lnk2091); /* build/src/video/decoder/video_input/vi_buf_stop_dma.c.o */
+        *(.text.lnk2091); /* build/src/movies/decoder/video_input/vi_buf_stop_dma.c.o */
     } :text
 
     .text.2092 0x23C280 : AT(0x13D200) SUBALIGN(4)
     {
-        *(.text.lnk2092); /* build/src/video/decoder/video_input/vi_buf_restart_dma.c.o */
+        *(.text.lnk2092); /* build/src/movies/decoder/video_input/vi_buf_restart_dma.c.o */
     } :text
 
     .text.2093 0x23C5B8 : AT(0x13D538) SUBALIGN(4)
     {
-        *(.text.lnk2093); /* build/src/video/decoder/video_input/vi_buf_delete.c.o */
+        *(.text.lnk2093); /* build/src/movies/decoder/video_input/vi_buf_delete.c.o */
     } :text
 
     .text.2094 0x23C610 : AT(0x13D590) SUBALIGN(4)
     {
-        *(.text.lnk2094); /* build/src/video/decoder/video_input/vi_buf_count.c.o */
+        *(.text.lnk2094); /* build/src/movies/decoder/video_input/vi_buf_count.c.o */
     } :text
 
     .text.2095 0x23C65C : AT(0x13D5DC) SUBALIGN(4)
@@ -12647,7 +12647,7 @@ SECTIONS
 
     .text.2096 0x23C660 : AT(0x13D5E0) SUBALIGN(4)
     {
-        *(.text.lnk2096); /* build/src/video/decoder/video_input/vi_buf_flush.c.o */
+        *(.text.lnk2096); /* build/src/movies/decoder/video_input/vi_buf_flush.c.o */
     } :text
 
     .text.2097 0x23C6B4 : AT(0x13D634) SUBALIGN(4)
@@ -12657,7 +12657,7 @@ SECTIONS
 
     .text.2098 0x23C6B8 : AT(0x13D638) SUBALIGN(4)
     {
-        *(.text.lnk2098); /* build/src/video/decoder/video_input/vi_buf_modify_pts.c.o */
+        *(.text.lnk2098); /* build/src/movies/decoder/video_input/vi_buf_modify_pts.c.o */
     } :text
 
     .text.2099 0x23C80C : AT(0x13D78C) SUBALIGN(4)
@@ -12667,12 +12667,12 @@ SECTIONS
 
     .text.2100 0x23C810 : AT(0x13D790) SUBALIGN(4)
     {
-        *(.text.lnk2100); /* build/src/video/decoder/video_input/vi_buf_put_ts.c.o */
+        *(.text.lnk2100); /* build/src/movies/decoder/video_input/vi_buf_put_ts.c.o */
     } :text
 
     .text.2101 0x23C920 : AT(0x13D8A0) SUBALIGN(4)
     {
-        *(.text.lnk2101); /* build/src/video/decoder/video_input/vi_buf_get_ts.c.o */
+        *(.text.lnk2101); /* build/src/movies/decoder/video_input/vi_buf_get_ts.c.o */
     } :text
 
     .text.2102 0x23CAC4 : AT(0x13DA44) SUBALIGN(4)
@@ -12682,7 +12682,7 @@ SECTIONS
 
     .text.2103 0x23CAC8 : AT(0x13DA48) SUBALIGN(4)
     {
-        *(.text.lnk2103); /* build/src/video/decoder/video_dec_create.c.o */
+        *(.text.lnk2103); /* build/src/movies/decoder/video_dec_create.c.o */
     } :text
 
     .text.2104 0x23CBC8 : AT(0x13DB48) SUBALIGN(4)
@@ -12692,12 +12692,12 @@ SECTIONS
 
     .text.2105 0x23CBD0 : AT(0x13DB50) SUBALIGN(4)
     {
-        *(.text.lnk2105); /* build/src/video/decoder/video_dec_set_stream.c.o */
+        *(.text.lnk2105); /* build/src/movies/decoder/video_dec_set_stream.c.o */
     } :text
 
     .text.2106 0x23CBF0 : AT(0x13DB70) SUBALIGN(4)
     {
-        *(.text.lnk2106); /* build/src/video/decoder/video_dec_begin_put.c.o */
+        *(.text.lnk2106); /* build/src/movies/decoder/video_dec_begin_put.c.o */
     } :text
 
     .text.2107 0x23CC0C : AT(0x13DB8C) SUBALIGN(4)
@@ -12707,7 +12707,7 @@ SECTIONS
 
     .text.2108 0x23CC10 : AT(0x13DB90) SUBALIGN(4)
     {
-        *(.text.lnk2108); /* build/src/video/decoder/video_dec_end_put.c.o */
+        *(.text.lnk2108); /* build/src/movies/decoder/video_dec_end_put.c.o */
     } :text
 
     .text.2109 0x23CC2C : AT(0x13DBAC) SUBALIGN(4)
@@ -12717,12 +12717,12 @@ SECTIONS
 
     .text.2110 0x23CC30 : AT(0x13DBB0) SUBALIGN(4)
     {
-        *(.text.lnk2110); /* build/src/video/decoder/video_dec_reset.c.o */
+        *(.text.lnk2110); /* build/src/movies/decoder/video_dec_reset.c.o */
     } :text
 
     .text.2111 0x23CC38 : AT(0x13DBB8) SUBALIGN(4)
     {
-        *(.text.lnk2111); /* build/src/video/decoder/video_dec_delete.c.o */
+        *(.text.lnk2111); /* build/src/movies/decoder/video_dec_delete.c.o */
     } :text
 
     .text.2112 0x23CC6C : AT(0x13DBEC) SUBALIGN(4)
@@ -12732,7 +12732,7 @@ SECTIONS
 
     .text.2113 0x23CC70 : AT(0x13DBF0) SUBALIGN(4)
     {
-        *(.text.lnk2113); /* build/src/video/decoder/video_dec_abort.c.o */
+        *(.text.lnk2113); /* build/src/movies/decoder/video_dec_abort.c.o */
     } :text
 
     .text.2114 0x23CC7C : AT(0x13DBFC) SUBALIGN(4)
@@ -12742,12 +12742,12 @@ SECTIONS
 
     .text.2115 0x23CC80 : AT(0x13DC00) SUBALIGN(4)
     {
-        *(.text.lnk2115); /* build/src/video/decoder/video_dec_get_state.c.o */
+        *(.text.lnk2115); /* build/src/movies/decoder/video_dec_get_state.c.o */
     } :text
 
     .text.2116 0x23CC88 : AT(0x13DC08) SUBALIGN(4)
     {
-        *(.text.lnk2116); /* build/src/video/decoder/video_dec_set_state.c.o */
+        *(.text.lnk2116); /* build/src/movies/decoder/video_dec_set_state.c.o */
     } :text
 
     .text.2117 0x23CC94 : AT(0x13DC14) SUBALIGN(4)
@@ -12757,12 +12757,12 @@ SECTIONS
 
     .text.2118 0x23CC98 : AT(0x13DC18) SUBALIGN(4)
     {
-        *(.text.lnk2118); /* build/src/video/decoder/video_dec_put_ts.c.o */
+        *(.text.lnk2118); /* build/src/movies/decoder/video_dec_put_ts.c.o */
     } :text
 
     .text.2119 0x23CCE0 : AT(0x13DC60) SUBALIGN(4)
     {
-        *(.text.lnk2119); /* build/src/video/decoder/video_dec_input_count.c.o */
+        *(.text.lnk2119); /* build/src/movies/decoder/video_dec_input_count.c.o */
     } :text
 
     .text.2120 0x23CCFC : AT(0x13DC7C) SUBALIGN(4)
@@ -12772,17 +12772,17 @@ SECTIONS
 
     .text.2121 0x23CD08 : AT(0x13DC88) SUBALIGN(4)
     {
-        *(.text.lnk2121); /* build/src/video/decoder/video_dec_flush.c.o */
+        *(.text.lnk2121); /* build/src/movies/decoder/video_dec_flush.c.o */
     } :text
 
     .text.2122 0x23CDE0 : AT(0x13DD60) SUBALIGN(4)
     {
-        *(.text.lnk2122); /* build/src/video/decoder/video_dec_is_flushed.c.o */
+        *(.text.lnk2122); /* build/src/movies/decoder/video_dec_is_flushed.c.o */
     } :text
 
     .text.2123 0x23CE28 : AT(0x13DDA8) SUBALIGN(4)
     {
-        *(.text.lnk2123); /* build/src/video/decoder/video_dec_main.c.o */
+        *(.text.lnk2123); /* build/src/movies/decoder/video_dec_main.c.o */
     } :text
 
     .text.2124 0x23CEC4 : AT(0x13DE44) SUBALIGN(4)
@@ -12792,7 +12792,7 @@ SECTIONS
 
     .text.2125 0x23CEC8 : AT(0x13DE48) SUBALIGN(4)
     {
-        *(.text.lnk2125); /* build/src/video/decoder/dec_bs0.c.o */
+        *(.text.lnk2125); /* build/src/movies/decoder/dec_bs0.c.o */
     } :text
 
     .text.2126 0x23D07C : AT(0x13DFFC) SUBALIGN(4)
@@ -12802,32 +12802,32 @@ SECTIONS
 
     .text.2127 0x23D080 : AT(0x13E000) SUBALIGN(4)
     {
-        *(.text.lnk2127); /* build/src/video/decoder/callbacks/mpeg_error.c.o */
+        *(.text.lnk2127); /* build/src/movies/decoder/callbacks/mpeg_error.c.o */
     } :text
 
     .text.2128 0x23D0A8 : AT(0x13E028) SUBALIGN(4)
     {
-        *(.text.lnk2128); /* build/src/video/decoder/callbacks/mpeg_nodata.c.o */
+        *(.text.lnk2128); /* build/src/movies/decoder/callbacks/mpeg_nodata.c.o */
     } :text
 
     .text.2129 0x23D0E0 : AT(0x13E060) SUBALIGN(4)
     {
-        *(.text.lnk2129); /* build/src/video/decoder/mpeg_stop_dma.c.o */
+        *(.text.lnk2129); /* build/src/movies/decoder/mpeg_stop_dma.c.o */
     } :text
 
     .text.2130 0x23D110 : AT(0x13E090) SUBALIGN(4)
     {
-        *(.text.lnk2130); /* build/src/video/decoder/mpeg_restart_video_dma.c.o */
+        *(.text.lnk2130); /* build/src/movies/decoder/mpeg_restart_video_dma.c.o */
     } :text
 
     .text.2131 0x23D140 : AT(0x13E0C0) SUBALIGN(4)
     {
-        *(.text.lnk2131); /* build/src/video/decoder/callbacks/get_mpeg_timestamp.c.o */
+        *(.text.lnk2131); /* build/src/movies/decoder/callbacks/get_mpeg_timestamp.c.o */
     } :text
 
     .text.2132 0x23D190 : AT(0x13E110) SUBALIGN(4)
     {
-        *(.text.lnk2132); /* build/src/video/decoder/video_output/vo_buf_create.c.o */
+        *(.text.lnk2132); /* build/src/movies/decoder/video_output/vo_buf_create.c.o */
     } :text
 
     .text.2133 0x23D1DC : AT(0x13E15C) SUBALIGN(4)
@@ -12837,17 +12837,17 @@ SECTIONS
 
     .text.2134 0x23D1E0 : AT(0x13E160) SUBALIGN(4)
     {
-        *(.text.lnk2134); /* build/src/video/decoder/video_output/vo_buf_delete.c.o */
+        *(.text.lnk2134); /* build/src/movies/decoder/video_output/vo_buf_delete.c.o */
     } :text
 
     .text.2135 0x23D1E8 : AT(0x13E168) SUBALIGN(4)
     {
-        *(.text.lnk2135); /* build/src/video/decoder/video_output/vo_buf_reset.c.o */
+        *(.text.lnk2135); /* build/src/movies/decoder/video_output/vo_buf_reset.c.o */
     } :text
 
     .text.2136 0x23D1F8 : AT(0x13E178) SUBALIGN(4)
     {
-        *(.text.lnk2136); /* build/src/video/decoder/video_output/vo_buf_is_full.c.o */
+        *(.text.lnk2136); /* build/src/movies/decoder/video_output/vo_buf_is_full.c.o */
     } :text
 
     .text.2137 0x23D20C : AT(0x13E18C) SUBALIGN(4)
@@ -12857,17 +12857,17 @@ SECTIONS
 
     .text.2138 0x23D210 : AT(0x13E190) SUBALIGN(4)
     {
-        *(.text.lnk2138); /* build/src/video/decoder/video_output/vo_buf_inc_count.c.o */
+        *(.text.lnk2138); /* build/src/movies/decoder/video_output/vo_buf_inc_count.c.o */
     } :text
 
     .text.2139 0x23D288 : AT(0x13E208) SUBALIGN(4)
     {
-        *(.text.lnk2139); /* build/src/video/decoder/video_output/vo_buf_get_data.c.o */
+        *(.text.lnk2139); /* build/src/movies/decoder/video_output/vo_buf_get_data.c.o */
     } :text
 
     .text.2140 0x23D2C8 : AT(0x13E248) SUBALIGN(4)
     {
-        *(.text.lnk2140); /* build/src/video/decoder/video_output/vo_buf_is_empty.c.o */
+        *(.text.lnk2140); /* build/src/movies/decoder/video_output/vo_buf_is_empty.c.o */
     } :text
 
     .text.2141 0x23D2D4 : AT(0x13E254) SUBALIGN(4)
@@ -12877,7 +12877,7 @@ SECTIONS
 
     .text.2142 0x23D2D8 : AT(0x13E258) SUBALIGN(4)
     {
-        *(.text.lnk2142); /* build/src/video/decoder/video_output/vo_buf_get_tag.c.o */
+        *(.text.lnk2142); /* build/src/movies/decoder/video_output/vo_buf_get_tag.c.o */
     } :text
 
     .text.2143 0x23D33C : AT(0x13E2BC) SUBALIGN(4)
@@ -12887,7 +12887,7 @@ SECTIONS
 
     .text.2144 0x23D340 : AT(0x13E2C0) SUBALIGN(4)
     {
-        *(.text.lnk2144); /* build/src/video/decoder/video_output/vo_buf_dec_count.c.o */
+        *(.text.lnk2144); /* build/src/movies/decoder/video_output/vo_buf_dec_count.c.o */
     } :text
 
     core.data.0 0x12F480 : AT(0x30400) SUBALIGN(1)
@@ -12947,7 +12947,7 @@ SECTIONS
 
     textbin.audio.snd_start_sound_system.data 0x133280 : AT(0x34200) SUBALIGN(4)
     {
-        build/link/src/textbin/audio/snd_start_sound_system.c.o(.data);
+        build/link/src/audio/snd_start_sound_system.c.o(.data);
     } :data
 
     core.data.6 0x135280 : AT(0x36200) SUBALIGN(1)
@@ -12957,7 +12957,7 @@ SECTIONS
 
     video.display.set_pal_mode.data 0x13D100 : AT(0x3E080) SUBALIGN(4)
     {
-        build/link/src/video/display/set_pal_mode.c.o(.data);
+        build/link/src/movies/display/set_pal_mode.c.o(.data);
     } :data
 
     core.data.7 0x13D108 : AT(0x3E088) SUBALIGN(1)
@@ -12967,7 +12967,7 @@ SECTIONS
 
     ui.menus.audio.set_pause_sound_volume.data 0x13E5A0 : AT(0x3F520) SUBALIGN(4)
     {
-        build/link/src/ui/menus/audio/set_pause_sound_volume.c.o(.data);
+        build/link/src/ui/menus/options/set_pause_sound_volume.c.o(.data);
     } :data
 
     core.data.8 0x13E5A4 : AT(0x3F524) SUBALIGN(1)
@@ -12987,7 +12987,7 @@ SECTIONS
 
     rendering.state.reset_gs_registers_pr.data 0x151788 : AT(0x52708) SUBALIGN(4)
     {
-        build/link/src/rendering/state/reset_gs_registers_pr.c.o(.data);
+        build/link/src/rendering/frame/reset_gs_registers_pr.c.o(.data);
     } :data
 
     core.data.10 0x1517A0 : AT(0x52720) SUBALIGN(1)
@@ -13287,7 +13287,7 @@ SECTIONS
 
     runtime.time.set_video_timing.sdata 0x15ED60 : AT(0x5FCE0) SUBALIGN(4)
     {
-        build/link/src/runtime/time/set_video_timing.c.o(.sdata);
+        build/link/src/runtime/set_video_timing.c.o(.sdata);
     } :data
 
     core.lit.2 0x15ED80 : AT(0x5FD00) SUBALIGN(1)
@@ -13297,7 +13297,7 @@ SECTIONS
 
     textbin.gameplay.state.load_level_zero_preserving_progress.sdata 0x15EDA0 : AT(0x5FD20) SUBALIGN(4)
     {
-        build/link/src/textbin/gameplay/state/load_level_zero_preserving_progress.c.o(.sdata);
+        build/link/src/game/load_level_zero_preserving_progress.c.o(.sdata);
     } :data
 
     core.lit.3 0x15EDA4 : AT(0x5FD24) SUBALIGN(1)
@@ -13317,7 +13317,7 @@ SECTIONS
 
     gameplay.state.service_level_archive_load.sdata 0x15EE50 : AT(0x5FDD0) SUBALIGN(4)
     {
-        build/link/src/gameplay/state/service_level_archive_load.c.o(.sdata);
+        build/link/src/game/service_level_archive_load.c.o(.sdata);
     } :data
 
     core.lit.5 0x15EE58 : AT(0x5FDD8) SUBALIGN(1)
@@ -13327,7 +13327,7 @@ SECTIONS
 
     ui.fonts.load_debug_font.sdata 0x15EEC8 : AT(0x5FE48) SUBALIGN(4)
     {
-        build/link/src/ui/fonts/load_debug_font.c.o(.sdata);
+        build/link/src/ui/text/font/load_debug_font.c.o(.sdata);
     } :data
 
     core.lit.6 0x15EED0 : AT(0x5FE50) SUBALIGN(1)
@@ -13342,7 +13342,7 @@ SECTIONS
 
     runtime.dma.initialize_streaming_state.sdata 0x15EF20 : AT(0x5FEA0) SUBALIGN(4)
     {
-        build/link/src/runtime/dma/initialize_streaming_state.c.o(.sdata);
+        build/link/src/streaming/initialize_streaming_state.c.o(.sdata);
     } :data
 
     .lit.1 0x15EF24 : AT(0x5FEA4) SUBALIGN(1)
@@ -13352,7 +13352,7 @@ SECTIONS
 
     gameplay.camera.camera_activation_check_priority.sdata 0x15EF40 : AT(0x5FEC0) SUBALIGN(4)
     {
-        build/link/src/gameplay/camera/camera_activation_check_priority.c.o(.sdata);
+        build/link/src/camera/camera_activation_check_priority.c.o(.sdata);
     } :data
 
     .lit.2 0x15EF44 : AT(0x5FEC4) SUBALIGN(1)
@@ -13362,7 +13362,7 @@ SECTIONS
 
     gameplay.camera.execute_camera_post_update_callbacks.sdata 0x15EF8C : AT(0x5FF0C) SUBALIGN(4)
     {
-        build/link/src/gameplay/camera/execute_camera_post_update_callbacks.c.o(.sdata);
+        build/link/src/camera/execute_camera_post_update_callbacks.c.o(.sdata);
     } :data
 
     .lit.3 0x15EF90 : AT(0x5FF10) SUBALIGN(1)
@@ -13372,7 +13372,7 @@ SECTIONS
 
     gameplay.camera.refresh_camera_control_flags.sdata 0x15EF98 : AT(0x5FF18) SUBALIGN(4)
     {
-        build/link/src/gameplay/camera/refresh_camera_control_flags.c.o(.sdata);
+        build/link/src/camera/refresh_camera_control_flags.c.o(.sdata);
     } :data
 
     .lit.4 0x15EFA4 : AT(0x5FF24) SUBALIGN(1)
@@ -13392,7 +13392,7 @@ SECTIONS
 
     gameplay.state.tick_space_transition.sdata 0x15F5EC : AT(0x6056C) SUBALIGN(4)
     {
-        build/link/src/gameplay/state/tick_space_transition.c.o(.sdata);
+        build/link/src/game/transitions/tick_space_transition.c.o(.sdata);
     } :data
 
     .lit.6 0x15F5F0 : AT(0x60570) SUBALIGN(1)
@@ -13422,7 +13422,7 @@ SECTIONS
 
     runtime.resources.update_resource_counter.sdata 0x15F8F8 : AT(0x60878) SUBALIGN(4)
     {
-        build/link/src/runtime/resources/update_resource_counter.c.o(.sdata);
+        build/link/src/runtime/update_resource_counter.c.o(.sdata);
     } :data
 
     .lit.9 0x15F8FC : AT(0x6087C) SUBALIGN(1)
@@ -13432,7 +13432,7 @@ SECTIONS
 
     gameplay.entities.create_moby.sdata 0x15FEFC : AT(0x60E7C) SUBALIGN(4)
     {
-        build/link/src/gameplay/entities/create_moby.c.o(.sdata);
+        build/link/src/mobys/create_moby.c.o(.sdata);
     } :data
 
     .lit.10 0x15FF00 : AT(0x60E80) SUBALIGN(1)
@@ -13442,7 +13442,7 @@ SECTIONS
 
     gameplay.state.initialize_level_render_state.sdata 0x1603D0 : AT(0x61350) SUBALIGN(4)
     {
-        build/link/src/gameplay/state/initialize_level_render_state.c.o(.sdata);
+        build/link/src/rendering/frame/initialize_level_render_state.c.o(.sdata);
     } :data
 
     .lit.11 0x1603D4 : AT(0x61354) SUBALIGN(1)
@@ -13482,7 +13482,7 @@ SECTIONS
 
     rendering.buffers.swap_render_buffer_chain.sdata 0x160F04 : AT(0x61E84) SUBALIGN(4)
     {
-        build/link/src/rendering/buffers/swap_render_buffer_chain.c.o(.sdata);
+        build/link/src/rendering/frame/swap_render_buffer_chain.c.o(.sdata);
     } :data
 
     .lit.15 0x160F08 : AT(0x61E88) SUBALIGN(1)
@@ -13512,7 +13512,7 @@ SECTIONS
 
     gameplay.entities.resolve_camera_surface_height.sdata 0x1611A0 : AT(0x62120) SUBALIGN(4)
     {
-        build/link/src/gameplay/entities/resolve_camera_surface_height.c.o(.sdata);
+        build/link/src/camera/resolve_camera_surface_height.c.o(.sdata);
     } :data
 
     .lit.18 0x1611A4 : AT(0x62124) SUBALIGN(1)
@@ -13532,7 +13532,7 @@ SECTIONS
 
     gameplay.camera.update_all_cameras.data 0x187410 : AT(0x88390) SUBALIGN(4)
     {
-        build/link/src/gameplay/camera/update_all_cameras.c.o(.data);
+        build/link/src/camera/update_all_cameras.c.o(.data);
     } :data
 
     .data.1 0x189210 : AT(0x8A190) SUBALIGN(1)
@@ -13542,7 +13542,7 @@ SECTIONS
 
     textbin.render_queued_rotated_sprites.data 0x189300 : AT(0x8A280) SUBALIGN(4)
     {
-        build/link/src/textbin/render_queued_rotated_sprites.c.o(.data);
+        build/link/src/rendering/effects/render_queued_rotated_sprites.c.o(.data);
     } :data
 
     .data.2 0x1893C4 : AT(0x8A344) SUBALIGN(1)
@@ -13552,7 +13552,7 @@ SECTIONS
 
     gameplay.camera.backup_current_cam.data 0x1893D0 : AT(0x8A350) SUBALIGN(4)
     {
-        build/link/src/gameplay/camera/backup_current_cam.c.o(.data);
+        build/link/src/camera/backup_current_cam.c.o(.data);
     } :data
 
     .data.3 0x189B50 : AT(0x8AAD0) SUBALIGN(1)
@@ -13572,7 +13572,7 @@ SECTIONS
 
     textbin.append_billboard_batch.data 0x18ED00 : AT(0x8FC80) SUBALIGN(4)
     {
-        build/link/src/textbin/append_billboard_batch.c.o(.data);
+        build/link/src/rendering/effects/append_billboard_batch.c.o(.data);
     } :data
 
     .data.5 0x18EF00 : AT(0x8FE80) SUBALIGN(1)
@@ -13612,7 +13612,7 @@ SECTIONS
 
     textbin.gameplay.state.initialize_level_runtime.data 0x1CAAC0 : AT(0xCBA40) SUBALIGN(4)
     {
-        build/link/src/textbin/gameplay/state/initialize_level_runtime.c.o(.data);
+        build/link/src/game/initialize_level_runtime.c.o(.data);
     } :data
 
     .data.9 0x1CBAC0 : AT(0xCCA40) SUBALIGN(1)
@@ -13622,7 +13622,7 @@ SECTIONS
 
     textbin.world.data.select_world_object_resource_tables.data 0x1CBBE0 : AT(0xCCB60) SUBALIGN(4)
     {
-        build/link/src/textbin/world/data/select_world_object_resource_tables.c.o(.data);
+        build/link/src/world/select_world_object_resource_tables.c.o(.data);
     } :data
 
     .data.10 0x1CC060 : AT(0xCCFE0) SUBALIGN(1)
@@ -13632,7 +13632,7 @@ SECTIONS
 
     input.pad.init_pads.data 0x1CD760 : AT(0xCE6E0) SUBALIGN(4)
     {
-        build/link/src/input/pad/init_pads.c.o(.data);
+        build/link/src/input/init_pads.c.o(.data);
     } :data
 
     .data.11 0x1CD770 : AT(0xCE6F0) SUBALIGN(1)
@@ -13642,7 +13642,7 @@ SECTIONS
 
     gameplay.state.render_level_effects_and_screen_sprites.data 0x1CE2C0 : AT(0xCF240) SUBALIGN(4)
     {
-        build/link/src/gameplay/state/render_level_effects_and_screen_sprites.c.o(.data);
+        build/link/src/rendering/effects/render_level_effects_and_screen_sprites.c.o(.data);
     } :data
 
     .data.12 0x1CE2F8 : AT(0xCF278) SUBALIGN(1)
@@ -13662,7 +13662,7 @@ SECTIONS
 
     textbin.gameplay.gadgets.load_hand_gadget.data 0x1D52E8 : AT(0xD6268) SUBALIGN(4)
     {
-        build/link/src/textbin/gameplay/gadgets/load_hand_gadget.c.o(.data);
+        build/link/src/weapons/load_hand_gadget.c.o(.data);
     } :data
 
     .data.14 0x1D59D8 : AT(0xD6958) SUBALIGN(1)
@@ -13692,7 +13692,7 @@ SECTIONS
 
     gameplay.build_variant_effect_quads.data 0x1D9890 : AT(0xDA810) SUBALIGN(4)
     {
-        build/link/src/gameplay/build_variant_effect_quads.c.o(.data);
+        build/link/src/rendering/effects/build_variant_effect_quads.c.o(.data);
     } :data
 
     rendering.effects.build_resident_indexed_texture_warp_meshes.data 0x1D9A10 : AT(0xDA990) SUBALIGN(4)
@@ -13737,12 +13737,12 @@ SECTIONS
 
     gameplay.vendor.render_capture_scrolling_text.data 0x1E6018 : AT(0xE6F98) SUBALIGN(4)
     {
-        build/link/src/gameplay/vendor/render_capture_scrolling_text.c.o(.data);
+        build/link/src/ui/vendor/render_capture_scrolling_text.c.o(.data);
     } :data
 
     gameplay.vendor.render_vendor_capture_pass_sequence.data 0x1E6218 : AT(0xE7198) SUBALIGN(4)
     {
-        build/link/src/gameplay/vendor/render_vendor_capture_pass_sequence.c.o(.data);
+        build/link/src/ui/vendor/render_vendor_capture_pass_sequence.c.o(.data);
     } :data
 
     .data.21 0x1E6278 : AT(0xE71F8) SUBALIGN(1)
@@ -13752,7 +13752,7 @@ SECTIONS
 
     gameplay.vendor.update_resident_dialogue_animation_state.data 0x1E63FC : AT(0xE737C) SUBALIGN(4)
     {
-        build/link/src/gameplay/vendor/update_resident_dialogue_animation_state.c.o(.data);
+        build/link/src/mobys/animation/update_resident_dialogue_animation_state.c.o(.data);
     } :data
 
     .data.22 0x1E6400 : AT(0xE7380) SUBALIGN(1)
@@ -13762,7 +13762,7 @@ SECTIONS
 
     textbin.render_vendor_capture_texture_overlays_pass.data 0x1E6620 : AT(0xE75A0) SUBALIGN(4)
     {
-        build/link/src/textbin/render_vendor_capture_texture_overlays_pass.c.o(.data);
+        build/link/src/ui/vendor/render_vendor_capture_texture_overlays_pass.c.o(.data);
     } :data
 
     .data.23 0x1E6660 : AT(0xE75E0) SUBALIGN(1)
@@ -13772,7 +13772,7 @@ SECTIONS
 
     input.pad.actuator_calc_power.rdata 0x1E7640 : AT(0xE85C0) SUBALIGN(4)
     {
-        build/link/src/input/pad/actuator_calc_power.c.o(.rodata);
+        build/link/src/input/actuator_calc_power.c.o(.rodata);
     } :data
 
     .data.24 0x1E7658 : AT(0xE85D8) SUBALIGN(1)
@@ -13782,7 +13782,7 @@ SECTIONS
 
     gameplay.camera.camera_activation_check_priority.rdata 0x1E7730 : AT(0xE86B0) SUBALIGN(4)
     {
-        build/link/src/gameplay/camera/camera_activation_check_priority.c.o(.rodata);
+        build/link/src/camera/camera_activation_check_priority.c.o(.rodata);
     } :data
 
     .data.25 0x1E7750 : AT(0xE86D0) SUBALIGN(1)
@@ -13792,7 +13792,7 @@ SECTIONS
 
     textbin.runtime.memory.mode_freeze_init.rdata 0x1E78D0 : AT(0xE8850) SUBALIGN(4)
     {
-        build/link/src/textbin/runtime/memory/mode_freeze_init.c.o(.rodata);
+        build/link/src/game/mode_freeze_init.c.o(.rodata);
     } :data
 
     .data.26 0x1E78EC : AT(0xE886C) SUBALIGN(1)
@@ -13817,7 +13817,7 @@ SECTIONS
 
     runtime.memory.update_mode_freeze.rdata 0x1E79A0 : AT(0xE8920) SUBALIGN(4)
     {
-        build/link/src/runtime/memory/update_mode_freeze.c.o(.rodata);
+        build/link/src/game/update_mode_freeze.c.o(.rodata);
     } :data
 
     .data.28 0x1E7A1C : AT(0xE899C) SUBALIGN(1)
@@ -13862,7 +13862,7 @@ SECTIONS
 
     gameplay.state.service_level_archive_load.rdata 0x1E7CE0 : AT(0xE8C60) SUBALIGN(4)
     {
-        build/link/src/gameplay/state/service_level_archive_load.c.o(.rodata);
+        build/link/src/game/service_level_archive_load.c.o(.rodata);
     } :data
 
     .data.32 0x1E7D00 : AT(0xE8C80) SUBALIGN(1)
@@ -13872,7 +13872,7 @@ SECTIONS
 
     storage.memory_card.memcard_update_state.rdata 0x1E8200 : AT(0xE9180) SUBALIGN(4)
     {
-        build/link/src/storage/memory_card/memcard_update_state.c.o(.rodata);
+        build/link/src/save/memcard_update_state.c.o(.rodata);
     } :data
 
     .data.33 0x1E835C : AT(0xE92DC) SUBALIGN(1)
@@ -13882,7 +13882,7 @@ SECTIONS
 
     gameplay.missions.check_mission_condition.rdata 0x1E8390 : AT(0xE9310) SUBALIGN(4)
     {
-        build/link/src/gameplay/missions/check_mission_condition.c.o(.rodata);
+        build/link/src/game/missions/check_mission_condition.c.o(.rodata);
     } :data
 
     .data.34 0x1E83B8 : AT(0xE9338) SUBALIGN(1)
@@ -13892,7 +13892,7 @@ SECTIONS
 
     gameplay.fun_00213928.rdata 0x1E84E0 : AT(0xE9460) SUBALIGN(4)
     {
-        build/link/src/gameplay/fun_00213928.c.o(.rodata);
+        build/link/src/game/fun_00213928.c.o(.rodata);
     } :data
 
     .data.35 0x1E8560 : AT(0xE94E0) SUBALIGN(1)
@@ -13912,7 +13912,7 @@ SECTIONS
 
     textbin.rebuild_configured_text_label_list.data 0x1E8728 : AT(0xE96A8) SUBALIGN(4)
     {
-        build/link/src/textbin/rebuild_configured_text_label_list.c.o(.data);
+        build/link/src/ui/text/rebuild_configured_text_label_list.c.o(.data);
     } :data
 
     .data.37 0x1E8764 : AT(0xE96E4) SUBALIGN(1)
@@ -13992,7 +13992,7 @@ SECTIONS
 
     gameplay.state.update_resident_gameplay_state.rdata 0x1E8930 : AT(0xE98B0) SUBALIGN(4)
     {
-        build/link/src/gameplay/state/update_resident_gameplay_state.c.o(.rodata);
+        build/link/src/game/update_resident_gameplay_state.c.o(.rodata);
     } :data
 
     .data.43 0x1E8954 : AT(0xE98D4) SUBALIGN(1)
@@ -14002,7 +14002,7 @@ SECTIONS
 
     gameplay.state.dispatch_game_state_update.rdata 0x1E8960 : AT(0xE98E0) SUBALIGN(4)
     {
-        build/link/src/gameplay/state/dispatch_game_state_update.c.o(.rodata);
+        build/link/src/game/dispatch_game_state_update.c.o(.rodata);
     } :data
 
     .data.44 0x1E8984 : AT(0xE9904) SUBALIGN(1)
@@ -14012,7 +14012,7 @@ SECTIONS
 
     gameplay.vendor.update_resident_dialogue_animation_state.rdata 0x1E8A90 : AT(0xE9A10) SUBALIGN(4)
     {
-        build/link/src/gameplay/vendor/update_resident_dialogue_animation_state.c.o(.rodata);
+        build/link/src/mobys/animation/update_resident_dialogue_animation_state.c.o(.rodata);
     } :data
 
     .data.45 0x1E8AC4 : AT(0xE9A44) SUBALIGN(1)
@@ -14022,7 +14022,7 @@ SECTIONS
 
     gameplay.vendor.render_vendor_capture_pass_sequence.rdata 0x1E8AD0 : AT(0xE9A50) SUBALIGN(4)
     {
-        build/link/src/gameplay/vendor/render_vendor_capture_pass_sequence.c.o(.rodata);
+        build/link/src/ui/vendor/render_vendor_capture_pass_sequence.c.o(.rodata);
     } :data
 
     .data.46 0x1E8AE8 : AT(0xE9A68) SUBALIGN(1)
@@ -14032,7 +14032,7 @@ SECTIONS
 
     textbin.video.player.init_all.data 0x1E8AF0 : AT(0xE9A70) SUBALIGN(4)
     {
-        build/link/src/textbin/video/player/init_all.c.o(.data);
+        build/link/src/movies/player/init_all.c.o(.data);
     } :data
 
     .data.47 0x1E8B02 : AT(0xE9A82) SUBALIGN(1)
@@ -14093,11 +14093,11 @@ ASSERT(SIZEOF(sdk.graph.sce_gs_get_gparam.data) == 16, "sdk/graph/sce_gs_get_gpa
 ASSERT(SIZEOF(sdk.video.ipu.send_ipu_command.data) == 64, "sdk/video/ipu/send_ipu_command: its .data is not the configured 64 bytes (configure.py)");
 ASSERT(SIZEOF(sdk.scf.sce_scf_get_language.data) == 1, "sdk/scf/sce_scf_get_language: its .data is not the configured 1 bytes (configure.py)");
 ASSERT(SIZEOF(audio.rpc.snd_send_iop_command_no_wait.data) == 16, "audio/rpc/snd_send_iop_command_no_wait: its .data is not the configured 16 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.audio.snd_start_sound_system.data) == 8192, "textbin/audio/snd_start_sound_system: its .data is not the configured 8192 bytes (configure.py)");
-ASSERT(SIZEOF(video.display.set_pal_mode.data) == 8, "video/display/set_pal_mode: its .data is not the configured 8 bytes (configure.py)");
-ASSERT(SIZEOF(ui.menus.audio.set_pause_sound_volume.data) == 4, "ui/menus/audio/set_pause_sound_volume: its .data is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.audio.snd_start_sound_system.data) == 8192, "audio/snd_start_sound_system: its .data is not the configured 8192 bytes (configure.py)");
+ASSERT(SIZEOF(video.display.set_pal_mode.data) == 8, "movies/display/set_pal_mode: its .data is not the configured 8 bytes (configure.py)");
+ASSERT(SIZEOF(ui.menus.audio.set_pause_sound_volume.data) == 4, "ui/menus/options/set_pause_sound_volume: its .data is not the configured 4 bytes (configure.py)");
 ASSERT(SIZEOF(ui.menus.selection.update_menu_item_slots.data) == 288, "ui/menus/selection/update_menu_item_slots: its .data is not the configured 288 bytes (configure.py)");
-ASSERT(SIZEOF(rendering.state.reset_gs_registers_pr.data) == 24, "rendering/state/reset_gs_registers_pr: its .data is not the configured 24 bytes (configure.py)");
+ASSERT(SIZEOF(rendering.state.reset_gs_registers_pr.data) == 24, "rendering/frame/reset_gs_registers_pr: its .data is not the configured 24 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.texture.append_palette_transfer_packet.data) == 656, "rendering/texture/append_palette_transfer_packet: its .data is not the configured 656 bytes (configure.py)");
 ASSERT(SIZEOF(sdk.libc.mprec._dtoa_r.rdata) == 56, "sdk/libc/mprec/_dtoa_r: its .rodata is not the configured 56 bytes (configure.py)");
 ASSERT(SIZEOF(sdk.libc.stdio._vfprintf_r.rdata) == 516, "sdk/libc/stdio/_vfprintf_r: its .rodata is not the configured 516 bytes (configure.py)");
@@ -14127,70 +14127,70 @@ ASSERT(SIZEOF(audio.banks.snd_bank_load_by_loc.rdata) == 77, "audio/banks/snd_ba
 ASSERT(SIZEOF(audio.rpc.snd_send_iop_command_no_wait.rdata) == 96, "audio/rpc/snd_send_iop_command_no_wait: its .rodata is not the configured 96 bytes (configure.py)");
 ASSERT(SIZEOF(audio.rpc.snd_returns.sdata) == 8, "audio/rpc/snd_returns: its .sdata is not the configured 8 bytes (configure.py)");
 ASSERT(SIZEOF(runtime.callbacks.count_vsync.sdata) == 24, "runtime/callbacks/count_vsync: its .sdata is not the configured 24 bytes (configure.py)");
-ASSERT(SIZEOF(runtime.time.set_video_timing.sdata) == 32, "runtime/time/set_video_timing: its .sdata is not the configured 32 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.gameplay.state.load_level_zero_preserving_progress.sdata) == 4, "textbin/gameplay/state/load_level_zero_preserving_progress: its .sdata is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(runtime.time.set_video_timing.sdata) == 32, "runtime/set_video_timing: its .sdata is not the configured 32 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.gameplay.state.load_level_zero_preserving_progress.sdata) == 4, "game/load_level_zero_preserving_progress: its .sdata is not the configured 4 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.debug.draw_debug_profiler.sdata) == 1, "rendering/debug/draw_debug_profiler: its .sdata is not the configured 1 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.state.service_level_archive_load.sdata) == 8, "gameplay/state/service_level_archive_load: its .sdata is not the configured 8 bytes (configure.py)");
-ASSERT(SIZEOF(ui.fonts.load_debug_font.sdata) == 8, "ui/fonts/load_debug_font: its .sdata is not the configured 8 bytes (configure.py)");
-ASSERT(SIZEOF(runtime.dma.initialize_streaming_state.sdata) == 4, "runtime/dma/initialize_streaming_state: its .sdata is not the configured 4 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.camera.camera_activation_check_priority.sdata) == 4, "gameplay/camera/camera_activation_check_priority: its .sdata is not the configured 4 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.camera.execute_camera_post_update_callbacks.sdata) == 4, "gameplay/camera/execute_camera_post_update_callbacks: its .sdata is not the configured 4 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.camera.refresh_camera_control_flags.sdata) == 12, "gameplay/camera/refresh_camera_control_flags: its .sdata is not the configured 12 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.state.service_level_archive_load.sdata) == 8, "game/service_level_archive_load: its .sdata is not the configured 8 bytes (configure.py)");
+ASSERT(SIZEOF(ui.fonts.load_debug_font.sdata) == 8, "ui/text/font/load_debug_font: its .sdata is not the configured 8 bytes (configure.py)");
+ASSERT(SIZEOF(runtime.dma.initialize_streaming_state.sdata) == 4, "streaming/initialize_streaming_state: its .sdata is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.camera.camera_activation_check_priority.sdata) == 4, "camera/camera_activation_check_priority: its .sdata is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.camera.execute_camera_post_update_callbacks.sdata) == 4, "camera/execute_camera_post_update_callbacks: its .sdata is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.camera.refresh_camera_control_flags.sdata) == 12, "camera/refresh_camera_control_flags: its .sdata is not the configured 12 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.debug.print_debug_text.sdata) == 8, "rendering/debug/print_debug_text: its .sdata is not the configured 8 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.state.tick_space_transition.sdata) == 4, "gameplay/state/tick_space_transition: its .sdata is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.state.tick_space_transition.sdata) == 4, "game/transitions/tick_space_transition: its .sdata is not the configured 4 bytes (configure.py)");
 ASSERT(SIZEOF(audio.voices.pause_all_sounds.sdata) == 4, "audio/voices/pause_all_sounds: its .sdata is not the configured 4 bytes (configure.py)");
 ASSERT(SIZEOF(ui.hud.update_hud.sdata) == 4, "ui/hud/update_hud: its .sdata is not the configured 4 bytes (configure.py)");
-ASSERT(SIZEOF(runtime.resources.update_resource_counter.sdata) == 4, "runtime/resources/update_resource_counter: its .sdata is not the configured 4 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.entities.create_moby.sdata) == 4, "gameplay/entities/create_moby: its .sdata is not the configured 4 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.state.initialize_level_render_state.sdata) == 4, "gameplay/state/initialize_level_render_state: its .sdata is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(runtime.resources.update_resource_counter.sdata) == 4, "runtime/update_resource_counter: its .sdata is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.entities.create_moby.sdata) == 4, "mobys/create_moby: its .sdata is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.state.initialize_level_render_state.sdata) == 4, "rendering/frame/initialize_level_render_state: its .sdata is not the configured 4 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.texture.dma_shrub_textures.sdata) == 4, "rendering/texture/dma_shrub_textures: its .sdata is not the configured 4 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.texture.dma_tfrag_textures.sdata) == 4, "rendering/texture/dma_tfrag_textures: its .sdata is not the configured 4 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.vu1.vu1_chain.sdata) == 4, "rendering/vu1/vu1_chain: its .sdata is not the configured 4 bytes (configure.py)");
-ASSERT(SIZEOF(rendering.buffers.swap_render_buffer_chain.sdata) == 4, "rendering/buffers/swap_render_buffer_chain: its .sdata is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(rendering.buffers.swap_render_buffer_chain.sdata) == 4, "rendering/frame/swap_render_buffer_chain: its .sdata is not the configured 4 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.texture.dma_tie_textures.sdata) == 4, "rendering/texture/dma_tie_textures: its .sdata is not the configured 4 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.view.update_fog.sdata) == 3, "rendering/view/update_fog: its .sdata is not the configured 3 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.entities.resolve_camera_surface_height.sdata) == 4, "gameplay/entities/resolve_camera_surface_height: its .sdata is not the configured 4 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.camera.update_all_cameras.data) == 7680, "gameplay/camera/update_all_cameras: its .data is not the configured 7680 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.render_queued_rotated_sprites.data) == 196, "textbin/render_queued_rotated_sprites: its .data is not the configured 196 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.camera.backup_current_cam.data) == 1920, "gameplay/camera/backup_current_cam: its .data is not the configured 1920 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.entities.resolve_camera_surface_height.sdata) == 4, "camera/resolve_camera_surface_height: its .sdata is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.camera.update_all_cameras.data) == 7680, "camera/update_all_cameras: its .data is not the configured 7680 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.render_queued_rotated_sprites.data) == 196, "rendering/effects/render_queued_rotated_sprites: its .data is not the configured 196 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.camera.backup_current_cam.data) == 1920, "camera/backup_current_cam: its .data is not the configured 1920 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.view.update_view_context.data) == 64, "rendering/view/update_view_context: its .data is not the configured 64 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.append_billboard_batch.data) == 512, "textbin/append_billboard_batch: its .data is not the configured 512 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.append_billboard_batch.data) == 512, "rendering/effects/append_billboard_batch: its .data is not the configured 512 bytes (configure.py)");
 ASSERT(SIZEOF(ui.help.find_help_entry.data) == 600, "ui/help/find_help_entry: its .data is not the configured 600 bytes (configure.py)");
 ASSERT(SIZEOF(ui.map.map_filters.data) == 4, "ui/map/map_filters: its .data is not the configured 4 bytes (configure.py)");
 ASSERT(SIZEOF(world.loaders.register_moby_class.data) == 448, "world/loaders/register_moby_class: its .data is not the configured 448 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.gameplay.state.initialize_level_runtime.data) == 4096, "textbin/gameplay/state/initialize_level_runtime: its .data is not the configured 4096 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.world.data.select_world_object_resource_tables.data) == 1152, "textbin/world/data/select_world_object_resource_tables: its .data is not the configured 1152 bytes (configure.py)");
-ASSERT(SIZEOF(input.pad.init_pads.data) == 16, "input/pad/init_pads: its .data is not the configured 16 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.state.render_level_effects_and_screen_sprites.data) == 56, "gameplay/state/render_level_effects_and_screen_sprites: its .data is not the configured 56 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.gameplay.state.initialize_level_runtime.data) == 4096, "game/initialize_level_runtime: its .data is not the configured 4096 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.world.data.select_world_object_resource_tables.data) == 1152, "world/select_world_object_resource_tables: its .data is not the configured 1152 bytes (configure.py)");
+ASSERT(SIZEOF(input.pad.init_pads.data) == 16, "input/init_pads: its .data is not the configured 16 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.state.render_level_effects_and_screen_sprites.data) == 56, "rendering/effects/render_level_effects_and_screen_sprites: its .data is not the configured 56 bytes (configure.py)");
 ASSERT(SIZEOF(ui.menus.system.update_timed_menu_sequence.data) == 3, "ui/menus/system/update_timed_menu_sequence: its .data is not the configured 3 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.gameplay.gadgets.load_hand_gadget.data) == 1776, "textbin/gameplay/gadgets/load_hand_gadget: its .data is not the configured 1776 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.gameplay.gadgets.load_hand_gadget.data) == 1776, "weapons/load_hand_gadget: its .data is not the configured 1776 bytes (configure.py)");
 ASSERT(SIZEOF(ui.menus.item_preview.update_preview_animation_and_attachments.data) == 56, "ui/menus/item_preview/update_preview_animation_and_attachments: its .data is not the configured 56 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.shrubs.register_shrub_render_class.data) == 128, "rendering/shrubs/register_shrub_render_class: its .data is not the configured 128 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.build_variant_effect_quads.data) == 384, "gameplay/build_variant_effect_quads: its .data is not the configured 384 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.build_variant_effect_quads.data) == 384, "rendering/effects/build_variant_effect_quads: its .data is not the configured 384 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.effects.build_resident_indexed_texture_warp_meshes.data) == 32, "rendering/effects/build_resident_indexed_texture_warp_meshes: its .data is not the configured 32 bytes (configure.py)");
 ASSERT(SIZEOF(ui.map.level_selection.draw_level_selection_map.data) == 320, "ui/map/level_selection/draw_level_selection_map: its .data is not the configured 320 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.tfrags.set_tfrag_dists.data) == 64, "rendering/tfrags/set_tfrag_dists: its .data is not the configured 64 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.ties.register_object_render_class.data) == 256, "rendering/ties/register_object_render_class: its .data is not the configured 256 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.vendor.render_capture_scrolling_text.data) == 512, "gameplay/vendor/render_capture_scrolling_text: its .data is not the configured 512 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.vendor.render_vendor_capture_pass_sequence.data) == 96, "gameplay/vendor/render_vendor_capture_pass_sequence: its .data is not the configured 96 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.vendor.update_resident_dialogue_animation_state.data) == 4, "gameplay/vendor/update_resident_dialogue_animation_state: its .data is not the configured 4 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.render_vendor_capture_texture_overlays_pass.data) == 64, "textbin/render_vendor_capture_texture_overlays_pass: its .data is not the configured 64 bytes (configure.py)");
-ASSERT(SIZEOF(input.pad.actuator_calc_power.rdata) == 24, "input/pad/actuator_calc_power: its .rodata is not the configured 24 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.camera.camera_activation_check_priority.rdata) == 32, "gameplay/camera/camera_activation_check_priority: its .rodata is not the configured 32 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.runtime.memory.mode_freeze_init.rdata) == 28, "textbin/runtime/memory/mode_freeze_init: its .rodata is not the configured 28 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.vendor.render_capture_scrolling_text.data) == 512, "ui/vendor/render_capture_scrolling_text: its .data is not the configured 512 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.vendor.render_vendor_capture_pass_sequence.data) == 96, "ui/vendor/render_vendor_capture_pass_sequence: its .data is not the configured 96 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.vendor.update_resident_dialogue_animation_state.data) == 4, "mobys/animation/update_resident_dialogue_animation_state: its .data is not the configured 4 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.render_vendor_capture_texture_overlays_pass.data) == 64, "ui/vendor/render_vendor_capture_texture_overlays_pass: its .data is not the configured 64 bytes (configure.py)");
+ASSERT(SIZEOF(input.pad.actuator_calc_power.rdata) == 24, "input/actuator_calc_power: its .rodata is not the configured 24 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.camera.camera_activation_check_priority.rdata) == 32, "camera/camera_activation_check_priority: its .rodata is not the configured 32 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.runtime.memory.mode_freeze_init.rdata) == 28, "game/mode_freeze_init: its .rodata is not the configured 28 bytes (configure.py)");
 ASSERT(SIZEOF(ui.text.draw_dialog_text.data) == 48, "ui/text/draw_dialog_text: its .data is not the configured 48 bytes (configure.py)");
 ASSERT(SIZEOF(ui.text.draw_dialog_text.rdata) == 124, "ui/text/draw_dialog_text: its .rodata is not the configured 124 bytes (configure.py)");
-ASSERT(SIZEOF(runtime.memory.update_mode_freeze.rdata) == 124, "runtime/memory/update_mode_freeze: its .rodata is not the configured 124 bytes (configure.py)");
+ASSERT(SIZEOF(runtime.memory.update_mode_freeze.rdata) == 124, "game/update_mode_freeze: its .rodata is not the configured 124 bytes (configure.py)");
 ASSERT(SIZEOF(ui.help.dismiss_help.rdata) == 32, "ui/help/dismiss_help: its .rodata is not the configured 32 bytes (configure.py)");
 ASSERT(SIZEOF(ui.help.update_help_state.rdata) == 36, "ui/help/update_help_state: its .rodata is not the configured 36 bytes (configure.py)");
 ASSERT(SIZEOF(ui.help.draw_help.rdata) == 28, "ui/help/draw_help: its .rodata is not the configured 28 bytes (configure.py)");
 ASSERT(SIZEOF(runtime.startup.init_once.rdata) == 20, "runtime/startup/init_once: its .rodata is not the configured 20 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.state.service_level_archive_load.rdata) == 32, "gameplay/state/service_level_archive_load: its .rodata is not the configured 32 bytes (configure.py)");
-ASSERT(SIZEOF(storage.memory_card.memcard_update_state.rdata) == 348, "storage/memory_card/memcard_update_state: its .rodata is not the configured 348 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.missions.check_mission_condition.rdata) == 40, "gameplay/missions/check_mission_condition: its .rodata is not the configured 40 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.fun_00213928.rdata) == 128, "gameplay/fun_00213928: its .rodata is not the configured 128 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.state.service_level_archive_load.rdata) == 32, "game/service_level_archive_load: its .rodata is not the configured 32 bytes (configure.py)");
+ASSERT(SIZEOF(storage.memory_card.memcard_update_state.rdata) == 348, "save/memcard_update_state: its .rodata is not the configured 348 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.missions.check_mission_condition.rdata) == 40, "game/missions/check_mission_condition: its .rodata is not the configured 40 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.fun_00213928.rdata) == 128, "game/fun_00213928: its .rodata is not the configured 128 bytes (configure.py)");
 ASSERT(SIZEOF(ui.menus.system.process_menu_entry.rdata) == 24, "ui/menus/system/process_menu_entry: its .rodata is not the configured 24 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.rebuild_configured_text_label_list.data) == 60, "textbin/rebuild_configured_text_label_list: its .data is not the configured 60 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.rebuild_configured_text_label_list.data) == 60, "ui/text/rebuild_configured_text_label_list: its .data is not the configured 60 bytes (configure.py)");
 ASSERT(SIZEOF(ui.menus.system.update_menu_entry_actions.rdata) == 48, "ui/menus/system/update_menu_entry_actions: its .rodata is not the configured 48 bytes (configure.py)");
 ASSERT(SIZEOF(ui.menus.item_preview.draw_menu_preview_objects.rdata) == 48, "ui/menus/item_preview/draw_menu_preview_objects: its .rodata is not the configured 48 bytes (configure.py)");
 ASSERT(SIZEOF(ui.menus.system.update_menu_resource_stream.data) == 24, "ui/menus/system/update_menu_resource_stream: its .data is not the configured 24 bytes (configure.py)");
@@ -14200,9 +14200,9 @@ ASSERT(SIZEOF(ui.menus.widgets.draw_menu_text_box.rdata) == 80, "ui/menus/widget
 ASSERT(SIZEOF(ui.menus.streamed_moby.update_streamed_moby_animation.rdata) == 28, "ui/menus/streamed_moby/update_streamed_moby_animation: its .rodata is not the configured 28 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.sky.draw_scrolling_sky_shells.rdata) == 20, "rendering/sky/draw_scrolling_sky_shells: its .rodata is not the configured 20 bytes (configure.py)");
 ASSERT(SIZEOF(rendering.sky.draw_sky_shells.rdata) == 24, "rendering/sky/draw_sky_shells: its .rodata is not the configured 24 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.state.update_resident_gameplay_state.rdata) == 36, "gameplay/state/update_resident_gameplay_state: its .rodata is not the configured 36 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.state.dispatch_game_state_update.rdata) == 36, "gameplay/state/dispatch_game_state_update: its .rodata is not the configured 36 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.vendor.update_resident_dialogue_animation_state.rdata) == 52, "gameplay/vendor/update_resident_dialogue_animation_state: its .rodata is not the configured 52 bytes (configure.py)");
-ASSERT(SIZEOF(gameplay.vendor.render_vendor_capture_pass_sequence.rdata) == 24, "gameplay/vendor/render_vendor_capture_pass_sequence: its .rodata is not the configured 24 bytes (configure.py)");
-ASSERT(SIZEOF(textbin.video.player.init_all.data) == 18, "textbin/video/player/init_all: its .data is not the configured 18 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.state.update_resident_gameplay_state.rdata) == 36, "game/update_resident_gameplay_state: its .rodata is not the configured 36 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.state.dispatch_game_state_update.rdata) == 36, "game/dispatch_game_state_update: its .rodata is not the configured 36 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.vendor.update_resident_dialogue_animation_state.rdata) == 52, "mobys/animation/update_resident_dialogue_animation_state: its .rodata is not the configured 52 bytes (configure.py)");
+ASSERT(SIZEOF(gameplay.vendor.render_vendor_capture_pass_sequence.rdata) == 24, "ui/vendor/render_vendor_capture_pass_sequence: its .rodata is not the configured 24 bytes (configure.py)");
+ASSERT(SIZEOF(textbin.video.player.init_all.data) == 18, "movies/player/init_all: its .data is not the configured 18 bytes (configure.py)");
 ASSERT(SIZEOF(.c_data_unplaced) == 0, "a unit defines data no *_OVERLAYS entry places (see .c_data_unplaced in the link map)");

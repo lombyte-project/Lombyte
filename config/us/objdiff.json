@@ -2117,9 +2117,9 @@
       }
     },
     {
-      "name": "runtime/queues/read_queue_status",
+      "name": "runtime/read_queue_status",
       "target_path": "expected/obj/runtime/queues/read_queue_status.c.o",
-      "base_path": "build/src/runtime/queues/read_queue_status.c.o",
+      "base_path": "build/src/runtime/read_queue_status.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -2837,9 +2837,9 @@
       }
     },
     {
-      "name": "assembly/textbin/rendering/gs/reset_vif1_gif",
+      "name": "assembly/textbin/rendering/frame/reset_vif1_gif",
       "target_path": "expected/obj/assembly/textbin/rendering/gs/reset_vif1_gif.c.o",
-      "base_path": "build/src/assembly/textbin/rendering/gs/reset_vif1_gif.c.o",
+      "base_path": "build/src/assembly/textbin/rendering/frame/reset_vif1_gif.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -4977,9 +4977,9 @@
       }
     },
     {
-      "name": "gameplay/state/parse_bin",
+      "name": "game/parse_bin",
       "target_path": "expected/obj/gameplay/state/parse_bin.c.o",
-      "base_path": "build/src/gameplay/state/parse_bin.c.o",
+      "base_path": "build/src/game/parse_bin.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -4987,9 +4987,9 @@
       }
     },
     {
-      "name": "gameplay/state/run_game_main_loop",
+      "name": "game/run_game_main_loop",
       "target_path": "expected/obj/gameplay/state/run_game_main_loop.c.o",
-      "base_path": "build/src/gameplay/state/run_game_main_loop.c.o",
+      "base_path": "build/src/game/run_game_main_loop.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -4997,9 +4997,9 @@
       }
     },
     {
-      "name": "textbin/audio/snd_start_sound_system",
+      "name": "audio/snd_start_sound_system",
       "target_path": "expected/obj/textbin/audio/snd_start_sound_system.c.o",
-      "base_path": "build/src/textbin/audio/snd_start_sound_system.c.o",
+      "base_path": "build/src/audio/snd_start_sound_system.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5217,9 +5217,9 @@
       }
     },
     {
-      "name": "runtime/data/read_global_table_entry",
+      "name": "runtime/read_global_table_entry",
       "target_path": "expected/obj/runtime/data/read_global_table_entry.c.o",
-      "base_path": "build/src/runtime/data/read_global_table_entry.c.o",
+      "base_path": "build/src/runtime/read_global_table_entry.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5477,9 +5477,9 @@
       }
     },
     {
-      "name": "storage/wad/wad_get_sectors",
+      "name": "streaming/wad_get_sectors",
       "target_path": "expected/obj/storage/wad/wad_get_sectors.c.o",
-      "base_path": "build/src/storage/wad/wad_get_sectors.c.o",
+      "base_path": "build/src/streaming/wad_get_sectors.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5487,9 +5487,9 @@
       }
     },
     {
-      "name": "storage/cd/load_disc_sectors_into_global_buffer",
+      "name": "streaming/load_disc_sectors_into_global_buffer",
       "target_path": "expected/obj/storage/cd/load_disc_sectors_into_global_buffer.c.o",
-      "base_path": "build/src/storage/cd/load_disc_sectors_into_global_buffer.c.o",
+      "base_path": "build/src/streaming/load_disc_sectors_into_global_buffer.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5497,9 +5497,9 @@
       }
     },
     {
-      "name": "storage/cd/read_file_entry_with_retry",
+      "name": "streaming/read_file_entry_with_retry",
       "target_path": "expected/obj/storage/cd/read_file_entry_with_retry.c.o",
-      "base_path": "build/src/storage/cd/read_file_entry_with_retry.c.o",
+      "base_path": "build/src/streaming/read_file_entry_with_retry.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5507,9 +5507,9 @@
       }
     },
     {
-      "name": "input/pad/actuator_calc_power",
+      "name": "input/actuator_calc_power",
       "target_path": "expected/obj/input/pad/actuator_calc_power.c.o",
-      "base_path": "build/src/input/pad/actuator_calc_power.c.o",
+      "base_path": "build/src/input/actuator_calc_power.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5517,9 +5517,9 @@
       }
     },
     {
-      "name": "runtime/dma/initialize_streaming_state",
+      "name": "streaming/initialize_streaming_state",
       "target_path": "expected/obj/runtime/dma/initialize_streaming_state.c.o",
-      "base_path": "build/src/runtime/dma/initialize_streaming_state.c.o",
+      "base_path": "build/src/streaming/initialize_streaming_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5537,9 +5537,9 @@
       }
     },
     {
-      "name": "ui/fonts/load_debug_font",
+      "name": "ui/text/font/load_debug_font",
       "target_path": "expected/obj/ui/fonts/load_debug_font.c.o",
-      "base_path": "build/src/ui/fonts/load_debug_font.c.o",
+      "base_path": "build/src/ui/text/font/load_debug_font.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5567,9 +5567,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_a",
+      "name": "rendering/frame/callbacks/noop_callback_a",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_a.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_a.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_a.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5577,9 +5577,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_b",
+      "name": "rendering/frame/callbacks/noop_callback_b",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_b.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_b.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_b.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5587,9 +5587,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_c",
+      "name": "rendering/frame/callbacks/noop_callback_c",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_c.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_c.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_c.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5597,9 +5597,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_d",
+      "name": "rendering/frame/callbacks/noop_callback_d",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_d.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_d.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_d.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5607,9 +5607,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_e",
+      "name": "rendering/frame/callbacks/noop_callback_e",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_e.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_e.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_e.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5617,9 +5617,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_f",
+      "name": "rendering/frame/callbacks/noop_callback_f",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_f.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_f.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_f.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5627,9 +5627,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_g",
+      "name": "rendering/frame/callbacks/noop_callback_g",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_g.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_g.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_g.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5637,9 +5637,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_h",
+      "name": "rendering/frame/callbacks/noop_callback_h",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_h.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_h.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_h.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5647,9 +5647,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_i",
+      "name": "rendering/frame/callbacks/noop_callback_i",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_i.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_i.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_i.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5657,9 +5657,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_j",
+      "name": "rendering/frame/callbacks/noop_callback_j",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_j.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_j.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_j.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5667,9 +5667,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_k",
+      "name": "rendering/frame/callbacks/noop_callback_k",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_k.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_k.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_k.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5677,9 +5677,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_l",
+      "name": "rendering/frame/callbacks/noop_callback_l",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_l.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_l.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_l.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5687,9 +5687,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_m",
+      "name": "rendering/frame/callbacks/noop_callback_m",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_m.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_m.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_m.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5697,9 +5697,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_n",
+      "name": "rendering/frame/callbacks/noop_callback_n",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_n.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_n.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_n.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5707,9 +5707,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_o",
+      "name": "rendering/frame/callbacks/noop_callback_o",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_o.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_o.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_o.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5717,9 +5717,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_p",
+      "name": "rendering/frame/callbacks/noop_callback_p",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_p.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_p.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_p.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5727,9 +5727,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_q",
+      "name": "rendering/frame/callbacks/noop_callback_q",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_q.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_q.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_q.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5737,9 +5737,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_r",
+      "name": "rendering/frame/callbacks/noop_callback_r",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_r.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_r.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_r.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5747,9 +5747,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_callback_s",
+      "name": "rendering/frame/callbacks/noop_callback_s",
       "target_path": "expected/obj/rendering/callbacks/noop_callback_s.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_callback_s.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_callback_s.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5757,9 +5757,9 @@
       }
     },
     {
-      "name": "gameplay/state/start_level",
+      "name": "game/start_level",
       "target_path": "expected/obj/gameplay/state/start_level.c.o",
-      "base_path": "build/src/gameplay/state/start_level.c.o",
+      "base_path": "build/src/game/start_level.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5767,9 +5767,9 @@
       }
     },
     {
-      "name": "textbin/world/startlevel",
+      "name": "game/startlevel",
       "target_path": "expected/obj/textbin/world/startlevel.c.o",
-      "base_path": "build/src/textbin/world/startlevel.c.o",
+      "base_path": "build/src/game/startlevel.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5777,9 +5777,9 @@
       }
     },
     {
-      "name": "gameplay/state/transition_draw_sky",
+      "name": "game/transitions/transition_draw_sky",
       "target_path": "expected/obj/gameplay/state/transition_draw_sky.c.o",
-      "base_path": "build/src/gameplay/state/transition_draw_sky.c.o",
+      "base_path": "build/src/game/transitions/transition_draw_sky.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5787,9 +5787,9 @@
       }
     },
     {
-      "name": "gameplay/state/initialize_level_render_state",
+      "name": "rendering/frame/initialize_level_render_state",
       "target_path": "expected/obj/gameplay/state/initialize_level_render_state.c.o",
-      "base_path": "build/src/gameplay/state/initialize_level_render_state.c.o",
+      "base_path": "build/src/rendering/frame/initialize_level_render_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5797,9 +5797,9 @@
       }
     },
     {
-      "name": "gameplay/state/transition_load_wad",
+      "name": "game/transitions/transition_load_wad",
       "target_path": "expected/obj/gameplay/state/transition_load_wad.c.o",
-      "base_path": "build/src/gameplay/state/transition_load_wad.c.o",
+      "base_path": "build/src/game/transitions/transition_load_wad.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5817,9 +5817,9 @@
       }
     },
     {
-      "name": "gameplay/camera/transition_update_movie_camera",
+      "name": "camera/transition_update_movie_camera",
       "target_path": "expected/obj/gameplay/camera/transition_update_movie_camera.c.o",
-      "base_path": "build/src/gameplay/camera/transition_update_movie_camera.c.o",
+      "base_path": "build/src/camera/transition_update_movie_camera.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5827,9 +5827,9 @@
       }
     },
     {
-      "name": "gameplay/state/update_gameplay_frame",
+      "name": "game/update_gameplay_frame",
       "target_path": "expected/obj/gameplay/state/update_gameplay_frame.c.o",
-      "base_path": "build/src/gameplay/state/update_gameplay_frame.c.o",
+      "base_path": "build/src/game/update_gameplay_frame.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5837,9 +5837,9 @@
       }
     },
     {
-      "name": "gameplay/state/transition_default_draw",
+      "name": "game/transitions/transition_default_draw",
       "target_path": "expected/obj/gameplay/state/transition_default_draw.c.o",
-      "base_path": "build/src/gameplay/state/transition_default_draw.c.o",
+      "base_path": "build/src/game/transitions/transition_default_draw.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5847,9 +5847,9 @@
       }
     },
     {
-      "name": "gameplay/state/is_active_state_entry",
+      "name": "game/is_active_state_entry",
       "target_path": "expected/obj/gameplay/state/is_active_state_entry.c.o",
-      "base_path": "build/src/gameplay/state/is_active_state_entry.c.o",
+      "base_path": "build/src/game/is_active_state_entry.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5857,9 +5857,9 @@
       }
     },
     {
-      "name": "gameplay/state/transition_do_transition",
+      "name": "game/transitions/transition_do_transition",
       "target_path": "expected/obj/gameplay/state/transition_do_transition.c.o",
-      "base_path": "build/src/gameplay/state/transition_do_transition.c.o",
+      "base_path": "build/src/game/transitions/transition_do_transition.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5867,9 +5867,9 @@
       }
     },
     {
-      "name": "gameplay/camera/backup_current_cam",
+      "name": "camera/backup_current_cam",
       "target_path": "expected/obj/gameplay/camera/backup_current_cam.c.o",
-      "base_path": "build/src/gameplay/camera/backup_current_cam.c.o",
+      "base_path": "build/src/camera/backup_current_cam.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5877,9 +5877,9 @@
       }
     },
     {
-      "name": "gameplay/camera/execute_camera_post_update_callbacks",
+      "name": "camera/execute_camera_post_update_callbacks",
       "target_path": "expected/obj/gameplay/camera/execute_camera_post_update_callbacks.c.o",
-      "base_path": "build/src/gameplay/camera/execute_camera_post_update_callbacks.c.o",
+      "base_path": "build/src/camera/execute_camera_post_update_callbacks.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5887,9 +5887,9 @@
       }
     },
     {
-      "name": "gameplay/camera/cam_interp_values",
+      "name": "camera/cam_interp_values",
       "target_path": "expected/obj/gameplay/camera/cam_interp_values.c.o",
-      "base_path": "build/src/gameplay/camera/cam_interp_values.c.o",
+      "base_path": "build/src/camera/cam_interp_values.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5897,9 +5897,9 @@
       }
     },
     {
-      "name": "gameplay/camera/handle_camera_collision_with_hero",
+      "name": "camera/handle_camera_collision_with_hero",
       "target_path": "expected/obj/gameplay/camera/handle_camera_collision_with_hero.c.o",
-      "base_path": "build/src/gameplay/camera/handle_camera_collision_with_hero.c.o",
+      "base_path": "build/src/camera/handle_camera_collision_with_hero.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5907,9 +5907,9 @@
       }
     },
     {
-      "name": "gameplay/camera/camera_run_setup_to_new_cam",
+      "name": "camera/camera_run_setup_to_new_cam",
       "target_path": "expected/obj/gameplay/camera/camera_run_setup_to_new_cam.c.o",
-      "base_path": "build/src/gameplay/camera/camera_run_setup_to_new_cam.c.o",
+      "base_path": "build/src/camera/camera_run_setup_to_new_cam.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5917,9 +5917,9 @@
       }
     },
     {
-      "name": "gameplay/camera/switch_active_camera_record",
+      "name": "camera/switch_active_camera_record",
       "target_path": "expected/obj/gameplay/camera/switch_active_camera_record.c.o",
-      "base_path": "build/src/gameplay/camera/switch_active_camera_record.c.o",
+      "base_path": "build/src/camera/switch_active_camera_record.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5927,9 +5927,9 @@
       }
     },
     {
-      "name": "gameplay/camera/camera_activation_check_priority",
+      "name": "camera/camera_activation_check_priority",
       "target_path": "expected/obj/gameplay/camera/camera_activation_check_priority.c.o",
-      "base_path": "build/src/gameplay/camera/camera_activation_check_priority.c.o",
+      "base_path": "build/src/camera/camera_activation_check_priority.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5937,9 +5937,9 @@
       }
     },
     {
-      "name": "gameplay/camera/camera_exit",
+      "name": "camera/camera_exit",
       "target_path": "expected/obj/gameplay/camera/camera_exit.c.o",
-      "base_path": "build/src/gameplay/camera/camera_exit.c.o",
+      "base_path": "build/src/camera/camera_exit.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5947,9 +5947,9 @@
       }
     },
     {
-      "name": "gameplay/camera/update_all_cameras",
+      "name": "camera/update_all_cameras",
       "target_path": "expected/obj/gameplay/camera/update_all_cameras.c.o",
-      "base_path": "build/src/gameplay/camera/update_all_cameras.c.o",
+      "base_path": "build/src/camera/update_all_cameras.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5957,9 +5957,9 @@
       }
     },
     {
-      "name": "gameplay/camera/compute_camera_angles",
+      "name": "camera/compute_camera_angles",
       "target_path": "expected/obj/gameplay/camera/compute_camera_angles.c.o",
-      "base_path": "build/src/gameplay/camera/compute_camera_angles.c.o",
+      "base_path": "build/src/camera/compute_camera_angles.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5967,9 +5967,9 @@
       }
     },
     {
-      "name": "gameplay/camera/capture_camera_orientation",
+      "name": "camera/capture_camera_orientation",
       "target_path": "expected/obj/gameplay/camera/capture_camera_orientation.c.o",
-      "base_path": "build/src/gameplay/camera/capture_camera_orientation.c.o",
+      "base_path": "build/src/camera/capture_camera_orientation.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5977,9 +5977,9 @@
       }
     },
     {
-      "name": "gameplay/camera/save_camera_vectors",
+      "name": "camera/save_camera_vectors",
       "target_path": "expected/obj/gameplay/camera/save_camera_vectors.c.o",
-      "base_path": "build/src/gameplay/camera/save_camera_vectors.c.o",
+      "base_path": "build/src/camera/save_camera_vectors.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5987,9 +5987,9 @@
       }
     },
     {
-      "name": "gameplay/camera/restore_camera_vectors",
+      "name": "camera/restore_camera_vectors",
       "target_path": "expected/obj/gameplay/camera/restore_camera_vectors.c.o",
-      "base_path": "build/src/gameplay/camera/restore_camera_vectors.c.o",
+      "base_path": "build/src/camera/restore_camera_vectors.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -5997,9 +5997,9 @@
       }
     },
     {
-      "name": "gameplay/camera/start_camera_blend",
+      "name": "camera/start_camera_blend",
       "target_path": "expected/obj/gameplay/camera/start_camera_blend.c.o",
-      "base_path": "build/src/gameplay/camera/start_camera_blend.c.o",
+      "base_path": "build/src/camera/start_camera_blend.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6007,9 +6007,9 @@
       }
     },
     {
-      "name": "gameplay/camera/step_camera_blend",
+      "name": "camera/step_camera_blend",
       "target_path": "expected/obj/gameplay/camera/step_camera_blend.c.o",
-      "base_path": "build/src/gameplay/camera/step_camera_blend.c.o",
+      "base_path": "build/src/camera/step_camera_blend.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6017,9 +6017,9 @@
       }
     },
     {
-      "name": "gameplay/camera/advance_alternate_camera_transition",
+      "name": "camera/advance_alternate_camera_transition",
       "target_path": "expected/obj/gameplay/camera/advance_alternate_camera_transition.c.o",
-      "base_path": "build/src/gameplay/camera/advance_alternate_camera_transition.c.o",
+      "base_path": "build/src/camera/advance_alternate_camera_transition.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6027,9 +6027,9 @@
       }
     },
     {
-      "name": "gameplay/camera/update_camera_blend",
+      "name": "camera/update_camera_blend",
       "target_path": "expected/obj/gameplay/camera/update_camera_blend.c.o",
-      "base_path": "build/src/gameplay/camera/update_camera_blend.c.o",
+      "base_path": "build/src/camera/update_camera_blend.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6037,9 +6037,9 @@
       }
     },
     {
-      "name": "gameplay/camera/apply_camera_shake",
+      "name": "camera/apply_camera_shake",
       "target_path": "expected/obj/gameplay/camera/apply_camera_shake.c.o",
-      "base_path": "build/src/gameplay/camera/apply_camera_shake.c.o",
+      "base_path": "build/src/camera/apply_camera_shake.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6047,9 +6047,9 @@
       }
     },
     {
-      "name": "gameplay/camera/update_camera_tracking_state",
+      "name": "camera/update_camera_tracking_state",
       "target_path": "expected/obj/gameplay/camera/update_camera_tracking_state.c.o",
-      "base_path": "build/src/gameplay/camera/update_camera_tracking_state.c.o",
+      "base_path": "build/src/camera/update_camera_tracking_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6057,9 +6057,9 @@
       }
     },
     {
-      "name": "gameplay/camera/update_camera_underwater_flag",
+      "name": "camera/update_camera_underwater_flag",
       "target_path": "expected/obj/gameplay/camera/update_camera_underwater_flag.c.o",
-      "base_path": "build/src/gameplay/camera/update_camera_underwater_flag.c.o",
+      "base_path": "build/src/camera/update_camera_underwater_flag.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6067,9 +6067,9 @@
       }
     },
     {
-      "name": "gameplay/camera/refresh_camera_control_flags",
+      "name": "camera/refresh_camera_control_flags",
       "target_path": "expected/obj/gameplay/camera/refresh_camera_control_flags.c.o",
-      "base_path": "build/src/gameplay/camera/refresh_camera_control_flags.c.o",
+      "base_path": "build/src/camera/refresh_camera_control_flags.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6077,9 +6077,9 @@
       }
     },
     {
-      "name": "gameplay/camera/advance_timed_camera_control",
+      "name": "camera/advance_timed_camera_control",
       "target_path": "expected/obj/gameplay/camera/advance_timed_camera_control.c.o",
-      "base_path": "build/src/gameplay/camera/advance_timed_camera_control.c.o",
+      "base_path": "build/src/camera/advance_timed_camera_control.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6087,9 +6087,9 @@
       }
     },
     {
-      "name": "gameplay/camera/update_camera",
+      "name": "camera/update_camera",
       "target_path": "expected/obj/gameplay/camera/update_camera.c.o",
-      "base_path": "build/src/gameplay/camera/update_camera.c.o",
+      "base_path": "build/src/camera/update_camera.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6117,9 +6117,9 @@
       }
     },
     {
-      "name": "textbin/render_queued_rotated_sprites",
+      "name": "rendering/effects/render_queued_rotated_sprites",
       "target_path": "expected/obj/textbin/render_queued_rotated_sprites.c.o",
-      "base_path": "build/src/textbin/render_queued_rotated_sprites.c.o",
+      "base_path": "build/src/rendering/effects/render_queued_rotated_sprites.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6127,9 +6127,9 @@
       }
     },
     {
-      "name": "textbin/update_camera_environment_from_regions",
+      "name": "camera/update_camera_environment_from_regions",
       "target_path": "expected/obj/textbin/update_camera_environment_from_regions.c.o",
-      "base_path": "build/src/textbin/update_camera_environment_from_regions.c.o",
+      "base_path": "build/src/camera/update_camera_environment_from_regions.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6237,9 +6237,9 @@
       }
     },
     {
-      "name": "rendering/state/reset_graphics",
+      "name": "rendering/frame/reset_graphics",
       "target_path": "expected/obj/rendering/state/reset_graphics.c.o",
-      "base_path": "build/src/rendering/state/reset_graphics.c.o",
+      "base_path": "build/src/rendering/frame/reset_graphics.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6337,9 +6337,9 @@
       }
     },
     {
-      "name": "video/display/set_pal_mode",
+      "name": "movies/display/set_pal_mode",
       "target_path": "expected/obj/video/display/set_pal_mode.c.o",
-      "base_path": "build/src/video/display/set_pal_mode.c.o",
+      "base_path": "build/src/movies/display/set_pal_mode.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6347,9 +6347,9 @@
       }
     },
     {
-      "name": "rendering/state/reset_draw_globals",
+      "name": "rendering/frame/reset_draw_globals",
       "target_path": "expected/obj/rendering/state/reset_draw_globals.c.o",
-      "base_path": "build/src/rendering/state/reset_draw_globals.c.o",
+      "base_path": "build/src/rendering/frame/reset_draw_globals.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6357,9 +6357,9 @@
       }
     },
     {
-      "name": "rendering/state/reset_gs_registers",
+      "name": "rendering/frame/reset_gs_registers",
       "target_path": "expected/obj/rendering/state/reset_gs_registers.c.o",
-      "base_path": "build/src/rendering/state/reset_gs_registers.c.o",
+      "base_path": "build/src/rendering/frame/reset_gs_registers.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6367,9 +6367,9 @@
       }
     },
     {
-      "name": "rendering/state/reset_gs_registers_pr",
+      "name": "rendering/frame/reset_gs_registers_pr",
       "target_path": "expected/obj/rendering/state/reset_gs_registers_pr.c.o",
-      "base_path": "build/src/rendering/state/reset_gs_registers_pr.c.o",
+      "base_path": "build/src/rendering/frame/reset_gs_registers_pr.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6427,9 +6427,9 @@
       }
     },
     {
-      "name": "gameplay/callbacks/add_draw_callback",
+      "name": "runtime/callbacks/add_draw_callback",
       "target_path": "expected/obj/gameplay/callbacks/add_draw_callback.c.o",
-      "base_path": "build/src/gameplay/callbacks/add_draw_callback.c.o",
+      "base_path": "build/src/runtime/callbacks/add_draw_callback.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6437,9 +6437,9 @@
       }
     },
     {
-      "name": "gameplay/callbacks/dispatch_callback_list_1",
+      "name": "runtime/callbacks/dispatch_callback_list_1",
       "target_path": "expected/obj/gameplay/callbacks/dispatch_callback_list_1.c.o",
-      "base_path": "build/src/gameplay/callbacks/dispatch_callback_list_1.c.o",
+      "base_path": "build/src/runtime/callbacks/dispatch_callback_list_1.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6447,9 +6447,9 @@
       }
     },
     {
-      "name": "gameplay/callbacks/dispatch_callback_list_2",
+      "name": "runtime/callbacks/dispatch_callback_list_2",
       "target_path": "expected/obj/gameplay/callbacks/dispatch_callback_list_2.c.o",
-      "base_path": "build/src/gameplay/callbacks/dispatch_callback_list_2.c.o",
+      "base_path": "build/src/runtime/callbacks/dispatch_callback_list_2.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6457,9 +6457,9 @@
       }
     },
     {
-      "name": "gameplay/callbacks/dispatch_callback_list_3",
+      "name": "runtime/callbacks/dispatch_callback_list_3",
       "target_path": "expected/obj/gameplay/callbacks/dispatch_callback_list_3.c.o",
-      "base_path": "build/src/gameplay/callbacks/dispatch_callback_list_3.c.o",
+      "base_path": "build/src/runtime/callbacks/dispatch_callback_list_3.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6467,9 +6467,9 @@
       }
     },
     {
-      "name": "gameplay/callbacks/enqueue_callback_list_4",
+      "name": "runtime/callbacks/enqueue_callback_list_4",
       "target_path": "expected/obj/gameplay/callbacks/enqueue_callback_list_4.c.o",
-      "base_path": "build/src/gameplay/callbacks/enqueue_callback_list_4.c.o",
+      "base_path": "build/src/runtime/callbacks/enqueue_callback_list_4.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6477,9 +6477,9 @@
       }
     },
     {
-      "name": "gameplay/callbacks/dispatch_callback_list_4",
+      "name": "runtime/callbacks/dispatch_callback_list_4",
       "target_path": "expected/obj/gameplay/callbacks/dispatch_callback_list_4.c.o",
-      "base_path": "build/src/gameplay/callbacks/dispatch_callback_list_4.c.o",
+      "base_path": "build/src/runtime/callbacks/dispatch_callback_list_4.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6497,9 +6497,9 @@
       }
     },
     {
-      "name": "rendering/transitions/fade_to_black",
+      "name": "rendering/effects/fade_to_black",
       "target_path": "expected/obj/rendering/transitions/fade_to_black.c.o",
-      "base_path": "build/src/rendering/transitions/fade_to_black.c.o",
+      "base_path": "build/src/rendering/effects/fade_to_black.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6577,9 +6577,9 @@
       }
     },
     {
-      "name": "textbin/append_subpixel_textured_screen_quad",
+      "name": "rendering/packets/append_subpixel_textured_screen_quad",
       "target_path": "expected/obj/textbin/append_subpixel_textured_screen_quad.c.o",
-      "base_path": "build/src/textbin/append_subpixel_textured_screen_quad.c.o",
+      "base_path": "build/src/rendering/packets/append_subpixel_textured_screen_quad.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6837,9 +6837,9 @@
       }
     },
     {
-      "name": "ui/fonts/font_set_window",
+      "name": "ui/text/font/font_set_window",
       "target_path": "expected/obj/ui/fonts/font_set_window.c.o",
-      "base_path": "build/src/ui/fonts/font_set_window.c.o",
+      "base_path": "build/src/ui/text/font/font_set_window.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6847,9 +6847,9 @@
       }
     },
     {
-      "name": "ui/fonts/font_queue_vu_state",
+      "name": "ui/text/font/font_queue_vu_state",
       "target_path": "expected/obj/ui/fonts/font_queue_vu_state.c.o",
-      "base_path": "build/src/ui/fonts/font_queue_vu_state.c.o",
+      "base_path": "build/src/ui/text/font/font_queue_vu_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6857,9 +6857,9 @@
       }
     },
     {
-      "name": "rendering/targets/configure_graphics_render_target_and_projection",
+      "name": "rendering/frame/configure_graphics_render_target_and_projection",
       "target_path": "expected/obj/rendering/targets/configure_graphics_render_target_and_projection.c.o",
-      "base_path": "build/src/rendering/targets/configure_graphics_render_target_and_projection.c.o",
+      "base_path": "build/src/rendering/frame/configure_graphics_render_target_and_projection.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6867,9 +6867,9 @@
       }
     },
     {
-      "name": "rendering/state/begin_draw_frame",
+      "name": "rendering/frame/begin_draw_frame",
       "target_path": "expected/obj/rendering/state/begin_draw_frame.c.o",
-      "base_path": "build/src/rendering/state/begin_draw_frame.c.o",
+      "base_path": "build/src/rendering/frame/begin_draw_frame.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6877,9 +6877,9 @@
       }
     },
     {
-      "name": "ui/fonts/draw_debug_font",
+      "name": "ui/text/font/draw_debug_font",
       "target_path": "expected/obj/ui/fonts/draw_debug_font.c.o",
-      "base_path": "build/src/ui/fonts/draw_debug_font.c.o",
+      "base_path": "build/src/ui/text/font/draw_debug_font.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6907,9 +6907,9 @@
       }
     },
     {
-      "name": "assembly/textbin/rendering/gs/fast_draw_quad_real",
+      "name": "assembly/textbin/rendering/frame/fast_draw_quad_real",
       "target_path": "expected/obj/assembly/textbin/rendering/gs/fast_draw_quad_real.c.o",
-      "base_path": "build/src/assembly/textbin/rendering/gs/fast_draw_quad_real.c.o",
+      "base_path": "build/src/assembly/textbin/rendering/frame/fast_draw_quad_real.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6917,9 +6917,9 @@
       }
     },
     {
-      "name": "assembly/textbin/rendering/gs/write_setup_block",
+      "name": "assembly/textbin/rendering/frame/write_setup_block",
       "target_path": "expected/obj/assembly/textbin/rendering/gs/write_setup_block.c.o",
-      "base_path": "build/src/assembly/textbin/rendering/gs/write_setup_block.c.o",
+      "base_path": "build/src/assembly/textbin/rendering/frame/write_setup_block.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6927,9 +6927,9 @@
       }
     },
     {
-      "name": "assembly/textbin/rendering/gs/write_gs_header",
+      "name": "assembly/textbin/rendering/frame/write_gs_header",
       "target_path": "expected/obj/assembly/textbin/rendering/gs/write_gs_header.c.o",
-      "base_path": "build/src/assembly/textbin/rendering/gs/write_gs_header.c.o",
+      "base_path": "build/src/assembly/textbin/rendering/frame/write_gs_header.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6937,9 +6937,9 @@
       }
     },
     {
-      "name": "assembly/textbin/rendering/gs/scis_and_render",
+      "name": "assembly/textbin/rendering/frame/scis_and_render",
       "target_path": "expected/obj/assembly/textbin/rendering/gs/scis_and_render.c.o",
-      "base_path": "build/src/assembly/textbin/rendering/gs/scis_and_render.c.o",
+      "base_path": "build/src/assembly/textbin/rendering/frame/scis_and_render.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -6967,9 +6967,9 @@
       }
     },
     {
-      "name": "textbin/append_billboard_batch",
+      "name": "rendering/effects/append_billboard_batch",
       "target_path": "expected/obj/textbin/append_billboard_batch.c.o",
-      "base_path": "build/src/textbin/append_billboard_batch.c.o",
+      "base_path": "build/src/rendering/effects/append_billboard_batch.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -7037,9 +7037,9 @@
       }
     },
     {
-      "name": "assembly/textbin/rendering/gs/log2dim",
+      "name": "assembly/textbin/rendering/frame/log2dim",
       "target_path": "expected/obj/assembly/textbin/rendering/gs/log2dim.c.o",
-      "base_path": "build/src/assembly/textbin/rendering/gs/log2dim.c.o",
+      "base_path": "build/src/assembly/textbin/rendering/frame/log2dim.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -7667,9 +7667,9 @@
       }
     },
     {
-      "name": "assembly/textbin/rendering/gs/fast_tween_color",
+      "name": "assembly/textbin/rendering/frame/fast_tween_color",
       "target_path": "expected/obj/assembly/textbin/rendering/gs/fast_tween_color.c.o",
-      "base_path": "build/src/assembly/textbin/rendering/gs/fast_tween_color.c.o",
+      "base_path": "build/src/assembly/textbin/rendering/frame/fast_tween_color.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -7707,9 +7707,9 @@
       }
     },
     {
-      "name": "rendering/buffers/setup_fs_aa_buffer",
+      "name": "rendering/frame/setup_fs_aa_buffer",
       "target_path": "expected/obj/rendering/buffers/setup_fs_aa_buffer.c.o",
-      "base_path": "build/src/rendering/buffers/setup_fs_aa_buffer.c.o",
+      "base_path": "build/src/rendering/frame/setup_fs_aa_buffer.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -7717,9 +7717,9 @@
       }
     },
     {
-      "name": "rendering/color/set_background_color",
+      "name": "rendering/frame/set_background_color",
       "target_path": "expected/obj/rendering/color/set_background_color.c.o",
-      "base_path": "build/src/rendering/color/set_background_color.c.o",
+      "base_path": "build/src/rendering/frame/set_background_color.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -7767,9 +7767,9 @@
       }
     },
     {
-      "name": "rendering/targets/setup_render_target",
+      "name": "rendering/frame/setup_render_target",
       "target_path": "expected/obj/rendering/targets/setup_render_target.c.o",
-      "base_path": "build/src/rendering/targets/setup_render_target.c.o",
+      "base_path": "build/src/rendering/frame/setup_render_target.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -7797,9 +7797,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/draw_centered_capture_background",
+      "name": "ui/vendor/draw_centered_capture_background",
       "target_path": "expected/obj/gameplay/vendor/draw_centered_capture_background.c.o",
-      "base_path": "build/src/gameplay/vendor/draw_centered_capture_background.c.o",
+      "base_path": "build/src/ui/vendor/draw_centered_capture_background.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -7807,9 +7807,9 @@
       }
     },
     {
-      "name": "rendering/framebuffer/draw_framebuffer_rect",
+      "name": "rendering/frame/draw_framebuffer_rect",
       "target_path": "expected/obj/rendering/framebuffer/draw_framebuffer_rect.c.o",
-      "base_path": "build/src/rendering/framebuffer/draw_framebuffer_rect.c.o",
+      "base_path": "build/src/rendering/frame/draw_framebuffer_rect.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -7817,9 +7817,9 @@
       }
     },
     {
-      "name": "textbin/runtime/memory/mode_freeze_init",
+      "name": "game/mode_freeze_init",
       "target_path": "expected/obj/textbin/runtime/memory/mode_freeze_init.c.o",
-      "base_path": "build/src/textbin/runtime/memory/mode_freeze_init.c.o",
+      "base_path": "build/src/game/mode_freeze_init.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -7837,9 +7837,9 @@
       }
     },
     {
-      "name": "runtime/memory/update_mode_freeze",
+      "name": "game/update_mode_freeze",
       "target_path": "expected/obj/runtime/memory/update_mode_freeze.c.o",
-      "base_path": "build/src/runtime/memory/update_mode_freeze.c.o",
+      "base_path": "build/src/game/update_mode_freeze.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8017,9 +8017,9 @@
       }
     },
     {
-      "name": "gameplay/animation/queue_animation_update",
+      "name": "mobys/animation/queue_animation_update",
       "target_path": "expected/obj/gameplay/animation/queue_animation_update.c.o",
-      "base_path": "build/src/gameplay/animation/queue_animation_update.c.o",
+      "base_path": "build/src/mobys/animation/queue_animation_update.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8027,9 +8027,9 @@
       }
     },
     {
-      "name": "gameplay/animation/apply_pending_animation",
+      "name": "mobys/animation/apply_pending_animation",
       "target_path": "expected/obj/gameplay/animation/apply_pending_animation.c.o",
-      "base_path": "build/src/gameplay/animation/apply_pending_animation.c.o",
+      "base_path": "build/src/mobys/animation/apply_pending_animation.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8047,9 +8047,9 @@
       }
     },
     {
-      "name": "gameplay/animation/load_animation_definition",
+      "name": "mobys/animation/load_animation_definition",
       "target_path": "expected/obj/gameplay/animation/load_animation_definition.c.o",
-      "base_path": "build/src/gameplay/animation/load_animation_definition.c.o",
+      "base_path": "build/src/mobys/animation/load_animation_definition.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8057,9 +8057,9 @@
       }
     },
     {
-      "name": "gameplay/animation/set_animation_parameter",
+      "name": "mobys/animation/set_animation_parameter",
       "target_path": "expected/obj/gameplay/animation/set_animation_parameter.c.o",
-      "base_path": "build/src/gameplay/animation/set_animation_parameter.c.o",
+      "base_path": "build/src/mobys/animation/set_animation_parameter.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8077,9 +8077,9 @@
       }
     },
     {
-      "name": "runtime/resources/update_resource_counter",
+      "name": "runtime/update_resource_counter",
       "target_path": "expected/obj/runtime/resources/update_resource_counter.c.o",
-      "base_path": "build/src/runtime/resources/update_resource_counter.c.o",
+      "base_path": "build/src/runtime/update_resource_counter.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8107,9 +8107,9 @@
       }
     },
     {
-      "name": "textbin/gameplay/animation/get_frame_texture",
+      "name": "rendering/texture/get_frame_texture",
       "target_path": "expected/obj/textbin/gameplay/animation/get_frame_texture.c.o",
-      "base_path": "build/src/textbin/gameplay/animation/get_frame_texture.c.o",
+      "base_path": "build/src/rendering/texture/get_frame_texture.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8237,9 +8237,9 @@
       }
     },
     {
-      "name": "textbin/ui/frames/draw_framed_text",
+      "name": "ui/frames/draw_framed_text",
       "target_path": "expected/obj/textbin/ui/frames/draw_framed_text.c.o",
-      "base_path": "build/src/textbin/ui/frames/draw_framed_text.c.o",
+      "base_path": "build/src/ui/frames/draw_framed_text.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8247,9 +8247,9 @@
       }
     },
     {
-      "name": "textbin/draw_boot_image",
+      "name": "ui/loading/draw_boot_image",
       "target_path": "expected/obj/textbin/draw_boot_image.c.o",
-      "base_path": "build/src/textbin/draw_boot_image.c.o",
+      "base_path": "build/src/ui/loading/draw_boot_image.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8417,9 +8417,9 @@
       }
     },
     {
-      "name": "runtime/relocation/relocate_asset_entry_pointers",
+      "name": "world/loaders/relocate_asset_entry_pointers",
       "target_path": "expected/obj/runtime/relocation/relocate_asset_entry_pointers.c.o",
-      "base_path": "build/src/runtime/relocation/relocate_asset_entry_pointers.c.o",
+      "base_path": "build/src/world/loaders/relocate_asset_entry_pointers.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8427,9 +8427,9 @@
       }
     },
     {
-      "name": "textbin/prepare_resident_class_render_data",
+      "name": "rendering/mobys/prepare_resident_class_render_data",
       "target_path": "expected/obj/textbin/prepare_resident_class_render_data.c.o",
-      "base_path": "build/src/textbin/prepare_resident_class_render_data.c.o",
+      "base_path": "build/src/rendering/mobys/prepare_resident_class_render_data.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8477,9 +8477,9 @@
       }
     },
     {
-      "name": "world/streaming/load_level_chunk_from_disc",
+      "name": "streaming/load_level_chunk_from_disc",
       "target_path": "expected/obj/world/streaming/load_level_chunk_from_disc.c.o",
-      "base_path": "build/src/world/streaming/load_level_chunk_from_disc.c.o",
+      "base_path": "build/src/streaming/load_level_chunk_from_disc.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8487,9 +8487,9 @@
       }
     },
     {
-      "name": "gameplay/state/service_level_archive_load",
+      "name": "game/service_level_archive_load",
       "target_path": "expected/obj/gameplay/state/service_level_archive_load.c.o",
-      "base_path": "build/src/gameplay/state/service_level_archive_load.c.o",
+      "base_path": "build/src/game/service_level_archive_load.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8497,9 +8497,9 @@
       }
     },
     {
-      "name": "world/animation/update_world_object_animation",
+      "name": "world/update_world_object_animation",
       "target_path": "expected/obj/world/animation/update_world_object_animation.c.o",
-      "base_path": "build/src/world/animation/update_world_object_animation.c.o",
+      "base_path": "build/src/world/update_world_object_animation.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8517,9 +8517,9 @@
       }
     },
     {
-      "name": "textbin/world/data/select_world_object_resource_tables",
+      "name": "world/select_world_object_resource_tables",
       "target_path": "expected/obj/textbin/world/data/select_world_object_resource_tables.c.o",
-      "base_path": "build/src/textbin/world/data/select_world_object_resource_tables.c.o",
+      "base_path": "build/src/world/select_world_object_resource_tables.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8777,9 +8777,9 @@
       }
     },
     {
-      "name": "math/geometry/point_is_clockwise",
+      "name": "math/point_is_clockwise",
       "target_path": "expected/obj/math/geometry/point_is_clockwise.c.o",
-      "base_path": "build/src/math/geometry/point_is_clockwise.c.o",
+      "base_path": "build/src/math/point_is_clockwise.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8797,9 +8797,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_init",
+      "name": "ui/menus/save_data/save_card_state_init",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_init.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_init.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_init.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8807,9 +8807,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_good_save",
+      "name": "ui/menus/save_data/save_card_state_good_save",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_good_save.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_good_save.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_good_save.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8817,9 +8817,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_warning",
+      "name": "ui/menus/save_data/save_card_state_warning",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_warning.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_warning.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_warning.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8827,9 +8827,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_no_card",
+      "name": "ui/menus/save_data/save_card_state_no_card",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_no_card.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_no_card.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_no_card.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8837,9 +8837,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_wait_for_card",
+      "name": "ui/menus/save_data/save_card_state_wait_for_card",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_wait_for_card.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_wait_for_card.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_wait_for_card.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8847,9 +8847,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_unformatted",
+      "name": "ui/menus/save_data/save_card_state_unformatted",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_unformatted.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_unformatted.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_unformatted.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8857,9 +8857,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_prompt_format",
+      "name": "ui/menus/save_data/save_card_state_prompt_format",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_prompt_format.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_prompt_format.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_prompt_format.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8867,9 +8867,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_format_pending",
+      "name": "ui/menus/save_data/save_card_state_format_pending",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_format_pending.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_format_pending.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_format_pending.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8877,9 +8877,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_formatting",
+      "name": "ui/menus/save_data/save_card_state_formatting",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_formatting.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_formatting.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_formatting.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8887,9 +8887,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_formatted",
+      "name": "ui/menus/save_data/save_card_state_formatted",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_formatted.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_formatted.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_formatted.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8897,9 +8897,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_check_save",
+      "name": "ui/menus/save_data/save_card_state_check_save",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_check_save.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_check_save.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_check_save.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8907,9 +8907,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_checking_save",
+      "name": "ui/menus/save_data/save_card_state_checking_save",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_checking_save.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_checking_save.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_checking_save.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8917,9 +8917,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_no_save",
+      "name": "ui/menus/save_data/save_card_state_no_save",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_no_save.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_no_save.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_no_save.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8927,9 +8927,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_prompt_create_save",
+      "name": "ui/menus/save_data/save_card_state_prompt_create_save",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_prompt_create_save.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_prompt_create_save.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_prompt_create_save.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8937,9 +8937,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_create_save_pending",
+      "name": "ui/menus/save_data/save_card_state_create_save_pending",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_create_save_pending.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_create_save_pending.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_create_save_pending.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8947,9 +8947,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_creating_save",
+      "name": "ui/menus/save_data/save_card_state_creating_save",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_creating_save.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_creating_save.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_creating_save.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8957,9 +8957,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_new_card",
+      "name": "ui/menus/save_data/save_card_state_new_card",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_new_card.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_new_card.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_new_card.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8967,9 +8967,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_format_failed",
+      "name": "ui/menus/save_data/save_card_state_format_failed",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_format_failed.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_format_failed.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_format_failed.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8977,9 +8977,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_create_failed",
+      "name": "ui/menus/save_data/save_card_state_create_failed",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_create_failed.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_create_failed.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_create_failed.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8987,9 +8987,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_no_room",
+      "name": "ui/menus/save_data/save_card_state_no_room",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_no_room.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_no_room.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_no_room.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -8997,9 +8997,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_load_failed",
+      "name": "ui/menus/save_data/save_card_state_load_failed",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_load_failed.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_load_failed.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_load_failed.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9007,9 +9007,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_save_failed",
+      "name": "ui/menus/save_data/save_card_state_save_failed",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_save_failed.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_save_failed.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_save_failed.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9017,9 +9017,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_saving",
+      "name": "ui/menus/save_data/save_card_state_saving",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_saving.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_saving.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_saving.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9027,9 +9027,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_prompt_begin_unformatted",
+      "name": "ui/menus/save_data/save_card_state_prompt_begin_unformatted",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_prompt_begin_unformatted.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_prompt_begin_unformatted.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_prompt_begin_unformatted.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9037,9 +9037,9 @@
       }
     },
     {
-      "name": "ui/menus/save_data/states/save_card_state_prompt_begin_no_save",
+      "name": "ui/menus/save_data/save_card_state_prompt_begin_no_save",
       "target_path": "expected/obj/ui/menus/save_data/states/save_card_state_prompt_begin_no_save.c.o",
-      "base_path": "build/src/ui/menus/save_data/states/save_card_state_prompt_begin_no_save.c.o",
+      "base_path": "build/src/ui/menus/save_data/save_card_state_prompt_begin_no_save.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9047,9 +9047,9 @@
       }
     },
     {
-      "name": "storage/memory_card/memcard_get_name",
+      "name": "save/memcard_get_name",
       "target_path": "expected/obj/storage/memory_card/memcard_get_name.c.o",
-      "base_path": "build/src/storage/memory_card/memcard_get_name.c.o",
+      "base_path": "build/src/save/memcard_get_name.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9057,9 +9057,9 @@
       }
     },
     {
-      "name": "storage/memory_card/check_memory_card",
+      "name": "save/check_memory_card",
       "target_path": "expected/obj/storage/memory_card/check_memory_card.c.o",
-      "base_path": "build/src/storage/memory_card/check_memory_card.c.o",
+      "base_path": "build/src/save/check_memory_card.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9067,9 +9067,9 @@
       }
     },
     {
-      "name": "storage/memory_card/memcard_restore_game",
+      "name": "save/memcard_restore_game",
       "target_path": "expected/obj/storage/memory_card/memcard_restore_game.c.o",
-      "base_path": "build/src/storage/memory_card/memcard_restore_game.c.o",
+      "base_path": "build/src/save/memcard_restore_game.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9077,9 +9077,9 @@
       }
     },
     {
-      "name": "world/streaming/load_and_initialize_level_chunk",
+      "name": "streaming/load_and_initialize_level_chunk",
       "target_path": "expected/obj/world/streaming/load_and_initialize_level_chunk.c.o",
-      "base_path": "build/src/world/streaming/load_and_initialize_level_chunk.c.o",
+      "base_path": "build/src/streaming/load_and_initialize_level_chunk.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9087,9 +9087,9 @@
       }
     },
     {
-      "name": "storage/memory_card/memcard_update_state",
+      "name": "save/memcard_update_state",
       "target_path": "expected/obj/storage/memory_card/memcard_update_state.c.o",
-      "base_path": "build/src/storage/memory_card/memcard_update_state.c.o",
+      "base_path": "build/src/save/memcard_update_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9097,9 +9097,9 @@
       }
     },
     {
-      "name": "storage/memory_card/memcard_make_whole_save",
+      "name": "save/memcard_make_whole_save",
       "target_path": "expected/obj/storage/memory_card/memcard_make_whole_save.c.o",
-      "base_path": "build/src/storage/memory_card/memcard_make_whole_save.c.o",
+      "base_path": "build/src/save/memcard_make_whole_save.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9107,9 +9107,9 @@
       }
     },
     {
-      "name": "storage/memory_card/memcard_initialize",
+      "name": "save/memcard_initialize",
       "target_path": "expected/obj/storage/memory_card/memcard_initialize.c.o",
-      "base_path": "build/src/storage/memory_card/memcard_initialize.c.o",
+      "base_path": "build/src/save/memcard_initialize.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9117,9 +9117,9 @@
       }
     },
     {
-      "name": "storage/memory_card/memcard_get_data_size",
+      "name": "save/memcard_get_data_size",
       "target_path": "expected/obj/storage/memory_card/memcard_get_data_size.c.o",
-      "base_path": "build/src/storage/memory_card/memcard_get_data_size.c.o",
+      "base_path": "build/src/save/memcard_get_data_size.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9127,9 +9127,9 @@
       }
     },
     {
-      "name": "storage/memory_card/data/calculate_crc16",
+      "name": "save/calculate_crc16",
       "target_path": "expected/obj/storage/memory_card/data/calculate_crc16.c.o",
-      "base_path": "build/src/storage/memory_card/data/calculate_crc16.c.o",
+      "base_path": "build/src/save/calculate_crc16.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9137,9 +9137,9 @@
       }
     },
     {
-      "name": "storage/memory_card/data/validate_data_crc",
+      "name": "save/validate_data_crc",
       "target_path": "expected/obj/storage/memory_card/data/validate_data_crc.c.o",
-      "base_path": "build/src/storage/memory_card/data/validate_data_crc.c.o",
+      "base_path": "build/src/save/validate_data_crc.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9147,9 +9147,9 @@
       }
     },
     {
-      "name": "storage/memory_card/data/memcard_prepare_data",
+      "name": "save/memcard_prepare_data",
       "target_path": "expected/obj/storage/memory_card/data/memcard_prepare_data.c.o",
-      "base_path": "build/src/storage/memory_card/data/memcard_prepare_data.c.o",
+      "base_path": "build/src/save/memcard_prepare_data.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9157,9 +9157,9 @@
       }
     },
     {
-      "name": "storage/memory_card/data/memcard_restore_info",
+      "name": "save/memcard_restore_info",
       "target_path": "expected/obj/storage/memory_card/data/memcard_restore_info.c.o",
-      "base_path": "build/src/storage/memory_card/data/memcard_restore_info.c.o",
+      "base_path": "build/src/save/memcard_restore_info.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9167,9 +9167,9 @@
       }
     },
     {
-      "name": "textbin/storage/memory_card/data/memcard_restore_data",
+      "name": "save/memcard_restore_data",
       "target_path": "expected/obj/textbin/storage/memory_card/data/memcard_restore_data.c.o",
-      "base_path": "build/src/textbin/storage/memory_card/data/memcard_restore_data.c.o",
+      "base_path": "build/src/save/memcard_restore_data.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9177,9 +9177,9 @@
       }
     },
     {
-      "name": "storage/memory_card/memcard_save_data",
+      "name": "save/memcard_save_data",
       "target_path": "expected/obj/storage/memory_card/memcard_save_data.c.o",
-      "base_path": "build/src/storage/memory_card/memcard_save_data.c.o",
+      "base_path": "build/src/save/memcard_save_data.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9237,9 +9237,9 @@
       }
     },
     {
-      "name": "gameplay/missions/update_mission_list",
+      "name": "game/missions/update_mission_list",
       "target_path": "expected/obj/gameplay/missions/update_mission_list.c.o",
-      "base_path": "build/src/gameplay/missions/update_mission_list.c.o",
+      "base_path": "build/src/game/missions/update_mission_list.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9247,9 +9247,9 @@
       }
     },
     {
-      "name": "gameplay/missions/check_mission_condition",
+      "name": "game/missions/check_mission_condition",
       "target_path": "expected/obj/gameplay/missions/check_mission_condition.c.o",
-      "base_path": "build/src/gameplay/missions/check_mission_condition.c.o",
+      "base_path": "build/src/game/missions/check_mission_condition.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9257,9 +9257,9 @@
       }
     },
     {
-      "name": "gameplay/missions/collect_mission_ids",
+      "name": "game/missions/collect_mission_ids",
       "target_path": "expected/obj/gameplay/missions/collect_mission_ids.c.o",
-      "base_path": "build/src/gameplay/missions/collect_mission_ids.c.o",
+      "base_path": "build/src/game/missions/collect_mission_ids.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9267,9 +9267,9 @@
       }
     },
     {
-      "name": "gameplay/missions/fun_0020bd30",
+      "name": "game/missions/fun_0020bd30",
       "target_path": "expected/obj/gameplay/missions/fun_0020bd30.c.o",
-      "base_path": "build/src/gameplay/missions/fun_0020bd30.c.o",
+      "base_path": "build/src/game/missions/fun_0020bd30.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9277,9 +9277,9 @@
       }
     },
     {
-      "name": "gameplay/missions/fun_0020bd58",
+      "name": "game/missions/fun_0020bd58",
       "target_path": "expected/obj/gameplay/missions/fun_0020bd58.c.o",
-      "base_path": "build/src/gameplay/missions/fun_0020bd58.c.o",
+      "base_path": "build/src/game/missions/fun_0020bd58.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9287,9 +9287,9 @@
       }
     },
     {
-      "name": "gameplay/missions/fun_0020bd90",
+      "name": "game/missions/fun_0020bd90",
       "target_path": "expected/obj/gameplay/missions/fun_0020bd90.c.o",
-      "base_path": "build/src/gameplay/missions/fun_0020bd90.c.o",
+      "base_path": "build/src/game/missions/fun_0020bd90.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9297,9 +9297,9 @@
       }
     },
     {
-      "name": "gameplay/missions/fun_0020bdc0",
+      "name": "game/missions/fun_0020bdc0",
       "target_path": "expected/obj/gameplay/missions/fun_0020bdc0.c.o",
-      "base_path": "build/src/gameplay/missions/fun_0020bdc0.c.o",
+      "base_path": "build/src/game/missions/fun_0020bdc0.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9307,9 +9307,9 @@
       }
     },
     {
-      "name": "gameplay/missions/fun_0020bde8",
+      "name": "game/missions/fun_0020bde8",
       "target_path": "expected/obj/gameplay/missions/fun_0020bde8.c.o",
-      "base_path": "build/src/gameplay/missions/fun_0020bde8.c.o",
+      "base_path": "build/src/game/missions/fun_0020bde8.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9317,9 +9317,9 @@
       }
     },
     {
-      "name": "gameplay/missions/fun_0020be10",
+      "name": "game/missions/fun_0020be10",
       "target_path": "expected/obj/gameplay/missions/fun_0020be10.c.o",
-      "base_path": "build/src/gameplay/missions/fun_0020be10.c.o",
+      "base_path": "build/src/game/missions/fun_0020be10.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9327,9 +9327,9 @@
       }
     },
     {
-      "name": "gameplay/missions/fun_0020be38",
+      "name": "game/missions/fun_0020be38",
       "target_path": "expected/obj/gameplay/missions/fun_0020be38.c.o",
-      "base_path": "build/src/gameplay/missions/fun_0020be38.c.o",
+      "base_path": "build/src/game/missions/fun_0020be38.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9337,9 +9337,9 @@
       }
     },
     {
-      "name": "gameplay/missions/is_item_available",
+      "name": "game/missions/is_item_available",
       "target_path": "expected/obj/gameplay/missions/is_item_available.c.o",
-      "base_path": "build/src/gameplay/missions/is_item_available.c.o",
+      "base_path": "build/src/game/missions/is_item_available.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9347,9 +9347,9 @@
       }
     },
     {
-      "name": "gameplay/missions/get_map_point_mission_status",
+      "name": "game/missions/get_map_point_mission_status",
       "target_path": "expected/obj/gameplay/missions/get_map_point_mission_status.c.o",
-      "base_path": "build/src/gameplay/missions/get_map_point_mission_status.c.o",
+      "base_path": "build/src/game/missions/get_map_point_mission_status.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9357,9 +9357,9 @@
       }
     },
     {
-      "name": "gameplay/missions/fun_0020bed8",
+      "name": "game/missions/fun_0020bed8",
       "target_path": "expected/obj/gameplay/missions/fun_0020bed8.c.o",
-      "base_path": "build/src/gameplay/missions/fun_0020bed8.c.o",
+      "base_path": "build/src/game/missions/fun_0020bed8.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9367,9 +9367,9 @@
       }
     },
     {
-      "name": "gameplay/missions/fun_0020bf08",
+      "name": "game/missions/fun_0020bf08",
       "target_path": "expected/obj/gameplay/missions/fun_0020bf08.c.o",
-      "base_path": "build/src/gameplay/missions/fun_0020bf08.c.o",
+      "base_path": "build/src/game/missions/fun_0020bf08.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9377,9 +9377,9 @@
       }
     },
     {
-      "name": "gameplay/missions/get_morph_o_ray_status",
+      "name": "game/missions/get_morph_o_ray_status",
       "target_path": "expected/obj/gameplay/missions/get_morph_o_ray_status.c.o",
-      "base_path": "build/src/gameplay/missions/get_morph_o_ray_status.c.o",
+      "base_path": "build/src/game/missions/get_morph_o_ray_status.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9387,9 +9387,9 @@
       }
     },
     {
-      "name": "gameplay/missions/has_hologuise",
+      "name": "game/missions/has_hologuise",
       "target_path": "expected/obj/gameplay/missions/has_hologuise.c.o",
-      "base_path": "build/src/gameplay/missions/has_hologuise.c.o",
+      "base_path": "build/src/game/missions/has_hologuise.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9397,9 +9397,9 @@
       }
     },
     {
-      "name": "gameplay/missions/mission_get_hologuise_or_map_status",
+      "name": "game/missions/mission_get_hologuise_or_map_status",
       "target_path": "expected/obj/gameplay/missions/mission_get_hologuise_or_map_status.c.o",
-      "base_path": "build/src/gameplay/missions/mission_get_hologuise_or_map_status.c.o",
+      "base_path": "build/src/game/missions/mission_get_hologuise_or_map_status.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9417,9 +9417,9 @@
       }
     },
     {
-      "name": "gameplay/entities/create_moby",
+      "name": "mobys/create_moby",
       "target_path": "expected/obj/gameplay/entities/create_moby.c.o",
-      "base_path": "build/src/gameplay/entities/create_moby.c.o",
+      "base_path": "build/src/mobys/create_moby.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9427,9 +9427,9 @@
       }
     },
     {
-      "name": "gameplay/entities/init_moby_instance",
+      "name": "mobys/init_moby_instance",
       "target_path": "expected/obj/gameplay/entities/init_moby_instance.c.o",
-      "base_path": "build/src/gameplay/entities/init_moby_instance.c.o",
+      "base_path": "build/src/mobys/init_moby_instance.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9437,9 +9437,9 @@
       }
     },
     {
-      "name": "gameplay/entities/mark_moby_for_removal",
+      "name": "mobys/mark_moby_for_removal",
       "target_path": "expected/obj/gameplay/entities/mark_moby_for_removal.c.o",
-      "base_path": "build/src/gameplay/entities/mark_moby_for_removal.c.o",
+      "base_path": "build/src/mobys/mark_moby_for_removal.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9447,9 +9447,9 @@
       }
     },
     {
-      "name": "gameplay/animation/update_moby_animation_state",
+      "name": "mobys/animation/update_moby_animation_state",
       "target_path": "expected/obj/gameplay/animation/update_moby_animation_state.c.o",
-      "base_path": "build/src/gameplay/animation/update_moby_animation_state.c.o",
+      "base_path": "build/src/mobys/animation/update_moby_animation_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9457,9 +9457,9 @@
       }
     },
     {
-      "name": "gameplay/entities/update_moby_voice",
+      "name": "mobys/update_moby_voice",
       "target_path": "expected/obj/gameplay/entities/update_moby_voice.c.o",
-      "base_path": "build/src/gameplay/entities/update_moby_voice.c.o",
+      "base_path": "build/src/mobys/update_moby_voice.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9467,9 +9467,9 @@
       }
     },
     {
-      "name": "gameplay/state/compute_interpolated_record_value",
+      "name": "game/compute_interpolated_record_value",
       "target_path": "expected/obj/gameplay/state/compute_interpolated_record_value.c.o",
-      "base_path": "build/src/gameplay/state/compute_interpolated_record_value.c.o",
+      "base_path": "build/src/game/compute_interpolated_record_value.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9477,9 +9477,9 @@
       }
     },
     {
-      "name": "gameplay/entities/attach_manipulator",
+      "name": "mobys/attach_manipulator",
       "target_path": "expected/obj/gameplay/entities/attach_manipulator.c.o",
-      "base_path": "build/src/gameplay/entities/attach_manipulator.c.o",
+      "base_path": "build/src/mobys/attach_manipulator.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9487,9 +9487,9 @@
       }
     },
     {
-      "name": "gameplay/entities/detach_manipulator",
+      "name": "mobys/detach_manipulator",
       "target_path": "expected/obj/gameplay/entities/detach_manipulator.c.o",
-      "base_path": "build/src/gameplay/entities/detach_manipulator.c.o",
+      "base_path": "build/src/mobys/detach_manipulator.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9497,9 +9497,9 @@
       }
     },
     {
-      "name": "gameplay/entities/find_or_allocate_id_slot",
+      "name": "mobys/find_or_allocate_id_slot",
       "target_path": "expected/obj/gameplay/entities/find_or_allocate_id_slot.c.o",
-      "base_path": "build/src/gameplay/entities/find_or_allocate_id_slot.c.o",
+      "base_path": "build/src/mobys/find_or_allocate_id_slot.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9507,9 +9507,9 @@
       }
     },
     {
-      "name": "gameplay/entities/prune_moby_references",
+      "name": "mobys/prune_moby_references",
       "target_path": "expected/obj/gameplay/entities/prune_moby_references.c.o",
-      "base_path": "build/src/gameplay/entities/prune_moby_references.c.o",
+      "base_path": "build/src/mobys/prune_moby_references.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9517,9 +9517,9 @@
       }
     },
     {
-      "name": "gameplay/entities/build_moby_bone_transform",
+      "name": "mobys/animation/build_moby_bone_transform",
       "target_path": "expected/obj/gameplay/entities/build_moby_bone_transform.c.o",
-      "base_path": "build/src/gameplay/entities/build_moby_bone_transform.c.o",
+      "base_path": "build/src/mobys/animation/build_moby_bone_transform.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9527,9 +9527,9 @@
       }
     },
     {
-      "name": "rendering/geometry/transform_scaled_vertex_batch",
+      "name": "rendering/packets/transform_scaled_vertex_batch",
       "target_path": "expected/obj/rendering/geometry/transform_scaled_vertex_batch.c.o",
-      "base_path": "build/src/rendering/geometry/transform_scaled_vertex_batch.c.o",
+      "base_path": "build/src/rendering/packets/transform_scaled_vertex_batch.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9547,9 +9547,9 @@
       }
     },
     {
-      "name": "gameplay/entities/draw/patch_moby_gifs",
+      "name": "rendering/mobys/patch_moby_gifs",
       "target_path": "expected/obj/gameplay/entities/draw/patch_moby_gifs.c.o",
-      "base_path": "build/src/gameplay/entities/draw/patch_moby_gifs.c.o",
+      "base_path": "build/src/rendering/mobys/patch_moby_gifs.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9557,9 +9557,9 @@
       }
     },
     {
-      "name": "gameplay/entities/update_resident_packed_direction",
+      "name": "mobys/update_resident_packed_direction",
       "target_path": "expected/obj/gameplay/entities/update_resident_packed_direction.c.o",
-      "base_path": "build/src/gameplay/entities/update_resident_packed_direction.c.o",
+      "base_path": "build/src/mobys/update_resident_packed_direction.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9567,9 +9567,9 @@
       }
     },
     {
-      "name": "gameplay/entities/configure_graphics_setup_dma_chain",
+      "name": "rendering/frame/configure_graphics_setup_dma_chain",
       "target_path": "expected/obj/gameplay/entities/configure_graphics_setup_dma_chain.c.o",
-      "base_path": "build/src/gameplay/entities/configure_graphics_setup_dma_chain.c.o",
+      "base_path": "build/src/rendering/frame/configure_graphics_setup_dma_chain.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9577,9 +9577,9 @@
       }
     },
     {
-      "name": "gameplay/entities/process_moby_anim_data",
+      "name": "mobys/animation/process_moby_anim_data",
       "target_path": "expected/obj/gameplay/entities/process_moby_anim_data.c.o",
-      "base_path": "build/src/gameplay/entities/process_moby_anim_data.c.o",
+      "base_path": "build/src/mobys/animation/process_moby_anim_data.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9587,9 +9587,9 @@
       }
     },
     {
-      "name": "gameplay/entities/class_dists/init_moby_class_dists",
+      "name": "mobys/init_moby_class_dists",
       "target_path": "expected/obj/gameplay/entities/class_dists/init_moby_class_dists.c.o",
-      "base_path": "build/src/gameplay/entities/class_dists/init_moby_class_dists.c.o",
+      "base_path": "build/src/mobys/init_moby_class_dists.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9597,9 +9597,9 @@
       }
     },
     {
-      "name": "gameplay/entities/class_dists/stash_moby_class_dists",
+      "name": "mobys/stash_moby_class_dists",
       "target_path": "expected/obj/gameplay/entities/class_dists/stash_moby_class_dists.c.o",
-      "base_path": "build/src/gameplay/entities/class_dists/stash_moby_class_dists.c.o",
+      "base_path": "build/src/mobys/stash_moby_class_dists.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9607,9 +9607,9 @@
       }
     },
     {
-      "name": "gameplay/entities/class_dists/restore_moby_class_dists",
+      "name": "mobys/restore_moby_class_dists",
       "target_path": "expected/obj/gameplay/entities/class_dists/restore_moby_class_dists.c.o",
-      "base_path": "build/src/gameplay/entities/class_dists/restore_moby_class_dists.c.o",
+      "base_path": "build/src/mobys/restore_moby_class_dists.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9617,9 +9617,9 @@
       }
     },
     {
-      "name": "gameplay/entities/draw/draw_mobys_setup",
+      "name": "rendering/mobys/draw_mobys_setup",
       "target_path": "expected/obj/gameplay/entities/draw/draw_mobys_setup.c.o",
-      "base_path": "build/src/gameplay/entities/draw/draw_mobys_setup.c.o",
+      "base_path": "build/src/rendering/mobys/draw_mobys_setup.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9627,9 +9627,9 @@
       }
     },
     {
-      "name": "gameplay/entities/draw/draw_moby_list",
+      "name": "rendering/mobys/draw_moby_list",
       "target_path": "expected/obj/gameplay/entities/draw/draw_moby_list.c.o",
-      "base_path": "build/src/gameplay/entities/draw/draw_moby_list.c.o",
+      "base_path": "build/src/rendering/mobys/draw_moby_list.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9637,9 +9637,9 @@
       }
     },
     {
-      "name": "gameplay/entities/draw/draw_mobys_clean_up",
+      "name": "rendering/mobys/draw_mobys_clean_up",
       "target_path": "expected/obj/gameplay/entities/draw/draw_mobys_clean_up.c.o",
-      "base_path": "build/src/gameplay/entities/draw/draw_mobys_clean_up.c.o",
+      "base_path": "build/src/rendering/mobys/draw_mobys_clean_up.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9647,9 +9647,9 @@
       }
     },
     {
-      "name": "gameplay/entities/draw/draw_mobys",
+      "name": "rendering/mobys/draw_mobys",
       "target_path": "expected/obj/gameplay/entities/draw/draw_mobys.c.o",
-      "base_path": "build/src/gameplay/entities/draw/draw_mobys.c.o",
+      "base_path": "build/src/rendering/mobys/draw_mobys.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9657,9 +9657,9 @@
       }
     },
     {
-      "name": "rendering/commands/pack_render_command_fields",
+      "name": "rendering/packets/pack_render_command_fields",
       "target_path": "expected/obj/rendering/commands/pack_render_command_fields.c.o",
-      "base_path": "build/src/rendering/commands/pack_render_command_fields.c.o",
+      "base_path": "build/src/rendering/packets/pack_render_command_fields.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9667,9 +9667,9 @@
       }
     },
     {
-      "name": "assembly/textbin/gameplay/entities/get_moby_light_direction",
+      "name": "assembly/textbin/mobys/get_moby_light_direction",
       "target_path": "expected/obj/assembly/textbin/gameplay/entities/get_moby_light_direction.c.o",
-      "base_path": "build/src/assembly/textbin/gameplay/entities/get_moby_light_direction.c.o",
+      "base_path": "build/src/assembly/textbin/mobys/get_moby_light_direction.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9677,9 +9677,9 @@
       }
     },
     {
-      "name": "assembly/textbin/gameplay/animation/advance_moby_animation",
+      "name": "assembly/textbin/mobys/animation/advance_moby_animation",
       "target_path": "expected/obj/assembly/textbin/gameplay/animation/advance_moby_animation.c.o",
-      "base_path": "build/src/assembly/textbin/gameplay/animation/advance_moby_animation.c.o",
+      "base_path": "build/src/assembly/textbin/mobys/animation/advance_moby_animation.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9687,9 +9687,9 @@
       }
     },
     {
-      "name": "assembly/textbin/gameplay/entities/build_resident_visibility_list",
+      "name": "assembly/textbin/mobys/build_resident_visibility_list",
       "target_path": "expected/obj/assembly/textbin/gameplay/entities/build_resident_visibility_list.c.o",
-      "base_path": "build/src/assembly/textbin/gameplay/entities/build_resident_visibility_list.c.o",
+      "base_path": "build/src/assembly/textbin/mobys/build_resident_visibility_list.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9727,9 +9727,9 @@
       }
     },
     {
-      "name": "assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds",
+      "name": "assembly/textbin/mobys/refresh_moby_spatial_bounds",
       "target_path": "expected/obj/assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds.c.o",
-      "base_path": "build/src/assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds.c.o",
+      "base_path": "build/src/assembly/textbin/mobys/refresh_moby_spatial_bounds.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9737,9 +9737,9 @@
       }
     },
     {
-      "name": "assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds_from_basis",
+      "name": "assembly/textbin/mobys/refresh_moby_spatial_bounds_from_basis",
       "target_path": "expected/obj/assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds_from_basis.c.o",
-      "base_path": "build/src/assembly/textbin/gameplay/entities/refresh_moby_spatial_bounds_from_basis.c.o",
+      "base_path": "build/src/assembly/textbin/mobys/refresh_moby_spatial_bounds_from_basis.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9767,9 +9767,9 @@
       }
     },
     {
-      "name": "assembly/textbin/gameplay/animation/compute_moby_joint_matrices",
+      "name": "assembly/textbin/mobys/animation/compute_moby_joint_matrices",
       "target_path": "expected/obj/assembly/textbin/gameplay/animation/compute_moby_joint_matrices.c.o",
-      "base_path": "build/src/assembly/textbin/gameplay/animation/compute_moby_joint_matrices.c.o",
+      "base_path": "build/src/assembly/textbin/mobys/animation/compute_moby_joint_matrices.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9787,9 +9787,9 @@
       }
     },
     {
-      "name": "assembly/textbin/gameplay/animation/get_moby_joint_matrices",
+      "name": "assembly/textbin/mobys/animation/get_moby_joint_matrices",
       "target_path": "expected/obj/assembly/textbin/gameplay/animation/get_moby_joint_matrices.c.o",
-      "base_path": "build/src/assembly/textbin/gameplay/animation/get_moby_joint_matrices.c.o",
+      "base_path": "build/src/assembly/textbin/mobys/animation/get_moby_joint_matrices.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9847,9 +9847,9 @@
       }
     },
     {
-      "name": "assembly/textbin/gameplay/camera/find_camera_environment_region",
+      "name": "assembly/textbin/camera/find_camera_environment_region",
       "target_path": "expected/obj/assembly/textbin/gameplay/camera/find_camera_environment_region.c.o",
-      "base_path": "build/src/assembly/textbin/gameplay/camera/find_camera_environment_region.c.o",
+      "base_path": "build/src/assembly/textbin/camera/find_camera_environment_region.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9857,9 +9857,9 @@
       }
     },
     {
-      "name": "gameplay/entities/assign_moby_class_data",
+      "name": "mobys/assign_moby_class_data",
       "target_path": "expected/obj/gameplay/entities/assign_moby_class_data.c.o",
-      "base_path": "build/src/gameplay/entities/assign_moby_class_data.c.o",
+      "base_path": "build/src/mobys/assign_moby_class_data.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9867,9 +9867,9 @@
       }
     },
     {
-      "name": "gameplay/entities/update_visible_resident_objects",
+      "name": "mobys/update_visible_resident_objects",
       "target_path": "expected/obj/gameplay/entities/update_visible_resident_objects.c.o",
-      "base_path": "build/src/gameplay/entities/update_visible_resident_objects.c.o",
+      "base_path": "build/src/mobys/update_visible_resident_objects.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9877,9 +9877,9 @@
       }
     },
     {
-      "name": "gameplay/animation/set_moby_animation",
+      "name": "mobys/animation/set_moby_animation",
       "target_path": "expected/obj/gameplay/animation/set_moby_animation.c.o",
-      "base_path": "build/src/gameplay/animation/set_moby_animation.c.o",
+      "base_path": "build/src/mobys/animation/set_moby_animation.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9887,9 +9887,9 @@
       }
     },
     {
-      "name": "gameplay/animation/blend_moby_animation",
+      "name": "mobys/animation/blend_moby_animation",
       "target_path": "expected/obj/gameplay/animation/blend_moby_animation.c.o",
-      "base_path": "build/src/gameplay/animation/blend_moby_animation.c.o",
+      "base_path": "build/src/mobys/animation/blend_moby_animation.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9897,9 +9897,9 @@
       }
     },
     {
-      "name": "gameplay/animation/blend_moby_animation_ex",
+      "name": "mobys/animation/blend_moby_animation_ex",
       "target_path": "expected/obj/gameplay/animation/blend_moby_animation_ex.c.o",
-      "base_path": "build/src/gameplay/animation/blend_moby_animation_ex.c.o",
+      "base_path": "build/src/mobys/animation/blend_moby_animation_ex.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9937,9 +9937,9 @@
       }
     },
     {
-      "name": "gameplay/entities/random_spherical_offset",
+      "name": "math/random/random_spherical_offset",
       "target_path": "expected/obj/gameplay/entities/random_spherical_offset.c.o",
-      "base_path": "build/src/gameplay/entities/random_spherical_offset.c.o",
+      "base_path": "build/src/math/random/random_spherical_offset.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9957,9 +9957,9 @@
       }
     },
     {
-      "name": "gameplay/entities/probe_ground_height",
+      "name": "world/collision/probe_ground_height",
       "target_path": "expected/obj/gameplay/entities/probe_ground_height.c.o",
-      "base_path": "build/src/gameplay/entities/probe_ground_height.c.o",
+      "base_path": "build/src/world/collision/probe_ground_height.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9967,9 +9967,9 @@
       }
     },
     {
-      "name": "gameplay/entities/resolve_camera_surface_height",
+      "name": "camera/resolve_camera_surface_height",
       "target_path": "expected/obj/gameplay/entities/resolve_camera_surface_height.c.o",
-      "base_path": "build/src/gameplay/entities/resolve_camera_surface_height.c.o",
+      "base_path": "build/src/camera/resolve_camera_surface_height.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9977,9 +9977,9 @@
       }
     },
     {
-      "name": "gameplay/entities/update_moby_shadow_range",
+      "name": "mobys/update_moby_shadow_range",
       "target_path": "expected/obj/gameplay/entities/update_moby_shadow_range.c.o",
-      "base_path": "build/src/gameplay/entities/update_moby_shadow_range.c.o",
+      "base_path": "build/src/mobys/update_moby_shadow_range.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -9987,9 +9987,9 @@
       }
     },
     {
-      "name": "gameplay/fun_00213928",
+      "name": "game/fun_00213928",
       "target_path": "expected/obj/gameplay/fun_00213928.c.o",
-      "base_path": "build/src/gameplay/fun_00213928.c.o",
+      "base_path": "build/src/game/fun_00213928.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10027,9 +10027,9 @@
       }
     },
     {
-      "name": "gameplay/entities/suck_get_aim_height",
+      "name": "weapons/suck_get_aim_height",
       "target_path": "expected/obj/gameplay/entities/suck_get_aim_height.c.o",
-      "base_path": "build/src/gameplay/entities/suck_get_aim_height.c.o",
+      "base_path": "build/src/weapons/suck_get_aim_height.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10087,9 +10087,9 @@
       }
     },
     {
-      "name": "rendering/culling/is_point_inside_clip_volume",
+      "name": "rendering/occlusion/is_point_inside_clip_volume",
       "target_path": "expected/obj/rendering/culling/is_point_inside_clip_volume.c.o",
-      "base_path": "build/src/rendering/culling/is_point_inside_clip_volume.c.o",
+      "base_path": "build/src/rendering/occlusion/is_point_inside_clip_volume.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10117,9 +10117,9 @@
       }
     },
     {
-      "name": "runtime/time/set_video_timing",
+      "name": "runtime/set_video_timing",
       "target_path": "expected/obj/runtime/time/set_video_timing.c.o",
-      "base_path": "build/src/runtime/time/set_video_timing.c.o",
+      "base_path": "build/src/runtime/set_video_timing.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10127,9 +10127,9 @@
       }
     },
     {
-      "name": "gameplay/entities/pack_vector_xyz_with_shared_scale",
+      "name": "math/pack_vector_xyz_with_shared_scale",
       "target_path": "expected/obj/gameplay/entities/pack_vector_xyz_with_shared_scale.c.o",
-      "base_path": "build/src/gameplay/entities/pack_vector_xyz_with_shared_scale.c.o",
+      "base_path": "build/src/math/pack_vector_xyz_with_shared_scale.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10147,9 +10147,9 @@
       }
     },
     {
-      "name": "math/conversion/round_float_to_decimal_places",
+      "name": "math/round_float_to_decimal_places",
       "target_path": "expected/obj/math/conversion/round_float_to_decimal_places.c.o",
-      "base_path": "build/src/math/conversion/round_float_to_decimal_places.c.o",
+      "base_path": "build/src/math/round_float_to_decimal_places.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10157,9 +10157,9 @@
       }
     },
     {
-      "name": "gameplay/state/is_value_within_interpolated_window",
+      "name": "game/is_value_within_interpolated_window",
       "target_path": "expected/obj/gameplay/state/is_value_within_interpolated_window.c.o",
-      "base_path": "build/src/gameplay/state/is_value_within_interpolated_window.c.o",
+      "base_path": "build/src/game/is_value_within_interpolated_window.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10167,9 +10167,9 @@
       }
     },
     {
-      "name": "gameplay/camera/build_spherical_offset",
+      "name": "camera/build_spherical_offset",
       "target_path": "expected/obj/gameplay/camera/build_spherical_offset.c.o",
-      "base_path": "build/src/gameplay/camera/build_spherical_offset.c.o",
+      "base_path": "build/src/camera/build_spherical_offset.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10177,9 +10177,9 @@
       }
     },
     {
-      "name": "gameplay/entities/sample_camera_path",
+      "name": "camera/sample_camera_path",
       "target_path": "expected/obj/gameplay/entities/sample_camera_path.c.o",
-      "base_path": "build/src/gameplay/entities/sample_camera_path.c.o",
+      "base_path": "build/src/camera/sample_camera_path.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10427,9 +10427,9 @@
       }
     },
     {
-      "name": "textbin/audio/music/music_update",
+      "name": "audio/music/music_update",
       "target_path": "expected/obj/textbin/audio/music/music_update.c.o",
-      "base_path": "build/src/textbin/audio/music/music_update.c.o",
+      "base_path": "build/src/audio/music/music_update.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10597,9 +10597,9 @@
       }
     },
     {
-      "name": "input/pad/init_pads",
+      "name": "input/init_pads",
       "target_path": "expected/obj/input/pad/init_pads.c.o",
-      "base_path": "build/src/input/pad/init_pads.c.o",
+      "base_path": "build/src/input/init_pads.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10607,9 +10607,9 @@
       }
     },
     {
-      "name": "input/pad/poll_pad_device_state",
+      "name": "input/poll_pad_device_state",
       "target_path": "expected/obj/input/pad/poll_pad_device_state.c.o",
-      "base_path": "build/src/input/pad/poll_pad_device_state.c.o",
+      "base_path": "build/src/input/poll_pad_device_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10617,9 +10617,9 @@
       }
     },
     {
-      "name": "input/pad/clear_pad_input",
+      "name": "input/clear_pad_input",
       "target_path": "expected/obj/input/pad/clear_pad_input.c.o",
-      "base_path": "build/src/input/pad/clear_pad_input.c.o",
+      "base_path": "build/src/input/clear_pad_input.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10627,9 +10627,9 @@
       }
     },
     {
-      "name": "input/pad/process_pad_input",
+      "name": "input/process_pad_input",
       "target_path": "expected/obj/input/pad/process_pad_input.c.o",
-      "base_path": "build/src/input/pad/process_pad_input.c.o",
+      "base_path": "build/src/input/process_pad_input.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10637,9 +10637,9 @@
       }
     },
     {
-      "name": "input/pad/update_primary_pad_state",
+      "name": "input/update_primary_pad_state",
       "target_path": "expected/obj/input/pad/update_primary_pad_state.c.o",
-      "base_path": "build/src/input/pad/update_primary_pad_state.c.o",
+      "base_path": "build/src/input/update_primary_pad_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10757,9 +10757,9 @@
       }
     },
     {
-      "name": "gameplay/state/render_level_effects_and_screen_sprites",
+      "name": "rendering/effects/render_level_effects_and_screen_sprites",
       "target_path": "expected/obj/gameplay/state/render_level_effects_and_screen_sprites.c.o",
-      "base_path": "build/src/gameplay/state/render_level_effects_and_screen_sprites.c.o",
+      "base_path": "build/src/rendering/effects/render_level_effects_and_screen_sprites.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10807,9 +10807,9 @@
       }
     },
     {
-      "name": "textbin/rebuild_configured_text_label_list",
+      "name": "ui/text/rebuild_configured_text_label_list",
       "target_path": "expected/obj/textbin/rebuild_configured_text_label_list.c.o",
-      "base_path": "build/src/textbin/rebuild_configured_text_label_list.c.o",
+      "base_path": "build/src/ui/text/rebuild_configured_text_label_list.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10817,9 +10817,9 @@
       }
     },
     {
-      "name": "ui/menus/choice_list/enter_menu_choice_list",
+      "name": "ui/menus/widgets/enter_menu_choice_list",
       "target_path": "expected/obj/ui/menus/choice_list/enter_menu_choice_list.c.o",
-      "base_path": "build/src/ui/menus/choice_list/enter_menu_choice_list.c.o",
+      "base_path": "build/src/ui/menus/widgets/enter_menu_choice_list.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10827,9 +10827,9 @@
       }
     },
     {
-      "name": "ui/menus/choice_list/leave_menu_choice_list",
+      "name": "ui/menus/widgets/leave_menu_choice_list",
       "target_path": "expected/obj/ui/menus/choice_list/leave_menu_choice_list.c.o",
-      "base_path": "build/src/ui/menus/choice_list/leave_menu_choice_list.c.o",
+      "base_path": "build/src/ui/menus/widgets/leave_menu_choice_list.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -10867,9 +10867,9 @@
       }
     },
     {
-      "name": "textbin/render_localized_ui_entry_list",
+      "name": "ui/text/render_localized_ui_entry_list",
       "target_path": "expected/obj/textbin/render_localized_ui_entry_list.c.o",
-      "base_path": "build/src/textbin/render_localized_ui_entry_list.c.o",
+      "base_path": "build/src/ui/text/render_localized_ui_entry_list.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11017,9 +11017,9 @@
       }
     },
     {
-      "name": "ui/menus/audio/set_pause_sound_volume",
+      "name": "ui/menus/options/set_pause_sound_volume",
       "target_path": "expected/obj/ui/menus/audio/set_pause_sound_volume.c.o",
-      "base_path": "build/src/ui/menus/audio/set_pause_sound_volume.c.o",
+      "base_path": "build/src/ui/menus/options/set_pause_sound_volume.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11027,9 +11027,9 @@
       }
     },
     {
-      "name": "textbin/ui/menus/audio/sound_options_menu",
+      "name": "ui/menus/options/sound_options_menu",
       "target_path": "expected/obj/textbin/ui/menus/audio/sound_options_menu.c.o",
-      "base_path": "build/src/textbin/ui/menus/audio/sound_options_menu.c.o",
+      "base_path": "build/src/ui/menus/options/sound_options_menu.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11037,9 +11037,9 @@
       }
     },
     {
-      "name": "textbin/ui/menus/audio/draw_sound_menu",
+      "name": "ui/menus/options/draw_sound_menu",
       "target_path": "expected/obj/textbin/ui/menus/audio/draw_sound_menu.c.o",
-      "base_path": "build/src/textbin/ui/menus/audio/draw_sound_menu.c.o",
+      "base_path": "build/src/ui/menus/options/draw_sound_menu.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11057,9 +11057,9 @@
       }
     },
     {
-      "name": "ui/menus/help_text/enter_menu_help_text",
+      "name": "ui/menus/widgets/enter_menu_help_text",
       "target_path": "expected/obj/ui/menus/help_text/enter_menu_help_text.c.o",
-      "base_path": "build/src/ui/menus/help_text/enter_menu_help_text.c.o",
+      "base_path": "build/src/ui/menus/widgets/enter_menu_help_text.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11067,9 +11067,9 @@
       }
     },
     {
-      "name": "ui/menus/help_text/restore_menu_help_text",
+      "name": "ui/menus/widgets/restore_menu_help_text",
       "target_path": "expected/obj/ui/menus/help_text/restore_menu_help_text.c.o",
-      "base_path": "build/src/ui/menus/help_text/restore_menu_help_text.c.o",
+      "base_path": "build/src/ui/menus/widgets/restore_menu_help_text.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11077,9 +11077,9 @@
       }
     },
     {
-      "name": "ui/menus/help_text/update_menu_help_text_load",
+      "name": "ui/menus/widgets/update_menu_help_text_load",
       "target_path": "expected/obj/ui/menus/help_text/update_menu_help_text_load.c.o",
-      "base_path": "build/src/ui/menus/help_text/update_menu_help_text_load.c.o",
+      "base_path": "build/src/ui/menus/widgets/update_menu_help_text_load.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11207,9 +11207,9 @@
       }
     },
     {
-      "name": "textbin/ui/menus/item_preview/update_item_preview_transform",
+      "name": "ui/menus/item_preview/update_item_preview_transform",
       "target_path": "expected/obj/textbin/ui/menus/item_preview/update_item_preview_transform.c.o",
-      "base_path": "build/src/textbin/ui/menus/item_preview/update_item_preview_transform.c.o",
+      "base_path": "build/src/ui/menus/item_preview/update_item_preview_transform.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11247,9 +11247,9 @@
       }
     },
     {
-      "name": "textbin/ui/menus/inventory/draw_items_menu",
+      "name": "ui/menus/weapons/draw_items_menu",
       "target_path": "expected/obj/textbin/ui/menus/inventory/draw_items_menu.c.o",
-      "base_path": "build/src/textbin/ui/menus/inventory/draw_items_menu.c.o",
+      "base_path": "build/src/ui/menus/weapons/draw_items_menu.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11347,9 +11347,9 @@
       }
     },
     {
-      "name": "rendering/transitions/draw_transition_overlay",
+      "name": "rendering/effects/draw_transition_overlay",
       "target_path": "expected/obj/rendering/transitions/draw_transition_overlay.c.o",
-      "base_path": "build/src/rendering/transitions/draw_transition_overlay.c.o",
+      "base_path": "build/src/rendering/effects/draw_transition_overlay.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11447,9 +11447,9 @@
       }
     },
     {
-      "name": "textbin/ui/menus/draw_cheats_menu",
+      "name": "ui/menus/options/draw_cheats_menu",
       "target_path": "expected/obj/textbin/ui/menus/draw_cheats_menu.c.o",
-      "base_path": "build/src/textbin/ui/menus/draw_cheats_menu.c.o",
+      "base_path": "build/src/ui/menus/options/draw_cheats_menu.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11457,9 +11457,9 @@
       }
     },
     {
-      "name": "ui/menus/choice_list/update_menu_choice_list",
+      "name": "ui/menus/widgets/update_menu_choice_list",
       "target_path": "expected/obj/ui/menus/choice_list/update_menu_choice_list.c.o",
-      "base_path": "build/src/ui/menus/choice_list/update_menu_choice_list.c.o",
+      "base_path": "build/src/ui/menus/widgets/update_menu_choice_list.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11467,9 +11467,9 @@
       }
     },
     {
-      "name": "ui/menus/choice_list/draw_menu_choice_list",
+      "name": "ui/menus/widgets/draw_menu_choice_list",
       "target_path": "expected/obj/ui/menus/choice_list/draw_menu_choice_list.c.o",
-      "base_path": "build/src/ui/menus/choice_list/draw_menu_choice_list.c.o",
+      "base_path": "build/src/ui/menus/widgets/draw_menu_choice_list.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11537,9 +11537,9 @@
       }
     },
     {
-      "name": "ui/menus/prompt/enter_menu_prompt",
+      "name": "ui/menus/widgets/enter_menu_prompt",
       "target_path": "expected/obj/ui/menus/prompt/enter_menu_prompt.c.o",
-      "base_path": "build/src/ui/menus/prompt/enter_menu_prompt.c.o",
+      "base_path": "build/src/ui/menus/widgets/enter_menu_prompt.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11547,9 +11547,9 @@
       }
     },
     {
-      "name": "ui/menus/prompt/leave_menu_prompt",
+      "name": "ui/menus/widgets/leave_menu_prompt",
       "target_path": "expected/obj/ui/menus/prompt/leave_menu_prompt.c.o",
-      "base_path": "build/src/ui/menus/prompt/leave_menu_prompt.c.o",
+      "base_path": "build/src/ui/menus/widgets/leave_menu_prompt.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11567,9 +11567,9 @@
       }
     },
     {
-      "name": "ui/menus/prompt/draw_prompt_box",
+      "name": "ui/menus/widgets/draw_prompt_box",
       "target_path": "expected/obj/ui/menus/prompt/draw_prompt_box.c.o",
-      "base_path": "build/src/ui/menus/prompt/draw_prompt_box.c.o",
+      "base_path": "build/src/ui/menus/widgets/draw_prompt_box.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11627,9 +11627,9 @@
       }
     },
     {
-      "name": "gameplay/state/process_global_state_flags",
+      "name": "game/process_global_state_flags",
       "target_path": "expected/obj/gameplay/state/process_global_state_flags.c.o",
-      "base_path": "build/src/gameplay/state/process_global_state_flags.c.o",
+      "base_path": "build/src/game/process_global_state_flags.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11637,9 +11637,9 @@
       }
     },
     {
-      "name": "gameplay/state/enter_timed_menu_sequence",
+      "name": "game/enter_timed_menu_sequence",
       "target_path": "expected/obj/gameplay/state/enter_timed_menu_sequence.c.o",
-      "base_path": "build/src/gameplay/state/enter_timed_menu_sequence.c.o",
+      "base_path": "build/src/game/enter_timed_menu_sequence.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11677,9 +11677,9 @@
       }
     },
     {
-      "name": "textbin/ui/menus/draw_localized_three_option_menu",
+      "name": "ui/menus/widgets/draw_localized_three_option_menu",
       "target_path": "expected/obj/textbin/ui/menus/draw_localized_three_option_menu.c.o",
-      "base_path": "build/src/textbin/ui/menus/draw_localized_three_option_menu.c.o",
+      "base_path": "build/src/ui/menus/widgets/draw_localized_three_option_menu.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11727,9 +11727,9 @@
       }
     },
     {
-      "name": "textbin/ui/menus/save_data/loading_data_menu",
+      "name": "ui/menus/save_data/loading_data_menu",
       "target_path": "expected/obj/textbin/ui/menus/save_data/loading_data_menu.c.o",
-      "base_path": "build/src/textbin/ui/menus/save_data/loading_data_menu.c.o",
+      "base_path": "build/src/ui/menus/save_data/loading_data_menu.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11787,9 +11787,9 @@
       }
     },
     {
-      "name": "textbin/gameplay/gadgets/load_hand_gadget",
+      "name": "weapons/load_hand_gadget",
       "target_path": "expected/obj/textbin/gameplay/gadgets/load_hand_gadget.c.o",
-      "base_path": "build/src/textbin/gameplay/gadgets/load_hand_gadget.c.o",
+      "base_path": "build/src/weapons/load_hand_gadget.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11797,9 +11797,9 @@
       }
     },
     {
-      "name": "gameplay/entities/gadget_moby_update_noop",
+      "name": "weapons/gadget_moby_update_noop",
       "target_path": "expected/obj/gameplay/entities/gadget_moby_update_noop.c.o",
-      "base_path": "build/src/gameplay/entities/gadget_moby_update_noop.c.o",
+      "base_path": "build/src/weapons/gadget_moby_update_noop.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11807,9 +11807,9 @@
       }
     },
     {
-      "name": "gameplay/entities/attachment_update_callback",
+      "name": "mobys/attachment_update_callback",
       "target_path": "expected/obj/gameplay/entities/attachment_update_callback.c.o",
-      "base_path": "build/src/gameplay/entities/attachment_update_callback.c.o",
+      "base_path": "build/src/mobys/attachment_update_callback.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11887,9 +11887,9 @@
       }
     },
     {
-      "name": "gameplay/entities/delete_moby",
+      "name": "mobys/delete_moby",
       "target_path": "expected/obj/gameplay/entities/delete_moby.c.o",
-      "base_path": "build/src/gameplay/entities/delete_moby.c.o",
+      "base_path": "build/src/mobys/delete_moby.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11927,9 +11927,9 @@
       }
     },
     {
-      "name": "rendering/entities/draw_moby_entries_from_object",
+      "name": "rendering/mobys/draw_moby_entries_from_object",
       "target_path": "expected/obj/rendering/entities/draw_moby_entries_from_object.c.o",
-      "base_path": "build/src/rendering/entities/draw_moby_entries_from_object.c.o",
+      "base_path": "build/src/rendering/mobys/draw_moby_entries_from_object.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -11937,9 +11937,9 @@
       }
     },
     {
-      "name": "gameplay/entities/helper_moby_update_noop",
+      "name": "mobys/helper_moby_update_noop",
       "target_path": "expected/obj/gameplay/entities/helper_moby_update_noop.c.o",
-      "base_path": "build/src/gameplay/entities/helper_moby_update_noop.c.o",
+      "base_path": "build/src/mobys/helper_moby_update_noop.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12047,9 +12047,9 @@
       }
     },
     {
-      "name": "rendering/image/pack_image_descriptor",
+      "name": "rendering/texture/pack_image_descriptor",
       "target_path": "expected/obj/rendering/image/pack_image_descriptor.c.o",
-      "base_path": "build/src/rendering/image/pack_image_descriptor.c.o",
+      "base_path": "build/src/rendering/texture/pack_image_descriptor.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12097,9 +12097,9 @@
       }
     },
     {
-      "name": "textbin/gameplay/state/load_level_zero_preserving_progress",
+      "name": "game/load_level_zero_preserving_progress",
       "target_path": "expected/obj/textbin/gameplay/state/load_level_zero_preserving_progress.c.o",
-      "base_path": "build/src/textbin/gameplay/state/load_level_zero_preserving_progress.c.o",
+      "base_path": "build/src/game/load_level_zero_preserving_progress.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12107,9 +12107,9 @@
       }
     },
     {
-      "name": "gameplay/state/tick_space_transition",
+      "name": "game/transitions/tick_space_transition",
       "target_path": "expected/obj/gameplay/state/tick_space_transition.c.o",
-      "base_path": "build/src/gameplay/state/tick_space_transition.c.o",
+      "base_path": "build/src/game/transitions/tick_space_transition.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12127,9 +12127,9 @@
       }
     },
     {
-      "name": "gameplay/state/clear_scene_state_buffers",
+      "name": "game/clear_scene_state_buffers",
       "target_path": "expected/obj/gameplay/state/clear_scene_state_buffers.c.o",
-      "base_path": "build/src/gameplay/state/clear_scene_state_buffers.c.o",
+      "base_path": "build/src/game/clear_scene_state_buffers.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12407,9 +12407,9 @@
       }
     },
     {
-      "name": "assembly/textbin/rendering/gs/ssp_load_tex",
+      "name": "assembly/textbin/rendering/frame/ssp_load_tex",
       "target_path": "expected/obj/assembly/textbin/rendering/gs/ssp_load_tex.c.o",
-      "base_path": "build/src/assembly/textbin/rendering/gs/ssp_load_tex.c.o",
+      "base_path": "build/src/assembly/textbin/rendering/frame/ssp_load_tex.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12637,9 +12637,9 @@
       }
     },
     {
-      "name": "world/transforms/build_object_rotation_matrix",
+      "name": "world/build_object_rotation_matrix",
       "target_path": "expected/obj/world/transforms/build_object_rotation_matrix.c.o",
-      "base_path": "build/src/world/transforms/build_object_rotation_matrix.c.o",
+      "base_path": "build/src/world/build_object_rotation_matrix.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12647,9 +12647,9 @@
       }
     },
     {
-      "name": "gameplay/space/draw_light_flare",
+      "name": "rendering/effects/draw_light_flare",
       "target_path": "expected/obj/gameplay/space/draw_light_flare.c.o",
-      "base_path": "build/src/gameplay/space/draw_light_flare.c.o",
+      "base_path": "build/src/rendering/effects/draw_light_flare.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12667,9 +12667,9 @@
       }
     },
     {
-      "name": "gameplay/build_variant_effect_quads",
+      "name": "rendering/effects/build_variant_effect_quads",
       "target_path": "expected/obj/gameplay/build_variant_effect_quads.c.o",
-      "base_path": "build/src/gameplay/build_variant_effect_quads.c.o",
+      "base_path": "build/src/rendering/effects/build_variant_effect_quads.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12687,9 +12687,9 @@
       }
     },
     {
-      "name": "gameplay/space/draw_resident_textured_quad",
+      "name": "rendering/effects/draw_resident_textured_quad",
       "target_path": "expected/obj/gameplay/space/draw_resident_textured_quad.c.o",
-      "base_path": "build/src/gameplay/space/draw_resident_textured_quad.c.o",
+      "base_path": "build/src/rendering/effects/draw_resident_textured_quad.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12697,9 +12697,9 @@
       }
     },
     {
-      "name": "gameplay/space/draw_resident_textured_banner",
+      "name": "rendering/effects/draw_resident_textured_banner",
       "target_path": "expected/obj/gameplay/space/draw_resident_textured_banner.c.o",
-      "base_path": "build/src/gameplay/space/draw_resident_textured_banner.c.o",
+      "base_path": "build/src/rendering/effects/draw_resident_textured_banner.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12707,9 +12707,9 @@
       }
     },
     {
-      "name": "gameplay/state/update_level_gameplay_frame",
+      "name": "game/update_level_gameplay_frame",
       "target_path": "expected/obj/gameplay/state/update_level_gameplay_frame.c.o",
-      "base_path": "build/src/gameplay/state/update_level_gameplay_frame.c.o",
+      "base_path": "build/src/game/update_level_gameplay_frame.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12717,9 +12717,9 @@
       }
     },
     {
-      "name": "textbin/render_level_frame",
+      "name": "rendering/frame/render_level_frame",
       "target_path": "expected/obj/textbin/render_level_frame.c.o",
-      "base_path": "build/src/textbin/render_level_frame.c.o",
+      "base_path": "build/src/rendering/frame/render_level_frame.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12737,9 +12737,9 @@
       }
     },
     {
-      "name": "gameplay/state/update_resident_gameplay_state",
+      "name": "game/update_resident_gameplay_state",
       "target_path": "expected/obj/gameplay/state/update_resident_gameplay_state.c.o",
-      "base_path": "build/src/gameplay/state/update_resident_gameplay_state.c.o",
+      "base_path": "build/src/game/update_resident_gameplay_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12747,9 +12747,9 @@
       }
     },
     {
-      "name": "gameplay/state/dispatch_game_state_update",
+      "name": "game/dispatch_game_state_update",
       "target_path": "expected/obj/gameplay/state/dispatch_game_state_update.c.o",
-      "base_path": "build/src/gameplay/state/dispatch_game_state_update.c.o",
+      "base_path": "build/src/game/dispatch_game_state_update.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12757,9 +12757,9 @@
       }
     },
     {
-      "name": "textbin/gameplay/state/initialize_level_runtime",
+      "name": "game/initialize_level_runtime",
       "target_path": "expected/obj/textbin/gameplay/state/initialize_level_runtime.c.o",
-      "base_path": "build/src/textbin/gameplay/state/initialize_level_runtime.c.o",
+      "base_path": "build/src/game/initialize_level_runtime.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12767,9 +12767,9 @@
       }
     },
     {
-      "name": "gameplay/space/play_level_transition_movie",
+      "name": "game/transitions/play_level_transition_movie",
       "target_path": "expected/obj/gameplay/space/play_level_transition_movie.c.o",
-      "base_path": "build/src/gameplay/space/play_level_transition_movie.c.o",
+      "base_path": "build/src/game/transitions/play_level_transition_movie.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12797,9 +12797,9 @@
       }
     },
     {
-      "name": "textbin/ui/loading/play_level_loading_slides",
+      "name": "ui/loading/play_level_loading_slides",
       "target_path": "expected/obj/textbin/ui/loading/play_level_loading_slides.c.o",
-      "base_path": "build/src/textbin/ui/loading/play_level_loading_slides.c.o",
+      "base_path": "build/src/ui/loading/play_level_loading_slides.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12807,9 +12807,9 @@
       }
     },
     {
-      "name": "gameplay/state/do_space_transition",
+      "name": "game/transitions/do_space_transition",
       "target_path": "expected/obj/gameplay/state/do_space_transition.c.o",
-      "base_path": "build/src/gameplay/state/do_space_transition.c.o",
+      "base_path": "build/src/game/transitions/do_space_transition.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12817,9 +12817,9 @@
       }
     },
     {
-      "name": "rendering/entities/render_environment_mapped_object",
+      "name": "rendering/mobys/render_environment_mapped_object",
       "target_path": "expected/obj/rendering/entities/render_environment_mapped_object.c.o",
-      "base_path": "build/src/rendering/entities/render_environment_mapped_object.c.o",
+      "base_path": "build/src/rendering/mobys/render_environment_mapped_object.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12827,9 +12827,9 @@
       }
     },
     {
-      "name": "runtime/rpc/initialize_sif_rpc",
+      "name": "runtime/iop/initialize_sif_rpc",
       "target_path": "expected/obj/runtime/rpc/initialize_sif_rpc.c.o",
-      "base_path": "build/src/runtime/rpc/initialize_sif_rpc.c.o",
+      "base_path": "build/src/runtime/iop/initialize_sif_rpc.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12837,9 +12837,9 @@
       }
     },
     {
-      "name": "storage/stash/init_stash",
+      "name": "streaming/stash/init_stash",
       "target_path": "expected/obj/storage/stash/init_stash.c.o",
-      "base_path": "build/src/storage/stash/init_stash.c.o",
+      "base_path": "build/src/streaming/stash/init_stash.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12847,9 +12847,9 @@
       }
     },
     {
-      "name": "storage/stash/stash_send_data",
+      "name": "streaming/stash/stash_send_data",
       "target_path": "expected/obj/storage/stash/stash_send_data.c.o",
-      "base_path": "build/src/storage/stash/stash_send_data.c.o",
+      "base_path": "build/src/streaming/stash/stash_send_data.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12857,9 +12857,9 @@
       }
     },
     {
-      "name": "storage/stash/stash_receive_data",
+      "name": "streaming/stash/stash_receive_data",
       "target_path": "expected/obj/storage/stash/stash_receive_data.c.o",
-      "base_path": "build/src/storage/stash/stash_receive_data.c.o",
+      "base_path": "build/src/streaming/stash/stash_receive_data.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12867,9 +12867,9 @@
       }
     },
     {
-      "name": "storage/stash/stash_get_reserved_qwords",
+      "name": "streaming/stash/stash_get_reserved_qwords",
       "target_path": "expected/obj/storage/stash/stash_get_reserved_qwords.c.o",
-      "base_path": "build/src/storage/stash/stash_get_reserved_qwords.c.o",
+      "base_path": "build/src/streaming/stash/stash_get_reserved_qwords.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12917,9 +12917,9 @@
       }
     },
     {
-      "name": "rendering/vu0/vu0_load_micro_program",
+      "name": "rendering/vu1/vu0_load_micro_program",
       "target_path": "expected/obj/rendering/vu0/vu0_load_micro_program.c.o",
-      "base_path": "build/src/rendering/vu0/vu0_load_micro_program.c.o",
+      "base_path": "build/src/rendering/vu1/vu0_load_micro_program.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -12947,9 +12947,9 @@
       }
     },
     {
-      "name": "rendering/buffers/swap_render_buffer_chain",
+      "name": "rendering/frame/swap_render_buffer_chain",
       "target_path": "expected/obj/rendering/buffers/swap_render_buffer_chain.c.o",
-      "base_path": "build/src/rendering/buffers/swap_render_buffer_chain.c.o",
+      "base_path": "build/src/rendering/frame/swap_render_buffer_chain.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13087,9 +13087,9 @@
       }
     },
     {
-      "name": "runtime/diagnostics/print_register_values_and_halt",
+      "name": "runtime/debug/print_register_values_and_halt",
       "target_path": "expected/obj/runtime/diagnostics/print_register_values_and_halt.c.o",
-      "base_path": "build/src/runtime/diagnostics/print_register_values_and_halt.c.o",
+      "base_path": "build/src/runtime/debug/print_register_values_and_halt.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13167,9 +13167,9 @@
       }
     },
     {
-      "name": "rendering/buffers/copy_render_buffer_pair",
+      "name": "rendering/frame/copy_render_buffer_pair",
       "target_path": "expected/obj/rendering/buffers/copy_render_buffer_pair.c.o",
-      "base_path": "build/src/rendering/buffers/copy_render_buffer_pair.c.o",
+      "base_path": "build/src/rendering/frame/copy_render_buffer_pair.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13177,9 +13177,9 @@
       }
     },
     {
-      "name": "rendering/entities/register_entity_render_resources",
+      "name": "rendering/mobys/register_entity_render_resources",
       "target_path": "expected/obj/rendering/entities/register_entity_render_resources.c.o",
-      "base_path": "build/src/rendering/entities/register_entity_render_resources.c.o",
+      "base_path": "build/src/rendering/mobys/register_entity_render_resources.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13237,9 +13237,9 @@
       }
     },
     {
-      "name": "rendering/callbacks/noop_graphics_callback",
+      "name": "rendering/frame/callbacks/noop_graphics_callback",
       "target_path": "expected/obj/rendering/callbacks/noop_graphics_callback.c.o",
-      "base_path": "build/src/rendering/callbacks/noop_graphics_callback.c.o",
+      "base_path": "build/src/rendering/frame/callbacks/noop_graphics_callback.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13277,9 +13277,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/update_resident_dialogue_animation_state",
+      "name": "mobys/animation/update_resident_dialogue_animation_state",
       "target_path": "expected/obj/gameplay/vendor/update_resident_dialogue_animation_state.c.o",
-      "base_path": "build/src/gameplay/vendor/update_resident_dialogue_animation_state.c.o",
+      "base_path": "build/src/mobys/animation/update_resident_dialogue_animation_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13287,9 +13287,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/render_capture_scrolling_text",
+      "name": "ui/vendor/render_capture_scrolling_text",
       "target_path": "expected/obj/gameplay/vendor/render_capture_scrolling_text.c.o",
-      "base_path": "build/src/gameplay/vendor/render_capture_scrolling_text.c.o",
+      "base_path": "build/src/ui/vendor/render_capture_scrolling_text.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13307,9 +13307,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/render_capture_effect_pass",
+      "name": "ui/vendor/render_capture_effect_pass",
       "target_path": "expected/obj/gameplay/vendor/render_capture_effect_pass.c.o",
-      "base_path": "build/src/gameplay/vendor/render_capture_effect_pass.c.o",
+      "base_path": "build/src/ui/vendor/render_capture_effect_pass.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13327,9 +13327,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/render_vendor_item_icon_strip_pass",
+      "name": "ui/vendor/render_vendor_item_icon_strip_pass",
       "target_path": "expected/obj/gameplay/vendor/render_vendor_item_icon_strip_pass.c.o",
-      "base_path": "build/src/gameplay/vendor/render_vendor_item_icon_strip_pass.c.o",
+      "base_path": "build/src/ui/vendor/render_vendor_item_icon_strip_pass.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13337,9 +13337,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/render_vendor_item_details_pass",
+      "name": "ui/vendor/render_vendor_item_details_pass",
       "target_path": "expected/obj/gameplay/vendor/render_vendor_item_details_pass.c.o",
-      "base_path": "build/src/gameplay/vendor/render_vendor_item_details_pass.c.o",
+      "base_path": "build/src/ui/vendor/render_vendor_item_details_pass.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13347,9 +13347,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/render_vendor_buy_label_pass",
+      "name": "ui/vendor/render_vendor_buy_label_pass",
       "target_path": "expected/obj/gameplay/vendor/render_vendor_buy_label_pass.c.o",
-      "base_path": "build/src/gameplay/vendor/render_vendor_buy_label_pass.c.o",
+      "base_path": "build/src/ui/vendor/render_vendor_buy_label_pass.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13357,9 +13357,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/render_vendor_purchase_prompt_pass",
+      "name": "ui/vendor/render_vendor_purchase_prompt_pass",
       "target_path": "expected/obj/gameplay/vendor/render_vendor_purchase_prompt_pass.c.o",
-      "base_path": "build/src/gameplay/vendor/render_vendor_purchase_prompt_pass.c.o",
+      "base_path": "build/src/ui/vendor/render_vendor_purchase_prompt_pass.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13367,9 +13367,9 @@
       }
     },
     {
-      "name": "textbin/render_vendor_capture_texture_overlays_pass",
+      "name": "ui/vendor/render_vendor_capture_texture_overlays_pass",
       "target_path": "expected/obj/textbin/render_vendor_capture_texture_overlays_pass.c.o",
-      "base_path": "build/src/textbin/render_vendor_capture_texture_overlays_pass.c.o",
+      "base_path": "build/src/ui/vendor/render_vendor_capture_texture_overlays_pass.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13377,9 +13377,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/configure_capture_target",
+      "name": "ui/vendor/configure_capture_target",
       "target_path": "expected/obj/gameplay/vendor/configure_capture_target.c.o",
-      "base_path": "build/src/gameplay/vendor/configure_capture_target.c.o",
+      "base_path": "build/src/ui/vendor/configure_capture_target.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13387,9 +13387,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/setup_view_context",
+      "name": "rendering/view/setup_view_context",
       "target_path": "expected/obj/gameplay/vendor/setup_view_context.c.o",
-      "base_path": "build/src/gameplay/vendor/setup_view_context.c.o",
+      "base_path": "build/src/rendering/view/setup_view_context.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13397,9 +13397,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/render_vendor_capture_pass_sequence",
+      "name": "ui/vendor/render_vendor_capture_pass_sequence",
       "target_path": "expected/obj/gameplay/vendor/render_vendor_capture_pass_sequence.c.o",
-      "base_path": "build/src/gameplay/vendor/render_vendor_capture_pass_sequence.c.o",
+      "base_path": "build/src/ui/vendor/render_vendor_capture_pass_sequence.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13407,9 +13407,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/find_zone_at_point",
+      "name": "world/find_zone_at_point",
       "target_path": "expected/obj/gameplay/vendor/find_zone_at_point.c.o",
-      "base_path": "build/src/gameplay/vendor/find_zone_at_point.c.o",
+      "base_path": "build/src/world/find_zone_at_point.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13417,9 +13417,9 @@
       }
     },
     {
-      "name": "gameplay/camera/sample_surface_height_map",
+      "name": "camera/sample_surface_height_map",
       "target_path": "expected/obj/gameplay/camera/sample_surface_height_map.c.o",
-      "base_path": "build/src/gameplay/camera/sample_surface_height_map.c.o",
+      "base_path": "build/src/camera/sample_surface_height_map.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13427,9 +13427,9 @@
       }
     },
     {
-      "name": "gameplay/entities/quad_moby_update",
+      "name": "mobys/quad_moby_update",
       "target_path": "expected/obj/gameplay/entities/quad_moby_update.c.o",
-      "base_path": "build/src/gameplay/entities/quad_moby_update.c.o",
+      "base_path": "build/src/mobys/quad_moby_update.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13437,9 +13437,9 @@
       }
     },
     {
-      "name": "gameplay/vendor/update_instance_attachment_points_and_lengths",
+      "name": "mobys/update_instance_attachment_points_and_lengths",
       "target_path": "expected/obj/gameplay/vendor/update_instance_attachment_points_and_lengths.c.o",
-      "base_path": "build/src/gameplay/vendor/update_instance_attachment_points_and_lengths.c.o",
+      "base_path": "build/src/mobys/update_instance_attachment_points_and_lengths.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13447,9 +13447,9 @@
       }
     },
     {
-      "name": "video/decoder/play_mpeg_movie",
+      "name": "movies/decoder/play_mpeg_movie",
       "target_path": "expected/obj/video/decoder/play_mpeg_movie.c.o",
-      "base_path": "build/src/video/decoder/play_mpeg_movie.c.o",
+      "base_path": "build/src/movies/decoder/play_mpeg_movie.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13457,9 +13457,9 @@
       }
     },
     {
-      "name": "video/decoder/read_mpeg",
+      "name": "movies/decoder/read_mpeg",
       "target_path": "expected/obj/video/decoder/read_mpeg.c.o",
-      "base_path": "build/src/video/decoder/read_mpeg.c.o",
+      "base_path": "build/src/movies/decoder/read_mpeg.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13467,9 +13467,9 @@
       }
     },
     {
-      "name": "runtime/threads/switch_thread",
+      "name": "runtime/switch_thread",
       "target_path": "expected/obj/runtime/threads/switch_thread.c.o",
-      "base_path": "build/src/runtime/threads/switch_thread.c.o",
+      "base_path": "build/src/runtime/switch_thread.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13487,9 +13487,9 @@
       }
     },
     {
-      "name": "textbin/video/player/init_all",
+      "name": "movies/player/init_all",
       "target_path": "expected/obj/textbin/video/player/init_all.c.o",
-      "base_path": "build/src/textbin/video/player/init_all.c.o",
+      "base_path": "build/src/movies/player/init_all.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13497,9 +13497,9 @@
       }
     },
     {
-      "name": "video/player/term_all",
+      "name": "movies/player/term_all",
       "target_path": "expected/obj/video/player/term_all.c.o",
-      "base_path": "build/src/video/player/term_all.c.o",
+      "base_path": "build/src/movies/player/term_all.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13507,9 +13507,9 @@
       }
     },
     {
-      "name": "video/player/err_message",
+      "name": "movies/player/err_message",
       "target_path": "expected/obj/video/player/err_message.c.o",
-      "base_path": "build/src/video/player/err_message.c.o",
+      "base_path": "build/src/movies/player/err_message.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13517,9 +13517,9 @@
       }
     },
     {
-      "name": "video/player/proceed_audio",
+      "name": "movies/player/proceed_audio",
       "target_path": "expected/obj/video/player/proceed_audio.c.o",
-      "base_path": "build/src/video/player/proceed_audio.c.o",
+      "base_path": "build/src/movies/player/proceed_audio.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13627,9 +13627,9 @@
       }
     },
     {
-      "name": "video/display/set_image_tag",
+      "name": "movies/display/set_image_tag",
       "target_path": "expected/obj/video/display/set_image_tag.c.o",
-      "base_path": "build/src/video/display/set_image_tag.c.o",
+      "base_path": "build/src/movies/display/set_image_tag.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13637,9 +13637,9 @@
       }
     },
     {
-      "name": "assembly/textbin/rendering/gs/vblank_handler",
+      "name": "assembly/textbin/rendering/frame/vblank_handler",
       "target_path": "expected/obj/assembly/textbin/rendering/gs/vblank_handler.c.o",
-      "base_path": "build/src/assembly/textbin/rendering/gs/vblank_handler.c.o",
+      "base_path": "build/src/assembly/textbin/rendering/frame/vblank_handler.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13647,9 +13647,9 @@
       }
     },
     {
-      "name": "video/display/handler_end_image",
+      "name": "movies/display/handler_end_image",
       "target_path": "expected/obj/video/display/handler_end_image.c.o",
-      "base_path": "build/src/video/display/handler_end_image.c.o",
+      "base_path": "build/src/movies/display/handler_end_image.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13657,9 +13657,9 @@
       }
     },
     {
-      "name": "video/display/start_display",
+      "name": "movies/display/start_display",
       "target_path": "expected/obj/video/display/start_display.c.o",
-      "base_path": "build/src/video/display/start_display.c.o",
+      "base_path": "build/src/movies/display/start_display.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13667,9 +13667,9 @@
       }
     },
     {
-      "name": "video/display/end_display",
+      "name": "movies/display/end_display",
       "target_path": "expected/obj/video/display/end_display.c.o",
-      "base_path": "build/src/video/display/end_display.c.o",
+      "base_path": "build/src/movies/display/end_display.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13677,9 +13677,9 @@
       }
     },
     {
-      "name": "video/decoder/callbacks/video_callback",
+      "name": "movies/decoder/callbacks/video_callback",
       "target_path": "expected/obj/video/decoder/callbacks/video_callback.c.o",
-      "base_path": "build/src/video/decoder/callbacks/video_callback.c.o",
+      "base_path": "build/src/movies/decoder/callbacks/video_callback.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13697,9 +13697,9 @@
       }
     },
     {
-      "name": "video/decoder/buffers/cpy2area",
+      "name": "movies/decoder/buffers/cpy2area",
       "target_path": "expected/obj/video/decoder/buffers/cpy2area.c.o",
-      "base_path": "build/src/video/decoder/buffers/cpy2area.c.o",
+      "base_path": "build/src/movies/decoder/buffers/cpy2area.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13707,9 +13707,9 @@
       }
     },
     {
-      "name": "video/decoder/buffers/read_buf_create",
+      "name": "movies/decoder/buffers/read_buf_create",
       "target_path": "expected/obj/video/decoder/buffers/read_buf_create.c.o",
-      "base_path": "build/src/video/decoder/buffers/read_buf_create.c.o",
+      "base_path": "build/src/movies/decoder/buffers/read_buf_create.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13717,9 +13717,9 @@
       }
     },
     {
-      "name": "video/decoder/buffers/read_buf_delete",
+      "name": "movies/decoder/buffers/read_buf_delete",
       "target_path": "expected/obj/video/decoder/buffers/read_buf_delete.c.o",
-      "base_path": "build/src/video/decoder/buffers/read_buf_delete.c.o",
+      "base_path": "build/src/movies/decoder/buffers/read_buf_delete.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13727,9 +13727,9 @@
       }
     },
     {
-      "name": "video/decoder/buffers/read_buf_begin_put",
+      "name": "movies/decoder/buffers/read_buf_begin_put",
       "target_path": "expected/obj/video/decoder/buffers/read_buf_begin_put.c.o",
-      "base_path": "build/src/video/decoder/buffers/read_buf_begin_put.c.o",
+      "base_path": "build/src/movies/decoder/buffers/read_buf_begin_put.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13737,9 +13737,9 @@
       }
     },
     {
-      "name": "video/decoder/buffers/read_buf_end_put",
+      "name": "movies/decoder/buffers/read_buf_end_put",
       "target_path": "expected/obj/video/decoder/buffers/read_buf_end_put.c.o",
-      "base_path": "build/src/video/decoder/buffers/read_buf_end_put.c.o",
+      "base_path": "build/src/movies/decoder/buffers/read_buf_end_put.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13747,9 +13747,9 @@
       }
     },
     {
-      "name": "video/decoder/buffers/read_buf_begin_get",
+      "name": "movies/decoder/buffers/read_buf_begin_get",
       "target_path": "expected/obj/video/decoder/buffers/read_buf_begin_get.c.o",
-      "base_path": "build/src/video/decoder/buffers/read_buf_begin_get.c.o",
+      "base_path": "build/src/movies/decoder/buffers/read_buf_begin_get.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13757,9 +13757,9 @@
       }
     },
     {
-      "name": "video/decoder/buffers/read_buf_end_get",
+      "name": "movies/decoder/buffers/read_buf_end_get",
       "target_path": "expected/obj/video/decoder/buffers/read_buf_end_get.c.o",
-      "base_path": "build/src/video/decoder/buffers/read_buf_end_get.c.o",
+      "base_path": "build/src/movies/decoder/buffers/read_buf_end_get.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13767,9 +13767,9 @@
       }
     },
     {
-      "name": "video/decoder/mpeg_cd_stream_open",
+      "name": "movies/decoder/mpeg_cd_stream_open",
       "target_path": "expected/obj/video/decoder/mpeg_cd_stream_open.c.o",
-      "base_path": "build/src/video/decoder/mpeg_cd_stream_open.c.o",
+      "base_path": "build/src/movies/decoder/mpeg_cd_stream_open.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13777,9 +13777,9 @@
       }
     },
     {
-      "name": "video/decoder/mpeg_cd_stream_close",
+      "name": "movies/decoder/mpeg_cd_stream_close",
       "target_path": "expected/obj/video/decoder/mpeg_cd_stream_close.c.o",
-      "base_path": "build/src/video/decoder/mpeg_cd_stream_close.c.o",
+      "base_path": "build/src/movies/decoder/mpeg_cd_stream_close.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13787,9 +13787,9 @@
       }
     },
     {
-      "name": "video/decoder/read_cd_stream_sectors",
+      "name": "movies/decoder/read_cd_stream_sectors",
       "target_path": "expected/obj/video/decoder/read_cd_stream_sectors.c.o",
-      "base_path": "build/src/video/decoder/read_cd_stream_sectors.c.o",
+      "base_path": "build/src/movies/decoder/read_cd_stream_sectors.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13797,9 +13797,9 @@
       }
     },
     {
-      "name": "video/decoder/buffers/get_fifo_index",
+      "name": "movies/decoder/buffers/get_fifo_index",
       "target_path": "expected/obj/video/decoder/buffers/get_fifo_index.c.o",
-      "base_path": "build/src/video/decoder/buffers/get_fifo_index.c.o",
+      "base_path": "build/src/movies/decoder/buffers/get_fifo_index.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13807,9 +13807,9 @@
       }
     },
     {
-      "name": "video/decoder/dma/set_d3_chcr",
+      "name": "movies/decoder/dma/set_d3_chcr",
       "target_path": "expected/obj/video/decoder/dma/set_d3_chcr.c.o",
-      "base_path": "build/src/video/decoder/dma/set_d3_chcr.c.o",
+      "base_path": "build/src/movies/decoder/dma/set_d3_chcr.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13817,9 +13817,9 @@
       }
     },
     {
-      "name": "video/decoder/dma/set_d4_chcr",
+      "name": "movies/decoder/dma/set_d4_chcr",
       "target_path": "expected/obj/video/decoder/dma/set_d4_chcr.c.o",
-      "base_path": "build/src/video/decoder/dma/set_d4_chcr.c.o",
+      "base_path": "build/src/movies/decoder/dma/set_d4_chcr.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13827,9 +13827,9 @@
       }
     },
     {
-      "name": "video/decoder/dma/sc_tag2",
+      "name": "movies/decoder/dma/sc_tag2",
       "target_path": "expected/obj/video/decoder/dma/sc_tag2.c.o",
-      "base_path": "build/src/video/decoder/dma/sc_tag2.c.o",
+      "base_path": "build/src/movies/decoder/dma/sc_tag2.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13837,9 +13837,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_create",
+      "name": "movies/decoder/video_input/vi_buf_create",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_create.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_create.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_create.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13847,9 +13847,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_reset",
+      "name": "movies/decoder/video_input/vi_buf_reset",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_reset.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_reset.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_reset.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13857,9 +13857,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_begin_put",
+      "name": "movies/decoder/video_input/vi_buf_begin_put",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_begin_put.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_begin_put.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_begin_put.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13867,9 +13867,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_end_put",
+      "name": "movies/decoder/video_input/vi_buf_end_put",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_end_put.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_end_put.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_end_put.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13877,9 +13877,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_add_dma",
+      "name": "movies/decoder/video_input/vi_buf_add_dma",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_add_dma.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_add_dma.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_add_dma.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13887,9 +13887,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_stop_dma",
+      "name": "movies/decoder/video_input/vi_buf_stop_dma",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_stop_dma.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_stop_dma.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_stop_dma.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13897,9 +13897,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_restart_dma",
+      "name": "movies/decoder/video_input/vi_buf_restart_dma",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_restart_dma.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_restart_dma.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_restart_dma.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13907,9 +13907,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_delete",
+      "name": "movies/decoder/video_input/vi_buf_delete",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_delete.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_delete.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_delete.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13917,9 +13917,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_count",
+      "name": "movies/decoder/video_input/vi_buf_count",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_count.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_count.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_count.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13927,9 +13927,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_flush",
+      "name": "movies/decoder/video_input/vi_buf_flush",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_flush.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_flush.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_flush.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13937,9 +13937,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_modify_pts",
+      "name": "movies/decoder/video_input/vi_buf_modify_pts",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_modify_pts.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_modify_pts.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_modify_pts.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13947,9 +13947,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_put_ts",
+      "name": "movies/decoder/video_input/vi_buf_put_ts",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_put_ts.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_put_ts.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_put_ts.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13957,9 +13957,9 @@
       }
     },
     {
-      "name": "video/decoder/video_input/vi_buf_get_ts",
+      "name": "movies/decoder/video_input/vi_buf_get_ts",
       "target_path": "expected/obj/video/decoder/video_input/vi_buf_get_ts.c.o",
-      "base_path": "build/src/video/decoder/video_input/vi_buf_get_ts.c.o",
+      "base_path": "build/src/movies/decoder/video_input/vi_buf_get_ts.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13967,9 +13967,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_create",
+      "name": "movies/decoder/video_dec_create",
       "target_path": "expected/obj/video/decoder/video_dec_create.c.o",
-      "base_path": "build/src/video/decoder/video_dec_create.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_create.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13977,9 +13977,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_set_stream",
+      "name": "movies/decoder/video_dec_set_stream",
       "target_path": "expected/obj/video/decoder/video_dec_set_stream.c.o",
-      "base_path": "build/src/video/decoder/video_dec_set_stream.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_set_stream.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13987,9 +13987,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_begin_put",
+      "name": "movies/decoder/video_dec_begin_put",
       "target_path": "expected/obj/video/decoder/video_dec_begin_put.c.o",
-      "base_path": "build/src/video/decoder/video_dec_begin_put.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_begin_put.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -13997,9 +13997,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_end_put",
+      "name": "movies/decoder/video_dec_end_put",
       "target_path": "expected/obj/video/decoder/video_dec_end_put.c.o",
-      "base_path": "build/src/video/decoder/video_dec_end_put.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_end_put.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14007,9 +14007,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_reset",
+      "name": "movies/decoder/video_dec_reset",
       "target_path": "expected/obj/video/decoder/video_dec_reset.c.o",
-      "base_path": "build/src/video/decoder/video_dec_reset.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_reset.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14017,9 +14017,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_delete",
+      "name": "movies/decoder/video_dec_delete",
       "target_path": "expected/obj/video/decoder/video_dec_delete.c.o",
-      "base_path": "build/src/video/decoder/video_dec_delete.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_delete.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14027,9 +14027,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_abort",
+      "name": "movies/decoder/video_dec_abort",
       "target_path": "expected/obj/video/decoder/video_dec_abort.c.o",
-      "base_path": "build/src/video/decoder/video_dec_abort.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_abort.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14037,9 +14037,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_get_state",
+      "name": "movies/decoder/video_dec_get_state",
       "target_path": "expected/obj/video/decoder/video_dec_get_state.c.o",
-      "base_path": "build/src/video/decoder/video_dec_get_state.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_get_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14047,9 +14047,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_set_state",
+      "name": "movies/decoder/video_dec_set_state",
       "target_path": "expected/obj/video/decoder/video_dec_set_state.c.o",
-      "base_path": "build/src/video/decoder/video_dec_set_state.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_set_state.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14057,9 +14057,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_put_ts",
+      "name": "movies/decoder/video_dec_put_ts",
       "target_path": "expected/obj/video/decoder/video_dec_put_ts.c.o",
-      "base_path": "build/src/video/decoder/video_dec_put_ts.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_put_ts.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14067,9 +14067,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_input_count",
+      "name": "movies/decoder/video_dec_input_count",
       "target_path": "expected/obj/video/decoder/video_dec_input_count.c.o",
-      "base_path": "build/src/video/decoder/video_dec_input_count.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_input_count.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14077,9 +14077,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_flush",
+      "name": "movies/decoder/video_dec_flush",
       "target_path": "expected/obj/video/decoder/video_dec_flush.c.o",
-      "base_path": "build/src/video/decoder/video_dec_flush.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_flush.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14087,9 +14087,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_is_flushed",
+      "name": "movies/decoder/video_dec_is_flushed",
       "target_path": "expected/obj/video/decoder/video_dec_is_flushed.c.o",
-      "base_path": "build/src/video/decoder/video_dec_is_flushed.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_is_flushed.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14097,9 +14097,9 @@
       }
     },
     {
-      "name": "video/decoder/video_dec_main",
+      "name": "movies/decoder/video_dec_main",
       "target_path": "expected/obj/video/decoder/video_dec_main.c.o",
-      "base_path": "build/src/video/decoder/video_dec_main.c.o",
+      "base_path": "build/src/movies/decoder/video_dec_main.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14107,9 +14107,9 @@
       }
     },
     {
-      "name": "video/decoder/dec_bs0",
+      "name": "movies/decoder/dec_bs0",
       "target_path": "expected/obj/video/decoder/dec_bs0.c.o",
-      "base_path": "build/src/video/decoder/dec_bs0.c.o",
+      "base_path": "build/src/movies/decoder/dec_bs0.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14117,9 +14117,9 @@
       }
     },
     {
-      "name": "video/decoder/callbacks/mpeg_error",
+      "name": "movies/decoder/callbacks/mpeg_error",
       "target_path": "expected/obj/video/decoder/callbacks/mpeg_error.c.o",
-      "base_path": "build/src/video/decoder/callbacks/mpeg_error.c.o",
+      "base_path": "build/src/movies/decoder/callbacks/mpeg_error.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14127,9 +14127,9 @@
       }
     },
     {
-      "name": "video/decoder/callbacks/mpeg_nodata",
+      "name": "movies/decoder/callbacks/mpeg_nodata",
       "target_path": "expected/obj/video/decoder/callbacks/mpeg_nodata.c.o",
-      "base_path": "build/src/video/decoder/callbacks/mpeg_nodata.c.o",
+      "base_path": "build/src/movies/decoder/callbacks/mpeg_nodata.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14137,9 +14137,9 @@
       }
     },
     {
-      "name": "video/decoder/mpeg_stop_dma",
+      "name": "movies/decoder/mpeg_stop_dma",
       "target_path": "expected/obj/video/decoder/mpeg_stop_dma.c.o",
-      "base_path": "build/src/video/decoder/mpeg_stop_dma.c.o",
+      "base_path": "build/src/movies/decoder/mpeg_stop_dma.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14147,9 +14147,9 @@
       }
     },
     {
-      "name": "video/decoder/mpeg_restart_video_dma",
+      "name": "movies/decoder/mpeg_restart_video_dma",
       "target_path": "expected/obj/video/decoder/mpeg_restart_video_dma.c.o",
-      "base_path": "build/src/video/decoder/mpeg_restart_video_dma.c.o",
+      "base_path": "build/src/movies/decoder/mpeg_restart_video_dma.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14157,9 +14157,9 @@
       }
     },
     {
-      "name": "video/decoder/callbacks/get_mpeg_timestamp",
+      "name": "movies/decoder/callbacks/get_mpeg_timestamp",
       "target_path": "expected/obj/video/decoder/callbacks/get_mpeg_timestamp.c.o",
-      "base_path": "build/src/video/decoder/callbacks/get_mpeg_timestamp.c.o",
+      "base_path": "build/src/movies/decoder/callbacks/get_mpeg_timestamp.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14167,9 +14167,9 @@
       }
     },
     {
-      "name": "video/decoder/video_output/vo_buf_create",
+      "name": "movies/decoder/video_output/vo_buf_create",
       "target_path": "expected/obj/video/decoder/video_output/vo_buf_create.c.o",
-      "base_path": "build/src/video/decoder/video_output/vo_buf_create.c.o",
+      "base_path": "build/src/movies/decoder/video_output/vo_buf_create.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14177,9 +14177,9 @@
       }
     },
     {
-      "name": "video/decoder/video_output/vo_buf_delete",
+      "name": "movies/decoder/video_output/vo_buf_delete",
       "target_path": "expected/obj/video/decoder/video_output/vo_buf_delete.c.o",
-      "base_path": "build/src/video/decoder/video_output/vo_buf_delete.c.o",
+      "base_path": "build/src/movies/decoder/video_output/vo_buf_delete.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14187,9 +14187,9 @@
       }
     },
     {
-      "name": "video/decoder/video_output/vo_buf_reset",
+      "name": "movies/decoder/video_output/vo_buf_reset",
       "target_path": "expected/obj/video/decoder/video_output/vo_buf_reset.c.o",
-      "base_path": "build/src/video/decoder/video_output/vo_buf_reset.c.o",
+      "base_path": "build/src/movies/decoder/video_output/vo_buf_reset.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14197,9 +14197,9 @@
       }
     },
     {
-      "name": "video/decoder/video_output/vo_buf_is_full",
+      "name": "movies/decoder/video_output/vo_buf_is_full",
       "target_path": "expected/obj/video/decoder/video_output/vo_buf_is_full.c.o",
-      "base_path": "build/src/video/decoder/video_output/vo_buf_is_full.c.o",
+      "base_path": "build/src/movies/decoder/video_output/vo_buf_is_full.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14207,9 +14207,9 @@
       }
     },
     {
-      "name": "video/decoder/video_output/vo_buf_inc_count",
+      "name": "movies/decoder/video_output/vo_buf_inc_count",
       "target_path": "expected/obj/video/decoder/video_output/vo_buf_inc_count.c.o",
-      "base_path": "build/src/video/decoder/video_output/vo_buf_inc_count.c.o",
+      "base_path": "build/src/movies/decoder/video_output/vo_buf_inc_count.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14217,9 +14217,9 @@
       }
     },
     {
-      "name": "video/decoder/video_output/vo_buf_get_data",
+      "name": "movies/decoder/video_output/vo_buf_get_data",
       "target_path": "expected/obj/video/decoder/video_output/vo_buf_get_data.c.o",
-      "base_path": "build/src/video/decoder/video_output/vo_buf_get_data.c.o",
+      "base_path": "build/src/movies/decoder/video_output/vo_buf_get_data.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14227,9 +14227,9 @@
       }
     },
     {
-      "name": "video/decoder/video_output/vo_buf_is_empty",
+      "name": "movies/decoder/video_output/vo_buf_is_empty",
       "target_path": "expected/obj/video/decoder/video_output/vo_buf_is_empty.c.o",
-      "base_path": "build/src/video/decoder/video_output/vo_buf_is_empty.c.o",
+      "base_path": "build/src/movies/decoder/video_output/vo_buf_is_empty.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14237,9 +14237,9 @@
       }
     },
     {
-      "name": "video/decoder/video_output/vo_buf_get_tag",
+      "name": "movies/decoder/video_output/vo_buf_get_tag",
       "target_path": "expected/obj/video/decoder/video_output/vo_buf_get_tag.c.o",
-      "base_path": "build/src/video/decoder/video_output/vo_buf_get_tag.c.o",
+      "base_path": "build/src/movies/decoder/video_output/vo_buf_get_tag.c.o",
       "metadata": {
         "progress_categories": [
           "us"
@@ -14247,9 +14247,9 @@
       }
     },
     {
-      "name": "video/decoder/video_output/vo_buf_dec_count",
+      "name": "movies/decoder/video_output/vo_buf_dec_count",
       "target_path": "expected/obj/video/decoder/video_output/vo_buf_dec_count.c.o",
-      "base_path": "build/src/video/decoder/video_output/vo_buf_dec_count.c.o",
+      "base_path": "build/src/movies/decoder/video_output/vo_buf_dec_count.c.o",
       "metadata": {
         "progress_categories": [
           "us"
