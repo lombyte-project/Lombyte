@@ -146,7 +146,7 @@ extern int exhaust_ftoi(float) __asm__("FUN_001fa6d0");
 void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     Vec4     step;
     Vec4     pos;
-    Vec4     base;
+    Vec4     paired_exhaust_origin;
     L14Puff *puff;
     int      i;
     int      j;
@@ -161,7 +161,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     fast_vec_add(&pos, &emitter_moby->pos, &step);
     fast_vec_scale(&step, &emitter_moby->rot_row2, enemy_fighter_exhaust_base_row2_offset_gp);
     fast_vec_add(&pos, &pos, &step);
-    qcopy(&base, &pos);
+    qcopy(&paired_exhaust_origin, &pos);
     fast_vec_scale(&step, &emitter_moby->rot_row1, enemy_fighter_exhaust_paired_emitter_offset_gp);
     fast_vec_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
@@ -204,7 +204,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
         size -= 20000.0f;
     }
     fast_vec_scale(&step, &emitter_moby->rot_row1, enemy_fighter_exhaust_paired_emitter_offset_gp);
-    fast_vec_sub(&pos, &base, &step);
+    fast_vec_sub(&pos, &paired_exhaust_origin, &step);
     for (j = 0; j < 2; j++) {
         spin = random_integer_below(16);
         puff = spawn_puff(&pos,
