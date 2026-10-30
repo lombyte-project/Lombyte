@@ -79,7 +79,7 @@ extern short    D_L00_0015F6B8;
 
 int lookup_hero_slot3_animation_key(int key, int *out) __asm__("FUN_L00_00231db0");
 
-int lookup_hero_slot3_animation_key(int key, int *out) {
+int lookup_hero_slot3_animation_key(int key, int *out_animation_key) {
     SeqEntry *animation_lookup_table;
     int       i;
 
@@ -97,12 +97,12 @@ int lookup_hero_slot3_animation_key(int key, int *out) {
     if (animation_lookup_table != 0) {
         for (i = 0; animation_lookup_table[i].seq != -1; i++) {
             if (key == animation_lookup_table[i].key) {
-                *out = animation_lookup_table[i].seq;
+                *out_animation_key = animation_lookup_table[i].seq;
                 return 1;
             }
         }
     }
-    *out = 0;
+    *out_animation_key = 0;
     return 0;
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002326D0), where it is exact; names translated to the US level program. */
