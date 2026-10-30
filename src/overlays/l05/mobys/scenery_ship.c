@@ -455,19 +455,19 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
             qcopy_nc(center, &member->pos);
             center[3] = 20.0f;
             if (fast_bsphere_check(center, 512.0f) != -1) {
-                int   first;
+                int   trail_segment_start_index;
                 int   ribbon;
                 int   k;
                 char *points;
                 int   index;
                 int   frame;
                 for (frame = 0; frame < *(short *)(scenery_ship_vars + 0x320); frame++) {
-                    first = (*(short *)(scenery_ship_vars + 0x322) - frame + 15) & 15;
+                    trail_segment_start_index = (*(short *)(scenery_ship_vars + 0x322) - frame + 15) & 15;
                     for (ribbon = 0; ribbon < 3; ribbon++) {
                         if (D_L05_001613F4 == 0) {
                             points = scenery_ship_vars + (ribbon * 0x100 + 0x20);
                             for (k = 0; k < 4; k++) {
-                                index = (first + (k >> 1)) & 15;
+                                index = (trail_segment_start_index + (k >> 1)) & 15;
                                 fast_vec_add(packet[frame].vertices + k * 0x10,
                                              points + (index << 4),
                                              (char *)matrix + (k & 1) * 0x10);
