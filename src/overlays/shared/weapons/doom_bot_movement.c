@@ -269,7 +269,7 @@ char *select_class5_target_or_hero(
 
 char *
 
-select_class5_target_or_hero(char *self, float *position, float *angles, int unused, int mode) {
+select_class5_target_or_hero(char *reference_moby, float *position, float *angles, int unused, int mode) {
     char *candidate;
     char *best = 0;
     float target[4] __attribute__((aligned(16)));
@@ -298,7 +298,7 @@ select_class5_target_or_hero(char *self, float *position, float *angles, int unu
             angles[1], fast_arc_tan(distance, target[2] - position[2]));
         heightError *= heightError;
         if (checkCollision) {
-            if (8.0f < FUN_001f99c0(*(float *)(candidate + 0x18) - *(float *)(self + 0x18)))
+            if (8.0f < FUN_001f99c0(*(float *)(candidate + 0x18) - *(float *)(reference_moby + 0x18)))
                 valid = 1;
             else
                 valid = FUN_001efa68_2bed90(position, target, 6, candidate, 0) != 0;
@@ -308,7 +308,7 @@ select_class5_target_or_hero(char *self, float *position, float *angles, int unu
         if (mode != 0 || !valid) {
             bonus = 0.0f;
             score = fast_vec_dist(position, target);
-            if (*(float *)(candidate + 0x18) - *(float *)(self + 0x18) > 3.25f)
+            if (*(float *)(candidate + 0x18) - *(float *)(reference_moby + 0x18) > 3.25f)
                 score += 15.0f;
             if (valid)
                 bonus = 5.0f;
@@ -323,7 +323,7 @@ select_class5_target_or_hero(char *self, float *position, float *angles, int unu
     }
     if (best == 0) {
         char *playerPosition = D_0013F3D0;
-        if (vector_distance(self + 0x10, playerPosition) > 3.2f)
+        if (vector_distance(reference_moby + 0x10, playerPosition) > 3.2f)
             best = *(char **)(playerPosition + 0x2000);
     }
     return best;
