@@ -436,7 +436,7 @@ void select_hero_grapple_swing_target(void) {
         OvlQuad q;
         f32     f[4];
     } v, w;
-    s32       out;
+    s32       target_rejected;
     M_221ee0 *candidate_moby;
     M_221ee0 *best;
     Q_221ee0 *q;
@@ -476,12 +476,12 @@ void select_hero_grapple_swing_target(void) {
         if (target_distance_override != 0.0f)
             max_target_distance = target_distance_override;
         target_score = score_hero_target_candidate(candidate_moby,
-                                                   &out,
+                                                   &target_rejected,
                                                    x,
                                                    max_target_distance,
                                                    target_angle_limit,
                                                    target_elevation_angle_limit);
-        if (out != 0)
+        if (target_rejected != 0)
             continue;
         if (candidate_moby->b31 == 0)
             target_score += 10.0f;
