@@ -1202,7 +1202,7 @@ void compute_nanotech_ball_slot_position(unsigned char *moby,
                                          float         *out,
                                          int            i) __asm__("FUN_L00_002d8850");
 
-void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i) {
+void compute_nanotech_ball_slot_position(unsigned char *moby, float *out_slot_position, int i) {
     u128        slot_offset;
     M_002d8850 *moby_data = ((M_002d8850 *)MOBY(moby)->pvars);
     char       *e;
@@ -1211,8 +1211,8 @@ void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i)
     e = moby_data->e[i];
     if (e && moby[0x20] == 2)
         FUN_001f9bf8_002d8850(&slot_offset, &slot_offset, *(float *)(e + 0x28));
-    fast_vec_add(out, &moby_data->p10, &slot_offset);
-    out[2] += moby_data->f0_002d8850;
+    fast_vec_add(out_slot_position, &moby_data->p10, &slot_offset);
+    out_slot_position[2] += moby_data->f0_002d8850;
 }
 
 /* Rebuilds the eight D_L00_001E3CA0 entries with build_look_at_matrix and normalizes them. */
