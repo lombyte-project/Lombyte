@@ -1237,7 +1237,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
     float       height, height_again;
     float       half_fov, tan_half_fov;
     float       speed_fraction;
-    char       *D_0013C940;
+    char       *pad_state;
     char       *player;
     char       *voice;
     char       *hit;
@@ -1252,8 +1252,8 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
     *(u128 *)impulse = *(u128 *)velocity;
     if (moby->unkBC == 0) {
         if (jet_flight_state->launch_frames > scale_game_frames(120)) {
-            D_0013C940 = (char *)D_0013A4E0 + 0x2460;
-            if (*(int *)(D_0013C940 + 0x1B4) & 0x40) {
+            pad_state = (char *)D_0013A4E0 + 0x2460;
+            if (*(int *)(pad_state + 0x1B4) & 0x40) {
                 voice_index = jet_flight_state->boost_sound;
                 if (voice_index != -1) {
                     voice = (char *)D_0013E533 + 0x1D + voice_index * 0x70;
@@ -1264,7 +1264,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
                 }
                 jet_flight_state->boost_sound = -1;
                 jet_flight_state->boost_sound = allocate_voice_for_target_entry(1, 4, (int)moby);
-            } else if (*(int *)(D_0013C940 + 0x1B8) & 0x40) {
+            } else if (*(int *)(pad_state + 0x1B8) & 0x40) {
                 voice_index = jet_flight_state->boost_sound;
                 if (voice_index != -1) {
                     voice = (char *)D_0013E533 + 0x1D + voice_index * 0x70;
@@ -1275,8 +1275,8 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
                 }
                 jet_flight_state->boost_sound = -1;
             }
-            D_0013C940 = (char *)D_0013A4E0 + 0x2460;
-            if (*(int *)(D_0013C940 + 0x1B0) & 0x40) {
+            pad_state = (char *)D_0013A4E0 + 0x2460;
+            if (*(int *)(pad_state + 0x1B0) & 0x40) {
                 float boosted = jet_flight_state->speed + frame_scale_gp * 0.035f;
                 float max_speed = frame_time_gp * 30.0f;
                 jet_flight_state->speed = boosted;
