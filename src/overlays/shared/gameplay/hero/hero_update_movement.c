@@ -87,14 +87,6 @@ struct PadState {
     u8 pad1D8[0x4];
     s32 i1DC;
 };
-struct LevelTable_QS {
-    u8 pad0[0x158];
-    f32 f158;
-    u8 pad15C[0x4];
-    f32 f160;
-    u8 pad164[0x4];
-    s32 i168;
-};
 
 /* second name for hero: gcc reloads the base through it (exactness) */
 extern struct Hero hero_b __asm__("D_0013F350");
@@ -168,8 +160,8 @@ extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 extern f32 forward_component(void *) __asm__("FUN_L00_00213350");
 extern struct HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
-extern struct LevelTable_QS D_L00_00166C80;
-#define Q D_L00_00166C80
+#include "rnc/overlay/level_camera.h"
+#define Q l00_camera
 extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void offset_hero_position_against_gravity(void *, void *, f32) __asm__("FUN_L00_002336e8");
@@ -1089,8 +1081,8 @@ void hero_update_movement(void) {
         }
         if (hero.past_apex != 0.0f && hero.air_frames.s == 0) {
             if (hero.rise_fall_land_frames == 0) {
-                Q.f160 = 0.2f;
-                Q.i168 = scale_game_frames(40);
+                Q.shake_amount = 0.2f;
+                Q.shake_frames = scale_game_frames(40);
             }
             hero.rise_fall_land_frames++;
         }
@@ -1902,11 +1894,11 @@ void hero_update_movement(void) {
             if (hero.stick_magnitude > 0.5f && !flag) {
                 f32 a;
                 stick_target(1.0f, 0);
-                a = fast_difference_between_rotations(hero.motion.move_yaw, Q.f158);
+                a = fast_difference_between_rotations(hero.motion.move_yaw, Q.yaw);
                 if (fast_difference_between_rotations(a, 1.5707964f) < 1.2217305f ||
                     fast_difference_between_rotations(a, -1.5707964f) < 1.2217305f) {
                     hero.grind_pose = fast_difference_between_rotations(
-                                 fast_subtract_rotations(hero.motion.move_yaw, Q.f158), 1.5707964f) < 0.7853982f
+                                 fast_subtract_rotations(hero.motion.move_yaw, Q.yaw), 1.5707964f) < 0.7853982f
                                  ? 2
                                  : 3;
                 }
@@ -2877,8 +2869,8 @@ void hero_update_movement(void) {
             play_entity_sound((struct MobyView *)hero.moby, 2.7f, &v0, 0x30000, 40.0f, 1.0f, 0, 1, 0);
         }
         if (test_hero_animation_frame_window(30.0f) != 0 || test_hero_animation_frame_window(0.0f) != 0) {
-            Q.f160 = 0.1f;
-            Q.i168 = scale_game_frames(20);
+            Q.shake_amount = 0.1f;
+            Q.shake_frames = scale_game_frames(20);
         }
         k = 1.0f;
         stick_target(frame_time * 6.0f, 0);
