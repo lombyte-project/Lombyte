@@ -900,9 +900,9 @@ extern f32 FUN_L05_00304058_u(s32, void *, void *, f32) __asm__("FUN_L05_0030405
    when it drifts off the path. */
 void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) __asm__("FUN_L05_00303b08");
 
-void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) {
+void move_extermibot_along_path(struct Moby *moby, s32 destination_position, f32 side) {
     PathWalkerVars *walker_vars = (PathWalkerVars *)moby->pvars;
-    Vec4f           facing_direction, out, goal;
+    Vec4f           facing_direction, movement_displacement, goal;
     f32             offset_heading;
     f32             distance_to_goal;
 
@@ -911,7 +911,7 @@ void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) {
                         1,
                         walker_vars->path_pos,
                         &moby->pos,
-                        node,
+                        destination_position,
                         &walker_vars->goal,
                         D_L05_00161A98_gp * 0.4f) == 0)
             walker_vars->mode = 2;
@@ -946,7 +946,7 @@ void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) {
     facing_direction.x = fast_cos(moby->rot.z) * 2.0f;
     facing_direction.y = fast_sin(moby->rot.z) * 2.0f;
     facing_direction.z = 0.0f;
-    FUN_L00_00258b50(moby, walker_vars->move, &facing_direction, &out, 1.0f);
+    FUN_L00_00258b50(moby, walker_vars->move, &facing_direction, &movement_displacement, 1.0f);
     if (walker_vars->stuck_timer == 0) {
         if (FUN_L05_00304058_u(
                 walker_vars->path, &moby->pos, &moby->pos, D_L05_00161A98_gp * 0.4f) > 2.0f)
