@@ -854,13 +854,13 @@ void configure_hero_point_effect_emission(float         random_value_base,
                                           unsigned char flags_to_set,
 
                                           unsigned char flags_to_clear) {
-    struct Hero *base = &hero;
+    struct Hero *hero_point_effect_state = &hero;
 
-    base->items[6].unk38 = remaining_updates;
-    base->items[6].unk3C = count_per_point;
-    base->items[6].unk3E = (base->items[6].unk3E & ~flags_to_clear) | flags_to_set;
-    base->items[6].unk30 = random_value_base;
-    base->items[6].unk34 = random_value_half_range;
+    hero_point_effect_state->items[6].unk38 = remaining_updates;
+    hero_point_effect_state->items[6].unk3C = count_per_point;
+    hero_point_effect_state->items[6].unk3E = (hero_point_effect_state->items[6].unk3E & ~flags_to_clear) | flags_to_set;
+    hero_point_effect_state->items[6].unk30 = random_value_base;
+    hero_point_effect_state->items[6].unk34 = random_value_half_range;
 }
 
 typedef unsigned int u128_2332d0 __attribute__((mode(TI), aligned(16)));
