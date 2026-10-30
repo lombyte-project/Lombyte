@@ -19,7 +19,7 @@ s32 sceDbcReceiveData(s32 rpc_request_word_0, s32 rpc_request_word_1, s32 *byte_
     state->unk0 = rpc_request_word_0;
     state->unk4 = rpc_request_word_1;
     state->unk8 = *byte_count;
-    if (sceSifCallRpc(RpcQueueData, 0x8000091A, 0, state, 0x400, state, 0x400, 0, 0) < 0) {
+    if (sceSifCallRpc(&RpcQueueData, 0x8000091A, 0, state, 0x400, state, 0x400, 0, 0) < 0) {
         debug_print_stub(dbc_receive_rpc_error_message);
         return 0;
     }

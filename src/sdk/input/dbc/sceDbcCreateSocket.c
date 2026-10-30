@@ -25,7 +25,7 @@ s32 sceDbcCreateSocket(void *params, s32 port, s32 mode) {
     for (i = 0; i < 0x10; i++) {
         name_target[i] = name_source[i];
     }
-    if (sceSifCallRpc(RpcQueueData, 0x80000901, 0, D_0015B080, 0x400, D_0015B080, 0x400, 0, 0) < 0) {
+    if (sceSifCallRpc(&RpcQueueData, 0x80000901, 0, D_0015B080, 0x400, D_0015B080, 0x400, 0, 0) < 0) {
         debug_print_stub(socket_create_rpc_error_message);
         return 0;
     }

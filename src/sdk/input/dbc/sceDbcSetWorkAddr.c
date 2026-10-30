@@ -18,7 +18,7 @@ extern s32 sceSifCallRpc();
 extern struct DbCState RpcReceiveData __asm__("D_0015B080");
 s32 sceDbcSetWorkAddr(s32 work_address) {
     RpcReceiveData.unk4 = work_address;
-    if (sceSifCallRpc(RpcQueueData, 0x80000904, 0, &RpcReceiveData, 0x400, &RpcReceiveData, 0x400, 0, 0) <
+    if (sceSifCallRpc(&RpcQueueData, 0x80000904, 0, &RpcReceiveData, 0x400, &RpcReceiveData, 0x400, 0, 0) <
         0) {
         debug_print_stub(dbc_set_work_address_rpc_error_message);
         return 0;

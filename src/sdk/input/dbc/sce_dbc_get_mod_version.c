@@ -10,7 +10,7 @@ extern int SceSifCallRpc(void *, unsigned int, int, void *, int, void *, int, vo
 int SceDbcGetModVersion(void) __asm__("sceDbcGetModVersion");
 
 int SceDbcGetModVersion(void) {
-    SceSifCallRpc(&RpcQueueData[0], 0x80000963, 0, &RpcReceiveData[0], 0x400, &RpcReceiveData[0],
+    SceSifCallRpc(&RpcQueueData, 0x80000963, 0, &RpcReceiveData[0], 0x400, &RpcReceiveData[0],
                   0x400, 0, 0);
     return *(int *)&RpcReceiveData[0];
 }

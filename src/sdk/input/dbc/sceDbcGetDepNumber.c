@@ -32,7 +32,7 @@ s32 sceDbcGetDepNumber(s32 dependency_index) {
     EnableInterrupts();
     if (((s32 *)D_0015B500)[dependency_index] == 1) {
         RpcReceiveData.unk0 = dependency_index;
-        if (sceSifCallRpc(RpcQueueData, 0x80000903, 0, &RpcReceiveData, 0x400, &RpcReceiveData, 0x400, 0, 0) <
+        if (sceSifCallRpc(&RpcQueueData, 0x80000903, 0, &RpcReceiveData, 0x400, &RpcReceiveData, 0x400, 0, 0) <
             0) {
             debug_print_stub(dbc_get_dep_number_rpc_error_message);
             return 0;

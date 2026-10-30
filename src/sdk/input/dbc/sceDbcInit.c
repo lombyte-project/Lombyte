@@ -1,18 +1,14 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-typedef struct {
-    u8 pad0[0x24];
-    void *server;
-} SifClientData;
+#include "rnc/sdk/library/sdk_globals.h"
 
-extern SifClientData RpcQueueData __asm__("D_0015B008");
-extern SifClientData dbc_transfer_rpc_client __asm__("D_0015B030");
+extern struct sceSifClientData dbc_transfer_rpc_client __asm__("D_0015B030");
 extern char dbc_rpc_bind_failure_message[] __asm__("D_001534D8");
 extern char dbc_module_version_mismatch_message[] __asm__("D_001534F0");
 const char D_00153518[] = "[libdbc.a = %d.%d, dbcman.irx = %d.%d]\n";
 const char D_00153540[] = "SifDmaAddr %08x\n";
 extern void sceSifInitRpc(u32);
-extern s32 sceSifBindRpc(SifClientData *, u32, u32);
+extern s32 sceSifBindRpc(struct sceSifClientData *, u32, u32);
 extern void debug_print_stub(const char *fmt, ...) __asm__("func_00124A20");
 extern void exit(s32);
 extern s32 sceDbcGetModVersion(void);
@@ -30,7 +26,7 @@ s32 sceDbcInit(void) {
             debug_print_stub(dbc_rpc_bind_failure_message);
             exit(-1);
         }
-        if (RpcQueueData.server != 0) {
+        if (RpcQueueData.serve != 0) {
             break;
         }
         i = 0x10000;
@@ -42,7 +38,7 @@ s32 sceDbcInit(void) {
             debug_print_stub(dbc_rpc_bind_failure_message);
             exit(-1);
         }
-        if (dbc_transfer_rpc_client.server != 0) {
+        if (dbc_transfer_rpc_client.serve != 0) {
             break;
         }
         i = 0x10000;
