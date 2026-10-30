@@ -128,7 +128,7 @@ void steer_helicopter(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
     SteeringVec_4f88   delta;
     SteeringVec_4f88  *look_at = &look_copy;
     SteeringVec_4f88  *target_at = &target;
-    SteeringVars_4f88 *vars = (SteeringVars_4f88 *)moby->pvars;
+    SteeringVars_4f88 *helicopter_steering_vars = (SteeringVars_4f88 *)moby->pvars;
     float              distance;
     float              step;
     float              old_speed;
@@ -153,32 +153,32 @@ void steer_helicopter(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
     origin.q = *(u128 *)&moby->pos;
     distance = fast_vec_dist(&moby->pos, target_at);
     step = frame_time_sq * 10.0f;
-    old_speed = vars->speed;
+    old_speed = helicopter_steering_vars->speed;
     speed_sq = old_speed * old_speed;
     twice_step = step + step;
     threshold = speed_sq / twice_step;
     if (distance <= threshold) {
-        vars->speed = old_speed - step;
-        if (vars->speed < 0.0f) {
-            vars->speed = 0.0f;
+        helicopter_steering_vars->speed = old_speed - step;
+        if (helicopter_steering_vars->speed < 0.0f) {
+            helicopter_steering_vars->speed = 0.0f;
         }
     } else {
-        vars->speed = old_speed + step;
+        helicopter_steering_vars->speed = old_speed + step;
         limit = frame_time * 10.0f;
-        if (limit < vars->speed) {
-            vars->speed = limit;
+        if (limit < helicopter_steering_vars->speed) {
+            helicopter_steering_vars->speed = limit;
         }
     }
 
     fast_vec_sub(&delta, target_at, &moby->pos);
     scaled.q = delta.q;
-    FUN_001f9bf8_4f88(vars->speed * 0.1f, &scaled, &scaled);
-    FUN_001f9a68_4f88(0.9f, &delta, &vars->delta);
-    vars->delta.q = delta.q;
-    add_vectors(&delta, &vars->delta, &scaled);
-    move_moby_with_sphere_collision(moby, &vars->delta.q, 0, 1.0f, 2.0f);
+    FUN_001f9bf8_4f88(helicopter_steering_vars->speed * 0.1f, &scaled, &scaled);
+    FUN_001f9a68_4f88(0.9f, &delta, &helicopter_steering_vars->delta);
+    helicopter_steering_vars->delta.q = delta.q;
+    add_vectors(&delta, &helicopter_steering_vars->delta, &scaled);
+    move_moby_with_sphere_collision(moby, &helicopter_steering_vars->delta.q, 0, 1.0f, 2.0f);
     /* Preserve the retail height store and facing input access order. */
-    height = *(volatile float *)&vars->height;
+    height = *(volatile float *)&helicopter_steering_vars->height;
     pos_x = *(volatile float *)&moby->pos.x;
     *(volatile float *)&moby->pos.z = height;
     pos_y = *(volatile float *)&moby->pos.y;
@@ -187,22 +187,22 @@ void steer_helicopter(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
     dy = dy - pos_y;
     dx = dx - pos_x;
     facing = fast_arc_tan(dx, dy);
-    moby->rot.z = spring_turn(&vars->facing_velocity, moby->rot.z, facing, 0.01f, 0.3f, 0.1f);
+    moby->rot.z = spring_turn(&helicopter_steering_vars->facing_velocity, moby->rot.z, facing, 0.01f, 0.3f, 0.1f);
     fast_vec_sub(&delta, &moby->pos, &origin);
-    vars->delta.q = delta.q;
-    angle = fast_arc_tan(vars->delta.f[0], vars->delta.f[1]);
+    helicopter_steering_vars->delta.q = delta.q;
+    angle = fast_arc_tan(helicopter_steering_vars->delta.f[0], helicopter_steering_vars->delta.f[1]);
     angle = fast_subtract_rotations(angle, moby->rot.z);
     relative_heading_cosine = fast_cos(angle);
-    yaw_target = (vars->speed * 0.34906584f * relative_heading_cosine) / (frame_time * 10.0f);
+    yaw_target = (helicopter_steering_vars->speed * 0.34906584f * relative_heading_cosine) / (frame_time * 10.0f);
     relative_heading_sine = fast_sin(angle);
-    pitch_target = (vars->speed * -0.34906584f * relative_heading_sine) / (frame_time * 10.0f);
-    moby->rot.y = spring_turn(&vars->yaw_velocity,
+    pitch_target = (helicopter_steering_vars->speed * -0.34906584f * relative_heading_sine) / (frame_time * 10.0f);
+    moby->rot.y = spring_turn(&helicopter_steering_vars->yaw_velocity,
                               moby->rot.y,
                               yaw_target,
                               frame_time_sq * 0.5235988f,
                               frame_time_sq * 1.0471976f,
                               frame_time * 0.7853982f);
-    moby->rot.x = spring_turn(&vars->pitch_velocity,
+    moby->rot.x = spring_turn(&helicopter_steering_vars->pitch_velocity,
                               moby->rot.x,
                               pitch_target,
                               frame_time_sq * 1.0471976f,
