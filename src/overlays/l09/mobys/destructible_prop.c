@@ -84,7 +84,7 @@ void update_destructible_prop(struct Moby *moby) {
     moby->hit_slot = 0xFF;
 }
 
-char *spawn_destructible_prop_wreck(char *owner, void *position, float angle) {
+char *spawn_destructible_prop_wreck(char *source_moby, void *position, float angle) {
     u128_ee380 position_copy;
     void      *copy = &position_copy;
     char      *moby;
@@ -92,14 +92,14 @@ char *spawn_destructible_prop_wreck(char *owner, void *position, float angle) {
     moby = create_moby(0x11C);
     if (moby != 0) {
         unsigned char state;
-        ((unsigned char *)moby)[0x30] = ((unsigned char *)owner)[0x30];
-        state = ((unsigned char *)owner)[0x30];
+        ((unsigned char *)moby)[0x30] = ((unsigned char *)source_moby)[0x30];
+        state = ((unsigned char *)source_moby)[0x30];
         moby[0x31] = 1;
         MOBY(moby)->draw_dist = state;
         qcopy(moby + 0x10, copy);
-        qcopy(moby + 0x40, owner + 0x40);
+        qcopy(moby + 0x40, source_moby + 0x40);
         MOBY(moby)->rot.z = angle;
-        MOBY(moby)->spawn_frame = *(long *)(owner + 0x38);
+        MOBY(moby)->spawn_frame = *(long *)(source_moby + 0x38);
         update_entity(moby);
     }
     return moby;
