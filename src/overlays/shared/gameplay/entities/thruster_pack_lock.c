@@ -1,5 +1,6 @@
 /* Shared moby classes: thruster_pack_lock. */
 #include "types.h"
+#include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -80,7 +81,6 @@ extern int D_L11_0015FC88; /* no foreign declaration */
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern unsigned char D_0013F350[];
 s32 FUN_L00_00203908(s32 a, s32 b);
-extern u8 item_available[] __asm__("D_0013D4C0");
 extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
 extern LvState D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
 extern LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
@@ -573,7 +573,6 @@ void update_moby_trail_points(char *moby) {
 
 #include "rnc/overlay/shared/gameplay/entities/thruster_pack_lock_globals.h"
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern unsigned char D_00141968[];
 
 void update_moby_hit_stats_and_state(char *moby) __asm__("FUN_L11_0031a1c0");

@@ -2498,7 +2498,6 @@ collision:
 }
 #include "types.h"
 #include "rnc/gameplay/state/item_state.h"
-extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern float D_L13_0015F580[] MACRO_ADDR;
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");

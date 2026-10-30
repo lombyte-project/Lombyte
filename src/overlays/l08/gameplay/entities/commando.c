@@ -730,7 +730,6 @@ typedef struct {
 /* interpolate_sample_ring(float, char *) with the arguments the other way round: the
    real prototype evaluates the operands in the other order and moves two words. */
 extern float interpolate_sample_ring_data_first(char *, float) __asm__("FUN_L08_002f5d98");
-extern float frame_scale __asm__("D_0015ED60");
 extern int l08_effect_animation_time __asm__("D_L08_0015F3F8");
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");

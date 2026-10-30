@@ -1800,8 +1800,6 @@ typedef struct {
 } TalkerHit;
 
 extern s32 D_L03_001BA5D0[];
-extern u8 alternate_item_available[] __asm__("D_0013D388");
-extern u8 item_unlocked[] __asm__("D_0013D408");
 extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
 extern TalkerHit *talker_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");

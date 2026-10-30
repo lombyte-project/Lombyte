@@ -2010,7 +2010,6 @@ typedef struct { float x, y, z, w; char *p; int c; unsigned char b18; unsigned c
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float frame_scale_sq __asm__("D_0015ED64");
 extern float D_0015ED70;
 extern float FUN_L00_001ff430(void *);
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
