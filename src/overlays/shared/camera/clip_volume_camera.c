@@ -134,8 +134,8 @@ int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_obje
 void set_transform_state_three_when_outside_clip_volume(char *moby) __asm__("FUN_L03_002e8980");
 
 void set_transform_state_three_when_outside_clip_volume(char *moby) {
-    char *entry = (char *)(D_L03_0015EF50 + (*(short *)(moby + 0x84) << 5));
-    char *sub = *(char **)(entry + 0x1C);
+    char *level_table_entry = (char *)(D_L03_0015EF50 + (*(short *)(moby + 0x84) << 5));
+    char *sub = *(char **)(level_table_entry + 0x1C);
     if (*(int *)(moby + 0x74) == 4) {
         if (is_point_inside_clip_volume(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) == 0) {
             *(short *)(moby + 0x7E) = 3;
