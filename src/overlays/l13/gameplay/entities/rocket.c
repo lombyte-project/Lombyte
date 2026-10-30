@@ -1522,9 +1522,9 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
     int cr, cg;
 
     struct Hero *player_hero = &hero;
-    char *ship_moby = ((char *)player_hero->ship_moby);
-    if (ship_moby != 0 && *(short *)(ship_moby + 0xA6) == 0x45 && (unsigned char)ship_moby[0x20] != 0xFE &&
-        (unsigned char)ship_moby[0x20] != 0xFD && player_hero->state.current == 0x32)
+    struct Moby *ship_moby = ((char *)player_hero->ship_moby);
+    if (ship_moby != 0 && ship_moby->oclass == 0x45 && (unsigned char)((char)ship_moby->state) != 0xFE &&
+        (unsigned char)((char)ship_moby->state) != 0xFD && player_hero->state.current == 0x32)
         return;
     bobbing_platform_vars = (Bob_9e88 *)moby->pvars;
     if (bobbing_platform_vars == 0)

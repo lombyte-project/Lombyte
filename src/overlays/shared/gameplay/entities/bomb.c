@@ -1010,14 +1010,14 @@ void update_morphoray_chicken(Moby *chicken_moby) {
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 5 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
-int moby_set_state_from_check(char *a) __asm__("FUN_L00_002cadc0");
-int moby_set_state_from_check(char *checked_moby) {
+int moby_set_state_from_check(struct Moby *a) __asm__("FUN_L00_002cadc0");
+int moby_set_state_from_check(struct Moby *checked_moby) {
     int suction_result = process_moby_suck_cannon_suction(checked_moby);
     if (suction_result == 0) {
-        if (*(unsigned char *)(checked_moby + 0x20) == 5)
-            checked_moby[0x20] = 1;
+        if (checked_moby->state == 5)
+            checked_moby->state = 1;
     } else {
-        checked_moby[0x20] = 5;
+        checked_moby->state = 5;
     }
     return suction_result;
 }
@@ -1027,15 +1027,15 @@ int moby_set_state_from_check(char *checked_moby) {
 extern char *get_moby_suck_cannon_record(char *) __asm__("FUN_L00_002db890");
 extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 
-int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int a, int target_moby, float target_height_offset) __asm__("FUN_L00_002cae60");
+int launch_suck_cannon_projectile_and_update_moby_state(struct Moby *moby, int a, int target_moby, float target_height_offset) __asm__("FUN_L00_002cae60");
 
-int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int launch_vector_address, int target_moby, float target_height_offset) {
+int launch_suck_cannon_projectile_and_update_moby_state(struct Moby *moby, int launch_vector_address, int target_moby, float target_height_offset) {
     char *class_callback_data = get_moby_suck_cannon_record(moby);
     int projectile_launch_result = launch_suck_cannon_projectile(moby, launch_vector_address, target_moby, target_height_offset);
     if (projectile_launch_result != 0) {
-        moby[0x20] = 5;
-    } else if ((unsigned char)moby[0x20] == 5) {
-        moby[0x20] = 1;
+        moby->state = 5;
+    } else if ((unsigned char)((char)moby->state) == 5) {
+        moby->state = 1;
     }
     if (*(short *)(class_callback_data + 0x68) == 6) {
         allocate_voice_for_target_entry(1, 0, moby);
@@ -1933,7 +1933,7 @@ unsigned char *spawn_ryno_rocket(int owner_moby, V_2ccee0 *spawn_position, unsig
     unsigned char *spawned_moby;
     unsigned char *rocket_vars;
     unsigned char *target_aim_data;
-    unsigned char *collision_ignore_moby;
+    struct Moby *collision_ignore_moby;
     float random_range_limit;
     float f;
 
@@ -1982,7 +1982,7 @@ unsigned char *spawn_ryno_rocket(int owner_moby, V_2ccee0 *spawn_position, unsig
         z.f[2] = D_0015ED6C_lui * 8.0f;
         collision_ignore_moby = D_001413D0_lui;
         explosion_direction.q = z.q;
-        collision_start.q = ((V_2ccee0 *)(collision_ignore_moby + 0x10))->q;
+        collision_start.q = ((V_2ccee0 *)&collision_ignore_moby->pos)->q;
         collision_start.f[2] = spawn_position->f[2];
         if (FUN_001efa68_2ccee0(&collision_start, spawn_position, 0, collision_ignore_moby, 0)) {
             spawned_moby[0xBC] = 2;
@@ -2258,7 +2258,7 @@ void replenish_hero_drones(void) {
     S_2cdcc0 *usage_stats;
     float initial_drone_velocity[4] __attribute__((aligned(16)));
     float drone_spawn_position[4] __attribute__((aligned(16)));
-    unsigned char *spawned_moby;
+    struct Moby *spawned_moby;
     int i;
     hero_state->b1FF5 = 0;
     if (get_ammo(0x18)) {
@@ -2281,7 +2281,7 @@ void replenish_hero_drones(void) {
             for (i = hero_state->b1FF6; i < 6; i++) {
                 spawned_moby = FUN_L00_002ce1f0_2cdcc0(spawned_moby, drone_spawn_position);
                 if (spawned_moby) {
-                    qcopy(*(void **)(spawned_moby + 0x78), initial_drone_velocity);
+                    qcopy(((void *)spawned_moby->pvars), initial_drone_velocity);
                 }
             }
         }
@@ -2292,10 +2292,10 @@ void replenish_hero_drones(void) {
 
 extern int spawn_moby_point_attached_particle(void *, int, float, float, unsigned, unsigned) __asm__("FUN_L00_002725d8");
 
-void ensure_drone_attached_particles(char *owner_moby) __asm__("FUN_L00_002cde78");
+void ensure_drone_attached_particles(struct Moby *owner_moby) __asm__("FUN_L00_002cde78");
 
-void ensure_drone_attached_particles(char *owner_moby) {
-    char *moby_vars = *(char **)(owner_moby + 0x78);
+void ensure_drone_attached_particles(struct Moby *owner_moby) {
+    char *moby_vars = ((char *)owner_moby->pvars);
     if (*(int *)(moby_vars + 0x4C) == 0) {
         *(int *)(moby_vars + 0x4C) = spawn_moby_point_attached_particle(owner_moby, 0, 0.05f, 0.01f, 0x80808080, 0x10808080);
     }

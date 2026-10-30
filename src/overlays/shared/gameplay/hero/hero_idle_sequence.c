@@ -604,10 +604,10 @@ void update_hero_bone_attachment(void) {
     M4_2061f0 bone_transform;
     struct Hero *hero_state = &hero;
     char *destination_moby = ((char *)hero_state->unkA88);
-    char *hero_moby;
+    struct Moby *hero_moby;
     destination_moby[0x7F] = 0;
     hero_moby = ((char *)hero_state->moby);
-    if ((*(unsigned short *)(hero_moby + 0x34) ^ 1) & 1) {
+    if ((hero_moby->flags ^ 1) & 1) {
         build_moby_bone_transform(hero_moby, 5, bone_transform);
         qcopy(destination_moby + 0x10, &bone_transform[12]);
         copy_matrix3x4(destination_moby + 0xC0, bone_transform);
@@ -1230,9 +1230,9 @@ extern unsigned char D_L00_0017C400_lui[] __asm__("D_L00_0017C400") NOT_SDA;
 extern void FUN_L00_00208038_c(void *, int, float, float) __asm__("FUN_L00_00208038");
 
 extern float D_0015EE18_gp __attribute__((sda));
-void update_moby_pulsing_glow_effects(char *moby) __asm__("FUN_L00_00207430");
+void update_moby_pulsing_glow_effects(struct Moby *moby) __asm__("FUN_L00_00207430");
 
-void update_moby_pulsing_glow_effects(char *moby) {
+void update_moby_pulsing_glow_effects(struct Moby *moby) {
     union {
         OvlQuad q;
         float f[4];
@@ -1241,7 +1241,7 @@ void update_moby_pulsing_glow_effects(char *moby) {
     float f, glow_wave, red_blue_swing;
     unsigned char *manipulator;
 
-    *(unsigned short *)(moby + 0x34) |= 0x10;
+    moby->flags |= 0x10;
     k = scale_game_frames(100);
     f = convert_integer_to_float(k);
     glow_wave = fast_sin((float)(D_15F5CC_207430 % k) / f * 2.0f * 3.1415927f + -3.1415927f);
@@ -1252,12 +1252,12 @@ void update_moby_pulsing_glow_effects(char *moby) {
         int glow_color = ((truncate_float_to_s32(red_blue_swing) + 0x4C) << 16) | 0x80000000;
         glow_color |= (green_glow_offset + 0xA2) << 8;
         glow_color |= red_glow_offset + 0x44;
-        *(int *)(moby + 0x90) = glow_color;
+        moby->glow_color = glow_color;
     }
-    if (*(short *)(moby + 0xA6) == 0x1A3) {
+    if (moby->oclass == 0x1A3) {
         moby_point_position(moby, 6, &v);
         v.f[2] -= 0.07f;
-        if (2.0f < absolute_float(*(float *)(moby + 0x18) - v.f[2])) {
+        if (2.0f < absolute_float(moby->pos.z - v.f[2])) {
             FUN_L00_00208038_c(&v, 0x200000C0, 0.25f, 0.15f);
         }
     } else {
@@ -1266,14 +1266,14 @@ void update_moby_pulsing_glow_effects(char *moby) {
         FUN_L00_00208038_c(&v, 0x200000C0, 0.0469999984f, 0.15f);
     }
     manipulator = D_L00_0017C380_lui;
-    if (*(short *)(moby + 0xA6) == 0x1A3) {
+    if (moby->oclass == 0x1A3) {
         manipulator = D_L00_0017C3C0_lui;
-    } else if (*(short *)(moby + 0xA6) == 0x555) {
+    } else if (moby->oclass == 0x555) {
         manipulator = D_L00_0017C400_lui;
     }
     if (*(unsigned char *)0x15EDB3 && manipulator[1] == 0) {
         float x;
-        if (*(short *)(moby + 0xA6) == 0x1A3) {
+        if (moby->oclass == 0x1A3) {
             attach_manipulator(moby, 1, manipulator);
             x = D_0015EE18_gp;
         } else {
@@ -1757,7 +1757,7 @@ extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 void update_hero_moby(void) {
     OvlQuad position_scratch[1];
     float minimum_top_gap, second_position_offset, top_gap;
-    unsigned char *hero_moby;
+    struct Moby *hero_moby;
 
     ((unsigned char *)hero.moby)[0xA4] = 0xFF;
     if (hero.unk20A5) {
@@ -1792,11 +1792,11 @@ void update_hero_moby(void) {
         set_moby_local_table_entry(((unsigned char *)hero.moby), 1, position_scratch, hero.capsule_radius, top_gap);
     }
     hero_moby = ((unsigned char *)hero.moby);
-    if (*(short *)(hero_moby + 0xA6) == 0) {
+    if (hero_moby->oclass == 0) {
         if (opt_mirror_anim) {
-            *(unsigned short *)(hero_moby + 0x34) |= 0x8000;
+            hero_moby->flags |= 0x8000;
         } else {
-            *(unsigned short *)(hero_moby + 0x34) &= 0x7FFF;
+            hero_moby->flags &= 0x7FFF;
         }
     }
 }

@@ -655,9 +655,9 @@ void tresspasser_pad_update(Moby *moby) {
 #endif
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
 extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C");
-void align_hero_to_tresspasser_pad(char *moby) __asm__("FUN_L02_002d92f0");
+void align_hero_to_tresspasser_pad(struct Moby *moby) __asm__("FUN_L02_002d92f0");
 
-void align_hero_to_tresspasser_pad(char *moby) {
+void align_hero_to_tresspasser_pad(struct Moby *moby) {
     float position_delta[4];
     char *hero_position;
     float f;
@@ -668,7 +668,7 @@ void align_hero_to_tresspasser_pad(char *moby) {
     fast_vec_sub(position_delta, position_delta, hero_position);
     func_L00_002607A8_d92f0(position_delta, D_0015EE6C_d92f0 * 4.0f);
     fast_vec_add(hero_position, hero_position, position_delta);
-    f = fast_add_rotations(*(float *)(moby + 0x48), 3.14159f);
+    f = fast_add_rotations(moby->rot.z, 3.14159f);
     f = fast_subtract_rotations(f, *(float *)(hero_position + 0x18));
     max_yaw_step = D_0015EE6C_d92f0 * 6.2831855f;
     if (max_yaw_step < f) {

@@ -1110,13 +1110,13 @@ int find_sentrybot_attention_target(char *moby) {
 extern int D_L15_0015FFD8;
 
 int can_sentrybot_advance_patrol(void *input_moby) {
-    unsigned char *moby = input_moby;
+    struct Moby *moby = input_moby;
     unsigned short *group_moby_entry;
     char *moby_data;
-    if (moby[0x21] == 0xFF)
+    if (moby->group == 0xFF)
         return 1;
-    group_moby_entry = (unsigned short *)D_L15_001ABE40[moby[0x21]];
-    moby_data = *(char **)(moby + 0x78);
+    group_moby_entry = (unsigned short *)D_L15_001ABE40[moby->group];
+    moby_data = ((char *)moby->pvars);
     if (group_moby_entry == 0)
         return 1;
     do {
@@ -1134,9 +1134,9 @@ int can_sentrybot_advance_patrol(void *input_moby) {
 extern short *D_L15_001ABE40_a0[] __asm__("D_L15_001ABE40");
 extern int D_L15_0015FFD8_a0 __asm__("D_L15_0015FFD8");
 extern int FUN_001efa68_a0(void *, void *, int, int, int) __asm__("FUN_001efa68");
-void set_sentrybot_attention_target(char *source_moby, char *recipient_moby) __asm__("FUN_L15_0029a248");
+void set_sentrybot_attention_target(char *source_moby, struct Moby *recipient_moby) __asm__("FUN_L15_0029a248");
 
-extern void set_sentrybot_attention_target(char *, char *) __asm__("FUN_L15_0029a248");
+extern void set_sentrybot_attention_target(char *, struct Moby *) __asm__("FUN_L15_0029a248");
 
 typedef struct { char p[0x156]; short h156; } D_a0d0;
 
@@ -1180,10 +1180,10 @@ void alert_visible_group_sentrybots(void *mp) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
 
 
-void set_sentrybot_attention_target(char *source_moby, char *recipient_moby) {
+void set_sentrybot_attention_target(char *source_moby, struct Moby *recipient_moby) {
     char *recipient_moby_data;
     if (source_moby != recipient_moby) {
-        recipient_moby_data = *(char **)(recipient_moby + 0x78);
+        recipient_moby_data = ((char *)recipient_moby->pvars);
         if (*(short *)(recipient_moby_data + 0x19C) == 0 || random_integer_below(0x10) == 0) {
             *(char **)(recipient_moby_data + 0x198) = source_moby;
             *(short *)(recipient_moby_data + 0x19C) = scale_game_frames(0xB4);

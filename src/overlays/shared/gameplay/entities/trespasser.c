@@ -38,14 +38,14 @@ extern unsigned char D_0013A4E0[];
 extern void update_trespasser_pickup(void *) __asm__("FUN_L00_002c1778");
 
 /* Runs FUN_L00_002c1778 when the moby data word 4 is set, else sets byte 0xBC from a mask test. */
-void trespasser_update(char *m) __asm__("FUN_L00_002c1718");
-void trespasser_update(char *trespasser_moby) {
-    if (*(int *)(*(char **)(trespasser_moby + 0x78) + 4) != 0) {
+void trespasser_update(struct Moby *m) __asm__("FUN_L00_002c1718");
+void trespasser_update(struct Moby *trespasser_moby) {
+    if (*(int *)(((char *)trespasser_moby->pvars) + 4) != 0) {
         update_trespasser_pickup(trespasser_moby);
     } else if (*(int *)(D_0013A4E0 + 0x2600) & *(int *)(((unsigned char *)&D_0013E533) + 0x1EBD)) {
-        trespasser_moby[0xBC] = 1;
+        trespasser_moby->command = 1;
     } else {
-        trespasser_moby[0xBC] = 0;
+        trespasser_moby->command = 0;
     }
 }
 extern float FUN_001f9b48_2c1928(void *, void *) __asm__("FUN_001f9b48");
@@ -273,15 +273,15 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 extern int weapon_ammo_pickup_totals[] __asm__("D_0013DE08");
 extern int D_L00_00161838;
-int try_collect_ammo_pickup(char *pickup_moby) __asm__("FUN_L00_002c5be8");
+int try_collect_ammo_pickup(struct Moby *pickup_moby) __asm__("FUN_L00_002c5be8");
 
-int try_collect_ammo_pickup(char *pickup_moby) {
-    int *pickup_vars = *(int **)(pickup_moby + 0x78);
+int try_collect_ammo_pickup(struct Moby *pickup_moby) {
+    int *pickup_vars = ((int *)pickup_moby->pvars);
     int before;
     float excess_ammo_amount;
     int ammo_added;
 
-    if (*(unsigned char *)(pickup_moby + 0x20) == 2) {
+    if (pickup_moby->state == 2) {
     fail:
         return 0;
     }
@@ -296,8 +296,8 @@ int try_collect_ammo_pickup(char *pickup_moby) {
                   ammo_added, -1);
     if (excess_ammo_amount < (float)pickup_vars[0]) {
         weapon_ammo_pickup_totals[pickup_vars[2]] += weapon_ammo_counts[pickup_vars[2]] - before;
-        *(unsigned char *)(pickup_moby + 0x20) = 2;
-        *(float *)(pickup_moby + 0x2C) *= D_0015ED60_2c5be8 * 0.200000048f + 1.0f;
+        pickup_moby->state = 2;
+        pickup_moby->scale *= D_0015ED60_2c5be8 * 0.200000048f + 1.0f;
         clear_u64_value(pickup_vars + 4);
         {
             int event_counter_delta = D_15F5CC_2c5be8 - D_L00_00161838;
@@ -340,9 +340,9 @@ float fast_sin(float) __asm__("FUN_001f9de0");
 float fast_normalize_angle(float) __asm__("FUN_001fa610");
 void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
-void draw_swingshot_cable(char *moby) __asm__("FUN_L00_002c5dc8");
+void draw_swingshot_cable(struct Moby *moby) __asm__("FUN_L00_002c5dc8");
 
-void draw_swingshot_cable(char *moby) {
+void draw_swingshot_cable(struct Moby *moby) {
     Quad segment_quad;
     V_2c5dc8 previous_segment_center, segment_center, attachment_position, segment_direction, f, unused_span_perpendicular, wobble_vector_scratch, segment_to_reference, k;
     Vars_2c5dc8 *v;
@@ -351,7 +351,7 @@ void draw_swingshot_cable(char *moby) {
     float span_length, distance_along_span, step, x, amplitude_envelope, amp, wob;
     if (moby == 0)
         return;
-    v = *(Vars_2c5dc8 **)(moby + 0x78);
+    v = ((Vars_2c5dc8 *)moby->pvars);
     if (v == 0)
         return;
     segment_quad.tex = get_effect_texture(0xF);
@@ -453,18 +453,18 @@ void swingshot_hook_update(unsigned char *hook_moby) {
         HOOK_RETURN_ANIMATION = 7
     };
     unsigned char **hook_vars;
-    unsigned char *owner_moby;
+    struct Moby *owner_moby;
     if (hook_moby == 0)
         return;
     hook_vars = *(unsigned char ***)(hook_moby + 0x78);
     if (hook_vars == 0)
         return;
     owner_moby = hook_vars[0];
-    if (owner_moby == 0 || *(short *)(owner_moby + 0xA6) != 0xD0 || owner_moby[0x20] == 0xFE || owner_moby[0x20] == 0xFD ||
-        *(unsigned char **)(*(unsigned char **)(owner_moby + 0x78) + 0x14) != hook_moby) {
+    if (owner_moby == 0 || owner_moby->oclass != 0xD0 || owner_moby->state == 0xFE || owner_moby->state == 0xFD ||
+        *(unsigned char **)(((unsigned char *)owner_moby->pvars) + 0x14) != hook_moby) {
         goto kill;
     }
-    if ((*(unsigned short *)(owner_moby + 0x34) & 1) || D_001413FF) {
+    if ((owner_moby->flags & 1) || D_001413FF) {
         *(unsigned short *)(hook_moby + 0x34) |= 0x41;
     } else {
         *(unsigned short *)(hook_moby + 0x34) &= ~0x41;
@@ -2607,7 +2607,7 @@ extern void FUN_001f9a10_2bffa8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float FUN_001f9af0_2bffa8(void *) __asm__("FUN_001f9af0");
 extern int FUN_001efa68_2bffa8(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int hero_idle_sequence(int) __asm__("FUN_L00_00205000");
-extern void draw_swingshot_cable(char *) __asm__("FUN_L00_002c5dc8");
+extern void draw_swingshot_cable(struct Moby *) __asm__("FUN_L00_002c5dc8");
 
 void swingshot_update(Moby *m) __asm__("FUN_L00_002c6158");
 void swingshot_update(Moby *m) {

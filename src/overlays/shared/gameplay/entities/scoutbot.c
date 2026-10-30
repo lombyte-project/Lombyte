@@ -89,9 +89,9 @@ void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, f
 void FUN_L00_0025a120(char *o);
 void spawn_explosion(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate) __asm__("FUN_L00_0025e450");
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
-void update_scoutbot_health_and_target(char *m) __asm__("FUN_L08_002d36e0");
-void draw_target_beam(char *m) __asm__("FUN_L08_002d3878");
-void update_scoutbot_movement(char *m) __asm__("FUN_L08_002d3d78");
+void update_scoutbot_health_and_target(struct Moby *m) __asm__("FUN_L08_002d36e0");
+void draw_target_beam(struct Moby *m) __asm__("FUN_L08_002d3878");
+void update_scoutbot_movement(struct Moby *m) __asm__("FUN_L08_002d3d78");
 void draw_scoutbot_glow_quad(struct Moby *arg) __asm__("FUN_L08_002d4108");
 extern void sound_3DF8(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
 extern void wake_3DF8(void *) __asm__("FUN_L00_0025a120");
@@ -100,7 +100,7 @@ extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214
 extern int FUN_L00_002dc9f0(void *, void *);
 extern void explode_3DF8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int colorlerp_3DF8(int, int, float) __asm__("FUN_001fa6e0");
-extern void draw_target_beam() __asm__("FUN_L08_002d3878");
+extern void draw_target_beam(struct Moby *) __asm__("FUN_L08_002d3878");
 extern void draw_scoutbot_glow_quad(struct Moby *) __asm__("FUN_L08_002d4108");
 extern char hero_pos_3DF8[] __asm__("D_L08_001675C0");
 
@@ -326,8 +326,8 @@ extern void FUN_L00_00257470(void *, int, int);
 extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *,
                                int) __asm__("FUN_L00_0025ff38");
 
-void update_scoutbot_health_and_target(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void update_scoutbot_health_and_target(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     int hit;
     float dmg;
     int hit_reaction_code;
@@ -340,7 +340,7 @@ void update_scoutbot_health_and_target(char *moby) {
         if (hit_reaction_code < 12) {
             if (hit_reaction_code >= 0) {
                 FUN_L00_00257470(moby, 0, -1);
-                moby[0x20] = 0x63;
+                moby->state = 0x63;
             }
         }
     }
@@ -373,9 +373,9 @@ extern u32 D_00151878_gp __asm__("D_00151878") __attribute__((sda));
 extern u32 D_0015187C_gp __asm__("D_0015187C") __attribute__((sda));
 extern u32 D_00151880_gp __asm__("D_00151880") __attribute__((sda));
 extern u32 D_00151884_gp __asm__("D_00151884") __attribute__((sda));
-void draw_target_beam(char *moby) __asm__("FUN_L08_002d3878");
-void draw_target_beam(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void draw_target_beam(struct Moby *moby) __asm__("FUN_L08_002d3878");
+void draw_target_beam(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     Packet_002d3878 pk;
     Vec_002d3878 matrix[3], direction, pos, delta, angles;
     float length;
@@ -486,8 +486,8 @@ void draw_target_beam(char *moby) {
 extern float scoutbot_probe_correction_target_position[] __asm__("D_L08_00174670");
 extern int FUN_L08_002025d0(void *, int, int, void *, int);
 
-void update_scoutbot_movement(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void update_scoutbot_movement(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     float movement_length = fast_vec_length((float *)(data + 0x40)) - frame_time_sq * 6.0f;
     float movement_length_limit = frame_time * 3.0f;
     float target_height;
@@ -501,12 +501,12 @@ void update_scoutbot_movement(char *moby) {
     }
     velocity_ptr = (float *)(data + 0x40);
     fast_vec_normalize(velocity_ptr, velocity_ptr, movement_length);
-    fast_vec_add((float *)(moby + 0x10), (float *)(moby + 0x10), velocity_ptr);
+    fast_vec_add((float *)&moby->pos, (float *)&moby->pos, velocity_ptr);
     *(float *)(data + 0x204) = fast_add_rotations(*(float *)(data + 0x204), *(float *)(data + 0x20C));
     target_height = *(float *)(data + 0x1C8) + *(float *)(data + 0x208) * fast_sin(*(float *)(data + 0x204));
     if (*(short *)(data + 0x216))
         target_height += *(float *)(data + 0x200);
-    vertical_step = target_height - *(float *)(moby + 0x18);
+    vertical_step = target_height - moby->pos.z;
     {
         float vertical_step_limit = frame_time * 3.0f;
         if (vertical_step_limit < vertical_step) {
@@ -518,18 +518,18 @@ void update_scoutbot_movement(char *moby) {
         }
     }
     *(float *)(data + 0x48) = vertical_step;
-    qcopy(probe_position_or_correction, (float *)(moby + 0x10));
+    qcopy(probe_position_or_correction, (float *)&moby->pos);
     probe_position_or_correction[2] += 0.5f;
     if (FUN_L08_002025d0(probe_position_or_correction, 0x190, 0, moby, 0)) {
         float z;
-        fast_vec_sub(probe_position_or_correction, scoutbot_probe_correction_target_position, (float *)(moby + 0x10));
+        fast_vec_sub(probe_position_or_correction, scoutbot_probe_correction_target_position, (float *)&moby->pos);
         z = frame_time * 3.0f;
         if (z < probe_position_or_correction[2]) {
             probe_position_or_correction[2] = z;
         } else if (probe_position_or_correction[2] < -z) {
             probe_position_or_correction[2] = -z;
         }
-        fast_vec_add((float *)(moby + 0x10), (float *)(moby + 0x10), probe_position_or_correction);
+        fast_vec_add((float *)&moby->pos, (float *)&moby->pos, probe_position_or_correction);
     }
 }
 

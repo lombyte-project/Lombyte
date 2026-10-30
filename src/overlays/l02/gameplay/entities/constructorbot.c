@@ -96,9 +96,9 @@ int D_L02_00161F50 = 0x60;
 int D_L02_00161F54 = 0x10;
 
 /* Spawns a projectile moby from src at pos, heading along dir, with its lifetime in the moby data. */
-char *spawn_projectile_moby(char *source_moby, void *pos, float *dir) __asm__("FUN_L02_002ec228");
+char *spawn_projectile_moby(struct Moby *source_moby, void *pos, float *dir) __asm__("FUN_L02_002ec228");
 
-char *spawn_projectile_moby(char *source_moby, void *spawn_position, float *projectile_direction) {
+char *spawn_projectile_moby(struct Moby *source_moby, void *spawn_position, float *projectile_direction) {
     char *moby;
     char *data;
     moby = create_moby(0x4B8);
@@ -106,7 +106,7 @@ char *spawn_projectile_moby(char *source_moby, void *spawn_position, float *proj
         moby[0x31] = 1;
         *(unsigned char *)(moby + 0x30) = *(short *)(moby + 0x32) = 0xFF;
         set_moby_color(moby, D_L02_00161F4C, D_L02_00161F50, D_L02_00161F54);
-        *(short *)(moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
+        *(short *)(moby + 0x34) = source_moby->flags;
         qcopy(moby + 0x10, spawn_position);
         *(float *)(moby + 0x48) = fast_arc_tan(projectile_direction[0], projectile_direction[1]);
         *(float *)(moby + 0x44) = fast_arc_tan(vector_length_xy(projectile_direction), projectile_direction[2]);

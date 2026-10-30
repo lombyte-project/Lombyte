@@ -6,30 +6,31 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
 #include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
+#include "rnc/gameplay/entities/moby.h"
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
-void pipe_update(char *m) __asm__("FUN_L04_002e79a8");
-void pipe_update(char *pipe_moby) {
+void pipe_update(struct Moby *m) __asm__("FUN_L04_002e79a8");
+void pipe_update(struct Moby *pipe_moby) {
     enum {
         PIPE_INITIALIZE = 0,
         PIPE_WAIT_FOR_HIT = 1,
         PIPE_REMOVE = 2
     };
     int hit = 0;
-    char *hit_moby = find_moby_hit(pipe_moby, 0x10000, 0);
-    switch (*(unsigned char *)(pipe_moby + 0x20)) {
+    struct Moby *hit_moby = find_moby_hit(pipe_moby, 0x10000, 0);
+    switch (pipe_moby->state) {
     case PIPE_INITIALIZE:
-        pipe_moby[0x20] = 1;
+        pipe_moby->state = 1;
         break;
     case PIPE_WAIT_FOR_HIT:
-        if (hit_moby != 0 && *(float *)(hit_moby + 0x2C) > 0.0f)
+        if (hit_moby != 0 && hit_moby->scale > 0.0f)
             hit = 1;
         if (hit)
-            pipe_moby[0x20] = 2;
+            pipe_moby->state = 2;
         break;
     case PIPE_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)pipe_moby);

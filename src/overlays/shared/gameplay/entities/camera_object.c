@@ -2235,14 +2235,14 @@ extern short D_L00_001613C8_d __asm__("D_L00_001613C8") __attribute__((sda));
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 
 void remove_tracked_class_5f3_moby(void) {
-    char *tracked_moby = *(char **)&D_L00_001613C8_d;
+    struct Moby *tracked_moby = *(char **)&D_L00_001613C8_d;
     if (tracked_moby != 0) {
-        if (*(short *)(tracked_moby + 0xA6) == 0x5F3) {
+        if (tracked_moby->oclass == 0x5F3) {
             char *data;
             int point_light_slot_index;
-            if (*(unsigned char *)(tracked_moby + 0x20) != 0)
+            if (tracked_moby->state != 0)
                 return;
-            data = *(char **)(tracked_moby + 0x78);
+            data = ((char *)tracked_moby->pvars);
             D_L00_0015F320 = 0;
             D_L00_0015F330 = 0;
             point_light_slot_index = *(short *)(data + 0x2C);

@@ -35,17 +35,17 @@ extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) _
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
-void process_dreks_fleet_turret_hits(char *turret_moby) __asm__("FUN_L17_002cbc10");
+void process_dreks_fleet_turret_hits(struct Moby *turret_moby) __asm__("FUN_L17_002cbc10");
 
-void process_dreks_fleet_turret_hits(char *turret_moby) {
+void process_dreks_fleet_turret_hits(struct Moby *turret_moby) {
     char *turret_vars;
     char *hit_animation_state;
     char *hit_record;
     int hit_reaction_status;
     float fv;
     int depletion_status;
-    turret_vars = *(char **)(turret_moby + 0x78);
-    if (*(unsigned char *)(turret_moby + 0x20) != 0) {
+    turret_vars = ((char *)turret_moby->pvars);
+    if (turret_moby->state != 0) {
         fv = 0.0f;
         hit_record = find_moby_hit(turret_moby, 0x330000, 0);
         if (hit_record != 0) {
@@ -59,20 +59,20 @@ void process_dreks_fleet_turret_hits(char *turret_moby) {
         }
         hit_animation_state = turret_vars + 0x60;
         hit_reaction(turret_moby, hit_record, turret_vars + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
-        if (hit_reaction_status != 1 && *(unsigned char *)(turret_moby + 0x20) != 4) {
+        if (hit_reaction_status != 1 && turret_moby->state != 4) {
             float remaining_value = *(float *)(turret_vars + 0x20) - fv;
             *(float *)(turret_vars + 0x20) = remaining_value;
             depletion_status = 0xB;
             if (remaining_value <= 0.0f)
                 depletion_status = 1;
             if (depletion_status == 1) {
-                *(unsigned char *)(turret_moby + 0x20) = 4;
-                *(short *)(turret_moby + 0x34) &= 0xEFFF;
+                turret_moby->state = 4;
+                turret_moby->flags &= 0xEFFF;
             }
             *(unsigned char *)(turret_vars + 0x67) = 0xF0;
             trooper_anim_update(turret_moby, (short *)hit_animation_state);
         }
-        *(unsigned char *)(turret_moby + 0xA4) = 0xFF;
+        turret_moby->hit_slot = 0xFF;
         trooper_anim_finish(turret_moby, hit_animation_state);
     }
 }
@@ -359,10 +359,10 @@ extern char fleet_turret_aim_vertex_indices[4] __asm__("D_L17_00161980") __attri
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9,
                               float scale, float *v10, float *v11, float *v12);
 extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
-extern void process_dreks_fleet_turret_hits(char *m) __asm__("FUN_L17_002cbc10");
-void distribute_class_733_group_mobys_along_path(char *turret_moby) __asm__("FUN_L17_002cbd38");
+extern void process_dreks_fleet_turret_hits(struct Moby *m) __asm__("FUN_L17_002cbc10");
+void distribute_class_733_group_mobys_along_path(struct Moby *turret_moby) __asm__("FUN_L17_002cbd38");
 
-extern void distribute_class_733_group_mobys_along_path(char *m) __asm__("FUN_L17_002cbd38");
+extern void distribute_class_733_group_mobys_along_path(struct Moby *m) __asm__("FUN_L17_002cbd38");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -540,7 +540,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
 extern char *D_L17_0015FFD8_macro __asm__("D_L17_0015FFD8") MACRO_ADDR;
 
 /* Spreads the class-0x733 mobies of this moby's group evenly along its path. */
-void distribute_class_733_group_mobys_along_path(char *turret_moby) {
+void distribute_class_733_group_mobys_along_path(struct Moby *turret_moby) {
     char *turret_vars;
     char *path;
     char *mobys;
@@ -552,7 +552,7 @@ void distribute_class_733_group_mobys_along_path(char *turret_moby) {
     short k;
     short step;
 
-    turret_vars = *(char **)(turret_moby + 0x78);
+    turret_vars = ((char *)turret_moby->pvars);
     class_733_moby_count = 0;
     k = 0;
     i = *(short *)(turret_vars + 0x80);

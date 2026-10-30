@@ -480,7 +480,7 @@ extern int D_L08_001B0CB0[];
 extern unsigned char D_0013D3B6 NOT_SDA;
 extern unsigned char D_0013D4CB NOT_SDA;
 extern void FUN_L00_00260738(void *, void *, void *, void *);
-void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) __asm__("FUN_L08_002d5950");
+void spawn_bomber_tank_joint_particles(struct Moby *moby, int joint, int count) __asm__("FUN_L08_002d5950");
 
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
@@ -489,7 +489,7 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void update_bomber_tank_damage_and_aim(Moby *moby) __asm__("FUN_L08_002d4ca0");
 void advance_bomber_tank_along_path(struct Moby *moby, int path_id) __asm__("FUN_L08_002d55c8");
 
-void scatter_bomber_tank_linked_debris(char *moby) __asm__("FUN_L08_002d5d08");
+void scatter_bomber_tank_linked_debris(struct Moby *moby) __asm__("FUN_L08_002d5d08");
 void remove_bomber_tank_linked_debris(struct Moby *moby) __asm__("FUN_L08_002d6450");
 
 
@@ -1045,8 +1045,8 @@ extern void func_L00_001FF4B0_2D6C58(void *, void *, float) __asm__("FUN_001f9bf
 extern float func_001F9F90_2D6C58(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2D6C58(float) __asm__("FUN_001f9de0");
 
-void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
-    char *data = *(char **)(moby + 0x78);
+void spawn_bomber_tank_joint_particles(struct Moby *moby, int joint, int count) {
+    char *data = ((char *)moby->pvars);
     char joint_transform_buffer[32];
     float jitter_direction_source[8];
     float joint_pos[4];
@@ -1116,7 +1116,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("func_001FA
 extern short *D_L08_001AC040[];
 extern void initialize_moby_launch_motion(void*,int,void*,void*,int) __asm__("FUN_L05_00318648");
 
-void scatter_bomber_tank_linked_debris(char *moby) {
+void scatter_bomber_tank_linked_debris(struct Moby *moby) {
     enum {
         LINKED_CLASS_SECOND_HIGHEST_Y_LAUNCH_OFFSET = 0,
         LINKED_CLASS_FOURTH_LOWEST_X_LAUNCH_OFFSET = 1,
@@ -1133,7 +1133,7 @@ void scatter_bomber_tank_linked_debris(char *moby) {
     float position_or_velocity_scratch[4];
     float launch_offset[4];
     float launch_velocity_or_offset[4];
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)moby->pvars);
     short *list = D_L08_001AC040[((Blk_7010 *)D_L08_0015FFD8 + *(int *)(moby_vars + 0x144))->group];
     char *other;
     unsigned short index;
@@ -1215,8 +1215,8 @@ void scatter_bomber_tank_linked_debris(char *moby) {
                     qcopy(launch_offset, launch_velocity_or_offset); break;
                 }
                 if (fast_difference_between_rotations(fast_arc_tan(position_or_velocity_scratch[0], position_or_velocity_scratch[1]),
-                                  fast_arc_tan(D_L08_00167480.x - *(float *)(moby + 0x10),
-                                                    D_L08_00167480.y - *(float *)(moby + 0x14))) < 0.2617994f) {
+                                  fast_arc_tan(D_L08_00167480.x - moby->pos.x,
+                                                    D_L08_00167480.y - moby->pos.y)) < 0.2617994f) {
                     initialize_moby_launch_motion(other, (int)moby, position_or_velocity_scratch, launch_offset, truncate_float_to_s32(random_float_between(10.0f, 20.0f)));
                 } else {
                     initialize_moby_launch_motion(other, (int)moby, position_or_velocity_scratch, launch_offset, truncate_float_to_s32(random_float_between(30.0f, 45.0f)));
@@ -1277,7 +1277,7 @@ void update_hero_water_entry_effects(struct Moby *moby) __asm__("FUN_L08_002da0f
 void update_hero_water_entry_effects(struct Moby *moby) {
     Vec4 pos;
     Vec4 spray_velocity_or_splash_position;
-    char *water_entry_moby;
+    struct Moby *water_entry_moby;
     int i;
     int spray_random_value;
     float sc, sp;
@@ -1301,7 +1301,7 @@ void update_hero_water_entry_effects(struct Moby *moby) {
     pos.f[2] = water_entry_plane_data[2];
     water_entry_moby = spawn_burst_moby(&pos, 3.0f);
     if (water_entry_moby)
-        water_entry_moby[0x23] = 0x70;
+        water_entry_moby->alpha = 0x70;
     for (i = 0; i < 16; i++) {
         float spray_heading_radians = random_angle_radians();
         float k = random_float_between(frame_time * 0.0f, frame_time * 3.0f);

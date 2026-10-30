@@ -2303,7 +2303,7 @@ extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") MACRO_ADDR;
 void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 void robot_dog_update(unsigned char *robot_dog_moby) {
     Vars1382 *robot_dog_vars;
-    unsigned char *facing_target_moby;
+    struct Moby *facing_target_moby;
     int clip_volume_suppressed;
     int clip_volume_id_or_animation_value;
     int secondary_clip_volume_id;
@@ -2414,8 +2414,8 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
             float ang;
             float *yaw = (float *)(robot_dog_moby + 0x48);
             int mode;
-            ang = fast_arc_tan(*(float *)(facing_target_moby + 0x10) - *(float *)(robot_dog_moby + 0x10),
-                               *(float *)(facing_target_moby + 0x14) - *(float *)(robot_dog_moby + 0x14));
+            ang = fast_arc_tan(facing_target_moby->pos.x - *(float *)(robot_dog_moby + 0x10),
+                               facing_target_moby->pos.y - *(float *)(robot_dog_moby + 0x14));
             turn = frame_time_sq * 4.712389f;
             approach_angle(yaw, &robot_dog_vars->yawvel, ang, turn, turn, frame_time * 3.4906585f);
             if (absolute_float(robot_dog_vars->yawvel) > frame_time * 0.08726646f) {

@@ -823,8 +823,8 @@ extern char *D_L16_001601AC_m_19510 __asm__("D_L05_001600EC");
 void reset_selected_moby_to_current_placement(void *moby_v) __asm__("FUN_L05_00319510");
 
 void reset_selected_moby_to_current_placement(void *moby_v) {
-    char *moby = moby_v;
-    char *data = *(char **)(moby + 0x78);
+    struct Moby *moby = moby_v;
+    char *data = ((char *)moby->pvars);
     char *spawn = func_L05_0031AAA8_19510(moby, *(short *)(data + 0xB6));
     char *position;
     if (spawn != 0) {

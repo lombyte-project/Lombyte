@@ -53,10 +53,10 @@ enum TaxiStop {
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002E0480), where it is exact; names translated to the US level
  * program. */
-void initialize_ribbon_effect_state(u8 *moby) __asm__("FUN_L14_002df080");
+void initialize_ribbon_effect_state(struct Moby *moby) __asm__("FUN_L14_002df080");
 
-void initialize_ribbon_effect_state(u8 *moby) {
-    f32 *moby_vars = *(f32 **)(moby + 0x78);
+void initialize_ribbon_effect_state(struct Moby *moby) {
+    f32 *moby_vars = ((f32 *)moby->pvars);
     f32 *vector_cursor = moby_vars;
     s32 i;
     for (i = 0; i < 10; i++) {
@@ -102,10 +102,10 @@ void draw_ribbon_effect(struct Moby *) __asm__("FUN_L14_002df458");
  *   scheduling barrier.
  * - rp is formed as an integer sum so fold keeps `d` as the last operand
  *   (`addu a0, v0, s1`), the way loop.c's giv init would have emitted it. */
-void animate_ribbon_effect_paths(u8 *moby) __asm__("FUN_L14_002df138");
+void animate_ribbon_effect_paths(struct Moby *moby) __asm__("FUN_L14_002df138");
 
-void animate_ribbon_effect_paths(u8 *moby) {
-    f32 *moby_vars = *(f32 **)(moby + 0x78);
+void animate_ribbon_effect_paths(struct Moby *moby) {
+    f32 *moby_vars = ((f32 *)moby->pvars);
     f32 step;
     f32 ripple_point_index;
     f32 ripple_height;
@@ -373,13 +373,13 @@ typedef struct {
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c:
  * func_L14_002E1058), where it is exact; names translated to the US level
  * program. */
-void register_hero_hit_in_clip_volume(u8 *moby) __asm__("FUN_L14_002dfc58");
+void register_hero_hit_in_clip_volume(struct Moby *moby) __asm__("FUN_L14_002dfc58");
 
-void register_hero_hit_in_clip_volume(u8 *moby) {
+void register_hero_hit_in_clip_volume(struct Moby *moby) {
     u8 *base = (u8 *)&hero.motion.pos;
     Level14Req hit_request;
     u8 *hero_base;
-    if (is_point_inside_clip_volume(base, *(s32 *)(*(u8 **)(moby + 0x78) + 0x200)) != 0) {
+    if (is_point_inside_clip_volume(base, *(s32 *)(((u8 *)moby->pvars) + 0x200)) != 0) {
         hit_request.flags = 0x200001;
         hit_request.range = 100.0f;
         hit_request.one = 1;
@@ -389,7 +389,7 @@ void register_hero_hit_in_clip_volume(u8 *moby) {
         hit_request.v[3] = 5627.925f;
         hit_request.a = 5;
         hit_request.b = 4;
-        hit_request.c = *(u16 *)(moby + 0xA6);
+        hit_request.c = ((u16)moby->oclass);
         hero_base = base - 0x80;
         *(s32 *)(hero_base + 0x22A8) = 0;
         record_moby_hit(*(s32 *)(hero_base + 0x2080), &hit_request);

@@ -31,12 +31,12 @@ extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__(
 void draw_background_ship_1_joint_billboards(char *self) __asm__("FUN_L02_002ec308");
 
 void draw_background_ship_1_joint_billboards(char *self) {
-    char *current_moby;
+    struct Moby *current_moby;
     get_first_moby_in_group((int *)&current_moby, *(unsigned char *)(self + 0x21), 0, 0);
     while (current_moby != 0) {
-        if (*(unsigned char *)(current_moby + 0x31) != 0) {
-            char *data = *(char **)(current_moby + 0x78);
-            if (*(short *)(current_moby + 0xA6) == *(short *)(self + 0xA6)) {
+        if (current_moby->visible != 0) {
+            char *data = ((char *)current_moby->pvars);
+            if (current_moby->oclass == *(short *)(self + 0xA6)) {
                 if ((*(int *)(data + 0xB0) & 0xFF) > 0x80) {
                     char *joint_position = data + 0x80;
                     int i;

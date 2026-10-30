@@ -287,10 +287,10 @@ frame_tail:
 
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 
-unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *target, char *initial_rotation, int lifetime_frames,
+unsigned char *spawn_ship_rocket(struct Moby *firing_moby, char *spawn_position, char *target, char *initial_rotation, int lifetime_frames,
                                 float scale) __asm__("FUN_L13_002e6a58");
 
-unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *target, char *initial_rotation, int lifetime_frames,
+unsigned char *spawn_ship_rocket(struct Moby *firing_moby, char *spawn_position, char *target, char *initial_rotation, int lifetime_frames,
                                 float scale) {
     unsigned char *moby = create_moby(0x127);
     if (moby != 0) {
@@ -325,7 +325,7 @@ unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *
         }
         *(float *)(moby + 0x2C) =
             *(float *)(*(char **)(moby + 0x24) + 0x24) *
-            (*(float *)(firing_moby + 0x2C) / *(float *)(*(char **)(firing_moby + 0x24) + 0x24));
+            (firing_moby->scale / *(float *)(((char *)firing_moby->pclass) + 0x24));
         update_entity(moby);
         spawn_source_attached_fading_effect_particle((char *)moby, 0x60808080, lifetime_frames, 0, 500000.0f);
     }

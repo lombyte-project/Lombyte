@@ -1076,10 +1076,10 @@ int process_suck_cannon_suction_candidate(u8 *cannon_moby, void *cannon_data, vo
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
 
 /* Calls the optional function reached through the moby pointer at +0x24 (slot 0xC); 1 if null. */
-int dispatch_suck_cannon_suction_cancel(char *moby) __asm__("FUN_L00_002da1e0");
+int dispatch_suck_cannon_suction_cancel(struct Moby *moby) __asm__("FUN_L00_002da1e0");
 
-int dispatch_suck_cannon_suction_cancel(char *moby) {
-    int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(moby + 0x24) + 0x2C) + 0xC);
+int dispatch_suck_cannon_suction_cancel(struct Moby *moby) {
+    int (*fn)(char *) = *(int (**)(char *))(*(char **)(((char *)moby->pclass) + 0x2C) + 0xC);
     if (fn != 0) {
         return fn(moby);
     }
@@ -1097,9 +1097,9 @@ extern char D_L00_00166C80[] NOT_SDA;
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_002da250;
-void compute_suck_cannon_suction_aim_and_origin(u8 *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) __asm__("FUN_L00_002da250");
+void compute_suck_cannon_suction_aim_and_origin(struct Moby *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) __asm__("FUN_L00_002da250");
 
-void compute_suck_cannon_suction_aim_and_origin(u8 *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) {
+void compute_suck_cannon_suction_aim_and_origin(struct Moby *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) {
     moby_point_position(cannon_moby, 0, out_suction_origin);
     if (hero_data.state.current == 1 || hero_data.state.current == 0x1E) {
         V_002da250 suction_origin_offset;
@@ -1110,12 +1110,12 @@ void compute_suck_cannon_suction_aim_and_origin(u8 *cannon_moby, f32 *out_suctio
         suction_origin_offset.z = 0;
         *out_suction_pitch = -suction_aim_camera->f154;
         transform_vector_by_basis(&suction_origin_offset, &suction_origin_offset, suction_aim_camera->m350);
-        out_suction_origin[2] = suction_origin_offset.z + *(f32 *)(cannon_moby + 0x18);
+        out_suction_origin[2] = suction_origin_offset.z + cannon_moby->pos.z;
         out_suction_origin[0] = suction_origin_offset.x + hero_data.motion.pos.f[0];
         out_suction_origin[1] = suction_origin_offset.y + hero_data.motion.pos.f[1];
     } else if (hero_data.unk22C8 == 1) {
         *out_suction_yaw = hero_data.held_pose_yaw;
-        *out_suction_pitch = *(f32 *)(cannon_moby + 0x44);
+        *out_suction_pitch = cannon_moby->rot.y;
     } else {
         *out_suction_yaw = hero_data.held_pose_yaw;
         *out_suction_pitch = hero_data.basis_pitch;
@@ -1833,7 +1833,7 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) __asm__("FUN_L00_002d
 
 s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
     u8 *suction_record = FUN_L00_002db890_002dbb20(moby);
-    u8 *sound_source_moby;
+    struct Moby *sound_source_moby;
     if (suction_record == 0)
         return 0;
     if (moby != 0 && moby[0x20] != 0xFE && moby[0x20] != 0xFD && *(s16 *)(suction_record + 0x68) != 8) {
@@ -1841,7 +1841,7 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
         FUN_L00_002d9fd0_002dbb20(*(void **)(suction_record + 0x60), moby, suck_cannon_storage_euler_offset);
         refresh_moby_spatial_bounds_from_basis(moby);
         sound_source_moby = D_001403E0_lui;
-        if (sound_source_moby != 0 && *(s16 *)(sound_source_moby + 0xA6) == 0x351) {
+        if (sound_source_moby != 0 && sound_source_moby->oclass == 0x351) {
             FUN_0022da68_002dbb20(5, 0, sound_source_moby);
         }
         mark_moby_for_removal_cf(moby, 0, -1);
@@ -1914,9 +1914,9 @@ typedef struct {
 } G;
 extern G D_0013F350_u __asm__("D_0013F350");
 u8 *FUN_L00_002db890_u(u8 *) __asm__("FUN_L00_002db890");
-s32 cancel_suck_cannon_suction(u8 *moby) __asm__("FUN_L00_002dbe20");
+s32 cancel_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L00_002dbe20");
 
-s32 cancel_suck_cannon_suction(u8 *moby) {
+s32 cancel_suck_cannon_suction(struct Moby *moby) {
     enum {
         SUCK_CANNON_INACTIVE = 0,
         SUCK_CANNON_ALIGNING_FOR_SUCTION = 1,
@@ -1931,7 +1931,7 @@ s32 cancel_suck_cannon_suction(u8 *moby) {
     s32 k;
     if (suction_record == 0)
         return 0;
-    if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
+    if (moby == 0 || moby->state == 0xFE || moby->state == 0xFD)
         return 0;
     k = *(s16 *)(suction_record + 0x68);
     if (k == 8)
@@ -1946,7 +1946,7 @@ s32 cancel_suck_cannon_suction(u8 *moby) {
         /* fall through */
     case SUCK_CANNON_ALIGNING_FOR_SUCTION:
     case SUCK_CANNON_RISING_FOR_SUCTION: {
-        if (moby[0x53] != *(u8 *)(*(u8 **)(suction_record + 0x70) + 7)) {
+        if (moby->prev_seq != *(u8 *)(*(u8 **)(suction_record + 0x70) + 7)) {
             u8 cancel_animation = *(u8 *)(*(u8 **)(suction_record + 0x70) + 7);
             blend_moby_animation(moby, cancel_animation, 0, scale_game_frames(10));
         }
@@ -3102,20 +3102,20 @@ void scatter_moby_from_hazards(O_2df1e0 *pickup_moby) {
 int get_first_moby_in_group(void *, s32, s32, s32) __asm__("FUN_L00_002591d0");
 int get_next_moby_in_group(void *, s32, s32, s32) __asm__("FUN_L00_002592b8");
 void draw_offset_textured_effect_quad(void *, void *, f32, f32) __asm__("FUN_L00_00263618");
-void draw_red_orb_group_effect_quads(u8 *reference_moby) __asm__("FUN_L00_002df3d8");
+void draw_red_orb_group_effect_quads(struct Moby *reference_moby) __asm__("FUN_L00_002df3d8");
 
-void draw_red_orb_group_effect_quads(u8 *reference_moby) {
+void draw_red_orb_group_effect_quads(struct Moby *reference_moby) {
     u8 *it[2] __attribute__((aligned(16)));
     f32 quad_scale = 1.2f;
     if (current_level_index == 0 || current_level_index == 0x12) {
         quad_scale = 1.0f;
     }
-    get_first_moby_in_group(it, reference_moby[0x21], 0, 0);
+    get_first_moby_in_group(it, reference_moby->group, 0, 0);
     while (it[0] != 0) {
         u8 *candidate_moby = it[0];
         if (candidate_moby[0x31] != 0) {
             void **moby_data = *(void ***)(candidate_moby + 0x78);
-            if (*(s16 *)(candidate_moby + 0xA6) == *(s16 *)(reference_moby + 0xA6)) {
+            if (*(s16 *)(candidate_moby + 0xA6) == reference_moby->oclass) {
                 draw_offset_textured_effect_quad(candidate_moby + 0x10, moby_data[1], quad_scale, 0.5f);
             }
         }

@@ -242,7 +242,7 @@ void update_moby_height_from_driver(char *moby)
         POSITION_APPROACH_TARGET = 2
     };
     char *position_vars = *(char **)(moby + 0x78);
-    char *driver_moby;
+    struct Moby *driver_moby;
     int i;
     switch (*(u8 *)(moby + 0x20)) {
     case POSITION_BASELINE_INITIALIZE:
@@ -253,13 +253,13 @@ void update_moby_height_from_driver(char *moby)
         i = *(int *)(position_vars + 8);
         if (i < 0) break;
         driver_moby = (char *)((i << 8) + (int)D_L08_0015FFD8_g);
-        if (*(short *)(driver_moby + 0xA6) == 0x267 || *(short *)(driver_moby + 0xA6) == 0x23F) {
-            if (*(u8 *)(driver_moby + 0x20) != 4) break;
+        if (driver_moby->oclass == 0x267 || driver_moby->oclass == 0x23F) {
+            if (driver_moby->state != 4) break;
             menu_item_enabled_41 = 1;
             allocate_voice_for_target_entry(0, 0, moby);
             *(u8 *)(moby + 0x20) = 2;
         } else {
-            FUN_00213ed8_c(moby + 0x18, (*(float *)position_vars - *(float *)(position_vars + 4)) * **(float **)(driver_moby + 0x78) + *(float *)(position_vars + 4), frame_time * 10.0f);
+            FUN_00213ed8_c(moby + 0x18, (*(float *)position_vars - *(float *)(position_vars + 4)) * *((float *)driver_moby->pvars) + *(float *)(position_vars + 4), frame_time * 10.0f);
         }
         break;
     case POSITION_APPROACH_TARGET:

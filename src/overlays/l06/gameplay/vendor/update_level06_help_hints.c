@@ -337,13 +337,13 @@ void update_hit_triggered_moby_replacement(char *self) {
         MOBY_SPAWN_AND_REMOVE = 2
     };
     int flag = 0;
-    char *hit_moby = find_moby_hit(self, 0x10000, 0);
+    struct Moby *hit_moby = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
     case MOBY_INITIALIZE:
         self[0x20] = 1;
         break;
     case MOBY_WAIT_FOR_HIT:
-        if (hit_moby != 0 && *(float *)(hit_moby + 0x2C) > 0.0f) {
+        if (hit_moby != 0 && hit_moby->scale > 0.0f) {
             flag = 1;
         }
         if (flag) {

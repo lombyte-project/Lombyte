@@ -1801,12 +1801,12 @@ extern void set_background_color(int, int, int) __asm__("FUN_001fb280");
 
 void moby_restore_globals_state(int m_, int flag) __asm__("FUN_L00_002b57f0");
 void moby_restore_globals_state(int m_, int flag) {
-    char *render_restore_moby = (char *)m_;
+    struct Moby *render_restore_moby = (char *)m_;
     char *render_restore_moby_vars;
     float f0, f1, f2, f3;
     char *background_color_source;
 
-    render_restore_moby_vars = *(char **)(render_restore_moby + 0x78);
+    render_restore_moby_vars = ((char *)render_restore_moby->pvars);
     visibomb_render_override_active = 0;
     f0 = *(float *)(render_restore_moby_vars + 0x30);
     f1 = *(float *)(render_restore_moby_vars + 0x34);
@@ -1948,13 +1948,13 @@ void update_attached_moby_transform(unsigned char *source_moby, unsigned char *a
 void update_attached_moby_transform(unsigned char *source_moby, unsigned char *attachment_state) {
     M_2b5ba0 combined_rotation, attachment_rotation, source_rotation;
     V_2b5ba0 k, rotated_attachment_offset;
-    unsigned char *attached_moby = *(unsigned char **)(attachment_state + 0x20);
+    struct Moby *attached_moby = *(unsigned char **)(attachment_state + 0x20);
     unsigned char *attached_moby_vars;
     if (attached_moby == 0)
         return;
     k.q = 0;
     k.f[1] = 0.11f;
-    attached_moby_vars = *(unsigned char **)(attached_moby + 0x78);
+    attached_moby_vars = ((unsigned char *)attached_moby->pvars);
     if (0.45f < *(float *)(attached_moby_vars + 0xC)) {
         *(float *)(attached_moby_vars + 0xC) = *(float *)(attached_moby_vars + 0xC) - D_0015ED60_gp * 0.05f;
     } else if (*(float *)(attached_moby_vars + 0xC) < 0.45f) {
@@ -2735,7 +2735,7 @@ extern f32 pyrocitor_flame_zero_length_random_range_gp __asm__("D_L00_00161528")
 extern s32 pyrocitor_ammo_use_interval_frames_gp __asm__("D_L00_00161530") __attribute__((sda));
 extern f32 D_L00_001601E8;
 
-void update_pyrocitor_usage_and_cleanup(unsigned char *) __asm__("FUN_L00_002b8230");
+void update_pyrocitor_usage_and_cleanup(struct Moby *) __asm__("FUN_L00_002b8230");
 void update_pyrocitor_flame_effect_slots(char *) __asm__("FUN_L00_002b8438");
 extern struct Moby *spawn_linked_moby_from_basis(struct Moby *) __asm__("FUN_L00_002bb360");
 extern s16 FUN_L00_0023e5e0(void *, f32, f32, s32) __asm__("FUN_L00_0023e5e0");
@@ -2940,15 +2940,15 @@ void FUN_0020c828_2b8230(void *) __asm__("FUN_0020c828");
 void help_request(int, int) __asm__("FUN_L00_00203908");
 
 extern unsigned short D_00141BD8 NOT_SDA;
-void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) __asm__("FUN_L00_002b8230");
+void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) __asm__("FUN_L00_002b8230");
 
-void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) {
-    unsigned char *pyrocitor_vars = *(unsigned char **)(pyrocitor_moby + 0x78);
+void update_pyrocitor_usage_and_cleanup(struct Moby *pyrocitor_moby) {
+    unsigned char *pyrocitor_vars = ((unsigned char *)pyrocitor_moby->pvars);
     struct UsageStats *P;
     unsigned char *voice;
     int voice_slot_or_time_stat, firing_frame_count;
-    if (pyrocitor_moby[0x53] == 2) {
-        pyrocitor_moby[0x20] = 4;
+    if (pyrocitor_moby->prev_seq == 2) {
+        pyrocitor_moby->state = 4;
         if (*(void **)pyrocitor_vars)
             FUN_0020c828_2b8230(*(void **)pyrocitor_vars);
         if (*(short *)(pyrocitor_vars + 0x44) != -1) {
@@ -2969,7 +2969,7 @@ void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) {
     P = &usage_stats;
     if (P->stat[10].count)
         return;
-    if (pyrocitor_moby[0x20] == 3) {
+    if (pyrocitor_moby->state == 3) {
         (*(unsigned short *)(pyrocitor_vars + 0x50))++;
         return;
     }

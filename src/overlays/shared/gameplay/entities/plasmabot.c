@@ -291,7 +291,7 @@ unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN
 unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
 void FUN_L14_002b2600_c(struct Moby *m) __asm__("FUN_L14_002b2600");
 void FUN_L14_002b2ed8_c(struct Moby *m) __asm__("FUN_L14_002b2ed8");
-void process_plasmabot_hit_reaction(char *m) __asm__("FUN_L14_002b2f60");
+void process_plasmabot_hit_reaction(struct Moby *m) __asm__("FUN_L14_002b2f60");
 void update_plasmabot_aim_joint_rotation(char *moby, float angle) __asm__("FUN_L14_002b37b0");
 void reset_listed_plasmabot_beam_cooldowns(int idx) __asm__("FUN_L14_002b3890");
 
@@ -794,10 +794,10 @@ extern float D_L14_001614AC_lui __asm__("D_L14_001614AC");
 extern float D_L14_001614BC_lui __asm__("D_L14_001614BC");
 extern float D_L14_001614C0_lui __asm__("D_L14_001614C0");
 
-void draw_plasmabot_effect_quads(char *moby) __asm__("FUN_L14_002b2928");
+void draw_plasmabot_effect_quads(struct Moby *moby) __asm__("FUN_L14_002b2928");
 
-void draw_plasmabot_effect_quads(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void draw_plasmabot_effect_quads(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     struct {
         Vec4_2b2928 o[4];
         unsigned int c[4];
@@ -959,7 +959,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 
-void process_plasmabot_hit_reaction(char *moby) {
+void process_plasmabot_hit_reaction(struct Moby *moby) {
     enum {
         HIT_REACTION_UNAVAILABLE = 0,
         HIT_REACTION_LETHAL = 1,
@@ -967,7 +967,7 @@ void process_plasmabot_hit_reaction(char *moby) {
         HIT_REACTION_STAGGER = 3,
         HIT_REACTION_NONE = 11
     };
-    char *state = *(char **)(moby + 0x78);
+    char *state = ((char *)moby->pvars);
     int hit_kind;
     float damage;
     char *hit_info;
@@ -982,7 +982,7 @@ void process_plasmabot_hit_reaction(char *moby) {
     damage = 0.0f;
     hit_info = find_moby_hit(moby, 0x330000, 0);
     if (hit_info != 0 && *(char **)(hit_info + 0x20) != 0
-        && (*(short *)(*(char **)(hit_info + 0x20) + 0xA6) == *(short *)(moby + 0xA6) || *(short *)(*(char **)(hit_info + 0x20) + 0xA6) == 0x370)) {
+        && (*(short *)(*(char **)(hit_info + 0x20) + 0xA6) == moby->oclass || *(short *)(*(char **)(hit_info + 0x20) + 0xA6) == 0x370)) {
         hit_info = 0;
     }
     result = hit_reaction(moby, hit_info, state + 0x20, 0, &hit_kind, &damage, 0, 4);
@@ -996,7 +996,7 @@ void process_plasmabot_hit_reaction(char *moby) {
             int stagger_duration_frames;
             float frame_duration, stagger_motion_z, k;
             release_beam_slot_by_id(moby);
-            moby[0x20] = 0xA;
+            moby->state = 0xA;
             stagger_duration_frames = scale_game_frames(0x3C);
             frame_duration = frame_time;
             stagger_motion_z = plasmabot_stagger_motion_z_scale_gp * frame_duration;
@@ -1013,11 +1013,11 @@ void process_plasmabot_hit_reaction(char *moby) {
         case HIT_REACTION_LETHAL: case HIT_REACTION_DEATH: {
             float y;
             if (*(int *)(hit_info + 0x24) & 0x800000) {
-                moby[0x20] = 0xC;
+                moby->state = 0xC;
             } else {
-                moby[0x20] = 0xB;
+                moby->state = 0xB;
             }
-            *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+            moby->flags &= 0xEFFF;
             {
                 int scaled_previous_motion_parameter = truncate_float_to_s32(*(float *)(state + 0x88) * 1024.0f);
                 float k = frame_time * 10.0f;
@@ -1036,7 +1036,7 @@ void process_plasmabot_hit_reaction(char *moby) {
             } else {
                 FUN_L00_00257470(moby, 0, -1);
             }
-            *(int *)(moby + 0x94) = 0;
+            moby->collision = 0;
             break;
         }
         case HIT_REACTION_UNAVAILABLE: case HIT_REACTION_NONE:
@@ -1313,14 +1313,14 @@ typedef struct {
 
 
 int refresh_plasmabot_hatch_reset_delay(int i) {
-    unsigned char *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
-    int *data = *(int **)(moby + 0x78);
+    struct Moby *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
+    int *data = ((int *)moby->pvars);
     int hatch_reset_delay_active = 0;
-    if (moby[0x20] == 0) {
-        moby[0x20] = 5;
+    if (moby->state == 0) {
+        moby->state = 5;
         set_moby_animation(moby, 1, 0);
     } else {
-        hatch_reset_delay_active = moby[0x20] == 6;
+        hatch_reset_delay_active = moby->state == 6;
     }
     data[2] = scale_game_frames(0x3C);
     return hatch_reset_delay_active;

@@ -2545,10 +2545,10 @@ extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__(
 
 /* In the given state and animation, when the walker is within range, pushes it along its
  * velocity; a hit on the target bounces it back up and switches to the next state. */
-void handle_sharkigator_contact_attack(char *moby, char *moby_data, int state, int anim, int seq, int frame, int next, int id,
+void handle_sharkigator_contact_attack(struct Moby *moby, char *moby_data, int state, int anim, int seq, int frame, int next, int id,
                       float lo, float hi, float hit_direction_length, float scale, float radius) __asm__("FUN_L07_0030f308");
 
-void handle_sharkigator_contact_attack(char *moby, char *moby_data, int state, int anim, int seq, int frame, int next, int id,
+void handle_sharkigator_contact_attack(struct Moby *moby, char *moby_data, int state, int anim, int seq, int frame, int next, int id,
                       float lo, float hi, float hit_direction_length, float scale, float radius) {
     float hit_direction[4];
     float hit_descriptor[12];
@@ -2586,7 +2586,7 @@ void handle_sharkigator_contact_attack(char *moby, char *moby_data, int state, i
     if (((unsigned char *)moby)[0x53] != seq) {
         blend_moby_animation(moby, seq, frame, 5);
     }
-    moby[0x20] = next;
+    moby->state = next;
 }
 
 /* Finds another moby whose state lies within the inclusive range. */
@@ -2654,7 +2654,7 @@ int update_sharkigator_horizontal_velocity_by_heading(char *moby, char *obj, flo
 void FUN_L00_002a3ec8_c(void *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount) __asm__("FUN_L00_002a3ec8");
 void handle_sharkigator_hit(struct Moby *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
 void advance_sharkigator_swim_movement(char *a, char *b, float f12, float f13, float f14) __asm__("FUN_L07_0030f0f8");
-void handle_sharkigator_contact_attack(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id, float lo, float hi, float len, float scale, float radius) __asm__("FUN_L07_0030f308");
+void handle_sharkigator_contact_attack(struct Moby *moby, char *obj, int state, int anim, int seq, int frame, int next, int id, float lo, float hi, float len, float scale, float radius) __asm__("FUN_L07_0030f308");
 extern char D_0013F65C[];
 extern char D_0013F350[];
 extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");

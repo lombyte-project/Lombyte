@@ -72,6 +72,7 @@ void make_hit_descriptor(char *hit_descriptor, int source_moby, int hit_mask, fl
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby.h"
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 int play_entity_sound(void *moby, void *position, int c, float d, float e, float f, int g, int h, int i) __asm__("FUN_L00_002598b0");
 int play_entity_sound(void *moby, void *position, int hit_mask, float sphere_radius, float hit_priority, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) {
@@ -130,8 +131,8 @@ typedef struct {
 } G_259a88;
 extern G_259a88 D_L00_00173E40_lui __asm__("D_L00_00173E40") NOT_SDA;
 extern T_259a88 D_L00_00178100_lui[] __asm__("D_L00_00178100") NOT_SDA;
-void record_moby_hit(unsigned char *m, L_259a88 *src) __asm__("FUN_L00_00259a88");
-void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
+void record_moby_hit(struct Moby *m, L_259a88 *src) __asm__("FUN_L00_00259a88");
+void record_moby_hit(struct Moby *owner_moby, L_259a88 *hit_descriptor) {
     L_259a88 hit_descriptor_copy;
     int i = D_L00_00173E40_lui.idx;
     T_259a88 *hit_record;
@@ -139,8 +140,8 @@ void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
     ((u128_259a88 *)&hit_descriptor_copy)[1] = ((u128_259a88 *)hit_descriptor)[1];
     ((u128_259a88 *)&hit_descriptor_copy)[2] = ((u128_259a88 *)hit_descriptor)[2];
     hit_descriptor = &hit_descriptor_copy;
-    if (owner_moby[0xA4] != 0xFF) {
-        T_259a88 *existing_hit = &D_L00_00178100_lui[owner_moby[0xA4]];
+    if (owner_moby->hit_slot != 0xFF) {
+        T_259a88 *existing_hit = &D_L00_00178100_lui[owner_moby->hit_slot];
         if (existing_hit->owner == owner_moby && hit_descriptor_copy.f < existing_hit->f)
             return;
     }
@@ -156,7 +157,7 @@ void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
     hit_record->flag = hit_descriptor->flag;
     hit_record->owner = owner_moby;
     hit_record->z = 0;
-    owner_moby[0xA4] = i;
+    owner_moby->hit_slot = i;
     D_L00_00173E40_lui.idx = (i + 1) & 0x3F;
 }
 #include "eetypes.h"

@@ -751,20 +751,20 @@ void FUN_L14_003061d8(void *updated_moby) {
     enum {
         MOBY_PVARS_INITIALIZE = 0
     };
-    char *moby = updated_moby;
+    struct Moby *moby = updated_moby;
     char *moby_pvars;
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)((char)moby->state)) {
     case MOBY_PVARS_INITIALIZE:
-        moby_pvars = *(char **)(moby + 0x78);
+        moby_pvars = ((char *)moby->pvars);
         moby_pvars[0x28] = 4;
         *(int *)(moby_pvars + 0x20) = 0;
         *(short *)(moby_pvars + 0x24) = 0;
         *(short *)(moby_pvars + 0x3E) = 0;
-        moby[0x20] = 1;
+        moby->state = 1;
         break;
     case 2:
-        *(short *)(*(char **)(moby + 0x78) + 0x3E) = 5;
-        moby[0x20] = 3;
+        *(short *)(((char *)moby->pvars) + 0x3E) = 5;
+        moby->state = 3;
         break;
     }
 }

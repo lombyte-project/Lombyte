@@ -1599,10 +1599,10 @@ extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int,
 void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2,
                                  int arg3) __asm__("FUN_00212f90");
 
-unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int arg,
+unsigned char *spawn_ship_projectile(struct Moby *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int arg,
                                 float scale) __asm__("FUN_L11_00309378");
 
-unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int duration_frames,
+unsigned char *spawn_ship_projectile(struct Moby *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int duration_frames,
                                 float scale) {
     unsigned char *moby = create_moby(0x40A);
     if (moby != 0) {
@@ -1636,7 +1636,7 @@ unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, 
         }
         *(float *)(moby + 0x2C) =
             *(float *)(*(char **)(moby + 0x24) + 0x24) *
-            (*(float *)(spawning_moby + 0x2C) / *(float *)(*(char **)(spawning_moby + 0x24) + 0x24));
+            (spawning_moby->scale / *(float *)(((char *)spawning_moby->pclass) + 0x24));
         FUN_L00_00250df8(moby);
     }
     return moby;

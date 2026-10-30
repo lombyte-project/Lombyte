@@ -2510,20 +2510,20 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
-int process_amoeboid_suck_cannon_suction(unsigned char *moby) __asm__("FUN_L01_002efa88");
+int process_amoeboid_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L01_002efa88");
 
-int process_amoeboid_suck_cannon_suction(unsigned char *moby) {
+int process_amoeboid_suck_cannon_suction(struct Moby *moby) {
     int value = process_moby_suck_cannon_suction(moby);
     if (value != 0) {
-        if (*(short *)(moby + 0xA6) != 0x362) {
+        if (moby->oclass != 0x362) {
             return 0;
-        } else if (moby[0x20] == 8) {
+        } else if (moby->state == 8) {
             return 0;
         } else {
-            moby[0x20] = 0xE;
+            moby->state = 0xE;
         }
-    } else if (moby[0x20] == 0xE) {
-        moby[0x20] = 1;
+    } else if (moby->state == 0xE) {
+        moby->state = 1;
     }
     return value;
 }
@@ -2551,15 +2551,15 @@ s32 reserve_expired_frame_slot(s32 *values, s32 count, s32 offset) {
 extern char *get_moby_suck_cannon_record(char *) __asm__("FUN_L00_002db890");
 extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 
-int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int a, int position_source_moby, float position_z_offset) __asm__("FUN_L01_002f1d18");
+int launch_suck_cannon_projectile_and_sync_moby_state(struct Moby *moby, int a, int position_source_moby, float position_z_offset) __asm__("FUN_L01_002f1d18");
 
-int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int launch_data_source, int position_source_moby, float position_z_offset) {
+int launch_suck_cannon_projectile_and_sync_moby_state(struct Moby *moby, int launch_data_source, int position_source_moby, float position_z_offset) {
     char *callback_record = get_moby_suck_cannon_record(moby);
     int projectile_launch_result = launch_suck_cannon_projectile(moby, launch_data_source, position_source_moby, position_z_offset);
     if (projectile_launch_result != 0) {
-        moby[0x20] = 7;
-    } else if ((unsigned char)moby[0x20] == 7) {
-        moby[0x20] = 1;
+        moby->state = 7;
+    } else if ((unsigned char)((char)moby->state) == 7) {
+        moby->state = 1;
     }
     if (callback_record != 0) {
         if (*(short *)(callback_record + 0x68) == 6) {

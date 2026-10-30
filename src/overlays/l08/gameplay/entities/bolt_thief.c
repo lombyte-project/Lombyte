@@ -135,7 +135,7 @@ void spawn_shrub_parts(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *anchor_joint_cursor = data + 0xBC;
     int i = 0;
-    char *child_moby;
+    struct Moby *child_moby;
     char *muzzle_anchor_moby;
     char *muzzle_part_moby;
     *(char **)(data + 0x60) = moby;
@@ -151,7 +151,7 @@ void spawn_shrub_parts(char *moby) {
     *(int *)(data + 0x7C) = 2;
     *(char **)(data + 0x74) = moby;
     *(int *)(data + 0x78) = 0;
-    *(float *)(child_moby + 0x2C) = *(float *)(*(char **)(child_moby + 0x24) + 0x24) * 0.75f;
+    child_moby->scale = *(float *)(((char *)child_moby->pclass) + 0x24) * 0.75f;
     muzzle_anchor_moby = FUN_L08_002e1c98_c(moby, 0x1BA, 1, 1);
     *(char **)(data + 0x80) = muzzle_anchor_moby;
     *(char **)(data + 0x84) = moby;
@@ -2520,10 +2520,10 @@ void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9CB0), where it is exact; names translated to the US level program. */
 
 
-void process_shrub_part_hits(char *parent_moby) __asm__("FUN_L08_002e88d8");
+void process_shrub_part_hits(struct Moby *parent_moby) __asm__("FUN_L08_002e88d8");
 
-void process_shrub_part_hits(char *parent_moby) {
-    char *data = *(char **)(parent_moby + 0x78);
+void process_shrub_part_hits(struct Moby *parent_moby) {
+    char *data = ((char *)parent_moby->pvars);
     char *base = data + 0x60;
     char **part_entry_cursor = (char **)base;
     char **sq;
@@ -2577,7 +2577,7 @@ void process_shrub_part_hits(char *parent_moby) {
                     return;
                 }
             }
-            parent_moby[0x20] = 0x63;
+            parent_moby->state = 0x63;
         }
     }
     if (hit_sound_id >= 0) allocate_voice_for_target_entry(hit_sound_id, 0, (int)parent_moby);
@@ -2777,16 +2777,16 @@ void shrub_update(struct Moby *moby) {
 void *FUN_L08_002e1c98_c2(char *parent, int oClass, int joint,
                           int pjoint) __asm__("FUN_L08_002e1c98");
 
-void spawn_joint_linked_moby_parts(char *moby) __asm__("FUN_L08_002e9558");
+void spawn_joint_linked_moby_parts(struct Moby *moby) __asm__("FUN_L08_002e9558");
 
-void spawn_joint_linked_moby_parts(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void spawn_joint_linked_moby_parts(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     char *anchor_joint_cursor = data + 0xFC;
     int i = 0;
-    char *child_moby;
+    struct Moby *child_moby;
     char *attachment_anchor_moby;
-    char *root_joint_attachment_moby;
-    char *anchor_joint_attachment_moby;
+    struct Moby *root_joint_attachment_moby;
+    struct Moby *anchor_joint_attachment_moby;
     *(char **)(data + 0x60) = moby;
     *(int *)(data + 0x64) = 0;
     *(int *)(data + 0x68) = 0;
@@ -2800,7 +2800,7 @@ void spawn_joint_linked_moby_parts(char *moby) {
     *(int *)(data + 0x7C) = 2;
     *(char **)(data + 0x74) = moby;
     *(int *)(data + 0x78) = 0;
-    *(float *)(child_moby + 0x2C) = *(float *)(*(char **)(child_moby + 0x24) + 0x24) * 0.75f;
+    child_moby->scale = *(float *)(((char *)child_moby->pclass) + 0x24) * 0.75f;
     attachment_anchor_moby = FUN_L08_002e1c98_c2(*(char **)(data + 0x90), 0x1BA, 1, 1);
     *(char **)(data + 0x80) = attachment_anchor_moby;
     *(char **)(data + 0x84) = *(char **)(data + 0x90);
@@ -2819,7 +2819,7 @@ void spawn_joint_linked_moby_parts(char *moby) {
     *(char **)(data + 0xC4) = moby;
     *(int *)(data + 0xC8) = 0;
     *(int *)(data + 0xCC) = 1;
-    *(unsigned short *)(root_joint_attachment_moby + 0x34) |= 0x8000;
+    root_joint_attachment_moby->flags |= 0x8000;
     *(char **)(data + 0xD0) = FUN_L08_002e1c98_c2(*(char **)(data + 0x80), 0x1D1, 0, 0);
     *(char **)(data + 0xD4) = *(char **)(data + 0x80);
     *(int *)(data + 0xD8) = 0;
@@ -2829,7 +2829,7 @@ void spawn_joint_linked_moby_parts(char *moby) {
     *(char **)(data + 0xE4) = *(char **)(data + 0x80);
     *(int *)(data + 0xE8) = 0;
     *(int *)(data + 0xEC) = 0;
-    *(unsigned short *)(anchor_joint_attachment_moby + 0x34) |= 0x8000;
+    anchor_joint_attachment_moby->flags |= 0x8000;
     do {
         int j = i + 2;
         i++;

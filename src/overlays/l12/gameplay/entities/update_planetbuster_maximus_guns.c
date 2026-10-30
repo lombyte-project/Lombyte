@@ -79,7 +79,7 @@ extern int D_L12_001FB688[];
 extern int FUN_L00_001fefc8(void *);
 extern void *spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
+extern void update_planetbuster_maximus_detached_parts(struct Moby *) __asm__("FUN_L12_003064e8");
 void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
 extern int D_L12_00161F04_gp __asm__("D_L12_00161F04") MACRO_ADDR;
@@ -401,10 +401,10 @@ extern float D_L12_00161F40;
 extern float D_L12_00161F60;
 extern float D_L12_00161F70;
 
-void update_planetbuster_maximus_detached_parts(char *moby) {
+void update_planetbuster_maximus_detached_parts(struct Moby *moby) {
     int i;
     int vertical_step_decrement_offset;
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)moby->pvars);
     int last = 17;
     for (i = 0, vertical_step_decrement_offset = 0; i < 18; i++, vertical_step_decrement_offset += 4) {
         int saved_moby_index = D_L12_001FB688[i];

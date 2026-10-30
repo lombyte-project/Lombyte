@@ -1313,8 +1313,8 @@ void update_owner_linked_moby_state(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     char *health_ptr = data + 0x20;
-    unsigned char *owner_moby = *(unsigned char **)(data + 0x70);
-    if (owner_moby == 0 || owner_moby[0x20] == 0xFE || owner_moby[0x20] == 0xFD) {
+    struct Moby *owner_moby = *(unsigned char **)(data + 0x70);
+    if (owner_moby == 0 || owner_moby->state == 0xFE || owner_moby->state == 0xFD) {
         if (moby->state < 3) {
             moby->state = 4;
         }
@@ -1802,9 +1802,9 @@ extern char ship_target_projection_offset_reference[] __asm__("D_L11_001679E0");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 
 float compute_ship_target_reticle_distance_squared(void *moby_v, void *o_v) {
-    char *moby = moby_v;
+    struct Moby *moby = moby_v;
     char *target_moby = o_v;
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)moby->pvars);
     if (*(unsigned char *)(target_moby + 0x31) != 0) {
         char target_projection_point[16];
         int ax, ay, cx, cy;

@@ -1305,7 +1305,7 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
 
 void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) {
     char *hero_base = (char *)((char *)((char *)&hero));
-    char *path_owner_moby = *(char **)(hero_base + 0x86C);
+    struct Moby *path_owner_moby = *(char **)(hero_base + 0x86C);
     char *path;
     float distance;
     int i, best;
@@ -1316,7 +1316,7 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
         qcopy(out_rotation, hero_base + 0x90);
         return;
     }
-    path = D_L05_001B0930[*(int *)(*(char **)(path_owner_moby + 0x78) + 0x24)];
+    path = D_L05_001B0930[*(int *)(((char *)path_owner_moby->pvars) + 0x24)];
     distance = 9999999.0f;
     best = 0;
     for (i = 0; i < *(int *)path; i += 2) {

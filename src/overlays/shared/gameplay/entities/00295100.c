@@ -1654,7 +1654,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
         VENDOR_AMMO_PURCHASE = 3
     };
     char *vendor_state_base;
-    unsigned char *auxiliary_moby;
+    struct Moby *auxiliary_moby;
     int auxiliary_moby_state;
     int moby_state;
     int selection_variant_index;
@@ -1665,7 +1665,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
     auxiliary_moby = *(unsigned char **)(vendor_state_base + 0x24);
     switch (vendor_event) {
     case VENDOR_SELECTION_CHANGED:
-        auxiliary_moby_state = auxiliary_moby[0x20];
+        auxiliary_moby_state = auxiliary_moby->state;
         if (auxiliary_moby_state == 2 || auxiliary_moby_state == 0) {
             if (random_integer_below(4) == 0) {
                 if (*(int *)(vendor_state_base + 0x30) + scale_game_frames(0x168) < D_L00_0015F3F8) {
@@ -1675,7 +1675,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
                     vendor_auxiliary_reaction_started = 1;
                     D_L00_00161194 = 0;
                     *(int *)(queued_dialogue_id) = (selection_variant_index * 3 + 2) * 6 + *(int *)(vendor_state_base + 0x38) + 10000;
-                    auxiliary_moby[0x20] = 0xB;
+                    auxiliary_moby->state = 0xB;
                 }
             }
         }
@@ -1686,13 +1686,13 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
         vendor_auxiliary_reaction_started = vendor_event;
         D_L00_00161194 = 0;
         *(int *)(queued_dialogue_id) = ready_variant_index * 0x12 + *(int *)(vendor_state_base + 0x38) + 10000;
-        if (auxiliary_moby[0x53] != vendor_event)
+        if (auxiliary_moby->prev_seq != vendor_event)
             blend_moby_animation(auxiliary_moby, 1, 0, 10);
-        auxiliary_moby[0x20] = 10;
+        auxiliary_moby->state = 10;
         break;
     case VENDOR_ITEM_PURCHASE:
     case VENDOR_AMMO_PURCHASE:
-        moby_state = auxiliary_moby[0x20];
+        moby_state = auxiliary_moby->state;
         if (moby_state == 2 || moby_state == 0) {
             char *vendor_state = D_L00_001CA4C0;
             *(int *)(vendor_state + 0x34) = 0;

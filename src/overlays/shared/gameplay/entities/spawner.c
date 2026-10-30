@@ -277,9 +277,9 @@ extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 extern void FUN_L00_0025d538_c(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 
-void process_spawner_hit_record(unsigned char *moby, char *spawner_vars) __asm__("FUN_L09_0030a9e8");
+void process_spawner_hit_record(struct Moby *moby, char *spawner_vars) __asm__("FUN_L09_0030a9e8");
 
-void process_spawner_hit_record(unsigned char *moby, char *spawner_vars) {
+void process_spawner_hit_record(struct Moby *moby, char *spawner_vars) {
     char *moby_record;
     int record_processing_status;
     float remaining_value;
@@ -294,12 +294,12 @@ void process_spawner_hit_record(unsigned char *moby, char *spawner_vars) {
             FUN_L00_0025d458_c(moby, spawner_vars + 0x60);
         } else {
             FUN_L00_00257470_c(moby, 0, -1);
-            moby[0x20] = 2;
+            moby->state = 2;
             spawner_vars[0x67] = 0x78;
             FUN_L00_0025d458_c(moby, spawner_vars + 0x60);
         }
     }
-    moby[0xA4] = 0xFF;
+    moby->hit_slot = 0xFF;
     FUN_L00_0025d538_c(moby, spawner_vars + 0x60);
 }
 /* Counts the live level-0x75E mobys among the 20 slots at +0xB0 and returns the last slot not counted. */

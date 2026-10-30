@@ -766,15 +766,15 @@ extern unsigned char D_L01_0017C8C0_lui[] __asm__("D_L01_0017C8C0") NOT_SDA;
 
 #include "rnc/overlay/shared/gameplay/entities/rock_globals.h"
 extern float cutscene_big_head_scale_gp __asm__("D_L01_00161D30") __attribute__((sda));
-void attach_cutscene_big_head_manipulator(char *class_reference_moby) __asm__("FUN_L01_002ff028");
+void attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) __asm__("FUN_L01_002ff028");
 
-void attach_cutscene_big_head_manipulator(char *class_reference_moby) {
+void attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) {
     if (cutscene_mode == 2 && big_head_cheat_enabled != 0) {
         int i;
         for (i = 0; i < D_L01_0016CCE0_q.n; i++) {
             char *moby = D_L01_0016CCE0_q.m[i];
             short c = *(short *)(moby + 0xA6);
-            if (c == *(short *)(class_reference_moby + 0xA6) || c == 0x32B) {
+            if (c == class_reference_moby->oclass || c == 0x32B) {
                 unsigned char *manipulator_record = D_L01_0017C8C0_lui;
                 if (manipulator_record[1] == 0) {
                     attach_manipulator(moby, 0, manipulator_record);
@@ -1628,7 +1628,7 @@ extern int D_L01_0015F594 __attribute__((sda));
 
 extern int FUN_00214720(void *, int);
 extern void activate_teleporter_and_record_state(struct Moby *) __asm__("FUN_L01_00308b28");
-extern void show_teleporter_and_children(char *) __asm__("FUN_L01_00309838");
+extern void show_teleporter_and_children(struct Moby *) __asm__("FUN_L01_00309838");
 extern void hide_teleporter_and_children(L01Moby *) __asm__("FUN_L01_003097e8");
 extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern void try_set_teleporter_help_message(struct Moby *) __asm__("FUN_L01_00309430");
@@ -2013,15 +2013,15 @@ void hide_teleporter_and_children(L01Moby *moby) {
         }
     }
 }
-void show_teleporter_and_children(char *parent_moby) {
-    char *parent_record = *(char **)(parent_moby + 0x24);
+void show_teleporter_and_children(struct Moby *parent_moby) {
+    char *parent_record = ((char *)parent_moby->pclass);
     char **child_slot;
     s32 i;
     s8 one;
-    child_slot = (char **)(*(char **)(parent_moby + 0x78) + 0x14);
-    *(s32 *)(parent_moby + 0x94) = *(s32 *)(parent_record + 0x10);
-    *(u16 *)(parent_moby + 0x34) &= 0xFFFE;
-    *(s8 *)(parent_moby + 0x31) = 1;
+    child_slot = (char **)(((char *)parent_moby->pvars) + 0x14);
+    parent_moby->collision = *(s32 *)(parent_record + 0x10);
+    parent_moby->flags &= 0xFFFE;
+    parent_moby->visible = 1;
     one = 1;
     for (i = 2; i >= 0; i--) {
         if (*child_slot != 0) {

@@ -673,10 +673,10 @@ extern char sandmouse_third_particle_config __asm__("D_L01_00162100") __attribut
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void spawn_type_74_particle(void *, void *, void *, void *, int) __asm__("FUN_L01_0028a7a8");
 
-void emit_sandmouse_particles(char *source_moby) __asm__("FUN_L01_0030dda0");
+void emit_sandmouse_particles(struct Moby *source_moby) __asm__("FUN_L01_0030dda0");
 
-void emit_sandmouse_particles(char *source_moby) {
-    if (*(unsigned char *)(source_moby + 0x31) != 0) {
+void emit_sandmouse_particles(struct Moby *source_moby) {
+    if (source_moby->visible != 0) {
         float particle_spawn_position[4];
         float particle_velocity[4];
         float z[4];
@@ -789,7 +789,7 @@ extern void compute_sand_mouse_approach_target(void *, void *) __asm__("FUN_L01_
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void compute_sandmouse_follow_goal(void *unused, float *p) __asm__("FUN_L01_0030d260");
-void emit_sandmouse_particles(char *m) __asm__("FUN_L01_0030dda0");
+void emit_sandmouse_particles(struct Moby *m) __asm__("FUN_L01_0030dda0");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
 #define LNK(i) (((Moby *)D_L01_0015FFD8) + (i))

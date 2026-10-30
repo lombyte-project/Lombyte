@@ -7,19 +7,20 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 /* Moby state 0xE while FUN_L00_002dbb20 reports a hit, back to 1 when it stops. */
-int moby_hold_state_if_found(char *a) __asm__("FUN_L01_002efaf8");
-int moby_hold_state_if_found(char *target_moby) {
+int moby_hold_state_if_found(struct Moby *a) __asm__("FUN_L01_002efaf8");
+int moby_hold_state_if_found(struct Moby *target_moby) {
     int suck_cannon_store_result = store_moby_in_suck_cannon(target_moby);
     if (suck_cannon_store_result == 0) {
-        if (*(unsigned char *)(target_moby + 0x20) == 0xe)
-            target_moby[0x20] = 1;
+        if (target_moby->state == 0xe)
+            target_moby->state = 1;
     } else {
-        target_moby[0x20] = 0xe;
+        target_moby->state = 0xe;
     }
     return suck_cannon_store_result;
 }
@@ -27,11 +28,11 @@ int moby_hold_state_if_found(char *target_moby) {
 extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 0xE. */
-int cancel_suck_cannon_suction_and_set_state_14(char *moby) __asm__("FUN_L01_002efb98");
+int cancel_suck_cannon_suction_and_set_state_14(struct Moby *moby) __asm__("FUN_L01_002efb98");
 
-int cancel_suck_cannon_suction_and_set_state_14(char *moby) {
+int cancel_suck_cannon_suction_and_set_state_14(struct Moby *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
-    moby[0x20] = 0xe;
+    moby->state = 0xe;
     return helper_result;
 }
 typedef struct {
@@ -56,24 +57,24 @@ s32 get_moby_data_plus_0xc0(T6 *moby) {
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 7 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
-int moby_hold_state_if_grabbed(char *a) __asm__("FUN_L01_002f1c78");
-int moby_hold_state_if_grabbed(char *suction_moby) {
+int moby_hold_state_if_grabbed(struct Moby *a) __asm__("FUN_L01_002f1c78");
+int moby_hold_state_if_grabbed(struct Moby *suction_moby) {
     int suction_result = process_moby_suck_cannon_suction(suction_moby);
     if (suction_result == 0) {
-        if (*(unsigned char *)(suction_moby + 0x20) == 0x7)
-            suction_moby[0x20] = 1;
+        if (suction_moby->state == 0x7)
+            suction_moby->state = 1;
     } else {
-        suction_moby[0x20] = 0x7;
+        suction_moby->state = 0x7;
     }
     return suction_result;
 }
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 7. */
-int run_moby_helper_and_set_state_7(char *moby) __asm__("FUN_L01_002f1dc8");
+int run_moby_helper_and_set_state_7(struct Moby *moby) __asm__("FUN_L01_002f1dc8");
 
-int run_moby_helper_and_set_state_7(char *moby) {
+int run_moby_helper_and_set_state_7(struct Moby *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
-    moby[0x20] = 0x7;
+    moby->state = 0x7;
     return helper_result;
 }
 /* Returns the moby data pointer plus 0x60, or 0 when either is null. */

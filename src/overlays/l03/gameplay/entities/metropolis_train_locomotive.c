@@ -513,7 +513,7 @@ void metropolis_train_locomotive_update(char *moby) {
     int i;
     int i6;
     float braking_speed_floor;
-    char *linked_moby;
+    struct Moby *linked_moby;
     int second_path_node_index;
     char *second_path;
     u32 mode;
@@ -718,9 +718,9 @@ void metropolis_train_locomotive_update(char *moby) {
             for (i6 = 0; i6 < 8; i6++) {
                 linked_moby = D_L03_0015FFD8_292e98 + (data->ids[i6] << 8);
                 if (data->ids[i6] != -1 && linked_moby != 0 && ((unsigned char *)linked_moby)[0x20] != 0xFE &&
-                    ((unsigned char *)linked_moby)[0x20] != 0xFD && *(short *)(linked_moby + 0xA6) == 0x23E &&
+                    ((unsigned char *)linked_moby)[0x20] != 0xFD && linked_moby->oclass == 0x23E &&
                     ((unsigned char *)linked_moby)[0x20] == 0x10) {
-                    linked_moby[0x20] = 0x11;
+                    linked_moby->state = 0x11;
                 }
             }
             data->fC8 = data->fC0;

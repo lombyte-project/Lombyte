@@ -113,8 +113,8 @@ typedef struct {
     short unk46;
 } WalloperBeam;
 
-void build_beam_and_arc_points(u8 *o) __asm__("FUN_L00_002b94d0");
-void build_beam_and_arc_points(u8 *beam_owner_moby) {
+void build_beam_and_arc_points(struct Moby *o) __asm__("FUN_L00_002b94d0");
+void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
     Vec4 target0, target1;
     struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } hit;
     Vec4 camera_direction, direction, delta, blend, step, offset;
@@ -123,7 +123,7 @@ void build_beam_and_arc_points(u8 *beam_owner_moby) {
     union { struct { Vec4 origin; HitDescriptor hit0; } first; HitDescriptor hit1; } effects;
     /* Retail uses a five-vector scratch span with differences beginning at slot 1. */
     Vec4 differences[5];
-    WalloperBeam *beam_state = *(WalloperBeam **)(beam_owner_moby + 0x78);
+    WalloperBeam *beam_state = ((WalloperBeam *)beam_owner_moby->pvars);
     int i;
     struct Moby *best = 0, *second = 0, *candidate, **list;
     char *data;
@@ -226,7 +226,7 @@ next_candidate:;
     else D_L00_001615F8 = 0x7f2020;
     clear_u64_value(&camera_direction);
     make_hit_descriptor(&hit, beam_owner_moby, 0x210000, &camera_direction, enabled + 2.0f);
-    hit.kind = 5; hit.mode = 1; hit.id = *(short *)(beam_owner_moby + 0xa6);
+    hit.kind = 5; hit.mode = 1; hit.id = beam_owner_moby->oclass;
     beam_state->count3e = 20;
     player = &hero;
     collect_mobies_in_sphere(0.3f, beam_state, 0x10, player->moby, &hit);
@@ -361,7 +361,7 @@ next_candidate:;
         fast_vec_normalize(&target_delta, &target_delta, 1.0f);
         target_delta.f[3] = 5627.9248046875f;
         make_hit_descriptor(&effects.first.hit0, beam_owner_moby, 0x210000, &target_delta, enabled + 2.0f);
-        effects.first.hit0.kind = 5; effects.first.hit0.mode = 3; effects.first.hit0.id = *(short *)(beam_owner_moby + 0xa6);
+        effects.first.hit0.kind = 5; effects.first.hit0.mode = 3; effects.first.hit0.id = beam_owner_moby->oclass;
         record_moby_hit(beam_state->target, &effects.first.hit0);
         {
             char *aim;
@@ -377,7 +377,7 @@ next_candidate:;
         fast_vec_normalize(&target_delta, &target_delta, 1.0f);
         target_delta.f[3] = 5627.9248046875f;
         make_hit_descriptor(&effects.hit1, beam_owner_moby, 0x210000, &target_delta, enabled + 2.0f);
-        effects.hit1.kind = 5; effects.hit1.mode = 3; effects.hit1.id = *(short *)(beam_owner_moby + 0xa6);
+        effects.hit1.kind = 5; effects.hit1.mode = 3; effects.hit1.id = beam_owner_moby->oclass;
         record_moby_hit(beam_state->second_target, &effects.hit1);
         {
             char *aim;
@@ -1258,7 +1258,7 @@ char *select_morphoray_target_and_adjust_aim(char *self, float *position, float 
     float offset[4] __attribute__((aligned(16)));
     char *candidate;
     char *data;
-    char *moby;
+    struct Moby *moby;
     int collision;
     int a0s[1];
     int selected_target[1];
@@ -1305,7 +1305,7 @@ char *select_morphoray_target_and_adjust_aim(char *self, float *position, float 
             moby = *(char **)(close_range_hero_base + 0x2080);
             toward = fast_arc_tan_c(*(float *)(candidate + 0x10) - *(float *)(close_range_hero_base + 0x80),
                                    *(float *)(candidate + 0x14) - *(float *)(close_range_hero_base + 0x84));
-            if (fast_difference_between_rotations(*(float *)(moby + 0x48), toward) < 1.0471976f &&
+            if (fast_difference_between_rotations(moby->rot.z, toward) < 1.0471976f &&
                 absolute_float(position[2] - target[2]) < 2.0f &&
                 !collision_line((Vec4f *)position, (Vec4f *)target, 6, *(char **)(close_range_hero_base + 0x2080), 0)) {
                 selected_target[0] = (int)candidate;

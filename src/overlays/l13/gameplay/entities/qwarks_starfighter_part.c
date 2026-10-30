@@ -1462,7 +1462,7 @@ void update_moby_state_relay(struct Moby *moby) {
         STATE_RELAY_WAIT_FOR_FIRST_STATE_SET = 2
     };
     char *data = ((char *)moby->pvars);
-    char *monitored_moby = 0;
+    struct Moby *monitored_moby = 0;
     int monitored_moby_index = *(int *)data;
     int found;
     int i;
@@ -1483,7 +1483,7 @@ void update_moby_state_relay(struct Moby *moby) {
     case STATE_RELAY_WAIT_FOR_SECOND_STATE_SET:
         found = 0;
         for (i = 0; i < 6; i++) {
-            if ((unsigned char)monitored_moby[0x20] == (data + i)[0xA]) {
+            if ((unsigned char)((char)monitored_moby->state) == (data + i)[0xA]) {
                 found = 1;
                 break;
             }
@@ -1507,7 +1507,7 @@ void update_moby_state_relay(struct Moby *moby) {
     case STATE_RELAY_WAIT_FOR_FIRST_STATE_SET:
         found = 0;
         for (i = 0; i < 6; i++) {
-            if ((unsigned char)monitored_moby[0x20] == (data + i)[4]) {
+            if ((unsigned char)((char)monitored_moby->state) == (data + i)[4]) {
                 found = 1;
                 break;
             }
