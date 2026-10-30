@@ -86,12 +86,12 @@ void update_exploding_prop(struct Moby *moby) {
         return;
 
     for (hit_record_index = 0; hit_record_index < 64; hit_record_index++) {
-        char *entry = D_L15_00178700 + hit_record_index * 0x40;
-        if (*(struct Moby **)(entry + 0x34) != moby)
+        char *scanned_hit_record = D_L15_00178700 + hit_record_index * 0x40;
+        if (*(struct Moby **)(scanned_hit_record + 0x34) != moby)
             continue;
-        if ((*(u32 *)(entry + 0x24) & 0x80000) == 0)
+        if ((*(u32 *)(scanned_hit_record + 0x24) & 0x80000) == 0)
             continue;
-        hit = entry;
+        hit = scanned_hit_record;
         break;
     }
     moby->hit_slot = 0xff;
