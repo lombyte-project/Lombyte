@@ -117,8 +117,8 @@ void update_data_processor_linked_effect(struct Moby *moby) {
         fast_dec_timer(linked_effect_vars + 0x34);
         voice = *(int *)(linked_effect_vars + 0x30);
         if (voice != -1) {
-            unsigned char *entry = (unsigned char *)&voice_pool + voice * 0x70;
-            if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
+            unsigned char *voice_slot_entry = (unsigned char *)&voice_pool + voice * 0x70;
+            if (*(struct Moby **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74] != 0)
                 release_voice_slot(voice);
         }
         *(int *)(linked_effect_vars + 0x30) = -1;
