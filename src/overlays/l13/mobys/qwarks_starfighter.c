@@ -493,9 +493,9 @@ void detach_moby_joint_attachment(void *unused,
                                   int   child_slot_index) __asm__("FUN_L13_002e9680");
 
 void detach_moby_joint_attachment(void *unused, char *parent_data, int child_slot_index) {
-    char  *base = parent_data + 0xC4;
+    char  *child_attachment_slots = parent_data + 0xC4;
     int    child_slot_byte_offset = child_slot_index * 4;
-    char **slot = (char **)(base + child_slot_byte_offset);
+    char **slot = (char **)(child_attachment_slots + child_slot_byte_offset);
     char  *moby = *slot;
     if (moby != 0) {
         char  *child_moby_data = ((char *)MOBY(moby)->pvars);
