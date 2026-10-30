@@ -846,7 +846,7 @@ unsigned char *spawn_bomb(int bomb_holder_moby, void *spawn_position) {
 void launch_bomb(float *pos, unsigned char *moby, float *velocity) __asm__("FUN_L00_002acfd8");
 
 void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
-    float         *vars = ((float *)MOBY(moby)->pvars);
+    float         *bomb_launch_data = ((float *)MOBY(moby)->pvars);
     float          difference[4] __attribute__((aligned(16)));
     float          direction[4] __attribute__((aligned(16)));
     float          throw_arc_velocity[4] __attribute__((aligned(16)));
@@ -856,31 +856,31 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
     float         *rp;
     float          dot, length, distance, angle, height, total;
 
-    *(short *)((char *)vars + 0x6a) = scale_game_frames(30);
+    *(short *)((char *)bomb_launch_data + 0x6a) = scale_game_frames(30);
     moby[0x20] = 1;
-    qcopy(vars, velocity);
+    qcopy(bomb_launch_data, velocity);
     if (hero.state.control_mode == 15) {
-        fast_vec_add(vars, vars, &hero.motion.displacement);
+        fast_vec_add(bomb_launch_data, bomb_launch_data, &hero.motion.displacement);
     } else if (hero.ground_moby != 0 && FUN_002141f8_cf((unsigned char *)hero.ground_moby) != 0) {
-        fast_vec_add(vars, vars, &hero.motion.displacement);
-    } else if (*(float **)((char *)vars + 0x60) != 0) {
-        short cls = *(short *)(*(char **)((char *)vars + 0x60) + 0xa6);
+        fast_vec_add(bomb_launch_data, bomb_launch_data, &hero.motion.displacement);
+    } else if (*(float **)((char *)bomb_launch_data + 0x60) != 0) {
+        short cls = *(short *)(*(char **)((char *)bomb_launch_data + 0x60) + 0xa6);
         if (cls == 0x56e || cls == 0x58e) {
-            fast_vec_add(vars, vars, vars + 0x10);
-        } else if (*(int *)((char *)vars + 0x64) != 0) {
+            fast_vec_add(bomb_launch_data, bomb_launch_data, bomb_launch_data + 0x10);
+        } else if (*(int *)((char *)bomb_launch_data + 0x64) != 0) {
             length = vector_length_xy(velocity);
-            fast_vec_sub(difference, &hero.motion.pos, *(char **)((char *)vars + 0x60) + 0x10);
+            fast_vec_sub(difference, &hero.motion.pos, *(char **)((char *)bomb_launch_data + 0x60) + 0x10);
             fast_vec_normalize(difference, difference, 1.0f);
-            dot = fast_vec_dot(difference, vars + 0x10);
+            dot = fast_vec_dot(difference, bomb_launch_data + 0x10);
             total = dot + length;
-            distance = vector_distance_xy(pos, *(char **)((char *)vars + 0x60) + 0x10) / total;
+            distance = vector_distance_xy(pos, *(char **)((char *)bomb_launch_data + 0x60) + 0x10) / total;
             if (dot > 0.0f) {
                 scale_vector_xyz(direction, difference, distance * dot);
-                fast_vec_add(working, direction, *(char **)((char *)vars + 0x60) + 0x10);
+                fast_vec_add(working, direction, *(char **)((char *)bomb_launch_data + 0x60) + 0x10);
                 *(OvlQuad *)direction = *(OvlQuad *)working;
             } else {
-                scale_vector_xyz(direction, vars + 0x10, distance);
-                fast_vec_add(working, direction, *(char **)((char *)vars + 0x60) + 0x10);
+                scale_vector_xyz(direction, bomb_launch_data + 0x10, distance);
+                fast_vec_add(working, direction, *(char **)((char *)bomb_launch_data + 0x60) + 0x10);
                 *(OvlQuad *)direction = *(OvlQuad *)working;
             }
             {
@@ -907,13 +907,13 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
             }
             aim_throw_arc(pos, direction, rp, total, 0.00001f, height);
             scale_vector_xyz(throw_arc_velocity, throw_arc_velocity, 0.65f);
-            scale_vector_xyz(vars, vars, 0.35f);
-            fast_vec_add(working, vars, throw_arc_velocity);
-            *(OvlQuad *)vars = *(OvlQuad *)working;
+            scale_vector_xyz(bomb_launch_data, bomb_launch_data, 0.35f);
+            fast_vec_add(working, bomb_launch_data, throw_arc_velocity);
+            *(OvlQuad *)bomb_launch_data = *(OvlQuad *)working;
         }
     }
     mp = moby + 0x10;
-    *(short *)((char *)vars + 0x54) = scale_game_frames(300);
+    *(short *)((char *)bomb_launch_data + 0x54) = scale_game_frames(300);
     qcopy(mp, pos);
     *(OvlQuad *)difference = *(OvlQuad *)((char *)hero.moby + 0x10);
     difference[2] = pos[2];
@@ -922,9 +922,9 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
         qcopy(mp, &coll_hit.pos);
     }
     if (D_0013E520.bA != 0 && hero.state.current == HERO_STATE_LOOK) {
-        float z = vars[2];
-        scale_vector_xyz(vars, vars, 1.5f);
-        vars[2] = z / 1.5f;
+        float z = bomb_launch_data[2];
+        scale_vector_xyz(bomb_launch_data, bomb_launch_data, 1.5f);
+        bomb_launch_data[2] = z / 1.5f;
     }
 }
 
