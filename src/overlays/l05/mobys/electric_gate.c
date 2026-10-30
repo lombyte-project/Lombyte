@@ -29,7 +29,7 @@ void electric_gate_update(char *gate_moby) {
     };
     char *electric_gate_vars = ((char *)MOBY(gate_moby)->pvars);
     int   state = MOBY(gate_moby)->state;
-    char *base;
+    char *voice_pool_base;
     char *tab;
     char *gate_position;
     char *voice_position_base;
@@ -53,8 +53,8 @@ void electric_gate_update(char *gate_moby) {
         if (fast_vec_dist(gate_position, tab) < 64.0f) {
             voice_slot_index = **(int **)(electric_gate_vars + 4);
             if (voice_slot_index >= 0) {
-                base = D_0013E550;
-                voice_owner = *(char **)(base + voice_slot_index * 0x70 + 0x88);
+                voice_pool_base = D_0013E550;
+                voice_owner = *(char **)(voice_pool_base + voice_slot_index * 0x70 + 0x88);
                 if (voice_owner != 0) {
                     if (*(short *)(voice_owner + 0xA6) == 0x346) {
                         if (voice_owner != gate_moby) {
@@ -64,8 +64,8 @@ void electric_gate_update(char *gate_moby) {
                                       fast_vec_dist(voice_owner + 0x10, tab)))
                                     goto after;
                             }
-                            voice_position_base = base + 0x90;
-                            *(char **)(base + **(int **)(electric_gate_vars + 4) * 0x70 + 0x88) = gate_moby;
+                            voice_position_base = voice_pool_base + 0x90;
+                            *(char **)(voice_pool_base + **(int **)(electric_gate_vars + 4) * 0x70 + 0x88) = gate_moby;
                             qcopy(**(int **)(electric_gate_vars + 4) * 0x70 + voice_position_base, gate_position);
                         }
                         goto after;
