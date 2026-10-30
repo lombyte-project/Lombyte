@@ -1092,7 +1092,7 @@ void bomb_update(BombMoby *m) __asm__("FUN_L00_002adb30");
 void bomb_update(BombMoby *bomb_moby) {
     B910       rec = l00_bomb_camera_blast_parameters;
     Vec_2adb30 delta;
-    Vec_2adb30 old;
+    Vec_2adb30 bomb_pre_motion_position;
     Vec_2adb30 blast_velocity;
     Vec_2adb30 b;
     Vec_2adb30 proj;
@@ -1202,7 +1202,7 @@ void bomb_update(BombMoby *bomb_moby) {
             BombHit q;
             bomb_moby->rx = fast_add_rotations(bomb_moby->rx, frame_time_macro * 2.0943952f);
             bomb_moby->ry = fast_add_rotations(bomb_moby->ry, frame_time_macro * 7.8539815f);
-            qcopy_nc(&old, &bomb_moby->pos);
+            qcopy_nc(&bomb_pre_motion_position, &bomb_moby->pos);
             fast_vec_add(&bomb_moby->pos, &bomb_moby->pos, d);
             if (d->h68 == 0) {
                 d->v.f[2] -= frame_time_sq_macro * 11.0f;
@@ -1232,7 +1232,7 @@ void bomb_update(BombMoby *bomb_moby) {
             if (d->h68 != 0) {
                 d->h68++;
             }
-            if (collision_line(&old, &bomb_moby->pos, 0x10, (int)bomb_moby, (int)&q)) {
+            if (collision_line(&bomb_pre_motion_position, &bomb_moby->pos, 0x10, (int)bomb_moby, (int)&q)) {
                 if (d->h68 == 0 && collision_hit_material() == 0 && d->v.f[2] < 0.0f) {
                     Vec_2adb30 p;
                     Vec_2adb30 splash_particle_velocity;
