@@ -87,7 +87,7 @@ void elevator_update(struct Moby *elevator_moby) {
         ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT = 4
     };
     L14VendorVars *elevator_vars = (L14VendorVars *)elevator_moby->pvars;
-    Vec4           old;
+    Vec4           previous_elevator_position;
     Vec4           rot;
     Vec4           delta;
     float          level;
@@ -99,7 +99,7 @@ void elevator_update(struct Moby *elevator_moby) {
         elevator_vars->along = *(float *)((char *)path + (elevator_vars->segment << 4) + 0x1C);
         elevator_moby->command = 1;
     }
-    qcopy(&old, &elevator_moby->pos);
+    qcopy(&previous_elevator_position, &elevator_moby->pos);
     qcopy(&rot, &elevator_moby->rot);
     switch (elevator_moby->state) {
     case ELEVATOR_STATE_INITIALIZE: {
@@ -185,7 +185,7 @@ void elevator_update(struct Moby *elevator_moby) {
             elevator_vars->level = elevator_vars->motor_volume;
         }
         rebuild_elevator_world_path((u8 *)elevator_moby);
-        fast_vec_sub(&delta, &elevator_moby->pos, &old);
+        fast_vec_sub(&delta, &elevator_moby->pos, &previous_elevator_position);
         update_entity_matrix(elevator_vars->spring, &delta, &rot, &elevator_moby->rot);
         break;
     case ELEVATOR_STATE_SETTLE_AT_ENDPOINT:
@@ -229,7 +229,7 @@ void elevator_update(struct Moby *elevator_moby) {
     if (elevator_moby->state != 2 && elevator_moby->state != 0) {
         settle_elevator_at_path_endpoint(elevator_moby);
         if (hero.ground_moby == elevator_moby) {
-            fast_vec_sub(&delta, &elevator_moby->pos, &old);
+            fast_vec_sub(&delta, &elevator_moby->pos, &previous_elevator_position);
             update_entity_matrix(elevator_vars->spring, &delta, &rot, &elevator_moby->rot);
         }
     }
