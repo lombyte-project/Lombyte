@@ -21,7 +21,7 @@ extern s32 sceGsExecLoadImage(sceGsLoadImage *img, s32 src);
 
 void upload_texture_images(s32 base, s32 count, struct TextureImage *p) __asm__("FUN_00203120");
 
-void upload_texture_images(s32 base, s32 count, struct TextureImage *texture_image) {
+void upload_texture_images(s32 pixel_data_base, s32 count, struct TextureImage *texture_image) {
     sceGsLoadImage img;
     s32            i;
     s32            pixel_data_source;
@@ -40,7 +40,7 @@ void upload_texture_images(s32 base, s32 count, struct TextureImage *texture_ima
         one = 1;
         while (i != 0) {
             size = texture_image->size;
-            pixel_data_source = base + texture_image->data_offset;
+            pixel_data_source = pixel_data_base + texture_image->data_offset;
             vram = gs_texture_allocation_cursor;
             width = (u16)size;
             height = size >> 16;
