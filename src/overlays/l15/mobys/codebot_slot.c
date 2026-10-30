@@ -81,12 +81,12 @@ int count_missing_or_dying_mobys_in_list(int moby_list_index) __asm__("FUN_L15_0
 int count_missing_or_dying_mobys_in_list(int moby_list_index) {
     unsigned short *moby_index_entry = (unsigned short *)D_L15_001ABE40[moby_list_index];
     int             missing_or_dying_count = 0;
-    int             base;
+    int             moby_array_base;
     if (moby_index_entry == 0)
         return 0;
-    base = (int)l15_moby_array;
+    moby_array_base = (int)l15_moby_array;
     do {
-        unsigned char *moby = (unsigned char *)(base + ((moby_index_entry[0] & 0x7FFF) << 8));
+        unsigned char *moby = (unsigned char *)(moby_array_base + ((moby_index_entry[0] & 0x7FFF) << 8));
         if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
             missing_or_dying_count++;
     } while ((short)*moby_index_entry++ >= 0);
