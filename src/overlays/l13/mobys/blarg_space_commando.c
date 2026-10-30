@@ -599,7 +599,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         GROUND_MATERIAL_KILLS_WALKER_WITH_EXPLOSION = 11,
         GROUND_MATERIAL_EXPLODES_WALKER = 13
     };
-    struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
+    struct WalkerVars_8d10 *blarg_space_commando_private_data = (struct WalkerVars_8d10 *)moby->pvars;
     char                   *hit;
     s32                     code;
     s32                     kind;
@@ -610,26 +610,26 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
 
     moby->scale = moby->pclass->scale * D_L13_00161E58;
     update_gemlik_trail(moby);
-    if (vars->init != 0) {
-        vars->idle_timer =
+    if (blarg_space_commando_private_data->init != 0) {
+        blarg_space_commando_private_data->idle_timer =
             truncate_float_to_s32(FUN_001f96b0_8d10(random_float_between(180.0f, 240.0f)));
-        vars->init = 0;
+        blarg_space_commando_private_data->init = 0;
     }
-    fast_dec_timer(&vars->idle_timer);
+    fast_dec_timer(&blarg_space_commando_private_data->idle_timer);
     damage = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
-    code = resolve_moby_hit_response(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
+    code = resolve_moby_hit_response(moby, hit, &blarg_space_commando_private_data->health, 0, &kind, &damage, 0, 4);
     if (kind != 1 && moby->state != 0x10) {
         if (hit != 0 && *(struct Moby **)(hit + 0x20) != 0 &&
             (*(struct Moby **)(hit + 0x20))->oclass == 0x4EE) {
             damage = 0.0f;
         }
-        vars->health -= damage;
-        if (vars->health <= 0.0f) {
+        blarg_space_commando_private_data->health -= damage;
+        if (blarg_space_commando_private_data->health <= 0.0f) {
             code = 1;
         }
-        vars->hit_sound = 0x2CD;
-        vars->hit_scale = 0.7f;
+        blarg_space_commando_private_data->hit_sound = 0x2CD;
+        blarg_space_commando_private_data->hit_scale = 0.7f;
         switch (code) {
         case HIT_RESULT_NONE:
         case HIT_RESULT_NO_REACTION:
@@ -643,61 +643,61 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         case 9:
         case 10:
             moby->state = 0xF;
-            vars->stun_timer = scale_game_frames(0x3C);
-            vars->knock_up = blarg_space_commando_stun_horizontal_knockback_speed * frame_time;
-            vars->knock_back = blarg_space_commando_stun_vertical_knockback_speed * frame_time;
-            vars->knock_min = 8.0f;
-            vars->knock_max = 15.0f;
+            blarg_space_commando_private_data->stun_timer = scale_game_frames(0x3C);
+            blarg_space_commando_private_data->knock_up = blarg_space_commando_stun_horizontal_knockback_speed * frame_time;
+            blarg_space_commando_private_data->knock_back = blarg_space_commando_stun_vertical_knockback_speed * frame_time;
+            blarg_space_commando_private_data->knock_min = 8.0f;
+            blarg_space_commando_private_data->knock_max = 15.0f;
             trooper_start_knockback(moby,
-                                    vars->anim,
+                                    blarg_space_commando_private_data->anim,
                                     7,
                                     1,
                                     0,
                                     fast_arc_tan(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
-            vars->flash_time = 0xFA;
+            blarg_space_commando_private_data->flash_time = 0xFA;
             break;
         case HIT_RESULT_DEATH:
         case HIT_RESULT_DYING_KNOCKBACK:
             moby->state = 0x10;
             moby->flags &= ~0x1000;
-            vars->knock_up = blarg_space_commando_dying_horizontal_knockback_speed * frame_time;
-            vars->knock_back = blarg_space_commando_dying_vertical_knockback_speed * frame_time;
-            vars->knock_min = 9.0f;
-            vars->knock_max = 17.0f;
+            blarg_space_commando_private_data->knock_up = blarg_space_commando_dying_horizontal_knockback_speed * frame_time;
+            blarg_space_commando_private_data->knock_back = blarg_space_commando_dying_vertical_knockback_speed * frame_time;
+            blarg_space_commando_private_data->knock_min = 9.0f;
+            blarg_space_commando_private_data->knock_max = 17.0f;
             trooper_start_knockback(moby,
-                                    vars->anim,
+                                    blarg_space_commando_private_data->anim,
                                     8,
                                     1,
                                     0,
                                     fast_arc_tan(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
-            vars->flash_time = 0xFA;
+            blarg_space_commando_private_data->flash_time = 0xFA;
             stop_moby_sound_8d10(moby, 0, -1);
             break;
         }
-        trooper_anim_update(moby, vars->flash);
+        trooper_anim_update(moby, blarg_space_commando_private_data->flash);
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, vars->flash);
-    if (vars->idle_timer != 0) {
-        vars->range = vars->far_range;
+    trooper_anim_finish(moby, blarg_space_commando_private_data->flash);
+    if (blarg_space_commando_private_data->idle_timer != 0) {
+        blarg_space_commando_private_data->range = blarg_space_commando_private_data->far_range;
     } else {
-        vars->range = vars->near_range;
+        blarg_space_commando_private_data->range = blarg_space_commando_private_data->near_range;
     }
-    path = (s32 *)walker_paths[vars->path];
-    if (find_target_8d10(vars->range, moby, &vars->target, 0, 0, path + 4, *path) != 2) {
-        if (vars->range < vector_distance_xy(&vars->home, &vars->target) ||
-            absolute_float(moby->pos.z - vars->target.z) > 3.0f) {
-            vars->mode = 2;
+    path = (s32 *)walker_paths[blarg_space_commando_private_data->path];
+    if (find_target_8d10(blarg_space_commando_private_data->range, moby, &blarg_space_commando_private_data->target, 0, 0, path + 4, *path) != 2) {
+        if (blarg_space_commando_private_data->range < vector_distance_xy(&blarg_space_commando_private_data->home, &blarg_space_commando_private_data->target) ||
+            absolute_float(moby->pos.z - blarg_space_commando_private_data->target.z) > 3.0f) {
+            blarg_space_commando_private_data->mode = 2;
         }
-        if (vars->target_moby != -1 &&
-            is_point_inside_clip_volume(&vars->target, vars->target_moby) == 0) {
-            vars->mode = 2;
+        if (blarg_space_commando_private_data->target_moby != -1 &&
+            is_point_inside_clip_volume(&blarg_space_commando_private_data->target, blarg_space_commando_private_data->target_moby) == 0) {
+            blarg_space_commando_private_data->mode = 2;
         } else {
-            vars->target_moby = -1;
+            blarg_space_commando_private_data->target_moby = -1;
         }
     }
-    if (vars->start_frame == 0) {
-        vars->start_frame = (*(int *)&D_001413D0_lui);
+    if (blarg_space_commando_private_data->start_frame == 0) {
+        blarg_space_commando_private_data->start_frame = (*(int *)&D_001413D0_lui);
     }
     ground = probe_ground_height(&moby->pos, 0, 0.5f);
     if (ground != 0.0f) {
@@ -738,10 +738,10 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
                     fast_vec_add(&moby->pos, &moby->pos, &push);
                 }
                 if (ground < moby->pos.z) {
-                    vars->fall_speed -= frame_time_sq * 9.8f;
-                    moby->pos.z += vars->fall_speed;
+                    blarg_space_commando_private_data->fall_speed -= frame_time_sq * 9.8f;
+                    moby->pos.z += blarg_space_commando_private_data->fall_speed;
                     if (moby->pos.z < ground) {
-                        vars->fall_speed = 0.0f;
+                        blarg_space_commando_private_data->fall_speed = 0.0f;
                         moby->pos.z = ground;
                     }
                 } else if (moby->pos.z < ground) {
@@ -752,8 +752,8 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         }
     } else {
         if (moby->state < 0xF) {
-            vars->fall_speed -= frame_time_sq * 9.8f;
-            moby->pos.z += vars->fall_speed;
+            blarg_space_commando_private_data->fall_speed -= frame_time_sq * 9.8f;
+            moby->pos.z += blarg_space_commando_private_data->fall_speed;
         }
     }
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f ||
