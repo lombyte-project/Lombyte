@@ -49,7 +49,7 @@ int        spawn_bombthrower_grass_projectile(int   owner,
                                               char *initial_position,
                                               char *initial_velocity) __asm__("FUN_L10_002d8058");
 
-int spawn_bombthrower_grass_projectile(int owner, char *initial_position, char *initial_velocity) {
+int spawn_bombthrower_grass_projectile(int firing_moby, char *initial_position, char *initial_velocity) {
     char *moby = create_moby(0x3AA);
     if (moby != 0) {
         char *bombthrower_projectile_vars = ((char *)MOBY(moby)->pvars);
@@ -57,7 +57,7 @@ int spawn_bombthrower_grass_projectile(int owner, char *initial_position, char *
         MOBY(moby)->draw_dist = 0x7F;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(int *)(bombthrower_projectile_vars + 0x10) = owner;
+        *(int *)(bombthrower_projectile_vars + 0x10) = firing_moby;
         *(short *)(bombthrower_projectile_vars + 0x16) = 0;
         qcopy(moby + 0x10, initial_position);
         MOBY(moby)->pos.z = MOBY(moby)->pos.z + *(float *)&D_L10_00161BEC_gp;
