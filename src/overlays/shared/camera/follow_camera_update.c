@@ -313,7 +313,7 @@ void follow_camera_build_view(u8 *camera) {
     u8 *view_blend_and_smoothing_state;
     u8 *reference_orbit_offset;
     u8 *tb;
-    u8 *base;
+    u8 *camera_reference_basis;
     u8 *side_axis;
     u8 *view_up_axis;
     u8 *side_axis_or_aim_position; /* scratch vector pointer: p + 0x10, later v4 */
@@ -329,7 +329,7 @@ void follow_camera_build_view(u8 *camera) {
     f32 view_direction[4];
     f32 adjusted_aim_position[4];
 
-    base = camera_view;
+    camera_reference_basis = camera_view;
     camera_state = *(u8 **)(camera + 0x70);
     follow_state_block = camera_state + 0x40;
     view_blend_and_smoothing_state = camera_state + 0x20;
@@ -342,7 +342,7 @@ void follow_camera_build_view(u8 *camera) {
         up = D_L00_00166E30;
     } else {
         up = D_L00_00166E30;
-        tb = base + 0x20;
+        tb = camera_reference_basis + 0x20;
         position_up_component = FUN_001f9ab0_2e9010(camera_state + 0x80, tb);
         FUN_001f9a68_2e9010(vector_scratch, tb, position_up_component);
         fast_vec_sub(projected_reference_position, camera_state + 0x80, vector_scratch);
