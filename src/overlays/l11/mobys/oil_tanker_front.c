@@ -417,13 +417,13 @@ void process_oil_tanker_damage_and_destruction(struct Moby *moby) {
 
 int collect_oil_tanker_chain_mobys(struct Moby *moby, void **out) __asm__("FUN_L11_00318050");
 
-int collect_oil_tanker_chain_mobys(struct Moby *moby, void **out) {
+int collect_oil_tanker_chain_mobys(struct Moby *moby, void **chain_mobys_output) {
     char *tanker_chain_vars = (char *)moby->pvars;
     int   i;
     int   count = *(int *)(tanker_chain_vars + 0x64) + 1;
-    out[0] = moby;
+    chain_mobys_output[0] = moby;
     for (i = 0; i < *(int *)(tanker_chain_vars + 0x64); i++) {
-        out[i + 1] = ((void **)(tanker_chain_vars + 0x70))[i];
+        chain_mobys_output[i + 1] = ((void **)(tanker_chain_vars + 0x70))[i];
     }
     return count;
 }
