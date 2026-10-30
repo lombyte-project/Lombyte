@@ -227,7 +227,6 @@ extern float vertical_gate_travel_distance_gp __asm__("D_L15_001614F8") __attrib
 extern int D_L15_00161AC0;
 extern unsigned char D_001413F4[];
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern int func_0022ED80_2A48B0(int, int, GateMoby *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern unsigned char D_0013DD50 NOT_SDA;
 extern unsigned char D_0013F3D0_2A48B0[] __asm__("D_0013F3D0");
@@ -294,7 +293,7 @@ void update_vertical_gate(GateMoby *gate_moby)
         }
         if (((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->owner != gate_moby ||
             ((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->active == 0) {
-            gate_vars->sound = func_0022ED80_2A48B0(0, 4, gate_moby);
+            gate_vars->sound = allocate_voice_for_target_entry(0, 4, gate_moby);
         }
         if (vertical_gate_travel_distance_gp < (gate_vars->travel = gate_vars->travel + step)) {
             if (gate_vars->sound != -1 &&
@@ -340,7 +339,7 @@ void update_vertical_gate(GateMoby *gate_moby)
         }
         if (((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->owner != gate_moby ||
             ((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->active == 0) {
-            gate_vars->sound = func_0022ED80_2A48B0(0, 4, gate_moby);
+            gate_vars->sound = allocate_voice_for_target_entry(0, 4, gate_moby);
         }
         if ((gate_vars->travel = gate_vars->travel - step) < 0.0f) {
             if (gate_vars->sound != -1 &&
@@ -1719,7 +1718,6 @@ void process_helicopter_hits(struct Moby *moby) {
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 int select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_0025fcb8");
-extern void func_L00_00260D30_t(void *, float *, float) __asm__("FUN_L00_0025fcb8");
 
 float compute_ultramech_flocking_steering_point(void *m_, void *out, float target_search_range) __asm__("FUN_L15_002cf110");
 
@@ -1733,7 +1731,7 @@ float compute_ultramech_flocking_steering_point(void *m_, void *out, float targe
     int clear = 1;
     float k;
     char *other_moby;
-    func_L00_00260D30_t(moby, target_position, target_search_range);
+    select_moby_combat_target(moby, target_position, target_search_range);
     target_distance = vector_distance_xy(moby + 0x10, target_position);
     clear_u64_value(out);
     for (other_moby = D_L15_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
@@ -2428,7 +2426,6 @@ extern void mark_moby_for_removal_cf(void *, int, long long) __asm__("FUN_L00_00
 extern void trooper_knockback_arc(void *, void *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_set_knockback(void *, float, float) __asm__("FUN_L03_00250a78");
-extern void FUN_0024cd00(void *, void *) __asm__("FUN_L00_0025d458");
 extern void FUN_0024f560(float, void *, void *) __asm__("FUN_L02_00261c80");
 extern void activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 
@@ -2550,7 +2547,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
                 mark_moby_for_removal_cf(ultramech_moby, 0x200, -1);
                 break;
             }
-            FUN_0024cd00(ultramech_moby, (char *)ultramech_vars + 0x60);
+            trooper_anim_update(ultramech_moby, (char *)ultramech_vars + 0x60);
         }
         if (slot != 0)
             *(int *)(slot + 0x34) = 0;

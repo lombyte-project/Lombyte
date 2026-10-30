@@ -341,7 +341,6 @@ extern s32 rig_pick_mode(struct Moby *, LegRig *, f32) __asm__("FUN_L04_002927d0
 extern f32 spring_turn(f32 cur, f32 target, f32 k, f32 d, f32 max, f32 *vel) __asm__("FUN_L00_00258110");
 extern void rig_animate(struct Moby *, LegRig *, s32, f32) __asm__("FUN_L04_00292d48");
 extern void divide_vector_xyz(void *, void *, f32) __asm__("FUN_L00_001ff378");
-extern s32 FUN_L04_00292828_c(struct Moby *, LegRig *) __asm__("FUN_L04_00292828");
 extern void walker_update_gait(struct Moby *, LegRig *, f32, f32, f32, s32) __asm__("FUN_L00_002a1670");
 extern void rig_probe_setup(struct Moby *, s32, s32 *, void *, f32 *, f32 *) __asm__("FUN_L01_00263a28");
 extern s32 rig_probe(void *, s32, f32, struct Moby *, f32) __asm__("FUN_L00_001f19a0");
@@ -445,7 +444,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
         rig->speed -= step;
         if (rig->speed < speed) rig->speed = speed;
     }
-    flags = FUN_L04_00292828_c(moby, rig);
+    flags = update_leg_rig_height_and_tilt(moby, rig);
     walker_update_gait(moby, rig, speed, heading, step, changed);
     if (!(rig->unkEE & 4)) {
         rig_probe_setup(moby, 0, &probe_kind, &local.v.ground, &probe_start, &probe_end);

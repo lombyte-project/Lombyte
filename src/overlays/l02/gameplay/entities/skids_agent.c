@@ -70,8 +70,8 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_
 extern void update_skid_mcmarx_relocation_sequence(struct Moby *) __asm__("FUN_L02_002e1fb8");
 extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
-extern void watcher_init(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
-extern s32 watcher_talk(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448");
+extern void initialize_npc_dialogue(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
+extern s32 update_npc_dialogue(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
@@ -82,7 +82,7 @@ extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void blend_anim(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void update_joint_animation(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
@@ -96,8 +96,6 @@ extern struct UsageStat D_00141968[] NOT_SDA; /* usage records 36 on (usage_stat
 extern u8 item_available[] __asm__("D_0013D4C0") NOT_SDA; /* by item id */
 extern s32 level_game_mode __asm__("D_L02_0015F5C4");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
-extern void initialize_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_002668a0");
-extern s32 update_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_00266448");
 extern void start_indexed_disc_stream(int) __asm__("FUN_L02_00298c68");
 extern void advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
@@ -174,10 +172,10 @@ void skids_agent_update(struct Moby *moby) {
         if (moby->prev_seq == 0 && fast_dec_timer_s16((s16 *)(data + 0x172)) != 0) {
             *(s16 *)(data + 0x172) = truncate_float_to_s32(scale_time(random_float_between(1200.0f, 2400.0f)));
             if (moby->prev_seq != 1) {
-                blend_anim(moby, 1, 0, scale_game_frames(10));
+                blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
         } else if (moby->prev_seq == 1 && (moby->anim_flags & 2)) {
-            blend_anim(moby, 0, 0, scale_game_frames(10));
+            blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         }
         break;
     case SKIDS_AGENT_CONVERSATION_ACTIVE:
@@ -370,7 +368,7 @@ void skid_mcmarx_update(struct Moby *moby) {
         watcher_vars->dialog = skid_mcmarx_dialogue_data;
         moby->state = 1;
         moby->update_dist = 0xFF;
-        watcher_init(moby, watcher_vars);
+        initialize_npc_dialogue(moby, watcher_vars);
         initialize_moby_grounding(moby);
         break;
     case SKID_MCMARX_IDLE_AND_TALK:
@@ -378,7 +376,7 @@ void skid_mcmarx_update(struct Moby *moby) {
             watcher_vars->talk_radius = 255.0f;
         else
             watcher_vars->talk_radius = 2.5f;
-        if (watcher_talk(moby, watcher_vars)) {
+        if (update_npc_dialogue(moby, watcher_vars)) {
             begin_dialogue_camera_transition(moby, 2.5f);
             moby->state = 2;
         }
@@ -397,9 +395,9 @@ void skid_mcmarx_update(struct Moby *moby) {
             if (random_integer_below(2) == 0)
                 idle_animation = 2;
             if (moby->prev_seq != idle_animation)
-                blend_anim(moby, idle_animation, 0, scale_game_frames(10));
+                blend_moby_animation(moby, idle_animation, 0, scale_game_frames(10));
         } else if ((moby->anim_flags & 2) && moby->prev_seq) {
-            blend_anim(moby, 0, 0, scale_game_frames(10));
+            blend_moby_animation(moby, 0, 0, scale_game_frames(10));
         }
         break;
     case SKID_MCMARX_CONVERSATION_ACTIVE:
@@ -547,7 +545,6 @@ extern struct Moby *D_L02_0015FFD8;
 extern unsigned char D_0014C050[][16];
 extern char voice_pool[] __asm__("D_0013E550");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -713,7 +710,6 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002E21F8.c: func_L02_002EB5D0), where it is exact; names translated to the US level program. */
 
 extern void prepare_scaled_table_on_stack(float) __asm__("FUN_L02_002a47f8");
-extern void FUN_L02_002ea048_cb(void) __asm__("FUN_L02_002ea048");
 
 void ocean_aridia_update(struct Moby *moby) __asm__("FUN_L02_002ea198");
 void ocean_aridia_update(struct Moby *moby) {
@@ -728,7 +724,7 @@ void ocean_aridia_update(struct Moby *moby) {
         moby->update_dist = 0xFF;
         break;
     case OCEAN_ARIDIA_REGISTER_DRAW_CALLBACK:
-        add_draw_callback(FUN_L02_002ea048_cb, moby);
+        add_draw_callback(draw_aridia_ocean_parts, moby);
         break;
     }
 }

@@ -188,7 +188,6 @@ extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
-extern void FUN_L00_00233ba0_u(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void air_accel(f32) __asm__("FUN_L01_00234358");
 
@@ -217,7 +216,7 @@ void update_hero_airborne_planar_motion(void) {
             hero.target_speed = frame_time * 3.5f;
         }
         speed_step(frame_time_sq * 44.0f, frame_time_sq * 45.0f);
-        FUN_L00_00233ba0_u(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
+        set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
         add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
     } else if (state == 0x1C) {
         if (scale_game_frames(0x28) < hero.state_timer) {
@@ -266,7 +265,7 @@ void update_hero_airborne_planar_motion(void) {
                 hero.motion.velocity.f[0] = fast_cos(hero.motion.move_yaw) * (frame_time * 4.9f);
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.move_yaw) * (frame_time * 4.9f);
             } else {
-                FUN_L00_00233ba0_u(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
+                set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
                 fast_vec_normalize(&added_velocity, &hero.motion.move_dir, frame_time * 4.9f);
                 fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &added_velocity);
             }

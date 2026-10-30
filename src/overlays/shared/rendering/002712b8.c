@@ -518,7 +518,7 @@ typedef struct {
 } P_2725d8;
 extern u8 *D_L00_001B215C NOT_SDA;
 P_2725d8 *FUN_L00_002678b8_c2(s32) __asm__("FUN_L00_002678b8");
-void add_vector_xyz_cf(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
+void moby_point_position(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
 P_2725d8 *spawn_moby_point_attached_particle(u8 *owner, u8 *attachment_point_selector, s32 color, s32 initial_size_bits, f32 primary_position_w, f32 secondary_position_w) __asm__("FUN_L00_002725d8");
 
 P_2725d8 *spawn_moby_point_attached_particle(u8 *owner, u8 *attachment_point_selector, s32 color, s32 initial_size_bits, f32 primary_position_w, f32 secondary_position_w) {
@@ -534,7 +534,7 @@ P_2725d8 *spawn_moby_point_attached_particle(u8 *owner, u8 *attachment_point_sel
         particle->b3 = 0x48;
         particle->b1 = 3;
         particle->b2 = *D_L00_001B215C;
-        add_vector_xyz_cf(owner, attachment_point_selector, particle->v10);
+        moby_point_position(owner, attachment_point_selector, particle->v10);
         qcopy(particle->v20, particle->v10);
         particle->unk2C = secondary_position_w;
         *(f32 *)((u8 *)particle + 0x1C) = primary_position_w;
@@ -561,7 +561,6 @@ typedef struct {
     Q_2726d8 q;
 } P_2726d8;
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 void update_moby_point_attached_particle(P_2726d8 *particle) __asm__("FUN_L00_002726d8");
 
 void update_moby_point_attached_particle(P_2726d8 *particle) {
@@ -919,7 +918,6 @@ typedef struct {
 } P_273448;
 extern u8 *D_L00_001B2174_lui __asm__("D_L00_001B2174") NOT_SDA;
 extern float g_debug_camera[4] __asm__("D_L00_00166DC0") NOT_SDA;
-extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) __asm__("FUN_L00_00273448");
 
 void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
@@ -1322,7 +1320,7 @@ typedef struct {
     u8 v10[16];
     R_274518 r;
 } M_274518;
-s32 FUN_L00_00259430_274518(void *, s32) __asm__("FUN_L00_00259430");
+s32 decrement_packed_countdown(void *, s32) __asm__("FUN_L00_00259430");
 u8 *FUN_L00_002743a8_274518(s32, void *, s32, f32, f32, s32, s32,
                             void *) __asm__("FUN_L00_002743a8");
 void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) __asm__("FUN_L00_00274518");
@@ -1335,7 +1333,7 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
     f32 k1, k2, z;
 
     if (r->h1C == 0) {
-        if (FUN_L00_00259430_274518(particle->b4, r->h1A))
+        if (decrement_packed_countdown(particle->b4, r->h1A))
             goto kill;
         if (r->iC == 0)
             return;
@@ -1349,7 +1347,7 @@ void update_mode_controlled_orbiting_trail_particle(M_274518 *particle) {
     if (fast_dec_timer_s16(&particle->hA))
         goto kill;
     if (particle->hA < scale_game_frames(10)) {
-        if (FUN_L00_00259430_274518(particle->b4, 0x10)) {
+        if (decrement_packed_countdown(particle->b4, 0x10)) {
         kill:
             free_effect_particle(particle);
             return;
@@ -1399,7 +1397,6 @@ typedef struct {
     float unk8;
     float unkC;
 } S_274818;
-extern void FUN_L00_0024f7c8_274818(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 
 void update_randomized_moby_point_attached_particle(char *particle) __asm__("FUN_L00_00274818");
@@ -1419,7 +1416,7 @@ void update_randomized_moby_point_attached_particle(char *particle) {
     one = 1.0f;
     randomized_primary_position_w = attachment_data->unk8 * random_float_between(0.05f, one);
     save = *(float *)(particle + 0x2C);
-    FUN_L00_0024f7c8_274818(attachment_data->o, attachment_data->b4, attachment_position);
+    moby_point_position(attachment_data->o, attachment_data->b4, attachment_position);
     build_moby_bone_transform(attachment_data->o, attachment_data->b4, attachment_vector_scratch);
     x = convert_integer_to_float(attachment_data->b5);
     x = random_float_between(-x, x);
@@ -1798,7 +1795,6 @@ void update_damped_moby_relative_color_size_tween_particle(char *particle) {
         free_effect_particle(particle);
     }
 }
-extern int FUN_L00_00259430_002756f0(void *, int) __asm__("FUN_L00_00259430");
 
 void update_gravity_damped_resizing_particle(unsigned char *particle) __asm__("FUN_L00_002756f0");
 
@@ -1817,13 +1813,12 @@ void update_gravity_damped_resizing_particle(unsigned char *particle) {
         *(float *)(particle + 0xC) = x;
         if (x < 15000.0f)
             *(float *)(particle + 0xC) = 15000.0f;
-    } else if (FUN_L00_00259430_002756f0(particle + 4, *(int *)(particle_data + 0x1C))) {
+    } else if (decrement_packed_countdown(particle + 4, *(int *)(particle_data + 0x1C))) {
         *(int *)(particle + 0xC) = 0;
         free_effect_particle(particle);
     }
 }
 extern int timed_particle_alpha_decrement_gp __asm__("D_L00_00160240") __attribute__((sda));
-void decrement_packed_countdown() __asm__("FUN_L00_00259430");
 void free_effect_particle() __asm__("FUN_L00_00267a08");
 /* Lowers the top byte at p+4 by D_L00_00160240; calls 00267a08 once fast_dec_timer_s16(p+0xA) is set. */
 void update_timed_alpha_fade_particle(char *particle) __asm__("FUN_L00_00275810");

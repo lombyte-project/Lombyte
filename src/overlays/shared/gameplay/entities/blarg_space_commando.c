@@ -606,7 +606,6 @@ void process_blarg_space_commando_hits(char *moby) {
 
 extern char D_L06_00174600_lui[] __asm__("D_L06_00174600") NOT_SDA;
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 extern float beam_spread_degrees_gp __asm__("D_L06_00161FD4") __attribute__((sda));
 extern int beam_duration_frames_gp __asm__("D_L06_00161FD8") __attribute__((sda));
@@ -618,7 +617,7 @@ void initialize_blarg_space_commando_beam(char *moby) {
     int i;
     probe_ground_height(moby + 0x10, 0, 0.5f);
     fast_vec_normalize(vars + 0x220, D_L06_00174600_lui, 1.0f);
-    add_vector_xyz_cf(moby, 0, vars + 0x210);
+    moby_point_position(moby, 0, vars + 0x210);
     *(float *)(vars + 0x218) = *(float *)(moby + 0x18);
     for (i = 0; i < 16; i++) {
         float angle_offset = convert_integer_to_float(i) * 0.0625f - 0.5f;

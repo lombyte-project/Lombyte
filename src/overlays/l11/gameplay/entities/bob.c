@@ -205,7 +205,6 @@ extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern unsigned char D_0013D4C3 NOT_SDA;
 extern int D_L11_0015F5C4;
@@ -252,7 +251,7 @@ void bob_update(WM11 *moby) {
             if (moby_vars->h04 == 2) {
                 grant_inventory_item(3, 1);
                 jet_reset_camera(hero.motion.pos.f, hero.motion.pos.f + 4);
-                memcard_save_data_d0710(0, -1);
+                memcard_save_data(0, -1);
                 clear_active_help_record();
                 help_request(0x2AFB, 0x3D);
             }
@@ -1075,7 +1074,6 @@ struct PokSentryVars {
 extern unsigned char D_0013D50B NOT_SDA;
 extern char *D_L11_001600EC;
 extern struct UsageStat help_records[] __asm__("D_00141968") NOT_SDA;
-extern void mark_moby_for_removal_f0e40(void *) __asm__("FUN_0020c828");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
 void fred_pokitaru_update(struct Moby *moby) __asm__("FUN_L11_002f0e40");
@@ -1102,7 +1100,7 @@ void fred_pokitaru_update(struct Moby *moby) {
         if (moby->prev_seq != 1)
             FUN_00212f90(moby, 1, 0, scale_game_frames(20));
         if (D_0013D50B) {
-            mark_moby_for_removal_f0e40(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         initialize_npc_dialogue(moby, moby_vars);
@@ -1140,7 +1138,7 @@ void fred_pokitaru_update(struct Moby *moby) {
                 discount_purchase_pricing[0] = 1;
                 D_0013D50B = 1;
                 queue_dialogue_message(0x2B06, scale_game_frames(300));
-                memcard_save_data_d0710(0, -1);
+                memcard_save_data(0, -1);
                 help_request(0x2AF9, 0x3B);
             }
         }
@@ -1225,7 +1223,7 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da
 extern void request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern int get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
-extern void advance_accelerated_scalar_2518(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void FUN_L00_00216f90_2518(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L01_0027a248_2518(int, int) __asm__("FUN_L01_0027a248");
@@ -1309,12 +1307,12 @@ void teleporter_update(struct Moby *moby) {
     case TELEPORTER_OPEN_PARTS: {
         int teleport_transition_status = get_hero_target_pose_status();
         if (*(float *)(data + 0x20) < 1.0f) {
-            advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
+            advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
                                             teleporter_parts_acceleration_gp * D_0015ED70_2518,
                                             teleporter_parts_deceleration_gp * D_0015ED70_2518,
                                             teleporter_parts_max_speed_gp * D_0015ED6C_2518);
         } else if (*(float *)(data + 0x24) < 1.0f) {
-            advance_accelerated_scalar_2518((float *)(data + 0x24), (float *)(data + 0x2C), 1.0f,
+            advance_accelerated_scalar((float *)(data + 0x24), (float *)(data + 0x2C), 1.0f,
                                             teleporter_parts_acceleration_gp * D_0015ED70_2518,
                                             teleporter_parts_deceleration_gp * D_0015ED70_2518,
                                             teleporter_parts_max_speed_gp * D_0015ED6C_2518);
@@ -1372,12 +1370,12 @@ void teleporter_update(struct Moby *moby) {
             add_draw_callback(FUN_L11_002f2d58_2518, moby);
             approach_value((float *)(data + 0x3C), 1.95f, D_0015ED6C_2518 * 4.0f);
         } else if (0.0f < *(float *)(data + 0x24)) {
-            advance_accelerated_scalar_2518((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,
+            advance_accelerated_scalar((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,
                                             teleporter_parts_acceleration_gp * D_0015ED70_2518,
                                             teleporter_parts_deceleration_gp * D_0015ED70_2518,
                                             teleporter_parts_max_speed_gp * D_0015ED6C_2518);
         } else if (0.0f < *(float *)(data + 0x20)) {
-            advance_accelerated_scalar_2518((float *)(data + 0x20), (float *)(data + 0x2C), 0.0f,
+            advance_accelerated_scalar((float *)(data + 0x20), (float *)(data + 0x2C), 0.0f,
                                             teleporter_parts_acceleration_gp * D_0015ED70_2518,
                                             teleporter_parts_deceleration_gp * D_0015ED70_2518,
                                             teleporter_parts_max_speed_gp * D_0015ED6C_2518);
@@ -1525,7 +1523,6 @@ void restore_teleporter_visibility_and_collision(struct Moby *moby) {
         count--;
     } while (count >= 0);
 }
-extern void delete_moby(void *) __asm__("FUN_0020c828");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F46C0), where it is exact; names translated to the US level program. */
 
@@ -1555,7 +1552,7 @@ void copy_pokitaru_pvar_to_hero(struct Moby *moby) {
         moby->update_dist = 0xFF;
         moby->state = 1;
         if (*(int *)state == -1)
-            delete_moby(moby);
+            mark_moby_for_removal(moby);
         break;
     case MOBY_COPY_PVAR_TO_HERO:
         if (hero.motion.pos.f[2] > 194.0f && hero.state.current != 0x32) {
@@ -1670,7 +1667,6 @@ extern void *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void scale_vec_309ac0(float *, float) __asm__("FUN_L00_0025f730");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");

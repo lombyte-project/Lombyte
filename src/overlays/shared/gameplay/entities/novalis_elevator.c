@@ -875,7 +875,7 @@ typedef struct {
 } SaleVars;
 
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
-extern void FUN_0020c828_2e1ac0(struct Moby *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 initialize_npc_dialogue(struct Moby *, SaleVars *) __asm__("FUN_L00_002668a0");
 extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars *) __asm__("FUN_L00_00266448");
 extern void initialize_vendor_screen(struct Moby *, s32, ItemPrice *) __asm__("FUN_L01_002aea70");
@@ -898,7 +898,7 @@ void gold_weapon_case_update(struct Moby *moby) {
     ItemPrice *price;
 
     if (sale_vars != 0 && sale_vars->slot != -1 && ((sale_vars->slot ^ 1) & 1) && alternate_animation_sequence_gp == 0) {
-        FUN_0020c828_2e1ac0(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     switch (moby->state) {
@@ -934,7 +934,7 @@ void gold_weapon_case_update(struct Moby *moby) {
         break;
     case GOLD_WEAPON_CASE_REMOVE_WHEN_PURCHASED:
         if (item_text_variant[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] != 0) {
-            FUN_0020c828_2e1ac0(moby);
+            mark_moby_for_removal(moby);
         }
         break;
     }
@@ -1007,7 +1007,6 @@ extern float fast_difference_between_rotations(float, float) __asm__("func_001FA
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern char D_L01_00174340_h[] __asm__("D_L01_001742C0");
-extern float *func_L00_0025D390_t(void *) __asm__("FUN_002141f8");
 extern int func_L00_001EFFF0_t(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 void *select_sand_mouse_spawn_target(void *moby, void *from, void *reference_rotation, float yawMax, float pitchMax, float range, float near,
@@ -1026,7 +1025,7 @@ void *select_sand_mouse_spawn_target(void *moby, void *from, void *reference_rot
         int candidate_class;
         float candidate_distance, score, pitch_error_squared;
         if (*(short *)(candidate_moby + 0x32) == 0) continue;
-        hp = func_L00_0025D390_t(candidate_moby);
+        hp = suck_get_aim_height(candidate_moby);
         if (!(*(unsigned short *)(candidate_moby + 0x34) & 0x1000) || candidate_moby == 0 || *(char **)(candidate_moby + 0x24) == 0) continue;
         candidate_class = *(short *)(*(char **)(candidate_moby + 0x24) + 0x46);
         if (candidate_class != 5 || hp == 0 || !(0.0f < *hp)) continue;
@@ -1303,7 +1302,6 @@ extern int step_mover_2e3f20(void *, void *, float *, float *) __asm__("FUN_L00_
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern void spawn_particle_2e3f20(float *, int, int, int, int, float *, float, float, float) __asm__("FUN_L00_00272060");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void compute_sand_mouse_approach_target(int, void *) __asm__("FUN_L01_002e30b8");
 extern void sand_mouse_compute_target(char *, char *) __asm__("FUN_L01_002e3110");
 extern s32 update_sand_mouse_fall_motion(void *, struct Moby *) __asm__("FUN_L01_002e3208");
@@ -1615,7 +1613,6 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
 
 void update_moby_motion_collision_and_burst(char *moby) __asm__("FUN_L01_002eda00");
@@ -2102,7 +2099,6 @@ extern short amoeboid_color_cycle_start_gp __asm__("D_L01_00161998") __attribute
 extern short amoeboid_color_cycle_end_gp __asm__("D_L01_0016199C") __attribute__((sda));
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern float D_0013F420[];
 extern int D_001413D0[];
 extern const float D_L01_001619A0_gp __asm__("D_L01_001619A0") __attribute__((sda));
@@ -2714,7 +2710,6 @@ typedef struct {
 } AreaVars;
 
 extern s32 *D_L01_001B0930_2f2eb8[] __asm__("D_L01_001B0930");
-extern void FUN_0020c828_2f2eb8(struct Moby *) __asm__("FUN_0020c828");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 
@@ -2730,7 +2725,7 @@ void update_nearest_area_moby_selection(struct Moby *moby) {
 
     if (moby->state == 0) {
         if (area_vars == 0) {
-            FUN_0020c828_2f2eb8(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         moby->update_dist = 0xFF;
@@ -2749,7 +2744,7 @@ void update_nearest_area_moby_selection(struct Moby *moby) {
             k *= 5;
             area_vars->count -= k;
             if (area_vars->count <= 0) {
-                FUN_0020c828_2f2eb8(moby);
+                mark_moby_for_removal(moby);
                 return;
             }
         }

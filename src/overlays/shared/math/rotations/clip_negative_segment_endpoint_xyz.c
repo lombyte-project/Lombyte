@@ -269,7 +269,6 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
     }
     return vector_distance_xy(query_point, out);
 }
-extern float FUN_L00_0025db00_c(void *, void *, void *, void *) __asm__("FUN_L00_0025db00");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern float FUN_L00_0025da70_c(void *, void *, float) __asm__("FUN_L00_0025da70");
 float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
@@ -285,7 +284,7 @@ float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQu
     int i;
     if (r > 0.0f && absolute_float(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
         absolute_float(((float *)query_point)[2] - ((float *)b)[2]) < r) {
-        planar_distance = FUN_L00_0025db00_c(out, query_point, segment_start, b);
+        planar_distance = project_level_path_point_onto_segment(out, query_point, segment_start, b);
         r = vector_distance_xy(segment_start, out);
         segment_length_or_start_direction_dot = vector_distance_xy(segment_start, b);
         segment_workspace[0] = *segment_start;
@@ -493,7 +492,7 @@ extern void *spawn_debris(void *, void *, int, int, int) __asm__("FUN_L00_002af4
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
-extern int allocate_voice_for_target_entry_25e450(int, int, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
 extern char default_explosion_flash_descriptor[] __asm__("D_L00_001B0250");
@@ -667,7 +666,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     }
     }
     if (owner_moby != 0 && k10 != -1) {
-        allocate_voice_for_target_entry_25e450(k10, 0, owner_moby);
+        allocate_voice_for_target_entry(k10, 0, owner_moby);
     }
     if (fG != 0.0f) {
         if (effect_reduction_level == 0) {
@@ -705,7 +704,6 @@ extern int FUN_L00_00257b90(int, int);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 
-extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 typedef struct {
     u8 pad0[0x160];

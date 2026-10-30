@@ -171,7 +171,6 @@ extern float vendor_hologram_vertex_offsets[][4] __asm__("D_L00_001CA380");
 extern float vendor_hologram_vertex_uvs[][2] __asm__("D_L00_001CA410");
 extern int D_L00_001CA458[] NOT_SDA;
 extern int D_L00_001CA4C0_lui[] __asm__("D_L00_001CA4C0") NOT_SDA;
-extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
 #include "rnc/overlay/shared/gameplay/entities/draw_vendor_inset_quads_globals.h"
 extern float vendor_hologram_v_scroll_offset_gp __asm__("D_L00_00161184") __attribute__((sda));
 extern struct Quad D_L00_001CA480[] NOT_SDA;
@@ -188,7 +187,7 @@ void draw_vendor_hologram_cone(void) {
     quad_packet.hdr[2] = 1;
     quad_packet.hdr[3] = 0x4000000044L;
     quad_packet.hdr[0] = 0;
-    quad_packet.hdr[1] = get_effect_texture_c(0x18);
+    quad_packet.hdr[1] = get_effect_texture(0x18);
     for (i = 0; i < 4; i++) {
         transform_vector_by_basis(transformed_vertex_offsets[0], vendor_hologram_vertex_offsets[D_L00_001CA480[i].a], (char *)D_L00_001CA4C0_lui[7] + 0xC0);
         transform_vector_by_basis(transformed_vertex_offsets[1], vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)], (char *)D_L00_001CA4C0_lui[7] + 0xC0);

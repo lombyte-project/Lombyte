@@ -202,7 +202,7 @@ extern int cutscene_active_macro __asm__("D_L01_0015F404") MACRO_ADDR;
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
-extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
@@ -289,9 +289,9 @@ void update_explosive_projectile(struct Moby *moby) {
                 damage.count = 0;
                 collect_mobies_in_sphere(1.0f, &(*(Vec_2F7E08 *)&moby->pos), 9, (void *)((Hero *)(D_0013E533 + 0xE1D))->moby, &damage);
                 if (D_L01_001742D8 != 0 && D_L01_001742D8->oclass >= 0x2C5 && D_L01_001742D8->oclass < 0x2C8) {
-                    allocate_voice_for_target_entry_alt(2, 0, (int)moby);
+                    allocate_voice_for_target_entry(2, 0, (int)moby);
                 } else {
-                    allocate_voice_for_target_entry_alt(1, 0, (int)moby);
+                    allocate_voice_for_target_entry(1, 0, (int)moby);
                 }
             }
         }
@@ -414,7 +414,7 @@ typedef struct {
 } DebrisVars;
 
 extern f32 D_0015ED6C_2f8530 __asm__("D_0015ED6C");
-extern struct Moby *create_moby_local(s32) __asm__("FUN_0020c4f8");
+extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 rand(void) __asm__("FUN_001160d8");
@@ -435,7 +435,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
 
     spawn_position_snapshot = *(u128 *)pos;
     spawn_velocity_snapshot = *(u128 *)vel;
-    debris_moby = create_moby_local(oclass);
+    debris_moby = create_moby(oclass);
     if (debris_moby != 0) {
         debris_vars = (DebrisVars *)debris_moby->pvars;
         copy_hero_moby_field_38(debris_moby);
@@ -855,7 +855,6 @@ extern struct {
     float f84;
     float f88;
 } D_0013F350_w __asm__("D_0013F350");
-extern void FUN_L01_002ff028_c(void *) __asm__("FUN_L01_002ff028");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
@@ -885,7 +884,7 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
     int tracking;
     if (!plumber_vars)
         return;
-    FUN_L01_002ff028_c(plumber_moby);
+    attach_cutscene_big_head_manipulator(plumber_moby);
     if (plumber_moby->near_flag) {
         if (fast_vec_dist(plumber_moby->position, D_L01_00167240_c) < 32.0f) {
             FUN_L00_0025a120(plumber_moby);
@@ -1177,8 +1176,7 @@ extern struct Moby *D_L01_0015FFE4_302648 __asm__("D_L01_0015FFE4");
 extern s32 *D_L01_001B0930_302648[] __asm__("D_L01_001B0930");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern void FUN_001f4600_302648(void (*)(char *), void *) __asm__("FUN_001f4600");
-extern void FUN_L01_00302438_302648(char *) __asm__("FUN_L01_00302438");
+extern void enqueue_callback_list_1(void (*)(char *), void *) __asm__("FUN_001f4600");
 extern void terminate_visibomb_missile(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
 
 extern s32 visibomb_outside_zone_overlay_enabled_gp __asm__("D_L01_0015F30C") __attribute__((sda));
@@ -1224,7 +1222,7 @@ void update_target_outside_zone_timeout(struct Moby *moby) {
     }
     if (zone_vars->count > 0) {
         if (visibomb_outside_zone_overlay_enabled_gp) {
-            FUN_001f4600_302648(FUN_L01_00302438_302648, moby);
+            enqueue_callback_list_1(draw_visibomb_outside_zone_overlay, moby);
         }
         if (scale_game_frames(90) < zone_vars->count) {
             terminate_visibomb_missile(target_moby, target_moby->pvars);
@@ -1259,7 +1257,6 @@ extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern void fade_to_black(s32) __asm__("FUN_001f4a58");
 extern void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void set_hero_animation(f32, s32, s32) __asm__("FUN_L00_002323b8");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
@@ -1657,8 +1654,6 @@ extern void advance_accelerated_scalar(float *, float *, float, float, float,
                                        float) __asm__("FUN_00213f38");
 extern int get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
-extern int add_draw_callback(void (*)(char *), char *) __asm__("FUN_001f4600");
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 extern float teleporter_child_motion_acceleration_gp __asm__("D_L01_00161F88") __attribute__((sda));
 extern float teleporter_child_motion_deceleration_gp __asm__("D_L01_00161F8C") __attribute__((sda));
@@ -1803,7 +1798,7 @@ void teleporter_update(struct Moby *moby) {
     }
     case TELEPORTER_TRANSFER_TO_DESTINATION:
         if (*(float *)(data + 0x34) != 0.0f) {
-            add_draw_callback(draw_moby_radius_ring, moby);
+            enqueue_callback_list_1(draw_moby_radius_ring, moby);
             approach_value((float *)(data + 0x34), 0.0f, frame_time * 4.0f);
         } else {
             char *destination_moby = D_L01_0015FFD8 + (*(int *)data << 8);
@@ -1835,7 +1830,7 @@ void teleporter_update(struct Moby *moby) {
     case TELEPORTER_RETURN_TO_IDLE:
     case TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE:
         if (*(float *)(data + 0x34) < 1.95f) {
-            add_draw_callback(draw_moby_radius_ring, moby);
+            enqueue_callback_list_1(draw_moby_radius_ring, moby);
             approach_value((float *)(data + 0x34), 1.95f, frame_time * 4.0f);
         } else if (0.0f < *(float *)(data + 0x24)) {
             advance_accelerated_scalar((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,

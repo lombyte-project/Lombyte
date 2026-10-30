@@ -933,7 +933,6 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 float move_gadgebot_toward_target(char *self, float *src) __asm__("FUN_L18_002fc4e0");
-extern float FUN_L18_002fc4e0_c(void *, void *) __asm__("FUN_L18_002fc4e0");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
@@ -1017,7 +1016,7 @@ void gadgebot_update(unsigned char *moby) {
     case GADGEBOT_APPROACH_TARGET: {
         float target_distance;
         *(QVd058 *)position_scratch = *(QVd058 *)(moby_vars + 0x180);
-        target_distance = FUN_L18_002fc4e0_c(moby, position_scratch);
+        target_distance = move_gadgebot_toward_target(moby, position_scratch);
         if (*(int *)(moby_vars + 0x1C4) == 2 && target_distance < 5.0f) {
             moby[0x20] = 2;
             if (moby[0x53])

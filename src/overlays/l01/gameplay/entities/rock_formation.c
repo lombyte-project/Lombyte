@@ -27,7 +27,7 @@ typedef struct {
 } DebrisHit;
 
 extern DebrisColors l01_rock_formation_debris_oclass_choices __asm__("D_L01_00161C50");
-extern void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
@@ -45,7 +45,7 @@ void rock_formation_update(struct Moby *rock_formation_moby) {
     s32 j;
     f32 offset_component_or_particle_size;
 
-    hit = trooper_find_hit(rock_formation_moby, 0x10000, 0);
+    hit = find_moby_hit(rock_formation_moby, 0x10000, 0);
     rock_formation_moby->hit_slot = 0xFF;
     if (hit != NULL && hit->force > 0.0f) {
         FUN_0022da68(0, 0x10, rock_formation_moby);
@@ -221,7 +221,7 @@ void bridge_piece_1_update(BurstMoby *self) {
     f32 spawn_angle_radians;
     s32 i;
 
-    hit_result = trooper_find_hit(self, 0x830000, 0);
+    hit_result = find_moby_hit(self, 0x830000, 0);
     if (D_L01_001BB6B0.collected[self->id] != 0 ||
         (D_0014C190_257218[current_level_index][self->id >> 5] >> (self->id & 0x1F)) & 1) {
         mark_moby_for_removal(self);
@@ -507,7 +507,7 @@ void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
         mark_moby_for_removal(cave_wall_moby);
         return;
     }
-    if (trooper_find_hit(cave_wall_moby, 0x800000, 0) != NULL) {
+    if (find_moby_hit(cave_wall_moby, 0x800000, 0) != NULL) {
         FUN_0022da68(0, 0, cave_wall_moby);
         for (i = 0; i < 500; i++) {
             /* A block of its own: retail reuses these stack slots in the next loop. */
@@ -1249,7 +1249,6 @@ typedef struct {
 } SparkHit;
 
 extern s32 D_L01_0015F580;
-void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
@@ -1270,7 +1269,7 @@ void green_mushroom_update(SparkMoby *mushroom_moby) {
     SparkVec fragment_rotation;
 
     flag = 0;
-    hit = trooper_find_hit(mushroom_moby, 0x10000, 0);
+    hit = find_moby_hit(mushroom_moby, 0x10000, 0);
     switch (mushroom_moby->state) {
     case GREEN_MUSHROOM_INITIALIZE:
         mushroom_moby->state = 1;
@@ -1462,7 +1461,6 @@ void door_left_update(HoverMoby *door_moby) {
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_00300C38), where it is exact; names translated to the US level program. */
 
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L01_002ffa90_c(void *owner) __asm__("FUN_L01_002ffa90");
 extern float fast_cos(float);
 extern float fast_sin(float);
@@ -1563,7 +1561,6 @@ typedef struct {
 } SmokeMoby;
 
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_L00_0026ced0_u(void *, void *, u32, u32, f32, s32) __asm__("FUN_L00_0026ced0");
 
 void update_smoke_emitter(SmokeMoby *self) __asm__("FUN_L01_002ffb28");
 
@@ -1590,7 +1587,7 @@ void update_smoke_emitter(SmokeMoby *self) {
         transform_vector_by_basis(&particle_velocity, &particle_velocity, self->mtx);
         fast_vec_add(&pos, &pos, &self->pos);
         size = random_float_between(125000.0f, 175000.0f);
-        FUN_L00_0026ced0_u(&pos, &particle_velocity, 0x207F7F7F, 0x272727, size,
+        spawn_effect_particle_with_target_scalar(&pos, &particle_velocity, 0x207F7F7F, 0x272727, size,
                            scale_game_frames(FUN_L00_00257b90(0x2D, 0x3C)));
     }
 }
@@ -1881,7 +1878,7 @@ void mushroom_underside_update(void *self) __asm__("FUN_L01_00307c48");
 void mushroom_underside_update(void *self) {
     u8 *hit;
 
-    hit = trooper_find_hit(self, 0x10000, 0);
+    hit = find_moby_hit(self, 0x10000, 0);
     if (hit != NULL && *(f32 *)(hit + 0x2C) > 0.0f) {
         mark_moby_for_removal(self);
     }

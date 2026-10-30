@@ -351,12 +351,12 @@ void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_298840(void) __asm__("FUN_L00_00232fe8");
-int FUN_L00_002451b8_c(int) __asm__("FUN_L00_002451b8");
+int start_cutscene_chunk_read(int) __asm__("FUN_L00_002451b8");
 void fade_to_black(int) __asm__("FUN_001f4a58");
 void update_world_object_animation(void) __asm__("FUN_00204790");
 void sound_update(void) __asm__("FUN_0022ca50");
 int f122298_298840(int) __asm__("FUN_00122298");
-int f215b10_298840(void) __asm__("FUN_00215b10");
+int continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern char D_L00_0017C440[] NOT_SDA;
 extern float D_L00_0015F59C;
 void start_scene(int a) __asm__("FUN_L00_00298840");
@@ -398,7 +398,7 @@ void start_scene(int scene_id) {
         active_scene_trigger.moby->flags |= 1;
     if (D_L00_001B9CF0.unkEC)
         ((struct Moby *)D_L00_001B9CF0.unkEC)->flags |= 1;
-    FUN_L00_002451b8_c(0);
+    start_cutscene_chunk_read(0);
     fade_to_black(scale_game_frames(6));
     update_audio_stream_until_idle(1);
     update_world_object_animation();
@@ -412,8 +412,8 @@ void start_scene(int scene_id) {
         f122298_298840(0);
     }
     D_L00_0016C860_lui.x48 = -3;
-    f215b10_298840();
-    FUN_L00_002451b8_c(1);
+    continue_audio_stream_if_ready();
+    start_cutscene_chunk_read(1);
     for (i = 0; D_L00_0016C860_lui.x48 < i; i--)
         f122298_298840(0);
 }
@@ -458,11 +458,11 @@ extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void update_view_context(void) __asm__("FUN_001f2d98");
-void f20c828_298b18(M_298b18 *) __asm__("FUN_0020c828");
+void mark_moby_for_removal(M_298b18 *) __asm__("FUN_0020c828");
 float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
-void f216f90_298b18(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-void SCRATCH(F_298b18 *, void *, int) __asm__("FUN_00216c48");
+void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+void process_menu_entry(F_298b18 *, void *, int) __asm__("FUN_00216c48");
 void music_set_active_track_value(int) __asm__("FUN_L00_00265880");
 void finish_cutscene(void) __asm__("FUN_L00_00298b18");
 
@@ -484,7 +484,7 @@ void finish_cutscene(void) {
         if (m) {
             m->cls->n--;
             m->cls->x48[m->cls->n] = 0;
-            f20c828_298b18(m);
+            mark_moby_for_removal(m);
         }
     }
     for (moby = D_L00_0015FFDC_298b18; moby->st != 0xFF; moby++) {
@@ -501,7 +501,7 @@ void finish_cutscene(void) {
         f = probe_ground_height(D_L00_0016C860_298b18.v, 0, 0.5f);
         if (2.0f < f && absolute_float(D_L00_0016C860_298b18.x18 - f) < 2.0f)
             D_L00_0016C860_298b18.x18 = f;
-        f216f90_298b18(D_L00_0016C860_298b18.v, D_L00_0016C860_298b18.v + 0x10, 0, 1);
+        set_race_camera(D_L00_0016C860_298b18.v, D_L00_0016C860_298b18.v + 0x10, 0, 1);
     }
     if (active_scene_trigger.moby)
         active_scene_trigger.moby->flags &= ~1;
@@ -514,7 +514,7 @@ void finish_cutscene(void) {
         void *scene_trigger = active_scene_trigger.trigger;
         active_scene_trigger.moby = 0;
         active_scene_trigger.trigger = 0;
-        SCRATCH(scene_trigger_moby, scene_trigger, 1);
+        process_menu_entry(scene_trigger_moby, scene_trigger, 1);
     }
     music_set_active_track_value(scale_game_frames(0x1E));
 }
@@ -642,10 +642,8 @@ extern s32 D_0015EEA0;
 extern s32 decode_mode __asm__("D_0015EED8");
 extern void apply_level_specific_cutscene_moby_effects(void) __asm__("FUN_L00_0023e268");
 extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
-extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern s32 FUN_002168a8(s32);
 extern void FUN_00204790(void);
-extern void start_cutscene_chunk_read(s32) __asm__("FUN_L00_002451b8");
 extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void update_moby_shadow_range(void *) __asm__("FUN_00213700");
@@ -912,7 +910,6 @@ void FUN_00122e68_2997c8(void *) __asm__("FUN_00122e68");
 void FUN_00122518_2997c8(void *, short, int, int, int, int, int, int) __asm__("FUN_00122518");
 void FUN_00118a80_2997c8(int) __asm__("FUN_00118a80");
 void FUN_001227d8_2997c8(void *, int) __asm__("FUN_001227d8");
-void FUN_00216c48_2997c8(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
 void music_start_track(s32 track, s32 track_flags, s32 volume) __asm__("FUN_00215c40");
 void count_vsync(void) __asm__("FUN_0012f1c8");
 void movie_exit_to_gameplay(void) __asm__("FUN_L00_002997c8");
@@ -961,7 +958,7 @@ void movie_exit_to_gameplay(void) {
         struct Moby *moby = active->moby;
         active->moby = 0;
         active->trigger = 0;
-        FUN_00216c48_2997c8(moby, trigger, 1);
+        process_menu_entry(moby, trigger, 1);
     }
     (*(M_2997c8 *)voice_pool_lui).f |= 0x10;
 }
@@ -1482,10 +1479,8 @@ struct S16_29ab70 {
 extern struct S16_29ab70 D_001516D0_29ab70 __asm__("D_001516D0");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void f2330d0_29ab70(void) __asm__("FUN_L00_002330d0");
-extern void f216f90_29ab70(Vec4_29ab70 *, Vec4_29ab70 *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void update_resource_counter(void) __asm__("FUN_001ff768");
-extern void f20c828_29ab70(void *) __asm__("FUN_0020c828");
 extern void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern int vendor_close_hero_local_offset_gp __asm__("D_L00_00161070") __attribute__((sda));
@@ -1514,10 +1509,10 @@ void close_vendor_menu(int exit_cutscene_completed) {
         euler_rotation.y = 0.0f;
         euler_rotation.z = fast_add_rotations(*(float *)(*(char **)(vendor_state_base + 0x1C) + 0x48), 3.1415927f);
         if (exit_cutscene_completed == 0) {
-            f216f90_29ab70(&world_position, &euler_rotation, 0, 0);
+            set_race_camera(&world_position, &euler_rotation, 0, 0);
             jet_end_mount(2);
         } else {
-            f216f90_29ab70(&world_position, &euler_rotation, 0, 1);
+            set_race_camera(&world_position, &euler_rotation, 0, 1);
         }
     }
     {
@@ -1526,7 +1521,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
         if ((unsigned short)(D_001516D0_29ab70.mode - 6) >= 2)
             D_001516D0_29ab70.mode = 5;
         if (*(int *)(vendor_state + 0x40))
-            f20c828_29ab70(*(void **)(vendor_state + 0x1C));
+            mark_moby_for_removal(*(void **)(vendor_state + 0x1C));
     }
     snd_continue_all_sounds_in_group(0x1D);
     music_unpause();
@@ -1549,7 +1544,6 @@ extern void parse_space_scene_chunk(s32, s32) __asm__("FUN_002049f0");
 extern void load_scene_chunks_with_fade(s32) __asm__("FUN_L00_002454c8");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void FUN_L00_002455c0(s32);
-extern void f215b10_29ad08(void) __asm__("FUN_00215b10");
 extern void sce_gs_sync_v(s32) __asm__("FUN_00122298");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 
@@ -1610,7 +1604,7 @@ void start_vendor_exit_cutscene(void) {
         sce_gs_sync_v(0);
         mode = D_001516D0_29ad08.mode;
     }
-    f215b10_29ad08();
+    continue_audio_stream_if_ready();
 }
 extern int D_L00_0015F5D8;
 extern char D_L00_001CA4C0_u[] __asm__("D_L00_001CA4C0");
@@ -1620,7 +1614,6 @@ struct S16 {
 };
 extern struct S16 D_001516D0;
 void FUN_L00_002330d0(void);
-void set_race_camera(Vec4 *, Vec4 *, int, int) __asm__("FUN_L00_00216f90");
 void update_resource_counter(void) __asm__("FUN_001ff768");
 void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 void music_unpause(void) __asm__("FUN_00216088");
@@ -1911,7 +1904,6 @@ extern void set_animation_parameter(s32, s32) __asm__("FUN_001ff570");
 extern s32 FUN_001ff308(s32, s32, void *, void *, void *, void *, s32);
 void update_vendor_purchase(void) __asm__("FUN_L00_0029ba78");
 extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void restore_hero_after_vendor_exit_cutscene(void) __asm__("FUN_L00_0029af80");
 extern void FUN_002049f0(s32);
 extern void sce_vu0_rot_matrix_x(void *, void *, f32) __asm__("FUN_00125360");

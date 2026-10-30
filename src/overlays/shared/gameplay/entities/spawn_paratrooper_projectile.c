@@ -181,7 +181,6 @@ extern void randomize_ground_particle_scatter_parameters(int) __asm__("FUN_L08_0
 extern int update_float_countdown(float *) __asm__("FUN_L08_00211b08");
 extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern float func_002140F8_3091B0(float, float) __asm__("FUN_002132a8");
-extern float func_L00_002644E0_3091B0(void *) __asm__("FUN_L00_00263468");
 extern void func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN_L08_00272cb8");
 extern void func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN_L08_0027f5f0");
 extern void spawn_ground_contact_effect_particle(void *) __asm__("FUN_L00_002634f8");
@@ -291,7 +290,7 @@ void scatter_ground_particles(Moby *moby) {
                     par.w = 0.0f;
                 }
                 D_L08_00160260 = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset_gp;
-                ground_height = func_L00_002644E0_3091B0(&pt);
+                ground_height = ground_height_at(&pt);
                 if (ground_height < ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp) {
                     void *distance_selected_spawn_argument;
                     if (ground_height < D_L08_00160260) {
@@ -329,7 +328,7 @@ void scatter_ground_particles(Moby *moby) {
                 w = w * func_002140F8_3091B0(0.0f, 8.0f);
                 pt.y += w;
                 D_L08_00160260 = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset_gp;
-                ground_height = func_L00_002644E0_3091B0(&pt);
+                ground_height = ground_height_at(&pt);
                 if (ground_height < ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp) {
                     if (ground_height < D_L08_00160260) {
                         w = D_L08_00160260;
@@ -463,7 +462,7 @@ void update_ground_height_modulated_voice(char *moby) {
     do {
         build_look_at_matrix(point, radius, axis, angle);
         fast_vec_add(point, D_L08_001675C0, point);
-        if (func_L00_002644E0_3091B0(point) < ((Cam *)(D_L08_001675C0 - 0x140))->f148) fraction += 0.05f;
+        if (ground_height_at(point) < ((Cam *)(D_L08_001675C0 - 0x140))->f148) fraction += 0.05f;
         angle += 0.31415927f;
     } while (angle < 6.2831855f);
     if (smoothed_below_reference_ground_fraction_gp < fraction) {

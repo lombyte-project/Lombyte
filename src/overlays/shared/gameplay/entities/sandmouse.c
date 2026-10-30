@@ -401,7 +401,7 @@ typedef struct {
     s16 kind;      /* 0x46: 5 for lock-on targets */
 } TargetClass;
 
-extern f32 *FUN_002141f8_30d308(struct Moby *) __asm__("FUN_002141f8");
+extern f32 *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 extern s32 collision_line_30d308(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 
 extern struct Moby *l01_sandmouse_projectile_target_candidates[] __asm__("D_L01_001ABE80");
@@ -426,7 +426,7 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
         struct Moby *hit;
 
         if (candidate_moby->draw_dist == 0) continue;
-        hp = FUN_002141f8_30d308(candidate_moby);
+        hp = suck_get_aim_height(candidate_moby);
         if (candidate_moby == 0 || candidate_moby->pclass == 0) continue;
         candidate_target_kind = ((TargetClass *)candidate_moby->pclass)->kind;
         if (candidate_target_kind != 5 || hp == 0 || !(0.0f < *hp)) continue;
@@ -462,7 +462,6 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
 #include "sda.h"
 
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, struct VoiceTarget *target) __asm__("FUN_0022da68");
 struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
                               f32 range, f32 near, f32 nearYaw, f32 nearPitch) __asm__("FUN_L01_0030d308");
@@ -1762,7 +1761,7 @@ void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera
 extern char *D_L00_0015F5F4;
 extern char D_0013E550[];
 extern int calculate_voice_distance_volume(float, float, float, void *) __asm__("FUN_0022c6f8");
-extern int play_voice_319928(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
+extern int play_voice(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int vendor_volume(int, int) __asm__("FUN_L01_002a1968");
@@ -1804,7 +1803,7 @@ void update_box_positional_voice(char *moby) {
             char *slot = D_0013E550 + sound_data[4] * 0x70;
             if (*(char **)(slot + 0x8c) != moby || *(u8 *)(slot + 0x74) == 0) {
                 if (fast_dec_timer(&sound_data[3])) {
-                    sound_data[4] = play_voice_319928(sound_data[0], flags, moby, volume);
+                    sound_data[4] = play_voice(sound_data[0], flags, moby, volume);
                     if (sound_data[2] > 0) {
                         sound_data[3] = (int)((float)scale_game_frames(sound_data[1] +
                             random_integer_below(sound_data[2] - sound_data[1])) * 60.0f);
@@ -1860,7 +1859,6 @@ void update_requested_state_from_box_position(char *moby) {
         data[3] = 0;
     }
 }
-extern int play_voice(int, int, int, int) __asm__("FUN_L00_0028ddd8");
 
 void update_listener_following_voice(int sound_owner) __asm__("FUN_L01_0031a078");
 

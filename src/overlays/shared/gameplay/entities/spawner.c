@@ -90,8 +90,8 @@ typedef struct {
 extern OvlVec4 D_0013F3D0_307d68 __asm__("D_0013F3D0");
 extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
 extern char D_L09_00174000[] __asm__("D_L09_00174000");
-extern s32 allocate_voice_307d68(s32, s32, void *) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal_307d68(struct Moby *) __asm__("FUN_0020c828");
+extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
+extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
@@ -125,7 +125,7 @@ void update_class_4ea_projectile(struct Moby *projectile_moby)
     qcopy(&old, &projectile_moby->pos);
     fast_vec_add(&projectile_moby->pos, &projectile_moby->pos, &projectile_vars->vel);
     if (projectile_vars->unk28 == 0 && projectile_vars->unk24 != 0 && projectile_vars->dist < distance_to_hero && distance_to_hero < 3.0f) {
-        allocate_voice_307d68(0, 0, projectile_moby);
+        allocate_voice_for_target_entry(0, 0, projectile_moby);
         projectile_vars->unk28 = 1;
     }
     if (distance_to_hero < projectile_vars->dist)
@@ -134,7 +134,7 @@ void update_class_4ea_projectile(struct Moby *projectile_moby)
     if (projectile_moby->pos.x < 2.0f || 1021.0f < projectile_moby->pos.x || projectile_moby->pos.y < 2.0f || 1021.0f < projectile_moby->pos.y
         || projectile_moby->pos.z < 2.0f || 1021.0f < projectile_moby->pos.z
         || 255.0f < vector_distance_xy(&projectile_moby->pos, &D_L09_00166F40_307d68)) {
-        mark_moby_for_removal_307d68(projectile_moby);
+        mark_moby_for_removal(projectile_moby);
         return;
     }
 
@@ -158,7 +158,7 @@ void update_class_4ea_projectile(struct Moby *projectile_moby)
         projectile_moby->command = 1;
         projectile_vars->life = projectile_vars->life_max / 4;
     } else if (projectile_vars->life <= 0 && projectile_moby->command != 0) {
-        mark_moby_for_removal_307d68(projectile_moby);
+        mark_moby_for_removal(projectile_moby);
         return;
     }
     if (collision_line_307d68(&old, &projectile_moby->pos, 0, projectile_vars->owner, probe) == 0)
@@ -182,7 +182,7 @@ void update_class_4ea_projectile(struct Moby *projectile_moby)
     }
     spawn_explosion(projectile_moby, projectile_vars, 0, 0.0f, 0.0f, 4, 3, 6, 1.1f, 0.6f, 1.0f, -1, 0.9f, 0.0f, 0, 1, -1, 0);
     collect_mobies_in_sphere(1.1f, &projectile_moby->pos, 0x10, projectile_moby, probe);
-    mark_moby_for_removal_307d68(projectile_moby);
+    mark_moby_for_removal(projectile_moby);
 }
 extern s32 get_first_moby_in_group(struct Moby **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
@@ -323,9 +323,6 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
     }
     return last;
 }
-extern void FUN_L09_0030a9e8_30ab80(char *, char *) __asm__("FUN_L09_0030a9e8");
-extern void mark_moby_for_removal_30ab80(void *) __asm__("FUN_0020c828");
-extern int FUN_L00_002591d0_30ab80(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int activate_effect_l08(void *, void *, float, void *, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern int refresh_spawner_population_and_find_free_slot(int, char *) __asm__("FUN_L09_0030aae0");
@@ -368,18 +365,18 @@ void spawner_update(char *moby)
     float spawn_position[4];
     float offset[4];
 
-    FUN_L09_0030a9e8_30ab80(moby, spawner_vars);
+    process_spawner_hit_record(moby, spawner_vars);
     switch ((unsigned char)moby[0x20]) {
     case SPAWNER_STATE_INITIALIZE: {
         int moby_to_remove = 0;
-        while (FUN_L00_002591d0_30ab80(&moby_to_remove, *(int *)(spawner_vars + 0x94), 0, 0) == 0) {
-            mark_moby_for_removal_30ab80((void *)moby_to_remove);
+        while (get_first_moby_in_group(&moby_to_remove, *(int *)(spawner_vars + 0x94), 0, 0) == 0) {
+            mark_moby_for_removal((void *)moby_to_remove);
         }
         moby[0x20] = 1;
         return;
     }
     case SPAWNER_STATE_SPAWN: {
-        FUN_L09_0030a9e8_30ab80(moby, spawner_vars);
+        process_spawner_hit_record(moby, spawner_vars);
         if (!fast_dec_timer_s16(spawner_vars + 0x8E))
             return;
         if (random_integer_below(7) == 0) {
@@ -499,7 +496,7 @@ void spawner_update(char *moby)
                                 D_L09_0015F580, D_L09_0015F580);
         FUN_L00_00263fd8_30ab80(moby, 0x6C7, moby + 0x10, moby + 0x40, 0, 0, 0.0f, D_L09_0015F580,
                                 D_L09_0015F580, D_L09_0015F580);
-        mark_moby_for_removal_30ab80(moby);
+        mark_moby_for_removal(moby);
         return;
     default:
         return;
@@ -537,7 +534,6 @@ char *spawn_spawner_egg(int owner, void *initial_position, void *initial_velocit
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030C790), where it is exact; names translated to the US level program. */
 
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void remove_spawner_egg(void *moby, char *data) __asm__("FUN_L09_0030b350");
 
@@ -579,7 +575,6 @@ extern CollisionHit D_L09_00173FC0;
 extern s32 collision_line(void *, void *, s32, struct Moby *, s32) __asm__("FUN_001efa68");
 extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
-extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001fefc8(void *);
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");

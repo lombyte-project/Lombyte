@@ -366,7 +366,6 @@ void set_camera_follow_parameters(float spring_distance, float spring_height, fl
 /* Places the camera moby relative to the hero's target and builds its look-at basis. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032AA50), where it is exact; names translated to the US level program. */
 
-extern void FUN_L05_00329358_c(void *) __asm__("FUN_L05_00329358");
 
 void build_hero_follow_camera_transform(char *camera) __asm__("FUN_L05_00329540");
 
@@ -383,7 +382,7 @@ void build_hero_follow_camera_transform(char *camera) {
     float look_target[4];
     float camera_offset[4];
     float gravity_up[4];
-    FUN_L05_00329358_c(camera);
+    update_hero_follow_camera_focus(camera);
     hero_state = &hero;
     focus = orbit + 0x80;
     spring = orbit + 0xE0;
@@ -741,7 +740,6 @@ extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
 extern Row *D_L05_0015EF50_macro __asm__("D_L05_0015EF50") MACRO_ADDR;
 extern float D_L05_001621A8_gp __asm__("D_L05_001621A8") __attribute__((sda));
 extern float spring_32B1F8(float, float, float *, float, float, float) __asm__("FUN_001ebd78");
-extern void FUN_L05_003298d8_c(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
 
 extern float D_L05_00174278 NOT_SDA;
 void update_orbit_camera_position(Camera_32B1F8 *camera) __asm__("FUN_L05_00329ce8");
@@ -848,7 +846,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
         else if (focus_state->dist < focus_distance) focus_state->dist = focus_state->dist + 0.02f;
         else focus_state->dist = focus_state->dist - 0.02f;
     }
-    FUN_L05_003298d8_c(camera);
+    update_hero_follow_camera_orbit(camera);
     qcopy(&focus_state->pos, &orbit->next);
     qcopy(&focus, &focus_state->pos);
     fast_vec_normalize(&offset, &focus_state->axis, focus_state->dist);

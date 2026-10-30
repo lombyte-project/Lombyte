@@ -321,7 +321,6 @@ extern void run_follow_camera_noop(int) __asm__("FUN_L00_002e8378");
 extern void follow_camera_read_stick(int, float *, float *) __asm__("FUN_L00_002e89b0");
 extern void follow_camera_turn_and_pitch(int, float, float) __asm__("FUN_L00_002e8bb8");
 extern void follow_camera_auto_turn(int) __asm__("FUN_L00_002e8f40");
-extern void FUN_L00_002e9010_u(int) __asm__("FUN_L00_002e9010");
 extern void follow_camera_orbit(int) __asm__("FUN_L00_002e9720");
 extern void run_type5_grid_record_noop_callbacks(int) __asm__("FUN_L00_002e9aa0");
 
@@ -337,7 +336,7 @@ void update_follow_camera_pose(int camera_moby) {
     follow_camera_avoid_mobies(camera_moby);
     follow_camera_orbit(camera_moby);
     run_follow_camera_noop(camera_moby);
-    FUN_L00_002e9010_u(camera_moby);
+    follow_camera_build_view(camera_moby);
 }
 extern s32 opt_cam_yaw_rate __asm__("D_0015EDE4");
 extern f32 follow_camera_yaw_rate_table[2] __asm__("D_L00_00161DB0") __attribute__((sda));
@@ -465,7 +464,6 @@ extern float hero_aligned_camera_rotation_gain_at_unit_input_gp __asm__("D_L00_0
 extern float hero_aligned_camera_input_stiffness_gp __asm__("D_L00_00161DC8") __attribute__((sda));
 extern float hero_aligned_camera_input_damping_gp __asm__("D_L00_00161DCC") __attribute__((sda));
 extern float hero_aligned_camera_input_step_limit_gp __asm__("D_L00_00161DD0") __attribute__((sda));
-void FUN_L00_002e9cc0_c(void *) __asm__("FUN_L00_002e9cc0");
 void FUN_001f9bf8_c(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 float FUN_001ebd78(float, float, float, float, float, float *);
@@ -480,7 +478,7 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
     S_9f38 *camera_rotation_state;
     float rotation_input_target, rotation_input_scratch, k;
     camera_rotation_state = *(S_9f38 **)(camera_object + 0x70);
-    FUN_L00_002e9cc0_c(camera_object);
+    update_hero_aligned_camera_position(camera_object);
     FUN_001f9bf8_c(&up, ((u8 *)hero.moby) + 0xE0, 1.0f);
     if (D_L00_00166C80_c.s270 == 0 && hero.unk20A5 == 0)
         hero.unk20A5 = 1;
@@ -816,12 +814,11 @@ typedef struct {
 extern V_2eaaa0 D_L00_00166DC0_2eaaa0[2] __asm__("D_L00_00166DC0")
     __attribute__((section(".data")));
 extern V_2eaaa0 D_0013F3D0_2eaaa0 __asm__("D_0013F3D0") NOT_SDA;
-u8 *FUN_L00_001eb1f8_2eaaa0(s32) __asm__("FUN_L00_001eb1f8");
 void switch_active_camera_record(u8 *) __asm__("FUN_001ebf10");
-void FUN_L00_001ed630_2eaaa0(void *, V_2eaaa0 *, V_2eaaa0 *) __asm__("FUN_L00_001ed630");
+void compute_spherical_offset_from_positions(void *, V_2eaaa0 *, V_2eaaa0 *) __asm__("FUN_L00_001ed630");
 void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
 void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_frames, s32 x) {
-    u8 *camera_record = FUN_L00_001eb1f8_2eaaa0(5);
+    u8 *camera_record = find_camera_record_by_id(5);
     V_2eaaa0 requested_position, requested_rotation, saved_camera_position, saved_camera_rotation;
     u8 *camera_state;
     u8 *transition_state;
@@ -851,7 +848,7 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_fra
         qcopy(camera_record + 0x30, &saved_camera_position);
         qcopy(camera_record + 0x40, &saved_camera_rotation);
         qcopy(camera_state + 0x110, &D_0013F3D0_2eaaa0);
-        FUN_L00_001ed630_2eaaa0(camera_state + 0xFC, &saved_camera_position, &D_0013F3D0_2eaaa0);
+        compute_spherical_offset_from_positions(camera_state + 0xFC, &saved_camera_position, &D_0013F3D0_2eaaa0);
     }
     *(s32 *)(transition_state + 4) = transition_duration_frames;
     *(s32 *)(camera_state + 0xE0) = transition_duration_frames;
@@ -929,7 +926,6 @@ extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FU
 extern float interpolate_wrapped_angle_cosine_eased(float, float, float) __asm__("FUN_L00_00257ef0");
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
-extern void compute_spherical_offset_from_positions(void *, void *, void *) __asm__("FUN_L00_001ed630");
 extern void interpolate_vector_xyz_cosine_eased(void *, void *, void *, float) __asm__("FUN_L00_00257f70");
 extern void interpolate_wrapped_rotations_cosine_eased(float *, float *, float *, float) __asm__("FUN_L00_00258050");
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
@@ -1047,7 +1043,6 @@ void initialize_orbit_camera_pose(void *camera) {
 void copy_five_floats_with_rotation_offset(void *, void *, float) __asm__("FUN_L00_001eb0c8");
 void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
 void clear_twelve_bytes(void *) __asm__("FUN_L00_001ff250");
-void FUN_L00_002eb278_002eb320(char *) __asm__("FUN_L00_002eb278");
 void initialize_orbit_camera_from_parameters(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) __asm__("FUN_L00_002eb320");
 
 void initialize_orbit_camera_from_parameters(char *camera_object, void *camera_initialization_values, u128 *initial_orbit_origin, float x) {
@@ -1060,7 +1055,7 @@ void initialize_orbit_camera_from_parameters(char *camera_object, void *camera_i
     copy_five_floats_with_rotation_offset(camera_object + 0x50, camera_initialization_values, 0.0f);
     zero_five_words(camera_state);
     clear_twelve_bytes(camera_state + 0x90);
-    FUN_L00_002eb278_002eb320(camera_object);
+    initialize_orbit_camera_pose(camera_object);
 }
 typedef struct {
     u8 pad[0x28];
@@ -1093,7 +1088,6 @@ typedef struct {
 
 extern void zero_five_words(void *) __asm__("FUN_L00_001eb0b0");
 extern void clear_twelve_bytes(void *) __asm__("FUN_L00_001ff250");
-extern void FUN_L00_002eb278_c(void *) __asm__("FUN_L00_002eb278");
 
 void initialize_orbit_camera_state(S002eb3b0 *camera_object) __asm__("FUN_L00_002eb3b0");
 
@@ -1119,7 +1113,7 @@ void initialize_orbit_camera_state(S002eb3b0 *camera_object) {
     zero_five_words((u8 *)m + 0x50);
     zero_five_words(m);
     clear_twelve_bytes((u8 *)m + 0x90);
-    FUN_L00_002eb278_c(camera_object);
+    initialize_orbit_camera_pose(camera_object);
     camera_object->f7E = 0;
 }
 void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
@@ -1165,7 +1159,6 @@ void update_orbit_camera_pose(char *camera_object) {
 extern struct Hero hero_data __asm__("D_0013F350") NOT_SDA;
 extern char D_L00_00166C80_2eb648[] __asm__("D_L00_00166C80") NOT_SDA;
 void FUN_001f9a10_2eb648(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_002eb320_2eb648(char *, void *, void *, float) __asm__("FUN_L00_002eb320");
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float D_L00_00161DD4 NOT_SDA;
 int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby) __asm__("FUN_L00_002eb648");
@@ -1198,7 +1191,7 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
         camera_initialization_values[2] = 6.0f;
         camera_initialization_values[1] = camera_initialization_values[3];
         camera_initialization_values[3] = 0.0f;
-        FUN_L00_002eb320_2eb648(camera_object, camera_initialization_values, target_orbit_origin, 0.0f);
+        initialize_orbit_camera_from_parameters(camera_object, camera_initialization_values, target_orbit_origin, 0.0f);
     }
     if (*(int *)(target_private_data + 0x10) > 0)
         goto pos;
@@ -1239,26 +1232,22 @@ one:
     return 1;
 }
 extern short D_L00_00166EF0_002eb930[] __asm__("D_L00_00166EF0");
-char *FUN_L00_001eb1f8_002eb930(int) __asm__("FUN_L00_001eb1f8");
-void FUN_001ebf10_002eb930(char *) __asm__("FUN_001ebf10");
-void FUN_L00_002eb648_002eb930(char *, void *) __asm__("FUN_L00_002eb648");
-void FUN_L00_002eb3b0_002eb930(char *) __asm__("FUN_L00_002eb3b0");
 extern char mode6_orbit_initial_values[] __asm__("D_L00_001E77C0");
 extern char mode6_orbit_spring_stiffness_values[] __asm__("D_L00_001E77D8");
 extern char mode6_orbit_spring_damping_values[] __asm__("D_L00_001E77F0");
 char *initialize_mode6_orbit_camera(void *target_moby) __asm__("FUN_L00_002eb930");
 
 char *initialize_mode6_orbit_camera(void *target_moby) {
-    char *camera_record = FUN_L00_001eb1f8_002eb930(6);
+    char *camera_record = find_camera_record_by_id(6);
     char *camera_state;
     D_L00_00166EF0_002eb930[0] = 0;
-    FUN_001ebf10_002eb930(camera_record);
-    FUN_L00_002eb648_002eb930(camera_record, target_moby);
+    switch_active_camera_record(camera_record);
+    update_orbit_camera_from_target_moby(camera_record, target_moby);
     camera_state = *(char **)(camera_record + 0x70);
     qcopy(camera_state + 0xB0, camera_state + 0x80);
     copy_five_floats_with_rotation_offset(camera_state + 0x14, mode6_orbit_initial_values, 0.0f);
     copy_five_floats_with_rotation_offset(camera_record + 0x50, camera_state + 0x14, 0.0f);
-    FUN_L00_002eb3b0_002eb930(camera_record);
+    initialize_orbit_camera_state(camera_record);
     *(int *)(camera_state + 0x9C) = 1;
     copy_five_floats_with_rotation_offset(camera_state + 0x28, mode6_orbit_spring_stiffness_values, 0.0f);
     copy_five_floats_with_rotation_offset(camera_state + 0x3C, mode6_orbit_spring_damping_values, 0.0f);
@@ -1292,7 +1281,6 @@ typedef struct {
     u8 *m;
 } O002ebb00;
 void copy_five_floats_with_rotation_offset(void *, void *, f32) __asm__("FUN_L00_001eb0c8");
-void FUN_L00_002eb3b0_u(O002ebb00 *) __asm__("FUN_L00_002eb3b0");
 void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) __asm__("FUN_L00_002ebb00");
 
 void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
@@ -1307,7 +1295,7 @@ void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
     zero_five_words(camera_state + 0x14);
     *(f32 *)(camera_state + 0x1C) = 4.64f;
     copy_five_floats_with_rotation_offset(camera_object->x50, camera_state + 0x14, 0.0f);
-    FUN_L00_002eb3b0_u(camera_object);
+    initialize_orbit_camera_state(camera_object);
 }
 /* Sets up the camera activation moby: tuning floats, then the pose copied from the current camera. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002ED088), where it is exact; names translated to the US level program. */

@@ -118,7 +118,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern char *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern int sound_0e00(int, int, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
@@ -201,7 +201,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
         fast_vec_normalize(&position_scratch, &D_L14_00174540.normal, spark_contact_clearance_gp);
         fast_vec_add(&spark_moby->pos, &D_L14_00174540.hit, &position_scratch);
         reflect_vector(&spark_data->vel, &spark_data->vel, &D_L14_00174540.normal);
-        sound_0e00(1, 0, spark_moby);
+        allocate_voice_for_target_entry(1, 0, spark_moby);
         if (spark_moby->state == 0)
         {
           spark_moby->state = 1;
@@ -303,7 +303,6 @@ void update_bouncing_spark(struct Moby *spark_moby)
 }
 #include "sda.h"
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00302968), where it is exact; names translated to the US level program. */
-extern char *FUN_0020c4f8_c(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
 extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
 
@@ -311,7 +310,7 @@ extern float spark_initial_moby_value_multiplier_gp __asm__("D_L14_00162098") __
 char *create_bouncing_spark(int owner, float *pos, float *initial_velocity, int fade_timer, float gravity) __asm__("FUN_L14_003014e0");
 
 char *create_bouncing_spark(int owner, float *spawn_position, float *initial_velocity, int fade_timer, float gravity) {
-    char *moby = FUN_0020c4f8_c(0x4A9);
+    char *moby = create_moby(0x4A9);
     float initial_yaw, scaled_moby_value;
     unsigned short initial_trail_timer;
     if (moby != 0) {
@@ -644,16 +643,10 @@ extern float helper_sequence_first_slot_offset __asm__("D_L14_001621FC") __attri
 extern float helper_sequence_owner_final_angle_degrees __asm__("D_L14_00162200") __attribute__((sda)); /* no foreign declaration */
 extern int helper_sequence_slot_animation_duration_frames __asm__("D_L14_00162204") __attribute__((sda)); /* no foreign declaration */
 extern int helper_sequence_owner_animation_duration_frames __asm__("D_L14_0016220C") __attribute__((sda)); /* no foreign declaration */
-extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 f32 interpolate_scalar_linear(f32 a, f32 b, f32 t) __asm__("FUN_L00_0025b6a8");
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
-u8 *FUN_L14_00306158_c(u8 *self) __asm__("FUN_L14_00306158");
-extern Moby_3071B0 *func_L14_003075E0_3071B0(Moby_3071B0 *owner) __asm__("FUN_L14_00306158");
-extern int func_L00_0028EF68_3071B0(int i, int a1, Moby_3071B0 *v, int k) __asm__("FUN_L00_0028dc90");
-extern int func_L00_0028EB98_3071B0(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int func_0022ED80_3071B0(int, int, Moby_3071B0 *) __asm__("FUN_0022da68");
 extern float interpolate_scalar_linear(float, float, float) __asm__("FUN_L00_0025b6a8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern char D_0013E633_3071B0[] __asm__("D_0013E550");
@@ -674,7 +667,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
     case HELPER_SEQUENCE_INITIALIZE: {
         int i;
         if (data->owner == 0) {
-            data->owner = func_L14_003075E0_3071B0(moby);
+            data->owner = create_helper_sequence_owner_moby(moby);
             fast_vec_scale(position_offset, moby->rot, helper_sequence_initial_position_offset_scale);
             fast_vec_add(data->owner->pos, moby->pos, position_offset);
         }
@@ -698,7 +691,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
             data->cur = 5;
             data->timer = scale_game_frames(helper_sequence_slot_animation_duration_frames);
             data->rate = 1.0f / convert_integer_to_float(data->timer);
-            func_L00_0028EF68_3071B0(0, 0, data->slots.m[data->cur], 0x575);
+            trooper_play_sound(0, 0, data->slots.m[data->cur], 0x575);
         }
         break;
     case HELPER_SEQUENCE_ANIMATE_SLOTS: {
@@ -714,7 +707,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
                 data->timer = scale_game_frames(helper_sequence_owner_animation_duration_frames);
                 data->rate = 1.0f / convert_integer_to_float(data->timer);
             } else {
-                func_L00_0028EF68_3071B0(0, 0, slots->m[data->cur], 0x575);
+                trooper_play_sound(0, 0, slots->m[data->cur], 0x575);
             }
         }
         break;
@@ -724,8 +717,8 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         Moby_3071B0 **slots;
         int i;
         float remaining_timer_fraction;
-        if (!func_L00_0028EB98_3071B0(moby, data->voice)) {
-            data->voice = func_0022ED80_3071B0(0, 4, moby);
+        if (!voice_is_playing(moby, data->voice)) {
+            data->voice = allocate_voice_for_target_entry(0, 4, moby);
         }
         fast_dec_timer_s16(&data->timer);
         slots = data->slots.m;
@@ -776,7 +769,6 @@ void FUN_L14_003061d8(void *updated_moby) {
 }
 extern char *D_L14_001B0BB0[];
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
-extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
 void button_update(struct Moby *moby) __asm__("FUN_L14_00306b78");
 void button_update(struct Moby *moby) {
@@ -911,9 +903,6 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern int FUN_L14_00307620_6ee0(void *) __asm__("FUN_L14_00307620");
 extern void FUN_L00_002502f0_6ee0(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern int FUN_L00_0028d8c0_6ee0(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int play_sound_6ee0(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L14_003135b8_6ee0(void *) __asm__("FUN_L14_003135b8");
 extern Path_6ee0 *D_L14_001B0BB0_6ee0[] __asm__("D_L14_001B0BB0");
 char D_L14_001FD118[] = "Flying Car (moby1417) with no flyPath. UID: %d - RAR\n";
 char D_L14_001FD150[] = "Flying Car (moby1417) with a flyPath that has no points. UID: %d - RAR\n";
@@ -1022,7 +1011,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
                 fast_vec_add(&o->pos, &o->pos, &attached_part_offset_component);
                 if ((hero.state.control_mode == 13 && hero.grapple_target == o)
                     || (hero.state.control_mode == 14 && hero.swing_target_moby == o)) {
-                    FUN_L14_003135b8_6ee0(flying_car_moby);
+                    seed_linked_record_for_flying_car(flying_car_moby);
                     flying_car_data->fCC = scale_game_frames(0x1E);
                 } else {
                     fast_dec_timer(&flying_car_data->fCC);
@@ -1077,8 +1066,8 @@ void update_flying_car(struct Moby *flying_car_moby) {
     if (flying_car_moby->state == 0 || flying_car_moby->state == 3 || flying_car_moby->state == 1) {
         return;
     }
-    if (FUN_L00_0028d8c0_6ee0(flying_car_moby, flying_car_data->sound) == 0) {
-        flying_car_data->sound = play_sound_6ee0(0, 4, flying_car_moby);
+    if (voice_is_playing(flying_car_moby, flying_car_data->sound) == 0) {
+        flying_car_data->sound = allocate_voice_for_target_entry(0, 4, flying_car_moby);
     }
 }
 /* Precomputes per-point segment values of a path and snaps the moby to its first point. */

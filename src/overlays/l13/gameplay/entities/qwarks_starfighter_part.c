@@ -477,7 +477,7 @@ extern void update_qwarks_starfighter_attack_commands(void *, void *) __asm__("F
 extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L06_00249738();
-extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
 void set_animation_parameter(s32 anim_id, s32 value) __asm__("FUN_001ff570");
 #include "rnc/gameplay/state/game_globals.h"
@@ -525,7 +525,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
     case STARFIGHTER_STATE_INITIALIZE: {
         int j;
         if (moby->bB0 != 0xFF && visited52[moby->bB0 + (D_0015ED84 << 4)] == 0xFF) {
-            mark_moby_for_removal_c(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         moby->scale = *(float *)(moby->cls + 0x24) * 4.0f;
@@ -887,7 +887,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
                 release_point_light_slot(data->light120);
             }
             flag_vendor_item(data->i12C);
-            mark_moby_for_removal_c(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         break;
@@ -896,17 +896,17 @@ void update_qwarks_starfighter(Moby388 *moby) {
         char *path;
         char **parts;
         if (data->pF0 != 0) {
-            mark_moby_for_removal_c(data->pF0);
+            mark_moby_for_removal(data->pF0);
             data->pF0 = 0;
         }
         if (data->child110 != 0) {
-            mark_moby_for_removal_c(data->child110);
+            mark_moby_for_removal(data->child110);
             data->child110 = 0;
         }
         parts = data->parts;
         for (i = 0; i < 10; i++) {
             if (parts[i] != 0) {
-                mark_moby_for_removal_c(parts[i]);
+                mark_moby_for_removal(parts[i]);
                 parts[i] = 0;
             }
         }
@@ -1124,7 +1124,6 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
 }
 extern int coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void remove_ece00(struct Moby *) __asm__("FUN_0020c828");
 extern char coll_hit_1638[] __asm__("D_L13_00174140");
 
 struct PieceVars {
@@ -1195,11 +1194,11 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
             break;
         }
     remove:
-        remove_ece00(moby);
+        mark_moby_for_removal(moby);
         break;
     case PART_STATE_BURST_AND_REMOVE:
         spawn_explosion(moby, &vars->vel, 0, 2.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
-        remove_ece00(moby);
+        mark_moby_for_removal(moby);
         break;
     }
 }
@@ -1272,8 +1271,7 @@ extern int D_0015ED84_n __asm__("D_0015ED84");
 extern void stub_printf(char *, int, int) __asm__("FUN_001e93b0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_forcefield_contact_effects(void *, void *) __asm__("FUN_L13_002ed158");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void FUN_L00_0024efb0_c(void *, int, int) __asm__("FUN_L00_0024efb0");
+extern void offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
 
 extern char forcefield_missing_trigger_format[] __asm__("D_L13_001F4FB0");
 void forcefield_update(unsigned char *m) __asm__("FUN_L13_002ed4a8");
@@ -1334,7 +1332,7 @@ void forcefield_update(unsigned char *moby) {
         *(short *)(forcefield_data + 0xC) += 0x1000;
         wrap_adjusted_step = 0x10C0;
     }
-    FUN_L00_0024efb0_c(*(void **)(moby + 0x24), wrap_adjusted_step, 0);
+    offset_moby_class_point_pairs(*(void **)(moby + 0x24), wrap_adjusted_step, 0);
 }
 
 
@@ -1456,7 +1454,6 @@ typedef struct {
 } Obj_q;
 
 extern int debug_print_alt_q() __asm__("FUN_001e93b0");
-void mmr_q(struct Obj_q *obj) __asm__("FUN_0020c828");
 
 extern char D_L13_001F51B0[] NOT_SDA;
 void update_moby_state_relay(char *moby) __asm__("FUN_L13_002f8880");
@@ -1479,7 +1476,7 @@ void update_moby_state_relay(char *moby) {
     case STATE_RELAY_INITIALIZE:
         if (monitored_moby == 0) {
             debug_print_alt_q(D_L13_001F51B0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
-            mmr_q(moby);
+            mark_moby_for_removal(moby);
         } else if (data[0x1D] != 0) {
             data[0x1C] = 1;
         } else {
@@ -1546,7 +1543,6 @@ void update_moby_state_relay(char *moby) {
 extern char gate_missing_controller_format[] __asm__("D_L13_001F51E0");
 extern int D_L13_0015FFD8; /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
-extern void offset_moby_class_point_pairs(unsigned char *, int, int) __asm__("FUN_L00_0024efb0");
 
 void update_controller_linked_gate(char *moby) __asm__("FUN_L13_002f8a78");
 

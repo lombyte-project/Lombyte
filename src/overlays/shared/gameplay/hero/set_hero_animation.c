@@ -456,7 +456,6 @@ void set_hero_animation(int requested_animation_id, int starting_frame_index, fl
     }
 }
 extern char *D_001413D0_2325a0[] __asm__("D_001413D0");
-extern void FUN_0020c880_2325a0(void *) __asm__("FUN_0020c880");
 /* Fills bytes 0x50..0x53 of D_001413D0[0] from a and b, clears 0x54, calls update_moby_animation_state. */
 void set_hero_animation_sequence_and_frame(int animation_id, int frame_index) __asm__("FUN_L00_002325a0");
 
@@ -467,7 +466,7 @@ void set_hero_animation_sequence_and_frame(int animation_id, int frame_index) {
     animation_moby[0x52] = animation_id;
     animation_moby[0x53] = animation_id;
     *(int *)(animation_moby + 0x54) = 0;
-    FUN_0020c880_2325a0(animation_moby);
+    update_moby_animation_state(animation_moby);
 }
 /* Queues sequence SEQ of bank BANK (hero +0xAB0 / 0xAB4) when BANK
    is valid and SEQ is below the count of the current animation's bank.
@@ -1567,7 +1566,6 @@ typedef struct {
 } B_00234b38;
 extern B_00234b38 D_L00_0016C860_00234b38 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
-void FUN_L00_00234a50_00234b38(void *) __asm__("FUN_L00_00234a50");
 void apply_hero_moby_scale(void *a) __asm__("FUN_L00_00234b38");
 
 void apply_hero_moby_scale(void *scale_owner_moby) {
@@ -1597,7 +1595,7 @@ void apply_hero_moby_scale(void *scale_owner_moby) {
             }
         }
     }
-    FUN_L00_00234a50_00234b38(scale_owner_moby);
+    update_hero_slot4_and_slot5_mobys(scale_owner_moby);
 }
 extern u8 D_L00_0017A608[];
 extern u8 D_L00_0017C680[];

@@ -524,14 +524,13 @@ void floating_platform_update(char *moby) {
     update_entity_matrix(data + 0x60, delta, moby + 0x40, moby + 0x40);
 }
 
-extern void remove_moby_2ce060(void *) __asm__("FUN_0020c828");
 
 /* Marks the moby for removal; the unused buffer is kept for its frame. */
 void transport_ship_update(void *moby) __asm__("FUN_L04_002ce060");
 void transport_ship_update(void *moby) {
     char unused_frame_padding[0x50];
 
-    remove_moby_2ce060(moby);
+    mark_moby_for_removal(moby);
 }
 
 extern void initialize_leg_rig_angle_defaults(void *, char *) __asm__("FUN_L04_00292370");
@@ -753,7 +752,6 @@ extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 void emit_woodcut_bot_death_effects(void *m) __asm__("FUN_L04_002d1608");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void woodcut_bot_update(WBMoby *m) __asm__("FUN_L04_002d16b8");
 void woodcut_bot_update(WBMoby *m) {
@@ -1637,7 +1635,6 @@ extern u8 suck_cannon_first_acquisition_recorded[] __asm__("D_0013D4C9");
 extern char suck_cannon_missing_segment_switch_warning_format[] __asm__("D_L04_001DC760");
 extern struct Moby *moby_array __asm__("D_L04_0015FFD8");
 extern void initialize_moby_particle_effect(struct Moby *) __asm__("FUN_L00_002d6bf0");
-extern void remove_moby_2e1a10(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
@@ -1665,7 +1662,7 @@ void suck_cannon_update(struct Moby *moby) {
     case SUCK_CANNON_INITIALIZE:
         initialize_moby_particle_effect(moby);
         if (suck_cannon_in_inventory[0]) {
-            remove_moby_2e1a10(moby);
+            mark_moby_for_removal(moby);
             break;
         }
         moby->state = 1;
@@ -1698,7 +1695,7 @@ void suck_cannon_update(struct Moby *moby) {
         memcard_save_data(0, -1);
         break;
     case SUCK_CANNON_REMOVE:
-        remove_moby_2e1a10(moby);
+        mark_moby_for_removal(moby);
         break;
     }
 }

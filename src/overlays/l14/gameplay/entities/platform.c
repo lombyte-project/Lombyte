@@ -178,16 +178,16 @@ int D_L14_00161A3C = 0x8c;
 extern char D_L14_001809C0[];
 extern char D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
-extern void spring_67e8(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
+extern void vendor_spring(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern void build_moby_bone_transform(struct Moby *, int, void *) __asm__("FUN_0020cca8");
-extern void joint_pos_67e8(struct Moby *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void moby_point_position(struct Moby *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void register_beam_slot(struct Moby *, int, int) __asm__("FUN_L00_002e1f28");
 extern int set_beam_origin_transform_and_endpoint(struct Moby *, void *, void *) __asm__("FUN_L00_002e2190");
 extern int collision_line(void *, void *, int, struct Moby *, void *) __asm__("FUN_001efa68");
-extern char *FUN_L00_00274948_c(void *, void *, int, struct Moby *) __asm__("FUN_L00_00274948");
-extern int FUN_L00_0023e738_c(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
+extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, struct Moby *) __asm__("FUN_L00_00274948");
+extern int allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 
 void update_racer_path_and_weapon(struct Moby *racer_moby) __asm__("FUN_L14_002d67e8");
 
@@ -229,9 +229,9 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
     z = *(float *)(moby_data + 0x68);
     FUN_L00_0025df68(path, &D_0013F3D0_67e8, &near.x, (int *)(moby_data + 0x64), (float *)(moby_data + 0x68), 0, 20.0f, 5.0f, z);
     track_67e8(path, &near, moby_data + 0x64, moby_data + 0x68, 0, -*(float *)(moby_data + 0x74));
-    spring_67e8(&racer_moby->pos.x, moby_data + 0x90, near.x, 0.01f, 0.2f, z);
-    spring_67e8(&racer_moby->pos.y, moby_data + 0x94, near.y, 0.01f, 0.2f, z);
-    spring_67e8(&racer_moby->pos.z, moby_data + 0x98, near.z, 0.01f, 0.2f, z);
+    vendor_spring(&racer_moby->pos.x, moby_data + 0x90, near.x, 0.01f, 0.2f, z);
+    vendor_spring(&racer_moby->pos.y, moby_data + 0x94, near.y, 0.01f, 0.2f, z);
+    vendor_spring(&racer_moby->pos.z, moby_data + 0x98, near.z, 0.01f, 0.2f, z);
     {
         int i = *(int *)(moby_data + 0x64);
         char *current_path_record = path + i * 16;
@@ -296,7 +296,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             turn = (turn - 0.0f) * blend + 0.0f;
         }
         FUN_L00_001fff28(moby_data + 0x150, 2, turn);
-        joint_pos_67e8(racer_moby, 4, &joint_transform_and_aim_vectors[2]);
+        moby_point_position(racer_moby, 4, &joint_transform_and_aim_vectors[2]);
         *(u128_67e8 *)&joint_transform_and_aim_vectors[3] = 0;
         joint_transform_and_aim_vectors[3].z = 1.0f;
         joint_transform_and_aim_vectors[3].w = 1.0f;
@@ -358,7 +358,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             char *muzzle = moby_data + 0xD0;
             fast_vec_scale(&ray, moby_data + 0xA0, muzzle_flash_joint_axis_offset);
             fast_vec_add(&ray, &ray, muzzle);
-            muzzle_flash_particle = FUN_L00_00274948_c(&ray, D_L14_0015F580_macro, 0x7F, racer_moby);
+            muzzle_flash_particle = spawn_mode_controlled_rotating_alpha_fade_particle(&ray, D_L14_0015F580_macro, 0x7F, racer_moby);
             if (muzzle_flash_particle != 0) {
                 char *muzzle_flash_particle_state = muzzle_flash_particle + 0x20;
                 int lifetime_frames;
@@ -374,7 +374,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             ((float *)&ray.self)[2] -= 0.5f;
             muzzle_light_position_w = (muzzle_light_full_blend_position_w - 0.1f) * blend + 0.1f;
             if (*(int *)(moby_data + 0xF0) == -1) {
-                *(int *)(moby_data + 0xF0) = FUN_L00_0023e738_c(&ray.self, muzzle_light_position_w, 0.0f, muzzle_light_color_component_x, muzzle_light_color_component_y, muzzle_light_color_component_z);
+                *(int *)(moby_data + 0xF0) = allocate_colored_effect_slot(&ray.self, muzzle_light_position_w, 0.0f, muzzle_light_color_component_x, muzzle_light_color_component_y, muzzle_light_color_component_z);
             }
             if (*(int *)(moby_data + 0xF0) >= 0) {
                 float *muzzle_light_entry = (float *)(D_L14_001809C0 + (*(int *)(moby_data + 0xF0) << 5));
@@ -491,15 +491,12 @@ void draw_racer_glow_quads(struct Moby *m) {
 /* Puffs smoke from the moby's exhaust joint: keeps its light in place while active, then spawns four puffs. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D87A0), where it is exact; names translated to the US level program. */
 
-extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, void *) __asm__("FUN_L00_00274948");
 extern float D_L14_0015F580[] MACRO_ADDR;
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
-extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 #include "rnc/overlay/l14/gameplay/entities/platform_globals.h"
 extern float joint_light_position_w_gp __asm__("D_L14_00161A60") __attribute__((sda));
 extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_racer_glow_quads(struct Moby *) __asm__("FUN_L14_002d71f0");
 void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 
@@ -589,7 +586,6 @@ void update_tilting_platform(struct Moby *moby) {
 
 typedef int u128_s07 __attribute__((mode(TI)));
 
-extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 #include "rnc/overlay/l14/gameplay/entities/platform_data/update_platform_tilt_basis.h"
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");

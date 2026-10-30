@@ -102,13 +102,10 @@ extern s32 queue_animation_update() __asm__("func_001FF308");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
-void FUN_L08_002b8228_c(struct Moby *moby) __asm__("FUN_L08_002b8228");
 extern int func_L00_001F39B0_2B94B0(void *, void *, int, int, int) __asm__("FUN_L08_002025d0");
 extern void func_L00_001FF610_2B94B0(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern int func_001FFB38_2B94B0(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float func_001F9FA8_2B94B0(float) __asm__("FUN_001f9de0");
-extern void func_L08_002B9438_2B94B0(void *moby) __asm__("FUN_L08_002b8228");
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
@@ -137,7 +134,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
     if (moby->state != 0) moby->pos[2] = moby_data->f8;
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:
-        func_L08_002B9438_2B94B0(moby);
+        initialize_bolt_pickup(moby);
         if (moby_data->f2C != 0) moby->state = 1;
         else moby->state = 2;
         break;
@@ -289,15 +286,14 @@ extern float D_L08_00174660[];
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern float bomb_downward_acceleration_gp __asm__("D_L08_00161860") __attribute__((sda));
 extern void FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern void FUN_L00_0025d458_c(void *, short *) __asm__("FUN_L00_0025d458");
-extern void FUN_L00_0025d538_c(void *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L00_0025e450_c3(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_0025f090_c(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00269958_c(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
@@ -426,9 +422,9 @@ void update_bomb(char *moby) {
                    || *(int *)(bomb_vars + 0x20) == scale_game_frames_c(0x28)
                    || *(int *)(bomb_vars + 0x20) == scale_game_frames_c(0x14)) {
             *(unsigned char *)(bomb_vars + 7) = 0xFA;
-            FUN_L00_0025d458_c(moby, (short *)bomb_vars);
+            trooper_anim_update(moby, (short *)bomb_vars);
         }
-        FUN_L00_0025d538_c(moby, bomb_vars);
+        trooper_anim_finish(moby, bomb_vars);
         break;
     case BOMB_STATE_EXPLODE_AND_REMOVE:
         allocate_voice_for_target_entry(0, 0, moby);
@@ -438,7 +434,7 @@ void update_bomb(char *moby) {
         clear_u64_value(&c.p);
         c.p.st = 0;
         collect_mobies_in_sphere(moby + 0x10, 1.0f, 0x10, moby, &c.p);
-        FUN_L00_0025e450_c3(moby, D_L08_0015F580_macro, 0, 0.0f, 0.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, 1.0f, -1, 7.0f, 0, 7, -1, 0);
+        spawn_explosion(moby, D_L08_0015F580_macro, 0, 0.0f, 0.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, 1.0f, -1, 7.0f, 0, 7, -1, 0);
         mark_moby_for_removal(moby);
         return;
     case BOMB_STATE_BURST_AND_REMOVE: {
@@ -771,39 +767,27 @@ void *select_candidate_by_max_float_2c(void *a, void *b, void *c, void *d) __asm
 extern float D_0015ED6C;
 extern s32 fun_00213928(void *, void *, void *, u32, s32 *, f32 *, s32 *, s32) __asm__("FUN_00213928");
 extern int FUN_L00_001fff28();
-extern int allocate_voice_for_target_entry_alt(int,int,void*) __asm__("FUN_0022da68");
 extern void *FUN_L00_0025a420(void*,int,int);
-extern void spawn_explosion(void *,void *,void *,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263d40(int, int);
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
 int FUN_L00_0025ff38(float best, char *a, char *o, int *excluded, int excluded_count, void *region, int region_count);
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void FUN_L00_00257470(unsigned char *m, int flags, int arg);
-void trooper_anim_update(void *a, void *s) __asm__("FUN_L00_0025d458");
-void trooper_anim_finish(s32 id, void *s) __asm__("FUN_L00_0025d538");
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
 extern int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F5B0");
 extern int D_L08_0015F5B4_gp __asm__("D_L08_0015F5B4") __attribute__((sda));
 extern int D_L08_0015F5BC_gp __asm__("D_L08_0015F5BC") __attribute__((sda));
 extern Path *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0CB0");
 extern unsigned char D_0013D50F_2D5FA8[] __asm__("D_0013D408");
-extern Hit_2D5FA8 *find_2D5FA8(Moby *, int, int) __asm__("FUN_L00_0025a420");
-extern Hit_2D5FA8 *FUN_L05_002899f8_c(Hit_2D5FA8 *, Hit_2D5FA8 *, Hit_2D5FA8 *, int) __asm__("FUN_L05_002899f8");
-extern int damage_2D5FA8(Moby *, Hit_2D5FA8 *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern void animate_2D5FA8(Moby *, int, int, int) __asm__("FUN_00212f90");
-extern void burst_2D5FA8(Moby *, float *, float *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern Hit_2D5FA8 *find_moby_hit(Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void *spawn_2D5FA8(Moby *, int, float *, float *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void mark_moby_for_removal_cf(Moby *, int, int) __asm__("FUN_L00_00257470");
-extern void delete_2D5FA8(Moby *) __asm__("FUN_0020c828");
-extern int event_2D5FA8(int, int, Moby *) __asm__("FUN_0022da68");
-extern void effects_start_2D5FA8(Moby *, short *) __asm__("FUN_L00_0025d458");
 extern int activate_effect_l08(float, Moby *, float *, int, int, char *, int) __asm__("FUN_L00_0025ff38");
 extern float approach_2D5FA8(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern void rotation_2D5FA8(float *, int, float) __asm__("FUN_L00_001fff28");
-extern void effects_update_2D5FA8(Moby *, short *) __asm__("FUN_L00_0025d538");
 
 extern int bomber_tank_part_3_destroyed_by_class_661_gp __asm__("D_L08_0015F5B8") __attribute__((sda));
 void update_bomber_tank_damage_and_aim(Moby *moby) {
@@ -816,27 +800,27 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
     float damage = 0.0f;
     int one;
 
-    source = find_2D5FA8(moby, 0x330000, 0);
+    source = find_moby_hit(moby, 0x330000, 0);
     if (data->partA != 0) {
-        part_a_source = find_2D5FA8(data->partA, 0x210000, 0);
+        part_a_source = find_moby_hit(data->partA, 0x210000, 0);
     } else {
         part_a_source = 0;
     }
     if (data->partB != 0) {
-        part_b_source = find_2D5FA8(data->partB, 0x210000, 0);
+        part_b_source = find_moby_hit(data->partB, 0x210000, 0);
     } else {
         part_b_source = 0;
     }
-    source = FUN_L05_002899f8_c(source, part_a_source, part_b_source, 0);
+    source = select_candidate_by_max_float_2c(source, part_a_source, part_b_source, 0);
     if (source != 0 && source->moby != 0) {
         short source_class = source->moby->oclass;
         if (source_class == 0x1A9 || source_class == 0x47) source = 0;
     }
-    damage_2D5FA8(moby, source, &data->health, 0, &hit, &damage, 0, 4);
+    fun_00213928(moby, source, &data->health, 0, &hit, &damage, 0, 4);
     one = 1;
     if (hit != one && moby->state != 0) {
         data->health -= damage;
-        if (damage != 0.0f) event_2D5FA8(4, 0, moby);
+        if (damage != 0.0f) allocate_voice_for_target_entry(4, 0, moby);
         if (data->health > 0.0f) {
             if (damage < 4.0f) {
                 data->tint = 0x78;
@@ -853,7 +837,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                 data->timer = scale_game_frames(0x1E);
             }
             if (moby->state == 0xC && moby->prev_seq != 1) {
-                animate_2D5FA8(moby, 1, 0, 0);
+                blend_moby_animation(moby, 1, 0, 0);
             }
         } else {
             int dead = 0x63;
@@ -862,13 +846,13 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                 burst_position_or_aim_scratch[2] += 3.0f;
                 data->tint = 0xFA;
                 clear_u64_value(data->f120);
-                burst_2D5FA8(moby, data->f40, burst_position_or_aim_scratch, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, one, -1, 0);
+                spawn_explosion(moby, data->f40, burst_position_or_aim_scratch, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, one, -1, 0);
                 spawn_2D5FA8(moby, 0x6C0, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6C1, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6C2, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6C3, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6C4, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
-                if (moby->prev_seq != one) animate_2D5FA8(moby, 1, 0, 3);
+                if (moby->prev_seq != one) blend_moby_animation(moby, 1, 0, 3);
                 moby->state = dead;
                 data->health = 6.0f;
                 data->flags &= 0xFFFD;
@@ -893,20 +877,20 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                 qcopy(burst_position_or_aim_scratch, &moby->pos);
                 burst_position_or_aim_scratch[2] += 1.0f;
                 mark_moby_for_removal_cf(moby, 0, -1);
-                event_2D5FA8(2, 0, moby);
-                burst_2D5FA8(moby, data->f40, burst_position_or_aim_scratch, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+                allocate_voice_for_target_entry(2, 0, moby);
+                spawn_explosion(moby, data->f40, burst_position_or_aim_scratch, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
                 spawn_2D5FA8(moby, 0x6FE, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6FE, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6FF, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6FF, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
                 spawn_2D5FA8(moby, 0x6FF, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
-                if (data->partA != 0) delete_2D5FA8(data->partA);
-                if (data->partB != 0) delete_2D5FA8(data->partB);
-                delete_2D5FA8(moby);
+                if (data->partA != 0) mark_moby_for_removal(data->partA);
+                if (data->partB != 0) mark_moby_for_removal(data->partB);
+                mark_moby_for_removal(moby);
                 return;
             }
         }
-        effects_start_2D5FA8(moby, &data->anim0);
+        trooper_anim_update(moby, &data->anim0);
     }
 
     moby->hit_slot = 0xFF;
@@ -940,16 +924,16 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
     {
         short saved_anim0 = data->anim0;
         short saved_anim2 = data->anim2;
-        effects_update_2D5FA8(moby, &data->anim0);
+        trooper_anim_finish(moby, &data->anim0);
         if (data->partA != 0) {
             data->anim0 = saved_anim0;
             data->anim2 = saved_anim2;
-            effects_update_2D5FA8(data->partA, &data->anim0);
+            trooper_anim_finish(data->partA, &data->anim0);
         }
         if (data->partB != 0) {
             data->anim0 = saved_anim0;
             data->anim2 = saved_anim2;
-            effects_update_2D5FA8(data->partB, &data->anim0);
+            trooper_anim_finish(data->partB, &data->anim0);
         }
     }
 }
@@ -958,8 +942,7 @@ extern float bomber_tank_part_reference_speed_gp __asm__("D_L08_001618A0") __att
 extern float approach_angle_l08(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void approach_value_l08(float *, float, float) __asm__("FUN_00213ed8");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern int sound_valid_l08(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int play_sound_l08(int, int, void *) __asm__("FUN_0022da68");
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void vendor_volume(int, int) __asm__("FUN_L01_002a1968");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
@@ -1031,13 +1014,13 @@ void advance_bomber_tank_along_path(struct Moby *moby, int path_id) {
     }
     speed = fast_vec_length(vars->velocity);
     if (frame_time * 0.1f < speed) {
-        if (sound_valid_l08(moby, vars->sound) == 0) {
-            vars->sound = play_sound_l08(1, 4, moby);
+        if (voice_is_playing(moby, vars->sound) == 0) {
+            vars->sound = allocate_voice_for_target_entry(1, 4, moby);
             vendor_volume(vars->sound, 1);
         } else if (SOUND_SLOT_2d55c8(vars->sound)->volume < 0x400) {
             vendor_volume(vars->sound, SOUND_SLOT_2d55c8(vars->sound)->volume + 0x400 / scale_game_frames(60));
         }
-    } else if (sound_valid_l08(moby, vars->sound) != 0) {
+    } else if (voice_is_playing(moby, vars->sound) != 0) {
         if (SOUND_SLOT_2d55c8(vars->sound)->volume < 0x100) {
             release_voice_slot(vars->sound);
             vars->sound = -1;
@@ -1059,7 +1042,6 @@ extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("
 #include "rnc/overlay/l08/gameplay/entities/bomb_data/spawn_bomber_tank_joint_particles.h"
 extern int FUN_L00_0024f7c8();
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
-extern void func_0020DAF8_2D6C58(char *, int, char *) __asm__("FUN_0020cca8");
 extern float func_00214158_2D6C58(void) __asm__("FUN_00213308");
 extern float func_002140F8_2D6C58(float, float) __asm__("FUN_002132a8");
 extern void func_L00_001FF4B0_2D6C58(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -1080,7 +1062,7 @@ void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
     float random_angle, offset;
 
     moby_point_position(moby, joint, joint_pos);
-    func_0020DAF8_2D6C58(moby, joint, joint_transform_buffer);
+    build_moby_bone_transform(moby, joint, joint_transform_buffer);
     for (i = 0; i < count; i++) {
         float *spawn_ptr = spawn_pos;
 
@@ -1135,7 +1117,6 @@ extern Camera46 D_L08_00167480;
 extern char *D_L08_001600EC;
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern short *D_L08_001AC040[];
-extern void FUN_L00_0025e450_c2(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void initialize_moby_launch_motion(void*,int,void*,void*,int) __asm__("FUN_L05_00318648");
 
 void scatter_bomber_tank_linked_debris(char *moby) {
@@ -1245,7 +1226,7 @@ void scatter_bomber_tank_linked_debris(char *moby) {
                 }
             } else if ((short)cls == 0x1D8) {
                 clear_u64_value(position_or_velocity_scratch);
-                FUN_L00_0025e450_c2(other, position_or_velocity_scratch, other + 0x10, 0.0f, 0.0f, 0x32, 0x3C, 0x3C, 12.0f, 8.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+                spawn_explosion(other, position_or_velocity_scratch, other + 0x10, 0.0f, 0.0f, 0x32, 0x3C, 0x3C, 12.0f, 8.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
                 mark_moby_for_removal(other);
             }
         }
@@ -1290,7 +1271,6 @@ extern f32 D_L08_0015F580[] MACRO_ADDR;
 extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_002a40d0");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L08_002da0d0(void *);
-extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_00257b90(int, int);
@@ -1542,19 +1522,13 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_00258278(void*,void*,float,float,float,float);
 extern void FUN_L00_0025a120(void *);
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern void FUN_L00_0025d458_c2(void *, short *) __asm__("FUN_L00_0025d458");
-extern void FUN_L00_0025d538_c2(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025f730(void*,float);
 extern void FUN_L01_0026d930(char *p);
 extern void spawn_moby_table_puff_pattern(void *) __asm__("FUN_L04_002c46d0");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
-extern Hit_2D5FA8_c *find_2D5FA8_c(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
-extern int trooper_take_damage(struct Moby *, Hit_2D5FA8_c *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void FUN_00212f90(struct Moby *, int, int, int);
 extern void explode_2D5FA8_c(struct Moby *, int, int) __asm__("FUN_L00_00257470");
-extern void effects_start_2D5FA8_c(struct Moby *, short *) __asm__("FUN_L00_0025d458");
-extern void effects_update_2D5FA8_c(struct Moby *, short *) __asm__("FUN_L00_0025d538");
 extern void func_L00_00264B40_x(struct Moby *, int, float, char *) __asm__("FUN_L00_00263ac8");
 extern float FUN_0020c9e0(struct Moby *);
 extern void func_L00_002592B0_x(float, void *, void *, float, float, float) __asm__("FUN_L00_00258278");
@@ -1606,7 +1580,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         spawn_moby_table_puff_pattern(moby);
         return;
     }
-    trooper_take_damage(moby, find_2D5FA8_c(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
+    fun_00213928(moby, find_moby_hit(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 0x63) {
         moby->flags |= 0x1000;
         vars->health -= damage;
@@ -1652,7 +1626,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             moby->flags &= 0xEFFF;
             vars->waypoint->command = 0;
         }
-        effects_start_2D5FA8_c(moby, vars->anim);
+        trooper_anim_update(moby, vars->anim);
     }
     moby->hit_slot = 0xFF;
     search.result = select_nearest_xy_moby_with_hero_fallback(moby, 16.0f, &search);
@@ -1878,7 +1852,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         }
         break;
     }
-    effects_update_2D5FA8_c(moby, vars->anim);
+    trooper_anim_finish(moby, vars->anim);
     vars->i38 = 0;
 }
 /* Pvars of the hero-carrying lift. */
@@ -2211,8 +2185,6 @@ extern int FUN_L08_002dc9a8_blend(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L08_002dc9a8_color(float, int, int) __asm__("FUN_L08_00264930");
 extern void FUN_L08_002dc9a8_emit(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 extern void FUN_L08_002dc9a8_special(void *, float, float, float) __asm__("FUN_00214db0");
-extern void FUN_L08_002dc9a8_start(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L08_002dc9a8_finish(void *) __asm__("FUN_0020c828");
 #include "rnc/overlay/collision.h"
 extern int D_L08_00174658_2DC9A8 __asm__("D_L08_00174658") NOT_SDA;
 
@@ -2296,7 +2268,7 @@ void update_ballistic_projectile(struct Moby *moby) {
         clear_u64_value(record.velocity);
         record.state = 0;
         FUN_L08_002dc9a8_collision(moby_bytes + 0x10, 1.0f, 9, moby_bytes, record.velocity);
-        FUN_L08_002dc9a8_start(0, 0, moby_bytes);
+        allocate_voice_for_target_entry(0, 0, moby_bytes);
         for (i = 0; i < 50; i++) {
             axis = i % 4;
             *(u128 *)velocity = 0;
@@ -2353,7 +2325,7 @@ void update_ballistic_projectile(struct Moby *moby) {
             case DETONATION_EFFECT_NO_EMISSION: break;
             }
         }
-        FUN_L08_002dc9a8_finish(moby_bytes);
+        mark_moby_for_removal(moby_bytes);
     } break;
     }
 }
@@ -2444,7 +2416,7 @@ void update_rocket(M46 *moby) {
     V46 target,delta,velocity_correction_or_effect_velocity,effect,aux;
     D46 *data=moby->data;
     if (FUN_L00_0025a420(moby,0x210000,0) && moby->state!=4) {
-        allocate_voice_for_target_entry_alt(0,0,moby);
+        allocate_voice_for_target_entry(0,0,moby);
         cart_burst(moby,moby->position,-1,0.5f,13.0f);
         mark_moby_for_removal(moby);
         return;
@@ -2510,7 +2482,7 @@ void update_rocket(M46 *moby) {
         moby->rotation[1]=-fast_arc_tan(vector_length_xy(data->velocity),data->velocity[2]);
         moby->rotation[2]=fast_arc_tan(data->velocity[0],data->velocity[1]);
         if (fast_vec_dist(moby->position,data->target->position)<rocket_target_hit_distance_gp) {
-            target_data->health-=60; clear_u64_value(data->velocity); allocate_voice_for_target_entry_alt(0,0,moby); moby->state=6;
+            target_data->health-=60; clear_u64_value(data->velocity); allocate_voice_for_target_entry(0,0,moby); moby->state=6;
         }
         radius=random_float_between(0.0f,rocket_effect_radial_speed_range_end_gp)*D_0015ED6C;
         angle=random_angle_radians();
@@ -2528,7 +2500,7 @@ void update_rocket(M46 *moby) {
         if (fast_vec_dist(D_0013F3D0,(char*)data->path+(data->path->count<<4))<data->activation_range && fast_dec_timer(&data->timer)) {
             moby->flags=0x40; moby->state=4; moby->animation=moby->model->animation;
             moby->rotation[2]=fast_arc_tan(data->path->e[1][0]-moby->position[0],data->path->e[1][1]-moby->position[1]);
-            allocate_voice_for_target_entry_alt(1,0,moby);
+            allocate_voice_for_target_entry(1,0,moby);
         }
         return;
     case ROCKET_STATE_FOLLOW_ROUTE: {
@@ -2612,7 +2584,7 @@ void update_rocket(M46 *moby) {
                 }
             if (special) FUN_L08_002de528_u(moby,data->effect_path,30,1);
             else FUN_L08_002de528_u(moby,data->effect_path,30,0);
-            allocate_voice_for_target_entry_alt(2,0,moby); moby->state=6;
+            allocate_voice_for_target_entry(2,0,moby); moby->state=6;
         }
         return;
     }
@@ -2675,7 +2647,6 @@ struct Moby *spawn_class_1b3_projectile(void *pos, struct Moby *target, void *ve
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DF8A0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spawn_count, int flag) __asm__("FUN_L08_002de528");
 
@@ -2687,9 +2658,9 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
     int i;
 
     if (flag) {
-        FUN_L00_0025e450_c(moby, data + 0x20, moby + 0x10, 0.0f, 0.0f, 0x1E, 0x14, 0x14, 6.0f, 4.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+        spawn_explosion(moby, data + 0x20, moby + 0x10, 0.0f, 0.0f, 0x1E, 0x14, 0x14, 6.0f, 4.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
     } else {
-        FUN_L00_0025e450_c(moby, data + 0x20, moby + 0x10, 0.0f, 0.0f, 0x2D, 0x1E, 0x1E, 10.0f, 6.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+        spawn_explosion(moby, data + 0x20, moby + 0x10, 0.0f, 0.0f, 0x2D, 0x1E, 0x1E, 10.0f, 6.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
     }
     for (i = 0; i < spawn_count; i++) {
         {
@@ -2729,7 +2700,6 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
 extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA;
 #include "rnc/overlay/l08/gameplay/entities/bomb_data/update_path_following_moby.h"
 extern unsigned char D_0013D408[];
-extern void *find_moby_hit(void*,int,int) __asm__("FUN_L00_0025a420");
 extern void FUN_L08_002dec90_c(char *m, char *pos) __asm__("FUN_L08_002dec90");
 
 void update_path_following_moby(char *moby) __asm__("FUN_L08_002de848");

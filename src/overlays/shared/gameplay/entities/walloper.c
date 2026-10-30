@@ -490,7 +490,7 @@ typedef struct {
 } RT_2baae0;
 
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_and_arc_two_pass_quads.h"
-extern long tex_2baae0(int) __asm__("FUN_001f44b8");
+extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
@@ -504,7 +504,7 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     RW_2baae0 camera_facing_side_vector, second_pass_width_offset, first_pass_point_camera_offset, segment_delta, adjusted_segment_start, adjusted_segment_end, segment_start_camera_offset, segment_end_camera_offset, s1A0, s1B0;
     int i, col0, col1;
     float first_pass_side_normalization_factor, initial_first_pass_side_normalization_factor, segment_start_camera_distance, segment_end_camera_distance, second_pass_side_normalization_factor;
-    first_pass_render_attributes.q0 = tex_2baae0(beam_and_arc_first_pass_texture_index_gp);
+    first_pass_render_attributes.q0 = get_effect_texture(beam_and_arc_first_pass_texture_index_gp);
     col0 = beam_and_arc_first_pass_base_vertex_color_gp | (first_pass_alpha << 24);
     first_pass_render_attributes.q2 = 0x8000000048L;
     first_pass_render_attributes.q1 = 0xFF9000000260L;
@@ -513,7 +513,7 @@ void draw_beam_and_arc_two_pass_quads(void *mv, int first_pass_alpha, int second
     first_pass_render_attributes.c[2] = col0;
     first_pass_render_attributes.c[1] = col0;
     first_pass_render_attributes.c[0] = col0;
-    u.q0 = tex_2baae0(beam_and_arc_second_pass_texture_index_gp);
+    u.q0 = get_effect_texture(beam_and_arc_second_pass_texture_index_gp);
     col1 = D_L00_001615F8 | (second_pass_alpha << 24);
     u.q2 = first_pass_render_attributes.q2;
     u.q1 = first_pass_render_attributes.q1;
@@ -639,7 +639,6 @@ void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-long tex_2bb0b0(int) __asm__("FUN_001f44b8");
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern unsigned int l00_beam_anchor_first_pass_vertex_color __asm__("D_L00_00161640") __attribute__((sda));
@@ -654,7 +653,7 @@ void draw_beam_anchor_camera_facing_quads(void *mv) {
     unsigned int quad_color;
     float corner_scale;
     int i;
-    quad.tex = tex_2bb0b0(0xB);
+    quad.tex = get_effect_texture(0xB);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
@@ -863,7 +862,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
 
@@ -987,7 +986,7 @@ void walloper_update(char *walloper_moby) {
                 D_L00_001DBED8[i] = 0;
         }
     }
-    add_draw_callback(FUN_L00_002bbb00_c, walloper_moby);
+    enqueue_callback_list_1(FUN_L00_002bbb00_c, walloper_moby);
 }
 extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") MACRO_ADDR;
 extern f32 walloper_arc_first_pass_half_width_gp __asm__("D_L00_00161690") __attribute__((sda));
@@ -1024,7 +1023,6 @@ typedef struct {
     long z4, q0, q1, q2;
 } RT;
 
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern char walloper_arc_first_pass_base_vertex_color_gp[4] __asm__("D_L00_00161680") __attribute__((sda));
 extern char walloper_arc_second_pass_base_vertex_color_gp[4] __asm__("D_L00_00161684") __attribute__((sda));
 extern char walloper_arc_first_pass_texture_index_gp[4] __asm__("D_L00_001616B0") __attribute__((sda));
@@ -1168,7 +1166,6 @@ typedef struct {
 } Q_2bc1a0;
 void FUN_001f9a68_2bc1a0(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_2bc1a0(void *, void *, float) __asm__("FUN_001f9bf8");
-long FUN_001f44b8_2bc1a0(int) __asm__("FUN_001f44b8");
 int random_integer_below(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_2bc1a0(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6d0_2bc1a0(float) __asm__("FUN_001fa6d0");
@@ -1189,7 +1186,7 @@ void draw_walloper_camera_facing_quad(void *mv) {
     int i;
     FUN_001f9a68_2bc1a0(walloper_quad_basis_offset_scale_gp, &scaled_basis_offset, moby_bytes + 0xD0);
     fast_vec_add(&camera_facing_transform[3], &scaled_basis_offset, moby_bytes + 0x10);
-    quad.tex = FUN_001f44b8_2bc1a0(walloper_quad_texture_index_gp);
+    quad.tex = get_effect_texture(walloper_quad_texture_index_gp);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
@@ -1239,7 +1236,6 @@ extern float fast_difference_between_rotations(float, float) __asm__("func_001FA
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L00_00173E40[];
-extern int fun_002141f8(char *) __asm__("FUN_002141f8");
 extern float D_L00_001616DC __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/select_morphoray_target_and_adjust_aim.h"
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -1283,7 +1279,7 @@ char *select_morphoray_target_and_adjust_aim(char *self, float *position, float 
             *(short *)(candidate + 0xA6) == 0x452)
             continue;
         qcopy(target, candidate + 0x10);
-        data = (char *)fun_002141f8(candidate);
+        data = (char *)suck_get_aim_height(candidate);
         if (!data)
             continue;
         target[2] += *(float *)(data + 0x10);
@@ -1320,7 +1316,7 @@ char *select_morphoray_target_and_adjust_aim(char *self, float *position, float 
         apparentAngle = fast_arc_sin(fast_vec_dist(offset, target) / (distance + distance));
         apparentAngle += apparentAngle;
         if (morphoray_target_angle_threshold_degrees_gp * 0.017453292f < apparentAngle) {
-            data = (char *)fun_002141f8(candidate);
+            data = (char *)suck_get_aim_height(candidate);
             if (data) {
                 radius = convert_integer_to_float(*(unsigned char *)(data + 10)) * 0.125f;
                 reduction = fast_arc_sin(radius / distance);
@@ -1403,7 +1399,6 @@ typedef struct Voice {
     Moby *owner;
 } Voice;
 
-char *FUN_L00_002bc3b0_u(char *self, float *position, float *heading, float *pitch) __asm__("FUN_L00_002bc3b0");
 extern unsigned char D_00141680_r[] __asm__("D_00141680");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
@@ -1457,28 +1452,21 @@ extern void func_001F9EE8_2BDAF0(void *, void *, void *) __asm__("FUN_001f9d20")
 extern void func_001F9C30_2BDAF0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float func_001F9CE8_2BDAF0(void *) __asm__("FUN_001f9b20");
-extern Moby *func_L00_002BD6B8_2BDAF0(void *, void *, void *, void *) __asm__("FUN_L00_002bc3b0");
 extern int func_001F9908_2BDAF0(void *) __asm__("FUN_001f9740");
-extern float *func_L00_0025D390_2BDAF0(Moby *) __asm__("FUN_002141f8");
 extern float func_001FA888_2BDAF0(int) __asm__("FUN_001fa6c0");
 extern int queue_animation_update(int, int, void *, void *, void *, int *, int) __asm__("FUN_001ff308");
 extern int func_001FA898_2BDAF0(float) __asm__("FUN_001fa6d0");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void func_L00_002CA728_2BDAF0(void *) __asm__("FUN_L00_002c9348");
 extern void func_L00_002BE3A8_2BDAF0(void *) __asm__("FUN_L00_002bd0a0");
-extern int func_L00_0023EF78_2BDAF0(float *pos, float radius, float intensity, int color) __asm__("FUN_L00_0023e5e0");
 extern void func_L00_001FF4B0_2BDAF0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_2BDAF0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int func_L00_0028EB98_2BDAF0(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int remove_hud_item(int) __asm__("FUN_001ff480");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
-extern void func_L00_00236BF8_2BDAF0(void) __asm__("FUN_L00_00236268");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
-extern void func_L00_002377E0_2BDAF0(void) __asm__("FUN_L00_00236e50");
 
 void morphoray_update(Moby *moby) __asm__("FUN_L00_002bc7e8");
 void morphoray_update(Moby *moby) {
@@ -1548,7 +1536,7 @@ void morphoray_update(Moby *moby) {
         data->yaw = fast_arc_tan(direction.x, direction.y);
         data->pitch = fast_arc_tan(func_001F9CE8_2BDAF0(&direction), direction.z);
         *(u128_2BDAF0 *)&points[0] = *(u128_2BDAF0 *)data->pos;
-        hit = func_L00_002BD6B8_2BDAF0(moby, &points[0], &data->yaw, &data->pitch);
+        hit = select_morphoray_target_and_adjust_aim(moby, &points[0], &data->yaw, &data->pitch);
         func_001F9908_2BDAF0(&data->delay);
         if (data->target != 0) {
             if (data->target->state == 0xFE) {
@@ -1561,7 +1549,7 @@ void morphoray_update(Moby *moby) {
         }
         if (hit != 0 || data->delay != 0) {
         if (hit != 0) {
-            float *target_health = func_L00_0025D390_2BDAF0(hit);
+            float *target_health = suck_get_aim_height(hit);
             if (hit != data->target && data->delay == 0) {
                 data->target = hit;
                 data->total = func_001FA888_2BDAF0(((short *)target_health)[2]);
@@ -1570,8 +1558,8 @@ void morphoray_update(Moby *moby) {
                 if (data->total <= 1.0f) {
                     data->left = 0.0f;
                 }
-                data->snd = queue_animation_update(4, 0x7533, func_L00_00236BF8_2BDAF0, hud_update_particles,
-                                              func_L00_002377E0_2BDAF0, &D_L00_001616EC, 10000);
+                data->snd = queue_animation_update(4, 0x7533, hud_init_particles, hud_update_particles,
+                                              draw_uniform_size_hud_stars, &D_L00_001616EC, 10000);
             }
         }
             {
@@ -1590,12 +1578,12 @@ void morphoray_update(Moby *moby) {
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }
-            func_L00_002CA728_2BDAF0(data->target);
+            spawn_morphoray_chicken(data->target);
             data->target = 0;
         }
         func_L00_002BE3A8_2BDAF0(moby);
         if (morphoray_point_light_slot == -1) {
-            morphoray_point_light_slot = func_L00_0023EF78_2BDAF0((float *)&moby->pos, 7.5f, 0.0f, 0x207F7F);
+            morphoray_point_light_slot = allocate_packed_color_point_light_slot((float *)&moby->pos, 7.5f, 0.0f, 0x207F7F);
         }
         if (morphoray_point_light_slot >= 0) {
             morphoray_light_fade_countdown = func_001F9850_2BDAF0(20);
@@ -1606,7 +1594,7 @@ void morphoray_update(Moby *moby) {
             ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[1].z;
             ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
         }
-        if (func_L00_0028EB98_2BDAF0(moby, D_L00_001617C8) == 0) {
+        if (voice_is_playing(moby, D_L00_001617C8) == 0) {
             D_L00_001617C8 = allocate_voice_for_target_entry(0, 4, moby);
         }
     } else {
@@ -1801,7 +1789,6 @@ extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F580") MACRO_ADDR;
 #include "rnc/data_labels.h"
 extern void func_L00_002BE2A0_2BE3A8(void) __asm__("FUN_L00_002bcf98");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern Info *func_L00_0025D390_2BE3A8(struct Moby *) __asm__("FUN_002141f8");
 extern void func_001F9BD8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_L00_001EFFF0_2BE3A8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void func_001F9BF0_2BE3A8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1813,13 +1800,11 @@ extern void func_001F9CA0_2BE3A8(void *, void *, void *) __asm__("FUN_001f9ad8")
 extern float func_001F9FA8_2BE3A8(float) __asm__("FUN_001f9de0");
 extern float func_001F9F90_2BE3A8(float) __asm__("FUN_001f9dc8");
 extern void func_001F9EE8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void func_001F49B0_2BE3A8(void *, struct Moby *) __asm__("FUN_001f4600");
 extern void draw_beam_ring_and_rail_effects(void *) __asm__("FUN_L00_002bdc50");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001F9850_2BE3A8(int) __asm__("FUN_001f96f8");
 extern void func_L00_00272F00_2BE3A8(void *, int, int, int, int, void *, float, float, float) __asm__("FUN_L00_00272060");
 extern int func_001FA898_2BE3A8(float) __asm__("FUN_001fa6d0");
-extern void func_L00_002767B0_2BE3A8(void *, int, int, int, int, void *, struct Moby *, float, float) __asm__("FUN_L00_00275910");
 extern int func_001F9908_2BE3A8(int *) __asm__("FUN_001f9740");
 
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/update_beam_ring_rail_and_pulse_effects.h"
@@ -1854,7 +1839,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     func_L00_002BE2A0_2BE3A8();
     D_L00_001617D0 = normalize_angle(D_L00_001617D0 + D_L00_001616F8_gp);
     build_spherical_offset(&aim, D_L00_001617CC_macro, data->f48, data->f4C);
-    if (data->target != 0 && (info = func_L00_0025D390_2BE3A8(data->target)) != 0) {
+    if (data->target != 0 && (info = suck_get_aim_height(data->target)) != 0) {
         qcopy(&beam_end, &data->target->pos);
         beam_end.z = beam_end.z + info->height;
     } else {
@@ -1925,7 +1910,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             }
         }
     }
-    func_001F49B0_2BE3A8(draw_beam_ring_and_rail_effects, moby);
+    enqueue_callback_list_1(draw_beam_ring_and_rail_effects, moby);
     spark_size = random_float_between(0.1f, 2.0f);
     sign = random_integer_below(2);
     if (sign == 0) {
@@ -1963,8 +1948,8 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             if (data->target != 0) {
                 node_index = node_index * 3;
             }
-            func_L00_002767B0_2BE3A8(&point, node_index, color, 0, sign, &out, data->target, spark_size * 0.1f, spark_size);
-            func_L00_002767B0_2BE3A8(&point, node_index, 0x7F7F7F7F, 1, -sign, &out, data->target, spark_size * 0.07f, spark_size * 0.7f);
+            spawn_proximity_corrected_size_alpha_tween_particle(&point, node_index, color, 0, sign, &out, data->target, spark_size * 0.1f, spark_size);
+            spawn_proximity_corrected_size_alpha_tween_particle(&point, node_index, 0x7F7F7F7F, 1, -sign, &out, data->target, spark_size * 0.07f, spark_size * 0.7f);
         }
     }
     if (func_001F9908_2BE3A8(&D_L00_00161824_macro) != 0) {
@@ -2156,7 +2141,7 @@ void draw_scrolling_ribbon_colored(void *mv, int ribbon_first_pass_alpha, int ri
     RW_2baae0 ribbon_camera_facing_side_vector, ribbon_second_pass_width_offset, ribbon_first_pass_point_camera_offset, ribbon_segment_delta, ribbon_adjusted_segment_start, ribbon_adjusted_segment_end, ribbon_segment_start_camera_offset, ribbon_segment_end_camera_offset, s1A0, s1B0;
     int i, col0, col1;
     float ribbon_first_pass_side_normalization_factor, ribbon_initial_side_normalization_factor, ribbon_second_pass_side_normalization_factor, ribbon_segment_start_camera_distance, ribbon_segment_end_camera_distance;
-    ribbon_first_pass_render_attributes.q0 = tex_2baae0(beam_rail_first_pass_texture_index_gp);
+    ribbon_first_pass_render_attributes.q0 = get_effect_texture(beam_rail_first_pass_texture_index_gp);
     col0 = beam_rail_first_pass_base_vertex_color_gp | (ribbon_first_pass_alpha << 24);
     ribbon_first_pass_render_attributes.q2 = 0x8000000048L;
     ribbon_first_pass_render_attributes.q1 = 0xFF9000000260L;
@@ -2165,7 +2150,7 @@ void draw_scrolling_ribbon_colored(void *mv, int ribbon_first_pass_alpha, int ri
     ribbon_first_pass_render_attributes.c[2] = col0;
     ribbon_first_pass_render_attributes.c[1] = col0;
     ribbon_first_pass_render_attributes.c[0] = col0;
-    ribbon_second_pass_render_attributes.q0 = tex_2baae0(beam_rail_second_pass_texture_index_gp);
+    ribbon_second_pass_render_attributes.q0 = get_effect_texture(beam_rail_second_pass_texture_index_gp);
     col1 = col | (ribbon_second_pass_alpha << 24);
     ribbon_second_pass_render_attributes.q2 = ribbon_first_pass_render_attributes.q2;
     ribbon_second_pass_render_attributes.q1 = ribbon_first_pass_render_attributes.q1;
@@ -2330,7 +2315,6 @@ void FUN_001f9a28_2be890(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_2be890(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9ad8_2be890(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_001f9d20_2be890(void *, void *, void *) __asm__("FUN_001f9d20");
-long FUN_001f44b8_2be890(int) __asm__("FUN_001f44b8");
 void FUN_001f7d30_2be890(void *, void *, int) __asm__("FUN_001f7d30");
 extern float beam_origin_quad_basis_offset_length_gp __asm__("D_L00_001617B4") __attribute__((sda));
 extern float beam_origin_quad_first_pass_corner_scale_gp __asm__("D_L00_001617AC") __attribute__((sda));
@@ -2344,7 +2328,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     V_2be890 offset_vector;
     int first_pass_vertex_color;
     int i, j;
-    quad.tex = FUN_001f44b8_2be890(11);
+    quad.tex = get_effect_texture(11);
     first_pass_vertex_color = beam_origin_quad_first_pass_vertex_color_gp;
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
@@ -2636,7 +2620,6 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 FUN_001efa68_c(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
-extern f32 FUN_L00_002bec80_c(void *, void *) __asm__("FUN_L00_002bec80");
 
 f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *target_position, f32 *out, f32 ang, f32 arc, f32 step, f32 probe_height_offset, f32 horizontal_probe_distance,
                      f32 probe_start_horizontal_offset) __asm__("FUN_L00_002bf050");
@@ -2684,7 +2667,7 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
     probe_end.f[0] += fast_cos(preferred_heading) * horizontal_probe_distance;
     probe_end.f[2] += probe_height_offset + probe_height_offset;
     if (FUN_001efa68_c(&probe_start, &probe_end, 4, moby, 0) == 0) {
-        if (FUN_L00_002bec80_c(&probe_end, moby) != 0.0f) {
+        if (probe_moby_landing_height(&probe_end, moby) != 0.0f) {
             best = preferred_heading;
             bestDist = horizontal_probe_distance;
             *out = horizontal_probe_distance;
@@ -2713,7 +2696,7 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
         probe_end.f[0] += fast_cos(arc) * horizontal_probe_distance;
         probe_end.f[2] += probe_height_offset + probe_height_offset;
         if (FUN_001efa68_c(&probe_start, &probe_end, 4, moby, 0) == 0) {
-            if (FUN_L00_002bec80_c(&probe_end, moby) != 0.0f) {
+            if (probe_moby_landing_height(&probe_end, moby) != 0.0f) {
                 sweep_heading_error = fast_difference_between_rotations(arc, preferred_heading);
                 if (sweep_heading_error < bestDiff || bestDist < horizontal_probe_distance) {
                     bestDiff = sweep_heading_error;
@@ -2880,25 +2863,14 @@ extern int FUN_001efa68_c2(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001e
 extern int FUN_L00_001ff600();
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
 float calculate_triangular_corrected_scalar(float *a, float *b, int *out, float f) __asm__("FUN_L00_00259468");
-float FUN_L00_002bec80_c2(void *p, void *q) __asm__("FUN_L00_002bec80");
-int FUN_L00_002beab0_c(char *a, int b, void *c) __asm__("FUN_L00_002beab0");
-void FUN_L00_002bec00_c(char *a) __asm__("FUN_L00_002bec00");
-void FUN_L00_002bec48_c(char *a) __asm__("FUN_L00_002bec48");
 void FUN_L00_002bf810_c(char *a, char *b, int n) __asm__("FUN_L00_002bf810");
-void FUN_L00_002bf8b0_c(unsigned char *m, unsigned char *o, void *src) __asm__("FUN_L00_002bf8b0");
 extern void func_001F9BF0_2C0CF8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int func_L00_001FF5B0_2C0CF8(float, void *, void *) __asm__("FUN_L00_001ff600");
 extern void func_001F9BD8_2C0CF8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_001F9C30_2C0CF8(void *, void *, float) __asm__("FUN_001f9a68");
 extern float func_001F9CE8_2C0CF8(void *) __asm__("FUN_001f9b20");
-extern float func_L00_002BFF88_2C0CF8(void *, void *) __asm__("FUN_L00_002bec80");
 extern void func_L00_001FF4B0_2C0CF8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
-extern int func_L00_002BFDB8_2C0CF8(void *, int, void *) __asm__("FUN_L00_002beab0");
-extern void func_L00_002BFF08_2C0CF8(void *a) __asm__("FUN_L00_002bec00");
-extern void func_L00_002BFF50_2C0CF8(void *a) __asm__("FUN_L00_002bec48");
-extern void func_L00_002C0BB8_2C0CF8(void *m, void *o, void *src) __asm__("FUN_L00_002bf8b0");
-extern float func_L00_0025A4A0_2C0CF8(void *a, void *b, int *out, float f) __asm__("FUN_L00_00259468");
 extern void func_L00_002C0B18_2C0CF8(void *a, void *b, int n, int c, int d, int e, float g, int f) __asm__("FUN_L00_002bf810");
 extern int func_L00_001EFFF0_2C0CF8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern char D_L00_00173F80_2C0CF8[] __asm__("D_L00_00173E80");
@@ -2929,7 +2901,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
     if (!(0.5f < half_length)) {
         can_halve = 0;
     }
-    land[2] = func_L00_002BFF88_2C0CF8(land, moby);
+    land[2] = probe_moby_landing_height(land, moby);
     jump[2] = land[2] - moby->pos[2];
     if (land[2] == 0.0f) {
         if (can_halve) {
@@ -2954,7 +2926,7 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
         return 0;
     }
     land[2] = land[2] + moby->f2C * 0.025f / moby->p24->unk24;
-    if (func_L00_002BFDB8_2C0CF8(moby, 6, land)) {
+    if (probe_moby_raised_sphere_collision(moby, 6, land)) {
         if (can_halve) {
             return try_start_moby_hop(moby, block, half, 1);
         }
@@ -2973,14 +2945,14 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
             return 0;
         }
     }
-    func_L00_002BFF08_2C0CF8(block);
-    func_L00_002C0BB8_2C0CF8(moby, D_0013E633_2C0CF8, land);
-    func_L00_002BFF50_2C0CF8(block);
+    save_state_vector_and_fields_to_hero(block);
+    initialize_moby_hop_trajectory(moby, D_0013E633_2C0CF8, land);
+    restore_saved_state_fields_from_hero(block);
     func_001F9C30_2C0CF8(mid, jump, 0.5f);
     func_001F9BD8_2C0CF8(mid, mid, moby->pos);
     qzero(up);
     up[2] = block->f50;
-    mid[2] = func_L00_0025A4A0_2C0CF8(moby->pos, up, 0, *(float *)(D_0013E633_2C0CF8 + 0x1C));
+    mid[2] = calculate_triangular_corrected_scalar(moby->pos, up, 0, *(float *)(D_0013E633_2C0CF8 + 0x1C));
     func_L00_002C0B18_2C0CF8(from, mid, 10, 0, 32, 32, 40000.0f, 60);
     func_L00_002C0B18_2C0CF8(to, mid, 10, 0, 32, 32, 40000.0f, 60);
     if (func_L00_001EFFF0_2C0CF8(from, mid, 6, moby, 0) != 0 && D_L00_00173F58_2C0CF8[0] != block->p38) {

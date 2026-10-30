@@ -1148,7 +1148,6 @@ typedef struct {
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern int mine_blend_color(int, int, float) __asm__("FUN_L00_002371e0");
-extern void FUN_L00_0026bed0_c(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 
 void update_fading_debris_particle_with_landing_spawn(Part *particle) __asm__("FUN_L00_0026c088");
 
@@ -1192,7 +1191,7 @@ void update_fading_debris_particle_with_landing_spawn(Part *particle) {
                 reference_distance_or_spawn_size = random_float_between(200000.0f, 300000.0f);
                 minimum_spawn_lifetime = scale_game_frames(0x5A);
                 spawn_lifetime = FUN_L00_00257b90(minimum_spawn_lifetime, scale_game_frames(0x96));
-                FUN_L00_0026bed0_c(particle->pos, particle_data, spawn_initial_color, spawn_final_color, reference_distance_or_spawn_size, spawn_lifetime, 3);
+                mine_debris(particle->pos, particle_data, spawn_initial_color, spawn_final_color, reference_distance_or_spawn_size, spawn_lifetime, 3);
             }
             free_effect_particle(particle);
         } else
@@ -1852,7 +1851,6 @@ typedef struct {
 extern char g_debug_camera_lui[] __asm__("D_L00_00166DC0") NOT_SDA;
 unsigned char *FUN_L00_002678b8_0026daa0(int) __asm__("FUN_L00_002678b8");
 int FUN_001160d8_0026daa0(void) __asm__("FUN_001160d8");
-void FUN_L00_0024f7c8_0026daa0(void *, int, V_0026daa0 *) __asm__("FUN_L00_0024f7c8");
 void FUN_001f9a28_0026daa0(V_0026daa0 *, void *, V_0026daa0 *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_0026daa0(V_0026daa0 *, V_0026daa0 *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_0026daa0(void *, V_0026daa0 *, V_0026daa0 *) __asm__("FUN_001f9a10");
@@ -1872,7 +1870,7 @@ unsigned char *spawn_source_attached_fading_effect_particle(char *source_moby, i
         if ((short)source_position_selector == -1) {
             qcopy(particle + 0x10, source_moby + 0x10);
         } else {
-            FUN_L00_0024f7c8_0026daa0(particle_data->o, (short)source_position_selector, &source_position);
+            moby_point_position(particle_data->o, (short)source_position_selector, &source_position);
             FUN_001f9a28_0026daa0(&position_offset, g_debug_camera_lui, &source_position);
             FUN_001f9bf8_0026daa0(&position_offset, &position_offset, 0.4f);
             FUN_001f9a10_0026daa0(particle + 0x10, &source_position, &position_offset);
@@ -1899,7 +1897,6 @@ typedef struct {
 } E_0026dbe0;
 extern char D_L00_00166DC0_0026dbe0[] __asm__("D_L00_00166DC0") NOT_SDA;
 void FUN_L00_00267a08_0026dbe0(void *) __asm__("FUN_L00_00267a08");
-void FUN_L00_0024f7c8_0026dbe0(void *, int, V_0026dbe0 *) __asm__("FUN_L00_0024f7c8");
 void FUN_001f9a28_0026dbe0(V_0026dbe0 *, void *, V_0026dbe0 *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_0026dbe0(V_0026dbe0 *, V_0026dbe0 *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_0026dbe0(void *, V_0026dbe0 *, V_0026dbe0 *) __asm__("FUN_001f9a10");
@@ -1922,7 +1919,7 @@ void update_source_attached_fading_effect_particle(unsigned char *particle) {
         qcopy(particle + 0x10, *(char *volatile *)&particle_data->o + 0x10);
         return;
     }
-    FUN_L00_0024f7c8_0026dbe0(particle_data->o, particle_data->h6, &source_position);
+    moby_point_position(particle_data->o, particle_data->h6, &source_position);
     FUN_001f9a28_0026dbe0(&position_offset, D_L00_00166DC0_0026dbe0, &source_position);
     FUN_001f9bf8_0026dbe0(&position_offset, &position_offset, 0.4f);
     FUN_001f9a10_0026dbe0(particle + 0x10, &source_position, &position_offset);
@@ -2127,7 +2124,6 @@ typedef struct {
 extern u8 *D_L00_001B20F4_lui __asm__("D_L00_001B20F4") NOT_SDA;
 extern f32 g_debug_camera[4] __asm__("D_L00_00166DC0") NOT_SDA;
 extern void kill_26e3a8(void *) __asm__("FUN_L00_00267a08");
-extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vscl_26e3a8(void *, void *, f32) __asm__("FUN_001f9bf8");
 void update_animated_source_attached_fade_in_out_effect_particle(P_26e3a8 *particle) __asm__("FUN_L00_0026e3a8");
@@ -3203,7 +3199,6 @@ typedef struct {
 extern u8 *D_L00_001B20B0_c[] __asm__("D_L00_001B20B0");
 extern void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a28_c(void *, void *, void *) __asm__("FUN_001f9a28");
-extern M_270948 *FUN_L00_00270758_c(void *, void *, s32, s32) __asm__("FUN_L00_00270758");
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 coll_line_fix(void *, void *, s32, s32, void *) __asm__("FUN_001efa68");
@@ -3231,7 +3226,7 @@ void update_splitting_effect_particle_with_collision_and_fade(M_270948 *particle
         v.f[0] += random_float_between(-e->v.f[0] * 0.2f, e->v.f[0] * 0.2f);
         v.f[1] += random_float_between(-e->v.f[1] * 0.2f, e->v.f[1] * 0.2f);
         v.f[2] += random_float_between(-e->v.f[2] * 0.2f, 0.0f);
-        spawned_particle = FUN_L00_00270758_c(&position_scratch, &v, 0x88, e->x1C);
+        spawned_particle = spawn_splitting_effect_particle_with_collision_and_fade(&position_scratch, &v, 0x88, e->x1C);
         if (spawned_particle) {
             spawned_particle->hA = FUN_001f96f8_c(2);
             spawned_particle->fC = particle->fC;

@@ -95,7 +95,6 @@ void apply_spatial_trigger_to_moby(int index, int trigger_arg, int inside) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F6518), where it is exact; names translated to the US level program. */
 
 extern int *D_L05_001ABCC0[];
-extern void apply_spatial_trigger_to_moby(int, int, int) __asm__("FUN_L05_002f4f60");
 
 void apply_spatial_trigger_to_moby_list(int unused_trigger_moby, int trigger_vars_arg, int i, int inside) __asm__("FUN_L05_002f5190");
 
@@ -125,8 +124,6 @@ extern Vec4 D_L05_001671C0_2f5200 __asm__("D_L05_001671C0");
 extern s32 *D_L05_001B0930_2f5200[] __asm__("D_L05_001B0930");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern void FUN_L05_002f5190_2f5200(struct Moby *, TriggerVars *, s32, s32) __asm__("FUN_L05_002f5190");
-extern void FUN_L05_002f4f60_2f5200(s32, TriggerVars *, s32) __asm__("FUN_L05_002f4f60");
 
 void update_moby_spatial_trigger(struct Moby *trigger_moby) __asm__("FUN_L05_002f5200");
 
@@ -168,12 +165,12 @@ void update_moby_spatial_trigger(struct Moby *trigger_moby) {
         trigger_moby->state = trigger_moby->command + 1;
         for (i = 0; i < 12; i++) {
             if (trigger_vars->on_lists[i] != -1) {
-                FUN_L05_002f5190_2f5200(trigger_moby, trigger_vars, trigger_vars->on_lists[i], inside);
+                apply_spatial_trigger_to_moby_list(trigger_moby, trigger_vars, trigger_vars->on_lists[i], inside);
             }
         }
         for (i = 0; i < 11; i++) {
             if (trigger_vars->on_mobys[i] != -1) {
-                FUN_L05_002f4f60_2f5200(trigger_vars->on_mobys[i], trigger_vars, inside);
+                apply_spatial_trigger_to_moby(trigger_vars->on_mobys[i], trigger_vars, inside);
             }
         }
     }

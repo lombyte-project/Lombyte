@@ -270,7 +270,7 @@ extern void FUN_L00_0025e450_c(struct Moby *, void *, void *, float, float, int,
 extern void FUN_L00_00263ac8(float, char *, int, char *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_moby_bone_transform_c(char *, int, void *) __asm__("build_moby_bone_transform");
-extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float update_plasmabot_aim_quaternion(char *moby, int flag, float angle) __asm__("FUN_L14_002b35d8");
@@ -289,7 +289,7 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 #define call_4BF0(m) FUN_L14_002b39a0_c((unsigned char *)(m))
 #define call_CE58 ((float (*)(float *, float, float *, float, float, float))approach_angle)
 #define call_F4A8 ((void (*)(char *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int))FUN_L00_0025e450_c)
-#define call_D678 ((void (*)(char *))mark_moby_for_removal_c)
+#define call_D678 ((void (*)(char *))mark_moby_for_removal)
 
 void update_plasmabot(char *moby) __asm__("FUN_L14_002b17d8");
 
@@ -1167,7 +1167,6 @@ extern float plasmabot_glow_camera_clearance_distance_gp __asm__("D_L14_00161500
 extern u32 plasmabot_glow_vertex_color_gp __asm__("D_L14_00161504") __attribute__((sda));
 extern void draw_geometry_quad(void *, void *, int);
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
-unsigned long get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
 void draw_plasmabot_glow_quad(char *m) __asm__("FUN_L14_002b3a20");
 
@@ -1182,7 +1181,7 @@ void draw_plasmabot_glow_quad(char *m) {
     qcopy(glow_position, m + 0x10);
     glow_position[2] += 0.01f;
     glow_position[3] = 1.0f;
-    pk.b = get_effect_texture_alt(0xB);
+    pk.b = get_effect_texture(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
@@ -1336,7 +1335,6 @@ extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32,
                               f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_0026cbb0_de670(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
 extern u8 *FUN_L00_0026d000_de670(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 
 extern f32 D_L14_00161B18 __attribute__((sda));
 extern f32 D_L14_00161B1C __attribute__((sda));
@@ -1668,10 +1666,8 @@ extern P_eca8 *FUN_L00_0026d000(void *, float, float, float, int, void *, float,
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int D_L14_0015F580_c __asm__("D_L14_0015F580");
 int FUN_L00_00257b90(int lo, int hi);
-unsigned char *FUN_L00_00274948_c(u128_2E17B8 *a, u128_2E17B8 *b, int c, int d) __asm__("FUN_L00_00274948");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern void func_002141A8_2E17B8(void *, float, float) __asm__("FUN_00213358");
-extern Particle_2E17B8 *func_L00_002757E8_2E17B8(void *, void *, int, Moby *) __asm__("FUN_L00_00274948");
 extern float func_002140F8_2E17B8(float, float) __asm__("FUN_002132a8");
 extern int func_002140B0_2E17B8(int) __asm__("FUN_00213260");
 extern float func_L00_00258C80_2E17B8(float lo, float hi) __asm__("FUN_L00_00257c48");
@@ -1698,14 +1694,14 @@ void emit_debris_trail_particles(Moby *moby) {
     fast_vec_normalize(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.2f);
     fast_vec_add(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
     func_002141A8_2E17B8(&particle_initial_velocity, 0.005f, 0.03f);
-    particle = func_L00_002757E8_2E17B8(&pos, &particle_initial_velocity, 0x7F, moby);
+    particle = spawn_mode_controlled_rotating_alpha_fade_particle(&pos, &particle_initial_velocity, 0x7F, moby);
     if (particle != 0) {
         particle->life = func_002140F8_2E17B8(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
         float f;
         int color;
-        particle = func_L00_002757E8_2E17B8(&pos, &D_L14_0015F580_c, 0x7F, moby);
+        particle = spawn_mode_controlled_rotating_alpha_fade_particle(&pos, &D_L14_0015F580_c, 0x7F, moby);
         if (particle == 0) {
             continue;
         }
@@ -1848,13 +1844,10 @@ typedef struct {
 extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/update_floating_mine.h"
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
-extern void ease_ff640(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern MobyHit *find_moby_hit_ff640(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void explode_ff640(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
                           int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void remove_moby_ff640(struct Moby *) __asm__("FUN_0020c828");
 
 /* Floating mine: spins and pulses (and bobs in level 16); blows up on a hit and respawns once out of view. */
 void update_floating_mine(struct Moby *moby) __asm__("FUN_L14_002ff640");
@@ -1894,11 +1887,11 @@ void update_floating_mine(struct Moby *moby) {
         if (current_level_index == 16) {
             if (vars->rest_z < 0.0f)
                 vars->rest_z = probe_ground_height_ff640(0.5f, &moby->pos, 0) + 0.7f;
-            ease_ff640(&moby->pos.z, &vars->z_speed, vars->rest_z, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, 0.0f);
+            vendor_spring(&moby->pos.z, &vars->z_speed, vars->rest_z, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, 0.0f);
             if ((char *)moby > floating_mine_respawn_address_limit && hero.state.control_mode != 15)
                 goto remove;
         }
-        hit = find_moby_hit_ff640(moby, 0x230000, 0);
+        hit = find_moby_hit(moby, 0x230000, 0);
         fast_mem_zero16(&scratch.info, 0x40);
         scratch.info.unk4 = 1;
         scratch.info.damage = 1.0f;
@@ -1922,7 +1915,7 @@ void update_floating_mine(struct Moby *moby) {
                 return;
             }
         remove:
-            remove_moby_ff640(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         break;

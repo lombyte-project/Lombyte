@@ -658,9 +658,9 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278_cf(char *moby, float *vel, float target, float k, float d,
                                 float max) __asm__("FUN_L00_00258278");
-extern void FUN_L00_0025ab48_u(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
+extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void FUN_L00_0025c558_u(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void FUN_L00_0025d458_u(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -675,7 +675,6 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-void FUN_L01_002e6518_c(SplashMoby *m, u128 *origin) __asm__("FUN_L01_002e6518");
 
 void birdbot_update(PeMoby *m) __asm__("FUN_L01_002e6bf0");
 void birdbot_update(PeMoby *birdbot_moby) {
@@ -785,12 +784,12 @@ void birdbot_update(PeMoby *birdbot_moby) {
             birdbot_vars->w94 = 1;
             birdbot_vars->bAD = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
-            FUN_L00_0025ab48_u(&va, &knockback_heading, &birdbot_vars->f88, &birdbot_vars->f8C);
+            trooper_knockback_arc(&va, &knockback_heading, &birdbot_vars->f88, &birdbot_vars->f8C);
             FUN_L00_0025c558_u(knockback_heading, birdbot_moby, birdbot_vars->x70, 9, scale_game_frames(2), 0);
             birdbot_vars->b67 = 0xB4;
             birdbot_moby->state = 0xE;
             birdbot_moby->h34 &= 0xEFFF;
-            FUN_L00_0025d458_u(birdbot_moby, (short *)birdbot_vars->x60);
+            trooper_anim_update(birdbot_moby, (short *)birdbot_vars->x60);
             birdbot_vars->h26 = scale_game_frames(0x3C);
             break;
         case BIRDBOT_HIT_REACTION_NONFATAL_KNOCKBACK:
@@ -806,13 +805,13 @@ void birdbot_update(PeMoby *birdbot_moby) {
             birdbot_vars->fC4 = 10.0f;
             birdbot_vars->bAD = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
-            FUN_L00_0025ab48_u(&va, &knockback_heading, &birdbot_vars->f88, &birdbot_vars->f8C);
+            trooper_knockback_arc(&va, &knockback_heading, &birdbot_vars->f88, &birdbot_vars->f8C);
             FUN_L00_0025c558_u(knockback_heading, birdbot_moby, birdbot_vars->x70, 0xC, 6, 0);
             if (birdbot_moby->b53 != 0xB) {
                 blend_moby_animation(birdbot_moby, 0xB, 0, scale_game_frames(6));
             }
             birdbot_moby->state = 0xC;
-            FUN_L00_0025d458_u(birdbot_moby, (short *)birdbot_vars->x60);
+            trooper_anim_update(birdbot_moby, (short *)birdbot_vars->x60);
             break;
         case BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK:
         case BIRDBOT_HIT_REACTION_LOW_SPEED_NONFATAL_KNOCKBACK_NO_BLEND:
@@ -826,10 +825,10 @@ void birdbot_update(PeMoby *birdbot_moby) {
             birdbot_vars->fC4 = 13.5f;
             birdbot_vars->bAD = 0;
             *(u128 *)&va = *(u128 *)&hit->pos;
-            FUN_L00_0025ab48_u(&va, &knockback_heading, &birdbot_vars->f88, &birdbot_vars->f8C);
+            trooper_knockback_arc(&va, &knockback_heading, &birdbot_vars->f88, &birdbot_vars->f8C);
             FUN_L00_0025c558_u(knockback_heading, birdbot_moby, birdbot_vars->x70, 0xE, 6, 0);
             birdbot_moby->state = 0xC;
-            FUN_L00_0025d458_u(birdbot_moby, (short *)birdbot_vars->x60);
+            trooper_anim_update(birdbot_moby, (short *)birdbot_vars->x60);
             break;
         }
     }
@@ -1053,7 +1052,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 birdbot_moby->state = 1;
             }
         }
-        FUN_L01_002e6518_c((SplashMoby *)birdbot_moby, (u128 *)&old);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&old);
         break;
     case BIRDBOT_STATE_FIRE_BURST:
         if (birdbot_vars->f1CC < 14.0f && frame >= 14.0f) {
@@ -1159,7 +1158,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_vars->f1B8 = 0.0f;
         birdbot_vars->f1BC = 0.0f;
         birdbot_moby->state = 0xA;
-        FUN_L01_002e6518_c((SplashMoby *)birdbot_moby, (u128 *)&old);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&old);
         break;
     case BIRDBOT_STATE_MOVE_TO_PATH_NODE: {
         PeCursor *c;
@@ -1211,7 +1210,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         if (fast_vec_dist(&birdbot_moby->pos, &va) < 0.25f) {
             birdbot_moby->state = 0xB;
         }
-        FUN_L01_002e6518_c((SplashMoby *)birdbot_moby, (u128 *)&old);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&old);
         break;
     }
     case BIRDBOT_STATE_BRAKE_AND_FACE_TARGET:
@@ -1250,7 +1249,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             }
             birdbot_moby->state = 1;
         }
-        FUN_L01_002e6518_c((SplashMoby *)birdbot_moby, (u128 *)&old);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&old);
         break;
     case BIRDBOT_STATE_NONFATAL_KNOCKBACK:
         if (mine_fall(birdbot_moby, birdbot_vars->x70) & 0x40) {
@@ -1502,11 +1501,9 @@ extern void spawn_nearby_effect(void *, void *, s32, void *, void *, f32) __asm_
 extern void FUN_L00_0025a120(void *);
 extern void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void hit_reaction(void *, void *, void *, s32, void *, void *, s32, s32) __asm__("FUN_L00_0025a478");
-extern void trooper_knockback_arc(void *, void *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern f32 FUN_L00_0025abf0(void *, void *, void *, f32, f32);
 extern void trooper_start_knockback(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern s32 mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *, f32);
 extern void select_moby_combat_target(void *, void *, f32) __asm__("FUN_L00_0025fcb8");

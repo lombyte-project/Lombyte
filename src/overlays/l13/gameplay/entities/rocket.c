@@ -621,21 +621,19 @@ extern int poison_vessel_blast_duration_frames_gp __asm__("D_L13_00161E2C") __at
 extern f32 poison_vessel_blast_start_radius_gp __asm__("D_L13_00161E30") __attribute__((sda));
 extern f32 poison_vessel_blast_end_radius_gp __asm__("D_L13_00161E34") __attribute__((sda));
 extern f32 poison_vessel_blast_damage_gp __asm__("D_L13_00161E38") __attribute__((sda));
-extern struct BlastHit *find_moby_hit_7b10(void *, int, int) __asm__("FUN_L00_0025a420");
+extern struct BlastHit *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fptodp(float) __asm__("FUN_00120478");
 extern void debug_print() __asm__("FUN_001e93b0");
-extern int hit_check_7b10(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void stop_moby_sound_7b10(void *, int, int) __asm__("FUN_L00_00257470");
-extern void anim_reset_7b10(struct Moby *, void *) __asm__("FUN_L00_0025d458");
-extern void anim_update_7b10(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_type_52_particle_near_moby(struct Moby *) __asm__("FUN_L10_002e3de8");
-extern int allocate_voice_7b10(int, int, int) __asm__("FUN_0022da68");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float interpolate_scalar_linear(float, float, float) __asm__("FUN_L00_0025b6a8");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void send_blast_hits(struct Moby *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern void remove_7b10(struct Moby *) __asm__("FUN_0020c828");
 
 void poison_vessel_update(struct Moby *moby) __asm__("FUN_L13_00307b10");
 void poison_vessel_update(struct Moby *moby) {
@@ -664,12 +662,12 @@ void poison_vessel_update(struct Moby *moby) {
         vars->hit = 0;
         moby->rot.x *= 0.7f;
         moby->rot.y *= 0.7f;
-        hit = find_moby_hit_7b10(moby, 0x330001, 0);
+        hit = find_moby_hit(moby, 0x330001, 0);
         health = &vars->health;
         if (hit != 0) {
             debug_print(D_L13_001F5590, moby->oclass, (s16)moby->save_id, fptodp(hit->damage));
         }
-        switch (hit_check_7b10(moby, hit, health, 0, &kind, 0, 0, 4)) {
+        switch (fun_00213928(moby, hit, health, 0, &kind, 0, 0, 4)) {
         case HIT_RESULT_DEATH:
         case HIT_RESULT_DYING_KNOCKBACK:
             *health = 0;
@@ -686,23 +684,23 @@ void poison_vessel_update(struct Moby *moby) {
                 moby->flags &= 0xEFFF;
                 stop_moby_sound_7b10(moby, 0, -1);
                 vars->effect_level = 0x78;
-                anim_reset_7b10(moby, effects);
+                trooper_anim_update(moby, effects);
                 vars->timer = 0;
                 spawn_poison_vessel_destruction_effects(moby, vars);
                 spawn_type_52_particle_near_moby(moby);
-                allocate_voice_7b10(0, 0, (int)moby);
+                allocate_voice_for_target_entry(0, 0, (int)moby);
                 moby->state = 1;
             } else {
                 *health = *health - hit->damage;
                 vars->effect_level = 0xFA;
                 vars->effect_timer = scale_game_frames(0x3C);
-                anim_reset_7b10(moby, effects);
+                trooper_anim_update(moby, effects);
                 moby->rot.x = random_float_between(-0.034906585f, 0.034906585f);
                 moby->rot.y = random_float_between(-0.034906585f, 0.034906585f);
             }
         }
         moby->hit_slot = 0xFF;
-        anim_update_7b10(moby, effects);
+        trooper_anim_finish(moby, effects);
         break;
     case POISON_VESSEL_BLASTING:
         qcopy(pos, &moby->pos);
@@ -722,7 +720,7 @@ void poison_vessel_update(struct Moby *moby) {
         vars->timer = timer;
         if (scale_game_frames(poison_vessel_blast_duration_frames_gp) < timer) {
             spawn_type_52_particle_near_moby(moby);
-            remove_7b10(moby);
+            mark_moby_for_removal(moby);
         }
         break;
     }
@@ -799,7 +797,6 @@ extern void FUN_L00_00263ac8(float, struct Moby *, int, void *);
 extern void FUN_L01_0026d930(void *);
 extern void FUN_L13_00308d10_c(struct Moby *) __asm__("FUN_L13_00308d10");
 extern void FUN_L13_00309370_c(char *m) __asm__("FUN_L13_00309370");
-extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 extern void func_L00_0025A8C0_30A9B0(void *, void *, int, void *, float) __asm__("FUN_L13_00265990");
 extern float D_L13_00161E58_gp __asm__("D_L13_00161E58") __attribute__((sda));
@@ -1098,13 +1095,13 @@ void blarg_space_commando_update(struct Moby *moby) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
         } else if (hit & 0x120) {
-            mark_moby_for_removal_c2(moby);
+            mark_moby_for_removal(moby);
         }
         break;
     case BLARG_SPACE_COMMANDO_DYING:
         if (mine_fall(moby, &vars->vel) & 0x160) {
             FUN_L00_0025e450_c(moby, &vars->vel, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
-            mark_moby_for_removal_c2(moby);
+            mark_moby_for_removal(moby);
         }
         break;
     }
@@ -1162,17 +1159,12 @@ void update_gemlik_trail(struct Moby *moby) __asm__("FUN_L13_003094f8");
 extern void update_gemlik_trail(struct Moby *) __asm__("FUN_L13_003094f8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 FUN_001f96b0_8d10(f32) __asm__("FUN_001f96b0");
-extern char *find_moby_hit_8d10(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern s32 hit_check_8d10(struct Moby *, char *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void trooper_start_knockback(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void stop_moby_sound_8d10(struct Moby *, s32, s32) __asm__("FUN_L00_00257470");
-extern void anim_reset_8d10(struct Moby *, void *) __asm__("FUN_L00_0025d458");
-extern void anim_update_8d10(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 extern s32 find_target_8d10(f32, struct Moby *, void *, s32, s32, s32 *, s32) __asm__("FUN_L00_0025ff38");
 extern s32 FUN_00214720_8d10(void *, s32) __asm__("FUN_00214720");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
-extern void mark_moby_for_removal_8d10(struct Moby *) __asm__("FUN_0020c828");
 
 /* Walker update: takes hits (knocked back, or dies at no health), picks its target and falls onto or slides off the ground. */
 void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby *moby) __asm__("FUN_L13_00308d10");
@@ -1209,8 +1201,8 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
     }
     fast_dec_timer(&vars->idle_timer);
     damage = 0.0f;
-    hit = find_moby_hit_8d10(moby, 0x330000, 0);
-    code = hit_check_8d10(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
+    hit = find_moby_hit(moby, 0x330000, 0);
+    code = fun_00213928(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
     if (kind != 1 && moby->state != 0x10) {
         if (hit != 0 && *(struct Moby **)(hit + 0x20) != 0 && (*(struct Moby **)(hit + 0x20))->oclass == 0x4EE) {
             damage = 0.0f;
@@ -1255,10 +1247,10 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
             stop_moby_sound_8d10(moby, 0, -1);
             break;
         }
-        anim_reset_8d10(moby, vars->flash);
+        trooper_anim_update(moby, vars->flash);
     }
     moby->hit_slot = 0xFF;
-    anim_update_8d10(moby, vars->flash);
+    trooper_anim_finish(moby, vars->flash);
     if (vars->idle_timer != 0) {
         vars->range = vars->far_range;
     } else {
@@ -1291,7 +1283,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
             moby->flags &= ~0x1000;
             stop_moby_sound_8d10(moby, 0, -1);
             spawn_explosion(moby, D_L13_00160680, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-            mark_moby_for_removal_8d10(moby);
+            mark_moby_for_removal(moby);
             return;
         default:
             if (moby->state < 0xF) {
@@ -1320,7 +1312,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
     }
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f
         || moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
-        mark_moby_for_removal_8d10(moby);
+        mark_moby_for_removal(moby);
     }
 }
 
@@ -1702,7 +1694,6 @@ extern float D_0015ED70;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int allocate_voice(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -1770,7 +1761,7 @@ void update_lift(struct Moby *moby) {
     case LIFT_MOVE_TO_BOTTOM: {
         float target;
         if (!voice_is_playing(moby, vars->voice))
-            vars->voice = allocate_voice(0, 4, moby);
+            vars->voice = allocate_voice_for_target_entry(0, 4, moby);
         if (moby->command != 0) {
             compute_lift_mount_transform(moby, mount_position_work, mount_transform_work);
             set_camera_position(mount_position_work);
@@ -2159,7 +2150,6 @@ after_state_4:
 extern char *D_L13_001B07B0[];
 extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
 extern int compute_advanced_moby_path_position(void *, void *, void *, int, int, float) __asm__("FUN_L09_00294ae0");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void update_moby_path_follower(struct Moby *moby) __asm__("FUN_L13_0030bb70");
 
@@ -2332,8 +2322,6 @@ char *spawn_scaled_owned_moby(char *owner, void *position, float scale) {
 /* updates the moby: deletes it when its owner is gone, else copies the owner's effect data and marks it */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D528), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void forward_moby_hits_to_owner(struct Moby *moby) __asm__("FUN_L13_0030c060");
 
@@ -2344,7 +2332,7 @@ void forward_moby_hits_to_owner(struct Moby *moby) {
     char forwarded_hit_descriptor[0x30];
     if (owner == 0 || *(short *)(owner + 0xA6) != *(int *)(data + 0x64) ||
         (unsigned char)owner[0x20] == 0xFE || (unsigned char)owner[0x20] == 0xFD) {
-        mark_moby_for_removal_u(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     hit_record = find_moby_hit(moby, -1, 0);
@@ -2516,9 +2504,6 @@ collision:
 #include "rnc/gameplay/state/item_state.h"
 extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern float D_L13_0015F580[] MACRO_ADDR;
-extern void trooper_take_damage(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -2547,7 +2532,7 @@ void blarg_ship_update(struct Moby *moby) {
     }
     data = (char *)moby->pvars;
     hit = find_moby_hit(moby, 0x10000, 0);
-    trooper_take_damage(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
+    fun_00213928(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
     switch (moby->state) {
     case BLARG_SHIP_ENTER_DAMAGE_HANDLING:
         moby->state = 1;
