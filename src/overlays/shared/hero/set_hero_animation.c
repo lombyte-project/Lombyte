@@ -305,13 +305,13 @@ void blend_hero_mapped_moby_animation(int animation_id, int frame_index, float b
 void sync_hero_mapped_moby_animation_speed(void) __asm__("FUN_L00_002322c8");
 
 void sync_hero_mapped_moby_animation_speed(void) {
-    struct Hero *base = &hero;
+    struct Hero *hero_animation_speed_state = &hero;
     int          mapped_animation_id[4];
 
-    if (((void *)base->unk2278) != 0 && base->unk227C != 0 &&
-        lookup_s16_pair_value(*(unsigned char *)(((char *)base->moby) + 0x53),
+    if (((void *)hero_animation_speed_state->unk2278) != 0 && hero_animation_speed_state->unk227C != 0 &&
+        lookup_s16_pair_value(*(unsigned char *)(((char *)hero_animation_speed_state->moby) + 0x53),
                               mapped_animation_id) != 0) {
-        *(float *)(((char *)base->unk2278) + 0x58) = base->anim_speed;
+        *(float *)(((char *)hero_animation_speed_state->unk2278) + 0x58) = hero_animation_speed_state->anim_speed;
     }
 }
 
