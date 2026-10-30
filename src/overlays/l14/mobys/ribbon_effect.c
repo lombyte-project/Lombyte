@@ -411,10 +411,10 @@ typedef struct {
 void register_hero_hit_in_clip_volume(struct Moby *moby) __asm__("FUN_L14_002dfc58");
 
 void register_hero_hit_in_clip_volume(struct Moby *moby) {
-    u8        *base = (u8 *)&hero.motion.pos;
+    u8        *hero_position = (u8 *)&hero.motion.pos;
     Level14Req hit_request;
     u8        *hero_base;
-    if (is_point_inside_clip_volume(base, *(s32 *)(((u8 *)moby->pvars) + 0x200)) != 0) {
+    if (is_point_inside_clip_volume(hero_position, *(s32 *)(((u8 *)moby->pvars) + 0x200)) != 0) {
         hit_request.flags = 0x200001;
         hit_request.range = 100.0f;
         hit_request.one = 1;
@@ -425,7 +425,7 @@ void register_hero_hit_in_clip_volume(struct Moby *moby) {
         hit_request.a = 5;
         hit_request.b = 4;
         hit_request.c = ((u16)moby->oclass);
-        hero_base = base - 0x80;
+        hero_base = hero_position - 0x80;
         *(s32 *)(hero_base + 0x22A8) = 0;
         record_moby_hit(*(s32 *)(hero_base + 0x2080), &hit_request);
     }
