@@ -29,31 +29,31 @@ s32 compute_advanced_moby_path_position(struct Moby *moby,
 
 s32 compute_advanced_moby_path_position(struct Moby *moby,
                                         PathPoints  *path,
-                                        Vec4        *out,
+                                        Vec4        *advanced_path_position,
                                         s32          i,
                                         s32          path_index_step,
 
                                         f32 advance_distance) {
     Vec4 seg;
     Vec4 rel;
-    s32  next;
+    s32  next_path_point_index;
     f32  segment_length;
     f32  along;
 
-    next = path_next(path, i, path_index_step);
-    fast_vec_sub(&seg, &path->point[next], &path->point[i]);
+    next_path_point_index = path_next(path, i, path_index_step);
+    fast_vec_sub(&seg, &path->point[next_path_point_index], &path->point[i]);
     segment_length = fast_vec_length(&seg);
     fast_vec_normalize(&seg, &seg, 1.0f);
     fast_vec_sub(&rel, &moby->pos, &path->point[i]);
     along = fast_vec_dot(&rel, &seg) + advance_distance;
     if (segment_length < along) {
-        i = next;
-        next = path_next(path, i, path_index_step);
-        fast_vec_sub(&seg, &path->point[next], &path->point[i]);
+        i = next_path_point_index;
+        next_path_point_index = path_next(path, i, path_index_step);
+        fast_vec_sub(&seg, &path->point[next_path_point_index], &path->point[i]);
         along = along - segment_length;
         fast_vec_normalize(&seg, &seg, 1.0f);
     }
     fast_vec_normalize(&seg, &seg, along);
-    fast_vec_add(out, &seg, &path->point[i]);
+    fast_vec_add(advanced_path_position, &seg, &path->point[i]);
     return i;
 }
