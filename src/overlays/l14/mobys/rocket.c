@@ -66,7 +66,7 @@ void rocket_update(struct Moby *moby) {
         ROCKET_STATE_IDLE = 1,
         ROCKET_STATE_FLY_TO_POINT = 2
     };
-    FlyerVars   *vars = (FlyerVars *)moby->pvars;
+    FlyerVars   *rocket_vars = (FlyerVars *)moby->pvars;
     Vec4f        destination_delta;
     OvlVec4      step;
     f32          distance_to_destination;
@@ -76,37 +76,37 @@ void rocket_update(struct Moby *moby) {
 
     switch (moby->state) {
     case ROCKET_STATE_INITIALIZE:
-        if (vars->point < 0 || vars->target < 0) {
+        if (rocket_vars->point < 0 || rocket_vars->target < 0) {
             mark_moby_for_removal(moby);
             return;
         }
         moby->state = 1;
         moby->update_dist = 0xFF;
         moby->pos.z += 1.5f;
-        vars->sound = -1;
-        vars->timer = scale_game_frames(rocket_initial_timer_frames_gp);
+        rocket_vars->sound = -1;
+        rocket_vars->timer = scale_game_frames(rocket_initial_timer_frames_gp);
         return;
     case ROCKET_STATE_IDLE:
         return;
     case ROCKET_STATE_FLY_TO_POINT:
         fast_vec_sub(
-            &destination_delta, (char *)l14_cuboids + vars->point * 0x80 + 0x30, &moby->pos);
+            &destination_delta, (char *)l14_cuboids + rocket_vars->point * 0x80 + 0x30, &moby->pos);
         distance_to_destination = fast_vec_length(&destination_delta);
-        fast_dec_timer(&vars->timer);
+        fast_dec_timer(&rocket_vars->timer);
         speed = rocket_travel_speed_gp * frame_time;
         if (distance_to_destination < speed || distance_to_destination <= 0.0f) {
-            if (vars->sound != -1) {
-                slot = ((char *)&voice_pool) + vars->sound * 0x70;
+            if (rocket_vars->sound != -1) {
+                slot = ((char *)&voice_pool) + rocket_vars->sound * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && ((u8 *)slot)[0x74] != 0) {
-                    release_voice_slot(vars->sound);
+                    release_voice_slot(rocket_vars->sound);
                 }
             }
-            target = (struct Moby *)(D_L14_0015FFD8 + vars->target * 0x100);
-            vars->sound = -1;
+            target = (struct Moby *)(D_L14_0015FFD8 + rocket_vars->target * 0x100);
+            rocket_vars->sound = -1;
             if (target != 0) {
                 mark_moby_for_removal(target);
             }
-            qcopy(&moby->pos, (char *)l14_cuboids + vars->point * 0x80 + 0x30);
+            qcopy(&moby->pos, (char *)l14_cuboids + rocket_vars->point * 0x80 + 0x30);
             qcopy(&step, &moby->rot_row0);
             step.f[2] = 1.0f;
             spawn_explosion(moby,
@@ -141,8 +141,8 @@ void rocket_update(struct Moby *moby) {
         fast_vec_scale(&step, &moby->rot_row0, speed);
         fast_vec_add((u8 *)&moby->pos, (u8 *)&moby->pos, (u8 *)&step);
         spawn_rocket_exhaust_puffs(moby);
-        if (voice_is_playing(moby, vars->sound) == 0) {
-            vars->sound = allocate_voice_for_target_entry(1, 4, (int)moby);
+        if (voice_is_playing(moby, rocket_vars->sound) == 0) {
+            rocket_vars->sound = allocate_voice_for_target_entry(1, 4, (int)moby);
         }
         return;
     }
