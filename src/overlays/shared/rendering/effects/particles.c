@@ -618,7 +618,7 @@ P_2725d8                 *spawn_moby_point_attached_particle(u8 *owner,
                                                              f32 primary_position_w,
                                                              f32 secondary_position_w) __asm__("FUN_L00_002725d8");
 
-P_2725d8 *spawn_moby_point_attached_particle(u8 *owner,
+P_2725d8 *spawn_moby_point_attached_particle(u8 *owner_moby,
                                              u8 *attachment_point_selector,
                                              s32 color,
                                              s32 initial_size_bits,
@@ -637,13 +637,13 @@ P_2725d8 *spawn_moby_point_attached_particle(u8 *owner,
         particle->b3 = 0x48;
         particle->b1 = 3;
         particle->b2 = *D_L00_001B215C;
-        moby_point_position(owner, attachment_point_selector, particle->v10);
+        moby_point_position(owner_moby, attachment_point_selector, particle->v10);
         qcopy(particle->v20, particle->v10);
         particle->unk2C = secondary_position_w;
         *(f32 *)((u8 *)particle + 0x1C) = primary_position_w;
         s = &particle->s;
-        particle->s.o = owner;
-        s->k = *(s16 *)(owner + 0xA6);
+        particle->s.o = owner_moby;
+        s->k = *(s16 *)(owner_moby + 0xA6);
         s->b = attachment_point_selector;
         s->f = primary_position_w;
     }
