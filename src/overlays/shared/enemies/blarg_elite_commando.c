@@ -183,18 +183,18 @@ void blarg_elite_commando_update(char *commando_moby) {
     };
     float  target[4], scratch_vector[4], delta[4];
     char  *commando_data = ((char *)MOBY(commando_moby)->pvars);
-    char  *source, *owner;
+    char  *source, *aim_target_moby;
     float  distance, angle;
     float *heading, *movement;
     int    ticks;
     int    owner_moby_class;
     update_blarg_elite_commando_damage_and_pursuit(commando_moby);
-    owner = *(char **)(commando_data + 0x110);
-    owner_moby_class = *(short *)(owner + 0xA6);
+    aim_target_moby = *(char **)(commando_data + 0x110);
+    owner_moby_class = *(short *)(aim_target_moby + 0xA6);
     if (owner_moby_class == 0 || owner_moby_class == 0x1A3) {
         qcopy(target, &hero.motion.near_ground_point);
     } else {
-        qcopy(target, owner + 0x10);
+        qcopy(target, aim_target_moby + 0x10);
     }
     if ((&big_head_cheat_enabled)[7])
         manipulator_set_scale(commando_data + 0x130, 2.5f);
