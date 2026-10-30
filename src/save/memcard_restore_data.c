@@ -31,7 +31,7 @@ typedef struct {
 } CardState;
 
 extern CardState D_0013D290;
-#include "rnc/textbin/storage/memory_card/data/memcard_restore_data_globals.h"
+#include "rnc/save/memcard_restore_data_globals.h"
 extern s32 memcard_restore_differing_block_count_gp __asm__("D_0015FE90") __attribute__((sda));
 extern s32 validate_data_crc(u8 *header) __asm__("func_0020AD38");
 extern s32 memcmp(const void *, const void *, s32);

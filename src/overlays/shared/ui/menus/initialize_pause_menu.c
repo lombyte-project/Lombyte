@@ -37,8 +37,8 @@
 #include "rnc/rendering/effects/update_fog.h"
 #include "rnc/rendering/view/update_camera_view_matrices.h"
 #include "rnc/rendering/vu1/vu1_init_chain.h"
-#include "rnc/textbin/runtime/memory/mode_freeze_init.h"
-#include "rnc/textbin/world/data/select_world_object_resource_tables.h"
+#include "rnc/game/mode_freeze_init.h"
+#include "rnc/world/select_world_object_resource_tables.h"
 #include "rnc/ui/menus/item_preview/create_menu_preview_moby.h"
 #include "rnc/ui/menus/stream_buffers/initialize_menu_stream_buffers.h"
 

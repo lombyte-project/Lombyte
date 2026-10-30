@@ -11,7 +11,7 @@
 #include "rnc/ui/text/font/measure_text_width_regular.h"
 #include "rnc/mobys/animation/apply_pending_animation.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
-#include "rnc/textbin/ui/frames/draw_framed_text.h"
+#include "rnc/ui/frames/draw_framed_text.h"
 
 /* The level's HUD bank reset, a shorter func_001FF6B8 (src/game/hud.c):
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,

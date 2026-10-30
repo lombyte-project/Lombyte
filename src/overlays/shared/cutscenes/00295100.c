@@ -50,7 +50,7 @@
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/world/loaders/relocate_asset_entry_pointers.h"
 #include "rnc/save/memcard_update_state.h"
-#include "rnc/textbin/world/data/select_world_object_resource_tables.h"
+#include "rnc/world/select_world_object_resource_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_00299108), where it is exact; names translated to the US level program. */
 

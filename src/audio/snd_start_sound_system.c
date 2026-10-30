@@ -4,7 +4,7 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/audio/sound_read_work.h"
-#include "rnc/textbin/audio/snd_start_sound_system_globals.h"
+#include "rnc/audio/snd_start_sound_system_globals.h"
 
 struct SifClientDataStartSound {
     u8 pad_0[0x24];

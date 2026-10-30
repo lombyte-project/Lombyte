@@ -4,7 +4,7 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
-#include "rnc/textbin/gameplay/animation/get_frame_texture.h"
+#include "rnc/rendering/texture/get_frame_texture.h"
 
 typedef struct {
     u8 p[6];

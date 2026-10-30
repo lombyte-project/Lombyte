@@ -30,7 +30,7 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "rnc/overlay/l05/hero/hero_set_state.h"
 #include "rnc/overlay/shared/mobys/open_vendor_menu.h"
 #include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
-#include "rnc/textbin/runtime/memory/mode_freeze_init.h"
+#include "rnc/game/mode_freeze_init.h"
 
 /* Steps two floats of arg toward a target and clamps them to [-1, 1]. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00237B00), where it is exact; names translated to the US level program. */

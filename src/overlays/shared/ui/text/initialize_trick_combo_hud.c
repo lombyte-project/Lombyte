@@ -9,7 +9,7 @@
 #include "rnc/ui/help/get_help_message_text.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
-#include "rnc/textbin/ui/frames/draw_framed_text.h"
+#include "rnc/ui/frames/draw_framed_text.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00264C88), where it is exact; names translated to the US level program. */
 
