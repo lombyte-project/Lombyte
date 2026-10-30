@@ -35,7 +35,7 @@ char *spawn_blarg_ship_shot(int    owner,
                             float  step_length,
                             float  z) __asm__("FUN_L11_00308f48");
 
-char *spawn_blarg_ship_shot(int    owner,
+char *spawn_blarg_ship_shot(int    firing_moby,
                             float *launch_direction,
                             float *spawn_position,
                             float  size,
@@ -47,7 +47,7 @@ char *spawn_blarg_ship_shot(int    owner,
         char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         int   size_length_ratio;
         MOBY(spawned_moby)->collision = 0;
-        *(int *)(moby_vars + 0x1C) = owner;
+        *(int *)(moby_vars + 0x1C) = firing_moby;
         MOBY(spawned_moby)->update_dist = 0xFF;
         MOBY(spawned_moby)->draw_dist = truncate_float_to_s32(size);
         *(int *)(spawned_moby + 0x40) = 0;
