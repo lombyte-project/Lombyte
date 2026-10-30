@@ -5,10 +5,13 @@
 
 /* Class data of the loaded classes, one pointer per class slot. register_moby_class
    hands out slots with a counter (D_0015FF00) and records them in three tables that
-   follow each other: this one (4 bytes per slot, D_001B3200), D_001B3580 (s32) and
-   D_001B3900 (s16); the slot count is the 0xE0 their sizes agree on. The pointee type
+   follow each other: this one (4 bytes per slot, D_001B3200), moby_class_updates and
+   resident_class_id_by_slot; the slot count is the 0xE0 their sizes agree on. The pointee type
    differs per user (class record, streamed resource, preview resource): cast at use. */
 extern void *moby_class_resources[224] __asm__("D_001B3200");
+
+/* Slot -> the class's update function (assign_moby_class_data); 0: none. */
+extern s32 moby_class_updates[224] __asm__("D_001B3580");
 
 /* Slot -> class id, the reverse of resident_class_slot_by_id. */
 extern s16 resident_class_id_by_slot[224] __asm__("D_001B3900");

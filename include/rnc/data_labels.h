@@ -113,7 +113,6 @@ extern s32           D_001940C0[];
 extern char          D_00194120[];
 extern s32           D_001A03A8[];
 extern char          D_001B2C00[];
-extern s32           D_001B3580[];
 extern s32           D_001B6180[];
 extern s32           D_001CDF80[];
 extern s32           D_001CF758[];

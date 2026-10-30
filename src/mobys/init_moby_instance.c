@@ -78,7 +78,7 @@ extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 
 /* InitMobyInstance: clears the 0x100-byte moby, fills its defaults (class
    byte from D_001B3AC0[oClass], colours, its slot index from the moby
-   array base D_0015FF18), flags a class with no D_001B3580 entry, then
+   array base D_0015FF18), flags a class with no moby_class_updates entry, then
    copies the class record D_001B3200[class] (or marks the moby dead when
    there is none) and applies the animation-sequence rules after
    update_moby_animation_state. The moby is a real struct so its non-byte stores are "in
@@ -115,7 +115,7 @@ void init_moby_instance(void *moby_mem, int oClass) {
     moby_instance->unk7D = 0xFF;
     moby_instance->unkA1 = 0x7F;
     moby_instance->unkA3 = 0x80;
-    moby_instance->unk74 = D_001B3580[moby_instance->oClass];
+    moby_instance->unk74 = moby_class_updates[moby_instance->oClass];
     if (moby_instance->unk74 == 0) {
         moby_instance->flags |= 2;
     }

@@ -19,7 +19,7 @@ void assign_moby_class_data(s32 id) {
     for (i = 0; resident_class_defaults[i].oclass != -1 && resident_class_defaults[i].oclass != id;
          i++) {
     }
-    D_001B3580[D_0015FF00] = (s32)resident_class_defaults[i].update;
+    moby_class_updates[D_0015FF00] = (s32)resident_class_defaults[i].update;
     if (class_resource != 0) {
         ((struct Obj *)moby_class_resources[D_0015FF00])->methods =
             resident_class_defaults[i].methods;

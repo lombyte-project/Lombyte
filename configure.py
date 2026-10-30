@@ -1076,7 +1076,7 @@ DATA_OVERLAYS = {
     "ui/menus/selection/update_menu_item_slots": (0x141848, 0x427C8, 288),
     "audio/snd_start_sound_system": (0x133280, 0x34200, 8192),
     "camera/update_all_cameras": (0x187410, 0x88390, 7680),
-    "world/loaders/register_moby_class": (0x1B3900, 0xB4880, 448),
+    "world/loaders/register_moby_class": (0x1B3200, 0xB4180, 4288),
     "rendering/tfrags/set_tfrag_dists": (0x1DE7F0, 0xDF770, 64),
 }
 
