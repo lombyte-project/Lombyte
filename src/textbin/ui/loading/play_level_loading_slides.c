@@ -5,6 +5,7 @@
 
 #include "rnc/rendering/fs_aa_packets.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/math/fast_math.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
@@ -17,7 +18,6 @@ extern void reset_gs_registers_pr(void) __asm__("func_001F3958");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64,
                                u64) __asm__("func_001F5450");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
 extern s32 service_level_archive_load(void) __asm__("func_00204428");
 extern void run_state_handler(void) __asm__("func_00208840");

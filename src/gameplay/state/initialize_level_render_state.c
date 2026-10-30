@@ -18,6 +18,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/ties/light_ties.h"
 #include "rnc/rendering/tfrags/light_tfrags.h"
+#include "rnc/runtime/state/enable_global_flag.h"
 
 typedef struct FRow {
     f32 v[3];
@@ -132,9 +133,7 @@ extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void PackDmaTag(s32 arg0, u64 arg1, u64 arg2);
 extern void update_fog(void) __asm__("func_001F2588");
 extern void reset_draw_globals(void) __asm__("func_001F37E8");
-extern void enable_global_flag(void) __asm__("func_001F61E8");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void set_video_timing(s32) __asm__("func_00214970");
 extern void reset_global_state_fields(void) __asm__("func_00217020");
 extern void FUN_0022a5e0(void *);

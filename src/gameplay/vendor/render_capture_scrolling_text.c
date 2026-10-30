@@ -2,11 +2,11 @@
 #include "sda.h"
 #include "rnc/ui/vendor/vendor_capture.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/asm_helpers.h"
 
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");

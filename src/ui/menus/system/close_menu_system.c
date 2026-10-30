@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
-extern s32 delete_moby(s32) __asm__("FUN_00225530");
+#include "rnc/gameplay/entities/delete_moby.h"
 void close_menu_system(void) __asm__("FUN_002191b8");
 
 void close_menu_system(void) {
@@ -25,7 +25,7 @@ void close_menu_system(void) {
     }
     gs_texture_allocation_start = menu_system.saved_texture_start;
     for (j = 0; j < 14; j++) {
-        panel_slots[j] = (void *)delete_moby((s32)panel_slots[j]);
+        panel_slots[j] = (void *)delete_moby(panel_slots[j]);
     }
     menu_system.state = 20;
     menu_system.timer = 2;

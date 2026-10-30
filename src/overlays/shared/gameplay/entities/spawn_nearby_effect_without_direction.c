@@ -2,8 +2,8 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
 
-extern void spawn_nearby_effect(unsigned char *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 
 void spawn_nearby_effect_without_direction(unsigned char *effect_owner, int x, int y, void *effect_position, float effect_priority) __asm__("FUN_L10_0024c7f0");
 

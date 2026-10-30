@@ -4,6 +4,8 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/runtime/state/disable_global_flag.h"
+#include "rnc/runtime/state/enable_global_flag.h"
 
 /* Draws a vertical text menu: picks the font size from the flags, sizes
    the rows, then prints each item (and its optional subtitle) with the
@@ -16,8 +18,6 @@
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void enable_global_flag(void) __asm__("func_001F61E8");
-extern void disable_global_flag(void) __asm__("func_001F61F8");
 extern void font_print_window(struct TextRegion *, long, char *, s32, s32,
                               u8 *) __asm__("FUN_001f7090");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");

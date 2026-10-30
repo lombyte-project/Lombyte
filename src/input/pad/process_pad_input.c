@@ -37,9 +37,7 @@ typedef struct Pad {
 } Pad;
 
 extern volatile u8 D_0015EDB4;
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern float convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 #define SWAPLR(x)                                                                                  \
     if ((x) & 0x8000) {                                                                            \

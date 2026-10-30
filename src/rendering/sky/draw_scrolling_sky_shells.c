@@ -2,6 +2,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/rendering/sky_shell.h"
+#include "rnc/math/asm_helpers.h"
 
 struct SkyShell {
     u8 pad_0[8];
@@ -20,9 +21,6 @@ struct SkyShellSet {
 extern f32 sky_shell_angle_step_gp __asm__("D_00160400") __attribute__((sda));
 extern struct SkyShellSet *level_sky_effect_data __asm__("D_0016045C");
 extern u8 sky_matrix[] __asm__("D_001D96E0");
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void euler_to_matrix_ee(void *, f32 *) __asm__("FUN_001fa070");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 
 void draw_scrolling_sky_shells(void) __asm__("FUN_0022abd8");

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/gameplay/surface_height_grid.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef struct {
     f32 samples[16][16];
@@ -24,7 +25,6 @@ extern s32 surface_height_layer __asm__("D_001610E0") __attribute__((sda));
 
 extern s32 find_zone_at_point(f32, f32, f32) __asm__("func_00239D60");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void fast_vec_cross(f32 *, f32 *, f32 *) __asm__("func_001F9AD8");
 extern void fast_vec_normalize(f32 *, f32 *, f32) __asm__("func_001F9BF8");
 

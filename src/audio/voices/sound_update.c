@@ -91,7 +91,6 @@ extern void snd_sound_is_still_playing_cb() __asm__("FUN_0012e448");
 extern void snd_set_sound_params_cb() __asm__("FUN_0012e4c0");
 extern void snd_reset_state_and_flush_commands() __asm__("FUN_0012eb00");
 extern void snd_auto_reverb(s32, s32, s32, s32) __asm__("FUN_0012efe0");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void music_update() __asm__("FUN_00216290");
 extern void clamp_voice_position_to_collision(void *) __asm__("FUN_0022c5a8");
 extern u8 test_voice_occlusion(VoiceSlot *, void *) __asm__("FUN_0022c658");

@@ -1,4 +1,4 @@
-extern float square_root(float) __asm__("FUN_001f9988");
+#include "rnc/math/asm_helpers.h"
 typedef struct {
     int next[3];
 } QuatNext;

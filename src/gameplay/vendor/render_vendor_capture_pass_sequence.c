@@ -6,6 +6,7 @@
 #include "qcopy.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/gameplay/vendor/configure_capture_target.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef u128 CaptureVector;
 extern int capture_primary_transition __asm__("D_00161298") MACRO_ADDR;
@@ -19,7 +20,6 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern float fast_vec_length(void *) __asm__("func_001F9AF0");
 extern void fast_vec_normalize(void *, void *, float) __asm__("func_001F9BF8");
-extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int truncate_float_to_s32(float) __asm__("func_001FA6D0");
 extern void project_graphics_bounds_float(void *, void *, float *, float *, float *,
                                           float *) __asm__("func_00237C80");

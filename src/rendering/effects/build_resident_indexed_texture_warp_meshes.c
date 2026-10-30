@@ -5,6 +5,7 @@
 #include "rnc/globals.h"
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/rendering/level_render_state.h"
+#include "rnc/math/fast_math.h"
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 typedef struct {
@@ -20,7 +21,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("func_001F9BF8");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern u32 fast_tween_color(u32, u32, f32) __asm__("func_001FA6E0");
 
 static inline Vec4 *get_history_position(s32 strip, s32 history_index) {

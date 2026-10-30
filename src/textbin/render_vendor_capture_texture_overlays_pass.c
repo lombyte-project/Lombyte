@@ -5,10 +5,10 @@
 
 #include "rnc/ui/vendor/vendor_capture.h"
 #include "rnc/math/random.h"
+#include "rnc/math/fast_math.h"
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern s32 SubtractIntegerWithClamp(s32);
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void append_subpixel_textured_screen_quad(f32, f32, f32, f32, s32, s32, s32, s32, u64,
                                                  s64) __asm__("func_001F55D8");
 

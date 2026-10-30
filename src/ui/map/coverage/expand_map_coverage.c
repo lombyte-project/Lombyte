@@ -1,6 +1,6 @@
 #include "types.h"
+#include "rnc/math/asm_helpers.h"
 
-extern void fast_mem_copy(u8 *, void *, s32) __asm__("FUN_001f98d0");
 
 void expand_map_coverage(u8 *dest, u8 *src) __asm__("FUN_00207e58");
 

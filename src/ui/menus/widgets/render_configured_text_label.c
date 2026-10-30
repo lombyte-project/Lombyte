@@ -12,6 +12,8 @@
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/runtime/state/disable_global_flag.h"
+#include "rnc/runtime/state/enable_global_flag.h"
 extern int panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
 extern int text_shadow_x_gp __asm__("D_001601B8") __attribute__((sda));
 extern int text_shadow_y_gp __asm__("D_001601BC") __attribute__((sda));
@@ -25,8 +27,6 @@ extern char fallback_label_text[] __asm__("D_00160288");
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern long get_effect_texture(int) __asm__("func_001F44B8");
-extern void enable_global_flag(void) __asm__("func_001F61E8");
-extern void disable_global_flag(void) __asm__("func_001F61F8");
 extern void font_print_window(struct TextRegion *, long, char *, int, long,
                               u8 *) __asm__("func_001F7090");
 extern int scale_game_frames(int) __asm__("func_001F96F8");

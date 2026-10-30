@@ -45,7 +45,6 @@ extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0"
 extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) __asm__("FUN_001f7090");
 extern void font_print_window_regular(struct TextRegion *, s32, char *, s32) __asm__("func_001F7580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");

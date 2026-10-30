@@ -6,7 +6,6 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/ground_probe.h"
-extern void fast_mem_copy(void *, void *, int) __asm__("FUN_001f98d0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 typedef struct {
     float positions[4][4];          /* 0x00 */

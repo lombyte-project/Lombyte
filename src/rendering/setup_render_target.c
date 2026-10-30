@@ -4,6 +4,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/fs_aa_buffer.h"
 #include "types.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Sets up a (1 << a) x (1 << b) render target at GS address c: records
    TEX0 for it in D_0015EED0 (buffer width 1 << max(a - 6, 1) pages,
@@ -23,7 +24,6 @@ typedef struct {
     unsigned long FBMSK : 32;
 } GsFrame; /* sceGsFrame */
 
-extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern int sceGsSetDefDrawEnv(void *, short, short, short, short, short);
 
 extern long capture_texture_tex0 __asm__("D_0015EED0") MACRO_ADDR;
@@ -44,7 +44,7 @@ void setup_render_target(int width_log2, int height_log2, int framebuffer_addres
     fs_aa_buffer.target_height = 1 << height_log2;
     capture_texture_tex0 = (long)(framebuffer_address >> 8) | ((long)(1 << x) << 14) | ((long)width_log2 << 26) |
                  ((unsigned long)height_log2 << 30) | ((unsigned long)1 << 34);
-    clear_blocks_16(render_packet_cursor.words, 0xF0);
+    fast_mem_zero16(render_packet_cursor.words, 0xF0);
     render_packet_cursor.words[0] = 0x1000000E;
     render_packet_cursor.words[1] = 0;
     render_packet_cursor.words[2] = 0;

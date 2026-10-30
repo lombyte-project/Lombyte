@@ -1,12 +1,12 @@
 /* Ported from rac1-decomp (src/game/tiefunc.c, func_00236CA8). */
 #include "sda.h"
 #include "rnc/rendering/draw_config.h"
+#include "rnc/math/asm_helpers.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 #include "types.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
-extern void fast_mem_copy(void *, void *, int) __asm__("FUN_001f98d0");
 extern void FlushCache(int);
 extern char *object_render_classes[] __asm__("D_001E1700");
 extern s32 D_001E3000[];

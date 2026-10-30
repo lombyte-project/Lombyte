@@ -6,6 +6,8 @@
 #include "rnc/ui/text/font_state.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/menus/widgets/fade_menu_color.h"
+#include "rnc/runtime/state/disable_global_flag.h"
+#include "rnc/runtime/state/enable_global_flag.h"
 
 
 
@@ -13,8 +15,6 @@ extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void enable_global_flag(void) __asm__("func_001F61E8");
-extern void disable_global_flag(void) __asm__("func_001F61F8");
 extern s32 measure_text_width(char *, s32, u8 *) __asm__("func_001F6200");
 extern void font_print(s32, s32, long, char *, s32, s32, u8 *) __asm__("func_001F62B0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");

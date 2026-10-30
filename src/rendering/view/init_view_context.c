@@ -3,7 +3,7 @@
 #include "rnc/rendering/fs_aa_buffer.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/rendering/view.h"
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+#include "rnc/math/fast_math.h"
 
 void init_view_context(void) __asm__("FUN_001f2c60");
 

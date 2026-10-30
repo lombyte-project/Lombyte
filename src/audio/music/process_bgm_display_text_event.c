@@ -2,6 +2,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/fast_math.h"
 
 struct Glyph {
     u8 u;
@@ -11,7 +12,6 @@ struct Glyph {
 };
 
 #include "rnc/ui/text/font_palette.h"
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void emit_textured_rectangle(f32, f32, f32, f32, s32, s32, s32, s32, u64, s32) __asm__("FUN_001f5808");
 
 void process_bgm_display_text_event(u64 color, u8 *s, s32 n, s32 tex, struct Glyph *g, f32 x, f32 y,

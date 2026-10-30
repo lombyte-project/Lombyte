@@ -17,7 +17,6 @@ extern u8 D_001872B0[];
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 void apply_camera_shake(struct CameraShake *shake, s32 axis_index) __asm__("FUN_001ed360");
 

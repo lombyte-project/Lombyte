@@ -4,6 +4,7 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/asm_helpers.h"
 
 struct AmmoPreviewMoby;
 struct AmmoPreviewOwner {
@@ -42,7 +43,6 @@ extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("func_001FA328");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void advance_moby_animation(void *) __asm__("func_0020D580");
 extern void refresh_moby_spatial_bounds(void *) __asm__("func_0020DEF8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("func_0020E098");

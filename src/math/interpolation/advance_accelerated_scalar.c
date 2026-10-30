@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/math/interpolation.h"
+#include "rnc/math/fast_math.h"
 
-extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern f32 square_root(f32) __asm__("func_001F9988");
 f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 acceleration_step,
                                f32 braking_step, f32 maximum_speed) __asm__("FUN_00213f38");

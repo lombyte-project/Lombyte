@@ -1,3 +1,4 @@
+#include "rnc/math/asm_helpers.h"
 /* Ported from rac1-decomp (src/game/music.c, func_00216F48). */
 extern void snd_continue_vag_stream(void *) __asm__("func_0012ECA0");
 typedef struct {
@@ -11,7 +12,6 @@ typedef struct {
 } MusicPlaying;
 extern void snd_stop_sound(int) __asm__("func_0012E368");
 extern void snd_pause_vag_stream(int) __asm__("FUN_0012ec70");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void snd_get_vag_stream_time_remaining_cb(int, void (*)(int, long),
                                                  long) __asm__("FUN_0012ecd0");
 extern void snd_sound_is_still_playing_cb(int, void (*)(int, long), long) __asm__("FUN_0012e448");

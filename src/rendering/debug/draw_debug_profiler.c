@@ -5,6 +5,7 @@
 #include "rnc/gameplay/entities/prune_moby_references.h"
 #include "rnc/rendering/texture/patch_tie_texture_fields.h"
 #include "rnc/rendering/tfrags/light_tfrags.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef struct {
     u8 pad_0[4];
@@ -78,7 +79,6 @@ extern void draw_fogged_fullscreen_sprite(void *) __asm__("func_001F5138");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
 extern void draw_debug_font(void) __asm__("func_001F79A8");
 extern void append_billboard_batch(void) __asm__("FUN_001f92b0");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void aa_blur_pass(void) __asm__("func_001FB680");

@@ -3,11 +3,9 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/world/collision/collision_line.h"
 extern float D_001CAA80[] NOT_SDA;
-extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern char coll_output[] __asm__("D_00194100");
-extern float min_float(float, float) __asm__("FUN_001f99d0");
-extern float max_float(float, float) __asm__("FUN_001f99c8");
 /* Shadow range probe: cast a ray down (8 units) from the moby position
    shifted against the light direction D_001CAA80 by its size, then a
    second one along the light from just above; +0x84/+0x88 get the lower

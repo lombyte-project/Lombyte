@@ -8,9 +8,9 @@
 #include "rnc/globals.h"
 #include "rnc/math/interpolation/cosine_interpolate.h"
 #include "rnc/math/quaternions/quaternion_to_matrix.h"
+#include "rnc/math/asm_helpers.h"
 extern char D_00187080[];
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
-extern void quaternion_nlerp(void *, void *, void *, float) __asm__("FUN_001fa400");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 /* Camera blend step toward to: while the position (cam[3]) or rotation
    (cam[0]) blend hasn't reached 1, move cam+0x40 from cam+0x30 toward

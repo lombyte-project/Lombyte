@@ -4,7 +4,6 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
-extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8"); /* dst = normalize(src) * len */
 extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1,
                                   void *axis) __asm__("func_001EC530");
 /* Builds three unit vectors from D_0013F350's +0x2080 pointer table

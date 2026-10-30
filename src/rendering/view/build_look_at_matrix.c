@@ -1,7 +1,6 @@
 /* Ported from rac1-decomp (src/game/mobyutil.c, func_002156E0). */
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
-extern float absolute_float(float input) __asm__("func_001F99C0");
 extern void build_quaternion_from_axis_angle(void *arg0, void *axis,
                                              float angle) __asm__("FUN_00214530");
 extern void rotate_vector_by_quaternion(void *out, void *source_vector, void *quat) __asm__("func_00214800");

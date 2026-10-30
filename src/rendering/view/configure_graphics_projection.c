@@ -2,8 +2,8 @@
 #include "types.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/rendering/view.h"
+#include "rnc/math/fast_math.h"
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void update_view_context(void) __asm__("func_001F2D98");
 void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 horizontal_fov,
                                    f32 fog_near_distance, f32 fog_far_distance,

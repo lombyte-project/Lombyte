@@ -34,7 +34,6 @@ extern struct CamColl cam_coll_state __asm__("D_001870D0");
 
 extern f32 cam_interp_values(f32 *vel, f32 from, f32 to, f32 stiffness, f32 damping,
                              f32 max) __asm__("FUN_001ebd78");
-extern float absolute_float(float input) __asm__("func_001F99C0");
 
 void update_camera_tracking_state(void) __asm__("FUN_001ed470");
 

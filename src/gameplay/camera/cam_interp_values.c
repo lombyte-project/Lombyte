@@ -1,5 +1,5 @@
 #include "types.h"
-extern f32 absolute_float(f32) __asm__("func_001F99C0");
+#include "rnc/math/fast_math.h"
 f32 cam_interp_values(f32 from, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 *vel) __asm__("FUN_001ebd78");
 
