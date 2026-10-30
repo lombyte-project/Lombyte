@@ -789,18 +789,18 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
 }
 
 char *activate_smaller_amoeboid(void *source_moby) {
-    struct Moby *self = source_moby;
+    struct Moby *source_amoeboid = source_moby;
     short       *list;
     char        *entities;
-    int          entry;
+    int          group_index_or_list_entry;
     int          next_class = -1;
-    if (self->oclass == 0x23C) {
+    if (source_amoeboid->oclass == 0x23C) {
         next_class = 0x361;
-    } else if (self->oclass == 0x361) {
+    } else if (source_amoeboid->oclass == 0x361) {
         next_class = 0x362;
     }
-    entry = *(volatile u8 *)&self->group;
-    entities = (char *)(l01_moby_index_lists_by_group + entry);
+    group_index_or_list_entry = *(volatile u8 *)&source_amoeboid->group;
+    entities = (char *)(l01_moby_index_lists_by_group + group_index_or_list_entry);
     /* Fakematch: the dead touch of the entity base gives retail's register for the list slot. */
     D_L01_0015FFD8++;
     D_L01_0015FFD8--;
@@ -810,39 +810,39 @@ char *activate_smaller_amoeboid(void *source_moby) {
         return 0;
     goto scan;
     do {
-        struct Moby *other;
+        struct Moby *smaller_amoeboid;
         int          index;
     advance:
-        if ((short)entry < 0)
+        if ((short)group_index_or_list_entry < 0)
             return 0;
         list++;
     scan:
         index = *(unsigned short *)list;
-        entry = index;
+        group_index_or_list_entry = index;
         index &= 0x7FFF;
-        other = (struct Moby *)(entities + (index << 8));
-        if (other->state != 12 || other->oclass != next_class)
+        smaller_amoeboid = (struct Moby *)(entities + (index << 8));
+        if (smaller_amoeboid->state != 12 || smaller_amoeboid->oclass != next_class)
             goto advance;
         {
             /* Retail reads both pvars pointers and update_dist before writing the entity. */
-            u8 *other_vars = *(u8 *volatile *)&other->pvars;
-            u8  update_dist = *(volatile u8 *)&self->update_dist;
-            u8 *self_vars = self->pvars;
-            other->update_dist = update_dist;
-            other->draw_dist = self->draw_dist;
+            u8 *other_vars = *(u8 *volatile *)&smaller_amoeboid->pvars;
+            u8  update_dist = *(volatile u8 *)&source_amoeboid->update_dist;
+            u8 *self_vars = source_amoeboid->pvars;
+            smaller_amoeboid->update_dist = update_dist;
+            smaller_amoeboid->draw_dist = source_amoeboid->draw_dist;
             {
-                u64 spawn_frame = self->spawn_frame;
-                other->visible = 1;
-                other->spawn_frame = spawn_frame;
+                u64 spawn_frame = source_amoeboid->spawn_frame;
+                smaller_amoeboid->visible = 1;
+                smaller_amoeboid->spawn_frame = spawn_frame;
             }
-            other->collision = other->pclass->collision;
-            other->flags = self->flags;
-            qcopy(&other->pos, &self->pos);
-            qcopy(&other->rot, &self->rot);
+            smaller_amoeboid->collision = smaller_amoeboid->pclass->collision;
+            smaller_amoeboid->flags = source_amoeboid->flags;
+            qcopy(&smaller_amoeboid->pos, &source_amoeboid->pos);
+            qcopy(&smaller_amoeboid->rot, &source_amoeboid->rot);
             *(float *)(other_vars + 0x20) = *(float *)(self_vars + 0x20);
             *(float *)(other_vars + 0x224) = *(float *)(self_vars + 0x224);
-            update_entity(other);
-            return (char *)other;
+            update_entity(smaller_amoeboid);
+            return (char *)smaller_amoeboid;
         }
     } while (1);
     return 0;
