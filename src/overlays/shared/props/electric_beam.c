@@ -387,7 +387,7 @@ void draw_electric_beam(char *moby) {
     float                   tangent[4] __attribute__((aligned(16)));
     u64                     texture;
     u64                     gs_state;
-    int                     branch, node, corner;
+    int                     branch, branch_segment_index, corner;
     int                     start_point;
     int                     k;
 
@@ -473,22 +473,22 @@ void draw_electric_beam(char *moby) {
             continue;
         if (start_point <= -1)
             continue;
-        for (node = 0; node < 3; node++) {
+        for (branch_segment_index = 0; branch_segment_index < 3; branch_segment_index++) {
             qcopy(prev_offset, offset);
-            if (node < 2) {
+            if (branch_segment_index < 2) {
                 fast_vec_sub(
-                    tangent, &beam->branches[node][branch], &beam->branches[node + 2][branch]);
-                fast_vec_sub(view, &beam->branches[node + 1][branch], camera);
+                    tangent, &beam->branches[branch_segment_index][branch], &beam->branches[branch_segment_index + 2][branch]);
+                fast_vec_sub(view, &beam->branches[branch_segment_index + 1][branch], camera);
                 fast_vec_cross(offset, view, tangent);
                 fast_vec_normalize(offset, offset, 0.1f);
             } else {
                 clear_u64_value(offset);
             }
-            if (node == 0)
+            if (branch_segment_index == 0)
                 qcopy(prev_offset, offset);
             for (corner = 0; corner < 4; corner++) {
                 if (corner < 2) {
-                    qcopy(&packet[0].vertices[corner], &beam->branches[node][branch]);
+                    qcopy(&packet[0].vertices[corner], &beam->branches[branch_segment_index][branch]);
                     if (corner & 1)
                         fast_vec_add(
                             &packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
@@ -496,7 +496,7 @@ void draw_electric_beam(char *moby) {
                         fast_vec_sub(
                             &packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
                 } else {
-                    qcopy(&packet[0].vertices[corner], &beam->branches[node + 1][branch]);
+                    qcopy(&packet[0].vertices[corner], &beam->branches[branch_segment_index + 1][branch]);
                     if (corner & 1)
                         fast_vec_add(
                             &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
@@ -508,7 +508,7 @@ void draw_electric_beam(char *moby) {
                  * so sched1 moves nothing between its blocks, as in retail. */
                 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 packet[0]
                     .uv[corner][0] = electric_beam_base_uv[corner][0] +
-                                     convert_integer_to_float(node - node / 4 * 4) * 0.25f;
+                                     convert_integer_to_float(branch_segment_index - branch_segment_index / 4 * 4) * 0.25f;
             }
             draw_geometry_quad(&packet[0], world, 0);
         }
