@@ -27,7 +27,7 @@ void leaf_update(struct Moby *moby) {
         LEAF_UPDATE_MOTION = 2
     };
     Vec4   random;
-    Vec4   old;
+    Vec4   random_direction_or_collision_start_position;
     Vec4   probe_endpoint_or_drift_step;
     Vec4   initialDirection;
     Vec4   direction;
@@ -37,13 +37,13 @@ void leaf_update(struct Moby *moby) {
     int    timer;
     float *motion;
 
-    old.q = 0;
-    old.f[0] = random_float_between(-1.0f, 1.0f);
-    old.f[1] = random_float_between(-1.0f, 1.0f);
-    old.f[2] = random_float_between(-1.0f, 1.0f);
-    random.q = old.q;
+    random_direction_or_collision_start_position.q = 0;
+    random_direction_or_collision_start_position.f[0] = random_float_between(-1.0f, 1.0f);
+    random_direction_or_collision_start_position.f[1] = random_float_between(-1.0f, 1.0f);
+    random_direction_or_collision_start_position.f[2] = random_float_between(-1.0f, 1.0f);
+    random.q = random_direction_or_collision_start_position.q;
     speed = vector_length_xy(leaf_vars);
-    qcopy(&old, &moby->pos);
+    qcopy(&random_direction_or_collision_start_position, &moby->pos);
     switch (moby->state) {
     case LEAF_INITIALIZE:
         qcopy(leaf_vars + 0x30, &moby->pos);
@@ -82,7 +82,7 @@ void leaf_update(struct Moby *moby) {
         fast_vec_normalize(&probe_endpoint_or_drift_step, leaf_vars + 0x10, 5.0f);
         fast_vec_normalize(leaf_vars + 0x10, leaf_vars + 0x10, leaf_motion_parameters[5] * 0.5f);
         fast_vec_add(&probe_endpoint_or_drift_step, &probe_endpoint_or_drift_step, &moby->pos);
-        if (collision_line(&old, &probe_endpoint_or_drift_step, 6, 0, 0) && !random_integer_below(8)) {
+        if (collision_line(&random_direction_or_collision_start_position, &probe_endpoint_or_drift_step, 6, 0, 0) && !random_integer_below(8)) {
             reflect_vector(leaf_vars + 0x10, leaf_vars + 0x10, D_L04_00173FE0 + 0x20);
             *(float *)(leaf_vars + 0x18) += leaf_motion_parameters[5] / 10.0f;
         }
@@ -94,7 +94,7 @@ void leaf_update(struct Moby *moby) {
         fast_vec_scale(leaf_vars, leaf_vars, 0.6f);
         fast_vec_add(leaf_vars, &probe_endpoint_or_drift_step, leaf_vars);
         fast_vec_add(&moby->pos, &moby->pos, leaf_vars);
-        if (collision_line(&old, &moby->pos, 6, 0, 0)) {
+        if (collision_line(&random_direction_or_collision_start_position, &moby->pos, 6, 0, 0)) {
             qcopy(&moby->pos, D_L04_00173FE0);
             reflect_vector(leaf_vars, leaf_vars, D_L04_00173FE0 + 0x20);
             fast_vec_scale(leaf_vars, leaf_vars, 0.25f);
