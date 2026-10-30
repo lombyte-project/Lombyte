@@ -336,7 +336,7 @@ float resolve_level_path_segment_point(
     OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
 float resolve_level_path_segment_point(
 
-    OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) {
+    OvlQuad *resolved_segment_point, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) {
     OvlQuad segment_workspace[2];
     OvlQuad direction_copy[1];
     OvlQuad query_point_copy[1];
@@ -346,12 +346,12 @@ float resolve_level_path_segment_point(
     int     i;
     if (r > 0.0f && absolute_float(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
         absolute_float(((float *)query_point)[2] - ((float *)b)[2]) < r) {
-        planar_distance = project_level_path_point_onto_segment(out, query_point, segment_start, b);
-        r = vector_distance_xy(segment_start, out);
+        planar_distance = project_level_path_point_onto_segment(resolved_segment_point, query_point, segment_start, b);
+        r = vector_distance_xy(segment_start, resolved_segment_point);
         segment_length_or_start_direction_dot = vector_distance_xy(segment_start, b);
         segment_workspace[0] = *segment_start;
         segment_workspace[1] = *b;
-        interpolate_vector(out,
+        interpolate_vector(resolved_segment_point,
                            &segment_workspace[0],
                            &segment_workspace[1],
                            r / segment_length_or_start_direction_dot);
@@ -363,15 +363,15 @@ float resolve_level_path_segment_point(
     qcopy(direction_copy, segment_workspace);
     negative_query_direction_dot = -fast_vec_dot(query_point, segment_workspace);
     segment_length_or_start_direction_dot = fast_vec_dot(&segment_workspace[1], direction_copy);
-    fast_vec_scale(out,
+    fast_vec_scale(resolved_segment_point,
                    segment_workspace,
                    -(negative_query_direction_dot + segment_length_or_start_direction_dot) /
                        fast_vec_dot(segment_workspace, direction_copy));
-    fast_vec_add(out, out, &segment_workspace[1]);
+    fast_vec_add(resolved_segment_point, resolved_segment_point, &segment_workspace[1]);
     i = 0;
     fb = (float *)b;
     fa = (float *)segment_start;
-    output_component = (float *)out;
+    output_component = (float *)resolved_segment_point;
     do {
         if (*output_component > *fa && *fb < *output_component)
             break;
@@ -383,14 +383,14 @@ float resolve_level_path_segment_point(
         output_component++;
     } while (i < 3);
     if (i < 3) {
-        if (fast_vec_dist(out, segment_start) < fast_vec_dist(out, b)) {
-            qcopy(out, segment_start);
+        if (fast_vec_dist(resolved_segment_point, segment_start) < fast_vec_dist(resolved_segment_point, b)) {
+            qcopy(resolved_segment_point, segment_start);
         } else {
-            qcopy(out, b);
+            qcopy(resolved_segment_point, b);
         }
     }
     query_point_copy[0] = *query_point;
-    g[0] = *out;
+    g[0] = *resolved_segment_point;
     return FUN_L00_0025da70_c(query_point_copy, g, 0.0f);
 }
 
