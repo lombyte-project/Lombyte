@@ -36,7 +36,7 @@ char *spawn_rocket(char *initial_velocity,
 
 char *spawn_rocket(char *initial_velocity,
                    char *pos,
-                   int   owner,
+                   int   firing_moby,
                    int   seed,
                    float yaw,
                    float nominal_speed,
@@ -56,7 +56,7 @@ char *spawn_rocket(char *initial_velocity,
         moby->rot.z = fast_arc_tan(*(float *)rocket_vars, *(float *)(rocket_vars + 4));
         moby->rot.y = -fast_arc_tan(vector_length_xy(rocket_vars), *(float *)(rocket_vars + 8));
         scaled_frames = scale_game_frames(seed);
-        *(int *)(rocket_vars + 0x10) = owner;
+        *(int *)(rocket_vars + 0x10) = firing_moby;
         *(float *)(rocket_vars + 0x18) = f2;
         *(float *)(rocket_vars + 0x1C) = yaw;
         *(float *)(rocket_vars + 0x24) = nominal_speed;
