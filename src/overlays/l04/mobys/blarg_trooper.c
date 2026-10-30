@@ -24,9 +24,9 @@ void destroy_blarg_trooper(struct Moby *moby) __asm__("FUN_L04_002c4808");
 
 void destroy_blarg_trooper(struct Moby *moby) {
     char *trooper_pvars = ((char *)moby->pvars);
-    void *other = *(void **)(trooper_pvars + 0xF8);
-    if (other != 0) {
-        mark_moby_for_removal(other);
+    void *trooper_gun_moby = *(void **)(trooper_pvars + 0xF8);
+    if (trooper_gun_moby != 0) {
+        mark_moby_for_removal(trooper_gun_moby);
     }
     spawn_moby_table_puff_pattern(moby);
     mark_moby_for_removal(moby);
