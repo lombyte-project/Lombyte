@@ -355,15 +355,15 @@ void platform_update(Moby *moby) {
     case PLATFORM_FOLLOW_WAYPOINTS: {
         Walk *w = &platform_vars->walk;
         Path *path;
-        int   next;
+        int   next_waypoint_index;
         emit_platform_exhaust_effects((char *)moby);
         path = w->path;
-        next = (w->idx + path->n + w->dir) % path->n;
-        qcopy(goal, &path->nodes[next]);
-        if (fast_vec_dist((*(float(*)[4]) & moby->pos), &path->nodes[next]) < 0.5f) {
-            platform_vars->walk.idx = next;
-            if (platform_vars->walk.path->nodes[next].w != -1.0f) {
-                platform_vars->fD0 = platform_vars->walk.path->nodes[next].w;
+        next_waypoint_index = (w->idx + path->n + w->dir) % path->n;
+        qcopy(goal, &path->nodes[next_waypoint_index]);
+        if (fast_vec_dist((*(float(*)[4]) & moby->pos), &path->nodes[next_waypoint_index]) < 0.5f) {
+            platform_vars->walk.idx = next_waypoint_index;
+            if (platform_vars->walk.path->nodes[next_waypoint_index].w != -1.0f) {
+                platform_vars->fD0 = platform_vars->walk.path->nodes[next_waypoint_index].w;
             }
         }
         fast_vec_sub(to_goal, goal, (*(float(*)[4]) & moby->pos));
