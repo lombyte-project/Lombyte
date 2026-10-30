@@ -297,7 +297,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
     AnklebiterData *data = moby->data;
     AnklebiterMoby *target;
     float           angle;
-    int             count, first, blocked, hit;
+    int             count, timer_range_min_frames, blocked, hit;
     process_hoven_anklebiter_damage_and_alerts((struct Moby *)moby);
     manipulator_set_scale(data->collision_data, 2.2f);
     FUN_L01_00274b78_c((char *)moby, (char *)&target_report_or_vector_scratch, data->range);
@@ -346,12 +346,12 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
             data->effect_size1 = 0.5f;
             data->effect_size0 = 0.5f;
             if (data->group_enabled) {
-                first = scale_game_frames(20);
-                data->group_timer = random_int_between(first, scale_game_frames(170));
+                timer_range_min_frames = scale_game_frames(20);
+                data->group_timer = random_int_between(timer_range_min_frames, scale_game_frames(170));
             }
             qcopy(data->idle_pos, moby->pos);
-            first = scale_game_frames(120);
-            data->idle_timer = random_int_between(first, scale_game_frames(700));
+            timer_range_min_frames = scale_game_frames(120);
+            data->idle_timer = random_int_between(timer_range_min_frames, scale_game_frames(700));
             qcopy(target_report_or_vector_scratch.v0, moby->pos);
             target_report_or_vector_scratch.v0[2] += 0.8f;
             moby->pos[2] = probe_ground_height(target_report_or_vector_scratch.v0, 0, 0.5f);
