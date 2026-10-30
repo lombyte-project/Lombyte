@@ -21,11 +21,11 @@
 /* Test the observed halfword and byte range without inferring object identity. */
 s32 is_taxi_in_round_trip_phase(u8 *object) __asm__("FUN_L03_002d30d8");
 
-s32 is_taxi_in_round_trip_phase(u8 *object) {
-    if (*(s16 *)(object + 0xa6) != 0x330) {
+s32 is_taxi_in_round_trip_phase(u8 *tested_moby) {
+    if (*(s16 *)(tested_moby + 0xa6) != 0x330) {
         return 0;
     }
-    return (u32)(object[0x20] - 2) < 5;
+    return (u32)(tested_moby[0x20] - 2) < 5;
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002D44C8), where it is exact; names translated to the US level program. */
 
