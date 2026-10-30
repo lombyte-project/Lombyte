@@ -3447,8 +3447,6 @@ typedef struct {
     float f40;
 } M;
 
-extern int D_L18_00162384_macro[] __asm__("D_L18_00162384") MACRO_ADDR;
-
 void update_moby_scene_visibility_and_height_reflection(M *moby) __asm__("FUN_L18_002f7ad8");
 
 void update_moby_scene_visibility_and_height_reflection(M *moby) {
@@ -3469,7 +3467,8 @@ void update_moby_scene_visibility_and_height_reflection(M *moby) {
         }
         break;
     case MOBY_WAIT_FOR_SCENE_END:
-        if (D_L18_00162384_macro[7] != 0 && moby->f40 == 0.0f) {
+        /* retail reaches D_L18_001623A0 here as the word 0x1C past D_L18_00162384 */
+        if ((&D_L18_00162384_gp)[7] != 0 && moby->f40 == 0.0f) {
             float height_reflection_delta = 101.6f - moby->f18;
             moby->f40 = fast_add_rotations(moby->f40, 3.14159274f);
             moby->f18 += height_reflection_delta + height_reflection_delta;
