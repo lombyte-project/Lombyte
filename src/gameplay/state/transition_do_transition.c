@@ -9,7 +9,7 @@
 #include "rnc/rendering/packets/put_draw_buffer_large.h"
 #include "rnc/runtime/data/read_global_table_entry.h"
 #include "rnc/ui/hud/banks/load_hud_banks.h"
-#include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/runtime/rpc/initialize_sif_rpc.h"
 #include "rnc/storage/stash/init_stash.h"
 #include "rnc/ui/hud/banks/hud_heap_reset.h"

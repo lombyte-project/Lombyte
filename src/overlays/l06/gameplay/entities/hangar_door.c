@@ -17,7 +17,7 @@
 #include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/ui/fonts/font_queue_vu_state.h"
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/world/collision/collision_line.h"
 

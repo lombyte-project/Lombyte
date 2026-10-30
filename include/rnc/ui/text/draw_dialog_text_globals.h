@@ -1,9 +1,9 @@
-#ifndef LOMBYTE_RNC_RENDERING_DRAW_DIALOG_TEXT_GLOBALS_H
-#define LOMBYTE_RNC_RENDERING_DRAW_DIALOG_TEXT_GLOBALS_H
+#ifndef LOMBYTE_RNC_UI_TEXT_DRAW_DIALOG_TEXT_GLOBALS_H
+#define LOMBYTE_RNC_UI_TEXT_DRAW_DIALOG_TEXT_GLOBALS_H
 
 #include "types.h"
 
-/* Scalar data read by src/rendering/draw_dialog_text.c. */
+/* Scalar data read by src/ui/text/draw_dialog_text.c. */
 extern s32 freeze_fading_dialog_text_base_color __asm__("D_0015F4F0") __attribute__((sda));
 extern s32 freeze_fading_dialog_text_blend_target_color __asm__("D_0015F4F4") __attribute__((sda));
 extern s32 freeze_three_line_outline_center_x __asm__("D_0015F4F8") __attribute__((sda));
@@ -23,4 +23,4 @@ extern s32 freeze_matched_record_text_blend_target_color __asm__("D_0015F538") _
 extern s32 freeze_unmatched_record_text_base_color __asm__("D_0015F53C") __attribute__((sda));
 extern s32 freeze_unmatched_record_text_blend_target_color __asm__("D_0015F540") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_RENDERING_DRAW_DIALOG_TEXT_GLOBALS_H */
+#endif /* LOMBYTE_RNC_UI_TEXT_DRAW_DIALOG_TEXT_GLOBALS_H */

@@ -10,7 +10,7 @@
 #include "rnc/overlay/l01/gameplay/hero/hero_set_state.h"
 #include "rnc/runtime/dma/calculate_dma_transfer_address.h"
 #include "rnc/textbin/world/data/select_world_object_resource_tables.h"
-#include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/overlay/shared/ui/text/draw_weapon_ammo_hud_panel.h"
 
 /* Opens the vendor screen for moby m in level lvl: sets up its camera, resets the screen state and runs it until it closes. */

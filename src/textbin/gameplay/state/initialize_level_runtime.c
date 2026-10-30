@@ -9,7 +9,7 @@
 #include "rnc/rendering/view/init_view_context.h"
 #include "rnc/rendering/vu1/vu1_init_chain.h"
 #include "rnc/runtime/memory/init_mem_slots.h"
-#include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/banks/snd_bank_load_from_ee_cb.h"
 #include "rnc/rendering/state/reset_draw_globals.h"
 

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_TEXTURE_DO_GIF_PAGING_H
+#define LOMBYTE_RNC_RENDERING_TEXTURE_DO_GIF_PAGING_H
+
+#include "types.h"
+
+void do_gif_paging(void) __asm__("FUN_001f4398");
+
+#endif /* LOMBYTE_RNC_RENDERING_TEXTURE_DO_GIF_PAGING_H */

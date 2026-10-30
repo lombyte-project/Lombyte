@@ -59,7 +59,7 @@ void draw_dialog_text(void) __asm__("FUN_001fbc50");
 
 extern s32 freeze_ans2 __asm__("D_0015F4E8") __attribute__((sda));
 extern s32 freeze_ans1 __asm__("D_0015F4EC") __attribute__((sda));
-#include "rnc/rendering/draw_dialog_text_globals.h"
+#include "rnc/ui/text/draw_dialog_text_globals.h"
 extern s32 freeze_bevel_a_text __asm__("D_0015F508") __attribute__((sda));
 extern s32 freeze_stats_text __asm__("D_0015F51C") __attribute__((sda));
 extern char freeze_fmt_race_first_place[] __asm__("D_0015F568");

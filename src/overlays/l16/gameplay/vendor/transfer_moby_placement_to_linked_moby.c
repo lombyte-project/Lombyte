@@ -9,7 +9,7 @@
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/ui/fonts/font_queue_vu_state.h"
 #include "rnc/ui/help/try_set_help_message.h"
 #ifndef __attribute__((section(".data")))
 #endif

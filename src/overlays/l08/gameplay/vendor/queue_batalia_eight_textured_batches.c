@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
 #include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
 #include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
-#include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/ui/fonts/font_queue_vu_state.h"
 
 /* Runs the two per-entry update calls over a 13-entry table. */
 

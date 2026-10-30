@@ -38,7 +38,7 @@ extern u8 D_0019C150[];
 extern u8 D_0019C160[];
 extern void quad_moby_update() __asm__("FUN_0023a2c0");
 extern struct S preview_camera __asm__("D_00186F40");
-#include "rnc/rendering/initialize_menu_preview_scene_globals.h"
+#include "rnc/ui/menus/initialize_menu_preview_scene_globals.h"
 #include "rnc/math/fast_math.h"
 extern u8 menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
 extern u8 menu_preview_lighting_copy_source_gp __asm__("D_001601D0") __attribute__((sda));

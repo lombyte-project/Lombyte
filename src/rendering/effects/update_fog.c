@@ -11,7 +11,7 @@ struct FogMode {
 
 extern struct FogMode view_proj_clip __asm__("D_00187000");
 
-#include "rnc/rendering/update_fog_globals.h"
+#include "rnc/rendering/effects/update_fog_globals.h"
 extern f32 water_fog_near_dist __asm__("D_001610C8");
 extern f32 water_fog_far_dist __asm__("D_001610CC");
 extern f32 water_fog_near_intensity __asm__("D_001610D0");

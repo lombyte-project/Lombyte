@@ -27,7 +27,7 @@
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
 #include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
-#include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/ui/fonts/font_queue_vu_state.h"
 #include "rnc/overlay/l17/gameplay/hero/hero_set_state.h"
 #include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
 

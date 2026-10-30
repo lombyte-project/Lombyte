@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/gameplay/entities/cutscene_set_camera_target.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/ui/fonts/font_queue_vu_state.h"
 #include "rnc/overlay/shared/gameplay/entities/draw_trail.h"
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
 

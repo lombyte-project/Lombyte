@@ -10,7 +10,7 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/rendering/view/update_view_context.h"
 #include "rnc/audio/voices/sound_update.h"
-#include "rnc/rendering/update_fog.h"
+#include "rnc/rendering/effects/update_fog.h"
 #include "rnc/rendering/debug/print_debug_text.h"
 #include "rnc/rendering/debug/print_debug_text_centered.h"
 

@@ -8,7 +8,7 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/runtime/dma/calculate_dma_transfer_address.h"
-#include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/voices/pause_all_sounds.h"
 
 typedef union {

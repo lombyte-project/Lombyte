@@ -30,8 +30,8 @@ typedef struct {
     float position_y;
 } EnvironmentCameraState;
 
-#include "rnc/rendering/render_environment_mapped_object_globals.h"
-#include "rnc/rendering/render_environment_mapped_object_globals.h"
+#include "rnc/rendering/entities/render_environment_mapped_object_globals.h"
+#include "rnc/rendering/entities/render_environment_mapped_object_globals.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 extern s32 environment_mapping_was_active_gp __asm__("D_001604A8") __attribute__((sda));

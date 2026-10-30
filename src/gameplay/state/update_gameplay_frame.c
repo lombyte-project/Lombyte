@@ -5,7 +5,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/state/game_globals.h"
-#include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/world/loaders/parse_space_scene_chunk.h"
 
 typedef struct {
     f32 x, y, z, w;

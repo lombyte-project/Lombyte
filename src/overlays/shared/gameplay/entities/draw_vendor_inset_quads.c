@@ -10,8 +10,8 @@
 #include "qcopy.h"
 #include "rnc/overlay/level_globals.h"
 #include "sda.h"
-#include "rnc/rendering/do_gif_paging.h"
-#include "rnc/rendering/setup_gif_paging.h"
+#include "rnc/rendering/texture/do_gif_paging.h"
+#include "rnc/rendering/texture/setup_gif_paging.h"
 #include "rnc/audio/streaming/start_audio_stream_read.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 

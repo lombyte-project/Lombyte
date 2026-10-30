@@ -37,7 +37,7 @@
 #include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
-#include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/ui/fonts/font_queue_vu_state.h"
 #include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
 #include "rnc/overlay/shared/math/rotations/split_float_fraction.h"

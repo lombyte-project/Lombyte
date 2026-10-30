@@ -8,7 +8,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/animation/set_moby_animation.h"
-#include "rnc/rendering/update_fog.h"
+#include "rnc/rendering/effects/update_fog.h"
 #include "rnc/runtime/dma/calculate_dma_transfer_address.h"
 
 struct Ent3 {

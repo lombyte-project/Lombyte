@@ -11,7 +11,7 @@
 #include "rnc/storage/memory_card/memcard_save_data.h"
 #include "rnc/gameplay/animation/set_moby_animation.h"
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
-#include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/world/loaders/parse_space_scene_chunk.h"
 
 /* Start the moby's camera-follow state: stash it in the global record, point its update at func_L00_0028F458. */
 /* Ported from rac1-decomp (src/overlays/shared/space_0028FB78.c: func_L00_0028FB78), where it is exact; names translated to the US level program. */

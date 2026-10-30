@@ -9,7 +9,7 @@
 #include "qzero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/audio/snd_flush_sound_commands.h"
+#include "rnc/audio/rpc/snd_flush_sound_commands.h"
 #include "rnc/runtime/data/read_global_table_entry.h"
 #include "rnc/audio/effects/snd_set_reverb_ex.h"
 #include "rnc/audio/mixer/snd_set_master_volume.h"

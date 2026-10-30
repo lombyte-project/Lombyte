@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_EFFECTS_UPDATE_FOG_H
+#define LOMBYTE_RNC_RENDERING_EFFECTS_UPDATE_FOG_H
+
+#include "types.h"
+
+void update_fog(void) __asm__("FUN_001f2588");
+
+#endif /* LOMBYTE_RNC_RENDERING_EFFECTS_UPDATE_FOG_H */

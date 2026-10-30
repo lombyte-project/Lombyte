@@ -12,7 +12,7 @@
 #include "rnc/world/loaders/relocate_sky_definition.h"
 #include "rnc/world/loaders/unpack_point_records.h"
 #include "rnc/world/loaders/upload_texture_images.h"
-#include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/world/loaders/parse_space_scene_chunk.h"
 typedef struct 
 {
   s32 x0;

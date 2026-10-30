@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_AUDIO_SND_FLUSH_SOUND_COMMANDS_H
-#define LOMBYTE_RNC_AUDIO_SND_FLUSH_SOUND_COMMANDS_H
-
-#include "types.h"
-
-s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
-
-#endif /* LOMBYTE_RNC_AUDIO_SND_FLUSH_SOUND_COMMANDS_H */

@@ -9,13 +9,13 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/rendering/do_gif_paging.h"
-#include "rnc/rendering/setup_gif_paging.h"
+#include "rnc/rendering/texture/do_gif_paging.h"
+#include "rnc/rendering/texture/setup_gif_paging.h"
 #include "rnc/ui/hud/get_icon_frame.h"
 #include "rnc/ui/help/get_help_message_text.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/ui/frames/draw_ui_frame.h"
-#include "rnc/rendering/draw_outlined_rect.h"
+#include "rnc/ui/text/draw_outlined_rect.h"
 
 /* State of the level's message box (D_L00_00173040). */
 typedef struct {

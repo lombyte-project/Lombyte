@@ -2,7 +2,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/rendering/setup_render_target.h"
+#include "rnc/rendering/framebuffer/setup_render_target.h"
 
 /* Ported from rac1-decomp (src/game/draw.c:func_001F7A50), which matched our retail at the instruction level before the address space was translated. */
 
