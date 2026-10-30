@@ -1407,7 +1407,7 @@ int  FUN_L00_0025bfe0_273ee0(float, float, float, float) __asm__("FUN_L00_0025bf
 void update_line_collision_rgb_fading_particle(unsigned char *particle) __asm__("FUN_L00_00273ee0");
 
 void update_line_collision_rgb_fading_particle(unsigned char *particle) {
-    u128           out[1];
+    u128           candidate_particle_position[1];
     float         *particle_data;
     unsigned char *particle_position;
     if (!particle)
@@ -1416,15 +1416,15 @@ void update_line_collision_rgb_fading_particle(unsigned char *particle) {
     particle_position = particle + 0x10;
     particle_data[7] += frame_scale * 0.0f;
     *(float *)(particle + 0xC) += frame_scale * -100.0f;
-    fast_vec_add(out, particle_position, particle_data);
+    fast_vec_add(candidate_particle_position, particle_position, particle_data);
     if (*(float *)(particle + 0x20) != 0.0f || particle_data[1] != 0.0f ||
         particle_data[2] != 0.0f) {
-        if (collision_line(particle + 0x10, out, 2, particle, 0)) {
+        if (collision_line(particle + 0x10, candidate_particle_position, 2, particle, 0)) {
             *(u128 *)(particle + 0x10) = ((u128 *)&D_L00_00173E60)[0];
             clear_u64_value(particle_data);
             *(float *)(particle + 0xC) += *(float *)(particle + 0xC);
         } else {
-            *(u128 *)(particle + 0x10) = out[0];
+            *(u128 *)(particle + 0x10) = candidate_particle_position[0];
             if (particle_data[3] != 0.0f) {
                 particle_data[2] += particle_data[3];
             } else {
@@ -1433,8 +1433,8 @@ void update_line_collision_rgb_fading_particle(unsigned char *particle) {
         }
     }
     if (particle_data[7] <= 0.0f || fast_dec_timer_s16(particle + 0xA) ||
-        *(float *)(particle + 0xC) < 0.0f || ((float *)out)[0] < 0.01f ||
-        ((float *)out)[1] < 0.01f || ((float *)out)[2] < 0.01f) {
+        *(float *)(particle + 0xC) < 0.0f || ((float *)candidate_particle_position)[0] < 0.01f ||
+        ((float *)candidate_particle_position)[1] < 0.01f || ((float *)candidate_particle_position)[2] < 0.01f) {
         free_effect_particle(particle);
         return;
     }
