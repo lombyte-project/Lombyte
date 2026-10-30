@@ -808,11 +808,11 @@ void FUN_L00_002330d0(void) {
 void set_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233210");
 
 void set_hero_moby_flag_bit0(void) {
-    struct Hero *base = &hero;
+    struct Hero *hero_flag_state = &hero;
     char        *optional_hero_flag_target;
 
-    *(unsigned short *)(((char *)base->moby) + 0x34) |= 1;
-    optional_hero_flag_target = ((char *)base->unk1620);
+    *(unsigned short *)(((char *)hero_flag_state->moby) + 0x34) |= 1;
+    optional_hero_flag_target = ((char *)hero_flag_state->unk1620);
     if (optional_hero_flag_target != 0) {
         *(unsigned short *)(optional_hero_flag_target + 0x34) |= 1;
     }
