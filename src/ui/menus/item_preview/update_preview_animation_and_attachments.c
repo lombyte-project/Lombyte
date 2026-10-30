@@ -1,6 +1,7 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "sda.h"
 #include "types.h"
+#include "rnc/audio/music/music_stream_state.h"
 #include "asm.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 
@@ -39,13 +40,7 @@ typedef struct {
     s16 oclass;
 } Moby;
 
-typedef struct {
-    u8 pad0[8];
-    s16 active;
-} CdReadState;
-
 extern s32 preview_request_count_macro __asm__("D_00160350") MACRO_ADDR;
-extern CdReadState music_stream_state __asm__("D_001516D0");
 typedef struct {
     u8 pad0[0x48];
     s32 animation_tables[1];
@@ -95,7 +90,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
             delay_expired = 1;
         }
     }
-    if (menu_system.pending_buffer != 0 && music_stream_state.active == 0) {
+    if (menu_system.pending_buffer != 0 && music_stream_state.read_state == 0) {
         s32 buffer_index = menu_system.pending_buffer - 1;
         s32 *buffer_slot = &menu_system.stream_buffer[buffer_index];
         s32 buffer_address = *buffer_slot;
@@ -112,7 +107,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
                                       preview_animation_requests[0].animation_id);
         menu_system.pending_buffer = 0;
     }
-    if (menu_system.pending_buffer == 0 && music_stream_state.active == 0 &&
+    if (menu_system.pending_buffer == 0 && music_stream_state.read_state == 0 &&
         preview_request_count > 0) {
         if (preview_animation_requests[0].status == 0) {
             u32 animation_id = preview_animation_requests[0].animation_id;

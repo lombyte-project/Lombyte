@@ -475,10 +475,6 @@ typedef struct {
     char pad48[0x130];
     M_298b18 *m[1];
 } C_298b18;
-extern struct {
-    char pad[0x5A];
-    unsigned short x5a;
-} D_001516D0_298b18 __asm__("D_001516D0");
 extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
@@ -493,8 +489,8 @@ void finish_cutscene(void) {
     O_298b18 *moby;
     float f, hero_candidate_z;
     int i;
-    if ((unsigned short)(D_001516D0_298b18.x5a - 6) >= 2)
-        D_001516D0_298b18.x5a = 5;
+    if ((unsigned short)(music_stream_state.secondary.state - 6) >= 2)
+        music_stream_state.secondary.state = 5;
     D_L00_0015F5D8 = 1;
     calculate_dma_transfer_address();
     fade_to_black(0xC);
@@ -898,9 +894,8 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
         raise_kernel_trap();
     }
 }
-typedef struct { u8 pad[0x38]; s16 h38; } S_2997c8;
 typedef struct { u8 pad[0x6B]; u8 f; } M_2997c8;
-extern S_2997c8 D_001516D0_lui __asm__("D_001516D0") NOT_SDA;
+extern struct MusicStreamState music_stream_state_lui __asm__("D_001516D0") NOT_SDA;
 extern s32 D_L00_0015F5C4_2997c8 __asm__("D_L00_0015F5C4");
 extern struct ActiveSceneTrigger active_scene_trigger_lui __asm__("D_L00_00179100") NOT_SDA;
 extern char voice_pool_lui[] __asm__("D_0013E550")NOT_SDA;
@@ -949,7 +944,7 @@ void movie_exit_to_gameplay(void) {
         decode_mode = 0;
     }
     fade_to_black(4);
-    music_start_track(D_001516D0_lui.h38, 1, 0x400);
+    music_start_track(music_stream_state_lui.primary.track, 1, 0x400);
     D_L00_0015F5C4_2997c8 = 0;
     active = &active_scene_trigger_lui;
     if (active->moby != 0) {
@@ -1453,11 +1448,6 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec4_29ab70;
 extern char D_L00_001CA4C0_29ab70[] __asm__("D_L00_001CA4C0");
-struct S16_29ab70 {
-    char pad[0x5A];
-    unsigned short mode;
-};
-extern struct S16_29ab70 D_001516D0_29ab70 __asm__("D_001516D0");
 extern void f2330d0_29ab70(void) __asm__("FUN_L00_002330d0");
 extern void update_resource_counter(void) __asm__("FUN_001ff768");
 extern void music_unpause(void) __asm__("FUN_00216088");
@@ -1496,8 +1486,8 @@ void close_vendor_menu(int exit_cutscene_completed) {
     {
         char *vendor_state = D_L00_001CA4C0_29ab70;
         *(*(char **)(vendor_state + 0x1C) + 0x20) = 1;
-        if ((unsigned short)(D_001516D0_29ab70.mode - 6) >= 2)
-            D_001516D0_29ab70.mode = 5;
+        if ((unsigned short)(music_stream_state.secondary.state - 6) >= 2)
+            music_stream_state.secondary.state = 5;
         if (*(int *)(vendor_state + 0x40))
             mark_moby_for_removal(*(void **)(vendor_state + 0x1C));
     }
@@ -1510,8 +1500,6 @@ extern s32 D_L00_001CA580[];
 extern Vendor D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
 extern s32 vendor_exit_hero_local_offset_gp __asm__("D_L00_00161100") __attribute__((sda));
 extern s32 vendor_exit_cutscene_local_offset_gp __asm__("D_L00_001610F0") __attribute__((sda));
-struct S16_29ad08 { char pad[0x5A]; s16 mode; };
-extern struct S16_29ad08 D_001516D0_29ad08 __asm__("D_001516D0");
 struct T_29ad08 { char p0[0x10]; s32 id; char p1[0x38]; };
 extern struct T_29ad08 D_L00_00179AC0_29ad08[] __asm__("D_L00_00179AC0");
 extern float f213508_29ad08(float, void *, s32) __asm__("FUN_00213508");
@@ -1529,13 +1517,13 @@ void start_vendor_exit_cutscene(void) {
     VendorMoby_29a6b0 *moby;
     s32 index, item, offset;
     f32 *cutscene_world_origin;
-    struct S16_29ad08 *state;
+    struct MusicStreamState *state;
     s32 *selected;
     s16 mode;
 
     jet_end_mount(2);
-    if ((u16)(D_001516D0_29ad08.mode - 6) >= 2)
-        D_001516D0_29ad08.mode = 5;
+    if ((u16)(music_stream_state.secondary.state - 6) >= 2)
+        music_stream_state.secondary.state = 5;
     vendor_state = &D_L00_001CA4C0_29ad08;
     D_L00_0015F5D8 = 1;
     ((VendorMoby_29a6b0 *)vendor_state->moby)->state = 1;
@@ -1570,24 +1558,19 @@ void start_vendor_exit_cutscene(void) {
         hero.pending_item[0] = 0;
     select_world_object_resource_tables(D_L00_00179AC0_29ad08[D_L00_001CA4C0_29ad08.f48].id, -1);
     load_scene_chunks_with_fade(item);
-    state = &D_001516D0_29ad08;
-    *(s32 *)&state->pad[0x1C] = 0x2734;
+    state = &music_stream_state;
+    state->queued_secondary_track = 0x2734;
     FUN_L00_002455c0(0);
-    mode = D_001516D0_29ad08.mode;
+    mode = music_stream_state.secondary.state;
     while (mode != 3) {
         sound_update();
         sce_gs_sync_v(0);
-        mode = D_001516D0_29ad08.mode;
+        mode = music_stream_state.secondary.state;
     }
     continue_audio_stream_if_ready();
 }
 extern int D_L00_0015F5D8;
 extern char D_L00_001CA4C0_u[] __asm__("D_L00_001CA4C0");
-struct S16 {
-    char pad[0x5A];
-    unsigned short mode;
-};
-extern struct S16 D_001516D0;
 void FUN_L00_002330d0(void);
 void update_resource_counter(void) __asm__("FUN_001ff768");
 void music_unpause(void) __asm__("FUN_00216088");
@@ -1611,8 +1594,8 @@ void restore_hero_after_vendor_exit_cutscene(void) {
     euler_rotation.f[2] = fast_add_rotations(*(float *)(*(char **)(vendor_state_base + 0x28) + 0x48), -1.5707964f);
     set_race_camera(&world_position, &euler_rotation, 0, 1);
     update_resource_counter();
-    if ((unsigned short)(D_001516D0.mode - 6) >= 2)
-        D_001516D0.mode = 5;
+    if ((unsigned short)(music_stream_state.secondary.state - 6) >= 2)
+        music_stream_state.secondary.state = 5;
     snd_continue_all_sounds_in_group(0x1D);
     music_unpause();
     snd_flush_sound_commands();

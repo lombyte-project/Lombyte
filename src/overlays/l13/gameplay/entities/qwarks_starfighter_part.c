@@ -1,5 +1,6 @@
 /* Level 13 moby classes: qwarks_starfighter_part, forcefield, purple_ship. */
 #include "types.h"
+#include "rnc/audio/music/music_stream_state.h"
 #include "rnc/rendering/level_render_state.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
@@ -487,7 +488,6 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
 #include "rnc/gameplay/state/game_globals.h"
 extern char D_0013F350[];
-extern char D_001516D0[];
 extern void func_L13_002E9F90_2(void *, void *) __asm__("FUN_L13_002e8b58");
 extern char *D_L13_00160058_m __asm__("D_L13_0015FFD8");
 extern char D_0013E633_snd[] __asm__("D_0013E533");
@@ -795,7 +795,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             (*(Moby388 **)(((char *)&D_00140940)))->bBC = 0;
         }
         advance_moby_along_selected_path(moby, data, data->b13B, 1);
-        dialog = (char *)((char *)&D_001516D0);
+        dialog = (char *)&music_stream_state;
         if (*(int *)(dialog + 0x50) == 0) {
             int line = *(int *)(dialog + 0x1C);
             if (line == -1 && (short)data->h138 <= 0) {
@@ -856,7 +856,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         }
         func_L13_002E9F90_2(moby, data);
         {
-            char *dialog = (char *)((char *)&D_001516D0);
+            char *dialog = (char *)&music_stream_state;
             if (*(int *)(dialog + 0x50) == 0 && *(int *)(dialog + 0x1C) == -1) {
                 if (data->iF8 < scale_game_frames(0x1A4) && data->i13C < 0) {
                     if (queue_starfighter_voice_line(moby, data, 0x23, 1) != 0) {

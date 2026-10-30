@@ -1,5 +1,6 @@
 /* Level 13 moby classes: elevator, blarg_turret, blarg_gunner, robosquawker, fighter_jet. */
 #include "types.h"
+#include "rnc/audio/music/music_stream_state.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -2877,14 +2878,12 @@ typedef struct {
     float health,max_health,health_scale; int health_meter; short weapon; unsigned char pad160E,pad160F;
     char pad1610[0xA70]; Jet *moby; int state; char pad2088[0x1C]; unsigned char busy,in_craft;
 } JetPlayer;
-typedef struct { char pad0[0x1C]; int active; char pad20[0x30]; int pending; } JetTransition;
 typedef struct { char pad0[0x160]; float flash; int pad164,ticks; } JetCamera;
 typedef struct { char pad0[0xA]; unsigned short palette; char padC[4]; } JetTexture;
 typedef struct { char pad0[0x30]; JetVec position; char pad40[0x30]; JetVec rotation; } JetPath;
 typedef struct { char pad0[0x10]; JetVec velocity; Jet *source; int pad24,pad28; float damage; int flags; } JetHit;
 extern JetPlayer jet_player47 __asm__("D_0013F350");
 extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
-extern JetTransition D_001516D0[];
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/l13/gameplay/entities/elevator_data/fighter_jet_update.h"
 extern JetTexture l13_texture_descriptors[] __asm__("D_L13_0016D480");
@@ -3085,12 +3084,12 @@ void fighter_jet_update(Jet *jet_moby) {
         }
         jet_moby->state=7; break;
     case FIGHTER_JET_STATE_WAIT_FOR_DEATH_RESET: {
-        JetTransition *transition;
+        struct MusicStreamState *transition;
         D_L13_0015F608=2;
         if (fast_dec_timer_s16(&jet_data->death_timer)) {
-            transition=(JetTransition*)(D_001516D0);
-            if (!transition->pending) {
-            int active=transition->active;
+            transition=&music_stream_state;
+            if (!transition->secondary.handle) {
+            int active=transition->queued_secondary_track;
             if (active==-1) {
                 hero_respawn(); jet_end_mount(0);
                 qcopy(jet_moby->position,jet_data->spawn_position); qcopy(jet_moby->rotation,jet_data->spawn_rotation); refresh_moby_spatial_bounds_from_basis(jet_moby);

@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/music.c, set_sound_handle_id). */
 #include "rnc/storage/disc_table.h"
-extern short D_001516D0[];
+#include "rnc/audio/music/music_stream_state.h"
 extern void snd_play_vag_stream_by_loc_ex_cb(int, int, int, int, short, int, int, int, int,
                                              void (*)(int, long), long) __asm__("func_0012EC08");
 extern void music_primary_replace_callback(int, long) __asm__("FUN_00216ad0");
@@ -16,7 +16,7 @@ extern void music_primary_replace_callback(int, long) __asm__("FUN_00216ad0");
 void music_start_track_body(int track, int track_flags, int volume) __asm__("FUN_00215d18");
 
 void music_start_track_body(int track, int track_flags, int volume) {
-    char *music_state_base = (char *)D_001516D0;
+    char *music_state_base = (char *)&music_stream_state;
     char *base;
     int *music_track_locations;
     unsigned int active_stream_handle;
