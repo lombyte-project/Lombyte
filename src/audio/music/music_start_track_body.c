@@ -27,7 +27,7 @@ void music_start_track_body(int track, int track_flags, int volume) __asm__("FUN
 
 void music_start_track_body(int track, int track_flags, int volume) {
     char        *music_state_base = (char *)&music_stream_state;
-    char        *base;
+    char        *disc_table_base;
     int         *music_track_locations;
     unsigned int active_stream_handle;
     long         track_location;
@@ -41,8 +41,8 @@ void music_start_track_body(int track, int track_flags, int volume) {
     if (active_stream_handle == 0 || active_stream_handle == 0xFFFFFFFF) {
         return;
     }
-    base = (char *)&disc_table;
-    music_track_locations = (int *)(base + 0x2AA8);
+    disc_table_base = (char *)&disc_table;
+    music_track_locations = (int *)(disc_table_base + 0x2AA8);
     i = track + 1;
     if (music_track_locations[i] == 0) {
         return;
