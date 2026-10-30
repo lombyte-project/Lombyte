@@ -106,7 +106,7 @@ void update_gemlik_projectile(struct Moby *moby) {
     int                    i;
     int                    flags;
     int                    stationary;
-    unsigned char         *base;
+    unsigned char         *hero_bytes;
     char                  *ent;
     struct L13Ent00178480 *target_hit_entry;
 
@@ -117,9 +117,9 @@ void update_gemlik_projectile(struct Moby *moby) {
     set_vector_length_xy(&work.velocity, &work.velocity, 1.0f);
     work.velocity.z = 1.0f;
     flags = 0x10001;
-    base = (unsigned char *)((char *)((char *)&hero));
-    if (base[0x1FF6] != 0 && *(float *)(projectile_vars + 0xC) != 31337.6015625f &&
-        fast_vec_dist(&moby->pos, base + 0x80) < 2.0f) {
+    hero_bytes = (unsigned char *)((char *)((char *)&hero));
+    if (hero_bytes[0x1FF6] != 0 && *(float *)(projectile_vars + 0xC) != 31337.6015625f &&
+        fast_vec_dist(&moby->pos, hero_bytes + 0x80) < 2.0f) {
         fast_vec_normalize(projectile_vars, projectile_vars, 0.5f);
         fast_vec_sub(&moby->pos, &moby->pos, projectile_vars);
         qzero(projectile_vars);
