@@ -244,11 +244,7 @@ void build_water_render_setup_packet(void) {
 #define F(p, o) (*(float *)((p) + (o)))
 
 /* Path mover gated by an activation trigger and its collectable flag; plays the arrival cue on the way back. */
-typedef struct {
-    u8 pad0[0x454];
-    u8 collected[1];
-} L01PathLevelState;
-extern L01PathLevelState D_L01_001BB6B0;
+#include "rnc/overlay/collection_state.h"
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
@@ -289,7 +285,7 @@ void novalis_elevator_update(unsigned char *moby) {
     if (*(int *)(data + 0xC0) != -1) {
         unsigned short id;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xC0)) ||
-            D_L01_001BB6B0.collected[(short)(id = MOBY(moby)->save_id)] != 0 ||
+            l01_save_id_collection_state.collected[(short)(id = MOBY(moby)->save_id)] != 0 ||
             (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
             if (*(int *)(data + 0xC0) != -1) {
                 D_0014C190_257218[current_level_index][(short)MOBY(moby)->save_id >> 5] |=
@@ -631,7 +627,7 @@ void bolt_crank_update(struct Moby *moby) {
         goto done;
     case BOLT_CRANK_IDLE: {
         save_id = moby->save_id;
-        if (D_L01_001BB6B0.collected[(short)save_id] != 0 ||
+        if (l01_save_id_collection_state.collected[(short)save_id] != 0 ||
             ((D_0014C190_257218[current_level_index][(short)save_id >> 5] >> (save_id & 0x1F)) & 1)) {
             moby->pos.z = moby->pos.z - 0.5f;
             moby->state = BOLT_CRANK_DONE;
@@ -1364,7 +1360,7 @@ void sand_mouse_update(struct Moby *moby) {
             unsigned short id;
             qcopy(((float *)&moby->pos), ((float *)&ents_2e3f20[sand_mouse_vars->parent].pos));
             moby->pos.z = moby->pos.z + 0.02f;
-            if (D_L01_001BB6B0.collected[(short)(id = moby->save_id)] != 0
+            if (l01_save_id_collection_state.collected[(short)(id = moby->save_id)] != 0
                 || (*(int *)((char *)D_0014C190_257218 + (((short)id >> 5) * 4 + (D_0015ED84 << 8))) >> (id & 0x1F)) & 1) {
                 debug_print(sand_mouse_already_completed_message);
                 mark_moby_for_removal(moby);

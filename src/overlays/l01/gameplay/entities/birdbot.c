@@ -3441,18 +3441,13 @@ typedef struct {
 } CapVec3;
 
 typedef struct {
-    u8 pad0[0x454];
-    u8 collected[1];
-} CapLevelState;
-
-typedef struct {
     u8 pad0[0x160];
     f32 shake;
     u8 pad164[4];
     s32 shake_time;
 } CapCamera;
 
-extern CapLevelState D_L01_001BB6B0;
+#include "rnc/overlay/collection_state.h"
 extern CapCamera D_L01_00167100;
 CapColors D_L01_00161C40 = {{0x2b8, 0x2b9, 0x2ba}};
 extern s32 D_0014C190[][64];
@@ -3501,7 +3496,7 @@ void falling_rock_update(CapMoby *falling_rock) {
         falling_rock_vars->h3E = 5;
         qcopy(&falling_rock_vars->home, &falling_rock->pos);
         falling_rock->state = 1;
-        if (D_L01_001BB6B0.collected[falling_rock->id] != 0 ||
+        if (l01_save_id_collection_state.collected[falling_rock->id] != 0 ||
             (D_0014C190[current_level_index_macro][falling_rock->id >> 5] >> (falling_rock->id & 0x1F)) & 1) {
             clear_u64_value(&falling_rock_vars->rot);
             falling_rock->state = 4;

@@ -204,11 +204,7 @@ typedef struct {
 
 extern s32 pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
-typedef struct {
-    u8 pad0[0x454];
-    u8 collected[1];
-} BurstLevelState;
-extern BurstLevelState D_L01_001BB6B0;
+#include "rnc/overlay/collection_state.h"
 extern BurstColors l01_bridge_piece_debris_oclass_choices __asm__("D_L01_00161C60");
 extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 
@@ -223,7 +219,7 @@ void bridge_piece_1_update(BurstMoby *self) {
     s32 i;
 
     hit_result = find_moby_hit(self, 0x830000, 0);
-    if (D_L01_001BB6B0.collected[self->id] != 0 ||
+    if (l01_save_id_collection_state.collected[self->id] != 0 ||
         (D_0014C190_257218[current_level_index][self->id >> 5] >> (self->id & 0x1F)) & 1) {
         mark_moby_for_removal(self);
     }
@@ -499,7 +495,7 @@ void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
     s32 j;
     f32 offset_component_or_smoke_scale;
 
-    if (D_L01_001BB6B0.collected[(s16)cave_wall_moby->save_id] != 0 ||
+    if (l01_save_id_collection_state.collected[(s16)cave_wall_moby->save_id] != 0 ||
         (D_0014C190_257218[current_level_index][(s16)cave_wall_moby->save_id >> 5] >> (cave_wall_moby->save_id & 0x1F)) & 1) {
         mark_moby_for_removal(cave_wall_moby);
         return;
@@ -670,7 +666,6 @@ extern Moby_2FC140 *ents_macro __asm__("D_L01_0015FFD8") MACRO_ADDR;
 extern LevelCuboid *l01_cuboids_macro __asm__("D_L01_001600EC") MACRO_ADDR;
 extern int cutscene_mode __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern char D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAA50");
-extern Lv D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
 extern char D_L01_001BAAA0[] __asm__("D_L01_001BAAA0");
 extern unsigned char D_0014C050_u[] __asm__("D_0014C050");
 extern void apply_cutscene_big_head_cheat(void) __asm__("FUN_L01_002fac80");
@@ -869,7 +864,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             if (ents_macro[data->link].fB0 == 0xFF
                 || (D_L01_0015FC88[ents_macro[data->link].fB0] != 0xFF
                     && D_0014C050_u[ents_macro[data->link].fB0 + (current_level_index_macro << 4)] == 0xFF)) {
-                D_L01_001BB9C0_2FC140.collected[ents_macro[data->link].fB2] = ents_macro[data->link].fB0 + 2;
+                l01_save_id_collection_state.collected[ents_macro[data->link].fB2] = ents_macro[data->link].fB0 + 2;
             }
         }
         if (data->f3C != -1) {

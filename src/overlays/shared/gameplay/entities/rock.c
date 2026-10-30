@@ -625,11 +625,6 @@ void attach_cutscene_fixed_scale_manipulator(void) {
 typedef struct {
     char pad0[0x454];
     unsigned char collected[1];
-} TpLevelState_fc988;
-
-typedef struct {
-    char pad0[0x454];
-    unsigned char collected[1];
 } TpLevelState;
 
 extern char cutscene_camera_init_position_error_format[] __asm__("D_L01_0020B550");
@@ -641,7 +636,7 @@ extern void DebugPrint(char *, ...);
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void FUN_L01_002fb4b8_c(void) __asm__("FUN_L01_002fb4b8");
 extern void func_L01_002FC890_m(char *) __asm__("FUN_L01_002fb4b8");
-extern TpLevelState_fc988 D_L01_001BB9C0_s __asm__("D_L01_001BB6B0");
+#include "rnc/overlay/collection_state.h"
 extern char camera_pos[] __asm__("D_L01_00167240");
 extern char D_0014171B_c[] __asm__("D_0014C190");
 extern int debug_print(void *, int, int) __asm__("FUN_001e93b0");
@@ -676,7 +671,7 @@ void update_cutscene_trigger(char *moby) {
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER: {
         char *hero_position;
-        if (D_L01_001BB9C0_s.collected[(short)MOBY(moby)->save_id] != 0) {
+        if (l01_save_id_collection_state.collected[(short)MOBY(moby)->save_id] != 0) {
             moby[0x20] = 1;
             break;
         }
@@ -1040,7 +1035,6 @@ typedef struct {
     u8 collected[1];
 } L01LevelState;
 
-extern L01LevelState D_L01_001BB6B0;
 extern L01LevelState D_L01_001BAA50;
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
 extern u8 D_0014C050[];
@@ -1086,7 +1080,7 @@ void spawn_point_update(struct Moby *moby) {
     } else {
         vars->in_volume = 0;
     }
-    if (armed || D_L01_001BB6B0.collected[(s16)moby->save_id] != 0 ||
+    if (armed || l01_save_id_collection_state.collected[(s16)moby->save_id] != 0 ||
         ((D_0014C190[current_level_index][(s16)moby->save_id >> 5] >> (moby->save_id & 0x1F)) & 1)) {
         if (vars->armed == 0 || vars->rearm != 0) {
             armed = 1;
@@ -1099,7 +1093,7 @@ void spawn_point_update(struct Moby *moby) {
             }
             jet_reset_camera(&pos, &moby->rot);
             D_L01_001BAA50.collected[(s16)moby->save_id] = 0;
-            D_L01_001BB6B0.collected[(s16)moby->save_id] = 0;
+            l01_save_id_collection_state.collected[(s16)moby->save_id] = 0;
             D_0014C190[current_level_index][(s16)moby->save_id >> 5] &=
                 ~(armed << (moby->save_id & 0x1F));
             moby_killed[(s16)moby->save_id >> 5] &= ~(armed << (moby->save_id & 0x1F));
@@ -1655,7 +1649,7 @@ void teleporter_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int active = 0;
 
-    if (D_L01_001BB6B0.collected[(short)moby->save_id] != 0 ||
+    if (l01_save_id_collection_state.collected[(short)moby->save_id] != 0 ||
         (level_moby_killed[D_0015ED84_c][((short)moby->save_id) >> 5] >>
          (moby->save_id & 0x1F)) &
             1) {
