@@ -84,7 +84,7 @@ void draw_snagglebeast_sphere_quad_strips(char *moby,
     float               whole_part;
     u64                 texture;
     int                 color;
-    float alpha_step, base, spin, latitude_step, angle_step, angle, next_angle, longitude;
+    float alpha_step, strip_start_alpha_scale, spin, latitude_step, angle_step, angle, next_angle, longitude;
     float latitude, row_alpha;
 
     vu1_add_g_sregister(0x4E, (u64)(depth_buffer_address >> 13) | 0x1000000L | (0x8000L << 17));
@@ -119,9 +119,9 @@ void draw_snagglebeast_sphere_quad_strips(char *moby,
         qcopy(&quad.positions[2], &center);
         qcopy(&quad.positions[3], &center);
         next_angle = angle + angle_step;
-        base = convert_integer_to_float(0);
+        strip_start_alpha_scale = convert_integer_to_float(0);
         row_alpha = alpha;
-        color = truncate_float_to_s32(base * row_alpha) << 24;
+        color = truncate_float_to_s32(strip_start_alpha_scale * row_alpha) << 24;
         color |= tint_color(grey);
         quad.colors[3] = color;
         quad.colors[2] = color;
