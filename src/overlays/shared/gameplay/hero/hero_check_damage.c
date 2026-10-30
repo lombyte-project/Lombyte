@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+#include "rnc/overlay/moby_hit.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/hero_state.h"
@@ -2304,18 +2305,6 @@ void hero_knockback(float *knockback_vector, int each, float horizontal_knockbac
     }
 }
 
-typedef struct {
-    u8 pad0[0x10];
-    OvlQuad v10;
-    u8 *p20;
-    s32 i24;
-    u8 b28;
-    u8 pad29[3];
-    f32 f2C;
-    s32 i30;
-    u8 *p34;
-    u8 pad38[8];
-} T_210ce8;
 
 typedef union {
     OvlQuad q;
@@ -2329,10 +2318,10 @@ extern s32 D_0015EEA8 __asm__("D_0015EEA8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 
 s32 hero_check_damage(s32 arg) __asm__("FUN_L00_00210ce8");
-extern T_210ce8 moby_hits[] __asm__("D_L00_00178100");
+extern MobyHit moby_hits[] __asm__("D_L00_00178100");
 s32 hero_check_damage(s32 apply_damage_response) {
     u8 *hero_moby;
-    T_210ce8 *hero_hit_entry;
+    MobyHit *hero_hit_entry;
     u8 *mob;
     s32 flag;
     s32 id;
@@ -2360,25 +2349,25 @@ s32 hero_check_damage(s32 apply_damage_response) {
         return 0;
     }
     hero_hit_entry = &moby_hits[hero_moby[0xA4]];
-    if (hero_hit_entry->p34 != hero_moby) {
+    if (hero_hit_entry->owner != hero_moby) {
         return 0;
     }
     if (hero.vehicle_mode == 2) {
-        if (!(hero_hit_entry->i24 & 2)) {
+        if (!(hero_hit_entry->flags & 2)) {
             return 0;
         }
-    } else if ((hero_hit_entry->i24 ^ 1) & 1) {
+    } else if ((hero_hit_entry->flags ^ 1) & 1) {
         return 0;
     }
     D_0013DF88[current_level_index]++;
-    hero.damage_source_moby = (struct Moby *)hero_hit_entry->p20;
+    hero.damage_source_moby = (struct Moby *)hero_hit_entry->source_moby;
     D_0015EEA8++;
     if (hero.state.control_mode == 0xF) {
         hero.unk5BE = 1;
         return 0;
     }
     if (hero.vehicle_mode == 2) {
-        hero.vehicle_hp -= truncate_float_to_s32(hero_hit_entry->f2C);
+        hero.vehicle_hp -= truncate_float_to_s32(hero_hit_entry->damage);
         if (hero.vehicle_hp < 0) {
             hero.vehicle_hp = 0;
         }
@@ -2388,13 +2377,13 @@ s32 hero_check_damage(s32 apply_damage_response) {
     }
     release_and_clear_hero_voice_slots();
     flag = 0;
-    if (hero_hit_entry->i30 & 1) {
-        qcopy(&knockback_vector, &hero_hit_entry->v10);
-        if (*(f32 *)((u8 *)hero_hit_entry + 0x1C) == 5627.9248046875f) {
+    if (hero_hit_entry->has_direction & 1) {
+        qcopy(&knockback_vector, &hero_hit_entry->direction);
+        if (hero_hit_entry->direction.f[3] == 5627.9248046875f) {
             flag = 1;
         }
-    } else if (hero_hit_entry->p20 != 0) {
-        fast_vec_sub(&knockback_vector, &hero.motion.pos, hero_hit_entry->p20 + 0x10);
+    } else if (hero_hit_entry->source_moby != 0) {
+        fast_vec_sub(&knockback_vector, &hero.motion.pos, hero_hit_entry->source_moby + 0x10);
     } else {
         knockback_vector.f[0] = fast_cos(fast_add_rotations(hero.motion.rot.f[2], 3.1415927f));
         knockback_vector.f[1] = fast_sin(fast_add_rotations(hero.motion.rot.f[2], 3.1415927f));
@@ -2455,7 +2444,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
             vertical_knockback_strength = knockback_scale * 1.7f;
         }
         hero_knockback(&knockback_vector, flag, horizontal_knockback_strength, vertical_knockback_strength);
-        if (flag != 0 && hero_hit_entry->b28 == 4) {
+        if (flag != 0 && hero_hit_entry->unk28 == 4) {
             knockback_vector.f[2] += knockback_vector.f[2];
         }
         break;
@@ -2464,7 +2453,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
         hero_knockback(&knockback_vector, flag, frame_time * 5.0f, frame_time * 3.0f);
         break;
     case HERO_VEHICLE_MODE_GIANT_CLANK:
-        if ((hero_hit_entry->i24 & 4) || hero.vehicle_hp <= 0) {
+        if ((hero_hit_entry->flags & 4) || hero.vehicle_hp <= 0) {
             hero_set_state(0x5D, 1);
             remove_tracked_class_5f3_moby();
             if (hero.air_frames.s == 0) {
@@ -2763,7 +2752,6 @@ void stick_target(float scale, int mode) {
     transform_vector_by_basis(&hero.motion.move_dir, &stick_vector, D_L00_00166FD0_2118c8);
     hero.target_speed = scale * vector_length_xy(&stick_vector);
 }
-extern float D_L00_0017BDB8[];
 
 /* Hero speed clamp after a move update (twin of hero_speed_from_table): in state 0x3F it scales unk190 by 3.5 frame steps with a floor; otherwise it picks a table speed, and in state 0x73 it slows by 0.8 down to a floor. */
 void update_hero_target_speed_from_stick(void) __asm__("FUN_L00_00211be8");
@@ -2778,10 +2766,10 @@ void update_hero_target_speed_from_stick(void) {
         return;
     }
     if (0.0f < hero.target_speed) {
-        if (hero.target_speed < D_L00_0017BDB8[3])
-            hero.target_speed = D_L00_0017BDB8[2] * frame_time;
+        if (hero.target_speed < hero_speed_steps[0].unkC)
+            hero.target_speed = hero_speed_steps[0].target_speed * frame_time;
         else
-            hero.target_speed = D_L00_0017BDB8[6] * frame_time;
+            hero.target_speed = hero_speed_steps[1].target_speed * frame_time;
     }
     if (hero.state.current == 0x73) {
         float reduced_target_speed = hero.target_speed * 0.8f;

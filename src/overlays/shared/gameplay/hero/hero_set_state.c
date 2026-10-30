@@ -3576,13 +3576,7 @@ int try_start_hero_jump(void *jump_press_window_frames, int suppress_normal_jump
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_002293E8). */
 
-typedef struct {
-    f32 lower;
-    f32 upper;
-    u8 pad8[8];
-} SpeedStepThreshold;
 
-extern SpeedStepThreshold D_L00_0017BDB8[];
 extern s32 l00_hero_speed_step_animation_frame_offsets __asm__("D_L00_0015F6C8") __attribute__((sda));
 
 void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
@@ -3608,30 +3602,30 @@ void update_hero_animation_for_movement_speed(void) {
         float *upper;
         if (scale_game_frames(4) < player->step_frames && player->run_start_blending == 0) {
             index = player->state.step;
-            below_lower = player->ground_speed < D_L00_0017BDB8[index].lower * frame_time;
-            if (below_lower || D_L00_0017BDB8[index].upper * frame_time < player->ground_speed) {
+            below_lower = player->ground_speed < hero_speed_steps[index].lower * frame_time;
+            if (below_lower || hero_speed_steps[index].upper * frame_time < player->ground_speed) {
                 if (scale_game_frames(4) < player->step_frames && player->run_start_blending == 0) {
                     previous_step = player->state.step;
                     if (below_lower) {
                         float scale = frame_time;
-                        if (player->ground_speed < D_L00_0017BDB8[previous_step].lower * scale) {
+                        if (player->ground_speed < hero_speed_steps[previous_step].lower * scale) {
                             struct Hero *stepper;
-                            SpeedStepThreshold *thresholds;
+                            HeroSpeedStep *thresholds;
                             do {
-                                thresholds = D_L00_0017BDB8;
+                                thresholds = hero_speed_steps;
                                 stepper = &hero;
                                 stepper->state.step -= 1;
                             } while (player->ground_speed < thresholds[stepper->state.step].lower * scale);
                         }
                     } else {
                         float scale = frame_time;
-                        upper = &D_L00_0017BDB8[0].upper;
+                        upper = &hero_speed_steps[0].upper;
                         if (upper[previous_step * 4] * scale < player->ground_speed) {
                             float *uppers;
                             struct Hero *stepper;
                             do {
                                 stepper = &hero;
-                                uppers = &D_L00_0017BDB8[0].upper;
+                                uppers = &hero_speed_steps[0].upper;
                                 stepper->state.step += 1;
                             } while (uppers[stepper->state.step * 4] * scale < player->ground_speed);
                         }

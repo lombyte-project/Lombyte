@@ -67,4 +67,18 @@ typedef struct HeroTableRow2C {
     u8 pad_24[0x8];
 } HeroTableRow2C;
 
+/*
+ * 16-byte row of hero_speed_steps. The hero keeps a speed step while
+ * ground_speed stays between lower and upper (times frame_time); a step sets
+ * hero.target_speed from target_speed.
+ */
+typedef struct HeroSpeedStep {
+    f32 lower;
+    f32 upper;
+    f32 target_speed;
+    f32 unkC;            /* compared with hero.target_speed */
+} HeroSpeedStep;
+
+extern HeroSpeedStep hero_speed_steps[] __asm__("D_L00_0017BDB8");
+
 #endif /* LOMBYTE_RNC_OVERLAY_HERO_TABLES_H */

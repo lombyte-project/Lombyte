@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+#include "rnc/overlay/moby_hit.h"
 
 #include "asm.h"
 #include "sda.h"
@@ -114,93 +115,70 @@ typedef struct {
     int pad[3];
 } L_259a88;
 typedef struct {
-    u128_259a88 a;
-    u128_259a88 b;
-    int x, y;
-    unsigned char b0, b1;
-    unsigned short s;
-    float f;
-    int flag;
-    void *owner;
-    int z;
-    int pad2;
-} T_259a88;
-typedef struct {
     char pad[0x14];
     int idx;
 } G_259a88;
 extern G_259a88 D_L00_00173E40_lui __asm__("D_L00_00173E40") NOT_SDA;
-extern T_259a88 D_L00_00178100_lui[] __asm__("D_L00_00178100") NOT_SDA;
+extern MobyHit moby_hits[] __asm__("D_L00_00178100") NOT_SDA;
 void record_moby_hit(struct Moby *m, L_259a88 *src) __asm__("FUN_L00_00259a88");
 void record_moby_hit(struct Moby *owner_moby, L_259a88 *hit_descriptor) {
     L_259a88 hit_descriptor_copy;
     int i = D_L00_00173E40_lui.idx;
-    T_259a88 *hit_record;
+    MobyHit *hit_record;
     ((u128_259a88 *)&hit_descriptor_copy)[0] = ((u128_259a88 *)hit_descriptor)[0];
     ((u128_259a88 *)&hit_descriptor_copy)[1] = ((u128_259a88 *)hit_descriptor)[1];
     ((u128_259a88 *)&hit_descriptor_copy)[2] = ((u128_259a88 *)hit_descriptor)[2];
     hit_descriptor = &hit_descriptor_copy;
     if (owner_moby->hit_slot != 0xFF) {
-        T_259a88 *existing_hit = &D_L00_00178100_lui[owner_moby->hit_slot];
-        if (existing_hit->owner == owner_moby && hit_descriptor_copy.f < existing_hit->f)
+        MobyHit *existing_hit = &moby_hits[owner_moby->hit_slot];
+        if (existing_hit->owner == owner_moby && hit_descriptor_copy.f < existing_hit->damage)
             return;
     }
-    hit_record = &D_L00_00178100_lui[i];
+    hit_record = &moby_hits[i];
     clear_u64_value(hit_record);
-    qcopy(&D_L00_00178100_lui[i].b, &hit_descriptor->v);
-    hit_record->x = hit_descriptor->x;
-    hit_record->y = hit_descriptor->y;
-    hit_record->b0 = hit_descriptor->b0;
-    hit_record->b1 = hit_descriptor->b1;
-    hit_record->s = hit_descriptor->s;
-    hit_record->f = hit_descriptor->f;
-    hit_record->flag = hit_descriptor->flag;
+    qcopy(&moby_hits[i].direction, &hit_descriptor->v);
+    hit_record->source_moby = (u8 *)hit_descriptor->x;
+    hit_record->flags = hit_descriptor->y;
+    hit_record->unk28 = hit_descriptor->b0;
+    hit_record->unk29 = hit_descriptor->b1;
+    hit_record->unk2A = hit_descriptor->s;
+    hit_record->damage = hit_descriptor->f;
+    hit_record->has_direction = hit_descriptor->flag;
     hit_record->owner = owner_moby;
-    hit_record->z = 0;
+    hit_record->unk38 = 0;
     owner_moby->hit_slot = i;
     D_L00_00173E40_lui.idx = (i + 1) & 0x3F;
 }
 #include "eetypes.h"
 typedef struct {
-    u128 a;
-    u128 b;
-    int x, y;
-    int pad;
-    float f;
-    int flag;
-    void *owner;
-    int z;
-    int pad2;
-} T_259bc8;
-typedef struct {
     char pad[0x14];
     int idx;
 } G_259bc8;
 extern G_259bc8 D_L00_00173E40 NOT_SDA;
-extern T_259bc8 moby_hits[] __asm__("D_L00_00178100") NOT_SDA;
+extern MobyHit moby_hits[] __asm__("D_L00_00178100") NOT_SDA;
 
 void spawn_nearby_effect(unsigned char *m, int x, int y, u128 *p, u128 *q, float f) __asm__("FUN_L00_00259bc8");
 void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *hit_vector_source, u128 *direction_vector, float f) {
     int i = D_L00_00173E40.idx;
-    T_259bc8 *hit_record;
+    MobyHit *hit_record;
     if (owner_moby[0xA4] != 0xFF) {
-        T_259bc8 *existing_hit = &moby_hits[owner_moby[0xA4]];
-        if (existing_hit->owner == owner_moby && f < existing_hit->f)
+        MobyHit *existing_hit = &moby_hits[owner_moby[0xA4]];
+        if (existing_hit->owner == owner_moby && f < existing_hit->damage)
             return;
     }
     hit_record = &moby_hits[i];
-    hit_record->x = x;
-    hit_record->y = y;
-    hit_record->f = f;
+    hit_record->source_moby = (u8 *)x;
+    hit_record->flags = y;
+    hit_record->damage = f;
     hit_record->owner = owner_moby;
-    hit_record->z = 0;
+    hit_record->unk38 = 0;
     if (fast_vec_length(direction_vector) > 0.0001f) {
-        hit_record->flag = 1;
+        hit_record->has_direction = 1;
     } else {
-        hit_record->flag = 0;
+        hit_record->has_direction = 0;
     }
-    qcopy(&moby_hits[i].a, hit_vector_source);
-    qcopy(&moby_hits[i].b, direction_vector);
+    qcopy(&moby_hits[i].position, hit_vector_source);
+    qcopy(&moby_hits[i].direction, direction_vector);
     owner_moby[0xA4] = i;
     D_L00_00173E40.idx = (i + 1) & 0x3F;
 }
@@ -306,30 +284,25 @@ void FUN_L00_0025a120(char *moby) {
         *(int *)(moby + 0x88) = 0;
     }
 }
-struct Ent_z {
-    s32 a[13];
-    u8 *f34;
-    s32 b[2];
-};
-extern struct Ent_z D_L00_00178100_c[] __asm__("D_L00_00178100") NOT_SDA;
+extern MobyHit moby_hits[] __asm__("D_L00_00178100") NOT_SDA;
 static inline u8 load_u8_0025a420(u8 *p) {
     return *p;
 }
 /* Returns the moby_hits entry linked from p+0xA4 when it matches mask; may unlink it. */
-struct Ent_z *find_moby_hit(u8 *p, s32 mask, s32 flag) __asm__("FUN_L00_0025a420");
-struct Ent_z *find_moby_hit(u8 *owner_moby, s32 mask, s32 flag) {
-    struct Ent_z *hit_record;
+MobyHit *find_moby_hit(u8 *p, s32 mask, s32 flag) __asm__("FUN_L00_0025a420");
+MobyHit *find_moby_hit(u8 *owner_moby, s32 mask, s32 flag) {
+    MobyHit *hit_record;
     u8 *a = owner_moby + 0xA4;
     u8 i = load_u8_0025a420(a);
     if (load_u8_0025a420(a) == 0xFF)
         return 0;
-    hit_record = &D_L00_00178100_c[i];
-    if (hit_record->f34 != owner_moby)
+    hit_record = &moby_hits[i];
+    if (hit_record->owner != owner_moby)
         return 0;
-    if (hit_record->a[9] & mask)
+    if (hit_record->flags & mask)
         return hit_record;
     if (!flag)
-        hit_record->f34[0xA4] = 0xFF;
+        ((u8 *)hit_record->owner)[0xA4] = 0xFF;
     return 0;
 }
 typedef unsigned int u128_25a478 __attribute__((mode(TI), aligned(16)));
