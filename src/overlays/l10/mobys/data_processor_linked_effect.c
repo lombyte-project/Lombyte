@@ -171,8 +171,8 @@ extern int D_L10_00161D68;
 
 void render_data_processor_linked_effect(u8 *moby) {
     char *linked_effect_render_vars = ((char *)MOBY(moby)->pvars);
-    char *base = *(char **)((*(int *)(linked_effect_render_vars + 0xc) << 8) + (int)D_L10_0015FFD8 + 0x78);
-    char  scratch[(unsigned int)*(int *)(linked_effect_render_vars + 4) * 0x40];
+    char *linked_processor_vars = *(char **)((*(int *)(linked_effect_render_vars + 0xc) << 8) + (int)D_L10_0015FFD8 + 0x78);
+    char  strip_transforms[(unsigned int)*(int *)(linked_effect_render_vars + 4) * 0x40];
     struct {
         unsigned char vertices[0x50];
         float         matrix1[16];
@@ -211,12 +211,12 @@ void render_data_processor_linked_effect(u8 *moby) {
     {
         int transform_index;
         for (transform_index = 0; transform_index < *(int *)(linked_effect_render_vars + 4); transform_index++) {
-            rotation_matrix(scratch + transform_index * 0x40, moby + 0x40);
-            multiply_matrix(scratch + transform_index * 0x40,
-                            scratch + transform_index * 0x40,
+            rotation_matrix(strip_transforms + transform_index * 0x40, moby + 0x40);
+            multiply_matrix(strip_transforms + transform_index * 0x40,
+                            strip_transforms + transform_index * 0x40,
                             buffers.rotation);
-            *(u128_c *)(scratch + transform_index * 0x40 + 0x30) = *(u128_c *)(moby + 0x10);
-            *(float *)(scratch + transform_index * 0x40 + 0x38) +=
+            *(u128_c *)(strip_transforms + transform_index * 0x40 + 0x30) = *(u128_c *)(moby + 0x10);
+            *(float *)(strip_transforms + transform_index * 0x40 + 0x38) +=
                 convert_integer_to_float(transform_index + 1) * *(float *)(linked_effect_render_vars + 8);
         }
     }
@@ -248,23 +248,23 @@ void render_data_processor_linked_effect(u8 *moby) {
         phase = 0.0f;
         row = 0;
         do {
-            int next;
+            int next_strip_index;
             phase += data_processor_linked_effect_row_uv_phase_step;
             if (phase > 1.0f)
                 phase -= 1.0f;
             next_row = row + 1;
             for (j = 0; j < 4; j++) {
                 matrix1[j * 2] = matrix2[j * 2] = data_processor_linked_effect_base_uvs[j * 2] +
-                                                  phase + *(float *)(base + 0x12de0);
+                                                  phase + *(float *)(linked_processor_vars + 0x12de0);
             }
-            for (i = 0; i < *(int *)(linked_effect_render_vars + 4); i = next) {
+            for (i = 0; i < *(int *)(linked_effect_render_vars + 4); i = next_strip_index) {
                 int          offset;
                 int          age;
                 float        progress;
                 unsigned int color;
                 order = (unsigned char *)(linked_effect_render_vars + 0x10);
                 group_age = group * 0x78;
-                age_base = base + 0x10000;
+                age_base = linked_processor_vars + 0x10000;
                 ages = age_base + 0x2c00;
                 age = *(int *)(ages + (order[i] * 4 + group_age));
                 group_vertices = group * 0x2580;
@@ -290,7 +290,7 @@ void render_data_processor_linked_effect(u8 *moby) {
                 }
                 vertex = 0;
                 offset = i * 0x40;
-                next = i + 1;
+                next_strip_index = i + 1;
                 *(unsigned int *)(buffers.packet.quad + 0x4c) = color;
                 *(unsigned int *)(buffers.packet.quad + 0x48) = color;
                 *(unsigned int *)(buffers.packet.quad + 0x44) = color;
@@ -299,9 +299,9 @@ void render_data_processor_linked_effect(u8 *moby) {
                     fast_vec_add(
                         buffers.packet.quad + vertex * 0x10,
                         (char *)data_processor_linked_effect_quad_vertex_offsets + vertex * 0x10,
-                        base + group_vertices + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
+                        linked_processor_vars + group_vertices + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
                 }
-                draw_geometry_quad(buffers.packet.quad, scratch + offset, 0);
+                draw_geometry_quad(buffers.packet.quad, strip_transforms + offset, 0);
             }
             row = next_row;
         } while (row < 19);
