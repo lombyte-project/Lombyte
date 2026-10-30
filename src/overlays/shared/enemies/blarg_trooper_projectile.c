@@ -190,7 +190,7 @@ extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
 void update_blarg_trooper_projectile(struct Moby *moby) __asm__("FUN_L04_002af058");
 
 void update_blarg_trooper_projectile(struct Moby *moby) {
-    Vec4            old;
+    Vec4            previous_position;
     CollisionProbe  pr;
     Vec4            push;
     Vec4            random_vector;
@@ -206,7 +206,7 @@ void update_blarg_trooper_projectile(struct Moby *moby) {
     if (current_level_index == 12)
         range = 100.0f;
     hero_distance = fast_vec_dist(&moby->pos, &hero.motion.pos);
-    qcopy(&old, &moby->pos);
+    qcopy(&previous_position, &moby->pos);
     fast_vec_add(&moby->pos, &moby->pos, &v->dir);
     if (v->unk28 == 0 && v->unk24 != 0 && v->hero_dist < hero_distance && hero_distance < 3.0f) {
         allocate_voice_for_target_entry(0, 0, moby);
@@ -247,7 +247,7 @@ void update_blarg_trooper_projectile(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (collision_line(&old, &moby->pos, 0, v->owner, probe) == 0)
+    if (collision_line(&previous_position, &moby->pos, 0, v->owner, probe) == 0)
         return;
 
     qcopy(&moby->pos, &D_L04_00173FE0);
