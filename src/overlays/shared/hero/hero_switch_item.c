@@ -496,13 +496,13 @@ s32 resolve_moby_animation_id(u8 *moby_bytes, s32 animation_id) {
 
 int hero_get_state_aim_pitch(int mode, float *out) __asm__("FUN_L00_0020d5d0");
 
-int hero_get_state_aim_pitch(int mode, float *out) {
+int hero_get_state_aim_pitch(int mode, float *aim_pitch_output) {
     int i;
-    *out = 0.0f;
+    *aim_pitch_output = 0.0f;
     i = mode - 0x1C;
     switch (i) {
     case 27:
-        *out = -0.9599311f;
+        *aim_pitch_output = -0.9599311f;
         return 1;
     case 21:
     case 22:
@@ -519,7 +519,7 @@ int hero_get_state_aim_pitch(int mode, float *out) {
         float pitch_override_frame_threshold;
         pitch_override_frame_threshold = 25.0f;
         if (pitch_override_frame_threshold < hero.anim_frame) {
-            *out = -1.3089969f;
+            *aim_pitch_output = -1.3089969f;
         }
         return 1;
     }
