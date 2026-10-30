@@ -20,13 +20,13 @@ extern int advance_alternate_camera_transition(void *, void *) __asm__("FUN_001e
 void update_camera_blend(char *to_cam) __asm__("FUN_001ed2b0");
 
 void update_camera_blend(char *to_cam) {
-    char *base = cam_trans_state;
+    char *camera_transition_state = cam_trans_state;
     int   transition_complete;
 
-    if (*(unsigned char *)(base + 2) == 0) {
-        transition_complete = step_camera_blend(to_cam, base + 0x10);
+    if (*(unsigned char *)(camera_transition_state + 2) == 0) {
+        transition_complete = step_camera_blend(to_cam, camera_transition_state + 0x10);
     } else {
-        transition_complete = advance_alternate_camera_transition(to_cam, base + 0x70);
+        transition_complete = advance_alternate_camera_transition(to_cam, camera_transition_state + 0x70);
     }
     if (transition_complete != 0) {
         if (camera_position_publication_suppressed[0] == 0) {
@@ -35,8 +35,8 @@ void update_camera_blend(char *to_cam) {
             qcopy(camera_rows + 0x20, to_cam + 0x20);
             qcopy(camera_rows - 0x210, to_cam + 0x30);
         }
-        *(short *)base = 0;
-        base[2] = 0;
+        *(short *)camera_transition_state = 0;
+        camera_transition_state[2] = 0;
     }
 }
 
