@@ -175,7 +175,7 @@ void update_level_13_homing_rocket(ProjectileMoby *rocket_moby) {
     float          yaw;
     float          pitch;
 
-    qcopy(&old, &rocket_moby->pos);
+    qcopy(&previous_rocket_position, &rocket_moby->pos);
     rocket_moby->scale += (rocket_moby->cls->scale - rocket_moby->scale) * 0.1f;
     hit = (Hit_2C27B0 *)find_moby_hit(rocket_moby, 0xA30000, 0);
     if (hit != 0 && hit->owner != 0 && hit->owner->cls_id != 0x52) {
@@ -343,7 +343,7 @@ void update_level_13_homing_rocket(ProjectileMoby *rocket_moby) {
         return;
     }
     moby_point_position(rocket_moby, 1, &hitpos);
-    if (collision_line(&old, &hitpos, 0, rocket_moby, 0) != 0) {
+    if (collision_line(&previous_rocket_position, &hitpos, 0, rocket_moby, 0) != 0) {
         ProjectileMoby *o = D_L13_00174158;
         if (o == 0 ||
             (o != rocket_data->owner && o->cls_id != 0x504 && o->cls_id != 0x534 &&
