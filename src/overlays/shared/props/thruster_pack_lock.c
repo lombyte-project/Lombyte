@@ -10,6 +10,7 @@
 #include "rnc/overlay/level_path.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/overlay/water_grid.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/random.h"
@@ -33,13 +34,12 @@ void synchronize_linked_moby_heights(char *moby) {
     short *moby_index_cursor = D_L11_001AC240[MOBY(moby)->group];
     int    base = D_L11_0015FFD8;
     do {
-        int   i = (*moby_index_cursor & 0x7FFF) * 256;
-        char *linked_moby = (char *)(i + base);
-        char *destination_record;
+        int        i = (*moby_index_cursor & 0x7FFF) * 256;
+        char      *linked_moby = (char *)(i + base);
+        WaterGrid *grid;
         MOBY(linked_moby)->pos.z = MOBY(moby)->pos.z;
-        destination_record =
-            D_L11_001DA880 + *(int *)(((char *)MOBY(linked_moby)->pvars) + 4) * 0x1190;
-        *(float *)(destination_record + 8) = MOBY(moby)->pos.z;
+        grid = &l11_water_grids[*(int *)(((char *)MOBY(linked_moby)->pvars) + 4)];
+        grid->z = MOBY(moby)->pos.z;
     } while (*moby_index_cursor++ >= 0);
 }
 

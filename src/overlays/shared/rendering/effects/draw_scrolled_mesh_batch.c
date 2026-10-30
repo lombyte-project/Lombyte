@@ -5,6 +5,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/overlay/l08/mesh_batches.h"
 
 typedef struct {
     float x;
@@ -13,18 +14,10 @@ typedef struct {
 
 extern Pair D_L08_001E8348[];
 extern char D_L08_001E8360[];
-extern int  D_L08_001E2858[];
-extern int  scrolled_mesh_position_streams[] __asm__("D_L08_001E8268");
-extern int  scrolled_mesh_uv_source_streams[] __asm__("D_L08_001E82A0");
-extern int  D_L08_001E8310[];
-extern void FUN_L00_001fde98(int, int, int, void *, int);
-extern void FUN_L08_00258090(void *, int, int, void *);
+extern void FUN_L00_001fde98(int, MeshPoint *, u32 *, void *, int);
+extern void FUN_L08_00258090(void *, MeshUv *, int, void *);
 
 extern Pair D_L08_00161E10[] MACRO_ADDR;
-extern int  D_L08_001DDF40[];
-extern int  eleven_entry_scrolled_base_uv_tables[] __asm__("D_L08_001E27C8");
-extern int  eleven_entry_scrolled_vertex_position_tables[] __asm__("D_L08_001E2798");
-extern int  D_L08_001E2828[];
 
 extern float frame_delta_time __asm__("D_0015ED7C");
 
@@ -36,6 +29,7 @@ extern float scroll_pos_x[] __asm__("D_L08_00161E10") MACRO_ADDR;
 extern float scroll_pos_y[] __asm__("D_L08_00161E14") MACRO_ADDR;
 
 float scroll_entry_x_rates_gp[2] __asm__("D_L08_00161DE0") = {0.01f, 1.0f};
+
 extern float D_L08_00161DE4[] MACRO_ADDR;
 
 /* Runs the two per-entry update calls over a 13-entry table. */
@@ -48,11 +42,11 @@ void draw_scrolled_mesh_batch(int pair_index) {
     for (i = 0; i < 13; i++) {
         FUN_L08_00258090(D_L08_001E8360,
                          scrolled_mesh_uv_source_streams[i],
-                         D_L08_001E2858[i],
+                         scrolled_mesh_batch_vertex_counts[i],
                          &D_L08_001E8348[pair_index]);
-        FUN_L00_001fde98(D_L08_001E2858[i],
+        FUN_L00_001fde98(scrolled_mesh_batch_vertex_counts[i],
                          scrolled_mesh_position_streams[i],
-                         D_L08_001E8310[i],
+                         scrolled_mesh_batch_colour_tables[i],
                          D_L08_001E8360,
                          1);
     }
@@ -65,11 +59,11 @@ void draw_eleven_entry_scrolled_texture_batch(int scroll_pair_index) {
     for (i = 0; i < 11; i++) {
         FUN_L08_00258090(D_L08_001E8360,
                          eleven_entry_scrolled_base_uv_tables[i],
-                         D_L08_001DDF40[i],
+                         eleven_entry_batch_vertex_counts[i],
                          &D_L08_00161E10[scroll_pair_index]);
-        FUN_L00_001fde98(D_L08_001DDF40[i],
+        FUN_L00_001fde98(eleven_entry_batch_vertex_counts[i],
                          eleven_entry_scrolled_vertex_position_tables[i],
-                         D_L08_001E2828[i],
+                         eleven_entry_batch_colour_tables[i],
                          D_L08_001E8360,
                          1);
     }

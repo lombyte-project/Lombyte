@@ -9,21 +9,11 @@
 #include "rnc/math/random.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/rendering/render_water_grids.h"
+#include "rnc/overlay/water_grid.h"
 
 extern int random_integer_below(int) __asm__("FUN_00213260");
 
 #include "rnc/overlay/l13/mobys/gemlik_bobbing_pool_tile_globals.h"
-
-typedef struct {
-    float          x;
-    float          y;
-    float          z;
-    char           pad0C[0x10];
-    unsigned char  c1C;
-    unsigned char  c1D;
-    unsigned short c1E;
-    char           rest[0x1170];
-} Tile_9e88;
 
 typedef struct {
     float top;
@@ -40,15 +30,155 @@ typedef struct {
     unsigned char c3C, c3D;
 } Light_9e88;
 
-extern Tile_9e88 Tiles_9e88[] __asm__("D_L13_001D9BC0");
+/* The 22 pool tiles' water grids: pool_init_tiles/pool_flush/pool_ripple/render_water_grids
+   all take 22 (0x16), and every tile loop runs 22 times. */
+WaterGrid l13_water_grids[22] __asm__("D_L13_001D9BC0") = {
+    {  562.0f,
+     578.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  578.0f,
+     578.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  562.0f,
+     594.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  578.0f,
+     594.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  578.0f,
+     611.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  594.0f,
+     611.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  578.0f,
+     627.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  594.0f,
+     627.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  578.0f,
+     643.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  594.0f,
+     643.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  529.0f,
+     636.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  545.0f,
+     636.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  561.0f,
+     636.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  501.0f,
+     596.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x35, 0x36,
+     0x60, 0x40,
+     0, {0}},
+    {  501.0f,
+     612.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x35, 0x36,
+     0x60, 0x40,
+     0, {0}},
+    {  501.0f,
+     628.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x35, 0x36,
+     0x60, 0x40,
+     0, {0}},
+    {  501.0f,
+     644.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x35, 0x36,
+     0x60, 0x40,
+     0, {0}},
+    {5.3e+02f,
+     566.0f, 283.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {5.3e+02f,
+     582.0f, 283.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  578.0f,
+     595.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  562.0f,
+     611.0f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2d, 0x2e,
+     0x60, 0x40,
+     0, {0}},
+    {  501.0f,
+     5.8e+02f, 289.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x35, 0x36,
+     0x60, 0x40,
+     0, {0}},
+};
 
 extern Light_9e88 D_L13_001CAB80;
 
 extern float D_L13_001801C0[];
 
-extern unsigned short D_L13_001F1E20[];
+/* Each pool tile's saved draw value, indexed by tile index (22 tiles). */
+unsigned short D_L13_001F1E20[22] = {0xffff, 0x3310, 0xffff, 0x33,   0xffff, 0x3311, 0xffff, 0x3333,
+                                     0xffff, 0x1133, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+                                     0xffff, 0xffff, 0xffff, 0xc000, 0xcc0,  0xffff};
 
-extern char gemlik_pool_tile_binding_records[] __asm__("D_L13_001F1E80");
+/* One fixed-point bounds record (pool_bind_tile: x, y, z, two scale shorts) per tile, 16 bytes
+   apart, 22 of them (gemlik_pool_tile_count = 22). */
+int gemlik_pool_tile_binding_records[22][4] __asm__("D_L13_001F1E80") = {0};
 
 extern int D_L13_00161208;
 
@@ -117,7 +247,7 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             Light_9e88 *tile_lighting;
             char       *tb;
             float       light_direction_angle;
-            pool_init_tiles(Tiles_9e88, 22);
+            pool_init_tiles(l13_water_grids, 22);
             pool_set_scale(1.0f);
             moby->update_dist = 0xFF;
             tile_lighting = &D_L13_001CAB80;
@@ -137,25 +267,25 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             tile_lighting->i2C = 0x2E;
             tile_lighting->c3C = 0x60;
             tile_lighting->c3D = 0x40;
-            tb = gemlik_pool_tile_binding_records;
+            tb = (char *)gemlik_pool_tile_binding_records;
             gemlik_pool_tile_count = 22;
             D_L13_0016120C = 32768.0f;
             D_L13_00161210 = 255.0f;
             D_L13_00161214 = 48.0f;
-            D_L13_001612D0 = Tiles_9e88;
+            D_L13_001612D0 = l13_water_grids;
             D_L13_001612D4 = tb;
             D_L13_00161208 = 0;
             for (i = 0; i < 22; i++) {
-                pool_bind_tile(&Tiles_9e88[i], tb + i * 16);
-                Tiles_9e88[bobbing_platform_vars->idx].c1E =
+                pool_bind_tile(&l13_water_grids[i], tb + i * 16);
+                l13_water_grids[bobbing_platform_vars->idx].draw_value =
                     D_L13_001F1E20[bobbing_platform_vars->idx];
             }
             for (k = 0; k < 22; k++) {
                 for (j = 0; j < 2; j++) {
-                    Tile_9e88 *t = &Tiles_9e88[k];
+                    WaterGrid *t = &l13_water_grids[k];
                     float      x = t->x + random_float_between(-6.0f, 6.0f);
                     float      y = t->y + random_float_between(-6.0f, 6.0f);
-                    pool_ripple(x, y, 2.0f, 0.2f, Tiles_9e88, 22);
+                    pool_ripple(x, y, 2.0f, 0.2f, l13_water_grids, 22);
                 }
             }
             for (tile_index = 0; tile_index < 22; tile_index++)
@@ -179,12 +309,13 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             hero_context->state.current != 0x7C)
             bobbing_platform_vars->angle =
                 fast_add_rotations(bobbing_platform_vars->angle, bobbing_platform_vars->speed);
-        Tiles_9e88[bobbing_platform_vars->idx].c1C = D_L13_001CAB80.c3C;
-        Tiles_9e88[bobbing_platform_vars->idx].c1D = D_L13_001CAB80.c3D;
+        l13_water_grids[bobbing_platform_vars->idx].unk1C = D_L13_001CAB80.c3C;
+        l13_water_grids[bobbing_platform_vars->idx].unk1D = D_L13_001CAB80.c3D;
         if (random_integer_below(200) == 0) {
-            float x = Tiles_9e88[bobbing_platform_vars->idx].x + random_float_between(-4.0f, 4.0f);
-            float y = random_float_between(-4.0f, 4.0f);
-            Tile_9e88 *t = &Tiles_9e88[bobbing_platform_vars->idx];
+            float x =
+                l13_water_grids[bobbing_platform_vars->idx].x + random_float_between(-4.0f, 4.0f);
+            float      y = random_float_between(-4.0f, 4.0f);
+            WaterGrid *t = &l13_water_grids[bobbing_platform_vars->idx];
             pool_splash(x, t->y + y, 1.0f, -0.05f, t, 1, 1);
         }
         break;
@@ -192,79 +323,70 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
     }
     if (bobbing_platform_vars->idx >= 0) {
         height_half_span_or_tile_enabled = 0.0f;
-        (Tiles_9e88 + bobbing_platform_vars->idx)->z = moby->pos.z;
+        (l13_water_grids + bobbing_platform_vars->idx)->z = moby->pos.z;
         if (check_scaled_vector_bsphere(48.0f, moby) != -1)
             height_half_span_or_tile_enabled = 1.0f;
         if (height_half_span_or_tile_enabled == 0.0f)
-            Tiles_9e88[bobbing_platform_vars->idx].c1E = 0;
+            l13_water_grids[bobbing_platform_vars->idx].draw_value = 0;
         else
-            Tiles_9e88[bobbing_platform_vars->idx].c1E = D_L13_001F1E20[bobbing_platform_vars->idx];
+            l13_water_grids[bobbing_platform_vars->idx].draw_value =
+                D_L13_001F1E20[bobbing_platform_vars->idx];
         if (bobbing_platform_vars->idx == 0) {
-            pool_flush(Tiles_9e88, 22);
+            pool_flush(l13_water_grids, 22);
             add_draw_callback(render_level13_water_grids, moby);
         }
         if (bobbing_platform_vars->idx == D_L13_00161EF0) {
-            Tiles_9e88[bobbing_platform_vars->idx].c1E = D_L13_00161EF4;
+            l13_water_grids[bobbing_platform_vars->idx].draw_value = D_L13_00161EF4;
             D_L13_001F1E20[bobbing_platform_vars->idx] = D_L13_00161EF4;
         }
     }
 }
-
-typedef struct {
-    float         x;
-    float         y;
-    int           pad;
-    unsigned char n[0x14];
-    char          rest[0x1170];
-} Ent;
-
-extern Ent D_L13_001D9BC0[];
 
 /* Draws the pool tiles as water grids. */
 
 void render_level13_water_grids(void) __asm__("FUN_L13_0030a460");
 
 void render_level13_water_grids(void) {
-    render_water_grids(D_L13_001D9BC0, 0x16);
+    render_water_grids(l13_water_grids, 0x16);
 }
 
 void initialize_gemlik_pool_tile_neighbors(int tile_index) {
     int i;
-    D_L13_001D9BC0[tile_index].n[0] = 0xFF;
-    D_L13_001D9BC0[tile_index].n[2] = 0xFF;
-    D_L13_001D9BC0[tile_index].n[1] = 0xFF;
-    D_L13_001D9BC0[tile_index].n[3] = 0xFF;
-    D_L13_001D9BC0[tile_index].n[4] = 0xFF;
-    D_L13_001D9BC0[tile_index].n[5] = 0xFF;
-    D_L13_001D9BC0[tile_index].n[6] = 0xFF;
-    D_L13_001D9BC0[tile_index].n[7] = 0xFF;
+    l13_water_grids[tile_index].neighbors[0] = 0xFF;
+    l13_water_grids[tile_index].neighbors[2] = 0xFF;
+    l13_water_grids[tile_index].neighbors[1] = 0xFF;
+    l13_water_grids[tile_index].neighbors[3] = 0xFF;
+    l13_water_grids[tile_index].neighbors[4] = 0xFF;
+    l13_water_grids[tile_index].neighbors[5] = 0xFF;
+    l13_water_grids[tile_index].neighbors[6] = 0xFF;
+    l13_water_grids[tile_index].neighbors[7] = 0xFF;
     for (i = 0; i < 22; i++) {
         if (tile_index != i) {
-            Ent  *tile_table = D_L13_001D9BC0;
-            Ent  *selected_tile = &tile_table[tile_index];
-            float x = selected_tile->x - tile_table[i].x;
-            float y = selected_tile->y - tile_table[i].y;
+            WaterGrid *tile_table = l13_water_grids;
+            WaterGrid *selected_tile = &tile_table[tile_index];
+            float      x = selected_tile->x - tile_table[i].x;
+            float      y = selected_tile->y - tile_table[i].y;
             if (absolute_float(x) < 0.1f) {
                 if (absolute_float(y - 16.0f) < 0.1f)
-                    selected_tile->n[0] = i;
+                    selected_tile->neighbors[0] = i;
                 if (absolute_float(y + 16.0f) < 0.1f)
-                    selected_tile->n[2] = i;
+                    selected_tile->neighbors[2] = i;
             } else if (absolute_float(y) < 0.1f) {
                 if (absolute_float(x - 16.0f) < 0.1f)
-                    selected_tile->n[1] = i;
+                    selected_tile->neighbors[1] = i;
                 if (absolute_float(x + 16.0f) < 0.1f)
-                    selected_tile->n[3] = i;
+                    selected_tile->neighbors[3] = i;
             } else {
                 if (absolute_float(x + 16.0f) < 0.1f) {
                     if (absolute_float(y - 16.0f) < 0.1f)
-                        selected_tile->n[5] = i;
+                        selected_tile->neighbors[5] = i;
                     if (absolute_float(y + 16.0f) < 0.1f)
-                        selected_tile->n[7] = i;
+                        selected_tile->neighbors[7] = i;
                 } else if (absolute_float(x - 16.0f) < 0.1f) {
                     if (absolute_float(y - 16.0f) < 0.1f)
-                        selected_tile->n[4] = i;
+                        selected_tile->neighbors[4] = i;
                     if (absolute_float(y + 16.0f) < 0.1f)
-                        selected_tile->n[6] = i;
+                        selected_tile->neighbors[6] = i;
                 }
             }
         }

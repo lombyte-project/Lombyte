@@ -24,8 +24,13 @@ typedef struct {
     f32 x;
     f32 y;
     f32 z;
-    u8  pad0C[0x12];
-    u16 color;
+    u8  neighbors
+        [8]; /* 0x0C: index of the tile 16 units away in each direction, 0xFF: none (WaterGrid layout) */
+    u32 texture_id;        /* 0x14 */
+    u32 second_texture_id; /* 0x18 */
+    u8  unk1C;             /* 0x1C */
+    u8  unk1D;             /* 0x1D */
+    u16 color;             /* 0x1E */
     f32 f20;
     f32 f24;
     f32 f28;
@@ -46,31 +51,199 @@ typedef struct {
     f32 x, y, z, w;
 } PoolVec;
 
-extern PoolTile pool_tiles[] __asm__("D_L01_001E34C0");
-extern f32      pool_sun[] __asm__("D_L01_00180340");
-extern u8       pool_tile_tex[] __asm__("D_L01_001FA6C0");
-extern s32      pool_first[] __asm__("D_L01_001FA5E8");
-extern s32      pool_count[] __asm__("D_L01_001FA608");
-extern s32      pool_odds[] __asm__("D_L01_001FA628");
-extern u32      pool_colors[] __asm__("D_L01_001FA590");
-extern u128     pool_drips[] __asm__("D_L01_001FA650");
-extern u8       pool_wave[] __asm__("D_L01_001FA6A0");
-extern u8       camera_pos[] __asm__("D_L01_00167240");
-extern s32      level_frame_count __asm__("D_L01_0015F5CC") MACRO_ADDR;
-s32             pool_drip_timer __asm__("D_L01_00161C84") = 0;
-extern u8      *pool_draw_tex __asm__("D_L01_001612D4") MACRO_ADDR;
-extern void     pool_init_tiles(void *, s32) __asm__("FUN_L01_002b7a48");
-extern void     pool_bind_tile(void *, void *) __asm__("FUN_L01_002b7c68");
-extern void     pool_set_scale(f32) __asm__("FUN_L01_002b7ef0");
-extern void     pool_flush(void *, s32) __asm__("FUN_L01_002b7fe0");
-extern void     pool_ripple(f32, f32, f32, f32, void *, s32) __asm__("FUN_L01_002b8288");
-extern void     pool_splash(f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_002a3ec8");
-extern s32      is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern void     render_level_water_grids(void) __asm__("FUN_L01_002fd0c0");
-extern int      add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-extern void     pool_drip(void *, f32) __asm__("FUN_L01_002ffcd0");
-extern void     pool_bubble(void *, void *, f32) __asm__("FUN_L01_00287b00");
-extern void     pool_bubbles(void *, void *, f32, f32) __asm__("FUN_L01_00287c80");
+/* 21 tiles: pool_init_tiles(pool_tiles, 21), pool_flush(pool_tiles, 21) and the bind/ripple loops. */
+PoolTile pool_tiles[21] __asm__("D_L01_001E34C0") = {
+    {155.0f,
+     88.5f, 61.0f,
+     {0xff, 0xff, 2, 1, 0xff, 0xff, 0xff, 3},
+     0x28, 0x29,
+     0x1c, 0x44,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {171.0f,
+     88.5f, 61.0f,
+     {0xff, 0, 3, 0xff, 0xff, 0xff, 2, 0xff},
+     0x28, 0x29,
+     0x1c, 0x44,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {155.0f,
+     104.5f, 61.0f,
+     {0, 0xff, 0xff, 3, 0xff, 1, 0xff, 0xff},
+     0x28, 0x29,
+     0x1c, 0x44,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {171.0f,
+     104.5f, 61.0f,
+     {1, 2, 0xff, 0xff, 0, 0xff, 0xff, 0xff},
+     0x28, 0x29,
+     0x1c, 0x44,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {125.5f,
+     91.75f, 56.5f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2a, 0x2b,
+     0x48, 0x40,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {117.75f,
+     115.0f, 56.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2a, 0x2b,
+     0x48, 0x48,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {166.0f,
+     6e+01f, 65.5f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2a, 0x2b,
+     0x48, 0x40,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {151.0f,
+     72.5f, 65.5f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2a, 0x2b,
+     0x48, 0x40,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {127.0f,
+     53.0f, 65.5f,
+     {0xff, 0xff, 0xa, 9, 0xff, 0xff, 0xff, 0xb},
+     0x2a, 0x2b,
+     0x48, 0x48,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {143.0f,
+     53.0f, 65.5f,
+     {0xff, 8, 0xb, 0xff, 0xff, 0xff, 0xa, 0xff},
+     0x2a, 0x2b,
+     0x48, 0x48,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {127.0f,
+     69.0f, 65.5f,
+     {8, 0xff, 0xff, 0xb, 0xff, 9, 0xff, 0xff},
+     0x2a, 0x2b,
+     0x48, 0x48,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {143.0f,
+     69.0f, 65.5f,
+     {9, 0xa, 0xff, 0xff, 8, 0xff, 0xff, 0xff},
+     0x2a, 0x2b,
+     0x48, 0x48,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {136.0f,
+     128.5f, 56.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x2a, 0x2b,
+     0x48, 0x48,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {186.1f,
+     154.0f, 39.0f,
+     {0xff, 0xff, 0xf, 0xe, 0xff, 0xff, 0xff, 0x10},
+     0x28, 0x29,
+     0x24, 0x54,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {202.1f,
+     154.0f, 39.0f,
+     {0xff, 0xd, 0x10, 0xff, 0xff, 0xff, 0xf, 0xff},
+     0x28, 0x29,
+     0x24, 0x54,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {186.1f,
+     1.7e+02f, 39.0f,
+     {0xd, 0xff, 0xff, 0x10, 0xff, 0xe, 0xff, 0xff},
+     0x28, 0x29,
+     0x24, 0x54,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {202.1f,
+     1.7e+02f, 39.0f,
+     {0xe, 0xf, 0xff, 0xff, 0xd, 0xff, 0xff, 0xff},
+     0x28, 0x29,
+     0x24, 0x54,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {155.5f,
+     115.5f, 60.5f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x28, 0x29,
+     0x1c, 0x48,
+     0, 0.0f,
+     0.0f, 0.0f,
+     0.0f, {0},
+     0, {0}},
+    {0},
+    {0},
+    {0},
+};
+
+extern f32  pool_sun[] __asm__("D_L01_00180340");
+extern u8   pool_tile_tex[] __asm__("D_L01_001FA6C0");
+extern s32  pool_first[] __asm__("D_L01_001FA5E8");
+extern s32  pool_count[] __asm__("D_L01_001FA608");
+extern s32  pool_odds[] __asm__("D_L01_001FA628");
+extern u32  pool_colors[] __asm__("D_L01_001FA590");
+extern u128 pool_drips[] __asm__("D_L01_001FA650");
+extern u8   pool_wave[] __asm__("D_L01_001FA6A0");
+extern u8   camera_pos[] __asm__("D_L01_00167240");
+extern s32  level_frame_count __asm__("D_L01_0015F5CC") MACRO_ADDR;
+s32         pool_drip_timer __asm__("D_L01_00161C84") = 0;
+extern u8  *pool_draw_tex __asm__("D_L01_001612D4") MACRO_ADDR;
+extern void pool_init_tiles(void *, s32) __asm__("FUN_L01_002b7a48");
+extern void pool_bind_tile(void *, void *) __asm__("FUN_L01_002b7c68");
+extern void pool_set_scale(f32) __asm__("FUN_L01_002b7ef0");
+extern void pool_flush(void *, s32) __asm__("FUN_L01_002b7fe0");
+extern void pool_ripple(f32, f32, f32, f32, void *, s32) __asm__("FUN_L01_002b8288");
+extern void pool_splash(f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_002a3ec8");
+extern s32  is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
+extern void render_level_water_grids(void) __asm__("FUN_L01_002fd0c0");
+extern int  add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
+extern void pool_drip(void *, f32) __asm__("FUN_L01_002ffcd0");
+extern void pool_bubble(void *, void *, f32) __asm__("FUN_L01_00287b00");
+extern void pool_bubbles(void *, void *, f32, f32) __asm__("FUN_L01_00287c80");
 
 extern u8 D_L01_00161200  MACRO_ADDR;
 extern u8 D_L01_00161201  MACRO_ADDR;

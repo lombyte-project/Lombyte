@@ -24,7 +24,9 @@ typedef struct {
     float fade;
 } CamVars_c788;
 
-extern struct Moby *l11_three_per_side_child_mobys[] __asm__("D_L11_001DA710");
+/* Three child mobys per side, created and posed in loops of 6. */
+struct Moby *l11_three_per_side_child_mobys[6] __asm__("D_L11_001DA710") = {0};
+
 extern struct Moby *D_L11_00161F10[] MACRO_ADDR;
 extern struct Moby *D_L11_00161F20[] MACRO_ADDR;
 extern struct Moby *D_L11_00161F30[] MACRO_ADDR;

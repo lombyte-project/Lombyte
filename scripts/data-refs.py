@@ -638,6 +638,25 @@ def find_declaration(label: str, files: list[Path]) -> tuple[Path, str, str] | N
 
 
 @functools.lru_cache(maxsize=None)
+def array_typedefs() -> dict[str, tuple[str, list[int]]]:
+    """Array typedefs in include/ (typedef f32 MeshPoint[3];): name -> element type, counts."""
+    found = {}
+    for path in sorted((ROOT / "include").rglob("*.h")):
+        for base, name, dims in re.findall(r"^typedef\s+(\w+)\s+(\w+)((?:\[(?:0x[0-9A-Fa-f]+|\d+)\])+);",
+                                           path.read_text(errors="replace"), re.M):
+            found[name] = (base, [int(n, 0) for n in re.findall(r"\[(\w+)\]", dims)])
+    return found
+
+
+def expand_array_typedef(elem: str, counts: list[int]) -> tuple[str, list[int]]:
+    """An array of an array typedef is written as the nested array it names."""
+    while elem in array_typedefs():
+        elem, inner = array_typedefs()[elem]
+        counts = counts + inner
+    return elem, counts
+
+
+@functools.lru_cache(maxsize=None)
 def level_symbols(level: int) -> dict[int, str]:
     """address -> name a level pointer can be written as: the level's
     functions and declared level data, and the executable's declarations."""
@@ -649,6 +668,8 @@ def level_symbols(level: int) -> dict[int, str]:
         for name, label in re.findall(rf'([A-Za-z_]\w*)[ \t]*(?:\[[^\]]*\])*[ \t]*__asm__\("({tag}[0-9A-Fa-f]{{8}})"\)',
                                       path.read_text(errors="replace")):
             symbols.setdefault(int(label[-8:], 16), name)
+        for label in re.findall(rf"\b({tag}[0-9A-F]{{8}})\b", path.read_text(errors="replace")):
+            symbols.setdefault(int(label[-8:], 16), label)
     return symbols
 
 
@@ -678,6 +699,7 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | Non
     counts = [int(n, 0) for n in re.findall(r"\[(0x[0-9A-Fa-f]+|\d+)\]", ctype)]
     if ctype.count("[") != len(counts):
         raise SystemExit(f"{ctype!r} has no complete size")
+    elem, counts = expand_array_typedef(elem, counts)
     record = re.sub(r"^(struct|union)\s+", "", elem)
     include = (header.relative_to(ROOT / "include").as_posix()
                if header.is_relative_to(ROOT / "include") else None)

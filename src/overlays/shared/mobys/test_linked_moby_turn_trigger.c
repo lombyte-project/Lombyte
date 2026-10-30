@@ -7,6 +7,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/overlay/l11/mobys/distance_faded_scroll_effect_globals.h"
 /* Recognize the active vendor object state. */
 
 int test_linked_moby_turn_trigger(struct Moby *moby) __asm__("FUN_L11_0030f270");
@@ -18,12 +19,12 @@ int test_linked_moby_turn_trigger(struct Moby *moby) {
     return 0;
 }
 
-extern void FUN_L00_001fde98(int, int, int, void *, int);
-extern void FUN_L08_00258090(void *, int, int, void *);
-extern Pair D_L11_00162628[] MACRO_ADDR;
-extern int  oil_tanker_front_texture_2b_batch_pair_sources[] __asm__("D_L11_00217710");
-extern int  oil_tanker_front_texture_2b_batch_triplet_sources[] __asm__("D_L11_002176F8");
-void        queue_oil_tanker_front_texture_2b_batches(int pair_index) __asm__("FUN_L11_0031e858");
+extern void       FUN_L00_001fde98(int, MeshPoint *, u32 *, void *, int);
+extern void       FUN_L08_00258090(void *, MeshUv *, int, void *);
+extern Pair       D_L11_00162628[] MACRO_ADDR;
+extern MeshUv    *oil_tanker_front_texture_2b_batch_pair_sources[5] __asm__("D_L11_00217710");
+extern MeshPoint *oil_tanker_front_texture_2b_batch_triplet_sources[5] __asm__("D_L11_002176F8");
+void queue_oil_tanker_front_texture_2b_batches(int pair_index) __asm__("FUN_L11_0031e858");
 
 void queue_oil_tanker_front_texture_2b_batches(int pair_index) {
     int i;
