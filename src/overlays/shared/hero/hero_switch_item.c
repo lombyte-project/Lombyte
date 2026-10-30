@@ -1096,10 +1096,10 @@ extern char D_0013F990[];
 void update_hero_held_items_and_orientation(void) __asm__("FUN_L00_0020e728");
 
 void update_hero_held_items_and_orientation(void) {
-    struct Hero *owner = &hero;
+    struct Hero *hero_item_animation_state = &hero;
     int          slot_index;
 
-    if (owner->item_anim_active != 0 && owner->unk20AA != 0) {
+    if (hero_item_animation_state->item_anim_active != 0 && hero_item_animation_state->unk20AA != 0) {
         if (get_ammo(-1) == 0) {
             cancel_hero_item_animation();
         }
@@ -1143,11 +1143,11 @@ void update_hero_held_items_and_orientation(void) {
                 } else {
                     approach_value((float *)(*current + 8), 0.0f, frame_scale * 0.07f);
                 }
-                owner = &hero;
+                hero_item_animation_state = &hero;
                 if (*(float *)(*slot + 8) != 0.0f) {
                     continue;
                 }
-                release_moby_animation_slot((u8 *)owner->moby, slot);
+                release_moby_animation_slot((u8 *)hero_item_animation_state->moby, slot);
                 return;
             } else {
                 approach_value((float *)(*current + 8), 1.0f, frame_scale * 0.2f);
