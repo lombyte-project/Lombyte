@@ -22,9 +22,9 @@ extern float D_L12_0015F3FC;
 
 #include "rnc/overlay/l12/mobys/water_reservoir_globals.h"
 
-extern float water_reservoir_angle_rate_degrees_gp __asm__("D_L12_001619CC") __attribute__((sda));
-int          D_L12_001619D0 = 105;
-extern float water_reservoir_random_offset_radius_gp __asm__("D_L12_001619D4") __attribute__((sda));
+float water_reservoir_angle_rate_degrees_gp __asm__("D_L12_001619CC") = 1.8e+02f;
+int   water_reservoir_transition_frames __asm__("D_L12_001619D0") = 105;
+float water_reservoir_random_offset_radius_gp __asm__("D_L12_001619D4") = 0.25f;
 
 #include "rnc/overlay/l12/mobys/water_reservoir_data/water_reservoir_update_3.h"
 
@@ -38,7 +38,7 @@ int D_L12_001619F8 = 0x10022;
 
 #include "rnc/overlay/l12/mobys/water_reservoir_data/water_reservoir_update.h"
 
-extern float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") __attribute__((sda));
+float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") = 6.0f;
 
 void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
 
@@ -62,10 +62,10 @@ void water_reservoir_update(struct Moby *moby) {
 active:
     if (moby->command & 8) {
         moby->command = 1;
-        *(int *)&data[1] = scale_game_frames(D_L12_001619D0);
+        *(int *)&data[1] = scale_game_frames(water_reservoir_transition_frames);
     } else if (moby->command & 4) {
         moby->command = 2;
-        *(int *)&data[1] = scale_game_frames(D_L12_001619D0);
+        *(int *)&data[1] = scale_game_frames(water_reservoir_transition_frames);
     }
     data[0] = fast_add_rotations(data[0],
                                  water_reservoir_angle_rate_degrees_gp * 0.017453292f * frame_time);
@@ -76,10 +76,10 @@ update:
         if (fast_dec_timer((int *)&data[1]) == 0) {
             if (moby->command & 1) {
                 fraction = 1.0f - convert_integer_to_float(*(int *)&data[1]) /
-                                      convert_integer_to_float(D_L12_001619D0);
+                                      convert_integer_to_float(water_reservoir_transition_frames);
             } else {
                 fraction = convert_integer_to_float(*(int *)&data[1]) /
-                           convert_integer_to_float(D_L12_001619D0);
+                           convert_integer_to_float(water_reservoir_transition_frames);
             }
             if (random_float_between(0.0f, 1.0f) < fraction) {
                 random_vector(pos, 0.0f, water_reservoir_random_offset_radius_gp);

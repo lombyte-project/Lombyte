@@ -129,11 +129,11 @@ typedef struct {
     s32            unk90;
 } ElectroidProbe;
 
-extern f32  veldin_robot_probe_length_gp __asm__("D_L00_00161BE4") __attribute__((sda));
-s32         D_L00_00161BE8 = 3;
-extern f32  veldin_robot_probe_heading_offset_gp __asm__("D_L00_00161BEC") __attribute__((sda));
-extern Vec4 D_L00_00166DC0;
-extern s32  D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
+f32                 veldin_robot_probe_length_gp __asm__("D_L00_00161BE4") = 5.0f;
+s32                 veldin_robot_beam_hit_frames __asm__("D_L00_00161BE8") = 3;
+f32                 veldin_robot_probe_heading_offset_gp __asm__("D_L00_00161BEC") = -0.15f;
+extern Vec4         D_L00_00166DC0;
+extern s32          D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
 extern Path        *toad_paths[] __asm__("D_L00_001B04B0");
 extern Vec4         zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
@@ -347,7 +347,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         }
         set_beam_origin_transform_and_endpoint(moby, mtx, &dir);
         if (moby->unk70 & 2) {
-            if (vars->timer++ == D_L00_00161BE8) {
+            if (vars->timer++ == veldin_robot_beam_hit_frames) {
                 release_beam_slot_by_id(moby);
                 moby->state = 6;
                 ELECTROID_ANIM(moby, 12, scale_game_frames_s32(10));
@@ -430,9 +430,9 @@ extern void trooper_anim_update(ElectroidMoby *, void *) __asm__("FUN_L00_0025d4
 extern void trooper_anim_finish(ElectroidMoby *, void *) __asm__("FUN_L00_0025d538");
 extern s32  select_moby_combat_target(ElectroidMoby *, f32, void *) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_0025ff38(ElectroidMoby *, void *, s32, s32, void *, s32, f32);
-extern f32  veldin_robot_default_target_range_gp __asm__("D_L00_00161BD0") __attribute__((sda));
-extern f32  veldin_robot_knockback_xy_scale_gp __asm__("D_L00_00161BDC") __attribute__((sda));
-extern f32  veldin_robot_knockback_z_scale_gp __asm__("D_L00_00161BE0") __attribute__((sda));
+f32         veldin_robot_default_target_range_gp __asm__("D_L00_00161BD0") = 24.0f;
+f32         veldin_robot_knockback_xy_scale_gp __asm__("D_L00_00161BDC") = 1e+01f;
+f32         veldin_robot_knockback_z_scale_gp __asm__("D_L00_00161BE0") = 9.5f;
 
 void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
     ElectroidVars *vars;

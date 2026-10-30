@@ -88,12 +88,15 @@ struct Shot5BD0 {
 extern char                *D_L04_0015FFD8;
 extern char *D_L04_00173FD8 NOT_SDA;
 extern char                 D_L04_00166E00[];
-extern char                 blarg_trooper_missing_path_fields_format[] __asm__("D_L04_001DBC80");
-extern float                vector_length_xy(void *);
-extern int                  DebugPrint();
-extern int                  rand(void);
-extern void                 record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
-extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
+
+char blarg_trooper_missing_path_fields_format[86] __asm__("D_L04_001DBC80") =
+    "moby 427, instance %d requires both path fields to run!!! DELETING MOBY FROM LEVEL!!\n";
+
+extern float vector_length_xy(void *);
+extern int   DebugPrint();
+extern int   rand(void);
+extern void  record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
+extern void  update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void spawn_blarg_trooper_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 void        destroy_blarg_trooper(struct Moby *arg) __asm__("FUN_L04_002c4808");
 extern int  func_L00_002594C8_o(void *, void *, void *, float, float, float, float, int) __asm__("FUN_L00_00258490");

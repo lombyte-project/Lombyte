@@ -31,13 +31,19 @@ extern s32  current_vu_chain __asm__("D_00160F0C");
 extern s32  surface_height_tiles __asm__("D_00161190");
 extern s32  occl_cell_table __asm__("D_00161194");
 extern s32  occl_cell_count __asm__("D_00161198");
-extern void (*draw_callback_funcs[])(s32) __asm__("D_0018DB40");
-extern s32 draw_callback_args[] __asm__("D_0018DC40");
-extern void (*draw_callback2_funcs[])(s32) __asm__("D_0018DD40");
-extern s32 draw_callback2_args[] __asm__("D_0018DE40");
-extern u8  occl_visibility[] __asm__("D_00193FC0");
-extern u8  hud_chan_slots[] __asm__("D_00199B60");
-extern u8  point_light_data[] __asm__("D_0019C3C0");
-extern u8  tie_light_data[] __asm__("D_001E3200");
+/* Draw callbacks and their arguments: add_draw_callback and
+   enqueue_callback_list_4 take at most 0x40 of each. */
+extern void (*draw_callback_funcs[0x40])(s32) __asm__("D_0018DB40");
+extern s32 draw_callback_args[0x40] __asm__("D_0018DC40");
+extern void (*draw_callback2_funcs[0x40])(s32) __asm__("D_0018DD40");
+extern s32 draw_callback2_args[0x40] __asm__("D_0018DE40");
+/* Occlusion visibility bits for this frame (0x400 cells), and the OR of
+   the grids around the camera they are built from: build_occlusion_visibility
+   fills both with 0x80-byte copies, zeroes and ORs. */
+extern u8 occl_visibility[0x80] __asm__("D_00193FC0");
+extern u8 occl_visibility_merged[0x80] __asm__("D_00194040");
+extern u8 hud_chan_slots[] __asm__("D_00199B60");
+extern u8 point_light_data[] __asm__("D_0019C3C0");
+extern u8 tie_light_data[] __asm__("D_001E3200");
 
 #endif /* LOMBYTE_RNC_RENDERING_RENDER_GLOBALS_H */

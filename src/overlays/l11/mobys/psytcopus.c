@@ -76,11 +76,11 @@ extern char                    D_L11_001677C0[];
 
 extern float psytcopus_projectile_forward_offset_length_gp __asm__("D_L11_00161FC8")
     __attribute__((sda));
-extern float psytcopus_projectile_z_offset_gp __asm__("D_L11_00161FCC") __attribute__((sda));
-void         handle_psytcopus_hits(struct Moby *m) __asm__("FUN_L11_00310698");
-extern void  FUN_L00_00263ac8_0180(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
-extern void  FUN_L00_0025a120_p(struct Moby *) __asm__("FUN_L00_0025a120");
-extern int   is_value_within_interpolated_window(struct Moby *, float) __asm__("FUN_00214cc8");
+float       psytcopus_projectile_z_offset_gp __asm__("D_L11_00161FCC") = 1.0f;
+void        handle_psytcopus_hits(struct Moby *m) __asm__("FUN_L11_00310698");
+extern void FUN_L00_00263ac8_0180(struct Moby *, int, void *, float) __asm__("FUN_L00_00263ac8");
+extern void FUN_L00_0025a120_p(struct Moby *) __asm__("FUN_L00_0025a120");
+extern int  is_value_within_interpolated_window(struct Moby *, float) __asm__("FUN_00214cc8");
 extern void *
 spawn_class_511_moby_with_sparks(struct Moby *, void *, int) __asm__("FUN_L11_00318d10");
 extern void set_moby_state_two_data_and_timer(void *, void *) __asm__("FUN_L11_00318e98");
@@ -394,3 +394,5 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         psytcopus_vars->target = D_001413D0;
     }
 }
+
+float psytcopus_projectile_forward_offset_length_gp __asm__("D_L11_00161FC8") = 2.0f;

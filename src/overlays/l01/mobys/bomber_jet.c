@@ -211,9 +211,9 @@ typedef struct {
     GunshipMoby *moby;
 } GunshipHit;
 
-extern f32 gunship_min_scale __asm__("D_L01_00161BD0") __attribute__((sda));
-extern f32 gunship_far_dist __asm__("D_L01_00161BD4") __attribute__((sda));
-extern f32 gunship_near_dist __asm__("D_L01_00161BD8") __attribute__((sda));
+f32 gunship_min_scale __asm__("D_L01_00161BD0") = 0.5f;
+f32 gunship_far_dist __asm__("D_L01_00161BD4") = 2e+02f;
+f32 gunship_near_dist __asm__("D_L01_00161BD8") = 2e+01f;
 
 GunshipTargets gunship_no_targets __asm__("D_L01_00161BE0") = {
     {-1, -1, -1, -1}

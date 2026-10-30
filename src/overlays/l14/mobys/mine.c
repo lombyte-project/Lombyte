@@ -46,9 +46,9 @@ extern char mine_missing_path_error_format[] __asm__("D_L14_001FCA98");
 
 extern char mine_empty_path_error_format[] __asm__("D_L14_001FCAD8");
 
-extern f32 mine_path_step_rate_gp __asm__("D_L14_00161C44") __attribute__((sda));
+f32 mine_path_step_rate_gp __asm__("D_L14_00161C44") = 6.0f;
 
-extern f32 mine_glow_pulse_phase_step_gp __asm__("D_L14_00161C48") __attribute__((sda));
+f32 mine_glow_pulse_phase_step_gp __asm__("D_L14_00161C48") = 0.05235988f;
 
 extern float FUN_L00_00257c48(float, float);
 

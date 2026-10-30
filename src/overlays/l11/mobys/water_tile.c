@@ -12,25 +12,13 @@
 #include "rnc/overlay/shared/props/pool_set_scale.h"
 #include "rnc/overlay/shared/props/pool_init_tiles.h"
 #include "rnc/overlay/shared/rendering/render_water_grids.h"
+#include "rnc/overlay/water_grid.h"
 
 extern void
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
-/* D_L11_001DA880 rows (0x1190 bytes each); see FUN_L11_0030e730 and FUN_L11_0030e088 */
-typedef struct {
-    float          x;
-    float          y;
-    float          z;
-    unsigned char  n[8];
-    int            unk14;
-    int            unk18;
-    unsigned char  unk1C;
-    unsigned char  unk1D;
-    unsigned short unk1E;
-    char           rest[0x1170];
-} Ent;
-
-extern Ent D_L11_001DA880[];
+/* The level's 20 water grids: pool_init_tiles/pool_flush/render_water_grids all take 20 (0x14),
+   and the neighbour scan loops over 20 rows. */
 void populate_water_tile_neighbor_indices(int selected_tile_index) __asm__("FUN_L11_0030e730");
 
 void populate_water_tile_neighbor_indices(int arg) __asm__("FUN_L11_0030e730");
@@ -59,7 +47,10 @@ extern Light_e088 l11_water_tile_light __asm__("D_L11_001CB280");
 int               D_L11_00161F64 = 0;
 char              D_L11_0021B4C0[] =
     "I'm really sorry, but you can't have more than 128 water tiles in this level";
-extern char  water_tile_binding_records[] __asm__("D_L11_001DA740");
+/* One fixed-point bounds record (pool_bind_tile: x, y, z, two scale shorts) per water grid;
+   the pool reads 20 of them (D_L11_001612D8 = 20 next to their base). */
+int water_tile_binding_records[20][4] __asm__("D_L11_001DA740") = {0};
+
 extern float water_light_heading_reference[] __asm__("D_L11_001808C0");
 extern void *D_L11_001612D0;
 extern void *l11_water_tile_binding_record_base __asm__("D_L11_001612D4");
@@ -76,7 +67,7 @@ extern int   check_scaled_vector_bsphere(float, void *) __asm__("FUN_L01_0027569
 void         render_level_11_water_grids(void) __asm__("FUN_L11_0030e708");
 extern void  add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
-/* Tile moby: claims a D_L11_001DA880 row on spawn (row 0 also sets up the shared light block), then moves
+/* Tile moby: claims a water grid row on spawn (row 0 also sets up the shared light block), then moves
    up or down once its switch fires and throws random sparks; row 0 flushes the visible rows each frame. */
 void update_water_tile(struct Moby *water_tile_moby) __asm__("FUN_L11_0030e088");
 
@@ -106,9 +97,9 @@ void update_water_tile(struct Moby *water_tile_moby) {
             Light_e088 *water_tile_light;
             float       light_direction_angle;
             for (i = 19; i >= 0; i--) {
-                D_L11_001DA880[i].unk1E = 0;
+                l11_water_grids[i].visible_subtiles = 0;
             }
-            pool_init_tiles(D_L11_001DA880, 20);
+            pool_init_tiles(l11_water_grids, 20);
             pool_set_scale(1.0f);
             water_tile_light = &l11_water_tile_light;
             water_tile_light->unk0 = 16.0f;
@@ -128,7 +119,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
             water_tile_light->unk2C = 0x39;
             water_tile_light->unk3C = 0x1C;
             water_tile_light->unk3D = 0x40;
-            D_L11_001612D0 = D_L11_001DA880;
+            D_L11_001612D0 = l11_water_grids;
             l11_water_tile_binding_record_base = water_tile_binding_records;
             D_L11_001612D8 = 20;
             D_L11_0016120C = 32768.0f;
@@ -136,16 +127,16 @@ void update_water_tile(struct Moby *water_tile_moby) {
             D_L11_00161214 = 48.0f;
             D_L11_00161208 = 0;
         }
-        D_L11_001DA880[water_tile_vars[1]].x = water_tile_moby->pos.x;
-        D_L11_001DA880[water_tile_vars[1]].y = water_tile_moby->pos.y;
-        D_L11_001DA880[water_tile_vars[1]].z = water_tile_moby->pos.z;
-        D_L11_001DA880[water_tile_vars[1]].unk14 = 0x38;
-        D_L11_001DA880[water_tile_vars[1]].unk18 = 0x39;
-        D_L11_001DA880[water_tile_vars[1]].unk1C = 0x1C;
-        D_L11_001DA880[water_tile_vars[1]].unk1D = 0x44;
-        D_L11_001DA880[water_tile_vars[1]].unk1E = 0xFFFF;
-        pool_bind_tile(&D_L11_001DA880[water_tile_vars[1]],
-                       water_tile_binding_records + water_tile_vars[1] * 16);
+        l11_water_grids[water_tile_vars[1]].x = water_tile_moby->pos.x;
+        l11_water_grids[water_tile_vars[1]].y = water_tile_moby->pos.y;
+        l11_water_grids[water_tile_vars[1]].z = water_tile_moby->pos.z;
+        l11_water_grids[water_tile_vars[1]].texture_id = 0x38;
+        l11_water_grids[water_tile_vars[1]].second_texture_id = 0x39;
+        l11_water_grids[water_tile_vars[1]].alpha_2_fix = 0x1C;
+        l11_water_grids[water_tile_vars[1]].alpha_1_fix = 0x44;
+        l11_water_grids[water_tile_vars[1]].visible_subtiles = 0xFFFF;
+        pool_bind_tile(&l11_water_grids[water_tile_vars[1]],
+                       water_tile_binding_records[water_tile_vars[1]]);
         water_tile_moby->state = 1;
         break;
     case WATER_TILE_STATE_FIND_NEIGHBORS:
@@ -169,9 +160,9 @@ void update_water_tile(struct Moby *water_tile_moby) {
             synchronize_linked_moby_heights(water_tile_moby);
         }
         if (random_integer_below(200) == 0) {
-            float x = D_L11_001DA880[water_tile_vars[1]].x + random_float_between(-4.0f, 4.0f);
+            float x = l11_water_grids[water_tile_vars[1]].x + random_float_between(-4.0f, 4.0f);
             float y = random_float_between(-4.0f, 4.0f);
-            Ent  *t = &D_L11_001DA880[water_tile_vars[1]];
+            WaterGrid *t = &l11_water_grids[water_tile_vars[1]];
             pool_splash(x, t->y + y, 1.0f, -0.03f, t, 1, 1);
         }
         break;
@@ -191,9 +182,9 @@ void update_water_tile(struct Moby *water_tile_moby) {
             synchronize_linked_moby_heights(water_tile_moby);
         }
         if (random_integer_below(200) == 0) {
-            float x = D_L11_001DA880[water_tile_vars[1]].x + random_float_between(-4.0f, 4.0f);
+            float x = l11_water_grids[water_tile_vars[1]].x + random_float_between(-4.0f, 4.0f);
             float y = random_float_between(-4.0f, 4.0f);
-            Ent  *t = &D_L11_001DA880[water_tile_vars[1]];
+            WaterGrid *t = &l11_water_grids[water_tile_vars[1]];
             pool_splash(x, t->y + y, 1.0f, -0.03f, t, 1, 1);
         }
         break;
@@ -204,12 +195,12 @@ void update_water_tile(struct Moby *water_tile_moby) {
             tile_query_has_result = 1.0f;
         }
         if (tile_query_has_result == 0.0f) {
-            D_L11_001DA880[water_tile_vars[1]].unk1E = 0;
+            l11_water_grids[water_tile_vars[1]].visible_subtiles = 0;
         } else {
-            D_L11_001DA880[water_tile_vars[1]].unk1E = 0xFFFF;
+            l11_water_grids[water_tile_vars[1]].visible_subtiles = 0xFFFF;
         }
         if (water_tile_vars[1] == 0) {
-            pool_flush(D_L11_001DA880, 20);
+            pool_flush(l11_water_grids, 20);
             add_draw_callback(render_level_11_water_grids, water_tile_moby);
         }
     }
@@ -217,7 +208,7 @@ void update_water_tile(struct Moby *water_tile_moby) {
 
 /* Draw callback the water tiles queue: renders the level's water grids. */
 void render_level_11_water_grids(void) {
-    render_water_grids(D_L11_001DA880, 0x14);
+    render_water_grids(l11_water_grids, 0x14);
 }
 /* Level overlay code; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
 
@@ -226,43 +217,45 @@ void render_level_11_water_grids(void) {
 
 void populate_water_tile_neighbor_indices(int selected_tile_index) {
     int i;
-    D_L11_001DA880[selected_tile_index].n[0] = 0xFF;
-    D_L11_001DA880[selected_tile_index].n[2] = 0xFF;
-    D_L11_001DA880[selected_tile_index].n[1] = 0xFF;
-    D_L11_001DA880[selected_tile_index].n[3] = 0xFF;
-    D_L11_001DA880[selected_tile_index].n[4] = 0xFF;
-    D_L11_001DA880[selected_tile_index].n[5] = 0xFF;
-    D_L11_001DA880[selected_tile_index].n[6] = 0xFF;
-    D_L11_001DA880[selected_tile_index].n[7] = 0xFF;
+    l11_water_grids[selected_tile_index].neighbors[0] = 0xFF;
+    l11_water_grids[selected_tile_index].neighbors[2] = 0xFF;
+    l11_water_grids[selected_tile_index].neighbors[1] = 0xFF;
+    l11_water_grids[selected_tile_index].neighbors[3] = 0xFF;
+    l11_water_grids[selected_tile_index].neighbors[4] = 0xFF;
+    l11_water_grids[selected_tile_index].neighbors[5] = 0xFF;
+    l11_water_grids[selected_tile_index].neighbors[6] = 0xFF;
+    l11_water_grids[selected_tile_index].neighbors[7] = 0xFF;
     for (i = 0; i < 20; i++) {
         if (selected_tile_index != i) {
-            Ent  *tile_table = D_L11_001DA880;
-            Ent  *selected_tile = &tile_table[selected_tile_index];
-            float x = selected_tile->x - tile_table[i].x;
-            float y = selected_tile->y - tile_table[i].y;
+            WaterGrid *tile_table = l11_water_grids;
+            WaterGrid *selected_tile = &tile_table[selected_tile_index];
+            float      x = selected_tile->x - tile_table[i].x;
+            float      y = selected_tile->y - tile_table[i].y;
             if (absolute_float(x) < 0.1f) {
                 if (absolute_float(y - 16.0f) < 0.1f)
-                    selected_tile->n[0] = i;
+                    selected_tile->neighbors[0] = i;
                 if (absolute_float(y + 16.0f) < 0.1f)
-                    selected_tile->n[2] = i;
+                    selected_tile->neighbors[2] = i;
             } else if (absolute_float(y) < 0.1f) {
                 if (absolute_float(x - 16.0f) < 0.1f)
-                    selected_tile->n[1] = i;
+                    selected_tile->neighbors[1] = i;
                 if (absolute_float(x + 16.0f) < 0.1f)
-                    selected_tile->n[3] = i;
+                    selected_tile->neighbors[3] = i;
             } else {
                 if (absolute_float(x + 16.0f) < 0.1f) {
                     if (absolute_float(y - 16.0f) < 0.1f)
-                        selected_tile->n[5] = i;
+                        selected_tile->neighbors[5] = i;
                     if (absolute_float(y + 16.0f) < 0.1f)
-                        selected_tile->n[7] = i;
+                        selected_tile->neighbors[7] = i;
                 } else if (absolute_float(x - 16.0f) < 0.1f) {
                     if (absolute_float(y - 16.0f) < 0.1f)
-                        selected_tile->n[4] = i;
+                        selected_tile->neighbors[4] = i;
                     if (absolute_float(y + 16.0f) < 0.1f)
-                        selected_tile->n[6] = i;
+                        selected_tile->neighbors[6] = i;
                 }
             }
         }
     }
 }
+
+WaterGrid l11_water_grids[20] = {0};

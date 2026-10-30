@@ -11,7 +11,7 @@
 #include "rnc/camera/camera_spring.h"
 #include "sda.h"
 
-/* Camera blocks FUN_L01_00314e98 resets (camera + 0x70 and its preset row in D_L01_0015EF50) */
+/* Camera blocks FUN_L01_00314e98 resets (camera + 0x70 and its preset row in l01_camera_preset_rows) */
 typedef struct {
     Vec4 pos; /* 0x00 */
     u8   pad10[0x30];
@@ -79,7 +79,7 @@ typedef struct {
     CameraOrbit  *orbit;   /* 0x70 */
     CameraControl control; /* 0x74 */
     u8            pad80[4];
-    s16           preset; /* 0x84: row of D_L01_0015EF50 */
+    s16           preset; /* 0x84: row of l01_camera_preset_rows */
 } Camera;
 
 /* A camera path: the point count, then 16-byte points */
@@ -107,7 +107,7 @@ typedef struct {
     CameraPreset *preset; /* 0x1C */
 } CameraPresetRow;
 
-extern CameraPresetRow *D_L01_0015EF50;
+extern CameraPresetRow *l01_camera_preset_rows __asm__("D_L01_0015EF50");
 extern s32              FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
 /* Resets the camera's orbit, focus, spring, view and track from fixed values; for a kind 2 preset it
@@ -118,7 +118,7 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     Vec4           at;
     s32            seg;
     f32            path_fraction_or_length;
-    CameraPreset  *preset = D_L01_0015EF50[destination_camera->preset].preset;
+    CameraPreset  *preset = l01_camera_preset_rows[destination_camera->preset].preset;
     CameraControl *control;
     CameraFocus   *focus;
     CameraSpring  *spring;
@@ -297,7 +297,7 @@ typedef struct {
     short unk84;
 } Cam;
 
-extern CameraPresetRow *D_L01_0015EF50_macro __asm__("D_L01_0015EF50") MACRO_ADDR;
+extern CameraPresetRow *l01_camera_preset_rows_macro __asm__("D_L01_0015EF50") MACRO_ADDR;
 extern LevelSpline     *l01_splines_macro __asm__("D_L01_0015F70C") MACRO_ADDR;
 extern float            camera_basis_reference_direction[] __asm__("D_L01_001672B0");
 extern float            cam_interp_values(float a, float b, float *p, float c, float d, float e);
@@ -320,7 +320,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     SubA         *look = &data->a;
     SubB         *follow = &data->b;
     SubC         *progress = &data->c;
-    CameraPreset *params = D_L01_0015EF50_macro[camera_to_update->unk84].preset;
+    CameraPreset *params = l01_camera_preset_rows_macro[camera_to_update->unk84].preset;
     float         rate = 0.01f;
     int           mode = params->kind;
     int           path_index = params->track_path;
@@ -541,7 +541,7 @@ extern OvlVec4                D_0013F3D0_315de0 __asm__("D_0013F3D0");
 void initialize_camera_transform_and_paths(Camera *destination_camera) __asm__("FUN_L01_00315de0");
 
 void initialize_camera_transform_and_paths(Camera *destination_camera) {
-    CameraPresetRow *rows = D_L01_0015EF50;
+    CameraPresetRow *rows = l01_camera_preset_rows;
     Camera          *source_camera = D_L01_00167284;
     CameraPreset    *camera_preset = rows[destination_camera->preset].preset;
     OvlVec4          at, delta, to_camera;
@@ -595,14 +595,14 @@ typedef struct {
     u8  pad00[0x7E];
     s16 mode; /* 0x7E: set to 3 or 5 */
     u8  pad80[4];
-    s16 slot;  /* 0x84: index into D_L01_0015EF50 */
+    s16 slot;  /* 0x84: index into l01_camera_preset_rows */
     s16 unk86; /* 0x86: compared with hero.unk2284 */
 } CamUser;
 
 void update_camera_mode_from_preset(CamUser *camera_user) __asm__("FUN_L01_00316030");
 
 void update_camera_mode_from_preset(CamUser *camera_user) {
-    CameraPreset *camera_preset = D_L01_0015EF50[camera_user->slot].preset;
+    CameraPreset *camera_preset = l01_camera_preset_rows[camera_user->slot].preset;
 
     if (hero.unk2284 == camera_user->unk86) {
         if (camera_preset->target < 0) {

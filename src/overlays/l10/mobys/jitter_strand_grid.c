@@ -19,8 +19,8 @@ extern s32           D_L10_00161D68;
 extern int   D_L10_00161D64;
 extern int   D_L10_00161D68;
 extern float D_L10_00161D54 __attribute__((sda));
-extern float jitter_strand_row_y_span_gp __asm__("D_L10_00161D58") __attribute__((sda));
-extern float jitter_strand_phase_advance_rate_gp __asm__("D_L10_00161D5C") __attribute__((sda));
+float        jitter_strand_row_y_span_gp __asm__("D_L10_00161D58") = 2.5f;
+float        jitter_strand_phase_advance_rate_gp __asm__("D_L10_00161D5C") = 2.0f;
 
 typedef struct {
     Vec4 pos[4][30][20];

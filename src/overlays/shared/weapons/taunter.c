@@ -102,32 +102,32 @@ void update_taunter_effect_slots(void *source_moby) __asm__("FUN_L00_002b7398");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 void        FUN_L00_002b7568_c(void) __asm__("FUN_L00_002b7568");
 
-extern int   D_0015EEA4;
-extern s32   D_0015EEA4;
-extern s32   D_L00_0015F5CC;
-extern u32   D_0013C940[];
-extern Ring  D_00141680;
-extern Moby *D_001ABA00_b6bc8[] __asm__("D_L00_001ABA00");
-extern s16   D_L00_001B07B0[] __asm__("D_L00_001B07B0");
-extern E8690 D_L00_001DB440[];
-extern int   D_L00_001614D0;
-extern float D_L00_001614DC;
-extern char  D_L00_001614E0[] MACRO_ADDR;
-extern int   taunter_effect_spawn_interval_frames_gp __asm__("D_L00_001614B0") __attribute__((sda));
-extern float taunter_effect_travel_distance_gp __asm__("D_L00_001614B4") __attribute__((sda));
-extern float taunter_effect_travel_speed_gp __asm__("D_L00_001614B8") __attribute__((sda));
-extern unsigned short D_L00_001614BC __attribute__((sda));
+extern int            D_0015EEA4;
+extern s32            D_0015EEA4;
+extern s32            D_L00_0015F5CC;
+extern u32            D_0013C940[];
+extern Ring           D_00141680;
+extern Moby          *D_001ABA00_b6bc8[] __asm__("D_L00_001ABA00");
+extern s16            D_L00_001B07B0[] __asm__("D_L00_001B07B0");
+extern E8690          D_L00_001DB440[];
+extern int            D_L00_001614D0;
+extern float          D_L00_001614DC;
+extern char           D_L00_001614E0[] MACRO_ADDR;
+int                   taunter_effect_spawn_interval_frames_gp __asm__("D_L00_001614B0") = 10;
+float                 taunter_effect_travel_distance_gp __asm__("D_L00_001614B4") = 1e+01f;
+float                 taunter_effect_travel_speed_gp __asm__("D_L00_001614B8") = 2e+01f;
+extern unsigned short taunter_effect_quad_alpha __asm__("D_L00_001614BC") __attribute__((sda));
 extern int            D_L00_001614D0_macro[] __asm__("D_L00_001614D0") MACRO_ADDR;
 extern E_2b7568       D_L00_001DB440_lui[] __asm__("D_L00_001DB440") NOT_SDA;
 extern V_2b7568       D_L00_001614E0_2b7568[] __asm__("D_L00_001614E0")
     __attribute__((section(".sdata")));
 extern f32      D_L00_001614DC;
-extern s32      D_L00_001614BC_gp __asm__("D_L00_001614BC") __attribute__((sda));
+s32             taunter_effect_quad_alpha_gp __asm__("D_L00_001614BC") = 20;
 extern V_2b7568 D_0013F5E0_2b7568 __asm__("D_0013F5E0");
 extern V_2b7568 D_L00_001DB400[] NOT_SDA;
-extern f32      taunter_effect_quad_final_scale_gp __asm__("D_L00_001614C8") __attribute__((sda));
-extern f32      taunter_effect_quad_initial_scale_gp __asm__("D_L00_001614C4") __attribute__((sda));
-extern u32      taunter_effect_quad_rgb_gp __asm__("D_L00_001614C0") __attribute__((sda));
+f32             taunter_effect_quad_final_scale_gp __asm__("D_L00_001614C8") = 1e+01f;
+f32             taunter_effect_quad_initial_scale_gp __asm__("D_L00_001614C4") = 0.3f;
+u32             taunter_effect_quad_rgb_gp __asm__("D_L00_001614C0") = 0x7f5050;
 
 f32 D_L15_001D034C[1] __attribute__((section(".data"))) = {0};
 
@@ -578,7 +578,7 @@ void update_taunter_effect_slots(void *source_moby) {
                 if (effect_slot->c == 0) {
                     D_L00_001614D0 = scale_game_frames(taunter_effect_spawn_interval_frames_gp);
                     av = *(unsigned short *)&D_L00_001614D0_macro[2];
-                    effect_slot->b = D_L00_001614BC;
+                    effect_slot->b = taunter_effect_quad_alpha;
                     effect_slot->c = 1;
                     effect_slot->a = av;
                     effect_slot->f = 0;
@@ -646,7 +646,8 @@ void draw_taunter_effect_quads(u8 *source_moby) {
                  fade_factor;
         col = (taunter_effect_quad_rgb_gp & 0xFFFFFF) |
               (truncate_float_to_s32(
-                   (convert_integer_to_float(D_L00_001614BC_gp) - 0.0f) * fade_factor + 0.0f)
+                   (convert_integer_to_float(taunter_effect_quad_alpha_gp) - 0.0f) * fade_factor +
+                   0.0f)
                << 24);
         quad.color[3] = col;
         quad.color[2] = col;

@@ -54,10 +54,13 @@ extern float spark_emitter_base_uvs[][2] __asm__("D_L15_001CE2D0");
 extern float spark_emitter_second_quad_vertex_template[4][4] __asm__("D_L15_001CE2F0");
 extern float spark_emitter_first_quad_vertex_template[4][4] __asm__("D_L15_001CE330");
 
-extern int spark_emitter_alpha_a_by_pass_parity[2] __asm__("D_L15_001614D8") __attribute__((sda));
-extern int spark_emitter_alpha_b_by_pass_parity[2] __asm__("D_L15_001614E0") __attribute__((sda));
-extern int spark_emitter_alpha_c_by_pass_parity[2] __asm__("D_L15_001614E8") __attribute__((sda));
-extern int spark_emitter_alpha_d_by_pass_parity[2] __asm__("D_L15_001614F0") __attribute__((sda));
+int spark_emitter_alpha_a_by_pass_parity[2] __asm__("D_L15_001614D8") = {0, 1};
+
+int spark_emitter_alpha_b_by_pass_parity[2] __asm__("D_L15_001614E0") = {2, 0};
+
+int spark_emitter_alpha_c_by_pass_parity[2] __asm__("D_L15_001614E8") = {2, 2};
+
+int spark_emitter_alpha_d_by_pass_parity[2] __asm__("D_L15_001614F0") = {1, 2};
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3DD0), where it is exact; names translated to the US level program. */
 

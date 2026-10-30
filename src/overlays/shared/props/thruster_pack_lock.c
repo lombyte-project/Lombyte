@@ -10,6 +10,7 @@
 #include "rnc/overlay/level_path.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/overlay/water_grid.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/random.h"
@@ -33,13 +34,12 @@ void synchronize_linked_moby_heights(char *moby) {
     short *moby_index_cursor = D_L11_001AC240[MOBY(moby)->group];
     int    base = D_L11_0015FFD8;
     do {
-        int   i = (*moby_index_cursor & 0x7FFF) * 256;
-        char *linked_moby = (char *)(i + base);
-        char *destination_record;
+        int        i = (*moby_index_cursor & 0x7FFF) * 256;
+        char      *linked_moby = (char *)(i + base);
+        WaterGrid *grid;
         MOBY(linked_moby)->pos.z = MOBY(moby)->pos.z;
-        destination_record =
-            D_L11_001DA880 + *(int *)(((char *)MOBY(linked_moby)->pvars) + 4) * 0x1190;
-        *(float *)(destination_record + 8) = MOBY(moby)->pos.z;
+        grid = &l11_water_grids[*(int *)(((char *)MOBY(linked_moby)->pvars) + 4)];
+        grid->z = MOBY(moby)->pos.z;
     } while (*moby_index_cursor++ >= 0);
 }
 
@@ -87,8 +87,8 @@ extern s32           allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern unsigned char D_0013F350[];
 s32                  FUN_L00_00203908(s32 a, s32 b);
 extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
-extern LvState       D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
-extern LvState       D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
+extern LvState       D_L11_001BBC30;
+extern LvState       D_L11_001BAFD0;
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
 
 void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
@@ -107,7 +107,7 @@ void thruster_pack_lock_update(Lock *moby) {
         ((Stats *)(D_00141968_r))->best = 0;
         *(unsigned short *)(vars + 0x3E) |= 8;
         if (level == 0xB && moby->bB0 != 0xFF) {
-            if (D_L11_001BBF40_3102C8.collected[(short)moby->uid] != 0 ||
+            if (D_L11_001BBC30.collected[(short)moby->uid] != 0 ||
                 ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (level << 8))) >>
                   (moby->uid & 0x1F)) &
                  1)) {
@@ -127,13 +127,13 @@ void thruster_pack_lock_update(Lock *moby) {
             if (current_level_index == 0xB && moby->bB0 != 0xFF) {
                 int group;
                 int group_index;
-                D_L11_001BB2E0_3102C8.collected[(short)moby->uid] = moby->bB0 + 2;
+                D_L11_001BAFD0.collected[(short)moby->uid] = moby->bB0 + 2;
                 group = moby->bB0;
                 group_index = group & 0xFF;
                 if (group == 0xFF ||
                     (D_L11_0015FD08_3102C8[group_index] != 0xFF &&
                      (visited52)[group_index + (current_level_index << 4)] == 0xFF)) {
-                    D_L11_001BBF40_3102C8.collected[(short)moby->uid] = group + 2;
+                    D_L11_001BBC30.collected[(short)moby->uid] = group + 2;
                 }
             }
             moby->state = 2;
@@ -195,8 +195,8 @@ void thruster_pack_lock_update(Lock *moby) {
 /* Builds one GIF packet for a rotated textured sprite and advances the packet pointer. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003121C0), where it is exact; names translated to the US level program. */
 
-extern int D_L11_001611C0 MACRO_ADDR;
-extern unsigned char      screen_extent_c[] __asm__("D_0013E500");
+extern int           l11_gif_packet_cursor __asm__("D_L11_001611C0") MACRO_ADDR;
+extern unsigned char screen_extent_c[] __asm__("D_0013E500");
 
 void append_rotated_textured_screen_quad(float x,
                                          float y,
@@ -271,12 +271,12 @@ void append_rotated_textured_screen_quad(float x,
     fast_vec_sub(top_right, center, horizontal);
     qcopy(bottom_right, center);
 
-    *(int *)(D_L11_001611C0 + 0) = 0x10000007;
+    *(int *)(l11_gif_packet_cursor + 0) = 0x10000007;
     green_bits = green_bits << 8;
     rgba = rgba | green_bits;
     gif_dma_tag = 0x50000007;
     gif_regs = 0x53535353106;
-    *(int *)(D_L11_001611C0 + 4) = 0;
+    *(int *)(l11_gif_packet_cursor + 4) = 0;
     blue_bits = blue_bits << 16;
     rgba = rgba | blue_bits;
     alpha_bits = alpha_bits << 24;
@@ -284,15 +284,15 @@ void append_rotated_textured_screen_quad(float x,
     tex_size = 0x100010;
     gif_tag = 0xB400000000008001;
     rgba = rgba | alpha_bits;
-    *(int *)(D_L11_001611C0 + 8) = 0;
+    *(int *)(l11_gif_packet_cursor + 8) = 0;
     scale = 16.0f;
     u_end = texture_width << 4;
     v_end = texture_height << 20;
     packed_depth = (unsigned long)depth << 32;
-    *(int *)(D_L11_001611C0 + 12) = gif_dma_tag;
-    tag = (char *)D_L11_001611C0;
+    *(int *)(l11_gif_packet_cursor + 12) = gif_dma_tag;
+    tag = (char *)l11_gif_packet_cursor;
     packet = (unsigned long *)(tag + 0x10);
-    D_L11_001611C0 = (int)packet;
+    l11_gif_packet_cursor = (int)packet;
     *(unsigned long *)(tag + 0x10) = gif_tag;
     packet[1] = gif_regs;
     packet[2] = texture_packet_value;
@@ -332,7 +332,7 @@ void append_rotated_textured_screen_quad(float x,
     }
 
     /* Fakematch: the store through the address keeps the reload after the last packet store. */
-    *(char **)&D_L11_001611C0 += 0x70;
+    *(char **)&l11_gif_packet_cursor += 0x70;
 }
 
 /* Draws four quads with the angle advanced by a quarter turn each time. */
@@ -797,7 +797,6 @@ void update_moby_hit_stats_and_state(char *moby) {
 
 /* Queues a GIF packet that draws a line strip through the given points, scaled and offset to the screen. */
 typedef unsigned int u128_ad0 __attribute__((mode(TI)));
-extern int           D_L11_001611C0_lui __asm__("D_L11_001611C0");
 extern int           screen_extent[] __asm__("D_0013E500");
 
 extern u128_ad0 l11_screen_triangle_strip_setup_gif_tag_template __asm__("D_L11_001608E0");
@@ -822,31 +821,31 @@ void append_scaled_screen_triangle_strip(short             *pts,
     unsigned long long *vertex_payload;
     int                 x, y;
     int                 i;
-    *(int *)(D_L11_001611C0 + 0) = packet_qword_count | 0x10000000;
-    *(int *)(D_L11_001611C0 + 4) = 0;
-    *(int *)(D_L11_001611C0 + 8) = 0;
-    *(int *)(D_L11_001611C0 + 12) = packet_qword_count | 0x50000000;
+    *(int *)(l11_gif_packet_cursor + 0) = packet_qword_count | 0x10000000;
+    *(int *)(l11_gif_packet_cursor + 4) = 0;
+    *(int *)(l11_gif_packet_cursor + 8) = 0;
+    *(int *)(l11_gif_packet_cursor + 12) = packet_qword_count | 0x50000000;
     {
-        char *dma_header = (char *)D_L11_001611C0;
-        D_L11_001611C0 = (int)(dma_header + 0x10);
-        qcopy((void *)D_L11_001611C0, &l11_screen_triangle_strip_setup_gif_tag_template);
+        char *dma_header = (char *)l11_gif_packet_cursor;
+        l11_gif_packet_cursor = (int)(dma_header + 0x10);
+        qcopy((void *)l11_gif_packet_cursor, &l11_screen_triangle_strip_setup_gif_tag_template);
         *(short *)(dma_header + 0x10) = -0x7FFF;
     }
     {
         unsigned long long *primitive_payload =
-            (unsigned long long *)((char *)D_L11_001611C0 + 0x10);
-        D_L11_001611C0 = (int)primitive_payload;
+            (unsigned long long *)((char *)l11_gif_packet_cursor + 0x10);
+        l11_gif_packet_cursor = (int)primitive_payload;
         primitive_payload[0] = 0x144;
         primitive_payload[1] = prim;
     }
     {
-        char *saved_packet_cursor = (char *)D_L11_001611C0;
-        D_L11_001611C0 = (int)(saved_packet_cursor + 0x10);
-        qcopy((void *)D_L11_001611C0, &l11_screen_triangle_strip_vertex_gif_tag_template);
+        char *saved_packet_cursor = (char *)l11_gif_packet_cursor;
+        l11_gif_packet_cursor = (int)(saved_packet_cursor + 0x10);
+        qcopy((void *)l11_gif_packet_cursor, &l11_screen_triangle_strip_vertex_gif_tag_template);
         *(short *)(saved_packet_cursor + 0x10) = point_count - 0x8000;
     }
-    D_L11_001611C0 += 0x10;
-    vertex_payload = (unsigned long long *)D_L11_001611C0;
+    l11_gif_packet_cursor += 0x10;
+    vertex_payload = (unsigned long long *)l11_gif_packet_cursor;
     for (i = 0; i < point_count; i++) {
         x = truncate_float_to_s32((convert_integer_to_float(pts[i * 2]) * scale + x0) * 16.0f);
         y = truncate_float_to_s32((convert_integer_to_float(pts[i * 2 + 1]) * scale + y0) * 16.0f);
@@ -854,7 +853,7 @@ void append_scaled_screen_triangle_strip(short             *pts,
                             ((unsigned long long)(y + screen_extent[5] - 8) << 16) |
                             ((unsigned long long)col << 32);
     }
-    D_L11_001611C0 += ((point_count + 1) / 2) * 16;
+    l11_gif_packet_cursor += ((point_count + 1) / 2) * 16;
 }
 
 extern float

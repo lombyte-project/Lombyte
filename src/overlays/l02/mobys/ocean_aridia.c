@@ -7,6 +7,7 @@
 #include "rnc/rendering/lights/refresh_point_light.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/interpolated_frame_packet.h"
 
 #include "rnc/overlay/l02/mobys/ocean_aridia_globals.h"
 
@@ -74,15 +75,16 @@ void begin_animated_frame_rendering(float x,
     FUN_L02_002101b8(animated_frame_scratchpad_dma_source, 0x70002800, 0xF8);
 }
 
-extern char D_L02_001673C0[];
-extern char aridia_ocean_first_clip_draw_data[] __asm__("D_L02_001F3C00");
-extern char aridia_ocean_last_clip_draw_data[] __asm__("D_L02_001F3C60");
-extern char aridia_ocean_middle_clip_first_draw_data[] __asm__("D_L02_001F3CD0");
-extern char D_L02_001F3D30[];
-extern char D_L02_001F3D90[];
-extern char D_L02_001F3DD0[];
-extern char aridia_ocean_middle_clip_last_draw_data[] __asm__("D_L02_001F3E10");
-extern char aridia_ocean_animated_frame_packet[] __asm__("D_L02_001F3E80");
+extern char             D_L02_001673C0[];
+extern char             aridia_ocean_first_clip_draw_data[] __asm__("D_L02_001F3C00");
+extern char             aridia_ocean_last_clip_draw_data[] __asm__("D_L02_001F3C60");
+extern char             aridia_ocean_middle_clip_first_draw_data[] __asm__("D_L02_001F3CD0");
+extern char             D_L02_001F3D30[];
+extern char             D_L02_001F3D90[];
+extern char             D_L02_001F3DD0[];
+extern char             aridia_ocean_middle_clip_last_draw_data[] __asm__("D_L02_001F3E10");
+InterpolatedFramePacket aridia_ocean_animated_frame_packet __asm__("D_L02_001F3E80") = {0};
+
 /* prepare_scaled_table_on_stack as the draw calls it: retail does not set the scale register first. */
 extern void prepare_scaled_table_on_stack_unset_scale(void) __asm__("FUN_L02_002a47f8");
 
@@ -94,7 +96,7 @@ void draw_aridia_ocean_parts(struct Moby *moby) {
     int *clip_volume_indices = (int *)moby->pvars;
 
     begin_animated_frame_rendering(
-        0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, aridia_ocean_animated_frame_packet);
+        0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, &aridia_ocean_animated_frame_packet);
     if (aridia_ocean_clip_culling_override != 0 ||
         (clip_volume_indices[0] != -1 &&
          is_point_inside_clip_volume(D_L02_001673C0, clip_volume_indices[0]))) {

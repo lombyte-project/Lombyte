@@ -170,7 +170,7 @@ extern Own  D_L00_001B86C8;
 
 #include "rnc/overlay/shared/ui/menus/initialize_pause_menu_globals.h"
 
-extern f32 pause_menu_initial_vector_gp __asm__("D_L00_00160280") __attribute__((sda));
+f32 pause_menu_initial_vector_gp __asm__("D_L00_00160280") = 0.7155f;
 
 #include "rnc/overlay/shared/ui/menus/initialize_pause_menu_data/initialize_pause_menu.h"
 
@@ -681,8 +681,9 @@ typedef struct {
     int  h;
 } PageMobyData;
 
-extern s32  pause_menu_page_render_enabled[] __asm__("D_L00_001B23C0");
-extern s32  pause_menu_rectangle_color_gp __asm__("D_L00_00160270") __attribute__((sda));
+extern s32 pause_menu_page_render_enabled[] __asm__("D_L00_001B23C0");
+extern s32 pause_menu_rectangle_color_gp __asm__("D_L00_00160270")
+    __attribute__((sda)); /* RGBA, 0xAABBGGRR */
 extern long capture_texture_tex0 __asm__("D_0015EED0");
 extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
 extern void append_draw_buffer_upload_packets(s32, s32, s32) __asm__("FUN_L00_002a0fc8");

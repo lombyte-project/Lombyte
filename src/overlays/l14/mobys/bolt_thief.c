@@ -91,9 +91,9 @@ int update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80
 
 extern int update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80");
 
-extern float bolt_thief_path_spring_gain_gp __asm__("D_L14_00161FBC") __attribute__((sda));
+float bolt_thief_path_spring_gain_gp __asm__("D_L14_00161FBC") = 0.01f;
 
-extern float bolt_thief_path_spring_damping_gp __asm__("D_L14_00161FC0") __attribute__((sda));
+float bolt_thief_path_spring_damping_gp __asm__("D_L14_00161FC0") = 0.2f;
 
 extern void FUN_L00_00257470(void *, int, int);
 
@@ -313,7 +313,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
 
 extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
 
-extern float bolt_thief_default_path_sample_rate_gp __asm__("D_L14_00161FB8") __attribute__((sda));
+float bolt_thief_default_path_sample_rate_gp __asm__("D_L14_00161FB8") = 25.0f;
 
 extern void FUN_L00_00258278(char *, float, float *, float, float, float);
 

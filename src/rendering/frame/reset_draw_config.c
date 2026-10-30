@@ -16,3 +16,5 @@ void reset_draw_config(void) {
         entry -= 1;
     } while (remaining >= 0);
 }
+
+struct DrawConfig draw_config = {0};

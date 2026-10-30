@@ -22,9 +22,9 @@ extern float absolute_float(float);
 
 extern CameraOffsetEffect   camera_offset_effect __asm__("D_L02_00167600");
 extern float D_L02_0016760C NOT_SDA;
-extern short                D_L02_0016238C_gp __asm__("D_L02_0016238C") __attribute__((sda));
-extern char                 D_0013CA44[];
-extern short                D_L02_0016238C;
+extern short camera_offset_effect_duration_step_gp __asm__("D_L02_0016238C") __attribute__((sda));
+extern char  D_0013CA44[];
+extern short camera_offset_effect_duration_step __asm__("D_L02_0016238C");
 
 s32 D_L02_00167604[1] __attribute__((section(".data"))) = {0};
 
@@ -170,7 +170,8 @@ void update_camera_offset_effect_state(void) {
     CameraOffsetEffect *effect_state = &camera_offset_effect;
     effect_state->c = 10000.0f;
     if (effect_state->b == 0) {
-        float decremented_duration = effect_state->duration - *(float *)&D_L02_0016238C_gp;
+        float decremented_duration =
+            effect_state->duration - *(float *)&camera_offset_effect_duration_step_gp;
         effect_state->duration = decremented_duration;
         if (decremented_duration < 0.0f) {
             effect_state->duration = 0.0f;
@@ -220,7 +221,7 @@ void try_select_camera_offset_effect_moby(char *candidate_moby) {
                                 if (candidate_reference_angle_radians < 0.62831855f) {
                                     accumulated_amount =
                                         *(float *)(candidate_selection_state + 0xC) +
-                                        *(float *)&D_L02_0016238C;
+                                        *(float *)&camera_offset_effect_duration_step;
                                     *(char **)(camera_selection_context + 0x380) =
                                         selection_reference;
                                     *(float *)(candidate_selection_state + 8) = vector_distance;

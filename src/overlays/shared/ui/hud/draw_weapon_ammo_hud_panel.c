@@ -233,7 +233,7 @@ int update_hud_elements(int call) {
     return positive_timer_count;
 }
 
-extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
+extern int weapon_hud_updates_suspended_gp __asm__("D_L00_0015F968") __attribute__((sda));
 extern int D_L00_0015F96C;
 extern int D_L00_0015F970;
 extern int
@@ -246,7 +246,7 @@ extern void draw_hud_cropped_gauge_panel(void) __asm__("FUN_L00_0023a640");
 void update_weapon_hud_state(void) {
     struct Hero *hero_state;
     int          weapon_item_id, mode, k;
-    if (D_L00_0015F968_gp != 0) {
+    if (weapon_hud_updates_suspended_gp != 0) {
         return;
     }
     hero_state = &hero;
@@ -290,7 +290,7 @@ void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 
 void reset_hud_and_suspend_weapon_updates(void) {
     reset_hud_animation_channels();
-    D_L00_0015F968_gp = 1;
+    weapon_hud_updates_suspended_gp = 1;
     D_L00_0015F970 = -1;
     D_L00_0015F96C = 0;
 }

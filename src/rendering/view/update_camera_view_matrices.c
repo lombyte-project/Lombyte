@@ -9,9 +9,9 @@
 #include "rnc/camera/update_cam.h"
 #include "rnc/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/rendering/view/sky_view_matrix.h"
 
 extern u8 D_0018CD00[];
-extern u8 sky_view_mtx[] __asm__("D_0018CF80");
 
 extern void sceVu0UnitMatrix(void *);
 extern void SceVu0RotMatrixX(void *, void *, f32);
@@ -97,10 +97,12 @@ void update_camera_view_matrices(void) {
                     &camera_view_matrices->view_matrices[0x100 / 4],
                     camera_view_matrices);
     qcopy(sky_view_mtx, camera_view_matrices);
-    qcopy(sky_view_mtx + 0x10, &camera_view_matrices->view_matrices[0x10 / 4]);
-    qcopy(sky_view_mtx + 0x20, &camera_view_matrices->view_matrices[0x20 / 4]);
-    fast_vec_scale(sky_view_mtx + 0x30, &camera_view_matrices->position, 1024.0f);
-    *(f32 *)(sky_view_mtx + 0x3C) = 1024.0f;
+    qcopy(sky_view_mtx[1], &camera_view_matrices->view_matrices[0x10 / 4]);
+    qcopy(sky_view_mtx[2], &camera_view_matrices->view_matrices[0x20 / 4]);
+    fast_vec_scale(sky_view_mtx[3], &camera_view_matrices->position, 1024.0f);
+    sky_view_mtx[3][3] = 1024.0f;
 }
 
 extern __typeof__(update_camera_view_matrices) func_001F2260 __attribute__((alias("FUN_001f2260")));
+
+f32 sky_view_mtx[4][4] = {0};

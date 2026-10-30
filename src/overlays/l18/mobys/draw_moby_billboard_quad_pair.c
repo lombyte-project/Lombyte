@@ -40,13 +40,27 @@ extern float l18_billboard_quad_pair_first_corner_scale_base __asm__("D_L18_0016
     __attribute__((sda));
 extern float l18_billboard_quad_pair_second_corner_scale_base __asm__("D_L18_001620AC")
     __attribute__((sda));
-extern Vec130  D_L18_001677C0 __asm__("D_L18_001677C0") NOT_SDA;
-extern Vec130  D_L18_001D9CA0[] __asm__("D_L18_001D9CA0") NOT_SDA;
-extern UVec130 D_L18_001D9CE0[] __asm__("D_L18_001D9CE0") NOT_SDA;
-extern void    vscl_ec130(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void    vmul_ec130(float, void *, void *) __asm__("FUN_001f9a68");
-extern float   randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern void    draw_ec130(void *, void *, int) __asm__("FUN_001f7d30");
+extern Vec130 D_L18_001677C0 __asm__("D_L18_001677C0") NOT_SDA;
+
+/* One corner and one (u, v) per quad corner (both draw loops run i < 4). */
+Vec130 billboard_quad_pair_corners[4] __asm__("D_L18_001D9CA0") = {
+    {{0.0f, -1.0f, 1.0f, 1.0f}},
+    {{0.0f, -1.0f, -1.0f, 1.0f}},
+    {{0.0f, 1.0f, 1.0f, 1.0f}},
+    {{0.0f, 1.0f, -1.0f, 1.0f}},
+};
+
+UVec130 billboard_quad_pair_uvs[4] __asm__("D_L18_001D9CE0") = {
+    {0},
+    {0.0f, 1.0f},
+    {1.0f, 0.0f},
+    {1.0f, 1.0f},
+};
+
+extern void  vscl_ec130(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void  vmul_ec130(float, void *, void *) __asm__("FUN_001f9a68");
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
+extern void  draw_ec130(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_moby_billboard_quad_pair(void *mv) __asm__("FUN_L18_002ec130");
 
@@ -79,10 +93,10 @@ void draw_moby_billboard_quad_pair(void *mv) {
     quad.color[0] = uniform_quad_color;
     corner_scale = l18_billboard_quad_pair_first_corner_scale_base + randf_sym(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
-        vmul_ec130(corner_scale, &quad.corner[i], &D_L18_001D9CA0[i]);
+        vmul_ec130(corner_scale, &quad.corner[i], &billboard_quad_pair_corners[i]);
         transform_vector(&quad.corner[i], &quad.corner[i], &quad_transform[0]);
-        quad.uv[i].u = D_L18_001D9CE0[i].u;
-        quad.uv[i].v = D_L18_001D9CE0[i].v;
+        quad.uv[i].u = billboard_quad_pair_uvs[i].u;
+        quad.uv[i].v = billboard_quad_pair_uvs[i].v;
     }
     draw_ec130(&quad, 0, 0);
     uniform_quad_color = D_L18_00162054;
@@ -92,10 +106,10 @@ void draw_moby_billboard_quad_pair(void *mv) {
     quad.color[0] = uniform_quad_color;
     corner_scale = l18_billboard_quad_pair_second_corner_scale_base + randf_sym(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
-        vmul_ec130(corner_scale, &quad.corner[i], &D_L18_001D9CA0[i]);
+        vmul_ec130(corner_scale, &quad.corner[i], &billboard_quad_pair_corners[i]);
         transform_vector(&quad.corner[i], &quad.corner[i], &quad_transform[0]);
-        quad.uv[i].u = D_L18_001D9CE0[i].u;
-        quad.uv[i].v = D_L18_001D9CE0[i].v;
+        quad.uv[i].u = billboard_quad_pair_uvs[i].u;
+        quad.uv[i].v = billboard_quad_pair_uvs[i].v;
     }
     draw_ec130(&quad, 0, 0);
 }

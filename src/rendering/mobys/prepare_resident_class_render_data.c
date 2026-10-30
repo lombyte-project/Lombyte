@@ -204,3 +204,14 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header,
 
 extern __typeof__(prepare_resident_class_render_data) func_00203338
     __attribute__((alias("FUN_00203338")));
+
+/* The moby texture tables sit in front of the material maps in retail .data. */
+s32 moby_texture_lookup_table[256] = {0};
+
+struct TexRemap moby_gs_loc_stash[256] = {0};
+
+s32 D_001B6180[224] = {0};
+
+s32 moby_class_rectify[224] = {0};
+
+MaterialMap resident_class_material_maps[224] = {0};

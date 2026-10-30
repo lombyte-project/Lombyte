@@ -1,18 +1,12 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/mobys/resident_packed_direction.h"
 
-struct Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-};
-
-extern struct Vec3 resident_packed_direction __asm__("D_001CAA80");
-extern void        get_moby_light_direction(s32, f32 *) __asm__("FUN_0020d510");
-extern f32         fast_cos(f32) __asm__("func_001F9DC8");
-extern f32         fast_sin(f32) __asm__("func_001F9DE0");
-void               update_resident_packed_direction(void) __asm__("FUN_0020cfd0");
+extern void get_moby_light_direction(s32, f32 *) __asm__("FUN_0020d510");
+extern f32  fast_cos(f32) __asm__("func_001F9DC8");
+extern f32  fast_sin(f32) __asm__("func_001F9DE0");
+void        update_resident_packed_direction(void) __asm__("FUN_0020cfd0");
 
 void update_resident_packed_direction(void) {
     f32 angle_source_vector[4];
@@ -27,3 +21,5 @@ void update_resident_packed_direction(void) {
 
 extern __typeof__(update_resident_packed_direction) func_0020CFD0
     __attribute__((alias("FUN_0020cfd0")));
+
+Vec4f resident_packed_direction = {0};

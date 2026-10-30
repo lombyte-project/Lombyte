@@ -36,7 +36,7 @@ extern struct {
     unsigned char flag;
 } D_0013D408;
 
-extern s32 enemy_fighter_respawn_delay_frames_gp __asm__("D_L14_00161F5C") __attribute__((sda));
+s32 enemy_fighter_respawn_delay_frames_gp __asm__("D_L14_00161F5C") = 500;
 
 char D_L14_001FCE10[] = "Enemy Fighter (moby908) with no flyPath. UID: %d - RAR\n";
 

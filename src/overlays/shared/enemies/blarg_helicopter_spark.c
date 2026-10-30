@@ -79,7 +79,7 @@ extern char                 D_0013E533[];
 extern CollisionHit         coll_hit __asm__("D_L03_00173F60");
 extern char                 D_L03_00173F80[];
 extern float                frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
-extern float homing_spark_turn_rate_degrees_gp __asm__("D_L03_00161B30") __attribute__((sda));
+float                       homing_spark_turn_rate_degrees_gp __asm__("D_L03_00161B30") = 9e+01f;
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");

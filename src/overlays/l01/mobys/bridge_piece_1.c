@@ -40,8 +40,11 @@ extern s32 pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 
 #include "rnc/overlay/level_save_state.h"
 
-extern BurstColors l01_bridge_piece_debris_oclass_choices __asm__("D_L01_00161C60");
-extern void        FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
+BurstColors l01_bridge_piece_debris_oclass_choices __asm__("D_L01_00161C60") = {
+    {0x2b8, 0x2b9, 0x2ba}
+};
+
+extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 
 void bridge_piece_1_update(BurstMoby *self) __asm__("FUN_L01_002f9d80");
 

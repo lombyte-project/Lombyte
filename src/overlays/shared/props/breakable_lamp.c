@@ -47,10 +47,10 @@ struct Spark_c8e0 {
     } draw;
 };
 
-extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
+f32 breakable_lamp_tip_distance_gp __asm__("D_L05_00161FC8") = 4.0f;
 
-extern f32  debris_axis_launch_speed_gp __asm__("D_L05_00161FD0") __attribute__((sda));
-extern f32  debris_upward_launch_speed_gp __asm__("D_L05_00161FD4") __attribute__((sda));
+f32         debris_axis_launch_speed_gp __asm__("D_L05_00161FD0") = 0.075f;
+f32         debris_upward_launch_speed_gp __asm__("D_L05_00161FD4") = 0.08f;
 extern void allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern struct Moby *spawn_debris_c8e0(f32,
                                       struct Moby *,
@@ -117,7 +117,7 @@ void update_moby_glow_and_contact_explosion(struct Moby *moby) {
     if (hit == 0) {
         return;
     }
-    fast_vec_scale(&tip, &moby->rot_row2, D_L05_00161FC8_gp);
+    fast_vec_scale(&tip, &moby->rot_row2, breakable_lamp_tip_distance_gp);
     fast_vec_add(&tip, &moby->pos, &tip);
     if (!(*(s32 *)(hit + 0x24) & 0x800000) && !(fast_vec_dist(&tip, hit) <= 0.8f)) {
         if ((*(struct Moby **)(hit + 0x20))->oclass != 0x47) {
@@ -268,7 +268,7 @@ void draw_moby_glow_sprite(char *m) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    fast_vec_scale(sprite_offset, m + 0xE0, *(float *)&D_L05_00161FC8_gp);
+    fast_vec_scale(sprite_offset, m + 0xE0, *(float *)&breakable_lamp_tip_distance_gp);
     fast_vec_add(M[3], m + 0x10, sprite_offset);
     fast_vec_sub(M[0], D_L05_001671C0_lui, M[3]);
     fast_vec_normalize(M[0], M[0], 1.0f);

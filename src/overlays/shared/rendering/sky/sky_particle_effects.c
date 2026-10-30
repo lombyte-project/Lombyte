@@ -308,7 +308,8 @@ typedef struct {
 
 extern Sys *D_L00_0016051C_c3 __asm__("D_L00_0016051C");
 extern u32  D_L00_00160500_gp[1] __asm__("D_L00_00160500") __attribute__((sda));
-extern u32  sky_type2_base_colors[1] __asm__("D_L00_001604F0") __attribute__((sda));
+u32         sky_type2_base_colors[1] __asm__("D_L00_001604F0") = {0x386070};
+
 extern char D_L00_001BD7E0_lui[] __asm__("D_L00_001BD7E0") NOT_SDA;
 extern u8   D_L00_001BD7B0[] NOT_SDA;
 

@@ -182,10 +182,10 @@ extern int D_L16_001600EC;
 
 /* no foreign declaration */
 
-extern float triggered_scene_rotation_y_gp __asm__("D_L16_00161A8C") __attribute__((sda));
-void         compute_triggered_scene_path_pose(struct Moby *moby,
-                                               void        *out1,
-                                               float       *out2) __asm__("FUN_L16_002d6260");
+float triggered_scene_rotation_y_gp __asm__("D_L16_00161A8C") = 0.35f;
+void  compute_triggered_scene_path_pose(struct Moby *moby,
+                                        void        *out1,
+                                        float       *out2) __asm__("FUN_L16_002d6260");
 
 void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out2) {
     char *data = (char *)moby->pvars;

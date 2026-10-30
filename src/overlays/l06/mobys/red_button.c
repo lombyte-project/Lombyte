@@ -52,6 +52,7 @@ typedef struct Data_304098 {
 extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
 extern char         D_0013F3D0[] NOT_SDA;
 extern LevelCamera  l06_camera_lui __asm__("D_L06_00167400") NOT_SDA;
+
 extern void
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void allocate_voice_for_group_entry(int, int, void *) __asm__("FUN_0022dba0");
@@ -81,7 +82,7 @@ V6 D_L06_002019A0 = {
 
 extern V6    l06_red_button_particle_second_color_palette __asm__("D_L06_002019B8");
 extern float D_L06_001621B4 __attribute__((sda));
-extern int   red_button_particle_emission_count_gp __asm__("D_L06_001621B8") __attribute__((sda));
+int          red_button_particle_emission_count_gp __asm__("D_L06_001621B8") = 8;
 
 V6 l06_red_button_particle_second_color_palette __asm__("D_L06_002019B8") = {
     {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}

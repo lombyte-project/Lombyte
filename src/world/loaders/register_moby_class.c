@@ -36,4 +36,10 @@ void register_moby_class(MobyClassData *moby, s32 indexed_textures, s32 material
 
 extern __typeof__(register_moby_class) func_00203640 __attribute__((alias("FUN_00203640")));
 
+void *moby_class_resources[224] = {0};
+
+s32 moby_class_updates[224] = {0};
+
 s16 resident_class_id_by_slot[224] = {0};
+
+u8 resident_class_slot_by_id[0x800] = {0};

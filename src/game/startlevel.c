@@ -8,6 +8,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/game/transitions/do_space_transition.h"
+#include "rnc/game/startlevel.h"
 
 typedef struct {
     s32 off;
@@ -24,22 +25,16 @@ typedef struct {
     s32        code;
 } LevelHeader;
 
-typedef struct {
-    s32 pad[7];
-    s32 bank;
-} SoundSlot;
-
-extern s32                boot_level_active __asm__("D_0015F5E8") MACRO_ADDR;
-extern u8                 level_bss_start[] __asm__("D_00161280");
-extern s32                game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
-extern s32                boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR;
-extern s32                decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
-extern u8                 D_24135F[];
-extern s32                boot_intro_movie_ntsc[] __asm__("D_00139378");
-extern s32                boot_intro_movie_pal[] __asm__("D_00139380");
-extern char               loading_boot_sound_bank_message[] __asm__("D_001E76C0");
-extern volatile SoundSlot boot_sound_defs_b[] __asm__("D_001861E0");
-extern volatile SoundSlot *volatile level_sound_defs __asm__("D_0015F634");
+extern s32  boot_level_active __asm__("D_0015F5E8") MACRO_ADDR;
+extern u8   level_bss_start[] __asm__("D_00161280");
+extern s32  game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
+extern s32  boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR;
+extern s32  decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
+extern u8   D_24135F[];
+extern s32  boot_intro_movie_ntsc[] __asm__("D_00139378");
+extern s32  boot_intro_movie_pal[] __asm__("D_00139380");
+extern char loading_boot_sound_bank_message[] __asm__("D_001E76C0");
+extern volatile SoundDef *volatile level_sound_defs __asm__("D_0015F634");
 extern volatile s32 level_sound_def_count __asm__("D_0015F630");
 
 extern void init_once(void) __asm__("func_00201650");
@@ -82,11 +77,10 @@ static inline void clear_bytes(u8 *p, s32 n) {
 
 void startlevel(void) __asm__("FUN_001e9658");
 
-extern u8                 level_bss_end[] __asm__("D_00165430");
-extern volatile SoundSlot l00_primary_sound_defs[] __asm__("D_00186100");
-extern s32                game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
-extern s32                pal_mode_macro __asm__("D_0015ED80") MACRO_ADDR;
-extern s32                current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
+extern u8  level_bss_end[] __asm__("D_00165430");
+extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
+extern s32 pal_mode_macro __asm__("D_0015ED80") MACRO_ADDR;
+extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 
 void startlevel(void) {
     LevelHeader *hdr;
@@ -200,8 +194,8 @@ void startlevel(void) {
     l00_primary_sound_defs[5].bank = bank;
     boot_sound_defs_b[0].bank = bank;
     /* The ordinary view lets the last bank store fill the call delay slot. */
-    ((SoundSlot *)boot_sound_defs_b)[2].bank = bank;
-    ((SoundSlot *)boot_sound_defs_b)[3].bank = bank;
+    ((SoundDef *)boot_sound_defs_b)[2].bank = bank;
+    ((SoundDef *)boot_sound_defs_b)[3].bank = bank;
     boot_sound_defs_b[1].bank = bank;
     transition_do_transition();
     if (pal_mode_macro != requested_video_mode) {
@@ -218,3 +212,21 @@ void startlevel(void) {
 }
 
 extern __typeof__(startlevel) func_001E9658 __attribute__((alias("FUN_001e9658")));
+
+volatile SoundDef l00_primary_sound_defs[7] = {
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 8},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 9},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 2},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 3},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 4},
+};
+
+volatile SoundDef boot_sound_defs_b[5] = {
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 0},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 1},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 5},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 6},
+    {.unk4 = 128.0f, .near_volume = 0x400, .sound = 7},
+};

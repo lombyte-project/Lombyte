@@ -95,9 +95,9 @@ extern void update_joint_animation(float, float, void *, void *, int) __asm__("F
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
-extern G_q           D_L01_0016CCE0_q __asm__("D_L01_0016CCE0");
-extern unsigned char D_L01_0017C8C0_lui[] __asm__("D_L01_0017C8C0") NOT_SDA;
-extern float         cutscene_big_head_scale_gp __asm__("D_L01_00161D30") __attribute__((sda));
+extern G_q                      D_L01_0016CCE0_q __asm__("D_L01_0016CCE0");
+extern unsigned char            D_L01_0017C8C0_lui[] __asm__("D_L01_0017C8C0") NOT_SDA;
+float                           cutscene_big_head_scale_gp __asm__("D_L01_00161D30") = 2.1f;
 extern unsigned char D_0013DD42 NOT_SDA;
 extern char                     plumber_level_one_dialogue_data[] __asm__("D_L01_0020B600");
 extern char                     plumber_level_eight_dialogue_data[] __asm__("D_L01_00161D38");

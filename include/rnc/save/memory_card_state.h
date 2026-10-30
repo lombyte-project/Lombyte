@@ -114,10 +114,20 @@ enum MemoryCardWriteStep {
  * the save/load menus. port/slot/type/free/format are the sceMcGetInfo and
  * sceMcOpen arguments, cmd/result the sceMcSync outputs, state/sub the card
  * operation state machine. A save file holds a main block (read into
- * D_0014EED0, at most 0x1800 bytes) and 20 records (read into D_001506D0,
- * at most 0x1000 bytes each); the file header stores both sizes.
+ * memcard_game_data_buffer, at most 0x1800 bytes) and 20 records (read into
+ * memcard_level_data_buffer, at most 0x1000 bytes each); the file header
+ * stores both sizes.
  * Offset checks: memory_card_layout_check.c.
  */
+
+/* The card I/O buffers: memcard_update_state traps when the file header
+ * asks for more than these, then reads or writes the file through them;
+ * memcard_prepare_data / memcard_restore_data pack and unpack them. */
+#define MEMCARD_GAME_DATA_SIZE  0x1800
+#define MEMCARD_LEVEL_DATA_SIZE 0x1000
+
+extern u8 memcard_game_data_buffer[MEMCARD_GAME_DATA_SIZE] __asm__("D_0014EED0");
+extern u8 memcard_level_data_buffer[MEMCARD_LEVEL_DATA_SIZE] __asm__("D_001506D0");
 
 /* One save entry in the card directory listing (0x1C bytes, five per card). */
 struct MemoryCardSaveEntry {

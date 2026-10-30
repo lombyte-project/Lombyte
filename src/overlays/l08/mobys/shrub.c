@@ -26,7 +26,7 @@ void       spawn_shrub_parts(char *moby) __asm__("FUN_L08_002e8788");
 /* Re-aims the twelve child mobys of a parent, adjusts the parent's spin, then runs the children's follow-up. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E9F78), where it is exact; names translated to the US level program. */
 extern float D_0015ED6C;
-extern float shrub_part_spin_speed_degrees_gp __asm__("D_L08_00161D28") __attribute__((sda));
+float        shrub_part_spin_speed_degrees_gp __asm__("D_L08_00161D28") = 3e+01f;
 void         update_shrub_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e8ba0");
 extern u8    D_0014C050[];
 
@@ -52,8 +52,8 @@ typedef struct {
     s16               sound; /* 0x13E */
 } SwarmVars;
 
-extern s32                shrub_updates_disabled_gp __asm__("D_L08_00161D30") __attribute__((sda));
-extern f32                shrub_path_speed_gp __asm__("D_L08_00161D24") __attribute__((sda));
+s32                       shrub_updates_disabled_gp __asm__("D_L08_00161D30") = 0;
+f32                       shrub_path_speed_gp __asm__("D_L08_00161D24") = 5.0f;
 extern s32                level_game_mode __asm__("D_L08_0015F5C4");
 extern s64 D_L08_0016D090 NOT_SDA;
 extern void               spawn_shrub_parts(char *) __asm__("FUN_L08_002e8788");

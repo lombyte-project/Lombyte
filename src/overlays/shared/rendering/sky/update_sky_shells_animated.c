@@ -377,7 +377,7 @@ void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 
 #include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated_globals.h"
 
-extern float sky_shell_rotation_phase_step_gp __asm__("D_L00_001604C0") __attribute__((sda));
+float                         sky_shell_rotation_phase_step_gp __asm__("D_L00_001604C0") = 0;
 extern OvlQuad D_L00_00160520 MACRO_ADDR;
 void draw_sky_shells_with_rotation_and_scaling(void) __asm__("FUN_L00_0028b1a0");
 

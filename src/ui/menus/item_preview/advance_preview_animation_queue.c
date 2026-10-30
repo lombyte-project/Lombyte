@@ -26,3 +26,6 @@ s32 advance_preview_animation_queue(void) {
 
 extern __typeof__(advance_preview_animation_queue) func_00226670
     __attribute__((alias("FUN_00226670")));
+
+/* The queue: advance_preview_animation_queue shifts entries 1..7 down to 0..6. */
+PreviewAnimationRequest preview_animation_requests[8] = {0};

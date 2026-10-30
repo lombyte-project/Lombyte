@@ -23,8 +23,11 @@ extern int D_L10_0015F5CC;
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA0F0), where it is exact; names translated to the US level program. */
 
 extern char point_light_parameter_entries[] __asm__("D_L10_00180740");
-extern char path_spark_missing_path_message[] __asm__("D_L10_001DD120");
-extern int  allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
+
+char path_spark_missing_path_message[62] __asm__("D_L10_001DD120") =
+    "Moby947 maya instance %d HAS NO PATH!!!\n\n\nMoron.\nMobyDeleted\n";
+
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void    release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 unsigned char *spawn_path_spark_effect(int   source_moby,
                                        void *initial_position,

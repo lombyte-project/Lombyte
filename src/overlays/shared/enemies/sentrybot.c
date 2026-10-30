@@ -135,7 +135,7 @@ extern void set_sentrybot_attention_target(char *, struct Moby *) __asm__("FUN_L
 
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 
-extern float sentrybot_class_scale_multiplier_gp __asm__("D_L15_001613EC") __attribute__((sda));
+float sentrybot_class_scale_multiplier_gp __asm__("D_L15_001613EC") = 1.0f;
 
 extern char  D_001413F4[];
 extern short sentrybot_target_visibility_height_check_gate[] __asm__("D_0013F658");

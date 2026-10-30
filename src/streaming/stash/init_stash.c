@@ -36,3 +36,7 @@ void init_stash(void) {
 }
 
 extern __typeof__(init_stash) func_00232D00 __attribute__((alias("FUN_00232d00")));
+
+struct StashState stash_state = {0};
+
+struct StashEntry stash_entries[STASH_SLOT_COUNT] = {0};

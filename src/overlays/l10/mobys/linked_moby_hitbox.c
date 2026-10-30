@@ -109,9 +109,14 @@ extern int FUN_001fa6d0_2c9c70(float) __asm__("truncate_float_to_s32");
 extern int FUN_001f9740_2c9c70(int *) __asm__("FUN_001f9740");
 extern int D_0015ED84;
 
-extern char linked_moby_warning[] __asm__("D_L10_001DCDA0");
-extern char linked_moby_present_message[] __asm__("D_L10_001DCDD0");
-extern char linked_moby_missing_message[] __asm__("D_L10_001DCE00");
+char linked_moby_warning[46] __asm__("D_L10_001DCDA0") =
+    "Warning! moby 794 does not have effect moby!\n";
+
+char linked_moby_present_message[42] __asm__("D_L10_001DCDD0") =
+    "M794 %d trigger %d = moby %d (oClass %d)\n";
+
+char linked_moby_missing_message[36] __asm__("D_L10_001DCE00") =
+    "M794 %d trigger %d = NO MOBY! (-1)\n";
 
 void update_linked_moby_hitbox(struct Moby *moby) __asm__("FUN_L10_002c9c70");
 

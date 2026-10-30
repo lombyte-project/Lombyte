@@ -2389,3 +2389,7 @@ f32                           D_L18_00160260 = 0;
 unsigned char *D_L18_001B2A84 NOT_SDA = 0;
 
 unsigned char *D_L00_001B2084 NOT_SDA = 0;
+
+ParticleClearance particle_clearance __asm__("D_L00_00160258") = {0};
+
+f32 particle_min_ground __asm__("D_L00_00160260") = 0;

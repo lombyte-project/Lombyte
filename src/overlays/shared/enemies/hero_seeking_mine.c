@@ -36,26 +36,27 @@ extern int              D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") MACRO_ADD
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int   D_L15_00161AB8_lui __asm__("D_L15_00161AB8"); /* no foreign declaration */
-extern float group_moby_seeking_speed_gp __asm__("D_L15_001614B4") __attribute__((sda));
-extern int   group_moby_particle_color_gp __asm__("D_L15_001614B8") __attribute__((sda));
-extern float group_moby_particle_scale_gp __asm__("D_L15_001614BC") __attribute__((sda));
-extern int   group_moby_particle_lifetime_frames_gp __asm__("D_L15_001614C0") __attribute__((sda));
-extern float group_moby_effect_z_offset_gp __asm__("D_L15_001614C4") __attribute__((sda));
-extern void  spawn_moving_hero_relative_alpha_fade_particle(float        *pos,
-                                                            char         *vel,
-                                                            int           color,
-                                                            unsigned char life,
-                                                            unsigned char b,
-                                                            int           mode,
-                                                            float scale) __asm__("FUN_L00_002730e0");
-void         draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8");
+float        group_moby_seeking_speed_gp __asm__("D_L15_001614B4") = 1e+01f;
+int   group_moby_particle_color_gp __asm__("D_L15_001614B8") = 0x60206080; /* RGBA, 0xAABBGGRR */
+float group_moby_particle_scale_gp __asm__("D_L15_001614BC") = 0.25f;
+extern int  group_moby_particle_lifetime_frames_gp __asm__("D_L15_001614C0") __attribute__((sda));
+float       group_moby_effect_z_offset_gp __asm__("D_L15_001614C4") = 0.333f;
+extern void spawn_moving_hero_relative_alpha_fade_particle(float        *pos,
+                                                           char         *vel,
+                                                           int           color,
+                                                           unsigned char life,
+                                                           unsigned char b,
+                                                           int           mode,
+                                                           float scale) __asm__("FUN_L00_002730e0");
+void        draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8");
 
 extern void draw_group_moby_effect_quads(unsigned char *) __asm__("FUN_L15_002a29b8");
 extern void func_L00_0025A8E8_m(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
 extern float group_moby_effect_quad_vertices[4][4][4] __asm__("D_L15_001CE110");
 extern float group_moby_effect_quad_uvs[8] __asm__("D_L15_001CE210");
-extern int   group_moby_effect_first_quad_color_gp __asm__("D_L15_001614C8") __attribute__((sda));
+int          group_moby_effect_first_quad_color_gp __asm__("D_L15_001614C8") =
+    0x40602080; /* RGBA, 0xAABBGGRR */
 extern long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void      draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 

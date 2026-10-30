@@ -3,13 +3,13 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 
-extern int pause_default_action_list[] __asm__("D_001D22F8");
+#include "rnc/ui/menus/menu_pages.h"
 
 int update_level_selection_map_screen(void) __asm__("FUN_00221908");
 
 int update_level_selection_map_screen(void) {
     if (controller_state.pressed_unmasked & PAD_CROSS) {
-        menu_system.next = (struct MenuPage *)pause_default_action_list;
+        menu_system.next = &planet_confirm_page;
     }
     return 0;
 }

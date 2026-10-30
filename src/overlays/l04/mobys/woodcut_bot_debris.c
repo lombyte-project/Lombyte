@@ -34,8 +34,8 @@ typedef struct {
     PV2e5178 *pv;
 } M2e5178;
 
-extern f32  D_L04_00161D78_gp __asm__("D_L04_00161D78") __attribute__((sda));
-extern f32  D_L04_00161D7C_gp __asm__("D_L04_00161D7C") __attribute__((sda));
+f32         woodcut_debris_bounce_spin_min_degrees_gp __asm__("D_L04_00161D78") = 0;
+f32         woodcut_debris_bounce_spin_max_degrees_gp __asm__("D_L04_00161D7C") = 3.6e+02f;
 extern u128 coll_hit_normal_lui[] __asm__("D_L04_00174000") NOT_SDA;
 extern s32  coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 void        update_woodcut_bot_debris(M2e5178 *entity) __asm__("FUN_L04_002e5178");
@@ -67,8 +67,12 @@ void update_woodcut_bot_debris(M2e5178 *entity) {
                 reflect_vector(pv->vel, pv->vel, collision_normal);
                 fast_vec_scale(pv->vel, pv->vel, 0.75f);
                 pv->f20 = 0.0f;
-                pv->f24 = randf_sym(D_L04_00161D78_gp, D_L04_00161D7C_gp) * DEG_TO_RAD * frame_time;
-                pv->f28 = randf_sym(D_L04_00161D78_gp, D_L04_00161D7C_gp) * DEG_TO_RAD * frame_time;
+                pv->f24 = randf_sym(woodcut_debris_bounce_spin_min_degrees_gp,
+                                    woodcut_debris_bounce_spin_max_degrees_gp) *
+                          DEG_TO_RAD * frame_time;
+                pv->f28 = randf_sym(woodcut_debris_bounce_spin_min_degrees_gp,
+                                    woodcut_debris_bounce_spin_max_degrees_gp) *
+                          DEG_TO_RAD * frame_time;
             }
         }
         break;

@@ -30,9 +30,14 @@ typedef struct {
     u32 c[3];
 } Colors0720;
 
-int               D_L02_00161CC4 = 0x5f243632;
-int               D_L02_00161CC8 = 0x61311;
-extern Colors0720 l02_rocks_debris_colors __asm__("D_L02_00161CD0");
+/* Dust puff colours, RGBA words (0xAABBGGRR). */
+int rocks_dust_initial_color __asm__("D_L02_00161CC4") = 0x5f243632;
+int rocks_dust_secondary_color __asm__("D_L02_00161CC8") = 0x00061311;
+
+Colors0720 l02_rocks_debris_colors __asm__("D_L02_00161CD0") = {
+    {0x2b8, 0x2b9, 0x2ba}
+};
+
 /* Spark emitter; the size float is declared before the int lifetime (same registers) so the calls
  * run in retail order: colour index, size, lifetime. */
 extern void
@@ -84,8 +89,8 @@ void rocks_update(struct Moby *moby) {
                     spawn_effect_particle_with_target_scalar(
                         &pos,
                         &dir,
-                        D_L02_00161CC4,
-                        D_L02_00161CC8,
+                        rocks_dust_initial_color,
+                        rocks_dust_secondary_color,
                         random_float_between(1.5f, 3.5f) * 210000.0f,
                         scale_game_frames(random_int_between(0x78, 0xF0)));
                 });

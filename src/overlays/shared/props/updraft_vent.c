@@ -75,14 +75,18 @@ extern QuadCorner l10_animated_quad_first_base_corners[] __asm__("D_L10_001DA350
 extern float      quad_layer_uv_phase_divisors[][2] __asm__("D_L10_001DA270");
 extern float      quad_corner_base_uvs[][2] __asm__("D_L10_001DA2F0");
 
-extern int  quad_layer_colors[] __asm__("D_L10_001DA250");
-extern int  quad_layer_uv_cosine_selectors[][2] __asm__("D_L10_001DA2B0");
-extern s64  get_effect_texture(s32) __asm__("func_001F44B8");
-extern int  quad_layer_count_gp __asm__("D_L10_00161F40") __attribute__((sda));
-extern int  quad_layer_alpha_a_selectors[2] __asm__("D_L10_00161F48") __attribute__((sda));
-extern int  quad_layer_alpha_b_selectors[2] __asm__("D_L10_00161F50") __attribute__((sda));
-extern int  quad_layer_alpha_c_selectors[2] __asm__("D_L10_00161F58") __attribute__((sda));
-extern int  quad_layer_alpha_d_selectors[2] __asm__("D_L10_00161F60") __attribute__((sda));
+extern int quad_layer_colors[] __asm__("D_L10_001DA250");
+extern int quad_layer_uv_cosine_selectors[][2] __asm__("D_L10_001DA2B0");
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+int        quad_layer_count_gp __asm__("D_L10_00161F40") = 6;
+int        quad_layer_alpha_a_selectors[2] __asm__("D_L10_00161F48") = {0, 1};
+
+int quad_layer_alpha_b_selectors[2] __asm__("D_L10_00161F50") = {2, 0};
+
+int quad_layer_alpha_c_selectors[2] __asm__("D_L10_00161F58") = {2, 2};
+
+int quad_layer_alpha_d_selectors[2] __asm__("D_L10_00161F60") = {1, 2};
+
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 #define GS_ALPHA(a, b, k, d, fix)                                                 \

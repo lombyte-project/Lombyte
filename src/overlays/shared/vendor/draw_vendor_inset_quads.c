@@ -189,7 +189,7 @@ extern VendorMenu vendor_menu_lui __asm__("D_L00_001CA4C0") NOT_SDA;
 
 #include "rnc/overlay/shared/vendor/draw_vendor_inset_quads_globals.h"
 
-extern float vendor_hologram_v_scroll_offset_gp __asm__("D_L00_00161184") __attribute__((sda));
+float              vendor_hologram_v_scroll_offset_gp __asm__("D_L00_00161184") = 0;
 extern struct Quad D_L00_001CA480[] NOT_SDA;
 extern void        fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 

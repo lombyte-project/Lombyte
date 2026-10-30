@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/effects/space_effect_tables.h"
 #include "rnc/rendering/level_render_state.h"
 #include "sda.h"
 #include "eetypes.h"
@@ -9,8 +10,6 @@
 #include "rnc/globals.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-
-extern u128 spark_spawn_points_by_variant[][6] __asm__("D_001D9B60");
 
 extern s32
 spawn_spark(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");
@@ -55,3 +54,24 @@ void emit_six_spark_effects(u8 *source_object, f32 z) {
 }
 
 extern __typeof__(emit_six_spark_effects) func_0022F5B0 __attribute__((alias("FUN_0022f5b0")));
+
+f32 spark_spawn_points_by_variant[3][6][4] = {
+    { {1.1f, 0.0f, 0.7f, 0.0f},
+     {2.1f, 0.0f, 0.7f, 0.0f},
+     {-0.6f, -0.9f, 0.7f, 0.0f},
+     {-1.6f, -0.9f, 0.7f, 0.0f},
+     {-0.6f, 0.9f, 0.7f, 0.0f},
+     {-1.6f, 0.9f, 0.7f, 0.0f}  },
+    {{2.25f, 0.0f, 1.0f, 0.0f},
+     {3.5f, 0.0f, 1.0f, 0.0f},
+     {-0.25f, -1.25f, 1.0f, 0.0f},
+     {-1.25f, -1.25f, 1.0f, 0.0f},
+     {-0.25f, 1.25f, 1.0f, 0.0f},
+     {-1.25f, 1.25f, 1.0f, 0.0f}},
+    {{2.66f, 0.0f, 0.8f, 0.0f},
+     {4.33f, 0.0f, 0.8f, 0.0f},
+     {-2.0f, -3.2f, 0.8f, 0.0f},
+     {-2.0f, -1.5f, 0.8f, 0.0f},
+     {-2.0f, 3.2f, 0.8f, 0.0f},
+     {-2.0f, 1.5f, 0.8f, 0.0f}  },
+};

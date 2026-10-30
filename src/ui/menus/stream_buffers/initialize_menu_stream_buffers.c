@@ -74,3 +74,5 @@ void initialize_menu_stream_buffers(s32 mode) {
 
 extern __typeof__(initialize_menu_stream_buffers) func_00225AC0
     __attribute__((alias("FUN_00225ac0")));
+
+struct MenuStreamBuffer menu_stream_buffers[MENU_STREAM_BUFFER_COUNT] = {0};

@@ -80,7 +80,7 @@ void reset_frame_counters(void) {
 
 extern struct PadStateWords D_0013C940;
 
-extern int controller_idle_frames_gp __asm__("D_L00_00160FF0") __attribute__((sda));
+int        controller_idle_frames_gp __asm__("D_L00_00160FF0") = 0;
 extern int D_L00_0015F5CC;
 extern int D_0015EEA4;
 extern int D_L00_0015F598;
@@ -580,7 +580,6 @@ extern char          D_L00_0016CA40_lui[] __asm__("D_L00_0016CA40") NOT_SDA;
 extern unsigned char D_0015EDB0_298de8 __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB0_298de8b __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB4_298de8 __asm__("D_0015EDB4");
-extern float         D_L00_0015F5A0 __asm__("D_L00_0015F5A0");
 
 #include "rnc/overlay/level_camera.h"
 

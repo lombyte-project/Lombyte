@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/rendering/effects/space_effect_tables.h"
 #include "rnc/globals.h"
 #include "eetypes.h"
 #include "sda.h"
@@ -107,11 +108,6 @@ typedef struct {
     RenderArchiveTable *archive_table; /* 0x14 */
 } LevelRenderArchive;
 
-typedef struct {
-    u32 w0;
-    u32 w1;
-} ColorPair;
-
 #include "rnc/game/level_state.h"
 
 extern LevelRenderState level_render_state __asm__("D_0013E030");
@@ -138,10 +134,6 @@ extern LevelGameplayState   render_sequence_lui __asm__("D_0018CB20");
 extern LevelRenderObject   *D_0018CC98[];
 extern LevelProjectionState view_context __asm__("D_0018CD00");
 extern LevelRenderArchive   D_001940C0;
-extern ColorPair            warp_trail_colors[] __asm__("D_001D9A30");
-extern u128                 level_render_motion_vectors_by_mode[] __asm__("D_001D9AE0");
-extern f32                  level_render_depth_by_mode[] __asm__("D_001D9B30");
-extern f32                  cam_mode_min_fov[] __asm__("D_001D9B48");
 
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
@@ -358,3 +350,15 @@ void update_level_gameplay_frame(void) {
 }
 
 extern __typeof__(update_level_gameplay_frame) func_0022EAA8 __attribute__((alias("FUN_0022eaa8")));
+
+f32 level_render_motion_vectors_by_mode[5][4] = {
+    { 0.6f, 0.15f, 0.0f, 1.0f},
+    { 1.0f,  1.0f, 0.0f, 1.0f},
+    { 0.9f, -0.4f, 0.0f, 1.0f},
+    {-0.3f, -0.9f, 0.0f, 1.0f},
+    { 0.4f,  0.4f, 0.0f, 1.0f},
+};
+
+f32 level_render_depth_by_mode[5] = {0.0f, 0.0f, 0.0f, 0.0f, 3.0f};
+
+f32 cam_mode_min_fov[5] = {0.3f, 0.3f, 0.3f, 0.3f, 0.63f};

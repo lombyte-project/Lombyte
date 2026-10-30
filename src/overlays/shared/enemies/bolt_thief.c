@@ -40,9 +40,9 @@ void initialize_moby_path_state(char *moby) {
 /* rebuilds two vectors from the moby's transform and applies them to its linked object */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_003000B0), where it is exact; names translated to the US level program. */
 
-extern float linked_moby_initial_offset_length_gp __asm__("D_L14_00161FC4") __attribute__((sda));
-extern float linked_moby_additional_offset_length_gp __asm__("D_L14_00161FC8") __attribute__((sda));
-void         update_linked_moby_position(char *moby) __asm__("FUN_L14_002fec28");
+float linked_moby_initial_offset_length_gp __asm__("D_L14_00161FC4") = 0.1f;
+float linked_moby_additional_offset_length_gp __asm__("D_L14_00161FC8") = 0.1f;
+void  update_linked_moby_position(char *moby) __asm__("FUN_L14_002fec28");
 
 void update_linked_moby_position(char *moby) {
     char *data = ((char *)MOBY(moby)->pvars);
@@ -81,12 +81,12 @@ extern P_eca8 *
 spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern float D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
 
-extern float particle_pair_moby_c0_offset_scale_gp __asm__("D_L14_00161FCC") __attribute__((sda));
-extern float particle_pair_moby_e0_offset_scale_gp __asm__("D_L14_00161FD0") __attribute__((sda));
-extern float particle_trio_moby_c0_offset_scale_gp __asm__("D_L14_00161FD4") __attribute__((sda));
-extern float particle_trio_moby_e0_offset_scale_gp __asm__("D_L14_00161FD8") __attribute__((sda));
-extern int   particle_pair_color_gp __asm__("D_L14_00161FE4") __attribute__((sda));
-void         emit_moby_offset_particles(unsigned char *moby) __asm__("FUN_L14_002feca8");
+float      particle_pair_moby_c0_offset_scale_gp __asm__("D_L14_00161FCC") = -0.5f;
+float      particle_pair_moby_e0_offset_scale_gp __asm__("D_L14_00161FD0") = 0.6f;
+float      particle_trio_moby_c0_offset_scale_gp __asm__("D_L14_00161FD4") = -0.4f;
+float      particle_trio_moby_e0_offset_scale_gp __asm__("D_L14_00161FD8") = 0.7f;
+extern int particle_pair_color_gp __asm__("D_L14_00161FE4") __attribute__((sda));
+void       emit_moby_offset_particles(unsigned char *moby) __asm__("FUN_L14_002feca8");
 
 void emit_moby_offset_particles(unsigned char *moby) {
     float emission_position_offset[4];

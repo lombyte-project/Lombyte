@@ -56,128 +56,131 @@ struct RData51 {
     int   timer;
 };
 
-/* no foreign declaration */
-extern f32 D_L08_00161AC0_gp __asm__("D_L08_00161AC0") __attribute__((sda));
+/* HUD radar marker offset per world unit of target distance, in 1/16 pixels (added after the * 16.0f). */
+float batalia_cannon_hud_radar_distance_scale __asm__("D_L08_00161AC0") = 7.5f;
+
+/* HUD colours are 0xAABBGGRR words: the health dial blends 0x600000FF (red) to 0x6000FF00 (green). */
+int batalia_cannon_hud_frame_colour __asm__("D_L08_00161AC8") = 0x60808080;
 
 /* no foreign declaration */
-extern int D_L08_00161AC8_gp __asm__("D_L08_00161AC8") __attribute__((sda));
+extern int batalia_cannon_hud_alerted_target_colour_gp __asm__("D_L08_00161AD4")
+    __attribute__((sda));
 
 /* no foreign declaration */
-extern int D_L08_00161AD4_gp __asm__("D_L08_00161AD4") __attribute__((sda));
+extern int batalia_cannon_hud_indexed_target_colour_gp __asm__("D_L08_00161AD8")
+    __attribute__((sda));
 
 /* no foreign declaration */
-extern int D_L08_00161AD8_gp __asm__("D_L08_00161AD8") __attribute__((sda));
+extern int batalia_cannon_hud_linked_target_colour_gp __asm__("D_L08_00161ADC")
+    __attribute__((sda));
+
+/* HUD layout in screen pixels from the centre: the dial (health, needles) and the radar (target markers), each framed by four quads. */
+float batalia_cannon_hud_dial_center_x __asm__("D_L08_00161B60") = -1.8e+02f;
 
 /* no foreign declaration */
-extern int D_L08_00161ADC_gp __asm__("D_L08_00161ADC") __attribute__((sda));
+float batalia_cannon_hud_dial_center_y __asm__("D_L08_00161B64") = 1.4e+02f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B60_gp __asm__("D_L08_00161B60") __attribute__((sda));
+float batalia_cannon_hud_dial_frame_half_width __asm__("D_L08_00161B68") = 55.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B64_gp __asm__("D_L08_00161B64") __attribute__((sda));
+float batalia_cannon_hud_dial_frame_half_height __asm__("D_L08_00161B6C") = 55.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B68_gp __asm__("D_L08_00161B68") __attribute__((sda));
+float batalia_cannon_hud_health_dial_radius_x __asm__("D_L08_00161B70") = 4e+01f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B6C_gp __asm__("D_L08_00161B6C") __attribute__((sda));
+float batalia_cannon_hud_health_dial_radius_y __asm__("D_L08_00161B74") = 4e+01f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B70_gp __asm__("D_L08_00161B70") __attribute__((sda));
+float batalia_cannon_hud_needle_radius_x __asm__("D_L08_00161B78") = 4e+01f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B74_gp __asm__("D_L08_00161B74") __attribute__((sda));
+float batalia_cannon_hud_needle_radius_y __asm__("D_L08_00161B7C") = 4e+01f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B78_gp __asm__("D_L08_00161B78") __attribute__((sda));
+float batalia_cannon_hud_radar_center_x __asm__("D_L08_00161B80") = 1.8e+02f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B7C_gp __asm__("D_L08_00161B7C") __attribute__((sda));
+float batalia_cannon_hud_radar_center_y __asm__("D_L08_00161B84") = 1.4e+02f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B80_gp __asm__("D_L08_00161B80") __attribute__((sda));
+float batalia_cannon_hud_radar_frame_half_width __asm__("D_L08_00161B88") = 55.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B84_gp __asm__("D_L08_00161B84") __attribute__((sda));
+float batalia_cannon_hud_radar_frame_half_height __asm__("D_L08_00161B8C") = 55.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B88_gp __asm__("D_L08_00161B88") __attribute__((sda));
+float batalia_cannon_hud_linked_marker_half_width __asm__("D_L08_00161B90") = 5.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B8C_gp __asm__("D_L08_00161B8C") __attribute__((sda));
+float batalia_cannon_hud_linked_marker_half_height __asm__("D_L08_00161B94") = 5.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B90_gp __asm__("D_L08_00161B90") __attribute__((sda));
+float batalia_cannon_hud_indexed_marker_half_width __asm__("D_L08_00161B98") = 8.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B94_gp __asm__("D_L08_00161B94") __attribute__((sda));
+float batalia_cannon_hud_indexed_marker_half_height __asm__("D_L08_00161B9C") = 8.0f;
+
+/* HUD textures are effect textures: the frame is get_effect_texture(offset + 0x28). */
+int batalia_cannon_hud_frame_texture_offset __asm__("D_L08_00161BA0") = 0x10;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B98_gp __asm__("D_L08_00161B98") __attribute__((sda));
+int batalia_cannon_hud_marker_texture __asm__("D_L08_00161BA4") = 6;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B9C_gp __asm__("D_L08_00161B9C") __attribute__((sda));
+int batalia_cannon_hud_yaw_needle_texture __asm__("D_L08_00161BA8") = 0x11;
 
 /* no foreign declaration */
-extern int D_L08_00161BA0_gp __asm__("D_L08_00161BA0") __attribute__((sda));
+int batalia_cannon_hud_pitch_needle_texture __asm__("D_L08_00161BAC") = 0x12;
+
+/* UV words of a HUD quad's four corners: v << 16 | u, GS 4-bit fixed point (0x800 = 128 texels). */
+int batalia_cannon_hud_frame_uv0 __asm__("D_L08_00161BB0") = 0;
 
 /* no foreign declaration */
-extern int D_L08_00161BA4_gp __asm__("D_L08_00161BA4") __attribute__((sda));
+int batalia_cannon_hud_frame_uv1 __asm__("D_L08_00161BB4") = 0x8000000;
 
 /* no foreign declaration */
-extern int D_L08_00161BA8_gp __asm__("D_L08_00161BA8") __attribute__((sda));
+int batalia_cannon_hud_frame_uv2 __asm__("D_L08_00161BB8") = 0x800;
 
 /* no foreign declaration */
-extern int D_L08_00161BAC_gp __asm__("D_L08_00161BAC") __attribute__((sda));
+int batalia_cannon_hud_frame_uv3 __asm__("D_L08_00161BBC") = 0x8000800;
 
 /* no foreign declaration */
-extern int D_L08_00161BB0_gp __asm__("D_L08_00161BB0") __attribute__((sda));
+int batalia_cannon_hud_marker_uv0 __asm__("D_L08_00161BC0") = 0;
 
 /* no foreign declaration */
-extern int D_L08_00161BB4_gp __asm__("D_L08_00161BB4") __attribute__((sda));
+int batalia_cannon_hud_marker_uv1 __asm__("D_L08_00161BC4") = 0x2000000;
 
 /* no foreign declaration */
-extern int D_L08_00161BB8_gp __asm__("D_L08_00161BB8") __attribute__((sda));
+int batalia_cannon_hud_marker_uv2 __asm__("D_L08_00161BC8") = 0x200;
 
 /* no foreign declaration */
-extern int D_L08_00161BBC_gp __asm__("D_L08_00161BBC") __attribute__((sda));
+int batalia_cannon_hud_marker_uv3 __asm__("D_L08_00161BCC") = 0x2000200;
 
 /* no foreign declaration */
-extern int D_L08_00161BC0_gp __asm__("D_L08_00161BC0") __attribute__((sda));
+int batalia_cannon_hud_health_dial_uv0 __asm__("D_L08_00161BD0") = 0x1600160;
 
 /* no foreign declaration */
-extern int D_L08_00161BC4_gp __asm__("D_L08_00161BC4") __attribute__((sda));
+int batalia_cannon_hud_health_dial_uv1 __asm__("D_L08_00161BD4") = 0xa000a0;
 
 /* no foreign declaration */
-extern int D_L08_00161BC8_gp __asm__("D_L08_00161BC8") __attribute__((sda));
+int batalia_cannon_hud_health_dial_uv2 __asm__("D_L08_00161BD8") = 0x1600160;
 
 /* no foreign declaration */
-extern int D_L08_00161BCC_gp __asm__("D_L08_00161BCC") __attribute__((sda));
+int batalia_cannon_hud_health_dial_uv3 __asm__("D_L08_00161BDC") = 0;
 
 /* no foreign declaration */
-extern int D_L08_00161BD0_gp __asm__("D_L08_00161BD0") __attribute__((sda));
+int batalia_cannon_hud_needle_uv0 __asm__("D_L08_00161BE0") = 0;
 
 /* no foreign declaration */
-extern int D_L08_00161BD4_gp __asm__("D_L08_00161BD4") __attribute__((sda));
+int batalia_cannon_hud_needle_uv1 __asm__("D_L08_00161BE4") = 0x4000000;
 
 /* no foreign declaration */
-extern int D_L08_00161BD8_gp __asm__("D_L08_00161BD8") __attribute__((sda));
+int batalia_cannon_hud_needle_uv2 __asm__("D_L08_00161BE8") = 0x400;
 
 /* no foreign declaration */
-extern int D_L08_00161BDC_gp __asm__("D_L08_00161BDC") __attribute__((sda));
-
-/* no foreign declaration */
-extern int D_L08_00161BE0_gp __asm__("D_L08_00161BE0") __attribute__((sda));
-
-/* no foreign declaration */
-extern int D_L08_00161BE4_gp __asm__("D_L08_00161BE4") __attribute__((sda));
-
-/* no foreign declaration */
-extern int D_L08_00161BE8_gp __asm__("D_L08_00161BE8") __attribute__((sda));
-
-/* no foreign declaration */
-extern int   D_L08_00161BEC_gp __asm__("D_L08_00161BEC") __attribute__((sda));
+int          batalia_cannon_hud_needle_uv3 __asm__("D_L08_00161BEC") = 0x4000400;
 extern s64   get_effect_texture(s32) __asm__("func_001F44B8");
 extern void  vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void  FUN_L02_0020bc88_c(void *, void *, void *, long, int) __asm__("FUN_L02_0020bc88");
@@ -185,47 +188,47 @@ extern int   func_001FA8A8_2E0258(int, int, float) __asm__("FUN_001fa6e0");
 extern char *D_L08_0015FFD8;
 extern int   D_L08_0015F5CC __asm__("D_L08_0015F5CC");
 extern unsigned char draw_map51[4] __asm__("D_0015EDB4");
-extern float         D_L08_00161AC0 __asm__("D_L08_00161AC0");
-extern float         D_L08_00161B60 __asm__("D_L08_00161B60");
-extern float         D_L08_00161B64 __asm__("D_L08_00161B64");
-extern float         D_L08_00161B68 __asm__("D_L08_00161B68");
-extern float         D_L08_00161B6C __asm__("D_L08_00161B6C");
-extern float         D_L08_00161B70 __asm__("D_L08_00161B70");
-extern float         D_L08_00161B74 __asm__("D_L08_00161B74");
-extern float         D_L08_00161B78 __asm__("D_L08_00161B78");
-extern float         D_L08_00161B7C __asm__("D_L08_00161B7C");
-extern float         D_L08_00161B80 __asm__("D_L08_00161B80");
-extern float         D_L08_00161B84 __asm__("D_L08_00161B84");
-extern float         D_L08_00161B88 __asm__("D_L08_00161B88");
-extern float         D_L08_00161B8C __asm__("D_L08_00161B8C");
-extern float         D_L08_00161B90 __asm__("D_L08_00161B90");
-extern float         D_L08_00161B94 __asm__("D_L08_00161B94");
-extern float         D_L08_00161B98 __asm__("D_L08_00161B98");
-extern float         D_L08_00161B9C __asm__("D_L08_00161B9C");
-extern int           D_L08_00161AC8 __asm__("D_L08_00161AC8");
-extern int           D_L08_00161AD4 __asm__("D_L08_00161AD4");
-extern int           D_L08_00161AD8 __asm__("D_L08_00161AD8");
-extern int           D_L08_00161ADC __asm__("D_L08_00161ADC");
-extern int           D_L08_00161BA0 __asm__("D_L08_00161BA0");
-extern int           D_L08_00161BA4 __asm__("D_L08_00161BA4");
-extern int           D_L08_00161BA8 __asm__("D_L08_00161BA8");
-extern int           D_L08_00161BAC __asm__("D_L08_00161BAC");
-extern int           D_L08_00161BB0 __asm__("D_L08_00161BB0");
-extern int           D_L08_00161BB4 __asm__("D_L08_00161BB4");
-extern int           D_L08_00161BB8 __asm__("D_L08_00161BB8");
-extern int           D_L08_00161BBC __asm__("D_L08_00161BBC");
-extern int           D_L08_00161BC0 __asm__("D_L08_00161BC0");
-extern int           D_L08_00161BC4 __asm__("D_L08_00161BC4");
-extern int           D_L08_00161BC8 __asm__("D_L08_00161BC8");
-extern int           D_L08_00161BCC __asm__("D_L08_00161BCC");
-extern int           D_L08_00161BD0 __asm__("D_L08_00161BD0");
-extern int           D_L08_00161BD4 __asm__("D_L08_00161BD4");
-extern int           D_L08_00161BD8 __asm__("D_L08_00161BD8");
-extern int           D_L08_00161BDC __asm__("D_L08_00161BDC");
-extern int           D_L08_00161BE0 __asm__("D_L08_00161BE0");
-extern int           D_L08_00161BE4 __asm__("D_L08_00161BE4");
-extern int           D_L08_00161BE8 __asm__("D_L08_00161BE8");
-extern int           D_L08_00161BEC __asm__("D_L08_00161BEC");
+extern float         batalia_cannon_hud_radar_distance_scale __asm__("D_L08_00161AC0");
+extern float         batalia_cannon_hud_dial_center_x __asm__("D_L08_00161B60");
+extern float         batalia_cannon_hud_dial_center_y __asm__("D_L08_00161B64");
+extern float         batalia_cannon_hud_dial_frame_half_width __asm__("D_L08_00161B68");
+extern float         batalia_cannon_hud_dial_frame_half_height __asm__("D_L08_00161B6C");
+extern float         batalia_cannon_hud_health_dial_radius_x __asm__("D_L08_00161B70");
+extern float         batalia_cannon_hud_health_dial_radius_y __asm__("D_L08_00161B74");
+extern float         batalia_cannon_hud_needle_radius_x __asm__("D_L08_00161B78");
+extern float         batalia_cannon_hud_needle_radius_y __asm__("D_L08_00161B7C");
+extern float         batalia_cannon_hud_radar_center_x __asm__("D_L08_00161B80");
+extern float         batalia_cannon_hud_radar_center_y __asm__("D_L08_00161B84");
+extern float         batalia_cannon_hud_radar_frame_half_width __asm__("D_L08_00161B88");
+extern float         batalia_cannon_hud_radar_frame_half_height __asm__("D_L08_00161B8C");
+extern float         batalia_cannon_hud_linked_marker_half_width __asm__("D_L08_00161B90");
+extern float         batalia_cannon_hud_linked_marker_half_height __asm__("D_L08_00161B94");
+extern float         batalia_cannon_hud_indexed_marker_half_width __asm__("D_L08_00161B98");
+extern float         batalia_cannon_hud_indexed_marker_half_height __asm__("D_L08_00161B9C");
+extern int           batalia_cannon_hud_frame_colour __asm__("D_L08_00161AC8");
+extern int           batalia_cannon_hud_alerted_target_colour __asm__("D_L08_00161AD4");
+extern int           batalia_cannon_hud_indexed_target_colour __asm__("D_L08_00161AD8");
+extern int           batalia_cannon_hud_linked_target_colour __asm__("D_L08_00161ADC");
+extern int           batalia_cannon_hud_frame_texture_offset __asm__("D_L08_00161BA0");
+extern int           batalia_cannon_hud_marker_texture __asm__("D_L08_00161BA4");
+extern int           batalia_cannon_hud_yaw_needle_texture __asm__("D_L08_00161BA8");
+extern int           batalia_cannon_hud_pitch_needle_texture __asm__("D_L08_00161BAC");
+extern int           batalia_cannon_hud_frame_uv0 __asm__("D_L08_00161BB0");
+extern int           batalia_cannon_hud_frame_uv1 __asm__("D_L08_00161BB4");
+extern int           batalia_cannon_hud_frame_uv2 __asm__("D_L08_00161BB8");
+extern int           batalia_cannon_hud_frame_uv3 __asm__("D_L08_00161BBC");
+extern int           batalia_cannon_hud_marker_uv0 __asm__("D_L08_00161BC0");
+extern int           batalia_cannon_hud_marker_uv1 __asm__("D_L08_00161BC4");
+extern int           batalia_cannon_hud_marker_uv2 __asm__("D_L08_00161BC8");
+extern int           batalia_cannon_hud_marker_uv3 __asm__("D_L08_00161BCC");
+extern int           batalia_cannon_hud_health_dial_uv0 __asm__("D_L08_00161BD0");
+extern int           batalia_cannon_hud_health_dial_uv1 __asm__("D_L08_00161BD4");
+extern int           batalia_cannon_hud_health_dial_uv2 __asm__("D_L08_00161BD8");
+extern int           batalia_cannon_hud_health_dial_uv3 __asm__("D_L08_00161BDC");
+extern int           batalia_cannon_hud_needle_uv0 __asm__("D_L08_00161BE0");
+extern int           batalia_cannon_hud_needle_uv1 __asm__("D_L08_00161BE4");
+extern int           batalia_cannon_hud_needle_uv2 __asm__("D_L08_00161BE8");
+extern int           batalia_cannon_hud_needle_uv3 __asm__("D_L08_00161BEC");
 void                 draw_batalia_cannon_hud(Moby *moby) __asm__("FUN_L08_002deee0");
 
 /* Updates the mounted Batalia cannon: entry/exit, aiming, alternating barrels, waves, and attached visuals. */
@@ -255,23 +258,24 @@ char        *spawn_turret_rocket(int    owner,
                                  float *rotation,
                                  int    value) __asm__("FUN_L08_002e7eb0");
 extern float D_0015ED70;
-extern float D_L08_00161AE8_gp __asm__("D_L08_00161AE8") __attribute__((sda));
-extern float D_L08_00161AEC_gp __asm__("D_L08_00161AEC") __attribute__((sda));
-extern float D_L08_00161AF0_gp __asm__("D_L08_00161AF0") __attribute__((sda));
-extern float D_L08_00161AF4_gp __asm__("D_L08_00161AF4") __attribute__((sda));
-extern float D_L08_00161AF8_gp __asm__("D_L08_00161AF8") __attribute__((sda));
-extern float D_L08_00161AFC_gp __asm__("D_L08_00161AFC") __attribute__((sda));
-extern float D_L08_00161B00_gp __asm__("D_L08_00161B00") __attribute__((sda));
+/* Aim rates and accelerations in degrees (the code converts with * 0.017453292f); the offsets are moved into the cannon's basis by transform_vector_by_basis. */
+float        batalia_cannon_max_yaw_rate_gp __asm__("D_L08_00161AE8") = 1.8e+02f;
+float        batalia_cannon_max_pitch_rate_gp __asm__("D_L08_00161AEC") = 22.5f;
+float        batalia_cannon_yaw_acceleration_gp __asm__("D_L08_00161AF0") = 45.0f;
+float        batalia_cannon_pitch_acceleration_gp __asm__("D_L08_00161AF4") = 1.8e+02f;
+float        batalia_cannon_yaw_deceleration_gp __asm__("D_L08_00161AF8") = 3.6e+02f;
+float        batalia_cannon_pitch_deceleration_gp __asm__("D_L08_00161AFC") = 7.2e+02f;
+float        batalia_cannon_rocket_speed_gp __asm__("D_L08_00161B00") = 1.8e+02f;
 extern s32   D_0015ED84;
 extern char  D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
 extern int   D_0015ED84;
-extern short D_L08_00161A90_gp __asm__("D_L08_00161A90") __attribute__((sda));
-extern short D_L08_00161B10_gp __asm__("D_L08_00161B10") __attribute__((sda));
-extern short D_L08_00161B20_gp __asm__("D_L08_00161B20") __attribute__((sda));
-extern short D_L08_00161B30_gp __asm__("D_L08_00161B30") __attribute__((sda));
-extern short D_L08_00161B40_gp __asm__("D_L08_00161B40") __attribute__((sda));
-extern short D_L08_00161B50_gp __asm__("D_L08_00161B50") __attribute__((sda));
-extern short D_L08_00161BF0_gp __asm__("D_L08_00161BF0") __attribute__((sda));
+extern short batalia_cannon_dismount_offset_gp __asm__("D_L08_00161A90") __attribute__((sda));
+extern short batalia_cannon_left_gun_offset_gp __asm__("D_L08_00161B10") __attribute__((sda));
+extern short batalia_cannon_right_gun_offset_gp __asm__("D_L08_00161B20") __attribute__((sda));
+extern short batalia_cannon_left_muzzle_offset_gp __asm__("D_L08_00161B30") __attribute__((sda));
+extern short batalia_cannon_right_muzzle_offset_gp __asm__("D_L08_00161B40") __attribute__((sda));
+extern short batalia_cannon_camera_offset_gp __asm__("D_L08_00161B50") __attribute__((sda));
+extern short batalia_cannon_visual_offset_gp __asm__("D_L08_00161BF0") __attribute__((sda));
 extern void  func_L00_001FF328_2E16A0(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern void  func_L00_00217718_2E16A0(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void         set_batalia_cannon_platform_mode(u8 *platform, s32 mode) __asm__("FUN_L08_00306b30");
@@ -282,11 +286,11 @@ extern unsigned char    l08_cannon_hero_interaction_flags[] __asm__("D_0014095F"
 void                    update_batalia_cannon(Moby *moby) __asm__("FUN_L08_002e0328");
 extern float D_0015ED70 MACRO_ADDR;
 
-int D_L08_00161AD4 = 0x600000ff;
+int batalia_cannon_hud_alerted_target_colour __asm__("D_L08_00161AD4") = 0x600000ff;
 
-int D_L08_00161AD8 = 0x600080ff;
+int batalia_cannon_hud_indexed_target_colour __asm__("D_L08_00161AD8") = 0x600080ff;
 
-int D_L08_00161ADC = 0x60ffffff;
+int batalia_cannon_hud_linked_target_colour __asm__("D_L08_00161ADC") = 0x60ffffff;
 
 void draw_batalia_cannon_hud(Moby *moby) {
     long     xy[4];
@@ -302,12 +306,13 @@ void draw_batalia_cannon_hud(Moby *moby) {
     int      color_a, color_b;
     long     base;
     vu1_add_g_sregister(0x42, 0x8000000044L);
-    texture = get_effect_texture(D_L08_00161BA0 + 0x28);
-    uv_words[0] = D_L08_00161BB0;
-    uv_words[1] = D_L08_00161BB4;
-    uv_words[2] = D_L08_00161BB8;
-    uv_words[3] = D_L08_00161BBC;
-    color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161AC8;
+    texture = get_effect_texture(batalia_cannon_hud_frame_texture_offset + 0x28);
+    uv_words[0] = batalia_cannon_hud_frame_uv0;
+    uv_words[1] = batalia_cannon_hud_frame_uv1;
+    uv_words[2] = batalia_cannon_hud_frame_uv2;
+    uv_words[3] = batalia_cannon_hud_frame_uv3;
+    color_words[0] = color_words[1] = color_words[2] = color_words[3] =
+        batalia_cannon_hud_frame_colour;
     for (i = 0; i < 4; i++) {
         sign_x = (i & 1) ? -1.0f : 1.0f;
         sign_y = (i >= 2) ? -1.0f : 1.0f;
@@ -315,29 +320,41 @@ void draw_batalia_cannon_hud(Moby *moby) {
         xy[2] = 0xFFFFF000000000L;
         xy[1] = 0xFFFFF000000000L;
         xy[0] = 0xFFFFF000000000L;
-        xy[0] += (unsigned int)((truncate_float_to_s32((D_L08_00161B84 + D_L08_00161B8C * sign_y) *
-                                                       16.0f)
+        xy[0] += (unsigned int)((truncate_float_to_s32(
+                                     (batalia_cannon_hud_radar_center_y +
+                                      batalia_cannon_hud_radar_frame_half_height * sign_y) *
+                                     16.0f)
                                  << 16) -
                                 (int)0x80000000);
-        xy[0] += (truncate_float_to_s32(D_L08_00161B80 + D_L08_00161B88 * sign_x) << 4) + 0x8000;
-        xy[1] +=
-            (unsigned int)((truncate_float_to_s32(D_L08_00161B84 * 16.0f) << 16) - (int)0x80000000);
-        xy[1] += (truncate_float_to_s32(D_L08_00161B80 + D_L08_00161B88 * sign_x) << 4) + 0x8000;
-        xy[2] += (unsigned int)((truncate_float_to_s32((D_L08_00161B84 + D_L08_00161B8C * sign_y) *
-                                                       16.0f)
+        xy[0] += (truncate_float_to_s32(batalia_cannon_hud_radar_center_x +
+                                        batalia_cannon_hud_radar_frame_half_width * sign_x)
+                  << 4) +
+                 0x8000;
+        xy[1] += (unsigned int)((truncate_float_to_s32(batalia_cannon_hud_radar_center_y * 16.0f)
                                  << 16) -
                                 (int)0x80000000);
-        xy[2] += (truncate_float_to_s32(D_L08_00161B80) << 4) + 0x8000;
-        xy[3] +=
-            (unsigned int)((truncate_float_to_s32(D_L08_00161B84 * 16.0f) << 16) - (int)0x80000000);
-        xy[3] += (truncate_float_to_s32(D_L08_00161B80) << 4) + 0x8000;
+        xy[1] += (truncate_float_to_s32(batalia_cannon_hud_radar_center_x +
+                                        batalia_cannon_hud_radar_frame_half_width * sign_x)
+                  << 4) +
+                 0x8000;
+        xy[2] += (unsigned int)((truncate_float_to_s32(
+                                     (batalia_cannon_hud_radar_center_y +
+                                      batalia_cannon_hud_radar_frame_half_height * sign_y) *
+                                     16.0f)
+                                 << 16) -
+                                (int)0x80000000);
+        xy[2] += (truncate_float_to_s32(batalia_cannon_hud_radar_center_x) << 4) + 0x8000;
+        xy[3] += (unsigned int)((truncate_float_to_s32(batalia_cannon_hud_radar_center_y * 16.0f)
+                                 << 16) -
+                                (int)0x80000000);
+        xy[3] += (truncate_float_to_s32(batalia_cannon_hud_radar_center_x) << 4) + 0x8000;
         FUN_L02_0020bc88_c(xy, uv_words, color_words, texture, 1);
     }
-    texture = get_effect_texture(D_L08_00161BA4);
-    uv_words[0] = D_L08_00161BC0;
-    uv_words[1] = D_L08_00161BC4;
-    uv_words[2] = D_L08_00161BC8;
-    uv_words[3] = D_L08_00161BCC;
+    texture = get_effect_texture(batalia_cannon_hud_marker_texture);
+    uv_words[0] = batalia_cannon_hud_marker_uv0;
+    uv_words[1] = batalia_cannon_hud_marker_uv1;
+    uv_words[2] = batalia_cannon_hud_marker_uv2;
+    uv_words[3] = batalia_cannon_hud_marker_uv3;
     for (k = 0; k < 8; k++) {
         float angle, radius;
         if (data->linked[k]) {
@@ -345,14 +362,14 @@ void draw_batalia_cannon_hud(Moby *moby) {
                 if (data->linked[k]->state == 2) {
                     if (D_L08_0015F5CC & 0x10) {
                         color_words[0] = color_words[1] = color_words[2] = color_words[3] =
-                            D_L08_00161AD4;
+                            batalia_cannon_hud_alerted_target_colour;
                     } else {
                         color_words[0] = color_words[1] = color_words[2] = color_words[3] =
                             0x60000000;
                     }
                 } else {
                     color_words[0] = color_words[1] = color_words[2] = color_words[3] =
-                        D_L08_00161ADC;
+                        batalia_cannon_hud_linked_target_colour;
                 }
                 angle = fast_subtract_rotations(
                     fast_arc_tan((*(float(*)[4]) & data->linked[k]->pos)[0] -
@@ -362,7 +379,7 @@ void draw_batalia_cannon_hud(Moby *moby) {
                     (*(float(*)[4]) & moby->rot)[2]);
                 radius = fast_vec_dist((*(float(*)[4]) & data->linked[k]->pos),
                                        (*(float(*)[4]) & moby->pos)) *
-                         D_L08_00161AC0;
+                         batalia_cannon_hud_radar_distance_scale;
                 sign = draw_map51[0] ? -1 : 1;
                 relative[0] = (float)-sign * fast_sin(angle) * radius;
                 relative[1] = -fast_cos(angle) * radius;
@@ -370,38 +387,54 @@ void draw_batalia_cannon_hud(Moby *moby) {
                 xy[2] = 0xFFFFF000000000L;
                 xy[1] = 0xFFFFF000000000L;
                 xy[0] = 0xFFFFF000000000L;
-                xy[0] +=
-                    (unsigned int)((truncate_float_to_s32(
-                                        (D_L08_00161B84 + D_L08_00161B94) * 16.0f + relative[1])
-                                    << 16) -
-                                   (int)0x80000000);
-                xy[0] +=
-                    truncate_float_to_s32((D_L08_00161B80 + D_L08_00161B90) * 16.0f + relative[0]) +
-                    0x8000;
-                xy[1] +=
-                    (unsigned int)((truncate_float_to_s32(
-                                        (D_L08_00161B84 - D_L08_00161B94) * 16.0f + relative[1])
-                                    << 16) -
-                                   (int)0x80000000);
-                xy[1] +=
-                    truncate_float_to_s32((D_L08_00161B80 + D_L08_00161B90) * 16.0f + relative[0]) +
-                    0x8000;
-                xy[2] +=
-                    (unsigned int)((truncate_float_to_s32(
-                                        (D_L08_00161B84 + D_L08_00161B94) * 16.0f + relative[1])
-                                    << 16) -
-                                   (int)0x80000000);
-                xy[2] +=
-                    truncate_float_to_s32((D_L08_00161B80 - D_L08_00161B90) * 16.0f + relative[0]) +
-                    0x8000;
-                xy[3] +=
-                    (unsigned int)((truncate_float_to_s32(
-                                        (D_L08_00161B84 - D_L08_00161B94) * 16.0f + relative[1])
-                                    << 16) -
-                                   (int)0x80000000);
-                xy[3] +=
-                    truncate_float_to_s32((D_L08_00161B80 - D_L08_00161B90) * 16.0f + relative[0]) +
-                    0x8000;
+                xy[0] += (unsigned int)((truncate_float_to_s32(
+                                             (batalia_cannon_hud_radar_center_y +
+                                              batalia_cannon_hud_linked_marker_half_height) *
+                                                 16.0f +
+                                             relative[1])
+                                         << 16) -
+                                        (int)0x80000000);
+                xy[0] += truncate_float_to_s32((batalia_cannon_hud_radar_center_x +
+                                                batalia_cannon_hud_linked_marker_half_width) *
+                                                   16.0f +
+                                               relative[0]) +
+                         0x8000;
+                xy[1] += (unsigned int)((truncate_float_to_s32(
+                                             (batalia_cannon_hud_radar_center_y -
+                                              batalia_cannon_hud_linked_marker_half_height) *
+                                                 16.0f +
+                                             relative[1])
+                                         << 16) -
+                                        (int)0x80000000);
+                xy[1] += truncate_float_to_s32((batalia_cannon_hud_radar_center_x +
+                                                batalia_cannon_hud_linked_marker_half_width) *
+                                                   16.0f +
+                                               relative[0]) +
+                         0x8000;
+                xy[2] += (unsigned int)((truncate_float_to_s32(
+                                             (batalia_cannon_hud_radar_center_y +
+                                              batalia_cannon_hud_linked_marker_half_height) *
+                                                 16.0f +
+                                             relative[1])
+                                         << 16) -
+                                        (int)0x80000000);
+                xy[2] += truncate_float_to_s32((batalia_cannon_hud_radar_center_x -
+                                                batalia_cannon_hud_linked_marker_half_width) *
+                                                   16.0f +
+                                               relative[0]) +
+                         0x8000;
+                xy[3] += (unsigned int)((truncate_float_to_s32(
+                                             (batalia_cannon_hud_radar_center_y -
+                                              batalia_cannon_hud_linked_marker_half_height) *
+                                                 16.0f +
+                                             relative[1])
+                                         << 16) -
+                                        (int)0x80000000);
+                xy[3] += truncate_float_to_s32((batalia_cannon_hud_radar_center_x -
+                                                batalia_cannon_hud_linked_marker_half_width) *
+                                                   16.0f +
+                                               relative[0]) +
+                         0x8000;
                 FUN_L02_0020bc88_c(xy, uv_words, color_words, texture, 1);
             } else
                 data->linked[k] = 0;
@@ -411,7 +444,8 @@ void draw_batalia_cannon_hud(Moby *moby) {
     for (indexed_target_slot = 0; indexed_target_slot < 4; indexed_target_slot++) {
         float angle, radius;
         if (((Moby *)D_L08_0015FFD8)[*indices].state < 0x7F) {
-            color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161AD8;
+            color_words[0] = color_words[1] = color_words[2] = color_words[3] =
+                batalia_cannon_hud_indexed_target_colour;
             angle = fast_subtract_rotations(
                 fast_arc_tan((*(float(*)[4]) & ((Moby *)D_L08_0015FFD8)[*indices].pos)[0] -
                                  (*(float(*)[4]) & moby->pos)[0],
@@ -420,7 +454,7 @@ void draw_batalia_cannon_hud(Moby *moby) {
                 (*(float(*)[4]) & moby->rot)[2]);
             radius = fast_vec_dist((*(float(*)[4]) & ((Moby *)D_L08_0015FFD8)[*indices].pos),
                                    (*(float(*)[4]) & moby->pos)) *
-                     D_L08_00161AC0;
+                     batalia_cannon_hud_radar_distance_scale;
             relative[0] = -fast_sin(angle) * radius;
             relative[1] = -fast_cos(angle) * radius;
             xy[3] = 0xFFFFF000000000L;
@@ -428,43 +462,64 @@ void draw_batalia_cannon_hud(Moby *moby) {
             xy[1] = 0xFFFFF000000000L;
             xy[0] = 0xFFFFF000000000L;
             xy[0] += (unsigned int)((truncate_float_to_s32(
-                                         (D_L08_00161B84 + D_L08_00161B9C) * 16.0f + relative[1])
+                                         (batalia_cannon_hud_radar_center_y +
+                                          batalia_cannon_hud_indexed_marker_half_height) *
+                                             16.0f +
+                                         relative[1])
                                      << 16) -
                                     (int)0x80000000);
-            xy[0] +=
-                truncate_float_to_s32((D_L08_00161B80 + D_L08_00161B98) * 16.0f + relative[0]) +
-                0x8000;
+            xy[0] += truncate_float_to_s32((batalia_cannon_hud_radar_center_x +
+                                            batalia_cannon_hud_indexed_marker_half_width) *
+                                               16.0f +
+                                           relative[0]) +
+                     0x8000;
             xy[1] += (unsigned int)((truncate_float_to_s32(
-                                         (D_L08_00161B84 - D_L08_00161B9C) * 16.0f + relative[1])
+                                         (batalia_cannon_hud_radar_center_y -
+                                          batalia_cannon_hud_indexed_marker_half_height) *
+                                             16.0f +
+                                         relative[1])
                                      << 16) -
                                     (int)0x80000000);
-            xy[1] +=
-                truncate_float_to_s32((D_L08_00161B80 + D_L08_00161B98) * 16.0f + relative[0]) +
-                0x8000;
+            xy[1] += truncate_float_to_s32((batalia_cannon_hud_radar_center_x +
+                                            batalia_cannon_hud_indexed_marker_half_width) *
+                                               16.0f +
+                                           relative[0]) +
+                     0x8000;
             xy[2] += (unsigned int)((truncate_float_to_s32(
-                                         (D_L08_00161B84 + D_L08_00161B9C) * 16.0f + relative[1])
+                                         (batalia_cannon_hud_radar_center_y +
+                                          batalia_cannon_hud_indexed_marker_half_height) *
+                                             16.0f +
+                                         relative[1])
                                      << 16) -
                                     (int)0x80000000);
-            xy[2] +=
-                truncate_float_to_s32((D_L08_00161B80 - D_L08_00161B98) * 16.0f + relative[0]) +
-                0x8000;
+            xy[2] += truncate_float_to_s32((batalia_cannon_hud_radar_center_x -
+                                            batalia_cannon_hud_indexed_marker_half_width) *
+                                               16.0f +
+                                           relative[0]) +
+                     0x8000;
             xy[3] += (unsigned int)((truncate_float_to_s32(
-                                         (D_L08_00161B84 - D_L08_00161B9C) * 16.0f + relative[1])
+                                         (batalia_cannon_hud_radar_center_y -
+                                          batalia_cannon_hud_indexed_marker_half_height) *
+                                             16.0f +
+                                         relative[1])
                                      << 16) -
                                     (int)0x80000000);
-            xy[3] +=
-                truncate_float_to_s32((D_L08_00161B80 - D_L08_00161B98) * 16.0f + relative[0]) +
-                0x8000;
+            xy[3] += truncate_float_to_s32((batalia_cannon_hud_radar_center_x -
+                                            batalia_cannon_hud_indexed_marker_half_width) *
+                                               16.0f +
+                                           relative[0]) +
+                     0x8000;
             FUN_L02_0020bc88_c(xy, uv_words, color_words, texture, 1);
         }
         indices++;
     }
-    uv_words[0] = D_L08_00161BB0;
-    uv_words[1] = D_L08_00161BB4;
-    uv_words[2] = D_L08_00161BB8;
-    uv_words[3] = D_L08_00161BBC;
-    color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161AC8;
-    texture = get_effect_texture(D_L08_00161BA0 + 0x28);
+    uv_words[0] = batalia_cannon_hud_frame_uv0;
+    uv_words[1] = batalia_cannon_hud_frame_uv1;
+    uv_words[2] = batalia_cannon_hud_frame_uv2;
+    uv_words[3] = batalia_cannon_hud_frame_uv3;
+    color_words[0] = color_words[1] = color_words[2] = color_words[3] =
+        batalia_cannon_hud_frame_colour;
+    texture = get_effect_texture(batalia_cannon_hud_frame_texture_offset + 0x28);
     for (i = 0; i < 4; i++) {
         sign_x = (i & 1) ? -1.0f : 1.0f;
         sign_y = (i >= 2) ? -1.0f : 1.0f;
@@ -472,29 +527,41 @@ void draw_batalia_cannon_hud(Moby *moby) {
         xy[2] = 0xFFFFF000000000L;
         xy[1] = 0xFFFFF000000000L;
         xy[0] = 0xFFFFF000000000L;
-        xy[0] += (unsigned int)((truncate_float_to_s32((D_L08_00161B64 + D_L08_00161B6C * sign_y) *
-                                                       16.0f)
+        xy[0] += (unsigned int)((truncate_float_to_s32(
+                                     (batalia_cannon_hud_dial_center_y +
+                                      batalia_cannon_hud_dial_frame_half_height * sign_y) *
+                                     16.0f)
                                  << 16) -
                                 (int)0x80000000);
-        xy[0] += (truncate_float_to_s32(D_L08_00161B60 + D_L08_00161B68 * sign_x) << 4) + 0x8000;
+        xy[0] += (truncate_float_to_s32(batalia_cannon_hud_dial_center_x +
+                                        batalia_cannon_hud_dial_frame_half_width * sign_x)
+                  << 4) +
+                 0x8000;
         xy[1] +=
-            (unsigned int)((truncate_float_to_s32(D_L08_00161B64 * 16.0f) << 16) - (int)0x80000000);
-        xy[1] += (truncate_float_to_s32(D_L08_00161B60 + D_L08_00161B68 * sign_x) << 4) + 0x8000;
-        xy[2] += (unsigned int)((truncate_float_to_s32((D_L08_00161B64 + D_L08_00161B6C * sign_y) *
-                                                       16.0f)
+            (unsigned int)((truncate_float_to_s32(batalia_cannon_hud_dial_center_y * 16.0f) << 16) -
+                           (int)0x80000000);
+        xy[1] += (truncate_float_to_s32(batalia_cannon_hud_dial_center_x +
+                                        batalia_cannon_hud_dial_frame_half_width * sign_x)
+                  << 4) +
+                 0x8000;
+        xy[2] += (unsigned int)((truncate_float_to_s32(
+                                     (batalia_cannon_hud_dial_center_y +
+                                      batalia_cannon_hud_dial_frame_half_height * sign_y) *
+                                     16.0f)
                                  << 16) -
                                 (int)0x80000000);
-        xy[2] += (truncate_float_to_s32(D_L08_00161B60) << 4) + 0x8000;
+        xy[2] += (truncate_float_to_s32(batalia_cannon_hud_dial_center_x) << 4) + 0x8000;
         xy[3] +=
-            (unsigned int)((truncate_float_to_s32(D_L08_00161B64 * 16.0f) << 16) - (int)0x80000000);
-        xy[3] += (truncate_float_to_s32(D_L08_00161B60) << 4) + 0x8000;
+            (unsigned int)((truncate_float_to_s32(batalia_cannon_hud_dial_center_y * 16.0f) << 16) -
+                           (int)0x80000000);
+        xy[3] += (truncate_float_to_s32(batalia_cannon_hud_dial_center_x) << 4) + 0x8000;
         FUN_L02_0020bc88_c(xy, uv_words, color_words, texture, 1);
     }
-    texture = get_effect_texture(D_L08_00161BA4);
-    uv_words[0] = D_L08_00161BD0;
-    uv_words[1] = D_L08_00161BD4;
-    uv_words[2] = D_L08_00161BD8;
-    uv_words[3] = D_L08_00161BDC;
+    texture = get_effect_texture(batalia_cannon_hud_marker_texture);
+    uv_words[0] = batalia_cannon_hud_health_dial_uv0;
+    uv_words[1] = batalia_cannon_hud_health_dial_uv1;
+    uv_words[2] = batalia_cannon_hud_health_dial_uv2;
+    uv_words[3] = batalia_cannon_hud_health_dial_uv3;
     if ((float)data->health > 100.0f)
         color =
             func_001FA8A8_2E0258(0x6000FFFF, 0x6000FF00, ((float)data->health - 100.0f) / 100.0f);
@@ -511,28 +578,36 @@ void draw_batalia_cannon_hud(Moby *moby) {
         }
         angle = fast_normalize_angle((float)j * 0.19634955f);
         next_angle = fast_add_rotations(angle, 0.19634955f);
-        outer_x = truncate_float_to_s32(D_L08_00161B70 * fast_sin(angle));
-        outer_y = truncate_float_to_s32(D_L08_00161B74 * -fast_cos(angle));
-        inner_x = truncate_float_to_s32(D_L08_00161B70 * fast_sin(next_angle));
-        inner_y = truncate_float_to_s32(D_L08_00161B74 * -fast_cos(next_angle));
+        outer_x = truncate_float_to_s32(batalia_cannon_hud_health_dial_radius_x * fast_sin(angle));
+        outer_y = truncate_float_to_s32(batalia_cannon_hud_health_dial_radius_y * -fast_cos(angle));
+        inner_x =
+            truncate_float_to_s32(batalia_cannon_hud_health_dial_radius_x * fast_sin(next_angle));
+        inner_y =
+            truncate_float_to_s32(batalia_cannon_hud_health_dial_radius_y * -fast_cos(next_angle));
         xy[3] = 0xFFFFF000000000L;
         xy[2] = 0xFFFFF000000000L;
         xy[1] = 0xFFFFF000000000L;
         xy[0] = 0xFFFFF000000000L;
-        xy[0] += (unsigned int)((truncate_float_to_s32((D_L08_00161B64 + (float)inner_y) * 16.0f)
+        xy[0] += (unsigned int)((truncate_float_to_s32(
+                                     (batalia_cannon_hud_dial_center_y + (float)inner_y) * 16.0f)
                                  << 16) -
                                 (int)0x80000000);
-        xy[0] += (truncate_float_to_s32(D_L08_00161B60 + (float)inner_x) << 4) + 0x8000;
+        xy[0] += (truncate_float_to_s32(batalia_cannon_hud_dial_center_x + (float)inner_x) << 4) +
+                 0x8000;
         xy[1] +=
-            (unsigned int)((truncate_float_to_s32(D_L08_00161B64 * 16.0f) << 16) - (int)0x80000000);
-        xy[1] += (truncate_float_to_s32(D_L08_00161B60) << 4) + 0x8000;
-        xy[2] += (unsigned int)((truncate_float_to_s32((D_L08_00161B64 + (float)outer_y) * 16.0f)
+            (unsigned int)((truncate_float_to_s32(batalia_cannon_hud_dial_center_y * 16.0f) << 16) -
+                           (int)0x80000000);
+        xy[1] += (truncate_float_to_s32(batalia_cannon_hud_dial_center_x) << 4) + 0x8000;
+        xy[2] += (unsigned int)((truncate_float_to_s32(
+                                     (batalia_cannon_hud_dial_center_y + (float)outer_y) * 16.0f)
                                  << 16) -
                                 (int)0x80000000);
-        xy[2] += (truncate_float_to_s32(D_L08_00161B60 + (float)outer_x) << 4) + 0x8000;
+        xy[2] += (truncate_float_to_s32(batalia_cannon_hud_dial_center_x + (float)outer_x) << 4) +
+                 0x8000;
         xy[3] +=
-            (unsigned int)((truncate_float_to_s32(D_L08_00161B64 * 16.0f) << 16) - (int)0x80000000);
-        xy[3] += (truncate_float_to_s32(D_L08_00161B60) << 4) + 0x8000;
+            (unsigned int)((truncate_float_to_s32(batalia_cannon_hud_dial_center_y * 16.0f) << 16) -
+                           (int)0x80000000);
+        xy[3] += (truncate_float_to_s32(batalia_cannon_hud_dial_center_x) << 4) + 0x8000;
         FUN_L02_0020bc88_c(xy, uv_words, color_words, texture, 1);
     }
     if (scale_game_frames(15) < data->timer) {
@@ -546,67 +621,85 @@ void draw_batalia_cannon_hud(Moby *moby) {
                                      convert_integer_to_float(data->timer) /
                                          (float)scale_game_frames(15));
     }
-    uv_words[0] = D_L08_00161BE0;
-    uv_words[1] = D_L08_00161BE4;
-    uv_words[2] = D_L08_00161BE8;
-    uv_words[3] = D_L08_00161BEC;
+    uv_words[0] = batalia_cannon_hud_needle_uv0;
+    uv_words[1] = batalia_cannon_hud_needle_uv1;
+    uv_words[2] = batalia_cannon_hud_needle_uv2;
+    uv_words[3] = batalia_cannon_hud_needle_uv3;
     color_words[0] = color_words[1] = color_words[2] = color_words[3] = color;
     xy[3] = 0xFFFFF000000000L;
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
     angle = fast_normalize_angle(fast_add_rotations((*(float(*)[4]) & moby->rot)[2] * 4.0f, 0.0f));
-    xy[0] +=
-        (unsigned int)((truncate_float_to_s32(fast_sin(angle) * D_L08_00161B7C * 16.0f) << 16) -
-                       (int)0x80000000);
-    xy[0] += truncate_float_to_s32(fast_cos(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
+    xy[0] += (unsigned int)((truncate_float_to_s32(fast_sin(angle) *
+                                                   batalia_cannon_hud_needle_radius_y * 16.0f)
+                             << 16) -
+                            (int)0x80000000);
+    xy[0] += truncate_float_to_s32(fast_cos(angle) * batalia_cannon_hud_needle_radius_x * 16.0f) +
+             0x8000;
     angle = fast_normalize_angle(
         fast_add_rotations((*(float(*)[4]) & moby->rot)[2] * 4.0f, 1.5707964f));
-    xy[1] +=
-        (unsigned int)((truncate_float_to_s32(fast_sin(angle) * D_L08_00161B7C * 16.0f) << 16) -
-                       (int)0x80000000);
-    xy[1] += truncate_float_to_s32(fast_cos(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
+    xy[1] += (unsigned int)((truncate_float_to_s32(fast_sin(angle) *
+                                                   batalia_cannon_hud_needle_radius_y * 16.0f)
+                             << 16) -
+                            (int)0x80000000);
+    xy[1] += truncate_float_to_s32(fast_cos(angle) * batalia_cannon_hud_needle_radius_x * 16.0f) +
+             0x8000;
     angle = fast_normalize_angle(
         fast_add_rotations((*(float(*)[4]) & moby->rot)[2] * 4.0f, -1.5707964f));
-    xy[2] +=
-        (unsigned int)((truncate_float_to_s32(fast_sin(angle) * D_L08_00161B7C * 16.0f) << 16) -
-                       (int)0x80000000);
-    xy[2] += truncate_float_to_s32(fast_cos(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
+    xy[2] += (unsigned int)((truncate_float_to_s32(fast_sin(angle) *
+                                                   batalia_cannon_hud_needle_radius_y * 16.0f)
+                             << 16) -
+                            (int)0x80000000);
+    xy[2] += truncate_float_to_s32(fast_cos(angle) * batalia_cannon_hud_needle_radius_x * 16.0f) +
+             0x8000;
     angle = fast_normalize_angle(
         fast_add_rotations((*(float(*)[4]) & moby->rot)[2] * 4.0f, 3.1415927f));
-    xy[3] +=
-        (unsigned int)((truncate_float_to_s32(fast_sin(angle) * D_L08_00161B7C * 16.0f) << 16) -
-                       (int)0x80000000);
-    xy[3] += truncate_float_to_s32(fast_cos(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
-    FUN_L02_0020bc88_c(xy, uv_words, color_words, get_effect_texture(D_L08_00161BA8), 1);
+    xy[3] += (unsigned int)((truncate_float_to_s32(fast_sin(angle) *
+                                                   batalia_cannon_hud_needle_radius_y * 16.0f)
+                             << 16) -
+                            (int)0x80000000);
+    xy[3] += truncate_float_to_s32(fast_cos(angle) * batalia_cannon_hud_needle_radius_x * 16.0f) +
+             0x8000;
+    FUN_L02_0020bc88_c(
+        xy, uv_words, color_words, get_effect_texture(batalia_cannon_hud_yaw_needle_texture), 1);
     xy[3] = 0xFFFFF000000000L;
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
     angle = fast_normalize_angle(fast_add_rotations((*(float(*)[4]) & moby->rot)[1] * 8.0f, 0.0f));
-    xy[0] +=
-        (unsigned int)((truncate_float_to_s32(fast_sin(angle) * D_L08_00161B7C * 16.0f) << 16) -
-                       (int)0x80000000);
-    xy[0] += truncate_float_to_s32(fast_cos(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
+    xy[0] += (unsigned int)((truncate_float_to_s32(fast_sin(angle) *
+                                                   batalia_cannon_hud_needle_radius_y * 16.0f)
+                             << 16) -
+                            (int)0x80000000);
+    xy[0] += truncate_float_to_s32(fast_cos(angle) * batalia_cannon_hud_needle_radius_x * 16.0f) +
+             0x8000;
     angle = fast_normalize_angle(
         fast_add_rotations((*(float(*)[4]) & moby->rot)[1] * 8.0f, 1.5707964f));
-    xy[1] +=
-        (unsigned int)((truncate_float_to_s32(fast_sin(angle) * D_L08_00161B7C * 16.0f) << 16) -
-                       (int)0x80000000);
-    xy[1] += truncate_float_to_s32(fast_cos(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
+    xy[1] += (unsigned int)((truncate_float_to_s32(fast_sin(angle) *
+                                                   batalia_cannon_hud_needle_radius_y * 16.0f)
+                             << 16) -
+                            (int)0x80000000);
+    xy[1] += truncate_float_to_s32(fast_cos(angle) * batalia_cannon_hud_needle_radius_x * 16.0f) +
+             0x8000;
     angle = fast_normalize_angle(
         fast_add_rotations((*(float(*)[4]) & moby->rot)[1] * 8.0f, -1.5707964f));
-    xy[2] +=
-        (unsigned int)((truncate_float_to_s32(fast_sin(angle) * D_L08_00161B7C * 16.0f) << 16) -
-                       (int)0x80000000);
-    xy[2] += truncate_float_to_s32(fast_cos(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
+    xy[2] += (unsigned int)((truncate_float_to_s32(fast_sin(angle) *
+                                                   batalia_cannon_hud_needle_radius_y * 16.0f)
+                             << 16) -
+                            (int)0x80000000);
+    xy[2] += truncate_float_to_s32(fast_cos(angle) * batalia_cannon_hud_needle_radius_x * 16.0f) +
+             0x8000;
     angle = fast_normalize_angle(
         fast_add_rotations((*(float(*)[4]) & moby->rot)[1] * 8.0f, 3.1415927f));
-    xy[3] +=
-        (unsigned int)((truncate_float_to_s32(fast_sin(angle) * D_L08_00161B7C * 16.0f) << 16) -
-                       (int)0x80000000);
-    xy[3] += truncate_float_to_s32(fast_cos(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
-    FUN_L02_0020bc88_c(xy, uv_words, color_words, get_effect_texture(D_L08_00161BAC), 1);
+    xy[3] += (unsigned int)((truncate_float_to_s32(fast_sin(angle) *
+                                                   batalia_cannon_hud_needle_radius_y * 16.0f)
+                             << 16) -
+                            (int)0x80000000);
+    xy[3] += truncate_float_to_s32(fast_cos(angle) * batalia_cannon_hud_needle_radius_x * 16.0f) +
+             0x8000;
+    FUN_L02_0020bc88_c(
+        xy, uv_words, color_words, get_effect_texture(batalia_cannon_hud_pitch_needle_texture), 1);
 }
 
 int find_batalia_cannon_aim_target(struct Moby *moby) {
@@ -684,7 +777,8 @@ void update_batalia_cannon(Moby *moby) {
             euler_rotation_basis((*(float(*)[16]) & moby->rot_row0), (*(float(*)[4]) & moby->rot));
             clear_u64_value(direction);
             direction[2] = (*(float(*)[4]) & moby->rot)[2];
-            transform_vector_by_basis(work, &D_L08_00161A90_gp, (*(float(*)[16]) & moby->rot_row0));
+            transform_vector_by_basis(
+                work, &batalia_cannon_dismount_offset_gp, (*(float(*)[16]) & moby->rot_row0));
             fast_vec_add(work, work, (*(float(*)[4]) & moby->pos));
             func_L00_00217718_2E16A0(work, direction, 0, 1);
             jet_end_mount(0);
@@ -765,18 +859,26 @@ void update_batalia_cannon(Moby *moby) {
         magnitude = vector_length_xy(work);
         if (magnitude > 1.0f)
             func_L00_001FF328_2E16A0(work, work, magnitude);
-        yaw = D_L08_00161AE8_gp * 0.017453292f * D_0015ED6C * -work[0];
-        pitch = -(D_L08_00161AEC_gp * 0.017453292f * D_0015ED6C) * work[1];
+        yaw = batalia_cannon_max_yaw_rate_gp * 0.017453292f * D_0015ED6C * -work[0];
+        pitch = -(batalia_cannon_max_pitch_rate_gp * 0.017453292f * D_0015ED6C) * work[1];
         if ((data->yaw_step >= 0.0f && data->yaw_step < yaw) ||
             (data->yaw_step <= 0.0f && yaw < data->yaw_step))
-            approach_value(&data->yaw_step, yaw, D_L08_00161AF0_gp * 0.017453292f * D_0015ED70);
+            approach_value(&data->yaw_step,
+                           yaw,
+                           batalia_cannon_yaw_acceleration_gp * 0.017453292f * D_0015ED70);
         else
-            approach_value(&data->yaw_step, yaw, D_L08_00161AF8_gp * 0.017453292f * D_0015ED70);
+            approach_value(&data->yaw_step,
+                           yaw,
+                           batalia_cannon_yaw_deceleration_gp * 0.017453292f * D_0015ED70);
         if ((data->pitch_step >= 0.0f && data->pitch_step < pitch) ||
             (data->pitch_step <= 0.0f && pitch < data->pitch_step))
-            approach_value(&data->pitch_step, pitch, D_L08_00161AF4_gp * 0.017453292f * D_0015ED70);
+            approach_value(&data->pitch_step,
+                           pitch,
+                           batalia_cannon_pitch_acceleration_gp * 0.017453292f * D_0015ED70);
         else
-            approach_value(&data->pitch_step, pitch, D_L08_00161AFC_gp * 0.017453292f * D_0015ED70);
+            approach_value(&data->pitch_step,
+                           pitch,
+                           batalia_cannon_pitch_deceleration_gp * 0.017453292f * D_0015ED70);
         (*(float(*)[4]) & moby->rot)[2] =
             fast_add_rotations((*(float(*)[4]) & moby->rot)[2], data->yaw_step);
         (*(float(*)[4]) & moby->rot)[1] =
@@ -796,12 +898,13 @@ void update_batalia_cannon(Moby *moby) {
             if (data->barrel == 1) {
                 int count;
                 build_spherical_offset(direction,
-                                       D_L08_00161B00_gp * D_0015ED6C,
+                                       batalia_cannon_rocket_speed_gp * D_0015ED6C,
                                        (*(float(*)[4]) & moby->rot)[2],
                                        -(*(float(*)[4]) & moby->rot)[1]);
                 blend_moby_animation(data->guns[0], 1, 0, 0);
-                transform_vector_by_basis(
-                    muzzle, &D_L08_00161B30_gp, (*(float(*)[16]) & moby->rot_row0));
+                transform_vector_by_basis(muzzle,
+                                          &batalia_cannon_left_muzzle_offset_gp,
+                                          (*(float(*)[16]) & moby->rot_row0));
                 fast_vec_add(muzzle, (*(float(*)[4]) & moby->pos), muzzle);
                 spawn_turret_rocket(moby, muzzle, direction, target);
                 allocate_voice_for_target_entry(0, 0, moby);
@@ -843,12 +946,13 @@ void update_batalia_cannon(Moby *moby) {
             } else {
                 int count;
                 build_spherical_offset(direction,
-                                       D_L08_00161B00_gp * D_0015ED6C,
+                                       batalia_cannon_rocket_speed_gp * D_0015ED6C,
                                        (*(float(*)[4]) & moby->rot)[2],
                                        -(*(float(*)[4]) & moby->rot)[1]);
                 blend_moby_animation(data->guns[1], 1, 0, 0);
-                transform_vector_by_basis(
-                    muzzle, &D_L08_00161B40_gp, (*(float(*)[16]) & moby->rot_row0));
+                transform_vector_by_basis(muzzle,
+                                          &batalia_cannon_right_muzzle_offset_gp,
+                                          (*(float(*)[16]) & moby->rot_row0));
                 fast_vec_add(muzzle, (*(float(*)[4]) & moby->pos), muzzle);
                 spawn_turret_rocket(
                     moby, muzzle, direction, find_batalia_cannon_aim_target((char *)moby));
@@ -893,7 +997,7 @@ void update_batalia_cannon(Moby *moby) {
         if (fast_dec_timer_s16(&data->camera_timer)) {
             snap_scripted_camera_to_pose();
             transform_vector_by_basis(
-                direction, &D_L08_00161B50_gp, (*(float(*)[16]) & moby->rot_row0));
+                direction, &batalia_cannon_camera_offset_gp, (*(float(*)[16]) & moby->rot_row0));
             fast_vec_add(direction, direction, (*(float(*)[4]) & moby->pos));
             set_camera_position(direction);
             set_camera_rotation((*(float(*)[4]) & moby->rot));
@@ -1007,7 +1111,8 @@ void update_batalia_cannon(Moby *moby) {
             data->guns[0]->draw_dist = 0x7E;
             data->guns[0]->visible = 1;
             (*(long *)&data->guns[0]->spawn_frame) = (*(long *)&moby->spawn_frame);
-            transform_vector_by_basis(work, &D_L08_00161B10_gp, (*(float(*)[16]) & moby->rot_row0));
+            transform_vector_by_basis(
+                work, &batalia_cannon_left_gun_offset_gp, (*(float(*)[16]) & moby->rot_row0));
             fast_vec_add(work, (*(float(*)[4]) & moby->pos), work);
             {
                 Moby *gun = data->guns[0];
@@ -1017,7 +1122,8 @@ void update_batalia_cannon(Moby *moby) {
             }
         }
     } else {
-        transform_vector_by_basis(work, &D_L08_00161B10_gp, (*(float(*)[16]) & moby->rot_row0));
+        transform_vector_by_basis(
+            work, &batalia_cannon_left_gun_offset_gp, (*(float(*)[16]) & moby->rot_row0));
         fast_vec_add(work, (*(float(*)[4]) & moby->pos), work);
         {
             Moby *gun = data->guns[0];
@@ -1037,7 +1143,8 @@ void update_batalia_cannon(Moby *moby) {
             data->guns[1]->draw_dist = 0x7E;
             data->guns[1]->visible = 1;
             (*(long *)&data->guns[1]->spawn_frame) = (*(long *)&moby->spawn_frame);
-            transform_vector_by_basis(work, &D_L08_00161B20_gp, (*(float(*)[16]) & moby->rot_row0));
+            transform_vector_by_basis(
+                work, &batalia_cannon_right_gun_offset_gp, (*(float(*)[16]) & moby->rot_row0));
             fast_vec_add(work, (*(float(*)[4]) & moby->pos), work);
             {
                 Moby *gun = data->guns[1];
@@ -1047,7 +1154,8 @@ void update_batalia_cannon(Moby *moby) {
             }
         }
     } else {
-        transform_vector_by_basis(work, &D_L08_00161B20_gp, (*(float(*)[16]) & moby->rot_row0));
+        transform_vector_by_basis(
+            work, &batalia_cannon_right_gun_offset_gp, (*(float(*)[16]) & moby->rot_row0));
         fast_vec_add(work, (*(float(*)[4]) & moby->pos), work);
         {
             Moby *gun = data->guns[1];
@@ -1059,7 +1167,8 @@ void update_batalia_cannon(Moby *moby) {
     }
 
     if (data->visual) {
-        transform_vector_by_basis(work, &D_L08_00161BF0_gp, (*(float(*)[16]) & moby->rot_row0));
+        transform_vector_by_basis(
+            work, &batalia_cannon_visual_offset_gp, (*(float(*)[16]) & moby->rot_row0));
         fast_vec_add((*(float(*)[4]) & data->visual->pos), work, (*(float(*)[4]) & moby->pos));
         {
             Moby *visual = data->visual;

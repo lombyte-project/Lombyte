@@ -17,13 +17,13 @@ struct GateVars {
     f32 swingSpeed;
 };
 
-extern float gate_rise_acceleration_gp __asm__("D_L05_00161E80") __attribute__((sda));
-extern float gate_rise_deceleration_gp __asm__("D_L05_00161E84") __attribute__((sda));
-extern float gate_rise_max_speed_gp __asm__("D_L05_00161E88") __attribute__((sda));
-extern float gate_swing_acceleration_gp __asm__("D_L05_00161E8C") __attribute__((sda));
-extern float gate_swing_deceleration_gp __asm__("D_L05_00161E90") __attribute__((sda));
-extern float gate_swing_max_speed_gp __asm__("D_L05_00161E94") __attribute__((sda));
-extern int   gate_mobys_314eb0 __asm__("D_L05_0015FFD8");
+float      gate_rise_acceleration_gp __asm__("D_L05_00161E80") = 5e+01f;
+float      gate_rise_deceleration_gp __asm__("D_L05_00161E84") = 1e+01f;
+float      gate_rise_max_speed_gp __asm__("D_L05_00161E88") = 18.0f;
+float      gate_swing_acceleration_gp __asm__("D_L05_00161E8C") = 3.6e+02f;
+float      gate_swing_deceleration_gp __asm__("D_L05_00161E90") = 3.6e+02f;
+float      gate_swing_max_speed_gp __asm__("D_L05_00161E94") = 1.44e+03f;
+extern int gate_mobys_314eb0 __asm__("D_L05_0015FFD8");
 extern float
 advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);

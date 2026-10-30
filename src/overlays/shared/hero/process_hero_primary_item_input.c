@@ -662,7 +662,7 @@ extern PadState       D_0013CA40_p2523C8 __asm__("D_0013C940");
 extern int            D_00141660_lui __asm__("D_00141660") NOT_SDA;
 extern unsigned char  D_0013D5C8_2523C8[] __asm__("D_0013D4DC");
 extern HeroTableRow2C D_L05_0017C088[];
-extern int            D_L05_0015F674_gp __asm__("D_L05_0015F674") __attribute__((sda));
+int                   hero_item_input_r1_double_press_timer_gp __asm__("D_L05_0015F674") = 0;
 extern Moby          *D_L05_0015FFD8_macro __asm__("D_L05_0015FFD8") MACRO_ADDR;
 extern int            D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern int            D_0015ED84_gp __asm__("D_0015ED84") MACRO_ADDR;
@@ -1113,8 +1113,8 @@ int process_hero_primary_item_input(void) {
         if (FUN_L00_0020d498(3) == 3 && (*(Hero *)((char *)&hero)).state.current != 0x81 &&
             ((*(Hero *)((char *)&hero)).unk308 == 0 || D_0013D5C8_2523C8[0] == 0) &&
             (*(Hero *)((char *)&hero)).pack_disabled == 0) {
-            fast_dec_timer(&D_L05_0015F674_gp);
-            if (D_L05_0015F674_gp != 0) {
+            fast_dec_timer(&hero_item_input_r1_double_press_timer_gp);
+            if (hero_item_input_r1_double_press_timer_gp != 0) {
                 if ((*(Hero *)((char *)&hero)).state.control_mode < 2U ||
                     (*(Hero *)((char *)&hero)).state.control_mode == 0xC ||
                     (((*(Hero *)((char *)&hero)).state.control_mode == 2 ||
@@ -1127,7 +1127,7 @@ int process_hero_primary_item_input(void) {
             }
             if ((D_0013CA40_p2523C8.pressed & 8) &&
                 (*(Hero *)((char *)&hero)).state.current != 0x81) {
-                D_L05_0015F674_gp = scale_game_frames(0x1E);
+                hero_item_input_r1_double_press_timer_gp = scale_game_frames(0x1E);
             }
         } else if ((*(Hero *)((char *)&hero)).state.current != 0x13 &&
                    (*(Hero *)((char *)&hero)).state.current != 0x81 &&

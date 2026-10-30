@@ -43,9 +43,9 @@ typedef struct {
 } PlatVars;
 
 extern float D_0015ED70;
-extern float platform_hero_offset_tilt_gain_gp __asm__("D_L09_001619F4") __attribute__((sda));
-extern float platform_sink_speed_gp __asm__("D_L09_001619F8") __attribute__((sda));
-extern float platform_height_return_gain_gp __asm__("D_L09_001619FC") __attribute__((sda));
+float        platform_hero_offset_tilt_gain_gp __asm__("D_L09_001619F4") = 0.1f;
+float        platform_sink_speed_gp __asm__("D_L09_001619F8") = 0.35f;
+float        platform_height_return_gain_gp __asm__("D_L09_001619FC") = 0.3f;
 
 #include "rnc/overlay/l09/mobys/platform_data/platform_update.h"
 

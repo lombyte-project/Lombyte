@@ -10,8 +10,8 @@ typedef struct {
     u8 alpha;
 } SlotMoby;
 
-extern int  beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
-extern int  beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
+extern int  beam_slot_state[3] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern int  beam_slot_id[3] __asm__("D_L00_00161C88") MACRO_ADDR;
 extern void release_beam_slot(s32) __asm__("FUN_L00_002e20f8");
 extern void update_slot_panes_and_effects(s32, s32) __asm__("FUN_L00_002e2250");
 extern void draw_active_beam_slots() __asm__("FUN_L00_002e2af0");

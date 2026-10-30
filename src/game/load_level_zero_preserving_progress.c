@@ -34,8 +34,9 @@ extern Checkpoints D_0013D290;
 
 #include "rnc/game/item_state.h"
 
-extern u8  D_0015EE98[] MACRO_ADDR;
-extern s32 item_availability_restore_indices[] __asm__("D_001D5BA0");
+extern u8 D_0015EE98[] MACRO_ADDR;
+/* Item ids whose availability survives the reload; -1 ends the list. */
+extern s32 item_availability_restore_indices[20] __asm__("D_001D5BA0");
 
 extern void copy_memory_aligned(void *dst, void *src, s32 size) __asm__("func_001F9838");
 extern void load_and_initialize_level_chunk(void) __asm__("func_00209370");
@@ -113,3 +114,8 @@ extern __typeof__(load_level_zero_preserving_progress) func_00226B08
     __attribute__((alias("FUN_00226b08")));
 
 s32 hero_max_health = 4;
+
+s32 item_availability_restore_indices[20] = {
+    0x9,  0xA,  0xB,  0xD,  0xE,  0xF,  0x10, 0x11, 0x12, 0x13,
+    0x14, 0x15, 0x17, 0x18, 0x19, 0x20, 0x21, 0x22, 0x23, -1,
+};

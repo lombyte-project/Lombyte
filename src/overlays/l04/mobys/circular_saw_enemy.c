@@ -213,10 +213,10 @@ int check_circular_saw_melee_attack_spacing(struct Moby *moby) {
  * to out and returns the yaw toward it. (The passed speed is recomputed from the moby's state.) */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C3338), where it is exact; names translated to the US level program. */
 
-extern float circular_saw_flock_separation_weight_gp __asm__("D_L04_00161884") __attribute__((sda));
-float        compute_circular_saw_flock_steering(struct Moby *moby,
-                                                 void        *out,
-                                                 float        speed) __asm__("FUN_L04_002c1fb8");
+float circular_saw_flock_separation_weight_gp __asm__("D_L04_00161884") = 6.0f;
+float compute_circular_saw_flock_steering(struct Moby *moby,
+                                          void        *out,
+                                          float        speed) __asm__("FUN_L04_002c1fb8");
 
 float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float speed) {
     float away[4];

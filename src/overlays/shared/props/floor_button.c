@@ -16,8 +16,9 @@ typedef struct {
     u8 collected[1];
 } SaveFlags;
 
-extern SaveFlags     D_L05_001BB6B0;
-extern SaveFlags     D_L05_001BAA50_s __asm__("D_L05_001BAA50");
+extern SaveFlags D_L05_001BB6B0;
+extern SaveFlags l05_moby_save_flags __asm__("D_L05_001BAA50");
+
 extern unsigned char D_L05_0015FC88[] MACRO_ADDR;
 extern u8            D_0014C050[];
 
@@ -74,7 +75,7 @@ void floor_button_update(struct Moby *moby) {
         high = color << 16;
         moby->glow_color = high | shade | color;
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
-            D_L05_001BAA50_s.collected[(s16)moby->save_id] = moby->mission + 2;
+            l05_moby_save_flags.collected[(s16)moby->save_id] = moby->mission + 2;
             if (moby->mission == 0xFF ||
                 (D_L05_0015FC88[moby->mission] != 0xFF &&
                  D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {

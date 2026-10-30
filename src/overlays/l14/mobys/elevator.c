@@ -392,11 +392,24 @@ void settle_elevator_at_path_endpoint(struct Moby *elevator_moby) {
     }
 }
 
-extern u8 elevator_local_path_points[] __asm__("D_L14_001E03B0");
+/* The elevator's path in its own frame: rebuild_elevator_world_path transforms 11 points (i = 10 down to 0). */
+f32 elevator_local_path_points[11][4] __asm__("D_L14_001E03B0") = {
+    {-1.886368f,  1.962136f, 0.0f, 1.0f},
+    { 1.886367f,  1.962136f, 0.0f, 1.0f},
+    { 2.464658f,  1.005283f, 0.0f, 1.0f},
+    { 2.667728f, -0.004372f, 0.0f, 1.0f},
+    { 2.464659f, -1.014029f, 0.0f, 1.0f},
+    { 1.886368f, -1.962136f, 0.0f, 1.0f},
+    {-1.886369f, -1.962136f, 0.0f, 1.0f},
+    { -2.46466f, -1.014028f, 0.0f, 1.0f},
+    {-2.667728f, -0.004372f, 0.0f, 1.0f},
+    {-2.464659f,  1.005284f, 0.0f, 1.0f},
+    {-1.886368f,  1.962136f, 0.0f, 1.0f},
+};
 
 void rebuild_elevator_world_path(u8 *moby) {
     u8          *data = ((u8 *)MOBY(moby)->pvars);
-    u8          *local_path_point_cursor = elevator_local_path_points;
+    u8          *local_path_point_cursor = (u8 *)elevator_local_path_points;
     u8          *world_path_point_cursor = ((u8 *)l14_paths[*(s32 *)(data + 0x114)]) + 0x10;
     s32          i = 10;
     f32          one = 1.0f;

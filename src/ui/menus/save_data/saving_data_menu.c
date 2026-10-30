@@ -11,11 +11,10 @@ extern Unaligned64 D_0015EE98[1];
 
 #include "rnc/save/memory_card_state.h"
 
-extern u8 D_001D2578[];
-
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/ui/menus/menu_pages.h"
 
 extern void mode_freeze_init() __asm__("func_001FBAB8");
 extern s32  prepare_save_game() __asm__("FUN_002269c0");
@@ -31,7 +30,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
     s32              selected_slot;
     s32              pad_buttons;
     if (menu_system.current->focus == menu) {
-        if (((menu->data.save.step == 0) && (menu_system.previous == D_001D2578)) &&
+        if (((menu->data.save.step == 0) && (menu_system.previous == &save_confirm_page)) &&
             (menu_system.previous->confirmed != 0)) {
             menu->data.save.step = 1;
         }
@@ -121,7 +120,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
                 new_var = (((u8 *)&memory_card_state) + (selected_slot * 0x1C)) + 0x20;
                 if ((*((s32 *)new_var)) != (-1)) {
                     menu_system.unkD4 = 0;
-                    menu_system.next = (new_var = D_001D2578);
+                    menu_system.next = (new_var = (u8 *)&save_confirm_page);
                     D_001D2640[0] = menu->data.save.slot;
                 } else {
                     menu->data.save.step = 1;

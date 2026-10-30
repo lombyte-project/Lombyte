@@ -28,11 +28,11 @@ void update_morphoray_particles(struct Moby *morphoray_moby) __asm__("FUN_L14_00
 
 extern void update_morphoray_particles(struct Moby *) __asm__("FUN_L14_00305b18");
 
-extern f32 morphoray_ground_height_offset_gp __asm__("D_L14_001621E8") __attribute__((sda));
+f32 morphoray_ground_height_offset_gp __asm__("D_L14_001621E8") = 0.8f;
 
-extern f32 morphoray_yaw_step_gp __asm__("D_L14_001621EC") __attribute__((sda));
+f32 morphoray_yaw_step_gp __asm__("D_L14_001621EC") = 0.02617994f;
 
-extern f32 morphoray_position_offset_scale_gp __asm__("D_L14_001621F0") __attribute__((sda));
+f32 morphoray_position_offset_scale_gp __asm__("D_L14_001621F0") = 0.4f;
 
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 

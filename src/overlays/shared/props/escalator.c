@@ -7,9 +7,9 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "qcopy.h"
 
-extern int   escalator_direction_timer_frames_gp __asm__("D_L02_00161C18") __attribute__((sda));
-extern float escalator_target_speed_gp __asm__("D_L02_00161C14") __attribute__((sda));
-extern float escalator_acceleration_gp __asm__("D_L02_00161C1C") __attribute__((sda));
+extern int escalator_direction_timer_frames_gp __asm__("D_L02_00161C18") __attribute__((sda));
+float      escalator_target_speed_gp __asm__("D_L02_00161C14") = -2.5f;
+float      escalator_acceleration_gp __asm__("D_L02_00161C1C") = 2.5f;
 
 void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");
 

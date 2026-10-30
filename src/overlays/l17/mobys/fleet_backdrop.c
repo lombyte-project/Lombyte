@@ -33,16 +33,32 @@ float        D_L17_001623C0[4] __attribute__((section(".sdata"))) = {-0.5f, -1.0
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
 extern float D_L17_0016D3E4 NOT_SDA;
-extern float                backdrop_quad_side_lengths[] __asm__("D_L17_001DDFF8");
-extern float                backdrop_quad_color_blend_factors[] __asm__("D_L17_001DE040");
-extern float                D_L17_001DE0A0[];
-extern float                backdrop_scrolling_quad_start_half_widths[] __asm__("D_L17_001DE0B8");
-extern float                backdrop_quad_uv_rotation_angles[] __asm__("D_L17_001DE0D0");
-extern float                backdrop_scrolling_quad_base_uv_coordinates[] __asm__("D_L17_001E6FA0");
-extern int                  backdrop_quad_color_blend_source_colors[] __asm__("D_L17_001DE010");
-extern int                  backdrop_quad_color_blend_target_colors[] __asm__("D_L17_001DE028");
-extern int                  backdrop_scrolling_quad_texture_indices[] __asm__("D_L17_001DE088");
-int                         D_L17_001623B8 = 0x807e4931;
+
+/* The five backdrop quads: every per-quad table below is indexed by the
+   k < 5 / i < 5 loops of draw_fleet_backdrop_quads and
+   update_fleet_backdrop_animation. */
+float backdrop_quad_side_lengths[5] __asm__("D_L17_001DDFF8") = {
+    3.5e+03f, 4e+03f, 2e+03f, 3e+03f, 3.3e+03f};
+
+float backdrop_quad_color_blend_factors[5] __asm__("D_L17_001DE040") = {
+    0.0f, 1.0f, 0.33f, 0.55f, 0.22f};
+
+extern float D_L17_001DE0A0[];
+extern float backdrop_scrolling_quad_start_half_widths[] __asm__("D_L17_001DE0B8");
+float        backdrop_quad_uv_rotation_angles[5] __asm__("D_L17_001DE0D0") = {0};
+
+float backdrop_scrolling_quad_base_uv_coordinates[8] __asm__("D_L17_001E6FA0") = {
+    -8.0f, 0.0f, -8.0f, 1.0f, 8.0f, 0.0f, 8.0f, 1.0f};
+
+/* RGBA words, 0xAABBGGRR. */
+int backdrop_quad_color_blend_source_colors[5] __asm__("D_L17_001DE010") = {
+    0x80252525, 0x80202020, 0x80252525, 0x80101010, 0x80151515};
+
+int backdrop_quad_color_blend_target_colors[5] __asm__("D_L17_001DE028") = {
+    0x80101030, 0x80301010, 0x80101015, 0x80151010, 0x80151015};
+
+extern int backdrop_scrolling_quad_texture_indices[] __asm__("D_L17_001DE088");
+int  backdrop_scrolling_quad_color __asm__("D_L17_001623B8") = 0x807e4931; /* RGBA, 0xAABBGGRR */
 void draw_fleet_backdrop_quads(struct Moby *moby) __asm__("FUN_L17_002f32f0");
 
 void draw_fleet_backdrop_quads(struct Moby *moby) {
@@ -74,10 +90,10 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
         *(long *)&pkt.q[4] = 0x0000FF9000000260LL;
         *(long *)&pkt.q[6] = 0x0000008000000048LL;
         *(long *)&pkt.q[0] = 0;
-        pkt.col[3] = D_L17_001623B8;
-        pkt.col[2] = D_L17_001623B8;
-        pkt.col[1] = D_L17_001623B8;
-        pkt.col[0] = D_L17_001623B8;
+        pkt.col[3] = backdrop_scrolling_quad_color;
+        pkt.col[2] = backdrop_scrolling_quad_color;
+        pkt.col[1] = backdrop_scrolling_quad_color;
+        pkt.col[0] = backdrop_scrolling_quad_color;
         {
             float *qu = &pkt.uv[0];
             float *qv = &pkt.uv[1];
@@ -154,9 +170,15 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
 extern float backdrop_shared_radius_numerator_gp __asm__("D_L17_001623D0") __attribute__((sda));
 extern float backdrop_offset_radius_divisor_gp __asm__("D_L17_001623D8") __attribute__((sda));
 
-extern float backdrop_quad_uv_rotation_rate_factors[] __asm__("D_L17_001DDFE0");
-extern float backdrop_quad_color_blend_direction_multipliers[] __asm__("D_L17_001DE058");
-extern float backdrop_quad_color_blend_rates[] __asm__("D_L17_001DE070");
+float backdrop_quad_uv_rotation_rate_factors[5] __asm__("D_L17_001DDFE0") = {
+    0.5f, -0.24f, 0.3f, 1.0f, -0.6f};
+
+float backdrop_quad_color_blend_direction_multipliers[5] __asm__("D_L17_001DE058") = {
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+
+float backdrop_quad_color_blend_rates[5] __asm__("D_L17_001DE070") = {
+    0.1f, 0.15f, 0.26f, 0.17f, 0.05f};
+
 extern float backdrop_heading_radius_numerator_addend_gp __asm__("D_L17_001623D4")
     __attribute__((sda));
 void update_fleet_backdrop_animation(struct Moby *moby) __asm__("FUN_L17_002f3848");

@@ -60,26 +60,26 @@ typedef struct {
 extern unsigned char D_001413F4_r[] __asm__("D_001413F4");
 extern char         *create_moby(int);
 extern unsigned char D_0013D4D6[];
-extern float         D_L06_00161D78_gp __asm__("D_L06_00161D78") __attribute__((sda));
-extern float         D_L06_00161D7C_gp __asm__("D_L06_00161D7C") __attribute__((sda));
-extern float         D_L06_00161D80_gp __asm__("D_L06_00161D80") __attribute__((sda));
+extern float         drawbridge_extension_gp __asm__("D_L06_00161D78") __attribute__((sda));
+extern float         drawbridge_pitch_degrees_gp __asm__("D_L06_00161D7C") __attribute__((sda));
+extern float         drawbridge_yaw_degrees_gp __asm__("D_L06_00161D80") __attribute__((sda));
 extern void          set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void                 jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 void         enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern float D_L06_0015F3FC;
-extern float D_L06_00161D84_gp __asm__("D_L06_00161D84") __attribute__((sda));
-extern float D_L06_00161D88_gp __asm__("D_L06_00161D88") __attribute__((sda));
-extern float D_L06_00161D8C_gp __asm__("D_L06_00161D8C") __attribute__((sda));
-extern float D_L06_00161D90_gp __asm__("D_L06_00161D90") __attribute__((sda));
-extern float D_L06_00161D94_gp __asm__("D_L06_00161D94") __attribute__((sda));
-extern float D_L06_00161D98_gp __asm__("D_L06_00161D98") __attribute__((sda));
+float        drawbridge_extension_max_speed_gp __asm__("D_L06_00161D84") = 1e+01f;
+float        drawbridge_pitch_max_speed_gp __asm__("D_L06_00161D88") = 3e+02f;
+float        drawbridge_yaw_max_speed_gp __asm__("D_L06_00161D8C") = 3e+02f;
+float        drawbridge_extension_acceleration_gp __asm__("D_L06_00161D90") = 15.0f;
+float        drawbridge_pitch_acceleration_gp __asm__("D_L06_00161D94") = 2e+02f;
+float        drawbridge_yaw_acceleration_gp __asm__("D_L06_00161D98") = 2e+02f;
 
-float D_L06_00161D9C = 0;
+float drawbridge_extension_speed __asm__("D_L06_00161D9C") = 0;
 
-extern float D_L06_00161DA0_gp __asm__("D_L06_00161DA0") __attribute__((sda));
-extern float D_L06_00161DA4_gp __asm__("D_L06_00161DA4") __attribute__((sda));
-extern float D_L06_00161DAC_gp __asm__("D_L06_00161DAC") __attribute__((sda));
-extern float D_L06_00161DB0_gp __asm__("D_L06_00161DB0") __attribute__((sda));
+float        drawbridge_pitch_speed_gp __asm__("D_L06_00161DA0") = 0;
+float        drawbridge_yaw_speed_gp __asm__("D_L06_00161DA4") = 0;
+float        drawbridge_pitch_start_extension_gp __asm__("D_L06_00161DAC") = 5.0f;
+float        drawbridge_yaw_start_pitch_gp __asm__("D_L06_00161DB0") = 3e+02f;
 extern void  update_drawbridge_segment_transforms(Moby *) __asm__("FUN_L06_002f5d78");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void  jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -106,20 +106,20 @@ typedef struct DrawbridgeVars {
 
 extern char drawbridge_first_row_local_offset_gp[4] __asm__("D_L06_00161D50") __attribute__((sda));
 extern char drawbridge_second_row_local_offset_gp[4] __asm__("D_L06_00161D60") __attribute__((sda));
-extern float drawbridge_min_segment_distance_base_gp __asm__("D_L06_00161D70") __attribute__((sda));
-extern float drawbridge_min_segment_distance_step_gp __asm__("D_L06_00161D74") __attribute__((sda));
-extern float D_L06_00161D78 __attribute__((sda));
-extern float D_L06_00161D7C __attribute__((sda));
-extern float D_L06_00161D80 __attribute__((sda));
+float       drawbridge_min_segment_distance_base_gp __asm__("D_L06_00161D70") = -0.6f;
+float       drawbridge_min_segment_distance_step_gp __asm__("D_L06_00161D74") = 0.25f;
+extern float drawbridge_extension __asm__("D_L06_00161D78") __attribute__((sda));
+extern float drawbridge_pitch_degrees __asm__("D_L06_00161D7C") __attribute__((sda));
+extern float drawbridge_yaw_degrees __asm__("D_L06_00161D80") __attribute__((sda));
 void         update_drawbridge_segment_transforms(Moby *moby) __asm__("FUN_L06_002f5d78");
 
 #include "sda.h"
 
-float D_L06_00161D78_gp __asm__("D_L06_00161D78") = 0;
+float drawbridge_extension_gp __asm__("D_L06_00161D78") = 0;
 
-float D_L06_00161D7C_gp __asm__("D_L06_00161D7C") = 0;
+float drawbridge_pitch_degrees_gp __asm__("D_L06_00161D7C") = 0;
 
-float D_L06_00161D80_gp __asm__("D_L06_00161D80") = 0;
+float drawbridge_yaw_degrees_gp __asm__("D_L06_00161D80") = 0;
 
 void update_drawbridge(Moby *moby) {
     enum {
@@ -140,9 +140,9 @@ void update_drawbridge(Moby *moby) {
         int status = visited52[moby->mission + (current_level_index << 4)];
         if (status == 0xFF) {
             moby->state = 6;
-            D_L06_00161D78_gp = 20.0f;
-            D_L06_00161D7C_gp = 1000.0f;
-            D_L06_00161D80_gp = 1000.0f;
+            drawbridge_extension_gp = 20.0f;
+            drawbridge_pitch_degrees_gp = 1000.0f;
+            drawbridge_yaw_degrees_gp = 1000.0f;
         } else {
             moby->state = 1;
         }
@@ -205,36 +205,38 @@ void update_drawbridge(Moby *moby) {
         break;
     case ANIMATE_DRAWBRIDGE_AND_CAMERA:
         jet_clear_persistent(moby->mission);
-        if (D_L06_00161D78_gp < 20.0f) {
-            advance_accelerated_scalar(&D_L06_00161D78_gp,
-                                       &D_L06_00161D9C,
+        if (drawbridge_extension_gp < 20.0f) {
+            advance_accelerated_scalar(&drawbridge_extension_gp,
+                                       &drawbridge_extension_speed,
                                        20.0f,
-                                       D_L06_00161D90_gp * frame_time_sq,
-                                       D_L06_00161D90_gp * frame_time_sq,
-                                       D_L06_00161D84_gp * frame_time);
+                                       drawbridge_extension_acceleration_gp * frame_time_sq,
+                                       drawbridge_extension_acceleration_gp * frame_time_sq,
+                                       drawbridge_extension_max_speed_gp * frame_time);
         }
-        if (D_L06_00161D78_gp > D_L06_00161DAC_gp && D_L06_00161D7C_gp < 1000.0f) {
-            advance_accelerated_scalar(&D_L06_00161D7C_gp,
-                                       &D_L06_00161DA0_gp,
+        if (drawbridge_extension_gp > drawbridge_pitch_start_extension_gp &&
+            drawbridge_pitch_degrees_gp < 1000.0f) {
+            advance_accelerated_scalar(&drawbridge_pitch_degrees_gp,
+                                       &drawbridge_pitch_speed_gp,
                                        1000.0f,
-                                       D_L06_00161D94_gp * frame_time_sq,
-                                       D_L06_00161D94_gp * frame_time_sq,
-                                       D_L06_00161D88_gp * frame_time);
+                                       drawbridge_pitch_acceleration_gp * frame_time_sq,
+                                       drawbridge_pitch_acceleration_gp * frame_time_sq,
+                                       drawbridge_pitch_max_speed_gp * frame_time);
         }
-        if (D_L06_00161D7C_gp > D_L06_00161DB0_gp && D_L06_00161D80_gp < 1000.0f) {
-            advance_accelerated_scalar(&D_L06_00161D80_gp,
-                                       &D_L06_00161DA4_gp,
+        if (drawbridge_pitch_degrees_gp > drawbridge_yaw_start_pitch_gp &&
+            drawbridge_yaw_degrees_gp < 1000.0f) {
+            advance_accelerated_scalar(&drawbridge_yaw_degrees_gp,
+                                       &drawbridge_yaw_speed_gp,
                                        1000.0f,
-                                       D_L06_00161D98_gp * frame_time_sq,
-                                       D_L06_00161D98_gp * frame_time_sq,
-                                       D_L06_00161D8C_gp * frame_time);
+                                       drawbridge_yaw_acceleration_gp * frame_time_sq,
+                                       drawbridge_yaw_acceleration_gp * frame_time_sq,
+                                       drawbridge_yaw_max_speed_gp * frame_time);
         }
-        if (1000.0f <= D_L06_00161D80_gp) {
+        if (1000.0f <= drawbridge_yaw_degrees_gp) {
             moby->state = 5;
             data->fade = -1.0f;
         }
         slot = moby->command;
-        if (20.0f <= D_L06_00161D78_gp) {
+        if (20.0f <= drawbridge_extension_gp) {
             if (func_L00_0028EB98_2F69D0(data->c[9], slot) != 0) {
                 if (slot != -1 &&
                     ((Slot *)((char *)&voice_pool + slot * 0x70))->p88 == data->c[9] &&
@@ -246,14 +248,14 @@ void update_drawbridge(Moby *moby) {
             }
         }
         update_drawbridge_segment_transforms(moby);
-        if (D_L06_00161D78_gp < 20.0f) {
-            blend = D_L06_00161D78_gp / 20.0f;
+        if (drawbridge_extension_gp < 20.0f) {
+            blend = drawbridge_extension_gp / 20.0f;
             qcopy_nc(&from_pos, &l06_cuboids[data->node_start].pos);
             qcopy_nc(&to_pos, &l06_cuboids[data->node_mid].pos);
             qcopy_nc(&from_rot, &l06_cuboids[data->node_start].rot);
             qcopy_nc(&to_rot, &l06_cuboids[data->node_mid].rot);
         } else {
-            blend = D_L06_00161D80_gp / 1000.0f;
+            blend = drawbridge_yaw_degrees_gp / 1000.0f;
             qcopy_nc(&from_pos, &l06_cuboids[data->node_mid].pos);
             qcopy_nc(&to_pos, &l06_cuboids[data->node_end].pos);
             qcopy_nc(&from_rot, &l06_cuboids[data->node_mid].rot);
@@ -295,7 +297,7 @@ void update_drawbridge_segment_transforms(Moby *moby) {
     float           length, angle, left, min_length, right, limit;
 
     for (i = 0; i < 20; i++) {
-        length = D_L06_00161D78 - (float)i;
+        length = drawbridge_extension - (float)i;
         if (length < 0.0f)
             length = 0.0f;
         fast_vec_normalize(&first, &moby->rot_row0, length);
@@ -309,7 +311,7 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         fast_vec_add(&result, &result, &moby->pos);
         fast_vec_add(&result, &result, &first);
         qcopy(&data->b[i]->pos, &result);
-        angle = D_L06_00161D7C * 0.017453292f - (float)(i * 45) * 0.017453292f;
+        angle = drawbridge_pitch_degrees * 0.017453292f - (float)(i * 45) * 0.017453292f;
         if (angle > 1.5707964f)
             angle = 1.5707964f;
         else if (angle < 0.0f)
@@ -323,7 +325,7 @@ void update_drawbridge_segment_transforms(Moby *moby) {
     for (j = 0; j < 10; j++) {
         min_length = drawbridge_min_segment_distance_base_gp +
                      (float)(4 - j) * drawbridge_min_segment_distance_step_gp;
-        length = D_L06_00161D78 - j * 2.0f;
+        length = drawbridge_extension - j * 2.0f;
         right = length - 1.0f;
         if (length < min_length)
             length = min_length;
@@ -342,8 +344,8 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         fast_vec_add(&result, &result, &second);
         qcopy(&data->d[j]->pos, &result);
 
-        left = D_L06_00161D7C * 0.017453292f - (float)(j * 2) * 0.7853982f;
-        limit = left - D_L06_00161DA0_gp * 0.017453292f;
+        left = drawbridge_pitch_degrees * 0.017453292f - (float)(j * 2) * 0.7853982f;
+        limit = left - drawbridge_pitch_speed_gp * 0.017453292f;
         if (left > 1.5707964f)
             left = 1.5707964f;
         else if (left < 0.0f)
@@ -355,8 +357,8 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         if (left != 0.0f && limit == 0.0f)
             allocate_voice_for_target_entry(1, 0, data->c[j]);
 
-        right = D_L06_00161D7C * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
-        limit = right - D_L06_00161DA0_gp * 0.017453292f;
+        right = drawbridge_pitch_degrees * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
+        limit = right - drawbridge_pitch_speed_gp * 0.017453292f;
         if (right > 1.5707964f)
             right = 1.5707964f;
         else if (right < 0.0f)
@@ -371,8 +373,8 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         data->c[j]->rot.x = -left;
         data->d[j]->rot.x = right;
 
-        left = D_L06_00161D80 * 0.017453292f - (float)(j * 2) * 0.7853982f;
-        limit = left - D_L06_00161DA4_gp * 0.017453292f;
+        left = drawbridge_yaw_degrees * 0.017453292f - (float)(j * 2) * 0.7853982f;
+        limit = left - drawbridge_yaw_speed_gp * 0.017453292f;
         if (left > 1.5707964f)
             left = 1.5707964f;
         else if (left < 0.0f)
@@ -384,8 +386,8 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         if (left != 0.0f && limit == 0.0f)
             allocate_voice_for_target_entry(2, 0, data->c[j]);
 
-        right = D_L06_00161D80 * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
-        limit = left - D_L06_00161DA4_gp * 0.017453292f;
+        right = drawbridge_yaw_degrees * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
+        limit = left - drawbridge_yaw_speed_gp * 0.017453292f;
         if (right > 1.5707964f)
             right = 1.5707964f;
         else if (right < 0.0f)

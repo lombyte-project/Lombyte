@@ -25,11 +25,15 @@ extern struct Moby *D_L10_0015FFD8;
 extern void        *memcpy(void *, const void *, u32);
 extern OvlQuad      D_L10_00167240;
 
-extern char
-    l10_data_processor_linked_effect_missing_processor_link_message[] __asm__("D_L10_001DD1D0");
-extern char l10_data_processor_linked_effect_deleted_instance_message[] __asm__("D_L10_001DD210");
+char l10_data_processor_linked_effect_missing_processor_link_message[63] __asm__("D_L10_001DD1D0") =
+
+    "moby class 1067 REQUIRES a link to dataProcessor class 1073!!\n";
+
+char l10_data_processor_linked_effect_deleted_instance_message[30] __asm__("D_L10_001DD210") =
+    "\tMoby Maya Index %d deleted.\n";
+
 extern unsigned char
-    l10_data_processor_linked_effect_initial_strip_order[] __asm__("D_L10_00161CA8");
+    l10_data_processor_linked_effect_initial_strip_order[10] __asm__("D_L10_00161CA8");
 extern unsigned char D_001413F4[];
 void                 render_data_processor_linked_effect(u8 *moby) __asm__("FUN_L10_002da690");
 
@@ -135,8 +139,18 @@ void update_data_processor_linked_effect(struct Moby *moby) {
 
 typedef int u128_c __attribute__((mode(TI)));
 
-extern f32 data_processor_linked_effect_base_uvs[] __asm__("D_L10_001D9FF0");
-extern f32 data_processor_linked_effect_quad_vertex_offsets[] __asm__("D_L10_001DA010");
+/* Four (u, v) pairs: the render loop reads [k * 2] and [k * 2 + 1] for k < 4. */
+f32 data_processor_linked_effect_base_uvs[8] __asm__("D_L10_001D9FF0") = {
+    0.0f, 0.0f, 0.0f, 1.0f, 0.25f, 0.0f, 0.25f, 1.0f};
+
+/* One 16-byte vector per quad vertex (vertex < 4, stride 0x10, added by fast_vec_add). */
+f32 data_processor_linked_effect_quad_vertex_offsets[4][4] __asm__("D_L10_001DA010") = {
+    {0.0f, 0.0f, -0.05f, 1.0f},
+    {0.0f, 0.0f,  0.05f, 1.0f},
+    {0.0f, 0.0f, -0.05f, 1.0f},
+    {0.0f, 0.0f,  0.05f, 1.0f},
+};
+
 extern s32 D_L10_00161D64;
 extern s32 D_L10_00161D68;
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
@@ -297,3 +311,6 @@ void render_data_processor_linked_effect(u8 *moby) {
 
 int D_L10_00161D64 = 0;
 int D_L10_00161D68 = 0;
+
+unsigned char l10_data_processor_linked_effect_initial_strip_order[10] __asm__("D_L10_00161CA8") = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9};

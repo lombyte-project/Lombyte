@@ -19,7 +19,9 @@
 
 extern int D_L04_0015FFD8;
 
-extern char  snow_plow_missing_path_warning_format[] __asm__("D_L04_001DBE10");
+char snow_plow_missing_path_warning_format[48] __asm__("D_L04_001DBE10") =
+    "WARNING moby class %d instance %d has no path!\n";
+
 extern char  D_L04_00166E00[];
 extern float D_L04_0015F580[] MACRO_ADDR;
 

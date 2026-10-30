@@ -49,8 +49,11 @@ void initialize_leg_rig_angle_defaults(void *unused, char *movement_data) {
     *(float *)(movement_data + 0x1C0) = 0.19634955f;
 }
 
-extern char  invalid_animation_message[] __asm__("D_L04_001DB360");
-extern char  rig_size_message[] __asm__("D_L04_001DB3F0");
+char invalid_animation_message[139] __asm__("D_L04_001DB360") =
+    "\n\nInvalid anim detected on pLD->anims[%d]->anim in walk_init2LegAnim.\nSee walk.h and check your initialization function for moby class %d\n";
+
+char rig_size_message[32] __asm__("D_L04_001DB3F0") = "sizeof(w_2legData) = %d bytes \n";
+
 extern void  debug_print() __asm__("FUN_001e93b0");
 extern void  raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern float FUN_L04_001f1978(float);

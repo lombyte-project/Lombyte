@@ -344,9 +344,14 @@ typedef struct {
 extern char        *D_L03_0015FFD8_292e98 __asm__("D_L03_0015FFD8");
 extern struct Moby *D_L03_0015FFD8_m292 __asm__("D_L03_0015FFD8");
 
-extern int  D_L03_0015FDFC;
-extern char train_missing_master_warning_format[] __asm__("D_L03_001E2448");
-extern char train_end_path_missing_stop_node_warning[] __asm__("D_L03_001E2478");
+extern int D_L03_0015FDFC;
+
+char train_missing_master_warning_format[48] __asm__("D_L03_001E2448") =
+    "train has no master! Deleting moby instance %d\n";
+
+char train_end_path_missing_stop_node_warning[124] __asm__("D_L03_001E2478") =
+    "train end path has no STOP NODE!!!\n  Bailing out of the end cutscene before the train goes out of control and kills us all!";
+
 extern int  FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int  is_hero_on_moby(char *) __asm__("FUN_L01_00277fb8");
 extern int  is_moby_class_23e_in_state_14(char *) __asm__("FUN_L03_002c6c60");

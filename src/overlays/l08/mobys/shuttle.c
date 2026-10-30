@@ -49,11 +49,13 @@ typedef struct {
     s32 owner; /* 0x24: -1 when free */
 } LiftLock;
 
-extern s32      level_game_mode __asm__("D_L08_0015F5C4");
-extern s32      D_L08_0015F594 __attribute__((sda));
+extern s32 level_game_mode __asm__("D_L08_0015F5C4");
+extern s32 D_L08_0015F594 __attribute__((sda));
+
 extern LiftLock l08_shuttle_departure_lock __asm__("D_L08_00179C10");
-extern s32      D_0013CAE4[];
-extern void     build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
+
+extern s32  D_0013CAE4[];
+extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void
 resolve_point_path_segment_xy_clearance(s32, float, void *, void *) __asm__("FUN_L00_00261d78");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");

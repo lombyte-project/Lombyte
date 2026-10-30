@@ -18,3 +18,5 @@ void backup_current_cam(void) {
 }
 
 struct CameraSavedState camera_saved_states[3] = {0};
+
+s32 camera_selectable_flags[48] = {0};

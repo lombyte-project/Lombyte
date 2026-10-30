@@ -800,11 +800,192 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
 extern s32 blarg_heavy_interceptor_light_ring_vertex_count_gp __asm__("D_L14_00161418")
     __attribute__((sda));
 
-extern float blarg_heavy_interceptor_light_ring_vertex_positions[][3] __asm__("D_L14_001D7A60");
+/* The light ring mesh: 82 vertices (the count above is 82, the draw transforms them into an 82-entry stack array). */
+#define BLARG_LIGHT_RING_VERTEX_CAPACITY 82
 
-extern s32 blarg_heavy_interceptor_light_ring_vertex_colors[] __asm__("D_L14_001D80C8");
+float blarg_heavy_interceptor_light_ring_vertex_positions[82][3] __asm__("D_L14_001D7A60") = {
+    {  3.71458f, -3.686132f,     -0.0f},
+    { 3.612892f, -1.164749f,     -0.0f},
+    { 0.743221f, -0.617193f,      0.0f},
+    { 0.838738f, -0.432467f,     -0.0f},
+    { 0.003774f, -0.298786f,      0.0f},
+    { 0.838738f, -0.432467f,     -0.0f},
+    {-0.000161f, -0.211026f,      0.0f},
+    { 0.838738f, -0.432467f,     -0.0f},
+    {-0.000161f, -0.200697f,  0.06509f},
+    { 0.838738f, -0.432467f,     -0.0f},
+    { 0.967502f, -0.443626f, 0.143877f},
+    { 3.612892f, -1.164749f,     -0.0f},
+    { 0.967502f, -0.443626f, 0.143877f},
+    { 3.887644f, -1.176718f, 0.381633f},
+    { 0.967502f, -0.443626f, 0.143877f},
+    { 3.912533f, -1.006291f, 0.729763f},
+    { 0.967502f, -0.443626f, 0.143877f},
+    { 0.975131f,    -0.379f, 0.274851f},
+    {-0.000161f, -0.200697f,  0.06509f},
+    { 0.975131f,    -0.379f, 0.274851f},
+    {-0.000161f, -0.170723f, 0.123809f},
+    { 0.975131f,    -0.379f, 0.274851f},
+    {-0.000161f, -0.124038f, 0.170408f},
+    { 0.975131f,    -0.379f, 0.274851f},
+    {  0.97663f, -0.275592f,  0.37862f},
+    { 3.912533f, -1.006291f, 0.729763f},
+    {  0.97663f, -0.275592f,  0.37862f},
+    { 3.827825f,  -0.71797f, 0.986377f},
+    {  0.97663f, -0.275592f,  0.37862f},
+    { 3.581488f, -0.357366f, 1.097827f},
+    {  0.97663f, -0.275592f,  0.37862f},
+    { 0.772205f, -0.128213f, 0.393869f},
+    {-0.000161f, -0.124038f, 0.170408f},
+    { 0.772205f, -0.128213f, 0.393869f},
+    {-0.000161f, -0.065211f, 0.200327f},
+    { 0.772205f, -0.128213f, 0.393869f},
+    {-0.000161f,       0.0f, 0.210636f},
+    { 0.772205f, -0.128213f, 0.393869f},
+    { 0.634602f,       0.0f, 0.377883f},
+    { 3.581488f, -0.357366f, 1.097827f},
+    { 0.634602f,       0.0f, 0.377883f},
+    { 3.280884f,       0.0f, 1.075121f},
+    { 0.634602f,       0.0f, 0.377883f},
+    { 3.295124f,  0.334007f, 1.026069f},
+    { 0.634602f,       0.0f, 0.377883f},
+    { 0.665676f,  0.119523f, 0.367174f},
+    {-0.000161f,       0.0f, 0.210636f},
+    { 0.665676f,  0.119523f, 0.367174f},
+    {-0.000161f,  0.065211f, 0.200327f},
+    { 0.665676f,  0.119523f, 0.367174f},
+    {-0.000161f,  0.124038f, 0.170408f},
+    { 0.665676f,  0.119523f, 0.367174f},
+    { 0.811952f,  0.250042f, 0.343517f},
+    { 3.295124f,  0.334007f, 1.026069f},
+    { 0.811952f,  0.250042f, 0.343517f},
+    { 3.482124f,  0.664333f, 0.912688f},
+    { 0.811952f,  0.250042f, 0.343517f},
+    { 3.664679f,  0.953361f, 0.691379f},
+    { 0.811952f,  0.250042f, 0.343517f},
+    { 0.859364f,  0.354278f, 0.256923f},
+    {-0.000161f,  0.124038f, 0.170408f},
+    { 0.859364f,  0.354278f, 0.256923f},
+    {-0.000161f,  0.170723f, 0.123809f},
+    { 0.859364f,  0.354278f, 0.256923f},
+    {-0.000161f,  0.200697f,  0.06509f},
+    { 0.859364f,  0.354278f, 0.256923f},
+    { 0.799961f,  0.401565f, 0.130236f},
+    { 3.664679f,  0.953361f, 0.691379f},
+    { 0.799961f,  0.401565f, 0.130236f},
+    { 3.729607f,  1.137043f, 0.368765f},
+    { 0.727714f,  0.403161f,      0.0f},
+    { 3.762307f,  1.204196f,      0.0f},
+    { 0.727714f,  0.403161f,      0.0f},
+    { 3.762307f,  1.204196f,      0.0f},
+    { 0.727714f,  0.403161f,      0.0f},
+    { 0.727714f,  0.403161f,      0.0f},
+    { 0.727714f,  0.403161f,      0.0f},
+    {-0.000161f,  0.211026f,      0.0f},
+    { 0.727714f,  0.403161f,      0.0f},
+    {-0.000161f,  0.211026f,      0.0f},
+    { 0.799961f,  0.401565f, 0.130236f},
+    {-0.000161f,  0.200697f,  0.06509f},
+};
 
-extern char blarg_heavy_interceptor_light_ring_texture_coordinates[] __asm__("D_L14_001D7E38");
+s32 blarg_heavy_interceptor_light_ring_vertex_colors[82] __asm__("D_L14_001D80C8") = {
+    0x507f7f,   0x507f7f,   0x507f7f,   0x10507f7f, 0x507f7f,   0x16507f7f, 0x7f507f7f, 0x20507f7f,
+    0x7f507f7f, 0x26507f7f, 0x30507f7f, 0x507f7f,   0x36507f7f, 0x507f7f,   0x40507f7f, 0x507f7f,
+    0x46507f7f, 0x50507f7f, 0x7f507f7f, 0x46507f7f, 0x7f507f7f, 0x40507f7f, 0x7f507f7f, 0x36507f7f,
+    0x30507f7f, 0x507f7f,   0x26507f7f, 0x507f7f,   0x20507f7f, 0x507f7f,   0x16507f7f, 0x10507f7f,
+    0x7f507f7f, 0x16507f7f, 0x7f507f7f, 0x20507f7f, 0x7f507f7f, 0x26507f7f, 0x30507f7f, 0x507f7f,
+    0x36507f7f, 0x507f7f,   0x40507f7f, 0x507f7f,   0x46507f7f, 0x50507f7f, 0x7f507f7f, 0x46507f7f,
+    0x7f507f7f, 0x40507f7f, 0x7f507f7f, 0x36507f7f, 0x30507f7f, 0x507f7f,   0x26507f7f, 0x507f7f,
+    0x20507f7f, 0x507f7f,   0x16507f7f, 0x10507f7f, 0x7f507f7f, 0x16507f7f, 0x7f507f7f, 0x20507f7f,
+    0x7f507f7f, 0x26507f7f, 0x30507f7f, 0x507f7f,   0x36507f7f, 0x507f7f,   0x40507f7f, 0x507f7f,
+    0x46507f7f, 0x507f7f,   0x50507f7f, 0x507f7f,   0x46507f7f, 0x507f7f,   0x40507f7f, 0x7f507f7f,
+    0x36507f7f, 0x7f507f7f};
+
+/* One (u, v) pair per vertex: FUN_L00_001fde98 copies 8 bytes per vertex from this argument. */
+float blarg_heavy_interceptor_light_ring_texture_coordinates[82][2] __asm__("D_L14_001D7E38") = {
+    {0.5f, 0.0f},
+    {0.5f, 0.0f},
+    {0.5f, 0.0f},
+    {0.5f, 0.3f},
+    {0.5f, 0.0f},
+    {0.5f, 0.3f},
+    {0.5f, 1.0f},
+    {0.5f, 0.3f},
+    {0.5f, 1.0f},
+    {0.5f, 0.3f},
+    {0.5f, 0.2f},
+    {0.5f, 0.0f},
+    {0.5f, 0.2f},
+    {0.5f, 0.0f},
+    {0.5f, 0.2f},
+    {0.5f, 0.0f},
+    {0.5f, 0.2f},
+    {0.5f, 0.1f},
+    {0.5f, 1.0f},
+    {0.5f, 0.1f},
+    {0.5f, 1.0f},
+    {0.5f, 0.1f},
+    {0.5f, 1.0f},
+    {0.5f, 0.1f},
+    {0.5f, 0.2f},
+    {0.5f, 0.0f},
+    {0.5f, 0.2f},
+    {0.5f, 0.0f},
+    {0.5f, 0.2f},
+    {0.5f, 0.0f},
+    {0.5f, 0.2f},
+    {0.5f, 0.3f},
+    {0.5f, 1.0f},
+    {0.5f, 0.3f},
+    {0.5f, 1.0f},
+    {0.5f, 0.3f},
+    {0.5f, 1.0f},
+    {0.5f, 0.3f},
+    {0.5f, 0.4f},
+    {0.5f, 0.0f},
+    {0.5f, 0.4f},
+    {0.5f, 0.0f},
+    {0.5f, 0.4f},
+    {0.5f, 0.0f},
+    {0.5f, 0.4f},
+    {0.5f, 0.5f},
+    {0.5f, 1.0f},
+    {0.5f, 0.5f},
+    {0.5f, 1.0f},
+    {0.5f, 0.5f},
+    {0.5f, 1.0f},
+    {0.5f, 0.5f},
+    {0.5f, 0.6f},
+    {0.5f, 0.0f},
+    {0.5f, 0.6f},
+    {0.5f, 0.0f},
+    {0.5f, 0.6f},
+    {0.5f, 0.0f},
+    {0.5f, 0.6f},
+    {0.5f, 0.7f},
+    {0.5f, 1.0f},
+    {0.5f, 0.7f},
+    {0.5f, 1.0f},
+    {0.5f, 0.7f},
+    {0.5f, 1.0f},
+    {0.5f, 0.7f},
+    {0.5f, 0.8f},
+    {0.5f, 0.0f},
+    {0.5f, 0.8f},
+    {0.5f, 0.0f},
+    {0.5f, 0.9f},
+    {0.5f, 0.0f},
+    {0.5f, 0.9f},
+    {0.5f, 0.0f},
+    {0.5f, 0.9f},
+    {0.5f, 0.0f},
+    {0.5f, 0.9f},
+    {0.5f, 0.0f},
+    {0.5f, 0.9f},
+    {0.5f, 1.0f},
+    {0.5f, 0.8f},
+    {0.5f, 1.0f},
+};
 
 extern char D_L14_001674C0_r[] __asm__("D_L14_001674C0");
 
@@ -828,8 +1009,8 @@ void draw_blarg_heavy_interceptor_light_ring(char *moby) __asm__("FUN_L14_002ada
 void draw_blarg_heavy_interceptor_light_ring(char *moby) {
     char *moby_vars = ((char *)MOBY(moby)->pvars);
     struct {
-        float mat[4][4];    /* camera-facing frame */
-        float verts[82][3]; /* ring vertices transformed by mat */
+        float mat[4][4];                                  /* camera-facing frame */
+        float verts[BLARG_LIGHT_RING_VERTEX_CAPACITY][3]; /* ring vertices transformed by mat */
     } f;
     u32   cols[84];
     float ring_vertex_scratch[4];
@@ -1560,7 +1741,13 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
     return ok;
 }
 
-extern s32 blarg_heavy_interceptor_light_ring_fade_values[] __asm__("D_L14_001D8210");
+s32 blarg_heavy_interceptor_light_ring_fade_values[82] __asm__("D_L14_001D8210") = {
+    0,    0, 0,    0x30, 0,    0x30, 0,    0x30, 0,    0x30, 0x20, 0, 0x20, 0,
+    0x20, 0, 0x20, 0x10, 0,    0x10, 0,    0x10, 0,    0x10, 0x20, 0, 0x20, 0,
+    0x20, 0, 0x20, 0x30, 0,    0x30, 0,    0x30, 0,    0x30, 0x40, 0, 0x40, 0,
+    0x40, 0, 0x40, 0x50, 0,    0x50, 0,    0x50, 0,    0x50, 0x40, 0, 0x40, 0,
+    0x40, 0, 0x40, 0x30, 0,    0x30, 0,    0x30, 0,    0x30, 0x20, 0, 0x20, 0,
+    0x10, 0, 0x10, 0,    0x10, 0x10, 0x10, 0,    0x10, 0,    0x20, 0};
 
 void update_blarg_heavy_interceptor_light_ring_alpha(struct Moby *moby) __asm__("FUN_L14_002aed50");
 
@@ -1589,9 +1776,11 @@ void update_blarg_heavy_interceptor_light_ring_alpha(struct Moby *moby) {
     }
 }
 
-extern int D_L14_001D8680[];
+/* Save ids of the group mobys already drawn this frame: reset as 20 entries, searched as 20 entries. */
+extern int blarg_heavy_interceptor_drawn_save_ids[20] __asm__("D_L14_001D8680");
 
-extern int D_L14_001D8680_b[] __asm__("D_L14_001D8680");
+/* Second name for the same table: the selection loop reads it through its own address load, as retail does. */
+int blarg_heavy_interceptor_drawn_save_ids_b[20] __asm__("D_L14_001D8680") = {0};
 
 char *select_farthest_unselected_group_moby(int index, int *ids) __asm__("FUN_L14_002aef28");
 
@@ -1606,11 +1795,11 @@ void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
     {
         int unused_id_sentinel = -1;
         for (i = 19; i >= 0; i--)
-            D_L14_001D8680[i] = unused_id_sentinel;
+            blarg_heavy_interceptor_drawn_save_ids[i] = unused_id_sentinel;
     }
     i = 0;
     if (*(short *)(moby_vars + 0x20A) > 0) {
-        int *ids = D_L14_001D8680_b;
+        int *ids = blarg_heavy_interceptor_drawn_save_ids_b;
         out = ids;
         do {
             char *selected_moby = select_farthest_unselected_group_moby(moby->group, ids);
@@ -1642,7 +1831,7 @@ char *select_farthest_unselected_group_moby(int index, int *ids) {
         int   found = 0;
         int   i;
         for (i = 0; i < 20; i++) {
-            if (((short)MOBY(moby)->save_id) == D_L14_001D8680[i]) {
+            if (((short)MOBY(moby)->save_id) == blarg_heavy_interceptor_drawn_save_ids[i]) {
                 found = 1;
                 break;
             }

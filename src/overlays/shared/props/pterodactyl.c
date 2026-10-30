@@ -20,9 +20,9 @@ typedef struct {
 
 void sample_camera_path(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
 
-extern int  *toad_paths[] __asm__("D_L00_001B04B0") NOT_SDA;
-extern float pterodactyl_path_speed_gp __asm__("D_L00_00161C98") __attribute__((sda));
-extern float pterodactyl_scale_multiplier_gp __asm__("D_L00_00161C9C") __attribute__((sda));
+extern int *toad_paths[] __asm__("D_L00_001B04B0") NOT_SDA;
+float       pterodactyl_path_speed_gp __asm__("D_L00_00161C98") = 6.0f;
+float       pterodactyl_scale_multiplier_gp __asm__("D_L00_00161C9C") = 2.0f;
 
 float D_L07_00161CD0 = 6.0f;
 float D_L07_00161CD4 = 2.0f;

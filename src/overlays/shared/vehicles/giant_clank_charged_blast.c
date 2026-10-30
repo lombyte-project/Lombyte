@@ -461,3 +461,5 @@ void update_giant_clank_charged_blast(Moby29FF90 *moby) {
 }
 
 unsigned char *D_L18_001B2AAC NOT_SDA = 0;
+
+int charged_blast_removal_target __asm__("D_L15_00161484") = 0;

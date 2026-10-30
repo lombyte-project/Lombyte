@@ -123,8 +123,11 @@ typedef struct ShipD_5E48 {
 extern Ship_5E48 *D_L10_001742D8 NOT_SDA;
 extern char                     *spawn_blarg_ship_rocket(
                         void *vel, void *pos, int a, int b, int c, float scale) __asm__("FUN_L10_002cc1b8");
-extern char  D_L10_00179890[];
-extern char  blarg_ship_missing_path_error_format[] __asm__("D_L10_001DD390");
+extern char D_L10_00179890[];
+
+char blarg_ship_missing_path_error_format[65] __asm__("D_L10_001DD390") =
+    "ERROR!! Moby class %d maya instance %d has no path set; deleted\n";
+
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float fast_vec_dist(void *, void *);
 extern s32   D_0015ED84;
@@ -132,8 +135,8 @@ extern int   D_L10_00161EE4 __attribute__((sda));
 
 #include "rnc/overlay/l10/mobys/blarg_ship_globals.h"
 
-extern float blarg_ship_rocket_speed_gp __asm__("D_L10_00161EE8") __attribute__((sda));
-extern float blarg_ship_firing_animation_speed_gp __asm__("D_L10_00161EEC") __attribute__((sda));
+float                blarg_ship_rocket_speed_gp __asm__("D_L10_00161EE8") = 32.0f;
+float                blarg_ship_firing_animation_speed_gp __asm__("D_L10_00161EEC") = 2.0f;
 extern unsigned char D_0013D4CB[];
 extern unsigned char D_001413F4[];
 extern unsigned char D_00141C48[];

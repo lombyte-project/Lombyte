@@ -43,11 +43,11 @@ extern int D_L14_0016208C_gp __asm__("D_L14_0016208C") __attribute__((sda));
 
 #include "rnc/overlay/l14/mobys/bouncing_spark_globals.h"
 
-extern float spark_contact_clearance_gp __asm__("D_L14_00162088") __attribute__((sda));
+float spark_contact_clearance_gp __asm__("D_L14_00162088") = 0.208f;
 
-extern float spark_minimum_speed_gp __asm__("D_L14_00162090") __attribute__((sda));
+float spark_minimum_speed_gp __asm__("D_L14_00162090") = 0.2f;
 
-extern float spark_rolling_speed_factor_gp __asm__("D_L14_00162094") __attribute__((sda));
+float spark_rolling_speed_factor_gp __asm__("D_L14_00162094") = 0.96f;
 
 extern float D_L14_001620A0 __attribute__((sda));
 
@@ -268,7 +268,7 @@ void update_bouncing_spark(struct Moby *spark_moby) {
 
 extern unsigned short D_L14_0016208C __asm__("D_L14_0016208C") __attribute__((sda));
 
-extern float spark_initial_moby_value_multiplier_gp __asm__("D_L14_00162098") __attribute__((sda));
+float spark_initial_moby_value_multiplier_gp __asm__("D_L14_00162098") = 1.3f;
 
 char *create_bouncing_spark(int    owner,
                             float *pos,

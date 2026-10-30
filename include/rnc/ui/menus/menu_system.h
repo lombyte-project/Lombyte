@@ -56,7 +56,7 @@ struct MenuPage {
  * - unkD4: 0 from saving_data_menu, 1/2 from saving_data_menu2 (flags
  *   0x2000); draw_prompt_box shows text 0x4FB3 for 0..2, 0x4FB5 for 3.
  * - unkD8: render_level_effects_and_screen_sprites draws panel slot 6 only while set; pause_all_sounds
- *   sets it and picks page tables D_001CE798 by it.
+ *   sets it and picks page tables pause_goodies_tab by it.
  * - resource_table_toggle: select_world_object_resource_tables(class,
  *   toggle == 0), then stored negated (load_hand_gadget, update_item_preview_binding);
  *   load_hand_gadget builds the preview moby once unk120 equals the
@@ -100,10 +100,11 @@ struct MenuSystem {
     s32 unkE0; /* 0x0E0: memcard_make_whole_save / memcard_restore_game argument */
     s32 unkE4; /* 0x0E4: written with unkF0/unkF4 before close_request 3 */
     u8  pad_E8[0x4];
-    s32 unkEC;              /* 0x0EC: menu_action_messages[] entry (update_menu_entry_actions) */
-    struct MenuPage *unkF0; /* 0x0F0: menu_system.current, or D_001CF418 (draw_map_screen) */
-    s32              unkF4; /* 0x0F4: 0, 2, 0xB or 0xF */
-    s32              unkF8; /* 0x0F8: read by pause_all_sounds */
+    s32 unkEC; /* 0x0EC: menu_action_messages[] entry (update_menu_entry_actions) */
+    struct MenuPage
+        *unkF0; /* 0x0F0: menu_system.current, or map_circle_destination_page (draw_map_screen) */
+    s32  unkF4; /* 0x0F4: 0, 2, 0xB or 0xF */
+    s32  unkF8; /* 0x0F8: read by pause_all_sounds */
 
     /* Buffers carved at init (FUN_00218f98) */
     s32 unkFC;            /* 0x0FC: from D_001940C0[1] */

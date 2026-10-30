@@ -8,6 +8,7 @@ extern u8            big_head_cheat_enabled __asm__("D_0015EDB0");
 extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
 extern int           invert52 __asm__("D_0015EDDC");
 extern int           opt_cam_invert __asm__("D_0015EDE0");
+extern s32           opt_cam_yaw_rate __asm__("D_0015EDE4");
 extern s32           playback_mode __asm__("D_0015EDE8");
 extern s32           music_volume __asm__("D_0015EDEC");
 extern s32           sound_volume __asm__("D_0015EDF0");

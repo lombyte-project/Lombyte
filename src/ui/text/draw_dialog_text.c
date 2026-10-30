@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/game/freeze_mode_state.h"
 #include "sda.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/screen.h"
@@ -12,26 +13,12 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/vu1_registers.h"
 
-/* State of the level's message box (D_00193300). */
-typedef struct {
-    s32   state; /* 0x00 */
-    s32   timer; /* 0x04: fade-in frames */
-    char *title; /* 0x08 */
-    char *line1; /* 0x0C */
-    char *line2; /* 0x10 */
-    u8    pad14[8];
-    s32   choice; /* 0x1C */
-    s32   unk20;  /* 0x20 */
-    s32   unk24;  /* 0x24 */
-} MessageBox;
-
-extern MessageBox freeze __asm__("D_00193300");
-extern s32        freeze_wave_period __asm__("D_0015F520") __attribute__((sda));
-extern char       freeze_default_text[] __asm__("D_0015F548");
-extern char       freeze_fmt_scsc[] __asm__("D_0015F550");
-extern char       freeze_fmt_indent[] __asm__("D_0015F560");
-extern char       freeze_fmt_time[] __asm__("D_0015F590");
-extern char       freeze_fmt_score[] __asm__("D_0015F5A0");
+extern s32  freeze_wave_period __asm__("D_0015F520") __attribute__((sda));
+extern char freeze_default_text[] __asm__("D_0015F548");
+extern char freeze_fmt_scsc[] __asm__("D_0015F550");
+extern char freeze_fmt_indent[] __asm__("D_0015F560");
+extern char freeze_fmt_time[] __asm__("D_0015F590");
+extern char freeze_fmt_score[] __asm__("D_0015F5A0");
 
 extern void memset(void *, s32, s32);
 extern s32  sprintf(char *, const char *, ...);
@@ -534,8 +521,8 @@ void draw_dialog_text(void) {
         font_print_center(0x100, 0x7A, 0x8000C0C0, freeze.title, -1);
         break;
     default: {
-        MessageBox *mb = &freeze;
-        s32         pulse;
+        FreezeModeState *mb = &freeze;
+        s32              pulse;
 
         pulse =
             fast_tween_color(freeze_outline_pulse_base_color,

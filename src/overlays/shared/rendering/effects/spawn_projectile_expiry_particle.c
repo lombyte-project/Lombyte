@@ -41,7 +41,7 @@ unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position,
 }
 
 extern int            rand(void);
-extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") NOT_SDA;
+extern unsigned char *l07_projectile_expiry_particle_lookup __asm__("D_L07_001B21F4") NOT_SDA;
 extern float          debris_far_point[] __asm__("D_L07_00166E40");
 
 unsigned char *spawn_moby_point_offset_particle(void *moby,
@@ -77,7 +77,7 @@ spawn_moby_point_offset_particle(void *moby, short index, float amount, float fa
         *(volatile unsigned char *)(particle + 3) = 0x48;
         *(volatile unsigned char *)(particle + 1) = 0;
         *(volatile float *)(particle + 0xc) = amount;
-        particle[2] = D_L07_001B21F4[*(short *)(particle_payload + 0xc)];
+        particle[2] = l07_projectile_expiry_particle_lookup[*(short *)(particle_payload + 0xc)];
         *(float *)(particle_payload + 0x10) = frame_scale * 0.015f;
         *(short *)(particle_payload + 0xe) = index;
         particle[8] = truncate_float_to_s32(*(float *)(particle_payload + 8) * 255.0f);

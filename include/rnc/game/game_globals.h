@@ -26,6 +26,6 @@ extern u8   *resident_object_pool __asm__("D_0015FF18");
 extern s32   active_decode_buffer __asm__("D_0015FF50");
 extern s32   moby_occl_cluster_count __asm__("D_0016119C");
 extern s32   moby_render_slots[16] __asm__("D_001B2BC0");
-extern u8    moby_backup_buffer[] __asm__("D_001B2E80");
+extern f32   moby_backup_buffer[0x380 / 4] __asm__("D_001B2E80");
 
 #endif /* LOMBYTE_RNC_GAME_GAME_GLOBALS_H */

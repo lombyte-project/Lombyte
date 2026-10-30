@@ -43,9 +43,10 @@ typedef struct {
     unsigned char *f88;
 } Row13E650;
 
-extern HeroTableRow2C       D_L18_0017C628[];
-extern HeroAnimRow          D_L18_0017A4C0[];
-extern HeroTableEntry70     l18_hero_idle_fidget_entries[] __asm__("D_L18_0017A290");
+extern HeroTableRow2C D_L18_0017C628[];
+extern HeroAnimRow    D_L18_0017A4C0[];
+/* pick_idle_fidget (FUN_L00_00229010) walks 5 entries of 0x70 bytes. */
+extern HeroTableEntry70     l18_hero_idle_fidget_entries[5] __asm__("D_L18_0017A290");
 extern S17B100              D_L18_0017B080;
 extern S17C838              D_L18_0017C7B8;
 extern float                D_L18_0015F638;
@@ -75,7 +76,7 @@ extern float          fast_sin(float);
 extern float          vector_length_xy(void *);
 extern int D_00141660 NOT_SDA;
 int                   r1_repeat_timer __asm__("D_L18_0015F678") = 0;
-extern int            D_L18_0015F6DC_d __asm__("D_L18_0015F6DC");
+extern int            l18_hero_run_start_frame __asm__("D_L18_0015F6DC");
 
 #include "rnc/overlay/l18/hero/process_hero_state_transitions_globals.h"
 
@@ -1957,7 +1958,7 @@ void process_hero_state_transitions(void) {
                         hero_set_state(HERO_STATE_RUN, 0);
                         if (hero.state.current == HERO_STATE_RUN) {
                             hero.state.step = 1;
-                            set_hero_animation(4, D_L18_0015F6DC_d, scale_game_frames(0xC));
+                            set_hero_animation(4, l18_hero_run_start_frame, scale_game_frames(0xC));
                         }
                         configure_hero_point_effect_emission(0.016f, 0.002f, 5, 2, 1, 0);
                         break;

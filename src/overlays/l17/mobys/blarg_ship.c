@@ -1,5 +1,6 @@
 /* Level 17 moby class blarg_ship: the fleet craft that circles, follows its path, strafes the player and fires, and its launch from a list. */
 #include "types.h"
+#include "rnc/math/vector.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
@@ -20,8 +21,10 @@
 
 extern char *spawn_blarg_ship_shot(
     int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
-extern char blarg_ship_positive_y_launch_offset[] __asm__("D_L17_001DE110");
-extern char blarg_ship_negative_y_launch_offset[] __asm__("D_L17_001DE120");
+/* Shot launch offsets in the ship's frame; transform_vector_by_basis loads
+   each as one quadword (lqc2). */
+extern Vec4 blarg_ship_positive_y_launch_offset __asm__("D_L17_001DE110");
+extern Vec4 blarg_ship_negative_y_launch_offset __asm__("D_L17_001DE120");
 extern f32  advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern int  FUN_0022da68(int, int, int);
@@ -31,8 +34,8 @@ extern void           update_moby_trail_points(void *) __asm__("FUN_L11_00319670
 extern void           update_moby_hit_stats_and_state(void *) __asm__("FUN_L11_0031a1c0");
 extern void           update_moby_path_transform(void *) __asm__("FUN_L11_0031a438");
 
-extern float blarg_ship_firing_speed_gp __asm__("D_L17_001623E8") __attribute__((sda));
-void         blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
+float blarg_ship_firing_speed_gp __asm__("D_L17_001623E8") = 32.0f;
+void  blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
 
 void blarg_ship_update(struct Moby *moby) {
     enum {
@@ -224,10 +227,10 @@ void blarg_ship_update(struct Moby *moby) {
                 fast_vec_add(sB0, sB0, hero_position);
                 if (D_L17_0015F5CC % 20 == 0) {
                     transform_vector_by_basis(
-                        sA0, blarg_ship_positive_y_launch_offset, &moby->rot_row0);
+                        sA0, &blarg_ship_positive_y_launch_offset, &moby->rot_row0);
                 } else {
                     transform_vector_by_basis(
-                        sA0, blarg_ship_negative_y_launch_offset, &moby->rot_row0);
+                        sA0, &blarg_ship_negative_y_launch_offset, &moby->rot_row0);
                 }
                 fast_vec_add(sA0, sA0, &moby->pos.x);
                 fast_vec_sub(firing_target_delta, sB0, sA0);

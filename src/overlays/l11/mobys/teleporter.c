@@ -37,9 +37,9 @@ extern int  add_draw_callback(void (*)(char *), char *) __asm__("FUN_001f4600");
 
 #include "rnc/overlay/l11/mobys/teleporter_globals.h"
 
-extern float teleporter_parts_acceleration_gp __asm__("D_L11_00161910") __attribute__((sda));
-extern float teleporter_parts_deceleration_gp __asm__("D_L11_00161914") __attribute__((sda));
-extern float teleporter_parts_max_speed_gp __asm__("D_L11_00161918") __attribute__((sda));
+float teleporter_parts_acceleration_gp __asm__("D_L11_00161910") = 12.0f;
+float teleporter_parts_deceleration_gp __asm__("D_L11_00161914") = 12.0f;
+float teleporter_parts_max_speed_gp __asm__("D_L11_00161918") = 32.0f;
 /* L11 twin of teleporter_update: a three-part switch moby that, once the hero
  * stands on it in mission state 0xB and presses the button, swings its parts
  * open and moves the linked moby (or its fallback) along. */
@@ -247,7 +247,7 @@ int          D_L11_00161928 = 0;
 int          D_L11_0016192C = 1;
 int          D_L11_00161930 = 0x13;
 unsigned int l11_teleporter_ring_vertex_color __asm__("D_L11_00161934") = 0x60408080;
-extern float teleporter_ring_local_z_center_gp __asm__("D_L11_00161938") __attribute__((sda));
+float        teleporter_ring_local_z_center_gp __asm__("D_L11_00161938") = 1.0f;
 /* Draws a ring of 32 textured quads around the moby; the band widens as the radius at pvars+0x3C shrinks below 1.15. */
 void draw_teleporter_ring(struct Moby *moby) __asm__("FUN_L11_002f2d58");
 

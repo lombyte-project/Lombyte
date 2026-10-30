@@ -73,14 +73,25 @@ extern void pool_splash(void *, int, int, float, float, float, float) __asm__("F
 extern int  check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690");
 extern void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
-extern Cam                  l05_water_light_heading_source __asm__("D_L05_00180340");
-extern Light                light __asm__("D_L05_001CAD00");
-extern int                  water_grid_fixed_point_bounds[][4] __asm__("D_L05_0020B440");
-extern unsigned short       record_draw_values[] __asm__("D_L05_0020B380");
-extern int                  rise_frames[] __asm__("D_L05_0020B3E0");
-extern float                rise_speeds[] __asm__("D_L05_0020B3F8");
-extern int                  base_rise_frames[] __asm__("D_L05_0020B410");
-extern float                base_rise_speeds[] __asm__("D_L05_0020B428");
+extern Cam   l05_water_light_heading_source __asm__("D_L05_00180340");
+extern Light light __asm__("D_L05_001CAD00");
+int          water_grid_fixed_point_bounds[48][4] __asm__("D_L05_0020B440") = {0};
+
+/* Each grid's WaterGrid.visible_subtiles while it is in view: bit i = sub-tile i of its 4x4 grid. */
+u16 l05_water_grid_visible_subtiles[48] __asm__("D_L05_0020B380") = {
+    0xfff0, 0x3100, 0xffff, 0x1331, 0xc800, 0xfff0, 0x8ccc, 0xffff, 0xfec8, 0xf531, 0xffff, 0x37f,
+    0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+    0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+    0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xfffe, 0xeffc};
+
+int rise_frames[6] __asm__("D_L05_0020B3E0") = {0x67, 0x2b1, 0x320, 0x514, 0x4e20, 0x4e20};
+
+float rise_speeds[6] __asm__("D_L05_0020B3F8") = {0.0f, 0.51f, 0.26f, 0.475f, 0.8f, 2.0f};
+
+int base_rise_frames[6] __asm__("D_L05_0020B410") = {0x67, 0x2b1, 0x320, 0x514, 0x4e20, 0x4e20};
+
+float base_rise_speeds[6] __asm__("D_L05_0020B428") = {0.0f, 0.51f, 0.26f, 0.475f, 0.8f, 2.0f};
+
 extern void *D_L05_001612D4 MACRO_ADDR;
 extern unsigned char        D_L05_00161204[] MACRO_ADDR;
 extern unsigned char        D_L05_00161205[] MACRO_ADDR;
@@ -89,8 +100,9 @@ extern int D_L05_00161208   MACRO_ADDR;
 extern float D_L05_0016120C MACRO_ADDR;
 extern float D_L05_00161210 MACRO_ADDR;
 extern float D_L05_00161214 MACRO_ADDR;
-int                         D_L05_00161D10 = -1;
-extern unsigned short       l05_water_record_draw_value_override __asm__("D_L05_00161D14")
+/* The grid whose mask is replaced by l05_water_grid_override_visible_subtiles; -1: none. */
+int                   l05_water_grid_override_index __asm__("D_L05_00161D10") = -1;
+extern unsigned short l05_water_grid_override_visible_subtiles __asm__("D_L05_00161D14")
     __attribute__((sda));
 int                       hero_hits __asm__("D_L05_00161D1C") = 0;
 int                       rise_step __asm__("D_L05_00161D20") = 0;
@@ -155,8 +167,8 @@ void water_update(struct Moby *moby) {
             D_L05_00161214 = 26.0f;
             for (i = 0; i < 0x30; i++) {
                 pool_bind_tile(&l05_water_grids[i].x, water_grid_fixed_point_bounds[i]);
-                l05_water_grids[water_vars->record_index].draw_value =
-                    record_draw_values[water_vars->record_index];
+                l05_water_grids[water_vars->record_index].visible_subtiles =
+                    l05_water_grid_visible_subtiles[water_vars->record_index];
             }
             for (j = 0; j < 0x30; j++) {
                 record_grid_entry_neighbor_indices(j);
@@ -186,7 +198,7 @@ void water_update(struct Moby *moby) {
                 moby->state = 3;
                 water_vars->timer = scale_game_frames(0x3C);
                 if (moby->pos.z < water_vars->lowered_z) {
-                    l05_water_grids[water_vars->record_index].draw_value = 0;
+                    l05_water_grids[water_vars->record_index].visible_subtiles = 0;
                 }
             }
         } else {
@@ -300,7 +312,7 @@ void water_update(struct Moby *moby) {
                 hero_hits++;
             }
         } else if (water_vars->raised_z < moby->pos.z) {
-            l05_water_grids[water_vars->record_index].draw_value = 0;
+            l05_water_grids[water_vars->record_index].visible_subtiles = 0;
             mark_moby_for_removal(moby);
             return;
         }
@@ -344,29 +356,30 @@ void water_update(struct Moby *moby) {
     }
     if (water_vars->record_index >= 0) {
         WaterGrid *e = &l05_water_grids[water_vars->record_index];
-        float      restore_record_draw_value;
+        float      grid_in_view;
 
         e->z = moby->pos.z;
-        restore_record_draw_value = 0.0f;
+        grid_in_view = 0.0f;
         if (check_scaled_vector_bsphere((char *)moby, 48.0f) != -1 &&
             (!(moby->state >= 3 && moby->state <= 7) ||
              (moby->pos.z > water_vars->lowered_z && moby->pos.z < water_vars->raised_z))) {
-            restore_record_draw_value = 1.0f;
+            grid_in_view = 1.0f;
         }
-        if (restore_record_draw_value == 0.0f) {
-            l05_water_grids[water_vars->record_index].draw_value = 0;
+        if (grid_in_view == 0.0f) {
+            l05_water_grids[water_vars->record_index].visible_subtiles = 0;
         } else {
-            l05_water_grids[water_vars->record_index].draw_value =
-                record_draw_values[water_vars->record_index];
+            l05_water_grids[water_vars->record_index].visible_subtiles =
+                l05_water_grid_visible_subtiles[water_vars->record_index];
         }
         if (water_vars->record_index == 0) {
             pool_flush((char *)l05_water_grids, 0x30);
             add_draw_callback(render_level_water_grids, moby);
         }
-        if (water_vars->record_index == D_L05_00161D10) {
-            l05_water_grids[water_vars->record_index].draw_value =
-                l05_water_record_draw_value_override;
-            record_draw_values[water_vars->record_index] = l05_water_record_draw_value_override;
+        if (water_vars->record_index == l05_water_grid_override_index) {
+            l05_water_grids[water_vars->record_index].visible_subtiles =
+                l05_water_grid_override_visible_subtiles;
+            l05_water_grid_visible_subtiles[water_vars->record_index] =
+                l05_water_grid_override_visible_subtiles;
         }
     }
 }
@@ -445,3 +458,294 @@ f32 D_L05_001CAD30[1] __attribute__((section(".data"))) = {0};
 f32 D_L05_001CAD34[1] __attribute__((section(".data"))) = {0};
 
 f32 D_L05_001CAD38[1] __attribute__((section(".data"))) = {0};
+
+WaterGrid l05_water_grids[48] = {
+    {  239.5f,
+     163.0f, 37.2f,
+     {0xff, 0xff, 2, 1, 0xff, 0xff, 0xff, 3},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  255.5f,
+     163.0f, 37.2f,
+     {0xff, 0, 3, 0xff, 0xff, 0xff, 2, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  239.5f,
+     179.0f, 37.2f,
+     {0, 0xff, 0xff, 3, 0xff, 1, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  255.5f,
+     179.0f, 37.2f,
+     {1, 2, 0xff, 0xff, 0, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  200.5f,
+     163.0f, 37.2f,
+     {0xff, 0xff, 6, 5, 0xff, 0xff, 0xff, 7},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  216.5f,
+     163.0f, 37.2f,
+     {0xff, 4, 7, 0xff, 0xff, 0xff, 6, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  200.5f,
+     179.0f, 37.2f,
+     {4, 0xff, 0xff, 7, 0xff, 5, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  216.5f,
+     179.0f, 37.2f,
+     {5, 6, 0xff, 0xff, 4, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  178.0f,
+     198.0f, 39.2f,
+     {0xff, 0xff, 0xa, 9, 0xff, 0xff, 0xff, 0xb},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  194.0f,
+     198.0f, 39.2f,
+     {0xff, 8, 0xb, 0xff, 0xff, 0xff, 0xa, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  178.0f,
+     214.0f, 39.2f,
+     {8, 0xff, 0xff, 0xb, 0xff, 9, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  194.0f,
+     214.0f, 39.2f,
+     {9, 0xa, 0xff, 0xff, 8, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  219.0f,
+     217.0f, 39.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  242.0f,
+     265.0f, 15.2f,
+     {0xff, 0xe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  226.0f,
+     265.0f, 15.2f,
+     {0xff, 0xf, 0xff, 0xd, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {2.1e+02f,
+     265.0f, 15.2f,
+     {0xff, 0x10, 0xff, 0xe, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  194.0f,
+     265.0f, 15.2f,
+     {0xff, 0x11, 0xff, 0xf, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  178.0f,
+     265.0f, 15.2f,
+     {0xff, 0x12, 0xff, 0x10, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  162.0f,
+     265.0f, 15.2f,
+     {0xff, 0xff, 0x13, 0x11, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  162.0f,
+     281.0f, 15.2f,
+     {0x12, 0xff, 0x14, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  162.0f,
+     297.0f, 15.2f,
+     {0x13, 0xff, 0x15, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  162.0f,
+     313.0f, 15.2f,
+     {0x14, 0xff, 0x16, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  162.0f,
+     329.0f, 15.2f,
+     {0x15, 0xff, 0x17, 0x19, 0xff, 0xff, 0xff, 0x18},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  162.0f,
+     345.0f, 15.2f,
+     {0x16, 0xff, 0xff, 0x18, 0xff, 0x19, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  178.0f,
+     345.0f, 15.2f,
+     {0x19, 0x17, 0xff, 0x1a, 0x16, 0xff, 0x1b, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  178.0f,
+     329.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  194.0f,
+     345.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  194.0f,
+     329.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {2.1e+02f,
+     345.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {2.1e+02f,
+     329.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  226.0f,
+     329.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  242.0f,
+     329.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  258.0f,
+     329.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  242.0f,
+     313.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  258.0f,
+     313.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  274.0f,
+     313.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  242.0f,
+     297.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  258.0f,
+     297.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  274.0f,
+     297.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  258.0f,
+     281.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  274.0f,
+     281.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  258.0f,
+     265.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  274.0f,
+     265.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  258.0f,
+     249.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  274.0f,
+     249.0f, 15.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {  206.0f,
+     286.0f, 54.0f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {228.341f,
+     228.694f, 34.8f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x44,
+     0, {0}},
+    {336.229f,
+     110.225f, 61.2f,
+     {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+     0x29, 0x2a,
+     0x1c, 0x10,
+     0, {0}},
+};

@@ -101,8 +101,10 @@ extern char        *D_L18_0015F604;
 extern Slot2463f8  *D_L18_0015F5F4;
 extern s16          level_moby_class_numbers[] __asm__("D_L18_00198400");
 extern u16          level_moby_class_reference_sound_ids[][16] __asm__("D_L18_001B0860");
-extern char         D_L18_001F0EB0[], D_L18_001F0F00[], D_L18_001F0FC0[], D_L18_001F1148[],
-    D_L18_001F1178[];
+extern char         D_L18_001F0EB0[], D_L18_001F0F00[], D_L18_001F0FC0[], D_L18_001F1148[];
+
+char l18_estimated_memory_report_format[23] __asm__("D_L18_001F1178") = "estimated mem:  %.1fM\n";
+
 extern char  level_memory_report_newline[] __asm__("D_L18_0015FC80");
 extern char  level_core_code_memory_end[] __asm__("D_L18_0030A0C0");
 char         D_L18_001F0ED0[] = "internal moby sound mismatch on moby %d\n";
@@ -137,7 +139,7 @@ extern char *D_L18_00160494_2463f8 __asm__("D_L18_00160494");
 extern char *D_L18_0015FFD8_2463f8 __asm__("D_L18_0015FFD8");
 extern char *D_L18_0015FFE8_2463f8 __asm__("D_L18_0015FFE8");
 extern char *D_L18_00160108_2463f8 __asm__("D_L18_00160108");
-extern char *D_L18_0016016C_2463f8 __asm__("D_L18_0016016C");
+extern char *l18_particle_buffer __asm__("D_L18_0016016C");
 
 typedef struct {
     u8  pad[0x10];
@@ -493,16 +495,16 @@ s32 load_level_core_data(s32 full, s32 keep) {
         debug_print(D_L18_001F10E8, KB(D_L18_0015FFD8_2463f8 - D_L18_00160494_2463f8));
         debug_print(D_L18_001F1100, KB(D_L18_0015FFE8_2463f8 - D_L18_0015FFD8_2463f8));
         debug_print(D_L18_001F1118, KB(D_L18_00160108_2463f8 - D_L18_0015FFE8_2463f8));
-        debug_print(D_L18_001F1130, KB(D_L18_0016016C_2463f8 - D_L18_00160108_2463f8));
+        debug_print(D_L18_001F1130, KB(l18_particle_buffer - D_L18_00160108_2463f8));
         debug_print(D_L18_001F1148, 128.0);
         debug_print(level_memory_report_newline);
         debug_print(D_L18_001F1160,
-                    convert_integer_to_float((s32)D_L18_0016016C_2463f8 + 0x20000) *
+                    convert_integer_to_float((s32)l18_particle_buffer + 0x20000) *
                         (1.0f / 1048576.0f));
         debug_print(level_memory_report_newline);
         {
             char *lo = D_L18_00174800_2463f8.f0 - 0x2D0000;
-            debug_print(D_L18_001F1178,
+            debug_print(l18_estimated_memory_report_format,
                         convert_integer_to_float(D_L18_00174800_2463f8.f1C - lo) *
                             (1.0f / 1048576.0f));
         }

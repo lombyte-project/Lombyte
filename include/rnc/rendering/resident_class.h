@@ -25,7 +25,9 @@ typedef union MaterialMap {
 } MaterialMap;
 
 /* Class slots of the resident class pool (0xE0 slots). The material maps of
-   all slots start out as -1 (initialize_level_runtime fills them). */
+   all slots start out as -1 (initialize_level_runtime fills them);
+   prepare_resident_class_render_data copies each slot's map and defines
+   the table. */
 extern MaterialMap resident_class_material_maps[0xE0] __asm__("D_001B6880");
 
 /* Class table copied from the level header (0x10-byte entries), and the

@@ -115,7 +115,7 @@ extern char  D_L06_001678D0[];
 extern int   D_L06_0016A010[];
 extern short D_L06_00161EF0 __attribute__((sda));
 extern short D_L06_00161EF4 __attribute__((sda));
-extern f32   alien_queen_movement_acceleration_gp __asm__("D_L06_00161EFC") __attribute__((sda));
+f32          alien_queen_movement_acceleration_gp __asm__("D_L06_00161EFC") = 8.0f;
 extern short D_L06_00161F00 __attribute__((sda));
 extern short D_L06_00161F04 __attribute__((sda));
 extern short D_L06_00161F08 __attribute__((sda));
@@ -201,7 +201,7 @@ typedef struct {
     s32          ground; /* 0xEC */
 } CirclerVars;
 
-extern f32 alien_queen_orbit_speed_gp __asm__("D_L06_00161EF8") __attribute__((sda));
+f32 alien_queen_orbit_speed_gp __asm__("D_L06_00161EF8") = 5.0f;
 extern f32
 approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
 

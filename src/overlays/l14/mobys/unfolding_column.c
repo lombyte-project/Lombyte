@@ -55,9 +55,9 @@ extern int D_L14_0015FFD8_c __asm__("D_L14_0015FFD8");
 extern float unfolding_column_initial_position_offset_scale __asm__("D_L14_001621F4")
     __attribute__((sda));
 
-extern float unfolding_column_piece_spacing __asm__("D_L14_001621F8") __attribute__((sda));
+float unfolding_column_piece_spacing __asm__("D_L14_001621F8") = 1.05f;
 
-extern float unfolding_column_first_piece_offset __asm__("D_L14_001621FC") __attribute__((sda));
+float unfolding_column_first_piece_offset __asm__("D_L14_001621FC") = 0;
 
 extern float unfolding_column_pivot_final_angle_degrees __asm__("D_L14_00162200")
     __attribute__((sda));
@@ -199,3 +199,7 @@ u8 *create_unfolding_column_pivot(u8 *self) {
 int unfolding_column_piece_unfold_frames __asm__("D_L14_00162204") = 0xf;
 
 int unfolding_column_pivot_swing_frames __asm__("D_L14_0016220C") = 0x78;
+
+float unfolding_column_initial_position_offset_scale __asm__("D_L14_001621F4") = 0.48f;
+
+float unfolding_column_pivot_final_angle_degrees __asm__("D_L14_00162200") = 182.0f;

@@ -3,6 +3,7 @@
 #include "rnc/game/item_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/ui/menus/menu_pages.h"
 
 typedef struct {
     unsigned short a;   /* +0 */
@@ -12,11 +13,9 @@ typedef struct {
     short          idx; /* +8 */
 } Item0A;
 
-extern Item0A pause_item_candidate_entries[] __asm__("D_001CF120");
 extern Item0A pause_item_list_entries[] __asm__("D_001D60E0");
 extern int    pause_item_variant_values[] __asm__("D_001D6178");
-extern char   pause_item_count_storage_base[] __asm__("D_001D0D00");
-/* Builds the pause-menu item list from the 15 entries of D_001CF120
+/* Builds the pause-menu item list from the 15 entries of pause_item_candidate_entries
    that item_available enables. The flag needs its own `f = b != 0`:
    `(b != 0) << 2` folds into a branch. */
 int build_pause_item_list(void) __asm__("FUN_002215f8");
@@ -42,9 +41,14 @@ int build_pause_item_list(void) {
             item_count++;
         }
     }
-    item_count_storage_base = pause_item_count_storage_base;
+    item_count_storage_base = (char *)&weapon_help_icon_list;
     *(int *)(item_count_storage_base + 0x40) = item_count;
     return 0;
 }
 
 extern __typeof__(build_pause_item_list) func_002215F8 __attribute__((alias("FUN_002215f8")));
+
+/* Written by build_pause_item_list: at most one entry per candidate (15). */
+Item0A pause_item_list_entries[15] = {0};
+
+int pause_item_variant_values[15] = {0};

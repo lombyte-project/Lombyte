@@ -38,8 +38,8 @@ extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32  sceGsExecLoadImage_23fa00(void *, void *) __asm__("FUN_00122658");
 extern s32  sceGsSyncPath(s32, u16) __asm__("FUN_00120558");
 
-extern s32                first_record __asm__("D_L00_0015FC00") __attribute__((sda));
-extern s32                second_record __asm__("D_L00_0015FC10") __attribute__((sda));
+s32                       first_record __asm__("D_L00_0015FC00") = 0;
+s32                       second_record __asm__("D_L00_0015FC10") = 0;
 extern TexRecord          first_record_fields __asm__("D_L00_0015FC0A") MACRO_ADDR;
 extern TexRecord          second_record_fields __asm__("D_L00_0015FC1A") MACRO_ADDR;
 extern u8                 record_index __asm__("D_L00_0015FC20") __attribute__((sda));

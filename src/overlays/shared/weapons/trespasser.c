@@ -19,7 +19,7 @@ extern unsigned char D_0013A4E0[];
 extern int           D_L00_0015F5CC_2c1778[1] __asm__("D_L00_0015F5CC");
 extern const float   l00_trespasser_pickup_initial_height_offset __asm__("D_L00_00161828")
     __attribute__((sda));
-extern float trespasser_pickup_z_rotation_step_gp __asm__("D_L00_00161830") __attribute__((sda));
+float trespasser_pickup_z_rotation_step_gp __asm__("D_L00_00161830") = 0;
 
 float D_L01_00161858 = 0.2f;
 float D_L01_00161860 = 0;
