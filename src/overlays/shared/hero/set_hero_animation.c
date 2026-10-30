@@ -522,12 +522,12 @@ void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 
 void hero_queue_sequence(int bank, int seq) {
     if (bank >= 0) {
-        struct Hero *base = &hero;
-        AnimState   *hero_moby = ((AnimState *)base->moby);
+        struct Hero *hero_queue_state = &hero;
+        AnimState   *hero_moby = ((AnimState *)hero_queue_state->moby);
 
         if (seq < hero_moby->model->banks[hero_moby->bank[1]]->count) {
-            base->anim_loop_frame = bank;
-            base->queued_anim_frame = seq;
+            hero_queue_state->anim_loop_frame = bank;
+            hero_queue_state->queued_anim_frame = seq;
         }
     }
 }
