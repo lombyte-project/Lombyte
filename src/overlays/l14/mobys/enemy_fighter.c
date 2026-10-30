@@ -87,8 +87,8 @@ void enemy_fighter_update(struct Moby *moby) {
         moby->flags |= 0x41;
         index = enemy_fighter_vars->sound;
         if (index != -1) {
-            char *entry = ((char *)&voice_pool) + index * 0x70;
-            if (*(struct Moby **)(entry + 0x88) == moby && *(unsigned char *)(entry + 0x74) != 0)
+            char *voice_slot_entry = ((char *)&voice_pool) + index * 0x70;
+            if (*(struct Moby **)(voice_slot_entry + 0x88) == moby && *(unsigned char *)(voice_slot_entry + 0x74) != 0)
                 release_voice_slot(index);
         }
         enemy_fighter_vars->sound = -1;
