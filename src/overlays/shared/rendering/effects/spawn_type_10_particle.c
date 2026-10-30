@@ -365,16 +365,16 @@ int advance_path_node_index(char *path_descriptor) __asm__("FUN_L01_0028b878");
 
 int advance_path_node_index(char *path_descriptor) {
     int max = 0;
-    int next;
+    int next_node_index;
     if (path_descriptor[4] >= 0) {
         max = **(int **)(path_descriptor + 0x10) - 1;
     }
-    next = *(int *)path_descriptor + 1;
-    if (max < next) {
-        next %= max + 1;
+    next_node_index = *(int *)path_descriptor + 1;
+    if (max < next_node_index) {
+        next_node_index %= max + 1;
     }
-    *(int *)path_descriptor = next;
-    return next;
+    *(int *)path_descriptor = next_node_index;
+    return next_node_index;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C690), where it is exact; names translated to the US level program. */
