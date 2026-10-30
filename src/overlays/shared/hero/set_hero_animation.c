@@ -1135,18 +1135,18 @@ float gravity_length_xy(float *input_vector) {
 float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 
 float gravity_z(float *input_vector) {
-    struct Hero *base = &hero;
+    struct Hero *hero_gravity_axis_state = &hero;
     float        gravity_axis_rotation_matrix[16] __attribute__((aligned(16)));
     float        axis[4] __attribute__((aligned(16)));
 
-    switch (base->gravity_mode) {
+    switch (hero_gravity_axis_state->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         return input_vector[2];
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         clear_u64_value(axis);
         axis[2] = 1.0f;
-        euler_rotation_matrix(gravity_axis_rotation_matrix, ((char *)base->moby) + 0x40);
+        euler_rotation_matrix(gravity_axis_rotation_matrix, ((char *)hero_gravity_axis_state->moby) + 0x40);
         transform_vector(axis, axis, gravity_axis_rotation_matrix);
         return fast_vec_dot(axis, input_vector);
     }
