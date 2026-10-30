@@ -173,7 +173,7 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_RETURN_HOME = 8,
         BLARG_TROOPER_DEATH_FALL = 9
     };
-    TargetReport work;
+    TargetReport combat_target_report;
     Vec4         query_position_or_projectile_origin;
     Vec4         delta;
     char        *trooper_update_vars = (char *)moby->pvars;

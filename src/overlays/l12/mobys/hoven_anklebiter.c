@@ -291,7 +291,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
         ANKLEBITER_DEATH_EFFECTS_AND_REMOVE = 15,
         ANKLEBITER_DEATH_FALL = 99
     };
-    TargetReport    work;
+    TargetReport    target_report_or_vector_scratch;
     AnklebiterMoby *iterator;
     float           trajectory;
     AnklebiterData *data = moby->data;

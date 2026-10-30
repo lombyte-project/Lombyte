@@ -209,7 +209,7 @@ void blarg_helicopter_update(HMob49 *moby) {
         BLARG_HELICOPTER_DESTROY = 5
     };
     HData49 *data = moby->data;
-    HWork49  work;
+    HWork49  helicopter_update_scratch;
     float    target_range = 40.0f;
     float    motion_scale, motion_gain;
     int      index;

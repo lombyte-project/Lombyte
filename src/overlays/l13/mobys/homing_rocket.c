@@ -165,7 +165,7 @@ void update_level_13_homing_rocket(ProjectileMoby *m) __asm__("FUN_L13_002c1528"
 
 void update_level_13_homing_rocket(ProjectileMoby *rocket_moby) {
     Rocket        *rocket_data = rocket_moby->data;
-    ProjectileVec4 old;
+    ProjectileVec4 previous_rocket_position;
     ProjectileVec4 hitpos;
     ProjectileVec4 scratch_vector;
     ProjectileVec4 particle_initial_velocity;

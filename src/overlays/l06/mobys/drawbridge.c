@@ -197,7 +197,7 @@ void update_drawbridge(Moby *moby) {
         if (previous_fade < 0.0f && 0.0f <= drawbridge_control_vars->fade) {
             set_race_camera((unsigned char *)&hero + 0x80, (unsigned char *)&hero + 0x90, 0x72, 1);
             jet_mount(
-                &l06_cuboids[data->node_start].pos, &l06_cuboids[data->node_start].rot, 1, 0, 0);
+                &l06_cuboids[drawbridge_control_vars->node_start].pos, &l06_cuboids[drawbridge_control_vars->node_start].rot, 1, 0, 0);
         } else if (1.0f <= drawbridge_control_vars->fade) {
             moby->state = 4;
             moby->command = allocate_voice_for_target_entry(0, 4, drawbridge_control_vars->c[9]);
@@ -355,7 +355,7 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         else if (limit < 0.0f)
             limit = 0.0f;
         if (left != 0.0f && limit == 0.0f)
-            allocate_voice_for_target_entry(1, 0, data->c[j]);
+            allocate_voice_for_target_entry(1, 0, drawbridge_vars->c[j]);
 
         right = drawbridge_pitch_degrees * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
         limit = right - drawbridge_pitch_speed_gp * 0.017453292f;
@@ -368,7 +368,7 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         else if (limit < 0.0f)
             limit = 0.0f;
         if (right != 0.0f && limit == 0.0f)
-            allocate_voice_for_target_entry(1, 0, data->d[j]);
+            allocate_voice_for_target_entry(1, 0, drawbridge_vars->d[j]);
 
         drawbridge_vars->c[j]->rot.x = -left;
         drawbridge_vars->d[j]->rot.x = right;
@@ -384,7 +384,7 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         else if (limit < 0.0f)
             limit = 0.0f;
         if (left != 0.0f && limit == 0.0f)
-            allocate_voice_for_target_entry(2, 0, data->c[j]);
+            allocate_voice_for_target_entry(2, 0, drawbridge_vars->c[j]);
 
         right = drawbridge_yaw_degrees * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
         limit = left - drawbridge_yaw_speed_gp * 0.017453292f;
@@ -397,7 +397,7 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         else if (limit < 0.0f)
             limit = 0.0f;
         if (right != 0.0f && limit == 0.0f)
-            allocate_voice_for_target_entry(2, 0, data->d[j]);
+            allocate_voice_for_target_entry(2, 0, drawbridge_vars->d[j]);
 
         drawbridge_vars->c[j]->rot.y = -left;
         drawbridge_vars->d[j]->rot.y = -right;

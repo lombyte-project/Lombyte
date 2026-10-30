@@ -168,7 +168,7 @@ void select_moby_context(int state) {
         oldE8 = l00_active_moby_pool_end;
         old7C = l00_inactive_moby_pool_end;
         l00_active_moby_context_selector = oldState ^ 1;
-        *(u8 *volatile *)&moby_table = (u8 *)old70;
+        *(u8 *volatile *)&moby_table = (u8 *)saved_inactive_moby_array_start;
         D_L00_0015FFDC = saved_inactive_loaded_moby_end;
         D_L00_0015FFE0 = saved_inactive_moby_pool_last_slot;
         l00_inactive_moby_pool_last_slot = oldDC;

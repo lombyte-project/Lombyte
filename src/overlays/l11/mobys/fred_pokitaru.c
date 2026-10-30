@@ -74,7 +74,7 @@ void fred_pokitaru_update(struct Moby *moby) {
         FRED_POKITARU_CHECK_DIALOGUE = 1,
         FRED_POKITARU_WAIT_FOR_DIALOGUE_END = 2
     };
-    L16WatchScratch       scratch;
+    L16WatchScratch       sentry_look_tracking_vectors;
     struct PokSentryVars *moby_vars = (struct PokSentryVars *)moby->pvars;
     float                 rate;
     float                 head_rate;

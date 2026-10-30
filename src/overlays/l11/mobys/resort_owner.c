@@ -805,7 +805,7 @@ typedef struct {
 
 /* Guard head update: in its watching states it turns its body and head toward the hero. */
 void update_resort_owner_look_tracking(WatcherMoby *moby) {
-    L16WatchScratch scratch;
+    L16WatchScratch resort_owner_look_vectors;
     WD11b          *moby_vars = (WD11b *)moby->data;
     float           rate;
     float           head_rate;

@@ -56,7 +56,7 @@ void set_range_centered_on_value(GroundRangeMoby *range, f32 x) {
 void spawn_birdbot_movement_particles(SplashMoby_u *moby, u128 *origin) __asm__("FUN_L01_002e6518");
 
 void spawn_birdbot_movement_particles(SplashMoby_u *moby, u128 *origin) {
-    Vec4         base;
+    Vec4         previous_moby_position;
     Vec4         world_motion_delta;
     Vec4         vector_scratch;
     Vec4         rel;
@@ -515,7 +515,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         BIRDBOT_HIT_REACTION_OMIT_KNOCKBACK_SETUP = 11
     };
     PeVars  *birdbot_vars;
-    Vec4     old;
+    Vec4     birdbot_position_before_update;
     PeTarget selected_combat_target;
     Vec4     va;
     Vec4     vb;

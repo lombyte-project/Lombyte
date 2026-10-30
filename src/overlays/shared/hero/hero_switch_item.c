@@ -1451,7 +1451,7 @@ void update_hero_item_rotation_from_history(char *rotation_output_moby, u8 *join
 
     {
         char *b = ((char *)((char *)&hero_lui));
-        copy_matrix3x4(((char *)((char *)&hero_lui)) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30, entry);
+        copy_matrix3x4(((char *)((char *)&hero_lui)) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30, joint_matrix_source);
         normalize_vector_triplet(((char *)((char *)&hero_lui)) + 0x12F0 +
                                  *(int *)(b + 0x21B8) * 0x30);
 

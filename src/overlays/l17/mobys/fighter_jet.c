@@ -1192,7 +1192,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby,
                                FighterJetVars *ship_vars) __asm__("FUN_L17_002ec360");
 
 void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_vars) {
-    sceVu0FVECTOR old;
+    sceVu0FVECTOR pre_movement_ship_position;
     sceVu0FVECTOR death_explosion_velocity;
     UQ_c4         movement_delta;
     sceVu0FVECTOR side;

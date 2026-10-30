@@ -27,7 +27,7 @@ void cave_door_update(struct Moby *cave_door_moby) {
     struct Moby *target_moby;
     f32         *mv;
 
-    cave_door_vars = (RotVars *)self->pvars;
+    cave_door_vars = (RotVars *)cave_door_moby->pvars;
     switch (cave_door_moby->state) {
     case CAVE_DOOR_STATE_INITIALIZE:
         cave_door_vars->angle = cave_door_moby->rot.x;

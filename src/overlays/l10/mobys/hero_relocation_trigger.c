@@ -124,9 +124,9 @@ void update_hero_relocation_trigger(struct Moby *moby) {
         target->collision = *(u32 *)((char *)target->pclass + 0x10);
         if (visited52[moby->mission + current_level_index * 16] == 0xFF || relocation_trigger_vars->spot_alt == -1) {
             set_race_camera(
-                &l10_cuboids[vars->spot_alt].pos, &l10_cuboids[vars->spot_alt].rot, 0, 1);
+                &l10_cuboids[relocation_trigger_vars->spot_alt].pos, &l10_cuboids[relocation_trigger_vars->spot_alt].rot, 0, 1);
         } else {
-            set_race_camera(&l10_cuboids[vars->spot].pos, &l10_cuboids[vars->spot].rot, 0, 1);
+            set_race_camera(&l10_cuboids[relocation_trigger_vars->spot].pos, &l10_cuboids[relocation_trigger_vars->spot].rot, 0, 1);
         }
         enter_hero_vehicle_mode(
             1, 0x43, (struct Moby *)(D_L10_0015FFD8_98b68 + (relocation_trigger_vars->target << 8)));
@@ -136,7 +136,7 @@ void update_hero_relocation_trigger(struct Moby *moby) {
     if (hero.vehicle_mode == 1) {
         exit_hero_vehicle_mode();
         set_race_camera(
-            &l10_cuboids[vars->vehicle_spot].pos, &l10_cuboids[vars->vehicle_spot].rot, 0, 1);
+            &l10_cuboids[relocation_trigger_vars->vehicle_spot].pos, &l10_cuboids[relocation_trigger_vars->vehicle_spot].rot, 0, 1);
         request_music_track(0, 5);
         ((struct Moby *)((relocation_trigger_vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 1;
         ((struct Moby *)((relocation_trigger_vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 2;

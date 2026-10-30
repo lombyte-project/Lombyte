@@ -903,7 +903,7 @@ void start_alien_queen_intro(char *moby) {
     char        *alien_queen_vars = ((char *)MOBY(moby)->pvars);
     LevelCuboid *hero_placement_node = &l06_cuboids[*(int *)(alien_queen_vars + 0xF8)];
     *(int *)(alien_queen_vars + 0x118) = 0;
-    set_race_camera(&base->pos, &base->rot, 0x72, 0);
+    set_race_camera(&hero_placement_node->pos, &hero_placement_node->rot, 0x72, 0);
     qcopy(output_position, moby + 0x10);
     output_position[2] = hero.motion.pos.f[2] + 2.0f;
     fast_vec_normalize(moby_offset_vector, moby + 0xC0, 8.0f);

@@ -52,7 +52,7 @@ void water_current_update(struct Moby *water_current_moby) {
     f32              cap;
     s32              i;
 
-    water_current_vars = (PathCarrierVars *)self->pvars;
+    water_current_vars = (PathCarrierVars *)water_current_moby->pvars;
     if (water_current_vars == NULL || water_current_vars->path == -1) {
         return;
     }

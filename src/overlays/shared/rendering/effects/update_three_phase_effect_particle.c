@@ -472,7 +472,7 @@ void update_colliding_effect_particle(unsigned char *particle) {
             *(u128 *)matrix = *(u128 *)update_parameters;
         }
         fast_vec_add(position_or_velocity_scratch, position_or_velocity_scratch, matrix);
-        clamp_vector_length(next, next, *(float *)(update_parameters + 0x40));
+        clamp_vector_length(position_or_velocity_scratch, position_or_velocity_scratch, *(float *)(update_parameters + 0x40));
         *(float *)(particle_data + 0x0) = position_or_velocity_scratch[0];
         *(float *)(particle_data + 0x4) = position_or_velocity_scratch[1];
         *(float *)(particle_data + 0x8) = position_or_velocity_scratch[2];

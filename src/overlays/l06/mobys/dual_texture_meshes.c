@@ -5480,7 +5480,7 @@ void draw_dual_texture_50_quad_mesh(void) {
 }
 
 void draw_dual_texture_58_quad_mesh(void) {
-    Packet first, mesh_second_pass_quad_packet;
+    Packet mesh_first_pass_quad_packet, mesh_second_pass_quad_packet;
     float  matrix[4][4] __attribute__((aligned(16)));
     float  quad_facing_unit_direction[4] __attribute__((aligned(16)));
     float  quad_facing_center_or_normal[4] __attribute__((aligned(16)));

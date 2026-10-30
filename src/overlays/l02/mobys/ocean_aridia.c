@@ -20,7 +20,7 @@ void prepare_scaled_table_on_stack(f32 scale) __asm__("FUN_L02_002a47f8");
 
 void prepare_scaled_table_on_stack(f32 scale) {
     char scaled_table_buffer[0x40];
-    prepare_scaled_table_with_byte_128(scratch, scale);
+    prepare_scaled_table_with_byte_128(scaled_table_buffer, scale);
 }
 
 extern void write_dma_channel(void *, int, int) __asm__("FUN_001f9928");

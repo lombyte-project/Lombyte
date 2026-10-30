@@ -100,7 +100,7 @@ void update_bomber_tank_bomb(struct Moby *moby) {
     char        *moby_bytes = (char *)moby;
     char        *ballistic_projectile_vars = *(char **)(moby_bytes + 0x78);
     float        original[4];
-    EffectRecord record;
+    EffectRecord collision_and_effect_record;
     float       *position;
     float        effect[4];
     float        velocity[4];

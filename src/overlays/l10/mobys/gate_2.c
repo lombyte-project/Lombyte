@@ -59,7 +59,7 @@ void gate_2_update(GateMoby *m) __asm__("FUN_L10_002e9990");
 void gate_2_update(GateMoby *moby) {
     GateVars     *vars = moby->vars;
     float         opening_offset[3];
-    Vec           out;
+    Vec           opening_position;
     unsigned char entry_gate_state = moby->state;
 
     switch (entry_gate_state) {

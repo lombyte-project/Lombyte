@@ -63,7 +63,7 @@ void bob_update(WatcherMoby *moby) {
         BOB_CHECK_DIALOGUE = 1,
         BOB_WAIT_FOR_DIALOGUE_END = 2
     };
-    L16WatchScratch scratch;
+    L16WatchScratch look_tracking_vectors;
     WD11           *moby_vars = (WD11 *)moby->data;
     float           rate;
     float           head_rate;
