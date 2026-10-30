@@ -101,7 +101,7 @@ void seeker_update(struct Moby *moby) {
         SEEKER_STATE_FATAL_KNOCKBACK = 6,
         SEEKER_STATE_EXPLODE = 7
     };
-    Moby52Vars      *vars = (Moby52Vars *)moby->pvars;
+    Moby52Vars      *seeker_instance_vars = (Moby52Vars *)moby->pvars;
     struct Moby     *target;
     Vec4             vel;
     s32              mode;
@@ -114,8 +114,8 @@ void seeker_update(struct Moby *moby) {
     VoicePoolWindow *slot;
 
     update_seeker_damage_and_target(moby);
-    target = vars->target;
-    FUN_L00_00263ac8(moby, 0, vars->unk280, 2.7f);
+    target = seeker_instance_vars->target;
+    FUN_L00_00263ac8(moby, 0, seeker_instance_vars->unk280, 2.7f);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L09_00166F40) < 29.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x17;
@@ -126,32 +126,32 @@ void seeker_update(struct Moby *moby) {
     }
     switch (moby->state) {
     case SEEKER_STATE_INITIALIZE:
-        vars->unk20 = 3.0f;
-        vars->unk24 = 3;
-        vars->unk28 = 2;
-        vars->unk5A = 6;
-        vars->unk58 = 8;
-        if (vars->unk180 == -1) {
+        seeker_instance_vars->unk20 = 3.0f;
+        seeker_instance_vars->unk24 = 3;
+        seeker_instance_vars->unk28 = 2;
+        seeker_instance_vars->unk5A = 6;
+        seeker_instance_vars->unk58 = 8;
+        if (seeker_instance_vars->unk180 == -1) {
             debug_print(seeker_invalid_bound_path_format, moby->save_id);
             mark_moby_for_removal(moby);
             break;
         }
-        FUN_L01_0026d930(&vars->unkD0);
-        vars->unkDC = 0.5f;
-        vars->unkD8 = 0.5f;
-        vars->unkD0 = truncate_float_to_s32(512.0f);
-        vars->speed = frame_time * 7.75f;
+        FUN_L01_0026d930(&seeker_instance_vars->unkD0);
+        seeker_instance_vars->unkDC = 0.5f;
+        seeker_instance_vars->unkD8 = 0.5f;
+        seeker_instance_vars->unkD0 = truncate_float_to_s32(512.0f);
+        seeker_instance_vars->speed = frame_time * 7.75f;
         moby->state = 1;
         if (moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         }
-        vars->voice = -1;
+        seeker_instance_vars->voice = -1;
         break;
     case SEEKER_STATE_IDLE_HOVER:
         moby->pos.z += (probe_ground_height(&moby->pos, 0, 0.5f) + 0.5f - moby->pos.z) * 0.1f;
         approach_angle(&moby->rot.z,
                        fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
-                       &vars->heading_speed,
+                       &seeker_instance_vars->heading_speed,
                        frame_time_sq * 8.726646f,
                        frame_time_sq * 8.726646f,
                        frame_time * 12.566371f);
@@ -165,14 +165,14 @@ void seeker_update(struct Moby *moby) {
             }
             moby->anim_speed = random_float_between(0.95f, 1.05f);
         }
-        if (vars->unk164 != 2) {
+        if (seeker_instance_vars->unk164 != 2) {
             if (moby->group != 0xFF) {
                 FUN_L01_0026e090(moby->group, 1);
             }
-            if (vars->voice == -1) {
-                vars->voice = allocate_voice_for_target_entry(1, 4, moby);
+            if (seeker_instance_vars->voice == -1) {
+                seeker_instance_vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }
-            vars->moving = 1;
+            seeker_instance_vars->moving = 1;
             moby->state = 2;
         }
         break;
@@ -181,16 +181,16 @@ void seeker_update(struct Moby *moby) {
             if (moby->group != 0xFF) {
                 FUN_L01_0026e090(moby->group, 1);
             }
-            vars->moving = 1;
+            seeker_instance_vars->moving = 1;
             moby->state = 4;
-            if (vars->voice == -1) {
-                vars->voice = allocate_voice_for_target_entry(1, 4, moby);
+            if (seeker_instance_vars->voice == -1) {
+                seeker_instance_vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }
             if (moby->prev_seq != 4) {
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             }
-            if (vars->timer == 0) {
-                vars->timer = scale_game_frames(180);
+            if (seeker_instance_vars->timer == 0) {
+                seeker_instance_vars->timer = scale_game_frames(180);
             }
         }
         break;
@@ -199,20 +199,20 @@ void seeker_update(struct Moby *moby) {
         z = moby->pos.z;
         approach_angle(&moby->rot.z,
                        fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
-                       &vars->heading_speed,
+                       &seeker_instance_vars->heading_speed,
                        frame_time_sq * 8.726646f,
                        frame_time_sq * 8.726646f,
                        frame_time * 12.566371f);
         target_distance_xy = vector_distance_xy(&moby->pos, &target->pos);
         if (target_distance_xy > 1.9f) {
-            vars->moving = 1;
+            seeker_instance_vars->moving = 1;
         }
         if (target_distance_xy < 1.4f) {
-            vars->moving = 0;
+            seeker_instance_vars->moving = 0;
         }
-        if (vars->moving != 0) {
-            vel.f[0] = fast_cos(moby->rot.z) * vars->speed;
-            vel.f[1] = fast_sin(moby->rot.z) * vars->speed;
+        if (seeker_instance_vars->moving != 0) {
+            vel.f[0] = fast_cos(moby->rot.z) * seeker_instance_vars->speed;
+            vel.f[1] = fast_sin(moby->rot.z) * seeker_instance_vars->speed;
             vel.f[2] = 0.0f;
             vertical_follow_adjustment = hero.motion.pos.f[2] + 0.8f - z;
             if (moby->pos.z < hero.motion.pos.f[2] + 0.8f) {
@@ -260,44 +260,44 @@ void seeker_update(struct Moby *moby) {
         break;
     case SEEKER_STATE_HURT_KNOCKBACK:
         height = moby->pos.z;
-        step_moby_motion(moby, &vars->vel);
+        step_moby_motion(moby, &seeker_instance_vars->vel);
         moby->pos.z = height;
-        vars->vel.f[2] = 0.0f;
-        if (fast_vec_length(&vars->vel) < frame_time * 2.0f) {
-            if (vars->voice == -1) {
-                vars->voice = allocate_voice_for_target_entry(1, 4, moby);
+        seeker_instance_vars->vel.f[2] = 0.0f;
+        if (fast_vec_length(&seeker_instance_vars->vel) < frame_time * 2.0f) {
+            if (seeker_instance_vars->voice == -1) {
+                seeker_instance_vars->voice = allocate_voice_for_target_entry(1, 4, moby);
             }
-            vars->moving = 1;
+            seeker_instance_vars->moving = 1;
             moby->state = 4;
-            if (vars->timer == 0) {
-                vars->timer = scale_game_frames(180);
+            if (seeker_instance_vars->timer == 0) {
+                seeker_instance_vars->timer = scale_game_frames(180);
             }
         }
         break;
     case SEEKER_STATE_FATAL_KNOCKBACK:
-        voice = vars->voice;
+        voice = seeker_instance_vars->voice;
         if (voice != -1) {
             slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
             if ((struct Moby *)slot->voice.owner == moby && slot->voice.state != 0) {
                 release_voice_slot(voice);
             }
         }
-        vars->voice = -1;
-        if (step_moby_motion(moby, &vars->vel) & 0x121) {
+        seeker_instance_vars->voice = -1;
+        if (step_moby_motion(moby, &seeker_instance_vars->vel) & 0x121) {
             cart_burst(moby, &moby->pos, 0, 0.5f, 13.0f);
             mark_moby_for_removal(moby);
         }
         break;
     case SEEKER_STATE_EXPLODE:
         FUN_L00_00257470(moby, 0, -1);
-        voice = vars->voice;
+        voice = seeker_instance_vars->voice;
         if (voice != -1) {
             slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
             if ((struct Moby *)slot->voice.owner == moby && slot->voice.state != 0) {
                 release_voice_slot(voice);
             }
         }
-        vars->voice = -1;
+        seeker_instance_vars->voice = -1;
         clear_u64_value(&vel);
         spawn_explosion(moby,
                         &vel,
