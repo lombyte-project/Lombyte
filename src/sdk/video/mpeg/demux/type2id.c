@@ -28,4 +28,3 @@ u64 _type2id(s32 id, s32 value) {
     }
     return result;
 }
-

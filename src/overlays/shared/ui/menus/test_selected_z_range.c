@@ -5,7 +5,10 @@
 #include "rnc/ui/help/get_help_message_text.h"
 
 /* For a below 0xE0 true when z is 42..43, else when z is at least 39. */
-int test_selected_z_range(int z_range_selector, float x, float y, float z) __asm__("FUN_L00_002497f8");
+int test_selected_z_range(int   z_range_selector,
+                          float x,
+                          float y,
+                          float z) __asm__("FUN_L00_002497f8");
 
 int test_selected_z_range(int z_range_selector, float x, float y, float z) {
     if (z_range_selector < 0xE0) {
@@ -15,29 +18,28 @@ int test_selected_z_range(int z_range_selector, float x, float y, float z) {
 }
 
 typedef struct {
-    u8 pad0[0xA];
-    s16 label;       /* 0x0A: text id */
-    s16 cost_index;  /* 0x0C: row in D_L00_001C40B0 */
-    u8 padE[0x1A];
+    u8  pad0[0xA];
+    s16 label;      /* 0x0A: text id */
+    s16 cost_index; /* 0x0C: row in D_L00_001C40B0 */
+    u8  padE[0x1A];
 } MenuItem;
 
 typedef struct {
-    u8 pad0[0x20];
+    u8        pad0[0x20];
     MenuItem *items;
 } Menu;
-
 
 extern Menu D_L00_001841F0;
 extern char menu_bolt_cost_format[] __asm__("D_L00_0015FE38");
 extern char menu_label_escape_error_text[] __asm__("D_L00_0015FE40");
-extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
+extern int  sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 
 /* Copies menu item idx's label into out, expanding one %b (the bolt cost)
  * or other % escape. */
 void format_menu_item_label(s32 menu_item_index, u8 *out) __asm__("FUN_L00_0024a618");
 
 void format_menu_item_label(s32 menu_item_index, u8 *out) {
-    u8 substitution_text[16];
+    u8  substitution_text[16];
     u8 *label_cursor;
     u8 *substitution_cursor;
 
@@ -55,8 +57,9 @@ void format_menu_item_label(s32 menu_item_index, u8 *out) {
     }
     label_cursor++;
     if (*label_cursor == 'b') {
-        sprintf((char *)substitution_text, menu_bolt_cost_format,
-                    D_L00_001C40B0[D_L00_001841F0.items[menu_item_index].cost_index].f0);
+        sprintf((char *)substitution_text,
+                menu_bolt_cost_format,
+                D_L00_001C40B0[D_L00_001841F0.items[menu_item_index].cost_index].f0);
     } else {
         sprintf((char *)substitution_text, menu_label_escape_error_text);
     }

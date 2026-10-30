@@ -18,16 +18,16 @@ u64 get_effect_texture(s32 index) __asm__("FUN_001f44b8");
 
 u64 get_effect_texture(s32 index) {
     struct EffectTextureDefinition *texture;
-    struct TextureUpload *upload;
-    s32 width_log2;
-    s32 buffer_width_shift;
-    s32 palette_block_offset;
-    s32 texel_address;
-    s32 texel_block_offset;
-    u64 tex0_word;
-    s64 width_bits;
-    s64 palette_bits;
-    s32 pending_texture_upload_count_snapshot;
+    struct TextureUpload           *upload;
+    s32                             width_log2;
+    s32                             buffer_width_shift;
+    s32                             palette_block_offset;
+    s32                             texel_address;
+    s32                             texel_block_offset;
+    u64                             tex0_word;
+    s64                             width_bits;
+    s64                             palette_bits;
+    s32                             pending_texture_upload_count_snapshot;
 
     if (effect_texture_definitions[index].tex0 == 0) {
         texture = &effect_texture_definitions[index];
@@ -69,4 +69,3 @@ u64 get_effect_texture(s32 index) {
 }
 
 extern __typeof__(get_effect_texture) func_001F44B8 __attribute__((alias("FUN_001f44b8")));
-

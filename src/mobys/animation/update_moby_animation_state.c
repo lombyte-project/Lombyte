@@ -1,14 +1,17 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
+
 struct AnimSeq {
-    u8 pad0[0x11];
-    u8 unk11;
-    u8 unk12;
-    u8 pad13[9];
+    u8    pad0[0x11];
+    u8    unk11;
+    u8    unk12;
+    u8    pad13[9];
     void *frames[1];
 };
+
 #include "rnc/mobys/moby.h"
+
 void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 
 void update_moby_animation_state(struct Moby *moby) {

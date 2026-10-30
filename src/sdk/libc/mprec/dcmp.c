@@ -2,16 +2,16 @@
 
 typedef struct _Bigint {
     struct _Bigint *_next;
-    s32 _k;
-    s32 _maxwds;
-    s32 _sign;
-    s32 _wds;
-    u32 _x[1];
+    s32             _k;
+    s32             _maxwds;
+    s32             _sign;
+    s32             _wds;
+    u32             _x[1];
 } _Bigint;
 
 s32 Dcmp(_Bigint *left_operand, _Bigint *right_operand) {
     u32 *xa, *xa0, *xb, *xb0;
-    s32 i, j;
+    s32  i, j;
 
     i = left_operand->_wds;
     j = right_operand->_wds;

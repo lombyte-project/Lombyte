@@ -1,4 +1,5 @@
 #include "types.h"
+
 char *FindSubstring(char *search_string, char *sub) {
     s32 i;
 

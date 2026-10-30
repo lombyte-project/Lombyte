@@ -81,19 +81,22 @@
  */
 
 #include "types.h"
+
 typedef struct _Bigint {
     struct _Bigint *_next;
-    s32 _k, _maxwds, _sign, _wds;
-    u32 _x[1];
+    s32             _k, _maxwds, _sign, _wds;
+    u32             _x[1];
 } _Bigint;
+
 typedef struct _reent {
-    u8 pad_0[0x4C];
+    u8        pad_0[0x4C];
     _Bigint **_freelist;
 } _reent;
+
 extern void *_calloc_r(struct _reent *, u32, u32);
 
 _Bigint *_Balloc(struct _reent *reent_context, s32 k) {
-    s32 x;
+    s32      x;
     _Bigint *rv;
 
     if (reent_context->_freelist == 0) {

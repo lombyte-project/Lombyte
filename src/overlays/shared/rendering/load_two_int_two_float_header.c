@@ -7,8 +7,8 @@
 extern char *D_L00_0015FCA8;
 extern float D_L00_0015FCA0;
 extern float D_L00_0015FCA4;
-extern int D_L00_0015FC98;
-extern int D_L00_0015FC9C;
+extern int   D_L00_0015FC98;
+extern int   D_L00_0015FC9C;
 
 /* Reads two ints and two floats from p into D_L00_0015FC98.. and keeps the rest pointer. */
 void load_two_int_two_float_header(char *data_cursor) __asm__("FUN_L00_0023f0d8");
@@ -24,10 +24,11 @@ void load_two_int_two_float_header(char *data_cursor) {
     data_cursor += 4;
     D_L00_0015FCA8 = data_cursor;
 }
+
 extern u32 D_L00_0015F43C;
 extern s32 D_L00_0015F438;
 extern u32 D_L00_0015F440;
-void relocate_counted_pointer_table(s32 *data_cursor) __asm__("FUN_L00_0023f120");
+void       relocate_counted_pointer_table(s32 *data_cursor) __asm__("FUN_L00_0023f120");
 
 void relocate_counted_pointer_table(s32 *data_cursor) {
     s32 i, j;

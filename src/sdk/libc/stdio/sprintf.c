@@ -19,7 +19,7 @@ extern s32 vfprintf(RncFile *file, const s8 *format, va_list arguments) __asm__(
 #define INT_MAX 0x7FFFFFFF
 
 s32 sprintf(s8 *str, const s8 *format, ...) {
-    s32 formatter_result;
+    s32     formatter_result;
     va_list arguments;
     RncFile output_stream;
 

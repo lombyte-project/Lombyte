@@ -7,39 +7,40 @@
 #include "rnc/audio/banks/snd_unload_bank.h"
 
 struct LevelArchiveDiscEntry {
-    u8 pad_0[0x12C8];
+    u8  pad_0[0x12C8];
     s32 start_sector;
     s32 sector_count;
 };
 
 struct LevelArchiveHeader {
-    u8 pad_0[8];
+    u8  pad_0[8];
     s32 sound_bank_offset;
 };
 
-extern s16 ship_index[] __asm__("D_0013E056");
-extern s32 D_0015ED58 MACRO_ADDR;
-extern u32 sound_bank_handle __asm__("D_0015ED5C") MACRO_ADDR;
-extern u16 D_0015EE48 MACRO_ADDR;
-extern s16 D_0015EE4A;
+extern s16                        ship_index[] __asm__("D_0013E056");
+extern s32 D_0015ED58             MACRO_ADDR;
+extern u32                        sound_bank_handle __asm__("D_0015ED5C") MACRO_ADDR;
+extern u16 D_0015EE48             MACRO_ADDR;
+extern s16                        D_0015EE4A;
 extern struct LevelArchiveHeader *level_root __asm__("D_0015EE4C");
-extern u8 *sound_archive_base __asm__("D_0015EE50") MACRO_ADDR;
-extern u8 *level_archive_base __asm__("D_0015EE54") MACRO_ADDR;
-extern s32 D_0015EEBC __attribute__((sda));
-extern s32 D_0015EEC0 MACRO_ADDR;
-extern u8 D_1FF8000[];
-extern void store_async_sound_bank_handle() __asm__("FUN_0022dd78");
-extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
-extern void snd_bank_load_from_ee_cb(s32, s32, u64) __asm__("FUN_0012e088");
-extern void snd_resolve_bank_xrefs() __asm__("FUN_0012e1a8");
-extern void snd_stop_all_sounds() __asm__("func_0012E3B8");
-extern s32 sceCdBreak();
-extern s32 sceCdGetError();
-extern s32 sceCdSync(s32);
+extern u8                        *sound_archive_base __asm__("D_0015EE50") MACRO_ADDR;
+extern u8                        *level_archive_base __asm__("D_0015EE54") MACRO_ADDR;
+extern s32                        D_0015EEBC __attribute__((sda));
+extern s32 D_0015EEC0             MACRO_ADDR;
+extern u8                         D_1FF8000[];
+extern void                       store_async_sound_bank_handle() __asm__("FUN_0022dd78");
+extern s32                        snd_flush_sound_commands() __asm__("func_0012DC80");
+extern void                       snd_bank_load_from_ee_cb(s32, s32, u64) __asm__("FUN_0012e088");
+extern void                       snd_resolve_bank_xrefs() __asm__("FUN_0012e1a8");
+extern void                       snd_stop_all_sounds() __asm__("func_0012E3B8");
+extern s32                        sceCdBreak();
+extern s32                        sceCdGetError();
+extern s32                        sceCdSync(s32);
 
 s32 service_level_archive_load(void) __asm__("FUN_00204428");
 
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
+
 s32 service_level_archive_load(void) {
     enum {
         LOAD_SHARED_ARCHIVE = 0,
@@ -51,21 +52,21 @@ s32 service_level_archive_load(void) {
         START_SOUND_BANK_LOAD = 6,
         WAIT_FOR_SOUND_BANK_LOAD = 7
     };
-    s32 stage;
-    u16 next_stage;
-    s32 retry_stage;
-    s32 archive_start_or_bytes;
-    s32 sound_aligned_bytes;
-    s32 level_archive_sectors;
-    s32 archive_start_or_sectors;
-    s32 shared_start_sector;
-    u8 *sound_archive_buffer;
-    u8 *level_archive_buffer;
-    u8 *shared_archive_buffer;
+    s32                           stage;
+    u16                           next_stage;
+    s32                           retry_stage;
+    s32                           archive_start_or_bytes;
+    s32                           sound_aligned_bytes;
+    s32                           level_archive_sectors;
+    s32                           archive_start_or_sectors;
+    s32                           shared_start_sector;
+    u8                           *sound_archive_buffer;
+    u8                           *level_archive_buffer;
+    u8                           *shared_archive_buffer;
     struct LevelArchiveDiscEntry *disc_entry;
     struct LevelArchiveDiscEntry *next_disc_entry;
-    s32 level_index;
-    struct LevelArchiveHeader *shared_header;
+    s32                           level_index;
+    struct LevelArchiveHeader    *shared_header;
 
     level_index = ship_index[0] + 1;
     if (sceCdSync(1) != 0) {
@@ -97,8 +98,7 @@ s32 service_level_archive_load(void) {
     switch (stage) {
     case LOAD_SHARED_ARCHIVE:
         if (pal_mode != 0) {
-            sound_aligned_bytes =
-                ((disc_table.sound_archive_alt.size << 11) + 0xFFF) & 0xFFFFF000;
+            sound_aligned_bytes = ((disc_table.sound_archive_alt.size << 11) + 0xFFF) & 0xFFFFF000;
         } else {
             sound_aligned_bytes = ((disc_table.sound_archive.size << 11) + 0xFFF) & 0xFFFFF000;
         }
@@ -115,22 +115,25 @@ s32 service_level_archive_load(void) {
         sound_archive_base = sound_archive_buffer;
         *(struct LevelArchiveHeader **)0x0015EE4C =
             (struct LevelArchiveHeader *)shared_archive_buffer;
-        submit_audio_stream_io_request(shared_archive_buffer, archive_start_or_bytes,
-                                       archive_start_or_sectors);
+        submit_audio_stream_io_request(
+            shared_archive_buffer, archive_start_or_bytes, archive_start_or_sectors);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case LOAD_LEVEL_ARCHIVE:
         next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&disc_table + level_index * 8);
-        submit_audio_stream_io_request(level_archive_base, *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12C8), *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12CC));
+        submit_audio_stream_io_request(level_archive_base,
+                                       *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12C8),
+                                       *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12CC));
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case LOAD_SOUND_ARCHIVE:
         if (pal_mode != 0) {
-            submit_audio_stream_io_request(sound_archive_base, disc_table.sound_archive_alt.sector,
+            submit_audio_stream_io_request(sound_archive_base,
+                                           disc_table.sound_archive_alt.sector,
                                            disc_table.sound_archive_alt.size);
         } else {
-            submit_audio_stream_io_request(sound_archive_base, disc_table.sound_archive.sector,
-                                           disc_table.sound_archive.size);
+            submit_audio_stream_io_request(
+                sound_archive_base, disc_table.sound_archive.sector, disc_table.sound_archive.size);
         }
     increment_stage:
         D_0015EE48 = D_0015EE48 + 1;
@@ -170,7 +173,8 @@ s32 service_level_archive_load(void) {
         shared_header = level_root;
         sound_bank_handle = 0xFFFFFFFFU;
         snd_bank_load_from_ee_cb(shared_header->sound_bank_offset + (s32)shared_header,
-                                 (s32)store_async_sound_bank_handle, (u32)&sound_bank_handle);
+                                 (s32)store_async_sound_bank_handle,
+                                 (u32)&sound_bank_handle);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case WAIT_FOR_SOUND_BANK_LOAD:

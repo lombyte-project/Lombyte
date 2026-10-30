@@ -12,45 +12,53 @@ struct P {
     u8 pad_0[0x10];
     u8 f10;
 };
+
 struct T {
-    u8 pad_0[0x48];
+    u8        pad_0[0x48];
     struct P *tbl[1];
 };
+
 struct O2 {
-    u8 pad_0[0x10];
-    float f10, f14, f18;
-    u8 pad_1C[8];
+    u8        pad_0[0x10];
+    float     f10, f14, f18;
+    u8        pad_1C[8];
     struct T *f24;
-    u8 pad_28[0xC];
-    u16 f34;
-    u8 pad_36[0xA];
-    s32 f40, f44, f48;
-    u8 pad_4C[0x28];
-    s32 *f74;
+    u8        pad_28[0xC];
+    u16       f34;
+    u8        pad_36[0xA];
+    s32       f40, f44, f48;
+    u8        pad_4C[0x28];
+    s32      *f74;
 };
+
 #include "rnc/ui/menus/menu_system.h"
-extern struct MenuPage menu_preview_initial_page __asm__("D_001D45C8"); /* page made current and next at init */
+
+extern struct MenuPage
+          menu_preview_initial_page __asm__("D_001D45C8"); /* page made current and next at init */
 extern u8 D_0019C150[];
 extern u8 D_0019C160[];
 extern void quad_moby_update() __asm__("FUN_0023a2c0");
+
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/ui/menus/initialize_menu_preview_scene_globals.h"
 #include "rnc/math/fast_math.h"
-extern u8 menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
-extern u8 menu_preview_lighting_copy_source_gp __asm__("D_001601D0") __attribute__((sda));
-extern void vu1_sync_chain(s32) __asm__("func_002337B0");
-extern s32 sceGsSyncV(s32);
-extern s32 initialize_menu_stream_buffers() __asm__("FUN_00225ac0");
-extern void vu1_init_chain(void) __asm__("func_002335D0");
+
+extern u8         menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
+extern u8         menu_preview_lighting_copy_source_gp __asm__("D_001601D0") __attribute__((sda));
+extern void       vu1_sync_chain(s32) __asm__("func_002337B0");
+extern s32        sceGsSyncV(s32);
+extern s32        initialize_menu_stream_buffers() __asm__("FUN_00225ac0");
+extern void       vu1_init_chain(void) __asm__("func_002335D0");
 extern struct O2 *create_menu_preview_moby() __asm__("func_00225490");
-extern s32 set_moby_animation() __asm__("func_00212ED8");
+extern s32        set_moby_animation() __asm__("func_00212ED8");
 
 void func_00225AC0__void() __asm__("FUN_00225ac0");
 void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
 
 void initialize_menu_preview_scene(void) {
     s32 i;
-    s32 preview_workspace_start, graphics_workspace_base, help_text_buffer_start, graphics_buffer_start;
+    s32 preview_workspace_start, graphics_workspace_base, help_text_buffer_start,
+        graphics_buffer_start;
     menu_system.state = 2;
     menu_system.current = &menu_preview_initial_page;
     menu_system.next = &menu_preview_initial_page;
@@ -91,10 +99,12 @@ void initialize_menu_preview_scene(void) {
                 ((struct O2 *)panel_slots[i])->f44 = 0;
                 ((struct O2 *)panel_slots[i])->f48 = 0;
                 k = menu_system.current->moby_anims[i];
-                set_moby_animation(panel_slots[i], k, ((struct O2 *)panel_slots[i])->f24->tbl[k]->f10 - 1);
+                set_moby_animation(
+                    panel_slots[i], k, ((struct O2 *)panel_slots[i])->f24->tbl[k]->f10 - 1);
             }
         }
     }
 }
 
-extern __typeof__(initialize_menu_preview_scene) func_00218F98 __attribute__((alias("FUN_00218f98")));
+extern __typeof__(initialize_menu_preview_scene) func_00218F98
+    __attribute__((alias("FUN_00218f98")));

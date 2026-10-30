@@ -49,7 +49,7 @@ void __unpack_d(FLOUnion *src, FpNumber *dst);
 
 s32 dptoli(u64 arg_a) {
     FpNumber unpacked_value;
-    s32 integer_magnitude;
+    s32      integer_magnitude;
 
     __unpack_d((FLOUnion *)&arg_a, &unpacked_value);
     if ((unpacked_value.class ^ 2) == 0) {

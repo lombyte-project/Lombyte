@@ -4,9 +4,9 @@ struct Table16 {
     s32 v[16];
 };
 
-extern u8 *D_001A00FC[];
+extern u8            *D_001A00FC[];
 extern struct Table16 map_coverage_nibble_contribution_table __asm__("D_001E8080");
-extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
+extern void           fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
 
 /* Builds a 1bpp mask from the 4bpp map at D_001A00FC[0]: each nibble is
    weighted through the 16-entry table D_001E8080, four source rows are summed
@@ -14,15 +14,15 @@ extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_00
 void downsample_map_coverage(u8 *out) __asm__("FUN_00208030");
 
 void downsample_map_coverage(u8 *out) {
-    s32 acc[128];
+    s32            acc[128];
     struct Table16 nibble_contributions;
-    u8 *packed_map_cursor;
-    u8 *coverage_mask_cursor;
-    s32 i;
-    s32 j;
-    s32 k;
-    s32 packed_column_start;
-    u32 packed_source_byte;
+    u8            *packed_map_cursor;
+    u8            *coverage_mask_cursor;
+    s32            i;
+    s32            j;
+    s32            k;
+    s32            packed_column_start;
+    u32            packed_source_byte;
 
     coverage_mask_cursor = out;
     packed_map_cursor = D_001A00FC[0];
@@ -45,8 +45,11 @@ void downsample_map_coverage(u8 *out) {
                 }
             }
             for (packed_column_start = 0; packed_column_start < 128; packed_column_start += 8) {
-                *coverage_mask_cursor++ = acc[packed_column_start] | acc[packed_column_start + 1] | acc[packed_column_start + 2] | acc[packed_column_start + 3] | acc[packed_column_start + 4] | acc[packed_column_start + 5] |
-                         acc[packed_column_start + 6] | acc[packed_column_start + 7];
+                *coverage_mask_cursor++ =
+                    acc[packed_column_start] | acc[packed_column_start + 1] |
+                    acc[packed_column_start + 2] | acc[packed_column_start + 3] |
+                    acc[packed_column_start + 4] | acc[packed_column_start + 5] |
+                    acc[packed_column_start + 6] | acc[packed_column_start + 7];
             }
         }
     }

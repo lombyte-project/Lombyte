@@ -5,27 +5,25 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/weapons/suck_aim.h"
 
-
-
 /* Set an attached effect's alpha from distance and the supplied scale. */
 /* Ported from rac1-decomp (src/overlays/l18/mobyutil_00267000.c: func_L18_00267000), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char pad0[0x10];
+    char  pad0[0x10];
     float position[4];
 } Level18Moby;
 
 typedef struct {
-    char pad0[0xA];
+    char          pad0[0xA];
     unsigned char alpha;
 } Level18Effect;
 
-
-void set_moby_attached_effect_alpha_from_distance(Level18Moby *moby, float scale) __asm__("FUN_L18_00265ff8");
+void set_moby_attached_effect_alpha_from_distance(Level18Moby *moby,
+                                                  float        scale) __asm__("FUN_L18_00265ff8");
 
 void set_moby_attached_effect_alpha_from_distance(Level18Moby *moby, float scale) {
     Level18Effect *effect;
-    int alpha;
+    int            alpha;
 
     if (moby == 0) {
         return;

@@ -8,8 +8,6 @@
 #include "rnc/overlay/shared/ui/map/reveal_map_around_position.h"
 #include "rnc/rendering/frame/begin_draw_frame.h"
 
-
-
 /* Per-frame driver: validates the cursor, then runs each update pass in order. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00200890.c: func_L03_00200890), where it is exact; names translated to the US level program. */
 

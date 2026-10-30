@@ -6,17 +6,14 @@
 #include "rnc/math/random.h"
 #include "rnc/world/collision/collision_line.h"
 
-
-
 /* index of the nearest of n vectors to a + 0x10 */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F2F68), where it is exact; names translated to the US level program. */
-
 
 int find_nearest_point_index_xy(char *moby, char *points, int count) __asm__("FUN_L04_001f3038");
 
 int find_nearest_point_index_xy(char *moby, char *points, int count) {
-    int best = -1;
-    int i;
+    int   best = -1;
+    int   i;
     float best_distance = 32767.0f;
     for (i = 0; i < count; i++) {
         float distance = vector_distance_xy(moby + 0x10, points + i * 0x10);
@@ -27,6 +24,7 @@ int find_nearest_point_index_xy(char *moby, char *points, int count) {
     }
     return best;
 }
+
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 
@@ -39,39 +37,53 @@ typedef struct Hero Hero;
 
 typedef struct Moby Moby;
 
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_1F3010;
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) Vec_1F3010;
 
-typedef union { Vec_1F3010 v; int n; } PathEl;
+typedef union {
+    Vec_1F3010 v;
+    int        n;
+} PathEl;
 
 typedef struct {
-    Vec_1F3010 vel;
-    Vec_1F3010 pos;
-    Vec_1F3010 dir;
-    Vec_1F3010 drift;
-    float range;
-    short timer;
-    short pad46;
-    float f48;
-    float near;
-    Moby *target;
+    Vec_1F3010  vel;
+    Vec_1F3010  pos;
+    Vec_1F3010  dir;
+    Vec_1F3010  drift;
+    float       range;
+    short       timer;
+    short       pad46;
+    float       f48;
+    float       near;
+    Moby       *target;
     Vec_1F3010 *point;
-    int pad58;
-    short path;
-    short count;
-    short classes[8];
-    float weight[8];
-    float scale[8];
+    int         pad58;
+    short       path;
+    short       count;
+    short       classes[8];
+    float       weight[8];
+    float       scale[8];
 } Steer;
 
 extern s32 D_L04_00173FF0[];
 extern int collision_line() __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-int find_closest_polygon_edge_point(float *out, float *p, float *poly, int n) __asm__("FUN_L04_0024c7d8");
-#include "rnc/overlay/collision.h"
-extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
-extern char D_0013F450_1F3010[] __asm__("D_0013F350");
+int        find_closest_polygon_edge_point(float *out,
+                                           float *p,
+                                           float *poly,
+                                           int    n) __asm__("FUN_L04_0024c7d8");
 
-void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *params) __asm__("FUN_L04_001f30e0");
+#include "rnc/overlay/collision.h"
+
+extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
+extern char         D_0013F450_1F3010[] __asm__("D_0013F350");
+
+void steer_child_moby(Moby **others,
+                      int    other_count,
+                      Moby  *moby,
+                      Steer *steer,
+                      float *params) __asm__("FUN_L04_001f30e0");
 
 void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *params) {
     Vec_1F3010 path_hit;
@@ -80,21 +92,21 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
     Vec_1F3010 ray_start;
     Vec_1F3010 ray_end;
     Vec_1F3010 surface_normal;
-    PathEl *path;
-    Moby *other;
-    int hit;
-    Moby *too_close;
-    int nearest_index;
-    int i;
-    int best_index;
-    int class_index;
-    int next_index;
-    int previous_index;
-    int point_count;
-    float distance;
-    float length;
-    float next_distance;
-    float repulsion;
+    PathEl    *path;
+    Moby      *other;
+    int        hit;
+    Moby      *too_close;
+    int        nearest_index;
+    int        i;
+    int        best_index;
+    int        class_index;
+    int        next_index;
+    int        previous_index;
+    int        point_count;
+    float      distance;
+    float      length;
+    float      next_distance;
+    float      repulsion;
 
     clear_u64_value(steer);
     distance = fast_vec_dist(&moby->pos, &uninitialized_point);
@@ -241,7 +253,8 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
                 fast_vec_scale(&surface_normal, &surface_normal, params[3]);
                 fast_vec_add(steer, steer, &surface_normal);
                 if (0.4f < length) {
-                    fast_vec_scale(&surface_normal, &surface_normal, params[3] * (length * 10000.0f));
+                    fast_vec_scale(
+                        &surface_normal, &surface_normal, params[3] * (length * 10000.0f));
                     fast_vec_add(steer, steer, &surface_normal);
                 }
                 if (0.2f < moby->pos.z - coll_hit.point.f[2]) {
@@ -286,35 +299,46 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
     }
 }
 
-
-
 #include "qcopy.h"
 
 /* steps a moby's position out of collision and aims it */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F39B0), where it is exact; names translated to the US level program. */
 
+void update_moby_movement_with_sphere_collision(
+    char *moby,
+    char *movement_state,
+    char *movement_params,
+    float collision_z_offset) __asm__("FUN_L04_001f3a80");
 
-void update_moby_movement_with_sphere_collision(char *moby, char *movement_state, char *movement_params, float collision_z_offset) __asm__("FUN_L04_001f3a80");
+void update_moby_movement_with_sphere_collision(char *a,
+                                                char *b,
+                                                char *c,
+                                                float f) __asm__("FUN_L04_001f3a80");
+void update_moby_movement_with_sphere_collision(char *moby,
+                                                char *movement_state,
+                                                char *movement_params,
 
-void update_moby_movement_with_sphere_collision(char *a, char *b, char *c, float f) __asm__("FUN_L04_001f3a80");
-void update_moby_movement_with_sphere_collision(char *moby, char *movement_state, char *movement_params, float collision_z_offset) {
-    int i;
+                                                float collision_z_offset) {
+    int   i;
     float collision_probe_position[4];
     char *movement_delta = movement_state + 0x10;
     fast_vec_add(movement_delta, movement_delta, movement_state);
     fast_vec_normalize(movement_delta, movement_delta, *(float *)(movement_params + 0x1C));
-    *(float *)(movement_state + 0x18) = *(float *)(movement_state + 0x18) / *(float *)(movement_state + 0x48);
+    *(float *)(movement_state + 0x18) =
+        *(float *)(movement_state + 0x18) / *(float *)(movement_state + 0x48);
     fast_vec_add(moby + 0x10, moby + 0x10, movement_delta);
     for (i = 0; i < 6; i++) {
         qcopy(collision_probe_position, moby + 0x10);
         collision_probe_position[2] = collision_probe_position[2] + collision_z_offset;
-        if (coll_sphere(*(float *)(movement_params + 0x10) * 0.25f, collision_probe_position, 4, moby)) {
+        if (coll_sphere(
+                *(float *)(movement_params + 0x10) * 0.25f, collision_probe_position, 4, moby)) {
             qcopy(moby + 0x10, D_L04_00173FF0);
             MOBY(moby)->pos.z = MOBY(moby)->pos.z - collision_z_offset;
         } else {
             break;
         }
     }
-    MOBY(moby)->rot.z =
-        fast_add_rotations(fast_arc_tan(*(float *)(movement_state + 0x10), *(float *)(movement_state + 0x14)), 3.14159265f);
+    MOBY(moby)->rot.z = fast_add_rotations(
+        fast_arc_tan(*(float *)(movement_state + 0x10), *(float *)(movement_state + 0x14)),
+        3.14159265f);
 }

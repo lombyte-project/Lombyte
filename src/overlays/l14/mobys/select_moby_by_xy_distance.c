@@ -10,20 +10,21 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"
 
-
-extern short D_L14_001B0F30[] NOT_SDA;
-extern char *D_L14_001DE5C0[] NOT_SDA;
+extern short       D_L14_001B0F30[] NOT_SDA;
+extern char       *D_L14_001DE5C0[] NOT_SDA;
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
-int select_moby_by_xy_distance(char *selection_reference, char *selection_output, float best) __asm__("FUN_L14_00268038");
+int                select_moby_by_xy_distance(char *selection_reference,
+                                              char *selection_output,
+                                              float best) __asm__("FUN_L14_00268038");
 
 int select_moby_by_xy_distance(char *selection_reference, char *selection_output, float best) {
     struct Hero *hero = &hero_lui;
-    char *selected_moby;
-    char *candidate_moby;
-    int selection_status;
-    int i;
-    int j;
-    float candidate_metric;
+    char        *selected_moby;
+    char        *candidate_moby;
+    int          selection_status;
+    int          i;
+    int          j;
+    float        candidate_metric;
 
     selected_moby = ((char *)hero->moby);
     selection_status = 0;

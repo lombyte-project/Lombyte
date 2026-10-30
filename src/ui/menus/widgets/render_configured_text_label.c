@@ -14,11 +14,12 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/runtime/state/disable_global_flag.h"
 #include "rnc/runtime/state/enable_global_flag.h"
-extern int panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
-extern int text_shadow_x_gp __asm__("D_001601B8") __attribute__((sda));
-extern int text_shadow_y_gp __asm__("D_001601BC") __attribute__((sda));
-extern int text_vertical_inset __asm__("D_00160258") __attribute__((sda));
-extern int text_line_spacing __asm__("D_00160268") __attribute__((sda));
+
+extern int  panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
+extern int  text_shadow_x_gp __asm__("D_001601B8") __attribute__((sda));
+extern int  text_shadow_y_gp __asm__("D_001601BC") __attribute__((sda));
+extern int  text_vertical_inset __asm__("D_00160258") __attribute__((sda));
+extern int  text_line_spacing __asm__("D_00160268") __attribute__((sda));
 extern char empty_label_text[] __asm__("D_00160270");
 extern char unavailable_label_text[] __asm__("D_00160278");
 extern char label_format[] __asm__("D_00160280");
@@ -27,42 +28,42 @@ extern char fallback_label_text[] __asm__("D_00160288");
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern long get_effect_texture(int) __asm__("func_001F44B8");
-extern void font_print_window(struct TextRegion *, long, char *, int, long,
-                              u8 *) __asm__("func_001F7090");
-extern int scale_game_frames(int) __asm__("func_001F96F8");
-extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
+extern void
+font_print_window(struct TextRegion *, long, char *, int, long, u8 *) __asm__("func_001F7090");
+extern int   scale_game_frames(int) __asm__("func_001F96F8");
+extern s32   fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern char *get_help_message_text(int) __asm__("func_001FDD10");
-extern int find_help_entry(short, int, u16 *) __asm__("func_001FECC8");
-extern s32 fade_menu_color(s32, s32, s32) __asm__("func_0021B6D8");
+extern int   find_help_entry(short, int, u16 *) __asm__("func_001FECC8");
+extern s32   fade_menu_color(s32, s32, s32) __asm__("func_0021B6D8");
 extern void *memset(void *, int, unsigned int);
-extern int sprintf(char *, const char *, ...);
+extern int   sprintf(char *, const char *, ...);
 
 int render_configured_text_label(struct MenuScreen *label) __asm__("FUN_0021a328");
 
 int render_configured_text_label(struct MenuScreen *label) {
-    char formatted_text[64];
-    u8 *font;
-    int font_texture_index;
-    char *text;
-    int value_variant;
-    int value_index;
-    int flags;
-    int selector_flags;
-    int render_flags;
-    int text_flags;
-    int draw_flags;
-    int x;
-    int y;
-    int text_style;
-    long texture_tex0;
-    int color;
-    int remaining_frames;
-    int visible_height;
-    int text_extent;
+    char                 formatted_text[64];
+    u8                  *font;
+    int                  font_texture_index;
+    char                *text;
+    int                  value_variant;
+    int                  value_index;
+    int                  flags;
+    int                  selector_flags;
+    int                  render_flags;
+    int                  text_flags;
+    int                  draw_flags;
+    int                  x;
+    int                  y;
+    int                  text_style;
+    long                 texture_tex0;
+    int                  color;
+    int                  remaining_frames;
+    int                  visible_height;
+    int                  text_extent;
     struct MenuGridCell *entry;
-    u8 *availability_table;
-    int item_id;
-    int id;
+    u8                  *availability_table;
+    int                  item_id;
+    int                  id;
 
     text = empty_label_text;
     font = normal_font_metrics;
@@ -177,7 +178,7 @@ int render_configured_text_label(struct MenuScreen *label) {
     }
     if (label->data.label.flags & 0x200) {
         int item_id = *((int *)label->data.label.text_id +
-                    value_index * label->data.label.text_stride / sizeof(int));
+                        value_index * label->data.label.text_stride / sizeof(int));
         if (item_id != 0x4ED2 && item_id != 0x4ED9 && item_id != 0x4EDD) {
             sprintf(formatted_text, label_format, get_help_message_text(0x4ECC), text);
             text = formatted_text;
@@ -225,7 +226,8 @@ int render_configured_text_label(struct MenuScreen *label) {
             c.bottom = label->height - 1;
         }
         color = fade_menu_color(label->data.label.fade_timer,
-                              fast_tween_color(panel_clear_color_gp, 0x80FFA888, 0.5f), 0x80FFA888);
+                                fast_tween_color(panel_clear_color_gp, 0x80FFA888, 0.5f),
+                                0x80FFA888);
         c.flags |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
         c.flags ^= 4;
@@ -286,7 +288,8 @@ int render_configured_text_label(struct MenuScreen *label) {
                 label->data.label.scroll_offset += (controller_state.held & 1) ? 10 : 3;
                 /* Fakematch: volatile keeps the store of the sum before the modulo. */
                 *(volatile int *)&label->data.label.scroll_offset =
-                    label->data.label.scroll_offset % ((c.rendered_height + text_line_spacing * 3) * 16);
+                    label->data.label.scroll_offset %
+                    ((c.rendered_height + text_line_spacing * 3) * 16);
             }
         }
     }

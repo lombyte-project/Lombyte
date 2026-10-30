@@ -1,26 +1,28 @@
-
 #include "types.h"
 #include "rnc/input/pad_state.h"
+
 struct Menu {
-    u8 pad0[0x34];
+    u8  pad0[0x34];
     s32 str;
-    u8 pad38[4];
+    u8  pad38[4];
     s32 unk3C;
     s32 unk40;
-    u8 pad44[0xC];
+    u8  pad44[0xC];
     u32 unk50;
     s32 unk54;
 };
+
 #include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+
 extern s32 D_001D2AF4[];
-extern u8 timed_menu_first_progress_string_ids[] __asm__("D_001D5098");
-extern u8 timed_menu_second_progress_string_ids[] __asm__("D_001D5148");
-extern u8 timed_menu_third_progress_string_ids[] __asm__("D_001D5208");
-u8 D_001D5298[] NOT_SDA = "9Q";
-extern u8 timed_menu_fifth_progress_string_ids[] __asm__("D_001D52B0");
-s32 update_timed_menu_sequence(struct Menu *menu) __asm__("FUN_002223f0");
+extern u8  timed_menu_first_progress_string_ids[] __asm__("D_001D5098");
+extern u8  timed_menu_second_progress_string_ids[] __asm__("D_001D5148");
+extern u8  timed_menu_third_progress_string_ids[] __asm__("D_001D5208");
+u8         D_001D5298[] NOT_SDA = "9Q";
+extern u8  timed_menu_fifth_progress_string_ids[] __asm__("D_001D52B0");
+s32        update_timed_menu_sequence(struct Menu *menu) __asm__("FUN_002223f0");
 
 s32 update_timed_menu_sequence(struct Menu *menu) {
     enum {
@@ -49,8 +51,11 @@ s32 update_timed_menu_sequence(struct Menu *menu) {
     s32 previous_counter_value;
 
     flag = (((struct PadStateWords *)&controller_state)->buttons.held_pressed & 0xF) == 0xF;
-    if ((menu_system.unkDC == 0) || (flag && (((s32)((struct PadStateWords *)&controller_state)->buttons.held_pressed) & 0x10))) {
-        if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && (menu_system.close_locked == 0)) {
+    if ((menu_system.unkDC == 0) ||
+        (flag &&
+         (((s32)((struct PadStateWords *)&controller_state)->buttons.held_pressed) & 0x10))) {
+        if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) &&
+            (menu_system.close_locked == 0)) {
             return 1;
         }
         if (controller_state.pressed_unmasked & PAD_TRIANGLE) {

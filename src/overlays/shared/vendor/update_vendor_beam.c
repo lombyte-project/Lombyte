@@ -20,39 +20,41 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00302A58), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    int w0;
+    int   w0;
     short s4, s6, s8, sA;
-    int wC;
+    int   wC;
     short s10, s12;
-    char pad14[8];
-    float radius;     /* 0x1C: beam half width */
-    char pad20[0x604];
+    char  pad14[8];
+    float radius; /* 0x1C: beam half width */
+    char  pad20[0x604];
     float f624;
-    char pad628[8];
-    Vec4 end_a;       /* 0x630: end of the line along +axis 1 */
-    Vec4 end_b;       /* 0x640: end of the line along -axis 1 */
+    char  pad628[8];
+    Vec4  end_a; /* 0x630: end of the line along +axis 1 */
+    Vec4  end_b; /* 0x640: end of the line along -axis 1 */
 } D1224;
 
 #include "rnc/overlay/cuboid.h"
-extern int D_L14_001620C8;   /* no foreign declaration */
-extern int D_L14_001620D8_t; /* no foreign declaration */
+
+extern int  D_L14_001620C8;   /* no foreign declaration */
+extern int  D_L14_001620D8_t; /* no foreign declaration */
 extern void start_vendor_beam_pulse(char *) __asm__("FUN_L14_003017f8");
-void update_vendor_beam_animation(char *moby) __asm__("FUN_L14_00301de8");
+void        update_vendor_beam_animation(char *moby) __asm__("FUN_L14_00301de8");
 
 extern void update_vendor_beam_animation(char *) __asm__("FUN_L14_00301de8");
 extern void draw_vendor_beam(char *) __asm__("FUN_L14_00301fa8");
-void apply_vendor_beam_damage(char *self) __asm__("FUN_L14_00302538");
+void        apply_vendor_beam_damage(char *self) __asm__("FUN_L14_00302538");
 
 extern void apply_vendor_beam_damage(char *) __asm__("FUN_L14_00302538");
-extern int D_L14_001620CC_gp __asm__("D_L14_001620CC") __attribute__((sda));
-extern int D_L14_001620B8_gp __asm__("D_L14_001620B8") __attribute__((sda));
-extern int D_L14_001620D0_gp __asm__("D_L14_001620D0") __attribute__((sda));
-extern s32 D_L14_001620C8_gp __asm__("D_L14_001620C8") __attribute__((sda));
-extern int D_L14_001620D4_gp __asm__("D_L14_001620D4") __attribute__((sda));
+extern int  D_L14_001620CC_gp __asm__("D_L14_001620CC") __attribute__((sda));
+extern int  D_L14_001620B8_gp __asm__("D_L14_001620B8") __attribute__((sda));
+extern int  D_L14_001620D0_gp __asm__("D_L14_001620D0") __attribute__((sda));
+extern s32  D_L14_001620C8_gp __asm__("D_L14_001620C8") __attribute__((sda));
+extern int  D_L14_001620D4_gp __asm__("D_L14_001620D4") __attribute__((sda));
 
 #include "rnc/overlay/shared/vendor/update_vendor_beam_globals.h"
+
 extern int vendor_beam_damage_disabled_gp __asm__("D_L14_001620D8") __attribute__((sda));
-void update_vendor_beam(unsigned char *moby) __asm__("FUN_L14_003015d0");
+void       update_vendor_beam(unsigned char *moby) __asm__("FUN_L14_003015d0");
 
 void update_vendor_beam(unsigned char *moby) {
     enum {
@@ -62,9 +64,9 @@ void update_vendor_beam(unsigned char *moby) {
         BEAM_STATE_REPEAT_PULSES = 3
     };
     D1224 *beam_vars = ((D1224 *)MOBY(moby)->pvars);
-    float beam_culling_sphere[4] __attribute__((aligned(16)));
-    int beam_state;
-    int phase_duration_frames;
+    float  beam_culling_sphere[4] __attribute__((aligned(16)));
+    int    beam_state;
+    int    phase_duration_frames;
     if (moby[0x20] != 0) {
         qcopy(beam_culling_sphere, moby + 0x10);
         beam_culling_sphere[3] = beam_vars->f624;
@@ -131,43 +133,47 @@ void update_vendor_beam(unsigned char *moby) {
         }
     }
 }
+
 extern int vendor_beam_min_pulse_duration_frames_gp __asm__("D_L14_001620BC") __attribute__((sda));
 extern int vendor_beam_max_pulse_duration_frames_gp __asm__("D_L14_001620C0") __attribute__((sda));
 extern float vendor_beam_displacement_radius_gp __asm__("D_L14_001620FC") __attribute__((sda));
 extern float vendor_beam_max_point_speed_gp __asm__("D_L14_00162100") __attribute__((sda));
-extern int vendor_beam_spark_initial_word_gp __asm__("D_L14_00162108") __attribute__((sda));
-extern int vendor_beam_spark_second_word_gp __asm__("D_L14_0016210C") __attribute__((sda));
+extern int   vendor_beam_spark_initial_word_gp __asm__("D_L14_00162108") __attribute__((sda));
+extern int   vendor_beam_spark_second_word_gp __asm__("D_L14_0016210C") __attribute__((sda));
+
 #include "rnc/overlay/shared/vendor/update_vendor_beam_data/start_vendor_beam_pulse_2.h"
+
 extern int D_L14_0016211C __attribute__((sda));
+
 #include "rnc/overlay/shared/vendor/update_vendor_beam_data/start_vendor_beam_pulse.h"
 
 extern char D_L14_001674C0[];
 
 typedef struct {
-    int frame;              /* 0x0: l14_cuboids index */
-    u8 pad4[0xE];
-    s16 countdown;          /* 0x12 */
-    int color;              /* 0x14 */
-    u8 branch_start[4];     /* 0x18: main line point each branch leaves from */
-    u8 pad1c[4];
-    Vec4 points[32];        /* 0x20 */
-    Vec4 point_steps[32];   /* 0x220 */
-    Vec4 branches[4][4];    /* 0x420: [point][branch] */
+    int  frame; /* 0x0: l14_cuboids index */
+    u8   pad4[0xE];
+    s16  countdown;       /* 0x12 */
+    int  color;           /* 0x14 */
+    u8   branch_start[4]; /* 0x18: main line point each branch leaves from */
+    u8   pad1c[4];
+    Vec4 points[32];         /* 0x20 */
+    Vec4 point_steps[32];    /* 0x220 */
+    Vec4 branches[4][4];     /* 0x420: [point][branch] */
     Vec4 branch_steps[4][4]; /* 0x520: [point][branch] */
-    int duration;           /* 0x620 */
+    int  duration;           /* 0x620 */
 } VendorBeamVars;
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00302C80). */
 void start_vendor_beam_pulse(char *moby) {
     VendorBeamVars *beam = ((VendorBeamVars *)MOBY(moby)->pvars);
-    Vec4 path[32];
-    Vec4 path_steps[32];
-    Vec4 work, delta;
-    Vec4 matrix[4];
-    LevelCuboid *frame;
-    float length;
-    int low, high, duration;
-    int i, j, k, branch;
+    Vec4            path[32];
+    Vec4            path_steps[32];
+    Vec4            work, delta;
+    Vec4            matrix[4];
+    LevelCuboid    *frame;
+    float           length;
+    int             low, high, duration;
+    int             i, j, k, branch;
 
     frame = (LevelCuboid *)((beam->frame << 7) + (int)l14_cuboids);
     {
@@ -215,16 +221,19 @@ void start_vendor_beam_pulse(char *moby) {
     }
 
     for (branch = 0; branch < 4; branch++) {
-        int start;
+        int   start;
         float spread = vendor_beam_displacement_radius_gp;
         random_vector(&work, spread, spread);
-        start = truncate_float_to_s32(random_float_between((float)branch * 6.0f, (float)(branch + 1) * 6.0f)) + 4;
+        start = truncate_float_to_s32(
+                    random_float_between((float)branch * 6.0f, (float)(branch + 1) * 6.0f)) +
+                4;
         beam->branch_start[branch] = (unsigned char)start;
         qcopy(&beam->branches[0][branch], &beam->points[start]);
         qcopy(&beam->branch_steps[0][branch], &beam->point_steps[start]);
         for (k = 1; k < 4; k++) {
             random_vector(&delta, 0.1f, 0.1f);
-            random_vector(&beam->branch_steps[k][branch], 0.0f, vendor_beam_max_point_speed_gp * frame_time);
+            random_vector(
+                &beam->branch_steps[k][branch], 0.0f, vendor_beam_max_point_speed_gp * frame_time);
             fast_vec_add(&beam->branches[k][branch], &beam->branches[k - 1][branch], &work);
             fast_vec_add(&beam->branches[k][branch], &beam->branches[k][branch], &delta);
         }
@@ -241,35 +250,55 @@ void start_vendor_beam_pulse(char *moby) {
             transform_vector(&work, &beam->points[point], matrix);
             qcopy(&delta, &beam->point_steps[point]);
             delta.f[3] = vendor_beam_spark_step_w_gp;
-            color = random_integer_below(2) ? D_L14_0016211C : vendor_beam_branch_end_spark_color_gp;
+            color =
+                random_integer_below(2) ? D_L14_0016211C : vendor_beam_branch_end_spark_color_gp;
             frames = scale_game_frames(random_integer_below(10) + 20);
-            spawn_spark(&work, &delta, &delta, vendor_beam_spark_initial_word_gp, vendor_beam_spark_second_word_gp, point >> 1, 15, frames, color);
+            spawn_spark(&work,
+                        &delta,
+                        &delta,
+                        vendor_beam_spark_initial_word_gp,
+                        vendor_beam_spark_second_word_gp,
+                        point >> 1,
+                        15,
+                        frames,
+                        color);
         }
         for (k = 0; k < 2; k++) {
             int frames, unused_color;
             transform_vector(&work, &beam->branches[3][k], matrix);
             qcopy(&delta, &beam->branch_steps[3][k]);
             delta.f[3] = vendor_beam_spark_step_w_gp;
-            unused_color = random_integer_below(2) ? D_L14_0016211C : vendor_beam_branch_end_spark_color_gp;
+            unused_color =
+                random_integer_below(2) ? D_L14_0016211C : vendor_beam_branch_end_spark_color_gp;
             frames = scale_game_frames(random_integer_below(10) + 20);
             /* Fakematch: a never-taken exit keeps the spark arguments in their own block until
              * gcse (retail's dead color pick did), so &delta is reused from the spilled copy. */
-            if (never) continue;
-            spawn_spark(&work, &delta, &delta, vendor_beam_spark_initial_word_gp, vendor_beam_spark_second_word_gp,
-                        beam->branch_start[k] >> 1, 15, frames, vendor_beam_branch_end_spark_color_gp);
+            if (never)
+                continue;
+            spawn_spark(&work,
+                        &delta,
+                        &delta,
+                        vendor_beam_spark_initial_word_gp,
+                        vendor_beam_spark_second_word_gp,
+                        beam->branch_start[k] >> 1,
+                        15,
+                        frames,
+                        vendor_beam_branch_end_spark_color_gp);
         }
     }
 }
+
 extern int vendor_beam_color_transition_countdown_gp __asm__("D_L14_001620C4") __attribute__((sda));
 extern int vendor_beam_initial_color_gp __asm__("D_L14_001620F0") __attribute__((sda));
 extern int vendor_beam_transition_color_gp __asm__("D_L14_001620F4") __attribute__((sda));
 extern int vendor_beam_final_color_gp __asm__("D_L14_001620F8") __attribute__((sda));
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+
 void update_vendor_beam_animation(char *moby) {
     char *vars = ((char *)MOBY(moby)->pvars);
     char *beam_point, *src;
-    u8 *indices;
-    int i, j, k, copy_i, next_i;
+    u8   *indices;
+    int   i, j, k, copy_i, next_i;
     float fraction;
 
     if (*(s16 *)(vars + 0x12) != 0) {
@@ -296,59 +325,71 @@ void update_vendor_beam_animation(char *moby) {
             indices = 0; /* End the saved index-base lifetime after the transfer. */
             copy_i = 0;
             do {
-                qcopy(vars + 0x420 + (copy_i << 4), (char *)(((u8)src[copy_i] << 4) + (int)vars) + 0x20);
+                qcopy(vars + 0x420 + (copy_i << 4),
+                      (char *)(((u8)src[copy_i] << 4) + (int)vars) + 0x20);
                 copy_i++;
             } while (copy_i < 4);
         }
     }
     if (*(s16 *)(vars + 0x12) > vendor_beam_color_transition_countdown_gp) {
-        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) - vendor_beam_color_transition_countdown_gp) /
-            convert_integer_to_float(*(int *)(vars + 0x620) - vendor_beam_color_transition_countdown_gp);
-        *(int *)(vars + 0x14) = fast_tween_color(vendor_beam_transition_color_gp, vendor_beam_initial_color_gp, fraction);
+        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) -
+                                            vendor_beam_color_transition_countdown_gp) /
+                   convert_integer_to_float(*(int *)(vars + 0x620) -
+                                            vendor_beam_color_transition_countdown_gp);
+        *(int *)(vars + 0x14) = fast_tween_color(
+            vendor_beam_transition_color_gp, vendor_beam_initial_color_gp, fraction);
     } else if (*(s16 *)(vars + 0x12) > D_L14_001620C8) {
-        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) - D_L14_001620C8) /
+        fraction =
+            convert_integer_to_float(*(s16 *)(vars + 0x12) - D_L14_001620C8) /
             convert_integer_to_float(vendor_beam_color_transition_countdown_gp - D_L14_001620C8);
-        *(int *)(vars + 0x14) = fast_tween_color(vendor_beam_final_color_gp, vendor_beam_transition_color_gp, fraction);
+        *(int *)(vars + 0x14) =
+            fast_tween_color(vendor_beam_final_color_gp, vendor_beam_transition_color_gp, fraction);
     } else {
         *(int *)(vars + 0x14) = 0;
     }
 }
+
 typedef struct {
-    u128 vertices[4];
-    int colors[4];
+    u128  vertices[4];
+    int   colors[4];
     float uv[4][2];
-    u64 tag;
-    u64 texture;
-    u64 texture_state;
-    u64 gs_state;
+    u64   tag;
+    u64   texture;
+    u64   texture_state;
+    u64   gs_state;
 } VendorBeamStripPacket;
 
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") __attribute__((sda));
+
 #include "rnc/overlay/shared/vendor/update_vendor_beam_data/draw_vendor_beam.h"
 
 extern float vendor_beam_base_uv[4][2] __asm__("D_L14_001E5FD0");
 
 /* Fakematch: an empty scope with a declaration adds two block notes (see the corner loops). */
-#define EMPTY_SCOPES_4 { typedef int pad; } { typedef int pad; } { typedef int pad; } { typedef int pad; }
+#define EMPTY_SCOPES_4   \
+    { typedef int pad; } \
+    { typedef int pad; } \
+    { typedef int pad; } \
+    { typedef int pad; }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00303430.c: func_L14_00303430). */
 void draw_vendor_beam(char *moby) {
-    VendorBeamVars *beam = ((VendorBeamVars *)MOBY(moby)->pvars);
+    VendorBeamVars       *beam = ((VendorBeamVars *)MOBY(moby)->pvars);
     VendorBeamStripPacket packet[3];
-    float world[16] __attribute__((aligned(16)));
-    float inverse[16] __attribute__((aligned(16)));
-    float camera[4] __attribute__((aligned(16)));
-    float prev_offset[4] __attribute__((aligned(16)));
-    float offset[4] __attribute__((aligned(16)));
-    float view[4] __attribute__((aligned(16)));
-    float tangent[4] __attribute__((aligned(16)));
-    u64 texture;
-    u64 gs_state;
-    int branch, node, corner;
-    int start_point;
-    int k;
+    float                 world[16] __attribute__((aligned(16)));
+    float                 inverse[16] __attribute__((aligned(16)));
+    float                 camera[4] __attribute__((aligned(16)));
+    float                 prev_offset[4] __attribute__((aligned(16)));
+    float                 offset[4] __attribute__((aligned(16)));
+    float                 view[4] __attribute__((aligned(16)));
+    float                 tangent[4] __attribute__((aligned(16)));
+    u64                   texture;
+    u64                   gs_state;
+    int                   branch, node, corner;
+    int                   start_point;
+    int                   k;
 
     euler_rotation_matrix(world, &l14_cuboids[beam->frame].rot);
     transpose_rotation_matrix(inverse, world);
@@ -356,8 +397,10 @@ void draw_vendor_beam(char *moby) {
     fast_vec_sub(camera, D_L14_001674C0, &l14_cuboids[beam->frame].pos);
     transform_vector_by_basis(camera, camera, inverse);
     texture = get_effect_texture(vendor_beam_effect_texture_index_gp);
-    gs_state = (u64)vendor_beam_blend_minuend_selector_gp | ((u64)vendor_beam_blend_subtrahend_selector_gp << 2) | ((u64)vendor_beam_blend_alpha_factor_selector_gp << 4)
-               | ((u64)vendor_beam_blend_addend_selector_gp << 6) | (0x8000ULL << 24);
+    gs_state = (u64)vendor_beam_blend_minuend_selector_gp |
+               ((u64)vendor_beam_blend_subtrahend_selector_gp << 2) |
+               ((u64)vendor_beam_blend_alpha_factor_selector_gp << 4) |
+               ((u64)vendor_beam_blend_addend_selector_gp << 6) | (0x8000ULL << 24);
     packet[2].texture_state = 0xFF9000000260ULL;
     packet[1].texture_state = 0xFF9000000260ULL;
     packet[0].texture_state = 0xFF9000000260ULL;
@@ -372,7 +415,7 @@ void draw_vendor_beam(char *moby) {
     packet[0].gs_state = gs_state;
     for (k = 0; k < 4; k++) {
         float v_coord = vendor_beam_base_uv[k][1];
-        int color;
+        int   color;
         packet[2].uv[k][1] = v_coord;
         packet[1].uv[k][1] = v_coord;
         packet[0].uv[k][1] = v_coord;
@@ -397,17 +440,28 @@ void draw_vendor_beam(char *moby) {
             for (corner = 0; corner < 4; corner++) {
                 if (corner < 2) {
                     qcopy(&packet[0].vertices[corner], &beam->points[point]);
-                    if (corner & 1) fast_vec_add(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
-                    else fast_vec_sub(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
+                    if (corner & 1)
+                        fast_vec_add(
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
+                    else
+                        fast_vec_sub(
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
                 } else {
                     qcopy(&packet[0].vertices[corner], &beam->points[point + 1]);
-                    if (corner & 1) fast_vec_add(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
-                    else fast_vec_sub(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                    if (corner & 1)
+                        fast_vec_add(
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                    else
+                        fast_vec_sub(
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
                 }
                 /* Fakematch: 34 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
-                EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 { typedef int pad; }
-                packet[0].uv[corner][0] = vendor_beam_base_uv[corner][0] + convert_integer_to_float(point - point / 4 * 4) * 0.25f;
+                EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 {
+                    typedef int pad;
+                }
+                packet[0].uv[corner][0] = vendor_beam_base_uv[corner][0] +
+                                          convert_integer_to_float(point - point / 4 * 4) * 0.25f;
             }
             draw_geometry_quad(&packet[0], world, 0);
         }
@@ -415,59 +469,73 @@ void draw_vendor_beam(char *moby) {
     for (branch = 0; branch < 4; branch++) {
         clear_u64_value(offset);
         start_point = beam->branch_start[branch];
-        if (start_point >= 0x1F) continue;
-        if (start_point <= -1) continue;
+        if (start_point >= 0x1F)
+            continue;
+        if (start_point <= -1)
+            continue;
         for (node = 0; node < 3; node++) {
             qcopy(prev_offset, offset);
             if (node < 2) {
-                fast_vec_sub(tangent, &beam->branches[node][branch], &beam->branches[node + 2][branch]);
+                fast_vec_sub(
+                    tangent, &beam->branches[node][branch], &beam->branches[node + 2][branch]);
                 fast_vec_sub(view, &beam->branches[node + 1][branch], camera);
                 fast_vec_cross(offset, view, tangent);
                 fast_vec_normalize(offset, offset, 0.1f);
             } else {
                 clear_u64_value(offset);
             }
-            if (node == 0) qcopy(prev_offset, offset);
+            if (node == 0)
+                qcopy(prev_offset, offset);
             for (corner = 0; corner < 4; corner++) {
                 if (corner < 2) {
                     qcopy(&packet[0].vertices[corner], &beam->branches[node][branch]);
-                    if (corner & 1) fast_vec_add(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
-                    else fast_vec_sub(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
+                    if (corner & 1)
+                        fast_vec_add(
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
+                    else
+                        fast_vec_sub(
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
                 } else {
                     qcopy(&packet[0].vertices[corner], &beam->branches[node + 1][branch]);
-                    if (corner & 1) fast_vec_add(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
-                    else fast_vec_sub(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                    if (corner & 1)
+                        fast_vec_add(
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                    else
+                        fast_vec_sub(
+                            &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
                 }
                 /* Fakematch: 32 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
-                EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4
-                packet[0].uv[corner][0] = vendor_beam_base_uv[corner][0] + convert_integer_to_float(node - node / 4 * 4) * 0.25f;
+                EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 packet[0]
+                    .uv[corner][0] = vendor_beam_base_uv[corner][0] +
+                                     convert_integer_to_float(node - node / 4 * 4) * 0.25f;
             }
             draw_geometry_quad(&packet[0], world, 0);
         }
     }
 }
+
 /* Damage request passed to the collision line test (coll_line_fix). */
 typedef struct {
-    f32 v[4];          /* 0x0: push direction xy; w 5627.925 */
-    struct Moby *moby; /* 0x10: source */
-    s32 flags;         /* 0x14 */
-    s8 a;              /* 0x18 */
-    s8 b;              /* 0x19 */
-    s16 oclass;        /* 0x1A: source class */
-    f32 range;         /* 0x1C */
-    s32 one;           /* 0x20 */
+    f32          v[4];   /* 0x0: push direction xy; w 5627.925 */
+    struct Moby *moby;   /* 0x10: source */
+    s32          flags;  /* 0x14 */
+    s8           a;      /* 0x18 */
+    s8           b;      /* 0x19 */
+    s16          oclass; /* 0x1A: source class */
+    f32          range;  /* 0x1C */
+    s32          one;    /* 0x20 */
 } VendorBeamReq;
 
 extern u8 D_L14_00174560[];
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */
 void apply_vendor_beam_damage(char *self) {
-    struct Moby *beam_moby = (struct Moby *)self;
-    D1224 *beam_vars = (D1224 *)beam_moby->pvars;
+    struct Moby  *beam_moby = (struct Moby *)self;
+    D1224        *beam_vars = (D1224 *)beam_moby->pvars;
     VendorBeamReq req;
-    Vec4 damage_push_direction, to_hero, base, end_a, end_b, from, to, beam_radius_offset;
-    f32 dot, collision_offset_length;
+    Vec4          damage_push_direction, to_hero, base, end_a, end_b, from, to, beam_radius_offset;
+    f32           dot, collision_offset_length;
 
     if (beam_vars->radius == 0.0f)
         return;
@@ -535,13 +603,14 @@ void apply_vendor_beam_damage(char *self) {
     fast_vec_sub(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
 }
+
 #include "sda.h"
 
 /* Slot update of moby class 1331: state 0 clears the two slot arrays, state 1 services the pending slots and frees a slot whose moby has died. Level 14 relative of func_L00_002E32A0. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00304E68), where it is exact; names translated to the US level program. */
 
-extern int D_L14_00162148[] MACRO_ADDR;
-extern int D_L14_001621D8[] MACRO_ADDR;
+extern int  D_L14_00162148[] MACRO_ADDR;
+extern int  D_L14_001621D8[] MACRO_ADDR;
 extern void release_beam_slot(int) __asm__("FUN_L00_002e20f8");
 extern void update_slot_panes_and_effects(int, int) __asm__("FUN_L00_002e2250");
 extern void draw_active_beam_slots(void) __asm__("FUN_L00_002e2af0");
@@ -591,54 +660,54 @@ void update_beam_slots(unsigned char *moby) {
     }
 }
 
-int D_L15_00161F54 = 0;
-int D_L15_00161F58 = 0;
-int D_L15_00161F44 = 0;
-int D_L15_00161F5C = 0;
-int D_L15_00161F60 = 0;
-int D_L15_00161F64 = 0;
-int D_L15_00161F48 = 0xa;
-int D_L15_00161F4C = 0x28;
+int   D_L15_00161F54 = 0;
+int   D_L15_00161F58 = 0;
+int   D_L15_00161F44 = 0;
+int   D_L15_00161F5C = 0;
+int   D_L15_00161F60 = 0;
+int   D_L15_00161F64 = 0;
+int   D_L15_00161F48 = 0xa;
+int   D_L15_00161F4C = 0x28;
 float D_L15_00161F88 = 0.3f;
 float D_L15_00161F8C = 1.0f;
-int D_L15_00161F94 = 0x10806080;
-int D_L15_00161F98 = 0x10806060;
-int D_L15_00161FA8 = 0x18;
-int D_L15_00161F50 = 0xf;
-int D_L15_00161F7C = 0x401040;
-int D_L15_00161F80 = 0x80403040;
-int D_L15_00161F84 = 0x400000;
-int D_L15_00161F68 = 0xe;
+int   D_L15_00161F94 = 0x10806080;
+int   D_L15_00161F98 = 0x10806060;
+int   D_L15_00161FA8 = 0x18;
+int   D_L15_00161F50 = 0xf;
+int   D_L15_00161F7C = 0x401040;
+int   D_L15_00161F80 = 0x80403040;
+int   D_L15_00161F84 = 0x400000;
+int   D_L15_00161F68 = 0xe;
 
 float D_L15_001D94F0[4][2] = {
-    {0.0f, 0.0f},
-    {0.0f, 1.0f},
+    { 0.0f, 0.0f},
+    { 0.0f, 1.0f},
     {0.25f, 0.0f},
     {0.25f, 1.0f},
 };
 
-int D_L17_00161F34 = 0;
-int D_L17_00161F38 = 0;
-int D_L17_00161F24 = 0;
-int D_L17_00161F3C = 0;
-int D_L17_00161F40 = 0;
-int D_L17_00161F44 = 0;
-int D_L17_00161F28 = 0xa;
-int D_L17_00161F2C = 0x28;
+int   D_L17_00161F34 = 0;
+int   D_L17_00161F38 = 0;
+int   D_L17_00161F24 = 0;
+int   D_L17_00161F3C = 0;
+int   D_L17_00161F40 = 0;
+int   D_L17_00161F44 = 0;
+int   D_L17_00161F28 = 0xa;
+int   D_L17_00161F2C = 0x28;
 float D_L17_00161F68 = 0.3f;
 float D_L17_00161F6C = 1.0f;
-int D_L17_00161F74 = 0x10806080;
-int D_L17_00161F78 = 0x10806060;
-int D_L17_00161F88 = 0x18;
-int D_L17_00161F30 = 0xf;
-int D_L17_00161F5C = 0x401040;
-int D_L17_00161F60 = 0x80403040;
-int D_L17_00161F64 = 0x400000;
-int D_L17_00161F48 = 0xe;
+int   D_L17_00161F74 = 0x10806080;
+int   D_L17_00161F78 = 0x10806060;
+int   D_L17_00161F88 = 0x18;
+int   D_L17_00161F30 = 0xf;
+int   D_L17_00161F5C = 0x401040;
+int   D_L17_00161F60 = 0x80403040;
+int   D_L17_00161F64 = 0x400000;
+int   D_L17_00161F48 = 0xe;
 
 float D_L17_001D9860[4][2] = {
-    {0.0f, 0.0f},
-    {0.0f, 1.0f},
+    { 0.0f, 0.0f},
+    { 0.0f, 1.0f},
     {0.25f, 0.0f},
     {0.25f, 1.0f},
 };
@@ -654,8 +723,8 @@ int vendor_beam_initial_color_gp __asm__("D_L14_001620F0") = 0x401040;
 int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") = 0xe;
 
 float vendor_beam_base_uv[4][2] __asm__("D_L14_001E5FD0") = {
-    {0.0f, 0.0f},
-    {0.0f, 1.0f},
+    { 0.0f, 0.0f},
+    { 0.0f, 1.0f},
     {0.25f, 0.0f},
     {0.25f, 1.0f},
 };

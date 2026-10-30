@@ -81,13 +81,16 @@
  */
 
 #include "types.h"
+
 typedef struct _Bigint {
     struct _Bigint *_next;
-    s32 _k, _maxwds, _sign, _wds;
-    u32 _x[1];
+    s32             _k, _maxwds, _sign, _wds;
+    u32             _x[1];
 } _Bigint;
+
 struct _reent;
 typedef u32 __ULong;
+
 typedef union double_union {
     f64 d;
     u32 i[2];
@@ -103,14 +106,14 @@ typedef union double_union {
 #define Bias      1023
 #define P         53
 extern _Bigint *_Balloc(struct _reent *, s32);
-extern s32 _hi0bits(u32);
-extern s32 _lo0bits(u32 *);
+extern s32      _hi0bits(u32);
+extern s32      _lo0bits(u32 *);
 
 _Bigint *_d2b(struct _reent *reent_context, f64 _d, s32 *binary_exponent, s32 *bits) {
     double_union d;
-    _Bigint *significand_bigint;
-    s32 de, i, k;
-    __ULong *x, y, z;
+    _Bigint     *significand_bigint;
+    s32          de, i, k;
+    __ULong     *x, y, z;
 
     d.d = _d;
     d.d = _d;

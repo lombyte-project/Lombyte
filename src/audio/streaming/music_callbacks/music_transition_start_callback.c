@@ -1,6 +1,7 @@
 /* Ported from rac1-decomp (src/game/stream.c, func_00217920). */
 #include "sda.h"
 #include "rnc/data_labels.h"
+
 void music_transition_start_callback(int handle, long context) __asm__("FUN_00216a80");
 
 void music_transition_start_callback(int handle, long context) {

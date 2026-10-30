@@ -2,9 +2,9 @@
 
 #include "types.h"
 
-extern s32 DIntr();
+extern s32  DIntr();
 extern void EnableInterrupts();
-extern s32 sceIpuSync();
+extern s32  sceIpuSync();
 
 void _clearEach(u8 *ctx) {
     s32 state;

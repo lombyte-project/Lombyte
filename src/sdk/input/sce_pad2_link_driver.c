@@ -1,12 +1,15 @@
 #include "types.h"
+
 struct Pad {
-    u8 pad[4];
+    u8  pad[4];
     s32 unk4;
     s32 unk8;
-    u8 rest[0x324];
+    u8  rest[0x324];
 };
+
 extern struct Pad D_0015B540[];
-extern s32 sceDbcGetDepNumber();
+extern s32        sceDbcGetDepNumber();
+
 s32 scePad2LinkDriver(s32 socket_index) {
     s32 dep;
     dep = sceDbcGetDepNumber();

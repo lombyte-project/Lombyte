@@ -26,8 +26,8 @@ typedef struct {
     s32 n2;
     u8 *d1;
     u8 *d2;
-    u8 buf1[0x40];
-    u8 buf2[0x40];
+    u8  buf1[0x40];
+    u8  buf2[0x40];
 } FsRcvRead;
 
 typedef struct {
@@ -41,9 +41,9 @@ typedef struct {
 /* Semaphore slot table: read plainly, released through a volatile store (below). */
 extern u32 sif_file_completion_bank_index[] __asm__("D_0012FC90");
 extern s32 D_0012FC98[];
-extern u8 D_00157500[];
+extern u8  D_00157500[];
 
-extern s32 iSignalSema(s32);
+extern s32   iSignalSema(s32);
 extern void *memcpy(void *, const void *, u32);
 
 void _sceFs_Rcv_Intr(s32 *command_packet) {
@@ -52,23 +52,23 @@ void _sceFs_Rcv_Intr(s32 *command_packet) {
         FS_COMPLETION_COPY_DIRENT = 11,
         FS_COMPLETION_COPY_STAT = 12
     };
-    FsRcvHead completion_header;
+    FsRcvHead  completion_header;
     FsRcvHead *packet_header;
-    FsRcvBuf *bs;
+    FsRcvBuf  *bs;
     union {
         FsRcvPtr p;
         FsRcvBuf b;
     } u;
     FsRcvRead *read_completion;
-    u8 *pkt;
-    u8 *base;
-    u8 *read_destination;
-    u32 *bank = sif_file_completion_bank_index;
-    s32 completion_bank_index;
-    s32 i;
-    s64 ret;
-    u32 copy_byte_count;
-    u32 addr;
+    u8        *pkt;
+    u8        *base;
+    u8        *read_destination;
+    u32       *bank = sif_file_completion_bank_index;
+    s32        completion_bank_index;
+    s32        i;
+    s64        ret;
+    u32        copy_byte_count;
+    u32        addr;
 
     completion_bank_index = D_0012FC98[0] != 0 ? command_packet[3] : 0;
     *bank = completion_bank_index;

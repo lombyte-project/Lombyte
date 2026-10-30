@@ -3,11 +3,10 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026E8E0), where it is exact; names translated to the US level program. */
 
 void FUN_L01_0026d930(char *p);
+
 void FUN_L01_0026d930(char *destination) {
     *(int *)(destination + 0x0) = 0x280;
     *(float *)(destination + 0x4) = 1.0f;
@@ -26,19 +25,20 @@ void FUN_L01_0026d930(char *destination) {
 #include "sda.h"
 
 typedef struct {
-    char pad0[0x20];
+    char        pad0[0x20];
     signed char state;
-    char pad21[0xDF];
+    char        pad21[0xDF];
 } O_26e008;
 
 extern unsigned short *D_L01_001ABCC0_lui[] __asm__("D_L01_001ABCC0") NOT_SDA;
-extern O_26e008 *D_L01_0015FFD8_26e008 __asm__("D_L01_0015FFD8");
+extern O_26e008       *D_L01_0015FFD8_26e008 __asm__("D_L01_0015FFD8");
 
 int count_active_moby_group_members(int i, int st) __asm__("FUN_L01_0026e008");
+
 int count_active_moby_group_members(int i, int excluded_moby_state) {
     unsigned short *moby_index_entry;
-    int qualifying_moby_count = 0;
-    O_26e008 *moby;
+    int             qualifying_moby_count = 0;
+    O_26e008       *moby;
 
     if (D_L01_001ABCC0_lui[i] == 0) {
         return 0;
@@ -46,7 +46,8 @@ int count_active_moby_group_members(int i, int excluded_moby_state) {
     moby_index_entry = D_L01_001ABCC0_lui[i];
     do {
         moby = (O_26e008 *)(((*moby_index_entry & 0x7FFF) << 8) + (int)D_L01_0015FFD8_26e008);
-        if (moby->state >= 0 && (excluded_moby_state == -1 || (unsigned char)moby->state != excluded_moby_state)) {
+        if (moby->state >= 0 &&
+            (excluded_moby_state == -1 || (unsigned char)moby->state != excluded_moby_state)) {
             qualifying_moby_count++;
         }
     } while ((short)*moby_index_entry++ >= 0);
@@ -55,10 +56,11 @@ int count_active_moby_group_members(int i, int excluded_moby_state) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026F040), where it is exact; names translated to the US level program. */
 
-extern char *D_L01_0015FFD8;
+extern char           *D_L01_0015FFD8;
 extern unsigned short *D_L01_001ABCC0[];
 
 void FUN_L01_0026e090(int i, int v);
+
 void FUN_L01_0026e090(int i, int moby_byte_value) {
     unsigned short *moby_index_list = D_L01_001ABCC0[i];
     unsigned short *moby_index_entry;
@@ -69,12 +71,14 @@ void FUN_L01_0026e090(int i, int moby_byte_value) {
         } while (*(short *)moby_index_entry++ >= 0);
     }
 }
+
 /* 0x0026e0e0, 88 bytes.
  * Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c:
  * func_L01_0026F090), where it is exact; names translated to the US level
  * program. The datum needs the unsplit macro form here, so it is declared
  * through an alias (same symbol, .sdata) beside its neighbour's declaration. */
 void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
+
 void set_moby_list_state(int list, int state) {
     unsigned short *moby_index_entry;
     unsigned short *moby_index_list = (unsigned short *)D_L01_001ABCC0[list];

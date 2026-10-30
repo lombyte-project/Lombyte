@@ -10,12 +10,12 @@
    +0xD9048, so its ViBuf is the one at +0xD9090; init_all reserves
    0xB8 bytes for it before AudioDec. */
 struct VideoDec {
-    struct sceMpeg mpeg;  /* 0x00: video_dec_set_stream passes it to sceMpegAddStrCallback */
-    struct ViBuf vi_buf;  /* 0x48 */
-    s32 state;            /* 0xA8: VideoDecState */
-    s32 sema;             /* 0xAC */
-    s32 hid_endimage;     /* 0xB0 */
-    s32 hid_vblank;       /* 0xB4 */
+    struct sceMpeg mpeg;         /* 0x00: video_dec_set_stream passes it to sceMpegAddStrCallback */
+    struct ViBuf   vi_buf;       /* 0x48 */
+    s32            state;        /* 0xA8: VideoDecState */
+    s32            sema;         /* 0xAC */
+    s32            hid_endimage; /* 0xB0 */
+    s32            hid_vblank;   /* 0xB4 */
 }; /* size 0xB8 */
 
 enum VideoDecState {
@@ -26,8 +26,8 @@ enum VideoDecState {
 };
 
 void video_dec_reset(struct VideoDec *vd) __asm__("func_0023CC30");
-s32 video_dec_abort(struct VideoDec *vd) __asm__("func_0023CC70");
-s32 video_dec_get_state(struct VideoDec *vd) __asm__("func_0023CC80");
-s32 video_dec_set_state(struct VideoDec *vd, s32 state) __asm__("func_0023CC88");
+s32  video_dec_abort(struct VideoDec *vd) __asm__("func_0023CC70");
+s32  video_dec_get_state(struct VideoDec *vd) __asm__("func_0023CC80");
+s32  video_dec_set_state(struct VideoDec *vd, s32 state) __asm__("func_0023CC88");
 
 #endif /* LOMBYTE_RNC_MOVIES_DECODER_VIDEO_DEC_H */

@@ -6,43 +6,46 @@
 #include "rnc/rendering/render_globals.h"
 
 extern s32 registered_object_render_class_count __asm__("D_00160F4C");
-extern u8 object_render_class_slot_by_id[] __asm__("D_001E1A00");
+extern u8  object_render_class_slot_by_id[] __asm__("D_001E1A00");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s32 log2dim(s32) __asm__("func_001F97A0");
 
-void register_object_render_class(ObjectRenderClass *render_class,
-                                  ResidentRenderTextureDefinition *textures, u128 *material_map,
+void register_object_render_class(ObjectRenderClass               *render_class,
+                                  ResidentRenderTextureDefinition *textures,
+                                  u128                            *material_map,
                                   s32 class_id) __asm__("FUN_00203730");
 
-void register_object_render_class(ObjectRenderClass *render_class,
-                                  ResidentRenderTextureDefinition *textures, u128 *material_map,
+void register_object_render_class(ObjectRenderClass               *render_class,
+                                  ResidentRenderTextureDefinition *textures,
+                                  u128                            *material_map,
+
                                   s32 class_id) {
-    s32 slot;
-    s32 fixed_threshold;
-    s32 stream_index;
-    s32 record_index;
-    s32 packed_normals;
-    ObjectRenderRecord *records;
-    ObjectRenderRecord *record;
-    MaterialMap *slot_materials;
-    s32 material_index;
-    s32 draw_high;
-    s32 material_base;
-    s32 material_shift;
-    s32 draw_shift;
-    s32 height_log2;
-    s32 width_bits;
-    s32 gs_block_base;
-    s32 mip_block_1;
-    s32 mip_block_0;
-    s32 draw_control_count;
-    s32 template_index;
-    s32 entry_index;
-    u64 tex1_word;
-    u64 clamp_word;
-    u64 template_tex1;
-    u64 template_tex0;
-    u64 template_mip;
+    s32                              slot;
+    s32                              fixed_threshold;
+    s32                              stream_index;
+    s32                              record_index;
+    s32                              packed_normals;
+    ObjectRenderRecord              *records;
+    ObjectRenderRecord              *record;
+    MaterialMap                     *slot_materials;
+    s32                              material_index;
+    s32                              draw_high;
+    s32                              material_base;
+    s32                              material_shift;
+    s32                              draw_shift;
+    s32                              height_log2;
+    s32                              width_bits;
+    s32                              gs_block_base;
+    s32                              mip_block_1;
+    s32                              mip_block_0;
+    s32                              draw_control_count;
+    s32                              template_index;
+    s32                              entry_index;
+    u64                              tex1_word;
+    u64                              clamp_word;
+    u64                              template_tex1;
+    u64                              template_tex0;
+    u64                              template_mip;
     ResidentRenderTextureDefinition *texture;
 
     object_render_class_ids[registered_object_render_class_count] = class_id;
@@ -113,8 +116,7 @@ void register_object_render_class(ObjectRenderClass *render_class,
             /* Fakematch: the signed/unsigned casts keep game cc1 from regrouping the ORs. */
             tex0_word = (s64)((u64)(((s64)width_units_64 << 14) | ((s64)0x13 << 20) |
                                     ((s64)width_log2 << 26)) |
-                              ((u64)height_log2 << 30) | ((u64)1 << 34) |
-                              ((u64)width_bits << 37)) |
+                              ((u64)height_log2 << 30) | ((u64)1 << 34) | ((u64)width_bits << 37)) |
                         ((s64)4 << 61);
             tex1_word = (s64)(((u64)(draw_control_count - 1) << 2) | ((u64)1 << 5) |
                               ((u64)draw_shift << 6)) |
@@ -154,4 +156,5 @@ void register_object_render_class(ObjectRenderClass *render_class,
 
 s16 object_render_class_ids[128] = {0};
 
-extern __typeof__(register_object_render_class) func_00203730 __attribute__((alias("FUN_00203730")));
+extern __typeof__(register_object_render_class) func_00203730
+    __attribute__((alias("FUN_00203730")));

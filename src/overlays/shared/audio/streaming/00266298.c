@@ -23,27 +23,27 @@
 
 /* One entry of a trigger's list (0x1C bytes, FUN_L00_002668a0_c reads bit 0 of flags). */
 struct SceneEntry {
-    u8 pad_00[4];
-    s16 scene;                     /* 0x04: -1 none; bit 0x4000 = other kind (FUN_L00_00299460) */
-    u8 pad_06[2];
-    s16 cost_kind;                 /* 0x08: 1 bolts (price table), 4 item flag, 6 bolts (no charge here) */
-    s16 cost_id;                   /* 0x0A: index into D_L00_001C40B0 / alternate_item_available */
-    u8 pad_0C[4];
-    u16 flags;                     /* 0x10: 1 = no facing check, 8 = has a cost */
-    u8 pad_12[0xA];
+    u8  pad_00[4];
+    s16 scene; /* 0x04: -1 none; bit 0x4000 = other kind (FUN_L00_00299460) */
+    u8  pad_06[2];
+    s16 cost_kind; /* 0x08: 1 bolts (price table), 4 item flag, 6 bolts (no charge here) */
+    s16 cost_id;   /* 0x0A: index into D_L00_001C40B0 / alternate_item_available */
+    u8  pad_0C[4];
+    u16 flags; /* 0x10: 1 = no facing check, 8 = has a cost */
+    u8  pad_12[0xA];
 };
 
 /* Trigger state set up by FUN_L00_002668a0_c. */
 struct SceneTrigger {
-    u8 pad_00[8];
-    u8 any_direction;              /* 0x08: entry flags bit 0; 0xFF disables the trigger */
-    u8 initialised;                /* 0x09: set by FUN_L00_002668a0_c */
-    u8 pad_0A[2];
-    f32 radius;                    /* 0x0C: facing tolerance; twice this is the reach */
-    u8 pad_10[0x26];
-    s16 entry;                     /* 0x36: current entry, -1 none */
-    s32 start_frame;               /* 0x38: game_frame at setup */
-    struct SceneEntry *entries;    /* 0x3C */
+    u8                 pad_00[8];
+    u8                 any_direction; /* 0x08: entry flags bit 0; 0xFF disables the trigger */
+    u8                 initialised;   /* 0x09: set by FUN_L00_002668a0_c */
+    u8                 pad_0A[2];
+    f32                radius; /* 0x0C: facing tolerance; twice this is the reach */
+    u8                 pad_10[0x26];
+    s16                entry;       /* 0x36: current entry, -1 none */
+    s32                start_frame; /* 0x38: game_frame at setup */
+    struct SceneEntry *entries;     /* 0x3C */
 };
 
 /* The trigger that fired last. */
@@ -52,29 +52,31 @@ struct SceneTrigger {
 
 /* Price table entry (0x18 bytes). */
 
-extern s32 D_L00_0015F5C4;                                  /* nonzero blocks all triggers */
+extern s32 D_L00_0015F5C4; /* nonzero blocks all triggers */
 extern s32 game_frame __asm__("D_L00_0015F5CC");
-extern s32 D_0013CAE4[];                                    /* bit 0x10 lifts the facing check */
+extern s32 D_0013CAE4[]; /* bit 0x10 lifts the facing check */
 extern s32 bolt_hud_item __asm__("D_L00_00160130") __attribute__((sda));
 
 extern void FUN_L00_002668a0_c(struct Moby *, struct SceneTrigger *) __asm__("FUN_L00_002668a0");
 extern void process_menu_entry(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
-extern s32 FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
+extern s32  FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
 extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
 extern void remove_hud_item(s32) __asm__("FUN_001ff480");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
-extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
-extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
+extern s32  hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
+extern s32
+queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
 
-s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) __asm__("FUN_L00_00266448");
-s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
-{
-    struct Hero *hero_ptr = &hero;
+s32 update_npc_dialogue(struct Moby         *moby,
+                        struct SceneTrigger *trigger) __asm__("FUN_L00_00266448");
+
+s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) {
+    struct Hero       *hero_ptr = &hero;
     struct SceneEntry *entry;
-    s32 index;
-    s32 handle;
+    s32                index;
+    s32                handle;
 
     if (hero_ptr->state.current == 0x1D)
         return 0;
@@ -97,14 +99,14 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
 
     if (trigger->any_direction == 0) {
         /* the moby must face the hero ... */
-        if (fast_difference_between_rotations(
-                fast_arc_tan(hero_ptr->motion.pos.f[0] - moby->pos.x, hero_ptr->motion.pos.f[1] - moby->pos.y),
-                moby->rot.z) > trigger->radius)
+        if (fast_difference_between_rotations(fast_arc_tan(hero_ptr->motion.pos.f[0] - moby->pos.x,
+                                                           hero_ptr->motion.pos.f[1] - moby->pos.y),
+                                              moby->rot.z) > trigger->radius)
             return 0;
         /* ... and the hero the moby, within 1.57 (about 90 degrees) */
-        if (fast_difference_between_rotations(
-                fast_arc_tan(moby->pos.x - hero_ptr->motion.pos.f[0], moby->pos.y - hero_ptr->motion.pos.f[1]),
-                hero_ptr->motion.rot.f[2]) > 1.57f)
+        if (fast_difference_between_rotations(fast_arc_tan(moby->pos.x - hero_ptr->motion.pos.f[0],
+                                                           moby->pos.y - hero_ptr->motion.pos.f[1]),
+                                              hero_ptr->motion.rot.f[2]) > 1.57f)
             return 0;
     }
 
@@ -144,25 +146,32 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
     }
 
     if (hud_keep_visible(bolt_hud_item, 10)) {
-        bolt_hud_item = queue_animation_update(12, 0, initialize_numeric_hud_element, mine_blend_color,
-                                               draw_hud_text_panel, 0, 0);
+        bolt_hud_item = queue_animation_update(
+            12, 0, initialize_numeric_hud_element, mine_blend_color, draw_hud_text_panel, 0, 0);
     }
     {
         /* a fresh block-local pointer (not `entry`) keeps retail's registers */
         struct SceneEntry *unpaid = &trigger->entries[trigger->entry];
 
         if (unpaid->cost_kind == 1 || unpaid->cost_kind == 6) {
-            handle = queue_animation_update(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility,
-                                            draw_bolt_counter_hud_panel, &current_bolt_count, 9999999);
+            handle = queue_animation_update(2,
+                                            0x754E,
+                                            initialize_bolt_counter_hud,
+                                            update_bolt_counter_hud_animation_and_visibility,
+                                            draw_bolt_counter_hud_panel,
+                                            &current_bolt_count,
+                                            9999999);
             hud_keep_visible(handle, scale_game_frames(60));
         }
     }
     return 0;
 }
+
 extern s32 D_0015ED84[];
 extern s32 D_L00_001791B8[] NOT_SDA;
 extern s32 D_L00_001C44B8[] NOT_SDA;
-s32 get_dialogue_entry(void *p) __asm__("FUN_L00_002667d0");
+s32        get_dialogue_entry(void *p) __asm__("FUN_L00_002667d0");
+
 s32 get_dialogue_entry(void *moby) {
     s32 range_index = D_0015ED84[0];
     s32 lo;
@@ -180,43 +189,46 @@ s32 get_dialogue_entry(void *moby) {
     }
     return -1;
 }
+
 s32 FUN_L00_002667d0_u(s32, s32) __asm__("FUN_L00_002667d0");
 /* Stores b in the entry get_dialogue_entry finds, if it finds one. */
-void set_moby_dialogue_record_value(s32 moby_address, s32 moby_record_value) __asm__("FUN_L00_00266858");
+void set_moby_dialogue_record_value(s32 moby_address,
+                                    s32 moby_record_value) __asm__("FUN_L00_00266858");
 
 void set_moby_dialogue_record_value(s32 moby_address, s32 moby_record_value) {
     s32 i = FUN_L00_002667d0_u(moby_address, moby_record_value);
     if (i != -1)
         level_object_states[i].state = moby_record_value;
 }
+
 typedef struct {
-    u8 pad0[4];
+    u8  pad0[4];
     s16 f04;
-    u8 pad6[2];
-    u8 f08;
-    u8 f09;
-    u8 padA[0x2C];
+    u8  pad6[2];
+    u8  f08;
+    u8  f09;
+    u8  padA[0x2C];
     s16 f36;
     u32 f38;
     u32 f3C;
 } Out002668a0;
 
-
 typedef struct {
-    u8 pad0[6];
+    u8  pad0[6];
     u16 f06;
     s16 f08;
 } P002668a0;
 
 extern P002668a0 *l00_moby_dialogue_entry_lists[] __asm__("D_L00_001B1678");
-extern s32 D_L00_0015F5CC;
-extern s32 FUN_L00_002667d0_c(void *) __asm__("FUN_L00_002667d0");
-s32 initialize_npc_dialogue(void *p, u8 *out_p) __asm__("FUN_L00_002668a0");
+extern s32        D_L00_0015F5CC;
+extern s32        FUN_L00_002667d0_c(void *) __asm__("FUN_L00_002667d0");
+s32               initialize_npc_dialogue(void *p, u8 *out_p) __asm__("FUN_L00_002668a0");
+
 s32 initialize_npc_dialogue(void *moby, u8 *out_p) {
-    Out002668a0 *out;
-    s32 i;
+    Out002668a0       *out;
+    s32                i;
     unsigned long long k;
-    P002668a0 *dialogue_entries;
+    P002668a0         *dialogue_entries;
 
     out = (Out002668a0 *)out_p;
     i = FUN_L00_002667d0_c(moby);
@@ -240,59 +252,67 @@ s32 initialize_npc_dialogue(void *moby, u8 *out_p) {
 }
 
 s32 D_L01_00179590[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_00179710[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_00179510[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_00179910[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_00179B10[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_00179590[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_00179810[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_00179710[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_00179510[1] __attribute__((section(".data"))) = {0};
 
-s32 D_L01_00160130 = -1;
+s32                D_L01_00160130 = -1;
 s32 D_L01_00179638 NOT_SDA = 0;
 s32 D_L01_001C4938 NOT_SDA = 0;
-s32 D_L02_00160130 = -1;
+s32                D_L02_00160130 = -1;
 s32 D_L02_001797B8 NOT_SDA = 0;
 s32 D_L02_001C4AB8 NOT_SDA = 0;
-s32 D_L03_00160130 = -1;
+s32                D_L03_00160130 = -1;
 s32 D_L03_001792B8 NOT_SDA = 0;
 s32 D_L03_001C45B8 NOT_SDA = 0;
-s32 D_L04_0015F5CC = 0;
-s32 D_L04_00160130 = -1;
+s32                D_L04_0015F5CC = 0;
+s32                D_L04_00160130 = -1;
 s32 D_L04_00179338 NOT_SDA = 0;
 s32 D_L04_001C4638 NOT_SDA = 0;
-s32 D_L05_00160130 = -1;
+s32                D_L05_00160130 = -1;
 s32 D_L05_001795B8 NOT_SDA = 0;
 s32 D_L05_001C4938 NOT_SDA = 0;
-s32 D_L06_00160130 = -1;
+s32                D_L06_00160130 = -1;
 s32 D_L06_00179938 NOT_SDA = 0;
 s32 D_L06_001C4C38 NOT_SDA = 0;
 s32 D_L07_00179238 NOT_SDA = 0;
 s32 D_L07_001C4538 NOT_SDA = 0;
-s32 D_L08_00160130 = -1;
+s32                D_L08_00160130 = -1;
 s32 D_L08_001799B8 NOT_SDA = 0;
 s32 D_L08_001C4CB8 NOT_SDA = 0;
 s32 D_L09_00179338 NOT_SDA = 0;
 s32 D_L09_001C4638 NOT_SDA = 0;
 s32 D_L10_00179638 NOT_SDA = 0;
 s32 D_L10_001C4938 NOT_SDA = 0;
-s32 D_L11_00160130 = -1;
+s32                D_L11_00160130 = -1;
 s32 D_L11_00179BB8 NOT_SDA = 0;
 s32 D_L11_001C4EB8 NOT_SDA = 0;
-s32 D_L12_00160130 = -1;
+s32                D_L12_00160130 = -1;
 s32 D_L12_00179638 NOT_SDA = 0;
 s32 D_L12_001C4938 NOT_SDA = 0;
-s32 D_L13_00160130 = -1;
+s32                D_L13_00160130 = -1;
 s32 D_L13_001794B8 NOT_SDA = 0;
 s32 D_L13_001C47B8 NOT_SDA = 0;
-s32 D_L14_00160130 = -1;
+s32                D_L14_00160130 = -1;
 s32 D_L14_001798B8 NOT_SDA = 0;
 s32 D_L14_001C4BB8 NOT_SDA = 0;
-s32 D_L15_00160130 = -1;
+s32                D_L15_00160130 = -1;
 s32 D_L15_001797B8 NOT_SDA = 0;
 s32 D_L15_001C4AB8 NOT_SDA = 0;
-s32 D_L16_00160130 = -1;
+s32                D_L16_00160130 = -1;
 s32 D_L16_001795B8 NOT_SDA = 0;
 s32 D_L16_001C4938 NOT_SDA = 0;
 s32 D_L17_00179AB8 NOT_SDA = 0;

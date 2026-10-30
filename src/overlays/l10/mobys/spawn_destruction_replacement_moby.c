@@ -6,9 +6,8 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+
 extern void *create_moby() __asm__("FUN_0020c4f8");
-
-
 
 char *spawn_destruction_replacement_moby(struct Moby *owner) __asm__("FUN_L10_002eb8c0");
 

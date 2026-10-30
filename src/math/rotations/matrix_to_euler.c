@@ -4,14 +4,14 @@
 
 typedef union {
     float m[4][4];
-    u128 q[4];
+    u128  q[4];
 } Mtx44;
 
-extern void clear_u64_value(float *) __asm__("func_001F99F8");
+extern void  clear_u64_value(float *) __asm__("func_001F99F8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
-extern void euler_to_matrix_ee(float *, float *) __asm__("FUN_001fa070");
-extern void multiply_matrix(Mtx44 *, float *, Mtx44 *) __asm__("FUN_001fa378");
+extern void  euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
+extern void  euler_to_matrix_ee(float *, float *) __asm__("FUN_001fa070");
+extern void  multiply_matrix(Mtx44 *, float *, Mtx44 *) __asm__("FUN_001fa378");
 
 /* Matrix to Euler angles: on a copy of src with the translation cleared,
    read the Z angle from row 0, undo it (euler_rotation_matrix builds the Z

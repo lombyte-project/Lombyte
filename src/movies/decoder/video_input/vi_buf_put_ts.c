@@ -1,10 +1,10 @@
 #include "types.h"
 #include "rnc/movies/decoder/vi_buf.h"
 
-extern s32 WaitSema(s32);
-extern s32 SignalSema(s32);
+extern s32  WaitSema(s32);
+extern s32  SignalSema(s32);
 extern void vi_buf_modify_pts(struct ViBuf *, struct ViBufTimeStamp *) __asm__("func_0023C6B8");
-s32 vi_buf_put_ts(struct ViBuf *f, struct ViBufTimeStamp *ts) __asm__("FUN_0023c810");
+s32         vi_buf_put_ts(struct ViBuf *f, struct ViBufTimeStamp *ts) __asm__("FUN_0023c810");
 
 s32 vi_buf_put_ts(struct ViBuf *video_buffer, struct ViBufTimeStamp *ts) {
     s32 has_timestamp_capacity;

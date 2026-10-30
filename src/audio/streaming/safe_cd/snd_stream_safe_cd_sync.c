@@ -2,9 +2,10 @@
 #include "rnc/audio/sound_read_work.h"
 #include "rnc/data_labels.h"
 #include "rnc/audio/sound_state.h"
+
 extern void FlushCache(s32);
 extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
-extern s32 sceCdSync(s32);
+extern s32  sceCdSync(s32);
 
 s32 snd_stream_safe_cd_sync(s32 mode) __asm__("FUN_0012ee08");
 

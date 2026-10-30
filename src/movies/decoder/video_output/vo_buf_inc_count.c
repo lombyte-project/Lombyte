@@ -3,7 +3,7 @@
 
 extern s32 DIntr(void);
 extern s32 EnableInterrupts(void);
-void vo_buf_inc_count(struct VoBuf *buf) __asm__("FUN_0023d210");
+void       vo_buf_inc_count(struct VoBuf *buf) __asm__("FUN_0023d210");
 
 void vo_buf_inc_count(struct VoBuf *buf) {
     DIntr();

@@ -13,6 +13,7 @@ void vu1_gs_regs_font(void) {
     *(s32 *)((u32)render_packet_cursor.words + 12) = 0x5000000B;
     render_packet_cursor.words += 4;
 }
+
 extern __typeof__(vu1_gs_regs_font) func_00233C90 __attribute__((alias("FUN_00233c90")));
 /* Recovered original symbol name. */
 extern __typeof__(vu1_gs_regs_font) VU1_gsRegsFont__Fv __attribute__((alias("FUN_00233c90")));

@@ -10,19 +10,25 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/mobys/cutscene_set_camera_target.h"
 #include "rnc/mobys/moby.h"
+
 extern char D_0013F3D0[];
-extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA, D_001413DC NOT_SDA, D_0013D464 NOT_SDA;
+extern int  camera_secondary_mode_lui __asm__("D_001413D4") NOT_SDA, D_001413DC NOT_SDA,
+    D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
-extern int frame_number __asm__("D_L05_0015F5CC"), D_L05_0015FFD8;
-extern int D_001417E0[];
-extern int D_0014EE90[];
+extern int           frame_number __asm__("D_L05_0015F5CC"), D_L05_0015FFD8;
+extern int           D_001417E0[];
+extern int           D_0014EE90[];
 extern unsigned char D_0014C050[];
-extern f32 D_0013F3D8, D_0013F3DC;
-extern void help_request(int, int) __asm__("FUN_L00_00203908");
-extern void collect_moby_and_clear_path_keys(void *) __asm__("FUN_L00_002d5830");
+extern f32           D_0013F3D8, D_0013F3DC;
+extern void          help_request(int, int) __asm__("FUN_L00_00203908");
+extern void          collect_moby_and_clear_path_keys(void *) __asm__("FUN_L00_002d5830");
 typedef unsigned int L05Vector __attribute__((mode(TI), aligned(16)));
 
-typedef struct { unsigned short count, best; int flags; } VendorEventRecord;
+typedef struct {
+    unsigned short count, best;
+    int            flags;
+} VendorEventRecord;
+
 extern VendorEventRecord D_00141968[];
 #define D_00141B8C (D_00141968[68].flags)
 #define D_00141BAC (D_00141968[72].flags)
@@ -44,17 +50,18 @@ extern VendorEventRecord D_00141968[];
 #define D_00141B88 (D_00141968[68].count)
 #define D_00141BB8 (D_00141968[74].count)
 typedef struct {
-    unsigned char pad_0[82];
+    unsigned char  pad_0[82];
     unsigned short D_00141772;
-    unsigned char pad_54[38];
+    unsigned char  pad_54[38];
     unsigned short D_0014179A;
-    unsigned char pad_7c[6];
+    unsigned char  pad_7c[6];
     unsigned short D_001417A2;
-    unsigned char pad_84[6];
+    unsigned char  pad_84[6];
     unsigned short D_001417AA;
-    unsigned char pad_8c[22];
+    unsigned char  pad_8c[22];
     unsigned short D_001417C2;
 } L05Fields_00141720;
+
 extern L05Fields_00141720 l05_00141720 __asm__("D_00141720");
 #define D_001417A2 (l05_00141720.D_001417A2)
 #define D_0014179A (l05_00141720.D_0014179A)
@@ -66,8 +73,9 @@ typedef struct {
     unsigned char pad_1[12];
     unsigned char menu_item_enabled_1;
 } L05Fields_0013D388;
+
 extern L05Fields_0013D388 alternate_item_available __asm__("D_0013D388");
-#define D_0013D388 (alternate_item_available.D_0013D388)
+#define D_0013D388          (alternate_item_available.D_0013D388)
 #define menu_item_enabled_1 (alternate_item_available.menu_item_enabled_1)
 typedef struct {
     unsigned char pad_0[15];
@@ -75,6 +83,7 @@ typedef struct {
     unsigned char pad_10[6];
     unsigned char D_0013D4D6;
 } L05Fields_0013D4C0;
+
 extern L05Fields_0013D4C0 item_available __asm__("D_0013D4C0");
 #define D_0013D4D6 (item_available.D_0013D4D6)
 #define D_0013D4CF (item_available.D_0013D4CF)
@@ -84,11 +93,12 @@ extern L05Fields_0013D4C0 item_available __asm__("D_0013D4C0");
 #include "rnc/overlay/l05/mobys/update_moby_gameplay_events_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+
 void update_moby_gameplay_events(struct Moby *moby) __asm__("FUN_L05_0031bf40");
 
 void update_moby_gameplay_events(struct Moby *moby) {
     int *data = ((int *)moby->pvars);
-    int value, elapsed, limit;
+    int  value, elapsed, limit;
     moby->update_dist = 0xff;
 
     if (is_point_inside_clip_volume(D_0013F3D0, data[20])) {
@@ -105,10 +115,12 @@ void update_moby_gameplay_events(struct Moby *moby) {
         if (limit < elapsed && (unsigned int)(D_00141BAC & (1 << gameplay_event_level_index)) < 1)
             help_request(0x7dd, 0x48);
     }
-    if (frame_number < scale_game_frames(60) && usage_stats.stat[12].count && !usage_stats.stat[11].count && D_00141BF4 >= 0)
+    if (frame_number < scale_game_frames(60) && usage_stats.stat[12].count &&
+        !usage_stats.stat[11].count && D_00141BF4 >= 0)
         help_request(0x4e27, 0x51);
     if (frame_number < scale_game_frames(60) && usage_stats.stat[29].count) {
-        if (D_00141CFC >= 0) help_request(0x4e28, 0x72);
+        if (D_00141CFC >= 0)
+            help_request(0x4e28, 0x72);
         usage_stats.stat[29].count = 0;
     }
     if (!D_0013D4D6) {
@@ -144,7 +156,8 @@ void update_moby_gameplay_events(struct Moby *moby) {
                 D_00141A8C = D_00141A8C | (1 << gameplay_event_level_index) | 0x80000000;
             }
         }
-        if (D_001413DC == 0x13) D_00141A88 = -1;
+        if (D_001413DC == 0x13)
+            D_00141A88 = -1;
     }
     if (D_00141A98 < 2) {
         if (D_0014C050[data[8] + gameplay_event_level_index * 16] == 0xff) {
@@ -163,7 +176,8 @@ void update_moby_gameplay_events(struct Moby *moby) {
                     if (scale_game_frames(18000) < elapsed) {
                         elapsed = scale_game_frames(gameplay_event_frame_count) - D_00141772 * 600;
                         if (scale_game_frames(18000) < elapsed) {
-                            elapsed = scale_game_frames(gameplay_event_frame_count) - D_001417AA * 600;
+                            elapsed =
+                                scale_game_frames(gameplay_event_frame_count) - D_001417AA * 600;
                             if (scale_game_frames(18000) < elapsed && D_00141A9C >= 0)
                                 help_request(0x138d, 0x26);
                         }
@@ -175,8 +189,8 @@ void update_moby_gameplay_events(struct Moby *moby) {
     if (D_0013D388 && D_00141A78 == 0 && D_001413DC == 0x16)
         help_request(0x1389, 0x22);
     if (D_00141C58 == 0) {
-        if (hero.state.current == 10 &&
-            (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14]))) {
+        if (hero.state.current == 10 && (is_point_inside_clip_volume(&hero.motion.pos, data[13]) ||
+                                         is_point_inside_clip_volume(&hero.motion.pos, data[14]))) {
             if (D_00141C58 < 0xffff)
                 D_00141C58 = D_00141C58 + 1;
             value = scale_game_frames(gameplay_event_frame_count) / 600;
@@ -185,12 +199,13 @@ void update_moby_gameplay_events(struct Moby *moby) {
             D_00141C5C = D_00141C5C | (1 << gameplay_event_level_index) | 0x80000000;
         }
         if (hero.state.control_mode == 0x12) {
-            if (is_point_inside_clip_volume(data + 4, data[13]) || is_point_inside_clip_volume(data + 4, data[14])) {
+            if (is_point_inside_clip_volume(data + 4, data[13]) ||
+                is_point_inside_clip_volume(data + 4, data[14])) {
                 clear_u64_value(data + 4);
                 data[24]++;
             }
-        } else if (data[24] > 1 &&
-                   (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14])))
+        } else if (data[24] > 1 && (is_point_inside_clip_volume(&hero.motion.pos, data[13]) ||
+                                    is_point_inside_clip_volume(&hero.motion.pos, data[14])))
             help_request(0x138e, 0x5e);
     }
     if (!usage_stats.stat[18].count && !D_00141BB8 && D_0013D4CF &&
@@ -199,13 +214,14 @@ void update_moby_gameplay_events(struct Moby *moby) {
     value = data[21];
     if (value != -1 && D_0014C050[data[22] + gameplay_event_level_index * 16] == 0xff &&
         D_0014C050[data[8] + gameplay_event_level_index * 16] == 0xff &&
-        (frame_number < 5 || (D_0013F64C &&
-          (*(short *)(D_0013F64C + 0xa6) == 0x3e6 || *(short *)(D_0013F64C + 0xa6) == 0x33e)))) {
+        (frame_number < 5 || (D_0013F64C && (*(short *)(D_0013F64C + 0xa6) == 0x3e6 ||
+                                             *(short *)(D_0013F64C + 0xa6) == 0x33e)))) {
         collect_moby_and_clear_path_keys((void *)(D_L05_0015FFD8 + value * 256));
         data[21] = -1;
     }
     qcopy(data, D_0013F3D0);
-    if (!D_0013F65E) qcopy(data + 4, D_0013F3D0);
+    if (!D_0013F65E)
+        qcopy(data + 4, D_0013F3D0);
 }
 /* UpdateMoby_1550 (names.tsv role). State 0 arms it: state 1 and byte 0x30 = 0xFF. In state 1,
  * while the level flag is 2 and the word at +0x30 of D_L05_0016CD60 is 10 or 11, passes one
@@ -215,9 +231,9 @@ void update_moby_gameplay_events(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031EAD8), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char pad0[0x44];
+    char  pad0[0x44];
     short n;
-    char pad1[0x132];
+    char  pad1[0x132];
     char *m[1];
 } G;
 
@@ -232,7 +248,7 @@ void update_selected_moby_effects(unsigned char *m) {
     };
     unsigned int object_state = m[0x20];
     unsigned int range_offset;
-    G *camera_target_table;
+    G           *camera_target_table;
     switch (object_state) {
     case INITIALIZE:
         m[0x30] = 0xFF;

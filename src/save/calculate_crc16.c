@@ -1,4 +1,5 @@
 #include "types.h"
+
 u16 calculate_crc16(u8 *p, s32 len) __asm__("FUN_0020acc0");
 
 u16 calculate_crc16(u8 *data_cursor, s32 byte_count) {

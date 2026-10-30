@@ -14,11 +14,14 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0029B070.c: func_L07_0029B070), where it is exact; names translated to the US level program. */
 
-
 extern unsigned char *D_L07_001B21CC NOT_SDA;
-unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position, char *particle_motion_vector) __asm__("FUN_L07_0029a2a0");
+unsigned char *
+spawn_projectile_expiry_particle(char *particle_spawn_position,
+                                 char *particle_motion_vector) __asm__("FUN_L07_0029a2a0");
 
-unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position, char *particle_motion_vector) {
+unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position,
+
+                                                char *particle_motion_vector) {
     unsigned char *particle = create_part(0x33);
     if (particle != 0) {
         char *particle_vector = (char *)particle + 0x20;
@@ -36,23 +39,33 @@ unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position, c
     }
     return particle;
 }
-extern int rand(void);
+
+extern int            rand(void);
 extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") NOT_SDA;
-extern float debris_far_point[] __asm__("D_L07_00166E40");
+extern float          debris_far_point[] __asm__("D_L07_00166E40");
 
-unsigned char *spawn_moby_point_offset_particle(void *moby, short index, float amount, float factor) __asm__("FUN_L07_0029b8d8");
+unsigned char *spawn_moby_point_offset_particle(void *moby,
+                                                short index,
+                                                float amount,
+                                                float factor) __asm__("FUN_L07_0029b8d8");
 
-unsigned char *spawn_moby_point_offset_particle(void *m, short index, float amount, float factor) __asm__("FUN_L07_0029b8d8");
-unsigned char *spawn_moby_point_offset_particle(void *moby, short index, float amount, float factor) {
-    float moby_point_world_position[4];
-    float position_offset[4];
+unsigned char *spawn_moby_point_offset_particle(void *m,
+                                                short index,
+                                                float amount,
+                                                float factor) __asm__("FUN_L07_0029b8d8");
+unsigned char *
+
+spawn_moby_point_offset_particle(void *moby, short index, float amount, float factor) {
+    float          moby_point_world_position[4];
+    float          position_offset[4];
     unsigned char *particle = create_part(0x3d);
     if (particle != 0) {
         unsigned char *particle_payload = particle + 0x20;
         *(void **)particle_payload = moby;
         *(short *)(particle + 0xa) = scale_game_frames(0x50);
         *(float *)(particle_payload + 4) = 0.0f;
-        *(float *)(particle_payload + 8) = random_float_between(*(float *)(particle_payload + 4), 1.0f);
+        *(float *)(particle_payload + 8) =
+            random_float_between(*(float *)(particle_payload + 4), 1.0f);
         {
             int random_index = rand() & 15;
             *(float *)(particle_payload + 0x14) = factor;
@@ -68,7 +81,9 @@ unsigned char *spawn_moby_point_offset_particle(void *moby, short index, float a
         *(float *)(particle_payload + 0x10) = frame_scale * 0.015f;
         *(short *)(particle_payload + 0xe) = index;
         particle[8] = truncate_float_to_s32(*(float *)(particle_payload + 8) * 255.0f);
-        moby_point_position(*(void **)particle_payload, *(short *)(particle_payload + 0xe), moby_point_world_position);
+        moby_point_position(*(void **)particle_payload,
+                            *(short *)(particle_payload + 0xe),
+                            moby_point_world_position);
         fast_vec_sub(position_offset, debris_far_point, moby_point_world_position);
         fast_vec_normalize(position_offset, position_offset, *(float *)(particle_payload + 0x14));
         fast_vec_add(particle + 0x10, moby_point_world_position, position_offset);

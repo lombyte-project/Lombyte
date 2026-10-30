@@ -18,7 +18,7 @@ void topThread(TopThreadQueue *queue) {
         THREAD_COMMAND_SUSPEND = 2
     };
     s32 i;
-    u8 type;
+    u8  type;
 
     for (;;) {
         WaitSema(top_thread_semaphore);

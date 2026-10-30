@@ -7,7 +7,7 @@ void jet_mount(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
 void jet_end_mount(s32) __asm__("FUN_L00_002eac18");
 void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 void initialize_target_tracking_camera(void *) __asm__("FUN_L00_002ebbd8");
-s32 camera_transition_update(u8 *, s8 *) __asm__("FUN_L00_002ea488");
+s32  camera_transition_update(u8 *, s8 *) __asm__("FUN_L00_002ea488");
 void conditionally_set_camera_state_three(s8 *) __asm__("FUN_L00_002ec7b0");
 void follow_camera_update(u8 *) __asm__("FUN_L00_002e9c28");
 void initialize_camera_pose_springs(s8 *) __asm__("FUN_L00_002ead60");

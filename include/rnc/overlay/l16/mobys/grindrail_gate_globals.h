@@ -18,7 +18,7 @@ extern float path_walker_speed_approach_acceleration __asm__("D_L16_00161E78");
 extern float path_walker_height_range_start __asm__("D_L16_00161E7C");
 extern float path_walker_height_range_end __asm__("D_L16_00161E80");
 extern float path_walker_reposition_advance_rate __asm__("D_L16_00161E8C");
-extern int path_walker_draw_distance __asm__("D_L16_00161E90");
+extern int   path_walker_draw_distance __asm__("D_L16_00161E90");
 extern float path_walker_particle_movement_velocity_scale __asm__("D_L16_00161EA0");
 extern float path_walker_particle_random_velocity_scale __asm__("D_L16_00161EA4");
 extern float path_walker_particle_target_scalar_scale __asm__("D_L16_00161EA8");

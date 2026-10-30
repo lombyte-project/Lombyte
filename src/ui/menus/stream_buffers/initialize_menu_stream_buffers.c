@@ -10,14 +10,14 @@ void initialize_menu_stream_buffers(s32 mode) __asm__("FUN_00225ac0");
  * the first two groups and 0x4F000 for the final group. The flag word
  * is one only for the final group. */
 void initialize_menu_stream_buffers(s32 mode) {
-    s32 secondary_address;
-    s32 primary_address;
-    s32 primary_count;
-    s32 secondary_count;
-    s32 large_count;
-    s32 index;
-    s32 end_index;
-    s32 clear_remaining;
+    s32                      secondary_address;
+    s32                      primary_address;
+    s32                      primary_count;
+    s32                      secondary_count;
+    s32                      large_count;
+    s32                      index;
+    s32                      end_index;
+    s32                      clear_remaining;
     struct MenuStreamBuffer *descriptor;
 
     primary_address = menu_system.help_text_buffer;
@@ -72,4 +72,5 @@ void initialize_menu_stream_buffers(s32 mode) {
     }
 }
 
-extern __typeof__(initialize_menu_stream_buffers) func_00225AC0 __attribute__((alias("FUN_00225ac0")));
+extern __typeof__(initialize_menu_stream_buffers) func_00225AC0
+    __attribute__((alias("FUN_00225ac0")));

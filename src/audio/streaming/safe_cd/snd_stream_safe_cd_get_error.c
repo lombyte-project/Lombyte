@@ -2,8 +2,9 @@
 #include "rnc/audio/sound_read_work.h"
 #include "rnc/data_labels.h"
 #include "rnc/audio/sound_state.h"
+
 extern s32 sceCdGetError();
-s32 snd_stream_safe_cd_get_error(s32 unused_arg) __asm__("FUN_0012eef0");
+s32        snd_stream_safe_cd_get_error(s32 unused_arg) __asm__("FUN_0012eef0");
 
 s32 snd_stream_safe_cd_get_error(s32 unused_arg) {
     if (snd_cd_stream_active == 0) {

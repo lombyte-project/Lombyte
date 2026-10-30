@@ -24,7 +24,7 @@
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
 struct L03HelpState {
     s32 state;
-    u8 pad4[0x20];
+    u8  pad4[0x20];
     s32 cur;
 };
 
@@ -40,13 +40,13 @@ struct L03ItemEntry {
     s32 pad0;
     s32 pad4;
     s32 active;
-    u8 rest[0x40];
+    u8  rest[0x40];
 };
 
-extern struct L03HelpState l03_help_message_playback_state __asm__("D_L03_00179510");
+extern struct L03HelpState  l03_help_message_playback_state __asm__("D_L03_00179510");
 extern struct L03HelpRecord help_records[] __asm__("D_00141968");
-extern struct L03ItemEntry D_L03_00179BC0[];
-extern struct Moby *D_L03_0015FFE4;
+extern struct L03ItemEntry  D_L03_00179BC0[];
+extern struct Moby         *D_L03_0015FFE4;
 
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 
@@ -58,11 +58,11 @@ void update_kerwan_tutorial_hints(struct Moby *moby) {
         TUTORIAL_HINTS_INITIALIZE = 0,
         TUTORIAL_HINTS_UPDATE = 1
     };
-    s32 *data = ((s32 *)moby->pvars);
+    s32         *data = ((s32 *)moby->pvars);
     struct Moby *candidate_moby;
-    s32 count;
-    s32 i;
-    s32 scaled_time_value;
+    s32          count;
+    s32          i;
+    s32          scaled_time_value;
 
     fast_dec_timer(&data[22]);
     switch (moby->state) {
@@ -79,44 +79,54 @@ void update_kerwan_tutorial_hints(struct Moby *moby) {
         }
         if (alternate_item_available[0x1A] == 0) {
             if (is_point_inside_clip_volume(&hero.motion.pos, data[0]) &&
-                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+                l03_help_message_playback_state.state == 0 &&
                 l03_help_message_playback_state.cur == -1 && help_records[0x14].v >= 0) {
                 help_request(0xBB8, 0x14);
             }
             if (is_point_inside_clip_volume(&hero.motion.pos, data[3]) &&
-                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+                l03_help_message_playback_state.state == 0 &&
                 l03_help_message_playback_state.cur == -1 && help_records[0x15].v >= 0) {
                 help_request(0xBB9, 0x15);
             }
             if (is_point_inside_clip_volume(&hero.motion.pos, data[6]) &&
-                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+                ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+                l03_help_message_playback_state.state == 0 &&
                 l03_help_message_playback_state.cur == -1 && help_records[0x17].v >= 0) {
                 help_request(0xBBB, 0x17);
             }
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[12]) && usage_stats.stat[3].count == 0 &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[12]) &&
+            usage_stats.stat[3].count == 0 &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
             usage_stats.stat[3].count++;
             scaled_time_value = scale_game_frames(D_0015EEA4) / 600;
             if (usage_stats.stat[3].unk2 < scaled_time_value) {
                 usage_stats.stat[3].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            usage_stats.stat[3].level_mask = usage_stats.stat[3].level_mask | (1 << current_level_index) | 0x80000000;
+            usage_stats.stat[3].level_mask =
+                usage_stats.stat[3].level_mask | (1 << current_level_index) | 0x80000000;
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[9]) && usage_stats.stat[3].count == 0 &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[9]) &&
+            usage_stats.stat[3].count == 0 &&
             !((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && data[22] == 0) {
             data[20]++;
             data[22] = scale_game_frames(60);
-        } else if (data[22] != 0 && ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
+        } else if (data[22] != 0 &&
+                   ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
             data[22] = 0;
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[9]) && usage_stats.stat[3].count == 0 &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && data[20] % 6 == 0 && data[20] != 0 &&
-            l03_help_message_playback_state.state == 0 && l03_help_message_playback_state.cur == -1 && help_records[0x16].id == 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[9]) &&
+            usage_stats.stat[3].count == 0 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+            data[20] % 6 == 0 && data[20] != 0 && l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x16].id == 0) {
             help_request(0xBBA, 0x16);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[10]) &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+            l03_help_message_playback_state.state == 0 &&
             l03_help_message_playback_state.cur == -1 && help_records[0x18].id == 0) {
             scaled_time_value = scale_game_frames(D_0015EEA4) - usage_stats.stat[9].unk2 * 600;
             if (scale_game_frames(216000) < scaled_time_value) {
@@ -124,16 +134,19 @@ void update_kerwan_tutorial_hints(struct Moby *moby) {
             }
         }
         count = 0;
-        for (candidate_moby = D_L03_0015FFE4; candidate_moby != 0; candidate_moby = candidate_moby->next) {
+        for (candidate_moby = D_L03_0015FFE4; candidate_moby != 0;
+             candidate_moby = candidate_moby->next) {
             if (candidate_moby->pclass != 0 && *(s16 *)((u8 *)candidate_moby->pclass + 0x46) == 5 &&
                 vector_distance_xy(&candidate_moby->pos, &hero.motion.pos) < 8.0f) {
                 count++;
             }
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[15]) && count == 0 &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current != 0x1E &&
-            item_available[0xF] != 0 && get_ammo(0xF) >= 0x15 && l03_help_message_playback_state.state == 0 &&
-            l03_help_message_playback_state.cur == -1 && help_records[0x4A].id == 0 && usage_stats.stat[19].count == 0) {
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+            hero.state.current != 0x1E && item_available[0xF] != 0 && get_ammo(0xF) >= 0x15 &&
+            l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x4A].id == 0 &&
+            usage_stats.stat[19].count == 0) {
             help_request(0x4E20, 0x4A);
         } else if (hero.state.current == 0x1E) {
             if (usage_stats.stat[19].count < 0xFFFF) {
@@ -143,43 +156,53 @@ void update_kerwan_tutorial_hints(struct Moby *moby) {
             if (usage_stats.stat[19].unk2 < scaled_time_value) {
                 usage_stats.stat[19].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            usage_stats.stat[19].level_mask = usage_stats.stat[19].level_mask | (1 << current_level_index) | 0x80000000;
+            usage_stats.stat[19].level_mask =
+                usage_stats.stat[19].level_mask | (1 << current_level_index) | 0x80000000;
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && D_L03_0015F68C < 3 &&
-            l03_help_message_playback_state.state == 0 && l03_help_message_playback_state.cur == -1 && help_records[0x40].id == 0) {
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+            D_L03_0015F68C < 3 && l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x40].id == 0) {
             help_request(0x3EC, 0x40);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current == HERO_STATE_LOOK &&
-            D_L03_0015F688 == -1 && l03_help_message_playback_state.state == 0 && l03_help_message_playback_state.cur == -1 &&
-            help_records[0x40].id != 0 && help_records[0x41].id == 0) {
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+            hero.state.current == HERO_STATE_LOOK && D_L03_0015F688 == -1 &&
+            l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x40].id != 0 &&
+            help_records[0x41].id == 0) {
             help_request(0x3ED, 0x41);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[16]) &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+            l03_help_message_playback_state.state == 0 &&
             l03_help_message_playback_state.cur == -1 && help_records[0x54].id == 0) {
             help_request(0xBC0, 0x54);
         }
-        if (D_L03_0015F5C4 == 0 && item_available[0x34] != 0 && l03_help_message_playback_state.state == 0 &&
+        if (D_L03_0015F5C4 == 0 && item_available[0x34] != 0 &&
+            l03_help_message_playback_state.state == 0 &&
             l03_help_message_playback_state.cur == -1 && help_records[0x19].id == 0) {
             help_request(0xBBD, 0x19);
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[13]) && usage_stats.stat[15].count == 0 &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[13]) &&
+            usage_stats.stat[15].count == 0 &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
             usage_stats.stat[15].count++;
             scaled_time_value = scale_game_frames(D_0015EEA4) / 600;
             if (usage_stats.stat[15].unk2 < scaled_time_value) {
                 usage_stats.stat[15].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            usage_stats.stat[15].level_mask = usage_stats.stat[15].level_mask | (1 << current_level_index) | 0x80000000;
+            usage_stats.stat[15].level_mask =
+                usage_stats.stat[15].level_mask | (1 << current_level_index) | 0x80000000;
         }
         if (hero.unk988 != 0 && usage_stats.stat[15].count == 0) {
             hero.unk988 = 0;
             data[21]++;
         }
-        if (usage_stats.stat[15].count == 0 && ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
-            data[21] >= 3 && l03_help_message_playback_state.state == 0 && l03_help_message_playback_state.cur == -1 && help_records[0x1A].id == 0) {
+        if (usage_stats.stat[15].count == 0 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && data[21] >= 3 &&
+            l03_help_message_playback_state.state == 0 &&
+            l03_help_message_playback_state.cur == -1 && help_records[0x1A].id == 0) {
             help_request(0xBBE, 0x1A);
         }
         if (hero.state.current == 0x74 && usage_stats.stat[16].count == 0) {
@@ -188,20 +211,24 @@ void update_kerwan_tutorial_hints(struct Moby *moby) {
             if (usage_stats.stat[16].unk2 < scaled_time_value) {
                 usage_stats.stat[16].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            usage_stats.stat[16].level_mask = usage_stats.stat[16].level_mask | (1 << current_level_index) | 0x80000000;
+            usage_stats.stat[16].level_mask =
+                usage_stats.stat[16].level_mask | (1 << current_level_index) | 0x80000000;
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[11]) && usage_stats.stat[16].count == 0 &&
-            hero.state.control_mode == 6 && hero.items[0].item_id == 8 && l03_help_message_playback_state.state == 0 &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[11]) &&
+            usage_stats.stat[16].count == 0 && hero.state.control_mode == 6 &&
+            hero.items[0].item_id == 8 && l03_help_message_playback_state.state == 0 &&
             l03_help_message_playback_state.cur == -1 && help_records[0x1B].id == 0) {
             help_request(0xBBF, 0x1B);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[17]) &&
-            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
+            ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
+            l03_help_message_playback_state.state == 0 &&
             l03_help_message_playback_state.cur == -1 && help_records[0x79].id == 0) {
             help_request(0x4E2F, 0x79);
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[31]) && (u32)hero.state.control_mode < 2 &&
-            help_records[0x4F].id == 0 && usage_stats.stat[20].count == 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[31]) &&
+            (u32)hero.state.control_mode < 2 && help_records[0x4F].id == 0 &&
+            usage_stats.stat[20].count == 0) {
             s32 owned = 0;
             for (i = 0; i < 37; i++) {
                 if (D_L03_00179BC0[i].active == 0 && i != 8 && i != 24) {
@@ -225,13 +252,15 @@ void update_kerwan_tutorial_hints(struct Moby *moby) {
         break;
     }
 }
+
 #include "rnc/math/vector.h"
+
 /* Cutscene state at D_L03_0016C960 (same layout as G_2da710 in entities/002c9eb8.c). */
 struct L03Cutscene {
-    char pad0[0x30];
-    int mode;
-    int t;
-    char pad38[0x140];
+    char  pad0[0x30];
+    int   mode;
+    int   t;
+    char  pad38[0x140];
     char *mobys[4];
 };
 
@@ -248,7 +277,7 @@ void update_kerwan_cutscene_effects(struct Moby *owner_moby) {
     char *moby;
     float from[4];
     float to[4];
-    Vec4 zero;
+    Vec4  zero;
 
     switch (owner_moby->state) {
     case CUTSCENE_EFFECTS_INITIALIZE:
@@ -280,28 +309,37 @@ void update_kerwan_cutscene_effects(struct Moby *owner_moby) {
         zero.q = 0;
         moby_point_position(moby, 0, from);
         moby_point_position(moby, 1, to);
-        spawn_effect_particle_with_target_scalar(from, &zero, 0x7F7F7F7F, 0x7F7F7F, random_float_between(0.25f, 0.5f) * 210000.0f,
-                         scale_game_frames(random_int_between(45, 60)));
-        spawn_effect_particle_with_target_scalar(to, &zero, 0x407F7F7F, 0x7F7F7F, random_float_between(0.25f, 0.5f) * 210000.0f,
-                         scale_game_frames(random_int_between(45, 60)));
+        spawn_effect_particle_with_target_scalar(from,
+                                                 &zero,
+                                                 0x7F7F7F7F,
+                                                 0x7F7F7F,
+                                                 random_float_between(0.25f, 0.5f) * 210000.0f,
+                                                 scale_game_frames(random_int_between(45, 60)));
+        spawn_effect_particle_with_target_scalar(to,
+                                                 &zero,
+                                                 0x407F7F7F,
+                                                 0x7F7F7F,
+                                                 random_float_between(0.25f, 0.5f) * 210000.0f,
+                                                 scale_game_frames(random_int_between(45, 60)));
         break;
     }
 }
+
 #include "qcopy.h"
 
 /* places the camera behind the hero and rebuilds its orientation axes */
 void rebuild_hero_relative_camera_transform(char *camera) __asm__("FUN_L03_002eb7e0");
 
 void rebuild_hero_relative_camera_transform(char *camera) {
-    char *camera_data = *(char **)(camera + 0x70);
+    char  *camera_data = *(char **)(camera + 0x70);
     float *camera_target_data = (float *)(camera_data + 0xB0);
     float *camera_offset_direction = (float *)(camera_data + 0xF0);
     float *camera_look_direction = (float *)(camera_data + 0x100);
-    float back[4];
-    float side[4];
-    float pos[4];
-    float look[4];
-    float camera_look_displacement[4];
+    float  back[4];
+    float  side[4];
+    float  pos[4];
+    float  look[4];
+    float  camera_look_displacement[4];
 
     fast_vec_normalize(side, &hero.gravity_dir, -*(float *)(camera_data + 0xE0));
     fast_vec_normalize(back, camera_offset_direction, -*(float *)(camera_data + 0xD0));
@@ -318,25 +356,27 @@ void rebuild_hero_relative_camera_transform(char *camera) {
     fast_vec_normalize(camera + 0x10, camera + 0x10, -1.0f);
     fast_vec_cross(camera + 0x20, camera + 0x10, camera);
 }
+
 #include "sda.h"
+
 extern s32 D_L03_00167074 NOT_SDA;
 /* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
 void initialize_hero_relative_camera(void *camera_instance) __asm__("FUN_L03_002eb978");
 
 void initialize_hero_relative_camera(void *camera_instance) {
-    char *camera = camera_instance;
-    char *camera_config = *(char **)((char *)D_L03_0015EF50 + *(s16 *)(camera + 0x84) * 32 + 0x1C);
-    char *target;
-    char *pos;
-    char *camera_data;
-    char *timer;
-    char *camera_back_direction_data;
-    int camera_table_base;
+    char  *camera = camera_instance;
+    char  *camera_config = *(char **)((char *)D_L03_0015EF50 + *(s16 *)(camera + 0x84) * 32 + 0x1C);
+    char  *target;
+    char  *pos;
+    char  *camera_data;
+    char  *timer;
+    char  *camera_back_direction_data;
+    int    camera_table_base;
     float *camera_parameter_values;
-    int i;
-    float f;
-    float mtx[12];
-    float camera_rotation_angles[4];
+    int    i;
+    float  f;
+    float  mtx[12];
+    float  camera_rotation_angles[4];
 
     target = *(char **)(camera + 0x70) + 0xB0;
     *(float *)(target + 0x14) = 1.5f;
@@ -378,64 +418,82 @@ void initialize_hero_relative_camera(void *camera_instance) {
     *(s16 *)(camera + 0x7E) = 0;
     D_L03_00167074 = 0x78;
 }
+
 #include "sda.h"
+
 extern float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
-void update_smoothed_hero_relative_camera_position(void *camera_instance) __asm__("FUN_L03_002ebb00");
+void         update_smoothed_hero_relative_camera_position(void *camera_instance) __asm__(
+    "FUN_L03_002ebb00");
 
 void update_smoothed_hero_relative_camera_position(void *camera_instance) {
-    char *camera = camera_instance;
-    char *camera_data = *(char **)(camera + 0x70);
-    char *camera_offset_params = camera_data + 0xD0;
-    char *camera_back_direction_data = camera_data + 0xF0;
+    char        *camera = camera_instance;
+    char        *camera_data = *(char **)(camera + 0x70);
+    char        *camera_offset_params = camera_data + 0xD0;
+    char        *camera_back_direction_data = camera_data + 0xF0;
     struct Hero *hero_for_height_update = &hero;
-    float camera_back_offset[4];
-    float gravity_offset[4];
-    float camera_position[4];
+    float        camera_back_offset[4];
+    float        gravity_offset[4];
+    float        camera_position[4];
     struct Hero *hero_ptr;
     if (hero_for_height_update->unk2284 != 0x50 || hero_for_height_update->state.current == 0x11) {
         *(float *)(camera_back_direction_data + 0x34) = hero_for_height_update->motion.pos.f[2];
     }
     fast_vec_normalize(gravity_offset, &hero.gravity_dir, -*(float *)(camera_offset_params + 0x10));
-    fast_vec_normalize(camera_back_offset, camera_back_direction_data, -*(float *)camera_offset_params);
+    fast_vec_normalize(
+        camera_back_offset, camera_back_direction_data, -*(float *)camera_offset_params);
     hero_ptr = &hero;
-    *(float *)camera_data =
-        cam_interp_values(camera_data + 0x10, *(float *)camera_data, hero_ptr->motion.pos.f[0], *(float *)(camera_data + 0x20),
-                            *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
-    *(float *)(camera_data + 4) =
-        cam_interp_values(camera_data + 0x14, *(float *)(camera_data + 4), hero_ptr->motion.pos.f[1], *(float *)(camera_data + 0x20),
-                            *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
-    *(float *)(camera_data + 8) =
-        cam_interp_values(camera_data + 0x18, *(float *)(camera_data + 8), *(float *)(camera_back_direction_data + 0x34), *(float *)(camera_data + 0x20),
-                            *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
+    *(float *)camera_data = cam_interp_values(camera_data + 0x10,
+                                              *(float *)camera_data,
+                                              hero_ptr->motion.pos.f[0],
+                                              *(float *)(camera_data + 0x20),
+                                              *(float *)(camera_data + 0x24),
+                                              *(float *)(camera_data + 0x28));
+    *(float *)(camera_data + 4) = cam_interp_values(camera_data + 0x14,
+                                                    *(float *)(camera_data + 4),
+                                                    hero_ptr->motion.pos.f[1],
+                                                    *(float *)(camera_data + 0x20),
+                                                    *(float *)(camera_data + 0x24),
+                                                    *(float *)(camera_data + 0x28));
+    *(float *)(camera_data + 8) = cam_interp_values(camera_data + 0x18,
+                                                    *(float *)(camera_data + 8),
+                                                    *(float *)(camera_back_direction_data + 0x34),
+                                                    *(float *)(camera_data + 0x20),
+                                                    *(float *)(camera_data + 0x24),
+                                                    *(float *)(camera_data + 0x28));
     fast_vec_add(camera_position, camera_data, gravity_offset);
     fast_vec_add(camera_position, camera_position, camera_back_offset);
     *(float *)(camera + 0x30) = camera_position[0];
     *(float *)(camera + 0x34) = camera_position[1];
     *(float *)(camera + 0x38) = camera_position[2];
 }
+
 #include "qcopy.h"
 
 /* smooths the moby's data floats and rebuilds its orientation axes */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED020), where it is exact; names translated to the US level program. */
 
-extern char camera_look_offset_direction[] __asm__("D_L03_00166F40");
+extern char  camera_look_offset_direction[] __asm__("D_L03_00166F40");
 extern short camera_target_height_stiffness __asm__("D_L03_00161E70") __attribute__((sda));
 extern short camera_target_height_damping __asm__("D_L03_00161E74") __attribute__((sda));
-f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
-                      f32 vel) __asm__("FUN_001ebd78");
+f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__(
+    "FUN_001ebd78");
 
 void rebuild_camera_orientation_axes(void *camera_instance) __asm__("FUN_L03_002ebc58");
 
 void rebuild_camera_orientation_axes(void *camera_instance) {
-    char *camera = camera_instance;
-    char *camera_data = *(char **)(camera + 0x70);
+    char  *camera = camera_instance;
+    char  *camera_data = *(char **)(camera + 0x70);
     float *camera_target_data = (float *)(camera_data + 0xB0);
-    float look_direction[4];
-    float look_point[4];
-    float look_offset[4];
+    float  look_direction[4];
+    float  look_point[4];
+    float  look_offset[4];
     qcopy(look_point, camera_data);
-    camera_target_data[2] = cam_interp_values(camera_data + 0xBC, camera_target_data[2], hero.motion.pos.f[2],
-                             *(float *)&camera_target_height_stiffness, *(float *)&camera_target_height_damping, 0.0f);
+    camera_target_data[2] = cam_interp_values(camera_data + 0xBC,
+                                              camera_target_data[2],
+                                              hero.motion.pos.f[2],
+                                              *(float *)&camera_target_height_stiffness,
+                                              *(float *)&camera_target_height_damping,
+                                              0.0f);
     fast_vec_normalize(look_offset, camera_look_offset_direction, camera_target_data[5]);
     fast_vec_add(look_point, look_offset, look_point);
     fast_vec_sub(look_direction, look_point, camera + 0x30);
@@ -446,24 +504,22 @@ void rebuild_camera_orientation_axes(void *camera_instance) {
     fast_vec_cross(camera + 0x20, camera + 0x10, camera);
 }
 
-
 /* Returns -1 while the game is in one of two blocking states, else 0. */
 int FUN_L03_002ebd70(void) {
     struct Hero *hero_ptr = &hero;
 
-    if ((hero_ptr->unk2284 == 0x50 && hero_ptr->state.current != 0x11) || hero_ptr->state.current == 6) {
+    if ((hero_ptr->unk2284 == 0x50 && hero_ptr->state.current != 0x11) ||
+        hero_ptr->state.current == 6) {
         return -1;
     }
     return 0;
 }
 
-
-
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED178), where it is exact; names translated to the US level program. */
 
 extern void update_smoothed_hero_relative_camera_position(void *) __asm__("FUN_L03_002ebb00");
 extern void rebuild_camera_orientation_axes(void *) __asm__("FUN_L03_002ebc58");
-void noop_main_callback(void *) __asm__("FUN_001e93e8");
+void        noop_main_callback(void *) __asm__("FUN_001e93e8");
 
 void update_camera_position_and_orientation(void *camera) __asm__("FUN_L03_002ebdb0");
 
@@ -474,13 +530,12 @@ void update_camera_position_and_orientation(void *camera) {
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
 
-
 void update_camera_state_outside_clip_volume(char *moby) __asm__("FUN_L03_002ebde8");
 
 void update_camera_state_outside_clip_volume(char *moby) {
     char *entry = (char *)((*(short *)(moby + 0x84) << 5) + D_L03_0015EF50);
     char *sub = *(char **)(entry + 0x1C);
-    int value = *(int *)(sub + 0xC);
+    int   value = *(int *)(sub + 0xC);
     if (value >= 0 && is_point_inside_clip_volume(D_0013E533 + 0xE9D, value) == 0) {
         *(short *)(moby + 0x7E) = 3;
     }

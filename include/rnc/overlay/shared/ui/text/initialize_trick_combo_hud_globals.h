@@ -5,7 +5,7 @@
 
 /* Scalar data read by src/overlays/shared/ui/text/initialize_trick_combo_hud.c. */
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
-extern u8 trick_combo_hud_delay_reload __asm__("D_L05_0015F87C");
+extern u8  trick_combo_hud_delay_reload __asm__("D_L05_0015F87C");
 extern s32 trick_combo_result_text_color __asm__("D_L05_0015F8A0");
 extern s32 trick_combo_pulsing_label_x __asm__("D_L05_0015F8A4");
 extern s32 trick_combo_pulsing_label_y __asm__("D_L05_0015F8A8");

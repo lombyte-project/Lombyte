@@ -1,34 +1,35 @@
 #include "types.h"
 #include "rnc/runtime/core_state.h"
+
 typedef struct {
-    s32 pid;
+    s32   pid;
     void *pkt_table;
-    s32 pkt_table_len;
-    s32 unk0C;
-    s32 unk10;
+    s32   pkt_table_len;
+    s32   unk0C;
+    s32   unk10;
     void *rdata_table;
-    s32 rdata_table_len;
+    s32   rdata_table_len;
     void *client_table;
-    s32 client_table_len;
-    s32 rdata_table_idx;
+    s32   client_table_len;
+    s32   rdata_table_idx;
 } SifRpcData;
 
-extern u8 sif_rpc_request_packets[] __asm__("D_00155000");
-extern u8 sif_rpc_reply_packets[] __asm__("D_00155800");
-extern u8 sif_rpc_client_table[] __asm__("D_00156000");
+extern u8         sif_rpc_request_packets[] __asm__("D_00155000");
+extern u8         sif_rpc_reply_packets[] __asm__("D_00155800");
+extern u8         sif_rpc_client_table[] __asm__("D_00156000");
 extern SifRpcData D_00156800;
-extern void _request_end();
-extern void _request_bind();
-extern void _request_rdata();
-extern void D_0011B138();
-extern s32 DIntr(void);
-extern s32 EnableInterrupts(void);
-extern void sceSifInitCmd(void);
-extern void sceSifAddCmdHandler(u32 cid, void *handler, void *data);
-extern u32 sceSifGetReg(u32 reg);
-extern u32 sceSifSetReg(u32 reg, u32 val);
-extern u32 sceSifSendCmd(u32 cid, void *packet, s32 size, void *src, void *dst, s32 dsize);
-extern u32 sceSifGetSreg(u32 reg) __asm__("func_0011A458");
+extern void       _request_end();
+extern void       _request_bind();
+extern void       _request_rdata();
+extern void       D_0011B138();
+extern s32        DIntr(void);
+extern s32        EnableInterrupts(void);
+extern void       sceSifInitCmd(void);
+extern void       sceSifAddCmdHandler(u32 cid, void *handler, void *data);
+extern u32        sceSifGetReg(u32 reg);
+extern u32        sceSifSetReg(u32 reg, u32 val);
+extern u32        sceSifSendCmd(u32 cid, void *packet, s32 size, void *src, void *dst, s32 dsize);
+extern u32        sceSifGetSreg(u32 reg) __asm__("func_0011A458");
 
 void sceSifInitRpc(u32 mode) {
     s32 *packet;

@@ -5,7 +5,6 @@
 
 extern s32 CreateSema();
 
-
 void _sceFsSemInit(void) {
     struct SemaParam args;
 

@@ -1,19 +1,21 @@
 #include "types.h"
+
 typedef struct {
-    u8 sts;
-    u8 std;
-    u8 mfd;
-    u8 rcyc;
-    u16 express;
-    u16 notify;
-    u16 sqwc;
-    u16 tqwc;
+    u8    sts;
+    u8    std;
+    u8    mfd;
+    u8    rcyc;
+    u16   express;
+    u16   notify;
+    u16   sqwc;
+    u16   tqwc;
     void *rbadr;
-    u32 rbmsk;
+    u32   rbmsk;
 } sceDmaEnv;
-extern u8 dma_sts_control_encodings[] __asm__("D_00153420");
-extern u8 dma_std_control_encodings[] __asm__("D_00153430");
-extern u8 dma_mfd_control_encodings[] __asm__("D_00153440");
+
+extern u8        dma_sts_control_encodings[] __asm__("D_00153420");
+extern u8        dma_std_control_encodings[] __asm__("D_00153430");
+extern u8        dma_mfd_control_encodings[] __asm__("D_00153440");
 extern sceDmaEnv dma_last_applied_environment __asm__("D_001599D8");
 
 s32 sceDmaPutEnv(sceDmaEnv *env) {

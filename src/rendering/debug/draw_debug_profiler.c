@@ -8,51 +8,51 @@
 #include "rnc/math/asm_helpers.h"
 
 typedef struct {
-    u8 pad_0[4];
+    u8  pad_0[4];
     s16 unk4;
 } SpriteFile;
 
-extern u8 D_00100AE0[];
-extern u16 D_0010FA90[];
-extern u8 D_0010FAA0[];
-extern u8 subtitles_enabled __asm__("D_0015EE40") MACRO_ADDR;
-extern s32 screen_overlay_enabled __asm__("D_0015F34C") __attribute__((sda));
-extern s32 screen_color_effect_now __asm__("D_0015F350") __attribute__((sda));
-extern s32 occl_debug_overlay_enabled[2] __asm__("D_0015F370") __attribute__((sda));
-extern u8 render_setup_label[] __asm__("D_0015F380");
-extern u8 sky_draw_label[] __asm__("D_0015F390");
-extern u8 pre_effects_label[] __asm__("D_0015F3A0");
-extern u8 vu_effects_label[] __asm__("D_0015F3B0");
-extern u8 moby_effects_label[] __asm__("D_0015F3C0");
-extern u8 part_draw_label[] __asm__("D_0015F3D0");
-extern u8 post_effects_label[] __asm__("D_0015F3E0");
-extern u8 aa_blur_label[] __asm__("D_0015F3F0");
-extern u8 hud_label[] __asm__("D_0015F3F8");
-extern u8 screen_overlays_label[] __asm__("D_0015F400");
-extern u8 dma_sync_empty_label[] __asm__("D_0015F410");
-extern u8 tie_patch_light_label[] __asm__("D_0015F418");
-extern u8 moby_patch_label[] __asm__("D_0015F428");
-extern s32 draw_enable_mask __asm__("D_0015F434") MACRO_ADDR;
+extern u8             D_00100AE0[];
+extern u16            D_0010FA90[];
+extern u8             D_0010FAA0[];
+extern u8             subtitles_enabled __asm__("D_0015EE40") MACRO_ADDR;
+extern s32            screen_overlay_enabled __asm__("D_0015F34C") __attribute__((sda));
+extern s32            screen_color_effect_now __asm__("D_0015F350") __attribute__((sda));
+extern s32            occl_debug_overlay_enabled[2] __asm__("D_0015F370") __attribute__((sda));
+extern u8             render_setup_label[] __asm__("D_0015F380");
+extern u8             sky_draw_label[] __asm__("D_0015F390");
+extern u8             pre_effects_label[] __asm__("D_0015F3A0");
+extern u8             vu_effects_label[] __asm__("D_0015F3B0");
+extern u8             moby_effects_label[] __asm__("D_0015F3C0");
+extern u8             part_draw_label[] __asm__("D_0015F3D0");
+extern u8             post_effects_label[] __asm__("D_0015F3E0");
+extern u8             aa_blur_label[] __asm__("D_0015F3F0");
+extern u8             hud_label[] __asm__("D_0015F3F8");
+extern u8             screen_overlays_label[] __asm__("D_0015F400");
+extern u8             dma_sync_empty_label[] __asm__("D_0015F410");
+extern u8             tie_patch_light_label[] __asm__("D_0015F418");
+extern u8             moby_patch_label[] __asm__("D_0015F428");
+extern s32            draw_enable_mask __asm__("D_0015F434") MACRO_ADDR;
 extern f32 D_0015F440 MACRO_ADDR;
-extern s32 draw_callback_count __asm__("D_0015F464") __attribute__((sda));
-extern s32 draw_callback2_count __asm__("D_0015F468") __attribute__((sda));
-extern s32 draw_callback3_count __asm__("D_0015F46C") __attribute__((sda));
-extern s32 draw_callback4_count __asm__("D_0015F470") __attribute__((sda));
+extern s32            draw_callback_count __asm__("D_0015F464") __attribute__((sda));
+extern s32            draw_callback2_count __asm__("D_0015F468") __attribute__((sda));
+extern s32            draw_callback3_count __asm__("D_0015F46C") __attribute__((sda));
+extern s32            draw_callback4_count __asm__("D_0015F470") __attribute__((sda));
 extern f32 D_0015F614 MACRO_ADDR;
-extern s32 font_state __asm__("D_0015F620") MACRO_ADDR;
+extern s32            font_state __asm__("D_0015F620") MACRO_ADDR;
 extern s32 D_0015F648 MACRO_ADDR;
-extern SpriteFile *level_sky_effect_data __asm__("D_0016045C");
-extern u8 D_001610C0 MACRO_ADDR;
-extern u8 D_001610C1 MACRO_ADDR;
-extern u8 D_001610C2 MACRO_ADDR;
-extern u8 D_001610C3 MACRO_ADDR;
-extern s32 use_alt_fog[] __asm__("D_001872D4");
-extern s32 D_0018C34C[];
-extern u8 D_001D8EB0[];
-extern u8 D_001E1300[];
-extern u8 tie_light_data[] __asm__("D_001E3200");
-extern u8 tfrag_patch_light_label[] __asm__("D_001E78A0");
-extern u8 shrub_patch_light_label[] __asm__("D_001E78B8");
+extern SpriteFile    *level_sky_effect_data __asm__("D_0016045C");
+extern u8 D_001610C0  MACRO_ADDR;
+extern u8 D_001610C1  MACRO_ADDR;
+extern u8 D_001610C2  MACRO_ADDR;
+extern u8 D_001610C3  MACRO_ADDR;
+extern s32            use_alt_fog[] __asm__("D_001872D4");
+extern s32            D_0018C34C[];
+extern u8             D_001D8EB0[];
+extern u8             D_001E1300[];
+extern u8             tie_light_data[] __asm__("D_001E3200");
+extern u8             tfrag_patch_light_label[] __asm__("D_001E78A0");
+extern u8             shrub_patch_light_label[] __asm__("D_001E78B8");
 
 extern void AppendDmaTag(u32);
 extern void FlushCache(s32);
@@ -79,7 +79,7 @@ extern void draw_fogged_fullscreen_sprite(void *) __asm__("func_001F5138");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
 extern void draw_debug_font(void) __asm__("func_001F79A8");
 extern void append_billboard_batch(void) __asm__("FUN_001f92b0");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s32  truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void aa_blur_pass(void) __asm__("func_001FB680");
 extern void draw_help(void) __asm__("func_001FE980");
@@ -106,15 +106,16 @@ extern void no_op_graphics_callback(void) __asm__("func_00237A70");
 
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 
-extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
+extern s32   pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 extern float sequence_macro __asm__("D_0015F43C") MACRO_ADDR;
-extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
+extern s32   game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
+
 void draw_debug_profiler(void) {
     f32 rcnt1_count_float;
     f32 div;
 
-    if (level_sky_effect_data == NULL || level_sky_effect_data->unk4 != 0 || ((draw_enable_mask ^ 1) & 1) ||
-        draw_config.unk8 == 0 || D_0018C34C[0] != 0) {
+    if (level_sky_effect_data == NULL || level_sky_effect_data->unk4 != 0 ||
+        ((draw_enable_mask ^ 1) & 1) || draw_config.unk8 == 0 || D_0018C34C[0] != 0) {
         append_gif_transfer_packet();
     }
     update_camera_view_matrices();

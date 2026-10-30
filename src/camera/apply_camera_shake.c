@@ -13,7 +13,7 @@ struct CameraShake {
 };
 
 extern struct UpdateCam *cur_cam[] __asm__("D_001870C0");
-extern u8 D_001872B0[];
+extern u8                D_001872B0[];
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
@@ -42,7 +42,8 @@ void apply_camera_shake(struct CameraShake *shake, s32 axis_index) {
             remaining_frames_float = convert_integer_to_float(shake->unk8);
             total_frames_float = convert_integer_to_float(shake->unkC);
             remaining_frame_ratio = remaining_frames_float / total_frames_float;
-            oscillation_cosine = fast_cos(fast_normalize_angle(2.0f * convert_integer_to_float(shake->unk8)));
+            oscillation_cosine =
+                fast_cos(fast_normalize_angle(2.0f * convert_integer_to_float(shake->unk8)));
             val = shake->unk0 * oscillation_cosine * remaining_frame_ratio * remaining_frame_ratio;
             shake->unk4 = val;
             if (axis_index == 0) {

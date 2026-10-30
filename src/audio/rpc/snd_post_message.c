@@ -1,13 +1,14 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/audio/sound_state.h"
+
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
-void snd_post_message(void) __asm__("FUN_0012e9a0");
+void       snd_post_message(void) __asm__("FUN_0012e9a0");
 
 void snd_post_message(void) {
     s32 *batch_count;
-    s32 active_batch_buffer_index;
-    u8 *base;
+    s32  active_batch_buffer_index;
+    u8  *base;
 
     active_batch_buffer_index = snd_batch_index;
     base = (u8 *)&snd_batch_command_buffers;

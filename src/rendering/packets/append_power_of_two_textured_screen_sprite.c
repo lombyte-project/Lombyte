@@ -21,26 +21,38 @@ struct PacketCursor {
 };
 
 struct SpriteDepthState {
-    u8 pad0[0xC];
+    u8  pad0[0xC];
     s32 z_and_fog;
 };
 
-extern struct PacketCursor render_packet_cursor __asm__("D_00160F00");
+extern struct PacketCursor     render_packet_cursor __asm__("D_00160F00");
 extern struct SpriteDepthState hud_state __asm__("D_0019A3E8");
 
-void append_power_of_two_textured_screen_sprite(u64 tex0, s32 screen_x, s32 screen_y,
-                                                s32 texture_width_log2, s32 texture_height_log2,
-                                                s32 screen_width, s32 screen_height, s32 texture_u,
+void append_power_of_two_textured_screen_sprite(u64 tex0,
+                                                s32 screen_x,
+                                                s32 screen_y,
+                                                s32 texture_width_log2,
+                                                s32 texture_height_log2,
+                                                s32 screen_width,
+                                                s32 screen_height,
+                                                s32 texture_u,
                                                 s32 texture_v,
                                                 s32 alpha) __asm__("FUN_00200468");
 
-void append_power_of_two_textured_screen_sprite(u64 texture_register_value, s32 screen_x, s32 screen_y,
-                                                s32 texture_width_log2, s32 texture_height_log2,
-                                                s32 screen_width, s32 screen_height, s32 texture_u,
-                                                s32 texture_v, s32 alpha) {
+void append_power_of_two_textured_screen_sprite(u64 texture_register_value,
+                                                s32 screen_x,
+                                                s32 screen_y,
+                                                s32 texture_width_log2,
+                                                s32 texture_height_log2,
+                                                s32 screen_width,
+                                                s32 screen_height,
+                                                s32 texture_u,
+                                                s32 texture_v,
+
+                                                s32 alpha) {
     struct SpritePacket *tag;
-    u64 *packet_words;
-    s64 packed_first_uv;
+    u64                 *packet_words;
+    s64                  packed_first_uv;
 
     render_packet_cursor.p->dma_word0 = 0x10000005;
     render_packet_cursor.p->dma_addr = 0;

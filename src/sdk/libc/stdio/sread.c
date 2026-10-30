@@ -18,21 +18,23 @@
 /* Source: newlib (UC Berkeley). */
 
 #include "types.h"
+
 struct StdioFile {
-    u8 pad_0[0xC];
+    u8  pad_0[0xC];
     u16 unkC;
     s32 unkE;
-    u8 pad_12[0x3E];
+    u8  pad_12[0x3E];
     s32 unk50;
     s32 unk54;
 };
 
 extern s64 _read_r() __asm__("func_00116108");
+
 s64 __sread(struct StdioFile *fp, s32 destination_buffer, s32 max_bytes) {
     register s32 bytes_read;
 
-    bytes_read =
-        (s32)_read_r(*(s32 *)((u8 *)fp + 0x54), *(s16 *)((u8 *)fp + 0xE), destination_buffer, max_bytes);
+    bytes_read = (s32)_read_r(
+        *(s32 *)((u8 *)fp + 0x54), *(s16 *)((u8 *)fp + 0xE), destination_buffer, max_bytes);
     if (bytes_read >= 0) {
         goto block_2;
     }

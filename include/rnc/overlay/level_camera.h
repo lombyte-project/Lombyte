@@ -10,42 +10,43 @@ struct Moby;
    position, pitch and yaw. A shot sets the two amount/frames pairs (0.03 for
    a few frames), a hard landing sets the first one (0.2 for 40 frames). */
 typedef struct {
-    f32 unk0[12];                   /* 0x000: a 3x4 basis; shots copy it as their launch rotation */
-    u8 pad30[0x110];
-    Vec4 pos;                       /* 0x140 */
-    f32 unk150;
-    f32 pitch;                      /* 0x154 */
-    f32 yaw;                        /* 0x158 */
-    u8 pad15C[4];
-    f32 shake_amount;               /* 0x160 */
-    u8 pad164[4];
-    s32 shake_frames;               /* 0x168 */
-    u8 pad16C[4];
-    f32 shake2_amount;              /* 0x170 */
-    u8 pad174[4];
-    s32 shake2_frames;              /* 0x178 */
-    u8 pad17C[4];
-    struct Moby *unk180;            /* 0x180: the camera moby (its pvars hold the follow camera state) */
-    char *unk184;                   /* 0x184 */
-    u8 pad188[0x38];
-    f32 unk1C0[4];                  /* 0x1C0 */
-    u8 pad1D0[0x84];
-    s32 unk254;                     /* 0x254 */
-    u8 pad258[4];
-    struct Moby *focus_moby;        /* 0x25C: a moby that takes the camera's attention (blarg helicopter); 0: none */
-    s32 focus_time;                 /* 0x260: reset to 0 when focus_moby is set */
-    u8 pad264[0xC];
-    s16 unk270;                     /* 0x270 */
-    u8 pad272;
-    u8 unk273;                      /* 0x273 */
-    u8 pad274[0x14];
-    f32 unk288;                     /* 0x288 */
-    u8 pad28C[8];
-    f32 unk294;                     /* 0x294 */
-    u8 pad298[0xB8];
-    f32 unk350[12];                 /* 0x350: basis the hero's input direction is turned by */
-    u8 pad380[0x10];
-    void (*unk390)(void);           /* 0x390: called each frame by the follow camera when set */
+    f32          unk0[12]; /* 0x000: a 3x4 basis; shots copy it as their launch rotation */
+    u8           pad30[0x110];
+    Vec4         pos; /* 0x140 */
+    f32          unk150;
+    f32          pitch; /* 0x154 */
+    f32          yaw;   /* 0x158 */
+    u8           pad15C[4];
+    f32          shake_amount; /* 0x160 */
+    u8           pad164[4];
+    s32          shake_frames; /* 0x168 */
+    u8           pad16C[4];
+    f32          shake2_amount; /* 0x170 */
+    u8           pad174[4];
+    s32          shake2_frames; /* 0x178 */
+    u8           pad17C[4];
+    struct Moby *unk180; /* 0x180: the camera moby (its pvars hold the follow camera state) */
+    char        *unk184; /* 0x184 */
+    u8           pad188[0x38];
+    f32          unk1C0[4]; /* 0x1C0 */
+    u8           pad1D0[0x84];
+    s32          unk254; /* 0x254 */
+    u8           pad258[4];
+    struct Moby *
+        focus_moby; /* 0x25C: a moby that takes the camera's attention (blarg helicopter); 0: none */
+    s32 focus_time; /* 0x260: reset to 0 when focus_moby is set */
+    u8  pad264[0xC];
+    s16 unk270; /* 0x270 */
+    u8  pad272;
+    u8  unk273; /* 0x273 */
+    u8  pad274[0x14];
+    f32 unk288; /* 0x288 */
+    u8  pad28C[8];
+    f32 unk294; /* 0x294 */
+    u8  pad298[0xB8];
+    f32 unk350[12]; /* 0x350: basis the hero's input direction is turned by */
+    u8  pad380[0x10];
+    void (*unk390)(void); /* 0x390: called each frame by the follow camera when set */
     u8 pad394[0xC];
 } LevelCamera;
 

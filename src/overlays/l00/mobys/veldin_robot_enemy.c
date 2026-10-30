@@ -30,11 +30,11 @@
 #include "rnc/overlay/shared/rendering/spawn_mode_controlled_rotating_alpha_fade_particle.h"
 
 typedef struct {
-    u8 pad0[0x20];
-    u8 state;
-    u8 pad21[0xF];
-    u8 alpha;
-    u8 pad31[0x47];
+    u8   pad0[0x20];
+    u8   state;
+    u8   pad21[0xF];
+    u8   alpha;
+    u8   pad31[0x47];
     s32 *vars;
 } HelpMoby;
 
@@ -44,16 +44,16 @@ typedef struct {
 } HelpTarget;
 
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
-extern u16 D_00141850[];
-extern u16 D_00141968[];
+extern u16  D_00141850[];
+extern u16  D_00141968[];
 
 void update_level_help_controller(HelpMoby *moby) __asm__("FUN_L00_002e0988");
 
 void update_level_help_controller(HelpMoby *moby) {
-    s32 *vars;
-    s32 *target_index_ptr;
-    s32 i;
-    HelpTarget *target_moby;
+    s32         *vars;
+    s32         *target_index_ptr;
+    s32          i;
+    HelpTarget  *target_moby;
     struct Hero *hero_ptr;
 
     vars = moby->vars;
@@ -70,7 +70,8 @@ void update_level_help_controller(HelpMoby *moby) {
         }
     }
     if (D_00141968[0x48 / 2] == 0) {
-        if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[0]) != 0 && D_00141850[0] == 0) {
+        if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[0]) != 0 &&
+            D_00141850[0] == 0) {
             help_request(5, 9);
         }
     }
@@ -102,6 +103,7 @@ void update_level_help_controller(HelpMoby *moby) {
         }
     }
 }
+
 #include "eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
@@ -110,143 +112,149 @@ void update_level_help_controller(HelpMoby *moby) {
 
 typedef union {
     u128 q;
-    f32 f[4];
+    f32  f[4];
 } ElectroidVec;
 
 typedef struct {
-    s32 count;
-    s32 pad4[3];
+    s32          count;
+    s32          pad4[3];
     ElectroidVec pts[1];
 } Path;
 
 typedef struct ElectroidMoby ElectroidMoby;
 
 typedef struct {
-    u8 pad0[0x20];
-    f32 health;
-    s16 unk24;
-    s16 unk26;
-    u8 unk28;
-    u8 unk29;
-    u8 pad2A[0x38 - 0x2A];
-    s32 unk38;
-    u8 pad3C[0x58 - 0x3C];
-    u8 unk58;
-    u8 pad59;
-    u8 unk5A;
-    u8 pad5B[0x60 - 0x5B];
-    u8 unk60[7];
-    u8 unk67;
-    u8 pad68[8];
-    u8 unk70[0x10];
-    f32 unk80;
-    f32 unk84;
-    f32 unk88;
-    f32 unk8C;
-    s32 unk90;
-    s32 unk94;
-    f32 unk98;
-    u8 pad9C[0xAD - 0x9C];
-    u8 unkAD;
-    u8 padAE[0xBC - 0xAE];
-    f32 unkBC;
-    f32 unkC0;
-    f32 unkC4;
-    u8 padC8[8];
-    ElectroidVec targetPos;
-    u8 padE0[0x110 - 0xE0];
+    u8             pad0[0x20];
+    f32            health;
+    s16            unk24;
+    s16            unk26;
+    u8             unk28;
+    u8             unk29;
+    u8             pad2A[0x38 - 0x2A];
+    s32            unk38;
+    u8             pad3C[0x58 - 0x3C];
+    u8             unk58;
+    u8             pad59;
+    u8             unk5A;
+    u8             pad5B[0x60 - 0x5B];
+    u8             unk60[7];
+    u8             unk67;
+    u8             pad68[8];
+    u8             unk70[0x10];
+    f32            unk80;
+    f32            unk84;
+    f32            unk88;
+    f32            unk8C;
+    s32            unk90;
+    s32            unk94;
+    f32            unk98;
+    u8             pad9C[0xAD - 0x9C];
+    u8             unkAD;
+    u8             padAE[0xBC - 0xAE];
+    f32            unkBC;
+    f32            unkC0;
+    f32            unkC4;
+    u8             padC8[8];
+    ElectroidVec   targetPos;
+    u8             padE0[0x110 - 0xE0];
     ElectroidMoby *target;
-    s32 unk114;
-    u8 pad118[0x120 - 0x118];
-    u8 unk120[0x1A0 - 0x120];
-    u128 spawnPos;
-    u8 pad1B0[4];
-    s32 unk1B4;
-    s32 pathIdx;
-    s32 unk1BC;
-    u8 pad1C0[0x1D0 - 0x1C0];
-    f32 turnVel;
-    f32 speed;
-    s16 timer;
-    s16 unk1DA;
-    s32 pathPt;
+    s32            unk114;
+    u8             pad118[0x120 - 0x118];
+    u8             unk120[0x1A0 - 0x120];
+    u128           spawnPos;
+    u8             pad1B0[4];
+    s32            unk1B4;
+    s32            pathIdx;
+    s32            unk1BC;
+    u8             pad1C0[0x1D0 - 0x1C0];
+    f32            turnVel;
+    f32            speed;
+    s16            timer;
+    s16            unk1DA;
+    s32            pathPt;
 } ElectroidVars;
 
 struct ElectroidMoby {
-    u8 pad0[0x10];
-    ElectroidVec pos;
-    u8 state;
-    u8 pad21[0x31 - 0x21];
-    u8 unk31;
-    u8 pad32[2];
-    u16 flags;
-    u8 pad36[0x40 - 0x36];
-    ElectroidVec unk40;
-    u8 pad50[2];
-    u8 unk52;
-    u8 anim;
-    u8 pad54[0x70 - 0x54];
-    u8 unk70;
-    u8 pad71[0x78 - 0x71];
+    u8             pad0[0x10];
+    ElectroidVec   pos;
+    u8             state;
+    u8             pad21[0x31 - 0x21];
+    u8             unk31;
+    u8             pad32[2];
+    u16            flags;
+    u8             pad36[0x40 - 0x36];
+    ElectroidVec   unk40;
+    u8             pad50[2];
+    u8             unk52;
+    u8             anim;
+    u8             pad54[0x70 - 0x54];
+    u8             unk70;
+    u8             pad71[0x78 - 0x71];
     ElectroidVars *vars;
-    u8 pad7C[3];
-    s8 unk7F;
-    u8 pad80[0x94 - 0x80];
-    s32 unk94;
-    u8 pad98[0xA4 - 0x98];
-    u8 unkA4;
-    u8 padA5;
-    u16 unkA6;
-    u8 padA8[0xC0 - 0xA8];
-    ElectroidVec unkC0;
+    u8             pad7C[3];
+    s8             unk7F;
+    u8             pad80[0x94 - 0x80];
+    s32            unk94;
+    u8             pad98[0xA4 - 0x98];
+    u8             unkA4;
+    u8             padA5;
+    u16            unkA6;
+    u8             padA8[0xC0 - 0xA8];
+    ElectroidVec   unkC0;
 };
 
 typedef struct {
-    f32 dir[4];
+    f32            dir[4];
     ElectroidMoby *moby;
-    s32 flags;
-    u8 unk88;
-    u8 unk89;
-    u16 unk8A;
-    f32 unk8C;
-    s32 unk90;
+    s32            flags;
+    u8             unk88;
+    u8             unk89;
+    u16            unk8A;
+    f32            unk8C;
+    s32            unk90;
 } ElectroidProbe;
 
 #include "rnc/overlay/l00/mobys/veldin_robot_enemy_globals.h"
-extern f32 veldin_robot_probe_length_gp __asm__("D_L00_00161BE4") __attribute__((sda));
-s32 D_L00_00161BE8 = 3;
-extern f32 veldin_robot_probe_heading_offset_gp __asm__("D_L00_00161BEC") __attribute__((sda));
+
+extern f32  veldin_robot_probe_length_gp __asm__("D_L00_00161BE4") __attribute__((sda));
+s32         D_L00_00161BE8 = 3;
+extern f32  veldin_robot_probe_heading_offset_gp __asm__("D_L00_00161BEC") __attribute__((sda));
 extern Vec4 D_L00_00166DC0;
-extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
+extern s32  D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
-extern Path *toad_paths[] __asm__("D_L00_001B04B0");
-extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
+extern Path        *toad_paths[] __asm__("D_L00_001B04B0");
+extern Vec4         zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 
 extern void update_veldin_robot_damage_and_targeting() __asm__("FUN_L00_002e1678");
 extern void FUN_L00_0025a120(ElectroidMoby *);
-extern s32 scale_game_frames_s32(s32) __asm__("FUN_001f96f8");
+extern s32  scale_game_frames_s32(s32) __asm__("FUN_001f96f8");
 extern void approach_angle(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_0025be00");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern f32 advance_accelerated_scalar(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_00213f38");
+extern f32  fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern f32  advance_accelerated_scalar(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_00213f38");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern s32 release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
-extern void FUN_L00_00263fd8(ElectroidMoby *, s32, void *, void *, s32, s32, f32, void *, void *,
-                             void *);
+extern f32  fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32  fast_sin(f32) __asm__("FUN_001f9de0");
+extern s32  release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
+extern void
+FUN_L00_00263fd8(ElectroidMoby *, s32, void *, void *, s32, s32, f32, void *, void *, void *);
 extern void update_veldin_robot_effects() __asm__("FUN_L00_002e1aa8");
 
-#define ELECTROID_TURN(m, v, ang, k)                                                               \
-    approach_angle(&(m)->unk40.f[2], ang, &(v)->turnVel, frame_time_sq *(k), frame_time_sq *(k),       \
-                     frame_time * 12.566371f)
-#define ELECTROID_ANIM(m, a, t)                                                                    \
-    if ((m)->anim != (a))                                                                          \
+#define ELECTROID_TURN(m, v, ang, k)   \
+    approach_angle(&(m)->unk40.f[2],   \
+                   ang,                \
+                   &(v)->turnVel,      \
+                   frame_time_sq *(k), \
+                   frame_time_sq *(k), \
+                   frame_time * 12.566371f)
+#define ELECTROID_ANIM(m, a, t) \
+    if ((m)->anim != (a))       \
     blend_moby_animation((m), (a), 0, (t))
 
 extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((sda));
-void veldin_robot_enemy_update(ElectroidMoby *moby) __asm__("FUN_L00_002e0b88");
+void       veldin_robot_enemy_update(ElectroidMoby *moby) __asm__("FUN_L00_002e0b88");
+
 void veldin_robot_enemy_update(ElectroidMoby *moby) {
     enum {
         VELDIN_ROBOT_STATE_INITIALIZE = 0,
@@ -261,21 +269,22 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
     };
     ElectroidVars *vars;
     ElectroidMoby *target;
-    Path *path;
-    ElectroidVec delta;
-    ElectroidVec dir;
-    ElectroidVec mtx[4];
+    Path          *path;
+    ElectroidVec   delta;
+    ElectroidVec   dir;
+    ElectroidVec   mtx[4];
     ElectroidProbe query;
-    ElectroidVec probe;
-    f32 path_step_distance;
-    s32 hit;
+    ElectroidVec   probe;
+    f32            path_step_distance;
+    s32            hit;
 
     vars = moby->vars;
     update_veldin_robot_damage_and_targeting(moby);
     target = vars->target;
     manipulator_set_scale(vars->unk120, 2.5f);
     if (*(u8 *)0x15EDB7 != 0) {
-        update_joint_animation(moby, vars->unk120, 2, frame_scale_sq_gp * 0.03f, frame_scale_sq_gp * 0.3f);
+        update_joint_animation(
+            moby, vars->unk120, 2, frame_scale_sq_gp * 0.03f, frame_scale_sq_gp * 0.3f);
     }
     if (moby->unk31 != 0 && fast_vec_dist(&moby->pos, &D_L00_00166DC0) < 27.0f) {
         FUN_L00_0025a120(moby);
@@ -324,12 +333,16 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         path_step_distance = 0.0f;
         path = toad_paths[vars->pathIdx];
         qcopy(&delta, &path->pts[vars->pathPt]);
-        ELECTROID_TURN(moby, vars,
-                  fast_arc_tan(delta.f[0] - moby->pos.f[0], delta.f[1] - moby->pos.f[1]),
-                  12.566371f);
+        ELECTROID_TURN(moby,
+                       vars,
+                       fast_arc_tan(delta.f[0] - moby->pos.f[0], delta.f[1] - moby->pos.f[1]),
+                       12.566371f);
         fast_vec_sub(&dir, &delta, &moby->pos);
         advance_accelerated_scalar(fast_vec_dist(&moby->pos, &path->pts[path->count - 1]),
-                                   frame_time_sq * 8.0f, frame_time_sq * 16.0f, frame_time * 12.0f, &path_step_distance,
+                                   frame_time_sq * 8.0f,
+                                   frame_time_sq * 16.0f,
+                                   frame_time * 12.0f,
+                                   &path_step_distance,
                                    &vars->speed);
         if (fast_vec_length(&dir) < vars->speed + vars->speed) {
             vars->pathPt++;
@@ -343,7 +356,8 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         break;
     case VELDIN_ROBOT_STATE_FACE_TARGET:
         ELECTROID_TURN(
-            moby, vars,
+            moby,
+            vars,
             fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
             12.566371f);
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 20.0f) {
@@ -358,7 +372,8 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         break;
     case VELDIN_ROBOT_STATE_WAIT_TO_START_COLLISION_PROBES:
         ELECTROID_TURN(
-            moby, vars,
+            moby,
+            vars,
             fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
             12.566371f);
         if (moby->unk70 & 2) {
@@ -370,11 +385,14 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
     case VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES: {
         f32 desired_heading;
 
-        desired_heading = fast_arc_tan(vars->targetPos.f[0] - moby->pos.f[0], vars->targetPos.f[1] - moby->pos.f[1]);
+        desired_heading = fast_arc_tan(vars->targetPos.f[0] - moby->pos.f[0],
+                                       vars->targetPos.f[1] - moby->pos.f[1]);
         if (moby->flags & 0x8000) {
-            desired_heading = fast_add_rotations(desired_heading, veldin_robot_probe_heading_offset_gp);
+            desired_heading =
+                fast_add_rotations(desired_heading, veldin_robot_probe_heading_offset_gp);
         } else {
-            desired_heading = fast_subtract_rotations(desired_heading, veldin_robot_probe_heading_offset_gp);
+            desired_heading =
+                fast_subtract_rotations(desired_heading, veldin_robot_probe_heading_offset_gp);
         }
         ELECTROID_TURN(moby, vars, desired_heading, 1.5707964f);
         build_moby_bone_transform(moby, 0, mtx);
@@ -426,7 +444,8 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
     }
     case VELDIN_ROBOT_STATE_WAIT_TO_RETURN_TO_FACE_TARGET:
         ELECTROID_TURN(
-            moby, vars,
+            moby,
+            vars,
             fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
             12.566371f);
         if (moby->unk70 & 2) {
@@ -444,12 +463,36 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         if (mine_fall(moby, vars->unk70) & 0x140) {
             cart_burst(moby, &moby->pos, -1, 0.75f, 13.0f);
             spawn_moby_break_fragments(moby, 0x7AB, 1, 0x7AB, 1, 4, 0);
-            FUN_L00_00263fd8(moby, 0x78D, &moby->pos, &moby->unk40, 0, 0, 0.0f, &zero_vector,
-                             &zero_vector, &zero_vector);
-            FUN_L00_00263fd8(moby, 0x78E, &moby->pos, &moby->unk40, 0, 0, 0.0f, &zero_vector,
-                             &zero_vector, &zero_vector);
-            FUN_L00_00263fd8(moby, 0x78F, &moby->pos, &moby->unk40, 0, 0, 0.0f, &zero_vector,
-                             &zero_vector, &zero_vector);
+            FUN_L00_00263fd8(moby,
+                             0x78D,
+                             &moby->pos,
+                             &moby->unk40,
+                             0,
+                             0,
+                             0.0f,
+                             &zero_vector,
+                             &zero_vector,
+                             &zero_vector);
+            FUN_L00_00263fd8(moby,
+                             0x78E,
+                             &moby->pos,
+                             &moby->unk40,
+                             0,
+                             0,
+                             0.0f,
+                             &zero_vector,
+                             &zero_vector,
+                             &zero_vector);
+            FUN_L00_00263fd8(moby,
+                             0x78F,
+                             &moby->pos,
+                             &moby->unk40,
+                             0,
+                             0,
+                             0.0f,
+                             &zero_vector,
+                             &zero_vector,
+                             &zero_vector);
             mark_moby_for_removal(moby);
             return;
         }
@@ -457,40 +500,44 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
     }
     update_veldin_robot_effects(moby);
 }
+
 #include "eetypes.h"
 #include "qcopy.h"
 
 typedef struct {
-    u8 pad0[0x10];
+    u8           pad0[0x10];
     ElectroidVec pos;
 } ElectroidHit;
 
-extern s16 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern s16  scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00257470(ElectroidMoby *, s32, s32);
-extern void hit_reaction(ElectroidMoby *, ElectroidHit *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
+extern void
+hit_reaction(ElectroidMoby *, ElectroidHit *, void *, s32, s32 *, f32 *, s32, s32) __asm__(
+    "FUN_L00_0025a478");
 extern void trooper_knockback_arc(ElectroidVec *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
-extern void trooper_start_knockback(ElectroidMoby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
+extern void
+trooper_start_knockback(ElectroidMoby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(ElectroidMoby *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(ElectroidMoby *, void *) __asm__("FUN_L00_0025d538");
-extern s32 select_moby_combat_target(ElectroidMoby *, f32, void *) __asm__("FUN_L00_0025fcb8");
+extern s32  select_moby_combat_target(ElectroidMoby *, f32, void *) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_0025ff38(ElectroidMoby *, void *, s32, s32, void *, s32, f32);
-extern f32 veldin_robot_default_target_range_gp __asm__("D_L00_00161BD0") __attribute__((sda));
-extern f32 veldin_robot_knockback_xy_scale_gp __asm__("D_L00_00161BDC") __attribute__((sda));
-extern f32 veldin_robot_knockback_z_scale_gp __asm__("D_L00_00161BE0") __attribute__((sda));
+extern f32  veldin_robot_default_target_range_gp __asm__("D_L00_00161BD0") __attribute__((sda));
+extern f32  veldin_robot_knockback_xy_scale_gp __asm__("D_L00_00161BDC") __attribute__((sda));
+extern f32  veldin_robot_knockback_z_scale_gp __asm__("D_L00_00161BE0") __attribute__((sda));
 
 void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
     ElectroidVars *vars;
-    void *anim;
-    ElectroidHit *coll;
-    Path *path;
+    void          *anim;
+    ElectroidHit  *coll;
+    Path          *path;
     ElectroidMoby *candidate_target;
-    ElectroidVec hit_position;
-    struct Hero *hero_ptr;
-    s32 hit;
-    f32 dmg;
-    f32 angle;
-    f32 unused;
-    f32 range;
+    ElectroidVec   hit_position;
+    struct Hero   *hero_ptr;
+    s32            hit;
+    f32            dmg;
+    f32            angle;
+    f32            unused;
+    f32            range;
 
     vars = moby->vars;
     if (moby->state == 0) {
@@ -534,7 +581,8 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
             vars->unk8C = veldin_robot_knockback_z_scale_gp * frame_time * 0.5f;
             hit_position.q = coll->pos.q;
             trooper_knockback_arc(&hit_position, &unused, &vars->unk88, &vars->unk8C);
-            trooper_start_knockback(moby, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
+            trooper_start_knockback(
+                moby, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
             vars->unkC4 = vars->unkC0 = -1.0f;
             moby->state = 7;
             vars->unk67 = 0xFA;
@@ -565,7 +613,8 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
     }
     if (vars->unk1BC >= 0) {
         candidate_target = (ElectroidMoby *)(moby_table + (vars->unk1BC << 8));
-        if (candidate_target == 0 || candidate_target->state == 0xFE || candidate_target->state == 0xFD) {
+        if (candidate_target == 0 || candidate_target->state == 0xFE ||
+            candidate_target->state == 0xFD) {
             vars->unk1BC = -1;
         } else {
             range = vector_distance_xy(&moby->pos, &candidate_target->pos);
@@ -577,29 +626,30 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         }
     }
 }
+
 typedef struct {
-    u8 pad0[0x10];
+    u8  pad0[0x10];
     f32 unk10;
-    u8 pad14[2];
+    u8  pad14[2];
     s16 unk16;
     s32 color;
 } SparkTail;
 
 typedef struct {
-    u8 pad0[0xA];
-    s16 life;
-    f32 unkC;
-    u8 pad10[0x10];
+    u8        pad0[0xA];
+    s16       life;
+    f32       unkC;
+    u8        pad10[0x10];
     SparkTail tail;
 } SparkPart;
 
 typedef struct {
-    u8 pad0[0x1C0];
+    u8  pad0[0x1C0];
     f32 pos[4];
 } SparkVars;
 
 typedef struct {
-    u8 pad0[0x78];
+    u8         pad0[0x78];
     SparkVars *vars;
 } SparkMoby;
 
@@ -609,22 +659,24 @@ void update_veldin_robot_effects(SparkMoby *moby) {
     SparkVars *vars;
     SparkPart *particle;
     SparkTail *particle_tail;
-    f32 *pos;
-    f32 particle_initial_velocity[4];
-    s32 i;
-    s32 life;
+    f32       *pos;
+    f32        particle_initial_velocity[4];
+    s32        i;
+    s32        life;
 
     vars = moby->vars;
     pos = vars->pos;
     moby_point_position(moby, 1, pos);
     vars->pos[2] -= 0.333f;
     random_spherical_offset(particle_initial_velocity, 0.005f, 0.03f);
-    particle = spawn_mode_controlled_rotating_alpha_fade_particle(pos, particle_initial_velocity, 0x7F, moby);
+    particle = spawn_mode_controlled_rotating_alpha_fade_particle(
+        pos, particle_initial_velocity, 0x7F, moby);
     if (particle != 0) {
         particle->unkC = random_float_between(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
-        particle = spawn_mode_controlled_rotating_alpha_fade_particle(vars->pos, &zero_vector, 0x7F, moby);
+        particle =
+            spawn_mode_controlled_rotating_alpha_fade_particle(vars->pos, &zero_vector, 0x7F, moby);
         if (particle != 0) {
             particle_tail = &particle->tail;
             if (i == 2 && random_integer_below(8) == 0) {
@@ -641,53 +693,54 @@ void update_veldin_robot_effects(SparkMoby *moby) {
     }
     add_draw_callback((s32)draw_veldin_robot_effect_quad, (s32)moby);
 }
+
 typedef union {
     u128 q;
-    f32 f[4];
+    f32  f[4];
 } GlowVec;
 
 typedef struct {
     GlowVec corner[4];
-    u32 color[4];
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    f32 unk5C;
-    f32 unk60;
-    s32 unk64;
-    f32 unk68;
-    f32 unk6C;
-    s64 unk70;
-    s64 tex;
-    s64 unk80;
-    s64 unk88;
+    u32     color[4];
+    s32     unk50;
+    s32     unk54;
+    s32     unk58;
+    f32     unk5C;
+    f32     unk60;
+    s32     unk64;
+    f32     unk68;
+    f32     unk6C;
+    s64     unk70;
+    s64     tex;
+    s64     unk80;
+    s64     unk88;
 } GlowQuad;
 
 typedef struct {
-    u8 pad0[0x1C0];
+    u8      pad0[0x1C0];
     GlowVec pos;
 } GlowVars;
 
 typedef struct {
-    u8 pad0[0x78];
+    u8        pad0[0x78];
     GlowVars *vars;
 } GlowMoby;
 
 extern GlowVec g_debug_camera __asm__("D_L00_00166DC0");
 extern GlowVec l00_veldin_robot_effect_quad_template_corners[4] __asm__("D_L00_001E6CA0");
-extern void fast_vec_scale(f32, void *, void *) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+extern void    fast_vec_scale(f32, void *, void *) __asm__("FUN_001f9a68");
+extern void    fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void    draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
+extern void    fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern s64     get_effect_texture(s32) __asm__("FUN_001f44b8");
 
 void draw_veldin_robot_effect_quad(GlowMoby *moby) {
     GlowQuad quad;
-    GlowVec quad_transform[4];
+    GlowVec  quad_transform[4];
     GlowVec *template_corner;
     GlowVec *quad_corner;
-    s32 i;
-    f32 one;
+    s32      i;
+    f32      one;
 
     qcopy(&quad_transform[3], &moby->vars->pos);
     one = 1.0f;
@@ -720,6 +773,7 @@ void draw_veldin_robot_effect_quad(GlowMoby *moby) {
     }
     draw_geometry_quad(&quad, quad_transform, 0);
 }
+
 typedef struct {
     u8 pad0[0x20];
     u8 state;
@@ -727,8 +781,8 @@ typedef struct {
     u8 alpha;
 } SlotMoby;
 
-extern int beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
-extern int beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
+extern int  beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern int  beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
 extern void release_beam_slot(s32) __asm__("FUN_L00_002e20f8");
 extern void update_slot_panes_and_effects(s32, s32) __asm__("FUN_L00_002e2250");
 extern void draw_active_beam_slots() __asm__("FUN_L00_002e2af0");
@@ -773,6 +827,7 @@ void update_beam_slot_controller(SlotMoby *slot_controller) {
         break;
     }
 }
+
 typedef struct {
     u8 pad0[0x20];
     u8 state;
@@ -781,35 +836,36 @@ typedef struct {
 } FlockMoby;
 
 typedef struct {
-    u8 pad0[0x30];
-    s32 phase;
-    s32 level;
-    u8 pad38[0x178 - 0x38];
+    u8    pad0[0x30];
+    s32   phase;
+    s32   level;
+    u8    pad38[0x178 - 0x38];
     void *mobys[4];
 } FlockGame;
 
 typedef struct {
-    u8 pad0[4];
+    u8  pad0[4];
     s32 unk4;
-    u8 pad8[2];
-    u8 unkA;
-    u8 unkB;
+    u8  pad8[2];
+    u8  unkA;
+    u8  unkB;
 } FlockTail;
 
 typedef struct {
-    u8 pad0[3];
-    u8 unk3;
-    u8 pad4[4];
-    u8 unk8;
-    u8 pad9;
-    s16 unkA;
-    u8 padC[0x20 - 0xC];
+    u8        pad0[3];
+    u8        unk3;
+    u8        pad4[4];
+    u8        unk8;
+    u8        pad9;
+    s16       unkA;
+    u8        padC[0x20 - 0xC];
     FlockTail tail;
 } FlockPart;
 
 extern FlockGame D_L00_0016C860;
 
-extern FlockPart *spawn_puff(void *, s32, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_0026d000");
+extern FlockPart *
+spawn_puff(void *, s32, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_0026d000");
 
 void update_phase_effect_controller(FlockMoby *moby) __asm__("FUN_L00_002e3800");
 
@@ -818,14 +874,14 @@ void update_phase_effect_controller(FlockMoby *moby) {
         FLOCK_EFFECT_STATE_INITIALIZE = 0,
         FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS = 1
     };
-    f32 effect_spawn_position[4];
-    void *effect_source_moby;
+    f32        effect_spawn_position[4];
+    void      *effect_source_moby;
     FlockPart *part;
-    s32 color;
-    s32 random_magnitude;
-    s32 i;
-    s32 phase;
-    s32 phase_effect_moby_index;
+    s32        color;
+    s32        random_magnitude;
+    s32        i;
+    s32        phase;
+    s32        phase_effect_moby_index;
     FlockTail *tail;
 
     switch (moby->state) {
@@ -851,12 +907,23 @@ void update_phase_effect_controller(FlockMoby *moby) {
             if (effect_source_moby != 0 && scale_game_frames_s32(150) <= D_L00_0016C860.level &&
                 D_L00_0016C860.level <= scale_game_frames_s32(220)) {
                 moby_point_position(effect_source_moby, 0, effect_spawn_position);
-                draw_trail(effect_spawn_position, effect_spawn_position, &zero_vector, 120000.0f, 50000.0f);
+                draw_trail(effect_spawn_position,
+                           effect_spawn_position,
+                           &zero_vector,
+                           120000.0f,
+                           50000.0f);
                 for (i = 0; i < 10; i++) {
                     color = (random_int_between(0x40, 0x80) << 24) | 0x787878;
                     random_magnitude = random_int_between(0, 4);
-                    part = spawn_puff(effect_spawn_position, random_integer_below(2) == 0 ? random_magnitude : -random_magnitude,
-                                            &zero_vector, color, 0.75f, 1.0f, 1.03f, 120000.0f);
+                    part = spawn_puff(effect_spawn_position,
+                                      random_integer_below(2) == 0 ? random_magnitude
+                                                                   : -random_magnitude,
+                                      &zero_vector,
+                                      color,
+                                      0.75f,
+                                      1.0f,
+                                      1.03f,
+                                      120000.0f);
                     if (part != 0) {
                         part->unk3 = 0x44;
                         tail = &part->tail;

@@ -11,22 +11,23 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/ui/help/try_set_help_message.h"
+
 #ifndef __attribute__((section(".data")))
 #endif
 #ifndef __attribute__((section(".sdata")))
 #endif
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L16_002e4be0");
-extern void initialize_taxi_stop_state(void *) __asm__("FUN_L16_002e4900");
+extern void  initialize_taxi_stop_state(void *) __asm__("FUN_L16_002e4900");
 extern char *D_L16_001601AC_m_19510 __asm__("D_L16_001600EC");
-void transfer_moby_placement_to_linked_moby(void *moby_v) __asm__("FUN_L16_002e4b58");
+void         transfer_moby_placement_to_linked_moby(void *moby_v) __asm__("FUN_L16_002e4b58");
 
 void transfer_moby_placement_to_linked_moby(void *moby_v) {
     struct Moby *moby = moby_v;
-    char *data = ((char *)moby->pvars);
-    char *spawn = func_L05_0031AAA8_19510(moby, *(short *)(data + 0xae));
-    char *position;
+    char        *data = ((char *)moby->pvars);
+    char        *spawn = func_L05_0031AAA8_19510(moby, *(short *)(data + 0xae));
+    char        *position;
     if (spawn != 0) {
-        int index;
+        int   index;
         char *slot = data;
         char *entry;
         position = spawn + 0x10;
@@ -39,22 +40,24 @@ void transfer_moby_placement_to_linked_moby(void *moby_v) {
     }
     *(short *)(data + 0xac) = *(unsigned short *)(data + 0xae);
 }
+
 /* Finds the listed moby whose data id at 0xAC matches, or returns null. */
 extern unsigned short *D_L16_001ABCC0_4be0[] __asm__("D_L16_001ABCC0");
 
 typedef struct {
-    char pad[0x78];
+    char  pad[0x78];
     char *data;
-    char pad2[0x84];
+    char  pad2[0x84];
 } M_4be0;
 
 extern char *D_L16_0015FFD8_gp __asm__("D_L16_0015FFD8") __attribute__((sda));
-char *find_group_moby_by_data_id(struct Moby *group_source_moby, int id) __asm__("FUN_L16_002e4be0");
+char        *find_group_moby_by_data_id(struct Moby *group_source_moby,
+                                        int          id) __asm__("FUN_L16_002e4be0");
 
 char *find_group_moby_by_data_id(struct Moby *group_source_moby, int id) {
     unsigned short *moby_index_entry = D_L16_001ABCC0_4be0[group_source_moby->group];
-    char *pool;
-    int moby_pool_index;
+    char           *pool;
+    int             moby_pool_index;
     if (moby_index_entry != 0) {
         pool = D_L16_0015FFD8_gp;
         do {
@@ -70,28 +73,36 @@ found:
 }
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
 
-extern float advance_accelerated_scalar(float, float, float, float, float *,
-                                        float *) __asm__("FUN_00213f38");
+extern float
+advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
 int advance_moby_path(struct Moby *moby) __asm__("FUN_L16_002e4c40");
 
 int advance_moby_path(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
-    int *path;
-    advance_accelerated_scalar(1.0f, *(float *)(moby_data + 0xC8), *(float *)(moby_data + 0xC8),
-                               *(float *)(moby_data + 0xc4), (float *)(moby_data + 0xb0), (float *)(moby_data + 0xb4));
+    int  *path;
+    advance_accelerated_scalar(1.0f,
+                               *(float *)(moby_data + 0xC8),
+                               *(float *)(moby_data + 0xC8),
+                               *(float *)(moby_data + 0xc4),
+                               (float *)(moby_data + 0xb0),
+                               (float *)(moby_data + 0xb4));
     path = *(int **)(moby_data + 0xa4);
-    sample_camera_path(path, 0, moby_data + 0x60, (float *)(moby_data + 0x70), 0,
+    sample_camera_path(path,
+                       0,
+                       moby_data + 0x60,
+                       (float *)(moby_data + 0x70),
+                       0,
                        *(float *)(moby_data + 0xb0) * (float)(*path - 1));
     return *(float *)(moby_data + 0xb0) >= 1.0f;
 }
+
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 /* Plays the sound that goes with the moby's current variant. */
-
 
 void request_moby_help_message(struct Moby *moby) __asm__("FUN_L16_002e4cd8");
 
@@ -119,7 +130,6 @@ void request_moby_help_message(struct Moby *moby) {
 }
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 
-
 void apply_moby_wobble(struct Moby *moby) __asm__("FUN_L16_002e4d88");
 
 void apply_moby_wobble(struct Moby *moby) {
@@ -139,8 +149,7 @@ void apply_moby_wobble(struct Moby *moby) {
     moby->rot.y = wobble_value;
     wobble_phase = fast_add_rotations(*(float *)(moby_data + 0xc0), wobble_phase_step);
     *(float *)(moby_data + 0xc0) = wobble_phase;
-    moby->rot.x =
-        fast_add_rotations(moby->rot.x, fast_sin(wobble_phase) * 0.08726646f);
+    moby->rot.x = fast_add_rotations(moby->rot.x, fast_sin(wobble_phase) * 0.08726646f);
     if (moby->rot.x > 0.17453292f)
         moby->rot.x = 0.17453292f;
     else if (moby->rot.x < -0.17453292f)
@@ -158,36 +167,43 @@ void transform_moby_table_entry_vectors(struct Moby *moby) __asm__("FUN_L16_002e
 
 void transform_moby_table_entry_vectors(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int table_entry_index = *(int *)(data + 0xa0);
+    int   table_entry_index = *(int *)(data + 0xa0);
     if (table_entry_index != -1) {
         char *table_entry = D_L16_001B0930[table_entry_index];
         if (*(int *)table_entry == 7) {
-            int i;
+            int          i;
             struct Hero *hero_state;
             for (i = 0; i < 7; i++) {
-                transform_vector_by_basis(table_entry + 0x10 + i * 16, table_entry_source_vectors + i * 16, &moby->rot_row0);
+                transform_vector_by_basis(table_entry + 0x10 + i * 16,
+                                          table_entry_source_vectors + i * 16,
+                                          &moby->rot_row0);
                 fast_vec_add(table_entry + 0x10 + i * 16, table_entry + 0x10 + i * 16, &moby->pos);
             }
             hero_state = &hero;
-            *(unsigned short *)&hero_state->path_constrain_pending = *(unsigned short *)(data + 0xa0);
+            *(unsigned short *)&hero_state->path_constrain_pending =
+                *(unsigned short *)(data + 0xa0);
         }
     }
 }
 /* Sets up the draw state, then draws the three entries of the level's table. */
 
-extern char D_L16_001DF2D0[] NOT_SDA;
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
+extern char  D_L16_001DF2D0[] NOT_SDA;
+extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float D_L16_001DE720[];
 extern float D_L16_001DEA90[];
-float *D_L16_00161FA0[2] = {D_L16_001DE720, D_L16_001DEA90};
+float       *D_L16_00161FA0[2] = {D_L16_001DE720, D_L16_001DEA90};
+
 extern float D_L16_001DEAF8[];
 extern float D_L16_001DF020[];
-float *D_L16_00161FA8[2] = {D_L16_001DEAF8, D_L16_001DF020};
+float       *D_L16_00161FA8[2] = {D_L16_001DEAF8, D_L16_001DF020};
+
 extern float D_L16_001DF0C0[];
 extern float D_L16_001DF278[];
-float *D_L16_00161FB0[2] = {D_L16_001DF0C0, D_L16_001DF278};
+float       *D_L16_00161FB0[2] = {D_L16_001DF0C0, D_L16_001DF278};
+
 extern void FUN_L00_001fde98(int, int, int, char *, int);
-extern void compute_level16_reflection_map_coordinates(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
+extern void
+compute_level16_reflection_map_coordinates(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 
 void draw_level16_visible_textured_batches(void) __asm__("FUN_L16_002e97a0");
 
@@ -197,7 +213,7 @@ void draw_level16_visible_textured_batches(void) {
     int *unused_reflection_argument_tables = (int *)D_L16_00161FA0;
     int *input_vector_tables = (int *)D_L16_00161FA8;
     int *packet_word_tables = (int *)D_L16_00161FB0;
-    int i;
+    int  i;
 
     vu1_add_g_sregister(6, get_effect_texture(0x29));
     vu1_add_g_sregister(0x42, 0x4000000064);
@@ -206,8 +222,16 @@ void draw_level16_visible_textured_batches(void) {
     font_queue_vu_state();
     for (i = 0; i < 0x2; i++) {
         if (fast_bsphere_check(D_L16_001DF2B0[i], 512.0f) != -1) {
-            compute_level16_reflection_map_coordinates(element_counts[i], input_vector_tables[i], packet_vector_tables[i], unused_reflection_argument_tables[i], D_L16_001DF2D0);
-            FUN_L00_001fde98(element_counts[i], packet_vector_tables[i], packet_word_tables[i], D_L16_001DF2D0, 1);
+            compute_level16_reflection_map_coordinates(element_counts[i],
+                                                       input_vector_tables[i],
+                                                       packet_vector_tables[i],
+                                                       unused_reflection_argument_tables[i],
+                                                       D_L16_001DF2D0);
+            FUN_L00_001fde98(element_counts[i],
+                             packet_vector_tables[i],
+                             packet_word_tables[i],
+                             D_L16_001DF2D0,
+                             1);
         }
     }
 }

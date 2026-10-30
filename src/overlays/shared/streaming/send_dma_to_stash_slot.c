@@ -2,24 +2,29 @@
 #include "types.h"
 #include "asm.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/stash_00295010.c: func_L00_00295010), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char *base;
-    int limit;
-    int unk8;
-    int unkC;
+    int   limit;
+    int   unk8;
+    int   unkC;
 } StashSlot;
 
 extern StashSlot l00_stash_slots[] __asm__("D_L00_001C12D8");
-extern s32 sceSifSetDma(struct sceSifDmaData *transfer, s32 priority);
+extern s32       sceSifSetDma(struct sceSifDmaData *transfer, s32 priority);
 
 /* SIF-DMAs size quadwords from slot base + off; -3 for a bad or empty slot, -1 past its limit. */
-int send_dma_to_stash_slot(int dma_source_address, unsigned int slot, int slot_offset_quadwords, int size) __asm__("FUN_L00_00293d38");
+int send_dma_to_stash_slot(int          dma_source_address,
+                           unsigned int slot,
+                           int          slot_offset_quadwords,
+                           int          size) __asm__("FUN_L00_00293d38");
 
-int send_dma_to_stash_slot(int dma_source_address, unsigned int slot, int slot_offset_quadwords, int size) {
+int send_dma_to_stash_slot(int          dma_source_address,
+                           unsigned int slot,
+                           int          slot_offset_quadwords,
+
+                           int size) {
     int req[4];
     int slot_limit_quadwords;
     if (slot >= 0x40)

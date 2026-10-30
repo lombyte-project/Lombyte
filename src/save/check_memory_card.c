@@ -1,30 +1,30 @@
 #include "types.h"
 
-
 struct McDirBlk {
-    u8 pad_0[0x4];
+    u8  pad_0[0x4];
     s32 unk4;
-    u8 pad_8[0xB4];
+    u8  pad_8[0xB4];
     s32 unkBC;
 };
 
 #include "rnc/save/memory_card_state.h"
+
 extern char D_0013D1D0[];
-extern u8 memory_card_info_sync_outputs[] __asm__("D_0013D348");
-extern s32 sceMcGetInfo(s32, s32, s32, s32, s32);
-extern s32 sceMcSync(s32, s32 *, s32 *);
-extern s32 sceMcGetDir(s32, s32, s8 *, s32, s32, s32);
-extern s32 sceGsSyncV(s32);
+extern u8   memory_card_info_sync_outputs[] __asm__("D_0013D348");
+extern s32  sceMcGetInfo(s32, s32, s32, s32, s32);
+extern s32  sceMcSync(s32, s32 *, s32 *);
+extern s32  sceMcGetDir(s32, s32, s8 *, s32, s32, s32);
+extern s32  sceGsSyncV(s32);
 
 s32 check_memory_card(void) __asm__("FUN_00209168");
 
 s32 check_memory_card(void) {
-    s32 card_type;
-    s32 free_blocks;
-    s32 format;
-    s32 cmd_code;
-    s32 result;
-    s32 *blk;
+    s32              card_type;
+    s32              free_blocks;
+    s32              format;
+    s32              cmd_code;
+    s32              result;
+    s32             *blk;
     struct McDirBlk *card_state;
 
     blk = &memory_card_state.card[0].port;

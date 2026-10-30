@@ -11,19 +11,21 @@
 
 extern char *D_L00_0015FFD8_25fcb8 __asm__("D_L02_0015FFD8");
 
-extern short D_L02_001B0E30[] NOT_SDA;
-extern char *D_L02_001D1B80[] NOT_SDA;
+extern short       D_L02_001B0E30[] NOT_SDA;
+extern char       *D_L02_001D1B80[] NOT_SDA;
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
-int select_moby_target_goal(char *comparison_source, char *output_data, float best) __asm__("FUN_L02_00261c80");
+int                select_moby_target_goal(char *comparison_source,
+                                           char *output_data,
+                                           float best) __asm__("FUN_L02_00261c80");
 
 int select_moby_target_goal(char *comparison_source, char *output_data, float best) {
     struct Hero *hero = &hero_lui;
-    char *selected_moby;
-    char *candidate_moby;
-    int selection_status;
-    int i;
-    int j;
-    float candidate_metric;
+    char        *selected_moby;
+    char        *candidate_moby;
+    int          selection_status;
+    int          i;
+    int          j;
+    float        candidate_metric;
 
     selected_moby = ((char *)hero->moby);
     selection_status = 0;

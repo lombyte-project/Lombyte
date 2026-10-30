@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
 
-extern u8 image_buffer_alignment_error_format[] __asm__("D_00153A58");
+extern u8  image_buffer_alignment_error_format[] __asm__("D_00153A58");
 extern s32 _Error1();
 extern s32 _decodeOrSkip();
 extern s32 _nextHeader();
@@ -15,9 +15,9 @@ s32 _getpic(struct sceMpeg *mpeg) {
         MPEG_BIDIRECTIONAL_PICTURE = 3,
         MPEG_DC_INTRA_PICTURE = 4
     };
-    s32 image_addr;
-    s32 status;
-    u32 start_code;
+    s32                 image_addr;
+    s32                 status;
+    u32                 start_code;
     struct MpegDecoder *decoder;
 
     start_code = 1;

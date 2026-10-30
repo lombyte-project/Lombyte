@@ -4,11 +4,13 @@
 
 extern u8 moby_draw_callback_label[] __asm__("D_0015FEE0");
 extern u8 moby_skin_callback_label[] __asm__("D_0015FEF0");
+
 #include "rnc/rendering/mobys/draw_mobys_clean_up_globals.h"
+
 extern void noop_core_callback() __asm__("func_001F21B0");
-extern s32 noop_core_callback_secondary() __asm__("func_001F21B8");
-extern s32 dma_moby_textures() __asm__("FUN_0020cdf0");
-extern s32 configure_graphics_setup_dma_chain() __asm__("FUN_0020d060");
+extern s32  noop_core_callback_secondary() __asm__("func_001F21B8");
+extern s32  dma_moby_textures() __asm__("FUN_0020cdf0");
+extern s32  configure_graphics_setup_dma_chain() __asm__("FUN_0020d060");
 extern void process_moby_anim_data() __asm__("FUN_0020d1a8");
 extern void FUN_002116b8();
 

@@ -16,11 +16,11 @@ typedef struct {
 } MenuItem;
 
 typedef struct {
-    u8 pad0[0x4];
+    u8  pad0[0x4];
     u16 unk4;
-    u8 pad6[0x2];
-    u8 unk8;
-    u8 pad9[0x2D];
+    u8  pad6[0x2];
+    u8  unk8;
+    u8  pad9[0x2D];
     s16 unk36;
     s32 unk38;
     u8 *unk3C;
@@ -28,9 +28,9 @@ typedef struct {
 
 typedef struct {
     s32 unk0;
-    u8 pad4[0x10];
+    u8  pad4[0x10];
     u16 unk14;
-    u8 pad16[0x2];
+    u8  pad16[0x2];
 } Weapon;
 
 typedef struct {
@@ -38,26 +38,31 @@ typedef struct {
 } Suffixes;
 
 #include "rnc/ui/menus/system/process_menu_entry_globals.h"
-extern s32 menu_help_hud_item_gp __asm__("D_00160070") __attribute__((sda));
-extern s32 world_update_time_macro __asm__("D_0015F60C") MACRO_ADDR;
-extern s32 D_001993C0[];
+
+extern s32      menu_help_hud_item_gp __asm__("D_00160070") __attribute__((sda));
+extern s32      world_update_time_macro __asm__("D_0015F60C") MACRO_ADDR;
+extern s32      D_001993C0[];
 extern Suffixes menu_bolt_threshold_thousands_separators __asm__("D_001E8680");
-extern char help_text_integer_placeholder[] __asm__("D_00160088");
-extern char bolt_threshold_number_format[] __asm__("D_00160090");
-extern Weapon D_001DFFB0[];
+extern char     help_text_integer_placeholder[] __asm__("D_00160088");
+extern char     bolt_threshold_number_format[] __asm__("D_00160090");
+extern Weapon   D_001DFFB0[];
+
 #include "rnc/game/item_state.h"
 #include "rnc/game/game_globals.h"
-extern void noop_callback_n(s32) __asm__("func_001E9458");
-extern void noop_callback_o(s32) __asm__("func_001E9460");
+
+extern void  noop_callback_n(s32) __asm__("func_001E9458");
+extern void  noop_callback_o(s32) __asm__("func_001E9460");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char *strcpy(char *, const char *);
 extern char *FindSubstring(char *, char *);
-extern s32 sprintf(char *, const char *, ...);
-extern void copy_text_to_shared_buffer(char *) __asm__("func_001FF658");
+extern s32   sprintf(char *, const char *, ...);
+extern void  copy_text_to_shared_buffer(char *) __asm__("func_001FF658");
 
 #define SCRATCH ((char *)0x70000000)
 
-void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_link) __asm__("FUN_00216c48");
+void process_menu_entry(void *callback_context,
+                        Menu *menu,
+                        s32   follow_entry_link) __asm__("FUN_00216c48");
 
 void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_link) {
     enum {
@@ -68,17 +73,17 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
         MENU_CONDITION_COUNT_DIFFERENCE_MET = 5,
         MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET = 6
     };
-    char formatted_help_text[0x100];
-    Suffixes sfx;
-    char num[0x20];
+    char      formatted_help_text[0x100];
+    Suffixes  sfx;
+    char      num[0x20];
     MenuItem *entry;
-    char *substring_match;
-    s32 ok;
-    s32 next;
-    u16 flags;
-    s16 linked_entry_index;
-    s16 kind;
-    s32 bolt_threshold;
+    char     *substring_match;
+    s32       ok;
+    s32       next;
+    u16       flags;
+    s16       linked_entry_index;
+    s16       kind;
+    s32       bolt_threshold;
 
     entry = (MenuItem *)(menu->unk3C + menu->unk36 * 0x1C);
     if (menu->unk3C == 0) {
@@ -119,7 +124,11 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
             substring_match[1] = 's';
         }
         bolt_threshold = D_001DFFB0[entry->unkA].unk14;
-        sprintf(num, bolt_threshold_number_format, bolt_threshold / 1000, sfx.s[game_language % 6], bolt_threshold % 1000);
+        sprintf(num,
+                bolt_threshold_number_format,
+                bolt_threshold / 1000,
+                sfx.s[game_language % 6],
+                bolt_threshold % 1000);
         sprintf(formatted_help_text, SCRATCH, num);
     } else {
         sprintf(formatted_help_text, get_help_message_text(entry->unk0));
@@ -154,7 +163,8 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
         ok = !(compute_clamped_count_difference() < entry->unkA);
         break;
     case MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET:
-        ok = current_bolt_count >= D_001DFFB0[entry->unkA].unk14 && compute_clamped_count_difference() >= 4;
+        ok = current_bolt_count >= D_001DFFB0[entry->unkA].unk14 &&
+             compute_clamped_count_difference() >= 4;
         break;
     default:
         ok = 0;

@@ -1,5 +1,9 @@
 #include "types.h"
-void compose_bitmap_from_mask(u8 *dst, u8 *src_set, u8 *src_clear, u8 *mask) __asm__("FUN_002053d8");
+
+void compose_bitmap_from_mask(u8 *dst,
+                              u8 *src_set,
+                              u8 *src_clear,
+                              u8 *mask) __asm__("FUN_002053d8");
 
 void compose_bitmap_from_mask(u8 *composed_bitmap, u8 *src_set, u8 *src_clear, u8 *mask) {
     s32 outer = 0;

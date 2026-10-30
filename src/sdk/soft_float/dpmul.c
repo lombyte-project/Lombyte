@@ -128,42 +128,55 @@ Boston, MA 02111-1307, USA.  */
 __truncxfsf2() {
     abort();
 }
+
 __extendsfxf2() {
     abort();
 }
+
 __addxf3() {
     abort();
 }
+
 __divxf3() {
     abort();
 }
+
 __eqxf2() {
     abort();
 }
+
 __extenddfxf2() {
     abort();
 }
+
 __gtxf2() {
     abort();
 }
+
 __lexf2() {
     abort();
 }
+
 __ltxf2() {
     abort();
 }
+
 __mulxf3() {
     abort();
 }
+
 __negxf2() {
     abort();
 }
+
 __nexf2() {
     abort();
 }
+
 __subxf3() {
     abort();
 }
+
 __truncxfdf2() {
     abort();
 }
@@ -171,51 +184,67 @@ __truncxfdf2() {
 __trunctfsf2() {
     abort();
 }
+
 __extendsftf2() {
     abort();
 }
+
 __addtf3() {
     abort();
 }
+
 __divtf3() {
     abort();
 }
+
 __eqtf2() {
     abort();
 }
+
 __extenddftf2() {
     abort();
 }
+
 __gttf2() {
     abort();
 }
+
 __letf2() {
     abort();
 }
+
 __lttf2() {
     abort();
 }
+
 __multf3() {
     abort();
 }
+
 __negtf2() {
     abort();
 }
+
 __netf2() {
     abort();
 }
+
 __subtf3() {
     abort();
 }
+
 __trunctfdf2() {
     abort();
 }
+
 __gexf2() {
     abort();
 }
+
 __fixxfsi() {
     abort();
 }
+
 __floatsixf() {
     abort();
 }
@@ -262,8 +291,8 @@ typedef unsigned int UDItype __attribute__((mode(DI)));
 #define __fpcmp_parts __fpcmp_parts_f
 typedef USItype fractype;
 typedef UHItype halffractype;
-typedef SFtype FLO_type;
-typedef SItype intfrac;
+typedef SFtype  FLO_type;
+typedef SItype  intfrac;
 
 #else
 #define PREFIXFPDP    dp
@@ -285,8 +314,8 @@ typedef SItype intfrac;
 #define __fpcmp_parts __fpcmp_parts_d
 typedef UDItype fractype;
 typedef USItype halffractype;
-typedef DFtype FLO_type;
-typedef DItype intfrac;
+typedef DFtype  FLO_type;
+typedef DItype  intfrac;
 #endif
 
 #ifdef US_SOFTWARE_GOFAST
@@ -357,7 +386,7 @@ typedef DItype intfrac;
 #endif
 
 /* Preserve the sticky-bit when shifting fractions to the right.  */
-#define LSHIFT(a)                                                                                  \
+#define LSHIFT(a) \
     { a = (a & 1) | (a >> 1); }
 
 /* numeric parameters */
@@ -373,21 +402,27 @@ typedef DItype intfrac;
 
 /* common types */
 
-typedef enum { CLASS_SNAN, CLASS_QNAN, CLASS_ZERO, CLASS_NUMBER, CLASS_INFINITY } fp_class_type;
+typedef enum {
+    CLASS_SNAN,
+    CLASS_QNAN,
+    CLASS_ZERO,
+    CLASS_NUMBER,
+    CLASS_INFINITY
+} fp_class_type;
 
 typedef struct {
 #ifdef SMALL_MACHINE
     char class;
     unsigned char sign;
-    short normal_exp;
+    short         normal_exp;
 #else
     fp_class_type class;
     unsigned int sign;
-    int normal_exp;
+    int          normal_exp;
 #endif
 
     union {
-        fractype ll;
+        fractype     ll;
         halffractype l[2];
     } fraction;
 } fp_number_type;
@@ -402,7 +437,7 @@ typedef union {
 
 #ifdef FLOAT_BIT_ORDER_MISMATCH
     struct {
-        fractype fraction : FRACBITS __attribute__((packed));
+        fractype     fraction : FRACBITS __attribute__((packed));
         unsigned int exp : EXPBITS __attribute__((packed));
         unsigned int sign : 1 __attribute__((packed));
     } bits;
@@ -412,11 +447,11 @@ typedef union {
     struct {
         unsigned int sign : 1 __attribute__((packed));
         unsigned int exp : EXPBITS __attribute__((packed));
-        fractype fraction : FRACBITS __attribute__((packed));
+        fractype     fraction : FRACBITS __attribute__((packed));
     } bits_big_endian;
 
     struct {
-        fractype fraction : FRACBITS __attribute__((packed));
+        fractype     fraction : FRACBITS __attribute__((packed));
         unsigned int exp : EXPBITS __attribute__((packed));
         unsigned int sign : 1 __attribute__((packed));
     } bits_little_endian;
@@ -437,16 +472,19 @@ typedef union {
 extern fp_number_type D_001596F0;
 
 INLINE
+
 static fp_number_type *nan() {
     return &D_001596F0;
 }
 
 INLINE
+
 static int isnan(fp_number_type *x) {
     return x->class == CLASS_SNAN || x->class == CLASS_QNAN;
 }
 
 INLINE
+
 static int isinf(fp_number_type *x) {
     return x->class == CLASS_INFINITY;
 }
@@ -454,11 +492,13 @@ static int isinf(fp_number_type *x) {
 #endif
 
 INLINE
+
 static int iszero(fp_number_type *x) {
     return x->class == CLASS_ZERO;
 }
 
 INLINE
+
 static void flip_sign(fp_number_type *x) {
     x->sign = !x->sign;
 }
@@ -468,9 +508,9 @@ extern FLO_type pack_d(fp_number_type *);
 #if defined(L_pack_df) || defined(L_pack_sf)
 FLO_type pack_d(fp_number_type *src) {
     FLO_union_type dst;
-    fractype fraction = src->fraction.ll; /* wasn't unsigned before? */
-    int sign = src->sign;
-    int exp = 0;
+    fractype       fraction = src->fraction.ll; /* wasn't unsigned before? */
+    int            sign = src->sign;
+    int            exp = 0;
 
     if (isnan(src)) {
         exp = EXPMAX;
@@ -559,8 +599,8 @@ void unpack_d(FLO_union_type *src, fp_number_type *dst) {
      handle little/big endian systems conveniently, so use shifts and
      masks */
     fractype fraction;
-    int exp;
-    int sign;
+    int      exp;
+    int      sign;
 
 #if defined(FLOAT_WORD_ORDER_MISMATCH) && !defined(FLOAT)
     FLO_union_type swapped;
@@ -631,8 +671,8 @@ static fp_number_type *_fpadd_parts(fp_number_type *a, fp_number_type *b, fp_num
     intfrac tfraction;
 
     /* Put commonly used fields in local variables.  */
-    int a_normal_exp;
-    int b_normal_exp;
+    int      a_normal_exp;
+    int      b_normal_exp;
     fractype a_fraction;
     fractype b_fraction;
 
@@ -737,9 +777,9 @@ static fp_number_type *_fpadd_parts(fp_number_type *a, fp_number_type *b, fp_num
 }
 
 FLO_type add(FLO_type arg_a, FLO_type arg_b) {
-    fp_number_type a;
-    fp_number_type b;
-    fp_number_type tmp;
+    fp_number_type  a;
+    fp_number_type  b;
+    fp_number_type  tmp;
     fp_number_type *res;
 
     unpack_d((FLO_union_type *)&arg_a, &a);
@@ -751,9 +791,9 @@ FLO_type add(FLO_type arg_a, FLO_type arg_b) {
 }
 
 FLO_type sub(FLO_type arg_a, FLO_type arg_b) {
-    fp_number_type a;
-    fp_number_type b;
-    fp_number_type tmp;
+    fp_number_type  a;
+    fp_number_type  b;
+    fp_number_type  tmp;
     fp_number_type *res;
 
     unpack_d((FLO_union_type *)&arg_a, &a);
@@ -768,8 +808,9 @@ FLO_type sub(FLO_type arg_a, FLO_type arg_b) {
 #endif
 
 #if defined(L_mul_sf) || defined(L_mul_df)
-static INLINE fp_number_type *_fpmul_parts(fp_number_type *a, fp_number_type *b,
-                                           fp_number_type *tmp) {
+static INLINE fp_number_type *
+
+_fpmul_parts(fp_number_type *a, fp_number_type *b, fp_number_type *tmp) {
     fractype low = 0;
     fractype high = 0;
 
@@ -811,7 +852,7 @@ static INLINE fp_number_type *_fpmul_parts(fp_number_type *a, fp_number_type *b,
             fractype x = a->fraction.ll;
             fractype ylow = b->fraction.ll;
             fractype yhigh = 0;
-            int bit;
+            int      bit;
 
             /* ??? This does multiplies one bit at a time.  Optimize.  */
             for (bit = 0; bit < FRAC_NBITS; bit++) {
@@ -919,9 +960,9 @@ static INLINE fp_number_type *_fpmul_parts(fp_number_type *a, fp_number_type *b,
 }
 
 FLO_type dpmul(FLO_type arg_a, FLO_type arg_b) {
-    fp_number_type a;
-    fp_number_type b;
-    fp_number_type tmp;
+    fp_number_type  a;
+    fp_number_type  b;
+    fp_number_type  tmp;
     fp_number_type *res;
 
     unpack_d((FLO_union_type *)&arg_a, &a);
@@ -1009,8 +1050,8 @@ static INLINE fp_number_type *_fpdiv_parts(fp_number_type *a, fp_number_type *b)
 }
 
 FLO_type divide(FLO_type arg_a, FLO_type arg_b) {
-    fp_number_type a;
-    fp_number_type b;
+    fp_number_type  a;
+    fp_number_type  b;
     fp_number_type *res;
 
     unpack_d((FLO_union_type *)&arg_a, &a);
@@ -1234,7 +1275,7 @@ FLO_type si_to_float(SItype arg_a) {
 #if defined(L_sf_to_si) || defined(L_df_to_si)
 SItype float_to_si(FLO_type arg_a) {
     fp_number_type a;
-    SItype tmp;
+    SItype         tmp;
 
     unpack_d((FLO_union_type *)&arg_a, &a);
     if (iszero(&a))
@@ -1353,7 +1394,7 @@ DFtype __make_dp(fp_class_type class, unsigned int sign, int exp, UDItype frac) 
 #if defined(L_df_to_sf)
 SFtype df_to_sf(DFtype arg_a) {
     fp_number_type in;
-    USItype sffrac;
+    USItype        sffrac;
 
     unpack_d((FLO_union_type *)&arg_a, &in);
 

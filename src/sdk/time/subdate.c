@@ -17,7 +17,7 @@ void SubtractDate(ClockDate *clock_date) __asm__("subdate");
 
 void SubtractDate(ClockDate *clock_date) {
     MonthLengthTable month_lengths = MonthLengths;
-    s32 previous_day = clock_date->day - 1;
+    s32              previous_day = clock_date->day - 1;
 
     clock_date->day = (u8)previous_day;
     if ((*(volatile u8 *)&clock_date->year & 3) == 0) {

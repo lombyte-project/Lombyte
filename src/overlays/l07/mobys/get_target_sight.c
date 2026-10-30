@@ -10,19 +10,19 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"
 
-
-extern short D_L07_001B08B0[] NOT_SDA;
-extern char *D_L07_001D1600[] NOT_SDA;
+extern short       D_L07_001B08B0[] NOT_SDA;
+extern char       *D_L07_001D1600[] NOT_SDA;
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
-int get_target_sight(char *a, char *o, float best) __asm__("FUN_L07_002886d8");
+int                get_target_sight(char *a, char *o, float best) __asm__("FUN_L07_002886d8");
+
 int get_target_sight(char *source_moby, char *sight_out, float best) {
     struct Hero *hero_context = &hero_lui;
-    char *target_moby;
-    char *candidate_moby;
-    int target_selection_status;
-    int i;
-    int j;
-    float candidate_metric;
+    char        *target_moby;
+    char        *candidate_moby;
+    int          target_selection_status;
+    int          i;
+    int          j;
+    float        candidate_metric;
 
     target_moby = ((char *)hero_context->moby);
     target_selection_status = 0;

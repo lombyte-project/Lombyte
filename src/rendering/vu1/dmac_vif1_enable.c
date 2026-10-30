@@ -1,15 +1,16 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-extern s32 AddDmacHandler();
-extern s32 enable_dmac() __asm__("func_00119160");
-extern s32 vif1_dma_interrupt_handler(s32 cause) __asm__("func_00233E00");
+
+extern s32  AddDmacHandler();
+extern s32  enable_dmac() __asm__("func_00119160");
+extern s32  vif1_dma_interrupt_handler(s32 cause) __asm__("func_00233E00");
 extern void print_register_values_and_halt() __asm__("func_00233F00");
 
 void dmac_vif1_enable(void) __asm__("FUN_00233d00");
 
 void dmac_vif1_enable(void) {
     s32 *handler_id_or_dmac_status_ptr;
-    s32 masked;
+    s32  masked;
 
     if (D_00160F18 == 0) {
         handler_id_or_dmac_status_ptr = &D_00160F1C;

@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-extern u32 strlen(const char *);
+
+extern u32   strlen(const char *);
 extern void *memcpy(void *, const void *, u32);
 
 #define UNCACHED_PWD ((char *)((u32)D_00159FC0 | 0x20000000))

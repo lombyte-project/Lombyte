@@ -12,10 +12,10 @@ typedef struct SysbitStream {
 } SysbitStream;
 
 s64 _sysbitFlush(SysbitStream *ctx, s32 amount) {
-    s64 new_var;
+    s64           new_var;
     SysbitStream *new_var2;
-    s64 bits = ctx->bits;
-    s32 cnt = ctx->cnt - amount;
+    s64           bits = ctx->bits;
+    s32           cnt = ctx->cnt - amount;
 
     new_var = bits << amount;
     ctx->bits = new_var;

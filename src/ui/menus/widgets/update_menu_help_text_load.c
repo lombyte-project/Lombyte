@@ -10,7 +10,8 @@ extern u8 D_001996D0[];
 
 extern s32 help_msgs __asm__("D_0015F6A0");
 
-extern s32 start_audio_stream_read(s32 read_destination, s32 sector, s32 sector_count) __asm__("FUN_00216788");
+extern s32
+start_audio_stream_read(s32 read_destination, s32 sector, s32 sector_count) __asm__("FUN_00216788");
 
 static inline int pauseSlotCount(void) {
     char *b = D_001996D0;
@@ -29,7 +30,8 @@ int update_menu_help_text_load(char *menu) {
     switch (*(int *)(menu + 0x50)) {
     case HELP_TEXT_LOAD_START_READ:
         if (cd_read_active[0] == 0) {
-            if (start_audio_stream_read(menu_system.help_text_buffer, disc_table.help_text.sector,
+            if (start_audio_stream_read(menu_system.help_text_buffer,
+                                        disc_table.help_text.sector,
                                         disc_table.help_text.size) != 0) {
                 *(int *)(menu + 0x50) = 1;
             } else {
@@ -40,13 +42,13 @@ int update_menu_help_text_load(char *menu) {
     case HELP_TEXT_LOAD_WAIT_FOR_READ:
         if (cd_read_active[0] == 0) {
             struct MenuSystem *menu_system_state = &menu_system;
-            int *archive = (int *)menu_system_state->help_text_buffer;
-            int *language_entries = (int *)((char *)archive + archive[game_language]);
-            int entry_count = *language_entries++;
-            int entry_bytes = *language_entries++;
-            char *entry_count_base;
-            int *text_entries;
-            int i;
+            int               *archive = (int *)menu_system_state->help_text_buffer;
+            int               *language_entries = (int *)((char *)archive + archive[game_language]);
+            int                entry_count = *language_entries++;
+            int                entry_bytes = *language_entries++;
+            char              *entry_count_base;
+            int               *text_entries;
+            int                i;
 
             copy_memory_aligned(archive, language_entries, ((entry_bytes + 3) & ~3) - 8);
             entry_count_base = D_001996D0;

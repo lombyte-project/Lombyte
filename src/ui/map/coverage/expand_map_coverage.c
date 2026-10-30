@@ -1,16 +1,15 @@
 #include "types.h"
 #include "rnc/math/asm_helpers.h"
 
-
 void expand_map_coverage(u8 *dest, u8 *src) __asm__("FUN_00207e58");
 
 void expand_map_coverage(u8 *dest, u8 *packed_coverage_data) {
-    u32 mask[0x100];
-    u32 expanded_coverage_words[0x10];
-    s32 i = 0;
+    u32  mask[0x100];
+    u32  expanded_coverage_words[0x10];
+    s32  i = 0;
     u32 *expanded_word_cursor;
-    s32 j;
-    s32 k;
+    s32  j;
+    s32  k;
 
     for (; i < 0x100; i++) {
         mask[i] = 0;

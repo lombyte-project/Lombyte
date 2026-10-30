@@ -1,10 +1,22 @@
 /* Ported from rac1-decomp (src/game/effects.c, func_001EE3B0). */
-extern int get_effect_texture(int) __asm__("func_001F44B8");
+extern int   get_effect_texture(int) __asm__("func_001F44B8");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
-extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, int, int, int,
-                                       int, int, float, float) __asm__("FUN_001f5ab0");
+extern void  append_rotated_sprite_quad(float,
+                                        float,
+                                        float,
+                                        float,
+                                        float,
+                                        int,
+                                        int,
+                                        int,
+                                        int,
+                                        int,
+                                        int,
+                                        int,
+                                        float,
+                                        float) __asm__("FUN_001f5ab0");
 /*
  * Spawns a burst of particle effects around (x, y) using the source
  * object's unk10 (a size, scaled by 40.0f) and unk18 (looked up through
@@ -32,18 +44,29 @@ void spawn_particle_burst(void *effect, float x, float y) {
     };
     float forty = 40.0f;
     char *record_bytes = (char *)effect;
-    int handle = get_effect_texture(*(int *)(record_bytes + 0x18));
-    int mode = *(int *)(record_bytes + 0x2C);
+    int   handle = get_effect_texture(*(int *)(record_bytes + 0x18));
+    int   mode = *(int *)(record_bytes + 0x2C);
     float angle = *(float *)(record_bytes + 0x1C);
     float k;
-    int i;
+    int   i;
 
     switch (mode) {
     case ROTATED_SPRITE_ANGLE_FAN:
         for (i = 0; i < *(short *)(record_bytes + 0x26); i++) {
-            append_rotated_sprite_quad(x, y, forty * *(float *)(record_bytes + 0x10),
-                                       forty * *(float *)(record_bytes + 0x10), angle, 0x3F, 0x3F, handle,
-                                       0xFFFFF3, *(int *)(record_bytes + 0x14), 0, 0, 0.0f, 0.0f);
+            append_rotated_sprite_quad(x,
+                                       y,
+                                       forty * *(float *)(record_bytes + 0x10),
+                                       forty * *(float *)(record_bytes + 0x10),
+                                       angle,
+                                       0x3F,
+                                       0x3F,
+                                       handle,
+                                       0xFFFFF3,
+                                       *(int *)(record_bytes + 0x14),
+                                       0,
+                                       0,
+                                       0.0f,
+                                       0.0f);
             angle = fast_add_rotations(angle, *(float *)(record_bytes + 0x28));
         }
         break;
@@ -56,31 +79,90 @@ void spawn_particle_burst(void *effect, float x, float y) {
         rotated_edge_offsets[5] = fast_sin(angle) * -forty * *(float *)(record_bytes + 0x10);
 
         k = *(float *)(record_bytes + 0x10) * forty;
-        append_rotated_sprite_quad(x, y, k, k, angle, 0x3F, 0x3F, handle, 0xFFFFF3,
-                                   *(int *)(record_bytes + 0x14), 0, 0, 0.0f, 0.0f);
+        append_rotated_sprite_quad(x,
+                                   y,
+                                   k,
+                                   k,
+                                   angle,
+                                   0x3F,
+                                   0x3F,
+                                   handle,
+                                   0xFFFFF3,
+                                   *(int *)(record_bytes + 0x14),
+                                   0,
+                                   0,
+                                   0.0f,
+                                   0.0f);
 
         k = *(float *)(record_bytes + 0x10);
         k *= forty;
-        append_rotated_sprite_quad(x + rotated_edge_offsets[4], y + rotated_edge_offsets[5], k, k, angle, 0x3F, 0x3F, handle,
-                                   0xFFFFF3, *(int *)(record_bytes + 0x14), 1, 0, 0.0f, 0.0f);
+        append_rotated_sprite_quad(x + rotated_edge_offsets[4],
+                                   y + rotated_edge_offsets[5],
+                                   k,
+                                   k,
+                                   angle,
+                                   0x3F,
+                                   0x3F,
+                                   handle,
+                                   0xFFFFF3,
+                                   *(int *)(record_bytes + 0x14),
+                                   1,
+                                   0,
+                                   0.0f,
+                                   0.0f);
 
         k = *(float *)(record_bytes + 0x10);
         k *= forty;
-        append_rotated_sprite_quad(x - rotated_edge_offsets[0], y - rotated_edge_offsets[1], k, k, angle, 0x3F, 0x3F, handle,
-                                   0xFFFFF3, *(int *)(record_bytes + 0x14), 0, 1, 0.0f, 0.0f);
+        append_rotated_sprite_quad(x - rotated_edge_offsets[0],
+                                   y - rotated_edge_offsets[1],
+                                   k,
+                                   k,
+                                   angle,
+                                   0x3F,
+                                   0x3F,
+                                   handle,
+                                   0xFFFFF3,
+                                   *(int *)(record_bytes + 0x14),
+                                   0,
+                                   1,
+                                   0.0f,
+                                   0.0f);
 
         k = *(float *)(record_bytes + 0x10);
         k *= forty;
-        append_rotated_sprite_quad(x + rotated_edge_offsets[4] - rotated_edge_offsets[0], y + rotated_edge_offsets[5] - rotated_edge_offsets[1], k, k, angle,
-                                   0x3F, 0x3F, handle, 0xFFFFF3, *(int *)(record_bytes + 0x14), 1, 1, 0.0f,
+        append_rotated_sprite_quad(x + rotated_edge_offsets[4] - rotated_edge_offsets[0],
+                                   y + rotated_edge_offsets[5] - rotated_edge_offsets[1],
+                                   k,
+                                   k,
+                                   angle,
+                                   0x3F,
+                                   0x3F,
+                                   handle,
+                                   0xFFFFF3,
+                                   *(int *)(record_bytes + 0x14),
+                                   1,
+                                   1,
+                                   0.0f,
                                    0.0f);
         break;
     }
     case ROTATED_SPRITE_CENTERED_SINGLE:
         k = *(float *)(record_bytes + 0x10);
         k *= forty;
-        append_rotated_sprite_quad(x, y, k, k, angle, 0x3F, 0x3F, handle, 0xFFFFF3,
-                                   *(int *)(record_bytes + 0x14), 0, 0, 0.5f, 0.5f);
+        append_rotated_sprite_quad(x,
+                                   y,
+                                   k,
+                                   k,
+                                   angle,
+                                   0x3F,
+                                   0x3F,
+                                   handle,
+                                   0xFFFFF3,
+                                   *(int *)(record_bytes + 0x14),
+                                   0,
+                                   0,
+                                   0.5f,
+                                   0.5f);
         break;
     }
 }

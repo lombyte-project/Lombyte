@@ -1,11 +1,13 @@
 #include "types.h"
 #include "sifrpc.h"
 #include "rnc/data_labels.h"
-extern s32 sif_load_module_bind_status[] __asm__("D_0012FCB0");
+
+extern s32                     sif_load_module_bind_status[] __asm__("D_0012FCB0");
 extern struct sceSifClientData D_00158400;
-extern s32 sceSifBindRpc();
-extern s32 sceSifCallRpc();
-extern void *memcpy();
+extern s32                     sceSifBindRpc();
+extern s32                     sceSifCallRpc();
+extern void                   *memcpy();
+
 s32 _lf_bind(void) {
     s32 i;
 

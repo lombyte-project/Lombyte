@@ -1,4 +1,3 @@
-
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "moby_update.h"
@@ -6,12 +5,12 @@
 
 /* Moby.flags bits this loop tests. */
 #define MOBY_SKIP_ANIMATION 0x40
-#define MOBY_SKIP_BOUNDS 0x4
+#define MOBY_SKIP_BOUNDS    0x4
 
 extern struct Moby *visible_moby_list __asm__("D_0015FF24") __attribute__((sda));
 extern struct Moby *build_resident_visibility_list(void) __asm__("FUN_0020d868");
-extern void advance_moby_animation(struct Moby *) __asm__("FUN_0020d580");
-void update_visible_resident_objects(void) __asm__("FUN_00212e28");
+extern void         advance_moby_animation(struct Moby *) __asm__("FUN_0020d580");
+void                update_visible_resident_objects(void) __asm__("FUN_00212e28");
 
 /* Each live moby on the visible list: its animation step, its class update
  * and its bounds. Animation can replace the update; the update and the

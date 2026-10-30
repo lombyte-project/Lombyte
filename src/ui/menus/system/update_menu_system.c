@@ -17,15 +17,15 @@ struct Ent3 {
 };
 
 struct Ent2 {
-    u8 pad0[0x48];
+    u8           pad0[0x48];
     struct Ent3 *unk48[1];
 };
 
 struct Ent {
-    u8 pad0[0x24];
+    u8           pad0[0x24];
     struct Ent2 *unk24;
-    u8 pad28[0x30];
-    f32 unk58;
+    u8           pad28[0x30];
+    f32          unk58;
 };
 
 extern void reset_active_camera_position_and_basis(void) __asm__("func_00218D10");
@@ -37,13 +37,13 @@ extern void close_menu_system(void) __asm__("FUN_002191b8");
 void update_menu_system(void) __asm__("FUN_002192a8");
 
 void update_menu_system(void) {
-    s32 i;
-    s32 j;
-    s32 k;
-    s32 flag;
-    struct MenuScreen *current_page_screen;
+    s32                 i;
+    s32                 j;
+    s32                 k;
+    s32                 flag;
+    struct MenuScreen  *current_page_screen;
     struct MenuScreen **objs;
-    struct MenuScreen *focused_screen;
+    struct MenuScreen  *focused_screen;
 
     menu_system.update_count = menu_system.update_count + 1;
     reset_active_camera_position_and_basis();
@@ -111,7 +111,11 @@ void update_menu_system(void) {
             }
             if (flag) {
                 s32 current_animation_index = menu_system.current->moby_anims[j];
-                set_moby_animation(panel_slots[j], current_animation_index, ((struct Ent *)panel_slots[j])->unk24->unk48[current_animation_index]->unk10 - 1);
+                set_moby_animation(
+                    panel_slots[j],
+                    current_animation_index,
+                    ((struct Ent *)panel_slots[j])->unk24->unk48[current_animation_index]->unk10 -
+                        1);
                 ((struct Ent *)panel_slots[j])->unk58 = -1.0f;
             } else {
                 set_moby_animation(panel_slots[j], menu_system.next->moby_anims[j], 0);

@@ -15,38 +15,65 @@ typedef struct {
     s32 id;
     f32 f10;
     f32 f14;
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 b1B;
+    u8  r;
+    u8  g;
+    u8  b;
+    u8  b1B;
 } SparkBody;
 
 typedef struct {
-    u8 b0;
-    u8 b1;
-    u8 b2;
-    u8 b3;
-    s32 w4;
-    u8 b8;
-    u8 b9;
-    s16 hA;
-    f32 fC;
-    u128 pos;
+    u8        b0;
+    u8        b1;
+    u8        b2;
+    u8        b3;
+    s32       w4;
+    u8        b8;
+    u8        b9;
+    s16       hA;
+    f32       fC;
+    u128      pos;
     SparkBody body;
 } Spark;
 
 extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
 extern u8 *spark_texture_table[] __asm__("D_L01_001B2500");
 
-void create_spark_particle(s32 id, u128 *pos, s32 life, u8 kind, u8 texture_table_index, u8 mode, f32 x, f32 y, f32 z,
-                      f32 w, f32 alpha, f32 r, f32 g, f32 b, f32 size) __asm__("FUN_L01_0027e900");
+void create_spark_particle(s32   id,
+                           u128 *pos,
+                           s32   life,
+                           u8    kind,
+                           u8    texture_table_index,
+                           u8    mode,
+                           f32   x,
+                           f32   y,
+                           f32   z,
+                           f32   w,
+                           f32   alpha,
+                           f32   r,
+                           f32   g,
+                           f32   b,
+                           f32   size) __asm__("FUN_L01_0027e900");
 
-void create_spark_particle(s32 id, u128 *pos, s32 life, u8 kind, u8 texture_table_index, u8 mode, f32 x, f32 y, f32 z,
-                      f32 w, f32 alpha, f32 r, f32 g, f32 b, f32 size) {
-    Spark *spark;
+void create_spark_particle(s32   id,
+                           u128 *pos,
+                           s32   life,
+                           u8    kind,
+                           u8    texture_table_index,
+                           u8    mode,
+                           f32   x,
+                           f32   y,
+                           f32   z,
+                           f32   w,
+                           f32   alpha,
+                           f32   r,
+                           f32   g,
+                           f32   b,
+
+                           f32 size) {
+    Spark     *spark;
     SparkBody *spark_body;
-    u128 position_snapshot = *pos;
-    u128 *position_copy_source = &position_snapshot;
+    u128       position_snapshot = *pos;
+    u128      *position_copy_source = &position_snapshot;
 
     if (id == 0) {
         return;
@@ -85,35 +112,39 @@ void create_spark_particle(s32 id, u128 *pos, s32 life, u8 kind, u8 texture_tabl
     spark_body->b1B = 0;
     spark->w4 = FUN_L00_0025bfe0(r, g, b, size);
 }
+
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+
 typedef struct {
     u128 pos;
-    f32 size;
-    f32 speed;
+    f32  size;
+    f32  speed;
 } PartMotion;
 
 typedef struct {
-    u8 pad0;
-    u8 active;
-    u8 tex;
-    u8 kind;
-    u32 color;
-    u8 spin;
-    u8 alpha;
-    s16 life;
-    f32 scale;
-    u128 pos;
+    u8         pad0;
+    u8         active;
+    u8         tex;
+    u8         kind;
+    u32        color;
+    u8         spin;
+    u8         alpha;
+    s16        life;
+    f32        scale;
+    u128       pos;
     PartMotion m;
 } Particle;
+
 extern u8 *pool_bubble_texture_table[] __asm__("D_L01_001B25E0");
 
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
+
 Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
     Particle *particle;
-    s32 gray_channel;
-    u32 col;
+    s32       gray_channel;
+    u32       col;
 
     particle = create_part(0x38);
     if (particle != 0) {
@@ -131,13 +162,15 @@ Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
     }
     return particle;
 }
+
 extern u8 *pool_bubbles_texture_table[] __asm__("D_L01_001B25E4");
 
 Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) __asm__("FUN_L01_00287c80");
+
 Particle *pool_bubbles(u128 *pos, u128 *motion_position_source, f32 scale, f32 speed) {
-    Particle *particle;
+    Particle   *particle;
     PartMotion *m;
-    f32 random_spin;
+    f32         random_spin;
 
     particle = create_part(0x39);
     if (particle != NULL) {

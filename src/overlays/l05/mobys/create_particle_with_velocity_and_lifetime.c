@@ -8,11 +8,23 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
+
 unsigned char *D_L05_001B25C0 __attribute__((section(".data"))) = 0;
 
-unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particle_scalar, void *initial_position_source, void *initial_velocity_source, int life, int size, int color) __asm__("FUN_L05_0029bbe0");
+unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particle_scalar,
+                                                          void *initial_position_source,
+                                                          void *initial_velocity_source,
+                                                          int   life,
+                                                          int   size,
+                                                          int   color) __asm__("FUN_L05_0029bbe0");
 
-unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particle_scalar, void *initial_position_source, void *initial_velocity_source, int life, int size, int color) {
+unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particle_scalar,
+                                                          void *initial_position_source,
+                                                          void *initial_velocity_source,
+                                                          int   life,
+                                                          int   size,
+
+                                                          int color) {
     unsigned char *allocated_object = create_part(0x30);
     if (allocated_object != 0) {
         unsigned char *velocity_block;
@@ -35,19 +47,30 @@ unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particl
     return allocated_object;
 }
 
-
 #include "qcopy.h"
 
 /* spawn a particle at a position with a velocity and random parameters */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/partupd_0029CA28.c: func_L05_0029CCB8), where it is exact; names translated to the US level program. */
 
-
 extern unsigned char *D_L05_001B25C8 NOT_SDA;
-unsigned char *create_particle_with_velocity_and_randomized_parameters(void *initial_position_source, void *initial_velocity_source, int initial_word_at_04, int byte_table_index, float unscaled_particle_scalar, float b,
-                                float initial_particle_scalar) __asm__("FUN_L05_0029be70");
+unsigned char                       *create_particle_with_velocity_and_randomized_parameters(
+                          void *initial_position_source,
+                          void *initial_velocity_source,
+                          int   initial_word_at_04,
+                          int   byte_table_index,
+                          float unscaled_particle_scalar,
+                          float b,
+                          float initial_particle_scalar) __asm__("FUN_L05_0029be70");
 
-unsigned char *create_particle_with_velocity_and_randomized_parameters(void *initial_position_source, void *initial_velocity_source, int initial_word_at_04, int byte_table_index, float unscaled_particle_scalar, float initial_velocity_block_scalar,
-                                float initial_particle_scalar) {
+unsigned char *
+create_particle_with_velocity_and_randomized_parameters(void *initial_position_source,
+                                                        void *initial_velocity_source,
+                                                        int   initial_word_at_04,
+                                                        int   byte_table_index,
+                                                        float unscaled_particle_scalar,
+                                                        float initial_velocity_block_scalar,
+
+                                                        float initial_particle_scalar) {
     unsigned char *allocated_object = create_part(0x32);
     unsigned char *velocity_block;
     if (allocated_object != 0) {

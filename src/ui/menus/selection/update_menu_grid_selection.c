@@ -12,21 +12,21 @@ extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 update_menu_grid_selection(struct MenuScreen *grid) __asm__("FUN_0021b858");
 
 s32 update_menu_grid_selection(struct MenuScreen *grid) {
-    s32 column_count;
-    s32 row_count;
-    s32 cursor;
-    s32 row;
-    s32 column_index;
-    s32 column;
-    s32 hidden;
-    s32 next_rows;
-    struct MenuPage *back_page;
-    s32 total;
-    s32 next_column_count;
-    s32 next_columns;
-    struct MenuScreen *next;
+    s32                  column_count;
+    s32                  row_count;
+    s32                  cursor;
+    s32                  row;
+    s32                  column_index;
+    s32                  column;
+    s32                  hidden;
+    s32                  next_rows;
+    struct MenuPage     *back_page;
+    s32                  total;
+    s32                  next_column_count;
+    s32                  next_columns;
+    struct MenuScreen   *next;
     struct MenuGridCell *entry;
-    s32 slot;
+    s32                  slot;
 
     if (menu_system.current->focus != grid) {
         return 0;

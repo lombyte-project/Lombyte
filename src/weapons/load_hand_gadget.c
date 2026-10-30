@@ -12,86 +12,89 @@
 #include "rnc/mobys/delete_moby.h"
 
 typedef struct Moby {
-    u8 pad00[0x20];
-    u8 state;
-    u8 pad21[0x13];
-    s16 update_kind;
-    u8 pad36[0x1D];
-    u8 anim;
-    u8 pad54[0x20];
-    void *update;
+    u8     pad00[0x20];
+    u8     state;
+    u8     pad21[0x13];
+    s16    update_kind;
+    u8     pad36[0x1D];
+    u8     anim;
+    u8     pad54[0x20];
+    void  *update;
     void **vars;
-    u8 pad7C[0x2A];
-    s16 oclass;
-    u8 padA8[0x14];
-    u8 ammo_moby_slot;
+    u8     pad7C[0x2A];
+    s16    oclass;
+    u8     padA8[0x14];
+    u8     ammo_moby_slot;
 } Moby;
+
 typedef struct HandGadgetState {
-    u8 pad00[0x44];
-    s32 source_moby_address;
-    u8 pad48[4];
+    u8    pad00[0x44];
+    s32   source_moby_address;
+    u8    pad48[4];
     Moby *pose_moby;
     Moby *animation_moby;
     Moby *class_pose_moby;
     Moby *first_attachment_moby;
     Moby *second_attachment_moby;
-    s32 x60;
-    s32 x64;
-    s32 x68;
+    s32   x60;
+    s32   x64;
+    s32   x68;
     Moby *class_0197_moby;
     Moby *class_0266_moby;
     Moby *class_026a_moby;
     Moby *ammo_mobys[8];
-    u8 pad98[0xC];
-    u8 timers[0x18];
+    u8    pad98[0xC];
+    u8    timers[0x18];
 } HandGadgetState;
+
 typedef struct HandGadgetDefinition {
-    u8 pad00[0x10];
+    u8  pad00[0x10];
     s32 oclass;
-    u8 pad14[0x38];
+    u8  pad14[0x38];
 } HandGadgetDefinition;
-extern u8 item_available[] __asm__("D_0013D4C0");
-extern u8 item_text_variant[] __asm__("D_0013E520");
+
+extern u8                   item_available[] __asm__("D_0013D4C0");
+extern u8                   item_text_variant[] __asm__("D_0013E520");
 extern HandGadgetDefinition menu_item_info[] __asm__("D_001863D0");
-extern void noop_callback_q(s32, s32) __asm__("func_001E9470");
-extern void noop_callback_r(Moby *, s32) __asm__("func_001E9478");
-extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
-extern void attach_manipulator(s32, s32, HandGadgetManipulator *) __asm__("FUN_0020cb10");
-extern void detach_manipulator(s32, HandGadgetManipulator *) __asm__("func_0020CB88");
-extern void blend_moby_animation(void *, int, int, int) __asm__("func_00212F90");
+extern void                 noop_callback_q(s32, s32) __asm__("func_001E9470");
+extern void                 noop_callback_r(Moby *, s32) __asm__("func_001E9478");
+extern void                 select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
+extern void  attach_manipulator(s32, s32, HandGadgetManipulator *) __asm__("FUN_0020cb10");
+extern void  detach_manipulator(s32, HandGadgetManipulator *) __asm__("func_0020CB88");
+extern void  blend_moby_animation(void *, int, int, int) __asm__("func_00212F90");
 extern Moby *create_menu_preview_moby(s32) __asm__("func_00225490");
-extern void update_preview_animation_and_attachments(s32, Moby *, Moby *, s32 *, s32 *,
-                                                     s32 *) __asm__("func_00225E70");
-extern s32 queue_preview_animation(s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32,
-                                   s32) __asm__("func_002265D8");
-extern s32 clear_preview_animation_queue(void) __asm__("func_00226718");
+extern void  update_preview_animation_and_attachments(
+     s32, Moby *, Moby *, s32 *, s32 *, s32 *) __asm__("func_00225E70");
+extern s32 queue_preview_animation(
+    s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("func_002265D8");
+extern s32  clear_preview_animation_queue(void) __asm__("func_00226718");
 extern void update_menu_preview_class_pose() __asm__("func_00224B70");
 extern void update_menu_preview_animation_transform() __asm__("func_00224D28");
 extern void update_menu_preview_pose_and_attachments() __asm__("func_00224E18");
 extern void update_menu_preview_animation_pose() __asm__("func_00224FC0");
 extern void update_menu_preview_class_transform() __asm__("func_002250F0");
 extern void update_ammo_preview_transform() __asm__("func_00225180");
-s32 load_hand_gadget(HandGadgetState *hand) __asm__("FUN_00224368");
+s32         load_hand_gadget(HandGadgetState *hand) __asm__("FUN_00224368");
 
 s32 load_hand_gadget(HandGadgetState *hand) {
-    Moby *moby;
-    s32 previous_selected_class;
-    s32 previous_animation_class;
-    s32 previous_attachment_class;
-    s32 previous_pose_class;
-    s32 previous_class_0197;
-    s32 previous_class_0266;
-    s32 previous_class;
-    s32 requested_class;
-    s32 selected_class;
-    s32 selected_gadget;
-    s32 loaded_gadget;
-    s32 slot_index;
-    s32 velocity_offset;
+    Moby                *moby;
+    s32                  previous_selected_class;
+    s32                  previous_animation_class;
+    s32                  previous_attachment_class;
+    s32                  previous_pose_class;
+    s32                  previous_class_0197;
+    s32                  previous_class_0266;
+    s32                  previous_class;
+    s32                  requested_class;
+    s32                  selected_class;
+    s32                  selected_gadget;
+    s32                  loaded_gadget;
+    s32                  slot_index;
+    s32                  velocity_offset;
     HandGadgetAnimation *animation;
-    float *ammo_offset;
-    s32 selected_class_ready;
-    Moby **ammo_moby_slot;
+    float               *ammo_offset;
+    s32                  selected_class_ready;
+    Moby               **ammo_moby_slot;
     loaded_gadget = 0;
     moby = hand->class_pose_moby;
     previous_selected_class = (moby != 0) ? (moby->oclass) : (-1);
@@ -103,8 +106,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         if (class_pose_manipulator.active) {
             detach_manipulator(hand->source_moby_address, &class_pose_manipulator);
         }
-        if ((hero.items[0].item_id != 0) &&
-            (selected_gadget != hero.items[0].item_id)) {
+        if ((hero.items[0].item_id != 0) && (selected_gadget != hero.items[0].item_id)) {
             noop_callback_q(0, 0);
         }
         active_decode_buffer = menu_system.resource_table_toggle == 0;
@@ -287,7 +289,9 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         clear_preview_animation_queue();
         queue_preview_animation(gadget_animations[loaded_gadget].primary_animation +
                                     menu_system.streamed_animation_base,
-                                0, gadget_animations[loaded_gadget].delay_frames, loaded_gadget,
+                                0,
+                                gadget_animations[loaded_gadget].delay_frames,
+                                loaded_gadget,
                                 gadget_animations[loaded_gadget].item_animation,
                                 gadget_animations[loaded_gadget].attachment0_class,
                                 gadget_animations[loaded_gadget].attachment0_animation,
@@ -300,7 +304,18 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         if (gadget_animations[loaded_gadget].delay_frames != 0) {
             queue_preview_animation(gadget_animations[loaded_gadget].secondary_animation +
                                         menu_system.streamed_animation_base,
-                                    2, 0, loaded_gadget, 1, -1, 0, -1, 0, -1, 0, 0, 0);
+                                    2,
+                                    0,
+                                    loaded_gadget,
+                                    1,
+                                    -1,
+                                    0,
+                                    -1,
+                                    0,
+                                    -1,
+                                    0,
+                                    0,
+                                    0);
         }
     }
     for (slot_index = 0; slot_index < 0x18; slot_index++) {
@@ -309,48 +324,51 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         }
     }
 
-    update_preview_animation_and_attachments(hand->source_moby_address, hand->class_pose_moby,
-                                             hand->animation_moby, &hand->x60, &hand->x64,
+    update_preview_animation_and_attachments(hand->source_moby_address,
+                                             hand->class_pose_moby,
+                                             hand->animation_moby,
+                                             &hand->x60,
+                                             &hand->x64,
                                              &hand->x68);
     return 0;
 }
 
 HandGadgetAnimation gadget_animations[37] = {
-    {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 7, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 0x19, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 0x1a, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 0x15, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 7, 1, 1, 7, -1, 0, 0, 0, 0, 0},
-    {0, 0, 0x16, 1, 1, 6, -1, 0, -1, 0, -1, 0},
-    {1, 1, 4, 1, 1, 7, 0x291, 1, -1, 0, -1, 0},
-    {0, 0, 0, 1, 1, 6, -1, 0, -1, 0, -1, 0},
-    {0, 0, 8, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0xe, 1, 0xf, 1, 4, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 0xe, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 1, 3, 1, 5, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 0xa, 1, 1, 6, -1, 0, -1, 0, -1, 0},
-    {2, 1, 5, 0, 1, 7, 0x4a, 3, -1, 0, -1, 0},
-    {0, 0, 2, 0, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 1, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {7, 3, 0xd, 1, 1, 7, 0xba, 8, 0xba, 9, 0xba, 0xa},
-    {0x10, 1, 0x17, 1, 1, 7, 0x10e, 4, -1, 0, -1, 0},
-    {0, 0, 0x12, 1, 1, 6, -1, 0, -1, 0, -1, 0},
-    {0, 0, 9, 1, 1, 6, -1, 0, -1, 0, -1, 0},
-    {0, 0, 0x11, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {6, 1, 0x10, 1, 1, 7, 0xcb, 3, -1, 0, -1, 0},
-    {0xc, 1, 0x18, 1, 3, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 0x1b, 1, 1, 6, -1, 0, -1, 0, -1, 0},
-    {0, 0, 0xb, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 0xc, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 6, 1, 1, 6, -1, 0, 0, 0, 0, 0},
-    {0xa, 2, 0x13, 1, 3, 7, 0x27a, 8, -1, 0, -1, 0},
-    {0xf, 1, 0x14, 1, 1, 7, -1, 0, -1, 0, -1, 0},
-    {0, 0, 6, 1, 1, 6, -1, 0, -1, 0, -1, 0},
-    {0, 0, 6, 1, 1, 6, -1, 0, -1, 0, -1, 0},
-    {0, 0, 6, 1, 1, 6, -1, 0, -1, 0, -1, 0},
-    {0, 0, 6, 1, 1, 6, -1, 0, -1, 0, -1, 0},
+    {   0, 0,    7, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    7, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    7, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    7, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    7, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0, 0x19, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0, 0x1a, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0, 0x15, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    7, 1, 1, 7,    -1, 0,    0, 0,    0,   0},
+    {   0, 0, 0x16, 1, 1, 6,    -1, 0,   -1, 0,   -1,   0},
+    {   1, 1,    4, 1, 1, 7, 0x291, 1,   -1, 0,   -1,   0},
+    {   0, 0,    0, 1, 1, 6,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    8, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    { 0xe, 1,  0xf, 1, 4, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,  0xe, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 1,    3, 1, 5, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,  0xa, 1, 1, 6,    -1, 0,   -1, 0,   -1,   0},
+    {   2, 1,    5, 0, 1, 7,  0x4a, 3,   -1, 0,   -1,   0},
+    {   0, 0,    2, 0, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    1, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   7, 3,  0xd, 1, 1, 7,  0xba, 8, 0xba, 9, 0xba, 0xa},
+    {0x10, 1, 0x17, 1, 1, 7, 0x10e, 4,   -1, 0,   -1,   0},
+    {   0, 0, 0x12, 1, 1, 6,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    9, 1, 1, 6,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0, 0x11, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   6, 1, 0x10, 1, 1, 7,  0xcb, 3,   -1, 0,   -1,   0},
+    { 0xc, 1, 0x18, 1, 3, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0, 0x1b, 1, 1, 6,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,  0xb, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,  0xc, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    6, 1, 1, 6,    -1, 0,    0, 0,    0,   0},
+    { 0xa, 2, 0x13, 1, 3, 7, 0x27a, 8,   -1, 0,   -1,   0},
+    { 0xf, 1, 0x14, 1, 1, 7,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    6, 1, 1, 6,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    6, 1, 1, 6,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    6, 1, 1, 6,    -1, 0,   -1, 0,   -1,   0},
+    {   0, 0,    6, 1, 1, 6,    -1, 0,   -1, 0,   -1,   0},
 };

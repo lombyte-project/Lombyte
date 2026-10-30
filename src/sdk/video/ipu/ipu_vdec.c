@@ -1,14 +1,15 @@
 #include "types.h"
 #include "rnc/sdk/ipu_command_table.h"
+
 typedef struct {
-    u8 pad0[0x11C];
-    s32 unk11C;
-    u8 pad120[0x6F8];
-    s32 unk818;
-    u8 pad81C[0x1C];
-    s32 unk838;
-    s32 unk83C;
-    u8 pad840[0x18];
+    u8    pad0[0x11C];
+    s32   unk11C;
+    u8    pad120[0x6F8];
+    s32   unk818;
+    u8    pad81C[0x1C];
+    s32   unk838;
+    s32   unk83C;
+    u8    pad840[0x18];
     void *cbData;
 } MpegDec;
 

@@ -20,45 +20,44 @@ struct FramePalettePage {
 struct FrameImagePage {
     s32 source_address;
     u16 gs_block_offset;
-    u8 width_log2;
-    u8 height_log2;
+    u8  width_log2;
+    u8  height_log2;
 };
 
 struct FrameTextureTables {
-    u8 pad00[0x20];
+    u8  pad00[0x20];
     s32 frame_references_address;
     s32 image_pages_address;
     s32 palette_pages_address;
 };
+
 extern struct FrameTextureTables hud_state __asm__("D_0019A3E8");
 
 u64 get_frame_texture(s32 frame_id) __asm__("FUN_001ffa10");
 
 u64 get_frame_texture(s32 frame_id) {
-    struct FrameTextureRef *frame;
+    struct FrameTextureRef  *frame;
     struct FramePalettePage *palette_page;
-    struct FrameImagePage *image_page;
-    struct TextureUpload *packet;
-    struct TextureUpload *initial_packet;
-    struct TextureUpload *palette_packet;
-    u32 packet_offset;
-    u32 queued_transfer;
-    s32 image_upload_count;
-    s32 allocation_cursor;
-    u8 width_log2;
-    u8 height_log2;
-    s32 palette_source_address;
-    s32 return_mode;
-    s32 return_shift;
-    u64 tex0_word;
-    u64 palette_word;
+    struct FrameImagePage   *image_page;
+    struct TextureUpload    *packet;
+    struct TextureUpload    *initial_packet;
+    struct TextureUpload    *palette_packet;
+    u32                      packet_offset;
+    u32                      queued_transfer;
+    s32                      image_upload_count;
+    s32                      allocation_cursor;
+    u8                       width_log2;
+    u8                       height_log2;
+    s32                      palette_source_address;
+    s32                      return_mode;
+    s32                      return_shift;
+    u64                      tex0_word;
+    u64                      palette_word;
 
-    frame =
-        (struct FrameTextureRef *)(frame_id * 4 + hud_state.frame_references_address);
-    palette_page = (struct FramePalettePage *)(hud_state.palette_pages_address +
-                                               frame->palette_index * 8);
-    image_page = (struct FrameImagePage *)(hud_state.image_pages_address +
-                                           frame->image_index * 8);
+    frame = (struct FrameTextureRef *)(frame_id * 4 + hud_state.frame_references_address);
+    palette_page =
+        (struct FramePalettePage *)(hud_state.palette_pages_address + frame->palette_index * 8);
+    image_page = (struct FrameImagePage *)(hud_state.image_pages_address + frame->image_index * 8);
     queued_transfer = 0;
 
     if (palette_page->gs_block_offset == 0 || image_page->gs_block_offset == 0) {

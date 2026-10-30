@@ -1,7 +1,8 @@
 #include "types.h"
 #include "rnc/ui/menus/stream_buffers.h"
+
 extern void fill_transfer_words() __asm__("func_001F97E8");
-extern s32 get_menu_stream_buffer_size() __asm__("func_00225D88");
+extern s32  get_menu_stream_buffer_size() __asm__("func_00225D88");
 
 s32 acquire_menu_stream_buffer(s32 require_large_buffer) __asm__("FUN_00225c18");
 
@@ -19,8 +20,10 @@ s32 acquire_menu_stream_buffer(s32 require_large_buffer) {
             if (menu_stream_buffers[i].address != 0) {
                 if (!(menu_stream_buffers[i].flags & MENU_STREAM_BUFFER_ALLOCATED)) {
                     menu_stream_buffers[i].flags |= MENU_STREAM_BUFFER_ALLOCATED;
-                    fill_transfer_words(menu_stream_buffers[i].address, 0xDEADBEEF,
-                                      get_menu_stream_buffer_size(menu_stream_buffers[i].address));
+                    fill_transfer_words(
+                        menu_stream_buffers[i].address,
+                        0xDEADBEEF,
+                        get_menu_stream_buffer_size(menu_stream_buffers[i].address));
                     return menu_stream_buffers[i].address;
                 }
             }

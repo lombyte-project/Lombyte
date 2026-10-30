@@ -29,7 +29,7 @@
    Slot 6 is skipped in every loop while menu_system.unkD8 is clear. */
 
 typedef struct {
-    u8 pad0[0x50];
+    u8  pad0[0x50];
     s32 screen_x;         /* 0x50 */
     s32 screen_y;         /* 0x54 */
     s32 projected_width;  /* 0x58 */
@@ -37,17 +37,18 @@ typedef struct {
 } ProjectedPanelFrame;
 
 typedef struct {
-    u8 pad0[0x78];
+    u8                   pad0[0x78];
     ProjectedPanelFrame *frame; /* 0x78 */
 } PanelRenderSlot;
 
 typedef struct RenderPanel RenderPanel;
+
 struct RenderPanel {
     u8 pad0[4];
     s32 (*draw)(RenderPanel *); /* 0x04: bit 0 = skip blit, 2/8/4/0x10 = fit mode */
-    u8 pad8[8];
+    u8  pad8[8];
     s32 flags; /* 0x10: 1 = draw directly, 2 = first pass, 4 = hidden */
-    u8 pad14[4];
+    u8  pad14[4];
     s32 screen_x;         /* 0x18 */
     s32 screen_y;         /* 0x1C */
     s32 projected_width;  /* 0x20 */
@@ -56,12 +57,12 @@ struct RenderPanel {
 
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
 
-extern void project_graphics_bounds(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *)
-    __asm__("FUN_00237a78");
+extern void
+project_graphics_bounds(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *) __asm__("FUN_00237a78");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("FUN_00200f90");
-extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64)
-    __asm__("FUN_001f5450");
+extern void
+    draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("FUN_001f5450");
 
 void render_level_effects_and_screen_sprites(void) __asm__("FUN_002196b8");
 
@@ -71,24 +72,24 @@ void render_level_effects_and_screen_sprites(void) {
        sp+0x50..0x9F, which nothing in the function reads or writes. This
        array only reproduces that gap so the corner copies land at
        sp+0xA0/0xB0; what the original local was is unknown. */
-    Vec4 unused[5];
-    Vec4 first_corner;
-    Vec4 opposite_corner;
-    s32 projected_width;
-    s32 projected_height;
-    s32 screen_x;
-    s32 screen_y;
-    RenderPanel **panels;
-    PanelRenderSlot *slot;
-    PanelRenderSlot *projected_slot;
-    RenderPanel *panel;
+    Vec4                 unused[5];
+    Vec4                 first_corner;
+    Vec4                 opposite_corner;
+    s32                  projected_width;
+    s32                  projected_height;
+    s32                  screen_x;
+    s32                  screen_y;
+    RenderPanel        **panels;
+    PanelRenderSlot     *slot;
+    PanelRenderSlot     *projected_slot;
+    RenderPanel         *panel;
     ProjectedPanelFrame *projected_frame;
     ProjectedPanelFrame *panel_frame;
-    s32 effect_slot_index;
-    s32 projection_slot_index;
-    s32 pass;
-    s32 draw_slot_index;
-    s32 final_slot_index;
+    s32                  effect_slot_index;
+    s32                  projection_slot_index;
+    s32                  pass;
+    s32                  draw_slot_index;
+    s32                  final_slot_index;
     /* One local serves as the projected width in the projection loop and
        as the panel flags in the draw loop; retail allocates both through
        the same register, which separate locals do not reproduce. */
@@ -124,8 +125,7 @@ void render_level_effects_and_screen_sprites(void) {
     }
 
     panels = menu_system.current != 0 ? (RenderPanel **)menu_system.current->screens : 0;
-    for (projection_slot_index = 0; projection_slot_index < slot_count;
-         projection_slot_index++) {
+    for (projection_slot_index = 0; projection_slot_index < slot_count; projection_slot_index++) {
         projected_slot = panel_slots[projection_slot_index];
         if (projected_slot == 0 || panel_slot_enabled[projection_slot_index] == 0 ||
             (projection_slot_index == 6 && menu_system.unkD8 == 0)) {
@@ -138,8 +138,12 @@ void render_level_effects_and_screen_sprites(void) {
         qcopy(&frame_vectors[3], (Vec4 *)projected_frame + 3);
         first_corner.q = frame_vectors[0].q;
         opposite_corner.q = frame_vectors[3].q;
-        project_graphics_bounds(&first_corner, &opposite_corner, &projected_width,
-                                &projected_height, &screen_x, &screen_y);
+        project_graphics_bounds(&first_corner,
+                                &opposite_corner,
+                                &projected_width,
+                                &projected_height,
+                                &screen_x,
+                                &screen_y);
         screen_x++;
         screen_y++;
         value = projected_width;
@@ -153,8 +157,12 @@ void render_level_effects_and_screen_sprites(void) {
         projected_frame->screen_y = screen_y;
         projected_frame->projected_width = projected_width;
         projected_frame->projected_height = projected_height;
-        append_screen_rect_packet(screen_x + 1, screen_y + 1, screen_x + projected_width - 1,
-                                  screen_y + projected_height - 1, panel_clear_color, 0);
+        append_screen_rect_packet(screen_x + 1,
+                                  screen_y + 1,
+                                  screen_x + projected_width - 1,
+                                  screen_y + projected_height - 1,
+                                  panel_clear_color,
+                                  0);
     }
 
     for (pass = 0; pass < 2; pass++) {
@@ -203,7 +211,8 @@ void render_level_effects_and_screen_sprites(void) {
             while (texture_width_log2 + texture_height_log2 >= 18) {
                 texture_height_log2--;
             }
-            configure_graphics_render_target_and_projection(texture_width_log2, texture_height_log2, pass != 0, 1.0f);
+            configure_graphics_render_target_and_projection(
+                texture_width_log2, texture_height_log2, pass != 0, 1.0f);
             texture_width = 1 << texture_width_log2;
             texture_height = 1 << texture_height_log2;
             draw_hud_rect_depth(0, 0, texture_width, texture_height, panel_clear_color, 0, 0);
@@ -248,9 +257,16 @@ void render_level_effects_and_screen_sprites(void) {
             }
             vu1_add_g_sregister(0x42, 0x8000000064L);
             vu1_add_g_sregister(0x47, 0x43);
-            draw_textured_quad(frame_x, frame_y, frame_width, frame_height, texture_left,
-                               texture_top, texture_right - texture_left,
-                               texture_bottom - texture_top, 0x80808080L, capture_texture_tex0);
+            draw_textured_quad(frame_x,
+                               frame_y,
+                               frame_width,
+                               frame_height,
+                               texture_left,
+                               texture_top,
+                               texture_right - texture_left,
+                               texture_bottom - texture_top,
+                               0x80808080L,
+                               capture_texture_tex0);
         }
         if (pass == 0) {
             restore_moby_class_dists();

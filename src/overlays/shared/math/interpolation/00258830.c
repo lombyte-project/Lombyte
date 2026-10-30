@@ -12,24 +12,30 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259868), where it is exact; names translated to the US level program. */
 
-typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
+typedef struct {
+    float a[4];
+} Vs __attribute__((aligned(16)));
 
 #include "rnc/overlay/collision.h"
-extern int D_L00_00173E40[];
-extern int coll_sphere() __asm__("FUN_L00_001f0d60");
-extern Vec4 collision_hit_point __asm__("D_L00_00173E60");
-extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
-int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, float radius, float height);
-int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, float radius, float height) {
-    Vs old_pos;
-    Vs ray_start;
-    Vs ray_end;
-    Vs reach;
-    int result = 0;
-    int coll_flags = (flags * 2) & 0x20;
+extern int  D_L00_00173E40[];
+extern int  coll_sphere() __asm__("FUN_L00_001f0d60");
+extern Vec4 collision_hit_point __asm__("D_L00_00173E60");
+extern int  func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
+
+int FUN_L00_00258830(
+    char *moby, char *velocity, int flags, float step_height, float radius, float height);
+int FUN_L00_00258830(
+
+    char *moby, char *velocity, int flags, float step_height, float radius, float height) {
+    Vs    old_pos;
+    Vs    ray_start;
+    Vs    ray_end;
+    Vs    reach;
+    int   result = 0;
+    int   coll_flags = (flags * 2) & 0x20;
     char *pos = moby + 0x10;
-    int i;
+    int   i;
     char *position;
 
     qcopy(&old_pos, pos);
@@ -66,7 +72,8 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
         if (D_L00_00173E40[7] > 0) {
             float surface;
             result |= 2;
-            surface = fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48), vector_length_xy((char *)D_L00_00173E40 + 0x40));
+            surface = fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48),
+                                   vector_length_xy((char *)D_L00_00173E40 + 0x40));
             if (surface > 0.5f) {
                 result |= 4;
             }

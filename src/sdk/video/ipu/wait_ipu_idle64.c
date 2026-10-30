@@ -1,10 +1,11 @@
 #include "types.h"
+
 extern s32 _dispatchMpegCbNodata();
 
 s64 _waitIpuIdle64(s32 *ctx) {
     long new_var;
-    s64 status;
-    int count = 0;
+    s64  status;
+    int  count = 0;
     status = *((volatile s64 *)0x10002000);
     if (status < 0) {
         if (((*((volatile u32 *)0x10002010)) & 0x4000) == 0) {

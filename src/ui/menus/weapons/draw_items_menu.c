@@ -7,55 +7,56 @@
 #include "rnc/ui/menus/weapons/compute_clamped_count_difference.h"
 
 typedef struct {
-    u8 pad0[0x20];
+    u8  pad0[0x20];
     s32 width;
     u16 height;
-    u8 pad26[0x1E];
+    u8  pad26[0x1E];
     s32 help_tip;
 } ItemsMenu;
 
-extern s32 game_language_macro[] __asm__("D_0015ED88")MACRO_ADDR;
+extern s32 game_language_macro[] __asm__("D_0015ED88") MACRO_ADDR;
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 
-
 extern void font_print_left(s32, s32, u64, char *, s32) __asm__("FUN_001f6a60");
-extern void font_print_window_regular(struct TextRegion *, u64, char *,
-                                      s32) __asm__("func_001F7580");
+extern void
+font_print_window_regular(struct TextRegion *, u64, char *, s32) __asm__("func_001F7580");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
-extern void draw_moby_list(s32, s32) __asm__("func_0020D330");
-extern s32 count_nonzero_entries_up_to_40(void) __asm__("func_00215290");
-extern s32 count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
+extern void  append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
+extern void  draw_moby_list(s32, s32) __asm__("func_0020D330");
+extern s32   count_nonzero_entries_up_to_40(void) __asm__("func_00215290");
+extern s32   count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
 extern void *memset(void *, s32, u32);
-extern int sprintf(char *, const char *, ...);
+extern int   sprintf(char *, const char *, ...);
 extern char *strchr(const char *, int);
 extern char *strcpy(char *, const char *);
-extern u32 strlen(const char *);
-s32 draw_items_menu(ItemsMenu *menu) __asm__("FUN_0021eb20");
+extern u32   strlen(const char *);
+s32          draw_items_menu(ItemsMenu *menu) __asm__("FUN_0021eb20");
+
 static inline int add_offset(s32 arg0, int arg1) {
     return arg0 + arg1;
 }
+
 static inline char *add_string_offset(char *a, int n) {
     return a + n;
 }
+
 static inline int divide_coordinate(s32 a, int n) {
     return a / n;
 }
 
-
 s32 draw_items_menu(ItemsMenu *menu) {
-    char text_buffer[0x80];
+    char  text_buffer[0x80];
     char *hyphen;
     char *source_end;
     char *destination_end;
     char *format;
-    s32 text_length;
-    s32 column_divisor;
-    s32 x;
-    s32 y;
-    s32 collected_count;
+    s32   text_length;
+    s32   column_divisor;
+    s32   x;
+    s32   y;
+    s32   collected_count;
     if (menu->help_tip != 0) {
         draw_moby_list(menu->help_tip, 1);
     }
@@ -112,22 +113,35 @@ s32 draw_items_menu(ItemsMenu *menu) {
     font_print_right(0xC8, 0x54, 0x80FFA888L, get_help_message_text(0x4F51), -1);
     collected_count = count_nonzero_entries_up_to_40();
     sprintf(text_buffer, D_001602A0, collected_count);
-    font_print_left(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x1D), 0x80000000L,
-                    text_buffer, -1);
+    font_print_left(add_offset(text_shadow_x, 0xF0),
+                    add_offset(text_shadow_y, 0x1D),
+                    0x80000000L,
+                    text_buffer,
+                    -1);
     font_print_left(0xF0, 0x1D, 0x80FFA888L, text_buffer, -1);
     sprintf(text_buffer, D_001602A0, count_nonzero_entries_up_to_10() * 4);
-    font_print_left(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x36), 0x80000000L,
-                    text_buffer, -1);
+    font_print_left(add_offset(text_shadow_x, 0xF0),
+                    add_offset(text_shadow_y, 0x36),
+                    0x80000000L,
+                    text_buffer,
+                    -1);
     font_print_left(0xF0, 0x36, 0x80FFA888L, text_buffer, -1);
     sprintf(text_buffer, D_001602A0, compute_clamped_count_difference());
-    font_print_left(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x54), 0x80000000L,
-                    text_buffer, -1);
+    font_print_left(add_offset(text_shadow_x, 0xF0),
+                    add_offset(text_shadow_y, 0x54),
+                    0x80000000L,
+                    text_buffer,
+                    -1);
     font_print_left(0xF0, 0x54, 0x80FFA888L, text_buffer, -1);
-    append_screen_rect_packet(add_offset(text_shadow_x, 0xD0), add_offset(text_shadow_y, 0x4D),
-                              add_offset(text_shadow_x, 0xF2), add_offset(text_shadow_y, 0x50),
-                              0x80000000L, 0);
+    append_screen_rect_packet(add_offset(text_shadow_x, 0xD0),
+                              add_offset(text_shadow_y, 0x4D),
+                              add_offset(text_shadow_x, 0xF2),
+                              add_offset(text_shadow_y, 0x50),
+                              0x80000000L,
+                              0);
     append_screen_rect_packet(0xD0, 0x4D, 0xF2, 0x50, 0x80FFA888L, 0);
     do_gif_paging();
     return 8;
 }
+
 extern __typeof__(draw_items_menu) func_0021EB20 __attribute__((alias("FUN_0021eb20")));

@@ -1,16 +1,19 @@
 #include "types.h"
 #include "rnc/sdk/ipu_command_table.h"
+
 typedef struct PeepBitContext {
-    u8 pad_0[0x818];
+    u8  pad_0[0x818];
     s32 unk818;
-    u8 pad_81C[0x1C];
+    u8  pad_81C[0x1C];
     s32 unk838;
     s32 unk83C;
-    u8 pad_840[0x18];
+    u8  pad_840[0x18];
     s32 unk858;
 } PeepBitContext;
+
 extern s32 _dispatchMpegCbNodata();
 extern s64 _waitIpuIdle64();
+
 s32 _peepBit(PeepBitContext *ctx, s32 count) {
     s32 counter;
 

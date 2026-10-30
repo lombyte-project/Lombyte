@@ -11,7 +11,7 @@ extern float ripple_mesh_buffers_uv_scroll_rate __asm__("D_L15_00162104");
 extern float ripple_mesh_uv_scroll_rate __asm__("D_L15_0016216C");
 extern float ripple_mesh_radial_wavelength __asm__("D_L15_00162160");
 extern float ripple_mesh_z_amplitude __asm__("D_L15_00162168");
-extern int level_save_bank_index __asm__("D_L15_0015ED84");
+extern int   level_save_bank_index __asm__("D_L15_0015ED84");
 extern float scaled_ripple_radial_wavelength __asm__("D_L15_001621F0");
 extern float scaled_ripple_z_amplitude __asm__("D_L15_001621F8");
 extern float scaled_ripple_uv_scroll_rate __asm__("D_L15_001621FC");

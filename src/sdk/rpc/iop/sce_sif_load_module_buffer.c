@@ -1,10 +1,12 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+
 struct SifLoadModuleArgs {
     s32 unk0;
     s32 unk4;
 };
-extern u8 D_00158400[];
+
+extern u8  D_00158400[];
 extern s32 _lf_bind();
 extern s32 sif_load_module_server_changed() __asm__("func_0011CAE0");
 extern s32 memcpy();

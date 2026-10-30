@@ -15,8 +15,9 @@ struct SaveHeader {
 
 extern s32 calculate_crc16(void *, s32) __asm__("func_0020ACC0");
 
-s32 memcard_prepare_data(struct SaveHeader *out, s32 slot,
-                         struct SaveBlock *blk) __asm__("FUN_0020ad78");
+s32 memcard_prepare_data(struct SaveHeader *out,
+                         s32                slot,
+                         struct SaveBlock  *blk) __asm__("FUN_0020ad78");
 
 s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk) {
     u8 *write_cursor;
@@ -27,7 +28,7 @@ s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk
     write_cursor = (u8 *)(out + 1);
     if (blk->base != 0) {
         struct SaveBlock *block = blk;
-        s32 mask = -4;
+        s32               mask = -4;
 
         do {
             slot_payload_source = block->base + slot * block->size;

@@ -2,8 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/runtime/time/fast_dec_timer_s16/FUN_001f9770.s",
-            fast_dec_timer_s16);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/runtime/time/fast_dec_timer_s16/FUN_001f9770.s", fast_dec_timer_s16);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

@@ -26,4 +26,5 @@ s32 load(s32 cd_read_destination, s32 sector, s32 sector_count) {
     return result;
 }
 
-extern s32 func_00216828(s32 dst, s32 sector, s32 sector_count) __attribute__((alias("FUN_00216828")));
+extern s32 func_00216828(s32 dst, s32 sector, s32 sector_count)
+    __attribute__((alias("FUN_00216828")));

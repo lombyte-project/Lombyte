@@ -2,8 +2,10 @@
 #include "sda.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/item_state.h"
+
 int FUN_0020bd58(void) {
-    if (D_0013D8AC != 0 && alternate_item_available[0x20] != 0 && alternate_item_available[0x21] != 0)
+    if (D_0013D8AC != 0 && alternate_item_available[0x20] != 0 &&
+        alternate_item_available[0x21] != 0)
         return 1;
     return 0;
 }

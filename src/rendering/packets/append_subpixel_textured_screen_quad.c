@@ -8,27 +8,41 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
+
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
-void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen_width,
-                                          f32 screen_height, s32 texture_u, s32 texture_v,
-                                          s32 texture_width, s32 texture_height, s64 color,
+void append_subpixel_textured_screen_quad(f32 screen_x,
+                                          f32 screen_y,
+                                          f32 screen_width,
+                                          f32 screen_height,
+                                          s32 texture_u,
+                                          s32 texture_v,
+                                          s32 texture_width,
+                                          s32 texture_height,
+                                          s64 color,
                                           s64 texture_tex0) __asm__("FUN_001f55d8");
 
-void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen_width,
-                                          f32 screen_height, s32 texture_u, s32 texture_v,
-                                          s32 texture_width, s32 texture_height, s64 color,
+void append_subpixel_textured_screen_quad(f32 screen_x,
+                                          f32 screen_y,
+                                          f32 screen_width,
+                                          f32 screen_height,
+                                          s32 texture_u,
+                                          s32 texture_v,
+                                          s32 texture_width,
+                                          s32 texture_height,
+                                          s64 color,
+
                                           s64 texture_tex0) {
     struct DmaTag *tag;
-    u64 *packet_words;
-    s32 left;
-    s32 right;
-    s32 top;
-    s32 bottom;
-    s32 texture_right;
-    s32 texture_left;
-    s32 texture_bottom;
-    f32 screen_scale = 16.0f;
+    u64           *packet_words;
+    s32            left;
+    s32            right;
+    s32            top;
+    s32            bottom;
+    s32            texture_right;
+    s32            texture_left;
+    s32            texture_bottom;
+    f32            screen_scale = 16.0f;
 
     left = truncate_float_to_s32(screen_x * screen_scale) + screen_extent.left - 8;
     right =

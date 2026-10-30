@@ -3,7 +3,7 @@
 #include "types.h"
 
 extern void GetOsdConfigParam(int *config);
-extern int IsT10K(void);
+extern int  IsT10K(void);
 
 int sceScfGetLanguage(void) {
     int config;

@@ -4,5 +4,4 @@
 #include "types.h"
 #include "rnc/overlay/hero_tables.h"
 
-
 #endif /* LOMBYTE_RNC_OVERLAY_HERO_H */

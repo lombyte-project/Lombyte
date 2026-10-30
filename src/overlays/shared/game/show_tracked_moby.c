@@ -9,8 +9,8 @@
 /* clears two moby flags and refreshes its linked value */
 /* Ported from rac1-decomp (src/overlays/shared/space_002A3680.c: func_L01_002A3680), where it is exact; names translated to the US level program. */
 
-
 void show_tracked_moby(void) __asm__("FUN_L01_002a2480");
+
 void show_tracked_moby(void) {
     char *first = *(char **)((char *)&level_render_state);
     if (first != 0) {

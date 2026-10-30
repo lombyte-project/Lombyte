@@ -6,14 +6,14 @@
 #include "rnc/globals.h"
 
 typedef struct {
-    u8 pad0[8];
+    u8  pad0[8];
     s32 width;
     s32 height;
     s32 pixel_storage_format;
     s32 palette_storage_format;
     s32 pad18;
     s32 mip_level_count;
-    u8 data[4];
+    u8  data[4];
 } MipTextureHeader;
 
 typedef struct {
@@ -30,23 +30,23 @@ typedef struct {
 
 extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("FUN_001f97e8");
 extern void FlushCache(s32);
-extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
-extern s32 sceGsExecLoadImage(sceGsLoadImage *, u128 *);
-extern s32 sceGsSyncPath(s32, s32) __asm__("func_00120558");
-extern s32 log2dim(s32) __asm__("func_001F97A0");
+extern s32  sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
+extern s32  sceGsExecLoadImage(sceGsLoadImage *, u128 *);
+extern s32  sceGsSyncPath(s32, s32) __asm__("func_00120558");
+extern s32  log2dim(s32) __asm__("func_001F97A0");
 
 s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) __asm__("FUN_00202270");
 
 s32 upload_mip_texture(MipTextureHeader *texture_source, u64 *regs) {
     MipTextureUpload upload;
-    sceGsLoadImage load_image;
-    s32 mip_index;
-    s32 header_byte;
-    s32 allocation_bytes;
-    s32 *buffer_width;
-    u64 tex0_word;
-    u64 palette_word;
-    u64 mip_word;
+    sceGsLoadImage   load_image;
+    s32              mip_index;
+    s32              header_byte;
+    s32              allocation_bytes;
+    s32             *buffer_width;
+    u64              tex0_word;
+    u64              palette_word;
+    u64              mip_word;
 
     fill_transfer_words(&upload, 0, sizeof(upload));
     switch (texture_source->pixel_storage_format) {
@@ -93,16 +93,29 @@ s32 upload_mip_texture(MipTextureHeader *texture_source, u64 *regs) {
         upload.mip_sizes[0] = (texture_source->width * texture_source->height) >> 1;
         break;
     }
-    if (texture_source->pixel_storage_format == 0x13 || texture_source->pixel_storage_format == 0x14) {
+    if (texture_source->pixel_storage_format == 0x13 ||
+        texture_source->pixel_storage_format == 0x14) {
         upload.palette_block_offset = gs_texture_allocation_cursor >> 8;
         if (texture_source->pixel_storage_format == 0x14) {
             gs_texture_allocation_cursor += 0x100;
-            sceGsSetDefLoadImage(&load_image, upload.palette_block_offset, 1,
-                                 texture_source->palette_storage_format, 0, 0, 8, 2);
+            sceGsSetDefLoadImage(&load_image,
+                                 upload.palette_block_offset,
+                                 1,
+                                 texture_source->palette_storage_format,
+                                 0,
+                                 0,
+                                 8,
+                                 2);
         } else {
             gs_texture_allocation_cursor += upload.palette_size;
-            sceGsSetDefLoadImage(&load_image, upload.palette_block_offset, 1,
-                                 texture_source->palette_storage_format, 0, 0, 16, 16);
+            sceGsSetDefLoadImage(&load_image,
+                                 upload.palette_block_offset,
+                                 1,
+                                 texture_source->palette_storage_format,
+                                 0,
+                                 0,
+                                 16,
+                                 16);
         }
         FlushCache(0);
         sceGsExecLoadImage(&load_image, (u128 *)upload.palette_address);
@@ -122,8 +135,12 @@ s32 upload_mip_texture(MipTextureHeader *texture_source, u64 *regs) {
                 *buffer_width = 1;
             }
             upload.texture_block_offsets[mip_index] = gs_texture_allocation_cursor >> 8;
-            sceGsSetDefLoadImage(&load_image, upload.texture_block_offsets[mip_index],
-                                 *buffer_width, texture_source->pixel_storage_format, 0, 0,
+            sceGsSetDefLoadImage(&load_image,
+                                 upload.texture_block_offsets[mip_index],
+                                 *buffer_width,
+                                 texture_source->pixel_storage_format,
+                                 0,
+                                 0,
                                  ((volatile MipTextureHeader *)texture_source)->width >> mip_index,
                                  texture_source->height >> mip_index);
             FlushCache(0);

@@ -9,15 +9,26 @@
 extern MpegMcFunc D_00132E30[];
 extern MpegMcFunc D_00132E50[];
 
-void _getRef0(struct MpegDecoder *d, struct MpegRefImage *ref, int sfield, int dfield, int yofs, int h,
-                   int bx, int by, int dx, int dy, int fieldpred, int avg) {
+void _getRef0(struct MpegDecoder  *d,
+              struct MpegRefImage *ref,
+              int                  sfield,
+              int                  dfield,
+              int                  yofs,
+              int                  h,
+              int                  bx,
+              int                  by,
+              int                  dx,
+              int                  dy,
+              int                  fieldpred,
+
+              int avg) {
     struct MpegMcFetch *fl;
     struct MpegMcFetch *fc;
-    u8 *mc;
-    int n, x, y, mbx, mby, ly, lx, v, base, code, mb;
-    int cmvx, cmvy, ch, cmbx, cmby;
-    int xh, yh, cyo, o0, o1;
-    u8 *data;
+    u8                 *mc;
+    int                 n, x, y, mbx, mby, ly, lx, v, base, code, mb;
+    int                 cmvx, cmvy, ch, cmbx, cmby;
+    int                 xh, yh, cyo, o0, o1;
+    u8                 *data;
 
     n = d->mb_buf[d->mb_buf_index].fetch_count;
     mc = d->mc_work;

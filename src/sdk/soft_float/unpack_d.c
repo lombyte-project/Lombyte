@@ -42,7 +42,7 @@ Boston, MA 02111-1307, USA.  */
 
 typedef union {
     double value;
-    u64 value_raw;
+    u64    value_raw;
 } FLOUnion;
 
 void __unpack_d(FLOUnion *src, FpNumber *dst);

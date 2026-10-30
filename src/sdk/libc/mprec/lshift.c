@@ -31,18 +31,18 @@ struct Bigint {
 };
 
 extern struct Bigint *_Balloc(s32, s32);
-extern s32 _Bfree() __asm__("InsertLinkObject");
+extern s32            _Bfree() __asm__("InsertLinkObject");
 
 struct Bigint *_lshift(s32 bigint_context, struct Bigint *input_bigint, s32 shift_bits) {
-    s32 i;
-    s32 k1;
-    s32 whole_word_shift;
-    s32 result_word_count_plus_one;
+    s32            i;
+    s32            k1;
+    s32            whole_word_shift;
+    s32            result_word_count_plus_one;
     struct Bigint *result_bigint;
-    u32 *x;
-    u32 *x1;
-    u32 *xe;
-    u32 z;
+    u32           *x;
+    u32           *x1;
+    u32           *xe;
+    u32            z;
 
     whole_word_shift = shift_bits >> 5;
     k1 = input_bigint->_k;

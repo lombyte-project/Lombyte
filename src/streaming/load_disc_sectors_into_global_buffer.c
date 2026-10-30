@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/streaming/disc_table.h"
 #include "rnc/data_labels.h"
+
 extern s32 sceCdGetError();
 extern s32 sceCdRead();
 extern s32 sceCdSync();
@@ -9,8 +10,8 @@ extern s32 sceGsSyncV();
 s32 load_disc_sectors_into_global_buffer(void) __asm__("FUN_0012f2b8");
 
 s32 load_disc_sectors_into_global_buffer(void) {
-    u8 disc_sector_buffer[0x3000];
-    u8 mode[4];
+    u8  disc_sector_buffer[0x3000];
+    u8  mode[4];
     u32 i;
 
     mode[0] = 0x20;

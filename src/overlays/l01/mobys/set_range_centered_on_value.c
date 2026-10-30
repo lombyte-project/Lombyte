@@ -4,8 +4,8 @@
 
 typedef struct {
     char pad0[0x84];
-    f32 lo;
-    f32 hi;
+    f32  lo;
+    f32  hi;
 } Range;
 
 /* Sets the range to x plus or minus 0.2. */

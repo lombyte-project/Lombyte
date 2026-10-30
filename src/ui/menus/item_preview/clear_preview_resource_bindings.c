@@ -5,16 +5,17 @@
 #include "rnc/ui/menus/menu_globals.h"
 
 void clear_preview_resource_bindings(void) __asm__("FUN_002267b8");
+
 void clear_preview_resource_bindings(void) {
-    register s32 class_slot;
-    register s32 class_resource_address;
-    s32 resource_index;
-    register u8 *binding_base;
+    register s32            class_slot;
+    register s32            class_resource_address;
+    s32                     resource_index;
+    register u8            *binding_base;
     PreviewResourceBinding *binding;
-    register s32 animation_address;
-    register s32 resource_first;
-    register s32 resource_count;
-    register s32 resource_end;
+    register s32            animation_address;
+    register s32            resource_first;
+    register s32            resource_count;
+    register s32            resource_end;
 
     resource_index = menu_system.unkA8;
     if (resource_index < (resource_index + menu_system.unkAC)) {

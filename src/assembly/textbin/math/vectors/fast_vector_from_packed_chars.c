@@ -2,8 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/math/vectors/fast_vector_from_packed_chars/FUN_001f9d50.s",
-            fast_vector_from_packed_chars);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/math/vectors/fast_vector_from_packed_chars/FUN_001f9d50.s", fast_vector_from_packed_chars);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

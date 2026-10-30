@@ -4,6 +4,7 @@
 #include "rnc/rendering/fs_aa_packets.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
+
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
@@ -13,7 +14,7 @@ extern void swap_render_buffer_chain(void) __asm__("func_00233630");
 extern void vu1_send_chain(void) __asm__("func_002336A0");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
-extern s32 sceGsSyncV(s32);
+extern s32  sceGsSyncV(s32);
 
 #define VP (*(u8 *volatile *)&render_packet_cursor.bytes)
 

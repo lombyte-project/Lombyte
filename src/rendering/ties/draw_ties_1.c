@@ -3,19 +3,19 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/render_globals.h"
 
-extern u8 D_00160F30[];
-extern u8 D_00160F40[];
-extern s32 D_00160F68;
-extern s32 D_0018A2C8[];
-extern u8 D_001DF030[];
-extern s32 FlushCache();
-extern s32 WriteDmaChannel();
-extern s32 noop_core_callback() __asm__("func_001F21B0");
+extern u8   D_00160F30[];
+extern u8   D_00160F40[];
+extern s32  D_00160F68;
+extern s32  D_0018A2C8[];
+extern u8   D_001DF030[];
+extern s32  FlushCache();
+extern s32  WriteDmaChannel();
+extern s32  noop_core_callback() __asm__("func_001F21B0");
 extern void noop_core_callback_secondary() __asm__("func_001F21B8");
-extern s32 fast_mem_copy() __asm__("func_001F98D0");
-extern s32 dma_tie_textures() __asm__("func_00235640");
-extern s32 tie_proc() __asm__("func_00235BE8");
-void draw_ties_1(void) __asm__("FUN_002358c8");
+extern s32  fast_mem_copy() __asm__("func_001F98D0");
+extern s32  dma_tie_textures() __asm__("func_00235640");
+extern s32  tie_proc() __asm__("func_00235BE8");
+void        draw_ties_1(void) __asm__("FUN_002358c8");
 
 void draw_ties_1(void) {
     register s32 current;

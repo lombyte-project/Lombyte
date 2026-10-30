@@ -1,10 +1,11 @@
 #include "types.h"
+
 typedef struct {
     s32 option;
     s32 port;
     s32 slot;
     s32 number;
-    u8 name[16];
+    u8  name[16];
 } Pad2SocketParam;
 
 typedef struct {
@@ -13,38 +14,38 @@ typedef struct {
     s32 port;
     s32 slot;
     s32 number;
-    u8 name[16];
+    u8  name[16];
 } DbcSocketParam;
 
 typedef struct {
     s32 active;
-    u8 pad4[0x8];
+    u8  pad4[0x8];
     u8 *addr;
-    u8 pad10[0x320];
+    u8  pad10[0x320];
 } Pad2Info;
 
 typedef struct {
-    u8 f0;
-    u8 f1;
-    u8 f2;
-    u8 f3;
+    u8  f0;
+    u8  f1;
+    u8  f2;
+    u8  f3;
     s32 f4;
-    u8 pad8[0x14];
-    u8 buttons[32];
-    u8 pad3C[0x40];
+    u8  pad8[0x14];
+    u8  buttons[32];
+    u8  pad3C[0x40];
     s32 f7C;
 } Pad2Side;
 
 extern Pad2Info D_0015B540[];
-extern s32 sceDbcCreateSocket(DbcSocketParam *param, void *addr0, void *addr1);
-extern void *memset(void *, s32, u32);
-extern void *memcpy(void *, const void *, u32);
+extern s32      sceDbcCreateSocket(DbcSocketParam *param, void *addr0, void *addr1);
+extern void    *memset(void *, s32, u32);
+extern void    *memcpy(void *, const void *, u32);
 
 s32 scePad2CreateSocket(Pad2SocketParam *param, void *addr) {
     DbcSocketParam dbc;
-    Pad2Side *side;
-    s32 socket;
-    s32 i;
+    Pad2Side      *side;
+    s32            socket;
+    s32            i;
 
     if ((u32)addr & 0x3F) {
         return -1;

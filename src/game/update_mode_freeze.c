@@ -21,26 +21,26 @@ struct FreezeModeState {
     s32 unk28;
 };
 
-extern u16 D_0013E05A[];
-extern u8 saved_camera_vectors[] __asm__("D_00141050");
-extern s32 D_0015EE38;
-extern s32 D_0015EE3C;
-extern s32 D_0015F648;
+extern u16                    D_0013E05A[];
+extern u8                     saved_camera_vectors[] __asm__("D_00141050");
+extern s32                    D_0015EE38;
+extern s32                    D_0015EE3C;
+extern s32                    D_0015F648;
 extern struct FreezeModeState freeze __asm__("D_00193300");
-extern s32 pause_current_action_list[] __asm__("D_001D5BF8");
-extern char sound_update() __asm__("func_0022CA50");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
-extern void noop_main_callback() __asm__("func_001E93E8");
-extern void noop_callback_k(u8 *, u8 *, s32, s32) __asm__("func_001E9440");
-extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern void set_animation_parameter(s32, s32) __asm__("func_001FF570");
-extern void decrement_resource_counter(void) __asm__("UpdateResourceCounter");
-extern void load_and_initialize_level_chunk() __asm__("func_00209370");
-extern void InitializeGlobalStateEntry(s32 value);
-extern void music_unpause();
-extern void snd_flush_sound_commands() __asm__("func_0012DC80");
-void update_mode_freeze(void) __asm__("FUN_001fce28");
+extern s32                    pause_current_action_list[] __asm__("D_001D5BF8");
+extern char                   sound_update() __asm__("func_0022CA50");
+extern s32                    scale_game_frames(s32) __asm__("func_001F96F8");
+extern void                   memcard_save_data(s32, s32) __asm__("func_0020B178");
+extern void                   noop_main_callback() __asm__("func_001E93E8");
+extern void                   noop_callback_k(u8 *, u8 *, s32, s32) __asm__("func_001E9440");
+extern void                   fade_to_black(s32) __asm__("func_001F4A58");
+extern void                   set_animation_parameter(s32, s32) __asm__("func_001FF570");
+extern void                   decrement_resource_counter(void) __asm__("UpdateResourceCounter");
+extern void                   load_and_initialize_level_chunk() __asm__("func_00209370");
+extern void                   InitializeGlobalStateEntry(s32 value);
+extern void                   music_unpause();
+extern void                   snd_flush_sound_commands() __asm__("func_0012DC80");
+void                          update_mode_freeze(void) __asm__("FUN_001fce28");
 
 void update_mode_freeze(void) {
     enum {

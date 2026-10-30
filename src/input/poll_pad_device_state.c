@@ -1,12 +1,12 @@
 #include "types.h"
 
 struct PAD {
-    u8 pad0[0x180];
-    u8 unk180[4];
-    u8 unk184[4];
-    u8 unk188;
-    u8 unk189;
-    u8 pad18A[0xA];
+    u8  pad0[0x180];
+    u8  unk180[4];
+    u8  unk184[4];
+    u8  unk188;
+    u8  unk189;
+    u8  pad18A[0xA];
     s32 socket;
     s32 unk198;
     s32 unk19C;
@@ -15,7 +15,7 @@ struct PAD {
     s32 unk1A8;
     s32 unk1AC;
     s32 unk1B0;
-    u8 pad1B4[4];
+    u8  pad1B4[4];
     s32 unk1B8;
     s32 unk1BC;
     s32 unk1C0;
@@ -26,14 +26,14 @@ struct PAD {
     s32 unk1D4;
     s32 unk1D8;
     s32 unk1DC;
-    u8 pad1E0[0x168];
+    u8  pad1E0[0x168];
     s32 unk348;
 };
 
-extern s32 scePad2GetState(s32 socket);
-extern s32 scePad2GetButtonProfile(s32 socket, u8 *profile);
-extern s32 sceVibGetProfile(s32 port, u8 *profile);
-extern s32 scePad2Read(s32 socket, void *buf);
+extern s32  scePad2GetState(s32 socket);
+extern s32  scePad2GetButtonProfile(s32 socket, u8 *profile);
+extern s32  sceVibGetProfile(s32 port, u8 *profile);
+extern s32  scePad2Read(s32 socket, void *buf);
 extern void clear_pad_input(struct PAD *p) __asm__("func_002172C0");
 extern void process_pad_input(struct PAD *p, u8 *buf, s32 len) __asm__("func_00217328");
 
@@ -49,7 +49,7 @@ void poll_pad_device_state(struct PAD *pad_state) {
     s32 pad_device_state;
     s32 byte_count;
     s32 i;
-    u8 pad_response_buffer[0x40];
+    u8  pad_response_buffer[0x40];
 
     pad_state->unk1A0 = 0;
     saved_pad_value = pad_state->unk1B0;

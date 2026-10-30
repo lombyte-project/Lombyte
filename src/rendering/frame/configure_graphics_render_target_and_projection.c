@@ -8,10 +8,19 @@
 
 /* data paired by order (exact), deltas ['0x100']: D_001519EE->D_001518EE, D_0015EF8C->D_0015EE8C */
 
-extern void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 horizontal_fov, f32 fog_near_distance, f32 fog_far_distance, f32 fog_near_intensity, f32 fog_far_intensity) __asm__("FUN_001f33b8");
-extern s16 fixed_render_target_framebuffer_page[] __asm__("D_001518EE");
+extern void configure_graphics_projection(s32 viewport_width,
+                                          s32 viewport_height,
+                                          f32 horizontal_fov,
+                                          f32 fog_near_distance,
+                                          f32 fog_far_distance,
+                                          f32 fog_near_intensity,
+                                          f32 fog_far_intensity) __asm__("FUN_001f33b8");
+extern s16  fixed_render_target_framebuffer_page[] __asm__("D_001518EE");
 
-void configure_graphics_render_target_and_projection(s32 tw, s32 th, s32 fixed, f32 scale) __asm__("FUN_001f7888");
+void configure_graphics_render_target_and_projection(s32 tw,
+                                                     s32 th,
+                                                     s32 fixed,
+                                                     f32 scale) __asm__("FUN_001f7888");
 
 void configure_graphics_render_target_and_projection(s32 tw, s32 th, s32 fixed, f32 scale) {
     s32 base;
@@ -36,4 +45,5 @@ void configure_graphics_render_target_and_projection(s32 tw, s32 th, s32 fixed, 
     vu1_add_g_sregister(0x42, 0x8000000044L);
 }
 
-extern __typeof__(configure_graphics_render_target_and_projection) func_001F7888 __attribute__((alias("FUN_001f7888")));
+extern __typeof__(configure_graphics_render_target_and_projection) func_001F7888
+    __attribute__((alias("FUN_001f7888")));

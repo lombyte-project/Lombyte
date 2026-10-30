@@ -1,7 +1,8 @@
 #include "types.h"
 #include "rnc/audio/decoder/audio_dec.h"
+
 extern s32 snd_start_movie_sound() __asm__("func_0012F108");
-void audio_dec_start(struct AudioDec *dec) __asm__("FUN_0023acb8");
+void       audio_dec_start(struct AudioDec *dec) __asm__("FUN_0023acb8");
 
 void audio_dec_start(struct AudioDec *dec) {
     s32 buff_size;
@@ -12,8 +13,11 @@ void audio_dec_start(struct AudioDec *dec) {
     buff_size = dec->iopBuffSize;
     four = 0x400;
     channel_count = dec->hdr.ch;
-    snd_start_movie_sound(dec->iopBuff, ((copy = buff_size) / 0x400) * four, dec->iopZero,
-                          dec->hdr.rate, channel_count);
+    snd_start_movie_sound(dec->iopBuff,
+                          ((copy = buff_size) / 0x400) * four,
+                          dec->iopZero,
+                          dec->hdr.rate,
+                          channel_count);
     dec->state = 2;
     /* Fakematch: GCC removes both stores, but the read-modify-write
        sequence gives hdr.ch retail's register. */

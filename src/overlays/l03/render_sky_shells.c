@@ -8,8 +8,6 @@
 #include "rnc/rendering/sky/setup_sky_gif_paging.h"
 #include "rnc/overlay/shared/rendering/sky/sky_shells_rotate_two.h"
 
-
-
 void render_sky_shells(void) __asm__("FUN_L03_0022c6a8");
 
 void render_sky_shells(void) {

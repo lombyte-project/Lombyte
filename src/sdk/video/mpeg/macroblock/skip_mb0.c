@@ -1,9 +1,10 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+
 struct MpegSkipState {
     s32 unk0;
     s32 unk4;
-    u8 pad_8[0x8];
+    u8  pad_8[0x8];
     s32 unk10;
     s32 unk14;
 };
@@ -13,10 +14,14 @@ struct MpegMotionRef {
     s32 unk4;
 };
 
-extern u8 skipped_macroblock_in_i_picture_error_message[] __asm__("D_00153868");
+extern u8  skipped_macroblock_in_i_picture_error_message[] __asm__("D_00153868");
 extern s32 _Error(struct MpegDecoder *a0, u8 *a1);
-s32 _skipMB0(struct MpegDecoder *decoder, struct MpegSkipState *skip_state, s32 *picture_structure_mode, struct MpegMotionRef *motion_reference,
-             s32 *flags) {
+s32        _skipMB0(struct MpegDecoder   *decoder,
+                    struct MpegSkipState *skip_state,
+                    s32                  *picture_structure_mode,
+                    struct MpegMotionRef *motion_reference,
+
+                    s32 *flags) {
     s32 buf_offset;
     s32 bottom_field;
     s32 ok;

@@ -32,19 +32,19 @@ typedef u32 size_t;
 #define __SERR 0x40
 extern void *memmove(void *, const void *, u32);
 extern void *memchr(const void *, s32, u32);
-extern s32 fflush(RncFile *);
-extern s32 __swsetup(RncFile *);
+extern s32   fflush(RncFile *);
+extern s32   __swsetup(RncFile *);
 #define cantwrite(fp) ((((fp)->_flags & 8) == 0 || (fp)->_bf._base == 0) && __swsetup(fp))
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define COPY(n)   (void)memmove((void *)fp->_p, (void *)p, (size_t)(n))
 
-#define GETIOV(extra_work)                                                                         \
-    while (len == 0) {                                                                             \
-        extra_work;                                                                                \
-        p = iov->iov_base;                                                                         \
-        len = iov->iov_len;                                                                        \
-        iov++;                                                                                     \
+#define GETIOV(extra_work)  \
+    while (len == 0) {      \
+        extra_work;         \
+        p = iov->iov_base;  \
+        len = iov->iov_len; \
+        iov++;              \
     }
 
 /*
@@ -55,12 +55,12 @@ extern s32 __swsetup(RncFile *);
  */
 
 s32 __sfvwrite(RncFile *fp, RncStdioUio *uio) {
-    register size_t len;
+    register size_t       len;
     register _CONST char *p;
     register RncStdioIov *iov;
-    register int w, s;
-    char *nl;
-    int nlknown, nldist;
+    register int          w, s;
+    char                 *nl;
+    int                   nlknown, nldist;
 
     if ((len = uio->uio_resid) == 0)
         return 0;

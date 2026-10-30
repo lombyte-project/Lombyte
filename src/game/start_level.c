@@ -3,11 +3,14 @@
 #include "rnc/streaming/disc_table.h"
 #include "types.h"
 #include "rnc/runtime/callbacks/count_vsync.h"
+
 extern int decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
+
 #include "rnc/save/memory_card_state.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/globals.h"
 #include "rnc/audio/voice_pool.h"
+
 extern char D_001940C0[];
 extern void FlushCache(int);
 extern void sound_stop_all_sounds(void) __asm__("func_0022DCD0");
@@ -28,6 +31,7 @@ extern void hud_send_texture(int, int, int, int, int, int) __asm__("func_00200B1
 void start_level(int level) __asm__("FUN_001e9488");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
+
 void start_level(int level) {
     int movie_size_bytes;
     int movie_start_sector;
@@ -65,7 +69,11 @@ void start_level(int level) {
         char *movie_work_area_record = D_001940C0;
         movie_work_area_base = *(int *)(movie_work_area_record + 0x1C);
     }
-    play_mpeg_movie(movie_start_sector, movie_size_bytes, movie_work_area_base + 0x100000, movie_work_area_base + 0x400000, 0);
+    play_mpeg_movie(movie_start_sector,
+                    movie_size_bytes,
+                    movie_work_area_base + 0x100000,
+                    movie_work_area_base + 0x400000,
+                    0);
     sceCdSync(0);
     sceGsSyncV(0);
     sceGsSyncPath(0, 0);

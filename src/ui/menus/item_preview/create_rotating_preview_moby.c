@@ -1,24 +1,29 @@
 #include "types.h"
+
 struct RotatingPreviewMoby;
+
 struct RotatingPreviewOwner {
-    u8 pad00[0x44];
+    u8                          pad00[0x44];
     struct RotatingPreviewMoby *preview_moby;
 };
+
 struct RotatingPreviewMoby {
-    u8 pad00[0x10];
+    u8  pad00[0x10];
     f32 x;
     f32 y;
     f32 z;
-    u8 pad1C[0x18];
+    u8  pad1C[0x18];
     s16 flags;
-    u8 pad36[0xA];
+    u8  pad36[0xA];
     f32 rotation_x;
     f32 rotation_y;
-    u8 pad48[0x2C];
+    u8  pad48[0x2C];
     void (*update)(struct RotatingPreviewMoby *);
     struct RotatingPreviewOwner **preview_vars;
 };
+
 #include "rnc/ui/menus/menu_globals.h"
+
 extern struct RotatingPreviewMoby *create_menu_preview_moby(s32) __asm__("func_00225490");
 extern void rotate_preview_moby_x(struct RotatingPreviewMoby *) __asm__("FUN_0021f120");
 s32 create_rotating_preview_moby(struct RotatingPreviewOwner *owner) __asm__("FUN_0021ea48");

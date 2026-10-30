@@ -2,30 +2,35 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
+
 extern int find_or_allocate_id_slot(int v) __asm__("func_0020CC18");
+
 typedef struct {
-    char _pad00[0x10];
+    char          _pad00[0x10];
     unsigned char nframes; /* 0x10 */
 } AnimSeq;
+
 typedef struct {
-    char _pad00[0x48];
+    char     _pad00[0x48];
     AnimSeq *seqs[1]; /* 0x48 */
 } AnimClass;
+
 typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass; /* 0x24 */
-    char _pad28[0x50 - 0x28];
+    char          _pad00[0x24];
+    AnimClass    *pClass; /* 0x24 */
+    char          _pad28[0x50 - 0x28];
     unsigned char frame;     /* 0x50 */
     unsigned char nextFrame; /* 0x51 */
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C; /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData; /* 0x68 */
-    char _pad6C[4];
+    char          _pad54[0x5C - 0x54];
+    float         unk5C; /* 0x5C */
+    char          _pad60[0x68 - 0x60];
+    float        *frameData; /* 0x68 */
+    char          _pad6C[4];
     unsigned char unk70; /* 0x70 */
 } MobyAnim;
+
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 extern void FUN_0020ede8(void *, int);
 /* Re-registers this MobyAnim in the shared slot table (D_001B2F40, via
@@ -39,14 +44,19 @@ extern void FUN_0020ede8(void *, int);
    resets unk54, clears unk70 bit 1, stores 1/convert_integer_to_float(arg3) into
    unk5C, and copies a not-yet-named byte (offset 0x11) out of
    pClass->seqs[arg1] into unk7C. */
-void blend_moby_animation_ex(MobyAnim *moby, int new_seq, int frame_index, int blend_frames,
-                             int options) __asm__("FUN_002130d8");
+void blend_moby_animation_ex(MobyAnim *moby,
+                             int       new_seq,
+                             int       frame_index,
+                             int       blend_frames,
+                             int       options) __asm__("FUN_002130d8");
 
-void blend_moby_animation_ex(MobyAnim *moby, int new_seq, int frame_index, int blend_frames, int options) {
-    int slot;
-    int flags;
+void blend_moby_animation_ex(
+
+    MobyAnim *moby, int new_seq, int frame_index, int blend_frames, int options) {
+    int           slot;
+    int           flags;
     unsigned char oldSeq;
-    float scale;
+    float         scale;
 
     if (*(float *)((char *)moby + 0x54) > 0.025f || *(int *)((char *)moby + 0x60) != 0 ||
         *(int *)((char *)moby + 0x64) != 0 || (options & 4)) {
@@ -71,7 +81,8 @@ void blend_moby_animation_ex(MobyAnim *moby, int new_seq, int frame_index, int b
     *(float *)((char *)moby + 0x54) = 0.0f;
     moby->unk70 = (unsigned char)(moby->unk70 & 0xFD);
     moby->unk5C = scale;
-    *(unsigned char *)((char *)moby + 0x7C) = *((unsigned char *)moby->pClass->seqs[new_seq] + 0x11);
+    *(unsigned char *)((char *)moby + 0x7C) =
+        *((unsigned char *)moby->pClass->seqs[new_seq] + 0x11);
 }
 
 extern __typeof__(blend_moby_animation_ex) func_002130D8 __attribute__((alias("FUN_002130d8")));

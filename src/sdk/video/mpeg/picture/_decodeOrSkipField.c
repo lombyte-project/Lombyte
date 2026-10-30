@@ -1,22 +1,23 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
 
-extern s32 _decPicture();
-extern s32 _dispatchMpegCbNodata();
-extern s32 _nextHeader();
-extern s32 _sceMpegFlush();
-extern s32 _updateRefImage();
+extern s32  _decPicture();
+extern s32  _dispatchMpegCbNodata();
+extern s32  _nextHeader();
+extern s32  _sceMpegFlush();
+extern s32  _updateRefImage();
 extern void _outputFrame();
+
 s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 skip_threshold) {
     struct MpegDecoder *mpeg_decoder;
-    s32 should_decode;
-    unsigned int new_var2;
-    s32 expected_second_field_structure;
-    long helper_result;
-    s32 frame_count_snapshot;
-    s32 second_field_decode_nonzero;
-    short new_var;
-    s32 gate;
+    s32                 should_decode;
+    unsigned int        new_var2;
+    s32                 expected_second_field_structure;
+    long                helper_result;
+    s32                 frame_count_snapshot;
+    s32                 second_field_decode_nonzero;
+    short               new_var;
+    s32                 gate;
     should_decode = 0;
     mpeg_decoder = decoder->sys;
     mpeg_decoder->second_field = 0;

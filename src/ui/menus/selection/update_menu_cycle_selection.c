@@ -5,14 +5,14 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/audio/voice_alloc.h"
 
-
 s32 update_menu_cycle_selection(struct MenuScreen *menu) __asm__("FUN_00221e50");
 
 /* The twelve choices wrap in either direction; back-page changes are deferred. */
 s32 update_menu_cycle_selection(struct MenuScreen *menu) {
     struct MenuPage *back_page;
 
-    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) &&
+        menu_system.close_locked == 0) {
         return 1;
     }
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {

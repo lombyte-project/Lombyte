@@ -9,31 +9,34 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/sound/calculate_voice_volume.h"
+
 typedef struct {
     VoiceVector value;
-    u8 pad10[0x60];
+    u8          pad10[0x60];
 } VoicePositionRecord;
-extern VoicePositionRecord voice_positions[] __asm__("D_0013E5E0");
-extern u8 voice_volume_records[] __asm__("D_0013E5C0");
-extern void clear_u64_value(VoiceVector *) __asm__("func_001F99F8");
 
-s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *,
-                        s32) __asm__("FUN_0022d7f0");
+extern VoicePositionRecord voice_positions[] __asm__("D_0013E5E0");
+extern u8                  voice_volume_records[] __asm__("D_0013E5C0");
+extern void                clear_u64_value(VoiceVector *) __asm__("func_001F99F8");
+
+s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *, s32) __asm__(
+    "FUN_0022d7f0");
 
 /* Reserve a game-side slot and queue its start for sound_update.
  * Ordinary owners search 26 slots; the hero, its first item, and class 0x472
  * may use all 30. A rejected definition, full pool, or low volume returns -1.
  * Retain the goto structure and address windows for retail code generation. */
-s32 allocate_voice_slot(VoiceDefinition *definition, u32 flags, VoiceMoby *moby,
-                        VoiceVector *position, s32 volume) {
-    s32 volume_offset;
-    s32 pitch_bend_max;
-    s32 pitch_bend_min;
-    s32 slot_index;
-    s32 result;
-    s32 slot_limit;
-    s32 pitch_bend;
-    s32 source_inactive;
+s32 allocate_voice_slot(
+
+    VoiceDefinition *definition, u32 flags, VoiceMoby *moby, VoiceVector *position, s32 volume) {
+    s32              volume_offset;
+    s32              pitch_bend_max;
+    s32              pitch_bend_min;
+    s32              slot_index;
+    s32              result;
+    s32              slot_limit;
+    s32              pitch_bend;
+    s32              source_inactive;
     VoicePoolWindow *committed_slot;
     VoicePoolWindow *slot;
     VoicePoolWindow *pitch_slot;
@@ -144,4 +147,5 @@ return_index:
 return_result:
     return result;
 }
+
 extern __typeof__(allocate_voice_slot) func_0022D7F0 __attribute__((alias("FUN_0022d7f0")));

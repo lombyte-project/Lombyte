@@ -3,20 +3,20 @@
 #include "types.h"
 
 typedef struct PdeContext {
-    u8 pad_0[0x124];
+    u8  pad_0[0x124];
     s32 horizontal_size;
     s32 vertical_size;
-    u8 pad_12C[0x8];
+    u8  pad_12C[0x8];
     s32 bit_rate;
     s32 vbv_buffer_size;
     s32 progressive_sequence;
     s32 chroma_format;
-    u8 pad_144[0x30];
+    u8  pad_144[0x30];
     s32 picture_structure;
     s32 top_field_first;
-    u8 pad_17C[0x8];
+    u8  pad_17C[0x8];
     s32 repeat_first_field;
-    u8 pad_188[0x4];
+    u8  pad_188[0x4];
     s32 arr1[3];
     s32 arr2[3];
 } PdeContext;

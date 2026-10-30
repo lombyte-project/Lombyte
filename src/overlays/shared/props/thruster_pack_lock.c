@@ -24,23 +24,25 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
-extern int D_L11_0015FFD8; /* no foreign declaration */
+extern int    D_L11_0015FFD8; /* no foreign declaration */
 extern short *D_L11_001AC240[];
 
 void synchronize_linked_moby_heights(char *moby) __asm__("FUN_L11_0030e690");
 
 void synchronize_linked_moby_heights(char *moby) {
     short *moby_index_cursor = D_L11_001AC240[MOBY(moby)->group];
-    int base = D_L11_0015FFD8;
+    int    base = D_L11_0015FFD8;
     do {
-        int i = (*moby_index_cursor & 0x7FFF) * 256;
+        int   i = (*moby_index_cursor & 0x7FFF) * 256;
         char *linked_moby = (char *)(i + base);
         char *destination_record;
         MOBY(linked_moby)->pos.z = MOBY(moby)->pos.z;
-        destination_record = D_L11_001DA880 + *(int *)(((char *)MOBY(linked_moby)->pvars) + 4) * 0x1190;
+        destination_record =
+            D_L11_001DA880 + *(int *)(((char *)MOBY(linked_moby)->pvars) + 4) * 0x1190;
         *(float *)(destination_record + 8) = MOBY(moby)->pos.z;
     } while (*moby_index_cursor++ >= 0);
 }
+
 #include "rnc/mobys/moby.h"
 #include "rnc/math/vector.h"
 
@@ -48,48 +50,51 @@ void synchronize_linked_moby_heights(char *moby) {
 
 typedef struct Hero Hero;
 
-typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } LvState;
+typedef struct {
+    unsigned char pad0[0x454];
+    unsigned char collected[1];
+} LvState;
 
 typedef struct {
-    char pad000[0x360];
-    unsigned short count;   /* 0x360 */
-    unsigned short best;    /* 0x362 */
-    unsigned int levels;    /* 0x364 */
-    char pad368[0x22];
-    unsigned short best2;   /* 0x38A */
+    char           pad000[0x360];
+    unsigned short count;  /* 0x360 */
+    unsigned short best;   /* 0x362 */
+    unsigned int   levels; /* 0x364 */
+    char           pad368[0x22];
+    unsigned short best2; /* 0x38A */
 } Stats;
 
 typedef struct {
-    char pad00[0x10];
-    float pos[2];           /* 0x10 */
-    float z;                /* 0x18 */
-    char pad1C[0x4];
-    unsigned char state;    /* 0x20 */
-    char pad21[0x57];
-    char *vars;             /* 0x78 */
-    char pad7C[0x34];
-    unsigned char bB0;      /* 0xB0 */
-    char padB1;
-    unsigned short uid;     /* 0xB2 */
+    char           pad00[0x10];
+    float          pos[2]; /* 0x10 */
+    float          z;      /* 0x18 */
+    char           pad1C[0x4];
+    unsigned char  state; /* 0x20 */
+    char           pad21[0x57];
+    char          *vars; /* 0x78 */
+    char           pad7C[0x34];
+    unsigned char  bB0; /* 0xB0 */
+    char           padB1;
+    unsigned short uid; /* 0xB2 */
 } Lock;
 
 extern unsigned char D_00141968_r[] __asm__("D_00141968");
 extern unsigned char D_0014C190_r[] __asm__("D_0014C190");
 extern unsigned char D_0013F350_r[] __asm__("D_0013F350");
 extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
-extern int D_0014C050; /* no foreign declaration */
-extern int D_L11_0015FC88; /* no foreign declaration */
-extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
+extern int           D_0014C050;     /* no foreign declaration */
+extern int           D_L11_0015FC88; /* no foreign declaration */
+extern s32           allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern unsigned char D_0013F350[];
-s32 FUN_L00_00203908(s32 a, s32 b);
+s32                  FUN_L00_00203908(s32 a, s32 b);
 extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
-extern LvState D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
-extern LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
+extern LvState       D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
+extern LvState       D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
 
 void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
-void thruster_pack_lock_update(Lock *moby)
-{
+
+void thruster_pack_lock_update(Lock *moby) {
     enum {
         THRUSTER_PACK_LOCK_STATE_INIT = 0,
         THRUSTER_PACK_LOCK_STATE_ACTIVE = 1
@@ -104,7 +109,9 @@ void thruster_pack_lock_update(Lock *moby)
         *(unsigned short *)(vars + 0x3E) |= 8;
         if (level == 0xB && moby->bB0 != 0xFF) {
             if (D_L11_001BBF40_3102C8.collected[(short)moby->uid] != 0 ||
-                ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (level << 8))) >> (moby->uid & 0x1F)) & 1)) {
+                ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (level << 8))) >>
+                  (moby->uid & 0x1F)) &
+                 1)) {
                 moby->state = 2;
                 moby->z = moby->z - 1.5f;
                 allocate_voice_for_target_entry(0, 0, moby);
@@ -116,15 +123,17 @@ void thruster_pack_lock_update(Lock *moby)
     }
     case THRUSTER_PACK_LOCK_STATE_ACTIVE:
         if (((void *)((Hero *)(D_0013F350_r))->ground_moby) == moby && item_available[3] != 0 &&
-            ((Hero *)(D_0013F350_r))->air_frames.s == 0 && ((Hero *)(D_0013F350_r))->state.current == 0x22) {
+            ((Hero *)(D_0013F350_r))->air_frames.s == 0 &&
+            ((Hero *)(D_0013F350_r))->state.current == 0x22) {
             if (current_level_index == 0xB && moby->bB0 != 0xFF) {
                 int group;
                 int group_index;
                 D_L11_001BB2E0_3102C8.collected[(short)moby->uid] = moby->bB0 + 2;
                 group = moby->bB0;
                 group_index = group & 0xFF;
-                if (group == 0xFF || (D_L11_0015FD08_3102C8[group_index] != 0xFF &&
-                                  (visited52)[group_index + (current_level_index << 4)] == 0xFF)) {
+                if (group == 0xFF ||
+                    (D_L11_0015FD08_3102C8[group_index] != 0xFF &&
+                     (visited52)[group_index + (current_level_index << 4)] == 0xFF)) {
                     D_L11_001BBF40_3102C8.collected[(short)moby->uid] = group + 2;
                 }
             }
@@ -181,46 +190,68 @@ void thruster_pack_lock_update(Lock *moby)
         break;
     }
 }
+
 #include "qcopy.h"
 
 /* Builds one GIF packet for a rotated textured sprite and advances the packet pointer. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003121C0), where it is exact; names translated to the US level program. */
 
 extern int D_L11_001611C0 MACRO_ADDR;
-extern unsigned char screen_extent_c[] __asm__("D_0013E500");
+extern unsigned char      screen_extent_c[] __asm__("D_0013E500");
 
-void append_rotated_textured_screen_quad(float x, float y, float width, float height, float angle, int texture_width,
-                       int texture_height, long texture, int z_and_fog, int red, int green, int blue,
-                       int alpha) __asm__("FUN_L11_00310cf8");
+void append_rotated_textured_screen_quad(float x,
+                                         float y,
+                                         float width,
+                                         float height,
+                                         float angle,
+                                         int   texture_width,
+                                         int   texture_height,
+                                         long  texture,
+                                         int   z_and_fog,
+                                         int   red,
+                                         int   green,
+                                         int   blue,
+                                         int   alpha) __asm__("FUN_L11_00310cf8");
 
-void append_rotated_textured_screen_quad(float x, float y, float width, float height, float angle, int texture_width,
-                       int texture_height, long texture, int z_and_fog, int red, int green, int blue,
-                       int alpha) {
-    float vertical[4];
-    float horizontal[4];
-    float center[4];
-    float top_left[4];
-    float bottom_left[4];
-    float top_right[4];
-    float bottom_right[4];
-    unsigned long rgba;
-    unsigned long green_bits;
-    unsigned long blue_bits;
-    unsigned long alpha_bits;
-    unsigned long texture_packet_value;
-    int depth;
-    unsigned long packed_depth;
-    unsigned long gif_tag;
-    unsigned long gif_regs;
-    unsigned long prim;
-    unsigned long tex_size;
-    int gif_dma_tag;
-    int u_end;
-    int v_end;
-    char *tag;
+void append_rotated_textured_screen_quad(float x,
+                                         float y,
+                                         float width,
+                                         float height,
+                                         float angle,
+                                         int   texture_width,
+                                         int   texture_height,
+                                         long  texture,
+                                         int   z_and_fog,
+                                         int   red,
+                                         int   green,
+                                         int   blue,
+
+                                         int alpha) {
+    float          vertical[4];
+    float          horizontal[4];
+    float          center[4];
+    float          top_left[4];
+    float          bottom_left[4];
+    float          top_right[4];
+    float          bottom_right[4];
+    unsigned long  rgba;
+    unsigned long  green_bits;
+    unsigned long  blue_bits;
+    unsigned long  alpha_bits;
+    unsigned long  texture_packet_value;
+    int            depth;
+    unsigned long  packed_depth;
+    unsigned long  gif_tag;
+    unsigned long  gif_regs;
+    unsigned long  prim;
+    unsigned long  tex_size;
+    int            gif_dma_tag;
+    int            u_end;
+    int            v_end;
+    char          *tag;
     unsigned long *packet;
-    int *extent;
-    float scale;
+    int           *extent;
+    float          scale;
 
     rgba = red & 0xFF;
     green_bits = green & 0xFF;
@@ -274,26 +305,30 @@ void append_rotated_textured_screen_quad(float x, float y, float width, float he
         int a = truncate_float_to_s32(top_left[0] * scale);
         int b = truncate_float_to_s32(top_left[1] * scale);
         extent = (int *)(screen_extent_c);
-        packet[6] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
+        packet[6] = (unsigned long)(a + extent[4] - 8) |
+                    ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
         packet[7] = u_end;
     }
     {
         int a = truncate_float_to_s32(bottom_left[0] * scale);
         int b = truncate_float_to_s32(bottom_left[1] * scale);
-        packet[8] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
+        packet[8] = (unsigned long)(a + extent[4] - 8) |
+                    ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
         packet[9] = v_end;
     }
     {
         int a = truncate_float_to_s32(top_right[0] * scale);
         int b = truncate_float_to_s32(top_right[1] * scale);
         v_end = v_end + u_end;
-        packet[10] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
+        packet[10] = (unsigned long)(a + extent[4] - 8) |
+                     ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
         packet[11] = v_end;
     }
     {
         int a = truncate_float_to_s32(bottom_right[0] * scale);
         int b = truncate_float_to_s32(bottom_right[1] * scale);
-        packet[12] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
+        packet[12] = (unsigned long)(a + extent[4] - 8) |
+                     ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
         packet[13] = 0;
     }
 
@@ -306,52 +341,119 @@ void append_rotated_textured_screen_quad(float x, float y, float width, float he
 
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 
-void draw_quarter_turn_textured_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
-                      float y, float scale, float quad_rotation_angle) __asm__("FUN_L11_00311048");
+void draw_quarter_turn_textured_quads(unsigned char red,
+                                      unsigned char green,
+                                      unsigned char blue,
+                                      unsigned char alpha,
+                                      float         x,
+                                      float         y,
+                                      float         scale,
+                                      float quad_rotation_angle) __asm__("FUN_L11_00311048");
 
-void draw_quarter_turn_textured_quads(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float x,
-                      float y, float scale, float quad_rotation_angle) {
-    int texture;
+void draw_quarter_turn_textured_quads(unsigned char red,
+                                      unsigned char green,
+                                      unsigned char blue,
+                                      unsigned char alpha,
+                                      float         x,
+                                      float         y,
+                                      float         scale,
+
+                                      float quad_rotation_angle) {
+    int   texture;
     float quad_size;
     texture = get_effect_texture(0x42);
     quad_size = scale * 20.0f;
-    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x,
+                                        y,
+                                        quad_size,
+                                        quad_size,
+                                        quad_rotation_angle,
+                                        0x3F,
+                                        0x3F,
+                                        texture,
+                                        0xFFFFF3,
+                                        red,
+                                        green,
+                                        blue,
+                                        alpha);
     quad_rotation_angle = fast_add_rotations(quad_rotation_angle, 1.5707964f);
-    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x,
+                                        y,
+                                        quad_size,
+                                        quad_size,
+                                        quad_rotation_angle,
+                                        0x3F,
+                                        0x3F,
+                                        texture,
+                                        0xFFFFF3,
+                                        red,
+                                        green,
+                                        blue,
+                                        alpha);
     quad_rotation_angle = fast_add_rotations(quad_rotation_angle, 1.5707964f);
-    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x,
+                                        y,
+                                        quad_size,
+                                        quad_size,
+                                        quad_rotation_angle,
+                                        0x3F,
+                                        0x3F,
+                                        texture,
+                                        0xFFFFF3,
+                                        red,
+                                        green,
+                                        blue,
+                                        alpha);
     quad_rotation_angle = fast_add_rotations(quad_rotation_angle, 1.5707964f);
-    append_rotated_textured_screen_quad(x, y, quad_size, quad_size, quad_rotation_angle, 0x3F, 0x3F, texture, 0xFFFFF3, red, green, blue, alpha);
+    append_rotated_textured_screen_quad(x,
+                                        y,
+                                        quad_size,
+                                        quad_size,
+                                        quad_rotation_angle,
+                                        0x3F,
+                                        0x3F,
+                                        texture,
+                                        0xFFFFF3,
+                                        red,
+                                        green,
+                                        blue,
+                                        alpha);
 }
 /* Projects a world point to screen and stores its x and y in 1/16 units, y plus an offset. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003126D8), where it is exact; names translated to the US level program. */
 
-
-void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yoff) __asm__("FUN_L11_00311210");
+void project_world_point_to_screen_pixels(void *pt,
+                                          int  *outx,
+                                          int  *outy,
+                                          int   yoff) __asm__("FUN_L11_00311210");
 
 void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yoff) {
     float projected_point[4];
-    int *screen_extent_data;
+    int  *screen_extent_data;
     project_to_screen(projected_point, pt);
     screen_extent_data = (int *)(D_0013E05A + 0x4A6);
     *outx = truncate_float_to_s32((projected_point[0] - (float)screen_extent_data[4]) * 0.0625f);
-    *outy = truncate_float_to_s32((projected_point[1] - (float)screen_extent_data[5]) * 0.0625f) + yoff;
+    *outy =
+        truncate_float_to_s32((projected_point[1] - (float)screen_extent_data[5]) * 0.0625f) + yoff;
 }
+
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
 
-extern f32 D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
+extern f32  D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
-extern void spawn_type_74_particle(void *, float *, float *, void *, int) __asm__("FUN_L01_0028a7a8");
+extern void
+spawn_type_74_particle(void *, float *, float *, void *, int) __asm__("FUN_L01_0028a7a8");
 
 extern short first_position_particle_config __asm__("D_L11_001621C8") __attribute__((sda));
 extern short second_position_particle_config __asm__("D_L11_001621D8") __attribute__((sda));
 extern short third_position_particle_config __asm__("D_L11_001621E8") __attribute__((sda));
 extern short extra_scattered_joint_particle_config __asm__("D_L11_001621F8") __attribute__((sda));
 extern short extra_joint_position_particle_config __asm__("D_L11_00162208") __attribute__((sda));
-void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission_data) __asm__("FUN_L11_003112b8");
+void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission_data) __asm__(
+    "FUN_L11_003112b8");
 
 void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission_data) {
     int i;
@@ -375,60 +477,108 @@ void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission
         qcopy(first_particle_position, joint_world_position);
         qcopy(second_particle_position, joint_world_position);
         qcopy(third_particle_position, joint_world_position);
-        add_random_offset_to_vector_xyz(first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
-        add_random_offset_to_vector_xyz(second_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
-        add_random_offset_to_vector_xyz(third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.02f);
-        initial_particle_velocity[0] =
-            -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) * frame_time) *
-            scale;
-        spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &first_position_particle_config, 1);
-        initial_particle_velocity[0] =
-            -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) * frame_time) *
-            scale;
-        spawn_type_74_particle(moby, second_particle_position, initial_particle_velocity, &second_position_particle_config, 1);
-        initial_particle_velocity[0] =
-            -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 4.0f) * frame_time) *
-            scale;
-        spawn_type_74_particle(moby, third_particle_position, initial_particle_velocity, &third_position_particle_config, 1);
+        add_random_offset_to_vector_xyz(first_particle_position,
+                                        *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
+        add_random_offset_to_vector_xyz(second_particle_position,
+                                        *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
+        add_random_offset_to_vector_xyz(third_particle_position,
+                                        *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.02f);
+        initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) +
+                                          *(float *)(particle_emission_data + 0xC4) * 2.0f) *
+                                         frame_time) *
+                                       scale;
+        spawn_type_74_particle(moby,
+                               first_particle_position,
+                               initial_particle_velocity,
+                               &first_position_particle_config,
+                               1);
+        initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) +
+                                          *(float *)(particle_emission_data + 0xC4) * 3.0f) *
+                                         frame_time) *
+                                       scale;
+        spawn_type_74_particle(moby,
+                               second_particle_position,
+                               initial_particle_velocity,
+                               &second_position_particle_config,
+                               1);
+        initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) +
+                                          *(float *)(particle_emission_data + 0xC4) * 4.0f) *
+                                         frame_time) *
+                                       scale;
+        spawn_type_74_particle(moby,
+                               third_particle_position,
+                               initial_particle_velocity,
+                               &third_position_particle_config,
+                               1);
         if (*(float *)(particle_emission_data + 0xC4) > 0.5f) {
-            add_random_offset_to_vector_xyz(first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
-            add_random_offset_to_vector_xyz(second_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
-            add_random_offset_to_vector_xyz(third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.01f);
-            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
-                       frame_time) *
-                     scale;
-            spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &first_position_particle_config, 1);
-            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) *
-                       frame_time) *
-                     scale;
-            spawn_type_74_particle(moby, second_particle_position, initial_particle_velocity, &second_position_particle_config, 1);
-            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 4.0f) *
-                       frame_time) *
-                     scale;
-            spawn_type_74_particle(moby, third_particle_position, initial_particle_velocity, &third_position_particle_config, 1);
-            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
-                       frame_time) *
-                     scale;
-            spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &extra_scattered_joint_particle_config, 1);
-            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) *
-                       frame_time) *
-                     scale;
-            spawn_type_74_particle(moby, joint_world_position, initial_particle_velocity, &extra_joint_position_particle_config, 1);
+            add_random_offset_to_vector_xyz(
+                first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
+            add_random_offset_to_vector_xyz(second_particle_position,
+                                            *(float *)(particle_emission_data + 0xC4) * 0.02f +
+                                                0.01f);
+            add_random_offset_to_vector_xyz(
+                third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.01f);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) +
+                                              *(float *)(particle_emission_data + 0xC4) * 2.0f) *
+                                             frame_time) *
+                                           scale;
+            spawn_type_74_particle(moby,
+                                   first_particle_position,
+                                   initial_particle_velocity,
+                                   &first_position_particle_config,
+                                   1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) +
+                                              *(float *)(particle_emission_data + 0xC4) * 3.0f) *
+                                             frame_time) *
+                                           scale;
+            spawn_type_74_particle(moby,
+                                   second_particle_position,
+                                   initial_particle_velocity,
+                                   &second_position_particle_config,
+                                   1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) +
+                                              *(float *)(particle_emission_data + 0xC4) * 4.0f) *
+                                             frame_time) *
+                                           scale;
+            spawn_type_74_particle(moby,
+                                   third_particle_position,
+                                   initial_particle_velocity,
+                                   &third_position_particle_config,
+                                   1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) +
+                                              *(float *)(particle_emission_data + 0xC4) * 2.0f) *
+                                             frame_time) *
+                                           scale;
+            spawn_type_74_particle(moby,
+                                   first_particle_position,
+                                   initial_particle_velocity,
+                                   &extra_scattered_joint_particle_config,
+                                   1);
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) +
+                                              *(float *)(particle_emission_data + 0xC4) * 3.0f) *
+                                             frame_time) *
+                                           scale;
+            spawn_type_74_particle(moby,
+                                   joint_world_position,
+                                   initial_particle_velocity,
+                                   &extra_joint_position_particle_config,
+                                   1);
         }
     }
 }
+
 extern unsigned char linked_moby_trail_long_span_enabled __asm__("D_0015EDB2");
-extern float trail_quad_texture_coordinates[] __asm__("D_L11_001F1490");
-extern short D_L11_001623F0_gp __asm__("D_L11_001623F0") __attribute__((sda));
-extern void memset(void *, int, int) __asm__("FUN_001153fc");
-extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
-extern int D_L11_0015FFD8;
+extern float         trail_quad_texture_coordinates[] __asm__("D_L11_001F1490");
+extern short         D_L11_001623F0_gp __asm__("D_L11_001623F0") __attribute__((sda));
+extern void          memset(void *, int, int) __asm__("FUN_001153fc");
+extern void          draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
+extern int           D_L11_0015FFD8;
 
 typedef struct {
     float positions[4][4];
-    int colors[4];
+    int   colors[4];
     float texture_coordinates[4][2];
-    long packet[4];
+    long  packet[4];
 } TrailQuad;
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -437,13 +587,14 @@ int draw_linked_moby_trails(struct Moby *moby) __asm__("FUN_L11_003192c8");
 
 int draw_linked_moby_trails(struct Moby *moby) {
     TrailQuad quads[16];
-    float offset[2][4];
-    short *list, *next_list;
-    int i, j, segment, side, slot, more, next_segment, next_side, own_class, other_class, visible, half, corner;
+    float     offset[2][4];
+    short    *list, *next_list;
+    int i, j, segment, side, slot, more, next_segment, next_side, own_class, other_class, visible,
+        half, corner;
     float base, blend;
-    long skip;
+    long  skip;
     char *other, *trail;
-    int never = 0;
+    int   never = 0;
 
     if (moby->group == 0xFF) {
         return;
@@ -455,17 +606,20 @@ int draw_linked_moby_trails(struct Moby *moby) {
     }
 
     for (i = 0; i < 16; i++) {
-        long texture = get_effect_texture(0x13);
+        long       texture = get_effect_texture(0x13);
         TrailQuad *quad = &quads[i];
         quad->packet[1] = texture;
         quad->packet[2] = 0xFF9000000260L;
         quad->packet[0] = 0;
         quad->packet[3] = 0x8000000048L;
-        base = convert_integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_gp * 4.0f);
+        base =
+            convert_integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_gp * 4.0f);
         for (j = 0; j < 4; j++) {
             half = (j >> 1) - 1;
-            quads[i].texture_coordinates[j][0] = ((float (*)[2])trail_quad_texture_coordinates)[j][0];
-            quads[i].texture_coordinates[j][1] = ((float (*)[2])trail_quad_texture_coordinates)[j][1];
+            quads[i].texture_coordinates[j][0] =
+                ((float(*)[2])trail_quad_texture_coordinates)[j][0];
+            quads[i].texture_coordinates[j][1] =
+                ((float(*)[2])trail_quad_texture_coordinates)[j][1];
             blend = convert_integer_to_float(i - half) / *(float *)&D_L11_001623F0_gp + base;
             if (1.0f < blend) {
                 blend = 1.0f;
@@ -511,8 +665,9 @@ int draw_linked_moby_trails(struct Moby *moby) {
                         next_side = side + 1;
                         for (corner = 0; corner < 4; corner++) {
                             int point = (slot + (corner >> 1)) % 16;
-                            fast_vec_add(quads[segment].positions[corner], &((float (*)[16][4])(trail + 0xC0))[side][point][0],
-                                           offset[corner & 1]);
+                            fast_vec_add(quads[segment].positions[corner],
+                                         &((float(*)[16][4])(trail + 0xC0))[side][point][0],
+                                         offset[corner & 1]);
                         }
                         draw_geometry_quad(&quads[segment], 0, 0);
                         side = next_side;
@@ -528,16 +683,15 @@ int draw_linked_moby_trails(struct Moby *moby) {
 /* Advances a trail ring buffer and records two offset points each fourth frame. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 
-
 void update_moby_trail_points(char *moby) __asm__("FUN_L11_00319670");
 
 void update_moby_trail_points(char *moby) {
     char *trail_data = ((char *)MOBY(moby)->pvars);
     float first_trail_offset[4];
     float second_trail_offset[4];
-    int current_frame;
+    int   current_frame;
     if ((level_frame & 3) == 0) {
-        int trail_segment_count;
+        int   trail_segment_count;
         float trail_segment_limit = *(float *)&D_L11_001623F0_gp;
         trail_segment_count = *(int *)(trail_data + 0x2C0);
         *(int *)(trail_data + 0x2C4) = (*(int *)(trail_data + 0x2C4) + 1) % 16;
@@ -550,14 +704,17 @@ void update_moby_trail_points(char *moby) {
     first_trail_offset[0] = -1.2f;
     first_trail_offset[2] = 0.3f;
     transform_vector_by_basis(first_trail_offset, first_trail_offset, moby + 0xC0);
-    fast_vec_add(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0), first_trail_offset, moby + 0x10);
+    fast_vec_add(
+        trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0), first_trail_offset, moby + 0x10);
     *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0xCC) = 1.0f;
     *(OvlQuad *)second_trail_offset = 0;
     second_trail_offset[0] = -1.2f;
     second_trail_offset[1] = -0.7f;
     second_trail_offset[2] = 0.3f;
     transform_vector_by_basis(second_trail_offset, second_trail_offset, moby + 0xC0);
-    fast_vec_add(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0x1C0), second_trail_offset, moby + 0x10);
+    fast_vec_add(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0x1C0),
+                 second_trail_offset,
+                 moby + 0x10);
     current_frame = level_frame;
     *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0x1CC) = 1.0f;
     if (current_frame != 0) {
@@ -573,14 +730,15 @@ void update_moby_trail_points(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031B630), where it is exact; names translated to the US level program. */
 
 #include "rnc/overlay/shared/props/thruster_pack_lock_globals.h"
-extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+
+extern int           coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern unsigned char D_00141968[];
 
 void update_moby_hit_stats_and_state(char *moby) __asm__("FUN_L11_0031a1c0");
 
 void update_moby_hit_stats_and_state(char *moby) {
-    char *moby_vars = ((char *)MOBY(moby)->pvars);
-    char *info = find_moby_hit(moby, 0x330000, 0);
+    char        *moby_vars = ((char *)MOBY(moby)->pvars);
+    char        *info = find_moby_hit(moby, 0x330000, 0);
     struct Hero *player_hero;
     ((unsigned char *)moby)[0xA4] = 0xFF;
     player_hero = &hero;
@@ -591,15 +749,18 @@ void update_moby_hit_stats_and_state(char *moby) {
     }
     if (info != 0) {
         char *collection_stats_base = (char *)D_00141968;
-        int next_moby_state;
-        int current_moby_state;
+        int   next_moby_state;
+        int   current_moby_state;
         if (*(unsigned short *)(collection_stats_base + 0x157E8) < 0xFFFF) {
             *(unsigned short *)(collection_stats_base + 0x157E8) += 1;
         }
-        if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(collection_stats_base + 0x157EA)) {
-            *(unsigned short *)(collection_stats_base + 0x157EA) = scale_game_frames(D_0015EEA4) / 600;
+        if (scale_game_frames(D_0015EEA4) / 600 >
+            *(unsigned short *)(collection_stats_base + 0x157EA)) {
+            *(unsigned short *)(collection_stats_base + 0x157EA) =
+                scale_game_frames(D_0015EEA4) / 600;
         }
-        *(int *)(collection_stats_base + 0x157EC) = *(int *)(collection_stats_base + 0x157EC) | (1 << current_level_index) | 0x80000000;
+        *(int *)(collection_stats_base + 0x157EC) =
+            *(int *)(collection_stats_base + 0x157EC) | (1 << current_level_index) | 0x80000000;
         if (current_level_index == 0xB && *(char **)(info + 0x20) != 0 &&
             *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
             if (++level_11_class_ac_hit_count >= 3 && item_unlocked[0x12] == 0) {
@@ -639,18 +800,31 @@ void update_moby_hit_stats_and_state(char *moby) {
 
 /* Queues a GIF packet that draws a line strip through the given points, scaled and offset to the screen. */
 typedef unsigned int u128_ad0 __attribute__((mode(TI)));
-extern int D_L11_001611C0_lui __asm__("D_L11_001611C0");
-extern int screen_extent[] __asm__("D_0013E500");
+extern int           D_L11_001611C0_lui __asm__("D_L11_001611C0");
+extern int           screen_extent[] __asm__("D_0013E500");
 
 extern u128_ad0 l11_screen_triangle_strip_setup_gif_tag_template __asm__("D_L11_001608E0");
 extern u128_ad0 l11_screen_triangle_strip_vertex_gif_tag_template __asm__("D_L11_001608F0");
-void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale) __asm__("FUN_L11_00310ad0");
+void            append_scaled_screen_triangle_strip(short             *pts,
+                                                    int                point_count,
+                                                    float              x0,
+                                                    float              y0,
+                                                    unsigned int       col,
+                                                    unsigned long long prim,
+                                                    float              scale) __asm__("FUN_L11_00310ad0");
 
-void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, float y0, unsigned int col, unsigned long long prim, float scale) {
-    int packet_qword_count = (point_count + 1) / 2 + 3;
+void append_scaled_screen_triangle_strip(short             *pts,
+                                         int                point_count,
+                                         float              x0,
+                                         float              y0,
+                                         unsigned int       col,
+                                         unsigned long long prim,
+
+                                         float scale) {
+    int                 packet_qword_count = (point_count + 1) / 2 + 3;
     unsigned long long *vertex_payload;
-    int x, y;
-    int i;
+    int                 x, y;
+    int                 i;
     *(int *)(D_L11_001611C0 + 0) = packet_qword_count | 0x10000000;
     *(int *)(D_L11_001611C0 + 4) = 0;
     *(int *)(D_L11_001611C0 + 8) = 0;
@@ -662,7 +836,8 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
         *(short *)(dma_header + 0x10) = -0x7FFF;
     }
     {
-        unsigned long long *primitive_payload = (unsigned long long *)((char *)D_L11_001611C0 + 0x10);
+        unsigned long long *primitive_payload =
+            (unsigned long long *)((char *)D_L11_001611C0 + 0x10);
         D_L11_001611C0 = (int)primitive_payload;
         primitive_payload[0] = 0x144;
         primitive_payload[1] = prim;
@@ -678,11 +853,15 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
     for (i = 0; i < point_count; i++) {
         x = truncate_float_to_s32((convert_integer_to_float(pts[i * 2]) * scale + x0) * 16.0f);
         y = truncate_float_to_s32((convert_integer_to_float(pts[i * 2 + 1]) * scale + y0) * 16.0f);
-        vertex_payload[i] = (unsigned long long)(x + screen_extent[4] - 8) | ((unsigned long long)(y + screen_extent[5] - 8) << 16) | ((unsigned long long)col << 32);
+        vertex_payload[i] = (unsigned long long)(x + screen_extent[4] - 8) |
+                            ((unsigned long long)(y + screen_extent[5] - 8) << 16) |
+                            ((unsigned long long)col << 32);
     }
     D_L11_001611C0 += ((point_count + 1) / 2) * 16;
 }
-extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+
+extern float
+advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
 #include "rnc/mobys/moby.h"
 
@@ -690,9 +869,9 @@ void update_moby_path_transform(char *moby) __asm__("FUN_L11_0031a438");
 
 void update_moby_path_transform(char *moby) {
     char *moby_vars = (char *)MOBY(moby)->pvars;
-    int i = *(int *)(moby_vars + 0x64);
+    int   i = *(int *)(moby_vars + 0x64);
     char *table = (char *)l11_paths[*(int *)(moby_vars + 0x60)];
-    int count;
+    int   count;
     float matrix[16];
     float current_path_point[4], next_path_point[4], lookahead_path_point[4];
     float point[4], turn[4], direction[4];
@@ -705,12 +884,18 @@ void update_moby_path_transform(char *moby) {
     qcopy(next_path_point, table + (i + 1) % count * 16 + 0x10);
     qcopy(lookahead_path_point, table + (i + 2) % count * 16 + 0x10);
     clear_u64_value(turn);
-    angle_a = fast_arc_tan(current_path_point[0] - next_path_point[0], current_path_point[1] - next_path_point[1]);
-    angle_b = fast_arc_tan(next_path_point[0] - lookahead_path_point[0], next_path_point[1] - lookahead_path_point[1]);
-    slope_a = fast_arc_tan(vector_distance_xy(current_path_point, next_path_point), next_path_point[2] - current_path_point[2]);
-    slope_b = fast_arc_tan(vector_distance_xy(next_path_point, lookahead_path_point), lookahead_path_point[2] - next_path_point[2]);
-    turn[1] = fast_add_rotations(fast_subtract_rotations(slope_b, slope_a) * *(float *)(moby_vars + 0x68), slope_a);
-    turn[2] = fast_add_rotations(fast_subtract_rotations(angle_b, angle_a) * *(float *)(moby_vars + 0x68), angle_a);
+    angle_a = fast_arc_tan(current_path_point[0] - next_path_point[0],
+                           current_path_point[1] - next_path_point[1]);
+    angle_b = fast_arc_tan(next_path_point[0] - lookahead_path_point[0],
+                           next_path_point[1] - lookahead_path_point[1]);
+    slope_a = fast_arc_tan(vector_distance_xy(current_path_point, next_path_point),
+                           next_path_point[2] - current_path_point[2]);
+    slope_b = fast_arc_tan(vector_distance_xy(next_path_point, lookahead_path_point),
+                           lookahead_path_point[2] - next_path_point[2]);
+    turn[1] = fast_add_rotations(
+        fast_subtract_rotations(slope_b, slope_a) * *(float *)(moby_vars + 0x68), slope_a);
+    turn[2] = fast_add_rotations(
+        fast_subtract_rotations(angle_b, angle_a) * *(float *)(moby_vars + 0x68), angle_a);
     qcopy(&MOBY(moby)->rot, turn);
     if (*(float *)(moby_vars + 0x6C) > 0.0f) {
         MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, 3.14159f);
@@ -718,13 +903,22 @@ void update_moby_path_transform(char *moby) {
     }
     lerp_vector(point, current_path_point, next_path_point, *(float *)(moby_vars + 0x68));
     euler_rotation_matrix(matrix, turn);
-    fast_vec_normalize(direction, matrix + 4, *(float *)(moby_vars + 0x78) * fast_sin(*(float *)(moby_vars + 0x70)));
+    fast_vec_normalize(direction,
+                       matrix + 4,
+                       *(float *)(moby_vars + 0x78) * fast_sin(*(float *)(moby_vars + 0x70)));
     fast_vec_add(point, point, direction);
-    fast_vec_normalize(direction, matrix + 8, *(float *)(moby_vars + 0x78) * fast_cos(*(float *)(moby_vars + 0x70)));
+    fast_vec_normalize(direction,
+                       matrix + 8,
+                       *(float *)(moby_vars + 0x78) * fast_cos(*(float *)(moby_vars + 0x70)));
     fast_vec_add(point, point, direction);
     speed = 0.0f;
     distance = fast_vec_dist(&MOBY(moby)->pos, point);
-    advance_accelerated_scalar(&speed, (float *)(moby_vars + 0x80), distance, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f);
+    advance_accelerated_scalar(&speed,
+                               (float *)(moby_vars + 0x80),
+                               distance,
+                               frame_time_sq * 10.0f,
+                               frame_time_sq * 10.0f,
+                               frame_time * 20.0f);
     fast_vec_sub(direction, point, &MOBY(moby)->pos);
     fast_vec_normalize(direction, direction, *(float *)(moby_vars + 0x80));
     fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);

@@ -17,31 +17,31 @@
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
-extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void font_print_window(struct TextRegion *, long, char *, s32, s32,
-                              u8 *) __asm__("FUN_001f7090");
+extern s32  get_effect_texture(s32) __asm__("FUN_001f44b8");
+extern void
+font_print_window(struct TextRegion *, long, char *, s32, s32, u8 *) __asm__("FUN_001f7090");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern void draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");
+extern void  draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");
 extern void *memset(void *, int, unsigned int);
 
 s32 draw_menu_text_list(struct MenuScreen *menu) __asm__("FUN_0021d4a8");
 
 s32 draw_menu_text_list(struct MenuScreen *menu) {
-    s32 font_size;
-    s32 font_kind;
-    s32 focused;
-    u8 *font;
-    s32 item_count;
+    s32                  font_size;
+    s32                  font_kind;
+    s32                  focused;
+    u8                  *font;
+    s32                  item_count;
     struct MenuTextItem *item;
-    s32 row_height;
-    s32 glyph_texture;
-    s32 i;
-    s32 selected;
-    s32 enabled;
-    s32 color;
-    char *text;
-    s32 row_bottom;
-    s32 y;
+    s32                  row_height;
+    s32                  glyph_texture;
+    s32                  i;
+    s32                  selected;
+    s32                  enabled;
+    s32                  color;
+    char                *text;
+    s32                  row_bottom;
+    s32                  y;
 
     font_size = 12;
     font_kind = 1;
@@ -74,9 +74,15 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
     }
     y = row_height - font_size / 2;
     {
-        struct TextRegion box = {
-            4, menu->height - 4, 0, menu->width - 2, 0, y - menu->data.list.scroll, 0,
-            0, font_size + 2};
+        struct TextRegion box = {4,
+                                 menu->height - 4,
+                                 0,
+                                 menu->width - 2,
+                                 0,
+                                 y - menu->data.list.scroll,
+                                 0,
+                                 0,
+                                 font_size + 2};
 
         glyph_texture = get_effect_texture(font_kind);
         for (i = 0; menu->data.list.items[i].text != 0; i++) {
@@ -112,8 +118,8 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
                 draw_menu_selection_marker(0xF, box.anchor_y + 9, item_unlocked[i] != 0);
             }
             if (menu->data.list.flags & 0x800) {
-                draw_menu_selection_marker(0xF, box.anchor_y + 9,
-                                           game_language == menu->data.list.items[i].param.value);
+                draw_menu_selection_marker(
+                    0xF, box.anchor_y + 9, game_language == menu->data.list.items[i].param.value);
             }
             box.anchor_y += box.rendered_height;
             if (menu->data.list.items[i].subtext != 0) {

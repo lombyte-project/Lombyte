@@ -10,7 +10,8 @@ s32 handle_menu_screen_buttons(struct MenuScreen *screen) {
     if (menu_system.current->focus != screen) {
         return 0;
     }
-    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) &&
+        menu_system.close_locked == 0) {
         return 1;
     }
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {

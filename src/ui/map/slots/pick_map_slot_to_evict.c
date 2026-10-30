@@ -1,6 +1,7 @@
 #include "types.h"
 
 #include "rnc/ui/map/map_state.h"
+
 extern s32 SubtractIntegerWithClamp(s32 value);
 extern s32 find_id_in_terminated_table(s32 id) __asm__("func_00205220");
 
@@ -19,7 +20,8 @@ s32 pick_map_slot_to_evict(s32 unused_arg0, s32 unused_arg1) {
     best = -1;
     if (level_map_selection.level == 0) {
         for (j = 4; j >= 0; j--) {
-            if (level_map_selection.slot[j] != 0 && j != level_map_selection.sel && level_map_selection.slot_id[j] == -1) {
+            if (level_map_selection.slot[j] != 0 && j != level_map_selection.sel &&
+                level_map_selection.slot_id[j] == -1) {
                 return j;
             }
         }

@@ -1,8 +1,7 @@
 /* Built only by `make layout-check-sys` (never linked). gcc 2.95 has no
    _Static_assert: a negative array size fails the compile. */
 #define OFFSET_CHECK(name, type, field, off) \
-    typedef char offset_check_##name[ \
-        ((unsigned long)&((type *)0)->field == (off)) ? 1 : -1]
+    typedef char offset_check_##name[((unsigned long)&((type *)0)->field == (off)) ? 1 : -1]
 
 #include "rnc/input/pad_state.h"
 

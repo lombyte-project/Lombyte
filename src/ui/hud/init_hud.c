@@ -10,18 +10,21 @@ struct Globals_0015FA00 {
 
 struct HudSlot {
     s32 unk0;
-    u8 pad_4[0x3C];
+    u8  pad_4[0x3C];
     s32 unk40;
-    u8 pad_44[0x4];
+    u8  pad_44[0x4];
     s32 unk48;
-    u8 pad_4C[0xC];
+    u8  pad_4C[0xC];
     s32 unk58;
 };
+
 #include "rnc/ui/hud/hud_state.h"
 
-extern u8 hud_file_str[] __asm__("D_0015F6D8");
+extern u8                       hud_file_str[] __asm__("D_0015F6D8");
 extern struct Globals_0015FA00 *hud_bank_main __asm__("D_0015FA00");
+
 #include "rnc/ui/hud/init_hud_globals.h"
+
 extern s32 hud_bank_main_start_gp __asm__("D_0015FA04") __attribute__((sda));
 extern s32 hud_bank_end __asm__("D_0015FA08");
 extern s32 hud_bank_aux __asm__("D_0015FA0C");
@@ -33,8 +36,8 @@ extern s32 queue_animation_update() __asm__("func_001FF308");
 void init_hud(void) __asm__("FUN_001fee88");
 
 void init_hud(void) {
-    s32 slot_index;
-    s32 *bank;
+    s32             slot_index;
+    s32            *bank;
     struct HudSlot *slot;
 
     slot_index = 0;

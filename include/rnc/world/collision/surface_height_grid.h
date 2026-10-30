@@ -4,7 +4,7 @@
 #include "types.h"
 
 typedef struct {
-    u8 pad_0[8];
+    u8  pad_0[8];
     f32 origin_x;
     f32 origin_y;
     f32 cell_width;

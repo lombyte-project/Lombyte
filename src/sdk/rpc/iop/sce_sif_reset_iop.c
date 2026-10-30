@@ -1,17 +1,18 @@
 #include "types.h"
+
 typedef struct {
     u64 psize : 8;
     u64 dsize : 24;
-    u64 dest : 32;
+    u64 dest  : 32;
     s32 cid;
     u32 opt;
 } SifCmdHeader;
 
 typedef struct {
     SifCmdHeader header;
-    s32 arglen;
-    s32 mode;
-    char arg[80];
+    s32          arglen;
+    s32          mode;
+    char         arg[80];
 } SifResetPacket;
 
 typedef struct {
@@ -22,16 +23,16 @@ typedef struct {
 } SifDmaData;
 
 extern SifResetPacket D_00158440;
-extern void sceSifStopDma(void);
-extern u32 sceSifGetReg(u32 reg);
-extern u32 sceSifSetReg(u32 reg, u32 val);
-extern void sceSifWriteBackDCache(void *p, s32 size);
-extern u32 sceSifSetDma(SifDmaData *dma, s32 count);
+extern void           sceSifStopDma(void);
+extern u32            sceSifGetReg(u32 reg);
+extern u32            sceSifSetReg(u32 reg, u32 val);
+extern void           sceSifWriteBackDCache(void *p, s32 size);
+extern u32            sceSifSetDma(SifDmaData *dma, s32 count);
 
 s32 sceSifResetIop(const char *arg, s32 mode) {
     SifDmaData dma;
-    u32 addr;
-    s32 arglen;
+    u32        addr;
+    s32        arglen;
 
     sceSifStopDma();
     addr = sceSifGetReg(0x80000000);

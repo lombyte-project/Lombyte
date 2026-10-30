@@ -16,7 +16,7 @@ struct _reent;
 
 extern void __malloc_lock(struct _reent *) __asm__("func_001154C0");
 extern void __malloc_unlock(struct _reent *) __asm__("func_001154C8");
-extern s32 _malloc_trim_r(struct _reent *ptr, u32 pad);
+extern s32  _malloc_trim_r(struct _reent *ptr, u32 pad);
 
 extern u64 D_0012FB90[]; /* trim_threshold */
 
@@ -32,17 +32,17 @@ extern u64 D_0012FB90[]; /* trim_threshold */
 #define set_foot(p, s)        (((struct malloc_chunk *)((char *)(p) + (s)))->prev_size = (s))
 #define mem2chunk(mem)        ((struct malloc_chunk *)((char *)(mem) - 2 * SIZE_SZ))
 #define chunk_at_offset(p, s) ((struct malloc_chunk *)(((char *)(p)) + (s)))
-#define inuse_bit_at_offset(p, s)                                                                  \
+#define inuse_bit_at_offset(p, s) \
     (((struct malloc_chunk *)(((char *)(p)) + (s)))->size & PREV_INUSE)
 #define smallbin_index(sz) (((unsigned long)(sz)) >> 3)
 #define idx2binblock(ix)   ((unsigned long)1 << ((ix) / BINBLOCKWIDTH))
-#define bin_index(sz)                                                                              \
-    (((((unsigned long)(sz)) >> 9) == 0)      ? (((unsigned long)(sz)) >> 3)                       \
-     : ((((unsigned long)(sz)) >> 9) <= 4)    ? 56 + (((unsigned long)(sz)) >> 6)                  \
-     : ((((unsigned long)(sz)) >> 9) <= 20)   ? 91 + (((unsigned long)(sz)) >> 9)                  \
-     : ((((unsigned long)(sz)) >> 9) <= 84)   ? 110 + (((unsigned long)(sz)) >> 12)                \
-     : ((((unsigned long)(sz)) >> 9) <= 340)  ? 119 + (((unsigned long)(sz)) >> 15)                \
-     : ((((unsigned long)(sz)) >> 9) <= 1364) ? 124 + (((unsigned long)(sz)) >> 18)                \
+#define bin_index(sz)                                                               \
+    (((((unsigned long)(sz)) >> 9) == 0)      ? (((unsigned long)(sz)) >> 3)        \
+     : ((((unsigned long)(sz)) >> 9) <= 4)    ? 56 + (((unsigned long)(sz)) >> 6)   \
+     : ((((unsigned long)(sz)) >> 9) <= 20)   ? 91 + (((unsigned long)(sz)) >> 9)   \
+     : ((((unsigned long)(sz)) >> 9) <= 84)   ? 110 + (((unsigned long)(sz)) >> 12) \
+     : ((((unsigned long)(sz)) >> 9) <= 340)  ? 119 + (((unsigned long)(sz)) >> 15) \
+     : ((((unsigned long)(sz)) >> 9) <= 1364) ? 124 + (((unsigned long)(sz)) >> 18) \
                                               : 126)
 
 #define av_               D_0012F788
@@ -55,58 +55,58 @@ extern u64 D_0012FB90[]; /* trim_threshold */
 #define trim_threshold (D_0012FB90[0])
 #define top_pad        (D_0012FB98[0])
 
-#define unlink(P, BK, FD)                                                                          \
-    {                                                                                              \
-        BK = P->bk;                                                                                \
-        FD = P->fd;                                                                                \
-        FD->bk = BK;                                                                               \
-        BK->fd = FD;                                                                               \
+#define unlink(P, BK, FD) \
+    {                     \
+        BK = P->bk;       \
+        FD = P->fd;       \
+        FD->bk = BK;      \
+        BK->fd = FD;      \
     }
 
-#define link_last_remainder(P)                                                                     \
-    {                                                                                              \
-        last_remainder->fd = last_remainder->bk = P;                                               \
-        P->fd = P->bk = last_remainder;                                                            \
+#define link_last_remainder(P)                       \
+    {                                                \
+        last_remainder->fd = last_remainder->bk = P; \
+        P->fd = P->bk = last_remainder;              \
     }
 
-#define frontlink(P, S, IDX, BK, FD)                                                               \
-    {                                                                                              \
-        if (S < MAX_SMALLBIN_SIZE) {                                                               \
-            IDX = smallbin_index(S);                                                               \
-            mark_binblock(IDX);                                                                    \
-            BK = bin_at(IDX);                                                                      \
-            FD = BK->fd;                                                                           \
-            P->bk = BK;                                                                            \
-            P->fd = FD;                                                                            \
-            FD->bk = BK->fd = P;                                                                   \
-        } else {                                                                                   \
-            IDX = bin_index(S);                                                                    \
-            BK = bin_at(IDX);                                                                      \
-            FD = BK->fd;                                                                           \
-            if (FD == BK)                                                                          \
-                mark_binblock(IDX);                                                                \
-            else {                                                                                 \
-                while (FD != BK && S < chunksize(FD))                                              \
-                    FD = FD->fd;                                                                   \
-                BK = FD->bk;                                                                       \
-            }                                                                                      \
-            P->bk = BK;                                                                            \
-            P->fd = FD;                                                                            \
-            FD->bk = BK->fd = P;                                                                   \
-        }                                                                                          \
+#define frontlink(P, S, IDX, BK, FD)                  \
+    {                                                 \
+        if (S < MAX_SMALLBIN_SIZE) {                  \
+            IDX = smallbin_index(S);                  \
+            mark_binblock(IDX);                       \
+            BK = bin_at(IDX);                         \
+            FD = BK->fd;                              \
+            P->bk = BK;                               \
+            P->fd = FD;                               \
+            FD->bk = BK->fd = P;                      \
+        } else {                                      \
+            IDX = bin_index(S);                       \
+            BK = bin_at(IDX);                         \
+            FD = BK->fd;                              \
+            if (FD == BK)                             \
+                mark_binblock(IDX);                   \
+            else {                                    \
+                while (FD != BK && S < chunksize(FD)) \
+                    FD = FD->fd;                      \
+                BK = FD->bk;                          \
+            }                                         \
+            P->bk = BK;                               \
+            P->fd = FD;                               \
+            FD->bk = BK->fd = P;                      \
+        }                                             \
     }
 
 void _free_r(struct _reent *reent_context, void *mem) {
     struct malloc_chunk *free_chunk;
-    u32 hd;
-    u32 sz;
-    s32 free_bin_index;
+    u32                  hd;
+    u32                  sz;
+    s32                  free_bin_index;
     struct malloc_chunk *next;
-    u32 nextsz;
-    u32 prevsz;
+    u32                  nextsz;
+    u32                  prevsz;
     struct malloc_chunk *bck;
     struct malloc_chunk *fwd;
-    s32 islr;
+    s32                  islr;
 
     if (mem == 0)
         return;

@@ -1,29 +1,30 @@
 #include "asm.h"
 
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
+typedef signed char        s8;
+typedef unsigned char      u8;
+typedef signed short       s16;
+typedef unsigned short     u16;
+typedef signed int         s32;
+typedef unsigned int       u32;
+typedef signed long long   s64;
 typedef unsigned long long u64;
-typedef float f32;
-typedef double f64;
-struct SifRpcClient
-{
-  volatile s32 packet;
-  volatile s32 request_id;
-    s32 semaphore_id;
-    u8 pad_C[0x8];
-    s32 server_buffer;
-    u8 pad_18[0x4];
-    s32 end_callback;
-  volatile s32 end_argument;
-    s32 server;
+typedef float              f32;
+typedef double             f64;
+
+struct SifRpcClient {
+    volatile s32 packet;
+    volatile s32 request_id;
+    s32          semaphore_id;
+    u8           pad_C[0x8];
+    s32          server_buffer;
+    u8           pad_18[0x4];
+    s32          end_callback;
+    volatile s32 end_argument;
+    s32          server;
 };
+
 struct SifRpcPacket {
-    u8 pad_0[0x14];
+    u8  pad_0[0x14];
     s32 packet_address;
     s32 request_id;
     s32 client;
@@ -34,7 +35,8 @@ struct SifRpcPacket {
     s32 completion_mode;
     s32 server;
 };
-extern u8 D_00156800[];
+
+extern u8  D_00156800[];
 extern s32 CreateSema();
 extern s32 DeleteSema();
 extern s32 WaitSema();
@@ -42,14 +44,22 @@ extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
 extern s32 free_rpc_packet() __asm__("func_0011AD90");
 extern s32 sceSifSendCmd();
 extern s32 sceSifWriteBackDCache();
-s32 sceSifCallRpc(struct SifRpcClient *client, s32 rpc_number, s32 mode, s32 send_buf, s32 send_size, s32 recv_buf,
-                  s32 recv_size, s32 end_func, s32 end_data) {
-    s32 semaphore_parameters[6];
+s32        sceSifCallRpc(struct SifRpcClient *client,
+                         s32                  rpc_number,
+                         s32                  mode,
+                         s32                  send_buf,
+                         s32                  send_size,
+                         s32                  recv_buf,
+                         s32                  recv_size,
+                         s32                  end_func,
+
+                         s32 end_data) {
+    s32                  semaphore_parameters[6];
     struct SifRpcPacket *packet;
-    s32 semaphore_id;
-    s32 skip_cache_writeback;
-    s32 request_id;
-    s32 allocation_failure_result;
+    s32                  semaphore_id;
+    s32                  skip_cache_writeback;
+    s32                  request_id;
+    s32                  allocation_failure_result;
     packet = (struct SifRpcPacket *)get_available_rpc_packet(D_00156800);
     allocation_failure_result = -1;
     if (packet == 0) {
@@ -87,7 +97,8 @@ s32 sceSifCallRpc(struct SifRpcClient *client, s32 rpc_number, s32 mode, s32 sen
             packet->completion_mode = 1;
         }
         client->semaphore_id = -1;
-        if (sceSifSendCmd(0x8000000A, packet, 0x40, send_buf, client->server_buffer, send_size) != 0) {
+        if (sceSifSendCmd(0x8000000A, packet, 0x40, send_buf, client->server_buffer, send_size) !=
+            0) {
             return 0;
         } else {
             free_rpc_packet(packet);
@@ -103,7 +114,8 @@ s32 sceSifCallRpc(struct SifRpcClient *client, s32 rpc_number, s32 mode, s32 sen
             return -3;
         }
         packet->completion_mode = 1;
-        if (sceSifSendCmd(0x8000000A, packet, 0x40, send_buf, client->server_buffer, send_size) == 0) {
+        if (sceSifSendCmd(0x8000000A, packet, 0x40, send_buf, client->server_buffer, send_size) ==
+            0) {
             DeleteSema(client->semaphore_id);
             free_rpc_packet(packet);
             return -2;

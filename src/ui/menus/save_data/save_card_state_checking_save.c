@@ -6,7 +6,7 @@ void save_card_state_checking_save(void) __asm__("FUN_00208c00");
 
 void save_card_state_checking_save(void) {
     struct MemoryCardState *card_state = &memory_card_state;
-    int save_index;
+    int                     save_index;
     if (card_state->card[0].sync_result < -1) {
         mode_freeze_state = 3;
         return;

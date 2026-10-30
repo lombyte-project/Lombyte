@@ -6,23 +6,28 @@
 #include "rnc/math/asm_helpers.h"
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
+
 extern void scale_vector(float scale, void *out, void *joint) __asm__("FUN_001f9a80");
 extern void compute_moby_joint_matrices(void *moby, short joint, int flags) __asm__("FUN_0020fa90");
 
 /* Joint positions in scratchpad, 16 bytes each. */
 #define JOINT_POSITIONS 0x70000000
 
-int rig_probe_setup(char *moby, int index, unsigned int *type, float *result,
-                      float *radius, float *distance) __asm__("FUN_L01_00263a28");
-int rig_probe_setup(char *moby, int index, unsigned int *type, float *result,
-                      float *radius, float *distance)
-{
-    char *entry;
-    float scale;
-    u128 matrix[4];
+int rig_probe_setup(char         *moby,
+                    int           index,
+                    unsigned int *type,
+                    float        *result,
+                    float        *radius,
+                    float        *distance) __asm__("FUN_L01_00263a28");
+int rig_probe_setup(
+
+    char *moby, int index, unsigned int *type, float *result, float *radius, float *distance) {
+    char         *entry;
+    float         scale;
+    u128          matrix[4];
     sceVu0FVECTOR first;
     sceVu0FVECTOR second;
-    short *joints;
+    short        *joints;
 
     entry = *(char **)(moby + 0x94);
     if (entry == 0) {

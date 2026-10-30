@@ -17,7 +17,7 @@
  * include is required because the generated per-function files do not set it
  * and the assembler would otherwise reorder delay slots.
  */
-#define INCLUDE_ASM(path, symbol)                                                                  \
+#define INCLUDE_ASM(path, symbol) \
     __asm__(".set noreorder\n.include \"macro.inc\"\n.include \"" path "\"\n.set reorder")
 
 #endif /* LOMBYTE_ASM_H */

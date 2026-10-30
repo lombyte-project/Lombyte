@@ -2,23 +2,24 @@
 #include "rnc/globals.h"
 
 struct AudioStream {
-    u8 pad_0[0x44];
+    u8  pad_0[0x44];
     s32 unk44;
     s32 unk48;
     s32 unk4C;
 };
 
 struct AudioStreamTableA {
-    u8 pad_0[0x2C8];
+    u8  pad_0[0x2C8];
     s32 unk2C8;
     s32 unk2CC;
 };
 
 struct AudioStreamTableB {
-    u8 pad_0[0x2F8];
+    u8  pad_0[0x2F8];
     s32 unk2F8;
     s32 unk2FC;
 };
+
 #include "rnc/streaming/disc_table.h"
 #include "rnc/audio/music/music_stream_state.h"
 
@@ -42,7 +43,8 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
         if (disc_table.unk2C8[game_language].size == 0) {
             break;
         }
-        if (start_audio_stream_read(stream->unk48, disc_table.unk2C8[game_language].sector,
+        if (start_audio_stream_read(stream->unk48,
+                                    disc_table.unk2C8[game_language].sector,
                                     disc_table.unk2C8[game_language].size) != 0) {
             stream->unk44 = stream->unk44 + 1;
         } else {
@@ -61,7 +63,8 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
         if (disc_table.unk2F8[game_language].size == 0) {
             break;
         }
-        if (start_audio_stream_read(stream->unk4C, disc_table.unk2F8[game_language].sector,
+        if (start_audio_stream_read(stream->unk4C,
+                                    disc_table.unk2F8[game_language].sector,
                                     disc_table.unk2F8[game_language].size) != 0) {
             stream->unk44 = stream->unk44 + 1;
         } else {

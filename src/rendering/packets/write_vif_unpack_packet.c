@@ -1,7 +1,8 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
+
 extern void fast_mem_copy(u8 *, void *, s32) __asm__("func_001F98D0");
-void write_vif_unpack_packet(s32 addr, void *src, s32 qwc) __asm__("FUN_00233888");
+void        write_vif_unpack_packet(s32 addr, void *src, s32 qwc) __asm__("FUN_00233888");
 
 void write_vif_unpack_packet(s32 addr, void *unpack_payload, s32 qwc) {
     *(u32 *)(render_packet_cursor.bytes + 0) = qwc | 0x10000000;

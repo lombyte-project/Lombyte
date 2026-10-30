@@ -9,7 +9,7 @@
 #include "rnc/audio/voice_pool.h"
 
 extern struct PadStateWords pad_words __asm__("D_0013C940");
-extern s32 D_0015EEA0;
+extern s32                  D_0015EEA0;
 /* Movie skip mode (decode_mode): -1 no skipping, 2 any new button. Read
    through a volatile view because retail loads it once for the -1 and 2
    tests and then again inside the skip-allowed test, with no store or call
@@ -17,20 +17,20 @@ extern s32 D_0015EEA0;
    object. */
 #define DECODE_MODE (*(volatile s32 *)&decode_mode)
 extern void FlushCache(s32);
-extern s32 sceGsSyncV(s32);
-extern s32 sceMpegDemuxPssRing(struct VideoDec *, u8 *, s32, struct ReadBuf *, s32);
-extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");
+extern s32  sceGsSyncV(s32);
+extern s32  sceMpegDemuxPssRing(struct VideoDec *, u8 *, s32, struct ReadBuf *, s32);
+extern s32  snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void switch_thread(void) __asm__("func_0023A770");
-extern s32 is_audio_ok(void) __asm__("func_0023A790");
-extern s32 proceed_audio(void) __asm__("func_0023ABA0");
+extern s32  is_audio_ok(void) __asm__("func_0023A790");
+extern s32  proceed_audio(void) __asm__("func_0023ABA0");
 extern void audio_dec_start(struct AudioDec *) __asm__("func_0023ACB8");
 extern void audio_dec_reset(struct AudioDec *) __asm__("FUN_0023ad10");
 extern void start_display(s32) __asm__("func_0023B590");
 extern void end_display(void) __asm__("ClearStageStateFlag");
-extern s32 read_cd_stream_sectors(struct MpegCdStream *, u8 *, s32, s32) __asm__("func_0023BA60");
-extern s32 video_dec_flush(struct VideoDec *) __asm__("func_0023CD08");
-extern s32 video_dec_is_flushed(struct VideoDec *) __asm__("FUN_0023cde0");
+extern s32  read_cd_stream_sectors(struct MpegCdStream *, u8 *, s32, s32) __asm__("func_0023BA60");
+extern s32  video_dec_flush(struct VideoDec *) __asm__("func_0023CD08");
+extern s32  video_dec_is_flushed(struct VideoDec *) __asm__("FUN_0023cde0");
 
 /* Each pad test takes the pad by pointer, so retail forms the pad address
    afresh for every test from one shared upper half. */
@@ -45,7 +45,8 @@ static inline s32 pad_chord(struct PadStateWords *pad, u64 mask) {
     return 1;
 }
 
-s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
+s32 read_mpeg(struct VideoDec     *video_dec,
+              struct ReadBuf      *read_buf,
               struct MpegCdStream *cd_stream) __asm__("FUN_0023a460");
 
 /* Feeds a PSS movie from the CD stream through the ring buffer into the
@@ -55,7 +56,9 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
    movie down and restores mixer channel 5. Returns 1 if the player
    skipped the movie: any new button in skip mode 2, start where skipping
    is allowed, or the L1+L2+R1+R2+start chord. */
-s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
+s32 read_mpeg(struct VideoDec *video_dec,
+              struct ReadBuf  *read_buf,
+
               struct MpegCdStream *cd_stream) {
     u8 *write_ptr;
     u8 *read_ptr;
@@ -80,10 +83,10 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
         update_primary_pad_state();
         mode = DECODE_MODE;
         if (mode != -1) {
-            if ((mode == 2 && pad_pressed(&pad_words, -1))
-                || ((D_0015EEA0 != 0 || alternate_animation_sequence != 0 || DECODE_MODE != 0
-                     || current_level_index <= 0)
-                    && pad_pressed(&pad_words, 0x800))) {
+            if ((mode == 2 && pad_pressed(&pad_words, -1)) ||
+                ((D_0015EEA0 != 0 || alternate_animation_sequence != 0 || DECODE_MODE != 0 ||
+                  current_level_index <= 0) &&
+                 pad_pressed(&pad_words, 0x800))) {
                 skip = 1;
             } else {
                 skip = pad_chord(&pad_words, 0x8000000000FULL);
@@ -103,8 +106,7 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
         switch_thread();
         avail = read_buf_begin_get(read_buf, &read_ptr);
         if (avail > 0) {
-            count = sceMpegDemuxPssRing(video_dec, read_ptr, avail, read_buf,
-                                        read_buf->size);
+            count = sceMpegDemuxPssRing(video_dec, read_ptr, avail, read_buf, read_buf->size);
             decode_remaining -= count;
             read_buf_end_get(read_buf, count);
         }
@@ -129,4 +131,5 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
     snd_flush_sound_commands();
     return skipped;
 }
+
 extern __typeof__(read_mpeg) func_0023A460 __attribute__((alias("FUN_0023a460")));

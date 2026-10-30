@@ -13,13 +13,15 @@
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
-extern Vec4 D_0013E090[2] NOT_SDA; /* camera start: position, rotation */
+extern Vec4           D_0013E090[2] NOT_SDA; /* camera start: position, rotation */
 extern s32 D_00141660 NOT_SDA;
+
 #include "rnc/overlay/level_labels.h"
-extern struct Moby *D_L00_0015FFDC; /* end of the moby table */
-extern s32 D_L00_00160540;
+
+extern struct Moby    *D_L00_0015FFDC; /* end of the moby table */
+extern s32             D_L00_00160540;
 extern struct HeroEase hero_eases_lui[] __asm__("D_L00_0017A680") NOT_SDA;
-extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
+extern void            fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
 extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
 
@@ -31,10 +33,10 @@ extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
 void initialize_hero(void) __asm__("FUN_L00_00204c60");
 
 void initialize_hero(void) {
-    s32 save[7];
-    s32 i;
+    s32          save[7];
+    s32          i;
     struct Moby *candidate_moby;
-    f32 z;
+    f32          z;
 
     for (i = 0; i < 7; i++)
         save[i] = hero.items[i].item_id;
@@ -76,7 +78,11 @@ void initialize_hero(void) {
     }
     /* the eight voice slots unk2218..unk2234 as one array, indexed from the hero base */
     for (i = 0; i < 8; i++)
-        ((struct { u8 pad[0x2218]; s32 v[8]; } *)&hero)->v[i] = -1;
+        ((struct {
+            u8  pad[0x2218];
+            s32 v[8];
+        } *)&hero)
+            ->v[i] = -1;
     hero.health.hp = hero_max_health;
     hero.reach_distance = 2.125f;
     hero.reach_height = 1.25f;

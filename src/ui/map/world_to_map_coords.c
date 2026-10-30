@@ -1,11 +1,13 @@
 #include "types.h"
 #include "rnc/globals.h"
+
 struct LevelMapTransform {
     f32 offset_x;
     f32 scale_x;
     f32 offset_y;
     f32 scale_y;
 };
+
 extern struct LevelMapTransform level_map_transforms[] __asm__("D_0019E970");
 void world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y, s32 level) __asm__("FUN_00208408");
 

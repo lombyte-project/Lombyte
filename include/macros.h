@@ -9,10 +9,10 @@
 
 /* Reads hard register REG (e.g. "$16") here, so it counts as live up to this
    point. */
-#define REG_LIVE(reg)                                                          \
-    do {                                                                       \
-        register int reg_live_ __asm__(reg);                                   \
-        __asm__ volatile("" : : "r"(reg_live_));                               \
+#define REG_LIVE(reg)                            \
+    do {                                         \
+        register int reg_live_ __asm__(reg);     \
+        __asm__ volatile("" : : "r"(reg_live_)); \
     } while (0)
 
 #endif /* LOMBYTE_MACROS_H */

@@ -10,7 +10,6 @@
 
 /* Register this level's vendor data set. */
 
-
 void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
 void render_level_water_grids(void) {

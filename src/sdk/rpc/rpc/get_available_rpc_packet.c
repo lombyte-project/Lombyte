@@ -1,16 +1,17 @@
 #include "types.h"
+
 typedef struct {
-    s32 pid;
+    s32   pid;
     void *pkt_table;
-    s32 pkt_table_len;
+    s32   pkt_table_len;
 } RpcData;
 
 typedef struct {
-    u8 pad0[0x10];
-    s32 rec_id;
+    u8    pad0[0x10];
+    s32   rec_id;
     void *pkt_addr;
-    s32 rpc_id;
-    u8 pad1C[0x24];
+    s32   rpc_id;
+    u8    pad1C[0x24];
 } RpcPacket;
 
 extern s32 DIntr(void);
@@ -20,9 +21,9 @@ void *get_available_rpc_packet(RpcData *rpc_data) __asm__("FUN_0011ace8");
 
 void *get_available_rpc_packet(RpcData *rpc_data) {
     RpcPacket *packet;
-    s32 packet_count;
-    s32 index;
-    s32 rid;
+    s32        packet_count;
+    s32        index;
+    s32        rid;
 
     DIntr();
     packet_count = rpc_data->pkt_table_len;

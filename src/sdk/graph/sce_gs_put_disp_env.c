@@ -1,6 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
+
 extern s32 sceGsGetGParam() __asm__("GetCoreDataTable");
+
 void sceGsPutDispEnv(struct sceGsDispEnv *env) {
     s32 *core;
 

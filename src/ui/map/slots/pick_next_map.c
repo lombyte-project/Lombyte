@@ -4,6 +4,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/ui/map/slots/find_map_entry_slot.h"
+
 extern unsigned char D_0013D4E1 NOT_SDA;
 /* Picks the map to load next: the current map id (level_map_selection.level,
    +0x100 when D_0013D4E1 is set) unless find_map_entry_slot finds it already

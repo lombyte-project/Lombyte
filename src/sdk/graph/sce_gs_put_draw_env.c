@@ -1,6 +1,8 @@
 #include "types.h"
-extern u8 gs_draw_env_dma_timeout_message[] __asm__("D_00153078");
+
+extern u8  gs_draw_env_dma_timeout_message[] __asm__("D_00153078");
 extern s32 scePrintf();
+
 s32 sceGsPutDrawEnv(u64 *env) {
     u32 count;
     u32 tag;

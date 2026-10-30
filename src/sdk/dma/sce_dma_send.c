@@ -1,15 +1,18 @@
 #include "types.h"
+
 struct DmaChannelRegs {
     s32 unk0;
-    u8 pad_4[0x1C];
+    u8  pad_4[0x1C];
     s32 unk20;
-    u8 pad_24[0xC];
+    u8  pad_24[0xC];
     s32 unk30;
 };
-extern s32 CheckAddress();
+
+extern s32  CheckAddress();
 extern void WaitDma();
+
 void sceDmaSend(struct DmaChannelRegs *channel, s32 addr) {
-    s32 phys_addr;
+    s32          phys_addr;
     register u32 sentinel;
     phys_addr = CheckAddress(addr);
     WaitDma(channel);

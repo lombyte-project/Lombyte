@@ -8,34 +8,35 @@
 
 struct SkyTile {
     u128 bounds; /* 16-byte aligned: tile fields are addressed from the tile base */
-    s32 address;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
+    s32  address;
+    s16  unk4;
+    s16  unk6;
+    s16  unk8;
+    s16  unkA;
+    s16  unkC;
+    s16  unkE;
 };
 
 struct Shell {
-    s32 count;
-    u8 pad4[0xC];
+    s32            count;
+    u8             pad4[0xC];
     struct SkyTile tiles[1];
 };
 
 extern u8 sky_gouraud_gs_block[] __asm__("D_0013D0F0");
 
-extern void sky_bsphere_check(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");
+extern void
+sky_bsphere_check(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");
 extern void WriteDmaChannelRegisters(s32 address, s32 qwc, s32 destination);
 extern void dma_to_spr_sync(void) __asm__("func_0020B3E0");
-extern s32 sky_transform_vertices(s32, s32, s32, s32) __asm__("FUN_0022bf94");
+extern s32  sky_transform_vertices(s32, s32, s32, s32) __asm__("FUN_0022bf94");
 extern void sky_build_gif_gouraud(s32, s32, s32, s32) __asm__("FUN_0022c0e0");
-extern s32 vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
+extern s32  vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 
 void sky_draw_shell_gouraud(struct Shell *shell) __asm__("FUN_0022b928");
 
 void sky_draw_shell_gouraud(struct Shell *shell) {
-    u8 visibility[shell->count];
+    u8  visibility[shell->count];
     s32 i;
     s32 dest;
     s32 c_dest;
@@ -56,8 +57,8 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
 
     D_00160410 = 1 - D_00160410;
     if (visibility[0] == 1) {
-        WriteDmaChannelRegisters(shell->tiles[0].address, shell->tiles[0].unkE >> 4,
-                                 D_00160408[D_00160410]);
+        WriteDmaChannelRegisters(
+            shell->tiles[0].address, shell->tiles[0].unkE >> 4, D_00160408[D_00160410]);
     }
 
     for (i = 0; i < shell->count; i++) {
@@ -68,16 +69,18 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
         next = i + 1;
         D_00160410 = 1 - D_00160410;
         if (next < shell->count && visibility[next] == 1) {
-            WriteDmaChannelRegisters(shell->tiles[next].address, shell->tiles[next].unkE >> 4,
-                                     D_00160408[D_00160410]);
+            WriteDmaChannelRegisters(
+                shell->tiles[next].address, shell->tiles[next].unkE >> 4, D_00160408[D_00160410]);
         }
 
         if (visibility[i] == 1) {
             dest = D_00160408[1 - D_00160410];
             c_dest = dest + shell->tiles[i].unkC;
             a_dest = dest + shell->tiles[i].unkA;
-            if (sky_transform_vertices(dest + shell->tiles[i].unk8, 0x70002000, shell->tiles[i].unk4,
-                             (&shell->tiles[i])->unkC) == 0) {
+            if (sky_transform_vertices(dest + shell->tiles[i].unk8,
+                                       0x70002000,
+                                       shell->tiles[i].unk4,
+                                       (&shell->tiles[i])->unkC) == 0) {
                 sky_build_gif_gouraud(shell->tiles[i].unk6, c_dest, a_dest, 0x70002000);
             }
         }

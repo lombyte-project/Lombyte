@@ -5,6 +5,7 @@
 
 /* Returns the pointer at +8 of the moby data when flag 0x20 at 0x34 is set, else 0. */
 char *FUN_L00_002603d0(struct Moby *m);
+
 char *FUN_L00_002603d0(struct Moby *moby) {
     if (moby == 0)
         return 0;

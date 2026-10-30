@@ -1,6 +1,6 @@
-typedef unsigned char u8;
+typedef unsigned char  u8;
 typedef unsigned short u16;
-typedef signed int s32;
+typedef signed int     s32;
 
 typedef union ImageDimension {
     struct {
@@ -11,7 +11,7 @@ typedef union ImageDimension {
 } ImageDimension;
 
 typedef struct ImageDescriptorInput {
-    u8 reserved[0x20];
+    u8             reserved[0x20];
     ImageDimension width;
     ImageDimension height;
 } ImageDescriptorInput;

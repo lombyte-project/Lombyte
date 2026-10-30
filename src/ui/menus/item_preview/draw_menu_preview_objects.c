@@ -1,17 +1,20 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
+
 struct MenuPreviewObject {
-    u8 pad0[0x50];
+    u8  pad0[0x50];
     u64 tag;
 };
+
 struct MenuPreviewObjects {
-    u8 pad0[0x44];
+    u8                        pad0[0x44];
     struct MenuPreviewObject *items[24];
-    u8 held[24];
+    u8                        held[24];
 };
-extern s32 menu_preview_slot_draw_enabled[] __asm__("D_001D5020");
+
+extern s32  menu_preview_slot_draw_enabled[] __asm__("D_001D5020");
 extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
-s32 draw_menu_preview_objects(struct MenuPreviewObjects *preview) __asm__("FUN_0021ddf8");
+s32         draw_menu_preview_objects(struct MenuPreviewObjects *preview) __asm__("FUN_0021ddf8");
 
 s32 draw_menu_preview_objects(struct MenuPreviewObjects *preview) {
     s32 i;

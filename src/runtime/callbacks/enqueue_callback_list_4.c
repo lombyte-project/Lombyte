@@ -1,8 +1,9 @@
 #include "types.h"
+
 extern s32 draw_callback2_count __asm__("D_0015F468");
-extern u8 draw_callback2_funcs[] __asm__("D_0018DD40");
-extern u8 draw_callback2_args[] __asm__("D_0018DE40");
-void enqueue_callback_list_4(s32 callback, s32 callback_argument) __asm__("FUN_001f47b8");
+extern u8  draw_callback2_funcs[] __asm__("D_0018DD40");
+extern u8  draw_callback2_args[] __asm__("D_0018DE40");
+void       enqueue_callback_list_4(s32 callback, s32 callback_argument) __asm__("FUN_001f47b8");
 
 void enqueue_callback_list_4(s32 callback, s32 callback_argument) {
     s32 callback_entry_byte_offset;

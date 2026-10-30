@@ -6,6 +6,7 @@
 #include "rnc/camera/camera_globals.h"
 
 #include "rnc/camera/update_cam.h"
+
 extern int step_camera_blend(void *, void *) __asm__("func_001ECAF8");
 extern int advance_alternate_camera_transition(void *, void *) __asm__("FUN_001eccd8");
 
@@ -20,7 +21,7 @@ void update_camera_blend(char *to_cam) __asm__("FUN_001ed2b0");
 
 void update_camera_blend(char *to_cam) {
     char *base = cam_trans_state;
-    int result;
+    int   result;
 
     if (*(unsigned char *)(base + 2) == 0) {
         result = step_camera_blend(to_cam, base + 0x10);

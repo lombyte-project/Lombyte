@@ -10,25 +10,25 @@
 /* The 0x70-byte header in front of the voices, then thirty 0x70-byte voices. */
 typedef struct {
     u128 clear[4];
-    s32 listener_history_position;
-    s32 reserved44;
-    s32 group_volume[6];
-    u8 pad60[0x10];
+    s32  listener_history_position;
+    s32  reserved44;
+    s32  group_volume[6];
+    u8   pad60[0x10];
 } VoicePoolHeader;
 
 typedef struct {
     s32 handle;
-    u8 state;
-    u8 pad5[0x6B];
+    u8  state;
+    u8  pad5[0x6B];
 } VoicePoolSlot;
 
-extern u8 voice_pool[] __asm__("D_0013E550");
-extern s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
+extern u8   voice_pool[] __asm__("D_0013E550");
+extern s32  snd_start_sound_system(void) __asm__("FUN_0012da28");
 extern void snd_set_mixer_mode(s32, s32) __asm__("FUN_0012e280");
 extern void snd_set_group_voice_range(s32, s32, s32) __asm__("FUN_0012e2b8");
 extern void snd_pre_alloc_reverb_work_area(s32, s32) __asm__("FUN_0012efa8");
 extern void reset_music(void) __asm__("FUN_00215390");
-void initialize_gameplay_sound_system(void) __asm__("FUN_0022c8d0");
+void        initialize_gameplay_sound_system(void) __asm__("FUN_0022c8d0");
 
 #define POOL ((VoicePoolHeader *)voice_pool)
 
@@ -73,4 +73,5 @@ void initialize_gameplay_sound_system(void) {
     snd_set_master_volume(5, POOL->group_volume[5]);
 }
 
-extern __typeof__(initialize_gameplay_sound_system) func_0022C8D0 __attribute__((alias("FUN_0022c8d0")));
+extern __typeof__(initialize_gameplay_sound_system) func_0022C8D0
+    __attribute__((alias("FUN_0022c8d0")));

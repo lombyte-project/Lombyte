@@ -9,11 +9,11 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby.h"
 
-
 extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 
 /* Moby state 0xE while FUN_L00_002dbb20 reports a hit, back to 1 when it stops. */
 int moby_hold_state_if_found(struct Moby *a) __asm__("FUN_L01_002efaf8");
+
 int moby_hold_state_if_found(struct Moby *target_moby) {
     int suck_cannon_store_result = store_moby_in_suck_cannon(target_moby);
     if (suck_cannon_store_result == 0) {
@@ -35,10 +35,12 @@ int cancel_suck_cannon_suction_and_set_state_14(struct Moby *moby) {
     moby->state = 0xe;
     return helper_result;
 }
+
 typedef struct {
     char pad[0x78];
-    s32 f;
+    s32  f;
 } T6;
+
 /* Returns the moby data pointer plus 0xC0, or 0 when either is null. */
 s32 get_moby_data_plus_0xc0(T6 *moby) __asm__("FUN_L01_002efbc8");
 
@@ -58,6 +60,7 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 7 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
 int moby_hold_state_if_grabbed(struct Moby *a) __asm__("FUN_L01_002f1c78");
+
 int moby_hold_state_if_grabbed(struct Moby *suction_moby) {
     int suction_result = process_moby_suck_cannon_suction(suction_moby);
     if (suction_result == 0) {
@@ -77,6 +80,7 @@ int run_moby_helper_and_set_state_7(struct Moby *moby) {
     moby->state = 0x7;
     return helper_result;
 }
+
 /* Returns the moby data pointer plus 0x60, or 0 when either is null. */
 s32 get_moby_data_plus_0x60(T6 *moby) __asm__("FUN_L01_002f1df8");
 
@@ -91,23 +95,26 @@ s32 get_moby_data_plus_0x60(T6 *moby) {
     }
     return 0;
 }
+
 typedef struct {
-    u8 p0[0x20];
+    u8  p0[0x20];
     f32 r[4];
     f32 a[4];
     s32 c[4];
     f32 x40, x44, x48, x4c;
 } M_FUN_L01_00308470;
+
 typedef struct {
-    u8 p0[0x78];
+    u8                  p0[0x78];
     M_FUN_L01_00308470 *m;
 } O_FUN_L01_00308470;
+
 /* Fills a moby data block: four random values, fixed constants, four frame-scaled counts. */
 void initialize_gold_bolt_data(O_FUN_L01_00308470 *moby) __asm__("FUN_L01_00308470");
 
 void initialize_gold_bolt_data(O_FUN_L01_00308470 *moby) {
     M_FUN_L01_00308470 *m = moby->m;
-    s32 i;
+    s32                 i;
     for (i = 0; i < 4; i++)
         m->r[i] = random_integer_below(0xFF);
     m->a[0] = -1.0f;

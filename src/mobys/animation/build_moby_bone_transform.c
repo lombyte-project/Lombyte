@@ -5,10 +5,12 @@
 
 extern void copy_matrix_rotation(void *, void *) __asm__("func_001FA298");
 extern void get_moby_joint_matrices(struct Moby *, s32, s32 *, s32) __asm__("FUN_00210850");
-void build_moby_bone_transform(struct Moby *moby, s32 bone_index, s32 output_transform) __asm__("FUN_0020cca8");
+void        build_moby_bone_transform(struct Moby *moby,
+                                      s32          bone_index,
+                                      s32          output_transform) __asm__("FUN_0020cca8");
 
 void build_moby_bone_transform(struct Moby *moby, s32 bone_index, s32 output_transform) {
-    u8 sp_slot[0x40];
+    u8  sp_slot[0x40];
     s32 bone_index_input;
     f32 scale;
     s32 translation;

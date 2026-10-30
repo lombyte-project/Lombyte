@@ -8,19 +8,20 @@
 #include "rnc/game/item_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
+
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 update_menu_item_slots(struct MenuScreen *menu) __asm__("FUN_0021c7a0");
 
 s32 update_menu_item_slots(struct MenuScreen *menu) {
-    s16 id;
-    s32 *slots;
-    s32 *scan;
-    s32 slot_cursor_after_input;
-    s32 cursor_or_scaled_frame_quotient;
-    int index;
-    int start_index;
-    int i;
+    s16                id;
+    s32               *slots;
+    s32               *scan;
+    s32                slot_cursor_after_input;
+    s32                cursor_or_scaled_frame_quotient;
+    int                index;
+    int                start_index;
+    int                i;
     struct MenuScreen *grid;
 
     grid = menu_system.current->focus;
@@ -48,7 +49,8 @@ s32 update_menu_item_slots(struct MenuScreen *menu) {
                 usage_stats.stat[21].unk2 = (u16)(scale_game_frames(D_0015EEA4) / 600);
             }
             slots = menu->data.slots.items;
-            usage_stats.stat[21].level_mask = (s32)((usage_stats.stat[21].level_mask | (1 << current_level_index)) | 0x80000000);
+            usage_stats.stat[21].level_mask =
+                (s32)((usage_stats.stat[21].level_mask | (1 << current_level_index)) | 0x80000000);
             i = 0;
             if (menu->data.slots.items[0] != id) {
                 scan = slots;

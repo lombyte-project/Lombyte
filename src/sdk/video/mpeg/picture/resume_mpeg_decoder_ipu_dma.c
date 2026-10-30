@@ -2,8 +2,9 @@
 #include "asm.h"
 
 #include "types.h"
+
 typedef struct MpegVideoLibraryContext {
-    u8 reserved[0x40];
+    u8    reserved[0x40];
     void *pDecoderState;
 } MpegVideoLibraryContext;
 

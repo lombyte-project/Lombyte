@@ -3,12 +3,13 @@
 #include "rnc/ui/text/text_region.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/rendering/vu1_registers.h"
-extern void setup_gif_paging(int) __asm__("func_001F4280");
-extern void do_gif_paging(void) __asm__("func_001F4398");
+
+extern void  setup_gif_paging(int) __asm__("func_001F4280");
+extern void  do_gif_paging(void) __asm__("func_001F4398");
 extern void *get_help_message_text(int) __asm__("func_001FDD10");
-extern char fallback_prompt_text[] __asm__("D_001602E8");
-extern void font_print_window_small(struct TextRegion *, long, char *,
-                                    int) __asm__("func_001F75F0");
+extern char  fallback_prompt_text[] __asm__("D_001602E8");
+extern void
+font_print_window_small(struct TextRegion *, long, char *, int) __asm__("func_001F75F0");
 /* Draws the two-line prompt box (text 0x4FB3 for menu_system.unkD4 in 0..2,
    0x4FB5 for 3, else D_001602E8) sized from arg0's +0x20/+0x24. The box
    is an aggregate initializer: this compiler clears it with a memset
@@ -18,7 +19,7 @@ int draw_prompt_box(char *prompt_dimensions) __asm__("FUN_00221b50");
 
 int draw_prompt_box(char *prompt_dimensions) {
     char *text;
-    int prompt_text_selector;
+    int   prompt_text_selector;
 
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0x2004B);

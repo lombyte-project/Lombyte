@@ -5,6 +5,7 @@
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00262618.s", FUN_L01_00262618);
+
 #include "eetypes.h"
 #include "qcopy.h"
 #include "qzero.h"
@@ -12,7 +13,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00262618.s", FUN_L01_00262618);
 #include "sda.h"
 
 extern u8 D_L01_001E3380[];
-void update_and_draw_scrolling_overlay_layers(s32, void *) __asm__("FUN_L01_002b96e0");
+void      update_and_draw_scrolling_overlay_layers(s32, void *) __asm__("FUN_L01_002b96e0");
 
 void draw_two_scroll_layers(void) __asm__("FUN_L01_002f6150");
 
@@ -20,11 +21,13 @@ void draw_two_scroll_layers(void) {
     mine_blend_color();
     update_and_draw_scrolling_overlay_layers(0x2, D_L01_001E3380);
 }
+
 #include "eetypes.h"
 #include "qcopy.h"
 #include "qzero.h"
 #include "rnc/math/vector.h"
 #include "sda.h"
+
 extern u8 D_L01_001FBC80[];
 
 void draw_four_scroll_layers(void) __asm__("FUN_L01_002feb28");

@@ -5,6 +5,7 @@
 
 /* Scalar data for src/overlays/l05/mobys/sharkigator.c.
  * Keep its include at this declaration block: SN small-data ordering matters. */
-extern float scenery_ship_initialization_scale_multiplier_gp __asm__("D_L05_001613D4") __attribute__((sda));
+extern float scenery_ship_initialization_scale_multiplier_gp __asm__("D_L05_001613D4")
+    __attribute__((sda));
 
 #endif /* LOMBYTE_RNC_OVERLAY_L05_MOBYS_SHARKIGATOR_DATA_SCENERY_SHIP_UPDATE_H */

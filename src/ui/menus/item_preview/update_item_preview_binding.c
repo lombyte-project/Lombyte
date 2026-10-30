@@ -10,49 +10,55 @@
 
 struct ItemPreviewVars {
     void *owner;
-    u8 pad4[8];
-    s32 item_index;
+    u8    pad4[8];
+    s32   item_index;
 };
+
 struct ItemPreviewBinding {
-    u8 pad0[0x14];
-    s32 variant;
-    u8 pad18[0x18];
-    s32 flags;
-    s32 state;
-    f32 rotation_angle;
-    u8 pad3C[8];
+    u8           pad0[0x14];
+    s32          variant;
+    u8           pad18[0x18];
+    s32          flags;
+    s32          state;
+    f32          rotation_angle;
+    u8           pad3C[8];
     struct Moby *primary_moby;
     struct Moby *secondary_moby;
 };
+
 struct PreviewItemDefinition {
-    u8 pad0[8];
+    u8  pad0[8];
     s32 item_type;
-    u8 padC[4];
+    u8  padC[4];
     s32 oclass;
-    u8 pad14[0x38];
+    u8  pad14[0x38];
 };
+
 struct PreviewCamera {
-    u8 pad0[0x140];
+    u8  pad0[0x140];
     f32 x;
     f32 y;
     f32 z;
 };
+
 struct PreviewClassResource {
     u8 pad0[0xD];
     u8 state_0d;
 };
 
 extern struct PreviewItemDefinition menu_item_info[] __asm__("D_001863D0");
-extern struct PreviewCamera preview_camera __asm__("D_00186F40");
-extern u8 item_text_variant[] __asm__("D_0013E520");
+extern struct PreviewCamera         preview_camera __asm__("D_00186F40");
+extern u8                           item_text_variant[] __asm__("D_0013E520");
+
 #include "rnc/hero/hero.h"
+
 extern void update_item_preview_transform() __asm__("FUN_0021e698");
 
-extern void noop_callback_q(s32, s32) __asm__("func_001E9470");
-extern void noop_callback_r(struct Moby *, s32) __asm__("func_001E9478");
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
-extern void set_moby_animation(struct Moby *, s32, s32) __asm__("func_00212ED8");
+extern void         noop_callback_q(s32, s32) __asm__("func_001E9470");
+extern void         noop_callback_r(struct Moby *, s32) __asm__("func_001E9478");
+extern f32          fast_add_rotations(f32, f32) __asm__("func_001FA580");
+extern void         select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
+extern void         set_moby_animation(struct Moby *, s32, s32) __asm__("func_00212ED8");
 extern struct Moby *create_menu_preview_moby(s32) __asm__("func_00225490");
 
 s32 update_item_preview_binding(struct ItemPreviewBinding *preview) __asm__("FUN_0021e230");
@@ -64,27 +70,27 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
         ITEM_PREVIEW_CREATE_MOBYS = 2,
         ITEM_PREVIEW_MONITOR_CLASS_CHANGE = 3
     };
-    struct MenuScreen *grid;
-    struct Moby *moby;
-    struct Moby *secondary_moby;
+    struct MenuScreen            *grid;
+    struct Moby                  *moby;
+    struct Moby                  *secondary_moby;
     struct PreviewItemDefinition *definition;
-    s32 item_index;
-    s32 previous_class;
-    s32 oclass;
-    s32 item_type;
-    s32 has_secondary_moby;
-    s32 load_class;
-    s32 use_alternate_x;
-    s32 animation_index;
-    s32 last_animation;
-    struct Moby *source_moby;
-    s32 is_type2;
-    struct ItemPreviewVars *preview_vars;
-    s32 is_type1;
-    s32 item_two_difference;
-    f32 camera_x;
-    struct ItemPreviewVars *secondary_vars;
-    f32 position_x;
+    s32                           item_index;
+    s32                           previous_class;
+    s32                           oclass;
+    s32                           item_type;
+    s32                           has_secondary_moby;
+    s32                           load_class;
+    s32                           use_alternate_x;
+    s32                           animation_index;
+    s32                           last_animation;
+    struct Moby                  *source_moby;
+    s32                           is_type2;
+    struct ItemPreviewVars       *preview_vars;
+    s32                           is_type1;
+    s32                           item_two_difference;
+    f32                           camera_x;
+    struct ItemPreviewVars       *secondary_vars;
+    f32                           position_x;
 
     grid = menu_system.current->focus;
     item_index = grid->data.grid.cells[grid->data.grid.selected_cell].id;
@@ -125,8 +131,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             break;
         }
         if (load_class) {
-            if (hero.items[0].item_id != 0 &&
-                oclass != hero.items[0].item_id) {
+            if (hero.items[0].item_id != 0 && oclass != hero.items[0].item_id) {
                 noop_callback_q(0, 0);
             }
             if (oclass != menu_system.unk11C) {
@@ -134,7 +139,9 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
                 menu_system.last_resource_table_toggle = active_decode_buffer;
                 menu_system.unk140 = oclass;
                 menu_system.unk120 = oclass;
-                ((struct PreviewClassResource *)moby_class_resources[resident_class_slot_by_id[oclass]])->state_0d = 0;
+                ((struct PreviewClassResource *)
+                     moby_class_resources[resident_class_slot_by_id[oclass]])
+                    ->state_0d = 0;
             }
         }
         moby = create_menu_preview_moby(oclass);

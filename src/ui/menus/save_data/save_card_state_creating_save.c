@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/save/memory_card_state.h"
 #include "rnc/globals.h"
+
 void save_card_state_creating_save(void) __asm__("FUN_00208d60");
 
 void save_card_state_creating_save(void) {

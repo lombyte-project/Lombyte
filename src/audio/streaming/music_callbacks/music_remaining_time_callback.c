@@ -9,7 +9,7 @@ void music_remaining_time_callback(int remaining_time, long context) __asm__("FU
    and copies the time (and a quarter of it) into the crossfade fields. */
 void music_remaining_time_callback(int remaining_time, long context) {
     struct MusicStreamChannel *channel = (struct MusicStreamChannel *)(int)context;
-    struct MusicStreamState *music_state;
+    struct MusicStreamState   *music_state;
     if (channel == 0) {
         return;
     }

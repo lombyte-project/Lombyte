@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
-extern u8 cd_sync_wait_debug_message[] __asm__("D_00152EF0");
+
+extern u8  cd_sync_wait_debug_message[] __asm__("D_00152EF0");
 extern s32 SceSifCheckStatRpc();
 extern s32 sceCdDelayThread();
 extern s32 scePrintf();

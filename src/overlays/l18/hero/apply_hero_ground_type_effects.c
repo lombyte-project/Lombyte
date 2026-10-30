@@ -12,19 +12,19 @@
 #include "rnc/mobys/moby.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L15_002044c8). */
-extern int D_0015ED84_d __asm__("D_0015ED84");
-extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int  D_0015ED84_d __asm__("D_0015ED84");
+extern int  coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
-extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
-float absolute_float(float input) __asm__("func_001F99C0");
+extern int  hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
+float       absolute_float(float input) __asm__("func_001F99C0");
 
 void apply_hero_ground_type_effects(void) __asm__("FUN_L18_00213b40");
 
 void apply_hero_ground_type_effects(void) {
     struct Hero *hero_state = &hero;
-    int keep = hero_state->ground_sound_class;
-    int saved_ground_type = hero_state->ground_type;
-    int collision_check_selector;
+    int          keep = hero_state->ground_sound_class;
+    int          saved_ground_type = hero_state->ground_type;
+    int          collision_check_selector;
     fast_mem_zero16(&hero_state->ground_type, 0x10);
     hero_state->ground_sound_class = keep;
     hero_state->ground_type = -1;
@@ -50,7 +50,7 @@ void apply_hero_ground_type_effects(void) {
     }
     if (saved_ground_type == 0) {
         struct Hero *q = &hero;
-        float water_depth = q->water_surface_z - q->ground_z.f;
+        float        water_depth = q->water_surface_z - q->ground_z.f;
         q->water_depth = water_depth;
         if (water_depth < 0.85f && 0.25f < water_depth)
             *(char *)&q->wading = 1;
@@ -115,7 +115,8 @@ void apply_hero_ground_type_effects(void) {
         hero_ptr = &hero;
         if (hero_ptr->selector_3 != 0 && hero_ptr->state.current != 0x68 &&
             hero_ptr->state.current != 0x7B) {
-            if (absolute_float(hero_ptr->sink_surface_z - (hero_ptr->motion.pos.f[2] + 0.25f)) < 1.0f) {
+            if (absolute_float(hero_ptr->sink_surface_z - (hero_ptr->motion.pos.f[2] + 0.25f)) <
+                1.0f) {
                 if (hero_ptr->sink_surface_z - hero_ptr->motion.pos.f[2] > 0.0f) {
                     if (hero_ptr->state.current != 0x69 || hero_ptr->past_jump_apex != 0) {
                         if (hero_ptr->motion.displacement.f[2] < 0.0f) {
@@ -132,7 +133,8 @@ void apply_hero_ground_type_effects(void) {
         }
         hero_ptr = &hero;
         if (hero_ptr->selector_11 != 0 && hero_ptr->state.current != 0x7B) {
-            if (absolute_float(hero_ptr->sink_surface_z - (hero_ptr->motion.pos.f[2] + 0.25f)) < 1.0f) {
+            if (absolute_float(hero_ptr->sink_surface_z - (hero_ptr->motion.pos.f[2] + 0.25f)) <
+                1.0f) {
                 if (hero_ptr->sink_surface_z - hero_ptr->motion.pos.f[2] > 0.0f) {
                     if (hero_ptr->motion.displacement.f[2] < 0.0f) {
                         exit_hero_vehicle_mode_if_mode_three();
@@ -143,45 +145,45 @@ void apply_hero_ground_type_effects(void) {
         }
     }
 }
+
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
 
 typedef struct {
-    u8 pad0[0x10];
+    u8      pad0[0x10];
     OvlQuad v10;
-    u8 *p20;
-    s32 i24;
-    u8 b28;
-    u8 pad29[3];
-    f32 f2C;
-    s32 i30;
-    u8 *p34;
-    u8 pad38[8];
+    u8     *p20;
+    s32     i24;
+    u8      b28;
+    u8      pad29[3];
+    f32     f2C;
+    s32     i30;
+    u8     *p34;
+    u8      pad38[8];
 } T_210ce8;
 
 typedef union {
     OvlQuad q;
-    f32 f[4];
-    s32 i[4];
+    f32     f[4];
+    s32     i[4];
 } V_210ce8;
-
 
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 extern T_210ce8 l18_moby_hurt_response_records[] __asm__("D_L18_00178B00");
-s32 process_hero_hurt_response(s32 apply_hurt_response) __asm__("FUN_L18_00218a90");
+s32             process_hero_hurt_response(s32 apply_hurt_response) __asm__("FUN_L18_00218a90");
 
 s32 process_hero_hurt_response(s32 apply_hurt_response) {
-    u8 *hero_moby_bytes;
+    u8       *hero_moby_bytes;
     T_210ce8 *response_record;
-    u8 *mob;
-    s32 flag;
-    s32 id;
-    f32 horizontal_response_scale, vertical_response_scale, response_frame_time;
-    V_210ce8 response_motion_delta;
+    u8       *mob;
+    s32       flag;
+    s32       id;
+    f32       horizontal_response_scale, vertical_response_scale, response_frame_time;
+    V_210ce8  response_motion_delta;
 
     if (hero.state.control_mode == 0x14) {
         return 0;
@@ -298,7 +300,8 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
             horizontal_response_scale = 0.0f;
             vertical_response_scale = response_frame_time * 1.7f;
         }
-        hero_knockback(&response_motion_delta, flag, horizontal_response_scale, vertical_response_scale);
+        hero_knockback(
+            &response_motion_delta, flag, horizontal_response_scale, vertical_response_scale);
         if (flag != 0 && response_record->b28 == 4) {
             response_motion_delta.f[2] += response_motion_delta.f[2];
         }
@@ -308,8 +311,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
             hero_set_state(0x5D, 1);
             remove_tracked_class_5f3_moby();
             if (hero.air_frames.s == 0) {
-                hero_knockback(&response_motion_delta, flag, frame_time * 7.0f,
-                                        frame_time * 3.5f);
+                hero_knockback(&response_motion_delta, flag, frame_time * 7.0f, frame_time * 3.5f);
                 break;
             }
         }

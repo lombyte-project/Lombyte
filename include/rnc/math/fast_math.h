@@ -10,9 +10,9 @@
 void fast_vec_add(void *out, void *a, void *b) __asm__("FUN_001f9a10");
 void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 void fast_vec_scale(void *out, void *a, f32 scale) __asm__("FUN_001f9a68");
-f32 fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
+f32  fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 void fast_vec_cross(void *out, void *a, void *b) __asm__("FUN_001f9ad8");
-f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
+f32  fast_vec_length(void *a) __asm__("FUN_001f9af0");
 /* Writes a scaled to the given length. */
 void fast_vec_normalize(void *out, void *a, f32 length) __asm__("FUN_001f9bf8");
 

@@ -12,51 +12,51 @@ typedef struct {
 } Vec4 __attribute__((aligned(16)));
 
 typedef struct {
-    u8 pad0[0x10];
+    u8   pad0[0x10];
     Vec4 position;
-    u8 pad20[0x30];
-    u8 current_frame;
-    u8 next_frame;
-    u8 pad52[2];
-    f32 frame_fraction;
-    u8 pad58[0x19];
-    u8 cached_frame;
-    u8 pad72[0xD];
-    u8 update_enabled;
-    u8 pad80[0x26];
-    s16 class_id;
+    u8   pad20[0x30];
+    u8   current_frame;
+    u8   next_frame;
+    u8   pad52[2];
+    f32  frame_fraction;
+    u8   pad58[0x19];
+    u8   cached_frame;
+    u8   pad72[0xD];
+    u8   update_enabled;
+    u8   pad80[0x26];
+    s16  class_id;
 } RenderSequenceActor;
 
 typedef struct {
-    u8 pad0[0x78];
+    u8    pad0[0x78];
     Vec4 *animation_positions;
 } RenderSequenceSidecar;
 
 typedef struct {
-    u8 pad0[0x34];
-    s32 time;
-    s32 frame;
-    s32 sequence_frame;
-    s16 end_time;
-    u8 pad42[2];
-    s16 count;
-    u8 pad46[0x132];
+    u8                   pad0[0x34];
+    s32                  time;
+    s32                  frame;
+    s32                  sequence_frame;
+    s16                  end_time;
+    u8                   pad42[2];
+    s16                  count;
+    u8                   pad46[0x132];
     RenderSequenceActor *actors[1];
 } RenderSequenceState;
 
 extern RenderSequenceState render_sequence __asm__("D_0018CB20");
-extern s32 intro_overlay_timer __asm__("D_0015EF58");
-extern void InitializeTransferCommand(void);
-extern void noop_callback_e(RenderSequenceActor *) __asm__("func_001E9410");
-extern void noop_callback_h(void) __asm__("func_001E9428");
-extern void noop_callback_i(void) __asm__("func_001E9430");
-extern void transition_update_movie_camera(void) __asm__("func_001EAF88");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void fast_vec_add(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9A10");
-extern void fast_vec_scale(Vec4 *, Vec4 *, f32) __asm__("func_001F9A68");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern void update_mode_freeze(void) __asm__("func_001FCE28");
+extern s32                 intro_overlay_timer __asm__("D_0015EF58");
+extern void                InitializeTransferCommand(void);
+extern void                noop_callback_e(RenderSequenceActor *) __asm__("func_001E9410");
+extern void                noop_callback_h(void) __asm__("func_001E9428");
+extern void                noop_callback_i(void) __asm__("func_001E9430");
+extern void                transition_update_movie_camera(void) __asm__("func_001EAF88");
+extern s32                 scale_game_frames(s32) __asm__("func_001F96F8");
+extern void                fast_vec_add(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9A10");
+extern void                fast_vec_scale(Vec4 *, Vec4 *, f32) __asm__("func_001F9A68");
+extern f32                 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32                 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern void                update_mode_freeze(void) __asm__("func_001FCE28");
 extern void update_moby_animation_state(RenderSequenceActor *) __asm__("func_0020C880");
 extern void refresh_moby_spatial_bounds(RenderSequenceActor *) __asm__("func_0020DEF8");
 extern void update_menu_system(void) __asm__("func_002192A8");
@@ -65,13 +65,13 @@ extern void sound_update(void) __asm__("func_0022CA50");
 void update_gameplay_frame(void) __asm__("FUN_001eb0a8");
 
 void update_gameplay_frame(void) {
-    Vec4 first_position;
-    Vec4 next_position;
+    Vec4                 first_position;
+    Vec4                 next_position;
     RenderSequenceActor *actor;
-    Vec4 *animation_positions;
-    s32 actor_index;
-    f32 fade;
-    f32 half;
+    Vec4                *animation_positions;
+    s32                  actor_index;
+    f32                  fade;
+    f32                  half;
 
     noop_callback_i();
     fade = sequence - 0.0625f;
@@ -102,11 +102,11 @@ void update_gameplay_frame(void) {
         {
             f32 remaining_fraction = 1.0f;
             remaining_fraction -= actor->frame_fraction;
-            fast_vec_scale(&first_position, &animation_positions[actor->current_frame],
-                          remaining_fraction);
+            fast_vec_scale(
+                &first_position, &animation_positions[actor->current_frame], remaining_fraction);
         }
-        fast_vec_scale(&next_position, &animation_positions[actor->next_frame],
-                      actor->frame_fraction);
+        fast_vec_scale(
+            &next_position, &animation_positions[actor->next_frame], actor->frame_fraction);
         fast_vec_add(&actor->position, &first_position, &next_position);
         actor->cached_frame = 0xFF;
         refresh_moby_spatial_bounds(actor);
@@ -149,4 +149,5 @@ void update_gameplay_frame(void) {
         sound_update();
     }
 }
+
 extern __typeof__(update_gameplay_frame) func_001EB0A8 __attribute__((alias("FUN_001eb0a8")));

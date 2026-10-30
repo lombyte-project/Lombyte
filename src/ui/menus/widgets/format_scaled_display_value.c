@@ -1,8 +1,9 @@
 #include "types.h"
-extern u8 thousands_grouped_integer_format[] __asm__("D_00161078");
-extern u8 plain_integer_format[] __asm__("D_00161080");
+
+extern u8  thousands_grouped_integer_format[] __asm__("D_00161078");
+extern u8  plain_integer_format[] __asm__("D_00161080");
 extern s32 sprintf();
-void format_scaled_display_value(u8 *buf, s32 value) __asm__("FUN_00238688");
+void       format_scaled_display_value(u8 *buf, s32 value) __asm__("FUN_00238688");
 
 void format_scaled_display_value(u8 *destination, s32 value) {
     if (value >= 0x3E8) {

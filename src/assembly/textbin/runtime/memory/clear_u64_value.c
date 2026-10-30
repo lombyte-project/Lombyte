@@ -2,8 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/runtime/memory/clear_u64_value/FUN_001f99f8.s",
-            clear_u64_value);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/runtime/memory/clear_u64_value/FUN_001f99f8.s", clear_u64_value);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

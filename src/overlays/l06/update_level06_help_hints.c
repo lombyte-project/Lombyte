@@ -22,24 +22,25 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 
 extern struct UsageStat help_records[] __asm__("D_00141968");
-extern char *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
-extern u8 level06_help_hint_variant_selector[] __asm__("D_0013D4CE");
+extern char            *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
+extern u8               level06_help_hint_variant_selector[] __asm__("D_0013D4CE");
 
 /* Level 6 help hints: shows the help messages for the area and records how often and when each was due. */
 void update_level06_help_hints(struct Moby *moby) __asm__("FUN_L06_003083b0");
 
 void update_level06_help_hints(struct Moby *moby) {
-    int *vars = (int *)moby->pvars;
+    int         *vars = (int *)moby->pvars;
     struct Moby *indexed_moby;
-    int i;
-    int j;
-    int elapsed;
+    int          i;
+    int          j;
+    int          elapsed;
     if (help_records[0x2A].count == 0 && is_point_inside_clip_volume(&hero.motion.pos, vars[9])) {
         help_request(0x1773, 0x2A);
     }
     if (help_records[0x29].count == 0) {
         for (i = 0; i < 6; i++) {
-            if (vars[i] != -1 && ((struct Moby *)(D_L06_0015FFD8_83b0 + (vars[i] << 8)))->state != 1) {
+            if (vars[i] != -1 &&
+                ((struct Moby *)(D_L06_0015FFD8_83b0 + (vars[i] << 8)))->state != 1) {
                 help_request(0x1772, 0x29);
             }
         }
@@ -55,7 +56,8 @@ void update_level06_help_hints(struct Moby *moby) {
                 if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x2F].unk2) {
                     help_records[0x2F].unk2 = scale_game_frames(D_0015EEA4) / 600;
                 }
-                help_records[0x2F].level_mask = help_records[0x2F].level_mask | (1 << current_level_index) | 0x80000000;
+                help_records[0x2F].level_mask =
+                    help_records[0x2F].level_mask | (1 << current_level_index) | 0x80000000;
             } else {
                 help_request(0x1778, 0x2F);
                 if (help_records[0x2E].count <= 0xFFFE) {
@@ -64,17 +66,21 @@ void update_level06_help_hints(struct Moby *moby) {
                 if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x2E].unk2) {
                     help_records[0x2E].unk2 = scale_game_frames(D_0015EEA4) / 600;
                 }
-                help_records[0x2E].level_mask = help_records[0x2E].level_mask | (1 << current_level_index) | 0x80000000;
+                help_records[0x2E].level_mask =
+                    help_records[0x2E].level_mask | (1 << current_level_index) | 0x80000000;
             }
         }
     }
-    if (is_point_inside_clip_volume(&hero.motion.pos, vars[8]) && count_active_moby_group_members(vars[6], -1) == 0) {
+    if (is_point_inside_clip_volume(&hero.motion.pos, vars[8]) &&
+        count_active_moby_group_members(vars[6], -1) == 0) {
         for (j = 0; j < 6; j++) {
             indexed_moby = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[j] << 8));
-            if (vars[j] != -1 && indexed_moby != 0 && indexed_moby->state != 0xFE && indexed_moby->state != 0xFD && indexed_moby->state != 1) {
+            if (vars[j] != -1 && indexed_moby != 0 && indexed_moby->state != 0xFE &&
+                indexed_moby->state != 0xFD && indexed_moby->state != 1) {
                 if (help_records[0x28].count != 0) {
                     elapsed = scale_game_frames(D_0015EEA4) - help_records[0x28].unk2 * 600;
-                    if ((int)(scale_game_frames(18) * 60.0f) < elapsed || help_records[0x28].unk2 * 600 == 0) {
+                    if ((int)(scale_game_frames(18) * 60.0f) < elapsed ||
+                        help_records[0x28].unk2 * 600 == 0) {
                         help_request(0x1771, 0x28);
                     } else if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x28].unk2) {
                         help_records[0x28].unk2 = scale_game_frames(D_0015EEA4) / 600;
@@ -86,7 +92,8 @@ void update_level06_help_hints(struct Moby *moby) {
                     if (scale_game_frames(D_0015EEA4) / 600 > help_records[0x28].unk2) {
                         help_records[0x28].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
-                    help_records[0x28].level_mask = help_records[0x28].level_mask | (1 << current_level_index) | 0x80000000;
+                    help_records[0x28].level_mask =
+                        help_records[0x28].level_mask | (1 << current_level_index) | 0x80000000;
                 }
             }
             if (indexed_moby == 0 || indexed_moby->state == 0xFE || indexed_moby->state == 0xFD) {
@@ -101,39 +108,52 @@ void update_level06_help_hints(struct Moby *moby) {
         }
     }
 }
+
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
+
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) SparkVector;
-typedef struct SparkData { int f0; int f4; char pad8[0x18]; int f20; int f24; int f28; } SparkData;
 
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) SparkVector;
 
-
+typedef struct SparkData {
+    int  f0;
+    int  f4;
+    char pad8[0x18];
+    int  f20;
+    int  f24;
+    int  f28;
+} SparkData;
 
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern void
+spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+
 #include "rnc/overlay/l06/update_level06_help_hints_globals.h"
 #include "rnc/overlay/l06/update_level06_help_hints_globals.h"
+
 extern float spark_burst_vector_scale_variation_gp __asm__("D_L06_001622FC") __attribute__((sda));
-extern int D_L06_00162304 __attribute__((sda));
-extern int D_L06_00162308 __attribute__((sda));
-int D_L06_00162320 = 0x80ffc0c0;
-int D_L06_00162324 = 0x80ffffc0;
-int D_L06_00162328 = 0x20c08080;
-int D_L06_0016232C = 0x20c0c080;
+extern int   D_L06_00162304 __attribute__((sda));
+extern int   D_L06_00162308 __attribute__((sda));
+int          D_L06_00162320 = 0x80ffc0c0;
+int          D_L06_00162324 = 0x80ffffc0;
+int          D_L06_00162328 = 0x20c08080;
+int          D_L06_0016232C = 0x20c0c080;
 extern float spark_spray_z_subtraction_rate_gp __asm__("D_L06_00162338") __attribute__((sda));
 extern float spark_spray_vector_scale_variation_gp __asm__("D_L06_0016233C") __attribute__((sda));
-extern int D_L06_00162348 __attribute__((sda));
-extern int D_L06_0016234C __attribute__((sda));
-int D_L06_00162364 = 0x804080ff;
-int D_L06_00162368 = 0x8040ffff;
-int D_L06_0016236C = 0x80204040;
-int D_L06_00162370 = 0x80204080;
-extern int spark_spray_timer_range_start_gp __asm__("D_L06_00162374") __attribute__((sda));
-extern int spark_spray_timer_range_end_gp __asm__("D_L06_00162378") __attribute__((sda));
-int D_L06_0016237C = 0x10019;
+extern int   D_L06_00162348 __attribute__((sda));
+extern int   D_L06_0016234C __attribute__((sda));
+int          D_L06_00162364 = 0x804080ff;
+int          D_L06_00162368 = 0x8040ffff;
+int          D_L06_0016236C = 0x80204040;
+int          D_L06_00162370 = 0x80204080;
+extern int   spark_spray_timer_range_start_gp __asm__("D_L06_00162374") __attribute__((sda));
+extern int   spark_spray_timer_range_end_gp __asm__("D_L06_00162378") __attribute__((sda));
+int          D_L06_0016237C = 0x10019;
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 /* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */
@@ -146,7 +166,7 @@ void update_spark_emitter(struct Moby *emitter) {
         SPARK_EMITTER_RANDOMIZED_SPRAY = 3,
         SPARK_EMITTER_TIMED_BURSTS = 4
     };
-    SparkData *emitter_data = *(void **)&emitter->pvars;
+    SparkData  *emitter_data = *(void **)&emitter->pvars;
     SparkVector position_test_vector;
     SparkVector rotation_based_spark_vector;
     SparkVector z_adjusted_spark_vector;
@@ -183,28 +203,65 @@ void update_spark_emitter(struct Moby *emitter) {
         int k;
         if (fast_dec_timer(&emitter_data->f24)) {
             spark_count = 5;
-            emitter_data->f24 = truncate_float_to_s32(scale_time(random_float_between(60.0f, 120.0f)));
+            emitter_data->f24 =
+                truncate_float_to_s32(scale_time(random_float_between(60.0f, 120.0f)));
         }
         if (random_integer_below(4) != 0 && spark_count < 2) {
             return;
         }
         for (k = 0; k < spark_count; k++) {
-                int c19, c18, c17, c16, c2;
-                float z;
-                fast_vec_normalize(&rotation_based_spark_vector, &*(SparkVector *)&emitter->rot_row0, spark_burst_rotation_row0_scale * (random_float_between(-spark_burst_vector_scale_variation_gp, spark_burst_vector_scale_variation_gp) + 1.0f) * frame_time_macro);
-                z = spark_burst_initial_z_scale * (random_float_between(-spark_burst_vector_scale_variation_gp, spark_burst_vector_scale_variation_gp) + 1.0f) * frame_time_macro;
-                clear_u64_value(&z_adjusted_spark_vector);
-                z_adjusted_spark_vector.z = z;
-                fast_vec_normalize(&spark_vector_offset, &*(SparkVector *)&emitter->rot_row1, random_float_between(-spark_burst_rotation_row1_scale_variation, spark_burst_rotation_row1_scale_variation) * frame_time_macro);
-                fast_vec_add(&z_adjusted_spark_vector, &z_adjusted_spark_vector, &spark_vector_offset);
-                rotation_based_spark_vector.w = random_float_between(spark_burst_rotation_vector_w_range_start, spark_burst_rotation_vector_w_range_end);
-                z_adjusted_spark_vector.w = random_float_between(spark_burst_z_adjusted_vector_w_range_start, spark_burst_z_adjusted_vector_w_range_end);
-                c19 = fast_tween_color(D_L06_00162320, D_L06_00162324, random_float_between(0.0f, 1.0f));
-                c18 = fast_tween_color(D_L06_00162328, D_L06_0016232C, random_float_between(0.0f, 1.0f));
-                c17 = truncate_float_to_s32(scale_time((float)spark_burst_emission_random_span * random_float_between(0.0f, 1.0f) + 1.0f));
-                c16 = truncate_float_to_s32(scale_time((float)D_L06_00162304 * (random_float_between(-spark_burst_emission_scale_variation, spark_burst_emission_scale_variation) + 1.0f)));
-                c2 = truncate_float_to_s32(scale_time((float)D_L06_00162308 * (random_float_between(-spark_burst_emission_scale_variation, spark_burst_emission_scale_variation) + 1.0f)));
-                spawn_spark(&*(SparkVector *)&emitter->pos, &rotation_based_spark_vector, &z_adjusted_spark_vector, c19, c18, c17, c16, c2, -1);
+            int   c19, c18, c17, c16, c2;
+            float z;
+            fast_vec_normalize(&rotation_based_spark_vector,
+                               &*(SparkVector *)&emitter->rot_row0,
+                               spark_burst_rotation_row0_scale *
+                                   (random_float_between(-spark_burst_vector_scale_variation_gp,
+                                                         spark_burst_vector_scale_variation_gp) +
+                                    1.0f) *
+                                   frame_time_macro);
+            z = spark_burst_initial_z_scale *
+                (random_float_between(-spark_burst_vector_scale_variation_gp,
+                                      spark_burst_vector_scale_variation_gp) +
+                 1.0f) *
+                frame_time_macro;
+            clear_u64_value(&z_adjusted_spark_vector);
+            z_adjusted_spark_vector.z = z;
+            fast_vec_normalize(&spark_vector_offset,
+                               &*(SparkVector *)&emitter->rot_row1,
+                               random_float_between(-spark_burst_rotation_row1_scale_variation,
+                                                    spark_burst_rotation_row1_scale_variation) *
+                                   frame_time_macro);
+            fast_vec_add(&z_adjusted_spark_vector, &z_adjusted_spark_vector, &spark_vector_offset);
+            rotation_based_spark_vector.w = random_float_between(
+                spark_burst_rotation_vector_w_range_start, spark_burst_rotation_vector_w_range_end);
+            z_adjusted_spark_vector.w =
+                random_float_between(spark_burst_z_adjusted_vector_w_range_start,
+                                     spark_burst_z_adjusted_vector_w_range_end);
+            c19 =
+                fast_tween_color(D_L06_00162320, D_L06_00162324, random_float_between(0.0f, 1.0f));
+            c18 =
+                fast_tween_color(D_L06_00162328, D_L06_0016232C, random_float_between(0.0f, 1.0f));
+            c17 = truncate_float_to_s32(scale_time(
+                (float)spark_burst_emission_random_span * random_float_between(0.0f, 1.0f) + 1.0f));
+            c16 = truncate_float_to_s32(
+                scale_time((float)D_L06_00162304 *
+                           (random_float_between(-spark_burst_emission_scale_variation,
+                                                 spark_burst_emission_scale_variation) +
+                            1.0f)));
+            c2 = truncate_float_to_s32(
+                scale_time((float)D_L06_00162308 *
+                           (random_float_between(-spark_burst_emission_scale_variation,
+                                                 spark_burst_emission_scale_variation) +
+                            1.0f)));
+            spawn_spark(&*(SparkVector *)&emitter->pos,
+                        &rotation_based_spark_vector,
+                        &z_adjusted_spark_vector,
+                        c19,
+                        c18,
+                        c17,
+                        c16,
+                        c2,
+                        -1);
         }
         break;
     }
@@ -212,29 +269,72 @@ void update_spark_emitter(struct Moby *emitter) {
         if (fast_dec_timer(&emitter_data->f20)) {
             int spray_spark_count;
             int k;
-            emitter_data->f20 = truncate_float_to_s32(scale_time(random_float_between((float)spark_spray_timer_range_start_gp, (float)spark_spray_timer_range_end_gp)));
+            emitter_data->f20 = truncate_float_to_s32(scale_time(random_float_between(
+                (float)spark_spray_timer_range_start_gp, (float)spark_spray_timer_range_end_gp)));
             spray_spark_count = random_integer_below(7) ? 1 : random_integer_below(5) + 5;
             for (k = 0; k < spray_spark_count; k++) {
-                    int c19, c18, c17, c16, c2;
-                    random_vector(&spark_vector_offset, 0.0f, spark_spray_offset_random_range_end * frame_time_macro);
-                    fast_vec_normalize(&rotation_based_spark_vector, &*(SparkVector *)&emitter->rot_row0, spark_spray_rotation_row0_scale * (random_float_between(-spark_spray_vector_scale_variation_gp, spark_spray_vector_scale_variation_gp) + 1.0f) * frame_time_macro);
-                    fast_vec_add(&rotation_based_spark_vector, &rotation_based_spark_vector, &spark_vector_offset);
-                    fast_vec_normalize(&z_adjusted_spark_vector, &rotation_based_spark_vector, spark_spray_second_vector_scale * (random_float_between(-spark_spray_vector_scale_variation_gp, spark_spray_vector_scale_variation_gp) + 1.0f) * frame_time_macro);
-                    z_adjusted_spark_vector.z = z_adjusted_spark_vector.z - spark_spray_z_subtraction_rate_gp * frame_time_macro;
-                    rotation_based_spark_vector.w = random_float_between(spark_spray_rotation_vector_w_range_start, spark_spray_rotation_vector_w_range_end);
-                    z_adjusted_spark_vector.w = random_float_between(spark_spray_z_adjusted_vector_w_range_start, spark_spray_z_adjusted_vector_w_range_end);
-                    c19 = fast_tween_color(D_L06_00162364, D_L06_00162368, random_float_between(0.0f, 1.0f));
-                    c18 = fast_tween_color(D_L06_0016236C, D_L06_00162370, random_float_between(0.0f, 1.0f));
-                    c17 = truncate_float_to_s32(scale_time((float)spark_spray_emission_random_span * random_float_between(0.0f, 1.0f) + 1.0f));
-                    c16 = truncate_float_to_s32(scale_time((float)D_L06_00162348 * (random_float_between(-spark_spray_emission_scale_variation, spark_spray_emission_scale_variation) + 1.0f)));
-                    c2 = truncate_float_to_s32(scale_time((float)D_L06_0016234C * (random_float_between(-spark_spray_emission_scale_variation, spark_spray_emission_scale_variation) + 1.0f)));
-                    spawn_spark(&*(SparkVector *)&emitter->pos, &rotation_based_spark_vector, &z_adjusted_spark_vector, c19, c18, c17, c16, c2, D_L06_0016237C);
+                int c19, c18, c17, c16, c2;
+                random_vector(&spark_vector_offset,
+                              0.0f,
+                              spark_spray_offset_random_range_end * frame_time_macro);
+                fast_vec_normalize(
+                    &rotation_based_spark_vector,
+                    &*(SparkVector *)&emitter->rot_row0,
+                    spark_spray_rotation_row0_scale *
+                        (random_float_between(-spark_spray_vector_scale_variation_gp,
+                                              spark_spray_vector_scale_variation_gp) +
+                         1.0f) *
+                        frame_time_macro);
+                fast_vec_add(&rotation_based_spark_vector,
+                             &rotation_based_spark_vector,
+                             &spark_vector_offset);
+                fast_vec_normalize(
+                    &z_adjusted_spark_vector,
+                    &rotation_based_spark_vector,
+                    spark_spray_second_vector_scale *
+                        (random_float_between(-spark_spray_vector_scale_variation_gp,
+                                              spark_spray_vector_scale_variation_gp) +
+                         1.0f) *
+                        frame_time_macro);
+                z_adjusted_spark_vector.z = z_adjusted_spark_vector.z -
+                                            spark_spray_z_subtraction_rate_gp * frame_time_macro;
+                rotation_based_spark_vector.w =
+                    random_float_between(spark_spray_rotation_vector_w_range_start,
+                                         spark_spray_rotation_vector_w_range_end);
+                z_adjusted_spark_vector.w =
+                    random_float_between(spark_spray_z_adjusted_vector_w_range_start,
+                                         spark_spray_z_adjusted_vector_w_range_end);
+                c19 = fast_tween_color(
+                    D_L06_00162364, D_L06_00162368, random_float_between(0.0f, 1.0f));
+                c18 = fast_tween_color(
+                    D_L06_0016236C, D_L06_00162370, random_float_between(0.0f, 1.0f));
+                c17 = truncate_float_to_s32(scale_time((float)spark_spray_emission_random_span *
+                                                           random_float_between(0.0f, 1.0f) +
+                                                       1.0f));
+                c16 = truncate_float_to_s32(
+                    scale_time((float)D_L06_00162348 *
+                               (random_float_between(-spark_spray_emission_scale_variation,
+                                                     spark_spray_emission_scale_variation) +
+                                1.0f)));
+                c2 = truncate_float_to_s32(
+                    scale_time((float)D_L06_0016234C *
+                               (random_float_between(-spark_spray_emission_scale_variation,
+                                                     spark_spray_emission_scale_variation) +
+                                1.0f)));
+                spawn_spark(&*(SparkVector *)&emitter->pos,
+                            &rotation_based_spark_vector,
+                            &z_adjusted_spark_vector,
+                            c19,
+                            c18,
+                            c17,
+                            c16,
+                            c2,
+                            D_L06_0016237C);
             }
         }
         break;
     }
 }
-
 
 #include "qcopy.h"
 #include "rnc/overlay/entities.h"
@@ -242,16 +342,16 @@ void update_spark_emitter(struct Moby *emitter) {
 /* finds the mobys of type 0x5E8 in state 1 in a level list and starts those within range */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A680), where it is exact; names translated to the US level program. */
 
-extern char *D_L06_0015FFD8;
+extern char  *D_L06_0015FFD8;
 extern short *D_L06_001ABFC0[];
 
 void activate_listed_class_5e8_mobys(int moby_list_index) __asm__("FUN_L06_00309240");
 
 void activate_listed_class_5e8_mobys(int moby_list_index) {
     short *moby_index_entry;
-    char *moby;
-    char *data;
-    float position_test_vector[4];
+    char  *moby;
+    char  *data;
+    float  position_test_vector[4];
     if (D_L06_001ABFC0[moby_list_index] != 0) {
         moby_index_entry = D_L06_001ABFC0[moby_list_index];
         do {
@@ -270,11 +370,10 @@ void activate_listed_class_5e8_mobys(int moby_list_index) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A788), where it is exact; names translated to the US level program. */
 
 extern char level06_camera_target_update_data[] __asm__("D_L06_0016CFE0");
-extern int D_L06_0015F5C4;
+extern int  D_L06_0015F5C4;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void update_gated_moby_effects(struct Moby *moby) __asm__("FUN_L06_00309348");
@@ -301,31 +400,32 @@ void update_gated_moby_effects(struct Moby *moby) {
         break;
     }
 }
+
 #include "sda.h"
 
 /* Same source as the exact FUN_L06_00309860, with two 0x67E effects and spawned class 0x67D. */
 typedef struct {
-    char pad0[0x10];
-    char pos[0x10];
-    unsigned char b20;
-    char pad21[0xB];
-    float f2C;
-    unsigned char b30;
-    unsigned char b31;
-    short s32;
+    char           pad0[0x10];
+    char           pos[0x10];
+    unsigned char  b20;
+    char           pad21[0xB];
+    float          f2C;
+    unsigned char  b30;
+    unsigned char  b31;
+    short          s32;
     unsigned short h34;
-    char pad36[0x12];
-    float f48;
-    char pad4C[0x2C];
-    Child *child;
-    char pad7C[0x14];
-    int f90;
+    char           pad36[0x12];
+    float          f48;
+    char           pad4C[0x2C];
+    Child         *child;
+    char           pad7C[0x14];
+    int            f90;
 } Obj;
 
 extern char *create_moby(int);
 extern float D_L06_0015F580[] MACRO_ADDR;
-extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+extern void  FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
+void         mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void update_hit_triggered_moby_replacement(char *self) __asm__("FUN_L06_00309e08");
@@ -336,7 +436,7 @@ void update_hit_triggered_moby_replacement(char *self) {
         MOBY_WAIT_FOR_HIT = 1,
         MOBY_SPAWN_AND_REMOVE = 2
     };
-    int flag = 0;
+    int          flag = 0;
     struct Moby *hit_moby = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
     case MOBY_INITIALIZE:
@@ -354,10 +454,26 @@ void update_hit_triggered_moby_replacement(char *self) {
         char *spawned_moby;
         allocate_voice_for_target_entry(0, 0, (int)self);
         spawn_proximity_gated_bolts(self);
-        FUN_L00_00263fd8(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
-                         D_L06_0015F580, D_L06_0015F580);
-        FUN_L00_00263fd8(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
-                         D_L06_0015F580, D_L06_0015F580);
+        FUN_L00_00263fd8(self,
+                         0x67E,
+                         self + 0x10,
+                         self + 0x40,
+                         0,
+                         0,
+                         0.0f,
+                         D_L06_0015F580,
+                         D_L06_0015F580,
+                         D_L06_0015F580);
+        FUN_L00_00263fd8(self,
+                         0x67E,
+                         self + 0x10,
+                         self + 0x40,
+                         0,
+                         0,
+                         0.0f,
+                         D_L06_0015F580,
+                         D_L06_0015F580,
+                         D_L06_0015F580);
         spawned_moby = create_moby(0x67D);
         if (spawned_moby != 0) {
             spawned_moby[0x31] = 1;

@@ -9,6 +9,7 @@
 #include "rnc/camera/update_cam.h"
 #include "rnc/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
+
 extern u8 D_0018CD00[];
 extern u8 sky_view_mtx[] __asm__("D_0018CF80");
 
@@ -21,13 +22,13 @@ extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 
 void update_camera_view_matrices(void) {
-    Vec4 camera_basis_matrix[4];
+    Vec4                  camera_basis_matrix[4];
     struct PreviewCamera *camera_view_matrices;
-    u8 *x;
-    f32 *xf;
-    f32 homogeneous_offset_x;
-    f32 homogeneous_offset_y;
-    f32 homogeneous_offset_z;
+    u8                   *x;
+    f32                  *xf;
+    f32                   homogeneous_offset_x;
+    f32                   homogeneous_offset_y;
+    f32                   homogeneous_offset_z;
 
     if (camera_position_publication_suppressed[0] == 0) {
         qcopy(&camera_basis_matrix[0].q, camera_rows);
@@ -63,24 +64,38 @@ void update_camera_view_matrices(void) {
     homogeneous_offset_x = xf[0x1A0 / 4];
     homogeneous_offset_y = xf[0x1A4 / 4];
     homogeneous_offset_z = xf[0x1A8 / 4];
-    camera_view_matrices->view_matrices[0x80 / 4] += camera_view_matrices->view_matrices[0x8C / 4] * homogeneous_offset_x;
-    camera_view_matrices->view_matrices[0x84 / 4] += camera_view_matrices->view_matrices[0x8C / 4] * homogeneous_offset_y;
-    camera_view_matrices->view_matrices[0x88 / 4] += camera_view_matrices->view_matrices[0x8C / 4] * homogeneous_offset_z;
-    camera_view_matrices->view_matrices[0x90 / 4] += camera_view_matrices->view_matrices[0x9C / 4] * homogeneous_offset_x;
-    camera_view_matrices->view_matrices[0x94 / 4] += camera_view_matrices->view_matrices[0x9C / 4] * homogeneous_offset_y;
-    camera_view_matrices->view_matrices[0x98 / 4] += camera_view_matrices->view_matrices[0x9C / 4] * homogeneous_offset_z;
-    camera_view_matrices->view_matrices[0xA0 / 4] += camera_view_matrices->view_matrices[0xAC / 4] * homogeneous_offset_x;
-    camera_view_matrices->view_matrices[0xA4 / 4] += camera_view_matrices->view_matrices[0xAC / 4] * homogeneous_offset_y;
-    camera_view_matrices->view_matrices[0xA8 / 4] += camera_view_matrices->view_matrices[0xAC / 4] * homogeneous_offset_z;
-    camera_view_matrices->view_matrices[0xB0 / 4] += camera_view_matrices->view_matrices[0xBC / 4] * homogeneous_offset_x;
-    camera_view_matrices->view_matrices[0xB4 / 4] += camera_view_matrices->view_matrices[0xBC / 4] * homogeneous_offset_y;
-    camera_view_matrices->view_matrices[0xB8 / 4] += camera_view_matrices->view_matrices[0xBC / 4] * homogeneous_offset_z;
+    camera_view_matrices->view_matrices[0x80 / 4] +=
+        camera_view_matrices->view_matrices[0x8C / 4] * homogeneous_offset_x;
+    camera_view_matrices->view_matrices[0x84 / 4] +=
+        camera_view_matrices->view_matrices[0x8C / 4] * homogeneous_offset_y;
+    camera_view_matrices->view_matrices[0x88 / 4] +=
+        camera_view_matrices->view_matrices[0x8C / 4] * homogeneous_offset_z;
+    camera_view_matrices->view_matrices[0x90 / 4] +=
+        camera_view_matrices->view_matrices[0x9C / 4] * homogeneous_offset_x;
+    camera_view_matrices->view_matrices[0x94 / 4] +=
+        camera_view_matrices->view_matrices[0x9C / 4] * homogeneous_offset_y;
+    camera_view_matrices->view_matrices[0x98 / 4] +=
+        camera_view_matrices->view_matrices[0x9C / 4] * homogeneous_offset_z;
+    camera_view_matrices->view_matrices[0xA0 / 4] +=
+        camera_view_matrices->view_matrices[0xAC / 4] * homogeneous_offset_x;
+    camera_view_matrices->view_matrices[0xA4 / 4] +=
+        camera_view_matrices->view_matrices[0xAC / 4] * homogeneous_offset_y;
+    camera_view_matrices->view_matrices[0xA8 / 4] +=
+        camera_view_matrices->view_matrices[0xAC / 4] * homogeneous_offset_z;
+    camera_view_matrices->view_matrices[0xB0 / 4] +=
+        camera_view_matrices->view_matrices[0xBC / 4] * homogeneous_offset_x;
+    camera_view_matrices->view_matrices[0xB4 / 4] +=
+        camera_view_matrices->view_matrices[0xBC / 4] * homogeneous_offset_y;
+    camera_view_matrices->view_matrices[0xB8 / 4] +=
+        camera_view_matrices->view_matrices[0xBC / 4] * homogeneous_offset_z;
     multiply_matrix(&camera_view_matrices->view_matrices[0xC0 / 4], x + 0x80, camera_view_matrices);
     scale_vector(&camera_view_matrices->view_matrices[0x100 / 4], x + 0x80, xf[0x1C0 / 4]);
     scale_vector(&camera_view_matrices->view_matrices[0x110 / 4], x + 0x90, xf[0x1C0 / 4]);
     qcopy(&camera_view_matrices->view_matrices[0x120 / 4], x + 0xA0);
     qcopy(&camera_view_matrices->view_matrices[0x130 / 4], x + 0xB0);
-    multiply_matrix(&camera_view_matrices->view_matrices[0x100 / 4], &camera_view_matrices->view_matrices[0x100 / 4], camera_view_matrices);
+    multiply_matrix(&camera_view_matrices->view_matrices[0x100 / 4],
+                    &camera_view_matrices->view_matrices[0x100 / 4],
+                    camera_view_matrices);
     qcopy(sky_view_mtx, camera_view_matrices);
     qcopy(sky_view_mtx + 0x10, &camera_view_matrices->view_matrices[0x10 / 4]);
     qcopy(sky_view_mtx + 0x20, &camera_view_matrices->view_matrices[0x20 / 4]);

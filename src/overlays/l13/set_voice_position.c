@@ -5,21 +5,20 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 
-
-
 /* Enable a sound effect and copy its 16-byte parameter vector. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/sound_002994D0.c: func_L13_002994D0), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char pad0[0x75];
+    char          pad0[0x75];
     unsigned char flags;
 } Level13SoundEffectTarget;
 
 int set_voice_position(int index, const void *vector) __asm__("FUN_L13_002982e8");
+
 int set_voice_position(int index, const void *vector) {
-    int offset = index * 0x70;
-    char *base = D_0013E533 + 0x1D;
-    char *vector_base = base + 0xA0;
+    int                       offset = index * 0x70;
+    char                     *base = D_0013E533 + 0x1D;
+    char                     *vector_base = base + 0xA0;
     Level13SoundEffectTarget *effect = (Level13SoundEffectTarget *)(base + offset);
     effect->flags |= 0x40;
     qcopy(vector_base + offset, vector);

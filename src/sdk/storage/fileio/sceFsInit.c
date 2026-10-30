@@ -17,27 +17,27 @@ struct UnalignedWord {
 };
 
 extern SifFileCommandCallbackRecord D_00158000 NOT_SDA;
-extern char fs_receive_interrupt_handler_data[] __asm__("D_00157FC0");
+extern char  fs_receive_interrupt_handler_data[] __asm__("D_00157FC0");
 extern char *fs_init_completion_buffer_addresses[] __asm__("D_00156840");
-extern u8 FsResetBuffer[] __asm__("D_00157FA8");
-extern u8 D_00157500[];
-extern s32 D_0012FC98[];
-extern void _sceFs_Rcv_Intr();
-extern void invoke_sif_file_command_callback(
-    void *packet, SifFileCommandCallbackRecord *callback_record) __asm__("func_0011B980");
+extern u8    FsResetBuffer[] __asm__("D_00157FA8");
+extern u8    D_00157500[];
+extern s32   D_0012FC98[];
+extern void  _sceFs_Rcv_Intr();
+extern void  invoke_sif_file_command_callback(
+     void *packet, SifFileCommandCallbackRecord *callback_record) __asm__("func_0011B980");
 extern void sceSifInitRpc(u32 mode);
-extern s32 DIntr();
-extern s32 EnableInterrupts();
-extern s32 SignalSema();
-extern s32 WaitSema();
-extern s32 _sceFsIobSemaMK();
+extern s32  DIntr();
+extern s32  EnableInterrupts();
+extern s32  SignalSema();
+extern s32  WaitSema();
+extern s32  _sceFsIobSemaMK();
 extern void sceSifAddCmdHandler(s32 command, u32 handler, u32 data);
-extern s32 sceSifBindRpc();
-extern s32 sceSifCallRpc();
+extern s32  sceSifBindRpc();
+extern s32  sceSifCallRpc();
 
 s32 sceFsInit(void) {
-    s32 result, delay;
-    struct SifFileSlot *slot;
+    s32                  result, delay;
+    struct SifFileSlot  *slot;
     struct UnalignedWord reply_word;
 
     SifFileCommandCallbackRecord *callback_record = &D_00158000;
@@ -69,7 +69,8 @@ s32 sceFsInit(void) {
     SignalSema(fio_iob_sema);
     fs_init_completion_buffer_addresses[0] = D_00157500;
     fs_init_completion_buffer_addresses[1] = D_00157500 + 0x440;
-    result = sceSifCallRpc(&fio_rpc_client, 0xFF, 0, fs_init_completion_buffer_addresses, 8, fio_rpc_result, 8, 0, 0);
+    result = sceSifCallRpc(
+        &fio_rpc_client, 0xFF, 0, fs_init_completion_buffer_addresses, 8, fio_rpc_result, 8, 0, 0);
     if (result < 0) {
         return (s32)0xFFFEFFFF;
     }

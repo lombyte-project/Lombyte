@@ -18,51 +18,55 @@ typedef struct ImageBank {
     s32 second_offset; /* 0x08 */
     s32 last_offset;   /* 0x0C */
 } ImageBank;
+
 /* One 16-byte texture record of the level's texture table. */
 typedef struct TexRecord {
     s16 h[8];
 } TexRecord;
+
 extern u8 *level_archive_base __asm__("D_0015EE54") MACRO_ADDR;
 /* Retail reaches gs_texture_allocation_base as the word after depth_buffer_address. */
 extern s32 depth_buffer_address_macro __asm__("D_0015EE88") MACRO_ADDR;
 #define texture_area_base ((&depth_buffer_address_macro)[1])
 /* $gp scalar aliases: retail takes the records' addresses through $gp. */
-#define first_record_23fa00 ((TexRecord *)&first_record)
+#define first_record_23fa00  ((TexRecord *)&first_record)
 #define second_record_23fa00 ((TexRecord *)&second_record)
 extern u32 texture_addresses_23fa00[] __asm__("D_L00_00199A80");
-extern s32 sceGsSetDefLoadImage_23fa00(void *, s16, s16, s16, s16, s16, s16, s16) __asm__("FUN_00122330");
+extern s32
+sceGsSetDefLoadImage_23fa00(void *, s16, s16, s16, s16, s16, s16, s16) __asm__("FUN_00122330");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
-extern s32 sceGsExecLoadImage_23fa00(void *, void *) __asm__("FUN_00122658");
-extern s32 sceGsSyncPath(s32, u16) __asm__("FUN_00120558");
+extern s32  sceGsExecLoadImage_23fa00(void *, void *) __asm__("FUN_00122658");
+extern s32  sceGsSyncPath(s32, u16) __asm__("FUN_00120558");
 
-extern s32 first_record __asm__("D_L00_0015FC00") __attribute__((sda));
-extern s32 second_record __asm__("D_L00_0015FC10") __attribute__((sda));
-extern TexRecord first_record_fields __asm__("D_L00_0015FC0A") MACRO_ADDR;
-extern TexRecord second_record_fields __asm__("D_L00_0015FC1A") MACRO_ADDR;
-extern u8 record_index __asm__("D_L00_0015FC20") __attribute__((sda));
-extern s32 second_class_ids[] __asm__("D_L00_00160558");
+extern s32                first_record __asm__("D_L00_0015FC00") __attribute__((sda));
+extern s32                second_record __asm__("D_L00_0015FC10") __attribute__((sda));
+extern TexRecord          first_record_fields __asm__("D_L00_0015FC0A") MACRO_ADDR;
+extern TexRecord          second_record_fields __asm__("D_L00_0015FC1A") MACRO_ADDR;
+extern u8                 record_index __asm__("D_L00_0015FC20") __attribute__((sda));
+extern s32                second_class_ids[] __asm__("D_L00_00160558");
 extern s32 D_L00_00160568 MACRO_ADDR;
 extern s32 D_L00_00160564 MACRO_ADDR;
 extern s32 D_L00_0016056C MACRO_ADDR;
-extern s32 texture_count_macro __asm__("D_L00_0015FFC8") MACRO_ADDR;
+extern s32                texture_count_macro __asm__("D_L00_0015FFC8") MACRO_ADDR;
 /* Loads a level's four packed images through the GS loader, adds two texture records and registers the moby class of each one not loaded yet. */
 char *load_level_texture_bank(char *bank, s32 *header) __asm__("FUN_L00_0023fa00");
 
 char *load_level_texture_bank(char *bank, s32 *header) {
-    s32 image[24];
-    s32 i = 0;
-    s32 sky_offset;
-    s32 first_offset;
-    s32 second_offset;
-    s32 last_offset;
+    s32   image[24];
+    s32   i = 0;
+    s32   sky_offset;
+    s32   first_offset;
+    s32   second_offset;
+    s32   last_offset;
     char *first;
     char *bulk_copy_destination;
     char *upload_pixels;
     char *base;
-    s32 index;
-    s32 next_index;
-    fast_mem_copy(bank, level_archive_base,
-                                  disc_table.level_archives[level_render_state.content_variant + 1].size << 11);
+    s32   index;
+    s32   next_index;
+    fast_mem_copy(bank,
+                  level_archive_base,
+                  disc_table.level_archives[level_render_state.content_variant + 1].size << 11);
     sky_offset = ((ImageBank *)bank)->sky_offset;
     first_offset = ((ImageBank *)bank)->first_offset;
     first = bank + first_offset;
@@ -70,19 +74,23 @@ char *load_level_texture_bank(char *bank, s32 *header) {
     last_offset = ((ImageBank *)bank)->last_offset;
     do {
         if (i == 0) {
-            sceGsSetDefLoadImage_23fa00(image, (texture_area_base + header[0x2B]) >> 8, 1, 0x13, 0, 0, 0x40, 0x40);
+            sceGsSetDefLoadImage_23fa00(
+                image, (texture_area_base + header[0x2B]) >> 8, 1, 0x13, 0, 0, 0x40, 0x40);
             bulk_copy_destination = bank + first_offset;
             upload_pixels = first + 0x14430;
         } else if (i == 1) {
-            sceGsSetDefLoadImage_23fa00(image, (texture_area_base + header[0x2C]) >> 8, 1, 0x13, 0, 0, 0x20, 0x20);
+            sceGsSetDefLoadImage_23fa00(
+                image, (texture_area_base + header[0x2C]) >> 8, 1, 0x13, 0, 0, 0x20, 0x20);
             bulk_copy_destination = bank + first_offset;
             upload_pixels = first + 0x15430;
         } else if (i == 2) {
-            sceGsSetDefLoadImage_23fa00(image, (texture_area_base + header[0x2D]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
+            sceGsSetDefLoadImage_23fa00(
+                image, (texture_area_base + header[0x2D]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
             upload_pixels = first + 0x30;
             bulk_copy_destination = bank + first_offset;
         } else {
-            sceGsSetDefLoadImage_23fa00(image, (texture_area_base + header[0x2E]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
+            sceGsSetDefLoadImage_23fa00(
+                image, (texture_area_base + header[0x2E]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
             bulk_copy_destination = bank + first_offset;
             upload_pixels = bank + last_offset + 0x30;
         }
@@ -103,7 +111,9 @@ char *load_level_texture_bank(char *bank, s32 *header) {
     bank += 0x14000;
     record_index = texture_count_macro;
     if (class_slot[first_class_ids[level_render_state.content_variant]] == 0xFF) {
-        register_moby_class(base + sky_offset, first_record_23fa00 - texture_count_macro, &record_index,
+        register_moby_class(base + sky_offset,
+                            first_record_23fa00 - texture_count_macro,
+                            &record_index,
                             first_class_ids[level_render_state.content_variant]);
     }
     next_index = texture_count_macro + 1;
@@ -115,7 +125,9 @@ char *load_level_texture_bank(char *bank, s32 *header) {
     bank += 0x4000;
     record_index = texture_count_macro;
     if (class_slot[second_class_ids[level_render_state.content_variant]] == 0xFF) {
-        register_moby_class(base + second_offset, second_record_23fa00 - texture_count_macro, &record_index,
+        register_moby_class(base + second_offset,
+                            second_record_23fa00 - texture_count_macro,
+                            &record_index,
                             second_class_ids[level_render_state.content_variant]);
     }
     D_L00_00160564 = 1;
@@ -127,149 +139,279 @@ char *load_level_texture_bank(char *bank, s32 *header) {
 
 s32 D_L01_0015FC00 = 0;
 s32 D_L01_0015FC10 = 0;
-TexRecord D_L01_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L01_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L01_0015FC20 = 0xff;
+
+TexRecord D_L01_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L01_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L01_0015FC20 = 0xff;
 s32 D_L01_00160568 = 1;
 s32 D_L01_00160564 = 1;
 s32 D_L01_0016056C = 0;
 s32 D_L02_0015FC00 = 0;
 s32 D_L02_0015FC10 = 0;
-TexRecord D_L02_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L02_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L02_0015FC20 = 0xff;
+
+TexRecord D_L02_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L02_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L02_0015FC20 = 0xff;
 s32 D_L02_00160568 = 1;
 s32 D_L02_00160564 = 1;
 s32 D_L02_0016056C = 0;
 s32 D_L03_0015FC00 = 0;
 s32 D_L03_0015FC10 = 0;
-TexRecord D_L03_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L03_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L03_0015FC20 = 0xff;
+
+TexRecord D_L03_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L03_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L03_0015FC20 = 0xff;
 s32 D_L03_00160568 = 1;
 s32 D_L03_00160564 = 1;
 s32 D_L03_0016056C = 0;
 s32 D_L04_0015FC00 = 0;
 s32 D_L04_0015FC10 = 0;
-TexRecord D_L04_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L04_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L04_0015FC20 = 0xff;
+
+TexRecord D_L04_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L04_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L04_0015FC20 = 0xff;
 s32 D_L04_00160568 = 1;
 s32 D_L04_00160564 = 1;
 s32 D_L04_0016056C = 0;
 s32 D_L05_0015FC00 = 0;
 s32 D_L05_0015FC10 = 0;
-TexRecord D_L05_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L05_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L05_0015FC20 = 0xff;
+
+TexRecord D_L05_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L05_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L05_0015FC20 = 0xff;
 s32 D_L05_00160568 = 1;
 s32 D_L05_00160564 = 1;
 s32 D_L05_0016056C = 0;
 s32 D_L06_0015FC00 = 0;
 s32 D_L06_0015FC10 = 0;
-TexRecord D_L06_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L06_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L06_0015FC20 = 0xff;
+
+TexRecord D_L06_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L06_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L06_0015FC20 = 0xff;
 s32 D_L06_00160568 = 1;
 s32 D_L06_00160564 = 1;
 s32 D_L06_0016056C = 0;
 s32 D_L07_0015FC00 = 0;
 s32 D_L07_0015FC10 = 0;
-TexRecord D_L07_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L07_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L07_0015FC20 = 0xff;
+
+TexRecord D_L07_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L07_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L07_0015FC20 = 0xff;
 s32 D_L07_00160568 = 1;
 s32 D_L07_00160564 = 1;
 s32 D_L07_0016056C = 0;
 s32 D_L08_0015FC00 = 0;
 s32 D_L08_0015FC10 = 0;
-TexRecord D_L08_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L08_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L08_0015FC20 = 0xff;
+
+TexRecord D_L08_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L08_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L08_0015FC20 = 0xff;
 s32 D_L08_00160568 = 1;
 s32 D_L08_00160564 = 1;
 s32 D_L08_0016056C = 0;
 s32 D_L09_0015FC00 = 0;
 s32 D_L09_0015FC10 = 0;
-TexRecord D_L09_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L09_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L09_0015FC20 = 0xff;
+
+TexRecord D_L09_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L09_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L09_0015FC20 = 0xff;
 s32 D_L09_00160568 = 1;
 s32 D_L09_00160564 = 1;
 s32 D_L09_0016056C = 0;
 s32 D_L10_0015FC00 = 0;
 s32 D_L10_0015FC10 = 0;
-TexRecord D_L10_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L10_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L10_0015FC20 = 0xff;
+
+TexRecord D_L10_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L10_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L10_0015FC20 = 0xff;
 s32 D_L10_00160568 = 1;
 s32 D_L10_00160564 = 1;
 s32 D_L10_0016056C = 0;
 s32 D_L11_0015FC00 = 0;
 s32 D_L11_0015FC10 = 0;
-TexRecord D_L11_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L11_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L11_0015FC20 = 0xff;
+
+TexRecord D_L11_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L11_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L11_0015FC20 = 0xff;
 s32 D_L11_00160568 = 1;
 s32 D_L11_00160564 = 1;
 s32 D_L11_0016056C = 0;
 s32 D_L12_0015FC00 = 0;
 s32 D_L12_0015FC10 = 0;
-TexRecord D_L12_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L12_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L12_0015FC20 = 0xff;
+
+TexRecord D_L12_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L12_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L12_0015FC20 = 0xff;
 s32 D_L12_00160568 = 1;
 s32 D_L12_00160564 = 1;
 s32 D_L12_0016056C = 0;
 s32 D_L13_0015FC00 = 0;
 s32 D_L13_0015FC10 = 0;
-TexRecord D_L13_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L13_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L13_0015FC20 = 0xff;
+
+TexRecord D_L13_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L13_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L13_0015FC20 = 0xff;
 s32 D_L13_00160568 = 1;
 s32 D_L13_00160564 = 1;
 s32 D_L13_0016056C = 0;
 s32 D_L14_0015FC00 = 0;
 s32 D_L14_0015FC10 = 0;
-TexRecord D_L14_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L14_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L14_0015FC20 = 0xff;
+
+TexRecord D_L14_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L14_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L14_0015FC20 = 0xff;
 s32 D_L14_00160568 = 1;
 s32 D_L14_00160564 = 1;
 s32 D_L14_0016056C = 0;
 s32 D_L15_0015FC00 = 0;
 s32 D_L15_0015FC10 = 0;
-TexRecord D_L15_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L15_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L15_0015FC20 = 0xff;
+
+TexRecord D_L15_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L15_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L15_0015FC20 = 0xff;
 s32 D_L15_00160568 = 1;
 s32 D_L15_00160564 = 1;
 s32 D_L15_0016056C = 0;
 s32 D_L16_0015FC00 = 0;
 s32 D_L16_0015FC10 = 0;
-TexRecord D_L16_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L16_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L16_0015FC20 = 0xff;
+
+TexRecord D_L16_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L16_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L16_0015FC20 = 0xff;
 s32 D_L16_00160568 = 1;
 s32 D_L16_00160564 = 1;
 s32 D_L16_0016056C = 0;
 s32 D_L17_0015FC00 = 0;
 s32 D_L17_0015FC10 = 0;
-TexRecord D_L17_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L17_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L17_0015FC20 = 0xff;
+
+TexRecord D_L17_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L17_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L17_0015FC20 = 0xff;
 s32 D_L17_00160568 = 1;
 s32 D_L17_00160564 = 1;
 s32 D_L17_0016056C = 0;
 s32 D_L18_0015FC00 = 0;
 s32 D_L18_0015FC10 = 0;
-TexRecord D_L18_0015FC0A = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
-TexRecord D_L18_0015FC1A = {{0, 0, 0, -1, -1, -1, -1, -1}};
-u8 D_L18_0015FC20 = 0xff;
+
+TexRecord D_L18_0015FC0A = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
+
+TexRecord D_L18_0015FC1A = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};
+
+u8  D_L18_0015FC20 = 0xff;
 s32 D_L18_00160568 = 1;
 s32 D_L18_00160564 = 1;
 s32 D_L18_0016056C = 0;
 
-TexRecord first_record_fields __asm__("D_L00_0015FC0A") = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
+TexRecord first_record_fields __asm__("D_L00_0015FC0A") = {
+    {0, 0, 0, 0, 0, 0x80, 0x80, 1}
+};
 
-TexRecord second_record_fields __asm__("D_L00_0015FC1A") = {{0, 0, 0, -1, -1, -1, -1, -1}};
+TexRecord second_record_fields __asm__("D_L00_0015FC1A") = {
+    {0, 0, 0, -1, -1, -1, -1, -1}
+};

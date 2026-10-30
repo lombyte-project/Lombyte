@@ -20,34 +20,35 @@
 /* The rest of a quad: draw_geometry_quad reads it right after the four corners,
    which sit just before it on the stack. */
 typedef struct {
-    int colors[4];
+    int   colors[4];
     float texture_coordinates[4][2];
-    long reserved;
-    long texture;
-    long texture_state;
-    long primitive;
+    long  reserved;
+    long  texture;
+    long  texture_state;
+    long  primitive;
 } QuadAttributes;
 
 extern float D_L00_0015FB08 NOT_SDA;
-extern long get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void build_moby_bone_transform(char *moby, int bone, char *out);
+extern long                 get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void                 build_moby_bone_transform(char *moby, int bone, char *out);
 extern void draw_geometry_quad(void *quads, void *matrix, int count) __asm__("FUN_001f7d30");
 
 /* Builds the object's tilted frame and emits three batches of four quads offset around it. */
 void glow_quads_draw(char *moby) __asm__("FUN_L00_0023db30");
+
 void glow_quads_draw(char *moby) {
-    float corners[4][4] __attribute__((aligned(16)));
+    float          corners[4][4] __attribute__((aligned(16)));
     QuadAttributes attributes;
-    float frame[4][4] __attribute__((aligned(16)));
-    float reach[4] __attribute__((aligned(16)));
-    float tip[4] __attribute__((aligned(16)));
-    float near_point[4] __attribute__((aligned(16)));
-    float far_point[4] __attribute__((aligned(16)));
-    int i;
-    float *corner;
-    float near_width, far_width;
-    float scale;
-    long texture;
+    float          frame[4][4] __attribute__((aligned(16)));
+    float          reach[4] __attribute__((aligned(16)));
+    float          tip[4] __attribute__((aligned(16)));
+    float          near_point[4] __attribute__((aligned(16)));
+    float          far_point[4] __attribute__((aligned(16)));
+    int            i;
+    float         *corner;
+    float          near_width, far_width;
+    float          scale;
+    long           texture;
 
     texture = get_effect_texture(0xE);
     attributes.colors[0] = 0x3FF08080;
@@ -168,74 +169,119 @@ void glow_quads_draw(char *moby) {
     }
     draw_geometry_quad(corners, frame, 1);
 }
+
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, int, int,
-                                  void *);
+
+extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, int, int, void *);
 
 void emit_moby_particle_pairs(void *moby) __asm__("FUN_L00_0023e008");
 
 void emit_moby_particle_pairs(void *moby) {
-    OvlQuad initial_velocity[1];
-    OvlQuad old[1];
-    float particle_spawn_position[4] __attribute__((aligned(16)));
-    int i;
+    OvlQuad        initial_velocity[1];
+    OvlQuad        old[1];
+    float          particle_spawn_position[4] __attribute__((aligned(16)));
+    int            i;
     unsigned char *particle;
     moby_point_position(moby, 0, particle_spawn_position);
     for (i = 3; i >= 0; i--) {
         float particle_size_scale = random_float_between(0.15f, 0.5f);
-        int k = random_integer_below(2);
+        int   k = random_integer_below(2);
         float azimuth_angle, elevation_angle;
         if (k == 0)
             k--;
         azimuth_angle = random_angle_radians();
         elevation_angle = random_float_between(0.34906584f, 1.53588974f);
-        build_spherical_offset(initial_velocity, random_float_between(0.05f, 0.2f) * frame_scale, azimuth_angle, elevation_angle);
+        build_spherical_offset(initial_velocity,
+                               random_float_between(0.05f, 0.2f) * frame_scale,
+                               azimuth_angle,
+                               elevation_angle);
         qcopy(old, particle_spawn_position);
         particle_spawn_position[0] += randf_sym(0.0f, 0.15f);
         particle_spawn_position[1] += randf_sym(0.0f, 0.15f);
         particle_spawn_position[2] += randf_sym(0.0f, 0.15f);
-        particle = FUN_L00_00272060(particle_spawn_position, scale_game_frames(0x3C), particle_size_scale * 0.1f, particle_size_scale, 0.009f, 0x7F7F2020, 0, k, initial_velocity);
+        particle = FUN_L00_00272060(particle_spawn_position,
+                                    scale_game_frames(0x3C),
+                                    particle_size_scale * 0.1f,
+                                    particle_size_scale,
+                                    0.009f,
+                                    0x7F7F2020,
+                                    0,
+                                    k,
+                                    initial_velocity);
         if (particle)
             particle[9] = truncate_float_to_s32(4.0f) + 0x70;
         k = -k;
-        particle = FUN_L00_00272060(particle_spawn_position, scale_game_frames(0x3C), particle_size_scale * 0.07f, particle_size_scale * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, initial_velocity);
+        particle = FUN_L00_00272060(particle_spawn_position,
+                                    scale_game_frames(0x3C),
+                                    particle_size_scale * 0.07f,
+                                    particle_size_scale * 0.7f,
+                                    0.009f,
+                                    0x7F7F7F7F,
+                                    1,
+                                    k,
+                                    initial_velocity);
         if (particle)
             particle[9] = truncate_float_to_s32(4.0f) + 0x70;
     }
 }
+
 #include "eetypes.h"
 #include "qcopy.h"
+
 typedef struct {
-    char pad[0xc];
+    char  pad[0xc];
     char *buf;
-    int used;
-    char pad2[0x30 - 0x14];
+    int   used;
+    char  pad2[0x30 - 0x14];
 } T_0023e5e0;
+
 extern T_0023e5e0 D_L00_001804C0_0023e5e0[] __asm__("D_L00_001804C0");
-u8 D_L00_00180640[8][1024] = {0};
+u8                D_L00_00180640[8][1024] = {0};
+
 u8 D_L01_00180AC0[8][1024] = {0};
+
 u8 D_L02_00180C40[8][1024] = {0};
+
 u8 D_L03_00180740[8][1024] = {0};
+
 u8 D_L04_001807C0[8][1024] = {0};
+
 u8 D_L05_00180AC0[8][1024] = {0};
+
 u8 D_L06_00180DC0[8][1024] = {0};
+
 u8 D_L07_001806C0[8][1024] = {0};
+
 u8 D_L08_00180E40[8][1024] = {0};
+
 u8 D_L09_001807C0[8][1024] = {0};
+
 u8 D_L10_00180AC0[8][1024] = {0};
+
 u8 D_L11_00181040[8][1024] = {0};
+
 u8 D_L12_00180AC0[8][1024] = {0};
+
 u8 D_L13_00180940[8][1024] = {0};
+
 u8 D_L14_00180D40[8][1024] = {0};
+
 u8 D_L15_00180C40[8][1024] = {0};
+
 u8 D_L16_00180AC0[8][1024] = {0};
+
 u8 D_L17_00180F40[8][1024] = {0};
+
 u8 D_L18_00181040[8][1024] = {0};
-int allocate_packed_color_point_light_slot(u128 *position, float radius, float b, int col) __asm__("FUN_L00_0023e5e0");
+
+int allocate_packed_color_point_light_slot(u128 *position,
+                                           float radius,
+                                           float b,
+                                           int   col) __asm__("FUN_L00_0023e5e0");
 
 int allocate_packed_color_point_light_slot(u128 *position, float radius, float b, int col) {
-    int i;
+    int         i;
     T_0023e5e0 *slot_state;
     PointLight *parameter_entry;
     if (0.8f < D_L00_0015F5D4)
@@ -258,18 +304,28 @@ int allocate_packed_color_point_light_slot(u128 *position, float radius, float b
     slot_state->buf = (char *)D_L00_00180640[i];
     return i;
 }
+
 #include "eetypes.h"
 #include "qcopy.h"
+
 typedef struct {
-    char pad[0xc];
+    char  pad[0xc];
     char *buf;
-    int used;
-    char pad2[0x30 - 0x14];
+    int   used;
+    char  pad2[0x30 - 0x14];
 } T_0023e738;
+
 extern T_0023e738 D_L00_001804C0_0023e738[] __asm__("D_L00_001804C0");
-int allocate_colored_effect_slot(u128 *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
-int allocate_colored_effect_slot(u128 *position, float position_w, float b_0023e738, float color_component_x, float color_component_y, float color_component_z) {
-    int i;
+int               allocate_colored_effect_slot(
+                  u128 *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
+int allocate_colored_effect_slot(u128 *position,
+                                 float position_w,
+                                 float b_0023e738,
+                                 float color_component_x,
+                                 float color_component_y,
+
+                                 float color_component_z) {
+    int         i;
     T_0023e738 *slot_state;
     PointLight *parameter_entry;
     if (0.8f < D_L00_0015F5D4)
@@ -292,10 +348,12 @@ int allocate_colored_effect_slot(u128 *position, float position_w, float b_0023e
     slot_state->buf = (char *)D_L00_00180640[i];
     return i;
 }
+
 extern char D_L00_001804C0[];
-void detach_point_light() __asm__("FUN_00201f88");
+void        detach_point_light() __asm__("FUN_00201f88");
 /* Detaches the point light and clears entry i of point_lights and D_L00_001804C0. */
 void release_point_light_slot(int i) __asm__("FUN_L00_0023e838");
+
 void release_point_light_slot(int i) {
     detach_point_light();
     fast_mem_zero16(&point_lights[i], 32);

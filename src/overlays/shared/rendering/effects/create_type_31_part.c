@@ -2,18 +2,24 @@
 #include "types.h"
 #include "asm.h"
 
-
-
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00260EE8.c: func_L03_00260EE8), where it is exact; names translated to the US level program. */
 
+void create_type_31_part(int    part_word_3c,
+                         int   *part_quadword_20_source,
+                         int   *source_quadword,
+                         float *source_floats,
+                         int    part_halfword_0a) __asm__("FUN_L03_00260130");
 
-void create_type_31_part(int part_word_3c, int *part_quadword_20_source, int *source_quadword, float *source_floats, int part_halfword_0a) __asm__("FUN_L03_00260130");
+void create_type_31_part(int    part_word_3c,
+                         int   *part_quadword_20_source,
+                         int   *source_quadword,
+                         float *source_floats,
 
-void create_type_31_part(int part_word_3c, int *part_quadword_20_source, int *source_quadword, float *source_floats, int part_halfword_0a) {
+                         int part_halfword_0a) {
     unsigned char *created_part = create_part(0x31);
     if (created_part != 0) {
         float *destination_floats;

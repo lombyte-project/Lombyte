@@ -13,8 +13,8 @@
 
 struct _reent;
 
-extern void __malloc_lock(struct _reent *) __asm__("func_001154C0");
-extern void __malloc_unlock(struct _reent *) __asm__("func_001154C8");
+extern void  __malloc_lock(struct _reent *) __asm__("func_001154C0");
+extern void  __malloc_unlock(struct _reent *) __asm__("func_001154C8");
 extern void *_sbrk_r(struct _reent *ptr, s32 delta);
 
 extern u32 D_0012F788[]; /* __malloc_av_ bins (pointer array) */

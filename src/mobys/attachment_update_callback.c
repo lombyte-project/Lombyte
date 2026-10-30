@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00225DF8). */
 void attachment_update_callback(void) __asm__("FUN_00224b68");
+
 void attachment_update_callback(void) {
 }
 

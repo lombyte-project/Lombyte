@@ -13,21 +13,23 @@ struct DmaChannel {
 /* The DMA-busy mask this file owns: both functions below read it
    gp-relative, which needs its definition ahead of them. */
 volatile s32 vif_chain_flags __asm__("D_00160EE0") = 0;
+
 #include "rnc/rendering/vu1_chain_globals.h"
-extern char vu1_chain_sync_timeout_message[] __asm__("D_001E89E0");
-extern u8 vu1_chain_overflow_message[] __asm__("D_001E89C8");
-extern void DebugPrint(char *, ...);
-extern void FlushCache(s32);
+
+extern char               vu1_chain_sync_timeout_message[] __asm__("D_001E89E0");
+extern u8                 vu1_chain_overflow_message[] __asm__("D_001E89C8");
+extern void               DebugPrint(char *, ...);
+extern void               FlushCache(s32);
 extern struct DmaChannel *sceDmaGetChan(s32);
-extern void sceDmaSend(struct DmaChannel *, s32);
+extern void               sceDmaSend(struct DmaChannel *, s32);
 
 void vu1_send_chain(void) __asm__("FUN_002336a0");
 
 void vu1_send_chain(void) {
     struct DmaChannel *channel;
-    s32 chain_size;
-    s32 remaining;
-    s32 overflow;
+    s32                chain_size;
+    s32                remaining;
+    s32                overflow;
 
     chain_size = D_00160EF8[D_00160F10];
     overflow = 0;
@@ -57,7 +59,7 @@ void vu1_send_chain(void) {
 extern __typeof__(vu1_send_chain) func_002336A0 __attribute__((alias("FUN_002336a0")));
 
 extern void SpinWait(s32);
-void vu1_sync_chain(s32 mask) __asm__("FUN_002337b0");
+void        vu1_sync_chain(s32 mask) __asm__("FUN_002337b0");
 
 void vu1_sync_chain(s32 mask) {
     s32 poll_count;

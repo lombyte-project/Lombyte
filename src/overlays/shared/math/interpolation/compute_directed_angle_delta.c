@@ -6,12 +6,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/interpolation.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025CB90), where it is exact; names translated to the US level program. */
 
-
-float compute_directed_angle_delta(int rotation_direction, float x, float y) __asm__("FUN_L00_0025bb38");
+float compute_directed_angle_delta(int   rotation_direction,
+                                   float x,
+                                   float y) __asm__("FUN_L00_0025bb38");
 
 float compute_directed_angle_delta(int rotation_direction, float x, float y) {
     float angle_delta = fast_subtract_rotations(x, y);
@@ -23,10 +22,18 @@ float compute_directed_angle_delta(int rotation_direction, float x, float y) {
         return angle_delta - 6.2831855f;
     return angle_delta + 6.2831855f;
 }
-extern float FUN_L00_0025bb38_c(float, void *, float) __asm__("FUN_L00_0025bb38");
-void step_angle_toward_target(float *current_angle, void *rotation_direction, float target_angle, float angle_step_limit) __asm__("FUN_L00_0025bc00");
 
-void step_angle_toward_target(float *current_angle, void *rotation_direction, float target_angle, float angle_step_limit) {
+extern float FUN_L00_0025bb38_c(float, void *, float) __asm__("FUN_L00_0025bb38");
+void         step_angle_toward_target(float *current_angle,
+                                      void  *rotation_direction,
+                                      float  target_angle,
+                                      float  angle_step_limit) __asm__("FUN_L00_0025bc00");
+
+void step_angle_toward_target(float *current_angle,
+                              void  *rotation_direction,
+                              float  target_angle,
+
+                              float angle_step_limit) {
     float angle_step = FUN_L00_0025bb38_c(target_angle, rotation_direction, *current_angle);
     if (angle_step_limit < angle_step)
         angle_step = angle_step_limit;
@@ -35,14 +42,29 @@ void step_angle_toward_target(float *current_angle, void *rotation_direction, fl
     *current_angle = fast_add_rotations(*current_angle, angle_step);
     FUN_L00_0025bb38_c(target_angle, rotation_direction, *current_angle);
 }
+
 extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025bb38");
-extern void advance_damped_scalar_velocity(float *, float, float, float,
-                                      float) __asm__("FUN_L00_0025b798");
+extern void
+advance_damped_scalar_velocity(float *, float, float, float, float) __asm__("FUN_L00_0025b798");
 
-float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
-float spring_angle(float *current_angle, float *angular_velocity, int rotation_direction, float x, float angle_error_gain, float angular_velocity_damping, float angular_velocity_limit) __asm__("FUN_L00_0025bc98");
+float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__(
+    "FUN_L00_0025bc98");
+float spring_angle(float *current_angle,
+                   float *angular_velocity,
+                   int    rotation_direction,
+                   float  x,
+                   float  angle_error_gain,
+                   float  angular_velocity_damping,
+                   float  angular_velocity_limit) __asm__("FUN_L00_0025bc98");
 
-float spring_angle(float *current_angle, float *angular_velocity, int rotation_direction, float x, float angle_error_gain, float angular_velocity_damping, float angular_velocity_limit) {
+float spring_angle(float *current_angle,
+                   float *angular_velocity,
+                   int    rotation_direction,
+                   float  x,
+                   float  angle_error_gain,
+                   float  angular_velocity_damping,
+
+                   float angular_velocity_limit) {
     float angle_error;
     if (rotation_direction == 2) {
         if ((0.0f < x && *current_angle < 0.0f) || (x < 0.0f && 0.0f < *current_angle)) {
@@ -54,8 +76,15 @@ float spring_angle(float *current_angle, float *angular_velocity, int rotation_d
         }
     }
     angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle);
-    advance_damped_scalar_velocity(angular_velocity, angle_error, angle_error_gain, angular_velocity_damping, angular_velocity_limit);
-    angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle = fast_add_rotations(*current_angle, *angular_velocity));
+    advance_damped_scalar_velocity(angular_velocity,
+                                   angle_error,
+                                   angle_error_gain,
+                                   angular_velocity_damping,
+                                   angular_velocity_limit);
+    angle_error = FUN_L00_0025bb38_0025bc98(
+        x,
+        rotation_direction,
+        *current_angle = fast_add_rotations(*current_angle, *angular_velocity));
     if (absolute_float(angle_error) < angular_velocity_limit * 0.01f) {
         *current_angle = x;
         *angular_velocity = 0;
@@ -63,10 +92,22 @@ float spring_angle(float *current_angle, float *angular_velocity, int rotation_d
     }
     return angle_error;
 }
+
 extern void step_angle_toward_target(float *, void *, float, float) __asm__("FUN_L00_0025bc00");
 
-float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
-float approach_angle(float *current_angle, float *angular_velocity, float target, float angular_velocity_step_limit, float angular_braking_step, float maxv) {
+float approach_angle(float *cur,
+                     float *vel,
+                     float  target,
+                     float  lim,
+                     float  accel,
+                     float  maxv) __asm__("FUN_L00_0025be00");
+float approach_angle(float *current_angle,
+                     float *angular_velocity,
+                     float  target,
+                     float  angular_velocity_step_limit,
+                     float  angular_braking_step,
+
+                     float maxv) {
     float angle_error;
     float initial_angular_velocity;
     float stop;
@@ -85,14 +126,17 @@ float approach_angle(float *current_angle, float *angular_velocity, float target
                 approach_value(0.0f, angular_braking_step * 1.1f, angular_velocity);
             }
         } else {
-            target_angular_speed = square_root((angular_braking_step + angular_braking_step) * angle_error);
+            target_angular_speed =
+                square_root((angular_braking_step + angular_braking_step) * angle_error);
             if (maxv < target_angular_speed) {
                 target_angular_speed = maxv;
             }
             if (angle_error < 0.0f) {
-                step_angle_toward_target(angular_velocity, 0, -target_angular_speed, angular_velocity_step_limit);
+                step_angle_toward_target(
+                    angular_velocity, 0, -target_angular_speed, angular_velocity_step_limit);
             } else {
-                step_angle_toward_target(angular_velocity, 0, target_angular_speed, angular_velocity_step_limit);
+                step_angle_toward_target(
+                    angular_velocity, 0, target_angular_speed, angular_velocity_step_limit);
             }
         }
         maxv = absolute_float(angle_error);
@@ -110,6 +154,7 @@ float approach_angle(float *current_angle, float *angular_velocity, float target
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D038), where it is exact; names translated to the US level program. */
 
 unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a);
+
 unsigned int FUN_L00_0025bfe0(float r, float g, float b, float high_byte_component) {
     unsigned int x = truncate_float_to_s32(r * 255.0f) & 0xFF;
     unsigned int y = truncate_float_to_s32(g * 255.0f) & 0xFF;
@@ -122,11 +167,13 @@ unsigned int FUN_L00_0025bfe0(float r, float g, float b, float high_byte_compone
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D0E0), where it is exact; names translated to the US level program. */
 
 /* Swaps a/b, b/c and c/a as bits 1, 2 and 4 of mask select. */
-void swap_color_channel_words(int *red_channel, int *green_channel, int *blue_channel, int mask) __asm__("FUN_L00_0025c088");
+void swap_color_channel_words(int *red_channel,
+                              int *green_channel,
+                              int *blue_channel,
+                              int  mask) __asm__("FUN_L00_0025c088");
 
 void swap_color_channel_words(int *red_channel, int *green_channel, int *blue_channel, int mask) {
     int x, y;
@@ -155,8 +202,9 @@ extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_
 
 /* Splits colour c into bytes, passes the low three through 0025c088 with mask, and repacks them. */
 unsigned swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
+
 unsigned swap_packed_color_channels(unsigned packed_color, int mask) {
-    int rgb_channels[3];
+    int      rgb_channels[3];
     unsigned preserved_high_byte;
     unsigned repacked_color;
     if (mask == 0)

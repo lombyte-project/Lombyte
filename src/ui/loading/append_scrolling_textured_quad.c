@@ -4,6 +4,7 @@
 #include "rnc/rendering/dma_tag.h"
 
 #include "rnc/rendering/screen.h"
+
 extern char loading_quad_packet_header_template[] __asm__("D_00160850");
 
 typedef union {
@@ -16,18 +17,35 @@ typedef union {
 
 /* Append a textured four-corner GIF packet. Screen coordinates use 12.4
    fixed point relative to the viewport origin; UV pairs stay as floats. */
-void append_scrolling_textured_quad(int x, int y, int w, int h, unsigned long rgba, unsigned long tex, float u0,
-                  float u1, float v0, float v1) __asm__("FUN_002316e8");
+void append_scrolling_textured_quad(int           x,
+                                    int           y,
+                                    int           w,
+                                    int           h,
+                                    unsigned long rgba,
+                                    unsigned long tex,
+                                    float         u0,
+                                    float         u1,
+                                    float         v0,
+                                    float         v1) __asm__("FUN_002316e8");
 
-void append_scrolling_textured_quad(int x, int y, int quad_width, int quad_height, unsigned long rgba, unsigned long texture_register_value, float texture_u_left,
-                  float texture_u_right, float texture_v_top, float texture_v_bottom) {
-    int x0 = x * 16 + screen_extent.left - 8;
-    int x1 = (x + quad_width) * 16 + screen_extent.left - 8;
-    int y0 = y * 16 + screen_extent.top - 8;
-    int y1 = (y + quad_height) * 16 + screen_extent.top - 8;
+void append_scrolling_textured_quad(int           x,
+                                    int           y,
+                                    int           quad_width,
+                                    int           quad_height,
+                                    unsigned long rgba,
+                                    unsigned long texture_register_value,
+                                    float         texture_u_left,
+                                    float         texture_u_right,
+                                    float         texture_v_top,
+
+                                    float texture_v_bottom) {
+    int         x0 = x * 16 + screen_extent.left - 8;
+    int         x1 = (x + quad_width) * 16 + screen_extent.left - 8;
+    int         y0 = y * 16 + screen_extent.top - 8;
+    int         y1 = (y + quad_height) * 16 + screen_extent.top - 8;
     SpaceUvPair uv[4];
-    long *quad_payload;
-    int *base;
+    long       *quad_payload;
+    int        *base;
 
     uv[0].f.u = texture_u_left;
     uv[0].f.v = texture_v_top;
@@ -62,4 +80,5 @@ void append_scrolling_textured_quad(int x, int y, int quad_width, int quad_heigh
     render_packet_cursor.words = (int *)((char *)render_packet_cursor.words + 0x60);
 }
 
-extern __typeof__(append_scrolling_textured_quad) func_002316E8 __attribute__((alias("FUN_002316e8")));
+extern __typeof__(append_scrolling_textured_quad) func_002316E8
+    __attribute__((alias("FUN_002316e8")));

@@ -7,13 +7,12 @@
 #include "rnc/math/random.h"
 /* Fills a moby data block: four random values, fixed constants, four frame-scaled counts. */
 
-
 void initialize_energy_sphere_holder_vars(char *moby) __asm__("FUN_L06_002f7548");
 
 void initialize_energy_sphere_holder_vars(char *moby) {
     float *holder_vars = ((float *)MOBY(moby)->pvars);
-    int *scaled_frame_counts;
-    int i;
+    int   *scaled_frame_counts;
+    int    i;
 
     for (i = 0; i < 4; i++) {
         holder_vars[i] = (float)random_integer_below(0xFF);
@@ -31,6 +30,7 @@ void initialize_energy_sphere_holder_vars(char *moby) {
     holder_vars[15] = 1.75f;
     holder_vars[14] = 2.25f;
 }
+
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"

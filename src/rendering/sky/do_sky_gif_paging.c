@@ -4,8 +4,10 @@
 
 extern struct TagPtr D_00160470;
 extern struct TagPtr sky_gif_paging_bypass_tag __asm__("D_00160474");
-extern s32 D_0018A2B4[];
+extern s32           D_0018A2B4[];
+
 #include "rnc/globals.h"
+
 extern void FUN_0020b4a8(void);
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 

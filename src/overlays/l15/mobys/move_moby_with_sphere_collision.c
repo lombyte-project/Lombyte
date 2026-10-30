@@ -12,16 +12,22 @@
 #include "sda.h"
 
 extern CollisionHit coll_hit __asm__("D_L15_00174440") NOT_SDA;
-extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
+extern int          coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
-int move_moby_with_sphere_collision(struct Moby *moving_moby, u128 *delta, int flags, float step, float radius) __asm__("FUN_L15_00247e90");
+int move_moby_with_sphere_collision(struct Moby *moving_moby,
+                                    u128        *delta,
+                                    int          flags,
+                                    float        step,
+                                    float        radius) __asm__("FUN_L15_00247e90");
 
-int move_moby_with_sphere_collision(struct Moby *moving_moby, u128 *delta, int flags, float step, float radius) {
+int move_moby_with_sphere_collision(
+
+    struct Moby *moving_moby, u128 *delta, int flags, float step, float radius) {
     Vec4 start;
     Vec4 probe;
-    int pushed = 0;
-    int i;
-    int mask;
+    int  pushed = 0;
+    int  i;
+    int  mask;
 
     qcopy(&start, &moving_moby->pos);
     fast_vec_add(&moving_moby->pos, &moving_moby->pos, delta);

@@ -42,7 +42,7 @@ typedef struct DoubleParts {
 } DoubleParts;
 
 extern void UnpackDouble(double *value, DoubleParts *parts) __asm__("__unpack_d");
-extern s32 CompareDoubleParts(DoubleParts *left, DoubleParts *right) __asm__("__fpcmp_parts_d");
+extern s32  CompareDoubleParts(DoubleParts *left, DoubleParts *right) __asm__("__fpcmp_parts_d");
 
 s32 CompareDoubles(double left, double right) __asm__("dpcmp");
 

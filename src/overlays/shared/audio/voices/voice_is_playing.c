@@ -3,12 +3,11 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028EB98), where it is exact; names translated to the US level program. */
 
 /* True when entry i (0x70 bytes) holds target at 0x88 and its byte at 0x74 is 1 or 2. */
 int voice_is_playing(void *target, int i) __asm__("FUN_L00_0028d8c0");
+
 int voice_is_playing(void *target, int i) {
     if (i >= 0) {
         char *voice_entry_base = D_0013E533 + 0x1D + i * 0x70;

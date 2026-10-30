@@ -28,19 +28,23 @@
 
 #include "types.h"
 #include "rnc/sdk/libc/mprec/_Bfree.h"
+
 /* Layout evidence: src/sdk/libc/mprec/lshift.c and src/sdk/libc/mprec/_Bfree.c. */
 typedef struct _Bigint {
     struct _Bigint *_next;
-    s32 _k, _maxwds, _sign, _wds;
-    u32 _x[1];
+    s32             _k, _maxwds, _sign, _wds;
+    u32             _x[1];
 } _Bigint;
+
 struct _reent {
-    u8 prefix[0x40];
+    u8       prefix[0x40];
     _Bigint *_result;
-    s32 _result_k;
+    s32      _result_k;
 };
+
 typedef s32 __Long;
 typedef u32 __ULong;
+
 union double_union {
     f64 d;
     u32 i[2];
@@ -65,7 +69,7 @@ union double_union {
 #define Bndry_mask  0xfffffU
 #define Log2P       1
 #define Balloc      _Balloc
-#define _Bfree       _Bfree
+#define _Bfree      _Bfree
 #define d2b         _d2b
 #define hi0bits     _hi0bits
 #define i2b         __i2b
@@ -80,19 +84,19 @@ union double_union {
 #define Bcopy(x, y) memcpy(&(x)->_sign, &(y)->_sign, (y)->_wds * sizeof(u32) + 2 * sizeof(s32))
 extern const f64 tens[23], bigtens[5];
 extern const f64 dtoa_quick_overflow_divisor[] __asm__("D_001524B0");
-extern char D_00152310[], D_00152320[], D_00152328[];
-extern _Bigint *Balloc(struct _reent *, s32);
-extern _Bigint *d2b(struct _reent *, f64, s32 *, s32 *);
-extern s32 hi0bits(u32);
-extern _Bigint *i2b(struct _reent *, s32) __asm__("func_00115808");
-extern _Bigint *mult(struct _reent *, _Bigint *, _Bigint *);
-extern _Bigint *pow5mult(struct _reent *, _Bigint *, s32);
-extern _Bigint *lshift(struct _reent *, _Bigint *, s32);
-extern s32 cmp(_Bigint *, _Bigint *);
-extern _Bigint *diff(struct _reent *, _Bigint *, _Bigint *);
-extern _Bigint *multadd(struct _reent *, _Bigint *, s32, s32);
-extern s32 quorem(_Bigint *, _Bigint *);
-extern void *memcpy(void *, const void *, u32);
+extern char      D_00152310[], D_00152320[], D_00152328[];
+extern _Bigint  *Balloc(struct _reent *, s32);
+extern _Bigint  *d2b(struct _reent *, f64, s32 *, s32 *);
+extern s32       hi0bits(u32);
+extern _Bigint  *i2b(struct _reent *, s32) __asm__("func_00115808");
+extern _Bigint  *mult(struct _reent *, _Bigint *, _Bigint *);
+extern _Bigint  *pow5mult(struct _reent *, _Bigint *, s32);
+extern _Bigint  *lshift(struct _reent *, _Bigint *, s32);
+extern s32       cmp(_Bigint *, _Bigint *);
+extern _Bigint  *diff(struct _reent *, _Bigint *, _Bigint *);
+extern _Bigint  *multadd(struct _reent *, _Bigint *, s32, s32);
+extern s32       quorem(_Bigint *, _Bigint *);
+extern void     *memcpy(void *, const void *, u32);
 
 /* dtoa for IEEE arithmetic (dmg): convert double to ASCII string.
  *
@@ -128,8 +132,9 @@ extern void *memcpy(void *, const void *, u32);
  *	   calculation.
  */
 
-char *_dtoa_r(struct _reent *ptr, f64 _d, s32 mode, s32 ndigits, s32 *decpt, s32 *sign,
-              char **rve) {
+char *
+
+_dtoa_r(struct _reent *ptr, f64 _d, s32 mode, s32 ndigits, s32 *decpt, s32 *sign, char **rve) {
     /*	Arguments ndigits, decpt, sign are similar to those
 	of ecvt and fcvt; trailing zeros are suppressed from
 	the returned string.  If not null, *rve is set to point
@@ -167,14 +172,14 @@ char *_dtoa_r(struct _reent *ptr, f64 _d, s32 mode, s32 ndigits, s32 *decpt, s32
     s32 bbits, b2, b5, be, dig, i, ieps, ilim, ilim0, ilim1, j, j1, k, k0, k_check, leftright, m2,
         m5, s2, s5, spec_case, try_quick;
     union double_union d, d2, eps;
-    __Long L;
+    __Long             L;
 #ifndef Sudden_Underflow
-    s32 denorm;
+    s32     denorm;
     __ULong x;
 #endif
     _Bigint *b, *b1, *delta, *mlo, *mhi, *S;
-    f64 ds;
-    char *s, *s0;
+    f64      ds;
+    char    *s, *s0;
 
     d.d = _d;
 

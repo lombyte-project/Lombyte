@@ -1,17 +1,17 @@
 #include "types.h"
 
-extern u8 tlb_init_syscall_payload[] __asm__("D_0012FCB8");
-extern s32 saved_syscall_3_handler[] __asm__("D_00130030");
-extern s32 tlb_syscall_registration_pairs[] __asm__("D_00130038");
+extern u8   tlb_init_syscall_payload[] __asm__("D_0012FCB8");
+extern s32  saved_syscall_3_handler[] __asm__("D_00130030");
+extern s32  tlb_syscall_registration_pairs[] __asm__("D_00130038");
 extern void FlushCache(s32 mode);
 extern void InvokeKernelSyscall005A_Rfu(u32 addr, void *buf, s32 size);
-extern s32 Rfu091Early(s32 arg);
+extern s32  Rfu091Early(s32 arg);
 extern void Rfu116SetSyscallEarly(s32 a, s32 b);
 
 void InitTLBFunctions(void) {
     s32 *base;
     s32 *cursor;
-    u32 i;
+    u32  i;
 
     base = tlb_syscall_registration_pairs;
     i = 3;

@@ -13,17 +13,20 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/mobys/moby.h"
+
 typedef union {
     u128 q;
-    f32 f[4];
+    f32  f[4];
 } V0025d238;
-void clip_negative_segment_endpoint_xyz(V0025d238 *src, V0025d238 *inout_vector) __asm__("FUN_L00_0025d238");
+
+void clip_negative_segment_endpoint_xyz(V0025d238 *src,
+                                        V0025d238 *inout_vector) __asm__("FUN_L00_0025d238");
 
 void clip_negative_segment_endpoint_xyz(V0025d238 *segment_start, V0025d238 *inout_vector) {
-    V0025d238 source_copy, scaled_delta;
-    f32 *inout_component, *source_component, *delta_component;
+    V0025d238  source_copy, scaled_delta;
+    f32       *inout_component, *source_component, *delta_component;
     V0025d238 *source_copy_ptr = &source_copy, *scaled_delta_ptr = &scaled_delta;
-    s32 i;
+    s32        i;
     source_copy.q = segment_start->q;
     source_component = source_copy.f;
     inout_component = inout_vector->f;
@@ -31,7 +34,9 @@ void clip_negative_segment_endpoint_xyz(V0025d238 *segment_start, V0025d238 *ino
     for (i = 2; i >= 0; i--) {
         if (*inout_component < 0.0f) {
             fast_vec_sub(scaled_delta_ptr, inout_vector, source_copy_ptr);
-            fast_vec_scale(scaled_delta_ptr, scaled_delta_ptr, absolute_float((*source_component - 0.1f) / *delta_component));
+            fast_vec_scale(scaled_delta_ptr,
+                           scaled_delta_ptr,
+                           absolute_float((*source_component - 0.1f) / *delta_component));
             fast_vec_add(inout_vector, source_copy_ptr, scaled_delta_ptr);
         }
         inout_component++;
@@ -39,17 +44,20 @@ void clip_negative_segment_endpoint_xyz(V0025d238 *segment_start, V0025d238 *ino
         source_component++;
     }
 }
+
 typedef struct {
-    short cur;
-    short flag;
+    short         cur;
+    short         flag;
     unsigned char r, g, b;
-    char pad;
-    char pad2[4];
-    short lo;
-    short hi;
+    char          pad;
+    char          pad2[4];
+    short         lo;
+    short         hi;
 } S;
+
 void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
 void trooper_anim_update(void *a, S *s) __asm__("FUN_L00_0025d458");
+
 void trooper_anim_update(void *moby, S *animation_state) {
     int old = animation_state->cur;
     if (old == 0 || animation_state->flag != 0) {
@@ -57,7 +65,9 @@ void trooper_anim_update(void *moby, S *animation_state) {
         animation_state->flag = 0;
         if (old != 0) {
             int scaled_duration_frames = scale_game_frames(animation_state->lo);
-            animation_state->cur = truncate_float_to_s32(scaled_duration_frames * (old / convert_integer_to_float(scale_game_frames(animation_state->hi))));
+            animation_state->cur = truncate_float_to_s32(
+                scaled_duration_frames *
+                (old / convert_integer_to_float(scale_game_frames(animation_state->hi))));
             if (animation_state->cur <= 0)
                 animation_state->cur = 1;
         } else {
@@ -69,17 +79,20 @@ void trooper_anim_update(void *moby, S *animation_state) {
         }
     }
 }
+
 typedef struct {
     s16 t;
     s16 phase;
-    u8 r0, g0, b0;
-    u8 r1, g1, b1;
-    u8 pad[2];
+    u8  r0, g0, b0;
+    u8  r1, g1, b1;
+    u8  pad[2];
     s16 d0;
     s16 d1;
 } S_25d538;
+
 void set_moby_color(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void trooper_anim_finish(s32 id, S_25d538 *s) __asm__("FUN_L00_0025d538");
+
 void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
     f32 phase_duration_frames, phase_progress;
     s32 r, g, b;
@@ -97,35 +110,42 @@ void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
         phase_duration_frames = convert_integer_to_float(scale_game_frames(animation_state->d0));
         phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
         if (animation_state->r1 != 0)
-            r = truncate_float_to_s32(animation_state->r0 + (animation_state->r1 - animation_state->r0) * phase_progress);
+            r = truncate_float_to_s32(animation_state->r0 +
+                                      (animation_state->r1 - animation_state->r0) * phase_progress);
         else
             r = animation_state->r0;
         if (animation_state->g1 != 0)
-            g = truncate_float_to_s32(animation_state->g0 + (animation_state->g1 - animation_state->g0) * phase_progress);
+            g = truncate_float_to_s32(animation_state->g0 +
+                                      (animation_state->g1 - animation_state->g0) * phase_progress);
         else
             g = animation_state->g0;
         if (animation_state->b1 != 0)
-            b = truncate_float_to_s32(animation_state->b0 + (animation_state->b1 - animation_state->b0) * phase_progress);
+            b = truncate_float_to_s32(animation_state->b0 +
+                                      (animation_state->b1 - animation_state->b0) * phase_progress);
         else
             b = animation_state->b0;
     } else {
         phase_duration_frames = convert_integer_to_float(scale_game_frames(animation_state->d1));
         phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
         if (animation_state->r1 != 0)
-            r = truncate_float_to_s32(animation_state->r1 + (animation_state->r0 - animation_state->r1) * phase_progress);
+            r = truncate_float_to_s32(animation_state->r1 +
+                                      (animation_state->r0 - animation_state->r1) * phase_progress);
         else
             r = animation_state->r0;
         if (animation_state->g1 != 0)
-            g = truncate_float_to_s32(animation_state->g1 + (animation_state->g0 - animation_state->g1) * phase_progress);
+            g = truncate_float_to_s32(animation_state->g1 +
+                                      (animation_state->g0 - animation_state->g1) * phase_progress);
         else
             g = animation_state->g0;
         if (animation_state->b1 != 0)
-            b = truncate_float_to_s32(animation_state->b1 + (animation_state->b0 - animation_state->b1) * phase_progress);
+            b = truncate_float_to_s32(animation_state->b1 +
+                                      (animation_state->b0 - animation_state->b1) * phase_progress);
         else
             b = animation_state->b0;
     }
     set_moby_color(id, r, g, b);
 }
+
 s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) __asm__("FUN_L00_0025d7a0");
 
 s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) {
@@ -145,16 +165,29 @@ s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) {
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025E860), where it is exact; names translated to the US level program. */
-typedef struct { float x, y, z, w; } Pt;
-typedef struct { int n; int pad[3]; Pt pt[1]; } Spline;
+typedef struct {
+    float x, y, z, w;
+} Pt;
+
+typedef struct {
+    int n;
+    int pad[3];
+    Pt  pt[1];
+} Spline;
 
 // Moves DIST along a spline from segment *IDX at offset *T, updates both, and writes the point reached to OUT; 1 when an end was passed.
-int FUN_L00_0025d808(Spline *path, float *out, int *segment_index, float *segment_offset, int loop, float remaining_traversal_amount) {
+int FUN_L00_0025d808(Spline *path,
+                     float  *out,
+                     int    *segment_index,
+                     float  *segment_offset,
+                     int     loop,
+
+                     float remaining_traversal_amount) {
     float segment_delta[4];
-    int crossed_path_boundary = 0;
-    int traversal_direction = 1;
-    int i;
-    int j;
+    int   crossed_path_boundary = 0;
+    int   traversal_direction = 1;
+    int   i;
+    int   j;
 
     if (remaining_traversal_amount < 0.0f) {
         remaining_traversal_amount = -remaining_traversal_amount;
@@ -184,7 +217,8 @@ int FUN_L00_0025d808(Spline *path, float *out, int *segment_index, float *segmen
                 remaining_traversal_amount -= *segment_offset;
                 *segment_offset = path->pt[i].w;
             }
-            if ((traversal_direction == 1 && *segment_index == path->n - 1) || (traversal_direction == -1 && *segment_index == 0)) {
+            if ((traversal_direction == 1 && *segment_index == path->n - 1) ||
+                (traversal_direction == -1 && *segment_index == 0)) {
                 crossed_path_boundary = 1;
             }
             *segment_index = i;
@@ -218,11 +252,16 @@ int FUN_L00_0025d808(Spline *path, float *out, int *segment_index, float *segmen
 }
 
 typedef unsigned int u128_0025da70 __attribute__((mode(TI), aligned(16)));
+
 typedef struct {
     float x, y, z, w_0025da70;
 } __attribute__((aligned(16))) Vec4_0025da70;
-void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, float z_difference_threshold) {
-    Vec4_0025da70 point_copies[2];
+
+void FUN_L00_0025da70(u128_0025da70 *first_point,
+                      u128_0025da70 *second_point,
+
+                      float z_difference_threshold) {
+    Vec4_0025da70  point_copies[2];
     Vec4_0025da70 *pa = &point_copies[0];
     Vec4_0025da70 *pb = &point_copies[1];
     *(u128_0025da70 *)pa = *first_point;
@@ -233,17 +272,26 @@ void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, f
         fast_vec_dist(pa, pb);
     }
 }
+
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-float project_level_path_point_onto_segment(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *segment_end) __asm__("FUN_L00_0025db00");
 
-float project_level_path_point_onto_segment(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *segment_end) {
-    float segment_delta[4];
-    float planar_normal[4];
+float project_level_path_point_onto_segment(float   *out,
+                                            float   *query_point,
+                                            OvlQuad *segment_start,
+                                            OvlQuad *segment_end) __asm__("FUN_L00_0025db00");
+
+float project_level_path_point_onto_segment(float   *out,
+                                            float   *query_point,
+                                            OvlQuad *segment_start,
+
+                                            OvlQuad *segment_end) {
+    float   segment_delta[4];
+    float   planar_normal[4];
     OvlQuad planar_endpoint_copy[1];
-    float k;
-    int i;
-    float *projected_point_components, *pa, *pb;
+    float   k;
+    int     i;
+    float  *projected_point_components, *pa, *pb;
 
     fast_vec_sub(segment_delta, segment_start, segment_end);
     planar_normal[0] = -segment_delta[1];
@@ -252,7 +300,8 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
     qcopy(planar_endpoint_copy, segment_start);
     *(int *)&((float *)planar_endpoint_copy)[2] = 0;
     set_vector_length_xy(planar_normal, planar_normal, 1.0f);
-    k = -fast_vec_dot(planar_normal, planar_endpoint_copy) + (planar_normal[0] * query_point[0] + planar_normal[1] * query_point[1]);
+    k = -fast_vec_dot(planar_normal, planar_endpoint_copy) +
+        (planar_normal[0] * query_point[0] + planar_normal[1] * query_point[1]);
     out[0] = query_point[0] - k * planar_normal[0];
     out[1] = query_point[1] - k * planar_normal[1];
     *(int *)&out[2] = 0;
@@ -260,7 +309,8 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
     pa = (float *)segment_start;
     pb = (float *)segment_end;
     for (i = 0; i < 2; i++) {
-        if ((projected_point_components[i] > pa[i] && projected_point_components[i] > pb[i]) || (projected_point_components[i] < pa[i] && projected_point_components[i] < pb[i]))
+        if ((projected_point_components[i] > pa[i] && projected_point_components[i] > pb[i]) ||
+            (projected_point_components[i] < pa[i] && projected_point_components[i] < pb[i]))
             break;
     }
     if (i < 2) {
@@ -274,19 +324,27 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
     }
     return vector_distance_xy(query_point, out);
 }
-extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
-extern float FUN_L00_0025da70_c(void *, void *, float) __asm__("FUN_L00_0025da70");
-float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
 
-float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
-float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) {
+extern void  interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
+extern float FUN_L00_0025da70_c(void *, void *, float) __asm__("FUN_L00_0025da70");
+float        resolve_level_path_segment_point(OvlQuad *out,
+                                              OvlQuad *query_point,
+                                              OvlQuad *segment_start,
+                                              OvlQuad *b,
+                                              float    r) __asm__("FUN_L00_0025dcd8");
+
+float resolve_level_path_segment_point(
+    OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
+float resolve_level_path_segment_point(
+
+    OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) {
     OvlQuad segment_workspace[2];
     OvlQuad direction_copy[1];
     OvlQuad query_point_copy[1];
     OvlQuad g[1];
-    float *output_component, *fa, *fb;
-    float planar_distance, negative_query_direction_dot, segment_length_or_start_direction_dot;
-    int i;
+    float  *output_component, *fa, *fb;
+    float   planar_distance, negative_query_direction_dot, segment_length_or_start_direction_dot;
+    int     i;
     if (r > 0.0f && absolute_float(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
         absolute_float(((float *)query_point)[2] - ((float *)b)[2]) < r) {
         planar_distance = project_level_path_point_onto_segment(out, query_point, segment_start, b);
@@ -294,7 +352,10 @@ float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQu
         segment_length_or_start_direction_dot = vector_distance_xy(segment_start, b);
         segment_workspace[0] = *segment_start;
         segment_workspace[1] = *b;
-        interpolate_vector(out, &segment_workspace[0], &segment_workspace[1], r / segment_length_or_start_direction_dot);
+        interpolate_vector(out,
+                           &segment_workspace[0],
+                           &segment_workspace[1],
+                           r / segment_length_or_start_direction_dot);
         return planar_distance;
     }
     fast_vec_sub(segment_workspace, b, segment_start);
@@ -303,7 +364,10 @@ float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQu
     qcopy(direction_copy, segment_workspace);
     negative_query_direction_dot = -fast_vec_dot(query_point, segment_workspace);
     segment_length_or_start_direction_dot = fast_vec_dot(&segment_workspace[1], direction_copy);
-    fast_vec_scale(out, segment_workspace, -(negative_query_direction_dot + segment_length_or_start_direction_dot) / fast_vec_dot(segment_workspace, direction_copy));
+    fast_vec_scale(out,
+                   segment_workspace,
+                   -(negative_query_direction_dot + segment_length_or_start_direction_dot) /
+                       fast_vec_dot(segment_workspace, direction_copy));
     fast_vec_add(out, out, &segment_workspace[1]);
     i = 0;
     fb = (float *)b;
@@ -330,25 +394,38 @@ float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQu
     g[0] = *out;
     return FUN_L00_0025da70_c(query_point_copy, g, 0.0f);
 }
-extern f32 path_distance_25df68(void *, void *, f32) __asm__("FUN_L00_0025da70");
-extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, f32, s32)
-    __asm__("FUN_L00_0025d808");
 
-s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
-                       s32 *segment, f32 *fraction, s32 wrap,
-                       f32 limit, f32 step, f32 height_tolerance);
-s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
-                       s32 *segment, f32 *fraction, s32 wrap,
-                       f32 limit, f32 step, f32 height_tolerance) {
+extern f32 path_distance_25df68(void *, void *, f32) __asm__("FUN_L00_0025da70");
+extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
+
+s32 FUN_L00_0025df68(s32     *path,
+                     OvlQuad *point,
+                     OvlQuad *nearest,
+                     s32     *segment,
+                     f32     *fraction,
+                     s32      wrap,
+                     f32      limit,
+                     f32      step,
+                     f32      height_tolerance);
+s32 FUN_L00_0025df68(s32     *path,
+                     OvlQuad *point,
+                     OvlQuad *nearest,
+                     s32     *segment,
+                     f32     *fraction,
+                     s32      wrap,
+                     f32      limit,
+                     f32      step,
+
+                     f32 height_tolerance) {
     OvlQuad work[4];
-    s32 current = 0;
-    s32 best_segment;
-    s32 start, end, previous, count;
-    s32 crossed;
-    f32 current_fraction = 0.0f;
-    f32 best_fraction;
-    f32 distance, previous_distance, next_distance;
-    f32 expanded_limit;
+    s32     current = 0;
+    s32     best_segment;
+    s32     start, end, previous, count;
+    s32     crossed;
+    f32     current_fraction = 0.0f;
+    f32     best_fraction;
+    f32     distance, previous_distance, next_distance;
+    f32     expanded_limit;
 
     qcopy(&work[0], path + 4);
     work[1] = *point;
@@ -362,8 +439,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
 
     expanded_limit = step + limit;
     do {
-        crossed = sample_path(path, &work[0], &current,
-                                   &current_fraction, step, wrap);
+        crossed = sample_path(path, &work[0], &current, &current_fraction, step, wrap);
         work[1] = *point;
         next_distance = path_distance_25df68(&work[0], &work[1], height_tolerance);
         if (next_distance < distance) {
@@ -403,9 +479,11 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
         count = *path;
         previous = count - 1;
         previous = (best_segment + previous) % count;
-        distance = resolve_level_path_segment_point(nearest, point,
-            (OvlQuad *)(path + 4 + previous * 4),
-            (OvlQuad *)(path + 4 + best_segment * 4), height_tolerance);
+        distance = resolve_level_path_segment_point(nearest,
+                                                    point,
+                                                    (OvlQuad *)(path + 4 + previous * 4),
+                                                    (OvlQuad *)(path + 4 + best_segment * 4),
+                                                    height_tolerance);
         *segment = previous;
         /* Retail reads the segment vertex before the projected point. */
         work[1] = *(volatile OvlQuad *)(path + 4 + previous * 4);
@@ -415,7 +493,9 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     }
     count = *path;
     if (best_segment < count - 1 || wrap) {
-        next_distance = resolve_level_path_segment_point(&work[1], point,
+        next_distance = resolve_level_path_segment_point(
+            &work[1],
+            point,
             (OvlQuad *)(path + 4 + best_segment * 4),
             (OvlQuad *)(path + 4 + ((best_segment + 1) % count) * 4),
             height_tolerance);
@@ -429,9 +509,11 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     }
     return 1;
 }
+
 extern f32 split_float_fraction(void *, f32) __asm__("FUN_L00_00200228");
 /* Wraps angle a into -pi..pi. */
 f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
+
 f32 normalize_angle(f32 angle_radians) {
     f32 out;
     f32 x;
@@ -449,7 +531,8 @@ f32 normalize_angle(f32 angle_radians) {
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
 /* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
-int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(struct Moby *moby) __asm__("FUN_L00_0025e368");
+int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(struct Moby *moby) __asm__(
+    "FUN_L00_0025e368");
 
 int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(struct Moby *moby) {
     int predicate_result;
@@ -462,57 +545,119 @@ int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(struct 
     }
     return predicate_result;
 }
+
 /* True for a moby of one of eight listed classes. */
 s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(void *moby) __asm__("FUN_L00_0025e3f8");
 
 s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(void *moby) {
     s16 moby_class_id = *(s16 *)((char *)moby + 0xA6);
-    if (moby_class_id == 0xE2 || moby_class_id == 0xCC || moby_class_id == 0xDE || moby_class_id == 0x3EE || moby_class_id == 0xD6 || moby_class_id == 0xE1 || moby_class_id == 0xD5 ||
-        moby_class_id == 0xDF) {
+    if (moby_class_id == 0xE2 || moby_class_id == 0xCC || moby_class_id == 0xDE ||
+        moby_class_id == 0x3EE || moby_class_id == 0xD6 || moby_class_id == 0xE1 ||
+        moby_class_id == 0xD5 || moby_class_id == 0xDF) {
         return 1;
     }
     return 0;
 }
 
 typedef int u128_25e450 __attribute__((mode(TI)));
-typedef struct { float f[4]; } Q_25e450;
-typedef struct { char p0[0x18]; unsigned char b18; unsigned char b19; unsigned short h1A; char p1C[0x14]; } Ev;
-typedef struct { int v[6]; } S6;
-typedef struct { char pad[0x160]; float f160; int f164; int f168; } Cam;
-typedef struct { float f[11]; } Fl;
+
+typedef struct {
+    float f[4];
+} Q_25e450;
+
+typedef struct {
+    char           p0[0x18];
+    unsigned char  b18;
+    unsigned char  b19;
+    unsigned short h1A;
+    char           p1C[0x14];
+} Ev;
+
+typedef struct {
+    int v[6];
+} S6;
+
+typedef struct {
+    char  pad[0x160];
+    float f160;
+    int   f164;
+    int   f168;
+} Cam;
+
+typedef struct {
+    float f[11];
+} Fl;
+
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
+
 #include "rnc/overlay/level_camera.h"
-extern S6 burst_first_color_palette __asm__("D_L00_001E9030");
-extern S6 burst_second_color_palette __asm__("D_L00_001E9048");
+
+extern S6       burst_first_color_palette __asm__("D_L00_001E9030");
+extern S6       burst_second_color_palette __asm__("D_L00_001E9048");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
-extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
+extern void     initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
+extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
+    void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
 extern void *spawn_debris(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
-extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
-extern void func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
-extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
+extern void  spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__(
+    "FUN_L00_0026a9f0");
+extern void
+func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
+extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__(
+    "FUN_L00_002ac910");
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
-extern char default_explosion_flash_descriptor[] __asm__("D_L00_001B0250");
-extern char alternate_explosion_flash_descriptor[] __asm__("D_L00_001B02A0");
-extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern char  default_explosion_flash_descriptor[] __asm__("D_L00_001B0250");
+extern char  alternate_explosion_flash_descriptor[] __asm__("D_L00_001B02A0");
+extern f32   frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_L00_0015F5D4_macro __asm__("D_L00_0015F5D4") MACRO_ADDR;
 extern float D_L00_0015F5D0_macro __asm__("D_L00_0015F5D0") MACRO_ADDR;
 /* Beam explosion at moby m: a spark burst from a spawn event, optional glow sparks and a flash, with a cam tint. */
-void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9,
-                       float fC, float fD, float fE, float fF, int k10, float fG, int k11,
-                       int s16, int s18, unsigned char flag) __asm__("FUN_L00_0025e450");
-void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, float fA, float fB, int burst_particle_count, int k8, int k9,
-                       float fC, float fD, float fE, float fF, int k10, float fG, int k11,
-                       int spray_count, int effect_reduction_level, unsigned char flag) {
+void spawn_explosion(char         *m,
+                     void         *unused,
+                     char         *pos,
+                     float         fA,
+                     float         fB,
+                     int           n,
+                     int           k8,
+                     int           k9,
+                     float         fC,
+                     float         fD,
+                     float         fE,
+                     float         fF,
+                     int           k10,
+                     float         fG,
+                     int           k11,
+                     int           s16,
+                     int           s18,
+                     unsigned char flag) __asm__("FUN_L00_0025e450");
+void spawn_explosion(char *owner_moby,
+                     void *unused,
+                     char *explosion_position,
+                     float fA,
+                     float fB,
+                     int   burst_particle_count,
+                     int   k8,
+                     int   k9,
+                     float fC,
+                     float fD,
+                     float fE,
+                     float fF,
+                     int   k10,
+                     float fG,
+                     int   k11,
+                     int   spray_count,
+                     int   effect_reduction_level,
+
+                     unsigned char flag) {
     Q_25e450 vb;
     Q_25e450 effect_vector_work;
-    float dist;
-    float effect_reduction_metric;
-    float proximity_speed_reduction;
-    int distance_limited_particle_pair_count;
-    int i;
+    float    dist;
+    float    effect_reduction_metric;
+    float    proximity_speed_reduction;
+    int      distance_limited_particle_pair_count;
+    int      i;
 
     *(u128_25e450 *)&effect_vector_work = 0;
     effect_vector_work.f[2] = frame_time_macro * 8.0f * fF;
@@ -520,70 +665,97 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     *(u128_25e450 *)&vb = *(u128_25e450 *)&effect_vector_work;
     if (effect_reduction_level == -1) {
         effect_reduction_level = 0;
-        if (1.7f < effect_reduction_metric) effect_reduction_level = 1;
+        if (1.7f < effect_reduction_metric)
+            effect_reduction_level = 1;
     }
     if (explosion_position == 0) {
-        if (owner_moby == 0) return;
+        if (owner_moby == 0)
+            return;
         explosion_position = owner_moby + 0x10;
     }
     {
-    if (fA > 0.0f) {
-        Ev ev;
-        initialize_hit_descriptor(&ev, owner_moby, 0x810001, fB);
-        ev.b18 = 2;
-        ev.b19 = 1;
-        ev.h1A = ((unsigned short)MOBY(owner_moby)->oclass);
-        collect_mobies_in_sphere(fA, explosion_position, 0x10, owner_moby, &ev);
-    }
+        if (fA > 0.0f) {
+            Ev ev;
+            initialize_hit_descriptor(&ev, owner_moby, 0x810001, fB);
+            ev.b18 = 2;
+            ev.b19 = 1;
+            ev.h1A = ((unsigned short)MOBY(owner_moby)->oclass);
+            collect_mobies_in_sphere(fA, explosion_position, 0x10, owner_moby, &ev);
+        }
     }
     for (i = 0; i < burst_particle_count; i++) {
         {
-        Q_25e450 burst_particle_vector;
-        float a;
-        float b;
-        a = random_float_between(0.2617994f, 1.3962634f);
-        b = random_angle_radians();
-        build_spherical_offset(&burst_particle_vector, fF * (random_float_between(7.0f, 10.5f) * frame_time_macro), b, a);
-        burst_particle_vector.f[2] += frame_time_macro * 3.0f;
-        dist = fF * 40000.0f;
-        spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(explosion_position, &burst_particle_vector, swap_packed_color_channels(0x4F007FFF, flag), swap_packed_color_channels(0x1F00007F, flag),
-            random_int_between(scale_game_frames(0x3C), scale_game_frames(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
+            Q_25e450 burst_particle_vector;
+            float    a;
+            float    b;
+            a = random_float_between(0.2617994f, 1.3962634f);
+            b = random_angle_radians();
+            build_spherical_offset(&burst_particle_vector,
+                                   fF * (random_float_between(7.0f, 10.5f) * frame_time_macro),
+                                   b,
+                                   a);
+            burst_particle_vector.f[2] += frame_time_macro * 3.0f;
+            dist = fF * 40000.0f;
+            spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
+                explosion_position,
+                &burst_particle_vector,
+                swap_packed_color_channels(0x4F007FFF, flag),
+                swap_packed_color_channels(0x1F00007F, flag),
+                random_int_between(scale_game_frames(0x3C), scale_game_frames(0x78)) -
+                    effect_reduction_level * 10,
+                1,
+                -1,
+                -1,
+                dist);
         }
     }
     fast_vec_sub(&effect_vector_work, g_debug_camera, explosion_position);
     dist = fast_vec_length(&effect_vector_work);
     {
-    if (spray_count != 0) {
-        Q_25e450 nearby_spray_vector;
-        Q_25e450 rnd;
-        int i;
-        *(u128_25e450 *)&rnd = 0;
-        rnd.f[0] = random_float_between(-1.0f, 1.0f);
-        rnd.f[1] = random_float_between(-1.0f, 1.0f);
-        rnd.f[2] = random_float_between(-1.0f, 1.0f);
-        *(u128_25e450 *)&nearby_spray_vector = *(u128_25e450 *)&rnd;
-        if (dist < 14.0f) {
-            effect_vector_work.f[2] += dist * 0.5f;
-            fast_vec_normalize(&nearby_spray_vector, &nearby_spray_vector, dist / 5.0f * frame_time_macro);
-            fast_vec_normalize(&effect_vector_work, &effect_vector_work, (dist + dist) * frame_time_macro);
-            fast_vec_add(&nearby_spray_vector, &nearby_spray_vector, &effect_vector_work);
-            clamp_vector_length(&nearby_spray_vector, &nearby_spray_vector, frame_time_macro * 10.0f);
-            spawn_debris(explosion_position, &nearby_spray_vector, random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)), 0, 0);
+        if (spray_count != 0) {
+            Q_25e450 nearby_spray_vector;
+            Q_25e450 rnd;
+            int      i;
+            *(u128_25e450 *)&rnd = 0;
+            rnd.f[0] = random_float_between(-1.0f, 1.0f);
+            rnd.f[1] = random_float_between(-1.0f, 1.0f);
+            rnd.f[2] = random_float_between(-1.0f, 1.0f);
+            *(u128_25e450 *)&nearby_spray_vector = *(u128_25e450 *)&rnd;
+            if (dist < 14.0f) {
+                effect_vector_work.f[2] += dist * 0.5f;
+                fast_vec_normalize(
+                    &nearby_spray_vector, &nearby_spray_vector, dist / 5.0f * frame_time_macro);
+                fast_vec_normalize(
+                    &effect_vector_work, &effect_vector_work, (dist + dist) * frame_time_macro);
+                fast_vec_add(&nearby_spray_vector, &nearby_spray_vector, &effect_vector_work);
+                clamp_vector_length(
+                    &nearby_spray_vector, &nearby_spray_vector, frame_time_macro * 10.0f);
+                spawn_debris(explosion_position,
+                             &nearby_spray_vector,
+                             random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)),
+                             0,
+                             0);
+            }
+            spray_count = spray_count - 1;
+            for (i = 0; i < spray_count; i++) {
+                float a;
+                float b;
+                int   sel;
+                a = random_float_between(0.2617994f, 1.3089969f);
+                b = random_angle_radians();
+                build_spherical_offset(
+                    &rnd, fF * (random_float_between(7.0f, 10.5f) * frame_time_macro), b, a);
+                rnd.f[2] += frame_time_macro + frame_time_macro;
+                sel = 0;
+                if (i % 3 == 0)
+                    sel = 1;
+                spawn_debris(explosion_position,
+                             &rnd,
+                             random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)),
+                             sel,
+                             0);
+            }
         }
-        spray_count = spray_count - 1;
-        for (i = 0; i < spray_count; i++) {
-            float a;
-            float b;
-            int sel;
-            a = random_float_between(0.2617994f, 1.3089969f);
-            b = random_angle_radians();
-            build_spherical_offset(&rnd, fF * (random_float_between(7.0f, 10.5f) * frame_time_macro), b, a);
-            rnd.f[2] += frame_time_macro + frame_time_macro;
-            sel = 0;
-            if (i % 3 == 0) sel = 1;
-            spawn_debris(explosion_position, &rnd, random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)), sel, 0);
-        }
-    }
     }
     if (dist < convert_integer_to_float(k8) * 2.0f) {
         distance_limited_particle_pair_count = truncate_float_to_s32(dist) / 2;
@@ -591,47 +763,73 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         distance_limited_particle_pair_count = k8;
     }
     proximity_speed_reduction = 0.0f;
-    if (dist < 7.0f) proximity_speed_reduction = 7.0f - dist;
+    if (dist < 7.0f)
+        proximity_speed_reduction = 7.0f - dist;
     {
-    int i;
-    for (i = 0; i < distance_limited_particle_pair_count; i++) {
-        S6 c0;
-        S6 c1;
-        float sp;
-        sp = random_float_between(8.0f, 10.0f) * frame_time_macro;
-        c0 = burst_first_color_palette;
-        c1 = burst_second_color_palette;
-        sp = sp - proximity_speed_reduction * frame_time_macro;
-        sp = sp * fF;
-        spawn_particle(explosion_position, &vb, swap_packed_color_channels(c0.v[random_integer_below(6)], flag),
-            swap_packed_color_channels(c1.v[random_integer_below(6)], flag), fF * 400000.0f,
-            random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)) - effect_reduction_level * 3,
-            random_int_between(scale_game_frames(0x1E), scale_game_frames(0x2D)) - effect_reduction_level * 5, 0, 0, sp);
-        spawn_particle(explosion_position, &vb, 0x7FFFFFFF, 0xFFFFFF, fF * 400000.0f,
-            random_int_between(scale_game_frames(5), scale_game_frames(0xA)) - effect_reduction_level * 2,
-            random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)) - effect_reduction_level * 3, 0, 0, sp * 0.5f);
-    }
+        int i;
+        for (i = 0; i < distance_limited_particle_pair_count; i++) {
+            S6    c0;
+            S6    c1;
+            float sp;
+            sp = random_float_between(8.0f, 10.0f) * frame_time_macro;
+            c0 = burst_first_color_palette;
+            c1 = burst_second_color_palette;
+            sp = sp - proximity_speed_reduction * frame_time_macro;
+            sp = sp * fF;
+            spawn_particle(explosion_position,
+                           &vb,
+                           swap_packed_color_channels(c0.v[random_integer_below(6)], flag),
+                           swap_packed_color_channels(c1.v[random_integer_below(6)], flag),
+                           fF * 400000.0f,
+                           random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)) -
+                               effect_reduction_level * 3,
+                           random_int_between(scale_game_frames(0x1E), scale_game_frames(0x2D)) -
+                               effect_reduction_level * 5,
+                           0,
+                           0,
+                           sp);
+            spawn_particle(explosion_position,
+                           &vb,
+                           0x7FFFFFFF,
+                           0xFFFFFF,
+                           fF * 400000.0f,
+                           random_int_between(scale_game_frames(5), scale_game_frames(0xA)) -
+                               effect_reduction_level * 2,
+                           random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)) -
+                               effect_reduction_level * 3,
+                           0,
+                           0,
+                           sp * 0.5f);
+        }
     }
     {
-    int i;
-    for (i = 0; i < k9; i++) {
-        S6 c0 = burst_first_color_palette;
-        S6 c1 = burst_second_color_palette;
-        Q_25e450 randomized_particle_vector;
-        Q_25e450 rnd;
-        int first_packed_color;
-        int second_packed_color;
-        *(u128_25e450 *)&rnd = 0;
-        rnd.f[0] = random_float_between(-1.0f, 1.0f);
-        rnd.f[1] = random_float_between(-1.0f, 1.0f);
-        rnd.f[2] = random_float_between(-1.0f, 1.0f);
-        *(u128_25e450 *)&randomized_particle_vector = *(u128_25e450 *)&rnd;
-        fast_vec_normalize(&randomized_particle_vector, &randomized_particle_vector, fF * (random_float_between(0.0f, 3.0f) * frame_time_macro));
-        first_packed_color = swap_packed_color_channels(c0.v[random_integer_below(6)], flag);
-        second_packed_color = swap_packed_color_channels(c1.v[random_integer_below(6)], flag);
-        func_L00_0026B368_25e450(explosion_position, &randomized_particle_vector, first_packed_color, second_packed_color,
-            random_int_between(scale_game_frames(0x1E), scale_game_frames(0x2D)) - effect_reduction_level * 5, 200000.0f);
-    }
+        int i;
+        for (i = 0; i < k9; i++) {
+            S6       c0 = burst_first_color_palette;
+            S6       c1 = burst_second_color_palette;
+            Q_25e450 randomized_particle_vector;
+            Q_25e450 rnd;
+            int      first_packed_color;
+            int      second_packed_color;
+            *(u128_25e450 *)&rnd = 0;
+            rnd.f[0] = random_float_between(-1.0f, 1.0f);
+            rnd.f[1] = random_float_between(-1.0f, 1.0f);
+            rnd.f[2] = random_float_between(-1.0f, 1.0f);
+            *(u128_25e450 *)&randomized_particle_vector = *(u128_25e450 *)&rnd;
+            fast_vec_normalize(&randomized_particle_vector,
+                               &randomized_particle_vector,
+                               fF * (random_float_between(0.0f, 3.0f) * frame_time_macro));
+            first_packed_color = swap_packed_color_channels(c0.v[random_integer_below(6)], flag);
+            second_packed_color = swap_packed_color_channels(c1.v[random_integer_below(6)], flag);
+            func_L00_0026B368_25e450(
+                explosion_position,
+                &randomized_particle_vector,
+                first_packed_color,
+                second_packed_color,
+                random_int_between(scale_game_frames(0x1E), scale_game_frames(0x2D)) -
+                    effect_reduction_level * 5,
+                200000.0f);
+        }
     }
     if (owner_moby != 0 && fC > 0.0f) {
         int first_glow_red = 150;
@@ -645,24 +843,49 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         }
         u = later_glow_red & 0xFF;
         if (D_L00_0015F5D0_macro < 0.95f && fE < dist) {
-            spawn_glow_particle(owner_moby, explosion_position, &vb, fC, scale_game_frames(0x10), first_glow_red, 0x96, first_glow_blue, 0x20);
-            spawn_glow_particle(owner_moby, explosion_position, &vb, fC, scale_game_frames(0x16), u, 0x7F, 0x50, 0x20);
+            spawn_glow_particle(owner_moby,
+                                explosion_position,
+                                &vb,
+                                fC,
+                                scale_game_frames(0x10),
+                                first_glow_red,
+                                0x96,
+                                first_glow_blue,
+                                0x20);
+            spawn_glow_particle(owner_moby,
+                                explosion_position,
+                                &vb,
+                                fC,
+                                scale_game_frames(0x16),
+                                u,
+                                0x7F,
+                                0x50,
+                                0x20);
         }
-        spawn_glow_particle(owner_moby, explosion_position, &vb, fC, scale_game_frames(0x1E), u, 0x7F, 0, 0x30);
+        spawn_glow_particle(
+            owner_moby, explosion_position, &vb, fC, scale_game_frames(0x1E), u, 0x7F, 0, 0x30);
     }
     if (owner_moby != 0 && fD > 0.0f) {
-        spawn_glow_particle(owner_moby, explosion_position, &vb, fD, scale_game_frames(0x1B), 0xFF, 0xFF, 0xFF, 0x20);
+        spawn_glow_particle(owner_moby,
+                            explosion_position,
+                            &vb,
+                            fD,
+                            scale_game_frames(0x1B),
+                            0xFF,
+                            0xFF,
+                            0xFF,
+                            0x20);
     }
     {
-    if (k11) {
-        Q_25e450 v;
-        *(u128_25e450 *)&v = *(u128_25e450 *)explosion_position;
-        v.f[3] = 2.0f;
-        if (fast_bsphere_check(&v, 10.0f) != -1) {
-            l00_camera.shake_amount = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
-            l00_camera.shake_frames = scale_game_frames(0x19);
+        if (k11) {
+            Q_25e450 v;
+            *(u128_25e450 *)&v = *(u128_25e450 *)explosion_position;
+            v.f[3] = 2.0f;
+            if (fast_bsphere_check(&v, 10.0f) != -1) {
+                l00_camera.shake_amount = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
+                l00_camera.shake_frames = scale_game_frames(0x19);
+            }
         }
-    }
     }
     if (owner_moby != 0 && k10 != -1) {
         allocate_voice_for_target_entry(k10, 0, owner_moby);
@@ -683,7 +906,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
                     ((Fl *)default_explosion_flash_descriptor)->f[8] = 15.0f;
                 }
                 if (flag) {
-                    mine_camera_blast(alternate_explosion_flash_descriptor, explosion_position, 0, 0);
+                    mine_camera_blast(
+                        alternate_explosion_flash_descriptor, explosion_position, 0, 0);
                 } else {
                     mine_camera_blast(default_explosion_flash_descriptor, explosion_position, 0, 0);
                 }
@@ -691,27 +915,30 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         }
     }
 }
-typedef struct { float x, y, z, w; } Vy10 __attribute__((aligned(16)));
-
-extern float explosion_flash_descriptor[] __asm__("D_L00_001B02F0");
-extern int FUN_L00_00257b90(int, int);
-extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
-
 
 typedef struct {
-    u8 pad0[0x160];
-    f32 scale;      /* 0x160 */
-    u8 pad164[4];
-    s32 frames;     /* 0x168 */
-} Shake0025f090;
+    float x, y, z, w;
+} Vy10 __attribute__((aligned(16)));
 
+extern float explosion_flash_descriptor[] __asm__("D_L00_001B02F0");
+extern int   FUN_L00_00257b90(int, int);
+extern void  swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
+
+typedef struct {
+    u8  pad0[0x160];
+    f32 scale; /* 0x160 */
+    u8  pad164[4];
+    s32 frames; /* 0x168 */
+} Shake0025f090;
 
 /* Explosion burst at `pos`: three random-coloured particles, two tinted particles on `owner`, a camera shake when the
    spot is in view, the owner's sound unless it is dying, and a light flash of intensity `flash` (13 if negative). */
-void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) __asm__("FUN_L00_0025f090");
+void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) __asm__(
+    "FUN_L00_0025f090");
+
 void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float flash) {
-    Vy10 particle_velocity;
-    int i;
+    Vy10  particle_velocity;
+    int   i;
     float sp, big;
     clear_u64_value(&particle_velocity);
     for (i = 2; i >= 0; i--) {
@@ -721,13 +948,36 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
         big = scale * 400000.0f;
         first_particle_color_palette = burst_first_color_palette;
         second_particle_color_palette = burst_second_color_palette;
-        spawn_particle(burst_position, &particle_velocity, first_particle_color_palette.v[random_integer_below(6)], second_particle_color_palette.v[random_integer_below(6)],
-            big, FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14)),
-            FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, sp * scale);
+        spawn_particle(burst_position,
+                       &particle_velocity,
+                       first_particle_color_palette.v[random_integer_below(6)],
+                       second_particle_color_palette.v[random_integer_below(6)],
+                       big,
+                       FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14)),
+                       FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)),
+                       0,
+                       0,
+                       sp * scale);
     }
     if (owner != 0) {
-        spawn_glow_particle(owner, burst_position, &particle_velocity, scale * 4.0f, scale_game_frames(0x14), 0x7F, 0x40, 0, 0x30);
-        spawn_glow_particle(owner, burst_position, &particle_velocity, scale * 3.0f, scale_game_frames(0x1D), 0x60, 0x20, 0, 0x20);
+        spawn_glow_particle(owner,
+                            burst_position,
+                            &particle_velocity,
+                            scale * 4.0f,
+                            scale_game_frames(0x14),
+                            0x7F,
+                            0x40,
+                            0,
+                            0x30);
+        spawn_glow_particle(owner,
+                            burst_position,
+                            &particle_velocity,
+                            scale * 3.0f,
+                            scale_game_frames(0x1D),
+                            0x60,
+                            0x20,
+                            0,
+                            0x20);
     }
     {
         Vy10 at;
@@ -758,13 +1008,20 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
 
 /* Spawns an explosion burst at `pos`: three random-coloured particles, two tinted particles when `owner` is set, and
    (when `flash` is nonzero) a light with intensity `flash` (or 13 if negative). */
-void spawn_color_swapped_explosion_burst(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
-void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, float scale, float flash) {
-    Vy10 zero_vec;
-    S6 first_particle_color_palette;
-    S6 second_particle_color_palette;
-    int rgb[3];
-    int i;
+void spawn_color_swapped_explosion_burst(char *owner,
+                                         char *pos,
+                                         float scale,
+                                         float flash) __asm__("FUN_L00_0025f3e8");
+void spawn_color_swapped_explosion_burst(char *owner,
+                                         char *effect_position,
+                                         float scale,
+
+                                         float flash) {
+    Vy10  zero_vec;
+    S6    first_particle_color_palette;
+    S6    second_particle_color_palette;
+    int   rgb[3];
+    int   i;
     float k5, sp, big, first_glow_scale, second_glow_scale;
     clear_u64_value(&zero_vec);
     k5 = 500000.0f;
@@ -773,19 +1030,47 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
         big = scale * k5;
         first_particle_color_palette = burst_first_color_palette;
         second_particle_color_palette = burst_second_color_palette;
-        spawn_particle(effect_position, &zero_vec, swap_packed_color_channels(first_particle_color_palette.v[random_integer_below(6)], 1), swap_packed_color_channels(second_particle_color_palette.v[random_integer_below(6)], 1),
-            big, FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14)),
-            FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, sp * scale);
+        spawn_particle(
+            effect_position,
+            &zero_vec,
+            swap_packed_color_channels(first_particle_color_palette.v[random_integer_below(6)], 1),
+            swap_packed_color_channels(second_particle_color_palette.v[random_integer_below(6)], 1),
+            big,
+            FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14)),
+            FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)),
+            0,
+            0,
+            sp * scale);
     }
     if (owner != 0) {
-        rgb[0] = 0x7F; rgb[1] = 0x40; rgb[2] = 0;
+        rgb[0] = 0x7F;
+        rgb[1] = 0x40;
+        rgb[2] = 0;
         swap_color_channel_words(&rgb[0], &rgb[1], &rgb[2], 1);
         first_glow_scale = scale * 4.0f;
-        spawn_glow_particle(owner, effect_position, &zero_vec, first_glow_scale, scale_game_frames(0x14), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x30);
-        rgb[0] = 0x60; rgb[1] = 0x20; rgb[2] = 0;
+        spawn_glow_particle(owner,
+                            effect_position,
+                            &zero_vec,
+                            first_glow_scale,
+                            scale_game_frames(0x14),
+                            *(unsigned char *)&rgb[0],
+                            *(unsigned char *)&rgb[1],
+                            *(unsigned char *)&rgb[2],
+                            0x30);
+        rgb[0] = 0x60;
+        rgb[1] = 0x20;
+        rgb[2] = 0;
         swap_color_channel_words(&rgb[0], &rgb[1], &rgb[2], 1);
         second_glow_scale = scale * 3.0f;
-        spawn_glow_particle(owner, effect_position, &zero_vec, second_glow_scale, scale_game_frames(0x1D), *(unsigned char *)&rgb[0], *(unsigned char *)&rgb[1], *(unsigned char *)&rgb[2], 0x20);
+        spawn_glow_particle(owner,
+                            effect_position,
+                            &zero_vec,
+                            second_glow_scale,
+                            scale_game_frames(0x1D),
+                            *(unsigned char *)&rgb[0],
+                            *(unsigned char *)&rgb[1],
+                            *(unsigned char *)&rgb[2],
+                            0x20);
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
@@ -805,6 +1090,7 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
 
 /* Clamps vector a to length x: normalizes it to x when vector_length_xyz is longer. */
 void FUN_L00_0025f730(void *a, float x);
+
 void FUN_L00_0025f730(void *vector, float x) {
     if (x < fast_vec_length(vector)) {
         fast_vec_normalize(vector, vector, x);
@@ -830,8 +1116,10 @@ void append_unique_moby_index(int moby_address, short *list, short max) {
         list[list[0]] = k;
     }
 }
+
 /* Removes moby p from the index list a by moving the last entry into its place. */
 void mine_spawn_drops(s32 p, s16 *a) __asm__("FUN_L00_0025f800");
+
 void mine_spawn_drops(s32 moby_address, s16 *moby_index_list) {
     s32 i;
     for (i = 1; i <= moby_index_list[0]; i++) {
@@ -842,15 +1130,18 @@ void mine_spawn_drops(s32 moby_address, s16 *moby_index_list) {
         }
     }
 }
+
 typedef struct {
-    u8 pad[0x18];
+    u8  pad[0x18];
     s32 id;
 } V25f878;
+
 typedef struct {
-    u8 pad[0x78];
+    u8       pad[0x78];
     V25f878 *p78;
-    u8 pad7c[0x100 - 0x7C];
+    u8       pad7c[0x100 - 0x7C];
 } M25f878;
+
 extern s16 D_L00_001B0770[] NOT_SDA;
 /* Finds the moby in the D_L00_001B0770 index list whose data id matches id; 0 when none. */
 M25f878 *find_listed_moby_by_data_id(s32 id) __asm__("FUN_L00_0025f878");
@@ -864,17 +1155,21 @@ M25f878 *find_listed_moby_by_data_id(s32 id) {
     }
     return 0;
 }
+
 /* Adds a random offset in [-r, r] to each of v[0..2]. */
-void add_random_offset_to_vector_xyz(f32 *inout_vector, f32 random_offset_bound) __asm__("FUN_L00_0025f8e0");
+void add_random_offset_to_vector_xyz(f32 *inout_vector,
+                                     f32  random_offset_bound) __asm__("FUN_L00_0025f8e0");
 
 void add_random_offset_to_vector_xyz(f32 *inout_vector, f32 random_offset_bound) {
     inout_vector[0] += random_float_between(-random_offset_bound, random_offset_bound);
     inout_vector[1] += random_float_between(-random_offset_bound, random_offset_bound);
     inout_vector[2] += random_float_between(-random_offset_bound, random_offset_bound);
 }
+
 extern u8 *D_L00_0015FFE0 __attribute__((sda));
 /* True for a moby inside the moby table whose class at 0xA6 is 0x1F4..0x21C. */
 s32 is_moby_in_class_range_500_to_540(u8 *m) __asm__("FUN_L00_0025e3b8");
+
 s32 is_moby_in_class_range_500_to_540(u8 *moby) {
     u32 moby_class_id;
     if (moby == 0) {
@@ -891,58 +1186,186 @@ s32 is_moby_in_class_range_500_to_540(u8 *moby) {
     return (moby_class_id - 0x1F4) < 0x29;
 }
 
-S6 D_L01_0020A090 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L01_0020A0A8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+S6 D_L01_0020A090 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L01_0020A0A8 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L01_0015FFE0 = 0;
-S6 D_L02_001F9930 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L02_001F9948 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L02_001F9930 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L02_001F9948 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L02_0015FFE0 = 0;
-S6 D_L03_001E1CB0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L03_001E1CC8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L03_001E1CB0 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L03_001E1CC8 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L03_0015FFE0 = 0;
-S6 D_L04_001DADD0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L04_001DADE8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L04_001DADD0 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L04_001DADE8 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L04_0015FFE0 = 0;
-S6 D_L05_00217740 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L05_00217758 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L05_00217740 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L05_00217758 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L05_0015FFE0 = 0;
-S6 D_L06_00200430 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L06_00200448 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L06_00200430 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L06_00200448 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L06_0015FFE0 = 0;
-S6 D_L07_002102D0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L07_002102E8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L07_002102D0 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L07_002102E8 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L07_0015FFE0 = 0;
-S6 D_L08_001FAF70 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L08_001FAF88 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L08_001FAF70 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L08_001FAF88 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L08_0015FFE0 = 0;
-S6 D_L09_00207B40 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L09_00207B58 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L09_00207B40 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L09_00207B58 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L09_0015FFE0 = 0;
-S6 D_L10_001DBDB0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L10_001DBDC8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L10_001DBDB0 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L10_001DBDC8 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L10_0015FFE0 = 0;
-S6 D_L11_0021A180 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L11_0021A198 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L11_0021A180 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L11_0021A198 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L11_0015FFE0 = 0;
-S6 D_L12_0020B510 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L12_0020B528 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L12_0020B510 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L12_0020B528 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L12_0015FFE0 = 0;
-S6 D_L13_001F3AA0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L13_001F3AB8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
-S6 D_L14_001FB380 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L14_001FB398 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L13_001F3AA0 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L13_001F3AB8 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
+S6 D_L14_001FB380 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L14_001FB398 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L14_0015FFE0 = 0;
-S6 D_L15_001E1BF0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L15_001E1C08 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L15_001E1BF0 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L15_001E1C08 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L15_0015FFE0 = 0;
-S6 D_L16_001E7300 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L16_001E7318 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L16_001E7300 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L16_001E7318 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L16_0015FFE0 = 0;
-S6 D_L17_001E59F0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L17_001E5A08 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
-S6 D_L18_001F1760 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L18_001F1778 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+S6 D_L17_001E59F0 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L17_001E5A08 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
+S6 D_L18_001F1760 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 D_L18_001F1778 = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};
+
 u8 *D_L18_0015FFE0 = 0;
 
-S6 burst_first_color_palette __asm__("D_L00_001E9030") = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 burst_second_color_palette __asm__("D_L00_001E9048") = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+S6 burst_first_color_palette __asm__("D_L00_001E9030") = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+S6 burst_second_color_palette __asm__("D_L00_001E9048") = {
+    {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
+};

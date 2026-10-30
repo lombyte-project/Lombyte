@@ -18,34 +18,50 @@ struct Sub {
 };
 
 struct Obj {
-    u8 pad_0;
-    u8 b1;
-    u8 b2;
-    u8 b3;
-    s32 w4;
-    u8 b8;
-    u8 b9;
-    s16 hA;
-    f32 fC;
-    u128 q10;
+    u8         pad_0;
+    u8         b1;
+    u8         b2;
+    u8         b3;
+    s32        w4;
+    u8         b8;
+    u8         b9;
+    s16        hA;
+    f32        fC;
+    u128       q10;
     struct Sub sub;
 };
 
-extern u8 *D_001CDF80[];
-extern u8 *default_spark_lookup[] __asm__("D_001CDFDC");
+extern u8         *D_001CDF80[];
+extern u8         *default_spark_lookup[] __asm__("D_001CDFDC");
 extern struct Obj *create_part(s32) __asm__("FUN_00217a30");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void pack_vector_xyz_with_shared_scale(void *, void *) __asm__("func_00214A98");
-extern void load_display_text_resource_entry(void *, void *) __asm__("func_00214BC0");
+extern s32         truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void        pack_vector_xyz_with_shared_scale(void *, void *) __asm__("func_00214A98");
+extern void        load_display_text_resource_entry(void *, void *) __asm__("func_00214BC0");
 
-struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_vector, s32 initial_spark_word, s32 second_spark_word, s32 frame_count, s32 second_frame_count, s32 third_frame_count, s32 lookup_index_and_flags) __asm__("FUN_00218888");
+struct Obj *spawn_spark(u128 *source_quadword,
+                        f32  *first_vector,
+                        f32  *second_vector,
+                        s32   initial_spark_word,
+                        s32   second_spark_word,
+                        s32   frame_count,
+                        s32   second_frame_count,
+                        s32   third_frame_count,
+                        s32   lookup_index_and_flags) __asm__("FUN_00218888");
 
-struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_vector, s32 initial_spark_word, s32 second_spark_word, s32 frame_count, s32 second_frame_count,
-                         s32 third_frame_count, s32 lookup_index_and_flags) {
+struct Obj *spawn_spark(u128 *source_quadword,
+                        f32  *first_vector,
+                        f32  *second_vector,
+                        s32   initial_spark_word,
+                        s32   second_spark_word,
+                        s32   frame_count,
+                        s32   second_frame_count,
+                        s32   third_frame_count,
+
+                        s32 lookup_index_and_flags) {
     struct Obj *spark_part;
     struct Sub *spark_substructure;
-    f32 first_vector_scratch[4];
-    f32 second_vector_scratch[4];
+    f32         first_vector_scratch[4];
+    f32         second_vector_scratch[4];
 
     spark_part = create_part(2);
     if (spark_part != 0) {

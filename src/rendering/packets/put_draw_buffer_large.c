@@ -1,8 +1,9 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
+
 extern void sceGsPutDrawEnv(s32);
-void put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
+void        put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
 
 void put_draw_buffer_large(void) {
     if (render_packet_cursor.bytes != 0) {
@@ -16,5 +17,4 @@ void put_draw_buffer_large(void) {
     }
 }
 
-extern __typeof__(put_draw_buffer_large) func_001FB2D0
-    __attribute__((alias("FUN_001fb2d0")));
+extern __typeof__(put_draw_buffer_large) func_001FB2D0 __attribute__((alias("FUN_001fb2d0")));

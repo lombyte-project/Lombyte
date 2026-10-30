@@ -11,7 +11,6 @@
 /* Spawns an effect moby at the position of moby a. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027ACC8), where it is exact; names translated to the US level program. */
 
-
 extern short moby_offset_effect_size_gp __asm__("D_L08_00160200") __attribute__((sda));
 extern short moby_offset_effect_color_gp __asm__("D_L08_00160204") __attribute__((sda));
 extern short moby_offset_effect_offset_length_gp __asm__("D_L08_00160208") __attribute__((sda));
@@ -19,15 +18,16 @@ extern unsigned char *D_L08_001B291C NOT_SDA;
 unsigned char *spawn_moby_offset_effect(char *source_moby) __asm__("FUN_L08_00279f00");
 
 unsigned char *spawn_moby_offset_effect(char *source_moby) {
-    float position_offset[4];
+    float          position_offset[4];
     unsigned char *effect = create_part(0x27);
-    char *source_position;
-    char *effect_data;
+    char          *source_position;
+    char          *effect_data;
     if (effect != 0) {
         source_position = source_moby + 0x10;
         effect_data = (char *)effect + 0x20;
         fast_vec_sub(position_offset, source_position, D_L08_001675C0);
-        fast_vec_normalize(position_offset, position_offset, *(float *)&moby_offset_effect_offset_length_gp);
+        fast_vec_normalize(
+            position_offset, position_offset, *(float *)&moby_offset_effect_offset_length_gp);
         fast_vec_add(effect + 0x10, source_position, position_offset);
         *(int *)(effect + 4) = *(int *)&moby_offset_effect_color_gp;
         effect[9] = truncate_float_to_s32(4.0f) + 0x40;
@@ -43,21 +43,34 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) {
     return effect;
 }
 
-
-
 #include "qcopy.h"
 
 /* Spawns a coloured effect at pos with the given vector, size and lifetime. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027C218), where it is exact; names translated to the US level program. */
 
-extern s32 rand(void);
+extern s32                    rand(void);
 unsigned char *D_L08_001B292C NOT_SDA = 0;
 
-unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *vec, short ticks, unsigned char r,
-                                unsigned char g, unsigned char b, unsigned char a, float size) __asm__("FUN_L08_0027b450");
+unsigned char *spawn_colored_effect(int           owner,
+                                    void         *spawn_position,
+                                    void         *vec,
+                                    short         ticks,
+                                    unsigned char r,
+                                    unsigned char g,
+                                    unsigned char b,
+                                    unsigned char a,
+                                    float         size) __asm__("FUN_L08_0027b450");
 
-unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *initial_effect_vector, short ticks, unsigned char r,
-                                unsigned char g, unsigned char b, unsigned char a, float size) {
+unsigned char *spawn_colored_effect(int           owner,
+                                    void         *spawn_position,
+                                    void         *initial_effect_vector,
+                                    short         ticks,
+                                    unsigned char r,
+                                    unsigned char g,
+                                    unsigned char b,
+                                    unsigned char a,
+
+                                    float size) {
     unsigned char *effect = create_part(0x2B);
     unsigned char *effect_data;
     if (effect != 0) {
@@ -81,12 +94,21 @@ unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *initi
     }
     return effect;
 }
+
 #include "eetypes.h"
+
 unsigned char *D_L08_001B29B4 NOT_SDA = 0;
 
-void spawn_effect_with_initial_motion(u128 *spawn_position, u128 *initial_motion_vector, int life, float scale) __asm__("FUN_L08_0027fe00");
+void spawn_effect_with_initial_motion(u128 *spawn_position,
+                                      u128 *initial_motion_vector,
+                                      int   life,
+                                      float scale) __asm__("FUN_L08_0027fe00");
 
-void spawn_effect_with_initial_motion(u128 *spawn_position, u128 *initial_motion_vector, int life, float scale) {
+void spawn_effect_with_initial_motion(u128 *spawn_position,
+                                      u128 *initial_motion_vector,
+                                      int   life,
+
+                                      float scale) {
     unsigned char *effect;
     unsigned char *effect_data;
     effect = create_part(0x4D);

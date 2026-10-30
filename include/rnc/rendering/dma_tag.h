@@ -26,9 +26,9 @@ struct GifTag; /* rnc/sdk/libgraph.h */
 union PacketCursor {
     struct DmaTag *tag;
     struct GifTag *gif;
-    s32 *words;
-    u8 *bytes;
-    s32 addr;
+    s32           *words;
+    u8            *bytes;
+    s32            addr;
 };
 
 /* Files whose code reaches the cursor through an absolute address instead of

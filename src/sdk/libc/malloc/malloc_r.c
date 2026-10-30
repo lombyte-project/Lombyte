@@ -11,28 +11,29 @@ extern void __malloc_lock(struct _reent *) __asm__("func_001154C0");
 extern void __malloc_unlock(struct _reent *) __asm__("func_001154C8");
 extern void malloc_extend_top(struct _reent *ptr, u32 nb);
 struct malloc_chunk;
-extern struct malloc_chunk malloc_split_remainder_bin_head __asm__("D_0012F790");
+extern struct malloc_chunk   malloc_split_remainder_bin_head __asm__("D_0012F790");
 typedef struct malloc_chunk *mchunkptr;
 typedef struct malloc_chunk *mbinptr;
+
 void *_malloc_r(struct _reent *reent_context, u32 bytes) {
-    mchunkptr victim;
-    u32 victim_size;
-    s32 bin_index;
-    int new_var;
-    mbinptr bin;
-    mchunkptr remainder;
-    mbinptr new_var2;
-    s64 remainder_size;
-    s32 remainder_index;
-    u8 *new_var3;
+    mchunkptr     victim;
+    u32           victim_size;
+    s32           bin_index;
+    int           new_var;
+    mbinptr       bin;
+    mchunkptr     remainder;
+    mbinptr       new_var2;
+    s64           remainder_size;
+    s32           remainder_index;
+    u8           *new_var3;
     unsigned long block;
-    s32 startidx;
-    mchunkptr fwd;
-    mchunkptr bck;
-    mbinptr bin_cursor;
-    u32 nb = (((long)(bytes + (4 + (16 - 1)))) < ((long)(16 + (16 - 1))))
-                 ? ((16 + (16 - 1)) & (~(16 - 1)))
-                 : ((bytes + (4 + (16 - 1))) & (~(16 - 1)));
+    s32           startidx;
+    mchunkptr     fwd;
+    mchunkptr     bck;
+    mbinptr       bin_cursor;
+    u32           nb = (((long)(bytes + (4 + (16 - 1)))) < ((long)(16 + (16 - 1))))
+                           ? ((16 + (16 - 1)) & (~(16 - 1)))
+                           : ((bytes + (4 + (16 - 1))) & (~(16 - 1)));
     __malloc_lock(reent_context);
     if (nb < (512 - 8)) {
         bin_index = ((unsigned long)nb) >> 3;
@@ -54,18 +55,18 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
         bin_index += 2;
     } else {
         bin_index = ((((unsigned long)nb) >> 9) == 0)
-                  ? (((unsigned long)nb) >> 3)
-                  : ((((((unsigned long)nb) >> 4) >> 5) <= 4)
-                         ? (56 + (((unsigned long)nb) >> 6))
-                         : (((((unsigned long)nb) >> 9) <= 20)
-                                ? (91 + (((unsigned long)nb) >> 9))
-                                : (((((unsigned long)nb) >> 9) <= 84)
-                                       ? (110 + (((unsigned long)nb) >> 12))
-                                       : (((((unsigned long)nb) >> 9) <= 340)
-                                              ? (119 + (((unsigned long)nb) >> 15))
-                                              : (((((unsigned long)nb) >> 9) <= 1364)
-                                                     ? (124 + (((unsigned long)nb) >> 18))
-                                                     : (126))))));
+                        ? (((unsigned long)nb) >> 3)
+                        : ((((((unsigned long)nb) >> 4) >> 5) <= 4)
+                               ? (56 + (((unsigned long)nb) >> 6))
+                               : (((((unsigned long)nb) >> 9) <= 20)
+                                      ? (91 + (((unsigned long)nb) >> 9))
+                                      : (((((unsigned long)nb) >> 9) <= 84)
+                                             ? (110 + (((unsigned long)nb) >> 12))
+                                             : (((((unsigned long)nb) >> 9) <= 340)
+                                                    ? (119 + (((unsigned long)nb) >> 15))
+                                                    : (((((unsigned long)nb) >> 9) <= 1364)
+                                                           ? (124 + (((unsigned long)nb) >> 18))
+                                                           : (126))))));
         bin = (new_var2 = (mbinptr)(((u8 *)(&D_0012F788[(2 * bin_index) + 2])) - (2 * 4)));
         for (victim = bin->bk; victim != bin; victim = victim->bk) {
             victim_size = victim->size & (~(1 | 0x2));
@@ -97,7 +98,8 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
             remainder = (mchunkptr)(((char *)victim) + nb);
             victim->size = nb | 1;
             {
-                (&malloc_split_remainder_bin_head)->fd = ((&malloc_split_remainder_bin_head)->bk = remainder);
+                (&malloc_split_remainder_bin_head)->fd =
+                    ((&malloc_split_remainder_bin_head)->bk = remainder);
                 remainder->fd = (remainder->bk = &malloc_split_remainder_bin_head);
             };
             remainder->size = remainder_size | 1;
@@ -106,7 +108,8 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
             __malloc_unlock(reent_context);
             return (void *)(((char *)victim) + (2 * 4));
         }
-        (&malloc_split_remainder_bin_head)->fd = ((&malloc_split_remainder_bin_head)->bk = &malloc_split_remainder_bin_head);
+        (&malloc_split_remainder_bin_head)->fd =
+            ((&malloc_split_remainder_bin_head)->bk = &malloc_split_remainder_bin_head);
         if (remainder_size >= 0) {
             ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
             (void)0;
@@ -116,7 +119,8 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
         {
             if (victim_size < 512) {
                 remainder_index = ((unsigned long)victim_size) >> 3;
-                new_var3 = ((u8 *)&malloc_split_remainder_bin_head - (2 * 4)) + ((2 * remainder_index) * 4);
+                new_var3 = ((u8 *)&malloc_split_remainder_bin_head - (2 * 4)) +
+                           ((2 * remainder_index) * 4);
                 ((mbinptr)((u8 *)&malloc_split_remainder_bin_head - (2 * 4)))->size |=
                     (u32)(((unsigned long)1) << (remainder_index / 4));
                 bck = (mbinptr)new_var3;
@@ -186,7 +190,8 @@ void *_malloc_r(struct _reent *reent_context, u32 bytes) {
                             bck->fd = fwd;
                         };
                         {
-                            (&malloc_split_remainder_bin_head)->fd = ((&malloc_split_remainder_bin_head)->bk = remainder);
+                            (&malloc_split_remainder_bin_head)->fd =
+                                ((&malloc_split_remainder_bin_head)->bk = remainder);
                             remainder->fd = (remainder->bk = &malloc_split_remainder_bin_head);
                         };
                         remainder->size = remainder_size | 1;

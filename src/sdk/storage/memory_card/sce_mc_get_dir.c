@@ -2,25 +2,27 @@
 #include "sifrpc.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libmc.h"
+
 struct McGetDirRequest {
     s32 unk0;
     s32 unk4;
     s32 unk8;
     s32 unkC;
     s32 unk10;
-    u8 pad_14[0x3FF];
+    u8  pad_14[0x3FF];
     s32 unk413;
 };
 
 extern struct McGetDirRequest D_00159AB0;
-extern s32 PollSema();
-extern s32 SignalSema();
-extern s32 sceSifCallRpc();
-extern s32 sceSifWriteBackDCache();
-extern s32 strncpy(s8 *, s8 *, s32);
+extern s32                    PollSema();
+extern s32                    SignalSema();
+extern s32                    sceSifCallRpc();
+extern s32                    sceSifWriteBackDCache();
+extern s32                    strncpy(s8 *, s8 *, s32);
+
 s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
-    s32 result;
-    s32 ret;
+    s32          result;
+    s32          ret;
     register s32 path_arg = slot;
 
     if (mc_rpc_client.serve == 0) {
@@ -42,7 +44,8 @@ s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
         if (maxent >= 0) {
             sceSifWriteBackDCache(table, maxent << 6);
         }
-        result = sceSifCallRpc(&mc_rpc_client, MC_FUNC_GET_DIR, 1, &D_00159AB0, 0x414, mc_rpc_result, 4, 0, 0);
+        result = sceSifCallRpc(
+            &mc_rpc_client, MC_FUNC_GET_DIR, 1, &D_00159AB0, 0x414, mc_rpc_result, 4, 0, 0);
         if (result == 0) {
             mc_current_func = MC_FUNC_GET_DIR;
         } else {

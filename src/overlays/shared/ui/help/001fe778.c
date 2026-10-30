@@ -17,7 +17,7 @@
 
 typedef struct {
     char pad[0x24];
-    int v;
+    int  v;
     char pad2[0x24];
 } Rec;
 
@@ -69,14 +69,15 @@ int FUN_L15_001fe778(int allow_item_lookup) {
 #define HF(o) (*(f32 *)(D_L15_00174440 + (o)))
 typedef union {
     OvlQuad q;
-    f32 f[4];
+    f32     f[4];
 } V;
+
 extern u8 D_L15_00174440[] NOT_SDA;
 extern u8 D_L15_00174460[] NOT_SDA;
 
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
-f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
-f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
+f32  resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
+f32  compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 
@@ -90,10 +91,11 @@ extern CollisionHit HH __asm__("D_L15_00174440") NOT_SDA;
 #define HF(o) (*(f32 *)(D_L15_00174440 + (o)))
 
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
-void update_hero_ground_contact(void) __asm__("FUN_L15_0020a7a0");
+void               update_hero_ground_contact(void) __asm__("FUN_L15_0020a7a0");
 
 void update_hero_ground_contact(void) {
-    V shared_ray_endpoint, ground_ray_endpoint, ground_displacement_or_angles, surface_probe_endpoint, unused_probe_vector, probe_surface_angles, probe_surface_normal;
+    V shared_ray_endpoint, ground_ray_endpoint, ground_displacement_or_angles,
+        surface_probe_endpoint, unused_probe_vector, probe_surface_angles, probe_surface_normal;
     f32 f;
     s32 collision_sound_class;
     s32 i;
@@ -124,7 +126,8 @@ void update_hero_ground_contact(void) {
     if (hero.state.control_mode == 2) {
         ground_ray_endpoint_offset = hero.capsule_radius * 2.9f;
     }
-    hero_get_collision_ray_endpoints(&ground_ray_endpoint, &shared_ray_endpoint, k, ground_ray_endpoint_offset, -48.0f);
+    hero_get_collision_ray_endpoints(
+        &ground_ray_endpoint, &shared_ray_endpoint, k, ground_ray_endpoint_offset, -48.0f);
     if (collision_line(&ground_ray_endpoint, &shared_ray_endpoint, 2, hero.moby, 0) == 0) {
         goto tail;
     }
@@ -135,7 +138,8 @@ void update_hero_ground_contact(void) {
     hero.ground_sound_class = collision_sound_class;
     hero.ground_type = collision_hit_material();
     if (hero.ground_type == 0) {
-        hero.water_surface_z = resolve_camera_surface_height(D_L15_00174460, &hero.water_surface_normal);
+        hero.water_surface_z =
+            resolve_camera_surface_height(D_L15_00174460, &hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
             hero.in_water_frames = 1;
         }
@@ -182,7 +186,8 @@ void update_hero_ground_contact(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 || hero.state.control_mode == 0x16) {
+            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 ||
+                hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = HH.moby;
             }
@@ -221,7 +226,8 @@ d1:
     hero.unk2C8.i[1] = 0;
     hero.unk2C0.i[0] = 0;
     hero.unk2C0.i[1] = 0;
-    if (hero.state.control_mode == 0xF || hero.state.control_mode == 0x15 || hero.state.control_mode == 6 || hero.state.control_mode == 4 ||
+    if (hero.state.control_mode == 0xF || hero.state.control_mode == 0x15 ||
+        hero.state.control_mode == 6 || hero.state.control_mode == 4 ||
         hero.state.control_mode == 5 || hero.state.control_mode == 3) {
         return;
     }
@@ -229,10 +235,12 @@ d1:
         return;
     }
     compute_rotated_vector_angles(&hero.ground_normal, &ground_displacement_or_angles);
-    if (-0.78539819f < ground_displacement_or_angles.f[1] && ground_displacement_or_angles.f[1] < 0.78539819f) {
+    if (-0.78539819f < ground_displacement_or_angles.f[1] &&
+        ground_displacement_or_angles.f[1] < 0.78539819f) {
         hero.ground_pitch.f = ground_displacement_or_angles.f[1];
     }
-    if (-0.78539819f < ground_displacement_or_angles.f[0] && ground_displacement_or_angles.f[0] < 0.78539819f) {
+    if (-0.78539819f < ground_displacement_or_angles.f[0] &&
+        ground_displacement_or_angles.f[0] < 0.78539819f) {
         hero.unk2E8.f = ground_displacement_or_angles.f[0];
     }
     for (i = 0; i < 2; i++) {
@@ -240,8 +248,10 @@ d1:
         if (i == 1) {
             surface_probe_angle = -surface_probe_angle;
         }
-        transform_hero_polar_offset_to_world(&surface_probe_endpoint, 0.2f, surface_probe_angle, 0.45f);
-        transform_hero_polar_offset_to_world(&unused_probe_vector, 0.2f, surface_probe_angle, -0.45f);
+        transform_hero_polar_offset_to_world(
+            &surface_probe_endpoint, 0.2f, surface_probe_angle, 0.45f);
+        transform_hero_polar_offset_to_world(
+            &unused_probe_vector, 0.2f, surface_probe_angle, -0.45f);
         if (collision_line(&surface_probe_endpoint, &shared_ray_endpoint, 0x22, hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
@@ -250,10 +260,12 @@ d1:
             }
             sceVu0Normalize(&probe_surface_normal, (u8 *)&HH.normal_x);
             compute_rotated_vector_angles(&probe_surface_normal, &probe_surface_angles);
-            if (-0.78539819f < probe_surface_angles.f[1] && probe_surface_angles.f[1] < 0.78539819f) {
+            if (-0.78539819f < probe_surface_angles.f[1] &&
+                probe_surface_angles.f[1] < 0.78539819f) {
                 hero.unk2C8.f[i] = probe_surface_angles.f[1];
             }
-            if (-0.78539819f < probe_surface_angles.f[0] && probe_surface_angles.f[0] < 0.78539819f) {
+            if (-0.78539819f < probe_surface_angles.f[0] &&
+                probe_surface_angles.f[0] < 0.78539819f) {
                 hero.unk2D0.f[i] = probe_surface_angles.f[0];
             }
         } else {

@@ -62,21 +62,21 @@ No supporting OS subroutines are required.
 #define __SNBF                     2
 #define __SERR                     0x40
 #define EOF                        (-1)
-extern s32 _fwalk(RncReent *, s32 (*)(RncFile *));
+extern s32  _fwalk(RncReent *, s32 (*)(RncFile *));
 extern void __sinit(RncReent *);
-#define CHECK_INIT(fp)                                                                             \
-    do {                                                                                           \
-        if ((fp)->_data == 0)                                                                      \
-            (fp)->_data = _REENT;                                                                  \
-        if (!(fp)->_data->__sdidinit)                                                              \
-            __sinit((fp)->_data);                                                                  \
+#define CHECK_INIT(fp)                \
+    do {                              \
+        if ((fp)->_data == 0)         \
+            (fp)->_data = _REENT;     \
+        if (!(fp)->_data->__sdidinit) \
+            __sinit((fp)->_data);     \
     } while (0)
 
 /* Flush a single file, or (if fp is NULL) all files.  */
 
 s32 fflush(RncFile *fp) {
     register unsigned char *p;
-    register int n, t;
+    register int            n, t;
 
     if (fp == NULL)
         return _fwalk(_REENT, fflush);

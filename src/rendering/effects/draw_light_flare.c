@@ -6,16 +6,19 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/collision/ground_probe.h"
+
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
+
 typedef struct {
-    float positions[4][4];          /* 0x00 */
-    int colors[4];                  /* 0x40 */
-    char texture_coordinates[0x20]; /* 0x50 */
-    long gs_state[4];               /* 0x70 */
+    float positions[4][4];           /* 0x00 */
+    int   colors[4];                 /* 0x40 */
+    char  texture_coordinates[0x20]; /* 0x50 */
+    long  gs_state[4];               /* 0x70 */
 } FlareQuad;
-extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
-extern int FUN_001fa820(void *, int *, float);
+
+extern void  draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern void  scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
+extern int   FUN_001fa820(void *, int *, float);
 extern float light_flare_corner_offsets[][4][4] __asm__("D_001D97D0");
 /* Draws a light flare quad at arg0's position (+0x00; the matrix is at
    +0xC0) when FUN_001fa820 finds it on screen, with the alpha it
@@ -25,13 +28,14 @@ extern float light_flare_corner_offsets[][4][4] __asm__("D_001D97D0");
 void draw_light_flare(char *object) __asm__("FUN_0022df40");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
+
 void draw_light_flare(char *object) {
-    float scaled_position[4];
+    float     scaled_position[4];
     FlareQuad quad;
-    float scaled_position_copy[4];
-    int alpha;
-    float depth;
-    int corner_index;
+    float     scaled_position_copy[4];
+    int       alpha;
+    float     depth;
+    int       corner_index;
 
     alpha = 0;
     scale_vector(scaled_position, object, 1.0f / 1024.0f);
@@ -60,8 +64,10 @@ void draw_light_flare(char *object) {
 
         quad.colors[corner_index] = ((alpha >> 1) << 24) | 0x808080;
         vertex_position = quad.positions[corner_index];
-        transform_vector_by_basis(vertex_position, light_flare_corner_offsets[level_render_state.content_variant][corner_index],
-                     object + 0xC0);
+        transform_vector_by_basis(
+            vertex_position,
+            light_flare_corner_offsets[level_render_state.content_variant][corner_index],
+            object + 0xC0);
         fast_vec_add(vertex_position, vertex_position, object + 0x10);
         vertex_position[2] = depth;
     }

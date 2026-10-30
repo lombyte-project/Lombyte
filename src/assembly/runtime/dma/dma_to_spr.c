@@ -2,8 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/runtime/dma/dma_to_spr/WriteDmaChannelRegisters.s",
-            WriteDmaChannelRegisters);
+INCLUDE_ASM("config/us/expected/asm/assembly/runtime/dma/dma_to_spr/WriteDmaChannelRegisters.s", WriteDmaChannelRegisters);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

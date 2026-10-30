@@ -5,7 +5,7 @@
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32 snd_stop_all_streams() __asm__("func_0012EBD0");
 extern s32 snd_stream_safe_check_cd_idle() __asm__("func_0012ED30");
-void music_stop(void) __asm__("FUN_00215ee8");
+void       music_stop(void) __asm__("FUN_00215ee8");
 
 void music_stop(void) {
     s32 requested_track;
@@ -27,7 +27,6 @@ void music_stop(void) {
     }
     snd_stop_all_streams();
     do {
-
     } while (snd_flush_sound_commands() != 0);
     snd_stream_safe_check_cd_idle(1);
     requested_track = music_stream_state.requested_track;

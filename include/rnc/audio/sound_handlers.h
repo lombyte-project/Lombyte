@@ -7,7 +7,7 @@
    section): resolve_lookup_record finds a record's type and stores its
    handler. A -1 id ends the list. */
 struct SoundHandler {
-    s32 id;
+    s32   id;
     void *handler;
 };
 

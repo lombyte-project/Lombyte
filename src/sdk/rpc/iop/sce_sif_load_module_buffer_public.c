@@ -3,10 +3,14 @@
 
 #include "types.h"
 
-extern s32 _sceSifLoadModuleBuffer(s32 module_id, s32 argument_count, const char *arguments,
-                               void *result) __asm__("_sceSifLoadModuleBuffer");
+extern s32 _sceSifLoadModuleBuffer(s32         module_id,
+                                   s32         argument_count,
+                                   const char *arguments,
+                                   void       *result) __asm__("_sceSifLoadModuleBuffer");
 
-s32 sceSifLoadModuleBuffer(s32 iop_address, s32 arguments_length, const char *arguments) __asm__("InvokeIopStatus");
+s32 sceSifLoadModuleBuffer(s32         iop_address,
+                           s32         arguments_length,
+                           const char *arguments) __asm__("InvokeIopStatus");
 
 s32 sceSifLoadModuleBuffer(s32 iop_address, s32 arguments_length, const char *arguments) {
     s32 result;

@@ -1,23 +1,26 @@
 #include "rnc/mobys/moby_class_tables.h"
 #include "types.h"
 #include "rnc/rendering/tex_remap.h"
+
 struct GifEntry {
-    u8 tex[12];
+    u8  tex[12];
     s32 gif;
 };
+
 struct MobyClass {
-    u8 pad0[0x20];
+    u8               pad0[0x20];
     struct GifEntry *gifs;
 };
-extern s32 moby_class_rectify[] __asm__("D_001B6500");
+
+extern s32             moby_class_rectify[] __asm__("D_001B6500");
 extern struct TexRemap moby_gs_loc_stash[] __asm__("D_001B5D80");
-void patch_moby_gifs(void) __asm__("FUN_0020cef8");
+void                   patch_moby_gifs(void) __asm__("FUN_0020cef8");
 
 void patch_moby_gifs(void) {
-    s32 *id;
+    s32             *id;
     struct GifEntry *gif_entry;
-    u8 *tex;
-    u32 *gif;
+    u8              *tex;
+    u32             *gif;
     struct TexRemap *texture_remap;
 
     for (id = moby_class_rectify; *id >= 0; id++) {

@@ -5,15 +5,20 @@
 #include "types.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
+
 extern int *gif_page_marker __asm__("D_0015F450") MACRO_ADDR;
+
 typedef struct {
     long unk0;
     long unk8;
 } PageSlot;
+
 extern char D_0019A3E8[];
+
 static inline char *PagingArena(void) {
     return D_0019A3E8;
 }
+
 /* SetupGifPaging(int): marks the render_packet_cursor.words packet in D_0015F450 and
    reserves 0x10 bytes, copies D_0015EE78 to D_0015EE74, clears
    pending_texture_upload_count and the first dword of the D_0015F45C paging slots, then,
@@ -29,10 +34,11 @@ static inline char *PagingArena(void) {
 void setup_gif_paging(int skip_paging_entry_reset) __asm__("FUN_001f4280");
 
 extern PageSlot effect_texture_definitions[] __asm__("D_0018D440");
-extern s32 gs_texture_allocation_base_macro __asm__("D_0015EE8C") MACRO_ADDR;
+extern s32      gs_texture_allocation_base_macro __asm__("D_0015EE8C") MACRO_ADDR;
+
 void setup_gif_paging(int skip_paging_entry_reset) {
     int *packet_cursor = render_packet_cursor.words;
-    int i;
+    int  i;
 
     gif_page_marker = packet_cursor;
     packet_cursor += 4;
@@ -56,7 +62,7 @@ void setup_gif_paging(int skip_paging_entry_reset) {
         }
         {
             char *paging_arena = D_0019A3E8;
-            int j;
+            int   j;
 
             for (j = 0; j < *(int *)(*(char **)(paging_arena + 0x18) + 0x24); j++) {
                 *(short *)(*(char **)(paging_arena + 0x28) + j * 8 + 4) = 0;

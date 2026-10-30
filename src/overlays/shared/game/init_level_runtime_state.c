@@ -13,13 +13,13 @@
 #include "rnc/runtime/memory/init_mem_slots.h"
 #include "rnc/rendering/vu1/dmac_vif1_enable.h"
 
-extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
+extern u8   D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
 extern char D_L00_001C5B00_lui[] __asm__("D_L00_001C5B00") NOT_SDA;
 extern char D_L00_001BC1B0_lui[] __asm__("D_L00_001BC1B0") NOT_SDA;
-void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
-void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
-void register_part_types(void) __asm__("FUN_L00_00268900");
-void init_level_item_inventory(void) __asm__("FUN_L00_0023d198");
+void        calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
+void        fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
+void        register_part_types(void) __asm__("FUN_L00_00268900");
+void        init_level_item_inventory(void) __asm__("FUN_L00_0023d198");
 extern char D_L00_0019A980[] NOT_SDA;
 extern char D_L00_0019A280[] NOT_SDA;
 extern char D_L00_001C7700[] NOT_SDA;
@@ -27,7 +27,7 @@ extern char D_L00_001C6F00[] NOT_SDA;
 extern char D_L00_001BD3B0[] NOT_SDA;
 extern char D_L00_001BCDB0[] NOT_SDA;
 extern char D_L00_00173EC0[] NOT_SDA;
-void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
+void        init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
 
 void init_level_runtime_state(void) {
     int texture_allocation_base;
@@ -58,13 +58,15 @@ void init_level_runtime_state(void) {
     }
     D_0015EE24 += 0xB4;
 }
+
 extern int D_L00_001C3E98[];
-extern u8 D_0015EDD0[] __attribute__((sda));
+extern u8  D_0015EDD0[] __attribute__((sda));
 extern int D_00141660_23d028[] __asm__("D_00141660");
-void append_level_item_if_absent(int i) __asm__("FUN_L00_0023d3d8");
+void       append_level_item_if_absent(int i) __asm__("FUN_L00_0023d3d8");
+
 void init_level_item_inventory(void) {
-    int j;
-    int item;
+    int           j;
+    int           item;
     unsigned char entry;
     if (current_level_index >= 19) {
         int i;
@@ -128,6 +130,7 @@ void init_level_item_inventory(void) {
         append_level_item_if_absent(current_level_index);
     }
 }
+
 /* Appends D_L00_001C3E98[i] to the 0xFF-terminated D_0015EDD0 list unless already present. */
 void append_level_item_if_absent(int i) {
     int item_id = D_L00_001C3E98[i];

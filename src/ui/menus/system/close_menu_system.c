@@ -4,11 +4,12 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/mobys/delete_moby.h"
+
 void close_menu_system(void) __asm__("FUN_002191b8");
 
 void close_menu_system(void) {
-    s32 i;
-    s32 j;
+    s32                i;
+    s32                j;
     struct MenuScreen *screen;
 
     if (menu_system.update_count < 10) {

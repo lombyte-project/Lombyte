@@ -46,18 +46,21 @@ typedef union {
 } FLOUnion;
 
 extern FpNumber D_001596F0;
+
 static __inline__ int IsNaN(FpNumber *x) {
     return (u32)x->class < 2;
 }
+
 static __inline__ int IsInf(FpNumber *x) {
     return (x->class ^ 4) == 0;
 }
+
 static __inline__ int IsZero(FpNumber *x) {
     return (x->class ^ 2) == 0;
 }
 
 void __unpack_d(FLOUnion *src, FpNumber *dst);
-u64 __pack_d(FpNumber *src);
+u64  __pack_d(FpNumber *src);
 
 static __inline__ FpNumber *divide_parts(FpNumber *a, FpNumber *b) {
     u64 bit;
@@ -116,8 +119,8 @@ static __inline__ FpNumber *divide_parts(FpNumber *a, FpNumber *b) {
 }
 
 u64 dpdiv(u64 arg_a, u64 arg_b) {
-    FpNumber a;
-    FpNumber b;
+    FpNumber  a;
+    FpNumber  b;
     FpNumber *res;
 
     __unpack_d((FLOUnion *)&arg_a, &a);

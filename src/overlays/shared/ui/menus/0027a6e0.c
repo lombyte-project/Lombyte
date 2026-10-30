@@ -7,8 +7,8 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 
 extern unsigned char D_0013D4C2 NOT_SDA;
-extern char D_L00_001B47D0[];
-extern char menu_items_when_flag_clear[] __asm__("D_L00_001B4808");
+extern char                     D_L00_001B47D0[];
+extern char                     menu_items_when_flag_clear[] __asm__("D_L00_001B4808");
 
 /* Points the menu at one of two item tables, picked by a game flag. */
 int FUN_L00_0027a6e0(char *menu) {
@@ -18,10 +18,10 @@ int FUN_L00_0027a6e0(char *menu) {
 
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00284410), where it is exact; names translated to the US level program. */
 
-extern char D_0013D4C0[];
-extern char D_0013D388[];
-extern short unlock_code_input_count __asm__("D_L00_001603F8") __attribute__((sda));
-extern short unlock_code_input_sequence[] __asm__("D_L00_001BA4A8");
+extern char          D_0013D4C0[];
+extern char          D_0013D388[];
+extern short         unlock_code_input_count __asm__("D_L00_001603F8") __attribute__((sda));
+extern short         unlock_code_input_sequence[] __asm__("D_L00_001BA4A8");
 extern unsigned char D_0013A4E0[];
 extern unsigned char D_0013C940[];
 extern unsigned char l00_unlock_code_comparison_table[] __asm__("D_L00_001B9BA0");
@@ -30,23 +30,31 @@ void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
 
 void process_unlock_code_input(void) {
     char *pad = (char *)((char *)&D_0013C940);
-    int staged_candidate_index_limit, candidate_index_limit;
-    int va, vb, vc;
-    int pressed, direction, count, j, code, index, matched;
+    int   staged_candidate_index_limit, candidate_index_limit;
+    int   va, vb, vc;
+    int   pressed, direction, count, j, code, index, matched;
     if ((*(long *)(pad + 0x1C0) & 0xF) == 6) {
         pressed = *(int *)(pad + 0x1C4);
-        if (!(pressed & 0xF0A0)) return;
+        if (!(pressed & 0xF0A0))
+            return;
 
-        if (*(int *)&unlock_code_input_count >= 20) return;
-        if (pressed & 0x1000) direction = 0;
-        else if (pressed & 0x4000) direction = 1;
-        else if (pressed & 0x8000) direction = 2;
-        else if (pressed & 0x2000) direction = 3;
-        else direction = (pressed & 0x80) ? 4 : 5;
+        if (*(int *)&unlock_code_input_count >= 20)
+            return;
+        if (pressed & 0x1000)
+            direction = 0;
+        else if (pressed & 0x4000)
+            direction = 1;
+        else if (pressed & 0x8000)
+            direction = 2;
+        else if (pressed & 0x2000)
+            direction = 3;
+        else
+            direction = (pressed & 0x80) ? 4 : 5;
         count = *(int *)&unlock_code_input_count;
         unlock_code_input_sequence[count++] = direction;
         *(int *)&unlock_code_input_count = count;
-        if (count != 20) return;
+        if (count != 20)
+            return;
         code = -1;
         index = 2;
         /* Fakematch: the bound read back through memory stays a register compare */
@@ -55,7 +63,8 @@ void process_unlock_code_input(void) {
         for (; index < candidate_index_limit; index++) {
             matched = 1;
             for (j = 0; j < 20; j++) {
-                if (unlock_code_input_sequence[j] != l00_unlock_code_comparison_table[(j * index + index) & 0xff]) {
+                if (unlock_code_input_sequence[j] !=
+                    l00_unlock_code_comparison_table[(j * index + index) & 0xff]) {
                     matched = 0;
                     break;
                 }
@@ -65,7 +74,8 @@ void process_unlock_code_input(void) {
                 break;
             }
         }
-        if (code == -1) return;
+        if (code == -1)
+            return;
         va = code - 0x24;
         vb = code - 0x37;
         vc = code - 0x3d;
@@ -91,40 +101,40 @@ void process_unlock_code_input(void) {
 }
 
 char D_L01_001B4C50 NOT_SDA = 0xd;
-short D_L01_001603F8 = 0;
+short               D_L01_001603F8 = 0;
 char D_L02_001B4DD0 NOT_SDA = 0xd;
-short D_L02_001603F8 = 0;
+short               D_L02_001603F8 = 0;
 char D_L03_001B48D0 NOT_SDA = 0xd;
-short D_L03_001603F8 = 0;
+short               D_L03_001603F8 = 0;
 char D_L04_001B4950 NOT_SDA = 0xd;
-short D_L04_001603F8 = 0;
+short               D_L04_001603F8 = 0;
 char D_L05_001B4C50 NOT_SDA = 0xd;
-short D_L05_001603F8 = 0;
+short               D_L05_001603F8 = 0;
 char D_L06_001B4F50 NOT_SDA = 0xd;
-short D_L06_001603F8 = 0;
+short               D_L06_001603F8 = 0;
 char D_L07_001B4850 NOT_SDA = 0xd;
-short D_L07_001603F8 = 0;
+short               D_L07_001603F8 = 0;
 char D_L08_001B4FD0 NOT_SDA = 0xd;
-short D_L08_001603F8 = 0;
+short               D_L08_001603F8 = 0;
 char D_L09_001B4950 NOT_SDA = 0xd;
-short D_L09_001603F8 = 0;
+short               D_L09_001603F8 = 0;
 char D_L10_001B4C50 NOT_SDA = 0xd;
-short D_L10_001603F8 = 0;
+short               D_L10_001603F8 = 0;
 char D_L11_001B51D0 NOT_SDA = 0xd;
-short D_L11_001603F8 = 0;
+short               D_L11_001603F8 = 0;
 char D_L12_001B4C50 NOT_SDA = 0xd;
-short D_L12_001603F8 = 0;
+short               D_L12_001603F8 = 0;
 char D_L13_001B4AD0 NOT_SDA = 0xd;
-short D_L13_001603F8 = 0;
+short               D_L13_001603F8 = 0;
 char D_L14_001B4ED0 NOT_SDA = 0xd;
-short D_L14_001603F8 = 0;
+short               D_L14_001603F8 = 0;
 char D_L15_001B4DD0 NOT_SDA = 0xd;
-short D_L15_001603F8 = 0;
+short               D_L15_001603F8 = 0;
 char D_L16_001B4C50 NOT_SDA = 0xd;
-short D_L16_001603F8 = 0;
+short               D_L16_001603F8 = 0;
 char D_L17_001B50D0 NOT_SDA = 0xd;
-short D_L17_001603F8 = 0;
+short               D_L17_001603F8 = 0;
 char D_L18_001B51D0 NOT_SDA = 0xd;
-short D_L18_001603F8 = 0;
+short               D_L18_001603F8 = 0;
 
 short unlock_code_input_count __asm__("D_L00_001603F8") = 0;

@@ -1,7 +1,7 @@
 #include "types.h"
 
-extern s32 DIntr(void);
-extern s32 EnableInterrupts(void);
+extern s32  DIntr(void);
+extern s32  EnableInterrupts(void);
 extern void printfloat(double);
 extern void (*D_0012FC00[])(s32);
 
@@ -11,16 +11,16 @@ void _printf(const char *fmt, char *ap) {
     enum {
         FORMAT_ZERO_PAD_WIDTH = 0
     };
-    char integer_text_buffer[32];
-    char *pad;
-    char *text_cursor;
-    s32 mod;
-    s32 zero_pad_width;
+    char          integer_text_buffer[32];
+    char         *pad;
+    char         *text_cursor;
+    s32           mod;
+    s32           zero_pad_width;
     unsigned long hex_digit;
-    u8 ch;
-    char second;
-    s64 integer_value;
-    s32 ie;
+    u8            ch;
+    char          second;
+    s64           integer_value;
+    s32           ie;
 
     ie = DIntr();
     for (; *fmt != 0; fmt++) {

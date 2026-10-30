@@ -1,7 +1,10 @@
 #include "types.h"
 #include "rnc/movies/decoder/vo_buf.h"
 
-void vo_buf_create(struct VoBuf *buf, struct VoData *data, struct VoTag *tag, s32 size) __asm__("FUN_0023d190");
+void vo_buf_create(struct VoBuf  *buf,
+                   struct VoData *data,
+                   struct VoTag  *tag,
+                   s32            size) __asm__("FUN_0023d190");
 
 void vo_buf_create(struct VoBuf *buf, struct VoData *data, struct VoTag *tag, s32 size) {
     s32 i;

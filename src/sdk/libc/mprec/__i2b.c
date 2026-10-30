@@ -1,8 +1,9 @@
 typedef struct Object Object;
+
 struct Object {
     unsigned char pad0[16];
-    int state;
-    int value;
+    int           state;
+    int           value;
 };
 
 Object *_Balloc(Object *object, int index) __asm__("func_001154D0");

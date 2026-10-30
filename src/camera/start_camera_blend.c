@@ -4,13 +4,14 @@
 #include "qcopy.h"
 #include "rnc/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
-extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1,
-                                  void *axis) __asm__("func_001EC530");
-extern void capture_camera_orientation(void) __asm__("func_001EC710");
-extern void save_camera_vectors(void) __asm__("func_001EC7F0");
-extern void restore_camera_vectors(void) __asm__("func_001EC868");
+
+extern void compute_camera_angles(
+    float *out, void *p0, void *p1, void *dir0, void *dir1, void *axis) __asm__("func_001EC530");
+extern void  capture_camera_orientation(void) __asm__("func_001EC710");
+extern void  save_camera_vectors(void) __asm__("func_001EC7F0");
+extern void  restore_camera_vectors(void) __asm__("func_001EC868");
 extern short cam_trans_state_lui __asm__("D_001871B0") NOT_SDA;
-extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
+extern void  extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
 /* Camera mode update from arg (its +0x30 vector is copied). In mode 1
    the sub-mode at +3 picks what is captured from it: 0 the +0x50/+0x60
    pair, 2 the +0xC0/+0xD0 pair and capture_camera_orientation's angles, otherwise
@@ -21,11 +22,11 @@ extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002
 void start_camera_blend(void *arg) __asm__("FUN_001ec8a0");
 
 void start_camera_blend(void *source_camera_transform) {
-    char *blend_source_transform = source_camera_transform;
-    char *r = cam_trans_state;
-    char orbit_reference_direction[16];
-    char orbit_yaw_side_direction[16];
-    char orbit_axis[16];
+    char         *blend_source_transform = source_camera_transform;
+    char         *r = cam_trans_state;
+    char          orbit_reference_direction[16];
+    char          orbit_yaw_side_direction[16];
+    char          orbit_axis[16];
     unsigned char sub;
 
     if (*(short *)r == 1) {
@@ -43,8 +44,12 @@ void start_camera_blend(void *source_camera_transform) {
             fast_vec_normalize(orbit_reference_direction, (char *)g->moby + 0xC0, 1.0f);
             fast_vec_normalize(orbit_yaw_side_direction, (char *)g->moby + 0xD0, 1.0f);
             fast_vec_normalize(orbit_axis, (char *)g->moby + 0xE0, 1.0f);
-            compute_camera_angles((float *)(r + 0x70), blend_source_transform + 0x30, *(char **)(r - 0xF0) + 0x30,
-                                  orbit_reference_direction, orbit_yaw_side_direction, orbit_axis);
+            compute_camera_angles((float *)(r + 0x70),
+                                  blend_source_transform + 0x30,
+                                  *(char **)(r - 0xF0) + 0x30,
+                                  orbit_reference_direction,
+                                  orbit_yaw_side_direction,
+                                  orbit_axis);
             extract_matrix_rotation_quaternion(r + 0xB0, blend_source_transform);
             qcopy(r + 0xD0, r + 0xB0);
         }
@@ -73,7 +78,7 @@ void start_camera_blend(void *source_camera_transform) {
         qcopy(r + 0x30, r + 0x60);
     } else {
         char *b = r + 0x70;
-        int configured_frame_count = ++*(int *)(b + 0x14);
+        int   configured_frame_count = ++*(int *)(b + 0x14);
 
         *(int *)(b + 0xC) = scale_game_frames(configured_frame_count);
         *(float *)(b + 0x10) = 1.0f / convert_integer_to_float(*(int *)(b + 0xC));

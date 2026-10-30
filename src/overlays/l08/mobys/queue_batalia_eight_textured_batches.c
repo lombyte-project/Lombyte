@@ -17,8 +17,8 @@
 /* Runs the two per-entry update calls over a 13-entry table. */
 
 extern Pair D_L08_001F8548[];
-extern int batalia_eight_batch_packet_triplet_sources[] __asm__("D_L08_001F84C8");
-extern int batalia_eight_batch_offset_source_streams[] __asm__("D_L08_001F84E8");
+extern int  batalia_eight_batch_packet_triplet_sources[] __asm__("D_L08_001F84C8");
+extern int  batalia_eight_batch_offset_source_streams[] __asm__("D_L08_001F84E8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
@@ -27,35 +27,49 @@ void queue_batalia_eight_textured_batches(int pair_index) __asm__("FUN_L08_00308
 void queue_batalia_eight_textured_batches(int pair_index) {
     int i;
     for (i = 0; i < 0x8; i++) {
-        FUN_L08_00258090(D_L08_001F8560, batalia_eight_batch_offset_source_streams[i], D_L08_001F4C60[i], &D_L08_001F8548[pair_index]);
-        FUN_L00_001fde98(D_L08_001F4C60[i], batalia_eight_batch_packet_triplet_sources[i], D_L08_001F8528[i], D_L08_001F8560,
+        FUN_L08_00258090(D_L08_001F8560,
+                         batalia_eight_batch_offset_source_streams[i],
+                         D_L08_001F4C60[i],
+                         &D_L08_001F8548[pair_index]);
+        FUN_L00_001fde98(D_L08_001F4C60[i],
+                         batalia_eight_batch_packet_triplet_sources[i],
+                         D_L08_001F8528[i],
+                         D_L08_001F8560,
                          1);
     }
 }
+
 extern Pair D_L08_001623F8[] MACRO_ADDR;
-extern int batalia_six_batch_offset_source_streams[] __asm__("D_L08_001F4C18");
-extern int batalia_six_batch_packet_triplet_sources[] __asm__("D_L08_001F4C00");
-void queue_batalia_six_textured_batches(int pair_index) __asm__("FUN_L08_00308e90");
+extern int  batalia_six_batch_offset_source_streams[] __asm__("D_L08_001F4C18");
+extern int  batalia_six_batch_packet_triplet_sources[] __asm__("D_L08_001F4C00");
+void        queue_batalia_six_textured_batches(int pair_index) __asm__("FUN_L08_00308e90");
 
 void queue_batalia_six_textured_batches(int pair_index) {
     int i;
     for (i = 0; i < 0x6; i++) {
-        FUN_L08_00258090(D_L08_001F8560, batalia_six_batch_offset_source_streams[i], D_L08_001F01C8[i], &D_L08_001623F8[pair_index]);
-        FUN_L00_001fde98(D_L08_001F01C8[i], batalia_six_batch_packet_triplet_sources[i], D_L08_001F4C48[i], D_L08_001F8560,
+        FUN_L08_00258090(D_L08_001F8560,
+                         batalia_six_batch_offset_source_streams[i],
+                         D_L08_001F01C8[i],
+                         &D_L08_001623F8[pair_index]);
+        FUN_L00_001fde98(D_L08_001F01C8[i],
+                         batalia_six_batch_packet_triplet_sources[i],
+                         D_L08_001F4C48[i],
+                         D_L08_001F8560,
                          1);
     }
 }
 /* Draws three rows of HUD elements with their colours. */
 
 #include "rnc/overlay/l08/mobys/queue_batalia_eight_textured_batches_globals.h"
-int batalia_texture_3a_blend_factor_gp __asm__("D_L08_00162390") = 0x40;
-int batalia_texture_3c_pair_zero_blend_factor_gp __asm__("D_L08_001623B0") = 0x20;
-int batalia_texture_3d_blend_factor_gp __asm__("D_L08_001623C0") = 0x30;
+
+int                  batalia_texture_3a_blend_factor_gp __asm__("D_L08_00162390") = 0x40;
+int                  batalia_texture_3c_pair_zero_blend_factor_gp __asm__("D_L08_001623B0") = 0x20;
+int                  batalia_texture_3d_blend_factor_gp __asm__("D_L08_001623C0") = 0x30;
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_001623F0");
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void queue_batalia_eight_textured_batches(int) __asm__("FUN_L08_00308db8");
-extern void queue_batalia_six_textured_batches(int) __asm__("FUN_L08_00308e90");
-extern void queue_batalia_offset_textured_batches(int) __asm__("FUN_L08_00308f68");
+extern int           get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void          queue_batalia_eight_textured_batches(int) __asm__("FUN_L08_00308db8");
+extern void          queue_batalia_six_textured_batches(int) __asm__("FUN_L08_00308e90");
+extern void          queue_batalia_offset_textured_batches(int) __asm__("FUN_L08_00308f68");
 
 void queue_batalia_textured_batch_passes(void) __asm__("FUN_L08_00309030");
 
@@ -69,9 +83,15 @@ void queue_batalia_textured_batch_passes(void) {
     vu1_add_g_sregister(0x42, (long)batalia_texture_3a_blend_factor_gp << 32 | 0x64);
     queue_batalia_eight_textured_batches(0);
     vu1_add_g_sregister(6, get_effect_texture(0x3B));
-    vu1_add_g_sregister(0x42, (long)((batalia_texture_3b_pair_one_blend_factor_base * D_L08_00161E08_u) >> 8) << 32 | 0x62);
+    vu1_add_g_sregister(
+        0x42,
+        (long)((batalia_texture_3b_pair_one_blend_factor_base * D_L08_00161E08_u) >> 8) << 32 |
+            0x62);
     queue_batalia_eight_textured_batches(1);
-    vu1_add_g_sregister(0x42, (long)((batalia_texture_3b_pair_two_blend_factor_base * D_L08_00161E08_u) >> 8) << 32 | 0x68);
+    vu1_add_g_sregister(
+        0x42,
+        (long)((batalia_texture_3b_pair_two_blend_factor_base * D_L08_00161E08_u) >> 8) << 32 |
+            0x68);
     queue_batalia_eight_textured_batches(2);
     vu1_add_g_sregister(6, get_effect_texture(0x3C));
     vu1_add_g_sregister(0x42, (long)batalia_texture_3c_pair_zero_blend_factor_gp << 32 | 0x48);
@@ -82,6 +102,7 @@ void queue_batalia_textured_batch_passes(void) {
     vu1_add_g_sregister(0x42, (long)batalia_texture_3d_blend_factor_gp << 32 | 0x48);
     queue_batalia_offset_textured_batches(0);
 }
+
 #include "sda.h"
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 
@@ -96,7 +117,7 @@ void update_moby_hit_removal_state(struct Moby *moby) {
         MOBY_STATE_WAIT_FOR_HIT = 1,
         MOBY_STATE_REMOVE = 2
     };
-    int hit = 0;
+    int   hit = 0;
     char *hit_result = find_moby_hit(moby, 0x10000, 0);
     switch (moby->state) {
     case MOBY_STATE_INITIALIZE:

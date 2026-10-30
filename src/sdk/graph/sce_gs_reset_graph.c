@@ -2,9 +2,9 @@
 #include "rnc/sdk/sce_gs_gparam.h"
 #include "rnc/sdk/graph/sce_gs_get_gparam.h"
 
-extern s32 GsPutIMR();
-extern s32 RemoveIntcHandler();
-extern s32 disable_intc() __asm__("func_00119028");
+extern s32  GsPutIMR();
+extern s32  RemoveIntcHandler();
+extern s32  disable_intc() __asm__("func_00119028");
 extern void SetGsCrt(s32, s32, s32);
 
 void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {

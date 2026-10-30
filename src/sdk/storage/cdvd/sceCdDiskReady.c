@@ -2,26 +2,27 @@
 #include "sifrpc.h"
 #include "rnc/sdk/libcdvd.h"
 
-extern s32 D_00131304[];
+extern s32                     D_00131304[];
 extern struct sceSifClientData cd_disk_ready_rpc_client __asm__("D_00159990");
-extern s32 D_001599D0[];
-extern u8 cd_disk_ready_entry_message[] __asm__("D_00152F80");
-extern u8 cd_disk_ready_bind_error_message[] __asm__("D_00152F90");
-extern u8 cd_disk_ready_completion_message[] __asm__("D_00152FB0");
-extern s32 PollSema();
-extern void SignalSema();
-extern void cmd_sem_init();
-extern s32 sceCdSyncS();
-extern void scePrintf();
-extern s32 sceSifBindRpc();
-extern void sceSifInitRpc();
-extern void sceSifWriteBackDCache();
-extern s32 sceSifCallRpc();
+extern s32                     D_001599D0[];
+extern u8                      cd_disk_ready_entry_message[] __asm__("D_00152F80");
+extern u8                      cd_disk_ready_bind_error_message[] __asm__("D_00152F90");
+extern u8                      cd_disk_ready_completion_message[] __asm__("D_00152FB0");
+extern s32                     PollSema();
+extern void                    SignalSema();
+extern void                    cmd_sem_init();
+extern s32                     sceCdSyncS();
+extern void                    scePrintf();
+extern s32                     sceSifBindRpc();
+extern void                    sceSifInitRpc();
+extern void                    sceSifWriteBackDCache();
+extern s32                     sceSifCallRpc();
 
 /* libcdvd disk-ready query (the sceCdDiskReady pattern): take the S-command
    semaphore, bind the 0x8000059A server once, send mode and return the
    server's status word. Mode 8 reports -1 on failure, every other mode 6. */
 s32 sceCdDiskReady(s32 mode) __asm__("FUN_00121190");
+
 s32 sceCdDiskReady(s32 mode) {
     s32 response;
     s32 spin;
@@ -61,7 +62,8 @@ s32 sceCdDiskReady(s32 mode) {
     }
     D_001599D0[0] = mode;
     sceSifWriteBackDCache(D_001599D0, 4);
-    if (sceSifCallRpc(&cd_disk_ready_rpc_client, 0, 0, D_001599D0, 4, cd_scmd_result, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&cd_disk_ready_rpc_client, 0, 0, D_001599D0, 4, cd_scmd_result, 4, 0, 0) <
+        0) {
         SignalSema(cd_scmd_sema);
         if (mode == 8) {
             return -1;

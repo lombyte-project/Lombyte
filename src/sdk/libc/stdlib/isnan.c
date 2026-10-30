@@ -9,15 +9,16 @@ typedef union {
 } ieee_double_shape_type;
 
 /* fdlibm math_private.h */
-#define EXTRACT_WORDS(ix0, ix1, d) \
-    do { \
+#define EXTRACT_WORDS(ix0, ix1, d)   \
+    do {                             \
         ieee_double_shape_type ew_u; \
-        ew_u.value = (d); \
-        (ix0) = ew_u.parts.msw; \
-        (ix1) = ew_u.parts.lsw; \
+        ew_u.value = (d);            \
+        (ix0) = ew_u.parts.msw;      \
+        (ix1) = ew_u.parts.lsw;      \
     } while (0)
 
 s32 isnan(f64 x) __asm__("ClassifyDoubleNaN");
+
 s32 isnan(f64 x) {
     s32 hx;
     s32 lx;

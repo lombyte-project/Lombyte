@@ -27,8 +27,19 @@
 
 extern char *create_moby(int);
 
-char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) __asm__("FUN_L08_00307190");
-char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
+char *spawn_paratrooper_projectile(char *initial_velocity,
+                                   char *spawn_position,
+                                   int   collision_ignore_moby,
+                                   int   tracked_moby,
+                                   int   lifetime_frames,
+                                   int   burst_mode) __asm__("FUN_L08_00307190");
+char *spawn_paratrooper_projectile(char *initial_velocity,
+                                   char *spawn_position,
+                                   int   collision_ignore_moby,
+                                   int   tracked_moby,
+                                   int   lifetime_frames,
+
+                                   int burst_mode) {
     char *spawned_moby = create_moby(0x50C);
     if (spawned_moby != 0) {
         char *moby_data;
@@ -45,7 +56,8 @@ char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position,
         *(int *)(moby_data + 0x2C) = burst_mode;
         *(int *)(moby_data + 0x28) = 0;
         MOBY(spawned_moby)->rot.z = fast_arc_tan(*(float *)moby_data, *(float *)(moby_data + 4));
-        MOBY(spawned_moby)->rot.y = -fast_arc_tan(vector_length_xy(moby_data), *(float *)(moby_data + 8));
+        MOBY(spawned_moby)->rot.y =
+            -fast_arc_tan(vector_length_xy(moby_data), *(float *)(moby_data + 8));
         update_entity(spawned_moby);
     }
     return spawned_moby;
@@ -53,11 +65,11 @@ char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position,
 /* Fire bolt: flies along its velocity with a smoke trail (while the level is not underwater), damaging what it hits. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308758), where it is exact; names translated to the US level program. */
 
-extern char D_L08_00174640[];
+extern char  D_L08_00174640[];
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern int   collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void update_fire_bolt(char *fire_bolt) __asm__("FUN_L08_00307298");
 
@@ -76,25 +88,38 @@ void update_fire_bolt(char *fire_bolt) {
     case FIRE_BOLT_STATE_FLYING:
         qcopy(previous_position, fire_bolt + 0x10);
         tracked_moby = *(char **)(bolt_data + 0x14);
-        if (tracked_moby == 0 || ((unsigned char *)tracked_moby)[0x20] == 0xFE || ((unsigned char *)tracked_moby)[0x20] == 0xFD) {
+        if (tracked_moby == 0 || ((unsigned char *)tracked_moby)[0x20] == 0xFE ||
+            ((unsigned char *)tracked_moby)[0x20] == 0xFD) {
             fire_bolt[0x20] = 2;
         }
         if (D_L08_0015F5D4 < 0.9f && D_L08_0015F5D0 < 0.9f) {
-            int trail_frame_count;
+            int   trail_frame_count;
             float trail_velocity_scale = random_float_between(0.95f, 0.985f);
             fast_vec_scale(sc, bolt_data, trail_velocity_scale);
             fast_vec_normalize(trail_spawn_position, bolt_data, -0.1f);
             add_vectors(unused_vector_argument, trail_spawn_position, fire_bolt + 0x10);
             trail_frame_count = scale_game_frames(random_int_between(0xF, 0x14));
-            spawn_effect(trail_spawn_position, sc, 0x6F00AFFF, 0xFF, trail_frame_count, 0x28,
-                             scale_game_frames(random_int_between(7, 0xA)), 1);
+            spawn_effect(trail_spawn_position,
+                         sc,
+                         0x6F00AFFF,
+                         0xFF,
+                         trail_frame_count,
+                         0x28,
+                         scale_game_frames(random_int_between(7, 0xA)),
+                         1);
         }
         fast_vec_add(fire_bolt + 0x10, fire_bolt + 0x10, bolt_data);
-        if (collision_line(fire_bolt + 0x10, previous_position, 0x10, *(int *)(bolt_data + 0x10), 0) != 0) {
+        if (collision_line(
+                fire_bolt + 0x10, previous_position, 0x10, *(int *)(bolt_data + 0x10), 0) != 0) {
             char *collision_result = D_L08_00174640;
             if (*(int *)(collision_result + 0x18) != *(int *)(bolt_data + 0x10)) {
                 if (*(int *)(collision_result + 0x18) != 0) {
-                    spawn_nearby_effect(*(void **)(collision_result + 0x18), (int)fire_bolt, 0x10001, collision_result + 0x20, bolt_data, 1.0f);
+                    spawn_nearby_effect(*(void **)(collision_result + 0x18),
+                                        (int)fire_bolt,
+                                        0x10001,
+                                        collision_result + 0x20,
+                                        bolt_data,
+                                        1.0f);
                 }
                 fire_bolt[0x20] = 2;
             }
@@ -115,15 +140,21 @@ void update_fire_bolt(char *fire_bolt) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309050), where it is exact; names translated to the US level program. */
 
 extern float ground_particle_scatter_spawn_vector_xy_bias[2] __asm__("D_L08_00162360");
+
 #include "rnc/overlay/shared/enemies/spawn_paratrooper_projectile_globals.h"
+
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
-extern short ground_particle_scatter_count_interpolation_start_override_gp __asm__("D_L08_0016234C") __attribute__((sda));
-extern short ground_particle_scatter_count_interpolation_end_override_gp __asm__("D_L08_00162350") __attribute__((sda));
-void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) __asm__("FUN_L08_00307b90");
+extern short ground_particle_scatter_count_interpolation_start_override_gp __asm__("D_L08_0016234C")
+    __attribute__((sda));
+extern short ground_particle_scatter_count_interpolation_end_override_gp __asm__("D_L08_00162350")
+    __attribute__((sda));
+void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) __asm__(
+    "FUN_L08_00307b90");
 
 void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) {
-    float xy_random_range_scale, countdown_range_start, count_interpolation_end, count_interpolation_start;
+    float xy_random_range_scale, countdown_range_start, count_interpolation_end,
+        count_interpolation_start;
     float xy_range_reference_vector[2];
     float xy_length_ratio;
     if (use_reduced_xy_range_preset == 0) {
@@ -138,18 +169,27 @@ void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_prese
         count_interpolation_start = 2.0f;
     }
     if (*(float *)&ground_particle_scatter_count_interpolation_start_override_gp >= 0.0f)
-        count_interpolation_start = *(float *)&ground_particle_scatter_count_interpolation_start_override_gp;
+        count_interpolation_start =
+            *(float *)&ground_particle_scatter_count_interpolation_start_override_gp;
     if (*(float *)&ground_particle_scatter_count_interpolation_end_override_gp >= 0.0f)
-        count_interpolation_end = *(float *)&ground_particle_scatter_count_interpolation_end_override_gp;
-    ground_particle_scatter_spawn_vector_xy_bias[0] = random_float_between(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
-    ground_particle_scatter_spawn_vector_xy_bias[1] = random_float_between(-(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
+        count_interpolation_end =
+            *(float *)&ground_particle_scatter_count_interpolation_end_override_gp;
+    ground_particle_scatter_spawn_vector_xy_bias[0] = random_float_between(
+        -(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
+    ground_particle_scatter_spawn_vector_xy_bias[1] = random_float_between(
+        -(xy_random_range_scale * frame_time), xy_random_range_scale * frame_time);
     countdown_range_start = scale_time(countdown_range_start);
-    ground_particle_scatter_refresh_countdown = random_float_between(countdown_range_start, scale_time(10.0f));
+    ground_particle_scatter_refresh_countdown =
+        random_float_between(countdown_range_start, scale_time(10.0f));
     xy_range_reference_vector[0] = xy_random_range_scale * frame_time;
     xy_range_reference_vector[1] = xy_range_reference_vector[0];
-    xy_length_ratio = vector_length_xy(ground_particle_scatter_spawn_vector_xy_bias) / fast_vec_length(xy_range_reference_vector);
-    ground_particle_scatter_base_attempt_count = (int)(xy_length_ratio * (count_interpolation_end - count_interpolation_start) + count_interpolation_start);
+    xy_length_ratio = vector_length_xy(ground_particle_scatter_spawn_vector_xy_bias) /
+                      fast_vec_length(xy_range_reference_vector);
+    ground_particle_scatter_base_attempt_count =
+        (int)(xy_length_ratio * (count_interpolation_end - count_interpolation_start) +
+              count_interpolation_start);
 }
+
 #include "rnc/mobys/moby.h"
 
 /* moby class 1400 update: steers the offset vectors from the mode, fans them out to the object over counted loops */
@@ -159,33 +199,50 @@ typedef struct Moby Moby;
 
 typedef int u128_3091B0 __attribute__((mode(TI)));
 
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_3091B0;
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) V_3091B0;
 
-typedef struct { char p0[0x148]; float f148; char p14C[8]; float f154; float f158; } Cam;
+typedef struct {
+    char  p0[0x148];
+    float f148;
+    char  p14C[8];
+    float f154;
+    float f158;
+} Cam;
 
-typedef struct { char p0[0x30]; V_3091B0 v30; } Obj;
+typedef struct {
+    char     p0[0x30];
+    V_3091B0 v30;
+} Obj;
 
-extern char D_L08_001675C0[];
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern char  D_L08_001675C0[];
+extern f32   random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_L08_00160260 __attribute__((sda));
-extern float ground_particle_scatter_minimum_z_scale_gp __asm__("D_L08_00162340") __attribute__((sda));
-extern float ground_particle_scatter_reference_height_offset_gp __asm__("D_L08_00162344") __attribute__((sda));
-extern float ground_particle_scatter_xy_offset_random_range_gp __asm__("D_L08_00162348") __attribute__((sda));
-extern float ground_particle_scatter_minimum_z_scale_override_gp __asm__("D_L08_00162354") __attribute__((sda));
-extern int ground_particle_scatter_distant_spawn_argument_gp __asm__("D_L08_00162358") __attribute__((sda));
-extern float ground_particle_scatter_ground_height_floor_offset_gp __asm__("D_L08_0016235C") __attribute__((sda));
-extern int update_float_countdown() __asm__("FUN_L08_00211b08");
+extern float ground_particle_scatter_minimum_z_scale_gp __asm__("D_L08_00162340")
+    __attribute__((sda));
+extern float ground_particle_scatter_reference_height_offset_gp __asm__("D_L08_00162344")
+    __attribute__((sda));
+extern float ground_particle_scatter_xy_offset_random_range_gp __asm__("D_L08_00162348")
+    __attribute__((sda));
+extern float ground_particle_scatter_minimum_z_scale_override_gp __asm__("D_L08_00162354")
+    __attribute__((sda));
+extern int ground_particle_scatter_distant_spawn_argument_gp __asm__("D_L08_00162358")
+    __attribute__((sda));
+extern float ground_particle_scatter_ground_height_floor_offset_gp __asm__("D_L08_0016235C")
+    __attribute__((sda));
+extern int                        update_float_countdown() __asm__("FUN_L08_00211b08");
 extern u128_3091B0 D_L08_00160250 MACRO_ADDR;
 extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
-void FUN_L00_00262cf0(void *a, void *b);
+void        FUN_L00_00262cf0(void *a, void *b);
 void create_type_49_particle(void *pos, int kind, void *vel, float f) __asm__("FUN_L08_0027f5f0");
 void randomize_ground_particle_scatter_parameters(int arg) __asm__("FUN_L08_00307b90");
-extern char D_L08_00167640_3091B0[] __asm__("D_L08_001675C0");
-extern void randomize_ground_particle_scatter_parameters(int) __asm__("FUN_L08_00307b90");
-extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
+extern char  D_L08_00167640_3091B0[] __asm__("D_L08_001675C0");
+extern void  randomize_ground_particle_scatter_parameters(int) __asm__("FUN_L08_00307b90");
+extern void  fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern float func_002140F8_3091B0(float, float) __asm__("FUN_002132a8");
-extern void func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN_L08_00272cb8");
-extern void func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN_L08_0027f5f0");
+extern void  func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN_L08_00272cb8");
+extern void  func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN_L08_0027f5f0");
 
 void scatter_ground_particles(Moby *moby) __asm__("FUN_L08_00307cf0");
 
@@ -199,18 +256,18 @@ void scatter_ground_particles(Moby *moby) {
     V_3091B0 base;
     V_3091B0 origin_delta_or_spawn_vector;
     V_3091B0 par;
-    int flag;
-    int big;
-    int pass_attempt_count;
-    int remaining_pass_attempts;
-    Obj *moby_data;
-    float lo;
-    float hi;
-    float fall;
-    float spread;
-    float ground_height;
-    float w;
-    float zero;
+    int      flag;
+    int      big;
+    int      pass_attempt_count;
+    int      remaining_pass_attempts;
+    Obj     *moby_data;
+    float    lo;
+    float    hi;
+    float    fall;
+    float    spread;
+    float    ground_height;
+    float    w;
+    float    zero;
 
     if (current_level_index == 0xC || current_level_index == 0x200) {
         flag = 1;
@@ -226,12 +283,11 @@ void scatter_ground_particles(Moby *moby) {
         lo = 0.5f;
         break;
     case FALSE:
-    default:
-        {
-            float k = frame_time;
-            big = 1;
-            spread = k + k;
-        }
+    default: {
+        float k = frame_time;
+        big = 1;
+        spread = k + k;
+    }
         fall = 0.15f;
         hi = 18.0f;
         lo = ground_particle_scatter_minimum_z_scale_gp;
@@ -240,7 +296,8 @@ void scatter_ground_particles(Moby *moby) {
     {
         float k = ground_particle_scatter_minimum_z_scale_override_gp;
         zero = 0.0f;
-        if (zero <= k) lo = k;
+        if (zero <= k)
+            lo = k;
     }
     moby_data = (Obj *)moby->pvars;
     switch (moby->state) {
@@ -250,14 +307,19 @@ void scatter_ground_particles(Moby *moby) {
         randomize_ground_particle_scatter_parameters(flag);
         break;
     case GROUND_PARTICLES_STATE_SCATTER:
-        if (update_float_countdown(&ground_particle_scatter_refresh_countdown)) randomize_ground_particle_scatter_parameters(flag);
+        if (update_float_countdown(&ground_particle_scatter_refresh_countdown))
+            randomize_ground_particle_scatter_parameters(flag);
         fast_vec_sub(&dv, D_L08_00167640_3091B0, &moby_data->v30);
         D_L08_00160250 = *(u128_3091B0 *)&dv;
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
         pass_attempt_count = ground_particle_scatter_base_attempt_count;
-        fast_add_rotations_cf(&base, &base, 16.0f, ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f158,
-            ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f154);
-        base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
+        fast_add_rotations_cf(&base,
+                              &base,
+                              16.0f,
+                              ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f158,
+                              ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f154);
+        base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 +
+                 ground_particle_scatter_reference_height_offset_gp;
         if (pass_attempt_count > 0) {
             V_3091B0 *po = &origin_delta_or_spawn_vector;
             remaining_pass_attempts = pass_attempt_count;
@@ -267,33 +329,42 @@ void scatter_ground_particles(Moby *moby) {
                 float u;
                 *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                 w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
-                w = w * func_002140F8_3091B0(0.0f, ground_particle_scatter_xy_offset_random_range_gp);
+                w = w *
+                    func_002140F8_3091B0(0.0f, ground_particle_scatter_xy_offset_random_range_gp);
                 pt.x += w;
                 w = fast_sin(func_002140F8_3091B0(0.0f, 6.2831855f));
-                w = w * func_002140F8_3091B0(0.0f, ground_particle_scatter_xy_offset_random_range_gp);
+                w = w *
+                    func_002140F8_3091B0(0.0f, ground_particle_scatter_xy_offset_random_range_gp);
                 pt.y += w;
                 fast_vec_sub(po, &pt, D_L08_00167640_3091B0);
                 origin_distance_xy = vector_length_xy(po);
                 if (origin_distance_xy <= 8.0f) {
                     w = -spread;
-                    par.x = ground_particle_scatter_spawn_vector_xy_bias[0] + func_002140F8_3091B0(w, spread);
-                    par.y = ground_particle_scatter_spawn_vector_y_bias + func_002140F8_3091B0(w, spread);
+                    par.x = ground_particle_scatter_spawn_vector_xy_bias[0] +
+                            func_002140F8_3091B0(w, spread);
+                    par.y = ground_particle_scatter_spawn_vector_y_bias +
+                            func_002140F8_3091B0(w, spread);
                     par.z = -(hi * frame_time);
                     par.w = 0.0f;
                 } else {
                     float h = (origin_distance_xy - 8.0f) * fall;
                     h = hi - h;
-                    if (h < lo) h = lo;
+                    if (h < lo)
+                        h = lo;
                     w = spread;
                     w = -w;
-                    par.x = ground_particle_scatter_spawn_vector_xy_bias[0] + func_002140F8_3091B0(w, spread);
-                    par.y = ground_particle_scatter_spawn_vector_y_bias + func_002140F8_3091B0(w, spread);
+                    par.x = ground_particle_scatter_spawn_vector_xy_bias[0] +
+                            func_002140F8_3091B0(w, spread);
+                    par.y = ground_particle_scatter_spawn_vector_y_bias +
+                            func_002140F8_3091B0(w, spread);
                     par.z = -(h * frame_time);
                     par.w = 0.0f;
                 }
-                D_L08_00160260 = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset_gp;
+                D_L08_00160260 = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 -
+                                 ground_particle_scatter_ground_height_floor_offset_gp;
                 ground_height = ground_height_at(&pt);
-                if (ground_height < ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp) {
+                if (ground_height < ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 +
+                                        ground_particle_scatter_reference_height_offset_gp) {
                     void *distance_selected_spawn_argument;
                     if (ground_height < D_L08_00160260) {
                         w = D_L08_00160260;
@@ -301,22 +372,28 @@ void scatter_ground_particles(Moby *moby) {
                         w = ground_height;
                     }
                     distance_selected_spawn_argument = 0;
-                    if (8.0f < origin_distance_xy) distance_selected_spawn_argument = ground_particle_scatter_distant_spawn_argument_gp;
-                    if (flag == 0) func_L08_00273A80_3091B0(&pt, distance_selected_spawn_argument, w, &par);
-                    if (flag == 1) func_L08_002803B8_3091B0(&pt, distance_selected_spawn_argument, w, &par);
+                    if (8.0f < origin_distance_xy)
+                        distance_selected_spawn_argument =
+                            ground_particle_scatter_distant_spawn_argument_gp;
+                    if (flag == 0)
+                        func_L08_00273A80_3091B0(&pt, distance_selected_spawn_argument, w, &par);
+                    if (flag == 1)
+                        func_L08_002803B8_3091B0(&pt, distance_selected_spawn_argument, w, &par);
                 }
             } while (--remaining_pass_attempts != 0);
         }
         pass_attempt_count = (int)((float)pass_attempt_count * 1.4f);
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-        base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
+        base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 +
+                 ground_particle_scatter_reference_height_offset_gp;
         if (pass_attempt_count > 0) {
             float negative_spread = -spread;
             remaining_pass_attempts = pass_attempt_count;
             do {
                 float u;
                 float t;
-                origin_delta_or_spawn_vector.x = ground_particle_scatter_spawn_vector_xy_bias[0] + func_002140F8_3091B0(negative_spread, spread);
+                origin_delta_or_spawn_vector.x = ground_particle_scatter_spawn_vector_xy_bias[0] +
+                                                 func_002140F8_3091B0(negative_spread, spread);
                 u = func_002140F8_3091B0(negative_spread, spread);
                 t = hi * frame_time;
                 *(int *)&origin_delta_or_spawn_vector.w = 0;
@@ -329,16 +406,20 @@ void scatter_ground_particles(Moby *moby) {
                 w = fast_sin(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, 8.0f);
                 pt.y += w;
-                D_L08_00160260 = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset_gp;
+                D_L08_00160260 = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 -
+                                 ground_particle_scatter_ground_height_floor_offset_gp;
                 ground_height = ground_height_at(&pt);
-                if (ground_height < ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp) {
+                if (ground_height < ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 +
+                                        ground_particle_scatter_reference_height_offset_gp) {
                     if (ground_height < D_L08_00160260) {
                         w = D_L08_00160260;
                     } else {
                         w = ground_height;
                     }
-                    if (flag == 0) func_L08_00273A80_3091B0(&pt, 0, w, &origin_delta_or_spawn_vector);
-                    if (flag == 1) func_L08_002803B8_3091B0(&pt, 0, w, &origin_delta_or_spawn_vector);
+                    if (flag == 0)
+                        func_L08_00273A80_3091B0(&pt, 0, w, &origin_delta_or_spawn_vector);
+                    if (flag == 1)
+                        func_L08_002803B8_3091B0(&pt, 0, w, &origin_delta_or_spawn_vector);
                 }
             } while (--remaining_pass_attempts != 0);
         }
@@ -347,14 +428,18 @@ void scatter_ground_particles(Moby *moby) {
             int h;
             w = 30.0f;
             *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-            fast_add_rotations_cf(&base, &base, w, ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f158,
-                ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f154);
+            fast_add_rotations_cf(&base,
+                                  &base,
+                                  w,
+                                  ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f158,
+                                  ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f154);
             sign = pass_attempt_count >> 31;
-            base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
+            base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 +
+                     ground_particle_scatter_reference_height_offset_gp;
             if (pass_attempt_count > 0) {
                 remaining_pass_attempts = pass_attempt_count;
                 do {
-                        *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
+                    *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                     w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 30.0f);
                     pt.x += w;
@@ -365,14 +450,18 @@ void scatter_ground_particles(Moby *moby) {
                 } while (--remaining_pass_attempts != 0);
             }
             *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-            fast_add_rotations_cf(&base, &base, 4.0f, ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f158,
-                ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f154);
-            base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
+            fast_add_rotations_cf(&base,
+                                  &base,
+                                  4.0f,
+                                  ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f158,
+                                  ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f154);
+            base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 +
+                     ground_particle_scatter_reference_height_offset_gp;
             h = (pass_attempt_count - sign) >> 1;
             if (h > 0) {
-                        remaining_pass_attempts = h;
+                remaining_pass_attempts = h;
                 do {
-                        *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
+                    *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                     w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 8.0f);
                     pt.x += w;
@@ -390,7 +479,6 @@ void scatter_ground_particles(Moby *moby) {
 /* While the player is within range, scatters spawned particles around the moby on a random disc. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309AB0), where it is exact; names translated to the US level program. */
 
-
 void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
 
 void spawn_moby_radial_particles(char *moby) {
@@ -399,10 +487,11 @@ void spawn_moby_radial_particles(char *moby) {
     float reference_to_spawn_delta[4];
     float randomized_spawn_vector[4];
     char *moby_data = ((char *)MOBY(moby)->pvars);
-    int i;
+    int   i;
     fast_vec_sub(range_check_delta_or_spawn_position, D_L08_001675C0, moby + 0x10);
     range_check_delta_or_spawn_position[2] = 0.0f;
-    if (fast_vec_dot(range_check_delta_or_spawn_position, range_check_delta_or_spawn_position) < *(float *)(moby_data + 4) * *(float *)(moby_data + 4)) {
+    if (fast_vec_dot(range_check_delta_or_spawn_position, range_check_delta_or_spawn_position) <
+        *(float *)(moby_data + 4) * *(float *)(moby_data + 4)) {
         float angle_start_radians, angle_end_radians, xy_random_range;
         i = 0;
         xy_random_range = *(float *)(moby_data + 0x24) * frame_time;
@@ -414,16 +503,27 @@ void spawn_moby_radial_particles(char *moby) {
             *(OvlQuad *)range_check_delta_or_spawn_position = *(OvlQuad *)spawn_center_position;
             spawn_angle_radians = random_float_between(angle_start_radians, angle_end_radians);
             rad = random_float_between(*(float *)(moby_data + 0xC), *(float *)(moby_data + 8));
-            range_check_delta_or_spawn_position[0] = range_check_delta_or_spawn_position[0] + fast_cos(spawn_angle_radians) * rad;
-            range_check_delta_or_spawn_position[1] = range_check_delta_or_spawn_position[1] + fast_sin(spawn_angle_radians) * rad;
-            fast_vec_sub(reference_to_spawn_delta, range_check_delta_or_spawn_position, D_L08_001675C0);
+            range_check_delta_or_spawn_position[0] =
+                range_check_delta_or_spawn_position[0] + fast_cos(spawn_angle_radians) * rad;
+            range_check_delta_or_spawn_position[1] =
+                range_check_delta_or_spawn_position[1] + fast_sin(spawn_angle_radians) * rad;
+            fast_vec_sub(
+                reference_to_spawn_delta, range_check_delta_or_spawn_position, D_L08_001675C0);
             if (!(vector_length_xy(reference_to_spawn_delta) <= *(float *)(moby_data + 0x10))) {
-                randomized_spawn_vector[0] = ground_particle_scatter_spawn_vector_xy_bias[0] + random_float_between(-xy_random_range, xy_random_range);
-                randomized_spawn_vector[1] = ground_particle_scatter_spawn_vector_y_bias + random_float_between(-xy_random_range, xy_random_range);
-                randomized_spawn_vector[2] = -(random_float_between(*(float *)(moby_data + 0x18), *(float *)(moby_data + 0x1C)) *
-                         frame_time);
+                randomized_spawn_vector[0] =
+                    ground_particle_scatter_spawn_vector_xy_bias[0] +
+                    random_float_between(-xy_random_range, xy_random_range);
+                randomized_spawn_vector[1] =
+                    ground_particle_scatter_spawn_vector_y_bias +
+                    random_float_between(-xy_random_range, xy_random_range);
+                randomized_spawn_vector[2] = -(random_float_between(*(float *)(moby_data + 0x18),
+                                                                    *(float *)(moby_data + 0x1C)) *
+                                               frame_time);
                 randomized_spawn_vector[3] = 0.0f;
-                spawn_span_particle(range_check_delta_or_spawn_position, *(void **)moby_data, randomized_spawn_vector, MOBY(moby)->pos.z - *(float *)(moby_data + 0x20));
+                spawn_span_particle(range_check_delta_or_spawn_position,
+                                    *(void **)moby_data,
+                                    randomized_spawn_vector,
+                                    MOBY(moby)->pos.z - *(float *)(moby_data + 0x20));
             }
         }
     }
@@ -431,17 +531,19 @@ void spawn_moby_radial_particles(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00315068), where it is exact; names translated to the US level program. */
 
 extern char *D_L08_00167600 NOT_SDA;
+
 void FUN_L08_00313ba8(void) {
     D_L08_00167600[0x88] = 1;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00318468), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
-extern char D_L08_0016C588[];
+extern char  D_0013E533[];
+extern char  D_L08_0016C588[];
 extern float frame_delta_time __asm__("D_0015ED7C");
-extern int FUN_L00_00263468();
-extern int play_voice(int sound, int flags, int moby, int volume) __asm__("FUN_L00_0028ddd8");
-extern float smoothed_below_reference_ground_fraction_gp __asm__("D_L08_001625E8") __attribute__((sda));
+extern int   FUN_L00_00263468();
+extern int   play_voice(int sound, int flags, int moby, int volume) __asm__("FUN_L00_0028ddd8");
+extern float smoothed_below_reference_ground_fraction_gp __asm__("D_L08_001625E8")
+    __attribute__((sda));
 
 void update_ground_height_modulated_voice(char *moby) __asm__("FUN_L08_00316fa8");
 
@@ -462,7 +564,8 @@ void update_ground_height_modulated_voice(char *moby) {
     do {
         build_look_at_matrix(point, radius, axis, angle);
         fast_vec_add(point, D_L08_001675C0, point);
-        if (ground_height_at(point) < ((Cam *)(D_L08_001675C0 - 0x140))->f148) fraction += 0.05f;
+        if (ground_height_at(point) < ((Cam *)(D_L08_001675C0 - 0x140))->f148)
+            fraction += 0.05f;
         angle += 0.31415927f;
     } while (angle < 6.2831855f);
     if (smoothed_below_reference_ground_fraction_gp < fraction) {
@@ -478,8 +581,10 @@ void update_ground_height_modulated_voice(char *moby) {
     {
         char *slot = ((char *)&voice_pool) + *(int *)(data + 8) * 0x70;
         if (*(char **)(slot + 0x8C) == moby && ((unsigned char *)slot)[0x74] != 0) {
-            vendor_volume(*(int *)(data + 8),
-                              (int)((*(float *)(data + 4) + smoothed_below_reference_ground_fraction_gp) / (*(float *)(data + 4) + 1.0f) * 1024.0f));
+            vendor_volume(
+                *(int *)(data + 8),
+                (int)((*(float *)(data + 4) + smoothed_below_reference_ground_fraction_gp) /
+                      (*(float *)(data + 4) + 1.0f) * 1024.0f));
         }
     }
     qcopy_nc(((char *)&voice_pool) + 0x90 + *(int *)(data + 8) * 0x70, D_L08_001675C0);
@@ -492,6 +597,7 @@ void update_ground_height_modulated_voice(char *moby) {
 }
 
 float D_L12_00162020[2] = {0};
+
 short D_L12_0016200C = 0;
 short D_L12_00162010 = 0;
 float D_L12_00160260 = 0;
@@ -499,7 +605,7 @@ float D_L12_00162000 = 0.5f;
 float D_L12_00162004 = 1e+01f;
 float D_L12_00162008 = 18.0f;
 float D_L12_00162014 = -1.0f;
-int D_L12_00162018 = 1;
+int   D_L12_00162018 = 1;
 float D_L12_0016201C = 5.0f;
 short D_L14_0016221C = 0;
 short D_L14_00162220 = 0;
@@ -508,10 +614,11 @@ float D_L14_00162210 = 0.5f;
 float D_L14_00162214 = 1e+01f;
 float D_L14_00162218 = 18.0f;
 float D_L14_00162224 = -1.0f;
-int D_L14_00162228 = 1;
+int   D_L14_00162228 = 1;
 float D_L14_0016222C = 5.0f;
 float D_L14_001624D0 = 0;
 
 float ground_particle_scatter_spawn_vector_xy_bias[2] __asm__("D_L08_00162360") = {0};
-int ground_particle_scatter_distant_spawn_argument_gp __asm__("D_L08_00162358") = 1;
+
+int   ground_particle_scatter_distant_spawn_argument_gp __asm__("D_L08_00162358") = 1;
 float smoothed_below_reference_ground_fraction_gp __asm__("D_L08_001625E8") = 0;

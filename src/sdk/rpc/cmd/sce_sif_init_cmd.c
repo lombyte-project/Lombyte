@@ -6,11 +6,11 @@ typedef void (*SifCmdHandler)(void *packet, void *argument);
 
 typedef struct SifCmdHandlerEntry {
     SifCmdHandler handler;
-    void *argument;
+    void         *argument;
 } SifCmdHandlerEntry;
 
 typedef struct SifCmdHeader {
-    u32 packet_size : 8;
+    u32 packet_size      : 8;
     u32 destination_size : 24;
     u32 destination;
     s32 command_id;
@@ -20,43 +20,43 @@ typedef struct SifCmdHeader {
 /* The SIF command state of sce_sif_cmd_intr_hdlr.c. Typed pointers in the
    first and fourth fields reorder the stores below, so they stay void *. */
 typedef struct SifCmdData {
-    void *packet_buffer;
-    void *unk4;
-    s32 unk8;
-    void *system_handlers;
-    s32 system_handler_count;
+    void               *packet_buffer;
+    void               *unk4;
+    s32                 unk8;
+    void               *system_handlers;
+    s32                 system_handler_count;
     SifCmdHandlerEntry *user_handlers;
-    s32 user_handler_count;
-    s32 *sregs;
+    s32                 user_handler_count;
+    s32                *sregs;
 } SifCmdData;
 
 /* Tells the IOP where the EE receives command packets. */
 typedef struct SifCmdInitPacket {
     SifCmdHeader header;
-    void *packet_buffer;
+    void        *packet_buffer;
 } SifCmdInitPacket;
 
-extern u32 D_0012FC04[];
-extern u32 D_00154E54[];
-extern int sif_sregs[] __asm__("D_00154F80");
-extern u8 sif_cmd_packet_buffer[] __asm__("D_00154D80");
-extern u8 sif_cmd_send_buffer[] __asm__("D_00154E00");
-extern SifCmdData sif_cmd_data __asm__("D_00154E58");
+extern u32                D_0012FC04[];
+extern u32                D_00154E54[];
+extern int                sif_sregs[] __asm__("D_00154F80");
+extern u8                 sif_cmd_packet_buffer[] __asm__("D_00154D80");
+extern u8                 sif_cmd_send_buffer[] __asm__("D_00154E00");
+extern SifCmdData         sif_cmd_data __asm__("D_00154E58");
 extern SifCmdHandlerEntry sif_system_handlers[] __asm__("D_00154E80");
-extern SifCmdInitPacket sif_init_packet __asm__("D_00154E40");
+extern SifCmdInitPacket   sif_init_packet __asm__("D_00154E40");
 
-extern int DIntr(void);
+extern int  DIntr(void);
 extern void EnableInterrupts(void);
 extern void FlushCache(int);
 extern void sceSifSetDChain(void);
-extern int AddDmacHandler(int, void *, int);
-extern s32 enable_dmac(s32 channel) __asm__("func_00119160");
+extern int  AddDmacHandler(int, void *, int);
+extern s32  enable_dmac(s32 channel) __asm__("func_00119160");
 extern void _sceSifCmdIntrHdlr(void);
-extern u32 sceSifGetReg(u32 reg);
-extern u32 sceSifSetReg(s32 reg, u32 value);
-extern u32 sceSifSendCmd(s32 command, void *packet, s32 size, void *source, void *destination,
-                         s32 data_size);
-extern s32 handle_sif_initialize_command(s32 *packet, s32 *command_state) __asm__("func_0011A448");
+extern u32  sceSifGetReg(u32 reg);
+extern u32  sceSifSetReg(s32 reg, u32 value);
+extern u32
+sceSifSendCmd(s32 command, void *packet, s32 size, void *source, void *destination, s32 data_size);
+extern s32  handle_sif_initialize_command(s32 *packet, s32 *command_state) __asm__("func_0011A448");
 extern void handle_sif_set_system_register(s32 *packet,
                                            s32 *command_state) __asm__("func_0011A428");
 

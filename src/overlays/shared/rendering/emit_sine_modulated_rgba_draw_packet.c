@@ -18,13 +18,15 @@ extern signed char D_L15_00161ACF[] MACRO_ADDR;
 extern short sine_draw_packet_rgb_control __asm__("D_L15_00161ACC") __attribute__((sda));
 extern short sine_alpha_scale_amplitude __asm__("D_L15_00161AD0") __attribute__((sda));
 extern short sine_alpha_period_frames __asm__("D_L15_00161AD4") __attribute__((sda));
-void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
+void         emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
 
 void emit_sine_modulated_rgba_draw_packet(void) {
-    int period_frames = scale_game_frames(*(int *)&sine_alpha_period_frames);
+    int   period_frames = scale_game_frames(*(int *)&sine_alpha_period_frames);
     float period_frames_float = convert_integer_to_float(period_frames);
-    float sine_value = fast_sin((float)(D_L15_0015F5CC % period_frames) / period_frames_float * 6.28318f);
-    float alpha_scale = *(float *)&D_L15_00161ABC + *(float *)&sine_alpha_scale_amplitude * sine_value;
+    float sine_value =
+        fast_sin((float)(D_L15_0015F5CC % period_frames) / period_frames_float * 6.28318f);
+    float alpha_scale =
+        *(float *)&D_L15_00161ABC + *(float *)&sine_alpha_scale_amplitude * sine_value;
     int alpha;
     int k;
     if (alpha_scale < 0.0f)
@@ -38,10 +40,11 @@ void emit_sine_modulated_rgba_draw_packet(void) {
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 
 int hero_is_near_ground(void) __asm__("FUN_L15_002d6770");
+
 int hero_is_near_ground(void) {
     struct Hero *hero_ptr;
-    float raised_probe_position[4];
-    float ground_height;
+    float        raised_probe_position[4];
+    float        ground_height;
     if (hero_is_in_special_state() != 0)
         return 1;
     hero_ptr = &hero;
@@ -58,9 +61,9 @@ int hero_is_near_ground(void) {
 }
 
 signed char D_L17_001619A3 = 0x20;
-short D_L17_001619A0 = 0xff;
-short D_L17_001619A4 = -13107;
-short D_L17_001619A8 = 0x28;
+short       D_L17_001619A0 = 0xff;
+short       D_L17_001619A4 = -13107;
+short       D_L17_001619A8 = 0x28;
 
 short sine_draw_packet_rgb_control __asm__("D_L15_00161ACC") = 0xff;
 short sine_alpha_period_frames __asm__("D_L15_00161AD4") = 0x28;

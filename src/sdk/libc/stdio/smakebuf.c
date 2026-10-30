@@ -27,16 +27,17 @@ struct RncStatBuffer {
     u16 st_dev;
     u16 st_ino;
     u32 st_mode;
-    u8 remaining[0x68];
+    u8  remaining[0x68];
 };
+
 extern void *_malloc_r();
-extern s32 _fstat_r() __asm__("func_00114000");
-extern s32 isatty() __asm__("func_00118EC0");
-extern s32 __sseek(void *, s32, s32);
+extern s32   _fstat_r() __asm__("func_00114000");
+extern s32   isatty() __asm__("func_00118EC0");
+extern s32   __sseek(void *, s32, s32);
 
 void __smakebuf(RncFile *fp) {
-    u32 size, couldbetty;
-    void *allocated_buffer;
+    u32                  size, couldbetty;
+    void                *allocated_buffer;
     struct RncStatBuffer file_status;
 
     if (fp->_flags & 2) {
@@ -44,8 +45,7 @@ void __smakebuf(RncFile *fp) {
         fp->_bf._size = 1;
         return;
     }
-    if ((s16)fp->_file < 0 ||
-        _fstat_r(fp->_data, (s16)fp->_file, &file_status) < 0) {
+    if ((s16)fp->_file < 0 || _fstat_r(fp->_data, (s16)fp->_file, &file_status) < 0) {
         couldbetty = 0;
         size = 0x400;
         fp->_flags |= 0x800;

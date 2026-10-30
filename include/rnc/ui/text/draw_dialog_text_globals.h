@@ -21,6 +21,7 @@ extern s32 freeze_shared_dialog_text_blend_target_color __asm__("D_0015F530") __
 extern s32 freeze_matched_record_text_base_color __asm__("D_0015F534") __attribute__((sda));
 extern s32 freeze_matched_record_text_blend_target_color __asm__("D_0015F538") __attribute__((sda));
 extern s32 freeze_unmatched_record_text_base_color __asm__("D_0015F53C") __attribute__((sda));
-extern s32 freeze_unmatched_record_text_blend_target_color __asm__("D_0015F540") __attribute__((sda));
+extern s32 freeze_unmatched_record_text_blend_target_color __asm__("D_0015F540")
+    __attribute__((sda));
 
 #endif /* LOMBYTE_RNC_UI_TEXT_DRAW_DIALOG_TEXT_GLOBALS_H */

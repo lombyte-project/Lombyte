@@ -4,8 +4,6 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/leg_rig.h"
 
-
-
 #include "qcopy.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
@@ -21,7 +19,6 @@
 #include "rnc/world/collision/collision_line.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
-
 
 extern float D_L04_00173FE8 NOT_SDA;
 float probe_leg_rig_ground_height(float *probe_origin) __asm__("FUN_L04_002922d0");
@@ -40,10 +37,10 @@ float probe_leg_rig_ground_height(float *probe_origin) {
     return 0.0f;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293530), where it is exact; names translated to the US level program. */
 
-void initialize_leg_rig_angle_defaults(void *unused, char *movement_data) __asm__("FUN_L04_00292370");
+void initialize_leg_rig_angle_defaults(void *unused,
+                                       char *movement_data) __asm__("FUN_L04_00292370");
 
 void initialize_leg_rig_angle_defaults(void *unused, char *movement_data) {
     *(float *)(movement_data + 0x10C) = -0.19634955f;
@@ -51,20 +48,21 @@ void initialize_leg_rig_angle_defaults(void *unused, char *movement_data) {
     *(float *)(movement_data + 0x1BC) = -1.5707964f;
     *(float *)(movement_data + 0x1C0) = 0.19634955f;
 }
-extern char invalid_animation_message[] __asm__("D_L04_001DB360");
-extern char rig_size_message[] __asm__("D_L04_001DB3F0");
-extern void debug_print() __asm__("FUN_001e93b0");
-extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
+
+extern char  invalid_animation_message[] __asm__("D_L04_001DB360");
+extern char  rig_size_message[] __asm__("D_L04_001DB3F0");
+extern void  debug_print() __asm__("FUN_001e93b0");
+extern void  raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern float FUN_L04_001f1978(float);
 
 void initialize_leg_rig(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_002923b8");
 
 void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
-    int joints[6];
+    int   joints[6];
     float matrix[4][4];
-    int i;
-    int j;
-    int k;
+    int   i;
+    int   j;
+    int   k;
 
     for (i = 0; i < 13; i++) {
         if (rig->anims[i]->id < 0) {
@@ -72,17 +70,23 @@ void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
             raise_kernel_trap();
         }
         rig->anims[i]->start = animation_start(moby->class_slot, rig->anims[i]->id);
-        rig->anims[i]->len = animation_end(moby->class_slot, rig->anims[i]->id) - rig->anims[i]->start;
+        rig->anims[i]->len =
+            animation_end(moby->class_slot, rig->anims[i]->id) - rig->anims[i]->start;
         if (rig->anims[i]->len != 0.0f) {
             for (j = 0; j < 2; j++) {
-                rig->anims[i]->phase[1].span[j] = rig->anims[i]->phase[1].from[j] <= rig->anims[i]->phase[1].to[j]
-                    ? rig->anims[i]->phase[1].to[j] - rig->anims[i]->phase[1].from[j]
-                    : rig->anims[i]->phase[1].to[j] + rig->anims[i]->len - rig->anims[i]->phase[1].from[j];
-                rig->anims[i]->phase[0].span[j] = rig->anims[i]->phase[0].from[j] <= rig->anims[i]->phase[0].to[j]
-                    ? rig->anims[i]->phase[0].to[j] - rig->anims[i]->phase[0].from[j]
-                    : rig->anims[i]->phase[0].to[j] + rig->anims[i]->len - rig->anims[i]->phase[0].from[j];
+                rig->anims[i]->phase[1].span[j] =
+                    rig->anims[i]->phase[1].from[j] <= rig->anims[i]->phase[1].to[j]
+                        ? rig->anims[i]->phase[1].to[j] - rig->anims[i]->phase[1].from[j]
+                        : rig->anims[i]->phase[1].to[j] + rig->anims[i]->len -
+                              rig->anims[i]->phase[1].from[j];
+                rig->anims[i]->phase[0].span[j] =
+                    rig->anims[i]->phase[0].from[j] <= rig->anims[i]->phase[0].to[j]
+                        ? rig->anims[i]->phase[0].to[j] - rig->anims[i]->phase[0].from[j]
+                        : rig->anims[i]->phase[0].to[j] + rig->anims[i]->len -
+                              rig->anims[i]->phase[0].from[j];
             }
-            rig->anims[i]->rate = rig->anims[i]->unk4 / FUN_L04_001f1978(rig->anims[i]->len + rig->anims[i]->len);
+            rig->anims[i]->rate =
+                rig->anims[i]->unk4 / FUN_L04_001f1978(rig->anims[i]->len + rig->anims[i]->len);
         }
     }
     joints[0] = rig->legs[0].joint;
@@ -121,8 +125,8 @@ extern int walker_gait_mask(int *a, char *b) __asm__("FUN_L00_002a13f0");
 
 int FUN_L04_002927d0(char *moby, char *rig) {
     int **record_cursor = (int **)(rig + 0x70);
-    int *found = 0;
-    int i;
+    int  *found = 0;
+    int   i;
     for (i = 12; i >= 0; i--) {
         int *candidate_record = *record_cursor++;
         if (*candidate_record == (int)(unsigned char)moby[0x52])
@@ -136,46 +140,49 @@ int FUN_L04_002927d0(char *moby, char *rig) {
 
 /* Steers a moby from the arg block: height and push terms, returns 2 when the tilt is past pi/4. */
 
-typedef struct { float x, y, z, w; } Vec;
+typedef struct {
+    float x, y, z, w;
+} Vec;
 
 typedef struct {
-    Vec pts[6];      /* 0x00: probe points */
-    char pad60[0x2C];
-    float *f8C;             /* 0x8C */
-    char pad90[0x26];
-    unsigned char mask;     /* 0xB6 */
-    unsigned char kind;     /* 0xB7 */
-    float tilt;             /* 0xB8 */
-    char padBC[0x1C];
-    float vel;              /* 0xD8 */
-    float accel;            /* 0xDC */
-    char padE0[0x4];
-    float ground;           /* 0xE4 */
-    char padE8[0x6];
-    unsigned short flags;   /* 0xEE */
+    Vec            pts[6]; /* 0x00: probe points */
+    char           pad60[0x2C];
+    float         *f8C; /* 0x8C */
+    char           pad90[0x26];
+    unsigned char  mask; /* 0xB6 */
+    unsigned char  kind; /* 0xB7 */
+    float          tilt; /* 0xB8 */
+    char           padBC[0x1C];
+    float          vel;   /* 0xD8 */
+    float          accel; /* 0xDC */
+    char           padE0[0x4];
+    float          ground; /* 0xE4 */
+    char           padE8[0x6];
+    unsigned short flags; /* 0xEE */
 } Steer;
 
 typedef struct {
-    char pad00[0x10];
-    Vec pos;         /* 0x10 */
-    char pad20[0x28];
-    float rotz;             /* 0x48 */
+    char  pad00[0x10];
+    Vec   pos; /* 0x10 */
+    char  pad20[0x28];
+    float rotz; /* 0x48 */
 } StMoby;
 
 float probe_leg_rig_ground_height(float *pos) __asm__("FUN_L04_002922d0");
+
 #include "rnc/overlay/collision.h"
+
 extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
 
 int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state) __asm__("FUN_L04_00292828");
 
-int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
-{
+int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state) {
     float push[4];
     float tilt_direction[4];
-    int excessive_tilt_flags = 0;
-    int pinned = 0;
-    int bit = 1;
-    int j;
+    int   excessive_tilt_flags = 0;
+    int   pinned = 0;
+    int   bit = 1;
+    int   j;
     float dz;
     float height_correction_divisor;
     float ground_height;
@@ -237,8 +244,10 @@ int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
         if (0.785398f < absolute_float(steer_state->tilt)) {
             excessive_tilt_flags = 2;
         }
-        if (steer_state->kind == 0xD && 0.0f < steer_state->ground && (steer_state->mask & 0xF) == 0) {
-            xy_abs_sum_or_tilt = -fast_arc_tan(steer_state->f8C[1], steer_state->ground - moby->pos.z);
+        if (steer_state->kind == 0xD && 0.0f < steer_state->ground &&
+            (steer_state->mask & 0xF) == 0) {
+            xy_abs_sum_or_tilt =
+                -fast_arc_tan(steer_state->f8C[1], steer_state->ground - moby->pos.z);
             if (absolute_float(xy_abs_sum_or_tilt) < 0.5235988f) {
                 pinned = 1;
                 dz += steer_state->ground - moby->pos.z;
@@ -271,17 +280,18 @@ int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
     moby->pos.z = moby->pos.z + dz;
     return excessive_tilt_flags;
 }
+
 extern float rig_turn_2d48(float, float, float *, float, float, float) __asm__("FUN_L00_00258110");
 
 void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
-    float joint[16];
-    float tilt[4];
-    float twist;
-    float base_yaw;
-    float heading;
+    float      joint[16];
+    float      tilt[4];
+    float      twist;
+    float      base_yaw;
+    float      heading;
     LegRigLeg *leg;
-    int mask;
-    int i;
+    int        mask;
+    int        i;
 
     mask = 3;
     for (i = 0; i < 2; i++) {
@@ -293,17 +303,33 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
             leg->lower_turn);
         base_yaw = fast_subtract_rotations(heading, twist);
         if (rig->unkB7 == 0 || (flags & mask) == 0) {
-            leg->upper_turn = rig_turn_2d48(leg->upper_turn, 0.0f, &rig->legs[i].upper_turn_speed, 0.1f, 0.1f,
-                                           frame_scale * 0.034906585f);
-            leg->lower_turn = rig_turn_2d48(leg->lower_turn, 0.0f, &rig->legs[i].lower_turn_speed, 0.1f, 0.1f,
-                                           frame_scale * 0.034906585f);
+            leg->upper_turn = rig_turn_2d48(leg->upper_turn,
+                                            0.0f,
+                                            &rig->legs[i].upper_turn_speed,
+                                            0.1f,
+                                            0.1f,
+                                            frame_scale * 0.034906585f);
+            leg->lower_turn = rig_turn_2d48(leg->lower_turn,
+                                            0.0f,
+                                            &rig->legs[i].lower_turn_speed,
+                                            0.1f,
+                                            0.1f,
+                                            frame_scale * 0.034906585f);
         } else {
             if (rig->unkB7 == 13)
-                leg->upper_turn = rig_turn_2d48(leg->upper_turn, 0.0f, &rig->legs[i].upper_turn_speed, 0.1f, 0.1f,
-                                               frame_scale * 0.034906585f);
+                leg->upper_turn = rig_turn_2d48(leg->upper_turn,
+                                                0.0f,
+                                                &rig->legs[i].upper_turn_speed,
+                                                0.1f,
+                                                0.1f,
+                                                frame_scale * 0.034906585f);
             else
-                leg->upper_turn = rig_turn_2d48(leg->upper_turn, twist * 0.5f, &rig->legs[i].upper_turn_speed, 0.1f,
-                                               0.1f, frame_scale * 0.034906585f);
+                leg->upper_turn = rig_turn_2d48(leg->upper_turn,
+                                                twist * 0.5f,
+                                                &rig->legs[i].upper_turn_speed,
+                                                0.1f,
+                                                0.1f,
+                                                frame_scale * 0.034906585f);
             leg->lower_turn = fast_subtract_rotations(twist, leg->upper_turn);
             leg->lower_turn_speed = 0.0f;
         }
@@ -329,19 +355,27 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
         mask <<= 2;
     }
 }
-typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) RigVec;
+
+typedef struct {
+    f32 x, y, z, w;
+} __attribute__((aligned(16))) RigVec;
 
 extern s32 rig_pick_mode(struct Moby *, LegRig *, f32) __asm__("FUN_L04_002927d0");
-extern f32 spring_turn(f32 cur, f32 target, f32 k, f32 d, f32 max, f32 *vel) __asm__("FUN_L00_00258110");
+extern f32
+spring_turn(f32 cur, f32 target, f32 k, f32 d, f32 max, f32 *vel) __asm__("FUN_L00_00258110");
 extern void rig_animate(struct Moby *, LegRig *, s32, f32) __asm__("FUN_L04_00292d48");
 extern void divide_vector_xyz(void *, void *, f32) __asm__("FUN_L00_001ff378");
-extern void walker_update_gait(struct Moby *, LegRig *, f32, f32, f32, s32) __asm__("FUN_L00_002a1670");
-extern void rig_probe_setup(struct Moby *, s32, s32 *, void *, f32 *, f32 *) __asm__("FUN_L01_00263a28");
+extern void
+walker_update_gait(struct Moby *, LegRig *, f32, f32, f32, s32) __asm__("FUN_L00_002a1670");
+extern void
+rig_probe_setup(struct Moby *, s32, s32 *, void *, f32 *, f32 *) __asm__("FUN_L01_00263a28");
 extern s32 rig_probe(void *, s32, f32, struct Moby *, f32) __asm__("FUN_L00_001f19a0");
 extern f32 D_0015ED60;
 extern s32 D_L04_00173FF0[] NOT_SDA;
 
-s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) __asm__("FUN_L04_00295778");
+s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) __asm__(
+    "FUN_L04_00295778");
+
 s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) {
     union {
         s32 joints[6];
@@ -352,33 +386,40 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     } local;
     RigVec transformed[6];
     RigVec shift;
-    s32 probe_kind;
-    f32 probe_start, probe_end;
-    s32 mode;
-    s32 flags;
-    s32 changed;
-    f32 time;
-    s32 i;
-    s32 tries;
+    s32    probe_kind;
+    f32    probe_start, probe_end;
+    s32    mode;
+    s32    flags;
+    s32    changed;
+    f32    time;
+    s32    i;
+    s32    tries;
     Vec4f *pos;
 
     if (moby->seq != 0xFF) {
         time = compute_interpolated_record_value(moby);
     } else {
-        time = convert_integer_to_float(moby->prev_frame) + animation_start(moby->class_slot, moby->prev_seq);
+        time = convert_integer_to_float(moby->prev_frame) +
+               animation_start(moby->class_slot, moby->prev_seq);
     }
     mode = rig_pick_mode(moby, rig, time);
     if (rig->unkEE & 4) {
-        moby->rot.z = spring_turn(moby->rot.z, rig->heading, rig->unkCC, rig->unkD0, rig->unkD4,
-                               (f32 *)&rig->unkC8);
+        moby->rot.z = spring_turn(
+            moby->rot.z, rig->heading, rig->unkCC, rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
     } else if (mode & 0xF) {
-        moby->rot.z = spring_turn(moby->rot.z, heading, rig->unkCC, rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
+        moby->rot.z = spring_turn(
+            moby->rot.z, heading, rig->unkCC, rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
     } else {
-        moby->rot.z = spring_turn(moby->rot.z, heading, 0.0f, rig->unkD0 + rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
+        moby->rot.z = spring_turn(
+            moby->rot.z, heading, 0.0f, rig->unkD0 + rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
     }
     rig_animate(moby, rig, mode, heading);
-    moby->rot.y = spring_turn(moby->rot.y, *(f32 *)&rig->unkB8, 0.005f, 0.01f, D_0015ED60 * 0.017453292f,
-                           (f32 *)&rig->unkBC);
+    moby->rot.y = spring_turn(moby->rot.y,
+                              *(f32 *)&rig->unkB8,
+                              0.005f,
+                              0.01f,
+                              D_0015ED60 * 0.017453292f,
+                              (f32 *)&rig->unkBC);
     local.joints[0] = rig->legs[0].joint;
     local.joints[1] = rig->legs[0].joint2;
     local.joints[2] = rig->legs[1].joint;
@@ -387,9 +428,9 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     local.joints[5] = rig->jointB5;
     transform_scaled_vertex_batch(moby, 6, local.joints, transformed);
     if (!(rig->unkEE & 4)) {
-        s32 active = mode | (rig->mode & 0x30);
-        s32 bit = 1;
-        f32 count = 0.0f;
+        s32     active = mode | (rig->mode & 0x30);
+        s32     bit = 1;
+        f32     count = 0.0f;
         RigVec *moved = transformed;
         RigVec *point = (RigVec *)rig->pts;
 
@@ -429,14 +470,17 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
 
         rig->mode = mode;
         changed = (mode ^ old) & mode;
-        if (max_step < step) step = max_step;
+        if (max_step < step)
+            step = max_step;
     }
     if (rig->speed < speed) {
         rig->speed += step;
-        if (speed < rig->speed) rig->speed = speed;
+        if (speed < rig->speed)
+            rig->speed = speed;
     } else if (speed < rig->speed) {
         rig->speed -= step;
-        if (rig->speed < speed) rig->speed = speed;
+        if (rig->speed < speed)
+            rig->speed = speed;
     }
     flags = update_leg_rig_height_and_tilt(moby, rig);
     walker_update_gait(moby, rig, speed, heading, step, changed);
@@ -453,13 +497,15 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
         local.v.ground.z += *(f32 *)&rig->unkE8;
         probe_end -= *(f32 *)&rig->unkE8;
         fast_vec_sub(&local.v.offset, pos, &local.v.ground);
-        for (tries = 0; tries < 8 && rig_probe(&local.v.ground, 4, probe_start, moby, probe_end); tries++) {
+        for (tries = 0; tries < 8 && rig_probe(&local.v.ground, 4, probe_start, moby, probe_end);
+             tries++) {
             qcopy(&local.v.ground, D_L04_00173FF0);
             flags |= 1;
         }
         fast_vec_sub(transformed, &local.v.ground, pos);
         fast_vec_add(pos, &local.v.ground, &local.v.offset);
-        if (vector_length_xy(transformed) < rig->speed * 0.5f) flags |= 2;
+        if (vector_length_xy(transformed) < rig->speed * 0.5f)
+            flags |= 2;
     }
     local.joints[0] = rig->legs[0].joint;
     local.joints[1] = rig->legs[0].joint2;
@@ -468,20 +514,22 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     local.joints[4] = rig->jointB4;
     local.joints[5] = rig->jointB5;
     transform_scaled_vertex_batch(moby, 6, local.joints, rig);
-    if (rig->unkB7 == 0x12 && moby->seq == rig->anims[12]->id) return flags;
+    if (rig->unkB7 == 0x12 && moby->seq == rig->anims[12]->id)
+        return flags;
     moby->anim_speed = 1.0f;
     if (rig->unkB7 != 0) {
         LegRigAnim **fallback = rig->anims;
         LegRigAnim **entry;
-        s32 seq = moby->seq;
-        f32 min_turn = 0.09239978f;
+        s32          seq = moby->seq;
+        f32          min_turn = 0.09239978f;
 
         for (i = 0, entry = fallback; i < 13; i++) {
             if ((*entry)->id == seq) {
                 LegRigAnim *anim;
-                f32 rate;
+                f32         rate;
 
-                if (!(rig->speed < frame_time * 0.19f) || !(min_turn < fast_difference_between_rotations(moby->rot.z, heading)) ||
+                if (!(rig->speed < frame_time * 0.19f) ||
+                    !(min_turn < fast_difference_between_rotations(moby->rot.z, heading)) ||
                     !(speed < (rate = frame_time * 0.19f))) {
                     anim = *entry;
                     rate = rig->speed;
@@ -497,31 +545,33 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
     }
     return flags;
 }
+
 u8 D_L04_001CA938[13][4] = {
-    {1, 0, 0, 0},
-    {2, 0, 0, 0},
-    {3, 0, 0, 0},
-    {4, 0, 0, 0},
-    {7, 0, 0, 0},
-    {8, 0, 0, 0},
-    {9, 0, 0, 0},
-    {0xc, 0, 0, 0},
-    {0xd, 0, 0, 0},
-    {0xe, 0, 0, 0},
+    {   1, 0, 0, 0},
+    {   2, 0, 0, 0},
+    {   3, 0, 0, 0},
+    {   4, 0, 0, 0},
+    {   7, 0, 0, 0},
+    {   8, 0, 0, 0},
+    {   9, 0, 0, 0},
+    { 0xc, 0, 0, 0},
+    { 0xd, 0, 0, 0},
+    { 0xe, 0, 0, 0},
     {0x13, 0, 0, 0},
-    {0xf, 0, 0, 0},
+    { 0xf, 0, 0, 0},
     {0x14, 0, 0, 0},
 };
+
 extern int rig_pick_mode(struct Moby *m, LegRig *rig, float t) __asm__("FUN_L04_002927d0");
 
 void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_00295de8");
 
 void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) {
-    int joints[6];
-    float mtx[4][4];
-    float animation_time;
-    int i;
-    int j;
+    int          joints[6];
+    float        mtx[4][4];
+    float        animation_time;
+    int          i;
+    int          j;
     LegRigAnim **animation_cursor;
 
     joints[0] = rig->legs[0].joint;

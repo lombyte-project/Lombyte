@@ -30,8 +30,10 @@ void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00
 extern void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
 extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
 extern void draw_sky_shells_with_fast_and_slow_rotation(void) __asm__("FUN_L00_00289a90");
-extern void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_00289bd8");
-extern void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_0028a208");
+extern void
+draw_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_00289bd8");
+extern void
+draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_0028a208");
 extern void draw_sky_shells_with_modulo_40000_rotation(void) __asm__("FUN_L00_0028a2f0");
 extern void draw_sky_shells_with_modulo_25000_rotation(void) __asm__("FUN_L00_0028a3a8");
 extern void draw_sky_shells_with_scaled_phase_rotation(void) __asm__("FUN_L00_0028a480");
@@ -39,9 +41,11 @@ extern void draw_sky_shells_with_slow_medium_and_fast_rotation(void) __asm__("FU
 extern void FUN_L00_0028a7a0(void);
 extern void FUN_L00_0028ab08(void);
 extern void draw_three_sky_shells_with_particles(void) __asm__("FUN_L00_0028a920");
-extern void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) __asm__("FUN_L00_0028a998");
+extern void
+draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) __asm__("FUN_L00_0028a998");
 extern void draw_two_sky_shells_with_particles(void) __asm__("FUN_L00_0028aa98");
-extern void draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) __asm__("FUN_L00_0028b080");
+extern void
+draw_seven_sky_shells_with_modulo_40000_and_60000_rotation(void) __asm__("FUN_L00_0028b080");
 extern void draw_sky_shells_with_rotation_and_scaling(void) __asm__("FUN_L00_0028b1a0");
 
 void draw_level_sky(void) __asm__("FUN_L00_0023d968");
@@ -139,39 +143,41 @@ void draw_level_sky(void) {
     vu1_add_g_sregister(0x47, 0x5360B);
     vu1_add_g_sregister(0x4E, 0x1000000 | (depth_buffer_address >> 13));
 }
+
 #include "eetypes.h"
 
 typedef struct {
-    u8 pad0[0x34];
+    u8  pad0[0x34];
     u16 flags;
-    u8 pad36[0x70];
+    u8  pad36[0x70];
     s16 oClass;
 } VeldinMoby;
 
 typedef struct {
-    u8 pad0[0x30];
-    s32 state;
-    s32 timer;
-    u8 pad38[0xC];
-    s16 count;
-    u8 pad46[0x132];
+    u8          pad0[0x30];
+    s32         state;
+    s32         timer;
+    u8          pad38[0xC];
+    s16         count;
+    u8          pad46[0x132];
     VeldinMoby *mobys[1];
     VeldinMoby *unk17C;
-    u8 pad180[4];
+    u8          pad180[4];
     VeldinMoby *unk184;
     VeldinMoby *unk188;
 } VeldinLevelState;
 
 typedef union {
     u128 q;
-    f32 f[4];
+    f32  f[4];
 } VeldinVec;
 
 extern void glow_quads_draw() __asm__("FUN_L00_0023db30");
 extern void FUN_L00_002935b8();
 extern void emit_moby_particle_pairs(VeldinMoby *) __asm__("FUN_L00_0023e008");
 extern void FUN_L00_00257024(void *);
-extern void spawn_effect_particle_with_target_scalar(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0026ced0");
+extern void spawn_effect_particle_with_target_scalar(void *, void *, s32, s32, s32, f32) __asm__(
+    "FUN_L00_0026ced0");
 extern VeldinLevelState D_L00_0016C860;
 
 void apply_level_specific_cutscene_moby_effects(void) __asm__("FUN_L00_0023e268");
@@ -179,16 +185,16 @@ void apply_level_specific_cutscene_moby_effects(void) __asm__("FUN_L00_0023e268"
 void apply_level_specific_cutscene_moby_effects(void) {
     VeldinMoby *particle_source_moby;
     VeldinMoby *mb;
-    char *joint_position_source_moby;
-    s32 i;
-    s32 j;
-    s32 k;
-    s32 effect_spawn_attempt_index;
-    f32 azimuth_angle;
-    f32 elevation_angle;
-    s32 r;
-    VeldinVec joint_world_position;
-    VeldinVec spherical_offset;
+    char       *joint_position_source_moby;
+    s32         i;
+    s32         j;
+    s32         k;
+    s32         effect_spawn_attempt_index;
+    f32         azimuth_angle;
+    f32         elevation_angle;
+    s32         r;
+    VeldinVec   joint_world_position;
+    VeldinVec   spherical_offset;
 
     if (current_level_index == 0) {
         for (i = 0; i < D_L00_0016C860.count; i++) {
@@ -210,16 +216,26 @@ void apply_level_specific_cutscene_moby_effects(void) {
         D_L00_0016C860.timer < scale_game_frames(1100)) {
         joint_position_source_moby = (char *)D_L00_0016C860.unk184;
         if (joint_position_source_moby != 0) {
-            for (effect_spawn_attempt_index = 0; effect_spawn_attempt_index < 4; effect_spawn_attempt_index++) {
+            for (effect_spawn_attempt_index = 0; effect_spawn_attempt_index < 4;
+                 effect_spawn_attempt_index++) {
                 clear_u64_value(&spherical_offset);
-                moby_point_position(joint_position_source_moby, effect_spawn_attempt_index % 2, &joint_world_position);
+                moby_point_position(joint_position_source_moby,
+                                    effect_spawn_attempt_index % 2,
+                                    &joint_world_position);
                 azimuth_angle = random_angle_radians();
                 elevation_angle = random_angle_radians();
-                build_spherical_offset(
-                    spherical_offset.f, random_float_between(frame_time * 0.7f, frame_time * 2.2f), azimuth_angle, elevation_angle);
+                build_spherical_offset(spherical_offset.f,
+                                       random_float_between(frame_time * 0.7f, frame_time * 2.2f),
+                                       azimuth_angle,
+                                       elevation_angle);
                 r = scale_game_frames(0xC);
-                spawn_effect_particle_with_target_scalar(&joint_world_position, &spherical_offset, 0x80808080, 0x808080,
-                                 random_int_between(r, scale_game_frames(0x23)), 147000.0f);
+                spawn_effect_particle_with_target_scalar(
+                    &joint_world_position,
+                    &spherical_offset,
+                    0x80808080,
+                    0x808080,
+                    random_int_between(r, scale_game_frames(0x23)),
+                    147000.0f);
             }
         }
     }
@@ -240,15 +256,15 @@ void apply_level_specific_cutscene_moby_effects(void) {
         }
     }
 }
+
 #include "qzero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 
 typedef union {
     u128 q;
-    f32 f[4];
+    f32  f[4];
 } SkyRotVec;
-
 
 void draw_sky_shells_with_particles_and_rotating_shell(void) {
     SkyRotVec sky_shell_rotation_radians;
@@ -263,40 +279,43 @@ void draw_sky_shells_with_particles_and_rotating_shell(void) {
     vu1_add_g_sregister(0x42, 0x8000000044L);
     sky_draw_shell(2);
     qzero(&sky_shell_rotation_radians);
-    sky_shell_rotation_radians.f[2] = (f32)(*(volatile int *)&D_L00_0015F5CC & 0x7FFF) * 1.9174760e-4f - 3.1415927f;
+    sky_shell_rotation_radians.f[2] =
+        (f32)(*(volatile int *)&D_L00_0015F5CC & 0x7FFF) * 1.9174760e-4f - 3.1415927f;
     euler_to_matrix_ee(D_L00_001BD7E0, &sky_shell_rotation_radians);
     sky_draw_shell(3);
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(4);
 }
+
 typedef struct {
-    u8 pad0[0x20];
-    u8 unk20[4];
+    u8  pad0[0x20];
+    u8  unk20[4];
     s16 unk24;
-    u8 pad26[6];
+    u8  pad26[6];
     f32 unk2C;
-    u8 pad30[0x26];
+    u8  pad30[0x26];
     s16 unk56;
-    u8 pad58[8];
+    u8  pad58[8];
     s32 unk60;
 } DoorVars;
 
 typedef struct {
-    u8 pad0[0x20];
-    u8 state;
-    u8 pad21[0xF];
-    u8 alpha;
-    u8 unk31;
-    u8 pad32[2];
-    u16 flags;
-    u8 pad36[0x42];
+    u8        pad0[0x20];
+    u8        state;
+    u8        pad21[0xF];
+    u8        alpha;
+    u8        unk31;
+    u8        pad32[2];
+    u16       flags;
+    u8        pad36[0x42];
     DoorVars *vars;
 } DoorMoby;
 
-extern s16 D_00141628[];
+extern s16  D_00141628[];
 extern void initialize_global_state_entry(s32) __asm__("FUN_0022e188");
 
 void clank_cutscene_trigger_update(DoorMoby *m) __asm__("FUN_L00_002d9dc8");
+
 void clank_cutscene_trigger_update(DoorMoby *moby) {
     enum {
         CLANK_TRIGGER_INITIALIZE_DIALOGUE = 0,

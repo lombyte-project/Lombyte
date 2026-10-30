@@ -10,7 +10,9 @@
 
 extern void copy_matrix3x4(void *, void *);
 
-void build_axis_roll_matrix(void *out, void *roll_axis_direction, float roll) __asm__("FUN_L08_0026a0f8");
+void build_axis_roll_matrix(void *out,
+                            void *roll_axis_direction,
+                            float roll) __asm__("FUN_L08_0026a0f8");
 
 void build_axis_roll_matrix(void *out, void *roll_axis_direction, float roll) {
     float M[4][4];

@@ -6,6 +6,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/world/collision/collision_line.h"
+
 extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0");
 /* Camera-inside-water test: cast a ray through the camera focus from
    0.75 above to 0.75 below (up to six hits); on the first hit that is
@@ -15,11 +16,12 @@ extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0")
 void update_camera_underwater_flag(void) __asm__("FUN_001ed7f0");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
+
 void update_camera_underwater_flag(void) {
     char *preview_camera_base = (char *)&preview_camera;
     float probe_start[4];
     float probe_end[4];
-    int i;
+    int   i;
 
     if (*(short *)(*(char **)(preview_camera_base + 0x180) + 0x86) == 6 || game_mode_macro != 0) {
         *(int *)(preview_camera_base + 0x394) = 0;
@@ -32,7 +34,8 @@ void update_camera_underwater_flag(void) {
     i = 0;
     while (i < 6 && collision_line(probe_start, probe_end, 0x12, 0, 0) != 0) {
         if (collision_hit_material() == 0) {
-            float submersion_height_threshold = resolve_camera_surface_height(D_00194120, 0) + 0.04f;
+            float submersion_height_threshold =
+                resolve_camera_surface_height(D_00194120, 0) + 0.04f;
             char *preview_camera_state = (char *)&preview_camera;
 
             if (*(float *)(preview_camera_state + 0x148) < submersion_height_threshold) {

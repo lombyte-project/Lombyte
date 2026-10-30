@@ -1,11 +1,12 @@
 #include "types.h"
+
 typedef struct {
-    u8 pad0[0x858];
+    u8    pad0[0x858];
     void *cbData;
 } MpegDec;
 
-extern s32 DIntr(void);
-extern s32 EnableInterrupts(void);
+extern s32  DIntr(void);
+extern s32  EnableInterrupts(void);
 extern void _sendIpuCommand(MpegDec *d, u32 cmd);
 extern void _dispatchMpegCallback(void *cb, s32 *arg);
 

@@ -14,13 +14,14 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void lightpost_update(struct Moby *m) __asm__("FUN_L03_002e2948");
+
 void lightpost_update(struct Moby *lightpost_moby) {
     enum {
         LIGHTPOST_INITIALIZE = 0,
         LIGHTPOST_WAIT_FOR_HIT = 1,
         LIGHTPOST_REMOVE = 2
     };
-    int hit = 0;
+    int   hit = 0;
     char *hit_result = find_moby_hit(lightpost_moby, 0x10000, 0);
     switch (lightpost_moby->state) {
     case LIGHTPOST_INITIALIZE:

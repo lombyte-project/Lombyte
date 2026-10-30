@@ -2,7 +2,7 @@
 #include "rnc/movies/player/movie_player.h"
 
 extern struct MoviePlayer *movie_player_macro __asm__("D_0016120C") MACRO_ADDR;
-extern void vi_buf_restart_dma(struct ViBuf *) __asm__("FUN_0023c280");
+extern void                vi_buf_restart_dma(struct ViBuf *) __asm__("FUN_0023c280");
 
 int mpeg_restart_video_dma(void) __asm__("FUN_0023d110");
 

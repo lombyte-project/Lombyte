@@ -1,9 +1,10 @@
 #include "types.h"
+
 typedef struct {
-    u8 pad0[0x838];
-    s32 unk838;
-    s32 unk83C;
-    u8 pad840[0x18];
+    u8    pad0[0x838];
+    s32   unk838;
+    s32   unk83C;
+    u8    pad840[0x18];
     void *cbData;
 } MpegDec;
 
@@ -11,8 +12,8 @@ extern char bdec_error_message[] __asm__("D_00153788");
 extern void _waitIpuIdle(MpegDec *d);
 extern void _dispatchMpegCallback(void *cb, s32 *arg);
 extern void _Error(MpegDec *d, char *msg);
-extern s32 DIntr(void);
-extern s32 EnableInterrupts(void);
+extern s32  DIntr(void);
+extern s32  EnableInterrupts(void);
 
 #define IPU_CTRL  ((volatile u32 *)0x10002010)
 #define IPU_BP    ((volatile u32 *)0x10002020)

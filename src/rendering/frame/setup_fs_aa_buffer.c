@@ -8,21 +8,29 @@
 #include "rnc/rendering/fs_aa_packets.h"
 
 extern struct FsAaBuf *active_fs_aa_buffer __asm__("D_0015EEB8") MACRO_ADDR;
-extern s32 display_buffer_address_macro __asm__("D_0015EE80") MACRO_ADDR;
-extern s32 draw_buffer_address_macro __asm__("D_0015EE84") MACRO_ADDR;
-extern s32 depth_buffer_address_macro __asm__("D_0015EE88") MACRO_ADDR;
+extern s32             display_buffer_address_macro __asm__("D_0015EE80") MACRO_ADDR;
+extern s32             draw_buffer_address_macro __asm__("D_0015EE84") MACRO_ADDR;
+extern s32             depth_buffer_address_macro __asm__("D_0015EE88") MACRO_ADDR;
 
 extern void sceGsSetDefDispEnv(void *, s16, s16, s16, s16, s16);
-extern s32 sceGsSetDefDrawEnv(void *, s16, s16, s16, s16, s16);
+extern s32  sceGsSetDefDrawEnv(void *, s16, s16, s16, s16, s16);
 
 #define FA ((struct FsAaBuf *)active_fs_aa_buffer)
 
-void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width,
-                        s32 storage_height, s32 display_offset_x,
+void setup_fs_aa_buffer(s32 display_width,
+                        s32 display_height,
+                        s32 storage_width,
+                        s32 storage_height,
+                        s32 display_offset_x,
                         s32 display_offset_y) __asm__("FUN_001fa978");
 
-void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width,
-                        s32 storage_height, s32 display_offset_x, s32 display_offset_y) {
+void setup_fs_aa_buffer(s32 display_width,
+                        s32 display_height,
+                        s32 storage_width,
+                        s32 storage_height,
+                        s32 display_offset_x,
+
+                        s32 display_offset_y) {
     u8 *packet_base;
 
     active_fs_aa_buffer = &fs_aa_buffer;
@@ -40,11 +48,15 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     fs_aa_buffer.fbp1 = display_buffer_address_macro >> 13;
     fs_aa_buffer.fbp0 = draw_buffer_address_macro >> 13;
     fs_aa_buffer.zbp = depth_buffer_address_macro >> 13;
-    sceGsSetDefDispEnv(&fs_aa_buffer, 0, storage_width, storage_height, display_offset_x,
-                       display_offset_y);
+    sceGsSetDefDispEnv(
+        &fs_aa_buffer, 0, storage_width, storage_height, display_offset_x, display_offset_y);
     ((struct GsDispfb *)&FA->disp.dispfb)->FBP = fs_aa_buffer.fbp1;
-    sceGsSetDefDrawEnv(&FA->draw0, fs_aa_buffer.psm, fs_aa_buffer.display_width,
-                       fs_aa_buffer.display_height, 3, fs_aa_buffer.zpsm);
+    sceGsSetDefDrawEnv(&FA->draw0,
+                       fs_aa_buffer.psm,
+                       fs_aa_buffer.display_width,
+                       fs_aa_buffer.display_height,
+                       3,
+                       fs_aa_buffer.zpsm);
     FA->draw0.frame1.FBP = fs_aa_buffer.fbp0;
     *(s64 *)&FA->draw0.zbuf1 = (s64)fs_aa_buffer.zbp | ((u64)(fs_aa_buffer.zpsm & 0xF) << 24);
     *(u128 *)&FA->giftag0 = 0;
@@ -52,8 +64,12 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     FA->giftag0.EOP = 1;
     FA->giftag0.NREG = 1;
     FA->giftag0.REGS0 = 0xE;
-    sceGsSetDefDrawEnv(&FA->draw1, fs_aa_buffer.storage_psm, fs_aa_buffer.storage_width,
-                       fs_aa_buffer.storage_height, 0, 0);
+    sceGsSetDefDrawEnv(&FA->draw1,
+                       fs_aa_buffer.storage_psm,
+                       fs_aa_buffer.storage_width,
+                       fs_aa_buffer.storage_height,
+                       0,
+                       0);
     FA->draw1.frame1.FBP = fs_aa_buffer.fbp1;
     *(s64 *)&FA->draw1.zbuf1 = (s64)1 << 32;
     *(u128 *)&FA->giftag1 = 0;
@@ -71,14 +87,15 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     *(u64 *)(packet_base + 0x28) = 8;
     *(u64 *)(packet_base + 0x30) = 0x100000261UL;
     *(u64 *)(packet_base + 0x38) = 0x14;
-    *(u64 *)(packet_base + 0x40) = ((s64)FA->fbp0 << 5) | ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
-           ((s64)FA->psm << 20) | 0xEA8000000UL;
+    *(u64 *)(packet_base + 0x40) = ((s64)FA->fbp0 << 5) |
+                                   ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
+                                   ((s64)FA->psm << 20) | 0xEA8000000UL;
     *(u64 *)(packet_base + 0x48) = 6;
     *(u64 *)(packet_base + 0x50) = 0x4400000000008010UL;
     *(u64 *)(packet_base + 0x58) = 0x5353;
     {
         volatile u64 *p;
-        s32 i;
+        s32           i;
         for (i = 0, p = (u64 *)packet_base + 12; i < 16; i++) {
             *p++ = i * FA->display_width;
             *p++ = (i * FA->storage_width + (0x8000 - FA->storage_width * 8)) |
@@ -102,14 +119,15 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     *(u64 *)(packet_base + 0x18) = 0x47;
     *(u64 *)(packet_base + 0x20) = 0x100000261UL;
     *(u64 *)(packet_base + 0x28) = 0x14;
-    *(u64 *)(packet_base + 0x30) = ((s64)FA->fbp0 << 5) | ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
-           ((s64)FA->psm << 20) | 0xEA8000000UL;
+    *(u64 *)(packet_base + 0x30) = ((s64)FA->fbp0 << 5) |
+                                   ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
+                                   ((s64)FA->psm << 20) | 0xEA8000000UL;
     *(u64 *)(packet_base + 0x38) = 6;
     *(u64 *)(packet_base + 0x40) = 0x4400000000008010UL;
     *(u64 *)(packet_base + 0x48) = 0x5353;
     {
         volatile u64 *p = (u64 *)packet_base + 10;
-        s32 i;
+        s32           i;
         for (i = 0; i < 16; i++) {
             s32 x0 = i * 0x200 + 0x6FF8;
             s32 x1 = (i + 1) * 0x200 + 0x6FF8;
@@ -130,14 +148,15 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     *(u64 *)(packet_base + 0x28) = 8;
     *(u64 *)(packet_base + 0x30) = 0x100000261UL;
     *(u64 *)(packet_base + 0x38) = 0x14;
-    *(u64 *)(packet_base + 0x40) = ((s64)FA->fbp0 << 5) | ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
-           ((s64)FA->psm << 20) | 0xEA8000000UL;
+    *(u64 *)(packet_base + 0x40) = ((s64)FA->fbp0 << 5) |
+                                   ((u64)((FA->display_width >> 6) & 0x3F) << 14) |
+                                   ((s64)FA->psm << 20) | 0xEA8000000UL;
     *(u64 *)(packet_base + 0x48) = 6;
     *(u64 *)(packet_base + 0x50) = 0x4400000000008010UL;
     *(u64 *)(packet_base + 0x58) = 0x5353;
     {
         volatile u64 *p = (u64 *)packet_base + 12;
-        s32 i;
+        s32           i;
         for (i = 0; i < 16; i++) {
             s32 x0 = i * 0x200 + 0x7000;
             s32 x1 = (i + 1) * 0x200;
@@ -164,7 +183,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     *(u64 *)(packet_base + 0x48) = 0x44;
     {
         volatile u64 *p = (u64 *)packet_base + 10;
-        s32 i;
+        s32           i;
         for (i = 0; i < 16; i++) {
             s32 x0 = i * 0x200 + 0x6FF8;
             s32 x1 = (i + 1) * 0x200 + 0x6FF8;
@@ -177,7 +196,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     packet_base = (u8 *)first_clear_packet;
     {
         volatile u64 *p = (u64 *)packet_base + 8;
-        s32 i;
+        s32           i;
         for (i = 0; i < 16; i++) {
             s32 x0 = i * 0x200 + 0x6FF8;
             s32 x1 = (i + 1) * 0x200 + 0x6FF8;
@@ -190,7 +209,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     packet_base = (u8 *)second_clear_packet;
     {
         volatile u64 *p = (u64 *)packet_base + 8;
-        s32 i;
+        s32           i;
         for (i = 0; i < 16; i++) {
             s32 x0 = i * 0x200 + 0x6FF8;
             s32 x1 = (i + 1) * 0x200 + 0x6FF8;
@@ -200,4 +219,5 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
         }
     }
 }
+
 extern __typeof__(setup_fs_aa_buffer) func_001FA978 __attribute__((alias("FUN_001fa978")));

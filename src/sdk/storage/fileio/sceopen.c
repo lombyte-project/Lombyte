@@ -7,39 +7,38 @@
 typedef char *va_list;
 
 struct FsOpenRequest {
-    s32 completion_semaphore;
+    s32   completion_semaphore;
     void *result;
-    s32 result_size;
-    s32 flags;
-    s32 mode;
-    char path[0x400];
-    s32 slot;
+    s32   result_size;
+    s32   flags;
+    s32   mode;
+    char  path[0x400];
+    s32   slot;
 };
 
-
 extern struct FsOpenRequest D_00156880;
-extern s32 CreateSema(struct SemaParam *);
-extern s32 DeleteSema(s32);
-extern s32 ReadQueueStatus(void);
-extern s32 SignalSema(s32);
-extern s32 WaitSema(s32);
-extern s32 _sceFsWaitS(s32);
-extern s32 sif_file_server_changed(void) __asm__("func_0011BBB8");
-extern struct SifFileSlot *new_iob(void);
-extern s32 sceFsInit(void);
+extern s32                  CreateSema(struct SemaParam *);
+extern s32                  DeleteSema(s32);
+extern s32                  ReadQueueStatus(void);
+extern s32                  SignalSema(s32);
+extern s32                  WaitSema(s32);
+extern s32                  _sceFsWaitS(s32);
+extern s32                  sif_file_server_changed(void) __asm__("func_0011BBB8");
+extern struct SifFileSlot  *new_iob(void);
+extern s32                  sceFsInit(void);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 
 s32 sceOpen(const u8 *path, s32 flags, ...) {
-    struct SemaParam semaphore_parameters;
-    va_list arguments;
-    s32 result;
-    s32 path_index;
-    s32 slot_mutex;
-    s32 mode;
-    s32 completion_semaphore;
-    s32 slot_index;
-    s32 return_value;
-    struct SifFileSlot *file_slot;
+    struct SemaParam      semaphore_parameters;
+    va_list               arguments;
+    s32                   result;
+    s32                   path_index;
+    s32                   slot_mutex;
+    s32                   mode;
+    s32                   completion_semaphore;
+    s32                   slot_index;
+    s32                   return_value;
+    struct SifFileSlot   *file_slot;
     struct FsOpenRequest *request;
 
     request = &D_00156880;

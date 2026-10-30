@@ -2,20 +2,23 @@
 #include "sda.h"
 #include "types.h"
 #include "rnc/ui/map/copy_level_object_positions.h"
+
 extern char D_0013D290[];
-extern int memcard_prepare_data(void *dst, int i, int *table) __asm__("func_0020AD78");
+extern int  memcard_prepare_data(void *dst, int i, int *table) __asm__("func_0020AD78");
 extern void sceCdReadClock(void *);
 extern void sceScfGetLocalTimefromRTC(void *);
 extern void save_map_coverage(void *) __asm__("func_00207B08");
 extern char D_0015EE98[] MACRO_ADDR;
 extern char D_00141EC0[];
+
 #include "rnc/game/level_state.h"
 #include "rnc/save/mc_data.h"
 #include "rnc/globals.h"
+
 extern int D_0015EE24 MACRO_ADDR;
-extern int alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
-extern u8 D_0014EED0[];
-extern u8 D_001506D0[];
+extern int            alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
+extern u8             D_0014EED0[];
+extern u8             D_001506D0[];
 /* memcard_save_data(slot, flags): starts the save (sceCdReadClock/sceScfGetLocalTimefromRTC
    on D_0015EE98, copy_level_object_positions, save_map_coverage on the D_00141EC0 page for
    D_0015ED84). With no valid card slot (D_0013D290+0xC8, its record's
@@ -32,6 +35,7 @@ extern u8 D_001506D0[];
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
 extern s32 current_bolt_count_macro __asm__("D_0015ED98") MACRO_ADDR;
+
 int memcard_save_data(int slot, int flags) {
     unsigned char saved;
 
@@ -41,8 +45,8 @@ int memcard_save_data(int slot, int flags) {
     save_map_coverage(D_00141EC0 + (current_level_index << 11));
     {
         char *memory_card_control = D_0013D290;
-        int active = *(int *)(memory_card_control + 0xC0);
-        int mask;
+        int   active = *(int *)(memory_card_control + 0xC0);
+        int   mask;
 
         if (active == -1 || *(int *)(memory_card_control + active * 0xB8 + 0x14) < 0) {
             return slot == 0;
@@ -75,11 +79,14 @@ int memcard_save_data(int slot, int flags) {
         char *memory_card_state = D_0013D290;
         char *names = memory_card_state + 0x30;
 
-        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x24) = current_bolt_count_macro;
-        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x20) = current_level_index;
+        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x24) =
+            current_bolt_count_macro;
+        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x20) =
+            current_level_index;
         *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x2C) = D_0015EE24;
         memcpy(names + *(int *)(memory_card_state + 0x14) * 0x1C, D_0015EE98, 8);
-        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x28) = alternate_animation_sequence_macro;
+        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x28) =
+            alternate_animation_sequence_macro;
         memcard_prepare_data(D_0014EED0, 0, mc_gamedata);
         memcard_prepare_data(D_001506D0, *(int *)(memory_card_state + 0xC8), mc_leveldata);
         if (flags >= 0) {

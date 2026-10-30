@@ -1,16 +1,16 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
 
-const u8 D_00153980[] = "Too small buffer size for %dx%d picture\n";
+const u8   D_00153980[] = "Too small buffer size for %dx%d picture\n";
 extern s32 _Error(void *a, void *b);
 extern s32 sprintf(char *d, char *f, ...);
 
 s32 _isOutSizeOK(struct MpegDecoder *decoder, struct MpegRefImage *reference_image) {
-    char sp_slot[0x100];
-    s32 out_max_height;
-    int new_var2;
+    char                 sp_slot[0x100];
+    s32                  out_max_height;
+    int                  new_var2;
     struct MpegRefImage *new_var;
-    s32 out_size_ok;
+    s32                  out_size_ok;
     out_max_height = decoder->out_max_height;
     if (out_max_height != 0) {
         out_size_ok = 0;
@@ -27,7 +27,8 @@ s32 _isOutSizeOK(struct MpegDecoder *decoder, struct MpegRefImage *reference_ima
             goto tail;
         }
     } else {
-        out_size_ok = (decoder->out_max_size < (reference_image->mb_width * reference_image->mb_height)) ^ 1;
+        out_size_ok =
+            (decoder->out_max_size < (reference_image->mb_width * reference_image->mb_height)) ^ 1;
     }
 tail:
     if (out_size_ok == 0) {

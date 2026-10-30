@@ -1,29 +1,34 @@
 #include "types.h"
 #include "rnc/ui/map/map_state.h"
+
 struct MenuItem {
     s16 id;
     s16 kind1;
     s32 value1;
     s16 kind2;
-    u8 padA[2];
+    u8  padA[2];
     s32 value2;
     u16 flags;
-    u8 pad12[0xA];
+    u8  pad12[0xA];
     s16 (*callback)(void *);
     void *arg;
-    s16 state;
-    s16 result;
+    s16   state;
+    s16   result;
 };
+
 struct MenuState {
-    u8 pad0[0xC];
-    s32 available;
+    u8               pad0[0xC];
+    s32              available;
     struct MenuItem *items;
 };
+
 extern struct MenuItem *mission_lists_by_level[] __asm__("D_001A2B70");
 extern struct MenuState D_001A2C10;
+
 #include "rnc/game/level_state.h"
+
 extern s32 check_mission_condition(s16, s32) __asm__("func_0020BAF0");
-s32 update_mission_list(void) __asm__("FUN_0020b950");
+s32        update_mission_list(void) __asm__("FUN_0020b950");
 
 s32 update_mission_list(void) {
     struct MenuItem *it;

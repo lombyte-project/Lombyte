@@ -2,18 +2,18 @@
 #include "sifrpc.h"
 #include "rnc/sdk/libcdvd.h"
 
-extern s32 D_00131308[];
-const u8 D_00152F10[] = "Scmd fail sema cur_cmd:%d keep_cmd:%d\n";
-extern u8 cd_s_command_bind_error_message[] __asm__("D_00152F38");
-extern s32 D_00159750[];
-extern u8 D_00159758[];
-extern s32 PollSema();
+extern s32  D_00131308[];
+const u8    D_00152F10[] = "Scmd fail sema cur_cmd:%d keep_cmd:%d\n";
+extern u8   cd_s_command_bind_error_message[] __asm__("D_00152F38");
+extern s32  D_00159750[];
+extern u8   D_00159758[];
+extern s32  PollSema();
 extern void ReferThreadStatus();
 extern void SignalSema();
 extern void cmd_sem_init();
-extern s32 sceCdSyncS();
+extern s32  sceCdSyncS();
 extern void scePrintf();
-extern s32 sceSifBindRpc();
+extern s32  sceSifBindRpc();
 extern void sceSifInitRpc();
 
 s32 cd_check_scmd(s32 cmd) __asm__("FUN_00120d40");

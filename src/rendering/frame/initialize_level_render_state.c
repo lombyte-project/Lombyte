@@ -32,8 +32,8 @@ typedef struct IRow {
 
 typedef struct TieData {
     FRow m[4];
-    u8 pad40[0x100];
-    u16 colors[64]; /* 0x140: copied from the gameplay file */
+    u8   pad40[0x100];
+    u16  colors[64]; /* 0x140: copied from the gameplay file */
 } TieData;
 
 typedef struct ShrubData {
@@ -44,30 +44,30 @@ typedef struct ShrubData {
 typedef struct LevelHeader {
     s32 x0;
     s32 directional_lights_offset; /* 0x04 */
-    u8 pad08[0x2C];
-    s32 ties_offset;   /* 0x34: 0xE0 bytes per tie */
-    u8 pad38[4];
+    u8  pad08[0x2C];
+    s32 ties_offset; /* 0x34: 0xE0 bytes per tie */
+    u8  pad38[4];
     s32 shrubs_offset; /* 0x3C: 0x70 bytes per shrub */
 } LevelHeader;
 
 typedef struct Ent100 {
-    u8 pad00[0x20];
-    u8 x20;
-    u8 pad21[0x15];
+    u8  pad00[0x20];
+    u8  x20;
+    u8  pad21[0x15];
     s16 x36;
-    u8 pad38[0xC8];
+    u8  pad38[0xC8];
 } Ent100;
 
 typedef struct Ent40 {
-    u8 pad00[0x36];
+    u8  pad00[0x36];
     u16 x36;
-    u8 pad38[2];
+    u8  pad38[2];
     s16 x3A;
-    u8 pad3C[4];
+    u8  pad3C[4];
 } Ent40;
 
 typedef struct Display {
-    u8 pad00[0x23C];
+    u8  pad00[0x23C];
     s32 x23C;
     s32 x240;
     s32 x244;
@@ -83,7 +83,7 @@ typedef struct Buf194100 {
 } Buf194100;
 
 typedef struct OcclCamState {
-    u8 pad00[0x1C];
+    u8  pad00[0x1C];
     s32 x1C;
 } OcclCamState;
 
@@ -92,41 +92,41 @@ typedef struct S160AB0 {
     u8 *x4;
 } S160AB0;
 
-extern u8 D_00100AE0[];
-extern u8 D_0013F350[];
-extern s32 D_0015ED80;
-extern Ent100 *D_0015FF18;
-extern Ent100 *moby_instance_end __asm__("D_0015FF1C");
-extern Ent100 *moby_instance_perm_end __asm__("D_0015FF20");
-extern u8 *moby_vars __asm__("D_0015FF28");
-extern s32 occl_fog_count __asm__("D_0015FF30");
-extern u8 *D_001600AC;
-extern s32 D_001600B0;
-extern s32 D_001600B4;
-extern s32 D_001600B8;
-extern ShrubData *shrub_data_table __asm__("D_001603DC");
-extern u8 *shrub_colors __asm__("D_001603E0"); /* 24 RGBA colours per shrub */
-extern f32 occl_fog_density_set __asm__("D_001603E4");
+extern u8                 D_00100AE0[];
+extern u8                 D_0013F350[];
+extern s32                D_0015ED80;
+extern Ent100            *D_0015FF18;
+extern Ent100            *moby_instance_end __asm__("D_0015FF1C");
+extern Ent100            *moby_instance_perm_end __asm__("D_0015FF20");
+extern u8                *moby_vars __asm__("D_0015FF28");
+extern s32                occl_fog_count __asm__("D_0015FF30");
+extern u8                *D_001600AC;
+extern s32                D_001600B0;
+extern s32                D_001600B4;
+extern s32                D_001600B8;
+extern ShrubData         *shrub_data_table __asm__("D_001603DC");
+extern u8                *shrub_colors __asm__("D_001603E0"); /* 24 RGBA colours per shrub */
+extern f32                occl_fog_density_set __asm__("D_001603E4");
 extern S160AB0 D_00160AB0 NOT_SDA;
-extern Ent40 *tfrag_render_records __asm__("D_00160E8C") __attribute__((sda));
-extern s32 tfrag_render_record_count __asm__("D_00160E90");
-extern f32 D_00160EC0;
-extern TieData *tie_data_table __asm__("D_00160F58");
-extern s32 tie_count __asm__("D_00160F5C");
-extern f32 D_00160F70;
-extern u8 D_00186F40[];
-extern Display D_0018CD00;
-extern u8 *D_001940D8 NOT_SDA;
-extern Buf194100 coll_output __asm__("D_00194100");
-extern u8 D_00194180[];
-extern char dir_lights[] __asm__("D_0019BDC0");
-extern u8 point_lights[] __asm__("D_0019C1C0");
-extern u8 D_001AAA40[];
-extern u8 moby_grids[] __asm__("D_001B76E0");
-extern u8 D_001C76E0[];
-extern u8 D_001CD780[];
-extern u8 object_render_class_slot_by_id[] __asm__("D_001E1A00");
-extern char too_many_directional_lights_message[] __asm__("D_001E76D8");
+extern Ent40             *tfrag_render_records __asm__("D_00160E8C") __attribute__((sda));
+extern s32                tfrag_render_record_count __asm__("D_00160E90");
+extern f32                D_00160EC0;
+extern TieData           *tie_data_table __asm__("D_00160F58");
+extern s32                tie_count __asm__("D_00160F5C");
+extern f32                D_00160F70;
+extern u8                 D_00186F40[];
+extern Display            D_0018CD00;
+extern u8 *D_001940D8     NOT_SDA;
+extern Buf194100          coll_output __asm__("D_00194100");
+extern u8                 D_00194180[];
+extern char               dir_lights[] __asm__("D_0019BDC0");
+extern u8                 point_lights[] __asm__("D_0019C1C0");
+extern u8                 D_001AAA40[];
+extern u8                 moby_grids[] __asm__("D_001B76E0");
+extern u8                 D_001C76E0[];
+extern u8                 D_001CD780[];
+extern u8                 object_render_class_slot_by_id[] __asm__("D_001E1A00");
+extern char               too_many_directional_lights_message[] __asm__("D_001E76D8");
 
 extern void DebugPrint(char *fmt, ...);
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
@@ -142,46 +142,46 @@ extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 u8 *initialize_level_render_state(LevelHeader *header) __asm__("FUN_001e9b10");
 
 u8 *initialize_level_render_state(LevelHeader *header) {
-    u8 *pool;
-    u8 *environment;
-    u8 *light_record;
-    u8 *tie_record;
-    u8 *shrub_record;
-    s32 light_count;
-    s32 shrub_index;
-    s32 tie_index;
-    s32 tfrag_index;
-    s32 tfrag_batch_start;
-    s32 tie_light_index;
-    s32 shrub_light_index;
-    s32 shrub_color_index;
-    s32 batch_count;
-    s32 tie_unk18;
-    s32 last_tie_class;
-    s32 last_shrub_class;
-    u16 *tfrag_list;
-    u16 *tie_list;
-    u16 *shrub_list;
-    TieInstance *tie;
-    TieData *tie_data;
+    u8            *pool;
+    u8            *environment;
+    u8            *light_record;
+    u8            *tie_record;
+    u8            *shrub_record;
+    s32            light_count;
+    s32            shrub_index;
+    s32            tie_index;
+    s32            tfrag_index;
+    s32            tfrag_batch_start;
+    s32            tie_light_index;
+    s32            shrub_light_index;
+    s32            shrub_color_index;
+    s32            batch_count;
+    s32            tie_unk18;
+    s32            last_tie_class;
+    s32            last_shrub_class;
+    u16           *tfrag_list;
+    u16           *tie_list;
+    u16           *shrub_list;
+    TieInstance   *tie;
+    TieData       *tie_data;
     ShrubInstance *shrub;
-    ShrubData *shrub_data;
-    s32 shrub_class;
-    s32 tie_size;
-    s32 tie_data_size;
-    s32 shrub_size;
-    s32 shrub_data_size;
-    s32 shrub_color_size;
-    f32 max_axis_length;
-    f32 horizontal_scale;
-    f32 vertical_scale;
-    s32 packed_horizontal;
-    s32 packed_vertical;
-    s32 red;
-    s32 green;
-    s32 blue;
-    Ent100 *moby;
-    TieInstance *tie_cursor;
+    ShrubData     *shrub_data;
+    s32            shrub_class;
+    s32            tie_size;
+    s32            tie_data_size;
+    s32            shrub_size;
+    s32            shrub_data_size;
+    s32            shrub_color_size;
+    f32            max_axis_length;
+    f32            horizontal_scale;
+    f32            vertical_scale;
+    s32            packed_horizontal;
+    s32            packed_vertical;
+    s32            red;
+    s32            green;
+    s32            blue;
+    Ent100        *moby;
+    TieInstance   *tie_cursor;
 
     pool = D_001940D8;
     fill_transfer_words(D_0013F350, 0, 0x2310);
@@ -249,7 +249,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     tfrag_batch_start = 0;
     while (tfrag_batch_start < tfrag_render_record_count) {
         tfrag_list = (u16 *)0x70003000;
-        for (batch_count = 0; batch_count < 0x3FF && tfrag_batch_start < tfrag_render_record_count; batch_count++, tfrag_batch_start++) {
+        for (batch_count = 0; batch_count < 0x3FF && tfrag_batch_start < tfrag_render_record_count;
+             batch_count++, tfrag_batch_start++) {
             *tfrag_list++ = tfrag_batch_start;
         }
         *tfrag_list = 0xFFFF;
@@ -368,7 +369,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         if (shrub_render_classes[shrub_class]->mip_packet != 0) {
             f32 min_radius;
 
-            shrub->x17 = truncate_float_to_s32(*(f32 *)shrub_render_classes[shrub_class]->mip_packet);
+            shrub->x17 =
+                truncate_float_to_s32(*(f32 *)shrub_render_classes[shrub_class]->mip_packet);
             min_radius = convert_integer_to_float(shrub->x17) + 24.0f;
             if (shrub->radius < min_radius) {
                 shrub->radius = min_radius;
@@ -380,7 +382,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         qcopy(&shrub_data->m3, shrub_record + 0x40);
         shrub_record += 0x50;
         shrub_data->m3.w = shrub_render_classes[shrub_class]->unk20;
-        horizontal_scale = (fast_vec_length(&shrub_data->m[0]) + fast_vec_length(&shrub_data->m[1])) * 0.5f;
+        horizontal_scale =
+            (fast_vec_length(&shrub_data->m[0]) + fast_vec_length(&shrub_data->m[1])) * 0.5f;
         vertical_scale = fast_vec_length(&shrub_data->m[2]);
         packed_horizontal = truncate_float_to_s32(horizontal_scale * 4096.0f);
         packed_vertical = truncate_float_to_s32(vertical_scale * 4096.0f);
@@ -436,7 +439,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         red_sum /= 24;
         green_sum /= 24;
         blue_sum /= 24;
-        *(s32 *)((u8 *)&shrub_data_table[shrub_color_index] + 0x1C) = (blue_sum << 16) | (green_sum << 8) | red_sum;
+        *(s32 *)((u8 *)&shrub_data_table[shrub_color_index] + 0x1C) =
+            (blue_sum << 16) | (green_sum << 8) | red_sum;
     }
 
     D_0015FF18 = (Ent100 *)pool;
@@ -471,6 +475,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     return pool;
 }
 
-extern __typeof__(initialize_level_render_state) func_001E9B10 __attribute__((alias("FUN_001e9b10")));
+extern __typeof__(initialize_level_render_state) func_001E9B10
+    __attribute__((alias("FUN_001e9b10")));
 
 s32 shrub_count = 0;

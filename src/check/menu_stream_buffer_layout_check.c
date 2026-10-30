@@ -1,8 +1,8 @@
 #include "rnc/ui/menus/stream_buffers.h"
 
-#define OFFSET_CHECK(field, offset) \
-    typedef char check_menu_stream_buffer_##field[ \
-        ((unsigned long)&((struct MenuStreamBuffer *)0)->field == (offset)) ? 1 : -1]
+#define OFFSET_CHECK(field, offset)               \
+    typedef char check_menu_stream_buffer_##field \
+        [((unsigned long)&((struct MenuStreamBuffer *)0)->field == (offset)) ? 1 : -1]
 
 OFFSET_CHECK(address, 0x0);
 OFFSET_CHECK(flags, 0x4);

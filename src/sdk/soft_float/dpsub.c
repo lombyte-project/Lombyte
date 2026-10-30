@@ -36,19 +36,22 @@ Boston, MA 02111-1307, USA.  */
 /* Source: GCC 2.95.2 fp-bit.c. */
 
 #include "types.h"
+
 extern s32 __pack_d();
 extern s32 __unpack_d();
 extern s32 _fpadd_parts();
+
 struct DpsubWork {
-    u8 pad_0[0x20];
+    u8  pad_0[0x20];
     s32 unk20;
     s32 unk24;
-    u8 pad_28[0x18];
+    u8  pad_28[0x18];
     s32 unk40;
-    u8 pad_44[0x1C];
+    u8  pad_44[0x1C];
     s64 unk60;
     s64 unk68;
 };
+
 void dpsub(s64 minuend, s64 subtrahend) {
     struct DpsubWork work;
 

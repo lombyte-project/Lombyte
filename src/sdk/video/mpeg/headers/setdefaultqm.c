@@ -2,14 +2,14 @@
 #include "eeregs.h"
 #include "rnc/sdk/libmpeg.h"
 
-extern s32 DIntr(void);
+extern s32  DIntr(void);
 extern void EnableInterrupts(void);
 extern void _dispatchMpegCallback(struct sceMpeg *, struct sceMpegCbData *);
 extern void _sendIpuCommand(struct MpegDecoder *, s32);
 extern void _waitIpuIdle(struct MpegDecoder *);
 
 void _setDefaultQM(struct MpegDecoder *decoder, s32 command, u32 matrix) {
-    s32 interrupts_enabled;
+    s32                  interrupts_enabled;
     struct sceMpegCbData callback;
 
     callback.type = 2;

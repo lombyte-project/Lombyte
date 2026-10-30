@@ -3,14 +3,16 @@
 #include "structs.h"
 
 typedef struct LinkObject LinkObject;
-typedef struct LinkOwner LinkOwner;
+typedef struct LinkOwner  LinkOwner;
+
 struct LinkObject {
     LinkObject *next_object;
-    int index;
+    int         index;
 };
+
 struct LinkOwner {
     unsigned char padding[76];
-    LinkObject **link_table;
+    LinkObject  **link_table;
 };
 
 void _Bfree(LinkOwner *link_owner, LinkObject *link_object) __asm__("InsertLinkObject");

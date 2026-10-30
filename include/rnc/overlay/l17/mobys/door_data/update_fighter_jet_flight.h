@@ -9,6 +9,7 @@ extern float fighter_jet_cruise_fov_gp __asm__("D_L17_00162144") __attribute__((
 extern float fighter_jet_boost_fov_gp __asm__("D_L17_00162148") __attribute__((sda));
 extern float fighter_jet_fov_error_gain_gp __asm__("D_L17_0016214C") __attribute__((sda));
 extern float fighter_jet_fov_velocity_damping_gp __asm__("D_L17_00162150") __attribute__((sda));
-extern float fighter_jet_fov_settle_threshold_scale_gp __asm__("D_L17_00162154") __attribute__((sda));
+extern float fighter_jet_fov_settle_threshold_scale_gp __asm__("D_L17_00162154")
+    __attribute__((sda));
 
 #endif /* LOMBYTE_RNC_OVERLAY_L17_MOBYS_DOOR_DATA_UPDATE_FIGHTER_JET_FLIGHT_H */

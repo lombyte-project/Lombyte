@@ -4,24 +4,24 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/ui/menus/item_preview/clear_preview_animation_queue.h"
 
-extern u8 D_00186310[];
-extern int active_class_resource_index __asm__("D_0015FF4C");
+extern u8   D_00186310[];
+extern int  active_class_resource_index __asm__("D_0015FF4C");
 extern void gadget_moby_update_noop() __asm__("FUN_00224b60");
-extern int noop_callback_e() __asm__("func_001E9410");
-extern int update_menu_preview_animation_pose() __asm__("FUN_00224fc0");
-extern int fill_transfer_words() __asm__("func_001F97E8");
-extern int create_menu_preview_moby() __asm__("func_00225490");
-extern int initialize_menu_stream_buffers() __asm__("FUN_00225ac0");
-extern s32 acquire_menu_stream_buffer() __asm__("FUN_00225c18");
+extern int  noop_callback_e() __asm__("func_001E9410");
+extern int  update_menu_preview_animation_pose() __asm__("FUN_00224fc0");
+extern int  fill_transfer_words() __asm__("func_001F97E8");
+extern int  create_menu_preview_moby() __asm__("func_00225490");
+extern int  initialize_menu_stream_buffers() __asm__("FUN_00225ac0");
+extern s32  acquire_menu_stream_buffer() __asm__("FUN_00225c18");
 
 int initialize_menu_preview_objects(char *preview) __asm__("FUN_002240c8");
 
 int initialize_menu_preview_objects(char *preview) {
     char *object;
-    int *resource_buffer_slot;
-    int *object_variables;
+    int  *resource_buffer_slot;
+    int  *object_variables;
     char *held_flag;
-    int i, j;
+    int   i, j;
 
     initialize_menu_stream_buffers(1);
     clear_preview_animation_queue();
@@ -57,7 +57,7 @@ int initialize_menu_preview_objects(char *preview) {
         held_flag--;
     }
     if (object != 0) {
-        char *camera = (char *)&preview_camera;
+        char              *camera = (char *)&preview_camera;
         struct MenuSystem *g;
 
         *(char **)(preview + 0x44) = object;

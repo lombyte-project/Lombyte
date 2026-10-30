@@ -12,11 +12,11 @@
 #include "rnc/overlay/shared/ui/menus/initialize_pause_menu.h"
 
 extern int D_L00_0015F5D8;
-int FUN_L00_00201720(void);
+int        FUN_L00_00201720(void);
 /* The level overlay's own copy of draw_dialog_text: same code, own data. */
-void level_draw_dialog_text(void) __asm__("FUN_L00_002018c8");
+void       level_draw_dialog_text(void) __asm__("FUN_L00_002018c8");
 extern s32 D_L00_0015F3F4_gp __asm__("D_L00_0015F3F4") __attribute__((sda));
-void draw_dialog_background_and_text(void) __asm__("FUN_L00_001f8ec8");
+void       draw_dialog_background_and_text(void) __asm__("FUN_L00_001f8ec8");
 
 void draw_dialog_background_and_text(void) {
     if (D_L00_0015F5D8 == 0) {
@@ -30,6 +30,7 @@ void draw_dialog_background_and_text(void) {
         level_draw_dialog_text();
     }
 }
+
 extern s32 D_L00_0015F5D8;
 /* Calls FUN_L00_002772c0(0) while D_L00_0015F5D8 is clear. */
 void draw_page_contents(void) __asm__("FUN_L00_001f8f50");
@@ -38,12 +39,15 @@ void draw_page_contents(void) {
     if (D_L00_0015F5D8 == 0)
         draw_pause_menu_pages(0);
 }
+
 extern volatile s32 D_L00_0015F628;
+
 #include "rnc/overlay/shared/rendering/debug/draw_dialog_background_and_text_globals.h"
+
 extern u8 timed_text_entries[] __asm__("D_L00_00173080");
-void queue_framebuffer_upload(s32) __asm__("FUN_L00_001fc558");
-void draw_timed_text(void *, s32) __asm__("FUN_L00_001fcca0");
-void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
+void      queue_framebuffer_upload(s32) __asm__("FUN_L00_001fc558");
+void      draw_timed_text(void *, s32) __asm__("FUN_L00_001fcca0");
+void      draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
 
 void draw_framebuffer_with_timed_text(void) {
     s32 i;

@@ -3,26 +3,28 @@
 typedef struct Manipulator Manipulator;
 
 typedef struct MobyAttachOwner {
-    u8 pad0[0x24];
-    void *unk24;
-    u8 pad28[0x3C];
+    u8           pad0[0x24];
+    void        *unk24;
+    u8           pad28[0x3C];
     Manipulator *unk64;
 } MobyAttachOwner;
 
 struct Manipulator {
-    u8 unk0;
-    u8 unk1;
-    u8 pad2[2];
+    u8    unk0;
+    u8    unk1;
+    u8    pad2[2];
     void *unk4;
     void *unk8;
-    u8 padC[0x10];
-    f32 unk1C;
-    f32 unk20;
-    f32 unk24;
-    f32 unk28;
+    u8    padC[0x10];
+    f32   unk1C;
+    f32   unk20;
+    f32   unk24;
+    f32   unk28;
 };
 
-void attach_manipulator(MobyAttachOwner *owner, s32 slot_index, Manipulator *manip) __asm__("FUN_0020cb10");
+void attach_manipulator(MobyAttachOwner *owner,
+                        s32              slot_index,
+                        Manipulator     *manip) __asm__("FUN_0020cb10");
 
 void attach_manipulator(MobyAttachOwner *owner, s32 slot_index, Manipulator *manip) {
     if (manip->unk1 == 0) {

@@ -81,25 +81,27 @@
  */
 
 #include "types.h"
+
 typedef struct _Bigint {
     struct _Bigint *_next;
-    s32 _k, _maxwds, _sign, _wds;
-    u32 _x[1];
+    s32             _k, _maxwds, _sign, _wds;
+    u32             _x[1];
 } _Bigint;
+
 struct _reent;
 typedef s32 __Long;
 typedef u32 __ULong;
 #define Storeinc(a, b, c) (((u16 *)a)[1] = (u16)b, ((u16 *)a)[0] = (u16)c, a++)
 #define Sign_Extend(a, b)
 extern _Bigint *_Balloc(struct _reent *, s32);
-extern s32 Dcmp(_Bigint *, _Bigint *);
+extern s32      Dcmp(_Bigint *, _Bigint *);
 
 _Bigint *__mdiff(struct _reent *reent_context, _Bigint *left_operand, _Bigint *right_operand) {
     _Bigint *difference;
-    s32 i, wa, wb;
-    __Long borrow, y;
+    s32      i, wa, wb;
+    __Long   borrow, y;
     __ULong *xa, *xae, *xb, *xbe, *xc;
-    __Long z;
+    __Long   z;
 
     i = Dcmp(left_operand, right_operand);
     if (!i) {

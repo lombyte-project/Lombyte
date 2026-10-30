@@ -5,6 +5,7 @@
 #include "rnc/mobys/animation/advance_moby_animation.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds.h"
+
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern char preview_binding_table_alias[] __asm__("D_001863D0");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
@@ -26,11 +27,17 @@ void update_menu_preview_animation_transform(PauseMoby *moby) {
     normalize_vector_triplet(moby->basis);
     refresh_moby_spatial_bounds_from_basis(moby);
     if (moby->oclass == 0x1B1) {
-        noop_callback_s(preview_binding_table_alias, menu_item_info, moby->resource_address,
-                        6, source_moby_address);
+        noop_callback_s(preview_binding_table_alias,
+                        menu_item_info,
+                        moby->resource_address,
+                        6,
+                        source_moby_address);
     } else {
-        noop_callback_s(preview_binding_table_alias, menu_item_info, moby->resource_address,
-                        0, source_moby_address);
+        noop_callback_s(preview_binding_table_alias,
+                        menu_item_info,
+                        moby->resource_address,
+                        0,
+                        source_moby_address);
     }
     moby->binding_state = 0;
     moby->primary_binding = (char *)menu_item_info;

@@ -1,6 +1,8 @@
 #include "types.h"
+
 extern s32 DIntr();
 extern s32 EnableInterrupts();
+
 void sceMpegInit(void) {
     s32 state;
 

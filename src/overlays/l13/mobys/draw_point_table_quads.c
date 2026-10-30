@@ -31,6 +31,7 @@ s32 D_L13_00161EA0 = 0x40ff;
 s32 D_L13_00161EA4 = 0x600040ff;
 s32 D_L13_00161EA8 = 0xcccc;
 s32 D_L13_00161EAC = 0x6000cccc;
+
 /* Scrolling texture coordinates of the four corners. */
 f32 D_L13_001D9B70[4][2] = {
     {0.0f, 1.0f},
@@ -39,7 +40,7 @@ f32 D_L13_001D9B70[4][2] = {
     {1.0f, 0.0f},
 };
 
-extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
+extern u32  fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 
 /* Draws the beam as 15 textured quads between consecutive points of the
@@ -48,15 +49,15 @@ extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 void draw_point_table_quads(struct Moby *moby) __asm__("FUN_L13_003098d0");
 
 void draw_point_table_quads(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char      *data = (char *)moby->pvars;
     QuadPacket pk[2];
-    f32 identity_matrix[4][4];
-    f32 corner_inset_offset[4];
-    s32 i;
-    s32 j;
-    s32 source_point_byte_offset;
-    f32 *corner_position;
-    u64 regs;
+    f32        identity_matrix[4][4];
+    f32        corner_inset_offset[4];
+    s32        i;
+    s32        j;
+    s32        source_point_byte_offset;
+    f32       *corner_position;
+    u64        regs;
 
     vu1_add_g_sregister(0x47, 0x5380B);
     i = 0;
@@ -90,10 +91,12 @@ void draw_point_table_quads(struct Moby *moby) {
                 fast_vec_normalize(corner_inset_offset, corner_inset_offset, 0.5f);
                 fast_vec_sub(corner_position, corner_position, corner_inset_offset);
                 corner_position[2] -= 0.125f;
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x21C), D_L13_00161EA8,
+                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x21C),
+                                                D_L13_00161EA8,
                                                 D_L13_00161EAC);
             } else {
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x21C), D_L13_00161EA0,
+                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x21C),
+                                                D_L13_00161EA0,
                                                 D_L13_00161EA4);
             }
             pk[0].uv[j][0] = D_L13_001D9B70[j][0];
@@ -117,35 +120,38 @@ void draw_point_table_quads(struct Moby *moby) {
 /* Spawns a burst of effects for each pair of ready entries in the moby's table. */
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
-int D_L13_00161EB0 = 0x800040ff;
-int D_L13_00161EB4 = 0x4000cc80;
+int          D_L13_00161EB0 = 0x800040ff;
+int          D_L13_00161EB4 = 0x4000cc80;
 extern short point_spark_first_vector_w __asm__("D_L13_00161EB8") __attribute__((sda));
 extern short point_spark_second_vector_w __asm__("D_L13_00161EBC") __attribute__((sda));
 extern short point_spark_frame_count_range_start __asm__("D_L13_00161EC0") __attribute__((sda));
 extern short point_spark_frame_count_range_end __asm__("D_L13_00161EC4") __attribute__((sda));
-extern short point_spark_second_frame_count_range_start __asm__("D_L13_00161EC8") __attribute__((sda));
-extern short point_spark_second_frame_count_range_end __asm__("D_L13_00161ECC") __attribute__((sda));
-extern short point_spark_third_frame_count_range_start __asm__("D_L13_00161ED0") __attribute__((sda));
+extern short point_spark_second_frame_count_range_start __asm__("D_L13_00161EC8")
+    __attribute__((sda));
+extern short point_spark_second_frame_count_range_end __asm__("D_L13_00161ECC")
+    __attribute__((sda));
+extern short point_spark_third_frame_count_range_start __asm__("D_L13_00161ED0")
+    __attribute__((sda));
 extern short point_spark_third_frame_count_range_end __asm__("D_L13_00161ED4") __attribute__((sda));
 extern short point_spark_xy_multiplier_range_start __asm__("D_L13_00161ED8") __attribute__((sda));
 extern short point_spark_xy_multiplier_range_end __asm__("D_L13_00161EDC") __attribute__((sda));
 extern short point_spark_z_range_start __asm__("D_L13_00161EE0") __attribute__((sda));
 extern short point_spark_z_range_end __asm__("D_L13_00161EE4") __attribute__((sda));
 extern short point_spark_spawn_random_threshold __asm__("D_L13_00161EE8") __attribute__((sda));
-int D_L13_00161EEC = 24;
+int          D_L13_00161EEC = 24;
 
 void spawn_point_table_sparks(struct Moby *moby) __asm__("FUN_L13_00309bc8");
 
 void spawn_point_table_sparks(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int i, next_point_index;
+    int   i, next_point_index;
     for (i = 0; i < 15; i = next_point_index) {
         float first_vector_angle_radians, second_vector_angle_radians;
-        int frame_count, second_frame_count, third_frame_count;
-        int spawn_position[4];
+        int   frame_count, second_frame_count, third_frame_count;
+        int   spawn_position[4];
         float first_vector[4], second_vector[4];
         char *source_point_position;
-        int source_point_byte_offset = i * 16;
+        int   source_point_byte_offset = i * 16;
         next_point_index = i + 1;
         if (*(float *)(data + source_point_byte_offset + 0x21c) < 0.99f &&
             *(float *)(data - (-(next_point_index * 16)) + 0x21c) < 0.99f) {
@@ -157,31 +163,50 @@ void spawn_point_table_sparks(struct Moby *moby) {
         first_vector_angle_radians = random_angle_radians();
         second_vector_angle_radians = random_angle_radians();
         first_vector[0] = fast_cos(first_vector_angle_radians) *
-               random_float_between(*(float *)&point_spark_xy_multiplier_range_start, *(float *)&point_spark_xy_multiplier_range_end);
+                          random_float_between(*(float *)&point_spark_xy_multiplier_range_start,
+                                               *(float *)&point_spark_xy_multiplier_range_end);
         first_vector[1] = fast_sin(first_vector_angle_radians) *
-               random_float_between(*(float *)&point_spark_xy_multiplier_range_start, *(float *)&point_spark_xy_multiplier_range_end);
+                          random_float_between(*(float *)&point_spark_xy_multiplier_range_start,
+                                               *(float *)&point_spark_xy_multiplier_range_end);
         first_vector[2] = 0;
         second_vector[0] = fast_cos(second_vector_angle_radians) *
-               random_float_between(*(float *)&point_spark_xy_multiplier_range_start, *(float *)&point_spark_xy_multiplier_range_end);
+                           random_float_between(*(float *)&point_spark_xy_multiplier_range_start,
+                                                *(float *)&point_spark_xy_multiplier_range_end);
         second_vector[1] = fast_sin(second_vector_angle_radians) *
-               random_float_between(*(float *)&point_spark_xy_multiplier_range_start, *(float *)&point_spark_xy_multiplier_range_end);
+                           random_float_between(*(float *)&point_spark_xy_multiplier_range_start,
+                                                *(float *)&point_spark_xy_multiplier_range_end);
         second_vector[2] = 0;
-        first_vector[2] = random_float_between(*(float *)&point_spark_z_range_start, *(float *)&point_spark_z_range_end);
-        second_vector[2] = random_float_between(*(float *)&point_spark_z_range_start, *(float *)&point_spark_z_range_end);
-        frame_count = truncate_float_to_s32(scale_time(
-            random_float_between(*(float *)&point_spark_frame_count_range_start, *(float *)&point_spark_frame_count_range_end)));
-        second_frame_count = truncate_float_to_s32(scale_time(
-            random_float_between(*(float *)&point_spark_second_frame_count_range_start, *(float *)&point_spark_second_frame_count_range_end)));
-        third_frame_count = truncate_float_to_s32(scale_time(
-            random_float_between(*(float *)&point_spark_third_frame_count_range_start, *(float *)&point_spark_third_frame_count_range_end)));
+        first_vector[2] = random_float_between(*(float *)&point_spark_z_range_start,
+                                               *(float *)&point_spark_z_range_end);
+        second_vector[2] = random_float_between(*(float *)&point_spark_z_range_start,
+                                                *(float *)&point_spark_z_range_end);
+        frame_count = truncate_float_to_s32(
+            scale_time(random_float_between(*(float *)&point_spark_frame_count_range_start,
+                                            *(float *)&point_spark_frame_count_range_end)));
+        second_frame_count = truncate_float_to_s32(
+            scale_time(random_float_between(*(float *)&point_spark_second_frame_count_range_start,
+                                            *(float *)&point_spark_second_frame_count_range_end)));
+        third_frame_count = truncate_float_to_s32(
+            scale_time(random_float_between(*(float *)&point_spark_third_frame_count_range_start,
+                                            *(float *)&point_spark_third_frame_count_range_end)));
         fast_vec_scale(first_vector, first_vector, 1.0f / (float)frame_count);
         first_vector[3] = *(float *)&point_spark_first_vector_w;
         fast_vec_scale(second_vector, second_vector, 1.0f / (float)third_frame_count);
         second_vector[3] = *(float *)&point_spark_second_vector_w;
         source_point_position = data + (source_point_byte_offset + 0x210);
-        lerp_vector(spawn_position, source_point_position, source_point_position, random_float_between(0.0f, 1.0f));
-        spawn_spark(spawn_position, first_vector, second_vector, D_L13_00161EB0, D_L13_00161EB4, frame_count, second_frame_count, third_frame_count,
-                     D_L13_00161EEC);
+        lerp_vector(spawn_position,
+                    source_point_position,
+                    source_point_position,
+                    random_float_between(0.0f, 1.0f));
+        spawn_spark(spawn_position,
+                    first_vector,
+                    second_vector,
+                    D_L13_00161EB0,
+                    D_L13_00161EB4,
+                    frame_count,
+                    second_frame_count,
+                    third_frame_count,
+                    D_L13_00161EEC);
     }
 }
 

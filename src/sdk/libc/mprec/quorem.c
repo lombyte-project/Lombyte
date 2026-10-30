@@ -8,18 +8,19 @@ extern int Dcmp(void *, void *);
 
 typedef struct Bigint {
     struct Bigint *next;
-    int k, maxwds, sign, wds;
-    unsigned int x[1];
+    int            k, maxwds, sign, wds;
+    unsigned int   x[1];
 } Bigint;
 
-#define STOREINC(xc, hi, lo)                                                                       \
-    (((unsigned short *)(xc))[1] = (unsigned short)(hi),                                           \
-     ((unsigned short *)(xc))[0] = (unsigned short)(lo), (xc)++)
+#define STOREINC(xc, hi, lo)                             \
+    (((unsigned short *)(xc))[1] = (unsigned short)(hi), \
+     ((unsigned short *)(xc))[0] = (unsigned short)(lo), \
+     (xc)++)
 
 int quorem(Bigint *dividend, Bigint *S) {
-    int word_count_or_index;
-    int borrow, y, z;
-    unsigned int carry, quotient_digit, ys, si, zs;
+    int           word_count_or_index;
+    int           borrow, y, z;
+    unsigned int  carry, quotient_digit, ys, si, zs;
     unsigned int *bx, *bxe, *sx, *sxe;
 
     word_count_or_index = S->wds;

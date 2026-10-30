@@ -5,23 +5,24 @@
 #include "rnc/math/asm_helpers.h"
 
 struct SkyShell {
-    u8 pad_0[8];
+    u8  pad_0[8];
     f32 angle;
 };
 
 struct SkyShellSet {
-    u8 pad_0[4];
-    u16 relocation_state;
-    s16 shell_count;
-    u8 pad_8[0x18];
+    u8               pad_0[4];
+    u16              relocation_state;
+    s16              shell_count;
+    u8               pad_8[0x18];
     struct SkyShell *shells[1];
 };
 
 #include "rnc/rendering/sky/draw_scrolling_sky_shells_globals.h"
-extern f32 sky_shell_angle_step_gp __asm__("D_00160400") __attribute__((sda));
+
+extern f32                 sky_shell_angle_step_gp __asm__("D_00160400") __attribute__((sda));
 extern struct SkyShellSet *level_sky_effect_data __asm__("D_0016045C");
-extern u8 sky_matrix[] __asm__("D_001D96E0");
-extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
+extern u8                  sky_matrix[] __asm__("D_001D96E0");
+extern void                scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 
 void draw_scrolling_sky_shells(void) __asm__("FUN_0022abd8");
 
@@ -33,12 +34,12 @@ void draw_scrolling_sky_shells(void) {
         SKY_SHELL_ONE_AND_HALF_SCALE_LAYER = 4,
         SKY_SHELL_ONE_AND_QUARTER_SCALE_LAYER = 5
     };
-    f32 rotation_angles[4];
-    f32 shell_scale;
+    f32                 rotation_angles[4];
+    f32                 shell_scale;
     struct SkyShellSet *shell_set;
-    f32 *shell_angle;
-    u8 *transform_row;
-    s32 shell_index;
+    f32                *shell_angle;
+    u8                 *transform_row;
+    s32                 shell_index;
 
     shell_index = 0;
     level_sky_effect_data->relocation_state = 0;
@@ -83,7 +84,8 @@ void draw_scrolling_sky_shells(void) {
             if (shell_index > 0) {
                 rotation_angles[2] =
                     (f32)((s32)(*shell_angle + (f32)shell_index * 2000.0f) % 10000) *
-                        0.0006283185f - 3.1415927f;
+                        0.0006283185f -
+                    3.1415927f;
                 euler_to_matrix_ee(sky_matrix, rotation_angles);
                 transform_row = sky_matrix;
                 scale_vector(transform_row, transform_row, shell_scale);

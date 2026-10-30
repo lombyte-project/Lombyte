@@ -10,19 +10,19 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"
 
-
-extern short D_L04_001B09B0[] NOT_SDA;
-extern char *D_L04_001D1700[] NOT_SDA;
+extern short       D_L04_001B09B0[] NOT_SDA;
+extern char       *D_L04_001D1700[] NOT_SDA;
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 int select_moby_record_by_xy_distance(char *a, char *o, float best) __asm__("FUN_L04_00252e18");
+
 int select_moby_record_by_xy_distance(char *reference_object, char *output_record, float best) {
     struct Hero *hero = &hero_lui;
-    char *selected_moby;
-    char *candidate_moby;
-    int selection_status;
-    int i;
-    int j;
-    float candidate_comparison_value;
+    char        *selected_moby;
+    char        *candidate_moby;
+    int          selection_status;
+    int          i;
+    int          j;
+    float        candidate_comparison_value;
 
     selected_moby = ((char *)hero->moby);
     selection_status = 0;
@@ -42,7 +42,8 @@ int select_moby_record_by_xy_distance(char *reference_object, char *output_recor
             continue;
         if (MOBY(candidate_moby)->state != 3)
             continue;
-        candidate_comparison_value = vector_distance_xy(reference_object + 0x10, candidate_moby + 0x10);
+        candidate_comparison_value =
+            vector_distance_xy(reference_object + 0x10, candidate_moby + 0x10);
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;
@@ -61,7 +62,8 @@ int select_moby_record_by_xy_distance(char *reference_object, char *output_recor
             continue;
         if (MOBY(candidate_moby)->command == 0)
             continue;
-        candidate_comparison_value = vector_distance_xy(reference_object + 0x10, candidate_moby + 0x10);
+        candidate_comparison_value =
+            vector_distance_xy(reference_object + 0x10, candidate_moby + 0x10);
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;

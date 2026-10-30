@@ -6,7 +6,7 @@
 
 /* Source: newlib. */
 
-extern int SbrkErrno __asm__("D_0015EC10") NOT_SDA;
+extern int   SbrkErrno __asm__("D_0015EC10") NOT_SDA;
 extern void *Sbrk(int increment) __asm__("sbrk");
 
 void *SbrkReentrant(void *reent, int increment) __asm__("_sbrk_r");

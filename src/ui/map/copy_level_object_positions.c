@@ -4,10 +4,10 @@
 #include "rnc/globals.h"
 
 struct ObjectVector {
-    u8 pad_0[0x10];
+    u8  pad_0[0x10];
     f32 x;
     f32 y;
-    u8 pad_18[0x30];
+    u8  pad_18[0x30];
     f32 z;
 };
 
@@ -16,13 +16,13 @@ extern u32 level_object_index_boundaries[] __asm__("D_001E03B8");
 void copy_level_object_positions(void) __asm__("FUN_00208770");
 
 void copy_level_object_positions(void) {
-    s32 index;
-    s32 next_index;
-    s32 start;
-    s32 end;
-    u8 *destination;
-    u8 *source_base;
-    u8 **source;
+    s32                  index;
+    s32                  next_index;
+    s32                  start;
+    s32                  end;
+    u8                  *destination;
+    u8                  *source_base;
+    u8                 **source;
     struct ObjectVector *object;
 
     index = current_level_index;

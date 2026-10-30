@@ -12,37 +12,37 @@ struct CheatMenuEntry {
 };
 
 struct CheatsMenu {
-    u8 pad0[0x20];
-    s32 width;
-    s32 height;
-    u8 pad28[8];
-    s32 flags;
+    u8                     pad0[0x20];
+    s32                    width;
+    s32                    height;
+    u8                     pad28[8];
+    s32                    flags;
     struct CheatMenuEntry *entries;
-    s32 selected_entry;
+    s32                    selected_entry;
 };
 
-extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
-extern void setup_gif_paging(s32) __asm__("func_001F4280");
-extern void do_gif_paging(void) __asm__("func_001F4398");
-extern void memset(void *, s32, u32) __asm__("func_001153FC");
+extern void  vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
+extern void  setup_gif_paging(s32) __asm__("func_001F4280");
+extern void  do_gif_paging(void) __asm__("func_001F4398");
+extern void  memset(void *, s32, u32) __asm__("func_001153FC");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern void font_print_window_regular(FontWindow *, u64, char *, s32) __asm__("func_001F7580");
-extern void font_print_large(s32, s32, u64, char *, s32) __asm__("func_001F6530");
-extern void font_print_right(s32, s32, u64, char *, s32) __asm__("func_001F6940");
+extern void  font_print_window_regular(FontWindow *, u64, char *, s32) __asm__("func_001F7580");
+extern void  font_print_large(s32, s32, u64, char *, s32) __asm__("func_001F6530");
+extern void  font_print_right(s32, s32, u64, char *, s32) __asm__("func_001F6940");
 
 s32 draw_cheats_menu(struct CheatsMenu *menu) __asm__("FUN_00221030");
 
 s32 draw_cheats_menu(struct CheatsMenu *menu) {
-    FontWindow text_window;
-    s16 window_fields[12];
+    FontWindow             text_window;
+    s16                    window_fields[12];
     struct CheatMenuEntry *entry;
-    s32 entry_count;
-    s32 entry_index;
-    s32 draw_index;
-    s32 draw_y;
-    s32 line_spacing;
-    s32 color;
-    s32 enabled;
+    s32                    entry_count;
+    s32                    entry_index;
+    s32                    draw_index;
+    s32                    draw_y;
+    s32                    line_spacing;
+    s32                    color;
+    s32                    enabled;
 
     vu1_add_g_sregister(0x47, 0x2004B);
     setup_gif_paging(0);
@@ -79,7 +79,9 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
             }
             font_print_large(0xC, draw_y, color, get_help_message_text(entry->text_id), -1);
             font_print_right(
-                menu->width - 0xC, draw_y, 0x80FFA888,
+                menu->width - 0xC,
+                draw_y,
+                0x80FFA888,
                 get_help_message_text(enabled ? entry->enabled_text_id : entry->disabled_text_id),
                 -1);
             draw_y += line_spacing;
@@ -90,4 +92,5 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
     do_gif_paging();
     return 2;
 }
+
 extern __typeof__(draw_cheats_menu) func_00221030 __attribute__((alias("FUN_00221030")));

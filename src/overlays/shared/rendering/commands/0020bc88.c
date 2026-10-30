@@ -11,8 +11,10 @@ extern char textured_quad_packet_header_template[] __asm__("D_L02_001609A0");
 /* Append a 0x154-tagged packet to the display list: header, qcopy of a static block,
    then four vector triples (a, b, m rows), a value `c` and a flag-dependent word. */
 void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
-void FUN_L02_0020bc88(long *packed_vertices, int *vertex_uvs, int *vertex_colors, long texture, int flag) {
-    int *packet_start;
+void FUN_L02_0020bc88(
+
+    long *packed_vertices, int *vertex_uvs, int *vertex_colors, long texture, int flag) {
+    int  *packet_start;
     long *packet_payload;
     D_L02_001611B8[2][0] = 0x10000009;
     D_L02_001611B8[2][1] = 0;

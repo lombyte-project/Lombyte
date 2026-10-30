@@ -15,11 +15,11 @@
    FBP is set through the sceGsFrame bitfield, the form that
    sign-extends the halfword before masking as retail does. */
 typedef struct {
-    unsigned long FBP : 9;
+    unsigned long FBP   : 9;
     unsigned long pad09 : 7;
-    unsigned long FBW : 6;
+    unsigned long FBW   : 6;
     unsigned long pad22 : 2;
-    unsigned long PSM : 6;
+    unsigned long PSM   : 6;
     unsigned long pad30 : 2;
     unsigned long FBMSK : 32;
 } GsFrame; /* sceGsFrame */
@@ -27,13 +27,13 @@ typedef struct {
 extern int sceGsSetDefDrawEnv(void *, short, short, short, short, short);
 
 extern long capture_texture_tex0 __asm__("D_0015EED0") MACRO_ADDR;
-void setup_render_target(int a, int b, int c) __asm__("FUN_001fb440");
+void        setup_render_target(int a, int b, int c) __asm__("FUN_001fb440");
 
 void setup_render_target(int width_log2, int height_log2, int framebuffer_address) {
-    int x;
-    long *draw_environment_gif_tag;
+    int            x;
+    long          *draw_environment_gif_tag;
     unsigned long *draw_environment;
-    long *render_target_clear_packet;
+    long          *render_target_clear_packet;
 
     x = width_log2 - 6;
     if (x <= 0) {
@@ -42,8 +42,9 @@ void setup_render_target(int width_log2, int height_log2, int framebuffer_addres
     fs_aa_buffer.target_fbp = framebuffer_address >> 13;
     fs_aa_buffer.target_width = 1 << width_log2;
     fs_aa_buffer.target_height = 1 << height_log2;
-    capture_texture_tex0 = (long)(framebuffer_address >> 8) | ((long)(1 << x) << 14) | ((long)width_log2 << 26) |
-                 ((unsigned long)height_log2 << 30) | ((unsigned long)1 << 34);
+    capture_texture_tex0 = (long)(framebuffer_address >> 8) | ((long)(1 << x) << 14) |
+                           ((long)width_log2 << 26) | ((unsigned long)height_log2 << 30) |
+                           ((unsigned long)1 << 34);
     fast_mem_zero16(render_packet_cursor.words, 0xF0);
     render_packet_cursor.words[0] = 0x1000000E;
     render_packet_cursor.words[1] = 0;
@@ -55,7 +56,12 @@ void setup_render_target(int width_log2, int height_log2, int framebuffer_addres
     draw_environment_gif_tag[1] = 0xE;
     render_packet_cursor.words += 4;
     draw_environment = (unsigned long *)render_packet_cursor.words;
-    sceGsSetDefDrawEnv(draw_environment, fs_aa_buffer.target_psm, fs_aa_buffer.target_width, fs_aa_buffer.target_height, 3, 0);
+    sceGsSetDefDrawEnv(draw_environment,
+                       fs_aa_buffer.target_psm,
+                       fs_aa_buffer.target_width,
+                       fs_aa_buffer.target_height,
+                       3,
+                       0);
     ((GsFrame *)draw_environment)->FBP = fs_aa_buffer.target_fbp;
     draw_environment[2] = fs_aa_buffer.zbp | ((unsigned long)(fs_aa_buffer.zpsm & 0xF) << 24);
     render_packet_cursor.words += 0x20;
@@ -68,8 +74,10 @@ void setup_render_target(int width_log2, int height_log2, int framebuffer_addres
     render_target_clear_packet[5] = 0x4410;
     render_target_clear_packet[6] = 0x106;
     render_target_clear_packet[7] = 0;
-    render_target_clear_packet[8] = (long)(0x8000 - fs_aa_buffer.target_width * 8) | ((long)(0x8000 - fs_aa_buffer.target_height * 8) << 16);
-    render_target_clear_packet[9] = (long)(fs_aa_buffer.target_width * 8 + 0x8000) | ((long)(fs_aa_buffer.target_height * 8 + 0x7FF0) << 16);
+    render_target_clear_packet[8] = (long)(0x8000 - fs_aa_buffer.target_width * 8) |
+                                    ((long)(0x8000 - fs_aa_buffer.target_height * 8) << 16);
+    render_target_clear_packet[9] = (long)(fs_aa_buffer.target_width * 8 + 0x8000) |
+                                    ((long)(fs_aa_buffer.target_height * 8 + 0x7FF0) << 16);
     render_packet_cursor.words += 0x14;
 }
 

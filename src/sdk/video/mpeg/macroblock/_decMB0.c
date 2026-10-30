@@ -12,38 +12,45 @@ struct MpegMbState {
     int unk1C;
 };
 
-extern u8 invalid_macroblock_type_error_message[] __asm__("D_00153898");
+extern u8   invalid_macroblock_type_error_message[] __asm__("D_00153898");
 extern void _Error();
 extern void _flushBuf();
-extern s16 _ipuVdec(struct MpegDecoder *, s32);
+extern s16  _ipuVdec(struct MpegDecoder *, s32);
 extern void _motionVector();
 extern void _motionVectors();
-extern s32 _nextBit(struct MpegDecoder *, s32);
+extern s32  _nextBit(struct MpegDecoder *, s32);
 extern void _sendIpuCommand();
 extern void _waitIpuIdle();
 extern void receiveDataFromIPU();
-int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dct_type_out, struct MpegMbState *motion_vector_state,
-            int *motion_field_select, int differential_motion_vector) {
+int         _decMB0(struct MpegDecoder *decoder,
+                    int                *mb_type,
+                    int                *motion_type,
+                    int                *dct_type_out,
+                    struct MpegMbState *motion_vector_state,
+                    int                *motion_field_select,
+
+                    int differential_motion_vector) {
     int *dct_type_output;
     int *motion_field_select_output;
-    u32 intra_quantiser_command_bits;
-    u32 dc_reset_command_base;
-    int motion_vector_count;
-    int type_code;
-    int type;
-    int coding_type;
-    int new_var;
-    int command_base;
-    int structure;
-    int forward_r_size;
-    int backward_r_size;
-    int frame_motion;
-    int field_in_frame;
-    int dct_type;
-    int motion_flag;
-    int result;
-    int coded;
-    *((int *)0x10002010) = ((*((int *)0x10002010)) & 0xF8FFFFFF) | (decoder->picture_coding_type << 0x18);
+    u32  intra_quantiser_command_bits;
+    u32  dc_reset_command_base;
+    int  motion_vector_count;
+    int  type_code;
+    int  type;
+    int  coding_type;
+    int  new_var;
+    int  command_base;
+    int  structure;
+    int  forward_r_size;
+    int  backward_r_size;
+    int  frame_motion;
+    int  field_in_frame;
+    int  dct_type;
+    int  motion_flag;
+    int  result;
+    int  coded;
+    *((int *)0x10002010) =
+        ((*((int *)0x10002010)) & 0xF8FFFFFF) | (decoder->picture_coding_type << 0x18);
     dct_type_output = dct_type_out;
     motion_field_select_output = motion_field_select;
     type_code = _ipuVdec(decoder, 1);
@@ -77,7 +84,8 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
         field_in_frame = structure == 3;
     }
     dct_type = 0;
-    if (((decoder->picture_structure == 3) && (decoder->frame_pred_frame_dct == 0)) && (((*mb_type) & 3) != 0)) {
+    if (((decoder->picture_structure == 3) && (decoder->frame_pred_frame_dct == 0)) &&
+        (((*mb_type) & 3) != 0)) {
         dct_type = _nextBit(decoder, 1);
     } else {
         dct_type = 0;
@@ -88,22 +96,53 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     }
     if (((*mb_type) & 8) || (((*mb_type) & 1) && (decoder->concealment_motion_vectors != 0))) {
         if (decoder->mpeg2 != 0) {
-            _motionVectors(decoder, motion_vector_state, differential_motion_vector, motion_field_select_output, 0, motion_vector_count, frame_motion, decoder->f_code_forward_h - 1,
-                           decoder->f_code_forward_v - 1, motion_flag, field_in_frame);
+            _motionVectors(decoder,
+                           motion_vector_state,
+                           differential_motion_vector,
+                           motion_field_select_output,
+                           0,
+                           motion_vector_count,
+                           frame_motion,
+                           decoder->f_code_forward_h - 1,
+                           decoder->f_code_forward_v - 1,
+                           motion_flag,
+                           field_in_frame);
         } else {
             forward_r_size = decoder->forward_f_code - 1;
-            _motionVector(decoder, motion_vector_state, differential_motion_vector, forward_r_size, forward_r_size, 0, 0, decoder->full_pel_forward_vector);
+            _motionVector(decoder,
+                          motion_vector_state,
+                          differential_motion_vector,
+                          forward_r_size,
+                          forward_r_size,
+                          0,
+                          0,
+                          decoder->full_pel_forward_vector);
         }
     }
     result = 0;
     if (decoder->slice_error == 0) {
         if ((*mb_type) & 4) {
             if (decoder->mpeg2 != 0) {
-                _motionVectors(decoder, motion_vector_state, differential_motion_vector, motion_field_select_output, 1, motion_vector_count, frame_motion, decoder->f_code_backward_h - 1,
-                               decoder->f_code_backward_v - 1, 0, field_in_frame);
+                _motionVectors(decoder,
+                               motion_vector_state,
+                               differential_motion_vector,
+                               motion_field_select_output,
+                               1,
+                               motion_vector_count,
+                               frame_motion,
+                               decoder->f_code_backward_h - 1,
+                               decoder->f_code_backward_v - 1,
+                               0,
+                               field_in_frame);
             } else {
                 backward_r_size = decoder->backward_f_code - 1;
-                _motionVector(decoder, ((u8 *)motion_vector_state) + 8, differential_motion_vector, backward_r_size, backward_r_size, 0, 0,
+                _motionVector(decoder,
+                              ((u8 *)motion_vector_state) + 8,
+                              differential_motion_vector,
+                              backward_r_size,
+                              backward_r_size,
+                              0,
+                              0,
                               decoder->full_pel_backward_vector);
             }
         }
@@ -117,12 +156,14 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
                 };
             }
             if (((*mb_type) & 3) != 0) {
-                receiveDataFromIPU(
-                    decoder->mb_buf[decoder->mb_buf_index].ipu_out, 0x300);
+                receiveDataFromIPU(decoder->mb_buf[decoder->mb_buf_index].ipu_out, 0x300);
                 _waitIpuIdle(decoder);
-                intra_quantiser_command_bits = (((*mb_type) & 1) << 0x1B) | (decoder->quantiser_scale_code << 0x10);
+                intra_quantiser_command_bits =
+                    (((*mb_type) & 1) << 0x1B) | (decoder->quantiser_scale_code << 0x10);
                 dc_reset_command_base = ((decoder->dc_reset) << 0x1A) | 0x20000000;
-                _sendIpuCommand(decoder, (intra_quantiser_command_bits | dc_reset_command_base) | ((*dct_type_output) << 0x19));
+                _sendIpuCommand(decoder,
+                                (intra_quantiser_command_bits | dc_reset_command_base) |
+                                    ((*dct_type_output) << 0x19));
             } else {
                 decoder->mb_buf[decoder->mb_buf_index].unk13C = 1;
             }
@@ -149,7 +190,9 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
             if (coding_type == 2) {
                 result = 1;
                 if (!((*mb_type) & 9)) {
-                    motion_vector_state->unk0 = (motion_vector_state->unk4 = (motion_vector_state->unk10 = (motion_vector_state->unk14 = 0)));
+                    motion_vector_state->unk0 =
+                        (motion_vector_state->unk4 =
+                             (motion_vector_state->unk10 = (motion_vector_state->unk14 = 0)));
                     if (decoder->picture_structure == 3) {
                         *motion_type = coding_type;
                     } else {

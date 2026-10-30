@@ -23,24 +23,24 @@
 
 typedef struct _Bigint {
     struct _Bigint *_next;
-    s32 _k;
-    s32 _maxwds;
-    s32 _sign;
-    s32 _wds;
-    u32 _x[1];
+    s32             _k;
+    s32             _maxwds;
+    s32             _sign;
+    s32             _wds;
+    u32             _x[1];
 } _Bigint;
 
-extern s32 _Bfree() __asm__("InsertLinkObject");
+extern s32      _Bfree() __asm__("InsertLinkObject");
 extern _Bigint *_Balloc();
-extern s32 memcpy();
+extern s32      memcpy();
 
-#define Bcopy(x, y)                                                                                \
+#define Bcopy(x, y) \
     memcpy((char *)&x->_sign, (char *)&y->_sign, y->_wds * sizeof(s32) + 2 * sizeof(s32))
 
 _Bigint *_multadd(s32 reent_context, _Bigint *bigint_operand, s32 multiplier, s32 carry) {
-    s32 i, wds;
-    u32 *x, y;
-    u32 xi, z;
+    s32      i, wds;
+    u32     *x, y;
+    u32      xi, z;
     _Bigint *expanded_bigint;
 
     wds = bigint_operand->_wds;

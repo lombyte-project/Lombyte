@@ -10,6 +10,7 @@
 
 extern s32 sceTtyInit(void);
 extern s32 sceTtyRead();
+
 s32 read(s32 file_descriptor, s32 destination_buffer, s32 max_bytes) {
     if (file_descriptor == 0) {
         if (CoreGlobalWord == 0) {

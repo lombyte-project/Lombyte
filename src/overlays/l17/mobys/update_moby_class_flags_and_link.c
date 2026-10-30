@@ -2,36 +2,37 @@
 #include "types.h"
 #include "asm.h"
 
-
-
 /* Apply three optional state changes to live mobys of one class. */
 /* Ported from rac1-decomp (src/overlays/l17/mobyutil_00254B40.c: func_L17_00254B40), where it is exact; names translated to the US level program. */
 
 typedef struct {
     char pad0[0x10];
-    int value;
+    int  value;
 } Level17MobyLink;
 
 typedef struct {
-    char pad0[0x20];
-    signed char state;
-    char pad21[3];
+    char             pad0[0x20];
+    signed char      state;
+    char             pad21[3];
     Level17MobyLink *link;
-    char pad28[9];
-    unsigned char active;
-    char pad32[2];
-    unsigned short flags;
-    char pad36[0x5E];
-    int linked_value;
-    char pad98[0xE];
-    short class_id;
-    char padA8[0x58];
+    char             pad28[9];
+    unsigned char    active;
+    char             pad32[2];
+    unsigned short   flags;
+    char             pad36[0x5E];
+    int              linked_value;
+    char             pad98[0xE];
+    short            class_id;
+    char             padA8[0x58];
 } Level17Moby;
 
 extern Level17Moby *D_L17_0015FFD8;
 extern Level17Moby *l17_moby_array_last __asm__("D_L17_0015FFE0");
 
-void update_moby_class_flags_and_link(int class_id, int flag2, int flag1, int link_mode) __asm__("FUN_L17_00253a90");
+void update_moby_class_flags_and_link(int class_id,
+                                      int flag2,
+                                      int flag1,
+                                      int link_mode) __asm__("FUN_L17_00253a90");
 
 void update_moby_class_flags_and_link(int class_id, int flag2, int flag1, int link_mode) {
     Level17Moby *moby;

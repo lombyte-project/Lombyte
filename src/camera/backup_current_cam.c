@@ -1,14 +1,15 @@
 #include "types.h"
 #include "rnc/camera/update_cam.h"
+
 struct CameraBackupState {
-    u8 pad_0[0x70];
+    u8  pad_0[0x70];
     s32 unk70;
 };
 
-extern u32 cur_cam[] __asm__("D_001870C0");
+extern u32                      cur_cam[] __asm__("D_001870C0");
 extern struct CameraBackupState backup_cam __asm__("D_00189210");
-extern s32 fast_mem_copy() __asm__("FUN_001f98d0");
-void backup_current_cam(void) __asm__("FUN_001ebc90");
+extern s32                      fast_mem_copy() __asm__("FUN_001f98d0");
+void                            backup_current_cam(void) __asm__("FUN_001ebc90");
 
 void backup_current_cam(void) {
     fast_mem_copy(&backup_cam, cur_cam[0], 0xA0);

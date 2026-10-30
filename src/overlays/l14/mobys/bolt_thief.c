@@ -35,42 +35,47 @@
 typedef float Vec_2FF358[4] __attribute__((aligned(16)));
 
 typedef struct Moby_2FF358 {
-    char pad0[0x10];
+    char       pad0[0x10];
     Vec_2FF358 pos; /* 0x10 */
-    char pad20[0xA0];
+    char       pad20[0xA0];
     Vec_2FF358 right; /* 0xC0 */
-    Vec_2FF358 fwd; /* 0xD0 */
-    Vec_2FF358 up; /* 0xE0 */
+    Vec_2FF358 fwd;   /* 0xD0 */
+    Vec_2FF358 up;    /* 0xE0 */
 } Moby_2FF358;
 
 typedef struct Part {
-    char pad0[3];
+    char          pad0[3];
     unsigned char b3;
-    char pad4[4];
+    char          pad4[4];
     unsigned char b8;
-    char pad9;
-    short life; /* 0xA */
-    char padC[0x14];
+    char          pad9;
+    short         life; /* 0xA */
+    char          padC[0x14];
     struct PartSub {
-        int f0;
-        int f4;
-        char pad8[2];
+        int           f0;
+        int           f4;
+        char          pad8[2];
         unsigned char bA;
         unsigned char bB;
     } sub; /* 0x20 */
 } Part;
 
 extern float D_L14_0015F580;
+
 #include "rnc/overlay/l14/mobys/bolt_thief_globals.h"
+
 extern float bolt_thief_puff_initial_right_offset_gp __asm__("D_L14_00161F90") __attribute__((sda));
 extern float bolt_thief_puff_forward_offset_gp __asm__("D_L14_00161F94") __attribute__((sda));
 extern float bolt_thief_puff_up_offset_gp __asm__("D_L14_00161F98") __attribute__((sda));
-extern float bolt_thief_puff_middle_right_offset_delta_gp __asm__("D_L14_00161F9C") __attribute__((sda));
+extern float bolt_thief_puff_middle_right_offset_delta_gp __asm__("D_L14_00161F9C")
+    __attribute__((sda));
 extern float bolt_thief_puff_final_right_offset_gp __asm__("D_L14_00161FA0") __attribute__((sda));
-int D_L14_00161FA4 = 0x7f204080;
-int FUN_L00_00257b90(int lo, int hi);
-unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
-extern Part *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
+int          D_L14_00161FA4 = 0x7f204080;
+int          FUN_L00_00257b90(int lo, int hi);
+unsigned char *
+FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
+extern Part *
+spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
 void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) __asm__("FUN_L14_002fded0");
 
@@ -78,9 +83,9 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     Vec_2FF358 A;
     Vec_2FF358 B;
     Vec_2FF358 C;
-    Part *puff;
-    int i, j, puff_signed_amount, puff_lifetime_frames, k, col;
-    float puff_size;
+    Part      *puff;
+    int        i, j, puff_signed_amount, puff_lifetime_frames, k, col;
+    float      puff_size;
 
     fast_vec_scale(A, source_moby->right, bolt_thief_puff_initial_right_offset_gp);
     fast_vec_add(B, source_moby->pos, A);
@@ -108,7 +113,8 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     puff_signed_amount = 0x10;
     puff_lifetime_frames = scale_game_frames(2);
     for (j = 0; j < 3; j++) {
-        puff = spawn_puff(B, 0.05f, 1.0f, 1.0f, puff_signed_amount, &D_L14_0015F580, puff_size, 0x7FFFFFFF);
+        puff = spawn_puff(
+            B, 0.05f, 1.0f, 1.0f, puff_signed_amount, &D_L14_0015F580, puff_size, 0x7FFFFFFF);
         if (puff != 0) {
             struct PartSub *f = &puff->sub;
 
@@ -147,6 +153,7 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
         }
     }
 }
+
 #include "sda.h"
 
 /* deletes the linked moby and then the owner if still active */
@@ -168,94 +175,96 @@ void mark_moby_and_linked_moby_for_removal(struct Moby *moby) {
 #include "qcopy.h"
 #include "rnc/overlay/level_path.h"
 
-
 typedef struct {
-    char pad00[0x60];
-    char effect[7];             /* 0x60: record func_L00_0025E590 updates */
-    unsigned char ticks;        /* 0x67 */
-    char pad68[8];
-    float knock[4];             /* 0x70: record func_L00_0025D5B0 fills (velocity first) */
-    float knock_drag;           /* 0x80 */
-    float knock_gravity;        /* 0x84 */
-    float knock_speed;          /* 0x88 */
-    float knock_rise;           /* 0x8C */
-    int unknown90;
-    int knock_flags;            /* 0x94 */
-    char pad98[0x15];
-    unsigned char knock_bAD;    /* 0xAD */
-    char padAE[0x22];
-    int counter;                /* 0xD0 */
-    float timer;                /* 0xD4 */
-    int path;                   /* 0xD8: index into D_L14_001B0BB0 */
-    int other_path;             /* 0xDC */
-    int trigger;                /* 0xE0 */
-    float vx;                   /* 0xE4 */
-    float vy;                   /* 0xE8 */
-    float vz;                   /* 0xEC */
-    float turn;                 /* 0xF0 */
-    char *child;                /* 0xF4 */
-    int unknownF8;
-    int mode;                   /* 0xFC */
+    char          pad00[0x60];
+    char          effect[7]; /* 0x60: record func_L00_0025E590 updates */
+    unsigned char ticks;     /* 0x67 */
+    char          pad68[8];
+    float         knock[4];      /* 0x70: record func_L00_0025D5B0 fills (velocity first) */
+    float         knock_drag;    /* 0x80 */
+    float         knock_gravity; /* 0x84 */
+    float         knock_speed;   /* 0x88 */
+    float         knock_rise;    /* 0x8C */
+    int           unknown90;
+    int           knock_flags; /* 0x94 */
+    char          pad98[0x15];
+    unsigned char knock_bAD; /* 0xAD */
+    char          padAE[0x22];
+    int           counter;    /* 0xD0 */
+    float         timer;      /* 0xD4 */
+    int           path;       /* 0xD8: index into D_L14_001B0BB0 */
+    int           other_path; /* 0xDC */
+    int           trigger;    /* 0xE0 */
+    float         vx;         /* 0xE4 */
+    float         vy;         /* 0xE8 */
+    float         vz;         /* 0xEC */
+    float         turn;       /* 0xF0 */
+    char         *child;      /* 0xF4 */
+    int           unknownF8;
+    int           mode; /* 0xFC */
 } L16CrateData;
 
 typedef struct {
     char pad00[0x10];
-    int bounds;
+    int  bounds;
 } L16CrateModel;
 
 typedef struct {
-    char pad00[0x10];
-    float position[4];          /* 0x10 */
-    unsigned char state;        /* 0x20 */
-    char pad21[3];
-    L16CrateModel *model;       /* 0x24 */
-    char pad28[8];
-    unsigned char collision;    /* 0x30 */
-    char pad31[3];
-    unsigned short flags;       /* 0x34 */
-    char pad36[10];
-    float rotation[4];          /* 0x40 */
-    char pad50[2];
-    unsigned char frame;        /* 0x52 */
-    unsigned char animation;    /* 0x53 */
-    char pad54[0x1C];
-    unsigned char status;       /* 0x70 */
-    char pad71[7];
-    L16CrateData *data;         /* 0x78 */
-    char pad7C[0x18];
-    int bounds;                 /* 0x94 */
-    char pad98[0xC];
-    unsigned char opacity;      /* 0xA4 */
-    char padA5[0xD];
-    short id;                   /* 0xB2 */
+    char           pad00[0x10];
+    float          position[4]; /* 0x10 */
+    unsigned char  state;       /* 0x20 */
+    char           pad21[3];
+    L16CrateModel *model; /* 0x24 */
+    char           pad28[8];
+    unsigned char  collision; /* 0x30 */
+    char           pad31[3];
+    unsigned short flags; /* 0x34 */
+    char           pad36[10];
+    float          rotation[4]; /* 0x40 */
+    char           pad50[2];
+    unsigned char  frame;     /* 0x52 */
+    unsigned char  animation; /* 0x53 */
+    char           pad54[0x1C];
+    unsigned char  status; /* 0x70 */
+    char           pad71[7];
+    L16CrateData  *data; /* 0x78 */
+    char           pad7C[0x18];
+    int            bounds; /* 0x94 */
+    char           pad98[0xC];
+    unsigned char  opacity; /* 0xA4 */
+    char           padA5[0xD];
+    short          id; /* 0xB2 */
 } L16CrateMoby;
 
 typedef struct {
-    char pad00[0x80];
-    float position[4];          /* 0x80 */
-    char pad90[0x1AC];
-    void *standing;             /* 0x23C: the moby the hero stands on */
+    char  pad00[0x80];
+    float position[4]; /* 0x80 */
+    char  pad90[0x1AC];
+    void *standing; /* 0x23C: the moby the hero stands on */
 } L16CratePlayer;
 
 extern char *spawn_floating_mine(void *, void *) __asm__("FUN_L14_002ffaf8");
-extern char D_L14_001FCF20[], D_L14_001FCF58[], D_L14_001FCFA0[], D_L14_001FCFD8[], D_L14_001FD020[];
+extern char  D_L14_001FCF20[], D_L14_001FCF58[], D_L14_001FCFA0[], D_L14_001FCFD8[],
+    D_L14_001FD020[];
 extern int debug_print() __asm__("FUN_001e93b0");
-int update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80");
+int        update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80");
 
-extern int update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80");
+extern int   update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80");
 extern float bolt_thief_path_spring_gain_gp __asm__("D_L14_00161FBC") __attribute__((sda));
 extern float bolt_thief_path_spring_damping_gp __asm__("D_L14_00161FC0") __attribute__((sda));
-extern void FUN_L00_00257470(void *, int, int);
-extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
+extern void  FUN_L00_00257470(void *, int, int);
+extern void
+trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void moby_set_state_one(void *) __asm__("FUN_L14_002ffc08");
 extern void initialize_moby_path_state(void *) __asm__("FUN_L14_002fe900");
 extern void update_linked_moby_position(void *) __asm__("FUN_L14_002fec28");
 extern void emit_moby_offset_particles(void *) __asm__("FUN_L14_002feca8");
-extern void FUN_L00_00258278(char*,float,float*,float,float,float);
+extern void FUN_L00_00258278(char *, float, float *, float, float, float);
 
 /* Same routine as bolt_thief_update, without the child hit test. */
 void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L14_002fe2a0");
+
 void bolt_thief_update(L16CrateMoby *moby) {
     enum {
         BOLT_THIEF_STATE_INITIALIZE = 0,
@@ -267,7 +276,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         BOLT_THIEF_STATE_KNOCKBACK = 6
     };
     L16CrateData *moby_data = moby->data;
-    char *hit;
+    char         *hit;
 
     if ((moby->status & 2) && moby->frame == moby->animation && moby->frame == 1)
         blend_moby_animation(moby, 4, 0, scale_game_frames(5));
@@ -283,8 +292,13 @@ void bolt_thief_update(L16CrateMoby *moby) {
         moby_data->knock_rise = frame_time * 12.0f;
         moby_data->knock_flags = 1;
         moby_data->knock_bAD = 0;
-        trooper_start_knockback(moby, moby_data->knock, 1, 1, 0,
-                          fast_arc_tan(moby->position[0] - player->motion.pos.f[0], moby->position[1] - player->motion.pos.f[1]));
+        trooper_start_knockback(moby,
+                                moby_data->knock,
+                                1,
+                                1,
+                                0,
+                                fast_arc_tan(moby->position[0] - player->motion.pos.f[0],
+                                             moby->position[1] - player->motion.pos.f[1]));
         moby_data->ticks = 0x78;
         FUN_L00_00257470(moby, 0, -1);
         moby->state = 6;
@@ -336,8 +350,12 @@ void bolt_thief_update(L16CrateMoby *moby) {
         struct Hero *player = &hero;
 
         FUN_L00_00258278((char *)moby,
-                                 fast_arc_tan(player->motion.pos.f[0] - moby->position[0], player->motion.pos.f[1] - moby->position[1]),
-                                 &moby_data->turn, 0.005f, 0.2f, 0.0f);
+                         fast_arc_tan(player->motion.pos.f[0] - moby->position[0],
+                                      player->motion.pos.f[1] - moby->position[1]),
+                         &moby_data->turn,
+                         0.005f,
+                         0.2f,
+                         0.0f);
         emit_moby_offset_particles(moby);
         break;
     }
@@ -366,17 +384,32 @@ void bolt_thief_update(L16CrateMoby *moby) {
         break;
     case BOLT_THIEF_STATE_SETTLE_AT_PATH_END: {
         L16CrateData *settle_data = moby->data;
-        char *path = ((char *)l14_paths[settle_data->path]);
-        float target[4];
-        float zero;
+        char         *path = ((char *)l14_paths[settle_data->path]);
+        float         target[4];
+        float         zero;
 
         if (settle_data->mode == 0)
             update_linked_moby_position(moby);
         qcopy(target, path + *(int *)path * 16);
         zero = 0.0f;
-        vendor_spring(moby->position, &settle_data->vx, target[0], bolt_thief_path_spring_gain_gp, bolt_thief_path_spring_damping_gp, zero);
-        vendor_spring(moby->position + 1, &settle_data->vy, target[1], bolt_thief_path_spring_gain_gp, bolt_thief_path_spring_damping_gp, zero);
-        vendor_spring(moby->position + 2, &settle_data->vz, target[2], bolt_thief_path_spring_gain_gp, bolt_thief_path_spring_damping_gp, zero);
+        vendor_spring(moby->position,
+                      &settle_data->vx,
+                      target[0],
+                      bolt_thief_path_spring_gain_gp,
+                      bolt_thief_path_spring_damping_gp,
+                      zero);
+        vendor_spring(moby->position + 1,
+                      &settle_data->vy,
+                      target[1],
+                      bolt_thief_path_spring_gain_gp,
+                      bolt_thief_path_spring_damping_gp,
+                      zero);
+        vendor_spring(moby->position + 2,
+                      &settle_data->vz,
+                      target[2],
+                      bolt_thief_path_spring_gain_gp,
+                      bolt_thief_path_spring_damping_gp,
+                      zero);
         if ((moby->status & 2) && moby->frame == moby->animation) {
             if (settle_data->mode == 1) {
                 moby->state = 1;
@@ -409,7 +442,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             path = ((char *)l14_paths[moby_data->path]);
             qcopy(moby->position, path + 0x10);
             moby->rotation[2] = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
-                                               *(float *)(path + 0x24) - *(float *)(path + 0x14));
+                                             *(float *)(path + 0x24) - *(float *)(path + 0x14));
         } else {
             emit_moby_offset_particles(moby);
         }
@@ -433,16 +466,16 @@ void bolt_thief_update(L16CrateMoby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5408), where it is exact; names translated to the US level program. */
 
-extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
+extern int   sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float bolt_thief_default_path_sample_rate_gp __asm__("D_L14_00161FB8") __attribute__((sda));
-extern void FUN_L00_00258278(char *, float, float *, float, float, float);
+extern void  FUN_L00_00258278(char *, float, float *, float, float, float);
 
 int update_bolt_thief_path_movement(struct Moby *moby) {
     float pos[4];
     float delta[4];
     char *data = (char *)moby->pvars;
     float path_sample_step = bolt_thief_default_path_sample_rate_gp * frame_time;
-    int path_sample_result;
+    int   path_sample_result;
     char *path;
     if (current_level_index == 0x10)
         path_sample_step = frame_time * 20.0f;
@@ -452,109 +485,142 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
         path = ((char *)l14_paths[*(int *)(data + 0xDC)]);
     else
         path = ((char *)l14_paths[*(int *)(data + 0xD8)]);
-    path_sample_result = sample_path(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, path_sample_step);
-    vendor_spring(&moby->pos.x, (float *)(data + 0xE4), pos[0], bolt_thief_path_spring_gain_gp,
-                     bolt_thief_path_spring_damping_gp, 0.0f);
-    vendor_spring(&moby->pos.y, (float *)(data + 0xE8), pos[1], bolt_thief_path_spring_gain_gp,
-                     bolt_thief_path_spring_damping_gp, 0.0f);
-    vendor_spring(&moby->pos.z, (float *)(data + 0xEC), pos[2], bolt_thief_path_spring_gain_gp,
-                     bolt_thief_path_spring_damping_gp, 0.0f);
+    path_sample_result =
+        sample_path(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, path_sample_step);
+    vendor_spring(&moby->pos.x,
+                  (float *)(data + 0xE4),
+                  pos[0],
+                  bolt_thief_path_spring_gain_gp,
+                  bolt_thief_path_spring_damping_gp,
+                  0.0f);
+    vendor_spring(&moby->pos.y,
+                  (float *)(data + 0xE8),
+                  pos[1],
+                  bolt_thief_path_spring_gain_gp,
+                  bolt_thief_path_spring_damping_gp,
+                  0.0f);
+    vendor_spring(&moby->pos.z,
+                  (float *)(data + 0xEC),
+                  pos[2],
+                  bolt_thief_path_spring_gain_gp,
+                  bolt_thief_path_spring_damping_gp,
+                  0.0f);
     fast_vec_sub(delta, pos, &moby->pos);
     if (absolute_float(delta[0]) > 0.01f) {
         if (absolute_float(delta[1]) > 0.01f) {
-            FUN_L00_00258278(moby, fast_arc_tan(delta[0], delta[1]), (float *)(data + 0xF0),
-                             bolt_thief_path_spring_gain_gp, bolt_thief_path_spring_damping_gp, 0.0f);
+            FUN_L00_00258278(moby,
+                             fast_arc_tan(delta[0], delta[1]),
+                             (float *)(data + 0xF0),
+                             bolt_thief_path_spring_gain_gp,
+                             bolt_thief_path_spring_damping_gp,
+                             0.0f);
         }
     }
     return path_sample_result;
 }
+
 #include "sda.h"
+
 extern unsigned char D_0015EDB0;
+
 #include "qcopy.h"
+
 extern int unlock_planet() __asm__("FUN_L00_002607d0");
+
 typedef struct {
     float target[4];
     float eye[4];
     float delta[4];
 } L14WatchScratch;
+
 typedef struct {
-    char pad00[0x10];
-    float position[4];
-    unsigned char state;
-    char pad21[0xF];
-    unsigned char opacity;
-    unsigned char near_flag;
-    char pad32[0x16];
-    float yaw;
-    char pad4C[7];
-    unsigned char animation;
-    char pad54[0x24];
-    char *data;
-    char pad7C[3];
-    unsigned char flag7F;
-    char pad80[0x30];
-    unsigned char bB0;
-    char padB1;
+    char           pad00[0x10];
+    float          position[4];
+    unsigned char  state;
+    char           pad21[0xF];
+    unsigned char  opacity;
+    unsigned char  near_flag;
+    char           pad32[0x16];
+    float          yaw;
+    char           pad4C[7];
+    unsigned char  animation;
+    char           pad54[0x24];
+    char          *data;
+    char           pad7C[3];
+    unsigned char  flag7F;
+    char           pad80[0x30];
+    unsigned char  bB0;
+    char           padB1;
     unsigned short hB2;
 } L14WatchMoby;
+
 typedef struct {
-    char pad00[4];
+    char           pad00[4];
     unsigned short sub;
-    char pad06[2];
-    unsigned char b8;
-    char pad09[3];
-    float fC;
-    char pad10[0x10];
-    void *p20;
-    char pad24[0x1C];
-    int i40;
-    int i44;
-    int i48;
-    char pad4C[4];
-    char body[0x64];
-    float pitch;
-    float yaw;
-    char padBC[4];
-    float height;
-    char padC4[0xC];
-    char head[0x68];
-    float head_yaw;
-    char pad13C[0x14];
-    float target[4];
-    int moving_timer;
-    int target_timer;
+    char           pad06[2];
+    unsigned char  b8;
+    char           pad09[3];
+    float          fC;
+    char           pad10[0x10];
+    void          *p20;
+    char           pad24[0x1C];
+    int            i40;
+    int            i44;
+    int            i48;
+    char           pad4C[4];
+    char           body[0x64];
+    float          pitch;
+    float          yaw;
+    char           padBC[4];
+    float          height;
+    char           padC4[0xC];
+    char           head[0x68];
+    float          head_yaw;
+    char           pad13C[0x14];
+    float          target[4];
+    int            moving_timer;
+    int            target_timer;
 } L14WatchData;
+
 typedef struct {
-    char pad00[0xD0];
+    char  pad00[0xD0];
     float aim[4];
 } L14Player;
+
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern float scale_time(float) __asm__("FUN_001f96b0");
+extern float         scale_time(float) __asm__("FUN_001f96b0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
+
 typedef struct {
     u8 pad0[0x454];
     u8 collected[1];
 } L14LevelState;
+
 extern L14LevelState D_L14_001BB930;
-extern int D_0015ED84_m __asm__("D_0015ED84");
-extern int D_L14_001BABD0[];
-extern char sam_dialogue_name_text[] __asm__("D_L14_00161FE8");
+extern int           D_0015ED84_m __asm__("D_0015ED84");
+extern int           D_L14_001BABD0[];
+extern char          sam_dialogue_name_text[] __asm__("D_L14_00161FE8");
+
 #include "rnc/overlay/cuboid.h"
-extern int D_L14_0015F5C4;
+
+extern int                      D_L14_0015F5C4;
 extern unsigned char D_0013DD4F NOT_SDA;
+
 extern struct {
-    char pad[0x10];
+    char         pad[0x10];
     unsigned int q10[4] __attribute__((aligned(16)));
-    char pad20[8];
-    float f28;
-    char pad2C[0x1A];
-    short h46;
+    char         pad20[8];
+    float        f28;
+    char         pad2C[0x1A];
+    short        h46;
 } D_L14_0016CF60;
+
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 /* Watcher moby update: gated by its collectable and trigger, primes a camera target, then turns its head toward the hero. */
 void sam_update(L14WatchMoby *m) __asm__("FUN_L14_002fefe0");
+
 void sam_update(L14WatchMoby *moby) {
     enum {
         SAM_STATE_INITIALIZE = 0,
@@ -563,10 +629,10 @@ void sam_update(L14WatchMoby *moby) {
         SAM_STATE_REMOVE = 3
     };
     L14WatchScratch scratch;
-    L14WatchData *moby_data = (L14WatchData *)moby->data;
-    float rate;
-    float head_rate;
-    int tracking;
+    L14WatchData   *moby_data = (L14WatchData *)moby->data;
+    float           rate;
+    float           head_rate;
+    int             tracking;
     attach_big_head_cheat_manipulator_to_matching_moby(moby);
     switch (moby->state) {
     case SAM_STATE_INITIALIZE: {
@@ -634,14 +700,15 @@ void sam_update(L14WatchMoby *moby) {
     head_rate = 0.3f;
     tracking = 0;
     if (moby->animation == 0) {
-        char *hero_position = (char *)&hero.motion.pos;
+        char      *hero_position = (char *)&hero.motion.pos;
         L14Player *hero_aim_view;
         tracking = 1;
         if (vector_distance_xy(moby->position, hero_position) < 8.0f &&
             (hero_aim_view = (L14Player *)(hero_position - 0x80),
              fast_difference_between_rotations(
-                 moby->yaw, fast_arc_tan(hero_aim_view->aim[0] - moby->position[0], hero_aim_view->aim[1] - moby->position[1]))) <
-                1.5707964f) {
+                 moby->yaw,
+                 fast_arc_tan(hero_aim_view->aim[0] - moby->position[0],
+                              hero_aim_view->aim[1] - moby->position[1]))) < 1.5707964f) {
             if (fast_vec_length(hero_position + 0x80) > 0.01f)
                 moby_data->moving_timer = scale_game_frames(120);
             else
@@ -656,8 +723,8 @@ void sam_update(L14WatchMoby *moby) {
                 truncate_float_to_s32(scale_time(random_float_between(180.0f, 300.0f)));
             heading =
                 fast_add_rotations(moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
-            build_spherical_offset(moby_data->target, 6.0f, heading,
-                                   random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
+            build_spherical_offset(
+                moby_data->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
             fast_vec_add(moby_data->target, moby_data->target, moby->position);
         }
         if (moby_data->moving_timer) {
@@ -690,6 +757,8 @@ void sam_update(L14WatchMoby *moby) {
     }
     if (D_0015EDB0_b)
         moby_data->height = 2.75f;
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_data->body, 0);
-    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_data->head, 1);
+    update_joint_animation(
+        rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_data->body, 0);
+    update_joint_animation(
+        rate * frame_scale_sq, head_rate * frame_scale_sq, moby, moby_data->head, 1);
 }

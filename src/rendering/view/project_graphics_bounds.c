@@ -7,19 +7,18 @@
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s32  truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
-void project_graphics_bounds(u128 *first, u128 *opposite, s32 *width, s32 *height, s32 *x,
-                             s32 *y) __asm__("FUN_00237a78");
+void project_graphics_bounds(
+    u128 *first, u128 *opposite, s32 *width, s32 *height, s32 *x, s32 *y) __asm__("FUN_00237a78");
 
-void project_graphics_bounds(u128 *first, u128 *opposite, s32 *width, s32 *height, s32 *x,
-                             s32 *y) {
-    Vec4 first_projected;
-    Vec4 opposite_projected;
+void project_graphics_bounds(u128 *first, u128 *opposite, s32 *width, s32 *height, s32 *x, s32 *y) {
+    Vec4  first_projected;
+    Vec4  opposite_projected;
     Vec4 *opposite_pointer;
-    f32 scale_x;
-    f32 scale_y;
-    s32 output_byte;
+    f32   scale_x;
+    f32   scale_y;
+    s32   output_byte;
 
     opposite_pointer = &opposite_projected;
     first_projected.q = *first;

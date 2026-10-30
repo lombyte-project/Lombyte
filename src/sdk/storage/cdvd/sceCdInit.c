@@ -7,35 +7,42 @@
    back the drive state. */
 
 typedef struct {
-    u8 pad0[0x24];
+    u8    pad0[0x24];
     void *server;
-    u8 pad28[0x10];
+    u8    pad28[0x10];
 } sceSifClientData;
 
-extern s32 D_001312E4[];
-extern s32 D_001312F4[];
-extern s32 D_001312F8[];
-extern s32 D_001312FC[];
-extern s32 D_00131300[];
-extern s32 D_00131304[];
-extern s32 D_00131308[];
-extern s32 D_0013130C[];
-extern s32 D_00131310[];
-extern char D_00152F50[];
-extern char D_00152F70[];
-extern s32 D_00159750[];
+extern s32              D_001312E4[];
+extern s32              D_001312F4[];
+extern s32              D_001312F8[];
+extern s32              D_001312FC[];
+extern s32              D_00131300[];
+extern s32              D_00131304[];
+extern s32              D_00131308[];
+extern s32              D_0013130C[];
+extern s32              D_00131310[];
+extern char             D_00152F50[];
+extern char             D_00152F70[];
+extern s32              D_00159750[];
 extern sceSifClientData D_00159968;
-extern s32 D_001599C0[];
+extern s32              D_001599C0[];
 
-extern s32 GetThreadId(void);
-extern s32 PowerOffCB(void);
+extern s32  GetThreadId(void);
+extern s32  PowerOffCB(void);
 extern void cdvd_exit(void);
 extern void cmd_sem_init(void);
-extern s32 sceCdSyncS(s32 mode);
-extern int scePrintf(const char *format, ...);
-extern s32 sceSifBindRpc(sceSifClientData *cd, u32 request, u32 mode);
-extern s32 sceSifCallRpc(sceSifClientData *cd, u32 fno, u32 mode, void *send, s32 ssize,
-                         void *receive, s32 rsize, void *end_func, void *end_para);
+extern s32  sceCdSyncS(s32 mode);
+extern int  scePrintf(const char *format, ...);
+extern s32  sceSifBindRpc(sceSifClientData *cd, u32 request, u32 mode);
+extern s32  sceSifCallRpc(sceSifClientData *cd,
+                          u32               fno,
+                          u32               mode,
+                          void             *send,
+                          s32               ssize,
+                          void             *receive,
+                          s32               rsize,
+                          void             *end_func,
+                          void             *end_para);
 extern void sceSifInitRpc(u32 mode);
 extern void sceSifWriteBackDCache(void *addr, s32 size);
 
@@ -57,10 +64,15 @@ int sceCdInit(int init_mode) {
     *(volatile s32 *)D_001312E4 = 1;
     *(volatile s32 *)D_00159750 = owner;
     {
-        s32 *p0 = D_00131300, *p1 = D_001312F8, *p2 = D_00131308, *p3 = D_00131304, *p6 = D_0013130C, *p4 = D_001312FC, *p5 = D_001312F4;
+        s32 *p0 = D_00131300, *p1 = D_001312F8, *p2 = D_00131308, *p3 = D_00131304,
+            *p6 = D_0013130C, *p4 = D_001312FC, *p5 = D_001312F4;
         /* Fakematch: retail keeps the -1 in $a0. */
         register int m __asm__("$4") = -1;
-        *p4 = m; *p0 = m; *p1 = m; *p2 = m; *p3 = m;
+        *p4 = m;
+        *p0 = m;
+        *p1 = m;
+        *p2 = m;
+        *p3 = m;
         *p5 = 0;
         D_00131310[0]++;
         *p6 = m;

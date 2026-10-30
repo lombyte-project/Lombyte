@@ -1,7 +1,7 @@
 #include "types.h"
 
 typedef struct {
-    u8 pad0[0xC];
+    u8  pad0[0xC];
     u8 *wp;
 } TtyQueue;
 
@@ -10,23 +10,23 @@ typedef struct {
 } Deci2Hdr;
 
 typedef struct {
-    s32 socket;
+    s32          socket;
     volatile s32 wlen;
     volatile s32 rlen;
     volatile s32 busy;
-    u8 *wbuf;
-    u8 *rbuf;
-    TtyQueue *queue;
+    u8          *wbuf;
+    u8          *rbuf;
+    TtyQueue    *queue;
 } TtyState;
 
-extern u8 tty_packet_size_error_message[] __asm__("D_00152710");
-extern u8 tty_receive_error_message[] __asm__("D_00152738");
-extern u8 tty_send_error_format[] __asm__("D_00152750");
-extern u8 tty_pending_send_bytes_error_format[] __asm__("D_00152768");
+extern u8   tty_packet_size_error_message[] __asm__("D_00152710");
+extern u8   tty_receive_error_message[] __asm__("D_00152738");
+extern u8   tty_send_error_format[] __asm__("D_00152750");
+extern u8   tty_pending_send_bytes_error_format[] __asm__("D_00152768");
 extern void QueuePeekWriteDone(TtyQueue *queue);
-extern s32 SceDeci2ExRecv(s32 socket, void *buffer, u16 byte_count);
-extern s32 SceDeci2ExSend(s32 socket, void *buffer, u16 byte_count);
-extern int kprintf(const char *format, ...);
+extern s32  SceDeci2ExRecv(s32 socket, void *buffer, u16 byte_count);
+extern s32  SceDeci2ExSend(s32 socket, void *buffer, u16 byte_count);
+extern int  kprintf(const char *format, ...);
 
 void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
     enum {
@@ -34,8 +34,8 @@ void sceTtyHandler(s32 event, s32 param, TtyState *tty) {
         TTY_CLEAR_SEND_BUSY = 4
     };
     Deci2Hdr *hdr;
-    s32 send_result;
-    s32 receive_append_offset;
+    s32       send_result;
+    s32       receive_append_offset;
 
     switch (event) {
     case 1:

@@ -2,11 +2,11 @@
 #include "rnc/ui/hud/hud_state.h"
 
 extern s32 initialize_resource_entry() __asm__("InitializeResourceEntry");
-s32 hud_heap_alloc(s32 size) __asm__("FUN_001ff288");
+s32        hud_heap_alloc(s32 size) __asm__("FUN_001ff288");
 
 s32 hud_heap_alloc(s32 size) {
     struct HudState *hud_state_ptr = &hud_state;
-    s32 allocation_address;
+    s32              allocation_address;
 
     if (hud_state_ptr->heap_cur == 0) {
         initialize_resource_entry();

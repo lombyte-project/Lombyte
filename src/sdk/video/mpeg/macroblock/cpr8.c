@@ -3,16 +3,16 @@
 
 struct MpegCopyParams {
     s32 unk0;
-    u8 pad_4[0x8];
+    u8  pad_4[0x8];
     s32 unkC;
     s32 unk10;
 };
 
 struct MpegDecoderFrame {
-    u8 pad_0[0xE0];
+    u8  pad_0[0xE0];
     s32 unkE0;
     s32 unkE4;
-    u8 pad_E8[0x8C];
+    u8  pad_E8[0x8C];
     s32 unk174;
 };
 
@@ -21,19 +21,19 @@ extern s32 EnableInterrupts();
 
 void _cpr8(struct MpegDecoder *decoder, struct MpegCopyParams *copy_params) {
     struct MpegDecoderFrame *decoder_transfer_layout;
-    s32 transfer_pass_count;
-    s32 destination_pass_base;
-    s32 interrupts_on2;
-    s32 interrupts_on;
-    s32 layout_width;
-    s32 row;
-    s32 dest_addr;
-    s32 source_addr;
-    s32 qword_count;
-    s32 source_stride;
-    s32 dest_stride;
-    s32 dest_width;
-    s32 pass;
+    s32                      transfer_pass_count;
+    s32                      destination_pass_base;
+    s32                      interrupts_on2;
+    s32                      interrupts_on;
+    s32                      layout_width;
+    s32                      row;
+    s32                      dest_addr;
+    s32                      source_addr;
+    s32                      qword_count;
+    s32                      source_stride;
+    s32                      dest_stride;
+    s32                      dest_width;
+    s32                      pass;
 
     decoder_transfer_layout = (struct MpegDecoderFrame *)decoder;
     source_addr = copy_params->unk0 & 0x0FFFFFFF;

@@ -6,19 +6,21 @@
 #include "rnc/rendering/frame/reset_graphics.h"
 
 extern volatile int D_L00_001611A0_gp __asm__("D_L00_001611A0") __attribute__((sda));
-extern int D_L00_001611C0_002a08c8 __asm__("D_L00_001611C0");
-void debug_print(char *) __asm__("FUN_001e93b0");
-u32 *FUN_00122fe0_002a08c8(int) __asm__("FUN_00122fe0");
-void flush_cache(int) __asm__("FUN_00118a80");
-void FUN_001232c8_002a08c8(u32 *, u32) __asm__("FUN_001232c8");
-extern u32 D_L00_001611B8[] NOT_SDA;
+extern int          D_L00_001611C0_002a08c8 __asm__("D_L00_001611C0");
+void                debug_print(char *) __asm__("FUN_001e93b0");
+u32                *FUN_00122fe0_002a08c8(int) __asm__("FUN_00122fe0");
+void                flush_cache(int) __asm__("FUN_00118a80");
+void                FUN_001232c8_002a08c8(u32 *, u32) __asm__("FUN_001232c8");
+extern u32          D_L00_001611B8[] NOT_SDA;
+
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer_globals.h"
+
 extern char vu1_render_buffer_overflow_message[] __asm__("D_L00_001E9530");
-void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
+void        vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 
 void vu1_send_chain_render_buffer(void) {
-    int buffer_limit_exceeded;
-    int buffer_used_bytes;
+    int  buffer_limit_exceeded;
+    int  buffer_used_bytes;
     u32 *flag_word;
     buffer_used_bytes = D_L00_001611C0_002a08c8 - D_L00_001611B8[selected_render_buffer_index];
     D_L00_001611A0_gp |= 0x1F;
@@ -46,9 +48,10 @@ void vu1_send_chain_render_buffer(void) {
         D_L00_001611A0_gp = 0;
     }
 }
-extern int D_L00_001611A0 __attribute__((sda));
+
+extern int  D_L00_001611A0 __attribute__((sda));
 extern char vu1_sync_timeout_message[] __asm__("D_L00_001E9548");
-void FUN_L00_001ff018(int);
+void        FUN_L00_001ff018(int);
 /* Waits while D_L00_001611A0 has any mask bit; after 100000 tries reports and resets graphics. */
 void vu1_sync_chain(int mask) __asm__("FUN_L00_002a09d8");
 

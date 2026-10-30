@@ -4,26 +4,32 @@
 #include "qcopy.h"
 
 extern s32 registered_shrub_render_class_count __asm__("D_001603CC");
+
 #include "rnc/rendering/render_globals.h"
 #include "rnc/rendering/material_templates.h"
+
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s32 log2dim(s32) __asm__("func_001F97A0");
-void register_shrub_render_class(ShrubRenderClass *render_class,
-                                 ResidentRenderTextureDefinition *textures, u128 *material_map,
-                                 ShrubMipTextureDefinition *mip_texture,
-                                 s32 class_id) __asm__("FUN_00203b08");
+void       register_shrub_render_class(ShrubRenderClass                *render_class,
+                                       ResidentRenderTextureDefinition *textures,
+                                       u128                            *material_map,
+                                       ShrubMipTextureDefinition       *mip_texture,
+                                       s32                              class_id) __asm__("FUN_00203b08");
 
-void register_shrub_render_class(ShrubRenderClass *render_class,
-                                 ResidentRenderTextureDefinition *textures, u128 *material_map,
-                                 ShrubMipTextureDefinition *mip_texture, s32 class_id) {
-    s32 group_index;
-    s32 index;
-    s32 fixed_threshold;
-    MaterialMap *slot_materials;
-    ShrubMipPacket *packed_mip_packet;
-    ShrubMipPacket *mip_packet;
+void register_shrub_render_class(ShrubRenderClass                *render_class,
+                                 ResidentRenderTextureDefinition *textures,
+                                 u128                            *material_map,
+                                 ShrubMipTextureDefinition       *mip_texture,
+
+                                 s32 class_id) {
+    s32                     group_index;
+    s32                     index;
+    s32                     fixed_threshold;
+    MaterialMap            *slot_materials;
+    ShrubMipPacket         *packed_mip_packet;
+    ShrubMipPacket         *mip_packet;
     ShrubRenderGroupHeader *group_header;
-    ShrubRenderPacket *packet;
+    ShrubRenderPacket      *packet;
 
     shrub_render_class_slot_by_id[class_id] = registered_shrub_render_class_count;
     shrub_render_class_ids[registered_shrub_render_class_count] = class_id;
@@ -84,8 +90,14 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
             mip_block_0 = mip_texture->mip_block_offset_0 + gs_block_base;
             mip_block_1 = mip_texture->mip_block_offset_1 + gs_block_base;
             mip_block_2 = mip_texture->mip_block_offset_2 + gs_block_base;
-            mip_packet->tex1.d = (s64)(((u64)(draw_control_count - 1) << 2) | ((u64)1 << 5) | ((u64)material_shift << 6)) | ((s64)material_base << 32);
-            mip_packet->tex0.d = (s64)((u64)((s64)palette_block | ((s64)mip_width_units[0] << 14) | ((s64)0x13 << 20) | ((s64)width_log2 << 26)) | ((u64)height_log2 << 30) | ((u64)1 << 34) | ((u64)(texture_block + gs_block_base) << 37)) | ((s64)4 << 61);
+            mip_packet->tex1.d = (s64)(((u64)(draw_control_count - 1) << 2) | ((u64)1 << 5) |
+                                       ((u64)material_shift << 6)) |
+                                 ((s64)material_base << 32);
+            mip_packet->tex0.d = (s64)((u64)((s64)palette_block | ((s64)mip_width_units[0] << 14) |
+                                             ((s64)0x13 << 20) | ((s64)width_log2 << 26)) |
+                                       ((u64)height_log2 << 30) | ((u64)1 << 34) |
+                                       ((u64)(texture_block + gs_block_base) << 37)) |
+                                 ((s64)4 << 61);
             draw_word = (u64)mip_block_0 | ((u64)mip_width_units[1] << 14);
             draw_word |= (u64)mip_block_1 << 20;
             draw_word |= (u64)mip_width_units[2] << 34;
@@ -139,19 +151,19 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
             material_shift = packet->material_shift;
             if (textures != 0) {
                 ResidentRenderTextureDefinition *texture;
-                s32 width_bits;
-                s32 width_units_64;
-                s32 width_units_128;
-                s32 width_log2;
-                s32 height_log2;
-                s32 gs_block_base;
-                s32 mip_block_1;
-                s32 mip_block_0;
-                s32 draw_control_count;
-                u64 tex0_word;
-                u64 tex1_word;
-                u64 mip_word;
-                u64 clamp_word;
+                s32                              width_bits;
+                s32                              width_units_64;
+                s32                              width_units_128;
+                s32                              width_log2;
+                s32                              height_log2;
+                s32                              gs_block_base;
+                s32                              mip_block_1;
+                s32                              mip_block_0;
+                s32                              draw_control_count;
+                u64                              tex0_word;
+                u64                              tex1_word;
+                u64                              mip_word;
+                u64                              clamp_word;
 
                 texture = &textures[material_index];
                 width_bits = (u16)texture->width << 16;
@@ -170,10 +182,19 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                 width_bits = texture->clut_block_offset + gs_block_base;
                 mip_block_0 = texture->mip_block_offset_0 + gs_block_base;
                 mip_block_1 = texture->mip_block_offset_1 + gs_block_base;
-                tex1_word = (s64)(((u64)(draw_control_count - 1) << 2) | ((u64)1 << 5) | ((u64)draw_shift << 6)) | ((s64)draw_high << 32);
-                clamp_word = (u64)material_base | ((u64)material_shift << 2) | ((u64)material_index << 24);
-                mip_word = (s64)(((u64)width_units_128 << 14) | ((u64)mip_block_0 << 20) | ((u64)1 << 34) | ((u64)mip_block_1 << 40)) | ((s64)1 << 54);
-                tex0_word = (s64)((u64)(((s64)width_units_64 << 14) | ((s64)0x13 << 20) | ((s64)width_log2 << 26)) | ((u64)height_log2 << 30) | ((u64)1 << 34) | ((u64)width_bits << 37)) | ((s64)4 << 61);
+                tex1_word = (s64)(((u64)(draw_control_count - 1) << 2) | ((u64)1 << 5) |
+                                  ((u64)draw_shift << 6)) |
+                            ((s64)draw_high << 32);
+                clamp_word =
+                    (u64)material_base | ((u64)material_shift << 2) | ((u64)material_index << 24);
+                mip_word = (s64)(((u64)width_units_128 << 14) | ((u64)mip_block_0 << 20) |
+                                 ((u64)1 << 34) | ((u64)mip_block_1 << 40)) |
+                           ((s64)1 << 54);
+                tex0_word =
+                    (s64)((u64)(((s64)width_units_64 << 14) | ((s64)0x13 << 20) |
+                                ((s64)width_log2 << 26)) |
+                          ((u64)height_log2 << 30) | ((u64)1 << 34) | ((u64)width_bits << 37)) |
+                    ((s64)4 << 61);
                 *(u64 *)&packet->draw_high = tex1_word;
                 *(u64 *)&packet->material_base = clamp_word;
                 *(u64 *)&packet->material_index = mip_word;
@@ -193,8 +214,8 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                 template_mip = resident_material_templates[template_index + 2];
                 draw_bits = ((u64)draw_shift << 6) | 0x20;
                 template_draw_word = (template_tex1 & 0x1C) | draw_bits | ((u64)draw_high << 32);
-                template_clamp_word = (u64)material_base | ((u64)material_shift << 2) |
-                                      ((u64)material_index << 24);
+                template_clamp_word =
+                    (u64)material_base | ((u64)material_shift << 2) | ((u64)material_index << 24);
                 *(u64 *)&packet->draw_high = template_draw_word;
                 *(u64 *)&packet->material_base = template_clamp_word;
                 *(u64 *)&packet->material_index = template_mip;

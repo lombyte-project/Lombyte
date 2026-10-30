@@ -22,7 +22,7 @@ typedef struct {
 
 typedef struct {
     QueuedRotatedSprite records[4];
-    s32 count; /* 0xC0 */
+    s32                 count; /* 0xC0 */
 } RotatedSpriteQueue;
 
 extern RotatedSpriteQueue rotated_sprite_queue __asm__("D_00189300");
@@ -52,7 +52,7 @@ void render_queued_rotated_sprites(void) {
         screen_center[1] = convert_integer_to_float(screen_extent.half_height);
         for (record_index = 0; record_index < rotated_sprite_queue.count; record_index++) {
             QueuedRotatedSprite *record = &rotated_sprite_queue.records[record_index];
-            s32 resource_state;
+            s32                  resource_state;
 
             if (record->resource == 0) {
                 continue;
@@ -78,6 +78,7 @@ void render_queued_rotated_sprites(void) {
         rotated_sprite_queue.count = 0;
     }
 }
+
 extern __typeof__(render_queued_rotated_sprites) func_001EE338
     __attribute__((alias("FUN_001ee338")));
 

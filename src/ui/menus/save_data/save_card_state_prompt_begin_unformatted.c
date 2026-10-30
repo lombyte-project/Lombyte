@@ -1,13 +1,14 @@
 #include "sda.h"
 #include "rnc/save/memory_card_state.h"
 #include "rnc/globals.h"
+
 extern int mode_freeze_flags_gp[] __asm__("D_0015EEB4") __attribute__((sda));
 
 void save_card_state_prompt_begin_unformatted(void) __asm__("FUN_00208fa0");
 
 void save_card_state_prompt_begin_unformatted(void) {
     struct MemoryCardState *card_state = &memory_card_state;
-    int freeze_flags_snapshot;
+    int                     freeze_flags_snapshot;
     if (card_state->card[0].sync_result != -2) {
         mode_freeze_state = 3;
         return;

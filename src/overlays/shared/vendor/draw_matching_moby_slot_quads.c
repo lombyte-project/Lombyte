@@ -21,9 +21,10 @@ void draw_matching_moby_slot_quads(char *self) {
             if (current_moby->oclass == *(short *)(self + 0xA6)) {
                 if ((*(int *)(data + 0xe0) & 0xFF) > 0x80) {
                     char *slot_position = data + 0x80;
-                    int i;
+                    int   i;
                     for (i = 0x5; i >= 0; i--) {
-                        draw_offset_textured_effect_quad(slot_position, *(int *)(data + 0xe0), 1.2f, 0.57f);
+                        draw_offset_textured_effect_quad(
+                            slot_position, *(int *)(data + 0xe0), 1.2f, 0.57f);
                         slot_position += 0x10;
                     }
                 }

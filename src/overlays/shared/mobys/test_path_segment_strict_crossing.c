@@ -15,28 +15,30 @@
 #include "rnc/mobys/moby.h"
 
 typedef struct {
-    s32 count;
-    u8 pad[12];
+    s32     count;
+    u8      pad[12];
     OvlVec4 points[1];
 } SegmentPath_261968;
 
 extern SegmentPath_261968 *D_L00_001B04B0_261968[] __asm__("D_L00_001B04B0");
 
-s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *end) __asm__("FUN_L00_00261968");
+s32 test_path_segment_strict_crossing(s32      path_index,
+                                      OvlVec4 *start,
+                                      OvlVec4 *end) __asm__("FUN_L00_00261968");
 
 s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
-    OvlVec4 direction;
-    OvlVec4 axis;
-    OvlVec4 origin;
-    OvlVec4 first;
-    OvlVec4 next;
-    OvlVec4 *previous;
-    OvlVec4 *current;
+    OvlVec4              direction;
+    OvlVec4              axis;
+    OvlVec4              origin;
+    OvlVec4              first;
+    OvlVec4              next;
+    OvlVec4             *previous;
+    OvlVec4             *current;
     SegmentPath_261968 **entry;
-    s32 i;
-    s32 offset;
-    f32 crossing;
-    f32 zero;
+    s32                  i;
+    s32                  offset;
+    f32                  crossing;
+    f32                  zero;
 
     i = 1;
     fast_vec_sub(&direction, end, start);
@@ -60,7 +62,8 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
             transform_vector_by_basis(current, current, &direction);
             if (first.f[3] != zero || next.f[3] != zero) {
                 if (next.f[1] * first.f[1] < 0.0f) {
-                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - next.f[1]) * -next.f[1] + next.f[0];
+                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - next.f[1]) * -next.f[1] +
+                               next.f[0];
                     if (crossing > 0.0f && crossing < 1.0f)
                         return 1;
                 }
@@ -78,13 +81,13 @@ typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
 
 typedef union {
     VecQuad q;
-    f32 f[4];
-    s32 i[4];
+    f32     f[4];
+    s32     i[4];
 } Vec4_261b48;
 
 typedef struct {
-    s32 count;
-    u8 pad[12];
+    s32         count;
+    u8          pad[12];
     Vec4_261b48 points[1];
 } SegmentPath;
 
@@ -92,25 +95,25 @@ typedef int OvlQuad_261b48 __attribute__((mode(TI)));
 
 typedef union {
     OvlQuad_261b48 q;
-    f32 f[4];
-    s32 i[4];
+    f32            f[4];
+    s32            i[4];
 } OvlVec4_261b48;
 
 typedef struct {
-    s32 count;
-    u8 pad[12];
+    s32            count;
+    u8             pad[12];
     OvlVec4_261b48 points[1];
 } SegmentPath_261d78_261b48;
 
-
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c);
+
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
-    float v[4], w[4], z[4], t[4], u[4];
-    float best;
-    float zero;
-    int found = 0;
-    int i = 1;
-    int offset;
+    float  v[4], w[4], z[4], t[4], u[4];
+    float  best;
+    float  zero;
+    int    found = 0;
+    int    i = 1;
+    int    offset;
     float *prev;
     float *cur;
     fast_vec_sub(v, b, a);
@@ -122,15 +125,15 @@ int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
     clear_u64_value(z);
     z[2] = 1.0f;
     best = 1.0f;
-    fast_vec_sub(t, (char *)((SegmentPath * *)D_L00_001B04B0_261968)[idx] + 0x10, a);
+    fast_vec_sub(t, (char *)((SegmentPath **)D_L00_001B04B0_261968)[idx] + 0x10, a);
     transform_vector_by_basis(t, t, v);
     prev = t;
     cur = u;
-    if (i < ((SegmentPath * *)D_L00_001B04B0_261968)[idx]->count) {
+    if (i < ((SegmentPath **)D_L00_001B04B0_261968)[idx]->count) {
         offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(cur, (char *)((SegmentPath * *)D_L00_001B04B0_261968)[idx] + offset, a);
+            fast_vec_sub(cur, (char *)((SegmentPath **)D_L00_001B04B0_261968)[idx] + offset, a);
             transform_vector_by_basis(cur, cur, v);
             if (t[3] != zero || u[3] != zero) {
                 if (u[1] * t[1] < 0.0f) {
@@ -147,34 +150,42 @@ int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
         next:
             i++;
             offset += 0x10;
-        } while (i < ((SegmentPath * *)D_L00_001B04B0_261968)[idx]->count);
+        } while (i < ((SegmentPath **)D_L00_001B04B0_261968)[idx]->count);
     }
     lerp_vector(c, a, b, best);
     return found;
 }
+
 #include "rnc/overlay/quad.h"
 
 typedef struct {
-    s32 count;
-    u8 pad[12];
+    s32     count;
+    u8      pad[12];
     OvlVec4 points[1];
 } SegmentPath_261d78;
 
 extern SegmentPath_261d78 *D_L00_001B04B0_261d78[] __asm__("D_L00_001B04B0");
 
-s32 resolve_point_path_segment_xy_clearance(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) __asm__("FUN_L00_00261d78");
+s32 resolve_point_path_segment_xy_clearance(f32      distance,
+                                            s32      path_index,
+                                            OvlVec4 *point,
+                                            OvlVec4 *out) __asm__("FUN_L00_00261d78");
 
-s32 resolve_point_path_segment_xy_clearance(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) {
-    OvlVec4 difference;
-    OvlVec4 scaled_difference;
-    OvlVec4 working;
-    OvlVec4 segment;
-    OvlVec4 scaled_segment;
-    OvlVec4 cross;
-    OvlVec4 scaled_cross;
+s32 resolve_point_path_segment_xy_clearance(f32      distance,
+                                            s32      path_index,
+                                            OvlVec4 *point,
+
+                                            OvlVec4 *out) {
+    OvlVec4              difference;
+    OvlVec4              scaled_difference;
+    OvlVec4              working;
+    OvlVec4              segment;
+    OvlVec4              scaled_segment;
+    OvlVec4              cross;
+    OvlVec4              scaled_cross;
     SegmentPath_261d78 **entry;
-    s32 i;
-    s32 found;
+    s32                  i;
+    s32                  found;
 
     found = 0;
     qcopy_nc(&working, point);
@@ -215,45 +226,53 @@ s32 resolve_point_path_segment_xy_clearance(f32 distance, s32 path_index, OvlVec
         qcopy(out, &working);
     return found;
 }
+
 #include "rnc/overlay/quad.h"
 
 typedef struct {
-    s32 count;
-    u8 pad[12];
+    s32     count;
+    u8      pad[12];
     OvlVec4 points[1];
 } SegmentPath_262030;
 
 extern SegmentPath_262030 *D_L00_001B04B0_262030[] __asm__("D_L00_001B04B0");
-extern char D_0013F5E0[];
-extern void FUN_001ff500_262030(f32, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9bf8");
+extern char                D_0013F5E0[];
+extern void                FUN_001ff500_262030(f32, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9bf8");
 
-s32 resolve_point_path_segment_clearance(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) __asm__("FUN_L00_00262030");
+s32 resolve_point_path_segment_clearance(f32      distance,
+                                         s32      path_index,
+                                         OvlVec4 *point,
+                                         OvlVec4 *out) __asm__("FUN_L00_00262030");
 
-s32 resolve_point_path_segment_clearance(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) {
-    OvlVec4 difference;
-    OvlVec4 scaled_difference;
-    OvlVec4 working;
-    OvlVec4 segment;
-    OvlVec4 scaled_segment;
-    OvlVec4 cross;
-    OvlVec4 scaled_cross;
+s32 resolve_point_path_segment_clearance(f32      distance,
+                                         s32      path_index,
+                                         OvlVec4 *point,
+
+                                         OvlVec4 *out) {
+    OvlVec4             difference;
+    OvlVec4             scaled_difference;
+    OvlVec4             working;
+    OvlVec4             segment;
+    OvlVec4             scaled_segment;
+    OvlVec4             cross;
+    OvlVec4             scaled_cross;
     SegmentPath_262030 *entry;
-    OvlVec4 *height_axis;
-    OvlVec4 *current;
-    s32 next;
-    s32 i;
-    s32 offset;
-    OvlVec4 *saved_out;
-    s32 found;
-    f32 original_height;
-    f32 segment_length;
-    f32 projection;
+    OvlVec4            *height_axis;
+    OvlVec4            *current;
+    s32                 next;
+    s32                 i;
+    s32                 offset;
+    OvlVec4            *saved_out;
+    s32                 found;
+    f32                 original_height;
+    f32                 segment_length;
+    f32                 projection;
 
     found = 0;
     saved_out = out;
     qcopy(&working, point);
     entry = D_L00_001B04B0_262030[path_index];
-    offset = (s32)&(*(OvlVec4 *)D_0013F5E0);
+    offset = (s32) & (*(OvlVec4 *)D_0013F5E0);
     original_height = fast_vec_dot(&working, (OvlVec4 *)offset);
     i = 0;
     if (entry->count - 1 > found) {
@@ -261,7 +280,8 @@ s32 resolve_point_path_segment_clearance(f32 distance, s32 path_index, OvlVec4 *
         do {
             offset = i << 4;
             next = i + 1;
-            if (((OvlVec4 *)((u8 *)entry + offset + 0x10))->f[3] != 0.0f || entry->points[next].f[3] != 0.0f) {
+            if (((OvlVec4 *)((u8 *)entry + offset + 0x10))->f[3] != 0.0f ||
+                entry->points[next].f[3] != 0.0f) {
                 current = (OvlVec4 *)((u8 *)entry + (offset + 0x10));
                 fast_vec_sub(&difference, &working, current);
                 fast_vec_sub(&segment, (OvlVec4 *)((u8 *)entry + (offset + 0x20)), current);
@@ -294,7 +314,7 @@ s32 resolve_point_path_segment_clearance(f32 distance, s32 path_index, OvlVec4 *
                     fast_vec_add(&working, &scaled_difference, current);
                 }
             }
-next_segment_262030:
+        next_segment_262030:
             i = next;
         } while (i < entry->count - 1);
     }
@@ -305,21 +325,28 @@ next_segment_262030:
     }
     return found;
 }
+
 #include "rnc/math/vector.h"
 
 /* A polyline of evenly spaced points. */
 typedef struct {
-    s32 count;          /* 0x00 */
-    u8 pad4[0xC];
-    Vec4 points[1];     /* 0x10 */
+    s32  count; /* 0x00 */
+    u8   pad4[0xC];
+    Vec4 points[1]; /* 0x10 */
 } PointPath;
 
-
 /* Samples path at distance dist (points spacing apart): stores the segment, the distance into it and the point. */
-void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) __asm__("FUN_L00_00262360");
-void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) {
+void path_sample_at_distance(PointPath *path,
+                             s32       *seg_out,
+                             f32       *along,
+                             Vec4      *out,
+                             f32        dist,
+                             f32        spacing) __asm__("FUN_L00_00262360");
+void path_sample_at_distance(
+
+    PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) {
     Vec4 tmp;
-    s32 seg;
+    s32  seg;
 
     seg = truncate_float_to_s32(dist / spacing);
     *seg_out = seg;
@@ -343,12 +370,13 @@ void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *ou
     out->q = tmp.q;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002634F8), where it is exact; names translated to the US level program. */
 
-
 /* Multiplies the 001fa050 matrices of (x, y, z) and of a+0x40, stored back by matrix_to_euler. */
-void compose_target_euler_rotation(char *rotation_target, float x, float y, float z) __asm__("FUN_L00_00262480");
+void compose_target_euler_rotation(char *rotation_target,
+                                   float x,
+                                   float y,
+                                   float z) __asm__("FUN_L00_00262480");
 
 void compose_target_euler_rotation(char *rotation_target, float x, float y, float z) {
     float in[3];
@@ -362,11 +390,11 @@ void compose_target_euler_rotation(char *rotation_target, float x, float y, floa
     matrix_to_euler(target_rotation_matrix, rotation_target + 0x40);
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263578), where it is exact; names translated to the US level program. */
 
 /* Unless the flag at b+0x13C is set: sets it, stores a at 0x134, clears 0x130..0x138. */
-void initialize_moby_transform_history(int source_moby, char *history_state) __asm__("FUN_L00_00262500");
+void initialize_moby_transform_history(int   source_moby,
+                                       char *history_state) __asm__("FUN_L00_00262500");
 
 void initialize_moby_transform_history(int source_moby, char *history_state) {
     if (*(int *)(history_state + 0x13C) == 0) {
@@ -377,35 +405,43 @@ void initialize_moby_transform_history(int source_moby, char *history_state) {
         *(short *)(history_state + 0x130) = 0;
     }
 }
+
 typedef struct {
-    u8 p0[0x23];
-    u8 x23;
-    u8 p24[0xC];
-    u8 x30;
-    u8 x31;
+    u8  p0[0x23];
+    u8  x23;
+    u8  p24[0xC];
+    u8  x30;
+    u8  x31;
     u16 x32;
     s16 x34;
-    u8 p36[2];
+    u8  p36[2];
     u64 x38;
-    u8 p40[0x32];
-    u8 x72;
-    u8 p73[0x21];
+    u8  p40[0x32];
+    u8  x72;
+    u8  p73[0x21];
     s32 x94;
-    u8 p98[0xE];
+    u8  p98[0xE];
     s16 xa6;
 } E00262528;
-typedef struct {
-    u8 p0[0x100];
-    s32 x100[4];
-    s32 x110[4];
-    E00262528 *x120[4];
-    u8 p130[4];
-    E00262528 *x134;
-    s32 x138;
-} O00262528;
-void create_moby_transform_history_entry(O00262528 *history_state, s32 initial_decay_value, s32 sample_delay) __asm__("FUN_L00_00262528");
 
-void create_moby_transform_history_entry(O00262528 *history_state, s32 initial_decay_value, s32 sample_delay) {
+typedef struct {
+    u8         p0[0x100];
+    s32        x100[4];
+    s32        x110[4];
+    E00262528 *x120[4];
+    u8         p130[4];
+    E00262528 *x134;
+    s32        x138;
+} O00262528;
+
+void create_moby_transform_history_entry(O00262528 *history_state,
+                                         s32        initial_decay_value,
+                                         s32        sample_delay) __asm__("FUN_L00_00262528");
+
+void create_moby_transform_history_entry(O00262528 *history_state,
+                                         s32        initial_decay_value,
+
+                                         s32 sample_delay) {
     E00262528 *spawned_moby;
     if (history_state->x138 == 4)
         return;
@@ -428,27 +464,30 @@ void create_moby_transform_history_entry(O00262528 *history_state, s32 initial_d
     history_state->x120[history_state->x138] = spawned_moby;
     history_state->x138++;
 }
+
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
+
 typedef struct {
-    OvlQuad a[8];
-    OvlQuad b[8];
-    unsigned char pad[0x10];
-    int w[8];
-    short head;
-    short count;
+    OvlQuad        a[8];
+    OvlQuad        b[8];
+    unsigned char  pad[0x10];
+    int            w[8];
+    short          head;
+    short          count;
     unsigned char *src;
-    int n;
-    int active;
+    int            n;
+    int            active;
 } S_262608;
+
 void FUN_L00_00262840_262608(S_262608 *) __asm__("FUN_L00_00262840");
 
 void update_moby_transform_history(S_262608 *history_state, int dec) __asm__("FUN_L00_00262608");
 
 void update_moby_transform_history(S_262608 *history_state, int dec) {
-    unsigned char *src;
-    unsigned char *destination;
-    int history_write_index, i, k, done;
+    unsigned char  *src;
+    unsigned char  *destination;
+    int             history_write_index, i, k, done;
     unsigned char **pp;
     if (!history_state->active)
         return;
@@ -482,7 +521,8 @@ void update_moby_transform_history(S_262608 *history_state, int dec) {
     if (dec) {
         done = 1;
         for (i = 0; i < history_state->n; i++) {
-            unsigned char *history_moby = (unsigned char *)*(int *)((char *)&history_state->w[i] + 0x10);
+            unsigned char *history_moby =
+                (unsigned char *)*(int *)((char *)&history_state->w[i] + 0x10);
             if (history_moby) {
                 int decrement_amount = history_moby[0x23];
                 int a = decrement_amount;
@@ -499,9 +539,7 @@ void update_moby_transform_history(S_262608 *history_state, int dec) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002638B8), where it is exact; names translated to the US level program. */
-
 
 /* When o+0x13C is set, marks each nonzero moby of the 0x120 list for removal; clears the flag. */
 void clear_moby_transform_history(char *history_state) __asm__("FUN_L00_00262840");
@@ -519,14 +557,17 @@ void clear_moby_transform_history(char *history_state) {
         *(int *)(history_state + 0x13C) = 0;
     }
 }
-float spring_angle(void *, void *, float, float, float, float,
-                              int) __asm__("FUN_L00_0025bc98");
-void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 
-void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb) __asm__("FUN_L00_002628d8");
-void update_joint_animation(void *moby, unsigned char *joint_animation_state, int joint_index, float fa, float fb) {
+float spring_angle(void *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
+void  build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
+
+void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb) __asm__(
+    "FUN_L00_002628d8");
+void update_joint_animation(
+
+    void *moby, unsigned char *joint_animation_state, int joint_index, float fa, float fb) {
     unsigned char *previous_moby = *(unsigned char **)(joint_animation_state + 0x78);
-    float uniform_scale;
+    float          uniform_scale;
     if (!previous_moby) {
         *(void **)(joint_animation_state + 0x78) = moby;
     } else if (previous_moby != moby) {
@@ -535,8 +576,10 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
         joint_animation_state[1] = 0;
         *(void **)(joint_animation_state + 0x78) = moby;
     }
-    if (*(float *)(joint_animation_state + 0x60) == 0.0f && *(float *)(joint_animation_state + 0x64) == 0.0f &&
-        *(float *)(joint_animation_state + 0x68) == 0.0f && *(float *)(joint_animation_state + 0x70) == 1.0f &&
+    if (*(float *)(joint_animation_state + 0x60) == 0.0f &&
+        *(float *)(joint_animation_state + 0x64) == 0.0f &&
+        *(float *)(joint_animation_state + 0x68) == 0.0f &&
+        *(float *)(joint_animation_state + 0x70) == 1.0f &&
         absolute_float(*(float *)(joint_animation_state + 0x40)) < 0.005f &&
         absolute_float(*(float *)(joint_animation_state + 0x44)) < 0.005f &&
         absolute_float(*(float *)(joint_animation_state + 0x48)) < 0.005f) {
@@ -544,12 +587,31 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
             detach_manipulator(moby, joint_animation_state);
         return;
     }
-    spring_angle(joint_animation_state + 0x40, joint_animation_state + 0x50, *(float *)(joint_animation_state + 0x60), fa, fb, 0.0f, 0);
-    spring_angle(joint_animation_state + 0x44, joint_animation_state + 0x54, *(float *)(joint_animation_state + 0x64), fa, fb, 0.0f, 0);
-    spring_angle(joint_animation_state + 0x48, joint_animation_state + 0x58, *(float *)(joint_animation_state + 0x68), fa, fb, 0.0f, 0);
+    spring_angle(joint_animation_state + 0x40,
+                 joint_animation_state + 0x50,
+                 *(float *)(joint_animation_state + 0x60),
+                 fa,
+                 fb,
+                 0.0f,
+                 0);
+    spring_angle(joint_animation_state + 0x44,
+                 joint_animation_state + 0x54,
+                 *(float *)(joint_animation_state + 0x64),
+                 fa,
+                 fb,
+                 0.0f,
+                 0);
+    spring_angle(joint_animation_state + 0x48,
+                 joint_animation_state + 0x58,
+                 *(float *)(joint_animation_state + 0x68),
+                 fa,
+                 fb,
+                 0.0f,
+                 0);
     if (!joint_animation_state[1])
         attach_manipulator(moby, joint_index, joint_animation_state);
-    build_quaternion_from_axis_rotations(joint_animation_state + 0x10, joint_animation_state + 0x40);
+    build_quaternion_from_axis_rotations(joint_animation_state + 0x10,
+                                         joint_animation_state + 0x40);
     uniform_scale = *(float *)(joint_animation_state + 0x70);
     *(float *)(joint_animation_state + 0x20) = uniform_scale;
     *(float *)(joint_animation_state + 0x24) = uniform_scale;
@@ -558,14 +620,18 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
     *(float *)(joint_animation_state + 0x70) = 1.0f;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263B78), where it is exact; names translated to the US level program. */
 
-
 /* Advances angle *p by y and swaps the old x*sin offset in a+0x18 for the new one. */
-void update_moby_vertical_oscillation(float x, float y, struct Moby *moby, float *phase_angle, float *previous_sine_offset) __asm__("FUN_L00_00262b00");
+void update_moby_vertical_oscillation(float        x,
+                                      float        y,
+                                      struct Moby *moby,
+                                      float       *phase_angle,
+                                      float *previous_sine_offset) __asm__("FUN_L00_00262b00");
 
-void update_moby_vertical_oscillation(float x, float y, struct Moby *moby, float *phase_angle, float *previous_sine_offset) {
+void update_moby_vertical_oscillation(
+
+    float x, float y, struct Moby *moby, float *phase_angle, float *previous_sine_offset) {
     float sine_offset;
     *phase_angle = fast_add_rotations(*phase_angle, y);
     moby->pos.z -= *previous_sine_offset;
@@ -575,13 +641,25 @@ void update_moby_vertical_oscillation(float x, float y, struct Moby *moby, float
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263BF8), where it is exact; names translated to the US level program. */
 
-
 /* Sets o[16] and o[17] from r and the sines/cosines of the two angles, then advances the angles by l1 and l2. */
-void update_moby_rotation_oscillation(float *moby, float *first_phase_angle, float *second_phase_angle, float oscillation_amplitude, float first_phase_increment, float second_phase_increment) __asm__("FUN_L00_00262b80");
+void update_moby_rotation_oscillation(float *moby,
+                                      float *first_phase_angle,
+                                      float *second_phase_angle,
+                                      float  oscillation_amplitude,
+                                      float  first_phase_increment,
+                                      float  second_phase_increment) __asm__("FUN_L00_00262b80");
 
-void update_moby_rotation_oscillation(float *moby, float *first_phase_angle, float *second_phase_angle, float oscillation_amplitude, float first_phase_increment, float second_phase_increment) {
-    moby[0x10] = oscillation_amplitude * fast_sin(*first_phase_angle) * fast_sin(*second_phase_angle);
-    moby[0x11] = oscillation_amplitude * fast_sin(*first_phase_angle) * fast_cos(*second_phase_angle);
+void update_moby_rotation_oscillation(float *moby,
+                                      float *first_phase_angle,
+                                      float *second_phase_angle,
+                                      float  oscillation_amplitude,
+                                      float  first_phase_increment,
+
+                                      float second_phase_increment) {
+    moby[0x10] =
+        oscillation_amplitude * fast_sin(*first_phase_angle) * fast_sin(*second_phase_angle);
+    moby[0x11] =
+        oscillation_amplitude * fast_sin(*first_phase_angle) * fast_cos(*second_phase_angle);
     *first_phase_angle = fast_add_rotations(*first_phase_angle, first_phase_increment);
     *second_phase_angle = fast_add_rotations(*second_phase_angle, second_phase_increment);
 }

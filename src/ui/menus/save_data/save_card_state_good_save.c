@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/save/memory_card_state.h"
 #include "rnc/globals.h"
+
 /* Clears the 4 and 2 flag bits of mode_freeze_flags, then picks the next
    state into mode_freeze_state from the 0x80/0x100/0x200 bits and the
    D_0013D290 record. The cross-jumped `b` back into the 0x80 arm is
@@ -10,9 +11,9 @@
 void save_card_state_good_save(void) __asm__("FUN_002088d0");
 
 void save_card_state_good_save(void) {
-    int flags = mode_freeze_flags;
+    int                     flags = mode_freeze_flags;
     struct MemoryCardState *card_state;
-    int nf;
+    int                     nf;
     mode_freeze_flags = flags & ~4;
     card_state = &memory_card_state;
     nf = mode_freeze_flags & ~2;

@@ -8,27 +8,27 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/rendering/packets/put_draw_buffer_large.h"
 
-extern s32 display_buffer_address __asm__("D_0015EE80");
+extern s32  display_buffer_address __asm__("D_0015EE80");
 extern void fill_transfer_words(u8 *, s32, s32) __asm__("FUN_001f97e8");
 extern void FlushCache(s32);
 /* Retail returns zero after the graphics pipeline becomes idle. */
-extern s32 sceGsSyncPath(s32, s32) __asm__("func_00120558");
+extern s32  sceGsSyncPath(s32, s32) __asm__("func_00120558");
 extern void setup_fs_aa_buffer(s32, s32, s32, s32, s32, s32) __asm__("func_001FA978");
 extern void put_disp_buffer(void) __asm__("func_001FB2A8");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
-extern s32 sceGsExecLoadImage(sceGsLoadImage *, u8 *);
-extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
+extern s32  sceGsExecLoadImage(sceGsLoadImage *, u8 *);
+extern s32  sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 
 void set_pal_mode(void) __asm__("FUN_001f34e8");
 
 void set_pal_mode(void) {
     sceGsLoadImage image_transfer;
-    s32 tile_count;
-    s32 tile_index;
-    u64 zbuf;
-    u64 frame;
-    u64 scissor;
-    s16 display_width;
+    s32            tile_count;
+    s32            tile_index;
+    u64            zbuf;
+    u64            frame;
+    u64            scissor;
+    s16            display_width;
 
     FlushCache(0);
     if (pal_mode != 0) {

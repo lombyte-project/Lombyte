@@ -7,10 +7,7 @@
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/l02_aridia/hud_0023D600.c: func_L02_0023D600), where it is exact; names translated to the US level program. */
-
 
 void update_hud_counter_transition(char *transition_state) __asm__("FUN_L02_0023ccc8");
 
@@ -34,46 +31,49 @@ void update_hud_counter_transition(char *transition_state) {
     }
     *(int *)(transition_state + 0x74) = **(int **)(transition_state + 0xC);
 }
+
 #include "rnc/overlay/hud.h"
 
-extern int hud_screen_position(HudElem *, int *, int *) __asm__("FUN_L00_00235a70");
-extern int sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern int  hud_screen_position(HudElem *, int *, int *) __asm__("FUN_L00_00235a70");
+extern int  sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
+extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_right(s32, s32, s32, char *, s32) __asm__("FUN_001f6940");
-extern s32 frame_size[] __asm__("D_0013E504");
+extern s32  frame_size[] __asm__("D_0013E504");
 extern char hud_counter_decimal_format[] __asm__("D_L02_0015F850");
+
 #include "rnc/overlay/l02/update_hud_counter_transition_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+
 extern s32 hud_counter_bar_growth_divisor_gp __asm__("D_L02_0015F91C") __attribute__((sda));
 extern s32 hud_counter_text_shade_divisor_gp __asm__("D_L02_0015F920") __attribute__((sda));
-s32 D_L02_0015F944 = 0x18;
-s32 D_L02_0015F948 = 0x1e0;
-s32 D_L02_0015F950 = 0xe08080;
-s32 D_L02_0015F954 = 0x80e08080;
-s32 D_L02_0015F958 = 0x30;
-s32 D_L02_0015F95C = 0x46;
+s32        D_L02_0015F944 = 0x18;
+s32        D_L02_0015F948 = 0x1e0;
+s32        D_L02_0015F950 = 0xe08080;
+s32        D_L02_0015F954 = 0x80e08080;
+s32        D_L02_0015F958 = 0x30;
+s32        D_L02_0015F95C = 0x46;
 
 /* Draws the counter: a stretched bar behind the icon and the count, on whichever side of the screen it sits. */
 s32 draw_hud_counter(HudElem *hud_element) __asm__("FUN_L02_0023cda8");
 
 s32 draw_hud_counter(HudElem *hud_element) {
-    char text[16];
-    int x;
-    int y;
+    char           text[16];
+    int            x;
+    int            y;
     unsigned char *fade = hud_element->cnt;
-    int left;
-    f32 grow;
-    f32 shade;
-    int alpha;
-    int width;
-    int frame;
-    int bright;
-    int dark;
-    int full_bar_width;
-    int px;
-    int bar;
-    int bottom;
+    int            left;
+    f32            grow;
+    f32            shade;
+    int            alpha;
+    int            width;
+    int            frame;
+    int            bright;
+    int            dark;
+    int            full_bar_width;
+    int            px;
+    int            bar;
+    int            bottom;
 
     if (fade[0] == 0) {
         return hud_element->w;
@@ -89,13 +89,15 @@ s32 draw_hud_counter(HudElem *hud_element) {
     }
     bottom = frame_size[0];
     y = pal_mode != 0 ? bottom - 0x2A : bottom - 0x32;
-    grow = convert_integer_to_float(fade[0]) / convert_integer_to_float(hud_counter_bar_growth_divisor_gp);
+    grow = convert_integer_to_float(fade[0]) /
+           convert_integer_to_float(hud_counter_bar_growth_divisor_gp);
     if (1.0f < grow) {
         grow = 1.0f;
     } else if (grow < 0.0f) {
         grow = 0.0f;
     }
-    shade = convert_integer_to_float(fade[1]) / convert_integer_to_float(hud_counter_text_shade_divisor_gp);
+    shade = convert_integer_to_float(fade[1]) /
+            convert_integer_to_float(hud_counter_text_shade_divisor_gp);
     if (1.0f < shade) {
         shade = 1.0f;
     } else if (shade < 0.0f) {

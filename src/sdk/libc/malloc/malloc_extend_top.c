@@ -14,10 +14,10 @@
 
 struct _reent;
 
-extern void __malloc_lock(struct _reent *) __asm__("func_001154C0");
-extern void __malloc_unlock(struct _reent *) __asm__("func_001154C8");
+extern void  __malloc_lock(struct _reent *) __asm__("func_001154C0");
+extern void  __malloc_unlock(struct _reent *) __asm__("func_001154C8");
 extern void *_sbrk_r(struct _reent *ptr, s32 delta);
-extern void _free_r(struct _reent *ptr, void *mem);
+extern void  _free_r(struct _reent *ptr, void *mem);
 
 extern u64 D_0012FBA8[]; /* max_sbrked_mem */
 extern u64 D_0012FBB0[]; /* max_total_mem */
@@ -51,16 +51,16 @@ typedef unsigned long POINTER_UINT;
 
 void malloc_extend_top(struct _reent *reent_context, u32 nb) {
     char *brk;
-    u32 front_misalign;
-    u32 correction;
+    u32   front_misalign;
+    u32   correction;
     char *new_brk;
-    u32 top_size;
+    u32   top_size;
 
     struct malloc_chunk *old_top = top;
-    u32 old_top_size = chunksize(old_top);
-    char *old_end = (char *)(chunk_at_offset(old_top, old_top_size));
+    u32                  old_top_size = chunksize(old_top);
+    char                *old_end = (char *)(chunk_at_offset(old_top, old_top_size));
 
-    u32 sbrk_size = nb + top_pad + MINSIZE;
+    u32           sbrk_size = nb + top_pad + MINSIZE;
     unsigned long pagesz = malloc_getpagesize;
 
     if (sbrk_base != (char *)(-1))

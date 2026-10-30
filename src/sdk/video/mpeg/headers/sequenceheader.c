@@ -1,12 +1,12 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
 
-extern u8 default_intra_quantiser_matrix[] __asm__("D_00132FC0");
-extern u8 default_non_intra_quantiser_matrix[] __asm__("D_00133000");
-extern u8 vertical_size_limit_error_message[] __asm__("D_00153AE8");
-extern s32 _Error();
+extern u8   default_intra_quantiser_matrix[] __asm__("D_00132FC0");
+extern u8   default_non_intra_quantiser_matrix[] __asm__("D_00133000");
+extern u8   vertical_size_limit_error_message[] __asm__("D_00153AE8");
+extern s32  _Error();
 extern void _extensionAndUserData(struct MpegDecoder *);
-extern u32 _nextBit(struct MpegDecoder *, s32);
+extern u32  _nextBit(struct MpegDecoder *, s32);
 extern void _sendIpuCommand(struct MpegDecoder *, s32);
 extern void _setDefaultQM(struct MpegDecoder *, s32, u32);
 extern void _waitIpuIdle(struct MpegDecoder *);

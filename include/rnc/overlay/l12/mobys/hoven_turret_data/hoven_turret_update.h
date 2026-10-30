@@ -5,8 +5,10 @@
 
 /* Scalar data for src/overlays/l12/mobys/hoven_turret.c.
  * Keep its include at this declaration block: SN small-data ordering matters. */
-extern float hoven_turret_destruction_view_offset_distance_min __asm__("D_L12_00161E60") __attribute__((sda));
-extern float hoven_turret_destruction_view_offset_distance_max __asm__("D_L12_00161E64") __attribute__((sda));
+extern float hoven_turret_destruction_view_offset_distance_min __asm__("D_L12_00161E60")
+    __attribute__((sda));
+extern float hoven_turret_destruction_view_offset_distance_max __asm__("D_L12_00161E64")
+    __attribute__((sda));
 extern float hoven_turret_pitch_min __asm__("D_L12_00161EA8") __attribute__((sda));
 extern float hoven_turret_pitch_max __asm__("D_L12_00161EAC") __attribute__((sda));
 extern float hoven_turret_yaw_input_rate __asm__("D_L12_00161ED0") __attribute__((sda));

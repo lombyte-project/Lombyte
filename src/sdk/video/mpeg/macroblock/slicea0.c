@@ -1,11 +1,11 @@
 #include "types.h"
 
 struct MpegSliceDecoder {
-    u8 reserved_000[0x11C];
+    u8  reserved_000[0x11C];
     s32 error;
-    u8 reserved_120[0xC];
+    u8  reserved_120[0xC];
     s32 macroblock_width;
-    u8 reserved_130[0x80];
+    u8  reserved_130[0x80];
     s32 slice_active;
 };
 
@@ -13,8 +13,8 @@ struct MpegMotionState {
     s32 values[8];
 };
 
-const u8 D_00153800[] = "slice_start_code(0x%08x) out of range";
-extern u8 slice_setup_error_message[] __asm__("D_00153828");
+const u8   D_00153800[] = "slice_start_code(0x%08x) out of range";
+extern u8  slice_setup_error_message[] __asm__("D_00153828");
 extern s32 _Error();
 extern s32 _Error1();
 extern s32 _flushBuf();
@@ -23,7 +23,11 @@ extern s32 _nextStartCode();
 extern s32 _peepBit();
 extern s32 _sliceB();
 
-s32 _sliceA0(struct MpegSliceDecoder *decoder, s32 unused, s32 *macroblock_address, s32 *increment,
+s32 _sliceA0(struct MpegSliceDecoder *decoder,
+             s32                      unused,
+             s32                     *macroblock_address,
+             s32                     *increment,
+
              volatile struct MpegMotionState *motion) {
     s32 slice_extension;
     s32 start_code;

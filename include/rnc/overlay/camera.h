@@ -8,7 +8,7 @@
    against 7. */
 typedef struct {
     f32 axis[4];
-    u8 pad10[0x76];
+    u8  pad10[0x76];
     s16 unk86;
 } FollowCamSideRef;
 

@@ -14,16 +14,18 @@ typedef struct {
     s16 mip_block_offset_1;
     s16 mip_block_offset_2;
 } ShrubMipTextureDefinition;
+
 typedef struct {
     s32 draw_high;
     s32 draw_shift;
-    u8 pad8[8];
+    u8  pad8[8];
     s32 material_base;
     s32 material_shift;
-    u8 pad18[8];
+    u8  pad18[8];
     s32 material_index;
-    u8 pad24[0x1C];
+    u8  pad24[0x1C];
 } ShrubRenderPacket;
+
 typedef struct {
     u8 pad0[0x10];
     union {
@@ -39,43 +41,47 @@ typedef struct {
     u64 miptbp1;
     u64 payload38;
 } ShrubMipPacket;
+
 typedef struct {
     s32 count;
     s32 prefix_record_count;
 } ShrubRenderGroupHeader;
+
 typedef struct {
-    u8 pad0[0x10];
+    u8                     pad0[0x10];
     ShrubRenderGroupHeader group_header;
 } ShrubRenderGroup;
+
 typedef struct {
     ShrubRenderGroup *group;
-    s32 pad4;
+    s32               pad4;
 } ShrubRenderGroupReference;
+
 struct ShrubInstance;
 
 typedef struct {
-    f32 bounding_sphere[4]; /* 0x00: center xyz, radius */
-    f32 scale;              /* 0x10 */
-    u8 pad14[2];
-    u16 instance_count;                  /* 0x16 */
-    struct ShrubInstance *first_instance; /* 0x18 */
-    ShrubMipPacket *mip_packet;           /* 0x1C */
-    f32 unk20;                            /* 0x20 */
-    u8 pad24[2];
-    u16 class_slot;
-    s16 group_count;
-    u8 pad2A[2];
-    s32 packed_geometry;
-    u8 pad30[0x10];
+    f32                       bounding_sphere[4]; /* 0x00: center xyz, radius */
+    f32                       scale;              /* 0x10 */
+    u8                        pad14[2];
+    u16                       instance_count; /* 0x16 */
+    struct ShrubInstance     *first_instance; /* 0x18 */
+    ShrubMipPacket           *mip_packet;     /* 0x1C */
+    f32                       unk20;          /* 0x20 */
+    u8                        pad24[2];
+    u16                       class_slot;
+    s16                       group_count;
+    u8                        pad2A[2];
+    s32                       packed_geometry;
+    u8                        pad30[0x10];
     ShrubRenderGroupReference groups[1];
 } ShrubRenderClass;
 
 extern ShrubRenderClass *shrub_render_classes[64] __asm__("D_001D7F30");
-extern s16 shrub_render_class_ids[64] __asm__("D_001D8030");
+extern s16               shrub_render_class_ids[64] __asm__("D_001D8030");
 /* Class id -> slot in shrub_render_classes. Two more tables of the same size follow
    (D_001D84B0, D_001D88B0), so this one spans exactly the 0x400 bytes up to D_001D84B0. */
-extern u8 shrub_render_class_slot_by_id[0x400] __asm__("D_001D80B0");
-extern s32 shrub_render_class_fixed_thresholds[64] __asm__("D_001D8CB0");
+extern u8          shrub_render_class_slot_by_id[0x400] __asm__("D_001D80B0");
+extern s32         shrub_render_class_fixed_thresholds[64] __asm__("D_001D8CB0");
 extern MaterialMap shrub_render_class_material_maps[64] __asm__("D_001D92B0");
 
 #endif /* LOMBYTE_RNC_RENDERING_SHRUB_RENDER_CLASS_H */

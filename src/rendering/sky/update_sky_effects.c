@@ -3,11 +3,11 @@
 #include "rnc/math/random.h"
 
 struct LevelSkyEffectData {
-    u8 pad_0[4];
-    s16 relocation_state;
-    u8 pad_6[2];
-    s16 effect_count;
-    u8 pad_A[0x12];
+    u8                pad_0[4];
+    s16               relocation_state;
+    u8                pad_6[2];
+    s16               effect_count;
+    u8                pad_A[0x12];
     struct SkyEffect *effects;
 };
 
@@ -21,51 +21,51 @@ union SkyEffectColorOrAngles {
 };
 
 struct SkyEffect {
-    u8 randomize_color;
-    u8 pad1[1];
-    u8 texture_index;
-    u8 flags;
-    u32 color;
-    f32 angle;
+    u8                           randomize_color;
+    u8                           pad1[1];
+    u8                           texture_index;
+    u8                           flags;
+    u32                          color;
+    f32                          angle;
     union SkyEffectColorOrAngles state;
-    f32 position_x;
-    f32 position_y;
-    f32 position_z;
-    f32 size;
+    f32                          position_x;
+    f32                          position_y;
+    f32                          position_z;
+    f32                          size;
 };
 
 extern struct LevelSkyEffectData *level_sky_effect_data __asm__("D_0016045C");
-extern u8 sky_matrix[] __asm__("D_001D96E0");
-extern void srand(s32) __asm__("func_001160C8");
-extern f32 absolute_float(f32) __asm__("func_001F99C0");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern void set_identity_matrix(u8 *) __asm__("func_001F9FC8");
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 random_angle_radians() __asm__("func_00213308");
-extern void sky_sprite_proc() __asm__("func_0022BBA0");
-extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
-extern s32 rand() __asm__("FUN_001160d8");
+extern u8                         sky_matrix[] __asm__("D_001D96E0");
+extern void                       srand(s32) __asm__("func_001160C8");
+extern f32                        absolute_float(f32) __asm__("func_001F99C0");
+extern f32                        fast_cos(f32) __asm__("func_001F9DC8");
+extern f32                        fast_sin(f32) __asm__("func_001F9DE0");
+extern void                       set_identity_matrix(u8 *) __asm__("func_001F9FC8");
+extern f32                        fast_add_rotations(f32, f32) __asm__("func_001FA580");
+extern f32                        convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern f32                        random_angle_radians() __asm__("func_00213308");
+extern void                       sky_sprite_proc() __asm__("func_0022BBA0");
+extern void                       vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
+extern s32                        rand() __asm__("FUN_001160d8");
 
 void update_sky_effects(void) __asm__("FUN_0022ae70");
 
 void update_sky_effects(void) {
-    f32 trig_product;
-    f32 elevation;
-    f32 azimuth;
-    s32 color_delta;
-    u32 base_color;
-    s32 initialization_index;
-    s32 effect_index;
-    s32 alpha_delta;
-    s32 random_bits;
-    s32 random_color_enabled;
-    s32 effect_flags;
-    f32 radius;
+    f32               trig_product;
+    f32               elevation;
+    f32               azimuth;
+    s32               color_delta;
+    u32               base_color;
+    s32               initialization_index;
+    s32               effect_index;
+    s32               alpha_delta;
+    s32               random_bits;
+    s32               random_color_enabled;
+    s32               effect_flags;
+    f32               radius;
     struct SkyEffect *effect;
     struct SkyAngles *orbit;
-    s16 *angles;
+    s16              *angles;
 
     level_sky_effect_data->relocation_state = 0;
     set_identity_matrix(sky_matrix);

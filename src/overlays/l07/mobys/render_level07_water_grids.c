@@ -16,23 +16,23 @@
 
 /* Register this level's vendor data set. */
 
-
 void render_level07_water_grids(void) __asm__("FUN_L07_0030cd20");
 
 void render_level07_water_grids(void) {
     render_water_grids(l07_water_grids, 0x24);
 }
+
 struct L07MovingVars {
     Vec4f home;
-    int target;
-    int openState;
-    int shutState;
+    int   target;
+    int   openState;
+    int   shutState;
     Vec4f destination;
     float speed;
-    int startSound;
-    int endSound;
-    int indicator;
-    int forceReturn;
+    int   startSound;
+    int   endSound;
+    int   indicator;
+    int   forceReturn;
 };
 
 extern struct Moby *D_L07_0015FFD8;
@@ -48,15 +48,15 @@ void update_moby_offset_motion(struct Moby *moby) {
         MOVING_MOBY_RETURN_HOME = 4
     };
     struct L07MovingVars *vars = (struct L07MovingVars *)moby->pvars;
-    struct Moby *target;
-    Vec4 next;
-    Vec4 start;
-    float distance;
-    float time;
-    int force_end;
-    int force_start;
-    u8 spawn_id;
-    int no_spawn;
+    struct Moby          *target;
+    Vec4                  next;
+    Vec4                  start;
+    float                 distance;
+    float                 time;
+    int                   force_end;
+    int                   force_start;
+    u8                    spawn_id;
+    int                   no_spawn;
 
     if (moby->mission != 0xff && visited52[moby->mission + current_level_index * 16] == 0xff)
         vars->target = -1;
@@ -83,10 +83,8 @@ void update_moby_offset_motion(struct Moby *moby) {
     case MOVING_MOBY_WAIT_AT_HOME:
         if (force_start)
             return;
-        if (!force_end && vars->target != -1 &&
-            (target = &D_L07_0015FFD8[vars->target]) != 0 &&
-            target->state != 0xfe && target->state != 0xfd &&
-            target->state != vars->openState)
+        if (!force_end && vars->target != -1 && (target = &D_L07_0015FFD8[vars->target]) != 0 &&
+            target->state != 0xfe && target->state != 0xfd && target->state != vars->openState)
             return;
         start.q = 0;
         start.f[0] = vars->destination.x;
@@ -99,10 +97,9 @@ void update_moby_offset_motion(struct Moby *moby) {
         moby->state = 2;
         break;
     case MOVING_MOBY_MOVE_TO_OFFSET:
-        if (force_start || (!force_end && vars->target != -1 &&
-            (target = &D_L07_0015FFD8[vars->target]) != 0 &&
-            target->state != 0xfe && target->state != 0xfd &&
-            target->state == vars->shutState)) {
+        if (force_start ||
+            (!force_end && vars->target != -1 && (target = &D_L07_0015FFD8[vars->target]) != 0 &&
+             target->state != 0xfe && target->state != 0xfd && target->state == vars->shutState)) {
             if (vars->startSound != -1)
                 FUN_0022da68(vars->startSound, 0, moby);
             moby->state = 4;
@@ -129,10 +126,9 @@ void update_moby_offset_motion(struct Moby *moby) {
             FUN_0022da68(vars->startSound, 0, moby);
         return;
     case MOVING_MOBY_WAIT_AT_OFFSET:
-        if (!force_start && (force_end || vars->target == -1 ||
-            (target = &D_L07_0015FFD8[vars->target]) == 0 ||
-            target->state == 0xfe || target->state == 0xfd ||
-            target->state != vars->shutState))
+        if (!force_start &&
+            (force_end || vars->target == -1 || (target = &D_L07_0015FFD8[vars->target]) == 0 ||
+             target->state == 0xfe || target->state == 0xfd || target->state != vars->shutState))
             return;
         vars->home.w = 0;
         if (vars->startSound != -1)
@@ -140,10 +136,9 @@ void update_moby_offset_motion(struct Moby *moby) {
         moby->state = 4;
         break;
     case MOVING_MOBY_RETURN_HOME:
-        if (!force_start && (force_end || vars->target == -1 ||
-            (target = &D_L07_0015FFD8[vars->target]) == 0 ||
-            target->state == 0xfe || target->state == 0xfd ||
-            target->state == vars->openState)) {
+        if (!force_start &&
+            (force_end || vars->target == -1 || (target = &D_L07_0015FFD8[vars->target]) == 0 ||
+             target->state == 0xfe || target->state == 0xfd || target->state == vars->openState)) {
             if (vars->startSound != -1)
                 FUN_0022da68(vars->startSound, 0, moby);
             moby->state = 2;
@@ -173,14 +168,15 @@ void update_moby_offset_motion(struct Moby *moby) {
         break;
     }
 }
+
 struct SwingGateVars {
-    int target;     /* 0x00: moby index, -1 for none */
-    int openState;  /* 0x04 */
-    int shutState;  /* 0x08 */
-    float speed;    /* 0x0C */
-    float damp;     /* 0x10 */
-    float rate;     /* 0x14 */
-    float vel;      /* 0x18 */
+    int   target;    /* 0x00: moby index, -1 for none */
+    int   openState; /* 0x04 */
+    int   shutState; /* 0x08 */
+    float speed;     /* 0x0C */
+    float damp;      /* 0x10 */
+    float rate;      /* 0x14 */
+    float vel;       /* 0x18 */
 };
 
 extern int FUN_0022da68(int, int, struct Moby *);
@@ -196,8 +192,8 @@ void update_swing_gate(struct Moby *moby) {
         SWING_GATE_RETURN_TO_ZERO = 4
     };
     struct SwingGateVars *vars = (struct SwingGateVars *)moby->pvars;
-    struct Moby *target;
-    float updated_y_rotation;
+    struct Moby          *target;
+    float                 updated_y_rotation;
 
     if (vars == 0)
         return;
@@ -219,7 +215,8 @@ void update_swing_gate(struct Moby *moby) {
     case SWING_GATE_HOLD_ROTATION:
         break;
     case SWING_GATE_SWINGING:
-        vars->vel = fast_add_rotations(vars->vel, fast_cos(moby->rot.y) * (vars->speed * frame_time));
+        vars->vel =
+            fast_add_rotations(vars->vel, fast_cos(moby->rot.y) * (vars->speed * frame_time));
         moby->rot.y = fast_add_rotations(moby->rot.y, vars->vel);
         vars->vel = vars->vel * vars->damp;
         target = &D_L07_0015FFD8[vars->target];

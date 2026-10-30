@@ -1,6 +1,7 @@
 #include "asm.h"
 
 #include "types.h"
+
 struct Pad2Capability {
     s32 present;
     s32 width;
@@ -11,11 +12,11 @@ struct Pad2Capability {
 /* Decode forty LSB-first presence bits into sixteen-byte capability records.
  * Absent entries leave the width field untouched, as in the retail code. */
 s32 scePad2SetButtonOrder(u8 *profile, s32 *order) {
-    s32 capabilityIndex;
-    u32 bitIndex;
-    u32 bitPosition;
-    s32 byteIndex;
-    u8 *profileByte;
+    s32                    capabilityIndex;
+    u32                    bitIndex;
+    u32                    bitPosition;
+    s32                    byteIndex;
+    u8                    *profileByte;
     struct Pad2Capability *capability;
 
     profileByte = profile;

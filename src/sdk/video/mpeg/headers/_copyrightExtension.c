@@ -1,5 +1,7 @@
 #include "types.h"
+
 extern s32 _nextBit();
+
 void _copyrightExtension(s32 decoder) {
     _nextBit(decoder, 1);
     _nextBit(decoder, 8);

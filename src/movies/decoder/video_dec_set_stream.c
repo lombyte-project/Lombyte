@@ -8,12 +8,17 @@
    SDK's previous-callback result and always returns 1; this is not a
    checked registration-success result. Explicit forwarding is required
    in C, even though EE argument registers happen to survive the old call. */
-s32 video_dec_set_stream(struct VideoDec *video_dec, s32 stream_type,
-                         s32 channel, MpegStreamCallback callback,
-                         void *callback_context) __asm__("FUN_0023cbd0");
+s32 video_dec_set_stream(struct VideoDec   *video_dec,
+                         s32                stream_type,
+                         s32                channel,
+                         MpegStreamCallback callback,
+                         void              *callback_context) __asm__("FUN_0023cbd0");
 
-s32 video_dec_set_stream(struct VideoDec *video_dec, s32 stream_type,
-                         s32 channel, MpegStreamCallback callback,
+s32 video_dec_set_stream(struct VideoDec   *video_dec,
+                         s32                stream_type,
+                         s32                channel,
+                         MpegStreamCallback callback,
+
                          void *callback_context) {
     sceMpegAddStrCallback(&video_dec->mpeg, stream_type, channel, callback, callback_context);
     return 1;

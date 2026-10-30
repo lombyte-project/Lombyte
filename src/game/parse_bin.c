@@ -18,15 +18,18 @@ s64 parse_bin(void) __asm__("FUN_0012d8f8");
    bottom with the entry jump. Returns the id of the first chunk that
    differs. */
 s64 parse_bin(void) {
-    u8 *chunk_cursor;
+    u8           *chunk_cursor;
     struct Chunk *chunk;
-    u8 *dst;
-    u8 *payload_source_cursor;
-    s64 id;
+    u8           *dst;
+    u8           *payload_source_cursor;
+    s64           id;
 
     id = 0;
     chunk_cursor = (u8 *)(level_root[0] + (s32)level_root);
-    while (chunk = (struct Chunk *)chunk_cursor, chunk_cursor = (u8 *)(chunk + 1), dst = chunk->dst, payload_source_cursor = chunk_cursor,
+    while (chunk = (struct Chunk *)chunk_cursor,
+           chunk_cursor = (u8 *)(chunk + 1),
+           dst = chunk->dst,
+           payload_source_cursor = chunk_cursor,
            (id == 0) ? (id = chunk->id, 1) : (id == chunk->id)) {
         if (((chunk->size & 7) == 0) && (((u32)chunk_cursor & 7) == 0) && (((u32)dst & 7) == 0)) {
             u8 *d = dst;

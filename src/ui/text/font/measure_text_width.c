@@ -5,9 +5,9 @@ s32 measure_text_width(u8 *text, s32 max_chars, s32 glyph_table) __asm__("FUN_00
 s32 measure_text_width(u8 *text, s32 max_chars, s32 glyph_table) {
     s32 total;
     s32 count;
-    s8 value;
+    s8  value;
     u8 *text_cursor;
-    u8 index;
+    u8  index;
 
     total = 0;
     count = 0;

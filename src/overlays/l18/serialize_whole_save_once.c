@@ -3,13 +3,11 @@
 #include "asm.h"
 #include "rnc/save/memcard_make_whole_save.h"
 
-
-
 /* Serialize save data once and retain its destination buffer. */
 /* Ported from rac1-decomp (src/overlays/l18/pause_00282F48.c: func_L18_00282F48), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char pad0[0xE0];
+    char  pad0[0xE0];
     char *save_data;
 } Level18PauseState;
 

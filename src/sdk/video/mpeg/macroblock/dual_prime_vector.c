@@ -1,6 +1,7 @@
 #include "types.h"
+
 typedef struct {
-    u8 pad0[0x174];
+    u8  pad0[0x174];
     s32 pictStruct;
     s32 topFieldFirst;
 } MpegDec;

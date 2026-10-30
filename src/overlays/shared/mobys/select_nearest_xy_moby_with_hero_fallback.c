@@ -10,20 +10,24 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"
 
-
-extern short D_L08_001B1030[] NOT_SDA;
-extern char *D_L08_001D1EA0[] NOT_SDA;
+extern short       D_L08_001B1030[] NOT_SDA;
+extern char       *D_L08_001D1EA0[] NOT_SDA;
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
-int select_nearest_xy_moby_with_hero_fallback(char *comparison_reference, char *selection_output, float best) __asm__("FUN_L08_0026a3d0");
+int                select_nearest_xy_moby_with_hero_fallback(char *comparison_reference,
+                                                             char *selection_output,
+                                                             float best) __asm__("FUN_L08_0026a3d0");
 
-int select_nearest_xy_moby_with_hero_fallback(char *comparison_reference, char *selection_output, float best) {
+int select_nearest_xy_moby_with_hero_fallback(char *comparison_reference,
+                                              char *selection_output,
+
+                                              float best) {
     struct Hero *hero = &hero_lui;
-    char *selected_moby;
-    char *candidate_moby;
-    int selection_status;
-    int i;
-    int j;
-    float candidate_metric;
+    char        *selected_moby;
+    char        *candidate_moby;
+    int          selection_status;
+    int          i;
+    int          j;
+    float        candidate_metric;
 
     selected_moby = ((char *)hero->moby);
     selection_status = 0;

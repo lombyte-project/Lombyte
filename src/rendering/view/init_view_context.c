@@ -9,9 +9,9 @@ void init_view_context(void) __asm__("FUN_001f2c60");
 
 void init_view_context(void) {
     struct FsAaBuf *fs_aa_buf = &fs_aa_buffer;
-    struct View *view = &view_context;
-    s32 hw;
-    s32 hh;
+    struct View    *view = &view_context;
+    s32             hw;
+    s32             hh;
 
     hw = fs_aa_buf->display_width >> 1;
     hh = fs_aa_buf->display_height >> 1;

@@ -7,6 +7,7 @@
 #include "rnc/save/memory_card_state.h"
 #include "rnc/globals.h"
 #include "rnc/ui/map/copy_level_object_positions.h"
+
 extern void memcard_make_whole_save(char *out) __asm__("func_0020ABB0");
 extern void prepare_save_game(int, int) __asm__("FUN_002269c0");
 extern char D_0015EE98[] MACRO_ADDR;
@@ -18,7 +19,7 @@ void prepare_save_game(int save_data, int slot) __asm__("FUN_002269c0");
 
 void prepare_save_game(int save_data, int slot) {
     struct MemoryCardState *card_state = &memory_card_state;
-    int saving = 1;
+    int                     saving = 1;
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
     copy_level_object_positions();

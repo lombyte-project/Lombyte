@@ -81,11 +81,13 @@
  */
 
 #include "types.h"
+
 typedef struct _Bigint {
     struct _Bigint *_next;
-    s32 _k, _maxwds, _sign, _wds;
-    u32 _x[1];
+    s32             _k, _maxwds, _sign, _wds;
+    u32             _x[1];
 } _Bigint;
+
 struct _reent;
 typedef u32 __ULong;
 #define Storeinc(a, b, c) (((u16 *)a)[1] = (u16)b, ((u16 *)a)[0] = (u16)c, a++)
@@ -93,10 +95,10 @@ extern _Bigint *_Balloc(struct _reent *, s32);
 
 _Bigint *_multiply(struct _reent *reent_context, _Bigint *multiplicand, _Bigint *multiplier) {
     _Bigint *product;
-    s32 k, wa, wb, wc;
-    __ULong carry, y, z;
+    s32      k, wa, wb, wc;
+    __ULong  carry, y, z;
     __ULong *x, *xa, *xae, *xb, *xbe, *xc, *xc0;
-    __ULong z2;
+    __ULong  z2;
 
     if (multiplicand->_wds < multiplier->_wds) {
         product = multiplicand;

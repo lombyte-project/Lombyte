@@ -9,43 +9,48 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+
 typedef union {
     u128 q_002acbf0;
-    f32 f[4];
+    f32  f[4];
 } V_2acbf0_002acbf0;
+
 typedef struct {
     V_2acbf0_002acbf0 corner[4];
-    u32 color[4];
-    f32 uv[8];
-    s64 unk70;
-    s64 tex;
-    s64 unk80;
-    s64 unk88;
+    u32               color[4];
+    f32               uv[8];
+    s64               unk70;
+    s64               tex;
+    s64               unk80;
+    s64               unk88;
 } Q_2acbf0_002acbf0;
+
 typedef struct {
-    u8 pad0[0x20];
+    u8                pad0[0x20];
     V_2acbf0_002acbf0 pos;
-    f32 f20, f24, f28;
+    f32               f20, f24, f28;
 } PV_2acbf0_002acbf0;
+
 typedef struct {
-    u8 pad0[0x78];
+    u8                  pad0[0x78];
     PV_2acbf0_002acbf0 *pv;
 } M_2acbf0_002acbf0;
-extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+
+extern f32  scale_time(f32) __asm__("FUN_001f96b0");
+extern s64  get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) __asm__("FUN_L00_002c31c0");
 
 void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
-    Q_2acbf0_002acbf0 quad;
-    V_2acbf0_002acbf0 quad_transform[4];
-    V_2acbf0_002acbf0 mz[4];
-    V_2acbf0_002acbf0 quad_orientation_angles;
-    V_2acbf0_002acbf0 rz;
+    Q_2acbf0_002acbf0   quad;
+    V_2acbf0_002acbf0   quad_transform[4];
+    V_2acbf0_002acbf0   mz[4];
+    V_2acbf0_002acbf0   quad_orientation_angles;
+    V_2acbf0_002acbf0   rz;
     PV_2acbf0_002acbf0 *pv = moby->pv;
-    s32 i;
-    s32 odd;
-    f32 polar_angle, phase_numerator;
+    s32                 i;
+    s32                 odd;
+    f32                 polar_angle, phase_numerator;
     if (D_L00_0015F5C4 == 2) {
         return;
     }
@@ -109,11 +114,11 @@ void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
         draw_geometry_quad(&quad, quad_transform, 1);
     }
 }
+
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/mobys/moby.h"
-
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
@@ -141,8 +146,8 @@ int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) {
     moby[0x20] = 0x9;
     return helper_result;
 }
-#include "rnc/math/vector.h"
 
+#include "rnc/math/vector.h"
 
 /* Calls the optional function reached through the moby pointer at +0x24; 1 when it is null. */
 int invoke_optional_moby_callback_or_return_one(char *moby) __asm__("FUN_L00_002da218");

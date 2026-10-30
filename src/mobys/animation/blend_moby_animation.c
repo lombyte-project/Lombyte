@@ -3,43 +3,51 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"
+
 extern int find_or_allocate_id_slot(int v) __asm__("func_0020CC18");
+
 typedef struct {
-    char _pad00[0x10];
+    char          _pad00[0x10];
     unsigned char nframes; /* 0x10 */
 } AnimSeq;
+
 typedef struct {
-    char _pad00[0x48];
+    char     _pad00[0x48];
     AnimSeq *seqs[1]; /* 0x48 */
 } AnimClass;
+
 typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass; /* 0x24 */
-    char _pad28[0x50 - 0x28];
+    char          _pad00[0x24];
+    AnimClass    *pClass; /* 0x24 */
+    char          _pad28[0x50 - 0x28];
     unsigned char frame;     /* 0x50 */
     unsigned char nextFrame; /* 0x51 */
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C; /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData; /* 0x68 */
-    char _pad6C[4];
+    char          _pad54[0x5C - 0x54];
+    float         unk5C; /* 0x5C */
+    char          _pad60[0x68 - 0x60];
+    float        *frameData; /* 0x68 */
+    char          _pad6C[4];
     unsigned char unk70; /* 0x70 */
 } MobyAnim;
+
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 extern void FUN_0020ede8(void *, int);
 /* As func_00213F28 below, for a plain sequence change: clamp the frame
    to the sequence's last one; if the moby hasn't settled, park the
    current pose in a D_001B2C00 blend slot (seq 0xFF, frame = slot). Then
    set the new sequence and frame and arm the blend timer from arg3. */
-void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
+void blend_moby_animation(MobyAnim *moby,
+                          int       new_seq,
+                          int       frame_index,
+                          int       blend_frames) __asm__("FUN_00212f90");
 
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) {
-    int frame_count = moby->pClass->seqs[new_seq]->nframes;
-    int slot;
+    int           frame_count = moby->pClass->seqs[new_seq]->nframes;
+    int           slot;
     unsigned char oldSeq;
-    float scale;
+    float         scale;
 
     if (frame_index >= frame_count) {
         frame_index = frame_count - 1;
@@ -66,7 +74,8 @@ void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blen
     *(float *)((char *)moby + 0x54) = 0.0f;
     moby->unk70 = (unsigned char)(moby->unk70 & 0xFD);
     moby->unk5C = scale;
-    *(unsigned char *)((char *)moby + 0x7C) = *((unsigned char *)moby->pClass->seqs[new_seq] + 0x11);
+    *(unsigned char *)((char *)moby + 0x7C) =
+        *((unsigned char *)moby->pClass->seqs[new_seq] + 0x11);
 }
 
 extern __typeof__(blend_moby_animation) func_00212F90 __attribute__((alias("FUN_00212f90")));

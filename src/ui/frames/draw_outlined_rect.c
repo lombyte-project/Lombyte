@@ -1,6 +1,7 @@
 #include "types.h"
+
 extern void draw_rect_overlay(s32, s32, s32, s32, u64) __asm__("func_001F52A0");
-void draw_outlined_rect(s32 x, s32 y, s32 w, s32 h, s32 color) __asm__("FUN_001f6060");
+void        draw_outlined_rect(s32 x, s32 y, s32 w, s32 h, s32 color) __asm__("FUN_001f6060");
 
 void draw_outlined_rect(s32 x, s32 y, s32 x_start, s32 x_end, s32 color) {
     s32 fill;

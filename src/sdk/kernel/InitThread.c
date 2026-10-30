@@ -4,23 +4,22 @@
 #include "kernel.h"
 #include "rnc/sdk/top_thread.h"
 
-
 struct ThreadParam {
     u8 pad0[4];
     void (*entry)();
     void *stack;
-    s32 stackSize;
+    s32   stackSize;
     void *gp;
-    s32 priority;
-    u8 pad18[0x18];
+    s32   priority;
+    u8    pad18[0x18];
 };
 
-extern s32 CreateSema();
-extern s32 CreateThread();
-extern s32 DeleteSema(s32 sema);
-extern s32 _StartThread(s32 id, void *arg);
-extern s32 GetThreadId();
-extern s32 ChangeThreadPriority(s32 id, s32 priority);
+extern s32  CreateSema();
+extern s32  CreateThread();
+extern s32  DeleteSema(s32 sema);
+extern s32  _StartThread(s32 id, void *arg);
+extern s32  GetThreadId();
+extern s32  ChangeThreadPriority(s32 id, s32 priority);
 extern void topThread(TopThreadQueue *queue);
 
 extern s32 top_thread_stack[] __asm__("D_00154100");
@@ -28,7 +27,7 @@ extern s32 D_00166C00[];
 
 s32 InitThread(void) {
     struct ThreadParam th;
-    struct SemaParam se;
+    struct SemaParam   se;
 
     if (top_thread_id > 0)
         return -1;

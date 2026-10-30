@@ -5,18 +5,19 @@
 
 /* D_001872D4 is the fog-source selector, a field 0x2D4 into this block. */
 struct FogMode {
-    u8 pad0[0x2D4];
+    u8  pad0[0x2D4];
     s32 use_level_fog;
 };
 
 extern struct FogMode view_proj_clip __asm__("D_00187000");
 
 #include "rnc/rendering/effects/update_fog_globals.h"
-extern f32 water_fog_near_dist __asm__("D_001610C8");
-extern f32 water_fog_far_dist __asm__("D_001610CC");
-extern f32 water_fog_near_intensity __asm__("D_001610D0");
-extern f32 water_fog_far_intensity __asm__("D_001610D4");
-extern s32 level_fog_mode __asm__("D_0015F498");
+
+extern f32  water_fog_near_dist __asm__("D_001610C8");
+extern f32  water_fog_far_dist __asm__("D_001610CC");
+extern f32  water_fog_near_intensity __asm__("D_001610D0");
+extern f32  water_fog_far_intensity __asm__("D_001610D4");
+extern s32  level_fog_mode __asm__("D_0015F498");
 extern void update_view_context(void) __asm__("func_001F2D98");
 
 void update_fog(void) __asm__("FUN_001f2588");

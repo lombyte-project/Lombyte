@@ -10,7 +10,9 @@
 
 extern void font_print_large(int, int, u64, char *, int) __asm__("FUN_001f6530");
 
-void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) __asm__("FUN_L00_001fcb28");
+void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) __asm__(
+    "FUN_L00_001fcb28");
+
 void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) {
     enum {
         TEXT_ALIGN_CENTER = 0,
@@ -34,7 +36,8 @@ void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char
         right = left + width;
         break;
     }
-    draw_stretchable_ui_frame(left - 0x20, y - 0xE, right - left + 0x40, 0x1C, truncate_float_to_s32(scale * 112.0f));
+    draw_stretchable_ui_frame(
+        left - 0x20, y - 0xE, right - left + 0x40, 0x1C, truncate_float_to_s32(scale * 112.0f));
     disable_global_flag();
     shadow = (int)(alpha * 128.0f) << 24;
     color = shadow + 0xE0E0E0;
@@ -55,31 +58,38 @@ typedef struct {
 } LevelTextEntry;
 
 void draw_timed_text(LevelTextEntry *entry, s32 frame) __asm__("FUN_L00_001fcca0");
-void draw_timed_text(LevelTextEntry *entry, s32 frame) {
-    int start = entry->start;
-    int end = start + entry->duration;
-    float scale, alpha;
-    unsigned char *source;
-    char buffer[256];
-    char *out;
-    int y;
-    int k;
 
-    if (frame < start) return;
-    if (end < frame) return;
+void draw_timed_text(LevelTextEntry *entry, s32 frame) {
+    int            start = entry->start;
+    int            end = start + entry->duration;
+    float          scale, alpha;
+    unsigned char *source;
+    char           buffer[256];
+    char          *out;
+    int            y;
+    int            k;
+
+    if (frame < start)
+        return;
+    if (end < frame)
+        return;
     scale = 1.0f;
-    if (frame < start + 16) scale = (float)(frame - start) * 0.0625f;
-    if (end - 8 < frame) scale = (float)(end - frame) * 0.125f;
+    if (frame < start + 16)
+        scale = (float)(frame - start) * 0.0625f;
+    if (end - 8 < frame)
+        scale = (float)(end - frame) * 0.125f;
     alpha = 1.0f;
     if (frame < start + 32) {
         k = frame - 16;
         alpha = (float)(k - start) * 0.0625f;
-        if (alpha < 0.0f) alpha = 0.0f;
+        if (alpha < 0.0f)
+            alpha = 0.0f;
     }
     if (end - 16 < frame) {
         k = frame + 8;
         alpha = (float)(end - k) * 0.125f;
-        if (alpha < 0.0f) alpha = 0.0f;
+        if (alpha < 0.0f)
+            alpha = 0.0f;
     }
     source = (unsigned char *)get_help_message_text(entry->text_id);
     if (entry->separator_mode == 1) {
@@ -90,8 +100,10 @@ void draw_timed_text(LevelTextEntry *entry, s32 frame) {
                 *out++ = ' ';
                 *out++ = '-';
                 *out++ = ' ';
-                while (*source == 1) source++;
-                if (*source != 0) goto joined_text;
+                while (*source == 1)
+                    source++;
+                if (*source != 0)
+                    goto joined_text;
                 out -= 3;
             } else {
                 *out++ = *source++;
@@ -113,8 +125,10 @@ void draw_timed_text(LevelTextEntry *entry, s32 frame) {
                 draw_timed_text_line(entry->x, y, entry->mode, scale, alpha, buffer);
                 y += 26;
                 out = buffer;
-                while (*source == 1) source++;
-                if (*source == 0) break;
+                while (*source == 1)
+                    source++;
+                if (*source == 0)
+                    break;
             } else {
                 *out++ = *source++;
             }

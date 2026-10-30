@@ -3,11 +3,10 @@
 #include "asm.h"
 #include "rnc/mobys/moby.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_0025D750), where it is exact; names translated to the US level program. */
 
 void initialize_moby_grounding(char *moby) __asm__("FUN_L02_0025c758");
+
 void initialize_moby_grounding(char *moby) {
     float delta = 0.2f;
     float val = MOBY(moby)->pos.z;

@@ -22,8 +22,8 @@ extern u8 resident_class_slot_by_id[0x800] __asm__("D_001B3AC0");
    stores its update function and method table. A -1 class ends the list and
    holds the defaults. */
 struct MobyClassUpdate {
-    s32 oclass;
-    void *update;
+    s32    oclass;
+    void  *update;
     void **methods;
 };
 

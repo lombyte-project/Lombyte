@@ -1,4 +1,5 @@
 int enter_timed_menu_sequence(int *destination) __asm__("FUN_002223d8");
+
 int enter_timed_menu_sequence(int *destination) {
     destination[0x10] = 0;
     destination[0x14] = 0;

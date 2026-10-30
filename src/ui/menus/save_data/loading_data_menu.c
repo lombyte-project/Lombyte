@@ -7,13 +7,14 @@
 #include "rnc/game/options.h"
 
 struct LoadMenuControllerState {
-    u8 pad_0[0x1B4];
+    u8  pad_0[0x1B4];
     s32 held_buttons;
-    u8 pad_1B8[0xC];
+    u8  pad_1B8[0xC];
     s32 pressed_buttons;
 };
+
 struct LoadMenuMixerState {
-    u8 pad_0[0x48];
+    u8  pad_0[0x48];
     s32 group_0_volume;
     s32 group_1_volume;
     s32 group_2_volume;
@@ -21,34 +22,37 @@ struct LoadMenuMixerState {
     s32 group_4_volume;
     s32 group_5_volume;
 };
+
 struct LoadMenuDescriptor {
-    u8 pad_0[0x14];
+    u8  pad_0[0x14];
     s32 sound_owner;
-    u8 pad_18[0x18];
+    u8  pad_18[0x18];
     s32 flags;
-    u8 pad_34[0xC];
+    u8  pad_34[0xC];
     s32 selected_save_slot;
 };
+
 extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
+
 #include "rnc/save/memory_card_state.h"
-extern s16 D_0013E05A[];
+
+extern s16                       D_0013E05A[];
 extern struct LoadMenuMixerState voice_pool __asm__("D_0013E550");
-extern void InitializeGlobalStateEntry(s32);
-extern s32 mode_freeze_init() __asm__("func_001FBAB8");
-extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
+extern void                      InitializeGlobalStateEntry(s32);
+extern s32                       mode_freeze_init() __asm__("func_001FBAB8");
+extern s32                       allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 loading_data_menu(struct LoadMenuDescriptor *menu) __asm__("FUN_002232d8");
 
 s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
-    s32 previous_save_slot;
+    s32              previous_save_slot;
     struct MenuPage *back_page;
-    s32 next_save_slot;
-    s32 buttons;
-    s32 scaled_volume_80;
-    s32 scaled_volume_70;
+    s32              next_save_slot;
+    s32              buttons;
+    s32              scaled_volume_80;
+    s32              scaled_volume_70;
     previous_save_slot = menu->selected_save_slot;
     if (menu_system.card_op_pending != 0) {
-        if ((memory_card_state.state < 3) &&
-            (memory_card_state.pending_state < 0)) {
+        if ((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) {
             menu_system.card_op_pending = 0;
             if (memory_card_state.err != 0) {
                 mode_freeze_flags |= 0x100;
@@ -88,8 +92,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
         menu_system.next = menu_system.current->back;
         return 0;
     }
-    if (((memory_card_state.state < 3) &&
-         (memory_card_state.pending_state < 0)) &&
+    if (((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) &&
         (memory_card_state.card[0].type == 2)) {
         if (menu->flags & 1) {
             buttons = controller_state.held_buttons;

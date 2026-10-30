@@ -14,40 +14,50 @@ struct Glyph {
 #include "rnc/rendering/screen.h"
 #include "rnc/ui/text/font_state.h"
 #include "rnc/game/game_globals.h"
-extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
-extern s32 measure_text_width(u8 *, s32, struct Glyph *) __asm__("func_001F6200");
-extern void font_print(s32, s32, u64, u8 *, s32, s64, struct Glyph *) __asm__("FUN_001f62b0");
-extern void process_bgm_display_text_event(s32, u8 *, s32, s64, struct Glyph *, f32, f32,
-                                           f32) __asm__("func_001F6638");
 
-void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_limit, s64 texture,
+extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
+extern s32  measure_text_width(u8 *, s32, struct Glyph *) __asm__("func_001F6200");
+extern void font_print(s32, s32, u64, u8 *, s32, s64, struct Glyph *) __asm__("FUN_001f62b0");
+extern void process_bgm_display_text_event(
+    s32, u8 *, s32, s64, struct Glyph *, f32, f32, f32) __asm__("func_001F6638");
+
+void font_print_window(FontWindow   *window,
+                       u64           color,
+                       u8           *text,
+                       s32           character_limit,
+                       s64           texture,
                        struct Glyph *glyphs) __asm__("FUN_001f7090");
 
-void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_limit, s64 texture,
+void font_print_window(FontWindow *window,
+                       u64         color,
+                       u8         *text,
+                       s32         character_limit,
+                       s64         texture,
+
                        struct Glyph *glyphs) {
-    s16 line_starts[32];
-    s16 line_ends[32];
-    s16 line_colors[32];
-    s32 wrap_width;
-    s32 initial_wrap_width;
-    s32 using_initial_width;
-    s32 initial_line_count;
-    s32 last_line_width;
-    s32 line_count;
-    s32 next_line_count;
-    s32 current_color;
-    s32 position;
-    s32 break_position;
-    s32 line_width;
-    s32 advance;
-    s32 right_width;
-    s32 left_width;
-    s32 balance_divisor;
-    s32 line_index;
-    s32 draw_y;
-    s32 line_length;
-    s32 width;
-    f32 subpixel_x;
+    s16         line_starts[32];
+    s16         line_ends[32];
+    s16         line_colors[32];
+    s32         wrap_width;
+    s32         initial_wrap_width;
+    s32         using_initial_width;
+    s32         initial_line_count;
+    s32         last_line_width;
+    s32         line_count;
+    s32         next_line_count;
+    s32         current_color;
+    s32         position;
+    s32         break_position;
+    s32         line_width;
+    s32         advance;
+    s32         right_width;
+    s32         left_width;
+    s32         balance_divisor;
+    s32         line_index;
+    s32         draw_y;
+    s32         line_length;
+    s32         width;
+    f32         subpixel_x;
     FontWindow *draw_window;
 
     vu1_set_scissor(window->left, window->right - 1, window->top, window->bottom - 1);
@@ -81,8 +91,7 @@ void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_li
                 if (text[position] == ' ' || text[position] < 0x10) {
                     break_position = position;
                 }
-                if (GlobalStateFlag != 0 &&
-                    (text[position] >= 8 && text[position] < 0x10)) {
+                if (GlobalStateFlag != 0 && (text[position] >= 8 && text[position] < 0x10)) {
                     current_color = text[position] - 8;
                 }
                 if (text[position] < 2) {
@@ -173,17 +182,31 @@ layout:
                 subpixel_x =
                     (f32)draw_window->anchor_x + (f32)draw_window->subpixel_x_sixteenths * 0.0625f;
             }
-            process_bgm_display_text_event(
-                font_palette_colors[line_colors[line_index]], text + line_starts[line_index],
-                line_length, texture, glyphs, subpixel_x,
-                (f32)draw_y + (f32)draw_window->subpixel_y_sixteenths * 0.0625f, 1.0f);
+            process_bgm_display_text_event(font_palette_colors[line_colors[line_index]],
+                                           text + line_starts[line_index],
+                                           line_length,
+                                           texture,
+                                           glyphs,
+                                           subpixel_x,
+                                           (f32)draw_y +
+                                               (f32)draw_window->subpixel_y_sixteenths * 0.0625f,
+                                           1.0f);
         } else if (draw_window->flags & TEXT_REGION_CENTER_HORIZONTALLY) {
-            font_print(draw_window->anchor_x - (width >> 1), draw_y,
-                       font_palette_colors[line_colors[line_index]], text + line_starts[line_index],
-                       line_length, texture, glyphs);
+            font_print(draw_window->anchor_x - (width >> 1),
+                       draw_y,
+                       font_palette_colors[line_colors[line_index]],
+                       text + line_starts[line_index],
+                       line_length,
+                       texture,
+                       glyphs);
         } else {
-            font_print(draw_window->anchor_x, draw_y, font_palette_colors[line_colors[line_index]],
-                       text + line_starts[line_index], line_length, texture, glyphs);
+            font_print(draw_window->anchor_x,
+                       draw_y,
+                       font_palette_colors[line_colors[line_index]],
+                       text + line_starts[line_index],
+                       line_length,
+                       texture,
+                       glyphs);
         }
     }
     font_window_active = 0;

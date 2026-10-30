@@ -7,7 +7,9 @@
 
 #include "types.h"
 #include "rnc/sdk/library/sdk_globals.h"
+
 extern s32 _close() __asm__("func_00118E00");
+
 s32 _close_r(s32 *reentrancy_error, s32 file_descriptor) {
     s32 close_result;
 

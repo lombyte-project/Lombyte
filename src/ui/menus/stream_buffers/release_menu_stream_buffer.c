@@ -3,12 +3,11 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/audio/streaming/request_audio_stream_break.h"
 
-
 s32 release_menu_stream_buffer(s32 buffer_address) __asm__("FUN_00225cd8");
 
 s32 release_menu_stream_buffer(s32 buffer_address) {
-    s32 i;
-    u8 *base;
+    s32  i;
+    u8  *base;
     s32 *buffer_flags;
 
     /* base is a separate local so the +4 (flags) stays its own addiu. */
@@ -35,5 +34,4 @@ s32 release_menu_stream_buffer(s32 buffer_address) {
     return 0;
 }
 
-extern __typeof__(release_menu_stream_buffer) func_00225CD8
-    __attribute__((alias("FUN_00225cd8")));
+extern __typeof__(release_menu_stream_buffer) func_00225CD8 __attribute__((alias("FUN_00225cd8")));

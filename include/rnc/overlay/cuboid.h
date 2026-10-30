@@ -10,10 +10,10 @@
    [-1, 1] on each axis inside the cuboid. Cameras, lifts and taxi stops take
    their position and rotation from one. */
 typedef struct {
-    Vec4f axes[3];      /* 0x00 */
-    Vec4f pos;          /* 0x30 */
-    Vec4f to_local[3];  /* 0x40 */
-    Vec4f rot;          /* 0x70: z is the yaw */
+    Vec4f axes[3];     /* 0x00 */
+    Vec4f pos;         /* 0x30 */
+    Vec4f to_local[3]; /* 0x40 */
+    Vec4f rot;         /* 0x70: z is the yaw */
 } LevelCuboid;
 
 /* Each level's cuboid table, indexed by the cuboid id a moby stores. */

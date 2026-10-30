@@ -9,43 +9,41 @@
 #include "rnc/runtime/state/disable_global_flag.h"
 #include "rnc/runtime/state/enable_global_flag.h"
 
-
-
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 
-extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern s32 measure_text_width(char *, s32, u8 *) __asm__("func_001F6200");
-extern void font_print(s32, s32, long, char *, s32, s32, u8 *) __asm__("func_001F62B0");
+extern s32   get_effect_texture(s32) __asm__("FUN_001f44b8");
+extern s32   measure_text_width(char *, s32, u8 *) __asm__("func_001F6200");
+extern void  font_print(s32, s32, long, char *, s32, s32, u8 *) __asm__("func_001F62B0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-s32 render_localized_ui_entry_list(struct MenuScreen *menu) __asm__("FUN_0021b1c8");
+s32          render_localized_ui_entry_list(struct MenuScreen *menu) __asm__("FUN_0021b1c8");
 
 s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
-    s32 focused;
-    u8 *glyphs;
-    s32 font_texture_index;
-    s32 row_height;
-    s32 half_width;
-    s32 maximum_text_width;
-    s32 selection_index;
-    s32 font_height;
-    s32 entry_count;
+    s32                  focused;
+    u8                  *glyphs;
+    s32                  font_texture_index;
+    s32                  row_height;
+    s32                  half_width;
+    s32                  maximum_text_width;
+    s32                  selection_index;
+    s32                  font_height;
+    s32                  entry_count;
     struct MenuTextItem *entry;
     struct MenuTextItem *scan_entry;
-    s32 entry_index;
-    s32 selected_entry;
-    s32 enabled;
-    s32 color;
-    char *text_id;
-    char *secondary_text;
-    s32 x;
-    s32 y;
-    s32 text_width;
-    s32 flags;
-    s32 menu_width;
+    s32                  entry_index;
+    s32                  selected_entry;
+    s32                  enabled;
+    s32                  color;
+    char                *text_id;
+    char                *secondary_text;
+    s32                  x;
+    s32                  y;
+    s32                  text_width;
+    s32                  flags;
+    s32                  menu_width;
     struct MenuTextItem *selected_item;
-    s32 shadow_y;
-    s32 shadow_x;
+    s32                  shadow_y;
+    s32                  shadow_x;
     font_height = 12;
     font_texture_index = 1;
     glyphs = normal_font_metrics;
@@ -84,8 +82,8 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
             entry_index = 0;
             selection_index = 0;
             do {
-                text_width = measure_text_width(get_help_message_text(scan_entry[entry_index].text),
-                                                -1, glyphs);
+                text_width = measure_text_width(
+                    get_help_message_text(scan_entry[entry_index].text), -1, glyphs);
                 entry_index++;
                 selection_index++;
                 maximum_text_width =
@@ -141,8 +139,13 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
                 x = half_width - (maximum_text_width >> 1);
             }
             disable_global_flag();
-            font_print(x + text_shadow_x, y + text_shadow_y, 0x80000000L, text_id, -1,
-                       get_effect_texture(font_texture_index), glyphs);
+            font_print(x + text_shadow_x,
+                       y + text_shadow_y,
+                       0x80000000L,
+                       text_id,
+                       -1,
+                       get_effect_texture(font_texture_index),
+                       glyphs);
             enable_global_flag();
             if (menu->data.list.flags & 0x80) {
                 disable_global_flag();
@@ -154,14 +157,23 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
                 shadow_x = x + text_shadow_x;
                 shadow_y = y + text_shadow_y;
                 secondary_text = get_help_message_text(menu->data.list.items[entry_index].subtext);
-                font_print(shadow_x, shadow_y, 0x80000000L, secondary_text, -1,
-                           get_effect_texture(font_texture_index), glyphs);
+                font_print(shadow_x,
+                           shadow_y,
+                           0x80000000L,
+                           secondary_text,
+                           -1,
+                           get_effect_texture(font_texture_index),
+                           glyphs);
                 if (!(menu->data.list.flags & 0x80)) {
                     enable_global_flag();
                 }
-                font_print(x, y, color,
-                           get_help_message_text(menu->data.list.items[entry_index].subtext), -1,
-                           get_effect_texture(font_texture_index), glyphs);
+                font_print(x,
+                           y,
+                           color,
+                           get_help_message_text(menu->data.list.items[entry_index].subtext),
+                           -1,
+                           get_effect_texture(font_texture_index),
+                           glyphs);
                 y += row_height;
             }
             if (menu->data.list.flags & 0x80) {

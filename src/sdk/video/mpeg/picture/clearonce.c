@@ -1,6 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+
 extern void _ipuSetMPEG1();
+
 void _clearOnce(struct MpegDecoder *mpeg) {
     u32 spr = 0x70000000;
 

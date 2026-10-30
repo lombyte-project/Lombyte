@@ -8,7 +8,6 @@
 #include "sda.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 
-
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 int update_moby_suck_cannon_state(struct Moby *a) __asm__("FUN_L18_002fcbb0");
@@ -23,11 +22,10 @@ int update_moby_suck_cannon_state(struct Moby *moby) {
     }
     return suction_result;
 }
+
 #include "rnc/mobys/moby.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/math/fast_math.h"
-
-
 
 void hide_moby_and_clear_collision(struct Moby *moby) __asm__("FUN_L18_002fcd00");
 

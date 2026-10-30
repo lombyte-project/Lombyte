@@ -7,15 +7,19 @@ typedef struct {
     float x, y, z, w;
 } V_24c4f0;
 
-int find_first_positive_polygon_edge_cross_xy(float *query_point, float *poly, int vertex_count) __asm__("FUN_L04_0024c4f0");
+int find_first_positive_polygon_edge_cross_xy(float *query_point,
+                                              float *poly,
+                                              int    vertex_count) __asm__("FUN_L04_0024c4f0");
 
 int find_first_positive_polygon_edge_cross_xy(float *query_point, float *poly, int vertex_count) {
     V_24c4f0 *polygon_vertices = (V_24c4f0 *)poly;
-    int i;
+    int       i;
 
     for (i = 0; i < vertex_count; i++) {
-        if ((polygon_vertices[(i + 1) % vertex_count].x - polygon_vertices[i].x) * (query_point[1] - polygon_vertices[i].y) -
-                (polygon_vertices[(i + 1) % vertex_count].y - polygon_vertices[i].y) * (query_point[0] - polygon_vertices[i].x) >
+        if ((polygon_vertices[(i + 1) % vertex_count].x - polygon_vertices[i].x) *
+                    (query_point[1] - polygon_vertices[i].y) -
+                (polygon_vertices[(i + 1) % vertex_count].y - polygon_vertices[i].y) *
+                    (query_point[0] - polygon_vertices[i].x) >
             0.0f) {
             return i + 1;
         }
@@ -23,17 +27,21 @@ int find_first_positive_polygon_edge_cross_xy(float *query_point, float *poly, i
     return 0;
 }
 
-
-
 #include "qcopy.h"
 
 /* closest point on a line to a point: writes the point, returns the parameter */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D618), where it is exact; names translated to the US level program. */
 
+float find_closest_point_on_segment_xy(float *closest_point,
+                                       float *segment_start,
+                                       float *segment_end,
+                                       float *query_point) __asm__("FUN_L04_0024c660");
 
-float find_closest_point_on_segment_xy(float *closest_point, float *segment_start, float *segment_end, float *query_point) __asm__("FUN_L04_0024c660");
+float find_closest_point_on_segment_xy(float *closest_point,
+                                       float *segment_start,
+                                       float *segment_end,
 
-float find_closest_point_on_segment_xy(float *closest_point, float *segment_start, float *segment_end, float *query_point) {
+                                       float *query_point) {
     float segment_direction[4];
     float perpendicular_direction_xy[4];
     float query_to_start_offset[4];
@@ -46,13 +54,15 @@ float find_closest_point_on_segment_xy(float *closest_point, float *segment_star
     perpendicular_offset_point_xy[1] = -segment_direction[0];
     fast_vec_add(perpendicular_offset_point_xy, query_point, perpendicular_offset_point_xy);
     fast_vec_sub(perpendicular_direction_xy, query_point, perpendicular_offset_point_xy);
-    det = segment_direction[1] * perpendicular_direction_xy[0] - segment_direction[0] * perpendicular_direction_xy[1];
+    det = segment_direction[1] * perpendicular_direction_xy[0] -
+          segment_direction[0] * perpendicular_direction_xy[1];
     if (absolute_float(det) < 0.0001f) {
         qcopy(closest_point, segment_start);
         return 0.0f;
     }
     det = 1.0f / det;
-    unclamped_segment_parameter = perpendicular_direction_xy[1] * query_to_start_offset[0] - perpendicular_direction_xy[0] * query_to_start_offset[1];
+    unclamped_segment_parameter = perpendicular_direction_xy[1] * query_to_start_offset[0] -
+                                  perpendicular_direction_xy[0] * query_to_start_offset[1];
     unclamped_segment_parameter = unclamped_segment_parameter * det;
     clamped_segment_parameter = unclamped_segment_parameter;
     if (clamped_segment_parameter < 0.0f)
@@ -64,26 +74,31 @@ float find_closest_point_on_segment_xy(float *closest_point, float *segment_star
     return unclamped_segment_parameter;
 }
 
-
 #include "qcopy.h"
 
 /* finds the closest point on a polygon's edges to a point, returns whether the first test hit */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D790), where it is exact; names translated to the US level program. */
 
-extern int find_first_positive_polygon_edge_cross_xy(float *, float *, int) __asm__("FUN_L04_0024c4f0");
+extern int
+find_first_positive_polygon_edge_cross_xy(float *, float *, int) __asm__("FUN_L04_0024c4f0");
 
-int find_closest_polygon_edge_point(float *out, float *query_point, float *poly, int vertex_count) __asm__("FUN_L04_0024c7d8");
+int find_closest_polygon_edge_point(float *out,
+                                    float *query_point,
+                                    float *poly,
+                                    int    vertex_count) __asm__("FUN_L04_0024c7d8");
 
 int find_closest_polygon_edge_point(float *out, float *query_point, float *poly, int vertex_count) {
     float edge_closest_point[4];
     float edge_to_query_offset[4];
     float best;
-    int i;
-    int has_positive_edge_cross = find_first_positive_polygon_edge_cross_xy(query_point, poly, vertex_count) != 0;
+    int   i;
+    int   has_positive_edge_cross =
+        find_first_positive_polygon_edge_cross_xy(query_point, poly, vertex_count) != 0;
     best = 0;
     for (i = 0; i < vertex_count; i++) {
         float distance_to_edge;
-        find_closest_point_on_segment_xy(edge_closest_point, poly + i * 4, poly + ((i + 1) % vertex_count) * 4, query_point);
+        find_closest_point_on_segment_xy(
+            edge_closest_point, poly + i * 4, poly + ((i + 1) % vertex_count) * 4, query_point);
         fast_vec_sub(edge_to_query_offset, query_point, edge_closest_point);
         distance_to_edge = fast_vec_length(edge_to_query_offset);
         if (i == 0 || distance_to_edge < best) {

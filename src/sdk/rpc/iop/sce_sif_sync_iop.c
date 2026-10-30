@@ -1,4 +1,4 @@
-int sceSifGetReg(int register_number) __asm__("sceSifGetReg");
+int  sceSifGetReg(int register_number) __asm__("sceSifGetReg");
 void clear_core_global(void) __asm__("func_00118BC0");
 
 int sceSifSyncIop(void) __asm__("sceSifSyncIop");

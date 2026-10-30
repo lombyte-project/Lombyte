@@ -1,24 +1,24 @@
 #include "types.h"
 
 struct MpegTimestampState {
-    u8 pad_0[0x70];
+    u8  pad_0[0x70];
     s32 interpolate_timestamps;
-    u8 pad_74[0x4];
+    u8  pad_74[0x4];
     s64 timestamp_scale;
     s32 previous_timestamp;
-    u8 pad_84[0x4];
+    u8  pad_84[0x4];
     s64 timestamp_step;
     s32 timestamp_carry;
-    u8 pad_94[0x5C];
+    u8  pad_94[0x5C];
     s64 override_timestamp;
     s32 override_state;
 };
 
 struct MpegPictureTimestampRecord {
-    u8 pad_0[0x18];
+    u8  pad_0[0x18];
     s64 presentation_timestamp;
     s64 decoding_timestamp;
-    u8 pad_28[0x4];
+    u8  pad_28[0x4];
     s32 coding_type;
     s32 picture_structure;
     s32 progressive_sequence;
@@ -29,14 +29,17 @@ struct MpegPictureTimestampRecord {
 
 extern s64 __muldi3(s64 a, s64 b);
 
-void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState *state,
+void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState         *state,
                                       struct MpegPictureTimestampRecord *picture,
-                                      s64 *presentation_timestamp, s64 *decoding_timestamp,
+                                      s64                               *presentation_timestamp,
+                                      s64                               *decoding_timestamp,
                                       s64 *flags) __asm__("_getPtsDtsFlags");
 
-void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState *state,
+void GetMpegPictureTimestampsAndFlags(struct MpegTimestampState         *state,
                                       struct MpegPictureTimestampRecord *picture,
-                                      s64 *presentation_timestamp, s64 *decoding_timestamp,
+                                      s64                               *presentation_timestamp,
+                                      s64                               *decoding_timestamp,
+
                                       s64 *flags) {
     s32 previous_timestamp;
     s32 timestamp_carry;

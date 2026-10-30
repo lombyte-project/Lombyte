@@ -4,9 +4,9 @@
 
 #include "types.h"
 
-extern s32 PatchIsNeeded();
+extern s32  PatchIsNeeded();
 extern void Rfu116SetSyscallLate();
-extern s32 Rfu091Mid();
+extern s32  Rfu091Mid();
 extern void InvokeKernelSyscall005A_RfuWorker(void *addr, void *table, s32 size);
 extern void FlushCache(s32 mode);
 
@@ -16,7 +16,7 @@ typedef struct PatchPair {
 } PatchPair;
 
 extern PatchPair exec_ps2_syscall_patch_pairs[] __asm__("D_00130AD0");
-extern u8 exec_ps2_patch_data[] __asm__("D_00130328");
+extern u8        exec_ps2_patch_data[] __asm__("D_00130328");
 
 void InitExecPS2(void) {
     u32 i;
@@ -28,7 +28,8 @@ void InitExecPS2(void) {
         FlushCache(2);
         Rfu116SetSyscallLate(exec_ps2_syscall_patch_pairs[1].a, exec_ps2_syscall_patch_pairs[1].b);
         for (i = 2; i < 3; i++) {
-            Rfu116SetSyscallLate(exec_ps2_syscall_patch_pairs[i].a, Rfu091Mid(exec_ps2_syscall_patch_pairs[i].a));
+            Rfu116SetSyscallLate(exec_ps2_syscall_patch_pairs[i].a,
+                                 Rfu091Mid(exec_ps2_syscall_patch_pairs[i].a));
         }
     }
 }

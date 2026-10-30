@@ -11,8 +11,10 @@
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/game/item_state.h"
-extern unsigned int pad_held_lui __asm__("D_0013CAE0")NOT_SDA;
-extern void queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
+
+extern unsigned int pad_held_lui __asm__("D_0013CAE0") NOT_SDA;
+extern void
+queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void hud_init_particles(void) __asm__("FUN_L00_00236268");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
 extern void draw_hud_stars(void) __asm__("FUN_L00_002365a8");
@@ -25,24 +27,28 @@ int try_transition_hero_water_state(void) __asm__("FUN_L00_00227778");
 int try_transition_hero_water_state(void) {
     Vec4 start;
     Vec4 end;
-    int decrement;
-    int state;
+    int  decrement;
+    int  state;
 
     if (hero.state.control_mode == 0x11) {
         if (item_available[6] != 0) {
             decrement = 0;
         } else {
             decrement = 10000 / (scale_game_frames(0x3C) * 15);
-            queue_animation_update(4, 0x753F, hud_init_particles,
-                hud_update_particles, draw_hud_stars, &hero.underwater_air, 10000);
+            queue_animation_update(4,
+                                   0x753F,
+                                   hud_init_particles,
+                                   hud_update_particles,
+                                   draw_hud_stars,
+                                   &hero.underwater_air,
+                                   10000);
         }
         hero.underwater_air -= decrement;
         if (hero.underwater_air < 0)
             hero.underwater_air = 0;
-        if (hero.underwater_air == 0 &&
-            (!(hero.water_surface_z - 2.0f < hero.motion.pos.f[2]) ||
-             !(hero.motion.rot.f[1] < -0.87266463f) ||
-             !(frame_time < hero.motion.displacement.f[2]))) {
+        if (hero.underwater_air == 0 && (!(hero.water_surface_z - 2.0f < hero.motion.pos.f[2]) ||
+                                         !(hero.motion.rot.f[1] < -0.87266463f) ||
+                                         !(frame_time < hero.motion.displacement.f[2]))) {
             state = 0x6A;
         } else if (hero.water_surface_z + 0.4f < hero.motion.pos.f[2]) {
             D_L00_00167014[0] = 0;
@@ -50,7 +56,7 @@ int try_transition_hero_water_state(void) {
         } else {
             goto collision_mode;
         }
-change_state:
+    change_state:
         hero_set_state(state, 1);
         return 1;
     } else if (hero.state.current != 0x6A && hero.state.current != 0x76) {

@@ -13,27 +13,27 @@
 
 /* Same source as the exact FUN_L06_00309860, with two 0x67E effects and spawned class 0x67D. */
 typedef struct {
-    char pad0[0x10];
-    char pos[0x10];
-    unsigned char b20;
-    char pad21[0xB];
-    float f2C;
-    unsigned char b30;
-    unsigned char b31;
-    short s32;
+    char           pad0[0x10];
+    char           pos[0x10];
+    unsigned char  b20;
+    char           pad21[0xB];
+    float          f2C;
+    unsigned char  b30;
+    unsigned char  b31;
+    short          s32;
     unsigned short h34;
-    char pad36[0x12];
-    float f48;
-    char pad4C[0x2C];
-    Child *child;
-    char pad7C[0x14];
-    int f90;
+    char           pad36[0x12];
+    float          f48;
+    char           pad4C[0x2C];
+    Child         *child;
+    char           pad7C[0x14];
+    int            f90;
 } Obj;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *create_moby(int);
-extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
+extern void  FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
+void         mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void update_hit_triggered_class_0681_spawner(char *self) __asm__("FUN_L06_00309fa8");
@@ -44,7 +44,7 @@ void update_hit_triggered_class_0681_spawner(char *self) {
         WAIT_FOR_HIT = 1,
         SPAWN_AND_REMOVE = 2
     };
-    int flag = 0;
+    int   flag = 0;
     char *hit_moby = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
     case INITIALIZE:
@@ -62,10 +62,26 @@ void update_hit_triggered_class_0681_spawner(char *self) {
         char *spawned_moby;
         allocate_voice_for_target_entry(0, 0, (int)self);
         spawn_proximity_gated_bolts(self);
-        FUN_L00_00263fd8(self, 0x682, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
-                         D_L06_0015F580, D_L06_0015F580);
-        FUN_L00_00263fd8(self, 0x682, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
-                         D_L06_0015F580, D_L06_0015F580);
+        FUN_L00_00263fd8(self,
+                         0x682,
+                         self + 0x10,
+                         self + 0x40,
+                         0,
+                         0,
+                         0.0f,
+                         D_L06_0015F580,
+                         D_L06_0015F580,
+                         D_L06_0015F580);
+        FUN_L00_00263fd8(self,
+                         0x682,
+                         self + 0x10,
+                         self + 0x40,
+                         0,
+                         0,
+                         0.0f,
+                         D_L06_0015F580,
+                         D_L06_0015F580,
+                         D_L06_0015F580);
         spawned_moby = create_moby(0x681);
         if (spawned_moby != 0) {
             spawned_moby[0x31] = 1;

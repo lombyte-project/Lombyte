@@ -15,7 +15,6 @@
 
 /* Register this level's vendor data set. */
 
-
 void render_level_11_water_grids(void) __asm__("FUN_L11_0030e708");
 
 void render_level_11_water_grids(void) {
@@ -27,13 +26,14 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void lamp_update(struct Moby *m) __asm__("FUN_L11_0031d7d8");
+
 void lamp_update(struct Moby *lamp_moby) {
     enum {
         LAMP_STATE_INITIALIZE = 0,
         LAMP_STATE_WAIT_FOR_HIT = 1,
         LAMP_STATE_REMOVE = 2
     };
-    int hit = 0;
+    int   hit = 0;
     char *hit_result = find_moby_hit(lamp_moby, 0x10000, 0);
     switch (lamp_moby->state) {
     case LAMP_STATE_INITIALIZE:
@@ -57,8 +57,8 @@ void lamp_update(struct Moby *lamp_moby) {
 /* Runs the two per-entry update calls over a 13-entry table. */
 
 extern Pair D_L11_00217758[];
-extern int render_batch_triplet_sources[] __asm__("D_L11_00215148");
-extern int render_batch_pair_sources[] __asm__("D_L11_00215190");
+extern int  render_batch_triplet_sources[] __asm__("D_L11_00215148");
+extern int  render_batch_pair_sources[] __asm__("D_L11_00215190");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
@@ -67,21 +67,34 @@ void emit_render_batches_with_pair_offset(int pair_index) __asm__("FUN_L11_0031e
 void emit_render_batches_with_pair_offset(int pair_index) {
     int i;
     for (i = 0; i < 0x11; i++) {
-        FUN_L08_00258090(D_L11_00217770, render_batch_pair_sources[i], D_L11_00207900[i], &D_L11_00217758[pair_index]);
-        FUN_L00_001fde98(D_L11_00207900[i], render_batch_triplet_sources[i], D_L11_00215220[i], D_L11_00217770,
+        FUN_L08_00258090(D_L11_00217770,
+                         render_batch_pair_sources[i],
+                         D_L11_00207900[i],
+                         &D_L11_00217758[pair_index]);
+        FUN_L00_001fde98(D_L11_00207900[i],
+                         render_batch_triplet_sources[i],
+                         D_L11_00215220[i],
+                         D_L11_00217770,
                          1);
     }
 }
+
 extern Pair D_L11_00162618[] MACRO_ADDR;
-extern int oil_tanker_render_batch_pair_sources[] __asm__("D_L11_00207888");
-extern int oil_tanker_render_batch_triplet_sources[] __asm__("D_L11_00207860");
+extern int  oil_tanker_render_batch_pair_sources[] __asm__("D_L11_00207888");
+extern int  oil_tanker_render_batch_triplet_sources[] __asm__("D_L11_00207860");
 void emit_oil_tanker_render_batches_with_pair_offset(int pair_index) __asm__("FUN_L11_0031e780");
 
 void emit_oil_tanker_render_batches_with_pair_offset(int pair_index) {
     int i;
     for (i = 0; i < 0x9; i++) {
-        FUN_L08_00258090(D_L11_00217770, oil_tanker_render_batch_pair_sources[i], D_L11_00200728[i], &D_L11_00162618[pair_index]);
-        FUN_L00_001fde98(D_L11_00200728[i], oil_tanker_render_batch_triplet_sources[i], D_L11_002078D8[i], D_L11_00217770,
+        FUN_L08_00258090(D_L11_00217770,
+                         oil_tanker_render_batch_pair_sources[i],
+                         D_L11_00200728[i],
+                         &D_L11_00162618[pair_index]);
+        FUN_L00_001fde98(D_L11_00200728[i],
+                         oil_tanker_render_batch_triplet_sources[i],
+                         D_L11_002078D8[i],
+                         D_L11_00217770,
                          1);
     }
 }

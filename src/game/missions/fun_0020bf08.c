@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/level_state.h"
+
 int FUN_0020bf08(void) {
     if (D_0013D3E9 != 0 && level_available[13] != 0)
         return 1;

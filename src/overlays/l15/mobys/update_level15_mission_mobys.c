@@ -3,24 +3,22 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-
-
 /* Update each moby while the level event is in phase three or four. */
 /* Ported from rac1-decomp (src/overlays/l15/initonce_0022E478.c: func_L15_0022E478), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char pad0[0x30];
-    int state;
-    char pad34[0x10];
+    char  pad0[0x30];
+    int   state;
+    char  pad34[0x10];
     short count;
-    char pad46[0x132];
+    char  pad46[0x132];
     void *mobys[1];
 } Level15State;
 
 extern void FUN_L00_00257024(void *);
 
 extern Level15State mission __asm__("D_L15_0016CE60");
-void update_level15_mission_mobys(void) __asm__("FUN_L15_0022db50");
+void                update_level15_mission_mobys(void) __asm__("FUN_L15_0022db50");
 
 void update_level15_mission_mobys(void) {
     int i;

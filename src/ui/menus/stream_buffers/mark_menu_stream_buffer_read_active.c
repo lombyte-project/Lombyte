@@ -4,8 +4,8 @@
 s32 mark_menu_stream_buffer_read_active(s32 buffer_address) __asm__("FUN_00225dd8");
 
 s32 mark_menu_stream_buffer_read_active(s32 buffer_address) {
-    s32 count = 0;
-    u8 *base = (u8 *)menu_stream_buffers;
+    s32  count = 0;
+    u8  *base = (u8 *)menu_stream_buffers;
     s32 *entry = (s32 *)(base + 4);
 loop:
     count += 1;

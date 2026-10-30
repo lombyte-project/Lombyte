@@ -24,7 +24,7 @@
 
 int exponent(char *destination, int exp, int fmtch) {
     register char *p, *t;
-    char expbuf[MAXEXP];
+    char           expbuf[MAXEXP];
 
     p = destination;
     *p++ = fmtch;

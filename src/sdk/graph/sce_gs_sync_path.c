@@ -45,5 +45,4 @@ s32 sceGsSyncPath(s32 unused_arg0, s32 unused_arg1) {
     return 0;
 }
 
-extern __typeof__(sceGsSyncPath) func_00120558
-    __attribute__((alias("FUN_00120558")));
+extern __typeof__(sceGsSyncPath) func_00120558 __attribute__((alias("FUN_00120558")));

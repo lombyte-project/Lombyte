@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-
-
 /* Test whether the current moby identifier matches the requested one. */
 /* Ported from rac1-decomp (src/overlays/l07/mobyutil_00282EB0.c: func_L07_00282EB0), where it is exact; names translated to the US level program. */
 

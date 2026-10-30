@@ -10,21 +10,22 @@ struct SifDmaData {
 
 extern u32 sceSifSetDma(struct SifDmaData *, s32);
 
-s32 stash_send_data(u32 source_address, s32 transfer_qwords,
-                    s32 reserve_qwords, s32 tag) __asm__("FUN_00232e40");
+s32 stash_send_data(u32 source_address,
+                    s32 transfer_qwords,
+                    s32 reserve_qwords,
+                    s32 tag) __asm__("FUN_00232e40");
 
-s32 stash_send_data(u32 source_address, s32 transfer_qwords,
-                    s32 reserve_qwords, s32 tag) {
+s32 stash_send_data(u32 source_address, s32 transfer_qwords, s32 reserve_qwords, s32 tag) {
     struct SifDmaData dma;
-    s32 reserve_bytes;
-    s32 slot_count;
-    s32 slot;
-    s32 iop_address;
-    s32 next_iop_address;
+    s32               reserve_bytes;
+    s32               slot_count;
+    s32               slot;
+    s32               iop_address;
+    s32               next_iop_address;
 
     reserve_bytes = reserve_qwords << 4;
-    if (stash_state.capacity_bytes -
-            (stash_state.next_iop_address - stash_state.iop_base) < reserve_bytes) {
+    if (stash_state.capacity_bytes - (stash_state.next_iop_address - stash_state.iop_base) <
+        reserve_bytes) {
         return -1;
     }
     if (stash_state.slot_count == STASH_SLOT_COUNT) {

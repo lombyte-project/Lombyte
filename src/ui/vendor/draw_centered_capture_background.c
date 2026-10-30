@@ -13,16 +13,16 @@ void draw_centered_capture_background(s32 w, s32 h) __asm__("FUN_001fb740");
 
 void draw_centered_capture_background(s32 width_pixels, s32 height_pixels) {
     struct DmaTag *tag;
-    u64 *packet_header;
-    volatile u64 *sprite_corner_cursor;
-    s32 column_count;
-    s32 i;
-    s32 zero;
-    s32 step;
-    s32 x;
-    s32 y;
-    u64 lo;
-    u64 hi;
+    u64           *packet_header;
+    volatile u64  *sprite_corner_cursor;
+    s32            column_count;
+    s32            i;
+    s32            zero;
+    s32            step;
+    s32            x;
+    s32            y;
+    u64            lo;
+    u64            hi;
 
     column_count = width_pixels / 32;
     vu1_add_g_sregister(0x42, 0x800000004AULL);
@@ -63,4 +63,5 @@ void draw_centered_capture_background(s32 width_pixels, s32 height_pixels) {
     render_packet_cursor.tag = render_packet_cursor.tag + (column_count + 5);
 }
 
-extern __typeof__(draw_centered_capture_background) func_001FB740 __attribute__((alias("FUN_001fb740")));
+extern __typeof__(draw_centered_capture_background) func_001FB740
+    __attribute__((alias("FUN_001fb740")));

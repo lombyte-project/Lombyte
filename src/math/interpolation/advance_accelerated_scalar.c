@@ -3,16 +3,25 @@
 #include "rnc/math/fast_math.h"
 
 extern f32 square_root(f32) __asm__("func_001F9988");
-f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 acceleration_step,
-                               f32 braking_step, f32 maximum_speed) __asm__("FUN_00213f38");
+f32        advance_accelerated_scalar(f32 *value,
+                                      f32 *velocity,
+                                      f32  target,
+                                      f32  acceleration_step,
+                                      f32  braking_step,
+                                      f32  maximum_speed) __asm__("FUN_00213f38");
 
 /* Advance value toward target while retaining velocity between calls. Brake
    when motion points away from the target; otherwise choose a desired speed
    from velocity squared divided by twice the braking step. Near the stopping
    distance, one path brakes at 1.1 times the usual step. Snap to target when
    the next step reaches it. Return the displacement applied this call. */
-f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 acceleration_step,
-                               f32 braking_step, f32 maximum_speed) {
+f32 advance_accelerated_scalar(f32 *value,
+                               f32 *velocity,
+                               f32  target,
+                               f32  acceleration_step,
+                               f32  braking_step,
+
+                               f32 maximum_speed) {
     f32 distance;
     f32 stopping_distance;
     f32 desired_speed;
@@ -52,4 +61,3 @@ f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 accele
 }
 
 extern __typeof__(advance_accelerated_scalar) func_00213F38 __attribute__((alias("FUN_00213f38")));
-

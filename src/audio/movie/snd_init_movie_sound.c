@@ -1,8 +1,20 @@
 #include "types.h"
-extern s32 snd_send_iop_command_and_wait() __asm__("func_0012E548");
-void snd_init_movie_sound(s32 transfer_block_size, s32 staging_buffer_size, s32 staging_block_size, s32 initial_offset, s32 buffer_count, s32 stream_count) __asm__("FUN_0012f068");
 
-void snd_init_movie_sound(s32 transfer_block_size, s32 staging_buffer_size, s32 staging_block_size, s32 initial_offset, s32 buffer_count, s32 stream_count) {
+extern s32 snd_send_iop_command_and_wait() __asm__("func_0012E548");
+void       snd_init_movie_sound(s32 transfer_block_size,
+                                s32 staging_buffer_size,
+                                s32 staging_block_size,
+                                s32 initial_offset,
+                                s32 buffer_count,
+                                s32 stream_count) __asm__("FUN_0012f068");
+
+void snd_init_movie_sound(s32 transfer_block_size,
+                          s32 staging_buffer_size,
+                          s32 staging_block_size,
+                          s32 initial_offset,
+                          s32 buffer_count,
+
+                          s32 stream_count) {
     s32 sp_slot[6];
 
     sp_slot[0] = transfer_block_size;

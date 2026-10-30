@@ -1,9 +1,10 @@
 #include "types.h"
 #include "rnc/rendering/draw_config.h"
+
 void ClearDmaQueueEntry(void) {
     s32 *entry;
-    s32 remaining;
-    s32 value;
+    s32  remaining;
+    s32  value;
 
     entry = (s32 *)&draw_config;
     value = 1;

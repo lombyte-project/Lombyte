@@ -1,20 +1,26 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/library/sdk_globals.h"
+
 struct DbCState {
     s32 unk0;
     s32 unk4;
     s32 unk8;
-    u8 payload[0x80];
+    u8  payload[0x80];
     s32 unk8C;
 };
-extern u8 dbc_receive_rpc_error_message[] __asm__("D_001536A0");
-extern s32 debug_print_stub() __asm__("func_00124A20");
-extern s32 sceSifCallRpc();
+
+extern u8              dbc_receive_rpc_error_message[] __asm__("D_001536A0");
+extern s32             debug_print_stub() __asm__("func_00124A20");
+extern s32             sceSifCallRpc();
 extern struct DbCState RpcReceiveData __asm__("D_0015B080");
-s32 sceDbcReceiveData(s32 rpc_request_word_0, s32 rpc_request_word_1, s32 *byte_count, u8 *destination) {
+s32                    sceDbcReceiveData(s32  rpc_request_word_0,
+                                         s32  rpc_request_word_1,
+                                         s32 *byte_count,
+
+                                         u8 *destination) {
     struct DbCState *state = &RpcReceiveData;
-    s32 i;
+    s32              i;
 
     state->unk0 = rpc_request_word_0;
     state->unk4 = rpc_request_word_1;

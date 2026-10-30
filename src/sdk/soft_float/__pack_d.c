@@ -42,16 +42,16 @@ typedef union {
     f64 value;
     struct {
         u64 fraction : 52 __attribute__((packed));
-        u32 exp : 11 __attribute__((packed));
-        u32 sign : 1 __attribute__((packed));
+        u32 exp      : 11 __attribute__((packed));
+        u32 sign     : 1 __attribute__((packed));
     } bits;
 } FLOUnion;
 
 f64 __pack_d(FpNumber *unpacked_value) {
     FLOUnion packed_value;
-    u64 fraction = unpacked_value->fraction;
-    s32 sign = unpacked_value->sign;
-    s32 exp = 0;
+    u64      fraction = unpacked_value->fraction;
+    s32      sign = unpacked_value->sign;
+    s32      exp = 0;
 
     if (unpacked_value->class == 0 || unpacked_value->class == 1) {
         exp = 0x7FF;

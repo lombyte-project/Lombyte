@@ -3,7 +3,7 @@
 
 extern s32 signal_semaphore() __asm__("FUN_00118990");
 extern s32 wait_semaphore() __asm__("FUN_001189b0");
-s32 vi_buf_count(struct ViBuf *buf) __asm__("FUN_0023c610");
+s32        vi_buf_count(struct ViBuf *buf) __asm__("FUN_0023c610");
 
 s32 vi_buf_count(struct ViBuf *input_buffer) {
     s32 count;

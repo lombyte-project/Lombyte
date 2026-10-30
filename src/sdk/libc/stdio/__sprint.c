@@ -20,7 +20,7 @@
 #include "types.h"
 
 struct PrintIoVector {
-    u8 reserved_00[4];
+    u8  reserved_00[4];
     s32 remaining_bytes;
     s32 vector_count;
 };

@@ -5,7 +5,7 @@
 #include "types.h"
 
 extern void Rfu116SetSyscallTail();
-extern s32 Rfu091Tail();
+extern s32  Rfu091Tail();
 extern void InvokeKernelSyscall005A_RfuTail(void *addr, void *table, s32 size);
 extern void FlushCache(s32 mode);
 
@@ -15,8 +15,8 @@ typedef struct PatchPair {
 } PatchPair;
 
 extern PatchPair alarm_syscall_patch_pairs[] __asm__("D_00131258");
-extern u8 alarm_kernel_patch_payload[] __asm__("D_00130AF0");
-extern u8 alarm_call_trampoline_payload[] __asm__("D_00131230");
+extern u8        alarm_kernel_patch_payload[] __asm__("D_00130AF0");
+extern u8        alarm_call_trampoline_payload[] __asm__("D_00131230");
 
 void InitAlarm(void) {
     u32 i;
@@ -29,7 +29,8 @@ void InitAlarm(void) {
         FlushCache(2);
         Rfu116SetSyscallTail(alarm_syscall_patch_pairs[1].a, alarm_syscall_patch_pairs[1].b);
         for (i = 2; i < 8; i++) {
-            Rfu116SetSyscallTail(alarm_syscall_patch_pairs[i].a, Rfu091Tail(alarm_syscall_patch_pairs[i].a));
+            Rfu116SetSyscallTail(alarm_syscall_patch_pairs[i].a,
+                                 Rfu091Tail(alarm_syscall_patch_pairs[i].a));
         }
     }
 }

@@ -1,10 +1,11 @@
 #include "types.h"
 #include "rnc/ui/text/font_metrics.h"
-extern s32 get_effect_texture() __asm__("func_001F44B8");
-extern s32 measure_text_width_large() __asm__("func_001F6290");
+
+extern s32  get_effect_texture() __asm__("func_001F44B8");
+extern s32  measure_text_width_large() __asm__("func_001F6290");
 extern void font_print() __asm__("func_001F62B0");
-s32 font_print_center_large(s32 center_x, s32 y, s32 color, s32 text,
-                            s32 max_chars) __asm__("FUN_001f6c20");
+s32 font_print_center_large(s32 center_x, s32 y, s32 color, s32 text, s32 max_chars) __asm__(
+    "FUN_001f6c20");
 
 s32 font_print_center_large(s32 center_x, s32 y, s32 color, s32 text, s32 max_chars) {
     s32 left_x;

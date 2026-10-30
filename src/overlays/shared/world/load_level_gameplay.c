@@ -29,21 +29,24 @@
 #include "rnc/world/loaders/relocate_sky_definition.h"
 #include "rnc/world/loaders/unpack_point_records.h"
 #include "rnc/world/loaders/upload_texture_images.h"
+
 typedef struct {
     s32 a, b, c, off;
 } Ent;
+
 typedef struct {
     s32 n;
     s32 pad[3];
     Ent e[1];
 } Tbl;
+
 extern u8 *D_L00_00173E40 NOT_SDA;
 extern Tbl *l00_level_asset_entry_table __asm__("D_L00_0015F618") __attribute__((sda));
 /* Sets D_L00_00173E40 from offset h[0] and turns the table at offset h[1] into pointers. */
 void resolve_level_asset_block_pointers(s32 *offset_header) __asm__("FUN_L00_00241728");
 
 void resolve_level_asset_block_pointers(s32 *offset_header) {
-    s32 i;
+    s32  i;
     Tbl *entry_table;
     if (offset_header[0])
         D_L00_00173E40 = (u8 *)offset_header + offset_header[0];
@@ -64,12 +67,13 @@ typedef struct {
 
 extern char moby_class_size_format[] __asm__("D_L00_001E8640");
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
-extern int fptodp(float) __asm__("FUN_00120478");
+extern int  fptodp(float) __asm__("FUN_00120478");
 
 void print_moby_class_sizes(int *record, int n) __asm__("FUN_L00_00241788");
+
 void print_moby_class_sizes(int *record, int n) {
     MobyClassSize entries[512];
-    int i, j, k, done;
+    int           i, j, k, done;
 
     for (i = 0; i < n; i++, record += 8) {
         entries[i].class_id = (float)record[1];
@@ -79,7 +83,8 @@ void print_moby_class_sizes(int *record, int n) {
             if (record[8] != 0) {
                 entries[i].size = convert_integer_to_float(record[8] - record[0]) * 0.0009765625f;
             } else {
-                entries[i].size = convert_integer_to_float(record[0x10] - record[0]) * 0.0009765625f;
+                entries[i].size =
+                    convert_integer_to_float(record[0x10] - record[0]) * 0.0009765625f;
             }
             entries[i + 1].class_id = -1.0f;
             entries[i + 1].size = 0;
@@ -154,26 +159,26 @@ typedef struct {
 } LevelHeader;
 
 typedef struct {
-    char pad0[4];
+    char         pad0[4];
     LevelHeader *f4;
-    char pad8[0x10];
-    char *f18;
+    char         pad8[0x10];
+    char        *f18;
 } LevelLoad173E00;
 
 typedef struct {
-    int f0;
+    int   f0;
     char *f4;
     char *f8;
-    int fC;
-    int f10;
-    int f14;
+    int   fC;
+    int   f10;
+    int   f14;
 } LevelLoad173E40;
 
 typedef struct {
     char pad0[0x23C];
-    int f23C;
-    int f240;
-    int f244;
+    int  f23C;
+    int  f240;
+    int  f244;
 } LevelState16CB40;
 
 typedef struct {
@@ -182,7 +187,6 @@ typedef struct {
 } PvarEntry;
 
 typedef int Qword __attribute__((mode(TI)));
-
 
 typedef struct TieMatrix {
     float m0[3];
@@ -193,125 +197,125 @@ typedef struct TieMatrix {
     float f2C;
     float m3[3];
     float f3C;
-    char pad40[0x100];
-    char f140[0x80];
+    char  pad40[0x100];
+    char  f140[0x80];
 } TieMatrix;
 
 typedef struct TieInst {
-    float f0[3];
-    float fC;
-    TieMatrix *f10;
-    float f14;
+    float          f0[3];
+    float          fC;
+    TieMatrix     *f10;
+    float          f14;
     unsigned short f18;
-    unsigned char f1A;
-    unsigned char f1B;
+    unsigned char  f1A;
+    unsigned char  f1B;
     unsigned short f1C;
     unsigned short f1E;
 } TieInst;
 
 typedef struct {
-    char pad0[0x26];
+    char           pad0[0x26];
     unsigned short f26;
-    TieInst *f28;
-    char pad2C[4];
-    float f30[3];
-    float f3C;
-    float f40;
+    TieInst       *f28;
+    char           pad2C[4];
+    float          f30[3];
+    float          f3C;
+    float          f40;
 } TieClass;
 
 typedef struct ShrubMatrix {
     float m0[3];
-    int fC;
+    int   fC;
     float m1[3];
-    int f1C;
+    int   f1C;
     float m2[3];
-    int f2C;
+    int   f2C;
     float m3[3];
     float f3C;
 } ShrubMatrix;
 
 typedef struct ShrubInst {
-    float f0[3];
-    float fC;
-    float f10;
-    char pad14[3];
-    unsigned char f17;
-    short f18;
-    unsigned char f1A;
-    unsigned char f1B;
+    float          f0[3];
+    float          fC;
+    float          f10;
+    char           pad14[3];
+    unsigned char  f17;
+    short          f18;
+    unsigned char  f1A;
+    unsigned char  f1B;
     unsigned short f1C;
     unsigned short f1E;
 } ShrubInst;
 
 typedef struct {
-    char pad0[0xC];
-    float fC;
-    char pad10[6];
+    char           pad0[0xC];
+    float          fC;
+    char           pad10[6];
     unsigned short f16;
-    ShrubInst *f18;
-    float *f1C;
-    float f20;
+    ShrubInst     *f18;
+    float         *f1C;
+    float          f20;
 } ShrubClass;
 
 typedef struct {
-    char pad0[0x24];
-    float f24;
-    char pad28[0x1C];
+    char           pad0[0x24];
+    float          f24;
+    char           pad28[0x1C];
     unsigned short f44;
 } MobyClass;
 
 typedef struct MobyInst {
-    char pad0[0x10];
-    float f10;
-    float f14;
-    float f18;
-    char pad1C[4];
-    unsigned char f20;
-    unsigned char f21;
-    char pad22[2];
-    MobyClass *f24;
-    char pad28[4];
-    float f2C;
-    unsigned char f30;
-    char pad31;
+    char           pad0[0x10];
+    float          f10;
+    float          f14;
+    float          f18;
+    char           pad1C[4];
+    unsigned char  f20;
+    unsigned char  f21;
+    char           pad22[2];
+    MobyClass     *f24;
+    char           pad28[4];
+    float          f2C;
+    unsigned char  f30;
+    char           pad31;
     unsigned short f32;
     unsigned short f34;
     unsigned short f36;
-    int f38;
-    char pad3C[4];
-    float f40;
-    float f44;
-    float f48;
-    char pad4C[0x28];
-    void *f74;
-    int f78;
-    char pad7C[4];
-    int f80;
-    char pad84[0x22];
-    short fA6;
-    char padA8[8];
-    unsigned char fB0;
-    unsigned char fB1;
-    short fB2;
-    short fB4;
-    short fB6;
-    char padB8[0x48];
+    int            f38;
+    char           pad3C[4];
+    float          f40;
+    float          f44;
+    float          f48;
+    char           pad4C[0x28];
+    void          *f74;
+    int            f78;
+    char           pad7C[4];
+    int            f80;
+    char           pad84[0x22];
+    short          fA6;
+    char           padA8[8];
+    unsigned char  fB0;
+    unsigned char  fB1;
+    short          fB2;
+    short          fB4;
+    short          fB6;
+    char           padB8[0x48];
 } MobyInst;
 
 typedef struct {
-    char pad0[0x36];
+    char           pad0[0x36];
     unsigned short f36;
-    char pad38[2];
+    char           pad38[2];
     unsigned short f3A;
-    char pad3C;
-    unsigned char f3D;
-    char pad3E[2];
+    char           pad3C;
+    unsigned char  f3D;
+    char           pad3E[2];
 } Tfrag;
 
 typedef struct {
     char pad0[0x48];
-    int f48;
-    int f4C;
+    int  f48;
+    int  f4C;
     char pad50[0x30];
 } Light;
 
@@ -322,78 +326,86 @@ typedef struct {
 
 typedef struct {
     char pad0[0x2C];
-    int f2C;
+    int  f2C;
 } TextHeader;
 
 typedef struct {
     float f0;
     float f4;
     float f8;
-    int fC;
+    int   fC;
     float f10;
     float f14;
     float f18;
-    int f1C;
+    int   f1C;
 } Cuboid;
 
-
-
 typedef struct {
-    char pad0[0x2080];
+    char      pad0[0x2080];
     MobyInst *f2080;
-    char pad2084[0x28C];
+    char      pad2084[0x28C];
 } HeroSpawn;
 
-typedef struct { s32 a, b; } P2;
+typedef struct {
+    s32 a, b;
+} P2;
 
-typedef struct { u8 pad[0x12E8]; P2 x[10]; P2 y[1]; } Tab;
+typedef struct {
+    u8 pad[0x12E8];
+    P2 x[10];
+    P2 y[1];
+} Tab;
 
-extern int D_L00_001600E8  MACRO_ADDR;
-extern int D_L00_001600F0  MACRO_ADDR;
-extern int D_L00_001600F8  MACRO_ADDR;
-extern int D_L00_00160100  MACRO_ADDR;
-extern char *D_L00_0015EF80;
-extern char *D_L00_0015FBC0  MACRO_ADDR;
-extern char *D_L00_0015FB80  MACRO_ADDR;
-extern int D_L00_0015FB50  MACRO_ADDR;
-extern char *D_L00_00160040  MACRO_ADDR;
-extern int D_L00_00160014  MACRO_ADDR;
-extern int D_L00_0015F63C  MACRO_ADDR;
+extern int D_L00_001600E8     MACRO_ADDR;
+extern int D_L00_001600F0     MACRO_ADDR;
+extern int D_L00_001600F8     MACRO_ADDR;
+extern int D_L00_00160100     MACRO_ADDR;
+extern char                  *D_L00_0015EF80;
+extern char *D_L00_0015FBC0   MACRO_ADDR;
+extern char *D_L00_0015FB80   MACRO_ADDR;
+extern int D_L00_0015FB50     MACRO_ADDR;
+extern char *D_L00_00160040   MACRO_ADDR;
+extern int D_L00_00160014     MACRO_ADDR;
+extern int D_L00_0015F63C     MACRO_ADDR;
 extern Cuboid *D_L00_0015EF50 MACRO_ADDR;
-extern HeroSpawn D_0013F350;
-extern Light l00_gameplay_lights[] __asm__("D_L00_0017EEC0");
-extern LevelState16CB40 D_L00_0016CA40;
-extern LevelLoad173E00 D_L00_00173E00;
+extern HeroSpawn              D_0013F350;
+extern Light                  l00_gameplay_lights[] __asm__("D_L00_0017EEC0");
+extern LevelState16CB40       D_L00_0016CA40;
+extern LevelLoad173E00        D_L00_00173E00;
 /* Level load state at D_L00_00173E40; this function sets its header pointers (+0x4, +0x8) and clears +0xC..+0x14. */
-extern LevelLoad173E40 coll_hit __asm__("D_L00_00173E40");
-extern MobyInst *moby_table __asm__("D_L00_0015FFD8") MACRO_ADDR;
+extern LevelLoad173E40          coll_hit __asm__("D_L00_00173E40");
+extern MobyInst                *moby_table __asm__("D_L00_0015FFD8") MACRO_ADDR;
 extern MobyInst *D_L00_0015FFDC MACRO_ADDR;
 extern MobyInst *D_L00_0015FFE0 MACRO_ADDR;
+
 #include "rnc/rendering/level_render_state.h"
-extern ShrubClass *D_L00_001BC030[];
-extern ShrubInst *D_L00_00160494 MACRO_ADDR;
-extern ShrubInst *D_L00_00160498 MACRO_ADDR;
+
+extern ShrubClass                 *D_L00_001BC030[];
+extern ShrubInst *D_L00_00160494   MACRO_ADDR;
+extern ShrubInst *D_L00_00160498   MACRO_ADDR;
 extern ShrubMatrix *D_L00_0016049C MACRO_ADDR;
-extern LevelSpline *l00_splines_macro __asm__("D_L00_0015F70C") MACRO_ADDR;
-extern TextHeader D_L00_00179410;
-extern TextTable *D_L00_0015F660  MACRO_ADDR;
-extern Tfrag *D_L00_00160F4C MACRO_ADDR;
-extern TieClass *D_L00_001C5800[];
-extern TieInst *D_L00_00160FC0 MACRO_ADDR;
-extern TieInst *D_L00_00160FC4 MACRO_ADDR;
-extern TieMatrix *D_L00_00160FC8 MACRO_ADDR;
-extern char *D_L00_0015F310  MACRO_ADDR;
-extern char *D_L00_0015FFE8_macro __asm__("D_L00_0015FFE8") MACRO_ADDR;
-extern char *D_L00_001600E4 MACRO_ADDR;
-extern char *D_L00_001600EC MACRO_ADDR;
-extern char *D_L00_001600F4 MACRO_ADDR;
-extern char *D_L00_001600FC MACRO_ADDR;
-extern char *D_L00_00160108_macro __asm__("D_L00_00160108") MACRO_ADDR;
-extern char *D_L00_0016016C_macro __asm__("D_L00_0016016C") MACRO_ADDR;
-extern char *D_L00_0015F318  MACRO_ADDR;
-extern char *toad_paths[] __asm__("D_L00_001B04B0");
-extern char *create_moby(int);
+extern LevelSpline                *l00_splines_macro __asm__("D_L00_0015F70C") MACRO_ADDR;
+extern TextHeader                  D_L00_00179410;
+extern TextTable *D_L00_0015F660   MACRO_ADDR;
+extern Tfrag *D_L00_00160F4C       MACRO_ADDR;
+extern TieClass                   *D_L00_001C5800[];
+extern TieInst *D_L00_00160FC0     MACRO_ADDR;
+extern TieInst *D_L00_00160FC4     MACRO_ADDR;
+extern TieMatrix *D_L00_00160FC8   MACRO_ADDR;
+extern char *D_L00_0015F310        MACRO_ADDR;
+extern char                       *D_L00_0015FFE8_macro __asm__("D_L00_0015FFE8") MACRO_ADDR;
+extern char *D_L00_001600E4        MACRO_ADDR;
+extern char *D_L00_001600EC        MACRO_ADDR;
+extern char *D_L00_001600F4        MACRO_ADDR;
+extern char *D_L00_001600FC        MACRO_ADDR;
+extern char                       *D_L00_00160108_macro __asm__("D_L00_00160108") MACRO_ADDR;
+extern char                       *D_L00_0016016C_macro __asm__("D_L00_0016016C") MACRO_ADDR;
+extern char *D_L00_0015F318        MACRO_ADDR;
+extern char                       *toad_paths[] __asm__("D_L00_001B04B0");
+extern char                       *create_moby(int);
+
 #include "rnc/overlay/level_camera.h"
+
 extern char D_L00_0016C780[];
 extern char D_L00_0016C7B0[];
 extern char D_L00_00173EC0[];
@@ -413,54 +425,56 @@ extern float D_L00_0015F448 MACRO_ADDR;
 extern float D_L00_0015F44C MACRO_ADDR;
 extern float D_L00_0015F450 MACRO_ADDR;
 extern float D_L00_0015F454 MACRO_ADDR;
-extern float D_L00_0015F638  MACRO_ADDR;
+extern float D_L00_0015F638 MACRO_ADDR;
 extern float D_L00_001604A4 MACRO_ADDR;
 extern float D_L00_00160F80 MACRO_ADDR;
 extern float D_L00_00160FE0 MACRO_ADDR;
-extern int D_0015ED84 MACRO_ADDR;
-extern int D_L00_0015EF54 MACRO_ADDR;
-extern char *level_root[2] __asm__("D_0015EE4C") MACRO_ADDR;
-extern int D_L00_0015F444 MACRO_ADDR;
-extern int D_L00_0015F445 MACRO_ADDR;
-extern int D_L00_0015F446 MACRO_ADDR;
-extern int D_L00_0015F5CC MACRO_ADDR;
-extern int D_L00_0015F600;
-extern int D_L00_0015F710 MACRO_ADDR;
-extern int D_L00_0015FBC4 MACRO_ADDR;
-extern int D_L00_0015FFF0 MACRO_ADDR;
-extern int D_L00_0015FFF4;
-extern int D_L00_00160104 MACRO_ADDR;
-extern int D_L00_00160170 MACRO_ADDR;
-extern int D_L00_00160174 MACRO_ADDR;
-extern int D_L00_00160178 MACRO_ADDR;
-extern int D_L00_0016017C MACRO_ADDR;
-extern int D_L00_00160490 MACRO_ADDR;
-extern int D_L00_00160540 MACRO_ADDR;
-extern int first_class_ids[] __asm__("D_L00_00160548");
-extern int shrub_color_buffer_descriptor[] __asm__("D_L00_00160B70");
-extern int D_L00_00160F50 MACRO_ADDR;
-extern int D_L00_00160FCC MACRO_ADDR;
+extern int D_0015ED84       MACRO_ADDR;
+extern int D_L00_0015EF54   MACRO_ADDR;
+extern char                *level_root[2] __asm__("D_0015EE4C") MACRO_ADDR;
+extern int D_L00_0015F444   MACRO_ADDR;
+extern int D_L00_0015F445   MACRO_ADDR;
+extern int D_L00_0015F446   MACRO_ADDR;
+extern int D_L00_0015F5CC   MACRO_ADDR;
+extern int                  D_L00_0015F600;
+extern int D_L00_0015F710   MACRO_ADDR;
+extern int D_L00_0015FBC4   MACRO_ADDR;
+extern int D_L00_0015FFF0   MACRO_ADDR;
+extern int                  D_L00_0015FFF4;
+extern int D_L00_00160104   MACRO_ADDR;
+extern int D_L00_00160170   MACRO_ADDR;
+extern int D_L00_00160174   MACRO_ADDR;
+extern int D_L00_00160178   MACRO_ADDR;
+extern int D_L00_0016017C   MACRO_ADDR;
+extern int D_L00_00160490   MACRO_ADDR;
+extern int D_L00_00160540   MACRO_ADDR;
+extern int                  first_class_ids[] __asm__("D_L00_00160548");
+extern int                  shrub_color_buffer_descriptor[] __asm__("D_L00_00160B70");
+extern int D_L00_00160F50   MACRO_ADDR;
+extern int D_L00_00160FCC   MACRO_ADDR;
+
 #include "rnc/rendering/debug/debug_menu.h"
-extern int D_L00_001AB840[];
-extern int D_L00_001BA4D0[];
-extern int find_or_assign_bolt_source_slot(int, int) __asm__("FUN_L00_00284d90");
+
+extern int   D_L00_001AB840[];
+extern int   D_L00_001BA4D0[];
+extern int   find_or_assign_bolt_source_slot(int, int) __asm__("FUN_L00_00284d90");
 extern short gameplay_moby_index_remap[] __asm__("D_L00_001AC780");
 extern short D_L00_001B0770[];
 extern short D_L00_001B07B0[];
 extern short D_L00_001B0830[];
-extern u8 D_00100AE0[];
+extern u8    D_00100AE0[];
 extern unsigned char *D_L00_001604A0 MACRO_ADDR;
-extern unsigned char mission_state[] __asm__("D_L00_0015FC88") MACRO_ADDR;
-extern unsigned char D_L00_001804C0[];
-extern unsigned char D_L00_001BC1B0[];
-extern unsigned char D_L00_001C5B00[];
-extern void enable_global_flag(void) __asm__("func_001F61E8");
-extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
-extern void FUN_0022a5e0(void *);
-extern void light_tfrags(void *) __asm__("FUN_00234f98");
-extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
-extern void initialize_hero(void) __asm__("FUN_L00_00204c60");
-extern void reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
+extern unsigned char                 mission_state[] __asm__("D_L00_0015FC88") MACRO_ADDR;
+extern unsigned char                 D_L00_001804C0[];
+extern unsigned char                 D_L00_001BC1B0[];
+extern unsigned char                 D_L00_001C5B00[];
+extern void                          enable_global_flag(void) __asm__("func_001F61E8");
+extern void                          scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
+extern void                          FUN_0022a5e0(void *);
+extern void                          light_tfrags(void *) __asm__("FUN_00234f98");
+extern void                          setup_level_cameras(void) __asm__("FUN_L00_001ed358");
+extern void                          initialize_hero(void) __asm__("FUN_L00_00204c60");
+extern void                          reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
 extern void store_current_level_table_value(int, int) __asm__("FUN_L00_0024a798");
 extern void resolve_lookup_record(short *) __asm__("FUN_L00_0028df58");
 extern void update_moby_proximity_interaction() __asm__("FUN_L00_0028e180");
@@ -475,20 +489,22 @@ extern void set_video_timing(s32) __asm__("func_00214970");
 extern void update_camera(void) __asm__("func_001EDAA8");
 extern void update_fog(void) __asm__("func_001F2588");
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
-void reset_global_state_fields(void) __asm__("func_00217020");
-void srand(int value) __asm__("func_001160C8");
+void        reset_global_state_fields(void) __asm__("func_00217020");
+void        srand(int value) __asm__("func_001160C8");
 extern void load(void *, int, int) __asm__("FUN_00216828");
 
-char *load_level_gameplay(int skip_gameplay_read) __asm__("FUN_L00_00241940");
+char                *load_level_gameplay(int skip_gameplay_read) __asm__("FUN_L00_00241940");
 extern unsigned char l00_moby_load_exclusion_flags_by_uid[] __asm__("D_L00_001BB684");
-extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
-extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
-extern s32 game_language __asm__("D_0015ED88") MACRO_ADDR;
+extern f32           frame_scale __asm__("D_0015ED60") MACRO_ADDR;
+extern s32           pal_mode __asm__("D_0015ED80") MACRO_ADDR;
+extern s32           game_language __asm__("D_0015ED88") MACRO_ADDR;
+
 char *load_level_gameplay(int skip_gameplay_read) {
     LevelHeader *hdr;
-    char *mem;
-    float *ship;
-    short *moby_index_remap = gameplay_moby_index_remap; /* moby index by file order; a pointer local, so its address is formed at each use */
+    char        *mem;
+    float       *ship;
+    short       *moby_index_remap =
+        gameplay_moby_index_remap; /* moby index by file order; a pointer local, so its address is formed at each use */
     int level_or_group_scratch; /* scratch int: the level number in the moby loop, a group's offset and end flag in the group loop */
 
     hdr = D_L00_00173E00.f4;
@@ -559,7 +575,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     fast_mem_zero16(level_directional_lights, 0x400);
     {
         char *p = (char *)hdr + hdr->f4;
-        int n = *(int *)p;
+        int   n = *(int *)p;
 
         p += 0x10;
         if (n >= 12) {
@@ -577,10 +593,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
         p += 0x10;
         if (D_L00_0015FBC4 != 0) {
             Light *current_light;
-            int i;
+            int    i;
 
             copy_memory_aligned(D_L00_0017ECC0, p, D_L00_0015FBC4 << 4);
-            copy_memory_aligned(l00_gameplay_lights, p + (D_L00_0015FBC4 << 4), D_L00_0015FBC4 << 7);
+            copy_memory_aligned(
+                l00_gameplay_lights, p + (D_L00_0015FBC4 << 4), D_L00_0015FBC4 << 7);
             for (i = 0; i < D_L00_0015FBC4; i++) {
                 current_light = &l00_gameplay_lights[i];
                 if (current_light->f48 < 0) {
@@ -606,7 +623,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
 
         while (i < D_L00_00160F50) {
             unsigned short *q = (unsigned short *)0x70003000;
-            int j;
+            int             j;
 
             for (j = 0; j < 0x3FF && i < D_L00_00160F50; j++) {
                 *q = i;
@@ -618,10 +635,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
         }
     }
     if (hdr->f10[0] != 0) {
-        int lang = game_language * 4;
+        int   lang = game_language * 4;
         char *p = (char *)hdr + *(int *)((char *)hdr + lang + 0x10);
-        int size;
-        int i;
+        int   size;
+        int   i;
 
         D_L00_00179410.f2C = *(int *)p;
         p += 4;
@@ -641,9 +658,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     {
         char *p = (char *)hdr + hdr->f34;
-        int n = *(int *)p;
-        int i;
-        int last;
+        int   n = *(int *)p;
+        int   i;
+        int   last;
 
         D_L00_00160FC0 = (TieInst *)mem;
         p += 0x10;
@@ -661,10 +678,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
         last = -1;
         D_L00_00160FC4 = D_L00_00160FC0 + D_L00_00160FCC;
         for (i = 0; i < D_L00_00160FCC; i++) {
-            TieInst *inst = D_L00_00160FC0 + i;
+            TieInst   *inst = D_L00_00160FC0 + i;
             TieMatrix *mtx = D_L00_00160FC8 + i;
-            int id;
-            float scale;
+            int        id;
+            float      scale;
 
             inst->f1A = D_L00_001C5B00[*(int *)p];
             if (inst->f1A != last) {
@@ -703,7 +720,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     {
         unsigned short *q = (unsigned short *)0x70000000;
-        int i;
+        int             i;
 
         for (i = 0; i < D_L00_00160FCC; i++) {
             *q++ = i;
@@ -713,9 +730,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     {
         char *p = (char *)hdr + hdr->f3C;
-        int n = *(int *)p;
-        int last;
-        int i;
+        int   n = *(int *)p;
+        int   last;
+        int   i;
 
         D_L00_00160494 = (ShrubInst *)mem;
         p += 0x10;
@@ -740,10 +757,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
         shrub_color_buffer_descriptor[1] = (int)D_L00_001604A0;
         D_L00_00160498 = D_L00_00160494 + D_L00_00160490;
         for (i = 0; i < D_L00_00160490; i++) {
-            ShrubInst *inst = D_L00_00160494 + i;
+            ShrubInst   *inst = D_L00_00160494 + i;
             ShrubMatrix *mtx = D_L00_0016049C + i;
-            int shrub_class_index = D_L00_001BC1B0[*(int *)p];
-            float scale;
+            int          shrub_class_index = D_L00_001BC1B0[*(int *)p];
+            float        scale;
 
             inst->f1A = shrub_class_index;
             if (shrub_class_index != last) {
@@ -777,8 +794,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
             {
                 float a = (fast_vec_length(mtx) + fast_vec_length(mtx->m1)) * 0.5f;
                 float b = fast_vec_length(mtx->m2);
-                int ia = truncate_float_to_s32(a * 4096.0f);
-                int ib = truncate_float_to_s32(b * 4096.0f);
+                int   ia = truncate_float_to_s32(a * 4096.0f);
+                int   ib = truncate_float_to_s32(b * 4096.0f);
 
                 if (ib > 0x10000) {
                     ib = 0x10000;
@@ -807,14 +824,15 @@ char *load_level_gameplay(int skip_gameplay_read) {
             transform_vector_by_basis(inst, D_L00_001BC030[shrub_class_index], mtx);
             scale = fast_vec_length(mtx);
             scale = max_float(scale, fast_vec_length(mtx->m1));
-            inst->fC = D_L00_001BC030[shrub_class_index]->fC * max_float(scale, fast_vec_length(mtx->m2));
+            inst->fC =
+                D_L00_001BC030[shrub_class_index]->fC * max_float(scale, fast_vec_length(mtx->m2));
             scale_vector(inst, inst, mtx->f3C);
             fast_vec_add(inst, inst, mtx->m3);
         }
     }
     {
         unsigned short *q = (unsigned short *)0x70000000;
-        int i;
+        int             i;
 
         for (i = 0; i < D_L00_00160490; i++) {
             *q++ = i;
@@ -827,11 +845,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
 
         for (i = 0; i < D_L00_00160490; i++) {
             unsigned char *q = D_L00_001604A0 + i * 0x60;
-            int r = 0;
-            int g = 0;
-            int b = 0;
-            int n = 24;
-            int j;
+            int            r = 0;
+            int            g = 0;
+            int            b = 0;
+            int            n = 24;
+            int            j;
 
             for (j = 0; j < n; j++) {
                 r += q[0];
@@ -847,8 +865,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (hdr->f8 != 0) {
         char *p = (char *)hdr + hdr->f8;
-        int n = *(int *)p;
-        int i;
+        int   n = *(int *)p;
+        int   i;
 
         D_L00_0015EF50 = (Cuboid *)mem;
         p += 0x10;
@@ -875,7 +893,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (hdr->fC != 0) {
         char *p = (char *)hdr + hdr->fC;
-        int n = *(int *)p;
+        int   n = *(int *)p;
 
         p += 0x10;
         voice_pool.sound_instance_count = n;
@@ -900,11 +918,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     {
         char *p = (char *)hdr + hdr->f44;
-        int n2;
-        int count = 0;
-        int n;
+        int   n2;
+        int   count = 0;
+        int   n;
         char *next;
-        int i;
+        int   i;
 
         n = *(int *)p;
         p += 4;
@@ -913,15 +931,15 @@ char *load_level_gameplay(int skip_gameplay_read) {
         moby_table = (MobyInst *)mem;
         FillTransferWords(mem, 0, (n + n2) << 8);
         for (i = 0; i < n; i++) {
-            int mission;
-            int flags;
-            int uid;
-            int bolts;
-            int bolts2;
-            int selected_bolt_count;
-            int adjusted_bolt_count;
+            int           mission;
+            int           flags;
+            int           uid;
+            int           bolts;
+            int           bolts2;
+            int           selected_bolt_count;
+            int           adjusted_bolt_count;
             unsigned char vis = 0xFE;
-            int skip = 0;
+            int           skip = 0;
 
             next = p + ((*(int *)p >> 2) << 2);
             p += 4;
@@ -981,13 +999,13 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 moby_index_remap[i] = -1;
             } else {
                 MobyInst *m;
-                int a;
-                float ground_height_offset;
-                int pv;
-                int moby_red;
-                int moby_green;
-                int moby_blue;
-                int upd;
+                int       a;
+                float     ground_height_offset;
+                int       pv;
+                int       moby_red;
+                int       moby_green;
+                int       moby_blue;
+                int       upd;
 
                 {
                     short *slot = moby_index_remap + i;
@@ -1074,10 +1092,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
         D_L00_0015FFE0 = (MobyInst *)((int)moby_table + ((count + n2) << 8) - 0x100);
     }
     if (hdr->f58 != 0) {
-        char *pv = (char *)hdr + hdr->f58;
+        char      *pv = (char *)hdr + hdr->f58;
         PvarEntry *tbl = (PvarEntry *)((char *)hdr + hdr->f54);
-        int i;
-        MobyInst *m;
+        int        i;
+        MobyInst  *m;
 
         for (i = 0; i < D_L00_0015EF54; i++) {
             int k = D_L00_0015EF50[i].f1C;
@@ -1085,7 +1103,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (k < 0) {
                 D_L00_0015EF50[i].f1C = 0;
             } else {
-                int size = tbl[k].f4;
+                int   size = tbl[k].f4;
                 char *src = pv + tbl[k].f0;
 
                 D_L00_0015EF50[i].f1C = (int)mem;
@@ -1100,7 +1118,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (k < 0) {
                 voice_pool.sound_instances[i].data = 0;
             } else {
-                int size = tbl[k].f4;
+                int   size = tbl[k].f4;
                 char *src = pv + tbl[k].f0;
 
                 voice_pool.sound_instances[i].data = (int)mem;
@@ -1115,7 +1133,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             if (k < 0) {
                 m->f78 = 0;
             } else {
-                int size = tbl[k].f4;
+                int   size = tbl[k].f4;
                 char *src = pv + tbl[k].f0;
 
                 m->f78 = (int)mem;
@@ -1127,7 +1145,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
     }
     if (hdr->f50 != 0) {
-        int *q = (int *)((char *)hdr + hdr->f50);
+        int       *q = (int *)((char *)hdr + hdr->f50);
         PvarEntry *tbl = (PvarEntry *)((char *)hdr + hdr->f54);
 
         while (q[0] >= 0) {
@@ -1145,7 +1163,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         }
     }
     if (hdr->f5C != 0) {
-        int *q = (int *)((char *)hdr + hdr->f5C);
+        int       *q = (int *)((char *)hdr + hdr->f5C);
         PvarEntry *tbl = (PvarEntry *)((char *)hdr + hdr->f54);
 
         while (q[0] >= 0) {
@@ -1163,10 +1181,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
     if (hdr->f48 != 0) {
         char *q = (char *)hdr + hdr->f48;
         char *base = mem;
-        int *offs;
-        int n;
-        int size;
-        int i;
+        int  *offs;
+        int   n;
+        int   size;
+        int   i;
 
         n = *(int *)q;
         q += 4;
@@ -1182,16 +1200,16 @@ char *load_level_gameplay(int skip_gameplay_read) {
         for (i = 0; i < n; i++, offs++) {
             level_or_group_scratch = *offs;
             if (level_or_group_scratch >= 0) {
-                int g = (int)(base + level_or_group_scratch);
+                int             g = (int)(base + level_or_group_scratch);
                 unsigned short *src;
-                short *group_write_cursor;
+                short          *group_write_cursor;
 
                 D_L00_001AB840[i] = g;
                 src = (unsigned short *)g;
                 group_write_cursor = (short *)src;
                 D_L00_0015FFF4 = i + 1;
                 do {
-                    int id = *src;
+                    int   id = *src;
                     short t;
 
                     level_or_group_scratch = *(short *)src;
@@ -1216,12 +1234,12 @@ char *load_level_gameplay(int skip_gameplay_read) {
         }
     }
     if (hdr->f4C != 0) {
-        char *q = (char *)hdr + hdr->f4C;
-        char *base = mem;
+        char      *q = (char *)hdr + hdr->f4C;
+        char      *base = mem;
         PvarEntry *tbl;
-        int size;
-        int n;
-        int i;
+        int        size;
+        int        n;
+        int        i;
 
         size = *(int *)q;
         q += 4;
@@ -1248,8 +1266,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     if (hdr->f70 != 0) {
         char *q = (char *)hdr + hdr->f70;
         char *src;
-        int size;
-        int i;
+        int   size;
+        int   i;
 
         D_L00_00160104 = *(int *)q;
         src = q + *(int *)(q + 4);
@@ -1270,9 +1288,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
         char *q = (char *)hdr + hdr->f74;
         char *src;
         char *base;
-        int n;
-        int size;
-        int i;
+        int   n;
+        int   size;
+        int   i;
 
         n = *(int *)q;
         D_L00_0015F710 = n;
@@ -1307,8 +1325,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (hdr->f6C != 0) {
         char *q = (char *)hdr + hdr->f6C;
-        int n = *(int *)q;
-        int i;
+        int   n = *(int *)q;
+        int   i;
 
         D_L00_001600E4 = mem;
         D_L00_001600E8 = n;
@@ -1325,8 +1343,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (hdr->f60 != 0) {
         char *q = (char *)hdr + hdr->f60;
-        int n = *(int *)q;
-        int i;
+        int   n = *(int *)q;
+        int   i;
 
         D_L00_001600EC = mem;
         q += 0x10;
@@ -1343,8 +1361,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (hdr->f64 != 0) {
         char *q = (char *)hdr + hdr->f64;
-        int n = *(int *)q;
-        int i;
+        int   n = *(int *)q;
+        int   i;
 
         D_L00_001600F4 = mem;
         q += 0x10;
@@ -1361,8 +1379,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (hdr->f68 != 0) {
         char *q = (char *)hdr + hdr->f68;
-        int n = *(int *)q;
-        int i;
+        int   n = *(int *)q;
+        int   i;
 
         D_L00_001600FC = mem;
         q += 0x10;
@@ -1379,7 +1397,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (hdr->f84 != 0) {
         char *q = (char *)hdr + hdr->f84;
-        int size = *(int *)q;
+        int   size = *(int *)q;
 
         D_L00_0015EF80 = mem;
         q += 0x10;
@@ -1390,7 +1408,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (hdr->f78 != 0) {
         char *q = (char *)hdr + hdr->f78;
-        int size = *(int *)q;
+        int   size = *(int *)q;
 
         D_L00_0015FBC0 = mem;
         q += 0x10;
@@ -1401,7 +1419,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (hdr->f7C != 0) {
         char *q = (char *)hdr + hdr->f7C;
-        int n = *(int *)q;
+        int   n = *(int *)q;
 
         D_L00_0015FB80 = mem;
         q += 0x10;
@@ -1414,7 +1432,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     }
     if (hdr->f88 != 0) {
         char *q = (char *)hdr + hdr->f88;
-        int n = *(int *)q;
+        int   n = *(int *)q;
 
         D_L00_00160040 = mem;
         D_L00_00160014 = n;
@@ -1468,11 +1486,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
     if (D_L00_0015F600 != 0 && hdr->f8C != 0) {
         int *q = (int *)((char *)hdr + hdr->f8C);
         int *object_mapping_header;
-        int tfrag_mapping_count;
-        int n2;
-        int moby_mapping_count;
-        int bad1 = 1;
-        int bad2;
+        int  tfrag_mapping_count;
+        int  n2;
+        int  moby_mapping_count;
+        int  bad1 = 1;
+        int  bad2;
 
         object_mapping_header = q;
         tfrag_mapping_count = q[0];
@@ -1510,9 +1528,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
         }
         {
             MobyInst *m;
-            int flag = 0;
-            int cnt = 0;
-            int k = 0;
+            int       flag = 0;
+            int       cnt = 0;
+            int       k = 0;
 
             for (m = moby_table; m->f20 != 0xFF; m++) {
                 if (m->f36 != 0x7F80) {
@@ -1560,8 +1578,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
         }
         if (bad2) {
             TieInst *t;
-            int cnt = 0;
-            int k = 0;
+            int      cnt = 0;
+            int      k = 0;
 
             q = &object_mapping_header[tfrag_mapping_count * 2 + 4];
             for (t = D_L00_00160FC0; t != D_L00_00160FC4; t++) {
@@ -1598,8 +1616,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
         g_debug_menu.occlusion_mode = 2;
     } else {
         MobyInst *m;
-        TieInst *t;
-        int i;
+        TieInst  *t;
+        int       i;
 
         debug_print(level_gameplay_no_occlusion_message);
         for (m = moby_table; m != D_L00_0015FFE0; m++) {
@@ -1644,33 +1662,33 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_0015F310 = D_L00_0015F318;
     return mem;
 }
+
 typedef struct {
-    char *f0;     /* 0x00 */
-    s32 *f4;      /* 0x04: level header */
-    char pad8[4];
-    char *fC;     /* 0x0C */
-    char *f10;    /* 0x10 */
-    char *f14;    /* 0x14: base the header's offsets are taken from */
-    char *f18;    /* 0x18 */
-    char *f1C;    /* 0x1C */
+    char *f0; /* 0x00 */
+    s32  *f4; /* 0x04: level header */
+    char  pad8[4];
+    char *fC;  /* 0x0C */
+    char *f10; /* 0x10 */
+    char *f14; /* 0x14: base the header's offsets are taken from */
+    char *f18; /* 0x18 */
+    char *f1C; /* 0x1C */
 } Load244110;
 
 typedef struct {
-    u8 pad0[0x1A];
-    s16 sound;   /* 0x1A */
-    s32 time;    /* 0x1C */
+    u8  pad0[0x1A];
+    s16 sound; /* 0x1A */
+    s32 time;  /* 0x1C */
 } Slot244110;
 
 typedef struct {
-    u8 pad0[0xC];
-    u8 seq_count;   /* 0x0C */
-    u8 count0D;     /* 0x0D */
-    u8 pad0E[0x1A];
+    u8          pad0[0xC];
+    u8          seq_count; /* 0x0C */
+    u8          count0D;   /* 0x0D */
+    u8          pad0E[0x1A];
     Slot244110 *f28; /* 0x28 */
-    u8 pad2C[0x1C];
-    char *seqs[1];  /* 0x48 */
+    u8          pad2C[0x1C];
+    char       *seqs[1]; /* 0x48 */
 } Class244110;
-
 
 typedef struct {
     s16 off;
@@ -1678,58 +1696,64 @@ typedef struct {
 } Span244110;
 
 extern Load244110 D_L00_00173E00_244110 __asm__("D_L00_00173E00");
-extern char *D_L00_00173E40_244110[] __asm__("D_L00_00173E40");
-typedef struct { s16 a; s16 b; s32 *file; } Ldg244110;
+extern char      *D_L00_00173E40_244110[] __asm__("D_L00_00173E40");
+
+typedef struct {
+    s16  a;
+    s16  b;
+    s32 *file;
+} Ldg244110;
+
 extern Ldg244110 D_0015EE48;
-extern u8 D_0014C050[];
-extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
-extern s32 D_L00_0015F40C;
-extern s32 sound_bank_handle __asm__("D_0015ED5C");
+extern u8        D_0014C050[];
+extern u8        mission_state_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
+extern s32       D_L00_0015F40C;
+extern s32       sound_bank_handle __asm__("D_0015ED5C");
+
 #include "rnc/overlay/shared/world/load_level_gameplay_globals.h"
-extern u64 level_texture_128x128_descriptor[3] __asm__("D_L00_001827C0");
-extern u64 level_texture_64x64_descriptor[3] __asm__("D_L00_001827D8");
-extern u64 D_L00_001827F0[3];
-extern s32 tfrag_packed_texture_refs[] __asm__("D_L00_001C4A00");
-extern s32 texture_count __asm__("D_L00_0015FFC8");
-extern u32 D_L00_00199A80[];
-extern s32 tie_packed_texture_refs[] __asm__("D_L00_001C6700");
-extern s32 shrub_packed_texture_refs[] __asm__("D_L00_001BC5B0");
-extern char *D_L00_0015F600_244110 __asm__("D_L00_0015F600");
-extern s32 D_L00_0016051C;
+
+extern u64          level_texture_128x128_descriptor[3] __asm__("D_L00_001827C0");
+extern u64          level_texture_64x64_descriptor[3] __asm__("D_L00_001827D8");
+extern u64          D_L00_001827F0[3];
+extern s32          tfrag_packed_texture_refs[] __asm__("D_L00_001C4A00");
+extern s32          texture_count __asm__("D_L00_0015FFC8");
+extern u32          D_L00_00199A80[];
+extern s32          tie_packed_texture_refs[] __asm__("D_L00_001C6700");
+extern s32          shrub_packed_texture_refs[] __asm__("D_L00_001BC5B0");
+extern char        *D_L00_0015F600_244110 __asm__("D_L00_0015F600");
+extern s32          D_L00_0016051C;
 extern Class244110 *D_L00_00197300[];
-extern s32 D_L00_0016000C;
-extern s32 D_L00_00160010;
-extern s32 moby_reference_class_ids[] __asm__("D_L00_001AFBC0");
-extern char *moby_reference_data_bases[] __asm__("D_L00_001AFC20");
-extern s32 D_L00_001AFC80[];
-typedef int Q244110 __attribute__((mode(TI)));
-extern Q244110 l00_moby_reference_texture_slot_maps[] __asm__("D_L00_001AFCE0");
-extern u8 D_L00_00197BC0[];
-extern char *effect_texture_data_base __asm__("D_L00_0015F420");
-extern s32 D_L00_0015F438;
-extern u32 D_L00_0015F43C;
-extern u32 D_L00_0015F440;
-extern s32 D_L00_0015FC98;
-extern s32 D_L00_0015FC9C;
-extern s32 D_L00_0015FCA0;
-extern s32 D_L00_0015FCA4;
-extern s32 D_L00_0015FCA8;
-extern char *D_L00_0015F604;
-extern Slot244110 *D_L00_0015F5F4;
-extern s32 D_L00_0015F5F0;
-extern s16 D_L00_00197A00[];
-extern u16 moby_reference_sound_ids[][16] __asm__("D_L00_001AFE60");
-extern char D_L00_001E8780[], D_L00_001E87A0[], D_L00_001E87D0[], D_L00_001E87E8[],
-    D_L00_001E8800[], D_L00_001E8818[], D_L00_001E8830[], D_L00_001E8848[],
-    D_L00_001E8860[], D_L00_001E8878[], D_L00_001E8890[], D_L00_001E88B0[],
-    D_L00_001E88C8[], D_L00_001E88E0[], D_L00_001E88F8[], D_L00_001E8910[],
-    D_L00_001E8928[], D_L00_001E8940[], D_L00_001E8958[], D_L00_001E8970[],
-    D_L00_001E8988[], D_L00_001E89A0[], D_L00_001E89B8[], D_L00_001E89D0[],
-    D_L00_001E89E8[], D_L00_001E8A00[], D_L00_001E8A18[], D_L00_001E8A30[],
-    D_L00_001E8A48[];
-extern char level_memory_map_newline[] __asm__("D_L00_0015FC80");
-extern char level_code_memory_end[] __asm__("D_L00_002F0CD0");
-extern s32 particle_texture_ranges[] __asm__("D_L00_001B1A80");
+extern s32          D_L00_0016000C;
+extern s32          D_L00_00160010;
+extern s32          moby_reference_class_ids[] __asm__("D_L00_001AFBC0");
+extern char        *moby_reference_data_bases[] __asm__("D_L00_001AFC20");
+extern s32          D_L00_001AFC80[];
+typedef int         Q244110 __attribute__((mode(TI)));
+extern Q244110      l00_moby_reference_texture_slot_maps[] __asm__("D_L00_001AFCE0");
+extern u8           D_L00_00197BC0[];
+extern char        *effect_texture_data_base __asm__("D_L00_0015F420");
+extern s32          D_L00_0015F438;
+extern u32          D_L00_0015F43C;
+extern u32          D_L00_0015F440;
+extern s32          D_L00_0015FC98;
+extern s32          D_L00_0015FC9C;
+extern s32          D_L00_0015FCA0;
+extern s32          D_L00_0015FCA4;
+extern s32          D_L00_0015FCA8;
+extern char        *D_L00_0015F604;
+extern Slot244110  *D_L00_0015F5F4;
+extern s32          D_L00_0015F5F0;
+extern s16          D_L00_00197A00[];
+extern u16          moby_reference_sound_ids[][16] __asm__("D_L00_001AFE60");
+extern char         D_L00_001E8780[], D_L00_001E87A0[], D_L00_001E87D0[], D_L00_001E87E8[],
+    D_L00_001E8800[], D_L00_001E8818[], D_L00_001E8830[], D_L00_001E8848[], D_L00_001E8860[],
+    D_L00_001E8878[], D_L00_001E8890[], D_L00_001E88B0[], D_L00_001E88C8[], D_L00_001E88E0[],
+    D_L00_001E88F8[], D_L00_001E8910[], D_L00_001E8928[], D_L00_001E8940[], D_L00_001E8958[],
+    D_L00_001E8970[], D_L00_001E8988[], D_L00_001E89A0[], D_L00_001E89B8[], D_L00_001E89D0[],
+    D_L00_001E89E8[], D_L00_001E8A00[], D_L00_001E8A18[], D_L00_001E8A30[], D_L00_001E8A48[];
+extern char  level_memory_map_newline[] __asm__("D_L00_0015FC80");
+extern char  level_code_memory_end[] __asm__("D_L00_002F0CD0");
+extern s32   particle_texture_ranges[] __asm__("D_L00_001B1A80");
 extern char *D_L00_001C5800_244110[] __asm__("D_L00_001C5800");
 extern char *D_L00_001BC030_244110[] __asm__("D_L00_001BC030");
 extern char *D_L00_00160FC0_244110 __asm__("D_L00_00160FC0");
@@ -1737,25 +1761,31 @@ extern char *D_L00_00160494_244110 __asm__("D_L00_00160494");
 extern char *D_L00_0015FFE8;
 extern char *D_L00_00160108;
 extern char *D_L00_0016016C;
-extern s32 D_0014EE90[16];
-typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una244110;
-extern u8 D_L00_00179100[];
+extern s32   D_0014EE90[16];
+
+typedef struct {
+    u8  pad[0x10];
+    u32 v __attribute__((packed, aligned(1)));
+} Una244110;
+
+extern u8  D_L00_00179100[];
 extern s32 game_frame __asm__("D_L00_0015F5CC");
 
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
 extern void register_object_render_class(char *, void *, void *, s32) __asm__("FUN_00203730");
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
-extern void register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00203b08");
-extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
-extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
+extern void
+register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00203b08");
+extern void  parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
+extern void  fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *FUN_L00_00241940_244110(s32) __asm__("FUN_L00_00241940");
-extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
+extern void  restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 
-#define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld) \
-    ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) \
-     | ((u64)(th) << 30) | ((u64)(tcc) << 34) | ((u64)(tfx) << 35) | ((u64)(cbp) << 37) \
-     | ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
+#define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld)             \
+    ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) |        \
+     ((u64)(th) << 30) | ((u64)(tcc) << 34) | ((u64)(tfx) << 35) | ((u64)(cbp) << 37) | \
+     ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
 #define KB(x) (convert_integer_to_float((s32)(x)) * (1.0f / 1024.0f))
 
 /* Reads the level's core data. Its index lists the object classes:
@@ -1772,80 +1802,128 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) __asm__("FUN_L00_00244110
 
 s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
     Load244110 *ld = &D_L00_00173E00_244110;
-    s32 *core_header = ld->f4;
-    s32 *level_file_base = D_0015EE48.file;
-    char *base;
-    s32 used;
-    char *sound_reference_cursor;
-    char *free;
-    char *end;
+    s32        *core_header = ld->f4;
+    s32        *level_file_base = D_0015EE48.file;
+    char       *base;
+    s32         used;
+    char       *sound_reference_cursor;
+    char       *free;
+    char       *end;
     Span244110 *span;
     TextureRef *moby_texture_refs;
     TextureRef *tfrag_texture_refs;
     TextureRef *tie_texture_refs;
     TextureRef *shrub_texture_refs;
-    char *sound_table_base;
-    s32 i;
-    s32 j;
-    s32 sound_slot_count;
-    s32 k;
-    s32 tfrag_texture_ref_index, moby_texture_ref_index, tie_texture_ref_index, shrub_texture_ref_index;
-    s32 moby_class_reference_index;
+    char       *sound_table_base;
+    s32         i;
+    s32         j;
+    s32         sound_slot_count;
+    s32         k;
+    s32         tfrag_texture_ref_index, moby_texture_ref_index, tie_texture_ref_index,
+        shrub_texture_ref_index;
+    s32   moby_class_reference_index;
     char *sequence_offset_cursor;
-    s32 sq;
+    s32   sq;
     char *sp;
     char *moby_class_reference_cursor;
-    s32 z;
-    s32 ci;
+    s32   z;
+    s32   ci;
     char *x;
     char *y;
-    s32 a1, a2, sound_slot_index;
+    s32   a1, a2, sound_slot_index;
     char *q1, *class_entry_cursor;
-    u64 *t;
+    u64  *t;
 
     if (full)
         load_hud_banks();
     base = ld->f14;
     if (full) {
-        fast_mem_copy(core_header, (char *)(level_file_base[4] + (s32)level_file_base), level_file_base[5]);
+        fast_mem_copy(
+            core_header, (char *)(level_file_base[4] + (s32)level_file_base), level_file_base[5]);
         D_L00_0015F40C = 0;
         copy_memory_aligned(mission_state_macro, D_0014C050 + current_level_index * 16, 0x10);
-        upload_texture_images((char *)(level_file_base[6] + (s32)level_file_base), core_header[0], (char *)core_header + core_header[1]);
+        upload_texture_images((char *)(level_file_base[6] + (s32)level_file_base),
+                              core_header[0],
+                              (char *)core_header + core_header[1]);
         saved_sound_bank_handle = sound_bank_handle;
         flush_cache(0);
         used = fast_decompress((char *)(level_file_base[0x14] + (s32)level_file_base), base);
         D_L00_0015F40C = (s32)(base + core_header[0x18]);
 
-        level_texture_128x128_descriptor[0] = GS_TEX0((gs_texture_allocation_base + core_header[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
-            (gs_texture_allocation_base + core_header[0x25]) >> 8, 0, 0, 0, 4);
+        level_texture_128x128_descriptor[0] =
+            GS_TEX0((gs_texture_allocation_base + core_header[0x24]) >> 8,
+                    2,
+                    0x13,
+                    7,
+                    7,
+                    1,
+                    0,
+                    (gs_texture_allocation_base + core_header[0x25]) >> 8,
+                    0,
+                    0,
+                    0,
+                    4);
         level_texture_128x128_descriptor[1] = 0x0000FFA0000000E0;
         level_texture_128x128_descriptor[2] = 0x0040000400004000;
-        level_texture_64x64_descriptor[0] = GS_TEX0((gs_texture_allocation_base + core_header[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
-            (gs_texture_allocation_base + core_header[0x27]) >> 8, 0, 0, 0, 4);
+        level_texture_64x64_descriptor[0] =
+            GS_TEX0((gs_texture_allocation_base + core_header[0x26]) >> 8,
+                    1,
+                    0x13,
+                    6,
+                    6,
+                    1,
+                    0,
+                    (gs_texture_allocation_base + core_header[0x27]) >> 8,
+                    0,
+                    0,
+                    0,
+                    4);
         level_texture_64x64_descriptor[1] = 0x0000FFA0000000E0;
         level_texture_64x64_descriptor[2] = 0x0040000400004000;
-        D_L00_001827F0[0] = GS_TEX0((gs_texture_allocation_base + core_header[0x30]) >> 8, 2, 0x13, 7, 7, 1, 0,
-            (gs_texture_allocation_base + core_header[0x31]) >> 8, 0, 0, 0, 4);
+        D_L00_001827F0[0] = GS_TEX0((gs_texture_allocation_base + core_header[0x30]) >> 8,
+                                    2,
+                                    0x13,
+                                    7,
+                                    7,
+                                    1,
+                                    0,
+                                    (gs_texture_allocation_base + core_header[0x31]) >> 8,
+                                    0,
+                                    0,
+                                    0,
+                                    4);
         D_L00_001827F0[1] = 0x0000FFA0000000E0;
         D_L00_001827F0[2] = 0x0040000400004000;
 
         tfrag_texture_refs = (TextureRef *)((char *)core_header + core_header[0xD]);
         tfrag_texture_ref_count = core_header[0xC];
-        for (tfrag_texture_ref_index = 0; tfrag_texture_ref_index < tfrag_texture_ref_count; tfrag_texture_ref_index++)
-            tfrag_packed_texture_refs[tfrag_texture_ref_index] = D_L00_0015F40C + tfrag_texture_refs[tfrag_texture_ref_index].offset + (log2dim(tfrag_texture_refs[tfrag_texture_ref_index].kind) << 28);
+        for (tfrag_texture_ref_index = 0; tfrag_texture_ref_index < tfrag_texture_ref_count;
+             tfrag_texture_ref_index++)
+            tfrag_packed_texture_refs[tfrag_texture_ref_index] =
+                D_L00_0015F40C + tfrag_texture_refs[tfrag_texture_ref_index].offset +
+                (log2dim(tfrag_texture_refs[tfrag_texture_ref_index].kind) << 28);
         moby_texture_refs = (TextureRef *)((char *)core_header + core_header[0xF]);
         texture_count = core_header[0xE];
-        for (moby_texture_ref_index = 0; moby_texture_ref_index < texture_count; moby_texture_ref_index++)
-            D_L00_00199A80[moby_texture_ref_index] = D_L00_0015F40C + moby_texture_refs[moby_texture_ref_index].offset + (log2dim(moby_texture_refs[moby_texture_ref_index].kind) << 28);
+        for (moby_texture_ref_index = 0; moby_texture_ref_index < texture_count;
+             moby_texture_ref_index++)
+            D_L00_00199A80[moby_texture_ref_index] =
+                D_L00_0015F40C + moby_texture_refs[moby_texture_ref_index].offset +
+                (log2dim(moby_texture_refs[moby_texture_ref_index].kind) << 28);
         fast_mem_copy(moby_texture_table, moby_texture_refs, texture_count * 16);
         tie_texture_refs = (TextureRef *)((char *)core_header + core_header[0x11]);
         tie_texture_ref_count = core_header[0x10];
-        for (tie_texture_ref_index = 0; tie_texture_ref_index < tie_texture_ref_count; tie_texture_ref_index++)
-            tie_packed_texture_refs[tie_texture_ref_index] = D_L00_0015F40C + tie_texture_refs[tie_texture_ref_index].offset + (log2dim(tie_texture_refs[tie_texture_ref_index].kind) << 28);
+        for (tie_texture_ref_index = 0; tie_texture_ref_index < tie_texture_ref_count;
+             tie_texture_ref_index++)
+            tie_packed_texture_refs[tie_texture_ref_index] =
+                D_L00_0015F40C + tie_texture_refs[tie_texture_ref_index].offset +
+                (log2dim(tie_texture_refs[tie_texture_ref_index].kind) << 28);
         shrub_texture_refs = (TextureRef *)((char *)core_header + core_header[0x13]);
         shrub_texture_ref_count = core_header[0x12];
-        for (shrub_texture_ref_index = 0; shrub_texture_ref_index < shrub_texture_ref_count; shrub_texture_ref_index++)
-            shrub_packed_texture_refs[shrub_texture_ref_index] = D_L00_0015F40C + shrub_texture_refs[shrub_texture_ref_index].offset + (log2dim(shrub_texture_refs[shrub_texture_ref_index].kind) << 28);
+        for (shrub_texture_ref_index = 0; shrub_texture_ref_index < shrub_texture_ref_count;
+             shrub_texture_ref_index++)
+            shrub_packed_texture_refs[shrub_texture_ref_index] =
+                D_L00_0015F40C + shrub_texture_refs[shrub_texture_ref_index].offset +
+                (log2dim(shrub_texture_refs[shrub_texture_ref_index].kind) << 28);
 
         initialize_tfrag_render_data(base + core_header[2], (char *)core_header + core_header[0xD]);
         if (core_header[3])
@@ -1857,10 +1935,16 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         else
             D_L00_0016051C = 0;
         resolve_level_asset_block_pointers(base + core_header[5]);
-        for (i = 0, class_entry_cursor = (char *)core_header + core_header[7]; i < core_header[6]; i++, class_entry_cursor += 0x20)
-            register_moby_class(*(s32 *)class_entry_cursor ? base + *(s32 *)class_entry_cursor : 0, (char *)core_header + core_header[0xF], class_entry_cursor + 0x10, *(s32 *)(class_entry_cursor + 4));
+        for (i = 0, class_entry_cursor = (char *)core_header + core_header[7]; i < core_header[6];
+             i++, class_entry_cursor += 0x20)
+            register_moby_class(*(s32 *)class_entry_cursor ? base + *(s32 *)class_entry_cursor : 0,
+                                (char *)core_header + core_header[0xF],
+                                class_entry_cursor + 0x10,
+                                *(s32 *)(class_entry_cursor + 4));
         print_moby_class_sizes((int *)((char *)core_header + core_header[7]), core_header[7]);
-        for (sq = 0, sequence_offset_cursor = (char *)core_header + core_header[0x1E]; sq < D_L00_00197300[0]->seq_count; sq++, sequence_offset_cursor += 4) {
+        for (sq = 0, sequence_offset_cursor = (char *)core_header + core_header[0x1E];
+             sq < D_L00_00197300[0]->seq_count;
+             sq++, sequence_offset_cursor += 4) {
             if (*(s32 *)sequence_offset_cursor) {
                 D_L00_00197300[0]->seqs[sq] = base + *(s32 *)sequence_offset_cursor;
                 relocate_asset_entry_pointers(D_L00_00197300[0], sq);
@@ -1870,18 +1954,34 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         moby_class_reference_cursor = (char *)core_header + core_header[0x21];
         D_L00_00160010 = 0;
         moby_class_reference_count = core_header[0x20];
-        for (moby_class_reference_index = 0; moby_class_reference_index < core_header[0x20]; moby_class_reference_index++, moby_class_reference_cursor += 0x10) {
-            moby_reference_class_ids[moby_class_reference_index] = *(s32 *)(moby_class_reference_cursor + 4);
-            moby_reference_data_bases[moby_class_reference_index] = base + *(s32 *)moby_class_reference_cursor;
+        for (moby_class_reference_index = 0; moby_class_reference_index < core_header[0x20];
+             moby_class_reference_index++, moby_class_reference_cursor += 0x10) {
+            moby_reference_class_ids[moby_class_reference_index] =
+                *(s32 *)(moby_class_reference_cursor + 4);
+            moby_reference_data_bases[moby_class_reference_index] =
+                base + *(s32 *)moby_class_reference_cursor;
             D_L00_001AFC80[moby_class_reference_index] = *(s32 *)(moby_class_reference_cursor + 8);
-            { s32 o = D_L00_00197BC0[*(s32 *)(moby_class_reference_cursor + 4)] * 32 + 0x10;
-            qcopy(&l00_moby_reference_texture_slot_maps[moby_class_reference_index], (char *)core_header + core_header[7] + o); }
+            {
+                s32 o = D_L00_00197BC0[*(s32 *)(moby_class_reference_cursor + 4)] * 32 + 0x10;
+                qcopy(&l00_moby_reference_texture_slot_maps[moby_class_reference_index],
+                      (char *)core_header + core_header[7] + o);
+            }
         }
-        for (i = 0, class_entry_cursor = (char *)core_header + core_header[9]; i < core_header[8]; i++, class_entry_cursor += 0x20)
-            register_object_render_class(base + *(s32 *)class_entry_cursor, (char *)core_header + core_header[0x11], class_entry_cursor + 0x10, *(s32 *)(class_entry_cursor + 4));
+        for (i = 0, class_entry_cursor = (char *)core_header + core_header[9]; i < core_header[8];
+             i++, class_entry_cursor += 0x20)
+            register_object_render_class(base + *(s32 *)class_entry_cursor,
+                                         (char *)core_header + core_header[0x11],
+                                         class_entry_cursor + 0x10,
+                                         *(s32 *)(class_entry_cursor + 4));
         noop_main_callback((char *)core_header + core_header[9], core_header[8]);
-        for (i = 0, class_entry_cursor = (char *)core_header + core_header[0xB]; i < core_header[0xA]; i++, class_entry_cursor += 0x30)
-            register_shrub_render_class(base + *(s32 *)class_entry_cursor, (char *)core_header + core_header[0x13], class_entry_cursor + 0x10, class_entry_cursor + 0x20, *(s32 *)(class_entry_cursor + 4));
+        for (i = 0, class_entry_cursor = (char *)core_header + core_header[0xB];
+             i < core_header[0xA];
+             i++, class_entry_cursor += 0x30)
+            register_shrub_render_class(base + *(s32 *)class_entry_cursor,
+                                        (char *)core_header + core_header[0x13],
+                                        class_entry_cursor + 0x10,
+                                        class_entry_cursor + 0x20,
+                                        *(s32 *)(class_entry_cursor + 4));
         effect_texture_data_base = base + core_header[0x1A];
         unpack_point_records((char *)core_header + core_header[0x17], core_header[0x16]);
         if (core_header[0x28]) {
@@ -1907,7 +2007,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         {
             char *x1 = base + core_header[0x19];
             char *x2 = (char *)core_header + core_header[0x15];
-            parse_particle_textures((char *)core_header + core_header[0x1B], x1, x2, core_header[0x14]);
+            parse_particle_textures(
+                (char *)core_header + core_header[0x1B], x1, x2, core_header[0x14]);
         }
 
         sound_table_base = (char *)core_header + core_header[0x1C];
@@ -1925,7 +2026,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
                 debug_print(D_L00_001E8780);
                 D_L00_0015F5F4[sound_slot_index].sound = -1;
             } else {
-                D_L00_0015F5F4[sound_slot_index].sound = *(u16 *)(sound_reference_cursor + D_L00_0015F5F4[sound_slot_index].sound * 4);
+                D_L00_0015F5F4[sound_slot_index].sound =
+                    *(u16 *)(sound_reference_cursor + D_L00_0015F5F4[sound_slot_index].sound * 4);
             }
             D_L00_0015F5F4[sound_slot_index].time = sound_bank_handle;
         }
@@ -1953,7 +2055,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
                 }
             }
         }
-        D_L00_00173E00_244110.f18 = load_level_texture_bank((char *)((u32)end & ~0x3F), core_header);
+        D_L00_00173E00_244110.f18 =
+            load_level_texture_bank((char *)((u32)end & ~0x3F), core_header);
     }
     D_L00_00173E00_244110.f1C = FUN_L00_00241940_244110(full);
     if (full) {
@@ -1982,7 +2085,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
             debug_print(D_L00_001E88C8, KB(D_L00_00173E40_244110[0] - (char *)D_L00_0016051C));
         debug_print(D_L00_001E88E0, KB(D_L00_0015F40C - (s32)D_L00_00173E40_244110[0]));
         debug_print(D_L00_001E88F8, KB((particle_texture_ranges[1] >> 4) - D_L00_0015F40C));
-        debug_print(D_L00_001E8910, KB((s32)effect_texture_data_base - (particle_texture_ranges[1] >> 4)));
+        debug_print(D_L00_001E8910,
+                    KB((s32)effect_texture_data_base - (particle_texture_ranges[1] >> 4)));
         debug_print(D_L00_001E8928, KB((char *)D_L00_00197300[0] - effect_texture_data_base));
         debug_print(D_L00_001E8940, KB(D_L00_001C5800_244110[0] - (char *)D_L00_00197300[0]));
         if (core_header[0xA])
@@ -1999,11 +2103,14 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         debug_print(D_L00_001E8A00, KB(D_L00_0016016C - D_L00_00160108));
         debug_print(D_L00_001E8A18, 128.0);
         debug_print(level_memory_map_newline);
-        debug_print(D_L00_001E8A30, convert_integer_to_float((s32)D_L00_0016016C + 0x20000) * (1.0f / 1048576.0f));
+        debug_print(D_L00_001E8A30,
+                    convert_integer_to_float((s32)D_L00_0016016C + 0x20000) * (1.0f / 1048576.0f));
         debug_print(level_memory_map_newline);
         {
             char *lo = D_L00_00173E00_244110.f0 - 0x2D0000;
-            debug_print(D_L00_001E8A48, convert_integer_to_float(D_L00_00173E00_244110.f1C - lo) * (1.0f / 1048576.0f));
+            debug_print(D_L00_001E8A48,
+                        convert_integer_to_float(D_L00_00173E00_244110.f1C - lo) *
+                            (1.0f / 1048576.0f));
         }
         debug_print(level_memory_map_newline);
     }
@@ -2019,27 +2126,32 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
     game_frame++;
     return 0;
 }
+
 struct StreamLoader {
-    u8 pad0[0x30];
-    s32 list;                   /* 0x30 */
-    u8 pad34[0x28];
-    u8 *buf;                    /* 0x5C */
+    u8  pad0[0x30];
+    s32 list; /* 0x30 */
+    u8  pad34[0x28];
+    u8 *buf; /* 0x5C */
 };
+
 extern struct StreamLoader D_L00_0016C860;
-extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
+extern void                update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 
 /* streams entry i of the current sector list into the loader buffer */
 s32 start_cutscene_chunk_read(s32 i) __asm__("FUN_L00_002451b8");
+
 s32 start_cutscene_chunk_read(s32 i) {
     u8 *buf = D_L00_0016C860.buf;
     s32 start;
     s32 size;
 
     if (pal_mode != 0) {
-        size = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i + 1] - disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
+        size = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i + 1] -
+               disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
         start = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
     } else {
-        size = disc_table.sector_lists[D_L00_0016C860.list].sectors[i + 1] - disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
+        size = disc_table.sector_lists[D_L00_0016C860.list].sectors[i + 1] -
+               disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
         start = disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
     }
     if (size > 0) {
@@ -2050,1057 +2162,1170 @@ s32 start_cutscene_chunk_read(s32 i) {
 }
 
 s64 D_L01_00182C60[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L01_00182C68[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L01_00182C78[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_0017441C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L02_00182DE0[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L02_00182DE8[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L02_00182DF8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_001B0220[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_001B0280[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L03_00173F1C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L03_001828E0[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L03_001828E8[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L03_001828F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L04_00173F9C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L04_00182960[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L04_00182968[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L04_00182978[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_0017421C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L05_00182C60[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L05_00182C68[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L05_00182C78[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_0017461C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L08_00182FE0[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L08_00182FE8[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L08_00182FF8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_001B0420[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_001B0480[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L09_00173F9C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L09_00182960[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L09_00182968[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L09_00182978[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L10_0017429C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L10_00182C60[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L10_00182C68[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L10_00182C78[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L11_001831E0[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L11_001831E8[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L11_001831F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_001B0620[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_001B0680[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_0017429C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L12_00182C60[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L12_00182C68[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L12_00182C78[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L13_0017411C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L13_00182AE0[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L13_00182AE8[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L13_00182AF8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_0017451C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L14_00182EE0[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L14_00182EE8[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L14_00182EF8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_001B0320[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_001B0380[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_0017441C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L15_00182DE0[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L15_00182DE8[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L15_00182DF8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_001B0220[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_001B0280[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_0017421C[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L16_00182C60[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L16_00182C68[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L16_00182C78[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L17_001830E0[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L17_001830E8[1] __attribute__((section(".data"))) = {0};
+
 s64 D_L17_001830F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_001B0520[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_001B0580[1] __attribute__((section(".data"))) = {0};
 
-Tbl *D_L01_0015F618 = 0;
-int D_L01_001600E8 = 0;
-int D_L01_001600F0 = 0;
-int D_L01_001600F8 = 0;
-int D_L01_00160100 = 0;
-char *D_L01_0015FBC0 = 0;
-char *D_L01_0015FB80 = 0;
-int D_L01_0015FB50 = 0;
-char *D_L01_00160040 = 0;
-int D_L01_00160014 = 0;
-ShrubClass *D_L01_001BC4B0 NOT_SDA = 0;
-ShrubInst *D_L01_00160494 = 0;
-ShrubInst *D_L01_00160498 = 0;
-ShrubMatrix *D_L01_0016049C = 0;
-TextTable *D_L01_0015F660 = 0;
-Tfrag *D_L01_00160F4C = 0;
-TieClass *D_L01_001C5C80 NOT_SDA = 0;
-TieInst *D_L01_00160FC0 = 0;
-TieInst *D_L01_00160FC4 = 0;
-TieMatrix *D_L01_00160FC8 = 0;
-char *D_L01_001600E4 = 0;
-char *D_L01_00160108 = 0;
-char *D_L01_0015F318 = 0;
-char D_L01_0016CC30 NOT_SDA = 0;
-char D_L01_00174380 NOT_SDA = 0;
-char D_L01_0017F140 NOT_SDA = 0;
-char D_L01_0019BC60 NOT_SDA = 0;
-char D_L01_001ABC60 NOT_SDA = 0;
-char D_L01_001B1D00 NOT_SDA = 0;
-float D_L01_001604A4 = 0;
-float D_L01_00160F80 = 0;
-float D_L01_00160FE0 = 0;
-int D_L01_0015EF54 = 0;
-int D_L01_0015FBC4 = 0;
-int D_L01_0015FFF0 = 0;
-int D_L01_00160104 = 0;
-int D_L01_00160170 = 0;
-int D_L01_00160174 = 0;
-int D_L01_00160178 = 0;
-int D_L01_0016017C = 0;
-int D_L01_00160490 = 0;
-int D_L01_00160F50 = 0;
-int D_L01_00160FCC = 0;
-unsigned char *D_L01_001604A0 = 0;
+Tbl                         *D_L01_0015F618 = 0;
+int                          D_L01_001600E8 = 0;
+int                          D_L01_001600F0 = 0;
+int                          D_L01_001600F8 = 0;
+int                          D_L01_00160100 = 0;
+char                        *D_L01_0015FBC0 = 0;
+char                        *D_L01_0015FB80 = 0;
+int                          D_L01_0015FB50 = 0;
+char                        *D_L01_00160040 = 0;
+int                          D_L01_00160014 = 0;
+ShrubClass *D_L01_001BC4B0   NOT_SDA = 0;
+ShrubInst                   *D_L01_00160494 = 0;
+ShrubInst                   *D_L01_00160498 = 0;
+ShrubMatrix                 *D_L01_0016049C = 0;
+TextTable                   *D_L01_0015F660 = 0;
+Tfrag                       *D_L01_00160F4C = 0;
+TieClass *D_L01_001C5C80     NOT_SDA = 0;
+TieInst                     *D_L01_00160FC0 = 0;
+TieInst                     *D_L01_00160FC4 = 0;
+TieMatrix                   *D_L01_00160FC8 = 0;
+char                        *D_L01_001600E4 = 0;
+char                        *D_L01_00160108 = 0;
+char                        *D_L01_0015F318 = 0;
+char D_L01_0016CC30          NOT_SDA = 0;
+char D_L01_00174380          NOT_SDA = 0;
+char D_L01_0017F140          NOT_SDA = 0;
+char D_L01_0019BC60          NOT_SDA = 0;
+char D_L01_001ABC60          NOT_SDA = 0;
+char D_L01_001B1D00          NOT_SDA = 0;
+float                        D_L01_001604A4 = 0;
+float                        D_L01_00160F80 = 0;
+float                        D_L01_00160FE0 = 0;
+int                          D_L01_0015EF54 = 0;
+int                          D_L01_0015FBC4 = 0;
+int                          D_L01_0015FFF0 = 0;
+int                          D_L01_00160104 = 0;
+int                          D_L01_00160170 = 0;
+int                          D_L01_00160174 = 0;
+int                          D_L01_00160178 = 0;
+int                          D_L01_0016017C = 0;
+int                          D_L01_00160490 = 0;
+int                          D_L01_00160F50 = 0;
+int                          D_L01_00160FCC = 0;
+unsigned char               *D_L01_001604A0 = 0;
 unsigned char D_L01_001BC630 NOT_SDA = 0;
 unsigned char D_L01_001C5F80 NOT_SDA = 0;
-u64 D_L01_00182C40[3] = {0};
+u64                          D_L01_00182C40[3] = {0};
+
 u64 D_L01_00182C58[3] = {0};
+
 u64 D_L01_00182C70[3] = {0};
-s32 D_L01_0015FFC8 = 0;
-u32 D_L01_00199F00 NOT_SDA = 0;
-u8 D_L01_001AF040 NOT_SDA = 0;
-s32 D_L01_00160010 = 0;
-s32 D_L01_001B0100 NOT_SDA = 0;
-char *D_L01_0015F420 = 0;
-char *D_L01_0015F604 = 0;
-s32 D_L01_0015F5F0 = 0;
-char D_L01_002097E0 NOT_SDA = 0x69;
-Tbl *D_L02_0015F618 = 0;
-int D_L02_001600E8 = 0;
-int D_L02_001600F0 = 0;
-int D_L02_001600F8 = 0;
-int D_L02_00160100 = 0;
-char *D_L02_0015FBC0 = 0;
-char *D_L02_0015FB80 = 0;
-int D_L02_0015FB50 = 0;
-char *D_L02_00160040 = 0;
-int D_L02_00160014 = 0;
-ShrubClass *D_L02_001BC630 NOT_SDA = 0;
-ShrubInst *D_L02_00160494 = 0;
-ShrubInst *D_L02_00160498 = 0;
-ShrubMatrix *D_L02_0016049C = 0;
-TextTable *D_L02_0015F660 = 0;
-Tfrag *D_L02_00160F4C = 0;
-TieClass *D_L02_001C5E00 NOT_SDA = 0;
-TieInst *D_L02_00160FC0 = 0;
-TieInst *D_L02_00160FC4 = 0;
-TieMatrix *D_L02_00160FC8 = 0;
-char *D_L02_001600E4 = 0;
-char *D_L02_00160108 = 0;
-char *D_L02_0015F318 = 0;
-char D_L02_0016CDB0 NOT_SDA = 0;
-char D_L02_00174500 NOT_SDA = 0;
-char D_L02_0017F2C0 NOT_SDA = 0;
-char D_L02_0019BDE0 NOT_SDA = 0;
-char D_L02_001ABDE0 NOT_SDA = 0;
-char D_L02_001B1E80 NOT_SDA = 0;
-float D_L02_001604A4 = 0;
-float D_L02_00160F80 = 0;
-float D_L02_00160FE0 = 0;
-int D_L02_0015EF54 = 0;
-int D_L02_0015FBC4 = 0;
-int D_L02_0015FFF0 = 0;
-int D_L02_00160104 = 0;
-int D_L02_00160170 = 0;
-int D_L02_00160174 = 0;
-int D_L02_0016017C = 0;
-int D_L02_00160490 = 0;
-int D_L02_00160F50 = 0;
-int D_L02_00160FCC = 0;
-unsigned char *D_L02_001604A0 = 0;
+
+s32                          D_L01_0015FFC8 = 0;
+u32 D_L01_00199F00           NOT_SDA = 0;
+u8 D_L01_001AF040            NOT_SDA = 0;
+s32                          D_L01_00160010 = 0;
+s32 D_L01_001B0100           NOT_SDA = 0;
+char                        *D_L01_0015F420 = 0;
+char                        *D_L01_0015F604 = 0;
+s32                          D_L01_0015F5F0 = 0;
+char D_L01_002097E0          NOT_SDA = 0x69;
+Tbl                         *D_L02_0015F618 = 0;
+int                          D_L02_001600E8 = 0;
+int                          D_L02_001600F0 = 0;
+int                          D_L02_001600F8 = 0;
+int                          D_L02_00160100 = 0;
+char                        *D_L02_0015FBC0 = 0;
+char                        *D_L02_0015FB80 = 0;
+int                          D_L02_0015FB50 = 0;
+char                        *D_L02_00160040 = 0;
+int                          D_L02_00160014 = 0;
+ShrubClass *D_L02_001BC630   NOT_SDA = 0;
+ShrubInst                   *D_L02_00160494 = 0;
+ShrubInst                   *D_L02_00160498 = 0;
+ShrubMatrix                 *D_L02_0016049C = 0;
+TextTable                   *D_L02_0015F660 = 0;
+Tfrag                       *D_L02_00160F4C = 0;
+TieClass *D_L02_001C5E00     NOT_SDA = 0;
+TieInst                     *D_L02_00160FC0 = 0;
+TieInst                     *D_L02_00160FC4 = 0;
+TieMatrix                   *D_L02_00160FC8 = 0;
+char                        *D_L02_001600E4 = 0;
+char                        *D_L02_00160108 = 0;
+char                        *D_L02_0015F318 = 0;
+char D_L02_0016CDB0          NOT_SDA = 0;
+char D_L02_00174500          NOT_SDA = 0;
+char D_L02_0017F2C0          NOT_SDA = 0;
+char D_L02_0019BDE0          NOT_SDA = 0;
+char D_L02_001ABDE0          NOT_SDA = 0;
+char D_L02_001B1E80          NOT_SDA = 0;
+float                        D_L02_001604A4 = 0;
+float                        D_L02_00160F80 = 0;
+float                        D_L02_00160FE0 = 0;
+int                          D_L02_0015EF54 = 0;
+int                          D_L02_0015FBC4 = 0;
+int                          D_L02_0015FFF0 = 0;
+int                          D_L02_00160104 = 0;
+int                          D_L02_00160170 = 0;
+int                          D_L02_00160174 = 0;
+int                          D_L02_0016017C = 0;
+int                          D_L02_00160490 = 0;
+int                          D_L02_00160F50 = 0;
+int                          D_L02_00160FCC = 0;
+unsigned char               *D_L02_001604A0 = 0;
 unsigned char D_L02_001BC7B0 NOT_SDA = 0;
 unsigned char D_L02_001C6100 NOT_SDA = 0;
-u64 D_L02_00182DC0[3] = {0};
+u64                          D_L02_00182DC0[3] = {0};
+
 u64 D_L02_00182DD8[3] = {0};
+
 u64 D_L02_00182DF0[3] = {0};
-s32 D_L02_0015FFC8 = 0;
-u32 D_L02_0019A080 NOT_SDA = 0;
-u8 D_L02_001AF1C0 NOT_SDA = 0;
-s32 D_L02_00160010 = 0;
-char *D_L02_0015F604 = 0;
-s32 D_L02_0015F5F0 = 0;
-char D_L02_001F9080 NOT_SDA = 0x69;
-Tbl *D_L03_0015F618 = 0;
-int D_L03_001600E8 = 0;
-int D_L03_001600F0 = 0;
-int D_L03_001600F8 = 0;
-int D_L03_00160100 = 0;
-char *D_L03_0015FBC0 = 0;
-char *D_L03_0015FB80 = 0;
-int D_L03_0015FB50 = 0;
-char *D_L03_00160040 = 0;
-int D_L03_00160014 = 0;
-ShrubClass *D_L03_001BC130 NOT_SDA = 0;
-ShrubInst *D_L03_00160494 = 0;
-ShrubInst *D_L03_00160498 = 0;
-ShrubMatrix *D_L03_0016049C = 0;
-TextTable *D_L03_0015F660 = 0;
-Tfrag *D_L03_00160F4C = 0;
-TieClass *D_L03_001C5900 NOT_SDA = 0;
-TieInst *D_L03_00160FC0 = 0;
-TieInst *D_L03_00160FC4 = 0;
-TieMatrix *D_L03_00160FC8 = 0;
-char *D_L03_001600E4 = 0;
-char *D_L03_00160108 = 0;
-char *D_L03_0015F318 = 0;
-char D_L03_0016C8B0 NOT_SDA = 0;
-char D_L03_00174000 NOT_SDA = 0;
-char D_L03_0017EDC0 NOT_SDA = 0;
-char D_L03_0019B8E0 NOT_SDA = 0;
-char D_L03_001AB8E0 NOT_SDA = 0;
-char D_L03_001B1980 NOT_SDA = 0;
-float D_L03_001604A4 = 0;
-float D_L03_00160F80 = 0;
-float D_L03_00160FE0 = 0;
-int D_L03_0015EF54 = 0;
-int D_L03_0015FBC4 = 0;
-int D_L03_0015FFF0 = 0;
-int D_L03_00160104 = 0;
-int D_L03_00160170 = 0;
-int D_L03_00160174 = 0;
-int D_L03_00160178 = 0;
-int D_L03_0016017C = 0;
-int D_L03_00160490 = 0;
-int D_L03_00160F50 = 0;
-int D_L03_00160FCC = 0;
-unsigned char *D_L03_001604A0 = 0;
+
+s32                          D_L02_0015FFC8 = 0;
+u32 D_L02_0019A080           NOT_SDA = 0;
+u8 D_L02_001AF1C0            NOT_SDA = 0;
+s32                          D_L02_00160010 = 0;
+char                        *D_L02_0015F604 = 0;
+s32                          D_L02_0015F5F0 = 0;
+char D_L02_001F9080          NOT_SDA = 0x69;
+Tbl                         *D_L03_0015F618 = 0;
+int                          D_L03_001600E8 = 0;
+int                          D_L03_001600F0 = 0;
+int                          D_L03_001600F8 = 0;
+int                          D_L03_00160100 = 0;
+char                        *D_L03_0015FBC0 = 0;
+char                        *D_L03_0015FB80 = 0;
+int                          D_L03_0015FB50 = 0;
+char                        *D_L03_00160040 = 0;
+int                          D_L03_00160014 = 0;
+ShrubClass *D_L03_001BC130   NOT_SDA = 0;
+ShrubInst                   *D_L03_00160494 = 0;
+ShrubInst                   *D_L03_00160498 = 0;
+ShrubMatrix                 *D_L03_0016049C = 0;
+TextTable                   *D_L03_0015F660 = 0;
+Tfrag                       *D_L03_00160F4C = 0;
+TieClass *D_L03_001C5900     NOT_SDA = 0;
+TieInst                     *D_L03_00160FC0 = 0;
+TieInst                     *D_L03_00160FC4 = 0;
+TieMatrix                   *D_L03_00160FC8 = 0;
+char                        *D_L03_001600E4 = 0;
+char                        *D_L03_00160108 = 0;
+char                        *D_L03_0015F318 = 0;
+char D_L03_0016C8B0          NOT_SDA = 0;
+char D_L03_00174000          NOT_SDA = 0;
+char D_L03_0017EDC0          NOT_SDA = 0;
+char D_L03_0019B8E0          NOT_SDA = 0;
+char D_L03_001AB8E0          NOT_SDA = 0;
+char D_L03_001B1980          NOT_SDA = 0;
+float                        D_L03_001604A4 = 0;
+float                        D_L03_00160F80 = 0;
+float                        D_L03_00160FE0 = 0;
+int                          D_L03_0015EF54 = 0;
+int                          D_L03_0015FBC4 = 0;
+int                          D_L03_0015FFF0 = 0;
+int                          D_L03_00160104 = 0;
+int                          D_L03_00160170 = 0;
+int                          D_L03_00160174 = 0;
+int                          D_L03_00160178 = 0;
+int                          D_L03_0016017C = 0;
+int                          D_L03_00160490 = 0;
+int                          D_L03_00160F50 = 0;
+int                          D_L03_00160FCC = 0;
+unsigned char               *D_L03_001604A0 = 0;
 unsigned char D_L03_001BC2B0 NOT_SDA = 0;
 unsigned char D_L03_001C5C00 NOT_SDA = 0;
-u64 D_L03_001828C0[3] = {0};
+u64                          D_L03_001828C0[3] = {0};
+
 u64 D_L03_001828D8[3] = {0};
+
 u64 D_L03_001828F0[3] = {0};
-s32 D_L03_0015FFC8 = 0;
-u32 D_L03_00199B80 NOT_SDA = 0;
-u8 D_L03_001AECC0 NOT_SDA = 0;
-s32 D_L03_00160010 = 0;
-s32 D_L03_001AFD80 NOT_SDA = 0;
-char *D_L03_0015F604 = 0;
-s32 D_L03_0015F5F0 = 0;
-char D_L03_001E1400 NOT_SDA = 0x69;
-Tbl *D_L04_0015F618 = 0;
-int D_L04_001600E8 = 0;
-int D_L04_001600F0 = 0;
-int D_L04_001600F8 = 0;
-int D_L04_00160100 = 0;
-char *D_L04_0015FBC0 = 0;
-char *D_L04_0015FB80 = 0;
-int D_L04_0015FB50 = 0;
-char *D_L04_00160040 = 0;
-int D_L04_00160014 = 0;
-ShrubClass *D_L04_001BC1B0 NOT_SDA = 0;
-ShrubInst *D_L04_00160494 = 0;
-ShrubInst *D_L04_00160498 = 0;
-ShrubMatrix *D_L04_0016049C = 0;
-TextTable *D_L04_0015F660 = 0;
-Tfrag *D_L04_00160F4C = 0;
-TieClass *D_L04_001C5980 NOT_SDA = 0;
-TieInst *D_L04_00160FC0 = 0;
-TieInst *D_L04_00160FC4 = 0;
-TieMatrix *D_L04_00160FC8 = 0;
-char *D_L04_001600E4 = 0;
-char *D_L04_00160108 = 0;
-char *D_L04_0015F318 = 0;
-char D_L04_0016C930 NOT_SDA = 0;
-char D_L04_00174080 NOT_SDA = 0;
-char D_L04_0017EE40 NOT_SDA = 0;
-char D_L04_0019B960 NOT_SDA = 0;
-char D_L04_001AB960 NOT_SDA = 0;
-char D_L04_001B1A00 NOT_SDA = 0;
-float D_L04_001604A4 = 0;
-float D_L04_00160F80 = 0;
-float D_L04_00160FE0 = 0;
-int D_L04_0015EF54 = 0;
-int D_L04_0015FBC4 = 0;
-int D_L04_0015FFF0 = 0;
-int D_L04_00160104 = 0;
-int D_L04_00160170 = 0;
-int D_L04_00160174 = 0;
-int D_L04_00160178 = 0;
-int D_L04_0016017C = 0;
-int D_L04_00160490 = 0;
-int D_L04_00160F50 = 0;
-int D_L04_00160FCC = 0;
-unsigned char *D_L04_001604A0 = 0;
+
+s32                          D_L03_0015FFC8 = 0;
+u32 D_L03_00199B80           NOT_SDA = 0;
+u8 D_L03_001AECC0            NOT_SDA = 0;
+s32                          D_L03_00160010 = 0;
+s32 D_L03_001AFD80           NOT_SDA = 0;
+char                        *D_L03_0015F604 = 0;
+s32                          D_L03_0015F5F0 = 0;
+char D_L03_001E1400          NOT_SDA = 0x69;
+Tbl                         *D_L04_0015F618 = 0;
+int                          D_L04_001600E8 = 0;
+int                          D_L04_001600F0 = 0;
+int                          D_L04_001600F8 = 0;
+int                          D_L04_00160100 = 0;
+char                        *D_L04_0015FBC0 = 0;
+char                        *D_L04_0015FB80 = 0;
+int                          D_L04_0015FB50 = 0;
+char                        *D_L04_00160040 = 0;
+int                          D_L04_00160014 = 0;
+ShrubClass *D_L04_001BC1B0   NOT_SDA = 0;
+ShrubInst                   *D_L04_00160494 = 0;
+ShrubInst                   *D_L04_00160498 = 0;
+ShrubMatrix                 *D_L04_0016049C = 0;
+TextTable                   *D_L04_0015F660 = 0;
+Tfrag                       *D_L04_00160F4C = 0;
+TieClass *D_L04_001C5980     NOT_SDA = 0;
+TieInst                     *D_L04_00160FC0 = 0;
+TieInst                     *D_L04_00160FC4 = 0;
+TieMatrix                   *D_L04_00160FC8 = 0;
+char                        *D_L04_001600E4 = 0;
+char                        *D_L04_00160108 = 0;
+char                        *D_L04_0015F318 = 0;
+char D_L04_0016C930          NOT_SDA = 0;
+char D_L04_00174080          NOT_SDA = 0;
+char D_L04_0017EE40          NOT_SDA = 0;
+char D_L04_0019B960          NOT_SDA = 0;
+char D_L04_001AB960          NOT_SDA = 0;
+char D_L04_001B1A00          NOT_SDA = 0;
+float                        D_L04_001604A4 = 0;
+float                        D_L04_00160F80 = 0;
+float                        D_L04_00160FE0 = 0;
+int                          D_L04_0015EF54 = 0;
+int                          D_L04_0015FBC4 = 0;
+int                          D_L04_0015FFF0 = 0;
+int                          D_L04_00160104 = 0;
+int                          D_L04_00160170 = 0;
+int                          D_L04_00160174 = 0;
+int                          D_L04_00160178 = 0;
+int                          D_L04_0016017C = 0;
+int                          D_L04_00160490 = 0;
+int                          D_L04_00160F50 = 0;
+int                          D_L04_00160FCC = 0;
+unsigned char               *D_L04_001604A0 = 0;
 unsigned char D_L04_001BC330 NOT_SDA = 0;
 unsigned char D_L04_001C5C80 NOT_SDA = 0;
-u64 D_L04_00182940[3] = {0};
+u64                          D_L04_00182940[3] = {0};
+
 u64 D_L04_00182958[3] = {0};
+
 u64 D_L04_00182970[3] = {0};
-s32 D_L04_0015FFC8 = 0;
-u32 D_L04_00199C00 NOT_SDA = 0;
-u8 D_L04_001AED40 NOT_SDA = 0;
-s32 D_L04_00160010 = 0;
-s32 D_L04_001AFE00 NOT_SDA = 0;
-char *D_L04_0015F420 = 0;
-char *D_L04_0015F604 = 0;
-s32 D_L04_0015F5F0 = 0;
-char D_L04_001DA520 NOT_SDA = 0x69;
-Tbl *D_L05_0015F618 = 0;
-int D_L05_001600E8 = 0;
-int D_L05_001600F0 = 0;
-int D_L05_001600F8 = 0;
-int D_L05_00160100 = 0;
-char *D_L05_0015FBC0 = 0;
-char *D_L05_0015FB80 = 0;
-int D_L05_0015FB50 = 0;
-char *D_L05_00160040 = 0;
-int D_L05_00160014 = 0;
-ShrubClass *D_L05_001BC4B0 NOT_SDA = 0;
-ShrubInst *D_L05_00160494 = 0;
-ShrubInst *D_L05_00160498 = 0;
-ShrubMatrix *D_L05_0016049C = 0;
-TextTable *D_L05_0015F660 = 0;
-Tfrag *D_L05_00160F4C = 0;
-TieClass *D_L05_001C5C80 NOT_SDA = 0;
-TieInst *D_L05_00160FC0 = 0;
-TieInst *D_L05_00160FC4 = 0;
-TieMatrix *D_L05_00160FC8 = 0;
-char *D_L05_001600E4 = 0;
-char *D_L05_00160108 = 0;
-char *D_L05_0015F318 = 0;
-char D_L05_0016CBB0 NOT_SDA = 0;
-char D_L05_00174300 NOT_SDA = 0;
-char D_L05_0017F140 NOT_SDA = 0;
-char D_L05_0019BC60 NOT_SDA = 0;
-char D_L05_001ABC60 NOT_SDA = 0;
-char D_L05_001B1D00 NOT_SDA = 0;
-float D_L05_001604A4 = 0;
-float D_L05_00160F80 = 0;
-float D_L05_00160FE0 = 0;
-int D_L05_0015EF54 = 0;
-int D_L05_0015FBC4 = 0;
-int D_L05_0015FFF0 = 0;
-int D_L05_00160104 = 0;
-int D_L05_00160170 = 0;
-int D_L05_00160174 = 0;
-int D_L05_00160178 = 0;
-int D_L05_0016017C = 0;
-int D_L05_00160490 = 0;
-int D_L05_00160F50 = 0;
-int D_L05_00160FCC = 0;
-unsigned char *D_L05_001604A0 = 0;
+
+s32                          D_L04_0015FFC8 = 0;
+u32 D_L04_00199C00           NOT_SDA = 0;
+u8 D_L04_001AED40            NOT_SDA = 0;
+s32                          D_L04_00160010 = 0;
+s32 D_L04_001AFE00           NOT_SDA = 0;
+char                        *D_L04_0015F420 = 0;
+char                        *D_L04_0015F604 = 0;
+s32                          D_L04_0015F5F0 = 0;
+char D_L04_001DA520          NOT_SDA = 0x69;
+Tbl                         *D_L05_0015F618 = 0;
+int                          D_L05_001600E8 = 0;
+int                          D_L05_001600F0 = 0;
+int                          D_L05_001600F8 = 0;
+int                          D_L05_00160100 = 0;
+char                        *D_L05_0015FBC0 = 0;
+char                        *D_L05_0015FB80 = 0;
+int                          D_L05_0015FB50 = 0;
+char                        *D_L05_00160040 = 0;
+int                          D_L05_00160014 = 0;
+ShrubClass *D_L05_001BC4B0   NOT_SDA = 0;
+ShrubInst                   *D_L05_00160494 = 0;
+ShrubInst                   *D_L05_00160498 = 0;
+ShrubMatrix                 *D_L05_0016049C = 0;
+TextTable                   *D_L05_0015F660 = 0;
+Tfrag                       *D_L05_00160F4C = 0;
+TieClass *D_L05_001C5C80     NOT_SDA = 0;
+TieInst                     *D_L05_00160FC0 = 0;
+TieInst                     *D_L05_00160FC4 = 0;
+TieMatrix                   *D_L05_00160FC8 = 0;
+char                        *D_L05_001600E4 = 0;
+char                        *D_L05_00160108 = 0;
+char                        *D_L05_0015F318 = 0;
+char D_L05_0016CBB0          NOT_SDA = 0;
+char D_L05_00174300          NOT_SDA = 0;
+char D_L05_0017F140          NOT_SDA = 0;
+char D_L05_0019BC60          NOT_SDA = 0;
+char D_L05_001ABC60          NOT_SDA = 0;
+char D_L05_001B1D00          NOT_SDA = 0;
+float                        D_L05_001604A4 = 0;
+float                        D_L05_00160F80 = 0;
+float                        D_L05_00160FE0 = 0;
+int                          D_L05_0015EF54 = 0;
+int                          D_L05_0015FBC4 = 0;
+int                          D_L05_0015FFF0 = 0;
+int                          D_L05_00160104 = 0;
+int                          D_L05_00160170 = 0;
+int                          D_L05_00160174 = 0;
+int                          D_L05_00160178 = 0;
+int                          D_L05_0016017C = 0;
+int                          D_L05_00160490 = 0;
+int                          D_L05_00160F50 = 0;
+int                          D_L05_00160FCC = 0;
+unsigned char               *D_L05_001604A0 = 0;
 unsigned char D_L05_001BC630 NOT_SDA = 0;
 unsigned char D_L05_001C5F80 NOT_SDA = 0;
-u64 D_L05_00182C40[3] = {0};
+u64                          D_L05_00182C40[3] = {0};
+
 u64 D_L05_00182C58[3] = {0};
+
 u64 D_L05_00182C70[3] = {0};
-s32 D_L05_0015FFC8 = 0;
-u32 D_L05_00199F00 NOT_SDA = 0;
-u8 D_L05_001AF040 NOT_SDA = 0;
-s32 D_L05_00160010 = 0;
-s32 D_L05_001B0100 NOT_SDA = 0;
-char *D_L05_0015F604 = 0;
-s32 D_L05_0015F5F0 = 0;
-char D_L05_00216E90 NOT_SDA = 0x69;
-Tbl *D_L06_0015F618 = 0;
-int D_L06_001600E8 = 0;
-int D_L06_001600F0 = 0;
-int D_L06_001600F8 = 0;
-int D_L06_00160100 = 0;
-char *D_L06_0015FBC0 = 0;
-char *D_L06_0015FB80 = 0;
-int D_L06_0015FB50 = 0;
-char *D_L06_00160040 = 0;
-int D_L06_00160014 = 0;
-ShrubInst *D_L06_00160498 = 0;
-ShrubMatrix *D_L06_0016049C = 0;
-TextTable *D_L06_0015F660 = 0;
-Tfrag *D_L06_00160F4C = 0;
-TieInst *D_L06_00160FC4 = 0;
-TieMatrix *D_L06_00160FC8 = 0;
-char *D_L06_001600E4 = 0;
-char *D_L06_0015F318 = 0;
-char D_L06_0016CF30 NOT_SDA = 0;
-char D_L06_00174680 NOT_SDA = 0;
-char D_L06_0017F440 NOT_SDA = 0;
-char D_L06_0019BF60 NOT_SDA = 0;
-char D_L06_001ABF60 NOT_SDA = 0;
-char D_L06_001B2000 NOT_SDA = 0;
-float D_L06_001604A4 = 0;
-float D_L06_00160F80 = 0;
-float D_L06_00160FE0 = 0;
-int D_L06_0015EF54 = 0;
-int D_L06_0015FBC4 = 0;
-int D_L06_0015FFF0 = 0;
-int D_L06_00160104 = 0;
-int D_L06_00160170 = 0;
-int D_L06_00160174 = 0;
-int D_L06_00160178 = 0;
-int D_L06_0016017C = 0;
-int D_L06_00160490 = 0;
-int D_L06_00160F50 = 0;
-int D_L06_00160FCC = 0;
-unsigned char *D_L06_001604A0 = 0;
+
+s32                          D_L05_0015FFC8 = 0;
+u32 D_L05_00199F00           NOT_SDA = 0;
+u8 D_L05_001AF040            NOT_SDA = 0;
+s32                          D_L05_00160010 = 0;
+s32 D_L05_001B0100           NOT_SDA = 0;
+char                        *D_L05_0015F604 = 0;
+s32                          D_L05_0015F5F0 = 0;
+char D_L05_00216E90          NOT_SDA = 0x69;
+Tbl                         *D_L06_0015F618 = 0;
+int                          D_L06_001600E8 = 0;
+int                          D_L06_001600F0 = 0;
+int                          D_L06_001600F8 = 0;
+int                          D_L06_00160100 = 0;
+char                        *D_L06_0015FBC0 = 0;
+char                        *D_L06_0015FB80 = 0;
+int                          D_L06_0015FB50 = 0;
+char                        *D_L06_00160040 = 0;
+int                          D_L06_00160014 = 0;
+ShrubInst                   *D_L06_00160498 = 0;
+ShrubMatrix                 *D_L06_0016049C = 0;
+TextTable                   *D_L06_0015F660 = 0;
+Tfrag                       *D_L06_00160F4C = 0;
+TieInst                     *D_L06_00160FC4 = 0;
+TieMatrix                   *D_L06_00160FC8 = 0;
+char                        *D_L06_001600E4 = 0;
+char                        *D_L06_0015F318 = 0;
+char D_L06_0016CF30          NOT_SDA = 0;
+char D_L06_00174680          NOT_SDA = 0;
+char D_L06_0017F440          NOT_SDA = 0;
+char D_L06_0019BF60          NOT_SDA = 0;
+char D_L06_001ABF60          NOT_SDA = 0;
+char D_L06_001B2000          NOT_SDA = 0;
+float                        D_L06_001604A4 = 0;
+float                        D_L06_00160F80 = 0;
+float                        D_L06_00160FE0 = 0;
+int                          D_L06_0015EF54 = 0;
+int                          D_L06_0015FBC4 = 0;
+int                          D_L06_0015FFF0 = 0;
+int                          D_L06_00160104 = 0;
+int                          D_L06_00160170 = 0;
+int                          D_L06_00160174 = 0;
+int                          D_L06_00160178 = 0;
+int                          D_L06_0016017C = 0;
+int                          D_L06_00160490 = 0;
+int                          D_L06_00160F50 = 0;
+int                          D_L06_00160FCC = 0;
+unsigned char               *D_L06_001604A0 = 0;
 unsigned char D_L06_001BC930 NOT_SDA = 0;
 unsigned char D_L06_001C6280 NOT_SDA = 0;
-Tbl *D_L07_0015F618 = 0;
-int D_L07_001600E8 = 0;
-int D_L07_001600F0 = 0;
-int D_L07_001600F8 = 0;
-int D_L07_00160100 = 0;
-char *D_L07_0015FBC0 = 0;
-char *D_L07_0015FB80 = 0;
-int D_L07_0015FB50 = 0;
-char *D_L07_00160040 = 0;
-int D_L07_00160014 = 0;
-ShrubInst *D_L07_00160498 = 0;
-ShrubMatrix *D_L07_0016049C = 0;
-TextTable *D_L07_0015F660 = 0;
-Tfrag *D_L07_00160F4C = 0;
-TieInst *D_L07_00160FC4 = 0;
-TieMatrix *D_L07_00160FC8 = 0;
-char *D_L07_001600E4 = 0;
-char *D_L07_0015F318 = 0;
-char D_L07_0016C830 NOT_SDA = 0;
-char D_L07_00173F80 NOT_SDA = 0;
-char D_L07_0017ED40 NOT_SDA = 0;
-char D_L07_0019B860 NOT_SDA = 0;
-char D_L07_001AB860 NOT_SDA = 0;
-char D_L07_001B1900 NOT_SDA = 0;
-float D_L07_001604A4 = 0;
-float D_L07_00160F80 = 0;
-float D_L07_00160FE0 = 0;
-int D_L07_0015EF54 = 0;
-int D_L07_0015FBC4 = 0;
-int D_L07_0015FFF0 = 0;
-int D_L07_00160104 = 0;
-int D_L07_00160170 = 0;
-int D_L07_00160174 = 0;
-int D_L07_00160178 = 0;
-int D_L07_0016017C = 0;
-int D_L07_00160490 = 0;
-int D_L07_00160F50 = 0;
-int D_L07_00160FCC = 0;
-unsigned char *D_L07_001604A0 = 0;
+Tbl                         *D_L07_0015F618 = 0;
+int                          D_L07_001600E8 = 0;
+int                          D_L07_001600F0 = 0;
+int                          D_L07_001600F8 = 0;
+int                          D_L07_00160100 = 0;
+char                        *D_L07_0015FBC0 = 0;
+char                        *D_L07_0015FB80 = 0;
+int                          D_L07_0015FB50 = 0;
+char                        *D_L07_00160040 = 0;
+int                          D_L07_00160014 = 0;
+ShrubInst                   *D_L07_00160498 = 0;
+ShrubMatrix                 *D_L07_0016049C = 0;
+TextTable                   *D_L07_0015F660 = 0;
+Tfrag                       *D_L07_00160F4C = 0;
+TieInst                     *D_L07_00160FC4 = 0;
+TieMatrix                   *D_L07_00160FC8 = 0;
+char                        *D_L07_001600E4 = 0;
+char                        *D_L07_0015F318 = 0;
+char D_L07_0016C830          NOT_SDA = 0;
+char D_L07_00173F80          NOT_SDA = 0;
+char D_L07_0017ED40          NOT_SDA = 0;
+char D_L07_0019B860          NOT_SDA = 0;
+char D_L07_001AB860          NOT_SDA = 0;
+char D_L07_001B1900          NOT_SDA = 0;
+float                        D_L07_001604A4 = 0;
+float                        D_L07_00160F80 = 0;
+float                        D_L07_00160FE0 = 0;
+int                          D_L07_0015EF54 = 0;
+int                          D_L07_0015FBC4 = 0;
+int                          D_L07_0015FFF0 = 0;
+int                          D_L07_00160104 = 0;
+int                          D_L07_00160170 = 0;
+int                          D_L07_00160174 = 0;
+int                          D_L07_00160178 = 0;
+int                          D_L07_0016017C = 0;
+int                          D_L07_00160490 = 0;
+int                          D_L07_00160F50 = 0;
+int                          D_L07_00160FCC = 0;
+unsigned char               *D_L07_001604A0 = 0;
 unsigned char D_L07_001BC230 NOT_SDA = 0;
 unsigned char D_L07_001C5B80 NOT_SDA = 0;
-Tbl *D_L08_0015F618 = 0;
-int D_L08_001600E8 = 0;
-int D_L08_001600F0 = 0;
-int D_L08_001600F8 = 0;
-int D_L08_00160100 = 0;
-char *D_L08_0015FBC0 = 0;
-char *D_L08_0015FB80 = 0;
-int D_L08_0015FB50 = 0;
-char *D_L08_00160040 = 0;
-int D_L08_00160014 = 0;
-ShrubClass *D_L08_001BC830 NOT_SDA = 0;
-ShrubInst *D_L08_00160494 = 0;
-ShrubInst *D_L08_00160498 = 0;
-ShrubMatrix *D_L08_0016049C = 0;
-TextTable *D_L08_0015F660 = 0;
-Tfrag *D_L08_00160F4C = 0;
-TieClass *D_L08_001C6000 NOT_SDA = 0;
-TieInst *D_L08_00160FC0 = 0;
-TieInst *D_L08_00160FC4 = 0;
-TieMatrix *D_L08_00160FC8 = 0;
-char *D_L08_001600E4 = 0;
-char *D_L08_00160108 = 0;
-char *D_L08_0015F318 = 0;
-char D_L08_0016CFB0 NOT_SDA = 0;
-char D_L08_0017F4C0 NOT_SDA = 0;
-char D_L08_0019BFE0 NOT_SDA = 0;
-char D_L08_001ABFE0 NOT_SDA = 0;
-char D_L08_001B2080 NOT_SDA = 0;
-float D_L08_001604A4 = 0;
-float D_L08_00160F80 = 0;
-float D_L08_00160FE0 = 0;
-int D_L08_0015EF54 = 0;
-int D_L08_0015FBC4 = 0;
-int D_L08_0015FFF0 = 0;
-int D_L08_00160104 = 0;
-int D_L08_00160170 = 0;
-int D_L08_00160174 = 0;
-int D_L08_00160178 = 0;
-int D_L08_0016017C = 0;
-int D_L08_00160490 = 0;
-int D_L08_00160F50 = 0;
-int D_L08_00160FCC = 0;
-unsigned char *D_L08_001604A0 = 0;
+Tbl                         *D_L08_0015F618 = 0;
+int                          D_L08_001600E8 = 0;
+int                          D_L08_001600F0 = 0;
+int                          D_L08_001600F8 = 0;
+int                          D_L08_00160100 = 0;
+char                        *D_L08_0015FBC0 = 0;
+char                        *D_L08_0015FB80 = 0;
+int                          D_L08_0015FB50 = 0;
+char                        *D_L08_00160040 = 0;
+int                          D_L08_00160014 = 0;
+ShrubClass *D_L08_001BC830   NOT_SDA = 0;
+ShrubInst                   *D_L08_00160494 = 0;
+ShrubInst                   *D_L08_00160498 = 0;
+ShrubMatrix                 *D_L08_0016049C = 0;
+TextTable                   *D_L08_0015F660 = 0;
+Tfrag                       *D_L08_00160F4C = 0;
+TieClass *D_L08_001C6000     NOT_SDA = 0;
+TieInst                     *D_L08_00160FC0 = 0;
+TieInst                     *D_L08_00160FC4 = 0;
+TieMatrix                   *D_L08_00160FC8 = 0;
+char                        *D_L08_001600E4 = 0;
+char                        *D_L08_00160108 = 0;
+char                        *D_L08_0015F318 = 0;
+char D_L08_0016CFB0          NOT_SDA = 0;
+char D_L08_0017F4C0          NOT_SDA = 0;
+char D_L08_0019BFE0          NOT_SDA = 0;
+char D_L08_001ABFE0          NOT_SDA = 0;
+char D_L08_001B2080          NOT_SDA = 0;
+float                        D_L08_001604A4 = 0;
+float                        D_L08_00160F80 = 0;
+float                        D_L08_00160FE0 = 0;
+int                          D_L08_0015EF54 = 0;
+int                          D_L08_0015FBC4 = 0;
+int                          D_L08_0015FFF0 = 0;
+int                          D_L08_00160104 = 0;
+int                          D_L08_00160170 = 0;
+int                          D_L08_00160174 = 0;
+int                          D_L08_00160178 = 0;
+int                          D_L08_0016017C = 0;
+int                          D_L08_00160490 = 0;
+int                          D_L08_00160F50 = 0;
+int                          D_L08_00160FCC = 0;
+unsigned char               *D_L08_001604A0 = 0;
 unsigned char D_L08_001BC9B0 NOT_SDA = 0;
 unsigned char D_L08_001C6300 NOT_SDA = 0;
-u64 D_L08_00182FC0[3] = {0};
+u64                          D_L08_00182FC0[3] = {0};
+
 u64 D_L08_00182FD8[3] = {0};
+
 u64 D_L08_00182FF0[3] = {0};
-s32 D_L08_0015FFC8 = 0;
-u32 D_L08_0019A280 NOT_SDA = 0;
-u8 D_L08_001AF3C0 NOT_SDA = 0;
-s32 D_L08_00160010 = 0;
-char *D_L08_0015F604 = 0;
-s32 D_L08_0015F5F0 = 0;
-char D_L08_001FA6C0 NOT_SDA = 0x69;
-Tbl *D_L09_0015F618 = 0;
-int D_L09_001600E8 = 0;
-int D_L09_001600F0 = 0;
-int D_L09_001600F8 = 0;
-int D_L09_00160100 = 0;
-char *D_L09_0015FBC0 = 0;
-char *D_L09_0015FB80 = 0;
-int D_L09_0015FB50 = 0;
-char *D_L09_00160040 = 0;
-int D_L09_00160014 = 0;
-ShrubClass *D_L09_001BC1B0 NOT_SDA = 0;
-ShrubInst *D_L09_00160494 = 0;
-ShrubInst *D_L09_00160498 = 0;
-ShrubMatrix *D_L09_0016049C = 0;
-TextTable *D_L09_0015F660 = 0;
-Tfrag *D_L09_00160F4C = 0;
-TieClass *D_L09_001C5980 NOT_SDA = 0;
-TieInst *D_L09_00160FC0 = 0;
-TieInst *D_L09_00160FC4 = 0;
-TieMatrix *D_L09_00160FC8 = 0;
-char *D_L09_001600E4 = 0;
-char *D_L09_00160108 = 0;
-char *D_L09_0015F318 = 0;
-char D_L09_0016C930 NOT_SDA = 0;
-char D_L09_00174080 NOT_SDA = 0;
-char D_L09_0017EE40 NOT_SDA = 0;
-char D_L09_0019B960 NOT_SDA = 0;
-char D_L09_001AB960 NOT_SDA = 0;
-char D_L09_001B1A00 NOT_SDA = 0;
-float D_L09_001604A4 = 0;
-float D_L09_00160F80 = 0;
-float D_L09_00160FE0 = 0;
-int D_L09_0015EF54 = 0;
-int D_L09_0015FBC4 = 0;
-int D_L09_0015FFF0 = 0;
-int D_L09_00160104 = 0;
-int D_L09_00160170 = 0;
-int D_L09_00160174 = 0;
-int D_L09_00160178 = 0;
-int D_L09_0016017C = 0;
-int D_L09_00160490 = 0;
-int D_L09_00160F50 = 0;
-int D_L09_00160FCC = 0;
-unsigned char *D_L09_001604A0 = 0;
+
+s32                          D_L08_0015FFC8 = 0;
+u32 D_L08_0019A280           NOT_SDA = 0;
+u8 D_L08_001AF3C0            NOT_SDA = 0;
+s32                          D_L08_00160010 = 0;
+char                        *D_L08_0015F604 = 0;
+s32                          D_L08_0015F5F0 = 0;
+char D_L08_001FA6C0          NOT_SDA = 0x69;
+Tbl                         *D_L09_0015F618 = 0;
+int                          D_L09_001600E8 = 0;
+int                          D_L09_001600F0 = 0;
+int                          D_L09_001600F8 = 0;
+int                          D_L09_00160100 = 0;
+char                        *D_L09_0015FBC0 = 0;
+char                        *D_L09_0015FB80 = 0;
+int                          D_L09_0015FB50 = 0;
+char                        *D_L09_00160040 = 0;
+int                          D_L09_00160014 = 0;
+ShrubClass *D_L09_001BC1B0   NOT_SDA = 0;
+ShrubInst                   *D_L09_00160494 = 0;
+ShrubInst                   *D_L09_00160498 = 0;
+ShrubMatrix                 *D_L09_0016049C = 0;
+TextTable                   *D_L09_0015F660 = 0;
+Tfrag                       *D_L09_00160F4C = 0;
+TieClass *D_L09_001C5980     NOT_SDA = 0;
+TieInst                     *D_L09_00160FC0 = 0;
+TieInst                     *D_L09_00160FC4 = 0;
+TieMatrix                   *D_L09_00160FC8 = 0;
+char                        *D_L09_001600E4 = 0;
+char                        *D_L09_00160108 = 0;
+char                        *D_L09_0015F318 = 0;
+char D_L09_0016C930          NOT_SDA = 0;
+char D_L09_00174080          NOT_SDA = 0;
+char D_L09_0017EE40          NOT_SDA = 0;
+char D_L09_0019B960          NOT_SDA = 0;
+char D_L09_001AB960          NOT_SDA = 0;
+char D_L09_001B1A00          NOT_SDA = 0;
+float                        D_L09_001604A4 = 0;
+float                        D_L09_00160F80 = 0;
+float                        D_L09_00160FE0 = 0;
+int                          D_L09_0015EF54 = 0;
+int                          D_L09_0015FBC4 = 0;
+int                          D_L09_0015FFF0 = 0;
+int                          D_L09_00160104 = 0;
+int                          D_L09_00160170 = 0;
+int                          D_L09_00160174 = 0;
+int                          D_L09_00160178 = 0;
+int                          D_L09_0016017C = 0;
+int                          D_L09_00160490 = 0;
+int                          D_L09_00160F50 = 0;
+int                          D_L09_00160FCC = 0;
+unsigned char               *D_L09_001604A0 = 0;
 unsigned char D_L09_001BC330 NOT_SDA = 0;
 unsigned char D_L09_001C5C80 NOT_SDA = 0;
-u64 D_L09_00182940[3] = {0};
+u64                          D_L09_00182940[3] = {0};
+
 u64 D_L09_00182958[3] = {0};
+
 u64 D_L09_00182970[3] = {0};
-s32 D_L09_0015FFC8 = 0;
-u32 D_L09_00199C00 NOT_SDA = 0;
-u8 D_L09_001AED40 NOT_SDA = 0;
-s32 D_L09_00160010 = 0;
-s32 D_L09_001AFE00 NOT_SDA = 0;
-char *D_L09_0015F604 = 0;
-s32 D_L09_0015F5F0 = 0;
-char D_L09_00207290 NOT_SDA = 0x69;
-Tbl *D_L10_0015F618 = 0;
-int D_L10_001600E8 = 0;
-int D_L10_001600F0 = 0;
-int D_L10_001600F8 = 0;
-int D_L10_00160100 = 0;
-char *D_L10_0015FBC0 = 0;
-char *D_L10_0015FB80 = 0;
-int D_L10_0015FB50 = 0;
-char *D_L10_00160040 = 0;
-int D_L10_00160014 = 0;
-ShrubClass *D_L10_001BC4B0 NOT_SDA = 0;
-ShrubInst *D_L10_00160494 = 0;
-ShrubInst *D_L10_00160498 = 0;
-ShrubMatrix *D_L10_0016049C = 0;
-TextTable *D_L10_0015F660 = 0;
-Tfrag *D_L10_00160F4C = 0;
-TieClass *D_L10_001C5C80 NOT_SDA = 0;
-TieInst *D_L10_00160FC0 = 0;
-TieInst *D_L10_00160FC4 = 0;
-TieMatrix *D_L10_00160FC8 = 0;
-char *D_L10_001600E4 = 0;
-char *D_L10_00160108 = 0;
-char *D_L10_0015F318 = 0;
-char D_L10_0016CC30 NOT_SDA = 0;
-char D_L10_0017F140 NOT_SDA = 0;
-char D_L10_0019BC60 NOT_SDA = 0;
-char D_L10_001ABC60 NOT_SDA = 0;
-char D_L10_001B1D00 NOT_SDA = 0;
-float D_L10_001604A4 = 0;
-float D_L10_00160F80 = 0;
-float D_L10_00160FE0 = 0;
-int D_L10_0015EF54 = 0;
-int D_L10_0015FBC4 = 0;
-int D_L10_0015FFF0 = 0;
-int D_L10_00160104 = 0;
-int D_L10_00160170 = 0;
-int D_L10_00160174 = 0;
-int D_L10_00160178 = 0;
-int D_L10_0016017C = 0;
-int D_L10_00160490 = 0;
-int D_L10_00160F50 = 0;
-int D_L10_00160FCC = 0;
-unsigned char *D_L10_001604A0 = 0;
+
+s32                          D_L09_0015FFC8 = 0;
+u32 D_L09_00199C00           NOT_SDA = 0;
+u8 D_L09_001AED40            NOT_SDA = 0;
+s32                          D_L09_00160010 = 0;
+s32 D_L09_001AFE00           NOT_SDA = 0;
+char                        *D_L09_0015F604 = 0;
+s32                          D_L09_0015F5F0 = 0;
+char D_L09_00207290          NOT_SDA = 0x69;
+Tbl                         *D_L10_0015F618 = 0;
+int                          D_L10_001600E8 = 0;
+int                          D_L10_001600F0 = 0;
+int                          D_L10_001600F8 = 0;
+int                          D_L10_00160100 = 0;
+char                        *D_L10_0015FBC0 = 0;
+char                        *D_L10_0015FB80 = 0;
+int                          D_L10_0015FB50 = 0;
+char                        *D_L10_00160040 = 0;
+int                          D_L10_00160014 = 0;
+ShrubClass *D_L10_001BC4B0   NOT_SDA = 0;
+ShrubInst                   *D_L10_00160494 = 0;
+ShrubInst                   *D_L10_00160498 = 0;
+ShrubMatrix                 *D_L10_0016049C = 0;
+TextTable                   *D_L10_0015F660 = 0;
+Tfrag                       *D_L10_00160F4C = 0;
+TieClass *D_L10_001C5C80     NOT_SDA = 0;
+TieInst                     *D_L10_00160FC0 = 0;
+TieInst                     *D_L10_00160FC4 = 0;
+TieMatrix                   *D_L10_00160FC8 = 0;
+char                        *D_L10_001600E4 = 0;
+char                        *D_L10_00160108 = 0;
+char                        *D_L10_0015F318 = 0;
+char D_L10_0016CC30          NOT_SDA = 0;
+char D_L10_0017F140          NOT_SDA = 0;
+char D_L10_0019BC60          NOT_SDA = 0;
+char D_L10_001ABC60          NOT_SDA = 0;
+char D_L10_001B1D00          NOT_SDA = 0;
+float                        D_L10_001604A4 = 0;
+float                        D_L10_00160F80 = 0;
+float                        D_L10_00160FE0 = 0;
+int                          D_L10_0015EF54 = 0;
+int                          D_L10_0015FBC4 = 0;
+int                          D_L10_0015FFF0 = 0;
+int                          D_L10_00160104 = 0;
+int                          D_L10_00160170 = 0;
+int                          D_L10_00160174 = 0;
+int                          D_L10_00160178 = 0;
+int                          D_L10_0016017C = 0;
+int                          D_L10_00160490 = 0;
+int                          D_L10_00160F50 = 0;
+int                          D_L10_00160FCC = 0;
+unsigned char               *D_L10_001604A0 = 0;
 unsigned char D_L10_001BC630 NOT_SDA = 0;
 unsigned char D_L10_001C5F80 NOT_SDA = 0;
-u64 D_L10_00182C40[3] = {0};
+u64                          D_L10_00182C40[3] = {0};
+
 u64 D_L10_00182C58[3] = {0};
+
 u64 D_L10_00182C70[3] = {0};
-s32 D_L10_0015FFC8 = 0;
-u32 D_L10_00199F00 NOT_SDA = 0;
-u8 D_L10_001AF040 NOT_SDA = 0;
-s32 D_L10_00160010 = 0;
-s32 D_L10_001B0100 NOT_SDA = 0;
-char *D_L10_0015F420 = 0;
-char *D_L10_0015F604 = 0;
-s32 D_L10_0015F5F0 = 0;
-char D_L10_001DB500 NOT_SDA = 0x69;
-Tbl *D_L11_0015F618 = 0;
-int D_L11_001600E8 = 0;
-int D_L11_001600F0 = 0;
-int D_L11_001600F8 = 0;
-int D_L11_00160100 = 0;
-char *D_L11_0015FBC0 = 0;
-char *D_L11_0015FB80 = 0;
-int D_L11_0015FB50 = 0;
-char *D_L11_00160040 = 0;
-int D_L11_00160014 = 0;
-ShrubClass *D_L11_001BCA30 NOT_SDA = 0;
-ShrubInst *D_L11_00160494 = 0;
-ShrubInst *D_L11_00160498 = 0;
-ShrubMatrix *D_L11_0016049C = 0;
-TextTable *D_L11_0015F660 = 0;
-Tfrag *D_L11_00160F4C = 0;
-TieClass *D_L11_001C6200 NOT_SDA = 0;
-TieInst *D_L11_00160FC0 = 0;
-TieInst *D_L11_00160FC4 = 0;
-TieMatrix *D_L11_00160FC8 = 0;
-char *D_L11_001600E4 = 0;
-char *D_L11_00160108 = 0;
-char *D_L11_0015F318 = 0;
-char D_L11_0016D1B0 NOT_SDA = 0;
-char D_L11_00174900 NOT_SDA = 0;
-char D_L11_0017F6C0 NOT_SDA = 0;
-char D_L11_0019C1E0 NOT_SDA = 0;
-char D_L11_001AC1E0 NOT_SDA = 0;
-char D_L11_001B2280 NOT_SDA = 0;
-float D_L11_001604A4 = 0;
-float D_L11_00160F80 = 0;
-float D_L11_00160FE0 = 0;
-int D_L11_0015EF54 = 0;
-int D_L11_0015FBC4 = 0;
-int D_L11_0015FFF0 = 0;
-int D_L11_00160104 = 0;
-int D_L11_00160170 = 0;
-int D_L11_00160174 = 0;
-int D_L11_00160178 = 0;
-int D_L11_0016017C = 0;
-int D_L11_00160490 = 0;
-int D_L11_00160F50 = 0;
-int D_L11_00160FCC = 0;
-unsigned char *D_L11_001604A0 = 0;
+
+s32                          D_L10_0015FFC8 = 0;
+u32 D_L10_00199F00           NOT_SDA = 0;
+u8 D_L10_001AF040            NOT_SDA = 0;
+s32                          D_L10_00160010 = 0;
+s32 D_L10_001B0100           NOT_SDA = 0;
+char                        *D_L10_0015F420 = 0;
+char                        *D_L10_0015F604 = 0;
+s32                          D_L10_0015F5F0 = 0;
+char D_L10_001DB500          NOT_SDA = 0x69;
+Tbl                         *D_L11_0015F618 = 0;
+int                          D_L11_001600E8 = 0;
+int                          D_L11_001600F0 = 0;
+int                          D_L11_001600F8 = 0;
+int                          D_L11_00160100 = 0;
+char                        *D_L11_0015FBC0 = 0;
+char                        *D_L11_0015FB80 = 0;
+int                          D_L11_0015FB50 = 0;
+char                        *D_L11_00160040 = 0;
+int                          D_L11_00160014 = 0;
+ShrubClass *D_L11_001BCA30   NOT_SDA = 0;
+ShrubInst                   *D_L11_00160494 = 0;
+ShrubInst                   *D_L11_00160498 = 0;
+ShrubMatrix                 *D_L11_0016049C = 0;
+TextTable                   *D_L11_0015F660 = 0;
+Tfrag                       *D_L11_00160F4C = 0;
+TieClass *D_L11_001C6200     NOT_SDA = 0;
+TieInst                     *D_L11_00160FC0 = 0;
+TieInst                     *D_L11_00160FC4 = 0;
+TieMatrix                   *D_L11_00160FC8 = 0;
+char                        *D_L11_001600E4 = 0;
+char                        *D_L11_00160108 = 0;
+char                        *D_L11_0015F318 = 0;
+char D_L11_0016D1B0          NOT_SDA = 0;
+char D_L11_00174900          NOT_SDA = 0;
+char D_L11_0017F6C0          NOT_SDA = 0;
+char D_L11_0019C1E0          NOT_SDA = 0;
+char D_L11_001AC1E0          NOT_SDA = 0;
+char D_L11_001B2280          NOT_SDA = 0;
+float                        D_L11_001604A4 = 0;
+float                        D_L11_00160F80 = 0;
+float                        D_L11_00160FE0 = 0;
+int                          D_L11_0015EF54 = 0;
+int                          D_L11_0015FBC4 = 0;
+int                          D_L11_0015FFF0 = 0;
+int                          D_L11_00160104 = 0;
+int                          D_L11_00160170 = 0;
+int                          D_L11_00160174 = 0;
+int                          D_L11_00160178 = 0;
+int                          D_L11_0016017C = 0;
+int                          D_L11_00160490 = 0;
+int                          D_L11_00160F50 = 0;
+int                          D_L11_00160FCC = 0;
+unsigned char               *D_L11_001604A0 = 0;
 unsigned char D_L11_001BCBB0 NOT_SDA = 0;
 unsigned char D_L11_001C6500 NOT_SDA = 0;
-u64 D_L11_001831C0[3] = {0};
+u64                          D_L11_001831C0[3] = {0};
+
 u64 D_L11_001831D8[3] = {0};
+
 u64 D_L11_001831F0[3] = {0};
-s32 D_L11_0015FFC8 = 0;
-u32 D_L11_0019A480 NOT_SDA = 0;
-u8 D_L11_001AF5C0 NOT_SDA = 0;
-s32 D_L11_00160010 = 0;
-char *D_L11_0015F604 = 0;
-s32 D_L11_0015F5F0 = 0;
-char D_L11_002198D0 NOT_SDA = 0x69;
-Tbl *D_L12_0015F618 = 0;
-int D_L12_001600E8 = 0;
-int D_L12_001600F0 = 0;
-int D_L12_001600F8 = 0;
-int D_L12_00160100 = 0;
-char *D_L12_0015FBC0 = 0;
-char *D_L12_0015FB80 = 0;
-int D_L12_0015FB50 = 0;
-char *D_L12_00160040 = 0;
-int D_L12_00160014 = 0;
-ShrubClass *D_L12_001BC4B0 NOT_SDA = 0;
-ShrubInst *D_L12_00160494 = 0;
-ShrubInst *D_L12_00160498 = 0;
-ShrubMatrix *D_L12_0016049C = 0;
-TextTable *D_L12_0015F660 = 0;
-Tfrag *D_L12_00160F4C = 0;
-TieClass *D_L12_001C5C80 NOT_SDA = 0;
-TieInst *D_L12_00160FC0 = 0;
-TieInst *D_L12_00160FC4 = 0;
-TieMatrix *D_L12_00160FC8 = 0;
-char *D_L12_001600E4 = 0;
-char *D_L12_00160108 = 0;
-char *D_L12_0015F318 = 0;
-char D_L12_0016CC30 NOT_SDA = 0;
-char D_L12_00174380 NOT_SDA = 0;
-char D_L12_0017F140 NOT_SDA = 0;
-char D_L12_0019BC60 NOT_SDA = 0;
-char D_L12_001ABC60 NOT_SDA = 0;
-char D_L12_001B1D00 NOT_SDA = 0;
-float D_L12_001604A4 = 0;
-float D_L12_00160F80 = 0;
-float D_L12_00160FE0 = 0;
-int D_L12_0015EF54 = 0;
-int D_L12_0015FBC4 = 0;
-int D_L12_0015FFF0 = 0;
-int D_L12_00160104 = 0;
-int D_L12_00160170 = 0;
-int D_L12_00160174 = 0;
-int D_L12_00160178 = 0;
-int D_L12_0016017C = 0;
-int D_L12_00160490 = 0;
-int D_L12_00160F50 = 0;
-int D_L12_00160FCC = 0;
-unsigned char *D_L12_001604A0 = 0;
+
+s32                          D_L11_0015FFC8 = 0;
+u32 D_L11_0019A480           NOT_SDA = 0;
+u8 D_L11_001AF5C0            NOT_SDA = 0;
+s32                          D_L11_00160010 = 0;
+char                        *D_L11_0015F604 = 0;
+s32                          D_L11_0015F5F0 = 0;
+char D_L11_002198D0          NOT_SDA = 0x69;
+Tbl                         *D_L12_0015F618 = 0;
+int                          D_L12_001600E8 = 0;
+int                          D_L12_001600F0 = 0;
+int                          D_L12_001600F8 = 0;
+int                          D_L12_00160100 = 0;
+char                        *D_L12_0015FBC0 = 0;
+char                        *D_L12_0015FB80 = 0;
+int                          D_L12_0015FB50 = 0;
+char                        *D_L12_00160040 = 0;
+int                          D_L12_00160014 = 0;
+ShrubClass *D_L12_001BC4B0   NOT_SDA = 0;
+ShrubInst                   *D_L12_00160494 = 0;
+ShrubInst                   *D_L12_00160498 = 0;
+ShrubMatrix                 *D_L12_0016049C = 0;
+TextTable                   *D_L12_0015F660 = 0;
+Tfrag                       *D_L12_00160F4C = 0;
+TieClass *D_L12_001C5C80     NOT_SDA = 0;
+TieInst                     *D_L12_00160FC0 = 0;
+TieInst                     *D_L12_00160FC4 = 0;
+TieMatrix                   *D_L12_00160FC8 = 0;
+char                        *D_L12_001600E4 = 0;
+char                        *D_L12_00160108 = 0;
+char                        *D_L12_0015F318 = 0;
+char D_L12_0016CC30          NOT_SDA = 0;
+char D_L12_00174380          NOT_SDA = 0;
+char D_L12_0017F140          NOT_SDA = 0;
+char D_L12_0019BC60          NOT_SDA = 0;
+char D_L12_001ABC60          NOT_SDA = 0;
+char D_L12_001B1D00          NOT_SDA = 0;
+float                        D_L12_001604A4 = 0;
+float                        D_L12_00160F80 = 0;
+float                        D_L12_00160FE0 = 0;
+int                          D_L12_0015EF54 = 0;
+int                          D_L12_0015FBC4 = 0;
+int                          D_L12_0015FFF0 = 0;
+int                          D_L12_00160104 = 0;
+int                          D_L12_00160170 = 0;
+int                          D_L12_00160174 = 0;
+int                          D_L12_00160178 = 0;
+int                          D_L12_0016017C = 0;
+int                          D_L12_00160490 = 0;
+int                          D_L12_00160F50 = 0;
+int                          D_L12_00160FCC = 0;
+unsigned char               *D_L12_001604A0 = 0;
 unsigned char D_L12_001BC630 NOT_SDA = 0;
 unsigned char D_L12_001C5F80 NOT_SDA = 0;
-u64 D_L12_00182C40[3] = {0};
+u64                          D_L12_00182C40[3] = {0};
+
 u64 D_L12_00182C58[3] = {0};
+
 u64 D_L12_00182C70[3] = {0};
-s32 D_L12_0015FFC8 = 0;
-u32 D_L12_00199F00 NOT_SDA = 0;
-u8 D_L12_001AF040 NOT_SDA = 0;
-s32 D_L12_00160010 = 0;
-s32 D_L12_001B0100 NOT_SDA = 0;
-char *D_L12_0015F420 = 0;
-char *D_L12_0015F604 = 0;
-s32 D_L12_0015F5F0 = 0;
-char D_L12_0020AC60 NOT_SDA = 0x69;
-Tbl *D_L13_0015F618 = 0;
-int D_L13_001600E8 = 0;
-int D_L13_001600F0 = 0;
-int D_L13_001600F8 = 0;
-int D_L13_00160100 = 0;
-char *D_L13_0015FBC0 = 0;
-char *D_L13_0015FB80 = 0;
-int D_L13_0015FB50 = 0;
-char *D_L13_00160040 = 0;
-int D_L13_00160014 = 0;
-ShrubClass *D_L13_001BC330 NOT_SDA = 0;
-ShrubInst *D_L13_00160494 = 0;
-ShrubInst *D_L13_00160498 = 0;
-ShrubMatrix *D_L13_0016049C = 0;
-TextTable *D_L13_0015F660 = 0;
-Tfrag *D_L13_00160F4C = 0;
-TieClass *D_L13_001C5B00 NOT_SDA = 0;
-TieInst *D_L13_00160FC0 = 0;
-TieInst *D_L13_00160FC4 = 0;
-TieMatrix *D_L13_00160FC8 = 0;
-char *D_L13_001600E4 = 0;
-char *D_L13_00160108 = 0;
-char *D_L13_0015F318 = 0;
-char D_L13_0016CAB0 NOT_SDA = 0;
-char D_L13_00174200 NOT_SDA = 0;
-char D_L13_0017EFC0 NOT_SDA = 0;
-char D_L13_0019BAE0 NOT_SDA = 0;
-char D_L13_001ABAE0 NOT_SDA = 0;
-char D_L13_001B1B80 NOT_SDA = 0;
-float D_L13_001604A4 = 0;
-float D_L13_00160F80 = 0;
-float D_L13_00160FE0 = 0;
-int D_L13_0015EF54 = 0;
-int D_L13_0015FBC4 = 0;
-int D_L13_0015FFF0 = 0;
-int D_L13_00160104 = 0;
-int D_L13_00160170 = 0;
-int D_L13_00160174 = 0;
-int D_L13_00160178 = 0;
-int D_L13_0016017C = 0;
-int D_L13_00160490 = 0;
-int D_L13_00160F50 = 0;
-int D_L13_00160FCC = 0;
-unsigned char *D_L13_001604A0 = 0;
+
+s32                          D_L12_0015FFC8 = 0;
+u32 D_L12_00199F00           NOT_SDA = 0;
+u8 D_L12_001AF040            NOT_SDA = 0;
+s32                          D_L12_00160010 = 0;
+s32 D_L12_001B0100           NOT_SDA = 0;
+char                        *D_L12_0015F420 = 0;
+char                        *D_L12_0015F604 = 0;
+s32                          D_L12_0015F5F0 = 0;
+char D_L12_0020AC60          NOT_SDA = 0x69;
+Tbl                         *D_L13_0015F618 = 0;
+int                          D_L13_001600E8 = 0;
+int                          D_L13_001600F0 = 0;
+int                          D_L13_001600F8 = 0;
+int                          D_L13_00160100 = 0;
+char                        *D_L13_0015FBC0 = 0;
+char                        *D_L13_0015FB80 = 0;
+int                          D_L13_0015FB50 = 0;
+char                        *D_L13_00160040 = 0;
+int                          D_L13_00160014 = 0;
+ShrubClass *D_L13_001BC330   NOT_SDA = 0;
+ShrubInst                   *D_L13_00160494 = 0;
+ShrubInst                   *D_L13_00160498 = 0;
+ShrubMatrix                 *D_L13_0016049C = 0;
+TextTable                   *D_L13_0015F660 = 0;
+Tfrag                       *D_L13_00160F4C = 0;
+TieClass *D_L13_001C5B00     NOT_SDA = 0;
+TieInst                     *D_L13_00160FC0 = 0;
+TieInst                     *D_L13_00160FC4 = 0;
+TieMatrix                   *D_L13_00160FC8 = 0;
+char                        *D_L13_001600E4 = 0;
+char                        *D_L13_00160108 = 0;
+char                        *D_L13_0015F318 = 0;
+char D_L13_0016CAB0          NOT_SDA = 0;
+char D_L13_00174200          NOT_SDA = 0;
+char D_L13_0017EFC0          NOT_SDA = 0;
+char D_L13_0019BAE0          NOT_SDA = 0;
+char D_L13_001ABAE0          NOT_SDA = 0;
+char D_L13_001B1B80          NOT_SDA = 0;
+float                        D_L13_001604A4 = 0;
+float                        D_L13_00160F80 = 0;
+float                        D_L13_00160FE0 = 0;
+int                          D_L13_0015EF54 = 0;
+int                          D_L13_0015FBC4 = 0;
+int                          D_L13_0015FFF0 = 0;
+int                          D_L13_00160104 = 0;
+int                          D_L13_00160170 = 0;
+int                          D_L13_00160174 = 0;
+int                          D_L13_00160178 = 0;
+int                          D_L13_0016017C = 0;
+int                          D_L13_00160490 = 0;
+int                          D_L13_00160F50 = 0;
+int                          D_L13_00160FCC = 0;
+unsigned char               *D_L13_001604A0 = 0;
 unsigned char D_L13_001BC4B0 NOT_SDA = 0;
 unsigned char D_L13_001C5E00 NOT_SDA = 0;
-u64 D_L13_00182AC0[3] = {0};
+u64                          D_L13_00182AC0[3] = {0};
+
 u64 D_L13_00182AD8[3] = {0};
+
 u64 D_L13_00182AF0[3] = {0};
-s32 D_L13_0015FFC8 = 0;
-u32 D_L13_00199D80 NOT_SDA = 0;
-u8 D_L13_001AEEC0 NOT_SDA = 0;
-s32 D_L13_00160010 = 0;
-s32 D_L13_001AFF80 NOT_SDA = 0;
-char *D_L13_0015F604 = 0;
-s32 D_L13_0015F5F0 = 0;
-char D_L13_001F31F0 NOT_SDA = 0x69;
-Tbl *D_L14_0015F618 = 0;
-int D_L14_001600E8 = 0;
-int D_L14_001600F0 = 0;
-int D_L14_001600F8 = 0;
-int D_L14_00160100 = 0;
-char *D_L14_0015FBC0 = 0;
-char *D_L14_0015FB80 = 0;
-int D_L14_0015FB50 = 0;
-char *D_L14_00160040 = 0;
-int D_L14_00160014 = 0;
-ShrubClass *D_L14_001BC730 NOT_SDA = 0;
-ShrubInst *D_L14_00160494 = 0;
-ShrubInst *D_L14_00160498 = 0;
-ShrubMatrix *D_L14_0016049C = 0;
-TextTable *D_L14_0015F660 = 0;
-Tfrag *D_L14_00160F4C = 0;
-TieClass *D_L14_001C5F00 NOT_SDA = 0;
-TieInst *D_L14_00160FC0 = 0;
-TieInst *D_L14_00160FC4 = 0;
-TieMatrix *D_L14_00160FC8 = 0;
-char *D_L14_001600E4 = 0;
-char *D_L14_00160108 = 0;
-char *D_L14_0015F318 = 0;
-char D_L14_0016CEB0 NOT_SDA = 0;
-char D_L14_00174600 NOT_SDA = 0;
-char D_L14_0017F3C0 NOT_SDA = 0;
-char D_L14_0019BEE0 NOT_SDA = 0;
-char D_L14_001ABEE0 NOT_SDA = 0;
-char D_L14_001B1F80 NOT_SDA = 0;
-float D_L14_001604A4 = 0;
-float D_L14_00160F80 = 0;
-float D_L14_00160FE0 = 0;
-int D_L14_0015EF54 = 0;
-int D_L14_0015FBC4 = 0;
-int D_L14_0015FFF0 = 0;
-int D_L14_00160104 = 0;
-int D_L14_00160170 = 0;
-int D_L14_00160174 = 0;
-int D_L14_00160178 = 0;
-int D_L14_0016017C = 0;
-int D_L14_00160490 = 0;
-int D_L14_00160F50 = 0;
-int D_L14_00160FCC = 0;
-unsigned char *D_L14_001604A0 = 0;
+
+s32                          D_L13_0015FFC8 = 0;
+u32 D_L13_00199D80           NOT_SDA = 0;
+u8 D_L13_001AEEC0            NOT_SDA = 0;
+s32                          D_L13_00160010 = 0;
+s32 D_L13_001AFF80           NOT_SDA = 0;
+char                        *D_L13_0015F604 = 0;
+s32                          D_L13_0015F5F0 = 0;
+char D_L13_001F31F0          NOT_SDA = 0x69;
+Tbl                         *D_L14_0015F618 = 0;
+int                          D_L14_001600E8 = 0;
+int                          D_L14_001600F0 = 0;
+int                          D_L14_001600F8 = 0;
+int                          D_L14_00160100 = 0;
+char                        *D_L14_0015FBC0 = 0;
+char                        *D_L14_0015FB80 = 0;
+int                          D_L14_0015FB50 = 0;
+char                        *D_L14_00160040 = 0;
+int                          D_L14_00160014 = 0;
+ShrubClass *D_L14_001BC730   NOT_SDA = 0;
+ShrubInst                   *D_L14_00160494 = 0;
+ShrubInst                   *D_L14_00160498 = 0;
+ShrubMatrix                 *D_L14_0016049C = 0;
+TextTable                   *D_L14_0015F660 = 0;
+Tfrag                       *D_L14_00160F4C = 0;
+TieClass *D_L14_001C5F00     NOT_SDA = 0;
+TieInst                     *D_L14_00160FC0 = 0;
+TieInst                     *D_L14_00160FC4 = 0;
+TieMatrix                   *D_L14_00160FC8 = 0;
+char                        *D_L14_001600E4 = 0;
+char                        *D_L14_00160108 = 0;
+char                        *D_L14_0015F318 = 0;
+char D_L14_0016CEB0          NOT_SDA = 0;
+char D_L14_00174600          NOT_SDA = 0;
+char D_L14_0017F3C0          NOT_SDA = 0;
+char D_L14_0019BEE0          NOT_SDA = 0;
+char D_L14_001ABEE0          NOT_SDA = 0;
+char D_L14_001B1F80          NOT_SDA = 0;
+float                        D_L14_001604A4 = 0;
+float                        D_L14_00160F80 = 0;
+float                        D_L14_00160FE0 = 0;
+int                          D_L14_0015EF54 = 0;
+int                          D_L14_0015FBC4 = 0;
+int                          D_L14_0015FFF0 = 0;
+int                          D_L14_00160104 = 0;
+int                          D_L14_00160170 = 0;
+int                          D_L14_00160174 = 0;
+int                          D_L14_00160178 = 0;
+int                          D_L14_0016017C = 0;
+int                          D_L14_00160490 = 0;
+int                          D_L14_00160F50 = 0;
+int                          D_L14_00160FCC = 0;
+unsigned char               *D_L14_001604A0 = 0;
 unsigned char D_L14_001BC8B0 NOT_SDA = 0;
 unsigned char D_L14_001C6200 NOT_SDA = 0;
-u64 D_L14_00182EC0[3] = {0};
+u64                          D_L14_00182EC0[3] = {0};
+
 u64 D_L14_00182ED8[3] = {0};
+
 u64 D_L14_00182EF0[3] = {0};
-s32 D_L14_0015FFC8 = 0;
-u32 D_L14_0019A180 NOT_SDA = 0;
-u8 D_L14_001AF2C0 NOT_SDA = 0;
-s32 D_L14_00160010 = 0;
-char *D_L14_0015F604 = 0;
-s32 D_L14_0015F5F0 = 0;
-char D_L14_001FAAD0 NOT_SDA = 0x69;
-Tbl *D_L15_0015F618 = 0;
-int D_L15_001600E8 = 0;
-int D_L15_001600F0 = 0;
-int D_L15_001600F8 = 0;
-int D_L15_00160100 = 0;
-char *D_L15_0015FBC0 = 0;
-char *D_L15_0015FB80 = 0;
-int D_L15_0015FB50 = 0;
-char *D_L15_00160040 = 0;
-int D_L15_00160014 = 0;
-ShrubClass *D_L15_001BC630 NOT_SDA = 0;
-ShrubInst *D_L15_00160494 = 0;
-ShrubInst *D_L15_00160498 = 0;
-ShrubMatrix *D_L15_0016049C = 0;
-TextTable *D_L15_0015F660 = 0;
-Tfrag *D_L15_00160F4C = 0;
-TieClass *D_L15_001C5E00 NOT_SDA = 0;
-TieInst *D_L15_00160FC0 = 0;
-TieInst *D_L15_00160FC4 = 0;
-TieMatrix *D_L15_00160FC8 = 0;
-char *D_L15_001600E4 = 0;
-char *D_L15_00160108 = 0;
-char *D_L15_0015F318 = 0;
-char D_L15_0016CDB0 NOT_SDA = 0;
-char D_L15_00174500 NOT_SDA = 0;
-char D_L15_0017F2C0 NOT_SDA = 0;
-char D_L15_0019BDE0 NOT_SDA = 0;
-char D_L15_001ABDE0 NOT_SDA = 0;
-char D_L15_001B1E80 NOT_SDA = 0;
-float D_L15_001604A4 = 0;
-float D_L15_00160F80 = 0;
-float D_L15_00160FE0 = 0;
-int D_L15_0015EF54 = 0;
-int D_L15_0015FBC4 = 0;
-int D_L15_0015FFF0 = 0;
-int D_L15_00160104 = 0;
-int D_L15_00160170 = 0;
-int D_L15_00160174 = 0;
-int D_L15_00160178 = 0;
-int D_L15_0016017C = 0;
-int D_L15_00160490 = 0;
-int D_L15_00160F50 = 0;
-int D_L15_00160FCC = 0;
-unsigned char *D_L15_001604A0 = 0;
+
+s32                          D_L14_0015FFC8 = 0;
+u32 D_L14_0019A180           NOT_SDA = 0;
+u8 D_L14_001AF2C0            NOT_SDA = 0;
+s32                          D_L14_00160010 = 0;
+char                        *D_L14_0015F604 = 0;
+s32                          D_L14_0015F5F0 = 0;
+char D_L14_001FAAD0          NOT_SDA = 0x69;
+Tbl                         *D_L15_0015F618 = 0;
+int                          D_L15_001600E8 = 0;
+int                          D_L15_001600F0 = 0;
+int                          D_L15_001600F8 = 0;
+int                          D_L15_00160100 = 0;
+char                        *D_L15_0015FBC0 = 0;
+char                        *D_L15_0015FB80 = 0;
+int                          D_L15_0015FB50 = 0;
+char                        *D_L15_00160040 = 0;
+int                          D_L15_00160014 = 0;
+ShrubClass *D_L15_001BC630   NOT_SDA = 0;
+ShrubInst                   *D_L15_00160494 = 0;
+ShrubInst                   *D_L15_00160498 = 0;
+ShrubMatrix                 *D_L15_0016049C = 0;
+TextTable                   *D_L15_0015F660 = 0;
+Tfrag                       *D_L15_00160F4C = 0;
+TieClass *D_L15_001C5E00     NOT_SDA = 0;
+TieInst                     *D_L15_00160FC0 = 0;
+TieInst                     *D_L15_00160FC4 = 0;
+TieMatrix                   *D_L15_00160FC8 = 0;
+char                        *D_L15_001600E4 = 0;
+char                        *D_L15_00160108 = 0;
+char                        *D_L15_0015F318 = 0;
+char D_L15_0016CDB0          NOT_SDA = 0;
+char D_L15_00174500          NOT_SDA = 0;
+char D_L15_0017F2C0          NOT_SDA = 0;
+char D_L15_0019BDE0          NOT_SDA = 0;
+char D_L15_001ABDE0          NOT_SDA = 0;
+char D_L15_001B1E80          NOT_SDA = 0;
+float                        D_L15_001604A4 = 0;
+float                        D_L15_00160F80 = 0;
+float                        D_L15_00160FE0 = 0;
+int                          D_L15_0015EF54 = 0;
+int                          D_L15_0015FBC4 = 0;
+int                          D_L15_0015FFF0 = 0;
+int                          D_L15_00160104 = 0;
+int                          D_L15_00160170 = 0;
+int                          D_L15_00160174 = 0;
+int                          D_L15_00160178 = 0;
+int                          D_L15_0016017C = 0;
+int                          D_L15_00160490 = 0;
+int                          D_L15_00160F50 = 0;
+int                          D_L15_00160FCC = 0;
+unsigned char               *D_L15_001604A0 = 0;
 unsigned char D_L15_001BC7B0 NOT_SDA = 0;
 unsigned char D_L15_001C6100 NOT_SDA = 0;
-u64 D_L15_00182DC0[3] = {0};
+u64                          D_L15_00182DC0[3] = {0};
+
 u64 D_L15_00182DD8[3] = {0};
+
 u64 D_L15_00182DF0[3] = {0};
-s32 D_L15_0015FFC8 = 0;
-u32 D_L15_0019A080 NOT_SDA = 0;
-u8 D_L15_001AF1C0 NOT_SDA = 0;
-s32 D_L15_00160010 = 0;
-char *D_L15_0015F420 = 0;
-char *D_L15_0015F604 = 0;
-s32 D_L15_0015F5F0 = 0;
-char D_L15_001E1340 NOT_SDA = 0x69;
-Tbl *D_L16_0015F618 = 0;
-int D_L16_001600E8 = 0;
-int D_L16_001600F0 = 0;
-int D_L16_001600F8 = 0;
-int D_L16_00160100 = 0;
-char *D_L16_0015FBC0 = 0;
-char *D_L16_0015FB80 = 0;
-int D_L16_0015FB50 = 0;
-char *D_L16_00160040 = 0;
-int D_L16_00160014 = 0;
-ShrubClass *D_L16_001BC4B0 NOT_SDA = 0;
-ShrubInst *D_L16_00160494 = 0;
-ShrubInst *D_L16_00160498 = 0;
-ShrubMatrix *D_L16_0016049C = 0;
-TextTable *D_L16_0015F660 = 0;
-Tfrag *D_L16_00160F4C = 0;
-TieClass *D_L16_001C5C80 NOT_SDA = 0;
-TieInst *D_L16_00160FC0 = 0;
-TieInst *D_L16_00160FC4 = 0;
-TieMatrix *D_L16_00160FC8 = 0;
-char *D_L16_001600E4 = 0;
-char *D_L16_00160108 = 0;
-char *D_L16_0015F318 = 0;
-char D_L16_0016CBB0 NOT_SDA = 0;
-char D_L16_00174300 NOT_SDA = 0;
-char D_L16_0017F140 NOT_SDA = 0;
-char D_L16_0019BC60 NOT_SDA = 0;
-char D_L16_001ABC60 NOT_SDA = 0;
-char D_L16_001B1D00 NOT_SDA = 0;
-float D_L16_001604A4 = 0;
-float D_L16_00160F80 = 0;
-float D_L16_00160FE0 = 0;
-int D_L16_0015EF54 = 0;
-int D_L16_0015FBC4 = 0;
-int D_L16_0015FFF0 = 0;
-int D_L16_00160104 = 0;
-int D_L16_00160170 = 0;
-int D_L16_00160174 = 0;
-int D_L16_00160178 = 0;
-int D_L16_0016017C = 0;
-int D_L16_00160490 = 0;
-int D_L16_00160F50 = 0;
-int D_L16_00160FCC = 0;
-unsigned char *D_L16_001604A0 = 0;
+
+s32                          D_L15_0015FFC8 = 0;
+u32 D_L15_0019A080           NOT_SDA = 0;
+u8 D_L15_001AF1C0            NOT_SDA = 0;
+s32                          D_L15_00160010 = 0;
+char                        *D_L15_0015F420 = 0;
+char                        *D_L15_0015F604 = 0;
+s32                          D_L15_0015F5F0 = 0;
+char D_L15_001E1340          NOT_SDA = 0x69;
+Tbl                         *D_L16_0015F618 = 0;
+int                          D_L16_001600E8 = 0;
+int                          D_L16_001600F0 = 0;
+int                          D_L16_001600F8 = 0;
+int                          D_L16_00160100 = 0;
+char                        *D_L16_0015FBC0 = 0;
+char                        *D_L16_0015FB80 = 0;
+int                          D_L16_0015FB50 = 0;
+char                        *D_L16_00160040 = 0;
+int                          D_L16_00160014 = 0;
+ShrubClass *D_L16_001BC4B0   NOT_SDA = 0;
+ShrubInst                   *D_L16_00160494 = 0;
+ShrubInst                   *D_L16_00160498 = 0;
+ShrubMatrix                 *D_L16_0016049C = 0;
+TextTable                   *D_L16_0015F660 = 0;
+Tfrag                       *D_L16_00160F4C = 0;
+TieClass *D_L16_001C5C80     NOT_SDA = 0;
+TieInst                     *D_L16_00160FC0 = 0;
+TieInst                     *D_L16_00160FC4 = 0;
+TieMatrix                   *D_L16_00160FC8 = 0;
+char                        *D_L16_001600E4 = 0;
+char                        *D_L16_00160108 = 0;
+char                        *D_L16_0015F318 = 0;
+char D_L16_0016CBB0          NOT_SDA = 0;
+char D_L16_00174300          NOT_SDA = 0;
+char D_L16_0017F140          NOT_SDA = 0;
+char D_L16_0019BC60          NOT_SDA = 0;
+char D_L16_001ABC60          NOT_SDA = 0;
+char D_L16_001B1D00          NOT_SDA = 0;
+float                        D_L16_001604A4 = 0;
+float                        D_L16_00160F80 = 0;
+float                        D_L16_00160FE0 = 0;
+int                          D_L16_0015EF54 = 0;
+int                          D_L16_0015FBC4 = 0;
+int                          D_L16_0015FFF0 = 0;
+int                          D_L16_00160104 = 0;
+int                          D_L16_00160170 = 0;
+int                          D_L16_00160174 = 0;
+int                          D_L16_00160178 = 0;
+int                          D_L16_0016017C = 0;
+int                          D_L16_00160490 = 0;
+int                          D_L16_00160F50 = 0;
+int                          D_L16_00160FCC = 0;
+unsigned char               *D_L16_001604A0 = 0;
 unsigned char D_L16_001BC630 NOT_SDA = 0;
 unsigned char D_L16_001C5F80 NOT_SDA = 0;
-u64 D_L16_00182C40[3] = {0};
+u64                          D_L16_00182C40[3] = {0};
+
 u64 D_L16_00182C58[3] = {0};
+
 u64 D_L16_00182C70[3] = {0};
-s32 D_L16_0015FFC8 = 0;
-u32 D_L16_00199F00 NOT_SDA = 0;
-u8 D_L16_001AF040 NOT_SDA = 0;
-s32 D_L16_00160010 = 0;
-s32 D_L16_001B0100 NOT_SDA = 0;
-char *D_L16_0015F420 = 0;
-char *D_L16_0015F604 = 0;
-s32 D_L16_0015F5F0 = 0;
-char D_L16_001E6A50 NOT_SDA = 0x69;
-Tbl *D_L17_0015F618 = 0;
-int D_L17_001600E8 = 0;
-int D_L17_001600F0 = 0;
-int D_L17_001600F8 = 0;
-int D_L17_00160100 = 0;
-char *D_L17_0015FBC0 = 0;
-char *D_L17_0015FB80 = 0;
-int D_L17_0015FB50 = 0;
-char *D_L17_00160040 = 0;
-int D_L17_00160014 = 0;
-ShrubClass *D_L17_001BC930 NOT_SDA = 0;
-ShrubInst *D_L17_00160494 = 0;
-ShrubInst *D_L17_00160498 = 0;
-ShrubMatrix *D_L17_0016049C = 0;
-TextTable *D_L17_0015F660 = 0;
-Tfrag *D_L17_00160F4C = 0;
-TieClass *D_L17_001C6100 NOT_SDA = 0;
-TieInst *D_L17_00160FC0 = 0;
-TieInst *D_L17_00160FC4 = 0;
-TieMatrix *D_L17_00160FC8 = 0;
-char *D_L17_001600E4 = 0;
-char *D_L17_00160108 = 0;
-char *D_L17_0015F318 = 0;
-char D_L17_0016D0B0 NOT_SDA = 0;
-char D_L17_00174800 NOT_SDA = 0;
-char D_L17_0017F5C0 NOT_SDA = 0;
-char D_L17_0019C0E0 NOT_SDA = 0;
-char D_L17_001AC0E0 NOT_SDA = 0;
-char D_L17_001B2180 NOT_SDA = 0;
-float D_L17_001604A4 = 0;
-float D_L17_00160F80 = 0;
-float D_L17_00160FE0 = 0;
-int D_L17_0015EF54 = 0;
-int D_L17_0015FBC4 = 0;
-int D_L17_0015FFF0 = 0;
-int D_L17_00160104 = 0;
-int D_L17_00160170 = 0;
-int D_L17_00160174 = 0;
-int D_L17_00160178 = 0;
-int D_L17_0016017C = 0;
-int D_L17_00160490 = 0;
-int D_L17_00160F50 = 0;
-int D_L17_00160FCC = 0;
-unsigned char *D_L17_001604A0 = 0;
+
+s32                          D_L16_0015FFC8 = 0;
+u32 D_L16_00199F00           NOT_SDA = 0;
+u8 D_L16_001AF040            NOT_SDA = 0;
+s32                          D_L16_00160010 = 0;
+s32 D_L16_001B0100           NOT_SDA = 0;
+char                        *D_L16_0015F420 = 0;
+char                        *D_L16_0015F604 = 0;
+s32                          D_L16_0015F5F0 = 0;
+char D_L16_001E6A50          NOT_SDA = 0x69;
+Tbl                         *D_L17_0015F618 = 0;
+int                          D_L17_001600E8 = 0;
+int                          D_L17_001600F0 = 0;
+int                          D_L17_001600F8 = 0;
+int                          D_L17_00160100 = 0;
+char                        *D_L17_0015FBC0 = 0;
+char                        *D_L17_0015FB80 = 0;
+int                          D_L17_0015FB50 = 0;
+char                        *D_L17_00160040 = 0;
+int                          D_L17_00160014 = 0;
+ShrubClass *D_L17_001BC930   NOT_SDA = 0;
+ShrubInst                   *D_L17_00160494 = 0;
+ShrubInst                   *D_L17_00160498 = 0;
+ShrubMatrix                 *D_L17_0016049C = 0;
+TextTable                   *D_L17_0015F660 = 0;
+Tfrag                       *D_L17_00160F4C = 0;
+TieClass *D_L17_001C6100     NOT_SDA = 0;
+TieInst                     *D_L17_00160FC0 = 0;
+TieInst                     *D_L17_00160FC4 = 0;
+TieMatrix                   *D_L17_00160FC8 = 0;
+char                        *D_L17_001600E4 = 0;
+char                        *D_L17_00160108 = 0;
+char                        *D_L17_0015F318 = 0;
+char D_L17_0016D0B0          NOT_SDA = 0;
+char D_L17_00174800          NOT_SDA = 0;
+char D_L17_0017F5C0          NOT_SDA = 0;
+char D_L17_0019C0E0          NOT_SDA = 0;
+char D_L17_001AC0E0          NOT_SDA = 0;
+char D_L17_001B2180          NOT_SDA = 0;
+float                        D_L17_001604A4 = 0;
+float                        D_L17_00160F80 = 0;
+float                        D_L17_00160FE0 = 0;
+int                          D_L17_0015EF54 = 0;
+int                          D_L17_0015FBC4 = 0;
+int                          D_L17_0015FFF0 = 0;
+int                          D_L17_00160104 = 0;
+int                          D_L17_00160170 = 0;
+int                          D_L17_00160174 = 0;
+int                          D_L17_00160178 = 0;
+int                          D_L17_0016017C = 0;
+int                          D_L17_00160490 = 0;
+int                          D_L17_00160F50 = 0;
+int                          D_L17_00160FCC = 0;
+unsigned char               *D_L17_001604A0 = 0;
 unsigned char D_L17_001BCAB0 NOT_SDA = 0;
 unsigned char D_L17_001C6400 NOT_SDA = 0;
-u64 D_L17_001830C0[3] = {0};
+u64                          D_L17_001830C0[3] = {0};
+
 u64 D_L17_001830D8[3] = {0};
+
 u64 D_L17_001830F0[3] = {0};
-s32 D_L17_0015FFC8 = 0;
-u32 D_L17_0019A380 NOT_SDA = 0;
-u8 D_L17_001AF4C0 NOT_SDA = 0;
-s32 D_L17_00160010 = 0;
-char *D_L17_0015F604 = 0;
-s32 D_L17_0015F5F0 = 0;
-char D_L17_001E5140 NOT_SDA = 0x69;
-Tbl *D_L18_0015F618 = 0;
-int D_L18_001600E8 = 0;
-int D_L18_001600F0 = 0;
-int D_L18_001600F8 = 0;
-int D_L18_00160100 = 0;
-char *D_L18_0015FBC0 = 0;
-char *D_L18_0015FB80 = 0;
-int D_L18_0015FB50 = 0;
-char *D_L18_00160040 = 0;
-int D_L18_00160014 = 0;
-ShrubInst *D_L18_00160498 = 0;
-ShrubMatrix *D_L18_0016049C = 0;
-TextTable *D_L18_0015F660 = 0;
-Tfrag *D_L18_00160F4C = 0;
-TieInst *D_L18_00160FC4 = 0;
-TieMatrix *D_L18_00160FC8 = 0;
-char *D_L18_001600E4 = 0;
-char *D_L18_0015F318 = 0;
-char D_L18_0016D1B0 NOT_SDA = 0;
-char D_L18_00174900 NOT_SDA = 0;
-char D_L18_0017F6C0 NOT_SDA = 0;
-char D_L18_0019C1E0 NOT_SDA = 0;
-char D_L18_001AC1E0 NOT_SDA = 0;
-char D_L18_001B2280 NOT_SDA = 0;
-float D_L18_001604A4 = 0;
-float D_L18_00160F80 = 0;
-float D_L18_00160FE0 = 0;
-int D_L18_0015EF54 = 0;
-int D_L18_0015FBC4 = 0;
-int D_L18_0015FFF0 = 0;
-int D_L18_00160104 = 0;
-int D_L18_00160170 = 0;
-int D_L18_00160174 = 0;
-int D_L18_00160178 = 0;
-int D_L18_0016017C = 0;
-int D_L18_00160490 = 0;
-int D_L18_00160F50 = 0;
-int D_L18_00160FCC = 0;
-unsigned char *D_L18_001604A0 = 0;
+
+s32                          D_L17_0015FFC8 = 0;
+u32 D_L17_0019A380           NOT_SDA = 0;
+u8 D_L17_001AF4C0            NOT_SDA = 0;
+s32                          D_L17_00160010 = 0;
+char                        *D_L17_0015F604 = 0;
+s32                          D_L17_0015F5F0 = 0;
+char D_L17_001E5140          NOT_SDA = 0x69;
+Tbl                         *D_L18_0015F618 = 0;
+int                          D_L18_001600E8 = 0;
+int                          D_L18_001600F0 = 0;
+int                          D_L18_001600F8 = 0;
+int                          D_L18_00160100 = 0;
+char                        *D_L18_0015FBC0 = 0;
+char                        *D_L18_0015FB80 = 0;
+int                          D_L18_0015FB50 = 0;
+char                        *D_L18_00160040 = 0;
+int                          D_L18_00160014 = 0;
+ShrubInst                   *D_L18_00160498 = 0;
+ShrubMatrix                 *D_L18_0016049C = 0;
+TextTable                   *D_L18_0015F660 = 0;
+Tfrag                       *D_L18_00160F4C = 0;
+TieInst                     *D_L18_00160FC4 = 0;
+TieMatrix                   *D_L18_00160FC8 = 0;
+char                        *D_L18_001600E4 = 0;
+char                        *D_L18_0015F318 = 0;
+char D_L18_0016D1B0          NOT_SDA = 0;
+char D_L18_00174900          NOT_SDA = 0;
+char D_L18_0017F6C0          NOT_SDA = 0;
+char D_L18_0019C1E0          NOT_SDA = 0;
+char D_L18_001AC1E0          NOT_SDA = 0;
+char D_L18_001B2280          NOT_SDA = 0;
+float                        D_L18_001604A4 = 0;
+float                        D_L18_00160F80 = 0;
+float                        D_L18_00160FE0 = 0;
+int                          D_L18_0015EF54 = 0;
+int                          D_L18_0015FBC4 = 0;
+int                          D_L18_0015FFF0 = 0;
+int                          D_L18_00160104 = 0;
+int                          D_L18_00160170 = 0;
+int                          D_L18_00160174 = 0;
+int                          D_L18_00160178 = 0;
+int                          D_L18_0016017C = 0;
+int                          D_L18_00160490 = 0;
+int                          D_L18_00160F50 = 0;
+int                          D_L18_00160FCC = 0;
+unsigned char               *D_L18_001604A0 = 0;
 unsigned char D_L18_001BCBB0 NOT_SDA = 0;
 
-int D_L00_001600E8 = 0;
-int D_L00_001600F0 = 0;
-int D_L00_001600F8 = 0;
-int D_L00_00160100 = 0;
-int D_L00_0015FB50 = 0;
+int   D_L00_001600E8 = 0;
+int   D_L00_001600F0 = 0;
+int   D_L00_001600F8 = 0;
+int   D_L00_00160100 = 0;
+int   D_L00_0015FB50 = 0;
 char *D_L00_00160108_macro __asm__("D_L00_00160108") = 0;
 char *D_L00_0015F318 = 0;
-int D_L00_00160104 = 0;
-int D_L00_00160490 = 0;
-int D_L00_00160FCC = 0;
+int   D_L00_00160104 = 0;
+int   D_L00_00160490 = 0;
+int   D_L00_00160FCC = 0;

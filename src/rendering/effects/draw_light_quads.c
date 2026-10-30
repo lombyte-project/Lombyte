@@ -6,7 +6,6 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/math/fast_math.h"
 
-
 typedef float FVec4[4] __attribute__((aligned(16)));
 
 typedef struct {
@@ -19,7 +18,7 @@ typedef struct {
 } LightRec;
 
 extern FRow light_quad_vertex_template[4] __asm__("D_0018CAA0");
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
+extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
 /* Builds a 4-row matrix per light in D_0018E340 (count D_0015F474):
@@ -32,14 +31,15 @@ extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 void draw_light_quads(void) __asm__("FUN_001f4880");
 
 extern LightRec light_quad_records[] __asm__("D_0018E340");
+
 void draw_light_quads(void) {
-    FRow quad_vertices[4];
-    int colors[4];
-    float uv[4][2];
+    FRow          quad_vertices[4];
+    int           colors[4];
+    float         uv[4][2];
     unsigned long pkt[4];
-    FRow dir;
-    int i;
-    int j;
+    FRow          dir;
+    int           i;
+    int           j;
 
     pkt[1] = get_effect_texture(0);
     pkt[2] = 0xFF9000000260;
@@ -52,7 +52,7 @@ void draw_light_quads(void) {
     }
     for (i = 0; i < effect_quad_count; i++) {
         float radius;
-        int k;
+        int   k;
 
         qcopy(&dir, &light_quad_records[i].dir);
         fast_vec_normalize(&dir, &dir, 1.0f);

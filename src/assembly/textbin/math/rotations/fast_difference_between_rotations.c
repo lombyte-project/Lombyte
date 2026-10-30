@@ -3,8 +3,7 @@
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/math/rotations/"
-            "fast_difference_between_rotations/FUN_001fa688.s",
-            fast_difference_between_rotations);
+            "fast_difference_between_rotations/FUN_001fa688.s", fast_difference_between_rotations);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

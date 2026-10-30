@@ -1,9 +1,9 @@
 #include "types.h"
 
 typedef struct SysbitState {
-    u8 reserved[8];
+    u8  reserved[8];
     u32 bit_pointer;
-    u8 padding[24];
+    u8  padding[24];
     u32 limit;
     u32 wrap_base;
 } SysbitState;

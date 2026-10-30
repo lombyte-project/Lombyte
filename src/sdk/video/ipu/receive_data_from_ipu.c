@@ -1,6 +1,8 @@
 #include "types.h"
-extern s32 DIntr();
+
+extern s32  DIntr();
 extern void EnableInterrupts();
+
 void receiveDataFromIPU(s32 destination_address, s32 byte_count) {
     s32 old;
 

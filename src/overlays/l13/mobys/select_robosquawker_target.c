@@ -10,19 +10,21 @@
 
 extern char *moby_base __asm__("D_L13_0015FFD8");
 
-extern short D_L13_001B0B30[] NOT_SDA;
-extern char *D_L13_001D1E90[] NOT_SDA;
+extern short       D_L13_001B0B30[] NOT_SDA;
+extern char       *D_L13_001D1E90[] NOT_SDA;
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
-int select_robosquawker_target(char *source_object, char *selection_output, float best) __asm__("FUN_L13_0026bd00");
+int                select_robosquawker_target(char *source_object,
+                                              char *selection_output,
+                                              float best) __asm__("FUN_L13_0026bd00");
 
 int select_robosquawker_target(char *source_object, char *selection_output, float best) {
     struct Hero *hero = &hero_lui;
-    char *selected_object;
-    char *candidate_object;
-    int selection_status;
-    int i;
-    int j;
-    float candidate_metric;
+    char        *selected_object;
+    char        *candidate_object;
+    int          selection_status;
+    int          i;
+    int          j;
+    float        candidate_metric;
 
     selected_object = ((char *)hero->moby);
     selection_status = 0;
@@ -34,7 +36,8 @@ int select_robosquawker_target(char *source_object, char *selection_output, floa
         candidate_object = moby_base + (D_L13_001B0B30[i] << 8);
         if (candidate_object == 0)
             continue;
-        if (*(short *)(candidate_object + 0xA6) != 0xCB && *(short *)(candidate_object + 0xA6) != 0x76C)
+        if (*(short *)(candidate_object + 0xA6) != 0xCB &&
+            *(short *)(candidate_object + 0xA6) != 0x76C)
             continue;
         if (*(unsigned char *)(candidate_object + 0x20) == 0xFE)
             continue;

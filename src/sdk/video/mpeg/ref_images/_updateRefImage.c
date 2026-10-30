@@ -2,7 +2,7 @@
 #include "types.h"
 
 struct MpegReferencePicture {
-    u8 pad_0[0x18];
+    u8  pad_0[0x18];
     s64 presentation_timestamp;
     s64 decoding_timestamp;
     s32 status;
@@ -23,32 +23,32 @@ struct MpegReferencePicture {
 };
 
 struct MpegReferenceState {
-    u8 pad_0[0xA0];
-    s32 queued_picture_count0;
-    s32 queued_picture_count1;
-    u8 pad_A8[0x40];
-    s32 reorder_gate;
-    u8 pad_EC[0x50];
-    s32 progressive_sequence;
-    u8 pad_140[0x8];
-    s32 display_width;
-    s32 display_height;
-    s32 coding_type;
-    u8 pad_154[0x20];
-    s32 picture_structure;
-    s32 top_field_first;
-    u8 pad_17C[0x8];
-    s32 repeat_first_field;
-    s32 progressive_frame;
-    s32 horizontal_offset0;
-    s32 horizontal_offset1;
-    s32 horizontal_offset2;
-    s32 vertical_offset0;
-    s32 vertical_offset1;
-    s32 vertical_offset2;
-    s32 closed_group;
-    s32 broken_link;
-    u8 pad_1AC[0xC];
+    u8                           pad_0[0xA0];
+    s32                          queued_picture_count0;
+    s32                          queued_picture_count1;
+    u8                           pad_A8[0x40];
+    s32                          reorder_gate;
+    u8                           pad_EC[0x50];
+    s32                          progressive_sequence;
+    u8                           pad_140[0x8];
+    s32                          display_width;
+    s32                          display_height;
+    s32                          coding_type;
+    u8                           pad_154[0x20];
+    s32                          picture_structure;
+    s32                          top_field_first;
+    u8                           pad_17C[0x8];
+    s32                          repeat_first_field;
+    s32                          progressive_frame;
+    s32                          horizontal_offset0;
+    s32                          horizontal_offset1;
+    s32                          horizontal_offset2;
+    s32                          vertical_offset0;
+    s32                          vertical_offset1;
+    s32                          vertical_offset2;
+    s32                          closed_group;
+    s32                          broken_link;
+    u8                           pad_1AC[0xC];
     struct MpegReferencePicture *current_frame;
     struct MpegReferencePicture *previous_frame;
     struct MpegReferencePicture *selected_frame;
@@ -61,13 +61,13 @@ struct MpegReferenceState {
     struct MpegReferencePicture *previous_bottom_field;
     struct MpegReferencePicture *selected_bottom_field;
     struct MpegReferencePicture *reordered_bottom_field;
-    u8 pad_1E8[0x640];
-    s64 presentation_timestamp;
-    s64 decoding_timestamp;
+    u8                           pad_1E8[0x640];
+    s64                          presentation_timestamp;
+    s64                          decoding_timestamp;
 };
 
 s32 UpdateMpegReferenceImages(struct MpegReferenceState *state,
-                              s32 force_reorder) __asm__("_updateRefImage");
+                              s32                        force_reorder) __asm__("_updateRefImage");
 
 s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorder) {
     enum {
@@ -76,8 +76,8 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
         MPEG_PICTURE_STRUCTURE_FRAME = 3
     };
     struct MpegReferencePicture *selected_picture;
-    s32 references_ready;
-    s32 queue_threshold;
+    s32                          references_ready;
+    s32                          queue_threshold;
     struct MpegReferencePicture *swap;
     struct MpegReferencePicture *predicted_field;
 
@@ -107,7 +107,8 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
                 }
             }
         } else {
-            if ((state->current_top_field->status == 1 && state->current_bottom_field->status == 1) ||
+            if ((state->current_top_field->status == 1 &&
+                 state->current_bottom_field->status == 1) ||
                 state->closed_group != 0) {
                 if (state->previous_top_field->status == 1) {
                     if (state->previous_bottom_field->status == 1) {
@@ -139,7 +140,8 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
             predicted_field = (state->picture_structure == 1) ? state->selected_bottom_field
                                                               : state->selected_top_field;
             if (state->coding_type != 2 || (force_reorder != 0 && predicted_field->status == 1) ||
-                (state->current_top_field->status == 1 && state->current_bottom_field->status == 1)) {
+                (state->current_top_field->status == 1 &&
+                 state->current_bottom_field->status == 1)) {
                 references_ready = 1;
             }
         }

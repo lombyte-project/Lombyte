@@ -27,35 +27,45 @@
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-void draw_water_reservoir(struct Moby *moby) __asm__("FUN_L12_002ecac0");
+void         draw_water_reservoir(struct Moby *moby) __asm__("FUN_L12_002ecac0");
 
-extern void draw_water_reservoir(struct Moby *) __asm__("FUN_L12_002ecac0");
+extern void  draw_water_reservoir(struct Moby *) __asm__("FUN_L12_002ecac0");
 extern float D_L12_0015F3FC;
+
 #include "rnc/overlay/l12/mobys/water_reservoir_globals.h"
+
 extern float water_reservoir_angle_rate_degrees_gp __asm__("D_L12_001619CC") __attribute__((sda));
-int D_L12_001619D0 = 105;
+int          D_L12_001619D0 = 105;
 extern float water_reservoir_random_offset_radius_gp __asm__("D_L12_001619D4") __attribute__((sda));
 extern float D_L12_001619D8 __attribute__((sda));
-extern int D_L12_001619DC __attribute__((sda));
+extern int   D_L12_001619DC __attribute__((sda));
+
 #include "rnc/overlay/l12/mobys/water_reservoir_data/water_reservoir_update_3.h"
+
 int D_L12_001619E8 = 1;
+
 #include "rnc/overlay/l12/mobys/water_reservoir_data/water_reservoir_update_2.h"
+
 int D_L12_001619F0 = 1;
 int D_L12_001619F4 = 0x40404040;
 int D_L12_001619F8 = 0x10022;
+
 #include "rnc/overlay/l12/mobys/water_reservoir_data/water_reservoir_update.h"
+
 extern float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") __attribute__((sda));
 
 void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
+
 void water_reservoir_update(struct Moby *moby) {
     float *data = (float *)moby->pvars;
-    float pos[4], offset0[4], offset1[4], pos_offset_delta[4], offset_pair_delta[4];
-    float fraction, frame_scale;
-    int scaled;
+    float  pos[4], offset0[4], offset1[4], pos_offset_delta[4], offset_pair_delta[4];
+    float  fraction, frame_scale;
+    int    scaled;
     if (moby->state != 0) {
         extern float D_L12_0015F3FC __attribute__((sda));
         frame_scale = D_L12_0015F3FC;
-        if (moby->state == 1) goto active;
+        if (moby->state == 1)
+            goto active;
         goto update;
     }
     moby->state = 1;
@@ -71,7 +81,8 @@ active:
         moby->command = 2;
         *(int *)&data[1] = scale_game_frames(D_L12_001619D0);
     }
-    data[0] = fast_add_rotations(data[0], water_reservoir_angle_rate_degrees_gp * 0.017453292f * frame_time);
+    data[0] = fast_add_rotations(data[0],
+                                 water_reservoir_angle_rate_degrees_gp * 0.017453292f * frame_time);
 frame_active:
     frame_scale = D_L12_0015F3FC;
 update:
@@ -79,7 +90,7 @@ update:
         if (fast_dec_timer((int *)&data[1]) == 0) {
             if (moby->command & 1) {
                 fraction = 1.0f - convert_integer_to_float(*(int *)&data[1]) /
-                                  convert_integer_to_float(D_L12_001619D0);
+                                      convert_integer_to_float(D_L12_001619D0);
             } else {
                 fraction = convert_integer_to_float(*(int *)&data[1]) /
                            convert_integer_to_float(D_L12_001619D0);
@@ -89,9 +100,11 @@ update:
                 random_vector(offset0, 0.0f, water_reservoir_random_offset_radius_gp);
                 random_vector(offset1, 0.0f, water_reservoir_random_offset_radius_gp);
                 fast_vec_sub(pos_offset_delta, pos, offset0);
-                pos_offset_delta[2] += water_reservoir_effect_delta_z_reference_gp - water_reservoir_unmirrored_effect_spawn_z_offset_gp;
+                pos_offset_delta[2] += water_reservoir_effect_delta_z_reference_gp -
+                                       water_reservoir_unmirrored_effect_spawn_z_offset_gp;
                 fast_vec_sub(offset_pair_delta, offset0, offset1);
-                offset_pair_delta[2] += water_reservoir_mirrored_effect_spawn_z_offset_gp - water_reservoir_effect_delta_z_reference_gp;
+                offset_pair_delta[2] += water_reservoir_mirrored_effect_spawn_z_offset_gp -
+                                        water_reservoir_effect_delta_z_reference_gp;
                 scaled = water_reservoir_effect_delta_scale_divisor_gp;
                 fast_vec_scale(pos_offset_delta, pos_offset_delta, 2.0f / (float)scaled);
                 fast_vec_scale(offset_pair_delta, offset_pair_delta, 2.0f / (float)scaled);
@@ -103,11 +116,21 @@ update:
                 } else {
                     pos[2] += water_reservoir_unmirrored_effect_spawn_z_offset_gp;
                 }
-                pos_offset_delta[3] = random_float_between(water_reservoir_effect_delta_fourth_component_range_start_gp, water_reservoir_effect_delta_fourth_component_range_end_gp);
-                offset_pair_delta[3] = random_float_between(water_reservoir_effect_delta_fourth_component_range_start_gp, water_reservoir_effect_delta_fourth_component_range_end_gp);
-                spawn_spark(pos, pos_offset_delta, offset_pair_delta, D_L12_001619F4, D_L12_001619F4,
-                                  D_L12_001619E8, scale_game_frames(water_reservoir_effect_delta_scale_divisor_gp),
-                                  D_L12_001619F0, D_L12_001619F8);
+                pos_offset_delta[3] = random_float_between(
+                    water_reservoir_effect_delta_fourth_component_range_start_gp,
+                    water_reservoir_effect_delta_fourth_component_range_end_gp);
+                offset_pair_delta[3] = random_float_between(
+                    water_reservoir_effect_delta_fourth_component_range_start_gp,
+                    water_reservoir_effect_delta_fourth_component_range_end_gp);
+                spawn_spark(pos,
+                            pos_offset_delta,
+                            offset_pair_delta,
+                            D_L12_001619F4,
+                            D_L12_001619F4,
+                            D_L12_001619E8,
+                            scale_game_frames(water_reservoir_effect_delta_scale_divisor_gp),
+                            D_L12_001619F0,
+                            D_L12_001619F8);
             }
         }
         if ((moby->command & 1) && *(int *)&data[1] == 0) {
@@ -119,40 +142,38 @@ update:
     add_draw_callback(draw_water_reservoir, moby);
 }
 
-
-
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EDE40), where it is exact; names translated to the US level program. */
 
 typedef struct {
     float v[16];
-    int c[4];
+    int   c[4];
     float uv[8];
-    long g[4];
+    long  g[4];
 } Quad;
 
-extern char water_reservoir_quad_vertex_template[] __asm__("D_L12_001F5B20");
+extern char  water_reservoir_quad_vertex_template[] __asm__("D_L12_001F5B20");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-int D_L12_00161A10 = 1;
-int D_L12_00161A14 = 0;
-int D_L12_00161A0C = 0;
-int D_L12_00161A18 = 1;
-int D_L12_00161A1C = 0x40602020;
-int D_L12_00161A20 = 0x40681818;
+extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
+int          D_L12_00161A10 = 1;
+int          D_L12_00161A14 = 0;
+int          D_L12_00161A0C = 0;
+int          D_L12_00161A18 = 1;
+int          D_L12_00161A1C = 0x40602020;
+int          D_L12_00161A20 = 0x40681818;
 extern short water_reservoir_segment_cosine_scale_gp __asm__("D_L12_00161A24") __attribute__((sda));
-extern void draw_geometry_quad(void *, void *, int);
+extern void  draw_geometry_quad(void *, void *, int);
 
 void draw_water_reservoir(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    Quad quad;
+    Quad  quad;
     float rotation_matrix[12];
     float pos[4];
     float segment_start_y, segment_end_y;
-    int i, col;
+    int   i, col;
     copy_matrix_rotation(rotation_matrix, &moby->rot_row0);
     qcopy(pos, &moby->pos);
     pos[2] = pos[2] + *(float *)(data + 8);
@@ -160,11 +181,10 @@ void draw_water_reservoir(struct Moby *moby) {
     quad.g[1] = get_effect_texture(0x10);
     quad.g[0] = 0;
     quad.g[2] = 0xFF9000000260UL;
-    quad.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) |
-             ((long)D_L12_00161A14 << 4) | ((long)D_L12_00161A18 << 6) |
-             (0x8000L << 24);
-    col = fast_tween_color(D_L12_00161A1C, D_L12_00161A20,
-                       (fast_sin(*(float *)data) + 1.0f) * 0.5f);
+    quad.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) | ((long)D_L12_00161A14 << 4) |
+                ((long)D_L12_00161A18 << 6) | (0x8000L << 24);
+    col =
+        fast_tween_color(D_L12_00161A1C, D_L12_00161A20, (fast_sin(*(float *)data) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
         quad.uv[i * 2] = 0.5f;
         *(&quad.uv[i * 2] + 1) = 0.5f;
@@ -178,16 +198,21 @@ void draw_water_reservoir(struct Moby *moby) {
         quad.v[13] = segment_end_y;
         quad.v[5] = segment_end_y;
         if (moby->command & 1) {
-            quad.v[2] = -fast_cos(segment_start_y * *(float *)&water_reservoir_segment_cosine_scale_gp) + 2.0f;
-            quad.v[6] = -fast_cos(segment_end_y * *(float *)&water_reservoir_segment_cosine_scale_gp) + 2.0f;
+            quad.v[2] =
+                -fast_cos(segment_start_y * *(float *)&water_reservoir_segment_cosine_scale_gp) +
+                2.0f;
+            quad.v[6] =
+                -fast_cos(segment_end_y * *(float *)&water_reservoir_segment_cosine_scale_gp) +
+                2.0f;
         } else {
-            quad.v[2] = fast_cos(segment_start_y * *(float *)&water_reservoir_segment_cosine_scale_gp);
-            quad.v[6] = fast_cos(segment_end_y * *(float *)&water_reservoir_segment_cosine_scale_gp);
+            quad.v[2] =
+                fast_cos(segment_start_y * *(float *)&water_reservoir_segment_cosine_scale_gp);
+            quad.v[6] =
+                fast_cos(segment_end_y * *(float *)&water_reservoir_segment_cosine_scale_gp);
         }
         draw_geometry_quad(&quad, rotation_matrix, 0);
     }
 }
-
 
 #include "qcopy.h"
 
@@ -195,13 +220,26 @@ void draw_water_reservoir(struct Moby *moby) {
 
 extern char *create_moby(int);
 
-char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) __asm__("FUN_L12_002ecce8");
+char *spawn_rocket(char *initial_velocity,
+                   char *pos,
+                   int   owner,
+                   int   seed,
+                   float yaw,
+                   float f1,
+                   float f2) __asm__("FUN_L12_002ecce8");
 
-char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float nominal_speed, float f2) {
+char *spawn_rocket(char *initial_velocity,
+                   char *pos,
+                   int   owner,
+                   int   seed,
+                   float yaw,
+                   float nominal_speed,
+
+                   float f2) {
     struct Moby *moby = (struct Moby *)create_moby(0x199);
     if (moby != 0) {
         char *data;
-        int scaled_frames;
+        int   scaled_frames;
         data = (char *)moby->pvars;
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x7E;
@@ -222,51 +260,69 @@ char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float
     }
     return (char *)moby;
 }
+
 typedef struct {
-    float vel[4];
+    float        vel[4];
     struct Moby *owner;
-    int timer;
-    float unk18;
-    float yaw;
+    int          timer;
+    float        unk18;
+    float        yaw;
 } ShotVars;
 
 typedef struct {
     float dir[4];
     float unk10[2];
-    char unk18;
-    char unk19;
+    char  unk18;
+    char  unk19;
     short oclass;
-    int pad1C;
-    int pad20[4];
+    int   pad1C;
+    int   pad20[4];
 } ShotHit;
 
 extern CollisionHit D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
-extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
+extern int          camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
+extern void         mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern int collision_line(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
-extern int coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
+extern int  collision_line(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
+extern int  coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void record_moby_hit(int, void *) __asm__("FUN_L00_00259a88");
-extern void spawn_explosion(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
-                             int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void spawn_explosion(struct Moby *,
+                            void *,
+                            void *,
+                            float,
+                            float,
+                            int,
+                            int,
+                            int,
+                            float,
+                            float,
+                            float,
+                            float,
+                            int,
+                            float,
+                            int,
+                            int,
+                            int,
+                            int) __asm__("FUN_L00_0025e450");
 
 /* Level 12 shot: flies with a smoke trail, damages the first moby it hits other than its owner, then pops. */
 void rocket_update(struct Moby *moby) __asm__("FUN_L12_002ece00");
+
 void rocket_update(struct Moby *moby) {
     enum {
         ROCKET_STATE_FLYING = 1,
         ROCKET_STATE_DETONATE = 2
     };
     ShotVars *vars = (ShotVars *)moby->pvars;
-    float old_pos[4];
-    float side[4];
-    float back[4];
-    float trail[4];
-    ShotHit hit;
+    float     old_pos[4];
+    float     side[4];
+    float     back[4];
+    float     trail[4];
+    ShotHit   hit;
     switch (moby->state) {
     case ROCKET_STATE_FLYING: {
         char *touch = find_moby_hit(moby, 0x230000, 0);
-        int damage;
+        int   damage;
         if (touch != 0 && *(struct Moby **)(touch + 0x20) != vars->owner) {
             moby->state = 2;
             break;
@@ -288,11 +344,24 @@ void rocket_update(struct Moby *moby) {
         fast_vec_normalize(side, vars, 0.2f);
         fast_vec_normalize(back, vars, -0.2f);
         add_vectors(trail, back, &moby->pos);
-        spawn_effect(back, side, 0x6F00AFFF, 0xFF, scale_game_frames(random_int_between(15, 22)), 40,
-                         random_int_between(20, 35), 1);
-        spawn_effect(back, side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between(30, 60)), 40,
-                         random_int_between(50, 75), 0);
-        if (collision_line(&moby->pos, old_pos, 0, moby, 0) || coll_sphere(&moby->pos, 0.2f, 0, moby)) {
+        spawn_effect(back,
+                     side,
+                     0x6F00AFFF,
+                     0xFF,
+                     scale_game_frames(random_int_between(15, 22)),
+                     40,
+                     random_int_between(20, 35),
+                     1);
+        spawn_effect(back,
+                     side,
+                     0x1FFFFFFF,
+                     0x4F4F4F,
+                     scale_game_frames(random_int_between(30, 60)),
+                     40,
+                     random_int_between(50, 75),
+                     0);
+        if (collision_line(&moby->pos, old_pos, 0, moby, 0) ||
+            coll_sphere(&moby->pos, 0.2f, 0, moby)) {
             if (D_L12_001742C0_lui.moby != 0 && D_L12_001742C0_lui.moby != (int)vars->owner) {
                 damage = 1;
                 if (current_level_index == 12 && camera_secondary_mode == 50) {
@@ -321,8 +390,24 @@ void rocket_update(struct Moby *moby) {
         fast_vec_add(&moby->pos, &moby->pos, old_pos);
         if (current_level_index == 12 && camera_secondary_mode == 50) {
             char *camera = D_L12_00167240 - 0x140;
-            spawn_explosion(moby, &D_L12_0015F580, 0, 0.0f, 0.0f, 3, 3, 5, 0.3f, 0.2f, 0.0f, 0.15f, -1, 0.0f, 0, 0,
-                             -1, 0);
+            spawn_explosion(moby,
+                            &D_L12_0015F580,
+                            0,
+                            0.0f,
+                            0.0f,
+                            3,
+                            3,
+                            5,
+                            0.3f,
+                            0.2f,
+                            0.0f,
+                            0.15f,
+                            -1,
+                            0.0f,
+                            0,
+                            0,
+                            -1,
+                            0);
             *(float *)(camera + 0x160) = 0.025f;
             *(int *)(camera + 0x168) = scale_game_frames(20);
         } else {
@@ -337,9 +422,9 @@ void rocket_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EE600), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
-extern char D_00141968_h[] __asm__("D_00141968");
-extern void help_request(int, int) __asm__("FUN_L00_00203908");
-extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
+extern char          D_00141968_h[] __asm__("D_00141968");
+extern void          help_request(int, int) __asm__("FUN_L00_00203908");
+extern void          allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern unsigned char D_0013D50F_e[] __asm__("D_0013D408");
 
 void update_hoven_help_and_dialogue(struct Moby *moby) __asm__("FUN_L12_002ed280");
@@ -364,7 +449,8 @@ void update_hoven_help_and_dialogue(struct Moby *moby) {
             if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0x36A)) {
                 *(unsigned short *)(h + 0x36A) = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 0x36C) = *(unsigned int *)(h + 0x36C) | (1 << current_level_index) | 0x80000000;
+            *(unsigned int *)(h + 0x36C) =
+                *(unsigned int *)(h + 0x36C) | (1 << current_level_index) | 0x80000000;
             if (is_point_inside_clip_volume(&q->motion.pos, moby_vars[0])) {
                 help_request(0x2EE3, 0x6D);
             }
@@ -372,9 +458,10 @@ void update_hoven_help_and_dialogue(struct Moby *moby) {
     }
     {
         char *h = D_00141968_h;
-        if (*(unsigned short *)(h + 0x370) == 0
-            || (*(unsigned short *)(h + 0x370) < 2
-                && scale_game_frames(D_0015EEA4) - *(unsigned short *)(h + 0x372) * 600 > scale_game_frames(72000))) {
+        if (*(unsigned short *)(h + 0x370) == 0 ||
+            (*(unsigned short *)(h + 0x370) < 2 &&
+             scale_game_frames(D_0015EEA4) - *(unsigned short *)(h + 0x372) * 600 >
+                 scale_game_frames(72000))) {
             struct Hero *q = &hero;
             if (q->state.current == 0x81) {
                 moby_vars[1]++;
@@ -387,18 +474,25 @@ void update_hoven_help_and_dialogue(struct Moby *moby) {
                     char *help_records = D_00141968_h;
                     moby_vars[1] = 0;
                     if (*(unsigned short *)(help_records + 0x370) <= 0xFFFE) {
-                        *(unsigned short *)(help_records + 0x370) = *(unsigned short *)(help_records + 0x370) + 1;
+                        *(unsigned short *)(help_records + 0x370) =
+                            *(unsigned short *)(help_records + 0x370) + 1;
                     }
-                    if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(help_records + 0x372)) {
-                        *(unsigned short *)(help_records + 0x372) = scale_game_frames(D_0015EEA4) / 600;
+                    if (scale_game_frames(D_0015EEA4) / 600 >
+                        *(unsigned short *)(help_records + 0x372)) {
+                        *(unsigned short *)(help_records + 0x372) =
+                            scale_game_frames(D_0015EEA4) / 600;
                     }
-                    *(unsigned int *)(help_records + 0x374) = *(unsigned int *)(help_records + 0x374) | (1 << current_level_index) | 0x80000000;
+                    *(unsigned int *)(help_records + 0x374) =
+                        *(unsigned int *)(help_records + 0x374) | (1 << current_level_index) |
+                        0x80000000;
                 }
                 {
-                    int help_threshold_step_frames = scale_game_frames(0x1C20);
-                    int help_threshold_base_frames = scale_game_frames(0x708);
+                    int   help_threshold_step_frames = scale_game_frames(0x1C20);
+                    int   help_threshold_base_frames = scale_game_frames(0x708);
                     char *k = D_00141968_h;
-                    if (*(unsigned short *)(k + 0x370) * help_threshold_step_frames + help_threshold_base_frames < moby_vars[1]) {
+                    if (*(unsigned short *)(k + 0x370) * help_threshold_step_frames +
+                            help_threshold_base_frames <
+                        moby_vars[1]) {
                         help_request(0x2EE4, 0x6E);
                     }
                 }

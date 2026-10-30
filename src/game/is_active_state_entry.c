@@ -1,13 +1,13 @@
 #include "types.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/data_labels.h"
+
 struct StateEntry {
-    u8 pad_0[0x74];
-    u8 unk74;
-    u8 pad_75[0x9];
+    u8  pad_0[0x74];
+    u8  unk74;
+    u8  pad_75[0x9];
     s16 unk7E;
 };
-
 
 s32 is_active_state_entry(s32 entry_index, s32 id) __asm__("FUN_001eb740");
 

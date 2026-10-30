@@ -20,11 +20,11 @@
 #include "types.h"
 
 typedef struct __sFILE {
-    u8 pad_0[0xC];
-    s16 _flags;
-    s16 _file;
-    u8 pad_10[0x40];
-    s32 _offset;
+    u8    pad_0[0xC];
+    s16   _flags;
+    s16   _file;
+    u8    pad_10[0x40];
+    s32   _offset;
     void *_data;
 } FILE;
 
@@ -34,7 +34,7 @@ extern s64 _lseek_r() __asm__("func_00114518");
 
 s64 __sseek(void *cookie, s32 offset, s32 whence) {
     register FILE *fp = (FILE *)cookie;
-    register s64 ret;
+    register s64   ret;
 
     ret = _lseek_r(fp->_data, fp->_file, offset, whence);
     if (ret == -1L)

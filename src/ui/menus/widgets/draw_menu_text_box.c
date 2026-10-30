@@ -1,10 +1,11 @@
 #include "rnc/rendering/vu1_registers.h"
+
 /* Ported from rac1-decomp (src/game/pause.c, func_00223810). */
-extern void setup_gif_paging(int) __asm__("func_001F4280");
-extern void do_gif_paging(void) __asm__("func_001F4398");
+extern void  setup_gif_paging(int) __asm__("func_001F4280");
+extern void  do_gif_paging(void) __asm__("func_001F4398");
 extern void *get_help_message_text(int) __asm__("func_001FDD10");
-extern void PackImageDescriptor(void *, char *);
-extern void font_print_window_regular(void *, long, void *, int) __asm__("func_001F7580");
+extern void  PackImageDescriptor(void *, char *);
+extern void  font_print_window_regular(void *, long, void *, int) __asm__("func_001F7580");
 /* A text box on the menu's own geometry (PackImageDescriptor's box, then
    arg0+0x18..0x24: top y + 4, bottom y + h - 4, x, x + w, centre).
    Per state (arg0+0x50): the list states draw each text id of the -1
@@ -21,9 +22,9 @@ int draw_menu_text_box(char *menu_text_box) {
         MENU_TEXT_DRAW_NONE = 0
     };
     short box[12];
-    int ypos;
-    int text_start_y_offset;
-    int i;
+    int   ypos;
+    int   text_start_y_offset;
+    int   i;
 
     vu1_add_g_sregister(0x47, 0x30000);
     vu1_add_g_sregister(0x42, 0x8000000044L);
@@ -58,8 +59,8 @@ int draw_menu_text_box(char *menu_text_box) {
         for (i = 0; (*(int **)(menu_text_box + 0x34))[i] != -1; i++) {
             box[5] = ypos;
             box[11] = (*(int *)(menu_text_box + 0x3C) >> 4) & 0xF;
-            font_print_window_regular(box, 0x80FFA888L,
-                                      get_help_message_text((*(int **)(menu_text_box + 0x34))[i]), -1);
+            font_print_window_regular(
+                box, 0x80FFA888L, get_help_message_text((*(int **)(menu_text_box + 0x34))[i]), -1);
             ypos += box[7];
             ypos += 10;
         }
@@ -72,8 +73,8 @@ int draw_menu_text_box(char *menu_text_box) {
     case 15:
     case 19:
         box[5] = *(int *)(menu_text_box + 0x1C) + 0x20;
-        font_print_window_regular(box, 0x80FFA888L, get_help_message_text(*(int *)(menu_text_box + 0x34)),
-                                  -1);
+        font_print_window_regular(
+            box, 0x80FFA888L, get_help_message_text(*(int *)(menu_text_box + 0x34)), -1);
         break;
     case MENU_TEXT_DRAW_NONE:
         break;

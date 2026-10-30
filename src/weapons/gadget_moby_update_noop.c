@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00225DF0). */
 void gadget_moby_update_noop(void) __asm__("FUN_00224b60");
+
 void gadget_moby_update_noop(void) {
 }
 

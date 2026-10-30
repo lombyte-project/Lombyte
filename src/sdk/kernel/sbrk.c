@@ -3,14 +3,14 @@
 #include "sda.h"
 
 extern void *EndOfHeap(void);
-extern int *__errno(void) __asm__("func_001138A8");
+extern int  *__errno(void) __asm__("func_001138A8");
 /* Current program break, raised by sbrk. */
 extern char *heap_break __asm__("D_0012FBF4") NOT_SDA;
 
 /* Sony libkernel sbrk: moves the program break by increment with interrupts
    disabled; fails with ENOMEM past the end of the heap. */
 void *sbrk(s32 increment) {
-    u32 status = CpuReadStatus();
+    u32   status = CpuReadStatus();
     char *next;
     void *previous;
 

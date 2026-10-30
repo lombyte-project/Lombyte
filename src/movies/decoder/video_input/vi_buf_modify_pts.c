@@ -1,28 +1,31 @@
 #include "types.h"
 #include "eetypes.h"
+
 typedef struct {
     s64 pts;
     s64 dts;
     s32 pos;
     s32 len;
 } TimeStamp;
+
 typedef struct {
-    u128 *data;
-    u128 *tag;
-    s32 n;
-    s32 dmaStart;
-    s32 dmaN;
-    s32 readBytes;
-    s32 buffSize;
-    u8 pad1C[0x24];
-    s32 sema;
-    s32 isActive;
-    s64 totalBytes;
+    u128      *data;
+    u128      *tag;
+    s32        n;
+    s32        dmaStart;
+    s32        dmaN;
+    s32        readBytes;
+    s32        buffSize;
+    u8         pad1C[0x24];
+    s32        sema;
+    s32        isActive;
+    s64        totalBytes;
     TimeStamp *ts;
-    s32 n_ts;
-    s32 count_ts;
-    s32 wt_ts;
+    s32        n_ts;
+    s32        count_ts;
+    s32        wt_ts;
 } ViBuf;
+
 static inline s32 IsInRegion(s32 tgt, s32 start, s32 len, s32 size) {
     return (tgt + size - start) % size < len;
 }
@@ -31,10 +34,10 @@ s32 vi_buf_modify_pts(ViBuf *f, TimeStamp *new_ts) __asm__("FUN_0023c6b8");
 
 s32 vi_buf_modify_pts(ViBuf *video_buffer, TimeStamp *new_ts) {
     TimeStamp *ts;
-    s32 rd;
-    s32 datasize;
-    s32 loop;
-    s32 len;
+    s32        rd;
+    s32        datasize;
+    s32        loop;
+    s32        len;
 
     rd = (video_buffer->wt_ts - video_buffer->count_ts + video_buffer->n_ts) % video_buffer->n_ts;
     datasize = video_buffer->n << 11;
@@ -59,7 +62,8 @@ s32 vi_buf_modify_pts(ViBuf *video_buffer, TimeStamp *new_ts) {
                         ts->pos = 0;
                         ts->len = 0;
                     }
-                    video_buffer->count_ts = video_buffer->count_ts - 1 > -1 ? video_buffer->count_ts - 1 : 0;
+                    video_buffer->count_ts =
+                        video_buffer->count_ts - 1 > -1 ? video_buffer->count_ts - 1 : 0;
                 }
             } else {
                 loop = 0;

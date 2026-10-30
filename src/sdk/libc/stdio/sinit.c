@@ -19,17 +19,19 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
+
 struct Reent {
-    u8 pad_0[0x38];
+    u8  pad_0[0x38];
     s32 unk38;
     s32 unk3C;
-    u8 pad_40[0x198];
+    u8  pad_40[0x198];
     s32 unk1D8;
     s32 unk1DC;
     s32 unk1E0;
 };
 
 extern void std();
+
 void __sinit(struct Reent *reent_context) {
     s32 *std_streams;
 

@@ -3,7 +3,7 @@
 #include "types.h"
 
 extern s32 deci2_buffered_byte_count[] __asm__("D_0012FBFC");
-extern s8 deci2_output_buffer[] __asm__("D_00154D00");
+extern s8  deci2_output_buffer[] __asm__("D_00154D00");
 extern s32 Kputs(s8 *text);
 
 void deci2Putchar(s32 c) __asm__("deci2Putchar");

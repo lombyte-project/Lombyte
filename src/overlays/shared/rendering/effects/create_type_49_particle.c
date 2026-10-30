@@ -8,24 +8,23 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/partupd_002803B8.c: func_L08_002803B8), where it is exact; names translated to the US level program. */
 
-
-
 extern unsigned char *D_L08_001B29A4 NOT_SDA;
-void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_override) __asm__("FUN_L08_0027f5f0");
+void                                 create_type_49_particle(void *pos,
+                                                             int   kind,
+                                                             void *vel,
+                                                             float velocity_w_override) __asm__("FUN_L08_0027f5f0");
 
 void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_override) {
-    float saved_velocity[4];
+    float          saved_velocity[4];
     unsigned char *particle;
-    float *vp = saved_velocity;
+    float         *vp = saved_velocity;
     *(OvlQuad *)saved_velocity = *(OvlQuad *)vel;
     particle = create_part(0x49);
     if (particle != 0) {
         float particle_scalar_factor = 0.0f;
-        int packed_high_byte = 0;
+        int   packed_high_byte = 0;
         switch (kind) {
         case 0:
             packed_high_byte = 0x20;
@@ -53,6 +52,7 @@ void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_ov
 }
 
 s32 D_L12_001B2624[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_001B28A4[1] __attribute__((section(".data"))) = {0};
 
 unsigned char *D_L08_001B29A4 NOT_SDA = 0;

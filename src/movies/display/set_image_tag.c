@@ -1,8 +1,11 @@
 /* Ported from rac1-decomp (src/game/movie/disp.c, func_0023C5E0). */
 #include "sda.h"
-extern int draw_buffer_address_macro __asm__("D_0015EE84") MACRO_ADDR;
+
+extern int              draw_buffer_address_macro __asm__("D_0015EE84") MACRO_ADDR;
 extern void *D_0015EEB8 MACRO_ADDR;
+
 #include "rnc/rendering/fs_aa_packets.h"
+
 /* setImageTag (SDK ezmpeg sample): builds the DMA/GIF chain that uploads a
    decoded frame to VRAM: a header packet (BITBLTBUF from draw_buffer_address_macro), one
    0x60-byte packet per 16x16 block (TRXPOS = block x/y, TRXDIR, an IMAGE
@@ -11,14 +14,13 @@ extern void *D_0015EEB8 MACRO_ADDR;
    written in address order, so the loop pass hoists the invariants in the
    order retail's scheduler starts from (TRXPOS x part first, the REF tag
    before the address mask). */
-void set_image_tag(void *p, int texbuf, int image_w,
-                              int image_h) __asm__("FUN_0023b210");
+void set_image_tag(void *p, int texbuf, int image_w, int image_h) __asm__("FUN_0023b210");
 
 void set_image_tag(void *tag_buffer, int texbuf, int image_w, int image_h) {
     char *out = (char *)tag_buffer;
-    int mbx = image_w >> 4;
-    int mby = image_h >> 4;
-    int x, y;
+    int   mbx = image_w >> 4;
+    int   mby = image_h >> 4;
+    int   x, y;
 
     *(long *)(out + 0x0) = 0x10000003L;
     *(long *)(out + 0x8) = 0;

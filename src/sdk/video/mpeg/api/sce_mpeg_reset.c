@@ -2,8 +2,8 @@
 #include "rnc/sdk/libmpeg.h"
 
 typedef struct MpegDecoder MpegDecoder;
-extern void ClearDecoderState(MpegDecoder *decoder) __asm__("_clearEach");
-extern void set_mpeg1_mode(MpegDecoder *decoder) __asm__("SetImageBufferFlag");
+extern void                ClearDecoderState(MpegDecoder *decoder) __asm__("_clearEach");
+extern void                set_mpeg1_mode(MpegDecoder *decoder) __asm__("SetImageBufferFlag");
 
 void sceMpegReset(struct sceMpeg *mpeg) __asm__("sceMpegReset");
 

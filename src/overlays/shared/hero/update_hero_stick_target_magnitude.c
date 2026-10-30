@@ -12,7 +12,7 @@
 #include "rnc/overlay/l02/hero/hero_set_state.h"
 
 extern float D_L02_0017C3B8[];
-extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
+extern void  stick_target(int, float) __asm__("FUN_L00_002118c8");
 
 void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
 
@@ -35,6 +35,7 @@ void update_hero_stick_target_magnitude(void) {
         }
     }
 }
+
 #include "rnc/game/usage_stats.h"
 #include "eetypes.h"
 #include "qcopy.h"
@@ -54,13 +55,14 @@ void update_hero_stick_target_magnitude(void) {
 /* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
    0x20B3: 0 = world z up, otherwise the frame of the hero's moby). */
 extern void update_hero_attachment(s32, void *, void *) __asm__("FUN_L00_00233f80");
-extern f32 gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
-extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
+extern f32  gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
+extern f32  gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
-extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
-extern f32 forward_component(void *) __asm__("FUN_L00_00213350");  /* dot with (cos, sin) of the hero yaw */
-
+extern void
+set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
+extern f32
+forward_component(void *) __asm__("FUN_L00_00213350"); /* dot with (cos, sin) of the hero yaw */
 
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
 extern void update_hero_ground_contact(void) __asm__("FUN_L02_002216a0");
@@ -68,14 +70,13 @@ extern void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
 
 void integrate_hero_movement(void) __asm__("FUN_L02_002226d8");
 
-void integrate_hero_movement(void)
-{
+void integrate_hero_movement(void) {
     Vec4 old_pos;
     Vec4 movement_vector_scratch;
     Vec4 velocity_projection_source;
-    f32 limit;
-    f32 velocity_measure;
-    f32 saved_platform_delta_w;
+    f32  limit;
+    f32  velocity_measure;
+    f32  saved_platform_delta_w;
 
     qcopy(&old_pos, &hero.motion.pos);
     update_hero_attachment(hero.ledge_moby, &hero.motion.platform_delta, &hero.motion.rot);
@@ -141,17 +142,21 @@ void integrate_hero_movement(void)
     if (velocity_measure < 0.0f) {
         velocity_measure = 0.0f;
     }
-    fast_vec_normalize(&hero.motion.resolved_velocity_xy, &movement_vector_scratch, velocity_measure);
+    fast_vec_normalize(
+        &hero.motion.resolved_velocity_xy, &movement_vector_scratch, velocity_measure);
 
     qcopy(&velocity_projection_source, &hero.motion.velocity);
-    set_gravity_relative_vector_length_xy((float *)&velocity_projection_source, (float *)&velocity_projection_source, 0.0f);
-    set_gravity_relative_vector_length_xy((float *)&hero.motion.resolved_velocity_z, (float *)&hero.motion.resolved_velocity_z, 0.0f);
+    set_gravity_relative_vector_length_xy(
+        (float *)&velocity_projection_source, (float *)&velocity_projection_source, 0.0f);
+    set_gravity_relative_vector_length_xy(
+        (float *)&hero.motion.resolved_velocity_z, (float *)&hero.motion.resolved_velocity_z, 0.0f);
     fast_vec_normalize(&hero.motion.resolved_velocity_z, &hero.motion.resolved_velocity_z, 1.0f);
     velocity_measure = fast_vec_dot(&hero.motion.resolved_velocity_z, &velocity_projection_source);
     if (velocity_measure < 0.0f) {
         velocity_measure = 0.0f;
     }
-    fast_vec_normalize(&hero.motion.resolved_velocity_z, &velocity_projection_source, velocity_measure);
+    fast_vec_normalize(
+        &hero.motion.resolved_velocity_z, &velocity_projection_source, velocity_measure);
 
     hero.motion.speed_xy = fast_vec_length(&hero.motion.resolved_velocity);
     hero.motion.flat_speed = vector_length_xy(&hero.motion.resolved_velocity);
@@ -196,23 +201,26 @@ void integrate_hero_movement(void)
 
     /* cap the step at 52 units per frame-rate unit */
     if (hero.motion.speed_xy > frame_time * 52.0f) {
-        fast_vec_scale(&hero.motion.displacement, &hero.motion.displacement, frame_time * 52.0f / hero.motion.speed_xy);
+        fast_vec_scale(&hero.motion.displacement,
+                       &hero.motion.displacement,
+                       frame_time * 52.0f / hero.motion.speed_xy);
         hero.motion.speed_xy = frame_time * 52.0f;
     }
 }
+
 #include "eetypes.h"
 #include "qcopy.h"
 
 typedef union {
     u128 q;
-    f32 f[4];
+    f32  f[4];
 } HopVec;
 
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
-extern f32 spring_angle(float *, float *, int, float, float, float,
-                                   float) __asm__("FUN_L00_0025bc98");
+extern f32
+spring_angle(float *, float *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void air_accel(f32) __asm__("FUN_L01_00234358");
@@ -222,15 +230,16 @@ extern void air_accel(f32) __asm__("FUN_L01_00234358");
 #define ED70 frame_time_sq
 
 extern f32 hero_low_speed_threshold_basis[] __asm__("D_L02_0017C3D0");
-void hero_update_hop_velocity(void) __asm__("FUN_L02_00223450");
+void       hero_update_hop_velocity(void) __asm__("FUN_L02_00223450");
+
 void hero_update_hop_velocity(void) {
     HopVec velocity_addend;
-    f32 x;
-    f32 speed;
-    f32 a;
-    f32 speed_reduction_step;
-    f32 velocity_change_step;
-    s32 state;
+    f32    x;
+    f32    speed;
+    f32    a;
+    f32    speed_reduction_step;
+    f32    velocity_change_step;
+    s32    state;
 
     state = hero.state.current;
     if (state == 10) {
@@ -280,7 +289,8 @@ void hero_update_hop_velocity(void) {
         }
         hero.motion.velocity.f[0] = fast_cos(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
         hero.motion.velocity.f[1] = fast_sin(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
-        a = hero.air_target_speed * fast_sin(fast_difference_between_rotations(hero.takeoff_yaw, hero.high_jump_drift_yaw));
+        a = hero.air_target_speed *
+            fast_sin(fast_difference_between_rotations(hero.takeoff_yaw, hero.high_jump_drift_yaw));
         hero.motion.velocity.f[0] += fast_cos(hero.takeoff_yaw) * a;
         hero.motion.velocity.f[1] += fast_sin(hero.takeoff_yaw) * a;
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
@@ -296,7 +306,8 @@ void hero_update_hop_velocity(void) {
                 hero.motion.velocity.f[0] = fast_cos(hero.motion.move_yaw) * (ED6C * 4.9f);
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
-                set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
+                set_gravity_relative_vector_length_xy(
+                    &hero.motion.velocity, &hero.motion.velocity, 0.0f);
                 fast_vec_normalize(&velocity_addend, &hero.motion.move_dir, ED6C * 4.9f);
                 fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &velocity_addend);
             }
@@ -305,8 +316,13 @@ void hero_update_hop_velocity(void) {
     } else {
         if (state == 0x2D) {
             x = hero.motion.rot.f[2];
-            hero.motion.yaw_error = spring_angle(&x, &hero.motion.yaw_rate, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
-                                             ED6C * 7.330383f);
+            hero.motion.yaw_error = spring_angle(&x,
+                                                 &hero.motion.yaw_rate,
+                                                 0,
+                                                 hero.motion.move_yaw,
+                                                 ED64 * 0.018f,
+                                                 ED64 * 0.2f,
+                                                 ED6C * 7.330383f);
             a = fast_subtract_rotations(x, hero.motion.rot.f[2]);
             rotate_hero_about_fixed_local_pivot(0.0f, 0.0f, a);
         } else {
@@ -332,6 +348,7 @@ void hero_update_hop_velocity(void) {
         air_accel(velocity_change_step);
     }
 }
+
 #include "sda.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
@@ -340,25 +357,27 @@ void hero_update_hop_velocity(void) {
 
 /* pvars of the gadget moby in slot 0 for item 15 */
 struct HeldGadgetVars {
-    u8 pad_0[0xC];
-    s32 voice;                     /* 0xC: allocate_voice_for_target_entry result */
+    u8  pad_0[0xC];
+    s32 voice; /* 0xC: allocate_voice_for_target_entry result */
 };
 
 extern int D_00141660 NOT_SDA;
 extern HeroTableRow2C D_L02_0017C228[];
+
 #include "rnc/overlay/shared/hero/update_hero_stick_target_magnitude_globals.h"
+
 extern s32 hero_button_8_double_press_countdown_gp __asm__("D_L02_0015F674") __attribute__((sda));
 
-extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
+extern s32  hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
-extern s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
-extern s32 is_wrench_moby(struct Moby *) __asm__("FUN_L00_00211360");
-extern s32 allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
+extern s32  can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
+extern s32  is_wrench_moby(struct Moby *) __asm__("FUN_L00_00211360");
+extern s32  allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern void select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
-extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
-extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
+extern s32  get_ammo(s32) __asm__("FUN_L00_00233e98");
+extern s32  voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
 extern void open_vendor_menu(s32) __asm__("FUN_L00_0029a6b0");
 
 /*
@@ -371,8 +390,7 @@ extern void open_vendor_menu(s32) __asm__("FUN_L00_0029a6b0");
  */
 s32 process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
 
-s32 process_hero_item_action_input(void)
-{
+s32 process_hero_item_action_input(void) {
     enum {
         HERO_ITEM_WRENCH = 8,
         HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE = 10,
@@ -387,15 +405,15 @@ s32 process_hero_item_action_input(void)
         HERO_ITEM_CLASS_GATED_BUFFERED_ACTIVATE = 31,
         HERO_ITEM_BUFFERED_ACTIVATE = 32
     };
-    s32 out0;
-    s32 out1;
-    s32 out2;
-    s32 saved;
-    u32 buttons;
-    s32 frames;
-    s32 window;
-    struct Moby *moby;
-    HeroTableRow2C *row;
+    s32                    out0;
+    s32                    out1;
+    s32                    out2;
+    s32                    saved;
+    u32                    buttons;
+    s32                    frames;
+    s32                    window;
+    struct Moby           *moby;
+    HeroTableRow2C        *row;
     struct HeldGadgetVars *vars;
 
     if (hero.item_use_locked != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) {
@@ -417,7 +435,8 @@ s32 process_hero_item_action_input(void)
     case HERO_ITEM_WRENCH:
         if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
             (hero.state.control_mode == 4 && hero.rail_land_frames != 0)) {
-            if (hero.on_slip_ground == 0 && pad_pressed_within(buttons, scale_game_frames(7), &out0) != 0) {
+            if (hero.on_slip_ground == 0 &&
+                pad_pressed_within(buttons, scale_game_frames(7), &out0) != 0) {
                 moby = hero.items[0].moby;
                 if (moby != NULL && is_wrench_moby(moby) != 0 && moby->state == 0) {
                     if ((controller_state.held & 0xA) ||
@@ -436,10 +455,15 @@ s32 process_hero_item_action_input(void)
                     }
                 }
             }
-        } else if ((hero.state.current == HERO_STATE_JUMP || hero.state.current == HERO_STATE_RUN_JUMP || hero.state.current == HERO_STATE_LAND ||
-                    hero.state.current == HERO_STATE_FALL || (hero.state.current == 0xE && hero.anim_frame > 32.0f) ||
+        } else if ((hero.state.current == HERO_STATE_JUMP ||
+                    hero.state.current == HERO_STATE_RUN_JUMP ||
+                    hero.state.current == HERO_STATE_LAND ||
+                    hero.state.current == HERO_STATE_FALL ||
+                    (hero.state.current == 0xE && hero.anim_frame > 32.0f) ||
                     (hero.state.current == HERO_STATE_HIGH_JUMP &&
-                     (hero.unk450 != 3 && hero.anim_frame > 18.0f) || (hero.state.current == HERO_STATE_HIGH_JUMP && hero.unk450 == 3 && hero.anim_frame > 20.0f)) ||
+                         (hero.unk450 != 3 && hero.anim_frame > 18.0f) ||
+                     (hero.state.current == HERO_STATE_HIGH_JUMP && hero.unk450 == 3 &&
+                      hero.anim_frame > 20.0f)) ||
                     hero.state.current == 0x2D || hero.state.current == 0x11) &&
                    scale_game_frames(0xA) < hero.state_timer) {
             window = scale_game_frames(0xA);
@@ -447,7 +471,9 @@ s32 process_hero_item_action_input(void)
                 window = scale_game_frames(0x12);
             }
             if (pad_pressed_within(buttons, window, NULL) != 0) {
-                if ((hero.past_jump_apex == 0 ? 0.1f < hero.ground_distance : 0.57f < hero.ground_distance) || (hero.state.current == HERO_STATE_LAND && 0.57f < hero.ground_distance)) {
+                if ((hero.past_jump_apex == 0 ? 0.1f < hero.ground_distance
+                                              : 0.57f < hero.ground_distance) ||
+                    (hero.state.current == HERO_STATE_LAND && 0.57f < hero.ground_distance)) {
                     hero_set_state(HERO_STATE_WRENCH_SLAM, 1);
                 } else if (hero.on_slip_ground == 0) {
                     hero_set_state(HERO_STATE_WRENCH_COMBO, 1);
@@ -455,8 +481,9 @@ s32 process_hero_item_action_input(void)
             }
         } else if (hero.state.control_mode == 6) {
             row = &D_L02_0017C228[hero.attack_record];
-            if (hero.state.current == HERO_STATE_CROUCH_SWING && scale_game_frames(0x1E) < hero.state_timer &&
-                hero.anim_changing == 0 && (f32)row->f10 <= hero.anim_frame && (controller_state.held & 0xA) &&
+            if (hero.state.current == HERO_STATE_CROUCH_SWING &&
+                scale_game_frames(0x1E) < hero.state_timer && hero.anim_changing == 0 &&
+                (f32)row->f10 <= hero.anim_frame && (controller_state.held & 0xA) &&
                 pad_pressed_within(buttons, scale_game_frames(0xF), NULL) != 0) {
                 hero_set_state(HERO_STATE_CROUCH_SWING, 1);
             } else if (hero.anim_changing == 0 && (f32)row->f10 <= hero.anim_frame) {
@@ -487,11 +514,13 @@ s32 process_hero_item_action_input(void)
         if (hero.air_frames.s != 0) {
             window = scale_game_frames(8);
         }
-        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 4 ||
-            hero.state.control_mode == 2 || hero.state.control_mode == 0xF || hero.state.control_mode == 5 ||
+        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
+            hero.state.control_mode == 4 || hero.state.control_mode == 2 ||
+            hero.state.control_mode == 0xF || hero.state.control_mode == 5 ||
             hero.state.current == 0x1E) {
             if (pad_pressed_within(buttons, window, NULL) != 0 ||
-                ((controller_state.held & buttons) && hero.items[0].ready_frames > scale_game_frames(0xF))) {
+                ((controller_state.held & buttons) &&
+                 hero.items[0].ready_frames > scale_game_frames(0xF))) {
                 if (hero.swing_target_in_sight != 0) {
                     if (hero.grapple_target_in_sight != 0) {
                         if (hero.swing_target_dist < hero.unk984) {
@@ -501,7 +530,8 @@ s32 process_hero_item_action_input(void)
                         }
                     }
                 }
-                if (hero.swing_target_in_sight != 0 && hero.grapple_lockout_timer == 0 && hero.state.current != 0x2C) {
+                if (hero.swing_target_in_sight != 0 && hero.grapple_lockout_timer == 0 &&
+                    hero.state.current != 0x2C) {
                     hero_set_state(0x2C, 1);
                 } else if (hero.grapple_target_in_sight != 0 && hero.grapple_lockout_timer == 0) {
                     hero_set_state(0x24, 1);
@@ -512,8 +542,9 @@ s32 process_hero_item_action_input(void)
 
     case HERO_ITEM_CLASS_GATED_BUFFERED_ACTIVATE:
         if (hero.vehicle_mode == 0 && can_select_hero_item_31() != 0) {
-            if (pad_pressed_within(buttons, scale_game_frames(7), NULL) != 0 && D_00141660 == 0x1F &&
-                hero.items[0].moby->oclass == 0x1E3 && hero.vehicle_toggle_timer == 0) {
+            if (pad_pressed_within(buttons, scale_game_frames(7), NULL) != 0 &&
+                D_00141660 == 0x1F && hero.items[0].moby->oclass == 0x1E3 &&
+                hero.vehicle_toggle_timer == 0) {
                 allocate_hero_voice_for_entry(0x18, 0);
                 hero.vehicle_toggle_timer = 0x12;
                 hero.unk22DC = 1;
@@ -522,20 +553,23 @@ s32 process_hero_item_action_input(void)
         break;
 
     case HERO_ITEM_BUFFERED_ACTIVATE:
-        if ((hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 2 ||
-             hero.state.control_mode == 4 || hero.state.control_mode == 5) &&
+        if ((hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
+             hero.state.control_mode == 2 || hero.state.control_mode == 4 ||
+             hero.state.control_mode == 5) &&
             pad_pressed_within(buttons, scale_game_frames(8), NULL) != 0) {
             open_vendor_menu(0);
         }
         break;
 
     case HERO_ITEM_HOLD_TO_FIRE:
-        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 0xC ||
-            hero.state.control_mode == 2 || hero.state.control_mode == 4 || hero.state.control_mode == 5 ||
+        if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
+            hero.state.control_mode == 0xC || hero.state.control_mode == 2 ||
+            hero.state.control_mode == 4 || hero.state.control_mode == 5 ||
             hero.state.control_mode == 0xF || hero.state.current == 0x1E) {
             if (hero.items[0].moby != NULL) {
                 vars = (struct HeldGadgetVars *)hero.items[0].moby->pvars;
-                if ((((controller_state.held & buttons) && scale_game_frames(5) < hero.items[0].ready_frames) ||
+                if ((((controller_state.held & buttons) &&
+                      scale_game_frames(5) < hero.items[0].ready_frames) ||
                      (controller_state.pressed & buttons)) &&
                     get_ammo(-1) != 0) {
                     if (hero.item_anim_active == 0) {
@@ -554,8 +588,9 @@ s32 process_hero_item_action_input(void)
     case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE:
     case HERO_ITEM_AMMO_GATED_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_VOICE:
     case HERO_ITEM_BUFFERED_OR_TIMED_HOLD_ACTIVATE_WITH_EMPTY_AMMO_VOICE:
-        if ((hero.state.control_mode == 0 && hero.state.current != 0x1E) || hero.state.control_mode == 1 ||
-            hero.state.control_mode == 0xC || hero.state.control_mode == 5 || hero.state.control_mode == 0xF ||
+        if ((hero.state.control_mode == 0 && hero.state.current != 0x1E) ||
+            hero.state.control_mode == 1 || hero.state.control_mode == 0xC ||
+            hero.state.control_mode == 5 || hero.state.control_mode == 0xF ||
             (hero.state.control_mode == 4 && hero.unk4AC != 0) ||
             (hero.state.current == 0x23 && hero.anim_frame > 25.0f)) {
             if (hero.item_anim_active == 0) {
@@ -567,7 +602,8 @@ s32 process_hero_item_action_input(void)
                     window = hold;
                 }
                 if (pad_pressed_within(buttons, window, &out1) != 0 ||
-                    ((controller_state.held & 0x20) && scale_game_frames(8) < hold && hold < scale_game_frames(0x11))) {
+                    ((controller_state.held & 0x20) && scale_game_frames(8) < hold &&
+                     hold < scale_game_frames(0x11))) {
                     if (get_ammo(-1) != 0) {
                         if (hero.state.control_mode == 0xC || hero.state.control_mode == 0 ||
                             hero.state.current == HERO_STATE_STOP ||
@@ -618,7 +654,8 @@ s32 process_hero_item_action_input(void)
             if (hero_button_8_double_press_countdown_gp != 0) {
                 if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
                     hero.state.control_mode == 0xC ||
-                    ((hero.state.control_mode == 2 || hero.state.control_mode == 4) && hero.grounded_frames != 0)) {
+                    ((hero.state.control_mode == 2 || hero.state.control_mode == 4) &&
+                     hero.grounded_frames != 0)) {
                     if ((controller_state.held & 8) && (controller_state.pressed & 8)) {
                         hero_set_state(0x81, 1);
                     }
@@ -627,7 +664,8 @@ s32 process_hero_item_action_input(void)
             if ((controller_state.pressed & 8) && hero.state.current != 0x81) {
                 hero_button_8_double_press_countdown_gp = scale_game_frames(0x1E);
             }
-        } else if (hero.state.current != HERO_STATE_WRENCH_COMBO && hero.state.current != 0x81 && hero.state.current != HERO_STATE_CROUCH_SWING &&
+        } else if (hero.state.current != HERO_STATE_WRENCH_COMBO && hero.state.current != 0x81 &&
+                   hero.state.current != HERO_STATE_CROUCH_SWING &&
                    hero.state.current != HERO_STATE_HURT) {
             hero.unk22CA = 0;
         }

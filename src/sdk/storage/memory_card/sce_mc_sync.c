@@ -1,11 +1,13 @@
 #include "types.h"
 #include "rnc/sdk/libmc.h"
+
 extern s32 SceSifCheckStatRpc();
 extern s32 SignalSema();
 extern s32 mcDelayThread();
+
 s32 sceMcSync(s32 poll_mode, s32 *active_code_out, s32 *completion_status_out) {
-    s32 busy;
-    register s32 wait_flag = poll_mode;
+    s32           busy;
+    register s32  wait_flag = poll_mode;
     register s32 *code_out = active_code_out;
     register s32 *status_out = completion_status_out;
 

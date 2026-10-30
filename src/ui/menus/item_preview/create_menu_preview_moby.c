@@ -1,31 +1,35 @@
 #include "rnc/mobys/moby_class_tables.h"
 #include "types.h"
 #include "rnc/mobys/moby_spawn.h"
+
 struct PreviewMobyResource {
     u8 pad0[6];
     u8 class_flags;
 };
+
 struct PreviewMoby {
-    u8 pad0[0x20];
-    u8 state;
-    u8 pad21[3];
+    u8                          pad0[0x20];
+    u8                          state;
+    u8                          pad21[3];
     struct PreviewMobyResource *resource;
-    u8 pad28[8];
-    u8 culling_radius;
-    u8 force_visible;
-    u16 control;
-    u8 pad34[0x3F];
-    u8 state_73;
+    u8                          pad28[8];
+    u8                          culling_radius;
+    u8                          force_visible;
+    u16                         control;
+    u8                          pad34[0x3F];
+    u8                          state_73;
 };
+
 extern void refresh_moby_spatial_bounds(struct PreviewMoby *) __asm__("func_0020DEF8");
-extern void pack_render_command_fields(struct PreviewMoby *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
+extern void pack_render_command_fields(struct PreviewMoby *, s32, s32, s32, s32) __asm__(
+    "PackRenderCommandFields");
 
 struct PreviewMoby *create_menu_preview_moby(s32 oclass) __asm__("FUN_00225490");
 
 struct PreviewMoby *create_menu_preview_moby(s32 oclass) {
     struct PreviewMoby *moby;
     struct PreviewMoby *result;
-    u8 unset = 0xFF;
+    u8                  unset = 0xFF;
     if (resident_class_slot_by_id[oclass] == unset)
         return 0;
     {

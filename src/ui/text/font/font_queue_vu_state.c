@@ -8,16 +8,15 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 
-
 extern void vu1_add_data_ref(u8 *, s32) __asm__("func_00233830");
 extern void vu1_gs_regs_font(void) __asm__("func_00233C90");
 
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void font_queue_vu_state(void) {
-    f32 camera_relative_scale_matrix[4][4];
+    f32            camera_relative_scale_matrix[4][4];
     struct DmaTag *base;
-    u8 *packet_write_ptr;
+    u8            *packet_write_ptr;
 
     set_scale_matrix(camera_relative_scale_matrix, 1024.0f);
     fast_vec_scale(camera_relative_scale_matrix[3], camera_position, -1024.0f);
@@ -58,7 +57,8 @@ void font_queue_vu_state(void) {
     base[14].vif0 = 0x15000000;
     base[14].vif1 = 0;
     packet_write_ptr = (u8 *)(base + 15);
-    render_packet_cursor.tag->tag |= (((u8 *)packet_write_ptr - (u8 *)render_packet_cursor.tag) >> 4) - 1;
+    render_packet_cursor.tag->tag |=
+        (((u8 *)packet_write_ptr - (u8 *)render_packet_cursor.tag) >> 4) - 1;
     render_packet_cursor.tag = (struct DmaTag *)packet_write_ptr;
     vu1_gs_regs_font();
 }

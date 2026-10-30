@@ -7,8 +7,6 @@
 #include "rnc/rendering/sky/do_sky_gif_paging.h"
 #include "rnc/rendering/sky/setup_sky_gif_paging.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/initonce_00252E80.c: func_L01_00252E80), where it is exact; names translated to the US level program. */
 
 extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
@@ -26,6 +24,7 @@ void render_sky_shells(void) {
     vu1_add_g_sregister(0x47, 0x5360B);
     vu1_add_g_sregister(0x4E, 0x1000000 | (depth_buffer_address >> 13));
 }
+
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00261c10.s", FUN_L01_00261c10);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00261d78.s", FUN_L01_00261d78);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00261df8.s", FUN_L01_00261df8);
@@ -33,17 +32,31 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00262038.s", FUN_L01_00262038);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00262388.s", FUN_L01_00262388);
 
 s16 D_L01_001CADA0[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L01_001CAE00[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L05_001CADA0[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L05_001CAE00[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L07_001CA940[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L07_001CA9A0[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L07_001CAA00[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L11_001CB2C0[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L11_001CB320[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L11_001CB380[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L12_001CADA0[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L12_001CAE00[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L13_001CABC0[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L13_001CAC20[1] __attribute__((section(".data"))) = {0};
+
 s16 D_L13_001CAC80[1] __attribute__((section(".data"))) = {0};

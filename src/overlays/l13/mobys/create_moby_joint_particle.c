@@ -13,17 +13,29 @@
 /* Allocates and fills a particle-process record attached to a moby. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/partupd_002811B0.c: func_L13_002811B0), where it is exact; names translated to the US level program. */
 
-
 unsigned char *D_L13_001B2490 NOT_SDA = 0;
-unsigned char *create_moby_joint_particle(char *moby, unsigned char joint_index, int b, int c, unsigned char d, float x,
-                                float y, float z) __asm__("FUN_L13_00280400");
+unsigned char                *create_moby_joint_particle(char         *moby,
+                                                         unsigned char joint_index,
+                                                         int           b,
+                                                         int           c,
+                                                         unsigned char d,
+                                                         float         x,
+                                                         float         y,
+                                                         float         z) __asm__("FUN_L13_00280400");
 
-unsigned char *create_moby_joint_particle(char *moby, unsigned char joint_index, int b, int c, unsigned char d, float x,
-                                float y, float z) {
+unsigned char *create_moby_joint_particle(char         *moby,
+                                          unsigned char joint_index,
+                                          int           b,
+                                          int           c,
+                                          unsigned char d,
+                                          float         x,
+                                          float         y,
+
+                                          float z) {
     unsigned char *particle = create_part(0x44);
     if (particle != 0) {
-        char *world_position;
-        int particle_bias;
+        char          *world_position;
+        int            particle_bias;
         unsigned short moby_a6_value;
         unsigned char *attachment_data;
         *(int *)(particle + 4) = b;

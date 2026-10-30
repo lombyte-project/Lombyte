@@ -21,11 +21,11 @@ extern void deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
 extern void update_moby_proximity_interaction(void) __asm__("FUN_L00_0028e180");
 
 extern s32 D_L00_00160540_gp __asm__("D_L00_00160540") __attribute__((sda));
-void initialize_moby_state_record(char *moby) __asm__("FUN_L00_0028e8a0");
+void       initialize_moby_state_record(char *moby) __asm__("FUN_L00_0028e8a0");
 
 void initialize_moby_state_record(char *moby) {
     char *moby_state_record;
-    int *moby_state_copy_source;
+    int  *moby_state_copy_source;
     D_L00_00160540_gp = 1;
     deactivate_recorded_moby();
     if (current_level_index == 0xD) {
@@ -47,9 +47,12 @@ void initialize_moby_state_record(char *moby) {
     *(int *)(moby_state_record + 0x34) = moby_state_copy_source[1];
     *(int *)(moby_state_record + 0x38) = moby_state_copy_source[2];
 }
+
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+
 extern u8 *D_0013E030 NOT_SDA;
+
 /* Flags the moby in D_0013E030 (bits 0 and 1) and clears its field 0x94. */
 void deactivate_recorded_moby(void) {
     if (D_0013E030 != 0) {
@@ -57,55 +60,63 @@ void deactivate_recorded_moby(void) {
         *(s32 *)(D_0013E030 + 0x94) = 0;
     }
 }
+
 typedef struct {
-    char pad[0x20];
-    unsigned char st;
-    char pad21[0x13];
+    char           pad[0x20];
+    unsigned char  st;
+    char           pad21[0x13];
     unsigned short flags;
-    char pad36[0x70];
-    short type;
-    char pada8[0x58];
+    char           pad36[0x70];
+    short          type;
+    char           pada8[0x58];
 } O_28e9c8;
+
 typedef struct {
-    char pad[0x34];
+    char           pad[0x34];
     unsigned short flags;
 } F_28e9c8;
+
 typedef struct {
     F_28e9c8 *x0;
-    int x4;
-    int x8;
-    char padc[0x14];
-    int x20;
-    short x24;
-    short x26;
-    char pad28[4];
-    short x2c;
+    int       x4;
+    int       x8;
+    char      padc[0x14];
+    int       x20;
+    short     x24;
+    short     x26;
+    char      pad28[4];
+    short     x2c;
 } E_28e9c8;
+
 typedef struct {
     char pad[0x58];
-    int x58;
-    int x5c;
+    int  x58;
+    int  x5c;
 } C_28e9c8;
+
 extern E_28e9c8 D_0013E030_28e9c8 __asm__("D_0013E030");
 extern C_28e9c8 D_L00_0016C860_lui __asm__("D_L00_0016C860") NOT_SDA;
-extern int D_L00_0015F5D8;
+extern int      D_L00_0015F5D8;
+
 extern struct {
     int x0, x4, x8;
 } D_L00_00173E00_28e9c8 __asm__("D_L00_00173E00") __attribute__((section(".data")));
+
 extern unsigned char D_001413F5_lui __asm__("D_001413F5") NOT_SDA;
-extern O_28e9c8 *D_L00_0015FFDC_28e9c8 __asm__("D_L00_0015FFDC");
+extern O_28e9c8     *D_L00_0015FFDC_28e9c8 __asm__("D_L00_0015FFDC");
 extern unsigned char D_0013D4C6_lui __asm__("D_0013D4C6") NOT_SDA;
-void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
-void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
-void f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
-void load_chunks_with_optional_fade(int, int) __asm__("FUN_L00_00245610");
-void sound_update(void) __asm__("FUN_0022ca50");
-int sce_gs_sync_v(int) __asm__("FUN_00122298");
+void                 fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
+void                 calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
+void                 f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
+void                 load_chunks_with_optional_fade(int, int) __asm__("FUN_L00_00245610");
+void                 sound_update(void) __asm__("FUN_0022ca50");
+int                  sce_gs_sync_v(int) __asm__("FUN_00122298");
 void initialize_level_transition_with_audio(int audio_selection_mode) __asm__("FUN_L00_0028e9c8");
 
 void initialize_level_transition_with_audio(int audio_selection_mode) {
     O_28e9c8 *moby;
-    int secondary_track_index, base_audio_selection_index, audio_stream_table_index, alternate_audio_stream_table_index, shared_table_offset;
+    int       secondary_track_index, base_audio_selection_index, audio_stream_table_index,
+        alternate_audio_stream_table_index, shared_table_offset;
     D_0013E030_28e9c8.x24 = -1;
     D_L00_0015F5D8 = 1;
     D_0013E030_28e9c8.x20 = audio_selection_mode;
@@ -173,15 +184,16 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
     }
     continue_audio_stream_if_ready();
 }
+
 extern short D_0013E05C NOT_SDA;
-void music_pause(int) __asm__("FUN_00216050");
-void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
-void initialize_level_transition_with_audio(int) __asm__("FUN_L00_0028e9c8");
+void                    music_pause(int) __asm__("FUN_00216050");
+void                    clear_active_help_record(void) __asm__("FUN_L00_002039a0");
+void                    initialize_level_transition_with_audio(int) __asm__("FUN_L00_0028e9c8");
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
 void prepare_level_transition_with_help_cleanup(void) __asm__("FUN_L00_0028ecd8");
 
 void prepare_level_transition_with_help_cleanup(void) {
-    struct Hero *hero_state = &hero;
+    struct Hero             *hero_state = &hero;
     struct MusicStreamState *music_state;
     if (hero_state->health.hp <= 0)
         hero_state->health.hp = 1;
@@ -195,12 +207,14 @@ void prepare_level_transition_with_help_cleanup(void) {
     initialize_level_transition_with_audio(0);
     D_0013E05C = 0;
 }
+
 typedef struct {
-    u8 p[0x20];
+    u8  p[0x20];
     s32 i20;
     s16 h24;
     s16 h26;
 } A_0028ed58;
+
 extern A_0028ed58 level_render_state_lui __asm__("D_0013E030") NOT_SDA;
 
 typedef struct {
@@ -208,27 +222,30 @@ typedef struct {
     s32 i4;
     s32 i8;
 } B_0028ed58;
+
 extern B_0028ed58 D_L00_00173E00_0028ed58 __asm__("D_L00_00173E00")
     __attribute__((section(".data")));
+
 typedef struct {
-    u8 p[0x34];
+    u8  p[0x34];
     s32 i34;
     s32 i38;
     s32 i3C;
-    u8 p2[0x18];
+    u8  p2[0x18];
     s32 i58;
     s32 i5C;
 } C_0028ed58;
+
 extern C_0028ed58 D_L00_0016C860_0028ed58 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
-void initialize_level_transition_with_audio(s32) __asm__("FUN_L00_0028e9c8");
+void       initialize_level_transition_with_audio(s32) __asm__("FUN_L00_0028e9c8");
 extern s32 transition_sequence_positions[1] __asm__("D_L00_00160570") __attribute__((sda));
-void prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
+void       prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
 
 void prepare_target_level_transition(s32 target_level_index) {
     A_0028ed58 *shared_state_record = &level_render_state_lui;
     C_0028ed58 *shared_result_record;
-    s32 shared_table_offset;
+    s32         shared_table_offset;
     (&D_L00_0015F5C4)[5] = 1; /* D_L00_0015F5D8: the unit declares it sda */
     D_L00_0015F5C4 = 6;
     fade_level = 1.0f;
@@ -245,7 +262,8 @@ void prepare_target_level_transition(s32 target_level_index) {
         s32 divisor;
         initialize_level_transition_with_audio(8);
         divisor = pal_mode ? 0x50 : 0x60;
-        shared_result_record->i34 = scale_game_frames(transition_sequence_positions[shared_state_record->h26]);
+        shared_result_record->i34 =
+            scale_game_frames(transition_sequence_positions[shared_state_record->h26]);
         shared_result_record->i3C = shared_result_record->i34 / divisor;
         parse_space_scene_chunk(shared_result_record->i3C);
         shared_result_record->i38 = shared_result_record->i34 % divisor;
@@ -256,27 +274,32 @@ void prepare_target_level_transition(s32 target_level_index) {
         shared_state_record->h24 = -1;
     }
 }
+
 typedef struct {
     char p0[0x20];
-    s32 x20;
-    s16 x24;
-    s16 p26;
-    s16 p28;
-    s16 x2a;
-    s16 x2c;
+    s32  x20;
+    s16  x24;
+    s16  p26;
+    s16  p28;
+    s16  x2a;
+    s16  x2c;
 } E_eed0;
+
 extern E_eed0 D_0013E030_eed0 __asm__("D_0013E030") NOT_SDA;
+
 extern struct {
     int x0, x4, x8_c;
 } D_L00_00173E00_eed0 __asm__("D_L00_00173E00") __attribute__((section(".data")));
+
 extern struct {
     char p[0x58];
-    int x58, x5c;
+    int  x58, x5c;
 } D_L00_0016C860_eed0 __asm__("D_L00_0016C860") __attribute__((section(".data")));
-void FUN_002335a0_eed0(void) __asm__("FUN_002335a0");
+
+void                 FUN_002335a0_eed0(void) __asm__("FUN_002335a0");
 extern u8 D_0013DD43 NOT_SDA;
-extern u8 level_14_entry_transition_gate[] __asm__("D_0013D3F0");
-void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
+extern u8            level_14_entry_transition_gate[] __asm__("D_0013D3F0");
+void                 prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
 
 void prepare_level_entry_transition(void) {
     int level_index, shared_table_offset;
@@ -311,60 +334,81 @@ in:
     D_L00_001611CC = shared_table_offset;
     initialize_level_transition_with_audio(8);
 }
+
 typedef struct {
     float f[4];
 } __attribute__((aligned(16))) V_28efc8;
+
 typedef struct {
-    V_28efc8 corner[4];
+    V_28efc8     corner[4];
     unsigned int color[4];
     struct {
         float u, v;
     } uv[4];
     long unk70, tex, unk80, unk88;
 } Q_28efc8;
+
 typedef struct {
     char *p0;
-    char pad[0x22];
+    char  pad[0x22];
     short h26;
 } G_28efc8;
+
 long get_effect_texture(int) __asm__("FUN_001f44b8");
 void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 /* FUN_L00_0028efc8 is the executable function of the same bytes (src/gameplay). */
 
 s32 D_L01_00160540 = 0;
 s32 D_L01_00160570[1] = {0xf0};
+
 s32 D_L02_00160540 = 0;
 s32 D_L02_00160570[1] = {0xf0};
+
 s32 D_L03_00160540 = 0;
 s32 D_L03_00160570[1] = {0xf0};
+
 s32 D_L04_00160540 = 0;
 s32 D_L04_00160570[1] = {0xf0};
+
 s32 D_L05_00160540 = 0;
 s32 D_L05_00160570[1] = {0xf0};
+
 s32 D_L06_00160540 = 0;
 s32 D_L06_00160570[1] = {0xf0};
+
 s32 D_L07_00160540 = 0;
 s32 D_L07_00160570[1] = {0xf0};
+
 s32 D_L08_00160540 = 0;
 s32 D_L08_00160570[1] = {0xf0};
+
 s32 D_L09_00160540 = 0;
 s32 D_L09_00160570[1] = {0xf0};
+
 s32 D_L10_00160540 = 0;
 s32 D_L10_00160570[1] = {0xf0};
+
 s32 D_L11_00160540 = 0;
 s32 D_L11_00160570[1] = {0xf0};
+
 s32 D_L12_00160540 = 0;
 s32 D_L12_00160570[1] = {0xf0};
+
 s32 D_L13_00160540 = 0;
 s32 D_L13_00160570[1] = {0xf0};
+
 s32 D_L14_00160540 = 0;
 s32 D_L14_00160570[1] = {0xf0};
+
 s32 D_L15_00160540 = 0;
 s32 D_L15_00160570[1] = {0xf0};
+
 s32 D_L16_00160540 = 0;
 s32 D_L16_00160570[1] = {0xf0};
+
 s32 D_L17_00160540 = 0;
 s32 D_L17_00160570[1] = {0xf0};
+
 s32 D_L18_00160540 = 0;
 s32 D_L18_00160570[1] = {0xf0};
 

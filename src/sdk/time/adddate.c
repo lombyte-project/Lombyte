@@ -17,7 +17,7 @@ void AddDate(ClockDate *clock_date) __asm__("adddate");
 
 void AddDate(ClockDate *clock_date) {
     MonthLengthTable month_lengths = MonthLengths;
-    s32 next_day = clock_date->day + 1;
+    s32              next_day = clock_date->day + 1;
 
     clock_date->day = (u8)next_day;
     if ((*(volatile u8 *)&clock_date->year & 3) == 0) {

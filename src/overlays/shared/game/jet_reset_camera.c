@@ -14,27 +14,30 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/camera/init_camera_system.h"
 #include "rnc/audio/voice_pool.h"
+
 typedef struct {
     unsigned char h[0x404];
     unsigned char f[0x7FF];
 } B_00284e50;
+
 extern B_00284e50 D_L00_001BA620 NOT_SDA;
 extern B_00284e50 D_L00_001BB280 NOT_SDA;
-extern int D_L00_001BA4D0[] NOT_SDA;
-extern char D_L00_001BB230[] NOT_SDA;
-extern unsigned char D_0014C050[][16];
+extern int                       D_L00_001BA4D0[] NOT_SDA;
+extern char                      D_L00_001BB230[] NOT_SDA;
+extern unsigned char             D_0014C050[][16];
 
 void jet_reset_camera(OvlQuad *a, OvlQuad *b) __asm__("FUN_L00_00284e50");
+
 void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
     unsigned char *save_candidate_cursor;
-    int i;
-    char *saved_state;
-    struct Hero *hero_state;
-    char *saved_value_source;
-    char *saved_state_fields_source;
-    int lvl;
-    signed char saved_value_override;
-    int source_byte;
+    int            i;
+    char          *saved_state;
+    struct Hero   *hero_state;
+    char          *saved_value_source;
+    char          *saved_state_fields_source;
+    int            lvl;
+    signed char    saved_value_override;
+    int            source_byte;
 
     copy_memory_aligned((int)&D_L00_001BB280, &D_L00_001BA620, 0x404);
     lvl = current_level_index;
@@ -42,7 +45,8 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
         source_byte = *save_candidate_cursor;
         if ((unsigned char)source_byte == 0)
             continue;
-        if ((unsigned char)source_byte != 1 && D_0014C050[lvl][(unsigned char)source_byte - 2] != 0xFF)
+        if ((unsigned char)source_byte != 1 &&
+            D_0014C050[lvl][(unsigned char)source_byte - 2] != 0xFF)
             continue;
         D_L00_001BB280.f[i] = source_byte;
         D_0014C190_257218[lvl][i >> 5] |= 1 << (i & 0x1F);
@@ -75,21 +79,22 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
         }
     }
 }
-extern char D_L00_001BA5D0[] NOT_SDA;
-extern u8 *D_L00_0015FFDC;
+
+extern char                      D_L00_001BA5D0[] NOT_SDA;
+extern u8                       *D_L00_0015FFDC;
 extern unsigned short D_00151708 NOT_SDA;
-extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
-extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
+extern void                      fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
+extern void                      raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void enter_hero_vehicle_mode(s32, s32, void *) __asm__("FUN_L00_00210a08");
 extern void FUN_L00_002852c0(void);
 
 void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 
 void restore_or_clear_level_state(void) {
-    char *s = D_L00_001BB230;
-    int i;
-    short id;
-    u8 *record_cursor;
+    char        *s = D_L00_001BB230;
+    int          i;
+    short        id;
+    u8          *record_cursor;
     struct Hero *hero_state;
 
     if (*(int *)s == 0) {
@@ -125,7 +130,7 @@ void restore_or_clear_level_state(void) {
             break;
         }
 
-        for (i = 0; ; i++) {
+        for (i = 0;; i++) {
             record_cursor = moby_table + i * 0x100;
             if (record_cursor >= D_L00_0015FFDC)
                 break;
@@ -142,6 +147,7 @@ void restore_or_clear_level_state(void) {
     init_camera_system();
     FUN_L00_002852c0();
 }
+
 /* Finds the moby (0x100 bytes each) whose short at 0xB2 equals id; 0 when none. */
 u8 *find_moby_by_id(s32 unused_parameter, s32 id) __asm__("FUN_L00_002851c0");
 
@@ -157,14 +163,13 @@ u8 *find_moby_by_id(s32 unused_parameter, s32 id) {
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_002864E0), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    int off;
-    int pad;
+    int            off;
+    int            pad;
     unsigned short len;
-    short kind;
-    short a;
-    short b;
+    short          kind;
+    short          a;
+    short          b;
 } Ent;
-
 
 void restore_moby_state_entries(int *entry_block) __asm__("FUN_L00_00285208");
 
@@ -172,56 +177,92 @@ void restore_moby_state_entries(int *entry_block) {
     int i;
 
     for (i = 0; i < *entry_block; i++) {
-        int moby_address = find_moby_by_id(((Ent *)(entry_block + 1))[i].b, ((Ent *)(entry_block + 1))[i].a);
+        int moby_address =
+            find_moby_by_id(((Ent *)(entry_block + 1))[i].b, ((Ent *)(entry_block + 1))[i].a);
         if (moby_address != 0) {
             int entry_copy_destination;
             if (((Ent *)(entry_block + 1))[i].kind == 1) {
                 entry_copy_destination = ((Ent *)(entry_block + 1))[i].off + moby_address;
             } else {
-                entry_copy_destination = ((Ent *)(entry_block + 1))[i].off + *(int *)(moby_address + 0x78);
+                entry_copy_destination =
+                    ((Ent *)(entry_block + 1))[i].off + *(int *)(moby_address + 0x78);
             }
-            copy_memory_aligned(entry_copy_destination, &((Ent *)(entry_block + 1))[i].pad, ((Ent *)(entry_block + 1))[i].len);
+            copy_memory_aligned(entry_copy_destination,
+                                &((Ent *)(entry_block + 1))[i].pad,
+                                ((Ent *)(entry_block + 1))[i].len);
         }
     }
 }
 
 B_00284e50 D_L01_001BB700 = {0};
+
 B_00284e50 D_L02_001BAC20 = {0};
+
 B_00284e50 D_L02_001BB880 = {0};
+
 B_00284e50 D_L03_001BB380 = {0};
+
 B_00284e50 D_L04_001BB400 = {0};
+
 B_00284e50 D_L05_001BB700 = {0};
+
 int D_L05_001BA950 NOT_SDA = 0;
-B_00284e50 D_L06_001BADA0 = {0};
+B_00284e50         D_L06_001BADA0 = {0};
+
 B_00284e50 D_L06_001BBA00 = {0};
+
 B_00284e50 D_L07_001BA6A0 = {0};
+
 B_00284e50 D_L07_001BB300 = {0};
+
 B_00284e50 D_L08_001BBA80 = {0};
+
 int D_L08_001BACD0 NOT_SDA = 0;
-B_00284e50 D_L09_001BA7A0 = {0};
+B_00284e50         D_L09_001BA7A0 = {0};
+
 B_00284e50 D_L09_001BB400 = {0};
+
 B_00284e50 D_L10_001BAAA0 = {0};
+
 B_00284e50 D_L10_001BB700 = {0};
+
 B_00284e50 D_L11_001BB020 = {0};
+
 B_00284e50 D_L11_001BBC80 = {0};
+
 int D_L11_001BAED0 NOT_SDA = 0;
-B_00284e50 D_L12_001BAAA0 = {0};
+B_00284e50         D_L12_001BAAA0 = {0};
+
 B_00284e50 D_L12_001BB700 = {0};
+
 int D_L12_001BA950 NOT_SDA = 0;
-B_00284e50 D_L13_001BA920 = {0};
+B_00284e50         D_L13_001BA920 = {0};
+
 B_00284e50 D_L13_001BB580 = {0};
+
 B_00284e50 D_L14_001BAD20 = {0};
+
 B_00284e50 D_L14_001BB980 = {0};
+
 B_00284e50 D_L15_001BAC20 = {0};
+
 B_00284e50 D_L15_001BB880 = {0};
+
 B_00284e50 D_L16_001BAAA0 = {0};
+
 B_00284e50 D_L16_001BB700 = {0};
+
 int D_L16_001BA950 NOT_SDA = 0;
-B_00284e50 D_L17_001BAF20 = {0};
+B_00284e50         D_L17_001BAF20 = {0};
+
 B_00284e50 D_L17_001BBB80 = {0};
+
 B_00284e50 D_L18_001BB020 = {0};
+
 B_00284e50 D_L18_001BBC80 = {0};
+
 int D_L18_001BAED0 NOT_SDA = 0;
 
 B_00284e50 D_L00_001BA620 = {0};
+
 B_00284e50 D_L00_001BB280 = {0};

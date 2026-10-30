@@ -1,19 +1,24 @@
 #include "types.h"
+
 typedef struct {
-    u8 pad_0[4];
+    u8           pad_0[4];
     volatile s32 avail;
 } TtyQueue;
+
 typedef struct {
-    u8 pad_0[8];
+    u8  pad_0[8];
     u8 *data;
 } TtyRcv;
+
 typedef struct {
-    u8 pad_0[0x18];
+    u8      pad_0[0x18];
     TtyRcv *rcv;
 } TtyState;
+
 extern TtyQueue *tty_read_input_queues[] __asm__("D_00154A68");
-extern TtyState D_00154A50;
-extern void QueuePeekReadDone();
+extern TtyState  D_00154A50;
+extern void      QueuePeekReadDone();
+
 s32 sceTtyRead(s8 *destination, s32 size) {
     s32 i;
 

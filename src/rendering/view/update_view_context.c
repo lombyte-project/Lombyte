@@ -9,39 +9,44 @@
 #include "rnc/math/asm_helpers.h"
 
 struct FogRegs2 {
-    u8 pad0[0x28];
+    u8  pad0[0x28];
     s32 mul;
     s32 max;
     s32 far_int;
     s32 near_int;
 };
+
 struct Clip {
     Vec4 constants[3];
 };
 
 Vec4 D_0018CFC0[4] = {0};
+
 extern f32 view_projection_scale_bias_constants[4] __asm__("D_00160720");
+
 #include "rnc/rendering/view/update_view_context_globals.h"
-extern f32 D_001DFF50[];
-extern f32 D_001E6B70[];
+
+extern f32             D_001DFF50[];
+extern f32             D_001E6B70[];
 extern struct FogRegs2 shrub_vu1_constants __asm__("D_001DE9B0");
 extern struct FogRegs2 view_fog_register_constants __asm__("D_001DEA00");
-extern Vec4 view_screen_scale_bias_constants[2] __asm__("D_001DEA40");
-extern Vec4 view_screen_bias_scale_aspect_constants[3] __asm__("D_001DE710");
+extern Vec4            view_screen_scale_bias_constants[2] __asm__("D_001DEA40");
+extern Vec4            view_screen_bias_scale_aspect_constants[3] __asm__("D_001DE710");
+
 extern struct {
-    u8 pad0[0x10];
-    s32 mul;
-    s32 far_int;
-    s32 near_int;
-    u8 pad1c[0x44];
+    u8   pad0[0x10];
+    s32  mul;
+    s32  far_int;
+    s32  near_int;
+    u8   pad1c[0x44];
     Vec4 constants[3];
-    u8 pad90[0x10];
-    s32 x;
-    s32 y;
+    u8   pad90[0x10];
+    s32  x;
+    s32  y;
 } tfrag_vu_const_block __asm__("D_001DE740");
 
-extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32  fast_arc_tan(f32, f32) __asm__("func_001F9E90");
+extern f32  fast_cos(f32) __asm__("func_001F9DC8");
 extern void set_tfrag_dists(void) __asm__("func_00233068");
 
 void update_view_context(void) __asm__("FUN_001f2d98");
@@ -53,25 +58,25 @@ void update_view_context(void) __asm__("FUN_001f2d98");
 void update_view_context(void) {
     struct View *view;
     struct View *packet_view;
-    f32 depth_scale;
-    f32 depth_bias;
-    f32 horizontal_clip_scale;
-    f32 vertical_clip_scale;
-    f32 fog_distance_range;
-    f32 fog_intensity_range;
-    f32 fog_distance_slope;
-    f32 near_clip;
-    f32 projection_near_clip;
-    f32 far_clip;
-    f32 fog_multiplier;
-    f32 projection_fog_multiplier;
-    f32 horizontal_fov;
-    f32 vertical_fov;
-    f32 viewport_width;
-    f32 viewport_height;
-    s32 near_bits;
-    s32 far_bits;
-    s32 mul_bits;
+    f32          depth_scale;
+    f32          depth_bias;
+    f32          horizontal_clip_scale;
+    f32          vertical_clip_scale;
+    f32          fog_distance_range;
+    f32          fog_intensity_range;
+    f32          fog_distance_slope;
+    f32          near_clip;
+    f32          projection_near_clip;
+    f32          far_clip;
+    f32          fog_multiplier;
+    f32          projection_fog_multiplier;
+    f32          horizontal_fov;
+    f32          vertical_fov;
+    f32          viewport_width;
+    f32          viewport_height;
+    s32          near_bits;
+    s32          far_bits;
+    s32          mul_bits;
 
     depth_scale = -8388080.0f;
     depth_bias = 8388112.0f;
@@ -229,4 +234,5 @@ void update_view_context(void) {
     qcopy(&view_screen_scale_bias_constants[0], &packet_view->screen_scale);
     qcopy(&view_screen_scale_bias_constants[1], &packet_view->screen_bias);
 }
+
 extern __typeof__(update_view_context) func_001F2D98 __attribute__((alias("FUN_001f2d98")));

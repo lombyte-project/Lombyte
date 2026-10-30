@@ -17,10 +17,10 @@ struct FreezeModeState {
 };
 
 extern struct FreezeModeState freeze __asm__("D_00193300");
-extern s32 music_pause();
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 get_help_message_text() __asm__("func_001FDD10");
-extern s32 push_help_history() __asm__("func_001FED30");
+extern s32                    music_pause();
+extern s32                    scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32                    get_help_message_text() __asm__("func_001FDD10");
+extern s32                    push_help_history() __asm__("func_001FED30");
 
 void mode_freeze_init(u32 mode, s32 freeze_context) __asm__("FUN_001fbab8");
 

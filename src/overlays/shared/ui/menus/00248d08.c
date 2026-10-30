@@ -4,8 +4,6 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 
-
-
 /* Stores v in D_L00_001791B8 at i plus this level's base from D_L00_001C44B8. */
 void store_current_level_table_value(s32 stored_value, s32 i) __asm__("FUN_L00_0024a798");
 
@@ -26,29 +24,29 @@ typedef struct {
 } MenuCacheEntry;
 
 typedef struct {
-    u8 *source;
-    s16 *offsets;
-    u8 pad08[0x20];
-    s32 enabled;
-    u8 pad2c[4];
+    u8            *source;
+    s16           *offsets;
+    u8             pad08[0x20];
+    s32            enabled;
+    u8             pad2c[4];
     MenuCacheEntry entries[8];
 } MenuCache;
 
 extern MenuCache D_L00_001841F0_lui __asm__("D_L00_001841F0");
-extern s32 D_L00_0015F3F8;
-extern void FUN_L00_002483c8(u8 *, s32, u8 *, s16 *);
+extern s32       D_L00_0015F3F8;
+extern void      FUN_L00_002483c8(u8 *, s32, u8 *, s16 *);
 
 s32 ensure_menu_cache_entry(s32 key) __asm__("FUN_L00_00249d80");
 
 s32 ensure_menu_cache_entry(s32 key) {
-    s32 i;
-    s32 victim;
-    s32 miss;
-    s32 *entry;
-    s32 *times;
+    s32            i;
+    s32            victim;
+    s32            miss;
+    s32           *entry;
+    s32           *times;
     MenuCacheQuad *base;
     MenuCacheQuad *other;
-    MenuCacheQuad selected_entry_copy;
+    MenuCacheQuad  selected_entry_copy;
 
     if (!D_L00_001841F0_lui.enabled) {
         return 0;
@@ -72,8 +70,10 @@ s32 ensure_menu_cache_entry(s32 key) {
         } while (0);
     }
     if (i == 8) {
-        FUN_L00_002483c8(D_L00_001841F0_lui.entries[victim].pixels, key,
-                          D_L00_001841F0_lui.source, D_L00_001841F0_lui.offsets);
+        FUN_L00_002483c8(D_L00_001841F0_lui.entries[victim].pixels,
+                         key,
+                         D_L00_001841F0_lui.source,
+                         D_L00_001841F0_lui.offsets);
         D_L00_001841F0_lui.entries[victim].key = key;
         i = victim;
         miss = 1;

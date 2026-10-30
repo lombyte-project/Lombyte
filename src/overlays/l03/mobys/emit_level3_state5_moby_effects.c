@@ -10,8 +10,6 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 
-
-
 /* In level 3, while the timer of state 5 is between 900 and 1100 ticks, throws four sparks off the moby. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/initonce_0022D028.c: func_L03_0022D028), where it is exact; names translated to the US level program. */
 
@@ -24,7 +22,7 @@ void emit_level3_state5_moby_effects(void) {
     char *moby;
     float world_position[4];
     float spherical_offset[4];
-    int i;
+    int   i;
     if (current_level_index != 3)
         return;
     level_state = D_L03_0016C960;
@@ -43,9 +41,17 @@ void emit_level3_state5_moby_effects(void) {
         moby_point_position(moby, i % 2, world_position);
         azimuth_angle = random_angle_radians();
         elevation_angle = random_angle_radians();
-        build_spherical_offset(spherical_offset, random_float_between(frame_time * 0.7f, frame_time * 2.2f), azimuth_angle, elevation_angle);
-        spawn_effect_particle_with_target_scalar(world_position, spherical_offset, 0x80808080, 0x808080, 147000.0f,
-                         random_int_between(scale_game_frames(12), scale_game_frames(35)));
+        build_spherical_offset(spherical_offset,
+                               random_float_between(frame_time * 0.7f, frame_time * 2.2f),
+                               azimuth_angle,
+                               elevation_angle);
+        spawn_effect_particle_with_target_scalar(
+            world_position,
+            spherical_offset,
+            0x80808080,
+            0x808080,
+            147000.0f,
+            random_int_between(scale_game_frames(12), scale_game_frames(35)));
     }
 }
 

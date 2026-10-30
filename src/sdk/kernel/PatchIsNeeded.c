@@ -9,7 +9,7 @@ s32 PatchIsNeeded(void) {
         struct {
             u32 a;
             u32 b;
-            u8 pad[8];
+            u8  pad[8];
         } f;
     } cfg;
 

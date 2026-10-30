@@ -22,16 +22,16 @@ void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 #define G hero
 
 extern OvlMobyEntry40 l08_moby_hit_records[] __asm__("D_L08_00178900");
-s32 handle_hero_hit(s32 apply_response) __asm__("FUN_L08_00222800");
+s32                   handle_hero_hit(s32 apply_response) __asm__("FUN_L08_00222800");
 
 s32 handle_hero_hit(s32 apply_response) {
-    u8 *hero_moby;
+    u8             *hero_moby;
     OvlMobyEntry40 *hero_moby_entry;
-    u8 *mob;
-    s32 flag;
-    s32 id;
-    f32 xy_response_scale, z_response_amount, frame_time_scale;
-    OvlVec4 response_vector;
+    u8             *mob;
+    s32             flag;
+    s32             id;
+    f32             xy_response_scale, z_response_amount, frame_time_scale;
+    OvlVec4         response_vector;
 
     if (G.state.control_mode == 0x14) {
         return 0;

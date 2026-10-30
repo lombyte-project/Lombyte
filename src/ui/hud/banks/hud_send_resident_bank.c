@@ -3,8 +3,8 @@
 #include "rnc/ui/hud/hud_state.h"
 
 extern void link_hud_bank(s32 bank, s32 base) __asm__("FUN_001fefc0");
-extern void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog,
-                             s32 immediate) __asm__("FUN_00200b10");
+extern void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immediate) __asm__(
+    "FUN_00200b10");
 
 void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) __asm__("FUN_001ff128");
 
@@ -13,15 +13,15 @@ void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) __asm__("FUN_001f
    linked first when the bank file is not linked yet. */
 void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) {
     struct HudTexCounts *counts;
-    s32 address;
-    s32 bank_offset;
-    s32 first;
-    s32 end;
-    s32 i;
-    s32 page;
-    s32 width_log2;
-    s32 height_log2;
-    s32 size;
+    s32                  address;
+    s32                  bank_offset;
+    s32                  first;
+    s32                  end;
+    s32                  i;
+    s32                  page;
+    s32                  width_log2;
+    s32                  height_log2;
+    s32                  size;
 
     if (hud_state.header.counts->loaded[bank] == 0) {
         link_hud_bank(0, base);
@@ -39,8 +39,12 @@ void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) {
         width_log2 = hud_state.image_pages[i].width_log2;
         height_log2 = hud_state.image_pages[i].height_log2;
         size = 1 << (width_log2 + height_log2);
-        hud_send_texture(hud_state.image_pages[i].source_address, page, 0x1B, width_log2,
-                         height_log2, immediate);
+        hud_send_texture(hud_state.image_pages[i].source_address,
+                         page,
+                         0x1B,
+                         width_log2,
+                         height_log2,
+                         immediate);
         address += size * 4;
         hud_state.image_pages[i].gs_block_offset = page;
     }

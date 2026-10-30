@@ -1,6 +1,8 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+
 extern s32 _nextBit();
+
 void _sequenceDisplayExtension(struct MpegDecoder *mpeg) {
     _nextBit(mpeg, 3);
     if (_nextBit(mpeg, 1) != 0) {

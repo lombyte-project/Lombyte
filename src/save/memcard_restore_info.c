@@ -1,19 +1,21 @@
 /* Ported from rac1-decomp (src/game/memcard.c, func_0020BCB0). */
 typedef struct {
-    int a;        /* 0x00 */
-    int b;        /* 0x04 */
-    int c;        /* 0x08 */
-    int d;        /* 0x0C */
+    int  a;       /* 0x00 */
+    int  b;       /* 0x04 */
+    int  c;       /* 0x08 */
+    int  d;       /* 0x0C */
     char name[8]; /* 0x10 */
-    int valid;    /* 0x18 */
+    int  valid;   /* 0x18 */
 } McEntry;        /* 0x1C */
+
 typedef struct {
-    char hdr[0x20];
+    char    hdr[0x20];
     McEntry e[5];
-    char pad[0xC];
+    char    pad[0xC];
 } McSlot; /* 0xB8 */
+
 extern McSlot D_0013D290[];
-extern int validate_data_crc(char *) __asm__("func_0020AD38"); /* memcard_TestChecksum */
+extern int    validate_data_crc(char *) __asm__("func_0020AD38"); /* memcard_TestChecksum */
 /* memcard_RestoreInfo(char *, int, int). Advancing the buf parameter
    itself and copying the name with memcpy both matter for retail's
    registers; re-indexing the entry per store keeps its daddu copies. */

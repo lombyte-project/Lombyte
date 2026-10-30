@@ -1,9 +1,10 @@
 #include "types.h"
-extern void UpdateRfuDispatchState(void);
-extern void startlevel(void) __asm__("func_001E9658");
+
+extern void  UpdateRfuDispatchState(void);
+extern void  startlevel(void) __asm__("func_001E9658");
 extern void *parse_bin(void) __asm__("func_0012D8F8");
-extern s32 FlushCache(s32);
-void run_game_main_loop(void) __asm__("FUN_0012d9d8");
+extern s32   FlushCache(s32);
+void         run_game_main_loop(void) __asm__("FUN_0012d9d8");
 
 void run_game_main_loop(void) {
     void (*step)(void);

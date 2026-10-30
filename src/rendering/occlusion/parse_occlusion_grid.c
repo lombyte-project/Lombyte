@@ -5,10 +5,10 @@ extern char *camera_visibility_grid __asm__("D_0015F640");
 int parse_occlusion_grid(int x, int y, int z) __asm__("FUN_001f2690");
 
 int parse_occlusion_grid(int x, int y, int z) {
-    char *grid = camera_visibility_grid;
-    char *base = grid + *(int *)grid;
+    char           *grid = camera_visibility_grid;
+    char           *base = grid + *(int *)grid;
     unsigned short *axis_lookup = (unsigned short *)(grid + 4);
-    int cz, cy, cx;
+    int             cz, cy, cx;
 
     cz = z - axis_lookup[0];
     if (cz < 0)

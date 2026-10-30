@@ -1,11 +1,12 @@
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
+typedef signed char        s8;
+typedef unsigned char      u8;
+typedef signed short       s16;
+typedef unsigned short     u16;
+typedef signed int         s32;
+typedef unsigned int       u32;
+typedef signed long long   s64;
 typedef unsigned long long u64;
+
 struct StdioFile {
     s32 unk0;
     s32 unk4;
@@ -13,22 +14,24 @@ struct StdioFile {
     u16 unkC;
     u16 unkE;
     s32 unk10;
-    u8 pad_14[0x4];
+    u8  pad_14[0x4];
     s32 unk18;
     s32 unk1C;
     s32 unk20;
     s32 unk24;
     s32 unk28;
     s32 unk2C;
-    u8 pad_30[0x24];
+    u8  pad_30[0x24];
     s32 unk54;
 };
+
 extern void __sread();
 extern void __sseek();
 extern void __swrite();
 extern void __sclose() __asm__("func_00116408");
+
 void std(struct StdioFile *fp, s16 flags, s16 fd, s32 reent) {
-    int new_var2;
+    int               new_var2;
     struct StdioFile *new_var;
     fp->unk54 = reent;
     new_var = fp;

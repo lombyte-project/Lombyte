@@ -10,13 +10,11 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/math/vectors/normalize_vector_triplet.h"
 
-
-
 /* tests whether a point lies within height, distance and heading limits of a moby */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C8D8), where it is exact; names translated to the US level program. */
 
-
-int test_point_within_moby_limits(char *moby, float *point_position, float x, float y, float z) __asm__("FUN_L12_0027b8e0");
+int test_point_within_moby_limits(
+    char *moby, float *point_position, float x, float y, float z) __asm__("FUN_L12_0027b8e0");
 
 int test_point_within_moby_limits(char *moby, float *point_position, float x, float y, float z) {
     float absolute_height_difference = absolute_float(point_position[2] - MOBY(moby)->pos.z);
@@ -27,23 +25,26 @@ int test_point_within_moby_limits(char *moby, float *point_position, float x, fl
     if (!(0.0f < z))
         return 1;
     {
-        float heading_test_angle = fast_arc_tan(point_position[0] - MOBY(moby)->pos.x, point_position[1] - MOBY(moby)->pos.y);
-        heading_test_angle = fast_difference_between_rotations(MOBY(moby)->rot.z, heading_test_angle);
+        float heading_test_angle = fast_arc_tan(point_position[0] - MOBY(moby)->pos.x,
+                                                point_position[1] - MOBY(moby)->pos.y);
+        heading_test_angle =
+            fast_difference_between_rotations(MOBY(moby)->rot.z, heading_test_angle);
         if (heading_test_angle > z)
             return 0;
     }
     return 1;
 }
+
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
+
 #include "qcopy.h"
 #include "rnc/overlay/level_path.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C9B8), where it is exact; names translated to the US level program. */
 
-
-void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int mode) __asm__("FUN_L12_0027b9c0");
+void update_moby_bone_attachment(struct Moby   *parent,
+                                 unsigned char *child,
+                                 int            mode) __asm__("FUN_L12_0027b9c0");
 
 void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int mode) {
     char workspace[0x40];
@@ -66,13 +67,14 @@ void cache_consecutive_point_distances(int point_data_index) __asm__("FUN_L12_00
 
 void cache_consecutive_point_distances(int point_data_index) {
     char *point_data;
-    int i;
+    int   i;
     if (point_data_index == -1)
         return;
     point_data = ((char *)l12_paths[point_data_index]);
     for (i = 0; i < *(int *)point_data - 1; i++) {
         int point_byte_offset = i * 16;
         *(float *)(point_data + point_byte_offset + 0x1C) =
-            fast_vec_dist(point_data + (point_byte_offset + 0x10), point_data + (((i + 1) % *(int *)point_data) * 16 + 0x10));
+            fast_vec_dist(point_data + (point_byte_offset + 0x10),
+                          point_data + (((i + 1) % *(int *)point_data) * 16 + 0x10));
     }
 }

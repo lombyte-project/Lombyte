@@ -20,20 +20,20 @@
 #include "types.h"
 
 struct ReentStream {
-    u8 reserved_00[0xC];
+    u8  reserved_00[0xC];
     s16 flags;
 };
 
 struct ReentStreamBlock {
     struct ReentStreamBlock *next;
-    s32 count;
-    struct ReentStream *streams;
+    s32                      count;
+    struct ReentStream      *streams;
 };
 
 s32 _fwalk(u8 *reent, s32 (*callback)(void *)) {
-    s32 stream_index;
-    s32 result;
-    struct ReentStream *stream;
+    s32                      stream_index;
+    s32                      result;
+    struct ReentStream      *stream;
     struct ReentStreamBlock *block;
 
     result = 0;

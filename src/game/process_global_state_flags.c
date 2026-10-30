@@ -7,11 +7,12 @@
 
 #include "rnc/input/pad_state.h"
 #include "rnc/data_labels.h"
-extern u8 preserved_gold_bolt_flags[] __asm__("D_0014BF08");
-extern u8 circle_target_menu_page[] __asm__("D_001D4EC0");
+
+extern u8   preserved_gold_bolt_flags[] __asm__("D_0014BF08");
+extern u8   circle_target_menu_page[] __asm__("D_001D4EC0");
 extern void InitializeGlobalStateEntry(s32);
 extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32  scale_game_frames(s32) __asm__("func_001F96F8");
 extern void memcard_restore_game(s32) __asm__("func_00209298");
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void load_level_zero_preserving_progress(s32) __asm__("func_00226B08");
@@ -20,8 +21,8 @@ extern void clear_scene_state_buffers(void) __asm__("func_00226F50");
 s32 process_global_state_flags(void) __asm__("FUN_00222290");
 
 s32 process_global_state_flags(void) {
-    u8 backup[4];
-    u8 old_value;
+    u8  backup[4];
+    u8  old_value;
     s32 i;
     s32 result;
 

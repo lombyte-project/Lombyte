@@ -4,15 +4,17 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/fastfunc_001FEF78.c: func_L00_002004C0), where it is exact; names translated to the US level program. */
 
-
 /* Steps rotation a toward b by at most c, clamped to the remaining difference. */
-float step_rotation_toward_target(float current_rotation, float target_rotation, float rotation_step) __asm__("FUN_L00_00200510");
+float step_rotation_toward_target(float current_rotation,
+                                  float target_rotation,
+                                  float rotation_step) __asm__("FUN_L00_00200510");
 
-float step_rotation_toward_target(float current_rotation, float target_rotation, float rotation_step) {
+float step_rotation_toward_target(float current_rotation,
+                                  float target_rotation,
+
+                                  float rotation_step) {
     float rotation_difference = fast_subtract_rotations(target_rotation, current_rotation);
     if (!(rotation_difference > 0.0f)) {
         rotation_step = -rotation_step;

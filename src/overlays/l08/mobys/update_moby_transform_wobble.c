@@ -11,7 +11,6 @@
 
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 
-
 void update_moby_transform_wobble(struct Moby *moby) __asm__("FUN_L08_002dc4a0");
 
 void update_moby_transform_wobble(struct Moby *moby) {
@@ -31,8 +30,7 @@ void update_moby_transform_wobble(struct Moby *moby) {
     moby->rot.y = wobble_value;
     wobble_phase = fast_add_rotations(*(float *)(pvars + 0xf4), wobble_phase_step);
     *(float *)(pvars + 0xf4) = wobble_phase;
-    moby->rot.x =
-        fast_add_rotations(moby->rot.x, fast_sin(wobble_phase) * 0.08726646f);
+    moby->rot.x = fast_add_rotations(moby->rot.x, fast_sin(wobble_phase) * 0.08726646f);
     if (moby->rot.x > 0.17453292f)
         moby->rot.x = 0.17453292f;
     else if (moby->rot.x < -0.17453292f)

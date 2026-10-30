@@ -1,7 +1,6 @@
 #include "types.h"
 #include "rnc/audio/voice_pool.h"
 
-
 void enqueue_voice_request(void) __asm__("FUN_0022dc50");
 
 void enqueue_voice_request(void) {

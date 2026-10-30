@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-
-
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
@@ -11,10 +9,18 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00249488.c: func_L03_0024F6D8), where it is exact; names translated to the US level program. */
 
+void rotate_vector_by_scaled_angle_between_vectors(float  rotation_scale,
+                                                   float *output_vector,
+                                                   float *source_vector,
+                                                   float *reference_vector,
+                                                   int    flag) __asm__("FUN_L03_0024e6f8");
 
-void rotate_vector_by_scaled_angle_between_vectors(float rotation_scale, float *output_vector, float *source_vector, float *reference_vector, int flag) __asm__("FUN_L03_0024e6f8");
+void rotate_vector_by_scaled_angle_between_vectors(float  rotation_scale,
+                                                   float *output_vector,
+                                                   float *source_vector,
+                                                   float *reference_vector,
 
-void rotate_vector_by_scaled_angle_between_vectors(float rotation_scale, float *output_vector, float *source_vector, float *reference_vector, int flag) {
+                                                   int flag) {
     float rotation_quaternion[4];
     float dot_product, vector_length_product, half_rotation_angle;
     fast_vec_cross(rotation_quaternion, reference_vector, source_vector);

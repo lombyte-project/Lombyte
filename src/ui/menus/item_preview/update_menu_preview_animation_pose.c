@@ -2,6 +2,7 @@
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
+
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void normalize_vector_triplet(void *) __asm__("func_00214128");
@@ -11,10 +12,10 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("func_00212F90")
 void update_menu_preview_animation_pose(void *preview) __asm__("FUN_00224fc0");
 
 void update_menu_preview_animation_pose(void *preview) {
-    PauseMoby *moby = preview;
+    PauseMoby     *moby = preview;
     unsigned char *moby_bytes = (unsigned char *)moby;
-    f32 transform[16];
-    s32 source_moby_address = *(int *)(*moby->vars + 0x44);
+    f32            transform[16];
+    s32            source_moby_address = *(int *)(*moby->vars + 0x44);
 
     if (moby_bytes[0x70] & 2) {
         if (moby->oclass == 0x25F) {

@@ -1,7 +1,7 @@
 #include "types.h"
 
 extern void DispatchMpegCallback(void *callback,
-                                 u32 *callback_data) __asm__("_dispatchMpegCallback");
+                                 u32  *callback_data) __asm__("_dispatchMpegCallback");
 
 void DispatchMpegCallbackNoData(void *callback) __asm__("_dispatchMpegCbNodata");
 

@@ -1,4 +1,5 @@
 int clear_menu_selected_index(int *destination) __asm__("FUN_0021a318");
+
 int clear_menu_selected_index(int *destination) {
     destination[0x11] = -1;
     return 0;

@@ -23,7 +23,16 @@ void music_start_track_50000(s32 track, s32 flags, s32 volume) {
             music_stream_state.secondary.volume = volume;
             music_stream_state.secondary.crossfade_enabled = 0;
             snd_play_vag_stream_by_loc_ex_cb(
-                handle, 0, 0, 0, (s16)volume, 0, 2, 0, 0x21, D_002169C0,
+                handle,
+                0,
+                0,
+                0,
+                (s16)volume,
+                0,
+                2,
+                0,
+                0x21,
+                D_002169C0,
                 (u64)((s64)(((u8 *)&music_stream_state + 0x50)) << 0x20) >> 0x20);
         }
     }

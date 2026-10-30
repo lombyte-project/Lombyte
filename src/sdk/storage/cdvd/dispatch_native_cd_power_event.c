@@ -4,6 +4,7 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/data_labels.h"
+
 extern void (*D_00159744)(void *) NOT_SDA;
 extern void *D_00159748 NOT_SDA;
 

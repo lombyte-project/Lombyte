@@ -3,6 +3,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/rendering/frame/swap_render_buffer_chain_globals.h"
+
 void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 
 void swap_render_buffer_chain(void) {

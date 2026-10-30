@@ -10,18 +10,18 @@
 /* refreshes two rotating shrub transform layers */
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028AC80), where it is exact; names translated to the US level program. */
 
-
 void sky_shells_rotate_two(void) __asm__("FUN_L00_002899a8");
+
 void sky_shells_rotate_two(void) {
- float v[4] __attribute__((aligned(16)));
- *(short *)(D_L00_0016051C+4)=0;
- set_identity_matrix(D_L00_001BD7E0);
- sky_draw_shell(0);
- qzero(v);
- v[2]=(unsigned short)D_L00_0015F5CC*0.000095873800f-3.14159265f;
- euler_to_matrix_ee(D_L00_001BD7E0,v);
- sky_draw_shell(1);
- v[2]=(D_L00_0015F5CC&0x1ffff)*0.000047936900f-3.14159265f;
- euler_to_matrix_ee(D_L00_001BD7E0,v);
- sky_draw_shell(2);
+    float v[4] __attribute__((aligned(16)));
+    *(short *)(D_L00_0016051C + 4) = 0;
+    set_identity_matrix(D_L00_001BD7E0);
+    sky_draw_shell(0);
+    qzero(v);
+    v[2] = (unsigned short)D_L00_0015F5CC * 0.000095873800f - 3.14159265f;
+    euler_to_matrix_ee(D_L00_001BD7E0, v);
+    sky_draw_shell(1);
+    v[2] = (D_L00_0015F5CC & 0x1ffff) * 0.000047936900f - 3.14159265f;
+    euler_to_matrix_ee(D_L00_001BD7E0, v);
+    sky_draw_shell(2);
 }

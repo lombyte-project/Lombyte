@@ -16,39 +16,40 @@ typedef struct {
 #include "rnc/game/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/save/mc_data.h"
+
 extern char D_0013D1D0[];
 extern char D_0013D1E8[];
 extern char D_0013D200[];
 extern char D_0013D220[];
 extern char D_0013D240[];
 extern char D_0013D270[];
-extern u8 D_0014EED0[];
-extern u8 D_001506D0[];
+extern u8   D_0014EED0[];
+extern u8   D_001506D0[];
 extern char memcard_delete_entry_path_format[] __asm__("D_0015FE98");
 extern char memcard_deleting_entry_message[] __asm__("D_0015FEA0");
-extern u8 D_001A0880[];
+extern u8   D_001A0880[];
 extern char D_001A08A0[];
 extern char memcard_deleting_directory_message[] __asm__("D_001E81E8");
 
-extern void DebugPrint(char *fmt, ...);
-extern void RaiseKernelTrap();
-extern s32 SceMcFormat(s32 port, s32 slot);
-extern s32 SceMcUnformat(s32 port, s32 slot);
-extern void calculate_ring_buffer_bounds(s32, McChunk **, s32 *) __asm__("func_001FD6E0");
-extern void memcard_restore_info(u8 *, s32, s32) __asm__("func_0020AE60");
-extern s32 memcard_restore_data(u8 *, s32, u32 *) __asm__("func_0020AF20");
-extern s32 sceMcChdir(s32, s32, char *, s32);
-extern s32 sceMcClose(s32 fd);
-extern s32 sceMcDelete(s32 port, s32 slot, char *name);
-extern s32 sceMcGetDir(s32, s32, char *, s32, s32, void *);
-extern s32 sceMcGetInfo(s32, s32, s32 *, s32 *, s32 *);
-extern s32 sceMcMkdir(s32 port, s32 slot, char *name);
-extern s32 sceMcOpen(s32 port, s32 slot, char *name, s32 mode);
-extern s32 sceMcRead(s32 fd, void *buf, s32 size);
-extern s32 sceMcSeek(s32 fd, s32 offset, s32 origin);
-extern s32 sceMcSync(s32 mode, s32 *cmd, s32 *result);
-extern s32 sceMcWrite(s32 fd, void *buf, s32 size);
-extern s32 sprintf(char *str, const char *format, ...);
+extern void  DebugPrint(char *fmt, ...);
+extern void  RaiseKernelTrap();
+extern s32   SceMcFormat(s32 port, s32 slot);
+extern s32   SceMcUnformat(s32 port, s32 slot);
+extern void  calculate_ring_buffer_bounds(s32, McChunk **, s32 *) __asm__("func_001FD6E0");
+extern void  memcard_restore_info(u8 *, s32, s32) __asm__("func_0020AE60");
+extern s32   memcard_restore_data(u8 *, s32, u32 *) __asm__("func_0020AF20");
+extern s32   sceMcChdir(s32, s32, char *, s32);
+extern s32   sceMcClose(s32 fd);
+extern s32   sceMcDelete(s32 port, s32 slot, char *name);
+extern s32   sceMcGetDir(s32, s32, char *, s32, s32, void *);
+extern s32   sceMcGetInfo(s32, s32, s32 *, s32 *, s32 *);
+extern s32   sceMcMkdir(s32 port, s32 slot, char *name);
+extern s32   sceMcOpen(s32 port, s32 slot, char *name, s32 mode);
+extern s32   sceMcRead(s32 fd, void *buf, s32 size);
+extern s32   sceMcSeek(s32 fd, s32 offset, s32 origin);
+extern s32   sceMcSync(s32 mode, s32 *cmd, s32 *result);
+extern s32   sceMcWrite(s32 fd, void *buf, s32 size);
+extern s32   sprintf(char *str, const char *format, ...);
 extern char *strcpy(char *, const char *);
 
 #define MC   memory_card_state
@@ -310,10 +311,11 @@ void memcard_update_state(void) {
             break;
         case MEMCARD_CREATE_REQUEST_RESOURCE_READ: {
             McChunk *chunk;
-            s32 size;
+            s32      size;
 
             calculate_ring_buffer_bounds(disc_table.memcard_data.size << 11, &chunk, &size);
-            start_audio_stream_read(chunk, disc_table.memcard_data.sector, disc_table.memcard_data.size);
+            start_audio_stream_read(
+                chunk, disc_table.memcard_data.sector, disc_table.memcard_data.size);
             MC.sub = 4;
             MC.busy = 0;
             break;
@@ -352,7 +354,7 @@ void memcard_update_state(void) {
         case MEMCARD_CREATE_PROCESS_SAVE_OPEN_RESULT_AND_REQUEST_WRITE:
         case MEMCARD_CREATE_PROCESS_AUXILIARY_FILE_OPEN_RESULT_AND_REQUEST_WRITE: {
             McChunk *chunk;
-            s32 size;
+            s32      size;
 
             if (MC.result >= 0) {
                 if (MC.fd < 0) {
@@ -839,7 +841,8 @@ void memcard_update_state(void) {
                 MC.sub = 8;
                 break;
             }
-            if (sceMcSeek(MC.fd, MC.record_index * get_dma_packet_span_bytes(mc_leveldata), 1) == 0) {
+            if (sceMcSeek(MC.fd, MC.record_index * get_dma_packet_span_bytes(mc_leveldata), 1) ==
+                0) {
                 MC.sub = 7;
             }
             break;
@@ -898,10 +901,11 @@ void memcard_update_state(void) {
 
     case MEMCARD_REQUEST_SAVE_RESOURCE_READ: {
         McChunk *chunk;
-        s32 size;
+        s32      size;
 
         calculate_ring_buffer_bounds(disc_table.memcard_data.size << 11, &chunk, &size);
-        start_audio_stream_read(chunk, disc_table.memcard_data.sector, disc_table.memcard_data.size);
+        start_audio_stream_read(
+            chunk, disc_table.memcard_data.sector, disc_table.memcard_data.size);
         MC.sub = 18;
         MC.busy = 0;
         break;
@@ -910,7 +914,7 @@ void memcard_update_state(void) {
     case MEMCARD_WAIT_SAVE_RESOURCE_READ_AND_SELECT_BUFFER:
         if (cd_read_active[0] == 0) {
             McChunk *chunk;
-            s32 size;
+            s32      size;
 
             calculate_ring_buffer_bounds(disc_table.memcard_data.size << 11, &chunk, &size);
             MC.sub = 19;

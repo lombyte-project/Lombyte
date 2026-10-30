@@ -7,8 +7,8 @@
 /* A path from the level's path table: count 16-byte points after a 16-byte
    header. The taxi reads w of a point as the length of the segment to the next. */
 typedef struct {
-    s32 count;
-    u8 pad4[0xC];
+    s32  count;
+    u8   pad4[0xC];
     Vec4 points[1];
 } LevelPath;
 

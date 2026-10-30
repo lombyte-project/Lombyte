@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
+
 extern s32 D_001312D4[];
 extern s32 D_00131314[];
 extern s32 DIntr();
@@ -7,6 +8,7 @@ extern s32 DeleteSema();
 extern s32 SignalSema();
 extern s32 sceSifRemoveCmdHandler();
 extern s32 EnableInterrupts();
+
 void cdvd_exit(void) {
     s32 interrupts_enabled;
     if (D_001312D4[0] != 0) {

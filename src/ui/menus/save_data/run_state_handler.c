@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+
 extern void (*D_001A0438[])(void);
 void run_state_handler(void) __asm__("FUN_00208840");
 

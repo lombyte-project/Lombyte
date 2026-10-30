@@ -21,12 +21,12 @@ static inline void CpuWriteStatus(u32 status_register) {
 }
 
 /* Kernel call made in place: number in $v1, result in $v0 (no stub). */
-#define CpuSyscall(number) ({                                              \
-    register s32 syscall_result __asm__("$2");                            \
-    __asm__ __volatile__("li $3, %1\n\tsyscall"                            \
-                         : "=r"(syscall_result) : "i"(number) : "$3");     \
-    syscall_result;                                                        \
-})
+#define CpuSyscall(number)                                                                        \
+    ({                                                                                            \
+        register s32 syscall_result __asm__("$2");                                                \
+        __asm__ __volatile__("li $3, %1\n\tsyscall" : "=r"(syscall_result) : "i"(number) : "$3"); \
+        syscall_result;                                                                           \
+    })
 
 /* Semaphore parameters of CreateSema/ReferSemaStatus (SDK eekernel.h). */
 struct SemaParam {

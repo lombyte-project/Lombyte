@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/ui/text/font_metrics.h"
+
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
 extern s32 measure_text_width_regular() __asm__("FUN_001f6250");
 extern s32 font_print() __asm__("FUN_001f62b0");

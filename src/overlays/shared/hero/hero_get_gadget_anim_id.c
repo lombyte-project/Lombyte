@@ -9,16 +9,15 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/interpolation.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/help_002284A8.c: func_L12_002284A8), where it is exact; names translated to the US level program. */
 
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 int hero_get_gadget_anim_id(int allow_item_lookup) __asm__("FUN_L12_00227f10");
+
 int hero_get_gadget_anim_id(int allow_item_lookup) {
     char *base = D_0013E533 + 0xE1D;
-    int i;
+    int   i;
     char *item_table_entry;
     if (((unsigned char *)base)[0x20A4] == 3) {
         return 0;
@@ -45,20 +44,21 @@ int hero_get_gadget_anim_id(int allow_item_lookup) {
     item_table_entry = D_L12_00179F40 - (-i);
     return *(int *)(item_table_entry + 0x24);
 }
+
 #include "eetypes.h"
 #include "qcopy.h"
 
 typedef union {
     u128 q;
-    f32 f[4];
+    f32  f[4];
 } HopVec;
 
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
-extern f32 spring_angle(float *, float *, int, float, float, float,
-                                   float) __asm__("FUN_L00_0025bc98");
+extern f32
+spring_angle(float *, float *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
@@ -69,15 +69,16 @@ extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 #define ED70 frame_time_sq
 
 extern f32 hop_deceleration_speed_reference[] __asm__("D_L12_0017C250");
-void hero_update_hop_movement(void) __asm__("FUN_L12_00235c08");
+void       hero_update_hop_movement(void) __asm__("FUN_L12_00235c08");
+
 void hero_update_hop_movement(void) {
     HopVec velocity_offset;
-    f32 x;
-    f32 speed;
-    f32 velocity_scale_or_yaw_delta;
-    f32 speed_decay_step;
-    f32 velocity_change_step;
-    s32 state;
+    f32    x;
+    f32    speed;
+    f32    velocity_scale_or_yaw_delta;
+    f32    speed_decay_step;
+    f32    velocity_change_step;
+    s32    state;
 
     state = hero.state.current;
     if (state == 10) {
@@ -127,7 +128,9 @@ void hero_update_hop_movement(void) {
         }
         hero.motion.velocity.f[0] = fast_cos(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
         hero.motion.velocity.f[1] = fast_sin(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
-        velocity_scale_or_yaw_delta = hero.air_target_speed * fast_sin(fast_difference_between_rotations(hero.takeoff_yaw, hero.high_jump_drift_yaw));
+        velocity_scale_or_yaw_delta =
+            hero.air_target_speed *
+            fast_sin(fast_difference_between_rotations(hero.takeoff_yaw, hero.high_jump_drift_yaw));
         hero.motion.velocity.f[0] += fast_cos(hero.takeoff_yaw) * velocity_scale_or_yaw_delta;
         hero.motion.velocity.f[1] += fast_sin(hero.takeoff_yaw) * velocity_scale_or_yaw_delta;
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
@@ -143,7 +146,8 @@ void hero_update_hop_movement(void) {
                 hero.motion.velocity.f[0] = fast_cos(hero.motion.move_yaw) * (ED6C * 4.9f);
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
-                set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
+                set_gravity_relative_vector_length_xy(
+                    &hero.motion.velocity, &hero.motion.velocity, 0.0f);
                 fast_vec_normalize(&velocity_offset, &hero.motion.move_dir, ED6C * 4.9f);
                 fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &velocity_offset);
             }
@@ -152,8 +156,13 @@ void hero_update_hop_movement(void) {
     } else {
         if (state == 0x2D) {
             x = hero.motion.rot.f[2];
-            hero.motion.yaw_error = spring_angle(&x, &hero.motion.yaw_rate, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
-                                             ED6C * 7.330383f);
+            hero.motion.yaw_error = spring_angle(&x,
+                                                 &hero.motion.yaw_rate,
+                                                 0,
+                                                 hero.motion.move_yaw,
+                                                 ED64 * 0.018f,
+                                                 ED64 * 0.2f,
+                                                 ED6C * 7.330383f);
             velocity_scale_or_yaw_delta = fast_subtract_rotations(x, hero.motion.rot.f[2]);
             rotate_hero_about_fixed_local_pivot(0.0f, 0.0f, velocity_scale_or_yaw_delta);
         } else {

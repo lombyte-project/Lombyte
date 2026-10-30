@@ -2,14 +2,18 @@
 #include "sda.h"
 
 struct CameraTrackingControl {
-    u8 pad_0[0xC0];
+    u8  pad_0[0xC0];
     s32 control_selector;
 };
+
 #include "rnc/hero/hero.h"
+
 extern s32 cam_coll_mode __asm__("D_0015EF98") MACRO_ADDR;
 extern s32 cam_coll_flag __asm__("D_0015EF9C") MACRO_ADDR;
 extern s32 cam_coll_flag_prev __asm__("D_0015EFA0") MACRO_ADDR;
+
 #include "rnc/camera/camera_globals.h"
+
 extern struct CameraTrackingControl cam_coll_state __asm__("D_001870D0");
 /* retail small-data globals, declared to GAS before the body */
 

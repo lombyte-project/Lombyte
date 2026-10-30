@@ -4,25 +4,25 @@
 #include "qcopy.h"
 #include "rnc/rendering/view/update_view_context.h"
 
-extern char D_00187080[];
-extern char render_sequence[] __asm__("D_0018CB20");
-extern float view_tan_half_fov __asm__("D_0018CDB0") NOT_SDA;
+extern char          D_00187080[];
+extern char          render_sequence[] __asm__("D_0018CB20");
+extern float         view_tan_half_fov __asm__("D_0018CDB0") NOT_SDA;
 extern unsigned char D_0015EDB4_macro[4] __asm__("D_0015EDB4") MACRO_ADDR;
-extern void sceVu0UnitMatrix(float *);
-extern void SceVu0RotMatrixX(float *, float *, float);
-extern void SceVu0RotMatrixY(float *, float *, float);
-extern void sceVu0RotMatrixZ(float *, float *, float);
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-unsigned char build_object_rotation_matrix(void) __asm__("FUN_0022de10");
+extern void          sceVu0UnitMatrix(float *);
+extern void          SceVu0RotMatrixX(float *, float *, float);
+extern void          SceVu0RotMatrixY(float *, float *, float);
+extern void          sceVu0RotMatrixZ(float *, float *, float);
+extern void          fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
+unsigned char        build_object_rotation_matrix(void) __asm__("FUN_0022de10");
 
 unsigned char build_object_rotation_matrix(void) {
-    char *gameplay_state = render_sequence;
-    char *key = *(char **)(gameplay_state + 0x54) + *(int *)(gameplay_state + 0x38) * 32;
+    char         *gameplay_state = render_sequence;
+    char         *key = *(char **)(gameplay_state + 0x54) + *(int *)(gameplay_state + 0x38) * 32;
     unsigned char flag = key[0xC];
-    float *keyframe_angles = (float *)(key + 0x10);
-    char *camera_position;
-    char *camera_state;
-    float rotation_matrix[16];
+    float        *keyframe_angles = (float *)(key + 0x10);
+    char         *camera_position;
+    char         *camera_state;
+    float         rotation_matrix[16];
 
     view_tan_half_fov = keyframe_angles[3];
     update_view_context();

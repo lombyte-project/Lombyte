@@ -9,8 +9,8 @@
    index; the owner then moves it each frame and release_point_light_slot
    clears it. */
 typedef struct {
-    f32 color[3];
-    f32 unkC;
+    f32     color[3];
+    f32     unkC;
     OvlVec4 position; /* w: radius */
 } PointLight;
 

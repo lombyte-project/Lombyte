@@ -3,13 +3,12 @@
 #include "rnc/movies/decoder/decoder_globals.h"
 
 extern volatile s32 D_001611E4;
-extern s32 sceGsSyncV();
+extern s32          sceGsSyncV();
 
 void start_display(s32 vblank_field_to_skip) __asm__("FUN_0023b590");
 
 void start_display(s32 vblank_field_to_skip) {
     do {
-
     } while (sceGsSyncV(0) == vblank_field_to_skip);
     movie_display_active = 1;
     D_001611E4 = 0;

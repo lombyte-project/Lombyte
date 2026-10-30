@@ -1,8 +1,8 @@
 #include "types.h"
 #include "kernel.h"
 
-extern s32 DIntr();
-extern s32 EnableInterrupts();
+extern s32  DIntr();
+extern s32  EnableInterrupts();
 extern void SetVSyncFlag(s32 *flag, s64 *result);
 
 s64 VSync2(void) {

@@ -6,7 +6,7 @@
 #include "rnc/rendering/render_globals.h"
 
 struct CameraEnvironmentRegion {
-    u8 pad0[0x50];
+    u8  pad0[0x50];
     s32 flags;
     s32 negative_color;
     s32 positive_color;
@@ -18,7 +18,7 @@ struct CameraEnvironmentRegion {
     f32 positive_value_start;
     f32 positive_depth_end;
     f32 positive_value_end;
-    u8 pad7C[4];
+    u8  pad7C[4];
 };
 
 extern struct CameraEnvironmentRegion camera_environment_regions[] __asm__("D_0019ADC0");
@@ -29,22 +29,22 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 void update_camera_environment_from_regions(void *position) __asm__("FUN_001ee4b0");
 
 void update_camera_environment_from_regions(void *position) {
-    f32 blend;
-    s32 region_index;
+    f32                             blend;
+    s32                             region_index;
     struct CameraEnvironmentRegion *region;
-    u32 positive_weight;
-    u32 negative_weight;
-    s32 negative_color;
-    s32 positive_color;
-    f32 inverse_blend;
-    u32 red;
-    u32 green;
-    u32 positive_red;
-    u32 negative_red;
-    u32 positive_green;
-    u32 negative_green;
-    u32 positive_blue;
-    u32 negative_blue;
+    u32                             positive_weight;
+    u32                             negative_weight;
+    s32                             negative_color;
+    s32                             positive_color;
+    f32                             inverse_blend;
+    u32                             red;
+    u32                             green;
+    u32                             positive_red;
+    u32                             negative_red;
+    u32                             positive_green;
+    u32                             negative_green;
+    u32                             positive_blue;
+    u32                             negative_blue;
 
     if (find_camera_environment_region(position, &blend, &region_index) == 0) {
         return;
@@ -81,5 +81,6 @@ void update_camera_environment_from_regions(void *position) {
         255.0f -
         (region->positive_value_end * blend + region->negative_value_end * inverse_blend) * 255.0f;
 }
+
 extern __typeof__(update_camera_environment_from_regions) func_001EE4B0
     __attribute__((alias("FUN_001ee4b0")));

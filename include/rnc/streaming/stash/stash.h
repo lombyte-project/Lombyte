@@ -4,20 +4,20 @@
 #include "types.h"
 #include "sifrpc.h"
 
-#define STASH_SLOT_COUNT 64
-#define STASH_QWORD_BYTES 16
+#define STASH_SLOT_COUNT       64
+#define STASH_QWORD_BYTES      16
 #define STASH_MAX_FETCH_QWORDS 0xFFFF
-#define STASH_RPC_SERVER 0x11
-#define STASH_RPC_FETCH 1
-#define STASH_RPC_INFO 2
+#define STASH_RPC_SERVER       0x11
+#define STASH_RPC_FETCH        1
+#define STASH_RPC_INFO         2
 
 /* EE bookkeeping for the IOP buffer returned by STASH_RPC_INFO. */
 struct StashState {
-    s32 iop_base;
-    s32 capacity_bytes;
+    s32                     iop_base;
+    s32                     capacity_bytes;
     struct sceSifClientData rpc_client;
-    s32 next_iop_address;
-    s32 slot_count;
+    s32                     next_iop_address;
+    s32                     slot_count;
 };
 
 /* A reserved range; the DMA may populate fewer qwords than are reserved. */

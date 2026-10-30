@@ -15,50 +15,50 @@ typedef struct {
 } CameraDescriptorInfo;
 
 typedef struct {
-    u8 pad0[0x1C];
+    u8                    pad0[0x1C];
     CameraDescriptorInfo *descriptor;
 } CameraDescriptor;
 
 struct CameraTransitionState {
-    u8 pad0[0x140];
-    u128 published_position;
-    u8 pad150[0x30];
+    u8                pad0[0x140];
+    u128              published_position;
+    u8                pad150[0x30];
     struct UpdateCam *current;
     struct UpdateCam *previous;
-    u8 pad188[0xE8];
-    s16 transition_phase;
-    u8 pad272;
-    u8 transition_mode;
-    u8 pad274[0x14];
-    f32 configured_rotation_rate;
-    u8 pad28C[8];
-    f32 configured_position_rate;
-    u8 pad298[0x5C];
-    s32 configured_frames;
-    u8 pad2F8[0xA0];
-    s32 snapshot_pending;
+    u8                pad188[0xE8];
+    s16               transition_phase;
+    u8                pad272;
+    u8                transition_mode;
+    u8                pad274[0x14];
+    f32               configured_rotation_rate;
+    u8                pad28C[8];
+    f32               configured_position_rate;
+    u8                pad298[0x5C];
+    s32               configured_frames;
+    u8                pad2F8[0xA0];
+    s32               snapshot_pending;
 };
 
 extern struct CameraTransitionState preview_camera __asm__("D_00186F40");
 
 extern void camera_run_setup_to_new_cam(struct UpdateCam *next_camera) __asm__("func_001EBEC8");
 extern void fast_mem_copy(void *dst, void *src, s32 size) __asm__("func_001F98D0");
-extern s32 truncate_float_to_s32(f32 transition_duration) __asm__("func_001FA6D0");
+extern s32  truncate_float_to_s32(f32 transition_duration) __asm__("func_001FA6D0");
 
 void switch_active_camera_record(struct UpdateCam *next_camera) __asm__("FUN_001ebf10");
 
 extern CameraDescriptor *D_0015EF90;
-void switch_active_camera_record(struct UpdateCam *next_camera) {
 
-    struct UpdateCam *previous_camera;
+void switch_active_camera_record(struct UpdateCam *next_camera) {
+    struct UpdateCam     *previous_camera;
     CameraDescriptorInfo *descriptor;
-    f32 transition_duration;
-    f32 mode_one_duration;
-    f32 handoff_duration;
-    f32 *previous_position;
-    Vec4f *position;
-    s32 descriptor_kind = 0;
-    s32 previous_transition_state;
+    f32                   transition_duration;
+    f32                   mode_one_duration;
+    f32                   handoff_duration;
+    f32                  *previous_position;
+    Vec4f                *position;
+    s32                   descriptor_kind = 0;
+    s32                   previous_transition_state;
 
     descriptor = D_0015EF90[next_camera->descriptor_index].descriptor;
     previous_camera = preview_camera.current;
@@ -83,8 +83,7 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
             transition_duration = next_camera->transition_duration;
             preview_camera.transition_mode = 2;
             if (transition_duration > 0.0f) {
-                preview_camera.configured_frames =
-                    truncate_float_to_s32(transition_duration);
+                preview_camera.configured_frames = truncate_float_to_s32(transition_duration);
             } else {
                 preview_camera.configured_frames = 40;
             }
@@ -146,4 +145,5 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     previous_position[1] = position->y;
     previous_position[2] = position->z;
 }
+
 extern __typeof__(switch_active_camera_record) func_001EBF10 __attribute__((alias("FUN_001ebf10")));

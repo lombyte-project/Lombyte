@@ -12,7 +12,7 @@ void hero_respawn() __asm__("FUN_L00_00211250");
 void start_indexed_disc_stream(s32 i) __asm__("FUN_L02_00298c68");
 
 void start_indexed_disc_stream(s32 i) {
-    s32 a, b;
+    s32          a, b;
     struct Hero *hero_ptr;
     if (i < 0)
         return;
@@ -30,11 +30,11 @@ void start_indexed_disc_stream(s32 i) {
         prepare_movie_playback(a, b, game_language);
     }
 }
+
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/mobys/moby.h"
-
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 

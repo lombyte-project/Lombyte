@@ -9,16 +9,17 @@ s32 update_menu_choice_list(struct MenuScreen *menu) __asm__("FUN_002212b8");
 
 s32 update_menu_choice_list(struct MenuScreen *menu) {
     struct MenuChoice *item;
-    s32 *first;
-    s32 *opt;
-    s32 previous_choice_index;
-    s32 selected_choice_index;
-    s32 option_count;
+    s32               *first;
+    s32               *opt;
+    s32                previous_choice_index;
+    s32                selected_choice_index;
+    s32                option_count;
 
     if (menu_system.current->focus != menu) {
         return 0;
     }
-    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) &&
+        menu_system.close_locked == 0) {
         return 1;
     }
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {

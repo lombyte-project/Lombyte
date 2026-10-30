@@ -3,6 +3,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
+
 /* When the flag at +2 is clear, copies the 16-byte vector at +0x50 to
    +0xC0 with retail's qcopy, optionally runs fast_vec_add on +0x60,
    then copies +0x60 to +0xD0. Sibling of func_001ECC10 just above it. */

@@ -1,4 +1,5 @@
 #include "types.h"
+
 typedef struct {
     s32 type;
     s64 pts;
@@ -6,17 +7,17 @@ typedef struct {
 } MpegCbTimeStamp;
 
 typedef struct {
-    u8 pad0[0x150];
-    s32 unk150;
-    u8 pad154[0x6D4];
-    s64 pts;
-    s64 dts;
-    u8 pad838[0x20];
+    u8    pad0[0x150];
+    s32   unk150;
+    u8    pad154[0x6D4];
+    s64   pts;
+    s64   dts;
+    u8    pad838[0x20];
     void *cbData;
 } MpegDec;
 
 extern void _nextStartCode(MpegDec *d);
-extern u32 _nextBit(MpegDec *d, s32 n);
+extern u32  _nextBit(MpegDec *d, s32 n);
 extern void _sequenceHeader(MpegDec *d);
 extern void _groupOfPicturesHeader(MpegDec *d);
 extern void _pictureHeader(MpegDec *d);
@@ -30,7 +31,7 @@ s32 _nextHeader(MpegDec *decoder) {
         MPEG_GROUP_START_CODE = 0x1B8
     };
     MpegCbTimeStamp cb;
-    u32 code;
+    u32             code;
 
     while (1) {
         _nextStartCode(decoder);

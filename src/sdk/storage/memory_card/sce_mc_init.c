@@ -2,24 +2,24 @@
 #include "kernel.h"
 #include "rnc/sdk/libmc.h"
 
-
 extern char mc_rpc_bind_error_message[] __asm__("D_00153450");
 extern char mcserv_old_release_message[] __asm__("D_00153468");
 extern char mcman_old_release_message[] __asm__("D_00153490");
-extern u8 D_00159A80[];
-extern s32 CreateSema(struct SemaParam *);
-extern s32 WaitSema(s32);
-extern s32 SignalSema(s32);
-extern s32 sceMcSync(s32, s32 *, s32 *);
+extern u8   D_00159A80[];
+extern s32  CreateSema(struct SemaParam *);
+extern s32  WaitSema(s32);
+extern s32  SignalSema(s32);
+extern s32  sceMcSync(s32, s32 *, s32 *);
 extern void sceSifInitRpc(u32);
-extern s32 sceSifBindRpc(struct sceSifClientData *, u32, u32);
-extern s32 sceSifCallRpc(struct sceSifClientData *, u32, u32, void *, s32, void *, s32, void *, void *);
+extern s32  sceSifBindRpc(struct sceSifClientData *, u32, u32);
+extern s32
+sceSifCallRpc(struct sceSifClientData *, u32, u32, void *, s32, void *, s32, void *, void *);
 extern s32 scePrintf(const char *, ...);
 
 s32 sceMcInit(void) {
     struct SemaParam param;
-    s32 rpc_call_result;
-    s32 i;
+    s32              rpc_call_result;
+    s32              i;
 
     if (mc_sema < 0) {
         param.initCount = 1;
@@ -43,7 +43,8 @@ s32 sceMcInit(void) {
         while (--i != 0) {
         }
     }
-    rpc_call_result = sceSifCallRpc(&mc_rpc_client, MC_FUNC_INIT, 0, D_00159A80, 48, mc_rpc_result, 12, 0, 0);
+    rpc_call_result =
+        sceSifCallRpc(&mc_rpc_client, MC_FUNC_INIT, 0, D_00159A80, 48, mc_rpc_result, 12, 0, 0);
     SignalSema(mc_sema);
     if (rpc_call_result < 0) {
         mc_rpc_client.serve = 0;

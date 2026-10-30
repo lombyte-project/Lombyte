@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+
 void UpdateTempTrackData(struct MpegDecoder *decoder, s32 delta) {
     s32 reference;
     s32 current;

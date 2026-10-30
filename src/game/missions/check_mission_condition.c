@@ -3,6 +3,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/level_state.h"
 #include "rnc/game/item_state.h"
+
 s32 check_mission_condition(s16 kind, s32 value) __asm__("FUN_0020baf0");
 
 s32 check_mission_condition(s16 kind, s32 value) {

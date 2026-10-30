@@ -25,7 +25,7 @@ typedef struct {
 } StreamedAnimationMoby;
 
 typedef struct {
-    u8 pad_0[0x48];
+    u8  pad_0[0x48];
     u8 *animation_tables[4];
 } StreamedClassResource;
 
@@ -35,17 +35,17 @@ typedef struct {
 } AnimationTableHeader;
 
 typedef struct {
-    u8 pad_0[0x34];
-    s32 state;
-    s32 pad_38;
-    u8 *buffer;
-    s32 read_offset;
+    u8                     pad_0[0x34];
+    s32                    state;
+    s32                    pad_38;
+    u8                    *buffer;
+    s32                    read_offset;
     StreamedAnimationMoby *moby;
 } MobyAnimationStream;
 
 extern s32 queued_dialogue_id[] __asm__("D_001516EC");
 extern s16 dialogue_playback_phase[] __asm__("D_0015172A");
-extern u8 animation_asset_read_active[] __asm__("D_001D5CBB");
+extern u8  animation_asset_read_active[] __asm__("D_001D5CBB");
 
 extern void decompress_wad(u8 *, u8 *) __asm__("FUN_0020b618");
 
@@ -66,16 +66,16 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
         STREAMED_MOBY_WAIT_THIRD_ANIMATION_COMPLETION = 5,
         STREAMED_MOBY_WAIT_SEQUENCE_RESTART = 6
     };
-    StreamedAnimationMoby *moby;
-    AnimationTableHeader *header;
+    StreamedAnimationMoby  *moby;
+    AnimationTableHeader   *header;
     StreamedClassResource **class_resource;
     StreamedClassResource **classes;
-    s32 k;
-    s32 table_index;
-    s32 dialogue_column;
-    u8 *animation_table;
-    s32 animation_index;
-    u16 class_slot;
+    s32                     k;
+    s32                     table_index;
+    s32                     dialogue_column;
+    u8                     *animation_table;
+    s32                     animation_index;
+    u16                     class_slot;
 
     switch (stream->state) {
     case ANIMATION_STREAM_START_READ:
@@ -83,7 +83,8 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
             break;
         }
         table_index = 0x4F000 - (disc_table.animation_table.size << 11);
-        if (start_audio_stream_read(stream->buffer + table_index, disc_table.animation_table.sector,
+        if (start_audio_stream_read(stream->buffer + table_index,
+                                    disc_table.animation_table.sector,
                                     disc_table.animation_table.size) != 0) {
             stream->read_offset = table_index;
             stream->state = 1;
@@ -187,4 +188,5 @@ s32 update_streamed_moby_animation(MobyAnimationStream *stream) {
     return 0;
 }
 
-extern __typeof__(update_streamed_moby_animation) func_002256E8 __attribute__((alias("FUN_002256e8")));
+extern __typeof__(update_streamed_moby_animation) func_002256E8
+    __attribute__((alias("FUN_002256e8")));

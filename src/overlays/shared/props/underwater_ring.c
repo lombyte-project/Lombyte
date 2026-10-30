@@ -22,46 +22,48 @@
 #include "rnc/overlay/shared/hero/update_hero_and_vehicle_mode_effects.h"
 
 typedef struct {
-    s16 timer;
-    s16 delay;
-    s16 triggered;
-    s16 flash_timer;
-    u8 flash_color;
-    u8 initialized;
-    u8 child_count;
-    u8 notified_count;
-    s32 frame_count;
+    s16          timer;
+    s16          delay;
+    s16          triggered;
+    s16          flash_timer;
+    u8           flash_color;
+    u8           initialized;
+    u8           child_count;
+    u8           notified_count;
+    s32          frame_count;
     struct Moby *parent;
-    f32 distance;
-    s16 restart_timer;
-    s16 pad26;
-    s32 enabled;
+    f32          distance;
+    s16          restart_timer;
+    s16          pad26;
+    s32          enabled;
 } VendorVars;
 
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
-extern u8 D_0013F3D0[];
-extern u32 D_0014C190[];
-extern s32 D_L15_001BAAD0[];
+extern u8   D_0013F3D0[];
+extern u32  D_0014C190[];
+extern s32  D_L15_001BAAD0[];
 
 void underwater_ring_update(struct Moby *moby) __asm__("FUN_L15_002e5958");
+
 void underwater_ring_update(struct Moby *moby) {
-    VendorVars *vars = (VendorVars *)moby->pvars;
-    u8 delta[16];
-    u8 matrix[64];
+    VendorVars  *vars = (VendorVars *)moby->pvars;
+    u8           delta[16];
+    u8           matrix[64];
     struct Moby *child;
-    u16 save_id;
-    u8 *save_byte;
-    s32 first;
-    s32 second;
-    s32 divisor;
-    s32 near_parent = 0;
+    u16          save_id;
+    u8          *save_byte;
+    s32          first;
+    s32          second;
+    s32          divisor;
+    s32          near_parent = 0;
 
     if ((u8)(moby->state - 1) < 2) {
         fast_vec_sub(delta, &moby->pos, D_0013F3D0);
         if (fast_vec_length(delta) < vars->distance) {
             transpose_rotation_matrix(matrix, &moby->rot_row0);
             transform_vector(delta, delta, matrix);
-            if (*(f32 *)(delta + 4) < 0.2f) near_parent = 1;
+            if (*(f32 *)(delta + 4) < 0.2f)
+                near_parent = 1;
         }
     }
     switch (moby->state) {
@@ -97,7 +99,10 @@ void underwater_ring_update(struct Moby *moby) {
         save_byte = (u8 *)&l15_save_state;
         save_byte -= -(s16)save_id;
         if (save_byte[0x454] != 0 ||
-            ((((s32)*(u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190)) >> (save_id & 31)) & 1) != 0) {
+            ((((s32) * (u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) +
+                               (u8 *)D_0014C190)) >>
+              (save_id & 31)) &
+             1) != 0) {
             if (vars->enabled != 0) {
                 set_moby_list_state(moby->group, 4);
                 vars->timer = vars->restart_timer;
@@ -107,11 +112,12 @@ void underwater_ring_update(struct Moby *moby) {
         }
         if (vars->triggered == 0 && near_parent) {
             struct Moby *parent = vars->parent;
-            VendorVars *parent_vars = (VendorVars *)parent->pvars;
+            VendorVars  *parent_vars = (VendorVars *)parent->pvars;
             if (parent->state == 1) {
                 vars->child_count = 0;
                 parent->state = 2;
-                parent_vars->timer = parent_vars->frame_count < 1 ? 900 : scale_game_frames(vars->frame_count);
+                parent_vars->timer =
+                    parent_vars->frame_count < 1 ? 900 : scale_game_frames(vars->frame_count);
             }
             parent_vars->child_count++;
             allocate_voice_for_target_entry(3, 0x31, moby);
@@ -155,7 +161,7 @@ void underwater_ring_update(struct Moby *moby) {
         moby->state = 1;
         break;
     case 4: {
-        u16 save_id;
+        u16  save_id;
         u32 *bits;
         if (fast_dec_timer_s16(&vars->flash_timer) != 0) {
             vars->flash_timer = scale_game_frames(0x14);
@@ -168,7 +174,8 @@ void underwater_ring_update(struct Moby *moby) {
             }
         }
         save_id = moby->save_id;
-        bits = (u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190);
+        bits =
+            (u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190);
         *bits |= 1U << (save_id & 31);
         save_id = moby->save_id;
         D_L15_001BAAD0[(s16)save_id >> 5] |= 1U << (save_id & 31);
@@ -182,6 +189,7 @@ void underwater_ring_update(struct Moby *moby) {
 extern void draw_moby_radial_ripple_mesh_buffers(void) __asm__("FUN_L15_002eac90");
 
 void ripple_strips_moby_update(struct Moby *moby) __asm__("FUN_L15_002eb0a0");
+
 void ripple_strips_moby_update(struct Moby *moby) {
     if (moby->state == 0) {
         set_moby_color(moby, 0x40, 0x40, 0x40);
@@ -192,37 +200,39 @@ void ripple_strips_moby_update(struct Moby *moby) {
         moby->flags |= 1;
     }
 }
+
 #include "sda.h"
 
 /* Update for moby class 1428: a four-state trigger that spins and then deletes itself. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002ED168), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char pad0[0x10];
-    char pos[0x10];
-    unsigned char b20;
-    char pad21[0xB];
-    float f2C;
-    unsigned char b30;
-    unsigned char b31;
-    short s32;
+    char           pad0[0x10];
+    char           pos[0x10];
+    unsigned char  b20;
+    char           pad21[0xB];
+    float          f2C;
+    unsigned char  b30;
+    unsigned char  b31;
+    short          s32;
     unsigned short h34;
-    char pad36[0x12];
-    float f48;
-    char pad4C[0x2C];
-    Child *child;
-    char pad7C[0x14];
-    int f90;
+    char           pad36[0x12];
+    float          f48;
+    char           pad4C[0x2C];
+    Child         *child;
+    char           pad7C[0x14];
+    int            f90;
 } Obj;
 
-extern int D_L15_0015F5C4;
+extern int           D_L15_0015F5C4;
 extern unsigned char D_0013D388_bd78[] __asm__("D_0013D388");
-extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void initialize_collectible_sprite_state(char *) __asm__("FUN_L02_002ea7d0");
-extern void update_collectible_sprite_effect(char *) __asm__("FUN_L02_002ea8b0");
+extern void          start_scene(int) __asm__("FUN_L00_00298840");
+extern void          initialize_collectible_sprite_state(char *) __asm__("FUN_L02_002ea7d0");
+extern void          update_collectible_sprite_effect(char *) __asm__("FUN_L02_002ea8b0");
 
 extern float D_L15_001621A0 __attribute__((sda));
-void codebot_update(struct Moby *moby) __asm__("FUN_L15_002ebd78");
+void         codebot_update(struct Moby *moby) __asm__("FUN_L15_002ebd78");
+
 void codebot_update(struct Moby *moby) {
     enum {
         CODEBOT_INITIALIZE = 0,
@@ -232,10 +242,8 @@ void codebot_update(struct Moby *moby) {
     };
     unsigned char *collection_flags;
     if (current_level_index != 0xF) {
-        moby->rot.z =
-            fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
-        moby->scale =
-            moby->pclass->scale * D_L15_001621A0;
+        moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
+        moby->scale = moby->pclass->scale * D_L15_001621A0;
         switch (moby->state) {
         case CODEBOT_INITIALIZE:
             initialize_collectible_sprite_state(moby);
@@ -273,16 +281,18 @@ void codebot_update(struct Moby *moby) {
         }
     }
 }
-extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
-extern int D_L15_0015F594 __attribute__((sda));
-extern u8 D_0014C050[];
+
+extern struct Moby   *l15_moby_array __asm__("D_L15_0015FFD8");
+extern int            D_L15_0015F594 __attribute__((sda));
+extern u8             D_0014C050[];
 extern u32 D_0013CAE4 NOT_SDA;
-extern void try_set_help_message(int, int) __asm__("FUN_00215130");
-extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
-extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");
+extern void           try_set_help_message(int, int) __asm__("FUN_00215130");
+extern void           jet_game_state(int, int) __asm__("FUN_L01_0027a248");
+extern void           set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void           enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");
 
 void giant_clank_pad_update(struct Moby *moby) __asm__("FUN_L15_002ed068");
+
 void giant_clank_pad_update(struct Moby *moby) {
     enum {
         GIANT_CLANK_PAD_INITIALIZE = 0,
@@ -292,8 +302,8 @@ void giant_clank_pad_update(struct Moby *moby) {
     struct Moby *linked = moby->pvars;
     struct Moby *entry;
     struct Moby *pad;
-    u8 state = moby->state;
-    u8 position[16] __attribute__((aligned(16)));
+    u8           state = moby->state;
+    u8           position[16] __attribute__((aligned(16)));
 
     switch (state) {
     case GIANT_CLANK_PAD_INITIALIZE: {
@@ -307,23 +317,28 @@ void giant_clank_pad_update(struct Moby *moby) {
         entry->collision = 0;
         entry->visible = 0;
         level = current_level_index;
-        moby->state = (level != 0x12 ||
-            D_0014C050[0x120 + moby->mission] != 0xff) ? 1 : 3;
+        moby->state = (level != 0x12 || D_0014C050[0x120 + moby->mission] != 0xff) ? 1 : 3;
         break;
     }
     case GIANT_CLANK_PAD_ARM_ACTIVATION:
         /* Fakematch: the second store gives retail's register for moby. */
-        if (moby) moby->state = 2; else moby->state = 2;
+        if (moby)
+            moby->state = 2;
+        else
+            moby->state = 2;
         return;
     case GIANT_CLANK_PAD_CHECK_ACTIVATION:
-        if (hero.ground_moby == moby && hero.air_frames.s == 0 && D_L15_0015F5C4 != 2 && hero.state.current != 0x1d) {
+        if (hero.ground_moby == moby && hero.air_frames.s == 0 && D_L15_0015F5C4 != 2 &&
+            hero.state.current != 0x1d) {
             if (hero.vehicle_mode == 0) {
                 try_set_help_message(4, 0x3aa4);
             } else if (hero.vehicle_mode == 2 && current_level_index != 0x12) {
                 try_set_help_message(4, 0x3aa5);
             }
-            if (!(D_0013CAE4 & 0x10)) return;
-            if (D_L15_0015F594 != 4) return;
+            if (!(D_0013CAE4 & 0x10))
+                return;
+            if (D_L15_0015F594 != 4)
+                return;
             if (hero.vehicle_mode == 2 && current_level_index == 0xf) {
                 pad = l15_moby_array;
                 pad += *(int *)((u8 *)linked + 0x60);
@@ -332,12 +347,14 @@ void giant_clank_pad_update(struct Moby *moby) {
                 pad->visible = 0;
                 restore_saved_hero_moby_and_clear_vehicle_mode();
                 set_moby_animation(pad, 0, 0);
-                if (current_level_index != 0xf) return;
+                if (current_level_index != 0xf)
+                    return;
                 start_scene(9);
                 jet_game_state(0, 5);
                 return;
             }
-            if (hero.vehicle_mode != 0) return;
+            if (hero.vehicle_mode != 0)
+                return;
             pad = l15_moby_array;
             pad += *(int *)((u8 *)linked + 0x60);
             *(u128 *)position = *(u128 *)&moby->pos;
@@ -354,7 +371,8 @@ void giant_clank_pad_update(struct Moby *moby) {
                 jet_game_state(2, 4);
                 return;
             }
-            if (current_level_index != 0x12) return;
+            if (current_level_index != 0x12)
+                return;
             start_scene(6);
             *(u128 *)hero.saved_pos_rot = *(u128 *)&hero.motion.pos;
             *(u128 *)(hero.saved_pos_rot + 16) = *(u128 *)&hero.motion.rot;

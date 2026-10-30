@@ -1,9 +1,10 @@
 typedef struct Resource Resource;
+
 struct Resource {
     unsigned char pad0[14];
-    short index;
+    short         index;
     unsigned char pad10[68];
-    int value;
+    int           value;
 };
 
 int _close_r(int value, int index) __asm__("func_00112468");

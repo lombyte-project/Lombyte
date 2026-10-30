@@ -11,37 +11,40 @@
    others through world_to_map_coords, then sizes each label box. */
 
 typedef struct {
-    u8 pad0[0x24];
+    u8  pad0[0x24];
     s16 active;
-    u8 pad26[2];
+    u8  pad26[2];
 } MapIconLink;
 
-
 #include "rnc/game/level_state.h"
+
 extern struct MapIcon *map_icon_lists_by_level[] __asm__("D_001A2BC0");
-extern s32 D_001A01F4[];
-extern s32 D_0015FD60 __attribute__((sda));
+extern s32             D_001A01F4[];
+extern s32             D_0015FD60 __attribute__((sda));
+
 #include "rnc/ui/menus/menu_globals.h"
+
 extern s32 D_0013D5BC[];
+
 extern struct {
-    u8 pad0[0x10];
+    u8           pad0[0x10];
     MapIconLink *links;
 } D_001A2C10;
 
-extern void world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y,
-                                s32 level) __asm__("func_00208408");
+extern void
+world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y, s32 level) __asm__("func_00208408");
 extern void format_menu_item_text(s32 idx, char *dst) __asm__("func_00208280");
-extern void font_print_window_small(struct TextRegion *, long, char *,
-                                    int) __asm__("func_001F75F0");
+extern void
+font_print_window_small(struct TextRegion *, long, char *, int) __asm__("func_001F75F0");
 
 void update_map_icons(s32 level, s32 flag) __asm__("FUN_0020bf90");
 
 void update_map_icons(s32 level, s32 flag) {
-    char label_text[128];
-    f32 map_x;
-    f32 map_y;
+    char            label_text[128];
+    f32             map_x;
+    f32             map_y;
     struct MapIcon *icon;
-    s32 icon_index;
+    s32             icon_index;
 
     if (level < 19 && level_visit_state[level] != 0) {
         level_map_selection.icons = map_icon_lists_by_level[level];
@@ -50,7 +53,10 @@ void update_map_icons(s32 level, s32 flag) {
     }
 
     if (hero.motion.pos.f[2] != 0.0f && level == current_level_index && flag) {
-        world_to_map_coords(hero.motion.pos.f[0], hero.motion.pos.f[1], &map_x, &map_y,
+        world_to_map_coords(hero.motion.pos.f[0],
+                            hero.motion.pos.f[1],
+                            &map_x,
+                            &map_y,
                             D_0015FD60 ? level + 100 : level);
         level_map_selection.pan_x[level] = (s32)(map_x * 4096.0f) << 16;
         level_map_selection.pan_y[level] = (s32)(map_y * 4096.0f) << 16;
@@ -99,13 +105,20 @@ void update_map_icons(s32 level, s32 flag) {
             } else {
                 if (level == current_level_index) {
                     if (menu_action_messages[icon->id] != 0) {
-                        world_to_map_coords(menu_action_messages[icon->id]->pos.x, menu_action_messages[icon->id]->pos.y,
-                                            &icon->x, &icon->y, level);
-                        level_map_selection.icons[icon_index].angle = menu_action_messages[icon->id]->rot.z;
+                        world_to_map_coords(menu_action_messages[icon->id]->pos.x,
+                                            menu_action_messages[icon->id]->pos.y,
+                                            &icon->x,
+                                            &icon->y,
+                                            level);
+                        level_map_selection.icons[icon_index].angle =
+                            menu_action_messages[icon->id]->rot.z;
                     }
                 } else {
-                    world_to_map_coords(level_object_states[icon->id].x, level_object_states[icon->id].y, &icon->x,
-                                        &icon->y, level);
+                    world_to_map_coords(level_object_states[icon->id].x,
+                                        level_object_states[icon->id].y,
+                                        &icon->x,
+                                        &icon->y,
+                                        level);
                     level_map_selection.icons[icon_index].angle = level_object_states[icon->id].z;
                 }
             }

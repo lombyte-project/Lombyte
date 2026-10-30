@@ -4,25 +4,26 @@
 typedef int TI __attribute__((mode(TI)));
 
 union V128 {
-    TI q;
+    TI  q;
     f32 f[4];
 };
 
 struct Loc {
-    f32 a;
-    f32 b;
-    f32 c;
-    f32 d;
+    f32        a;
+    f32        b;
+    f32        c;
+    f32        d;
     union V128 v;
 };
 
 extern void fast_vector_from_packed_chars(void *dst, s32 src) __asm__("FUN_001f9d50");
 
-void load_display_text_resource_entry(void *destination, s32 *packed_chars_source) __asm__("FUN_00214bc0");
+void load_display_text_resource_entry(void *destination,
+                                      s32  *packed_chars_source) __asm__("FUN_00214bc0");
 
 void load_display_text_resource_entry(void *destination, s32 *packed_chars_source) {
     struct Loc loc;
-    f32 scale;
+    f32        scale;
 
     loc.v.q = 0;
     loc.v.f[0] = 127.0f;

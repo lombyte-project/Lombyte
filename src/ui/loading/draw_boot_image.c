@@ -10,12 +10,12 @@ void draw_boot_image(u32 image_address) __asm__("FUN_002012b8");
 void draw_boot_image(u32 image_address) {
     struct DmaTag *tag;
     struct DmaTag *next;
-    u64 *register_words;
-    s32 remaining_rows;
-    s32 destination_block;
-    s64 upload_rows;
-    s32 rows_after_upload;
-    s64 image_quadword_count;
+    u64           *register_words;
+    s32            remaining_rows;
+    s32            destination_block;
+    s64            upload_rows;
+    s32            rows_after_upload;
+    s64            image_quadword_count;
 
     remaining_rows = pal_mode ? 0x1C0 : 0x1A0;
     destination_block = draw_buffer_address >> 8;
@@ -66,7 +66,7 @@ void draw_boot_image(u32 image_address) {
     {
         struct DmaTag *final_tag;
         struct DmaTag *final_next;
-        u64 *final_words;
+        u64           *final_words;
         render_packet_cursor.tag->tag = 0x10000002;
         render_packet_cursor.tag->addr = 0;
         render_packet_cursor.tag->vif0 = 0;

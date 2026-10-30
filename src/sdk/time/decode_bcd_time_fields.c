@@ -1,4 +1,5 @@
 #include "types.h"
+
 struct BcdClockTime {
     u8 pad_0;
     u8 unk1;

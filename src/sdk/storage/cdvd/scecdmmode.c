@@ -1,15 +1,17 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/sdk/libcdvd.h"
-extern u8 cd_media_mode_request[] __asm__("D_00132900");
-extern s32 SignalSema();
-extern s32 cd_check_scmd() __asm__("func_00120D40");
-extern s32 sceSifCallRpc();
+
+extern u8   cd_media_mode_request[] __asm__("D_00132900");
+extern s32  SignalSema();
+extern s32  cd_check_scmd() __asm__("func_00120D40");
+extern s32  sceSifCallRpc();
 extern void sceSifWriteBackDCache();
+
 s32 sceCdMmode(s32 media_mode) {
     register u8 *state;
     register s32 mode;
-    s32 result;
+    s32          result;
 
     state = cd_media_mode_request;
     mode = media_mode;

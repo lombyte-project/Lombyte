@@ -5,7 +5,7 @@ int ClearMpegReferenceBuffer(struct sceMpeg *mp) __asm__("ClearMpegReferenceBuff
 
 /* Zero status of reference images 0, 4, 8, 1, 5, 9. */
 int ClearMpegReferenceBuffer(struct sceMpeg *mp) {
-    struct MpegDecoder *decoder = mp->sys;
+    struct MpegDecoder  *decoder = mp->sys;
     struct MpegRefImage *buffer;
 
     buffer = decoder->ref_images[0];

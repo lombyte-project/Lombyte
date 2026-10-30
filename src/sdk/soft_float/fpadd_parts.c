@@ -43,7 +43,7 @@ Boston, MA 02111-1307, USA.  */
 
 extern FpNumber D_001596F0;
 
-#define LSHIFT(a)                                                                                  \
+#define LSHIFT(a) \
     { a = (a & 1) | (a >> 1); }
 #define IMPLICIT_1 0x1000000000000000ULL
 #define IMPLICIT_2 0x2000000000000000ULL

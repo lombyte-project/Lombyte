@@ -7,7 +7,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
-s32 handle_menu_action_buttons(struct MenuScreen *menu_screen) __asm__("FUN_00221968");
+s32        handle_menu_action_buttons(struct MenuScreen *menu_screen) __asm__("FUN_00221968");
 
 s32 handle_menu_action_buttons(struct MenuScreen *menu_screen) {
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {

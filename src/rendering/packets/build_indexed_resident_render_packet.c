@@ -4,35 +4,42 @@
 #include "rnc/rendering/render_globals.h"
 
 #include "rnc/rendering/material_templates.h"
+
 extern s32 log2dim(s32) __asm__("func_001F97A0");
 
-void build_indexed_resident_render_packet(u64 *packet,
+void build_indexed_resident_render_packet(u64                                    *packet,
                                           struct ResidentRenderTextureDefinition *texture,
-                                          s32 draw_high, s32 draw_shift, s32 material_base,
-                                          s32 material_shift,
+                                          s32                                     draw_high,
+                                          s32                                     draw_shift,
+                                          s32                                     material_base,
+                                          s32                                     material_shift,
                                           s32 material_index) __asm__("FUN_00202d78");
 
-void build_indexed_resident_render_packet(u64 *packet,
+void build_indexed_resident_render_packet(u64                                    *packet,
                                           struct ResidentRenderTextureDefinition *texture,
-                                          s32 draw_high, s32 draw_shift, s32 material_base,
-                                          s32 material_shift, s32 material_index) {
-    s32 width_units_128;
-    s32 width_units_64;
-    s32 width_log2;
-    s32 height_log2;
-    s32 gs_block_base;
-    s32 texture_block;
-    s32 mip_block_1;
-    s32 mip_block_0;
+                                          s32                                     draw_high,
+                                          s32                                     draw_shift,
+                                          s32                                     material_base,
+                                          s32                                     material_shift,
+
+                                          s32 material_index) {
+    s32  width_units_128;
+    s32  width_units_64;
+    s32  width_log2;
+    s32  height_log2;
+    s32  gs_block_base;
+    s32  texture_block;
+    s32  mip_block_1;
+    s32  mip_block_0;
     u64 *fallback_packet;
-    u64 draw_control_word;
-    u64 texture_word;
-    u64 texture_address_word;
-    u64 mip_word;
-    u64 mip_address_word;
-    s32 draw_control_count;
-    u64 filter;
-    u64 format;
+    u64  draw_control_word;
+    u64  texture_word;
+    u64  texture_address_word;
+    u64  mip_word;
+    u64  mip_address_word;
+    s32  draw_control_count;
+    u64  filter;
+    u64  format;
 
     width_units_64 = texture->width >> 6;
     width_units_128 = texture->width >> 7;
@@ -92,4 +99,3 @@ void build_indexed_resident_render_packet(u64 *packet,
 
 extern __typeof__(build_indexed_resident_render_packet) func_00202D78
     __attribute__((alias("FUN_00202d78")));
-

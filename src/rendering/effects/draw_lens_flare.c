@@ -10,30 +10,30 @@
    the source is off centre. */
 
 typedef struct {
-    u8 pad_0[0x10];
+    u8  pad_0[0x10];
     f32 pos[4];
-    u8 flags;
+    u8  flags;
 } FlareMoby;
 
 typedef struct {
     FlareMoby *moby;
-    s32 state;
-    f32 intensity;
-    s32 pad_c;
-    s16 alpha[16];
-    s16 tex[16];
-    s32 color[16];
-    f32 dist[16];
-    f32 scale[16];
+    s32        state;
+    f32        intensity;
+    s32        pad_c;
+    s16        alpha[16];
+    s16        tex[16];
+    s32        color[16];
+    f32        dist[16];
+    f32        scale[16];
 } LensFlare;
 
-
 #include "rnc/rendering/screen.h"
+
 extern LensFlare effect_ribbon __asm__("D_00187300");
 
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
-                               s64) __asm__("FUN_001f5450");
+extern void
+    draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("FUN_001f5450");
 
 void draw_lens_flare(void) __asm__("FUN_001edc50");
 

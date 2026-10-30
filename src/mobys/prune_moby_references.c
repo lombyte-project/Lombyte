@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/game/game_globals.h"
+
 struct MobyRecord {
     u8 pad_0[0x20];
     u8 unk20;
@@ -10,10 +11,10 @@ struct MobyRecord {
 void prune_moby_references(void) __asm__("FUN_0020cc60");
 
 void prune_moby_references(void) {
-    s32 remaining;
-    void **slot;
+    s32                remaining;
+    void             **slot;
     struct MobyRecord *moby;
-    s32 mask = 0xFF;
+    s32                mask = 0xFF;
 
     slot = moby_render_slots;
     remaining = 0xF;

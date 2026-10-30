@@ -24,7 +24,7 @@ extern s32 FUN_00216788();
 extern s32 get_menu_stream_buffer_size() __asm__("func_00225D88");
 extern s32 mark_menu_stream_buffer_read_active() __asm__("FUN_00225dd8");
 extern s32 clear_menu_stream_buffer_read_active() __asm__("FUN_00225e20");
-s32 update_menu_resource_stream(struct MenuScreen *stream) __asm__("FUN_0021fdc8");
+s32        update_menu_resource_stream(struct MenuScreen *stream) __asm__("FUN_0021fdc8");
 
 s32 update_menu_resource_stream(struct MenuScreen *stream) {
     enum {
@@ -37,37 +37,37 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
         STREAM_PRIMARY_REPLACEMENT_READ_COMPLETE = 6
     };
     LanguageResourceOffsets language_offsets;
-    s32 *completed_buffer_slot;
-    s32 primary_entry_offset;
-    s32 secondary_entry_offset;
-    s32 replacement_entry_offset;
-    s32 stream_flags;
-    s32 slot_index;
-    s32 primary_read_offset;
-    s32 secondary_read_offset;
-    s32 replacement_read_offset;
-    s32 stream_state;
-    s32 primary_buffer;
-    s32 completed_buffer;
-    s32 secondary_buffer;
-    s32 replacement_buffer;
-    s32 selection_flags;
-    s32 resource_index;
-    s32 primary_read_address;
-    s32 secondary_read_address;
-    s32 replacement_read_address;
-    s32 primary_read_started;
-    s32 secondary_read_started;
-    s32 replacement_read_started;
+    s32                    *completed_buffer_slot;
+    s32                     primary_entry_offset;
+    s32                     secondary_entry_offset;
+    s32                     replacement_entry_offset;
+    s32                     stream_flags;
+    s32                     slot_index;
+    s32                     primary_read_offset;
+    s32                     secondary_read_offset;
+    s32                     replacement_read_offset;
+    s32                     stream_state;
+    s32                     primary_buffer;
+    s32                     completed_buffer;
+    s32                     secondary_buffer;
+    s32                     replacement_buffer;
+    s32                     selection_flags;
+    s32                     resource_index;
+    s32                     primary_read_address;
+    s32                     secondary_read_address;
+    s32                     replacement_read_address;
+    s32                     primary_read_started;
+    s32                     secondary_read_started;
+    s32                     replacement_read_started;
     struct MenuStreamEntry *primary_entry;
     struct MenuStreamEntry *primary_entry_alternate;
     struct MenuStreamEntry *secondary_entry;
     struct MenuStreamEntry *secondary_entry_alternate;
     struct MenuStreamEntry *replacement_entry;
     struct MenuStreamEntry *replacement_entry_alternate;
-    struct MenuScreen *item_selection;
-    struct MenuScreen *group_selection;
-    u8 *item_table_entry;
+    struct MenuScreen      *item_selection;
+    struct MenuScreen      *group_selection;
+    u8                     *item_table_entry;
 
     selection_flags = stream->data.stream.flags;
     stream->data.stream.elapsed_frames = (s32)(stream->data.stream.elapsed_frames + 1);
@@ -111,19 +111,21 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
             }
         } else if (selection_flags & 8) {
             group_selection = menu_system.current->focus;
-            resource_index = (s32) * (s16 *)((u8 *)((group_selection->data.grid.selected_cell * 0xA) +
-                                                    (s32)group_selection->data.grid.cells) +
-                                             0x8);
+            resource_index =
+                (s32) * (s16 *)((u8 *)((group_selection->data.grid.selected_cell * 0xA) +
+                                       (s32)group_selection->data.grid.cells) +
+                                0x8);
             if (group_selection->data.grid.rows == 0) {
             disable_stream:
                 stream->data.stream.state = -1;
             }
         } else if (selection_flags & 0x400) {
-            resource_index = (s32)((s32)stream->data.stream.elapsed_frames / scale_game_frames(0x12C)) % 19;
+            resource_index =
+                (s32)((s32)stream->data.stream.elapsed_frames / scale_game_frames(0x12C)) % 19;
         } else if (selection_flags & 0x1000) {
             language_offsets = menu_language_resource_offsets;
-            resource_index = *stream->data.stream.language_base +
-                             language_offsets.values[game_language];
+            resource_index =
+                *stream->data.stream.language_base + language_offsets.values[game_language];
         } else {
             item_selection = menu_system.current->focus;
             resource_index = item_selection->data.list.selected;
@@ -146,30 +148,32 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
             primary_buffer = stream->data.stream.buffer[0];
             if (primary_buffer != 0 && cd_read_active[0] == 0) {
                 primary_entry_offset = resource_index * 8;
-                if (*(s32 *)((u8 *)(primary_entry_offset + (s32)stream->data.stream.entries) + 0x4) !=
-                    0) {
+                if (*(s32 *)((u8 *)(primary_entry_offset + (s32)stream->data.stream.entries) +
+                             0x4) != 0) {
                     primary_read_address = primary_buffer;
                     if (stream->data.stream.flags & 0x20) {
-                        primary_read_offset =
-                            get_menu_stream_buffer_size(primary_buffer) -
-                            (*(s32 *)((u8 *)(primary_entry_offset + (s32)stream->data.stream.entries) +
-                                      0x4)
-                             << 0xB);
+                        primary_read_offset = get_menu_stream_buffer_size(primary_buffer) -
+                                              (*(s32 *)((u8 *)(primary_entry_offset +
+                                                               (s32)stream->data.stream.entries) +
+                                                        0x4)
+                                               << 0xB);
                         stream->data.stream.read_offset = primary_read_offset;
                         primary_read_address += primary_read_offset;
                     }
                     if (stream->data.stream.flags & 0x10) {
-                        primary_entry = (struct MenuStreamEntry *)(primary_entry_offset +
-                                                                     (s32)stream->data.stream.entries);
-                        primary_read_started = start_audio_stream_read(
-                            primary_read_address, primary_entry->sector, primary_entry->sector_count);
+                        primary_entry =
+                            (struct MenuStreamEntry *)(primary_entry_offset +
+                                                       (s32)stream->data.stream.entries);
+                        primary_read_started = start_audio_stream_read(primary_read_address,
+                                                                       primary_entry->sector,
+                                                                       primary_entry->sector_count);
                     } else {
                         primary_entry_alternate =
                             (struct MenuStreamEntry *)(primary_entry_offset +
-                                                         (s32)stream->data.stream.entries);
-                        primary_read_started = FUN_00216788(
-                            primary_read_address, primary_entry_alternate->sector,
-                            primary_entry_alternate->sector_count);
+                                                       (s32)stream->data.stream.entries);
+                        primary_read_started = FUN_00216788(primary_read_address,
+                                                            primary_entry_alternate->sector,
+                                                            primary_entry_alternate->sector_count);
                     }
                     if (primary_read_started != 0) {
                         mark_menu_stream_buffer_read_active(stream->data.stream.buffer[0]);
@@ -192,7 +196,8 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                     completed_buffer_slot += slot_index;
                     clear_menu_stream_buffer_read_active(*completed_buffer_slot);
                     completed_buffer = *completed_buffer_slot;
-                    decompress_wad(completed_buffer + stream->data.stream.read_offset, completed_buffer);
+                    decompress_wad(completed_buffer + stream->data.stream.read_offset,
+                                   completed_buffer);
                     stream->data.stream.read_offset = 0;
                 }
                 stream->data.stream.state = stream->data.stream.state + 1;
@@ -211,7 +216,8 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                         stream->data.stream.state = 0;
                     } else if (cd_read_active[0] == 0) {
                         secondary_entry_offset = resource_index * 8;
-                        if (*(s32 *)((u8 *)(secondary_entry_offset + (s32)stream->data.stream.entries) +
+                        if (*(s32 *)((u8 *)(secondary_entry_offset +
+                                            (s32)stream->data.stream.entries) +
                                      0x4) != 0) {
                             secondary_read_address = secondary_buffer;
                             if (stream->data.stream.flags & 0x20) {
@@ -227,17 +233,19 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                             if (stream->data.stream.flags & 0x10) {
                                 secondary_entry =
                                     (struct MenuStreamEntry *)(secondary_entry_offset +
-                                                                 (s32)stream->data.stream.entries);
-                                secondary_read_started = start_audio_stream_read(
-                                    secondary_read_address, secondary_entry->sector,
-                                    secondary_entry->sector_count);
+                                                               (s32)stream->data.stream.entries);
+                                secondary_read_started =
+                                    start_audio_stream_read(secondary_read_address,
+                                                            secondary_entry->sector,
+                                                            secondary_entry->sector_count);
                             } else {
                                 secondary_entry_alternate =
                                     (struct MenuStreamEntry *)(secondary_entry_offset +
-                                                                 (s32)stream->data.stream.entries);
-                                secondary_read_started = FUN_00216788(
-                                    secondary_read_address, secondary_entry_alternate->sector,
-                                    secondary_entry_alternate->sector_count);
+                                                               (s32)stream->data.stream.entries);
+                                secondary_read_started =
+                                    FUN_00216788(secondary_read_address,
+                                                 secondary_entry_alternate->sector,
+                                                 secondary_entry_alternate->sector_count);
                             }
                             if (secondary_read_started != 0) {
                                 mark_menu_stream_buffer_read_active(stream->data.stream.buffer[1]);
@@ -278,18 +286,19 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
                             if (stream->data.stream.flags & 0x10) {
                                 replacement_entry =
                                     (struct MenuStreamEntry *)(replacement_entry_offset +
-                                                                 (s32)stream->data.stream.entries);
-                                replacement_read_started = start_audio_stream_read(
-                                    replacement_read_address, replacement_entry->sector,
-                                    replacement_entry->sector_count);
+                                                               (s32)stream->data.stream.entries);
+                                replacement_read_started =
+                                    start_audio_stream_read(replacement_read_address,
+                                                            replacement_entry->sector,
+                                                            replacement_entry->sector_count);
                             } else {
                                 replacement_entry_alternate =
                                     (struct MenuStreamEntry *)(replacement_entry_offset +
-                                                                 (s32)stream->data.stream.entries);
-                                replacement_read_started = FUN_00216788(
-                                    replacement_read_address,
-                                    replacement_entry_alternate->sector,
-                                    replacement_entry_alternate->sector_count);
+                                                               (s32)stream->data.stream.entries);
+                                replacement_read_started =
+                                    FUN_00216788(replacement_read_address,
+                                                 replacement_entry_alternate->sector,
+                                                 replacement_entry_alternate->sector_count);
                             }
                             if (replacement_read_started != 0) {
                                 mark_menu_stream_buffer_read_active(stream->data.stream.buffer[0]);
@@ -312,4 +321,6 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
 
 extern s32 func_0021FDC8(struct MenuScreen *stream) __attribute__((alias("FUN_0021fdc8")));
 
-LanguageResourceOffsets menu_language_resource_offsets = {{0, 0, 0xc, 0x24, 0x30, 0x18}};
+LanguageResourceOffsets menu_language_resource_offsets = {
+    {0, 0, 0xc, 0x24, 0x30, 0x18}
+};

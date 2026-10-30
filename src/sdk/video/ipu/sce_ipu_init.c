@@ -2,8 +2,8 @@
 #include "eetypes.h"
 
 extern volatile u128 ipu_default_quantization_matrices[] __asm__("D_00133050");
-extern u128 ipu_default_vq_table[] __asm__("D_001330A0");
-extern void SetD4ChcrVariant(s32);
+extern u128          ipu_default_vq_table[] __asm__("D_001330A0");
+extern void          SetD4ChcrVariant(s32);
 
 #define IPU_CMD     ((volatile u32 *)0x10002000)
 #define IPU_CTRL    ((volatile s32 *)0x10002010)

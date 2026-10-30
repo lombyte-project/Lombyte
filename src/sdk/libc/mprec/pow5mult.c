@@ -82,23 +82,26 @@
 
 #include "types.h"
 #include "rnc/sdk/libc/mprec/_Bfree.h"
+
 typedef struct _Bigint {
     struct _Bigint *_next;
-    s32 _k, _maxwds, _sign, _wds;
-    u32 _x[1];
+    s32             _k, _maxwds, _sign, _wds;
+    u32             _x[1];
 } _Bigint;
+
 typedef struct _reent {
-    u8 pad_0[0x48];
+    u8       pad_0[0x48];
     _Bigint *_p5s;
 } _reent;
-extern s32 small_powers_of_five[] __asm__("D_001523B8");
+
+extern s32      small_powers_of_five[] __asm__("D_001523B8");
 extern _Bigint *__i2b(struct _reent *, s32) __asm__("func_00115808");
 extern _Bigint *_multiply(struct _reent *, _Bigint *, _Bigint *);
 extern _Bigint *_multadd(struct _reent *, _Bigint *, s32, s32);
 
 _Bigint *_pow5mult(struct _reent *bigint_context, _Bigint *accumulator, s32 k) {
     _Bigint *product, *cached_power_of_five, *next_power_of_five;
-    s32 i;
+    s32      i;
 
     if (i = k & 3)
         accumulator = _multadd(bigint_context, accumulator, small_powers_of_five[i - 1], 0);
@@ -117,7 +120,8 @@ _Bigint *_pow5mult(struct _reent *bigint_context, _Bigint *accumulator, s32 k) {
         if (!(k >>= 1))
             break;
         if (!(next_power_of_five = cached_power_of_five->_next)) {
-            next_power_of_five = cached_power_of_five->_next = _multiply(bigint_context, cached_power_of_five, cached_power_of_five);
+            next_power_of_five = cached_power_of_five->_next =
+                _multiply(bigint_context, cached_power_of_five, cached_power_of_five);
             next_power_of_five->_next = 0;
         }
         cached_power_of_five = next_power_of_five;

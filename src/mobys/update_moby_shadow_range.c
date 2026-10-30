@@ -5,8 +5,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/mobys/moby.h"
+
 extern float D_001CAA80[] NOT_SDA;
-extern char coll_output[] __asm__("D_00194100");
+extern char  coll_output[] __asm__("D_00194100");
 /* Shadow range probe: cast a ray down (8 units) from the moby position
    shifted against the light direction D_001CAA80 by its size, then a
    second one along the light from just above; +0x84/+0x88 get the lower
@@ -36,9 +37,13 @@ void update_moby_shadow_range(char *moby) {
         hit = coll_output;
         first_hit_height = *(float *)(hit + 0x28);
         segment_start[2] = segment_start[2] + MOBY(moby)->bsphere.w * 0.00048828125f;
-        segment_start[0] = segment_start[0] + shadow_probe_direction[0] * MOBY(moby)->bsphere.w * 0.000732421875f;
-        segment_start[1] = segment_start[1] + shadow_probe_direction[1] * MOBY(moby)->bsphere.w * 0.000732421875f;
-        fast_vec_normalize(shadow_probe_direction, shadow_probe_direction, (segment_start[2] - first_hit_height) / -shadow_probe_direction[2]);
+        segment_start[0] =
+            segment_start[0] + shadow_probe_direction[0] * MOBY(moby)->bsphere.w * 0.000732421875f;
+        segment_start[1] =
+            segment_start[1] + shadow_probe_direction[1] * MOBY(moby)->bsphere.w * 0.000732421875f;
+        fast_vec_normalize(shadow_probe_direction,
+                           shadow_probe_direction,
+                           (segment_start[2] - first_hit_height) / -shadow_probe_direction[2]);
         fast_vec_add(segment_end, segment_start, shadow_probe_direction);
         second_hit_height = first_hit_height;
         if (collision_line(segment_start, segment_end, 0x22, 0, 0) != 0) {

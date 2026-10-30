@@ -1,18 +1,23 @@
 #include "types.h"
+
 struct MpegContext;
+
 struct MpegEvent {
     s32 type;
 };
+
 struct MpegCallback {
     s32 (*function)(struct MpegContext *, struct MpegEvent *, void *);
     void *data;
 };
+
 struct MpegCallbacks {
-    u8 pad0[0xC];
+    u8                  pad0[0xC];
     struct MpegCallback entries[1];
 };
+
 struct MpegContext {
-    u8 pad0[0x40];
+    u8                    pad0[0x40];
     struct MpegCallbacks *callbacks;
 };
 

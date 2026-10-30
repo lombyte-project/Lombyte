@@ -3,13 +3,14 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/options.h"
 #include "rnc/globals.h"
+
 extern int mode_freeze_flags_gp[] __asm__("D_0015EEB4") __attribute__((sda));
 
 void save_card_state_prompt_format(void) __asm__("FUN_00208a78");
 
 void save_card_state_prompt_format(void) {
     struct MemoryCardState *card_state = &memory_card_state;
-    int mode_freeze_flags_snapshot;
+    int                     mode_freeze_flags_snapshot;
     if (card_state->card[0].sync_result != -2) {
         mode_freeze_state = 3;
         return;

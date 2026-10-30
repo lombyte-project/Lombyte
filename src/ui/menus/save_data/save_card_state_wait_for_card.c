@@ -6,9 +6,10 @@
 void save_card_state_wait_for_card(void) __asm__("FUN_002089d0");
 
 extern s32 mode_freeze_state_macro __asm__("D_0015EEB0") MACRO_ADDR;
+
 void save_card_state_wait_for_card(void) {
     struct MemoryCardState *card_state = &memory_card_state;
-    int sync_result;
+    int                     sync_result;
     mode_freeze_flags &= ~0x20;
     sync_result = card_state->card[0].sync_result;
     if (sync_result == 0) {

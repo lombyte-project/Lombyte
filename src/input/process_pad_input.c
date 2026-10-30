@@ -3,55 +3,55 @@
 #include "rnc/math/asm_helpers.h"
 
 typedef struct Pad {
-    u8 pad0[0x100];
+    u8    pad0[0x100];
     float axes[16]; /* 0x100 */
     float prev[16]; /* 0x140 */
-    u8 pad180[0xE];
-    s16 idx;   /* 0x18E */
-    s32 count; /* 0x190 */
-    u8 pad194[0xC];
-    s32 held;     /* 0x1A0 */
-    s32 pressed;  /* 0x1A4 */
-    s32 released; /* 0x1A8 */
-    s32 old;      /* 0x1AC */
-    s32 raw;      /* 0x1B0 */
-    s32 x1B4;     /* 0x1B4 */
-    s32 x1B8;     /* 0x1B8 */
-    s32 x1BC;     /* 0x1BC */
-    s32 x1C0;     /* 0x1C0 */
-    s32 x1C4;     /* 0x1C4 */
-    s32 x1C8;     /* 0x1C8 */
-    s32 mode;     /* 0x1CC */
-    s32 none;     /* 0x1D0 */
-    s32 nodir;    /* 0x1D4 */
-    s32 moving;   /* 0x1D8 */
-    u8 pad1DC[4];
-    s32 hist_btn[30];   /* 0x1E0 */
+    u8    pad180[0xE];
+    s16   idx;   /* 0x18E */
+    s32   count; /* 0x190 */
+    u8    pad194[0xC];
+    s32   held;     /* 0x1A0 */
+    s32   pressed;  /* 0x1A4 */
+    s32   released; /* 0x1A8 */
+    s32   old;      /* 0x1AC */
+    s32   raw;      /* 0x1B0 */
+    s32   x1B4;     /* 0x1B4 */
+    s32   x1B8;     /* 0x1B8 */
+    s32   x1BC;     /* 0x1BC */
+    s32   x1C0;     /* 0x1C0 */
+    s32   x1C4;     /* 0x1C4 */
+    s32   x1C8;     /* 0x1C8 */
+    s32   mode;     /* 0x1CC */
+    s32   none;     /* 0x1D0 */
+    s32   nodir;    /* 0x1D4 */
+    s32   moving;   /* 0x1D8 */
+    u8    pad1DC[4];
+    s32   hist_btn[30]; /* 0x1E0 */
     float hist_ang[30]; /* 0x258 */
     float hist_mag[30]; /* 0x2D0 */
-    s32 x348;           /* 0x348 */
-    u8 pad34C;
-    u8 rep_delay; /* 0x34D */
-    u8 rep_rate;  /* 0x34E */
-    u8 rep_timer; /* 0x34F */
+    s32   x348;         /* 0x348 */
+    u8    pad34C;
+    u8    rep_delay; /* 0x34D */
+    u8    rep_rate;  /* 0x34E */
+    u8    rep_timer; /* 0x34F */
 } Pad;
 
 extern volatile u8 D_0015EDB4;
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
+extern float       fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 
-#define SWAPLR(x)                                                                                  \
-    if ((x) & 0x8000) {                                                                            \
-        (x) = ((x) & ~0x8000) | 0x2000;                                                            \
-    } else if ((x) & 0x2000) {                                                                     \
-        (x) = ((x) & ~0x2000) | 0x8000;                                                            \
+#define SWAPLR(x)                       \
+    if ((x) & 0x8000) {                 \
+        (x) = ((x) & ~0x8000) | 0x2000; \
+    } else if ((x) & 0x2000) {          \
+        (x) = ((x) & ~0x2000) | 0x8000; \
     }
 
 void process_pad_input(Pad *p, u8 *buf, s32 len) __asm__("FUN_00217328");
 
 void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 pad_read_byte_count) {
     float axis_vector[2];
-    s32 i, j, k;
-    s32 held_buttons, old, ncur, nold;
+    s32   i, j, k;
+    s32   held_buttons, old, ncur, nold;
     float mag, axis_vector_angle;
 
     pad_state->raw = pad_state->held = ((pad_read_data[0] << 8) | pad_read_data[1]) ^ 0xFFFF;
@@ -64,7 +64,9 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 pad_read_byte_coun
             if (axis_center_distance < 0)
                 axis_center_distance = -axis_center_distance;
             if (axis_center_distance >= 0x30) {
-                float scaled_axis_magnitude = convert_integer_to_float(axis_center_distance - 0x30) / convert_integer_to_float(0x4C);
+                float scaled_axis_magnitude =
+                    convert_integer_to_float(axis_center_distance - 0x30) /
+                    convert_integer_to_float(0x4C);
                 pad_state->axes[i] = scaled_axis_magnitude;
                 if (scaled_axis_magnitude > 1.0f) {
                     pad_state->axes[i] = 1.0f;
@@ -92,7 +94,8 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 pad_read_byte_coun
             *axis_copy_destination++ = *axis_copy_source++;
         }
     }
-    if (((volatile float *)pad_state->axes)[2] != 0.0f || ((volatile float *)pad_state->axes)[3] != 0.0f) {
+    if (((volatile float *)pad_state->axes)[2] != 0.0f ||
+        ((volatile float *)pad_state->axes)[3] != 0.0f) {
         pad_state->moving = 1;
     } else {
         pad_state->moving = 0;
@@ -158,7 +161,8 @@ void process_pad_input(Pad *pad_state, u8 *pad_read_data, s32 pad_read_byte_coun
         }
         if (!(pad_state->pressed & 0x10000)) {
             for (k = 1; k < scale_game_frames(5); k++) {
-                if (fast_difference_between_rotations(pad_state->hist_ang[(pad_state->idx - k + 30) % 30], axis_vector_angle) >
+                if (fast_difference_between_rotations(
+                        pad_state->hist_ang[(pad_state->idx - k + 30) % 30], axis_vector_angle) >
                     0.9599311f) {
                     pad_state->pressed |= 0x10000;
                     break;

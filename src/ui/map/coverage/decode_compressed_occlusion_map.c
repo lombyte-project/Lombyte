@@ -2,26 +2,27 @@
 #include "rnc/math/asm_helpers.h"
 
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream,
-                                     u8 *span_stream) __asm__("FUN_00207c28");
+void        decode_compressed_occlusion_map(u8 *destination,
+                                            u8 *control_stream,
+                                            u8 *span_stream) __asm__("FUN_00207c28");
 
 /* Decode a 32 KiB bit map in 1 KiB output blocks. Each span pair skips bytes
    then writes a run of bits in scratchpad. A zero control count toggles the bit
    again until a nonzero count appears. Pack eight expanded bits per byte and
    carry any expansion past 0x70002000 into the next block. */
 void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *span_stream) {
-    u8 *destination_end;
+    u8          *destination_end;
     volatile u8 *expanded_cursor;
-    u8 *next_start;
-    u8 *bit_read;
+    u8          *next_start;
+    u8          *bit_read;
     volatile u8 *packed_write;
-    u8 *carry_read;
-    u8 *carry_write;
-    u8 bit_value;
-    int run_length;
-    u32 packed;
-    u32 control_remaining;
-    u8 *scratchpad_end;
+    u8          *carry_read;
+    u8          *carry_write;
+    u8           bit_value;
+    int          run_length;
+    u32          packed;
+    u32          control_remaining;
+    u8          *scratchpad_end;
 
     destination_end = destination + 0x8000;
     scratchpad_end = (u8 *)0x70002000;

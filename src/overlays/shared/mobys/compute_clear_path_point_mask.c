@@ -7,13 +7,15 @@
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
 // Expands a bit mask through a table of per-bit masks until it meets another mask.
-int expand_path_mask_to_intersection(int path_index, int from_mask, int mask) __asm__("FUN_L01_00276c40");
+int expand_path_mask_to_intersection(int path_index,
+                                     int from_mask,
+                                     int mask) __asm__("FUN_L01_00276c40");
 
 int expand_path_mask_to_intersection(int path_index, int from_mask, int mask) {
     char *path_data = ((int)l01_paths[path_index]);
-    int i;
-    int j;
-    int expanded_mask;
+    int   i;
+    int   j;
+    int   expanded_mask;
     for (i = 0; i < 32; i++) {
         if (from_mask & mask) {
             return from_mask & mask;
@@ -36,8 +38,8 @@ int expand_path_mask_to_intersection(int path_index, int from_mask, int mask) {
 
 /* A path in D_L01_001B0930: point count, then the points. */
 typedef struct {
-    s32 count;
-    u8 pad04[0xC];
+    s32     count;
+    u8      pad04[0xC];
     OvlVec4 pts[1];
 } Path;
 
@@ -45,18 +47,24 @@ extern s32 test_path_segment_strict_crossing(s32, OvlVec4 *, OvlVec4 *) __asm__(
 
 /* Bit i set for each point i of the path that none of the n segments in ids
    reaches from pos (with a sideways margin of radius when it is nonzero). */
-s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4 *segment_origin) __asm__("FUN_L01_00276a48");
+s32 compute_clear_path_point_mask(s32     *ids,
+                                  s32      id_count,
+                                  f32      radius,
+                                  s32      path_index,
+                                  OvlVec4 *segment_origin) __asm__("FUN_L01_00276a48");
 
-s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4 *segment_origin) {
-    Path *path = ((Path *)l01_paths[path_index]);
+s32 compute_clear_path_point_mask(
+
+    s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4 *segment_origin) {
+    Path   *path = ((Path *)l01_paths[path_index]);
     OvlVec4 side;
     OvlVec4 left;
     OvlVec4 right;
     OvlVec4 up;
-    s32 mask = 0;
-    s32 i;
-    s32 j;
-    s32 hit;
+    s32     mask = 0;
+    s32     i;
+    s32     j;
+    s32     hit;
 
     for (i = 0; i < path->count; i++) {
         hit = 0;
@@ -88,22 +96,33 @@ s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_i
     return mask;
 }
 
-s32 follow_path(s32 *ids, s32 n, s32 path_index, f32 radius,
-                       OvlVec4 *pos, OvlVec4 *target, OvlVec4 *out) __asm__("FUN_L01_00276fe8");
-s32 follow_path(s32 *ids, s32 id_count, s32 path_index, f32 radius,
-                       OvlVec4 *start_position, OvlVec4 *target, OvlVec4 *out) {
+s32 follow_path(s32     *ids,
+                s32      n,
+                s32      path_index,
+                f32      radius,
+                OvlVec4 *pos,
+                OvlVec4 *target,
+                OvlVec4 *out) __asm__("FUN_L01_00276fe8");
+s32 follow_path(s32     *ids,
+                s32      id_count,
+                s32      path_index,
+                f32      radius,
+                OvlVec4 *start_position,
+                OvlVec4 *target,
+
+                OvlVec4 *out) {
     OvlVec4 side;
     OvlVec4 left;
     OvlVec4 right;
-    Path *path;
-    s32 hit = 0;
-    s32 mask;
-    s32 best;
-    s32 i;
-    s32 j;
-    f32 nearest;
-    f32 x;
-    s32 from_mask, to_mask;
+    Path   *path;
+    s32     hit = 0;
+    s32     mask;
+    s32     best;
+    s32     i;
+    s32     j;
+    f32     nearest;
+    f32     x;
+    s32     from_mask, to_mask;
 
     for (j = 0; j < id_count; j++) {
         if (radius != 0.0f) {
@@ -123,11 +142,13 @@ s32 follow_path(s32 *ids, s32 id_count, s32 path_index, f32 radius,
         } else if (test_path_segment_strict_crossing(ids[j], start_position, target)) {
             hit = 1;
         }
-        if (hit) break;
+        if (hit)
+            break;
     }
     if (hit) {
         path = ((Path *)l01_paths[path_index]);
-        from_mask = compute_clear_path_point_mask(ids, id_count, radius, path_index, start_position);
+        from_mask =
+            compute_clear_path_point_mask(ids, id_count, radius, path_index, start_position);
         to_mask = compute_clear_path_point_mask(ids, id_count, radius, path_index, target);
         mask = expand_path_mask_to_intersection(path_index, from_mask, to_mask);
         if (mask != 0) {

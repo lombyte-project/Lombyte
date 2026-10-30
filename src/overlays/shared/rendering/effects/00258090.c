@@ -12,10 +12,11 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00258090.s", FUN_L08_00258090);
 /* Ported from rac1-decomp (src/overlays/shared/partproc_00273A80.c: func_L08_00273A80), where it is exact; names translated to the US level program. */
 
-
-
 extern unsigned char *D_L08_001B2880 NOT_SDA;
-void spawn_span_particle(float *span_start_position, int kind, float *span_direction, float scale) __asm__("FUN_L08_00272cb8");
+void                                 spawn_span_particle(float *span_start_position,
+                                                         int    kind,
+                                                         float *span_direction,
+                                                         float  scale) __asm__("FUN_L08_00272cb8");
 
 void spawn_span_particle(float *span_start_position, int kind, float *span_direction, float scale) {
     enum {
@@ -23,16 +24,16 @@ void spawn_span_particle(float *span_start_position, int kind, float *span_direc
         PARTICLE_MEDIUM_SPAN = 1,
         PARTICLE_LONG_SPAN = 2
     };
-    float v[4];
-    float *vp = v;
-    float span_offset[4];
-    float u[4];
+    float          v[4];
+    float         *vp = v;
+    float          span_offset[4];
+    float          u[4];
     unsigned char *particle;
-    int k2 = kind;
-    int color_high_byte;
-    float span_length;
-    float span_start_w;
-    int k;
+    int            k2 = kind;
+    int            color_high_byte;
+    float          span_length;
+    float          span_start_w;
+    int            k;
     *(OvlQuad *)v = *(OvlQuad *)span_direction;
     particle = create_part(0);
     if (particle != 0) {

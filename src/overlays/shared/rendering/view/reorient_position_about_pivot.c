@@ -4,14 +4,20 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00289960.c: func_L07_00289960), where it is exact; names translated to the US level program. */
 
+void reorient_position_about_pivot(void *input_position,
+                                   void *output_position,
+                                   void *pivot_position,
+                                   void *inverse_rotation_angles,
+                                   void *forward_rotation_angles) __asm__("FUN_L07_00288968");
 
-void reorient_position_about_pivot(void *input_position, void *output_position, void *pivot_position, void *inverse_rotation_angles, void *forward_rotation_angles) __asm__("FUN_L07_00288968");
+void reorient_position_about_pivot(void *input_position,
+                                   void *output_position,
+                                   void *pivot_position,
+                                   void *inverse_rotation_angles,
 
-void reorient_position_about_pivot(void *input_position, void *output_position, void *pivot_position, void *inverse_rotation_angles, void *forward_rotation_angles) {
+                                   void *forward_rotation_angles) {
     float inverse_rotation_matrix[16];
     float forward_rotation_matrix[16];
     float pivot_relative_position[4];

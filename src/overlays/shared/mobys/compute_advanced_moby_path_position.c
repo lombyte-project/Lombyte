@@ -6,11 +6,10 @@
 #include "rnc/math/fast_math.h"
 
 typedef struct {
-    s32 count;
-    u8 pad4[0xC];
+    s32  count;
+    u8   pad4[0xC];
     Vec4 point[1];
 } PathPoints;
-
 
 static inline s32 path_next(PathPoints *path, s32 i, s32 dir) {
     if (i == path->count - 1) {
@@ -22,14 +21,25 @@ static inline s32 path_next(PathPoints *path, s32 i, s32 dir) {
     return i + dir;
 }
 
-s32 compute_advanced_moby_path_position(struct Moby *moby, PathPoints *path, Vec4 *out, s32 i, s32 path_index_step, f32 advance_distance) __asm__("FUN_L09_00294ae0");
+s32 compute_advanced_moby_path_position(struct Moby *moby,
+                                        PathPoints  *path,
+                                        Vec4        *out,
+                                        s32          i,
+                                        s32          path_index_step,
+                                        f32          advance_distance) __asm__("FUN_L09_00294ae0");
 
-s32 compute_advanced_moby_path_position(struct Moby *moby, PathPoints *path, Vec4 *out, s32 i, s32 path_index_step, f32 advance_distance) {
+s32 compute_advanced_moby_path_position(struct Moby *moby,
+                                        PathPoints  *path,
+                                        Vec4        *out,
+                                        s32          i,
+                                        s32          path_index_step,
+
+                                        f32 advance_distance) {
     Vec4 seg;
     Vec4 rel;
-    s32 next;
-    f32 segment_length;
-    f32 along;
+    s32  next;
+    f32  segment_length;
+    f32  along;
 
     next = path_next(path, i, path_index_step);
     fast_vec_sub(&seg, &path->point[next], &path->point[i]);

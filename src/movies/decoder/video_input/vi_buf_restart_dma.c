@@ -5,10 +5,10 @@
 #define DGET(a) (*(volatile u32 *)(a))
 #define BLOCK_IN_DMA_RANGE(i, start, n_dma, n) \
     ((((i) + (n) - (start)) % (n)) >= 0 && (((i) + (n) - (start)) % (n)) < (n_dma))
-extern s32 WaitSema(s32);
-extern s32 SignalSema(s32);
+extern s32  WaitSema(s32);
+extern s32  SignalSema(s32);
 extern void set_d4_chcr(u32) __asm__("FUN_0023bbb0");
-s32 vi_buf_restart_dma(struct ViBuf *f) __asm__("FUN_0023c280");
+s32         vi_buf_restart_dma(struct ViBuf *f) __asm__("FUN_0023c280");
 
 /* Backs channel 4 up by the qwords still in the IPU FIFO, restarts channels 3 and 4
    and the IPU bit position saved by vi_buf_stop_dma. */
@@ -27,7 +27,10 @@ s32 vi_buf_restart_dma(struct ViBuf *video_buffer) {
         qwc = ((u32)video_buffer->data - madr) >> 4;
         tadr = (u32)video_buffer->tag & 0x0FFFFFFF;
         madr += video_buffer->n << 11;
-        tag_id = (video_buffer->d4_madr != (u32)video_buffer->data && video_buffer->d4_madr != (u32)video_buffer->data + (video_buffer->n << 11)) ? 3 : 0;
+        tag_id = (video_buffer->d4_madr != (u32)video_buffer->data &&
+                  video_buffer->d4_madr != (u32)video_buffer->data + (video_buffer->n << 11))
+                     ? 3
+                     : 0;
         chcr = (video_buffer->d4_chcr & 0x0FFFFFFF) | (tag_id << 28) | 0x100;
         if (!BLOCK_IN_DMA_RANGE(0, video_buffer->dma_start, video_buffer->dma_n, video_buffer->n)) {
             video_buffer->dma_start = video_buffer->n - 1;
@@ -41,10 +44,16 @@ s32 vi_buf_restart_dma(struct ViBuf *video_buffer) {
             s32 size = video_buffer->n << 11;
             qwc = ((u32)video_buffer->data + (saved_block << 11) - madr) >> 4;
             tadr = ((saved_block << 4) + (u32)video_buffer->tag) & 0x0FFFFFFF;
-            tag_id = ((u32)video_buffer->data + (video_buffer->d4_madr - (u32)video_buffer->data) % size
-                      == (u32)video_buffer->data + (((video_buffer->dma_start + video_buffer->dma_n) % video_buffer->n) << 11)) ? 0 : 3;
+            tag_id =
+                ((u32)video_buffer->data +
+                     (video_buffer->d4_madr - (u32)video_buffer->data) % size ==
+                 (u32)video_buffer->data +
+                     (((video_buffer->dma_start + video_buffer->dma_n) % video_buffer->n) << 11))
+                    ? 0
+                    : 3;
             chcr = (video_buffer->d4_chcr & 0x0FFFFFFF) | (tag_id << 28) | 0x100;
-            if (!BLOCK_IN_DMA_RANGE(block, video_buffer->dma_start, video_buffer->dma_n, video_buffer->n)) {
+            if (!BLOCK_IN_DMA_RANGE(
+                    block, video_buffer->dma_start, video_buffer->dma_n, video_buffer->n)) {
                 video_buffer->dma_start = block;
                 video_buffer->dma_n++;
             }

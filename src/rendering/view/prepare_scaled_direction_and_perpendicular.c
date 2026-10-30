@@ -9,14 +9,14 @@ extern f32 D_00160390[] MACRO_ADDR;
 
 typedef union {
     u128 q;
-    f32 v[4];
+    f32  v[4];
 } PauseVec;
 
 void prepare_scaled_direction_and_perpendicular(PauseVec *dir, f32 scale) __asm__("FUN_00226fb8");
 
 void prepare_scaled_direction_and_perpendicular(PauseVec *input_direction, f32 scale) {
     PauseVec direction_copy;
-    f32 *v = direction_copy.v;
+    f32     *v = direction_copy.v;
 
     direction_copy.q = input_direction->q;
     fast_vec_normalize(D_00160370, v, 1.0f);
@@ -46,4 +46,5 @@ void prepare_scaled_direction_and_perpendicular(PauseVec *input_direction, f32 s
     fast_vec_normalize(D_00160380, D_00160380, 1.0f);
 }
 
-extern __typeof__(prepare_scaled_direction_and_perpendicular) func_00226FB8 __attribute__((alias("FUN_00226fb8")));
+extern __typeof__(prepare_scaled_direction_and_perpendicular) func_00226FB8
+    __attribute__((alias("FUN_00226fb8")));

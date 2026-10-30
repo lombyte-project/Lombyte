@@ -1,8 +1,9 @@
 #include "types.h"
 #include "rnc/camera/camera_globals.h"
-extern s32 sound_probe_ignore[] __asm__("D_0013E5BC");
+
+extern s32  sound_probe_ignore[] __asm__("D_0013E5BC");
 extern char D_00194120[];
-extern s32 collision_line() __asm__("func_001EFA68");
+extern s32  collision_line() __asm__("func_001EFA68");
 extern void fast_vec_add() __asm__("func_001F9A10");
 extern void fast_vec_sub() __asm__("func_001F9A28");
 extern void fast_vec_scale(s32, s32, f32) __asm__("func_001F9A68");

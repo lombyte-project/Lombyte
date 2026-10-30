@@ -24,7 +24,7 @@
 
 struct _atexit {
     struct _atexit *_next;
-    int _ind;
+    int             _ind;
     void (*_fns[32])(void);
 };
 
@@ -32,7 +32,7 @@ extern void JumpToRfuStatus(int code);
 
 void exit(int code) {
     struct _atexit *atexit_block;
-    int callback_index;
+    int             callback_index;
 
     for (atexit_block = _impure_ptr->_atexit; atexit_block != 0; atexit_block = atexit_block->_next)
         for (callback_index = atexit_block->_ind; --callback_index >= 0;)

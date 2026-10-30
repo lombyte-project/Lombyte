@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/game/item_state.h"
+
 s32 count_nonzero_entries_up_to_10(void) __asm__("FUN_00215300");
 
 s32 count_nonzero_entries_up_to_10(void) {

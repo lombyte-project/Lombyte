@@ -27,24 +27,24 @@ s32 is_hero_on_moby(struct Moby *candidate_moby) {
     return 0;
 }
 
-
 #include "qcopy.h"
 
 /* Places the marker at a moby's position offset along its heading by scale. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279398), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char pad0[0x10];
+    char  pad0[0x10];
     float p[4];
     float q[2];
     float a;
-    char pad1[0x1A];
+    char  pad1[0x1A];
     short f;
 } GG_q;
 
 extern GG_q D_L01_0016CCE0_lui __asm__("D_L01_0016CCE0") NOT_SDA;
 
 void begin_dialogue_camera_transition(float scale, char *moby) __asm__("FUN_L01_002783a8");
+
 void begin_dialogue_camera_transition(float scale, char *moby) {
     D_L01_0016CCE0_lui.f = 1;
     qcopy(D_L01_0016CCE0_lui.p, moby + 0x10);
@@ -53,7 +53,6 @@ void begin_dialogue_camera_transition(float scale, char *moby) {
     clear_u64_value(D_L01_0016CCE0_lui.q);
     D_L01_0016CCE0_lui.a = fast_add_rotations(MOBY(moby)->rot.z, 3.14159274101257324f);
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
 
@@ -68,6 +67,7 @@ void spawn_proximity_gated_bolts(char *moby) {
     }
     spawn_randomized_bolt_drop(moby, 4, 7, bolt_spawn_flags, -1);
 }
+
 #include "qcopy.h"
 
 /* spawns a moby of a class copying the source moby's placement, scaled */
@@ -75,15 +75,17 @@ void spawn_proximity_gated_bolts(char *moby) {
 
 extern char *create_moby(int);
 
-void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) __asm__("FUN_L01_00278e20");
+void spawn_moby_from_placement(struct Moby *placement_source_moby,
+                               int          oClass) __asm__("FUN_L01_00278e20");
 
 void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) {
     char *destination_moby = create_moby(oClass);
     if (destination_moby != 0) {
         MOBY(destination_moby)->draw_dist = 0xFF;
         destination_moby[0x31] = 1;
-        MOBY(destination_moby)->scale = MOBY(destination_moby)->scale *
-                               (placement_source_moby->scale / placement_source_moby->pclass->scale);
+        MOBY(destination_moby)->scale =
+            MOBY(destination_moby)->scale *
+            (placement_source_moby->scale / placement_source_moby->pclass->scale);
         qcopy(destination_moby + 0x10, &placement_source_moby->pos);
         qcopy(destination_moby + 0x40, &placement_source_moby->rot);
         MOBY(destination_moby)->spawn_frame = placement_source_moby->spawn_frame;
@@ -94,4 +96,5 @@ void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) {
 }
 
 f32 D_L02_0016CE74[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L05_0016CC74[1] __attribute__((section(".data"))) = {0};

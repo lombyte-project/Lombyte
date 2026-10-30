@@ -18,10 +18,10 @@ struct SifFileSlot {
 
 extern s32 fio_async_semas[] __asm__("D_0012FC10");
 extern s32 fio_wait_sema __asm__("D_0012FC9C") NOT_SDA;
-extern s32 fio_iob_sema __asm__("D_0012FCA0") NOT_SDA;      /* guards fio_iob */
+extern s32 fio_iob_sema __asm__("D_0012FCA0") NOT_SDA;         /* guards fio_iob */
 extern s32 fio_async_table_sema __asm__("D_0012FCA4") NOT_SDA; /* guards fio_async_semas */
-extern u8 fio_rpc_result[] __asm__("D_001574C0");            /* read through kseg1 */
-extern struct SifFileSlot fio_iob[SIF_FILE_SLOT_COUNT] __asm__("D_00157D80");
+extern u8  fio_rpc_result[] __asm__("D_001574C0");             /* read through kseg1 */
+extern struct SifFileSlot      fio_iob[SIF_FILE_SLOT_COUNT] __asm__("D_00157D80");
 extern struct sceSifClientData fio_rpc_client __asm__("D_00157F80");
 
 #endif /* LOMBYTE_RNC_SDK_LIBRARY_SIF_FILE_SLOT_H */

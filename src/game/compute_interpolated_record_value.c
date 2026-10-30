@@ -1,23 +1,24 @@
 #include "types.h"
+
 struct InterpolatedStateEntry {
-    u8 pad_0[0x50];
-    u8 unk50;
-    u8 unk51;
-    u8 unk52;
-    u8 unk53;
-    f32 unk54;
-    u8 pad_58[0x10];
+    u8                      pad_0[0x50];
+    u8                      unk50;
+    u8                      unk51;
+    u8                      unk52;
+    u8                      unk53;
+    f32                     unk54;
+    u8                      pad_58[0x10];
     struct InterpKeyframeA *unk68;
     struct InterpKeyframeB *unk6C;
 };
 
 struct InterpKeyframeB {
-    u8 pad_0[0x4];
+    u8  pad_0[0x4];
     s16 unk4;
 };
 
 struct InterpKeyframeA {
-    u8 pad_0[0x4];
+    u8  pad_0[0x4];
     s16 unk4;
 };
 
@@ -27,8 +28,8 @@ f32 compute_interpolated_record_value(struct InterpolatedStateEntry *anim) __asm
 f32 compute_interpolated_record_value(struct InterpolatedStateEntry *anim) {
     struct InterpKeyframeB *next_record;
     struct InterpKeyframeA *cur_record;
-    f32 temp_f20_55;
-    u8 primary_binding_index, secondary_binding_index;
+    f32                     temp_f20_55;
+    u8                      primary_binding_index, secondary_binding_index;
 
     if (anim->unk52 != 0xFF) {
         cur_record = anim->unk68;
@@ -46,7 +47,8 @@ f32 compute_interpolated_record_value(struct InterpolatedStateEntry *anim) {
     if ((u8)secondary_binding_index >= (u8)primary_binding_index) {
         next_record = anim->unk6C;
         temp_f20_55 = convert_integer_to_float(cur_record->unk4) * (1.0f - anim->unk54);
-        return (temp_f20_55 + (convert_integer_to_float(next_record->unk4) * anim->unk54)) * 0.0625f;
+        return (temp_f20_55 + (convert_integer_to_float(next_record->unk4) * anim->unk54)) *
+               0.0625f;
     }
     return (convert_integer_to_float(cur_record->unk4) * 0.0625f) + anim->unk54;
 }

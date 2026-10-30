@@ -1,7 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+
 extern char *strncpy(char *, const char *, u32);
-void memcard_get_name(u8 *src) __asm__("FUN_00209030");
+void         memcard_get_name(u8 *src) __asm__("FUN_00209030");
 
 void memcard_get_name(u8 *rom_configuration) {
     s32 i;

@@ -1,4 +1,4 @@
-typedef int s32;
+typedef int            s32;
 typedef unsigned short u16;
 
 extern s32 Deci2Call(s32 command, void *request);

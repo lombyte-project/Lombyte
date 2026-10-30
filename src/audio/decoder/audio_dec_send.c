@@ -1,7 +1,8 @@
 #include "types.h"
 #include "rnc/audio/decoder/audio_dec.h"
+
 extern s32 send_adpcm() __asm__("FUN_0023afc0");
-void audio_dec_send(struct AudioDec *dec) __asm__("FUN_0023aef0");
+void       audio_dec_send(struct AudioDec *dec) __asm__("FUN_0023aef0");
 
 void audio_dec_send(struct AudioDec *dec) {
     if (dec->state != 0) {

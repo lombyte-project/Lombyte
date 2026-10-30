@@ -3,7 +3,7 @@
 
 extern s32 signal_semaphore() __asm__("FUN_00118990");
 extern s32 wait_semaphore() __asm__("FUN_001189b0");
-void vi_buf_end_put(struct ViBuf *buf, s32 bytes) __asm__("FUN_0023bf18");
+void       vi_buf_end_put(struct ViBuf *buf, s32 bytes) __asm__("FUN_0023bf18");
 
 void vi_buf_end_put(struct ViBuf *video_buffer_state, s32 bytes) {
     wait_semaphore(video_buffer_state->sema);

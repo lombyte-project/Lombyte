@@ -1,8 +1,9 @@
 #include "types.h"
+
 struct MpegPictureBuffer {
-    u8 pad0[0x10];
+    u8  pad0[0x10];
     s32 macroblock_height;
-    u8 pad14[4];
+    u8  pad14[4];
     s64 presentation_timestamp;
     s64 decoding_timestamp;
     s32 status;
@@ -31,60 +32,62 @@ union MpegTimestampSlot {
 };
 
 struct MpegPictureTransfer {
-    u8 pad0[0x10];
+    u8                      pad0[0x10];
     union MpegTimestampSlot first_timestamp;
-    s64 first_decode_timestamp;
-    s64 first_flags;
+    s64                     first_decode_timestamp;
+    s64                     first_flags;
     union MpegTimestampSlot second_timestamp;
-    s64 second_decode_timestamp;
-    s64 second_flags;
+    s64                     second_decode_timestamp;
+    s64                     second_flags;
 };
 
 struct MpegFieldTransferState {
-    u8 pad0[0x80];
-    s32 last_timestamp;
-    u8 pad84[4];
-    s64 timestamp_step;
-    u8 pad90[0x20];
-    s32 decoder_initialized;
-    s32 horizontal_offset0;
-    s32 horizontal_offset1;
-    u8 padbc[4];
-    s32 vertical_offset0;
-    s32 vertical_offset1;
-    u8 padc8[4];
-    s32 display_width;
-    s32 display_height;
-    u8 padd4[0xa0];
-    s32 picture_structure;
-    u8 pad178[0x6e0];
+    u8                          pad0[0x80];
+    s32                         last_timestamp;
+    u8                          pad84[4];
+    s64                         timestamp_step;
+    u8                          pad90[0x20];
+    s32                         decoder_initialized;
+    s32                         horizontal_offset0;
+    s32                         horizontal_offset1;
+    u8                          padbc[4];
+    s32                         vertical_offset0;
+    s32                         vertical_offset1;
+    u8                          padc8[4];
+    s32                         display_width;
+    s32                         display_height;
+    u8                          padd4[0xa0];
+    s32                         picture_structure;
+    u8                          pad178[0x6e0];
     struct MpegPictureTransfer *transfer;
 };
 
-extern void _getPtsDtsFlags(struct MpegFieldTransferState *, struct MpegPictureBuffer *, s64 *,
-                            s64 *, s64 *);
-extern s32 _isOutSizeOK(struct MpegFieldTransferState *, struct MpegPictureBuffer *);
+extern void
+_getPtsDtsFlags(struct MpegFieldTransferState *, struct MpegPictureBuffer *, s64 *, s64 *, s64 *);
+extern s32  _isOutSizeOK(struct MpegFieldTransferState *, struct MpegPictureBuffer *);
 extern void _cpr8(struct MpegFieldTransferState *, struct MpegPictureBuffer *);
 extern void _csc_storeRefImage(struct MpegFieldTransferState *, struct MpegPictureBuffer *);
 extern void FinishMpegReferenceImage(struct MpegFieldTransferState *state) __asm__("func_00129B38");
 
 void PrepareMpegPictureFieldTransfers(
-    struct MpegFieldTransferState *state, struct MpegPictureBuffer *first,
-    struct MpegPictureBuffer *second) __asm__("_dispRefImageField");
+    struct MpegFieldTransferState *state,
+    struct MpegPictureBuffer      *first,
+    struct MpegPictureBuffer      *second) __asm__("_dispRefImageField");
 
 void PrepareMpegPictureFieldTransfers(struct MpegFieldTransferState *state,
-                                      struct MpegPictureBuffer *first,
+                                      struct MpegPictureBuffer      *first,
+
                                       struct MpegPictureBuffer *second) {
-    s64 first_flags, second_flags;
-    s32 timestamp;
-    s32 second_timestamp;
-    s32 display_height;
-    struct MpegPictureBuffer *primary;
-    struct MpegPictureBuffer *secondary;
+    s64                         first_flags, second_flags;
+    s32                         timestamp;
+    s32                         second_timestamp;
+    s32                         display_height;
+    struct MpegPictureBuffer   *primary;
+    struct MpegPictureBuffer   *secondary;
     struct MpegPictureTransfer *transfer;
     struct MpegPictureTransfer *second_transfer;
     struct MpegPictureTransfer *final_transfer;
-    s32 flags;
+    s32                         flags;
     flags = 0;
     if (state->picture_structure == 2) {
         primary = first;
@@ -95,14 +98,20 @@ void PrepareMpegPictureFieldTransfers(struct MpegFieldTransferState *state,
         secondary = first;
     }
     transfer = state->transfer;
-    _getPtsDtsFlags(state, primary, &transfer->first_timestamp.value,
-                    &transfer->first_decode_timestamp, &transfer->first_flags);
+    _getPtsDtsFlags(state,
+                    primary,
+                    &transfer->first_timestamp.value,
+                    &transfer->first_decode_timestamp,
+                    &transfer->first_flags);
     second_transfer = state->transfer;
     timestamp = second_transfer->first_timestamp.words.low;
     state->timestamp_step = 1;
     state->last_timestamp = timestamp;
-    _getPtsDtsFlags(state, secondary, &second_transfer->second_timestamp.value,
-                    &second_transfer->second_decode_timestamp, &second_transfer->second_flags);
+    _getPtsDtsFlags(state,
+                    secondary,
+                    &second_transfer->second_timestamp.value,
+                    &second_transfer->second_decode_timestamp,
+                    &second_transfer->second_flags);
     final_transfer = state->transfer;
     second_timestamp = final_transfer->second_timestamp.words.low;
     state->timestamp_step = 1;

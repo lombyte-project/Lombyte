@@ -1,7 +1,7 @@
 #include "types.h"
 
 typedef struct ImageBufferState {
-    u8 reserved[0x848];
+    u8  reserved[0x848];
     s32 pending_flag;
 } ImageBufferState;
 

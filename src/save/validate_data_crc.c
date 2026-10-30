@@ -1,6 +1,7 @@
 #include "types.h"
+
 extern s32 calculate_crc16() __asm__("func_0020ACC0");
-s32 validate_data_crc(s32 *data) __asm__("FUN_0020ad38");
+s32        validate_data_crc(s32 *data) __asm__("FUN_0020ad38");
 
 s32 validate_data_crc(s32 *data) {
     s32 crc_is_valid = 0;

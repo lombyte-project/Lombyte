@@ -4,13 +4,17 @@
 
 /* Class data block of a moby class in the level file (not a Moby instance). */
 typedef struct MobyClassData {
-    u8 pad[0x2C];
+    u8  pad[0x2C];
     s32 unk2C;
 } MobyClassData;
+
 extern void assign_moby_class_data(s32) __asm__("FUN_00212d68");
-extern void prepare_resident_class_render_data(MobyClassData *, s32, s32,
-                                               s32) __asm__("FUN_00203338");
-void register_moby_class(MobyClassData *moby, s32 indexed_textures, s32 material_map, s32 oclass) __asm__("FUN_00203640");
+extern void
+     prepare_resident_class_render_data(MobyClassData *, s32, s32, s32) __asm__("FUN_00203338");
+void register_moby_class(MobyClassData *moby,
+                         s32            indexed_textures,
+                         s32            material_map,
+                         s32            oclass) __asm__("FUN_00203640");
 
 void register_moby_class(MobyClassData *moby, s32 indexed_textures, s32 material_map, s32 oclass) {
     s32 class_slot;

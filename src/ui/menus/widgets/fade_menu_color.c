@@ -2,6 +2,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/math/fast_math.h"
+
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 
 /* Fades from one color to another once the delay has passed. -1 picks the

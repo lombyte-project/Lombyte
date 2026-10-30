@@ -19,9 +19,9 @@ extern s32 fflush(RncFile *file);
 #define __SERR 0x0040
 
 s32 __sbprintf(RncFile *fp, const s8 *fmt, va_list ap) {
-    s32 print_result;
+    s32     print_result;
     RncFile fake;
-    u8 output_buffer[1024];
+    u8      output_buffer[1024];
 
     fake._data = fp->_data;
     fake._flags = (u16)(fp->_flags & ~__SNBF);

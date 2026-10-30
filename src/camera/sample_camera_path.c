@@ -7,8 +7,8 @@
 #include "rnc/math/asm_helpers.h"
 
 struct CameraPath {
-    s32 count;
-    s32 pad[3];
+    s32  count;
+    s32  pad[3];
     u128 points[1];
 };
 
@@ -16,27 +16,32 @@ extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
-void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags,
-                        f32 progress) __asm__("FUN_00214e58");
+void sample_camera_path(struct CameraPath *path,
+                        s32                loop,
+                        void              *position,
+                        f32               *rotation,
+                        s32                flags,
+                        f32                progress) __asm__("FUN_00214e58");
 
-void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags,
-                        f32 progress) {
+void sample_camera_path(
+
+    struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags, f32 progress) {
     Vec4 current_point;
     Vec4 next_point;
     Vec4 following_point;
     Vec4 segment;
-    s32 point_index;
-    s32 next_index;
-    s32 following_index;
-    s32 clamped;
-    f32 fraction;
-    f32 pitch;
-    f32 heading;
-    f32 c;
-    f32 next_heading;
-    f32 bank;
-    f32 next_bank;
-    f32 next_pitch;
+    s32  point_index;
+    s32  next_index;
+    s32  following_index;
+    s32  clamped;
+    f32  fraction;
+    f32  pitch;
+    f32  heading;
+    f32  c;
+    f32  next_heading;
+    f32  bank;
+    f32  next_bank;
+    f32  next_pitch;
 
     clamped = 0;
     point_index = truncate_float_to_s32(progress);

@@ -4,6 +4,7 @@
 
 #include "sda.h"
 #include "rnc/overlay/shared/camera/register_camera_update_callback_globals.h"
+
 extern int D_L02_001695F0[] NOT_SDA;
 
 void register_camera_update_callback(int x) __asm__("FUN_L02_001fc008");

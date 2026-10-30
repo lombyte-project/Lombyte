@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/ui/hud/hud_state.h"
+
 void link_hud_bank(s32 bank, u32 base) __asm__("FUN_001fefc0");
 
 void link_hud_bank(s32 bank, u32 base) {

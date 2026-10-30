@@ -7,38 +7,38 @@ typedef struct {
 } CscDmaState;
 
 typedef struct {
-    u8 pad0[0xD8];
-    u32 source;
-    u8 padDC[0x858 - 0xDC];
+    u8    pad0[0xD8];
+    u32   source;
+    u8    padDC[0x858 - 0xDC];
     void *callback_data;
 } CscDecoder;
 
 typedef struct {
     u32 dest;
-    u8 pad4[0x8];
+    u8  pad4[0x8];
     s32 width;
     s32 height;
 } CscImage;
 
-extern s32 csc_dma_chunk_handler() __asm__("D_0012A5D8");
-extern s32 AddDmacHandlerSecondary(s32 channel, void *handler, s32 next, void *arg);
-extern s32 RemoveDmacHandler(s32 channel, s32 handle);
-extern s32 DIntr(void);
-extern s32 EnableInterrupts(void);
-extern s32 _dispatchMpegCallback(void *callback_data, s32 *callback_args);
+extern s32  csc_dma_chunk_handler() __asm__("D_0012A5D8");
+extern s32  AddDmacHandlerSecondary(s32 channel, void *handler, s32 next, void *arg);
+extern s32  RemoveDmacHandler(s32 channel, s32 handle);
+extern s32  DIntr(void);
+extern s32  EnableInterrupts(void);
+extern s32  _dispatchMpegCallback(void *callback_data, s32 *callback_args);
 extern void _doCSC(CscDecoder *decoder, u32 source, s32 macroblocks);
 extern void _doCSC2(CscDecoder *decoder, u32 source, s32 macroblocks);
 extern void _sendIpuCommand(CscDecoder *decoder, u32 command);
-extern s32 disable_dmac(s32 channel) __asm__("func_001190F8");
-extern s32 enable_dmac(s32 channel) __asm__("func_00119160");
+extern s32  disable_dmac(s32 channel) __asm__("func_001190F8");
+extern s32  enable_dmac(s32 channel) __asm__("func_00119160");
 
 void _csc_storeRefImage(CscDecoder *decoder, CscImage *image) {
-    s32 callback_args[8];
+    s32         callback_args[8];
     CscDmaState dma;
-    s32 macroblocks;
-    s32 few_macroblocks;
-    s32 handle;
-    s32 interrupts_enabled;
+    s32         macroblocks;
+    s32         few_macroblocks;
+    s32         handle;
+    s32         interrupts_enabled;
 
     macroblocks = image->width * image->height;
     callback_args[0] = 2;

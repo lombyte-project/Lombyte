@@ -6,7 +6,7 @@ extern u32 hud_heap_base[4] __asm__("D_001940CC");
 void initialize_resource_entry(void) __asm__("InitializeResourceEntry");
 
 void initialize_resource_entry(void) {
-    u32 base;
+    u32              base;
     struct HudState *entry;
 
     base = hud_heap_base[0];

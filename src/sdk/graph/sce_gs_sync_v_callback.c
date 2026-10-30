@@ -1,19 +1,19 @@
 #include "types.h"
 
 struct VerticalSyncCallbackState {
-    u8 reserved_00[8];
+    u8  reserved_00[8];
     s32 callback;
     s32 interrupt_handler_id;
 };
 
 extern struct VerticalSyncCallbackState *sceGsGetGParam() __asm__("GetCoreDataTable");
-extern s32 disable_intc() __asm__("func_00119028");
-extern s32 enable_intc() __asm__("func_00119090");
-extern s32 RemoveIntcHandler();
-extern s32 AddIntcHandler();
+extern s32                               disable_intc() __asm__("func_00119028");
+extern s32                               enable_intc() __asm__("func_00119090");
+extern s32                               RemoveIntcHandler();
+extern s32                               AddIntcHandler();
 
 s32 sceGsSyncVCallback(s32 callback) {
-    s32 previous_callback;
+    s32                               previous_callback;
     struct VerticalSyncCallbackState *callback_state;
 
     callback_state = sceGsGetGParam();

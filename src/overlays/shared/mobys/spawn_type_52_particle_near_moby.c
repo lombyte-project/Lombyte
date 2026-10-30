@@ -17,25 +17,33 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
-extern void spawn_type_52_particle(float *, float, float, int, int, int) __asm__("FUN_L01_00287158");
+extern void
+spawn_type_52_particle(float *, float, float, int, int, int) __asm__("FUN_L01_00287158");
 
 extern short type_52_particle_header_value __asm__("D_L10_00161E58") __attribute__((sda));
 extern short type_52_particle_data_value __asm__("D_L10_00161E5C") __attribute__((sda));
 extern short type_52_particle_scale_upper_bound __asm__("D_L10_00161E60") __attribute__((sda));
-extern short type_52_particle_random_value_upper_bound __asm__("D_L10_00161E64") __attribute__((sda));
+extern short type_52_particle_random_value_upper_bound __asm__("D_L10_00161E64")
+    __attribute__((sda));
 extern short type_52_particle_divisor_lower_bound __asm__("D_L10_00161E68") __attribute__((sda));
 extern short type_52_particle_divisor_upper_bound __asm__("D_L10_00161E6C") __attribute__((sda));
-extern short type_52_particle_offset_radius_upper_bound __asm__("D_L10_00161E70") __attribute__((sda));
+extern short type_52_particle_offset_radius_upper_bound __asm__("D_L10_00161E70")
+    __attribute__((sda));
 void spawn_type_52_particle_near_moby(char *moby) __asm__("FUN_L10_002e3de8");
 
 void spawn_type_52_particle_near_moby(char *moby) {
     float spawn_position[3];
-    int particle_header_value, particle_data_value;
+    int   particle_header_value, particle_data_value;
     float offset_angle_radians = random_angle_radians();
-    float offset_radius = random_float_between(0.0f, *(float *)&type_52_particle_offset_radius_upper_bound);
-    float particle_scale = random_float_between(0.0f, *(float *)&type_52_particle_scale_upper_bound);
-    float random_particle_value = random_float_between(*(float *)&type_52_particle_scale_upper_bound, *(float *)&type_52_particle_random_value_upper_bound);
-    int random_divisor = random_int_between(*(int *)&type_52_particle_divisor_lower_bound, *(int *)&type_52_particle_divisor_upper_bound);
+    float offset_radius =
+        random_float_between(0.0f, *(float *)&type_52_particle_offset_radius_upper_bound);
+    float particle_scale =
+        random_float_between(0.0f, *(float *)&type_52_particle_scale_upper_bound);
+    float random_particle_value =
+        random_float_between(*(float *)&type_52_particle_scale_upper_bound,
+                             *(float *)&type_52_particle_random_value_upper_bound);
+    int random_divisor = random_int_between(*(int *)&type_52_particle_divisor_lower_bound,
+                                            *(int *)&type_52_particle_divisor_upper_bound);
     spawn_position[0] = fast_cos(offset_angle_radians) * offset_radius;
     spawn_position[1] = fast_sin(offset_angle_radians) * offset_radius;
     spawn_position[2] = 0.0f;
@@ -43,7 +51,12 @@ void spawn_type_52_particle_near_moby(char *moby) {
     spawn_position[2] = spawn_position[2] + 0.025f;
     particle_header_value = *(int *)&type_52_particle_header_value;
     particle_data_value = *(int *)&type_52_particle_data_value;
-    spawn_type_52_particle(spawn_position, particle_scale, random_particle_value, particle_header_value, particle_data_value, random_divisor);
+    spawn_type_52_particle(spawn_position,
+                           particle_scale,
+                           random_particle_value,
+                           particle_header_value,
+                           particle_data_value,
+                           random_divisor);
 }
 
 /* UpdateMoby_1378 (names.tsv role). State 0 sets flag bit 0 and goes to state 1. In state 1,
@@ -62,9 +75,9 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
         MOBY_UPDATE_INITIALIZE = 0,
         MOBY_UPDATE_ACTIVE = 1
     };
-    float hero_point_local_offset[4] __attribute__((aligned(16)));
-    float mtx[16] __attribute__((aligned(16)));
-    char *player;
+    float        hero_point_local_offset[4] __attribute__((aligned(16)));
+    float        mtx[16] __attribute__((aligned(16)));
+    char        *player;
     unsigned int update_state = moby[0x20];
     switch (update_state) {
     case MOBY_UPDATE_INITIALIZE:
@@ -78,7 +91,8 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
             fast_vec_sub(hero_point_local_offset, player + 0x50, moby + 0x10);
             transpose_rotation_matrix(mtx, moby + 0xC0);
             transform_vector(hero_point_local_offset, hero_point_local_offset, mtx);
-            if (-5.0f < hero_point_local_offset[0] && hero_point_local_offset[0] < 5.0f && 0.0f < hero_point_local_offset[2] && hero_point_local_offset[2] < 8.0f) {
+            if (-5.0f < hero_point_local_offset[0] && hero_point_local_offset[0] < 5.0f &&
+                0.0f < hero_point_local_offset[2] && hero_point_local_offset[2] < 8.0f) {
                 if (hero_point_local_offset[1] < 0.5f) {
                     player[0x224B] = 1;
                 } else {
@@ -92,6 +106,7 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
         break;
     }
 }
+
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002EA578), where it is exact; names translated to the US level program. */
@@ -102,40 +117,42 @@ typedef struct {
 
 typedef struct {
     QuadCorner corner[4];
-    int color[4];
-    float uv[4][2];
-    long unk70, tex, unk80, alpha;
+    int        color[4];
+    float      uv[4][2];
+    long       unk70, tex, unk80, alpha;
 } TrailQuad;
 
 extern QuadCorner l10_animated_quad_second_base_corners[] __asm__("D_L10_001DA310");
 extern QuadCorner l10_animated_quad_first_base_corners[] __asm__("D_L10_001DA350");
-extern float quad_layer_uv_phase_divisors[][2] __asm__("D_L10_001DA270");
-extern float quad_corner_base_uvs[][2] __asm__("D_L10_001DA2F0");
+extern float      quad_layer_uv_phase_divisors[][2] __asm__("D_L10_001DA270");
+extern float      quad_corner_base_uvs[][2] __asm__("D_L10_001DA2F0");
+
 #include "rnc/overlay/shared/mobys/spawn_type_52_particle_near_moby_globals.h"
 #include "rnc/overlay/level_path.h"
-extern int quad_layer_colors[] __asm__("D_L10_001DA250");
-extern int quad_layer_uv_cosine_selectors[][2] __asm__("D_L10_001DA2B0");
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern int quad_layer_count_gp __asm__("D_L10_00161F40") __attribute__((sda));
-extern int quad_layer_alpha_a_selectors[2] __asm__("D_L10_00161F48") __attribute__((sda));
-extern int quad_layer_alpha_b_selectors[2] __asm__("D_L10_00161F50") __attribute__((sda));
-extern int quad_layer_alpha_c_selectors[2] __asm__("D_L10_00161F58") __attribute__((sda));
-extern int quad_layer_alpha_d_selectors[2] __asm__("D_L10_00161F60") __attribute__((sda));
+
+extern int  quad_layer_colors[] __asm__("D_L10_001DA250");
+extern int  quad_layer_uv_cosine_selectors[][2] __asm__("D_L10_001DA2B0");
+extern s64  get_effect_texture(s32) __asm__("func_001F44B8");
+extern int  quad_layer_count_gp __asm__("D_L10_00161F40") __attribute__((sda));
+extern int  quad_layer_alpha_a_selectors[2] __asm__("D_L10_00161F48") __attribute__((sda));
+extern int  quad_layer_alpha_b_selectors[2] __asm__("D_L10_00161F50") __attribute__((sda));
+extern int  quad_layer_alpha_c_selectors[2] __asm__("D_L10_00161F58") __attribute__((sda));
+extern int  quad_layer_alpha_d_selectors[2] __asm__("D_L10_00161F60") __attribute__((sda));
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
-#define GS_ALPHA(a, b, k, d, fix) \
+#define GS_ALPHA(a, b, k, d, fix)                                                 \
     ((unsigned long)(a) | ((unsigned long)(b) << 2) | ((unsigned long)(k) << 4) | \
      ((unsigned long)(d) << 6) | ((unsigned long)(fix) << 32))
 
 void draw_moby_animated_quad_layers(unsigned char *moby) {
-    TrailQuad first, second;
-    float transform[12] __attribute__((aligned(16)));
-    float position[4] __attribute__((aligned(16)));
-    float *scale;
-    int pass, axis, k, i;
-    float *first_corner, *second_corner, *second_dst;
+    TrailQuad   first, second;
+    float       transform[12] __attribute__((aligned(16)));
+    float       position[4] __attribute__((aligned(16)));
+    float      *scale;
+    int         pass, axis, k, i;
+    float      *first_corner, *second_corner, *second_dst;
     QuadCorner *first_src, *second_src;
-    TrailQuad *second_quad;
+    TrailQuad  *second_quad;
 
     scale = ((float *)MOBY(moby)->pvars);
     copy_matrix_rotation(transform, moby + 0xC0);
@@ -170,10 +187,16 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
     for (pass = 0; pass < quad_layer_count_gp; pass++) {
         int parity = pass & 1;
         int shade;
-        first.alpha = GS_ALPHA(quad_layer_alpha_a_selectors[parity], quad_layer_alpha_b_selectors[parity],
-                                   quad_layer_alpha_c_selectors[parity], quad_layer_alpha_d_selectors[parity], 0x80);
-        second.alpha = GS_ALPHA(quad_layer_alpha_a_selectors[parity], quad_layer_alpha_b_selectors[parity],
-                                    quad_layer_alpha_c_selectors[parity], quad_layer_alpha_d_selectors[parity], 0x80);
+        first.alpha = GS_ALPHA(quad_layer_alpha_a_selectors[parity],
+                               quad_layer_alpha_b_selectors[parity],
+                               quad_layer_alpha_c_selectors[parity],
+                               quad_layer_alpha_d_selectors[parity],
+                               0x80);
+        second.alpha = GS_ALPHA(quad_layer_alpha_a_selectors[parity],
+                                quad_layer_alpha_b_selectors[parity],
+                                quad_layer_alpha_c_selectors[parity],
+                                quad_layer_alpha_d_selectors[parity],
+                                0x80);
         shade = quad_layer_colors[pass];
         second.color[2] = shade;
         second.color[0] = shade;
@@ -183,8 +206,11 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
         first.color[0] = shade;
         for (i = 0; i < 4; i++) {
             for (axis = 0; axis < 2; axis++) {
-                int limit = truncate_float_to_s32(quad_layer_uv_phase_divisors[pass][axis] * 360.0f);
-                float angle = convert_integer_to_float(quad_uv_animation_phase_input % limit) / quad_layer_uv_phase_divisors[pass][axis] - 180.0f;
+                int limit =
+                    truncate_float_to_s32(quad_layer_uv_phase_divisors[pass][axis] * 360.0f);
+                float angle = convert_integer_to_float(quad_uv_animation_phase_input % limit) /
+                                  quad_layer_uv_phase_divisors[pass][axis] -
+                              180.0f;
                 float wave;
                 if (quad_layer_uv_cosine_selectors[pass][axis] != 0) {
                     wave = fast_cos(angle * 0.017453292f);
@@ -215,6 +241,7 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
         }
     }
 }
+
 extern char *D_L10_0015EF50;
 
 void activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
@@ -225,13 +252,13 @@ void activate_descriptor(int i) {
     descriptor_record[0x38] = 1;
     descriptor_record[0x39] = 0;
 }
+
 extern int point_in_path_xy(float *, float *, int) __asm__("FUN_L00_00259740");
 
 int check_descriptor_hero_trigger(char *moby) __asm__("FUN_L10_002f5a78");
 
 int check_descriptor_hero_trigger(char *moby) {
-    unsigned char *e =
-        *(unsigned char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    unsigned char *e = *(unsigned char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
 
     if (*(int *)(e + 0x0C) >= 0) {
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(e + 0x0C)))
@@ -245,51 +272,57 @@ int check_descriptor_hero_trigger(char *moby) {
     } else if (*(int *)(e + 0x14) >= 0) {
         int i = *(int *)(e + 0x14);
         if (point_in_path_xy((float *)(&hero.motion.pos),
-                                  (float *)(((char *)l10_paths[i]) + 0x10),
-                                  *(int *)l10_paths[i]))
+                             (float *)(((char *)l10_paths[i]) + 0x10),
+                             *(int *)l10_paths[i]))
             return 1;
     } else if (e[0x38] != 0 && e[0x39] == 0) {
         return 1;
     }
     return 0;
 }
+
 typedef struct {
-    char pad0[0xB0];
+    char  pad0[0xB0];
     float tan_half_fov;
 } VendorView_5f18;
 
 typedef struct {
-    s16 seg[8];   /* 0x00: path segment of each stop (-1 ends the list) */
-    f32 fov[8];   /* 0x10: field of view at each stop, degrees */
-    f32 fov_end;  /* 0x30: field of view handed back at the end */
+    s16 seg[8];  /* 0x00: path segment of each stop (-1 ends the list) */
+    f32 fov[8];  /* 0x10: field of view at each stop, degrees */
+    f32 fov_end; /* 0x30: field of view handed back at the end */
 } VendorCamStops_5f18;
 
 typedef struct {
-    s32 seg;      /* 0x40 */
-    f32 t;        /* 0x44 */
+    s32 seg;              /* 0x40 */
+    f32 t;                /* 0x44 */
     f32 path_length;      /* 0x48 */
     f32 look_path_length; /* 0x4C */
-    f32 dist;     /* 0x50: distance travelled */
-    s16 started;  /* 0x54 */
-    s16 timer;    /* 0x56 */
+    f32 dist;             /* 0x50: distance travelled */
+    s16 started;          /* 0x54 */
+    s16 timer;            /* 0x56 */
 } VendorCamRun_5f18;
 
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/camera/update_cam.h"
+
 /* Retail retains this global base and loads the four-block source at +0x184. */
-extern struct { char pad0[0x184]; char *source; } D_L10_00167100;
+extern struct {
+    char  pad0[0x184];
+    char *source;
+} D_L10_00167100;
+
 extern VendorView_5f18 D_L10_0016CEC0;
 
 void initialize_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L10_002f5b58");
 
 void initialize_path_camera(struct UpdateCam *path_camera) {
-    char *rec = *(char **)(D_L10_0015EF50 + path_camera->descriptor_index * 32 + 0x1C);
+    char              *rec = *(char **)(D_L10_0015EF50 + path_camera->descriptor_index * 32 + 0x1C);
     VendorCamRun_5f18 *run;
     VendorCamStops_5f18 *stops;
-    f32 *fov;
-    Vec4f *m1, *m2, *pos;
-    char *saved;
+    f32                 *fov;
+    Vec4f               *m1, *m2, *pos;
+    char                *saved;
 
     rec[0x38] = 1;
     run = (VendorCamRun_5f18 *)((char *)path_camera->saved_state + 0x40);
@@ -315,11 +348,11 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     stops->fov_end = fast_arc_tan(1.0f, D_L10_0016CEC0.tan_half_fov) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         char *path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
-        int i = 0;
+        int   i = 0;
         if (i < *(int *)path) {
             f32 *stop_fov = fov;
             s16 *stop_seg = stops->seg;
-            int next;
+            int  next;
             do {
                 int offset = i * 16;
                 f32 angle = *(f32 *)(path + offset + 0x1C);
@@ -333,7 +366,8 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
                     stop_seg++;
                 }
                 next = i + 1;
-                length = fast_vec_dist(&((Vec4f *)(path + 0x10))[i], &((Vec4f *)(path + 0x10))[next % *(int *)path]);
+                length = fast_vec_dist(&((Vec4f *)(path + 0x10))[i],
+                                       &((Vec4f *)(path + 0x10))[next % *(int *)path]);
                 {
                     char *point = path + i * 16;
                     *(f32 *)(point + 0x1C) = length;
@@ -347,14 +381,16 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     {
         s16 frames = *(s16 *)(rec + 0x3A);
         if (frames > 0)
-            *(f32 *)(rec + 0x3C) = run->path_length / convert_integer_to_float(scale_game_frames(frames)) * 60.0f;
+            *(f32 *)(rec + 0x3C) =
+                run->path_length / convert_integer_to_float(scale_game_frames(frames)) * 60.0f;
     }
     if (*(int *)(rec + 0x24) >= 0) {
         char *path = ((char *)l10_paths[*(int *)(rec + 0x24)]);
-        int i;
+        int   i;
         for (i = 0; i < *(int *)path; i++) {
             int offset = i * 16;
-            f32 length = fast_vec_dist(path + (offset + 0x10), path + ((i + 1) % *(int *)path * 16 + 0x10));
+            f32 length =
+                fast_vec_dist(path + (offset + 0x10), path + ((i + 1) % *(int *)path * 16 + 0x10));
             *(f32 *)(path + offset + 0x1C) = length;
             if (i < *(int *)path - 1)
                 run->look_path_length += length;
@@ -378,36 +414,38 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     if (*(int *)(rec + 0x4C) == 0)
         hero_set_state(0x72, 1);
 }
+
 #include "rnc/overlay/level_globals.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/camera/update_cam.h"
 
-extern char *D_L10_0015FFD8_5f18 __asm__("D_L10_0015FFD8");
-extern f32 D_L10_0015F3FC;
-extern s32 D_L10_0015F404;
-extern char D_L10_00167450[];
+extern char                *D_L10_0015FFD8_5f18 __asm__("D_L10_0015FFD8");
+extern f32                  D_L10_0015F3FC;
+extern s32                  D_L10_0015F404;
+extern char                 D_L10_00167450[];
 extern float D_L10_00167358 NOT_SDA;
-extern float D_0013F5E0_5f18[] __asm__("D_0013F5E0");
-extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
+extern float                D_0013F5E0_5f18[] __asm__("D_0013F5E0");
+extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__(
+    "FUN_L00_0025d808");
 extern void FUN_L00_002223f8(s32, s32);
 extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 
 void FUN_L10_002f5f18(struct UpdateCam *cam) {
-    float dir[4];
-    float offset[4];
-    float point[4];
-    float look_point[4];
-    s32 look_seg;
-    f32 look_t;
-    char *saved;
-    VendorCamRun_5f18 *run;
-    char *rec;
+    float                dir[4];
+    float                offset[4];
+    float                point[4];
+    float                look_point[4];
+    s32                  look_seg;
+    f32                  look_t;
+    char                *saved;
+    VendorCamRun_5f18   *run;
+    char                *rec;
     VendorCamStops_5f18 *stops;
-    char *path;
-    int done;
-    int i;
+    char                *path;
+    int                  done;
+    int                  i;
 
     saved = (char *)cam->saved_state;
     rec = *(char **)(D_L10_0015EF50 + cam->descriptor_index * 32 + 0x1C);
@@ -424,7 +462,8 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
             run->started = 1;
             qcopy(&cam->pos, start_path + 0x10);
             if (*(int *)(rec + 0x28) >= 0) {
-                struct Moby *anchor = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
+                struct Moby *anchor =
+                    (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
                 float *ofs = (float *)(rec + 0x2C);
                 offset[0] = ofs[0];
                 offset[1] = ofs[1];
@@ -471,11 +510,13 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
     }
     path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
     qcopy(dir, &cam->pos);
-    done = sample_path(path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
+    done =
+        sample_path(path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
     if (run->timer != 0) {
         if (fast_dec_timer_s16(&run->timer) != 0)
             done = 1;
-        else if (*(int *)(rec + 0x40) != 0 && run->timer < scale_game_frames(truncate_float_to_s32(20.0f)))
+        else if (*(int *)(rec + 0x40) != 0 &&
+                 run->timer < scale_game_frames(truncate_float_to_s32(20.0f)))
             done = 1;
     }
     if (*(u8 *)(rec + 0x39) != 0)
@@ -491,15 +532,16 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
             float sum = 0.0f;
             float total;
             float ang;
-            int before;
-            int after;
+            int   before;
+            int   after;
             for (before = first_seg; before < run->seg; before++)
                 sum += *(float *)(path + (before * 16 + 0x1C));
             total = sum;
             sum += run->t;
             for (after = run->seg; after < stops->seg[i + 1]; after++)
                 total += *(float *)(path + (after * 16 + 0x1C));
-            ang = cosine_interpolate(stops->fov[i], stops->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
+            ang = cosine_interpolate(stops->fov[i], stops->fov[i + 1], sum / total) * 0.017453292f *
+                  0.5f;
             D_L10_0016CEC0.tan_half_fov = fast_sin(ang) / fast_cos(ang);
             update_view_context();
         }
@@ -507,7 +549,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
     run->dist += fast_vec_dist(dir, &cam->pos);
     if (*(int *)(rec + 0x28) >= 0) {
         struct Moby *anchor = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
-        float *ofs = (float *)(rec + 0x2C);
+        float       *ofs = (float *)(rec + 0x2C);
         point[0] = ofs[0];
         point[1] = ofs[1];
         point[2] = ofs[2];
@@ -519,7 +561,12 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         char *look = ((char *)l10_paths[*(int *)(rec + 0x24)]);
         look_seg = 0;
         look_t = 0.0f;
-        sample_path(look, point, &look_seg, &look_t, 0, run->dist / run->path_length * run->look_path_length);
+        sample_path(look,
+                    point,
+                    &look_seg,
+                    &look_t,
+                    0,
+                    run->dist / run->path_length * run->look_path_length);
         debug_point_5f18(point, 0.2f);
         noop_main_callback(look + 0x10, look + *(int *)look * 16);
         fast_vec_sub(offset, point, &cam->pos);
@@ -530,16 +577,19 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
     fast_vec_normalize(&cam->m1, &cam->m1, 1.0f);
     fast_vec_cross(&cam->m2, &cam->m1, &cam->m0);
 }
+
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
 
 extern int FUN_L10_002f5a78_u(char *, char *) __asm__("FUN_L10_002f5a78");
 
-int evaluate_descriptor_eligibility(char *descriptor_owner, char *comparison_object) __asm__("FUN_L10_002f65f8");
+int evaluate_descriptor_eligibility(char *descriptor_owner,
+                                    char *comparison_object) __asm__("FUN_L10_002f65f8");
 
 int evaluate_descriptor_eligibility(char *descriptor_owner, char *comparison_object) {
-    unsigned char *descriptor_record = *(unsigned char **)(D_L10_0015EF50 + *(short *)(descriptor_owner + 0x84) * 32 + 0x1C);
+    unsigned char *descriptor_record =
+        *(unsigned char **)(D_L10_0015EF50 + *(short *)(descriptor_owner + 0x84) * 32 + 0x1C);
     int x;
     int y;
     if (descriptor_record[0x39] != 0) {
@@ -548,7 +598,8 @@ int evaluate_descriptor_eligibility(char *descriptor_owner, char *comparison_obj
     if (descriptor_record[0x38] != 0 && *(short *)(comparison_object + 0x86) != 0x13) {
         return 1;
     }
-    if (comparison_object != 0 && *(short *)(comparison_object + 0x7E) == 0 && (unsigned char)comparison_object[0x7C] >= (unsigned char)descriptor_owner[0x7C]) {
+    if (comparison_object != 0 && *(short *)(comparison_object + 0x7E) == 0 &&
+        (unsigned char)comparison_object[0x7C] >= (unsigned char)descriptor_owner[0x7C]) {
         return 0;
     }
     if (FUN_L10_002f5a78_u(descriptor_owner, comparison_object) == 0) {
@@ -565,19 +616,22 @@ int evaluate_descriptor_eligibility(char *descriptor_owner, char *comparison_obj
     return 1;
 }
 
-short D_L12_00161820 = 0x2028;
-short D_L12_00161824 = 0x2020;
-short D_L12_00161828 = 0;
-short D_L12_0016182C = 0x6666;
-short D_L12_00161830 = 0x64;
-short D_L12_00161834 = 0xb4;
-short D_L12_00161838 = -13107;
+short                D_L12_00161820 = 0x2028;
+short                D_L12_00161824 = 0x2020;
+short                D_L12_00161828 = 0;
+short                D_L12_0016182C = 0x6666;
+short                D_L12_00161830 = 0x64;
+short                D_L12_00161834 = 0xb4;
+short                D_L12_00161838 = -13107;
 float D_L13_001671D8 NOT_SDA = 0;
 float D_L15_001674D8 NOT_SDA = 0;
-int D_L17_00161FB0 = 6;
-int D_L17_00161FB8[2] = {0, 1};
+int                  D_L17_00161FB0 = 6;
+int                  D_L17_00161FB8[2] = {0, 1};
+
 int D_L17_00161FC0[2] = {2, 0};
+
 int D_L17_00161FC8[2] = {2, 2};
+
 int D_L17_00161FD0[2] = {1, 2};
 
 short type_52_particle_divisor_upper_bound __asm__("D_L10_00161E6C") = 0xb4;

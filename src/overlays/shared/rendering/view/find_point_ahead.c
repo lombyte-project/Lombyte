@@ -9,21 +9,20 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 
-
-extern short D_L01_001B0CB0[] NOT_SDA;
-extern char *D_L01_001DD580[] NOT_SDA;
+extern short       D_L01_001B0CB0[] NOT_SDA;
+extern char       *D_L01_001DD580[] NOT_SDA;
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
-int find_point_ahead(char *a, char *o, float best) __asm__("FUN_L01_00274b78");
+int                find_point_ahead(char *a, char *o, float best) __asm__("FUN_L01_00274b78");
 int find_point_ahead(char *source_entity, char *target_out, float best) __asm__("FUN_L01_00274b78");
 
 int find_point_ahead(char *source_entity, char *target_out, float best) {
     struct Hero *hero = &hero_lui;
-    char *selected_entity;
-    char *candidate_entity;
-    int selection_status;
-    int i;
-    int j;
-    float candidate_metric;
+    char        *selected_entity;
+    char        *candidate_entity;
+    int          selection_status;
+    int          i;
+    int          j;
+    float        candidate_metric;
 
     selected_entity = ((char *)hero->moby);
     selection_status = 0;
@@ -35,7 +34,8 @@ int find_point_ahead(char *source_entity, char *target_out, float best) {
         candidate_entity = ents + (D_L01_001B0CB0[i] << 8);
         if (candidate_entity == 0)
             continue;
-        if (*(short *)(candidate_entity + 0xA6) != 0xCB && *(short *)(candidate_entity + 0xA6) != 0x76C)
+        if (*(short *)(candidate_entity + 0xA6) != 0xCB &&
+            *(short *)(candidate_entity + 0xA6) != 0x76C)
             continue;
         if (*(unsigned char *)(candidate_entity + 0x20) == 0xFE)
             continue;

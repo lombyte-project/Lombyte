@@ -1,31 +1,34 @@
-typedef signed char s8;
-typedef unsigned char u8;
-typedef signed short s16;
-typedef unsigned short u16;
-typedef signed int s32;
-typedef unsigned int u32;
-typedef signed long long s64;
+typedef signed char        s8;
+typedef unsigned char      u8;
+typedef signed short       s16;
+typedef unsigned short     u16;
+typedef signed int         s32;
+typedef unsigned int       u32;
+typedef signed long long   s64;
 typedef unsigned long long u64;
-typedef float f32;
-typedef double f64;
+typedef float              f32;
+typedef double             f64;
+
 typedef struct SeqExtContext {
-    u8 pad_0[0x124];
+    u8  pad_0[0x124];
     s32 horizontal_size;
     s32 vertical_size;
-    u8 pad_12C[0x8];
+    u8  pad_12C[0x8];
     s32 bit_rate;
     s32 vbv_buffer_size;
     s32 progressive_sequence;
     s32 chroma_format;
-    u8 pad_144[0x204];
-    u8 pad_348[0x500];
+    u8  pad_144[0x204];
+    u8  pad_348[0x500];
     s32 mpeg2;
 } SeqExtContext;
+
 extern void _Error();
-extern s32 _nextBit();
+extern s32  _nextBit();
 extern void _ipuSetMPEG1();
-extern u8 unsupported_chroma_format_message[] __asm__("D_00153B00");
-extern u8 unsupported_profile_level_message[] __asm__("D_00153B28");
+extern u8   unsupported_chroma_format_message[] __asm__("D_00153B00");
+extern u8   unsupported_profile_level_message[] __asm__("D_00153B28");
+
 void _sequenceExtension(SeqExtContext *ctx) {
     u32 bits;
     u32 bits2;
@@ -50,7 +53,8 @@ void _sequenceExtension(SeqExtContext *ctx) {
     profile_and_level_indication = bits >> 20;
     bits2 = _nextBit(ctx, 0x10);
     vbv_buffer_size_extension = bits2 >> 8;
-    if (((profile_and_level_indication != 0x48) && (profile_and_level_indication != 0x58)) && (profile_and_level_indication != 0x44)) {
+    if (((profile_and_level_indication != 0x48) && (profile_and_level_indication != 0x58)) &&
+        (profile_and_level_indication != 0x44)) {
         _Error(ctx, unsupported_profile_level_message);
     }
     ctx->horizontal_size = (horizontal_size_extension << 12) | (ctx->horizontal_size & 0xFFF);

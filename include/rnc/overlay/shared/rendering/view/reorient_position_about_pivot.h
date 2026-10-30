@@ -3,6 +3,7 @@
 
 #include "types.h"
 
-void reorient_position_about_pivot(void *, void *, void *, void *, void *) __asm__("FUN_L07_00288968");
+void reorient_position_about_pivot(void *, void *, void *, void *, void *) __asm__(
+    "FUN_L07_00288968");
 
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_VIEW_REORIENT_POSITION_ABOUT_PIVOT_H */

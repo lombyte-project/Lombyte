@@ -3,8 +3,9 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
+
 extern unsigned char D_0013A4E0[] NOT_SDA;
-int update_menu_confirm_page(void) __asm__("FUN_00221af0");
+int                  update_menu_confirm_page(void) __asm__("FUN_00221af0");
 
 int update_menu_confirm_page(void) {
     int confirm_input_flags = *(int *)(D_0013A4E0 + 0x2604);

@@ -1,15 +1,16 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/ui/menus/stream_buffers/acquire_menu_stream_buffer.h"
+
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c, func_L00_00284620). */
 extern void *create_menu_preview_moby(int) __asm__("func_00225490");
-extern void helper_moby_update_noop(void *) __asm__("func_00225AB8");
+extern void  helper_moby_update_noop(void *) __asm__("func_00225AB8");
 /* sets up a pause-menu helper moby in front of the camera */
 int enter_streamed_moby_screen(char *h) __asm__("FUN_00225588");
 
 int enter_streamed_moby_screen(char *screen_state) {
     char *preview_moby;
-    int stream_buffer_address;
+    int   stream_buffer_address;
     preview_moby = create_menu_preview_moby(0x7A5);
     *(int *)(screen_state + 0x34) = 0;
     if (preview_moby != 0) {

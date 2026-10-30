@@ -1,12 +1,14 @@
 #include "types.h"
 #include "rnc/camera/update_cam.h"
 #include "rnc/mobys/moby_spawn.h"
+
 struct CamColl {
-    u8 pad0[0xC4];
+    u8    pad0[0xC4];
     void *moby;
 };
+
 extern struct CamColl cam_coll_state __asm__("D_001870D0");
-extern void *noop_callback_l(void *) __asm__("func_001E9448");
+extern void          *noop_callback_l(void *) __asm__("func_001E9448");
 void handle_camera_collision_with_hero(struct UpdateCam *cam) __asm__("FUN_001ebe68");
 
 void handle_camera_collision_with_hero(struct UpdateCam *selected_camera) {

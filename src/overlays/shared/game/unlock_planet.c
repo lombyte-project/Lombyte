@@ -19,21 +19,24 @@
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/camera/queue_planet_unlock_message.h"
+
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
 
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
-extern short D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")NOT_SDA;
-int select_moby_combat_target(char *query_moby, char *target_output, float best) __asm__("FUN_L00_0025fcb8");
+extern short       D_L00_001B0830_lui[] __asm__("D_L00_001B0830") NOT_SDA;
+int                select_moby_combat_target(char *query_moby,
+                                             char *target_output,
+                                             float best) __asm__("FUN_L00_0025fcb8");
 
 int select_moby_combat_target(char *query_moby, char *target_output, float best) {
     struct Hero *hero_data = &hero_lui;
-    char *selected_moby;
-    char *candidate_moby;
-    int target_selection_status;
-    int i;
-    int j;
-    float candidate_distance_score;
+    char        *selected_moby;
+    char        *candidate_moby;
+    int          target_selection_status;
+    int          i;
+    int          j;
+    float        candidate_distance_score;
 
     selected_moby = ((char *)hero_data->moby);
     target_selection_status = 0;
@@ -102,19 +105,27 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
     *(int *)(target_output + 0x44) = target_selection_status;
     return target_selection_status;
 }
+
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
-int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv);
-int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *list, int exclusion_list_bound, float *target_region_vertices, int nv) {
+int        FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv);
+int        FUN_L00_0025ff38(char  *query_moby,
+                            char  *target_output,
+                            float  best,
+                            int   *list,
+                            int    exclusion_list_bound,
+                            float *target_region_vertices,
+
+                            int nv) {
     struct Hero *hero_data = &hero_lui;
-    char *selected_moby;
-    char *indexed_candidate;
-    char *listed_candidate;
-    int target_selection_status;
-    int i;
-    int j;
-    int k;
-    int ok;
-    float candidate_distance_score;
+    char        *selected_moby;
+    char        *indexed_candidate;
+    char        *listed_candidate;
+    int          target_selection_status;
+    int          i;
+    int          j;
+    int          k;
+    int          ok;
+    float        candidate_distance_score;
 
     selected_moby = (char *)hero_data->moby;
     target_selection_status = 0;
@@ -137,11 +148,17 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
     }
     for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
         indexed_candidate = moby_table + (D_L00_001B0830_lui[i] << 8);
-        if (indexed_candidate == 0) continue;
-        if (*(short *)(indexed_candidate + 0xA6) != 0xCB && *(short *)(indexed_candidate + 0xA6) != 0x76C) continue;
-        if (*(unsigned char *)(indexed_candidate + 0x20) == 0xFE) continue;
-        if (*(unsigned char *)(indexed_candidate + 0x20) == 0xFD) continue;
-        if (*(unsigned char *)(indexed_candidate + 0x20) != 3) continue;
+        if (indexed_candidate == 0)
+            continue;
+        if (*(short *)(indexed_candidate + 0xA6) != 0xCB &&
+            *(short *)(indexed_candidate + 0xA6) != 0x76C)
+            continue;
+        if (*(unsigned char *)(indexed_candidate + 0x20) == 0xFE)
+            continue;
+        if (*(unsigned char *)(indexed_candidate + 0x20) == 0xFD)
+            continue;
+        if (*(unsigned char *)(indexed_candidate + 0x20) != 3)
+            continue;
         ok = 1;
         candidate_distance_score = vector_distance_xy(query_moby + 0x10, indexed_candidate + 0x10);
         if (best <= candidate_distance_score) {
@@ -154,7 +171,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
                 }
             }
         } else if (target_region_vertices != 0 && nv > 0) {
-            if (point_in_path_xy(indexed_candidate + 0x10, target_region_vertices, nv) == 0) ok = 0;
+            if (point_in_path_xy(indexed_candidate + 0x10, target_region_vertices, nv) == 0)
+                ok = 0;
         }
         if (ok) {
             selected_moby = indexed_candidate;
@@ -164,11 +182,16 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
     }
     for (j = 0; j < 20; j++) {
         listed_candidate = D_L00_001DD100_lui[j];
-        if (listed_candidate == 0) continue;
-        if (*(short *)(listed_candidate + 0xA6) != 0x10E) continue;
-        if (*(unsigned char *)(listed_candidate + 0x20) == 0xFE) continue;
-        if (*(unsigned char *)(listed_candidate + 0x20) == 0xFD) continue;
-        if (*(unsigned char *)(listed_candidate + 0xBC) == 0) continue;
+        if (listed_candidate == 0)
+            continue;
+        if (*(short *)(listed_candidate + 0xA6) != 0x10E)
+            continue;
+        if (*(unsigned char *)(listed_candidate + 0x20) == 0xFE)
+            continue;
+        if (*(unsigned char *)(listed_candidate + 0x20) == 0xFD)
+            continue;
+        if (*(unsigned char *)(listed_candidate + 0xBC) == 0)
+            continue;
         ok = 1;
         candidate_distance_score = vector_distance_xy(query_moby + 0x10, listed_candidate + 0x10);
         if (best <= candidate_distance_score) {
@@ -181,7 +204,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
                 }
             }
         } else if (target_region_vertices != 0 && nv > 0) {
-            if (point_in_path_xy(listed_candidate + 0x10, target_region_vertices, nv) == 0) ok = 0;
+            if (point_in_path_xy(listed_candidate + 0x10, target_region_vertices, nv) == 0)
+                ok = 0;
         }
         if (ok) {
             selected_moby = listed_candidate;
@@ -212,12 +236,19 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
     *(int *)(target_output + 0x44) = target_selection_status;
     return target_selection_status;
 }
+
 typedef float M4_260400[16] __attribute__((aligned(16)));
-extern char *FUN_L00_002603d0_c(char *) __asm__("FUN_L00_002603d0");
-int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
-int FUN_L00_00260400(int unused_subject_object, char *reference_object, void *input_position, void *input_rotation, float *output_position, void *out) {
+extern char  *FUN_L00_002603d0_c(char *) __asm__("FUN_L00_002603d0");
+int           FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
+int           FUN_L00_00260400(int    unused_subject_object,
+                               char  *reference_object,
+                               void  *input_position,
+                               void  *input_rotation,
+                               float *output_position,
+
+                               void *out) {
     M4_260400 basis_rotation_matrix, composed_rotation_matrix;
-    char *transform_record = FUN_L00_002603d0_c(reference_object);
+    char     *transform_record = FUN_L00_002603d0_c(reference_object);
     if (transform_record == 0)
         return 0;
     euler_rotation_matrix(basis_rotation_matrix, transform_record);
@@ -230,32 +261,53 @@ int FUN_L00_00260400(int unused_subject_object, char *reference_object, void *in
     matrix_to_euler(composed_rotation_matrix, out);
     return 1;
 }
+
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-typedef float V4_2604f0[4] __attribute__((aligned(16)));
-u8 *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
-void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *,
-                               void *) __asm__("FUN_L00_00260668");
-void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
-int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void *position, void *rotation, void *transformed_position, void *transformed_rotation) __asm__("FUN_L00_002604f0");
 
-int transform_attachment_pose(u8 *a, u8 *b, void *c, void *d, void *e, void *f) __asm__("FUN_L00_002604f0");
-int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void *position, void *rotation, void *transformed_position, void *transformed_rotation) {
-    float reference_basis_matrix[16] __attribute__((aligned(16)));
-    float composed_attachment_rotation_matrix[16] __attribute__((aligned(16)));
+typedef float V4_2604f0[4] __attribute__((aligned(16)));
+u8           *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
+void          FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *, void *) __asm__(
+    "FUN_L00_00260668");
+void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
+int  transform_attachment_pose(u8   *comparison_object,
+                               u8   *reference_object,
+                               void *position,
+                               void *rotation,
+                               void *transformed_position,
+                               void *transformed_rotation) __asm__("FUN_L00_002604f0");
+
+int transform_attachment_pose(u8 *a, u8 *b, void *c, void *d, void *e, void *f) __asm__(
+    "FUN_L00_002604f0");
+int transform_attachment_pose(u8   *comparison_object,
+                              u8   *reference_object,
+                              void *position,
+                              void *rotation,
+                              void *transformed_position,
+
+                              void *transformed_rotation) {
+    float     reference_basis_matrix[16] __attribute__((aligned(16)));
+    float     composed_attachment_rotation_matrix[16] __attribute__((aligned(16)));
     V4_2604f0 translation_adjustment;
-    u8 *transform_record = FUN_L00_002603d0_002604f0(reference_object);
+    u8       *transform_record = FUN_L00_002603d0_002604f0(reference_object);
     if (!transform_record)
         return 0;
     transform_vector_by_basis(transformed_position, position, reference_object + 0xC0);
     fast_vec_add(transformed_position, transformed_position, reference_object + 0x10);
     euler_rotation_matrix(composed_attachment_rotation_matrix, rotation);
     copy_matrix_rotation(reference_basis_matrix, reference_object + 0xC0);
-    multiply_matrix(composed_attachment_rotation_matrix, reference_basis_matrix, composed_attachment_rotation_matrix);
+    multiply_matrix(composed_attachment_rotation_matrix,
+                    reference_basis_matrix,
+                    composed_attachment_rotation_matrix);
     matrix_to_euler(composed_attachment_rotation_matrix, transformed_rotation);
     if (*(int *)(transform_record + 0x3C) & 4) {
         fast_vec_add(transformed_position, transformed_position, transform_record + 0x10);
-        FUN_L00_00260668_002604f0(comparison_object, reference_object, transformed_position, transformed_rotation, position, rotation);
+        FUN_L00_00260668_002604f0(comparison_object,
+                                  reference_object,
+                                  transformed_position,
+                                  transformed_rotation,
+                                  position,
+                                  rotation);
         return 1;
     }
     if (comparison_object[0x22] && comparison_object[0x22] < reference_object[0x22]) {
@@ -270,8 +322,15 @@ int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void 
 
 extern int FUN_L00_002603d0(char *);
 
-int convert_pose_to_reference_local(int x, char *o, float *a, float *c, float *b, float *d) __asm__("FUN_L00_00260668");
-int convert_pose_to_reference_local(int x, char *reference_object, float *input_position, float *input_rotation, float *output_position, float *output_rotation) {
+int convert_pose_to_reference_local(int x, char *o, float *a, float *c, float *b, float *d) __asm__(
+    "FUN_L00_00260668");
+int convert_pose_to_reference_local(int    x,
+                                    char  *reference_object,
+                                    float *input_position,
+                                    float *input_rotation,
+                                    float *output_position,
+
+                                    float *output_rotation) {
     float transposed_rotation_matrix[16];
     float position_offset[4];
     float composed_rotation_matrix[4];
@@ -286,21 +345,32 @@ int convert_pose_to_reference_local(int x, char *reference_object, float *input_
     matrix_to_euler(composed_rotation_matrix, output_rotation);
     return 1;
 }
+
 typedef float M4[16] __attribute__((aligned(16)));
+
 #include "qcopy.h"
+
 void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) __asm__("FUN_L00_00260738");
-void update_entity_matrix(char *out, OvlQuad *position_delta, void *previous_rotation, void *current_rotation) {
+void update_entity_matrix(char    *out,
+                          OvlQuad *position_delta,
+                          void    *previous_rotation,
+
+                          void *current_rotation) {
     M4 transposed_previous_rotation_matrix, current_rotation_matrix, relative_rotation_matrix;
     euler_rotation_matrix(transposed_previous_rotation_matrix, previous_rotation);
-    transpose_rotation_matrix(transposed_previous_rotation_matrix, transposed_previous_rotation_matrix);
+    transpose_rotation_matrix(transposed_previous_rotation_matrix,
+                              transposed_previous_rotation_matrix);
     euler_rotation_matrix(current_rotation_matrix, current_rotation);
-    multiply_matrix(relative_rotation_matrix, transposed_previous_rotation_matrix, current_rotation_matrix);
+    multiply_matrix(
+        relative_rotation_matrix, transposed_previous_rotation_matrix, current_rotation_matrix);
     matrix_to_euler(relative_rotation_matrix, out);
     qcopy(out + 0x10, position_delta);
 }
-extern u8 level_available[] __asm__("D_0013DD40");
+
+extern u8  level_available[] __asm__("D_0013DD40");
 extern s32 D_0013D510[] __asm__("D_0013D510");
-void unlock_planet(s32 id) __asm__("FUN_L00_002607d0");
+void       unlock_planet(s32 id) __asm__("FUN_L00_002607d0");
+
 void unlock_planet(s32 id) {
     s32 available_planet_count, i;
     available_planet_count = 0;
@@ -318,23 +388,24 @@ void unlock_planet(s32 id) {
 /* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
 
-
 #include "rnc/overlay/item_defs.h"
-extern ItemDef item_defs_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
-extern int D_L00_001B0340[] NOT_SDA;
-extern int D_L00_001C3E98[] NOT_SDA;
+
+extern ItemDef        item_defs_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
+extern int            D_L00_001B0340[] NOT_SDA;
+extern int            D_L00_001C3E98[] NOT_SDA;
 extern int D_00141408 NOT_SDA;
 extern int D_00141410 NOT_SDA;
 extern int D_00141414 NOT_SDA;
 
 extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
-void grant_inventory_item(int id, int flag) __asm__("FUN_L00_00260860");
+void      grant_inventory_item(int id, int flag) __asm__("FUN_L00_00260860");
+
 void grant_inventory_item(int id, int flag) {
     unsigned char *pa = &item_available[id];
     unsigned char *pb = &items_acquired[id];
-    int dialogue_message_index = id + 0x25;
-    int *dialogue_message_id_ptr;
-    int i;
+    int            dialogue_message_index = id + 0x25;
+    int           *dialogue_message_id_ptr;
+    int            i;
 
     if (*pa == 0) {
         dialogue_message_index = id;
@@ -351,7 +422,7 @@ void grant_inventory_item(int id, int flag) {
         *pb = 1;
         if (vendor_item_info_ptr->h8 != 0) {
             int *ammo_count_ptr = &weapon_ammo_counts[id];
-            int updated_ammo_count = vendor_item_info_ptr->h12;
+            int  updated_ammo_count = vendor_item_info_ptr->h12;
             if (updated_ammo_count < *ammo_count_ptr) {
                 updated_ammo_count = *ammo_count_ptr;
             }
@@ -389,46 +460,53 @@ void grant_inventory_item(int id, int flag) {
         }
     }
 }
+
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00261B00). */
 #include "rnc/mobys/moby.h"
 
-extern char *toad_paths[] __asm__("D_L00_001B04B0");
-extern char bolt_drop_scale_five_message[] __asm__("D_L00_001600A0");
-extern char bolt_drop_integer_scale_format[] __asm__("D_L00_001600B0");
-extern char bolt_drop_float_scale_format[] __asm__("D_L00_001600C0");
-extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
-extern s32 alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
-extern s32 D_0015EE2C_macro __asm__("D_0015EE2C") MACRO_ADDR;
-extern int D_0015EE28_macro __asm__("D_0015EE28") MACRO_ADDR;
-extern s32 D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
-extern int D_L00_0015F598;
+extern char         *toad_paths[] __asm__("D_L00_001B04B0");
+extern char          bolt_drop_scale_five_message[] __asm__("D_L00_001600A0");
+extern char          bolt_drop_integer_scale_format[] __asm__("D_L00_001600B0");
+extern char          bolt_drop_float_scale_format[] __asm__("D_L00_001600C0");
+extern f32           frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern f32           frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+extern s32           alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
+extern s32           D_0015EE2C_macro __asm__("D_0015EE2C") MACRO_ADDR;
+extern int           D_0015EE28_macro __asm__("D_0015EE28") MACRO_ADDR;
+extern s32           D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
+extern int           D_L00_0015F598;
 extern unsigned char D_L00_0015FC88_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
-extern void debug_print() __asm__("FUN_001e93b0");
-extern int FUN_L00_00261b48(int, void *, void *, void *);
+extern void          debug_print() __asm__("FUN_001e93b0");
+extern int           FUN_L00_00261b48(int, void *, void *, void *);
 extern void spawn_bolt_by_value(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");
 
-void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index) __asm__("FUN_L00_00260a88");
+void spawn_randomized_bolt_drop(struct Moby *moby,
+                                int          min_bolts,
+                                int          max_bolts,
+                                int          flags,
+                                int          path_index) __asm__("FUN_L00_00260a88");
 
-void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index)
-{
-    float base_velocity[4], position[4], velocity[4], spread[4], landing[4], path_point[4], quarter[4];
+void spawn_randomized_bolt_drop(
+
+    struct Moby *moby, int min_bolts, int max_bolts, int flags, int path_index) {
+    float base_velocity[4], position[4], velocity[4], spread[4], landing[4], path_point[4],
+        quarter[4];
     float first_root, second_root;
-    int counted;
-    int total, remaining, sum, rate, roots, ones;
-    int up_total, up_fives, down_total, up_twenties, down_twenties, down_fives, up_ones, down_fifties;
-    int down_ones, up_fifties, twenties, fives, fifties;
+    int   counted;
+    int   total, remaining, sum, rate, roots, ones;
+    int   up_total, up_fives, down_total, up_twenties, down_twenties, down_fives, up_ones,
+        down_fifties;
+    int            down_ones, up_fifties, twenties, fives, fifties;
     unsigned char *aim;
-    float time;
-    float gravity, rise, height, angle;
+    float          time;
+    float          gravity, rise, height, angle;
 
     fives = 0;
     twenties = 0;
     fifties = 0;
     clear_u64_value(base_velocity);
     if (!(flags & 0x20)) {
-        if (moby->mission != 0xFF
-            && (unsigned)((unsigned short)moby->oclass - 0x1F4) >= 0x29) {
+        if (moby->mission != 0xFF && (unsigned)((unsigned short)moby->oclass - 0x1F4) >= 0x29) {
             D_L00_0015F598 = D_L00_0015FC88_macro[moby->mission] == 0xFF;
         }
     }
@@ -459,7 +537,8 @@ void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts,
     }
     if (total < 0x1F4) {
         if (counted && D_0015EE28_macro) {
-            rate = (int)((float)scale_game_frames(0x3C) * 60.0f) * D_0015EE2C_macro / D_0015EE28_macro;
+            rate =
+                (int)((float)scale_game_frames(0x3C) * 60.0f) * D_0015EE2C_macro / D_0015EE28_macro;
             if (D_0015EEA0_macro || alternate_animation_sequence_macro) {
                 rate /= 2;
             }
@@ -472,16 +551,19 @@ void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts,
                     total *= (0xBE - rate) / 20;
                 }
                 if (D_0015EEA0_macro) {
-                    if (total > 0x3E8) total = 0x3E8;
+                    if (total > 0x3E8)
+                        total = 0x3E8;
                 } else {
-                    if (total > 0x1F4) total = 0x1F4;
+                    if (total > 0x1F4)
+                        total = 0x1F4;
                 }
             } else if (rate >= 0x12D) {
                 if (rate >= 0x160) {
                     debug_print(bolt_drop_float_scale_format, 0x3FB99999A0000000L);
                     total /= 10;
                 } else {
-                    debug_print(bolt_drop_float_scale_format, convert_integer_to_float(0x168 - rate) / 20.0f);
+                    debug_print(bolt_drop_float_scale_format,
+                                convert_integer_to_float(0x168 - rate) / 20.0f);
                     total *= (0x168 - rate) / 80;
                 }
                 if (total <= 0) {
@@ -528,37 +610,38 @@ void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts,
         down_total = 0x96;
         up_total = 3;
         if (ones + fives + twenties + fifties >= 4) {
-        if (total < down_total) {
-            do {
-                if (down_fifties) {
-                    down_fifties--;
-                    down_twenties++;
-                } else if (down_twenties) {
-                    down_twenties--;
-                    down_fives++;
-                } else if (down_fives) {
-                    down_fives--;
-                    down_ones++;
-                }
-                down_total = down_fifties * 50 + down_twenties * 20 + down_fives * 5 + down_ones;
-            } while (total < down_total && down_total >= 4);
-        }
-        up_total = 3;
-        if (up_total < total) {
-            do {
-                if (up_ones) {
-                    up_ones--;
-                    up_fives++;
-                } else if (up_fives) {
-                    up_fives--;
-                    up_twenties++;
-                } else if (up_twenties) {
-                    up_twenties--;
-                    up_fifties++;
-                }
-                up_total = up_fifties * 50 + up_twenties * 20 + up_fives * 5 + up_ones;
-            } while (up_total < total && up_total < 0x96);
-        }
+            if (total < down_total) {
+                do {
+                    if (down_fifties) {
+                        down_fifties--;
+                        down_twenties++;
+                    } else if (down_twenties) {
+                        down_twenties--;
+                        down_fives++;
+                    } else if (down_fives) {
+                        down_fives--;
+                        down_ones++;
+                    }
+                    down_total =
+                        down_fifties * 50 + down_twenties * 20 + down_fives * 5 + down_ones;
+                } while (total < down_total && down_total >= 4);
+            }
+            up_total = 3;
+            if (up_total < total) {
+                do {
+                    if (up_ones) {
+                        up_ones--;
+                        up_fives++;
+                    } else if (up_fives) {
+                        up_fives--;
+                        up_twenties++;
+                    } else if (up_twenties) {
+                        up_twenties--;
+                        up_fifties++;
+                    }
+                    up_total = up_fifties * 50 + up_twenties * 20 + up_fives * 5 + up_ones;
+                } while (up_total < total && up_total < 0x96);
+            }
         }
         if ((down_total - total) < (total - up_total)) {
             ones = down_ones;

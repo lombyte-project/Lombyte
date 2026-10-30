@@ -5,26 +5,29 @@
 #include "rnc/rendering/render_globals.h"
 
 struct HudSlot {
-    u8 pad_0[0x18];
+    u8  pad_0[0x18];
     s32 unk18;
 };
+
 extern s32 hud_msg_count __asm__("D_0015F680");
-extern u8 hud_msg_text1[] __asm__("D_001993D8");
-extern u8 hud_msg_text2[] __asm__("D_00199428");
+extern u8  hud_msg_text1[] __asm__("D_001993D8");
+extern u8  hud_msg_text2[] __asm__("D_00199428");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern s32 draw_framed_text() __asm__("func_00201200");
-void update_hud(void) __asm__("FUN_001ff780");
+void       update_hud(void) __asm__("FUN_001ff780");
 
 extern s32 D_0015F684;
+
 #include "rnc/ui/hud/update_hud_globals.h"
+
 void update_hud(void) {
-    s32 update_fn;
+    s32   update_fn;
     short new_var2;
-    u8 *slot;
-    s32 text_color;
-    s32 raised_alpha;
-    s32 lowered_alpha;
-    s32 remaining;
+    u8   *slot;
+    s32   text_color;
+    s32   raised_alpha;
+    s32   lowered_alpha;
+    s32   remaining;
     if (hud_state.unk30 == 0) {
         goto block_2;
     }

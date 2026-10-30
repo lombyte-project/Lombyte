@@ -1,4 +1,5 @@
 int menu_update_noop(void) __asm__("FUN_0021bd98");
+
 int menu_update_noop(void) {
     return 0;
 }

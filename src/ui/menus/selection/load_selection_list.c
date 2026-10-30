@@ -1,10 +1,12 @@
 #include "rnc/game/item_state.h"
+
 /* Ported from rac1-decomp (src/game/pause.c, func_0021D9C8). */
 typedef struct {
     char pad[0x30];
-    int list[8]; /* 0x30 */
-    int idx;     /* 0x50 */
+    int  list[8]; /* 0x30 */
+    int  idx;     /* 0x50 */
 } SelList;
+
 /* Reload the 8-entry list at +0x30 from D_00141EA0 (the reverse of
    func_0021DA60 below), then leave idx at +0x50 on the first empty entry,
    wrapped to 0..7. Indexing sel_list->list directly in both loops (no local

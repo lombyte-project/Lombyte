@@ -22,7 +22,8 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
 
 extern char moby_segment_puff_local_endpoint_table[] __asm__("D_L04_001D2C90");
-extern void spawn_smoke_puff_trail_with_endpoint_bursts(void *, void *, void *, int, float, float) __asm__("FUN_L04_002c41e0");
+extern void spawn_smoke_puff_trail_with_endpoint_bursts(
+    void *, void *, void *, int, float, float) __asm__("FUN_L04_002c41e0");
 
 extern short moby_segment_puff_scale_multiplier __asm__("D_L04_001618B0") __attribute__((sda));
 void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) __asm__("FUN_L04_002c45b8");
@@ -40,12 +41,18 @@ void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) {
     second_world_position[3] = 1.0f;
     transform_vector_by_basis(second_world_position, second_world_position, moby + 0xC0);
     fast_vec_add(second_world_position, second_world_position, moby + 0x10);
-    spawn_smoke_puff_trail_with_endpoint_bursts(moby, first_world_position, second_world_position, k, *(float *)(pi + 0xC) * *(float *)&moby_segment_puff_scale_multiplier,
-                     *(float *)(pj + 0xC) * *(float *)&moby_segment_puff_scale_multiplier);
+    spawn_smoke_puff_trail_with_endpoint_bursts(
+        moby,
+        first_world_position,
+        second_world_position,
+        k,
+        *(float *)(pi + 0xC) * *(float *)&moby_segment_puff_scale_multiplier,
+        *(float *)(pj + 0xC) * *(float *)&moby_segment_puff_scale_multiplier);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5A50), where it is exact; names translated to the US level program. */
 
-extern void spawn_moby_table_segment_puffs(char *a, int i, int j, int k) __asm__("FUN_L04_002c45b8");
+extern void
+spawn_moby_table_segment_puffs(char *a, int i, int j, int k) __asm__("FUN_L04_002c45b8");
 
 extern short D_L04_001618C0 __attribute__((sda));
 extern short D_L04_001618C4 __attribute__((sda));
@@ -55,7 +62,7 @@ extern short D_L04_001618D0 __attribute__((sda));
 extern short D_L04_001618D4 __attribute__((sda));
 extern short D_L04_001618D8 __attribute__((sda));
 extern short D_L04_001618DC __attribute__((sda));
-void spawn_moby_table_puff_pattern(char *moby) __asm__("FUN_L04_002c46d0");
+void         spawn_moby_table_puff_pattern(char *moby) __asm__("FUN_L04_002c46d0");
 
 void spawn_moby_table_puff_pattern(char *moby) {
     spawn_moby_table_segment_puffs(moby, 0, 1, *(int *)&D_L04_001618C0);
@@ -79,18 +86,19 @@ void spawn_moby_table_puff_pattern(char *moby) {
 
 /* Vars of the class 0xB8 moby spawned by FUN_L04_002aee30. */
 typedef struct {
-    Vec4f dir;                     /* 0x00: travel direction (also gives the yaw) */
-    f32 spin;                      /* 0x10: random turn rate, +-90 degrees per frame unit */
-    s32 unk14;
-    struct Moby *owner;            /* 0x18: the moby that fired it */
-    s16 time;                      /* 0x1C: frames left */
-    s16 time_max;                  /* 0x1E: lifetime */
-    f32 hero_dist;                 /* 0x20: distance to the hero at spawn */
-    s32 unk24;
-    s32 unk28;
+    Vec4f        dir;  /* 0x00: travel direction (also gives the yaw) */
+    f32          spin; /* 0x10: random turn rate, +-90 degrees per frame unit */
+    s32          unk14;
+    struct Moby *owner;     /* 0x18: the moby that fired it */
+    s16          time;      /* 0x1C: frames left */
+    s16          time_max;  /* 0x1E: lifetime */
+    f32          hero_dist; /* 0x20: distance to the hero at spawn */
+    s32          unk24;
+    s32          unk28;
 } ShotVars;
 
-extern void spawn_source_attached_fading_effect_particle(struct Moby *, int color, int life, int, float size) __asm__("FUN_L00_0026daa0");
+extern void spawn_source_attached_fading_effect_particle(
+    struct Moby *, int color, int life, int, float size) __asm__("FUN_L00_0026daa0");
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 /*
@@ -98,16 +106,18 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
  * `life` frames, with two glows (bluish, or reddish for an owner of class
  * 0xFF, which also keeps full scale). Returns the new moby or 0.
  */
-struct Moby *spawn_class_b8_projectile(struct Moby *owner, void *pos, void *dir, int life) __asm__("FUN_L04_002aee30");
+struct Moby *spawn_class_b8_projectile(struct Moby *owner,
+                                       void        *pos,
+                                       void        *dir,
+                                       int          life) __asm__("FUN_L04_002aee30");
 
-struct Moby *spawn_class_b8_projectile(struct Moby *owner, void *pos, void *dir, int life)
-{
+struct Moby *spawn_class_b8_projectile(struct Moby *owner, void *pos, void *dir, int life) {
     struct Moby *spawned_moby;
-    ShotVars *vars;
-    OvlQuad pos_q;
-    OvlQuad dir_q;
-    Vec4f *position_copy = (Vec4f *)&pos_q;
-    Vec4f *direction_copy = (Vec4f *)&dir_q;
+    ShotVars    *vars;
+    OvlQuad      pos_q;
+    OvlQuad      dir_q;
+    Vec4f       *position_copy = (Vec4f *)&pos_q;
+    Vec4f       *direction_copy = (Vec4f *)&dir_q;
 
     pos_q = *(OvlQuad *)pos;
     dir_q = *(OvlQuad *)dir;
@@ -125,7 +135,8 @@ struct Moby *spawn_class_b8_projectile(struct Moby *owner, void *pos, void *dir,
         spawned_moby->rot.z = fast_arc_tan(direction_copy->x, direction_copy->y);
         qcopy(&spawned_moby->pos, position_copy);
         qcopy(&vars->dir, direction_copy);
-        vars->spin = random_float_between(-(frame_time_macro * 1.5707964f), frame_time_macro * 1.5707964f);
+        vars->spin =
+            random_float_between(-(frame_time_macro * 1.5707964f), frame_time_macro * 1.5707964f);
         vars->unk14 = 0;
         vars->time = life;
         vars->time_max = life;
@@ -133,11 +144,15 @@ struct Moby *spawn_class_b8_projectile(struct Moby *owner, void *pos, void *dir,
         vars->unk24 = 0;
         vars->unk28 = 0;
         if (owner->oclass == 0xFF) {
-            spawn_source_attached_fading_effect_particle(spawned_moby, 0x2F7F4F4F, life * 5 / 4, -1, 100000.0f);
-            spawn_source_attached_fading_effect_particle(spawned_moby, 0x4F7F7F7F, life * 5 / 4, -1, 40000.0f);
+            spawn_source_attached_fading_effect_particle(
+                spawned_moby, 0x2F7F4F4F, life * 5 / 4, -1, 100000.0f);
+            spawn_source_attached_fading_effect_particle(
+                spawned_moby, 0x4F7F7F7F, life * 5 / 4, -1, 40000.0f);
         } else {
-            spawn_source_attached_fading_effect_particle(spawned_moby, 0x2F4F7F7F, life * 5 / 4, -1, 100000.0f);
-            spawn_source_attached_fading_effect_particle(spawned_moby, 0x4F6F7F7F, life * 5 / 4, -1, 40000.0f);
+            spawn_source_attached_fading_effect_particle(
+                spawned_moby, 0x2F4F7F7F, life * 5 / 4, -1, 100000.0f);
+            spawn_source_attached_fading_effect_particle(
+                spawned_moby, 0x4F6F7F7F, life * 5 / 4, -1, 40000.0f);
         }
         update_entity(spawned_moby);
     }
@@ -148,20 +163,22 @@ struct Moby *spawn_class_b8_projectile(struct Moby *owner, void *pos, void *dir,
 typedef struct {
     union {
         u128 q;
-        struct { f32 x, y, z, w; } v;
-    } dir;                         /* 0x00: unit direction; z/w overwritten with 1 and a range */
-    struct Moby *self;             /* 0x10: moby to ignore */
-    s32 mask;                      /* 0x14: collision classes */
-    u8 unk18;
-    u8 unk19;
-    s16 oclass;                    /* 0x1A */
-    f32 radius;                    /* 0x1C */
-    s32 unk20;
+        struct {
+            f32 x, y, z, w;
+        } v;
+    } dir;             /* 0x00: unit direction; z/w overwritten with 1 and a range */
+    struct Moby *self; /* 0x10: moby to ignore */
+    s32          mask; /* 0x14: collision classes */
+    u8           unk18;
+    u8           unk19;
+    s16          oclass; /* 0x1A */
+    f32          radius; /* 0x1C */
+    s32          unk20;
 } CollisionProbe;
 
-extern f32 D_L04_00166F40[];                             /* arena centre */
-extern u128 D_L04_00173FE0;                              /* hit position of the last collision_line */
-extern u128 coll_hit_normal[] __asm__("D_L04_00174000");  /* normal of the last collision_line hit */
+extern f32  D_L04_00166F40[]; /* arena centre */
+extern u128 D_L04_00173FE0;   /* hit position of the last collision_line */
+extern u128 coll_hit_normal[] __asm__("D_L04_00174000"); /* normal of the last collision_line hit */
 extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
 
 /*
@@ -172,17 +189,16 @@ extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
  */
 void update_class_b8_projectile(struct Moby *moby) __asm__("FUN_L04_002af058");
 
-void update_class_b8_projectile(struct Moby *moby)
-{
-    Vec4 old;
-    CollisionProbe pr;
-    Vec4 push;
-    Vec4 random_vector;
-    ShotVars *v = (ShotVars *)moby->pvars;
+void update_class_b8_projectile(struct Moby *moby) {
+    Vec4            old;
+    CollisionProbe  pr;
+    Vec4            push;
+    Vec4            random_vector;
+    ShotVars       *v = (ShotVars *)moby->pvars;
     CollisionProbe *probe;
-    f32 range;
-    f32 hero_distance;
-    s32 i;
+    f32             range;
+    f32             hero_distance;
+    s32             i;
 
     range = 64.0f;
     if (v->owner->oclass == 0xFF)
@@ -199,8 +215,8 @@ void update_class_b8_projectile(struct Moby *moby)
     if (hero_distance < v->hero_dist)
         v->unk24 = 1;
     v->hero_dist = hero_distance;
-    if (moby->pos.x < 0.0f || moby->pos.y < 0.0f || moby->pos.z < 0.0f
-        || range < vector_distance_xy(&moby->pos, D_L04_00166F40)) {
+    if (moby->pos.x < 0.0f || moby->pos.y < 0.0f || moby->pos.z < 0.0f ||
+        range < vector_distance_xy(&moby->pos, D_L04_00166F40)) {
         mark_moby_for_removal(moby);
         return;
     }
@@ -245,9 +261,15 @@ void update_class_b8_projectile(struct Moby *moby)
             reflect_vector(&random_vector, v, coll_hit_normal);
             fast_vec_normalize(&push, &push, fast_vec_length(&random_vector) * 0.5f);
             fast_vec_add(&push, &random_vector, &push);
-            fast_vec_normalize(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
-            FUN_L00_0026dd20(&moby->pos, &push, 0x7F2F4F6F,
-                             random_int_between(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
+            fast_vec_normalize(
+                &push,
+                &push,
+                random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
+            FUN_L00_0026dd20(&moby->pos,
+                             &push,
+                             0x7F2F4F6F,
+                             random_int_between(scale_game_frames(10), scale_game_frames(15)),
+                             30000.0f);
         }
     }
     mark_moby_for_removal(moby);
@@ -258,11 +280,10 @@ void update_class_b8_projectile(struct Moby *moby)
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D48B8), where it is exact; names translated to the US level program. */
 
-
 void *spawn_moby_attachment(char *source_moby, char *spawn_position) __asm__("FUN_L04_002ce080");
 
 void *spawn_moby_attachment(char *source_moby, char *spawn_position) {
-    char position_copy[16];
+    char  position_copy[16];
     char *position_copy_ptr = position_copy;
     char *spawned_moby;
     *(OvlQuad *)position_copy = *(OvlQuad *)spawn_position;

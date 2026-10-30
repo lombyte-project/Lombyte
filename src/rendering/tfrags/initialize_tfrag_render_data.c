@@ -20,13 +20,13 @@ typedef struct {
 } TfragMaterialPacket;
 
 typedef struct {
-    u8 pad0[0x10];
+    u8  pad0[0x10];
     u8 *data;
-    u8 pad14[8];
+    u8  pad14[8];
     u16 material_packet_offset;
-    u8 pad1E[0xA];
-    u8 count;
-    u8 pad29[0x17];
+    u8  pad1E[0xA];
+    u8  count;
+    u8  pad29[0x17];
 } TfragRenderRecord;
 
 typedef struct {
@@ -35,24 +35,24 @@ typedef struct {
     f32 scale;
 } TfragRenderHeader;
 
-extern s32 tfrag_render_record_count __asm__("D_00160E90");
-extern f32 tfrag_render_ranges[3] __asm__("D_00160EA0");
+extern s32                tfrag_render_record_count __asm__("D_00160E90");
+extern f32                tfrag_render_ranges[3] __asm__("D_00160EA0");
 extern TfragRenderRecord *tfrag_render_records __asm__("D_00160E8C");
-extern s32 log2dim(s32) __asm__("func_001F97A0");
-extern void set_tfrag_dists(void) __asm__("func_00233068");
+extern s32                log2dim(s32) __asm__("func_001F97A0");
+extern void               set_tfrag_dists(void) __asm__("func_00233068");
+
+void initialize_tfrag_render_data(
+    TfragRenderHeader *header, ResidentRenderTextureDefinition *textures) __asm__("FUN_002040e0");
 
 void initialize_tfrag_render_data(TfragRenderHeader *header,
-                                  ResidentRenderTextureDefinition *textures)
-    __asm__("FUN_002040e0");
 
-void initialize_tfrag_render_data(TfragRenderHeader *header,
                                   ResidentRenderTextureDefinition *textures) {
     TfragRenderRecord *records;
-    f32 scale;
-    s32 record_index;
-    s32 packet_index;
-    s32 record_count;
-    s32 index;
+    f32                scale;
+    s32                record_index;
+    s32                packet_index;
+    s32                record_count;
+    s32                index;
 
     tfrag_render_record_count = header->count;
     scale = *(f32 *)((u8 *)header + 8);
@@ -71,24 +71,24 @@ void initialize_tfrag_render_data(TfragRenderHeader *header,
              packet_index++) {
             TfragRenderRecord *record =
                 (TfragRenderRecord *)((record_index << 6) + (s32)tfrag_render_records);
-            u64 *packet = (u64 *)(record->data + record->material_packet_offset +
-                                  packet_index * 0x50);
+            u64 *packet =
+                (u64 *)(record->data + record->material_packet_offset + packet_index * 0x50);
             s32 texture_index = ((TfragMaterialPacket *)packet)->texture_index;
             s32 draw_high = ((TfragMaterialPacket *)packet)->draw_high;
             s32 draw_shift = ((TfragMaterialPacket *)packet)->draw_shift;
             s32 material_base = ((TfragMaterialPacket *)packet)->material_base;
             s32 material_shift = ((TfragMaterialPacket *)packet)->material_shift;
             ResidentRenderTextureDefinition *texture = &textures[texture_index];
-            s32 bits = (u16)texture->width << 16;
-            s32 width_units_64 = bits >> 22;
-            s32 width_units_128 = bits >> 23;
-            s64 width_log2;
-            s32 height_log2;
-            s32 gs_block_base;
-            u64 tex0_word;
-            u64 tex1_word;
-            u64 clamp_word;
-            u64 mip_word;
+            s32                              bits = (u16)texture->width << 16;
+            s32                              width_units_64 = bits >> 22;
+            s32                              width_units_128 = bits >> 23;
+            s64                              width_log2;
+            s32                              height_log2;
+            s32                              gs_block_base;
+            u64                              tex0_word;
+            u64                              tex1_word;
+            u64                              clamp_word;
+            u64                              mip_word;
 
             if (width_units_64 <= 0) {
                 width_units_64 = 1;

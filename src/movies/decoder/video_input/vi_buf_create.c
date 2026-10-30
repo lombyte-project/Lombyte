@@ -11,22 +11,23 @@ typedef struct {
     s32 pos;
     s32 len;
 } TimeStamp;
+
 typedef struct {
-    u128 *data;
-    u128 *tag;
-    s32 n;
-    s32 dmaStart;
-    s32 dmaN;
-    s32 readBytes;
-    s32 buffSize;
-    u8 pad1C[0x24];
-    s32 sema;
-    s32 isActive;
-    s64 totalBytes;
+    u128      *data;
+    u128      *tag;
+    s32        n;
+    s32        dmaStart;
+    s32        dmaN;
+    s32        readBytes;
+    s32        buffSize;
+    u8         pad1C[0x24];
+    s32        sema;
+    s32        isActive;
+    s64        totalBytes;
     TimeStamp *ts;
-    s32 n_ts;
-    s32 count_ts;
-    s32 wt_ts;
+    s32        n_ts;
+    s32        count_ts;
+    s32        wt_ts;
 } ViBuf;
 
 #define VIBUF_ELM_SIZE 2048
@@ -35,10 +36,12 @@ typedef struct {
 
 extern s32 CreateSema(struct SemaParam *);
 
-s32 vi_buf_create(ViBuf *f, u128 *data, u128 *tag, s32 size, TimeStamp *ts,
-                  s32 n_ts) __asm__("FUN_0023bc48");
+s32 vi_buf_create(ViBuf *f, u128 *data, u128 *tag, s32 size, TimeStamp *ts, s32 n_ts) __asm__(
+    "FUN_0023bc48");
 
-s32 vi_buf_create(ViBuf *video_input_buffer, u128 *data, u128 *tag, s32 size, TimeStamp *ts, s32 n_ts) {
+s32 vi_buf_create(
+
+    ViBuf *video_input_buffer, u128 *data, u128 *tag, s32 size, TimeStamp *ts, s32 n_ts) {
     struct SemaParam param;
 
     video_input_buffer->data = data;

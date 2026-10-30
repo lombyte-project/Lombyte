@@ -8,12 +8,13 @@ extern s32 snd_stop_all_sounds() __asm__("func_0012E3B8");
 extern s32 snd_reset_state_and_flush_commands() __asm__("func_0012EB00");
 
 void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
+
 void sound_stop_all_sounds(void) {
-    s32 i;
+    s32        i;
     VoicePool *sound_state;
-    u128 *q;
-    s32 voice_clear_cursor;
-    s32 end;
+    u128      *q;
+    s32        voice_clear_cursor;
+    s32        end;
 
     snd_reset_state_and_flush_commands();
     snd_flush_sound_commands();

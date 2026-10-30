@@ -2,8 +2,13 @@
 
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
+
 extern s32 _dispRefImage(struct MpegDecoder *mpeg, struct MpegRefImage *arg1, s32 arg2);
-extern s32 _dispRefImageField(struct MpegDecoder *mpeg, struct MpegRefImage *arg1, struct MpegRefImage *arg2, s32 arg3);
+extern s32 _dispRefImageField(struct MpegDecoder  *mpeg,
+                              struct MpegRefImage *arg1,
+                              struct MpegRefImage *arg2,
+                              s32                  arg3);
+
 void _outputFrame(struct MpegDecoder *mpeg, s32 frame_counter, s32 output_enabled) {
     struct MpegRefImage *frame_image;
     struct MpegRefImage *top_field;

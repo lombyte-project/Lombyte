@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
+
 extern s32 D_0015F330;
 extern s32 D_0015F334;
 extern s32 D_0015F360 __attribute__((sda));
@@ -8,6 +9,7 @@ extern s32 D_0015F360 __attribute__((sda));
 void reset_draw_globals(void) __asm__("FUN_001f37e8");
 
 extern s32 moby_occl_cluster_count_gp __asm__("D_0016119C") __attribute__((sda));
+
 void reset_draw_globals(void) {
     draw_callback_count = 0;
     draw_callback3_count = 0;

@@ -16,22 +16,20 @@
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/mobys/moby.h"
 
-
-
 /* Per-frame update of the pickup/hit state flags from the state code. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_00209D98), where it is exact; names translated to the US level program. */
 
-extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int  coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
-extern int hero_set_state(int, int) __asm__("FUN_L16_0021e398");
+extern int  hero_set_state(int, int) __asm__("FUN_L16_0021e398");
 
 void apply_hero_ground_material_effects(void) __asm__("FUN_L16_002097a0");
 
 void apply_hero_ground_material_effects(void) {
     struct Hero *hero_data = &hero;
-    int keep = hero_data->ground_sound_class;
-    int saved_ground_type = hero_data->ground_type;
-    int level_index;
+    int          keep = hero_data->ground_sound_class;
+    int          saved_ground_type = hero_data->ground_type;
+    int          level_index;
     fast_mem_zero16(&hero_data->ground_type, 0x10);
     hero_data->ground_sound_class = keep;
     hero_data->ground_type = -1;
@@ -57,7 +55,7 @@ void apply_hero_ground_material_effects(void) {
     }
     if (saved_ground_type == 0) {
         struct Hero *q = &hero;
-        float water_depth = q->water_surface_z - q->ground_z.f;
+        float        water_depth = q->water_surface_z - q->ground_z.f;
         q->water_depth = water_depth;
         if (water_depth < 0.85f && 0.25f < water_depth)
             q->wading = 1;
@@ -128,7 +126,8 @@ void apply_hero_ground_material_effects(void) {
         }
         hero_ptr = &hero;
         if (hero_ptr->selector_13 != 0 && hero_ptr->state.current != 0x7F) {
-            if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.25f)) < 1.0f) {
+            if (absolute_float(hero_ptr->water_surface_z - (hero_ptr->motion.pos.f[2] + 0.25f)) <
+                1.0f) {
                 if (hero_ptr->water_surface_z - hero_ptr->motion.pos.f[2] > 0.0f) {
                     if (hero_ptr->motion.displacement.f[2] < 0.0f) {
                         exit_hero_vehicle_mode_if_mode_three();
@@ -140,7 +139,6 @@ void apply_hero_ground_material_effects(void) {
     }
 }
 
-
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
@@ -151,29 +149,34 @@ extern void FUN_L00_0025f730(void *a, float x);
 void compose_and_limit_hero_velocity(void) __asm__("FUN_L16_0020f8b0");
 
 void compose_and_limit_hero_velocity(void) {
-    char normalized_vector[16];
+    char  normalized_vector[16];
     char *accumulated_vector = D_0013E533 + 0x158D;
     char *normalization_source;
     qcopy(accumulated_vector, accumulated_vector - 0x670);
     normalization_source = accumulated_vector - 0x770;
-    fast_vec_normalize(normalized_vector, normalization_source, *(float *)(normalization_source + 0x194));
+    fast_vec_normalize(
+        normalized_vector, normalization_source, *(float *)(normalization_source + 0x194));
     fast_vec_add(accumulated_vector, accumulated_vector, normalized_vector);
     qcopy(accumulated_vector - 0x690, accumulated_vector);
-    FUN_L00_0025f730(accumulated_vector - 0x690, *(float *)(normalization_source + 0x85C) + *(float *)(normalization_source + 0x868));
+    FUN_L00_0025f730(accumulated_vector - 0x690,
+                     *(float *)(normalization_source + 0x85C) +
+                         *(float *)(normalization_source + 0x868));
 }
+
 typedef union {
     OvlQuad q;
-    f32 f[4];
+    f32     f[4];
 } V_u;
+
 extern u8 D_L16_00174240[] NOT_SDA;
 extern u8 D_L16_00174260[] NOT_SDA;
 
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
-s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
-f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
+s32  collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
+s32  coll_sound_class(void) __asm__("FUN_L00_001f3608");
+f32  resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
-f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
+f32  compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 void FUN_L00_002334d0(void *, void *, f32);
@@ -185,7 +188,8 @@ extern CollisionHit HH __asm__("D_L16_00174240") NOT_SDA;
 void update_hero_ground_contact(void) __asm__("FUN_L16_0020ffb0");
 
 void update_hero_ground_contact(void) {
-    V_u collision_ray_endpoint, ground_probe_endpoint, ground_offset_or_angles, side_probe_endpoint, unused_side_probe_endpoint, probe_surface_angles, normalized_hit_normal;
+    V_u collision_ray_endpoint, ground_probe_endpoint, ground_offset_or_angles, side_probe_endpoint,
+        unused_side_probe_endpoint, probe_surface_angles, normalized_hit_normal;
     f32 f;
     s32 collision_sound_class;
     s32 i;
@@ -216,8 +220,10 @@ void update_hero_ground_contact(void) {
     if (hero.state.control_mode == 2) {
         ground_probe_start_offset = hero.capsule_radius * 2.9f;
     }
-    hero_get_collision_ray_endpoints(&ground_probe_endpoint, &collision_ray_endpoint, k, ground_probe_start_offset, -48.0f);
-    if (collision_line(&ground_probe_endpoint, &collision_ray_endpoint, 2, (s32)hero.moby, 0) == 0) {
+    hero_get_collision_ray_endpoints(
+        &ground_probe_endpoint, &collision_ray_endpoint, k, ground_probe_start_offset, -48.0f);
+    if (collision_line(&ground_probe_endpoint, &collision_ray_endpoint, 2, (s32)hero.moby, 0) ==
+        0) {
         goto tail;
     }
     collision_sound_class = coll_sound_class();
@@ -227,11 +233,13 @@ void update_hero_ground_contact(void) {
     hero.ground_sound_class = collision_sound_class;
     hero.ground_type = collision_hit_material();
     if (hero.ground_type == 0) {
-        hero.water_surface_z = resolve_camera_surface_height(D_L16_00174260, (u8 *)&hero.water_surface_normal);
+        hero.water_surface_z =
+            resolve_camera_surface_height(D_L16_00174260, (u8 *)&hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
             hero.in_water_frames = 1;
         }
-        if (collision_line(&ground_probe_endpoint, &collision_ray_endpoint, 0x24, (s32)hero.moby, 0) == 0) {
+        if (collision_line(
+                &ground_probe_endpoint, &collision_ray_endpoint, 0x24, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
         collision_sound_class = coll_sound_class();
@@ -243,7 +251,8 @@ void update_hero_ground_contact(void) {
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = HH.point.f[2];
         ground_probe_endpoint.f[2] = HH.point.f[2] - 0.01f;
-        if (collision_line(&ground_probe_endpoint, &collision_ray_endpoint, 4, (s32)hero.moby, 0) == 0) {
+        if (collision_line(&ground_probe_endpoint, &collision_ray_endpoint, 4, (s32)hero.moby, 0) ==
+            0) {
             goto d1;
         }
     }
@@ -277,7 +286,8 @@ void update_hero_ground_contact(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 || hero.state.control_mode == 0x16) {
+            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 ||
+                hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = HH.moby;
             }
@@ -304,7 +314,8 @@ d1:
         fast_vec_scale((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        fast_vec_sub((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.gravity_point, (u8 *)&hero.motion.pos);
+        fast_vec_sub(
+            (u8 *)&hero.gravity_dir, (u8 *)&hero.motion.gravity_point, (u8 *)&hero.motion.pos);
         fast_vec_normalize((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, 1.0f);
         break;
     }
@@ -316,7 +327,8 @@ d1:
     hero.unk2C8.i[1] = 0;
     hero.unk2C0.i[0] = 0;
     hero.unk2C0.i[1] = 0;
-    if (hero.state.control_mode == 0xF || hero.state.control_mode == 0x15 || hero.state.control_mode == 6 || hero.state.control_mode == 4 ||
+    if (hero.state.control_mode == 0xF || hero.state.control_mode == 0x15 ||
+        hero.state.control_mode == 6 || hero.state.control_mode == 4 ||
         hero.state.control_mode == 5 || hero.state.control_mode == 3) {
         return;
     }
@@ -336,8 +348,10 @@ d1:
             side_probe_angle = -side_probe_angle;
         }
         transform_hero_polar_offset_to_world(&side_probe_endpoint, 0.2f, side_probe_angle, 0.45f);
-        transform_hero_polar_offset_to_world(&unused_side_probe_endpoint, 0.2f, side_probe_angle, -0.45f);
-        if (collision_line(&side_probe_endpoint, &collision_ray_endpoint, 0x22, (s32)hero.moby, 0)) {
+        transform_hero_polar_offset_to_world(
+            &unused_side_probe_endpoint, 0.2f, side_probe_angle, -0.45f);
+        if (collision_line(
+                &side_probe_endpoint, &collision_ray_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < absolute_float(f)) {
@@ -345,10 +359,12 @@ d1:
             }
             sceVu0Normalize(&normalized_hit_normal, (u8 *)&HH.normal_x);
             compute_rotated_vector_angles(&normalized_hit_normal, &probe_surface_angles);
-            if (-0.78539819f < probe_surface_angles.f[1] && probe_surface_angles.f[1] < 0.78539819f) {
+            if (-0.78539819f < probe_surface_angles.f[1] &&
+                probe_surface_angles.f[1] < 0.78539819f) {
                 hero.unk2C8.f[i] = probe_surface_angles.f[1];
             }
-            if (-0.78539819f < probe_surface_angles.f[0] && probe_surface_angles.f[0] < 0.78539819f) {
+            if (-0.78539819f < probe_surface_angles.f[0] &&
+                probe_surface_angles.f[0] < 0.78539819f) {
                 hero.unk2D0.f[i] = probe_surface_angles.f[0];
             }
         } else {
@@ -361,28 +377,30 @@ d1:
 /* Adapted from the exact FUN_L00_002133a8 (src/overlays/shared/hero/hero_check_damage.c): L16 adds the mode-0x16 v-offset branch, the 0x15/0x16 range test and a 0x5f collision arm, and its own level data. */
 
 typedef unsigned int u128_2133a8 __attribute__((mode(TI), aligned(16)));
+
 typedef union {
     u128_2133a8 q;
-    f32 f[4];
+    f32         f[4];
 } V_2133a8;
+
 extern void FUN_L00_002347c0(void);
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00233810(void *, void *, f32);
 extern void FUN_L00_002334d0(void *, void *, f32);
-extern s32 coll1_2133a8(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
-extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
-extern s32 FUN_L00_001f3170(void *, f32);
+extern s32  coll1_2133a8(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
+extern s32  rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
+extern s32  FUN_L00_001f3170(void *, f32);
 extern u128_2133a8 D_L16_00174270[] NOT_SDA;
-s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L16_00210b60");
+s32                resolve_hero_position_collisions(s32 mode) __asm__("FUN_L16_00210b60");
 
 s32 resolve_hero_position_collisions(s32 mode) {
-    V_2133a8 old;
-    V_2133a8 collision_position_offset;
-    V_2133a8 resolved_position_delta;
-    s32 mask;
-    s32 i;
+    V_2133a8     old;
+    V_2133a8     collision_position_offset;
+    V_2133a8     resolved_position_delta;
+    s32          mask;
+    s32          i;
     u128_2133a8 *collision_output;
-    f32 collision_extent_or_displacement_length;
+    f32          collision_extent_or_displacement_length;
     if (hero.collision_off_frames != 0) {
         return 1;
     }
@@ -395,13 +413,15 @@ s32 resolve_hero_position_collisions(s32 mode) {
     if (hero.state.control_mode != 0x11) {
         if (hero.state.control_mode == 0x16) {
             transform_hero_local_offset_to_world(&collision_position_offset, 0.0f, 0.0f, 0.7f);
-            fast_vec_sub(&collision_position_offset, &collision_position_offset, &hero.motion.pos.q);
+            fast_vec_sub(
+                &collision_position_offset, &collision_position_offset, &hero.motion.pos.q);
         } else if (hero.gravity_mode != 0 || hero.unk1F8 != 0) {
             if (hero.gravity_mode == 1 || hero.unk1F8 != 0 ||
                 (unsigned)(hero.state.control_mode - 0x15) < 2) {
                 FUN_L00_00233810(&collision_position_offset, &collision_position_offset, 0.6f);
             } else {
-                FUN_L00_002334d0(&collision_position_offset, &collision_position_offset, -hero.capsule_bottom);
+                FUN_L00_002334d0(
+                    &collision_position_offset, &collision_position_offset, -hero.capsule_bottom);
             }
         } else {
             collision_position_offset.f[2] = hero.capsule_bottom;
@@ -431,7 +451,11 @@ s32 resolve_hero_position_collisions(s32 mode) {
             if (collision_extent_or_displacement_length < 0.05f) {
                 collision_extent_or_displacement_length = 0.05f;
             }
-            collision_result = rig_probe(&hero.motion.pos.q, mask, hero.capsule_radius, ((s32)hero.moby), collision_extent_or_displacement_length);
+            collision_result = rig_probe(&hero.motion.pos.q,
+                                         mask,
+                                         hero.capsule_radius,
+                                         ((s32)hero.moby),
+                                         collision_extent_or_displacement_length);
             if (!(collision_result | FUN_L00_001f3170(&hero.motion.pos.q, hero.capsule_radius)))
                 break;
         }
@@ -459,7 +483,8 @@ s32 resolve_hero_position_collisions(s32 mode) {
                 resolved_position_delta.f[2] = 512.0f;
             else if (resolved_position_delta.f[2] < -512.0f)
                 resolved_position_delta.f[2] = -512.0f;
-            fast_vec_normalize(&resolved_position_delta, &resolved_position_delta, hero.capsule_radius);
+            fast_vec_normalize(
+                &resolved_position_delta, &resolved_position_delta, hero.capsule_radius);
             fast_vec_add(&hero.motion.pos.q, &old, &resolved_position_delta);
         }
         return -1;
@@ -467,89 +492,91 @@ s32 resolve_hero_position_collisions(s32 mode) {
     return 1;
 }
 
-
-
 #include "qcopy.h"
 
 /* Integrate player motion, resolve contacts, and measure the resulting movement. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_002116B0), where it is exact; names translated to the US level program. */
 
-typedef union { OvlQuad q; f32 f[4]; } V;
+typedef union {
+    OvlQuad q;
+    f32     f[4];
+} V;
 
 typedef struct {
-    char pad00[0x80];
-    float position[4];
-    float rotation[4];
-    char padA0[0x40];
-    float velocity[4];
-    float contact[4];
-    float external[4];
-    float delta[4];
-    float vertical_delta[4];
-    float horizontal_delta[4];
-    float frame_delta[4];
-    char pad150[0x10];
-    float speed;
-    float horizontal_speed;
-    float vertical_speed;
-    float slope;
-    char pad170[0x5C];
-    int unconstrained;
-    char pad1D0[0x64];
-    float speed_limit;
-    char pad238[4];
-    int contact_state;
-    char pad240[0x17];
+    char          pad00[0x80];
+    float         position[4];
+    float         rotation[4];
+    char          padA0[0x40];
+    float         velocity[4];
+    float         contact[4];
+    float         external[4];
+    float         delta[4];
+    float         vertical_delta[4];
+    float         horizontal_delta[4];
+    float         frame_delta[4];
+    char          pad150[0x10];
+    float         speed;
+    float         horizontal_speed;
+    float         vertical_speed;
+    float         slope;
+    char          pad170[0x5C];
+    int           unconstrained;
+    char          pad1D0[0x64];
+    float         speed_limit;
+    char          pad238[4];
+    int           contact_state;
+    char          pad240[0x17];
     unsigned char contact_flag;
-    char pad258[0x84];
-    float gravity_limit;
-    char pad2E0[0x218];
-    int physics_mode;
-    char pad4FC[0x424];
-    float extra_step[4];
-    char pad930[0x1754];
-    int state;
-    char pad2088[4];
-    int mode;
+    char          pad258[0x84];
+    float         gravity_limit;
+    char          pad2E0[0x218];
+    int           physics_mode;
+    char          pad4FC[0x424];
+    float         extra_step[4];
+    char          pad930[0x1754];
+    int           state;
+    char          pad2088[4];
+    int           mode;
 } L16MovementPlayer;
 
 extern char *D_L16_00174258[];
 extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
-extern void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
-extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
-extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
-extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
+extern void  correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
+extern void  resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
+extern void  gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
+extern void
+set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern void update_hero_attachment(int, void *, void *) __asm__("FUN_L00_00233f80");
 extern char D_0013F430[] MACRO_ADDR;
 
 void integrate_hero_motion(void) __asm__("FUN_L16_00211098");
 
 void integrate_hero_motion(void) {
-    V previous;
-    V work;
-    V plane;
+    V                  previous;
+    V                  work;
+    V                  plane;
     L16MovementPlayer *contact_player;
     L16MovementPlayer *motion_player;
     L16MovementPlayer *cap_player;
-    float *position = (float *)(&hero.motion.pos);
+    float             *position = (float *)(&hero.motion.pos);
     L16MovementPlayer *player;
-    float *delta;
-    float *vertical;
-    float *horizontal;
-    float *extra_step;
-    float *velocity;
-    float *new_position;
-    float *contact;
-    float *external;
-    float magnitude;
+    float             *delta;
+    float             *vertical;
+    float             *horizontal;
+    float             *extra_step;
+    float             *velocity;
+    float             *new_position;
+    float             *contact;
+    float             *external;
+    float              magnitude;
 
     qcopy(previous.f, position);
     player = (L16MovementPlayer *)((char *)position - 0x80);
     update_hero_attachment(player->physics_mode, (char *)position + 0x70, (char *)position + 0x10);
     /* Limit the velocity by state and mode. Inside an arm `position` moves on to the velocity; it is formed again below. */
     if (player->state == 34 || player->state == 20) {
-        float limit;
+        float  limit;
         float *limited_velocity;
 
         if (!player->unconstrained) {
@@ -558,13 +585,15 @@ void integrate_hero_motion(void) {
             position = (float *)((char *)position + 0x60);
             length = gravity_length_xy(position);
             limit = player->speed_limit - 0.02f;
-            if (limit < length) fast_vec_normalize(position, position, limit);
+            if (limit < length)
+                fast_vec_normalize(position, position, limit);
         }
         limited_velocity = (float *)(&hero.motion.velocity);
         magnitude = gravity_z(limited_velocity);
         limit = -*(float *)((char *)limited_velocity + 0x1FC); /* the player's gravity_limit */
         if (magnitude < limit) {
-            if (limit > 0.0f) limit = 0.0f;
+            if (limit > 0.0f)
+                limit = 0.0f;
             gravity_set_z(limited_velocity, limited_velocity, limit);
         }
     } else if (player->mode == 15) {
@@ -576,7 +605,8 @@ void integrate_hero_motion(void) {
             position = (float *)(((char *)&D_0013F430));
             length = vector_length_xy(position);
             limit = player->speed_limit - 0.02f;
-            if (limit < length) set_vector_length_xy(position, position, limit);
+            if (limit < length)
+                set_vector_length_xy(position, position, limit);
         }
     } else if (player->mode == 21) {
         float limit = 0.6f;
@@ -584,7 +614,8 @@ void integrate_hero_motion(void) {
         if (!player->unconstrained) {
             float *limited_velocity = (float *)((char *)position + 0x60);
 
-            if (fast_vec_length(limited_velocity) > limit) fast_vec_normalize(limited_velocity, limited_velocity, limit);
+            if (fast_vec_length(limited_velocity) > limit)
+                fast_vec_normalize(limited_velocity, limited_velocity, limit);
         }
     } else if (player->mode == 22) {
         qcopy(work.f, position);
@@ -602,7 +633,8 @@ void integrate_hero_motion(void) {
                     position = (float *)(((char *)&D_0013F430));
                     length = vector_length_xy(position);
                     limit = player->speed_limit - 0.02f;
-                    if (limit < length) set_vector_length_xy(position, position, limit);
+                    if (limit < length)
+                        set_vector_length_xy(position, position, limit);
                 }
             }
         }
@@ -615,7 +647,8 @@ void integrate_hero_motion(void) {
                 position = (float *)((char *)position + 0x60);
                 length = fast_vec_length(position);
                 limit = player->speed_limit - 0.02f;
-                if (limit < length) fast_vec_normalize(position, position, limit);
+                if (limit < length)
+                    fast_vec_normalize(position, position, limit);
             }
         }
     }
@@ -645,28 +678,32 @@ void integrate_hero_motion(void) {
     velocity = (float *)((char *)delta - 0x30);
     fast_vec_normalize(delta, delta, 1.0f);
     magnitude = fast_vec_dot(delta, velocity);
-    if (magnitude < 0.0f) magnitude = 0.0f;
+    if (magnitude < 0.0f)
+        magnitude = 0.0f;
     fast_vec_normalize(delta, velocity, magnitude);
     qcopy(work.f, velocity);
     gravity_flatten(work.f, work.f);
     gravity_flatten(horizontal, horizontal);
     fast_vec_normalize(horizontal, horizontal, 1.0f);
     magnitude = fast_vec_dot(horizontal, work.f);
-    if (magnitude < 0.0f) magnitude = 0.0f;
+    if (magnitude < 0.0f)
+        magnitude = 0.0f;
     fast_vec_normalize(horizontal, work.f, magnitude);
     qcopy(plane.f, velocity);
     set_gravity_relative_vector_length_xy(plane.f, plane.f, 0.0f);
     set_gravity_relative_vector_length_xy(vertical, vertical, 0.0f);
     fast_vec_normalize(vertical, vertical, 1.0f);
     magnitude = fast_vec_dot(vertical, plane.f);
-    if (magnitude < 0.0f) magnitude = 0.0f;
+    if (magnitude < 0.0f)
+        magnitude = 0.0f;
     fast_vec_normalize(vertical, plane.f, magnitude);
     motion_player = (L16MovementPlayer *)((char *)delta - 0x110);
     motion_player->speed = fast_vec_length(delta);
     motion_player->horizontal_speed = vector_length_xy(delta);
     work.q = *(OvlQuad *)delta;
     motion_player->vertical_speed = forward_component(work.f);
-    if (motion_player->vertical_speed < 0.0f) motion_player->vertical_speed = 0.0f;
+    if (motion_player->vertical_speed < 0.0f)
+        motion_player->vertical_speed = 0.0f;
     qcopy(work.f, new_position);
     contact = (float *)((char *)delta - 0x20);
     external = (float *)((char *)delta - 0x10);
@@ -689,8 +726,10 @@ void integrate_hero_motion(void) {
     motion_player->slope = 0.0f;
     if (motion_player->horizontal_speed > 0.004f) {
         motion_player->slope = motion_player->external[2] / motion_player->horizontal_speed;
-        if (motion_player->slope > 0.5f) motion_player->slope = 0.5f;
-        else if (motion_player->slope < -0.5f) motion_player->slope = -0.5f;
+        if (motion_player->slope > 0.5f)
+            motion_player->slope = 0.5f;
+        else if (motion_player->slope < -0.5f)
+            motion_player->slope = -0.5f;
     }
     cap_player = (L16MovementPlayer *)(((char *)((char *)&hero)));
     magnitude = frame_time * 52.0f;

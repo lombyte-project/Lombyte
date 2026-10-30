@@ -48,8 +48,8 @@ typedef union {
     f32 value;
     struct {
         u32 fraction : 23 __attribute__((packed));
-        u32 exp : 8 __attribute__((packed));
-        u32 sign : 1 __attribute__((packed));
+        u32 exp      : 8 __attribute__((packed));
+        u32 sign     : 1 __attribute__((packed));
     } bits;
 } FLOSingleUnion;
 

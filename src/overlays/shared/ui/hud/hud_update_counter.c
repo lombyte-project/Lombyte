@@ -6,21 +6,19 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/ui/text/draw_weapon_ammo_hud_panel.h"
 
-
-
 /* Eases a counter's shown value toward its target and animates its two drifting digits. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236830), where it is exact; names translated to the US level program. */
 
-
 void hud_update_counter(HudElem *hud_element) __asm__("FUN_L00_00235ea0");
+
 void hud_update_counter(HudElem *hud_element) {
     unsigned char *counter_state_bytes = hud_element->cnt;
-    int counter_value;
-    int cap;
-    int value_distance;
-    int easing_step;
-    int x;
-    unsigned char easing_accumulator_value;
+    int            counter_value;
+    int            cap;
+    int            value_distance;
+    int            easing_step;
+    int            x;
+    unsigned char  easing_accumulator_value;
 
     if (hud_element->unk0C != 0) {
         counter_value = *hud_element->unk0C;
@@ -40,8 +38,10 @@ void hud_update_counter(HudElem *hud_element) {
             value_distance = x;
             value_distance = value_distance < 0 ? -value_distance : value_distance;
             if (value_distance != 0) {
-                easing_step = truncate_float_to_s32(square_root(convert_integer_to_float(value_distance) / 25.0f) * 5.0f);
-                easing_step = easing_step < value_distance * scale_game_frames(2) / scale_game_frames(10)
+                easing_step = truncate_float_to_s32(
+                    square_root(convert_integer_to_float(value_distance) / 25.0f) * 5.0f);
+                easing_step =
+                    easing_step < value_distance * scale_game_frames(2) / scale_game_frames(10)
                         ? value_distance * scale_game_frames(2) / scale_game_frames(10)
                         : easing_step;
                 if (easing_step >= 0x7A) {

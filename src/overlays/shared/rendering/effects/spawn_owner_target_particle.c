@@ -15,19 +15,22 @@
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 #include "rnc/ui/text/load_display_text_resource_entry.h"
 #include "rnc/math/pack_vector_xyz_with_shared_scale.h"
+
 extern int owner_target_particle_frame_count_gp __asm__("D_L15_001601FC") __attribute__((sda));
 
 /* Spawns particle type 0x1F of colour `color` at `pos`, starting a quarter of the way from `owner` towards it. */
-void spawn_owner_target_particle(int color, u128 *target_position, char *owner) __asm__("FUN_L15_0025e2c0");
+void spawn_owner_target_particle(int   color,
+                                 u128 *target_position,
+                                 char *owner) __asm__("FUN_L15_0025e2c0");
 
 void spawn_owner_target_particle(int color, u128 *target_position, char *owner) {
-    Vec4 target;
-    Vec4 step;
-    u128 at;
+    Vec4           target;
+    Vec4           step;
+    u128           at;
     unsigned char *particle;
-    char *from;
-    u128 *vector_scratch;
-    u128 *step_vector;
+    char          *from;
+    u128          *vector_scratch;
+    u128          *step_vector;
 
     target.q = *target_position;
     particle = create_part(0x1F);
@@ -53,16 +56,30 @@ void spawn_owner_target_particle(int color, u128 *target_position, char *owner) 
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0025F0A0.c: func_L15_002655D0), where it is exact; names translated to the US level program. */
 
-
 extern int *D_L15_001B2770 NOT_SDA;
-unsigned char *create_type_47_particle(void *particle_position, float *p_vector, float *c_vector, int particle_color, int e, int particle_frame_count, int g, int h,
-                                char *owner) __asm__("FUN_L15_002647f0");
+unsigned char             *create_type_47_particle(void  *particle_position,
+                                                   float *p_vector,
+                                                   float *c_vector,
+                                                   int    particle_color,
+                                                   int    e,
+                                                   int    particle_frame_count,
+                                                   int    g,
+                                                   int    h,
+                                                   char  *owner) __asm__("FUN_L15_002647f0");
 
-unsigned char *create_type_47_particle(void *particle_position, float *p_vector, float *c_vector, int particle_color, int secondary_particle_color, int particle_frame_count, int g, int h,
-                                char *owner) {
+unsigned char *create_type_47_particle(void  *particle_position,
+                                       float *p_vector,
+                                       float *c_vector,
+                                       int    particle_color,
+                                       int    secondary_particle_color,
+                                       int    particle_frame_count,
+                                       int    g,
+                                       int    h,
+
+                                       char *owner) {
     unsigned char *particle = create_part(0x47);
     if (particle != 0) {
-        int *packed_p_vector, *packed_c_vector;
+        int  *packed_p_vector, *packed_c_vector;
         float p_vector_scratch[4], c_vector_scratch[4];
         qcopy(particle + 0x10, particle_position);
         packed_p_vector = (int *)(particle + 0x20);
@@ -93,5 +110,5 @@ s32 D_L17_001B2A70[1] __attribute__((section(".data"))) = {0};
 
 int D_L18_001601FC = 0x5a;
 
-int owner_target_particle_frame_count_gp __asm__("D_L15_001601FC") = 0x5a;
+int                 owner_target_particle_frame_count_gp __asm__("D_L15_001601FC") = 0x5a;
 int *D_L15_001B2770 NOT_SDA = 0;

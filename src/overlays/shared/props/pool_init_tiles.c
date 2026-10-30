@@ -4,13 +4,11 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 
-
-
 /* Converts a float vector to fixed-point ints, relative to the grid origin, plus two scale shorts. */
 /* Ported from rac1-decomp (src/overlays/shared/vuchain_002B8C00.c: func_L01_002B8E20), where it is exact; names translated to the US level program. */
 
-
 void pool_bind_tile(float *in, int *out) __asm__("FUN_L01_002b7c68");
+
 void pool_bind_tile(float *in, int *out) {
     out[0] = truncate_float_to_s32((in[0] + pool_light[2]) * 1024.0f);
     out[1] = truncate_float_to_s32((in[1] + pool_light[3]) * 1024.0f);
@@ -22,8 +20,6 @@ void pool_bind_tile(float *in, int *out) {
 /* Ported from rac1-decomp src/overlays/shared/vuchain_002B8C00.c (func_L01_002B8C00) */
 #include "sda.h"
 
-
-
 /* Clears each record's three buffer groups and resets its scalar parameters. */
 
 typedef struct VuChainSlot {
@@ -34,17 +30,18 @@ typedef struct VuChainSlot {
 } VuChainSlot;
 
 typedef struct VuChainRecord {
-    char pad0[0x20];
-    int f20, f24;
-    float f28, f2C, f30, f34, f38, f3C, f40;
-    int f44;
-    char pad48[8];
+    char        pad0[0x20];
+    int         f20, f24;
+    float       f28, f2C, f30, f34, f38, f3C, f40;
+    int         f44;
+    char        pad48[8];
     VuChainSlot slots[3];
 } VuChainRecord;
 
 extern void memset(void *, s32, s32);
 
 void pool_init_tiles(VuChainRecord *records, int count) __asm__("FUN_L01_002b7a48");
+
 void pool_init_tiles(VuChainRecord *records, int count) {
     int i;
     for (i = 0; i < count; i++) {

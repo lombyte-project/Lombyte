@@ -11,16 +11,23 @@
 #include "rnc/overlay/shared/pickups/nanotech_ball.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 
-
-extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
+extern int  launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
 /* Moby state 9 while FUN_L00_002dbc30 reports a hit; allocates a voice when the short at 0x68 of process_moby_hit_state_and_voice(moby) is 6. */
-int process_moby_hit_state_and_voice(struct Moby *moby, int input_quad_address, int b, float f) __asm__("FUN_L04_002c40d0");
+int process_moby_hit_state_and_voice(struct Moby *moby,
+                                     int          input_quad_address,
+                                     int          b,
+                                     float        f) __asm__("FUN_L04_002c40d0");
 
-int process_moby_hit_state_and_voice(struct Moby *moby, int input_quad_address, int launch_position_source, float launch_position_offset) {
+int process_moby_hit_state_and_voice(struct Moby *moby,
+                                     int          input_quad_address,
+                                     int          launch_position_source,
+
+                                     float launch_position_offset) {
     char *moby_callback_result = get_moby_suck_cannon_record(moby);
-    int hit_processing_result = launch_suck_cannon_projectile(moby, input_quad_address, launch_position_source, launch_position_offset);
+    int   hit_processing_result = launch_suck_cannon_projectile(
+        moby, input_quad_address, launch_position_source, launch_position_offset);
     if (hit_processing_result != 0) {
         moby->state = 0x9;
     } else if ((unsigned char)moby->state == 0x9) {
@@ -31,10 +38,12 @@ int process_moby_hit_state_and_voice(struct Moby *moby, int input_quad_address, 
     }
     return hit_processing_result;
 }
+
 typedef struct {
     char pad[0x78];
-    s32 f;
+    s32  f;
 } T6;
+
 /* Returns the moby data pointer plus 0x180, or 0 when either is null. */
 s32 FUN_L04_002c41b0(T6 *data_owner) {
     s32 data_base;
@@ -48,13 +57,11 @@ s32 FUN_L04_002c41b0(T6 *data_owner) {
     return 0;
 }
 
-
-
 /* Creates a class 0x23A moby at pos, copying a few fields from src. */
 void *spawn_class_23a_moby(char *source_moby, char *spawn_position) __asm__("FUN_L04_002d34d8");
 
 void *spawn_class_23a_moby(char *source_moby, char *spawn_position) {
-    char saved_position[16];
+    char  saved_position[16];
     char *saved_position_ptr = saved_position;
     char *created_moby;
     *(OvlQuad *)saved_position = *(OvlQuad *)spawn_position;

@@ -3,15 +3,14 @@
 #include "asm.h"
 #include "rnc/overlay/shared/ui/menus/ensure_menu_cache_entry.h"
 
-
-
 /* Clears each set bit in a rectangle of a per-row bit grid, notifying for each. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/map_00270BE0.c: func_L07_00270BE0), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char pad[0xC];
+    char           pad[0xC];
     unsigned char *p;
 } Grid;
+
 extern Grid l07_packed_bit_grid __asm__("D_L07_00184270");
 
 void clear_bit_grid_rectangle(int x, int y0, int width, int height) __asm__("FUN_L07_00270248");

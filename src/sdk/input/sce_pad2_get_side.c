@@ -1,13 +1,13 @@
 #include "types.h"
 
 typedef struct PadPort {
-    u8 pad[0xC];
+    u8  pad[0xC];
     u8 *unkC;
-    u8 pad2[816 - 0x10];
+    u8  pad2[816 - 0x10];
 } PadPort;
 
 extern PadPort D_0015B540[];
-extern void SyncDCache(s32, s32) __asm__("func_00118F88");
+extern void    SyncDCache(s32, s32) __asm__("func_00118F88");
 
 void *scePad2GetSide(s32 port_index) {
     u8 *sides[2];

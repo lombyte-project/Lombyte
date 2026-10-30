@@ -18,16 +18,16 @@ typedef struct {
 } Moby;
 
 typedef struct {
-    u8 pad0[0x34];
+    u8  pad0[0x34];
     s32 timer;
     s32 base;
     s32 pick;
 } BossVars;
 
 typedef struct {
-    u8 pad0;
-    u8 active;
-    u8 pad2[0x1E];
+    u8  pad0;
+    u8  active;
+    u8  pad2[0x1E];
     f32 x;
     f32 y;
     f32 z;
@@ -35,14 +35,17 @@ typedef struct {
 
 extern s32 D_001516EC NOT_SDA;
 extern s16 D_0015172A NOT_SDA;
-extern s32 resident_dialogue_after_completion_wait_thresholds[2] __asm__("D_00161030") __attribute__((sda));
-extern s32 resident_dialogue_after_start_wait_thresholds[2] __asm__("D_00161038") __attribute__((sda));
-extern s32 resident_dialogue_before_timed_idle_restore_thresholds[2] __asm__("D_00161040") __attribute__((sda));
+extern s32            resident_dialogue_after_completion_wait_thresholds[2] __asm__("D_00161030")
+    __attribute__((sda));
+extern s32 resident_dialogue_after_start_wait_thresholds[2] __asm__("D_00161038")
+    __attribute__((sda));
+extern s32 resident_dialogue_before_timed_idle_restore_thresholds[2] __asm__("D_00161040")
+    __attribute__((sda));
 extern s32 D_001610B0 MACRO_ADDR;
 extern s32 D_001610B4 MACRO_ADDR;
-extern BossVars D_001E63C0;
-s32 D_001E63FC NOT_SDA = 0;
-extern Cam D_001E65E0;
+extern BossVars       D_001E63C0;
+s32 D_001E63FC        NOT_SDA = 0;
+extern Cam            D_001E65E0;
 
 extern s32 is_value_within_interpolated_window(Moby *, f32) __asm__("FUN_00214cc8");
 
@@ -108,7 +111,9 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
         }
         break;
     case RESIDENT_DIALOGUE_ANIMATION_AFTER_COMPLETION_WAIT:
-        if (is_value_within_interpolated_window(resident_moby, resident_dialogue_after_completion_wait_thresholds[D_001E63C0.pick]) != 0 &&
+        if (is_value_within_interpolated_window(
+                resident_moby,
+                resident_dialogue_after_completion_wait_thresholds[D_001E63C0.pick]) != 0 &&
             D_001610B4 != 0) {
             D_001610B4 = 0;
             continue_audio_stream_if_ready();
@@ -122,7 +127,9 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
         }
         break;
     case RESIDENT_DIALOGUE_ANIMATION_AFTER_START_WAIT:
-        if (is_value_within_interpolated_window(resident_moby, resident_dialogue_after_start_wait_thresholds[D_001E63C0.pick]) != 0 &&
+        if (is_value_within_interpolated_window(
+                resident_moby, resident_dialogue_after_start_wait_thresholds[D_001E63C0.pick]) !=
+                0 &&
             D_001610B4 != 0) {
             D_001610B4 = 0;
             continue_audio_stream_if_ready();
@@ -136,7 +143,9 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
         }
         break;
     case RESIDENT_DIALOGUE_ANIMATION_WAIT_TO_RESTORE_TIMED_IDLE:
-        if (is_value_within_interpolated_window(resident_moby, resident_dialogue_before_timed_idle_restore_thresholds[D_001E63C0.pick]) != 0 &&
+        if (is_value_within_interpolated_window(
+                resident_moby,
+                resident_dialogue_before_timed_idle_restore_thresholds[D_001E63C0.pick]) != 0 &&
             D_001610B4 != 0) {
             D_001610B4 = 0;
             continue_audio_stream_if_ready();
@@ -187,4 +196,5 @@ void update_resident_dialogue_animation_state(Moby *resident_moby) {
     }
 }
 
-extern __typeof__(update_resident_dialogue_animation_state) func_00237ED0 __attribute__((alias("FUN_00237ed0")));
+extern __typeof__(update_resident_dialogue_animation_state) func_00237ED0
+    __attribute__((alias("FUN_00237ed0")));

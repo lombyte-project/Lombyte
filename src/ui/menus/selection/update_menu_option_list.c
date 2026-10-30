@@ -7,6 +7,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"
+
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
@@ -30,7 +31,8 @@ s32 update_menu_option_list(struct MenuScreen *menu_screen) {
     if (!active) {
         return 0;
     }
-    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) &&
+        menu_system.close_locked == 0) {
         return 1;
     }
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
@@ -44,7 +46,8 @@ s32 update_menu_option_list(struct MenuScreen *menu_screen) {
     if ((controller_state.pressed_unmasked & PAD_UP) && old != 0) {
         menu_screen->data.options.selection = old - 1;
     }
-    if ((controller_state.pressed_unmasked & PAD_DOWN) && menu_screen->data.options.list[menu_screen->data.options.selection + 1].unk0 != 0) {
+    if ((controller_state.pressed_unmasked & PAD_DOWN) &&
+        menu_screen->data.options.list[menu_screen->data.options.selection + 1].unk0 != 0) {
         menu_screen->data.options.selection = menu_screen->data.options.selection + 1;
     }
     if (controller_state.pressed_unmasked & PAD_CROSS) {
@@ -58,7 +61,8 @@ s32 update_menu_option_list(struct MenuScreen *menu_screen) {
                 requested_video_mode = requested_video_mode == 0;
             }
         } else if (menu_screen->data.options.list[menu_screen->data.options.selection].flag != 0) {
-            *menu_screen->data.options.list[menu_screen->data.options.selection].flag = *menu_screen->data.options.list[menu_screen->data.options.selection].flag == 0;
+            *menu_screen->data.options.list[menu_screen->data.options.selection].flag =
+                *menu_screen->data.options.list[menu_screen->data.options.selection].flag == 0;
         }
     }
     if (menu_screen->data.options.selection != old) {

@@ -3,8 +3,9 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
+
 extern struct Moby *moby_instance_end __asm__("D_0015FF1C");
-extern void update_moby_grids(struct Moby *, u32) __asm__("func_0020DC20");
+extern void         update_moby_grids(struct Moby *, u32) __asm__("func_0020DC20");
 
 void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 

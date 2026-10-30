@@ -3,11 +3,10 @@
  * See docs/game/audio-voices.md for the binary identities and partial views. */
 #include "rnc/audio/voice_pool.h"
 
-#define CHECK_CAT2(a, b) a##b
-#define CHECK_CAT(a, b) CHECK_CAT2(a, b)
-#define CHECK(cond) typedef char CHECK_CAT(layout_check_, __LINE__)[(cond) ? 1 : -1]
-#define OFFSET(type, field, off) \
-    CHECK((unsigned long)&((type *)0)->field == (off))
+#define CHECK_CAT2(a, b)         a##b
+#define CHECK_CAT(a, b)          CHECK_CAT2(a, b)
+#define CHECK(cond)              typedef char CHECK_CAT(layout_check_, __LINE__)[(cond) ? 1 : -1]
+#define OFFSET(type, field, off) CHECK((unsigned long)&((type *)0)->field == (off))
 
 CHECK(sizeof(VoiceVector) == 0x10);
 CHECK(__alignof__(VoiceVector) == 0x10);

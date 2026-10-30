@@ -9,9 +9,9 @@
    stream id; returns the number of bytes consumed. */
 
 typedef struct {
-    u8 pad0[0x18];
+    u8  pad0[0x18];
     u64 pos;
-    u8 pad20[0x10];
+    u8  pad20[0x10];
 } SysBit;
 
 typedef struct {
@@ -32,7 +32,7 @@ typedef struct {
 
 typedef struct {
     PackHdr pack;
-    PesHdr pes;
+    PesHdr  pes;
 } PssHdr;
 
 typedef struct {
@@ -47,42 +47,42 @@ typedef struct {
 typedef s32 (*sceMpegCallback)(void *mp, sceMpegCbDataStr *cbstr, void *data);
 
 typedef struct {
-    u64 id;
-    u64 mask;
+    u64             id;
+    u64             mask;
     sceMpegCallback func;
-    void *data;
+    void           *data;
 } StreamCb;
 
 typedef struct {
-    u8 pad0[0x44];
+    u8        pad0[0x44];
     StreamCb *tbl;
-    s32 n;
+    s32       n;
 } MpegSys;
 
 typedef struct {
-    u8 pad0[0x40];
+    u8       pad0[0x40];
     MpegSys *sys;
 } sceMpeg;
 
 extern void _sysbitInit(SysBit *bs, u8 *start, u8 *bufstart, s32 bufsize);
-extern u8 *GetSysbitPointer(SysBit *bs, s32 pos);
-extern s32 _pack_header(SysBit *bs, PackHdr *pack);
-extern s32 _PES_packet(MpegSys *sys, SysBit *bs, PesHdr *pes);
+extern u8  *GetSysbitPointer(SysBit *bs, s32 pos);
+extern s32  _pack_header(SysBit *bs, PackHdr *pack);
+extern s32  _PES_packet(MpegSys *sys, SysBit *bs, PesHdr *pes);
 
 int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufsize) {
-    SysBit bs;
-    PssHdr hdr;
-    SysBit *bitstream;
-    PssHdr *pss_header;
+    SysBit           bs;
+    PssHdr           hdr;
+    SysBit          *bitstream;
+    PssHdr          *pss_header;
     sceMpegCbDataStr cb;
-    sceMpegCallback cbfunc = 0;
-    void *cbdata = 0;
-    StreamCb *tbl;
-    int consumed_bytes;
-    int i;
-    int cont;
-    MpegSys *sys;
-    int headerpos;
+    sceMpegCallback  cbfunc = 0;
+    void            *cbdata = 0;
+    StreamCb        *tbl;
+    int              consumed_bytes;
+    int              i;
+    int              cont;
+    MpegSys         *sys;
+    int              headerpos;
 
     cont = 1;
     pss_header = &hdr;

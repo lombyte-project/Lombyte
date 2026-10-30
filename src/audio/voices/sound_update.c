@@ -20,8 +20,8 @@
 extern f32 sound_water_height_threshold[] __asm__("D_0013F640");
 extern s32 use_alt_fog[] __asm__("D_001872D4");
 
-extern s32 ComputeByteStringHash(u8 *, s32);
-extern int snd_get_doppler_pitch_mod(int arg0);
+extern s32  ComputeByteStringHash(u8 *, s32);
+extern int  snd_get_doppler_pitch_mod(int arg0);
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void snd_play_sound_vol_pan_pmpb() __asm__("FUN_0012e308");
 extern void snd_sound_is_still_playing_cb() __asm__("FUN_0012e448");
@@ -30,47 +30,47 @@ extern void snd_reset_state_and_flush_commands() __asm__("FUN_0012eb00");
 extern void snd_auto_reverb(s32, s32, s32, s32) __asm__("FUN_0012efe0");
 extern void music_update() __asm__("FUN_00216290");
 extern void clamp_voice_position_to_collision(void *) __asm__("FUN_0022c5a8");
-extern u8 test_voice_occlusion(VoiceSlot *, void *) __asm__("FUN_0022c658");
-extern s32 calculate_voice_pan(VoiceSlot *, VoiceVector *, void *) __asm__("FUN_0022c830");
+extern u8   test_voice_occlusion(VoiceSlot *, void *) __asm__("FUN_0022c658");
+extern s32  calculate_voice_pan(VoiceSlot *, VoiceVector *, void *) __asm__("FUN_0022c830");
 extern void voice_start_callback() __asm__("FUN_0022dd90");
 extern void voice_update_callback() __asm__("FUN_0022ddd8");
 
 s32 sound_update(void) __asm__("FUN_0022ca50");
 
 s32 sound_update(void) {
-    VoiceSlot *voices;
+    VoiceSlot  *voices;
     VoiceVector listener_occlusion_position;
     VoiceVector listener_velocity;
     VoiceVector relative_velocity;
-    s32 flags[30];
-    s32 voice_volumes[30];
-    f32 radial_velocities[30];
+    s32         flags[30];
+    s32         voice_volumes[30];
+    f32         radial_velocities[30];
     VoiceVector direction;
     VoiceVector listener_matrix[4];
-    s32 slot_index;
-    s32 underwater;
-    s32 *voice_flags;
-    s32 *volumes;
-    VoiceMoby *moby;
-    f32 water_height;
-    s32 history_index;
-    s32 divisor;
-    s32 current_index;
-    s32 previous_history_index;
-    s32 listener_sample_count;
-    s32 group_volume;
-    s32 history_offset;
-    s32 sample_index;
-    s32 repeat_index;
-    s32 owner_removed;
-    s32 distance_volume;
-    s32 occluded_samples;
-    s32 parameter_mask;
-    s32 pan;
-    s32 pitch_modifier;
-    s32 pitch_bend;
-    s32 handle;
-    s32 command_flags;
+    s32         slot_index;
+    s32         underwater;
+    s32        *voice_flags;
+    s32        *volumes;
+    VoiceMoby  *moby;
+    f32         water_height;
+    s32         history_index;
+    s32         divisor;
+    s32         current_index;
+    s32         previous_history_index;
+    s32         listener_sample_count;
+    s32         group_volume;
+    s32         history_offset;
+    s32         sample_index;
+    s32         repeat_index;
+    s32         owner_removed;
+    s32         distance_volume;
+    s32         occluded_samples;
+    s32         parameter_mask;
+    s32         pan;
+    s32         pitch_modifier;
+    s32         pitch_bend;
+    s32         handle;
+    s32         command_flags;
 
     underwater = use_alt_fog[0];
     water_height = 0.0f;
@@ -82,8 +82,11 @@ s32 sound_update(void) {
     if (voice_pool.reverb_commands & 8) {
         snd_set_reverb_ex(2, 0, 0, 0, 0);
     } else if (voice_pool.reverb_commands & 0x13) {
-        snd_set_reverb_ex(2, voice_pool.reverb_type, voice_pool.reverb_depth,
-                          voice_pool.reverb_delay, voice_pool.reverb_feedback);
+        snd_set_reverb_ex(2,
+                          voice_pool.reverb_type,
+                          voice_pool.reverb_depth,
+                          voice_pool.reverb_delay,
+                          voice_pool.reverb_feedback);
     } else if (voice_pool.reverb_commands & 4) {
         snd_auto_reverb(2, voice_pool.reverb_depth, 0xC, 3);
     }
@@ -105,8 +108,9 @@ s32 sound_update(void) {
     previous_history_index = (current_index + 3) % 4;
     if (previous_history_index != current_index) {
         do {
-            fast_vec_sub(&relative_velocity, &voice_pool.listener_history[current_index],
-                                &voice_pool.listener_history[previous_history_index]);
+            fast_vec_sub(&relative_velocity,
+                         &voice_pool.listener_history[current_index],
+                         &voice_pool.listener_history[previous_history_index]);
             if (!(fast_vec_length(&relative_velocity) < frame_time * 60.0f)) {
                 break;
             }
@@ -117,8 +121,9 @@ s32 sound_update(void) {
         } while (previous_history_index != voice_pool.listener_history_position);
     }
     if (listener_sample_count >= 2) {
-        fast_vec_scale(&listener_velocity, &listener_velocity,
-                         1.0f / convert_integer_to_float(listener_sample_count));
+        fast_vec_scale(&listener_velocity,
+                       &listener_velocity,
+                       1.0f / convert_integer_to_float(listener_sample_count));
     }
 
     if (game_mode == 2) {
@@ -174,9 +179,8 @@ s32 sound_update(void) {
         }
         {
             s32 state = voice_pool.voices[slot_index].state;
-            if (state == 4 ||
-                (state != 6 && owner_removed &&
-                 voice_pool.voices[slot_index].definition->source_state != 0)) {
+            if (state == 4 || (state != 6 && owner_removed &&
+                               voice_pool.voices[slot_index].definition->source_state != 0)) {
                 voice_flags[slot_index] = 0x20;
                 continue;
             }
@@ -192,17 +196,17 @@ s32 sound_update(void) {
         if (voice_pool.voices[slot_index].owner != NULL &&
             !(voice_pool.voices[slot_index].flags & 8)) {
             if (voice_pool.voices[slot_index].flags & 0x40) {
-                transform_vector_by_basis(&direction, &voice_pool.voices[slot_index].position_offset,
-                              &moby->rotation);
+                transform_vector_by_basis(
+                    &direction, &voice_pool.voices[slot_index].position_offset, &moby->rotation);
                 fast_vec_add(&direction, &direction, &moby->position);
-                fast_vec_sub(&relative_velocity, &direction,
-                                    &voice_pool.voices[slot_index].position);
+                fast_vec_sub(
+                    &relative_velocity, &direction, &voice_pool.voices[slot_index].position);
                 qcopy(&voice_pool.voices[slot_index].position, &direction);
             } else {
                 voice_pool.voices[slot_index].position.f[2] -= 1.0f;
                 fast_vec_sub(&relative_velocity,
-                                    &voice_pool.voices[slot_index].owner->position,
-                                    &voice_pool.voices[slot_index].position);
+                             &voice_pool.voices[slot_index].owner->position,
+                             &voice_pool.voices[slot_index].position);
                 qcopy(&voice_pool.voices[slot_index].position,
                       &voice_pool.voices[slot_index].owner->position);
                 voice_pool.voices[slot_index].position.f[2] += 1.0f;
@@ -293,7 +297,8 @@ s32 sound_update(void) {
                 if (occluded_samples >= 36) {
                     voice_volumes[slot_index] = 0;
                 } else if (occluded_samples >= 19) {
-                    voice_volumes[slot_index] = (36 - occluded_samples) * voice_volumes[slot_index] / divisor;
+                    voice_volumes[slot_index] =
+                        (36 - occluded_samples) * voice_volumes[slot_index] / divisor;
                 }
             } else {
                 if ((game_mode == 0 || game_mode == 2) && boot_level_active == 0) {
@@ -301,30 +306,32 @@ s32 sound_update(void) {
                         (voice_pool.voices[slot_index].occlusion_history_position + 1) % 36;
                     /* Active sources test every other frame; other voices every fourth. */
                     {
-                    s32 test_now = (slot_index ^ world_update_time) & 1;
-                    if (!(voice_pool.voices[slot_index].flags & 4)) {
-                        test_now = (slot_index & 3) == (world_update_time & 3);
-                    }
-                    if (test_now) {
-                        voice_pool.voices[slot_index].occlusion_history
-                            [voice_pool.voices[slot_index].occlusion_history_position] =
-                            test_voice_occlusion(&voice_pool.voices[slot_index],
-                                                 &listener_occlusion_position);
-                    } else {
-                        voice_pool.voices[slot_index].occlusion_history
-                            [voice_pool.voices[slot_index].occlusion_history_position] =
+                        s32 test_now = (slot_index ^ world_update_time) & 1;
+                        if (!(voice_pool.voices[slot_index].flags & 4)) {
+                            test_now = (slot_index & 3) == (world_update_time & 3);
+                        }
+                        if (test_now) {
                             voice_pool.voices[slot_index].occlusion_history
-                                [(voice_pool.voices[slot_index].occlusion_history_position + 35) % 36];
-                    }
+                                [voice_pool.voices[slot_index].occlusion_history_position] =
+                                test_voice_occlusion(&voice_pool.voices[slot_index],
+                                                     &listener_occlusion_position);
+                        } else {
+                            voice_pool.voices[slot_index].occlusion_history
+                                [voice_pool.voices[slot_index].occlusion_history_position] =
+                                voice_pool.voices[slot_index].occlusion_history
+                                    [(voice_pool.voices[slot_index].occlusion_history_position +
+                                      35) %
+                                     36];
+                        }
                     }
                 }
                 {
-                    s32 occluded =
-                        ComputeByteStringHash(voices[slot_index].occlusion_history, 36);
+                    s32 occluded = ComputeByteStringHash(voices[slot_index].occlusion_history, 36);
                     if (occluded >= 36) {
                         voice_volumes[slot_index] = 0;
                     } else if (occluded >= 19) {
-                        voice_volumes[slot_index] = (36 - occluded) * voice_volumes[slot_index] / divisor;
+                        voice_volumes[slot_index] =
+                            (36 - occluded) * voice_volumes[slot_index] / divisor;
                     }
                 }
             }
@@ -349,13 +356,13 @@ s32 sound_update(void) {
                 } else {
                     snd_stop_sound(handle);
                     voice_pool.voices[slot_index].state = 6;
-                    snd_sound_is_still_playing_cb(handle, voice_update_callback,
-                                                  &voice_pool.voices[slot_index]);
+                    snd_sound_is_still_playing_cb(
+                        handle, voice_update_callback, &voice_pool.voices[slot_index]);
                 }
             }
         } else if (command_flags & 0x10) {
-            snd_sound_is_still_playing_cb(handle, voice_update_callback,
-                                          &voice_pool.voices[slot_index]);
+            snd_sound_is_still_playing_cb(
+                handle, voice_update_callback, &voice_pool.voices[slot_index]);
         } else {
             pitch_bend = voice_pool.voices[slot_index].pitch_bend;
             parameter_mask = pitch_bend ? 0x11 : 1;
@@ -363,7 +370,8 @@ s32 sound_update(void) {
             pitch_modifier = 0;
             if (command_flags & 2) {
                 pan = calculate_voice_pan(&voice_pool.voices[slot_index],
-                                          &voice_pool.voices[slot_index].position, listener_matrix);
+                                          &voice_pool.voices[slot_index].position,
+                                          listener_matrix);
                 parameter_mask |= 6;
             }
             if (voice_flags[slot_index] & 4) {
@@ -378,15 +386,25 @@ s32 sound_update(void) {
             {
                 s32 state = voice_pool.voices[slot_index].state;
                 if (state != 7) {
-                    snd_set_sound_params_cb(handle, parameter_mask, voice_volumes[slot_index], pan,
-                                            pitch_modifier, pitch_bend, voice_update_callback,
+                    snd_set_sound_params_cb(handle,
+                                            parameter_mask,
+                                            voice_volumes[slot_index],
+                                            pan,
+                                            pitch_modifier,
+                                            pitch_bend,
+                                            voice_update_callback,
                                             &voice_pool.voices[slot_index]);
                 } else {
                     voice_pool.voices[slot_index].state = 1;
-                    snd_play_sound_vol_pan_pmpb(voice_pool.voices[slot_index].definition->bank_handle,
-                                                voice_pool.voices[slot_index].definition->sound_index,
-                                                voice_volumes[slot_index], pan, pitch_modifier, pitch_bend,
-                                                voice_start_callback, &voice_pool.voices[slot_index]);
+                    snd_play_sound_vol_pan_pmpb(
+                        voice_pool.voices[slot_index].definition->bank_handle,
+                        voice_pool.voices[slot_index].definition->sound_index,
+                        voice_volumes[slot_index],
+                        pan,
+                        pitch_modifier,
+                        pitch_bend,
+                        voice_start_callback,
+                        &voice_pool.voices[slot_index]);
                 }
             }
         }

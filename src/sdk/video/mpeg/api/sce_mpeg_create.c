@@ -1,17 +1,17 @@
 #include "types.h"
 #define W(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define L(p, o) (*(s64 *)((u8 *)(p) + (o)))
-extern u8 mpeg_work_area_too_small_message[] __asm__("D_00153A10");
-extern void D_0012CB30();
-extern void D_0012CB40();
+extern u8    mpeg_work_area_too_small_message[] __asm__("D_00153A10");
+extern void  D_0012CB30();
+extern void  D_0012CB40();
 extern void *memset(void *, s32, u32);
-extern void _Error(void *, u8 *);
-extern void init_work_area(void *, void *, s32) __asm__("InitializeStateRecord");
-extern s32 alloc_work_area(void *, void *, s32, s32) __asm__("func_0012BC20");
-extern void mark_work_area(void *) __asm__("func_0012BC00");
-extern void _clearOnce(void *);
-extern s32 sceMpegReset(void *);
-extern s32 ClearMpegReferenceBuffer(void *);
+extern void  _Error(void *, u8 *);
+extern void  init_work_area(void *, void *, s32) __asm__("InitializeStateRecord");
+extern s32   alloc_work_area(void *, void *, s32, s32) __asm__("func_0012BC20");
+extern void  mark_work_area(void *) __asm__("func_0012BC00");
+extern void  _clearOnce(void *);
+extern s32   sceMpegReset(void *);
+extern s32   ClearMpegReferenceBuffer(void *);
 
 s32 sceMpegCreate(void *mp, u8 *work, s32 size) {
     u8 *decoder;

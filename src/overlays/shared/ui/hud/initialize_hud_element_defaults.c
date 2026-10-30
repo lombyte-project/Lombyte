@@ -33,19 +33,22 @@ void FUN_L05_002661e8(char *moby) {
         *(int *)(moby + 0x6C) = -6;
     }
 }
+
 extern int D_0013E500[];
+
 #include "rnc/overlay/shared/ui/hud/initialize_hud_element_defaults_globals.h"
 #include "rnc/math/fast_math.h"
-extern int hud_timer_frame_x_gp __asm__("D_L05_0015FA14") __attribute__((sda));
-extern int hud_timer_frame_bottom_offset_gp __asm__("D_L05_0015FA18") __attribute__((sda));
-extern int hud_timer_frame_width_gp __asm__("D_L05_0015FA1C") __attribute__((sda));
-extern int hud_timer_frame_height_gp __asm__("D_L05_0015FA20") __attribute__((sda));
-extern int hud_timer_frame_alpha_gp __asm__("D_L05_0015FA24") __attribute__((sda));
-extern int hud_timer_label_color_gp __asm__("D_L05_0015FA28") __attribute__((sda));
-extern int hud_timer_value_color_gp __asm__("D_L05_0015FA2C") __attribute__((sda));
-extern int hud_timer_text_center_x_gp __asm__("D_L05_0015FA30") __attribute__((sda));
-extern int hud_timer_optional_row_bottom_offset_gp __asm__("D_L05_0015FA34") __attribute__((sda));
-extern int hud_timer_time_row_bottom_offset_gp __asm__("D_L05_0015FA44") __attribute__((sda));
+
+extern int  hud_timer_frame_x_gp __asm__("D_L05_0015FA14") __attribute__((sda));
+extern int  hud_timer_frame_bottom_offset_gp __asm__("D_L05_0015FA18") __attribute__((sda));
+extern int  hud_timer_frame_width_gp __asm__("D_L05_0015FA1C") __attribute__((sda));
+extern int  hud_timer_frame_height_gp __asm__("D_L05_0015FA20") __attribute__((sda));
+extern int  hud_timer_frame_alpha_gp __asm__("D_L05_0015FA24") __attribute__((sda));
+extern int  hud_timer_label_color_gp __asm__("D_L05_0015FA28") __attribute__((sda));
+extern int  hud_timer_value_color_gp __asm__("D_L05_0015FA2C") __attribute__((sda));
+extern int  hud_timer_text_center_x_gp __asm__("D_L05_0015FA30") __attribute__((sda));
+extern int  hud_timer_optional_row_bottom_offset_gp __asm__("D_L05_0015FA34") __attribute__((sda));
+extern int  hud_timer_time_row_bottom_offset_gp __asm__("D_L05_0015FA44") __attribute__((sda));
 extern char hud_timer_optional_row_centering_format[] __asm__("D_L05_0015F788");
 extern char hud_label_colon_format[] __asm__("D_L05_0015F9D8");
 extern char hud_timer_optional_value_format[] __asm__("D_L05_0015FA50");
@@ -55,7 +58,8 @@ extern char hud_timer_time_value_format[] __asm__("D_L05_0015FA70");
 
 extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern int FUN_001f6250(char *, int);
-extern void print_text_with_texture_3(int x, int y, u64 color, char *text, int len) __asm__("FUN_L00_001fb470");
+extern void
+print_text_with_texture_3(int x, int y, u64 color, char *text, int len) __asm__("FUN_L00_001fb470");
 extern char D_L05_0015F860[];
 extern char hud_race_lap_progress_format[] __asm__("D_L05_0015F9E0");
 extern char hud_race_first_place_format[] __asm__("D_L05_0015F9E8");
@@ -63,7 +67,7 @@ extern char hud_race_second_place_format[] __asm__("D_L05_0015F9F0");
 extern char hud_race_third_place_format[] __asm__("D_L05_0015F9F8");
 extern char hud_race_other_place_format[] __asm__("D_L05_0015FA00");
 extern char hud_race_rank_label_format[] __asm__("D_L05_0015FA08");
-extern int measure_text_width_regular(char *, int) __asm__("FUN_L05_00229d48");
+extern int  measure_text_width_regular(char *, int) __asm__("FUN_L05_00229d48");
 
 int draw_hud_progress_and_rank(HudElem *hud_element) __asm__("FUN_L05_00266320");
 
@@ -83,9 +87,9 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
     extern int D_L05_0015F9C0 __attribute__((sda));
     extern int D_L05_0015F9C4 __attribute__((sda));
     extern int D_L05_0015F9C8 __attribute__((sda));
-    char formatted_hud_text[64];
-    char small_buf[16];
-    int x, y, count;
+    char       formatted_hud_text[64];
+    char       small_buf[16];
+    int        x, y, count;
 
     if (hud_element->unk6C <= 0) {
         return 0;
@@ -94,7 +98,8 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
         int x;
         x = -(pal_mode ? D_L05_0015F988 + 10 : D_L05_0015F988 + 18) + D_0013E500[1];
         y = -(pal_mode ? D_L05_0015F9A4 + 10 : D_L05_0015F9A4 + 18) + D_0013E500[1];
-        draw_stretchable_ui_frame(D_L05_0015F984, x, D_L05_0015F98C, D_L05_0015F990, D_L05_0015F994);
+        draw_stretchable_ui_frame(
+            D_L05_0015F984, x, D_L05_0015F98C, D_L05_0015F990, D_L05_0015F994);
     }
     x = D_L05_0015F9A0;
     sprintf(formatted_hud_text, hud_label_colon_format, get_help_message_text(0x523F));
@@ -102,7 +107,8 @@ int draw_hud_progress_and_rank(HudElem *hud_element) {
     print_text_with_texture_3(x, y, D_L05_0015F998, formatted_hud_text, -1);
     x += measure_text_width_regular(formatted_hud_text, -1);
     count = hero.race_lap + 1;
-    if (count > 3) count = 3;
+    if (count > 3)
+        count = 3;
     sprintf(formatted_hud_text, hud_race_lap_progress_format, count);
     print_text_with_texture_3(x - 1, y + 2, 0x80000000, formatted_hud_text, -1);
     print_text_with_texture_3(x, y, D_L05_0015F99C, formatted_hud_text, -1);
@@ -154,18 +160,24 @@ int draw_hud_timer(HudElem *hud_element) __asm__("FUN_L05_00266710");
 
 int draw_hud_timer(HudElem *hud_element) {
     char formatted_hud_text[64];
-    int y0, y1, y2;
-    int frames, per_min, per_sec;
-    int min, sec, hund;
-    int x;
+    int  y0, y1, y2;
+    int  frames, per_min, per_sec;
+    int  min, sec, hund;
+    int  x;
 
     if (hud_element->unk6C <= 0) {
         return 0;
     }
     /* written as -(row) + height: the plain `height - row` form folds the +10/+18 into the subtraction */
-    y0 = -(pal_mode ? hud_timer_frame_bottom_offset_gp + 10 : hud_timer_frame_bottom_offset_gp + 18) + D_0013E500[1];
-    y1 = -(pal_mode ? hud_timer_optional_row_bottom_offset_gp + 10 : hud_timer_optional_row_bottom_offset_gp + 18) + D_0013E500[1];
-    y2 = -(pal_mode ? hud_timer_time_row_bottom_offset_gp + 10 : hud_timer_time_row_bottom_offset_gp + 18) + D_0013E500[1];
+    y0 = -(pal_mode ? hud_timer_frame_bottom_offset_gp + 10
+                    : hud_timer_frame_bottom_offset_gp + 18) +
+         D_0013E500[1];
+    y1 = -(pal_mode ? hud_timer_optional_row_bottom_offset_gp + 10
+                    : hud_timer_optional_row_bottom_offset_gp + 18) +
+         D_0013E500[1];
+    y2 = -(pal_mode ? hud_timer_time_row_bottom_offset_gp + 10
+                    : hud_timer_time_row_bottom_offset_gp + 18) +
+         D_0013E500[1];
     per_min = pal_mode ? 3000 : 3600;
     per_sec = per_min / 60;
     frames = hero.race_time_frames;
@@ -176,9 +188,16 @@ int draw_hud_timer(HudElem *hud_element) {
     hund = frames * 100 / per_sec;
 
     if (alternate_item_available[0]) {
-        draw_stretchable_ui_frame(hud_timer_frame_x_gp, y0, hud_timer_frame_width_gp, hud_timer_frame_height_gp, hud_timer_frame_alpha_gp);
+        draw_stretchable_ui_frame(hud_timer_frame_x_gp,
+                                  y0,
+                                  hud_timer_frame_width_gp,
+                                  hud_timer_frame_height_gp,
+                                  hud_timer_frame_alpha_gp);
         x = hud_timer_text_center_x_gp;
-        sprintf(formatted_hud_text, hud_timer_optional_row_centering_format, get_help_message_text(0x50A6), hero.race_score);
+        sprintf(formatted_hud_text,
+                hud_timer_optional_row_centering_format,
+                get_help_message_text(0x50A6),
+                hero.race_score);
         x -= FUN_001f6250(formatted_hud_text, -1) >> 1;
         sprintf(formatted_hud_text, hud_label_colon_format, get_help_message_text(0x50A6));
         print_text_with_texture_3(x + 1, y1 + 1, 0x80000000, formatted_hud_text, -1);
@@ -201,16 +220,16 @@ int draw_hud_timer(HudElem *hud_element) {
     return hud_element->w;
 }
 
-int D_L16_0015FA14 = 0x8c;
-int D_L16_0015FA18 = 0x2e;
-int D_L16_0015FA1C = 0xeb;
-int D_L16_0015FA20 = 0x20;
-int D_L16_0015FA24 = 0x60;
-int D_L16_0015FA28 = 0x80e08060;
-int D_L16_0015FA2C = 0x80ffb080;
-int D_L16_0015FA30 = 0x100;
-int D_L16_0015FA34 = 0x26;
-int D_L16_0015FA44 = 0xc;
+int  D_L16_0015FA14 = 0x8c;
+int  D_L16_0015FA18 = 0x2e;
+int  D_L16_0015FA1C = 0xeb;
+int  D_L16_0015FA20 = 0x20;
+int  D_L16_0015FA24 = 0x60;
+int  D_L16_0015FA28 = 0x80e08060;
+int  D_L16_0015FA2C = 0x80ffb080;
+int  D_L16_0015FA30 = 0x100;
+int  D_L16_0015FA34 = 0x26;
+int  D_L16_0015FA44 = 0xc;
 char D_L16_0015F860 = 0x25;
 
 int hud_timer_frame_x_gp __asm__("D_L05_0015FA14") = 0x8c;

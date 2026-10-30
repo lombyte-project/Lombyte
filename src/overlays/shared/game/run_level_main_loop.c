@@ -43,24 +43,24 @@
    quit. */
 /* Ported from rac1-decomp (src/overlays/shared/map_002465F8.c: func_L00_002465F8), where it is exact; names translated to the US level program. */
 
-extern char level_bss_clear_args[] __asm__("D_L00_0015FCB0");
-extern char level_frame_callback_args[] __asm__("D_L00_0015FCB8");
+extern char                     level_bss_clear_args[] __asm__("D_L00_0015FCB0");
+extern char                     level_frame_callback_args[] __asm__("D_L00_0015FCB8");
 extern unsigned char D_0013D390 NOT_SDA;
-extern struct UsageStat item_usage[] __asm__("D_00141680");
-extern short D_L00_0016C8B0 NOT_SDA;
-extern int D_0015EEA4;
-extern long frm_clock_time __asm__("D_0015ED40");
+extern struct UsageStat         item_usage[] __asm__("D_00141680");
+extern short D_L00_0016C8B0     NOT_SDA;
+extern int                      D_0015EEA4;
+extern long                     frm_clock_time __asm__("D_0015ED40");
 /* lower alias of D_L00_0015F5AC: retail stores the float view with lui, the int view through $gp */
 extern float D_L00_0015F5A8_macro[] __asm__("D_L00_0015F5A8") MACRO_ADDR;
 
-extern int debug_print(void *) __asm__("FUN_001e93b0");
+extern int  debug_print(void *) __asm__("FUN_001e93b0");
 extern void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
-extern int load_level_assets_and_gameplay(int, int) __asm__("FUN_L00_00244110");
+extern int  load_level_assets_and_gameplay(int, int) __asm__("FUN_L00_00244110");
 extern void clear_dma_queue_entry(void) __asm__("FUN_001f0b88");
 extern void initialize_level_map_archive(void) __asm__("FUN_L00_002464a8");
 extern void load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
 extern void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
-extern int sce_gs_sync_v(int) __asm__("FUN_00122298");
+extern int  sce_gs_sync_v(int) __asm__("FUN_00122298");
 extern void put_disp_buffer(void) __asm__("FUN_001fb2a8");
 extern void music_start_track(int, int, int) __asm__("FUN_00215c40");
 extern void noop_main_callback() __asm__("FUN_001e93e8");
@@ -84,7 +84,8 @@ extern void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
 extern void frame_roll_counter(void) __asm__("FUN_L00_001f6d70");
 extern void read_global_table_entry(void) __asm__("FUN_0012eaf0");
 extern long get_frame_texture(int) __asm__("FUN_001ffa10");
-extern void draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
+extern void
+draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
 extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
 extern void reset_gs_registers_pr(void) __asm__("FUN_001f3958");
 extern void music_unpause(void) __asm__("FUN_00216088");
@@ -93,7 +94,7 @@ extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 
 extern char level_startup_clear_end[] __asm__("D_L00_00165FB0");
 extern char level_startup_clear_start[] __asm__("D_L00_00161E00");
-void run_level_main_loop(void) __asm__("FUN_L00_00245c28");
+void        run_level_main_loop(void) __asm__("FUN_L00_00245c28");
 
 void run_level_main_loop(void) {
     enum {
@@ -113,8 +114,10 @@ void run_level_main_loop(void) {
     int one;
     int per;
 
-    if (((level_startup_clear_end - level_startup_clear_start) & 0xF) == 0 && ((unsigned int)level_startup_clear_start & 0xF) == 0) {
-        fast_mem_zero16(level_startup_clear_start, level_startup_clear_end - level_startup_clear_start);
+    if (((level_startup_clear_end - level_startup_clear_start) & 0xF) == 0 &&
+        ((unsigned int)level_startup_clear_start & 0xF) == 0) {
+        fast_mem_zero16(level_startup_clear_start,
+                        level_startup_clear_end - level_startup_clear_start);
     } else {
         debug_print(level_bss_clear_args);
         for (i = 0; i < level_startup_clear_end - level_startup_clear_start; i++) {
@@ -235,19 +238,26 @@ void run_level_main_loop(void) {
         run_state_handler();
         if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
             if (D_L00_001B9CF0.unk13C == 0) {
-                int rotation_period_frames = 55;
+                int   rotation_period_frames = 55;
                 float size;
                 float sprite_rotation_radians;
-                int hud_sprite;
+                int   hud_sprite;
 
                 setup_gif_paging(0);
                 size = 272.0f;
                 vu1_add_g_sregister(0x47, 0x3004B);
                 hud_sprite = get_icon_frame(0x755D, 0);
                 draw_hud_sprite(hud_sprite, 0x32, 0x12C, 0x40, 0x40, 0x80);
-                sprite_rotation_radians = (float)(D_L00_0015F3F8 % rotation_period_frames) * -6.2831855f / (float)rotation_period_frames;
-                draw_rotated_sprite(1312.0f, 5312.0f, 0x40, 0x40, get_frame_texture(get_icon_frame(0x755D, 1)),
-                                    size, size, sprite_rotation_radians);
+                sprite_rotation_radians = (float)(D_L00_0015F3F8 % rotation_period_frames) *
+                                          -6.2831855f / (float)rotation_period_frames;
+                draw_rotated_sprite(1312.0f,
+                                    5312.0f,
+                                    0x40,
+                                    0x40,
+                                    get_frame_texture(get_icon_frame(0x755D, 1)),
+                                    size,
+                                    size,
+                                    sprite_rotation_radians);
                 do_gif_paging();
             }
         }
@@ -256,7 +266,8 @@ void run_level_main_loop(void) {
         noop_main_callback(level_frame_callback_args, 0x10);
         noop_main_callback(level_frame_callback_args, 0x10);
         vu1_sync_chain(1);
-        D_L00_0015F5D0 = convert_integer_to_float(*(volatile int *)0x10000800) / (pal_mode != 0 ? 11520.0f : 9600.0f);
+        D_L00_0015F5D0 = convert_integer_to_float(*(volatile int *)0x10000800) /
+                         (pal_mode != 0 ? 11520.0f : 9600.0f);
         if (D_L00_0015F5C4 == 0 && g_debug_menu.profiler_mode != 0) {
             noop_main_callback();
         }
@@ -312,6 +323,7 @@ void run_level_main_loop(void) {
     }
     do_space_transition();
 }
+
 #include "rnc/streaming/disc_table.h"
 
 typedef struct {
@@ -322,101 +334,107 @@ typedef struct {
 } MapChunkSlot;
 
 typedef struct {
-    s32 first_data;
-    s32 second_data;
-    s32 scratch_data;
-    s32 mask_data;
-    s32 initialized;
-    s32 second_raw;
-    u8 pad18[0xc];
-    s32 active;
-    s32 unk28;
-    u8 pad2c[4];
+    s32          first_data;
+    s32          second_data;
+    s32          scratch_data;
+    s32          mask_data;
+    s32          initialized;
+    s32          second_raw;
+    u8           pad18[0xc];
+    s32          active;
+    s32          unk28;
+    u8           pad2c[4];
     MapChunkSlot slots[8];
-    u8 padB0[4];
-    f32 unkB4[20];
-    s32 unk104[20];
-    s32 unk154[20];
-    u8 pad1a4[0x80];
-    s32 archive_index;
-    s32 load_state;
-    s32 file_handle;
-    s32 loaded;
-    s32 transfer_bytes;
-    u8 pad238[4];
-    s32 old_base;
-    u8 pad240[0x38];
-    s32 start;
-    s32 buffer;
-    s32 old_end;
-    s32 zero_284;
-    s32 zero_288;
-    s32 slot_28c;
-    s32 level_slot;
-    s32 slot_294;
-    s32 slot_298;
-    s32 slot_29c;
-    s32 slot_2a0;
-    u8 pad2a4[4];
-    s32 last_transfer_bytes;
+    u8           padB0[4];
+    f32          unkB4[20];
+    s32          unk104[20];
+    s32          unk154[20];
+    u8           pad1a4[0x80];
+    s32          archive_index;
+    s32          load_state;
+    s32          file_handle;
+    s32          loaded;
+    s32          transfer_bytes;
+    u8           pad238[4];
+    s32          old_base;
+    u8           pad240[0x38];
+    s32          start;
+    s32          buffer;
+    s32          old_end;
+    s32          zero_284;
+    s32          zero_288;
+    s32          slot_28c;
+    s32          level_slot;
+    s32          slot_294;
+    s32          slot_298;
+    s32          slot_29c;
+    s32          slot_2a0;
+    u8           pad2a4[4];
+    s32          last_transfer_bytes;
 } RenderArchiveState;
 
 /* Sets up the map's tables, loads its data from disc and builds the circular mask. */
 /* Ported from rac1-decomp (src/overlays/shared/map_002465F8.c: func_L00_00246EC0), where it is exact; names translated to the US level program. */
 
-extern char render_archive_source_file[] __asm__("D_L00_0015FE00");
-extern char map_archive_stash_tag[] __asm__("D_L00_001E8B00");
-extern float map_points[] __asm__("D_L00_00182810");
-extern float map_coefficients[] __asm__("D_L00_00182A70");
+extern char               render_archive_source_file[] __asm__("D_L00_0015FE00");
+extern char               map_archive_stash_tag[] __asm__("D_L00_001E8B00");
+extern float              map_points[] __asm__("D_L00_00182810");
+extern float              map_coefficients[] __asm__("D_L00_00182A70");
 extern s32 D_L00_00173E08 NOT_SDA;
-extern int map_parameter_pair_defaults[] __asm__("D_L00_00183EF0");
+extern int                map_parameter_pair_defaults[] __asm__("D_L00_00183EF0");
 extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
-extern int fast_decompress() __asm__("FUN_L00_0024d8d0");
-extern s32 D_0015ED84;
-extern s32 hud_heap_alloc() __asm__("func_001FF288");
-extern unsigned char D_0014161B[];
-extern unsigned char l00_map_outside_circle_mask[] __asm__("D_L00_00184394");
+extern int                fast_decompress() __asm__("FUN_L00_0024d8d0");
+extern s32                D_0015ED84;
+extern s32                hud_heap_alloc() __asm__("func_001FF288");
+extern unsigned char      D_0014161B[];
+extern unsigned char      l00_map_outside_circle_mask[] __asm__("D_L00_00184394");
 extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
 extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
-s32 load(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
-s32 stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
+s32         load(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
+s32         stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
 extern struct DiscFile D_00138438[];
-extern char D_001383A0[];
-extern char D_00141EC0[];
+extern char            D_001383A0[];
+extern char            D_00141EC0[];
 
 void initialize_level_map_archive(void) {
-    int i;
+    int                 i;
     RenderArchiveState *state;
-    int level;
-    struct DiscFile *file;
-    int heap_tag, first_size, second_size, scratch;
-    int *archive, *archive_base;
-    unsigned char *level_data;
-    int x, y, mask_buffer;
-    float radius_sq;
-    unsigned char *flags;
+    int                 level;
+    struct DiscFile    *file;
+    int                 heap_tag, first_size, second_size, scratch;
+    int                *archive, *archive_base;
+    unsigned char      *level_data;
+    int                 x, y, mask_buffer;
+    float               radius_sq;
+    unsigned char      *flags;
 
     D_L00_001841F0.initialized = 1;
-    { int i;
-    for (i = 0; i < 20; i++) {
-        D_L00_001841F0.unk104[i] = map_parameter_pair_defaults[i * 2];
-        D_L00_001841F0.unkB4[i] = 0.65f;
-        D_L00_001841F0.unk154[i] = map_parameter_pair_defaults[i * 2 + 1];
-    } }
+    {
+        int i;
+        for (i = 0; i < 20; i++) {
+            D_L00_001841F0.unk104[i] = map_parameter_pair_defaults[i * 2];
+            D_L00_001841F0.unkB4[i] = 0.65f;
+            D_L00_001841F0.unk154[i] = map_parameter_pair_defaults[i * 2 + 1];
+        }
+    }
     level = current_level_index;
     D_L00_001841F0.file_handle = -1;
     D_L00_001841F0.archive_index = level > 18 ? 0 : level;
-    { int i;
-    for (i = 0; i < 19; i++) {
-        float world_x0 = map_points[i * 8], world_y0 = map_points[i * 8 + 1], world_x1 = map_points[i * 8 + 2], world_y1 = map_points[i * 8 + 3];
-        float map_x0 = map_points[i * 8 + 4], map_y0 = map_points[i * 8 + 5], map_x1 = map_points[i * 8 + 6], map_y1 = map_points[i * 8 + 7];
-        float scale_x = (map_x0 - map_x1) / (world_x0 - world_x1);
-        float scale_y = (map_y0 - map_y1) / (world_y0 - world_y1);
-        map_coefficients[i * 4 + 1] = scale_x;
-        map_coefficients[i * 4 + 3] = scale_y;
-        map_coefficients[i * 4] = map_x0 - scale_x * world_x0;
-        map_coefficients[i * 4 + 2] = map_y0 - scale_y * world_y0;
-    } }
+    {
+        int i;
+        for (i = 0; i < 19; i++) {
+            float world_x0 = map_points[i * 8], world_y0 = map_points[i * 8 + 1],
+                  world_x1 = map_points[i * 8 + 2], world_y1 = map_points[i * 8 + 3];
+            float map_x0 = map_points[i * 8 + 4], map_y0 = map_points[i * 8 + 5],
+                  map_x1 = map_points[i * 8 + 6], map_y1 = map_points[i * 8 + 7];
+            float scale_x = (map_x0 - map_x1) / (world_x0 - world_x1);
+            float scale_y = (map_y0 - map_y1) / (world_y0 - world_y1);
+            map_coefficients[i * 4 + 1] = scale_x;
+            map_coefficients[i * 4 + 3] = scale_y;
+            map_coefficients[i * 4] = map_x0 - scale_x * world_x0;
+            map_coefficients[i * 4 + 2] = map_y0 - scale_y * world_y0;
+        }
+    }
     flags = (unsigned char *)((unsigned char *)item_available);
     if (flags[0x21] != 0) {
         D_L00_001841F0.loaded = 1;
@@ -433,7 +451,8 @@ void initialize_level_map_archive(void) {
         archive = (int *)((int)archive_base + 0x9A800);
         scratch = file->size << 7;
         load(archive, file->sector, file->size);
-        state->file_handle = stash_send_data((int)archive, scratch, 0x4800, (int)map_archive_stash_tag);
+        state->file_handle =
+            stash_send_data((int)archive, scratch, 0x4800, (int)map_archive_stash_tag);
         state->transfer_bytes = scratch;
         fast_decompress((int)archive, (int)archive_base);
         archive = archive_base;
@@ -457,13 +476,16 @@ void initialize_level_map_archive(void) {
         if (level_data[0] != 0) {
             load_map_chunk((void *)D_L00_001841F0.mask_data, level_data, D_L00_001841F0.second_raw);
         } else {
-            decode_map_mask((int *)D_L00_001841F0.mask_data, (unsigned char *)D_L00_001841F0.first_data, (short *)D_L00_001841F0.second_data);
+            decode_map_mask((int *)D_L00_001841F0.mask_data,
+                            (unsigned char *)D_L00_001841F0.first_data,
+                            (short *)D_L00_001841F0.second_data);
         }
         radius_sq = 256.0f;
         for (y = 0; y < 32; y++) {
             for (x = 0; x < 32; x++) {
                 if ((15.5f - (float)x) * (15.5f - (float)x) +
-                    (15.5f - (float)y) * (15.5f - (float)y) > radius_sq) {
+                        (15.5f - (float)y) * (15.5f - (float)y) >
+                    radius_sq) {
                     l00_map_outside_circle_mask[x / 8 + y * 4] |= 1 << (x - (x / 8) * 8);
                 }
             }
@@ -489,11 +511,11 @@ void stash_receive_data(s32, s32, s32, s32, s32) __asm__("FUN_00232f20");
 void initialize_render_archive_transfer(void) __asm__("FUN_L00_002468b8");
 
 void initialize_render_archive_transfer(void) {
-    s32 first_base;
-    s32 second_base;
-    s32 buffer;
-    s32 bytes;
-    s32 archive_index;
+    s32                 first_base;
+    s32                 second_base;
+    s32                 buffer;
+    s32                 bytes;
+    s32                 archive_index;
     RenderArchiveState *state = &D_L00_001841F0;
 
     noop_main_callback();
@@ -519,8 +541,9 @@ void initialize_render_archive_transfer(void) {
         if (state->loaded == 0 && D_0013D4E1 != 0) {
             archive_index = state->archive_index;
             bytes = disc_table.render_archives[archive_index].size << 7;
-            start_audio_stream_read(buffer, disc_table.render_archives[archive_index].sector,
-                         disc_table.render_archives[archive_index].size);
+            start_audio_stream_read(buffer,
+                                    disc_table.render_archives[archive_index].sector,
+                                    disc_table.render_archives[archive_index].size);
             update_audio_stream_until_idle(1);
             state->loaded = 1;
             state->transfer_bytes = bytes;
@@ -533,8 +556,13 @@ void initialize_render_archive_transfer(void) {
         }
         if (D_L00_001841F0.file_handle != -1) {
             D_L00_001841F0.last_transfer_bytes = D_L00_001841F0.transfer_bytes;
-            stash_receive_data(D_L00_001841F0.buffer, D_L00_001841F0.file_handle, 0, D_L00_001841F0.transfer_bytes, 0);
-            D_L00_001841F0.level_slot = D_0013D4E1 != 0 ? current_level_index + 0x100 : current_level_index;
+            stash_receive_data(D_L00_001841F0.buffer,
+                               D_L00_001841F0.file_handle,
+                               0,
+                               D_L00_001841F0.transfer_bytes,
+                               0);
+            D_L00_001841F0.level_slot =
+                D_0013D4E1 != 0 ? current_level_index + 0x100 : current_level_index;
             D_L00_001841F0.active = 1;
             D_L00_001841F0.load_state = -2;
             return;
@@ -544,170 +572,315 @@ void initialize_render_archive_transfer(void) {
 }
 
 s32 D_L00_00184420[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L00_00184424[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L00_00184470[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L00_00184474[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L01_0018489C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L01_001848A0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L01_001848F0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L01_001848F4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L01_001848F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L01_00184904[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L01_00184908[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_00184A1C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_00184A20[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_00184A70[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_00184A74[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_00184A78[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_00184A84[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_00184A88[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L03_0018451C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L03_00184520[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L03_00184570[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L03_00184574[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L03_00184578[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L03_00184584[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L03_00184588[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L04_0018459C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L04_001845A0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L04_001845F0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L04_001845F4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L04_001845F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L04_00184604[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L04_00184608[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_0018489C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_001848A0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_001848F0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_001848F4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_001848F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_00184904[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_00184908[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_00184B9C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_00184BA0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_00184BF0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_00184BF4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_00184BF8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_00184C04[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_00184C08[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L07_0018449C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L07_001844A0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L07_001844F0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L07_001844F4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L07_001844F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L07_00184504[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L07_00184508[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_00184C1C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_00184C20[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_00184C70[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_00184C74[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_00184C78[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_00184C84[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_00184C88[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L09_0018459C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L09_001845A0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L09_001845F0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L09_001845F4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L09_001845F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L09_00184604[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L09_00184608[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L10_0018489C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L10_001848A0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L10_001848F0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L10_001848F4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L10_001848F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L10_00184904[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L10_00184908[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_00184E1C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_00184E20[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_00184E70[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_00184E74[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_00184E78[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_00184E84[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_00184E88[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_0018489C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_001848A0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_001848F0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_001848F4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_001848F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_00184904[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_00184908[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L13_0018471C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L13_00184720[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L13_00184770[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L13_00184774[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L13_00184778[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L13_00184784[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L13_00184788[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_00184B1C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_00184B20[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_00184B70[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_00184B74[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_00184B78[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_00184B84[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_00184B88[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_00184A1C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_00184A20[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_00184A70[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_00184A74[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_00184A78[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_00184A84[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_00184A88[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_0018489C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_001848A0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_001848F0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_001848F4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_001848F8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_00184904[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_00184908[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_00184D1C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_00184D20[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_00184D70[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_00184D74[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_00184D78[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_00184D84[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_00184D88[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_00184E1C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_00184E20[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_00184E70[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_00184E74[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_00184E78[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_00184E84[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_00184E88[1] __attribute__((section(".data"))) = {0};
 
 short D_L01_0016CD30 NOT_SDA = 0;
-RenderArchiveState D_L01_00184670 = {0};
+RenderArchiveState   D_L01_00184670 = {0};
+
 short D_L02_0016CEB0 NOT_SDA = 0;
-RenderArchiveState D_L02_001847F0 = {0};
+RenderArchiveState   D_L02_001847F0 = {0};
+
 short D_L03_0016C9B0 NOT_SDA = 0;
-RenderArchiveState D_L03_001842F0 = {0};
+RenderArchiveState   D_L03_001842F0 = {0};
+
 short D_L04_0016CA30 NOT_SDA = 0;
-RenderArchiveState D_L04_00184370 = {0};
+RenderArchiveState   D_L04_00184370 = {0};
+
 short D_L05_0016CCB0 NOT_SDA = 0;
-RenderArchiveState D_L05_00184670 = {0};
+RenderArchiveState   D_L05_00184670 = {0};
+
 short D_L06_0016D030 NOT_SDA = 0;
-RenderArchiveState D_L06_00184970 = {0};
+RenderArchiveState   D_L06_00184970 = {0};
+
 short D_L07_0016C930 NOT_SDA = 0;
 short D_L08_0016D0B0 NOT_SDA = 0;
-RenderArchiveState D_L08_001849F0 = {0};
+RenderArchiveState   D_L08_001849F0 = {0};
+
 short D_L09_0016CA30 NOT_SDA = 0;
-RenderArchiveState D_L09_00184370 = {0};
+RenderArchiveState   D_L09_00184370 = {0};
+
 short D_L10_0016CD30 NOT_SDA = 0;
-RenderArchiveState D_L10_00184670 = {0};
+RenderArchiveState   D_L10_00184670 = {0};
+
 short D_L11_0016D2B0 NOT_SDA = 0;
-RenderArchiveState D_L11_00184BF0 = {0};
+RenderArchiveState   D_L11_00184BF0 = {0};
+
 short D_L12_0016CD30 NOT_SDA = 0;
-RenderArchiveState D_L12_00184670 = {0};
+RenderArchiveState   D_L12_00184670 = {0};
+
 short D_L13_0016CBB0 NOT_SDA = 0;
-RenderArchiveState D_L13_001844F0 = {0};
+RenderArchiveState   D_L13_001844F0 = {0};
+
 short D_L14_0016CFB0 NOT_SDA = 0;
-RenderArchiveState D_L14_001848F0 = {0};
+RenderArchiveState   D_L14_001848F0 = {0};
+
 short D_L15_0016CEB0 NOT_SDA = 0;
-RenderArchiveState D_L15_001847F0 = {0};
+RenderArchiveState   D_L15_001847F0 = {0};
+
 short D_L16_0016CCB0 NOT_SDA = 0;
-RenderArchiveState D_L16_00184670 = {0};
+RenderArchiveState   D_L16_00184670 = {0};
+
 short D_L17_0016D1B0 NOT_SDA = 0;
-RenderArchiveState D_L17_00184AF0 = {0};
+RenderArchiveState   D_L17_00184AF0 = {0};
+
 short D_L18_0016D2B0 NOT_SDA = 0;
-RenderArchiveState D_L18_00184BF0 = {0};
+RenderArchiveState   D_L18_00184BF0 = {0};
 
 short D_L00_0016C8B0 NOT_SDA = 0;

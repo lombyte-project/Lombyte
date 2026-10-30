@@ -20,9 +20,10 @@ extern void mode_freeze_init(s32, s32) __asm__("func_001FBAB8");
  */
 s32 update_menu_entry_actions(struct MenuScreen *menu) __asm__("FUN_0021abf8");
 
-extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
-extern s32 game_language_gp __asm__("D_0015ED88") __attribute__((sda));
+extern s32  current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
+extern s32  game_language_gp __asm__("D_0015ED88") __attribute__((sda));
 extern s32 *menu_level_indices_gp __asm__("D_001601E0") __attribute__((sda));
+
 s32 update_menu_entry_actions(struct MenuScreen *menu) {
     enum {
         MENU_ACTION_DISABLED = 0,
@@ -121,8 +122,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             menu_system.close_request = 5;
             menu_system.unkF0 = menu_system.current;
             menu_system.unkF4 = 0;
-            menu_system.unkE4 =
-                menu->data.list.items[menu->data.list.selected].param.half.lo;
+            menu_system.unkE4 = menu->data.list.items[menu->data.list.selected].param.half.lo;
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case MENU_ACTION_REQUEST_CLOSE_WITH_WORD_PAYLOAD:
@@ -200,4 +200,3 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
 }
 
 extern __typeof__(update_menu_entry_actions) func_0021ABF8 __attribute__((alias("FUN_0021abf8")));
-

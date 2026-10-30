@@ -2,9 +2,10 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
+
 extern s32 RemoveDmacHandler();
 extern s32 disable_dmac() __asm__("func_001190F8");
-void dmac_vif1_disable(void) __asm__("FUN_00233d90");
+void       dmac_vif1_disable(void) __asm__("FUN_00233d90");
 
 void dmac_vif1_disable(void) {
     if (*(volatile s32 *)0x1000E010 & 0x20000) {

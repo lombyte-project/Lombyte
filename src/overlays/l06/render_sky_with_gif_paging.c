@@ -8,8 +8,6 @@
 #include "rnc/rendering/sky/setup_sky_gif_paging.h"
 #include "rnc/overlay/shared/rendering/sky/sky_particle_effects.h"
 
-
-
 void render_sky_with_gif_paging(void) __asm__("FUN_L06_0024d218");
 
 void render_sky_with_gif_paging(void) {

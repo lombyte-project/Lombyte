@@ -6,8 +6,8 @@ s32 find_map_entry_slot(s32 map_id) __asm__("FUN_002050a0");
 /* Returns the cache slot holding map id arg0, or -1. */
 s32 find_map_entry_slot(s32 map_id) {
     register struct MapState *map;
-    register s32 *id;
-    register s32 count = 0;
+    register s32             *id;
+    register s32              count = 0;
 
     map = &level_map_selection;
     id = map->slot_id;

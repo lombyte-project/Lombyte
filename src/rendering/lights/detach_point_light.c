@@ -1,23 +1,24 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
+
 struct ShrubLightLink {
-    u8 pad_0[0x1B];
-    u8 unk1B;
-    u8 pad_1C[0x2];
+    u8  pad_0[0x1B];
+    u8  unk1B;
+    u8  pad_1C[0x2];
     u16 packed_lights;
 };
 
 struct TfragLightLink {
-    u8 pad_0[0x35];
-    u8 unk35;
+    u8  pad_0[0x35];
+    u8  unk35;
     u16 packed_lights;
 };
 
 struct TieLightLink {
-    u8 pad_0[0x1B];
-    u8 unk1B;
-    u8 pad_1C[0x2];
+    u8  pad_0[0x1B];
+    u8  unk1B;
+    u8  pad_1C[0x2];
     u16 packed_lights;
 };
 
@@ -31,32 +32,32 @@ struct PointLightIndexRanges {
     s32 instance_indices_address;
 };
 
-extern u8 tie_point_light_missing_message[] __asm__("D_001E7B50");
-extern u8 tfrag_point_light_missing_message[] __asm__("D_001E7B70");
-extern u8 shrub_point_light_missing_message[] __asm__("D_001E7B98");
+extern u8  tie_point_light_missing_message[] __asm__("D_001E7B50");
+extern u8  tfrag_point_light_missing_message[] __asm__("D_001E7B70");
+extern u8  shrub_point_light_missing_message[] __asm__("D_001E7B98");
 extern s32 DebugPrint();
-void detach_point_light(s32 light_index) __asm__("FUN_00201f88");
+void       detach_point_light(s32 light_index) __asm__("FUN_00201f88");
 
 void detach_point_light(s32 light_index) {
-    s16 *tie_index_cursor;
-    s16 *shrub_index_cursor;
-    s16 *tfrag_index_cursor;
-    s32 shrub_indices_end_address;
-    s32 tie_indices_end_address;
-    s32 tfrag_indices_end_address;
-    s32 light_third_nibble;
-    s32 light_second_nibble;
-    s32 light_fourth_nibble;
-    s32 light_low_nibble;
-    s32 tfrag_first_light;
-    s32 shrub_first_light;
-    s32 tie_first_light;
-    u32 shrub_packed_lights;
-    u32 tie_packed_lights;
-    u32 tfrag_packed_lights;
-    struct ShrubLightLink *shrub_link;
-    struct TfragLightLink *tfrag_link;
-    struct TieLightLink *tie_link;
+    s16                          *tie_index_cursor;
+    s16                          *shrub_index_cursor;
+    s16                          *tfrag_index_cursor;
+    s32                           shrub_indices_end_address;
+    s32                           tie_indices_end_address;
+    s32                           tfrag_indices_end_address;
+    s32                           light_third_nibble;
+    s32                           light_second_nibble;
+    s32                           light_fourth_nibble;
+    s32                           light_low_nibble;
+    s32                           tfrag_first_light;
+    s32                           shrub_first_light;
+    s32                           tie_first_light;
+    u32                           shrub_packed_lights;
+    u32                           tie_packed_lights;
+    u32                           tfrag_packed_lights;
+    struct ShrubLightLink        *shrub_link;
+    struct TfragLightLink        *tfrag_link;
+    struct TieLightLink          *tie_link;
     struct PointLightIndexRanges *light_entry;
 
     light_low_nibble = light_index & 0xFFFF;
@@ -76,7 +77,8 @@ void detach_point_light(s32 light_index) {
             } else if ((tie_packed_lights & 0xF0) == light_second_nibble) {
                 tie_packed_lights = tie_first_light | ((tie_packed_lights >> 4) & 0xFF0) | 0xF000;
             } else if ((tie_packed_lights & 0xF00) == light_third_nibble) {
-                tie_packed_lights = (tie_packed_lights & 0xFF) | ((tie_packed_lights >> 4) & 0xF00) | 0xF000;
+                tie_packed_lights =
+                    (tie_packed_lights & 0xFF) | ((tie_packed_lights >> 4) & 0xF00) | 0xF000;
             } else if ((tie_packed_lights & 0xF000) == light_fourth_nibble) {
                 tie_packed_lights |= 0xF000;
             } else {
@@ -101,9 +103,11 @@ void detach_point_light(s32 light_index) {
             if (tfrag_first_light == light_low_nibble) {
                 tfrag_packed_lights = (tfrag_packed_lights >> 4) | 0xF000;
             } else if ((tfrag_packed_lights & 0xF0) == light_second_nibble) {
-                tfrag_packed_lights = tfrag_first_light | ((tfrag_packed_lights >> 4) & 0xFF0) | 0xF000;
+                tfrag_packed_lights =
+                    tfrag_first_light | ((tfrag_packed_lights >> 4) & 0xFF0) | 0xF000;
             } else if ((tfrag_packed_lights & 0xF00) == light_third_nibble) {
-                tfrag_packed_lights = (tfrag_packed_lights & 0xFF) | ((tfrag_packed_lights >> 4) & 0xF00) | 0xF000;
+                tfrag_packed_lights =
+                    (tfrag_packed_lights & 0xFF) | ((tfrag_packed_lights >> 4) & 0xF00) | 0xF000;
             } else if ((tfrag_packed_lights & 0xF000) == light_fourth_nibble) {
                 tfrag_packed_lights |= 0xF000;
             } else {
@@ -128,9 +132,11 @@ void detach_point_light(s32 light_index) {
             if (shrub_first_light == light_low_nibble) {
                 shrub_packed_lights = (shrub_packed_lights >> 4) | 0xF000;
             } else if ((shrub_packed_lights & 0xF0) == light_second_nibble) {
-                shrub_packed_lights = shrub_first_light | ((shrub_packed_lights >> 4) & 0xFF0) | 0xF000;
+                shrub_packed_lights =
+                    shrub_first_light | ((shrub_packed_lights >> 4) & 0xFF0) | 0xF000;
             } else if ((shrub_packed_lights & 0xF00) == light_third_nibble) {
-                shrub_packed_lights = (shrub_packed_lights & 0xFF) | ((shrub_packed_lights >> 4) & 0xF00) | 0xF000;
+                shrub_packed_lights =
+                    (shrub_packed_lights & 0xFF) | ((shrub_packed_lights >> 4) & 0xF00) | 0xF000;
             } else if ((shrub_packed_lights & 0xF000) == light_fourth_nibble) {
                 shrub_packed_lights |= 0xF000;
             } else {

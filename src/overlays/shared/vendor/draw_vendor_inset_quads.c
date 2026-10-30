@@ -20,35 +20,35 @@
 
 typedef struct {
     float v[4][4];
-    int rgba[4];
+    int   rgba[4];
     float uv[4][2];
-    long gs[4];
+    long  gs[4];
 } QuadPkt;
 
 extern float vendor_quad_inset_parameters[][4] __asm__("D_L00_001CA318");
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void project_graphics_bounds_float(void *, void *, float *, float *, float *,
-                                          float *) __asm__("FUN_00237c80");
+extern int   get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void  project_graphics_bounds_float(
+     void *, void *, float *, float *, float *, float *) __asm__("FUN_00237c80");
 extern void draw_geometry_quad(void *, void *, int);
-extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
-                                          char *arg3) __asm__("FUN_0020cd48");
+extern void
+transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2, char *arg3) __asm__("FUN_0020cd48");
 extern void vu1_add_g_sregister(int, long);
 
 void draw_vendor_inset_quads(char *vertex_batch) __asm__("FUN_L00_0029f990");
 
 void draw_vendor_inset_quads(char *vertex_batch) {
-    float A[4];
-    float B[4];
-    float C[4];
-    float P[3][4];
-    int vertex_indices[3];
-    float E[4];
+    float   A[4];
+    float   B[4];
+    float   C[4];
+    float   P[3][4];
+    int     vertex_indices[3];
+    float   E[4];
     QuadPkt quad_packet;
-    float projected_bounds[4];
-    float edge_length;
-    int i;
-    float one = 1.0f;
-    float uvv = 0.984375f;
+    float   projected_bounds[4];
+    float   edge_length;
+    int     i;
+    float   one = 1.0f;
+    float   uvv = 0.984375f;
     for (i = 1; i < 6; i++) {
         vertex_indices[0] = i * 4;
         vertex_indices[1] = i * 4 + 1;
@@ -67,7 +67,12 @@ void draw_vendor_inset_quads(char *vertex_batch) {
         fast_vec_normalize(B, B, edge_length - vendor_quad_inset_parameters[i][3] * 2.0f);
         fast_vec_add(E, C, A);
         fast_vec_add(E, E, B);
-        project_graphics_bounds_float(C, E, &projected_bounds[0], &projected_bounds[1], &projected_bounds[2], &projected_bounds[3]);
+        project_graphics_bounds_float(C,
+                                      E,
+                                      &projected_bounds[0],
+                                      &projected_bounds[1],
+                                      &projected_bounds[2],
+                                      &projected_bounds[3]);
         qcopy(quad_packet.v[0], C);
         fast_vec_add(quad_packet.v[1], C, A);
         fast_vec_add(quad_packet.v[2], C, B);
@@ -96,13 +101,16 @@ void draw_vendor_inset_quads(char *vertex_batch) {
         draw_geometry_quad(&quad_packet, 0, 1);
     }
 }
+
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
+
 typedef struct {
     int a, b, c;
 } I3;
+
 extern long capture_texture_tex0 __asm__("D_0015EED0");
-void FUN_0020cd48_29fcd0(void *, int, void *, void *) __asm__("FUN_0020cd48");
+void        FUN_0020cd48_29fcd0(void *, int, void *, void *) __asm__("FUN_0020cd48");
 void project_graphics_bounds(void *, void *, int *, int *, int *, int *) __asm__("FUN_00237a78");
 void configure_capture_target(int, int, float) __asm__("FUN_00239690");
 void draw_centered_capture_background(int, int) __asm__("FUN_001fb740");
@@ -111,24 +119,23 @@ void draw_vendor_purchase_text(void *, int, int) __asm__("FUN_L00_0029ead8");
 void render_vendor_capture_texture_overlays_pass(int, float, float) __asm__("FUN_00239328");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
 void draw_moby_list(void *, int) __asm__("FUN_0020d330");
-void draw_textured_quad(int, int, int, int, int, int, int, int, long,
-                         long) __asm__("FUN_001f5450");
+void draw_textured_quad(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
 
 extern I3 D_L00_00161178 NOT_SDA;
-void draw_vendor_purchase_panel(void *moby) __asm__("FUN_L00_0029fcd0");
+void                     draw_vendor_purchase_panel(void *moby) __asm__("FUN_L00_0029fcd0");
 
 void draw_vendor_purchase_panel(void *moby) {
     OvlQuad first_edge[1];
     OvlQuad second_edge[1];
     OvlQuad base[1];
     OvlQuad out[3];
-    I3 ids;
+    I3      ids;
     OvlQuad inset_offset[1];
     OvlQuad quad_corners[4];
     OvlQuad pad[5];
     OvlQuad bounds_first_corner, bounds_opposite_corner;
-    int x, y, panel_screen_x, panel_screen_y;
-    float untrimmed_edge_length;
+    int     x, y, panel_screen_x, panel_screen_y;
+    float   untrimmed_edge_length;
     ids = D_L00_00161178;
     FUN_0020cd48_29fcd0(moby, 3, &ids, out);
     qcopy(base, out);
@@ -148,7 +155,8 @@ void draw_vendor_purchase_panel(void *moby) {
     fast_vec_add(&quad_corners[3], &quad_corners[2], first_edge);
     bounds_first_corner = quad_corners[0];
     bounds_opposite_corner = quad_corners[3];
-    project_graphics_bounds(&bounds_first_corner, &bounds_opposite_corner, &x, &y, &panel_screen_x, &panel_screen_y);
+    project_graphics_bounds(
+        &bounds_first_corner, &bounds_opposite_corner, &x, &y, &panel_screen_x, &panel_screen_y);
     configure_capture_target(9, 7, 1.0f);
     draw_centered_capture_background(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
@@ -158,107 +166,146 @@ void draw_vendor_purchase_panel(void *moby) {
     draw_centered_capture_background(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
     draw_moby_list(moby, 1);
-    draw_textured_quad(panel_screen_x, panel_screen_y, x, y, 0, 0, x, y, 0x80808080L, capture_texture_tex0);
+    draw_textured_quad(
+        panel_screen_x, panel_screen_y, x, y, 0, 0, x, y, 0x80808080L, capture_texture_tex0);
 }
 /* Draws the four quads of the hologram cone, scrolling the texture coordinates. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A11E8), where it is exact; names translated to the US level program. */
 
-struct Quad { int a, b, c, d; };
+struct Quad {
+    int a, b, c, d;
+};
 
 struct HoloPacket {
     float pos[4][4];
-    int col[4];
+    int   col[4];
     float uv[4][2];
-    long hdr[4];
+    long  hdr[4];
 };
 
-extern float vendor_hologram_vertex_offsets[][4] __asm__("D_L00_001CA380");
-extern float vendor_hologram_vertex_uvs[][2] __asm__("D_L00_001CA410");
-extern int D_L00_001CA458[] NOT_SDA;
+extern float      vendor_hologram_vertex_offsets[][4] __asm__("D_L00_001CA380");
+extern float      vendor_hologram_vertex_uvs[][2] __asm__("D_L00_001CA410");
+extern int        D_L00_001CA458[] NOT_SDA;
 extern VendorMenu vendor_menu_lui __asm__("D_L00_001CA4C0") NOT_SDA;
+
 #include "rnc/overlay/shared/vendor/draw_vendor_inset_quads_globals.h"
+
 extern float vendor_hologram_v_scroll_offset_gp __asm__("D_L00_00161184") __attribute__((sda));
 extern struct Quad D_L00_001CA480[] NOT_SDA;
-extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
+extern void        fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_vendor_hologram_cone(void) __asm__("FUN_L00_0029ff58");
 
 void draw_vendor_hologram_cone(void) {
     struct HoloPacket quad_packet;
-    float transformed_vertex_offsets[4][4];
-    int i;
+    float             transformed_vertex_offsets[4][4];
+    int               i;
     vendor_hologram_v_scroll_offset_gp = vendor_hologram_v_scroll_offset_gp + 0.01f;
-    if (vendor_hologram_v_scroll_offset_gp > 1.0f) vendor_hologram_v_scroll_offset_gp = vendor_hologram_v_scroll_offset_gp - 1.0f;
+    if (vendor_hologram_v_scroll_offset_gp > 1.0f)
+        vendor_hologram_v_scroll_offset_gp = vendor_hologram_v_scroll_offset_gp - 1.0f;
     quad_packet.hdr[2] = 1;
     quad_packet.hdr[3] = 0x4000000044L;
     quad_packet.hdr[0] = 0;
     quad_packet.hdr[1] = get_effect_texture(0x18);
     for (i = 0; i < 4; i++) {
-        transform_vector_by_basis(transformed_vertex_offsets[0], vendor_hologram_vertex_offsets[D_L00_001CA480[i].a], (char *)vendor_menu_lui.vendor_moby + 0xC0);
-        transform_vector_by_basis(transformed_vertex_offsets[1], vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)], (char *)vendor_menu_lui.vendor_moby + 0xC0);
-        transform_vector_by_basis(transformed_vertex_offsets[2], vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)], (char *)vendor_menu_lui.vendor_moby + 0xC0);
-        transform_vector_by_basis(transformed_vertex_offsets[3], vendor_hologram_vertex_offsets[D_L00_001CA480[i].d], (char *)vendor_menu_lui.vendor_moby + 0xC0);
-        quad_packet.pos[0][0] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x10) + transformed_vertex_offsets[0][0];
-        quad_packet.pos[0][1] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x14) + transformed_vertex_offsets[0][1];
-        quad_packet.pos[0][2] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x18) + transformed_vertex_offsets[0][2];
-        quad_packet.pos[1][0] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x10) + transformed_vertex_offsets[1][0];
-        quad_packet.pos[1][1] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x14) + transformed_vertex_offsets[1][1];
-        quad_packet.pos[1][2] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x18) + transformed_vertex_offsets[1][2];
-        quad_packet.pos[2][0] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x10) + transformed_vertex_offsets[2][0];
-        quad_packet.pos[2][1] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x14) + transformed_vertex_offsets[2][1];
-        quad_packet.pos[2][2] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x18) + transformed_vertex_offsets[2][2];
-        quad_packet.pos[3][0] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x10) + transformed_vertex_offsets[3][0];
-        quad_packet.pos[3][1] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x14) + transformed_vertex_offsets[3][1];
-        quad_packet.pos[3][2] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x18) + transformed_vertex_offsets[3][2];
+        transform_vector_by_basis(transformed_vertex_offsets[0],
+                                  vendor_hologram_vertex_offsets[D_L00_001CA480[i].a],
+                                  (char *)vendor_menu_lui.vendor_moby + 0xC0);
+        transform_vector_by_basis(
+            transformed_vertex_offsets[1],
+            vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)],
+            (char *)vendor_menu_lui.vendor_moby + 0xC0);
+        transform_vector_by_basis(
+            transformed_vertex_offsets[2],
+            vendor_hologram_vertex_offsets[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)],
+            (char *)vendor_menu_lui.vendor_moby + 0xC0);
+        transform_vector_by_basis(transformed_vertex_offsets[3],
+                                  vendor_hologram_vertex_offsets[D_L00_001CA480[i].d],
+                                  (char *)vendor_menu_lui.vendor_moby + 0xC0);
+        quad_packet.pos[0][0] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x10) +
+                                transformed_vertex_offsets[0][0];
+        quad_packet.pos[0][1] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x14) +
+                                transformed_vertex_offsets[0][1];
+        quad_packet.pos[0][2] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x18) +
+                                transformed_vertex_offsets[0][2];
+        quad_packet.pos[1][0] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x10) +
+                                transformed_vertex_offsets[1][0];
+        quad_packet.pos[1][1] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x14) +
+                                transformed_vertex_offsets[1][1];
+        quad_packet.pos[1][2] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x18) +
+                                transformed_vertex_offsets[1][2];
+        quad_packet.pos[2][0] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x10) +
+                                transformed_vertex_offsets[2][0];
+        quad_packet.pos[2][1] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x14) +
+                                transformed_vertex_offsets[2][1];
+        quad_packet.pos[2][2] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x18) +
+                                transformed_vertex_offsets[2][2];
+        quad_packet.pos[3][0] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x10) +
+                                transformed_vertex_offsets[3][0];
+        quad_packet.pos[3][1] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x14) +
+                                transformed_vertex_offsets[3][1];
+        quad_packet.pos[3][2] = *(float *)((char *)vendor_menu_lui.vendor_moby + 0x18) +
+                                transformed_vertex_offsets[3][2];
         quad_packet.col[0] = D_L00_001CA458[D_L00_001CA480[i].a];
         quad_packet.col[1] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)];
         quad_packet.col[2] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)];
         quad_packet.col[3] = D_L00_001CA458[D_L00_001CA480[i].d];
         quad_packet.uv[0][0] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].a][0];
-        quad_packet.uv[0][1] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].a][1] + vendor_hologram_v_scroll_offset_gp;
-        quad_packet.uv[1][0] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][0];
-        quad_packet.uv[1][1] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][1] + vendor_hologram_v_scroll_offset_gp;
-        quad_packet.uv[2][0] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][0];
-        quad_packet.uv[2][1] = vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[0][1] =
+            vendor_hologram_vertex_uvs[D_L00_001CA480[i].a][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[1][0] =
+            vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][0];
+        quad_packet.uv[1][1] =
+            vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 4)][1] +
+            vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[2][0] =
+            vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][0];
+        quad_packet.uv[2][1] =
+            vendor_hologram_vertex_uvs[*(int *)((char *)D_L00_001CA480 + i * 16 + 8)][1] +
+            vendor_hologram_v_scroll_offset_gp;
         quad_packet.uv[3][0] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].d][0];
-        quad_packet.uv[3][1] = vendor_hologram_vertex_uvs[D_L00_001CA480[i].d][1] + vendor_hologram_v_scroll_offset_gp;
+        quad_packet.uv[3][1] =
+            vendor_hologram_vertex_uvs[D_L00_001CA480[i].d][1] + vendor_hologram_v_scroll_offset_gp;
         fast_draw_quad_real(&quad_packet, 0, 1);
     }
 }
+
 #include "eetypes.h"
 #include "qzero.h"
+
 typedef struct {
     u128 q[3];
 } Q3;
 
-
 typedef struct {
     char pad[0x30];
-    s32 f30;
+    s32  f30;
     char pad2[0xC];
 } A02b0_tab;
 
-extern VendorMenu vendor_menu __asm__("D_L00_001CA4C0");
-extern s32 D_L00_0015F3F4;
-extern s32 D_L00_0015F3F8[];
-extern s32 D_L00_0015F3F8_s __asm__("D_L00_0015F3F8");
+extern VendorMenu   vendor_menu __asm__("D_L00_001CA4C0");
+extern s32          D_L00_0015F3F4;
+extern s32          D_L00_0015F3F8[];
+extern s32          D_L00_0015F3F8_s __asm__("D_L00_0015F3F8");
 extern volatile s32 D_L00_0015F3F8_v[1] __asm__("D_L00_0015F3F8");
-extern s32 D_L00_0016118C;
-extern s32 D_L00_00161E38;
-extern s32 D_L00_001BA4C0;
-extern u32 frame_size[] __asm__("D_0013E504");
-extern u128 D_L00_00166DD0[];
-extern u128 D_L00_00165F80[];
-extern u128 camera_lateral_axis[] __asm__("D_L00_00166FE0");
-extern u128 D_L00_00166FF0[];
-extern u128 D_L00_00166FD0[];
+extern s32          D_L00_0016118C;
+extern s32          D_L00_00161E38;
+extern s32          D_L00_001BA4C0;
+extern u32          frame_size[] __asm__("D_0013E504");
+extern u128         D_L00_00166DD0[];
+extern u128         D_L00_00165F80[];
+extern u128         camera_lateral_axis[] __asm__("D_L00_00166FE0");
+extern u128         D_L00_00166FF0[];
+extern u128         D_L00_00166FD0[];
+
 #include "rnc/overlay/level_camera.h"
+
 extern A02b0_tab D_L00_001C8FF0[];
 
 extern void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
 extern void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
-extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
+extern s32  sce_gs_sync_v(s32) __asm__("FUN_00122298");
 extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 extern void capture_draw_buffer(s32) __asm__("FUN_L00_001f99c0");
@@ -285,7 +332,7 @@ void draw_vendor_screen(void) __asm__("FUN_L00_002a02b0");
 
 void draw_vendor_screen(void) {
     VendorMenu *e;
-    A02b0_tab *g;
+    A02b0_tab  *g;
 #define p (&vendor_menu)
 
     if (D_L00_0015F5D8 != 0) {
@@ -352,7 +399,8 @@ void draw_vendor_screen(void) {
         fast_mem_zero16(p->unk2C, 0x400);
         p->unk18 = p->unk2C + 0x400;
         if (cd_read_active[0] == 0) {
-            if (start_audio_stream_read(p->unk18 + 0x80000, disc_table.vendor_animation.sector,
+            if (start_audio_stream_read(p->unk18 + 0x80000,
+                                        disc_table.vendor_animation.sector,
                                         disc_table.vendor_animation.size) != 0) {
                 D_L00_0016118C = 1;
             } else {
@@ -403,112 +451,164 @@ void draw_vendor_screen(void) {
 }
 
 s32 D_L01_001CA900[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_001CAA80[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L02_001CAAC8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L03_001CA580[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L03_001CA5C8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L04_001CA600[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L04_001CA648[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_001CA900[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L05_001CA948[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_001CAC00[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_001CAC48[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L07_001CA500[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L07_001CA548[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_001CAC80[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_001CACC8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L09_001CA600[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L09_001CA648[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L10_001CA900[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L10_001CA948[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_001CAE80[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_001CAEC8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_001CA900[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L12_001CA948[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L13_001CA780[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L13_001CA7C8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_001CAB80[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_001CABC8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_001CAA80[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L15_001CAAC8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_001CA900[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L16_001CA948[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_001CAD80[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_001CADC8[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_001CAE80[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_001CAEC8[1] __attribute__((section(".data"))) = {0};
 
 I3 D_L01_00161178 = {0, 1, 2};
+
 int D_L01_001CA8D8 NOT_SDA = 0x10808080;
-float D_L01_00161184 = 0;
-s32 D_L01_0015F3F4 = 0;
-I3 D_L02_00161178 = {0, 1, 2};
+float              D_L01_00161184 = 0;
+s32                D_L01_0015F3F4 = 0;
+I3                 D_L02_00161178 = {0, 1, 2};
+
 int D_L02_001CAA58 NOT_SDA = 0x10808080;
-float D_L02_00161184 = 0;
-s32 D_L02_0015F3F4 = 0;
-I3 D_L03_00161178 = {0, 1, 2};
+float              D_L02_00161184 = 0;
+s32                D_L02_0015F3F4 = 0;
+I3                 D_L03_00161178 = {0, 1, 2};
+
 int D_L03_001CA558 NOT_SDA = 0x10808080;
-float D_L03_00161184 = 0;
-s32 D_L03_0015F3F4 = 0;
-I3 D_L04_00161178 = {0, 1, 2};
+float              D_L03_00161184 = 0;
+s32                D_L03_0015F3F4 = 0;
+I3                 D_L04_00161178 = {0, 1, 2};
+
 int D_L04_001CA5D8 NOT_SDA = 0x10808080;
-float D_L04_00161184 = 0;
-s32 D_L04_0015F3F4 = 0;
-I3 D_L05_00161178 = {0, 1, 2};
+float              D_L04_00161184 = 0;
+s32                D_L04_0015F3F4 = 0;
+I3                 D_L05_00161178 = {0, 1, 2};
+
 int D_L05_001CA8D8 NOT_SDA = 0x10808080;
-float D_L05_00161184 = 0;
-s32 D_L05_0015F3F4 = 0;
-I3 D_L06_00161178 = {0, 1, 2};
+float              D_L05_00161184 = 0;
+s32                D_L05_0015F3F4 = 0;
+I3                 D_L06_00161178 = {0, 1, 2};
+
 int D_L06_001CABD8 NOT_SDA = 0x10808080;
-float D_L06_00161184 = 0;
-s32 D_L06_0015F3F4 = 0;
-I3 D_L07_00161178 = {0, 1, 2};
+float              D_L06_00161184 = 0;
+s32                D_L06_0015F3F4 = 0;
+I3                 D_L07_00161178 = {0, 1, 2};
+
 int D_L07_001CA4D8 NOT_SDA = 0x10808080;
-float D_L07_00161184 = 0;
-s32 D_L07_0015F3F4 = 0;
-I3 D_L08_00161178 = {0, 1, 2};
+float              D_L07_00161184 = 0;
+s32                D_L07_0015F3F4 = 0;
+I3                 D_L08_00161178 = {0, 1, 2};
+
 int D_L08_001CAC58 NOT_SDA = 0x10808080;
-float D_L08_00161184 = 0;
-s32 D_L08_0015F3F4 = 0;
-I3 D_L09_00161178 = {0, 1, 2};
+float              D_L08_00161184 = 0;
+s32                D_L08_0015F3F4 = 0;
+I3                 D_L09_00161178 = {0, 1, 2};
+
 int D_L09_001CA5D8 NOT_SDA = 0x10808080;
-float D_L09_00161184 = 0;
-s32 D_L09_0015F3F4 = 0;
-I3 D_L10_00161178 = {0, 1, 2};
+float              D_L09_00161184 = 0;
+s32                D_L09_0015F3F4 = 0;
+I3                 D_L10_00161178 = {0, 1, 2};
+
 int D_L10_001CA8D8 NOT_SDA = 0x10808080;
-float D_L10_00161184 = 0;
-s32 D_L10_0015F3F4 = 0;
-I3 D_L11_00161178 = {0, 1, 2};
+float              D_L10_00161184 = 0;
+s32                D_L10_0015F3F4 = 0;
+I3                 D_L11_00161178 = {0, 1, 2};
+
 int D_L11_001CAE58 NOT_SDA = 0x10808080;
-float D_L11_00161184 = 0;
-s32 D_L11_0015F3F4 = 0;
-I3 D_L12_00161178 = {0, 1, 2};
+float              D_L11_00161184 = 0;
+s32                D_L11_0015F3F4 = 0;
+I3                 D_L12_00161178 = {0, 1, 2};
+
 int D_L12_001CA8D8 NOT_SDA = 0x10808080;
-float D_L12_00161184 = 0;
-s32 D_L12_0015F3F4 = 0;
-I3 D_L13_00161178 = {0, 1, 2};
+float              D_L12_00161184 = 0;
+s32                D_L12_0015F3F4 = 0;
+I3                 D_L13_00161178 = {0, 1, 2};
+
 int D_L13_001CA758 NOT_SDA = 0x10808080;
-float D_L13_00161184 = 0;
-s32 D_L13_0015F3F4 = 0;
-I3 D_L14_00161178 = {0, 1, 2};
+float              D_L13_00161184 = 0;
+s32                D_L13_0015F3F4 = 0;
+I3                 D_L14_00161178 = {0, 1, 2};
+
 int D_L14_001CAB58 NOT_SDA = 0x10808080;
-float D_L14_00161184 = 0;
-s32 D_L14_0015F3F4 = 0;
-I3 D_L15_00161178 = {0, 1, 2};
+float              D_L14_00161184 = 0;
+s32                D_L14_0015F3F4 = 0;
+I3                 D_L15_00161178 = {0, 1, 2};
+
 int D_L15_001CAA58 NOT_SDA = 0x10808080;
-float D_L15_00161184 = 0;
-s32 D_L15_0015F3F4 = 0;
-I3 D_L16_00161178 = {0, 1, 2};
+float              D_L15_00161184 = 0;
+s32                D_L15_0015F3F4 = 0;
+I3                 D_L16_00161178 = {0, 1, 2};
+
 int D_L16_001CA8D8 NOT_SDA = 0x10808080;
-float D_L16_00161184 = 0;
-s32 D_L16_0015F3F4 = 0;
-I3 D_L17_00161178 = {0, 1, 2};
+float              D_L16_00161184 = 0;
+s32                D_L16_0015F3F4 = 0;
+I3                 D_L17_00161178 = {0, 1, 2};
+
 int D_L17_001CAD58 NOT_SDA = 0x10808080;
-float D_L17_00161184 = 0;
-s32 D_L17_0015F3F4 = 0;
-I3 D_L18_00161178 = {0, 1, 2};
+float              D_L17_00161184 = 0;
+s32                D_L17_0015F3F4 = 0;
+I3                 D_L18_00161178 = {0, 1, 2};
+
 int D_L18_001CAE58 NOT_SDA = 0x10808080;
-float D_L18_00161184 = 0;
-s32 D_L18_0015F3F4 = 0;
+float              D_L18_00161184 = 0;
+s32                D_L18_0015F3F4 = 0;
 
 I3 D_L00_00161178 = {0, 1, 2};

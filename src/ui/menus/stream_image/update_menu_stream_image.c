@@ -17,7 +17,7 @@
 
 extern void FUN_0020b4a8(void);
 extern void decompress_wad(u8 *, s32) __asm__("FUN_0020b618");
-extern s32 mark_menu_stream_buffer_read_active(s32) __asm__("FUN_00225dd8");
+extern s32  mark_menu_stream_buffer_read_active(s32) __asm__("FUN_00225dd8");
 
 s32 update_menu_stream_image(struct MenuScreen *stream) __asm__("FUN_0021f990");
 
@@ -28,15 +28,15 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         MENU_STREAM_IMAGE_READY = 2,
         MENU_STREAM_IMAGE_RELOAD_PENDING = 3
     };
-    s32 flags;
-    s32 selected_entry_index;
-    s32 read_offset_or_start_result;
-    s32 x;
-    s32 y;
-    u8 *read_destination;
+    s32               flags;
+    s32               selected_entry_index;
+    s32               read_offset_or_start_result;
+    s32               x;
+    s32               y;
+    u8               *read_destination;
     struct ClutImage *stream_image;
-    u8 *clut_data;
-    u8 *pixel_data;
+    u8               *clut_data;
+    u8               *pixel_data;
 
     flags = stream->data.stream.flags;
     if (flags & 1) {
@@ -88,17 +88,22 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         }
         read_destination = (u8 *)stream->data.stream.buffer[0];
         if (stream->data.stream.flags & 0x20) {
-            read_offset_or_start_result = get_menu_stream_buffer_size(stream->data.stream.buffer[0]) -
+            read_offset_or_start_result =
+                get_menu_stream_buffer_size(stream->data.stream.buffer[0]) -
                 (stream->data.stream.entries[selected_entry_index].sector_count << 11);
             stream->data.stream.read_offset = read_offset_or_start_result;
             read_destination += read_offset_or_start_result;
         }
         if (stream->data.stream.flags & 0x10) {
-            read_offset_or_start_result = start_audio_stream_read(read_destination, stream->data.stream.entries[selected_entry_index].sector,
-                                        stream->data.stream.entries[selected_entry_index].sector_count);
+            read_offset_or_start_result = start_audio_stream_read(
+                read_destination,
+                stream->data.stream.entries[selected_entry_index].sector,
+                stream->data.stream.entries[selected_entry_index].sector_count);
         } else {
-            read_offset_or_start_result = start_audio_stream_read(read_destination, stream->data.stream.entries[selected_entry_index].sector,
-                                        stream->data.stream.entries[selected_entry_index].sector_count);
+            read_offset_or_start_result = start_audio_stream_read(
+                read_destination,
+                stream->data.stream.entries[selected_entry_index].sector,
+                stream->data.stream.entries[selected_entry_index].sector_count);
         }
         if (read_offset_or_start_result != 0) {
             mark_menu_stream_buffer_read_active(stream->data.stream.buffer[0]);
@@ -116,7 +121,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         clear_menu_stream_buffer_read_active(stream->data.stream.buffer[0]);
         if (stream->data.stream.flags & 0x20) {
             decompress_wad((u8 *)stream->data.stream.buffer[0] + stream->data.stream.read_offset,
-                         stream->data.stream.buffer[0]);
+                           stream->data.stream.buffer[0]);
             stream->data.stream.read_offset = 0;
         }
         stream_image = (struct ClutImage *)stream->data.stream.buffer[0];
@@ -124,7 +129,12 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         pixel_data = stream_image->pixels;
         x = log2dim(stream_image->width);
         y = log2dim(stream_image->height);
-        level_map_selection.tex0 = register_8bit_texture(x, y, clut_data, pixel_data, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
+        level_map_selection.tex0 = register_8bit_texture(x,
+                                                         y,
+                                                         clut_data,
+                                                         pixel_data,
+                                                         level_map_selection.tex_clut_vram,
+                                                         level_map_selection.tex0_vram);
         FUN_0020b4a8();
         stream->data.stream.state = 2;
         break;

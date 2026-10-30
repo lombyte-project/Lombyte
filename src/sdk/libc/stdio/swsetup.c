@@ -20,27 +20,27 @@
 
 /* FILE with the SDK's signed flags word. */
 struct SwFile {
-    u8 *_p;
-    s32 _r;
-    s32 _w;
-    s16 _flags;
-    s16 _file;
+    u8            *_p;
+    s32            _r;
+    s32            _w;
+    s16            _flags;
+    s16            _file;
     RncStdioBuffer _bf;
-    s32 _lbfsize;
-    void *_cookie;
+    s32            _lbfsize;
+    void          *_cookie;
     s32 (*_read)(void *, char *, s32);
     s32 (*_write)(void *, const char *, s32);
     s32 (*_seek)(void *, s32, s32);
     s32 (*_close)(void *);
     RncStdioBuffer _ub;
-    u8 *_up;
-    s32 _ur;
-    u8 _ubuf[3];
-    u8 _nbuf[1];
+    u8            *_up;
+    s32            _ur;
+    u8             _ubuf[3];
+    u8             _nbuf[1];
     RncStdioBuffer _lb;
-    s32 _blksize;
-    s32 _offset;
-    RncReent *_data;
+    s32            _blksize;
+    s32            _offset;
+    RncReent      *_data;
 };
 
 #define __SLBF 0x0001 /* line buffered */
@@ -57,20 +57,20 @@ extern void __smakebuf(struct SwFile *);
 extern void _free_r(RncReent *, void *);
 
 /* Called by the main entry point fns to ensure stdio has been initialized. */
-#define CHECK_INIT(fp)                                                                             \
-    do {                                                                                           \
-        if ((fp)->_data == 0)                                                                      \
-            (fp)->_data = _REENT;                                                                  \
-        if (!(fp)->_data->__sdidinit)                                                              \
-            __sinit((fp)->_data);                                                                  \
+#define CHECK_INIT(fp)                \
+    do {                              \
+        if ((fp)->_data == 0)         \
+            (fp)->_data = _REENT;     \
+        if (!(fp)->_data->__sdidinit) \
+            __sinit((fp)->_data);     \
     } while (0)
 
 #define HASUB(fp) ((fp)->_ub._base != 0)
-#define FREEUB(fp)                                                                                 \
-    {                                                                                              \
-        if ((fp)->_ub._base != (fp)->_ubuf)                                                        \
-            _free_r((fp)->_data, (void *)(fp)->_ub._base);                                         \
-        (fp)->_ub._base = 0;                                                                       \
+#define FREEUB(fp)                                         \
+    {                                                      \
+        if ((fp)->_ub._base != (fp)->_ubuf)                \
+            _free_r((fp)->_data, (void *)(fp)->_ub._base); \
+        (fp)->_ub._base = 0;                               \
     }
 
 /*

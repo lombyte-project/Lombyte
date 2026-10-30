@@ -9,6 +9,7 @@ extern void render_level_frame(void) __asm__("func_0022F288");
 void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
 
 extern s32 draw_enable_mask_gp __asm__("D_0015F434") __attribute__((sda));
+
 void dispatch_game_state_update(void) {
     enum {
         LEVEL_FRAME_RENDER = 4

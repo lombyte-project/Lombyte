@@ -6,12 +6,12 @@ typedef void (*SifCmdHandler)(void *packet, void *argument);
 
 typedef struct SifCmdHandlerEntry {
     SifCmdHandler handler;
-    void *argument;
+    void         *argument;
 } SifCmdHandlerEntry;
 
 /* Header of a SIF command packet from the IOP. */
 typedef struct SifCmdHeader {
-    u32 packet_size : 8;
+    u32 packet_size      : 8;
     u32 destination_size : 24;
     u32 destination;
     s32 command_id;
@@ -20,29 +20,29 @@ typedef struct SifCmdHeader {
 
 /* The SIF command state (sceSifInitCmd fills it). */
 typedef struct SifCmdData {
-    SifCmdHeader *packet_buffer;
-    void *unk4;
-    s32 unk8;
+    SifCmdHeader       *packet_buffer;
+    void               *unk4;
+    s32                 unk8;
     SifCmdHandlerEntry *system_handlers;
-    s32 system_handler_count;
+    s32                 system_handler_count;
     SifCmdHandlerEntry *user_handlers;
-    s32 user_handler_count;
-    s32 *sregs;
+    s32                 user_handler_count;
+    s32                *sregs;
 } SifCmdData;
 
-extern s32 EnableInterrupts(void);
-extern s32 isceSifSetDChain(void);
+extern s32        EnableInterrupts(void);
+extern s32        isceSifSetDChain(void);
 extern SifCmdData sif_cmd_data __asm__("D_00154E58");
 
 /* Sony libsifcmd: copies the received command packet out of the DMA buffer,
    re-arms the receive chain and runs the handler registered for the command. */
 s32 _sceSifCmdIntrHdlr(void) {
-    u128 packet[7];
-    SifCmdData *cmd = &sif_cmd_data;
+    u128                   packet[7];
+    SifCmdData            *cmd = &sif_cmd_data;
     volatile SifCmdHeader *header;
-    SifCmdHandlerEntry *entry;
-    SifCmdHandler handler;
-    u128 *buffer;
+    SifCmdHandlerEntry    *entry;
+    SifCmdHandler          handler;
+    u128                  *buffer;
     s32 packet_count_or_handler_index; /* packet bytes, then quadwords, then handler index */
     s32 i;
 

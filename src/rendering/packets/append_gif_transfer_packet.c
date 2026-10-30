@@ -1,6 +1,7 @@
 #include "types.h"
 
 #include "rnc/rendering/fs_aa_packets.h"
+
 extern u8 *volatile D_00160F00;
 
 void append_gif_transfer_packet(void) __asm__("FUN_001fb368");

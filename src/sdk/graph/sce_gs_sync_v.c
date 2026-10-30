@@ -7,7 +7,7 @@ extern s64 VSync2(void);
 
 s32 sceGsSyncV(s32 mode) {
     sceGsGParam *gp;
-    s64 field;
+    s64          field;
 
     gp = sceGsGetGParam();
     if (gp->sceGsVSCfunc == 0) {

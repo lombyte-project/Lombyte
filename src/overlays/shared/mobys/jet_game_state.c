@@ -6,6 +6,7 @@
 
 /* requests a music track: plays it now when nothing is streaming, else queues it */
 void jet_game_state(s32 track, s32 transition) __asm__("FUN_L01_0027a248");
+
 void jet_game_state(s32 track, s32 transition) {
     if (music_stream_state.primary.track == track && music_stream_state.requested_track == -1)
         return;

@@ -4,13 +4,13 @@
 extern char significand_format[] __asm__("D_00152780");
 extern char nonnegative_exponent_format[] __asm__("D_00152788");
 extern char negative_exponent_format[] __asm__("D_00152790");
-extern s32 CompareDoubles(f64 left, f64 right) __asm__("dpcmp");
-extern f64 dpsub_f(f64 left, f64 right) __asm__("dpsub");
-extern f64 dpmul_f(f64 left, f64 right) __asm__("dpmul");
-extern f64 dpdiv_f(f64 left, f64 right) __asm__("dpdiv");
-extern u64 __fixunsdfdi(f64 value);
-extern s64 ftoi(s64 bits);
-extern s32 kprintf();
+extern s32  CompareDoubles(f64 left, f64 right) __asm__("dpcmp");
+extern f64  dpsub_f(f64 left, f64 right) __asm__("dpsub");
+extern f64  dpmul_f(f64 left, f64 right) __asm__("dpmul");
+extern f64  dpdiv_f(f64 left, f64 right) __asm__("dpdiv");
+extern u64  __fixunsdfdi(f64 value);
+extern s64  ftoi(s64 bits);
+extern s32  kprintf();
 
 void printfloat(f64 x) {
     s32 exponent;

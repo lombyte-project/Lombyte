@@ -18,21 +18,23 @@
 
 typedef struct {
     char p0[0x10];
-    int f10;
+    int  f10;
     char p14[0x4C - 0x14];
 } R_2afd00;
 
 extern R_2afd00 D_L01_00179F40[];
-extern char fx_cutscene[] __asm__("D_L01_0016CCE0");
-extern char D_L01_0017C7C0[];
-extern char vendor_screen_state_storage[] __asm__("D_L01_001CA940");
-extern float D_L01_0015F3FC;
-extern int cutscene_mode __asm__("D_L01_0015F5C4");
+extern char     fx_cutscene[] __asm__("D_L01_0016CCE0");
+extern char     D_L01_0017C7C0[];
+extern char     vendor_screen_state_storage[] __asm__("D_L01_001CA940");
+extern float    D_L01_0015F3FC;
+extern int      cutscene_mode __asm__("D_L01_0015F5C4");
+
 #include "rnc/overlay/shared/vendor/initialize_vendor_screen_globals.h"
 #include "rnc/mobys/moby.h"
-extern int vendor_relocation_offsets[] __asm__("D_L01_00174280");
-extern int level_table_pair_indices[] __asm__("D_L01_001CA4A0");
-extern int sceGsSyncV_alt(int) __asm__("FUN_00122298");
+
+extern int  vendor_relocation_offsets[] __asm__("D_L01_00174280");
+extern int  level_table_pair_indices[] __asm__("D_L01_001CA4A0");
+extern int  sceGsSyncV_alt(int) __asm__("FUN_00122298");
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
@@ -44,22 +46,22 @@ extern void music_pause(s32);
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void transform_vector_by_basis(void *, void *, void *);
 
-extern char vendor_camera_local_position_offset __asm__("D_L01_00161100") __attribute__((sda));
-extern int D_L01_0015F5D8 __attribute__((sda));
+extern char  vendor_camera_local_position_offset __asm__("D_L01_00161100") __attribute__((sda));
+extern int   D_L01_0015F5D8 __attribute__((sda));
 extern short D_L01_0015F400 __attribute__((sda));
-void initialize_vendor_screen(char *vendor_moby, int lvl) __asm__("FUN_L01_002aea70");
+void         initialize_vendor_screen(char *vendor_moby, int lvl) __asm__("FUN_L01_002aea70");
 
 void initialize_vendor_screen(char *vendor_moby, int lvl) {
-    struct Hero *hero_state = &hero;
-    char *vendor_screen_state = vendor_screen_state_storage;
-    char *relocated_address_block = fx_cutscene;
-    char *sc;
-    char *relocated_address_source_block;
-    struct Hero *hero_moby_owner;
+    struct Hero             *hero_state = &hero;
+    char                    *vendor_screen_state = vendor_screen_state_storage;
+    char                    *relocated_address_block = fx_cutscene;
+    char                    *sc;
+    char                    *relocated_address_source_block;
+    struct Hero             *hero_moby_owner;
     struct MusicStreamState *music_state;
     struct MusicStreamState *qq;
-    int adjusted_address_base;
-    int level_table_pair_index;
+    int                      adjusted_address_base;
+    int                      level_table_pair_index;
     snd_pause_all_sounds_in_group(0x1D);
     music_pause(0);
     snd_flush_sound_commands();
@@ -80,7 +82,8 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     fast_vec_add(sc, sc, vendor_moby + 0x10);
     *(float *)(vendor_screen_state + 0xC8) = probe_ground_height(sc, 0, 0.5f);
     clear_u64_value(vendor_screen_state + 0xB0);
-    *(float *)(vendor_screen_state + 0xB8) = fast_add_rotations(MOBY(vendor_moby)->rot.z, -1.5707964f);
+    *(float *)(vendor_screen_state + 0xB8) =
+        fast_add_rotations(MOBY(vendor_moby)->rot.z, -1.5707964f);
     euler_rotation_basis(vendor_screen_state + 0x80, vendor_screen_state + 0xB0);
     fill_transfer_words(relocated_address_block, 0, 0x1C0);
     fill_transfer_words(D_L01_0017C7C0, 0, 0x40);
@@ -105,8 +108,15 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     }
     relocated_address_source_block = fx_cutscene;
     hero_moby_owner = &hero;
-    update_item_tint_from_hero(*(int *)(relocated_address_source_block + 0x17C), ((int)hero_moby_owner->moby));
+    update_item_tint_from_hero(*(int *)(relocated_address_source_block + 0x17C),
+                               ((int)hero_moby_owner->moby));
     continue_audio_stream_if_ready();
 }
 
-R_2afd00 D_L13_00179DC0 = {{0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1}, -1, {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+R_2afd00 D_L13_00179DC0 = {
+    {0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1},
+    -1,
+    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,  0,  0,  0,  0,  0,
+     -1, -1, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
+};

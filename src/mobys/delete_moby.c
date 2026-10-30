@@ -3,7 +3,7 @@
 #include "rnc/game/game_globals.h"
 
 struct MobyRef {
-    u8 pad_0[0x38];
+    u8  pad_0[0x38];
     s64 unk38;
 };
 

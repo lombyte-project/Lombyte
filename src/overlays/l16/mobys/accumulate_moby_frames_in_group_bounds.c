@@ -10,19 +10,17 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 
-
-
 /* Same routine as FUN_L05_00307010, with this level's data offsets. */
 void accumulate_moby_frames_in_group_bounds(struct Moby *moby) __asm__("FUN_L16_002cfc00");
 
 void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char        *data = (char *)moby->pvars;
     struct Hero *hero_state = &hero;
-    float displacement_vector[4];
-    char *enumerated_moby;
-    char *group_candidate_moby;
-    char *other;
-    char *od;
+    float        displacement_vector[4];
+    char        *enumerated_moby;
+    char        *group_candidate_moby;
+    char        *other;
+    char        *od;
 
     if (hero_state->race_time_frames < scale_game_frames(0xB4)) {
         return;
@@ -49,7 +47,8 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, enumerated_moby + 0xC0);
                     transform_vector(displacement_vector, displacement_vector, m);
-                    if (absolute_float(displacement_vector[0]) < 0.5f && absolute_float(displacement_vector[1]) < 2.5f &&
+                    if (absolute_float(displacement_vector[0]) < 0.5f &&
+                        absolute_float(displacement_vector[1]) < 2.5f &&
                         absolute_float(displacement_vector[2]) < 2.5f) {
                         *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
                         *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
@@ -69,7 +68,8 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, group_candidate_moby + 0xC0);
                     transform_vector(displacement_vector, displacement_vector, m);
-                    if (absolute_float(displacement_vector[0]) < 2.8f && absolute_float(displacement_vector[1]) < 1.4f &&
+                    if (absolute_float(displacement_vector[0]) < 2.8f &&
+                        absolute_float(displacement_vector[1]) < 1.4f &&
                         absolute_float(displacement_vector[2]) < 0.5f) {
                         *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
                         *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
@@ -80,4 +80,3 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
         }
     }
 }
-

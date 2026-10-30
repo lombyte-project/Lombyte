@@ -7,7 +7,6 @@
 #include "rnc/rendering/sky/do_sky_gif_paging.h"
 #include "rnc/rendering/sky/setup_sky_gif_paging.h"
 
-
 extern void draw_three_sky_shells_with_particles(void) __asm__("FUN_L00_0028a920");
 
 void draw_paged_sky_shells(void) __asm__("FUN_L13_002497d8");

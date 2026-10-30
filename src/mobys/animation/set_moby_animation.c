@@ -1,27 +1,30 @@
 /* Ported from rac1-decomp (src/game/mobyutil.c, func_00213D28). */
 typedef struct {
-    char _pad00[0x10];
+    char          _pad00[0x10];
     unsigned char nframes; /* 0x10 */
 } AnimSeq;
+
 typedef struct {
-    char _pad00[0x48];
+    char     _pad00[0x48];
     AnimSeq *seqs[1]; /* 0x48 */
 } AnimClass;
+
 typedef struct {
-    char _pad00[0x24];
-    AnimClass *pClass;       /* 0x24 */
-    char _pad28[0x50 - 0x28];
+    char          _pad00[0x24];
+    AnimClass    *pClass; /* 0x24 */
+    char          _pad28[0x50 - 0x28];
     unsigned char frame;     /* 0x50 */
     unsigned char nextFrame; /* 0x51 */
     unsigned char seq;       /* 0x52 */
     unsigned char prevSeq;   /* 0x53 */
-    char _pad54[0x5C - 0x54];
-    float unk5C;             /* 0x5C */
-    char _pad60[0x68 - 0x60];
-    float *frameData;        /* 0x68 */
-    char _pad6C[4];
-    unsigned char unk70;     /* 0x70 */
+    char          _pad54[0x5C - 0x54];
+    float         unk5C; /* 0x5C */
+    char          _pad60[0x68 - 0x60];
+    float        *frameData; /* 0x68 */
+    char          _pad6C[4];
+    unsigned char unk70; /* 0x70 */
 } MobyAnim;
+
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 /* Sets moby m's animation to sequence seq at frame (clamped to the
    sequence's last frame), the next frame to frame + 1 (clamped the same

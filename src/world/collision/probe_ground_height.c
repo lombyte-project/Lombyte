@@ -1,8 +1,10 @@
 /* Ported from rac1-decomp (src/game/mobyutil.c, func_00214358). */
-typedef int s32;
+typedef int   s32;
 typedef float f32;
+
 #include "qcopy.h"
-extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
+
+extern int  collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern char D_00194120[];
 /* Builds two 16-byte copies of *pos: one with byte offset 8 (a float)
    forced to 0.01f, the other with its offset-8 float bumped by height_offset.

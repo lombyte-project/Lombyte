@@ -7,7 +7,7 @@ struct Pad2StateEntry {
 };
 
 extern u32 pad2_initialized[] __asm__("D_00132DD0");
-extern u8 D_0015B540[];
+extern u8  D_0015B540[];
 
 s32 scePad2Init(void) {
     struct Pad2StateEntry *entry;

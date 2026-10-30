@@ -1,7 +1,8 @@
 #include "types.h"
+
 extern s32 count_nonzero_entries_up_to_40() __asm__("FUN_00215290");
 extern s32 count_nonzero_entries_up_to_10() __asm__("FUN_00215300");
-s32 compute_clamped_count_difference(void) __asm__("FUN_00215248");
+s32        compute_clamped_count_difference(void) __asm__("FUN_00215248");
 
 s32 compute_clamped_count_difference(void) {
     s32 entry_count;

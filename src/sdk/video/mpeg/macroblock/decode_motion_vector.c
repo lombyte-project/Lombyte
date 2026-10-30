@@ -1,8 +1,14 @@
 #include "types.h"
 
-void decode_motion_vector(s32 *motion_vector, s32 delta_shift, s32 motion_code, s32 motion_residual, s32 use_half_scale) __asm__("FUN_001280a8");
+void decode_motion_vector(s32 *motion_vector,
+                          s32  delta_shift,
+                          s32  motion_code,
+                          s32  motion_residual,
+                          s32  use_half_scale) __asm__("FUN_001280a8");
 
-void decode_motion_vector(s32 *motion_vector, s32 delta_shift, s32 motion_code, s32 motion_residual, s32 use_half_scale) {
+void decode_motion_vector(
+
+    s32 *motion_vector, s32 delta_shift, s32 motion_code, s32 motion_residual, s32 use_half_scale) {
     int new_var;
     s32 prediction;
     int new_var3;

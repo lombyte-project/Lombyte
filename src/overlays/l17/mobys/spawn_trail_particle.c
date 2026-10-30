@@ -14,12 +14,16 @@
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 #include "qcopy.h"
+
 extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
-unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) __asm__("FUN_L17_0026fb60");
+unsigned char        *spawn_trail_particle(struct Moby *parent,
+                                           void        *pos,
+                                           float       *record_vector_source) __asm__("FUN_L17_0026fb60");
+
 unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) {
-    int header_value_input_base = random_integer_below(5);
-    unsigned char unscaled_header_value = scale_game_frames(header_value_input_base + 2);
-    unsigned char header_byte_value = random_integer_below(0xFF);
+    int            header_value_input_base = random_integer_below(5);
+    unsigned char  unscaled_header_value = scale_game_frames(header_value_input_base + 2);
+    unsigned char  header_byte_value = random_integer_below(0xFF);
     unsigned char *record = create_part(0x4F);
     if (record != 0) {
         char *record_data = (char *)record + 0x20;
@@ -52,11 +56,13 @@ unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *recor
 
 extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
 
-unsigned char *create_drone_flight_trail_record(char *position_source, int mode, int step) __asm__("FUN_L17_0026fdd0");
+unsigned char *create_drone_flight_trail_record(char *position_source,
+                                                int   mode,
+                                                int   step) __asm__("FUN_L17_0026fdd0");
 
 unsigned char *create_drone_flight_trail_record(char *position_source, int mode, int step) {
     unsigned char *record;
-    int remaining_steps;
+    int            remaining_steps;
     if (mode)
         remaining_steps = 5 - step;
     else
@@ -76,7 +82,8 @@ unsigned char *create_drone_flight_trail_record(char *position_source, int mode,
                 if (step != 0) {
                     float a = convert_integer_to_float((short)d - 1);
                     *(int *)(record + 4) =
-                        FUN_001fa6e0_q(0x603F1008, *(int *)(record + 4),
+                        FUN_001fa6e0_q(0x603F1008,
+                                       *(int *)(record + 4),
                                        a / convert_integer_to_float(*(short *)(record + 0xA)));
                 }
             } else {
@@ -88,7 +95,8 @@ unsigned char *create_drone_flight_trail_record(char *position_source, int mode,
                 if (step != 0) {
                     float a = convert_integer_to_float((short)d - 1);
                     *(int *)(record + 4) =
-                        FUN_001fa6e0_q(0x30FFFFFF, *(int *)(record + 4),
+                        FUN_001fa6e0_q(0x30FFFFFF,
+                                       *(int *)(record + 4),
                                        a / convert_integer_to_float(*(short *)(record + 0xA)));
                 }
             }

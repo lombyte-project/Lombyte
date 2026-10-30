@@ -10,17 +10,18 @@
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
+extern void  allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+extern void  spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void pipe_update(struct Moby *m) __asm__("FUN_L04_002e79a8");
+
 void pipe_update(struct Moby *pipe_moby) {
     enum {
         PIPE_INITIALIZE = 0,
         PIPE_WAIT_FOR_HIT = 1,
         PIPE_REMOVE = 2
     };
-    int hit = 0;
+    int          hit = 0;
     struct Moby *hit_moby = find_moby_hit(pipe_moby, 0x10000, 0);
     switch (pipe_moby->state) {
     case PIPE_INITIALIZE:

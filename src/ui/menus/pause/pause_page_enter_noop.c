@@ -1,4 +1,5 @@
 int pause_page_enter_noop(void) __asm__("FUN_002217f8");
+
 int pause_page_enter_noop(void) {
     return 0;
 }

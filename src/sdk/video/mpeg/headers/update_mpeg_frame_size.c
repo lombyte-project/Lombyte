@@ -8,22 +8,22 @@ extern s32 alloc_work_area() __asm__("func_0012BC20");
 
 void func_0012C4C8(struct sceMpeg *mpeg) {
     struct MpegDecoder *decoder;
-    u8 *frame0;
-    u8 *frame1;
-    u8 *frame2;
-    u8 *field0;
-    u8 *field1;
-    u8 *field2;
-    u8 *field3;
-    u8 *field4;
-    u8 *field5;
-    u8 *last_field;
-    u8 *pool;
-    s32 mpeg2;
-    s32 mb_height;
-    s32 width;
-    s32 height;
-    u32 frame_size;
+    u8                 *frame0;
+    u8                 *frame1;
+    u8                 *frame2;
+    u8                 *field0;
+    u8                 *field1;
+    u8                 *field2;
+    u8                 *field3;
+    u8                 *field4;
+    u8                 *field5;
+    u8                 *last_field;
+    u8                 *pool;
+    s32                 mpeg2;
+    s32                 mb_height;
+    s32                 width;
+    s32                 height;
+    u32                 frame_size;
 
     decoder = mpeg->sys;
     mpeg2 = decoder->mpeg2;
@@ -70,9 +70,20 @@ void func_0012C4C8(struct sceMpeg *mpeg) {
     decoder->frame_buffers[0] = alloc_work_area(decoder, pool, frame_size, 0x40);
     decoder->frame_buffers[1] = alloc_work_area(decoder, pool, frame_size, 0x40);
     decoder->frame_buffers[2] = alloc_work_area(decoder, pool, frame_size, 0x40);
-    _initRefImages(frame0, frame1, frame2, field0, field1, field2, field3, field4, field5,
-                   decoder->frame_buffers[0], decoder->frame_buffers[1], decoder->frame_buffers[2],
-                   width, height);
+    _initRefImages(frame0,
+                   frame1,
+                   frame2,
+                   field0,
+                   field1,
+                   field2,
+                   field3,
+                   field4,
+                   field5,
+                   decoder->frame_buffers[0],
+                   decoder->frame_buffers[1],
+                   decoder->frame_buffers[2],
+                   width,
+                   height);
     InitializeReferenceImage(frame0, width, height);
     InitializeReferenceImage(frame1, width, height);
     InitializeReferenceImage(frame2, width, height);

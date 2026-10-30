@@ -34,9 +34,9 @@ Boston, MA 02111-1307, USA.  */
  * (verified 2026-09-11, run pipeline-2026-09-11-6).
  */
 
-typedef int SItype __attribute__((mode(SI)));
+typedef int          SItype __attribute__((mode(SI)));
 typedef unsigned int USItype __attribute__((mode(SI)));
-typedef int DItype __attribute__((mode(DI)));
+typedef int          DItype __attribute__((mode(DI)));
 typedef unsigned int UDItype __attribute__((mode(DI)));
 
 struct DIstruct {
@@ -46,19 +46,19 @@ struct DIstruct {
 
 typedef union {
     struct DIstruct s;
-    DItype ll;
+    DItype          ll;
 } DIunion;
 
-#define umul_ppmm(w1, w0, u, v)                                                                    \
-    __asm__("multu %2,%3"                                                                          \
-            : "=l"((USItype)(w0)), "=h"((USItype)(w1))                                             \
+#define umul_ppmm(w1, w0, u, v)                        \
+    __asm__("multu %2,%3"                              \
+            : "=l"((USItype)(w0)), "=h"((USItype)(w1)) \
             : "d"((USItype)(u)), "d"((USItype)(v)))
 
-#define __umulsidi3(u, v)                                                                          \
-    ({                                                                                             \
-        DIunion __w;                                                                               \
-        umul_ppmm(__w.s.high, __w.s.low, u, v);                                                    \
-        __w.ll;                                                                                    \
+#define __umulsidi3(u, v)                       \
+    ({                                          \
+        DIunion __w;                            \
+        umul_ppmm(__w.s.high, __w.s.low, u, v); \
+        __w.ll;                                 \
     })
 
 DItype __muldi3(DItype u, DItype v) {

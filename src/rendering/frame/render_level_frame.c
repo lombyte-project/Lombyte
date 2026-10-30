@@ -11,26 +11,28 @@
 #include "rnc/mobys/prune_moby_references.h"
 
 struct LevelProjectionState {
-    u8 pad_0[0xB0];
+    u8  pad_0[0xB0];
     f32 projection_scale;
 };
+
 #include "rnc/save/memory_card_state.h"
 #include "rnc/game/level_state.h"
 #include "rnc/rendering/screen.h"
-extern s32 D_0018CB54[];
-extern s32 D_0018CC98[];
+
+extern s32                         D_0018CB54[];
+extern s32                         D_0018CC98[];
 extern struct LevelProjectionState view_context __asm__("D_0018CD00");
-extern void AppendDmaTag(u32);
-extern void update_camera_view_matrices() __asm__("func_001F2260");
-extern void update_view_context() __asm__("func_001F2D98");
-extern void reset_gs_registers() __asm__("func_001F3868");
-extern void setup_gif_paging(s32) __asm__("func_001F4280");
-extern void do_gif_paging() __asm__("func_001F4398");
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void                        AppendDmaTag(u32);
+extern void                        update_camera_view_matrices() __asm__("func_001F2260");
+extern void                        update_view_context() __asm__("func_001F2D98");
+extern void                        reset_gs_registers() __asm__("func_001F3868");
+extern void                        setup_gif_paging(s32) __asm__("func_001F4280");
+extern void                        do_gif_paging() __asm__("func_001F4398");
+extern s64                         get_effect_texture(s32) __asm__("func_001F44B8");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
-extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
-                               s64) __asm__("func_001F5450");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void
+    draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
+extern s32  truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void append_gif_transfer_packet() __asm__("func_001FB368");
 extern void draw_rotated_sprite(f32, f32, f32, f32, s32, s32, s64, f32) __asm__("FUN_00200600");
 extern void patch_moby_gifs() __asm__("func_0020CEF8");
@@ -45,13 +47,13 @@ extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 void render_level_frame(void) __asm__("FUN_0022f288");
 
 void render_level_frame(void) {
-    f32 rotation_angle;
-    f32 screen_y;
-    f32 quad_extent;
-    s32 overlay_alpha;
-    f32 saved_projection_scale;
+    f32            rotation_angle;
+    f32            screen_y;
+    f32            quad_extent;
+    s32            overlay_alpha;
+    f32            saved_projection_scale;
     struct Screen *display_state;
-    s64 texture;
+    s64            texture;
     append_gif_transfer_packet();
     update_camera_view_matrices();
     prune_moby_references();
@@ -93,14 +95,20 @@ void render_level_frame(void) {
         quad_extent = 272.0f;
         texture = get_effect_texture(2);
         display_state = &screen_extent;
-        draw_textured_quad(0x2C, display_state->height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40,
-                           0x80808080, texture);
+        draw_textured_quad(
+            0x2C, display_state->height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40, 0x80808080, texture);
         screen_y = (f32)((display_state->height - 0x40) * 16);
         rotation_angle = ((game_frame_counter % 55) * (-6.2831855f)) / 55.0f;
         /* The frame counter contributes only the sprite angle modulo 55. */
         /* Retail passes the full texture value in a2 and the five floats in f12-f16. */
-        draw_rotated_sprite(1216.0f, screen_y, quad_extent, 272.0f, 0x40, 0x40,
-                            get_effect_texture(3), rotation_angle);
+        draw_rotated_sprite(1216.0f,
+                            screen_y,
+                            quad_extent,
+                            272.0f,
+                            0x40,
+                            0x40,
+                            get_effect_texture(3),
+                            rotation_angle);
     }
     do_gif_paging();
     if (sequence > 0.0f) {
@@ -112,4 +120,5 @@ void render_level_frame(void) {
     vu1_sync_chain(0x10);
     patch_moby_gifs();
 }
+
 extern __typeof__(render_level_frame) func_0022F288 __attribute__((alias("FUN_0022f288")));

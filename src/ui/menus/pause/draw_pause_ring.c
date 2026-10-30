@@ -11,43 +11,44 @@
    flags table (item_text_variant) when nonzero. */
 
 struct IconEnt {
-    u8 pad[0x38];
+    u8  pad[0x38];
     u16 id;
-    u8 pad3A[0x12];
+    u8  pad3A[0x12];
 };
 
 struct PauseState {
-    u8 pad00[0x20];
+    u8  pad00[0x20];
     s32 w;
     s32 h;
-    u8 pad28[8];
+    u8  pad28[8];
     s32 slots[8];
     s32 sel;
 };
 
 #include "rnc/game/item_state.h"
-extern u8 pause_ring_left_label_text[] __asm__("D_001602D8");
-extern u8 pause_ring_right_label_text[] __asm__("D_001602E0");
-extern u8 D_001863D0[];
-extern s32 SubtractIntegerWithClamp(s32);
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
+
+extern u8   pause_ring_left_label_text[] __asm__("D_001602D8");
+extern u8   pause_ring_right_label_text[] __asm__("D_001602E0");
+extern u8   D_001863D0[];
+extern s32  SubtractIntegerWithClamp(s32);
+extern f32  fast_cos(f32) __asm__("func_001F9DC8");
+extern f32  fast_sin(f32) __asm__("func_001F9DE0");
+extern f32  fast_normalize_angle(f32) __asm__("func_001FA610");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void font_print_large(s32, s32, u64, s32, s32) __asm__("func_001F6530");
-extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
+extern s32  get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 
 s32 draw_pause_ring(struct PauseState *pause_state) __asm__("FUN_00220b20");
 
 s32 draw_pause_ring(struct PauseState *pause_state) {
-    s32 i;
-    s32 flag;
-    f32 cx, cy, radius;
+    s32             i;
+    s32             flag;
+    f32             cx, cy, radius;
     struct IconEnt *iconTab;
-    s32 viewport_dimension, viewport_height;
+    s32             viewport_dimension, viewport_height;
 
     setup_gif_paging(0);
     viewport_dimension = pause_state->w;
@@ -72,28 +73,29 @@ s32 draw_pause_ring(struct PauseState *pause_state) {
         x = cx + fast_cos(slot_angle) * radius;
         y = cy + fast_sin(slot_angle) * radius;
         if (i == pause_state->sel) {
-            u64 color = ((SubtractIntegerWithClamp((game_frame_counter & 0x3F) - 0x20) + 0x40) * 0x10202) |
-                        0x80000000;
+            u64 color =
+                ((SubtractIntegerWithClamp((game_frame_counter & 0x3F) - 0x20) + 0x40) * 0x10202) |
+                0x80000000;
 
-            append_screen_rect_packet((s32)x - 0x13, (s32)y - 0x13, (s32)x + 0x13, (s32)y + 0x13,
-                                      color, 0);
-            append_screen_rect_packet((s32)x - 0x12, (s32)y - 0x12, (s32)x + 0x12, (s32)y + 0x12,
-                                      panel_clear_color, 0);
+            append_screen_rect_packet(
+                (s32)x - 0x13, (s32)y - 0x13, (s32)x + 0x13, (s32)y + 0x13, color, 0);
+            append_screen_rect_packet(
+                (s32)x - 0x12, (s32)y - 0x12, (s32)x + 0x12, (s32)y + 0x12, panel_clear_color, 0);
         }
         if (pause_state->slots[i] == 0) {
-            append_screen_rect_packet((s32)x - 0xF, (s32)y - 0xF, (s32)x + 0xF, (s32)y + 0xF,
-                                      0x40404040L, 0);
+            append_screen_rect_packet(
+                (s32)x - 0xF, (s32)y - 0xF, (s32)x + 0xF, (s32)y + 0xF, 0x40404040L, 0);
         } else {
             s32 icon_entry_index = pause_state->slots[i];
-            s32 id = get_icon_frame(iconTab[icon_entry_index].id, item_text_variant[icon_entry_index] ? 4 : 0);
+            s32 id = get_icon_frame(iconTab[icon_entry_index].id,
+                                    item_text_variant[icon_entry_index] ? 4 : 0);
 
             draw_hud_sprite(id, (s32)x - 0x11, (s32)y - 0x11, 0x20, 0x20, 0x80);
         }
         i += 1;
     } while (i < 8);
     draw_hud_sprite(get_icon_frame(0xE99E, 0), 8, 0x27, 0x20, -0x20, 0x80);
-    draw_hud_sprite(get_icon_frame(0xE99E, 0), pause_state->w - 0xA, 0x27, -0x20, -0x20,
-                    0x80);
+    draw_hud_sprite(get_icon_frame(0xE99E, 0), pause_state->w - 0xA, 0x27, -0x20, -0x20, 0x80);
     font_print_large(0x28, 0xF, 0x80FFA888L, pause_ring_left_label_text, -1);
     font_print_large(pause_state->w - 0x3C, 0xF, 0x80FFA888L, pause_ring_right_label_text, -1);
     do_gif_paging();

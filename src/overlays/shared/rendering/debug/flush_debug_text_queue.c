@@ -17,29 +17,50 @@
 typedef struct {
     s32 a, b, c, d;
 } E001f36f8;
+
 #include "rnc/overlay/shared/rendering/debug/flush_debug_text_queue_globals.h"
-extern s32 debug_text_queue_count_gp __asm__("D_L00_0015EFC4") __attribute__((sda));
-extern void *D_L00_0015EFC0 __attribute__((sda));
+
+extern s32       debug_text_queue_count_gp __asm__("D_L00_0015EFC4") __attribute__((sda));
+extern void     *D_L00_0015EFC0 __attribute__((sda));
 extern E001f36f8 l00_debug_text_queue_entries[] __asm__("D_L00_0016A840");
-u8 D_L00_0016A040[0x800] = {0};
+u8               D_L00_0016A040[0x800] = {0};
+
 u8 D_L01_0016A4C0[0x800] = {0};
+
 u8 D_L02_0016A640[0x800] = {0};
+
 u8 D_L03_0016A140[0x800] = {0};
+
 u8 D_L04_0016A1C0[0x800] = {0};
+
 u8 D_L05_0016A440[0x800] = {0};
+
 u8 D_L06_0016A7C0[0x800] = {0};
+
 u8 D_L07_0016A0C0[0x800] = {0};
+
 u8 D_L08_0016A840[0x800] = {0};
+
 u8 D_L09_0016A1C0[0x800] = {0};
+
 u8 D_L10_0016A4C0[0x800] = {0};
+
 u8 D_L11_0016AA40[0x800] = {0};
+
 u8 D_L12_0016A4C0[0x800] = {0};
+
 u8 D_L13_0016A340[0x800] = {0};
+
 u8 D_L14_0016A740[0x800] = {0};
+
 u8 D_L15_0016A640[0x800] = {0};
+
 u8 D_L16_0016A440[0x800] = {0};
+
 u8 D_L17_0016A940[0x800] = {0};
+
 u8 D_L18_0016AA40[0x800] = {0};
+
 void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) __asm__("FUN_L00_001f3770");
 
 void draw_debug_text(s32, s32, s32, s32) __asm__("FUN_L00_001f3770");
@@ -47,14 +68,17 @@ void draw_debug_text(s32, s32, s32, s32) __asm__("FUN_L00_001f3770");
 void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
 
 void flush_debug_text_queue(void) {
-    s32 i;
+    s32        i;
     E001f36f8 *unused_text_entry;
     for (i = 0; i < debug_text_queue_count_gp; i++)
-        draw_debug_text(l00_debug_text_queue_entries[i].a, l00_debug_text_queue_entries[i].b, l00_debug_text_queue_entries[i].c,
-                         l00_debug_text_queue_entries[i].d);
+        draw_debug_text(l00_debug_text_queue_entries[i].a,
+                        l00_debug_text_queue_entries[i].b,
+                        l00_debug_text_queue_entries[i].c,
+                        l00_debug_text_queue_entries[i].d);
     debug_text_queue_count_gp = 0;
     D_L00_0015EFC0 = D_L00_0016A040;
 }
+
 typedef struct {
     s32 width;
     s32 height;
@@ -73,22 +97,22 @@ typedef struct {
 } DebugFontTexture;
 
 extern DebugViewport D_0013E500;
-extern s32 debug_font_glyph_texture_coordinates[] __asm__("D_L00_00169980");
-extern s32 debug_font_glyph_advances[] __asm__("D_L00_00169B00");
+extern s32           debug_font_glyph_texture_coordinates[] __asm__("D_L00_00169980");
+extern s32           debug_font_glyph_advances[] __asm__("D_L00_00169B00");
 /* Struct views of the two globals: retail reads them after the packet stores. */
-#define debug_packet (*(PacketBuffer *)&D_L00_001611C0)
+#define debug_packet       (*(PacketBuffer *)&D_L00_001611C0)
 #define debug_font_texture (*(DebugFontTexture *)&debug_font_pif_header)
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 
 void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
     const u8 *text = (const u8 *)text_address;
-    s32 glyph_count = 0;
-    u32 quadwords;
-    u32 glyph;
-    s32 texture_coordinates;
-    u64 *packet;
-    u64 *glyph_tag;
-    u64 *cursor;
+    s32       glyph_count = 0;
+    u32       quadwords;
+    u32       glyph;
+    s32       texture_coordinates;
+    u64      *packet;
+    u64      *glyph_tag;
+    u64      *cursor;
 
     vu1_add_g_sregister(0x42, 0x8000000044ULL);
     vu1_add_g_sregister(0x47, 0x5360B);
@@ -135,14 +159,18 @@ void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
     ((u32 *)packet)[3] = quadwords | 0x50000000;
     *glyph_tag = (s64)(glyph_count | 0x8000) | 0x4400000000000000ULL;
 }
+
 #include "types.h"
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/vector.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
+
 extern struct PadStateWords D_0013C940;
+
 #include "rnc/overlay/level_camera.h"
+
 extern void update_all_cameras(void) __asm__("FUN_001ec420");
 extern void reset_follow_camera_state_from_position(void *) __asm__("FUN_L00_002e6bf8");
 
@@ -159,10 +187,10 @@ void update_debug_camera(void) __asm__("FUN_L00_001f3aa0");
 
 void update_debug_camera(void) {
     struct PadStateWords *pad;
-    DebugMenuState *menu;
-    int moved;
-    int free_look;
-    DebugCameraTarget *target;
+    DebugMenuState       *menu;
+    int                   moved;
+    int                   free_look;
+    DebugCameraTarget    *target;
     pad = &D_0013C940;
     moved = 0;
     if (pad->buttons.w.held & 0x800)
@@ -178,65 +206,41 @@ void update_debug_camera(void) {
         if ((pad->buttons.held_pressed & 3) != 3) {
             if (D_0013C940.buttons.w.held & 0x1000) {
                 if (free_look) {
-                    fast_vec_normalize(&step, l00_camera.unk350,
-                                 g_debug_menu.movement_speed);
-                    fast_vec_add(l00_camera.pos.f,
-                                 l00_camera.pos.f, &step);
+                    fast_vec_normalize(&step, l00_camera.unk350, g_debug_menu.movement_speed);
+                    fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &step);
                 } else {
-                    l00_camera.pos.f[0] +=
-                        fast_cos(l00_camera.yaw) *
-                        g_debug_menu.movement_speed;
-                    l00_camera.pos.f[1] +=
-                        fast_sin(l00_camera.yaw) *
-                        g_debug_menu.movement_speed;
+                    l00_camera.pos.f[0] += fast_cos(l00_camera.yaw) * g_debug_menu.movement_speed;
+                    l00_camera.pos.f[1] += fast_sin(l00_camera.yaw) * g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 0x4000) {
                 if (free_look) {
-                    fast_vec_normalize(&step, l00_camera.unk350,
-                                 g_debug_menu.movement_speed);
-                    fast_vec_sub(l00_camera.pos.f,
-                                 l00_camera.pos.f, &step);
+                    fast_vec_normalize(&step, l00_camera.unk350, g_debug_menu.movement_speed);
+                    fast_vec_sub(l00_camera.pos.f, l00_camera.pos.f, &step);
                 } else {
-                    l00_camera.pos.f[0] -=
-                        fast_cos(l00_camera.yaw) *
-                        g_debug_menu.movement_speed;
-                    l00_camera.pos.f[1] -=
-                        fast_sin(l00_camera.yaw) *
-                        g_debug_menu.movement_speed;
+                    l00_camera.pos.f[0] -= fast_cos(l00_camera.yaw) * g_debug_menu.movement_speed;
+                    l00_camera.pos.f[1] -= fast_sin(l00_camera.yaw) * g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 1) {
                 if (free_look) {
-                    fast_vec_normalize(&step, l00_camera.unk350 + 4,
-                                 g_debug_menu.movement_speed);
-                    fast_vec_add(l00_camera.pos.f,
-                                 l00_camera.pos.f, &step);
+                    fast_vec_normalize(&step, l00_camera.unk350 + 4, g_debug_menu.movement_speed);
+                    fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &step);
                 } else {
-                    l00_camera.pos.f[0] -=
-                        fast_sin(l00_camera.yaw) *
-                        g_debug_menu.movement_speed;
-                    l00_camera.pos.f[1] +=
-                        fast_cos(l00_camera.yaw) *
-                        g_debug_menu.movement_speed;
+                    l00_camera.pos.f[0] -= fast_sin(l00_camera.yaw) * g_debug_menu.movement_speed;
+                    l00_camera.pos.f[1] += fast_cos(l00_camera.yaw) * g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 2) {
                 if (free_look) {
-                    fast_vec_normalize(&step, l00_camera.unk350 + 4,
-                                 g_debug_menu.movement_speed);
-                    fast_vec_sub(l00_camera.pos.f,
-                                 l00_camera.pos.f, &step);
+                    fast_vec_normalize(&step, l00_camera.unk350 + 4, g_debug_menu.movement_speed);
+                    fast_vec_sub(l00_camera.pos.f, l00_camera.pos.f, &step);
                 } else {
-                    l00_camera.pos.f[0] +=
-                        fast_sin(l00_camera.yaw) *
-                        g_debug_menu.movement_speed;
-                    l00_camera.pos.f[1] -=
-                        fast_cos(l00_camera.yaw) *
-                        g_debug_menu.movement_speed;
+                    l00_camera.pos.f[0] += fast_sin(l00_camera.yaw) * g_debug_menu.movement_speed;
+                    l00_camera.pos.f[1] -= fast_cos(l00_camera.yaw) * g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
@@ -262,8 +266,8 @@ void update_debug_camera(void) {
             else if (g_debug_menu.yaw_speed < -0.04f)
                 g_debug_menu.yaw_speed = -0.04f;
             if (free_look) {
-                Vec4 r[4];
-                Vec4 m[4];
+                Vec4  r[4];
+                Vec4  m[4];
                 float sine = fast_sin(g_debug_menu.yaw_speed);
                 float cosine = fast_cos(g_debug_menu.yaw_speed);
                 set_identity_matrix(r);
@@ -275,8 +279,7 @@ void update_debug_camera(void) {
                 multiply_matrix(m, m, r);
                 copy_matrix3x4(l00_camera.unk350, m);
             } else {
-                l00_camera.yaw = fast_subtract_rotations(
-                    l00_camera.yaw, g_debug_menu.yaw_speed);
+                l00_camera.yaw = fast_subtract_rotations(l00_camera.yaw, g_debug_menu.yaw_speed);
             }
         } else {
             g_debug_menu.yaw_speed = g_debug_menu.yaw_speed / 1.5f;
@@ -284,8 +287,7 @@ void update_debug_camera(void) {
                 g_debug_menu.yaw_speed = 0;
         }
     }
-    if ((D_0013C940.buttons.held_pressed & 3) == 3 &&
-        (D_0013C940.buttons.held_pressed & 0x5000)) {
+    if ((D_0013C940.buttons.held_pressed & 3) == 3 && (D_0013C940.buttons.held_pressed & 0x5000)) {
         if (D_0013C940.buttons.w.held & 0x1000)
             g_debug_menu.pitch_speed -= 0.002f;
         else
@@ -295,8 +297,8 @@ void update_debug_camera(void) {
         else if (g_debug_menu.pitch_speed < -0.04f)
             g_debug_menu.pitch_speed = -0.04f;
         if (free_look) {
-            Vec4 r[4];
-            Vec4 m[4];
+            Vec4  r[4];
+            Vec4  m[4];
             float sine = fast_sin(g_debug_menu.pitch_speed);
             float cosine = fast_cos(g_debug_menu.pitch_speed);
             set_identity_matrix(r);
@@ -308,8 +310,7 @@ void update_debug_camera(void) {
             multiply_matrix(m, m, r);
             copy_matrix3x4(l00_camera.unk350, m);
         } else {
-            l00_camera.pitch = fast_subtract_rotations(
-                l00_camera.pitch, g_debug_menu.pitch_speed);
+            l00_camera.pitch = fast_subtract_rotations(l00_camera.pitch, g_debug_menu.pitch_speed);
         }
     } else {
         g_debug_menu.pitch_speed = g_debug_menu.pitch_speed / 1.5f;
@@ -328,9 +329,9 @@ void update_debug_camera(void) {
         else if (g_debug_menu.roll_speed < -0.04f)
             g_debug_menu.roll_speed = -0.04f;
         {
-            Vec4 r[4];
-            Vec4 m[4];
-            Vec4 rolled_basis[4];
+            Vec4  r[4];
+            Vec4  m[4];
+            Vec4  rolled_basis[4];
             float sine = fast_sin(g_debug_menu.roll_speed);
             float cosine = fast_cos(g_debug_menu.roll_speed);
             set_identity_matrix(r);
@@ -367,8 +368,7 @@ void update_debug_camera(void) {
         Vec4 r[3];
         if (free_look) {
             fast_vec_normalize(&r[0], l00_camera.unk350 + 8, g_debug_menu.vertical_speed);
-            fast_vec_add(l00_camera.pos.f, l00_camera.pos.f,
-                         &r[0]);
+            fast_vec_add(l00_camera.pos.f, l00_camera.pos.f, &r[0]);
         } else {
             l00_camera.pos.f[2] += g_debug_menu.vertical_speed;
         }
@@ -391,26 +391,33 @@ void update_debug_camera(void) {
         reset_follow_camera_state_from_position(l00_camera.unk180);
     }
 }
+
 #include "qcopy.h"
+
 typedef struct {
-    u8 p[0x84];
+    u8  p[0x84];
     f32 x84, x88, x8c, x90;
 } B001f4490;
+
 extern B001f4490 D_L00_0016C058;
-void update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
+void             update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
 
 void update_hero_from_debug_camera(void) {
     LevelCamera *debug_camera_block = &l00_camera;
-    B001f4490 *hero_camera_offsets = &D_L00_0016C058;
+    B001f4490   *hero_camera_offsets = &D_L00_0016C058;
     struct Hero *hero_state;
-    u8 *hero_moby;
-    f32 camera_to_hero_angle = fast_add_rotations(debug_camera_block->yaw, hero_camera_offsets->x88);
+    u8          *hero_moby;
+    f32          camera_to_hero_angle =
+        fast_add_rotations(debug_camera_block->yaw, hero_camera_offsets->x88);
     f32 angle_cosine = fast_cos(camera_to_hero_angle);
     hero_state = &hero;
-    hero_state->motion.pos.f[0] = debug_camera_block->pos.f[0] + angle_cosine * hero_camera_offsets->x8c;
-    hero_state->motion.pos.f[1] = debug_camera_block->pos.f[1] + fast_sin(camera_to_hero_angle) * hero_camera_offsets->x8c;
+    hero_state->motion.pos.f[0] =
+        debug_camera_block->pos.f[0] + angle_cosine * hero_camera_offsets->x8c;
+    hero_state->motion.pos.f[1] =
+        debug_camera_block->pos.f[1] + fast_sin(camera_to_hero_angle) * hero_camera_offsets->x8c;
     hero_state->motion.pos.f[2] = debug_camera_block->pos.f[2] + hero_camera_offsets->x90;
-    hero_state->motion.rot.f[2] = fast_add_rotations(debug_camera_block->yaw, hero_camera_offsets->x84);
+    hero_state->motion.rot.f[2] =
+        fast_add_rotations(debug_camera_block->yaw, hero_camera_offsets->x84);
     euler_rotation_matrix(hero_state, hero_state->motion.rot.f);
     hero_moby = *(u8 **)&hero_state->moby;
     qcopy(hero_moby + 0x10, &hero_state->motion.pos);
@@ -418,6 +425,7 @@ void update_hero_from_debug_camera(void) {
     copy_memory_aligned(hero_moby + 0xC0, hero_state, 0x30);
     update_entity(*(u8 **)&hero_state->moby);
 }
+
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001F4918). */
 #include "rnc/game/game_globals.h"
 #include "rnc/game/item_state.h"
@@ -427,47 +435,51 @@ void update_hero_from_debug_camera(void) {
 typedef struct {
     s32 rows[6];
 } DebugRowCounts;
+
 extern DebugRowCounts l00_debug_menu_column_row_counts __asm__("D_L00_001E7920");
+
 /* The screen half size and background color of the level's view context. */
 typedef struct {
-    u8 pad0[0x200];
+    u8  pad0[0x200];
     f32 half_width;
     f32 half_height;
     f32 scr_x;
     f32 scr_y;
-    u8 pad210[0x2C];
+    u8  pad210[0x2C];
     s32 background_color[3];
 } LevelViewContext;
+
 extern u8 D_L00_0016CA40[];
 #define level_view_context (*(LevelViewContext *)D_L00_0016CA40)
 #include "rnc/overlay/item_defs.h"
+
 /* 13 item ids, declared as 8 bytes: the most gas reaches through $gp, as retail does. */
 extern u8 debug_menu_item_ids[8] __asm__("D_L00_0015EFD0") __attribute__((sda));
 /* Declared as 1 byte so the add_sample path forms its address through $gp, as retail does. */
-extern char level_file_path_format_gp[1] __asm__("D_L00_0015EFE0") __attribute__((sda));
-extern char level_file_path_format[] __asm__("D_L00_0015EFE0");
-extern char iso_version_suffix[] __asm__("D_L00_0015EFF0");
-extern char occlusion_samples_file_name[] __asm__("D_L00_0015EFF8");
-extern char level_directory_macro[] __asm__("D_L00_001E7938") MACRO_ADDR;
-extern char level_directory[] __asm__("D_L00_001E7938");
-extern char occlusion_deltas_file_name[] __asm__("D_L00_001E7958");
-extern char add_sample_format[] __asm__("D_L00_001E7970");
-extern char start_point_format[] __asm__("D_L00_001E7990");
-extern u8 mission_state[] __asm__("D_L00_0015FC88") MACRO_ADDR;
-extern s32 occlusion_sample_count __asm__("D_L00_0015F614");
-extern f32 *occlusion_samples __asm__("D_L00_00173E20") NOT_SDA;
-extern u8 D_L00_0015F444;
-extern f32 D_L00_0015F448;
+extern char  level_file_path_format_gp[1] __asm__("D_L00_0015EFE0") __attribute__((sda));
+extern char  level_file_path_format[] __asm__("D_L00_0015EFE0");
+extern char  iso_version_suffix[] __asm__("D_L00_0015EFF0");
+extern char  occlusion_samples_file_name[] __asm__("D_L00_0015EFF8");
+extern char  level_directory_macro[] __asm__("D_L00_001E7938") MACRO_ADDR;
+extern char  level_directory[] __asm__("D_L00_001E7938");
+extern char  occlusion_deltas_file_name[] __asm__("D_L00_001E7958");
+extern char  add_sample_format[] __asm__("D_L00_001E7970");
+extern char  start_point_format[] __asm__("D_L00_001E7990");
+extern u8    mission_state[] __asm__("D_L00_0015FC88") MACRO_ADDR;
+extern s32   occlusion_sample_count __asm__("D_L00_0015F614");
+extern f32  *occlusion_samples __asm__("D_L00_00173E20") NOT_SDA;
+extern u8    D_L00_0015F444;
+extern f32   D_L00_0015F448;
 extern char *D_L00_0015F600;
-extern void set_background_color(s32, s32, s32) __asm__("FUN_001fb280");
-extern s32 sprintf(char *, const char *, ...);
-extern f64 fptodp(f32) __asm__("FUN_00120478");
-extern s32 sceOpen(const char *, s32, ...);
-extern s32 sceLseek(s32, s32, s32);
-extern s32 sceWrite(s32, void *, s32);
-extern s32 sceRead(s32, void *, s32);
-extern s32 sceClose(s32);
-extern u32 strlen(const char *);
+extern void  set_background_color(s32, s32, s32) __asm__("FUN_001fb280");
+extern s32   sprintf(char *, const char *, ...);
+extern f64   fptodp(f32) __asm__("FUN_00120478");
+extern s32   sceOpen(const char *, s32, ...);
+extern s32   sceLseek(s32, s32, s32);
+extern s32   sceWrite(s32, void *, s32);
+extern s32   sceRead(s32, void *, s32);
+extern s32   sceClose(s32);
+extern u32   strlen(const char *);
 
 /* Debug menu input: moves between the columns and rows and changes the selected toggle, mode, item
    count or fog value; the last column records occlusion sample points to files. */
@@ -504,7 +516,7 @@ void update_debug_menu(void) {
     DebugRowCounts row_counts;
     union {
         struct {
-            f32 hero_offset[4];
+            f32  hero_offset[4];
             char path[64], line[32];
         } sample;
         struct {
@@ -516,7 +528,8 @@ void update_debug_menu(void) {
     pressed = D_0013C940.buttons.w.pressed;
     if (pressed & 0x500) {
         D_L00_0015F5C4 = g_debug_menu.unknown_a4;
-        set_background_color(level_view_context.background_color[0], level_view_context.background_color[1],
+        set_background_color(level_view_context.background_color[0],
+                             level_view_context.background_color[1],
                              level_view_context.background_color[2]);
         g_debug_menu.start_capture_status = 110;
         g_debug_menu.sample_capture_status = 110;
@@ -584,8 +597,7 @@ void update_debug_menu(void) {
                     break;
                 case DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET:
                     g_debug_menu.update_flags = 0;
-                    fast_vec_sub(scratch.sample.hero_offset, &hero.motion.pos,
-                                        l00_camera.pos.f);
+                    fast_vec_sub(scratch.sample.hero_offset, &hero.motion.pos, l00_camera.pos.f);
                     g_debug_menu.target_distance = vector_length_xy(scratch.sample.hero_offset);
                     g_debug_menu.target_angle = fast_subtract_rotations(
                         fast_arc_tan(scratch.sample.hero_offset[0], scratch.sample.hero_offset[1]),
@@ -668,11 +680,15 @@ void update_debug_menu(void) {
             if (D_0013C940.buttons.w.pressed & 0x50) {
                 g_debug_menu.screen_mode = !g_debug_menu.screen_mode;
                 if (g_debug_menu.screen_mode) {
-                    level_view_context.half_width = convert_integer_to_float(fs_aa_buffer.display_width) * 0.125f;
-                    level_view_context.half_height = convert_integer_to_float(fs_aa_buffer.display_height) * 0.125f;
+                    level_view_context.half_width =
+                        convert_integer_to_float(fs_aa_buffer.display_width) * 0.125f;
+                    level_view_context.half_height =
+                        convert_integer_to_float(fs_aa_buffer.display_height) * 0.125f;
                 } else {
-                    level_view_context.half_width = convert_integer_to_float(fs_aa_buffer.display_width) * 0.5f;
-                    level_view_context.half_height = convert_integer_to_float(fs_aa_buffer.display_height) * 0.5f;
+                    level_view_context.half_width =
+                        convert_integer_to_float(fs_aa_buffer.display_width) * 0.5f;
+                    level_view_context.half_height =
+                        convert_integer_to_float(fs_aa_buffer.display_height) * 0.5f;
                 }
                 {
                     f32 half_width = level_view_context.half_width;
@@ -727,7 +743,7 @@ void update_debug_menu(void) {
         break;
     case DEBUG_COLUMN_ITEM_COUNTS: {
         s32 *count;
-        s32 limit = 999999;
+        s32  limit = 999999;
         if (g_debug_menu.selected_row < 13) {
             s32 item = debug_menu_item_ids[g_debug_menu.selected_row];
             count = &weapon_ammo_counts[item];
@@ -768,9 +784,9 @@ void update_debug_menu(void) {
         if (D_0013C940.buttons.w.pressed & 0x80)
             item_text_variant[debug_menu_item_ids[g_debug_menu.selected_row]]--;
         {
-            s32 item = debug_menu_item_ids[g_debug_menu.selected_row];
+            s32      item = debug_menu_item_ids[g_debug_menu.selected_row];
             ItemDef *def = item_defs + item;
-            u8 *variant = item_text_variant + item;
+            u8      *variant = item_text_variant + item;
             if (*variant > def->variant_limit.value)
                 *variant = def->variant_limit.low_byte;
         }
@@ -849,10 +865,10 @@ void update_debug_menu(void) {
         if (g_debug_menu.selected_row == 2 && (D_0013C940.buttons.w.pressed & 0xF0)) {
             char *directory = level_directory_macro;
             char *path_format = level_file_path_format_gp;
-            s32 i = 0, found, fd, size;
+            s32   i = 0, found, fd, size;
             {
                 f32 *sample;
-                s32 count = occlusion_sample_count;
+                s32  count = occlusion_sample_count;
                 found = 0;
                 if (count > 0) {
                     sample = occlusion_samples;
@@ -872,10 +888,17 @@ void update_debug_menu(void) {
             }
             if (found)
                 break;
-            sprintf(scratch.sample.path, path_format, directory, current_level_index,
-                    occlusion_deltas_file_name, iso_version_suffix);
-            sprintf(scratch.sample.line, add_sample_format, fptodp(l00_camera.pos.f[0]),
-                    fptodp(l00_camera.pos.f[1]), fptodp(l00_camera.pos.f[2]));
+            sprintf(scratch.sample.path,
+                    path_format,
+                    directory,
+                    current_level_index,
+                    occlusion_deltas_file_name,
+                    iso_version_suffix);
+            sprintf(scratch.sample.line,
+                    add_sample_format,
+                    fptodp(l00_camera.pos.f[0]),
+                    fptodp(l00_camera.pos.f[1]),
+                    fptodp(l00_camera.pos.f[2]));
             fd = sceOpen(scratch.sample.path, 0x303);
             if (fd >= 0) {
                 sceLseek(fd, 0, 2);
@@ -885,8 +908,12 @@ void update_debug_menu(void) {
             }
             {
                 f32 *samples = occlusion_samples;
-                sprintf(scratch.sample.path, path_format, directory,
-                        current_level_index, occlusion_samples_file_name, iso_version_suffix);
+                sprintf(scratch.sample.path,
+                        path_format,
+                        directory,
+                        current_level_index,
+                        occlusion_samples_file_name,
+                        iso_version_suffix);
                 fd = sceOpen(scratch.sample.path, 0x303);
                 if (fd >= 0) {
                     sceLseek(fd, 0, 2);
@@ -908,10 +935,17 @@ void update_debug_menu(void) {
         }
         if (g_debug_menu.selected_row == 3 && (D_0013C940.buttons.w.pressed & 0xF0)) {
             s32 fd;
-            sprintf(scratch.start_point.path, level_file_path_format, level_directory, current_level_index,
-                    occlusion_deltas_file_name, iso_version_suffix);
-            sprintf(scratch.start_point.line, start_point_format, fptodp(l00_camera.pos.f[0]),
-                    fptodp(l00_camera.pos.f[1]), fptodp(l00_camera.pos.f[2]));
+            sprintf(scratch.start_point.path,
+                    level_file_path_format,
+                    level_directory,
+                    current_level_index,
+                    occlusion_deltas_file_name,
+                    iso_version_suffix);
+            sprintf(scratch.start_point.line,
+                    start_point_format,
+                    fptodp(l00_camera.pos.f[0]),
+                    fptodp(l00_camera.pos.f[1]),
+                    fptodp(l00_camera.pos.f[2]));
             fd = sceOpen(scratch.start_point.path, 0x303);
             if (fd >= 0) {
                 sceLseek(fd, 0, 2);
@@ -923,6 +957,7 @@ void update_debug_menu(void) {
         break;
     }
 }
+
 /* Pending C: keep the oracle until the placed overlay bytes match. */
 #include "types.h"
 
@@ -932,9 +967,9 @@ void update_debug_menu(void) {
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001F5C60), where it is exact; names translated to the US level program. */
 
 typedef struct {
- char pad0[0x28];
- s32 ammo28, ammo2C, unused30, ammo34, unused38, ammo3C, ammo40, ammo44;
- s32 unused48, ammo4C, ammo50, unused54, unused58, ammo5C, ammo60;
+    char pad0[0x28];
+    s32  ammo28, ammo2C, unused30, ammo34, unused38, ammo3C, ammo40, ammo44;
+    s32  unused48, ammo4C, ammo50, unused54, unused58, ammo5C, ammo60;
 } AmmoDisplay60;
 
 extern char *debug_menu_toggle_value_texts[] __asm__("D_L00_00160C18");
@@ -945,98 +980,101 @@ extern char *debug_menu_television_mode_texts[] __asm__("D_L00_00160CE0");
 extern char *debug_menu_screen_mode_texts[] __asm__("D_L00_00160CF0");
 extern char *debug_menu_occlusion_mode_texts[] __asm__("D_L00_00160D08");
 extern char *debug_menu_profiler_mode_texts[] __asm__("D_L00_001C3E28");
-extern s32 D_0015ED84;
-extern char debug_menu_title_text[] __asm__("D_L00_0015F008");
-extern char debug_menu_title_underline[] __asm__("D_L00_0015F010");
-extern char debug_menu_update_heading[] __asm__("D_L00_0015F020");
-extern char debug_menu_update_heading_underline[] __asm__("D_L00_0015F028");
-extern char debug_menu_ratchet_update_label[] __asm__("D_L00_0015F030");
-extern char debug_menu_mobys_update_label[] __asm__("D_L00_0015F040");
-extern char debug_menu_parts_update_label[] __asm__("D_L00_0015F048");
-extern char debug_menu_camera_update_label[] __asm__("D_L00_0015F050");
-extern char debug_menu_step_update_label[] __asm__("D_L00_0015F058");
-extern char debug_menu_selection_marker[] __asm__("D_L00_0015F060");
-extern char debug_menu_mode_heading[] __asm__("D_L00_0015F068");
-extern char debug_menu_section_heading_underline[] __asm__("D_L00_0015F070");
-extern char debug_menu_control_mode_label[] __asm__("D_L00_0015F078");
-extern char debug_menu_profiler_mode_label[] __asm__("D_L00_0015F080");
-extern char debug_menu_occlusion_mode_label[] __asm__("D_L00_0015F088");
-extern char debug_menu_bookmark_label[] __asm__("D_L00_0015F090");
-extern char debug_menu_invincibility_label[] __asm__("D_L00_0015F0A0");
-extern char debug_menu_draw_distance_override_label[] __asm__("D_L00_0015F0A8");
-extern char debug_menu_collision_mode_label[] __asm__("D_L00_0015F0B8");
-extern char debug_menu_television_mode_label[] __asm__("D_L00_0015F0C0");
-extern char debug_menu_screen_mode_label[] __asm__("D_L00_0015F0C8");
-extern char debug_menu_scene_label[] __asm__("D_L00_0015F0D0");
-extern char debug_menu_integer_format[] __asm__("D_L00_0015F0D8");
-extern char debug_menu_no_scene_text[] __asm__("D_L00_0015F0E0");
-extern char debug_menu_segment_label[] __asm__("D_L00_0015F0E8");
-extern char debug_menu_draw_heading[] __asm__("D_L00_0015F0F8");
-extern char debug_menu_darken_draw_label[] __asm__("D_L00_0015F100");
-extern char debug_menu_environment_collision_draw_label[] __asm__("D_L00_0015F108");
-extern char debug_menu_moby_collision_draw_label[] __asm__("D_L00_0015F118");
-extern char debug_menu_hero_collision_draw_label[] __asm__("D_L00_0015F128");
-extern char debug_menu_bounding_spheres_draw_label[] __asm__("D_L00_0015F138");
-extern char debug_menu_cameras_draw_label[] __asm__("D_L00_0015F148");
-extern char debug_menu_cuboids_draw_label[] __asm__("D_L00_0015F150");
-extern char debug_menu_samples_draw_label[] __asm__("D_L00_0015F158");
-extern char debug_menu_text_draw_label[] __asm__("D_L00_0015F160");
-extern char debug_menu_ammo_heading[] __asm__("D_L00_0015F168");
-extern char debug_menu_suck_cannon_label[] __asm__("D_L00_0015F170");
-extern char debug_menu_morph_ray_label[] __asm__("D_L00_0015F180");
-extern char debug_menu_inflato_r_label[] __asm__("D_L00_0015F190");
-extern char debug_menu_ryno_label[] __asm__("D_L00_0015F1A0");
-extern char debug_menu_droids_label[] __asm__("D_L00_0015F1B0");
-extern char debug_menu_bomb_label[] __asm__("D_L00_0015F1C0");
-extern char debug_menu_devastator_label[] __asm__("D_L00_0015F1C8");
-extern char debug_menu_visibomb_label[] __asm__("D_L00_0015F1D8");
-extern char debug_menu_agents_label[] __asm__("D_L00_0015F1E8");
-extern char debug_menu_pyrocitor_label[] __asm__("D_L00_0015F1F0");
-extern char debug_menu_tesla_label[] __asm__("D_L00_0015F200");
-extern char debug_menu_mine_glove_label[] __asm__("D_L00_0015F210");
-extern char debug_menu_blaster_label[] __asm__("D_L00_0015F220");
-extern char debug_menu_bolts_label[] __asm__("D_L00_0015F228");
-extern char debug_menu_fog_heading[] __asm__("D_L00_0015F230");
-extern char debug_menu_fog_heading_underline[] __asm__("D_L00_0015F238");
-extern char debug_menu_fog_near_distance_label[] __asm__("D_L00_0015F240");
-extern char debug_menu_fog_near_intensity_label[] __asm__("D_L00_0015F250");
-extern char debug_menu_fog_far_distance_label[] __asm__("D_L00_0015F258");
-extern char debug_menu_fog_far_intensity_label[] __asm__("D_L00_0015F260");
-extern char debug_menu_fog_red_label[] __asm__("D_L00_0015F268");
-extern char debug_menu_fog_green_label[] __asm__("D_L00_0015F270");
-extern char debug_menu_fog_blue_label[] __asm__("D_L00_0015F278");
-extern char debug_menu_misc_heading[] __asm__("D_L00_0015F280");
-extern char debug_menu_battle_camera_label[] __asm__("D_L00_0015F288");
-extern char debug_menu_actuator_label[] __asm__("D_L00_0015F298");
-extern char debug_menu_sample_capture_label[] __asm__("D_L00_0015F2A8");
-extern char debug_menu_start_capture_label[] __asm__("D_L00_0015F2B8");
+extern s32   D_0015ED84;
+extern char  debug_menu_title_text[] __asm__("D_L00_0015F008");
+extern char  debug_menu_title_underline[] __asm__("D_L00_0015F010");
+extern char  debug_menu_update_heading[] __asm__("D_L00_0015F020");
+extern char  debug_menu_update_heading_underline[] __asm__("D_L00_0015F028");
+extern char  debug_menu_ratchet_update_label[] __asm__("D_L00_0015F030");
+extern char  debug_menu_mobys_update_label[] __asm__("D_L00_0015F040");
+extern char  debug_menu_parts_update_label[] __asm__("D_L00_0015F048");
+extern char  debug_menu_camera_update_label[] __asm__("D_L00_0015F050");
+extern char  debug_menu_step_update_label[] __asm__("D_L00_0015F058");
+extern char  debug_menu_selection_marker[] __asm__("D_L00_0015F060");
+extern char  debug_menu_mode_heading[] __asm__("D_L00_0015F068");
+extern char  debug_menu_section_heading_underline[] __asm__("D_L00_0015F070");
+extern char  debug_menu_control_mode_label[] __asm__("D_L00_0015F078");
+extern char  debug_menu_profiler_mode_label[] __asm__("D_L00_0015F080");
+extern char  debug_menu_occlusion_mode_label[] __asm__("D_L00_0015F088");
+extern char  debug_menu_bookmark_label[] __asm__("D_L00_0015F090");
+extern char  debug_menu_invincibility_label[] __asm__("D_L00_0015F0A0");
+extern char  debug_menu_draw_distance_override_label[] __asm__("D_L00_0015F0A8");
+extern char  debug_menu_collision_mode_label[] __asm__("D_L00_0015F0B8");
+extern char  debug_menu_television_mode_label[] __asm__("D_L00_0015F0C0");
+extern char  debug_menu_screen_mode_label[] __asm__("D_L00_0015F0C8");
+extern char  debug_menu_scene_label[] __asm__("D_L00_0015F0D0");
+extern char  debug_menu_integer_format[] __asm__("D_L00_0015F0D8");
+extern char  debug_menu_no_scene_text[] __asm__("D_L00_0015F0E0");
+extern char  debug_menu_segment_label[] __asm__("D_L00_0015F0E8");
+extern char  debug_menu_draw_heading[] __asm__("D_L00_0015F0F8");
+extern char  debug_menu_darken_draw_label[] __asm__("D_L00_0015F100");
+extern char  debug_menu_environment_collision_draw_label[] __asm__("D_L00_0015F108");
+extern char  debug_menu_moby_collision_draw_label[] __asm__("D_L00_0015F118");
+extern char  debug_menu_hero_collision_draw_label[] __asm__("D_L00_0015F128");
+extern char  debug_menu_bounding_spheres_draw_label[] __asm__("D_L00_0015F138");
+extern char  debug_menu_cameras_draw_label[] __asm__("D_L00_0015F148");
+extern char  debug_menu_cuboids_draw_label[] __asm__("D_L00_0015F150");
+extern char  debug_menu_samples_draw_label[] __asm__("D_L00_0015F158");
+extern char  debug_menu_text_draw_label[] __asm__("D_L00_0015F160");
+extern char  debug_menu_ammo_heading[] __asm__("D_L00_0015F168");
+extern char  debug_menu_suck_cannon_label[] __asm__("D_L00_0015F170");
+extern char  debug_menu_morph_ray_label[] __asm__("D_L00_0015F180");
+extern char  debug_menu_inflato_r_label[] __asm__("D_L00_0015F190");
+extern char  debug_menu_ryno_label[] __asm__("D_L00_0015F1A0");
+extern char  debug_menu_droids_label[] __asm__("D_L00_0015F1B0");
+extern char  debug_menu_bomb_label[] __asm__("D_L00_0015F1C0");
+extern char  debug_menu_devastator_label[] __asm__("D_L00_0015F1C8");
+extern char  debug_menu_visibomb_label[] __asm__("D_L00_0015F1D8");
+extern char  debug_menu_agents_label[] __asm__("D_L00_0015F1E8");
+extern char  debug_menu_pyrocitor_label[] __asm__("D_L00_0015F1F0");
+extern char  debug_menu_tesla_label[] __asm__("D_L00_0015F200");
+extern char  debug_menu_mine_glove_label[] __asm__("D_L00_0015F210");
+extern char  debug_menu_blaster_label[] __asm__("D_L00_0015F220");
+extern char  debug_menu_bolts_label[] __asm__("D_L00_0015F228");
+extern char  debug_menu_fog_heading[] __asm__("D_L00_0015F230");
+extern char  debug_menu_fog_heading_underline[] __asm__("D_L00_0015F238");
+extern char  debug_menu_fog_near_distance_label[] __asm__("D_L00_0015F240");
+extern char  debug_menu_fog_near_intensity_label[] __asm__("D_L00_0015F250");
+extern char  debug_menu_fog_far_distance_label[] __asm__("D_L00_0015F258");
+extern char  debug_menu_fog_far_intensity_label[] __asm__("D_L00_0015F260");
+extern char  debug_menu_fog_red_label[] __asm__("D_L00_0015F268");
+extern char  debug_menu_fog_green_label[] __asm__("D_L00_0015F270");
+extern char  debug_menu_fog_blue_label[] __asm__("D_L00_0015F278");
+extern char  debug_menu_misc_heading[] __asm__("D_L00_0015F280");
+extern char  debug_menu_battle_camera_label[] __asm__("D_L00_0015F288");
+extern char  debug_menu_actuator_label[] __asm__("D_L00_0015F298");
+extern char  debug_menu_sample_capture_label[] __asm__("D_L00_0015F2A8");
+extern char  debug_menu_start_capture_label[] __asm__("D_L00_0015F2B8");
 extern float D_L00_0015F448;
-extern char debug_menu_fog_float_format[] __asm__("D_L00_0015F248");
+extern char  debug_menu_fog_float_format[] __asm__("D_L00_0015F248");
 extern float D_L00_0015F44C;
 extern float D_L00_0015F450;
 extern float D_L00_0015F454;
-extern int D_0013E520[];
-extern char debug_menu_segment_visited_format[] __asm__("D_L00_0015F0F0");
+extern int   D_0013E520[];
+extern char  debug_menu_segment_visited_format[] __asm__("D_L00_0015F0F0");
+
 #include "rnc/game/game_globals.h"
-extern u8 D_L00_0015F445;
-extern u8 D_L00_0015F446;
-extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
-extern void append_gif_transfer_packet() __asm__("func_001FB368");
+
+extern u8     D_L00_0015F445;
+extern u8     D_L00_0015F446;
+extern void   flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
+extern void   append_gif_transfer_packet() __asm__("func_001FB368");
 extern double fptodp(float) __asm__("FUN_00120478");
 
 static __inline__ int flag_offset60(int flags) {
-    if (!flags) return 0;
+    if (!flags)
+        return 0;
     return sizeof(char *);
 }
 
 void draw_debug_menu(void) __asm__("FUN_L00_001f58e0");
 
 void draw_debug_menu(void) {
-    char menu_value_text[16];
-    int stride;
-    char *fmt;
+    char           menu_value_text[16];
+    int            stride;
+    char          *fmt;
     AmmoDisplay60 *ammo;
-    u8 *weapon_order;
+    u8            *weapon_order;
 
     append_gif_transfer_packet();
     if (D_L00_0015F5D8 == 0) {
@@ -1045,38 +1083,80 @@ void draw_debug_menu(void) {
         print_debug_text(0xC, 0x2C, 0x8000C000, debug_menu_update_heading);
         print_debug_text(0xC, 0x32, 0x8000C000, debug_menu_update_heading_underline);
         print_debug_text(0x14, 0x40, 0x8000C0C0, debug_menu_ratchet_update_label);
-        print_debug_text(0x6C, 0x40, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.update_flags & 1)));
+        print_debug_text(0x6C,
+                         0x40,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.update_flags & 1)));
         print_debug_text(0x14, 0x4F, 0x8000C0C0, debug_menu_mobys_update_label);
-        print_debug_text(0x6C, 0x4F, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.update_flags & 2)));
+        print_debug_text(0x6C,
+                         0x4F,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.update_flags & 2)));
         print_debug_text(0x14, 0x5E, 0x8000C0C0, debug_menu_parts_update_label);
-        print_debug_text(0x6C, 0x5E, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.update_flags & 4)));
+        print_debug_text(0x6C,
+                         0x5E,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.update_flags & 4)));
         print_debug_text(0x14, 0x6D, 0x8000C0C0, debug_menu_camera_update_label);
-        print_debug_text(0x6C, 0x6D, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.update_flags & 8)));
+        print_debug_text(0x6C,
+                         0x6D,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.update_flags & 8)));
         print_debug_text(0x14, 0x7C, 0x8000C0C0, debug_menu_step_update_label);
-        print_debug_text(0x6C, 0x7C, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.update_flags & 0x10)));
+        print_debug_text(0x6C,
+                         0x7C,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.update_flags & 0x10)));
         if (g_debug_menu.selected_column == 0) {
-            print_debug_text(9, (g_debug_menu.selected_row * 0xF) + 0x40, 0x800000C0, debug_menu_selection_marker);
+            print_debug_text(9,
+                             (g_debug_menu.selected_row * 0xF) + 0x40,
+                             0x800000C0,
+                             debug_menu_selection_marker);
         }
         print_debug_text(0xA8, 0x2C, 0x8000C000, debug_menu_mode_heading);
         print_debug_text(0xA8, 0x32, 0x8000C000, debug_menu_section_heading_underline);
         print_debug_text(0xB0, 0x40, 0x8000C0C0, debug_menu_control_mode_label);
-        print_debug_text(0x108, 0x40, 0x80F0F0F0, debug_menu_control_mode_texts[g_debug_menu.control_mode]);
+        print_debug_text(
+            0x108, 0x40, 0x80F0F0F0, debug_menu_control_mode_texts[g_debug_menu.control_mode]);
         print_debug_text(0xB0, 0x4F, 0x8000C0C0, debug_menu_profiler_mode_label);
-        print_debug_text(0x108, 0x4F, 0x80F0F0F0, debug_menu_profiler_mode_texts[g_debug_menu.profiler_mode]);
+        print_debug_text(
+            0x108, 0x4F, 0x80F0F0F0, debug_menu_profiler_mode_texts[g_debug_menu.profiler_mode]);
         print_debug_text(0xB0, 0x5E, 0x8000C0C0, debug_menu_occlusion_mode_label);
-        print_debug_text(0x108, 0x5E, 0x80F0F0F0, debug_menu_occlusion_mode_texts[g_debug_menu.occlusion_mode]);
+        print_debug_text(
+            0x108, 0x5E, 0x80F0F0F0, debug_menu_occlusion_mode_texts[g_debug_menu.occlusion_mode]);
         print_debug_text(0xB0, 0x6D, 0x8000C0C0, debug_menu_bookmark_label);
-        print_debug_text(0x108, 0x6D, 0x80F0F0F0, debug_menu_toggle_value_texts[(g_debug_menu.bookmark_enabled != 0) ? 0 : 1]);
+        print_debug_text(
+            0x108,
+            0x6D,
+            0x80F0F0F0,
+            debug_menu_toggle_value_texts[(g_debug_menu.bookmark_enabled != 0) ? 0 : 1]);
         print_debug_text(0xB0, 0x7C, 0x8000C0C0, debug_menu_invincibility_label);
-        print_debug_text(0x108, 0x7C, 0x80F0F0F0, debug_menu_toggle_value_texts[g_debug_menu.invincibility_enabled]);
+        print_debug_text(0x108,
+                         0x7C,
+                         0x80F0F0F0,
+                         debug_menu_toggle_value_texts[g_debug_menu.invincibility_enabled]);
         print_debug_text(0xB0, 0x8B, 0x8000C0C0, debug_menu_draw_distance_override_label);
-        print_debug_text(0x108, 0x8B, 0x80F0F0F0, debug_menu_draw_distance_override_texts[g_debug_menu.draw_distance_override]);
+        print_debug_text(
+            0x108,
+            0x8B,
+            0x80F0F0F0,
+            debug_menu_draw_distance_override_texts[g_debug_menu.draw_distance_override]);
         print_debug_text(0xB0, 0x9A, 0x8000C0C0, debug_menu_collision_mode_label);
-        print_debug_text(0x108, 0x9A, 0x80F0F0F0, debug_menu_collision_mode_texts[g_debug_menu.collision_mode]);
+        print_debug_text(
+            0x108, 0x9A, 0x80F0F0F0, debug_menu_collision_mode_texts[g_debug_menu.collision_mode]);
         print_debug_text(0xB0, 0xA9, 0x8000C0C0, debug_menu_television_mode_label);
-        print_debug_text(0x108, 0xA9, 0x80F0F0F0, debug_menu_television_mode_texts[g_debug_menu.television_mode]);
+        print_debug_text(0x108,
+                         0xA9,
+                         0x80F0F0F0,
+                         debug_menu_television_mode_texts[g_debug_menu.television_mode]);
         print_debug_text(0xB0, 0xB8, 0x8000C0C0, debug_menu_screen_mode_label);
-        print_debug_text(0x108, 0xB8, 0x80F0F0F0, debug_menu_screen_mode_texts[g_debug_menu.screen_mode]);
+        print_debug_text(
+            0x108, 0xB8, 0x80F0F0F0, debug_menu_screen_mode_texts[g_debug_menu.screen_mode]);
         print_debug_text(0xB0, 0xC7, 0x8000C0C0, debug_menu_scene_label);
         if (g_debug_menu.scene_index >= 0) {
             sprintf(menu_value_text, debug_menu_integer_format, g_debug_menu.scene_index);
@@ -1088,49 +1168,97 @@ void draw_debug_menu(void) {
         print_debug_text(0xB0, 0xD6, 0x8000C0C0, debug_menu_segment_label);
         {
             int mission = g_debug_menu.segment_index;
-            sprintf(menu_value_text, debug_menu_segment_visited_format, mission, (visited52)[mission + D_0015ED84 * stride]);
+            sprintf(menu_value_text,
+                    debug_menu_segment_visited_format,
+                    mission,
+                    (visited52)[mission + D_0015ED84 * stride]);
         }
         print_debug_text(0x108, 0xD6, 0x80F0F0F0, menu_value_text);
         if (g_debug_menu.selected_column == 1) {
-            print_debug_text(0xA5, (g_debug_menu.selected_row * 0xF) + 0x40, 0x800000C0, debug_menu_selection_marker);
+            print_debug_text(0xA5,
+                             (g_debug_menu.selected_row * 0xF) + 0x40,
+                             0x800000C0,
+                             debug_menu_selection_marker);
         }
         print_debug_text(0x158, 0x2C, 0x8000C000, debug_menu_draw_heading);
         print_debug_text(0x158, 0x32, 0x8000C000, debug_menu_section_heading_underline);
         print_debug_text(0x160, 0x40, 0x8000C0C0, debug_menu_darken_draw_label);
-        print_debug_text(0x1CC, 0x40, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.draw_flags & 1)));
+        print_debug_text(0x1CC,
+                         0x40,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.draw_flags & 1)));
         print_debug_text(0x160, 0x4F, 0x8000C0C0, debug_menu_environment_collision_draw_label);
-        print_debug_text(0x1CC, 0x4F, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.draw_flags & 2)));
+        print_debug_text(0x1CC,
+                         0x4F,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.draw_flags & 2)));
         print_debug_text(0x160, 0x5E, 0x8000C0C0, debug_menu_moby_collision_draw_label);
-        print_debug_text(0x1CC, 0x5E, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.draw_flags & 4)));
+        print_debug_text(0x1CC,
+                         0x5E,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.draw_flags & 4)));
         print_debug_text(0x160, 0x6D, 0x8000C0C0, debug_menu_hero_collision_draw_label);
-        print_debug_text(0x1CC, 0x6D, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.draw_flags & 8)));
+        print_debug_text(0x1CC,
+                         0x6D,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.draw_flags & 8)));
         print_debug_text(0x160, 0x7C, 0x8000C0C0, debug_menu_bounding_spheres_draw_label);
-        print_debug_text(0x1CC, 0x7C, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.draw_flags & 0x10)));
+        print_debug_text(0x1CC,
+                         0x7C,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.draw_flags & 0x10)));
         print_debug_text(0x160, 0x8B, 0x8000C0C0, debug_menu_cameras_draw_label);
-        print_debug_text(0x1CC, 0x8B, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.draw_flags & 0x20)));
+        print_debug_text(0x1CC,
+                         0x8B,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.draw_flags & 0x20)));
         print_debug_text(0x160, 0x9A, 0x8000C0C0, debug_menu_cuboids_draw_label);
-        print_debug_text(0x1CC, 0x9A, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.draw_flags & 0x40)));
+        print_debug_text(0x1CC,
+                         0x9A,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.draw_flags & 0x40)));
         print_debug_text(0x160, 0xA9, 0x8000C0C0, debug_menu_samples_draw_label);
-        print_debug_text(0x1CC, 0xA9, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.draw_flags & 0x80)));
+        print_debug_text(0x1CC,
+                         0xA9,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.draw_flags & 0x80)));
         print_debug_text(0x160, 0xB8, 0x8000C0C0, debug_menu_text_draw_label);
-        print_debug_text(0x1CC, 0xB8, 0x80F0F0F0, *(char **)((char *)debug_menu_toggle_value_texts + flag_offset60(g_debug_menu.draw_flags & 0x100)));
+        print_debug_text(0x1CC,
+                         0xB8,
+                         0x80F0F0F0,
+                         *(char **)((char *)debug_menu_toggle_value_texts +
+                                    flag_offset60(g_debug_menu.draw_flags & 0x100)));
         if (g_debug_menu.selected_column == 2) {
-            print_debug_text(0x155, (g_debug_menu.selected_row * 0xF) + 0x3E, 0x800000C0, debug_menu_selection_marker);
+            print_debug_text(0x155,
+                             (g_debug_menu.selected_row * 0xF) + 0x3E,
+                             0x800000C0,
+                             debug_menu_selection_marker);
         }
         print_debug_text(0xC, 0xA6, 0x8000C000, debug_menu_ammo_heading);
         print_debug_text(0xC, 0xAC, 0x8000C000, debug_menu_section_heading_underline);
         if (g_debug_menu.selected_column == 3) {
-            print_debug_text(9, (g_debug_menu.selected_row * 0xF) + 0xB8, 0x800000C0, debug_menu_selection_marker);
+            print_debug_text(9,
+                             (g_debug_menu.selected_row * 0xF) + 0xB8,
+                             0x800000C0,
+                             debug_menu_selection_marker);
         }
         print_debug_text(0x14, 0xBA, 0x8000C0C0, debug_menu_suck_cannon_label);
         weapon_order = (u8 *)D_0013E520;
-        sprintf(menu_value_text, debug_menu_integer_format, (s32) weapon_order[0x9]);
+        sprintf(menu_value_text, debug_menu_integer_format, (s32)weapon_order[0x9]);
         print_debug_text(0x7A, 0xBA, 0x80406080, menu_value_text);
         print_debug_text(0x14, 0xC9, 0x8000C0C0, debug_menu_morph_ray_label);
-        sprintf(menu_value_text, debug_menu_integer_format, (s32) weapon_order[0x15]);
+        sprintf(menu_value_text, debug_menu_integer_format, (s32)weapon_order[0x15]);
         print_debug_text(0x7A, 0xC9, 0x80406080, menu_value_text);
         print_debug_text(0x14, 0xD8, 0x8000C0C0, debug_menu_inflato_r_label);
-        sprintf(menu_value_text, debug_menu_integer_format, (s32) weapon_order[0x19]);
+        sprintf(menu_value_text, debug_menu_integer_format, (s32)weapon_order[0x19]);
         print_debug_text(0x7A, 0xD8, 0x80406080, menu_value_text);
         print_debug_text(0x14, 0xE7, 0x8000C0C0, debug_menu_ryno_label);
         ammo = (AmmoDisplay60 *)(weapon_ammo_counts);
@@ -1142,12 +1270,12 @@ void draw_debug_menu(void) {
         print_debug_text(0x14, 0x105, 0x8000C0C0, debug_menu_bomb_label);
         sprintf(menu_value_text, debug_menu_integer_format, ammo->ammo28);
         print_debug_text(0x8C, 0x105, 0x80F0F0F0, menu_value_text);
-        sprintf(menu_value_text, debug_menu_integer_format, (s32) weapon_order[0xA]);
+        sprintf(menu_value_text, debug_menu_integer_format, (s32)weapon_order[0xA]);
         print_debug_text(0x7A, 0x105, 0x80406080, menu_value_text);
         print_debug_text(0x14, 0x114, 0x8000C0C0, debug_menu_devastator_label);
         sprintf(menu_value_text, debug_menu_integer_format, ammo->ammo2C);
         print_debug_text(0x8C, 0x114, 0x80F0F0F0, menu_value_text);
-        sprintf(menu_value_text, debug_menu_integer_format, (s32) weapon_order[0xB]);
+        sprintf(menu_value_text, debug_menu_integer_format, (s32)weapon_order[0xB]);
         print_debug_text(0x7A, 0x114, 0x80406080, menu_value_text);
         print_debug_text(0x14, 0x123, 0x8000C0C0, debug_menu_visibomb_label);
         sprintf(menu_value_text, debug_menu_integer_format, ammo->ammo34);
@@ -1155,27 +1283,27 @@ void draw_debug_menu(void) {
         print_debug_text(0x14, 0x132, 0x8000C0C0, debug_menu_agents_label);
         sprintf(menu_value_text, debug_menu_integer_format, ammo->ammo50);
         print_debug_text(0x8C, 0x132, 0x80F0F0F0, menu_value_text);
-        sprintf(menu_value_text, debug_menu_integer_format, (s32) weapon_order[0x14]);
+        sprintf(menu_value_text, debug_menu_integer_format, (s32)weapon_order[0x14]);
         print_debug_text(0x7A, 0x132, 0x80406080, menu_value_text);
         print_debug_text(0x14, 0x141, 0x8000C0C0, debug_menu_pyrocitor_label);
         sprintf(menu_value_text, debug_menu_integer_format, ammo->ammo40);
         print_debug_text(0x8C, 0x141, 0x80F0F0F0, menu_value_text);
-        sprintf(menu_value_text, debug_menu_integer_format, (s32) weapon_order[0x10]);
+        sprintf(menu_value_text, debug_menu_integer_format, (s32)weapon_order[0x10]);
         print_debug_text(0x7A, 0x141, 0x80406080, menu_value_text);
         print_debug_text(0x14, 0x150, 0x8000C0C0, debug_menu_tesla_label);
         sprintf(menu_value_text, debug_menu_integer_format, ammo->ammo4C);
         print_debug_text(0x8C, 0x150, 0x80F0F0F0, menu_value_text);
-        sprintf(menu_value_text, debug_menu_integer_format, (s32) weapon_order[0x13]);
+        sprintf(menu_value_text, debug_menu_integer_format, (s32)weapon_order[0x13]);
         print_debug_text(0x7A, 0x150, 0x80406080, menu_value_text);
         print_debug_text(0x14, 0x15F, 0x8000C0C0, debug_menu_mine_glove_label);
         sprintf(menu_value_text, fmt = debug_menu_integer_format, ammo->ammo44);
         print_debug_text(0x8C, 0x15F, 0x80F0F0F0, menu_value_text);
-        sprintf(menu_value_text, fmt, (s32) weapon_order[0x11]);
+        sprintf(menu_value_text, fmt, (s32)weapon_order[0x11]);
         print_debug_text(0x7A, 0x15F, 0x80406080, menu_value_text);
         print_debug_text(0x14, 0x16E, 0x8000C0C0, debug_menu_blaster_label);
         sprintf(menu_value_text, fmt, ammo->ammo3C);
         print_debug_text(0x8C, 0x16E, 0x80F0F0F0, menu_value_text);
-        sprintf(menu_value_text, fmt, (s32) weapon_order[0xF]);
+        sprintf(menu_value_text, fmt, (s32)weapon_order[0xF]);
         print_debug_text(0x7A, 0x16E, 0x80406080, menu_value_text);
         print_debug_text(0x14, 0x17D, 0x8000C0C0, debug_menu_bolts_label);
         sprintf(menu_value_text, fmt, current_bolt_count);
@@ -1183,38 +1311,55 @@ void draw_debug_menu(void) {
         print_debug_text(0xBC, 0x100, 0x8000C000, debug_menu_fog_heading);
         print_debug_text(0xBC, 0x106, 0x8000C000, debug_menu_fog_heading_underline);
         if (g_debug_menu.selected_column == 4) {
-            print_debug_text(0xB9, (g_debug_menu.selected_row * 0xF) + 0x112, 0x800000C0, debug_menu_selection_marker);
+            print_debug_text(0xB9,
+                             (g_debug_menu.selected_row * 0xF) + 0x112,
+                             0x800000C0,
+                             debug_menu_selection_marker);
         }
         print_debug_text(0xC4, 0x114, 0x8000C0C0, debug_menu_fog_near_distance_label);
-        sprintf(menu_value_text, debug_menu_fog_float_format, fptodp(D_L00_0015F448 * 0.0009765625f));
+        sprintf(
+            menu_value_text, debug_menu_fog_float_format, fptodp(D_L00_0015F448 * 0.0009765625f));
         print_debug_text(0x11C, 0x114, 0x80F0F0F0, menu_value_text);
         print_debug_text(0xC4, 0x123, 0x8000C0C0, debug_menu_fog_near_intensity_label);
-        sprintf(menu_value_text, debug_menu_fog_float_format, fptodp(100.0f - (D_L00_0015F450 / 2.55f)));
+        sprintf(menu_value_text,
+                debug_menu_fog_float_format,
+                fptodp(100.0f - (D_L00_0015F450 / 2.55f)));
         print_debug_text(0x11C, 0x123, 0x80F0F0F0, menu_value_text);
         print_debug_text(0xC4, 0x132, 0x8000C0C0, debug_menu_fog_far_distance_label);
-        sprintf(menu_value_text, debug_menu_fog_float_format, fptodp(D_L00_0015F44C * 0.0009765625f));
+        sprintf(
+            menu_value_text, debug_menu_fog_float_format, fptodp(D_L00_0015F44C * 0.0009765625f));
         print_debug_text(0x11C, 0x132, 0x80F0F0F0, menu_value_text);
         print_debug_text(0xC4, 0x141, 0x8000C0C0, debug_menu_fog_far_intensity_label);
-        sprintf(menu_value_text, debug_menu_fog_float_format, fptodp(100.0f - (D_L00_0015F454 / 2.55f)));
+        sprintf(menu_value_text,
+                debug_menu_fog_float_format,
+                fptodp(100.0f - (D_L00_0015F454 / 2.55f)));
         print_debug_text(0x11C, 0x141, 0x80F0F0F0, menu_value_text);
         print_debug_text(0xC4, 0x150, 0x8000C0C0, debug_menu_fog_red_label);
-        sprintf(menu_value_text, fmt, (s32) D_L00_0015F444);
+        sprintf(menu_value_text, fmt, (s32)D_L00_0015F444);
         print_debug_text(0x11C, 0x150, 0x80F0F0F0, menu_value_text);
         print_debug_text(0xC4, 0x15F, 0x8000C0C0, debug_menu_fog_green_label);
-        sprintf(menu_value_text, fmt, (s32) D_L00_0015F445);
+        sprintf(menu_value_text, fmt, (s32)D_L00_0015F445);
         print_debug_text(0x11C, 0x15F, 0x80F0F0F0, menu_value_text);
         print_debug_text(0xC4, 0x16E, 0x8000C0C0, debug_menu_fog_blue_label);
-        sprintf(menu_value_text, fmt, (s32) D_L00_0015F446);
+        sprintf(menu_value_text, fmt, (s32)D_L00_0015F446);
         print_debug_text(0x11C, 0x16E, 0x80F0F0F0, menu_value_text);
         print_debug_text(0x160, 0x100, 0x8000C000, debug_menu_misc_heading);
         print_debug_text(0x160, 0x106, 0x8000C000, debug_menu_section_heading_underline);
         if (g_debug_menu.selected_column == 5) {
-            print_debug_text(0x15D, (g_debug_menu.selected_row * 0xF) + 0x112, 0x800000C0, debug_menu_selection_marker);
+            print_debug_text(0x15D,
+                             (g_debug_menu.selected_row * 0xF) + 0x112,
+                             0x800000C0,
+                             debug_menu_selection_marker);
         }
         print_debug_text(0x168, 0x114, 0x8000C0C0, debug_menu_battle_camera_label);
-        print_debug_text(0x1CA, 0x114, 0x80F0F0F0, debug_menu_toggle_value_texts[(g_debug_menu.battle_camera_enabled != 0) ? 0 : 1]);
+        print_debug_text(
+            0x1CA,
+            0x114,
+            0x80F0F0F0,
+            debug_menu_toggle_value_texts[(g_debug_menu.battle_camera_enabled != 0) ? 0 : 1]);
         print_debug_text(0x168, 0x123, 0x8000C0C0, debug_menu_actuator_label);
-        print_debug_text(0x1CA, 0x123, 0x80F0F0F0, debug_menu_toggle_value_texts[g_debug_menu.actuator_enabled]);
+        print_debug_text(
+            0x1CA, 0x123, 0x80F0F0F0, debug_menu_toggle_value_texts[g_debug_menu.actuator_enabled]);
         print_debug_text(0x168, 0x132, 0x8000C0C0, debug_menu_sample_capture_label);
         menu_value_text[1] = 0;
         menu_value_text[0] = g_debug_menu.sample_capture_status;
@@ -1224,242 +1369,382 @@ void draw_debug_menu(void) {
         menu_value_text[0] = g_debug_menu.start_capture_status;
         print_debug_text(0x1CA, 0x141, 0x80F0F0F0, menu_value_text);
         flush_debug_text_queue();
-        while (D_L00_001611A0 & 1) {}
+        while (D_L00_001611A0 & 1) {
+        }
     }
 }
 
 s32 D_L06_0016C7E4[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L06_0016C860[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L06_0016C864[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_0016C86C[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_0016C870[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L06_0016C874[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_0016C864[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L08_0016C8E0[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L08_0016C8E4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_0016C8EC[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_0016C8F0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L08_0016C8F4[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L11_0016CAE0[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L11_0016CAE4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_0016CAEC[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_0016CAF0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L11_0016CAF4[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L14_0016C7E0[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L14_0016C7E4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_0016C7EC[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_0016C7F0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L14_0016C7F4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L17_0016C964[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L18_0016CAE0[1] __attribute__((section(".data"))) = {0};
+
 f32 D_L18_0016CAE4[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_0016CAEC[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_0016CAF0[1] __attribute__((section(".data"))) = {0};
+
 s32 D_L18_0016CAF4[1] __attribute__((section(".data"))) = {0};
 
 s32 D_L01_0015EFC4 = 0;
-DebugRowCounts D_L01_00208980 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L01_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L01_0015EFE0[1] = {0x25};
-s32 D_L01_0015F614 = 0;
-f32 *D_L01_001742A0 NOT_SDA = 0;
-char *D_L01_0015F600 = 0;
-float D_L01_0015F44C = 0;
-float D_L01_0015F450 = 0;
-float D_L01_0015F454 = 0;
-u8 D_L01_0015F445 = 0;
-u8 D_L01_0015F446 = 0;
-s32 D_L02_0015EFC4 = 0;
-DebugRowCounts D_L02_001F8220 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L02_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L02_0015EFE0[1] = {0x25};
-s32 D_L02_0015F614 = 0;
-f32 *D_L02_00174420 NOT_SDA = 0;
-char *D_L02_0015F600 = 0;
-float D_L02_0015F44C = 0;
-float D_L02_0015F450 = 0;
-float D_L02_0015F454 = 0;
-u8 D_L02_0015F445 = 0;
-u8 D_L02_0015F446 = 0;
-s32 D_L03_0015EFC4 = 0;
-DebugRowCounts D_L03_001E05A0 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L03_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L03_0015EFE0[1] = {0x25};
-s32 D_L03_0015F614 = 0;
-f32 *D_L03_00173F20 NOT_SDA = 0;
-char *D_L03_0015F600 = 0;
-float D_L03_0015F44C = 0;
-float D_L03_0015F450 = 0;
-float D_L03_0015F454 = 0;
-u8 D_L03_0015F445 = 0;
-u8 D_L03_0015F446 = 0;
-s32 D_L04_0015EFC4 = 0;
-DebugRowCounts D_L04_001D9710 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L04_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L04_0015EFE0[1] = {0x25};
-s32 D_L04_0015F614 = 0;
-f32 *D_L04_00173FA0 NOT_SDA = 0;
-char *D_L04_0015F600 = 0;
-float D_L04_0015F44C = 0;
-float D_L04_0015F450 = 0;
-float D_L04_0015F454 = 0;
-u8 D_L04_0015F445 = 0;
-u8 D_L04_0015F446 = 0;
-s32 D_L05_0015EFC4 = 0;
-DebugRowCounts D_L05_00216010 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L05_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L05_0015EFE0[1] = {0x25};
-s32 D_L05_0015F614 = 0;
-f32 *D_L05_00174220 NOT_SDA = 0;
-char *D_L05_0015F600 = 0;
-s32 D_L06_0015EFC4 = 0;
-DebugRowCounts D_L06_001FED70 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L06_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L06_0015EFE0[1] = {0x25};
-s32 D_L06_0015F614 = 0;
-f32 *D_L06_001745A0 NOT_SDA = 0;
-float D_L06_0015F44C = 0;
-float D_L06_0015F450 = 0;
-float D_L06_0015F454 = 0;
-u8 D_L06_0015F445 = 0;
-u8 D_L06_0015F446 = 0;
-s32 D_L07_0015EFC4 = 0;
-DebugRowCounts D_L07_0020EC10 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L07_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L07_0015EFE0[1] = {0x25};
-s32 D_L07_0015F614 = 0;
-f32 *D_L07_00173EA0 NOT_SDA = 0;
-float D_L07_0015F44C = 0;
-float D_L07_0015F450 = 0;
-float D_L07_0015F454 = 0;
-u8 D_L07_0015F445 = 0;
-u8 D_L07_0015F446 = 0;
-s32 D_L08_0015EFC4 = 0;
-DebugRowCounts D_L08_001F9860 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L08_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L08_0015EFE0[1] = {0x25};
-s32 D_L08_0015F614 = 0;
-f32 *D_L08_00174620 NOT_SDA = 0;
-char *D_L08_0015F600 = 0;
-float D_L08_0015F44C = 0;
-float D_L08_0015F450 = 0;
-float D_L08_0015F454 = 0;
-u8 D_L08_0015F445 = 0;
-u8 D_L08_0015F446 = 0;
-s32 D_L09_0015EFC4 = 0;
-DebugRowCounts D_L09_00206480 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L09_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L09_0015EFE0[1] = {0x25};
-s32 D_L09_0015F614 = 0;
-f32 *D_L09_00173FA0 NOT_SDA = 0;
-char *D_L09_0015F600 = 0;
-float D_L09_0015F44C = 0;
-float D_L09_0015F450 = 0;
-float D_L09_0015F454 = 0;
-u8 D_L09_0015F445 = 0;
-u8 D_L09_0015F446 = 0;
-s32 D_L10_0015EFC4 = 0;
-DebugRowCounts D_L10_001DA6F0 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L10_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L10_0015EFE0[1] = {0x25};
-s32 D_L10_0015F614 = 0;
-f32 *D_L10_001742A0 NOT_SDA = 0;
-char *D_L10_0015F600 = 0;
-float D_L10_0015F44C = 0;
-float D_L10_0015F450 = 0;
-float D_L10_0015F454 = 0;
-u8 D_L10_0015F445 = 0;
-u8 D_L10_0015F446 = 0;
-s32 D_L11_0015EFC4 = 0;
-DebugRowCounts D_L11_00218A70 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L11_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L11_0015EFE0[1] = {0x25};
-s32 D_L11_0015F614 = 0;
-f32 *D_L11_00174820 NOT_SDA = 0;
-char *D_L11_0015F600 = 0;
-float D_L11_0015F44C = 0;
-float D_L11_0015F450 = 0;
-float D_L11_0015F454 = 0;
-u8 D_L11_0015F445 = 0;
-u8 D_L11_0015F446 = 0;
-s32 D_L12_0015EFC4 = 0;
-DebugRowCounts D_L12_00209E00 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L12_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L12_0015EFE0[1] = {0x25};
-s32 D_L12_0015F614 = 0;
-f32 *D_L12_001742A0 NOT_SDA = 0;
-char *D_L12_0015F600 = 0;
-float D_L12_0015F44C = 0;
-float D_L12_0015F450 = 0;
-float D_L12_0015F454 = 0;
-u8 D_L12_0015F445 = 0;
-u8 D_L12_0015F446 = 0;
-s32 D_L13_0015EFC4 = 0;
-DebugRowCounts D_L13_001F23E0 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L13_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L13_0015EFE0[1] = {0x25};
-s32 D_L13_0015F614 = 0;
-f32 *D_L13_00174120 NOT_SDA = 0;
-char *D_L13_0015F600 = 0;
-float D_L13_0015F44C = 0;
-float D_L13_0015F450 = 0;
-float D_L13_0015F454 = 0;
-u8 D_L13_0015F445 = 0;
-u8 D_L13_0015F446 = 0;
-s32 D_L14_0015EFC4 = 0;
-DebugRowCounts D_L14_001F9C70 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L14_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L14_0015EFE0[1] = {0x25};
-s32 D_L14_0015F614 = 0;
-f32 *D_L14_00174520 NOT_SDA = 0;
-char *D_L14_0015F600 = 0;
-float D_L14_0015F44C = 0;
-float D_L14_0015F450 = 0;
-float D_L14_0015F454 = 0;
-u8 D_L14_0015F445 = 0;
-u8 D_L14_0015F446 = 0;
-s32 D_L15_0015EFC4 = 0;
-DebugRowCounts D_L15_001E04E0 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L15_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L15_0015EFE0[1] = {0x25};
-s32 D_L15_0015F614 = 0;
-f32 *D_L15_00174420 NOT_SDA = 0;
-char *D_L15_0015F600 = 0;
-u8 D_L15_0015F445 = 0;
-u8 D_L15_0015F446 = 0;
-s32 D_L16_0015EFC4 = 0;
-DebugRowCounts D_L16_001E5BD0 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L16_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L16_0015EFE0[1] = {0x25};
-s32 D_L16_0015F614 = 0;
-f32 *D_L16_00174220 NOT_SDA = 0;
-char *D_L16_0015F600 = 0;
-float D_L16_0015F44C = 0;
-float D_L16_0015F450 = 0;
-float D_L16_0015F454 = 0;
-u8 D_L16_0015F445 = 0;
-u8 D_L16_0015F446 = 0;
-s32 D_L17_0015EFC4 = 0;
-DebugRowCounts D_L17_001E4330 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L17_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L17_0015EFE0[1] = {0x25};
-s32 D_L17_0015F614 = 0;
-f32 *D_L17_00174720 NOT_SDA = 0;
-char *D_L17_0015F600 = 0;
-u8 D_L17_0015F445 = 0;
-u8 D_L17_0015F446 = 0;
-s32 D_L18_0015EFC4 = 0;
-DebugRowCounts D_L18_001F0050 = {{5, 0xb, 9, 0xe, 7, 5}};
-u8 D_L18_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
-char D_L18_0015EFE0[1] = {0x25};
-s32 D_L18_0015F614 = 0;
-f32 *D_L18_00174820 NOT_SDA = 0;
-float D_L18_0015F44C = 0;
-float D_L18_0015F450 = 0;
-float D_L18_0015F454 = 0;
-u8 D_L18_0015F445 = 0;
-u8 D_L18_0015F446 = 0;
 
-DebugRowCounts l00_debug_menu_column_row_counts __asm__("D_L00_001E7920") = {{5, 0xb, 9, 0xe, 7, 5}};
+DebugRowCounts D_L01_00208980 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L01_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L01_0015EFE0[1] = {0x25};
+
+s32                 D_L01_0015F614 = 0;
+f32 *D_L01_001742A0 NOT_SDA = 0;
+char               *D_L01_0015F600 = 0;
+float               D_L01_0015F44C = 0;
+float               D_L01_0015F450 = 0;
+float               D_L01_0015F454 = 0;
+u8                  D_L01_0015F445 = 0;
+u8                  D_L01_0015F446 = 0;
+s32                 D_L02_0015EFC4 = 0;
+
+DebugRowCounts D_L02_001F8220 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L02_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L02_0015EFE0[1] = {0x25};
+
+s32                 D_L02_0015F614 = 0;
+f32 *D_L02_00174420 NOT_SDA = 0;
+char               *D_L02_0015F600 = 0;
+float               D_L02_0015F44C = 0;
+float               D_L02_0015F450 = 0;
+float               D_L02_0015F454 = 0;
+u8                  D_L02_0015F445 = 0;
+u8                  D_L02_0015F446 = 0;
+s32                 D_L03_0015EFC4 = 0;
+
+DebugRowCounts D_L03_001E05A0 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L03_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L03_0015EFE0[1] = {0x25};
+
+s32                 D_L03_0015F614 = 0;
+f32 *D_L03_00173F20 NOT_SDA = 0;
+char               *D_L03_0015F600 = 0;
+float               D_L03_0015F44C = 0;
+float               D_L03_0015F450 = 0;
+float               D_L03_0015F454 = 0;
+u8                  D_L03_0015F445 = 0;
+u8                  D_L03_0015F446 = 0;
+s32                 D_L04_0015EFC4 = 0;
+
+DebugRowCounts D_L04_001D9710 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L04_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L04_0015EFE0[1] = {0x25};
+
+s32                 D_L04_0015F614 = 0;
+f32 *D_L04_00173FA0 NOT_SDA = 0;
+char               *D_L04_0015F600 = 0;
+float               D_L04_0015F44C = 0;
+float               D_L04_0015F450 = 0;
+float               D_L04_0015F454 = 0;
+u8                  D_L04_0015F445 = 0;
+u8                  D_L04_0015F446 = 0;
+s32                 D_L05_0015EFC4 = 0;
+
+DebugRowCounts D_L05_00216010 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L05_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L05_0015EFE0[1] = {0x25};
+
+s32                 D_L05_0015F614 = 0;
+f32 *D_L05_00174220 NOT_SDA = 0;
+char               *D_L05_0015F600 = 0;
+s32                 D_L06_0015EFC4 = 0;
+
+DebugRowCounts D_L06_001FED70 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L06_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L06_0015EFE0[1] = {0x25};
+
+s32                 D_L06_0015F614 = 0;
+f32 *D_L06_001745A0 NOT_SDA = 0;
+float               D_L06_0015F44C = 0;
+float               D_L06_0015F450 = 0;
+float               D_L06_0015F454 = 0;
+u8                  D_L06_0015F445 = 0;
+u8                  D_L06_0015F446 = 0;
+s32                 D_L07_0015EFC4 = 0;
+
+DebugRowCounts D_L07_0020EC10 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L07_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L07_0015EFE0[1] = {0x25};
+
+s32                 D_L07_0015F614 = 0;
+f32 *D_L07_00173EA0 NOT_SDA = 0;
+float               D_L07_0015F44C = 0;
+float               D_L07_0015F450 = 0;
+float               D_L07_0015F454 = 0;
+u8                  D_L07_0015F445 = 0;
+u8                  D_L07_0015F446 = 0;
+s32                 D_L08_0015EFC4 = 0;
+
+DebugRowCounts D_L08_001F9860 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L08_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L08_0015EFE0[1] = {0x25};
+
+s32                 D_L08_0015F614 = 0;
+f32 *D_L08_00174620 NOT_SDA = 0;
+char               *D_L08_0015F600 = 0;
+float               D_L08_0015F44C = 0;
+float               D_L08_0015F450 = 0;
+float               D_L08_0015F454 = 0;
+u8                  D_L08_0015F445 = 0;
+u8                  D_L08_0015F446 = 0;
+s32                 D_L09_0015EFC4 = 0;
+
+DebugRowCounts D_L09_00206480 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L09_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L09_0015EFE0[1] = {0x25};
+
+s32                 D_L09_0015F614 = 0;
+f32 *D_L09_00173FA0 NOT_SDA = 0;
+char               *D_L09_0015F600 = 0;
+float               D_L09_0015F44C = 0;
+float               D_L09_0015F450 = 0;
+float               D_L09_0015F454 = 0;
+u8                  D_L09_0015F445 = 0;
+u8                  D_L09_0015F446 = 0;
+s32                 D_L10_0015EFC4 = 0;
+
+DebugRowCounts D_L10_001DA6F0 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L10_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L10_0015EFE0[1] = {0x25};
+
+s32                 D_L10_0015F614 = 0;
+f32 *D_L10_001742A0 NOT_SDA = 0;
+char               *D_L10_0015F600 = 0;
+float               D_L10_0015F44C = 0;
+float               D_L10_0015F450 = 0;
+float               D_L10_0015F454 = 0;
+u8                  D_L10_0015F445 = 0;
+u8                  D_L10_0015F446 = 0;
+s32                 D_L11_0015EFC4 = 0;
+
+DebugRowCounts D_L11_00218A70 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L11_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L11_0015EFE0[1] = {0x25};
+
+s32                 D_L11_0015F614 = 0;
+f32 *D_L11_00174820 NOT_SDA = 0;
+char               *D_L11_0015F600 = 0;
+float               D_L11_0015F44C = 0;
+float               D_L11_0015F450 = 0;
+float               D_L11_0015F454 = 0;
+u8                  D_L11_0015F445 = 0;
+u8                  D_L11_0015F446 = 0;
+s32                 D_L12_0015EFC4 = 0;
+
+DebugRowCounts D_L12_00209E00 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L12_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L12_0015EFE0[1] = {0x25};
+
+s32                 D_L12_0015F614 = 0;
+f32 *D_L12_001742A0 NOT_SDA = 0;
+char               *D_L12_0015F600 = 0;
+float               D_L12_0015F44C = 0;
+float               D_L12_0015F450 = 0;
+float               D_L12_0015F454 = 0;
+u8                  D_L12_0015F445 = 0;
+u8                  D_L12_0015F446 = 0;
+s32                 D_L13_0015EFC4 = 0;
+
+DebugRowCounts D_L13_001F23E0 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L13_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L13_0015EFE0[1] = {0x25};
+
+s32                 D_L13_0015F614 = 0;
+f32 *D_L13_00174120 NOT_SDA = 0;
+char               *D_L13_0015F600 = 0;
+float               D_L13_0015F44C = 0;
+float               D_L13_0015F450 = 0;
+float               D_L13_0015F454 = 0;
+u8                  D_L13_0015F445 = 0;
+u8                  D_L13_0015F446 = 0;
+s32                 D_L14_0015EFC4 = 0;
+
+DebugRowCounts D_L14_001F9C70 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L14_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L14_0015EFE0[1] = {0x25};
+
+s32                 D_L14_0015F614 = 0;
+f32 *D_L14_00174520 NOT_SDA = 0;
+char               *D_L14_0015F600 = 0;
+float               D_L14_0015F44C = 0;
+float               D_L14_0015F450 = 0;
+float               D_L14_0015F454 = 0;
+u8                  D_L14_0015F445 = 0;
+u8                  D_L14_0015F446 = 0;
+s32                 D_L15_0015EFC4 = 0;
+
+DebugRowCounts D_L15_001E04E0 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L15_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L15_0015EFE0[1] = {0x25};
+
+s32                 D_L15_0015F614 = 0;
+f32 *D_L15_00174420 NOT_SDA = 0;
+char               *D_L15_0015F600 = 0;
+u8                  D_L15_0015F445 = 0;
+u8                  D_L15_0015F446 = 0;
+s32                 D_L16_0015EFC4 = 0;
+
+DebugRowCounts D_L16_001E5BD0 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L16_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L16_0015EFE0[1] = {0x25};
+
+s32                 D_L16_0015F614 = 0;
+f32 *D_L16_00174220 NOT_SDA = 0;
+char               *D_L16_0015F600 = 0;
+float               D_L16_0015F44C = 0;
+float               D_L16_0015F450 = 0;
+float               D_L16_0015F454 = 0;
+u8                  D_L16_0015F445 = 0;
+u8                  D_L16_0015F446 = 0;
+s32                 D_L17_0015EFC4 = 0;
+
+DebugRowCounts D_L17_001E4330 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L17_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L17_0015EFE0[1] = {0x25};
+
+s32                 D_L17_0015F614 = 0;
+f32 *D_L17_00174720 NOT_SDA = 0;
+char               *D_L17_0015F600 = 0;
+u8                  D_L17_0015F445 = 0;
+u8                  D_L17_0015F446 = 0;
+s32                 D_L18_0015EFC4 = 0;
+
+DebugRowCounts D_L18_001F0050 = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
+u8 D_L18_0015EFD0[8] = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
+char D_L18_0015EFE0[1] = {0x25};
+
+s32                 D_L18_0015F614 = 0;
+f32 *D_L18_00174820 NOT_SDA = 0;
+float               D_L18_0015F44C = 0;
+float               D_L18_0015F450 = 0;
+float               D_L18_0015F454 = 0;
+u8                  D_L18_0015F445 = 0;
+u8                  D_L18_0015F446 = 0;
+
+DebugRowCounts l00_debug_menu_column_row_counts __asm__("D_L00_001E7920") = {
+    {5, 0xb, 9, 0xe, 7, 5}
+};
+
 u8 debug_menu_item_ids[8] __asm__("D_L00_0015EFD0") = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+
 s32 occlusion_sample_count __asm__("D_L00_0015F614") = 0;

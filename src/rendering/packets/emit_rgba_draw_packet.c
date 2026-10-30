@@ -1,8 +1,9 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/fs_aa_packets.h"
+
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
-void emit_rgba_draw_packet(s32 r, s32 g, s32 b, s32 a) __asm__("FUN_001f5210");
+void        emit_rgba_draw_packet(s32 r, s32 g, s32 b, s32 a) __asm__("FUN_001f5210");
 
 void emit_rgba_draw_packet(s32 r, s32 g, s32 b, s32 alpha) {
     vu1_add_g_sregister(1, (u64)r | ((u64)g << 8) | ((u64)b << 16) | ((u64)alpha << 24));

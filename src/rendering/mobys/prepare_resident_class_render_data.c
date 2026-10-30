@@ -10,12 +10,12 @@
 typedef struct {
     s32 draw_high;
     s32 draw_shift;
-    u8 pad8[0x8];
+    u8  pad8[0x8];
     s32 material_base;
     s32 material_shift;
-    u8 pad18[0x8];
+    u8  pad18[0x8];
     s32 material_index;
-    u8 pad24[0x1C];
+    u8  pad24[0x1C];
 } ResidentRenderPacket;
 
 typedef struct {
@@ -26,73 +26,79 @@ typedef struct {
 } ResidentRenderGroup;
 
 typedef struct {
-    u8 first_selector;
-    u8 pad1[0xB];
+    u8  first_selector;
+    u8  pad1[0xB];
     s32 target;
 } MaterialRun;
 
 typedef struct {
-    u8 pad0[0x10];
-    u8 count;
-    u8 pad11[3];
+    u8  pad0[0x10];
+    u8  count;
+    u8  pad11[3];
     s32 optional_data_14;
-    u8 pad18[4];
+    u8  pad18[4];
     s32 entry_offsets[1];
 } NestedRenderTable;
 
 typedef struct {
-    s32 groups;
-    u8 group_count_0;
-    u8 group_count_1;
-    u8 group_count_2;
-    u8 pad7[5];
-    u8 nested_table_count;
-    u8 padD[3];
-    s32 optional_table_10;
-    s32 optional_data_14;
-    s32 optional_table_18;
+    s32  groups;
+    u8   group_count_0;
+    u8   group_count_1;
+    u8   group_count_2;
+    u8   pad7[5];
+    u8   nested_table_count;
+    u8   padD[3];
+    s32  optional_table_10;
+    s32  optional_data_14;
+    s32  optional_table_18;
     s32 *counted_pointers;
-    s32 material_runs;
-    u8 pad24[4];
-    s32 runtime_table;
-    u8 pad2C[0x1C];
-    s32 nested_tables[1];
+    s32  material_runs;
+    u8   pad24[4];
+    s32  runtime_table;
+    u8   pad2C[0x1C];
+    s32  nested_tables[1];
 } ResidentClassRenderHeader;
 
+extern void build_indexed_resident_render_packet(
+    ResidentRenderPacket *, void *, s32, s32, s32, s32, s32) __asm__("func_00202D78");
+extern void set_up_vis_gif_viewer(ResidentRenderPacket *packet,
+                                  s32                   draw_high,
+                                  s32                   draw_shift,
+                                  s32                   material_base,
+                                  s32                   material_shift,
+                                  s32                   material_index) __asm__("FUN_00202fd0");
 
-extern void build_indexed_resident_render_packet(ResidentRenderPacket *, void *, s32, s32, s32, s32,
-                                                 s32) __asm__("func_00202D78");
-extern void set_up_vis_gif_viewer(ResidentRenderPacket *packet, s32 draw_high,
-                                                  s32 draw_shift, s32 material_base,
-                                                  s32 material_shift,
-                                                  s32 material_index) __asm__("FUN_00202fd0");
+void prepare_resident_class_render_data(ResidentClassRenderHeader *header,
+                                        u8                        *textures,
+                                        u8                        *material_map,
+                                        s32 class_id) __asm__("FUN_00203338");
 
-void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *textures,
-                                        u8 *material_map, s32 class_id) __asm__("FUN_00203338");
+void prepare_resident_class_render_data(ResidentClassRenderHeader *header,
+                                        u8                        *textures,
+                                        u8                        *material_map,
 
-void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *textures,
-                                        u8 *material_map, s32 class_id) {
-    s32 group_count;
-    s32 class_slot;
-    s32 group_index;
-    s32 packet_quadword;
-    s32 groups_remaining;
-    s32 packet_extent;
-    ResidentRenderGroup *group;
-    ResidentRenderGroup *relocation_group;
-    MaterialRun *material_run;
-    u8 *selector;
-    NestedRenderTable *nested_table;
-    s32 *entry_offset;
-    MaterialMap *slot_materials;
+                                        s32 class_id) {
+    s32                   group_count;
+    s32                   class_slot;
+    s32                   group_index;
+    s32                   packet_quadword;
+    s32                   groups_remaining;
+    s32                   packet_extent;
+    ResidentRenderGroup  *group;
+    ResidentRenderGroup  *relocation_group;
+    MaterialRun          *material_run;
+    u8                   *selector;
+    NestedRenderTable    *nested_table;
+    s32                  *entry_offset;
+    MaterialMap          *slot_materials;
     ResidentRenderPacket *packet;
-    s32 packed_extent;
-    s32 packet_start;
-    s32 material_index;
-    s32 pointer_count;
-    s32 pointer_index;
-    s32 nested_table_index;
-    s32 nested_entry_index;
+    s32                   packed_extent;
+    s32                   packet_start;
+    s32                   material_index;
+    s32                   pointer_count;
+    s32                   pointer_index;
+    s32                   nested_table_index;
+    s32                   nested_entry_index;
 
     /* Serialized pointers are relative to the entire class blob. */
     group_count = header->group_count_0 + header->group_count_1 + header->group_count_2;
@@ -176,13 +182,20 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *t
                 material_index = slot_materials->b[material_index];
             }
             if (textures != NULL) {
-                build_indexed_resident_render_packet(
-                    packet, textures + material_index * 16, packet->draw_high, packet->draw_shift,
-                    packet->material_base, packet->material_shift, material_index);
+                build_indexed_resident_render_packet(packet,
+                                                     textures + material_index * 16,
+                                                     packet->draw_high,
+                                                     packet->draw_shift,
+                                                     packet->material_base,
+                                                     packet->material_shift,
+                                                     material_index);
             } else {
-                set_up_vis_gif_viewer(packet, packet->draw_high, packet->draw_shift,
-                                                      packet->material_base, packet->material_shift,
-                                                      material_index);
+                set_up_vis_gif_viewer(packet,
+                                      packet->draw_high,
+                                      packet->draw_shift,
+                                      packet->material_base,
+                                      packet->material_shift,
+                                      material_index);
             }
             packet++;
         }

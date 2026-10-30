@@ -1,4 +1,5 @@
 #include "types.h"
+
 struct IpuContext {
     s32 unk0;
     s32 unk4;
@@ -9,8 +10,10 @@ struct IpuContext {
     s32 unk18;
     s32 unk1C;
 };
+
 extern s32 SetD3Chcr();
 extern s32 SetD4Chcr();
+
 void sceIpuRestartDMA(struct IpuContext *ctx) {
     u32 bits;
     u32 magic;

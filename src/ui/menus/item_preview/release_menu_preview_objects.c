@@ -1,16 +1,17 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/item_preview/clear_preview_resource_bindings.h"
+
 extern s32 delete_moby() __asm__("FUN_00225530");
 extern s32 release_menu_stream_buffer() __asm__("func_00225CD8");
 
 s32 release_menu_preview_objects(s32 preview_address) __asm__("FUN_002242b8");
 
 s32 release_menu_preview_objects(s32 preview_address) {
-    s32 *object_slot;
-    s32 *resource_slot;
-    s32 objects_remaining;
-    s32 resources_remaining;
+    s32               *object_slot;
+    s32               *resource_slot;
+    s32                objects_remaining;
+    s32                resources_remaining;
     struct MenuSystem *resources;
 
     objects_remaining = 0x17;

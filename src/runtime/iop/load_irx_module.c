@@ -7,18 +7,21 @@ struct sceSifDmaData {
     u32 attr;
 };
 
-extern s32 sceSifAllocIopHeap(s32 module_id);
-extern s32 sceSifSetDma(struct sceSifDmaData *transfer, s32 priority);
-extern s32 sceSifDmaStat(s32 dma_id);
-extern s32 sceSifLoadModuleBuffer(s32 iop_address, s32 arguments_length, s32 arguments) __asm__("InvokeIopStatus");
+extern s32  sceSifAllocIopHeap(s32 module_id);
+extern s32  sceSifSetDma(struct sceSifDmaData *transfer, s32 priority);
+extern s32  sceSifDmaStat(s32 dma_id);
+extern s32  sceSifLoadModuleBuffer(s32 iop_address,
+                                   s32 arguments_length,
+                                   s32 arguments) __asm__("InvokeIopStatus");
 extern void invoke_state_initializer(s32 module_id) __asm__("InvokeStateInitializer");
 
 s32 load_irx_module(s32 irx_image, s32 size_bytes) __asm__("FUN_00201520");
+
 s32 load_irx_module(s32 irx_image, s32 size_bytes) {
     struct sceSifDmaData transfer;
-    s32 module_id;
-    s32 dma_id;
-    s32 result;
+    s32                  module_id;
+    s32                  dma_id;
+    s32                  result;
 
     module_id = sceSifAllocIopHeap(size_bytes);
     transfer.size = size_bytes;

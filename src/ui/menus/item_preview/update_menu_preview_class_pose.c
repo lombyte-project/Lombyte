@@ -5,36 +5,39 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds.h"
+
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern char preview_binding_table_alias[] __asm__("D_001863D0");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void normalize_vector_triplet(void *) __asm__("func_00214128");
 extern void noop_callback_s(void *, void *, int, int, int) __asm__("func_001E9480");
+
 typedef struct {
     char pad00[0xC];
-    s32 bone_index; /* 0x0C */
-    s32 oclass;     /* 0x10 */
+    s32  bone_index; /* 0x0C */
+    s32  oclass;     /* 0x10 */
     char pad14[4];
-    s32 normalize_basis; /* 0x18 */
+    s32  normalize_basis; /* 0x18 */
     char pad1C[0x30];
 } PauseClassRecord;
+
 extern PauseClassRecord preview_class_records[] __asm__("D_001863D0");
-extern void blend_moby_animation(void *, int, int, int) __asm__("func_00212F90");
-extern void detach_manipulator(int, void *) __asm__("func_0020CB88");
-extern void attach_manipulator(int, int, void *) __asm__("FUN_0020cb10");
+extern void             blend_moby_animation(void *, int, int, int) __asm__("func_00212F90");
+extern void             detach_manipulator(int, void *) __asm__("func_0020CB88");
+extern void             attach_manipulator(int, int, void *) __asm__("FUN_0020cb10");
 /* Resolve the class-specific bone pose, publish translation and basis, and
    temporarily detach an active shared manipulator while resetting bindings.
    Store order follows the retail callback. */
 void update_menu_preview_class_pose(void *preview) __asm__("FUN_00224b70");
 
 void update_menu_preview_class_pose(void *preview) {
-    PauseMoby *moby = preview;
+    PauseMoby     *moby = preview;
     unsigned char *moby_bytes = preview;
-    f32 transform[16];
-    s32 source_moby_address = *(int *)(*moby->vars + 0x44);
-    s32 i;
-    s32 reset_bindings;
-    s32 attachment_active;
+    f32            transform[16];
+    s32            source_moby_address = *(int *)(*moby->vars + 0x44);
+    s32            i;
+    s32            reset_bindings;
+    s32            attachment_active;
     unsigned char *attachment;
 
     if ((moby_bytes[0x70] & 2) && moby_bytes[0x53] != 1) {
@@ -61,8 +64,11 @@ void update_menu_preview_class_pose(void *preview) {
         detach_manipulator(source_moby_address, attachment);
     }
     if (reset_bindings) {
-        noop_callback_s(preview_binding_table_alias, menu_item_info, moby->resource_address,
-                        0, source_moby_address);
+        noop_callback_s(preview_binding_table_alias,
+                        menu_item_info,
+                        moby->resource_address,
+                        0,
+                        source_moby_address);
         moby->primary_binding = (char *)menu_item_info;
         moby->binding_blend_word = 0;
         moby->secondary_binding = (char *)menu_item_info;

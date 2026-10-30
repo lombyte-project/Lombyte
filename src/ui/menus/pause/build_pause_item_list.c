@@ -3,34 +3,36 @@
 #include "rnc/game/item_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
+
 typedef struct {
-    unsigned short a; /* +0 */
-    short b;          /* +2 */
-    short c;          /* +4 */
-    short id;         /* +6 */
-    short idx;        /* +8 */
+    unsigned short a;   /* +0 */
+    short          b;   /* +2 */
+    short          c;   /* +4 */
+    short          id;  /* +6 */
+    short          idx; /* +8 */
 } Item0A;
+
 extern Item0A pause_item_candidate_entries[] __asm__("D_001CF120");
 extern Item0A pause_item_list_entries[] __asm__("D_001D60E0");
-extern int pause_item_variant_values[] __asm__("D_001D6178");
-extern char pause_item_count_storage_base[] __asm__("D_001D0D00");
+extern int    pause_item_variant_values[] __asm__("D_001D6178");
+extern char   pause_item_count_storage_base[] __asm__("D_001D0D00");
 /* Builds the pause-menu item list from the 15 entries of D_001CF120
    that item_available enables. The flag needs its own `f = b != 0`:
    `(b != 0) << 2` folds into a branch. */
 int build_pause_item_list(void) __asm__("FUN_002215f8");
 
 int build_pause_item_list(void) {
-    int i;
-    int item_count = 0;
+    int   i;
+    int   item_count = 0;
     char *item_count_storage_base;
 
     for (i = 0; i < 15; i++) {
         int id = pause_item_candidate_entries[i].id;
         if (item_available[id] != 0) {
-            Item0A *out = &pause_item_list_entries[item_count];
+            Item0A       *out = &pause_item_list_entries[item_count];
             MenuItemInfo *rec = &menu_item_info[id];
             unsigned char b = item_text_variant[id];
-            int has_text_variant = b != 0;
+            int           has_text_variant = b != 0;
             out->a = rec->unk38;
             out->b = has_text_variant << 2;
             out->c = 0;

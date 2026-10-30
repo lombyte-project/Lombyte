@@ -8,17 +8,17 @@ void append_fullscreen_setup_strips(void) __asm__("FUN_002271d0");
 
 void append_fullscreen_setup_strips(void) {
     struct DmaTag *tag;
-    u64 *packet_words;
-    u64 *strip_words;
-    s32 display_width;
-    s32 display_height;
-    s32 strip_count;
-    s32 strip_index;
-    s32 negative_half_width;
-    s32 left_x;
-    s32 right_x;
-    u64 top_y;
-    u64 bottom_y;
+    u64           *packet_words;
+    u64           *strip_words;
+    s32            display_width;
+    s32            display_height;
+    s32            strip_count;
+    s32            strip_index;
+    s32            negative_half_width;
+    s32            left_x;
+    s32            right_x;
+    u64            top_y;
+    u64            bottom_y;
 
     display_width = fs_aa_buffer.display_width;
     display_height = fs_aa_buffer.display_height;

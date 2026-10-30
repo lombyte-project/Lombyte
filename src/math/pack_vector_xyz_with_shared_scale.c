@@ -35,4 +35,5 @@ void pack_vector_xyz_with_shared_scale(f32 *source_vector, s32 *out) {
     *out = fast_vector_to_packed_chars(encoded_xyz_and_scale);
 }
 
-extern __typeof__(pack_vector_xyz_with_shared_scale) func_00214A98 __attribute__((alias("FUN_00214a98")));
+extern __typeof__(pack_vector_xyz_with_shared_scale) func_00214A98
+    __attribute__((alias("FUN_00214a98")));

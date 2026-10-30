@@ -3,6 +3,7 @@
 #include "types.h"
 #include "kernel.h"
 #include "rnc/sdk/libcdvd.h"
+
 extern s32 CreateSema(struct SemaParam *);
 
 /* Retail keeps these two in registers here, as plain (not volatile) words. */
@@ -19,8 +20,7 @@ void cmd_sem_init(void) {
     sema.initCount = 1;
     sema.maxCount = 1;
     /* Both results use the same record; store the first ID before the second call. */
-    SCMD_SEMA = CreateSema(
-        (NCMD_SEMA = CreateSema(&sema)) ? &sema : &sema);
+    SCMD_SEMA = CreateSema((NCMD_SEMA = CreateSema(&sema)) ? &sema : &sema);
     sema.initCount = 0;
     cd_callback_sema = CreateSema(&sema);
     cd_read_pending = 0;

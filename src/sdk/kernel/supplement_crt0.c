@@ -1,6 +1,7 @@
 #include "rnc/sdk/library/sdk_state.h"
 #include "sda.h"
 #include "types.h"
+
 extern int CreateSema(int *parameters) __asm__("CreateSema");
 
 void SupplementCrt0(void) __asm__("supplement_crt0");

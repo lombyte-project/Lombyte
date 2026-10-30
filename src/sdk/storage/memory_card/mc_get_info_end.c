@@ -8,6 +8,7 @@ extern u32 *D_00159A2C __attribute__((section(".bss")));
 extern u32 *D_00159A30 __attribute__((section(".bss")));
 
 void mc_get_info_end(u32 address) __asm__("FUN_00123d10");
+
 void mc_get_info_end(u32 address) {
     u32 *source = (u32 *)(address | 0x20000000);
 

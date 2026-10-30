@@ -3,5 +3,4 @@
 
 #include "types.h"
 
-
 #endif /* LOMBYTE_RNC_UI_MENUS_SAVE_DATA_SAVE_CARD_STATE_H */
