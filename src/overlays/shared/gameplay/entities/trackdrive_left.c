@@ -328,7 +328,7 @@ typedef struct {
     float y;
 } H2d8910;
 extern H2d8910 D_L02_00167280_lui __asm__("D_L02_00167280") NOT_SDA;
-extern char *D_L02_001600EC_2d8910 __asm__("D_L02_001600EC");
+#include "rnc/overlay/cuboid.h"
 
 /* Spawn point for the moby: its slot's stored position and rotation, or, with no slot, a point beside it on the side facing the hero. */
 void compute_tresspasser_pad_camera_transform(float *pos, float *camera_rotation_output, char *moby) __asm__("FUN_L02_002d8910");
@@ -361,7 +361,7 @@ void compute_tresspasser_pad_camera_transform(float *pos, float *camera_rotation
         camera_rotation_output[1] = 0;
         camera_rotation_output[2] = fast_add_rotations(pick, 3.14159274f);
     } else {
-        base = D_L02_001600EC_2d8910;
+        base = (char *)l02_cuboids;
         qcopy(pos, base + camera_transform_index * 128 + 0x30);
         qcopy(camera_rotation_output, base + camera_transform_index * 128 + 0x70);
     }
