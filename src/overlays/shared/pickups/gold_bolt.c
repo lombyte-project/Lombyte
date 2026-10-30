@@ -472,7 +472,7 @@ void gold_bolt_update(struct Moby *moby) {
         GOLD_BOLT_WAIT_FOR_PICKUP = 1,
         GOLD_BOLT_PICKUP_CUTSCENE = 2
     };
-    Vars        *vars = (Vars *)moby->pvars;
+    Vars        *gold_bolt_instance_vars = (Vars *)moby->pvars;
     struct Hero *hero_ptr;
     Vec4f        at;
     Vec4f        look;
@@ -482,24 +482,24 @@ void gold_bolt_update(struct Moby *moby) {
 
     switch (moby->state) {
     case GOLD_BOLT_INITIALIZE:
-        if (vars->id == -1 || D_0014BEC0[vars->id + D_0015ED84 * 4] != 0) {
+        if (gold_bolt_instance_vars->id == -1 || D_0014BEC0[gold_bolt_instance_vars->id + D_0015ED84 * 4] != 0) {
             goto remove;
         }
-        qcopy(&vars->home, &moby->pos);
-        vars->home.w = moby->rot.z;
+        qcopy(&gold_bolt_instance_vars->home, &moby->pos);
+        gold_bolt_instance_vars->home.w = moby->rot.z;
         moby->rot.x = random_angle_radians();
         moby->rot.y = random_angle_radians();
         moby->rot.z = random_angle_radians();
         moby->rot.w = random_angle_radians();
-        vars->unk68 = gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * frame_time_macro;
-        vars->unk64 = gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * frame_time_macro;
-        vars->unk60 = gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * frame_time_macro;
+        gold_bolt_instance_vars->unk68 = gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * frame_time_macro;
+        gold_bolt_instance_vars->unk64 = gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * frame_time_macro;
+        gold_bolt_instance_vars->unk60 = gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * frame_time_macro;
         moby->state = 1;
         initialize_gold_bolt_data(moby);
         return;
     case GOLD_BOLT_WAIT_FOR_PICKUP:
         moby->scale = moby->pclass->scale * D_L01_00161F10_gp;
-        moby->pos.z = vars->home.z + D_L01_00161F14_gp + D_L01_00161F18_gp * fast_sin(moby->rot.w);
+        moby->pos.z = gold_bolt_instance_vars->home.z + D_L01_00161F14_gp + D_L01_00161F18_gp * fast_sin(moby->rot.w);
         moby->rot.x = fast_add_rotations(
             moby->rot.x, gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * frame_time_macro);
         moby->rot.y = fast_add_rotations(
@@ -524,36 +524,36 @@ void gold_bolt_update(struct Moby *moby) {
         if (hero.vehicle_mode != 3 && hero.vehicle_mode != 0) {
             return;
         }
-        if (vars->unkC != 0) {
+        if (gold_bolt_instance_vars->unkC != 0) {
             D_L01_0015F640 = scale_game_frames(180);
             queue_dialogue_message(0x53B3, -1);
-            D_0014BEC0[vars->id + current_level_index_macro * 4] = 1;
+            D_0014BEC0[gold_bolt_instance_vars->id + current_level_index_macro * 4] = 1;
             memcard_save_data(0, -1);
         remove:
             mark_moby_for_removal(moby);
             return;
         }
-        at.x = fast_cos(vars->home.w) * 2.5f;
-        at.y = fast_sin(vars->home.w) * 2.5f;
+        at.x = fast_cos(gold_bolt_instance_vars->home.w) * 2.5f;
+        at.y = fast_sin(gold_bolt_instance_vars->home.w) * 2.5f;
         at.z = 0.0f;
-        fast_vec_add(&at, &at, &vars->home);
+        fast_vec_add(&at, &at, &gold_bolt_instance_vars->home);
         clear_u64_value(&look);
-        look.z = fast_add_rotations(vars->home.w, 3.1415927f);
+        look.z = fast_add_rotations(gold_bolt_instance_vars->home.w, 3.1415927f);
         fade_to_black(scale_game_frames(10));
         if (hero.vehicle_mode == 3) {
             exit_hero_vehicle_mode_and_restore_moby();
         }
         set_race_camera(&at, &look, 0x72, 0);
         allocate_voice_for_target_entry(0, 0, moby);
-        at2.x = fast_cos(vars->home.w) * 1.25f;
-        at2.y = fast_sin(vars->home.w) * 1.25f;
+        at2.x = fast_cos(gold_bolt_instance_vars->home.w) * 1.25f;
+        at2.y = fast_sin(gold_bolt_instance_vars->home.w) * 1.25f;
         at2.z = 0.0f;
-        at2.x += fast_cos(fast_add_rotations(vars->home.w, 1.5707964f)) * 4.0f;
-        at2.y += fast_sin(fast_add_rotations(vars->home.w, 1.5707964f)) * 4.0f;
-        fast_vec_add(&at2, &at2, &vars->home);
+        at2.x += fast_cos(fast_add_rotations(gold_bolt_instance_vars->home.w, 1.5707964f)) * 4.0f;
+        at2.y += fast_sin(fast_add_rotations(gold_bolt_instance_vars->home.w, 1.5707964f)) * 4.0f;
+        fast_vec_add(&at2, &at2, &gold_bolt_instance_vars->home);
         at2.z += 1.0f;
         clear_u64_value(&look2);
-        look2.z = fast_subtract_rotations(vars->home.w, 1.5707964f);
+        look2.z = fast_subtract_rotations(gold_bolt_instance_vars->home.w, 1.5707964f);
         jet_mount(&at2, &look2, 1, 0, 0);
         set_camera_position(&at2);
         set_camera_rotation(&look2);
@@ -569,7 +569,7 @@ void gold_bolt_update(struct Moby *moby) {
         hero.unk20AF = 1;
         cutscene_active = 1;
         moby->state = 2;
-        vars->timer = scale_game_frames(60);
+        gold_bolt_instance_vars->timer = scale_game_frames(60);
         return;
     case GOLD_BOLT_PICKUP_CUTSCENE:
         FUN_L01_003087e0_f(moby);
@@ -595,12 +595,12 @@ void gold_bolt_update(struct Moby *moby) {
         if (hero_ptr->anim_flags & 2) {
             set_hero_animation(scale_game_frames(30), 0, 0);
         }
-        if (moby->seq != 0 || !fast_dec_timer(&vars->timer)) {
+        if (moby->seq != 0 || !fast_dec_timer(&gold_bolt_instance_vars->timer)) {
             return;
         }
         D_L01_0015F640 = scale_game_frames(180);
         queue_dialogue_message(0x53B3, -1);
-        D_0014BEC0[vars->id + current_level_index_macro * 4] = 1;
+        D_0014BEC0[gold_bolt_instance_vars->id + current_level_index_macro * 4] = 1;
         cutscene_active = 0;
         set_race_camera(&hero_ptr->motion.pos, &hero_ptr->motion.rot, 0, 0);
         jet_end_mount(0);
