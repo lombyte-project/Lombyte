@@ -42,8 +42,8 @@ void init_hud(void) {
 
     slot_index = 0;
     {
-        u8 *base = hud_chan_slots;
-        slot = (struct HudSlot *)((u8 *)base + 0x24);
+        u8 *hud_slots_start = hud_chan_slots;
+        slot = (struct HudSlot *)((u8 *)hud_slots_start + 0x24);
     }
     hud_state.serial = 0;
     hud_state.unk4 = 0;
