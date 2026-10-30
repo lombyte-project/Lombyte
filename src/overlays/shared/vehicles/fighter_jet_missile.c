@@ -112,7 +112,7 @@ unsigned char *spawn_fighter_jet_missile(char  *owner,
                                          float  travel_distance,
                                          float  step_length) __asm__("FUN_L11_00308848");
 
-unsigned char *spawn_fighter_jet_missile(char  *owner,
+unsigned char *spawn_fighter_jet_missile(char  *launching_moby,
                                          float *launch_direction,
                                          float *spawn_position,
                                          float  travel_distance,
@@ -122,7 +122,7 @@ unsigned char *spawn_fighter_jet_missile(char  *owner,
     if (spawned_moby) {
         char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         float direction_length_xy;
-        *(char **)(moby_vars + 0x1C) = owner;
+        *(char **)(moby_vars + 0x1C) = launching_moby;
         spawned_moby[0x30] = 0xFF;
         MOBY(spawned_moby)->draw_dist = truncate_float_to_s32(travel_distance);
         *(int *)(spawned_moby + 0x40) = 0;
@@ -143,7 +143,7 @@ unsigned char *spawn_fighter_jet_missile(char  *owner,
         MOBY(spawned_moby)->flags = 0x200;
         MOBY(spawned_moby)->scale =
             *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) *
-            (*(float *)(owner + 0x2C) / *(float *)(*(char **)(owner + 0x24) + 0x24));
+            (*(float *)(launching_moby + 0x2C) / *(float *)(*(char **)(launching_moby + 0x24) + 0x24));
         spawned_moby[0x23] = truncate_float_to_s32(*(float *)(moby_vars + 0x10) * 24.0f);
         set_moby_color(spawned_moby, 0xFF, 0xFF, 0xFF);
         update_entity(spawned_moby);
