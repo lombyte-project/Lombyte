@@ -118,7 +118,7 @@ void draw_electric_gate_beams(struct Moby *moby) {
     int                 i, j, k, vertex_index, outer_color, inner_color, offset;
     float               angle, blend;
     unsigned short     *list;
-    unsigned short     *next;
+    unsigned short     *next_moby_index_ptr;
     short               id;
 
     angle = convert_integer_to_float(frame_number & 0x3F) / 63.0f * 6.28318f;
@@ -161,12 +161,12 @@ void draw_electric_gate_beams(struct Moby *moby) {
 
     list = (unsigned short *)D_L05_001ABCC0[moby->group];
     do {
-        char *entry;
+        char *listed_moby;
         offset = (*list & 0x7FFF) << 8;
-        entry = (char *)(offset + (int)*(char **)&D_L05_0015FFD8_d);
-        next = list + 1;
-        if (*(short *)(entry + 0xA6) == 0x346 && *(unsigned char *)(entry + 0x20) == 1) {
-            copy_matrix_rotation(matrix, entry + 0xC0);
+        listed_moby = (char *)(offset + (int)*(char **)&D_L05_0015FFD8_d);
+        next_moby_index_ptr = list + 1;
+        if (*(short *)(listed_moby + 0xA6) == 0x346 && *(unsigned char *)(listed_moby + 0x20) == 1) {
+            copy_matrix_rotation(matrix, listed_moby + 0xC0);
             qcopy(matrix + 0x30, (char *)(offset + (int)*(char **)&D_L05_0015FFD8_d) + 0x10);
             *(float *)(matrix + 0x3C) = 1.0f;
             for (k = 0; k < 5; k++) {
@@ -175,7 +175,7 @@ void draw_electric_gate_beams(struct Moby *moby) {
             }
         }
         id = *(short *)list;
-        list = next;
+        list = next_moby_index_ptr;
     } while (id >= 0);
 }
 
