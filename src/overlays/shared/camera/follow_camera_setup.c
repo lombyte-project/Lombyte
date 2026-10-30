@@ -1273,7 +1273,7 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
     V_2e7a30       step;
     V_2e7a30       save;
     V_2e7a30       position_delta;
-    unsigned char *base;
+    unsigned char *camera_rig_state;
     unsigned char *orbit;
     unsigned char *camera_collision_state;
     struct Hero   *hero_state;
@@ -1285,13 +1285,13 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
     float          orbit_distance_ratio;
 
     found = 0;
-    base = *(unsigned char **)(camera_moby + 0x70);
-    target = base + 0x40;
-    orbit = base + 0x130;
-    camera_collision_state = base + 0x1D0;
+    camera_rig_state = *(unsigned char **)(camera_moby + 0x70);
+    target = camera_rig_state + 0x40;
+    orbit = camera_rig_state + 0x130;
+    camera_collision_state = camera_rig_state + 0x1D0;
     qcopy(initial_orbit_vector, orbit);
     accumulated_radial_adjustment_distance = 0.0f;
-    qcopy(probe_position, base + 0x90);
+    qcopy(probe_position, camera_rig_state + 0x90);
     spd = follow_cam_min_distance_gp;
     fast_vec_normalize(ndir, initial_orbit_vector, 1.0f);
     for (i = 0; i < truncate_float_to_s32(*(float *)(camera_collision_state + 0x40) - 1.0f); i++) {
