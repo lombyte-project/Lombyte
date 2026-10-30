@@ -19,7 +19,7 @@ extern u8  *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
 s32         draw_item_preview_screen(struct MenuScreen *item) __asm__("FUN_0021e110");
 
-s32 draw_item_preview_screen(struct MenuScreen *item) {
+s32 draw_item_preview_screen(struct MenuScreen *preview_screen) {
     struct Descriptor  desc;
     struct MenuScreen *grid;
 
@@ -27,15 +27,15 @@ s32 draw_item_preview_screen(struct MenuScreen *item) {
     if (item_available[grid->data.grid.cells[grid->data.grid.selected_cell].id] == 0) {
         return 0;
     }
-    if (item->data.preview.moby != 0) {
-        draw_moby_list(item->data.preview.moby, 1);
-        if (item->data.preview.second_moby != 0) {
-            draw_moby_list(item->data.preview.second_moby, 1);
+    if (preview_screen->data.preview.moby != 0) {
+        draw_moby_list(preview_screen->data.preview.moby, 1);
+        if (preview_screen->data.preview.second_moby != 0) {
+            draw_moby_list(preview_screen->data.preview.second_moby, 1);
         }
         return 8;
     }
     setup_gif_paging(0);
-    pack_image_descriptor(&desc, item);
+    pack_image_descriptor(&desc, preview_screen);
     desc.w = 0x10;
     desc.h = 3;
     font_print_window_regular(
