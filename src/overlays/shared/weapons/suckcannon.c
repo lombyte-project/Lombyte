@@ -1800,38 +1800,38 @@ s32 process_moby_suck_cannon_suction(u8 *moby, u8 *position, u8 *target) {
         SUCK_DISPATCH_ROLLING_PROJECTILE = 5,
         SUCK_DISPATCH_FALLING_AFTER_CANCEL = 6
     };
-    u8 *record = FUN_L00_002db890_002db8f8(moby);
+    u8 *moby_suction_record = FUN_L00_002db890_002db8f8(moby);
     s16 state;
-    if (record == 0)
+    if (moby_suction_record == 0)
         goto missing;
-    if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD || *(s16 *)(record + 0x68) == 8)
+    if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD || *(s16 *)(moby_suction_record + 0x68) == 8)
         goto fail;
-    qcopy_nc(record, position);
-    *(u8 **)(record + 0x60) = target;
-    *(f32 *)(record + 0xC) = 1.0f;
-    state = (s16)(*(u16 *)(record + 0x68) - 1);
+    qcopy_nc(moby_suction_record, position);
+    *(u8 **)(moby_suction_record + 0x60) = target;
+    *(f32 *)(moby_suction_record + 0xC) = 1.0f;
+    state = (s16)(*(u16 *)(moby_suction_record + 0x68) - 1);
     switch (state) {
     case SUCK_DISPATCH_ALIGNING_FOR_SUCTION:
-        if (1.0f <= *(f32 *)(record + 0x6C)) {
+        if (1.0f <= *(f32 *)(moby_suction_record + 0x6C)) {
             {
-                u8 *seq = *(u8 **)(record + 0x70);
+                u8 *seq = *(u8 **)(moby_suction_record + 0x70);
                 if (moby[0x53] != seq[2]) {
                     blend_moby_animation(moby, seq[2], 0, scale_game_frames(10));
                 }
             }
-            *(s32 *)(record + 0x6C) = 0;
-            *(s16 *)(record + 0x68) = 2;
+            *(s32 *)(moby_suction_record + 0x6C) = 0;
+            *(s16 *)(moby_suction_record + 0x68) = 2;
             return 1;
         }
         {
-            u8 *seq = *(u8 **)(record + 0x70);
+            u8 *seq = *(u8 **)(moby_suction_record + 0x70);
             if (moby[0x53] != seq[1]) {
                 blend_moby_animation(moby, seq[1], 0, scale_game_frames(10));
             }
         }
         return 1;
     case SUCK_DISPATCH_RISING_FOR_SUCTION:
-        if (!(1.0f <= *(f32 *)(record + 0x6C)))
+        if (!(1.0f <= *(f32 *)(moby_suction_record + 0x6C)))
             return 1;
         return 2;
     case SUCK_DISPATCH_BEING_PULLED_IN:
@@ -1841,24 +1841,24 @@ s32 process_moby_suck_cannon_suction(u8 *moby, u8 *position, u8 *target) {
     case SUCK_DISPATCH_FLYING_PROJECTILE:
     case SUCK_DISPATCH_ROLLING_PROJECTILE:
     case SUCK_DISPATCH_FALLING_AFTER_CANCEL: {
-        u8 *seq = *(u8 **)(record + 0x70);
+        u8 *seq = *(u8 **)(moby_suction_record + 0x70);
         if (moby[0x53] != seq[3]) {
             blend_moby_animation(moby, seq[3], 0, scale_game_frames(10));
         }
     }
-        *(s16 *)(record + 0x68) = 3;
-        *(s32 *)(record + 0x6C) = 0;
+        *(s16 *)(moby_suction_record + 0x68) = 3;
+        *(s32 *)(moby_suction_record + 0x6C) = 0;
         MOBY(moby)->anim_speed = 1.0f;
-        *(f32 *)(record + 0x64) = vector_distance_xy(moby + 0x10, target + 0x10);
+        *(f32 *)(moby_suction_record + 0x64) = vector_distance_xy(moby + 0x10, target + 0x10);
         break;
     default: {
-        u8 *seq = *(u8 **)(record + 0x70);
+        u8 *seq = *(u8 **)(moby_suction_record + 0x70);
         if (moby[0x53] != seq[1]) {
             blend_moby_animation(moby, seq[1], 0, scale_game_frames(10));
         }
     }
-        *(s32 *)(record + 0x6C) = 0;
-        *(s16 *)(record + 0x68) = 1;
+        *(s32 *)(moby_suction_record + 0x6C) = 0;
+        *(s16 *)(moby_suction_record + 0x68) = 1;
         return 1;
     }
     return 2;
