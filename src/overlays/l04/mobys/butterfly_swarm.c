@@ -92,7 +92,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
     Vec_1F3010 ray_end;
     Vec_1F3010 surface_normal;
     PathEl    *path;
-    Moby      *other;
+    Moby      *repulsion_candidate;
     int        hit;
     Moby      *too_close;
     int        nearest_index;
@@ -204,27 +204,27 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
         }
         for (i = 0; i < other_count + 1; i++) {
             if (i < other_count) {
-                other = others[i];
+                repulsion_candidate = others[i];
             } else {
-                other = hero.moby;
+                repulsion_candidate = hero.moby;
             }
             class_index = 0;
-            if ((*(signed char *)&other->state) < 0 || moby == other) {
+            if ((*(signed char *)&repulsion_candidate->state) < 0 || moby == repulsion_candidate) {
                 continue;
             }
-            length = fast_vec_dist(&moby->pos, &other->pos);
+            length = fast_vec_dist(&moby->pos, &repulsion_candidate->pos);
             if (steer->near < length) {
                 continue;
             }
             do {
-                if (other->oclass == steer->classes[class_index]) {
+                if (repulsion_candidate->oclass == steer->classes[class_index]) {
                     break;
                 }
                 class_index++;
             } while (class_index < steer->count);
             if (class_index < steer->count) {
                 if (length < steering_settings[4]) {
-                    too_close = other;
+                    too_close = repulsion_candidate;
                     break;
                 }
                 repulsion = length / steer->scale[class_index];
@@ -233,7 +233,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
                 } else {
                     repulsion = 1000.0f;
                 }
-                fast_vec_sub(&force, &moby->pos, &other->pos);
+                fast_vec_sub(&force, &moby->pos, &repulsion_candidate->pos);
                 fast_vec_normalize(&force, &force, repulsion);
                 fast_vec_add(steer, steer, &force);
             }
