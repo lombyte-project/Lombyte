@@ -662,13 +662,13 @@ struct TgtData {
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
 
-int try_update_resort_owner_path_target(struct Moby *moby, char *other) {
+int try_update_resort_owner_path_target(struct Moby *moby, char *requested_destination_position) {
     struct TgtData *moby_vars = (struct TgtData *)moby->pvars;
     int            *leg_path_ids = moby_vars->a;
     int *ent = (int *)l11_paths[*(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)))];
     int  path_ids[8];
     int  path_id_count;
-    if (point_in_path_xy(other, ent + 4, *ent) == 0)
+    if (point_in_path_xy(requested_destination_position, ent + 4, *ent) == 0)
         return 0;
     path_ids[0] = *(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)));
     path_id_count = 1;
@@ -691,7 +691,7 @@ int try_update_resort_owner_path_target(struct Moby *moby, char *other) {
                        path_id_count,
                        moby_vars->b[moby_vars->idx],
                        &moby->pos,
-                       other,
+                       requested_destination_position,
                        moby_vars->e,
                        0.2f) != 0;
 }
