@@ -195,7 +195,7 @@ void initialize_pause_menu(void) {
     struct GameState *state = &D_L00_001B9CF0;
     Own              *page;
     s32               small_buffers = 0;
-    s32               state_id, i, j, item_index, seq, texture_start, next;
+    s32               state_id, i, j, item_index, seq, texture_start, texture_region_end;
     s32              *slot;
 
     D_L00_00173E40_lui[4] |= 0x80000000;
@@ -327,9 +327,9 @@ void initialize_pause_menu(void) {
     D_L00_001B9CF0.saved_texture_start = texture_start;
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
         D_L00_001841F0.unk240 = texture_start;
-        next = texture_start + 0x40000;
-        D_L00_001841F0.unk244 = next;
-        gs_texture_allocation_start = next + 0x400;
+        texture_region_end = texture_start + 0x40000;
+        D_L00_001841F0.unk244 = texture_region_end;
+        gs_texture_allocation_start = texture_region_end + 0x400;
         for (j = 0; j < 4; j++) {
             s32 start = gs_texture_allocation_start;
             D_L00_001841F0.texture_slots[j] = start;
