@@ -1676,7 +1676,7 @@ void platform_update(Moby *moby)
 /* UpdateMoby_1000: timer and sound bookkeeping */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00301C38), where it is exact; names translated to the US level program. */
 
-extern int D_0015EEA4_q __asm__("D_0015EEA4");
+extern int D_0015EEA4;
 extern unsigned char D_0013D4C2_q[] __asm__("D_0013D4C2");
 extern unsigned char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
 extern unsigned char D_00141968_lui[] __asm__("D_00141968") NOT_SDA;
@@ -1710,9 +1710,9 @@ void update_level09_item_unlock_and_frame_record(struct Moby *moby) {
         if (D_0013D4C2_q[9] != 0) {
             (*tp)++;
         }
-        scaled_frame_quotient = scale_game_frames(D_0015EEA4_q) / 600;
+        scaled_frame_quotient = scale_game_frames(D_0015EEA4) / 600;
         if (*(unsigned short *)(frame_and_level_record + 0x2DA) < scaled_frame_quotient) {
-            *(unsigned short *)(frame_and_level_record + 0x2DA) = scale_game_frames(D_0015EEA4_q) / 600;
+            *(unsigned short *)(frame_and_level_record + 0x2DA) = scale_game_frames(D_0015EEA4) / 600;
         }
         *(int *)(frame_and_level_record + 0x2DC) = *(int *)(frame_and_level_record + 0x2DC) | (1 << current_level_index) | 0x80000000;
         if (is_point_inside_clip_volume(D_0013F3D0_lui, *data) != 0) {

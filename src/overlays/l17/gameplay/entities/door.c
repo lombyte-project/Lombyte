@@ -259,7 +259,7 @@ void door_update(struct Moby *door_moby) {
 
 extern char D_L17_00174740_lui[] __asm__("D_L17_00174740") NOT_SDA;
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int D_0015EEA4_q __asm__("D_0015EEA4");
+extern int D_0015EEA4;
 extern int FUN_001efa68_q(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60_q(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -342,10 +342,10 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
                         unsigned char *rec = D_00141968_x_q;
                         if (*(unsigned short *)(rec + 0x458) == 0) {
                             (*(unsigned short *)(rec + 0x458))++;
-                            scaled_frame_blocks = scale_game_frames(D_0015EEA4_q) / 600;
+                            scaled_frame_blocks = scale_game_frames(D_0015EEA4) / 600;
                             if (*(unsigned short *)(rec + 0x45A) < scaled_frame_blocks) {
                                 *(unsigned short *)(rec + 0x45A) =
-                                    scale_game_frames(D_0015EEA4_q) / 600;
+                                    scale_game_frames(D_0015EEA4) / 600;
                             }
                             *(int *)(rec + 0x45C) =
                                 *(int *)(rec + 0x45C) | (1 << current_level_index) | 0x80000000;
@@ -359,10 +359,10 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
                         unsigned char *rec = D_00141968_x_q;
                         if (*(unsigned short *)(rec + 0x458) == 0) {
                             (*(unsigned short *)(rec + 0x458))++;
-                            scaled_frame_blocks = scale_game_frames(D_0015EEA4_q) / 600;
+                            scaled_frame_blocks = scale_game_frames(D_0015EEA4) / 600;
                             if (*(unsigned short *)(rec + 0x45A) < scaled_frame_blocks) {
                                 *(unsigned short *)(rec + 0x45A) =
-                                    scale_game_frames(D_0015EEA4_q) / 600;
+                                    scale_game_frames(D_0015EEA4) / 600;
                             }
                             *(int *)(rec + 0x45C) =
                                 *(int *)(rec + 0x45C) | (1 << current_level_index) | 0x80000000;

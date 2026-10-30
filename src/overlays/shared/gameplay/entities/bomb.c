@@ -1702,7 +1702,7 @@ typedef struct { float radius; char pad4[0xC]; float height; } Bounds;
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern Vec4 camera_rot_2cc608 __asm__("D_L00_00166DD0");
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
-extern int play_frames __asm__("D_0015EEA4") MACRO_ADDR;
+extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern int D_0015ED84 MACRO_ADDR;
 extern struct UsageStats item_usage __asm__("D_00141680");
 extern struct Moby *FUN_L00_002cc360_c(float *, float *, struct Moby **, float, float, float) __asm__("FUN_L00_002cc360");
@@ -1795,7 +1795,7 @@ void ryno_update(struct Moby *ryno_moby) {
             struct UsageStats *s = &item_usage;
             if (s->stat[23].count <= 0xFFFE) s->stat[23].count++;
             per = 600;
-            if (scale_game_frames(play_frames) / per > s->stat[23].unk2) s->stat[23].unk2 = scale_game_frames(play_frames) / 600;
+            if (scale_game_frames(D_0015EEA4_macro) / per > s->stat[23].unk2) s->stat[23].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
         hero.items[0].switch_lock = 2;
@@ -1824,7 +1824,7 @@ void ryno_update(struct Moby *ryno_moby) {
             struct UsageStats *s = &item_usage;
             if (s->stat[23].count <= 0xFFFE) s->stat[23].count++;
             per = 600;
-            if (scale_game_frames(play_frames) / per > s->stat[23].unk2) s->stat[23].unk2 = scale_game_frames(play_frames) / 600;
+            if (scale_game_frames(D_0015EEA4_macro) / per > s->stat[23].unk2) s->stat[23].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
         hero.items[0].switch_lock = 2;
@@ -2242,7 +2242,7 @@ typedef struct {
     unsigned int wC4;
 } S_2cdcc0;
 extern S_2cdcc0 D_00141680_2cdcc0 __asm__("D_00141680");
-extern int D_0015EEA4_2cdcc0 __asm__("D_0015EEA4");
+extern int D_0015EEA4;
 int get_ammo(int) __asm__("FUN_L00_00233e98");
 void FUN_L00_00233db8_2cdcc0(int, int) __asm__("FUN_L00_00233db8");
 float FUN_001f9dc8_2cdcc0(float) __asm__("FUN_001f9dc8");
@@ -2270,8 +2270,8 @@ void replenish_hero_drones(void) {
             if (usage_stats->hC0 < 0xFFFF) {
                 usage_stats->hC0++;
             }
-            if (FUN_001f96f8_2cdcc0(D_0015EEA4_2cdcc0) / 600 > usage_stats->hC2) {
-                usage_stats->hC2 = FUN_001f96f8_2cdcc0(D_0015EEA4_2cdcc0) / 600;
+            if (FUN_001f96f8_2cdcc0(D_0015EEA4) / 600 > usage_stats->hC2) {
+                usage_stats->hC2 = FUN_001f96f8_2cdcc0(D_0015EEA4) / 600;
             }
             usage_stats->wC4 = usage_stats->wC4 | (1 << current_level_index) | 0x80000000;
 
