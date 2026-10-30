@@ -67,7 +67,7 @@ void update_path_mover(struct Moby *moby) {
         PATH_MOVER_COMMAND_WAIT_AT_FIRST_POINT = 1,
         PATH_MOVER_COMMAND_TRAVERSE_PATH = 2
     };
-    PathMoverVars *vars = (PathMoverVars *)moby->pvars;
+    PathMoverVars *path_mover_vars = (PathMoverVars *)moby->pvars;
     LevelPath     *path;
     Vec4           orig;
     Vec4           delta;
@@ -75,76 +75,76 @@ void update_path_mover(struct Moby *moby) {
     Vec4           goal;
     s32            on = 0;
 
-    if (vars->path == -1) {
+    if (path_mover_vars->path == -1) {
         return;
     }
-    path = l14_paths[vars->path];
-    if (vars->show_volume != -1) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, vars->show_volume) == 0) {
+    path = l14_paths[path_mover_vars->path];
+    if (path_mover_vars->show_volume != -1) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, path_mover_vars->show_volume) == 0) {
             moby->update_dist = 0xFF;
             moby->collision = 0;
             moby->flags |= 0x41;
             return;
         }
-        if (vars->show_volume != -1 &&
-            is_point_inside_clip_volume(&hero.motion.pos, vars->show_volume)) {
+        if (path_mover_vars->show_volume != -1 &&
+            is_point_inside_clip_volume(&hero.motion.pos, path_mover_vars->show_volume)) {
             moby->flags &= 0xFFBE;
             moby->collision = moby->pclass->collision;
-            vars->show_volume = -1;
+            path_mover_vars->show_volume = -1;
         }
     }
     {
         u16 id;
 
-        if (vars->trigger == -1 || is_point_inside_clip_volume(&hero.motion.pos, vars->trigger) ||
+        if (path_mover_vars->trigger == -1 || is_point_inside_clip_volume(&hero.motion.pos, path_mover_vars->trigger) ||
             D_L14_001BB930.cleared[(s16)(id = moby->save_id)] != 0 ||
             (D_0014C190_257218[current_level_index][(s16)id >> 5] >> (id & 0x1F)) & 1) {
-            if (vars->trigger != -1) {
+            if (path_mover_vars->trigger != -1) {
                 D_0014C190_257218[current_level_index][(s16)moby->save_id >> 5] |=
                     1 << (moby->save_id & 0x1F);
                 D_L14_001BABD0[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
-                vars->trigger = -1;
+                path_mover_vars->trigger = -1;
             }
             on = 1;
         }
     }
     qcopy(&orig, &moby->pos);
-    fast_dec_timer_s16(&vars->wait);
+    fast_dec_timer_s16(&path_mover_vars->wait);
     if (moby->state == 0) {
         f32   t;
         Vec4 *points;
 
-        vars->unk28 = 4;
-        vars->unk3E = 5;
-        vars->unk20 = 0;
-        vars->unk24 = 0;
+        path_mover_vars->unk28 = 4;
+        path_mover_vars->unk3E = 5;
+        path_mover_vars->unk20 = 0;
+        path_mover_vars->unk24 = 0;
         t = 0.0f;
-        if ((moby->command = vars->start_end) == 0) {
+        if ((moby->command = path_mover_vars->start_end) == 0) {
             t = 1.0f;
         }
-        vars->t = t;
+        path_mover_vars->t = t;
         points = path->points;
         /* the unsigned index keeps retail's (count - 1) << 4; a signed one folds the -1 into the pointer */
         qcopy(&moby->pos, truncate_float_to_s32(t) ? &points[(u32)(path->count - 1)] : points);
-        vars->wait = 0;
-        vars->speed = 0.0f;
-        vars->rise = 0.0f;
+        path_mover_vars->wait = 0;
+        path_mover_vars->speed = 0.0f;
+        path_mover_vars->rise = 0.0f;
         moby->state = 1;
         moby->update_dist = 0xFF;
         moby->draw_dist = 0xFF;
-        vars->voice = -1;
+        path_mover_vars->voice = -1;
     }
     switch (moby->command) {
     case PATH_MOVER_COMMAND_WAIT_AT_LAST_POINT:
         if (on) {
             f32 far;
 
-            if ((vars->retrigger != 0 && is_hero_on_moby(moby)) ||
+            if ((path_mover_vars->retrigger != 0 && is_hero_on_moby(moby)) ||
                 (far = fast_vec_dist(&hero.motion.pos, &path->points[path->count - 1]),
                  fast_vec_dist(&hero.motion.pos, &path->points[0]) < far)) {
                 moby->command = 2;
-                vars->target_speed = -1.0f / scale_time(vars->travel_time * 60.0f);
-                vars->retrigger = 0;
+                path_mover_vars->target_speed = -1.0f / scale_time(path_mover_vars->travel_time * 60.0f);
+                path_mover_vars->retrigger = 0;
             }
         }
         break;
@@ -152,31 +152,31 @@ void update_path_mover(struct Moby *moby) {
         if (on) {
             f32 near;
 
-            if ((vars->retrigger != 0 && is_hero_on_moby(moby)) ||
+            if ((path_mover_vars->retrigger != 0 && is_hero_on_moby(moby)) ||
                 (near = fast_vec_dist(&hero.motion.pos, &path->points[0]),
                  fast_vec_dist(&hero.motion.pos, &path->points[path->count - 1]) < near)) {
                 moby->command = 2;
-                vars->target_speed = 1.0f / scale_time(vars->travel_time * 60.0f);
-                vars->retrigger = 0;
+                path_mover_vars->target_speed = 1.0f / scale_time(path_mover_vars->travel_time * 60.0f);
+                path_mover_vars->retrigger = 0;
             }
         }
         break;
     case PATH_MOVER_COMMAND_TRAVERSE_PATH:
-        if (vars->silent == 0 && is_hero_on_moby(moby)) {
+        if (path_mover_vars->silent == 0 && is_hero_on_moby(moby)) {
             hero.jump_lock_timer = 4;
             hero.unk1F4 = 4;
         }
-        if (vars->wait != 0 ||
-            (vars->rise < 0.0f && vector_distance_xy(&moby->pos, &hero.motion.pos) < 2.0f &&
+        if (path_mover_vars->wait != 0 ||
+            (path_mover_vars->rise < 0.0f && vector_distance_xy(&moby->pos, &hero.motion.pos) < 2.0f &&
              absolute_float(hero.motion.pos.f[2] - moby->pos.z) < 4.0f &&
              moby->pos.z - hero.motion.pos.f[2] > 1.0f)) {
             s32 voice;
 
-            if (vars->wait == 0) {
-                vars->wait = scale_game_frames(30);
+            if (path_mover_vars->wait == 0) {
+                path_mover_vars->wait = scale_game_frames(30);
             }
-            voice = vars->voice;
-            vars->speed = 0.0f;
+            voice = path_mover_vars->voice;
+            path_mover_vars->speed = 0.0f;
             if (voice != -1) {
                 VoicePoolWindow *slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
 
@@ -184,34 +184,34 @@ void update_path_mover(struct Moby *moby) {
                     release_voice_slot(voice);
                 }
             }
-            vars->voice = -1;
+            path_mover_vars->voice = -1;
         } else {
             s32   i;
             f32   frac;
             f32   fi;
             Vec4 *from;
 
-            if (!voice_is_playing(moby, vars->voice)) {
-                vars->voice = allocate_voice_for_target_entry(0, 4, moby);
+            if (!voice_is_playing(moby, path_mover_vars->voice)) {
+                path_mover_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
             }
-            vars->speed += vars->target_speed * frame_time;
-            if (absolute_float(vars->speed) > absolute_float(vars->target_speed)) {
-                vars->speed = vars->target_speed;
+            path_mover_vars->speed += path_mover_vars->target_speed * frame_time;
+            if (absolute_float(path_mover_vars->speed) > absolute_float(path_mover_vars->target_speed)) {
+                path_mover_vars->speed = path_mover_vars->target_speed;
             }
-            vars->t = vars->t + vars->speed;
-            if (0.5f < absolute_float(vars->t - 0.5f)) {
+            path_mover_vars->t = path_mover_vars->t + path_mover_vars->speed;
+            if (0.5f < absolute_float(path_mover_vars->t - 0.5f)) {
                 s32 voice;
 
-                if (0.0f < vars->target_speed) {
+                if (0.0f < path_mover_vars->target_speed) {
                     moby->command = 0;
-                    vars->t = 1.0f;
+                    path_mover_vars->t = 1.0f;
                 } else {
                     moby->command = 1;
-                    vars->t = 0.0f;
+                    path_mover_vars->t = 0.0f;
                 }
-                vars->speed = 0.0f;
-                vars->wait = scale_game_frames(15);
-                voice = vars->voice;
+                path_mover_vars->speed = 0.0f;
+                path_mover_vars->wait = scale_game_frames(15);
+                voice = path_mover_vars->voice;
                 if (voice != -1) {
                     VoicePoolWindow *slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
 
@@ -219,13 +219,13 @@ void update_path_mover(struct Moby *moby) {
                         release_voice_slot(voice);
                     }
                 }
-                vars->voice = -1;
+                path_mover_vars->voice = -1;
             }
             frac = convert_integer_to_float(path->count - 1);
-            i = truncate_float_to_s32(frac * vars->t);
+            i = truncate_float_to_s32(frac * path_mover_vars->t);
             frac = convert_integer_to_float(path->count - 1);
             fi = convert_integer_to_float(i);
-            frac *= vars->t;
+            frac *= path_mover_vars->t;
             frac -= fi;
             if (i == path->count - 1) {
                 qcopy(&goal, &path->points[i]);
@@ -235,10 +235,10 @@ void update_path_mover(struct Moby *moby) {
                 fast_vec_scale(&step, &step, frac);
                 fast_vec_add(&goal, &step, from);
             }
-            vendor_spring(&moby->pos.x, &vars->ease[0], goal.f[0], 0.005f, 0.2f, 0.0f);
-            vendor_spring(&moby->pos.y, &vars->ease[1], goal.f[1], 0.005f, 0.2f, 0.0f);
-            vendor_spring(&moby->pos.z, &vars->ease[2], goal.f[2], 0.005f, 0.2f, 0.0f);
-            vars->rise = moby->pos.z - orig.f[2];
+            vendor_spring(&moby->pos.x, &path_mover_vars->ease[0], goal.f[0], 0.005f, 0.2f, 0.0f);
+            vendor_spring(&moby->pos.y, &path_mover_vars->ease[1], goal.f[1], 0.005f, 0.2f, 0.0f);
+            vendor_spring(&moby->pos.z, &path_mover_vars->ease[2], goal.f[2], 0.005f, 0.2f, 0.0f);
+            path_mover_vars->rise = moby->pos.z - orig.f[2];
         }
         break;
     }
@@ -246,11 +246,11 @@ void update_path_mover(struct Moby *moby) {
         ease_path_mover_to_endpoint(moby);
     }
     fast_vec_sub(&delta, &moby->pos, &orig);
-    update_entity_matrix(vars->carry, &delta, &moby->rot, &moby->rot);
+    update_entity_matrix(path_mover_vars->carry, &delta, &moby->rot, &moby->rot);
     if (!is_hero_on_moby(moby)) {
         if (2.0f < vector_distance_xy(&moby->pos, &hero.motion.pos)) {
-            if (vars->wait == 0) {
-                vars->retrigger = 1;
+            if (path_mover_vars->wait == 0) {
+                path_mover_vars->retrigger = 1;
             }
         }
     }
