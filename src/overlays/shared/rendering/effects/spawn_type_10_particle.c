@@ -278,7 +278,7 @@ int select_list_point_toward_target(char *reference_object,
                                     char *pt,
                                     char *out) __asm__("FUN_L01_0028b5e0");
 
-int select_list_point_toward_target(char *reference_object, List *list, char *pt, char *out) {
+int select_list_point_toward_target(char *reference_object, List *list, char *pt, char *selected_point) {
     int   nearest_reference_entry_index = -1;
     int   nearest_eligible_entry_index = -1;
     float best0 = 10000.0f;
@@ -302,17 +302,17 @@ int select_list_point_toward_target(char *reference_object, List *list, char *pt
     }
     if (nearest_eligible_entry_index != -1) {
         if (nearest_reference_entry_index == nearest_eligible_entry_index) {
-            qcopy(out, list->e[nearest_reference_entry_index]);
+            qcopy(selected_point, list->e[nearest_reference_entry_index]);
             return nearest_reference_entry_index;
         }
         if (nearest_reference_entry_index < nearest_eligible_entry_index) {
-            qcopy(out, list->e[nearest_reference_entry_index + 1]);
+            qcopy(selected_point, list->e[nearest_reference_entry_index + 1]);
             return nearest_reference_entry_index + 1;
         }
-        qcopy(out, list->e[nearest_reference_entry_index - 1]);
+        qcopy(selected_point, list->e[nearest_reference_entry_index - 1]);
         return nearest_reference_entry_index - 1;
     }
-    qcopy(out, pt);
+    qcopy(selected_point, pt);
     return -1;
 }
 
