@@ -722,7 +722,7 @@ extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 
 void process_extermitank_particle_hits(char *moby) {
     char       **slots = (char **)(((char *)MOBY(moby)->pvars) + 0x1A0);
-    struct Hero *base;
+    struct Hero *hero_actor;
     Hit_306CF0   hit_info;
     int          i;
     int          j;
@@ -735,14 +735,14 @@ void process_extermitank_particle_hits(char *moby) {
             }
         }
     }
-    base = &hero;
-    if (base->items[2].item_id == 6)
+    hero_actor = &hero;
+    if (hero_actor->items[2].item_id == 6)
         return;
     hit_info.flags |= 1;
     hit_info.owner = moby;
     hit_info.x14 = 1;
     hit_info.x1C = 1.0f;
-    fast_vec_sub(hit_info.v, &base->motion.pos, moby + 0x10);
+    fast_vec_sub(hit_info.v, &hero_actor->motion.pos, moby + 0x10);
     hit_info.v[2] = 0.0f;
     set_vector_length_xy(hit_info.v, hit_info.v, 1.5f);
     hit_info.v[2] = 1.0f;
