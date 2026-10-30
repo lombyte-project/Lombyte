@@ -76,7 +76,7 @@ void edwina_update(L16WatchMoby *moby) {
         EDWINA_UPDATE_DIALOGUE = 1,
         EDWINA_APPLY_DIALOGUE_COMPLETION = 2
     };
-    L16WatchScratch scratch;
+    L16WatchScratch edwina_look_vectors;
     L12WatchData   *moby_data = (L12WatchData *)moby->data;
     float           rate;
     float           head_rate;
@@ -157,11 +157,11 @@ void edwina_update(L16WatchMoby *moby) {
             fast_vec_add(moby_data->target, moby_data->target, moby->position);
         }
         if (moby_data->moving_timer) {
-            qcopy(scratch.target, (char *)&D_0013E633_watch + 0xEED);
+            qcopy(edwina_look_vectors.target, (char *)&D_0013E633_watch + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, moby_data->target);
+            qcopy(edwina_look_vectors.target, moby_data->target);
         }
     }
     if (level_object_states[70].state == 0) {
@@ -224,11 +224,11 @@ void edwina_update(L16WatchMoby *moby) {
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, moby->position);
-        scratch.eye[2] += 1.0f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
+        qcopy(edwina_look_vectors.eye, moby->position);
+        edwina_look_vectors.eye[2] += 1.0f;
+        fast_vec_sub(edwina_look_vectors.delta, edwina_look_vectors.target, edwina_look_vectors.eye);
+        yaw = fast_subtract_rotations(fast_arc_tan(edwina_look_vectors.delta[0], edwina_look_vectors.delta[1]), moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy(edwina_look_vectors.delta), edwina_look_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)
