@@ -192,10 +192,10 @@ extern short *group_record_index_lists[] __asm__("D_L12_001ABCC0");
 /* Copies the moby's height into every moby of its group and into their water grid slots. */
 void copy_moby_z_to_group_records(struct Moby *moby) {
     short *group_index_cursor = group_record_index_lists[moby->group];
-    int    base = D_L12_0015FFD8;
+    int    indexed_records_base = D_L12_0015FFD8;
     do {
         int   i = (*group_index_cursor & 0x7FFF) * 256;
-        char *indexed_record = (char *)(i + base);
+        char *indexed_record = (char *)(i + indexed_records_base);
         char *linked_record;
         *(float *)(indexed_record + 0x18) = moby->pos.z;
         linked_record =
