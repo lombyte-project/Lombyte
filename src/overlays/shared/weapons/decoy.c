@@ -440,8 +440,8 @@ ret0:
 
 void update_decoy_proximity_motion(S_2c40a0 *self) __asm__("FUN_L00_002c40a0");
 
-void update_decoy_proximity_motion(S_2c40a0 *self) {
-    O_2c40a0 *moby_vars = self->p78;
+void update_decoy_proximity_motion(S_2c40a0 *decoy_moby) {
+    O_2c40a0 *moby_vars = decoy_moby->p78;
     P_2c40a0 *P = (P_2c40a0 *)&hero;
     s16       proximity_response_gate = P->h1E2;
     f32       horizontal_displacement[4];
@@ -449,13 +449,13 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
     if (moby_vars->i68 == 0) {
         if (proximity_response_gate == 0)
             return;
-        if (!(FUN_001f9b80_2c40a0(P->v80, self->v10) < 1.0f))
+        if (!(FUN_001f9b80_2c40a0(P->v80, decoy_moby->v10) < 1.0f))
             return;
-        if (!(FUN_001f99c0_2c40a0(P->f88 - self->f18) < 1.3f))
+        if (!(FUN_001f99c0_2c40a0(P->f88 - decoy_moby->f18) < 1.3f))
             return;
         moby_vars->i68 = 1;
     }
-    FUN_001f9a28_2c40a0(horizontal_displacement, self->v10, P->v80);
+    FUN_001f9a28_2c40a0(horizontal_displacement, decoy_moby->v10, P->v80);
     horizontal_displacement[2] = 0.0f;
     horizontal_separation_error = FUN_001f9b20_2c40a0(horizontal_displacement) - 1.4f;
     if (horizontal_separation_error > 0.0f)
@@ -469,7 +469,7 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
                   frame_scale_sq * 0.3f,
                   frame_time * 4.0f);
     if (horizontal_separation_error == 0.0f && moby_vars->f60 == 0.0f) {
-        if (FUN_001f99c0_2c40a0(self->f18 - probe_ground_height(self->v10, 0, 0.5f)) < 0.02f)
+        if (FUN_001f99c0_2c40a0(decoy_moby->f18 - probe_ground_height(decoy_moby->v10, 0, 0.5f)) < 0.02f)
             moby_vars->i68 = 0;
     }
     horizontal_separation_distance = FUN_001f9af0_2c40a0(horizontal_displacement);
@@ -477,17 +477,17 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
         moby_vars->f60 = horizontal_separation_distance;
     if (moby_vars->f60 < horizontal_separation_distance)
         FUN_001f9bf8_2c40a0(horizontal_displacement, horizontal_displacement, moby_vars->f60);
-    FUN_L00_00258830_2c40a0(self, horizontal_displacement, 0.5f, 0.4f, 0.0f, 0);
-    ground_height = probe_ground_height(self->v10, 0, 0.5f);
-    if (self->f18 < ground_height) {
-        self->f18 = ground_height;
+    FUN_L00_00258830_2c40a0(decoy_moby, horizontal_displacement, 0.5f, 0.4f, 0.0f, 0);
+    ground_height = probe_ground_height(decoy_moby->v10, 0, 0.5f);
+    if (decoy_moby->f18 < ground_height) {
+        decoy_moby->f18 = ground_height;
         moby_vars->f64 = 0.0f;
         return;
     }
     moby_vars->f64 -= frame_time_sq * 24.0f;
-    self->f18 += moby_vars->f64;
-    if (self->f18 < ground_height)
-        self->f18 = ground_height;
+    decoy_moby->f18 += moby_vars->f64;
+    if (decoy_moby->f18 < ground_height)
+        decoy_moby->f18 = ground_height;
 }
 
 /* Calls FUN_L00_002c3440 on m for collision_hit_material results 0, 1, 3, 8, 11, 12 and 13. */
