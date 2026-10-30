@@ -329,9 +329,9 @@ short count_listed_blarg_ships_in_state_5(int moby_list_index) {
     short *moby_list_entry = D_L11_001AC240[moby_list_index];
     short  found = 0;
     short  n = 0;
-    char  *base = D_L11_0015FFD8;
+    char  *moby_array_base = D_L11_0015FFD8;
     do {
-        unsigned char *moby = (unsigned char *)(((moby_list_entry[0] & 0x7FFF) << 8) + (int)base);
+        unsigned char *moby = (unsigned char *)(((moby_list_entry[0] & 0x7FFF) << 8) + (int)moby_array_base);
         if (MOBY(moby)->oclass == 0x527 && moby[0x20] == 5) {
             found = ++n;
         }
