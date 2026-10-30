@@ -32,7 +32,7 @@ extern int D_L03_0015F5CC; /* no foreign declaration */
 
 void add_moby_rotation_based_offsets(struct Moby *moby, float *out) __asm__("FUN_L03_0029c8a8");
 
-void add_moby_rotation_based_offsets(struct Moby *moby, float *out) {
+void add_moby_rotation_based_offsets(struct Moby *moby, float *position) {
     float unit_x_axis[4];
     float transformed_x_axis[4];
     float first_offset[4];
@@ -52,8 +52,8 @@ void add_moby_rotation_based_offsets(struct Moby *moby, float *out) {
         fast_vec_cross(second_offset, transformed_x_axis, first_offset);
         fast_vec_scale(first_offset, first_offset, *(float *)(rotation_offset_pvars + 0x140));
         fast_vec_scale(second_offset, second_offset, *(float *)(rotation_offset_pvars + 0x144));
-        fast_vec_add(out, out, first_offset);
-        fast_vec_add(out, out, second_offset);
+        fast_vec_add(position, position, first_offset);
+        fast_vec_add(position, position, second_offset);
     }
 }
 
