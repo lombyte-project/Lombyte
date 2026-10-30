@@ -105,8 +105,8 @@ void spawn_shrub_parts(char *moby) {
 
 void process_shrub_part_hits(struct Moby *parent_moby) {
     char  *shrub_hit_vars = ((char *)parent_moby->pvars);
-    char  *base = shrub_hit_vars + 0x60;
-    char **part_entry_cursor = (char **)base;
+    char  *shrub_part_entry_address = shrub_hit_vars + 0x60;
+    char **part_entry_cursor = (char **)shrub_part_entry_address;
     char **sq;
     int    weighted_hit_score = 0;
     int    selected_hit_part_index = 0;
@@ -141,7 +141,7 @@ void process_shrub_part_hits(struct Moby *parent_moby) {
         *(short *)(shrub_hit_vars + 0x13C) = *(short *)(shrub_hit_vars + 0x13C) % 8;
         if (selected_hit_part_index != 0) {
             int    selected_part_byte_offset = selected_hit_part_index * 16;
-            char **selected_part_entry = (char **)(base + selected_part_byte_offset);
+            char **selected_part_entry = (char **)(shrub_part_entry_address + selected_part_byte_offset);
             char  *selected_part_moby = *selected_part_entry;
             char  *d2;
             d2 = ((char *)MOBY(selected_part_moby)->pvars);
@@ -155,12 +155,12 @@ void process_shrub_part_hits(struct Moby *parent_moby) {
             return;
         } else {
             int   random_search_start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
-            char *part_table_base = base;
+            char *part_table_base = shrub_part_entry_address;
             for (i = 0; i < 8; i++) {
                 int k = (i + random_search_start) % 8 + 5;
                 int fallback_part_byte_offset = k * 16;
-                base = part_table_base + fallback_part_byte_offset;
-                sq = (char **)base;
+                shrub_part_entry_address = part_table_base + fallback_part_byte_offset;
+                sq = (char **)shrub_part_entry_address;
                 if (*sq != 0) {
                     char *d2 = *(char **)(*sq + 0x78);
                     cart_burst(parent_moby, *sq + 0x10, -1, 2.0f, 13.0f);
