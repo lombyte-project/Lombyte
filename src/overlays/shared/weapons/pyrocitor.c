@@ -526,7 +526,7 @@ void pyrocitor_update(struct Moby *moby) {
         PYROCITOR_STATE_FIRING = 3
     };
     PyrocitorVars *pyrocitor_vars = (PyrocitorVars *)moby->pvars;
-    Vec_2b2100   pos, light_offset_and_flame_velocity, scratch, endpoint, particle_pos, random_vec;
+    Vec_2b2100   pos, light_offset_and_flame_velocity, light_color_and_flame_origin, endpoint, particle_pos, random_vec;
     FlameHit     hit;
     f32          pos_out, vel_out;
     f32          speed, length, flame_braking_step, damping;
@@ -601,7 +601,7 @@ void pyrocitor_update(struct Moby *moby) {
                          &hero.motion.pos,
                          &light_offset_and_flame_velocity);
             point_lights[pyrocitor_vars->light].position.f[3] = 7.5f;
-            lerp_vector(&scratch,
+            lerp_vector(&light_color_and_flame_origin,
                         &pyrocitor_light_color_start_x_gp,
                         &pyrocitor_light_color_end_x_gp,
                         fast_sin(((f32)(D_L00_0015F5CC % 120) / 120.0f) * 6.28318f - 3.14159f) *
@@ -609,7 +609,7 @@ void pyrocitor_update(struct Moby *moby) {
                             0.5f);
             lerp_vector(&point_lights[pyrocitor_vars->light],
                         &point_lights[pyrocitor_vars->light],
-                        &scratch,
+                        &light_color_and_flame_origin,
                         0.1f);
         }
         pos_out = vel_out = 0.0f;
@@ -619,23 +619,23 @@ void pyrocitor_update(struct Moby *moby) {
         else
             gate = 0;
         if (hero.state.current == 1 && (moby->flags & 1)) {
-            fast_vec_normalize(&scratch, &l00_camera.unk350[8], -1.0f);
-            fast_vec_add(&scratch, &scratch, &l00_camera.pos);
+            fast_vec_normalize(&light_color_and_flame_origin, &l00_camera.unk350[8], -1.0f);
+            fast_vec_add(&light_color_and_flame_origin, &light_color_and_flame_origin, &l00_camera.pos);
             fast_vec_normalize(&light_offset_and_flame_velocity,
                                l00_camera.unk350,
                                pyrocitor_flame_base_range_gp + speed + 0.75f);
-            fast_vec_add(&endpoint, &light_offset_and_flame_velocity, &scratch);
+            fast_vec_add(&endpoint, &light_offset_and_flame_velocity, &light_color_and_flame_origin);
         } else {
-            qcopy(&scratch, &pos);
+            qcopy(&light_color_and_flame_origin, &pos);
             fast_vec_normalize(&light_offset_and_flame_velocity,
                                &hero.facing_x,
                                pyrocitor_flame_base_range_gp + speed + 0.75f);
             fast_vec_add(&endpoint, &light_offset_and_flame_velocity, &pos);
         }
-        if (collision_line(&hero.motion.body_center, &scratch, 2, 0, 0)) {
+        if (collision_line(&hero.motion.body_center, &light_color_and_flame_origin, 2, 0, 0)) {
             length = 0.0f;
-        } else if (collision_line(&scratch, &endpoint, 2, 0, 0)) {
-            length = fast_vec_dist(&scratch, coll_hit + 0x20) - 0.75f;
+        } else if (collision_line(&light_color_and_flame_origin, &endpoint, 2, 0, 0)) {
+            length = fast_vec_dist(&light_color_and_flame_origin, coll_hit + 0x20) - 0.75f;
             if (length < 0.0f)
                 length = 0.0f;
         } else {
@@ -664,7 +664,7 @@ void pyrocitor_update(struct Moby *moby) {
                 fast_vec_scale(&particle_pos,
                                &light_offset_and_flame_velocity,
                                random_float_between(0.0f, 1.0f));
-                fast_vec_add(&particle_pos, &particle_pos, &scratch);
+                fast_vec_add(&particle_pos, &particle_pos, &light_color_and_flame_origin);
                 if (i < initial_count)
                     fl = 1;
                 else
@@ -701,7 +701,7 @@ void pyrocitor_update(struct Moby *moby) {
             fast_vec_scale(
                 &particle_pos, &light_offset_and_flame_velocity, random_float_between(0.5f, 0.1f));
             fast_vec_add(&particle_pos, &particle_pos, &random_vec);
-            spawn_color_decaying_effect_particle(&scratch, &particle_pos, item_text_variant[16]);
+            spawn_color_decaying_effect_particle(&light_color_and_flame_origin, &particle_pos, item_text_variant[16]);
         }
         if (D_L00_0015F5CC % scale_game_frames(pyrocitor_ammo_use_interval_frames_gp) == 0)
             use_ammo(-1, 1);
