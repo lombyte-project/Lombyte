@@ -18,7 +18,7 @@ extern struct Moby *D_L01_0015FFD8;
 
 void cave_door_update(struct Moby *self) __asm__("FUN_L01_002f4348");
 
-void cave_door_update(struct Moby *self) {
+void cave_door_update(struct Moby *cave_door_moby) {
     enum {
         CAVE_DOOR_STATE_INITIALIZE = 0,
         CAVE_DOOR_STATE_UPDATE_ROTATION = 1
@@ -28,11 +28,11 @@ void cave_door_update(struct Moby *self) {
     f32         *mv;
 
     cave_door_vars = (RotVars *)self->pvars;
-    switch (self->state) {
+    switch (cave_door_moby->state) {
     case CAVE_DOOR_STATE_INITIALIZE:
-        cave_door_vars->angle = self->rot.x;
+        cave_door_vars->angle = cave_door_moby->rot.x;
         cave_door_vars->speed = cave_door_vars->speed * DEG_TO_RAD;
-        self->state = 1;
+        cave_door_moby->state = 1;
         break;
     case CAVE_DOOR_STATE_UPDATE_ROTATION:
         if (cave_door_vars->target != -1) {
@@ -40,7 +40,7 @@ void cave_door_update(struct Moby *self) {
             if (target_moby->oclass == 0x118) {
                 mv = (f32 *)target_moby->pvars;
                 target_moby->update_dist = 0xFF;
-                self->rot.x = fast_add_rotations(
+                cave_door_moby->rot.x = fast_add_rotations(
                     cave_door_vars->angle,
                     fast_normalize_angle(
                         fast_add_rotations(cave_door_vars->speed, -cave_door_vars->angle) * mv[0]));
