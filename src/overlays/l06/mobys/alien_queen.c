@@ -901,7 +901,7 @@ void activate_listed_state_15_mobys_at_raised_positions(char *moby) {
 void start_alien_queen_intro(char *moby) {
     float        output_position[4], output_rotation[4], moby_offset_vector[4];
     char        *alien_queen_vars = ((char *)MOBY(moby)->pvars);
-    LevelCuboid *base = &l06_cuboids[*(int *)(alien_queen_vars + 0xF8)];
+    LevelCuboid *hero_placement_node = &l06_cuboids[*(int *)(alien_queen_vars + 0xF8)];
     *(int *)(alien_queen_vars + 0x118) = 0;
     set_race_camera(&base->pos, &base->rot, 0x72, 0);
     qcopy(output_position, moby + 0x10);
