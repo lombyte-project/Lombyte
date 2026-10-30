@@ -174,7 +174,7 @@ void doom_bot_update(struct Moby *moby) {
         DOOM_BOT_INITIAL_FALL = 14,
         DOOM_BOT_RESET_TO_INITIALIZE = 15
     };
-    OvlVec4       scratch[4];
+    OvlVec4       movement_and_detonation_vectors[4];
     float         clearance;
     DoomBotVars  *doom_bot_vars;
     struct Moby  *target;
@@ -298,7 +298,7 @@ void doom_bot_update(struct Moby *moby) {
         break;
     case DOOM_BOT_COLLISION_RECOVERY_FALL: {
         DoomBotParams *hp;
-        fast_vec_add(&scratch[0], &moby->pos, &doom_bot_vars->velocity);
+        fast_vec_add(&movement_and_detonation_vectors[0], &moby->pos, &doom_bot_vars->velocity);
         doom_bot_vars->velocity.f[2] -= frame_time_sq * 9.0f;
         save_state_fields_to_hero((char *)doom_bot_vars);
         hp = (DoomBotParams *)&hero;
@@ -356,11 +356,11 @@ void doom_bot_update(struct Moby *moby) {
                 moby->state = 6;
             }
         }
-        qcopy(&scratch[0], &moby->pos);
-        scratch[0].f[2] += scale * 0.3f;
+        qcopy(&movement_and_detonation_vectors[0], &moby->pos);
+        movement_and_detonation_vectors[0].f[2] += scale * 0.3f;
         if (random_integer_below(4) == 0)
             doom_bot_vars->target_moby =
-                select_class5_target_or_hero(moby, &scratch[0], &moby->rot, doom_bot_vars->last, 1);
+                select_class5_target_or_hero(moby, &movement_and_detonation_vectors[0], &moby->rot, doom_bot_vars->last, 1);
         doom_bot_vars->turn_rate = frame_scale * 0.1f * speed;
         moby->state = 4;
         if (!doom_bot_vars->target_moby) {
@@ -462,12 +462,12 @@ void doom_bot_update(struct Moby *moby) {
             FUN_L00_00258278(
                 moby, &doom_bot_vars->movement_speed, doom_bot_vars->angle, hp->move_k, hp->move_d, hp->move_max);
         }
-        fast_vec_scale(&scratch[3], &doom_bot_vars->velocity, 5.0f);
-        scratch[3].f[2] = 0;
-        qcopy(&scratch[1], &moby->pos);
-        scratch[1].f[2] += scale * 0.15f;
-        fast_vec_add(&scratch[2], &scratch[1], &scratch[3]);
-        if (!collision_line(&scratch[1], &scratch[2], 6, moby, 0) ||
+        fast_vec_scale(&movement_and_detonation_vectors[3], &doom_bot_vars->velocity, 5.0f);
+        movement_and_detonation_vectors[3].f[2] = 0;
+        qcopy(&movement_and_detonation_vectors[1], &moby->pos);
+        movement_and_detonation_vectors[1].f[2] += scale * 0.15f;
+        fast_vec_add(&movement_and_detonation_vectors[2], &movement_and_detonation_vectors[1], &movement_and_detonation_vectors[3]);
+        if (!collision_line(&movement_and_detonation_vectors[1], &movement_and_detonation_vectors[2], 6, moby, 0) ||
             coll_hit.moby == (s32)doom_bot_vars->target_moby ||
             (coll_hit.moby && ((struct Moby *)coll_hit.moby)->pclass &&
              ((struct Moby *)coll_hit.moby)->pclass->type == 5)) {
@@ -547,13 +547,13 @@ void doom_bot_update(struct Moby *moby) {
     case DOOM_BOT_DETONATE: {
         if (!(moby->pos.x < 2.0f) && !(moby->pos.x > 1021.0f) && !(moby->pos.y < 2.0f) &&
             !(moby->pos.y > 1021.0f) && !(moby->pos.z < 2.0f) && !(moby->pos.z > 1021.0f)) {
-            qcopy(&scratch[1], &moby->pos);
-            scratch[2].q = 0;
-            scratch[2].f[2] = 1.0f;
-            scratch[2].f[3] = 1.0f;
+            qcopy(&movement_and_detonation_vectors[1], &moby->pos);
+            movement_and_detonation_vectors[2].q = 0;
+            movement_and_detonation_vectors[2].f[2] = 1.0f;
+            movement_and_detonation_vectors[2].f[3] = 1.0f;
             spawn_explosion(0.0f,
                             moby,
-                            &scratch[2],
+                            &movement_and_detonation_vectors[2],
                             (int)&moby->pos,
                             0.0f,
                             2.0f * speed,
@@ -569,11 +569,11 @@ void doom_bot_update(struct Moby *moby) {
                             5,
                             -1,
                             item_text_variant[0x14]);
-            scratch[1].f[2] += scale * 0.5f;
+            movement_and_detonation_vectors[1].f[2] += scale * 0.5f;
             count = collect_mobies_in_sphere(&moby->pos, speed, 0x15, moby, 0);
-            scratch[3].q = *(OvlQuad *)&moby->pos;
+            movement_and_detonation_vectors[3].q = *(OvlQuad *)&moby->pos;
             send_blast_hits(
-                moby, &scratch[3], D_L00_00177F00, count, 0, 0x10000, 2, 3, 3.0f, 1.0f, 1.0f);
+                moby, &movement_and_detonation_vectors[3], D_L00_00177F00, count, 0, 0x10000, 2, 3, 3.0f, 1.0f, 1.0f);
             if (item_text_variant[0x14])
                 allocate_voice_for_target_entry(4, 0, moby);
             else
@@ -595,14 +595,14 @@ void doom_bot_update(struct Moby *moby) {
         break;
     case DOOM_BOT_INITIAL_FALL: {
         DoomBotParams *hp;
-        fast_vec_add(&scratch[1], &moby->pos, &doom_bot_vars->velocity);
+        fast_vec_add(&movement_and_detonation_vectors[1], &moby->pos, &doom_bot_vars->velocity);
         if (coll_sphere(&moby->pos, scale * 0.5f, 1, moby) && coll_hit.moby &&
             ((struct Moby *)coll_hit.moby)->oclass == 186) {
-            fast_vec_sub(&scratch[1], coll_hit.pad30, &moby->pos);
-            distance = fast_vec_length(&scratch[1]);
-            scratch[1].f[2] = 0;
-            fast_vec_normalize(&scratch[1], &scratch[1], distance * 1.1f);
-            fast_vec_add(&moby->pos, &moby->pos, &scratch[1]);
+            fast_vec_sub(&movement_and_detonation_vectors[1], coll_hit.pad30, &moby->pos);
+            distance = fast_vec_length(&movement_and_detonation_vectors[1]);
+            movement_and_detonation_vectors[1].f[2] = 0;
+            fast_vec_normalize(&movement_and_detonation_vectors[1], &movement_and_detonation_vectors[1], distance * 1.1f);
+            fast_vec_add(&moby->pos, &moby->pos, &movement_and_detonation_vectors[1]);
         }
         doom_bot_vars->velocity.f[2] -= frame_time_sq * 9.0f;
         save_state_fields_to_hero((char *)doom_bot_vars);
