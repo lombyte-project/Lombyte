@@ -551,11 +551,11 @@ void update_timed_sphere_probed_particle(unsigned char *particle) __asm__("FUN_L
 void update_timed_sphere_probed_particle(unsigned char *particle) {
     u128_272438         *particle_position = (u128_272438 *)(particle + 0x10);
     Q_272438            *particle_data = (Q_272438 *)(particle + 0x20);
-    volatile u128_272438 old;
+    volatile u128_272438 previous_particle_position;
     volatile u128_272438 position_copy;
     float                x, y;
     int                  sphere_probe_result;
-    old = *particle_position;
+    previous_particle_position = *particle_position;
     particle_data->unk4 += particle_data->unk8;
     path_sample_at_distance(
         particle_data->i0, &x, &y, particle_position, particle_data->unk4, particle_data->fc);
