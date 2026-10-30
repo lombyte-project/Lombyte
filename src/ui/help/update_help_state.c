@@ -4,6 +4,7 @@
 #include "sda.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/help/force_help_message.h"
 
 typedef struct {
     s32 state;    /* 0x00 */
@@ -37,7 +38,6 @@ extern HelpState D_001996D0;
 extern s32 fast_dec_timer(void *) __asm__("func_001F9740");
 extern s32 find_help_message_index(s32 message_id) __asm__("FUN_001fdca0");
 extern void link_localized_display_text(void) __asm__("FUN_001fdd58");
-extern s32 force_help_message(s32 owner, s32 message_id) __asm__("FUN_002151d8");
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 
 void update_help_state(void) __asm__("FUN_001fde90");

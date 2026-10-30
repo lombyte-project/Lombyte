@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RUNTIME_MEMORY_INIT_MEM_SLOTS_H
+#define LOMBYTE_RNC_RUNTIME_MEMORY_INIT_MEM_SLOTS_H
+
+#include "types.h"
+
+void init_mem_slots(void) __asm__("FUN_002015d8");
+
+#endif /* LOMBYTE_RNC_RUNTIME_MEMORY_INIT_MEM_SLOTS_H */

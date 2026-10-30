@@ -10,6 +10,7 @@
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/rendering/sky/sky_sprite_proc.h"
 
 extern char D_L00_001BD7E0[];
 extern char *D_L00_0016051C;
@@ -122,7 +123,6 @@ typedef union {
     OvlQuad q;
     float f[4];
 } U289bd8;
-void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 void FUN_00233980(int, long);
 void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_00289bd8");
 
@@ -285,7 +285,6 @@ void draw_sky_shells_with_slow_medium_and_fast_rotation(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028BBF8), where it is exact; names translated to the US level program. */
 
-extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 
 void draw_three_sky_shells_with_particles(void) __asm__("FUN_L00_0028a920");
 

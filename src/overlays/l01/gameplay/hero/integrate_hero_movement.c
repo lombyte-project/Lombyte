@@ -19,6 +19,7 @@
 #include "rnc/overlay/shared/gameplay/hero/air_accel.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
+#include "rnc/overlay/shared/rendering/spawn_random_alpha_rotated_particle.h"
 
 /*
  * Hero movement step: clamps the velocity, moves the hero by it (plus the
@@ -419,7 +420,6 @@ extern int scale_game_frames(int);
 extern s32 D_L01_0015F688 __attribute__((sda));
 extern s32 D_L01_0015F68C __attribute__((sda));
 extern unsigned char *pool_draw_tiles __asm__("D_L01_001612D0");
-extern unsigned char *spawn_random_alpha_rotated_particle(void *, void *, float) __asm__("FUN_L00_00271b18");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern void FUN_001efa68_cf(float *, float *, float) __asm__("FUN_L00_00233810");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");

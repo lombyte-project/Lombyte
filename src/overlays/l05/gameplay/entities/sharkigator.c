@@ -10,6 +10,11 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
+#include "rnc/overlay/shared/gameplay/entities/pool_set_scale.h"
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
+#include "rnc/overlay/shared/gameplay/state/build_symmetric_adjacency_masks.h"
+#include "rnc/overlay/shared/runtime/dma/pool_init_tiles.h"
 
 
 
@@ -469,7 +474,6 @@ void spawn_sharkigator_surface_effects(char *moby) {
 /* Spawns a burst of particles and a ring of sparks around a position. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D3220), where it is exact; names translated to the US level program. */
 
-extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern char D_L05_0015F580_macro[]  __asm__("D_L05_0015F580")MACRO_ADDR;
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_cos(float);
@@ -1060,9 +1064,7 @@ extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__
 extern void FUN_L00_0025a120(void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void resolve_point_path_segment_xy_clearance(int, void *, void *, float) __asm__("FUN_L00_00261d78");
-extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
-extern void build_symmetric_adjacency_masks(int *, int, int) __asm__("FUN_L05_0028be78");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 void FUN_L05_00303390_c(Moby *m) __asm__("FUN_L05_00303390");
@@ -3035,9 +3037,6 @@ typedef struct {
 
 extern WaterRecord water_records[] __asm__("D_L05_001D6880");
 extern void *D_L05_001612D0_macro __asm__("D_L05_001612D0") MACRO_ADDR;
-extern void pool_init_tiles(void *, int) __asm__("FUN_L01_002b7a48");
-extern void pool_set_scale(float) __asm__("FUN_L01_002b7ef0");
-extern void pool_bind_tile(float *, int *) __asm__("FUN_L01_002b7c68");
 extern void record_grid_entry_neighbor_indices(int) __asm__("FUN_L05_0030d6a0");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern float advance_accelerated_scalar_30ca80(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
@@ -3046,7 +3045,6 @@ void synchronize_group_water_heights(char *moby) __asm__("FUN_L05_0030d5c0");
 extern void synchronize_group_water_heights(char *) __asm__("FUN_L05_0030d5c0");
 extern void pool_splash(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern int check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690");
-extern void pool_flush(char *, int) __asm__("FUN_L01_002b7fe0");
 extern void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
 extern Cam l05_water_light_heading_source __asm__("D_L05_00180340");

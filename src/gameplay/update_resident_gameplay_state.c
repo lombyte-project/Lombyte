@@ -7,6 +7,8 @@
 #include "rnc/rendering/level_render_state.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/runtime/dma/calculate_dma_transfer_address.h"
+#include "rnc/world/parse_space_scene_chunk.h"
 
 typedef union {
     u128 quadword;
@@ -134,7 +136,6 @@ extern Vector4 resident_path_companion_a_local_offsets[] __asm__("D_001D9C80");
 extern Vector4 resident_path_companion_b_local_offsets[] __asm__("D_001D9CB0");
 extern void build_variant_effect_quads() __asm__("FUN_0022e1b0");
 
-extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 extern void music_pause(s32);
 extern void music_unpause(void);
 extern void sceVu0UnitMatrix(void *);
@@ -175,7 +176,6 @@ extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void update_all_point_lights(void) __asm__("func_00201A28");
-extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern void update_moby_animation_state(ResidentRenderObject *) __asm__("func_0020C880");
 extern void update_resident_packed_direction(void) __asm__("func_0020CFD0");
 extern void refresh_moby_spatial_bounds(ResidentRenderObject *) __asm__("func_0020DEF8");

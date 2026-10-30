@@ -25,6 +25,10 @@
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/spawn_spark.h"
+#include "rnc/gameplay/trooper_take_damage.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
+#include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
 
 
 
@@ -771,7 +775,6 @@ typedef struct { int count; char pad4[0xC]; char list[1]; } Path;
 
 void *select_candidate_by_max_float_2c(void *a, void *b, void *c, void *d) __asm__("FUN_L05_002899f8");
 extern float D_0015ED6C;
-extern s32 fun_00213928(void *, void *, void *, u32, s32 *, f32 *, s32 *, s32) __asm__("FUN_00213928");
 extern int FUN_L00_001fff28();
 extern void *FUN_L00_0025a420(void*,int,int);
 extern void FUN_L00_00263d40(int, int);
@@ -788,7 +791,6 @@ extern void *spawn_2D5FA8(Moby *, int, float *, float *, int, int, float, float 
 extern void mark_moby_for_removal_cf(Moby *, int, int) __asm__("FUN_L00_00257470");
 extern int activate_effect_l08(float, Moby *, float *, int, int, char *, int) __asm__("FUN_L00_0025ff38");
 extern float approach_2D5FA8(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
-extern void rotation_2D5FA8(float *, int, float) __asm__("FUN_L00_001fff28");
 
 extern int bomber_tank_part_3_destroyed_by_class_661_gp __asm__("D_L08_0015F5B8") __attribute__((sda));
 void update_bomber_tank_damage_and_aim(Moby *moby) {
@@ -817,7 +819,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
         short source_class = source->moby->oclass;
         if (source_class == 0x1A9 || source_class == 0x47) source = 0;
     }
-    fun_00213928(moby, source, &data->health, 0, &hit, &damage, 0, 4);
+    trooper_take_damage(moby, source, &data->health, 0, &hit, &damage, 0, 4);
     one = 1;
     if (hit != one && moby->state != 0) {
         data->health -= damage;
@@ -1263,9 +1265,7 @@ void remove_bomber_tank_linked_debris(struct Moby *moby) {
 extern int water_entry_plane_initialized_gp __asm__("D_L08_00161970") __attribute__((sda));
 extern float water_entry_plane_data[4] __asm__("D_L08_001D7060");
 extern f32 D_L08_0015F580[] MACRO_ADDR;
-extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_002a40d0");
 extern void FUN_L08_002da0d0(void *);
-extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_00257b90(int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -1569,7 +1569,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         spawn_moby_table_puff_pattern(moby);
         return;
     }
-    fun_00213928(moby, find_moby_hit(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
+    trooper_take_damage(moby, find_moby_hit(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 0x63) {
         moby->flags |= 0x1000;
         vars->health -= damage;

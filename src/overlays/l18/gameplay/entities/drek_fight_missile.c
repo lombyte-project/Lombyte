@@ -27,6 +27,10 @@
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/gameplay/animation/hud_update_counter.h"
+#include "rnc/overlay/shared/gameplay/entities/draw_trail.h"
+#include "rnc/overlay/shared/gameplay/hero/update_hero_and_vehicle_mode_effects.h"
+#include "rnc/overlay/shared/gameplay/state/capture_linked_moby_relative_transforms.h"
 
 /* Drek missile Moby.state shared by its update and response helpers. */
 enum DrekMissileState {
@@ -506,10 +510,8 @@ extern float D_L18_0015F580_macro[] __asm__("D_L18_0015F580") MACRO_ADDR;
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_linked_moby_group_transform_and_fall.h"
 extern void spawn_debris_chunk(void *, void *, unsigned int, int, float, float, float, float, int) __asm__("FUN_L01_002f8530");
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
-extern void apply_linked_moby_relative_transforms(Level18VendorMoby *, void *, int) __asm__("FUN_L12_0027b370");
 extern void mark_class_0630_moby_and_child_for_removal(void *) __asm__("FUN_L18_002fa8e0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void func_L12_0027C368_v(char *, void *, int) __asm__("FUN_L12_0027b370");
 
 void update_linked_moby_group_transform_and_fall(struct Moby *moby) __asm__("FUN_L18_002f16f0");
 
@@ -612,7 +614,7 @@ void update_linked_moby_group_transform_and_fall(struct Moby *moby) {
             lerp_vector(&moby->pos, moby_vars->v10, D_L18_001600EC + (moby_vars->i4 << 7) + 0x30, moby_vars->f330 * 0.5f);
             lerp_vector(&moby->rot, moby_vars->v20, D_L18_001600EC + (moby_vars->i4 << 7) + 0x70, moby_vars->f330 * 0.5f);
         }
-        func_L12_0027C368_v(moby, (char *)moby_vars + 0x30, moby_vars->cnt);
+        apply_linked_moby_relative_transforms(moby, (char *)moby_vars + 0x30, moby_vars->cnt);
         if (moby_vars->f344 != 0.0f) {
             if (moby->state != 4) {
                 float debris_spawn_position[4];
@@ -678,7 +680,6 @@ typedef struct L18VD_1cc8 {
     int field344;
 } L18VD_1cc8;
 
-extern void FUN_L12_0027b370_u(L18VM_1cc8 *, void *, int) __asm__("FUN_L12_0027b370");
 
 void reset_drek_boss_class_0565_moby(L18VM_1cc8 *moby) __asm__("FUN_L18_002f1cc8");
 
@@ -689,7 +690,7 @@ void reset_drek_boss_class_0565_moby(L18VM_1cc8 *moby) {
         data->field330 = 0;
         data->field344 = 0;
     }
-    FUN_L12_0027b370_u(moby, data->update_data, data->field338);
+    apply_linked_moby_relative_transforms(moby, data->update_data, data->field338);
 }
 /* For each entry of block D_L18_001C6480[D_L18_001C6780[A]]: runs func_001F9BF0 /
    func_001F9EC0 against the records at D_L18_001600EC + B * 0x80 (+0x30, +0x40)
@@ -1408,10 +1409,8 @@ extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
-extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void queue_movie_with_game_language(int i) __asm__("FUN_L00_00299560");
 extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
-extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void set_class_247_list_data_fields(int idx) __asm__("FUN_L18_002d6d50");
 extern void moby_init_action_mode(void *moby) __asm__("FUN_L18_002d6dc0");
 extern void request_thruster_pack_lock_red_wait(unsigned char *arg, int value) __asm__("FUN_L18_002d7f68");
@@ -3161,7 +3160,6 @@ extern int drek_boss_scalar_scan_entry_gates[] __asm__("D_L18_0016A290");
 extern char l18_drek_boss_scalar_scan_records[] __asm__("D_L18_00167B50");
 extern char D_L18_00167680[];
 extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
-extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void FUN_L06_00249738(void);
 extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float)
     __asm__("FUN_00213f38");

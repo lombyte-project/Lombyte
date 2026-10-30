@@ -2,6 +2,7 @@
 #include "rnc/globals.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/audio/streaming/start_audio_stream_read.h"
+#include "rnc/storage/memory_card/memcard_get_data_size.h"
 
 typedef struct {
     s32 x0;
@@ -30,7 +31,6 @@ extern char D_001A08A0[];
 extern char memcard_deleting_directory_message[] __asm__("D_001E81E8");
 
 extern void DebugPrint(char *fmt, ...);
-extern s32 get_dma_packet_span_bytes(const u32 *packet) __asm__("GetDmaPacketSpanBytes");
 extern void RaiseKernelTrap();
 extern s32 SceMcFormat(s32 port, s32 slot);
 extern s32 SceMcUnformat(s32 port, s32 slot);

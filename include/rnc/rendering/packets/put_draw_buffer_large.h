@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_PACKETS_PUT_DRAW_BUFFER_LARGE_H
+#define LOMBYTE_RNC_RENDERING_PACKETS_PUT_DRAW_BUFFER_LARGE_H
+
+#include "types.h"
+
+void put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
+
+#endif /* LOMBYTE_RNC_RENDERING_PACKETS_PUT_DRAW_BUFFER_LARGE_H */

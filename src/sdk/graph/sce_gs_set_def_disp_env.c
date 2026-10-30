@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
+#include "rnc/sdk/graph/sce_gs_get_gparam.h"
 
 typedef struct {
     s16 nSInterlace;
@@ -9,7 +10,6 @@ typedef struct {
     s32 pad08[2];
 } GsVideoModeState;
 
-extern GsVideoModeState *sceGsGetGParam(void) __asm__("GetCoreDataTable");
 extern s32 checkModelVersion(void);
 extern void InvokeKernelSyscall0080(s32 mode, s32 *horizontal, s32 *vertical,
                                      s32 *display_width, s32 *display_height);

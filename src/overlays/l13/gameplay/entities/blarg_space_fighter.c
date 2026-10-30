@@ -23,6 +23,7 @@
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/gameplay/entities/spawn_type_52_particle_near_moby.h"
 
 /* Rotation-axis selection shared by the asteroid update helpers. */
 enum AsteroidSpinAxis {
@@ -2902,7 +2903,6 @@ void detach_moby_joint_attachment(void *unused, char *parent_data, int child_slo
         *slot = 0;
     }
 }
-extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 
 
 void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *result) __asm__("FUN_L13_002e97e0");

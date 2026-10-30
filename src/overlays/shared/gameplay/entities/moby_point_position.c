@@ -3,12 +3,12 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/animation/get_moby_joint_matrices.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_00250800), where it is exact; names translated to the US level program. */
 
-extern void get_moby_joint_matrices(void *, int, int *, void *) __asm__("FUN_00210850");
 
 /* Writes into arg2 the 0x30 point of joint arg1, scaled by 0x2C/1024 and moved to world space. */
 void moby_point_position(char *moby, int joint_index, void *world_position_out) __asm__("FUN_L00_0024f7c8");

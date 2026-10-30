@@ -81,6 +81,7 @@
  */
 
 #include "types.h"
+#include "rnc/sdk/libc/mprec/_Bfree.h"
 typedef struct _Bigint {
     struct _Bigint *_next;
     s32 _k, _maxwds, _sign, _wds;
@@ -94,7 +95,6 @@ extern s32 small_powers_of_five[] __asm__("D_001523B8");
 extern _Bigint *__i2b(struct _reent *, s32) __asm__("func_00115808");
 extern _Bigint *_multiply(struct _reent *, _Bigint *, _Bigint *);
 extern _Bigint *_multadd(struct _reent *, _Bigint *, s32, s32);
-extern void _Bfree(struct _reent *, _Bigint *) __asm__("InsertLinkObject");
 
 _Bigint *_pow5mult(struct _reent *bigint_context, _Bigint *accumulator, s32 k) {
     _Bigint *product, *cached_power_of_five, *next_power_of_five;

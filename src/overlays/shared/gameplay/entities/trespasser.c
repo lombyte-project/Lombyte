@@ -29,6 +29,7 @@
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C2A20), where it is exact; names translated to the US level program. */
 
@@ -1977,7 +1978,6 @@ extern void FUN_0028dbe8_2c4380(int, int, void *) __asm__("FUN_0022da68");
 extern int FUN_001fef20_2c4380(int) __asm__("FUN_001f96f8");
 extern int FUN_001fef68_2c4380(void *) __asm__("FUN_001f9740");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern float FUN_001ff3d8_2c4380(void *) __asm__("FUN_001f9af0");
 extern float FUN_001ff408_2c4380(void *) __asm__("FUN_001f9b20");
 extern float FUN_001ff1e0_2c4380(float) __asm__("FUN_001f9988");

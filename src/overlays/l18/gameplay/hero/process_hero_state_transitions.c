@@ -16,6 +16,10 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
+#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
+#include "rnc/overlay/shared/gameplay/hero/update_hero_and_vehicle_mode_effects.h"
+#include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 18 build). */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/help_0022F058.c: func_L18_0022F058), where it is exact; names translated to the US level program. */
@@ -84,7 +88,6 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
-extern int try_transition_hero_water_state(void) __asm__("FUN_L00_00227778");
 extern int try_enter_hero_water_state(void) __asm__("FUN_L00_002279b0");
 extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
 extern int pick_idle_fidget(int *) __asm__("FUN_L00_00229010");
@@ -97,8 +100,6 @@ extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, 
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int check_pad_press_separation(int, int, int, int) __asm__("FUN_L00_00266e00");
 extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
-extern int process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
-extern int get_hero_help_value(int a) __asm__("FUN_L06_0021d0a0");
 extern int process_hero_hurt_response(int) __asm__("FUN_L18_00218a90");
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
@@ -132,7 +133,6 @@ extern void play_entity_sound(int, float, void *, int, float, float, int, int, i
 extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, int call_enabled) __asm__("FUN_L01_00227e48");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
-extern void set_hero_state_for_vehicle_mode(void) __asm__("FUN_L15_0021ab60");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");

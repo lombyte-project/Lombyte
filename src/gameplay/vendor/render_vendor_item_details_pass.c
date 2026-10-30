@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/text/font/measure_text_width_regular.h"
 
 typedef struct {
     s32 id;
@@ -43,7 +44,6 @@ extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void font_print_small(s32, s32, u64, char *, s32) __asm__("func_001F65B0");
 extern void format_scaled_display_value(char *, s32) __asm__("func_00238688");
 extern void font_print_right_small(s32, s32, u64, char *, s32) __asm__("func_001F69D0");
-extern s32 measure_text_width_regular(char *, s32) __asm__("FUN_001f6250");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 
 void render_vendor_item_details_pass(void) __asm__("FUN_002389e0");

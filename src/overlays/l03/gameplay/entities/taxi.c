@@ -12,6 +12,10 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
+#include "rnc/overlay/shared/gameplay/entities/initialize_moby_grounding.h"
+#include "rnc/overlay/shared/gameplay/state/record_moby_context_bytes.h"
+#include "rnc/overlay/shared/gameplay/state/trooper_set_knockback.h"
 
 
 
@@ -355,7 +359,6 @@ extern f32 mine_layer_nonlethal_knockback_speed_scale_gp __asm__("D_L03_001618FC
 #include "rnc/overlay/l03/gameplay/entities/taxi_data/handle_mine_layer_damage.h"
 extern TrooperHit *trooper_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 trooper_take_damage(struct Moby *, TrooperHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
-extern void trooper_set_knockback(void *, f32, f32) __asm__("FUN_L03_00250a78");
 extern void trooper_knockback_arc(Vec4 *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(f32, struct Moby *, void *, s32, s32, s32) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
@@ -722,7 +725,6 @@ extern f32 rail_flyer_pitch_acceleration_degrees_gp __asm__("D_L03_00161B10") __
 extern f32 rail_flyer_roll_acceleration_degrees_gp __asm__("D_L03_00161B18") __attribute__((sda));
 extern L03LevelState D_L03_001BB330;
 extern s32 D_L03_0015F594 __attribute__((sda));
-extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void draw_number(void *, struct Moby *, s32, u32, s32, s32, s32, f32) __asm__("FUN_L01_00285768");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
@@ -1225,10 +1227,8 @@ extern char helga_dialogue_script[] __asm__("D_L03_00161BB8");
 extern u8 mission_collection_recording_filter[] __asm__("D_L03_0015FC88");
 extern L03LevelState l03_moby_collection_state __asm__("D_L03_001BA6D0");
 extern char *D_L03_001600EC;
-extern void record_moby_context_bytes(void *, int, struct Moby *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void initialize_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_00266448");
-extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");

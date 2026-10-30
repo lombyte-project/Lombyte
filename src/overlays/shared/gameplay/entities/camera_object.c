@@ -29,6 +29,9 @@
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility.h"
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/gameplay/animation/update_moby_animation_state.h"
+#include "rnc/overlay/shared/gameplay/entities/open_vendor_menu.h"
+#include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
 
 /* per-frame level ambience (wind/sway) state machine: picks a random target, then eases toward it */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A5B20), where it is exact; names translated to the US level program. */
@@ -540,8 +543,6 @@ extern V_2a57a8 hero_pos __asm__("D_0013F3D0") NOT_SDA;
 extern s32 D_0013CAE4_lui __asm__("D_0013CAE4") NOT_SDA;
 extern s32 D_L00_0015F5CC_2a57a8 __asm__("D_L00_0015F5CC");
 void FUN_L00_002a5040_2a57a8(void) __asm__("FUN_L00_002a5040");
-void FUN_L00_001fff28_2a57a8(void *, s32, f32) __asm__("FUN_L00_001fff28");
-void open_vendor_menu(P_2a57a8 *) __asm__("FUN_L00_0029a6b0");
 
 #include "rnc/overlay/shared/gameplay/entities/camera_object_data/vendor_update.h"
 void vendor_update(P_2a57a8 *p) __asm__("FUN_L00_002a57a8");
@@ -594,8 +595,8 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             q->mC->h34 &= 0xFFFE;
         }
         add_draw_callback(FUN_L00_002a5040_2a57a8, vendor_moby);
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
+        rotation_2D5FA8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
+        rotation_2D5FA8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
         vendor_manipulator_rotation_phase = fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase = fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
@@ -615,8 +616,8 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         add_draw_callback(FUN_L00_002a5040_2a57a8, vendor_moby);
         interaction_allowed = 1;
         help_message_allowed = 1;
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
-        FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
+        rotation_2D5FA8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
+        rotation_2D5FA8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
         vendor_manipulator_rotation_phase = fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase = fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
@@ -1525,7 +1526,6 @@ typedef struct {
     char p2[8];
     s32 i2090;
 } G_002a7c70;
-void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) __asm__("FUN_L00_002a7c70");
 
 void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) {

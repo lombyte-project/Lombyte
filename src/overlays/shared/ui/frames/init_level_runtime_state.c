@@ -7,16 +7,16 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 #include "rnc/rendering/view/update_view_context.h"
+#include "rnc/audio/streaming/register_audio_stream_callback.h"
+#include "rnc/rendering/view/init_view_context.h"
+#include "rnc/rendering/vu1/vu1_init_chain.h"
+#include "rnc/runtime/memory/init_mem_slots.h"
 
 extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
 extern char D_L00_001C5B00_lui[] __asm__("D_L00_001C5B00") NOT_SDA;
 extern char D_L00_001BC1B0_lui[] __asm__("D_L00_001BC1B0") NOT_SDA;
-void register_audio_stream_callback(void) __asm__("FUN_00215420");
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
-void init_mem_slots(void) __asm__("FUN_002015d8");
 void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
-void init_view_context(void) __asm__("FUN_001f2c60");
-void vu1_init_chain(void) __asm__("FUN_002335d0");
 void register_part_types(void) __asm__("FUN_L00_00268900");
 void dmac_vif1_enable(void) __asm__("FUN_00233d00");
 void init_level_item_inventory(void) __asm__("FUN_L00_0023d198");

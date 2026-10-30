@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/sce_gs_gparam.h"
+#include "rnc/sdk/graph/sce_gs_get_gparam.h"
 
-extern sceGsGParam *sceGsGetGParam(void) __asm__("GetCoreDataTable");
 
 s16 sceGszbufaddr(s16 psm, s16 width_pixels, s16 height_pixels) {
     sceGsGParam *gp;

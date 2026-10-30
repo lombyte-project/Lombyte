@@ -1,7 +1,7 @@
 #include "types.h"
+#include "rnc/sdk/video/mpeg/bitstream/peek_bits.h"
 
 extern s32 ReadSysbit(void *state, s32 bit_count) __asm__("_sysbitGet");
-extern s32 peek_bits(void *state, s32 bit_count) __asm__("SignExtendPackedValue");
 
 s32 ParseSystemHeader(void *state) __asm__("_system_header");
 

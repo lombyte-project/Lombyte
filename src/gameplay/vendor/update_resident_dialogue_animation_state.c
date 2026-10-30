@@ -5,6 +5,8 @@
 #include "rnc/math/random.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
+#include "rnc/gameplay/entities/detach_manipulator.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -42,9 +44,7 @@ extern BossVars D_001E63C0;
 s32 D_001E63FC NOT_SDA = 0;
 extern Cam D_001E65E0;
 
-extern void detach_manipulator(Moby *, Cam *) __asm__("FUN_0020cb88");
 extern s32 is_value_within_interpolated_window(Moby *, f32) __asm__("FUN_00214cc8");
-extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 
 void update_resident_dialogue_animation_state(Moby *m) __asm__("FUN_00237ed0");
 

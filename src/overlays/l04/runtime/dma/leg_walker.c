@@ -15,6 +15,8 @@
 #include "rnc/gameplay/state/interpolated_record.h"
 #include "rnc/gameplay/entities/build_moby_bone_transform.h"
 #include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
+#include "rnc/rendering/geometry/transform_scaled_vertex_batch.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
@@ -55,7 +57,6 @@ extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
 extern float animation_end(int, int) __asm__("FUN_L04_00241910");
 extern float FUN_L04_001f1978(float);
-extern void transform_scaled_vertex_batch(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
 
 void initialize_leg_rig(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_002923b8");
 
@@ -276,7 +277,6 @@ int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
     return excessive_tilt_flags;
 }
 extern float rig_turn_2d48(float, float, float *, float, float, float) __asm__("FUN_L00_00258110");
-extern void axis_rotation_2d48(float *, int, float) __asm__("FUN_L00_001fff28");
 
 void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
     float joint[16];
@@ -323,11 +323,11 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
         rig->legs[i].yaw = fast_add_rotations(rig->legs[i].upper_turn, base_yaw);
         rig->legs[i].yaw = fast_add_rotations(rig->legs[i].lower_turn, rig->legs[i].yaw);
         if (rig->legs[i].manip_b.attached)
-            axis_rotation_2d48(rig->legs[i].manip_b.rot, 2, rig->legs[i].upper_turn);
+            rotation_2D5FA8(rig->legs[i].manip_b.rot, 2, rig->legs[i].upper_turn);
         if (rig->legs[i].manip_a.attached) {
-            axis_rotation_2d48(rig->legs[i].manip_a.rot, 2, rig->legs[i].lower_turn);
+            rotation_2D5FA8(rig->legs[i].manip_a.rot, 2, rig->legs[i].lower_turn);
             if (flags & mask) {
-                axis_rotation_2d48(tilt, 0, -moby->rot.x);
+                rotation_2D5FA8(tilt, 0, -moby->rot.x);
                 multiply_quaternions(rig->legs[i].manip_a.rot, rig->legs[i].manip_a.rot, tilt);
             }
         }

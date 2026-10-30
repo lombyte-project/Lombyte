@@ -29,6 +29,8 @@
 #include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/l08/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
 
 
 
@@ -61,7 +63,6 @@ int find_batalia_cannon_aim_target(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E2A10), where it is exact; names translated to the US level program. */
 
-extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 
 /* Sets the moby's byte 0xBC and calls hero_set_state(0x32, 1). */
 void request_batalia_cannon_mount(struct Moby *command_target_moby) __asm__("FUN_L08_002e1698");
@@ -632,13 +633,11 @@ extern short D_L08_00161B30_gp __asm__("D_L08_00161B30") __attribute__((sda));
 extern short D_L08_00161B40_gp __asm__("D_L08_00161B40") __attribute__((sda));
 extern short D_L08_00161B50_gp __asm__("D_L08_00161B50") __attribute__((sda));
 extern short D_L08_00161BF0_gp __asm__("D_L08_00161BF0") __attribute__((sda));
-extern int FUN_L08_00230b38_c(int,int) __asm__("FUN_L08_00230b38");
 extern void func_L00_001FF328_2E16A0(void *,void *,float) __asm__("FUN_L00_001ff378");
 extern void func_L00_00217718_2E16A0(void *,void *,int,int) __asm__("FUN_L00_00216f90");
 extern void func_L08_00307FF0_2E16A0(char *,int) __asm__("FUN_L08_00306b30");
 extern float func_002140F8_2E16A0(float,float) __asm__("FUN_002132a8");
 extern float func_00214D28_2E16A0(float *,float,float) __asm__("FUN_00213ed8");
-extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern char *func_L00_0026EBC0_2E16A0(char *,char *,int,int,float) __asm__("FUN_L00_0026dd20");
 extern void func_L08_00315068_2E16A0(void) __asm__("FUN_L08_00313ba8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -691,7 +690,7 @@ void update_batalia_cannon(Moby *moby) {
         if (visited52[D_0015ED84][moby->mission] != 0xFF && (hero52.interact & 1)) hero_respawn();
         if (((*(int *)D_0013A5E0_2E16A0 & 0x10) || (*(unsigned char *)(l08_cannon_hero_interaction_flags) & 1)) && visited52[D_0015ED84][moby->mission] == 0xFF) {
             hero52.interact = 0;
-            FUN_L08_00230b38_c(0, 1);
+            hero_set_state(0, 1);
             moby->command = 2; (*(float (*)[4])&moby->rot)[1] = 0.0f;
             euler_rotation_basis((*(float (*)[16])&moby->rot_row0), (*(float (*)[4])&moby->rot));
             clear_u64_value(direction); direction[2] = (*(float (*)[4])&moby->rot)[2];
@@ -726,7 +725,7 @@ void update_batalia_cannon(Moby *moby) {
     } else if (visited52[D_0015ED84][moby->mission] == 0xFF) {
         if (vector_distance_xy(position, (*(float (*)[4])&hero52.moby->pos)) < 1.0f && hero52.pos[2] - (*(float (*)[4])&moby->pos)[2] < 7.0f && data->exit_timer == 0 && data->health > 0) {
             moby->command = 1;
-            FUN_L08_00230b38_c(50, 1);
+            hero_set_state(50, 1);
         }
     }
     switch (moby->state) {

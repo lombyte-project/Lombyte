@@ -22,11 +22,11 @@
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/gameplay/entities/draw_trail.h"
 typedef struct { char pad[0x30]; int state; int n; char pad38[0x140]; struct Moby *objects[8]; } L18SequenceState;
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int D_L18_0015F5C4;
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void enqueue_callback_list_1_overlay(void *, void *) __asm__("FUN_L18_002020c8");
 void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *second_position_source, void *effect_velocity_source, float f0, float f1) __asm__("FUN_L18_002fa250");
 

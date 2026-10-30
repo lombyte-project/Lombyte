@@ -14,6 +14,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
 
@@ -178,7 +179,6 @@ extern int scale_game_frames(int);
 extern int truncate_float_to_s32(float);
 extern int D_001413DC NOT_SDA;
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void update_blarg_elite_commando_damage_and_pursuit(struct Moby *) __asm__("FUN_L16_002d38b0");
 void select_blarg_elite_commando_movement_animation(char *moby) __asm__("FUN_L16_002d4070");
 

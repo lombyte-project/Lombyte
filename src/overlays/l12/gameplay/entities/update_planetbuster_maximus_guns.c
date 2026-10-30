@@ -32,6 +32,7 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
 #include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/overlay/shared/gameplay/state/capture_linked_moby_relative_transforms.h"
 
 typedef struct Moby Moby;
 
@@ -550,7 +551,6 @@ extern void update_moby_vertical_oscillation(float, float, char *, float *, floa
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
-extern void apply_linked_moby_relative_transforms(char *, char *, int) __asm__("FUN_L12_0027b370");
 extern int current_level_index_gp __asm__("D_0015ED84") MACRO_ADDR;
 extern char D_0013F3D0[];
 

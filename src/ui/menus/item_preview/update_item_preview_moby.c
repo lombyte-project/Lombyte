@@ -5,7 +5,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
-extern char *delete_moby(char *) __asm__("FUN_00225530");
+#include "rnc/gameplay/entities/delete_moby.h"
 extern void *create_menu_preview_moby(int) __asm__("func_00225490");
 extern void rotate_item_preview_moby(struct MenuScreen *) __asm__("FUN_0021e1f8");
 /* Keeps the item preview moby in step with the highlighted entry: drop it

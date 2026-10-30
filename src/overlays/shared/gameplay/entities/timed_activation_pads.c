@@ -9,13 +9,13 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F9438.c: func_L07_002F9438), where it is exact; names translated to the US level program. */
 
 extern char draw_registration_value_target[] __asm__("D_L07_001D3400");
-extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
 extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
 
 void update_moby_draw_registration(unsigned char *moby) __asm__("FUN_L07_002f8058");

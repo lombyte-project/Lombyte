@@ -20,6 +20,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
+#include "rnc/ui/text/load_display_text_resource_entry.h"
 
 extern unsigned char *D_L00_001B2130 NOT_SDA;
 unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
@@ -1549,7 +1550,6 @@ typedef struct {
 extern float D_0013F420[];
 void pack_vector_xyz_with_shared_scale(void *, void *) __asm__("FUN_00214a98");
 s32 FUN_001fa6e0_274e48(s32, s32, f32) __asm__("FUN_001fa6e0");
-void load_display_text_resource_entry(void *, void *) __asm__("FUN_00214bc0");
 void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) __asm__("FUN_L00_00274e48");
 
 void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {

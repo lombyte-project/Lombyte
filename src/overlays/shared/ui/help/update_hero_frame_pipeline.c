@@ -4,6 +4,9 @@
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/overlay/shared/ui/help/advance_hero_animation.h"
+#include "rnc/overlay/shared/ui/map/reveal_map_around_position.h"
+#include "rnc/rendering/state/begin_draw_frame.h"
 
 
 
@@ -32,8 +35,6 @@ extern void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
-extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
-extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 extern void FUN_L00_00257024(void *);
 extern void hero_frame_update(void) __asm__("FUN_L01_00228000");
 extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
@@ -41,7 +42,6 @@ extern void update_hero_ground_material_effects(void) __asm__("FUN_L01_0022cd48"
 extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void update_hero_state_machine(void) __asm__("FUN_L03_0021c668");
 extern void noop_main_callback(void *) __asm__("FUN_001e93e8");
-void begin_draw_frame(void) __asm__("FUN_001f7978");
 
 void update_hero_frame_pipeline(void) __asm__("FUN_L03_002002f8");
 

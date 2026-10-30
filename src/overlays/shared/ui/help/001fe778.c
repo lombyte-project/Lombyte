@@ -11,6 +11,8 @@
 #include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/overlay/shared/world/collision/find_camera_collision_volume_for_point.h"
+#include "rnc/sdk/library/sceVu0Normalize.h"
 
 typedef struct {
     char pad[0x24];
@@ -73,9 +75,7 @@ extern u8 D_L15_00174460[] NOT_SDA;
 
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68_c(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
-void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
@@ -173,7 +173,7 @@ void update_hero_ground_contact(void) {
         hero.ground_z.f = HH.point.f[2];
         hero.ground_distance = fast_vec_dist(&hero.motion.pos, &hero.ground_point);
         hero.ground_moby = (struct Moby *)HH.moby;
-        FUN_00125180_c(&hero.ground_normal, (u8 *)&HH.normal_x);
+        sceVu0Normalize(&hero.ground_normal, (u8 *)&HH.normal_x);
         hero.ground_slope.f = compute_gravity_relative_vector_inclination((u8 *)&HH.normal_x);
         hero.downhill_yaw = fast_arc_tan(HH.normal_x, HH.normal_y);
         fast_vec_sub(&ground_displacement_or_angles, &hero.ground_point, &hero.motion.pos);
@@ -248,7 +248,7 @@ d1:
             if (0.4f < absolute_float(f)) {
                 hero.unk2C0.f[i] = 0.0f;
             }
-            FUN_00125180_c(&probe_surface_normal, (u8 *)&HH.normal_x);
+            sceVu0Normalize(&probe_surface_normal, (u8 *)&HH.normal_x);
             compute_rotated_vector_angles(&probe_surface_normal, &probe_surface_angles);
             if (-0.78539819f < probe_surface_angles.f[1] && probe_surface_angles.f[1] < 0.78539819f) {
                 hero.unk2C8.f[i] = probe_surface_angles.f[1];

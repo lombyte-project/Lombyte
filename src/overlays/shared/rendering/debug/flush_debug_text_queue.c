@@ -9,6 +9,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/rendering/view/update_view_context.h"
+#include "rnc/audio/voices/sound_update.h"
+#include "rnc/rendering/update_fog.h"
 
 typedef struct {
     s32 a, b, c, d;
@@ -468,9 +470,7 @@ extern f32 *occlusion_samples __asm__("D_L00_00173E20") NOT_SDA;
 extern u8 D_L00_0015F444;
 extern f32 D_L00_0015F448;
 extern char *D_L00_0015F600;
-extern s32 sound_update(void) __asm__("FUN_0022ca50");
 extern void set_background_color(s32, s32, s32) __asm__("FUN_001fb280");
-extern void update_fog(void) __asm__("FUN_001f2588");
 extern s32 sprintf(char *, const char *, ...);
 extern f64 fptodp(f32) __asm__("FUN_00120478");
 extern s32 sceOpen(const char *, s32, ...);

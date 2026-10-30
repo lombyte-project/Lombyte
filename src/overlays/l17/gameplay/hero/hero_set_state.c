@@ -16,6 +16,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
+#include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
+#include "rnc/overlay/shared/rendering/commands/get_moby_color.h"
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/help_0021ED38.c: func_L17_0021ED38), where it is exact; names translated to the US level program. */
 
@@ -73,19 +76,16 @@ extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void scale_hero_motion(float) __asm__("FUN_L00_00213de8");
 extern void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
-extern void help_queue_add(int, int, int) __asm__("FUN_L00_00216ec0");
 extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
-extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void initialize_moby_transform_history(int a, char *b) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");
 extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
-extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */

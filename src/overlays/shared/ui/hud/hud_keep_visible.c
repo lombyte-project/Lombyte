@@ -7,6 +7,8 @@
 #include "rnc/ui/hud/get_icon_frame.h"
 #include "rnc/ui/help/get_help_message_text.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
+#include "rnc/ui/text/font/measure_text_width_regular.h"
 
 /* The level's HUD bank reset, a shorter func_001FF6B8 (src/game/hud.c):
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
@@ -623,8 +625,6 @@ extern u8 D_L00_0017E530[] NOT_SDA;
 extern char D_0013F3D0[];
 extern char freeze_stats_time_format[] __asm__("D_L00_001E84C0") NOT_SDA;
 extern char freeze_stats_score_format[] __asm__("D_L00_0015F778") NOT_SDA;
-extern s32 measure_text_width_regular(u8 *, s32) __asm__("FUN_001f6250");
-extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern s32 font_print_center(s32, s32, s32, s32, s32) __asm__("FUN_001f6af0");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");

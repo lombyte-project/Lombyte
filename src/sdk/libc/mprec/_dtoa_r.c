@@ -27,6 +27,7 @@
  */
 
 #include "types.h"
+#include "rnc/sdk/libc/mprec/_Bfree.h"
 /* Layout evidence: src/sdk/libc/mprec/lshift.c and src/sdk/libc/mprec/_Bfree.c. */
 typedef struct _Bigint {
     struct _Bigint *_next;
@@ -64,7 +65,7 @@ union double_union {
 #define Bndry_mask  0xfffffU
 #define Log2P       1
 #define Balloc      _Balloc
-#define Bfree       _Bfree
+#define _Bfree       _Bfree
 #define d2b         _d2b
 #define hi0bits     _hi0bits
 #define i2b         __i2b
@@ -81,7 +82,6 @@ extern const f64 tens[23], bigtens[5];
 extern const f64 dtoa_quick_overflow_divisor[] __asm__("D_001524B0");
 extern char D_00152310[], D_00152320[], D_00152328[];
 extern _Bigint *Balloc(struct _reent *, s32);
-extern void Bfree(struct _reent *, _Bigint *) __asm__("InsertLinkObject");
 extern _Bigint *d2b(struct _reent *, f64, s32 *, s32 *);
 extern s32 hi0bits(u32);
 extern _Bigint *i2b(struct _reent *, s32) __asm__("func_00115808");
@@ -181,7 +181,7 @@ char *_dtoa_r(struct _reent *ptr, f64 _d, s32 mode, s32 ndigits, s32 *decpt, s32
     if (ptr->_result) {
         ptr->_result->_k = ptr->_result_k;
         ptr->_result->_maxwds = 1 << ptr->_result_k;
-        Bfree(ptr, ptr->_result);
+        _Bfree(ptr, ptr->_result);
         ptr->_result = 0;
     }
 
@@ -531,7 +531,7 @@ if (b5 > 0) {
         if (m5 > 0) {
             mhi = pow5mult(ptr, mhi, m5);
             b1 = mult(ptr, mhi, b);
-            Bfree(ptr, b);
+            _Bfree(ptr, b);
             b = b1;
         }
         if (j = b5 - m5)
@@ -633,7 +633,7 @@ if (leftright) {
         j = cmp(b, mlo);
         delta = diff(ptr, S, mhi);
         j1 = delta->_sign ? 1 : cmp(b, delta);
-        Bfree(ptr, delta);
+        _Bfree(ptr, delta);
 #ifndef ROUND_BIASED
         if (j1 == 0 && !mode && !(word1(d) & 1)) {
             if (dig == '9')
@@ -704,13 +704,13 @@ roundoff:
         ;
     s++;
 }
-ret: Bfree(ptr, S);
+ret: _Bfree(ptr, S);
 if (mhi) {
     if (mlo && mlo != mhi)
-        Bfree(ptr, mlo);
-    Bfree(ptr, mhi);
+        _Bfree(ptr, mlo);
+    _Bfree(ptr, mhi);
 }
-ret1: Bfree(ptr, b);
+ret1: _Bfree(ptr, b);
 *s = 0;
 *decpt = k + 1;
 if (rve)

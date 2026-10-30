@@ -7,9 +7,9 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
-extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
+#include "rnc/audio/streaming/register_audio_stream_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
 extern unsigned char l14_scaled_table_setup_target[] __asm__("D_L14_001E9C60");
-extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
 void update_moby_draw_registration(struct Moby *moby) __asm__("FUN_L14_00303370");
 

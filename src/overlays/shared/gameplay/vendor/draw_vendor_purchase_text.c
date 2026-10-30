@@ -8,6 +8,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/help/get_help_message_text.h"
+#include "rnc/ui/text/font/font_print_small.h"
+#include "rnc/ui/text/font/font_print_window_small.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_0029FD68). */
 
@@ -41,8 +43,6 @@ extern char vendor_ammo_quantity_left_arrow_text[] __asm__("D_L00_00161168");
 extern char vendor_ammo_quantity_right_arrow_text[] __asm__("D_L00_00161170");
 extern void draw_framebuffer_rect(s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_001fb8f0");
 extern void *memset(void *, s32, s32) __asm__("FUN_001153fc");
-extern void font_print_window_small(void *, u64, char *, s32) __asm__("FUN_001f75f0");
-extern void font_print_small(s32, s32, u64, char *, s32) __asm__("FUN_001f65b0");
 extern void font_print_right_small(s32, s32, u64, char *, s32) __asm__("FUN_001f69d0");
 extern void draw_moby_list(s32, s32) __asm__("FUN_0020d330");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");

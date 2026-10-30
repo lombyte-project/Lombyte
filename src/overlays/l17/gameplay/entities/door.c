@@ -30,6 +30,11 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/overlay/l17/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
+#include "rnc/overlay/shared/rendering/commands/get_moby_color.h"
+#include "rnc/rendering/view/project_to_screen.h"
+#include "rnc/ui/help/force_help_message.h"
 
 /* Shuttle destination selection shared by its route helpers. */
 enum ShuttleStop {
@@ -518,7 +523,6 @@ extern unsigned char D_0013E500[];
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void emit_transformed_2d_vertex_packet(void *, int, int, long, float, float, float, float) __asm__("FUN_L13_002b7d50");
 void draw_fighter_jet_radar_contact_icon(char *rot, char *from, char *moby, int icon, long color, int tex) __asm__("FUN_L17_002eaae0");
-extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 
 short D_L17_00162188 = 2;
 int select_fighter_jet_target_and_draw_contacts(int ship_moby, char *ship_vars, char *radar_origin, char *radar_rotation, float f0, float f1, float f2, char *current_target,
@@ -1530,7 +1534,6 @@ typedef struct {
 
 extern float FUN_00213ed8(float *, float, float);
 extern int FUN_00215130(int, int);
-extern int force_help_message(int, int) __asm__("FUN_002151d8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
@@ -1999,7 +2002,6 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern void FUN_L17_002ee9c0_c(char *, char *, char *) __asm__("FUN_L17_002ee9c0");
 extern void FUN_L17_002eea70_c(char *) __asm__("FUN_L17_002eea70");
 extern char D_0013F350_c2[] __asm__("D_0013F350");
@@ -2287,7 +2289,6 @@ extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8,
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_0025a120(void *);
-extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_volume_suppressed) __asm__("FUN_L17_002efa48");
 
@@ -2986,7 +2987,6 @@ extern float ripple_pair_phase_period_gp __asm__("D_L17_00162258") __attribute__
 extern float ripple_pair_z_amplitude_gp __asm__("D_L17_0016225C") __attribute__((sda));
 extern float ripple_pair_uv_scroll_rate_gp __asm__("D_L17_00162260") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
-extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 int D_L17_00162210[2] = {0x94, 0xb};

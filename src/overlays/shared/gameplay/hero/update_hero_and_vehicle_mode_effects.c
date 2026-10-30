@@ -17,6 +17,9 @@
 #include "rnc/gameplay/animation/set_animation_parameter.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/overlay/shared/ui/help/advance_hero_animation.h"
+#include "rnc/overlay/shared/ui/map/reveal_map_around_position.h"
+#include "rnc/sdk/library/sceVu0Normalize.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_001FFED0), where it is exact; names translated to the US level program. */
 
@@ -43,8 +46,6 @@ extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b6
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
-extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
-extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 extern void FUN_L00_00257024(void *);
 extern void apply_hero_ground_type_effects(void) __asm__("FUN_L15_002044c8");
 extern void update_hero_state_machine(void) __asm__("FUN_L15_0021d040");
@@ -338,7 +339,6 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_20a328(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 #define P D_0013F350_lui
 #define X D_L15_00174440_lui
 

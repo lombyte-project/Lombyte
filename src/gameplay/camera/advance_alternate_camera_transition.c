@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "qcopy.h"
+#include "rnc/math/interpolation/cosine_interpolate.h"
 
 typedef struct {
     f32 v[4];
@@ -13,7 +14,6 @@ extern char camera_position[] __asm__("D_00187080");
 extern char camera_rows[] __asm__("D_00187290");
 #include "rnc/gameplay/camera/update_cam.h"
 
-extern f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void compute_camera_angles(f32 *, void *, void *, void *, void *,
                                            void *) __asm__("func_001EC530");

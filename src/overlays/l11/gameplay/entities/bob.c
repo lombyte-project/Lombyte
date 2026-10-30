@@ -30,6 +30,9 @@
 #include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
 #include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
 #include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
+#include "rnc/overlay/shared/gameplay/state/build_symmetric_adjacency_masks.h"
 
 /* Moby.state for the resort-owner callbacks; path progression is separate. */
 enum ResortOwnerState {
@@ -334,7 +337,6 @@ void bob_update(WM11 *moby) {
 
 extern float camera_pos_b358[] __asm__("D_L11_001677C0");
 extern void FUN_L00_0025a120(void *);
-extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 void update_resort_owner_state_actions(void *mp) __asm__("FUN_L11_002d1030");
 
 extern void update_resort_owner_state_actions(void *) __asm__("FUN_L11_002d1030");
@@ -504,8 +506,6 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *out) __asm__("FU
 extern int try_find_resort_owner_jump_target(struct Moby *m, float *out) __asm__("FUN_L11_002d25e8");
 extern void FUN_L11_002d2088_c(struct Moby *moby, int state) __asm__("FUN_L11_002d2088");
 extern float ground_height_14b0(void *) __asm__("FUN_L00_00259710");
-extern void build_symmetric_adjacency_masks(void *, int, int) __asm__("FUN_L05_0028be78");
-extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern int is_moby_in_state_five(struct Moby *arg) __asm__("FUN_L11_0030a830");
 extern void FUN_L11_0030a840(unsigned char *arg);
 extern unsigned char D_0013D4EE NOT_SDA;

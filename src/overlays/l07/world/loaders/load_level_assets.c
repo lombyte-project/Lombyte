@@ -15,6 +15,18 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/rendering/gs/log2dim.h"
+#include "rnc/gameplay/state/clear_scene_state_buffers.h"
+#include "rnc/overlay/shared/gameplay/entities/link_and_update_all_mobys.h"
+#include "rnc/overlay/shared/rendering/load_two_int_two_float_header.h"
+#include "rnc/overlay/shared/runtime/dma/fast_decompress.h"
+#include "rnc/overlay/shared/world/loaders/load_level_gameplay.h"
+#include "rnc/overlay/shared/world/loaders/load_level_texture_bank.h"
+#include "rnc/runtime/relocation/relocate_asset_entry_pointers.h"
+#include "rnc/ui/hud/banks/load_hud_banks.h"
+#include "rnc/world/loaders/register_moby_class.h"
+#include "rnc/world/loaders/relocate_sky_definition.h"
+#include "rnc/world/loaders/unpack_point_records.h"
+#include "rnc/world/loaders/upload_texture_images.h"
 
 typedef struct {
     char *f0;     /* 0x00 */
@@ -129,30 +141,17 @@ extern char *D_L18_0016016C_26b768 __asm__("D_L07_0016016C");
 typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una26b768;
 extern u8 D_L07_00179180[];
 
-extern void load_hud_banks(void) __asm__("FUN_00202a98");
-extern void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
-extern s32 fast_decompress(void *, char *) __asm__("FUN_L00_0024d8d0");
 extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
-extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
 extern void resolve_level_asset_block_pointers(char *) __asm__("FUN_L00_00241728");
-extern void register_moby_class(char *, void *, void *, s32) __asm__("FUN_00203640");
 extern void print_moby_class_sizes(void *, s32) __asm__("FUN_L00_00241788");
-extern void relocate_asset_entry_pointers(Class26b768 *, s32) __asm__("FUN_002032e0");
 extern void register_object_render_class(char *, void *, void *, s32) __asm__("FUN_00203730");
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
 extern void register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00203b08");
-extern void unpack_point_records(void *, s32) __asm__("FUN_00202800");
-extern void relocate_counted_pointer_table(char *) __asm__("FUN_L00_0023f120");
-extern void load_two_int_two_float_header(char *) __asm__("FUN_L00_0023f0d8");
 extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern char *load_level_texture_bank(char *, s32 *) __asm__("FUN_L00_0023fa00");
-extern char *load_level_gameplay(s32) __asm__("FUN_L00_00241940");
 extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
-extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
-extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
 
 #define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld) \
     ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) \

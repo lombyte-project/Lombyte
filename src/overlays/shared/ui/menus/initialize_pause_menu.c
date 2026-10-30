@@ -21,6 +21,26 @@
 #include "rnc/overlay/shared/gameplay/entities/start_scene.h"
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility.h"
 #include "rnc/rendering/view/update_view_context.h"
+#include "rnc/audio/voices/snd_continue_all_sounds_in_group.h"
+#include "rnc/audio/voices/sound_update.h"
+#include "rnc/gameplay/entities/class_dists/init_moby_class_dists.h"
+#include "rnc/gameplay/entities/class_dists/restore_moby_class_dists.h"
+#include "rnc/gameplay/entities/class_dists/stash_moby_class_dists.h"
+#include "rnc/gameplay/entities/delete_moby.h"
+#include "rnc/gameplay/entities/draw/draw_mobys_clean_up.h"
+#include "rnc/gameplay/entities/draw/draw_mobys_setup.h"
+#include "rnc/gameplay/entities/update_visible_resident_objects.h"
+#include "rnc/overlay/shared/gameplay/entities/queue_scene_movie_with_game_language.h"
+#include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
+#include "rnc/rendering/packets/emit_rgba_draw_packet.h"
+#include "rnc/rendering/state/begin_draw_frame.h"
+#include "rnc/rendering/update_fog.h"
+#include "rnc/rendering/view/update_camera_view_matrices.h"
+#include "rnc/rendering/vu1/vu1_init_chain.h"
+#include "rnc/textbin/runtime/memory/mode_freeze_init.h"
+#include "rnc/textbin/world/data/select_world_object_resource_tables.h"
+#include "rnc/ui/menus/item_preview/create_menu_preview_moby.h"
+#include "rnc/ui/menus/stream_buffers/initialize_menu_stream_buffers.h"
 
 typedef unsigned int u128d __attribute__((mode(TI), aligned(16)));
 typedef union {
@@ -98,12 +118,9 @@ extern s32 D_0015EE78_gp __attribute__((sda));
 extern void *D_L00_00197300[];
 extern u8 D_L00_0017E4D8[] NOT_SDA;
 extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
-extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
-extern void vu1_init_chain(void) __asm__("FUN_002335d0");
 extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001ff128");
 extern void apply_group_entry_adjustment(s32) __asm__("FUN_L00_00235310");
-extern Ent *delete_moby(Ent *) __asm__("FUN_00225530");
 extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
@@ -122,15 +139,9 @@ extern s32 D_L00_0016000C __attribute__((sda));
 extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 extern u8 level_transition_debug_format[] __asm__("D_L00_001E91B0");
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
-extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
 extern void debug_print(void *, s32) __asm__("FUN_001e93b0");
-extern void update_fog(void) __asm__("FUN_001f2588");
 extern s32 fade_to_black(s32) __asm__("FUN_001f4a58");
-extern void mode_freeze_init(s32, void *) __asm__("FUN_001fbab8");
-extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
-extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void music_unpause(void) __asm__("FUN_00216088");
-extern int sound_update(void) __asm__("FUN_0022ca50");
 extern void allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern void select_moby_context(s32) __asm__("FUN_L00_00235668");
@@ -140,7 +151,6 @@ void close_pause_menu(void) __asm__("FUN_L00_00276908");
 extern void close_pause_menu(void) __asm__("FUN_L00_00276908");
 extern void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
 extern void prepare_target_level_transition(s32) __asm__("FUN_L00_0028ed58");
-extern void queue_scene_movie_with_game_language(void *) __asm__("FUN_L00_00299460");
 extern void queue_language_zero_movie(void *) __asm__("FUN_L00_002994f8");
 extern void queue_movie_with_game_language(void *) __asm__("FUN_L00_00299560");
 extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
@@ -160,10 +170,7 @@ extern int D_L00_00173E00[];
 extern f32 player_camera[] __asm__("D_L00_00166C80");
 extern s32 frame_size __asm__("D_0013E504") NOT_SDA;
 extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
-extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
-extern void initialize_menu_stream_buffers(s32) __asm__("FUN_00225ac0");
-extern Ent *create_menu_preview_moby(s32) __asm__("FUN_00225490");
 extern void initialize_render_archive_transfer(void) __asm__("FUN_L00_002468b8");
 extern void decompress_and_relocate_selected_groups(s32) __asm__("FUN_L00_00234fd0");
 extern void transfer_draw_buffer_chunks(s32, s32, s32) __asm__("FUN_L00_002a0f18");
@@ -655,20 +662,13 @@ extern long capture_texture_tex0 __asm__("D_0015EED0");
 extern void append_gif_transfer_packet() __asm__("FUN_001fb368");
 extern void append_draw_buffer_upload_packets(s32, s32, s32) __asm__("FUN_L00_002a0fc8");
 extern void reset_gs_registers() __asm__("FUN_001f3868");
-extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("FUN_001f5210");
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
-extern void draw_mobys_setup(void) __asm__("FUN_0020d278");
-extern void init_moby_class_dists(void) __asm__("FUN_0020d1f0");
-extern void stash_moby_class_dists(void) __asm__("FUN_0020d218");
 extern void draw_moby_list(s32, s32) __asm__("FUN_0020d330");
 extern void project_graphics_bounds(void *, void *, int *, int *, int *, int *) __asm__("FUN_00237a78");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 extern void configure_graphics_render_target_and_projection(s32, s32, s32, f32) __asm__("FUN_001f7888");
 extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("FUN_00200f90");
-extern void begin_draw_frame(void) __asm__("FUN_001f7978");
 extern void draw_textured_quad(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
-extern void restore_moby_class_dists(void) __asm__("FUN_0020d248");
-extern void draw_mobys_clean_up(void) __asm__("FUN_0020d3b0");
 extern void patch_moby_gifs() __asm__("FUN_0020cef8");
 extern void draw_menu_flashing_panel(int) __asm__("FUN_00223e28");
 

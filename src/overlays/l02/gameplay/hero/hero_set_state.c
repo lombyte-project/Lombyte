@@ -27,6 +27,7 @@
 #include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/help_0022BE40.c: func_L02_0022BE40), where it is exact; names translated to the US level program. */
 
@@ -1807,7 +1808,6 @@ extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int check_pad_press_separation(int, int, int, int) __asm__("FUN_L00_00266e00");
 extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
 extern int process_hero_hurt_response(int) __asm__("FUN_L02_0021ff70");
-extern int process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
@@ -1826,7 +1826,6 @@ extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, int call_enabled) __asm__("FUN_L01_00227e48");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
-extern void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
 extern HeroTableRow2C D_L02_0017C2A8_rec[] __asm__("D_L02_0017C228");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 

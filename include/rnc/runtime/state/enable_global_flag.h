@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RUNTIME_STATE_ENABLE_GLOBAL_FLAG_H
+#define LOMBYTE_RNC_RUNTIME_STATE_ENABLE_GLOBAL_FLAG_H
+
+#include "types.h"
+
+void enable_global_flag(void) __asm__("FUN_001f61e8");
+
+#endif /* LOMBYTE_RNC_RUNTIME_STATE_ENABLE_GLOBAL_FLAG_H */

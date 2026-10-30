@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_TEXT_FONT_MEASURE_TEXT_WIDTH_REGULAR_H
+#define LOMBYTE_RNC_UI_TEXT_FONT_MEASURE_TEXT_WIDTH_REGULAR_H
+
+#include "types.h"
+
+s32 measure_text_width_regular(void *, s32) __asm__("FUN_001f6250");
+
+#endif /* LOMBYTE_RNC_UI_TEXT_FONT_MEASURE_TEXT_WIDTH_REGULAR_H */

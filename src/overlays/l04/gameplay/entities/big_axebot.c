@@ -19,6 +19,11 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/gameplay/animation/update_moby_animation_state.h"
+#include "rnc/math/vectors/normalize_vector_triplet.h"
+#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
+#include "rnc/overlay/shared/gameplay/state/trooper_set_knockback.h"
+#include "rnc/overlay/shared/ui/text/update_object_wander_movement.h"
 
 
 
@@ -517,14 +522,12 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
-extern void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
 extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void advance_moby_animation(void *);
 extern void build_moby_bone_transform(char *, int, char *);
 extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos,
                                       void *vel) __asm__("FUN_L00_00259bc8");
 extern void copy_matrix3x4(void *, void *);
-extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 void blend_big_axebot_and_axe_animation(char *arg, void *a, void *b, void *c) __asm__("FUN_L04_002ba3e0");
 extern P_B7B0 *D_L04_001B0930_B7B0[] __asm__("D_L04_001B0630");
@@ -1484,7 +1487,6 @@ extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, fl
 extern int FUN_L00_002dc9f0(void *, void *);
 short D_L04_00161878 = 0x101;
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-extern void update_object_wander_movement(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
 extern void FUN_L01_0026d930(char *p);
 extern void update_circular_saw_engine_sound(struct Moby *) __asm__("FUN_L04_002c1b80");
 extern void release_voice_slot(int);
@@ -2215,7 +2217,6 @@ extern int DebugPrint();
 extern int rand(void);
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 void destroy_blarg_trooper(char *arg) __asm__("FUN_L04_002c4808");
 extern int func_L00_002594C8_o(void *, void *, void *, float, float, float, float,
@@ -2870,7 +2871,6 @@ typedef struct {
 extern char *moby_array __asm__("D_L04_0015FFD8");
 extern u8 level04_moby_class_slot_by_oclass[] __asm__("D_L04_00197D40");                 /* class slot by oclass */
 extern struct MobyClass *D_L04_00197480[];  /* class header by slot */
-extern void update_moby_animation_state(struct Moby *) __asm__("FUN_0020c880");
 extern s32 play_moby_voice(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
 /* Follows a linked switch moby (class 0x118): mirrors its position value, loops a sound while it moves, plays a click at either end and swaps class 0x41C back to 0x1B0 when it reaches 1.0. */

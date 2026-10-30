@@ -21,6 +21,7 @@
 #include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated.h"
 #include "rnc/rendering/sky/do_sky_gif_paging.h"
 #include "rnc/rendering/sky/setup_sky_gif_paging.h"
+#include "rnc/rendering/sky/sky_sprite_proc.h"
 
 void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
 
@@ -250,7 +251,6 @@ typedef union {
     f32 f[4];
 } SkyRotVec;
 
-extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 
 void draw_sky_shells_with_particles_and_rotating_shell(void) {
     SkyRotVec sky_shell_rotation_radians;

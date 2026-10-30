@@ -39,6 +39,9 @@
 #include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
+#include "rnc/overlay/shared/gameplay/entities/draw_trail.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
 
 /* Activate the watcher and steer its body and head toward the player. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
@@ -606,7 +609,6 @@ extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
 extern s32 D_L16_0015F594;
 extern unsigned char D_0013D4E1 NOT_SDA;
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
@@ -1398,7 +1400,6 @@ extern void FUN_L00_00263d40(int, int);
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L16_002923d0(int);
 extern void begin_dialogue_camera_transition(float, void *) __asm__("FUN_L01_002783a8");
-extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) __asm__("FUN_L16_002e70c0");
 
 extern void activate_gadgetron_ceo_challenge_environment(struct Moby *) __asm__("FUN_L16_002e70c0");
@@ -1972,7 +1973,6 @@ typedef float W[4] __attribute__((aligned(16)));
 
 extern char paired_joint_trail_source_context[] __asm__("D_L16_0016CC60");
 extern int D_L16_0015F5C4;
-extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 
 void update_paired_joint_particle_trails(struct Moby *moby) __asm__("FUN_L16_002e7e00");
 

@@ -37,6 +37,13 @@
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/gameplay/animation/get_moby_joint_matrices.h"
+#include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
+#include "rnc/overlay/shared/gameplay/animation/hud_update_counter.h"
+#include "rnc/overlay/shared/gameplay/camera/init_camera_system.h"
+#include "rnc/overlay/shared/gameplay/entities/rock.h"
+#include "rnc/overlay/shared/gameplay/state/build_symmetric_adjacency_masks.h"
+#include "rnc/overlay/shared/math/rotations/split_float_fraction.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/effect_00313D28.c: func_L07_00313D28). */
 
@@ -45,7 +52,6 @@ extern s32 level_frame_count __asm__("D_L07_0015F5CC");
 extern s32 gs_texture_allocation_start_macro[6] __asm__("D_0015EE78") MACRO_ADDR;
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
-extern float split_float_fraction(void *, float) __asm__("FUN_L00_00200228");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
 static inline int tint_color(int color) {
@@ -318,7 +324,6 @@ extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_00212f90(void *, int, int, int);
 extern void hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void FUN_L00_00200228(float, void *);
 extern int FUN_0022da68(int, int, void *);
 extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA;
@@ -682,9 +687,7 @@ extern int FUN_L00_001fefc8(void *);
 extern void suck_beam_queue_draw(int) __asm__("FUN_L00_002defe0");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
-extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void FUN_L06_00249738(void);
-extern void build_symmetric_adjacency_masks(int *, int, int) __asm__("FUN_L05_0028be78");
 extern void suck_reset(void *) __asm__("FUN_L00_002ddca0");
 extern int rand(void) __asm__("FUN_001160d8");
 extern int FUN_00213260(int);
@@ -699,7 +702,6 @@ extern void spawn_white_particle_with_payload(void *, void *) __asm__("FUN_L07_0
 extern void rumble_by_distance(char *) __asm__("FUN_L07_003120d8");
 extern void draw_collision_clipped_moby_beam(void) __asm__("FUN_L07_00312420");
 extern void *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
-extern void get_moby_joint_matrices(void *, int, void *, void *) __asm__("FUN_00210850");
 extern float update_snagglebeast_rope(void *, void *) __asm__("FUN_L07_00317e60");
 void detach_snagglebeast_rope_particles(int target_entry) __asm__("FUN_L07_00318e98");
 
@@ -1952,7 +1954,6 @@ extern RopeVec l07_rope_ring_profile_vectors[] __asm__("D_L07_0020C700");
 extern RopeVec l07_rope_previous_ring_rows[][20] __asm__("D_L07_0020DAA0");
 extern RopeVec l07_rope_previous_segment_start_points[] __asm__("D_L07_0020DAE0");
 extern float rope_segment_angular_velocities[] __asm__("D_L07_0020DBA0");
-extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float select_segment_point_near_sphere_surface(void *, void *, void *, void *, void *, float) __asm__("FUN_L07_0029e6d8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
@@ -2658,7 +2659,6 @@ typedef struct {
 } BreakableVars;
 
 extern float D_0015ED6C MACRO_ADDR;
-extern struct Moby *spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 
 /* Breakable prop: when hit by moby 0x415 in state 8 or 0x452 in state 9 with hit kind 1.000123, scatters its shard count of pieces over its rotated extent, spawns debris and removes itself. */
 void process_breakable_prop_hit(struct Moby *moby) __asm__("FUN_L07_00319f48");

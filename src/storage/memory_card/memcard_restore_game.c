@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/storage/memory_card/mc_data.h"
+#include "rnc/storage/memory_card/memcard_get_data_size.h"
 extern char out_of_date_save_message[] __asm__("D_001E81D0");
-extern s32 get_dma_packet_span_bytes(void *) __asm__("GetDmaPacketSpanBytes");
 extern void DebugPrint(char *, ...);
 extern void memcard_restore_data(u8 *, s32, void *) __asm__("func_0020AF20");
 void memcard_restore_game(u8 *p) __asm__("FUN_00209298");

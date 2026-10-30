@@ -15,6 +15,9 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/overlay/shared/gameplay/entities/open_vendor_menu.h"
+#include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
+#include "rnc/overlay/shared/rendering/commands/get_moby_color.h"
 
 extern s32 D_L00_0015F5CC;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
@@ -611,7 +614,6 @@ extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void scale_hero_motion(float) __asm__("FUN_L00_00213de8");
 extern void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
-extern void help_queue_add(int, int, int) __asm__("FUN_L00_00216ec0");
 extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 
@@ -619,7 +621,6 @@ extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
-extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void initialize_moby_transform_history(int a, char *b) __asm__("FUN_L00_00262500");
@@ -3256,7 +3257,6 @@ extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
-extern void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");

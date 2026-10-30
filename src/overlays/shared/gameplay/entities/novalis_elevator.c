@@ -35,6 +35,9 @@
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/rendering/effects/spawn_spark.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/overlay/l01/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/state/record_moby_context_bytes.h"
+#include "rnc/rendering/vu1/vu1_add_data_ref.h"
 
 /* Bolt-crank Moby.state, including the callback-only state. */
 enum BoltCrankState {
@@ -173,7 +176,6 @@ extern u32 cached_water_second_texture_id_gp __asm__("D_L01_0016122C") __attribu
 extern u32 D_L01_00161230 __attribute__((sda));
 extern u32 cached_water_alpha_1_fix_gp __asm__("D_L01_00161234") __attribute__((sda));
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") MACRO_ADDR;
-extern void vu1_add_data_ref(void *, s32) __asm__("FUN_00233830");
 extern void vu1_gs_regs_font(void) __asm__("FUN_00233c90");
 extern void FUN_L01_002b4c28(void);
 
@@ -592,8 +594,6 @@ extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
-extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void set_camera_5_track_acceleration_yz(f32, f32) __asm__("FUN_L01_00316e88");
 
 /* Turned by the hero (state 0x3B) until progress reaches 1, then lowered and saved as done. */

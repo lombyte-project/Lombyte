@@ -19,6 +19,7 @@
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/l05/gameplay/hero/hero_set_state.h"
 extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
 char *create_class_5c3_moby(int owner, char *initial_position, int arg, float initial_rotation_z, float initial_rotation_y) __asm__("FUN_L05_002d4168");
 
@@ -272,7 +273,6 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 extern int frame_number_gp __asm__("D_L05_0015F5CC") __attribute__((sda));
 extern unsigned short D_00141938 NOT_SDA;
 extern unsigned short D_00141C60 NOT_SDA;

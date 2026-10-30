@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"
 
 struct FreezeModeState {
     s32 unk0;
@@ -16,7 +17,6 @@ struct FreezeModeState {
 };
 
 extern struct FreezeModeState freeze __asm__("D_00193300");
-extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern s32 music_pause();
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 get_help_message_text() __asm__("func_001FDD10");

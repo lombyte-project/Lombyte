@@ -40,6 +40,9 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
 #include "rnc/ui/help/try_set_help_message.h"
+#include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
+#include "rnc/overlay/shared/gameplay/state/record_moby_context_bytes.h"
 
 /* A path of points: the point count, then 16-byte points whose w is the length of the segment to the next one */
 typedef struct {
@@ -740,7 +743,6 @@ void update_cutscene_trigger(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
 
 extern char pool_tiles[] __asm__("D_L01_001E34C0");
-extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
 void render_level_water_grids(void) __asm__("FUN_L01_002fd0c0");
 
@@ -863,8 +865,6 @@ extern struct {
 } D_0013F350_w __asm__("D_0013F350");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
-extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 /* Watcher moby update with a level-specific state script, then turns its head toward the hero or a random target. */

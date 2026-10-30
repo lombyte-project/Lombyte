@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/storage/memory_card/mc_data.h"
+#include "rnc/storage/memory_card/memcard_get_data_size.h"
 
-extern s32 get_dma_packet_span_bytes(u8 *) __asm__("GetDmaPacketSpanBytes");
 extern s32 memcard_prepare_data(u8 *, s32, u8 *) __asm__("func_0020AD78");
 
 void memcard_make_whole_save(u8 *cursor) __asm__("FUN_0020abb0");

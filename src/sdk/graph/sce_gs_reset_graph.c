@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/sce_gs_gparam.h"
+#include "rnc/sdk/graph/sce_gs_get_gparam.h"
 
-extern sceGsGParam *sceGsGetGParam(void) __asm__("GetCoreDataTable");
 extern s32 GsPutIMR();
 extern s32 RemoveIntcHandler();
 extern s32 disable_intc() __asm__("func_00119028");

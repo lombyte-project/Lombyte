@@ -4,12 +4,12 @@
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/rendering/debug/draw_debug_profiler.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001F91B0), where it is exact; names translated to the US level program. */
 
-void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 
 /* Draws the debug profiler unless D_L00_0015F5D8 or D_001413F5[0xC] is set. */
 void draw_debug_profiler_if_enabled(void) __asm__("FUN_L00_001f8e30");

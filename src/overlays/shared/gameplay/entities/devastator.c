@@ -12,6 +12,10 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/gameplay/state/interpolated_record.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/overlay/shared/audio/voices/play_voice.h"
+#include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
+#include "rnc/rendering/geometry/transform_scaled_vertex_batch.h"
+#include "rnc/ui/help/force_help_message.h"
 
 /* Devastator (class 157) update: tracks the aimed target, draws the reticle, picks a target and fires,
    keeps its usage statistics and moves the muzzle light. */
@@ -544,7 +548,6 @@ typedef struct Child_2b3628 { char pad0[0xA6]; short cls; } Child_2b3628;
 typedef struct Data_2b3628 { int f0; int f4; Child_2b3628 *child; char padC[0x14]; float f20; char pad24[8]; float f2C; } Data_2b3628;
 
 extern float D_L00_00166DC0_2b3628[] __asm__("D_L00_00166DC0");
-extern void transform_scaled_vertex_batch(void *, int, void *, void *) __asm__("FUN_0020cd48");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
@@ -2086,16 +2089,13 @@ extern Hit2 *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 extern char D_L00_00177F00_2b6140[] __asm__("D_L00_00177F00");
 extern float frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 extern void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
-extern int force_help_message(int, int) __asm__("FUN_002151d8");
 extern int update_orbit_camera_from_target_moby(void *, void *) __asm__("FUN_L00_002eb648");
 extern void func_L00_002B6AE0_2b6140(void *, int) __asm__("FUN_L00_002b57f0");
 extern void func_L00_002B6E90_2b6140(void *, void *) __asm__("FUN_L00_002b5ba0");
 extern void func_L00_002B6E10_2b6140(void *, void *) __asm__("FUN_L00_002b5b20");
 extern void func_L00_002B6FF0_2b6140(void *, int) __asm__("FUN_L00_002b5d00");
-extern int engine_voice_set_pitch(int, int) __asm__("FUN_L00_0028df38");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern void func_L00_001FFED8_2b6140(void *, int, float) __asm__("FUN_L00_001fff28");
 extern int collision_line_2b6140(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -2210,9 +2210,9 @@ void visibomb_missile_update(struct Moby *missile_moby) {
     func_L00_002B6E90_2b6140(missile_moby, missile_vars);
     {
         struct Moby *skip = missile_moby;
-        func_L00_001FFED8_2b6140(&missile_vars->f24->pos, 1,
+        rotation_2D5FA8(&missile_vars->f24->pos, 1,
             -(missile_vars->f1C * 0.5f + absolute_float(missile_vars->f18 / 3.0f) + (missile_vars->f18 - missile_moby->rot.x) * 1.1f) * 0.7f);
-        func_L00_001FFED8_2b6140(&missile_vars->f28->pos, 1,
+        rotation_2D5FA8(&missile_vars->f28->pos, 1,
             -(missile_vars->f1C * 0.5f + absolute_float(missile_vars->f18 / 3.0f) - (missile_vars->f18 - missile_moby->rot.x) * 1.1f) * 0.7f);
         ev.moby = missile_moby;
         ev.flags = 0x830000;

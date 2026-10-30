@@ -11,6 +11,8 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/update_view_context.h"
 #include "rnc/runtime/callbacks/noop_main_callback.h"
+#include "rnc/math/interpolation/cosine_interpolate.h"
+#include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
@@ -222,8 +224,6 @@ void activate_descriptor(int i) {
     descriptor_record[0x39] = 0;
 }
 extern char *D_L10_001B0930_5a78[] __asm__("D_L10_001B0930");
-extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
-extern int test_point_in_transformed_unit_sphere(float *, int) __asm__("FUN_L00_0025faf0");
 extern int point_in_path_xy(float *, float *, int) __asm__("FUN_L00_00259740");
 
 int check_descriptor_hero_trigger(char *moby) __asm__("FUN_L10_002f5a78");
@@ -391,7 +391,6 @@ extern char D_L10_00167450[];
 extern float D_L10_00167358 NOT_SDA;
 extern float D_0013F5E0_5f18[] __asm__("D_0013F5E0");
 extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
-extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void FUN_L00_002223f8(s32, s32);
 extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 

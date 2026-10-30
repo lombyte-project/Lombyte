@@ -11,10 +11,10 @@
 #include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
 #include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
 #include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
 
 /* Register this level's vendor data set. */
 
-extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
 void render_level_11_water_grids(void) __asm__("FUN_L11_0030e708");
 

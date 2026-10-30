@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "sda.h"
+#include "rnc/storage/memory_card/memcard_get_data_size.h"
 
 struct RestoreEntry {
     u8 *data;
@@ -35,7 +36,6 @@ extern s32 memcard_restore_differing_block_count_gp __asm__("D_0015FE90") __attr
 extern s32 validate_data_crc(u8 *header) __asm__("func_0020AD38");
 extern s32 memcmp(const void *, const void *, s32);
 extern void copy_memory_aligned(void *, void *, s32) __asm__("func_001F9838");
-extern s32 get_dma_packet_span_bytes(struct RestoreEntry *tbl) __asm__("GetDmaPacketSpanBytes");
 
 s32 memcard_restore_data(u8 *buf, s32 slot, struct RestoreEntry *tbl) __asm__("FUN_0020af20");
 

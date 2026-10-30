@@ -11,6 +11,8 @@
 #include "rnc/ui/hud/get_icon_frame.h"
 #include "rnc/gameplay/animation/set_animation_parameter.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
+#include "rnc/overlay/shared/gameplay/animation/hud_update_counter.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 
 /* Draws the weapon HUD tile: three-part frame, weapon icon and ammo text with shadow, faded by the slide-in timers. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B140), where it is exact; names translated to the US level program. */
@@ -21,7 +23,6 @@ extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern s32 D_L00_0015F91C_gp __asm__("D_L00_0015F91C") __attribute__((sda));
 extern s32 D_L00_0015F920_gp __asm__("D_L00_0015F920") __attribute__((sda));
 extern void hud_frame(char *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
-void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffe18");
 void font_print_right(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6940");
 
 extern short ammo_hud_frame_width_below_100 __asm__("D_L00_0015F924") __attribute__((sda));
@@ -228,7 +229,6 @@ extern int queue_animation_update(int, int, void *, void *, void *, void *,
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void hud_weapon_update(void) __asm__("FUN_L00_0023cdb8");
 extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
-extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_hud_cropped_gauge_panel(void) __asm__("FUN_L00_0023a640");
 
 void update_weapon_hud_state(void) {

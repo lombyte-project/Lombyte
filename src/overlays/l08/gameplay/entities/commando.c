@@ -38,6 +38,9 @@
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
 #include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
+#include "rnc/overlay/shared/math/rotations/split_float_fraction.h"
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
@@ -729,7 +732,6 @@ typedef struct {
 extern float interpolate_sample_ring_data_first(char *, float) __asm__("FUN_L08_002f5d98");
 extern float frame_scale __asm__("D_0015ED60");
 extern int l08_effect_animation_time __asm__("D_L08_0015F3F8");
-extern f32 split_float_fraction(void *, f32) __asm__("FUN_L00_00200228");
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 /* spawn_colored_effect (rendering/00279f00.c) with size before life: the real order
@@ -1180,9 +1182,7 @@ extern unsigned char D_0013D3B4 NOT_SDA;
 extern char commando_name_string[] __asm__("D_L08_001621E0");
 extern int commando_height_probe_distance_limit_gp __asm__("D_L08_001621D8") __attribute__((sda));
 extern char *D_L08_001600EC;
-extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
-extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void FUN_L00_0025a120(void *);
 
 /* Watcher update, same routine as batalia_deserter_update with two more states and the joint pose copy. */

@@ -21,6 +21,7 @@
 #include "rnc/overlay/shared/math/interpolation/vendor_spring.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/math/interpolation/cosine_interpolate.h"
 
 
 
@@ -2103,7 +2104,6 @@ char D_L14_001FBF20[] = "Hovertank with no exit Path. UID: %d\n";
 extern char minibomber_empty_exit_path_diagnostic[] __asm__("D_L14_001FBF48");
 extern float D_0015ED60;
 extern float minibomber_bomb_gravity_gp __asm__("D_L14_00161568") __attribute__((sda));
-extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern float minibomber_intro_exit_path_step_distance_gp __asm__("D_L14_0016154C") __attribute__((sda)); /* no foreign declaration */
 extern float minibomber_traversal_path_step_distance_gp __asm__("D_L14_00161550") __attribute__((sda)); /* no foreign declaration */
 extern float minibomber_retrace_path_step_distance_gp __asm__("D_L14_00161554") __attribute__((sda)); /* no foreign declaration */

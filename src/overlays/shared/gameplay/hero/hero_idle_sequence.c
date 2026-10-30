@@ -27,6 +27,12 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
+#include "rnc/overlay/shared/math/rotations/split_float_fraction.h"
+#include "rnc/overlay/shared/rendering/commands/get_moby_color.h"
+#include "rnc/overlay/shared/ui/help/advance_hero_animation.h"
+#include "rnc/overlay/shared/ui/map/reveal_map_around_position.h"
+#include "rnc/rendering/state/begin_draw_frame.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00204130), where it is exact; names translated to the US level program. */
 
@@ -624,7 +630,6 @@ extern f32 D_0015EE18_gp __attribute__((sda));
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") MACRO_ADDR;
 extern s32 D_L00_0015F5CC MACRO_ADDR;
 extern f32 D_L00_0017B85C_lui __asm__("D_L00_0017B85C") NOT_SDA;
-extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 extern void FUN_L00_00211670(void);
 extern void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
 extern void check_ledge_grab(void) __asm__("FUN_L00_0020bed0");
@@ -640,7 +645,6 @@ extern void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58")
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
-extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 extern void FUN_L00_00257024(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0024f7c8(void *, s32, void *);
@@ -1082,7 +1086,6 @@ void scan_hero_input_sequences(void) {
         if (*(int *)(r + 0x21D4) >= 16) *(int *)(r + 0x21D4) = 0;
     }
 }
-void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 void hero_update(void) __asm__("FUN_L00_00211670");
 void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
 void check_ledge_grab(void) __asm__("FUN_L00_0020bed0");
@@ -1103,11 +1106,9 @@ void update_hero_world_matrices(s32 moby_override) __asm__("FUN_L00_00209240");
 
 void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
 void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
-void begin_draw_frame(void) __asm__("FUN_001f7978");
 void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
 void noop_main_callback(int) __asm__("FUN_001e93e8");
-void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 void FUN_L00_00257024(int);
 void update_hero_color_and_item_tint(void) __asm__("FUN_L00_002076a8");
 
@@ -1286,7 +1287,6 @@ void update_moby_pulsing_glow_effects(char *moby) {
     }
 }
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
 
 void update_hero_color_and_item_tint(void) {
     struct Hero *player = &hero;
@@ -2016,7 +2016,6 @@ f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame, f32 anim
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00209690), where it is exact; names translated to the US level program. */
 
-extern float split_float_fraction(void *, float) __asm__("FUN_L00_00200228");
 #include "rnc/data_labels.h"
 
 float FUN_L00_00209018(float *a, int n);
@@ -2622,8 +2621,6 @@ extern P_a540 D_L00_0017A680_a540 __asm__("D_L00_0017A680");
 extern f32 D_0015EE14 __asm__("D_0015EE14");
 
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
-extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
-extern void set_fourth_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a228");
 extern f32 interpolate_scalar_linear(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
 
 extern u8 D_0015EDB3 __asm__("D_0015EDB3");
@@ -2759,7 +2756,6 @@ extern int D_L00_0015F6B0 __asm__("D_L00_0015F5CC");
 extern int FUN_001efa68_ac98(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern unsigned char hero_pos[] __asm__("D_0013F3D0");
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
-void set_fourth_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a228");
 void set_third_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a210");
 
 void update_hero_target_tracking(void) {

@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/ui/frames/draw_ui_frame.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002DA990), where it is exact; names translated to the US level program. */
 
@@ -532,7 +533,6 @@ extern short electric_water_countdown_frame_y_offset __asm__("D_L15_00161BE8") _
 extern short electric_water_countdown_frame_left_x_offset __asm__("D_L15_00161BEC") __attribute__((sda));
 extern short electric_water_countdown_frame_right_x_offset __asm__("D_L15_00161BF0") __attribute__((sda));
 extern short electric_water_countdown_frame_color __asm__("D_L15_00161BF4") __attribute__((sda));
-extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
 extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");

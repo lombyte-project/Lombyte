@@ -5,6 +5,7 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/audio/voices/snd_continue_all_sounds_in_group.h"
 
 struct FreezeModeState {
     s32 unk0;
@@ -37,7 +38,6 @@ extern void set_animation_parameter(s32, s32) __asm__("func_001FF570");
 extern void decrement_resource_counter(void) __asm__("UpdateResourceCounter");
 extern void load_and_initialize_level_chunk() __asm__("func_00209370");
 extern void InitializeGlobalStateEntry(s32 value);
-extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
 extern void music_unpause();
 extern void snd_flush_sound_commands() __asm__("func_0012DC80");
 void update_mode_freeze(void) __asm__("FUN_001fce28");

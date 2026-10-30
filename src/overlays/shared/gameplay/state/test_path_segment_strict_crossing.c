@@ -10,6 +10,8 @@
 #include "rnc/gameplay/entities/attach_manipulator.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/gameplay/animation/update_moby_animation_state.h"
+#include "rnc/gameplay/entities/detach_manipulator.h"
 
 typedef struct {
     s32 count;
@@ -453,7 +455,6 @@ typedef struct {
     int active;
 } S_262608;
 void FUN_L00_00262840_262608(S_262608 *) __asm__("FUN_L00_00262840");
-void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 
 void update_moby_transform_history(S_262608 *history_state, int dec) __asm__("FUN_L00_00262608");
 
@@ -531,7 +532,6 @@ void clear_moby_transform_history(char *history_state) {
         *(int *)(history_state + 0x13C) = 0;
     }
 }
-void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
 float absolute_float(float) __asm__("FUN_001f99c0");
 float spring_angle(void *, void *, float, float, float, float,
                               int) __asm__("FUN_L00_0025bc98");

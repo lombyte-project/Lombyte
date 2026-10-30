@@ -31,6 +31,10 @@
 #include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 #include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
+#include "rnc/overlay/shared/gameplay/entities/initialize_moby_grounding.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
+#include "rnc/overlay/shared/gameplay/state/record_moby_context_bytes.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -763,7 +767,6 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
 extern void *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void initialize_moby_launch_motion(struct Moby *, struct Moby *, void *, void *, int) __asm__("FUN_L05_00318648");
-extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
                             void *vel, f32 f2);
 extern char pipe_mounted_grating_command_records[] __asm__("D_L05_001BAAA0");
@@ -1360,7 +1363,6 @@ void draw_ocean_grid_outside_clip_volumes(char *moby) {
 }
 /* Updates the pulsing marker: spawns it, then each frame animates its height and queues the draw. */
 extern char D_L05_00211B28[];
-extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_002a40d0");
 extern float D_L05_00211B20[];
 
 void ocean_rilgar_update(char *moby) __asm__("FUN_L05_00316110");
@@ -1675,7 +1677,6 @@ typedef struct {
 } WD2;
 extern char qwarks_bouncer_dialogue_name[] __asm__("D_L05_00161EF0");
 extern void attach_big_head_cheat_manipulator(void *) __asm__("FUN_L05_00317398");
-extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 
 extern unsigned char D_0013DD47 NOT_SDA;
 /* Watcher moby update (variant of shady_salesman_update): turns its head toward the hero or a random target. */
@@ -1858,7 +1859,6 @@ extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void attach_big_head_cheat_manipulator_to_matching_moby(char *) __asm__("FUN_L02_002e0cd8");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 
 void shady_salesman_update(WM *m) __asm__("FUN_L05_003180a0");
@@ -2066,7 +2066,6 @@ extern char D_0013CAE4[];
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
 extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
-extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");

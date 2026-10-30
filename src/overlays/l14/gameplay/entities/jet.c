@@ -33,6 +33,10 @@
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
+#include "rnc/overlay/shared/gameplay/entities/spawn_type_52_particle_near_moby.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -428,7 +432,6 @@ extern s32 shuttle_exit_riding_transition_frames_gp __asm__("D_L14_00161B90") __
 extern f32 shuttle_horizontal_rider_correction_limit_scale_gp __asm__("D_L14_00161B88") __attribute__((sda));
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
 extern void FUN_L00_001fff28(void *, int, float);
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L14_002e7bd8");
@@ -2108,7 +2111,6 @@ extern s32 D_L14_0015F594;
 extern char D_0013CAE4[];
 extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
-extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
 extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
@@ -2563,7 +2565,6 @@ extern L14LevelState D_L14_001BB930;
 extern char captain_qwark_name[] __asm__("D_L14_00161F20");
 extern char *D_L14_001600EC;
 extern unsigned char *D_L14_0015FFD8;
-extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 void mark_elevator_collected(Level14VendorMoby *m) __asm__("FUN_L14_002ef5a8");
@@ -3014,7 +3015,6 @@ extern char enemy_fighter_921_empty_flight_path_error_format[] __asm__("D_L14_00
 extern s32 enemy_fighter_921_respawn_delay_frames_gp __asm__("D_L14_00161F8C") __attribute__((sda));
 extern void mark_moby_and_linked_moby_for_removal(char *moby) __asm__("FUN_L14_002fe238");
 extern void set_moby_state_two(unsigned char *moby) __asm__("FUN_L06_00303150");
-extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 void spawn_moby_exhaust_puffs(struct Moby *m) __asm__("FUN_L14_002fd310");
 int advance_moby_along_flight_path(struct Moby *moby) __asm__("FUN_L14_002fd918");

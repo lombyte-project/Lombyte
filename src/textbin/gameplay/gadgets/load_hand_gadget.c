@@ -9,6 +9,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/gameplay/entities/delete_moby.h"
 
 typedef struct Moby {
     u8 pad00[0x20];
@@ -59,7 +60,6 @@ extern void attach_manipulator(s32, s32, HandGadgetManipulator *) __asm__("FUN_0
 extern void detach_manipulator(s32, HandGadgetManipulator *) __asm__("func_0020CB88");
 extern void blend_moby_animation(void *, int, int, int) __asm__("func_00212F90");
 extern Moby *create_menu_preview_moby(s32) __asm__("func_00225490");
-extern Moby *delete_moby(Moby *) __asm__("FUN_00225530");
 extern void update_preview_animation_and_attachments(s32, Moby *, Moby *, s32 *, s32 *,
                                                      s32 *) __asm__("func_00225E70");
 extern s32 queue_preview_animation(s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32, s32,

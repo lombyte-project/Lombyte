@@ -26,6 +26,7 @@
 #include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
 
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
@@ -463,7 +464,6 @@ extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern int advance_moby_along_selected_path(void *, void *, int, int) __asm__("FUN_L13_002e9160");
 extern int update_moby_path_following_away_from_hero(void *, void *, int, int) __asm__("FUN_L13_002e9408");
-extern int continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern short dialogue_playback_phase[] __asm__("D_0015172A");

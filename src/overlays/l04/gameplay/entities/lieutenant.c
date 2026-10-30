@@ -22,6 +22,7 @@
 #include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
 #include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */
@@ -55,7 +56,6 @@ extern u8 D_0014C050[];
 struct ShopCamera l04_lieutenant_shop_camera __asm__("D_L04_0016C9F0") = {0};
 extern s32 D_L04_0015F5C4;
 extern void FUN_L00_0025a120(struct Moby *);
-extern void attach_big_head_cheat_manipulator_to_matching_moby(struct Moby *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_002668a0");
 extern int FUN_00214720(char *, s32);
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");

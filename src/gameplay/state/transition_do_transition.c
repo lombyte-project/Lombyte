@@ -6,6 +6,10 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/rendering/packets/put_draw_buffer_large.h"
+#include "rnc/runtime/data/read_global_table_entry.h"
+#include "rnc/ui/hud/banks/load_hud_banks.h"
+#include "rnc/world/parse_space_scene_chunk.h"
 
 typedef struct {
     s32 off;
@@ -44,7 +48,6 @@ extern WadHeader *volatile D_001940C8[];
 
 extern void initialize_resource_entry(void) __asm__("InitializeResourceEntry");
 extern void QueueDmaTransfer(s32 index);
-extern void read_global_table_entry(void) __asm__("ReadGlobalTableEntry");
 extern s32 rand(void);
 extern void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff);
 extern s32 sceGsSyncV(s32 mode);
@@ -58,12 +61,9 @@ extern void transition_default_draw() __asm__("FUN_001eb410");
 extern s32 is_active_state_entry(s32 entry_index, s32 id) __asm__("FUN_001eb740");
 extern s32 set_pal_mode() __asm__("func_001F34E8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern void put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
 extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
 extern void append_palette_transfer_packet() __asm__("func_001FB6E0");
 extern void init_hud(void) __asm__("FUN_001fee88");
-extern void load_hud_banks(void) __asm__("FUN_00202a98");
-extern void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");
 extern s32 run_state_handler() __asm__("func_00208840");
 extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
 extern s32 memcard_update_state() __asm__("func_002093D8");

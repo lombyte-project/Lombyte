@@ -4,9 +4,9 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/gameplay/animation/advance_moby_animation.h"
 #include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/gameplay/entities/refresh_moby_spatial_bounds.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern char preview_binding_table_alias[] __asm__("D_001863D0");
-extern void refresh_moby_spatial_bounds(void *) __asm__("FUN_0020def8");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void normalize_vector_triplet(void *) __asm__("func_00214128");
 extern void noop_callback_s(void *, void *, int, int, int) __asm__("func_001E9480");

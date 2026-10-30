@@ -11,6 +11,12 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/overlay/shared/gameplay/entities/initialize_moby_grounding.h"
+#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
+#include "rnc/overlay/shared/gameplay/entities/pool_set_scale.h"
+#include "rnc/overlay/shared/gameplay/entities/spawn_type_52_particle_near_moby.h"
+#include "rnc/overlay/shared/runtime/dma/pool_init_tiles.h"
+#include "rnc/overlay/shared/ui/text/update_object_wander_movement.h"
 
 typedef struct {
     float position[3];
@@ -33,10 +39,6 @@ extern int next_water_tile_index_gp __asm__("D_L12_00151388") __attribute__((sda
 extern float D_0015ED70_c __asm__("D_0015ED70");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern void debug_print(int) __asm__("FUN_001e93b0");
-extern void pool_init_tiles(void *, int) __asm__("FUN_L01_002b7a48");
-extern void pool_set_scale(float) __asm__("FUN_L01_002b7ef0");
-extern void pool_bind_tile(void *, void *) __asm__("FUN_L01_002b7c68");
-extern void pool_flush(void *, int) __asm__("FUN_L01_002b7fe0");
 extern float water_tile_direction_inputs[8] __asm__("D_L12_00180340");
 extern int D_L12_001612D0;
 extern void *l12_water_tile_position_records __asm__("D_L12_001612D4");
@@ -469,17 +471,13 @@ int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 int FUN_L12_002e2eb8_c(struct Moby *m, float speed) __asm__("FUN_L12_002e2eb8");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 void FUN_L00_0025a120(char *o);
-void update_object_wander_movement(u8 *o, u8 *s, f32 a, f32 b) __asm__("FUN_L00_00261630");
-void manipulator_set_scale(char *p, float x) __asm__("FUN_L00_00263b38");
 void FUN_L01_0026d930(char *p);
-void spawn_type_52_particle_near_moby(char *moby) __asm__("FUN_L10_002e3de8");
 void FUN_L12_002e18e8_c(struct Moby *moby) __asm__("FUN_L12_002e18e8");
 void spawn_spark_scatter(void *pos) __asm__("FUN_L12_002e19a8");
 void FUN_L12_002e3528_c(struct Moby *moby) __asm__("FUN_L12_002e3528");
 extern char D_0013E633_2E2EF0[] __asm__("D_001413D0");
 extern char *D_L12_001B0C30_2E2EF0[] __asm__("D_L12_001B0930");
 extern void func_L12_002E4838_2E2EF0(void *) __asm__("FUN_L12_002e3528");
-extern void func_L00_00264BB0_2E2EF0(void *,float) __asm__("FUN_L00_00263b38");
 extern int FUN_L01_00274b78_c(char *,char *,float) __asm__("FUN_L01_00274b78");
 extern void blend_moby_animation(void *,int,int,int) __asm__("FUN_00212f90");
 extern void func_L01_0026E8E0_2E2EF0(char *) __asm__("FUN_L01_0026d930");
@@ -487,7 +485,6 @@ extern int random_int_between(int,int) __asm__("FUN_L00_00257b90");
 extern int func_001160D8_2E2EF0(void) __asm__("FUN_001160d8");
 extern float func_00214358_2E2EF0(void *,int,float) __asm__("FUN_00213508");
 extern float smooth54(float *,float,float) __asm__("FUN_00213ed8");
-extern void func_L00_002626A8_2E2EF0(char *,char *,float,float) __asm__("FUN_L00_00261630");
 extern int func_L00_0025A208_2E2EF0(int *,int,int,int) __asm__("FUN_L00_002591d0");
 extern int func_L00_0025A2F0_2E2EF0(int *,int,int,int) __asm__("FUN_L00_002592b8");
 extern void func_L01_0026F040_2E2EF0(int,int) __asm__("FUN_L01_0026e090");
@@ -504,7 +501,6 @@ extern int point_in_path_xy(void *,void *,int) __asm__("FUN_L00_00259740");
 extern int func_L00_002DDEA0_2E2EF0(void *,void *) __asm__("FUN_L00_002dc9f0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern void mark_moby_for_removal_cf(void *,int,int) __asm__("FUN_L00_00257470");
-extern void spawn_type_52_particle_near_moby(char *) __asm__("FUN_L10_002e3de8");
 extern void func_L12_002E43A8_2E2EF0(void *) __asm__("FUN_L12_002e3098");
 extern void func_L00_00263950_2E2EF0(char *,char *,int,float,float) __asm__("FUN_L00_002628d8");
 extern void func_L00_0025B178_2E2EF0(void *) __asm__("FUN_L00_0025a120");
@@ -538,7 +534,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
     float angle;
     int count, first, blocked, hit;
     func_L12_002E4838_2E2EF0(moby);
-    func_L00_00264BB0_2E2EF0(data->collision_data,2.2f);
+    manipulator_set_scale(data->collision_data,2.2f);
     FUN_L01_00274b78_c((char *)moby,(char *)&work,data->range);
     target=work.moby;
     if (!target) target=*(AnklebiterMoby **)D_0013E633_2E2EF0;
@@ -594,7 +590,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
             if(count>scale_game_frames(20)) smooth54(&data->idle_speed,D_0015ED6C*2.5f,D_0015ED70*7.0f);
             else smooth54(&data->idle_speed,0.0f,D_0015ED70*7.0f);
             moby->anim_rate=0.8f;
-            func_L00_002626A8_2E2EF0((char *)moby,(char *)data->idle_pos,0.35f,0.25f);
+            update_object_wander_movement((char *)moby,(char *)data->idle_pos,0.35f,0.25f);
         }
         break;
     }
@@ -1497,7 +1493,6 @@ extern float fast_subtract_rotations(float, float);
 extern float vector_length_xy(void *);
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern int D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
-extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void FUN_L00_00250df8_x(void *) __asm__("FUN_L00_00250df8");
 extern void update_moby_bone_attachment(void *, void *, int) __asm__("FUN_L12_0027b9c0");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -1738,7 +1733,7 @@ void blarg_trooper_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     struct Moby *target;
 
-    func_L00_00264BB0_2E2EF0(data + 0x120, 3.0f);
+    manipulator_set_scale(data + 0x120, 3.0f);
     if (D_L12_0015F5C4 == 2) goto hide;
     if (moby->state >= 3) {
         moby->flags &= 0xffbe;

@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/ui/menus/stream_buffers.h"
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/audio/streaming/request_audio_stream_break.h"
 
-extern void request_audio_stream_break(s32) __asm__("FUN_002166e8");
 
 s32 release_menu_stream_buffer(s32 buffer_address) __asm__("FUN_00225cd8");
 

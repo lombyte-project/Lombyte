@@ -23,6 +23,8 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
+#include "rnc/overlay/l01/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
 
 /* One scrolling two-texture overlay layer (0x60 bytes). */
 typedef struct {
@@ -652,7 +654,6 @@ extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int,
                               int) __asm__("FUN_L00_0025a478");
-extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern int select_birdbot_path_node(void *, int *) __asm__("FUN_L01_002e6790");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(void *) __asm__("func_001F9740");
@@ -2280,7 +2281,6 @@ extern short fighter_jet_minimum_scale_camera_distance_gp __asm__("D_L01_00161AF
 extern short fighter_jet_full_scale_camera_distance_gp __asm__("D_L01_00161AFC") __attribute__((sda));
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263d40(int, int);
-extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
 extern void FUN_L01_0030be70(char *, void *, float);
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 
@@ -2925,7 +2925,6 @@ extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10")
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern void spawn_debris(char *, void *, f32) __asm__("FUN_L01_0030be70");
 extern int debug_print() __asm__("FUN_001e93b0");
-extern s32 hero_set_state(s32, s32) __asm__("FUN_L01_0023cf98");
 extern void jet_mount(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
 extern void jet_end_mount(s32) __asm__("FUN_L00_002eac18");
 extern s32 collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");

@@ -24,6 +24,8 @@
 #include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
+#include "rnc/overlay/shared/rendering/commands/get_moby_color.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00235E08.c: func_L06_00235E08), where it is exact; names translated to the US level program. */
 
@@ -48,7 +50,6 @@ extern int D_L06_0015F5C4;
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
-extern int get_hero_help_value(int a) __asm__("FUN_L06_0021d0a0");
 struct HeroVelocityKey D_L06_0015F6E8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
 extern s32 D_L06_0015F688 __attribute__((sda));
 int D_L06_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
@@ -60,12 +61,10 @@ extern void create_missing_hero_item_slot_animations(int a, int b) __asm__("FUN_
 extern void scale_hero_motion(float) __asm__("FUN_L00_00213de8");
 extern void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
 extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
-extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");
 extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
-extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");

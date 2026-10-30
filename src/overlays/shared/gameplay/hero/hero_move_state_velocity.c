@@ -17,6 +17,9 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
+#include "rnc/overlay/shared/gameplay/camera/init_camera_system.h"
+#include "rnc/overlay/shared/gameplay/entities/camera_object.h"
+#include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
 
 typedef union {
     u128 q;
@@ -223,7 +226,6 @@ void update_hero_target_heading(float a, float b, float c) {
 }
 extern struct { f32 f[0xB68 / 4]; } D_L00_0017A680_214fe8 __asm__("D_L00_0017A680");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
 #define V214(off) (D_L00_0017A680_214fe8.f[(off) / 4])
 void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
 
@@ -887,7 +889,6 @@ void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void set_hero_animation_sequence_and_frame(int, int) __asm__("FUN_L00_002325a0");
 void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
-void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void apply_nearest_environment_sample(int) __asm__("FUN_L00_002500b8");
 extern char D_0013F3D0[] NOT_SDA;
 void set_race_camera(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) __asm__("FUN_L00_00216f90");
@@ -998,7 +999,6 @@ void stop_hero_motion_without_forward_support(float velocity_scale, float planar
 
 extern int *D_L00_00177F00[];
 extern void offset_hero_position_against_gravity(float *dst, float *src, float h) __asm__("FUN_L00_002336e8");
-extern void emit_randomized_sparkle_pairs(void *, int) __asm__("FUN_L00_002a7e20");
 
 void emit_filtered_entry_sparkles(int voice_target, int entry_count) __asm__("FUN_L00_00217368");
 

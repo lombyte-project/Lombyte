@@ -13,6 +13,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/overlay/l06/gameplay/entities/hangar_door.h"
+#include "rnc/overlay/l06/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/audio/music/jet_game_state.h"
+#include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
 
 /* Shuttle route selection; independent of Moby.state. */
 enum ShuttleRoute {
@@ -5672,7 +5677,6 @@ extern void FUN_L06_00312ad0(void *);
 extern void FUN_L06_00312ce8(int);
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 void spawn_moby_breakup_effect(char *source_moby) __asm__("FUN_L06_00300278");
 
 extern void spawn_moby_breakup_effect(char *) __asm__("FUN_L06_00300278");
@@ -6103,8 +6107,6 @@ typedef struct Busy {
 
 extern void attach_shared_manipulator_to_matching_class_moby(char *) __asm__("FUN_L03_002db480");
 extern void FUN_L00_0025a120_301070(void *) __asm__("FUN_L00_0025a120");
-extern void set_moby_and_links_to_states_8_and_9(char *) __asm__("FUN_L06_002f53e8");
-extern void set_moby_and_links_to_states_4_and_5(char *) __asm__("FUN_L06_002f5360");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int check_all_listed_class_33b_states_fe_fd_or_10(int) __asm__("FUN_L06_002e9ea0");
@@ -6396,7 +6398,6 @@ extern void FUN_L06_002356a0(int, int);
 extern void set_moby_state_5(char *) __asm__("FUN_L06_00304088");
 extern float scale_recovery_time(float) __asm__("FUN_L06_00216fa8");
 extern float FUN_002132a8(float, float);
-extern int jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern int hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
@@ -6683,9 +6684,7 @@ extern void initialize_moby_particle_effect_state(void *) __asm__("FUN_L06_002e6
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern int memcard_Save_302578(int, long) __asm__("FUN_0020b178");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void allocate_voice_302578(int, int, void *) __asm__("FUN_0022da68");

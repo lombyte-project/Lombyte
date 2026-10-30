@@ -29,6 +29,8 @@
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/gameplay/entities/random_spherical_offset.h"
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
 extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_001fff28(char *, int, float);
@@ -496,7 +498,6 @@ extern u8 D_0014C050_2e03a0[] __asm__("D_0014C050");
 extern s32 D_00141410_2e03a0[] __asm__("D_00141410");
 extern u8 item_available[] __asm__("D_0013D4C0");
 extern f32 FUN_001fa580_2e03a0(f32, f32) __asm__("FUN_001fa580");
-extern void initialize_moby_particle_effect(void *) __asm__("FUN_L00_002d6bf0");
 extern void debug_print() __asm__("FUN_001e93b0");
 extern void FUN_L00_002e0788_2e03a0(void *) __asm__("FUN_L00_002e0788");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -823,7 +824,6 @@ f32 FUN_L00_00257c48(f32, f32);
 f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 int allocate_colored_effect_slot(void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
 unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(void *a, void *b, int c, int d) __asm__("FUN_L00_00274948");
-void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern Slot D_L00_001E7070_2E3700[] __asm__("D_L00_001E6D20");
 extern End D_L00_001E70A0_2E3700[] __asm__("D_L00_001E6D50");
 extern Q_2E3700 D_L00_001E7130_2E3700[] __asm__("D_L00_001E6DE0");
@@ -857,7 +857,6 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void func_001F9BD8_2E3700(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9850_2E3700(int) __asm__("FUN_001f96f8");
-extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 
 void update_slot_panes_and_effects(int unused, int beam) __asm__("FUN_L00_002e2250");
 

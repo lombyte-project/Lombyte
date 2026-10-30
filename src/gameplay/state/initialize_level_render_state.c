@@ -16,6 +16,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/ties/light_ties.h"
 
 typedef struct FRow {
     f32 v[3];
@@ -138,7 +139,6 @@ extern void reset_global_state_fields(void) __asm__("func_00217020");
 extern void FUN_0022a5e0(void *);
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 extern void light_tfrags(void *) __asm__("FUN_00234f98");
-extern void light_ties(void *) __asm__("FUN_00237370");
 
 u8 *initialize_level_render_state(LevelHeader *header) __asm__("FUN_001e9b10");
 

@@ -6,6 +6,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/ui/menus/item_preview/item_preview_placement.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/gameplay/entities/delete_moby.h"
 
 struct ItemPreviewVars {
     void *owner;
@@ -53,7 +54,6 @@ extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
 extern void set_moby_animation(struct Moby *, s32, s32) __asm__("func_00212ED8");
 extern struct Moby *create_menu_preview_moby(s32) __asm__("func_00225490");
-extern struct Moby *delete_moby(struct Moby *) __asm__("FUN_00225530");
 
 s32 update_item_preview_binding(struct ItemPreviewBinding *preview) __asm__("FUN_0021e230");
 

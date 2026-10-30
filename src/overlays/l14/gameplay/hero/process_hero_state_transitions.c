@@ -15,6 +15,8 @@
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_get_gadget_anim_id.h"
+#include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 14 build). */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/help_00235DC8.c: func_L14_00235DC8), where it is exact; names translated to the US level program. */
@@ -78,8 +80,6 @@ extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, 
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int check_pad_press_separation(int, int, int, int) __asm__("FUN_L00_00266e00");
 extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
-extern int process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
-extern int hero_get_gadget_anim_id(int a) __asm__("FUN_L12_00227f10");
 extern int process_hero_hit_reaction(int) __asm__("FUN_L14_00222aa8");
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
@@ -110,7 +110,6 @@ extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
-extern void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");

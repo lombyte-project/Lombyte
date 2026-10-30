@@ -3,6 +3,7 @@
 #include "rnc/ui/text/text_region.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
+#include "rnc/ui/text/font/font_print_right.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -17,7 +18,6 @@ extern s32 game_language_macro[] __asm__("D_0015ED88")MACRO_ADDR;
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 
-extern void font_print_right(s32, s32, u64, char *, s32) __asm__("FUN_001f6940");
 
 extern void font_print_right_large(s32, s32, u64, char *, s32) __asm__("FUN_001f6a60");
 extern void font_print_window_regular(struct TextRegion *, u64, char *,

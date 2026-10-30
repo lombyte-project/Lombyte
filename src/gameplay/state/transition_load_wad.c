@@ -3,6 +3,16 @@
 #include "rnc/storage/disc_table.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/view/update_view_context.h"
+#include "rnc/rendering/view/init_view_context.h"
+#include "rnc/rendering/vu1/vu1_init_chain.h"
+#include "rnc/runtime/dma/calculate_dma_transfer_address.h"
+#include "rnc/runtime/memory/decompress_wad.h"
+#include "rnc/runtime/memory/init_mem_slots.h"
+#include "rnc/world/loaders/register_moby_class.h"
+#include "rnc/world/loaders/relocate_sky_definition.h"
+#include "rnc/world/loaders/unpack_point_records.h"
+#include "rnc/world/loaders/upload_texture_images.h"
+#include "rnc/world/parse_space_scene_chunk.h"
 typedef struct 
 {
   s32 x0;
@@ -122,29 +132,19 @@ extern s32 D_001B6180[];
 extern s32 shrub_render_texture_lookup_table[] __asm__("D_001D84B0");
 extern s32 tfrag_texture_size_table[] __asm__("D_001E0900");
 extern s32 object_render_texture_lookup_table[] __asm__("D_001E2600");
-extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void FlushCache(s32);
 extern void QueueDmaTransfer(s32);
 extern void sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
 extern s32 initialize_level_render_state(u8 *) __asm__("FUN_001e9b10");
-extern void init_view_context(void) __asm__("FUN_001f2c60");
 extern volatile char log2dim(s32) __asm__("func_001F97A0");
-extern void init_mem_slots(void) __asm__("FUN_002015d8");
 extern void parse_particle_textures(u8 *, u8 *, u8 *, s32) __asm__("FUN_002026c8");
-extern void unpack_point_records(u8 *, s32) __asm__("FUN_00202800");
-extern void relocate_sky_definition(u8 *) __asm__("FUN_002028e0");
-extern void upload_texture_images(u8 *, s32, u8 *) __asm__("FUN_00203120");
-extern void register_moby_class(u8 *, u8 *, u8 *, s32) __asm__("FUN_00203640");
 extern void register_object_render_class(u8 *, u8 *, u8 *, s32) __asm__("func_00203730");
 extern void register_shrub_render_class(u8 *, u8 *, u8 *, u8 *, s32) __asm__("func_00203B08");
 extern void initialize_tfrag_render_data(u8 *, u8 *) __asm__("func_002040E0");
-extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
-extern s32 decompress_wad(u8 *, u8 *) __asm__("FUN_0020b618");
 extern void start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
 extern volatile unsigned int load(s32, s32, s32) __asm__("func_00216828");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
-extern void vu1_init_chain(void) __asm__("FUN_002335d0");
 extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
 

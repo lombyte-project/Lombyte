@@ -29,6 +29,8 @@
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/gameplay/entities/random_spherical_offset.h"
+#include "rnc/ui/hud/remove_hud_item.h"
 extern float D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
 extern float D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
 extern float D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
@@ -867,7 +869,6 @@ short D_L17_001D1040[10] = {0};
 short D_L18_001D0D40[10] = {0};
 extern short D_L00_001DBEF0[];
 extern short D_L00_001DBF08[];
-extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void FUN_L00_002bbb00_c(int) __asm__("FUN_L00_002bbb00");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
@@ -1430,7 +1431,6 @@ extern void tick_countdown_32_c(s32 *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 int allocate_packed_color_point_light_slot(void *v, float a, float b, int col) __asm__("FUN_L00_0023e5e0");
-s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
 struct Moby *spawn_morphoray_chicken(void *a) __asm__("FUN_L00_002c9348");
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 void hud_init_particles(HudElem *e) __asm__("FUN_L00_00236268");
@@ -1459,7 +1459,6 @@ extern int func_001FA898_2BDAF0(float) __asm__("FUN_001fa6d0");
 extern void func_L00_002BE3A8_2BDAF0(void *) __asm__("FUN_L00_002bd0a0");
 extern void func_L00_001FF4B0_2BDAF0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_2BDAF0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int remove_hud_item(int) __asm__("FUN_001ff480");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
 
 void morphoray_update(Moby *moby) __asm__("FUN_L00_002bc7e8");

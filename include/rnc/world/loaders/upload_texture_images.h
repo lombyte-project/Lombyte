@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_WORLD_LOADERS_UPLOAD_TEXTURE_IMAGES_H
+#define LOMBYTE_RNC_WORLD_LOADERS_UPLOAD_TEXTURE_IMAGES_H
+
+#include "types.h"
+
+void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
+
+#endif /* LOMBYTE_RNC_WORLD_LOADERS_UPLOAD_TEXTURE_IMAGES_H */

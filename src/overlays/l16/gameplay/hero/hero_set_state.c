@@ -26,6 +26,8 @@
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/gameplay/hero/air_accel.h"
 #include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
+#include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
+#include "rnc/overlay/shared/gameplay/hero/smooth_and_clamp_value_pair.h"
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_0021EA88.c: func_L16_0021EA88), where it is exact; names translated to the US level program. */
 
@@ -49,7 +51,6 @@ extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int sample_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
-extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 int D_L16_0015F6E8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 extern short D_L16_0015F688 __attribute__((sda));
@@ -62,7 +63,6 @@ extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930
 extern void create_missing_hero_item_slot_animations(int a, int b) __asm__("FUN_L00_0020e360");
 extern void scale_hero_motion(float) __asm__("FUN_L00_00213de8");
 extern void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
-extern void help_queue_add(int, int, int) __asm__("FUN_L00_00216ec0");
 extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 extern void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 extern void FUN_L00_0025f730(void *a, float x);

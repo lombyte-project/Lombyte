@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RUNTIME_CALLBACKS_COUNT_VSYNC_H
+#define LOMBYTE_RNC_RUNTIME_CALLBACKS_COUNT_VSYNC_H
+
+#include "types.h"
+
+s32 count_vsync(void) __asm__("FUN_0012f1c8");
+
+#endif /* LOMBYTE_RNC_RUNTIME_CALLBACKS_COUNT_VSYNC_H */

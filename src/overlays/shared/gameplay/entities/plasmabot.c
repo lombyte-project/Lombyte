@@ -25,6 +25,9 @@
 #include "rnc/overlay/shared/audio/sound/trooper_play_sound.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/gameplay/entities/random_spherical_offset.h"
+#include "rnc/overlay/shared/gameplay/entities/vendor_orb.h"
+#include "rnc/overlay/shared/rendering/spawn_mode_controlled_rotating_alpha_fade_particle.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
@@ -265,9 +268,7 @@ extern char plasmabot_missing_hatch_index_format[] __asm__("D_L14_001FBC90");
 extern float probe_ground_height(float, void *, int);
 extern int D_L14_0015F5C4;
 extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
-extern int register_beam_slot(void *, int, int) __asm__("FUN_L00_002e1f28");
 extern int release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
-extern int set_beam_origin_transform_and_endpoint(void *, void *, void *) __asm__("FUN_L00_002e2190");
 extern int FUN_L14_002b39a0_c(unsigned char *) __asm__("FUN_L14_002b39a0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern float l14_plasmabot_beam_trace_endpoint_distance __asm__("D_L14_001614E4") __attribute__((sda));
@@ -708,7 +709,6 @@ extern u8 D_L14_0015F580[] MACRO_ADDR;
 extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
 extern void FUN_L14_002b2928_u(struct Moby *) __asm__("FUN_L14_002b2928");
 extern void FUN_00213358(void *, f32, f32);
-extern Particle *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, s32, struct Moby *) __asm__("FUN_L00_00274948");
 extern f32 FUN_002132a8(f32, f32);
 extern s32 FUN_00213260(s32);
 
@@ -1667,8 +1667,6 @@ extern P_eca8 *FUN_L00_0026d000(void *, float, float, float, int, void *, float,
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int D_L14_0015F580_c __asm__("D_L14_0015F580");
 int FUN_L00_00257b90(int lo, int hi);
-void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
-extern void func_002141A8_2E17B8(void *, float, float) __asm__("FUN_00213358");
 extern float func_002140F8_2E17B8(float, float) __asm__("FUN_002132a8");
 extern int func_002140B0_2E17B8(int) __asm__("FUN_00213260");
 extern void func_L00_0026DA50_2E17B8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
@@ -1692,7 +1690,7 @@ void emit_debris_trail_particles(Moby *moby) {
     debris_motion_state = *(Vars **)&moby->pvars;
     fast_vec_normalize(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.2f);
     fast_vec_add(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
-    func_002141A8_2E17B8(&particle_initial_velocity, 0.005f, 0.03f);
+    random_spherical_offset(&particle_initial_velocity, 0.005f, 0.03f);
     particle = spawn_mode_controlled_rotating_alpha_fade_particle(&pos, &particle_initial_velocity, 0x7F, moby);
     if (particle != 0) {
         particle->life = func_002140F8_2E17B8(6000.0f, 32000.0f);

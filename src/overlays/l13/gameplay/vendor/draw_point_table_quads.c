@@ -10,6 +10,7 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/rendering/effects/spawn_spark.h"
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
 
 /* GS quad packet for draw_quad_packet: four corners, their colours and
    texture coordinates, then the giftag and register words. */
@@ -187,7 +188,6 @@ void spawn_point_table_sparks(struct Moby *moby) {
 /* Register this level's vendor data set. */
 
 extern char D_L13_001D9BC0[];
-extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
 void render_level13_water_grids(void) __asm__("FUN_L13_0030a460");
 

@@ -13,6 +13,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
+#include "rnc/ui/text/load_display_text_resource_entry.h"
 extern int owner_target_particle_frame_count_gp __asm__("D_L15_001601FC") __attribute__((sda));
 
 /* Spawns particle type 0x1F of colour `color` at `pos`, starting a quarter of the way from `owner` towards it. */
@@ -52,7 +53,6 @@ void spawn_owner_target_particle(int color, u128 *target_position, char *owner) 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0025F0A0.c: func_L15_002655D0), where it is exact; names translated to the US level program. */
 
 extern void pack_vector_xyz_with_shared_scale(float *, int *) __asm__("FUN_00214a98");
-void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214bc0");
 
 extern int *D_L15_001B2770 NOT_SDA;
 unsigned char *create_type_47_particle(void *particle_position, float *p_vector, float *c_vector, int particle_color, int e, int particle_frame_count, int g, int h,

@@ -8,6 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/world/loaders/register_moby_class.h"
 
 /* Offsets of the bank's four packed images, from the bank start. */
 typedef struct ImageBank {
@@ -34,7 +35,6 @@ extern s32 sceGsSetDefLoadImage_23fa00(void *, s16, s16, s16, s16, s16, s16, s16
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32 sceGsExecLoadImage_23fa00(void *, void *) __asm__("FUN_00122658");
 extern s32 sceGsSyncPath(s32, u16) __asm__("FUN_00120558");
-extern void register_moby_class(void *, void *, void *, s32) __asm__("FUN_00203640");
 
 extern s32 first_record __asm__("D_L00_0015FC00") __attribute__((sda));
 extern s32 second_record __asm__("D_L00_0015FC10") __attribute__((sda));

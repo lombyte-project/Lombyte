@@ -20,6 +20,18 @@
 #include "rnc/ui/hud/get_icon_frame.h"
 #include "rnc/audio/snd_flush_sound_commands.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
+#include "rnc/audio/music/music_stop.h"
+#include "rnc/audio/rpc/snd_reset_state_and_flush_commands.h"
+#include "rnc/audio/streaming/register_audio_stream_callback.h"
+#include "rnc/audio/voices/sound_stop_all_sounds.h"
+#include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
+#include "rnc/rendering/buffers/swap_render_buffer_chain.h"
+#include "rnc/rendering/packets/put_draw_buffer_large.h"
+#include "rnc/rendering/packets/put_draw_buffer_small.h"
+#include "rnc/rendering/texture/append_palette_transfer_packet.h"
+#include "rnc/rendering/vu1/vu1_init_chain.h"
+#include "rnc/storage/memory_card/memcard_update_state.h"
+#include "rnc/ui/menus/save_data/run_state_handler.h"
 
 /* Level main loop (shared by every level): clears the level's work area, sets up the level and counts the visit
    and play time of the planet, then runs one frame per pass, dispatching on the game mode, until the level asks to
@@ -49,7 +61,6 @@ extern int sce_gs_sync_v(int) __asm__("FUN_00122298");
 extern void put_disp_buffer(void) __asm__("FUN_001fb2a8");
 extern void music_start_track(int, int, int) __asm__("FUN_00215c40");
 extern void noop_main_callback() __asm__("FUN_001e93e8");
-extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 extern void update_debug_menu(void) __asm__("FUN_L00_001f4598");
 extern void draw_debug_menu(void) __asm__("FUN_L00_001f58e0");
 extern void FUN_L00_00297f78(void);
@@ -68,17 +79,7 @@ extern void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
 extern void update_slideshow(void) __asm__("FUN_L00_00299c48");
 extern void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
 extern void frame_roll_counter(void) __asm__("FUN_L00_001f6d70");
-extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
-extern void put_draw_buffer_small(void) __asm__("FUN_001fb3d0");
-extern void append_palette_transfer_packet(void) __asm__("FUN_001fb6e0");
-extern void put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
-extern void vu1_init_chain(void) __asm__("FUN_002335d0");
 extern void read_global_table_entry(void) __asm__("FUN_0012eaf0");
-extern void snd_reset_state_and_flush_commands(void) __asm__("FUN_0012eb00");
-extern void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
-extern void music_stop(void) __asm__("FUN_00215ee8");
-extern void memcard_update_state(void) __asm__("FUN_002093d8");
-extern void run_state_handler(void) __asm__("FUN_00208840");
 extern long get_frame_texture(int) __asm__("FUN_001ffa10");
 extern void draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
 extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
@@ -87,7 +88,6 @@ extern void do_space_transition(void) __asm__("FUN_00231ff0");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern void music_pause(int) __asm__("FUN_00216050");
 extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
-extern void vu1_sync_chain(int) __asm__("FUN_L00_002a09d8");
 extern void tick_space_transition(void) __asm__("FUN_00226e08");
 
 extern char level_startup_clear_end[] __asm__("D_L00_00165FB0");

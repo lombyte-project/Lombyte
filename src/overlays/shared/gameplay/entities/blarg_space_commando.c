@@ -20,6 +20,7 @@
 #include "rnc/gameplay/state/interpolated_record.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/ui/frames/draw_ui_frame.h"
 
 /* Movement controller block at vars + 0xC0 (FUN_L01_0026d930 init, FUN_L00_00258b50 step). */
 typedef struct {
@@ -975,7 +976,6 @@ extern short timer_frame_y_addend_gp __asm__("D_L06_001620DC") __attribute__((sd
 extern short timer_frame_left_x_addend_gp __asm__("D_L06_001620E0") __attribute__((sda));
 extern short timer_frame_right_x_addend_gp __asm__("D_L06_001620E4") __attribute__((sda));
 extern short timer_frame_fill_high_byte_gp __asm__("D_L06_001620E8") __attribute__((sda));
-extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern int fast_tween_color_local(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
 extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");

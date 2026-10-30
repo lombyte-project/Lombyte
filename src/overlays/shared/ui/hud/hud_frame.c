@@ -4,6 +4,7 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
+#include "rnc/textbin/gameplay/animation/get_frame_texture.h"
 
 typedef struct {
     u8 p[6];
@@ -59,7 +60,6 @@ void hud_frame(O0023b120 *hud_element, s32 id, s32 x, s32 y, u32 flags, s32 extr
 extern char *D_L00_001611C0_23b6c0 __asm__("D_L00_001611C0");
 extern int screen_extent[] __asm__("D_0013E500");
 extern int D_L00_0017E4D8_lui[] __asm__("D_L00_0017E4D8") NOT_SDA;
-extern u64 get_frame_texture(int) __asm__("FUN_001ffa10");
 
 void draw_cropped_hud_sprite(int tex, int x, int y, int draw_width, int draw_height, int alpha) __asm__("FUN_L00_0023b6c0");
 

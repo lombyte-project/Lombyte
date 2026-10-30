@@ -22,6 +22,8 @@
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/math/rotations/extract_matrix_rotation_quaternion.h"
+#include "rnc/overlay/shared/gameplay/camera/init_camera_system.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
@@ -568,7 +570,6 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     camera_to_reset->unk7E = 0;
 }
 
-extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float FUN_001ebd78(void *, float, float, float, float, float);
 
 /* Camera that orbits the hero while hero.vert_ramp_launch is set, easing yaw, pitch and distance toward their goals. */
@@ -877,7 +878,6 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032BBF0), where it is exact; names translated to the US level program. */
 
-extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_002144d8");
 extern void reset_hero_follow_camera_from_preset(Camera *) __asm__("FUN_L05_003296e0");
 
 extern char *D_L05_00167204 NOT_SDA;

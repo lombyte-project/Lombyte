@@ -11,6 +11,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/ui/text/load_display_text_resource_entry.h"
 
 typedef struct {
     char p0[8];
@@ -19,7 +20,6 @@ typedef struct {
     short h10, h12, h14, h16, h18;
 } S_269290;
 extern int D_15F5CC_269290 __asm__("D_L00_0015F5CC");
-extern void load_display_text_resource_entry(void *, void *) __asm__("FUN_00214bc0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 

@@ -20,6 +20,11 @@
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/gameplay/entities/detach_manipulator.h"
+#include "rnc/overlay/l01/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/audio/voices/play_voice.h"
+#include "rnc/overlay/shared/audio/voices/vendor_volume.h"
+#include "rnc/overlay/shared/gameplay/camera/init_camera_system.h"
 extern void interpolate_vector(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
 extern s32 allocate_colored_effect_slot(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
@@ -760,7 +765,6 @@ extern float fast_vec_dist(void *, void *);
 extern int debug_print() __asm__("FUN_001e93b0");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00259028(void *, void *, void *, void *);
-extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern s32 collision_line(void *, void *, s32, void *, s32);
 extern s32 rand(void);
 extern short sandmouse_follow_duration_frames_gp __asm__("D_L01_00162098") __attribute__((sda));
@@ -787,7 +791,6 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void compute_sandmouse_follow_goal(void *unused, float *p) __asm__("FUN_L01_0030d260");
 void emit_sandmouse_particles(char *m) __asm__("FUN_L01_0030dda0");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
-void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
 
 #define LNK(i) (((Moby *)D_L01_0015FFD8) + (i))
 #define VOICE(i) (voice_pool_lui + (i) * 0x70)
@@ -1436,7 +1439,6 @@ typedef struct {
 extern Ent50 *D_L01_0015EF50_macro __asm__("D_L01_0015EF50") MACRO_ADDR;
 extern Ent7EC *D_L01_0015F70C_macro __asm__("D_L01_0015F70C") MACRO_ADDR;
 extern float camera_basis_reference_direction[] __asm__("D_L01_001672B0");
-extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cam_interp_values(float a, float b, float *p, float c, float d, float e);
 extern int sample_path(void *, void *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
 extern int current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
@@ -1759,9 +1761,7 @@ void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera
 extern char *D_L00_0015F5F4;
 extern char D_0013E550[];
 extern int calculate_voice_distance_volume(float, float, float, void *) __asm__("FUN_0022c6f8");
-extern int play_voice(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int vendor_volume(int, int) __asm__("FUN_L01_002a1968");
 
 void update_box_positional_voice(char *moby) __asm__("FUN_L01_00319928");
 

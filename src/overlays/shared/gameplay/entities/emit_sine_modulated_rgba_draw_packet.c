@@ -9,11 +9,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/rendering/packets/emit_rgba_draw_packet.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CD118), where it is exact; names translated to the US level program. */
 
 extern signed char D_L15_00161ACF[] MACRO_ADDR;
-void emit_rgba_draw_packet(s32 r, s32 g, s32 b, s32 a) __asm__("FUN_001f5210");
 
 extern short sine_draw_packet_rgb_control __asm__("D_L15_00161ACC") __attribute__((sda));
 extern short sine_alpha_scale_amplitude __asm__("D_L15_00161AD0") __attribute__((sda));

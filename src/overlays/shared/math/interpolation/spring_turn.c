@@ -6,6 +6,7 @@
 #include "rnc/globals.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/sdk/library/sceVu0Normalize.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
 
@@ -144,7 +145,6 @@ extern V_258490 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern V_258490 D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern int FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 extern int FUN_L00_001f0d60_258490(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
 int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h, float r, float lim,

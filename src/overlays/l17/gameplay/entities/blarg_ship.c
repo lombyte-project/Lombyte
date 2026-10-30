@@ -28,6 +28,8 @@
 #include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
 #include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
 #include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/overlay/l17/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
@@ -48,8 +50,6 @@ extern void DebugPrint();
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FUN_L00_002e8970");
-extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
-extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern char fleet_dwell_help_gate_value[] __asm__("D_00141D54");
 extern char fleet_clip_volume_help_suppression_flags[] __asm__("D_00141D7C");
 #include "rnc/gameplay/state/game_globals.h"

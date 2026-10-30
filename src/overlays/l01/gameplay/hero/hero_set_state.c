@@ -30,6 +30,7 @@
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/gameplay/hero/air_accel.h"
 #include "rnc/overlay/shared/input/pad/pad_pressed_within.h"
+#include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/help_0023D688.c: func_L01_0023D688), where it is exact; names translated to the US level program. */
 
@@ -58,7 +59,6 @@ extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930
 extern void create_missing_hero_item_slot_animations(int a, int b) __asm__("FUN_L00_0020e360");
 extern void scale_hero_motion(float) __asm__("FUN_L00_00213de8");
 extern void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
-extern void help_queue_add(int, int, int) __asm__("FUN_L00_00216ec0");
 extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");

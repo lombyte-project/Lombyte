@@ -22,6 +22,11 @@
 #include "rnc/overlay/shared/gameplay/entities/cutscene_set_camera_target.h"
 #include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/gameplay/entities/random_spherical_offset.h"
+#include "rnc/overlay/shared/gameplay/entities/draw_trail.h"
+#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
+#include "rnc/overlay/shared/gameplay/entities/vendor_orb.h"
+#include "rnc/overlay/shared/rendering/spawn_mode_controlled_rotating_alpha_fade_particle.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -218,7 +223,6 @@ extern Path *toad_paths[] __asm__("D_L00_001B04B0");
 extern s32 D_L00_0015F580[] MACRO_ADDR;
 
 extern void update_veldin_robot_damage_and_targeting() __asm__("FUN_L00_002e1678");
-extern void manipulator_set_scale(void *, f32) __asm__("FUN_L00_00263b38");
 extern void FUN_L00_0025a120(ElectroidMoby *);
 extern s32 scale_game_frames_s32(s32) __asm__("FUN_001f96f8");
 extern void approach_angle(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_0025be00");
@@ -227,11 +231,9 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 advance_accelerated_scalar(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_00213f38");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern s32 register_beam_slot(ElectroidMoby *, s32, s32) __asm__("FUN_L00_002e1f28");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
-extern s32 set_beam_origin_transform_and_endpoint(ElectroidMoby *, void *, void *) __asm__("FUN_L00_002e2190");
 extern void FUN_L00_00263fd8(ElectroidMoby *, s32, void *, void *, s32, s32, f32, void *, void *,
                              void *);
 extern void update_veldin_robot_effects() __asm__("FUN_L00_002e1aa8");
@@ -601,8 +603,6 @@ typedef struct {
     SparkVars *vars;
 } SparkMoby;
 
-extern void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
-extern SparkPart *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, s32, void *) __asm__("FUN_L00_00274948");
 extern void draw_veldin_robot_effect_quad() __asm__("FUN_L00_002e1c78");
 
 void update_veldin_robot_effects(SparkMoby *moby) {
@@ -809,7 +809,6 @@ typedef struct {
 
 extern FlockGame D_L00_0016C860;
 
-extern void draw_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b70");
 extern FlockPart *spawn_puff(void *, s32, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_0026d000");
 
 void update_phase_effect_controller(FlockMoby *moby) __asm__("FUN_L00_002e3800");

@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/gameplay/entities/002630b8.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
 
@@ -298,7 +299,6 @@ void update_entity_matrix(char *out, OvlQuad *position_delta, void *previous_rot
 }
 extern u8 level_available[] __asm__("D_0013DD40");
 extern s32 D_0013D510[] __asm__("D_0013D510");
-void queue_planet_unlock_message(s32) __asm__("FUN_L00_00262d38");
 void unlock_planet(s32 id) __asm__("FUN_L00_002607d0");
 void unlock_planet(s32 id) {
     s32 available_planet_count, i;

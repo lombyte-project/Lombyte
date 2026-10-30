@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_AUDIO_RPC_SND_RESET_STATE_AND_FLUSH_COMMANDS_H
+#define LOMBYTE_RNC_AUDIO_RPC_SND_RESET_STATE_AND_FLUSH_COMMANDS_H
+
+#include "types.h"
+
+void snd_reset_state_and_flush_commands(void) __asm__("FUN_0012eb00");
+
+#endif /* LOMBYTE_RNC_AUDIO_RPC_SND_RESET_STATE_AND_FLUSH_COMMANDS_H */

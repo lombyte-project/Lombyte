@@ -15,6 +15,7 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
 
 /* Mine (moby class 74) update: falls and bounces, sticks to what it hits, homes on a nearby target and explodes. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002AB910), where it is exact; names translated to the US level program. */
@@ -160,8 +161,6 @@ extern E D_0013E520;
 extern M910 *D_L00_00173E58 NOT_SDA;
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char *mine_debris(char *, char *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
-extern char *mine_camera_blast(char *a, char *b, int c, char *d) __asm__("FUN_L00_002d3838");
-extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern char D_L00_00173E70[];
 extern s16 D_L00_001B07B0[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");

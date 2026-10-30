@@ -10,6 +10,8 @@
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
 #include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
+#include "rnc/world/parse_space_scene_chunk.h"
 
 /* Start the moby's camera-follow state: stash it in the global record, point its update at func_L00_0028F458. */
 /* Ported from rac1-decomp (src/overlays/shared/space_0028FB78.c: func_L00_0028FB78), where it is exact; names translated to the US level program. */
@@ -97,10 +99,8 @@ void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
 void load_chunks_with_optional_fade(int, int) __asm__("FUN_L00_00245610");
-void parse_space_scene_chunk(int) __asm__("FUN_002049f0");
 void sound_update(void) __asm__("FUN_0022ca50");
 int sce_gs_sync_v(int) __asm__("FUN_00122298");
-int continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 void initialize_level_transition_with_audio(int audio_selection_mode) __asm__("FUN_L00_0028e9c8");
 
 void initialize_level_transition_with_audio(int audio_selection_mode) {
@@ -222,7 +222,6 @@ typedef struct {
 extern C_0028ed58 D_L00_0016C860_0028ed58 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
 void initialize_level_transition_with_audio(s32) __asm__("FUN_L00_0028e9c8");
-void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern s32 transition_sequence_positions[1] __asm__("D_L00_00160570") __attribute__((sda));
 void prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
 

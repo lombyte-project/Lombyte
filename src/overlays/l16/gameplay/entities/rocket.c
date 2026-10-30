@@ -19,6 +19,7 @@
 #include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
 
 
 
@@ -2250,7 +2251,6 @@ extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
-extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 void advance_hoverboard_dummy_path_node(char *m) __asm__("FUN_L16_002cf9f8");
 void FUN_L16_002cf9d0_c(Level16VendorVectorMoby *moby, int index,

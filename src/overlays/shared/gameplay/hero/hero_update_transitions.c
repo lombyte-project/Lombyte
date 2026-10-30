@@ -14,6 +14,8 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/gameplay/entities/camera_object.h"
+#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (shared build, levels 00, 04, 07, 09, 10, 13). */
 /* Ported from rac1-decomp (src/overlays/shared/help_0022A340.c: func_L00_0022A340), where it is exact; names translated to the US level program. */
@@ -87,7 +89,6 @@ extern int test_hero_animation_frame_window(float t) __asm__("FUN_L00_00211870")
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
-extern int try_transition_hero_water_state(void) __asm__("FUN_L00_00227778");
 extern int try_enter_hero_water_state(void) __asm__("FUN_L00_002279b0");
 extern int process_hero_equipped_item_input(void) __asm__("FUN_L00_00227fa0");
 extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
@@ -135,7 +136,6 @@ extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_0025f730(void *a, float x);
-extern void emit_randomized_sparkle_pairs(void *, int) __asm__("FUN_L00_002a7e20");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");

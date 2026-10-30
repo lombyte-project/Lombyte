@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/draw_config.h"
 #include "sda.h"
+#include "rnc/rendering/ties/light_ties.h"
 
 typedef struct {
     u8 pad_0[4];
@@ -101,7 +102,6 @@ extern void copy_render_buffer_pair(void) __asm__("FUN_00235840");
 extern void register_entity_render_resources(void) __asm__("FUN_00235898");
 extern void draw_ties_1(void) __asm__("func_002358C8");
 extern void draw_ties_2(void) __asm__("func_00235990");
-extern void light_ties(void *) __asm__("FUN_00237370");
 extern void no_op_graphics_callback(void) __asm__("func_00237A70");
 
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");

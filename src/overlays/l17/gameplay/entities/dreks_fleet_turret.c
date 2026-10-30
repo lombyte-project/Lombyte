@@ -24,6 +24,7 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/math/vectors/normalize_vector_triplet.h"
 
 
 
@@ -622,7 +623,6 @@ extern unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos,
                                        unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 
-extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 
 void update_fleet_rotating_radial_effect(char *moby) __asm__("FUN_L17_002d77f0");
 

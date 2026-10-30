@@ -27,6 +27,9 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/gameplay/animation/update_moby_animation_state.h"
+#include "rnc/gameplay/trooper_take_damage.h"
+#include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
 
 /* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
 typedef struct {
@@ -1559,7 +1562,6 @@ unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initi
 void FUN_001f9a10_2cc210(void *, void *, void *) __asm__("FUN_001f9a10");
 float absolute_float(float) __asm__("FUN_001f99c0");
 int FUN_001f96f8_2cc210(int) __asm__("FUN_001f96f8");
-int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern float falling_moby_horizontal_velocity_scale_gp __asm__("D_L00_001618A8") __attribute__((sda));
 void update_damped_falling_moby(unsigned char *updated_moby) __asm__("FUN_L00_002cc210");
 
@@ -2846,11 +2848,9 @@ extern void *D_001413D0 NOT_SDA;
 extern s32 D_001413DC NOT_SDA;
 
 extern void update_crate_stack_motion(struct Moby *) __asm__("FUN_L00_002d1428");
-extern int trooper_take_damage(void *, void *, void *, int, int *, int *, int *, int) __asm__("FUN_00213928");
 extern void ground_attached_update(struct Moby *) __asm__("FUN_L00_002cfcb8");
 extern void create_linked_class_0326_moby(struct Moby *) __asm__("FUN_L00_002d8138");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern void update_moby_animation_state(struct Moby *) __asm__("FUN_0020c880");
 extern void break_crate(struct Moby *, int, Contact *) __asm__("FUN_L00_002d09b8");
 extern void crate_drop_bolts(struct Moby *) __asm__("FUN_L00_002d0538");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");

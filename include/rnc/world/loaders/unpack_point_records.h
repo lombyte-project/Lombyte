@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_WORLD_LOADERS_UNPACK_POINT_RECORDS_H
+#define LOMBYTE_RNC_WORLD_LOADERS_UNPACK_POINT_RECORDS_H
+
+#include "types.h"
+
+void unpack_point_records(void *, s32) __asm__("FUN_00202800");
+
+#endif /* LOMBYTE_RNC_WORLD_LOADERS_UNPACK_POINT_RECORDS_H */

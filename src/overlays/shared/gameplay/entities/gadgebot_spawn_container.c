@@ -15,6 +15,13 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/entities/detach_manipulator.h"
+#include "rnc/math/rotations/extract_matrix_rotation_quaternion.h"
+#include "rnc/overlay/l06/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
+#include "rnc/overlay/shared/gameplay/state/build_symmetric_adjacency_masks.h"
+#include "rnc/overlay/shared/gameplay/state/trooper_set_knockback.h"
+#include "rnc/overlay/shared/ui/text/update_object_wander_movement.h"
 extern unsigned char *spawn_spinning_fade_in_out_effect_particle(void *, int, int, float, float, float, float, float) __asm__("FUN_L00_0026b790");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -317,7 +324,6 @@ void gadgebot_spawn_pad_update(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002E7578), where it is exact; names translated to the US level program. */
 
-extern void initialize_moby_particle_effect(char *) __asm__("FUN_L00_002d6bf0");
 
 void initialize_moby_particle_effect_state(char *moby) __asm__("FUN_L06_002e6148");
 
@@ -832,7 +838,6 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
 /* Build an orthogonal frame from two vectors and apply it to the matrix at moby+0xC0. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EADC8), where it is exact; names translated to the US level program. */
 
-extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_002144d8");
 
 #include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_globals.h"
 extern float frog_facing_rotation_blend_factor_gp __asm__("D_L06_00161C00") __attribute__((sda));
@@ -1295,9 +1300,7 @@ extern void play_entity_sound(int, float, void *, int, float, float, int, int, i
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void update_object_wander_movement(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
 extern void FUN_L00_00272060(void *, int, float, float, int, int, int, float, void *);
-extern void build_symmetric_adjacency_masks(int *list, int n, int idx) __asm__("FUN_L05_0028be78");
 extern void assign_gadgebot_attack_targets(void) __asm__("FUN_L06_002f2250");
 void select_nearest_gadgebot_interaction_target(void *moby_arg) __asm__("FUN_L06_002f2910");
 
@@ -1307,7 +1310,6 @@ void update_gadgebot_glow_effects(char *moby) __asm__("FUN_L06_002f38c8");
 
 extern void update_gadgebot_glow_effects(char *) __asm__("FUN_L06_002f38c8");
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
-extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
 
 void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 void gadgebot_update(GbMoby *moby) {
@@ -2570,7 +2572,6 @@ void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) {
     *current = best.moby;
 }
 typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
-extern void trooper_set_knockback(void *, float, float) __asm__("FUN_L03_00250a78");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void FUN_0022da68(int, int, void *);
 
@@ -2993,7 +2994,6 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8D60), where it is exact; names translated to the US level program. */
 
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
-extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 void update_hero_trigger_volume_monitor(char *moby) __asm__("FUN_L06_002f7930");

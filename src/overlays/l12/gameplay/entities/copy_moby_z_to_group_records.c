@@ -4,6 +4,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
 
 
 extern char D_L12_001CBF40[];
@@ -28,7 +29,6 @@ void copy_moby_z_to_group_records(struct Moby *moby) {
 
 /* Register this level's vendor data set. */
 
-extern void render_water_grids(char *, int) __asm__("FUN_L01_002b91c8");
 
 void render_level_12_water_grids(void) __asm__("FUN_L12_002bf748");
 

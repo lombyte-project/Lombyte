@@ -4,6 +4,12 @@
 #include "asm.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/audio/banks/snd_resolve_bank_xrefs.h"
+#include "rnc/audio/streaming/submit_audio_stream_io_request.h"
+#include "rnc/rendering/view/init_view_context.h"
+#include "rnc/rendering/vu1/vu1_init_chain.h"
+#include "rnc/runtime/memory/init_mem_slots.h"
+#include "rnc/world/parse_space_scene_chunk.h"
 
 void initialize_level_runtime(void) __asm__("FUN_00230f60");
 
@@ -113,12 +119,8 @@ extern u8 D_00186310[];
 extern u8 D_00186350[];
 extern u32 sound_bank_handle __asm__("D_0015ED5C");
 
-extern void init_mem_slots(void) __asm__("FUN_002015d8");
 extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("func_001F97E8");
-extern void init_view_context(void) __asm__("FUN_001f2c60");
 extern void update_view_context(void) __asm__("func_001F2D98");
-extern void vu1_init_chain(void) __asm__("FUN_002335d0");
-extern s32 submit_audio_stream_io_request(void *buf, u32 lsn, u32 sectors) __asm__("FUN_00216728");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 sceCdSync(s32);
 extern void FlushCache(s32);
@@ -134,12 +136,10 @@ extern s32 upload_mip_texture(s32, void *) __asm__("func_00202270");
 extern void clear_blocks_16(void *, s32) __asm__("func_001F9810");
 extern void reset_draw_globals(void) __asm__("FUN_001f37e8");
 extern s32 rand(void);
-extern void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");
 extern void snd_bank_load_from_ee_cb(s32 cmd, void *arg, s64 data) __asm__("FUN_0012e088");
 extern void store_sound_bank_handle_callback() __asm__("func_0022DD78");
 extern s32 sceGsSyncV(s32);
 extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");
-extern void snd_resolve_bank_xrefs(void) __asm__("FUN_0012e1a8");
 
 
 void initialize_level_runtime(void) {

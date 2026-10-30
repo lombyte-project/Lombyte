@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/rendering/view/project_to_screen.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
@@ -323,7 +324,6 @@ void draw_quarter_turn_textured_quads(unsigned char red, unsigned char green, un
 /* Projects a world point to screen and stores its x and y in 1/16 units, y plus an offset. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003126D8), where it is exact; names translated to the US level program. */
 
-extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 
 void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yoff) __asm__("FUN_L11_00311210");
 

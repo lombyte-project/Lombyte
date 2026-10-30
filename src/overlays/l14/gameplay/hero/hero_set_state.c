@@ -24,6 +24,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/gameplay/hero/air_accel.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_get_gadget_anim_id.h"
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/help_002306C8.c: func_L14_002306C8), where it is exact; names translated to the US level program. */
 
@@ -45,7 +46,6 @@ extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int sample_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
-extern int hero_get_gadget_anim_id(int a) __asm__("FUN_L12_00227f10");
 struct HeroVelocityKey D_L14_0015F6E8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
 extern short D_L14_0015F688 __attribute__((sda));
 int D_L14_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};

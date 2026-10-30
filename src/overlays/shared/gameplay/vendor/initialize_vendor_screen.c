@@ -5,6 +5,12 @@
 #include "asm.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
+#include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"
+#include "rnc/overlay/l01/gameplay/hero/hero_set_state.h"
+#include "rnc/runtime/dma/calculate_dma_transfer_address.h"
+#include "rnc/textbin/world/data/select_world_object_resource_tables.h"
+#include "rnc/world/parse_space_scene_chunk.h"
 
 /* Opens the vendor screen for moby m in level lvl: sets up its camera, resets the screen state and runs it until it closes. */
 /* Ported from rac1-decomp (src/overlays/shared/update_002AFD00.c: func_L01_002AFD00), where it is exact; names translated to the US level program. */
@@ -25,8 +31,6 @@ extern int cutscene_mode __asm__("D_L01_0015F5C4");
 extern int vendor_relocation_offsets[] __asm__("D_L01_00174280");
 extern int level_table_pair_indices[] __asm__("D_L01_001CA4A0");
 extern int sceGsSyncV_alt(int) __asm__("FUN_00122298");
-extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
-extern void select_world_object_resource_tables(int, int) __asm__("FUN_00204a40");
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
@@ -34,14 +38,10 @@ extern void clear_hero_item_slot(int, int) __asm__("FUN_L00_0020fca8");
 extern void FUN_L00_00232fe8(void);
 extern void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 extern void load_scene_chunks_with_fade(int) __asm__("FUN_L00_002454c8");
-extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void fill_transfer_words() __asm__("FUN_001f97e8");
 extern void music_pause(s32);
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void transform_vector_by_basis(void *, void *, void *);
-void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
-void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");
-void snd_pause_all_sounds_in_group(s32 arg0) __asm__("FUN_0012e3e8");
 
 extern char vendor_camera_local_position_offset __asm__("D_L01_00161100") __attribute__((sda));
 extern int D_L01_0015F5D8 __attribute__((sda));

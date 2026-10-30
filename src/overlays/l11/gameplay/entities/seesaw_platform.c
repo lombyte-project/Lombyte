@@ -31,6 +31,8 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/rendering/view/update_view_context.h"
 #include "rnc/ui/help/try_set_help_message.h"
+#include "rnc/overlay/shared/gameplay/entities/pool_set_scale.h"
+#include "rnc/overlay/shared/runtime/dma/pool_init_tiles.h"
 
 typedef struct {
     int link;
@@ -610,14 +612,10 @@ extern float D_L11_00161210;
 extern float D_L11_00161214;
 extern int D_L11_00161208;
 extern void print_e088(char *) __asm__("FUN_001e93b0");
-extern void pool_init_tiles(void *, int) __asm__("FUN_L01_002b7a48");
-extern void pool_set_scale(float) __asm__("FUN_L01_002b7ef0");
-extern void pool_bind_tile(void *, void *) __asm__("FUN_L01_002b7c68");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void synchronize_linked_moby_heights(struct Moby *) __asm__("FUN_L11_0030e690");
 extern void pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
 extern int check_scaled_vector_bsphere(float, void *) __asm__("FUN_L01_00275690");
-extern void pool_flush(void *, int) __asm__("FUN_L01_002b7fe0");
 extern void render_level_11_water_grids(void) __asm__("FUN_L11_0030e708");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 

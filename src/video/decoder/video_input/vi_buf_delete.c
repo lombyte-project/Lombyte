@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/video/decoder/vi_buf.h"
+#include "rnc/video/decoder/dma/set_d4_chcr.h"
 
-extern s32 set_d4_chcr(s32 buf) __asm__("FUN_0023bbb0");
 extern s32 DeleteSema(s32 buf);
 
 s32 vi_buf_delete(struct ViBuf *buf) __asm__("FUN_0023c5b8");

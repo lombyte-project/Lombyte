@@ -23,6 +23,11 @@
 #include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/rendering/view/update_view_context.h"
+#include "rnc/overlay/l02/gameplay/hero/hero_set_state.h"
+#include "rnc/rendering/view/update_camera_view_matrices.h"
+#include "rnc/rendering/vu1/vu1_add_data_ref.h"
+#include "rnc/rendering/vu1/vu1_tex_flush.h"
+#include "rnc/ui/help/force_help_message.h"
 
 extern u8 scaled_table_output[] __asm__("D_L02_001CB9C0");
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
@@ -94,8 +99,6 @@ typedef struct QuadCamera {
 
 typedef struct QuadFrame { char pad0[8]; unsigned short a; unsigned short b; char padC[4]; } QuadFrame;
 
-extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
-extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int, float);
 extern char level02_camera_view_state[] __asm__("D_L02_0016D040");
 extern char D_L02_001673C0[];
@@ -273,7 +276,6 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
 extern int *D_L02_001611C0;
 extern void vu1_add_vif_code(int) __asm__("FUN_00233938");
 void aa_blur_pass(void) __asm__("FUN_001fb680");
-extern void vu1_tex_flush(void) __asm__("FUN_00233b68");
 
 void restore_view_after_textured_grid(void) __asm__("FUN_L02_002a46e0");
 
@@ -439,7 +441,6 @@ extern float fast_difference_between_rotations(float, float) __asm__("func_001FA
 extern int D_0015ED84; /* no foreign declaration */
 extern int FUN_L00_002323b8();
 extern int FUN_L02_0022b728();
-extern s32 force_help_message(s32 owner, s32 message_id) __asm__("FUN_002151d8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 void trooper_anim_finish(s32 id, void *s) __asm__("FUN_L00_0025d538");
 void FUN_L02_002d8910_c(float *pos, float *rot, char *moby) __asm__("FUN_L02_002d8910");
@@ -447,11 +448,9 @@ void FUN_L02_002d92f0_c(char *moby) __asm__("FUN_L02_002d92f0");
 void draw_tresspasser_puzzle(char *moby) __asm__("FUN_L02_002d93e8");
 /* Fakematch: the first parameter is an int; as a long the 0 passed after the 64-bit pad test is set again instead of taken from the mask register, like retail. */
 extern int func_0022ED80_2D9F08(long, int, Moby *) __asm__("FUN_0022da68");
-extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern void func_L02_002DA728_2D9F08(Moby *) __asm__("FUN_L02_002d92f0");
 extern void func_L02_002D9D48_2D9F08(void *, void *, Moby *) __asm__("FUN_L02_002d8910");
 extern float func_00214D88_2D9F08(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern int force_help_message(int, int) __asm__("FUN_002151d8");
 extern void func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
 extern void func_L00_0025E590_2D9F08(Moby *, Data *) __asm__("FUN_L00_0025d538");
 extern float D_L02_001D33B0[4][4];

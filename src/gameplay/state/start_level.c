@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/storage/disc_table.h"
 #include "types.h"
+#include "rnc/runtime/callbacks/count_vsync.h"
 extern int decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
 extern char voice_pool[] __asm__("D_0013E550");
 #include "rnc/storage/memory_card/memory_card_state.h"
@@ -18,7 +19,6 @@ extern void play_mpeg_movie(int, int, int, int, int) __asm__("func_0023A3B8");
 extern void sceCdSync(int);
 extern void sceGsSyncV(int);
 extern void sceGsSyncPath(int, int) __asm__("FUN_00120558");
-extern int count_vsync(void) __asm__("FUN_0012f1c8");
 extern void sceGsSyncVCallback(void (*)(void));
 extern void hud_send_texture(int, int, int, int, int, int) __asm__("func_00200B10");
 /* Start level `level`: pick its two load parameters from the level

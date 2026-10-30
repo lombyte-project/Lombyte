@@ -6,6 +6,7 @@
 #include "rnc/rendering/screen.h"
 #include "rnc/rendering/draw_environment.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/rendering/packets/put_draw_buffer_large.h"
 
 extern s32 display_buffer_address __asm__("D_0015EE80");
 extern void fill_transfer_words(u8 *, s32, s32) __asm__("FUN_001f97e8");
@@ -14,7 +15,6 @@ extern void FlushCache(s32);
 extern s32 sceGsSyncPath(s32, s32) __asm__("func_00120558");
 extern void setup_fs_aa_buffer(s32, s32, s32, s32, s32, s32) __asm__("func_001FA978");
 extern void put_disp_buffer(void) __asm__("func_001FB2A8");
-extern void put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u8 *);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);

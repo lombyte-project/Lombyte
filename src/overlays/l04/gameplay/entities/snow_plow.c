@@ -27,6 +27,8 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
 
 /* UpdateMoby_584 */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D4960), where it is exact; names translated to the US level program. */
@@ -60,7 +62,6 @@ extern float D_L04_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/l04/gameplay/entities/snow_plow_globals.h"
 extern int snow_plow_hit_count_gp __asm__("D_L04_0015EDF8") __attribute__((sda));
 extern void debug_print() __asm__("FUN_001e93b0");
-extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
 extern void FUN_L00_00258278(void *, float, void *, float, float, float);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern void FUN_L00_001fff28(void *, int, float);
@@ -1629,7 +1630,6 @@ extern u8 suck_cannon_in_inventory[] __asm__("D_0013D4F1");
 extern u8 suck_cannon_first_acquisition_recorded[] __asm__("D_0013D4C9");
 extern char suck_cannon_missing_segment_switch_warning_format[] __asm__("D_L04_001DC760");
 extern struct Moby *moby_array __asm__("D_L04_0015FFD8");
-extern void initialize_moby_particle_effect(struct Moby *) __asm__("FUN_L00_002d6bf0");
 extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");

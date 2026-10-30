@@ -16,6 +16,8 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/gameplay/hero/smooth_and_clamp_value_pair.h"
+#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 16 build). */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00227818.c: func_L16_00227818), where it is exact; names translated to the US level program. */
@@ -73,7 +75,6 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
-extern int try_transition_hero_water_state(void) __asm__("FUN_L00_00227778");
 extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
 extern int pick_idle_fidget(int *) __asm__("FUN_L00_00229010");
 extern int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
@@ -88,8 +89,6 @@ extern int get_hero_idle_animation_index(int a) __asm__("FUN_L01_00226f10");
 extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
 extern int try_apply_hero_water_and_ground_transitions(void) __asm__("FUN_L05_002515d0");
 extern int process_hero_primary_item_input(void) __asm__("FUN_L05_00251be8");
-extern int compute_hero_hoverboard_respawn_transform(float *, float *) __asm__("FUN_L05_00254358");
-extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern int hero_select_anim_id_by_flags(void) __asm__("FUN_L05_002551d0");
 extern int hero_pick_help_mode(void) __asm__("FUN_L05_00255208");
 extern int handle_hero_hit(int) __asm__("FUN_L08_00222800");

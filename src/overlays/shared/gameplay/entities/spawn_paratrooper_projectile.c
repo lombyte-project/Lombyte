@@ -17,6 +17,7 @@
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/audio/voices/vendor_volume.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
@@ -440,7 +441,6 @@ extern char D_L08_0016C588[];
 extern float frame_delta_time __asm__("D_0015ED7C");
 extern int FUN_L00_00263468();
 extern int play_voice(int sound, int flags, int moby, int volume) __asm__("FUN_L00_0028ddd8");
-extern int vendor_volume(int, int) __asm__("FUN_L01_002a1968");
 extern float smoothed_below_reference_ground_fraction_gp __asm__("D_L08_001625E8") __attribute__((sda));
 
 void update_ground_height_modulated_voice(char *moby) __asm__("FUN_L08_00316fa8");

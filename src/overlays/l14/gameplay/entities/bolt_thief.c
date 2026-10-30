@@ -26,6 +26,8 @@
 #include "rnc/gameplay/animation/set_moby_animation.h"
 #include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
 #include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
+#include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
 
 /* Spawns the effect pieces for a moby: two sparks, the ring of three and a final coloured one. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_002FF358), where it is exact; names translated to the US level program. */
@@ -548,9 +550,7 @@ extern struct {
     char pad2C[0x1A];
     short h46;
 } D_L14_0016CF60;
-extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
-extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 /* Watcher moby update: gated by its collectable and trigger, primes a camera target, then turns its head toward the hero. */

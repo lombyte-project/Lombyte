@@ -5,6 +5,7 @@
 #include "rnc/gameplay/camera/update_cam.h"
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"
 extern s32 D_0015F674 MACRO_ADDR;
 extern s32 D_00141660[];
 extern u8 D_0014161B NOT_SDA;
@@ -15,7 +16,6 @@ extern char pause_menu_chain_tail[] __asm__("D_001CE748");
 extern char D_001CE798[];
 extern s32 D_001D0398[];
 
-extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void music_pause(s32);
 extern s32 snd_flush_sound_commands() __asm__("FUN_0012dc80");
 extern s32 update_mission_list() __asm__("FUN_0020b950");

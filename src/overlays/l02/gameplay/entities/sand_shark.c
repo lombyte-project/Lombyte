@@ -21,6 +21,8 @@
 #include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/overlay/shared/audio/voices/play_voice.h"
+#include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
 
 
 
@@ -1837,7 +1839,6 @@ typedef struct {
 extern char *level02_elevator_transform_table __asm__("D_L02_001600FC");
 extern float level02_elevator_stop_height_offset_gp __asm__("D_L02_00161BD0") __attribute__((sda));
 extern unsigned char D_0013D4DA NOT_SDA;
-extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
 extern float level02_elevator_max_vertical_speed_gp __asm__("D_L02_00161BDC") __attribute__((sda));
 extern float level02_elevator_vertical_acceleration_gp __asm__("D_L02_00161BE0") __attribute__((sda));
 void draw_elevator_rotating_rings(struct Moby *moby) __asm__("FUN_L02_002dc2c8");
@@ -3087,7 +3088,6 @@ void rocket_launcher_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E0B68), where it is exact; names translated to the US level program. */
 
 extern int D_001413D4 NOT_SDA;
-extern int engine_voice_set_pitch(int, int) __asm__("FUN_L00_0028df38");
 extern int FUN_L02_0028d618(int, int);
 extern short rocket_launcher_shot_sound_distance_threshold_rate_gp __asm__("D_L02_00161C80") __attribute__((sda));
 extern short rocket_launcher_shot_sound_0_scalar_full_distance_gp __asm__("D_L02_00161C88") __attribute__((sda));

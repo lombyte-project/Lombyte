@@ -15,6 +15,8 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/gameplay/entities/camera_object.h"
+#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 03 build). */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/help_0021CDA8.c: func_L03_0021CDA8), where it is exact; names translated to the US level program. */
@@ -70,7 +72,6 @@ extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int test_hero_animation_frame_window(float t) __asm__("FUN_L00_00211870");
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
-extern int try_transition_hero_water_state(void) __asm__("FUN_L00_00227778");
 extern int try_enter_hero_water_state(void) __asm__("FUN_L00_002279b0");
 extern int process_hero_equipped_item_input(void) __asm__("FUN_L00_00227fa0");
 extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
@@ -111,7 +112,6 @@ extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void FUN_L00_0025f730(void *a, float x);
-extern void emit_randomized_sparkle_pairs(void *, int) __asm__("FUN_L00_002a7e20");
 extern void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, int call_enabled) __asm__("FUN_L01_00227e48");
 extern void hero_speed_from_table(void) __asm__("FUN_L01_00232290");
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");

@@ -6,8 +6,8 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/globals.h"
+#include "rnc/math/interpolation/cosine_interpolate.h"
 extern char D_00187080[];
-extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
 extern void quaternion_nlerp(void *, void *, void *, float) __asm__("FUN_001fa400");
 extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");

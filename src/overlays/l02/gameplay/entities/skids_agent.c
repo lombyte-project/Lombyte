@@ -35,6 +35,9 @@
 #include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 #include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/gameplay/entities/initialize_moby_grounding.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
+#include "rnc/rendering/lights/refresh_point_light.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
 typedef struct {
@@ -85,11 +88,9 @@ extern u8 big_head_cheat_enabled_macro __asm__("D_0015EDB0")MACRO_ADDR;
 extern s32 level_game_mode_macro __asm__("D_L02_0015F5C4") MACRO_ADDR;
 extern WatcherReward D_L02_0016CE60;
 extern char skid_mcmarx_dialogue_data[] __asm__("D_L02_00161D00");
-extern void attach_big_head_cheat_manipulator_to_matching_moby(struct Moby *) __asm__("FUN_L02_002e0cd8");
 void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_002e1fb8");
 
 extern void update_skid_mcmarx_relocation_sequence(struct Moby *) __asm__("FUN_L02_002e1fb8");
-extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
 extern void initialize_npc_dialogue(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
@@ -672,7 +673,6 @@ extern char aridia_ocean_middle_clip_last_draw_data[] __asm__("D_L02_001F3E10");
 extern char aridia_ocean_animated_frame_packet[] __asm__("D_L02_001F3E80");
 extern void begin_animated_frame_rendering(float, float, float, float, int, int, int, int, int, int, void *) __asm__("FUN_L02_002a4818");
 extern void FUN_L02_002a47f8_c(void) __asm__("FUN_L02_002a47f8");
-extern void refresh_point_light(void *) __asm__("FUN_00201f58");
 
 /* Draws the parts whose clip volumes contain the camera (all of them when
  * the override flag is set). */

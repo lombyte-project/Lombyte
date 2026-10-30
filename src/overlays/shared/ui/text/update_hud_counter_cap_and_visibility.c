@@ -13,6 +13,9 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/ui/hud/get_icon_frame.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
+#include "rnc/overlay/shared/ui/text/print_text_with_texture_3.h"
+#include "rnc/ui/hud/remove_hud_item.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 
 extern unsigned char D_0013E529[];
 void hud_update_counter(char *) __asm__("FUN_L00_00235ea0");
@@ -214,7 +217,6 @@ extern int D_00141610[];
 extern int D_L00_0015FA98 MACRO_ADDR;
 extern int D_L00_0015FA94;
 extern int D_L00_0015F3F8;
-extern int remove_hud_item(int) __asm__("FUN_001ff480");
 typedef struct {
     u8 p0[0x10B8];
     int w10B8;
@@ -882,7 +884,6 @@ typedef struct {
     s16 *p;
 } Hud;
 
-extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern int pal_mode __asm__("D_0015ED80");
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility_data/draw_health_hud_panel_2.h"
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility_data/draw_health_hud_panel.h"
@@ -1190,7 +1191,6 @@ extern s32 bolt_exclamation_label_y_offset_gp __asm__("D_L00_0015F908") __attrib
 extern s32 bolt_exclamation_label_color_from_gp __asm__("D_L00_0015F90C") __attribute__((sda));
 extern s32 bolt_exclamation_label_color_to_gp __asm__("D_L00_0015F910") __attribute__((sda));
 extern s32 bolt_exclamation_label_pulse_base_period_frames_gp __asm__("D_L00_0015F914") __attribute__((sda));
-extern void print_text_with_texture_3(s32, s32, s32, char *, s32) __asm__("FUN_L00_001fb470");
 
 /* Draws the short counter panel, its spinning icon, and a pulsing label. */
 s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) __asm__("FUN_L00_0023a2d0");

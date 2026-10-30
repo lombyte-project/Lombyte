@@ -16,6 +16,9 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/l06/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
+#include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 06 build). */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_0023BBE8.c: func_L06_0023BBE8), where it is exact; names translated to the US level program. */
@@ -75,10 +78,7 @@ extern int sample_path(int *tab, float *out, int *a, float *b, int c, float d) _
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int check_pad_press_separation(int, int, int, int) __asm__("FUN_L00_00266e00");
-extern int process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
-extern int get_hero_help_value(int a) __asm__("FUN_L06_0021d0a0");
 extern int process_hero_hit_response(int) __asm__("FUN_L06_00227e78");
-extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 int r1_repeat_timer __asm__("D_L06_0015F678") = 0;
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
@@ -111,7 +111,6 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_voice_if_enabled(int voice_group_index, int voice_pair_index, int call_enabled) __asm__("FUN_L01_00227e48");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void quantize_hero_input_target_speed(void) __asm__("FUN_L06_00228b40");
-extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");

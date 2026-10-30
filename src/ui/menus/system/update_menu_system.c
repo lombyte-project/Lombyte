@@ -8,6 +8,8 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/rendering/update_fog.h"
+#include "rnc/runtime/dma/calculate_dma_transfer_address.h"
 
 struct Ent3 {
     u8 pad0[0x10];
@@ -30,8 +32,6 @@ extern void reset_active_camera_position_and_basis(void) __asm__("func_00218D10"
 extern void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
 extern void update_visible_resident_objects() __asm__("FUN_00212e28");
 extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
-extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
-extern void update_fog(void) __asm__("FUN_001f2588");
 extern void close_menu_system(void) __asm__("FUN_002191b8");
 
 void update_menu_system(void) __asm__("FUN_002192a8");

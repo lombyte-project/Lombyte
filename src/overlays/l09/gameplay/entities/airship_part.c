@@ -5,6 +5,7 @@
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/animation/get_moby_joint_matrices.h"
 int find_nearest_moby_by_class() __asm__("FUN_L09_002c2610");
 
 int spawn_airship_part() __asm__("FUN_L09_002c2500");
@@ -17,7 +18,6 @@ int spawn_airship_part() __asm__("FUN_L09_002c2500");
 #include "qcopy.h"
 
 extern s32 fptodp(f32) __asm__("FUN_00120478");
-extern void get_moby_joint_matrices(void *, int, int *, void *) __asm__("FUN_00210850");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 typedef struct Data {
     float vel[4];

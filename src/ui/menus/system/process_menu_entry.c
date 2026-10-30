@@ -1,6 +1,7 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/globals.h"
+#include "rnc/ui/hud/remove_hud_item.h"
 
 typedef struct {
     s32 unk0;
@@ -46,7 +47,6 @@ extern Weapon D_001DFFB0[];
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/state/game_globals.h"
 extern void noop_callback_n(s32) __asm__("func_001E9458");
-extern s32 remove_hud_item(s32) __asm__("FUN_001ff480");
 extern void noop_callback_o(s32) __asm__("func_001E9460");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char *strcpy(char *, const char *);

@@ -12,6 +12,19 @@
 #include "rnc/audio/streaming/start_audio_stream_read.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/rendering/gs/log2dim.h"
+#include "rnc/gameplay/entities/init_moby_instance.h"
+#include "rnc/gameplay/state/clear_scene_state_buffers.h"
+#include "rnc/overlay/shared/gameplay/entities/link_and_update_all_mobys.h"
+#include "rnc/overlay/shared/rendering/load_two_int_two_float_header.h"
+#include "rnc/overlay/shared/runtime/dma/fast_decompress.h"
+#include "rnc/overlay/shared/world/loaders/load_level_texture_bank.h"
+#include "rnc/rendering/ties/light_ties.h"
+#include "rnc/runtime/relocation/relocate_asset_entry_pointers.h"
+#include "rnc/ui/hud/banks/load_hud_banks.h"
+#include "rnc/world/loaders/register_moby_class.h"
+#include "rnc/world/loaders/relocate_sky_definition.h"
+#include "rnc/world/loaders/unpack_point_records.h"
+#include "rnc/world/loaders/upload_texture_images.h"
 typedef struct {
     s32 a, b, c, off;
 } Ent;
@@ -460,7 +473,6 @@ extern int D_L00_00160FCC MACRO_ADDR;
 extern int g_debug_menu[] __asm__("D_L00_0016C058");
 extern int D_L00_001AB840[];
 extern int D_L00_001BA4D0[];
-extern int fast_decompress(void *, void *) __asm__("FUN_L00_0024d8d0");
 extern int find_or_assign_bolt_source_slot(int, int) __asm__("FUN_L00_00284d90");
 extern short gameplay_moby_index_remap[] __asm__("D_L00_001AC780");
 extern short D_L00_001B0770[];
@@ -477,7 +489,6 @@ extern void enable_global_flag(void) __asm__("func_001F61E8");
 extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 extern void FUN_0022a5e0(void *);
 extern void light_tfrags(void *) __asm__("FUN_00234f98");
-extern void light_ties(void *) __asm__("FUN_00237370");
 extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern void initialize_hero(void) __asm__("FUN_L00_00204c60");
 extern void reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
@@ -497,7 +508,6 @@ extern void update_fog(void) __asm__("func_001F2588");
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 void reset_global_state_fields(void) __asm__("func_00217020");
 void srand(int value) __asm__("func_001160C8");
-void init_moby_instance(void *moby_mem, int oClass) __asm__("FUN_0020c5f0");
 extern void load(void *, int, int) __asm__("FUN_00216828");
 extern GameState137B80 D_00137B80;
 
@@ -1772,27 +1782,15 @@ typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una2
 extern u8 D_L00_00179100[];
 extern s32 game_frame __asm__("D_L00_0015F5CC");
 
-extern void load_hud_banks(void) __asm__("FUN_00202a98");
-extern void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
-extern s32 FUN_L00_0024d8d0_244110(void *, char *) __asm__("FUN_L00_0024d8d0");
 extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
-extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
-extern void register_moby_class(char *, void *, void *, s32) __asm__("FUN_00203640");
-extern void relocate_asset_entry_pointers(Class244110 *, s32) __asm__("FUN_002032e0");
 extern void register_object_render_class(char *, void *, void *, s32) __asm__("FUN_00203730");
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
 extern void register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00203b08");
-extern void unpack_point_records(void *, s32) __asm__("FUN_00202800");
-extern void relocate_counted_pointer_table(char *) __asm__("FUN_L00_0023f120");
-extern void load_two_int_two_float_header(char *) __asm__("FUN_L00_0023f0d8");
 extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern char *load_level_texture_bank(char *, s32 *) __asm__("FUN_L00_0023fa00");
 extern char *FUN_L00_00241940_244110(s32) __asm__("FUN_L00_00241940");
 extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
-extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
-extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
 
 #define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld) \
     ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) \
@@ -1855,7 +1853,7 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         upload_texture_images((char *)(level_file_base[6] + (s32)level_file_base), core_header[0], (char *)core_header + core_header[1]);
         saved_sound_bank_handle = sound_bank_handle;
         flush_cache(0);
-        used = FUN_L00_0024d8d0_244110((char *)(level_file_base[0x14] + (s32)level_file_base), base);
+        used = fast_decompress((char *)(level_file_base[0x14] + (s32)level_file_base), base);
         D_L00_0015F40C = (s32)(base + core_header[0x18]);
 
         level_texture_128x128_descriptor[0] = GS_TEX0((gs_texture_allocation_base + core_header[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,

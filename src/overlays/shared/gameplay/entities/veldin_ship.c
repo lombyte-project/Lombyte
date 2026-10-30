@@ -20,6 +20,10 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/math/rotations/matrix_to_quaternion.h"
+#include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
+#include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/ui/text/update_object_wander_movement.h"
 
 typedef unsigned int Q_2cfcb8 __attribute__((mode(TI)));
 typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) V_2cfcb8;
@@ -1429,7 +1433,6 @@ extern u8 D_L00_001E1170[] NOT_SDA;
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
-extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void engine_voice_set_pitch(s32, s32) __asm__("FUN_L00_0028df38");
 extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
@@ -2119,7 +2122,6 @@ extern int FUN_L00_002dc9f0_2d4610(void *, void *) __asm__("FUN_L00_002dc9f0");
 extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
 extern float move_horny_toad_toward_position(unsigned char *m, float *t, float vel) __asm__("FUN_L00_002d54c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void update_object_wander_movement(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
 extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
 extern void collect_mobies_in_sphere_at_moby_point(void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
 extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
@@ -2790,8 +2792,6 @@ extern void unlock_planet(s32) __asm__("FUN_L00_002607d0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
-extern void queue_planet_unlock_message(s32) __asm__("FUN_L00_00262d38");
-extern void set_moby_dialogue_record_value(struct Moby *, s32) __asm__("FUN_L00_00266858");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern void FUN_0020c828(struct Moby *);
 

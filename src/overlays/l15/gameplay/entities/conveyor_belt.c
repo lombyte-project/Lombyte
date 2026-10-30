@@ -15,6 +15,12 @@
 #include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/gameplay/entities/initialize_moby_grounding.h"
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
+#include "rnc/overlay/shared/gameplay/hero/update_hero_and_vehicle_mode_effects.h"
+#include "rnc/overlay/shared/rendering/commands/get_moby_color.h"
+#include "rnc/overlay/shared/rendering/culling/test_point_in_transformed_unit_cylinder.h"
 
 
 
@@ -345,7 +351,6 @@ extern int D_L15_0015F640;
 extern unsigned char D_0013D4FD[];
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void initialize_moby_particle_effect(char *) __asm__("FUN_L00_002d6bf0");
 extern void emit_moby_sprite_particles(char *) __asm__("FUN_L10_00298940");
 
 extern short bolt_grabber_scale_multiplier_gp __asm__("D_L15_00162078") __attribute__((sda));
@@ -450,7 +455,6 @@ extern float ripple_mesh_buffers_z_amplitude_gp __asm__("D_L15_00162100") __attr
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern float ripple_mesh_buffers_uv_scroll_rate_gp __asm__("D_L15_00162104") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
-extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
@@ -702,7 +706,6 @@ extern void FUN_L00_002330d0_v(void) __asm__("FUN_L00_002330d0");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
 
@@ -1093,9 +1096,7 @@ extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") MACRO_
 extern void FUN_L00_002502a0(int);
 extern void FUN_L00_00284e50(void *, void *);
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
-extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void apply_npc_big_head_cheat(void *) __asm__("FUN_L12_002e6b60");
-extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 #include "rnc/gameplay/state/game_globals.h"
@@ -1828,7 +1829,6 @@ extern float FUN_001f96b0_2edfc0(float) __asm__("FUN_001f96b0");
 extern void FUN_00233980_2edfc0(int, long) __asm__("FUN_00233980");
 extern void FUN_L00_001fde98_2edfc0(int, int, int, void *, int) __asm__("FUN_L00_001fde98");
 extern float FUN_L00_00200260_2edfc0(float, float) __asm__("FUN_L00_00200260");
-extern void FUN_L00_00250320_2edfc0(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 typedef struct { float f[2][2]; } Quad4_2edfc0;
 typedef struct {
     float prev;
@@ -2052,7 +2052,7 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
     FUN_00233980_2edfc0(0x14, 0xFF9000000260L);
     data->prev = data->angle;
     data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0_2edfc0(ripple_88_phase_advance_divisor_gp) * 0.017453292f * D_0015ED6C_2edfc0);
-    FUN_L00_00250320_2edfc0(moby, &r, &g, &b);
+    get_moby_color(moby, &r, &g, &b);
     color = (D_L15_0016225C << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 88; i++) {
         float *template_vertex = D_L15_001DF100[i];
@@ -2098,8 +2098,6 @@ int can_spawn_codebot_slot_effect(int slot) {
 
 extern int *D_L15_001B0AB0[];
 extern int point_in_path_xy(float *p, float *v, int n) __asm__("FUN_L00_00259740");
-extern int test_point_in_transformed_unit_cylinder(void *p, int i) __asm__("FUN_L00_0025fa38");
-extern int test_point_in_transformed_unit_sphere(float *p, int idx) __asm__("FUN_L00_0025faf0");
 
 extern char *D_L15_0015EF48[] MACRO_ADDR;
 int is_hero_in_moby_follow_camera_region(char *moby) __asm__("FUN_L15_002f85a8");

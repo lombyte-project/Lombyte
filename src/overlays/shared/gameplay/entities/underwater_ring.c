@@ -18,6 +18,7 @@
 #include "rnc/gameplay/animation/set_moby_animation.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/gameplay/hero/update_hero_and_vehicle_mode_effects.h"
 
 typedef struct {
     s16 timer;
@@ -277,7 +278,6 @@ extern int D_L15_0015F594 __attribute__((sda));
 extern u8 D_0014C050[];
 extern u32 D_0013CAE4 NOT_SDA;
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
-extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");

@@ -16,6 +16,10 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/l17/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/entities/camera_object.h"
+#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
+#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 17's build of the shared func_L00_0022A340, without states 90-97). */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/help_002260F0.c: func_L17_002260F0), where it is exact; names translated to the US level program. */
@@ -78,7 +82,6 @@ extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int test_hero_animation_frame_window(float t) __asm__("FUN_L00_00211870");
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
-extern int try_transition_hero_water_state(void) __asm__("FUN_L00_00227778");
 extern int try_enter_hero_water_state(void) __asm__("FUN_L00_002279b0");
 extern int process_hero_equipped_item_input(void) __asm__("FUN_L00_00227fa0");
 extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
@@ -93,7 +96,6 @@ extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int check_pad_press_separation(int, int, int, int) __asm__("FUN_L00_00266e00");
 extern int select_hero_help_value(int a) __asm__("FUN_L17_002020a8");
 extern int process_hero_hit_response(int) __asm__("FUN_L17_0020dbe8");
-extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern void emit_hero_animation_voice_and_ground_particle(int a0, int a1, int a2) __asm__("FUN_L00_00205f60");
@@ -126,8 +128,6 @@ extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void FUN_L00_0025f730(void *a, float x);
-extern void emit_randomized_sparkle_pairs(void *, int) __asm__("FUN_L00_002a7e20");
-extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");

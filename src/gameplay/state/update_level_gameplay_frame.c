@@ -4,6 +4,8 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/runtime/data/read_global_table_entry.h"
+#include "rnc/world/parse_space_scene_chunk.h"
 
 typedef union {
     u128 quadword;
@@ -136,7 +138,6 @@ extern f32 level_render_depth_by_mode[] __asm__("D_001D9B30");
 extern f32 cam_mode_min_fov[] __asm__("D_001D9B48");
 
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void read_global_table_entry(void) __asm__("ReadGlobalTableEntry");
 extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void snd_play_sound_vol_pan_pmpb(s32, s32, s32, s32, s32, s32, s32,
                                         void *) __asm__("func_0012E308");
@@ -149,7 +150,6 @@ extern u32 fast_mem_copy(void *, void *, s32) __asm__("func_001F98D0");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern void update_moby_animation_state(LevelRenderObject *) __asm__("func_0020C880");
 extern void build_moby_bone_transform(LevelRenderObject *, s32, void *) __asm__("func_0020CCA8");
 extern void refresh_moby_spatial_bounds(LevelRenderObject *) __asm__("func_0020DEF8");

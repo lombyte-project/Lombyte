@@ -35,6 +35,21 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility.h"
 #include "rnc/rendering/view/update_view_context.h"
+#include "rnc/audio/music/music_stop.h"
+#include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
+#include "rnc/audio/streaming/safe_cd/snd_stream_safe_cd_sync.h"
+#include "rnc/audio/voices/snd_continue_all_sounds_in_group.h"
+#include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"
+#include "rnc/audio/voices/sound_stop_all_sounds.h"
+#include "rnc/gameplay/animation/update_moby_animation_state.h"
+#include "rnc/gameplay/entities/detach_manipulator.h"
+#include "rnc/gameplay/entities/init_moby_instance.h"
+#include "rnc/gameplay/entities/update_visible_resident_objects.h"
+#include "rnc/overlay/shared/gameplay/animation/hud_update_counter.h"
+#include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
+#include "rnc/runtime/relocation/relocate_asset_entry_pointers.h"
+#include "rnc/storage/memory_card/memcard_update_state.h"
+#include "rnc/textbin/world/data/select_world_object_resource_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_00299108), where it is exact; names translated to the US level program. */
 
@@ -368,7 +383,6 @@ int start_cutscene_chunk_read(int) __asm__("FUN_L00_002451b8");
 void update_world_object_animation(void) __asm__("FUN_00204790");
 void sound_update(void) __asm__("FUN_0022ca50");
 int f122298_298840(int) __asm__("FUN_00122298");
-int continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern char D_L00_0017C440[] NOT_SDA;
 extern float D_L00_0015F59C;
 void start_scene(int a) __asm__("FUN_L00_00298840");
@@ -649,10 +663,8 @@ extern VendorCutscene D_L00_0016C860;
 extern s32 D_0015EEA0;
 extern s32 decode_mode __asm__("D_0015EED8");
 extern void apply_level_specific_cutscene_moby_effects(void) __asm__("FUN_L00_0023e268");
-extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern s32 FUN_002168a8(s32);
 extern void FUN_00204790(void);
-extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 extern void update_moby_shadow_range(void *) __asm__("FUN_00213700");
 extern void apply_hero_moby_scale(void *) __asm__("FUN_L00_00234b38");
 extern void update_moby_pulsing_glow_effects(void *) __asm__("FUN_L00_00207430");
@@ -847,8 +859,6 @@ extern s32 D_L00_00173E04_lui __asm__("D_L00_00173E04") NOT_SDA;
 /* [0] is gs_texture_allocation_start, [4] depth_buffer_address. */
 extern s32 D_0015EE78_macro[6] __asm__("D_0015EE78") MACRO_ADDR;
 extern void flush_cache(s32) __asm__("FUN_00118a80");
-extern void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
-extern void music_stop(void) __asm__("FUN_00215ee8");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
@@ -979,10 +989,6 @@ extern int sceCdSync_alt(int) __asm__("FUN_00120c30");
 extern void play_mpeg_movie(int, int, int, int, int) __asm__("FUN_0023a3b8");
 extern void movie_exit_to_gameplay(void) __asm__("FUN_L00_002997c8");
 extern void FlushCache(s32);
-s32 snd_stream_safe_cd_sync(s32 mode) __asm__("FUN_0012ee08");
-void memcard_update_state(void) __asm__("FUN_002093d8");
-void music_stop(void) __asm__("FUN_00215ee8");
-void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 
 void play_queued_movie(void) __asm__("FUN_L00_002999a8");
 
@@ -1049,7 +1055,6 @@ void start_slideshow(void) {
     }
 }
 extern s32 D_L00_0015F3FC;
-void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 void request_audio_stream_break(void) __asm__("FUN_002166e8");
 /* Calls 002a09d8(1), fades to black, breaks the audio stream, clears globals, calls 002335a0. */
 void end_slideshow(void) __asm__("FUN_L00_00299c00");
@@ -1153,7 +1158,6 @@ void update_slideshow(void) {
 extern char *D_L00_00197300_lui[] __asm__("D_L00_00197300") NOT_SDA;
 extern int D_L00_001CA4C0_lui[] __asm__("D_L00_001CA4C0") NOT_SDA;
 extern void fast_decompress(int, int) __asm__("FUN_L00_0024d8d0");
-extern void relocate_asset_entry_pointers(char *arg0, int idx) __asm__("FUN_002032e0");
 
 extern unsigned char D_L00_00197BCC NOT_SDA;
 void decompress_and_relocate_vendor_moby_assets(void) __asm__("FUN_L00_0029a330");
@@ -1331,14 +1335,12 @@ extern Vec4 D_L00_00180260_29a6b0 __asm__("D_L00_00180260");
 extern s32 D_L00_00161188;
 extern s32 D_L00_0016118C;
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void FUN_00216050_29a6b0(s32) __asm__("FUN_00216050");
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void build_vendor_menu_rows(s32) __asm__("FUN_L00_0029a400");
 extern void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
-extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 extern void FUN_L00_00232fe8_29a6b0(void) __asm__("FUN_L00_00232fe8");
 
@@ -1475,7 +1477,6 @@ struct S16_29ab70 {
 extern struct S16_29ab70 D_001516D0_29ab70 __asm__("D_001516D0");
 extern void f2330d0_29ab70(void) __asm__("FUN_L00_002330d0");
 extern void update_resource_counter(void) __asm__("FUN_001ff768");
-extern void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern int vendor_close_hero_local_offset_gp __asm__("D_L00_00161070") __attribute__((sda));
 void close_vendor_menu(int exit_cutscene_completed) __asm__("FUN_L00_0029ab70");
@@ -1531,11 +1532,9 @@ extern struct S16_29ad08 D_001516D0_29ad08 __asm__("D_001516D0");
 struct T_29ad08 { char p0[0x10]; s32 id; char p1[0x38]; };
 extern struct T_29ad08 D_L00_00179AC0_29ad08[] __asm__("D_L00_00179AC0");
 extern float f213508_29ad08(float, void *, s32) __asm__("FUN_00213508");
-extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 extern void clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");
 extern void parse_space_scene_chunk(s32, s32) __asm__("FUN_002049f0");
 extern void load_scene_chunks_with_fade(s32) __asm__("FUN_L00_002454c8");
-extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void FUN_L00_002455c0(s32);
 extern void sce_gs_sync_v(s32) __asm__("FUN_00122298");
 extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
@@ -1608,7 +1607,6 @@ struct S16 {
 extern struct S16 D_001516D0;
 void FUN_L00_002330d0(void);
 void update_resource_counter(void) __asm__("FUN_001ff768");
-void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 void music_unpause(void) __asm__("FUN_00216088");
 void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 void restore_hero_after_vendor_exit_cutscene(void) __asm__("FUN_L00_0029af80");
@@ -1727,8 +1725,6 @@ extern T_29b680 D_L00_00179AC0_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern int D_L00_001C8FF0_lui[][16] __asm__("D_L00_001C8FF0") NOT_SDA;
 extern unsigned char discount_purchase_pricing __asm__("D_0013D4E3") NOT_SDA;
 extern int D_L00_00161E38;
-extern void select_world_object_resource_tables(int, int) __asm__("FUN_00204a40");
-extern void init_moby_instance(void *, int) __asm__("FUN_0020c5f0");
 extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f0");
 #define P D_L00_001CA4C0_29b680
 
@@ -1875,13 +1871,11 @@ extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 
 extern void FUN_0022dc50(void);
 extern void FUN_00212f90(void *, s32, s32, s32);
-extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
 extern void start_vendor_exit_cutscene(void) __asm__("FUN_L00_0029ad08");
 extern void close_vendor_menu(s32) __asm__("FUN_L00_0029ab70");
 extern void draw_vendor_inset_quads(void) __asm__("FUN_L00_0029f990");
 extern void FUN_00201a28(void);
 extern void decompress_and_relocate_vendor_moby_assets(void) __asm__("FUN_L00_0029a330");
-extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void handle_vendor_auxiliary_moby_event(s32) __asm__("FUN_L00_0029b4d8");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");

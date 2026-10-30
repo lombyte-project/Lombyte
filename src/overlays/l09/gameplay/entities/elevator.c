@@ -24,6 +24,8 @@
 #include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
+#include "rnc/overlay/shared/rendering/view/reorient_position_about_pivot.h"
 #define F(p, o) (*(float *)((p) + (o)))
 
 /* Moves a moby along a path between its ends once its collectable flag is set, easing between nodes. */
@@ -1273,7 +1275,6 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 struct Moby *spawn_tumbling_debris(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) __asm__("FUN_L09_002ef868");
 void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate);
-extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern int func_001F9850_309688(int) __asm__("FUN_001f96f8");
 extern float func_002140F8_309688(float, float) __asm__("FUN_002132a8");
 extern float func_001F9F90_309688(float) __asm__("FUN_001f9dc8");
@@ -1389,13 +1390,11 @@ extern void update_moby_vertical_oscillation(float, float, char *, float *, floa
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
 float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
-void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
 extern float func_002140F8_30A560(float, float) __asm__("FUN_002132a8");
 extern void func_001E9730_30A560() __asm__("FUN_001e93b0");
 extern int func_001F9850_30A560(int) __asm__("FUN_001f96f8");
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_30A560(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
-extern void reorient_position_about_pivot(void *input_position, void *output_position, void *pivot_position, void *inverse_rotation_angles, void *forward_rotation_angles) __asm__("FUN_L07_00288968");
 extern char D_L09_00209518_30A560[] __asm__("D_L09_00209228");
 extern unsigned char D_0013E633_30A560[] __asm__("D_0013F350");
 extern unsigned char D_0013F3D0[];

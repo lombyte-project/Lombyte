@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/rendering/view/project_to_screen.h"
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L06_00167400[];
 extern OvlVec4 D_L06_001fe8d0[];
@@ -408,7 +409,6 @@ void spawn_timed_projected_sprite_effect(char *world_position, int duration_upda
         effect_moby[0x20] = 1;
     }
 }
-extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern s32 D_0013E500[];

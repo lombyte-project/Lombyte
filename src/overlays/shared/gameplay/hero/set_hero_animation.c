@@ -20,6 +20,8 @@
 #include "rnc/gameplay/entities/attach_manipulator.h"
 #include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/gameplay/animation/update_moby_animation_state.h"
+#include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
 extern int lookup_s16_pair_value(int, int *) __asm__("FUN_L00_002321c0");
 
 /* With both objects at hero +0x1180 and +0x1184 present and the
@@ -393,7 +395,6 @@ extern void blend_hero_mapped_moby_animation(int, int, float) __asm__("FUN_L00_0
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void FUN_L00_00251ce8(void *, int);
 extern void FlushCache(s32);
-void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 
 void set_hero_animation(int requested_animation_id, int starting_frame_index, float blend_frames_or_selector) __asm__("FUN_L00_002323b8");
 void set_hero_animation(int requested_animation_id, int starting_frame_index, float blend_frames_or_selector) {
@@ -1447,7 +1448,6 @@ void FUN_L00_002347c0(void) {
 }
 extern s32 D_L00_0015F5C4_234808 __asm__("D_L00_0015F5C4");
 s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
-void FUN_L00_001fff28_234808(void *, s32, f32) __asm__("FUN_L00_001fff28");
 #define X  D_L00_0015F5C4_234808
 #define DD frame_time
 void animate_hero_slot4_and_slot5_visuals(void) __asm__("FUN_L00_00234808");
@@ -1494,7 +1494,7 @@ void animate_hero_slot4_and_slot5_visuals(void) {
             if (!hero.unk1D90.attached)
                 attach_manipulator(slot5_moby, 0, &hero.unk1D90);
             else
-                FUN_L00_001fff28_234808(&hero.unk1D90.quat, 0, hero.unk22F0);
+                rotation_2D5FA8(&hero.unk1D90.quat, 0, hero.unk22F0);
         }
     }
 }

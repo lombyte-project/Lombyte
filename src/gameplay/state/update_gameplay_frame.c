@@ -5,6 +5,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/world/parse_space_scene_chunk.h"
 
 typedef struct {
     f32 x, y, z, w;
@@ -56,7 +57,6 @@ extern void fast_vec_scale(Vec4 *, Vec4 *, f32) __asm__("func_001F9A68");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void update_mode_freeze(void) __asm__("func_001FCE28");
-extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern void update_moby_animation_state(RenderSequenceActor *) __asm__("func_0020C880");
 extern void refresh_moby_spatial_bounds(RenderSequenceActor *) __asm__("func_0020DEF8");
 extern void update_menu_system(void) __asm__("func_002192A8");

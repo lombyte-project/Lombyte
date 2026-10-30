@@ -3,6 +3,7 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/audio/streaming/submit_audio_stream_io_request.h"
 
 struct LevelArchiveDiscEntry {
     u8 pad_0[0x12C8];
@@ -32,7 +33,6 @@ extern void snd_bank_load_from_ee_cb(s32, s32, u64) __asm__("FUN_0012e088");
 extern void snd_resolve_bank_xrefs() __asm__("FUN_0012e1a8");
 extern s32 snd_unload_bank(s32) __asm__("FUN_0012e1d8");
 extern void snd_stop_all_sounds() __asm__("func_0012E3B8");
-extern s32 submit_audio_stream_io_request(void *, u32, u32) __asm__("FUN_00216728");
 extern s32 sceCdBreak();
 extern s32 sceCdGetError();
 extern s32 sceCdSync(s32);

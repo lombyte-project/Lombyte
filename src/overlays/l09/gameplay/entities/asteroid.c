@@ -29,6 +29,10 @@
 #include "rnc/rendering/view/update_view_context.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/overlay/shared/audio/voices/vendor_volume.h"
+#include "rnc/overlay/shared/rendering/view/reorient_position_about_pivot.h"
+#include "rnc/rendering/view/update_camera_view_matrices.h"
+#include "rnc/rendering/vu1/vu1_add_data_ref.h"
 
 extern union PacketCursor l09_packet __asm__("D_L09_001611C0") MACRO_ADDR;
 extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") MACRO_ADDR;
@@ -187,9 +191,7 @@ void draw_level09_scrolling_textured_strips(char *list, int count, float unused,
         }
     }
 }
-extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern void setup_offset_vector(float, void *, void *) __asm__("FUN_001f9a68");
-extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void restore_view_after_textured_grid(void *) __asm__("FUN_L02_002a46e0");
 #include "rnc/overlay/l09/gameplay/entities/asteroid_globals.h"
@@ -691,7 +693,6 @@ extern float D_0015ED6C MACRO_ADDR;
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_00257b90(int, int);
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
-extern int vendor_volume(int, int) __asm__("FUN_L01_002a1968");
 extern unsigned char D_0013F350[];
 extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1580,11 +1581,9 @@ extern void update_moby_vertical_oscillation(float, float, char *, float *, floa
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
-void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
 extern int func_001F9850_2F9A50(int) __asm__("FUN_001f96f8");
 extern float func_001F9C78_2F9A50(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
-extern void reorient_position_about_pivot(void *input_position, void *output_position, void *pivot_position, void *inverse_rotation_angles, void *forward_rotation_angles) __asm__("FUN_L07_00288968");
 extern unsigned char D_0013E633_2F9A50[] __asm__("D_0013F350");
 extern unsigned char D_0013F3D0[];
 

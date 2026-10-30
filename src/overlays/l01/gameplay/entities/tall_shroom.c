@@ -16,6 +16,8 @@
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/overlay/shared/gameplay/entities/draw_trail.h"
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
 
 typedef struct {
     u8 pad0[0x5C];
@@ -420,12 +422,10 @@ extern u128 fx_prev_pos __asm__("D_L01_00162070") MACRO_ADDR;
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern char *spawn_splash(f32, f32, void *, void *, void *) __asm__("FUN_L00_002718d0");
-extern char *spawn_burst_moby(void *, f32) __asm__("FUN_L00_002d7e90");
 extern void spawn_debris_chunk(void *, void *, s32, s32) __asm__("FUN_L00_0026f548");
 extern FxSpark *spawn_spark(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32,
                        s32) __asm__("FUN_L00_0025e450");
-extern void draw_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b70");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 

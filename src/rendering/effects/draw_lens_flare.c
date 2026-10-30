@@ -2,6 +2,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/view/project_to_screen.h"
 
 /* Lens flare: 16 sprites along the line from the flare source's screen
    position through the screen centre, faded by distance and by how far
@@ -31,7 +32,6 @@ extern LensFlare effect_ribbon __asm__("D_00187300");
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float absolute_float(float input) __asm__("func_001F99C0");
-extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("FUN_001f5450");

@@ -5,13 +5,14 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/do_gif_paging.h"
 #include "rnc/rendering/setup_gif_paging.h"
+#include "rnc/rendering/debug/draw_debug_profiler.h"
+#include "rnc/rendering/packets/append_gif_transfer_packet.h"
+#include "rnc/rendering/packets/emit_rgba_draw_packet.h"
+#include "rnc/rendering/state/reset_gs_registers.h"
 
 extern int D_L00_0015F5D8;
 int FUN_L00_00201720(void);
-void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
-void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 void draw_pause_menu_pages(int) __asm__("FUN_L00_002772c0");
-void emit_rgba_draw_packet(int, int, int, int) __asm__("FUN_001f5210");
 /* The level overlay's own copy of draw_dialog_text: same code, own data. */
 void level_draw_dialog_text(void) __asm__("FUN_L00_002018c8");
 extern s32 D_L00_0015F3F4_gp __asm__("D_L00_0015F3F4") __attribute__((sda));
@@ -42,8 +43,6 @@ extern volatile s32 D_L00_0015F628;
 #include "rnc/overlay/shared/rendering/debug/draw_dialog_background_and_text_globals.h"
 extern u8 timed_text_entries[] __asm__("D_L00_00173080");
 void queue_framebuffer_upload(s32) __asm__("FUN_L00_001fc558");
-void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("FUN_001f5210");
-void reset_gs_registers(void) __asm__("FUN_001f3868");
 void draw_timed_text(void *, s32) __asm__("FUN_L00_001fcca0");
 void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
 

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_LIGHTS_REFRESH_POINT_LIGHT_H
+#define LOMBYTE_RNC_RENDERING_LIGHTS_REFRESH_POINT_LIGHT_H
+
+#include "types.h"
+
+void refresh_point_light(void *) __asm__("FUN_00201f58");
+
+#endif /* LOMBYTE_RNC_RENDERING_LIGHTS_REFRESH_POINT_LIGHT_H */

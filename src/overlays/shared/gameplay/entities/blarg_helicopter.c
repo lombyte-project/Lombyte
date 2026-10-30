@@ -30,6 +30,11 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/audio/streaming/register_audio_stream_callback.h"
+#include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
+#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
+#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
+#include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_00292AC0), where it is exact; names translated to the US level program. */
 
@@ -970,7 +975,6 @@ extern void attach_manipulator(int, int, void *) __asm__("FUN_0020cb10");
 extern void detach_manipulator(int, void *) __asm__("func_0020CB88");
 s32 FUN_L00_0025df68(s32 *path, void *point, void *nearest, f32 *fraction, s32 *segment, s32 wrap, f32 limit, f32 step, f32 height_tolerance);
 void record_moby_hit(unsigned char *m, void *src) __asm__("FUN_L00_00259a88");
-void manipulator_set_scale(char *p, float x) __asm__("FUN_L00_00263b38");
 void handle_blarg_helicopter_hits(char *m) __asm__("FUN_L03_002ce238");
 extern int D_L03_001BA5D0[] __asm__("D_L03_001BA5D0");
 extern HPath49 *D_L03_001B08B0_2CDDC8[] __asm__("D_L03_001B05B0");
@@ -979,7 +983,6 @@ extern void func_L00_00263950_2CDDC8(char*,char*,int,float,float) __asm__("FUN_L
 extern void handle_blarg_helicopter_hits(char*) __asm__("FUN_L03_002ce238");
 extern int func_L00_0025EFC0_2CDDC8(void*,void*,void*,int*,float*,int,float,float,float) __asm__("FUN_L00_0025df68");
 extern float spring_turn(float*,float,float,float,float,float) __asm__("FUN_L00_00258110");
-extern void func_L00_001FFED8_2CDDC8(void*,int,float) __asm__("FUN_L00_001fff28");
 extern float func_00214D28_2CDDC8(float*,float,float) __asm__("FUN_00213ed8");
 extern float func_001F9878_2CDDC8(float) __asm__("FUN_001f96b0");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
@@ -1121,7 +1124,7 @@ void blarg_helicopter_update(HMob49 *moby) {
             data->gun_yaw=spring_turn(&data->gun_yaw_velocity,data->gun_yaw,angle,D_0015ED70*6.2831855f,D_0015ED70*12.566371f,D_0015ED6C*6.2831855f);
             angle=-fast_arc_tan(vector_length_xy(work.projected),work.projected[2]);
             data->gun_pitch=spring_turn(&data->gun_pitch_velocity,data->gun_pitch,angle,D_0015ED70*3.1415927f,D_0015ED70*6.2831855f,D_0015ED6C*1.5707964f);
-            func_L00_001FFED8_2CDDC8(data->gun_yaw_matrix+4,2,data->gun_yaw); func_L00_001FFED8_2CDDC8(data->gun_pitch_matrix+4,2,data->gun_pitch); data->projectile=0;
+            rotation_2D5FA8(data->gun_yaw_matrix+4,2,data->gun_yaw); rotation_2D5FA8(data->gun_pitch_matrix+4,2,data->gun_pitch); data->projectile=0;
         } else {
             moby_point_position(moby,0,work.movement);
             fast_vec_sub(work.direction,data->projectile->position,work.movement);
@@ -1130,7 +1133,7 @@ void blarg_helicopter_update(HMob49 *moby) {
             data->gun_yaw=spring_turn(&data->gun_yaw_velocity,data->gun_yaw,angle,D_0015ED70*6.2831855f,D_0015ED70*12.566371f,D_0015ED6C*6.2831855f);
             angle=-fast_arc_tan(vector_length_xy(work.projected),work.projected[2]);
             data->gun_pitch=spring_turn(&data->gun_pitch_velocity,data->gun_pitch,angle,D_0015ED70*3.1415927f,D_0015ED70*6.2831855f,D_0015ED6C*1.5707964f);
-            func_L00_001FFED8_2CDDC8(data->gun_yaw_matrix+4,2,data->gun_yaw); func_L00_001FFED8_2CDDC8(data->gun_pitch_matrix+4,2,data->gun_pitch);
+            rotation_2D5FA8(data->gun_yaw_matrix+4,2,data->gun_yaw); rotation_2D5FA8(data->gun_pitch_matrix+4,2,data->gun_pitch);
         }
         if (point>0 && point<route->path->count-1) {
             float node_distance=vector_distance_xy(&route->path->points[point],work.target.position);
@@ -1729,7 +1732,6 @@ extern unsigned char *D_L03_0015FFD8 __attribute__((sda));
 extern char D_L03_001E3628[], D_L03_001E3660[], D_L03_001E3690[];
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void debug_print(void *) __asm__("FUN_001e93b0");
-extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void attach_cutscene_fixed_scale_manipulator(void *) __asm__("FUN_L01_002fb4b8");
 
@@ -1845,10 +1847,8 @@ void qwark_rilgar_update(L03WatchMoby *moby) {
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, watch_data, 0);
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, (char *)watch_data + 0x80, 1);
 }
-extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char l03_draw_callback_setup_byte_target[] __asm__("D_L03_001DC1A0");
-extern void register_audio_stream_callback(void) __asm__("FUN_00215420");
 
 void update_moby_draw_callback(unsigned char *moby) __asm__("FUN_L03_002dc9b0");
 

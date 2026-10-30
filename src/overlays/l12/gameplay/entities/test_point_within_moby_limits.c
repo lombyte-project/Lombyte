@@ -8,6 +8,7 @@
 #include "rnc/gameplay/entities/build_moby_bone_transform.h"
 #include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/math/vectors/normalize_vector_triplet.h"
 
 
 
@@ -34,7 +35,6 @@ int test_point_within_moby_limits(char *moby, float *point_position, float x, fl
     return 1;
 }
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 #include "qcopy.h"
 
 

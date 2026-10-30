@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/sce_gs_gparam.h"
+#include "rnc/sdk/graph/sce_gs_get_gparam.h"
 
-extern sceGsGParam *sceGsGetGParam(void) __asm__("GetCoreDataTable");
 extern s32 VSync(void);
 extern s64 VSync2(void);
 

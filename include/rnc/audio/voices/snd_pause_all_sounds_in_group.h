@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_AUDIO_VOICES_SND_PAUSE_ALL_SOUNDS_IN_GROUP_H
+#define LOMBYTE_RNC_AUDIO_VOICES_SND_PAUSE_ALL_SOUNDS_IN_GROUP_H
+
+#include "types.h"
+
+void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
+
+#endif /* LOMBYTE_RNC_AUDIO_VOICES_SND_PAUSE_ALL_SOUNDS_IN_GROUP_H */

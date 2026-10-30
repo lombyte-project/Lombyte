@@ -13,6 +13,7 @@
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
 
 
 
@@ -144,7 +145,6 @@ void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D6F0), where it is exact; names translated to the US level program. */
 
 extern Vec4 D_L00_00173E70;
-extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern float approach_value(float *p, float target, float maxstep);
 extern int *D_L00_00177F00[];
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60"); /* no foreign declaration */

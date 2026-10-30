@@ -4,6 +4,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/ui/text/font/font_print_right.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -16,7 +17,6 @@ typedef struct {
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void *get_help_message_text(s32) __asm__("func_001FDD10");
-extern void font_print_right(s32, s32, u64, void *, s32) __asm__("FUN_001f6940");
 extern void font_print_large(s32, s32, u64, void *, s32) __asm__("FUN_001f6530");
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite_rect(s32, s32, s32, s32, s32, s32, s32, s32, s32,

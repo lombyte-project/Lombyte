@@ -2,6 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/sdk/video/mpeg/bitstream/peek_bits.h"
 
 /* libmpeg: demultiplex the PSS (MPEG-2 program stream) data of a ring
    buffer and hand each PES packet to the callback registered for its
@@ -64,7 +65,6 @@ typedef struct {
 } sceMpeg;
 
 extern void _sysbitInit(SysBit *bs, u8 *start, u8 *bufstart, s32 bufsize);
-extern s32 peek_bits(SysBit *bs, s32 n) __asm__("SignExtendPackedValue");
 extern u8 *GetSysbitPointer(SysBit *bs, s32 pos);
 extern s32 _pack_header(SysBit *bs, PackHdr *pack);
 extern s32 _PES_packet(MpegSys *sys, SysBit *bs, PesHdr *pes);

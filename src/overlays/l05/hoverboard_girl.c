@@ -12,6 +12,8 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/gameplay/entities/002630b8.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/audio/streaming/get_dialogue_entry.h"
+#include "rnc/overlay/shared/gameplay/entities/initialize_moby_grounding.h"
 
 /* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
@@ -103,10 +105,8 @@ extern HoverboardGirlVector saved_camera_vectors[] __asm__("D_00141050");
 
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern f32 probe_ground_height(f32, HoverboardGirlVector *, s32) __asm__("FUN_00213508");
-extern s32 get_dialogue_entry(HoverboardGirlMoby *) __asm__("FUN_L00_002667d0");
 extern void initialize_npc_dialogue(HoverboardGirlMoby *,
                                     HoverboardGirlState *) __asm__("FUN_L00_002668a0");
-extern void initialize_moby_grounding(HoverboardGirlMoby *) __asm__("FUN_L02_0025c758");
 extern s32 update_npc_dialogue(HoverboardGirlMoby *,
                                HoverboardGirlState *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(f32, HoverboardGirlMoby *) __asm__("FUN_L01_002783a8");
