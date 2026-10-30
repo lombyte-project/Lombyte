@@ -272,7 +272,7 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
     float            position[4];
     float            velocity[4];
     int              link;
-    VoicePoolWindow *record;
+    VoicePoolWindow *voice_slot_record;
 
     if (moby->state != 2) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
@@ -340,9 +340,9 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
                     }
                     link = *(int *)(moby_data + 0x70);
                     if (link != -1) {
-                        record = (VoicePoolWindow *)((u8 *)&voice_pool + link * 0x70);
-                        if ((struct Moby *)record->voice.owner == moby &&
-                            record->voice.state != 0) {
+                        voice_slot_record = (VoicePoolWindow *)((u8 *)&voice_pool + link * 0x70);
+                        if ((struct Moby *)voice_slot_record->voice.owner == moby &&
+                            voice_slot_record->voice.state != 0) {
                             release_voice_slot(link);
                         }
                     }
