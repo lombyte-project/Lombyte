@@ -12,6 +12,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/overlay/level_labels.h"
 
 /* UpdateMoby_1343: tutorial hint and statistic triggers around the player on Eudora. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002E57F8), where it is exact; names translated to the US level program. */
@@ -60,7 +61,6 @@ extern unsigned short D_00141910 NOT_SDA;
 extern unsigned short D_00141940 NOT_SDA;
 extern char                      D_00141968[];
 extern Moby                     *D_L04_00160064_2E57F8 __asm__("D_L04_0015FFE4");
-extern Moby                     *moby_array __asm__("D_L04_0015FFD8");
 
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
@@ -156,22 +156,26 @@ void update_help_hints(Moby *moby) {
         }
 
         if (data->f48 != -1) {
-            if (moby_array[data->f48].oclass == 0x267 && moby_array[data->f48].state == 4) {
+            if (((struct Moby *)moby_array)[data->f48].oclass == 0x267 &&
+                ((struct Moby *)moby_array)[data->f48].state == 4) {
                 menu_item_enabled_16 = 1;
             }
         }
         if (data->f4C != -1) {
-            if (moby_array[data->f4C].oclass == 0x267 && moby_array[data->f4C].state == 4) {
+            if (((struct Moby *)moby_array)[data->f4C].oclass == 0x267 &&
+                ((struct Moby *)moby_array)[data->f4C].state == 4) {
                 menu_item_enabled_17 = 1;
             }
         }
         if (data->f40 != -1) {
-            if (moby_array[data->f40].oclass == 0x118 && moby_array[data->f40].state == 5) {
+            if (((struct Moby *)moby_array)[data->f40].oclass == 0x118 &&
+                ((struct Moby *)moby_array)[data->f40].state == 5) {
                 menu_item_enabled_18 = 1;
             }
         }
         if (data->f44 != -1) {
-            if (moby_array[data->f44].oclass == 0x118 && moby_array[data->f44].state == 5) {
+            if (((struct Moby *)moby_array)[data->f44].oclass == 0x118 &&
+                ((struct Moby *)moby_array)[data->f44].state == 5) {
                 menu_item_enabled_19 = 1;
             }
         }
@@ -193,8 +197,8 @@ void update_help_hints(Moby *moby) {
                     }
                 }
             } else {
-                if (data->f48 != -1 && moby_array[data->f48].oclass == 0x267 &&
-                    moby_array[data->f48].state == 4) {
+                if (data->f48 != -1 && ((struct Moby *)moby_array)[data->f48].oclass == 0x267 &&
+                    ((struct Moby *)moby_array)[data->f48].state == 4) {
                     struct UsageStat *usage = usage_stats.stat;
                     unsigned int      count = usage[0x11].count;
                     if (count <= 0xFFFE) {

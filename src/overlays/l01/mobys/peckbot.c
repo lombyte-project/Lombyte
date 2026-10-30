@@ -13,6 +13,7 @@
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
 
 #include "rnc/overlay/level_path.h"
+#include "rnc/overlay/level_labels.h"
 
 extern float D_L01_0015F580[] MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
@@ -161,13 +162,10 @@ typedef struct {
     u8     pad44[0xC];
 } Mob577Target;
 
-extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
-
 #include "rnc/overlay/l01/mobys/peckbot_data/peckbot_update.h"
 
-s32              D_L01_00161A70 = 0x9020202;
-extern MobyNode *D_L01_0015FFE4;
-extern u8        D_L01_00161A80[] MACRO_ADDR;
+s32       D_L01_00161A70 = 0x9020202;
+extern u8 D_L01_00161A80[] MACRO_ADDR;
 
 extern s32  rand() __asm__("FUN_001160d8");
 extern f32  FUN_L04_001f1978(f32);
@@ -810,7 +808,7 @@ void peckbot_update(Mob577 *self) {
         vector_scratch.f[1] = fast_sin(self->rot.f[2]) * (peckbot_vars->speed * frame_time);
         vector_scratch.f[2] = 0.0f;
         fast_vec_add(&position_scratch, &self->pos, &vector_scratch);
-        for (candidate_moby = D_L01_0015FFE4; candidate_moby != NULL;
+        for (candidate_moby = (MobyNode *)D_L01_0015FFE4; candidate_moby != NULL;
              candidate_moby = candidate_moby->next) {
             if (candidate_moby == (MobyNode *)self || candidate_moby->state < 0) {
                 continue;

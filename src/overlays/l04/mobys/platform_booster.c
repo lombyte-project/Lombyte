@@ -8,6 +8,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/overlay/level_labels.h"
 
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void release_voice_slot(int);
@@ -32,7 +33,6 @@ typedef struct {
 extern int          FUN_L00_0028d8c0(void *, int);
 extern int          allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern struct Moby *moby_array_macro __asm__("D_L04_0015FFD8") MACRO_ADDR;
-extern struct Moby *moby_array __asm__("D_L04_0015FFD8");
 
 /* Door update: follows its lever's travel, pushes the lever back while opening, and runs the motor sounds. */
 void platform_booster_update(struct Moby *m) __asm__("FUN_L04_002c6bb8");
@@ -65,7 +65,7 @@ void platform_booster_update(struct Moby *moby) {
         if (door_vars->lever == -1) {
             break;
         }
-        lever = &moby_array[door_vars->lever];
+        lever = &((struct Moby *)moby_array)[door_vars->lever];
         if (lever->oclass != 0x118) {
             break;
         }
@@ -76,7 +76,7 @@ void platform_booster_update(struct Moby *moby) {
                    (door_vars->target != -1 && door_vars->locked == 0 &&
                     ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9 ||
                      hero.state.control_mode == 12) &&
-                    hero.ground_moby == &moby_array[door_vars->target])) {
+                    hero.ground_moby == &((struct Moby *)moby_array)[door_vars->target])) {
             moby->state = 2;
         }
         if (moby->anim_time != previous_anim_time) {

@@ -12,6 +12,7 @@
 #include "rnc/overlay/shared/vehicles/gunship_follow_path.h"
 
 #include "rnc/overlay/level_path.h"
+#include "rnc/overlay/level_labels.h"
 
 #include "rnc/overlay/cuboid.h"
 
@@ -92,7 +93,6 @@ typedef struct {
     u8    padD0[0x30];
 } CarrierMoby;
 
-extern CarrierMoby   *ents __asm__("D_L01_0015FFD8");
 extern CarrierOffsets l01_carrier_rider_local_offsets __asm__("D_L01_0020B360");
 extern void           advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void           update_entity(void *) __asm__("FUN_L00_00250df8");
@@ -144,9 +144,9 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
             v->state = 2;
             carrier_moby->flags &= ~0x41;
             if (v->camera != -1) {
-                cv = (CarrierCamVars *)ents[v->camera].pvars;
+                cv = (CarrierCamVars *)((CarrierMoby *)ents)[v->camera].pvars;
                 cv->frames = scale_game_frames(truncate_float_to_s32(v->seconds * 60.0f));
-                ents[v->camera].unkBC = 1;
+                ((CarrierMoby *)ents)[v->camera].unkBC = 1;
             }
             if (v->path != -1) {
                 carrier_path = l01_paths[v->path];
@@ -163,7 +163,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
     case CARRIER_STATE_FOLLOW_PATH:
         gunship_follow_path((char *)carrier_moby);
         if (v->camera != -1) {
-            cv = (CarrierCamVars *)ents[v->camera].pvars;
+            cv = (CarrierCamVars *)((CarrierMoby *)ents)[v->camera].pvars;
             camera_target_yaw = fast_arc_tan(carrier_moby->pos.x - l01_camera.pos.f[0],
                                              carrier_moby->pos.y - l01_camera.pos.f[1]);
             camera_node_yaw_delta =
@@ -205,35 +205,38 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
             offs = l01_carrier_rider_local_offsets;
             if (v->riders[i] != -1) {
                 if (v->state != 1) {
-                    ents[v->riders[i]].flags &= ~0x41;
+                    ((CarrierMoby *)ents)[v->riders[i]].flags &= ~0x41;
                 }
                 transform_vector_by_basis(&offs.v[i], &offs.v[i], &carrier_moby->unkC0);
-                fast_vec_add(&ents[v->riders[i]].pos, &carrier_moby->pos, &offs.v[i]);
-                qcopy_nc(&ents[v->riders[i]].rot, &carrier_moby->rot);
-                ents[v->riders[i]].rot.z = fast_add_rotations(ents[v->riders[i]].rot.z, 3.1415927f);
-                advance_moby_animation(&ents[v->riders[i]]);
-                update_entity(&ents[v->riders[i]]);
-                ents[v->riders[i]].flags |= 6;
+                fast_vec_add(
+                    &((CarrierMoby *)ents)[v->riders[i]].pos, &carrier_moby->pos, &offs.v[i]);
+                qcopy_nc(&((CarrierMoby *)ents)[v->riders[i]].rot, &carrier_moby->rot);
+                ((CarrierMoby *)ents)[v->riders[i]].rot.z =
+                    fast_add_rotations(((CarrierMoby *)ents)[v->riders[i]].rot.z, 3.1415927f);
+                advance_moby_animation(&((CarrierMoby *)ents)[v->riders[i]]);
+                update_entity(&((CarrierMoby *)ents)[v->riders[i]]);
+                ((CarrierMoby *)ents)[v->riders[i]].flags |= 6;
             }
         }
         return;
     }
     for (j = 0; j < 8; j++) {
         if (v->riders[j] != -1) {
-            level_moby_array = ents;
+            level_moby_array = (CarrierMoby *)ents;
             level_moby_array[v->riders[j]].flags &= ~6;
             clear_u64_value(&level_moby_array[v->riders[j]].rot);
-            ents[v->riders[j]].rot.z = fast_arc_tan(hero.motion.pos.f[0] - carrier_moby->pos.x,
-                                                    hero.motion.pos.f[1] - carrier_moby->pos.y);
-            switch (ents[v->riders[j]].oclass) {
+            ((CarrierMoby *)ents)[v->riders[j]].rot.z =
+                fast_arc_tan(hero.motion.pos.f[0] - carrier_moby->pos.x,
+                             hero.motion.pos.f[1] - carrier_moby->pos.y);
+            switch (((CarrierMoby *)ents)[v->riders[j]].oclass) {
             case 0x154:
-                ents[v->riders[j]].state = 2;
+                ((CarrierMoby *)ents)[v->riders[j]].state = 2;
                 break;
             case 0x1AB:
-                ents[v->riders[j]].state = 4;
+                ((CarrierMoby *)ents)[v->riders[j]].state = 4;
                 break;
             case CARRIER_RIDER_CLASS_TURRET:
-                rv = (CarrierRiderVars *)ents[v->riders[j]].pvars;
+                rv = (CarrierRiderVars *)((CarrierMoby *)ents)[v->riders[j]].pvars;
                 rv->dropped = 1;
                 rv->drop_timer = scale_game_frames(0x1E);
                 fast_vec_sub(&rv->drop, &v->dropoff, &carrier_moby->pos);

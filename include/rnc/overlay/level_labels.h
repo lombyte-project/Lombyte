@@ -199,6 +199,7 @@ extern char           D_L17_001B0DB0[];
 extern int            D_L18_0015F5C4;
 extern int            game_frame __asm__("D_L18_0015F5CC");
 extern s32            D_L18_0015F688 __attribute__((sda));
+extern u8            *D_L18_0015FFD8;
 extern s32            D_L18_001612D0;
 extern s32            D_L18_001612D8;
 extern u8             D_L18_001677D8[];

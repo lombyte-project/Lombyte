@@ -6,6 +6,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/animation/update_moby_animation_state.h"
+#include "rnc/overlay/level_labels.h"
 
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 extern s32  voice_is_playing(long moby, s32 voice) __asm__("FUN_L00_0028d8c0");
@@ -27,9 +28,7 @@ typedef struct {
     f32 scale; /* 0x24 */
 } MobyClassHeader;
 
-extern char *moby_array __asm__("D_L04_0015FFD8");
-extern u8 level04_moby_class_slot_by_oclass[] __asm__("D_L04_00197D40"); /* class slot by oclass */
-extern struct MobyClass *D_L04_00197480[];                               /* class header by slot */
+extern u8  level04_moby_class_slot_by_oclass[] __asm__("D_L04_00197D40"); /* class slot by oclass */
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
 /* Follows a linked switch moby (class 0x118): mirrors its position value, loops a sound while it moves, plays a click at either end and swaps class 0x41C back to 0x1B0 when it reaches 1.0. */
@@ -60,7 +59,7 @@ void eudora_bridge_update(struct Moby *moby) {
         if (moby->oclass == 0x1B0) {
             moby->oclass = 0x41C;
             moby->class_slot = level04_moby_class_slot_by_oclass[0x41C];
-            moby->pclass = D_L04_00197480[moby->class_slot];
+            moby->pclass = (struct MobyClass *)D_L04_00197480[moby->class_slot];
             moby->unk71 = 0xFF;
             moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
             update_moby_animation_state(moby);
@@ -93,7 +92,7 @@ void eudora_bridge_update(struct Moby *moby) {
                 if (moby->oclass == 0x41C && *linked_switch_travel == 1.0f) {
                     moby->oclass = 0x1B0;
                     moby->class_slot = level04_moby_class_slot_by_oclass[0x1B0];
-                    moby->pclass = D_L04_00197480[moby->class_slot];
+                    moby->pclass = (struct MobyClass *)D_L04_00197480[moby->class_slot];
                     moby->unk71 = 0xFF;
                     moby->scale = ((MobyClassHeader *)moby->pclass)->scale;
                     update_moby_animation_state(moby);

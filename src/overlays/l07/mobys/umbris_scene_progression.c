@@ -4,6 +4,7 @@
 #include "rnc/mobys/moby.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
@@ -23,9 +24,7 @@ typedef struct {
     int points_1c;
 } Class436Vars;
 
-extern u8           umbris_open_volume_triggered[] __asm__("D_0013D3B1");
-extern struct Moby *level_mobys __asm__("D_L07_0015FFD8");
-extern int          scene_state __asm__("D_L07_0015F5C4");
+extern u8 umbris_open_volume_triggered[] __asm__("D_0013D3B1");
 
 #include "rnc/overlay/cuboid.h"
 
@@ -65,7 +64,7 @@ void update_umbris_scene_progression(struct Moby *moby) {
     switch (moby->state) {
     case CONTROLLER_WAIT_FOR_SCENE_IDLE:
         if (umbris_open_volume_triggered[0] != 0 && data->removed_moby != -1) {
-            mark_moby_for_removal(&level_mobys[data->removed_moby]);
+            mark_moby_for_removal(&((struct Moby *)level_mobys)[data->removed_moby]);
         }
         if (scene_state == 0)
             moby->state = 1;
@@ -92,11 +91,11 @@ void update_umbris_scene_progression(struct Moby *moby) {
                 if (is_point_inside_clip_volume(&hero.motion.pos, data->open_volume) != 0) {
                     alternate_item_available[0x29] = 1;
                     if (data->moby_0c != -1) {
-                        struct Moby *e = &level_mobys[data->moby_0c];
+                        struct Moby *e = &((struct Moby *)level_mobys)[data->moby_0c];
                         e->flags |= 0x41;
                     }
                     if (data->moby_14 != -1) {
-                        struct Moby *e = &level_mobys[data->moby_14];
+                        struct Moby *e = &((struct Moby *)level_mobys)[data->moby_14];
                         e->flags |= 0x41;
                     }
                     moby->state = 5;
@@ -109,14 +108,14 @@ void update_umbris_scene_progression(struct Moby *moby) {
             moby->state = 7;
         }
         if (moby->state != 4 && data->removed_moby != -1) {
-            mark_moby_for_removal(&level_mobys[data->removed_moby]);
+            mark_moby_for_removal(&((struct Moby *)level_mobys)[data->removed_moby]);
         }
         break;
     case CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE:
         if (scene_state == 2)
             break;
         if (data->moby_0c != -1) {
-            struct Moby *e = &level_mobys[data->moby_0c];
+            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_0c];
             e->flags |= 0x41;
         }
         moby->state = 6;
@@ -133,11 +132,11 @@ void update_umbris_scene_progression(struct Moby *moby) {
         break;
     case CONTROLLER_CLEAR_LINKED_MOBY_FLAGS:
         if (data->moby_0c != -1) {
-            struct Moby *e = &level_mobys[data->moby_0c];
+            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_0c];
             e->flags &= 0xFFBE;
         }
         if (data->moby_14 != -1) {
-            struct Moby *e = &level_mobys[data->moby_14];
+            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_14];
             e->flags &= 0xFFBE;
         }
         request_music_track(2, 4);
@@ -146,8 +145,8 @@ void update_umbris_scene_progression(struct Moby *moby) {
     case CONTROLLER_WAIT_FOR_FINISH_VOLUME:
         if (alternate_item_available[0x2A] == 0) {
             struct Moby *e;
-            if (data->moby_0c == -1 || (e = &level_mobys[data->moby_0c]) == 0 || e->state == 0xFE ||
-                e->state == 0xFD) {
+            if (data->moby_0c == -1 || (e = &((struct Moby *)level_mobys)[data->moby_0c]) == 0 ||
+                e->state == 0xFE || e->state == 0xFD) {
                 if (data->finish_volume != -1) {
                     if (is_point_inside_clip_volume(&hero.motion.pos, data->finish_volume) != 0) {
                         set_race_camera(&l07_cuboids[data->points_1c].pos,
@@ -166,7 +165,7 @@ void update_umbris_scene_progression(struct Moby *moby) {
             moby->state = 12;
         }
         if (moby->state != 8 && data->moby_10 != -1) {
-            struct Moby *e = &level_mobys[data->moby_10];
+            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_10];
             e->flags |= 0x41;
         }
         break;
@@ -189,7 +188,7 @@ void update_umbris_scene_progression(struct Moby *moby) {
                 &l07_cuboids[data->points_1c].pos, &l07_cuboids[data->points_1c].rot, 0, 1);
         }
         if (data->moby_10 != -1) {
-            struct Moby *e = &level_mobys[data->moby_10];
+            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_10];
             fast_vec_sub(linked_moby_to_hero_offset, &hero.motion.pos, &e->pos);
             clamp_vector_length(linked_moby_to_hero_offset, linked_moby_to_hero_offset, 0.9f);
             fast_vec_add(&e->pos, &hero.motion.pos, linked_moby_to_hero_offset);
@@ -203,7 +202,7 @@ void update_umbris_scene_progression(struct Moby *moby) {
         break;
     case CONTROLLER_CLEANUP_LINKED_MOBY:
         if (data->moby_10 != -1) {
-            struct Moby *e = &level_mobys[data->moby_10];
+            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_10];
             if (e != 0 && e->state != 0xFE && e->state != 0xFD) {
                 mark_moby_for_removal(e);
             }
