@@ -35,8 +35,15 @@ typedef struct {
 extern LevelCamera l01_camera __asm__("D_L01_00167100");
 extern LevelCamera l02_camera __asm__("D_L02_00167280");
 extern LevelCamera l03_camera __asm__("D_L03_00166D80");
+extern LevelCamera l05_camera __asm__("D_L05_00167080");
 extern LevelCamera l06_camera __asm__("D_L06_00167400");
 extern LevelCamera l08_camera __asm__("D_L08_00167480");
+extern LevelCamera l11_camera __asm__("D_L11_00167680");
 extern LevelCamera l12_camera __asm__("D_L12_00167100");
+extern LevelCamera l14_camera __asm__("D_L14_00167380");
+extern LevelCamera l15_camera __asm__("D_L15_00167280");
+extern LevelCamera l16_camera __asm__("D_L16_00167080");
+extern LevelCamera l17_camera __asm__("D_L17_00167580");
+extern LevelCamera l18_camera __asm__("D_L18_00167680");
 
 #endif /* LOMBYTE_RNC_OVERLAY_LEVEL_CAMERA_H */
