@@ -1,5 +1,6 @@
 /* Level 10 moby classes: bombthrower_grass, platform, magnetboots, gadgebot_telepot_pad, gate, bomb, lab_door, button, block_cave. */
 #include "types.h"
+#include "rnc/overlay/level_save_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -326,15 +327,10 @@ typedef struct {
     int switch_b;
 } PickupVars;
 
-typedef struct {
-    u8 pad[0x454];
-    u8 collected[1];
-} LevelState;
 
 int D_L10_00161388 = 1;
 extern char *D_L10_0015FFD8_98b68 __asm__("D_L10_0015FFD8");
 extern u8 D_0014C050_98b68[] __asm__("D_0014C050");
-extern LevelState D_L10_001BB6B0_98b68 __asm__("D_L10_001BB6B0");
 extern int level_moby_killed[][64] __asm__("D_0014C190");
 extern int D_L10_001BA950[];
 extern u8 D_001413F4_98b68[] __asm__("D_001413F4");
@@ -375,7 +371,7 @@ void update_hero_relocation_trigger(struct Moby *moby) {
             }
         }
     }
-    if (D_L10_001BB6B0_98b68.collected[(short)moby->save_id] != 0 ||
+    if (l10_save_state.cleared[(short)moby->save_id] != 0 ||
         ((level_moby_killed[current_level_index][(short)moby->save_id >> 5] >> (moby->save_id & 31)) & 1) != 0) {
         if (D_0013D4C6[0] != 0) {
             ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 1;
@@ -617,7 +613,6 @@ typedef struct {
     char pad0[0x454];
     unsigned char collected[1];
 } BfState;
-extern BfState D_L10_001BB6B0_bf __asm__("D_L10_001BB6B0");
 extern int D_0015ED84_bf __asm__("D_0015ED84");
 extern float D_0015ED6C_bf __asm__("D_0015ED6C");
 extern unsigned char D_0014C190_bf[] __asm__("D_0014C190");
@@ -637,7 +632,7 @@ void gate_update(unsigned char *gate_moby) {
     case GATE_STATE_WAIT_FOR_SAVE_FLAG:
         *(OvlQuad *)saved_position = *(OvlQuad *)&MOBY(gate_moby)->pos;
         id = MOBY(gate_moby)->save_id;
-        if (D_L10_001BB6B0_bf.collected[(short)id] != 0 ||
+        if (l10_save_state.cleared[(short)id] != 0 ||
             (*(int *)(D_0014C190_bf + (((short)id >> 5) * 4 + (D_0015ED84_bf << 8))) >> (id & 0x1F)) & 1) {
             gate_moby[0x20] = 1;
         }
@@ -647,7 +642,7 @@ void gate_update(unsigned char *gate_moby) {
         if (MOBY(gate_moby)->pos.y <= saved_position[1] + -3.75f) {
             l10_gate_completion_records.collected[((short)MOBY(gate_moby)->save_id)] = gate_moby[0xB0] + 2;
             if (gate_moby[0xB0] == 0xFF || (l10_gate_persistence_eligibility_by_mission[gate_moby[0xB0]] != 0xFF && visited52[gate_moby[0xB0] + (D_0015ED84_bf << 4)] == 0xFF)) {
-                D_L10_001BB6B0_bf.collected[((short)MOBY(gate_moby)->save_id)] = gate_moby[0xB0] + 2;
+                l10_save_state.cleared[((short)MOBY(gate_moby)->save_id)] = gate_moby[0xB0] + 2;
             }
             gate_moby[0x20] = 2;
             if (D_0015ED84_bf == 10) {
@@ -1814,11 +1809,9 @@ void button_update(struct Moby *moby) {
 
 /* Orxon moby update: destroys itself when its item is taken, else fires its effect once per pass. */
 
-typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State;
 
 typedef union { u128 q; float f[4]; } UVec;
 
-extern L10State D_L10_001BB6B0;
 extern char *spawn_destruction_replacement_moby(char *owner) __asm__("FUN_L10_002eb8c0");
 extern int D_0015ED84; /* no foreign declaration */
 extern unsigned char D_0014C190_c[] __asm__("D_0014C190");
@@ -1838,7 +1831,7 @@ void handle_moby_destruction(char *moby) {
     int debris_option_roll;
     float debris_gravity_multiplier, debris_scale_multiplier;
 
-    if (D_L10_001BB6B0.collected[(short)id] != 0
+    if (l10_save_state.cleared[(short)id] != 0
         || ((*(int *)(D_0014C190_c + (((short)id >> 5) * 4 + (D_0015ED84 << 8))) >> (id & 0x1F)) & 1)) {
         spawn_fixed_height_destruction_moby(moby);
         spawn_destruction_replacement_moby(moby);
@@ -2289,7 +2282,7 @@ void block_cave_update(struct Moby *moby) {
     float transposed_rotation_matrix[16];
     float relative_position[4];
     unsigned short id = moby->save_id;
-    if (D_L10_001BB6B0.collected[(short)id] != 0 ||
+    if (l10_save_state.cleared[(short)id] != 0 ||
         (*(int *)(D_0014C190 + (((short)id >> 5) * 4 + (D_0015ED84_m << 8))) >> (id & 0x1F)) & 1) {
         mark_moby_for_removal(moby);
         return;

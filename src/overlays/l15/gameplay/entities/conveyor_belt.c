@@ -1,5 +1,6 @@
 /* Level 15 moby classes: conveyor_belt, poison_vessel, bolt_grabber, codebot_slot, ultramech_scientist. */
 #include "types.h"
+#include "rnc/overlay/level_save_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
@@ -936,11 +937,6 @@ int count_missing_or_dying_mobys_in_list(int moby_list_index) {
     } while ((short)*moby_index_entry++ >= 0);
     return missing_or_dying_count;
 }
-typedef struct {
-    u8 pad[0x454];
-    u8 killed[1]; /* per spawn id */
-} KillFlags;
-extern KillFlags D_L15_001BB830;
 extern unsigned int D_L15_001BAAD0[];
 extern unsigned int l15_banked_moby_save_bits[] __asm__("D_L15_0014C190");
 extern int D_L15_0015ED98;
@@ -987,7 +983,7 @@ void codebot_slot_update(struct Moby *moby) {
         int save_index;
         int i;
         save_index = ((int)((unsigned int)moby->save_id << 16)) >> 16;
-        if (D_L15_001BB830.killed[save_index] != 0 ||
+        if (l15_save_state.cleared[save_index] != 0 ||
             ((*(int *)(level_save_bank_index * 0x100 + (save_index >> 5) * 4 + (char *)l15_banked_moby_save_bits) >> (moby->save_id & 31) & 1) != 0)) {
             moby->state = 4;
             break;

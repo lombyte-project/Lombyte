@@ -1,5 +1,6 @@
 /* Level 10 moby classes: screamer, toxic_crab, blarg_ship, nanotech_upgrade_vendor, gun, gate_1, gate_2. */
 #include "types.h"
+#include "rnc/overlay/level_save_state.h"
 
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/state/item_state.h"
@@ -2957,8 +2958,6 @@ typedef struct {
 } Vars;
 
 extern struct Moby *D_L10_0015FFD8_8ab0 __asm__("D_L10_0015FFD8") __attribute__((sda));
-typedef struct { unsigned char pad[0x454]; unsigned char collected[1]; } SaveFlags;
-extern SaveFlags D_L10_001BB6B0_8ab0 __asm__("D_L10_001BB6B0");
 extern int D_L10_001BA950[] __asm__("D_L10_001BA950");
 extern int D_0014C190_8ab0[] __asm__("D_0014C190");
 extern float FUN_L00_00258110(float *, float, float, float, float, float);
@@ -2989,7 +2988,7 @@ state_zero:
         int signed_save_id;
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
-        if (D_L10_001BB6B0_8ab0.collected[(short)save_id] != 0 ||
+        if (l10_save_state.cleared[(short)save_id] != 0 ||
             ((*(int *)((char *)D_0014C190_8ab0 + ((signed_save_id >> 5) * 4 + (current_level_index << 8))) >> (save_id & 31)) & 1) != 0) {
             moby->state = 3;
             return;
@@ -3012,7 +3011,7 @@ state_two:
         struct Moby *candidate;
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
-        if (D_L10_001BB6B0_8ab0.collected[(short)save_id] != 0 ||
+        if (l10_save_state.cleared[(short)save_id] != 0 ||
             ((*(int *)((char *)D_0014C190_8ab0 + ((signed_save_id >> 5) * 4 + (current_level_index << 8))) >> (save_id & 31)) & 1) != 0) {
             moby->state = 3;
             return;
@@ -3127,12 +3126,7 @@ typedef struct {
     int sound;
 } DoorVars;
 
-typedef struct {
-    u8 pad0[0x454];
-    u8 collected[1];
-} LevelState;
 
-extern LevelState D_L10_001BB6B0_e9648 __asm__("D_L10_001BB6B0");
 extern int D_0014C190_e9648[][64] __asm__("D_0014C190");
 extern unsigned char D_001413F4_e9648[] __asm__("D_001413F4");
 extern unsigned char D_0013DD4C_e9648[] __asm__("D_0013DD4C");
@@ -3149,7 +3143,7 @@ void gate_1_update(struct Moby *moby) {
         moby->update_dist = 0xFF;
         if (D_001413F4_e9648[0] == 0) {
             save_id = moby->save_id;
-            if (D_L10_001BB6B0_e9648.collected[(short)save_id] == 0 &&
+            if (l10_save_state.cleared[(short)save_id] == 0 &&
                 ((D_0014C190_e9648[current_level_index][(short)save_id >> 5] >> (save_id & 31)) & 1) == 0) {
                 vars->home_yaw = moby->rot.y;
                 moby->state = 1;
@@ -3163,7 +3157,7 @@ void gate_1_update(struct Moby *moby) {
         if (hero.vehicle_mode != 0)
             goto open;
         save_id = moby->save_id;
-        if (D_L10_001BB6B0_e9648.collected[(short)save_id] != 0 ||
+        if (l10_save_state.cleared[(short)save_id] != 0 ||
             ((D_0014C190_e9648[current_level_index][(short)save_id >> 5] >> (save_id & 31)) & 1) != 0) {
         open:
             moby->rot.y = fast_add_rotations(moby->rot.y, -1.3962634f);
@@ -3192,7 +3186,7 @@ void gate_1_update(struct Moby *moby) {
         if (D_001413F4_e9648[0] != 0)
             return;
         save_id = moby->save_id;
-        if (D_L10_001BB6B0_e9648.collected[(short)save_id] != 0)
+        if (l10_save_state.cleared[(short)save_id] != 0)
             return;
         if ((((D_0014C190_e9648[current_level_index][(short)save_id >> 5] >> (save_id & 31)) ^ 1) & 1) == 0)
             return;
@@ -3230,7 +3224,6 @@ typedef struct {
     char padB4[0x4C];
 } GateMoby;
 
-typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State;
 
 extern int D_0013DD4C; /* no foreign declaration */
 extern unsigned char D_0014C190_c[] __asm__("D_0014C190");
@@ -3238,7 +3231,6 @@ extern struct Moby * D_L10_0015FFD8_gp __asm__("D_L10_0015FFD8") __attribute__((
 extern s32 FUN_001f96b0_c(f32) __asm__("FUN_001f96b0");
 void activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
 extern unsigned char D_0013DE4B_2EAD50[] __asm__("D_0013DD4C");
-extern L10State D_L10_001BB9C0_2EAD50 __asm__("D_L10_001BB6B0");
 
 void gate_2_update(GateMoby *m) __asm__("FUN_L10_002e9990");
 void gate_2_update(GateMoby *moby)
@@ -3253,7 +3245,7 @@ void gate_2_update(GateMoby *moby)
         moby->f30 = 0xFF;
         vars->home = moby->pos;
         if (D_001413F4[0] != 0 ||
-            D_L10_001BB9C0_2EAD50.collected[(short)moby->uid] != 0 ||
+            l10_save_state.cleared[(short)moby->uid] != 0 ||
             ((*(int *)(D_0014C190_c + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) >> (moby->uid & 0x1F)) & 1) != 0) {
             opening_offset[0] = fast_cos(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
             opening_offset[1] = fast_sin(fast_add_rotations(moby->rotz, 3.14159265f)) * 1.5f;
@@ -3271,7 +3263,7 @@ void gate_2_update(GateMoby *moby)
     case GATE_STATE_CLOSED: {
         unsigned char *bits;
         if (D_001413F4[0] != 0 ||
-            D_L10_001BB9C0_2EAD50.collected[(short)moby->uid] != 0 ||
+            l10_save_state.cleared[(short)moby->uid] != 0 ||
             ((*(int *)((bits = (char *)D_0014C190_c) + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) >> (moby->uid & 0x1F)) & 1) != 0) {
             moby->pos = vars->home;
             moby->state = 3;
@@ -3308,7 +3300,7 @@ void gate_2_update(GateMoby *moby)
         break;
     case GATE_STATE_OPEN:
         if (D_001413F4[0] == 0 &&
-            D_L10_001BB9C0_2EAD50.collected[(short)moby->uid] == 0 &&
+            l10_save_state.cleared[(short)moby->uid] == 0 &&
             (((*(int *)(D_0014C190_c + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) >> (moby->uid & 0x1F)) ^ 1) & 1)) {
             moby->pos = vars->home;
             moby->state = 0;

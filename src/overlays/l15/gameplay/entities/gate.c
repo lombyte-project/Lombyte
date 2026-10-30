@@ -1,5 +1,6 @@
 /* Level 15 moby classes: gate, construction_arm, helicopter, ultramech_unlimited. */
 #include "types.h"
+#include "rnc/overlay/level_save_state.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -77,12 +78,7 @@ typedef struct {
     struct Moby *owner;
 } VoiceSlot_29aff0;
 
-typedef struct {
-    char pad0[0x454];
-    unsigned char collected[1];
-} CollectedFlags;
 
-extern CollectedFlags D_L15_001BB830_29aff0 __asm__("D_L15_001BB830");
 extern u8 D_0013F3D0[];
 extern char D_L15_001673C0[];
 extern char D_0014C190[];
@@ -130,7 +126,7 @@ void update_sliding_gate(struct Moby *gate_moby)
         }
 check_lock:
         if (gate_vars->lock != 0) {
-            if (D_L15_001BB830_29aff0.collected[(s16)gate_moby->save_id] != 0 ||
+            if (l15_save_state.cleared[(s16)gate_moby->save_id] != 0 ||
                 ((*(s32 *)(D_0014C190 + (current_level_index * 0x100 + ((s16)gate_moby->save_id >> 5) * 4)) >> (gate_moby->save_id & 31)) & 1) != 0)
                 trigger_active = 1;
         }
@@ -1249,7 +1245,6 @@ typedef struct {
 
 extern UPath *D_L15_001B0AB0[];
 extern ULevelState D_L15_001BABD0;
-extern ULevelState D_L15_001BB830;
 extern float helicopter_bob_period_gp __asm__("D_L15_00161A08") __attribute__((sda));
 extern float helicopter_bob_amplitude_gp __asm__("D_L15_00161A0C") __attribute__((sda));
 
@@ -1585,7 +1580,7 @@ void helicopter_update(struct Moby *moby) {
         vars->unk58 = 0;
         if (vars->pilot != 0) vars->pilot->flags |= 0x41;
         D_L15_001BABD0.collected[(short)moby->save_id] = 0;
-        D_L15_001BB830.collected[(short)moby->save_id] = 0;
+        l15_save_state.cleared[(short)moby->save_id] = 0;
         *(int *)(D_0014C190 + (((short)moby->save_id >> 5) * 4 + (current_level_index << 8))) &=
             ~(1 << (moby->save_id & 0x1F));
         D_L15_001BAAD0[(short)moby->save_id >> 5] &= ~(1 << (moby->save_id & 0x1F));
@@ -2346,7 +2341,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         ultramech_moby->flags = (ultramech_moby->flags | 0x41) & 0xEFFF;
         ultramech_vars->b58 = 0;
         D_L15_001BABD0.collected[(short)ultramech_moby->id] = 0;
-        D_L15_001BB830.collected[(short)ultramech_moby->id] = 0;
+        l15_save_state.cleared[(short)ultramech_moby->id] = 0;
         *(int *)(((char *)&D_0014C190) + (((short)ultramech_moby->id >> 5) * 4 + (current_level_index << 8))) &=
             ~(1 << (ultramech_moby->id & 0x1F));
         D_L15_001BAAD0[(short)ultramech_moby->id >> 5] &= ~(1 << (ultramech_moby->id & 0x1F));

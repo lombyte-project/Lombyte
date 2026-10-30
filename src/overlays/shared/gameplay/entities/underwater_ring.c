@@ -1,5 +1,6 @@
 /* Shared moby classes: underwater_ring, codebot, giant_clank_pad. */
 #include "types.h"
+#include "rnc/overlay/level_save_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/globals.h"
@@ -39,7 +40,6 @@ typedef struct {
 
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern u8 D_0013F3D0[];
-extern u8 D_L15_001BB830[];
 extern u32 D_0014C190[];
 extern s32 D_L15_001BAAD0[];
 
@@ -94,7 +94,7 @@ void underwater_ring_update(struct Moby *moby) {
     case 1:
     case 2:
         save_id = moby->save_id;
-        save_byte = D_L15_001BB830;
+        save_byte = (u8 *)&l15_save_state;
         save_byte -= -(s16)save_id;
         if (save_byte[0x454] != 0 ||
             ((((s32)*(u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190)) >> (save_id & 31)) & 1) != 0) {

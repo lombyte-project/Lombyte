@@ -1,5 +1,6 @@
 /* Shared moby classes: sentrybot, rocket, mine, spiderbot, door, sentrybot_alarm. */
 #include "types.h"
+#include "rnc/overlay/level_save_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -2529,7 +2530,6 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
 /* Level 15 moby update (class 78), three states: 0 picks the first state from the kill and save flags,
  * 1 sprays sixteen random sparks around the moby and parks its data vector, 2 counts down. */
 
-typedef struct { unsigned char pad[0x454]; unsigned char killed[1]; } KillFlags_2A3DD0;
 
 typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char pad75[0x13]; char *owner; } Voice;
 
@@ -2538,7 +2538,6 @@ extern unsigned char D_0014C190[];
 extern int D_0015ED84;
 extern int draw_spark_emitter_effect_quads() __asm__("FUN_L15_002a3138");
 unsigned char *create_type_47_particle(void *pos, float *p, float *c, int d, int e, int f, int g, int h, char *owner) __asm__("FUN_L15_002647f0");
-extern KillFlags_2A3DD0 D_L15_001BBB40_2A3DD0 __asm__("D_L15_001BB830");
 extern unsigned char D_0013E650_2A3DD0[] __asm__("D_0013E550");
 extern void func_L15_002A47B8_2A3DD0(void *) __asm__("FUN_L15_002a35d8");
 extern void func_L15_002A4318_2A3DD0(void) __asm__("FUN_L15_002a3138");
@@ -2565,7 +2564,7 @@ void update_spark_emitter_moby(unsigned char *moby) {
         MOBY(moby)->flags |= 1;
         moby[0x31] = 0;
         id = MOBY(moby)->save_id;
-        if (D_L15_001BBB40_2A3DD0.killed[(short)id] == 0 && (((*(int *)(D_0014C190 + (((short)id >> 5) * 4) + (D_0015ED84 << 8)) >> (id & 0x1F)) ^ 1) & 1)) {
+        if (l15_save_state.cleared[(short)id] == 0 && (((*(int *)(D_0014C190 + (((short)id >> 5) * 4) + (D_0015ED84 << 8)) >> (id & 0x1F)) ^ 1) & 1)) {
             moby[0x20] = 1;
         } else {
             moby[0xBC] = 0xFF;
@@ -2790,7 +2789,6 @@ typedef struct {
     struct Moby *owner;
 } VoiceSlot;
 extern KillFlags D_L15_001BABD0 NOT_SDA;
-extern KillFlags D_L15_001BB830 NOT_SDA;
 extern u8 secondary_kill_record_gate_by_mission[8] __asm__("D_L15_0015FC88");
 extern u8 D_0014C050[][16] NOT_SDA;
 extern u8 D_0013E550[] NOT_SDA;
@@ -2802,7 +2800,7 @@ void mark_moby_killed_and_release_owned_voice(int addr) {
     moby->collision = 0;
     D_L15_001BABD0.killed[(s16)moby->save_id] = moby->mission + 2;
     if (moby->mission == 0xFF || (secondary_kill_record_gate_by_mission[moby->mission] != 0xFF && D_0014C050[current_level_index][moby->mission] == 0xFF)) {
-        D_L15_001BB830.killed[(s16)moby->save_id] = moby->mission + 2;
+        l15_save_state.cleared[(s16)moby->save_id] = moby->mission + 2;
     }
     if (moby->command != 0xFF) {
         VoiceSlot *voice_slot;
