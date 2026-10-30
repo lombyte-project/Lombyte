@@ -27,8 +27,8 @@ float update_follow_camera_angle_blend_from_direction(char  *camera,
     float planar_input_direction[4];
     float planar_reference_direction[4];
     float input_cross_axis[4];
-    char *base = D_L00_00166E10;
-    char *axis = base + 0x20;
+    char *camera_view = D_L00_00166E10;
+    char *axis = camera_view + 0x20;
     char *camera_state = *(char **)(camera + 0x70);
     char *blend_output_block = camera_state + 0x1A8;
     char *reference_direction = camera_state + 0x130;
