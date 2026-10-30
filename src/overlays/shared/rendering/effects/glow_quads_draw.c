@@ -178,7 +178,7 @@ void emit_moby_particle_pairs(void *moby) __asm__("FUN_L00_0023e008");
 
 void emit_moby_particle_pairs(void *moby) {
     OvlQuad        initial_velocity[1];
-    OvlQuad        old[1];
+    OvlQuad        spawn_position_before_offsets[1];
     float          particle_spawn_position[4] __attribute__((aligned(16)));
     int            i;
     unsigned char *particle;
@@ -195,7 +195,7 @@ void emit_moby_particle_pairs(void *moby) {
                                random_float_between(0.05f, 0.2f) * frame_scale,
                                azimuth_angle,
                                elevation_angle);
-        qcopy(old, particle_spawn_position);
+        qcopy(spawn_position_before_offsets, particle_spawn_position);
         particle_spawn_position[0] += randf_sym(0.0f, 0.15f);
         particle_spawn_position[1] += randf_sym(0.0f, 0.15f);
         particle_spawn_position[2] += randf_sym(0.0f, 0.15f);
