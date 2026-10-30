@@ -10,13 +10,13 @@
 extern struct Moby *visible_moby_list __asm__("D_0015FF24") __attribute__((sda));
 extern struct Moby *build_resident_visibility_list(void) __asm__("FUN_0020d868");
 extern void         advance_moby_animation(struct Moby *) __asm__("FUN_0020d580");
-void                update_visible_resident_objects(void) __asm__("FUN_00212e28");
+void                update_visible_mobys(void) __asm__("FUN_00212e28");
 
 /* Each live moby on the visible list: its animation step, its class update
  * and its bounds. Animation can replace the update; the update and the
  * bounds refresh can change flags or the list link, so each field is read at
  * its point of use. */
-void update_visible_resident_objects(void) {
+void update_visible_mobys(void) {
     struct Moby *moby;
 
     visible_moby_list = build_resident_visibility_list();
@@ -35,5 +35,4 @@ void update_visible_resident_objects(void) {
     }
 }
 
-extern __typeof__(update_visible_resident_objects) func_00212E28
-    __attribute__((alias("FUN_00212e28")));
+extern __typeof__(update_visible_mobys) func_00212E28 __attribute__((alias("FUN_00212e28")));

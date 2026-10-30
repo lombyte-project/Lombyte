@@ -150,7 +150,7 @@ extern void          register_object_render_class(u8 *, u8 *, u8 *, s32) __asm__
 extern void register_shrub_render_class(u8 *, u8 *, u8 *, u8 *, s32) __asm__("func_00203B08");
 extern void initialize_tfrag_render_data(u8 *, u8 *) __asm__("func_002040E0");
 extern void start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
-extern volatile unsigned int load(s32, s32, s32) __asm__("func_00216828");
+extern volatile unsigned int read_disc_sectors_and_wait(s32, s32, s32) __asm__("func_00216828");
 extern void                  update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 extern s32                   sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32                   sceGsExecLoadImage(void *, u8 *);
@@ -318,7 +318,8 @@ void transition_load_wad(void) {
     }
     parse_space_scene_chunk(0);
     help_msg_data = D_001940C0.x1C;
-    load(D_001940C0.x1C, disc_table.help_text.sector, disc_table.help_text.size);
+    read_disc_sectors_and_wait(
+        D_001940C0.x1C, disc_table.help_text.sector, disc_table.help_text.size);
     help_offset_table = help_msg_data;
     D_001940C0.x1C = help_msg_data + (disc_table.help_text.size << 11);
     for (k = 0; k < 8; k++) {

@@ -2415,7 +2415,7 @@ void update_mode_controlled_shrinking_color_tween_particle(Part *particle) {
 
 extern s32 D_L00_00173E08 NOT_SDA;
 extern u8                 misc_animation_stash_tag[] __asm__("D_L00_001602D0");
-void                      load(s32, s32, s32) __asm__("FUN_00216828");
+void                      read_disc_sectors_and_wait(s32, s32, s32) __asm__("FUN_00216828");
 s32                       stash_send_data(s32, s32, s32, void *) __asm__("FUN_00232e40");
 void                      load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
 
@@ -2425,9 +2425,9 @@ void load_misc_animations_into_stash(void) {
     for (i = 0; i < 20; i++) {
         s32 sz = disc_table.misc_animations[i].size << 7;
         if (sz) {
-            load(stash_source_address,
-                 disc_table.misc_animations[i].sector,
-                 disc_table.misc_animations[i].size);
+            read_disc_sectors_and_wait(stash_source_address,
+                                       disc_table.misc_animations[i].sector,
+                                       disc_table.misc_animations[i].size);
             D_L00_001B9CF0.stash_handles[i] =
                 stash_send_data(stash_source_address, sz, sz, misc_animation_stash_tag);
         }

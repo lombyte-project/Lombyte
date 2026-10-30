@@ -28,7 +28,7 @@
 #include "rnc/mobys/delete_moby.h"
 #include "rnc/rendering/mobys/draw_mobys_clean_up.h"
 #include "rnc/rendering/mobys/draw_mobys_setup.h"
-#include "rnc/mobys/update_visible_resident_objects.h"
+#include "rnc/mobys/update_visible_mobys.h"
 #include "rnc/overlay/shared/cutscenes/update_cutscene_playback.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/rendering/packets/emit_rgba_draw_packet.h"
@@ -664,7 +664,7 @@ L2:
             }
         }
     }
-    update_visible_resident_objects();
+    update_visible_mobys();
     sound_update();
     if (D_L00_001B9CF0.unkC != 0) {
         close_pause_menu();

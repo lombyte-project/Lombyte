@@ -2,9 +2,9 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
 
-s32 find_or_allocate_id_slot(s32 id) __asm__("FUN_0020cc18");
+s32 find_or_allocate_moby_render_slot(s32 id) __asm__("FUN_0020cc18");
 
-s32 find_or_allocate_id_slot(s32 id) {
+s32 find_or_allocate_moby_render_slot(s32 id) {
     s32 i;
 
     for (i = 0; i < 16; i++) {
@@ -16,4 +16,5 @@ s32 find_or_allocate_id_slot(s32 id) {
     return -1;
 }
 
-extern __typeof__(find_or_allocate_id_slot) func_0020CC18 __attribute__((alias("FUN_0020cc18")));
+extern __typeof__(find_or_allocate_moby_render_slot) func_0020CC18
+    __attribute__((alias("FUN_0020cc18")));

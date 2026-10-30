@@ -43,7 +43,7 @@
 #include "rnc/mobys/animation/update_moby_animation_state.h"
 #include "rnc/mobys/detach_manipulator.h"
 #include "rnc/mobys/init_moby_instance.h"
-#include "rnc/mobys/update_visible_resident_objects.h"
+#include "rnc/mobys/update_visible_mobys.h"
 #include "rnc/overlay/shared/ui/hud/hud_update_counter.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/world/loaders/relocate_asset_entry_pointers.h"
@@ -734,7 +734,7 @@ void update_cutscene_playback(void) {
     }
     if ((g_debug_menu.update_flags & 2) ||
         ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-        update_visible_resident_objects();
+        update_visible_mobys();
         enqueue_voice_request();
     }
     noop_main_callback(D_L00_00160FF8, 3);

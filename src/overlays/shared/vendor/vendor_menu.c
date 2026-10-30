@@ -34,7 +34,7 @@
 #include "rnc/mobys/animation/update_moby_animation_state.h"
 #include "rnc/mobys/detach_manipulator.h"
 #include "rnc/mobys/init_moby_instance.h"
-#include "rnc/mobys/update_visible_resident_objects.h"
+#include "rnc/mobys/update_visible_mobys.h"
 #include "rnc/overlay/shared/ui/hud/hud_update_counter.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/world/loaders/relocate_asset_entry_pointers.h"
@@ -1155,7 +1155,7 @@ void update_vendor_menu(void) {
             }
             if ((g_debug_menu.update_flags & 2) ||
                 ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-                update_visible_resident_objects();
+                update_visible_mobys();
                 FUN_0022dc50();
             }
             noop_main_callback(vendor_moby_update_label, 3);
@@ -1493,7 +1493,7 @@ void update_vendor_menu(void) {
         break;
     case VENDOR_MENU_EXIT_CUTSCENE:
         reset_frame_counters();
-        update_visible_resident_objects();
+        update_visible_mobys();
         FUN_0022dc50();
         coordinate_hero_frame_update();
         update_parts();

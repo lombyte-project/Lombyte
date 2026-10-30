@@ -30,7 +30,7 @@ struct Ent {
 
 extern void reset_active_camera_position_and_basis(void) __asm__("func_00218D10");
 extern void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
-extern void update_visible_resident_objects() __asm__("FUN_00212e28");
+extern void update_visible_mobys() __asm__("FUN_00212e28");
 extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 extern void close_menu_system(void) __asm__("FUN_002191b8");
 
@@ -149,7 +149,7 @@ void update_menu_system(void) {
             }
         }
     }
-    update_visible_resident_objects();
+    update_visible_mobys();
     if (menu_system.close_request != 0) {
         close_menu_system();
     }

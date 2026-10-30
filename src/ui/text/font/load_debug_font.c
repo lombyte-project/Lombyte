@@ -6,14 +6,15 @@
 
 extern u64  debug_font_pif_header __asm__("D_0015EEC8") MACRO_ADDR;
 extern void load_pif_as_psmt8_h() __asm__("func_001E9168");
-extern s32  load() __asm__("func_00216828");
+extern s32  read_disc_sectors_and_wait() __asm__("func_00216828");
 
 void load_debug_font(void) __asm__("FUN_001e9338");
 
 void load_debug_font(void) {
     u8 sp_slot[32];
 
-    load(debug_font_buffer, disc_table.debug_font.sector, disc_table.debug_font.size);
+    read_disc_sectors_and_wait(
+        debug_font_buffer, disc_table.debug_font.sector, disc_table.debug_font.size);
     load_pif_as_psmt8_h(debug_font_buffer, sp_slot, *(s32 *)0x15EE88 + 0xC0000, 0x3FFC00);
     debug_font_pif_header = *(u64 *)(void *)sp_slot;
 }

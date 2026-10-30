@@ -390,8 +390,8 @@ extern unsigned char      D_0014161B[];
 extern unsigned char      l00_map_outside_circle_mask[] __asm__("D_L00_00184394");
 extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
 extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
-s32         load(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
-s32         stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
+s32 read_disc_sectors_and_wait(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
+s32 stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
 extern struct DiscFile D_00138438[];
 extern char            D_001383A0[];
 extern char            D_00141EC0[];
@@ -450,7 +450,7 @@ void initialize_level_map_archive(void) {
         archive_base = ((int **)&D_L00_00173E08)[0];
         archive = (int *)((int)archive_base + 0x9A800);
         scratch = file->size << 7;
-        load(archive, file->sector, file->size);
+        read_disc_sectors_and_wait(archive, file->sector, file->size);
         state->file_handle =
             stash_send_data((int)archive, scratch, 0x4800, (int)map_archive_stash_tag);
         state->transfer_bytes = scratch;

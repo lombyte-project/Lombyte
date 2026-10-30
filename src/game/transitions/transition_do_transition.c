@@ -71,7 +71,7 @@ extern void append_palette_transfer_packet() __asm__("func_001FB6E0");
 extern s32  run_state_handler() __asm__("func_00208840");
 extern s32  load_and_initialize_level_chunk() __asm__("func_00209370");
 extern s32  memcard_update_state() __asm__("func_002093D8");
-extern s32  load(u8 *dst, s32 a, s32 b) __asm__("func_00216828");
+extern s32  read_disc_sectors_and_wait(u8 *dst, s32 a, s32 b) __asm__("func_00216828");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern s32
 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) __asm__("FUN_0022dba0");
@@ -106,35 +106,36 @@ void transition_do_transition(void) {
     /* Load chunks 1..5 before chunk 0, advancing each destination to 16-byte alignment. */
     chunk_destination = (u8 *)hdr + 0x60;
     level_root = hdr;
-    first_size = load(chunk_destination,
-                      ((volatile struct DiscFile *)&chunk_source_table->wad_chunks[1])->sector,
-                      ((volatile struct DiscFile *)&chunk_source_table->wad_chunks[1])->size);
+    first_size = read_disc_sectors_and_wait(
+        chunk_destination,
+        ((volatile struct DiscFile *)&chunk_source_table->wad_chunks[1])->sector,
+        ((volatile struct DiscFile *)&chunk_source_table->wad_chunks[1])->size);
     hdr->chunk[1].size = first_size;
     hdr->chunk[1].off = chunk_destination - (u8 *)hdr;
     chunk_destination += ((u32)first_size + 0xF) & alignment_mask;
-    hdr->chunk[2].size = load(chunk_destination,
-                              chunk_source_table->wad_chunks[2].sector,
-                              chunk_source_table->wad_chunks[2].size);
+    hdr->chunk[2].size = read_disc_sectors_and_wait(chunk_destination,
+                                                    chunk_source_table->wad_chunks[2].sector,
+                                                    chunk_source_table->wad_chunks[2].size);
     hdr->chunk[2].off = chunk_destination - (u8 *)hdr;
     chunk_destination += ((u32)hdr->chunk[2].size + 0xF) & alignment_mask;
-    hdr->chunk[3].size = load(chunk_destination,
-                              chunk_source_table->wad_chunks[3].sector,
-                              chunk_source_table->wad_chunks[3].size);
+    hdr->chunk[3].size = read_disc_sectors_and_wait(chunk_destination,
+                                                    chunk_source_table->wad_chunks[3].sector,
+                                                    chunk_source_table->wad_chunks[3].size);
     hdr->chunk[3].off = chunk_destination - (u8 *)hdr;
     chunk_destination += ((u32)hdr->chunk[3].size + 0xF) & alignment_mask;
-    hdr->chunk[4].size = load(chunk_destination,
-                              chunk_source_table->wad_chunks[4].sector,
-                              chunk_source_table->wad_chunks[4].size);
+    hdr->chunk[4].size = read_disc_sectors_and_wait(chunk_destination,
+                                                    chunk_source_table->wad_chunks[4].sector,
+                                                    chunk_source_table->wad_chunks[4].size);
     hdr->chunk[4].off = chunk_destination - (u8 *)hdr;
     chunk_destination += ((u32)hdr->chunk[4].size + 0xF) & alignment_mask;
-    hdr->chunk[5].size = load(chunk_destination,
-                              chunk_source_table->wad_chunks[5].sector,
-                              chunk_source_table->wad_chunks[5].size);
+    hdr->chunk[5].size = read_disc_sectors_and_wait(chunk_destination,
+                                                    chunk_source_table->wad_chunks[5].sector,
+                                                    chunk_source_table->wad_chunks[5].size);
     hdr->chunk[5].off = chunk_destination - (u8 *)hdr;
     chunk_destination += ((u32)hdr->chunk[5].size + 0xF) & alignment_mask;
-    hdr->chunk[0].size = load(chunk_destination,
-                              chunk_source_table->wad_chunks[0].sector,
-                              chunk_source_table->wad_chunks[0].size);
+    hdr->chunk[0].size = read_disc_sectors_and_wait(chunk_destination,
+                                                    chunk_source_table->wad_chunks[0].sector,
+                                                    chunk_source_table->wad_chunks[0].size);
     hdr->chunk[0].off = chunk_destination - (u8 *)hdr;
     hud_heap_reset();
     initialize_sif_rpc();
