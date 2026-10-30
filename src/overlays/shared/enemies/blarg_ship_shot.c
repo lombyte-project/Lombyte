@@ -81,7 +81,7 @@ char *spawn_blarg_ship_shot(int    firing_moby,
 void update_blarg_ship_shot(char *moby) __asm__("FUN_L11_00309098");
 
 void update_blarg_ship_shot(char *moby) {
-    float old[4];
+    float previous_moby_position[4];
     float trail_position[4];
     float trail_velocity[4];
     float hit[4];
@@ -97,7 +97,7 @@ void update_blarg_ship_shot(char *moby) {
     if (projectile_vars == 0)
         return;
     moby_position = moby + 0x10;
-    qcopy(old, moby_position);
+    qcopy(previous_moby_position, moby_position);
     trail_color = fast_tween_color(projectile_trail_color_start_gp,
                                    projectile_trail_color_end_gp,
                                    random_float_between(0.0f, 1.0f));
@@ -111,7 +111,7 @@ void update_blarg_ship_shot(char *moby) {
                      (float)l11_projectile_trail_initial_particle_scalar);
     fast_vec_add(moby_position, moby_position, projectile_vars);
     make_hit_descriptor(hit, moby, 0x10000, *(float *)(projectile_vars + 0x20), projectile_vars);
-    if (collision_line(old, moby_position, 0, *(void **)(projectile_vars + 0x1C), hit)) {
+    if (collision_line(previous_moby_position, moby_position, 0, *(void **)(projectile_vars + 0x1C), hit)) {
         int i;
         for (i = 0; i < 5; i++) {
             *(OvlQuad *)spark_scatter_vector = 0;
