@@ -1481,7 +1481,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
     float       angle;
     Data2C8398 *moby_data;
     char       *hit;
-    char       *other;
+    char       *hit_record_source_moby;
     int         hit_response_code;
 
     damage = 0.0f;
@@ -1498,11 +1498,11 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
     hit = find_moby_hit(moby, 0x330000, 0);
     hit_response_code = resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
     if (hit != 0 && kind != 1 && moby->state != 0xD) {
-        other = *(char **)(hit + 0x20);
-        if (other != 0) {
-            if (other != (char *)hero.items[0].moby) {
-                angle = fast_arc_tan(moby->pos[0] - *(float *)(other + 0x10),
-                                     moby->pos[1] - *(float *)(other + 0x14));
+        hit_record_source_moby = *(char **)(hit + 0x20);
+        if (hit_record_source_moby != 0) {
+            if (hit_record_source_moby != (char *)hero.items[0].moby) {
+                angle = fast_arc_tan(moby->pos[0] - *(float *)(hit_record_source_moby + 0x10),
+                                     moby->pos[1] - *(float *)(hit_record_source_moby + 0x14));
             } else {
                 angle = fast_arc_tan(moby->pos[0] - hero.motion.pos.f[0],
                                      moby->pos[1] - hero.motion.pos.f[1]);
