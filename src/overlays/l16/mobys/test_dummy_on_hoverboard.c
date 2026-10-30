@@ -516,7 +516,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         dust[4];
     char *hoverboard_dummy_data = ((char *)MOBY(moby)->pvars);
     char *hero_base;
-    int   i, nearby_moby_count, next;
+    int   i, nearby_moby_count, next_jump_path_node_index;
     /* One mask for both collision calls. Held in a local it is one more instruction when GCSE sizes its
        expression table, and that size orders the stack slots of the cached addresses (sp+0x90..0xC4):
        with the literal at both calls every one of those slots is rotated by three. */
@@ -654,10 +654,10 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                 while (i < *(short *)(hoverboard_dummy_data + 0x2F0)) {
                     char *path;
 
-                    next = offset_path_index(*(char **)(hoverboard_dummy_data + 0x2C0), i, 1, 1);
+                    next_jump_path_node_index = offset_path_index(*(char **)(hoverboard_dummy_data + 0x2C0), i, 1, 1);
                     path = *(char **)(hoverboard_dummy_data + 0x2C0);
-                    distance += vector_distance_xy(path + (i * 16 + 16), path + (next * 16 + 16));
-                    i = next;
+                    distance += vector_distance_xy(path + (i * 16 + 16), path + (next_jump_path_node_index * 16 + 16));
+                    i = next_jump_path_node_index;
                 }
                 {
                     short last = *(short *)(hoverboard_dummy_data + 0x2F0);
