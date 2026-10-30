@@ -17,7 +17,7 @@ extern s32  acquire_menu_stream_buffer() __asm__("FUN_00225c18");
 int initialize_menu_preview_objects(char *preview) __asm__("FUN_002240c8");
 
 int initialize_menu_preview_objects(char *preview) {
-    char *object;
+    char *preview_moby;
     int  *resource_buffer_slot;
     int  *object_variables;
     char *held_flag;
@@ -50,39 +50,39 @@ int initialize_menu_preview_objects(char *preview) {
         first_attachment_manipulator.active = 0;
         second_attachment_manipulator.active = 0;
     }
-    object = create_menu_preview_moby(0);
+    preview_moby = create_menu_preview_moby(0);
     held_flag = preview + 0xBB;
     for (j = 23; j >= 0; j--) {
         *held_flag = 0;
         held_flag--;
     }
-    if (object != 0) {
+    if (preview_moby != 0) {
         char              *camera = (char *)&preview_camera;
         struct MenuSystem *g;
 
-        *(char **)(preview + 0x44) = object;
-        *(short *)(object + 0x34) = 0;
-        *(float *)(object + 0x10) = *(float *)(camera + 0x140) + 4.0f;
-        *(float *)(object + 0x14) = *(float *)(camera + 0x144);
-        *(float *)(object + 0x18) = *(float *)(camera + 0x148) - 0.6f;
-        *(float *)(object + 0x48) = 3.1415927f;
-        *(void **)(object + 0x74) = gadget_moby_update_noop;
-        object_variables = *(int **)(object + 0x78);
+        *(char **)(preview + 0x44) = preview_moby;
+        *(short *)(preview_moby + 0x34) = 0;
+        *(float *)(preview_moby + 0x10) = *(float *)(camera + 0x140) + 4.0f;
+        *(float *)(preview_moby + 0x14) = *(float *)(camera + 0x144);
+        *(float *)(preview_moby + 0x18) = *(float *)(camera + 0x148) - 0.6f;
+        *(float *)(preview_moby + 0x48) = 3.1415927f;
+        *(void **)(preview_moby + 0x74) = gadget_moby_update_noop;
+        object_variables = *(int **)(preview_moby + 0x78);
         object_variables[0] = (int)preview;
         object_variables[1] = 0;
         object_variables[2] = 0;
         g = &menu_system;
         g->unkC0 = -1;
         fill_transfer_words(D_00186310, 0, 0x40);
-        noop_callback_e(object);
+        noop_callback_e(preview_moby);
     }
-    object = create_menu_preview_moby(0x259);
-    if (object != 0) {
-        **(int **)(object + 0x78) = (int)preview;
-        *(void **)(object + 0x74) = update_menu_preview_animation_pose;
-        *(short *)(object + 0x34) = 4;
+    preview_moby = create_menu_preview_moby(0x259);
+    if (preview_moby != 0) {
+        **(int **)(preview_moby + 0x78) = (int)preview;
+        *(void **)(preview_moby + 0x74) = update_menu_preview_animation_pose;
+        *(short *)(preview_moby + 0x34) = 4;
     }
-    *(char **)(preview + 0x48) = object;
+    *(char **)(preview + 0x48) = preview_moby;
     return 0;
 }
 
