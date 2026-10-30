@@ -2025,17 +2025,25 @@ def build_overlays() -> Path:
     # others, and on some with both; cc1 -G0 leaves no such access, so a file
     # passes when it assembles any of the three ways.
     overlay_cc = f"{game_root}/ee-gcc -c {includes} {LANG_DEFINE} {COMPILER_FLAGS} $in -o $out"
+    # The headers a file includes, so that ninja rebuilds it when one changes.
+    header_deps = (f"{game_root}/ee-gcc -M {includes} {LANG_DEFINE} -DMATCHING_DECOMP $in"
+                   " | sed '1s|^[^:]*:|$out:|' > $out.d")
     ninja.rule(
         "overlay-cc",
         description="overlay-cc $in",
-        command=(f"{overlay_cc.replace(' -c ', ' -c -Wa,-G0 ', 1)} 2>/dev/null || {overlay_cc} 2>/dev/null || "
-                 f"{overlay_cc.replace(' -c ', ' -c -G0 ', 1)}"),
+        command=(f"{{ {overlay_cc.replace(' -c ', ' -c -Wa,-G0 ', 1)} 2>/dev/null || {overlay_cc} 2>/dev/null || "
+                 f"{overlay_cc.replace(' -c ', ' -c -G0 ', 1)}; }} && {header_deps}"),
+        depfile="$out.d",
+        deps="gcc",
     )
     ninja.rule(
         "c-only",
         description="c-only $in",
-        # a file of stubs only would leave no .text for padless-asm.py
-        command="{ grep -v INCLUDE_ASM $in; echo 'void overlay_c_only_anchor(void) {}'; } > $out",
+        # a file of stubs only would leave no .text for padless-asm.py; the
+        # copy depends on the headers too, so the game objects rebuild with it
+        command="{ grep -v INCLUDE_ASM $in; echo 'void overlay_c_only_anchor(void) {}'; } > $out && " + header_deps,
+        depfile="$out.d",
+        deps="gcc",
     )
     work = "${out}.work"
     ninja.rule(
