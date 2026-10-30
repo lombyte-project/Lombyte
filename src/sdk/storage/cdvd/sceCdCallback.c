@@ -7,16 +7,16 @@ extern s32 EnableInterrupts();
 
 s32 sceCdCallback(s32 callback) {
     s32 intr;
-    s32 old;
+    s32 previous_callback;
 
     if (sceCdSync(1) != 0) {
         return 0;
     }
     intr = DIntr();
-    old = D_00159740[0];
+    previous_callback = D_00159740[0];
     D_00159740[0] = callback;
     if (intr != 0) {
         EnableInterrupts();
     }
-    return old;
+    return previous_callback;
 }
