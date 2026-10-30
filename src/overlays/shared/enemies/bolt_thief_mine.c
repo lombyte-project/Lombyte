@@ -202,11 +202,11 @@ void update_bolt_thief_mine(struct Moby *moby) {
 unsigned char *spawn_bolt_thief_mine(unsigned char *owner,
                                      char          *spawn_position) __asm__("FUN_L14_002ffaf8");
 
-unsigned char *spawn_bolt_thief_mine(unsigned char *owner, char *spawn_position) {
+unsigned char *spawn_bolt_thief_mine(unsigned char *spawning_moby, char *spawn_position) {
     unsigned char *spawned_moby = create_moby(0x3A5);
     if (spawned_moby != 0) {
         char *spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
-        *(unsigned char **)spawned_vars = owner;
+        *(unsigned char **)spawned_vars = spawning_moby;
         *(int *)(spawned_vars + 8) = 0;
         *(int *)(spawned_vars + 0xC) = 0;
         *(float *)(spawned_vars + 4) = -1.0f;
@@ -214,7 +214,7 @@ unsigned char *spawn_bolt_thief_mine(unsigned char *owner, char *spawn_position)
         *(float *)(spawned_vars + 0x14) = random_float_between(0.00698131695f, 0.0139626339f);
         *(float *)(spawned_vars + 0x18) = random_float_between(0.00349065848f, 0.00698131695f);
         qcopy(spawned_moby + 0x10, spawn_position);
-        MOBY(spawned_moby)->rot.z = *(float *)(owner + 0x48);
+        MOBY(spawned_moby)->rot.z = *(float *)(spawning_moby + 0x48);
         spawned_moby[0x20] = 0;
         spawned_moby[0x30] = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
