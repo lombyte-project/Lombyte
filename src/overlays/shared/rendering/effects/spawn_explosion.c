@@ -280,7 +280,7 @@ float project_level_path_point_onto_segment(float   *out,
                                             OvlQuad *segment_start,
                                             OvlQuad *segment_end) __asm__("FUN_L00_0025db00");
 
-float project_level_path_point_onto_segment(float   *out,
+float project_level_path_point_onto_segment(float   *projected_point,
                                             float   *query_point,
                                             OvlQuad *segment_start,
 
@@ -301,10 +301,10 @@ float project_level_path_point_onto_segment(float   *out,
     set_vector_length_xy(planar_normal, planar_normal, 1.0f);
     k = -fast_vec_dot(planar_normal, planar_endpoint_copy) +
         (planar_normal[0] * query_point[0] + planar_normal[1] * query_point[1]);
-    out[0] = query_point[0] - k * planar_normal[0];
-    out[1] = query_point[1] - k * planar_normal[1];
-    *(int *)&out[2] = 0;
-    projected_point_components = out;
+    projected_point[0] = query_point[0] - k * planar_normal[0];
+    projected_point[1] = query_point[1] - k * planar_normal[1];
+    *(int *)&projected_point[2] = 0;
+    projected_point_components = projected_point;
     pa = (float *)segment_start;
     pb = (float *)segment_end;
     for (i = 0; i < 2; i++) {
@@ -313,15 +313,15 @@ float project_level_path_point_onto_segment(float   *out,
             break;
     }
     if (i < 2) {
-        if (vector_distance_xy(out, segment_start) < vector_distance_xy(out, segment_end)) {
-            qcopy(out, segment_start);
-            *(int *)&out[2] = 0;
+        if (vector_distance_xy(projected_point, segment_start) < vector_distance_xy(projected_point, segment_end)) {
+            qcopy(projected_point, segment_start);
+            *(int *)&projected_point[2] = 0;
         } else {
-            qcopy(out, segment_end);
-            *(int *)&out[2] = 0;
+            qcopy(projected_point, segment_end);
+            *(int *)&projected_point[2] = 0;
         }
     }
-    return vector_distance_xy(query_point, out);
+    return vector_distance_xy(query_point, projected_point);
 }
 
 extern void  interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
