@@ -694,7 +694,7 @@ void move_frog_with_collision_resolution(float  scale,
 
 void move_frog_with_collision_resolution(
 
-    float scale, float threshold, char *moby, float *out, int follow_path) {
+    float scale, float threshold, char *moby, float *movement_displacement, int follow_path) {
     extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
     float      start[4];
     float      end[4];
@@ -704,13 +704,13 @@ void move_frog_with_collision_resolution(
 
     fast_vec_normalize(forward, moby + 0xE0, scale);
     fast_vec_normalize(backward, forward, -D_0015ED6C);
-    fast_vec_add(out, out, backward);
+    fast_vec_add(movement_displacement, movement_displacement, backward);
     qcopy(start, moby + 0x10);
     fast_vec_add(start, start, forward);
-    fast_vec_add(moby + 0x10, moby + 0x10, out);
+    fast_vec_add(moby + 0x10, moby + 0x10, movement_displacement);
     fast_vec_add(end, moby + 0x10, forward);
 
-    if (threshold < fast_vec_length(out) && collision_line(start, end, 0, moby, 0) != 0) {
+    if (threshold < fast_vec_length(movement_displacement) && collision_line(start, end, 0, moby, 0) != 0) {
         qcopy(end, &D_L06_001745E0);
         fast_vec_sub(moby + 0x10, end, forward);
     }
