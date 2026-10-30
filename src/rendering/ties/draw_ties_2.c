@@ -8,7 +8,7 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
 extern void FlushCache(int);
-extern char *object_render_classes[] __asm__("D_001E1700");
+#include "rnc/rendering/object_render_class.h"
 extern s32 D_001E3000[];
 extern u8 D_001E4200[];
 extern u8 D_001E2A00[];
@@ -36,7 +36,7 @@ void draw_ties_2(void) {
         int i;
         int n = registered_object_render_class_count_macro;
         for (i = 1; i < n; i += 2) {
-            *(short *)(object_render_classes[i] + 0x24) |= 8;
+            object_render_classes[i]->flags |= 8;
         }
     }
     {
@@ -62,14 +62,14 @@ void draw_ties_2(void) {
         int i;
         int n = registered_object_render_class_count_macro;
         for (i = 1; i < n; i += 2) {
-            *(short *)(object_render_classes[i] + 0x24) &= ~8;
+            object_render_classes[i]->flags &= ~8;
         }
     }
     {
         int i;
         int n = registered_object_render_class_count_macro;
         for (i = 0; i < n; i += 2) {
-            *(short *)(object_render_classes[i] + 0x24) |= 8;
+            object_render_classes[i]->flags |= 8;
         }
     }
     {
@@ -91,7 +91,7 @@ void draw_ties_2(void) {
         int i;
         int n = registered_object_render_class_count_macro;
         for (i = 0; i < n; i += 2) {
-            *(short *)(object_render_classes[i] + 0x24) &= ~8;
+            object_render_classes[i]->flags &= ~8;
         }
     }
     fast_mem_copy((void *)render_packet_cursor.addr, D_001DF030, 0x20);

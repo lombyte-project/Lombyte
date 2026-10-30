@@ -125,9 +125,9 @@ void register_object_render_class(ObjectRenderClass *render_class,
             clamp_word =
                 (u64)material_base | ((u64)material_shift << 2) | ((u64)material_index << 24);
 
-            record->tex0 = tex0_word;
+            record->tex0.d = tex0_word;
             record->tex1.d = tex1_word;
-            record->mip = mip_word;
+            record->mip.d = mip_word;
             record->clamp.d = clamp_word;
             record->end = 0;
         } else {
@@ -143,9 +143,9 @@ void register_object_render_class(ObjectRenderClass *render_class,
             template_draw_word = (template_tex1 & 0x1C) | draw_bits | ((u64)draw_high << 32);
             template_clamp_word =
                 (u64)material_base | ((u64)material_shift << 2) | ((u64)material_index << 24);
-            record->tex0 = template_tex0;
+            record->tex0.d = template_tex0;
             record->tex1.d = template_draw_word;
-            record->mip = template_mip;
+            record->mip.d = template_mip;
             record->clamp.d = template_clamp_word;
             record->end = 0;
         }

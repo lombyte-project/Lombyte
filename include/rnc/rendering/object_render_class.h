@@ -7,18 +7,25 @@
 struct TieInstance;
 
 typedef struct {
-    u64 tex0;
+    union {
+        u64 d;
+        s32 w[2];
+    } tex0;
     u64 pad8;
     union {
         u64 d;
         s32 w[2];
     } tex1;
     u64 pad18;
-    u64 mip;
+    union {
+        u64 d;
+        s32 w[2];
+    } mip;
     u64 pad28;
     union {
         u64 d;
         s32 w[2];
+        u8 b[8];
     } clamp;
     u64 pad38;
     u64 end;
@@ -34,7 +41,7 @@ typedef struct {
     u8 pad10[0x10];
     u8 stream_counts[3];
     u8 record_count;
-    u8 pad24[2];
+    s16 flags;                          /* 0x24 */
     u16 instance_count;                 /* 0x26 */
     struct TieInstance *first_instance; /* 0x28 */
     ObjectRenderRecord *records;

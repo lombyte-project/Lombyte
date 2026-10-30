@@ -1,28 +1,18 @@
 #include "types.h"
 #include "rnc/rendering/tex_remap.h"
+#include "rnc/rendering/shrub_render_class.h"
 struct GifPacket {
     s32 count;
     s32 skip;
     u8 pad8[8];
 };
-struct GifSlot {
-    struct GifPacket *pkt;
-    s32 pad;
-};
-struct TieClass {
-    u8 pad0[0x28];
-    s16 count;
-    u8 pad2A[0x16];
-    struct GifSlot slots[1];
-};
 extern s32 shrub_gif_patch_class_ids[] __asm__("D_001D8DB0");
-extern struct TieClass *shrub_render_classes[] __asm__("D_001D7F30");
 extern struct TexRemap shrub_paging_table[] __asm__("D_001D88B0");
 void patch_shrub_gifs(void) __asm__("FUN_00228a30");
 
 void patch_shrub_gifs(void) {
     s32 *id;
-    struct TieClass *tc;
+    ShrubRenderClass *tc;
     s32 i;
     s32 j;
     struct GifPacket *pkt;
@@ -31,8 +21,8 @@ void patch_shrub_gifs(void) {
 
     for (id = shrub_gif_patch_class_ids; *id >= 0; id++) {
         tc = shrub_render_classes[*id];
-        for (i = 0; i < tc->count; i++) {
-            pkt = tc->slots[i].pkt + 1;
+        for (i = 0; i < tc->group_count; i++) {
+            pkt = (struct GifPacket *)tc->groups[i].group + 1;
             gif = (u8 *)(pkt + pkt->skip) + 0x10;
             for (j = 0; j < pkt->count; j++) {
                 texture_remap = &shrub_paging_table[gif[0x13]];
