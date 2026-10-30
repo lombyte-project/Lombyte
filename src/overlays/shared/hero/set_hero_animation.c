@@ -1183,17 +1183,17 @@ void set_gravity_relative_vector_length_xy(float *output_vector,
                                            float  z) __asm__("FUN_L00_00233ba0");
 
 void set_gravity_relative_vector_length_xy(float *output_vector, float *input_vector, float z) {
-    struct Hero *base = &hero;
+    struct Hero *hero_gravity_frame_state = &hero;
 
-    switch (base->gravity_mode) {
+    switch (hero_gravity_frame_state->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         set_vector_length_xy(output_vector, input_vector, z);
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        transform_vector(output_vector, input_vector, base->inv_rot_matrix);
+        transform_vector(output_vector, input_vector, hero_gravity_frame_state->inv_rot_matrix);
         set_vector_length_xy(output_vector, output_vector, z);
-        transform_vector(output_vector, output_vector, base->rot_matrix);
+        transform_vector(output_vector, output_vector, hero_gravity_frame_state->rot_matrix);
         break;
     }
 }
