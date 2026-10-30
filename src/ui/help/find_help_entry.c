@@ -3,13 +3,13 @@
 
 s32 find_help_entry(s16 id, s32 which, u16 *other) __asm__("FUN_001fecc8");
 
-s32 find_help_entry(s16 id, s32 which, u16 *other) {
+s32 find_help_entry(s16 id, s32 which, u16 *paired_column_output) {
     s32 i;
 
     for (i = 0; i < 150; i++) {
         if (message_id_code_table[i][which] == id) {
-            if (other != 0) {
-                *other = message_id_code_table[i][which ? 0 : 1];
+            if (paired_column_output != 0) {
+                *paired_column_output = message_id_code_table[i][which ? 0 : 1];
             }
             return i;
         }
