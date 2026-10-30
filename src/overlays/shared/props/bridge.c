@@ -27,7 +27,7 @@ void bridge_update(u8 *moby) {
         BRIDGE_RETURN_TO_INITIAL_POSITION = 4
     };
     u8         *bridge_data = ((u8 *)MOBY(moby)->pvars);
-    u8         *other;
+    u8         *linked_state_moby;
     f32         delta[4];
     f32         old_rotation[4];
     f32         vectors[8];
@@ -52,9 +52,9 @@ void bridge_update(u8 *moby) {
         break;
     case BRIDGE_WAIT_TO_MOVE_TO_OFFSET_POSITION:
         if (*(s32 *)(bridge_data + 0xb0) != -1) {
-            other = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
-            if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
-                other[0x20] != *(u32 *)(bridge_data + 0xb4))
+            linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
+            if (linked_state_moby != 0 && linked_state_moby[0x20] != 0xfe && linked_state_moby[0x20] != 0xfd &&
+                linked_state_moby[0x20] != *(u32 *)(bridge_data + 0xb4))
                 break;
         }
         *(quadword *)(vectors + 4) = 0;
@@ -69,9 +69,9 @@ void bridge_update(u8 *moby) {
         break;
     case BRIDGE_MOVE_TO_OFFSET_POSITION:
         if (*(s32 *)(bridge_data + 0xb0) != -1) {
-            other = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
-            if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
-                other[0x20] == *(u32 *)(bridge_data + 0xb8)) {
+            linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
+            if (linked_state_moby != 0 && linked_state_moby[0x20] != 0xfe && linked_state_moby[0x20] != 0xfd &&
+                linked_state_moby[0x20] == *(u32 *)(bridge_data + 0xb8)) {
                 if (*(s32 *)(bridge_data + 0xd0) != -1)
                     allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd0), 0, moby);
                 moby[0x20] = 4;
@@ -99,9 +99,9 @@ void bridge_update(u8 *moby) {
         break;
     case BRIDGE_WAIT_TO_RETURN_TO_INITIAL_POSITION:
         if (*(s32 *)(bridge_data + 0xb0) != -1) {
-            other = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
-            if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
-                other[0x20] == *(u32 *)(bridge_data + 0xb8)) {
+            linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100;
+            if (linked_state_moby != 0 && linked_state_moby[0x20] != 0xfe && linked_state_moby[0x20] != 0xfd &&
+                linked_state_moby[0x20] == *(u32 *)(bridge_data + 0xb8)) {
                 *(s32 *)(bridge_data + 0xac) = 0;
                 if (*(s32 *)(bridge_data + 0xd0) != -1)
                     allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd0), 0, moby);
@@ -111,8 +111,8 @@ void bridge_update(u8 *moby) {
         break;
     case BRIDGE_RETURN_TO_INITIAL_POSITION:
         if (*(s32 *)(bridge_data + 0xb0) == -1 ||
-            (other = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100) == 0 || other[0x20] == 0xfe ||
-            other[0x20] == 0xfd || other[0x20] == *(u32 *)(bridge_data + 0xb4)) {
+            (linked_state_moby = level_mobys + *(s32 *)(bridge_data + 0xb0) * 0x100) == 0 || linked_state_moby[0x20] == 0xfe ||
+            linked_state_moby[0x20] == 0xfd || linked_state_moby[0x20] == *(u32 *)(bridge_data + 0xb4)) {
             if (*(s32 *)(bridge_data + 0xd0) != -1)
                 allocate_voice_for_target_entry(*(s32 *)(bridge_data + 0xd0), 0, moby);
             moby[0x20] = 2;
