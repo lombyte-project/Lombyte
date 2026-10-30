@@ -101,7 +101,7 @@ extern void update_joint_animation(f32, f32, struct Moby *, void *, s32) __asm__
 
 extern WatcherReward talk_camera __asm__("D_L02_0016CE60") NOT_SDA; /* dialogue camera spot */
 extern char skids_agent_dialogue_data[] __asm__("D_L02_00161CF0");
-extern char *D_L02_001600EC;
+#include "rnc/overlay/cuboid.h"
 extern f32 D_L02_0015F3FC;
 extern f32 skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
 extern struct UsageStat D_00141968[] NOT_SDA; /* usage records 36 on (usage_stats + 0x120) */
@@ -188,7 +188,7 @@ void skids_agent_update(struct Moby *moby) {
             if (*(s16 *)(data + 4) == 0) {
                 jet_clear_persistent(moby->mission);
                 if (*(s32 *)(data + 0x150) != -1) {
-                    char *camera_transform_entry = D_L02_001600EC + (*(s32 *)(data + 0x150) << 7);
+                    char *camera_transform_entry = (char *)l02_cuboids + (*(s32 *)(data + 0x150) << 7);
                     jet_reset_camera(camera_transform_entry + 0x30, camera_transform_entry + 0x70);
                 }
             } else if (*(s16 *)(data + 4) == 2) {
@@ -222,10 +222,10 @@ void skids_agent_update(struct Moby *moby) {
         Vec4 to;
         advance_accelerated_scalar((f32 *)(data + 0x180), (f32 *)(data + 0x184), 1.0f, frame_time_sq * 0.1f,
                            frame_time_sq * 0.25f, frame_time * 0.5f);
-        lerp_vector(&pos, D_L02_001600EC + (*(s32 *)(data + 0x158) << 7) + 0x30,
-                    D_L02_001600EC + (*(s32 *)(data + 0x15C) << 7) + 0x30, *(f32 *)(data + 0x180));
-        qcopy_nc(&from, (char *)((*(s32 *)(data + 0x158) << 7) + (s32)D_L02_001600EC) + 0x70);
-        qcopy_nc(&to, (char *)((*(s32 *)(data + 0x15C) << 7) + (s32)D_L02_001600EC) + 0x70);
+        lerp_vector(&pos, (char *)l02_cuboids + (*(s32 *)(data + 0x158) << 7) + 0x30,
+                    (char *)l02_cuboids + (*(s32 *)(data + 0x15C) << 7) + 0x30, *(f32 *)(data + 0x180));
+        qcopy_nc(&from, (char *)((*(s32 *)(data + 0x158) << 7) + (s32)l02_cuboids) + 0x70);
+        qcopy_nc(&to, (char *)((*(s32 *)(data + 0x15C) << 7) + (s32)l02_cuboids) + 0x70);
         rot.f[2] = fast_add_rotations(fast_subtract_rotations(to.f[2], from.f[2]) * *(f32 *)(data + 0x180), from.f[2]);
         rot.f[1] = fast_add_rotations(fast_subtract_rotations(to.f[1], from.f[1]) * *(f32 *)(data + 0x180), from.f[1]);
         rot.f[0] = fast_add_rotations(fast_subtract_rotations(to.f[0], from.f[0]) * *(f32 *)(data + 0x180), from.f[0]);
@@ -475,7 +475,6 @@ void skid_mcmarx_update(struct Moby *moby) {
     update_joint_animation(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, watcher_vars->head, 1);
 }
 #include "qcopy.h"
-extern char *D_L02_001600EC_n __asm__("D_L02_001600EC");
 extern char *D_L02_0015FFD8_n __asm__("D_L02_0015FFD8");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
@@ -511,7 +510,7 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
         set_animation_parameter(*(int *)(data + 0x160), 0);
         *(int *)(data + 0x160) = -1;
         set_animation_parameter(*(int *)(data + 0x164), 0);
-        table = D_L02_001600EC_n;
+        table = (char *)l02_cuboids;
         entry_off = *(int *)(data + 0x154) << 7;
         mobys = table;
         *(int *)(data + 0x164) = -1;
