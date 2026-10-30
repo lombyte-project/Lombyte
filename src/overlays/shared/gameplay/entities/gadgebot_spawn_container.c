@@ -125,7 +125,7 @@ extern int FUN_L00_001fefc8(void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void destroy_gadgebot_spawn_container(void *, void *) __asm__("FUN_L06_002d8178");
 extern void draw_gadgebot_spawn_container(char *) __asm__("FUN_L06_002d8738");
-extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
+extern void add_draw_callback(int, int) __asm__("FUN_001f4600");
 
 void gadgebot_spawn_container_update(unsigned char *moby) __asm__("FUN_L06_002d85a0");
 void gadgebot_spawn_container_update(unsigned char *moby) {
@@ -156,7 +156,7 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
             destroy_gadgebot_spawn_container(moby, hit_record);
         }
         if (moby[0x31] != 0) {
-            enqueue_callback_list_1((int)draw_gadgebot_spawn_container, (int)moby);
+            add_draw_callback((int)draw_gadgebot_spawn_container, (int)moby);
         }
         break;
     case GADGEBOT_CONTAINER_WAIT_FOR_REMOVAL:
@@ -2704,7 +2704,7 @@ void update_gadgebot_glow_effects(char *moby) {
             int *last_effect_frame_ptr = *(int **)(moby_vars + 0x294);
             if (dv != *last_effect_frame_ptr) {
                 *last_effect_frame_ptr = dv;
-                enqueue_callback_list_1(draw_gadgebot_group_glow_effects, moby);
+                add_draw_callback(draw_gadgebot_group_glow_effects, moby);
             }
         }
     }

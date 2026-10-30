@@ -94,7 +94,7 @@ typedef struct {
 } FrameTiming;
 extern s32 breast_growth_count_gp __asm__("D_L05_00161ED0") __attribute__((sda));
 extern s32 game_mode __asm__("D_L05_0015F5C4");
-extern s32 game_mode_absolute __asm__("D_L05_0015F5C4");
+extern s32 game_mode __asm__("D_L05_0015F5C4");
 extern s32 frame_number __asm__("D_L05_0015F5CC");
 extern u8 alternate_item_available __asm__("D_0013D388") NOT_SDA;
 extern HoverboardRaceGates race_gates __asm__("D_0013D5B0");
@@ -335,7 +335,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             breast_growth_count_gp = state->breast_growth_count_gp;
         }
     }
-    if (game_mode_absolute != 2) {
+    if (game_mode != 2) {
         update_hoverboard_girl_boobs_animation(moby, state);
         if (big_head_cheat_enabled != 0)
             state->joints[0].target_scale = 2.75f;

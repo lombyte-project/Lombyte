@@ -169,7 +169,7 @@ extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
 extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
-extern f32 vector_distance_xy(void *, void *, void *) __asm__("func_001F9B80");
+extern f32 vector_distance(void *, void *, void *) __asm__("func_001F9B80");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
@@ -624,7 +624,7 @@ void update_resident_gameplay_state(void) {
                 qcopy(&level_render_state.pathPos, &path->p[0]);
                 qcopy(&level_render_state.startRot, &player->rotation);
                 level_render_state.rotY = fast_arc_tan(
-                    vector_distance_xy(&path->p[1], &path->p[0], &level_render_state.startPos),
+                    vector_distance(&path->p[1], &path->p[0], &level_render_state.startPos),
                     path->p[0].components[2] - path->p[1].components[2]);
                 level_render_state.rotZ =
                     fast_arc_tan(path->p[1].components[0] - path->p[0].components[0],

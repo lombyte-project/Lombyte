@@ -436,7 +436,7 @@ int timer_frame_right __asm__("D_L18_00161A38") = 52;
 int D_L18_00161A3C = 96;
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
-extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
+extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 
 
 /* Draws the level timer as "H:MM:SS.t" text with a pulsing colour. */
@@ -466,7 +466,7 @@ void draw_pulsing_timer_hud(struct Moby *moby) {
     timer_text[5] = 0x3A;
     timer_text[6] = *(int *)(data + 0x6c) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
     timer_text[7] = truncate_float_to_s32((float)random_integer_below(10)) + 0x30;
-    font_print_center_large_001f6c20(timer_text_x, timer_text_y, col, (int)timer_text, 8);
+    font_print_center_large(timer_text_x, timer_text_y, col, (int)timer_text, 8);
 }
 
 

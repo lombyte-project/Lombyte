@@ -16,7 +16,7 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/initonce_0023E4C8.c: func_L00_0023E4C8). */
 
-/* The rest of a quad: fast_draw_quad_real reads it right after the four corners,
+/* The rest of a quad: draw_geometry_quad reads it right after the four corners,
    which sit just before it on the stack. */
 typedef struct {
     int colors[4];
@@ -30,7 +30,7 @@ typedef struct {
 extern float D_L00_0015FB08 NOT_SDA;
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void build_moby_bone_transform(char *moby, int bone, char *out);
-extern void fast_draw_quad_real(void *quads, void *matrix, int count) __asm__("FUN_001f7d30");
+extern void draw_geometry_quad(void *quads, void *matrix, int count) __asm__("FUN_001f7d30");
 
 /* Builds the object's tilted frame and emits three batches of four quads offset around it. */
 void glow_quads_draw(char *moby) __asm__("FUN_L00_0023db30");
@@ -94,7 +94,7 @@ void glow_quads_draw(char *moby) {
     corners[3][2] = corners[3][2] + 0.25f;
     corners[3][3] = 1.0f;
     corners[3][0] = near_point[3] * scale;
-    fast_draw_quad_real(corners, frame, 1);
+    draw_geometry_quad(corners, frame, 1);
     for (i = 1; i < 4; i += 2) {
         corner = corners[i];
         if (i < 2) {
@@ -105,7 +105,7 @@ void glow_quads_draw(char *moby) {
             corner[2] = corner[2] + -0.25f;
         }
     }
-    fast_draw_quad_real(corners, frame, 1);
+    draw_geometry_quad(corners, frame, 1);
 
     qcopy(corners[0], near_point);
     near_width = scale * near_point[3];
@@ -125,7 +125,7 @@ void glow_quads_draw(char *moby) {
     corners[3][0] = far_width;
     corners[3][2] = corners[3][2] + 0.25f;
     corners[3][3] = 1.0f;
-    fast_draw_quad_real(corners, frame, 1);
+    draw_geometry_quad(corners, frame, 1);
     for (i = 0; i < 4; i++) {
         corner = corners[i];
         if (i < 2) {
@@ -136,7 +136,7 @@ void glow_quads_draw(char *moby) {
             corner[2] = corner[2] + -0.25f;
         }
     }
-    fast_draw_quad_real(corners, frame, 1);
+    draw_geometry_quad(corners, frame, 1);
 
     qcopy(corners[0], far_point);
     corners[0][2] = corners[0][2] + -0.25f;
@@ -154,7 +154,7 @@ void glow_quads_draw(char *moby) {
     corners[3][3] = 1.0f;
     corners[3][2] = 0.0f;
     corners[3][0] = scale * near_point[3] * 3.0f;
-    fast_draw_quad_real(corners, frame, 1);
+    draw_geometry_quad(corners, frame, 1);
     for (i = 0; i < 4; i += 2) {
         corner = corners[i];
         if (i < 2) {
@@ -165,7 +165,7 @@ void glow_quads_draw(char *moby) {
             corner[2] = corner[2] + -0.25f;
         }
     }
-    fast_draw_quad_real(corners, frame, 1);
+    draw_geometry_quad(corners, frame, 1);
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"

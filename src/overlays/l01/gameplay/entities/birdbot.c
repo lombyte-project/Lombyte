@@ -656,7 +656,7 @@ extern int FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int,
                               int) __asm__("FUN_L00_0025a478");
 extern int select_birdbot_path_node(void *, int *) __asm__("FUN_L01_002e6790");
 extern int scale_game_frames(int);
-extern int tick_countdown_32(void *) __asm__("func_001F9740");
+extern int fast_dec_timer(void *) __asm__("func_001F9740");
 extern short birdbot_projectile_speed_gp __asm__("D_L01_00161950") __attribute__((sda));
 extern short birdbot_path_speed_scale_gp __asm__("D_L01_00161954") __attribute__((sda));
 extern short birdbot_path_entry_animation_speed_gp __asm__("D_L01_0016195C") __attribute__((sda));
@@ -915,7 +915,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         c = &birdbot_vars->main;
         a = fast_arc_tan(selected_combat_target.pos.f[0] - birdbot_moby->pos.f[0], selected_combat_target.pos.f[1] - birdbot_moby->pos.f[1]);
         FUN_L00_00258278_cf((char *)birdbot_moby, &birdbot_vars->f194, a, 0.02f, 0.3f, 0.1f);
-        tick_countdown_32(&birdbot_vars->w190);
+        fast_dec_timer(&birdbot_vars->w190);
         d = vector_distance_xy(&birdbot_moby->pos, &selected_combat_target);
         if ((flag ? d < birdbot_vars->f1A0 * 2.0f : d < birdbot_vars->f1A0) &&
             absolute_float(birdbot_moby->pos.f[2] - selected_combat_target.pos.f[2]) < 2.0f && birdbot_moby->b31 != 0 &&
@@ -1109,7 +1109,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         a = fast_arc_tan(selected_combat_target.pos.f[0] - birdbot_moby->pos.f[0], selected_combat_target.pos.f[1] - birdbot_moby->pos.f[1]);
         FUN_L00_00258278_cf((char *)birdbot_moby, &birdbot_vars->f194, a, 0.02f, 0.3f, 0.1f);
         if (birdbot_moby->b53 == 0) {
-            if (tick_countdown_32(&birdbot_vars->w190) != 0) {
+            if (fast_dec_timer(&birdbot_vars->w190) != 0) {
                 if (birdbot_moby->b53 != 5) {
                     blend_moby_animation(birdbot_moby, 5, 0, scale_game_frames(0xF));
                 }
@@ -1486,7 +1486,7 @@ extern u8 D_L01_00161A80[] MACRO_ADDR;
 
 extern s32 rand() __asm__("FUN_001160d8");
 extern f32 FUN_L04_001f1978(f32);
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
@@ -1673,7 +1673,7 @@ void peckbot_update(Mob577 *self) {
         break;
     case PECKBOT_STATE_AIRBORNE_IDLE:
         fast_vec_sub(&vector_scratch, &target.pos, &self->pos);
-        if (tick_countdown_32(&peckbot_vars->x228) != 0 && fast_vec_length(&vector_scratch) < peckbot_vars->range + 4.0f &&
+        if (fast_dec_timer(&peckbot_vars->x228) != 0 && fast_vec_length(&vector_scratch) < peckbot_vars->range + 4.0f &&
             absolute_float(self->pos.f[2] - target.pos.f[2]) < 8.0f &&
             random_integer_below(0x13) == 0) {
             self->state = 17;
@@ -1686,7 +1686,7 @@ void peckbot_update(Mob577 *self) {
             self->state = 17;
             clear_u64_value(&peckbot_vars->vel);
             self->hit = 0;
-        } else if (tick_countdown_32(&peckbot_vars->idle_timer) != 0) {
+        } else if (fast_dec_timer(&peckbot_vars->idle_timer) != 0) {
             peckbot_vars->idle_timer = scale_game_frames(0x78);
             rad = random_float_between(0.0f, 3.0f);
             idle_destination_azimuth = random_angle_radians();
@@ -1865,7 +1865,7 @@ void peckbot_update(Mob577 *self) {
         vector_scratch.f[1] = fast_sin(self->rot.f[2]) * 2.0f;
         vector_scratch.f[2] = 0.0f;
         movement_result_flags = FUN_L00_00258b50(self, &peckbot_vars->x180, &vector_scratch, &position_scratch, 1.0f);
-        if (tick_countdown_32(&peckbot_vars->turn_timer) != 0) {
+        if (fast_dec_timer(&peckbot_vars->turn_timer) != 0) {
             peckbot_vars->turn_timer = scale_game_frames(random_float_between(30.0f, 90.0f));
             peckbot_vars->turn_off = -peckbot_vars->turn_off;
         }
@@ -3304,7 +3304,7 @@ typedef struct {
 
 SteamColors D_L01_00161C08 = {{0x2b8, 0x2b9, 0x2ba}};
 extern SteamColors l01_rising_particle_variant_indices __asm__("D_L01_00161C18");
-extern s32 tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void spawn_debris_chunk(void *, void *, u32, s32, f32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 extern void *mine_debris(void *, void *, u32, u32, f32, s32, u32) __asm__("FUN_L00_0026bed0");
 
@@ -3329,7 +3329,7 @@ void update_rising_particle_and_debris_emitter(SteamMoby *steam_moby) {
     if (steam_vars->active == 0) {
         return;
     }
-    if (tick_countdown_32(steam_vars)) {
+    if (fast_dec_timer(steam_vars)) {
         steam_vars->puff_timer = scale_game_frames(0x78);
     }
     if (steam_vars->burst_timer == 0 && random_integer_below(100) < 5) {

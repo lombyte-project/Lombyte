@@ -28,7 +28,7 @@ extern u8 *level_archive_base __asm__("D_0015EE54") MACRO_ADDR;
 extern s32 D_0015EEBC __attribute__((sda));
 extern s32 D_0015EEC0 MACRO_ADDR;
 extern u8 D_1FF8000[];
-extern void store_sound_bank_handle_callback() __asm__("FUN_0022dd78");
+extern void store_async_sound_bank_handle() __asm__("FUN_0022dd78");
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern void snd_bank_load_from_ee_cb(s32, s32, u64) __asm__("FUN_0012e088");
 extern void snd_resolve_bank_xrefs() __asm__("FUN_0012e1a8");
@@ -170,7 +170,7 @@ s32 service_level_archive_load(void) {
         shared_header = level_root;
         sound_bank_handle = 0xFFFFFFFFU;
         snd_bank_load_from_ee_cb(shared_header->sound_bank_offset + (s32)shared_header,
-                                 (s32)store_sound_bank_handle_callback, (u32)&sound_bank_handle);
+                                 (s32)store_async_sound_bank_handle, (u32)&sound_bank_handle);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case WAIT_FOR_SOUND_BANK_LOAD:

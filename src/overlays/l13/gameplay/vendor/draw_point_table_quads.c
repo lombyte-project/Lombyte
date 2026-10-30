@@ -12,7 +12,7 @@
 #include "rnc/rendering/effects/spawn_spark.h"
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
 
-/* GS quad packet for draw_quad_packet: four corners, their colours and
+/* GS quad packet for draw_geometry_quad: four corners, their colours and
    texture coordinates, then the giftag and register words. */
 typedef struct {
     f32 pos[4][4];
@@ -40,7 +40,7 @@ f32 D_L13_001D9B70[4][2] = {
 };
 
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
-extern void draw_quad_packet(void *, void *, s32) __asm__("FUN_001f7d30");
+extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 
 /* Draws the beam as 15 textured quads between consecutive points of the
    moby's point list (data + 0x210), each twice: once with the odd corners
@@ -101,7 +101,7 @@ void draw_point_table_quads(struct Moby *moby) {
             pk[1].uv[j][0] = D_L13_001D9B70[j][0];
             pk[1].uv[j][1] = D_L13_001D9B70[j][1];
         }
-        draw_quad_packet(pk, identity_matrix, 0);
+        draw_geometry_quad(pk, identity_matrix, 0);
         for (j = 0; j < 4; j++) {
             corner_position = pk[0].pos[j];
             if (j & 1) {
@@ -109,7 +109,7 @@ void draw_point_table_quads(struct Moby *moby) {
             }
         }
         i++;
-        draw_quad_packet(pk, identity_matrix, 0);
+        draw_geometry_quad(pk, identity_matrix, 0);
     } while (i < 15);
     vu1_add_g_sregister(0x47, 0x5360B);
 }

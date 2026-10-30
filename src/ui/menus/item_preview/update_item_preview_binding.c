@@ -42,7 +42,7 @@ struct PreviewClassResource {
     u8 state_0d;
 };
 
-extern struct PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
+extern struct PreviewItemDefinition menu_item_info[] __asm__("D_001863D0");
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
 extern u8 item_text_variant[] __asm__("D_0013E520");
 #include "rnc/gameplay/hero.h"
@@ -94,12 +94,12 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
         previous_class = -1;
     }
     load_class = 0;
-    oclass = preview_item_definitions[item_index].oclass;
+    oclass = menu_item_info[item_index].oclass;
     if (item_index == 0x18) {
         oclass = 0x1DF;
     }
     preview->rotation_angle = fast_add_rotations(preview->rotation_angle, 0.01f);
-    item_type = preview_item_definitions[item_index].item_type;
+    item_type = menu_item_info[item_index].item_type;
     is_type2 = item_type == 2;
     has_secondary_moby = item_type == 3;
     is_type1 = item_type == 1;
@@ -173,7 +173,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             set_moby_animation(moby, last_animation, 0);
         }
         if (has_secondary_moby && moby != 0) {
-            moby = create_menu_preview_moby(preview_item_definitions[1].oclass);
+            moby = create_menu_preview_moby(menu_item_info[1].oclass);
             if (moby != 0) {
                 moby->flags = 0;
                 source_moby = preview->primary_moby;
