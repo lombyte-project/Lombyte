@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+#include "rnc/storage/disc_table.h"
 #include "asm.h"
 
 #include "sda.h"
@@ -179,13 +180,6 @@ typedef struct {
 
 typedef int Qword __attribute__((mode(TI)));
 
-typedef struct {
-    char pad0[0x2970];
-    int f2970;
-    int f2974;
-    int f2978;
-    int f297C;
-} GameState137B80;
 
 typedef struct TieMatrix {
     float m0[3];
@@ -497,7 +491,6 @@ extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 void reset_global_state_fields(void) __asm__("func_00217020");
 void srand(int value) __asm__("func_001160C8");
 extern void load(void *, int, int) __asm__("FUN_00216828");
-extern GameState137B80 D_00137B80;
 
 char *load_level_gameplay(int skip_gameplay_read) __asm__("FUN_L00_00241940");
 extern unsigned char l00_moby_load_exclusion_flags_by_uid[] __asm__("D_L00_001BB684");
@@ -515,9 +508,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
     mem = D_L00_00173E00.f18;
     if (skip_gameplay_read == 0) {
         if (pal_mode != 0) {
-            load(mem, D_00137B80.f2978, D_00137B80.f297C);
+            load(mem, disc_table.sound_archive_alt.sector, disc_table.sound_archive_alt.size);
         } else {
-            load(mem, D_00137B80.f2970, D_00137B80.f2974);
+            load(mem, disc_table.sound_archive.sector, disc_table.sound_archive.size);
         }
         level_root[1] = mem; /* D_0015EE50 */
     }
@@ -2047,21 +2040,12 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
     game_frame++;
     return 0;
 }
-struct SectorListPair {
-    s32 x[71];                  /* 0x000 */
-    s32 y[77];                  /* 0x11C: used while D_0015ED80 is set */
-};
-struct SectorListTable {
-    u8 pad0[0x2AFC];
-    struct SectorListPair lists[1]; /* 0x2AFC, 0x250 apart */
-};
 struct StreamLoader {
     u8 pad0[0x30];
     s32 list;                   /* 0x30 */
     u8 pad34[0x28];
     u8 *buf;                    /* 0x5C */
 };
-extern struct SectorListTable disc_table __asm__("D_00137B80");
 extern struct StreamLoader D_L00_0016C860;
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 
@@ -2073,11 +2057,11 @@ s32 start_cutscene_chunk_read(s32 i) {
     s32 size;
 
     if (pal_mode != 0) {
-        size = disc_table.lists[D_L00_0016C860.list].y[i + 1] - disc_table.lists[D_L00_0016C860.list].y[i];
-        start = disc_table.lists[D_L00_0016C860.list].y[i];
+        size = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i + 1] - disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
+        start = disc_table.sector_lists[D_L00_0016C860.list].sectors_alt[i];
     } else {
-        size = disc_table.lists[D_L00_0016C860.list].x[i + 1] - disc_table.lists[D_L00_0016C860.list].x[i];
-        start = disc_table.lists[D_L00_0016C860.list].x[i];
+        size = disc_table.sector_lists[D_L00_0016C860.list].sectors[i + 1] - disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
+        start = disc_table.sector_lists[D_L00_0016C860.list].sectors[i];
     }
     if (size > 0) {
         start_audio_stream_read(buf, start, size);

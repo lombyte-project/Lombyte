@@ -376,8 +376,8 @@ void draw_vendor_screen(void) {
         fast_mem_zero16(p->f2C, 0x400);
         p->f18 = p->f2C + 0x400;
         if (cd_read_active[0] == 0) {
-            if (start_audio_stream_read(p->f18 + 0x80000, disc_table.animation_streams[48].sector,
-                                        disc_table.animation_streams[48].size) != 0) {
+            if (start_audio_stream_read(p->f18 + 0x80000, disc_table.vendor_animation.sector,
+                                        disc_table.vendor_animation.size) != 0) {
                 D_L00_0016118C = 1;
             } else {
                 D_L00_0016118C = 0;

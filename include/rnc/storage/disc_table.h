@@ -9,6 +9,13 @@ struct DiscFile {
     s32 size;
 };
 
+/* One sector list of the cutscene chunk loader: start sectors, read as
+   [i + 1] - [i] for the length of chunk i. */
+struct DiscSectorList {
+    s32 sectors[71];                       /* 0x000 */
+    s32 sectors_alt[77];                   /* 0x11C, while D_0015ED80 is set */
+};
+
 /*
  * The disc file table at D_00137B80, as far as the code in src/ reads it.
  * load_disc_sectors_into_global_buffer copies its first 0x2960 bytes from
@@ -23,7 +30,9 @@ struct DiscTable {
     u8 pad_0[0x8];
     struct DiscFile debug_font;            /* 0x8 */
     struct DiscFile memcard_data;          /* 0x10, read by memcard_update_state and memcard_restore_game */
-    struct DiscFile animation_streams[49]; /* 0x18, streamed animations by archive index */
+    struct DiscFile animation_streams[28]; /* 0x18, streamed animations by archive index */
+    struct DiscFile misc_animations[20];   /* 0xF8, loaded into the stash by load_misc_animations_into_stash */
+    struct DiscFile vendor_animation;      /* 0x198, streamed by draw_vendor_inset_quads */
     struct DiscFile music_10000[37];       /* 0x1A0, music tracks 10000.. */
     struct DiscFile unk2C8[6];             /* 0x2C8, one per language */
     struct DiscFile unk2F8[6];             /* 0x2F8, one per language */
@@ -35,7 +44,9 @@ struct DiscTable {
     struct DiscFile render_archives[201];
     s32 music_50000[40][6];                /* 0xF00, tracks 50000.., one location per language */
     struct DiscFile unk12C0;               /* 0x12C0 */
-    struct DiscFile level_archives[24];    /* 0x12C8, by level index */
+    struct DiscFile level_archives[4];     /* 0x12C8, by level index */
+    struct DiscFile unk12E8[10];           /* 0x12E8, overlays: x of an x/y pair picked by D_0015ED80 */
+    struct DiscFile unk1338[10];           /* 0x1338, the y half of the 0x12E8 pair */
     struct DiscFile loading_slides[6];     /* 0x1388, one per language */
     struct DiscFile unk13B8;               /* 0x13B8 */
     struct DiscFile music_40000[36];       /* 0x13C0, music tracks 40000.. */
@@ -65,7 +76,8 @@ struct DiscTable {
     struct DiscFile sound_archive_alt;     /* 0x2978, while D_0015ED80 is set */
     u8 pad_2980[0x8];
     struct DiscFile music_20000[36];       /* 0x2988, music tracks 20000.. */
-    s32 music_tracks[1];                   /* 0x2AA8, by track number */
+    s32 music_tracks[21];                  /* 0x2AA8, by track number */
+    struct DiscSectorList sector_lists[1]; /* 0x2AFC, by the chunk loader's list index */
 };
 
 extern struct DiscTable disc_table __asm__("D_00137B80");

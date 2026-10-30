@@ -773,16 +773,7 @@ void update_cutscene_playback(void) {
         update_game_frame_and_idle_counters();
     }
 }
-typedef struct {
-    s32 a, b;
-} P2;
-typedef struct {
-    u8 pad[0x1808];
-    P2 x[19];
-    P2 y[1];
-} Tab;
 extern s32 D_0015ED80;
-extern Tab D_00137B80;
 void prepare_movie_playback(s32 sector, s32 size, s32 language) __asm__("FUN_L00_002995d0");
 
 void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
@@ -795,11 +786,11 @@ void queue_scene_movie_with_game_language(s32 i) {
     if (i < 0)
         return;
     if (D_0015ED80) {
-        a = D_00137B80.y[i].a;
-        b = D_00137B80.y[i].b;
+        a = disc_table.unk18A0[i].sector;
+        b = disc_table.unk18A0[i].size;
     } else {
-        a = D_00137B80.x[i].a;
-        b = D_00137B80.x[i].b;
+        a = disc_table.unk1808[i].sector;
+        b = disc_table.unk1808[i].size;
     }
     hero_ptr = &hero;
     if (hero_ptr->health.hp == 0) {
@@ -808,14 +799,6 @@ void queue_scene_movie_with_game_language(s32 i) {
         prepare_movie_playback(a, b, game_language);
     }
 }
-typedef struct {
-    s32 a, b;
-} P2_002994f8;
-typedef struct {
-    u8 pad[0x1A28];
-    P2_002994f8 x[5];
-    P2_002994f8 y[5];
-} Tab_002994f8;
 /* Passes disc table entry i at 0x1A28 (0x1A50 while D_0015ED80 is set) to FUN_L00_002995d0. */
 void queue_language_zero_movie(s32 i) __asm__("FUN_L00_002994f8");
 
@@ -824,11 +807,11 @@ void queue_language_zero_movie(s32 i) {
     if (i < 0)
         return;
     if (D_0015ED80) {
-        a = (*(Tab_002994f8 *)&D_00137B80).y[i].a;
-        b = (*(Tab_002994f8 *)&D_00137B80).y[i].b;
+        a = disc_table.unk1A50[i].sector;
+        b = disc_table.unk1A50[i].size;
     } else {
-        a = (*(Tab_002994f8 *)&D_00137B80).x[i].a;
-        b = (*(Tab_002994f8 *)&D_00137B80).x[i].b;
+        a = disc_table.unk1A28[i].sector;
+        b = disc_table.unk1A28[i].size;
     }
     prepare_movie_playback(a, b, 0);
 }
@@ -1042,16 +1025,16 @@ void start_slideshow(void) {
     slideshow.src = (s32 *)(D_L00_00173E00[2] + slideshow_buffer_base);
     D_L00_001611CC = slideshow_buffer_base;
     if (D_0015ED80_gp != 0) {
-        start_audio_stream_read((s32)slideshow.dst, (*(G9 *)&D_00137B80).alt[slideshow.slide].a, (*(G9 *)&D_00137B80).alt[slideshow.slide].b);
+        start_audio_stream_read((s32)slideshow.dst, (*(G9 *)&disc_table).alt[slideshow.slide].a, (*(G9 *)&disc_table).alt[slideshow.slide].b);
     } else {
-        start_audio_stream_read((s32)slideshow.dst, (*(G9 *)&D_00137B80).normal[slideshow.slide].a, (*(G9 *)&D_00137B80).normal[slideshow.slide].b);
+        start_audio_stream_read((s32)slideshow.dst, (*(G9 *)&disc_table).normal[slideshow.slide].a, (*(G9 *)&disc_table).normal[slideshow.slide].b);
     }
     update_audio_stream_until_idle(1);
     slideshow.slide++;
     if (D_0015ED80_gp != 0) {
-        start_audio_stream_read((s32)slideshow.src, (*(G9 *)&D_00137B80).alt[slideshow.slide].a, (*(G9 *)&D_00137B80).alt[slideshow.slide].b);
+        start_audio_stream_read((s32)slideshow.src, (*(G9 *)&disc_table).alt[slideshow.slide].a, (*(G9 *)&disc_table).alt[slideshow.slide].b);
     } else {
-        start_audio_stream_read((s32)slideshow.src, (*(G9 *)&D_00137B80).normal[slideshow.slide].a, (*(G9 *)&D_00137B80).normal[slideshow.slide].b);
+        start_audio_stream_read((s32)slideshow.src, (*(G9 *)&disc_table).normal[slideshow.slide].a, (*(G9 *)&disc_table).normal[slideshow.slide].b);
     }
 }
 extern s32 D_L00_0015F3FC;
@@ -1140,9 +1123,9 @@ void update_slideshow(void) {
             slideshow.slide++;
             slide = slideshow.slide % 20;
             if (D_0015ED80_gp != 0) {
-                start_audio_stream_read((s32)slideshow.src, (*(G9 *)&D_00137B80).alt[slide].a, (*(G9 *)&D_00137B80).alt[slide].b);
+                start_audio_stream_read((s32)slideshow.src, (*(G9 *)&disc_table).alt[slide].a, (*(G9 *)&disc_table).alt[slide].b);
             } else {
-                start_audio_stream_read((s32)slideshow.src, (*(G9 *)&D_00137B80).normal[slide].a, (*(G9 *)&D_00137B80).normal[slide].b);
+                start_audio_stream_read((s32)slideshow.src, (*(G9 *)&disc_table).normal[slide].a, (*(G9 *)&disc_table).normal[slide].b);
             }
         }
     }
