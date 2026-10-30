@@ -1439,11 +1439,11 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     s32      retraction_timer_or_below_hold_threshold;
     f32      probe_diameter;
     f32      f;
-    u8      *base;
+    u8      *camera_tracking_state;
     f32      orbit_distance;
     u8      *restored_moby;
 
-    base = camera_view;
+    camera_tracking_state = camera_view;
     x = *(u8 **)(camera_moby + 0x70);
     orbit_state = x + 0x130;
     camera_collision_state = x + 0x1D0;
@@ -1454,7 +1454,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     if (current_level_index_macro == 0xF) {
         any = D_0013F350_lui.b20A4 == 2;
     }
-    lerp_vector(&probe_center, x + 0x90, base - 0x50, 0.5f);
+    lerp_vector(&probe_center, x + 0x90, camera_tracking_state - 0x50, 0.5f);
     nearby_moby_count =
         probe_world_sphere(&probe_center, 1, D_0013F350_lui.p2080, 0, probe_diameter * 0.5f);
     if (nearby_moby_count > 0) {
@@ -1480,18 +1480,18 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
             }
             fast_vec_sub(&moby_offset_or_camera_endpoint, nearby_moby + 0x10, (x + 0x90));
             fast_vec_scale(
-                &v20, base + 0x30, fast_vec_dot(base + 0x30, &moby_offset_or_camera_endpoint));
+                &v20, camera_tracking_state + 0x30, fast_vec_dot(camera_tracking_state + 0x30, &moby_offset_or_camera_endpoint));
             fast_vec_sub(&planar_moby_direction, &moby_offset_or_camera_endpoint, &v20);
             fast_vec_normalize(&planar_moby_direction, &planar_moby_direction, 1.0f);
             f = fast_vec_dot(&planar_moby_direction, orbit_state);
             f = fast_arc_sin(f / (AF_2e7d20(0x2C) - BF_2e7d20(0x30)));
             if (absolute_float(1.5707964f - f) < 0.43633232f) {
-                fast_vec_cross(&orbit_side_direction, orbit_state, base + 0x30);
+                fast_vec_cross(&orbit_side_direction, orbit_state, camera_tracking_state + 0x30);
                 fast_vec_normalize(&orbit_side_direction, &orbit_side_direction, 1.0f);
                 if (0.0f < fast_vec_dot(&orbit_side_direction, &moby_offset_or_camera_endpoint)) {
-                    build_look_at_matrix(orbit_state, orbit_state, base + 0x20, -0.017453292f);
+                    build_look_at_matrix(orbit_state, orbit_state, camera_tracking_state + 0x20, -0.017453292f);
                 } else {
-                    build_look_at_matrix(orbit_state, orbit_state, base + 0x20, 0.017453292f);
+                    build_look_at_matrix(orbit_state, orbit_state, camera_tracking_state + 0x20, 0.017453292f);
                 }
             }
         next:
