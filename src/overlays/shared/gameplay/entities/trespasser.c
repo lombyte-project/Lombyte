@@ -1187,7 +1187,8 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern s32 D_0015EEA4;
 extern u32 D_0013CAE4 NOT_SDA;
 extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") NOT_SDA;
-extern OvlVec4 D_L00_00166C80_lui[3] __asm__("D_L00_00166C80") NOT_SDA;
+#include "rnc/overlay/level_camera.h"
+extern LevelCamera l00_camera_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")NOT_SDA;
 extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("FUN_L00_002aa008");
 extern struct Moby *spawn_mine(void *, void *, void *) __asm__("FUN_L00_002a9ed0");
@@ -1219,7 +1220,6 @@ typedef struct {
 } GloveVars;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
 extern Vec4 D_L00_00166DC0;
-extern char D_L00_00166C80[];
 extern short D_L00_001B07B0[];
 extern f32 frame_scale_inv_macro __asm__("D_0015ED68") MACRO_ADDR;
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
@@ -1261,7 +1261,7 @@ void mine_glove_update(struct Moby *moby) {
     offset.q = 0;
     offset.f[1] = -0.09f;
     offset.f[2] = -0.02f;
-    copy_matrix3x4(basis, D_L00_00166C80);
+    copy_matrix3x4(basis, l00_camera.unk0);
     transpose_rotation_matrix(matrix, basis);
     if (vars == 0)
         return;
@@ -1520,7 +1520,7 @@ void bomb_glove_update(struct Moby *moby) {
     offset.q = 0;
     offset.f[1] = -0.09f;
     offset.f[2] = -0.02f;
-    copy_matrix3x4(basis, D_L00_00166C80_lui);
+    copy_matrix3x4(basis, l00_camera_lui.unk0);
     transpose_rotation_matrix(matrix, basis);
     if (vars == 0)
         return;
@@ -3147,7 +3147,6 @@ typedef float Vec_2c7548[4] __attribute__((aligned(16)));
 typedef float Mat_2c7548[4][4] __attribute__((aligned(16)));
 typedef float Mat3_2c7548[3][4] __attribute__((aligned(16)));
 
-extern char player_camera[] __asm__("D_L00_00166C80");
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -3176,7 +3175,7 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, 
     float *pos = throw_origin;
 
     *(u128 *)pos = grip->q;
-    copy_matrix3x4(basis, player_camera);
+    copy_matrix3x4(basis, l00_camera.unk0);
     transpose_rotation_matrix(matrix, basis);
     held = vars->held;
     if (held == 0) return;
@@ -3206,7 +3205,7 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, 
             if (0.593411922f < slope) slope = 0.593411922f;
             if (slope < -1.39626336f) slope = -1.39626336f;
             build_spherical_offset(arc, (controller_state.held & 5) ? 3.5f : 2.5f, angle, slope);
-            qcopy(saved, player_camera + 0x140);
+            qcopy(saved, &l00_camera.pos);
             distance = vector_length_xy(arc);
             {
                 float z = arc[2];

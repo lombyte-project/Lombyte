@@ -158,7 +158,7 @@ typedef struct {
 
 extern B910 l00_mine_camera_blast_parameters __asm__("D_L00_001E9830");
 extern B910 l00_mine_alternate_camera_blast_parameters __asm__("D_L00_001E9880");
-extern Cam910 D_L00_00166C80;
+#include "rnc/overlay/level_camera.h"
 extern E D_0013E520;
 #include "rnc/overlay/collision.h"
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
@@ -924,8 +924,8 @@ void mine_update(M910 *mine_moby) {
                 } else {
                     allocate_voice_for_target_entry(2, 0, (int)mine_moby);
                 }
-                D_L00_00166C80.f160 = explosion_camera_distance < 20.0f ? 0.4f - explosion_camera_distance * 0.0175f : 0.050000012f;
-                D_L00_00166C80.i168 = scale_game_frames(0x19);
+                l00_camera.shake_amount = explosion_camera_distance < 20.0f ? 0.4f - explosion_camera_distance * 0.0175f : 0.050000012f;
+                l00_camera.shake_frames = scale_game_frames(0x19);
                 fast_vec_dist(&mine_moby->pos, hero.motion.pos.f);
                 if (D_E910.b11 != 0) {
                     mine_camera_blast((char *)&alternate_camera_blast_parameters, (char *)&mine_moby->pos, 0, 0);
@@ -1489,7 +1489,6 @@ typedef struct {
 extern float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int D_L00_0015F5CC_2adb30 __asm__("D_L00_0015F5CC");
-extern Cam910 player_camera __asm__("D_L00_00166C80");
 extern s32 g_debug_camera[] __asm__("D_L00_00166DC0");
 extern int *D_L00_00177F00_2adb30[] __asm__("D_L00_00177F00");
 extern unsigned char *D_L00_001B2080_2adb30[] __asm__("D_L00_001B2080");
@@ -1904,8 +1903,8 @@ void bomb_update(BombMoby *bomb_moby) {
                         }
                     }
                 }
-                player_camera.f160 = camera_distance < 20.0f ? 0.4f - camera_distance * 0.0175f : 0.4f - 20.0f * 0.0175f;
-                player_camera.i168 = FUN_001f96f8_2adb30(0x19);
+                l00_camera.shake_amount = camera_distance < 20.0f ? 0.4f - camera_distance * 0.0175f : 0.4f - 20.0f * 0.0175f;
+                l00_camera.shake_frames = FUN_001f96f8_2adb30(0x19);
                 fast_vec_dist(&bomb_moby->pos, D_G910.pos);
                 mine_camera_blast((char *)&rec, (char *)&bomb_moby->pos, 0, 0);
                 if (bomb_moby->state != 2) {
@@ -2797,8 +2796,8 @@ void gold_devastator_missile_update(M910 *missile_moby) {
         if(!reduced) spawn_glow_particle_u8(missile_moby,(&missile_moby->pos),&blast_velocity,(size+size),scale_game_frames(19),255,255,255,32);
         motion.f[0]=0.0f;
         missile_moby->bBC=0;
-        D_L00_00166C80.f160=distance<20.0f ? 0.4f-distance*0.0175f : 0.4f-20.0f*0.0175f;
-        D_L00_00166C80.i168=scale_game_frames(25);
+        l00_camera.shake_amount=distance<20.0f ? 0.4f-distance*0.0175f : 0.4f-20.0f*0.0175f;
+        l00_camera.shake_frames=scale_game_frames(25);
         allocate_voice_for_target_entry(0,0,(int)missile_moby);
         if(!reduced) {
             if(D_0013E520.bB) mine_camera_blast((char *)&gold_effect,(char *)(&missile_moby->pos),0,0);

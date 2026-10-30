@@ -40,7 +40,7 @@ extern char D_0013E533[];
 #include "rnc/data_labels.h"
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
-extern float player_camera[] __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern u8 D_L00_001DB5C0[];
 #include "rnc/overlay/collision.h"
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
@@ -136,7 +136,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
     float side_phase;
     float x_s, x_c, x_a, x_m;
     struct Hero *player;
-    float *camera;
+    LevelCamera *camera;
     struct Hero *aim_hero;
     float primary_distance, sign;
     float distance_w17;
@@ -164,7 +164,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
             beam_state->second_timer = 0;
         } else {
             for (k = 0; (candidate = ((struct Moby **)active_mobies)[k]) != 0; k++) {
-                camera = player_camera;
+                camera = &l00_camera;
                 aim_hero = &hero;
                 if (candidate == beam_state->target || candidate == beam_state->second_target ||
                     !candidate || !candidate->pclass ||
@@ -175,8 +175,8 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
                 fast_vec_sub(&target0, &candidate->pos, beam_state);
                 distance_w16 = vector_length_xy(&target0);
                 if (D_L00_00161594 < distance_w16) continue;
-                length_w3 = fast_difference_between_rotations(camera[0x56],
-                    fast_arc_tan(candidate->pos.x - camera[0x50], candidate->pos.y - camera[0x51]));
+                length_w3 = fast_difference_between_rotations(camera->yaw,
+                    fast_arc_tan(candidate->pos.x - camera->pos.f[0], candidate->pos.y - camera->pos.f[1]));
                 if (beam_target_camera_heading_error_limit < length_w3) continue;
                 score = fast_difference_between_rotations(
                     fast_arc_tan(candidate->pos.x - aim_hero->motion.pos.f[0], candidate->pos.y - aim_hero->motion.pos.f[1]),
@@ -1432,7 +1432,6 @@ void FUN_L00_00263d40(int a, int b);
 extern char D_0013A5E0_2BDAF0[] __asm__("D_0013CAE0");
 extern unsigned char D_0013E633_2BDAF0[] __asm__("D_0013E533");
 extern char voice_pool[] __asm__("D_0013E550");
-extern char D_L00_00166C80[];
 extern int func_001F9938_2BDAF0(void *) __asm__("FUN_001f9770");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int func_001F9850_2BDAF0(int) __asm__("FUN_001f96f8");
@@ -1507,7 +1506,7 @@ void morphoray_update(Moby *moby) {
         *(u128_2BDAF0 *)&direction = 0;
         if (((Hero *)((char *)&hero))->state.current == 30
             && (*(unsigned short *)((char *)((Hero *)((char *)&hero))->moby + 0x34) & 1)) {
-            copy_matrix3x4(points, D_L00_00166C80);
+            copy_matrix3x4(points, l00_camera.unk0);
             func_001FA4A0_2BDAF0(matrix, points);
             direction.z = 1.0f;
             func_001F9EE8_2BDAF0(&direction, &direction, matrix);

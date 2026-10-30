@@ -498,7 +498,7 @@ extern s32 D_L00_0015FFBC __asm__("D_L00_0015FFBC");
 extern f32 D_L00_0015F5D0 __asm__("D_L00_0015F5D0");
 extern s32 D_001413DC_lui __asm__("D_001413DC") NOT_SDA;
 extern int D_001413D0[] NOT_SDA;
-extern f32 player_camera[] __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern char camera_position[] __asm__("D_L00_00166DC0");
 extern V2d09b8 D_L00_001DE6F0_2d09b8[] __asm__("D_L00_001DE6F0");
 extern V2d09b8 D_L00_001DE750_2d09b8[] __asm__("D_L00_001DE750");
@@ -602,8 +602,8 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             if (D_L00_0015FFBC >= 51) { count = 1; trail_count = 0; }
             else { count = 1; trail_count = 0; }
         }
-        angle = player_camera[80] - moby->pos.x;
-        speed = player_camera[81] - moby->pos.y;
+        angle = l00_camera.pos.f[0] - moby->pos.x;
+        speed = l00_camera.pos.f[1] - moby->pos.y;
         angle = fast_arc_tan(angle, speed);
         angle = fast_subtract_rotations(angle, moby->v40.z);
         angle += 3.1415925f;
@@ -860,8 +860,8 @@ void veldin_ship_draw(struct Moby *moby) {
                       ((u64)(s64)G_EC << 32);
     quad.texture[0] = 0;
     quad.colors[0] = quad.colors[1] = quad.colors[2] = quad.colors[3] = G_F4;
-    if (absolute_float(player_camera[80] - moby->pos.x) < 16.0f &&
-        absolute_float(player_camera[81] - moby->pos.y) < 16.0f)
+    if (absolute_float(l00_camera.pos.f[0] - moby->pos.x) < 16.0f &&
+        absolute_float(l00_camera.pos.f[1] - moby->pos.y) < 16.0f)
         active = 1;
     if (active || moby->state == 1) {
         moby->command = 1;
@@ -989,12 +989,10 @@ extern unsigned char D_001413D0_r[] __asm__("D_001413D0");
 extern char D_0013F990[];
 extern char camera_position[] __asm__("D_L00_00166DC0");
 extern int D_0013C940;
-extern int D_L00_00166C80;
 extern int D_L00_00173E40;
 extern int FUN_001efa68_c(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 void compute_glove_of_doom_launch_velocity(void *pos, void *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__("FUN_L00_002c7320");
-extern char player_camera_2D3608[] __asm__("D_L00_00166C80");
 extern char D_0013F990_2D3608[] __asm__("D_0013F990");
 extern char controller_state_2D3608[] __asm__("D_0013C940");
 extern float func_001F9F90_2D3608(float) __asm__("FUN_001f9dc8");
@@ -1019,7 +1017,7 @@ void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *posit
     float *anchor_ptr = anchor;
 
     *(u128_2D3608 *)anchor_ptr = *(u128_2D3608 *)position;
-    copy_matrix3x4(rotation, player_camera_2D3608);
+    copy_matrix3x4(rotation, l00_camera.unk0);
     transpose_rotation_matrix(inverse, rotation);
     target = carrier->target;
     if (target == 0) return;
@@ -1049,7 +1047,7 @@ void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *posit
             if (0.593411922f < pitch) pitch = 0.593411922f;
             if (pitch < -1.39626336f) pitch = -1.39626336f;
             build_spherical_offset(launch, (((PadState *)controller_state_2D3608)->held & 5) ? 3.5f : 2.5f, heading, pitch);
-            qcopy(origin_copy, player_camera_2D3608 + 0x140);
+            qcopy(origin_copy, &l00_camera.pos);
             length = vector_length_xy(launch);
             {
                 float rise = launch[2];

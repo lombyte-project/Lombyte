@@ -59,7 +59,7 @@ typedef struct Hit_2b2100 { char pad0[0x18]; struct Moby *moby; char pad1C[4]; V
 typedef struct AimInfo { char pad0[0xA]; unsigned char radius; char padB[5]; float height; } AimInfo;
 
 extern char usage_stats_2b2100[] __asm__("D_00141680");
-extern char player_camera[] __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern char view_origin_2b2100[] __asm__("D_L00_00166DC0");
 extern char coll_hit[] __asm__("D_L00_00173E40");
 #include "rnc/overlay/collision.h"
@@ -112,7 +112,7 @@ void devastator_update(struct Moby *devastator_moby) {
         data->light = -1;
         data->glow = 0;
     }
-    copy_matrix3x4(&rotation, player_camera);
+    copy_matrix3x4(&rotation, l00_camera.unk0);
     transpose_rotation_matrix(&inverse, &rotation);
     fast_dec_timer(&data->cooldown);
     if (fast_dec_timer(&data->target_timer) ||
@@ -367,7 +367,6 @@ typedef struct {
 } O_b3058;
 
 extern C_b3058 D_0013C940_b3058 __asm__("D_0013C940");
-extern S_b3058 D_L00_00166C80_b3058 __asm__("D_L00_00166C80");
 extern R_b3058 D_00141680_b3058 __asm__("D_00141680");
 extern s32 D_0015EEA4;
 extern s32 D_0015ED84_b3058 __asm__("D_0015ED84");
@@ -383,7 +382,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
     V_b3058 *v;
     struct Hero *g;
     C_b3058 *controller;
-    S_b3058 *camera;
+    LevelCamera *camera;
     R_b3058 *r;
     f32 launch_yaw, b;
     s32 k;
@@ -411,8 +410,8 @@ void visibomb_update(O_b3058 *visibomb_moby) {
         goto tail;
     if (g->state.current == 0x72 || g->state.current == 0x65)
         goto tail;
-    camera = &D_L00_00166C80_b3058;
-    if (camera->p180 != 0 && *(s16 *)(camera->p180 + 0x86) == 5)
+    camera = &l00_camera;
+    if (camera->unk180 != 0 && *(s16 *)((u8 *)camera->unk180 + 0x86) == 5)
         goto tail;
     if (g->grounded_frames == 0)
         goto tail;
@@ -422,12 +421,12 @@ void visibomb_update(O_b3058 *visibomb_moby) {
         b = 0.0f;
         launch_yaw = g->held_pose_yaw;
         if (g->state.current == 1 && (*(u16 *)((u8 *)g->moby + 0x34) & 1)) {
-            launch_yaw = fast_arc_tan(camera->f350, camera->f354);
-            b = -fast_arc_tan(vector_length_xy(&camera->f350), camera->f358);
-            fast_vec_normalize(launch_position, &camera->f350, 0.3f);
-            fast_vec_normalize(u, camera->v370, -0.35f);
+            launch_yaw = fast_arc_tan(camera->unk350[0], camera->unk350[1]);
+            b = -fast_arc_tan(vector_length_xy(camera->unk350), camera->unk350[2]);
+            fast_vec_normalize(launch_position, camera->unk350, 0.3f);
+            fast_vec_normalize(u, &camera->unk350[8], -0.35f);
             fast_vec_add(launch_position, launch_position, u);
-            fast_vec_add(launch_position, launch_position, camera->v140);
+            fast_vec_add(launch_position, launch_position, &camera->pos);
         } else if (hero.unk22C8 == 1) {
             b = fast_arc_tan(vector_length_xy(visibomb_moby->vD0), visibomb_moby->fD8);
             build_spherical_offset(launch_position, 0.6f, launch_yaw, -b);
@@ -1515,7 +1514,6 @@ typedef union BlasterWork {
 char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
 extern G_B4F40_49a8 D_0013F350;
 extern char D_00141680_49a8[];
-extern char D_L00_00166C80[];
 #include "rnc/rendering/debug/debug_menu.h"
 extern f32 D_0015ED6C;
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -1538,7 +1536,6 @@ struct Moby *spawn_homing_shot(struct Moby *source, OvlVec4 *position, struct Mo
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void transform_hero_local_offset_to_world(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
 void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
-extern char player_camera[] __asm__("D_L00_00166C80");
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_001edf60_49a8(int, int, float, void *, float, int, int, float, int) __asm__("FUN_L00_001edf60");
@@ -1581,7 +1578,7 @@ void blaster_update(struct Moby *moby) {
     if (hero.state.current == 1) hero_set_state(30, 1);
     if (moby->prev_seq == 0 && moby->prev_frame < 3) data->cooldown = scale_game_frames(7);
     if (hero.state.current == 30 && (hero.moby->flags & 1)) {
-        copy_matrix3x4(&work.rotation, player_camera);
+        copy_matrix3x4(&work.rotation, l00_camera.unk0);
         transpose_rotation_matrix(&inverse, &work.rotation);
         velocity.f.z = frame_time * 40.0f;
         transform_vector(&velocity, &velocity, &inverse);
@@ -1590,7 +1587,7 @@ void blaster_update(struct Moby *moby) {
         launch.f.z += 0.75f;
         launch.f.y += 0.15f;
         transform_vector(&launch, &launch, &inverse);
-        fast_vec_add(&launch, &launch, player_camera + 0x140);
+        fast_vec_add(&launch, &launch, &l00_camera.pos);
         if (hero.state.current == 30 && (hero.moby->flags & 1) && !hero.item_use_locked) {
             FUN_L00_001edf60_49a8((int)moby, 0xFF0F0FFF, 1.0f, 0, 0.0f, 0x26, -1, 90.0f, 4);
             fast_vec_normalize(&reach, &velocity, 20.0f);
@@ -1599,7 +1596,7 @@ void blaster_update(struct Moby *moby) {
             /* Fakematch: a never-taken set of target on this path keeps gcse from
                folding target's 0 into the hit test below (retail keeps it in $fp). */
             if (never) target = (struct Moby *)moby->pvars;
-            if (coll_line_fix(player_camera + 0x140, &reach, 0, (int)moby, 0)) {
+            if (coll_line_fix(&l00_camera.pos, &reach, 0, (int)moby, 0)) {
                 struct Moby *hit = coll_hit_moby;
                 if (hit && (hit->flags & 0x1000)) target = hit;
             }
@@ -2820,9 +2817,9 @@ void pyrocitor_update(struct Moby *moby) {
         else
             gate = 0;
         if (hero.state.current == 1 && (moby->flags & 1)) {
-            fast_vec_normalize(&scratch, player_camera + 0x370, -1.0f);
-            fast_vec_add(&scratch, &scratch, player_camera + 0x140);
-            fast_vec_normalize(&light_offset_and_flame_velocity, player_camera + 0x350, pyrocitor_flame_base_range_gp + speed + 0.75f);
+            fast_vec_normalize(&scratch, &l00_camera.unk350[8], -1.0f);
+            fast_vec_add(&scratch, &scratch, &l00_camera.pos);
+            fast_vec_normalize(&light_offset_and_flame_velocity, l00_camera.unk350, pyrocitor_flame_base_range_gp + speed + 0.75f);
             fast_vec_add(&endpoint, &light_offset_and_flame_velocity, &scratch);
         } else {
             qcopy(&scratch, &pos);
