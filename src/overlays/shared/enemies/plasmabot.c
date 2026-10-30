@@ -285,7 +285,7 @@ void update_plasmabot(char *moby) {
         PLASMABOT_FACE_TARGET_AND_WAIT = 13
     };
     char    *plasmabot_update_private_vars;
-    char    *owner;
+    char    *plasmabot_aim_target_moby;
     int      state;
     float    bone_transform_scratch[4][4];
     float    direction[4];
@@ -294,7 +294,7 @@ void update_plasmabot(char *moby) {
     int      status;
 
     plasmabot_update_private_vars = ((char *)MOBY(moby)->pvars);
-    owner = 0;
+    plasmabot_aim_target_moby = 0;
     FUN_L00_00263ac8(2.5f, moby, 2, plasmabot_update_private_vars + 0x120);
     if (*(int *)(plasmabot_update_private_vars + 0x288) != 0) {
         if (((unsigned char *)D_001413F4)[0] != 2) {
@@ -323,7 +323,7 @@ void update_plasmabot(char *moby) {
         process_plasmabot_hit_reaction(moby);
         update_plasmabot_target(moby);
         FUN_L14_002b2ed8_c((struct Moby *)moby);
-        owner = *(char **)(plasmabot_update_private_vars + 0x110);
+        plasmabot_aim_target_moby = *(char **)(plasmabot_update_private_vars + 0x110);
     }
     if (D_L14_0015F5C4 == 2) {
         ((unsigned char *)moby)[0x31] = 0;
@@ -470,8 +470,8 @@ void update_plasmabot(char *moby) {
     case PLASMABOT_FACE_TARGET_AND_WAIT: {
         float ang;
         float k;
-        ang = fast_arc_tan(*(float *)(owner + 0x10) - MOBY(moby)->pos.x,
-                           *(float *)(owner + 0x14) - MOBY(moby)->pos.y);
+        ang = fast_arc_tan(*(float *)(plasmabot_aim_target_moby + 0x10) - MOBY(moby)->pos.x,
+                           *(float *)(plasmabot_aim_target_moby + 0x14) - MOBY(moby)->pos.y);
         k = frame_time_sq * 12.566371f;
         call_CE58((float *)&MOBY(moby)->rot.z,
                   ang,
@@ -519,8 +519,8 @@ void update_plasmabot(char *moby) {
         float k;
         float aim;
         scale_and_apply_plasmabot_planar_velocity(moby);
-        ang = fast_arc_tan(*(float *)(owner + 0x10) - MOBY(moby)->pos.x,
-                           *(float *)(owner + 0x14) - MOBY(moby)->pos.y);
+        ang = fast_arc_tan(*(float *)(plasmabot_aim_target_moby + 0x10) - MOBY(moby)->pos.x,
+                           *(float *)(plasmabot_aim_target_moby + 0x14) - MOBY(moby)->pos.y);
         k = frame_time_sq * 12.566371f;
         call_CE58((float *)&MOBY(moby)->rot.z,
                   ang,
@@ -561,7 +561,7 @@ void update_plasmabot(char *moby) {
             break;
         if (!(aim < 0.017453292f))
             break;
-        if (test_path_segment_strict_crossing(*(int *)(plasmabot_update_private_vars + 0x244), moby + 0x10, owner + 0x10) !=
+        if (test_path_segment_strict_crossing(*(int *)(plasmabot_update_private_vars + 0x244), moby + 0x10, plasmabot_aim_target_moby + 0x10) !=
             0)
             break;
         reset_listed_plasmabot_beam_cooldowns(((unsigned char *)moby)[0x21]);
@@ -573,8 +573,8 @@ void update_plasmabot(char *moby) {
     }
     case PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP: {
         float ang;
-        ang = fast_arc_tan(*(float *)(owner + 0x10) - MOBY(moby)->pos.x,
-                           *(float *)(owner + 0x14) - MOBY(moby)->pos.y);
+        ang = fast_arc_tan(*(float *)(plasmabot_aim_target_moby + 0x10) - MOBY(moby)->pos.x,
+                           *(float *)(plasmabot_aim_target_moby + 0x14) - MOBY(moby)->pos.y);
         update_plasmabot_aim_quaternion(
             moby, 0, fast_subtract_rotations(ang, l14_plasmabot_aim_sweep_half_angle));
         update_plasmabot_aim_joint_rotation(moby, ang);
@@ -591,8 +591,8 @@ void update_plasmabot(char *moby) {
         float sweep;
         float angle;
         flag = 0;
-        ang = fast_arc_tan(*(float *)(owner + 0x10) - MOBY(moby)->pos.x,
-                           *(float *)(owner + 0x14) - MOBY(moby)->pos.y);
+        ang = fast_arc_tan(*(float *)(plasmabot_aim_target_moby + 0x10) - MOBY(moby)->pos.x,
+                           *(float *)(plasmabot_aim_target_moby + 0x14) - MOBY(moby)->pos.y);
         progress = convert_integer_to_float(*(short *)(plasmabot_update_private_vars + 0x262));
         progress = progress / convert_integer_to_float(
                                   scale_game_frames(l14_plasmabot_aim_sweep_duration_frames));
@@ -600,7 +600,7 @@ void update_plasmabot(char *moby) {
         angle =
             fast_subtract_rotations(*(float *)(plasmabot_update_private_vars + 0x278), -sweep + (sweep + sweep) * progress);
         if (((unsigned char *)plasmabot_update_private_vars)[0x24B] != 0) {
-            if (*(float *)(owner + 0x18) + 0.1f - MOBY(moby)->pos.z < 0.0f) {
+            if (*(float *)(plasmabot_aim_target_moby + 0x18) + 0.1f - MOBY(moby)->pos.z < 0.0f) {
                 flag = 1;
             }
         }
