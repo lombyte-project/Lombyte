@@ -9,6 +9,9 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/rendering/do_gif_paging.h"
+#include "rnc/rendering/setup_gif_paging.h"
+#include "rnc/ui/hud/get_icon_frame.h"
 
 /* State of the level's message box (D_L00_00173040). */
 typedef struct {
@@ -44,8 +47,6 @@ extern struct TextRegion l00_choice_dialog_text_region_template __asm__("D_L00_0
 extern void memset(void *, s32, s32) __asm__("FUN_001153fc");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern void strncpy(void *, char *, s32) __asm__("FUN_00116808");
-extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
-extern void do_gif_paging(void) __asm__("FUN_001f4398");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_ui_frame(s32, s32, s32, s32, s32) __asm__("FUN_001f5f18");
 extern void draw_outlined_rect(s32, s32, s32, s32, s32) __asm__("FUN_001f6060");
@@ -54,7 +55,6 @@ extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) 
 extern void font_print_window_regular(struct TextRegion *, s32, char *, s32) __asm__("FUN_001f7580");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
-extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern s64 get_frame_texture(s32) __asm__("FUN_001ffa10");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 /* Same registers as (w, h, tex, x, y, cx, cy, angle); floats are listed first so they are evaluated first. */

@@ -12,11 +12,17 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 typedef struct { char pad[0x30]; int state; int n; char pad38[0x140]; struct Moby *objects[8]; } L18SequenceState;
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int D_L18_0015F5C4;
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void enqueue_callback_list_1_overlay(void *, void *) __asm__("FUN_L18_002020c8");
 void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *second_position_source, void *effect_velocity_source, float f0, float f1) __asm__("FUN_L18_002fa250");
@@ -61,7 +67,6 @@ extern Vec4 D_L18_00162540 MACRO_ADDR;
 typedef struct { float radius[5]; } EffectRadii;
 extern EffectRadii l18_deplanetizer_object_trail_base_radii __asm__("D_L18_001F2C20");
 extern char D_L18_0015F580[] MACRO_ADDR;
-extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void update_beam_ring_rail_and_pulse_effects(void *) __asm__("FUN_L00_002bd0a0");
 
 extern int deplanetizer_camera_quad_start_frame_gp __asm__("D_L18_00162498") __attribute__((sda));
@@ -916,10 +921,8 @@ typedef unsigned int QVd058 __attribute__((mode(TI), aligned(16)));
 
 extern char D_L18_001625F0[4] __attribute__((sda));
 extern char D_L18_00162608 __attribute__((sda));
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int spawn_explosion() __asm__("FUN_L00_0025e450");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
@@ -931,7 +934,6 @@ extern void update_gadgebot_damage_target_and_glow(struct Moby *) __asm__("FUN_L
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
 
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 float move_gadgebot_toward_target(char *self, float *src) __asm__("FUN_L18_002fc4e0");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
@@ -1093,7 +1095,6 @@ extern int *D_L18_001B0EB0[] __asm__("D_L18_001B0EB0");
 void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
 
 extern void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
@@ -1284,7 +1285,6 @@ typedef struct {
     f32 unk1F4;        /* 0x1F4: set to 1.0 on launch */
 } LaunchedMobyVars;
 extern float FUN_L00_0025abf0(void *, void *, float, float, int);
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
 /* Launches the first idle (state 8) class-0x772 moby of group `group` from `from` towards `to` at `speed`.
    Returns 1 when one was launched. */

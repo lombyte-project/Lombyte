@@ -13,8 +13,8 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
 
-void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");

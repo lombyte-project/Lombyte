@@ -7,6 +7,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L15_002044c8). */
 extern int D_0015ED84_d __asm__("D_0015ED84");
@@ -165,7 +166,6 @@ typedef union {
 } V_210ce8;
 
 
-void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");

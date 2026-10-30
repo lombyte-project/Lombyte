@@ -17,6 +17,10 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
 
 
 /* triggers objects matching the moby's class */
@@ -149,7 +153,6 @@ extern char batalia_deserter_name_text[] __asm__("D_L08_001622E8");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L00_0025a120(void *);
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern struct {
     char pad[0x2FC];
@@ -396,7 +399,6 @@ extern unsigned char *D_L08_0015FFD8;
 extern void request_batalia_cannon_mount(void *) __asm__("FUN_L08_002e1698");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L08_002a1880(int);
-extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 
 /* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
@@ -548,7 +550,6 @@ extern u8 D_0013D413 NOT_SDA;
 extern u8 D_0013D3B7 NOT_SDA;
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
-extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 typedef struct {
     s32 first;
@@ -794,7 +795,6 @@ extern void scale_rgba_tables(void *, int, void *, float, float, float, float, i
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
 extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
 extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_batalia_textured_effect(struct Moby *moby) __asm__("FUN_L08_003097b0");

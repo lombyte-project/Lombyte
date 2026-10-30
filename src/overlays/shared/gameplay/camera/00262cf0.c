@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
 
 void build_spherical_offset(void *) __asm__("FUN_00214db0");
 void FUN_L00_00262cf0(void *a, void *b);
@@ -14,7 +15,6 @@ typedef struct {
     s32 v[19];
 } T;
 extern T l00_planet_unlock_dialogue_message_ids __asm__("D_L00_001E9060");
-void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 void queue_planet_unlock_message(s32 i) __asm__("FUN_L00_00262d38");
 
 void queue_planet_unlock_message(s32 i) {

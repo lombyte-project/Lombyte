@@ -13,6 +13,10 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 
 /* Per-instance variables of the oClass 52 moby (moby->pvars). */
 typedef struct {
@@ -69,10 +73,8 @@ extern s32 FUN_L00_00257b90(s32, s32);
 extern void FUN_L00_00258830(struct Moby *, Vec4 *, s32, f32, f32, f32);
 extern void FUN_L00_0025a120(struct Moby *);
 extern void approach_angle(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025be00");
-extern s32 mine_fall(struct Moby *, Vec4 *) __asm__("FUN_L00_0025c698");
 extern void spawn_explosion(struct Moby *, Vec4 *, void *, s32, f32, f32, f32, f32, f32, f32, f32, s32,
                              s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
-extern void cart_burst(struct Moby *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263ac8(struct Moby *, s32, void *, f32);
 extern void FUN_L01_0026d930(void *);
 extern void FUN_L01_0026e090(s32, s32);
@@ -335,7 +337,6 @@ void trooper_knockback_arc(void *v, float *ang, float *s1, float *s2) __asm__("F
 void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void FUN_L01_0026e090_c(int i, int v) __asm__("FUN_L01_0026e090");
 extern void func_L00_0025E4B0_2C73D0(void *, void *) __asm__("FUN_L00_0025d458");
-extern Hit_2C73D0 *func_L00_0025B478_2C73D0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int func_L00_0025B4D0_2C73D0(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void func_L00_0025BBA0_2C73D0(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void func_L00_0025D5B0_2C73D0(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
@@ -384,7 +385,7 @@ void update_seeker_damage_and_target(Moby *moby) {
         func_L00_0025E4B0_2C73D0(moby, data->react);
     }
     damage = 0.0f;
-    source = func_L00_0025B478_2C73D0(moby, 0x330000, 0);
+    source = find_moby_hit(moby, 0x330000, 0);
     response = func_L00_0025B4D0_2C73D0(moby, source, &data->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 6) {
         data->health = data->health - damage;
@@ -573,15 +574,11 @@ extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 extern s32 rand(void);
 extern void FUN_L00_00257470_c2(void *, int, int) __asm__("FUN_L00_00257470");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
-int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
-int FUN_L00_0025c698_c(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 int select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_0025fcb8");
 int select_list_point_toward_target(char *a0, void *list, char *pt, char *out) __asm__("FUN_L01_0028b5e0");
 s32 FUN_L00_00258b50(void *m, void *c, void *v, Vec4 *out, f32 f);
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-void spawn_nearby_effect(unsigned char *m, int x, int y, void *p, void *q, float f) __asm__("FUN_L00_00259bc8");
 void FUN_L00_0025a120_c(char *o) __asm__("FUN_L00_0025a120");
-void FUN_L00_0025f090_c(u8 *owner, void *pos, int sound, float scale, float flash) __asm__("FUN_L00_0025f090");
 void FUN_L00_00263ac8_c(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
 void FUN_L01_0026d930_c(char *p) __asm__("FUN_L01_0026d930");
 void FUN_L01_0026e090_c2(int i, int v) __asm__("FUN_L01_0026e090");
@@ -595,7 +592,6 @@ extern Moby *D_L09_00160064_2E39E0 __asm__("D_L09_0015FFE4");
 extern float impulse __asm__("D_L09_001618C8") __attribute__((sda));
 extern float lift_2E39E0 __asm__("D_L09_001618CC") __attribute__((sda));
 extern unsigned char settings_2E39E0 __asm__("D_L09_001618D8") __attribute__((sda));
-extern Hit_2E39E0 *find_moby_hit(Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(Moby *, Hit_2E39E0 *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void FUN_L01_0026e090(int, int);
 extern void knock_2E39E0(Moby *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
@@ -606,16 +602,12 @@ extern void wake_2E39E0(Moby *) __asm__("FUN_L00_0025a120");
 extern int FUN_L04_00252e18_c(Moby *, void *, float) __asm__("FUN_L04_00252e18");
 extern void steer_init_2E39E0(int *) __asm__("FUN_L01_0026d930");
 extern int rand_2E39E0(void) __asm__("FUN_001160d8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void animate_2E39E0(Moby *, int, int, int) __asm__("FUN_00212f90");
 extern void approach_w(Moby *, float, void *, float, float, float) __asm__("FUN_L00_00258278");
 extern void FUN_L01_0028b5e0_c(Moby *, char *, void *, void *) __asm__("FUN_L01_0028b5e0");
 extern int move_w(Moby *, int *, void *, void *, float) __asm__("FUN_L00_00258b50");
-extern void hurt_2E39E0(Moby *, Moby *, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
-extern int knock_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025c698");
 extern int recover_2E39E0(Moby *, void *) __asm__("FUN_L00_002dc9f0");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern void cart_burst(Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void effects_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d538");
 
 void update_ground_melee_enemy(Moby *moby) __asm__("FUN_L09_002e27d8");
@@ -833,7 +825,7 @@ void update_ground_melee_enemy(Moby *moby) {
             step.z = 0.0f;
             qcopy(&goal, &query);
             goal.z += 0.75f;
-            hurt_2E39E0(query.who, moby, 1, &goal, &step, 1.0f);
+            spawn_nearby_effect(query.who, moby, 1, &goal, &step, 1.0f);
         }
         if ((moby->anim_flags & 2) && vector_distance_xy(&moby->pos, &query) > 1.5f) {
             moby->state = 3;
@@ -879,7 +871,7 @@ void update_ground_melee_enemy(Moby *moby) {
         break;
     }
     case GROUND_ENEMY_STATE_HURT_KNOCKBACK:
-        if (knock_update_2E39E0(moby, data->motion) & 1) {
+        if (mine_fall(moby, data->motion) & 1) {
             moby->state = 9;
             if (moby->prev_seq != 3) animate_2E39E0(moby, 3, 0, scale_game_frames(random_int_between(10, 13)));
             return;
@@ -904,7 +896,7 @@ void update_ground_melee_enemy(Moby *moby) {
         }
         break;
     case GROUND_ENEMY_STATE_FATAL_KNOCKBACK:
-        if (knock_update_2E39E0(moby, data->motion) & 0x40) {
+        if (mine_fall(moby, data->motion) & 0x40) {
             clear_u64_value(&step);
             cart_burst(moby, &moby->pos, 6, 0.5f, 13.0f);
             mark_moby_for_removal(moby);

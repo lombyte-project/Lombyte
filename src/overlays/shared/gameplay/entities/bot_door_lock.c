@@ -11,6 +11,9 @@
 #include "sda.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L06_00167400[];
 extern OvlVec4 D_L06_001fe8d0[];
@@ -136,7 +139,6 @@ void draw_bot_door_lock_glow(char *moby) {
 
 extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 
 void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *target_moby) __asm__("FUN_L06_00307c48");
 
@@ -174,7 +176,6 @@ extern unsigned char D_0015EDB4;
 extern unsigned char D_0014C050[];
 extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern void add_draw_callback(int, int) __asm__("FUN_001f4600");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void draw_number(void *, void *, int, unsigned int, int, int, int, float) __asm__("FUN_L01_00285768");
 
@@ -306,7 +307,6 @@ typedef struct {
     int f90;
 } Obj;
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *create_moby(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
@@ -365,7 +365,6 @@ void update_hit_triggered_moby_breakup(char *self) {
 
 void draw_projected_fading_quad(char *moby) __asm__("FUN_L06_0030bfa8");
 
-void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void update_timed_sprite_effect(char *moby) __asm__("FUN_L06_0030be60");
 

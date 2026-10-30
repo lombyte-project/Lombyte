@@ -20,6 +20,14 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/effect_00313D28.c: func_L07_00313D28). */
 
@@ -28,7 +36,6 @@ extern s32 level_frame_count __asm__("D_L07_0015F5CC");
 extern s32 gs_texture_allocation_start_macro[6] __asm__("D_0015EE78") MACRO_ADDR;
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern float split_float_fraction(void *, float) __asm__("FUN_L00_00200228");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
@@ -229,10 +236,8 @@ typedef union {
 } RopeQuad;
 typedef float RopeVec[4] __attribute__((aligned(16)));
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-extern void make_hit_descriptor(void *, void *, s32, f32, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00258278(struct Moby *, f32, void *, f32, f32, f32);
 extern void draw_snagglebeast_rope_attack_layer(char *, float, int, float, int) __asm__("FUN_L07_00312e70");
 
@@ -299,16 +304,13 @@ void *collect_snagglebeast_navigation_ids(void *unused, void *dp, void *op) {
     }
     return (void *)output_count;
 }
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_00212f90(void *, int, int, int);
 extern void hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L00_00200228(float, void *);
 extern int FUN_0022da68(int, int, void *);
@@ -595,7 +597,6 @@ int start_snagglebeast_turn_toward_target(unsigned char *moby, unsigned char *mo
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00315338), where it is exact; names translated to the US level program. */
 
-extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 
 void update_snagglebeast_target_joint_animation(char *moby, char *moby_vars, float *target_position) __asm__("FUN_L07_00313f60");
 
@@ -675,7 +676,6 @@ extern void FUN_L00_0025a120(struct Moby *);
 extern int get_target_sight(void *, void *, float) __asm__("FUN_L07_002886d8");
 extern int FUN_L00_001fefc8(void *);
 extern void suck_beam_queue_draw(int) __asm__("FUN_L00_002defe0");
-extern void add_draw_callback(void (*)(), void *) __asm__("FUN_001f4600");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
 extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
@@ -2658,7 +2658,6 @@ typedef struct {
 } BreakableVars;
 
 extern float D_0015ED6C MACRO_ADDR;
-extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 extern struct Moby *spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 
 /* Breakable prop: when hit by moby 0x415 in state 8 or 0x452 in state 9 with hit kind 1.000123, scatters its shard count of pieces over its rotated extent, spawns debris and removes itself. */

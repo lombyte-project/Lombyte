@@ -16,12 +16,20 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/storage/memory_card/memcard_save_data.h"
 
 /* Spawns a Gemlik moby that copies its look and transform from a source moby. */
 
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *create_attached_rocket(struct Moby *source_moby, short joint_index) __asm__("FUN_L13_003058a8");
@@ -83,10 +91,8 @@ void launch_attached_rocket(struct Moby *moby, char *pos, int distance_reference
 }
 extern char *FUN_L00_0025a420(void *, int, int);
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float FUN_002132a8(float, float);
 extern int FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, float, float, float);
-extern void make_hit_descriptor(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
@@ -624,7 +630,6 @@ extern int poison_vessel_blast_duration_frames_gp __asm__("D_L13_00161E2C") __at
 extern f32 poison_vessel_blast_start_radius_gp __asm__("D_L13_00161E30") __attribute__((sda));
 extern f32 poison_vessel_blast_end_radius_gp __asm__("D_L13_00161E34") __attribute__((sda));
 extern f32 poison_vessel_blast_damage_gp __asm__("D_L13_00161E38") __attribute__((sda));
-extern struct BlastHit *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fptodp(float) __asm__("FUN_00120478");
 extern void debug_print() __asm__("FUN_001e93b0");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -786,7 +791,6 @@ typedef struct {
 } Vars_309330;
 
 extern int FUN_L00_00258b50(struct Moby *, void *, void *, void *, float);
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern s32 rand(void);
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -1349,7 +1353,6 @@ void initialize_gemlik_trail(struct Moby *moby) {
     *(float *)(moby_vars + 0x1FC) = scale_game_frames(D_L13_00161E84);
 }
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void spawn_point_table_sparks(struct Moby *) __asm__("FUN_L13_00309bc8");
 extern void draw_point_table_quads(struct Moby *) __asm__("FUN_L13_003098d0");
 extern float gemlik_trail_point_radial_speed_gp __asm__("D_L13_00161E7C") __attribute__((sda));
@@ -1692,8 +1695,6 @@ typedef struct {
 extern float D_0015ED70;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
@@ -1946,7 +1947,6 @@ extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void initialize_moby_state_record(void *) __asm__("FUN_L00_0028e8a0");
-extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void update_gemlik_scene_controller(struct Moby *moby) __asm__("FUN_L13_0030b628");
 
@@ -2503,7 +2503,6 @@ extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern float D_L13_0015F580[] MACRO_ADDR;
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);

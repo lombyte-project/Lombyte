@@ -11,6 +11,10 @@
 #include "sda.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/audio/sound_state.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
@@ -46,10 +50,7 @@ char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position,
 extern char D_L08_00174640[];
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
@@ -441,7 +442,6 @@ extern int FUN_L00_00263468();
 extern int play_voice(int sound, int flags, int moby, int volume) __asm__("FUN_L00_0028ddd8");
 extern int vendor_volume(int, int) __asm__("FUN_L01_002a1968");
 extern float smoothed_below_reference_ground_fraction_gp __asm__("D_L08_001625E8") __attribute__((sda));
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 angle) __asm__("FUN_00214890");
 
 void update_ground_height_modulated_voice(char *moby) __asm__("FUN_L08_00316fa8");
 

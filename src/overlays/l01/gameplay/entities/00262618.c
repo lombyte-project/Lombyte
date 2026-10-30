@@ -2,6 +2,7 @@
 /* Entity helpers; the leading stub has no calls to classify it by. */
 #include "types.h"
 #include "asm.h"
+#include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00262618.s", FUN_L01_00262618);
 #include "eetypes.h"
@@ -11,7 +12,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00262618.s", FUN_L01_00262618);
 #include "sda.h"
 
 extern u8 D_L01_001E3380[];
-void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void update_and_draw_scrolling_overlay_layers(s32, void *) __asm__("FUN_L01_002b96e0");
 
 void draw_two_scroll_layers(void) __asm__("FUN_L01_002f6150");

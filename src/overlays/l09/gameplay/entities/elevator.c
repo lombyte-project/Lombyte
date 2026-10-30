@@ -10,6 +10,12 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #define F(p, o) (*(float *)((p) + (o)))
 
 /* Moves a moby along a path between its ends once its collectable flag is set, easing between nodes. */
@@ -22,10 +28,8 @@ extern L09LevelState l09_moby_collection_state __asm__("D_L09_001BB3B0");
 extern int elevator_activation_save_id_bits[] __asm__("D_L09_001BA650");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -226,7 +230,6 @@ typedef struct {
 extern struct Moby *moby_list __asm__("D_L09_0015FFD8");
 char D_L09_00208F90[] = "Moby class %d Damage Received: %f\n";
 char D_L09_00208FF0[] = "Moby class %d Damage Received: %f\n";
-extern VendorHitSource *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 fptodp(f32) __asm__("FUN_00120478");
 extern void debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
 extern s32 trooper_take_damage(struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
@@ -453,7 +456,6 @@ void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health
 
 
 extern char *D_L09_0015FFE4;
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 char *find_nearby_chain_attachment(char *self, char *search_position, int bone) __asm__("FUN_L09_003041d0");
 
@@ -931,7 +933,6 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_001fff28(void *, int, float);
 
 void turret_update(struct Moby *moby) __asm__("FUN_L09_00304c80");
@@ -1270,7 +1271,6 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 #include "rnc/overlay/l09/gameplay/entities/elevator_data/barrier_update.h"
 extern int FUN_L00_001fefc8();
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 struct Moby *spawn_tumbling_debris(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) __asm__("FUN_L09_002ef868");
@@ -1563,7 +1563,6 @@ typedef struct {
     f32 lag;
 } PathFlyerVars_00309c08;
 extern void scale_vector_00309c08(f32, void *, void *) __asm__("FUN_001f9a68");
-extern s32 voice_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
 extern u8 D_0013F3D0[];
 extern u8 D_0014C050[];
 extern s32 D_L09_0015F5CC NOT_SDA;

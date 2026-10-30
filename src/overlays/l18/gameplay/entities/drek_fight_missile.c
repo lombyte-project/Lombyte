@@ -11,6 +11,16 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 /* Drek missile Moby.state shared by its update and response helpers. */
 enum DrekMissileState {
@@ -195,7 +205,6 @@ int activate_drek_fight_missiles_in_group(char *moby, int group, float *missile_
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F1510), where it is exact; names translated to the US level program. */
 
 extern float FUN_00213f38_c(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 extern short drek_missile_wander_vertical_velocity_to_pitch_scale_gp __asm__("D_L18_0016222C") __attribute__((sda));
@@ -394,7 +403,6 @@ void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
 
 extern void draw_drek_fight_missile_group_trails(struct Moby *moby) __asm__("FUN_L18_002f0390");
 void render_drek_fight_missile_group_effects(struct Moby *m) __asm__("FUN_L18_002f06c0");
-extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern short drek_missile_effect_callbacks_last_queued_frame_gp __asm__("D_L18_00162230") __attribute__((sda));
 void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) {
@@ -415,8 +423,8 @@ void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) {
     *(float *)(data + trail_slot_byte_offset + 0x1C) = 1.0f;
     if (current_game_frame != old) {
         *(int *)&drek_missile_effect_callbacks_last_queued_frame_gp = current_game_frame;
-        enqueue_callback_list_1_alt(draw_drek_fight_missile_group_trails, moby);
-        enqueue_callback_list_1_alt(render_drek_fight_missile_group_effects, moby);
+        add_draw_callback(draw_drek_fight_missile_group_trails, moby);
+        add_draw_callback(render_drek_fight_missile_group_effects, moby);
     }
 }
 
@@ -723,7 +731,6 @@ void mark_block_entries_within_transform_xy_bounds(int block_lookup_index, int t
 extern char voice_pool[] __asm__("D_0013E550");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern int FUN_0022da68(int, int, int);
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 void draw_glow_moby_layered_quads(struct Moby *moby) __asm__("FUN_L18_002f1fd8");
 
 extern void draw_glow_moby_layered_quads(struct Moby *) __asm__("FUN_L18_002f1fd8");
@@ -744,7 +751,7 @@ void update_glow_moby_state_and_voice(struct Moby *moby) {
         ((float *)moby_vars)[3] = 1.0f;
         break;
     case GLOW_ACTIVE:
-        enqueue_callback_list_1_alt((void (*)(void))draw_glow_moby_layered_quads, moby);
+        add_draw_callback((void (*)(void))draw_glow_moby_layered_quads, moby);
         if (voice_is_playing(moby, moby_vars[1]) == 0) {
             moby_vars[1] = FUN_0022da68(0, 4, (int)moby);
         }
@@ -859,7 +866,6 @@ typedef struct { char p0[0x34]; unsigned short h34; } M_2310;
 extern float D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
 extern float D_0015ED6C_2310 __asm__("D_0015ED6C");
 extern float approach_2310(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void enqueue_2310(void *, void *) __asm__("FUN_001f4600");
 void synchronize_lift_group_height(void *source_moby) __asm__("FUN_L18_002f2598");
 
 extern void synchronize_lift_group_height(void *a) __asm__("FUN_L18_002f2598");
@@ -950,13 +956,13 @@ void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
         if (1.0f < D_L18_00162308_gp) {
             D_L18_00162308_gp -= 1.0f;
         }
-        enqueue_2310(draw_lift_25_quad_mesh, lift_moby);
+        add_draw_callback(draw_lift_25_quad_mesh, lift_moby);
         break;
     case LIFT_DRAW_38_QUAD_MESH:
-        enqueue_2310(draw_lift_38_quad_mesh, lift_moby);
+        add_draw_callback(draw_lift_38_quad_mesh, lift_moby);
         break;
     case LIFT_DRAW_22_QUAD_MESH:
-        enqueue_2310(draw_lift_22_quad_mesh, lift_moby);
+        add_draw_callback(draw_lift_22_quad_mesh, lift_moby);
         break;
     }
 }
@@ -1369,7 +1375,6 @@ extern f32 aas_c(f32, f32, f32, f32, f32 *, f32 *) __asm__("func_00213F38");
 extern float D_0015ED6C_e[] __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_L18_0015F3FC;
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float get_position_and_rotation_transition_progress(void *moby) __asm__("FUN_L18_002dfb90");
 extern int *D_L18_001B0EB0[];
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
@@ -1395,12 +1400,8 @@ unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) __asm_
 
 extern unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) __asm__("FUN_L18_002f6e10");
 extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *b, int idx) __asm__("FUN_L18_002d6b58");
-extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_0025a120(void *);
-extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
@@ -2525,7 +2526,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         boss_data->f3B8 = (a << 24) | ((b / 3) << 16) | (g << 8) | (r / 3);
     }
     if (moby->f31 != 0) {
-        enqueue_callback_list_1_alt((void (*)(void))render_drek_boss_joint_glows, moby);
+        add_draw_callback((void (*)(void))render_drek_boss_joint_glows, moby);
     }
 }
 /* Latches the target from the global block once, and counts a class 0x24B hit. */
@@ -2574,13 +2575,11 @@ typedef struct {
 } VendorNode_5e80;
 
 extern void set_moby_attached_effect_alpha_from_distance(void *, float) __asm__("FUN_L18_00265ff8");
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void FUN_L00_00250df8_5e80(void *) __asm__("FUN_L00_00250df8");
 extern int FUN_L00_0025ff38_5e80(float a, char *m, char *b, int c, int d, int *e, int f) __asm__("FUN_L00_0025ff38");
 extern int poll_moby_state_and_rearm(char *) __asm__("FUN_L18_002d8050");
@@ -3291,7 +3290,6 @@ typedef union {
 
 extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern int FUN_L00_001fefc8(void *);
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern char drek_boss_firing_secondary_effect_initial_color_gp[4] __asm__("D_L18_001623EC") __attribute__((sda));
 extern char drek_boss_firing_secondary_effect_final_color_gp[4] __asm__("D_L18_001623F0") __attribute__((sda));
 extern char drek_boss_firing_particle_count_gp[4] __asm__("D_L18_00162408") __attribute__((sda));

@@ -15,6 +15,8 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
+#include "rnc/rendering/do_gif_paging.h"
+#include "rnc/rendering/setup_gif_paging.h"
 
 typedef unsigned int u128d __attribute__((mode(TI), aligned(16)));
 typedef union {
@@ -670,9 +672,7 @@ extern void draw_textured_quad(int, int, int, int, int, int, int, int, long, lon
 extern void restore_moby_class_dists(void) __asm__("FUN_0020d248");
 extern void draw_mobys_clean_up(void) __asm__("FUN_0020d3b0");
 extern void patch_moby_gifs() __asm__("FUN_0020cef8");
-extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
 extern void draw_menu_flashing_panel(int) __asm__("FUN_00223e28");
-extern void do_gif_paging(void) __asm__("FUN_001f4398");
 
 /* Draws the pause menu pages: lays out each page moby's screen rect, then renders each page's texture. */
 void draw_pause_menu_pages(int transfer_only) __asm__("FUN_L00_002772c0");

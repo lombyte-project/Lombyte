@@ -10,6 +10,9 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/rendering/effects/spawn_spark.h"
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EB5B0), where it is exact; names translated to the US level program. */
 
@@ -80,7 +83,6 @@ void update_configurable_particle_emitter(char *moby) {
  }
 }
 #include "qcopy.h"
-extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 #include "rnc/overlay/l10/gameplay/vendor/update_configurable_particle_emitter_data/emit_burst_spark_particle.h"
 #include "rnc/overlay/l10/gameplay/vendor/update_configurable_particle_emitter_globals.h"
@@ -98,7 +100,6 @@ extern int burst_spark_active_duration_min_gp __asm__("D_L10_00161FAC") __attrib
 extern int burst_spark_active_duration_max_gp __asm__("D_L10_00161FB0") __attribute__((sda));
 extern int burst_spark_pause_duration_min_gp __asm__("D_L10_00161FB4") __attribute__((sda));
 extern int burst_spark_pause_duration_max_gp __asm__("D_L10_00161FB8") __attribute__((sda));
-extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
 void emit_burst_spark_particle(void *emission_position, short *timer, short *burst) {
     float visibility_sphere[4];
@@ -311,7 +312,6 @@ void update_level_mode_dispatcher(struct Moby *moby) {
 /* Update for moby class 1855: waits, arms, then fires an effect and deletes itself. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECAB0), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 

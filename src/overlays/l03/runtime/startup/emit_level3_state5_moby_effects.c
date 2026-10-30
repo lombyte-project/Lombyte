@@ -6,6 +6,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/math/spherical_offset.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 
 
@@ -13,8 +15,6 @@
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/initonce_0022D028.c: func_L03_0022D028), where it is exact; names translated to the US level program. */
 
 extern char D_L03_0016C960[];
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 void emit_level3_state5_moby_effects(void) __asm__("FUN_L03_0022c728");

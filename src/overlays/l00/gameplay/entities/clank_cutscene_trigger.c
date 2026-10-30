@@ -13,6 +13,9 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
@@ -163,13 +166,10 @@ typedef union {
     f32 f[4];
 } VeldinVec;
 
-void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 extern void glow_quads_draw() __asm__("FUN_L00_0023db30");
 extern void FUN_L00_002935b8();
 extern void emit_moby_particle_pairs(VeldinMoby *) __asm__("FUN_L00_0023e008");
-void moby_point_position(char *arg0, int arg1, void *arg2) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0026ced0");
 extern VeldinLevelState D_L00_0016C860;
 

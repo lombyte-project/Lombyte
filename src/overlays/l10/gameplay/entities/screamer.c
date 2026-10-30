@@ -21,6 +21,17 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/rendering/effects/spawn_spark.h"
+#include "rnc/storage/memory_card/memcard_save_data.h"
 
 /* Gate states shared by the paired gate update callbacks. */
 enum GateState {
@@ -77,8 +88,6 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
-float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
-int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 void FUN_L00_00257470_c(unsigned char *m, int flags, int arg) __asm__("FUN_L00_00257470");
 void FUN_L00_00258278_c(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
 void move_moby_with_collision_integer_radius(int a, int b, float x, float y, int c, int d) __asm__("FUN_L00_00258ad0");
@@ -101,7 +110,6 @@ extern void func_L10_002E14F8_2E0630(void *) __asm__("FUN_L10_002e0138");
 extern float func_L00_0025CC58_2E0630(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern void approach_w(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
 extern int func_L00_001F10E0_2E0630(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern V_2E0630 D_L10_001672C0_2E0630 __asm__("D_L10_00167240");
@@ -306,9 +314,7 @@ typedef struct EventRecord { unsigned char pad[0x10]; unsigned char flag; } Even
 extern EventRecord D_0013D408_2DFC38 __asm__("D_0013D408");
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/update_screamer_hit_reactions_and_targeting.h"
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int hit_search_2DFC38(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hit_update_2DFC38(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry_2DFC38(int, int, int) __asm__("FUN_0022db10");
 
 void update_screamer_hit_reactions_and_targeting(struct Moby *moby) __asm__("FUN_L10_002dfc38");
@@ -328,7 +334,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     }
     fast_dec_timer(&data->f184);
     if (moby->state != 11) {
-        hit_record = (Hit_2DFC38 *)hit_search_2DFC38(moby, 0x330000, 0);
+        hit_record = (Hit_2DFC38 *)find_moby_hit(moby, 0x330000, 0);
         hit_update_2DFC38(moby, hit_record, &data->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0) {
             if (data->f20 <= hit_record->f2C) {
@@ -918,7 +924,6 @@ typedef struct Path_2E2B80 {
     float pts[4];
 } Path_2E2B80;
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float FUN_L04_001f1978(float);
 extern int trooper_take_damage() __asm__("FUN_00213928");
 extern int FUN_L00_0025ff38();
@@ -927,7 +932,6 @@ extern int blend_moby_animation_alt(int) __asm__("FUN_00212f90");
 extern s32 random_float_between_alt(f32) __asm__("FUN_002132a8");
 void FUN_L00_0025ab48(OvlQuad *v, float *ang, float *s1, float *s2);
 void FUN_L00_0025d538(s32 id, void *s);
-extern Hit_2E2B80 *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
@@ -951,7 +955,7 @@ void update_class_1199_hit_reactions_and_targeting(struct Moby *moby)
     }
     fast_dec_timer(&data->f184);
     if (moby->state != 13) {
-        hit_record = trooper_find_hit(moby, 0x330000, 0);
+        hit_record = find_moby_hit(moby, 0x330000, 0);
         fun_00213928(moby, hit_record, &data->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0 && hit_record->moby->oclass != moby->oclass) {
             if (data->f20 <= hit_record->f2C) {
@@ -1174,7 +1178,6 @@ typedef struct Moby2E30F8 {
 extern char D_L10_00167240[];
 extern char ground_hit[] __asm__("D_L10_001742C0");
 extern float D_L10_0015F580[] MACRO_ADDR;
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 float compute_toxic_crab_group_approach_angle(struct Moby *self) __asm__("FUN_L10_002e4840");
 
 extern float compute_toxic_crab_group_approach_angle(struct Moby *self) __asm__("FUN_L10_002e4840");
@@ -1187,7 +1190,6 @@ extern char *D_L10_0015FFD0_w[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern float l10_toxic_crab_size_scale __asm__("D_L10_00161E24") __attribute__((sda));
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/toxic_crab_update_2.h"
 extern f32 D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
@@ -1197,7 +1199,6 @@ extern f32 D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
                               float *);
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_0025a120(void *);
@@ -1835,7 +1836,6 @@ extern int D_L10_00161EB8 __attribute__((sda));
 extern int D_L10_00161EBC __attribute__((sda));
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern int fast_tween_color_3a90(int, int, float) __asm__("FUN_001fa6e0");
-extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 void emit_moby_particles(struct Moby *moby) __asm__("FUN_L10_002e3a90");
 void emit_moby_particles(struct Moby *moby) {
@@ -1974,12 +1974,10 @@ extern void trooper_anim_finish(void *,void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L10_002e0138_c(unsigned char *m) __asm__("FUN_L10_002e0138");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 int find_point_ahead(char *a, char *o, float best) __asm__("FUN_L01_00274b78");
-s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 void FUN_L00_0025ab48_c(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
 void FUN_L00_00263d40(int a, int b);
 extern void func_L10_002E14F8_2E52B0(void *) __asm__("FUN_L10_002e0138");
 extern float func_001F9878_2E52B0(float) __asm__("FUN_001f96b0");
-extern Hit_2E52B0 *func_L00_0025B478_2E52B0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int update_collision_l08(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void func_0022EE28_2E52B0(int, int, int) __asm__("FUN_0022db10");
 extern void trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250a78");
@@ -2033,7 +2031,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     fast_dec_timer(&moby_data->f1AC);
     A = 1;
     B = 0.0f;
-    hit_record = func_L00_0025B478_2E52B0(moby, 0xB30000, 0);
+    hit_record = find_moby_hit(moby, 0xB30000, 0);
     hit_response_code = update_collision_l08(moby, hit_record, &moby_data->f20, 0, &A, &B, 0, 4);
     fast_dec_timer_s16(&moby_data->h26);
     if ((unsigned int)A >= 2 && moby->state != 0xB && moby->state != 0xC) {
@@ -2315,7 +2313,6 @@ extern char D_L10_00179890[];
 extern char blarg_ship_missing_path_error_format[] __asm__("D_L10_001DD390");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float fast_vec_dist(void *, void *);
-extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern s32 D_0015ED84;
 extern int D_L10_00161EE4 __attribute__((sda));
 extern float blarg_ship_rocket_speed_gp __asm__("D_L10_00161EE8") __attribute__((sda));
@@ -2567,7 +2564,6 @@ void blarg_ship_update(Ship_5E48 *ship) {
     }
 }
 /* Hit handling and path following for a level 10 vendor moby. */
-extern char *info_5968(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void select_hero_or_gadgebot_target(float, void *, void *) __asm__("FUN_L06_002f34d8");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_5968(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
@@ -2584,7 +2580,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         NO_REACTION_HIT_RESPONSE = 13
     };
     unsigned char *pvars = moby->pvars;
-    char *info = info_5968(moby, 0x370000, 0);
+    char *info = find_moby_hit(moby, 0x370000, 0);
     int out;
     float dmg;
     int hit_response_code;
@@ -2730,7 +2726,6 @@ void emit_moby_directional_particles(struct Moby *moby) {
 extern void set_moby_dialogue_record_value(struct Moby *, int) __asm__("FUN_L00_00266858");
 extern int try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int D_0013ED98 MACRO_ADDR;
 extern int purchased_nanotech_health_gp __asm__("D_0013EDA0") __attribute__((sda));
 extern int D_L10_0013F640 __asm__("D_L10_0013F640") MACRO_ADDR;

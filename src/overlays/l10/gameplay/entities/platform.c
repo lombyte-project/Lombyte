@@ -17,6 +17,14 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/storage/memory_card/memcard_save_data.h"
 
 
 
@@ -25,7 +33,6 @@
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int spawn_bombthrower_grass_projectile() __asm__("FUN_L10_002d8058");
 
 int D_L10_00161BF0 = 240;
@@ -170,7 +177,6 @@ void update_cycling_platform(char *platform_moby) {
 
 
 extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
@@ -257,10 +263,8 @@ extern void initialize_moby_particle_effect(void *) __asm__("FUN_L00_002d6bf0");
 extern void emit_moby_sprite_particles(void *) __asm__("FUN_L10_00298940");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void magnetboots_update(struct Moby *m) __asm__("FUN_L10_00298668");
 void magnetboots_update(struct Moby *moby) {
@@ -664,7 +668,6 @@ void gate_update(unsigned char *gate_moby) {
 
 extern char voice_pool[] __asm__("D_0013E550");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern void *spawn_splitting_effect_particle_with_collision_response_and_fade(char *a, char *b, unsigned char c, int d) __asm__("FUN_L00_0026fd28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -951,7 +954,6 @@ void approach_moby_height(struct Moby *moby, float target_height) {
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int find_point_ahead(float, void *, void *) __asm__("FUN_L01_00274b78");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
@@ -1227,7 +1229,6 @@ extern void FUN_L00_0025a420(void *, void *, void *);
 extern void FUN_L00_0025f090(void *,void *,void *,int,int,int,int,int,float,float,float);
 int resolve_bouncing_projectile_collision(char *m, char *c, float *a2) __asm__("FUN_L10_002d8170");
 extern char D_0013E633_2D9988[] __asm__("D_0013F350");
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int resolve_bouncing_projectile_collision(char *, char *, float *) __asm__("FUN_L10_002d8170");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
@@ -1235,7 +1236,6 @@ extern void func_L00_00251358_2D9988(void *, void *, void *, void *) __asm__("FU
 extern void func_L00_00251328_2D9988(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int func_L00_001F2BE8_2D9988(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 
 void FUN_L10_002d85c8(char *m) {
     char *data;
@@ -1361,7 +1361,6 @@ void FUN_L10_002d85c8(char *m) {
 #else
 extern void get_moby_color(char *, void *, int *, int *) __asm__("FUN_L00_00250320");
 extern void set_moby_color(char *, int, int, int) __asm__("FUN_L00_002502f0");
-extern char *find_moby_hit(char *, int, int) __asm__("FUN_L00_0025a420");
 extern void trooper_knockback_arc(void *, float *, float *, float *) __asm__("FUN_L00_0025ab48");
 extern int collect_mobies_in_sphere(float, void *, int, char *, int) __asm__("FUN_L00_001f2868");
 extern void send_blast_hits(float, float, float, char *, void *, int, int, int, int, int, int) __asm__("FUN_L00_0025a9f8");
@@ -1825,7 +1824,6 @@ typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State;
 typedef union { u128 q; float f[4]; } UVec;
 
 extern L10State D_L10_001BB6B0;
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *spawn_destruction_replacement_moby(char *owner) __asm__("FUN_L10_002eb8c0");
 extern int D_0015ED84; /* no foreign declaration */
 extern unsigned char D_0014C190_c[] __asm__("D_0014C190");
@@ -1899,7 +1897,6 @@ extern int FUN_001fa6d0(float);
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 
 extern float data_processor_linked_effect_fade_duration_seconds_gp __asm__("D_L10_00161C98") __attribute__((sda));
@@ -2143,7 +2140,6 @@ extern float D_L10_00161D54 __attribute__((sda));
 extern float jitter_strand_row_y_span_gp __asm__("D_L10_00161D58") __attribute__((sda));
 extern float jitter_strand_phase_advance_rate_gp __asm__("D_L10_00161D5C") __attribute__((sda));
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 
 typedef struct {
     Vec4 pos[4][30][20];

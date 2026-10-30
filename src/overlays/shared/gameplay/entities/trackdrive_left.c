@@ -12,6 +12,10 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/math/interpolation.h"
 #include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
 
 extern u8 scaled_table_output[] __asm__("D_L02_001CB9C0");
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
@@ -431,7 +435,6 @@ extern int FUN_L00_002323b8();
 extern int FUN_L02_0022b728();
 extern s32 force_help_message(s32 owner, s32 message_id) __asm__("FUN_002151d8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 void trooper_anim_finish(s32 id, void *s) __asm__("FUN_L00_0025d538");
 void set_camera_position(char *src) __asm__("FUN_L00_002ea9d8");
 void set_camera_rotation(char *src) __asm__("FUN_L00_002eaa30");
@@ -444,7 +447,6 @@ void draw_tresspasser_puzzle(char *moby) __asm__("FUN_L02_002d93e8");
 /* Fakematch: the first parameter is an int; as a long the 0 passed after the 64-bit pad test is set again instead of taken from the mask register, like retail. */
 extern int func_0022ED80_2D9F08(long, int, Moby *) __asm__("FUN_0022da68");
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
-extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void func_L02_002DA728_2D9F08(Moby *) __asm__("FUN_L02_002d92f0");
 extern void func_L02_002D9D48_2D9F08(void *, void *, Moby *) __asm__("FUN_L02_002d8910");
@@ -452,7 +454,6 @@ extern float func_00214D88_2D9F08(float *, float *, float, float, float, float) 
 extern void func_L00_002EBE88_2D9F08(void *) __asm__("FUN_L00_002ea9d8");
 extern void func_L00_002EBEE0_2D9F08(void *) __asm__("FUN_L00_002eaa30");
 extern int force_help_message(int, int) __asm__("FUN_002151d8");
-extern void func_001F49B0_2D9F08(void (*)(void), Moby *) __asm__("FUN_001f4600");
 extern void func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
@@ -560,7 +561,7 @@ void tresspasser_pad_update(Moby *moby) {
         }
         i = 0;
         if (0.99f <= data->f110 && fast_difference_between_rotations(D_L02_00167300_2D9F08.v150.z, camera_rot.z) < 0.017453292f) {
-            func_001F49B0_2D9F08(func_L02_002DA820_2D9F08, moby);
+            add_draw_callback(func_L02_002DA820_2D9F08, moby);
             for (i = 0; i < 12; i++) {
                 if (data->iB0[i] == 1) {
                     break;
@@ -657,7 +658,6 @@ void tresspasser_pad_update(Moby *moby) {
 #endif
 #ifndef
 #endif
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
 extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C");
 void align_hero_to_tresspasser_pad(char *moby) __asm__("FUN_L02_002d92f0");
@@ -1195,7 +1195,6 @@ extern void FUN_L02_002ea7d0_c(struct Moby *) __asm__("FUN_L02_002ea7d0");
 extern void FUN_L02_002ea8b0_c(struct Moby *) __asm__("FUN_L02_002ea8b0");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");

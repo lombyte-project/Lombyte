@@ -16,7 +16,10 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/entities/suck_aim.h"
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 extern void interpolate_vector(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
 extern s32 allocate_colored_effect_slot(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
@@ -462,7 +465,6 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
 }
 #include "sda.h"
 
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
                               f32 range, f32 near, f32 nearYaw, f32 nearPitch) __asm__("FUN_L01_0030d308");
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
@@ -702,7 +704,6 @@ void draw_sandmouse_billboard_quads(char *moby) {
 /* Attach two effect entries and register their update callback. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
 
-extern void add_draw_callback(void (*)(char *), char *) __asm__("FUN_001f4600");
 
 void update_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030ded0");
 
@@ -1438,7 +1439,6 @@ extern float camera_basis_reference_direction[] __asm__("D_L01_001672B0");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cam_interp_values(float a, float b, float *p, float c, float d, float e);
 extern int sample_path(void *, void *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern int current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern Path *D_L01_001B0C30_316730[] __asm__("D_L01_001B0930");
 

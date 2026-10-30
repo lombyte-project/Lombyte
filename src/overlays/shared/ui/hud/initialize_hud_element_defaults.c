@@ -6,6 +6,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/ui/hud/get_icon_frame.h"
 
 /* Sets up a HUD element: timer, 128x128 size, zero offsets. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266B90), where it is exact; names translated to the US level program. */
@@ -62,7 +63,6 @@ extern char hud_race_third_place_format[] __asm__("D_L05_0015F9F8");
 extern char hud_race_other_place_format[] __asm__("D_L05_0015FA00");
 extern char hud_race_rank_label_format[] __asm__("D_L05_0015FA08");
 extern int measure_text_width_regular(char *, int) __asm__("FUN_L05_00229d48");
-extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 
 int draw_hud_progress_and_rank(HudElem *hud_element) __asm__("FUN_L05_00266320");

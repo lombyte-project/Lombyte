@@ -11,6 +11,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/ui/hud/get_icon_frame.h"
 
 extern unsigned char D_0013E529[];
 void hud_update_counter(char *) __asm__("FUN_L00_00235ea0");
@@ -54,7 +55,6 @@ typedef struct {
     void *unk80;
 } HudElem_237840;
 
-extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern int D_L00_0015F760 __attribute__((sda));
 extern int D_L00_0015F764 __attribute__((sda));
 extern void apply_hud_slide_offset(HudElem_237840 *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
@@ -673,7 +673,6 @@ extern Ent_239918 **D_L00_0015FAC0_c2 __asm__("D_L00_0015FAC0");
 extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
 extern Ids D_L00_0015F8C0_239918 __asm__("D_L00_0015F7E0");
 extern char D_L00_0017E5D8_239918[] __asm__("D_L00_0017E4D8");
-extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 extern int strlen_alt(int) __asm__("FUN_001166cc");
@@ -884,7 +883,6 @@ typedef struct {
     s16 *p;
 } Hud;
 
-extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern int pal_mode __asm__("D_0015ED80");
@@ -1260,7 +1258,6 @@ out:
     return hud_element->ret;
 }
 extern short D_00140986 NOT_SDA;
-int get_icon_frame(int, int) __asm__("FUN_001ff960");
 void draw_cropped_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023b6c0");
 void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 int draw_hud_cropped_gauge_panel(char *rec) __asm__("FUN_L00_0023a640");

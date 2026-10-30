@@ -11,6 +11,15 @@
 #include "rnc/overlay/level_globals.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_move_state_velocity.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/math/interpolation/vendor_spring.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/rendering/transitions/fade_to_black.h"
 
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 /* line query from -> to; fills the collision hit record, nonzero on a hit */
@@ -504,7 +513,6 @@ typedef struct {
     float f158;
 } C_20d6b0;
 extern C_20d6b0 player_camera __asm__("D_L00_00166C80");
-extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 
 float score_hero_target_candidate(char *target_moby, float yaw, float range, float ylim, float plim, int *out) __asm__("FUN_L00_0020d6b0");
 
@@ -676,7 +684,6 @@ extern u8 D_L00_0017CA80[] NOT_SDA;
 extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 extern void advance_moby_animation_blend(void *, unsigned char *) __asm__("FUN_L00_0024f190");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern s32 return_hero_animation_id_unchanged(s32) __asm__("FUN_L00_002050b8");
 
 /* Ported from rac1-decomp (src/overlays/shared/hero_animation_slots.c: update_hero_item_slot_animation_blends). */
 void update_hero_item_slot_blends(void) __asm__("FUN_L00_0020dd20");
@@ -928,7 +935,6 @@ typedef struct {
 
 extern ID_20e4c8 D_L00_00179AC0_c[] __asm__("D_L00_00179AC0");
 extern s32 FUN_L00_0020d498_c(s32) __asm__("FUN_L00_0020d498");
-extern void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 void start_equipped_item_animation(void) {
@@ -977,7 +983,6 @@ void start_equipped_item_animation(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020ED30), where it is exact; names translated to the US level program. */
 
 extern int hero_idle_sequence(int) __asm__("FUN_L00_00205000");
-extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void cancel_hero_item_animation(void) {
@@ -1477,7 +1482,6 @@ extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern void pack_pose(void *, void *, s32, s32, s32) __asm__("FUN_L00_002092c8");
-extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
 extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern s32 FUN_L00_0020d540(s32) __asm__("FUN_L00_0020d540");
 extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
@@ -1789,8 +1793,6 @@ extern int D_0015ED90;
 extern int D_0015ED94;
 extern ItemDef item_defs[] __asm__("D_L00_00179AC0");
 extern int hero_is_in_special_state() __asm__("FUN_L00_0020d568");
-extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
@@ -2186,13 +2188,11 @@ void update_hero_equipped_items(void) {
 }
 void clear_moby_transform_history(void *) __asm__("FUN_L00_00262840");
 void FUN_L00_00232fe8_210a08(void) __asm__("FUN_L00_00232fe8");
-void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 void update_hero_collision_capsule_dimensions(void) __asm__("FUN_L00_00211380");
 void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 void FUN_L00_00257024_210a08(char *) __asm__("FUN_L00_00257024");
 void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) __asm__("FUN_L00_00210a08");
 
 void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) {
@@ -2233,7 +2233,6 @@ void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) 
 }
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
-extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 
 void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
@@ -2488,7 +2487,6 @@ s32 hero_check_damage(s32 apply_damage_response) {
 extern s32 D_0015EEAC __asm__("D_0015EEAC");
 extern s32 D_0014EE90[] __asm__("D_0014EE90");
 extern void clear_help_record_high_bits(void) __asm__("FUN_L00_00203a28");
-extern void fade_to_black(int) __asm__("FUN_001f4a58");
 
 void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern s32 hero_respawn_counts_by_level[] __asm__("D_0013DFD8");
@@ -3300,7 +3298,6 @@ d1:
 /* Snaps the hero's follow position toward its target, stepping up by a bounded amount. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002136A8), where it is exact; names translated to the US level program. */
 
-extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern float func_L00_0025C918_2136A8(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 
 void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
@@ -3542,8 +3539,6 @@ void resolve_hero_collisions_with_history(void) {
 /* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
    0x20B3: 0 = world z up, otherwise the frame of the hero's moby). */
 extern void update_hero_attachment(s32, void *, void *) __asm__("FUN_L00_00233f80");
-extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
-extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern f32 forward_component(void *) __asm__("FUN_L00_00213350");  /* dot with (cos, sin) of the hero yaw */

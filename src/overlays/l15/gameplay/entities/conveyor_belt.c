@@ -8,6 +8,13 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/camera/follow_cam.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/storage/memory_card/memcard_save_data.h"
 
 
 
@@ -216,7 +223,6 @@ typedef struct Tb {
     OvlQuad v40;
 } Tb;
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float D_0015ED6C;
 #include "rnc/overlay/l15/gameplay/entities/conveyor_belt_globals.h"
@@ -237,7 +243,6 @@ extern int D_L15_00174458_lui __asm__("D_L15_00174458") NOT_SDA;
 extern int D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern s32 D_L15_00178500[] __asm__("D_L15_00178500");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern Res *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L00_002603d0(int);
 extern void func_L00_001FF610_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern int probe_ground_height_cf(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
@@ -268,7 +273,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
             moby->bBC = 1;
         }
     }
-    hit_result = trooper_find_hit(moby, 0x830000, 0);
+    hit_result = find_moby_hit(moby, 0x830000, 0);
     if (hit_result != 0 && hit_result->owner != 0 && hit_result->owner->hA6 != moby->hA6) {
         moby->bBC = 1;
     }
@@ -339,11 +344,9 @@ extern int D_L15_0015F5C4;
 extern int D_L15_0015F640;
 extern unsigned char D_0013D4FD[];
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void initialize_moby_particle_effect(char *) __asm__("FUN_L00_002d6bf0");
 extern void emit_moby_sprite_particles(char *) __asm__("FUN_L10_00298940");
-int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
 extern short bolt_grabber_scale_multiplier_gp __asm__("D_L15_00162078") __attribute__((sda));
 void bolt_grabber_update(struct Moby *m) __asm__("FUN_L15_002ea748");
@@ -693,7 +696,6 @@ extern unsigned char *D_L15_0015FFD8_v __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern unsigned char D_0014C050_v[] __asm__("D_0014C050");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00232fe8_v(void) __asm__("FUN_L00_00232fe8");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L00_002330d0_v(void) __asm__("FUN_L00_002330d0");
@@ -701,7 +703,6 @@ extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90"
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
 
@@ -1090,7 +1091,6 @@ extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern void FUN_L00_002502a0(int);
-extern void update_joint_animation(void *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00284e50(void *, void *);
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
@@ -1443,7 +1443,6 @@ typedef struct Items {
     unsigned char f6F;
 } Items;
 
-extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern unsigned char D_0013D4DF_2ed398[] __asm__("D_0013D4DF");
 extern int D_L15_00161AC0_macro __asm__("D_L15_00161AC0") MACRO_ADDR;

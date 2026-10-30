@@ -11,6 +11,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 extern Vec4 D_0013E090[2] NOT_SDA; /* camera start: position, rotation */
 extern s32 D_00141660 NOT_SDA;
@@ -21,7 +22,6 @@ extern struct HeroEase D_L00_0017A680[] NOT_SDA;
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
 extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 
 /* Clears the hero, binds it to the first moby of class 0 (snapped to the
    ground, its position and yaw copied in, the camera start set from it unless

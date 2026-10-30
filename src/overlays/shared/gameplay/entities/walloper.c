@@ -15,6 +15,14 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 extern float D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
 extern float D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
 extern float D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
@@ -67,13 +75,11 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int suck_get_aim_height() __asm__("FUN_002141f8");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 /* The arc points one slot before each arc row. */
 extern Vec4 D_L00_001DBA10[4][5];
 extern Vec4 arc_points[4][5] __asm__("D_L00_001DBA20");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int FUN_L00_00257b90(int, int), FUN_00213260(int);
-extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern int test_moby_linked_record_word8(void *) __asm__("FUN_L00_00259830");
@@ -643,7 +649,6 @@ void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern unsigned int l00_beam_anchor_first_pass_vertex_color __asm__("D_L00_00161640") __attribute__((sda));
 extern float beam_anchor_first_pass_base_corner_scale_gp __asm__("D_L00_00161648") __attribute__((sda));
@@ -863,7 +868,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
 
@@ -987,7 +991,7 @@ void walloper_update(char *walloper_moby) {
                 D_L00_001DBED8[i] = 0;
         }
     }
-    enqueue_callback_list_1(FUN_L00_002bbb00_c, walloper_moby);
+    add_draw_callback(FUN_L00_002bbb00_c, walloper_moby);
 }
 extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") MACRO_ADDR;
 extern f32 walloper_arc_first_pass_half_width_gp __asm__("D_L00_00161690") __attribute__((sda));
@@ -1422,12 +1426,9 @@ extern void tick_countdown_32_c(s32 *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 int allocate_packed_color_point_light_slot(void *v, float a, float b, int col) __asm__("FUN_L00_0023e5e0");
-int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
-s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
 struct Moby *spawn_morphoray_chicken(void *a) __asm__("FUN_L00_002c9348");
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
-void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void hud_init_particles(HudElem *e) __asm__("FUN_L00_00236268");
 void hud_update_particles(void) __asm__("FUN_L00_00236458");
 void release_point_light_slot(int i) __asm__("FUN_L00_0023e838");
@@ -1441,7 +1442,6 @@ extern char D_L00_00166C80[];
 extern int func_001F9938_2BDAF0(void *) __asm__("FUN_001f9770");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int func_001F9850_2BDAF0(int) __asm__("FUN_001f96f8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void func_001FA4A0_2BDAF0(void *, void *) __asm__("FUN_001fa2d8");
@@ -1453,14 +1453,11 @@ extern int func_001F9908_2BDAF0(void *) __asm__("FUN_001f9740");
 extern float func_001FA888_2BDAF0(int) __asm__("FUN_001fa6c0");
 extern int queue_animation_update(int, int, void *, void *, void *, int *, int) __asm__("FUN_001ff308");
 extern int func_001FA898_2BDAF0(float) __asm__("FUN_001fa6d0");
-extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void func_L00_002BE3A8_2BDAF0(void *) __asm__("FUN_L00_002bd0a0");
 extern void func_L00_001FF4B0_2BDAF0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_2BDAF0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int remove_hud_item(int) __asm__("FUN_001ff480");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
-extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
 
 void morphoray_update(Moby *moby) __asm__("FUN_L00_002bc7e8");
@@ -1719,7 +1716,6 @@ extern int D_L00_001DD0A0;
 extern int D_L00_001DD0D0;
 extern int FUN_001efa68_c_c(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern int lerp_vector() __asm__("FUN_001f9a40");
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 unsigned char *FUN_L00_00272060(void *pos, int s, float x, float y, int color, int mode, int b, float *v, float z);
 unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(void *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y) __asm__("FUN_L00_00275910");
@@ -1901,7 +1897,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             }
         }
     }
-    enqueue_callback_list_1(draw_beam_ring_and_rail_effects, moby);
+    add_draw_callback(draw_beam_ring_and_rail_effects, moby);
     spark_size = random_float_between(0.1f, 2.0f);
     sign = random_integer_below(2);
     if (sign == 0) {

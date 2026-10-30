@@ -18,6 +18,18 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/interpolation/vendor_spring.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/rendering/transitions/fade_to_black.h"
 
 /* Shuttle destination selection shared by its route helpers. */
 enum ShuttleStop {
@@ -48,7 +60,6 @@ enum RobotDogState {
 
 extern char D_L17_001676C0[];
 extern int D_L17_0015F5C4;
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern unsigned char D_0013E633[] __asm__("D_0013F3D0");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -253,7 +264,6 @@ extern unsigned char *create_drone_flight_trail_record(char *pos, int mode, int 
 extern unsigned char D_00141968_x_q[] __asm__("D_00141968");
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
                                int) __asm__("FUN_L00_002598b0");
-void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
 extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale,
                                     void *src) __asm__("FUN_L00_00259888");
 
@@ -962,7 +972,6 @@ void draw_fighter_jet_hud(struct Moby *moby) {
 extern int spawn_class_3f1_moby(void *, void *, void *, float, float) __asm__("FUN_L11_00308848");
 extern f32 D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
 extern unsigned char D_0013A4E0_u[] __asm__("D_0013A4E0");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 extern short fighter_jet_aim_direction_base_length_gp __asm__("D_L17_0016206C") __attribute__((sda));
 int D_L17_00162070 = 4;
@@ -1080,7 +1089,6 @@ typedef struct {
 extern char *D_L17_001600EC;
 extern char D_L17_00174740[];
 extern float D_L17_0016D3F0 NOT_SDA;
-extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern float spring_angle(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern float interpolate_value_with_repeated_squaring(int, int, float, float, float, float, float) __asm__("FUN_L13_002ba088");
 extern float fast_add_rotations(float, float);
@@ -1131,7 +1139,6 @@ void try_fire_fighter_jet_rocket(char *moby, char *obj) __asm__("FUN_L17_002ec15
 void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *horizontal_steering_input, float *vertical_steering_input) __asm__("FUN_L17_002edf10");
 
 void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *a, float *b) __asm__("FUN_L17_002edf10");
-void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 extern char D_0013C940[];
 extern char D_0013E550[];
 extern char pad_held[] __asm__("D_0013CAE0");
@@ -1527,7 +1534,6 @@ extern int force_help_message(int, int) __asm__("FUN_002151d8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float jet_distance(void *, void *) __asm__("FUN_L00_00250430");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
@@ -1536,8 +1542,6 @@ extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0")
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
 extern void clear_jet_camera_mode_latch(void) __asm__("FUN_L00_00203b78");
-extern void hero_respawn(void) __asm__("FUN_L00_00211250");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void emit_type_74_particles_from_moby_joints(void *, void *) __asm__("FUN_L11_003112b8");
@@ -2274,9 +2278,7 @@ typedef struct {
 } Vars1382;
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern int FUN_L17_002efd48_c(char *moby, float *target, float speed) __asm__("FUN_L17_002efd48");
 short D_L17_00162200 = 0x909;
@@ -2284,9 +2286,7 @@ extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8,
                               float scale, float *v10, float *v11, float *v12);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-extern void spawn_nearby_effect(int, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void FUN_L00_0025a120(void *);
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_volume_suppressed) __asm__("FUN_L17_002efa48");
@@ -2842,7 +2842,6 @@ typedef struct {
     AimPart_1BB0 part;
 } AimData_1BB0;
 
-extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 
 void update_robot_dog_aim_joint(struct Moby *moby) {
     AimData_1BB0 *moby_vars = (AimData_1BB0 *)moby->pvars;
@@ -2878,7 +2877,6 @@ void update_robot_dog_aim_joint(struct Moby *moby) {
 
 extern void draw_sentrybot_effect_quads(char *) __asm__("FUN_L15_0029aba8");
 extern void draw_three_moby_effect_quads(char *) __asm__("FUN_L17_002f0448");
-extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 
 void update_robot_dog_glow_effects(struct Moby *moby) {
     char *data;
@@ -2958,7 +2956,7 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
         for (i = 0; i < 3; i++) {
             moby_point_position(moby, i + 1, data + 0x200 + i * 16);
         }
-        enqueue_callback_list_1(draw_three_moby_effect_quads, moby);
+        add_draw_callback(draw_three_moby_effect_quads, moby);
     }
 }
 
@@ -3326,7 +3324,6 @@ extern int scale_game_frames(int);
 extern short shuttle_second_stop_departure_scale_multiplier __asm__("D_L17_001623A8") __attribute__((sda));
 extern short shuttle_first_stop_departure_scale_multiplier __asm__("D_L17_001623AC") __attribute__((sda));
 extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
-extern void fade_to_black(int) __asm__("FUN_001f4a58");
 int update_shuttle_travel_and_camera(char *moby, int idx) __asm__("FUN_L17_002f2180");
 void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");
 

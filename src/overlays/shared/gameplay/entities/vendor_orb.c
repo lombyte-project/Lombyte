@@ -13,6 +13,12 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/interpolation.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -159,8 +165,6 @@ extern char D_L00_00166EC0_2E0E50[] __asm__("D_L00_00166DC0");
 extern int func_001F9850_2E0E50(int) __asm__("FUN_001f96f8");
 extern int pad_pressed_within(int, int, int) __asm__("FUN_L00_00266d60");
 extern int func_L00_002E1790_2E0E50(Moby *) __asm__("FUN_L00_002e02e0");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_2E0E50(float) __asm__("FUN_001fa6d0");
@@ -384,9 +388,7 @@ typedef struct {
 } __attribute__((aligned(16))) V_2e01b0;
 extern float D_0015ED6C_2e01b0 __asm__("D_0015ED6C");
 int FUN_001f9740_2e01b0(void *) __asm__("FUN_001f9740");
-void moby_point_position(char *, int, void *) __asm__("FUN_L00_0024f7c8");
 void fast_vec_normalize(V_2e01b0 *, void *, float) __asm__("FUN_001f9bf8");
-int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void spawn_debris_chunk(V_2e01b0 *, V_2e01b0 *, int, int) __asm__("FUN_L00_0026f548");
 int FUN_001f96f8_2e01b0(int) __asm__("FUN_001f96f8");
 
@@ -499,10 +501,8 @@ extern void FUN_L00_002e0788_2e03a0(void *) __asm__("FUN_L00_002e0788");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
-extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
-extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 
 extern u8 pilots_helmet_missing_cutscene_format[] __asm__("D_L00_001EA1B0");
@@ -856,7 +856,6 @@ extern void func_L00_001FF4B0_2E3700(void *, void *, float) __asm__("FUN_001f9bf
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void func_001F9BD8_2E3700(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9850_2E3700(int) __asm__("FUN_001f96f8");
@@ -1227,7 +1226,6 @@ void FUN_001f9a28_e3388(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_e3388(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9ad8_e3388(void *, void *, void *) __asm__("FUN_001f9ad8");
 s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 void FUN_001f9a68_e3388(void *, void *, f32) __asm__("FUN_001f9a68");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_e3388(void *, void *, void *) __asm__("FUN_001f9a10");

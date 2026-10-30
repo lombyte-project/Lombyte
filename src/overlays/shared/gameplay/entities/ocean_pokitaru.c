@@ -9,6 +9,13 @@
 #include "sda.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 extern int FUN_00116248_b7(void *, void *) __asm__("FUN_00116248");
 extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
@@ -149,7 +156,6 @@ extern void initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern char *FUN_L00_0026dd20_c(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 char *select_homing_missile_target(float *pos, float *aim, float r1, float r2, float maxd) __asm__("FUN_L11_00308670");
@@ -288,8 +294,6 @@ extern int projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") __attribute
 extern int D_L11_00161DCC __attribute__((sda));
 extern float projectile_trail_velocity_scale_gp __asm__("D_L11_00161DD0") __attribute__((sda));
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 /* Per-frame update of a projectile moby: moves it by its velocity and leaves a trail particle; on impact it bursts into
    five sparks and removes itself, otherwise it shrinks when its timer runs out and is removed once tiny. */
@@ -353,12 +357,9 @@ typedef struct {
 } Missile_94f8;
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void FUN_L00_0026cbb0_94f8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern unsigned char *FUN_L00_002712b8_94f8(void *, void *, int, int, int, int,
                                               float, float, float, float, float) __asm__("FUN_L00_002712b8");
-extern float FUN_L00_0025be00_94f8(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0025e450_94f8(void *, void *, void *, float, float, int, int, int,
                                     float, float, float, float, int, float, int, int, int, int)
     __asm__("FUN_L00_0025e450");
@@ -416,9 +417,9 @@ void rocket_update(struct Moby *moby) {
         moby->rot.y = -fast_arc_tan(vector_distance_xy(pos, &data->target->pos), data->target->pos.z - moby->pos.z);
         qcopy(&data->target_pos, &data->target->pos);
     } else {
-        FUN_L00_0025be00_94f8(&moby->rot.z, &data->turn_speed, moby->rot.z, frame_time_sq * 251.32741f,
+        approach_angle(&moby->rot.z, &data->turn_speed, moby->rot.z, frame_time_sq * 251.32741f,
                                frame_time_sq * 251.32741f, frame_time * 2513.2742f);
-        FUN_L00_0025be00_94f8(&moby->rot.y, &data->turn_speed, moby->rot.y, frame_time_sq * 251.32741f,
+        approach_angle(&moby->rot.y, &data->turn_speed, moby->rot.y, frame_time_sq * 251.32741f,
                                frame_time_sq * 251.32741f, frame_time * 2513.2742f);
         data->target = 0;
     }
@@ -686,7 +687,6 @@ typedef struct {
     OceanVars *vars; /* 0x78 */
 } OceanMoby;
 
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern UV wave_offset[] __asm__("D_L11_00161E08") MACRO_ADDR;
 extern float camera_pos_b358[] __asm__("D_L11_001677C0");
 extern char last_camera_pos[4] __asm__("D_L11_00162840") __attribute__((sda)); /* a 16-byte vector; declared small so it is reached through $gp */

@@ -4,6 +4,7 @@
 
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/ui/hud/get_icon_frame.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00264C88), where it is exact; names translated to the US level program. */
 
@@ -205,7 +206,6 @@ extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern void font_print_center_large(s32, s32, u64, char *, s32) __asm__("FUN_001f6c20");
 extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
 extern s32 hud_screen_position(char *, s32 *, s32 *) __asm__("FUN_L00_00235a70");
-extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_cropped_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b6c0");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 

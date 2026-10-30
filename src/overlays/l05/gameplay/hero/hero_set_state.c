@@ -15,6 +15,14 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_handle_jump_press.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_move_state_velocity.h"
+#include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/help_0024D680.c: func_L05_0024D680), where it is exact; names translated to the US level program. */
 
@@ -32,17 +40,12 @@ extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float level05_hero_animation_blend_curves[][25] __asm__("D_L05_0017C250");
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float vector_length_xy(void *);
 extern int D_L05_001612D8;
 extern int D_L05_0015F5C4;
-extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
-extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
-extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int get_hero_idle_animation_index(int a) __asm__("FUN_L01_00226f10");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
@@ -52,26 +55,18 @@ int D_L05_0015F6E8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 struct HeroVelocityKey D_L05_0015F6F8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
 extern unsigned char l05_run_jump_animation_by_run_frame[] __asm__("D_L05_0017C238");
 extern void *D_L05_001612D0;
-extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
-extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern void create_missing_hero_item_slot_animations(int a, int b) __asm__("FUN_L00_0020e360");
-extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
-extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
 extern void scale_hero_motion(float) __asm__("FUN_L00_00213de8");
 extern void update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
 extern void help_queue_add(int, int, int) __asm__("FUN_L00_00216ec0");
 extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
-extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 extern void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
-extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
 extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void FUN_L00_0025f730(void *a, float x);
-extern void initialize_moby_transform_history(int a, char *b) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");
 extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void pool_splash(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");

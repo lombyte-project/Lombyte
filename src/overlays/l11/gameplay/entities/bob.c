@@ -17,6 +17,13 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/storage/memory_card/memcard_save_data.h"
 
 /* Moby.state for the resort-owner callbacks; path progression is separate. */
 enum ResortOwnerState {
@@ -53,9 +60,7 @@ enum ResortOwnerPathLeg {
 /* Per-frame update of a pickup moby: waits for the player to come near, then grants the item. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC828), where it is exact; names translated to the US level program. */
 
-extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4E3[];
-int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 void mark_moby_for_removal(struct Moby *obj) __asm__("FUN_0020c828");
 
 void update_pokitaru_pickup(struct Moby *moby) __asm__("FUN_L11_002cb668");
@@ -498,7 +503,6 @@ extern int try_find_resort_owner_jump_target(struct Moby *m, float *out) __asm__
 extern void FUN_L11_002d2088_c(struct Moby *moby, int state) __asm__("FUN_L11_002d2088");
 extern float ground_height_14b0(void *) __asm__("FUN_L00_00259710");
 extern void build_symmetric_adjacency_masks(void *, int, int) __asm__("FUN_L05_0028be78");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern int is_moby_in_state_five(struct Moby *arg) __asm__("FUN_L11_0030a830");
 extern void FUN_L11_0030a840(unsigned char *arg);
@@ -1077,7 +1081,6 @@ struct PokSentryVars {
 extern unsigned char D_0013D50B NOT_SDA;
 extern char *D_L11_001600EC;
 extern struct UsageStat help_records[] __asm__("D_00141968") NOT_SDA;
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
 void fred_pokitaru_update(struct Moby *moby) __asm__("FUN_L11_002f0e40");
 void fred_pokitaru_update(struct Moby *moby) {
@@ -1664,7 +1667,6 @@ struct PokPv {
 
 extern unsigned char D_0013E550_309ac0[] __asm__("D_0013E550");
 extern void *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void scale_vec_309ac0(float *, float) __asm__("FUN_L00_0025f730");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -1905,8 +1907,6 @@ int try_activate_pokitaru_gate(struct Moby *moby) {
 }
 extern void attach_manipulator(struct Moby *, int, void *) __asm__("FUN_0020cb10");
 extern void FUN_L00_001fff28(void *, int, float);
-extern void moby_point_position(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void FUN_L00_0026f080(float *, float *, float, float);
 extern int level_frame __asm__("D_L11_0015F5CC");
 

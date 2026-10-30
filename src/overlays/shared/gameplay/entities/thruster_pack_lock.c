@@ -10,6 +10,12 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/random.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
@@ -76,7 +82,6 @@ extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
 extern LvState D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
 extern LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
-extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 
 void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
 void thruster_pack_lock_update(Lock *moby)
@@ -335,7 +340,6 @@ void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yo
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
 
 extern f32 D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void spawn_type_74_particle(void *, float *, float *, void *, int) __asm__("FUN_L01_0028a7a8");
 
@@ -521,8 +525,6 @@ int draw_linked_moby_trails(char *moby) {
 /* Advances a trail ring buffer and records two offset points each fourth frame. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 
-void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 
 void update_moby_trail_points(char *moby) __asm__("FUN_L11_00319670");
 
@@ -559,7 +561,7 @@ void update_moby_trail_points(char *moby) {
         int *last_callback_frame = *(int **)(trail_data + 0x2C8);
         if (current_frame != *last_callback_frame) {
             *last_callback_frame = current_frame;
-            enqueue_callback_list_1(draw_linked_moby_trails, moby);
+            add_draw_callback(draw_linked_moby_trails, moby);
         }
     }
 }
@@ -567,14 +569,11 @@ void update_moby_trail_points(char *moby) {
 /* Collectable crate: when hit, updates the totals (count, best time, levels mask, a level-11 bonus) and breaks open. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031B630), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 #include "rnc/overlay/shared/gameplay/entities/thruster_pack_lock_globals.h"
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern unsigned char D_00141968[];
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
 void update_moby_hit_stats_and_state(char *moby) __asm__("FUN_L11_0031a1c0");
 

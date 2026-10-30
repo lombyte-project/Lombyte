@@ -9,6 +9,8 @@
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
@@ -146,8 +148,6 @@ typedef struct {
 } L07SparkState;
 
 extern char D_L07_0016C8E0[];
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi,
                                 float size);

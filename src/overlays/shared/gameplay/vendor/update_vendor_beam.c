@@ -11,6 +11,10 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/random.h"
 #include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/rendering/effects/spawn_spark.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00302A58), where it is exact; names translated to the US level program. */
 
@@ -47,7 +51,6 @@ extern void draw_vendor_beam(char *) __asm__("FUN_L14_00301fa8");
 void apply_vendor_beam_damage(char *self) __asm__("FUN_L14_00302538");
 
 extern void apply_vendor_beam_damage(char *) __asm__("FUN_L14_00302538");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int D_L14_001620CC_gp __asm__("D_L14_001620CC") __attribute__((sda));
 extern int D_L14_001620B8_gp __asm__("D_L14_001620B8") __attribute__((sda));
 extern int D_L14_001620D0_gp __asm__("D_L14_001620D0") __attribute__((sda));
@@ -135,9 +138,6 @@ void update_vendor_beam(unsigned char *moby) {
         }
     }
 }
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
-extern int spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int vendor_beam_min_pulse_duration_frames_gp __asm__("D_L14_001620BC") __attribute__((sda));
 extern int vendor_beam_max_pulse_duration_frames_gp __asm__("D_L14_001620C0") __attribute__((sda));
 extern float vendor_beam_displacement_radius_gp __asm__("D_L14_001620FC") __attribute__((sda));

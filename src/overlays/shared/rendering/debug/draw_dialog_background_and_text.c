@@ -3,6 +3,8 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/rendering/do_gif_paging.h"
+#include "rnc/rendering/setup_gif_paging.h"
 
 extern int D_L00_0015F5D8;
 int FUN_L00_00201720(void);
@@ -42,9 +44,7 @@ extern u8 timed_text_entries[] __asm__("D_L00_00173080");
 void queue_framebuffer_upload(s32) __asm__("FUN_L00_001fc558");
 void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("FUN_001f5210");
 void reset_gs_registers(void) __asm__("FUN_001f3868");
-void setup_gif_paging(s32) __asm__("FUN_001f4280");
 void draw_timed_text(void *, s32) __asm__("FUN_L00_001fcca0");
-void do_gif_paging(void) __asm__("FUN_001f4398");
 void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
 
 void draw_framebuffer_with_timed_text(void) {

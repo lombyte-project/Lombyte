@@ -14,6 +14,15 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 
 /* One scrolling two-texture overlay layer (0x60 bytes). */
 typedef struct {
@@ -252,9 +261,7 @@ typedef struct {
 
 SplashColors D_L01_0020AF50 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 SplashColors D_L01_0020AF68 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
-extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, f32, s32) __asm__("FUN_L00_0026ced0");
 
@@ -645,7 +652,6 @@ extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int,
                               int) __asm__("FUN_L00_0025a478");
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern int select_birdbot_path_node(void *, int *) __asm__("FUN_L01_002e6790");
 extern int scale_game_frames(int);
@@ -653,10 +659,8 @@ extern int tick_countdown_32(void *) __asm__("func_001F9740");
 extern short birdbot_projectile_speed_gp __asm__("D_L01_00161950") __attribute__((sda));
 extern short birdbot_path_speed_scale_gp __asm__("D_L01_00161954") __attribute__((sda));
 extern short birdbot_path_entry_animation_speed_gp __asm__("D_L01_0016195C") __attribute__((sda));
-extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void *FUN_L00_00263fd8_u(char *, int, float *, void *, int, int, float, float *, float *,
                                 float *) __asm__("FUN_L00_00263fd8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278_cf(char *moby, float *vel, float target, float k, float d,
                                 float max) __asm__("FUN_L00_00258278");
@@ -1496,14 +1500,10 @@ extern void FUN_L00_001ff500_cf(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00257470(void *, s32, s32);
 extern void FUN_L00_00258278(void *, void *, f32, f32, f32, f32);
 extern s32 FUN_L00_00258b50(void *, void *, void *, void *, f32);
-extern void spawn_nearby_effect(void *, void *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
 extern void FUN_L00_0025a120(void *);
-extern void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void hit_reaction(void *, void *, void *, s32, void *, void *, s32, s32) __asm__("FUN_L00_0025a478");
 extern f32 FUN_L00_0025abf0(void *, void *, void *, f32, f32);
 extern void trooper_start_knockback(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
-extern s32 mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *, f32);
 extern void select_moby_combat_target(void *, void *, f32) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8(void *, s32, void *, f32);
@@ -2379,7 +2379,6 @@ struct VoicePoolWindow {
 
 extern u8 voice_pool[] __asm__("D_0013E550");
 /* nonzero while voice `handle` plays (state 1 or 2) for `moby` */
-extern int voice_is_playing(void *moby, int handle) __asm__("FUN_L00_0028d8c0");
 
 void door_half_update(Moby *self) __asm__("FUN_L01_002f4710");
 void door_half_update(Moby *self)
@@ -2540,7 +2539,6 @@ extern CarrierCamera D_L01_00167100_c __asm__("D_L01_00167100");
 extern CarrierOffsets l01_carrier_rider_local_offsets __asm__("D_L01_0020B360");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 /* Rider carrier: waits for the hero in its clip volume, then follows its path carrying up to eight rider mobys (and steers its camera moby), drops them off one by one at the marked node and removes itself at the end of the path. */
 void stationary_ship_update(CarrierMoby *m) __asm__("FUN_L01_002f4960");
@@ -2685,7 +2683,6 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
     }
 }
 extern ScrollLayer l01_scrolling_overlay_layers[] __asm__("D_L01_001E2FC0");
-void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void update_and_draw_scrolling_overlay_layers(s32, ScrollLayer *) __asm__("FUN_L01_002b96e0");
 
 void update_and_draw_level01_scrolling_layers(void) __asm__("FUN_L01_002f60f8");
@@ -2712,7 +2709,6 @@ s32 D_L01_00161BA0 = 0;
 extern BoundGroup D_L01_001E3380[];
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void draw_two_scroll_layers(void) __asm__("FUN_L01_002f6150");
-void add_draw_callback(void *fn, void *arg) __asm__("FUN_001f4600");
 
 void initialize_bounds_and_enqueue_scroll_layers(void *callback_argument) __asm__("FUN_L01_002f6180");
 
@@ -2926,7 +2922,6 @@ extern char *paths[] __asm__("D_L01_001B0930");
 extern s32 cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
 
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
-extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern void spawn_debris(char *, void *, f32) __asm__("FUN_L01_0030be70");
 extern int debug_print() __asm__("FUN_001e93b0");

@@ -7,6 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 
 
 extern void FUN_L00_00250df8_8670(void *) __asm__("FUN_L00_00250df8");
@@ -108,7 +109,6 @@ typedef struct {
     float vx, vy;
 } MO;
 
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");

@@ -11,6 +11,10 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/storage/memory_card/memcard_save_data.h"
 
 typedef struct {
     s16 timer;
@@ -29,7 +33,6 @@ typedef struct {
     s32 enabled;
 } VendorVars;
 
-extern void moby_point_position(struct Moby *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int get_first_moby_in_group(struct Moby **, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
@@ -176,7 +179,6 @@ void underwater_ring_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002EC490), where it is exact; names translated to the US level program. */
 
 extern void draw_moby_radial_ripple_mesh_buffers(void) __asm__("FUN_L15_002eac90");
-void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void ripple_strips_moby_update(char *moby) __asm__("FUN_L15_002eb0a0");
 void ripple_strips_moby_update(char *moby) {
@@ -214,11 +216,9 @@ typedef struct {
 
 extern int D_L15_0015F5C4;
 extern unsigned char D_0013D388_bd78[] __asm__("D_0013D388");
-extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void initialize_collectible_sprite_state(char *) __asm__("FUN_L02_002ea7d0");
 extern void update_collectible_sprite_effect(char *) __asm__("FUN_L02_002ea8b0");
-int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
 extern float D_L15_001621A0 __attribute__((sda));
 void codebot_update(struct Moby *moby) __asm__("FUN_L15_002ebd78");

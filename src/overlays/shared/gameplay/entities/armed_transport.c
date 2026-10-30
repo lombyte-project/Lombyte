@@ -12,6 +12,12 @@
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E3740), where it is exact; names translated to the US level program. */
 
@@ -36,7 +42,6 @@ extern short D_L16_00161D80;
 extern short armed_transport_bob_phase_speed_degrees __asm__("D_L16_00161D88") __attribute__((sda));
 extern short armed_transport_bob_amplitude __asm__("D_L16_00161D8C") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_explosion(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int) __asm__("FUN_L00_0025e450");
 void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) __asm__("FUN_L16_002e2b60");
@@ -259,12 +264,9 @@ typedef struct {
     char *owner;
 } L16Slot_e;
 
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_0022da68_i(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, char *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
@@ -410,7 +412,6 @@ void compute_armed_transport_path_headings(void *path_data) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E44B8), where it is exact; names translated to the US level program. */
 
-extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 
 void update_armed_transport_joint_animation(char *moby) {
     float ticks = frame_scale_sq;
@@ -428,7 +429,6 @@ int check_grindrail_barrier_release_condition(int moby_list_index) __asm__("FUN_
 int check_grindrail_barrier_release_condition(int idx) __asm__("FUN_L16_002e5cd0");
 extern void FUN_L16_002e58d8_u(void) __asm__("FUN_L16_002e58d8");
 extern void group_trigger_nearest(int) __asm__("FUN_L16_002e5d30");
-extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_0022ED80_6B70(int, int, void *) __asm__("FUN_0022da68");
 
 extern short grindrail_barrier_ring_rotation_speed __asm__("D_L16_00161E00") __attribute__((sda));
@@ -466,7 +466,7 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
                                       ((float *)&grindrail_barrier_accent_rotation_speeds)[i] * DEG_TO_RAD * frame_time);
         }
         if (barrier_moby->visible)
-            enqueue_callback_list_1_alt(FUN_L16_002e58d8_u, barrier_moby);
+            add_draw_callback(FUN_L16_002e58d8_u, barrier_moby);
         if (*(int *)(barrier_data + 0x20) != -1 && check_grindrail_barrier_release_condition(*(int *)(barrier_data + 0x20))) {
             barrier_moby->collision = 0;
             barrier_moby->state = 2;
@@ -633,7 +633,6 @@ void group_trigger_nearest(int moby_list_index) {
     }
 }
 extern void draw_level16_reflection_mesh_batch(void) __asm__("FUN_L16_002e9ce0");
-void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 
 void moby_update_draw_only(unsigned char *moby) __asm__("FUN_L16_002e9df0");
 void moby_update_draw_only(unsigned char *moby) {

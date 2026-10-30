@@ -14,6 +14,11 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/storage/memory_card/memcard_save_data.h"
 
 typedef union {
     u128 q;
@@ -30,7 +35,6 @@ typedef struct {
 } DebrisHit;
 
 extern DebrisColors l01_rock_formation_debris_oclass_choices __asm__("D_L01_00161C50");
-extern void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern int FUN_L00_00257b90(int lo, int hi);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
@@ -330,7 +334,6 @@ typedef struct {
 extern BurstPalette D_L01_0020B4F0;   /* inner colours */
 extern BurstPalette D_L01_0020B508;   /* outer colours */
 BurstLight D_L01_001E3440 = {{0, 0, 0, 0, 0, 0, 0, 0, 0x66, 0x66, 0xa6, 0x3f, 0, 0, 0, 0, 0, 0, 0xff, 0, 0x13, 0xf, 0, 0xff, 0, 0x13, 0x11, 0, 0x64, 0, 0x13, 0x13}, 13.0f, 13.0f, 13.0f};
-extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 extern void spawn_particle(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026a9f0");
 /* s32 return is load-bearing: a void prototype changes the code */
 extern s32 spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
@@ -687,9 +690,7 @@ extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460"
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void show_tracked_moby(void) __asm__("FUN_L01_002a2480");
 
 extern unsigned char D_L01_0015FC88[] MACRO_ADDR;
@@ -928,7 +929,6 @@ typedef struct {
 
 extern u8 D_0014C050[];
 extern u8 voice_pool[] __asm__("D_0013E550");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 void bridge_half_update(PendulumMoby *self) __asm__("FUN_L01_002fb8a8");
@@ -1038,7 +1038,6 @@ extern void pool_flush(void *, s32) __asm__("FUN_L01_002b7fe0");
 extern void pool_ripple(f32, f32, f32, f32, void *, s32) __asm__("FUN_L01_002b8288");
 extern void pool_splash(f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_002a3ec8");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void render_level_water_grids(void) __asm__("FUN_L01_002fd0c0");
 extern int add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void pool_drip(void *, f32) __asm__("FUN_L01_002ffcd0");

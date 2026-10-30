@@ -14,6 +14,13 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_move_state_velocity.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C2A20), where it is exact; names translated to the US level program. */
 
@@ -318,7 +325,6 @@ typedef struct {
 } Vars_2c5dc8;
 extern V_2c5dc8 g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
 long get_effect_texture(int) __asm__("FUN_001f44b8");
-void pos_2c5dc8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 void sub_2c5dc8(void *, void *, void *) __asm__("FUN_001f9a28");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 float fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -359,7 +365,7 @@ void draw_swingshot_cable(char *moby) {
     segment_quad.uv[2].v = 1.0f;
     segment_quad.uv[3].u = 1.0f;
     segment_quad.uv[3].v = 1.0f;
-    pos_2c5dc8(moby, 0, &attachment_position);
+    moby_point_position(moby, 0, &attachment_position);
     qcopy(&previous_segment_center, v->x14 + 0x10);
     qcopy(&segment_center, &previous_segment_center);
     sub_2c5dc8(&segment_direction, &attachment_position, &previous_segment_center);
@@ -402,7 +408,6 @@ void draw_swingshot_cable(char *moby) {
 }
 #include "eetypes.h"
 void set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
-void moby_point_position(unsigned char *, int, void *) __asm__("FUN_L00_0024f7c8");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
@@ -735,7 +740,6 @@ typedef struct {
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 extern char D_L00_00177F00[],D_L00_001E9B48[],D_L00_001E9B70[];
 extern s32 D_L00_0015F5C4;
-extern int find_moby_hit(void *,int,int) __asm__("FUN_L00_0025a420");
 extern f32 fast_vec_dist(void *,void *) __asm__("FUN_001f9b48");
 extern f32 vector_distance(void *,void *) __asm__("FUN_001f9b80");
 extern f32 fast_arc_tan(f32,f32) __asm__("FUN_001f9e90");
@@ -1198,7 +1202,6 @@ extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")NOT_SDA;
 extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("FUN_L00_002aa008");
 extern struct Moby *spawn_mine(void *, void *, void *) __asm__("FUN_L00_002a9ed0");
 extern void append_unique_moby_index(void *, void *, int) __asm__("FUN_L00_0025f780");
-extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern f32 square_root(f32) __asm__("FUN_001f9988");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -1210,8 +1213,6 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int use_ammo(int, int) __asm__("FUN_L00_00233db8");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 #include "rnc/input/pad_state.h"
@@ -2599,24 +2600,19 @@ extern int FUN_L00_00205000();
 extern int hero_set_state() __asm__("FUN_L00_002223f8");
 extern int FUN_L00_002323b8();
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 unsigned char *spawn_swingshot_hook(unsigned char *src, float f) __asm__("FUN_L00_002c6f88");
 void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern Moby *FUN_L00_002c6f88_2bffa8(void *, float) __asm__("FUN_L00_002c6f88");
 extern void FUN_L00_001edf60_2bffa8(int, int, float, void *, int, float, int, float, int) __asm__("FUN_L00_001edf60");
 extern int FUN_001f96f8_2bffa8(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void FUN_L00_0024f7c8_2bffa8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern float FUN_001f9b48_2bffa8(void *, void *) __asm__("FUN_001f9b48");
-extern void FUN_001f4600_2bffa8(void (*)(char *), void *) __asm__("FUN_001f4600");
 extern void FUN_001f9a28_2bffa8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9bf8_2bffa8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a10_2bffa8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float FUN_001f9af0_2bffa8(void *) __asm__("FUN_001f9af0");
 extern int FUN_001efa68_2bffa8(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int hero_idle_sequence(int) __asm__("FUN_L00_00205000");
-extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void draw_swingshot_cable(char *) __asm__("FUN_L00_002c5dc8");
 
 void swingshot_update(Moby *m) __asm__("FUN_L00_002c6158");
@@ -2651,7 +2647,7 @@ void swingshot_update(Moby *m) {
             m->state = 1;
         }
         if (d->hook) {
-            FUN_L00_0024f7c8_2bffa8(m, 0, &d->hook->pos);
+            moby_point_position(m, 0, &d->hook->pos);
             {
                 Moby *h = d->hook;
                 *(u128 *)&h->rot_row0 = *(u128 *)&m->rot_row0;
@@ -2685,7 +2681,7 @@ void swingshot_update(Moby *m) {
         }
         break;
     case 2:
-        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+        add_draw_callback(draw_swingshot_cable, m);
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
@@ -2716,12 +2712,12 @@ void swingshot_update(Moby *m) {
         break;
     case 3:
         allocate_voice_for_target_entry(1, 0, m);
-        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+        add_draw_callback(draw_swingshot_cable, m);
         qcopy(&d->hook->pos, &hero.grapple_target->pos);
         m->state = 4;
         break;
     case 4:
-        FUN_L00_0024f7c8_2bffa8(m, 0, &v0);
+        moby_point_position(m, 0, &v0);
         qcopy(&v0, &hero.motion.pos);
         v0.f.z += 0.5f;
         if (FUN_001efa68_2bffa8(&v0, &hero.grapple_target->pos, 2, 0, 0)) {
@@ -2733,7 +2729,7 @@ void swingshot_update(Moby *m) {
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
-        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+        add_draw_callback(draw_swingshot_cable, m);
         d->spin = d->spin + 0.69813168f;
         d->size = d->size * (frame_scale * -0.100000024f + 1.0f);
         if (d->size < 0.168000013f) {
@@ -2763,21 +2759,21 @@ void swingshot_update(Moby *m) {
         }
         d->size = d->size * (frame_scale * -0.100000024f + 1.0f);
         d->spin = d->spin + 0.69813168f;
-        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+        add_draw_callback(draw_swingshot_cable, m);
         if ((unsigned int)(hero.state.current - 0x25) >= 2) m->state = 6;
         break;
     case 6:
-        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+        add_draw_callback(draw_swingshot_cable, m);
         hd->speed = frame_time * 80.0f;
         m->state = 7;
         break;
     case 7:
-        FUN_L00_0024f7c8_2bffa8(m, 0, &v10);
+        moby_point_position(m, 0, &v10);
         FUN_001f9a28_2bffa8(&v0, &v10, &d->hook->pos);
         if (hd->speed < FUN_001f9b48_2bffa8(&d->hook->pos, &v10)) {
             FUN_001f9bf8_2bffa8(&v0, &v0, hd->speed);
             FUN_001f9a10_2bffa8(&d->hook->pos, &d->hook->pos, &v0);
-            FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+            add_draw_callback(draw_swingshot_cable, m);
         } else {
             qcopy(&d->hook->pos, &v10);
             if (m->prev_seq != 1) blend_moby_animation(m, 1, 0, FUN_001f96f8_2bffa8(10));
@@ -2787,7 +2783,7 @@ void swingshot_update(Moby *m) {
     case 8:
         break;
     case 9:
-        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+        add_draw_callback(draw_swingshot_cable, m);
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
@@ -2802,14 +2798,14 @@ void swingshot_update(Moby *m) {
         }
         break;
     case 10:
-        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+        add_draw_callback(draw_swingshot_cable, m);
         m->state = 11;
         break;
     case 11:
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
-        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+        add_draw_callback(draw_swingshot_cable, m);
         d->spin = d->spin + 0.69813168f;
         d->size = d->size * (frame_scale * -0.600000024f + 1.0f);
         if (d->size < 0.168000013f) {
@@ -2825,14 +2821,14 @@ void swingshot_update(Moby *m) {
         }
         d->size = d->size * (frame_scale * -0.600000024f + 1.0f);
         d->spin = d->spin + 0.69813168f;
-        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+        add_draw_callback(draw_swingshot_cable, m);
         if (hero.state.current != 0x2C) m->state = 13;
         break;
     case 13:
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
-        FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+        add_draw_callback(draw_swingshot_cable, m);
         hd->speed = frame_time * 80.0f;
         m->state = 14;
         break;
@@ -2840,12 +2836,12 @@ void swingshot_update(Moby *m) {
         if (m->anim_flags & 2) {
             if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
-        FUN_L00_0024f7c8_2bffa8(m, 0, &v10);
+        moby_point_position(m, 0, &v10);
         FUN_001f9a28_2bffa8(&v0, &v10, &d->hook->pos);
         if (hd->speed < FUN_001f9b48_2bffa8(&d->hook->pos, &v10)) {
             FUN_001f9bf8_2bffa8(&v0, &v0, hd->speed);
             FUN_001f9a10_2bffa8(&d->hook->pos, &d->hook->pos, &v0);
-            FUN_001f4600_2bffa8(draw_swingshot_cable, m);
+            add_draw_callback(draw_swingshot_cable, m);
         } else {
             qcopy(&d->hook->pos, &v10);
             if (m->prev_seq != 1) blend_moby_animation(m, 1, 0, FUN_001f96f8_2bffa8(10));

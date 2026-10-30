@@ -17,6 +17,11 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 /* Finds the path segments nearest to the two target points and sums the segment lengths between them. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D7668), where it is exact; names translated to the US level program. */
@@ -183,8 +188,6 @@ extern char D_L14_001809C0[];
 extern char D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void vendor_spring(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern void build_moby_bone_transform(struct Moby *, int, void *) __asm__("FUN_0020cca8");
-extern void moby_point_position(struct Moby *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void register_beam_slot(struct Moby *, int, int) __asm__("FUN_L00_002e1f28");
@@ -499,7 +502,6 @@ extern float D_L14_0015F580[] MACRO_ADDR;
 extern float joint_light_position_w_gp __asm__("D_L14_00161A60") __attribute__((sda));
 extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void draw_racer_glow_quads(struct Moby *) __asm__("FUN_L14_002d71f0");
-void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 
 void update_moby_joint_visual_effects(struct Moby *moby) __asm__("FUN_L14_002d7490");
 
@@ -589,7 +591,6 @@ typedef int u128_s07 __attribute__((mode(TI)));
 
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 #include "rnc/overlay/l14/gameplay/entities/platform_data/update_platform_tilt_basis.h"
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern char D_0013F3D0[];
 
 /* The caller passes two floats in f12/f13; this routine never reads them. */
@@ -692,7 +693,6 @@ typedef struct {
 
 extern char D_0013E633[] __asm__("D_0013F3D0");
 extern int D_L14_0015F7EC __asm__("D_L14_0015F70C");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 extern void initialize_ribbon_effect_state(char *) __asm__("FUN_L14_002df080");
 extern void animate_ribbon_effect_paths(char *) __asm__("FUN_L14_002df138");

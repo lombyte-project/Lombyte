@@ -8,8 +8,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/ground_probe.h"
-f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
-s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 void step_angle_toward_target(void *, s32, f32, f32) __asm__("FUN_L00_0025bc00");
 s32 FUN_L00_00258490_261630(void *, void *, void *, s32, f32, f32, f32,
                             f32) __asm__("FUN_L00_00258490");

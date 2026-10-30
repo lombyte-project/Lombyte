@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "sda.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 
 void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 /* Calls probe_ground_height(a, 0x20, 0.5f). */
@@ -90,7 +91,6 @@ int play_entity_sound(void *moby, void *position, int hit_mask, float sphere_rad
     *(unsigned short *)(descriptor + 0x1a) = *(unsigned short *)((char *)moby + 0xa6);
     return collect_mobies_in_sphere(position, sphere_radius, i, moby, descriptor);
 }
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int play_entity_sound(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 /* Calls play_entity_sound at a moby point; the f13 argument is ignored and c is passed again as a float. */
 int collect_mobies_in_sphere_at_moby_point(void *moby, int point, int hit_mask, float sphere_radius, float unused, float direction_scale, int hit_descriptor_payload_byte, int hit_payload_byte, int i) __asm__("FUN_L00_002599e8");

@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/rendering/transitions/fade_to_black.h"
 
 
 
@@ -41,7 +42,6 @@ extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void update_hero_state_machine(void) __asm__("FUN_L03_0021c668");
 extern void noop_main_callback(void *) __asm__("FUN_001e93e8");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
-void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 void update_hero_frame_pipeline(void) __asm__("FUN_L03_002002f8");
 

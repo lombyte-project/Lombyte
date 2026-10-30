@@ -7,6 +7,8 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/storage/memory_card/memcard_save_data.h"
 
 /* Start the moby's camera-follow state: stash it in the global record, point its update at func_L00_0028F458. */
 /* Ported from rac1-decomp (src/overlays/shared/space_0028FB78.c: func_L00_0028FB78), where it is exact; names translated to the US level program. */
@@ -93,7 +95,6 @@ extern O_28e9c8 *D_L00_0015FFDC_28e9c8 __asm__("D_L00_0015FFDC");
 extern unsigned char D_0013D4C6_lui __asm__("D_0013D4C6") NOT_SDA;
 void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
 void load_chunks_with_optional_fade(int, int) __asm__("FUN_L00_00245610");
 void parse_space_scene_chunk(int) __asm__("FUN_002049f0");
@@ -222,7 +223,6 @@ extern C_0028ed58 D_L00_0016C860_0028ed58 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
 void initialize_level_transition_with_audio(s32) __asm__("FUN_L00_0028e9c8");
 void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
-s32 memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern s32 transition_sequence_positions[1] __asm__("D_L00_00160570") __attribute__((sda));
 void prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
 

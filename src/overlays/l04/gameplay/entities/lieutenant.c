@@ -16,6 +16,9 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */
@@ -54,7 +57,6 @@ extern void initialize_npc_dialogue(struct Moby *, struct VendorVars *) __asm__(
 extern int FUN_00214720(char *, s32);
 extern int update_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_00266448");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void lieutenant_update(struct Moby *moby) __asm__("FUN_L04_002e3078");
@@ -161,7 +163,6 @@ typedef struct {
 } Help;
 
 extern int D_L04_00179590[] NOT_SDA;
-extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4D4 NOT_SDA;
 extern unsigned short D_001417C2 NOT_SDA;
 extern unsigned short D_00141892 NOT_SDA;
@@ -441,7 +442,6 @@ extern f32 D_L04_00161D7C_gp __asm__("D_L04_00161D7C") __attribute__((sda));
 extern u128 tgt[] __asm__("D_L04_00174000") NOT_SDA;
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 void update_entity_bounce_and_decay(M2e5178 *entity) __asm__("FUN_L04_002e5178");
 
 void update_entity_bounce_and_decay(M2e5178 *entity) {

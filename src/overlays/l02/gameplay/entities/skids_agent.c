@@ -21,6 +21,11 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/rendering/transitions/fade_to_black.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
 typedef struct {
@@ -81,7 +86,6 @@ extern s32 update_npc_dialogue(struct Moby *, WatcherVars *) __asm__("FUN_L00_00
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
-extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
@@ -101,8 +105,6 @@ extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 /* Aridia NPC with a carried prop moby (data+0x178): dialogue state machine (the hint in state 1 is usage
@@ -473,7 +475,6 @@ void skid_mcmarx_update(struct Moby *moby) {
 extern char *D_L02_001600EC_n __asm__("D_L02_001600EC");
 extern char *D_L02_0015FFD8_n __asm__("D_L02_0015FFD8");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
-extern void fade_to_black(int) __asm__("FUN_001f4a58");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
@@ -699,7 +700,6 @@ void draw_aridia_ocean_parts(struct Moby *moby) {
     FUN_L02_002a47f8_c();
 }
 
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 
 

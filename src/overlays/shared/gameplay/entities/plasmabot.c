@@ -10,6 +10,15 @@
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/interpolation/vendor_spring.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
@@ -98,7 +107,6 @@ void scale_and_apply_plasmabot_planar_velocity(char *moby) {
 /* steers the pitch angle of a moby toward a target and updates the joint */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4A00), where it is exact; names translated to the US level program. */
 
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_001fff28(void *, int, float);
 
 void update_plasmabot_aim_joint_rotation(char *moby, float x) __asm__("FUN_L14_002b37b0");
@@ -249,11 +257,9 @@ extern char plasmabot_empty_intro_path_format[] __asm__("D_L14_001FBBA0");
 extern char plasmabot_missing_bound_path_format[] __asm__("D_L14_001FBBF8");
 extern char plasmabot_empty_bound_path_format[] __asm__("D_L14_001FBC38");
 extern char plasmabot_missing_hatch_index_format[] __asm__("D_L14_001FBC90");
-extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern float probe_ground_height(float, void *, int);
 extern int D_L14_0015F5C4;
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int register_beam_slot(void *, int, int) __asm__("FUN_L00_002e1f28");
 extern int release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
@@ -700,9 +706,6 @@ extern u8 D_L14_0015F580[] MACRO_ADDR;
 
 extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
 extern void FUN_L14_002b2928_u(struct Moby *) __asm__("FUN_L14_002b2928");
-extern void add_draw_callback(void (*)(struct Moby *), struct Moby *) __asm__("FUN_001f4600");
-extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
-extern void build_moby_bone_transform(struct Moby *, s32, void *) __asm__("FUN_0020cca8");
 extern void FUN_00213358(void *, f32, f32);
 extern Particle *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, s32, struct Moby *) __asm__("FUN_L00_00274948");
 extern f32 FUN_002132a8(f32, f32);
@@ -949,7 +952,6 @@ void update_plasmabot_target_range(struct Moby *moby) {
 /* Enemy hit reaction: takes damage from attacks (not from its own kind), staggers or is knocked away and dies. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B41B0), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern float plasmabot_stagger_motion_z_scale_gp __asm__("D_L14_001614C8") __attribute__((sda));
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -1547,8 +1549,6 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     if (random_integer_below(2) != 0)
         emit_debris_trail_particles(moby);
 }
-extern void build_look_at_2e0170(void *, void *, void *, float) __asm__("FUN_00214890");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void create_effect_2e0170(void *, void *, void *, void *, void *, int, float, float, float) __asm__("FUN_L00_0025df68");
 extern char *race_paths_2e0170 __asm__("D_L14_0015F70C");
 
@@ -1593,7 +1593,7 @@ unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mod
                                        ballistic_debris_launch_magnitude_range_end_gp * D_0015ED60));
             fast_vec_cross(launch_vector_scratch + 4, &hero.gravity_dir, launch_vector_scratch);
             angle = randf_sym(0.5759586691856384f, 1.3962633609771729f);
-            build_look_at_2e0170(spawned_vars + 0x30, launch_vector_scratch, &hero.gravity_dir, angle);
+            build_look_at_matrix(spawned_vars + 0x30, launch_vector_scratch, &hero.gravity_dir, angle);
             *(float *)(spawned_vars + 0x38) = random_float_between(ballistic_debris_z_velocity_range_start_gp * D_0015ED60,
                 ballistic_debris_z_velocity_range_end_gp * D_0015ED60);
             *(float *)(spawned_vars + 0x20) = randf_sym(0.0f, 0.008726646f);
@@ -1671,8 +1671,6 @@ void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern void func_002141A8_2E17B8(void *, float, float) __asm__("FUN_00213358");
 extern float func_002140F8_2E17B8(float, float) __asm__("FUN_002132a8");
 extern int func_002140B0_2E17B8(int) __asm__("FUN_00213260");
-extern float func_L00_00258C80_2E17B8(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void func_L00_0026DA50_2E17B8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern Particle_2E17B8 *func_L00_0026DEA0_2E17B8(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
@@ -1735,8 +1733,8 @@ void emit_debris_trail_particles(Moby *moby) {
     emission_position_offset.f[2] = 0.0f;
     fast_vec_add(&pos, &pos, &emission_position_offset);
     if (moby->state == 1) {
-        pos.f[0] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
-        pos.f[1] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
+        pos.f[0] += randf_sym(0.0f, 0.1f);
+        pos.f[1] += randf_sym(0.0f, 0.1f);
     }
     func_L00_0026DA50_2E17B8(&pos, &particle_initial_velocity, 0x4F007FFF, 0x1FFFFFFF,
                              random_int_between(scale_game_frames(10), scale_game_frames(20)), 1, 60000.0f);

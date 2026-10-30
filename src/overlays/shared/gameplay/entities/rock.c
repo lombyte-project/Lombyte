@@ -19,6 +19,13 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/rendering/transitions/fade_to_black.h"
 
 /* A path of points: the point count, then 16-byte points whose w is the length of the segment to the next one */
 typedef struct {
@@ -207,7 +214,6 @@ extern float D_0015ED6C MACRO_ADDR;
 extern float D_L01_0015F5D0 MACRO_ADDR;
 extern int cutscene_active_macro __asm__("D_L01_0015F404") MACRO_ADDR;
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void FUN_L00_0026a4c8(void *, void *, int, int, int, float);
@@ -855,7 +861,6 @@ extern struct {
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
@@ -1169,7 +1174,6 @@ typedef struct {
 extern struct Moby *D_L01_0015FFE4_302648 __asm__("D_L01_0015FFE4");
 extern s32 *D_L01_001B0930_302648[] __asm__("D_L01_001B0930");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
-extern void enqueue_callback_list_1(void (*)(char *), void *) __asm__("FUN_001f4600");
 extern void terminate_visibomb_missile(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
 
 extern s32 visibomb_outside_zone_overlay_enabled_gp __asm__("D_L01_0015F30C") __attribute__((sda));
@@ -1215,7 +1219,7 @@ void update_target_outside_zone_timeout(struct Moby *moby) {
     }
     if (zone_vars->count > 0) {
         if (visibomb_outside_zone_overlay_enabled_gp) {
-            enqueue_callback_list_1(draw_visibomb_outside_zone_overlay, moby);
+            add_draw_callback(draw_visibomb_outside_zone_overlay, moby);
         }
         if (scale_game_frames(90) < zone_vars->count) {
             terminate_visibomb_missile(target_moby, target_moby->pvars);
@@ -1247,11 +1251,9 @@ extern f32 D_L01_00161F14_gp __asm__("D_L01_00161F14") __attribute__((sda));
 extern f32 D_L01_00161F18_gp __asm__("D_L01_00161F18") __attribute__((sda));
 extern f32 D_L01_00161F2C_gp __asm__("D_L01_00161F2C") __attribute__((sda));
 extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
-extern void fade_to_black(s32) __asm__("FUN_001f4a58");
 extern void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void set_hero_animation(f32, s32, s32) __asm__("FUN_L00_002323b8");
-extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void initialize_gold_bolt_data(struct Moby *) __asm__("FUN_L01_00308470");
 /* the unit defines these with a char * parameter further down */
 extern void FUN_L01_00308550_f(struct Moby *) __asm__("FUN_L01_00308550");
@@ -1445,7 +1447,6 @@ extern int gold_bolt_glow_ring_tween_end_color_gp __asm__("D_L01_00161F40") __at
 extern int gold_bolt_glow_ring_particle_use_flags_44_gp __asm__("D_L01_00161F48") __attribute__((sda));
 extern int gold_bolt_glow_ring_particle_texture_index_gp __asm__("D_L01_00161F4C") __attribute__((sda));
 extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 void update_gold_bolt_glow_rings(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
@@ -1553,7 +1554,6 @@ void update_gold_bolt_pickup_camera(char *moby) {
 /* builds three jittered offsets and fires the same effect at each accumulated point */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309DC8), where it is exact; names translated to the US level program. */
 
-extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
 extern float gold_bolt_particle_initial_speed_min_gp __asm__("D_L01_00161F54") __attribute__((sda));
@@ -1786,7 +1786,7 @@ void teleporter_update(struct Moby *moby) {
     }
     case TELEPORTER_TRANSFER_TO_DESTINATION:
         if (*(float *)(data + 0x34) != 0.0f) {
-            enqueue_callback_list_1(draw_moby_radius_ring, moby);
+            add_draw_callback(draw_moby_radius_ring, moby);
             approach_value((float *)(data + 0x34), 0.0f, frame_time * 4.0f);
         } else {
             char *destination_moby = D_L01_0015FFD8 + (*(int *)data << 8);
@@ -1818,7 +1818,7 @@ void teleporter_update(struct Moby *moby) {
     case TELEPORTER_RETURN_TO_IDLE:
     case TELEPORTER_EFFECT_CYCLE_RETURN_TO_IDLE:
         if (*(float *)(data + 0x34) < 1.95f) {
-            enqueue_callback_list_1(draw_moby_radius_ring, moby);
+            add_draw_callback(draw_moby_radius_ring, moby);
             approach_value((float *)(data + 0x34), 1.95f, frame_time * 4.0f);
         } else if (0.0f < *(float *)(data + 0x24)) {
             advance_accelerated_scalar((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,

@@ -7,6 +7,8 @@
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
 
 
 
@@ -15,7 +17,6 @@
 extern char draw_registration_value_target[] __asm__("D_L07_001D3400");
 extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
 extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
-void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void update_moby_draw_registration(unsigned char *moby) __asm__("FUN_L07_002f8058");
 
@@ -43,7 +44,6 @@ extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
-void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 void FUN_L01_0026e090(int i, int v);
 void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char D_0013F350_lui[] __asm__("D_0013F350") NOT_SDA;
@@ -51,7 +51,6 @@ extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0")
 extern void func_L01_0026F040_30D370(int, int) __asm__("FUN_L01_0026e090");
 extern int func_001F9850_30D370(int) __asm__("FUN_001f96f8");
 extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 
 void timed_activation_pads_update(unsigned char *moby) __asm__("FUN_L07_0030bf90");
 void timed_activation_pads_update(unsigned char *moby)

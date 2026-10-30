@@ -13,6 +13,7 @@
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 /* Builds two direction vectors from a table and relative to a moby, then hands them to the L04 effect spawner. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
@@ -161,7 +162,6 @@ extern u128 D_L04_00173FE0;                              /* hit position of the 
 extern u8 D_L04_00174000[];
 extern s32 collision_line(void *, void *, s32, struct Moby *, CollisionProbe *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
 
 /*

@@ -16,6 +16,14 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
@@ -26,9 +34,7 @@ extern char D_L17_00167580[];
 extern char fleet_camera_box_configuration_error_format[] __asm__("D_L17_001E6F60");
 extern int D_00141DC4 NOT_SDA;
 extern int fleet_help_request_gate_state[] __asm__("D_L17_00179D10");
-extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
-extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern int scale_game_frames(int);
 extern unsigned char D_0013D408[];
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
@@ -36,7 +42,6 @@ extern unsigned char D_0013D4DF NOT_SDA;
 extern int pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 extern void DebugPrint();
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
-extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FUN_L00_002e8970");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
@@ -449,7 +454,6 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
 #include "rnc/overlay/l17/gameplay/entities/blarg_ship_globals.h"
 extern float backdrop_shared_radius_numerator_gp __asm__("D_L17_001623D0") __attribute__((sda));
 extern float backdrop_offset_radius_divisor_gp __asm__("D_L17_001623D8") __attribute__((sda));
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern float backdrop_quad_uv_rotation_rate_factors[] __asm__("D_L17_001DDFE0");
 extern float backdrop_quad_color_blend_direction_multipliers[] __asm__("D_L17_001DE058");
@@ -532,11 +536,8 @@ extern char blarg_ship_positive_y_launch_offset[] __asm__("D_L17_001DE110");
 extern char blarg_ship_negative_y_launch_offset[] __asm__("D_L17_001DE120");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern int FUN_0022da68(int, int, int);
 extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
 extern void update_moby_hit_stats_and_state(void *) __asm__("FUN_L11_0031a1c0");
@@ -808,7 +809,6 @@ char *try_activate_blarg_ship_from_list(int list) {
 /* UpdateMoby 1873: wait for a target, then play two effects and delete itself. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6DA0), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");

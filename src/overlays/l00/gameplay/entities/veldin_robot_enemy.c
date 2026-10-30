@@ -10,6 +10,14 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -207,7 +215,6 @@ extern s32 D_L00_0015F580[] MACRO_ADDR;
 
 extern void update_veldin_robot_damage_and_targeting() __asm__("FUN_L00_002e1678");
 extern void manipulator_set_scale(void *, f32) __asm__("FUN_L00_00263b38");
-extern void update_joint_animation(ElectroidMoby *, void *, s32, f32, f32) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_0025a120(ElectroidMoby *);
 extern void blend_moby_animation(ElectroidMoby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 scale_game_frames_s32(s32) __asm__("FUN_001f96f8");
@@ -218,14 +225,11 @@ extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 advance_accelerated_scalar(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_00213f38");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 register_beam_slot(ElectroidMoby *, s32, s32) __asm__("FUN_L00_002e1f28");
-extern void build_moby_bone_transform(ElectroidMoby *, s32, void *) __asm__("FUN_0020cca8");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 collision_line(void *, void *, s32, ElectroidMoby *, ElectroidProbe *) __asm__("FUN_001efa68");
 extern s32 release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
 extern s32 set_beam_origin_transform_and_endpoint(ElectroidMoby *, void *, void *) __asm__("FUN_L00_002e2190");
-extern s32 mine_fall(ElectroidMoby *, void *) __asm__("FUN_L00_0025c698");
-extern void cart_burst(ElectroidMoby *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern void spawn_moby_break_fragments(ElectroidMoby *, s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_00263e30");
 extern void FUN_L00_00263fd8(ElectroidMoby *, s32, void *, void *, s32, s32, f32, void *, void *,
                              void *);
@@ -460,8 +464,6 @@ typedef struct {
 
 extern s16 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00257470(ElectroidMoby *, s32, s32);
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern ElectroidHit *find_moby_hit(ElectroidMoby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void hit_reaction(ElectroidMoby *, ElectroidHit *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
 extern void trooper_knockback_arc(ElectroidVec *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(ElectroidMoby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
@@ -598,11 +600,9 @@ typedef struct {
     SparkVars *vars;
 } SparkMoby;
 
-extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern SparkPart *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, s32, void *) __asm__("FUN_L00_00274948");
 extern void draw_veldin_robot_effect_quad() __asm__("FUN_L00_002e1c78");
-void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void update_veldin_robot_effects(SparkMoby *moby) {
     SparkVars *vars;

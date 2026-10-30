@@ -17,6 +17,20 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/interpolation/vendor_spring.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/storage/memory_card/memcard_save_data.h"
 
 /* Activate the watcher and steer its body and head toward the player. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
@@ -76,16 +90,13 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 extern float vector_length_xy(void *);
-extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int scale_game_frames(int);
 extern s32 D_L16_0015F5C4 ;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
@@ -324,7 +335,6 @@ typedef struct {
 } L16CratePlayer;
 
 extern char *D_L16_001B0930[];
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *spawn_floating_mine(void *, void *) __asm__("FUN_L14_002ffaf8");
 extern char D_L16_001E86A0[], D_L16_001E89D8[], D_L16_001E8A20[], D_L16_001E8A58[], D_L16_001E8AA0[];
 extern char D_L16_001E89A0[], D_L16_001E86D8[], D_L16_001E8A20[], D_L16_001E8A58[], D_L16_001E8AA0[] __asm__("D_L16_001E8AA0");
@@ -332,9 +342,7 @@ extern char D_L16_001E89A0[], D_L16_001E89D8[], D_L16_001E8720[], D_L16_001E8A58
 extern char D_L16_001E89A0[], D_L16_001E89D8[], D_L16_001E8A20[], D_L16_001E8758[], D_L16_001E8AA0[] __asm__("D_L16_001E8AA0");
 extern char D_L16_001E89A0[], D_L16_001E89D8[], D_L16_001E8A20[], D_L16_001E8A58[], D_L16_001E87A0[];
 extern float frame_time ,D_0015EE70;
-extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int debug_print() __asm__("FUN_001e93b0");
-extern int mine_fall(void *,void *) __asm__("FUN_L00_0025c698");
 int advance_bolt_thief_path(struct Moby *moby) __asm__("FUN_L16_002e3fa0");
 
 extern int advance_bolt_thief_path(struct Moby *moby) __asm__("FUN_L16_002e3fa0");
@@ -344,7 +352,6 @@ extern f32 D_L16_00161D98_gp __asm__("D_L16_00161D98") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void set_moby_state_14(void *) __asm__("FUN_L03_002c6c90");
 extern void initialize_moby_path_state(void *) __asm__("FUN_L14_002fe900");
 extern void update_linked_moby_position(void *) __asm__("FUN_L14_002fec28");
@@ -594,7 +601,6 @@ extern float frame_time,
     D_0015EE70_c __asm__("D_0015EE70");
 extern float D_0015EE6C_u,
     D_0015ED70_c2 __asm__("D_0015ED70");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
 extern s32 D_L16_0015F594;
 extern unsigned char D_0013D4E1 NOT_SDA;
@@ -1050,9 +1056,7 @@ typedef struct {
 } Obj;
 
 extern char D_L16_001671C0[];
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float move_chomper_toward_position(void *, void *) __asm__("FUN_L16_002e6428");
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern s32 rand();
 extern void collect_mobies_in_sphere_at_moby_point(void *, int, int, float, float, float, int, int, int) __asm__("FUN_L00_002599e8");
@@ -1388,7 +1392,6 @@ extern int freeze_stats_score_ref_b[] __asm__("D_0015EE6C") MACRO_ADDR;
 extern volatile int D_0015EE6C_p __asm__("D_0015EE6C");
 extern float D_L16_0015F638;
 extern int D_0015EEA4;
-extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern unsigned char D_0013D4DE NOT_SDA;
 extern unsigned char D_0013D507 NOT_SDA;
 extern unsigned char D_0013D408[];
@@ -1668,7 +1671,6 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
 #ifndef
 #endif
 extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 void update_two_region_trigger_latch(char *moby) __asm__("FUN_L16_002e7208");
 
 void update_two_region_trigger_latch(char *moby) {
@@ -1971,7 +1973,6 @@ typedef float W[4] __attribute__((aligned(16)));
 
 extern char paired_joint_trail_source_context[] __asm__("D_L16_0016CC60");
 extern int D_L16_0015F5C4;
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 
 void update_paired_joint_particle_trails(struct Moby *moby) __asm__("FUN_L16_002e7e00");
@@ -2063,7 +2064,6 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 void draw_elevator_rotating_rings(struct Moby *elevator_moby) __asm__("FUN_L16_002e84e8");
 
 extern void draw_elevator_rotating_rings(struct Moby *) __asm__("FUN_L16_002e84e8");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L16_002e7f80");
 void elevator_update(L16PlatformMoby *moby) {
@@ -2322,7 +2322,6 @@ void gadgetron_sign_update(struct Moby *moby) {
 char *find_group_class_010e_moby_in_state_6(int moby_group_index) __asm__("FUN_L16_002e8b08");
 
 char *find_group_class_010e_moby_in_state_6(int idx) __asm__("FUN_L16_002e8b08");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int get_target_reposition_status(void *) __asm__("FUN_L16_002e0e28");
 extern void reposition_moby_with_collision_check(void *, void *) __asm__("FUN_L16_002c44f0");
 extern void request_target_reposition(void *) __asm__("FUN_L16_002e0de0");
@@ -2623,7 +2622,6 @@ typedef struct {
 } L16SingleSphere;
 
 extern void draw_level16_visible_single_reflection_mesh(void) __asm__("FUN_L16_002e9270");
-void enqueue_callback_list_1_u(int arg0, int arg1) __asm__("FUN_001f4600");
 extern L16SingleSphere D_L16_00161F60_bounds[] __asm__("D_L16_00161F80")
     __attribute__((section(".sdata")));
 
@@ -2690,7 +2688,7 @@ void update_level16_single_mesh_render_state(unsigned char *moby) {
         break;
     }
     case SINGLE_MESH_RENDER_QUEUE_CALLBACK:
-        enqueue_callback_list_1_u(draw_level16_visible_single_reflection_mesh, moby);
+        add_draw_callback(draw_level16_visible_single_reflection_mesh, moby);
         break;
     }
 }
@@ -2818,7 +2816,6 @@ typedef struct {
     float x, y, z, radius;
 } L16SingleSphere_2ea128;
 
-void enqueue_callback_list_1_2ea128(int arg0, int arg1) __asm__("FUN_001f4600");
 
 int D_L16_00162008[4] __attribute__((section(".sdata"))) = {148, 75, 45, 0};
 extern float D_L16_001E2DB0[];
@@ -2890,7 +2887,7 @@ void update_level16_three_mesh_bounds_and_callback(unsigned char *moby) {
         break;
     }
     case MESH_RENDER_QUEUE_CALLBACK:
-        enqueue_callback_list_1_2ea128(env_map_a_draw, moby);
+        add_draw_callback(env_map_a_draw, moby);
         break;
     }
 }

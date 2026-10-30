@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/globals.h"
+#include "rnc/rendering/transitions/fade_to_black.h"
 
 typedef struct {
     s32 a, b;
@@ -20,7 +21,6 @@ extern Tab D_00137B80;
 extern H D_L00_0016C860;
 void start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
-void fade_to_black(s32) __asm__("FUN_001f4a58");
 void load_scene_chunks_with_fade(s32 i) __asm__("FUN_L00_002454c8");
 
 void load_scene_chunks_with_fade(s32 i) {

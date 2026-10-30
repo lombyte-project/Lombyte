@@ -2,6 +2,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/ui/hud/get_icon_frame.h"
 
 typedef struct {
     u8 pad_0[0x40];
@@ -30,7 +31,6 @@ extern f32 D_00160294 __attribute__((sda));
 extern s32 SubtractIntegerWithClamp(s32);
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
-extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern s32 vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");

@@ -16,6 +16,17 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/rendering/transitions/fade_to_black.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00204130), where it is exact; names translated to the US level program. */
 
@@ -44,7 +55,6 @@ void clear_jet_camera_mode_latch(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205598), where it is exact; names translated to the US level program. */
 
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 
 /* Resets hero fields 0x220..0x234, 0x22CB, 0x2084 and 0xA94, then calls 00232628 and 002223f8. */
@@ -75,7 +85,6 @@ typedef struct {
 } Rec;
 
 extern Rec item_defs[] __asm__("D_L00_00179AC0");
-extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");
 int hero_idle_sequence(int allow_item_idle_sequence) {
@@ -116,7 +125,6 @@ s32 return_hero_animation_id_unchanged(s32 input_value) __asm__("FUN_L00_002050b
 s32 return_hero_animation_id_unchanged(s32 input_value) {
     return input_value;
 }
-void show_health_hud(void) __asm__("FUN_L00_00234e00");
 /* Lowers hero.health.hp by one (not below 0) and calls 00234e00. */
 void hero_change_health(s32 n) __asm__("FUN_L00_002050c0");
 void hero_change_health(s32 health_decrement) {
@@ -367,7 +375,6 @@ extern u128 hero_extra_manipulator_initial_scales[] __asm__("D_L00_0017C220");
 extern u128 hero_extra_manipulator_initial_translations[] __asm__("D_L00_0017C260");
 extern f32 hero_extra_manipulator_blend_by_phase[] __asm__("D_L00_0017C2A0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 
 /* Pulses the glow colour of the hero's moby (or of the item slot 3 moby2),
    then attaches the four extra manipulators while their timer runs. */
@@ -513,7 +520,6 @@ void update_hero_bolt_exclamation_hud(void) {
     }
 }
 extern void request_grouped_voice(int, char *, int, int, int) __asm__("FUN_L00_0028de68");
-extern void moby_point_position(int, char *, float *) __asm__("FUN_L00_0024f7c8");
 extern void spawn_texture_indexed_rotated_particle(float *, int, float) __asm__("FUN_L00_00274cf8");
 
 void emit_hero_animation_voice_and_ground_particle(int record_group_index, char *joint_index_offset, int enable_record_dispatch) __asm__("FUN_L00_00205f60");
@@ -582,7 +588,6 @@ void dispatch_hero_animation_timed_events(void) {
 }
 #include "qcopy.h"
 typedef float M4_2061f0[16] __attribute__((aligned(16)));
-void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void advance_moby_animation(void *) __asm__("FUN_0020d580");
@@ -639,7 +644,6 @@ extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 extern void FUN_L00_00257024(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0024f7c8(void *, s32, void *);
-extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
 extern void blend_moby_animation_2062b0(void *, s32, s32, s32) __asm__("FUN_L00_00257880");
 extern int FUN_L00_0028dbe8(void *, s32, void *);
 extern void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
@@ -958,7 +962,6 @@ extern G00206cf8 help_records __asm__("D_00141968");
 extern s32 D_L00_0015F5CC_00206cf8 __asm__("D_L00_0015F5CC");
 extern E00206cf8 D_L00_00179AC0_00206cf8[] __asm__("D_L00_00179AC0");
 s32 hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
-s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern u16 D_001418F0 NOT_SDA;
 void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 
@@ -991,7 +994,6 @@ extern int D_0015EEA0 MACRO_ADDR;
 extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0")MACRO_ADDR;
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
 extern unsigned char D_0015EDC0[] MACRO_ADDR;
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
 void scan_hero_input_sequences(void) __asm__("FUN_L00_00206e00");
 
@@ -1080,7 +1082,6 @@ void scan_hero_input_sequences(void) {
         if (*(int *)(r + 0x21D4) >= 16) *(int *)(r + 0x21D4) = 0;
     }
 }
-void fade_to_black(int) __asm__("FUN_001f4a58");
 void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 void hero_update(void) __asm__("FUN_L00_00211670");
 void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
@@ -1397,7 +1398,6 @@ void apply_hero_rotation_oscillation(void) {
                          frame_time * 1.5707963705062866f, frame_time * 2.094395160675049f);
     }
 }
-void gravity_set_z(void *, void *, float) __asm__("FUN_L00_00233b20");
 
 extern float D_L00_001797D8[] NOT_SDA;
 void apply_hero_and_item_scale_sequence(void) {
@@ -1464,7 +1464,6 @@ void update_hero_scalar_pulse(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00208318), where it is exact; names translated to the US level program. */
 
 extern void draw_hero_glow_quads(void) __asm__("FUN_L00_00207d40");
-void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 /* Once (flag at ((char *)&hero)+0x1EB2) queues FUN_L00_00207d40 with the object at +0x2080. */
 void enqueue_hero_glow_draw_callback_once(void) {
@@ -2283,7 +2282,6 @@ void fast_sin_cf(int seed, int limit) {
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) V_209848;
-int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void spawn_debris_chunk(V_209848 *, V_209848 *, int, int) __asm__("FUN_L00_0026f548");
 void emit_hero_periodic_surface_particles(int counter_reset_range, int effect_spawn_counter_threshold) __asm__("FUN_L00_00209848");
 
@@ -2411,7 +2409,6 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
         FUN_L00_0026f548(&start, &effect_vector, color, life);
     }
 }
-float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 void spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
 void FUN_L00_00269958(void *, void *, int, int, int, int, int,
                              int);
@@ -2514,7 +2511,6 @@ s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_rad
 
 extern V collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
 extern char D_L00_0017A680_lui[] __asm__("D_L00_0017A680") NOT_SDA;
-extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 extern void *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 
 void update_hero_collision_ease_target(void) {
@@ -2628,7 +2624,6 @@ extern f32 D_0015EE14 __asm__("D_0015EE14");
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
 extern void set_fourth_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a228");
-extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern f32 interpolate_scalar_linear(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
 
 extern u8 D_0015EDB3 __asm__("D_0015EDB3");
@@ -2979,7 +2974,6 @@ typedef struct {
 
 extern V4_20b5b8 coll_hit_normal[] __asm__("D_L00_00173E80");
 
-extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern s32 probe_hero_ledge_edge(void *, void *) __asm__("FUN_L00_0020c758");
 extern s32 FUN_001efa68_20b5b8(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");

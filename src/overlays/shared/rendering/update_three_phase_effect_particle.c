@@ -9,6 +9,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 typedef struct {
     char p0[8];
@@ -716,7 +718,6 @@ void update_branching_and_fading_effect_particle(char *particle) {
     }
 }
 extern unsigned char *create_part2(int, int) __asm__("FUN_L00_002678c0");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int FUN_001fa6e0_26b230(int, int, float) __asm__("FUN_001fa6e0");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
@@ -861,7 +862,6 @@ void update_spinning_and_fading_effect_particle(unsigned char *particle) {
     }
 }
 unsigned char *FUN_L00_002678b8_26b790(int) __asm__("FUN_L00_002678b8");
-float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 int FUN_001f96f8_26b790(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L00_001B20B4 NOT_SDA;
 unsigned char *spawn_spinning_fade_in_out_effect_particle(void *spawn_origin, int spd, int color, float j, float lo, float hi, float vertical_position_step,
@@ -1025,7 +1025,6 @@ int mine_blend_color(int, int, float) __asm__("FUN_L00_002371e0");
 void FUN_001f9a68_26bca8(void *, void *, float) __asm__("FUN_001f9a68");
 float FUN_001f9af0_26bca8(void *) __asm__("FUN_001f9af0");
 void FUN_001f9bf8_26bca8(void *, void *, float) __asm__("FUN_001f9bf8");
-int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 int FUN_001f96f8_26bca8(int) __asm__("FUN_001f96f8");
 unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, float, int, int, int,
                                        int) __asm__("FUN_L00_0026bb70");
@@ -1339,7 +1338,6 @@ typedef struct {
     V_26c860 v10;
     R_26c860 r;
 } M_26c860;
-void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 void FUN_L00_001ff500_26c860(void *, void *, f32) __asm__("FUN_L00_001ff500");
 f32 compute_transformed_delta_component(void *, void *, void *, s32) __asm__("FUN_L00_0025c230");
 void FUN_L00_00267a08_26c860(void *) __asm__("FUN_L00_00267a08");

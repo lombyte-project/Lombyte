@@ -13,6 +13,13 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
 
 extern union PacketCursor l09_packet __asm__("D_L09_001611C0") MACRO_ADDR;
 extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") MACRO_ADDR;
@@ -360,7 +367,6 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
 
 
 extern char *create_moby(int);
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_airship_part(struct Moby *rotation_source_moby, char *spawn_reference_position, int spawned_moby_class) __asm__("FUN_L09_002c2500");
@@ -1077,13 +1083,11 @@ char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_clas
 }
 extern u8 D_0014C050_edc30[] __asm__("D_0014C050");
 extern float D_L09_00166F40_edc30[] __asm__("D_L09_00166F40");
-extern char *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_001fefc8(u8 *);
 extern void mark_moby_for_removal_cf(struct Moby *, int, int) __asm__("FUN_L00_00257470");
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern void scale_vector_edc30(void *, void *, float) __asm__("FUN_001f9a68");
 extern struct Moby *spawn_tumbling_debris(struct Moby *, Vec4 *, Vec4 *, s32, f32) __asm__("FUN_L09_002ef868");
-extern void cart_burst(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void spawn_explosion(struct Moby *, void *, void *, float, float, int, int, int, float, float, float,
                                    float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
@@ -1280,7 +1284,6 @@ extern char D_L09_00166F40_2ef430[] __asm__("D_L09_00166F40");
 extern float D_0015ED6C_2ef430 __asm__("D_0015ED6C");
 extern float D_0015ED70_2ef430 __asm__("D_0015ED70");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void *spawn_spark_2ef430(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 
@@ -1678,12 +1681,9 @@ void platform_update(Moby *moby)
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00301C38), where it is exact; names translated to the US level program. */
 
 extern int D_0015EEA4_q __asm__("D_0015EEA4");
-extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C2_q[] __asm__("D_0013D4C2");
 extern unsigned char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
 extern unsigned char D_00141968_lui[] __asm__("D_00141968") NOT_SDA;
-extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
-s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
 void update_level09_item_unlock_and_frame_record(struct Moby *moby) __asm__("FUN_L09_00300888");
 

@@ -4,6 +4,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/globals.h"
+#include "rnc/ui/hud/get_icon_frame.h"
 
 typedef struct {
     u8 pad_0[0x20];
@@ -23,7 +24,6 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void font_print_small(s32, s32, u64, char *, s32) __asm__("func_001F65B0");
 extern void font_print_center_small(s32, s32, u64, char *, s32) __asm__("func_001F6B88");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern s32 sprintf(char *, const char *, ...);

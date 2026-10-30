@@ -6,6 +6,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/rendering/level_render_state.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
 
 typedef union {
     u128 quadword;
@@ -155,7 +156,6 @@ extern void noop_callback_k(void *, void *, s32, s32) __asm__("func_001E9440");
 extern void noop_callback_m(ResidentRenderObject *, ResidentRenderObject *) __asm__("func_001E9450");
 extern void update_camera(void) __asm__("func_001EDAA8");
 extern void update_view_context(void) __asm__("func_001F2D98");
-extern void add_draw_callback(void *, ResidentRenderObject *) __asm__("FUN_001f4600");
 extern void enqueue_callback_list_4(void *, ResidentRenderObject *) __asm__("FUN_001f47b8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern f32 multiply_global_scale(f32) __asm__("func_001F96E8");

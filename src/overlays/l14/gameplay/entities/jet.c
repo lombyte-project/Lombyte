@@ -18,6 +18,13 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -60,8 +67,6 @@ void initialize_ribbon_effect_state(u8 *moby) {
     moby_vars[0x1EC / 4] = 0.0f;
 }
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 void draw_ribbon_effect(struct Moby *ribbon_moby) __asm__("FUN_L14_002df458");
 
 void draw_ribbon_effect(struct Moby *) __asm__("FUN_L14_002df458");
@@ -148,7 +153,7 @@ void animate_ribbon_effect_paths(u8 *moby) {
         moby_vars[(i * 4) + (0xA0 / 4)] = sweep_point_index * 0.39f;
         moby_vars[(i * 4) + (0xAC / 4)] = 1.0f;
     }
-    enqueue_callback_list_1(draw_ribbon_effect, moby);
+    add_draw_callback(draw_ribbon_effect, moby);
 }
 
 
@@ -417,8 +422,6 @@ extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_00
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
@@ -785,7 +788,7 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
         shade++;
         i++;
     } while (i < 48);
-    enqueue_callback_list_1(draw_wind_sparks, wind_control_moby);
+    add_draw_callback(draw_wind_sparks, wind_control_moby);
 }
 /* Draws every live spark as a quad that faces the camera, faded by its age. */
 typedef unsigned int u128_m __attribute__((mode(TI)));
@@ -887,7 +890,6 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float FUN_L00_00257c48(float, float);
 extern int FUN_L00_0025d808_mine(void *, float *, int *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
-extern L14MineHit *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern s32 trooper_take_damage(struct Moby *, void *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern void mine_explode(void *, void *, void *, float, float, int, int, int, float, float, float, float,
                          int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -1224,7 +1226,6 @@ extern s16 D_L14_001E0000[40];
 f32 D_L14_001E0050_d530[3][16][4] __asm__("D_L14_001E0050") = {0};
 u16 D_L14_001E0350_d530[3][16] __asm__("D_L14_001E0350") = {0};
 extern int arc_ftoi(float) __asm__("FUN_001fa6d0");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void allocate_voice_for_group_entry(int, int, void *) __asm__("FUN_0022dba0");
 void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spawn_pair_count) __asm__("FUN_L14_002ee6b0");
 
@@ -1361,7 +1362,7 @@ void update_branched_lightning_arc(char *moby) {
         } else {
             D_L14_00161CE0_d530 = 0;
         }
-        enqueue_callback_list_1(draw_branched_lightning_arc, moby);
+        add_draw_callback(draw_branched_lightning_arc, moby);
     }
 }
 #include "sda.h"
@@ -2565,7 +2566,6 @@ extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 void mark_elevator_collected(Level14VendorMoby *m) __asm__("FUN_L14_002ef5a8");
 extern void FUN_L00_00263d40(int, int);
@@ -2715,7 +2715,6 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
 }
 extern void cart_burst(float, float, struct Moby *, void *, int) __asm__("FUN_L00_0025f090");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
 
 extern void initialize_flight_path_state(struct Moby *) __asm__("FUN_L14_002fc890");

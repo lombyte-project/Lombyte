@@ -7,6 +7,8 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/rendering/do_gif_paging.h"
+#include "rnc/rendering/setup_gif_paging.h"
 
 /* Retail 0x002196b8..0x00219d77: draws the level-effect moby lists, then
    projects each enabled menu panel slot to the screen, renders panel
@@ -59,9 +61,7 @@ extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64)
     __asm__("FUN_001f5450");
 extern void restore_moby_class_dists(void) __asm__("FUN_0020d248");
 extern void draw_mobys_clean_up(void) __asm__("FUN_0020d3b0");
-extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
 extern void draw_menu_flashing_panel(PanelRenderSlot *) __asm__("FUN_00223e28");
-extern void do_gif_paging(void) __asm__("FUN_001f4398");
 
 void render_level_effects_and_screen_sprites(void) __asm__("FUN_002196b8");
 

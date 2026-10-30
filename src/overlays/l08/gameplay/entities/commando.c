@@ -23,6 +23,13 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
@@ -41,11 +48,8 @@ extern f32 swarm_path_movement_speed_gp __asm__("D_L08_00161D34") __attribute__(
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8;
 
-extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
-extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern struct Moby *spawn_class_1b3_projectile(void *, struct Moby *, void *, f32, f32) __asm__("FUN_L08_002de3e0");
 extern void spawn_joint_linked_moby_parts(struct Moby *) __asm__("FUN_L08_002e9558");
 extern void process_linked_moby_part_hits(struct Moby *) __asm__("FUN_L08_002e9758");
@@ -394,7 +398,6 @@ extern void scale_rgba_tables(void *, int, void *, float, float, float, float, i
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
 extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
 extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern Pair D_L08_00161E20[] MACRO_ADDR;
 void update_layered_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f1548");
@@ -470,7 +473,6 @@ extern f32 D_L08_0015F580[] MACRO_ADDR;
 extern struct Moby *D_0013F58C NOT_SDA;
 /* Retail loads gp - 0x4C90; GP 0x166C00 places this scalar at 0x161F70. */
 
-extern s32 find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern f32 approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 extern void allocate_voice_for_target_entry_44c0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
@@ -721,7 +723,6 @@ extern float interpolate_sample_ring_data_first(char *, float) __asm__("FUN_L08_
 extern float frame_scale __asm__("D_0015ED60");
 extern int l08_effect_animation_time __asm__("D_L08_0015F3F8");
 extern f32 split_float_fraction(void *, f32) __asm__("FUN_L00_00200228");
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 /* spawn_colored_effect (rendering/00279f00.c) with size before life: the real order
@@ -1182,7 +1183,6 @@ extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void FUN_L00_0025a120(void *);
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 
 /* Watcher update, same routine as batalia_deserter_update with two more states and the joint pose copy. */

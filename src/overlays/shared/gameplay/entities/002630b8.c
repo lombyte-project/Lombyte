@@ -15,6 +15,9 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 
 /* Record suck_get_aim_height returns for a moby: collision size and aim height. */
 typedef struct MobyBound {
@@ -220,7 +223,6 @@ typedef struct {
     u8 padC[0x14];
     EffectTail tail;
 } Effect;
-extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
 extern Effect *spawn_puff(void *, f32, f32, f32, s32, void *, f32, u32)
     __asm__("FUN_L00_0026d000");
 extern u8 D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
@@ -471,7 +473,6 @@ typedef struct {
 extern float frame_time_gp[] __asm__("D_0015ED6C") __attribute__((sda));
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
@@ -542,7 +543,6 @@ extern s32 D_L00_0015F594;
 #include "rnc/overlay/shared/gameplay/entities/002630b8_globals.h"
 extern s32 D_L00_00161E04;
 void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
-void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
 s32 queue_animation_update(s32, s32, void *, void *, void *, s32, s32) __asm__("FUN_001ff308");
 void hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");

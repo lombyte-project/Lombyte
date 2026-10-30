@@ -11,6 +11,8 @@
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
 /* Resets the follow camera to its defaults: springs the orbit and target
@@ -1133,12 +1135,10 @@ extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
 
 extern s32 probe_world_sphere(void *, s32, void *, s32, f32) __asm__("FUN_L00_001f2868");
 s32 test_moby_linked_record_word8(void *) __asm__("FUN_L00_00259830");
-void build_look_at_matrix(void *, void *, void *, f32) __asm__("FUN_00214890");
 extern s32 FUN_L00_002e7520_2e7d20(void *) __asm__("FUN_L00_002e7520");
 f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
 extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 test_follow_camera_point_in_collision_volume(void *) __asm__("FUN_L00_002e4290");
-s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 void make_hit_descriptor(void *, void *, s32, void *, f32) __asm__("FUN_L00_00259888");
 void record_moby_hit(s32, void *) __asm__("FUN_L00_00259a88");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");

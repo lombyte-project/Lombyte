@@ -10,6 +10,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/math/interpolation.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_001FFED0), where it is exact; names translated to the US level program. */
 
@@ -38,7 +42,6 @@ extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 extern void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
 extern void apply_hero_ground_type_effects(void) __asm__("FUN_L15_002044c8");
 extern void update_hero_state_machine(void) __asm__("FUN_L15_0021d040");
@@ -211,7 +214,6 @@ void update_hero_bobbing_and_target_position(void) {
 
 extern int D_L15_0015F5C4;
 extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
-extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
@@ -423,13 +425,11 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
-extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_215e58(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
-extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 
 extern Entry70 l15_hero_auxiliary_countdown_records[] __asm__("D_L15_00179EF0");
 /* Per-frame hero upkeep: tick the hero timers, spawn the respawn marker, track sinking, and set the camera follow target. Clone of FUN_L00_002215c8 without the case-1 camera tuning. */

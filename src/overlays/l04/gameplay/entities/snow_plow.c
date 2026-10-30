@@ -20,6 +20,13 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 
 /* UpdateMoby_584 */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D4960), where it is exact; names translated to the US level program. */
@@ -60,14 +67,10 @@ extern void FUN_L00_001fff28(void *, int, float);
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 
 /* Class-dependent movement, manipulator rotation, hit effects and visibility. */
@@ -468,7 +471,6 @@ hit:
 
 extern int D_L04_0015FFD8; /* no foreign declaration */
 extern short floating_platform_ring_rotation_rate_degrees __asm__("D_L04_0016195C") __attribute__((sda));
-extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 
 void floating_platform_update(char *moby) __asm__("FUN_L04_002cdda0");
 void floating_platform_update(char *moby) {
@@ -724,7 +726,6 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float spring_turn(float, float, void *, float, float, float) __asm__("FUN_L00_00258110");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int leg_walker_update(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern void *memset(void *, int, unsigned int);
@@ -1410,7 +1411,6 @@ void interpolate_moby_and_linked_moby_positions_on_path(char *moby) {
     fast_vec_add(moby + 0x10, weighted_first_point, weighted_second_point);
     qcopy(destination_moby + 0x10, moby + 0x10);
 }
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern float leaf_motion_parameters[6] __asm__("D_L04_001CB940");

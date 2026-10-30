@@ -4,6 +4,7 @@
 #include "rnc/overlay/hud.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/ui/hud/get_icon_frame.h"
 
 /* The level's HUD bank reset, a shorter func_001FF6B8 (src/game/hud.c):
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
@@ -413,7 +414,6 @@ extern float D_L00_0015F76C __attribute__((sda));
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
-extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void FUN_L00_001ff348(void *, void *, void *);
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("FUN_00200080");
@@ -547,7 +547,6 @@ int draw_hud_stars(HudElem *element) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_002377E0), where it is exact; names translated to the US level program. */
 
-extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 
 int draw_uniform_size_hud_stars(HudElem *hud_element) __asm__("FUN_L00_00236e50");

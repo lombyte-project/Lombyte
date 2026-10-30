@@ -11,6 +11,7 @@
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 typedef union {
     u128 q;
     f32 f[4];
@@ -483,7 +484,6 @@ extern char player_camera[] __asm__("D_L00_00166C80");
 extern S6 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
 extern S6 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");

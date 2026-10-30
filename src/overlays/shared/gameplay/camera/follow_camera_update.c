@@ -8,6 +8,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/random.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 extern u8 camera_view[] __asm__("D_L00_00166E10");
 extern u8 D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
@@ -22,7 +23,6 @@ f32 FUN_001f9af0_2e9010(void *) __asm__("FUN_001f9af0");
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
 f32 rope_spring_turn(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_001eb328");
 s32 FUN_001f96f8_2e9010(s32) __asm__("FUN_001f96f8");
-void build_look_at_matrix(void *, void *, void *, f32) __asm__("FUN_00214890");
 
 /* Follow-camera orientation update: rebuilds the basis vectors at p from the
  * target moby, eases pitch/yaw and renormalises. */
@@ -468,7 +468,6 @@ extern float hero_aligned_camera_input_step_limit_gp __asm__("D_L00_00161DD0") _
 void FUN_001f9bf8_c(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 float FUN_001ebd78(float, float, float, float, float, float *);
-void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
 void update_hero_aligned_camera_from_input(u8 *camera_object) __asm__("FUN_L00_002e9f38");
 

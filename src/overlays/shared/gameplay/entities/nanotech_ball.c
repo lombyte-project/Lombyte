@@ -16,6 +16,13 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/state/interpolated_record.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 typedef struct {
     u8 pad[0x20];
     u8 b20;
@@ -151,7 +158,6 @@ extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
 extern float D_L00_00173E68_lui __asm__("D_L00_00173E68") NOT_SDA;
 extern float frame_time_sq __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 void update_nanotech_ball_grounding_and_fall(unsigned char *moby) __asm__("FUN_L00_002d81b8");
 
 void update_nanotech_ball_grounding_and_fall(unsigned char *moby) {
@@ -344,7 +350,6 @@ typedef struct {
     char *e[4];
 } M_002d8850;
 extern u128 D_L00_001E3CA0_002d8850[] __asm__("D_L00_001E3CA0");
-void FUN_00214890_002d8850(void *, void *, void *, float) __asm__("FUN_00214890");
 void FUN_001f9bf8_002d8850(void *, void *, float) __asm__("FUN_001f9bf8");
 void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i) __asm__("FUN_L00_002d8850");
 
@@ -352,7 +357,7 @@ void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i)
     u128 slot_offset;
     M_002d8850 *moby_data = *(M_002d8850 **)(moby + 0x78);
     char *e;
-    FUN_00214890_002d8850(&slot_offset, &D_L00_001E3CA0_002d8850[i], &moby_data->p20, moby_data->p20.f[3]);
+    build_look_at_matrix(&slot_offset, &D_L00_001E3CA0_002d8850[i], &moby_data->p20, moby_data->p20.f[3]);
     e = moby_data->e[i];
     if (e && moby[0x20] == 2)
         FUN_001f9bf8_002d8850(&slot_offset, &slot_offset, *(float *)(e + 0x28));
@@ -364,7 +369,6 @@ extern V4 D_L00_001E3CA0[];
 extern V4 D_L00_001E3D20[];
 extern f32 nanotech_ball_slot_offset_transform_amount_gp __asm__("D_L00_001619F0") __attribute__((sda));
 extern f32 D_L00_00161A14_gp __asm__("D_L00_00161A14") __attribute__((sda));
-void build_look_at_matrix(V4 *, V4 *, V4 *, f32) __asm__("FUN_00214890");
 /* Rebuilds the eight D_L00_001E3CA0 entries with build_look_at_matrix and normalizes them. */
 void update_nanotech_ball_slot_offsets(void) __asm__("FUN_L00_002d8908");
 
@@ -450,9 +454,7 @@ extern int free_effect_particle() __asm__("FUN_L00_00267a08");
 extern unsigned char D_0013F5E0[];
 extern volatile unsigned char nanotech_ball_invulnerability_pickup_enabled __asm__("D_0015EDB6");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void build_look_at_matrix_c(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void enqueue_callback_list_1_alt(void (*)(void), int) __asm__("FUN_001f4600");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -475,14 +477,11 @@ extern void func_L00_001FF4B0_2D9EA0(void *, void *, float) __asm__("FUN_001f9bf
 extern void func_001F9BD8_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void func_001F9BF0_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float func_001F9FA8_2D9EA0(float) __asm__("FUN_001f9de0");
 extern int func_L00_002D9E30_2D9EA0(void *) __asm__("FUN_L00_002d8980");
 extern void func_001F9C30_2D9EA0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void func_002156E0_2D9EA0(void *, void *, float, void *) __asm__("FUN_00214890");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void update_nanotech_ball_slot_offsets(void) __asm__("FUN_L00_002d8908");
-extern void func_001F49B0_2D9EA0(void (*)(void), int) __asm__("FUN_001f4600");
 extern void func_L00_002D9D00_2D9EA0(void *, void *, int) __asm__("FUN_L00_002d8850");
 extern Part *func_L00_002745A8_2D9EA0(void *, int, int) __asm__("FUN_L00_00273708");
 extern void func_L00_002D98C8_2D9EA0(void *) __asm__("FUN_L00_002d8418");
@@ -637,7 +636,7 @@ void nanotech_ball_update(Moby *moby) {
         if (fast_bsphere_check(&slot_rotation_basis_or_cull_position_or_start_tangent, 64.0f) >= 0) {
             int i;
             int lifetime;
-            func_001F49B0_2D9EA0((void (*)(void))draw_nanotech_ball, (int)moby);
+            add_draw_callback((void (*)(void))draw_nanotech_ball, (int)moby);
             if (10.0f < vector_distance_xy(&moby->pos, D_L00_00166DC0)) lifetime = func_001F9850_2D9EA0(5);
             else lifetime = func_001F9850_2D9EA0(40);
             for (i = 0; i < 8; i++) {
@@ -1098,7 +1097,6 @@ extern char D_L00_00166C80[] NOT_SDA;
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_002da250;
-void moby_point_position(void *, s32, f32 *) __asm__("FUN_L00_0024f7c8");
 void compute_suck_cannon_suction_aim_and_origin(u8 *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) __asm__("FUN_L00_002da250");
 
 void compute_suck_cannon_suction_aim_and_origin(u8 *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) {
@@ -1378,7 +1376,6 @@ extern int collision_segment_hits(void *, void *, int, int, int) __asm__("FUN_00
 extern int queue_animation_update(int,int,int,int,int,int,int) __asm__("FUN_001ff308");
 extern s32 D_0015EEA4;
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
-extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_set_state(int,int) __asm__("FUN_L00_002223f8");
 extern void update_hud_counter_cap_and_visibility(void) __asm__("FUN_L00_002377b8");
 extern void hud_draw_gauge_frame(void) __asm__("FUN_L00_00237840");
@@ -2248,7 +2245,6 @@ extern int func_001F9850_2DDEA0(int) __asm__("FUN_001f96f8");
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_002144d8");
 extern void func_002150B0_2DDEA0(void *, void *) __asm__("FUN_00214260");
 extern void func_001FA6C0_2DDEA0(void *, void *) __asm__("FUN_001fa4f8");
-extern void func_L00_00250800_2DDEA0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int func_L00_002DB6C8_2DDEA0(void *, void *) __asm__("FUN_L00_002da218");
 extern void func_001F9BF0_2DDEA0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
@@ -2260,7 +2256,6 @@ extern void func_L00_002DDDE8_2DDEA0(void *, void *, int) __asm__("FUN_L00_002dc
 extern float func_001F9CB8_2DDEA0(void *) __asm__("FUN_001f9af0");
 extern float func_L00_001FF3E0_2DDEA0(void *) __asm__("FUN_L00_001ff430");
 extern void func_001F9C30_2DDEA0(void *, void *, float) __asm__("FUN_001f9a68");
-extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int func_L00_001F2BE8_2DDEA0(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int func_L00_001F10E0_2DDEA0(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
@@ -2331,7 +2326,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             } else {
                 record->f6C = one;
             }
-            func_L00_00250800_2DDEA0(record->owner, 0, &work.v[0]);
+            moby_point_position(record->owner, 0, &work.v[0]);
             half = 0.5f;
             distance = vector_distance_xy(&moby->pos, &work.v[0]);
             moby->scale = ((Cls *)moby->pclass)->f24 * (distance / (record->f64 + record->f64) + half);
@@ -2779,7 +2774,6 @@ extern int collision_line_ddf60(void *, void *, int, int, int) __asm__("FUN_001e
 extern void interpolate_vector(void *,void *,void *,float) __asm__("FUN_L00_0025b6b8");
 extern void FUN_L00_00267a08(void *);
 extern void suck_beam_draw_mesh(void) __asm__("FUN_L00_002dd8e8");
-extern void enqueue_callback_list_1_alt(void (*)(void),int) __asm__("FUN_001f4600");
 extern Particle41 *spawn_puff(void *,float,float,float,int,void *,float,int) __asm__("FUN_L00_0026d000");
 
 void suck_beam_update(void *moby,void *position) {
@@ -2899,7 +2893,7 @@ void suck_beam_update(void *moby,void *position) {
         fast_vec_normalize(&step,&motion,D_L00_00161B84);
     }
     }
-    enqueue_callback_list_1_alt(suck_beam_draw_mesh,(int)moby);
+    add_draw_callback(suck_beam_draw_mesh,(int)moby);
     { int count,sparks;
     count=0; sparks=0;
     for(i=0;i<200;i++) {
@@ -2990,7 +2984,6 @@ void suck_beam_update(void *moby,void *position) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E0490), where it is exact; names translated to the US level program. */
 
-void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 /* When D_L00_001E6008[0] > 0: caps the ten counters at 0x40, lowers each by 4, queues 002dd8e8. */
 void suck_beam_queue_draw(int draw_callback_context) {

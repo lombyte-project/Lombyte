@@ -11,6 +11,11 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 extern int lookup_s16_pair_value(int, int *) __asm__("FUN_L00_002321c0");
 
 /* With both objects at hero +0x1180 and +0x1184 present and the
@@ -59,7 +64,6 @@ typedef struct {
 
 extern SeqEntry D_L00_0017BBD0[];
 extern SeqEntry D_L00_0017BBF0[];
-extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern short D_L00_0015F6B8;
 
 int lookup_hero_slot3_animation_key(int key, int *out) __asm__("FUN_L00_00231db0");
@@ -154,9 +158,6 @@ extern E_231ff8 D_L00_0017BBF0_00231ff8[] __asm__("D_L00_0017BBF0")
 extern E_231ff8 D_L00_0017BBD0_00231ff8[] __asm__("D_L00_0017BBD0")
     __attribute__((section(".data")));
 extern E_231ff8 D_L00_0015F6B8_gp[1] __asm__("D_L00_0015F6B8") __attribute__((sda));
-int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
-int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
-int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_animation_id, int *out_secondary_animation_id) {
     int matching_animation_entry_indices[20];
     E_231ff8 *animation_table;
@@ -1194,7 +1195,6 @@ s32 get_ammo(s32 weapon_index) {
         return 1;
     return weapon_ammo_counts[weapon_index];
 }
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* Stores v, f and n in hero; calls 002223f8(0x65, 1) unless state is 0x65..0x67. */
 void request_hero_target_pose(void *source_position, float f, int state_entry_option) __asm__("FUN_L00_00233ee8");
 
@@ -1593,7 +1593,6 @@ void apply_hero_moby_scale(void *scale_owner_moby) {
 extern u8 D_L00_0017A608[];
 extern u8 D_L00_0017C680[];
 extern u8 D_L00_0015F6A8[];
-void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 void FUN_L00_002092c8(void *, void *, void *, int, void *);
 void configure_moby_from_source_bone4(void *source_moby, char *destination_moby) __asm__("FUN_L00_00234c78");

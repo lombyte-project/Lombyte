@@ -10,6 +10,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
 
 /* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
@@ -112,7 +113,6 @@ extern void begin_dialogue_camera_transition(f32, HoverboardGirlMoby *) __asm__(
 extern void set_race_camera(HoverboardGirlVector *, HoverboardGirlVector *, s32,
                             s32) __asm__("FUN_L00_00216f90");
 extern void jet_game_state(s32, s32) __asm__("FUN_L01_0027a248");
-extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void memcard_save_data(s32, s64) __asm__("FUN_0020b178");
 extern void build_spherical_offset(f32, f32, f32, void *) __asm__("FUN_00214db0");
 extern void update_joint_animation(HoverboardGirlMoby *, HoverboardGirlJoint *, s32, f32,

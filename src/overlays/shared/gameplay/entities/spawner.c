@@ -16,6 +16,9 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 /* pvars of the projectile moby FUN_L09_00307ba8 spawns */
 typedef struct {
@@ -95,7 +98,6 @@ extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
 extern char D_L09_00174000[] __asm__("D_L09_00174000");
 extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026dd20_307d68(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32,
                                     f32, s32, f32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
@@ -268,7 +270,6 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos)
     }
     return result;
 }
-extern char *FUN_L00_0025a420_c(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int,
                               int) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
@@ -282,7 +283,7 @@ void process_spawner_hit_record(unsigned char *moby, char *spawner_vars) {
     int record_processing_status;
     float remaining_value;
 
-    moby_record = FUN_L00_0025a420_c(moby, 0xC30000, 0);
+    moby_record = find_moby_hit(moby, 0xC30000, 0);
     FUN_L00_0025a478_c(moby, moby_record, spawner_vars + 0x20, 0, &record_processing_status, 0, 0, 4);
     if (record_processing_status >= 2) {
         remaining_value = *(float *)(spawner_vars + 0x20) - *(float *)(moby_record + 0x2C);
@@ -325,9 +326,7 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
 }
 extern int activate_effect_l08(void *, void *, float, void *, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern int refresh_spawner_population_and_find_free_slot(int, char *) __asm__("FUN_L09_0030aae0");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void generate_random_scaled_vector2(float *, float) __asm__("FUN_L09_00277758");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_random_offset_to_vector_xyz(float *, float) __asm__("FUN_L00_0025f8e0");
 extern float FUN_L00_0025abf0_30ab80(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
 extern char *spawn_spawner_egg(int, void *, void *, unsigned char, unsigned char) __asm__("FUN_L09_0030b218");

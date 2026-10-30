@@ -13,6 +13,7 @@
 #include "sda.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
@@ -54,7 +55,6 @@ extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
 extern float animation_end(int, int) __asm__("FUN_L04_00241910");
 extern float FUN_L04_001f1978(float);
 extern void transform_scaled_vertex_batch(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
-extern void build_moby_bone_transform(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
 extern void attach_manipulator(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
 
 void initialize_leg_rig(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_002923b8");
@@ -275,7 +275,6 @@ int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
     moby->pos.z = moby->pos.z + dz;
     return excessive_tilt_flags;
 }
-extern void build_moby_bone_transform(struct Moby *, int, float *) __asm__("FUN_0020cca8");
 extern float rig_turn_2d48(float, float, float *, float, float, float) __asm__("FUN_L00_00258110");
 extern void axis_rotation_2d48(float *, int, float) __asm__("FUN_L00_001fff28");
 

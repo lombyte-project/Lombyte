@@ -2,8 +2,8 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
 
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 
 

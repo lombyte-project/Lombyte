@@ -14,8 +14,12 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
 
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_starfighter_tractor_beam(struct Moby *moby) __asm__("FUN_L13_002ea8c8");
@@ -100,7 +104,6 @@ void draw_starfighter_tractor_beam(struct Moby *moby) {
 
 extern char D_0013E533[];
 extern int FUN_L00_001fefc8(void *);
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int queue_starfighter_voice_line(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 extern unsigned char *fire_class_53_projectile(char *, char *) __asm__("FUN_L13_002ea6b8");
 extern void fire_starfighter_homing_rocket(void *, void *) __asm__("FUN_L13_002ea540");
@@ -467,7 +470,6 @@ extern void FUN_L00_00258278(void *moby, float *vel, float target, float k, floa
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void emit_gated_moby_joint_effects(void *, void *) __asm__("FUN_L13_002e8920");
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void update_moby_joint_attachments(void *, void *) __asm__("FUN_L13_002e8d28");
 extern void update_moby_spring_steering_and_banking(void *, void *, float, float) __asm__("FUN_L13_002e9018");
 extern void detach_moby_joint_attachment(void *, void *, int) __asm__("FUN_L13_002e9680");
@@ -475,7 +477,6 @@ extern void process_moby_attachment_damage(void *, void *) __asm__("FUN_L13_002e
 extern void draw_starfighter_tractor_beam();
 extern void update_qwarks_starfighter_attack_commands(void *, void *) __asm__("FUN_L13_002eac00");
 extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L06_00249738();
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
@@ -1361,7 +1362,6 @@ void purple_ship_update(Level13VendorMoby *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4C10), where it is exact; names translated to the US level program. */
 
 extern int help_request_state[] __asm__("D_L13_00179710");
-extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int scale_game_frames(int);
 extern unsigned char menu_item_enabled_115[] __asm__("D_0013D407");
 extern char D_00141968[];

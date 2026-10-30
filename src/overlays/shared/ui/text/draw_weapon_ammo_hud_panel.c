@@ -8,13 +8,13 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/ui/hud/get_icon_frame.h"
 
 /* Draws the weapon HUD tile: three-part frame, weapon icon and ammo text with shadow, faded by the slide-in timers. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B140), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0015F7C8[];
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern s32 D_L00_0015F91C_gp __asm__("D_L00_0015F91C") __attribute__((sda));
 extern s32 D_L00_0015F920_gp __asm__("D_L00_0015F920") __attribute__((sda));

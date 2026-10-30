@@ -8,6 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "sda.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 typedef struct {
     unsigned char pad0[0x10];
@@ -74,7 +75,6 @@ typedef float V_2e8bb8[4] __attribute__((aligned(16)));
 extern unsigned char D_L00_00166E10_2e8bb8[] __asm__("D_L00_00166E10")
     __attribute__((section(".data")));
 extern float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
-extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 
 void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) __asm__("FUN_L00_002e8bb8");
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_turn_and_pitch_globals.h"

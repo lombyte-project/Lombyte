@@ -14,6 +14,7 @@
 #include "rnc/math/random.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
 
@@ -328,7 +329,6 @@ extern int D_L00_001C3E98[] NOT_SDA;
 extern int D_00141408 NOT_SDA;
 extern int D_00141410 NOT_SDA;
 extern int D_00141414 NOT_SDA;
-extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 
 extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 void grant_inventory_item(int id, int flag) __asm__("FUN_L00_00260860");

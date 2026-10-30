@@ -16,6 +16,10 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
@@ -87,15 +91,11 @@ extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/hoverboard_ring_globals.h"
 extern f32 debris_axis_launch_speed_gp __asm__("D_L05_00161FD0") __attribute__((sda));
 extern f32 debris_upward_launch_speed_gp __asm__("D_L05_00161FD4") __attribute__((sda));
-extern void add_draw_callback(void (*)(char *), struct Moby *) __asm__("FUN_001f4600");
-extern char *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern struct Moby *spawn_debris_c8e0(f32, struct Moby *, s32, void *, void *, s32, s32, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void spawn_proximity_gated_bolts(struct Moby *) __asm__("FUN_L01_002787a0");
-extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void spawn_trail_c8e0(void *, s32, f32, f32, s32, s32, s32, void *, f32) __asm__("FUN_L00_00272060");
 extern struct Spark_c8e0 *spawn_puff(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) __asm__("FUN_L05_0031d160");
 
 extern char *spawn_moby_class_5ea_from_source(unsigned char *) __asm__("FUN_L05_0031d160");
@@ -568,7 +568,6 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     camera_to_reset->unk7E = 0;
 }
 
-extern void build_look_at_matrix(void *out, void *v, void *axis, f32 ang) __asm__("FUN_00214890");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float FUN_001ebd78(void *, float, float, float, float, float);
 

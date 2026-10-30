@@ -7,6 +7,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
 
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
@@ -21,7 +22,6 @@ extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void draw_light_flare() __asm__("func_0022DF40");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void update_moby_proximity_interaction(unsigned char *moby) __asm__("FUN_L00_0028e180");

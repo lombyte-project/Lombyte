@@ -12,6 +12,11 @@
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/rendering/effects/spawn_spark.h"
 typedef struct {
     Vec4f vel;
     s32 timer;
@@ -30,7 +35,6 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern u8 *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");
-extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 
 /* Shard debris update: drifts along its velocity, sheds particle trails and expires when its timer runs out. */
 void update_shard_debris(struct Moby *moby) __asm__("FUN_L02_002ebf20");
@@ -134,8 +138,6 @@ typedef struct {
 
 extern Entry_L02_0017A140 D_L02_0017A0C0[];
 
-extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern unsigned char D_0014C050[][16];
 extern unsigned char invert52[4] __asm__("D_0015EDDC");
@@ -146,7 +148,6 @@ extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern unsigned short D_001417A2 NOT_SDA;
 extern unsigned short D_00141888 NOT_SDA;
 extern unsigned short D_001418E8 NOT_SDA;
-extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 extern char D_00141968[];
 extern s32 D_0014EE90[];
 
@@ -357,8 +358,6 @@ extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 /* fast_vec_normalize (out = in scaled to length s), with the float declared first (same registers): the scale is then
  * evaluated before the vector addresses, as in retail. */
 extern void fast_vec_normalize(f32 s, void *out, void *in) __asm__("FUN_001f9bf8");
-extern void random_vector(void *out, f32 a, f32 b) __asm__("FUN_L00_00257d78");
-extern char *spawn_spark(void *pos, void *vel, void *acc, s32, s32, s32, s32, s32, s32) __asm__("FUN_00218888");
 #include "rnc/overlay/l02/gameplay/entities/constructorbot_data/update_smoke_vent_8.h"
 extern s32 alternating_smoke_puff_second_timing_base_gp __asm__("D_L02_0016205C") __attribute__((sda));
 extern s32 alternating_smoke_puff_third_timing_base_gp __asm__("D_L02_00162060") __attribute__((sda));

@@ -13,11 +13,14 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
 
 extern struct UsageStat help_records[] __asm__("D_00141968");
 extern char *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
 extern u8 level06_help_hint_variant_selector[] __asm__("D_0013D4CE");
-extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 
 /* Level 6 help hints: shows the help messages for the area and records how often and when each was due. */
@@ -103,14 +106,12 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) SparkVector;
 typedef struct SparkData { int f0; int f4; char pad8[0x18]; int f20; int f24; int f28; } SparkData;
 
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 
 
 
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 #include "rnc/overlay/l06/gameplay/vendor/update_level06_help_hints_globals.h"
 #include "rnc/overlay/l06/gameplay/vendor/update_level06_help_hints_globals.h"
 extern float spark_burst_vector_scale_variation_gp __asm__("D_L06_001622FC") __attribute__((sda));
@@ -319,7 +320,6 @@ typedef struct {
     int f90;
 } Obj;
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *create_moby(int);
 extern float D_L06_0015F580[] MACRO_ADDR;
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");

@@ -10,6 +10,16 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_move_state_velocity.h"
+#include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
 
 /* Steps two floats of arg toward a target and clamps them to [-1, 1]. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00237B00), where it is exact; names translated to the US level program. */
@@ -83,10 +93,7 @@ extern int D_0015ED94;
 extern ItemDef D_L05_00179F20[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int hero_is_in_special_state() __asm__("FUN_L00_0020d568");
-extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
-extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
 s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 void set_hero_condition_animation_timer_for_item(int id) __asm__("FUN_L00_0020fd80");
@@ -415,7 +422,6 @@ extern CollisionHit D_L05_00174240 NOT_SDA;
 extern u8 D_L05_00174260[] NOT_SDA;
 extern u8 D_L05_0017AB20[] NOT_SDA;
 extern int probe_hero_forward_collision(float, float, float *) __asm__("FUN_L00_0020a240");
-extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, int) __asm__("FUN_L00_001f0d60");
@@ -487,7 +493,6 @@ void update_hero_movement_and_collision_probes(void) {
 
 extern float D_L05_00174268 NOT_SDA;
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void hero_get_collision_ray_endpoints(void *, void *, int, float, float) __asm__("FUN_L00_002126b8");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
@@ -608,20 +613,17 @@ typedef struct {
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84; /* no foreign declaration */
 extern int FUN_L00_001fefc8(void *);
-extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d498(int);
 extern int can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern unsigned short D_00141920[] NOT_SDA;
 extern unsigned short D_00141D80[] NOT_SDA;
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 extern void FUN_L05_0024cee8(int, int);
 extern void create_class_5c3_moby(void *, void *, void *, float, float) __asm__("FUN_L05_002d4168");
@@ -1036,7 +1038,6 @@ extern char pad_held[] __asm__("D_0013CAE0");
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 
 void update_hero_hoverboard_trick_animations(void) __asm__("FUN_L05_00253850");
@@ -1394,8 +1395,6 @@ extern int freeze_stats_score_ref_a_macro[2] __asm__("D_0015EE68") MACRO_ADDR;
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
-extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void mode_freeze_init(int, void *) __asm__("FUN_001fbab8");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void update_resource_counter(void) __asm__("FUN_001ff768");

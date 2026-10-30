@@ -3,6 +3,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/globals.h"
+#include "rnc/rendering/transitions/fade_to_black.h"
 
 void initialize_level_runtime(void) __asm__("FUN_00230f60");
 
@@ -119,7 +120,6 @@ extern void update_view_context(void) __asm__("func_001F2D98");
 extern void vu1_init_chain(void) __asm__("FUN_002335d0");
 extern s32 submit_audio_stream_io_request(void *buf, u32 lsn, u32 sectors) __asm__("FUN_00216728");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 extern s32 sceCdSync(s32);
 extern void FlushCache(s32);
 extern s32 decompress_wad(void *, void *) __asm__("func_0020B618");

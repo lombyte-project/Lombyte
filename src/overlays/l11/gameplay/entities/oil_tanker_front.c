@@ -21,6 +21,14 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/rendering/effects/spawn_spark.h"
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
@@ -83,7 +91,6 @@ struct L11HitInfo {
     struct Moby *moby;  /* 0x20: the moby that hit */
 };
 
-extern struct L11HitInfo *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 trooper_take_damage(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void spawn_color_swapped_explosion_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f3e8");
 extern s32 is_moby_in_state_five(void *) __asm__("FUN_L11_0030a830");
@@ -528,7 +535,6 @@ struct L11ChainVars {
 };
 
 extern float oil_tanker_path_progress_step_gp __asm__("D_L11_00162320") __attribute__((sda));
-extern s32 voice_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 void update_oil_tanker_front_path_pose(struct Moby *moby) __asm__("FUN_L11_00317678");
 
@@ -753,7 +759,6 @@ void update_oil_tanker_link_path_poses(struct Moby *moby) {
 extern char D_00141C18[];
 extern float D_L11_0015F580[] MACRO_ADDR;
 extern float oil_tanker_head_fragment_velocity_scale_gp __asm__("D_L11_00162330") __attribute__((sda));
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
 void start_oil_tanker_link_destruction(struct Moby *link_moby) __asm__("FUN_L11_00318488");
@@ -892,7 +897,6 @@ extern char oil_tanker_link_effect_scale_range_start_gp[4] __asm__("D_L11_001623
 extern char oil_tanker_link_effect_scale_range_end_gp[4] __asm__("D_L11_00162364") __attribute__((sda));
 extern char oil_tanker_link_effect_random_motion_radius_scale_gp[4] __asm__("D_L11_00162368") __attribute__((sda));
 extern char oil_tanker_link_fragment_velocity_scale_gp[4] __asm__("D_L11_0016236C") __attribute__((sda));
-extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void transform_vector_by_basis(void *, void *, void *);
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
@@ -1082,7 +1086,6 @@ void set_moby_state_two_data_and_timer(struct Moby *moby, void *movement_step) {
 /* Builds a few direction vectors from a moby's axes and calls the 0x219780 spawner. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A348), where it is exact; names translated to the US level program. */
 
-extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 extern short moby_radial_spark_initial_word_gp __asm__("D_L11_0016238C") __attribute__((sda));
 extern short moby_radial_spark_second_word_gp __asm__("D_L11_00162390") __attribute__((sda));
@@ -1196,7 +1199,6 @@ extern char blarg_ship_negative_y_local_shot_offset[] __asm__("D_L11_001F14C0");
 extern float D_L11_0015F580[];
 extern float D_L11_001677C0_c[] __asm__("D_L11_001677C0");
 extern float D_L11_001677D0[];
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern int level_frame __asm__("D_L11_0015F5CC");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_0025f730(void *a, float x);
@@ -1486,7 +1488,6 @@ char *activate_listed_blarg_ship(int list) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
 
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 
 void update_moby_list_empty_dialogue_trigger(struct Moby *moby) __asm__("FUN_L11_0031aa80");
@@ -1611,7 +1612,6 @@ char *spawn_class_5f4_moby_with_random_rotation(void *position, void *vector, vo
 /* Bursts n1 sparks and n2 smoke puffs at the moby, the puffs sitting on the ground height. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C2D8), where it is exact; names translated to the US level program. */
 
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern char bubble_surface_effect_color_range_start_gp[4] __asm__("D_L11_00162420") __attribute__((sda));
 extern char bubble_surface_effect_color_range_end_gp[4] __asm__("D_L11_00162424") __attribute__((sda));
 extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
@@ -1786,7 +1786,6 @@ extern void scale_rgba_tables(void *, int, void *, float, float, float, float, i
 extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
 extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
 extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern unsigned char l11_layered_effect_texture_29_distance_fade_alpha __asm__("D_L11_00162590");
 void update_level11_layered_effect_and_queue_draw(struct Moby *moby) __asm__("FUN_L11_0031e2f0");

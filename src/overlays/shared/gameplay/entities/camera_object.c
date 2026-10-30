@@ -11,6 +11,14 @@
 #include "rnc/rendering/debug/debug_menu.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_move_state_velocity.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
 
 /* per-frame level ambience (wind/sway) state machine: picks a random target, then eases toward it */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A5B20), where it is exact; names translated to the US level program. */
@@ -525,7 +533,6 @@ extern s32 D_L00_0015F5CC_2a57a8 __asm__("D_L00_0015F5CC");
 void attach_manipulator(M_2a57a8 *, s32, void *) __asm__("FUN_0020cb10");
 void blend_moby_animation_u(P_2a57a8 *, s32, s32, s32) __asm__("FUN_00212f90");
 void FUN_L00_002a5040_2a57a8(void) __asm__("FUN_L00_002a5040");
-void add_draw_callback(void *, P_2a57a8 *) __asm__("FUN_001f4600");
 void FUN_L00_001fff28_2a57a8(void *, s32, f32) __asm__("FUN_L00_001fff28");
 void upd_a(M_2a57a8 *) __asm__("FUN_L00_00250df8");
 s32 try_set_help_message(s32, s32) __asm__("FUN_00215130");
@@ -1037,7 +1044,6 @@ extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");      
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");          /* update */
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");          /* draw */
 extern void queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
-extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 /* spawns a sparkle particle */
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
                             void *vel, f32 f2);
@@ -1278,7 +1284,6 @@ typedef struct {
 } BoltVars_u;
 
 extern void *D_001413D0 NOT_SDA;
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");       /* sets the moby colour */
 extern void FUN_L00_001ff500(void *, void *, float);
 
@@ -1580,7 +1585,6 @@ int should_trigger_wrench_hit_reaction(void) {
     return 0;
 }
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void emit_2a7e20(float *, int, int, int, int, void *, float, float,
                         float) __asm__("FUN_L00_00272060");
 
@@ -1614,10 +1618,8 @@ typedef union {
 } V2a8028;
 extern V2a8028 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern f32 D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
-extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void spawn_two_point_effect_particle(void *, void *) __asm__("FUN_L00_0026c6e8");
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void spawn_burst(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L00_002a7e20_c(void *, s32) __asm__("FUN_L00_002a7e20");
 void spawn_wrench_impact_effects(u8 *wrench_moby) __asm__("FUN_L00_002a8028");
@@ -1776,17 +1778,11 @@ extern int FUN_001efa68(void*,void*,int,int,int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
-extern int allocate_hero_voice_for_entry(int,int) __asm__("FUN_L00_00216de8");
-extern int hero_set_state(int,int) __asm__("FUN_L00_002223f8");
 extern int sweep_hit_segment(void*,void*,void*,void*,void*,void*,int) __asm__("FUN_L00_00259d08");
 extern int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char*) __asm__("FUN_L00_0025e368");
-extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void hero_set_attack_ticks(int) __asm__("FUN_L00_00232640");
 extern void offset_hero_position_against_gravity(float*,float*,float) __asm__("FUN_L00_002336e8");
-extern void moby_point_position(void*,int,void*) __asm__("FUN_L00_0024f7c8");
-extern void make_hit_descriptor(void*,void*,int,float,void*) __asm__("FUN_L00_00259888");
-extern void spawn_nearby_effect(void*,int,int,void*,void*,float) __asm__("FUN_L00_00259bc8");
 extern void interpolate_vector(void*,void*,void*,float) __asm__("FUN_L00_0025b6b8");
 extern void compose_target_euler_rotation(char*,float,float,float) __asm__("FUN_L00_00262480");
 extern void update_moby_transform_history(void*,int) __asm__("FUN_L00_00262608");
@@ -1794,7 +1790,6 @@ extern void clear_moby_transform_history(char*) __asm__("FUN_L00_00262840");
 extern void FUN_L00_002a7780_cb(void) __asm__("FUN_L00_002a7780");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
-extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
 void FUN_L00_002a7c70_c(void *m) __asm__("FUN_L00_002a7c70");
@@ -1852,7 +1847,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
                 wrench_vars->aim_hit=player_state; qcopy(wrench_vars->target,collision_hit.position);
             }
         }
-        enqueue_callback_list_1_alt(FUN_L00_002a7780_cb,wrench_moby);
+        add_draw_callback(FUN_L00_002a7780_cb,wrench_moby);
         anim=wrench_moby->current_animation;
         if ((unsigned char)anim!=0) {
             if ((unsigned char)anim==14) {
@@ -2578,7 +2573,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
             if (FUN_L00_002603d0_u(D_L00_00173E58_c[0]) == 0) return 0;
         }
         if (mode != 2 || D_L00_00173E58_c[0] == 0 || FUN_L00_002603d0_u(D_L00_00173E58_c[0]) == 0) {
-            enqueue_callback_list_1_alt(FUN_L00_002a9c50_c, moby);
+            add_draw_callback(FUN_L00_002a9c50_c, moby);
         }
         {
             char *camera_position = (char *)&D_L00_00166DC0;

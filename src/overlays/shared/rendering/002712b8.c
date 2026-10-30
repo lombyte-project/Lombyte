@@ -15,6 +15,9 @@
 #include "rnc/math/random.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L00_001B2130 NOT_SDA;
@@ -516,7 +519,6 @@ typedef struct {
 } P_2725d8;
 extern u8 *D_L00_001B215C NOT_SDA;
 P_2725d8 *FUN_L00_002678b8_c2(s32) __asm__("FUN_L00_002678b8");
-void moby_point_position(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
 P_2725d8 *spawn_moby_point_attached_particle(u8 *owner, u8 *attachment_point_selector, s32 color, s32 initial_size_bits, f32 primary_position_w, f32 secondary_position_w) __asm__("FUN_L00_002725d8");
 
 P_2725d8 *spawn_moby_point_attached_particle(u8 *owner, u8 *attachment_point_selector, s32 color, s32 initial_size_bits, f32 primary_position_w, f32 secondary_position_w) {
@@ -1392,7 +1394,6 @@ typedef struct {
     float unk8;
     float unkC;
 } S_274818;
-extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 
 void update_randomized_moby_point_attached_particle(char *particle) __asm__("FUN_L00_00274818");
 
@@ -1420,7 +1421,6 @@ void update_randomized_moby_point_attached_particle(char *particle) {
     *(float *)(particle + 0x1C) = randomized_primary_position_w;
     *(float *)(particle + 0x2C) = save;
 }
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 extern unsigned char *D_L00_001B2194 NOT_SDA;
 unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(u128 *a, u128 *b, int c, int d) __asm__("FUN_L00_00274948");
@@ -1451,7 +1451,6 @@ unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(u128 *position
     }
     return particle;
 }
-f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 void update_mode_controlled_rotating_alpha_fade_particle(u8 *particle) __asm__("FUN_L00_00274a70");
 
 void update_mode_controlled_rotating_alpha_fade_particle(u8 *particle) {

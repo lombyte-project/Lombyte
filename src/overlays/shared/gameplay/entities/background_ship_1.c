@@ -11,6 +11,14 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/rendering/effects/spawn_spark.h"
 
 /* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
@@ -45,8 +53,6 @@ void draw_background_ship_1_joint_billboards(char *self) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED828), where it is exact; names translated to the US level program. */
 
 extern int D_L02_0015F5CC;
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
 void prepare_background_ship_1_joint_billboards(char *moby) __asm__("FUN_L02_002ec3f0");
 
@@ -89,14 +95,12 @@ void prepare_background_ship_1_joint_billboards(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED8F0), where it is exact; names translated to the US level program. */
 
 extern char *D_L02_001B0AB0[];
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char background_ship_1_missing_path_message[] __asm__("D_L02_001FAD60");
 extern char background_ship_1_empty_path_message[] __asm__("D_L02_001FAD80");
 #include "rnc/overlay/shared/gameplay/entities/background_ship_1_globals.h"
 #include "rnc/overlay/shared/gameplay/entities/background_ship_1_globals.h"
 extern int debug_print() __asm__("FUN_001e93b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern float D_0015ED60;
 extern float D_L02_0015F580;
 extern float background_ship_1_path_travel_speed_gp __asm__("D_L02_00161F64") __attribute__((sda));
@@ -104,11 +108,9 @@ extern float background_ship_1_color_phase_rate_degrees_gp __asm__("D_L02_00161F
 extern short background_ship_1_color_tween_start_gp __asm__("D_L02_00161F74") __attribute__((sda));
 extern short background_ship_1_color_tween_end_gp __asm__("D_L02_00161F78") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void spawn_background_ship_1_joint_sparks(char *moby, void *previous_position) __asm__("FUN_L02_002eca30");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
-s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
 
 void background_ship_1_update(char *moby) __asm__("FUN_L02_002ec4b8");
@@ -252,7 +254,6 @@ void background_ship_1_update(char *moby) {
 /* Spawns three particles around a moby with randomized direction, speed and colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002EDE68), where it is exact; names translated to the US level program. */
 
-extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern short background_ship_1_first_spark_position_delta_scale_gp __asm__("D_L02_00161F84") __attribute__((sda));
 extern short background_ship_1_second_spark_position_delta_scale_gp __asm__("D_L02_00161F88") __attribute__((sda));
@@ -269,7 +270,6 @@ extern short background_ship_1_first_spark_color_tween_start_gp __asm__("D_L02_0
 extern short background_ship_1_first_spark_color_tween_end_gp __asm__("D_L02_00161FB4") __attribute__((sda));
 extern short background_ship_1_second_spark_color_tween_start_gp __asm__("D_L02_00161FB8") __attribute__((sda));
 extern short background_ship_1_second_spark_color_tween_end_gp __asm__("D_L02_00161FBC") __attribute__((sda));
-extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
 void spawn_background_ship_1_joint_sparks(char *moby, void *previous_position) {
     float first_spark_vector[4], second_spark_vector[4], position_delta[4], random_offset[4], emission_position[4];

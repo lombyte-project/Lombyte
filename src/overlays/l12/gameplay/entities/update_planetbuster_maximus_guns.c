@@ -20,6 +20,12 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 typedef struct Moby Moby;
 
@@ -49,7 +55,6 @@ typedef struct {
     short h9E;
 } Gun;
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 extern char D_L12_00167240[];
 extern float frame_scale_sq_macro __asm__("D_0015ED64")MACRO_ADDR;
@@ -65,10 +70,7 @@ extern int D_L12_00161F34 __attribute__((sda));
 extern int planetbuster_maximus_gun_part_slots[] __asm__("D_L12_001FB670");
 extern int D_L12_001FB688[];
 extern int FUN_L00_001fefc8(void *);
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void *spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
@@ -344,7 +346,6 @@ void update_planetbuster_maximus_guns(char *moby) {
         moby[0xBC] = 0;
     }
 }
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
 
 void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) {
@@ -951,8 +952,6 @@ void update_homing_mine_spawner_target(struct Moby *spawner) {
 
 extern int check_scaled_vector_bsphere(void *, float) __asm__("FUN_L01_00275690");
 extern int FUN_0022da68(int, int, void *);
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 void draw_hoven_jittered_quad_layers(struct Moby *moby) __asm__("FUN_L12_00308350");
 
 extern void draw_hoven_jittered_quad_layers(struct Moby *) __asm__("FUN_L12_00308350");

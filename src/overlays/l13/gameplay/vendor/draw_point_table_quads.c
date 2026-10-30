@@ -9,6 +9,7 @@
 #include "rnc/math/random.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/rendering/effects/spawn_spark.h"
 
 /* GS quad packet for draw_quad_packet: four corners, their colours and
    texture coordinates, then the giftag and register words. */
@@ -114,7 +115,6 @@ void draw_point_table_quads(struct Moby *moby) {
 
 /* Spawns a burst of effects for each pair of ready entries in the moby's table. */
 
-extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 int D_L13_00161EB0 = 0x800040ff;
 int D_L13_00161EB4 = 0x4000cc80;

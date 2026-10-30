@@ -6,12 +6,12 @@
 
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 
 /* Allocates and fills a particle-process record attached to a moby. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/partupd_002811B0.c: func_L13_002811B0), where it is exact; names translated to the US level program. */
 
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 unsigned char *D_L13_001B2490 NOT_SDA = 0;
 unsigned char *create_moby_joint_particle(char *moby, unsigned char joint_index, int b, int c, unsigned char d, float x,

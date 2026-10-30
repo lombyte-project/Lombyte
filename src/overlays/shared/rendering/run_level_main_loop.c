@@ -15,6 +15,9 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/rendering/do_gif_paging.h"
+#include "rnc/rendering/setup_gif_paging.h"
+#include "rnc/ui/hud/get_icon_frame.h"
 
 /* Level main loop (shared by every level): clears the level's work area, sets up the level and counts the visit
    and play time of the planet, then runs one frame per pass, dispatching on the game mode, until the level asks to
@@ -75,12 +78,9 @@ extern void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 extern void music_stop(void) __asm__("FUN_00215ee8");
 extern void memcard_update_state(void) __asm__("FUN_002093d8");
 extern void run_state_handler(void) __asm__("FUN_00208840");
-extern void setup_gif_paging(int) __asm__("FUN_001f4280");
-extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 extern long get_frame_texture(int) __asm__("FUN_001ffa10");
 extern void draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
-extern void do_gif_paging(void) __asm__("FUN_001f4398");
 extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
 extern void reset_gs_registers_pr(void) __asm__("FUN_001f3958");
 extern void do_space_transition(void) __asm__("FUN_00231ff0");

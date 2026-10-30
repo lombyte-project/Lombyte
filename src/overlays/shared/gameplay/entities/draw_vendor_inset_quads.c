@@ -10,6 +10,8 @@
 #include "qcopy.h"
 #include "rnc/overlay/level_globals.h"
 #include "sda.h"
+#include "rnc/rendering/do_gif_paging.h"
+#include "rnc/rendering/setup_gif_paging.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A0C20), where it is exact; names translated to the US level program. */
 
@@ -289,7 +291,6 @@ extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_
 extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void append_draw_buffer_upload_packets(s32, u32, u32) __asm__("FUN_L00_002a0fc8");
-extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
 extern void reset_gs_registers(void) __asm__("FUN_001f3868");
 extern void draw_mobys_setup(void) __asm__("FUN_0020d278");
 extern void init_moby_class_dists(void) __asm__("FUN_0020d1f0");
@@ -300,7 +301,6 @@ extern void render_vendor_capture_pass_sequence(s32) __asm__("FUN_00239780");
 extern void draw_vendor_purchase_panel(void *) __asm__("FUN_L00_0029fcd0");
 extern void FUN_00233980(s32, s64);
 extern void update_hud(void) __asm__("FUN_001ff780");
-extern void do_gif_paging(void) __asm__("FUN_001f4398");
 extern void restore_moby_class_dists(void) __asm__("FUN_0020d248");
 extern void draw_mobys_clean_up(void) __asm__("FUN_0020d3b0");
 extern void patch_moby_gifs(void) __asm__("FUN_0020cef8");

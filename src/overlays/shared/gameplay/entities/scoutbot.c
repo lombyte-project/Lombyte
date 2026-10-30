@@ -18,6 +18,15 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 
 /* Scoutbot update: hovers at its post, flies to its target and back, calls reinforcements, shoots, dies. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D3DF8), where it is exact; names translated to the US level program. */
@@ -69,10 +78,7 @@ extern int FUN_L00_0024f7c8();
 extern int FUN_L00_002dc9f0();
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern short D_L08_00161888 __attribute__((sda));
-extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_0025a120(char *o);
@@ -89,7 +95,6 @@ extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214
 extern int FUN_L00_002dc9f0(void *, void *);
 extern void explode_3DF8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int colorlerp_3DF8(int, int, float) __asm__("FUN_001fa6e0");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_target_beam() __asm__("FUN_L08_002d3878");
 extern void draw_scoutbot_glow_quad() __asm__("FUN_L08_002d4108");
 extern char hero_pos_3DF8[] __asm__("D_L08_001675C0");
@@ -310,7 +315,6 @@ void scoutbot_update(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
 extern char *D_L08_001B0CB0[];
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L00_0025ff38();
 extern void FUN_L00_00257470(void *, int, int);
@@ -601,7 +605,6 @@ void draw_scoutbot_glow_quad(char *moby) {
 }
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern float FUN_L08_00211a20(float);
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
@@ -1102,11 +1105,8 @@ extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00259888();
 extern s32 rand(void);
 extern void DebugPrint(char *, ...);
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
 int FUN_L00_00258830(char *m, char *v, int flags, float a, float b, float c);
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
-int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 int select_point_index_by_distance(void *arg0, void *arg1, float target) __asm__("FUN_L01_0028b510");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void FUN_L00_0025f730(void *a, float x);
@@ -1134,9 +1134,7 @@ extern void FUN_L00_00259028_c(void *, void *, void *, void *) __asm__("FUN_L00_
 extern int ray302618(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void FUN_L00_0025f730(void *, float);
 extern void FUN_L00_00258830_c(void *, void *, float, float, float, int) __asm__("FUN_L00_00258830");
-extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int damage302618(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern void *FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 
 extern char paratrooper_invalid_wake_path_format[] __asm__("D_L08_001FC600");
@@ -1443,7 +1441,6 @@ delete_moby:
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00303998), where it is exact; names translated to the US level program. */
-extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, void *, float *, float *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");

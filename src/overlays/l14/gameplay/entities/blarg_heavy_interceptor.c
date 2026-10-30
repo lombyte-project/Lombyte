@@ -13,8 +13,15 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
+#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/interpolation/vendor_spring.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 
 
@@ -135,10 +142,8 @@ extern L14LevelState D_L14_001BB930;
 extern s32 D_L14_001BABD0[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
-extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void ease_path_mover_to_endpoint(struct Moby *moby) __asm__("FUN_L14_002ac2b8");
 
 extern void ease_path_mover_to_endpoint(struct Moby *) __asm__("FUN_L14_002ac2b8");
@@ -400,16 +405,12 @@ extern void attach_manipulator_c618(void *, s32, void *) __asm__("FUN_0020cb10")
 extern void noop_main_callback(void *, float) __asm__("FUN_001e93e8");
 extern int FUN_L00_001f2868_c618(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_001efa68_c618(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_001fff28(void *, int, float);
 extern f32 ease_c618(f32 *pos, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 extern int FUN_L00_0025df68_c618(void *, void *, void *, int *, float *, int, float, float, float) __asm__("FUN_L00_0025df68");
 extern int FUN_L00_0025d808_c618(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void FUN_L00_0025e450_c618(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void normalize_vector_c618(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
-extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern unsigned char *FUN_L00_0026d000_c618(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
@@ -816,7 +817,6 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
 /* per-frame update: runs the hit query, decays a timer, then dispatches on the hit result */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AEAF8), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -1422,7 +1422,6 @@ void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(u8 *moby) {
                          blarg_heavy_interceptor_patrol_heading_error_gain_gp, blarg_heavy_interceptor_patrol_heading_damping_coefficient_gp, blarg_heavy_interceptor_patrol_heading_snap_threshold_scale_gp);
     }
 }
-extern void build_moby_bone_transform(u8 *, s32, u8 *) __asm__("FUN_0020cca8");
 
 /* 0x002AEAD8, 200 bytes.  Checks a flag and a position test, then sets up
  * three vectors in the moby data.  The 16-byte copy is the qcopy idiom
@@ -1451,7 +1450,6 @@ void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AFDE0), where it is exact; names translated to the US level program. */
 
-extern void FUN_0020cca8_c(char *, int, void *) __asm__("FUN_0020cca8");
 extern void FUN_L14_002ae260_u(void) __asm__("FUN_L14_002ae260");
 
 int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
@@ -1465,7 +1463,7 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
     fast_vec_add(bounding_sphere, data + 0xD0, half_span_vector);
     bounding_sphere[3] = fast_vec_length(half_span_vector) + 2.0f;
     if (fast_bsphere_check((char *)bounding_sphere, convert_integer_to_float(moby->draw_dist)) >= 0) {
-        FUN_0020cca8_c(moby, 1, data + 0xA0);
+        build_moby_bone_transform(moby, 1, data + 0xA0);
         ok = 1;
         fast_vec_normalize(data + 0xA0, data + 0xA0, 1.0f);
         fast_vec_normalize(data + 0xB0, data + 0xB0, 1.0f);
@@ -2621,7 +2619,6 @@ int advance_minibomber_along_path(struct Moby *moby, char *path, int segment_ind
 /* eases a moby's position and heading toward targets while in states 4-6 or 8 */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6AA0), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_0025b8c0_c2(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void approach_w(char *moby, float target, float *vel, float k, float d, float max) __asm__("FUN_L00_00258278");
 
@@ -2630,9 +2627,9 @@ void ease_minibomber_position_and_heading(char *moby, float *target, float targe
     int moby_state = moby[0x20] & 0xFF;
     if ((moby_state >= 4 && moby_state <= 6) || moby_state == 8) {
         data = *(int *)(moby + 0x78);
-        FUN_L00_0025b8c0_c2((float *)(moby + 0x10), (float *)(data + 0xF0), target[0], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
-        FUN_L00_0025b8c0_c2((float *)(moby + 0x14), (float *)(data + 0xF4), target[1], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
-        FUN_L00_0025b8c0_c2((float *)(moby + 0x18), (float *)(data + 0xF8), target[2], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
+        vendor_spring((float *)(moby + 0x10), (float *)(data + 0xF0), target[0], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
+        vendor_spring((float *)(moby + 0x14), (float *)(data + 0xF4), target[1], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
+        vendor_spring((float *)(moby + 0x18), (float *)(data + 0xF8), target[2], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
         approach_w(moby, target_heading, (float *)(data + 0xE4), heading_error_gain, heading_velocity_damping, heading_velocity_limit);
     }
 }
@@ -2652,7 +2649,6 @@ typedef struct {
     PuffParticleTail tail;
 } PuffParticle;
 extern int random_integer_below(int);
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float);
 extern int scale_game_frames(int);
 extern void build_look_at_matrix(void *, void *, void *, float);
@@ -2977,7 +2973,6 @@ void update_flying_debris(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002BC560), where it is exact; names translated to the US level program. */
 
 
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");

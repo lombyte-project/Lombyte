@@ -16,6 +16,9 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
 char *create_class_5c3_moby(int owner, char *initial_position, int arg, float initial_rotation_z, float initial_rotation_y) __asm__("FUN_L05_002d4168");
 
@@ -267,8 +270,6 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
 }
 #include "rnc/gameplay/state/item_state.h"
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
@@ -442,14 +443,12 @@ void add_moby_frames_for_group_proximity(char *moby) {
 /* UpdateMoby_823: pick random wobble parameters, then animate them each frame */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
 
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 void draw_moby_wobble_quads(struct Moby *moby) __asm__("FUN_L05_0030c220");
 
 extern void draw_moby_wobble_quads(struct Moby *m) __asm__("FUN_L05_0030c220");
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
-void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void update_moby_wobble(unsigned char *moby) __asm__("FUN_L05_0030c0a8");
 

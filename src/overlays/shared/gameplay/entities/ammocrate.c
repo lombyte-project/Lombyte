@@ -8,6 +8,8 @@
 #include "sda.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002BB2F8), where it is exact; names translated to the US level program. */
 
@@ -134,7 +136,6 @@ extern float frame_time __asm__("D_0015ED6C");
 extern struct Moby *moby_base __asm__("D_L13_0015FFD8");
 extern int D_L13_00174158_lui __asm__("D_L13_00174158") NOT_SDA;
 
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -366,7 +367,6 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern int collision_line() __asm__("FUN_001efa68");
 extern int FUN_L00_0024f7c8();
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float accel, float maxv);
 unsigned char *spawn_particle(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
@@ -374,7 +374,6 @@ void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_e
 extern float func_002140F8_2E8040(float, float) __asm__("FUN_002132a8");
 extern unsigned char *spawn_particle(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
 extern float func_00214158_2E8040(void) __asm__("FUN_00213308");
-extern void func_002156E0_2E8040(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 extern unsigned char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern float approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -419,7 +418,7 @@ void update_ship_rocket(Moby *rocket) {
         *(Q_2E8040 *)&trail_direction = 0;
         trail_direction.z = 0.02f;
         transform_vector_by_basis(&trail_direction, &trail_direction, &*(V4_2E8040 *)&rocket->rot_row0);
-        func_002156E0_2E8040(&trail_direction, &trail_direction, &*(V4_2E8040 *)&rocket->rot_row0, func_00214158_2E8040());
+        build_look_at_matrix(&trail_direction, &trail_direction, &*(V4_2E8040 *)&rocket->rot_row0, func_00214158_2E8040());
         spawned_effect = spawn_burst(&effect_scratch_vector, &trail_direction, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(5), 1, 20000.0f);
         if (spawned_effect != 0) {
             spawned_effect[3] = 0x48;

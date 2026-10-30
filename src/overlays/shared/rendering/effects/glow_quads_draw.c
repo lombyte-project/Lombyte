@@ -10,6 +10,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/math/spherical_offset.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/initonce_0023E4C8.c: func_L00_0023E4C8). */
 
@@ -26,7 +29,6 @@ typedef struct {
 
 extern float D_L00_0015FB08 NOT_SDA;
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_moby_bone_transform(char *moby, int bone, char *out);
 extern void fast_draw_quad_real(void *quads, void *matrix, int count) __asm__("FUN_001f7d30");
 
@@ -167,8 +169,6 @@ void glow_quads_draw(char *moby) {
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, int, int,
                                   void *);
 

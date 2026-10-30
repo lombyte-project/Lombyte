@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/globals.h"
+#include "rnc/ui/hud/get_icon_frame.h"
 
 
 
@@ -34,7 +35,6 @@ void update_hud_counter_transition(char *transition_state) {
 
 extern int hud_screen_position(HudElem *, int *, int *) __asm__("FUN_L00_00235a70");
 extern int sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
-extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");

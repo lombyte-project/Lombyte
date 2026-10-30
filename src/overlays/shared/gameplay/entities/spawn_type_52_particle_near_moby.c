@@ -6,10 +6,12 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/callbacks/add_draw_callback.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void spawn_type_52_particle(float *, float, float, int, int, int) __asm__("FUN_L01_00287158");
 
 extern short type_52_particle_header_value __asm__("D_L10_00161E58") __attribute__((sda));
@@ -47,7 +49,6 @@ void spawn_type_52_particle_near_moby(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002EA3E8), where it is exact; names translated to the US level program. */
 
 extern void draw_moby_animated_quad_layers(unsigned char *m) __asm__("FUN_L10_002e91b8");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
 void update_hero_flag_from_moby_local_box(unsigned char *moby) __asm__("FUN_L10_002e9028");
 
@@ -273,7 +274,6 @@ typedef struct {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/gameplay/camera/update_cam.h"
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* Retail retains this global base and loads the four-block source at +0x184. */
 extern struct { char pad0[0x184]; char *source; } D_L10_00167100;
 extern VendorView_5f18 D_L10_0016CEC0;

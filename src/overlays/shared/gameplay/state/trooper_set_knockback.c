@@ -3,6 +3,8 @@
 #include "asm.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/build_look_at_matrix.h"
 
 
 
@@ -20,9 +22,6 @@ void trooper_set_knockback(float *knockback_state, float horizontal_knockback_sc
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
 
-extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
-extern void build_look_at_matrix(void *, void *, void *, f32) __asm__("FUN_00214890");
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");
 extern void *spawn_burst(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");

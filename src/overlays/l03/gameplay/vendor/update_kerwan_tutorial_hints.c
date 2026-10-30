@@ -13,6 +13,11 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
+#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
 struct L03HelpState {
@@ -41,10 +46,7 @@ extern struct L03HelpRecord help_records[] __asm__("D_00141968");
 extern struct L03ItemEntry D_L03_00179BC0[];
 extern struct Moby *D_L03_0015FFE4;
 
-extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
-extern s32 allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
-extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 /* Kerwan tutorial hint triggers: plays help messages and counts usage stats while the hero is inside the moby's clip volumes. */
 void update_kerwan_tutorial_hints(u8 *moby) __asm__("FUN_L03_002df520");
@@ -233,8 +235,6 @@ struct L03Cutscene {
 
 extern struct L03Cutscene D_L03_0016C960;
 extern void cutscene_set_camera_target(void *) __asm__("FUN_L00_002637f8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 /* Starts the cutscene, then during mode 3 (frames 900-10000) emits two particle beams from the listed moby. */
