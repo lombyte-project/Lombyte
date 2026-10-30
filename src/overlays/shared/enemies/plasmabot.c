@@ -1216,9 +1216,9 @@ int count_listed_plasmabots_preparing_or_sweeping_beam(int moby_list_index) {
         return 0;
     do {
         unsigned short v = *(unsigned short *)moby_list_entry;
-        unsigned char *other = (unsigned char *)(D_L14_0015FFD8_3920 + ((v & 0x7FFF) << 8));
-        if (*(short *)(other + 0xA6) == 0x1C) {
-            if ((unsigned char)(other[0x20] - 5) <= 1)
+        unsigned char *listed_moby = (unsigned char *)(D_L14_0015FFD8_3920 + ((v & 0x7FFF) << 8));
+        if (*(short *)(listed_moby + 0xA6) == 0x1C) {
+            if ((unsigned char)(listed_moby[0x20] - 5) <= 1)
                 count++;
         }
     } while (*moby_list_entry++ >= 0);
