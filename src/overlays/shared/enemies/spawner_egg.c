@@ -154,7 +154,7 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) {
 extern char *
 spawn_spawner_egg(int, void *, void *, unsigned char, unsigned char) __asm__("FUN_L09_0030b218");
 
-char *spawn_spawner_egg(int           owner,
+char *spawn_spawner_egg(int           spawner_moby,
                         void         *initial_position,
                         void         *initial_velocity,
                         unsigned char grow_held_moby,
@@ -163,7 +163,7 @@ char *spawn_spawner_egg(int           owner,
     char *spawned_moby = (char *)create_moby(0x75E);
     if (spawned_moby) {
         char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
-        *(int *)(moby_vars + 0x10) = owner;
+        *(int *)(moby_vars + 0x10) = spawner_moby;
         qcopy(spawned_moby + 0x10, initial_position);
         qcopy(moby_vars, initial_velocity);
         MOBY(spawned_moby)->rot.x = random_float_between(-3.1415927f, 3.1415927f);
