@@ -70,7 +70,7 @@ void update_level_12_water_tile(struct Moby *moby) {
     int  *water_tile_vars = (int *)moby->pvars;
     int   slot;
     float value;
-    float other;
+    float random_xy_offset;
     int   i;
     switch (state) {
     case SLOT_INITIALIZE:
@@ -156,13 +156,13 @@ void update_level_12_water_tile(struct Moby *moby) {
         }
         if (random_integer_below(200) == 0) {
             char *slot_record;
-            other = random_float_between(-4.0f, 4.0f);
+            random_xy_offset = random_float_between(-4.0f, 4.0f);
             value = *(float *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190);
-            value += other;
-            other = random_float_between(-4.0f, 4.0f);
+            value += random_xy_offset;
+            random_xy_offset = random_float_between(-4.0f, 4.0f);
             slot_record = D_L12_001CBF40_c + water_tile_vars[3] * 0x1190;
             pool_splash(
-                value, *(float *)(slot_record + 4) + other, 1.0f, -0.05f, slot_record, 1, 1);
+                value, *(float *)(slot_record + 4) + random_xy_offset, 1.0f, -0.05f, slot_record, 1, 1);
         }
         break;
     }
