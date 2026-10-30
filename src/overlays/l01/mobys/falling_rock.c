@@ -210,11 +210,11 @@ void falling_rock_update(CapMoby *falling_rock) {
         }
         break;
     case FALLING_ROCK_STATE_FALLING: {
-        CapVec3 old;
+        CapVec3 falling_rock_position_before_step;
 
         apply_falling_rock_camera_overrides((Obj *)falling_rock);
         falling_rock->pos.f[2] -= 0.0f;
-        qcopy(&old, &falling_rock->pos);
+        qcopy(&falling_rock_position_before_step, &falling_rock->pos);
         falling_rock_vars->rot.f[2] -= frame_time_sq * 30.0f;
         fast_vec_add(&falling_rock->pos, &falling_rock->pos, &falling_rock_vars->rot);
         if (fast_dec_timer_s16(&falling_rock_vars->hold) &&
