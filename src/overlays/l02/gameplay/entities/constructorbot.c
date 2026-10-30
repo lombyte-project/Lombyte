@@ -138,13 +138,10 @@ typedef struct {
 
 extern Entry_L02_0017A140 D_L02_0017A0C0[];
 
-extern unsigned char item_available[] __asm__("D_0013D4C0");
+#include "rnc/gameplay/state/item_state.h"
 extern unsigned char D_0014C050[][16];
-extern unsigned char invert52[4] __asm__("D_0015EDDC");
-extern unsigned char opt_cam_invert[4] __asm__("D_0015EDE0");
+#include "rnc/gameplay/state/options.h"
 extern int D_0015EEA4;
-extern unsigned char alternate_item_available[] __asm__("D_0013D388");
-extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern unsigned short D_001417A2 NOT_SDA;
 extern unsigned short D_00141888 NOT_SDA;
 extern unsigned short D_001418E8 NOT_SDA;
@@ -232,7 +229,7 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
                 help_request(0x4E22, 0x4C);
             }
         }
-        if (invert52[0] != 0 && opt_cam_invert[0] != 0) {
+        if (*(u8 *)&invert52 != 0 && *(u8 *)&opt_cam_invert != 0) {
             char *b = ((char *)&D_00141968);
             if (!(*(unsigned int *)(b + 0x3B4) & (1 << current_level_index))) {
                 help_request(0x4E2C, 0x76);

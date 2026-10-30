@@ -142,10 +142,6 @@ typedef struct {
     u8 pad0[0x86];
     s16 h86;
 } P_297f78;
-typedef struct {
-    u8 pad0[0x10];
-    u8 b10;
-} R_297f78;
 extern S_297f78 D_L00_0016C058;
 extern C_297f78 D_0013C940_c __asm__("D_0013C940");
 extern s32 D_L00_0015F5C0_macro[] __asm__("D_L00_0015F5C0") MACRO_ADDR;
@@ -154,7 +150,7 @@ extern s32 game_frame __asm__("D_L00_0015F5CC");
 extern s32 D_L00_001B9DE0 NOT_SDA;
 extern P_297f78 *D_L00_00166E00 NOT_SDA;
 extern s32 D_0013D384 NOT_SDA;
-extern R_297f78 alternate_item_available __asm__("D_0013D388");
+#include "rnc/gameplay/state/item_state.h"
 extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_L00_00184214 NOT_SDA;
 extern s32 D_0015EEA4;
@@ -254,11 +250,11 @@ void handle_pause_input(void) {
         pause_all_sounds(10);
         return;
     }
-    if (D_0013D384 && !alternate_item_available.b10 && level_timer >= 8 && !alternate_animation_sequence &&
+    if (D_0013D384 && !alternate_item_available[0x10] && level_timer >= 8 && !alternate_animation_sequence &&
         !hero.fall_fade_pending && hero.health.hp && scale_game_frames(0x1E) < game_frame &&
         current_level_index) {
         mode_freeze_init(5, 0);
-        alternate_item_available.b10 = 1;
+        alternate_item_available[0x10] = 1;
         return;
     }
     if (hero.state.current != 0x1D && hero.state.current != 0x32)
@@ -1179,7 +1175,6 @@ typedef struct {
 extern VendorList vendor_list __asm__("D_L00_001CA4C0") NOT_SDA;
 extern VendorSound vendor_sound[] __asm__("D_L00_001C2108") NOT_SDA;
 /* Stocked item ids (low 6 bits; bit 0x40 = listed as selected), 0xFF-terminated. */
-extern u8 item_available[] __asm__("D_0013D4C0");
 
 extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 /* Builds the vendor list: the stocked items (up to 12, 0xFF-terminated), then
@@ -1304,7 +1299,6 @@ extern s32 D_L00_00161E24_29a6b0 __asm__("D_L00_00161E24");
 extern s32 D_L00_00161E30;
 extern s32 D_L00_00161E34;
 extern s32 D_0015ED98_29a6b0 __asm__("D_0015ED98");
-extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern s32 D_L00_00173E00_29a6b0[] __asm__("D_L00_00173E00");
 extern s32 D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
@@ -1689,7 +1683,6 @@ typedef struct {
 extern P_29b680 D_L00_001CA4C0_29b680 __asm__("D_L00_001CA4C0") NOT_SDA;
 extern T_29b680 D_L00_00179AC0_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern int D_L00_001C8FF0_lui[][16] __asm__("D_L00_001C8FF0") NOT_SDA;
-extern unsigned char discount_purchase_pricing __asm__("D_0013D4E3") NOT_SDA;
 extern int D_L00_00161E38;
 extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f0");
 #define P D_L00_001CA4C0_29b680
@@ -1719,7 +1712,7 @@ void initialize_vendor_selected_item_mobys(void) {
     if (P.ent[P.i58].f == 0) {
         float item_z_offset = D_L00_001C8920[P.ent[P.i58].k][3];
         item_local_position[2] += item_z_offset;
-        if (discount_purchase_pricing) {
+        if (discount_purchase_pricing[0]) {
             item_local_position[2] += item_z_offset;
         }
     }
@@ -1817,7 +1810,6 @@ typedef struct { char pad0[0x140]; Vec4 pos; char pad150[0x200]; f32 basis[12]; 
 
 extern VendorMenu vendor_menu __asm__("D_L00_001CA4C0");
 extern struct PadState controller_state __asm__("D_0013C940");
-extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern VendorItemSound D_L00_001C2108[];
 extern VendorItemSlot40 D_L00_001C8FF0[];
 extern VendorItemSlot30 l00_vendor_item_display_transform_parameters[] __asm__("D_L00_001C9930");

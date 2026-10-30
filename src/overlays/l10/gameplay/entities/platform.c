@@ -1639,7 +1639,7 @@ int test_point_in_lab_door_local_xy_bounds(struct Moby *moby, float *world_point
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA468), where it is exact; names translated to the US level program. */
 
 
-extern char alternate_item_available[] __asm__("D_0013D388");
+#include "rnc/gameplay/state/item_state.h"
 char D_L10_001DD160[] = "Moby Class %d Instance %d has no pVars!  May be in the art file.\n\tMobyDeleted\n";
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");

@@ -87,7 +87,7 @@ extern int process_hero_primary_item_input(void) __asm__("FUN_L05_00251be8");
 extern int hero_select_anim_id_by_flags(void) __asm__("FUN_L05_002551d0");
 extern int hero_pick_help_mode(void) __asm__("FUN_L05_00255208");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern unsigned char item_available[] __asm__("D_0013D4C0");
+#include "rnc/gameplay/state/item_state.h"
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
