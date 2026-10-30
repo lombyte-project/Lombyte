@@ -70,7 +70,12 @@ Level data in C has its `D_LNN_XXXXXXXX` label and a row (name, size) in
 resolved for that level, to what the level loads there. A row named
 `D_XXXXXXXX` (no level) is data that every level has at that address, like
 the zero globals in `src/overlays/shared/data/level_globals.c`; it is checked
-and counted in every level.
+and counted in every level. A pointer to a function the level holds more than
+once must name the copy the level's word points to.
+
+Each level's `lvl.vtbl`, `lvl.camvtbl` and `lvl.sndvtbl` sections (the moby
+classes, camera types and sound emitter types the executable looks ids up in)
+are in `src/overlays/lNN/level_class_tables.c`.
 
 The compiler's own data for a function in C, its switch tables and float
 literals, is checked too: each table word must point into the function at the

@@ -35,7 +35,7 @@ struct UpdateCam {
 
 /* Per camera type callbacks, indexed by UpdateCam.type. */
 struct CameraType {
-    void *unk0;
+    s32 id;                  /* find_camera_table_index_by_id; -1 ends the list */
     int (*check_priority)(void *cur, void *other);
     void (*run_setup)(struct UpdateCam *cam);
     void (*update)(struct UpdateCam *cam);

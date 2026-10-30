@@ -103,6 +103,16 @@ def place_in_level(name: str, level: int, near: int) -> int:
     return min(matches, key=lambda a: abs(a - near))
 
 
+def function_copies(name: str, level: int) -> list[int]:
+    """Every place of function NAME in LEVEL (none for data)."""
+    m = ov.EXE_FUNC.match(name)
+    if m:
+        name = f"FUN_{int(m.group(1), 16):08x}"
+    elif not ov.OVERLAY_FUNC.match(name):
+        return []
+    return ov.places_in_level(name, level) or []
+
+
 def resolve_symbol(name: str, level: int, near: int) -> int:
     """A symbol's address in LEVEL, by name."""
     if name == "_gp":
@@ -797,7 +807,8 @@ def copy_check(obj_path, name: str, place: tuple[int, int]) -> dict:
 
 
 DATA_METHOD = "overlay-data-bytes-v1"
-DATA_SECTIONS = (".data", ".sdata", ".rodata", ".bss", ".sbss")
+# lvl.*: the tables a level program places for the executable to look ids up in
+DATA_SECTIONS = (".data", ".sdata", ".rodata", ".bss", ".sbss", "lvl.vtbl", "lvl.camvtbl", "lvl.sndvtbl")
 
 
 def data_symbols(elf: ELFFile) -> list:
@@ -916,6 +927,10 @@ def check_data(obj_path, name: str) -> dict:
                 unresolved.append(e.what)
                 continue
             addend = int.from_bytes(ours[off:off + 4], "little")
+            # a function the level holds more than once: the copy the word names
+            word = int.from_bytes(retail[off:off + 4], "little") - addend
+            if word != value and word in function_copies(target.name, level):
+                value = word
             ours[off:off + 4] = ((value + addend) & 0xFFFFFFFF).to_bytes(4, "little")
     if unresolved:
         result["verdict"] = "LINK " + ", ".join(unresolved[:4])

@@ -17,4 +17,14 @@ extern s16 resident_class_id_by_slot[224] __asm__("D_001B3900");
    fill all 0x800 bytes with 0xFF before the classes register. */
 extern u8 resident_class_slot_by_id[0x800] __asm__("D_001B3AC0");
 
+/* One per moby class a level program defines (its lvl.vtbl section; the
+   executable's own list is empty): assign_moby_class_data looks a class up and
+   stores its update function and method table. A -1 class ends the list and
+   holds the defaults. */
+struct MobyClassUpdate {
+    s32 oclass;
+    void *update;
+    void **methods;
+};
+
 #endif /* LOMBYTE_RNC_GAMEPLAY_ENTITIES_MOBY_CLASS_TABLES_H */

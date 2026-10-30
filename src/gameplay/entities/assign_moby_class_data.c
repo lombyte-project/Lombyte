@@ -1,16 +1,11 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/data_labels.h"
-struct MapEntry {
-    s32 id;
-    s32 value;
-    s32 extra;
-};
 struct Obj {
     u8 pad0[0x2C];
-    s32 extra;
+    void **methods;
 };
-extern struct MapEntry resident_class_defaults[] __asm__("D_001E8B80");
+extern struct MobyClassUpdate resident_class_defaults[] __asm__("D_001E8B80");
 
 void assign_moby_class_data(s32 id) __asm__("FUN_00212d68");
 
@@ -19,11 +14,11 @@ void assign_moby_class_data(s32 id) {
     s32 i;
 
     class_resource = moby_class_resources[D_0015FF00];
-    for (i = 0; resident_class_defaults[i].id != -1 && resident_class_defaults[i].id != id; i++) {
+    for (i = 0; resident_class_defaults[i].oclass != -1 && resident_class_defaults[i].oclass != id; i++) {
     }
-    D_001B3580[D_0015FF00] = resident_class_defaults[i].value;
+    D_001B3580[D_0015FF00] = (s32)resident_class_defaults[i].update;
     if (class_resource != 0) {
-        ((struct Obj *)moby_class_resources[D_0015FF00])->extra = resident_class_defaults[i].extra;
+        ((struct Obj *)moby_class_resources[D_0015FF00])->methods = resident_class_defaults[i].methods;
     }
 }
 

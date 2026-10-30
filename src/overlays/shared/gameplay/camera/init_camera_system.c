@@ -1,3 +1,4 @@
+#include "rnc/gameplay/camera/update_cam.h"
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "rnc/gameplay/hero.h"
@@ -68,17 +69,13 @@ void initialize_camera_record_handoff_defaults(void) {
     D_L00_00166C80_u.p->h = 1;
     D_L00_00166C80_u.p->b = 0;
 }
-typedef struct {
-    s32 id;
-    s32 pad[4];
-} E5;
-extern E5 l00_camera_id_lookup_table[] __asm__("D_L00_001EA880");
+extern struct CameraType level_camera_types[] __asm__("D_L00_001EA880");
 /* Index of id in the table that ends with -1 (the end index when it is missing). */
 s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
 
 s32 find_camera_table_index_by_id(s32 id) {
     s32 table_index = 0;
-    while (l00_camera_id_lookup_table[table_index].id != -1 && l00_camera_id_lookup_table[table_index].id != id)
+    while (level_camera_types[table_index].id != -1 && level_camera_types[table_index].id != id)
         table_index++;
     return table_index;
 }
