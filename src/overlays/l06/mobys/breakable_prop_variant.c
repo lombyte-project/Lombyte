@@ -38,44 +38,44 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void update_breakable_prop_variant(char *self) __asm__("FUN_L06_00309fa8");
 
-void update_breakable_prop_variant(char *self) {
+void update_breakable_prop_variant(char *spawner_moby) {
     enum {
         INITIALIZE = 0,
         WAIT_FOR_HIT = 1,
         SPAWN_AND_REMOVE = 2
     };
     int   flag = 0;
-    char *hit_moby = find_moby_hit(self, 0x10000, 0);
-    switch (((unsigned char *)self)[0x20]) {
+    char *hit_moby = find_moby_hit(spawner_moby, 0x10000, 0);
+    switch (((unsigned char *)spawner_moby)[0x20]) {
     case INITIALIZE:
-        self[0x20] = 1;
+        spawner_moby[0x20] = 1;
         break;
     case WAIT_FOR_HIT:
         if (hit_moby != 0 && MOBY(hit_moby)->scale > 0.0f) {
             flag = 1;
         }
         if (flag) {
-            self[0x20] = 2;
+            spawner_moby[0x20] = 2;
         }
         break;
     case SPAWN_AND_REMOVE: {
         char *spawned_moby;
-        allocate_voice_for_target_entry(0, 0, (int)self);
-        spawn_proximity_gated_bolts(self);
-        FUN_L00_00263fd8(self,
+        allocate_voice_for_target_entry(0, 0, (int)spawner_moby);
+        spawn_proximity_gated_bolts(spawner_moby);
+        FUN_L00_00263fd8(spawner_moby,
                          0x682,
-                         self + 0x10,
-                         self + 0x40,
+                         spawner_moby + 0x10,
+                         spawner_moby + 0x40,
                          0,
                          0,
                          0.0f,
                          D_L06_0015F580,
                          D_L06_0015F580,
                          D_L06_0015F580);
-        FUN_L00_00263fd8(self,
+        FUN_L00_00263fd8(spawner_moby,
                          0x682,
-                         self + 0x10,
-                         self + 0x40,
+                         spawner_moby + 0x10,
+                         spawner_moby + 0x40,
                          0,
                          0,
                          0.0f,
@@ -86,12 +86,12 @@ void update_breakable_prop_variant(char *self) {
         if (spawned_moby != 0) {
             spawned_moby[0x31] = 1;
             MOBY(spawned_moby)->draw_dist = 0xFF;
-            qcopy(spawned_moby + 0x10, self + 0x10);
-            qcopy(spawned_moby + 0x40, self + 0x40);
-            MOBY(spawned_moby)->spawn_frame = *(long *)(self + 0x38);
+            qcopy(spawned_moby + 0x10, spawner_moby + 0x10);
+            qcopy(spawned_moby + 0x40, spawner_moby + 0x40);
+            MOBY(spawned_moby)->spawn_frame = *(long *)(spawner_moby + 0x38);
             update_entity(spawned_moby);
         }
-        mark_moby_for_removal(self);
+        mark_moby_for_removal(spawner_moby);
         break;
     }
     }
