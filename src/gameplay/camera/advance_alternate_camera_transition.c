@@ -7,11 +7,9 @@ typedef struct {
     f32 v[4];
 } __attribute__((aligned(16))) CameraVector;
 
-extern u8 cam_trans_state[] __asm__("D_001871B0");
 extern char D_0013F3D0[];
 extern char D_0013F5E0[];
-extern char camera_position[] __asm__("D_00187080");
-extern char camera_rows[] __asm__("D_00187290");
+#include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/gameplay/camera/update_cam.h"
 
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
@@ -66,7 +64,7 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     }
     step = 1.0f / cosine_interpolate(1.0f, (f32) * (s32 *)(transition_state + 5),
                                      (f32) * (s32 *)(transition_state + 3) * transition_state[4]);
-    if (cam_trans_state[2] == 2) {
+    if (((u8 *)cam_trans_state)[2] == 2) {
         qcopy(&focus_position, D_0013F3D0);
         qcopy(&forward_axis, transition_state + 8);
         qcopy(&vertical_axis, transition_state + 12);

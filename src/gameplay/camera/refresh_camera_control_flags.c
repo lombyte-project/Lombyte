@@ -1,11 +1,6 @@
 #include "types.h"
 #include "sda.h"
 
-struct CameraPosition {
-    u8 pad_0[0x8];
-    f32 z;
-};
-
 struct CameraTrackingControl {
     u8 pad_0[0xC0];
     s32 control_selector;
@@ -14,7 +9,7 @@ struct CameraTrackingControl {
 extern s32 cam_coll_mode __asm__("D_0015EF98") MACRO_ADDR;
 extern s32 cam_coll_flag __asm__("D_0015EF9C") MACRO_ADDR;
 extern s32 cam_coll_flag_prev __asm__("D_0015EFA0") MACRO_ADDR;
-extern struct CameraPosition camera_position __asm__("D_00187080");
+#include "rnc/gameplay/camera/camera_globals.h"
 extern struct CameraTrackingControl cam_coll_state __asm__("D_001870D0");
 /* retail small-data globals, declared to GAS before the body */
 
@@ -28,7 +23,7 @@ void refresh_camera_control_flags(void) {
     if ((u32)(hero.state.control_mode - 0x11) < 2U || hero.state.current == 0x73) {
         cam_coll_flag = 0x34;
     }
-    if (hero.state.control_mode != 0x11 && hero.water_surface_z < camera_position.z) {
+    if (hero.state.control_mode != 0x11 && hero.water_surface_z < *(f32 *)(camera_position + 8)) {
         cam_coll_flag = 0x14;
     }
     cam_coll_flag_prev = cam_coll_flag;
