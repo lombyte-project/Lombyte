@@ -553,13 +553,13 @@ void bomb_spawner_update(struct Moby *moby) {
 
 char *spawn_class_221_moby(
 
-    char *owner, float *pos, float *launch_velocity, short ang, int spawn_options) {
+    char *spawning_moby, float *pos, float *launch_velocity, short ang, int spawn_options) {
     char *spawned_moby;
     char *moby_pvars;
     spawned_moby = create_moby(0x221);
     if (spawned_moby != 0) {
         moby_pvars = ((char *)MOBY(spawned_moby)->pvars);
-        *(char **)(moby_pvars + 0x10) = owner;
+        *(char **)(moby_pvars + 0x10) = spawning_moby;
         qcopy(spawned_moby + 0x10, pos);
         qcopy(moby_pvars, launch_velocity);
         MOBY(spawned_moby)->rot.x = random_float_between(-3.1415927f, 3.1415927f);
