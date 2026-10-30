@@ -941,11 +941,11 @@ void release_voice_slot_cf(int voice_slot_index, int a, int b) {
 void help_queue_add(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 
 void help_queue_add(s32 voice_entry_index, s32 voice_delay_timer, s32 voice_allocation_argument) {
-    struct Hero *base;
+    struct Hero *hero_state;
     s16         *current_slot;
     s32          slots_examined = 0;
-    base = &hero;
-    current_slot = (s16 *)(&base->unk21D8[0]);
+    hero_state = &hero;
+    current_slot = (s16 *)(&hero_state->unk21D8[0]);
     do {
         slots_examined = slots_examined + 1;
         if (current_slot[0] == 0) {
