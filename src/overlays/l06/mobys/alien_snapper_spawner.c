@@ -11,7 +11,7 @@
 
 /* Trigger moby: waits for the hero in its zone, plays its open animation, then launches a listed moby. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_002FEE60), where it is exact; names translated to the US level program. */
-extern int    D_L06_0015FFD8;
+extern int    level_mobys_q __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0[];
 extern void   blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void          alien_snapper_spawner_update(char *moby) __asm__("FUN_L06_002fda30");
@@ -54,7 +54,7 @@ void alien_snapper_spawner_update(char *moby) {
                 char  *pos = moby + 0x10;
                 do {
                     if (activate_state_15_moby_at_position(
-                            D_L06_0015FFD8 + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8),
+                            level_mobys_q + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8),
                             pos)) {
                         found = 1.0f;
                         break;
