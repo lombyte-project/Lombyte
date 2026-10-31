@@ -67,6 +67,9 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
         CAMERA_TRANSITION_STATE_BLOCK_ACTIVATION = 4,
         CAMERA_TRANSITION_STATE_INHERIT_TRANSFORM_WITH_RATE_TRANSITION = 5
     };
+    enum {
+        CAMERA_DESCRIPTOR_NULL_FALLBACK = 0
+    };
     struct UpdateCam     *previous_camera;
     CameraDescriptorInfo *descriptor;
     f32                   transition_duration;
@@ -74,7 +77,7 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     f32                   handoff_duration;
     f32                  *previous_position;
     Vec4f                *position;
-    s32                   descriptor_kind = 0;
+    s32                   descriptor_kind = CAMERA_DESCRIPTOR_NULL_FALLBACK;
     s32                   previous_transition_state;
 
     descriptor = D_0015EF90[next_camera->descriptor_index].descriptor;
