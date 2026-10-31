@@ -261,7 +261,7 @@ void spawner_egg_update(struct Moby *moby) {
             }
         }
         if (fast_dec_timer_s16(&bubble_vars->life) != 0) {
-            moby->state = 2;
+            moby->state = SPAWNER_EGG_STATE_SHRINKING;
         }
         moby->rot.x = normalize_angle(bubble_vars->vel.f[0]);
         moby->rot.y = normalize_angle(bubble_vars->vel.f[1]);
@@ -276,7 +276,7 @@ void spawner_egg_update(struct Moby *moby) {
         moby->pos.w = 0.0f;
         step.q = ((Vec4 *)&moby->pos)->q;
         bubble_vars->held = respawn_spawner_child(bubble_vars->owner, &step);
-        moby->state = 2;
+        moby->state = SPAWNER_EGG_STATE_SHRINKING;
         break;
     case SPAWNER_EGG_STATE_SHRINKING:
         rate = frame_scale * 0.05f;
