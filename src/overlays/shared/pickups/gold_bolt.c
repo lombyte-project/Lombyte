@@ -620,12 +620,15 @@ void gold_bolt_update(struct Moby *moby) {
 void update_gold_bolt_visuals(struct Moby *moby) __asm__("FUN_L01_00308380");
 
 void update_gold_bolt_visuals(struct Moby *moby) {
+    enum {
+        GOLD_BOLT_WAIT_FOR_PICKUP = 1
+    };
     char *gold_bolt_visual_vars = (char *)moby->pvars;
     float updated_rotation_z;
     float bobbing_sine;
     float k;
     moby->scale = moby->pclass->scale * *(float *)&D_L01_00161F10_gp;
-    if (moby->state == 1) {
+    if (moby->state == GOLD_BOLT_WAIT_FOR_PICKUP) {
         bobbing_sine = fast_sin(moby->rot.w);
         moby->pos.z = *(float *)(gold_bolt_visual_vars + 0x18) + *(float *)&l01_gold_bolt_bobbing_height_offset_gp +
                       *(float *)&l01_gold_bolt_bobbing_amplitude_gp * bobbing_sine;
