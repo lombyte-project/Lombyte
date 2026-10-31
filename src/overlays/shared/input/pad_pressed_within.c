@@ -5,11 +5,11 @@
 
 u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");
 
-u32 pad_pressed_within(u32 mask, s32 n, s32 *press_age_frames_out) {
+u32 pad_pressed_within(u32 mask, s32 requested_lookback_frames, s32 *press_age_frames_out) {
     s32 history_search_limit = controller_state.hist_count;
     s32 i;
-    if (history_search_limit >= n)
-        history_search_limit = n;
+    if (history_search_limit >= requested_lookback_frames)
+        history_search_limit = requested_lookback_frames;
     for (i = 1; i < history_search_limit + 1; i++) {
         s32 k = (controller_state.hist_idx - i + 30) % 30;
         if (controller_state.pressed_history[k] & mask) {
