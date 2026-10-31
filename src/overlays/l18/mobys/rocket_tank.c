@@ -146,7 +146,7 @@ void rocket_tank_update(M1454 *moby) {
         if (moby->b53 != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         }
-        moby->state = 1;
+        moby->state = ROCKET_TANK_PATROLLING;
         break;
     case ROCKET_TANK_PATROLLING:
         func_L18_002F9AB8_v(moby);
@@ -156,7 +156,7 @@ void rocket_tank_update(M1454 *moby) {
             if (moby->b53 != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(20));
             }
-            moby->state = 2;
+            moby->state = ROCKET_TANK_FIRING;
         }
         break;
     case ROCKET_TANK_FIRING:
@@ -194,7 +194,7 @@ void rocket_tank_update(M1454 *moby) {
             if (moby->b53 != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
-            moby->state = 1;
+            moby->state = ROCKET_TANK_PATROLLING;
         }
         break;
     }
