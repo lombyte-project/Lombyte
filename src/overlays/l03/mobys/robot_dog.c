@@ -104,7 +104,7 @@ extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
 extern int   rand(void) __asm__("FUN_001160d8");
 extern int   FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern int   FUN_L00_00259028(char *m, char *p, char *pos, char *v);
+extern int   step_mover_2e3f20(char *m, char *p, char *pos, char *v) __asm__("FUN_L00_00259028");
 extern int   FUN_L00_002dc9f0(void *, void *);
 extern int select_moby_target_with_hero_fallback(char *, char *, float) __asm__("FUN_L03_0024e830");
 extern void FUN_L00_00257470(void *, int, int);
@@ -305,7 +305,7 @@ void robot_dog_update(char *moby) {
         if (robot_dog_state->i278 < seg) {
             robot_dog_state->i278 = seg;
         }
-        if (FUN_L00_00259028(moby,
+        if (step_mover_2e3f20(moby,
                              (char *)&robot_dog_state->i180,
                              (char *)path + (robot_dog_state->i278 * 0x10 + 0x10),
                              (char *)robot_dog_state->v40) &

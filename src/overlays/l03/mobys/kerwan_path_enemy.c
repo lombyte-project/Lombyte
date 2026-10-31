@@ -263,7 +263,7 @@ extern Moby2C8398  *D_L03_0015FFD8_m __asm__("D_L03_0015FFD8");
 int                 D_L03_001618F4_i __asm__("D_L03_001618F4") = 0;
 extern int          coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int          is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
-extern int FUN_L00_0025df68_cf(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
+extern int step_mover_2e3f20(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
 extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern int probe_ground_height_cf(int unused, char *m, char *a, void *b, char *c, void *d) __asm__("FUN_L00_00260400");
 extern short          D_L03_001618F4 __attribute__((sda));
@@ -800,7 +800,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
                 break;
             }
         }
-        if (!(FUN_L00_0025df68_cf((char *)m,
+        if (!(step_mover_2e3f20((char *)m,
                                   (char *)&moby_data->mv,
                                   (float *)(pf->path + 0x10 + pf->idx * 0x10),
                                   (char *)moby_data->v40) &
@@ -858,7 +858,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             if (pf->idx < seg) {
                 pf->idx = seg;
             }
-            if (!(FUN_L00_0025df68_cf((char *)m,
+            if (!(step_mover_2e3f20((char *)m,
                                       (char *)&moby_data->mv,
                                       (float *)(pf->path + 0x10 + pf->idx * 0x10),
                                       (char *)moby_data->v40) &
@@ -891,7 +891,7 @@ void kerwan_path_enemy_update(Moby2C8398 *m) {
             if (moby_data->i298 < seg) {
                 moby_data->i298 = seg;
             }
-            if (!(FUN_L00_0025df68_cf((char *)m,
+            if (!(step_mover_2e3f20((char *)m,
                                       (char *)&moby_data->mv,
                                       (float *)(path + 0x10 + moby_data->i298 * 0x10),
                                       (char *)moby_data->v40) &

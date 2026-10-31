@@ -652,7 +652,7 @@ struct ChaserTarget {
 extern s32                 level_frame_count_lui __asm__("D_L07_0015F5CC");
 extern float               D_0015ED6C;
 extern struct ChaserTarget D_L07_00173EC0;
-extern int                 FUN_L00_00259028(struct Moby *, void *, int, void *);
+extern int                 step_mover_2e3f20(struct Moby *, void *, int, void *) __asm__("FUN_L00_00259028");
 extern int probe_vertical_ground_collision(void *, struct Moby *, int, float, float) __asm__("FUN_L00_002583f0");
 int update_snagglebeast_chase_movement(struct Moby       *chaser_moby,
                                        struct ChaserVars *chaser_vars,
@@ -674,7 +674,7 @@ int update_snagglebeast_chase_movement(
     path = D_L07_001B0530[chaser_vars->path];
     if (range < goal_distance) {
         navigation_result =
-            FUN_L00_00259028(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
+            step_mover_2e3f20(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
         if (navigation_result == 2) {
             fast_vec_sub(
                 position_delta,

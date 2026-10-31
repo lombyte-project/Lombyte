@@ -137,7 +137,7 @@ extern void  FUN_L00_00263ac8_c(float, void *, int, void *) __asm__("FUN_L00_002
 extern void  FUN_L00_0025a120_c(void *) __asm__("FUN_L00_0025a120");
 extern void  debug_print(char *, int) __asm__("FUN_001e93b0");
 extern void  FUN_L01_0026d930_c(void *) __asm__("FUN_L01_0026d930");
-extern void  FUN_L00_00259028_c(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
+extern void  step_mover_2e3f20(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern void  FUN_L00_0025f730(void *, float);
 extern void
            FUN_L00_00258830_c(void *, void *, float, float, float, int) __asm__("FUN_L00_00258830");
@@ -288,7 +288,7 @@ void blarg_paratrooper_update(char *moby) {
                 paratrooper_private_state->f1F4 = index + 2 * paratrooper_private_state->f20C;
             }
         }
-        FUN_L00_00259028_c(moby,
+        step_mover_2e3f20(moby,
                            (char *)paratrooper_private_state + 0xD0,
                            path + 0x10 + paratrooper_private_state->f1F4 * 16,
                            pos);
@@ -310,7 +310,7 @@ void blarg_paratrooper_update(char *moby) {
             paratrooper_private_state->fE0 = 0.0f;
             (*(unsigned char *)((char *)(moby) + 0x20)) = 3;
         } else {
-            FUN_L00_00259028_c(moby,
+            step_mover_2e3f20(moby,
                                (char *)paratrooper_private_state + 0xD0,
                                ((char *)l08_paths[paratrooper_private_state->f1D4]) + 0x10 +
                                    paratrooper_private_state->f1F4 * 16,

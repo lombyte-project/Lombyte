@@ -105,7 +105,7 @@ extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern int   D_L08_001619AC_gp __asm__("D_L08_001619AC") __attribute__((sda));
 extern int   l08_bombthrower_fade_interpolation_divisor_gp __asm__("D_L08_001619D0")
     __attribute__((sda));
-extern int FUN_L00_00259028(char *m, char *p, float *pos, char *v);
+extern int step_mover_2e3f20(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
 extern int
 select_nearest_xy_moby_with_hero_fallback(void *, float, void *) __asm__("FUN_L08_0026a3d0");
 extern void FUN_L00_0025a120(void *);
@@ -328,7 +328,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         bombthrower_vars->i134 = scale_game_frames(0xF0);
         break;
     case BOMBTHROWER_STATE_APPROACH_WAYPOINT:
-        FUN_L00_00259028((char *)moby,
+        step_mover_2e3f20((char *)moby,
                          bombthrower_vars->blkD0,
                          (float *)&bombthrower_vars->waypoint->pos,
                          (char *)bombthrower_vars->v40);
@@ -370,7 +370,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         }
         break;
     case BOMBTHROWER_STATE_MOVE_ONTO_WAYPOINT:
-        FUN_L00_00259028((char *)moby,
+        step_mover_2e3f20((char *)moby,
                          bombthrower_vars->blkD0,
                          (float *)&bombthrower_vars->waypoint->pos,
                          (char *)bombthrower_vars->v40);
@@ -425,7 +425,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         point[2] = 0.0f;
         fast_vec_add(point, point, &bombthrower_vars->waypoint->pos);
         if (0.2f < vector_distance_xy(&moby->pos, point)) {
-            FUN_L00_00259028(
+            step_mover_2e3f20(
                 (char *)moby, bombthrower_vars->blkD0, point, (char *)bombthrower_vars->v40);
         }
         if (moby->anim_flags & 2) {

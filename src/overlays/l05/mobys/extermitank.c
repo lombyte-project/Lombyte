@@ -33,7 +33,7 @@ extern int   collision_line(void *, void *, int, void *, void *) __asm__("FUN_00
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern int   frame_number_gp __asm__("D_L05_0015F5CC") MACRO_ADDR;
-extern int   FUN_L00_00259028(char *m, char *p, float *pos, char *v);
+extern int   step_mover_2e3f20(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
 extern int   FUN_L00_00259740(void *, void *, int);
 extern s32
 spawn_spark_c2(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");
@@ -263,7 +263,7 @@ void extermitank_update(unsigned char *moby) {
         if (dir >= 0)
             last = n - 1;
         idx = (extermitank_vars->unkC0 + n + dir) % n;
-        FUN_L00_00259028((char *)moby,
+        step_mover_2e3f20((char *)moby,
                          &extermitank_vars->unk70,
                          (float *)(path + (idx * 16 + 0x10)),
                          extermitank_vars->unk40);
@@ -326,7 +326,7 @@ void extermitank_update(unsigned char *moby) {
         if (dir >= 0)
             last = n - 1;
         idx = (extermitank_vars->unkC0 + n + dir) % n;
-        FUN_L00_00259028((char *)moby,
+        step_mover_2e3f20((char *)moby,
                          &extermitank_vars->unk70,
                          (float *)(path + (idx * 16 + 0x10)),
                          extermitank_vars->unk40);

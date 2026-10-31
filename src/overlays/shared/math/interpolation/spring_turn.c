@@ -577,8 +577,8 @@ done:
 
 void approach_w(unsigned char *, float *, float, float, float, float) __asm__("FUN_L00_00258278");
 int  move_w(unsigned char *, char *, float *, void *, float) __asm__("FUN_L00_00258b50");
-int  FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
-int  FUN_L00_00259028(unsigned char *moby,
+int  step_mover_2e3f20(unsigned char *m, char *c, float *tgt, void *out) __asm__("FUN_L00_00259028");
+int  step_mover_2e3f20(unsigned char *moby,
                       char          *movement_control,
                       float         *target_position,
 

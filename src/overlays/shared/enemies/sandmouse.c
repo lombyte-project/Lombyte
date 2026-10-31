@@ -491,7 +491,7 @@ extern char                        D_L01_0020BA30[] NOT_SDA;
 extern float                       fast_vec_dist(void *, void *);
 extern int                         debug_print() __asm__("FUN_001e93b0");
 extern int                         FUN_L00_00257b90(int, int);
-extern int                         FUN_L00_00259028(void *, void *, void *, void *);
+extern int                         step_mover_2e3f20(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern s32                         collision_line(void *, void *, s32, void *, s32);
 extern s32                         rand(void);
 extern short sandmouse_follow_duration_frames_gp __asm__("D_L01_00162098") __attribute__((sda));
@@ -744,7 +744,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                                   frame_time_sq * 3.1415927f,
                                   frame_time * 11.519173f);
             sandmouse_vars->vel.f[2] = 0;
-            movement_result_flags = FUN_L00_00259028(
+            movement_result_flags = step_mover_2e3f20(
                 sandmouse_moby, &D_L01_001DEB38_lui, sandmouse_vars, &sandmouse_vars->vel);
         }
         if ((movement_result_flags & 6) != 0 ||

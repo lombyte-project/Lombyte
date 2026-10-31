@@ -120,7 +120,7 @@ extern int   try_start_moby_hop(void *, void *, void *, int) __asm__("FUN_L00_00
 extern void  initialize_moby_hop_trajectory(void *, void *, void *) __asm__("FUN_L00_002bf8b0");
 extern int   compute_moby_state_from_vertical_probe(void *) __asm__("FUN_L00_002bfec8");
 extern int   update_arc_motion(void *, void *) __asm__("FUN_L00_0025b440");
-extern int   FUN_L00_00259028(void *, void *, void *, void *);
+extern int   step_mover_2e3f20(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern void  fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
@@ -488,7 +488,7 @@ void doom_bot_update(struct Moby *moby) {
             (coll_hit.moby && ((struct Moby *)coll_hit.moby)->pclass &&
              ((struct Moby *)coll_hit.moby)->pclass->type == 5)) {
             z = moby->pos.z;
-            move_flags = FUN_L00_00259028(
+            move_flags = step_mover_2e3f20(
                 moby, &((DoomBotParams *)&hero)->damage, doom_bot_vars, &doom_bot_vars->velocity);
             if (absolute_float(moby->pos.z - z) > 1.0f) {
                 moby->pos.z = z;

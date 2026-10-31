@@ -92,7 +92,7 @@ char       *spawn_mine_layer_projectile(char *p, void *pos, float *dir) __asm__(
 extern void FUN_L01_0026d930(void *);
 extern void blend_moby_animation(struct Moby *, int, int, int) __asm__("FUN_00212f90");
 extern void FUN_L00_00258278(f32, f32, f32, f32, struct Moby *, void *);
-extern void FUN_L00_00259028(struct Moby *, void *, void *, void *);
+extern void step_mover_2e3f20(struct Moby *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern void trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 extern int  step_moby_motion(struct Moby *, void *) __asm__("FUN_L00_0025c698");
 extern void spawn_explosion(struct Moby *,
@@ -211,7 +211,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
     case MINE_LAYER_PATROL_AND_FIRE:
         pt = &mine_layer_vars->patrol;
         patrol_point_index = pt->idx;
-        FUN_L00_00259028(mine_layer_moby,
+        step_mover_2e3f20(mine_layer_moby,
                          mine_layer_vars->walk,
                          &pt->path->points[patrol_point_index],
                          mine_layer_vars->effect);

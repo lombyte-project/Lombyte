@@ -85,7 +85,7 @@ int          D_L02_00161A94 = 0x78;
 extern float constructorbot_wake_spray_planar_magnitude_max_gp __asm__("D_L02_00161A98")
     __attribute__((sda));
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern int   FUN_L00_00259028(char *m, char *p, float *pos, char *v);
+extern int   step_mover_2e3f20(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
 extern s32   rand(void);
 extern void *FUN_L00_00263fd8(char  *src,
                               int    cls,
@@ -274,7 +274,7 @@ void constructorbot_update(struct Moby *moby) {
         }
         break;
     case L02_BOT_MOVE_TO_POST:
-        if (FUN_L00_00259028((char *)moby,
+        if (step_mover_2e3f20((char *)moby,
                              bot_private_vars->walk,
                              (float *)&l02_cuboids[bot_private_vars->post].pos,
                              (char *)bot_private_vars->velocity) == 4) {
@@ -285,7 +285,7 @@ void constructorbot_update(struct Moby *moby) {
         }
         break;
     case L02_BOT_WANDER:
-        if (FUN_L00_00259028((char *)moby,
+        if (step_mover_2e3f20((char *)moby,
                              bot_private_vars->walk,
                              bot_private_vars->wander,
                              (char *)bot_private_vars->velocity) &
