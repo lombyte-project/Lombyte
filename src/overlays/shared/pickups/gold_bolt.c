@@ -81,9 +81,9 @@ extern s32 current_level_index_macro __asm__("D_0015ED84");
 extern s32 D_L01_0015F640;
 extern s32 cutscene_active __asm__("D_L01_0015F404");
 extern f32 D_L01_00161F10_gp __asm__("D_L01_00161F10") __attribute__((sda));
-extern f32 D_L01_00161F14_gp __asm__("D_L01_00161F14") __attribute__((sda));
-extern f32 D_L01_00161F18_gp __asm__("D_L01_00161F18") __attribute__((sda));
-extern f32 D_L01_00161F2C_gp __asm__("D_L01_00161F2C") __attribute__((sda));
+extern f32 l01_gold_bolt_bobbing_height_offset_gp __asm__("D_L01_00161F14") __attribute__((sda));
+extern f32 l01_gold_bolt_bobbing_amplitude_gp __asm__("D_L01_00161F18") __attribute__((sda));
+extern f32 l01_gold_bolt_bobbing_phase_degrees_per_second_gp __asm__("D_L01_00161F2C") __attribute__((sda));
 extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
 extern f32 gold_bolt_spin_x_degrees_per_second_gp __asm__("D_L01_00161F20") __attribute__((sda));
 extern f32 gold_bolt_spin_y_degrees_per_second_gp __asm__("D_L01_00161F24") __attribute__((sda));
@@ -504,8 +504,8 @@ void gold_bolt_update(struct Moby *moby) {
         return;
     case GOLD_BOLT_WAIT_FOR_PICKUP:
         moby->scale = moby->pclass->scale * D_L01_00161F10_gp;
-        moby->pos.z = gold_bolt_instance_vars->home.z + D_L01_00161F14_gp +
-                      D_L01_00161F18_gp * fast_sin(moby->rot.w);
+        moby->pos.z = gold_bolt_instance_vars->home.z + l01_gold_bolt_bobbing_height_offset_gp +
+                      l01_gold_bolt_bobbing_amplitude_gp * fast_sin(moby->rot.w);
         moby->rot.x = fast_add_rotations(
             moby->rot.x, gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * frame_time_macro);
         moby->rot.y = fast_add_rotations(
@@ -513,7 +513,7 @@ void gold_bolt_update(struct Moby *moby) {
         moby->rot.z = fast_add_rotations(
             moby->rot.z, gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * frame_time_macro);
         moby->rot.w =
-            fast_add_rotations(moby->rot.w, D_L01_00161F2C_gp * 0.017453292f * frame_time_macro);
+            fast_add_rotations(moby->rot.w, l01_gold_bolt_bobbing_phase_degrees_per_second_gp * 0.017453292f * frame_time_macro);
         FUN_L01_00308550_f(moby);
         if (!random_integer_below(D_L01_00161F50_gp)) {
             FUN_L01_003089f0_f(moby);
@@ -627,13 +627,13 @@ void update_gold_bolt_visuals(struct Moby *moby) {
     moby->scale = moby->pclass->scale * *(float *)&D_L01_00161F10_gp;
     if (moby->state == 1) {
         bobbing_sine = fast_sin(moby->rot.w);
-        moby->pos.z = *(float *)(gold_bolt_visual_vars + 0x18) + *(float *)&D_L01_00161F14_gp +
-                      *(float *)&D_L01_00161F18_gp * bobbing_sine;
+        moby->pos.z = *(float *)(gold_bolt_visual_vars + 0x18) + *(float *)&l01_gold_bolt_bobbing_height_offset_gp +
+                      *(float *)&l01_gold_bolt_bobbing_amplitude_gp * bobbing_sine;
         moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(gold_bolt_visual_vars + 0x68));
         moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(gold_bolt_visual_vars + 0x64));
         updated_rotation_z =
             fast_add_rotations(moby->rot.z, *(float *)(gold_bolt_visual_vars + 0x60));
-        k = *(float *)&D_L01_00161F2C_gp * DEG_TO_RAD * frame_time;
+        k = *(float *)&l01_gold_bolt_bobbing_phase_degrees_per_second_gp * DEG_TO_RAD * frame_time;
         moby->rot.z = updated_rotation_z;
         moby->rot.w = fast_add_rotations(moby->rot.w, k);
     }
