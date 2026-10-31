@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/sdk/video/mpeg/bitstream/peek_bits.h"
+#include "rnc/sdk/mpeg/bitstream/peek_bits.h"
 
 extern s32 ReadSysbit(void *state, s32 bit_count) __asm__("_sysbitGet");
 

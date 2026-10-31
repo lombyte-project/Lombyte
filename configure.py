@@ -951,7 +951,7 @@ RODATA_OVERLAYS = {
     "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0, 26),  # its RPC-collision message
     "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 77),  # its two error messages
     "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 96),  # its buffer-full message
-    "sdk/video/mpeg/errors/print_mpeg_error": (0x153AD8, 0x54A58, 16),  # its error message
+    "sdk/mpeg/errors/print_mpeg_error": (0x153AD8, 0x54A58, 16),  # its error message
     "sdk/graph/sce_gs_set_def_load_image": (0x1530B0, 0x54030, 284),  # its error message and switch table
     "update_menu_resource_stream": (0x1E87F0, 0xE9770, 28),  # stream-state switch table
     # vfprintf_r: blanks/zeroes, the xdigs strings, the short literals (kept in
@@ -985,14 +985,14 @@ RODATA_OVERLAYS = {
     "sdk/storage/cdvd/checkModelVersion": (0x153030, 0x53FB0, 12),
     "sdk/dma/wait_dma": (0x1533E0, 0x54360, 22),
     "sdk/input/dbc/sceDbcInit": (0x153518, 0x54498, 57),
-    "sdk/video/mpeg/macroblock/mb_address_increment": (0x1537A8, 0x54728, 50),
-    "sdk/video/mpeg/macroblock/slicea0": (0x153800, 0x54780, 38),
-    "sdk/video/mpeg/headers/_quantMatrixExtension": (0x153910, 0x54890, 44),
-    "sdk/video/mpeg/ref_images/is_out_size_ok": (0x153980, 0x54900, 41),
-    "sdk/video/mpeg/errors/report_mpeg_sequence_scalable_unsupported": (0x153B48, 0x54AC8, 48),
-    "sdk/video/mpeg/errors/report_unknown_mpeg_extension": (0x153B78, 0x54AF8, 18),
-    "sdk/video/mpeg/errors/report_mpeg_picture_spatial_scalable_unsupported": (0x153B90, 0x54B10, 50),
-    "sdk/video/mpeg/errors/report_mpeg_picture_temporal_scalable_unsupported": (0x153BC8, 0x54B48, 51),
+    "sdk/mpeg/macroblock/mb_address_increment": (0x1537A8, 0x54728, 50),
+    "sdk/mpeg/macroblock/slicea0": (0x153800, 0x54780, 38),
+    "sdk/mpeg/headers/_quantMatrixExtension": (0x153910, 0x54890, 44),
+    "sdk/mpeg/ref_images/is_out_size_ok": (0x153980, 0x54900, 41),
+    "sdk/mpeg/errors/report_mpeg_sequence_scalable_unsupported": (0x153B48, 0x54AC8, 48),
+    "sdk/mpeg/errors/report_unknown_mpeg_extension": (0x153B78, 0x54AF8, 18),
+    "sdk/mpeg/errors/report_mpeg_picture_spatial_scalable_unsupported": (0x153B90, 0x54B10, 50),
+    "sdk/mpeg/errors/report_mpeg_picture_temporal_scalable_unsupported": (0x153BC8, 0x54B48, 51),
     "sdk/scf/GetRomName": (0x153C00, 0x54B80, 12),
     "draw_scrolling_sky_shells": (0x1E88F0, 0xE9870, 20),  # switch table
     "update_streamed_moby_animation": (0x1E88B0, 0xE9830, 28),  # switch table
@@ -1040,7 +1040,7 @@ SDATA_OVERLAYS = {
 DATA_OVERLAYS = {
     "sdk/kernel/supplement_crt0": (0x130320, 0x312A0, 8),
     "sdk/graph/sce_gs_get_gparam": (0x132D40, 0x33CC0, 16),
-    "sdk/video/ipu/send_ipu_command": (0x132E70, 0x33DF0, 64),
+    "sdk/ipu/send_ipu_command": (0x132E70, 0x33DF0, 64),
     "sdk/scf/sce_scf_get_language": (0x1330D4, 0x34054, 1),
     "movies/display/set_pal_mode": (0x13D100, 0x3E080, 8),
     "rendering/texture/append_palette_transfer_packet": (0x151B60, 0x52AE0, 656),

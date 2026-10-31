@@ -2,7 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
-#include "rnc/sdk/video/mpeg/bitstream/peek_bits.h"
+#include "rnc/sdk/mpeg/bitstream/peek_bits.h"
 
 /* libmpeg: demultiplex the PSS (MPEG-2 program stream) data of a ring
    buffer and hand each PES packet to the callback registered for its
