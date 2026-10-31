@@ -176,7 +176,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         qcopy(&mine_layer_moby->pos, &path->points[0]);
         mine_layer_vars->patrol.idx = 1;
         mine_layer_moby->scale *= mine_layer_initial_scale_multiplier_gp;
-        mine_layer_moby->state = 1;
+        mine_layer_moby->state = MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE;
         if (mine_layer_moby->prev_seq != 0) {
             blend_moby_animation(mine_layer_moby, 0, 0, 0);
         }
@@ -191,7 +191,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
                          mine_layer_vars->turn);
         if (vector_distance_xy(&mine_layer_moby->pos, &target.aim) < sight &&
             absolute_float(target.aim.f[2] - mine_layer_moby->pos.z) < 4.0f) {
-            mine_layer_moby->state = 2;
+            mine_layer_moby->state = MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL;
             if (mine_layer_moby->prev_seq != 1) {
                 blend_moby_animation(mine_layer_moby, 1, 0, scale_game_frames(10));
             }
@@ -199,7 +199,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         break;
     case MINE_LAYER_WAIT_FOR_ANIMATION_BEFORE_PATROL:
         if (mine_layer_moby->anim_flags & 2) {
-            mine_layer_moby->state = 3;
+            mine_layer_moby->state = MINE_LAYER_PATROL_AND_FIRE;
             mine_layer_vars->patrol_timer = scale_game_frames(120);
             if (mine_layer_moby->prev_seq != 2) {
                 blend_moby_animation(mine_layer_moby, 2, 0, scale_game_frames(10));
@@ -220,7 +220,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         if (fast_vec_dist(&mine_layer_moby->pos, &pt->path->points[patrol_point_index]) < 1.0f) {
             if (mine_layer_vars->patrol_timer == 0 &&
                 vector_distance_xy(&mine_layer_moby->pos, &target.aim) > 25.0f) {
-                mine_layer_moby->state = 1;
+                mine_layer_moby->state = MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE;
                 if (mine_layer_moby->prev_seq != 0) {
                     blend_moby_animation(mine_layer_moby, 0, 0, scale_game_frames(10));
                 }
@@ -267,7 +267,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
             if (mine_layer_moby->prev_seq != 0) {
                 blend_moby_animation(mine_layer_moby, 0, 0, scale_game_frames(10));
             }
-            mine_layer_moby->state = 1;
+            mine_layer_moby->state = MINE_LAYER_FACE_TARGET_AND_WAIT_FOR_RANGE;
         } else if (mine_layer_moby->pos.z < 5.0f) {
             qcopy(muzzle, &mine_layer_moby->pos);
             muzzle[2] += 0.5f;
@@ -323,7 +323,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         }
         break;
     }
-    if (mine_layer_moby->state < 4) {
+    if (mine_layer_moby->state < MINE_LAYER_KNOCKBACK_AND_RECOVER) {
         mine_layer_vars->fall_speed += frame_time_sq * 9.8f;
         mine_layer_moby->pos.z -= mine_layer_vars->fall_speed - 2.0f;
         ground = probe_ground_height(&mine_layer_moby->pos, 0, 0.5f);
