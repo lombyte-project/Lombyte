@@ -745,8 +745,8 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
                 k = frame_time_macro;
                 seven = 7.0f;
                 *(float *)(q + 0x88) = moby_vars->size_scale * size_multiplier;
-                *(float *)(q + 0x78) = D_L01_001619A0_gp * k;
-                *(float *)(q + 0x7C) = D_L01_001619A4_gp * k;
+                *(float *)(q + 0x78) = l01_smaller_amoeboid_knockback_xy_scale * k;
+                *(float *)(q + 0x7C) = l01_smaller_amoeboid_knockback_z_scale * k;
                 *(int *)(q + 0x84) = *(int *)(q + 0x84) | 4;
                 *(float *)(q + 0xB0) = seven;
                 *(float *)(q + 0xB4) = 13.0f;
@@ -768,8 +768,8 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
                 k = frame_time_macro;
                 seven = 7.0f;
                 *(float *)(q + 0x88) = moby_vars->size_scale * size_multiplier;
-                *(float *)(q + 0x78) = D_L01_001619A0_gp * k;
-                *(float *)(q + 0x7C) = D_L01_001619A4_gp * k;
+                *(float *)(q + 0x78) = l01_smaller_amoeboid_knockback_xy_scale * k;
+                *(float *)(q + 0x7C) = l01_smaller_amoeboid_knockback_z_scale * k;
                 *(int *)(q + 0x84) = *(int *)(q + 0x84) | 4;
                 *(float *)(q + 0xB0) = seven;
                 *(float *)(q + 0xB4) = 13.0f;
