@@ -803,6 +803,9 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
     enum {
         PYROCITOR_FLAME_SUBTYPE_SPARK_BURST = 10
     };
+    enum {
+        PYROCITOR_FLAME_MIN_TRACKED_FRAME_COUNT = 2
+    };
     float          hit_direction_vector[4];
     char           hit_descriptor[0x30];
     char           qv[16];
@@ -879,7 +882,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
                                 spark_third_frame_count,
                                 *(int *)&pyrocitor_spark_lookup_index_and_flags_gp);
                 }
-            } else if (sub_type < 2) {
+            } else if (sub_type < PYROCITOR_FLAME_MIN_TRACKED_FRAME_COUNT) {
                 *(int *)(slots_base - (-(i * 4))) = 0;
             }
         } else {
