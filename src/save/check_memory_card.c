@@ -17,6 +17,9 @@ extern u8   memory_card_info_sync_outputs[] __asm__("D_0013D348");
 s32 check_memory_card(void) __asm__("FUN_00209168");
 
 s32 check_memory_card(void) {
+    enum {
+        MEMCARD_TYPE_SUPPORTED_FOR_STARTUP = 2
+    };
     s32              card_type;
     s32              free_blocks;
     s32              format;
@@ -41,7 +44,7 @@ s32 check_memory_card(void) {
     if (card_state->unkBC == -2) {
         return 0;
     }
-    if (card_type != 2) {
+    if (card_type != MEMCARD_TYPE_SUPPORTED_FOR_STARTUP) {
         return 1;
     }
     if (format == 0) {
