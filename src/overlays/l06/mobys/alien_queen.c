@@ -114,8 +114,8 @@ typedef struct {
     int   count;
 } QueenProbe;
 
-extern char  D_L06_001678D0[];
-extern int   D_L06_0016A010[];
+extern char  l06_post_death_scan_records[] __asm__("D_L06_001678D0");
+extern int   l06_post_death_scan_record_gates[] __asm__("D_L06_0016A010");
 extern short D_L06_00161EF0 __attribute__((sda));
 extern short l06_alien_queen_movement_speed __asm__("D_L06_00161EF4") __attribute__((sda));
 f32          alien_queen_movement_acceleration_gp __asm__("D_L06_00161EFC") = 8.0f;
@@ -738,8 +738,8 @@ void alien_queen_update(unsigned char *moby) {
         int   i;
         char *post_death_scan_record = 0;
         for (i = 0; i < 0x30; i++) {
-            if (D_L06_0016A010[i] != 0) {
-                post_death_scan_record = D_L06_001678D0 + i * 0xA0;
+            if (l06_post_death_scan_record_gates[i] != 0) {
+                post_death_scan_record = l06_post_death_scan_records + i * 0xA0;
                 if (*(short *)(post_death_scan_record + 0x86) == 0x12) {
                     release_moby_camera_control(post_death_scan_record);
                     break;
