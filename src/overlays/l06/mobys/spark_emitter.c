@@ -247,7 +247,7 @@ void spark_emitter_update(struct Moby *emitter) {
 /* finds the mobys of type 0x5E8 in state 1 in a level list and starts those within range */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A680), where it is exact; names translated to the US level program. */
 
-extern char  *D_L06_0015FFD8;
+extern char  *level_mobys_q __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0[];
 
 void activate_listed_spark_emitters(int moby_list_index) __asm__("FUN_L06_00309240");
@@ -260,7 +260,7 @@ void activate_listed_spark_emitters(int moby_list_index) {
     if (D_L06_001ABFC0[moby_list_index] != 0) {
         moby_index_entry = D_L06_001ABFC0[moby_list_index];
         do {
-            moby = D_L06_0015FFD8 + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
+            moby = level_mobys_q + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
             if (MOBY(moby)->oclass == 0x5E8 && (unsigned char)moby[0x20] == 1) {
                 qcopy(position_test_vector, moby + 0x10);
                 position_test_vector[3] = 0.25f;
