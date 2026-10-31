@@ -644,9 +644,9 @@ void update_scoutbot_movement(struct Moby *moby) {
 void *enter_scoutbot_return_home_state(struct Moby *moby) __asm__("FUN_L08_002d4050");
 
 void *enter_scoutbot_return_home_state(struct Moby *moby) {
-    void         *suction_cancel_status = cancel_suck_cannon_suction(moby);
+    enum { SCOUTBOT_STATE_RETURN_HOME = 3 } ;void         *suction_cancel_status = cancel_suck_cannon_suction(moby);
     ScoutbotVars *scoutbot_data = (ScoutbotVars *)moby->pvars;
-    moby->state = 3;
+    moby->state = SCOUTBOT_STATE_RETURN_HOME;
     scoutbot_data->unk200 = 4.0f;
     scoutbot_data->unk208 = 0.5f;
     if ((unsigned char)((char)moby->prev_seq) != 2) {
