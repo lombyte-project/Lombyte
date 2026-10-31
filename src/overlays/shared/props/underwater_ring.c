@@ -90,7 +90,7 @@ void underwater_ring_update(struct Moby *moby) {
         ring_vars->triggered = 0;
         ring_vars->flash_timer = 0;
         set_moby_color(moby, 0, 0, 0);
-        moby->state = 1;
+        moby->state = UNDERWATER_RING_STATE_READY;
         break;
     case UNDERWATER_RING_STATE_READY:
     case UNDERWATER_RING_STATE_TIMED_CHALLENGE:
@@ -105,16 +105,16 @@ void underwater_ring_update(struct Moby *moby) {
             if (ring_vars->enabled != 0) {
                 set_moby_list_state(moby->group, 4);
                 ring_vars->timer = ring_vars->restart_timer;
-                moby->state = 4;
+                moby->state = UNDERWATER_RING_STATE_COMPLETED;
                 break;
             }
         }
         if (ring_vars->triggered == 0 && near_parent) {
             struct Moby *parent = ring_vars->parent;
             VendorVars  *parent_vars = (VendorVars *)parent->pvars;
-            if (parent->state == 1) {
+            if (parent->state == UNDERWATER_RING_STATE_READY) {
                 ring_vars->child_count = 0;
-                parent->state = 2;
+                parent->state = UNDERWATER_RING_STATE_TIMED_CHALLENGE;
                 parent_vars->timer =
                     parent_vars->frame_count < 1 ? 900 : scale_game_frames(ring_vars->frame_count);
             }
@@ -123,12 +123,12 @@ void underwater_ring_update(struct Moby *moby) {
             set_moby_color(moby, 0, 0xff, 0);
             ring_vars->triggered = 1;
         }
-        if (moby->state == 2) {
+        if (moby->state == UNDERWATER_RING_STATE_TIMED_CHALLENGE) {
             if (ring_vars->child_count >= ring_vars->notified_count) {
                 set_moby_list_state(moby->group, 4);
                 allocate_voice_for_target_entry(1, 0x31, moby);
                 ring_vars->timer = ring_vars->restart_timer;
-                moby->state = 4;
+                moby->state = UNDERWATER_RING_STATE_COMPLETED;
                 break;
             } else {
                 if (fast_dec_timer_s16(&ring_vars->timer) != 0) {
@@ -157,7 +157,7 @@ void underwater_ring_update(struct Moby *moby) {
         set_moby_color(moby, 0, 0, 0);
         ring_vars->child_count = 0;
         ring_vars->triggered = 0;
-        moby->state = 1;
+        moby->state = UNDERWATER_RING_STATE_READY;
         break;
     case UNDERWATER_RING_STATE_COMPLETED: {
         u16  save_id;
