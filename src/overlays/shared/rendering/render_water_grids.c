@@ -224,6 +224,10 @@ void build_water_render_setup_packet(void) {
 void render_water_grids(f32 *water_record, s32 count) __asm__("FUN_L01_002b91c8");
 
 void render_water_grids(f32 *water_record, s32 count) {
+    enum {
+        WATER_GRID_MODE_SKIP_CLIP_TESTS = 0,
+        WATER_GRID_MODE_TEST_NEAR_CLIP = 2
+    };
     f32  corners[4][4];
     f32  near_clip[4];
     f32  far_clip[4];
@@ -314,9 +318,9 @@ void render_water_grids(f32 *water_record, s32 count) {
             }
             mode = (far_bits & 0x2f2f2f2f) != 0;
             if (!mode) {
-                mode = 2;
+                mode = WATER_GRID_MODE_TEST_NEAR_CLIP;
                 if (!(near_bits & 0x2f2f2f2f))
-                    mode = 0;
+                    mode = WATER_GRID_MODE_SKIP_CLIP_TESTS;
             }
             mask = *(u16 *)((u8 *)water_record + 0x1e);
             if (*(u32 *)(water_record + 5) != cached_water_texture_id_gp ||
