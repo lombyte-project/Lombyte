@@ -124,12 +124,12 @@ void level_12_water_tile_update(struct Moby *moby) {
         ((L12Slot *)D_L12_001CBF40_c)[water_tile_vars[3]].visibility = 0xffff;
         pool_bind_tile(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190,
                        D_L12_001CBE00_c + water_tile_vars[3] * 16);
-        moby->state = 1;
+        moby->state = SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT;
         break;
     case SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT:
         next_water_tile_index_gp = 0;
         initialize_level_12_slot_grid_neighbors(water_tile_vars[3]);
-        moby->state = 2;
+        moby->state = SLOT_UPDATE_HEIGHT_AND_MOTION;
         *(float *)(water_tile_vars + 4) = moby->pos.z;
         break;
     case SLOT_UPDATE_HEIGHT_AND_MOTION:
