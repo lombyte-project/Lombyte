@@ -10,9 +10,12 @@ void audio_dec_begin_put(struct AudioDec *dec,
                          void           **second_destination,
 
                          s32 *size2) {
+    enum {
+        AUDIO_DEC_STATE_HEADER_PENDING = 0
+    };
     s32 writable_byte_count;
 
-    if (dec->state == 0) {
+    if (dec->state == AUDIO_DEC_STATE_HEADER_PENDING) {
         if (dec->strType != 4) {
             *first_destination = ((u8 *)&dec->hdr + dec->hdrCount);
             *size1 = 0x28 - dec->hdrCount;
