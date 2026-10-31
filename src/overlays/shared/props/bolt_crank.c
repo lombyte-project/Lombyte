@@ -133,7 +133,7 @@ void bolt_crank_update(struct Moby *moby) {
         }
         distance = vector_distance_xy(&moby->pos, &hero.motion.pos);
         if (distance < 1.75f) {
-            if (hero.vehicle_mode == 0) {
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 angle = fast_arc_tan(moby->pos.x - hero.motion.pos.f[0],
                                      moby->pos.y - hero.motion.pos.f[1]);
                 yaw_diff = fast_difference_between_rotations(hero.motion.rot.f[2], angle);
