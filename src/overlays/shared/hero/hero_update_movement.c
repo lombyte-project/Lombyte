@@ -127,7 +127,7 @@ extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00
 extern u8  *FUN_L00_0026f080(void *, void *, f32, f32);
 extern s32  random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_00262cf0(void *, void *, f32, f32, f32);
-extern f32  FUN_L00_00209018(void *, s32);
+extern f32  vector_length_xyz_cf(void *, s32) __asm__("FUN_L00_00209018");
 extern f32  approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void set_fourth_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a228");
@@ -683,7 +683,7 @@ void hero_update_movement(void) {
                     &hero.motion.velocity, hero.ground_speed, hero.motion.rot.f[2], yaw);
             } else if (hero.state.current == 0x33) {
                 f32 sp = hero.ground_speed *
-                         FUN_L00_00209018(l00_swim_speed_scale_by_animation_frame, 0x1E) * 5.0f;
+                         vector_length_xyz_cf(l00_swim_speed_scale_by_animation_frame, 0x1E) * 5.0f;
                 if (hero.state.prev == 0x35 && scale_game_frames(15) > hero.state_timer) {
                     if (sp < frame_time * 4.5f) {
                         sp = frame_time * 4.5f;
@@ -808,7 +808,7 @@ void hero_update_movement(void) {
             speed_step(frame_time_sq * 4.0f, frame_time_sq * 5.0f);
             {
                 f32 sp = hero.ground_speed *
-                         FUN_L00_00209018(l00_swim_speed_scale_by_animation_frame, 0x1E) * 5.5f;
+                         vector_length_xyz_cf(l00_swim_speed_scale_by_animation_frame, 0x1E) * 5.5f;
                 hero.motion.velocity.f[0] = fast_cos(hero.motion.rot.f[2]) * sp;
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.rot.f[2]) * sp;
                 hero.motion.velocity.f[2] = 0.0f;

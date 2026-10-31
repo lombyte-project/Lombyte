@@ -2201,9 +2201,9 @@ f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame,
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00209690), where it is exact; names translated to the US level program. */
 
-float FUN_L00_00209018(float *a, int n);
+float vector_length_xyz_cf(float *a, int n) __asm__("FUN_L00_00209018");
 
-float FUN_L00_00209018(float *sample_values, int sample_count) {
+float vector_length_xyz_cf(float *sample_values, int sample_count) {
     char         sample_integral_part_scratch[16] __attribute__((aligned(16)));
     struct Hero *hero_base = (struct Hero *)((char *)((unsigned char *)&D_0013E533) + 0xE1D);
     int          i = truncate_float_to_s32(hero_base->anim_frame);
