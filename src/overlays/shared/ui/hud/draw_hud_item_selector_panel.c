@@ -71,58 +71,58 @@ extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("fun
 
 int hud_draw_gauge_frame(HudElem_237840 *e) __asm__("FUN_L00_00237840");
 
-int hud_draw_gauge_frame(HudElem_237840 *e) {
+int hud_draw_gauge_frame(HudElem_237840 *gauge_element) {
     int pos[2];
     int left, top, right, bottom, w, h, bh, step, i;
     {
         int ww = D_L00_0015F760;
-        pos[0] = e->unk50;
-        pos[1] = e->unk54;
-        e->w = ww;
+        pos[0] = gauge_element->unk50;
+        pos[1] = gauge_element->unk54;
+        gauge_element->w = ww;
         {
             int *src = (int *)&(*(short *)&D_L00_0015F764);
-            int *dst = &e->h;
+            int *dst = &gauge_element->h;
             __builtin_memcpy(dst, src, 4);
         }
     }
-    hud_screen_position(e, &pos[0], &pos[1]);
-    apply_hud_slide_offset(e, &pos[0], &pos[1], e->unk6C, 0);
+    hud_screen_position(gauge_element, &pos[0], &pos[1]);
+    apply_hud_slide_offset(gauge_element, &pos[0], &pos[1], gauge_element->unk6C, 0);
     w = D_L00_0015F760 * 0xD0;
     h = D_L00_0015F764 * 0xA0;
     bh = D_L00_0015F760 * 0x260;
     bottom = D_L00_0015F764 * 0xEA0;
-    left = (pos[0] + e->unk48) << 4;
-    top = (pos[1] + e->unk4A) << 4;
+    left = (pos[0] + gauge_element->unk48) << 4;
+    top = (pos[1] + gauge_element->unk4A) << 4;
     left += w / 64;
     top += h / 256;
     right = left + bh / 64;
     bottom = top + bottom / 256;
     append_screen_rect_packet(left, top, right, bottom, 0x80000000, 1);
     {
-        int st = D_L00_0015F764 * 0xEA0;
+        int gauge_height_numerator = D_L00_0015F764 * 0xEA0;
         h = D_L00_0015F764;
-        top = (pos[1] + e->unk4A) << 4;
+        top = (pos[1] + gauge_element->unk4A) << 4;
         top += (h * 0xF40) / 256;
-        bh = (e->unk74 * st) / (e->unk08 << 8);
+        bh = (gauge_element->unk74 * gauge_height_numerator) / (gauge_element->unk08 << 8);
         append_screen_rect_packet(left, top, right, top - bh, 0x80829E00, 1);
     }
     i = 1;
-    if (i < e->unk74)
+    if (i < gauge_element->unk74)
         do {
             int hh = D_L00_0015F764;
-            top = (pos[1] + e->unk4A) << 4;
+            top = (pos[1] + gauge_element->unk4A) << 4;
             top += (hh * 0xF40) / 256;
             step = D_L00_0015F764 * 0xEA0;
-            step = i * step / (e->unk08 << 8);
+            step = i * step / (gauge_element->unk08 << 8);
             i++;
             top -= step;
             top -= 16;
             append_screen_rect_packet(left, top, right, top + 32, 0x80000000, 1);
-        } while (i < e->unk74);
-    w = get_icon_frame(*(int *)e, 0);
+        } while (i < gauge_element->unk74);
+    w = get_icon_frame(*(int *)gauge_element, 0);
     draw_rotated_hud_sprite(
-        w, pos[0] + e->unk48, pos[1] + e->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
-    return e->w;
+        w, pos[0] + gauge_element->unk48, pos[1] + gauge_element->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
+    return gauge_element->w;
 }
 
 typedef struct {
