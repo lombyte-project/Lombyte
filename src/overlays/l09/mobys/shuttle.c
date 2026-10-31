@@ -119,7 +119,7 @@ void shuttle_update(struct Moby *moby) {
             Vec4               *endpoint;
             attach_manipulator(moby, 0, (u8 *)shuttle_vars + 0x60);
             path = (PathNodes_00309c08 *)l09_paths[shuttle_vars->path];
-            moby->state = 1;
+            moby->state = SHUTTLE_STATE_WAIT_FOR_DEPARTURE;
             if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
                 shuttle_vars->dir = -1;
                 shuttle_vars->node = path->count - 2;
@@ -149,7 +149,7 @@ void shuttle_update(struct Moby *moby) {
                                          frame_time * 0.31415927f,
                                          frame_time * 0.4886922f);
         if (hero.ground_moby != moby)
-            moby->state = 1;
+            moby->state = SHUTTLE_STATE_WAIT_FOR_DEPARTURE;
         break;
     case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
         shuttle_vars->lag += (1.0f - shuttle_vars->lag) * 0.01f;
@@ -169,12 +169,12 @@ void shuttle_update(struct Moby *moby) {
                  is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)shuttle_vars + 0xB4))) ||
                 (shuttle_vars->dir < 0 && *(s32 *)((u8 *)shuttle_vars + 0xB0) != -1 &&
                  is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)shuttle_vars + 0xB0)))) {
-                moby->state = 3;
+                moby->state = SHUTTLE_STATE_FOLLOW_PATH;
             }
         }
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
             *(s32 *)((u8 *)shuttle_vars + 0xC8) = 1;
-            moby->state = 3;
+            moby->state = SHUTTLE_STATE_FOLLOW_PATH;
         }
         break;
     case SHUTTLE_STATE_FOLLOW_PATH:
@@ -218,7 +218,7 @@ void shuttle_update(struct Moby *moby) {
             *(s32 *)((u8 *)shuttle_vars + 0xC4) = -1;
             shuttle_vars->lag = 0.0f;
             *(s32 *)((u8 *)shuttle_vars + 0xDC) = 0;
-            moby->state = 2;
+            moby->state = SHUTTLE_STATE_WAIT_FOR_DISMOUNT;
             shuttle_vars->yaw_offset = 3.1415927f;
             dir = shuttle_vars->dir;
             shuttle_vars->dir = -dir;
