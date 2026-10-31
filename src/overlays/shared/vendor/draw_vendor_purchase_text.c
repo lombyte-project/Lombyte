@@ -147,6 +147,9 @@ void pool_splash(HeightTile *tile,
 void pool_splash(
 
     HeightTile *tile, int count, int mode, float x, float z, float radius, float amount) {
+    enum {
+        POOL_SPLASH_KEEP_GREATER_MAGNITUDE = 0
+    };
     HeightTile *tiles = tile;
     int         row;
     int         i;
@@ -186,7 +189,7 @@ void pool_splash(
                 } else {
                     height = amount / square_root(dist_sq);
                 }
-                if (mode == 0) {
+                if (mode == POOL_SPLASH_KEEP_GREATER_MAGNITUDE) {
                     float magnitude = absolute_float(height);
                     if (magnitude < absolute_float(tile->heights[l00_pool_height_write_bank_index][row][col])) {
                         height = tile->heights[l00_pool_height_write_bank_index][row][col];
