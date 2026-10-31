@@ -3318,6 +3318,9 @@ extern s32 D_00141660 NOT_SDA;
 int                   process_hero_equipped_item_input(void) __asm__("FUN_L00_00227fa0");
 
 int process_hero_equipped_item_input(void) {
+    enum {
+        WRENCH_MOBY_STATE_READY = 0
+    };
     int item_press_age_frames[3];
     int start;
     int mask;
@@ -3356,7 +3359,7 @@ int process_hero_equipped_item_input(void) {
             if (!is_wrench_moby((char *)equipped_item_moby)) {
                 break;
             }
-            if (equipped_item_moby->state != 0) {
+            if (equipped_item_moby->state != WRENCH_MOBY_STATE_READY) {
                 break;
             }
             if ((controller_state.held & 0xA) ||
