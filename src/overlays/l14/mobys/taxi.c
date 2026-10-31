@@ -469,9 +469,12 @@ found:
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void request_taxi_stop_prompt(struct Moby *moby) {
+    enum {
+        TAXI_STATE_BLEND_PATH_END_TO_STOP = 5
+    };
     char *taxi_prompt_vars = (char *)moby->pvars;
     int   taxi_stop_index = *(short *)(taxi_prompt_vars + 0xB4);
-    if (moby->state == 5) {
+    if (moby->state == TAXI_STATE_BLEND_PATH_END_TO_STOP) {
         taxi_stop_index = *(short *)(taxi_prompt_vars + 0xB6);
     }
     switch (taxi_stop_index) {
