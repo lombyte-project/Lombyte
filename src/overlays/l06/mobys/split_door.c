@@ -88,7 +88,7 @@ void split_door_update(char *moby) {
         MOVE_PAIR_TO_FIXED_OFFSETS = 3,
         ANIMATE_PAIR_WITH_TIMED_PHASES = 4,
         WAIT_FOR_RESET = 5
-    };
+    } ; enum { SPLIT_DOOR_PHASE_TARGET_CURRENT_TRANSFORMS = 1 , SPLIT_DOOR_PHASE_TARGET_CONFIGURED_TRANSFORMS = 2};
     SplitDoorVars *pair_transform_vars = (SplitDoorVars *)MOBY(moby)->pvars;
     char          *child;
     float          position_offset[4];
@@ -178,11 +178,11 @@ void split_door_update(char *moby) {
         phase_a = target_delta;
         phase_b = fast_vec_dist(child + 0x10, &pair_transform_vars->unk10);
         phase = (unsigned char)MOBY(moby)->command;
-        if (phase == 1)
+        if (phase == SPLIT_DOOR_PHASE_TARGET_CURRENT_TRANSFORMS)
             goto phase_one;
-        if (phase < 2)
+        if (phase < SPLIT_DOOR_PHASE_TARGET_CONFIGURED_TRANSFORMS)
             goto phase_default;
-        if (phase == 2)
+        if (phase == SPLIT_DOOR_PHASE_TARGET_CONFIGURED_TRANSFORMS)
             goto phase_two;
 
     phase_default:
@@ -196,7 +196,7 @@ void split_door_update(char *moby) {
         rotation_acceleration = 10.0f;
         rotation_speed = 10.0f;
         rotation_damping = 5.0f;
-        next_phase = 1;
+        next_phase = SPLIT_DOOR_PHASE_TARGET_CURRENT_TRANSFORMS;
         next_timer = 30;
         goto phase_join;
     phase_one:
@@ -210,7 +210,7 @@ void split_door_update(char *moby) {
         rotation_acceleration = moby_pair_phase_rotation_y_acceleration_degrees_gp;
         rotation_speed = moby_pair_phase_rotation_y_deceleration_degrees_gp;
         rotation_damping = moby_pair_phase_rotation_y_max_speed_degrees_gp;
-        next_phase = 2;
+        next_phase = SPLIT_DOOR_PHASE_TARGET_CONFIGURED_TRANSFORMS;
         next_timer = truncate_float_to_s32(
             random_float_between((float)moby_pair_phase_two_duration_min_frames_gp,
                                  (float)moby_pair_phase_two_duration_max_frames_gp));
@@ -226,7 +226,7 @@ void split_door_update(char *moby) {
         rotation_acceleration = moby_pair_phase_rotation_y_acceleration_degrees_gp;
         rotation_speed = moby_pair_phase_rotation_y_deceleration_degrees_gp;
         rotation_damping = moby_pair_phase_rotation_y_max_speed_degrees_gp;
-        next_phase = 1;
+        next_phase = SPLIT_DOOR_PHASE_TARGET_CURRENT_TRANSFORMS;
         next_timer = truncate_float_to_s32(
             random_float_between((float)moby_pair_phase_one_duration_min_frames_gp,
                                  (float)moby_pair_phase_one_duration_max_frames_gp));
