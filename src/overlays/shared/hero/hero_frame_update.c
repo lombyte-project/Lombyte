@@ -113,11 +113,11 @@ void hero_frame_update(void) {
     hero_update();
     update_hero_ground_material_effects();
     update_hero_state_machine();
-    if (hero.vehicle_mode == 0)
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT)
         return;
     update_hero_delayed_voice_requests();
     update_hero_easing_records();
-    if (hero.vehicle_mode == 0)
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT)
         return;
     update_hero_vehicle_moby();
     update_hero_scalar_pulse();
