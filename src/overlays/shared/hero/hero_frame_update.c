@@ -1445,6 +1445,9 @@ extern Entry70 l01_countdown_timer_records[] __asm__("D_L01_00179D70");
 void           update_hero_timers_and_vehicle_transitions(void) __asm__("FUN_L01_0023c710");
 
 void update_hero_timers_and_vehicle_transitions(void) {
+    enum {
+        CUTSCENE_MODE_INACTIVE = 0
+    };
     Vec4         sum;
     Vec4         sample_delta;
     struct Moby *vehicle_moby;
@@ -1501,7 +1504,7 @@ void update_hero_timers_and_vehicle_transitions(void) {
         hero.stick_held_frames++;
     }
     if (hero.vehicle_toggle_timer != 0 && fast_dec_timer_s16(&hero.vehicle_toggle_timer) != 0 &&
-        hero.health.hp != 0 && cutscene_mode == 0) {
+        hero.health.hp != 0 && cutscene_mode == CUTSCENE_MODE_INACTIVE) {
         if (hero.vehicle_mode == 3) {
             exit_hero_vehicle_mode_and_restore_moby();
             if (pad_pressed_within(0x80, scale_game_frames(0x12), 0)) {
