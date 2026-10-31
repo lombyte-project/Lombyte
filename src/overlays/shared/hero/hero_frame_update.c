@@ -824,6 +824,9 @@ extern OvlMobyEntry40 l01_moby_hit_response_entries[] __asm__("D_L01_00178580");
 s32 process_hero_hit_response(s32 apply_state_and_motion_response) __asm__("FUN_L01_00231580");
 
 s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
+    enum {
+        CUTSCENE_MODE_INACTIVE = 0
+    };
     u8             *hero_moby;
     OvlMobyEntry40 *hero_moby_entry;
     u8             *mob;
@@ -844,7 +847,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
     if (G.invulnerable_frames != 0) {
         return 0;
     }
-    if (cutscene_mode != 0) {
+    if (cutscene_mode != CUTSCENE_MODE_INACTIVE) {
         return 0;
     }
     G.damage_source_moby = 0;
