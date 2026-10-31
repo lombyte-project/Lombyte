@@ -345,13 +345,16 @@ extern int
 FUN_L00_0025d808_path54(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
 
 int advance_bolt_thief_path(struct Moby *moby) {
+    enum {
+        BOLT_THIEF_FOLLOW_OTHER_PATH = 5
+    };
     float pos[4];
     float delta[4];
     char *bolt_thief_path_data = (char *)moby->pvars;
     float scaled_frame_time = bolt_thief_path_speed_gp * frame_time;
     int   path_sample_result;
     char *path;
-    if (moby->state == 5)
+    if (moby->state == BOLT_THIEF_FOLLOW_OTHER_PATH)
         path = D_L16_001B0930[*(int *)(bolt_thief_path_data + 0xDC)];
     else
         path = D_L16_001B0930[*(int *)(bolt_thief_path_data + 0xD8)];
