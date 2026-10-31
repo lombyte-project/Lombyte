@@ -41,7 +41,7 @@ void test_dummy_door_update(struct Moby *moby) {
     char *test_dummy_door_motion_data = (char *)moby->pvars;
     switch (moby->state) {
     case TEST_DUMMY_DOOR_STATE_INITIALIZE:
-        moby->state = 1;
+        moby->state = TEST_DUMMY_DOOR_STATE_UPDATE_HEIGHT;
         *(float *)test_dummy_door_motion_data = moby->pos.z;
         break;
     case TEST_DUMMY_DOOR_STATE_UPDATE_HEIGHT: {
