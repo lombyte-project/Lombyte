@@ -619,6 +619,12 @@ void mine_update(M910 *mine_moby) {
         MINE_DEBRIS_SHORT_LIVED = 2,
         MINE_DEBRIS_SPHERICAL_VELOCITY = 3
     };
+    enum {
+        MINE_STATE_OWNER_ATTACHED = 0,
+        MINE_STATE_FREE_MOTION = 1,
+        MINE_HOMING_RISE_PHASE = 1,
+        MINE_HOMING_FALL_PHASE = 2
+    };
     B910  camera_blast_parameters = l00_mine_camera_blast_parameters;
     B910  alternate_camera_blast_parameters = l00_mine_alternate_camera_blast_parameters;
     U910  collision_response_velocity;
@@ -635,17 +641,17 @@ void mine_update(M910 *mine_moby) {
     up.f[2] = 1.0f;
     collision_response_velocity.q = mine_pre_motion_position.q;
     v = mine_moby->v;
-    if ((hero.unk20A5 != 0 || hero.unk20AF != 0) && mine_moby->state == 0) {
+    if ((hero.unk20A5 != 0 || hero.unk20AF != 0) && mine_moby->state == MINE_STATE_OWNER_ATTACHED) {
         mine_moby->flags |= 0x41;
     } else {
         mine_moby->flags &= 0xFFBE;
     }
     if ((hero.items[0].moby == 0 || ((M910 *)hero.items[0].moby)->cls != 0xBE) &&
-        mine_moby->state == 0) {
+        mine_moby->state == MINE_STATE_OWNER_ATTACHED) {
         mark_moby_for_removal(mine_moby);
         return;
     }
-    if (hero.vehicle_mode != 0 && mine_moby->state == 0) {
+    if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT && mine_moby->state == MINE_STATE_OWNER_ATTACHED) {
         mark_moby_for_removal(mine_moby);
         return;
     }
@@ -775,7 +781,7 @@ void mine_update(M910 *mine_moby) {
                             coll_hit.moby->cls != mine_moby->cls && coll_hit.moby != hero.moby &&
                             coll_hit.moby != v->owner) {
                             mine_moby->bBC = 1;
-                            if (mine_moby->state != 1) {
+                            if (mine_moby->state != MINE_STATE_FREE_MOTION) {
                                 qcopy(&mine_moby->pos, &coll_hit.pos);
                                 mine_moby->pos.f[2] = probe_ground_height(&mine_moby->pos, 0, 0.5f);
                             }
@@ -890,7 +896,7 @@ void mine_update(M910 *mine_moby) {
                     if (hd == 0) {
                         int s;
 
-                        mine_moby->state = 1;
+                        mine_moby->state = MINE_STATE_FREE_MOTION;
                         s = v->i68;
                         if (s != -1) {
                             char *tab = ((char *)&voice_pool);
@@ -917,7 +923,7 @@ void mine_update(M910 *mine_moby) {
                     } else {
                         int s;
 
-                        mine_moby->state = 1;
+                        mine_moby->state = MINE_STATE_FREE_MOTION;
                         s = v->i68;
                         if (s != -1) {
                             char *tab = ((char *)&voice_pool);
@@ -938,7 +944,7 @@ void mine_update(M910 *mine_moby) {
                     (mine_moby->state & 0x10)) {
                     int s;
 
-                    mine_moby->state = 1;
+                    mine_moby->state = MINE_STATE_FREE_MOTION;
                     s = v->i68;
                     if (s != -1) {
                         char *tab = ((char *)&voice_pool);
@@ -982,13 +988,13 @@ void mine_update(M910 *mine_moby) {
                             v->f40 = max_homing_step;
                         }
                         mode = v->h52;
-                        if (mode == 1) {
+                        if (mode == MINE_HOMING_RISE_PHASE) {
                             mine_moby->pos.f[2] += frame_scale * 0.05f;
                             if (fast_dec_timer(&v->i48) != 0) {
                                 v->i48 = scale_game_frames(7);
                                 v->h52 = 2;
                             }
-                        } else if (mode == 2) {
+                        } else if (mode == MINE_HOMING_FALL_PHASE) {
                             mine_moby->pos.f[2] -= frame_scale * 0.05f;
                             if (fast_dec_timer(&v->i48) != 0) {
                                 v->h52 = 0;
@@ -1316,7 +1322,7 @@ void mine_update(M910 *mine_moby) {
                             r[1] = random_float_between(frame_time * -0.5f, frame_time * 0.5f) * sc;
                             r[2] = random_float_between(frame_time * 4.0f, tbl[kind]) * sc;
                             *(OvlQuad *)n = *(OvlQuad *)r;
-                            rr = random_float_between(0.0f, kind == 1 ? 0.5f : 0.25f) * sc;
+                            rr = random_float_between(0.0f, kind == MINE_DEBRIS_FIXED_LIFETIME ? 0.5f : 0.25f) * sc;
                             ang = random_angle_radians();
                             r[0] = fast_cos(ang) * rr;
                             r[1] = fast_sin(ang) * rr;
