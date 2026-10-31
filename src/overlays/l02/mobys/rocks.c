@@ -61,7 +61,7 @@ void rocks_update(struct Moby *moby) {
         if (menu_item_enabled_9) {
             mark_moby_for_removal(moby);
         } else {
-            moby->state = 1;
+            moby->state = ROCKS_WAIT_FOR_HIT;
         }
         break;
     case ROCKS_WAIT_FOR_HIT:
