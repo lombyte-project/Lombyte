@@ -22,6 +22,10 @@ void beam_slot_controller_update(SlotMoby *slot_controller) {
         SLOT_CONTROLLER_STATE_INITIALIZE = 0,
         SLOT_CONTROLLER_STATE_PROCESS_SLOTS = 1
     };
+    enum {
+        BEAM_SLOT_STATE_INACTIVE = 0,
+        BEAM_SLOT_STATE_PENDING_RELEASE = 4
+    };
     s32 i;
     s32 j;
     s32 dispatched_slot_count;
@@ -33,7 +37,7 @@ void beam_slot_controller_update(SlotMoby *slot_controller) {
             beam_slot_state[j] = 0;
             beam_slot_id[j] = 0;
         }
-        slot_controller->state = 1;
+        slot_controller->state = SLOT_CONTROLLER_STATE_PROCESS_SLOTS;
         slot_controller->alpha = 0xFF;
         break;
     case SLOT_CONTROLLER_STATE_PROCESS_SLOTS:
@@ -41,9 +45,9 @@ void beam_slot_controller_update(SlotMoby *slot_controller) {
         for (i = 0; i < 3; i++) {
             slot_state = beam_slot_state[i];
             if (slot_state == 1) {
-            } else if (slot_state == 4) {
+            } else if (slot_state == BEAM_SLOT_STATE_PENDING_RELEASE) {
                 release_beam_slot(i);
-            } else if (slot_state != 0) {
+            } else if (slot_state != BEAM_SLOT_STATE_INACTIVE) {
                 dispatched_slot_count++;
                 update_slot_panes_and_effects(beam_slot_id[i], i);
                 beam_slot_state[i] = 4;
