@@ -1928,6 +1928,10 @@ extern void          replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
 void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 
 void hero_switch_item(int i) {
+    enum {
+        HERO_ITEM_SWITCH_MODE_RELOAD_TIMER_WHEN_ZERO = 1,
+        HERO_ITEM_SWITCH_MODE_BLOCKED = 2
+    };
     int           changed;
     int           flag6;
     int           flag4;
@@ -2176,10 +2180,10 @@ void hero_switch_item(int i) {
     {
         struct Hero *s = (struct Hero *)(((char *)&hero) + i * sizeof(struct HeroItemSlot));
         item_switch_mode = s->items[0].switch_lock;
-        if (item_switch_mode == 2) {
+        if (item_switch_mode == HERO_ITEM_SWITCH_MODE_BLOCKED) {
             changed = 0;
         }
-        if (item_switch_mode == 1 && s->items[0].timer == 0) {
+        if (item_switch_mode == HERO_ITEM_SWITCH_MODE_RELOAD_TIMER_WHEN_ZERO && s->items[0].timer == 0) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
