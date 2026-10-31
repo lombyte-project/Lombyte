@@ -333,6 +333,10 @@ void update_fading_asteroid_debris(unsigned char *moby) {
 }
 
 void update_falling_asteroid(Moby *falling_rock) {
+    enum {
+        FALLING_ASTEROID_STATE_FALLING = 0,
+        FALLING_ASTEROID_IMPACT_REMOVAL_STATE = 3
+    };
     float movement_step[4];
     float collision_probe_offset[4];
     float position_or_movement_step[4];
@@ -358,7 +362,7 @@ void update_falling_asteroid(Moby *falling_rock) {
     updated_rotation_x = fast_add_rotations(falling_rock->rot.x, moby_vars->f40);
     falling_rock->rot.x = updated_rotation_x;
     falling_rock->rot.y = fast_add_rotations(updated_rotation_x, moby_vars->f44);
-    if (falling_rock->state == 0) {
+    if (falling_rock->state == FALLING_ASTEROID_STATE_FALLING) {
         if (moby_vars->pos[2] < 100.0f && moby_vars->pos[0] < 500.0f &&
             moby_vars->pos[1] < 500.0f) {
             position_or_movement_step[0] = random_float_between(-5.0f, 5.0f);
@@ -568,7 +572,7 @@ void update_falling_asteroid(Moby *falling_rock) {
                                  1200000.0f,
                                  sc);
             }
-            if (falling_rock->state >= 3) {
+            if (falling_rock->state >= FALLING_ASTEROID_IMPACT_REMOVAL_STATE) {
                 mark_moby_for_removal(falling_rock);
             }
         }
