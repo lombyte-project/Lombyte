@@ -67,7 +67,7 @@ void skid_mcmarx_update(struct Moby *moby) {
         }
         watcher_vars->unk180 = 0;
         watcher_vars->dialog = skid_mcmarx_dialogue_data;
-        moby->state = 1;
+        moby->state = SKID_MCMARX_IDLE_AND_TALK;
         moby->update_dist = 0xFF;
         initialize_npc_dialogue(moby, watcher_vars);
         initialize_moby_grounding(moby);
@@ -80,7 +80,7 @@ void skid_mcmarx_update(struct Moby *moby) {
             watcher_vars->talk_radius = 2.5f;
         if (update_npc_dialogue(moby, watcher_vars)) {
             begin_dialogue_camera_transition(moby, 2.5f);
-            moby->state = 2;
+            moby->state = SKID_MCMARX_CONVERSATION_ACTIVE;
         }
         if (watcher_vars->talk_state == 2) {
             help_request(2000, 10);
@@ -114,7 +114,7 @@ void skid_mcmarx_update(struct Moby *moby) {
             D_L02_0016CE60.placed = 1;
         }
         if (level_game_mode_macro != 2)
-            moby->state = 1;
+            moby->state = SKID_MCMARX_IDLE_AND_TALK;
         break;
     }
     rate = 0.02f;
