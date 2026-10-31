@@ -304,7 +304,7 @@ int check_path_camera_priority(char *camera, char *control_mode_gate_object) {
     if (required_control_mode >= 0 && hero.state.control_mode != required_control_mode)
         return 0;
     required_hero_state = *(int *)(rec + 0x44);
-    if (required_hero_state >= 0 && hero.state.current != required_hero_state)
+    if (required_hero_state >= HERO_STATE_IDLE && hero.state.current != required_hero_state)
         return 0;
     return 1;
 }
