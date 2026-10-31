@@ -25,6 +25,9 @@ void apply_hero_ground_material_effects(void) {
         GROUND_MATERIAL_MAGNET = 2,
         GROUND_MATERIAL_FIXED_SHALLOW_WATER = 14
     };
+    enum {
+        GROUND_MATERIAL_SINK_TRIGGER = 13
+    };
     u8  save = hero.ground_sound_class;
     s16 saved_ground_type = hero.ground_type;
     f32 water_depth;
@@ -72,7 +75,7 @@ void apply_hero_ground_material_effects(void) {
         hero.unk12E9 = 1;
     if (saved_ground_type == 4)
         hero.selector_4 = 1;
-    if (saved_ground_type == 13)
+    if (saved_ground_type == GROUND_MATERIAL_SINK_TRIGGER)
         hero.selector_13 = 1;
     if (saved_ground_type == 1)
         hero.selector_1 = 1;
