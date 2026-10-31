@@ -145,7 +145,7 @@ void linked_moby_hitbox_update(struct Moby *moby) {
         LINKED_HITBOX_STATE_WAIT_FOR_LINKED_MOBIES = 1,
         LINKED_HITBOX_STATE_WAIT_FOR_TARGET_STATE_OR_TIMER = 2,
         LINKED_HITBOX_STATE_REMOVE = 3
-    };
+    } ; enum { MOBY_STATE_REMOVAL_MARKER_BELOW_CUTOFF = 0xfd , MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF = 0xfe};
     LinkedMobyHitboxVars *linked_hitbox_vars = (LinkedMobyHitboxVars *)moby->pvars;
     int                   differences = 0;
     struct Moby          *target = 0;
@@ -164,7 +164,7 @@ void linked_moby_hitbox_update(struct Moby *moby) {
             if (index != -1) {
                 struct Moby *linked_moby = &D_L10_0015FFD8[index];
                 if (linked_moby != 0 && linked_moby->oclass == *(short *)(entry + 1) &&
-                    linked_moby->state != 0xfe && linked_moby->state != 0xfd) {
+                    linked_moby->state != MOBY_STATE_REMOVAL_MARKER_AT_OR_ABOVE_CUTOFF && linked_moby->state != MOBY_STATE_REMOVAL_MARKER_BELOW_CUTOFF) {
                     unsigned short id = linked_moby->save_id;
                     if ((((*(int *)((unsigned char *)D_0014C190_257218 + (((short)id >> 5) * 4) +
                                     (D_0015ED84 << 8)) >>
