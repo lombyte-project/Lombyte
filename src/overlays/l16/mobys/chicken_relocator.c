@@ -219,14 +219,14 @@ void chicken_relocator_update(struct Moby *moby) {
     target = D_L16_0015FFD8 + (target_cycle_data->unk4 << 8);
     switch (moby->state) {
     case TARGET_CYCLE_INITIALIZE_DELAY:
-        moby->state = 1;
+        moby->state = TARGET_CYCLE_WAIT_TO_TRIGGER;
         target_cycle_data->timer_C = scale_game_frames(random_int_between(0xB4, 0x168));
         break;
     case TARGET_CYCLE_WAIT_TO_TRIGGER:
         if (vector_distance_xy(hero_position, target + 0x10) > 3.0f) {
             if (find_group_chicken_in_state_6(*(int *)target_cycle_data) != 0) {
                 if (fast_dec_timer(&target_cycle_data->timer_C)) {
-                    moby->state = 2;
+                    moby->state = TARGET_CYCLE_POLL_STATUS;
                     request_target_reposition(target);
                     target_cycle_data->timer_C = scale_game_frames(random_int_between(0xB4, 0x168));
                 }
@@ -237,10 +237,10 @@ void chicken_relocator_update(struct Moby *moby) {
         target_status = get_target_reposition_status(target);
         switch (target_status) {
         case TARGET_STATUS_INACTIVE:
-            moby->state = 1;
+            moby->state = TARGET_CYCLE_WAIT_TO_TRIGGER;
             break;
         case TARGET_STATUS_REPOSITION_READY:
-            moby->state = 1;
+            moby->state = TARGET_CYCLE_WAIT_TO_TRIGGER;
             {
                 char *moby_to_reposition = find_group_chicken_in_state_6(*(int *)target_cycle_data);
                 if (moby_to_reposition != 0) {
