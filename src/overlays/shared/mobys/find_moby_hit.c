@@ -381,9 +381,9 @@ MobyHit *find_moby_hit(u8 *p, s32 mask, s32 flag) __asm__("FUN_L00_0025a420");
 
 MobyHit *find_moby_hit(u8 *owner_moby, s32 mask, s32 flag) {
     MobyHit *hit_record;
-    u8      *a = owner_moby + 0xA4;
-    u8       i = load_u8_0025a420(a);
-    if (load_u8_0025a420(a) == 0xFF)
+    u8      *hit_slot_address = owner_moby + 0xA4;
+    u8       i = load_u8_0025a420(hit_slot_address);
+    if (load_u8_0025a420(hit_slot_address) == 0xFF)
         return 0;
     hit_record = &moby_hits[i];
     if (hit_record->owner != owner_moby)
