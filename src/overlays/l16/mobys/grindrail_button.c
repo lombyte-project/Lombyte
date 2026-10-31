@@ -60,7 +60,7 @@ void grindrail_button_update(struct Moby *button_moby) {
     float glow_blend_factor;
     switch (button_moby->state) {
     case GRINDRAIL_BUTTON_INITIALIZE_GLOW_PHASE:
-        button_moby->state = 1;
+        button_moby->state = GRINDRAIL_BUTTON_CHECK_ACTIVATION;
         *(float *)button_data = random_angle_radians();
         break;
     case GRINDRAIL_BUTTON_CHECK_ACTIVATION:
