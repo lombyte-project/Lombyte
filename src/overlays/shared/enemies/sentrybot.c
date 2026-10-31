@@ -1768,6 +1768,9 @@ void draw_sentrybot_effect_quads(char *moby) {
 /* Marks the moby as killed in the level's spawn tables and releases the voice slot it still owns. */
 
 void mark_moby_killed_and_release_owned_voice(int addr) {
+    enum {
+        MOBY_KILLED = 2
+    };
     struct Moby *moby = (struct Moby *)addr;
     s32          slot;
     moby->collision = 0;
@@ -1785,7 +1788,7 @@ void mark_moby_killed_and_release_owned_voice(int addr) {
         }
     }
     moby->command = 0xFF;
-    moby->state = 2;
+    moby->state = MOBY_KILLED;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
