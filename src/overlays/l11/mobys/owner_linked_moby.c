@@ -40,6 +40,9 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
         LINKED_MOBY_STATE_FADE_OUT = 3,
         LINKED_MOBY_STATE_REMOVE = 4
     };
+    enum {
+        HIT_STATUS_DAMAGE_PROCESSING_THRESHOLD = 2
+    };
     int   hit_status;
     char *hit_record;
     if (moby->state != LINKED_MOBY_STATE_REMOVE) {
@@ -58,7 +61,7 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
         case HIT_REACTION_NO_RESPONSE:
             break;
         }
-        if (hit_status >= 2) {
+        if (hit_status >= HIT_STATUS_DAMAGE_PROCESSING_THRESHOLD) {
             if (*health <= *(float *)(hit_record + 0x2C)) {
                 unsigned char *owner_moby;
                 *health = 0.0f;
