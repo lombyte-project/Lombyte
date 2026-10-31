@@ -173,6 +173,11 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         GADGETRON_CEO_MONITOR_CHALLENGE_EVENTS = 3,
         GADGETRON_CEO_WAIT_TO_SAVE = 4
     };
+    enum {
+        GADGETRON_CEO_DIALOGUE_AFTER_CHALLENGE_START = 2,
+        GADGETRON_CEO_DIALOGUE_START_CHALLENGE = 3,
+        GADGETRON_CEO_DIALOGUE_AFTER_CHALLENGE_RETURN = 4
+    };
     L16ChallengeScratch     ceo_gaze_vectors;
     L16ChallengeData       *ceo_data = ceo_moby->data;
     L16ChallengeActivation *activation = (L16ChallengeActivation *)ceo_data->activation;
@@ -219,13 +224,13 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
                 *(unsigned short *)(statistics + 0x43A) = scale_game_frames(D_0015EEA4) / 600;
             }
         }
-        if (activation->mode == 3) {
+        if (activation->mode == GADGETRON_CEO_DIALOGUE_START_CHALLENGE) {
             char *camera;
             char *pose;
             int   pending;
             pending = D_L16_0015F5CC;
             activation->previous = (unsigned short)activation->mode;
-            activation->mode = 2;
+            activation->mode = GADGETRON_CEO_DIALOGUE_AFTER_CHALLENGE_START;
             activation->pending = pending;
             ceo_moby->event = 0;
             pose = gadgetron_ceo_challenge_start_pose;
@@ -292,7 +297,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
                 previous = activation->mode;
                 pending = D_L16_0015F5CC;
                 activation->previous = previous;
-                activation->mode = 4;
+                activation->mode = GADGETRON_CEO_DIALOGUE_AFTER_CHALLENGE_RETURN;
                 activation->pending = pending;
                 activation->flag = event;
             }
