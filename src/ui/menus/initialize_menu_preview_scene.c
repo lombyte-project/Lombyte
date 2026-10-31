@@ -52,10 +52,13 @@ extern s32          set_moby_animation() __asm__("func_00212ED8");
 void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
 
 void initialize_menu_preview_scene(void) {
+    enum {
+        MENU_STATE_INITIAL_PAGE_TRANSITION_PENDING = 2
+    };
     s32 i;
     s32 preview_workspace_start, graphics_workspace_base, help_text_buffer_start,
         graphics_buffer_start;
-    menu_system.state = 2;
+    menu_system.state = MENU_STATE_INITIAL_PAGE_TRANSITION_PENDING;
     menu_system.current = &menu_preview_initial_page;
     menu_system.next = &menu_preview_initial_page;
     menu_system.close_locked = 0;
