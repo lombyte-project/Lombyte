@@ -289,6 +289,9 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
         HOVER_COMMAND_FACE_GOAL = 0,
         HOVER_COMMAND_MOVE_TO_GOAL = 2
     };
+    enum {
+        SANDMOUSE_STATE_FADE_OUT = 6
+    };
     Vec4                steering_correction;
     f32                 reference_distance;
     f32                 k;
@@ -299,7 +302,7 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
     struct HoverTuning *hover_tuning;
 
     fast_vec_sub(&steering_correction, hover_vars, &moby->pos);
-    if (moby->state == 6) {
+    if (moby->state == SANDMOUSE_STATE_FADE_OUT) {
         reference_distance = vector_distance_xy(&moby->pos, &hover_vars->unk30);
     } else {
         reference_distance = vector_distance_xy(&moby->pos, &hero.motion.pos);
@@ -349,7 +352,7 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
         }
         steering_correction.f[2] *= frame_scale * -0.100000024f + 1.0f;
         fast_vec_add(&hover_vars->vel, &hover_vars->vel, &steering_correction);
-        if (moby->state == 6) {
+        if (moby->state == SANDMOUSE_STATE_FADE_OUT) {
             clamp_vector_length(&hover_vars->vel, &hover_vars->vel, frame_time * 2.7f);
         }
         hover_tuning = &D_L01_001DEB38;
