@@ -1548,7 +1548,7 @@ void apply_hero_and_item_scale_sequence(void) {
             ((unsigned char *)G->moby) + 0xC0, ((unsigned char *)G->moby) + 0xC0, sequence_scale);
         fast_vec_scale(
             ((unsigned char *)G->moby) + 0xD0, ((unsigned char *)G->moby) + 0xD0, sequence_scale);
-        if (G->vehicle_mode == 0) {
+        if (G->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
             for (i = 0; i < 7; i++) {
                 for (j = 0; j < 3; j++) {
                     struct Hero *hero_state = &hero;
@@ -1556,7 +1556,7 @@ void apply_hero_and_item_scale_sequence(void) {
                     if (j == 1)
                         item_moby = *(unsigned char **)&hero_state->items[i].moby2;
                     item_scale = sequence_scale;
-                    if (i == 0 && hero_state->vehicle_mode == 0 && 1.0f < sequence_scale)
+                    if (i == 0 && hero_state->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT && 1.0f < sequence_scale)
                         item_scale = 1.0f;
                     if (item_moby) {
                         fast_vec_scale(item_moby + 0xC0, item_moby + 0xC0, item_scale);
