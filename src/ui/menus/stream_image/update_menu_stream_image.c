@@ -56,7 +56,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         if (selected_entry_index >= 5) {
             selected_entry_index = 4;
         }
-        if (memory_card_state.state < 3 && memory_card_state.pending_state < 0) {
+        if (memory_card_state.state < MEMCARD_REQUEST_FORMAT && memory_card_state.pending_state < MEMCARD_QUERY_INFO) {
             if (stream->data.stream.state == -1) {
                 stream->data.stream.state = 0;
             }
