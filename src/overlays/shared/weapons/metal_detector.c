@@ -229,6 +229,10 @@ void metal_detector_update(struct Moby *moby) {
         METAL_DETECTOR_ACTIVE = 1,
         METAL_DETECTOR_TRACK_AND_COLLECT = 2
     };
+    enum {
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+    };
     Vars2d2ee8       *metal_detector_vars;
     struct Moby      *target_moby;
     TargetVars2d2ee8 *tv;
@@ -268,7 +272,7 @@ void metal_detector_update(struct Moby *moby) {
         metal_detector_vars->unk28 = 0;
         qzero(&D_L00_001E1160);
         attach_manipulator(moby, 3, &D_L00_001E1160);
-        moby->state = 1;
+        moby->state = METAL_DETECTOR_ACTIVE;
         break;
     case 3:
     case 4:
@@ -369,7 +373,7 @@ void metal_detector_update(struct Moby *moby) {
                 }
                 target_moby = hero.metal_detector_target;
                 if (target_moby != 0 && target_moby->oclass == 0x25D &&
-                    target_moby->state != 0xFE && target_moby->state != 0xFD &&
+                    target_moby->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && target_moby->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END &&
                     hero.detector_target_dist < 1.0f) {
                     tv = (TargetVars2d2ee8 *)target_moby->pvars;
                     while (tv->count > 0) {
