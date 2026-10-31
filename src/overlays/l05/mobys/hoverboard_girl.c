@@ -164,9 +164,12 @@ extern unsigned char D_L05_0017C8A0[];
  * of the girl's class. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317E58), where it is exact; names translated to the US level program. */
 void update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *girl) {
+    enum {
+        GAME_MODE_CUTSCENE = 2
+    };
     char *reference_moby = (char *)girl;
 
-    if (game_mode == 2 && (D_0015EDB0[0] != 0 || breast_growth_count_gp != 0)) {
+    if (game_mode == GAME_MODE_CUTSCENE && (D_0015EDB0[0] != 0 || breast_growth_count_gp != 0)) {
         int i;
         for (i = 0; i < D_L05_0016CC60.count; i++) {
             char *moby = D_L05_0016CC60.mobys[i];
