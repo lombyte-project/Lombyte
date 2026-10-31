@@ -311,6 +311,10 @@ extern int current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 void update_camera_position_and_orientation_from_paths(Cam *cam) __asm__("FUN_L01_00315358");
 
 void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
+    enum {
+        CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC = 0,
+        CAMERA_PRESET_KIND_MAPPED_PATHS = 2
+    };
     float         camera_goal[4];
     float         look_offset[4];
     float         look_dir[4];
@@ -333,7 +337,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     float         look_length;
     float         pitch_step;
 
-    if (mode == 0) {
+    if (mode == CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC) {
         Path *path;
         float dist;
 
@@ -357,7 +361,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
             camera_to_update->pos[1], rail_point[1], &data->vel[1], rate, 0.175f, 0.0f);
         camera_to_update->pos[2] = cam_interp_values(
             camera_to_update->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
-    } else if (mode == 2) {
+    } else if (mode == CAMERA_PRESET_KIND_MAPPED_PATHS) {
         Path *pathA = ((Path *)l01_paths[path_index]);
         Path *pathD = (Path *)l01_splines_macro[camera_path_preset->target].path;
         Path *pathC = ((Path *)l01_paths[camera_path_preset->path]);
@@ -491,7 +495,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
                          20.0f,
                          1.0f,
                          0.0f);
-        if (current_level_index_macro == 0xE && camera_path_preset->kind == 0) {
+        if (current_level_index_macro == 0xE && camera_path_preset->kind == CAMERA_PRESET_KIND_RAIL_SEGMENT_SYNC) {
             sample_path(path, delta, &segment, &fraction, lead, 0);
         } else {
             sample_path(path, delta, &segment, &fraction, lead, 1);
