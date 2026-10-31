@@ -86,6 +86,13 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
 
 void owner_linked_moby_update(struct Moby *moby) __asm__("FUN_L11_00310028");
 
+typedef struct OwnerLinkedMobyVars {
+    u8  pad_0[0x20];
+    u8  unk20;
+    u8  pad_21[0x4F];
+    u8 *unk70;
+} OwnerLinkedMobyVars;
+
 /* Moby class 1219 */
 void owner_linked_moby_update(struct Moby *moby) {
     enum {
@@ -95,9 +102,9 @@ void owner_linked_moby_update(struct Moby *moby) {
         LINKED_MOBY_STATE_FADE_OUT = 3,
         LINKED_MOBY_STATE_REMOVE = 4
     };
-    char        *owner_linked_moby_vars = (char *)moby->pvars;
-    char        *health_ptr = owner_linked_moby_vars + 0x20;
-    struct Moby *owner_moby = *(unsigned char **)(owner_linked_moby_vars + 0x70);
+    OwnerLinkedMobyVars *owner_linked_moby_vars = (OwnerLinkedMobyVars *)moby->pvars;
+    char                *health_ptr = &owner_linked_moby_vars->unk20;
+    struct Moby         *owner_moby = owner_linked_moby_vars->unk70;
     if (owner_moby == 0 || owner_moby->state == 0xFE || owner_moby->state == 0xFD) {
         if (moby->state < 3) {
             moby->state = 4;

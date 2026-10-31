@@ -147,8 +147,18 @@ extern void draw_oscillating_target_link_strips(struct Moby *) __asm__("FUN_L12_
 
 void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
 
+typedef struct OscillatingTargetLinkVars {
+    u8  pad_0[0x2300];
+    u8  timer_2300;
+    u8  pad_2301[0x23];
+    f32 unk2324;
+    u8  pad_2328[0x4];
+    s32 unk232C;
+} OscillatingTargetLinkVars;
+
 void update_oscillating_target_link_strips(struct Moby *moby) {
-    char *oscillating_link_strip_state = (char *)moby->pvars;
+    OscillatingTargetLinkVars *oscillating_link_strip_state =
+        (OscillatingTargetLinkVars *)moby->pvars;
     float cycle =
         oscillating_link_strip_scroll_phase_gp + oscillating_link_strip_scroll_rate_gp * frame_time;
     int strip;
@@ -160,22 +170,22 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
         int    i;
         float *points;
         float *intermediate;
-        if (fast_dec_timer((int *)(oscillating_link_strip_state + 0x2300 + strip * 4))) {
-            int   vector_count = *(int *)(oscillating_link_strip_state + 0x232c);
+        if (fast_dec_timer((int *)((char *)oscillating_link_strip_state + 0x2300 + strip * 4))) {
+            int   vector_count = oscillating_link_strip_state->unk232C;
             float intermediate_storage[vector_count][4];
-            char *timers = oscillating_link_strip_state + 0x2300;
+            char *timers = &oscillating_link_strip_state->timer_2300;
             intermediate = &intermediate_storage[0][0];
             i = 0;
-            if (0 < *(int *)(oscillating_link_strip_state + 0x232c)) {
-                points = (float *)(oscillating_link_strip_state + strip * 0x460);
+            if (0 < oscillating_link_strip_state->unk232C) {
+                points = (float *)((char *)oscillating_link_strip_state + strip * 0x460);
                 do {
                     float vector_count_float;
                     float length;
                     float index;
                     float rate;
                     clear_u64_value(points);
-                    vector_count_float = (float)*(int *)(oscillating_link_strip_state + 0x232c);
-                    length = *(float *)(oscillating_link_strip_state + 0x2324);
+                    vector_count_float = (float)oscillating_link_strip_state->unk232C;
+                    length = oscillating_link_strip_state->unk2324;
                     index = (float)i;
                     rate = oscillating_link_strip_random_delta_magnitude_rate_gp * frame_time;
                     points[3] = 1.0f;
@@ -183,11 +193,11 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
                     random_vector(intermediate + i * 4, 0.0f, rate);
                     points += 4;
                     i++;
-                } while (i < *(int *)(oscillating_link_strip_state + 0x232c));
+                } while (i < oscillating_link_strip_state->unk232C);
             }
             count = 1;
-            if (count < *(int *)(oscillating_link_strip_state + 0x232c) - 1) {
-                points = (float *)(oscillating_link_strip_state + strip * 0x460 + 0x1190);
+            if (count < oscillating_link_strip_state->unk232C - 1) {
+                points = (float *)((char *)oscillating_link_strip_state + strip * 0x460 + 0x1190);
                 do {
                     fast_vec_add(
                         points, intermediate_storage[count - 1], intermediate_storage[count]);
@@ -195,14 +205,15 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
                     fast_vec_scale(points, points, 0.333f);
                     count++;
                     points += 4;
-                } while (count < *(int *)(oscillating_link_strip_state + 0x232c) - 1);
+                } while (count < oscillating_link_strip_state->unk232C - 1);
             }
             *(int *)(timers + (strip << 2)) = oscillating_link_strip_reset_ticks;
         } else {
-            for (i = 1; i < *(int *)(oscillating_link_strip_state + 0x232c) - 1; i++) {
-                float *point = (float *)(oscillating_link_strip_state + strip * 0x460 + i * 16);
-                float *delta =
-                    (float *)(oscillating_link_strip_state + strip * 0x460 + 0x1190 + i * 16 - 16);
+            for (i = 1; i < oscillating_link_strip_state->unk232C - 1; i++) {
+                float *point =
+                    (float *)((char *)oscillating_link_strip_state + strip * 0x460 + i * 16);
+                float *delta = (float *)((char *)oscillating_link_strip_state + strip * 0x460 +
+                                         0x1190 + i * 16 - 16);
                 fast_vec_add(point, point, delta);
             }
         }

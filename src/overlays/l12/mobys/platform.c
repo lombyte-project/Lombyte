@@ -107,33 +107,43 @@ void  steer_platform_toward_target(char  *moby,
                                    int    unused,
                                    int    brake) __asm__("FUN_L12_002e3c08");
 
+typedef struct PlatformVars {
+    u8  pad_0[0x40];
+    f32 unk40[4];
+    u8  pad_50[0x80];
+    f32 unkD0;
+    f32 unkD4;
+    u8  pad_D8[0x20];
+    f32 unkF8;
+} PlatformVars;
+
 void steer_platform_toward_target(
 
     char *moby, float *target_angles, void *target, int unused, int brake) {
-    char *moby_vars = ((char *)MOBY(moby)->pvars);
-    float target_offset[4];
-    float target_distance;
-    float speed;
-    float acc;
-    float yaw_angular_velocity_limit = 1.9198622f;
+    PlatformVars *moby_vars = (PlatformVars *)MOBY(moby)->pvars;
+    float         target_offset[4];
+    float         target_distance;
+    float         speed;
+    float         acc;
+    float         yaw_angular_velocity_limit = 1.9198622f;
     fast_vec_sub(target_offset, target, moby + 0x10);
     target_distance = fast_vec_length(target_offset);
-    speed = fast_vec_length(moby_vars + 0x40);
+    speed = fast_vec_length(moby_vars->unk40);
     if (brake) {
         if (speed == 0.0f)
             speed = D_0015ED6C_k * 0.01f;
-        acc = *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
+        acc = moby_vars->unkD4 * D_0015ED70_k;
         if (acc < speed * speed / (target_distance + target_distance))
             speed -= acc;
-        else if (speed < *(float *)(moby_vars + 0xD0) * D_0015ED6C_k)
+        else if (speed < moby_vars->unkD0 * D_0015ED6C_k)
             speed += acc;
     } else {
-        if (speed < *(float *)(moby_vars + 0xD0) * D_0015ED6C_k)
-            speed += *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
-        else if (*(float *)(moby_vars + 0xD0) * D_0015ED6C_k < speed)
-            speed -= *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
+        if (speed < moby_vars->unkD0 * D_0015ED6C_k)
+            speed += moby_vars->unkD4 * D_0015ED70_k;
+        else if (moby_vars->unkD0 * D_0015ED6C_k < speed)
+            speed -= moby_vars->unkD4 * D_0015ED70_k;
     }
-    fast_vec_normalize(moby_vars + 0x40, target_offset, speed);
+    fast_vec_normalize(moby_vars->unk40, target_offset, speed);
     appr_k(moby + 0x40,
            target_angles[0],
            fast_difference_between_rotations(target_angles[0], MOBY(moby)->rot.x) /
@@ -144,12 +154,12 @@ void steer_platform_toward_target(
                platform_tilt_approach_divisor_gp);
     spring_angle((float *)&MOBY(moby)->rot.z,
                  target_angles[2],
-                 (float *)(moby_vars + 0xF8),
+                 &moby_vars->unkF8,
                  0,
                  D_0015ED64_k * 0.005f,
                  D_0015ED64_k * 0.3f,
                  D_0015ED6C_k * yaw_angular_velocity_limit);
-    fast_vec_add(moby + 0x10, moby + 0x10, moby_vars + 0x40);
+    fast_vec_add(moby + 0x10, moby + 0x10, moby_vars->unk40);
 }
 /* Projects a moby's offset from a reference point into a 2D pair, or zeroes it. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E5138), where it is exact; names translated to the US level program. */

@@ -21,16 +21,22 @@ extern char statistics_level_flags[] __asm__("D_00141CE4");
 
 void help_hints_update(struct Moby *moby) __asm__("FUN_L13_002f3778");
 
+typedef struct HelpHintsVars {
+    u8  pad_0[0x4];
+    s32 unk4;
+    s32 unk8;
+} HelpHintsVars;
+
 /* Moby class 558 */
 void help_hints_update(struct Moby *moby) {
-    char          *linked_moby_volume_config;
+    HelpHintsVars *linked_moby_volume_config;
     unsigned char *menu_item_enable_base;
     moby->update_dist = 0xFF;
-    linked_moby_volume_config = (char *)moby->pvars;
+    linked_moby_volume_config = (HelpHintsVars *)moby->pvars;
     if (help_request_state[0] == 0 && help_request_state[9] == -1) {
         unsigned int hero_control_mode = *(unsigned int *)(&hero.state.control_mode);
         if ((hero_control_mode < 2 || hero_control_mode == 9) ? D_L13_0015F5C4 == 0 : 0) {
-            int   linked_moby_index = *(int *)(linked_moby_volume_config + 4);
+            int   linked_moby_index = linked_moby_volume_config->unk4;
             char *linked_moby;
             if (linked_moby_index != -1) {
                 linked_moby = moby_base + (linked_moby_index << 8);
@@ -69,8 +75,7 @@ void help_hints_update(struct Moby *moby) {
             }
         }
     }
-    if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(linked_moby_volume_config + 8)) !=
-        0) {
+    if (is_point_inside_clip_volume(&hero.motion.pos, linked_moby_volume_config->unk8) != 0) {
         hero.vent_updraft = 0;
     } else {
         hero.vent_updraft = 1;

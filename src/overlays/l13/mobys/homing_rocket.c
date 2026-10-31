@@ -23,6 +23,18 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
                                             float scale,
                                             float max_speed) __asm__("FUN_L13_002c13b0");
 
+typedef struct Level13HomingRocketVars {
+    u8    pad_0[0x10];
+    f32   unk10[4];
+    char *unk20;
+    char *unk24;
+    s32   unk28;
+    f32   unk2C;
+    s32   unk30;
+    s32   unk34;
+    f32   unk38;
+} Level13HomingRocketVars;
+
 unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
                                             char *rocket_spawn_position,
                                             char *target,
@@ -33,30 +45,30 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
                                             float max_speed) {
     unsigned char *moby = (unsigned char *)create_moby(0x52);
     if (moby != 0) {
-        char *homing_rocket_vars = ((char *)MOBY(moby)->pvars);
+        Level13HomingRocketVars *homing_rocket_vars = (Level13HomingRocketVars *)MOBY(moby)->pvars;
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         MOBY(moby)->visible = 1;
         MOBY(moby)->state = 0;
-        *(char **)(homing_rocket_vars + 0x24) = target;
-        *(char **)(homing_rocket_vars + 0x20) = owner_moby;
+        homing_rocket_vars->unk24 = target;
+        homing_rocket_vars->unk20 = owner_moby;
         qcopy(moby + 0x10, rocket_spawn_position);
         qcopy(moby + 0x40, initial_rotation);
         {
             float *sp = &scale;
-            *(float *)(homing_rocket_vars + 0x2C) = *sp;
+            homing_rocket_vars->unk2C = *sp;
         }
-        *(float *)(homing_rocket_vars + 0x38) = max_speed;
-        *(int *)(homing_rocket_vars + 0x28) = initial_expiry_countdown;
-        *(int *)(homing_rocket_vars + 0x30) = 0;
-        *(int *)(homing_rocket_vars + 0x34) = 0;
+        homing_rocket_vars->unk38 = max_speed;
+        homing_rocket_vars->unk28 = initial_expiry_countdown;
+        homing_rocket_vars->unk30 = 0;
+        homing_rocket_vars->unk34 = 0;
         qcopy(homing_rocket_vars, ((char *)MOBY(owner_moby)->pvars) + 0xC0);
         if (MOBY(moby)->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
         fast_vec_add(moby + 0x10, moby + 0x10, homing_rocket_vars);
-        if (*(char **)(homing_rocket_vars + 0x24) != 0) {
-            qcopy(homing_rocket_vars + 0x10, *(char **)(homing_rocket_vars + 0x24) + 0x10);
+        if (homing_rocket_vars->unk24 != 0) {
+            qcopy(homing_rocket_vars->unk10, homing_rocket_vars->unk24 + 0x10);
         }
         MOBY(moby)->scale = MOBY(moby)->pclass->scale;
         update_entity(moby);

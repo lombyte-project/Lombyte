@@ -18,6 +18,16 @@ advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__
    it toward the end point, 3 lowers it to 5.9 below the entry's height. */
 void triggered_slide_update(char *moby) __asm__("FUN_L05_0030e508");
 
+typedef struct TriggeredSlideVars {
+    u8  pad_0[0x8];
+    f32 unk8;
+    u8  pad_C[0x4];
+    s32 cuboid_10;
+    s32 unk14;
+    f32 unk18;
+    s32 unk1C;
+} TriggeredSlideVars;
+
 /* Moby class 843 */
 void triggered_slide_update(char *moby) {
     enum {
@@ -26,25 +36,24 @@ void triggered_slide_update(char *moby) {
         MOBY_SLIDE_TO_END_POINT = 2,
         MOBY_LOWER_BELOW_POSE_HEIGHT = 3
     };
-    char        *slide_and_lowering_vars = ((char *)MOBY(moby)->pvars);
-    float        slide_motion_scratch[4];
-    float        slide_step_distance;
-    float        speed;
-    LevelCuboid *pose_entry;
-    float        remaining_slide_distance;
-    float        reach;
+    TriggeredSlideVars *slide_and_lowering_vars = (TriggeredSlideVars *)MOBY(moby)->pvars;
+    float               slide_motion_scratch[4];
+    float               slide_step_distance;
+    float               speed;
+    LevelCuboid        *pose_entry;
+    float               remaining_slide_distance;
+    float               reach;
 
     switch (MOBY(moby)->state) {
     case MOBY_PLACE_AT_POSE_OFFSET: {
         LevelCuboid *initial_pose_entry;
 
-        initial_pose_entry = &l05_cuboids[*(int *)(slide_and_lowering_vars + 0x10)];
+        initial_pose_entry = &l05_cuboids[slide_and_lowering_vars->cuboid_10];
         qcopy(moby + 0x10, &initial_pose_entry->pos);
         MOBY(moby)->rot.z = initial_pose_entry->rot.z;
-        fast_vec_normalize(slide_motion_scratch,
-                           &initial_pose_entry->axes[1],
-                           *(float *)(slide_and_lowering_vars + 0x18));
-        if (*(int *)(slide_and_lowering_vars + 0x1C) != 0) {
+        fast_vec_normalize(
+            slide_motion_scratch, &initial_pose_entry->axes[1], slide_and_lowering_vars->unk18);
+        if (slide_and_lowering_vars->unk1C != 0) {
             fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
             MOBY(moby)->flags |= 0x8000;
         }
@@ -53,19 +62,19 @@ void triggered_slide_update(char *moby) {
         break;
     }
     case MOBY_WAIT_FOR_TRIGGER:
-        if ((*(unsigned char **)&D_L05_0015FFD8)[*(int *)(slide_and_lowering_vars + 0x14) * 256 +
-                                                 0xBC] != 0) {
+        if ((*(unsigned char **)&D_L05_0015FFD8)[slide_and_lowering_vars->unk14 * 256 + 0xBC] !=
+            0) {
             allocate_voice_for_target_entry(0, 0, moby);
             MOBY(moby)->state = 2;
             clear_u64_value(slide_and_lowering_vars);
         }
         break;
     case MOBY_SLIDE_TO_END_POINT:
-        pose_entry = &l05_cuboids[*(int *)(slide_and_lowering_vars + 0x10)];
-        reach = *(float *)(slide_and_lowering_vars + 0x18) * 3.0f;
+        pose_entry = &l05_cuboids[slide_and_lowering_vars->cuboid_10];
+        reach = slide_and_lowering_vars->unk18 * 3.0f;
         slide_step_distance = 0.0f;
         fast_vec_normalize(slide_motion_scratch, &pose_entry->axes[1], reach);
-        if (*(int *)(slide_and_lowering_vars + 0x1C) != 0) {
+        if (slide_and_lowering_vars->unk1C != 0) {
             fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
         }
         fast_vec_add(slide_motion_scratch, &pose_entry->pos, slide_motion_scratch);
@@ -86,13 +95,13 @@ void triggered_slide_update(char *moby) {
         break;
     case MOBY_LOWER_BELOW_POSE_HEIGHT:
         pose_entry = l05_cuboids;
-        pose_entry += *(int *)(slide_and_lowering_vars + 0x10);
+        pose_entry += slide_and_lowering_vars->cuboid_10;
         advance_accelerated_scalar(pose_entry->pos.z - 5.9f,
                                    frame_time_sq * 20.0f,
                                    frame_time_sq * 40.0f,
                                    frame_time * 10.0f,
                                    (float *)&MOBY(moby)->pos.z,
-                                   (float *)(slide_and_lowering_vars + 8));
+                                   &slide_and_lowering_vars->unk8);
         if (MOBY(moby)->pos.z < pose_entry->pos.z - 5.9f) {
             MOBY(moby)->state = 4;
         }

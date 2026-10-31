@@ -179,6 +179,16 @@ unsigned char *spawn_thrown_bomb(int    owner,
                                  int    fuse_frames,
                                  float  gravity) __asm__("FUN_L16_002c6268");
 
+typedef struct ThrownBombVars {
+    u8  pad_0[0xC];
+    s16 unkC;
+    s16 unkE;
+    f32 unk10[4];
+    s32 unk20;
+    f32 unk24;
+    s32 unk28;
+} ThrownBombVars;
+
 unsigned char *spawn_thrown_bomb(
 
     int    thrower_moby,
@@ -189,18 +199,18 @@ unsigned char *spawn_thrown_bomb(
     float gravity) {
     unsigned char *moby = (unsigned char *)create_moby(0x119);
     if (moby != 0) {
-        char *thrown_bomb_data = ((char *)MOBY(moby)->pvars);
+        ThrownBombVars *thrown_bomb_data = (ThrownBombVars *)MOBY(moby)->pvars;
         moby[0x30] = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 1;
         MOBY(moby)->draw_dist = 0xFF;
-        *(int *)(thrown_bomb_data + 0x20) = thrower_moby;
-        *(float *)(thrown_bomb_data + 0x24) = gravity;
-        *(int *)(thrown_bomb_data + 0x28) = fuse_frames;
-        *(short *)(thrown_bomb_data + 0xC) = scale_game_frames(5);
-        *(short *)(thrown_bomb_data + 0xE) = scale_game_frames(0xF);
+        thrown_bomb_data->unk20 = thrower_moby;
+        thrown_bomb_data->unk24 = gravity;
+        thrown_bomb_data->unk28 = fuse_frames;
+        thrown_bomb_data->unkC = scale_game_frames(5);
+        thrown_bomb_data->unkE = scale_game_frames(0xF);
         qcopy(moby + 0x10, spawn_position);
-        qcopy(thrown_bomb_data + 0x10, initial_velocity);
+        qcopy(thrown_bomb_data->unk10, initial_velocity);
         MOBY(moby)->rot.x = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;
         MOBY(moby)->rot.z = fast_arc_tan(initial_velocity[0], initial_velocity[1]) + 1.5707964f;
         update_entity(moby);

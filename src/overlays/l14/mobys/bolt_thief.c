@@ -318,41 +318,52 @@ float bolt_thief_default_path_sample_rate_gp __asm__("D_L14_00161FB8") = 25.0f;
 
 extern void FUN_L00_00258278(char *, float, float *, float, float, float);
 
+typedef struct BoltThiefVars {
+    u8  pad_0[0xD0];
+    f32 unkD0;
+    f32 unkD4;
+    s32 path_D8;
+    s32 path_DC;
+    u8  pad_E0[0x4];
+    f32 unkE4;
+    f32 unkE8;
+    f32 unkEC;
+    f32 unkF0;
+    u8  pad_F4[0x4];
+    f32 unkF8;
+} BoltThiefVars;
+
 int update_bolt_thief_path_movement(struct Moby *moby) {
-    float pos[4];
-    float delta[4];
-    char *bolt_thief_state = (char *)moby->pvars;
-    float path_sample_step = bolt_thief_default_path_sample_rate_gp * frame_time;
-    int   path_sample_result;
-    char *path;
+    float          pos[4];
+    float          delta[4];
+    BoltThiefVars *bolt_thief_state = (BoltThiefVars *)moby->pvars;
+    float          path_sample_step = bolt_thief_default_path_sample_rate_gp * frame_time;
+    int            path_sample_result;
+    char          *path;
     if (current_level_index == 0x10)
         path_sample_step = frame_time * 20.0f;
-    if (*(float *)(bolt_thief_state + 0xF8) != 0.0f)
-        path_sample_step = *(float *)(bolt_thief_state + 0xF8) * frame_time;
+    if (bolt_thief_state->unkF8 != 0.0f)
+        path_sample_step = bolt_thief_state->unkF8 * frame_time;
     if (moby->state == 5)
-        path = ((char *)l14_paths[*(int *)(bolt_thief_state + 0xDC)]);
+        path = ((char *)l14_paths[bolt_thief_state->path_DC]);
     else
-        path = ((char *)l14_paths[*(int *)(bolt_thief_state + 0xD8)]);
-    path_sample_result = sample_path(path,
-                                     pos,
-                                     (float *)(bolt_thief_state + 0xD0),
-                                     (float *)(bolt_thief_state + 0xD4),
-                                     0,
-                                     path_sample_step);
+        path = ((char *)l14_paths[bolt_thief_state->path_D8]);
+    path_sample_result = sample_path(
+        path, pos, &bolt_thief_state->unkD0, &bolt_thief_state->unkD4, 0, path_sample_step);
     vendor_spring(&moby->pos.x,
-                  (float *)(bolt_thief_state + 0xE4),
+                  &bolt_thief_state->unkE4,
                   pos[0],
                   bolt_thief_path_spring_gain_gp,
                   bolt_thief_path_spring_damping_gp,
                   0.0f);
     vendor_spring(&moby->pos.y,
-                  (float *)(bolt_thief_state + 0xE8),
+                  &bolt_thief_state->unkE8,
                   pos[1],
                   bolt_thief_path_spring_gain_gp,
                   bolt_thief_path_spring_damping_gp,
                   0.0f);
     vendor_spring(&moby->pos.z,
-                  (float *)(bolt_thief_state + 0xEC),
+                  &bolt_thief_state->unkEC,
                   pos[2],
                   bolt_thief_path_spring_gain_gp,
                   bolt_thief_path_spring_damping_gp,
@@ -362,7 +373,7 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
         if (absolute_float(delta[1]) > 0.01f) {
             FUN_L00_00258278(moby,
                              fast_arc_tan(delta[0], delta[1]),
-                             (float *)(bolt_thief_state + 0xF0),
+                             &bolt_thief_state->unkF0,
                              bolt_thief_path_spring_gain_gp,
                              bolt_thief_path_spring_damping_gp,
                              0.0f);

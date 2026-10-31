@@ -21,20 +21,25 @@ int  D_L02_00161C9C = 0x6f707070;
 int  D_L02_00161CA0 = 0x707070;
 void sandshark_egg_update(struct Moby *moby) __asm__("FUN_L02_002e0280");
 
+typedef struct SandsharkEggVars {
+    u8    pad_0[0x60];
+    char *unk60;
+} SandsharkEggVars;
+
 /* Moby class 755 */
 void sandshark_egg_update(struct Moby *moby) {
     enum {
         SANDSHARK_EGG_FALL_UNTIL_LANDING = 1,
         SANDSHARK_EGG_HANDOFF_TO_LINKED_MOBY = 2
     };
-    float  u[4];
-    float  v[4];
-    char  *egg_vars = (char *)moby->pvars;
-    int    i;
-    float *vp;
-    int    effect_frame_count;
-    int    random_effect_value;
-    char  *linked_moby;
+    float             u[4];
+    float             v[4];
+    SandsharkEggVars *egg_vars = (SandsharkEggVars *)moby->pvars;
+    int               i;
+    float            *vp;
+    int               effect_frame_count;
+    int               random_effect_value;
+    char             *linked_moby;
     switch (moby->state) {
     case SANDSHARK_EGG_FALL_UNTIL_LANDING:
         clear_u64_value(u);
@@ -62,14 +67,13 @@ void sandshark_egg_update(struct Moby *moby) {
         } while (i >= 0);
         break;
     case SANDSHARK_EGG_HANDOFF_TO_LINKED_MOBY:
-        linked_moby = *(char **)(egg_vars + 0x60);
+        linked_moby = egg_vars->unk60;
         qcopy(linked_moby + 0x10, &moby->pos);
         linked_moby[0x20] = 0x11;
-        blend_moby_animation(*(char **)(egg_vars + 0x60), 5, 0, 1);
-        *(int *)(*(char **)(egg_vars + 0x60) + 0x94) =
-            *(int *)(*(char **)(*(char **)(egg_vars + 0x60) + 0x24) + 0x10);
-        *(float *)(*(char **)(egg_vars + 0x60) + 0x58) = 1.0f;
-        update_entity(*(char **)(egg_vars + 0x60));
+        blend_moby_animation(egg_vars->unk60, 5, 0, 1);
+        *(int *)(egg_vars->unk60 + 0x94) = *(int *)(*(char **)(egg_vars->unk60 + 0x24) + 0x10);
+        *(float *)(egg_vars->unk60 + 0x58) = 1.0f;
+        update_entity(egg_vars->unk60);
         mark_moby_for_removal(moby);
         break;
     }

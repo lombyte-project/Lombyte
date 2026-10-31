@@ -62,19 +62,28 @@ char *spawn_bomber_tank_bomb(char *source_moby,
                              char *spawn_position,
                              char *initial_velocity) __asm__("FUN_L08_002dc8a0");
 
+typedef struct BomberTankBombVars {
+    u8    pad_0[0x10];
+    s32   unk10;
+    s32   unk14;
+    u8    pad_18[0x4];
+    f32   unk1C;
+    char *unk20;
+} BomberTankBombVars;
+
 char *spawn_bomber_tank_bomb(char *source_moby, char *spawn_position, char *initial_velocity) {
-    char *moby = create_moby(0x1A9);
-    char *projectile_vars;
+    char               *moby = create_moby(0x1A9);
+    BomberTankBombVars *projectile_vars;
     if (moby) {
-        projectile_vars = ((char *)MOBY(moby)->pvars);
+        projectile_vars = (BomberTankBombVars *)MOBY(moby)->pvars;
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 1;
-        *(char **)(projectile_vars + 0x20) = source_moby;
-        *(int *)(projectile_vars + 0x10) = scale_game_frames(0x12C);
-        *(float *)(projectile_vars + 0x1C) = 1.0f;
-        *(int *)(projectile_vars + 0x14) = 0;
+        projectile_vars->unk20 = source_moby;
+        projectile_vars->unk10 = scale_game_frames(0x12C);
+        projectile_vars->unk1C = 1.0f;
+        projectile_vars->unk14 = 0;
         qcopy(moby + 0x10, spawn_position);
         qcopy(projectile_vars, initial_velocity);
         MOBY(moby)->rot.x = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD;

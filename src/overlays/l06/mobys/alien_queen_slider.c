@@ -15,20 +15,29 @@ void alien_queen_slider_update(unsigned char *moby) __asm__("FUN_L06_002d9d10");
 
 #include "sda.h"
 
+typedef struct AlienQueenSliderVars {
+    u8  pad_0[0x10];
+    u8  unk10;
+    u8  pad_11[0xF];
+    f32 unk20;
+    f32 unk24;
+    f32 unk28;
+} AlienQueenSliderVars;
+
 /* Moby class 367 */
 void alien_queen_slider_update(unsigned char *moby) {
     enum {
         INITIALIZE_POSITION_ENDPOINTS = 0,
         INTERPOLATE_POSITION_TO_TARGET = 2
     };
-    char *position_interpolation_vars;
-    position_interpolation_vars = ((char *)MOBY(moby)->pvars);
+    AlienQueenSliderVars *position_interpolation_vars;
+    position_interpolation_vars = (AlienQueenSliderVars *)MOBY(moby)->pvars;
     switch (moby[0x20]) {
     case INITIALIZE_POSITION_ENDPOINTS: {
         char *moby_position = (char *)moby + 0x10;
         char *offset_position_endpoint;
         qcopy(position_interpolation_vars, moby_position);
-        offset_position_endpoint = position_interpolation_vars + 0x10;
+        offset_position_endpoint = &position_interpolation_vars->unk10;
         fast_vec_normalize(offset_position_endpoint, moby + 0xD0, 11.0f);
         fast_vec_add(offset_position_endpoint, offset_position_endpoint, moby_position);
         moby[0x20] = 1;
@@ -36,18 +45,17 @@ void alien_queen_slider_update(unsigned char *moby) {
     }
     case INTERPOLATE_POSITION_TO_TARGET: {
         float blend_acceleration_step = (&frame_time)[1] * 10.0f;
-        advance_accelerated_scalar((float *)(position_interpolation_vars + 0x20),
-                                   (float *)(position_interpolation_vars + 0x24),
-                                   *(float *)(position_interpolation_vars + 0x28),
+        advance_accelerated_scalar(&position_interpolation_vars->unk20,
+                                   &position_interpolation_vars->unk24,
+                                   position_interpolation_vars->unk28,
                                    blend_acceleration_step,
                                    blend_acceleration_step,
                                    frame_time * 20.0f);
         lerp_vector(moby + 0x10,
                     position_interpolation_vars,
-                    position_interpolation_vars + 0x10,
-                    *(float *)(position_interpolation_vars + 0x20));
-        if (*(float *)(position_interpolation_vars + 0x20) ==
-            *(float *)(position_interpolation_vars + 0x28))
+                    &position_interpolation_vars->unk10,
+                    position_interpolation_vars->unk20);
+        if (position_interpolation_vars->unk20 == position_interpolation_vars->unk28)
             moby[0x20] = 1;
         break;
     }
@@ -85,9 +93,9 @@ void set_listed_alien_queen_sliders_state_2_and_clear_data_28(int moby_list_inde
         do {
             char *moby = (char *)(((*moby_index_cursor & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
             if (MOBY(moby)->oclass == 0x16F) {
-                char *listed_moby_vars = ((char *)MOBY(moby)->pvars);
+                AlienQueenSliderVars *listed_moby_vars = (AlienQueenSliderVars *)MOBY(moby)->pvars;
                 moby[0x20] = 2;
-                *(int *)(listed_moby_vars + 0x28) = 0;
+                *(int *)&listed_moby_vars->unk28 = 0;
             }
         } while (*moby_index_cursor++ >= 0);
     }

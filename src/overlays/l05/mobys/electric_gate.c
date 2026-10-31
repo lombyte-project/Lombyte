@@ -21,6 +21,11 @@ extern void  draw_electric_gate_beams(struct Moby *moby) __asm__("FUN_L05_0030de
 extern short electric_gate_beam_callback_frame_gp __asm__("D_L05_00161D38") __attribute__((sda));
 void         electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");
 
+typedef struct ElectricGateVars {
+    u8   pad_0[0x4];
+    s32 *unk4;
+} ElectricGateVars;
+
 /* Moby class 838 */
 void electric_gate_update(char *gate_moby) {
     enum {
@@ -28,21 +33,21 @@ void electric_gate_update(char *gate_moby) {
         ELECTRIC_GATE_WAIT_FOR_TRIGGER = 1,
         ELECTRIC_GATE_TRIGGERED = 2
     };
-    char *electric_gate_vars = ((char *)MOBY(gate_moby)->pvars);
-    int   state = MOBY(gate_moby)->state;
-    char *voice_pool_base;
-    char *tab;
-    char *gate_position;
-    char *voice_position_base;
-    char *voice_owner;
-    float gate_reference_distance;
-    int   voice_slot_index;
+    ElectricGateVars *electric_gate_vars = (ElectricGateVars *)MOBY(gate_moby)->pvars;
+    int               state = MOBY(gate_moby)->state;
+    char             *voice_pool_base;
+    char             *tab;
+    char             *gate_position;
+    char             *voice_position_base;
+    char             *voice_owner;
+    float             gate_reference_distance;
+    int               voice_slot_index;
     switch (state) {
     case ELECTRIC_GATE_INITIALIZE:
         MOBY(gate_moby)->flags |= 1;
         MOBY(gate_moby)->state = 1;
         MOBY(gate_moby)->visible = 0;
-        **(int **)(electric_gate_vars + 4) = -1;
+        *electric_gate_vars->unk4 = -1;
         break;
     case ELECTRIC_GATE_WAIT_FOR_TRIGGER:
         if (*(int *)&electric_gate_beam_callback_frame_gp != D_L05_0015F5CC_e[2]) {
@@ -52,7 +57,7 @@ void electric_gate_update(char *gate_moby) {
         gate_position = gate_moby + 0x10;
         tab = D_L05_001671C0;
         if (fast_vec_dist(gate_position, tab) < 64.0f) {
-            voice_slot_index = **(int **)(electric_gate_vars + 4);
+            voice_slot_index = *electric_gate_vars->unk4;
             if (voice_slot_index >= 0) {
                 voice_pool_base = D_0013E550;
                 voice_owner = *(char **)(voice_pool_base + voice_slot_index * 0x70 + 0x88);
@@ -66,16 +71,16 @@ void electric_gate_update(char *gate_moby) {
                                     goto after;
                             }
                             voice_position_base = voice_pool_base + 0x90;
-                            *(char **)(voice_pool_base + **(int **)(electric_gate_vars + 4) * 0x70 +
-                                       0x88) = gate_moby;
-                            qcopy(**(int **)(electric_gate_vars + 4) * 0x70 + voice_position_base,
+                            *(char **)(voice_pool_base + *electric_gate_vars->unk4 * 0x70 + 0x88) =
+                                gate_moby;
+                            qcopy(*electric_gate_vars->unk4 * 0x70 + voice_position_base,
                                   gate_position);
                         }
                         goto after;
                     }
                 }
             }
-            **(int **)(electric_gate_vars + 4) = allocate_voice_for_target_entry(0, 4, gate_moby);
+            *electric_gate_vars->unk4 = allocate_voice_for_target_entry(0, 4, gate_moby);
         }
     after:
         if (*(int *)electric_gate_vars >= 0) {

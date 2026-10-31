@@ -38,12 +38,19 @@ int count_live_mobys_in_list(int moby_list_index, int excluded_moby_state) {
 
 void group_clear_trigger_update(struct Moby *moby) __asm__("FUN_L13_0030af50");
 
+typedef struct GroupClearTriggerVars {
+    u8  pad_0[0x20];
+    s32 unk20;
+    s32 unk24;
+    s32 clip_volume_28;
+} GroupClearTriggerVars;
+
 /* Moby class 1271 */
 void group_clear_trigger_update(struct Moby *moby) {
-    char *moby_vars = (char *)moby->pvars;
-    int  *moby_list_index_cursor = (int *)moby_vars;
-    int   i;
-    char *clip_volume_subject_base;
+    GroupClearTriggerVars *moby_vars = (GroupClearTriggerVars *)moby->pvars;
+    int                   *moby_list_index_cursor = (int *)moby_vars;
+    int                    i;
+    char                  *clip_volume_subject_base;
     for (i = 0; i < 8; i++) {
         if (*moby_list_index_cursor != -1) {
             if (count_live_mobys_in_list(*moby_list_index_cursor, -1) != 0)
@@ -55,13 +62,13 @@ void group_clear_trigger_update(struct Moby *moby) {
     if (*(int *)(clip_volume_subject_base + 0x15F0) != 0 &&
         *(int *)(clip_volume_subject_base + 0x2084) == 0x32)
         return;
-    if (*(int *)(moby_vars + 0x28) != -1 &&
-        is_point_inside_clip_volume(clip_volume_subject_base + 0x80, *(int *)(moby_vars + 0x28)) ==
+    if (moby_vars->clip_volume_28 != -1 &&
+        is_point_inside_clip_volume(clip_volume_subject_base + 0x80, moby_vars->clip_volume_28) ==
             0)
         return;
-    if (*(int *)(moby_vars + 0x20) != -1)
-        moby->state = moby_vars[0x20];
-    if (*(int *)(moby_vars + 0x24) == -1)
+    if (moby_vars->unk20 != -1)
+        moby->state = ((char *)moby_vars)[0x20];
+    if (moby_vars->unk24 == -1)
         return;
-    moby->command = moby_vars[0x24];
+    moby->command = ((char *)moby_vars)[0x24];
 }

@@ -12,37 +12,55 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 
 void metropolis_train_carriage_update(struct Moby *moby) __asm__("FUN_L03_002953f8");
 
+typedef struct MetropolisTrainCarriageVars {
+    u8  pad_0[0x20];
+    f32 unk20[4];
+    u8  pad_30[0x2C];
+    s32 unk5C;
+    s32 unk60;
+    s16 unk64;
+    u8  pad_66[0x2];
+    s8  unk68;
+    u8  pad_69[0x15];
+    s16 unk7E;
+    u8  pad_80[0x20];
+    u8  unkA0;
+    u8  pad_A1[0xF];
+    u8  unkB0;
+    u8  pad_B1[0x13];
+    f32 unkC4;
+} MetropolisTrainCarriageVars;
+
 /* Moby class 1210 */
 void metropolis_train_carriage_update(struct Moby *moby) {
-    float position_delta[4];
-    float joint_zero_world_position[4];
-    char *carriage_pvars;
-    char *current_position;
-    char *current_rotation;
-    char *previous_rotation;
-    char *previous_position;
-    carriage_pvars = (char *)moby->pvars;
+    float                        position_delta[4];
+    float                        joint_zero_world_position[4];
+    MetropolisTrainCarriageVars *carriage_pvars;
+    char                        *current_position;
+    char                        *current_rotation;
+    char                        *previous_rotation;
+    char                        *previous_position;
+    carriage_pvars = (MetropolisTrainCarriageVars *)moby->pvars;
     if ((moby->flags & 2) == 0) {
         current_position = &moby->pos;
-        previous_position = carriage_pvars + 0xA0;
-        previous_rotation = carriage_pvars + 0xB0;
+        previous_position = &carriage_pvars->unkA0;
+        previous_rotation = &carriage_pvars->unkB0;
         current_rotation = &moby->rot;
         if (moby->state == 0) {
-            *(int *)(carriage_pvars + 0x60) = 0;
-            *(short *)(carriage_pvars + 0x64) = 0;
-            carriage_pvars[0x68] = 4;
-            *(short *)(carriage_pvars + 0x7E) = 0xD;
+            carriage_pvars->unk60 = 0;
+            carriage_pvars->unk64 = 0;
+            carriage_pvars->unk68 = 4;
+            carriage_pvars->unk7E = 0xD;
             moby_point_position(moby, 0, joint_zero_world_position);
-            *(float *)(carriage_pvars + 0xC4) =
-                fast_vec_dist(current_position, joint_zero_world_position);
+            carriage_pvars->unkC4 = fast_vec_dist(current_position, joint_zero_world_position);
             qcopy(previous_position, current_position);
             qcopy(previous_rotation, current_rotation);
-            *(int *)(carriage_pvars + 0x5C) = 3;
+            carriage_pvars->unk5C = 3;
             moby->update_dist = moby->draw_dist = 0xFF;
         }
         fast_vec_sub(position_delta, current_position, previous_position);
         update_entity_matrix(
-            carriage_pvars + 0x20, position_delta, previous_rotation, current_rotation);
+            carriage_pvars->unk20, position_delta, previous_rotation, current_rotation);
         qcopy(previous_position, current_position);
         qcopy(previous_rotation, current_rotation);
     }

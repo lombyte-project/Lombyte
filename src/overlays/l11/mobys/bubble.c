@@ -52,55 +52,59 @@ extern short bubble_shrink_effect_color_range_start_gp __asm__("D_L11_00162418")
 extern short bubble_shrink_effect_color_range_end_gp __asm__("D_L11_0016241C") __attribute__((sda));
 void         bubble_update(struct Moby *bubble_moby) __asm__("FUN_L11_0031ab08");
 
+typedef struct BubbleVars {
+    u8   pad_0[0x8];
+    f32  unk8;
+    u8   pad_C[0x16];
+    s16  unk22;
+    f32 *unk24;
+} BubbleVars;
+
 /* Moby class 1524 */
 void bubble_update(struct Moby *bubble_moby) {
     enum {
         BUBBLE_MOVE_UNTIL_SURFACE_CROSSING = 1,
         BUBBLE_SHRINK_TO_REMOVAL = 2
     };
-    char *bubble_vars = (char *)bubble_moby->pvars;
-    float randomized_effect_vector[4];
-    float horizontal_speed;
-    float rate;
-    char *spawned_effect;
+    BubbleVars *bubble_vars = (BubbleVars *)bubble_moby->pvars;
+    float       randomized_effect_vector[4];
+    float       horizontal_speed;
+    float       rate;
+    char       *spawned_effect;
     if (bubble_moby->visible == 0) {
-        if (++*(short *)(bubble_vars + 0x22) > scale_game_frames(0xF)) {
+        if (++bubble_vars->unk22 > scale_game_frames(0xF)) {
             mark_moby_for_removal(bubble_moby);
             return;
         }
     } else {
-        *(short *)(bubble_vars + 0x22) = 0;
+        bubble_vars->unk22 = 0;
     }
     switch (bubble_moby->state) {
     case BUBBLE_MOVE_UNTIL_SURFACE_CROSSING:
-        *(float *)(bubble_vars + 8) -=
-            *(float *)&bubble_pre_surface_vertical_acceleration_gp * frame_time_sq;
-        if (**(float **)(bubble_vars + 0x24) + 3.0f < bubble_moby->pos.z) {
+        bubble_vars->unk8 -= *(float *)&bubble_pre_surface_vertical_acceleration_gp * frame_time_sq;
+        if (*bubble_vars->unk24 + 3.0f < bubble_moby->pos.z) {
             if (random_integer_below(*(int *)&bubble_spark_spawn_random_limit_gp) == 0) {
                 FUN_L11_0031b098_c(bubble_moby);
             }
         }
-        if (bubble_moby->pos.z < **(float **)(bubble_vars + 0x24)) {
+        if (bubble_moby->pos.z < *bubble_vars->unk24) {
             fast_vec_scale(
                 bubble_vars, bubble_vars, *(float *)&bubble_surface_crossing_velocity_scale_gp);
             bubble_moby->state = 2;
-            spawn_bubble_surface_effects(
-                (struct Moby *)bubble_moby, *(float **)(bubble_vars + 0x24), 8, 4);
+            spawn_bubble_surface_effects((struct Moby *)bubble_moby, bubble_vars->unk24, 8, 4);
         }
         break;
     case BUBBLE_SHRINK_TO_REMOVAL:
-        *(float *)(bubble_vars + 8) -=
-            *(float *)&bubble_shrink_vertical_acceleration_gp * frame_time_sq;
+        bubble_vars->unk8 -= *(float *)&bubble_shrink_vertical_acceleration_gp * frame_time_sq;
         rate = bubble_moby->pclass->scale / (float)scale_game_frames(0x3C);
         if ((level_frame & 3) == 0) {
-            spawn_bubble_surface_effects(
-                (struct Moby *)bubble_moby, *(float **)(bubble_vars + 0x24), 0, 1);
+            spawn_bubble_surface_effects((struct Moby *)bubble_moby, bubble_vars->unk24, 0, 1);
             random_vector(randomized_effect_vector, 0.0f, frame_scale_inv_macro[1]);
             randomized_effect_vector[2] = absolute_float(randomized_effect_vector[2]);
             spawned_effect = func_L00_0026FF20_p(&bubble_moby->pos,
                                                  randomized_effect_vector,
                                                  *(float *)&D_L11_00162414,
-                                                 **(float **)(bubble_vars + 0x24));
+                                                 *bubble_vars->unk24);
             if (spawned_effect != 0) {
                 *(int *)(spawned_effect + 4) =
                     fast_tween_color(*(int *)&bubble_shrink_effect_color_range_start_gp,

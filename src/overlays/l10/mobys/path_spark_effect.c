@@ -29,11 +29,17 @@ send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, f
 
 void path_spark_effect_update(char *moby) __asm__("FUN_L10_002dd3d8");
 
+typedef struct PathSparkEffectVars {
+    u8    pad_0[0x10];
+    void *unk10;
+    s32   timer_14;
+} PathSparkEffectVars;
+
 /* Moby class 1090 */
 void path_spark_effect_update(char *moby) {
     float spark_position_before_path_update[4], blast_hit_position[4], path_segment_index,
         path_segment_remainder;
-    char *effect_data = ((char *)MOBY(moby)->pvars);
+    PathSparkEffectVars *effect_data = (PathSparkEffectVars *)MOBY(moby)->pvars;
     *(OvlQuad *)spark_position_before_path_update = *(OvlQuad *)&MOBY(moby)->pos;
     ((EffectData *)effect_data)->phase += ((EffectData *)effect_data)->speed;
     ((EffectData *)effect_data)->speed *=
@@ -47,28 +53,27 @@ void path_spark_effect_update(char *moby) {
     MOBY(moby)->rot.x = random_angle_radians();
     MOBY(moby)->rot.y = random_angle_radians();
     MOBY(moby)->rot.z = random_angle_radians();
-    if (fast_dec_timer((int *)(effect_data + 0x14))) {
+    if (fast_dec_timer(&effect_data->timer_14)) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (*(int *)(effect_data + 0x14) < truncate_float_to_s32(10.0f / (frame_time * 5.0f)) / 2) {
-        float numerator = convert_integer_to_float(*(int *)(effect_data + 0x14));
+    if (effect_data->timer_14 < truncate_float_to_s32(10.0f / (frame_time * 5.0f)) / 2) {
+        float numerator = convert_integer_to_float(effect_data->timer_14);
         MOBY(moby)->scale =
             MOBY(moby)->pclass->scale * numerator /
             convert_integer_to_float(truncate_float_to_s32(10.0f / (frame_time * 5.0f)) / 2) * 0.5f;
     } else if ((truncate_float_to_s32(10.0f / (frame_time * 5.0f)) / 4) * 3 <
-               *(int *)(effect_data + 0x14)) {
+               effect_data->timer_14) {
         float numerator = convert_integer_to_float(
-            truncate_float_to_s32(10.0f / (frame_time * 5.0f)) - *(int *)(effect_data + 0x14));
+            truncate_float_to_s32(10.0f / (frame_time * 5.0f)) - effect_data->timer_14);
         MOBY(moby)->scale =
             MOBY(moby)->pclass->scale * numerator /
             convert_integer_to_float(truncate_float_to_s32(10.0f / (frame_time * 5.0f)) / 4) * 0.5f;
     }
     if (MOBY(moby)->pclass->scale * 0.25f < MOBY(moby)->scale) {
-        int count =
-            collect_mobies_in_sphere(moby + 0x10, 0.15f, 16, *(void **)(effect_data + 0x10), 0);
+        int count = collect_mobies_in_sphere(moby + 0x10, 0.15f, 16, effect_data->unk10, 0);
         *(OvlQuad *)blast_hit_position = *(OvlQuad *)&MOBY(moby)->pos;
-        send_blast_hits(*(void **)(effect_data + 0x10),
+        send_blast_hits(effect_data->unk10,
                         blast_hit_position,
                         D_L10_00178380,
                         count,

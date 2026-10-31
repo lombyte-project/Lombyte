@@ -25,15 +25,20 @@ void blend_big_axebot_and_axe_animation(char *moby,
                                         void *frame_index,
                                         void *blend_frames) __asm__("FUN_L04_002ba3e0");
 
+typedef struct BigAxebotVars {
+    u8    pad_0[0x424];
+    char *unk424;
+} BigAxebotVars;
+
 void blend_big_axebot_and_axe_animation(char *moby,
                                         void *new_seq,
                                         void *frame_index,
 
                                         void *blend_frames) {
-    char *axebot_pvars = ((char *)MOBY(moby)->pvars);
-    void *linked_axe_moby;
+    BigAxebotVars *axebot_pvars = (BigAxebotVars *)MOBY(moby)->pvars;
+    void          *linked_axe_moby;
     blend_moby_animation(moby, new_seq, frame_index, blend_frames);
-    linked_axe_moby = *(void **)(axebot_pvars + 0x424);
+    linked_axe_moby = (void *)axebot_pvars->unk424;
     if (linked_axe_moby != 0) {
         blend_moby_animation(linked_axe_moby, new_seq, frame_index, blend_frames);
     }
@@ -45,10 +50,10 @@ void set_big_axebot_and_axe_animation_speed(struct Moby *moby,
                                             float animation_speed) __asm__("FUN_L04_002ba448");
 
 void set_big_axebot_and_axe_animation_speed(struct Moby *moby, float animation_speed) {
-    char *big_axebot_pvars = ((char *)moby->pvars);
+    BigAxebotVars *big_axebot_pvars = (BigAxebotVars *)moby->pvars;
     moby->anim_speed = animation_speed;
-    if (*(char **)(big_axebot_pvars + 0x424) != 0) {
-        *(float *)(*(char **)(big_axebot_pvars + 0x424) + 0x58) = animation_speed;
+    if (big_axebot_pvars->unk424 != 0) {
+        *(float *)(big_axebot_pvars->unk424 + 0x58) = animation_speed;
     }
 }
 /* Spawns an effect on the moby at its marker vector. */
