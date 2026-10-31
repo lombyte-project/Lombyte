@@ -46,7 +46,7 @@ void cutscene_camera_target_update(struct Moby *moby) {
     switch (moby->state) {
     case INITIALIZE_UPDATE_DISTANCE:
         moby->update_dist = 0xFF;
-        moby->state = 1;
+        moby->state = DISPATCH_PHASE_SELECTED_MOBY;
         break;
     case DISPATCH_PHASE_SELECTED_MOBY:
         if (D_L12_0015F5C4 == 2) {
