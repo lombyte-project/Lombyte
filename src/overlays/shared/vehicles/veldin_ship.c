@@ -145,9 +145,13 @@ void veldin_ship_update(M2d1e80 *m) __asm__("FUN_L00_002d1e80");
 
 /* Moby class 530 */
 void veldin_ship_update(M2d1e80 *moby) {
+    enum {
+        VELDIN_SHIP_STATE_UNINITIALIZED = 0,
+        VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING = 1
+    };
     s32 *ship_vars = moby->vars;
-    if (moby->state == 0) {
-        moby->state = 1;
+    if (moby->state == VELDIN_SHIP_STATE_UNINITIALIZED) {
+        moby->state = VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING;
         moby->bc = 1;
         ship_vars[0x10] = 0;
     }
