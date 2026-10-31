@@ -393,8 +393,8 @@ s32 resolve_hero_position_collisions(s32 mode) {
         if (hero.state.control_mode == 0x16) {
             transform_hero_local_offset_to_world(&collision_query_offset, 0.0f, 0.0f, 0.7f);
             fast_vec_sub(&collision_query_offset, &collision_query_offset, &hero.motion.pos.q);
-        } else if (hero.gravity_mode != 0 || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == 1 || hero.unk1F8 != 0 ||
+        } else if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0 ||
                 (unsigned)(hero.state.control_mode - 0x15) < 2) {
                 FUN_L00_00233810(&collision_query_offset, &collision_query_offset, 0.6f);
             } else {
@@ -411,7 +411,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {
-        if (hero.gravity_mode != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
             if (!coll_sphere(&hero.motion.pos.q, mask, ((s32)hero.moby), frame_scale * 0.4f))
                 break;
         } else if (hero.state.control_mode == 0x11) {
