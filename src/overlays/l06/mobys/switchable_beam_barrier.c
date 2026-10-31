@@ -14,7 +14,7 @@
 
 extern float D_L06_00167540[];
 
-extern char *D_L06_0015FFD8 __asm__("D_L06_0015FFD8");
+extern char *level_mobys_q __asm__("D_L06_0015FFD8");
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
@@ -93,7 +93,7 @@ void switchable_beam_barrier_update(char *moby) {
         }
         break;
     case WAIT_FOR_LINKED_MOBY: {
-        char *e = D_L06_0015FFD8 + (vector_stream_vars->f10 << 8);
+        char *e = level_mobys_q + (vector_stream_vars->f10 << 8);
         if (*(short *)(e + 0xA6) == 0x463 && (unsigned char)e[0x20] < 3) {
             return;
         }
@@ -151,7 +151,7 @@ void switchable_beam_barrier_update(char *moby) {
             add_draw_callback((int)draw_moby_vector_streams, moby);
         }
         if (vector_stream_vars->f14 >= 0 &&
-            *(unsigned char *)(D_L06_0015FFD8 + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
+            *(unsigned char *)(level_mobys_q + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
             int voice_slot_index;
             MOBY(moby)->collision = 0;
             MOBY(moby)->state = 3;
