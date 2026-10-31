@@ -14,7 +14,7 @@ extern char *create_moby(int);
 
 char *spawn_qwarks_starfighter_shield(char *owner) __asm__("FUN_L13_002e8438");
 
-char *spawn_qwarks_starfighter_shield(char *owner) {
+char *spawn_qwarks_starfighter_shield(char *shielded_starfighter) {
     char *moby = create_moby(0x160);
     if (moby != 0) {
         char *spawned_moby_vars;
@@ -24,8 +24,8 @@ char *spawn_qwarks_starfighter_shield(char *owner) {
         spawned_moby_vars = ((char *)MOBY(moby)->pvars);
         moby[0x20] = 0;
         moby[0xBC] = 0;
-        qcopy(moby + 0x10, owner + 0x10);
-        *(char **)spawned_moby_vars = owner;
+        qcopy(moby + 0x10, shielded_starfighter + 0x10);
+        *(char **)spawned_moby_vars = shielded_starfighter;
         *(int *)(spawned_moby_vars + 4) = 0;
         MOBY(moby)->flags |= 0x200;
         update_entity(moby);
