@@ -50,7 +50,7 @@ void swinging_door_update(struct Moby *moby) {
     f32          yaw;
 
     if (door_vars->trigger == -1) {
-        if (moby->state != 0) {
+        if (moby->state != SWINGING_DOOR_INITIALIZE) {
             if (is_point_inside_clip_volume(&hero.motion.pos, door_vars->open_volume) ||
                 is_point_inside_clip_volume(D_L15_001673C0, door_vars->open_volume)) {
                 open = 1;
@@ -92,13 +92,13 @@ void swinging_door_update(struct Moby *moby) {
         door_vars->swing = 0.0f;
         door_vars->closed_yaw = yaw;
         moby->rot.z = yaw;
-        moby->state = 1;
+        moby->state = SWINGING_DOOR_CLOSED;
         break;
     case SWINGING_DOOR_CLOSED:
         door_vars->swing = 0.0f;
         moby->rot.z = door_vars->closed_yaw;
         if (open) {
-            moby->state = 2;
+            moby->state = SWINGING_DOOR_OPENING;
             door_vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
         }
         break;
@@ -110,7 +110,7 @@ void swinging_door_update(struct Moby *moby) {
         limit = swinging_door_swing_angle_degrees_gp * DEG_TO_RAD;
         if (door_vars->swing < limit) {
             door_vars->swing = limit;
-            moby->state = 3;
+            moby->state = SWINGING_DOOR_OPEN;
         }
         step = door_vars->swing;
         if (door_vars->reverse) {
@@ -120,7 +120,7 @@ void swinging_door_update(struct Moby *moby) {
         break;
     case SWINGING_DOOR_OPEN:
         if (close) {
-            moby->state = 4;
+            moby->state = SWINGING_DOOR_CLOSING;
             door_vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
         }
         break;
@@ -131,7 +131,7 @@ void swinging_door_update(struct Moby *moby) {
                                  swinging_door_swing_duration_gp * DEG_TO_RAD * frame_time));
         if (0.0f < door_vars->swing) {
             door_vars->swing = 0.0f;
-            moby->state = 1;
+            moby->state = SWINGING_DOOR_CLOSED;
         }
         step = door_vars->swing;
         if (door_vars->reverse) {
@@ -139,7 +139,7 @@ void swinging_door_update(struct Moby *moby) {
         }
         moby->rot.z = fast_add_rotations(door_vars->closed_yaw, step);
         if (open) {
-            moby->state = 2;
+            moby->state = SWINGING_DOOR_OPENING;
         }
         break;
     }
