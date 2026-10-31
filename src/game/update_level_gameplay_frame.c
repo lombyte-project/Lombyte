@@ -156,7 +156,7 @@ extern void build_object_rotation_matrix(void) __asm__("func_0022DE10");
 void update_level_gameplay_frame(void) __asm__("FUN_0022eaa8");
 
 void update_level_gameplay_frame(void) {
-    Vector4             first_position;
+    enum { LEVEL_RENDER_PHASE_SELECT_RANDOM_MODE = 0 , LEVEL_RENDER_PHASE_REQUEST_LOAD = 2 , LEVEL_RENDER_MODE_FADE_OUT = 4 } ;Vector4             first_position;
     Vector4             second_position;
     Matrix4x4           first_transform;
     Matrix4x4           second_transform;
@@ -221,14 +221,14 @@ void update_level_gameplay_frame(void) {
         }
         if (current_level_index != 0 && (current_level_index != 1 || level_available[3] != 0) &&
             D_0015EE48 < 3) {
-            level_render_state.state = 0;
+            level_render_state.state = LEVEL_RENDER_PHASE_SELECT_RANDOM_MODE;
         }
-        if (level_render_state.state < 2) {
-            if (level_render_state.state == 0) {
+        if (level_render_state.state < LEVEL_RENDER_PHASE_REQUEST_LOAD) {
+            if (level_render_state.state == LEVEL_RENDER_PHASE_SELECT_RANDOM_MODE) {
                 mode_advance = (RandomNext() >> 16) % 3 + 1;
                 level_render_state.mode = (level_render_state.mode + mode_advance) & 3;
             } else {
-                level_render_state.mode = 4;
+                level_render_state.mode = LEVEL_RENDER_MODE_FADE_OUT;
             }
             level_render_state.history_index = 0;
             level_render_state.history_count = 0;
@@ -267,7 +267,7 @@ void update_level_gameplay_frame(void) {
     }
     update_view_context();
     scale = 1.0f;
-    if (level_render_state.mode == 4) {
+    if (level_render_state.mode == LEVEL_RENDER_MODE_FADE_OUT) {
         scale = (f32)(render_sequence.end - render_sequence.time) / (f32)render_sequence.end;
         scale_vector(&first_position, &mode4_render_vector_delta_gp, scale);
         fast_vec_add(&D_001604F0, &D_001604F0, &first_position);
@@ -324,7 +324,7 @@ void update_level_gameplay_frame(void) {
                   &first_transform.rows[3]);
             qcopy(&level_render_state.secondary_history_positions[history_slot],
                   &second_transform.rows[3]);
-            if (level_render_state.mode == 4) {
+            if (level_render_state.mode == LEVEL_RENDER_MODE_FADE_OUT) {
                 if (current_level_index == 0 ||
                     (current_level_index == 1 && level_available[3] == 0)) {
                     interpolated_object->flags |= 1;
