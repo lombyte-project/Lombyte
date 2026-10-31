@@ -142,6 +142,9 @@ void mine_glove_update(struct Moby *moby) {
         MINE_GLOVE_BEGIN_HELD_MOBY_REMOVAL = 5,
         MINE_GLOVE_REMOVE_HELD_MOBY = 6
     };
+    enum {
+        MINE_GLOVE_IDLE = 2
+    };
     GloveVars *mine_glove_vars;
     Vec4       saved, offset, rotatedOffset;
     Vec4       local[4];
@@ -276,10 +279,10 @@ void mine_glove_update(struct Moby *moby) {
         if (!(moby->anim_flags & 2))
             moby->state = MINE_GLOVE_WAIT_FOR_ANIMATION;
         else
-            moby->state = 2;
+            moby->state = MINE_GLOVE_IDLE;
     case MINE_GLOVE_WAIT_FOR_ANIMATION:
         if (moby->anim_flags & 2)
-            moby->state = 2;
+            moby->state = MINE_GLOVE_IDLE;
         break;
     case MINE_GLOVE_RELEASE_HELD_MOBY:
         if (mine_glove_vars->held != 0) {
@@ -306,7 +309,7 @@ void mine_glove_update(struct Moby *moby) {
         break;
     case MINE_GLOVE_POST_RELEASE_WAIT:
         if (hero.state.current != 0x23 && !hero.item_anim_active)
-            moby->state = 2;
+            moby->state = MINE_GLOVE_IDLE;
         break;
     case MINE_GLOVE_BEGIN_HELD_MOBY_REMOVAL:
         moby->state = MINE_GLOVE_REMOVE_HELD_MOBY;
