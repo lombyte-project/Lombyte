@@ -149,7 +149,7 @@ extern float FUN_001f9bf8_2d5988(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern float FUN_001f9dc8_2d5988(f32) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2d5988(f32) __asm__("FUN_001f9de0");
 
-extern Path        *D_L00_001B04B0[];
+extern Path        *toad_paths[] __asm__("D_L00_001B04B0");
 extern Player       D_0013F3D0;
 extern Camera       D_0013F350;
 extern f32          D_0015ED6C;
@@ -372,9 +372,9 @@ void infobot_update(struct Moby *moby) {
             if (infobot->slots[i] == -1) {
                 continue;
             }
-            measure_path(D_L00_001B04B0[infobot->slots[i]]);
+            measure_path(toad_paths[infobot->slots[i]]);
         }
-        MPOS(moby)->q = D_L00_001B04B0[infobot->slots[0]]->pts[0].q;
+        MPOS(moby)->q = toad_paths[infobot->slots[0]]->pts[0].q;
         infobot->seg = 0;
         moby->state = 3;
         break;
@@ -441,7 +441,7 @@ void infobot_update(struct Moby *moby) {
         }
         break;
     case INFOBOT_FOLLOW_SLOT_PATH:
-        FUN_L00_002d5988_2d5de8(moby, D_L00_001B04B0[infobot->slots[infobot->seg]], 3);
+        FUN_L00_002d5988_2d5de8(moby, toad_paths[infobot->slots[infobot->seg]], 3);
         FUN_L00_002d6cd0_2d5de8(moby);
         if (moby->state != 4) {
             infobot->seg++;
@@ -472,14 +472,14 @@ void infobot_update(struct Moby *moby) {
         }
         moby->state = 6;
         infobot->attach = -1;
-        MPOS(moby)->q = D_L00_001B04B0[infobot->path]->pts[0].q;
+        MPOS(moby)->q = toad_paths[infobot->path]->pts[0].q;
         moby->rot.z = fast_arc_tan(
-            D_L00_001B04B0[infobot->path]->pts[1].v.x - D_L00_001B04B0[infobot->path]->pts[0].v.x,
-            D_L00_001B04B0[infobot->path]->pts[1].v.y - D_L00_001B04B0[infobot->path]->pts[0].v.y);
-        measure_path(D_L00_001B04B0[infobot->path]);
+            toad_paths[infobot->path]->pts[1].v.x - toad_paths[infobot->path]->pts[0].v.x,
+            toad_paths[infobot->path]->pts[1].v.y - toad_paths[infobot->path]->pts[0].v.y);
+        measure_path(toad_paths[infobot->path]);
         break;
     case INFOBOT_FOLLOW_PATH:
-        path = D_L00_001B04B0[infobot->path];
+        path = toad_paths[infobot->path];
         pos = (Vec *)&moby->pos;
         FUN_L00_002d6cd0_2d5de8(moby);
         FUN_L00_0025df68(path, pos, &point, &segment, &fraction, 0, 999.0f, 5.0f, 0.0f);
@@ -541,7 +541,7 @@ void infobot_update(struct Moby *moby) {
                                   &infobot->spin[0]);
         break;
     case INFOBOT_ORBIT_PATH_ENDPOINT: {
-        Path *orbit_path = D_L00_001B04B0[infobot->path];
+        Path *orbit_path = toad_paths[infobot->path];
         FUN_L00_002d6cd0_2d5de8(moby);
         infobot->sway = infobot->sway + D_0015ED6C;
         if (1.0f < infobot->sway) {
