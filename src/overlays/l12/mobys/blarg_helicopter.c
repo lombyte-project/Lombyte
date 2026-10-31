@@ -288,7 +288,7 @@ update_state:
             }
         }
         blarg_helicopter_vars->unkB4 = 0;
-        moby->state = 1;
+        moby->state = BLARG_HELICOPTER_WAIT_FOR_ACTIVATION;
         break;
     }
     case BLARG_HELICOPTER_WAIT_FOR_ACTIVATION: {
@@ -310,7 +310,7 @@ update_state:
                 child->flags &= 0xffbe;
             moby->flags |= 0x1000;
             a = moby->pclass->collision;
-            moby->state = 2;
+            moby->state = BLARG_HELICOPTER_FOLLOW_INITIAL_PATH;
             moby->collision = a;
         }
         break;
@@ -331,7 +331,7 @@ update_state:
                 blarg_helicopter_vars->unk8C = limit * scale_game_frames(15);
         }
         if (follow_blarg_helicopter_path(moby, blarg_helicopter_vars->unkA0))
-            moby->state = 3;
+            moby->state = BLARG_HELICOPTER_AIM_AND_FIRE;
         break;
     case BLARG_HELICOPTER_AIM_AND_FIRE: {
         int   count, limit, a, b, color, life, size;
@@ -410,7 +410,7 @@ update_state:
                 }
                 if (blarg_helicopter_vars->unkBC >= limit && blarg_helicopter_vars->unkA4 != -1) {
                     blarg_helicopter_vars->unkBC = 0;
-                    moby->state = 4;
+                    moby->state = BLARG_HELICOPTER_MOVE_BETWEEN_PATH_ENDPOINTS;
                 } else
                     blarg_helicopter_vars->unk8C = scale_game_frames(40);
             }
@@ -438,7 +438,7 @@ update_state:
             if (blarg_helicopter_vars->unk94 == 0.0f) {
                 blarg_helicopter_vars->unk8C = scale_game_frames(50);
                 blarg_helicopter_vars->unkBE = blarg_helicopter_vars->unkBE == 0;
-                moby->state = 3;
+                moby->state = BLARG_HELICOPTER_AIM_AND_FIRE;
                 break;
             }
         } else
@@ -506,7 +506,7 @@ update_state:
         b = scale_game_frames(400);
         blarg_helicopter_vars->unkC4 = FUN_L00_00257b90(a, b);
         moby->collision = 0;
-        moby->state = 0;
+        moby->state = BLARG_HELICOPTER_INITIALIZE;
         moby->flags = (moby->flags | 0x41) & 0xefff;
         break;
     }
@@ -527,7 +527,7 @@ update_state:
             (*(struct Moby **)(&blarg_helicopter_vars->unkAC))->flags |= 6;
         }
     }
-    if (blarg_helicopter_vars->unkC0 == 0 && moby->state > 1 && moby->visible &&
+    if (blarg_helicopter_vars->unkC0 == 0 && moby->state > BLARG_HELICOPTER_WAIT_FOR_ACTIVATION && moby->visible &&
         fast_vec_dist(&moby->pos, D_L12_00167240) < 30.0f) {
         FUN_L00_0025a120((char *)moby);
         moby->shadow_range = 24;
