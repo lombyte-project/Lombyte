@@ -21,6 +21,9 @@ extern s32                   sceSifWriteBackDCache();
 extern s32                   strncpy(s8 *, s8 *, s32);
 
 s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
+    enum {
+        RPC_DISPATCH_SUCCESS = 0
+    };
     s32 rpc_dispatch_status;
     s32 chdir_request_status;
 
@@ -48,7 +51,7 @@ s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
                                             4,
                                             &mceStorePwd,
                                             pwd);
-        if (rpc_dispatch_status == 0) {
+        if (rpc_dispatch_status == RPC_DISPATCH_SUCCESS) {
             mc_current_func = MC_FUNC_CHDIR;
         } else {
             SignalSema(mc_sema);
