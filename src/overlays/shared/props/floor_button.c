@@ -16,7 +16,7 @@ typedef struct {
     u8 collected[1];
 } SaveFlags;
 
-extern SaveFlags D_L05_001BB6B0;
+extern SaveFlags l05_mission_gated_moby_save_flags __asm__("D_L05_001BB6B0");
 extern SaveFlags l05_moby_save_flags __asm__("D_L05_001BAA50");
 
 extern unsigned char D_L05_0015FC88[] MACRO_ADDR;
@@ -45,7 +45,7 @@ void floor_button_update(struct Moby *moby) {
         *(f32 *)(floor_button_private_state + 3) = random_angle_radians();
         moby->pos.z -= 0.35f;
         id = (s16)moby->save_id;
-        if (D_L05_001BB6B0.collected[id] != 0 ||
+        if (l05_mission_gated_moby_save_flags.collected[id] != 0 ||
             (D_0014C190_257218[current_level_index][id >> 5] >> (moby->save_id & 31) & 1) != 0 ||
             (floor_button_private_state[2] != 0 && D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
             moby->command = 2;
@@ -84,7 +84,7 @@ void floor_button_update(struct Moby *moby) {
             if (moby->mission == 0xFF ||
                 (D_L05_0015FC88[moby->mission] != 0xFF &&
                  D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
-                D_L05_001BB6B0.collected[(s16)moby->save_id] = moby->mission + 2;
+                l05_mission_gated_moby_save_flags.collected[(s16)moby->save_id] = moby->mission + 2;
             }
             moby->state = 2;
             moby->command = 1;
