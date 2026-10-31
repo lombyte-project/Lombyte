@@ -327,19 +327,19 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
     case ANKLEBITER_INITIALIZE:
         if (data->sleep) {
             qcopy(data->home, moby->pos);
-            moby->state = 9;
+            moby->state = ANKLEBITER_DORMANT;
             if (moby->anim != 12)
                 blend_moby_animation(moby, 12, 0, 3);
             moby->collision = 0;
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
         } else if (data->home[3] != 0.0f) {
-            moby->state = 11;
+            moby->state = ANKLEBITER_WAIT_FOR_LEAP_TRIGGER;
             moby->joints = 0;
             moby->flags &= 0xEFFF;
             moby->collision = 0;
         } else {
             qcopy(data->home, moby->pos);
-            moby->state = 1;
+            moby->state = ANKLEBITER_IDLE;
             if (moby->anim != 0)
                 blend_moby_animation(moby, 0, 0, 3);
         }
@@ -382,7 +382,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         idle_angle = fast_arc_tan(target->pos[0] - moby->pos[0], target->pos[1] - moby->pos[1]);
         idle_difference = fast_difference_between_rotations(moby->rot[2], idle_angle);
         if (idle_distance < data->range && absolute_float(moby->pos[2] - target->pos[2]) < 4.0f) {
-            moby->state = 3;
+            moby->state = ANKLEBITER_FACE_TARGET_BEFORE_PURSUIT;
             if (idle_difference < 0.9599311f) {
                 if (moby->anim != 2)
                     blend_moby_animation(moby, 2, 0, scale_game_frames(5));
@@ -395,7 +395,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
                 data->circle_rate = -data->circle_rate;
             data->circle_angle = data->circle_rate * 0.017453292f;
             data->circle_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
-            moby->state = 3;
+            moby->state = ANKLEBITER_FACE_TARGET_BEFORE_PURSUIT;
             if (moby->anim != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(7));
             moby->proximity = 0;
@@ -421,7 +421,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
                 count = 0;
                 func_L00_0025A208_2E2EF0((int *)&iterator, moby->group, 0, 0);
                 while (iterator) {
-                    if ((signed char)iterator->state >= 0 && iterator->state != 9)
+                    if ((signed char)iterator->state >= 0 && iterator->state != ANKLEBITER_DORMANT)
                         count++;
                     func_L00_0025A2F0_2E2EF0((int *)&iterator, (int)iterator, 0, 0);
                 }
@@ -438,7 +438,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         } else if (!((moby->proximity & 1) && fast_dec_timer_s16(&data->group_timer)) &&
                    moby->proximity != 7)
             break;
-        moby->state = 13;
+        moby->state = ANKLEBITER_ACTIVATE_FROM_DORMANCY;
         if (moby->anim != 7)
             blend_moby_animation(moby, 7, 0, 1);
         moby->flags |= 0x1000;
@@ -456,7 +456,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
                 data->circle_rate = -data->circle_rate;
             data->circle_angle = data->circle_rate * 0.017453292f;
             data->circle_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
-            moby->state = 4;
+            moby->state = ANKLEBITER_PURSUE_TARGET;
             data->blocked = 0;
             select_hoven_anklebiter_pursuit_animation((struct Moby *)moby);
             moby->proximity = 0;
@@ -486,14 +486,14 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
             setup_fall54(moby->rot[2], (char *)moby, data->fall, 8, 1, 0);
             data->fall_a = 5.0f;
             data->fall_b = 10.0f;
-            moby->state = 12;
+            moby->state = ANKLEBITER_LEAP_TO_HOME;
             moby->flags |= 0x1000;
             moby->collision = *(int *)(moby->model + 0x10);
         }
         break;
     case ANKLEBITER_LEAP_TO_HOME:
         if (step_moby_motion(moby, data->fall) & 1) {
-            moby->state = 14;
+            moby->state = ANKLEBITER_LAND_AFTER_LEAP;
             if (moby->anim != 9)
                 blend_moby_animation(moby, 9, 8, scale_game_frames(7));
             return;
@@ -505,7 +505,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         break;
     case ANKLEBITER_LAND_AFTER_LEAP:
         if (moby->anim_flags & 2) {
-            moby->state = 4;
+            moby->state = ANKLEBITER_PURSUE_TARGET;
             data->blocked = 0;
             if (random_integer_below(256) & 1)
                 data->circle_rate = -data->circle_rate;
@@ -518,7 +518,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         angle = fast_arc_tan(target->pos[0] - moby->pos[0], target->pos[1] - moby->pos[1]);
         approach_w((char *)moby, &data->turn_velocity, angle, 0.03f, 0.3f, D_0015ED6C * 6.2831855f);
         if (moby->anim_flags & 2) {
-            moby->state = 4;
+            moby->state = ANKLEBITER_PURSUE_TARGET;
             data->blocked = 0;
             select_hoven_anklebiter_pursuit_animation((struct Moby *)moby);
         }
@@ -533,7 +533,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         data->look_angle = look_difference;
         if (move_hoven_anklebiter_toward_heading(
                 (struct Moby *)moby, fast_add_rotations(chase_angle, data->circle_angle)) == 2) {
-            moby->state = 6;
+            moby->state = ANKLEBITER_RETURN_HOME;
             data->return_timer = 0;
         } else {
             if (fast_dec_timer(&data->circle_timer)) {
@@ -542,7 +542,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
             }
             fast_vec_sub(target_report_or_vector_scratch.v0, target->pos, data->home);
             if (vector_distance_xy(moby->pos, target->pos) < 1.5f) {
-                moby->state = 5;
+                moby->state = ANKLEBITER_MELEE_ATTACK;
                 if (moby->anim != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(5));
             } else if (fast_vec_length(target_report_or_vector_scratch.v0) < data->range + 5.5f &&
@@ -550,7 +550,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
                 if (moby->group != 255)
                     FUN_L01_0026e090(moby->group, 1);
             } else if (moby->proximity != 1 && random_integer_below(9) == 0) {
-                moby->state = 6;
+                moby->state = ANKLEBITER_RETURN_HOME;
                 data->return_timer = 0;
             }
         }
@@ -581,7 +581,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
                                 1.0f);
         }
         if ((moby->anim_flags & 2) && vector_distance_xy(moby->pos, target->pos) >= 2.0f) {
-            moby->state = 4;
+            moby->state = ANKLEBITER_PURSUE_TARGET;
             data->blocked = 0;
             select_hoven_anklebiter_pursuit_animation((struct Moby *)moby);
         }
@@ -592,7 +592,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
             (struct Moby *)moby,
             fast_arc_tan(data->home[0] - moby->pos[0], data->home[1] - moby->pos[1]));
         if (vector_distance_xy(moby->pos, data->home) < 2.0f) {
-            moby->state = 1;
+            moby->state = ANKLEBITER_IDLE;
             if (moby->anim != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(7));
         }
@@ -608,12 +608,12 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
                 if (data->return_timer > scale_game_frames(70)) {
                     if (moby->group != 255)
                         FUN_L01_0026e090(moby->group, 1);
-                    moby->state = 4;
+                    moby->state = ANKLEBITER_PURSUE_TARGET;
                     data->blocked = 0;
                     select_hoven_anklebiter_pursuit_animation((struct Moby *)moby);
                 }
             } else if (moby->proximity == 1) {
-                moby->state = 4;
+                moby->state = ANKLEBITER_PURSUE_TARGET;
                 data->blocked = 0;
                 select_hoven_anklebiter_pursuit_animation((struct Moby *)moby);
             }
@@ -625,7 +625,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         if (moby->group != 255)
             FUN_L01_0026e090(moby->group, 1);
         if (step_moby_motion(moby, data->fall) & 1) {
-            moby->state = 10;
+            moby->state = ANKLEBITER_RECOVER_AFTER_KNOCKBACK;
             if (moby->anim != 13)
                 blend_moby_animation(moby, 13, 8, scale_game_frames(8));
             return;
@@ -637,14 +637,14 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         break;
     case ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME:
         if (func_L00_002DDEA0_2E2EF0(moby, data->fall)) {
-            moby->state = 6;
+            moby->state = ANKLEBITER_RETURN_HOME;
             data->return_timer = 0;
             data->stuck = 0;
         }
         break;
     case ANKLEBITER_RECOVER_AFTER_KNOCKBACK:
         if (compute_interpolated_record_value(moby) > 29.0f) {
-            moby->state = 4;
+            moby->state = ANKLEBITER_PURSUE_TARGET;
             data->blocked = 0;
             select_hoven_anklebiter_pursuit_animation((struct Moby *)moby);
             return;
@@ -656,7 +656,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
             (compute_interpolated_record_value(moby) > 37.0f && moby->anim_end == moby->anim)) {
             moby->anim_rate = 0.0f;
             mark_moby_for_removal_cf(moby, 0, -1);
-            moby->state = 15;
+            moby->state = ANKLEBITER_DEATH_EFFECTS_AND_REMOVE;
             moby->flags |= 8;
         } else if (moby->pos[2] < 10.0f) {
             mark_moby_for_removal_cf(moby, 0, -1);
@@ -676,7 +676,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
             return;
         }
     }
-    if (moby->enabled && moby->state != 9 && moby->state != 8) {
+    if (moby->enabled && moby->state != ANKLEBITER_DORMANT && moby->state != ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME) {
         func_L00_00263950_2E2EF0(
             (char *)moby, data->collision_data, 0, D_0015ED64 * 0.018f, D_0015ED64 * 0.3f);
         if (moby->enabled && fast_vec_dist(moby->pos, D_L12_00167240) < 28.0f) {
