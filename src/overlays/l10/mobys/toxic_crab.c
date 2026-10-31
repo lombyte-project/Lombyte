@@ -233,6 +233,9 @@ void toxic_crab_update(Moby2E30F8 *m) {
         TOXIC_CRAB_STATE_DEATH_EFFECTS = 11,
         TOXIC_CRAB_STATE_FALL_TO_DEATH = 12
     };
+    enum {
+        MOBY_STATE_MARKED_FOR_REMOVAL = 0xFE
+    };
     int         see = 0;
     Crab2E30F8 *crab_data = m->data;
     char       *target_moby;
@@ -293,7 +296,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             int k = crab_data->i1BC;
             if (k != -1) {
                 Moby2E30F8 *p = (Moby2E30F8 *)((char *)D_L10_0015FFD0_macro[2] + (k << 8));
-                if (p == 0 || p->state == 0xFE || p->state == 0xFD ||
+                if (p == 0 || p->state == MOBY_STATE_MARKED_FOR_REMOVAL || p->state == 0xFD ||
                     (((*(int *)(((char *)&D_0014C190) +
                                 (((short)p->id >> 5) * 4 + (current_level_index << 8))) >>
                        (p->id & 0x1F)) &
@@ -315,7 +318,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         if (crab_data->i1BC != -1) {
             char       *moby_instance_array_base = D_L10_0015FFD8;
             Moby2E30F8 *p = (Moby2E30F8 *)(moby_instance_array_base + (crab_data->i1BC << 8));
-            if (p == 0 || p->state == 0xFE || p->state == 0xFD ||
+            if (p == 0 || p->state == MOBY_STATE_MARKED_FOR_REMOVAL || p->state == 0xFD ||
                 ((*(int *)(((char *)&D_0014C190) +
                            (((short)p->id >> 5) * 4 + (current_level_index << 8))) >>
                   (p->id & 0x1F)) &
