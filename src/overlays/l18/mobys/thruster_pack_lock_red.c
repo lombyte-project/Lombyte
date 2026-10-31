@@ -193,12 +193,17 @@ void end_thruster_pack_lock_red_wait(struct Moby *moby) {
 int poll_moby_state_and_rearm(struct Moby *moby) __asm__("FUN_L18_002d8050");
 
 int poll_moby_state_and_rearm(struct Moby *moby) {
+    enum {
+        THRUSTER_PACK_LOCK_RED_STATE_APPROACH_CONFIGURED_HEIGHT = 1,
+        THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER = 2,
+        THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT = 3
+    };
     int *moby_private_vars = (int *)moby->pvars;
-    if (moby->state == 3) {
-        moby->state = 1;
+    if (moby->state == THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT) {
+        moby->state = THRUSTER_PACK_LOCK_RED_STATE_APPROACH_CONFIGURED_HEIGHT;
         return 1;
     }
-    if (moby->state == 2 && moby_private_vars[0x6C / 4] == 0) {
+    if (moby->state == THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER && moby_private_vars[0x6C / 4] == 0) {
         return -1;
     }
     return 0;
