@@ -306,6 +306,9 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
         ANKLEBITER_DEATH_EFFECTS_AND_REMOVE = 15,
         ANKLEBITER_DEATH_FALL = 99
     };
+    enum {
+        ANKLEBITER_LEAP_TO_HOME_MOTION_FLAGS = 5
+    };
     TargetReport    target_report_or_vector_scratch;
     AnklebiterMoby *iterator;
     float           trajectory;
@@ -481,7 +484,7 @@ void hoven_anklebiter_update(AnklebiterMoby *moby) {
                                                          &trajectory,
                                                          data->launch_speed,
                                                          -hoven_anklebiter_leap_gravity_gp);
-            data->fall_mode = 5;
+            data->fall_mode = ANKLEBITER_LEAP_TO_HOME_MOTION_FLAGS;
             data->falling = 0;
             setup_fall54(moby->rot[2], (char *)moby, data->fall, 8, 1, 0);
             data->fall_a = 5.0f;
