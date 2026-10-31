@@ -728,14 +728,20 @@ extern short minibomber_rotation_oscillation_second_phase_increment_gp __asm__("
 void update_minibomber_oscillation(struct Moby *moby) __asm__("FUN_L14_002b5428");
 
 void update_minibomber_oscillation(struct Moby *moby) {
+    enum {
+        MINIBOMBER_STATE_INITIALIZE = 0,
+        MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH = 1,
+        MINIBOMBER_STATE_TRAVERSE_PATH = 7,
+        MINIBOMBER_STATE_DESTROY = 9
+    };
     int           raw = moby->state;
     unsigned char state = raw;
     char         *minibomber_instance_vars = (char *)moby->pvars;
     float         spring_target;
-    if (state == 0 || state == 9 || state == 1)
+    if (state == MINIBOMBER_STATE_INITIALIZE || state == MINIBOMBER_STATE_DESTROY || state == MINIBOMBER_STATE_WAIT_TO_FOLLOW_PATH)
         return;
     spring_target = *(float *)&D_L14_00161540_gp;
-    if ((raw >= 2 && raw <= 3) || state == 7) {
+    if ((raw >= 2 && raw <= 3) || state == MINIBOMBER_STATE_TRAVERSE_PATH) {
         spring_target = spring_target * 1.5f;
     } else {
         FUN_L00_0025b8c0_c((float *)(minibomber_instance_vars + 0x168),
