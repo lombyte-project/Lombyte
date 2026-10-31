@@ -1234,6 +1234,9 @@ void update_crate_stack_motion(M2d1428 *moby) {
         CRATE_STATE_BREAKABLE = 1,
         CRATE_STATE_IMPACT_TRIGGERED = 5
     };
+    enum {
+        CRATE_STATE_INITIALIZE = 0
+    };
     O2d1428 *vars;
     M2d1428 *chain_cursor, *parent_moby, *next;
     V2d1428  collision_start, collision_end, landing_position, hero_local_offset,
@@ -1262,7 +1265,7 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (vars->flags & 2)
             return;
         vars->iB4 = D_L00_0015F5CC;
-        if (moby->state == 0)
+        if (moby->state == CRATE_STATE_INITIALIZE)
             continue;
         fast_vec_sub(&hero_local_offset, &hero.motion.pos, &moby->pos);
         transform_vector_by_basis(&hero_local_offset, &hero_local_offset, moby->vC0);
@@ -1328,12 +1331,12 @@ void update_crate_stack_motion(M2d1428 *moby) {
         if (hit != 0) {
             acceleration_scale_or_speed = fast_vec_length(&vars->vel);
             if (frame_time * 0.5f < acceleration_scale_or_speed) {
-                if (moby->oclass == 0x1F9 && moby->state == 1) {
+                if (moby->oclass == 0x1F9 && moby->state == CRATE_STATE_BREAKABLE) {
                     moby->bBC = 0;
-                    moby->state = 5;
+                    moby->state = CRATE_STATE_IMPACT_TRIGGERED;
                 } else if ((parent_moby = vars->parent) != 0 && parent_moby->oclass == 0x1F9 &&
-                           parent_moby->state == 1) {
-                    parent_moby->state = 5;
+                           parent_moby->state == CRATE_STATE_BREAKABLE) {
+                    parent_moby->state = CRATE_STATE_IMPACT_TRIGGERED;
                     vars->parent->bBC = 0;
                 }
             }
