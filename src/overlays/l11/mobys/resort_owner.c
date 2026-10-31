@@ -893,8 +893,11 @@ void update_resort_owner_look_tracking(WatcherMoby *moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */
 
 int try_activate_pokitaru_gate(struct Moby *moby) {
+    enum {
+        POKITARU_GATE_READY_FOR_ACTIVATION = 1
+    };
     char *current;
-    if (moby->state != 1)
+    if (moby->state != POKITARU_GATE_READY_FOR_ACTIVATION)
         return 0;
     current = (char *)hero.ground_moby;
     if (current != (char *)moby || hero.air_frames.s)
