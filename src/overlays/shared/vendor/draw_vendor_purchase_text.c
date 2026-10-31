@@ -131,9 +131,9 @@ typedef struct {
     f32 origin_x, origin_z, cell_width, cell_height;
 } HeightGridLayout;
 
-extern HeightGridLayout D_L00_001CA880;
-extern s32              D_L00_00161218 __attribute__((sda));
-extern s32              D_L00_00161220 __attribute__((sda));
+extern HeightGridLayout l00_pool_height_grid_layout __asm__("D_L00_001CA880");
+extern s32              l00_pool_height_write_bank_index __asm__("D_L00_00161218") __attribute__((sda));
+extern s32              l00_pool_height_additive_read_bank_index __asm__("D_L00_00161220") __attribute__((sda));
 
 /* Splash on the pool height tiles: raises the heights around (x, z) and copies the edges into the neighbour tiles. */
 void pool_splash(HeightTile *tile,
@@ -152,9 +152,9 @@ void pool_splash(
     int         i;
 
     for (i = 0; i < count; i++) {
-        float tile_z = tile->z + D_L00_001CA880.origin_z;
-        float cell_z = (z - tile_z) / D_L00_001CA880.cell_height;
-        float cell_x = (x - (tile->x + D_L00_001CA880.origin_x)) / D_L00_001CA880.cell_width;
+        float tile_z = tile->z + l00_pool_height_grid_layout.origin_z;
+        float cell_z = (z - tile_z) / l00_pool_height_grid_layout.cell_height;
+        float cell_x = (x - (tile->x + l00_pool_height_grid_layout.origin_x)) / l00_pool_height_grid_layout.cell_width;
         int   row_first, row_last, col_first, col_last;
         float row_z;
 
@@ -170,11 +170,11 @@ void pool_splash(
             col_last = 15;
         if (col_first < 0)
             col_first = 0;
-        row_z = tile_z + D_L00_001CA880.cell_height * (float)row_first;
+        row_z = tile_z + l00_pool_height_grid_layout.cell_height * (float)row_first;
 
         for (row = row_first; row <= row_last; row++) {
             float col_x =
-                (tile->x + D_L00_001CA880.origin_x) + D_L00_001CA880.cell_width * (float)col_first;
+                (tile->x + l00_pool_height_grid_layout.origin_x) + l00_pool_height_grid_layout.cell_width * (float)col_first;
             int col;
 
             for (col = col_first; col <= col_last; col++) {
@@ -188,14 +188,14 @@ void pool_splash(
                 }
                 if (mode == 0) {
                     float magnitude = absolute_float(height);
-                    if (magnitude < absolute_float(tile->heights[D_L00_00161218][row][col])) {
-                        height = tile->heights[D_L00_00161218][row][col];
+                    if (magnitude < absolute_float(tile->heights[l00_pool_height_write_bank_index][row][col])) {
+                        height = tile->heights[l00_pool_height_write_bank_index][row][col];
                     }
                 } else {
-                    height += tile->heights[D_L00_00161220][row][col];
+                    height += tile->heights[l00_pool_height_additive_read_bank_index][row][col];
                 }
                 {
-                    int cur = D_L00_00161218;
+                    int cur = l00_pool_height_write_bank_index;
                     tile->heights[cur][row][col] = height;
 
                     if (row < 2 && tile->neighbours[0] != 0xFF) {
@@ -209,51 +209,51 @@ void pool_splash(
                 }
                 if (col < 2 && tile->neighbours[1] != 0xFF) {
                     if (col == 0) {
-                        tiles[tile->neighbours[1]].heights[D_L00_00161218][19][row] =
-                            tile->heights[D_L00_00161218][row][0];
+                        tiles[tile->neighbours[1]].heights[l00_pool_height_write_bank_index][19][row] =
+                            tile->heights[l00_pool_height_write_bank_index][row][0];
                     } else {
-                        tiles[tile->neighbours[1]].heights[D_L00_00161218][21][row] =
-                            tile->heights[D_L00_00161218][row][col];
+                        tiles[tile->neighbours[1]].heights[l00_pool_height_write_bank_index][21][row] =
+                            tile->heights[l00_pool_height_write_bank_index][row][col];
                     }
                 }
                 if (row == 15 && tile->neighbours[2] != 0xFF) {
-                    int cur = D_L00_00161218;
+                    int cur = l00_pool_height_write_bank_index;
                     tiles[tile->neighbours[2]].heights[cur][16][col] = tile->heights[cur][row][col];
                 }
                 if (col == 15 && tile->neighbours[3] != 0xFF) {
-                    int cur = D_L00_00161218;
+                    int cur = l00_pool_height_write_bank_index;
                     tiles[tile->neighbours[3]].heights[cur][17][row] = tile->heights[cur][row][col];
                 }
                 if (tile->neighbours[4] != 0xFF) {
                     if (col == 0 && row == 0) {
-                        int cur = D_L00_00161218;
+                        int cur = l00_pool_height_write_bank_index;
                         tiles[tile->neighbours[4]].heights[cur][22][3] =
                             tile->heights[cur][row][col];
                     }
                     if (col == 1 && row == 0) {
-                        int cur = D_L00_00161218;
+                        int cur = l00_pool_height_write_bank_index;
                         tiles[tile->neighbours[4]].heights[cur][22][4] = tile->heights[cur][0][1];
                     }
                     if (col == 0 && row == 1) {
-                        int cur = D_L00_00161218;
+                        int cur = l00_pool_height_write_bank_index;
                         tiles[tile->neighbours[4]].heights[cur][22][5] = tile->heights[cur][1][0];
                     }
                 }
                 if (tile->neighbours[5] != 0xFF && col == 15 && row == 0) {
-                    int cur = D_L00_00161218;
+                    int cur = l00_pool_height_write_bank_index;
                     tiles[tile->neighbours[5]].heights[cur][22][2] = tile->heights[cur][0][15];
                 }
                 if (tile->neighbours[6] != 0xFF && col == 0 && row == 15) {
-                    int cur = D_L00_00161218;
+                    int cur = l00_pool_height_write_bank_index;
                     tiles[tile->neighbours[6]].heights[cur][22][1] = tile->heights[cur][15][0];
                 }
                 if (tile->neighbours[7] != 0xFF && col == 15 && row == 15) {
-                    int cur = D_L00_00161218;
+                    int cur = l00_pool_height_write_bank_index;
                     tiles[tile->neighbours[7]].heights[cur][22][0] = tile->heights[cur][15][15];
                 }
-                col_x += D_L00_001CA880.cell_width;
+                col_x += l00_pool_height_grid_layout.cell_width;
             }
-            row_z += D_L00_001CA880.cell_height;
+            row_z += l00_pool_height_grid_layout.cell_height;
         }
         tile++;
     }
