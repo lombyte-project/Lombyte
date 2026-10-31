@@ -3476,24 +3476,24 @@ void apply_hero_selected_flags_and_state_transitions(void) {
     if (saved_flag_selector == 12)
         P.b12EA = 1;
     if (P.b12E3 && P.i300 && P.i208C != 0x10 && P.i208C != 0x14 && P.i208C != 7) {
-        target_state = 0x31;
+        target_state = HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT;
         goto call;
     }
     if (P.b12E5 && P.i300 && P.b20A4 == 1 && P.i2084 != 0x7D) {
-        target_state = 0x7D;
+        target_state = HERO_STATE_VEHICLE_MODE_1_DEATH_DESCENT;
         goto call;
     }
     if (P.b12E5 && P.i300 && (P.i2084 != 0x3C || P.h41E != 0)) {
         exit_hero_vehicle_mode_if_mode_three();
         if (P.i22A8)
             goto call3c;
-        target_state = 0x7C;
+        target_state = HERO_STATE_DEATH_DESCENT;
         goto call;
     }
     if (P.b12EC && P.i2084 != 0x7F && absolute_float(P.f2F0 - (P.f88 + 0.25f)) < 1.0f &&
         0.0f < P.f2F0 - P.f88 && P.f108 < 0.0f) {
         exit_hero_vehicle_mode_if_mode_three();
-        target_state = 0x7F;
+        target_state = HERO_STATE_SINK;
         goto call;
     }
     if (P.b12E6 && P.i2084 != 0x68 && P.i2084 != 0x7B &&
@@ -3501,16 +3501,16 @@ void apply_hero_selected_flags_and_state_transitions(void) {
         (P.i2084 != 0x69 || P.h41E != 0) && P.f108 < 0.0f) {
         exit_hero_vehicle_mode_if_mode_three();
         if (P.i22A8) {
-            target_state = 0x68;
+            target_state = HERO_STATE_WAIT_FOR_JUMP_OR_RESPAWN;
             goto call;
         }
     s7B:
-        target_state = 0x7B;
+        target_state = HERO_STATE_HEIGHT_OR_TIMEOUT_RESPAWN_WAIT;
     call:
         hero_set_state(target_state, 1);
         return;
     call3c:
-        target_state = 0x3C;
+        target_state = HERO_STATE_JUMP_WITH_HEALTH_DAMAGE;
         goto call;
     }
     if (P.b12EB && P.i2084 != 0x7B && absolute_float(P.f2F4 - (P.f88 + 0.25f)) < 1.0f &&
