@@ -87,7 +87,7 @@ void sharkigator_update(char *moby) {
 state_zero: {
     float height;
     if (sharkigator_instance_vars->unk64 != 0) {
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = SHARKIGATOR_WAIT_TO_LEAP;
         MOBY(moby)->flags |= 1;
         MOBY(moby)->update_dist = 0xff;
         sharkigator_instance_vars->unk74 = MOBY(moby)->pos.z;
@@ -180,7 +180,7 @@ state_two: {
         if (MOBY(moby)->prev_seq != state)
             set_action_2d1688(moby, 2, 0, scale_game_frames(5));
         MOBY(moby)->command = 0;
-        MOBY(moby)->state = 3;
+        MOBY(moby)->state = SHARKIGATOR_UPDATE_LEAP;
         jet_mount(point + 0x140, point + 0x150, 0, 0, 0);
         return;
     }
