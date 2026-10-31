@@ -544,11 +544,11 @@ void pyrocitor_update(struct Moby *moby) {
     case PYROCITOR_STATE_INITIALIZE:
         pyrocitor_vars->light = -1;
         pyrocitor_vars->voice = -1;
-        moby->state = 1;
+        moby->state = PYROCITOR_STATE_WAIT_FOR_READY;
         break;
     case PYROCITOR_STATE_WAIT_FOR_READY:
         if (moby->seq == 1)
-            moby->state = 2;
+            moby->state = PYROCITOR_STATE_READY;
         if (moby->seq != 0)
             break;
         if (compute_interpolated_record_value(moby) > 10.0f &&
@@ -580,7 +580,7 @@ void pyrocitor_update(struct Moby *moby) {
         /* Fakematch: the second pad name rebuilds the address for these button tests. */
         if ((controller_state_lui.held & hero.items[0].button_mask) && !hero.item_use_locked &&
             get_ammo(-1)) {
-            moby->state = 3;
+            moby->state = PYROCITOR_STATE_FIRING;
             start_equipped_item_animation();
             pyrocitor_vars->timer = scale_game_frames(10);
             if (pyrocitor_vars->light == -1)
@@ -592,7 +592,7 @@ void pyrocitor_update(struct Moby *moby) {
     case PYROCITOR_STATE_FIRING:
         if (!voice_is_playing(moby, pyrocitor_vars->voice))
             pyrocitor_vars->voice = FUN_0022da68(1, 4, moby);
-        if (pyrocitor_vars->light != -1 && moby->state == 3) {
+        if (pyrocitor_vars->light != -1 && moby->state == PYROCITOR_STATE_FIRING) {
             light_offset_and_flame_velocity.q = 0;
             light_offset_and_flame_velocity.f.x = 2.0f;
             light_offset_and_flame_velocity.f.z = 2.0f;
@@ -714,7 +714,7 @@ void pyrocitor_update(struct Moby *moby) {
             if ((controller_state.held & hero.items[0].button_mask) && !hero.item_use_locked &&
                 ready)
                 break;
-            moby->state = 2;
+            moby->state = PYROCITOR_STATE_READY;
             cancel_hero_item_animation();
             firing_voice_slot_index = pyrocitor_vars->voice;
             if (firing_voice_slot_index != -1) {
