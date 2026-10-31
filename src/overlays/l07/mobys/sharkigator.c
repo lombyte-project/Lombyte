@@ -780,6 +780,11 @@ void sharkigator_update(unsigned char *moby) {
         SHARKIGATOR_DAMPED_GRAVITY_RECOVERY = 16,
         SHARKIGATOR_DAMPED_RECOVERY = 17
     };
+    enum {
+        WALKER_TARGET_HERO = 0,
+        WALKER_TARGET_NONE = 2,
+        SHARKIGATOR_WATER_GAP_TRANSITION_NONE = 0xFF
+    };
     char               *sharkigator_instance_vars;
     struct WalkerTarget target;
     float               point[4];
@@ -829,14 +834,14 @@ void sharkigator_update(unsigned char *moby) {
             qcopy(&target.q10, hero + 0x10);
             qcopy(&target.q20, hero + 0x40);
             qcopy(&target.q30, hero + 0x50);
-            target.kind = 0;
+            target.kind = WALKER_TARGET_HERO;
         } else {
             target.moby = 0;
             qzero(&target.pos);
             qzero(&target.q10);
             qzero(&target.q30);
             qzero(&target.q20);
-            target.kind = 2;
+            target.kind = WALKER_TARGET_NONE;
         }
     }
     if (*(int *)(sharkigator_instance_vars + 0x110) != 0) {
@@ -844,7 +849,7 @@ void sharkigator_update(unsigned char *moby) {
         FUN_L00_00259740(moby + 0x10, path + 0x10, *(int *)path);
     }
     old_command = moby[0xBC];
-    next_state = 0xFF;
+    next_state = SHARKIGATOR_WATER_GAP_TRANSITION_NONE;
     next_sequence = 0xFF;
     moby[0xBC] = classify_sharkigator_water_height_gap((char *)moby, sharkigator_instance_vars);
     command = moby[0xBC];
@@ -935,7 +940,7 @@ void sharkigator_update(unsigned char *moby) {
                                           frame_time_sq * 15.0f,
                                           frame_time_sq * 50.0f,
                                           frame_time * 8.0f);
-        if (next_state != 0xFF) {
+        if (next_state != SHARKIGATOR_WATER_GAP_TRANSITION_NONE) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
             }
@@ -1007,7 +1012,7 @@ void sharkigator_update(unsigned char *moby) {
                                           frame_time_sq * 15.0f,
                                           frame_time_sq * 50.0f,
                                           frame_time * 8.0f);
-        if (next_state != 0xFF) {
+        if (next_state != SHARKIGATOR_WATER_GAP_TRANSITION_NONE) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
             }
@@ -1078,7 +1083,7 @@ void sharkigator_update(unsigned char *moby) {
             }
             moby[0x20] = 2;
         }
-        if (next_state != 0xFF) {
+        if (next_state != SHARKIGATOR_WATER_GAP_TRANSITION_NONE) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
             }
@@ -1171,7 +1176,7 @@ void sharkigator_update(unsigned char *moby) {
         if ((moby[0x70] & 2) && moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
-        if (next_state != 0xFF) {
+        if (next_state != SHARKIGATOR_WATER_GAP_TRANSITION_NONE) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
             }
@@ -1202,7 +1207,7 @@ void sharkigator_update(unsigned char *moby) {
             fast_vec_scale(
                 sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, 0.5f);
         }
-        if (next_state != 0xFF) {
+        if (next_state != SHARKIGATOR_WATER_GAP_TRANSITION_NONE) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
             }
@@ -1263,7 +1268,7 @@ void sharkigator_update(unsigned char *moby) {
             fast_vec_scale(
                 sharkigator_instance_vars + 0xD0, sharkigator_instance_vars + 0xD0, 0.5f);
         }
-        if (next_state != 0xFF) {
+        if (next_state != SHARKIGATOR_WATER_GAP_TRANSITION_NONE) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
             }
@@ -1331,7 +1336,7 @@ void sharkigator_update(unsigned char *moby) {
             *(int *)(sharkigator_instance_vars + 0x134) = rand() % 200 + 300;
             moby[0x20] = 8;
         }
-        if (next_state != 0xFF) {
+        if (next_state != SHARKIGATOR_WATER_GAP_TRANSITION_NONE) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
             }
@@ -1399,7 +1404,7 @@ void sharkigator_update(unsigned char *moby) {
         F(sharkigator_instance_vars, 0xD8) -= frame_time * 9.8f;
         move_moby_with_collision_integer_radius(
             (int)moby, (int)(sharkigator_instance_vars + 0xD0), 0x400, 0x10, 1.0f, 0.0f);
-        if (next_state != 0xFF) {
+        if (next_state != SHARKIGATOR_WATER_GAP_TRANSITION_NONE) {
             if (moby[0x53] != next_sequence) {
                 blend_moby_animation(moby, next_sequence, 0, 6);
             }
