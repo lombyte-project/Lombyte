@@ -758,6 +758,9 @@ extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) __asm__("FUN_L12_002e3098");
 
 void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
+    enum {
+        ANKLEBITER_DEATH_EFFECTS_AND_REMOVE = 15
+    };
     float  pos[4];
     float  spark_launch_velocity[4];
     float  gravity_adjusted_spark_velocity[4];
@@ -780,7 +783,7 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
 
     count = D_L12_0016183C;
     spark_moby_vars = (char *)moby->pvars;
-    if (moby->state == 15)
+    if (moby->state == ANKLEBITER_DEATH_EFFECTS_AND_REMOVE)
         count = truncate_float_to_s32((float)count * 1.5f);
     for (i = 0; i < count; i++) {
         pos_ptr = pos;
@@ -791,7 +794,7 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
         angle = random_angle_radians();
         speed = random_float_between(l12_anklebiter_spark_horizontal_speed_range_start, l12_anklebiter_spark_horizontal_speed_range_end);
         rise = random_float_between(l12_anklebiter_spark_vertical_speed_range_start, l12_anklebiter_spark_vertical_speed_range_end);
-        if (moby->state == 15) {
+        if (moby->state == ANKLEBITER_DEATH_EFFECTS_AND_REMOVE) {
             speed *= 0.55f;
             rise *= 0.55f;
             pos[2] -= 0.2f;
