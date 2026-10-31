@@ -45,9 +45,12 @@ extern MobyList fx_cutscene __asm__("D_L01_0016CCE0");
 void            apply_cutscene_big_head_cheat(void) __asm__("FUN_L01_002fac80");
 
 void apply_cutscene_big_head_cheat(void) {
+    enum {
+        CUTSCENE_MODE_PLAYING = 2
+    };
     s32 i;
 
-    if (cutscene_mode == 2 && big_head_cheat_enabled != 0) {
+    if (cutscene_mode == CUTSCENE_MODE_PLAYING && big_head_cheat_enabled != 0) {
         for (i = 0; i < fx_cutscene.count; i++) {
             if (fx_cutscene.list[i]->type == 0x32B && D_L01_0017C8C0.active == 0) {
                 attach_manipulator(fx_cutscene.list[i], 0, &D_L01_0017C8C0);
