@@ -1611,6 +1611,9 @@ extern int            get_ammo(int) __asm__("FUN_L00_00233e98");
 int handle_hero_gadget_button(void) __asm__("FUN_L01_00240ed8");
 
 int handle_hero_gadget_button(void) {
+    enum {
+        WRENCH_MOBY_STATE_READY_FOR_ATTACK = 0
+    };
     int                    wrench_button_history_age;
     int                    item_animation_button_history_age;
     int                    item_state_button_history_age;
@@ -1641,7 +1644,7 @@ int handle_hero_gadget_button(void) {
                 pad_pressed_within(buttons, scale_game_frames(7), &wrench_button_history_age) !=
                     0) {
                 moby = hero.items[0].moby;
-                if (moby != 0 && is_wrench_moby((char *)moby) != 0 && moby->state == 0) {
+                if (moby != 0 && is_wrench_moby((char *)moby) != 0 && moby->state == WRENCH_MOBY_STATE_READY_FOR_ATTACK) {
                     if ((controller_state.held & 0xa) != 0 ||
                         ((hero.state.current == 1 || hero.state.current == 0x1e) &&
                          scale_game_frames(0x14) < hero.state_timer)) {
