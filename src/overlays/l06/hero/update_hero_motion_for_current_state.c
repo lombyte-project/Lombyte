@@ -2031,9 +2031,9 @@ void update_hero_motion_for_current_state(void) {
             release_voice_slot_cf(0, (struct MobyView *)hero.moby, 0);
         } else {
             if (hero.grind_voice != -1) {
-                struct VoiceSlot *e =
+                struct VoiceSlot *grind_voice_slot =
                     (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.grind_voice * 0x70);
-                if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
+                if (grind_voice_slot->pm88 == (struct MobyView *)hero.moby && grind_voice_slot->b74 != 0) {
                     release_voice_slot(hero.grind_voice);
                 }
             }
@@ -2297,7 +2297,7 @@ void update_hero_motion_for_current_state(void) {
         } else {
             f32 grind_base_speed_target = D_0015ED6C_c * 12.0f;
             f32 tt;
-            f32 e;
+            f32 rail_ahead_pitch;
             f32 sp;
             s32 si;
             f32 sf;
@@ -2343,20 +2343,20 @@ void update_hero_motion_for_current_state(void) {
                         &sf,
                         0.3f,
                         hero.rail_spline_loops);
-            e = fast_arc_tan(vector_distance_xy(&hero.rail_point, &vector_or_descriptor_scratch),
+            rail_ahead_pitch = fast_arc_tan(vector_distance_xy(&hero.rail_point, &vector_or_descriptor_scratch),
                              vector_or_descriptor_scratch.f[2] - hero.rail_point.f[2]);
-            if (e > 0.0f) {
-                sp = e * 1.9098593f * (D_0015ED6C_c * -2.5f);
-                if (e > 0.2617994f && hero.grind_pose != 2 && hero.grind_pose != 3) {
+            if (rail_ahead_pitch > 0.0f) {
+                sp = rail_ahead_pitch * 1.9098593f * (D_0015ED6C_c * -2.5f);
+                if (rail_ahead_pitch > 0.2617994f && hero.grind_pose != 2 && hero.grind_pose != 3) {
                     hero.grind_pose = 0;
-                } else if (e < 0.13962634f && hero.grind_pose == 0) {
+                } else if (rail_ahead_pitch < 0.13962634f && hero.grind_pose == 0) {
                     hero.grind_pose = -1;
                 }
             } else {
-                sp = -e * 2.864789f * (D_0015ED6C_c * 8.0f);
-                if (e < -0.19198622f && hero.grind_pose != 2 && hero.grind_pose != 3) {
+                sp = -rail_ahead_pitch * 2.864789f * (D_0015ED6C_c * 8.0f);
+                if (rail_ahead_pitch < -0.19198622f && hero.grind_pose != 2 && hero.grind_pose != 3) {
                     hero.grind_pose = 1;
-                } else if (e > -0.12217305f && hero.grind_pose == 1) {
+                } else if (rail_ahead_pitch > -0.12217305f && hero.grind_pose == 1) {
                     hero.grind_pose = -1;
                 }
             }
@@ -2618,9 +2618,9 @@ void update_hero_motion_for_current_state(void) {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
-                struct VoiceSlot *e =
+                struct VoiceSlot *landing_item_voice_slot =
                     (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.voice_slot4 * 0x70);
-                if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
+                if (landing_item_voice_slot->pm88 == (struct MobyView *)hero.moby && landing_item_voice_slot->b74 != 0) {
                     release_voice_slot(hero.voice_slot4);
                 }
             }
@@ -2628,9 +2628,9 @@ void update_hero_motion_for_current_state(void) {
             release_voice_slot_cf(3, (struct MobyView *)hero.moby, 2);
         } else {
             if (hero.unk2224 != -1) {
-                struct VoiceSlot *e =
+                struct VoiceSlot *landing_entry4_voice_slot =
                     (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.unk2224 * 0x70);
-                if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
+                if (landing_entry4_voice_slot->pm88 == (struct MobyView *)hero.moby && landing_entry4_voice_slot->b74 != 0) {
                     release_voice_slot(hero.unk2224);
                 }
             }
