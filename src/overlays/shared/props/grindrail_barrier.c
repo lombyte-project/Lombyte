@@ -86,7 +86,7 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
     float                *cardinal_angles;
     switch (barrier_moby->state) {
     case GRINDRAIL_BARRIER_STATE_INITIALIZE:
-        barrier_moby->state = 1;
+        barrier_moby->state = GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED;
         barrier_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED:
@@ -111,13 +111,13 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
         if (barrier_data->unk20 != -1 &&
             check_grindrail_barrier_release_condition(barrier_data->unk20)) {
             barrier_moby->collision = 0;
-            barrier_moby->state = 2;
+            barrier_moby->state = GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED;
             group_trigger_nearest(barrier_data->unk20);
         }
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED:
         if (!check_grindrail_barrier_release_condition(barrier_data->unk20)) {
-            barrier_moby->state = 1;
+            barrier_moby->state = GRINDRAIL_BARRIER_STATE_COLLISION_ENABLED;
             barrier_moby->collision = barrier_moby->pclass->collision;
         }
         break;
