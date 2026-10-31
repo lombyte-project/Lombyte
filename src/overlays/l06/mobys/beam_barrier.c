@@ -16,7 +16,7 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 
 /* angle from a moby to its owner, clamped to the gaps between obstacles in its list */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FAB28), where it is exact; names translated to the US level program. */
-extern char *D_L06_0015FFD8;
+extern char *level_mobys_q __asm__("D_L06_0015FFD8");
 
 #include "qcopy.h"
 
@@ -238,7 +238,7 @@ void beam_barrier_update(struct Moby *moby) {
         {
             int   all_done = 1;
             int   count_usage = 1;
-            char *moby_table = D_L06_0015FFD8;
+            char *moby_table = level_mobys_q;
             int   link;
             for (link = 0; link < 4; link++) {
                 int index = beam_barrier_control_vars->links[link];
