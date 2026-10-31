@@ -69,6 +69,10 @@ extern s32 veldin_ship_visibility_selector[] __asm__("D_L00_0016C890");
 void veldin_ship_draw(struct Moby *moby) __asm__("FUN_L00_002d19b0");
 
 void veldin_ship_draw(struct Moby *moby) {
+    enum {
+        VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING = 1,
+        VELDIN_SHIP_STATE_REFLECTION_INITIALIZED = 2
+    };
     Quad_2d19b0 quad;
     Vec_2d19b0  normal, reflection, view;
     u8         *ship_render_state = ((u8 *)moby->pvars);
@@ -84,7 +88,7 @@ void veldin_ship_draw(struct Moby *moby) {
     if (absolute_float(l00_camera.pos.f[0] - moby->pos.x) < 16.0f &&
         absolute_float(l00_camera.pos.f[1] - moby->pos.y) < 16.0f)
         active = 1;
-    if (active || moby->state == 1) {
+    if (active || moby->state == VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING) {
         moby->command = 1;
         fast_dec_timer((s32 *)(ship_render_state + 0x40));
         blend = convert_integer_to_float(*(s32 *)(ship_render_state + 0x40));
@@ -103,7 +107,7 @@ void veldin_ship_draw(struct Moby *moby) {
             reflection.z += 1.0f;
             reflection_projection_factor = square_root(reflection.z + reflection.z);
             reflection_projection_factor += reflection_projection_factor;
-            if (moby->state == 1 || *(s32 *)(ship_render_state + 0x40) == 0) {
+            if (moby->state == VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING || *(s32 *)(ship_render_state + 0x40) == 0) {
                 ship_reflection_uvs[i][0] = reflection.x / reflection_projection_factor + 0.5f;
                 ship_reflection_uvs[i][1] = reflection.y / reflection_projection_factor + 0.5f;
             } else {
@@ -114,8 +118,8 @@ void veldin_ship_draw(struct Moby *moby) {
                 ship_reflection_uvs[i][1] = x + (ship_previous_uvs[i][1] - x) * blend;
             }
         }
-        if (moby->state == 1)
-            moby->state = 2;
+        if (moby->state == VELDIN_SHIP_STATE_REFLECTION_INIT_PENDING)
+            moby->state = VELDIN_SHIP_STATE_REFLECTION_INITIALIZED;
     } else {
         if (moby->command == 1) {
             moby->command = 0;
