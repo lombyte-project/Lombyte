@@ -27,13 +27,16 @@ void tresspasser_door1_update(struct Moby *moby) {
         TRESSPASSER_DOOR1_WAIT_FOR_LINKED_MOBY = 1,
         TRESSPASSER_DOOR1_SLIDE_TO_OFFSET_POSITION = 2
     };
+    enum {
+        TRESSPASSER_DOOR1_SLIDE_COMPLETE = 3
+    };
     char *door_vars = (char *)moby->pvars;
     float destination_position[4];
     float movement_step[4];
     switch (moby->state) {
     case TRESSPASSER_DOOR1_CAPTURE_START_POSITION:
         qcopy(door_vars, &moby->pos);
-        moby->state = 1;
+        moby->state = TRESSPASSER_DOOR1_WAIT_FOR_LINKED_MOBY;
         break;
     case TRESSPASSER_DOOR1_WAIT_FOR_LINKED_MOBY:
         if (*(int *)(door_vars + 0x10) >= 0) {
@@ -42,7 +45,7 @@ void tresspasser_door1_update(struct Moby *moby) {
             short c = *(short *)(o + 0xA6);
             if (c == 0x267 || c == 0x23F) {
                 if (o[0x20] == 4) {
-                    moby->state = 2;
+                    moby->state = TRESSPASSER_DOOR1_SLIDE_TO_OFFSET_POSITION;
                     FUN_0022da68(0, 0, (int)moby);
                 }
             }
@@ -56,7 +59,7 @@ void tresspasser_door1_update(struct Moby *moby) {
         fast_vec_add(&moby->pos, &moby->pos, movement_step);
         if (fast_vec_length(movement_step) == 0.0f) {
             FUN_0022da68(1, 0, (int)moby);
-            moby->state = 3;
+            moby->state = TRESSPASSER_DOOR1_SLIDE_COMPLETE;
         }
         break;
     }
