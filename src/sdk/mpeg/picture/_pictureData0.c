@@ -21,6 +21,9 @@ s32 _pictureData0(MpegDec *decoder) {
         DECODE_STATUS_SUCCESS = 0,
         DECODE_STATUS_ABORT_PICTURE = 2
     };
+    enum {
+        DECODE_STATUS_SLICE_DECODE_ERROR = 1
+    };
     s32 decode_status;
     s32 mbs;
 
@@ -32,7 +35,7 @@ s32 _pictureData0(MpegDec *decoder) {
     }
     do {
         decode_status = _slice0(decoder, mbs);
-    } while (decode_status == 1 || decode_status == 3);
+    } while (decode_status == DECODE_STATUS_SLICE_DECODE_ERROR || decode_status == 3);
     _waitIpuIdle(decoder);
     if (_waitBdecOut(decoder) == 0) {
         decode_status = DECODE_STATUS_ABORT_PICTURE;
@@ -42,7 +45,7 @@ s32 _pictureData0(MpegDec *decoder) {
     if (decode_status == DECODE_STATUS_SUCCESS) {
         _doMC(decoder, decoder->unk810 == 0);
     }
-    if (decode_status == 1 || decode_status == DECODE_STATUS_ABORT_PICTURE) {
+    if (decode_status == DECODE_STATUS_SLICE_DECODE_ERROR || decode_status == DECODE_STATUS_ABORT_PICTURE) {
         _Error(decoder, skip_to_next_picture_error_message);
     }
     return decode_status == DECODE_STATUS_SUCCESS;
