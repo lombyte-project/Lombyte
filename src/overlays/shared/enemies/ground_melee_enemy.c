@@ -228,7 +228,7 @@ void ground_melee_enemy_update(Moby *moby) {
     int           expired;
     float         ground;
 
-    if (moby->state != 99 && moby->state != 7) {
+    if (moby->state != GROUND_ENEMY_STATE_FATAL_KNOCKBACK && moby->state != GROUND_ENEMY_STATE_RECOVER_TO_IDLE) {
         Hit_2E39E0 *hit;
         damage = 0.0f;
         hit = find_moby_hit(moby, 0x330000, 0);
@@ -278,7 +278,7 @@ void ground_melee_enemy_update(Moby *moby) {
                     else
                         explode_2E39E0(moby, 0, -1);
                     moby->collision = 0;
-                    moby->state = 99;
+                    moby->state = GROUND_ENEMY_STATE_FATAL_KNOCKBACK;
                     ground_enemy_vars->f117 = 120;
                     effects_start_2E39E0(moby, ground_enemy_vars->effects);
                 } else {
@@ -294,7 +294,7 @@ void ground_melee_enemy_update(Moby *moby) {
                                  0);
                     ground_enemy_vars->f170 = 5.0f;
                     ground_enemy_vars->f174 = 10.0f;
-                    moby->state = 6;
+                    moby->state = GROUND_ENEMY_STATE_HURT_KNOCKBACK;
                     ground_enemy_vars->f117 = 250;
                     ground_enemy_vars->cooldown = scale_game_frames(60);
                     effects_start_2E39E0(moby, ground_enemy_vars->effects);
@@ -337,7 +337,7 @@ void ground_melee_enemy_update(Moby *moby) {
     switch (moby->state) {
     case GROUND_ENEMY_STATE_INITIALIZE:
         qcopy(&ground_enemy_vars->home, &moby->pos);
-        moby->state = 1;
+        moby->state = GROUND_ENEMY_STATE_IDLE;
         ground_enemy_vars->f29 = 0;
         ground_enemy_vars->health = 1.0f;
         ground_enemy_vars->f24 = 1;
@@ -360,7 +360,7 @@ void ground_melee_enemy_update(Moby *moby) {
         fast_vec_sub(&step, &query, &moby->pos);
         if ((kind < 2 || fast_vec_length(&step) < ground_enemy_vars->range + 4.0f) &&
             absolute_float(moby->pos.z - query.z) < 8.0f && !random_integer_below(19)) {
-            moby->state = 2;
+            moby->state = GROUND_ENEMY_STATE_ALERT_TURN;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (moby->command == 1 && !random_integer_below(19)) {
@@ -369,7 +369,7 @@ void ground_melee_enemy_update(Moby *moby) {
             ground_enemy_vars->side = ground_enemy_vars->side_deg * 0.017453292f;
             ground_enemy_vars->side_timer =
                 scale_game_frames((int)random_float_between(30.0f, 90.0f));
-            moby->state = 3;
+            moby->state = GROUND_ENEMY_STATE_CHASE;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             moby->command = 0;
@@ -395,7 +395,7 @@ void ground_melee_enemy_update(Moby *moby) {
             ground_enemy_vars->side = ground_enemy_vars->side_deg * 0.017453292f;
             ground_enemy_vars->side_timer =
                 scale_game_frames((int)random_float_between(30.0f, 90.0f));
-            moby->state = 3;
+            moby->state = GROUND_ENEMY_STATE_CHASE;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             moby->command = 0;
@@ -405,7 +405,7 @@ void ground_melee_enemy_update(Moby *moby) {
             ground_enemy_vars->side = ground_enemy_vars->side_deg * 0.017453292f;
             ground_enemy_vars->side_timer =
                 scale_game_frames((int)random_float_between(30.0f, 90.0f));
-            moby->state = 3;
+            moby->state = GROUND_ENEMY_STATE_CHASE;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             moby->command = 0;
@@ -441,18 +441,18 @@ void ground_melee_enemy_update(Moby *moby) {
         }
         fast_vec_sub(&away, &query, &ground_enemy_vars->home);
         if ((flags & 4) || (vector_distance_xy(&moby->pos, &query) < 1.5f && !(flags & 2))) {
-            moby->state = 4;
+            moby->state = GROUND_ENEMY_STATE_MELEE_ATTACK;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (ground_enemy_vars->f190 < frame_time || 1.0f < steep || (flags & 2)) {
             ground_enemy_vars->home_timer = scale_game_frames(50);
-            moby->state = 5;
+            moby->state = GROUND_ENEMY_STATE_RETURN_HOME;
         } else if (fast_vec_length(&away) < ground_enemy_vars->range + 4.0f &&
                    absolute_float(moby->pos.z - query.z) < 8.0f) {
             if (moby->group != 0xFF)
                 FUN_L01_0026e090(moby->group, 1);
         } else if (moby->command != 1) {
-            moby->state = 5;
+            moby->state = GROUND_ENEMY_STATE_RETURN_HOME;
         }
         moby->command = 0;
         break;
@@ -478,7 +478,7 @@ void ground_melee_enemy_update(Moby *moby) {
             spawn_nearby_effect(query.who, moby, 1, &goal, &step, 1.0f);
         }
         if ((moby->anim_flags & 2) && vector_distance_xy(&moby->pos, &query) > 1.5f) {
-            moby->state = 3;
+            moby->state = GROUND_ENEMY_STATE_CHASE;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         }
@@ -511,7 +511,7 @@ void ground_melee_enemy_update(Moby *moby) {
         fast_vec_add(&goal, &moby->pos, &step);
         flags = move_w(moby, &ground_enemy_vars->steer, &goal, &step, 1.0f);
         if (vector_distance_xy(&moby->pos, &ground_enemy_vars->home) < 2.0f) {
-            moby->state = 1;
+            moby->state = GROUND_ENEMY_STATE_IDLE;
             if (moby->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
         }
@@ -519,17 +519,17 @@ void ground_melee_enemy_update(Moby *moby) {
         if (expired && fast_vec_length(&away) < ground_enemy_vars->range) {
             if (moby->group != 0xFF)
                 FUN_L01_0026e090(moby->group, 1);
-            moby->state = 3;
+            moby->state = GROUND_ENEMY_STATE_CHASE;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (expired && moby->command == 1) {
-            moby->state = 3;
+            moby->state = GROUND_ENEMY_STATE_CHASE;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (flags & 2) {
             moby->pos.x = previous.x;
             moby->pos.y = previous.y;
-            moby->state = 12;
+            moby->state = GROUND_ENEMY_STATE_BLOCKED_RETURN_HOME;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(random_int_between(10, 13)));
         }
@@ -538,7 +538,7 @@ void ground_melee_enemy_update(Moby *moby) {
     }
     case GROUND_ENEMY_STATE_HURT_KNOCKBACK:
         if (step_moby_motion(moby, ground_enemy_vars->motion) & 1) {
-            moby->state = 9;
+            moby->state = GROUND_ENEMY_STATE_HURT_RECOVERY;
             if (moby->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, scale_game_frames(random_int_between(10, 13)));
             return;
@@ -550,7 +550,7 @@ void ground_melee_enemy_update(Moby *moby) {
         break;
     case GROUND_ENEMY_STATE_RECOVER_TO_IDLE:
         if (recover_2E39E0(moby, ground_enemy_vars->motion)) {
-            moby->state = 1;
+            moby->state = GROUND_ENEMY_STATE_IDLE;
             if (moby->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, 0);
             ground_enemy_vars->fC8 = 0;
@@ -558,7 +558,7 @@ void ground_melee_enemy_update(Moby *moby) {
         break;
     case GROUND_ENEMY_STATE_HURT_RECOVERY:
         if (compute_interpolated_record_value(moby) > 29.0f) {
-            moby->state = 3;
+            moby->state = GROUND_ENEMY_STATE_CHASE;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             return;
@@ -601,15 +601,15 @@ void ground_melee_enemy_update(Moby *moby) {
         flags = move_w(moby, &ground_enemy_vars->steer, &goal, &step, 1.0f);
         fast_vec_sub(&away, &query, &ground_enemy_vars->home);
         if ((flags & 4) || (vector_distance_xy(&moby->pos, &query) < 1.5f && steep <= 1.0f)) {
-            moby->state = 4;
+            moby->state = GROUND_ENEMY_STATE_MELEE_ATTACK;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (steep <= 1.0f && !(flags & 2)) {
-            moby->state = 5;
+            moby->state = GROUND_ENEMY_STATE_RETURN_HOME;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         } else if ((flags & 2) && expired) {
-            moby->state = 1;
+            moby->state = GROUND_ENEMY_STATE_IDLE;
             if (moby->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (moby->anim_flags & 2) {
@@ -660,7 +660,7 @@ void ground_melee_enemy_update(Moby *moby) {
         if (ground_enemy_vars->anchor == 0 ||
             vector_distance_xy(&moby->pos, &ground_enemy_vars->anchor->pos) >
                 convert_integer_to_float(ground_enemy_vars->leash)) {
-            moby->state = 5;
+            moby->state = GROUND_ENEMY_STATE_RETURN_HOME;
             if (moby->prev_seq != 0)
                 blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         }
