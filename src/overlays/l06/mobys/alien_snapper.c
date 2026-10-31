@@ -725,6 +725,12 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         SNAPPER_RETURN_HOME = 12,
         SNAPPER_RETREAT_FROM_TARGET = 13
     };
+    enum {
+        ALIEN_SNAPPER_STATE_WAIT_FOR_ACTIVATION = 1,
+        ALIEN_SNAPPER_STATE_WAIT_FOR_CLIP_TRIGGER = 3,
+        ALIEN_SNAPPER_STATE_HIT_KNOCKBACK = 14,
+        ALIEN_SNAPPER_STATE_DEATH_MOTION = 0x11
+    };
     BlargVars *snapper_vars = (struct BlargVars *)moby->pvars;
     int        hit;
     float      damage;
@@ -745,7 +751,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     reaction =
         resolve_moby_hit_response(moby, target, &snapper_vars->health, 0, &hit, &damage, 0, 4);
 
-    if (hit != 1 && moby->state != 0x11 && moby->state != 3) {
+    if (hit != 1 && moby->state != ALIEN_SNAPPER_STATE_DEATH_MOTION && moby->state != ALIEN_SNAPPER_STATE_WAIT_FOR_CLIP_TRIGGER) {
         snapper_vars->health = snapper_vars->health - damage;
         if (moby->group != 0xFF) {
             func_L06_002FAAC8_2FA618(moby);
@@ -768,7 +774,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         case HIT_RESPONSE_NONLETHAL_ANIMATION_MAINTENANCE:
         case HIT_RESPONSE_NONLETHAL_ANIMATION_FEEDBACK:
         case HIT_RESPONSE_NONLETHAL_KNOCKBACK:
-            moby->state = 14;
+            moby->state = ALIEN_SNAPPER_STATE_HIT_KNOCKBACK;
             snapper_vars->f88 = frame_time + frame_time;
             snapper_vars->f8C = frame_time;
             snapper_vars->fC0 = 5.0f;
@@ -779,7 +785,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
             break;
         case REACTION_DEATH:
         case HIT_RESPONSE_DEATH_SEQUENCE:
-            moby->state = 0x11;
+            moby->state = ALIEN_SNAPPER_STATE_DEATH_MOTION;
             moby->flags &= 0xEFFF;
             snapper_vars->f88 = frame_time * 8.0f;
             snapper_vars->f8C = frame_time * 5.0f;
@@ -815,7 +821,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
 
     if (snapper_vars->f1AC != 0) {
         snapper_vars->f1A0 = l06_alien_snapper_base_targeting_radius + 6.0f;
-    } else if (moby->state == 1) {
+    } else if (moby->state == ALIEN_SNAPPER_STATE_WAIT_FOR_ACTIVATION) {
         if (moby == ((Moby *)hero.unk240) || moby == ((Moby *)hero.coll_hit_moby)) {
             snapper_vars->f1A0 = 6.0f;
         } else {
