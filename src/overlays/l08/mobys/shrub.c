@@ -104,6 +104,9 @@ void spawn_shrub_parts(char *moby) {
 }
 
 void process_shrub_part_hits(struct Moby *parent_moby) {
+    enum {
+        SHRUB_BREAK_APART_AND_REMOVE = 0x63
+    };
     char  *shrub_hit_vars = ((char *)parent_moby->pvars);
     char  *shrub_part_entry_address = shrub_hit_vars + 0x60;
     char **part_entry_cursor = (char **)shrub_part_entry_address;
@@ -175,7 +178,7 @@ void process_shrub_part_hits(struct Moby *parent_moby) {
                     return;
                 }
             }
-            parent_moby->state = 0x63;
+            parent_moby->state = SHRUB_BREAK_APART_AND_REMOVE;
         }
     }
     if (hit_sound_id >= 0)
