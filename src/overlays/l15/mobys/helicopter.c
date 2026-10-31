@@ -399,6 +399,9 @@ void helicopter_update(struct Moby *moby) {
         HELICOPTER_DEATH_EFFECTS = 7,
         HELICOPTER_DEAD_WAIT_FOR_RESET = 0x40
     };
+    enum {
+        HELICOPTER_GOAL_UNAVAILABLE = 2
+    };
     Vec4            previous_pos;
     HelicopterGoal  goal;
     Vec4            move;
@@ -450,7 +453,7 @@ void helicopter_update(struct Moby *moby) {
             helicopter_instance_vars->chase_range, moby, &goal, 0, 0, path->points, path->count);
     }
     if (helicopter_instance_vars->range < fast_vec_dist(&moby->pos, &goal))
-        goal.status = 2;
+        goal.status = HELICOPTER_GOAL_UNAVAILABLE;
     if (goal.target == 0)
         goal.target = hero.moby;
     target = goal.target;
@@ -516,7 +519,7 @@ void helicopter_update(struct Moby *moby) {
         if (helicopter_instance_vars->wait_group != -1 ||
             (is_point_inside_clip_volume(&hero.motion.pos,
                                          helicopter_instance_vars->trigger_volume) &&
-             goal.status != 2)) {
+             goal.status != HELICOPTER_GOAL_UNAVAILABLE)) {
             if (helicopter_instance_vars->wait_group != -1 &&
                 count_active_moby_group_members(helicopter_instance_vars->wait_group, 0x40))
                 break;
@@ -530,7 +533,7 @@ void helicopter_update(struct Moby *moby) {
         } else {
             if (helicopter_instance_vars->trigger_volume != -1)
                 break;
-            if (goal.status == 2)
+            if (goal.status == HELICOPTER_GOAL_UNAVAILABLE)
                 break;
             moby->collision = moby->pclass->collision;
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
@@ -573,7 +576,7 @@ void helicopter_update(struct Moby *moby) {
             point_in_path_xy(&moby->pos,
                              D_L15_001B0AB0[helicopter_instance_vars->area_path]->points,
                              D_L15_001B0AB0[helicopter_instance_vars->area_path]->count)) {
-            if (goal.status != 2) {
+            if (goal.status != HELICOPTER_GOAL_UNAVAILABLE) {
                 moby->state = HELICOPTER_ENGAGE_AND_FIRE;
                 helicopter_instance_vars->fire_timer = 0;
             } else {
@@ -643,7 +646,7 @@ void helicopter_update(struct Moby *moby) {
         steer_helicopter(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&point);
         if (vector_distance_xy(&move, &moby->pos) < 1.0f ||
             point_in_path_xy(&moby->pos, path->points, path->count)) {
-            if (goal.status != 2) {
+            if (goal.status != HELICOPTER_GOAL_UNAVAILABLE) {
                 moby->state = HELICOPTER_ENGAGE_AND_FIRE;
                 helicopter_instance_vars->fire_timer = 0;
             } else {
@@ -658,7 +661,7 @@ void helicopter_update(struct Moby *moby) {
         move.q = *(u128 *)&moby->pos;
         point.q = *(u128 *)&target->pos;
         steer_helicopter(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&point);
-        if (goal.status == 2)
+        if (goal.status == HELICOPTER_GOAL_UNAVAILABLE)
             break;
         if (point_in_path_xy(&moby->pos, path->points, path->count)) {
             moby->state = HELICOPTER_ENGAGE_AND_FIRE;
@@ -670,7 +673,7 @@ void helicopter_update(struct Moby *moby) {
     }
     case HELICOPTER_ENGAGE_AND_FIRE:
         moby_point_position(moby, 0, &point);
-        if (goal.status != 2) {
+        if (goal.status != HELICOPTER_GOAL_UNAVAILABLE) {
             compute_helicopter_flocking_steering_point(moby, move.f, *(Goal_52b8 *)&goal);
             aim.q = *(u128 *)&target->pos;
             steer_helicopter(moby, (SteeringVec_4f88 *)&move, (SteeringVec_4f88 *)&aim);
