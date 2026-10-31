@@ -350,7 +350,7 @@ void sand_shark_update(struct Moby *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            moby->state = 0xC;
+            moby->state = SAND_SHARK_WAIT_FOR_HERO_LAUNCH_TRIGGER;
             moby->collision = 0;
             moby->pos.z += 10.0f;
             moby->flags = (moby->flags | 1) & ~0x1000;
@@ -359,16 +359,16 @@ void sand_shark_update(struct Moby *moby) {
             }
         } else if (sand_shark_behavior_vars->unk278 >= 0) {
             sand_shark_behavior_vars->walk_18C = 0.2f;
-            moby->state = 3;
+            moby->state = SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(3));
             }
         } else if (sand_shark_behavior_vars->unk258 >= 0) {
-            moby->state = 0x1D;
+            moby->state = SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE;
             moby->collision = 0;
             moby->flags = (moby->flags | 0x41) & ~0x1000;
         } else {
-            moby->state = 1;
+            moby->state = SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(3));
             }
@@ -383,13 +383,13 @@ void sand_shark_update(struct Moby *moby) {
             moby->collision = moby->pclass->collision;
             sand_shark_behavior_vars->unk258 = -1;
             sand_shark_behavior_vars->unk25C = scale_game_frames(0x1518);
-            moby->state = 0;
+            moby->state = SAND_SHARK_INITIALIZE;
             moby->pos.z -= sand_shark_height_offset_gp;
         }
         break;
     case SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET:
         fast_vec_sub(&position_or_offset_scratch, &hero.motion.pos, &moby->pos);
-        moby->state = 0x12;
+        moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET;
         if (moby->prev_seq != 0) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(3));
         }
@@ -438,13 +438,13 @@ void sand_shark_update(struct Moby *moby) {
                 sand_shark_behavior_vars->turn_timer =
                     scale_game_frames((int)random_float_between(30.0f, 90.0f));
                 sand_shark_behavior_vars->walk_step = D_0015ED6C * 4.0f;
-                moby->state = 0x11;
+                moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET;
                 if (moby->prev_seq != 0xC) {
                     blend_moby_animation(moby, 0xC, 0, scale_game_frames(3));
                 }
             }
         } else if (sand_shark_behavior_vars->unk25E != 0 && random_integer_below(0x13) == 0) {
-            moby->state = 0x15;
+            moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK;
             allocate_voice_for_target_entry(4, 0, moby);
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 0);
@@ -456,7 +456,7 @@ void sand_shark_update(struct Moby *moby) {
         if (sand_shark_behavior_vars->unk214 != 2 &&
             is_point_inside_clip_volume(&sand_shark_behavior_vars->target,
                                         sand_shark_behavior_vars->unk278)) {
-            moby->state = 5;
+            moby->state = SAND_SHARK_APPROACH_TARGET;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(3));
             }
@@ -493,23 +493,23 @@ void sand_shark_update(struct Moby *moby) {
         }
         if (sand_shark_behavior_vars->unk25E != 0) {
             if (hit14) {
-                moby->state = 0xF;
+                moby->state = SAND_SHARK_FACE_TARGET;
                 if (moby->prev_seq != 5) {
                     blend_moby_animation(moby, 5, 0, scale_game_frames(0xA));
                 }
             } else if (vector_distance_xy(&moby->pos, &target_or_particle_vector) < 1.5f) {
-                moby->state = 6;
+                moby->state = SAND_SHARK_CLOSE_RANGE_ATTACK;
                 if (moby->prev_seq != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(0xA));
                 }
             } else if (sand_shark_behavior_vars->unk214 != 2) {
-                moby->state = 5;
+                moby->state = SAND_SHARK_APPROACH_TARGET;
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(0xF));
                 }
             }
         } else {
-            moby->state = 0x12;
+            moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET;
         }
         break;
     }
@@ -523,18 +523,18 @@ void sand_shark_update(struct Moby *moby) {
                        D_0015ED6C * 6.2831855f);
         if (sand_shark_behavior_vars->unk25E != 0) {
             if (vector_distance_xy(&moby->pos, &sand_shark_behavior_vars->target) < 1.5f) {
-                moby->state = 6;
+                moby->state = SAND_SHARK_CLOSE_RANGE_ATTACK;
                 if (moby->prev_seq != 1) {
                     blend_moby_animation(moby, 1, 0, scale_game_frames(0xA));
                 }
             } else if (sand_shark_behavior_vars->unk214 != 2) {
-                moby->state = 5;
+                moby->state = SAND_SHARK_APPROACH_TARGET;
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(0xF));
                 }
             }
         } else {
-            moby->state = 0x12;
+            moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET;
         }
         break;
     case SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET:
@@ -552,10 +552,10 @@ void sand_shark_update(struct Moby *moby) {
             if (moby->prev_seq != 0xC) {
                 blend_moby_animation(moby, 0xC, 0, scale_game_frames(5));
             }
-            if (moby->state == 0x11) {
-                moby->state = 0x16;
+            if (moby->state == SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_HEIGHT_OFFSET) {
+                moby->state = SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET;
             } else {
-                moby->state = 0x17;
+                moby->state = SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET;
             }
         }
         moby->pos.z -= sand_shark_height_offset_gp;
@@ -574,20 +574,20 @@ void sand_shark_update(struct Moby *moby) {
         position_or_offset_scratch.f[2] = g;
         if (approach_value(&moby->pos.z, g + sand_shark_height_offset_gp, D_0015ED6C * 4.0f) ==
             0.0f) {
-            if (moby->state == 0x13) {
-                moby->state = 5;
+            if (moby->state == SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET) {
+                moby->state = SAND_SHARK_APPROACH_TARGET;
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(3));
                 }
-            } else if (moby->state == 0x14) {
-                moby->state = 7;
+            } else if (moby->state == SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME) {
+                moby->state = SAND_SHARK_RETURN_HOME;
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(3));
                 }
             } else {
                 sand_shark_behavior_vars->unk294 = random_float_between(2.0f, 3.5f);
                 sand_shark_behavior_vars->walk_step = D_0015ED6C * 4.0f;
-                moby->state = 0xE;
+                moby->state = SAND_SHARK_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK;
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, scale_game_frames(3));
                 }
@@ -599,7 +599,7 @@ void sand_shark_update(struct Moby *moby) {
     }
     case SAND_SHARK_APPROACH_TARGET:
     case SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET:
-        if (moby->state == 0x16) {
+        if (moby->state == SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET) {
             moby->pos.z += sand_shark_height_offset_gp;
             if (random_integer_below(0xFF) & 1) {
                 particle_position_or_forward_step.q = *(OvlQuad *)&moby->pos;
@@ -625,39 +625,39 @@ void sand_shark_update(struct Moby *moby) {
                          &target_or_particle_vector,
                          1.0f);
         FUN_L02_002d63c0_e50(moby);
-        if (moby->state == 0x16) {
+        if (moby->state == SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET) {
             moby->pos.z -= sand_shark_height_offset_gp;
         }
         if (sand_shark_behavior_vars->unk214 != 2) {
             if (sand_shark_behavior_vars->unk278 >= 0 &&
                 !is_point_inside_clip_volume(&sand_shark_behavior_vars->target,
                                              sand_shark_behavior_vars->unk278)) {
-                moby->state = 7;
+                moby->state = SAND_SHARK_RETURN_HOME;
             } else {
                 fast_vec_sub(&target_home_delta,
                              &sand_shark_behavior_vars->target,
                              &sand_shark_behavior_vars->home);
                 if (vector_distance_xy(&moby->pos, &navigation_point) < 12.0f &&
-                    moby->state == 0x16) {
-                    moby->state = 0x13;
+                    moby->state == SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET) {
+                    moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET;
                     allocate_voice_for_target_entry(4, 0, moby);
                     if (moby->prev_seq != 0) {
                         blend_moby_animation(moby, 0, 0, scale_game_frames(3));
                     }
                 } else if (vector_distance_xy(&moby->pos, &navigation_point) < 1.5f &&
-                           moby->state == 5) {
-                    moby->state = 6;
+                           moby->state == SAND_SHARK_APPROACH_TARGET) {
+                    moby->state = SAND_SHARK_CLOSE_RANGE_ATTACK;
                     if (moby->prev_seq != 1) {
                         blend_moby_animation(moby, 1, 0, scale_game_frames(3));
                     }
                 }
             }
         } else if (sand_shark_behavior_vars->unk278 >= 0) {
-            moby->state = 7;
+            moby->state = SAND_SHARK_RETURN_HOME;
         } else if (sand_shark_behavior_vars->unk25E != 0) {
-            moby->state = 0xE;
+            moby->state = SAND_SHARK_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK;
         } else {
-            moby->state = 0x12;
+            moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET;
         }
         break;
     case SAND_SHARK_CLOSE_RANGE_ATTACK:
@@ -676,7 +676,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         if ((moby->anim_flags & 2) &&
             vector_distance_xy(&moby->pos, &sand_shark_behavior_vars->target) > 1.5f) {
-            moby->state = 5;
+            moby->state = SAND_SHARK_APPROACH_TARGET;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(3));
             }
@@ -693,7 +693,7 @@ void sand_shark_update(struct Moby *moby) {
         break;
     case SAND_SHARK_RETURN_HOME:
     case SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET:
-        if (moby->state == 0x17) {
+        if (moby->state == SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET) {
             moby->pos.z += sand_shark_height_offset_gp;
             if (random_integer_below(0xFF) & 1) {
                 particle_position_or_forward_step.q = *(OvlQuad *)&moby->pos;
@@ -717,26 +717,26 @@ void sand_shark_update(struct Moby *moby) {
                          &position_or_offset_scratch,
                          &target_or_particle_vector,
                          1.0f);
-        if (moby->state == 0x17) {
+        if (moby->state == SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET) {
             moby->pos.z -= sand_shark_height_offset_gp;
         }
         if (vector_distance_xy(&moby->pos, &sand_shark_behavior_vars->home) < 0.5f) {
             sand_shark_behavior_vars->unk298 = 0;
-            if (moby->state == 7) {
+            if (moby->state == SAND_SHARK_RETURN_HOME) {
                 if (sand_shark_behavior_vars->unk278 >= 0) {
-                    moby->state = 3;
+                    moby->state = SAND_SHARK_WAIT_FOR_TARGET_IN_VOLUME;
                     if (moby->prev_seq != 2) {
                         blend_moby_animation(moby, 2, 0, scale_game_frames(3));
                     }
                 } else {
-                    moby->state = 0x12;
+                    moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_RETURN_HOME_WITH_HEIGHT_OFFSET;
                     sand_shark_behavior_vars->walk_step = D_0015ED6C * 1.5f;
                     if (moby->prev_seq != 0) {
                         blend_moby_animation(moby, 0, 0, scale_game_frames(3));
                     }
                 }
             } else {
-                moby->state = 2;
+                moby->state = SAND_SHARK_WANDER_AROUND_HOME;
                 sand_shark_behavior_vars->walk_step = D_0015ED6C * 1.5f;
                 if (moby->prev_seq != 0xC) {
                     blend_moby_animation(moby, 0xC, 0, scale_game_frames(5));
@@ -751,15 +751,15 @@ void sand_shark_update(struct Moby *moby) {
                 if (sand_shark_behavior_vars->unk278 >= 0) {
                     if (is_point_inside_clip_volume(&sand_shark_behavior_vars->target,
                                                     sand_shark_behavior_vars->unk278)) {
-                        moby->state = 5;
+                        moby->state = SAND_SHARK_APPROACH_TARGET;
                         sand_shark_behavior_vars->walk_step =
                             sand_shark_behavior_vars->unk254 * D_0015ED6C;
                     }
                 } else if (fast_vec_length(&target_home_delta) < sand_shark_behavior_vars->unk24C) {
-                    if (moby->state == 7) {
-                        moby->state = 5;
+                    if (moby->state == SAND_SHARK_RETURN_HOME) {
+                        moby->state = SAND_SHARK_APPROACH_TARGET;
                     } else {
-                        moby->state = 0x16;
+                        moby->state = SAND_SHARK_APPROACH_TARGET_WITH_HEIGHT_OFFSET;
                     }
                     sand_shark_behavior_vars->walk_step =
                         sand_shark_behavior_vars->unk254 * D_0015ED6C;
@@ -768,7 +768,7 @@ void sand_shark_update(struct Moby *moby) {
                     }
                 }
             } else if (sand_shark_behavior_vars->unk25E != 0 && random_integer_below(0x13) == 0) {
-                moby->state = 0x15;
+                moby->state = SAND_SHARK_ALIGN_TO_GROUND_BEFORE_APPROACH_TARGET_WITH_PATH_PROXIMITY_CHECK;
                 allocate_voice_for_target_entry(4, 0, moby);
                 if (moby->prev_seq != 0) {
                     blend_moby_animation(moby, 0, 0, 0);
@@ -798,7 +798,7 @@ void sand_shark_update(struct Moby *moby) {
         break;
     case SAND_SHARK_SUCK_CANNON_INTERACTION:
         if (FUN_L00_002dc9f0_e50(moby, sand_shark_behavior_vars->unk120)) {
-            moby->state = 1;
+            moby->state = SAND_SHARK_BEGIN_RETURN_HOME_WITH_HEIGHT_OFFSET;
             sand_shark_behavior_vars->unkC8 = 0;
         }
         break;
@@ -831,7 +831,7 @@ void sand_shark_update(struct Moby *moby) {
             if (moby->prev_seq != 0xB) {
                 blend_moby_animation(moby, 0xB, 0, 0);
             }
-            moby->state = 0xD;
+            moby->state = SAND_SHARK_BALLISTIC_FLIGHT;
         }
         break;
     }
@@ -862,7 +862,7 @@ void sand_shark_update(struct Moby *moby) {
             moby->collision = moby->pclass->collision;
             moby->flags |= 0x1000;
             moby->pos.z = sand_shark_behavior_vars->home.f[2] - sink;
-            moby->state = 0x17;
+            moby->state = SAND_SHARK_RETURN_HOME_WITH_HEIGHT_OFFSET;
             moby->rot.y = 0.0f;
             if (moby->prev_seq != 0xC) {
                 blend_moby_animation(moby, 0xC, 0, scale_game_frames(1));
@@ -885,7 +885,7 @@ void sand_shark_update(struct Moby *moby) {
             sand_shark_behavior_vars->unk27C = select_group_class_29c_moby(moby);
             if (sand_shark_behavior_vars->unk27C != 0) {
                 emit_sand_shark_dust_burst(moby);
-                moby->state = 0x1A;
+                moby->state = SAND_SHARK_INACTIVE_WAIT_FOR_RELAUNCH;
                 moby->anim_speed = 0.0f;
                 qcopy(&moby->pos, &sand_shark_behavior_vars->home);
                 moby->collision = 0;
@@ -911,7 +911,7 @@ void sand_shark_update(struct Moby *moby) {
             if (sand_shark_behavior_vars->unk27C != 0) {
                 emit_sand_shark_dust_burst(moby);
                 moby->alpha = 0x80;
-                moby->state = 0x1A;
+                moby->state = SAND_SHARK_INACTIVE_WAIT_FOR_RELAUNCH;
                 qcopy(&moby->pos, &sand_shark_behavior_vars->home);
                 moby->collision = 0;
                 moby->pos.z -= 10.0f;
