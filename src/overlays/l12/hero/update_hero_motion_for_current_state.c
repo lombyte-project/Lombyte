@@ -213,6 +213,10 @@ extern CollisionHit D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
 void update_hero_ground_contact_and_gravity(void) __asm__("FUN_L12_00233e80");
 
 void update_hero_ground_contact_and_gravity(void) {
+    enum {
+        GROUND_MATERIAL_WATER = 0,
+        GROUND_MATERIAL_SINK_TRIGGER = 0xD
+    };
     V collision_ray_second_endpoint, ground_ray_first_endpoint, ground_geometry_scratch,
         ground_probe_first_endpoint, unused_ground_probe_output, hit_surface_angles,
         normalized_hit_normal;
@@ -262,7 +266,7 @@ void update_hero_ground_contact_and_gravity(void) {
     }
     hero.ground_sound_class = collision_sound_class;
     hero.ground_type = collision_hit_material();
-    if (hero.ground_type == 0) {
+    if (hero.ground_type == GROUND_MATERIAL_WATER) {
         hero.water_surface_z =
             resolve_camera_surface_height(D_L12_001742E0, (u8 *)&hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
@@ -281,7 +285,7 @@ void update_hero_ground_contact_and_gravity(void) {
         }
         hero.ground_sound_class = collision_sound_class;
     }
-    if (hero.ground_type == 0xD) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_TRIGGER) {
         hero.water_surface_z = D_L12_001742C0_lui.point.f[2];
         ground_ray_first_endpoint.f[2] = D_L12_001742C0_lui.point.f[2] - 0.01f;
         if (FUN_001efa68_u(
@@ -314,7 +318,7 @@ void update_hero_ground_contact_and_gravity(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 ||
+            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = D_L12_001742C0_lui.moby;
