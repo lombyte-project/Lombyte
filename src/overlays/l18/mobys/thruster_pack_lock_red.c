@@ -176,10 +176,14 @@ void request_thruster_pack_lock_red_wait(struct Moby *moby, int wait_duration_fr
 void end_thruster_pack_lock_red_wait(struct Moby *moby) __asm__("FUN_L18_002d7fd0");
 
 void end_thruster_pack_lock_red_wait(struct Moby *moby) {
+    enum {
+        THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER = 2,
+        THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT = 3
+    };
     int *red_lock_private_vars = (int *)moby->pvars;
-    if (moby->state == 2) {
+    if (moby->state == THRUSTER_PACK_LOCK_RED_STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER) {
         int voice_slot_index;
-        moby->state = 3;
+        moby->state = THRUSTER_PACK_LOCK_RED_STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT;
         voice_slot_index = red_lock_private_vars[0x70 / 4];
         if (voice_slot_index != -1) {
             unsigned char *voice_slot_entry =
