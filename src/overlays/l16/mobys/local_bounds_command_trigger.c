@@ -43,7 +43,7 @@ void local_bounds_command_trigger_update(struct Moby *trigger_moby) {
                        D_L16_00161DEC);
     switch (trigger_moby->state) {
     case GRINDRAIL_TRIGGER_INITIALIZE:
-        trigger_moby->state = 1;
+        trigger_moby->state = GRINDRAIL_TRIGGER_CHECK_LOCAL_BOUNDS;
         trigger_moby->update_dist = 0xFF;
         break;
     case GRINDRAIL_TRIGGER_CHECK_LOCAL_BOUNDS:
@@ -63,14 +63,14 @@ void local_bounds_command_trigger_update(struct Moby *trigger_moby) {
                 bounds_check_offset_from_trigger[2] < D_L16_001D9768[5]) {
                 allocate_voice_for_target_entry(1, 0, trigger_moby);
                 trigger_moby->command = 1;
-                trigger_moby->state = 2;
+                trigger_moby->state = GRINDRAIL_TRIGGER_WAIT_FOR_COMMAND_TIMEOUT;
                 *(int *)command_timer = scale_game_frames(D_L16_00161DE4);
             }
         }
         break;
     case GRINDRAIL_TRIGGER_WAIT_FOR_COMMAND_TIMEOUT:
         if (fast_dec_timer((int *)command_timer)) {
-            trigger_moby->state = 1;
+            trigger_moby->state = GRINDRAIL_TRIGGER_CHECK_LOCAL_BOUNDS;
             trigger_moby->command = 0;
         }
         break;
