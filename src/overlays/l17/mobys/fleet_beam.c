@@ -73,6 +73,24 @@ extern void transform_vector_by_basis(void *, void *, void *);
 extern char *D_L17_0015FFD0[] MACRO_ADDR;
 void         fleet_beam_update(struct Moby *beam_moby) __asm__("FUN_L17_002a8da0");
 
+typedef struct FleetBeamVars {
+    u8  pad_0[0x10];
+    f32 unk10[4];
+    f32 unk20[4];
+    f32 unk30[4];
+    s32 clip_volume;
+    s32 unk44;
+    f32 unk48;
+    f32 unk4C;
+    f32 unk50;
+    f32 unk54;
+    f32 anim_start;
+    f32 unk5C;
+    s32 unk60;
+    u8  pad_64[0x4];
+    s32 unk68;
+} FleetBeamVars;
+
 /* Moby class 99 */
 void fleet_beam_update(struct Moby *beam_moby) {
     enum {
@@ -80,20 +98,20 @@ void fleet_beam_update(struct Moby *beam_moby) {
         BEAM_UPDATE_STATIONARY = 1,
         BEAM_UPDATE_OSCILLATING = 2
     };
-    float beam_endpoint_and_offset_scratch[4];
-    float beam_vector_scratch[4];
-    float beam_geometry_scratch[4];
-    float hero_offset[4];
-    float axis_aligned_hero_offset[4];
-    float beam_endpoint_position_scratch[4];
-    float hit_descriptor_and_vector_scratch[12];
-    char *beam_vars;
-    char *beam_endpoint_record;
-    int   flag;
-    int   i;
-    int   k;
-    int   j;
-    float signed_beam_length;
+    float          beam_endpoint_and_offset_scratch[4];
+    float          beam_vector_scratch[4];
+    float          beam_geometry_scratch[4];
+    float          hero_offset[4];
+    float          axis_aligned_hero_offset[4];
+    float          beam_endpoint_position_scratch[4];
+    float          hit_descriptor_and_vector_scratch[12];
+    FleetBeamVars *beam_vars;
+    char          *beam_endpoint_record;
+    int            flag;
+    int            i;
+    int            k;
+    int            j;
+    float          signed_beam_length;
 
     if (beam_moby->state == 3)
         return;
@@ -101,27 +119,25 @@ void fleet_beam_update(struct Moby *beam_moby) {
     beam_vars = (char *)beam_moby->pvars;
     switch (beam_moby->state) {
     case BEAM_INITIALIZE:
-        *(float *)(beam_vars + 0x58) = animation_start(beam_moby->class_slot, 0);
-        *(float *)(beam_vars + 0x5C) =
-            (animation_end(beam_moby->class_slot, 0) - *(float *)(beam_vars + 0x58)) / 6.2831855f;
-        k = *(int *)(beam_vars + 0x44);
+        beam_vars->anim_start = animation_start(beam_moby->class_slot, 0);
+        beam_vars->unk5C =
+            (animation_end(beam_moby->class_slot, 0) - beam_vars->anim_start) / 6.2831855f;
+        k = beam_vars->unk44;
         if (k != -1) {
             qcopy(beam_vars, &beam_moby->pos);
-            *(float *)(beam_vars + 0x54) =
-                *(float *)(beam_vars + 0x48) * frame_time /
-                fast_vec_dist(beam_vars, D_L17_001600EC + (k << 7) + 0x30);
+            beam_vars->unk54 = beam_vars->unk48 * frame_time /
+                               fast_vec_dist(beam_vars, D_L17_001600EC + (k << 7) + 0x30);
             beam_moby->state = 2;
-        } else if ((j = *(int *)(beam_vars + 0x68)) != -1) {
+        } else if ((j = beam_vars->unk68) != -1) {
             qcopy(beam_vars, &beam_moby->pos);
-            *(float *)(beam_vars + 0x54) =
-                *(float *)(beam_vars + 0x48) * frame_time /
-                fast_vec_dist(beam_vars, D_L17_0015FFD0[2] + (j << 8) + 0x10);
+            beam_vars->unk54 = beam_vars->unk48 * frame_time /
+                               fast_vec_dist(beam_vars, D_L17_0015FFD0[2] + (j << 8) + 0x10);
             beam_moby->state = 2;
         } else {
             beam_moby->state = 1;
         }
-        *(int *)(beam_vars + 0x60) = 0;
-        *(float *)(beam_vars + 0x4C) = 0.1f;
+        beam_vars->unk60 = 0;
+        beam_vars->unk4C = 0.1f;
         *(OvlQuad *)beam_vector_scratch = 0;
         beam_vector_scratch[0] = 13.0f;
         transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
@@ -131,36 +147,36 @@ void fleet_beam_update(struct Moby *beam_moby) {
             *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)D_L17_00174760;
         }
         fast_vec_sub(beam_geometry_scratch, beam_endpoint_and_offset_scratch, &beam_moby->pos);
-        *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)beam_geometry_scratch;
+        *(OvlQuad *)&beam_vars->unk30[0] = *(OvlQuad *)beam_geometry_scratch;
         break;
     case BEAM_UPDATE_STATIONARY:
-        if (*(int *)(beam_vars + 0x40) == -1 ||
-            is_point_inside_clip_volume(&hero.motion.pos, *(int *)(beam_vars + 0x40))) {
+        if (beam_vars->clip_volume == -1 ||
+            is_point_inside_clip_volume(&hero.motion.pos, beam_vars->clip_volume)) {
             flag = 1;
         }
         break;
     case BEAM_UPDATE_OSCILLATING:
-        *(float *)(beam_vars + 0x50) += *(float *)(beam_vars + 0x54);
-        if (*(float *)(beam_vars + 0x50) > 1.0f) {
-            *(float *)(beam_vars + 0x50) = 1.0f;
-            *(float *)(beam_vars + 0x54) = -*(float *)(beam_vars + 0x54);
-        } else if (*(float *)(beam_vars + 0x50) < 0.0f) {
-            *(float *)(beam_vars + 0x50) = 0.0f;
-            *(float *)(beam_vars + 0x54) = -*(float *)(beam_vars + 0x54);
+        beam_vars->unk50 += beam_vars->unk54;
+        if (beam_vars->unk50 > 1.0f) {
+            beam_vars->unk50 = 1.0f;
+            beam_vars->unk54 = -beam_vars->unk54;
+        } else if (beam_vars->unk50 < 0.0f) {
+            beam_vars->unk50 = 0.0f;
+            beam_vars->unk54 = -beam_vars->unk54;
         }
-        if (*(int *)(beam_vars + 0x68) != -1) {
+        if (beam_vars->unk68 != -1) {
             lerp_vector(&beam_moby->pos,
                         beam_vars,
-                        ((char *(*)[64])D_L17_0015FFD8)[*(int *)(beam_vars + 0x68)][0x1E],
-                        *(float *)(beam_vars + 0x50));
+                        ((char *(*)[64])D_L17_0015FFD8)[beam_vars->unk68][0x1E],
+                        beam_vars->unk50);
         } else {
             lerp_vector(&beam_moby->pos,
                         beam_vars,
-                        D_L17_001600EC + (*(int *)(beam_vars + 0x44) << 7) + 0x30,
-                        *(float *)(beam_vars + 0x50));
+                        D_L17_001600EC + (beam_vars->unk44 << 7) + 0x30,
+                        beam_vars->unk50);
         }
-        if (*(int *)(beam_vars + 0x40) == -1 ||
-            is_point_inside_clip_volume(&hero.motion.pos, *(int *)(beam_vars + 0x40))) {
+        if (beam_vars->clip_volume == -1 ||
+            is_point_inside_clip_volume(&hero.motion.pos, beam_vars->clip_volume)) {
             *(OvlQuad *)beam_vector_scratch = 0;
             beam_vector_scratch[0] = 13.0f;
             transform_vector_by_basis(
@@ -172,44 +188,44 @@ void fleet_beam_update(struct Moby *beam_moby) {
             }
             flag = 1;
             fast_vec_sub(beam_geometry_scratch, beam_endpoint_and_offset_scratch, &beam_moby->pos);
-            *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)beam_geometry_scratch;
+            *(OvlQuad *)&beam_vars->unk30[0] = *(OvlQuad *)beam_geometry_scratch;
         }
         break;
     }
     *(OvlQuad *)beam_vector_scratch = 0;
     beam_vector_scratch[0] = 12.0f;
     transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
-    fast_vec_add(beam_geometry_scratch, &beam_moby->pos, beam_vars + 0x30);
+    fast_vec_add(beam_geometry_scratch, &beam_moby->pos, beam_vars->unk30);
     *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)beam_geometry_scratch;
-    if (*(int *)(beam_vars + 0x60) != 0) {
-        fast_vec_normalize(beam_vars + 0x20,
+    if (beam_vars->unk60 != 0) {
+        fast_vec_normalize(beam_vars->unk20,
                            beam_vector_scratch,
                            -(*(float *)&fleet_beam_endpoint_axis_offset - 0.2f));
-        fast_vec_normalize(*(char **)(beam_vars + 0x60) + 0x10,
+        fast_vec_normalize(*(char **)&beam_vars->unk60 + 0x10,
                            beam_vector_scratch,
                            -*(float *)&fleet_beam_endpoint_axis_offset);
-        fast_vec_add(beam_geometry_scratch, beam_vars + 0x20, beam_endpoint_and_offset_scratch);
-        beam_endpoint_record = *(char **)(beam_vars + 0x60);
-        *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_geometry_scratch;
+        fast_vec_add(beam_geometry_scratch, beam_vars->unk20, beam_endpoint_and_offset_scratch);
+        beam_endpoint_record = *(char **)&beam_vars->unk60;
+        *(OvlQuad *)&beam_vars->unk20[0] = *(OvlQuad *)beam_geometry_scratch;
         fast_vec_add(
             beam_geometry_scratch, beam_endpoint_record + 0x10, beam_endpoint_and_offset_scratch);
         *(OvlQuad *)(beam_endpoint_record + 0x10) = *(OvlQuad *)beam_geometry_scratch;
     } else {
-        *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_endpoint_and_offset_scratch;
+        *(OvlQuad *)&beam_vars->unk20[0] = *(OvlQuad *)beam_endpoint_and_offset_scratch;
     }
     if (flag) {
-        *(float *)(beam_vars + 0x4C) =
+        beam_vars->unk4C =
             fast_cos(fast_add_rotations(
                 3.1415927f,
-                (compute_interpolated_record_value(beam_moby) - *(float *)(beam_vars + 0x58)) /
-                    *(float *)(beam_vars + 0x5C))) *
+                (compute_interpolated_record_value(beam_moby) - beam_vars->anim_start) /
+                    beam_vars->unk5C)) *
                 0.02f +
             0.09f;
-        fast_vec_normalize(beam_vars + 0x10, beam_vector_scratch, 0.2f);
-        fast_vec_sub(beam_endpoint_position_scratch, &beam_moby->pos, beam_vars + 0x10);
-        *(OvlQuad *)(beam_vars + 0x10) = *(OvlQuad *)beam_endpoint_position_scratch;
-        signed_beam_length = fast_vec_length(beam_vars + 0x30);
-        lerp_vector(beam_geometry_scratch, beam_vars + 0x10, beam_vars + 0x20, 0.5f);
+        fast_vec_normalize(beam_vars->unk10, beam_vector_scratch, 0.2f);
+        fast_vec_sub(beam_endpoint_position_scratch, &beam_moby->pos, beam_vars->unk10);
+        *(OvlQuad *)&beam_vars->unk10[0] = *(OvlQuad *)beam_endpoint_position_scratch;
+        signed_beam_length = fast_vec_length(beam_vars->unk30);
+        lerp_vector(beam_geometry_scratch, beam_vars->unk10, beam_vars->unk20, 0.5f);
         beam_geometry_scratch[3] = signed_beam_length * 0.5f;
         if (fast_bsphere_check((char *)beam_geometry_scratch, 32.0f) != -1) {
             fast_vec_sub(hero_offset, &hero.motion.pos, &beam_moby->pos);
@@ -223,28 +239,28 @@ void fleet_beam_update(struct Moby *beam_moby) {
                                 1.0f,
                                 hero_offset);
             collision_line(
-                &beam_moby->pos, beam_vars + 0x20, 9, beam_moby, hit_descriptor_and_vector_scratch);
-            signed_beam_length = fast_vec_length(beam_vars + 0x30);
-            *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x10);
+                &beam_moby->pos, beam_vars->unk20, 9, beam_moby, hit_descriptor_and_vector_scratch);
+            signed_beam_length = fast_vec_length(beam_vars->unk30);
+            *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)&beam_vars->unk10[0];
             for (i = 0; i < 7; i++) {
                 fast_vec_scale(beam_endpoint_and_offset_scratch,
-                               beam_vars + 0x30,
+                               beam_vars->unk30,
                                random_float_between(0.0f, 0.9f));
                 add_vectors(hit_descriptor_and_vector_scratch,
                             beam_endpoint_and_offset_scratch,
                             beam_endpoint_position_scratch);
                 fast_vec_normalize(
                     beam_vector_scratch,
-                    beam_vars + 0x30,
+                    beam_vars->unk30,
                     random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
                 spawn_fleet_beam_particle(
                     beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
             }
             signed_beam_length = -signed_beam_length;
-            *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x20);
+            *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)&beam_vars->unk20[0];
             for (i = 0; i < 8; i++) {
                 fast_vec_scale(beam_endpoint_and_offset_scratch,
-                               beam_vars + 0x30,
+                               beam_vars->unk30,
                                random_float_between(0.0f, 0.9f));
                 fast_vec_sub(hit_descriptor_and_vector_scratch,
                              beam_endpoint_position_scratch,
@@ -253,18 +269,18 @@ void fleet_beam_update(struct Moby *beam_moby) {
                     *(OvlQuad *)hit_descriptor_and_vector_scratch;
                 fast_vec_normalize(
                     beam_vector_scratch,
-                    beam_vars + 0x30,
+                    beam_vars->unk30,
                     random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
                 spawn_fleet_beam_particle(
                     beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
             }
             fast_vec_normalize(beam_vector_scratch,
-                               beam_vars + 0x30,
+                               beam_vars->unk30,
                                -random_float_between(frame_time * 0.5f, frame_time));
             beam_vector_scratch[0] += random_float_between(-0.01f, 0.01f);
             beam_vector_scratch[1] += random_float_between(-0.01f, 0.01f);
             beam_vector_scratch[2] += random_float_between(-0.01f, 0.01f);
-            spawn_fleet_beam_particle(0, beam_vars + 0x20, beam_vector_scratch);
+            spawn_fleet_beam_particle(0, beam_vars->unk20, beam_vector_scratch);
         }
         add_draw_callback(draw_fleet_beam_quad, beam_moby);
     }
@@ -289,22 +305,20 @@ extern struct {
 } D_L17_001E6620_a95b8[4] __asm__("D_L17_001E6320");
 
 void draw_fleet_beam_quad(struct Moby *moby) {
-    char   *moby_vars = (char *)moby->pvars;
-    S_a95b8 quad_primitive;
-    char    beam_start_vertex_offset[16];
-    char    beam_end_vertex_offset[16];
-    char    beam_end_to_start_vector[16];
-    char    quad_vertex_scratch[16];
-    int     i;
-    fast_vec_sub(beam_end_to_start_vector, moby_vars + 0x10, moby_vars + 0x20);
-    fast_vec_sub(beam_start_vertex_offset, moby_vars + 0x10, D_L17_001676C0);
-    fast_vec_sub(beam_end_vertex_offset, moby_vars + 0x20, D_L17_001676C0);
+    FleetBeamVars *moby_vars = (FleetBeamVars *)moby->pvars;
+    S_a95b8        quad_primitive;
+    char           beam_start_vertex_offset[16];
+    char           beam_end_vertex_offset[16];
+    char           beam_end_to_start_vector[16];
+    char           quad_vertex_scratch[16];
+    int            i;
+    fast_vec_sub(beam_end_to_start_vector, moby_vars->unk10, moby_vars->unk20);
+    fast_vec_sub(beam_start_vertex_offset, moby_vars->unk10, D_L17_001676C0);
+    fast_vec_sub(beam_end_vertex_offset, moby_vars->unk20, D_L17_001676C0);
     fast_vec_cross(beam_start_vertex_offset, beam_start_vertex_offset, beam_end_to_start_vector);
-    fast_vec_normalize(
-        beam_start_vertex_offset, beam_start_vertex_offset, *(float *)(moby_vars + 0x4C));
+    fast_vec_normalize(beam_start_vertex_offset, beam_start_vertex_offset, moby_vars->unk4C);
     fast_vec_cross(beam_end_vertex_offset, beam_end_vertex_offset, beam_end_to_start_vector);
-    fast_vec_normalize(
-        beam_end_vertex_offset, beam_end_vertex_offset, *(float *)(moby_vars + 0x4C));
+    fast_vec_normalize(beam_end_vertex_offset, beam_end_vertex_offset, moby_vars->unk4C);
     quad_primitive.z78 = get_effect_texture(0xE);
     quad_primitive.q80 = 0xFF9000000260L;
     quad_primitive.q88 = 0x8000000048L;
@@ -317,13 +331,13 @@ void draw_fleet_beam_quad(struct Moby *moby) {
         quad_primitive.f[i].a = D_L17_001E6620_a95b8[i].a;
         quad_primitive.f[i].b = D_L17_001E6620_a95b8[i].b;
     }
-    fast_vec_sub(quad_vertex_scratch, moby_vars + 0x10, beam_start_vertex_offset);
+    fast_vec_sub(quad_vertex_scratch, moby_vars->unk10, beam_start_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0) = *(OvlQuad *)quad_vertex_scratch;
-    fast_vec_add(quad_vertex_scratch, moby_vars + 0x10, beam_start_vertex_offset);
+    fast_vec_add(quad_vertex_scratch, moby_vars->unk10, beam_start_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0x10) = *(OvlQuad *)quad_vertex_scratch;
-    fast_vec_sub(quad_vertex_scratch, moby_vars + 0x20, beam_end_vertex_offset);
+    fast_vec_sub(quad_vertex_scratch, moby_vars->unk20, beam_end_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0x20) = *(OvlQuad *)quad_vertex_scratch;
-    fast_vec_add(quad_vertex_scratch, moby_vars + 0x20, beam_end_vertex_offset);
+    fast_vec_add(quad_vertex_scratch, moby_vars->unk20, beam_end_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0x30) = *(OvlQuad *)quad_vertex_scratch;
     func_L00_001FD1D8_a95b8(&quad_primitive, 0, 0);
 }
