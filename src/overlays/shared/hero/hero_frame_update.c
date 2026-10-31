@@ -330,6 +330,10 @@ extern int  l01_hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 
 void update_hero_ground_material_effects(void) {
+    enum {
+        GROUND_MATERIAL_WATER = 0,
+        GROUND_MATERIAL_MAGNETIC = 2
+    };
     struct Hero  *hero_ptr = &hero;
     int           saved_ground_type;
     int           x;
@@ -342,10 +346,10 @@ void update_hero_ground_material_effects(void) {
     hero_ptr->unk308 = 0;
     if (saved_ground_type == -1)
         return;
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == GROUND_MATERIAL_MAGNETIC) {
         if (hero_ptr->frames_off_ground.s == 0 || hero_ptr->ground_distance < 0.3f) {
             hero_ptr->on_magnet_ground = 1;
-            if (hero_ptr->vehicle_mode == 0) {
+            if (hero_ptr->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *item_slot_1_moby = (char *)hero_ptr->items[1].moby;
                 if (item_slot_1_moby != 0 && MOBY(item_slot_1_moby)->oclass == 0xAD)
                     hero_ptr->unk308 = 1;
@@ -358,7 +362,7 @@ void update_hero_ground_material_effects(void) {
         q->water_depth = 0.2f;
         q->water_surface_z = q->ground_z.f + 0.2f;
     }
-    if (saved_ground_type == 0) {
+    if (saved_ground_type == GROUND_MATERIAL_WATER) {
         struct Hero *q = &hero;
         q->water_depth = q->water_surface_z - q->ground_z.f;
         if (q->water_depth < 0.85f) {
