@@ -1428,6 +1428,9 @@ int process_gadgebot_interaction_candidate(
 int process_gadgebot_interaction_candidate(
 
     char *ctx, char *ow, char *moby, int flag, int *interaction_status_out) {
+    enum {
+        GADGEBOT_ABSORPTION_DISABLED = 2
+    };
     float candidate_position[4];
     float vB[4];
     float vA[4];
@@ -1564,7 +1567,7 @@ int process_gadgebot_interaction_candidate(
     case MOBY_CLASS_GADGEBOT_ABSORPTION_TARGET:
         if (flag != 0)
             return 0;
-        if (MOBY(moby)->state == 2)
+        if (MOBY(moby)->state == GADGEBOT_ABSORPTION_DISABLED)
             return 0;
         if (!(vector_distance_xy(ctx + 0x10, candidate_position) < 1.0f))
             return 0;
