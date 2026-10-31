@@ -178,6 +178,10 @@ void bomb_spawner_update(struct Moby *moby) {
         SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED_AFTER_PROXIMITY_ALIAS = 5,
         SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT = 6
     };
+    enum {
+        MOBY_STATE_REMOVAL_BELOW_INSTANCE_END = 0xFD,
+        MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END = 0xFE
+    };
     int          used[4];
     Vec4A_2bef68 launch_origin;
     Vec4A_2bef68 launch_velocity;
@@ -217,14 +221,14 @@ void bomb_spawner_update(struct Moby *moby) {
         if (id == -1)
             continue;
         o = (struct Moby *)(D_L03_0015FFD8_macro + (id << 8));
-        if (o != 0 && o->state != 0xFE && o->state != 0xFD) {
+        if (o != 0 && o->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && o->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
             spawner_data->count++;
         }
     }
     {
         struct Moby *o;
         for (o = (struct Moby *)D_L03_0015FFE4_macro; o != 0; o = o->next) {
-            if (o->oclass == 0x221 && o->state != 0xFE && o->state != 0xFD) {
+            if (o->oclass == 0x221 && o->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && o->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 spawner_data->count++;
             }
         }
@@ -263,7 +267,7 @@ void bomb_spawner_update(struct Moby *moby) {
             trooper_anim_update(moby, spawner_data->f60);
         } else {
             mark_moby_for_removal_cf(moby, 0, -1);
-            moby->state = 8;
+            moby->state = SPAWNER_DESTROY;
             spawner_data->b67 = 0x78;
             trooper_anim_update(moby, spawner_data->f60);
         }
@@ -278,7 +282,7 @@ void bomb_spawner_update(struct Moby *moby) {
             if (id == -1)
                 continue;
             o = (struct Moby *)(D_L03_0015FFD8_macro + (id << 8));
-            if (o != 0 && o->state != 0xFE && o->state != 0xFD) {
+            if (o != 0 && o->state != MOBY_STATE_REMOVAL_AT_OR_ABOVE_INSTANCE_END && o->state != MOBY_STATE_REMOVAL_BELOW_INSTANCE_END) {
                 mark_moby_for_removal(o);
             }
         }
@@ -286,33 +290,33 @@ void bomb_spawner_update(struct Moby *moby) {
         spawner_data->b5A = 3;
         spawner_data->b58 = 8;
         spawner_data->b29 = 0;
-        moby->state = 1;
+        moby->state = SPAWNER_WAIT_FOR_PROXIMITY;
         break;
     }
     case SPAWNER_WAIT_FOR_PROXIMITY:
         if (near1) {
             switch (spawner_data->b84) {
             case SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED:
-                moby->state = 2;
+                moby->state = SPAWNER_SPAWN_ENABLED;
                 break;
             case SPAWNER_ACTIVATION_ENTER_SHARED_SPAWN_ENABLED:
-                moby->state = 3;
+                moby->state = SPAWNER_SPAWN_ENABLED_SHARED;
                 break;
             case SPAWNER_ACTIVATION_ENTER_SHARED_SPAWN_ENABLED_ALIAS:
-                moby->state = 7;
+                moby->state = SPAWNER_SPAWN_ENABLED_SHARED_ALIAS;
                 break;
             case SPAWNER_ACTIVATION_SET_SPAWN_ENABLED:
-                moby->state = 2;
+                moby->state = SPAWNER_SPAWN_ENABLED;
                 break;
             case SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED_AFTER_PROXIMITY:
-                moby->state = 5;
+                moby->state = SPAWNER_SPAWN_ENABLED_AFTER_PROXIMITY;
                 break;
             case SPAWNER_ACTIVATION_ENTER_SPAWN_ENABLED_AFTER_PROXIMITY_ALIAS:
-                moby->state = 5;
+                moby->state = SPAWNER_SPAWN_ENABLED_AFTER_PROXIMITY;
                 break;
             case SPAWNER_ACTIVATION_STAY_IN_PROXIMITY_WAIT:
             default:
-                moby->state = 1;
+                moby->state = SPAWNER_WAIT_FOR_PROXIMITY;
                 break;
             }
         }
@@ -368,7 +372,7 @@ void bomb_spawner_update(struct Moby *moby) {
     }
     case SPAWNER_RESET_TO_PROXIMITY_WAIT:
     default:
-        moby->state = 1;
+        moby->state = SPAWNER_WAIT_FOR_PROXIMITY;
         break;
     }
     if (spawn && cond && timerDone && room) {
