@@ -615,7 +615,7 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
     float        target_heading;
 
     moby_vars = moby->data;
-    if (moby->state == 0) {
+    if (moby->state == ROBOT_DOG_STATE_INITIALIZE) {
         return;
     }
     if (moby_vars->i38 != 0) {
@@ -626,7 +626,7 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
     y = 0;
     hit_record = (Hit_2F1558 *)find_moby_hit(moby, 0x330000, 0);
     hit_reaction(moby, hit_record, &moby_vars->f20, 0, &x, &y, 0, 4);
-    if (x != 1 && moby->state != 15) {
+    if (x != 1 && moby->state != ROBOT_DOG_STATE_FALL_THEN_REMOVE) {
         moby_vars->f20 -= y;
         moby_vars->f130 = frame_time_sq * 42.0f;
         moby_vars->f134 = frame_time_sq * 24.0f;
@@ -644,7 +644,7 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
                 fast_arc_tan(moby_vars->f1F0 - moby->pos[0], moby_vars->f1F4 - moby->pos[1]);
         }
         trooper_start_knockback(knockback_heading, moby, moby_vars->v120, 0xB, 1, 0);
-        moby->state = 15;
+        moby->state = ROBOT_DOG_STATE_FALL_THEN_REMOVE;
         moby_vars->b117 = 0xF0;
         trooper_anim_update(moby, moby_vars->h110);
     }
