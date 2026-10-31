@@ -1015,14 +1015,17 @@ extern void *store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 void *moby_park_state_on_find(struct Moby *arg) __asm__("FUN_L11_00316210");
 
 void *moby_park_state_on_find(struct Moby *suction_moby) {
+    enum {
+        PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 0x14
+    };
     void *found = store_moby_in_suck_cannon(suction_moby);
     if (found != 0) {
         unsigned char state = suction_moby->state;
-        if (state != 0x14) {
+        if (state != PUFFOID_STATE_WAIT_TO_RESUME_COMMAND) {
             suction_moby->command = state;
-            suction_moby->state = 0x14;
+            suction_moby->state = PUFFOID_STATE_WAIT_TO_RESUME_COMMAND;
         }
-    } else if (suction_moby->state == 0x14) {
+    } else if (suction_moby->state == PUFFOID_STATE_WAIT_TO_RESUME_COMMAND) {
         suction_moby->state = suction_moby->command;
     }
     return found;
