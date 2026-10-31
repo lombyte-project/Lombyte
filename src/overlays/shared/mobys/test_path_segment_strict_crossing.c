@@ -110,52 +110,52 @@ typedef struct {
 
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c);
 
-int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
-    float  v[4], w[4], z[4], t[4], u[4];
+int FUN_L00_00261b48(int segment_path_index, void *segment_start, void *segment_end, void *adjusted_endpoint) {
+    float  v[4], perpendicular_xy_axis[4], z[4], previous_path_point_in_basis[4], u[4];
     float  best;
     float  zero;
     int    found = 0;
     int    i = 1;
     int    offset;
-    float *prev;
-    float *cur;
-    fast_vec_sub(v, b, a);
+    float *previous_path_point_slot;
+    float *current_path_point_slot;
+    fast_vec_sub(v, segment_end, segment_start);
     v[2] = 0;
     fast_vec_normalize(v, v, 1.0f / fast_vec_length(v));
-    clear_u64_value(w);
-    w[0] = v[1];
-    w[1] = -v[0];
+    clear_u64_value(perpendicular_xy_axis);
+    perpendicular_xy_axis[0] = v[1];
+    perpendicular_xy_axis[1] = -v[0];
     clear_u64_value(z);
     z[2] = 1.0f;
     best = 1.0f;
-    fast_vec_sub(t, (char *)((SegmentPath **)D_L00_001B04B0_261968)[idx] + 0x10, a);
-    transform_vector_by_basis(t, t, v);
-    prev = t;
-    cur = u;
-    if (i < ((SegmentPath **)D_L00_001B04B0_261968)[idx]->count) {
+    fast_vec_sub(previous_path_point_in_basis, (char *)((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index] + 0x10, segment_start);
+    transform_vector_by_basis(previous_path_point_in_basis, previous_path_point_in_basis, v);
+    previous_path_point_slot = previous_path_point_in_basis;
+    current_path_point_slot = u;
+    if (i < ((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index]->count) {
         offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(cur, (char *)((SegmentPath **)D_L00_001B04B0_261968)[idx] + offset, a);
-            transform_vector_by_basis(cur, cur, v);
-            if (t[3] != zero || u[3] != zero) {
-                if (u[1] * t[1] < 0.0f) {
-                    float x = (t[0] - u[0]) / (t[1] - u[1]) * -u[1] + u[0];
+            fast_vec_sub(current_path_point_slot, (char *)((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index] + offset, segment_start);
+            transform_vector_by_basis(current_path_point_slot, current_path_point_slot, v);
+            if (previous_path_point_in_basis[3] != zero || u[3] != zero) {
+                if (u[1] * previous_path_point_in_basis[1] < 0.0f) {
+                    float x = (previous_path_point_in_basis[0] - u[0]) / (previous_path_point_in_basis[1] - u[1]) * -u[1] + u[0];
                     if (x > 0.0f && x < best) {
                         best = x;
                         found = 1;
-                        qcopy(prev, cur);
+                        qcopy(previous_path_point_slot, current_path_point_slot);
                         goto next;
                     }
                 }
             }
-            qcopy(prev, cur);
+            qcopy(previous_path_point_slot, current_path_point_slot);
         next:
             i++;
             offset += 0x10;
-        } while (i < ((SegmentPath **)D_L00_001B04B0_261968)[idx]->count);
+        } while (i < ((SegmentPath **)D_L00_001B04B0_261968)[segment_path_index]->count);
     }
-    lerp_vector(c, a, b, best);
+    lerp_vector(adjusted_endpoint, segment_start, segment_end, best);
     return found;
 }
 
