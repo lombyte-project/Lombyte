@@ -224,14 +224,14 @@ void fleet_turret_shot_update(struct Moby *moby) {
                         }
                     }
                     drone_vars->timer_38 = scale_game_frames(0x1E);
-                    moby->state = 1;
+                    moby->state = DRONE_STATE_SPARKS_UNTIL_REMOVAL;
                     return;
                 }
             } else if (vector_distance_xy(&moby->pos, *(char **)&drone_vars->unk3C + 0x10) >
                        10.0f) {
                 qcopy(&moby->pos, r + 0x20);
                 drone_vars->timer_38 = scale_game_frames(0x1E);
-                moby->state = 1;
+                moby->state = DRONE_STATE_SPARKS_UNTIL_REMOVAL;
                 return;
             }
         }
