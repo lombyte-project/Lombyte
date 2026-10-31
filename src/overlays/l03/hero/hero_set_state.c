@@ -1173,7 +1173,7 @@ int hero_set_state(int requested_state, int b) {
                 u->unk4A6 = scale_game_frames(0x55);
                 u->ledge_probe_cooldown = scale_game_frames(0x46);
                 u->velocity_keys_active = 1;
-                if (pal_mode != 0) {
+                if (pal_mode != FALSE) {
                     u->unk3D0 = scale_game_frames(0x22);
                 } else {
                     u->unk3D0 = scale_game_frames(0x23);
