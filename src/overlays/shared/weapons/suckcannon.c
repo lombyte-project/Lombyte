@@ -610,7 +610,7 @@ extern float D_L00_00161B80 MACRO_ADDR;
 extern float D_L00_00161B84 MACRO_ADDR;
 extern int                  suck_beam_reset_pending __asm__("D_L00_00161B40") __attribute__((sda));
 extern int   suck_beam_particles_reset_pending __asm__("D_L00_00161B44") __attribute__((sda));
-extern int   D_L00_00161B54 __attribute__((sda));
+extern int   l00_suck_beam_step_blend_elapsed_frames __asm__("D_L00_00161B54") __attribute__((sda));
 extern int   suck_beam_wave_phase __asm__("D_L00_00161B58") __attribute__((sda));
 extern short D_L00_001E6008[];
 extern V41   l00_suck_beam_ring_source_offsets[] __asm__("D_L00_001E4B40");
@@ -2887,7 +2887,7 @@ void suck_beam_build(char *cannon_moby, char *suction_origin) {
         D_L00_00161B80 = initial_random_angle;
     }
     suck_beam_texture_v_step = 0.006f;
-    D_L00_00161B54 = 0;
+    l00_suck_beam_step_blend_elapsed_frames = 0;
     suck_beam_wave_phase = 0;
     if (suck_beam_particles_reset_pending != 0) {
         suck_beam_particles_reset_pending = 0;
@@ -2955,12 +2955,12 @@ void suck_beam_update(void *moby, void *position) {
     transform_vector_by_basis(&end, &(*(V41 *)D_L00_00161B70), orientation);
     fast_vec_add(&end, &end, &step);
     beam_step_blend_fraction =
-        (float)D_L00_00161B54 / convert_integer_to_float(scale_game_frames(60));
-    D_L00_00161B54++;
+        (float)l00_suck_beam_step_blend_elapsed_frames / convert_integer_to_float(scale_game_frames(60));
+    l00_suck_beam_step_blend_elapsed_frames++;
     step.f.x = start.f.x + (end.f.x - start.f.x) * beam_step_blend_fraction;
     step.f.y = start.f.y + (end.f.y - start.f.y) * beam_step_blend_fraction;
     step.f.z = start.f.z + (end.f.z - start.f.z) * beam_step_blend_fraction;
-    if (D_L00_00161B54 >= scale_game_frames(60)) {
+    if (l00_suck_beam_step_blend_elapsed_frames >= scale_game_frames(60)) {
         qcopy(&(*(V41 *)D_L00_00161B60), &(*(V41 *)D_L00_00161B70));
         fast_vec_normalize(&axis, orientation, D_L00_00161B84);
         tmp_a.q = 0;
@@ -2973,7 +2973,7 @@ void suck_beam_update(void *moby, void *position) {
             fast_add_rotations(D_L00_00161B80, random_float_between(45.0f, 315.0f) * 0.0174532924f);
         build_look_at_matrix(&(*(V41 *)D_L00_00161B70), &tmp_a, angle, &tmp_b);
         D_L00_00161B80 = angle;
-        D_L00_00161B54 = 0;
+        l00_suck_beam_step_blend_elapsed_frames = 0;
     }
     (*(float *)&suck_beam_wave_phase_gp) =
         fast_add_rotations((*(float *)&suck_beam_wave_phase_gp), 0.1f);
