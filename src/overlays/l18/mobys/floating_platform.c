@@ -268,7 +268,7 @@ spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_0
 extern int   FUN_001fa6e0(int, int, float);
 extern short floating_platform_spark_first_vector_length_base_rate_gp __asm__("D_L18_00161A68")
     __attribute__((sda));
-extern short D_L18_00161A6C_gp __asm__("D_L18_00161A6C") __attribute__((sda));
+extern short l18_floating_platform_spark_second_vector_length_base_rate_gp __asm__("D_L18_00161A6C") __attribute__((sda));
 extern short floating_platform_spark_second_vector_downward_z_rate_gp __asm__("D_L18_00161A70")
     __attribute__((sda));
 extern short
@@ -348,7 +348,7 @@ void spawn_floating_platform_sparks(struct Moby *moby) {
         fast_vec_normalize(
             second_spark_vector,
             first_spark_vector,
-            (*(float *)&(D_L18_00161A6C_gp)) *
+            (*(float *)&(l18_floating_platform_spark_second_vector_length_base_rate_gp)) *
                 (random_float_between(
                      -(*(float *)&(
                          floating_platform_spark_vector_length_relative_variation_limit_gp)),
