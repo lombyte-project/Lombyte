@@ -95,7 +95,7 @@ void elevator_with_button_update(struct Moby *moby) {
         elevator_vars->phase = random_angle_radians();
         elevator_vars->sound = -1;
         elevator_vars->base_yaw = moby->rot.z;
-        moby->state = 3;
+        moby->state = ELEVATOR_MOVE_TO_BOTTOM;
         break;
     case ELEVATOR_FADE_BEFORE_CAMERA_MOUNT:
         D_0014162A = elevator_vars->marker;
@@ -127,7 +127,7 @@ void elevator_with_button_update(struct Moby *moby) {
             progress_speed_limit = frame_time;
             max_speed = frame_time_sq;
         }
-        target = moby->state == 2 ? 1.0f : 0.0f;
+        target = moby->state == ELEVATOR_MOVE_TO_TOP ? 1.0f : 0.0f;
         advance_accelerated_scalar(&elevator_vars->progress,
                                    &elevator_vars->speed,
                                    target,
@@ -157,16 +157,16 @@ void elevator_with_button_update(struct Moby *moby) {
                 elevator_vars->speed = -0.00125f;
             }
             if (moby->command) {
-                if (moby->state == 2) {
-                    moby->state = 6;
+                if (moby->state == ELEVATOR_MOVE_TO_TOP) {
+                    moby->state = ELEVATOR_WAIT_TO_RETURN_FROM_TOP;
                 } else {
-                    moby->state = 7;
+                    moby->state = ELEVATOR_WAIT_TO_RETURN_FROM_BOTTOM;
                 }
             } else {
-                if (moby->state == 2) {
-                    moby->state = 4;
+                if (moby->state == ELEVATOR_MOVE_TO_TOP) {
+                    moby->state = ELEVATOR_WAIT_AT_TOP;
                 } else {
-                    moby->state = 5;
+                    moby->state = ELEVATOR_WAIT_AT_BOTTOM;
                 }
             }
         }
@@ -183,10 +183,10 @@ void elevator_with_button_update(struct Moby *moby) {
         }
         if (hero.ground_moby != moby) {
             jet_end_mount(1);
-            if (moby->state == 7) {
-                moby->state = 5;
+            if (moby->state == ELEVATOR_WAIT_TO_RETURN_FROM_BOTTOM) {
+                moby->state = ELEVATOR_WAIT_AT_BOTTOM;
             } else {
-                moby->state = 4;
+                moby->state = ELEVATOR_WAIT_AT_TOP;
             }
             break;
         }
@@ -205,10 +205,10 @@ void elevator_with_button_update(struct Moby *moby) {
             vector_distance_xy(&hero.motion.pos, &moby->pos) < 0.5f) {
             allocate_voice_for_target_entry(1, 0, moby);
             moby->glow_color = 0x80208020;
-            if (moby->state == 7) {
-                moby->state = 2;
+            if (moby->state == ELEVATOR_WAIT_TO_RETURN_FROM_BOTTOM) {
+                moby->state = ELEVATOR_MOVE_TO_TOP;
             } else {
-                moby->state = 3;
+                moby->state = ELEVATOR_MOVE_TO_BOTTOM;
             }
         }
         break;
@@ -229,26 +229,26 @@ void elevator_with_button_update(struct Moby *moby) {
                 place_marker_ring(moby);
             }
             moby->glow_color = 0x80208020;
-            if (moby->state == 5) {
+            if (moby->state == ELEVATOR_WAIT_AT_BOTTOM) {
                 moby->command = 2;
             } else {
                 moby->command = 3;
             }
-            moby->state = 1;
+            moby->state = ELEVATOR_FADE_BEFORE_CAMERA_MOUNT;
             elevator_vars->fade = 0.0f;
-        } else if (moby->state == 4) {
+        } else if (moby->state == ELEVATOR_WAIT_AT_TOP) {
             f32 dist = vector_distance_xy(&moby->pos, &hero.motion.pos);
             if (absolute_float(hero.ground_z.f - elevator_vars->bottom) < 2.0f && dist < 32.0f &&
                 dist > 5.0f) {
                 moby->command = 0;
-                moby->state = 3;
+                moby->state = ELEVATOR_MOVE_TO_BOTTOM;
             }
-        } else if (moby->state == 5) {
+        } else if (moby->state == ELEVATOR_WAIT_AT_BOTTOM) {
             f32 dist = vector_distance_xy(&moby->pos, &hero.motion.pos);
             if (absolute_float(hero.ground_z.f - elevator_vars->top) < 2.0f && dist < 32.0f &&
                 dist > 5.0f) {
                 moby->command = 0;
-                moby->state = 2;
+                moby->state = ELEVATOR_MOVE_TO_TOP;
             }
         }
         break;
