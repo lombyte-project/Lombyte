@@ -336,19 +336,19 @@ void                      resolve_camera_movement_collisions(OvlQuad *camera_pos
 void resolve_camera_movement_collisions(OvlQuad *camera_position, float collision_radius) {
     OvlQuad step_delta[1];
     float   camera_movement_origin_snapshot[4] __attribute__((aligned(16)));
-    char   *o = (char *)l00_camera_lui.unk180;
-    float  *camera_movement_origin = (float *)(o + 0x64);
+    char   *camera_record_at_entry = (char *)l00_camera_lui.unk180;
+    float  *camera_movement_origin = (float *)(camera_record_at_entry + 0x64);
     int     step_count, i, j;
 
     camera_movement_origin_snapshot[0] = camera_movement_origin[0];
     camera_movement_origin_snapshot[1] = camera_movement_origin[1];
     camera_movement_origin_snapshot[2] = camera_movement_origin[2];
     ((int *)camera_movement_origin_snapshot)[3] = 0;
-    if (*(short *)(o + 0x8A) != 0) {
+    if (*(short *)(camera_record_at_entry + 0x8A) != 0) {
         if (D_L00_0016C06C == 0) {
             qcopy(&l00_camera_lui.pos, camera_position);
         }
-        *(short *)(o + 0x8A) = 0;
+        *(short *)(camera_record_at_entry + 0x8A) = 0;
         return;
     }
     fast_vec_sub(step_delta, camera_position, camera_movement_origin_snapshot);
