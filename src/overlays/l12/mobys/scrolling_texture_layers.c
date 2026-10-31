@@ -2601,7 +2601,7 @@ void scrolling_texture_layers_update(M_bff0 *moby) {
                               1);
             hoven_scrolling_color_tables_initialized_gp = 1;
         }
-        moby->state = 1;
+        moby->state = UPDATE_SCROLL_PHASES_AND_QUEUE_DRAW;
         moby->b30 = 0xFF;
         moby->h32 = 0xFF;
         for (i = 0; i < 2; i++) {
