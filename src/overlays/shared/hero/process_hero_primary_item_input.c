@@ -1813,7 +1813,7 @@ extern s32   current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern float frame_time __asm__("D_0015ED6C") MACRO_ADDR;
 extern void  fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int   offset_path_index(void *, int, int, int) __asm__("FUN_L00_0025d7a0");
-extern int   D_L05_0015F698 __attribute__((sda));
+extern int   l05_hoverboard_trick_landing_frame_thresholds __asm__("D_L05_0015F698") __attribute__((sda));
 
 int hero_pick_help_mode(void) __asm__("FUN_L05_00255208");
 
@@ -1881,18 +1881,18 @@ int hero_pick_help_mode(void) {
         if ((&hero)->race_path != 0) {
             int index =
                 select_point_index_by_distance(&(&hero)->motion.pos, (&hero)->race_path, 0.0f);
-            int next = offset_path_index((&hero)->race_path, index, -1, 1);
+            int previous_path_point_index = offset_path_index((&hero)->race_path, index, -1, 1);
             (&hero)->wrong_way_path_point = index;
             if (*(int *)0x0015ED84 == 5) {
                 Path *path = (Path *)(&hero)->race_path;
                 float height = path->p[index].z;
-                float other = path->p[next].z;
+                float previous_path_point_height = path->p[previous_path_point_index].z;
                 float distance;
                 float minimum;
-                if (height < other)
+                if (height < previous_path_point_height)
                     minimum = height;
                 else
-                    minimum = other;
+                    minimum = previous_path_point_height;
                 distance = vector_distance_xy(&(&hero)->motion.pos, &path->p[index]);
                 if (0.5f < minimum - (&hero)->motion.pos.f[2] && 4.0f < distance) {
                     state = 0x6D;
@@ -1934,7 +1934,7 @@ int hero_pick_help_mode(void) {
         goto change_state;
     }
     if ((unsigned)(*((unsigned char *)(&hero)->moby + 0x53) - 0x69) < 4 &&
-        (&hero)->anim_frame < (float)(&D_L05_0015F698)[(&hero)->air_pose_index]) {
+        (&hero)->anim_frame < (float)(&l05_hoverboard_trick_landing_frame_thresholds)[(&hero)->air_pose_index]) {
         state = 0x6D;
         goto change_state;
     }
