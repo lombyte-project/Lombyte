@@ -1017,6 +1017,9 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         CRATE_VARIANT_FINAL_DAMAGE_STAGE = 10,
         CRATE_VARIANT_CONDITIONAL_RESPAWN_START = 11
     };
+    enum {
+        CRATE_STATE_BROKEN = 3
+    };
     u8      *vars = (u8 *)moby->vars;
     V2d09b8  position, away, rotation, basis[3], launch, spawn_pos, spin;
     s32      kind;
@@ -1169,7 +1172,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         }
     }
     *(u32 *)((u8 *)broken_crate_moby + 0x94) = 0;
-    moby->state = 3;
+    moby->state = CRATE_STATE_BROKEN;
     *(u16 *)((u8 *)moby + 0x34) |= 1;
     moby->bBC = FUN_001fef20_2d09b8(15);
     if (hit) {
