@@ -25,7 +25,7 @@ void television_update(struct Moby *moby) {
     moby->scale = moby->pclass->scale * *(float *)&television_scale_multiplier_gp;
     switch (moby->state) {
     case TELEVISION_INITIALIZE:
-        moby->state = 1;
+        moby->state = TELEVISION_UPDATE_BOBBING;
         *(float *)television_bobbing_state = random_angle_radians();
         *(float *)(television_bobbing_state + 4) = moby->pos.z;
         break;
