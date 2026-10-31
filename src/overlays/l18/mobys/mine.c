@@ -421,8 +421,11 @@ int moby_hold_state_while_active(struct Moby *moby) {
 void hide_moby_and_disable_collision(struct Moby *moby) __asm__("FUN_L18_002d6280");
 
 void hide_moby_and_disable_collision(struct Moby *moby) {
+    enum {
+        STATE_INACTIVE = 5
+    };
     unsigned short flags;
-    moby->state = 5;
+    moby->state = STATE_INACTIVE;
     if (moby->prev_seq != 0) {
         blend_moby_animation(moby, 0, 0, scale_game_frames(10));
     }
