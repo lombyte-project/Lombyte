@@ -25,7 +25,10 @@ int is_robot_dog_in_state_5(struct Moby *moby) {
     enum {
         ROBOT_DOG_FOLLOW_PATH = 5
     };
-    if (moby && moby->state != 0xFE && moby->state != 0xFD && moby->oclass == 0x23D &&
+    enum {
+        MOBY_STATE_PENDING_REMOVAL = 0xFE
+    };
+    if (moby && moby->state != MOBY_STATE_PENDING_REMOVAL && moby->state != 0xFD && moby->oclass == 0x23D &&
         moby->state == ROBOT_DOG_FOLLOW_PATH) {
         return 1;
     }
