@@ -30,6 +30,10 @@ void apply_hero_ground_material_effects(void) {
         GROUND_MATERIAL_WATER = 0,
         GROUND_MATERIAL_MAGNET = 2
     };
+    enum {
+        GROUND_MATERIAL_SINK_TRIGGER = 0xD,
+        GROUND_MATERIAL_FIXED_WATER_DEPTH = 0xE
+    };
     struct Hero *hero_data = &hero;
     int          keep = hero_data->ground_sound_class;
     int          saved_ground_type = hero_data->ground_type;
@@ -51,7 +55,7 @@ void apply_hero_ground_material_effects(void) {
             }
         }
     }
-    if (saved_ground_type == 0xE) {
+    if (saved_ground_type == GROUND_MATERIAL_FIXED_WATER_DEPTH) {
         struct Hero *q = &hero;
         q->base_condition = 1;
         q->water_depth = 0.2f;
@@ -102,7 +106,7 @@ void apply_hero_ground_material_effects(void) {
         struct Hero *q = &hero;
         q->selector_4 = 1;
     }
-    if (saved_ground_type == 0xD) {
+    if (saved_ground_type == GROUND_MATERIAL_SINK_TRIGGER) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
