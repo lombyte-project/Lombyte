@@ -82,14 +82,14 @@ extern int  hero_set_state(int, int) __asm__("FUN_L16_0021e398");
 extern char level16_hero_jump_velocity_keys[] __asm__("D_L16_0017C380");
 extern char level16_hero_water_surface_jump_velocity_keys[] __asm__("D_L16_0017C3C0");
 
-int hero_set_state(int a, int b) {
+int hero_set_state(int requested_state, int b) {
     int   saved_state_step;
     char *moby;
     int   old20A7;
     float vec[4];
     {
         struct Hero *p = &hero;
-        if (p->state.control_mode == 0x14 && (a != 0x64 || b != 2))
+        if (p->state.control_mode == 0x14 && (requested_state != 0x64 || b != 2))
             return 0;
     }
     if ((D_L16_0015F5C4 == 2 || D_L16_0015F5C4 == 6) && b != 2)
@@ -97,8 +97,8 @@ int hero_set_state(int a, int b) {
     {
         struct Hero *p = &hero;
         if (p->health.hp == 0 && (p->state.control_mode == 2 || p->state.control_mode == 7) &&
-            a != 6 && a != 0x3D && a != 0x47 && a != 0x57 && a != 0x62 && a != 0x77 && a != 0x7B &&
-            a != 0x7C && a != 0x7F && a != 0x6A && a != 0x80 && a != 0x82)
+            requested_state != 6 && requested_state != 0x3D && requested_state != 0x47 && requested_state != 0x57 && requested_state != 0x62 && requested_state != 0x77 && requested_state != 0x7B &&
+            requested_state != 0x7C && requested_state != 0x7F && requested_state != 0x6A && requested_state != 0x80 && requested_state != 0x82)
             return 0;
     }
     {
@@ -111,7 +111,7 @@ int hero_set_state(int a, int b) {
         p->state.prev_timer = p->state_timer;
         p->state.prev = p->state.current;
         p->state.prev_control_mode = p->state.control_mode;
-        p->state.current = a;
+        p->state.current = requested_state;
         p->state.step = 0;
         p->unk20A5 = 0;
         p->item_use_locked = 0;
@@ -136,7 +136,7 @@ int hero_set_state(int a, int b) {
         create_missing_hero_item_slot_animations(p->state.prev, p->state.current);
         p->rand_timer.range = 0;
     }
-    switch (a) {
+    switch (requested_state) {
     case HERO_STATE_IDLE: {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
@@ -1185,7 +1185,7 @@ int hero_set_state(int a, int b) {
             return 0;
         }
         p->state.control_mode = 4;
-        if (a >= 0x29 && a <= 0x2A) {
+        if (requested_state >= 0x29 && requested_state <= 0x2A) {
             p->unk2284 = 3;
         } else {
             p->unk2284 = 0x50;
