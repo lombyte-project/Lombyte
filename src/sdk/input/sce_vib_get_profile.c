@@ -16,6 +16,9 @@ typedef union {
 extern s32 sceDbcReceiveData(s32 port, DbcCommand cmd, void *buf, void *data);
 
 s32 sceVibGetProfile(s32 port, u8 *profile) {
+    enum {
+        DBC_RECEIVE_ERROR_THRESHOLD = 0
+    };
     DbcCommand cmd;
     s32        profile_byte_count;
     s32        receive_status;
@@ -25,7 +28,7 @@ s32 sceVibGetProfile(s32 port, u8 *profile) {
     cmd.cmd = 3;
     cmd.ver = 1;
     receive_status = sceDbcReceiveData(port, cmd, &profile_byte_count, profile);
-    if (receive_status < 0) {
+    if (receive_status < DBC_RECEIVE_ERROR_THRESHOLD) {
         return receive_status;
     }
     return profile_byte_count;
