@@ -659,8 +659,11 @@ void hide_moby_and_clear_collision(struct Moby *moby) __asm__("FUN_L18_002fcd00"
 
 /* Method: sends the gadgebot back to its idle state 8, hidden and without collision. */
 void hide_moby_and_clear_collision(struct Moby *moby) {
+    enum {
+        GADGEBOT_IDLE = 0x8
+    };
     unsigned short flags;
-    moby->state = 0x8;
+    moby->state = GADGEBOT_IDLE;
     if (moby->prev_seq != 0) {
         blend_moby_animation(moby, 0, 0, scale_game_frames(10));
     }
