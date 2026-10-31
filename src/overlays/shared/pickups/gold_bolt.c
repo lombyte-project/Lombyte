@@ -783,6 +783,9 @@ void update_gold_bolt_pickup_camera(struct Moby *moby) {
 void spawn_gold_bolt_particles(struct Moby *moby) __asm__("FUN_L01_003089f0");
 
 void spawn_gold_bolt_particles(struct Moby *moby) {
+    enum {
+        GOLD_BOLT_WAIT_FOR_PICKUP = 1
+    };
     float v[4];
     float particle_velocity[4];
     float u[4];
@@ -790,7 +793,7 @@ void spawn_gold_bolt_particles(struct Moby *moby) {
     int   i;
     int   particle_lifetime;
     int   loop_particle_lifetime;
-    if (moby->state == 1) {
+    if (moby->state == GOLD_BOLT_WAIT_FOR_PICKUP) {
         fast_vec_scale(v, moby, 0.0009765625f);
     } else {
         moby_point_position(moby, 0, v);
