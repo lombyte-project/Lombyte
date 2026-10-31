@@ -29,7 +29,7 @@ void cutscene_camera_target_update(struct Moby *moby) {
     switch (moby->state) {
     case MODE_SLOT_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
-        moby->state = 1;
+        moby->state = MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT;
         break;
     case MODE_SLOT_STATE_DISPATCH_SELECTED_SLOT:
         if (D_L04_0015F5C4 == 2) {
