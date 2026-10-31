@@ -499,7 +499,7 @@ void gold_bolt_update(struct Moby *moby) {
             gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * frame_time_macro;
         gold_bolt_instance_vars->unk60 =
             gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * frame_time_macro;
-        moby->state = 1;
+        moby->state = GOLD_BOLT_WAIT_FOR_PICKUP;
         initialize_gold_bolt_data(moby);
         return;
     case GOLD_BOLT_WAIT_FOR_PICKUP:
@@ -527,7 +527,7 @@ void gold_bolt_update(struct Moby *moby) {
         if (hero.health.hp == 0) {
             return;
         }
-        if (hero.vehicle_mode != 3 && hero.vehicle_mode != 0) {
+        if (hero.vehicle_mode != 3 && hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
             return;
         }
         if (gold_bolt_instance_vars->unkC != 0) {
@@ -574,7 +574,7 @@ void gold_bolt_update(struct Moby *moby) {
         }
         hero.unk20AF = 1;
         cutscene_active = 1;
-        moby->state = 2;
+        moby->state = GOLD_BOLT_PICKUP_CUTSCENE;
         gold_bolt_instance_vars->timer = scale_game_frames(60);
         return;
     case GOLD_BOLT_PICKUP_CUTSCENE:
