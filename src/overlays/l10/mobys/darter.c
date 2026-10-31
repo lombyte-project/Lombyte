@@ -649,6 +649,9 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
     enum {
         DARTER_STATE_DYING = 13
     };
+    enum {
+        TARGET_SELECTION_DEFAULT_REJECTED_NO_REPLACEMENT = 2
+    };
     MobyData   *class_1199_vars = ((struct MobyData *)moby->pvars);
     float       vector_scratch[4];
     float       transformed_offset[4];
@@ -715,7 +718,7 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
     }
     if (class_1199_vars->f174 == 2) {
         target_selection_status = ahead_f(class_1199_vars->f180, moby, class_1199_vars->fC0);
-        if (target_selection_status != 2) {
+        if (target_selection_status != TARGET_SELECTION_DEFAULT_REJECTED_NO_REPLACEMENT) {
             LevelCuboid *bp = &l10_cuboids[class_1199_vars->f194];
             fast_vec_sub(vector_scratch, D_0013F3D0, &bp->pos);
             vector_scratch[3] = 0.0f;
@@ -745,7 +748,7 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
     } else {
         target_selection_status = ahead_f(class_1199_vars->f180, moby, class_1199_vars->fC0);
     }
-    if (target_selection_status != 2) {
+    if (target_selection_status != TARGET_SELECTION_DEFAULT_REJECTED_NO_REPLACEMENT) {
         if (class_1199_vars->f180 <
             vector_distance_xy(class_1199_vars->f130, class_1199_vars->fC0)) {
             class_1199_vars->f104 = 2;
