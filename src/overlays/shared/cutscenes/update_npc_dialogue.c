@@ -72,6 +72,11 @@ s32 update_npc_dialogue(struct Moby         *moby,
                         struct SceneTrigger *trigger) __asm__("FUN_L00_00266448");
 
 s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) {
+    enum {
+        MENU_CONDITION_PURCHASE_PRICE_MET = 1,
+        MENU_CONDITION_ALTERNATE_ITEM_AVAILABLE = 4,
+        MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET = 6
+    };
     struct Hero       *hero_ptr = &hero;
     struct SceneEntry *entry;
     s32                index;
@@ -121,9 +126,9 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) {
 
         entry = &trigger->entries[trigger->entry];
         if (entry->flags & 8) {
-            if (entry->cost_kind == 1)
+            if (entry->cost_kind == MENU_CONDITION_PURCHASE_PRICE_MET)
                 current_bolt_count -= D_L00_001C40B0[entry->cost_id].f0;
-            else if (entry->cost_kind == 4)
+            else if (entry->cost_kind == MENU_CONDITION_ALTERNATE_ITEM_AVAILABLE)
                 alternate_item_available[entry->cost_id] = 0;
         }
         if (entry->scene == -1) {
@@ -152,7 +157,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) {
         /* a fresh block-local pointer (not `entry`) keeps retail's registers */
         struct SceneEntry *unpaid = &trigger->entries[trigger->entry];
 
-        if (unpaid->cost_kind == 1 || unpaid->cost_kind == 6) {
+        if (unpaid->cost_kind == MENU_CONDITION_PURCHASE_PRICE_MET || unpaid->cost_kind == MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET) {
             handle = queue_animation_update(2,
                                             0x754E,
                                             initialize_bolt_counter_hud,
