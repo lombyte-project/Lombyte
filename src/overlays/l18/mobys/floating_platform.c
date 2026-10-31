@@ -229,11 +229,16 @@ typedef struct {
 int request_floating_platform_sink(Level18State *platform_moby) __asm__("FUN_L18_002d8858");
 
 int request_floating_platform_sink(Level18State *platform_moby) {
-    if (platform_moby->state == 1) {
+    enum {
+        STATE_WAIT_FOR_TILT_REQUEST = 1,
+        STATE_WAIT_FOR_SINK_REQUEST = 2,
+        STATE_SINKING = 5
+    };
+    if (platform_moby->state == STATE_WAIT_FOR_TILT_REQUEST) {
         return 1;
     }
-    if (platform_moby->state == 2) {
-        platform_moby->state = 5;
+    if (platform_moby->state == STATE_WAIT_FOR_SINK_REQUEST) {
+        platform_moby->state = STATE_SINKING;
     }
     return 0;
 }
