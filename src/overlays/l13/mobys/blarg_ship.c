@@ -73,13 +73,13 @@ void blarg_ship_update(struct Moby *moby) {
     resolve_moby_hit_response(moby, hit, blarg_ship_vars + 0x20, 0, hit_buffer, 0, 0, 4);
     switch (moby->state) {
     case BLARG_SHIP_ENTER_DAMAGE_HANDLING:
-        moby->state = 1;
+        moby->state = BLARG_SHIP_HANDLE_DAMAGE;
         break;
     case BLARG_SHIP_HANDLE_DAMAGE:
         if (hit != 0) {
             float cost = *(float *)((char *)hit + 0x2c);
             if (*(float *)(blarg_ship_vars + 0x20) < cost) {
-                moby->state = 2;
+                moby->state = BLARG_SHIP_EXPLODE;
             } else {
                 ((unsigned char *)blarg_ship_vars)[0x67] = 0xfa;
                 *(float *)(blarg_ship_vars + 0x20) -= cost;
