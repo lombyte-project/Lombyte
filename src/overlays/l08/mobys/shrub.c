@@ -265,7 +265,7 @@ void shrub_update(struct Moby *moby) {
         moby->flags |= 0x4000;
         qcopy(&moby->pos, &shrub_control_vars->follow[1].path->points[0]);
         spawn_shrub_parts((char *)moby);
-        moby->state = 2;
+        moby->state = SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY;
         moby->rot.z =
             fast_arc_tan(shrub_control_vars->follow[1].path->points[1].f[0] - moby->pos.x,
                          shrub_control_vars->follow[1].path->points[1].f[1] - moby->pos.y);
@@ -375,7 +375,7 @@ void shrub_update(struct Moby *moby) {
     case SHRUB_BEGIN_PRIMARY_PATH: {
         LevelPath *path;
 
-        moby->state = 1;
+        moby->state = SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET;
         path = shrub_control_vars->follow[0].path;
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z =
