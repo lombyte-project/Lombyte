@@ -16,7 +16,7 @@ void save_card_state_saving(void) __asm__("FUN_00208f28");
 void save_card_state_saving(void) {
     s32 flags;
 
-    if ((memory_card_state.state < 3) && (memory_card_state.pending_state < 0)) {
+    if ((memory_card_state.state < MEMCARD_REQUEST_FORMAT) && (memory_card_state.pending_state < MEMCARD_QUERY_INFO)) {
         if (memory_card_state.err != 0) {
             mode_freeze_init(3, 0);
             mode_freeze_state = 0x15;
