@@ -166,7 +166,7 @@ void helga_update(struct Moby *helga_moby) {
             }
         }
         helga_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
-        helga_moby->state = 1;
+        helga_moby->state = HELGA_UPDATE_DIALOGUE;
         talk->script = helga_dialogue_script;
         helga_vars->talk.unk48 = 5;
         initialize_npc_dialogue(helga_moby, talk);
@@ -175,7 +175,7 @@ void helga_update(struct Moby *helga_moby) {
     case HELGA_UPDATE_DIALOGUE:
         if (update_npc_dialogue(helga_moby, talk)) {
             begin_dialogue_camera_transition(helga_moby, 2.3f);
-            helga_moby->state = 2;
+            helga_moby->state = HELGA_RESOLVE_DIALOGUE;
             if (helga_vars->link != -1) {
                 helper_moby = (struct Moby *)((helga_vars->link << 8) + (s32)D_L03_0015FFD8);
                 if (helper_moby->oclass == 0x3F4) {
@@ -205,7 +205,7 @@ void helga_update(struct Moby *helga_moby) {
                                      &l03_cuboids[helga_vars->talk.warp].rot);
                 }
             }
-            helga_moby->state = 1;
+            helga_moby->state = HELGA_UPDATE_DIALOGUE;
             if (helga_vars->talk.mode == 2) {
                 grant_inventory_item(0xC, 1);
                 queue_dialogue_message(0xBC8, -1);
