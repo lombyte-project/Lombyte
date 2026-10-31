@@ -581,6 +581,10 @@ void update_falling_asteroid(Moby *falling_rock) {
 
 /* Moby classes 263-267 */
 void asteroid_update(struct Moby *asteroid_moby) {
+    enum {
+        ASTEROID_MODE_FALLING = 1,
+        ASTEROID_MODE_FADING_DEBRIS = 2
+    };
     Data_2ECC50 *moby_vars = (*(Data_2ECC50 **)&asteroid_moby->pvars);
     Path        *path;
     float        displacement_vector[4];
@@ -589,11 +593,11 @@ void asteroid_update(struct Moby *asteroid_moby) {
     float        dot;
     int          i;
 
-    if (moby_vars->mode == 2) {
+    if (moby_vars->mode == ASTEROID_MODE_FADING_DEBRIS) {
         update_fading_asteroid_debris((unsigned char *)asteroid_moby);
         return;
     }
-    if (moby_vars->mode == 1) {
+    if (moby_vars->mode == ASTEROID_MODE_FALLING) {
         update_falling_asteroid((void *)asteroid_moby);
         return;
     }
