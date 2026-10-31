@@ -31,16 +31,23 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int process_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L12_002e16b8");
 
 int process_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) {
+    enum {
+        ANKLEBITER_IDLE = 1,
+        ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
+        ANKLEBITER_DORMANT = 9,
+        ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 11,
+        ANKLEBITER_ACTIVATE_FROM_DORMANCY = 13
+    };
     int active;
-    if (moby->state == 9 || moby->state == 11 || moby->state == 13)
+    if (moby->state == ANKLEBITER_DORMANT || moby->state == ANKLEBITER_WAIT_FOR_LEAP_TRIGGER || moby->state == ANKLEBITER_ACTIVATE_FROM_DORMANCY)
         return 0;
     active = process_moby_suck_cannon_suction(moby);
     if (active) {
         if (moby->group != 0xFF)
             FUN_L01_0026e090(moby->group, 1);
-        moby->state = 8;
-    } else if (moby->state == 8) {
-        moby->state = 1;
+        moby->state = ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME;
+    } else if (moby->state == ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME) {
+        moby->state = ANKLEBITER_IDLE;
     }
     return active;
 }
