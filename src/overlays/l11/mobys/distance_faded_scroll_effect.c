@@ -6044,7 +6044,7 @@ void distance_faded_effect_update(struct Moby *moby) {
                               1);
             distance_faded_effect_color_tables_initialized_gp = 1;
         }
-        moby->state = 1;
+        moby->state = EFFECT_UPDATE_AND_QUEUE_DRAW;
         for (i = 0; i < 3; i++) {
             l11_distance_faded_effect_uv_offsets[i].a = 0;
             l11_distance_faded_effect_uv_offsets[i].b = 0;
