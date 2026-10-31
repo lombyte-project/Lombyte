@@ -418,6 +418,9 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
 int camera_transition_update(u8 *, char *) __asm__("FUN_L00_002ea488");
 
 int camera_transition_update(u8 *transition_camera_record, char *mode_check_object) {
+    enum {
+        CAMERA_REQUEST_BYPASS_MODE_MATCH = 0x51
+    };
     Q_2ea488 *q;
     char     *active_transition_camera_record;
     char     *r;
@@ -434,7 +437,7 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
     g = &P;
     requested_camera_mode = g->i2284;
     if (requested_camera_mode == *(s16 *)(transition_camera_record + 0x86) ||
-        requested_camera_mode == 0x51) {
+        requested_camera_mode == CAMERA_REQUEST_BYPASS_MODE_MATCH) {
         active_transition_camera_record = D_L00_00166E00_lui;
         checked_object_mode = *(s16 *)(mode_check_object + 0x86);
         if (checked_object_mode != 0 && checked_object_mode != 10 && checked_object_mode != 14 &&
