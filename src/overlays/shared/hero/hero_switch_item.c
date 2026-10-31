@@ -3516,7 +3516,7 @@ void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
 void correct_hero_ground_penetration(void) {
     struct Hero *globals = &hero;
     float        ground_position_correction[4];
-    if (globals->gravity_mode != 0) {
+    if (globals->gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
         float velocity_dot = fast_vec_dot(&globals->motion.velocity, &globals->ground_normal);
         float ground_dist;
         float ground_correction_length;
