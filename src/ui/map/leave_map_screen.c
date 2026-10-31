@@ -8,14 +8,17 @@ extern void request_audio_stream_break() __asm__("FUN_002166e8");
 s32 leave_map_screen(void) __asm__("FUN_0021bda0");
 
 s32 leave_map_screen(void) {
-    if (music_stream_state.read_state == 0) {
+    enum {
+        MUSIC_STREAM_READ_INACTIVE = 0
+    };
+    if (music_stream_state.read_state == MUSIC_STREAM_READ_INACTIVE) {
         if (level_map_selection.sel != -1) {
             menu_system.pending_buffer = 0;
             level_map_selection.slot_id[level_map_selection.sel] ^= 0x1000;
             level_map_selection.sel = -1;
         }
     }
-    if (music_stream_state.read_state != 0) {
+    if (music_stream_state.read_state != MUSIC_STREAM_READ_INACTIVE) {
         if (menu_system.pending_buffer != 0) {
             request_audio_stream_break();
             menu_system.pending_buffer = 0;
