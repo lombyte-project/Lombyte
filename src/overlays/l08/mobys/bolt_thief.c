@@ -109,6 +109,10 @@ void bolt_thief_update(struct Moby *moby) {
         BOLT_THIEF_FACE_HERO = 7,
         BOLT_THIEF_KNOCKBACK = 8
     };
+    enum {
+        BOLT_PICKUP_CONTROLLED_BY_THIEF = 3,
+        BOLT_PICKUP_COLLECTION_TRIGGERED = 4
+    };
     Vec4           point;
     Vec4           step;
     BoltThiefVars *bolt_thief_instance_vars;
@@ -127,7 +131,7 @@ void bolt_thief_update(struct Moby *moby) {
         for (i = 0; i < 0x32; i++) {
             struct Moby *other = bolt_thief_instance_vars->list[i];
 
-            if (other != 0 && other->state == 3) {
+            if (other != 0 && other->state == BOLT_PICKUP_CONTROLLED_BY_THIEF) {
                 other->state = 1;
             }
         }
@@ -222,7 +226,7 @@ void bolt_thief_update(struct Moby *moby) {
                 struct Moby *other = bolt_thief_instance_vars->list[i];
 
                 if (other != 0 && (signed char)other->state >= 0) {
-                    other->state = 3;
+                    other->state = BOLT_PICKUP_CONTROLLED_BY_THIEF;
                 }
             }
             moby->state = BOLT_THIEF_PULL_PICKUPS_TO_JOINT;
@@ -247,7 +251,7 @@ void bolt_thief_update(struct Moby *moby) {
                 FUN_L00_0025f730(&point, D_0015ED6C * 4.0f);
                 fast_vec_add(&other->pos, &other->pos, &point);
                 if (fast_vec_length(&point) < 2.0f * D_0015ED6C) {
-                    other->state = 4;
+                    other->state = BOLT_PICKUP_COLLECTION_TRIGGERED;
                     bolt_thief_instance_vars->list[i] = 0;
                     bolt_thief_instance_vars->w22C++;
                 }
