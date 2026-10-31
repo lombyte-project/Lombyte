@@ -453,9 +453,9 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
 }
 
 void draw_target_beam(struct Moby *moby) {
-    ScoutbotVars   *data = (ScoutbotVars *)moby->pvars;
+    ScoutbotVars   *scoutbot_private_vars = (ScoutbotVars *)moby->pvars;
     Packet_002d3878 pk;
-    Vec_002d3878    matrix[3], direction, pos, delta, angles;
+    Vec_002d3878    matrix[3], direction, beam_origin_position, delta, angles;
     float           length;
     u64             tag;
     Vec_002d3878   *points;
@@ -464,10 +464,10 @@ void draw_target_beam(struct Moby *moby) {
     float          *vertex;
     int             i;
     tag = get_effect_texture(14);
-    pk.color[0] = D_00151878_gp;
-    pk.color[1] = D_0015187C_gp;
-    pk.color[2] = D_00151880_gp;
-    pk.color[3] = D_00151884_gp;
+    pk.color[0] = scoutbot_target_beam_vertex_0_color;
+    pk.color[1] = scoutbot_target_beam_vertex_1_color;
+    pk.color[2] = scoutbot_target_beam_vertex_2_color;
+    pk.color[3] = scoutbot_target_beam_vertex_3_color;
     pk.tag[1] = tag;
     pk.tag[2] = 0xff9000000260ULL;
     pk.tag[0] = 5;
@@ -480,17 +480,17 @@ void draw_target_beam(struct Moby *moby) {
     pk.uv[5] = 1.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    moby_point_position(moby, 2, &pos);
-    fast_vec_sub(&delta, data->unk218 + 0x10, &pos);
+    moby_point_position(moby, 2, &beam_origin_position);
+    fast_vec_sub(&delta, data->unk218 + 0x10, &beam_origin_position);
     scale_vector_002d3878(3.0f, &delta);
-    delta.v[2] = (*(float *)(data->unk218 + 0x18) + 0.25f) - pos.v[2];
+    delta.v[2] = (*(float *)(data->unk218 + 0x18) + 0.25f) - beam_origin_position.v[2];
     delta.v[3] = 1.0f;
     length = fast_vec_length(&delta);
     clear_u64_value(&angles);
     angles.v[1] = -fast_arc_tan(vector_length_xy(&delta), delta.v[2]);
     angles.v[2] = fast_arc_tan(delta.v[0], delta.v[1]);
     euler_rotation_matrix(matrix, &angles);
-    qcopy(&direction, &pos);
+    qcopy(&direction, &beam_origin_position);
     direction.v[3] = 1.0f;
 
     clear_u64_value(&pk.vertices[0]);
