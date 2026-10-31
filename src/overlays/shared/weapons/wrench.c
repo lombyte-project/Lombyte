@@ -631,10 +631,13 @@ void wrench_update(WrenchMoby *wrench_moby) {
     enum {
         HERO_WRENCH_STATUS_THROWN = 2
     };
+    enum {
+        HERO_WRENCH_STATUS_NONE = 0
+    };
     WrenchVars   *wrench_vars = wrench_moby->data;
     WrenchScratch wrench_collision_scratch;
     WrenchHero   *player = wrench_hero();
-    player->wrench_state = 0;
+    player->wrench_state = HERO_WRENCH_STATUS_NONE;
     if (player->mode == 3)
         return;
     switch (wrench_moby->state) {
