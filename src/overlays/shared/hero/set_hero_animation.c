@@ -920,8 +920,8 @@ int resolve_hero_gravity_mode(void) {
     int          state = hero_gravity_mode_state->state.current;
     int          return_value = hero_gravity_mode_state->unk308;
 
-    if (state == 0x3F || state == 0x71 || state == 0x70 ||
-        (hero_gravity_mode_state->on_magnet_ground != 0 && D_0013D4DC[0] != 0 && state == 0 &&
+    if (state == HERO_STATE_DIRECTION_LIMITED_GROUND_MOVE || state == HERO_STATE_ANIMATION_FRAME_EXIT_WAIT || state == HERO_STATE_ATTACK_RECORD_FRAME_EXIT_WAIT ||
+        (hero_gravity_mode_state->on_magnet_ground != 0 && D_0013D4DC[0] != 0 && state == HERO_STATE_IDLE &&
          hero_gravity_mode_state->air_frames.s < scale_game_frames(4))) {
         return_value = 1;
     }
