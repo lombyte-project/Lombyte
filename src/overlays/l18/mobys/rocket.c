@@ -291,7 +291,7 @@ void spawn_rocket_explosion(void *moby_object, void *movement_step) {
                           -1,
                           0);
     if (hit_radius != 0.0f) {
-        if (hero.vehicle_mode == 2) {
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
             play_entity_sound(
                 (int)moby, 2.0f, moby + 0x10, 2, rocket_explosion_hit_priority_gp, 1.0f, 0, 1, 0);
         }
