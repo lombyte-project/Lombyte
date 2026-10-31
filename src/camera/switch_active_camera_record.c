@@ -50,6 +50,16 @@ void switch_active_camera_record(struct UpdateCam *next_camera) __asm__("FUN_001
 extern CameraDescriptor *D_0015EF90;
 
 void switch_active_camera_record(struct UpdateCam *next_camera) {
+    enum {
+        CAMERA_TRANSITION_RATE_BASED = 0,
+        CAMERA_HANDOFF_NONE = 0,
+        CAMERA_DESCRIPTOR_RATE_TRANSITION = 1,
+        CAMERA_HANDOFF_INHERITED_TRANSFORM = 2,
+        CAMERA_TRANSITION_FRAME_COUNT_BASED = 2,
+        CAMERA_DESCRIPTOR_INHERIT_TRANSFORM = 3,
+        CAMERA_DESCRIPTOR_FRAME_COUNT_TRANSITION = 5,
+        CAMERA_DESCRIPTOR_INHERIT_TRANSFORM_WITH_RATE_TRANSITION = 6
+    };
     struct UpdateCam     *previous_camera;
     CameraDescriptorInfo *descriptor;
     f32                   transition_duration;
@@ -68,10 +78,10 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     }
     if (previous_transition_state == 4) {
         next_camera->activation_blocked = 1;
-    } else if (previous_transition_state == 2 || descriptor_kind == 1 || descriptor_kind == 5) {
-        if (descriptor_kind == 1) {
+    } else if (previous_transition_state == 2 || descriptor_kind == CAMERA_DESCRIPTOR_RATE_TRANSITION || descriptor_kind == CAMERA_DESCRIPTOR_FRAME_COUNT_TRANSITION) {
+        if (descriptor_kind == CAMERA_DESCRIPTOR_RATE_TRANSITION) {
             mode_one_duration = next_camera->transition_duration;
-            preview_camera.transition_mode = 0;
+            preview_camera.transition_mode = CAMERA_TRANSITION_RATE_BASED;
             if (mode_one_duration > 0.0f) {
                 preview_camera.configured_position_rate = mode_one_duration;
                 preview_camera.configured_rotation_rate = mode_one_duration;
@@ -79,9 +89,9 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
                 preview_camera.configured_position_rate = 0.018f;
                 preview_camera.configured_rotation_rate = 0.018f;
             }
-        } else if (descriptor_kind == 5) {
+        } else if (descriptor_kind == CAMERA_DESCRIPTOR_FRAME_COUNT_TRANSITION) {
             transition_duration = next_camera->transition_duration;
-            preview_camera.transition_mode = 2;
+            preview_camera.transition_mode = CAMERA_TRANSITION_FRAME_COUNT_BASED;
             if (transition_duration > 0.0f) {
                 preview_camera.configured_frames = truncate_float_to_s32(transition_duration);
             } else {
@@ -94,15 +104,15 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
             preview_camera.transition_phase = 2;
         }
     } else if (previous_transition_state == 3 || previous_transition_state == 5 ||
-               descriptor_kind == 3 || descriptor_kind == 6) {
+               descriptor_kind == CAMERA_DESCRIPTOR_INHERIT_TRANSFORM || descriptor_kind == CAMERA_DESCRIPTOR_INHERIT_TRANSFORM_WITH_RATE_TRANSITION) {
         qcopy(&next_camera->pos, &previous_camera->pos);
         qcopy(&next_camera->m0, &previous_camera->m0);
         qcopy(&next_camera->m1, &previous_camera->m1);
         qcopy(&next_camera->m2, &previous_camera->m2);
-        next_camera->handoff_state = 2;
-        if (previous_camera->transition_state == 5 || descriptor_kind == 6) {
+        next_camera->handoff_state = CAMERA_HANDOFF_INHERITED_TRANSFORM;
+        if (previous_camera->transition_state == 5 || descriptor_kind == CAMERA_DESCRIPTOR_INHERIT_TRANSFORM_WITH_RATE_TRANSITION) {
             handoff_duration = next_camera->transition_duration;
-            preview_camera.transition_mode = 0;
+            preview_camera.transition_mode = CAMERA_TRANSITION_RATE_BASED;
             if (handoff_duration > 0.0f) {
                 preview_camera.configured_position_rate = handoff_duration;
                 preview_camera.configured_rotation_rate = handoff_duration;
@@ -126,7 +136,7 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
 
     position = &next_camera->pos;
     previous_camera->transition_state = 0;
-    previous_camera->handoff_state = 0;
+    previous_camera->handoff_state = CAMERA_HANDOFF_NONE;
     previous_camera->activation_blocked = 0;
     preview_camera.previous = previous_camera;
     fast_mem_copy(&camera_saved_states[1], &camera_saved_states[0], 0x280);
