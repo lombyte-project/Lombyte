@@ -864,6 +864,9 @@ void handle_blarg_helicopter_hits(char *helicopter_moby) {
         BLARG_HELICOPTER_TIMED_REACTION = 4,
         BLARG_HELICOPTER_DESTROY = 5
     };
+    enum {
+        HIT_REACTION_SKIP_DAMAGE = 1
+    };
     int   hit_reaction_status;
     float fv;
     int   hit_reaction_result;
@@ -876,7 +879,7 @@ void handle_blarg_helicopter_hits(char *helicopter_moby) {
     hit_record = find_moby_hit(helicopter_moby, 0x330000, 0);
     hit_reaction_result = hit_reaction(
         helicopter_moby, hit_record, helicopter_data + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
-    if (hit_reaction_status != 1 && MOBY(helicopter_moby)->state != BLARG_HELICOPTER_DESTROY) {
+    if (hit_reaction_status != HIT_REACTION_SKIP_DAMAGE && MOBY(helicopter_moby)->state != BLARG_HELICOPTER_DESTROY) {
         float remaining_health = *(float *)(helicopter_data + 0x20) - fv;
         *(float *)(helicopter_data + 0x20) = remaining_health;
         if (hit_reaction_result == 1 || remaining_health <= 0.0f) {
