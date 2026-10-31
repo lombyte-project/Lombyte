@@ -2843,6 +2843,12 @@ extern float compute_hero_ground_aligned_heading(void) __asm__("FUN_L00_002332d0
 void stick_target(float scale, int mode) __asm__("FUN_L00_002118c8");
 
 void stick_target(float scale, int mode) {
+    enum {
+        STICK_TARGET_MODE_CARDINAL_AXIS_FILTER = 1,
+        STICK_TARGET_MODE_FOUR_WAY_YAW = 2,
+        STICK_TARGET_MODE_EIGHT_WAY_YAW = 3,
+        STICK_TARGET_MODE_HERO_RELATIVE_YAW = 4
+    };
     V_2118c8 stick_vector;
     V_2118c8 q;
     float    x;
@@ -2851,7 +2857,7 @@ void stick_target(float scale, int mode) {
 
     stick_vector.f[1] = hero.stick_y;
     stick_vector.f[0] = hero.stick_x;
-    if (mode == 1) {
+    if (mode == STICK_TARGET_MODE_CARDINAL_AXIS_FILTER) {
         if (absolute_float(stick_vector.f[1]) > 0.7f && absolute_float(stick_vector.f[0]) < 0.12f) {
             stick_vector.f[0] = 0.0f;
         }
@@ -2876,21 +2882,21 @@ void stick_target(float scale, int mode) {
         return;
     }
     hero.motion.move_yaw = fast_arc_tan(-stick_vector.f[1], -stick_vector.f[0]);
-    if (mode == 2) {
+    if (mode == STICK_TARGET_MODE_FOUR_WAY_YAW) {
         hero.motion.move_yaw =
             convert_integer_to_float(
                 truncate_float_to_s32((hero.motion.move_yaw + 3.1415927f) * 0.63662f + 0.5f) & 3) *
                 1.5707964f -
             3.1415927f;
     }
-    if (mode == 3) {
+    if (mode == STICK_TARGET_MODE_EIGHT_WAY_YAW) {
         hero.motion.move_yaw =
             convert_integer_to_float(
                 truncate_float_to_s32((hero.motion.move_yaw + 3.1415927f) * 1.27324f + 0.5f) & 7) *
                 0.785398f -
             3.1415927f;
     }
-    if (mode == 4) {
+    if (mode == STICK_TARGET_MODE_HERO_RELATIVE_YAW) {
         hero.motion.move_yaw = fast_add_rotations(hero.motion.move_yaw, hero.motion.rot.f[2]);
     } else {
         hero.motion.move_yaw = fast_add_rotations(hero.motion.move_yaw, D_L00_00166DD8_lui);
