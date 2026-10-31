@@ -54,7 +54,7 @@ void grind_rail_junction_update(struct Moby *moby) {
 
     switch (moby->state) {
     case STATE_INITIALIZE_PATH_PAIRS:
-        moby->state = 1;
+        moby->state = STATE_SELECT_NEARER_PATH;
         moby->update_dist = 0xFF;
         pair_or_node_index = 0;
         do {
