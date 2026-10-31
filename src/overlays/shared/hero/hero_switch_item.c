@@ -3652,6 +3652,9 @@ extern s32  FUN_L00_001f3170(void *, f32);
 s32         resolve_hero_current_position_collisions(s32 mode) __asm__("FUN_L00_002133a8");
 
 s32 resolve_hero_current_position_collisions(s32 mode) {
+    enum {
+        HERO_COLLISION_HISTORY_FINAL_ATTEMPT_INDEX = 0xF
+    };
     V_2133a8     pre_collision_position;
     V_2133a8     collision_probe_offset;
     V_2133a8     collision_correction;
@@ -3669,8 +3672,8 @@ s32 resolve_hero_current_position_collisions(s32 mode) {
         hero.path_constrain_pending = 0;
     }
     if (hero.state.control_mode != 0x11) {
-        if (hero.gravity_mode != 0 || hero.unk1F8 != 0) {
-            if (hero.gravity_mode == 1 || hero.unk1F8 != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN || hero.unk1F8 != 0) {
+            if (hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL || hero.unk1F8 != 0) {
                 FUN_L00_00233810(&collision_probe_offset, &collision_probe_offset, 0.6f);
             } else {
                 FUN_L00_002334d0(
@@ -3686,7 +3689,7 @@ s32 resolve_hero_current_position_collisions(s32 mode) {
         mask = 0xD24;
     }
     for (i = 0; i < 8; i++) {
-        if (hero.gravity_mode != 0) {
+        if (hero.gravity_mode != HERO_GRAVITY_WORLD_DOWN) {
             if (!coll_sphere(&hero.motion.pos.q, mask, ((s32)hero.moby), frame_scale * 0.4f))
                 break;
         } else if (hero.state.control_mode == 0x11) {
@@ -3721,7 +3724,7 @@ s32 resolve_hero_current_position_collisions(s32 mode) {
     fast_vec_sub(&collision_correction, &hero.motion.pos.q, &pre_collision_position);
     probe_height_or_correction_length = fast_vec_length(&collision_correction);
     if (hero.capsule_radius * 1.5f < probe_height_or_correction_length) {
-        if (mode == 0xF) {
+        if (mode == HERO_COLLISION_HISTORY_FINAL_ATTEMPT_INDEX) {
             if (512.0f < collision_correction.f[0])
                 collision_correction.f[0] = 512.0f;
             else if (collision_correction.f[0] < -512.0f)
