@@ -52,17 +52,17 @@ void underwater_door_update(struct Moby *moby) {
     case DOOR_INITIALIZE:
         door_motion_data->origin.q = *(u128 *)&moby->pos;
         if (door_motion_data->trigger != 0) {
-            moby->state = 1;
+            moby->state = DOOR_WAIT_FOR_TRIGGER;
             return;
         }
-        moby->state = 4;
+        moby->state = DOOR_WAIT_FOR_START_VOLUME_ENTRY;
         return;
     case DOOR_WAIT_FOR_TRIGGER:
         if (((struct Moby *)((int)l15_moby_array + door_motion_data->trigger * 0x100))->state != 4)
             return;
         if (reversed)
             allocate_voice_for_target_entry(0, 0, (int)moby);
-        moby->state = 2;
+        moby->state = DOOR_MOVE_AWAY_FROM_ORIGIN;
         break;
     case DOOR_MOVE_AWAY_FROM_ORIGIN: {
         union {
@@ -91,7 +91,7 @@ void underwater_door_update(struct Moby *moby) {
             moby->state = 3;
             return;
         }
-        moby->state = 5;
+        moby->state = DOOR_WAIT_FOR_STOP_VOLUME_EXIT;
         return;
     }
     case DOOR_WAIT_FOR_START_VOLUME_ENTRY:
@@ -100,14 +100,14 @@ void underwater_door_update(struct Moby *moby) {
             return;
         if (reversed)
             allocate_voice_for_target_entry(0, 0, (int)moby);
-        moby->state = 2;
+        moby->state = DOOR_MOVE_AWAY_FROM_ORIGIN;
         break;
     case DOOR_WAIT_FOR_STOP_VOLUME_EXIT:
         if (is_point_inside_clip_volume(&hero.motion.pos, door_motion_data->stop_volume))
             return;
         if (reversed)
             allocate_voice_for_target_entry(0, 0, (int)moby);
-        moby->state = 6;
+        moby->state = DOOR_RETURN_TO_ORIGIN;
         break;
     case DOOR_RETURN_TO_ORIGIN: {
         f32 old_travel;
@@ -133,7 +133,7 @@ void underwater_door_update(struct Moby *moby) {
         *(u128 *)&moby->pos = updated_door_position.q;
         if (door_motion_data->travel != 0.0f)
             return;
-        moby->state = 4;
+        moby->state = DOOR_WAIT_FOR_START_VOLUME_ENTRY;
         break;
     }
     }
