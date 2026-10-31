@@ -3,9 +3,9 @@
 
 void vo_buf_reset(struct VoBuf *buf) __asm__("func_0023D1E8");
 
-void vo_buf_reset(struct VoBuf *buf) {
-    buf->count = 0;
-    buf->write = 0;
+void vo_buf_reset(struct VoBuf *video_output_buffer) {
+    video_output_buffer->count = 0;
+    video_output_buffer->write = 0;
 }
 
 /* Recovered original symbol name. */
