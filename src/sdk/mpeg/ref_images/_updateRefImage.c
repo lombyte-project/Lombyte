@@ -75,6 +75,12 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
         MPEG_PICTURE_STRUCTURE_BOTTOM_FIELD = 2,
         MPEG_PICTURE_STRUCTURE_FRAME = 3
     };
+    enum {
+        MPEG_REFERENCE_STATUS_NOT_READY = 0,
+        MPEG_REFERENCE_STATUS_READY = 1,
+        MPEG_PICTURE_CODING_TYPE_P = 2,
+        MPEG_PICTURE_CODING_TYPE_B = 3
+    };
     struct MpegReferencePicture *selected_picture;
     s32                          references_ready;
     s32                          queue_threshold;
@@ -84,7 +90,7 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
     selected_picture = NULL;
     references_ready = 0;
     queue_threshold = (state->picture_structure == 3) ? 2 : 4;
-    if (state->coding_type == 3) {
+    if (state->coding_type == MPEG_PICTURE_CODING_TYPE_B) {
         state->selected_frame = state->reordered_frame;
         state->selected_top_field = state->reordered_top_field;
         state->selected_bottom_field = state->reordered_bottom_field;
@@ -133,13 +139,13 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
         state->selected_top_field = state->previous_top_field;
         state->selected_bottom_field = state->previous_bottom_field;
         if (state->picture_structure == 3) {
-            if (state->coding_type != 2 || state->current_frame->status == 1) {
+            if (state->coding_type != MPEG_PICTURE_CODING_TYPE_P || state->current_frame->status == 1) {
                 references_ready = 1;
             }
         } else {
             predicted_field = (state->picture_structure == 1) ? state->selected_bottom_field
                                                               : state->selected_top_field;
-            if (state->coding_type != 2 || (force_reorder != 0 && predicted_field->status == 1) ||
+            if (state->coding_type != MPEG_PICTURE_CODING_TYPE_P || (force_reorder != 0 && predicted_field->status == MPEG_REFERENCE_STATUS_READY) ||
                 (state->current_top_field->status == 1 &&
                  state->current_bottom_field->status == 1)) {
                 references_ready = 1;
@@ -157,7 +163,7 @@ s32 UpdateMpegReferenceImages(struct MpegReferenceState *state, s32 force_reorde
         selected_picture = state->selected_bottom_field;
         break;
     }
-    selected_picture->status = 0;
+    selected_picture->status = MPEG_REFERENCE_STATUS_NOT_READY;
     selected_picture->presentation_timestamp = state->presentation_timestamp;
     selected_picture->coding_type = state->coding_type;
     selected_picture->decoding_timestamp = state->decoding_timestamp;
