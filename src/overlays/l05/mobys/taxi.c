@@ -72,7 +72,7 @@ void taxi_update(struct Moby *moby) {
         TAXI_FOLLOW_PATH = 4,
         TAXI_BLEND_TO_DESTINATION = 5,
         TAXI_WAIT_FOR_ACTIVATION = 6
-    };
+    } ; enum { TAXI_HIDDEN_STOP = 2};
     TaxiVars *taxi_data = (TaxiVars *)moby->pvars;
     float     old_position[4], old_rotation[4], position_delta[4],
         rotation_or_start_position_scratch[4], interpolation_end_position[4],
@@ -109,7 +109,7 @@ void taxi_update(struct Moby *moby) {
                     moby->state = TAXI_BLEND_TO_PATH_START;
                     destination_stop_moby = find_moby_in_owner_list_by_id(moby, taxi_data->unkB6);
                     if (destination_stop_moby != 0) {
-                        destination_stop_moby->state = 2;
+                        destination_stop_moby->state = TAXI_HIDDEN_STOP;
                         destination_stop_moby->flags |= 1;
                         destination_stop_moby->visible = 0;
                         destination_stop_moby->collision = 0;
