@@ -538,6 +538,9 @@ void begin_starfighter_death_sequence(struct Moby *moby,
                                       char        *starfighter_moby_data,
 
                                       int *remaining_health) {
+    enum {
+        STARFIGHTER_STATE_DEATH_FLIGHT = 7
+    };
     int          path_ids = (int)starfighter_moby_data + 0xB0;
     struct Moby *mobys;
     float        dx;
@@ -599,7 +602,7 @@ void begin_starfighter_death_sequence(struct Moby *moby,
     mobys[*(int *)(starfighter_moby_data + 0x134)].flags |= 1;
     mobys[*(int *)(starfighter_moby_data + 0x134)].visible = 0;
     activate_descriptor(*(int *)(starfighter_moby_data + 0x12C));
-    moby->state = 7;
+    moby->state = STARFIGHTER_STATE_DEATH_FLIGHT;
     *(float *)(starfighter_moby_data + 0xAC) = D_0015ED6C * 80.0f;
     *(int *)(starfighter_moby_data + 0xF8) = scale_game_frames(600);
     queue_starfighter_voice_line(moby, (unsigned char *)starfighter_moby_data, 0x22, 1);
