@@ -53,7 +53,7 @@ void qwarks_starfighter_shield_update(struct Moby *moby) {
     switch (moby->state) {
     case INITIALIZE_COLLISION:
         moby->collision = moby->pclass->collision;
-        moby->state = 1;
+        moby->state = FADE_IN;
         break;
     case FADE_IN: {
         float fade = frame_scale * 0.02f;
@@ -61,7 +61,7 @@ void qwarks_starfighter_shield_update(struct Moby *moby) {
         ((float *)moby_data)[1] += fade;
         if (((float *)moby_data)[1] >= 1.0f) {
             ((float *)moby_data)[1] = 1.0f;
-            moby->state = 2;
+            moby->state = WAIT_FOR_OWNER_REMOVAL;
         }
         moby->alpha = truncate_float_to_s32(((float *)moby_data)[1] * 60.0f);
         break;
@@ -70,7 +70,7 @@ void qwarks_starfighter_shield_update(struct Moby *moby) {
         moby->scale += (moby->pclass->scale * 4.0f - moby->scale) * 0.1f;
         if (moby_data[0] == 0 || ((unsigned char *)moby_data[0])[0x20] == 0xFE ||
             ((unsigned char *)moby_data[0])[0x20] == 0xFD) {
-            moby->state = 3;
+            moby->state = FADE_OUT;
         }
         break;
     case FADE_OUT: {
@@ -79,7 +79,7 @@ void qwarks_starfighter_shield_update(struct Moby *moby) {
         ((float *)moby_data)[1] -= fade;
         if (((float *)moby_data)[1] <= 0.0f) {
             ((float *)moby_data)[1] = 0.0f;
-            moby->state = 4;
+            moby->state = REMOVE_MOBY;
         }
         moby->alpha = truncate_float_to_s32(((float *)moby_data)[1] * 60.0f);
         break;
