@@ -362,6 +362,12 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 
 void open_vendor_menu(void *vendor_moby_arg) {
+    enum {
+        VENDOR_PURCHASE_INACTIVE = 0,
+        VENDOR_MENU_MODE_EXISTING_VENDOR = 0,
+        VENDOR_MENU_OPENING = 0,
+        VENDOR_MENU_MODE_SPAWNED_VENDOR = 1
+    };
     VendorMoby_29a6b0 *vendor_moby = vendor_moby_arg;
     s32                i;
     Vec4              *vector_destination_cursor;
@@ -384,7 +390,7 @@ void open_vendor_menu(void *vendor_moby_arg) {
         vendor_moby->rot.f[2] = 3.1415927f;
         update_entity(vendor_moby);
         vendor_moby->state = 3;
-        vendor_menu.mode = 1;
+        vendor_menu.mode = VENDOR_MENU_MODE_SPAWNED_VENDOR;
     }
     if ((vendor_menu.timer = game_language_macro - 1) < 0) {
         vendor_menu.timer = 0;
@@ -395,13 +401,13 @@ void open_vendor_menu(void *vendor_moby_arg) {
     l00_vendor_close_pending = 0;
     l00_vendor_opening_countdown_active = 0;
     l00_vendor_previous_pressed_buttons = 0;
-    vendor_menu.purchase_state = 0;
+    vendor_menu.purchase_state = VENDOR_PURCHASE_INACTIVE;
     D_L00_00161E34 = 0;
     D_L00_00161E24_29a6b0 = 0;
     snd_pause_all_sounds_in_group(0x1D);
     FUN_00216050_29a6b0(0);
     snd_flush_sound_commands();
-    build_vendor_menu_rows(vendor_menu.mode != 0);
+    build_vendor_menu_rows(vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR);
     half = vendor_menu.row_count;
     sel = half / 2;
     if (half < 3)
@@ -430,13 +436,13 @@ void open_vendor_menu(void *vendor_moby_arg) {
                                    (D_L00_001C40B0 + item)->hE);
     }
     D_L00_0015F5D8 = 1;
-    vendor_menu.state = 0;
+    vendor_menu.state = VENDOR_MENU_OPENING;
     vendor_menu.unk10 = D_L00_00173E00[2] + 0x60000;
     vendor_menu.unk14 = (struct VendorMoby *)(D_L00_00173E00[1] + 0x60000);
     vendor_menu.unk08 = 0;
     vendor_menu.vendor_moby = (struct VendorMoby *)vendor_moby;
     allocate_voice_for_target_entry(3, 0, vendor_moby);
-    if (vendor_menu.mode == 0) {
+    if (vendor_menu.mode == VENDOR_MENU_MODE_EXISTING_VENDOR) {
         fade_to_black(4);
     }
     clear_active_help_record();
@@ -447,13 +453,13 @@ void open_vendor_menu(void *vendor_moby_arg) {
     D_0013F350[0x20AC] = 1;
     D_0013F350[0x20A5] = 1;
     FUN_L00_00232fe8_29a6b0();
-    if (vendor_menu.mode != 0) {
+    if (vendor_menu.mode != VENDOR_MENU_MODE_EXISTING_VENDOR) {
         set_moby_animation(vendor_moby, 3, 0);
     } else {
         set_moby_animation(vendor_moby, 2, 0);
     }
     vendor_moby->f58 = frame_scale_macro * 0.5f;
-    if (vendor_menu.mode == 0) {
+    if (vendor_menu.mode == VENDOR_MENU_MODE_EXISTING_VENDOR) {
         transform_vector_by_basis(&vendor_menu.eye,
                                   &vendor_camera_eye_local_offset_x_gp,
                                   ((char *)vendor_menu.vendor_moby) + 0xC0);
