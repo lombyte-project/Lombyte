@@ -174,7 +174,7 @@ void       spawn_explosion(char         *m,
 extern void
 send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 unsigned char *spawn_feather_moby(int unused, void *pos, float *vel) __asm__("FUN_L00_002cbf68");
-extern int     FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
+extern int     move_moby_xy_with_collision_constraints(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
 extern void    FUN_L00_00258278(void *, float *, float, float, float, float);
 extern float   FUN_L00_00259710(void *);
 extern int     FUN_L00_002dc9f0(void *, void *);
@@ -549,7 +549,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
             ahead.y = fast_sin(chicken_moby->rot.z) * frame_time * size;
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
-            path_clear = FUN_L00_00258490(
+            path_clear = move_moby_xy_with_collision_constraints(
                 chicken_moby, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
             if (path_clear != 0 ||
                 (fast_difference_between_rotations(chicken_moby->rot.z,
@@ -566,12 +566,12 @@ void morphoray_chicken_update(Moby *chicken_moby) {
         } else if (vector_distance_xy(&chicken_moby->pos, &hero.motion.pos) < size * 5.0f &&
                    0.5235988f <
                        fast_difference_between_rotations(flee_angle, chicken_moby->rot.z)) {
-            FUN_L00_00258490(
+            move_moby_xy_with_collision_constraints(
                 chicken_moby, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
             chicken_moby->state = 2;
             blend_moby_animation(chicken_moby, 3, 0, scale_game_frames(10));
         } else {
-            FUN_L00_00258490(
+            move_moby_xy_with_collision_constraints(
                 chicken_moby, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
         }
         break;
@@ -582,7 +582,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
                          frame_time_sq * 0.7853982f,
                          frame_time_sq * 1.5707964f,
                          frame_time * 0.7853982f);
-        FUN_L00_00258490(
+        move_moby_xy_with_collision_constraints(
             chicken_moby, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
         if (fast_dec_timer_s16(&chicken_vars->flee_timer) != 0 &&
             vector_distance_xy(&chicken_moby->pos, &hero.motion.pos) < size * 5.0f) {
@@ -612,7 +612,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
                 random_int_between(scale_game_frames(0x3C), scale_game_frames(0xB4));
             blend_moby_animation(
                 chicken_moby, random_integer_below(2) == 0, 0, scale_game_frames(5));
-            FUN_L00_00258490(
+            move_moby_xy_with_collision_constraints(
                 chicken_moby, &next_pos, &next_pos, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
         } else if (vector_distance_xy(&chicken_moby->pos, &hero.motion.pos) < size * 3.0f) {
             FUN_L00_00258278(chicken_moby,
@@ -625,7 +625,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
             ahead.y = fast_sin(chicken_moby->rot.z) * (frame_time + frame_time);
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
-            path_clear = FUN_L00_00258490(
+            path_clear = move_moby_xy_with_collision_constraints(
                 chicken_moby, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
             if (path_clear == 0 &&
                 (1.5707964f < fast_difference_between_rotations(
@@ -653,7 +653,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
             ahead.y = fast_sin(chicken_moby->rot.z) * frame_time * size;
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
-            path_clear = FUN_L00_00258490(
+            path_clear = move_moby_xy_with_collision_constraints(
                 chicken_moby, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
             if (path_clear == 0 &&
                 (1.5707964f < fast_difference_between_rotations(
@@ -682,7 +682,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
             ahead.y = fast_sin(chicken_moby->rot.z) * frame_time * size;
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
-            path_clear = FUN_L00_00258490(
+            path_clear = move_moby_xy_with_collision_constraints(
                 chicken_moby, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
             if (path_clear == 0 &&
                 (1.5707964f < fast_difference_between_rotations(
@@ -710,7 +710,7 @@ void morphoray_chicken_update(Moby *chicken_moby) {
             ahead.y = fast_sin(chicken_moby->rot.z) * (frame_time + frame_time) * size;
             ahead.z = 0.0f;
             fast_vec_add(&ahead, &ahead, &next_pos);
-            path_clear = FUN_L00_00258490(
+            path_clear = move_moby_xy_with_collision_constraints(
                 chicken_moby, &next_pos, &ahead, 0, size * 0.2f, size * 0.5f, speed, 0.2617994f);
             if (path_clear == 0 &&
                 (1.5707964f < fast_difference_between_rotations(

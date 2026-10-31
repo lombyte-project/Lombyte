@@ -466,7 +466,7 @@ I4_35F0 D_L04_00161890 = {
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
+extern int move_moby_xy_with_collision_constraints(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
 extern int FUN_L00_002dc9f0(void *, void *);
 short      D_L04_00161878 = 0x101;
 extern void FUN_L01_0026d930(char *p);
@@ -981,7 +981,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             v[2] = 0.0f;
             fast_vec_add(v, v, moby->pos);
             data->f13C += -10.0f / (scale_time(15.0f) * scale_time(15.0f));
-            FUN_L00_00258490(moby, moby->pos, v, 1, 0.25f, 0.57f, 0.5f, 0.5235988f);
+            move_moby_xy_with_collision_constraints(moby, moby->pos, v, 1, 0.25f, 0.57f, 0.5f, 0.5235988f);
         }
     }
     if (moby->state == 9) {
@@ -999,7 +999,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             v[2] = 0.0f;
             fast_vec_add(v, v, moby->pos);
             qcopy(np, moby->pos);
-            FUN_L00_00258490(moby, np, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
+            move_moby_xy_with_collision_constraints(moby, np, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
             if (data->f138 == -1 ||
                 point_in_path_xy(np,
                                  ((P_35F0 *)l04_paths[data->f138])->pts,
@@ -1042,7 +1042,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 anim = 0;
             }
             qcopy(np, moby->pos);
-            moved = FUN_L00_00258490(moby, np, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
+            moved = move_moby_xy_with_collision_constraints(moby, np, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
             if (data->f138 == -1 ||
                 point_in_path_xy(np,
                                  ((P_35F0 *)l04_paths[data->f138])->pts,
@@ -1071,7 +1071,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 v[2] = 0.0f;
                 fast_vec_add(v, v, moby->pos);
                 qcopy(np, moby->pos);
-                FUN_L00_00258490(moby, np, v, 0, 0.25f, 1.25f, 0.5f, 0.5235988f);
+                move_moby_xy_with_collision_constraints(moby, np, v, 0, 0.25f, 1.25f, 0.5f, 0.5235988f);
                 if (data->f138 == -1 ||
                     point_in_path_xy(np,
                                      ((P_35F0 *)l04_paths[data->f138])->pts,
@@ -1084,7 +1084,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         V4_35F0 v;
         {
             qcopy(v, moby->pos);
-            FUN_L00_00258490(moby, moby->pos, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
+            move_moby_xy_with_collision_constraints(moby, moby->pos, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
         }
     }
     data->f78 += frame_time_sq * 9.8f;

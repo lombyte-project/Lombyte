@@ -149,7 +149,7 @@ extern void  record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void  update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void spawn_blarg_trooper_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 void        destroy_blarg_trooper(struct Moby *arg) __asm__("FUN_L04_002c4808");
-extern int  func_L00_002594C8_o(void *, void *, void *, float, float, float, float, int) __asm__("FUN_L00_00258490");
+extern int  move_moby_xy_with_collision_constraints(void *, void *, void *, float, float, float, float, int) __asm__("FUN_L00_00258490");
 
 void blarg_trooper_update(struct Moby *moby) __asm__("FUN_L04_002c4850");
 
@@ -496,7 +496,7 @@ void blarg_trooper_update(struct Moby *moby) {
             update_scratch.w.p.v70[1] = fast_sin(moby->rot.z) * (frame_time * 2.5f);
             update_scratch.w.p.v70[2] = 0.0f;
             fast_vec_add(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
-            func_L00_002594C8_o(moby, pos, update_scratch.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 0);
+            move_moby_xy_with_collision_constraints(moby, pos, update_scratch.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 0);
         }
         break;
     case BLARG_TROOPER_STATE_RUN_TO_TARGET_OR_PATH_POINT:
@@ -518,7 +518,7 @@ void blarg_trooper_update(struct Moby *moby) {
             update_scratch.w.p.v70[2] = 0.0f;
             fast_vec_add(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
             qcopy(update_scratch.w.p.v80, pos);
-            if (func_L00_002594C8_o(moby,
+            if (move_moby_xy_with_collision_constraints(moby,
                                     update_scratch.w.p.v80,
                                     update_scratch.w.p.v70,
                                     0.5f,
@@ -581,7 +581,7 @@ void blarg_trooper_update(struct Moby *moby) {
                 update_scratch.w.p.v70[1] = fast_sin(moby->rot.z) * (frame_time * 6.0f);
                 update_scratch.w.p.v70[2] = 0.0f;
                 fast_vec_add(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
-                func_L00_002594C8_o(
+                move_moby_xy_with_collision_constraints(
                     moby, pos, update_scratch.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 0);
             }
         }
@@ -743,7 +743,7 @@ void blarg_trooper_update(struct Moby *moby) {
             fast_vec_add(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
             blarg_trooper_pvars->unkF4 =
                 blarg_trooper_pvars->unkF4 + -2.0f / (scale_time(15.0f) * scale_time(15.0f));
-            func_L00_002594C8_o(moby, pos, update_scratch.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 1);
+            move_moby_xy_with_collision_constraints(moby, pos, update_scratch.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 1);
         }
         if (moby->anim_flags & 2) {
             *(unsigned short *)&blarg_trooper_pvars->path_selector ^= 1;

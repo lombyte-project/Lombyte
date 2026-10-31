@@ -248,7 +248,7 @@ extern int   FUN_L00_001fefc8(void *);
 extern int   is_point_inside_clip_volume(void *point, int volume_index) __asm__("FUN_00214720");
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int FUN_L04_00295de8_cf(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
+extern int move_moby_xy_with_collision_constraints(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
 extern int step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 extern int allocate_voice_for_target_entry(int, int, char *);
 extern int mark_moby_for_removal_cf() __asm__("FUN_L04_002ba470");
@@ -649,7 +649,7 @@ void big_axebot_update(M_B7B0 *moby) {
         vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * (frame_time * 6.0f);
         vector_quaternion_scratch[2] = 0.0f;
         fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
-        FUN_L04_00295de8_cf(
+        move_moby_xy_with_collision_constraints(
             moby, moby->pos, vector_quaternion_scratch, 1, 0.25f, 1.5f, 0.75f, 0.87266463f);
         break;
     }
@@ -896,7 +896,7 @@ void big_axebot_update(M_B7B0 *moby) {
         if (data->f420 == 0.0f) {
             data->f42C += -3.4f / (scale_time(7.0f) * scale_time(7.0f));
         }
-        FUN_L04_00295de8_cf(
+        move_moby_xy_with_collision_constraints(
             moby, moby->pos, vector_quaternion_scratch, 1, 0.25f, 1.5f, 0.75f, 0.87266463f);
     }
     data->f408 *= 0.96f;

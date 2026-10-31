@@ -192,7 +192,11 @@ extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_0025971
 extern int   FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int   FUN_L00_001f0d60_258490(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
-int FUN_L00_00258490(
+int move_moby_xy_with_collision_constraints(
+
+    void *ign, V_258490 *to, V_258490 *pos, int flags, float h, float r, float lim, float slope) __asm__("FUN_L00_00258490");
+
+int move_moby_xy_with_collision_constraints(
 
     void *ign, V_258490 *to, V_258490 *pos, int flags, float h, float r, float lim, float slope) {
     V_258490       d;

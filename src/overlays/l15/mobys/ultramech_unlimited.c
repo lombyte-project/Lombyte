@@ -213,7 +213,7 @@ extern float approach_angle(void *, float, void *, float, float, float) __asm__(
 extern float
 compute_ultramech_flocking_steering_point(void *, void *, float) __asm__("FUN_L15_002cf110");
 
-extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
+extern int move_moby_xy_with_collision_constraints(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
 
 extern int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, void *f, int n) __asm__("FUN_L00_00259d08");
 
@@ -681,7 +681,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         normalize_vector_xyz(
             &position_or_motion_vector, &position_or_motion_vector, frame_time * 6.5f);
         add_vectors(&vector_arithmetic_result, &position_or_motion_vector, &ultramech_moby->pos);
-        if (!FUN_L00_00258490(ultramech_moby,
+        if (!move_moby_xy_with_collision_constraints(ultramech_moby,
                               &vector_or_hit_descriptor,
                               &position_or_motion_vector,
                               1,

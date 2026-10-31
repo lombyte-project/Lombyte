@@ -62,7 +62,7 @@ extern int   FUN_L00_001f0d60(float, void *, int, void *);
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern int hud_counter_update(int, int, float) __asm__("FUN_L00_002371e0");
 extern int FUN_L00_00257b90(int, int);
-extern int FUN_L00_00258490(void *, void *, void *, float, float, float, float, int);
+extern int move_moby_xy_with_collision_constraints(void *, void *, void *, float, float, float, float, int) __asm__("FUN_L00_00258490");
 extern int FUN_L00_00260400(void *, void *, void *, void *, void *, void *);
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -1063,7 +1063,7 @@ void mine_update(M910 *mine_moby) {
                         fast_vec_normalize(t, t, 0.75f);
                         fast_vec_add(r, &((M910 *)hero.moby)->pos, t);
                         *(OvlQuad *)n = *(OvlQuad *)r;
-                        FUN_L00_00258490(
+                        move_moby_xy_with_collision_constraints(
                             mine_moby, &mine_moby->pos, n, 0.4f, 0.25f, 0.25f, 0.5235988f, 0);
                     }
                 } else {

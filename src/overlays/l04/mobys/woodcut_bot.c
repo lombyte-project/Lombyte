@@ -299,7 +299,7 @@ extern void *memset(void *, int, unsigned int);
 extern void  coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void  add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void  FUN_L00_00257470(void *, int, int);
-extern void  FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
+extern void  move_moby_xy_with_collision_constraints(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
 extern void  FUN_L00_0025a120(void *);
 extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
@@ -966,7 +966,7 @@ void woodcut_bot_update(WBMoby *m) {
             recoil_scratch[2] = 0.0f;
             fast_vec_add(recoil_scratch, recoil_scratch, pos);
             d->f3E4 += -2.0f / (scale_time(15.0f) * scale_time(15.0f));
-            FUN_L00_00258490(m, pos, recoil_scratch, 1, 0.25f, 1.0f, 0.75f, 0.87266463f);
+            move_moby_xy_with_collision_constraints(m, pos, recoil_scratch, 1, 0.25f, 1.0f, 0.75f, 0.87266463f);
         }
         d->f3C8 *= 0.96f;
         build_axis_rotation_quaternion(recoil_scratch, 1, d->f3C8);
