@@ -535,7 +535,7 @@ extern float extermitank_child_animation_speed_offset_scale_gp __asm__("D_L05_00
 typedef struct Hero Hero;
 
 void handle_extermitank_hits_and_sync_children(char *moby) {
-    ExtermitankVars *extermitank_hit_sync_vars = (ExtermitankVars *)MOBY(moby)->pvars;
+    enum { MOBY_HIT_RESPONSE_SKIP_DAMAGE = 1 } ;ExtermitankVars *extermitank_hit_sync_vars = (ExtermitankVars *)MOBY(moby)->pvars;
     char            *first;
     char            *second;
     char            *part0;
@@ -568,7 +568,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     hit = part0;
     resolve_moby_hit_response(
         moby, hit, &extermitank_hit_sync_vars->health, 0, &hit_processing_status, &remaining, 0, 4);
-    if (hit_processing_status == 1 || (unsigned char)MOBY(moby)->state == 3)
+    if (hit_processing_status == MOBY_HIT_RESPONSE_SKIP_DAMAGE || (unsigned char)MOBY(moby)->state == 3)
         goto mark_children;
     {
         extermitank_hit_sync_vars->health -= remaining;
