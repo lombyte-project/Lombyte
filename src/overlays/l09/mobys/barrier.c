@@ -93,6 +93,10 @@ char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class
 
 /* Moby classes 1285-1288 */
 void barrier_update(Moby *moby) {
+    enum {
+        BARRIER_STATE_UNINITIALIZED = 0,
+        BARRIER_STATE_INITIALIZED = 1
+    };
     BarrierData *barrier_vars = (*(BarrierData **)&moby->pvars);
     float        origin[4], center[4], piece_pos[4], piece_velocity[4], push[4];
     Hit_309688  *hit;
@@ -102,10 +106,10 @@ void barrier_update(Moby *moby) {
     float        angle;
     float        scale;
 
-    if (moby->state == 0) {
+    if (moby->state == BARRIER_STATE_UNINITIALIZED) {
         if (barrier_vars->idx != -1)
             ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->f43 = 0;
-        moby->state = 1;
+        moby->state = BARRIER_STATE_INITIALIZED;
     }
     if (moby->mission != 0xFF) {
         int row = current_level_index * 16;
