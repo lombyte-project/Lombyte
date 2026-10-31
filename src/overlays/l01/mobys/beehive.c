@@ -104,7 +104,7 @@ void beehive_update(SpawnerMoby *beehive_moby) {
 
     switch (beehive_moby->state) {
     case BEEHIVE_INITIALIZE:
-        beehive_moby->state = 1;
+        beehive_moby->state = BEEHIVE_TRY_SPAWN_CLONE;
         break;
     case BEEHIVE_TRY_SPAWN_CLONE:
         if (beehive_vars->src_id < 0) {
