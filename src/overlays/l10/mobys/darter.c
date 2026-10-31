@@ -156,7 +156,7 @@ void darter_update(Moby *moby) {
         moby->shadow_range = 0x17;
     }
     moby->anim_speed = 1.0f;
-    if (moby->state != 0 && moby->state != 13) {
+    if (moby->state != DARTER_STATE_INITIALIZE && moby->state != DARTER_STATE_DYING) {
         moby->pos.z = moby->pos.z - l10_darter_bob_amplitude * fast_cos(darter_vars->bob_angle);
     }
     switch (moby->state) {
@@ -175,7 +175,7 @@ void darter_update(Moby *moby) {
         darter_vars->b5A = truncate_float_to_s32(D_L10_00161E20 * 8.0f);
         switch (darter_vars->spawn_kind) {
         case DARTER_SPAWN_HOME_WANDER:
-            moby->state = 3;
+            moby->state = DARTER_STATE_WANDER;
             moby->pos.z = moby->pos.z + 2.0f;
             if (moby->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
@@ -186,7 +186,7 @@ void darter_update(Moby *moby) {
         case DARTER_SPAWN_CUBOID_PATROL:
             vector_and_collision_scratch[0] = fast_cos(random_angle_radians()) * 10.0f;
             vector_and_collision_scratch[1] = fast_sin(random_angle_radians()) * 10.0f;
-            moby->state = 9;
+            moby->state = DARTER_STATE_CUBOID_PATROL;
             vector_and_collision_scratch[2] = 0.0f;
             moby->pos.z = l10_cuboids[darter_vars->f194].pos.z;
             add_vectors(&vector_and_collision_scratch[4], &moby->pos, vector_and_collision_scratch);
@@ -208,7 +208,7 @@ void darter_update(Moby *moby) {
                                        D_0015ED70 * 18.0f,
                                        D_0015ED70 * 18.0f,
                                        frame_time * 6.0f) == 0.0f) {
-            moby->state = 3;
+            moby->state = DARTER_STATE_WANDER;
         }
         break;
     case DARTER_STATE_WANDER: {
@@ -251,7 +251,7 @@ void darter_update(Moby *moby) {
             vector_and_collision_scratch[2] = random_float_between(l10_darter_min_wander_height_offset, l10_darter_max_wander_height_offset);
             fast_vec_add(&darter_vars->goal, vector_and_collision_scratch, &darter_vars->home);
         } else if (dist < 0.1f) {
-            moby->state = 4;
+            moby->state = DARTER_STATE_WAIT_BETWEEN_WANDER_GOALS;
             darter_vars->wait =
                 scale_game_frames(truncate_float_to_s32(random_float_between(30.0f, 90.0f)));
         }
@@ -263,7 +263,7 @@ void darter_update(Moby *moby) {
             break;
         if (moby->group != 0xFF)
             FUN_L10_002e1cb0_2e01a8((unsigned char *)moby);
-        moby->state = 6;
+        moby->state = DARTER_STATE_ATTACK_WINDUP;
         if (moby->prev_seq != 1)
             blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         break;
@@ -274,7 +274,7 @@ void darter_update(Moby *moby) {
             FUN_L00_001fefc8(&moby->command) != 0) {
             if (moby->group != 0xFF)
                 FUN_L10_002e1cb0_2e01a8((unsigned char *)moby);
-            moby->state = 6;
+            moby->state = DARTER_STATE_ATTACK_WINDUP;
             if (moby->prev_seq != 1)
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             break;
@@ -289,7 +289,7 @@ void darter_update(Moby *moby) {
             vector_and_collision_scratch[2] = 0.0f;
             vector_and_collision_scratch[2] = random_float_between(l10_darter_min_wander_height_offset, l10_darter_max_wander_height_offset);
             fast_vec_add(&darter_vars->goal, vector_and_collision_scratch, &darter_vars->home);
-            moby->state = 3;
+            moby->state = DARTER_STATE_WANDER;
         }
         break;
     case DARTER_STATE_ATTACK_WINDUP:
@@ -301,7 +301,7 @@ void darter_update(Moby *moby) {
                    frame_time * 6.2831855f);
         if ((moby->anim_flags & 2) == 0)
             break;
-        moby->state = 7;
+        moby->state = DARTER_STATE_DIVE_TOWARD_TARGET;
         if (moby->prev_seq != 3)
             blend_moby_animation(moby, 3, 0, scale_game_frames(10));
         if (random_integer_below(0xFF) & 1) {
@@ -343,7 +343,7 @@ void darter_update(Moby *moby) {
             if (absolute_float(moby->pos.z - ((Hero_2e01a8 *)((char *)&hero))->motion.pos.f[2]) <
                 2.0f) {
                 allocate_voice_for_target_entry(0, 0, moby);
-                moby->state = 8;
+                moby->state = DARTER_STATE_DIVE_ATTACK;
                 clear_u64_value(&darter_vars->velocity);
                 if (moby->prev_seq != 2)
                     blend_moby_animation(moby, 2, 4, scale_game_frames(5));
@@ -354,7 +354,7 @@ void darter_update(Moby *moby) {
         }
         if (moby->prev_seq != 3)
             blend_moby_animation(moby, 3, 0, scale_game_frames(0x14));
-        moby->state = 5;
+        moby->state = DARTER_STATE_RETURN_HOME;
         break;
     }
     case DARTER_STATE_DIVE_ATTACK:
@@ -390,7 +390,7 @@ void darter_update(Moby *moby) {
             break;
         if (moby->prev_seq != 3)
             blend_moby_animation(moby, 3, 0, scale_game_frames(0x14));
-        moby->state = 5;
+        moby->state = DARTER_STATE_RETURN_HOME;
         break;
     case DARTER_STATE_RETURN_HOME: {
         float zero = 0.0f;
@@ -414,7 +414,7 @@ void darter_update(Moby *moby) {
         darter_vars->velocity.z = climb;
         func_L00_00259B08_2E0630(moby, &darter_vars->velocity, 0.5f, 0x200, 0.0f, 0);
         if (vector_distance_xy(&moby->pos, &darter_vars->home) < 2.0f)
-            moby->state = 3;
+            moby->state = DARTER_STATE_WANDER;
         break;
     }
     case DARTER_STATE_CUBOID_PATROL: {
@@ -450,7 +450,7 @@ void darter_update(Moby *moby) {
             break;
         if (moby->group != 0xFF)
             FUN_L10_002e1cb0_2e01a8((unsigned char *)moby);
-        moby->state = 10;
+        moby->state = DARTER_STATE_CUBOID_APPROACH_TARGET;
         if (moby->prev_seq != 3)
             blend_moby_animation(moby, 3, 0, scale_game_frames(10));
         break;
@@ -480,14 +480,14 @@ void darter_update(Moby *moby) {
         if (dist < l10_darter_attack_distance &&
             absolute_float(l10_cuboids[darter_vars->f194].pos.z - moby->pos.z) < 1.0f) {
             allocate_voice_for_target_entry(0, 0, moby);
-            moby->state = 11;
+            moby->state = DARTER_STATE_CUBOID_CHARGE_ATTACK;
             if (moby->prev_seq != 2)
                 blend_moby_animation(moby, 2, 0, scale_game_frames(2));
             break;
         }
         if (darter_vars->f104 != 2)
             break;
-        moby->state = 9;
+        moby->state = DARTER_STATE_CUBOID_PATROL;
         darter_vars->height_offset = random_float_between(0.0f, l10_darter_max_height_offset);
         darter_vars->height_timer = truncate_float_to_s32(scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
                                                    random_float_between(0.75f, 1.25f));
@@ -527,14 +527,14 @@ void darter_update(Moby *moby) {
         coll_sphere_mobys(0.2f, vector_and_collision_scratch, 0, moby, &vector_and_collision_scratch[4]);
         if (fast_vec_dist(&moby->pos, &target->pos) < one ||
             *(int *)(((char *)&hero) + 0x208C) == 7 || (moby->anim_flags & 2)) {
-            moby->state = 12;
+            moby->state = DARTER_STATE_CUBOID_RETURN_HOME;
             if (moby->prev_seq != 3)
                 blend_moby_animation(moby, 3, 0, scale_game_frames(2));
             break;
         }
         if (darter_vars->f104 != 2)
             break;
-        moby->state = 9;
+        moby->state = DARTER_STATE_CUBOID_PATROL;
         darter_vars->height_offset = random_float_between(zero, l10_darter_max_height_offset);
         darter_vars->height_timer = truncate_float_to_s32(scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
                                                    random_float_between(0.75f, 1.25f));
@@ -560,7 +560,7 @@ void darter_update(Moby *moby) {
         darter_vars->velocity.z = climb;
         add_vectors(vector_and_collision_scratch, &moby->pos, &darter_vars->velocity);
         if (vector_distance_xy(&moby->pos, &darter_vars->home) < 2.0f) {
-            moby->state = 9;
+            moby->state = DARTER_STATE_CUBOID_PATROL;
             moby->command = scale_game_frames(0x78);
             darter_vars->height_offset = random_float_between(0.0f, l10_darter_max_height_offset);
             darter_vars->height_timer = truncate_float_to_s32(scale_time(l10_darter_height_change_interval_seconds * 60.0f) *
@@ -576,7 +576,7 @@ void darter_update(Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (moby->state != 0 && moby->state != 13) {
+    if (moby->state != DARTER_STATE_INITIALIZE && moby->state != DARTER_STATE_DYING) {
         darter_vars->bob_angle = fast_add_rotations(
             darter_vars->bob_angle,
             360.0f / (float)truncate_float_to_s32(scale_time(l10_darter_bob_period_seconds * 60.0f)) *
