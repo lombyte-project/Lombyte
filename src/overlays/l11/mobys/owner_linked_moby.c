@@ -36,9 +36,13 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
         HIT_REACTION_KNOCKBACK_AND_CANCEL_PROJECTILE = 4,
         HIT_REACTION_NO_RESPONSE = 11
     };
+    enum {
+        LINKED_MOBY_STATE_FADE_OUT = 3,
+        LINKED_MOBY_STATE_REMOVE = 4
+    };
     int   hit_status;
     char *hit_record;
-    if (moby->state != 4) {
+    if (moby->state != LINKED_MOBY_STATE_REMOVE) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
         if (hit_record != 0) {
             print_fe50(D_L11_0021B530, moby->oclass, fptodp(*(float *)(hit_record + 0x2C)));
@@ -68,7 +72,7 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
                 if (owner_moby != 0 && owner_moby[0x20] != 0xFE && owner_moby[0x20] != 0xFD) {
                     owner_moby[0x20] = 3;
                 }
-                moby->state = 3;
+                moby->state = LINKED_MOBY_STATE_FADE_OUT;
             } else {
                 *health -= *(float *)(hit_record + 0x2C);
                 private_data[0x67] = 0xFA;
