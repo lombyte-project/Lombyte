@@ -102,6 +102,9 @@ void seeker_update(struct Moby *moby) {
         SEEKER_STATE_FATAL_KNOCKBACK = 6,
         SEEKER_STATE_EXPLODE = 7
     };
+    enum {
+        SEEKER_DISPATCH_MODE_SKIP_STATE_UPDATE = 2
+    };
     Moby52Vars      *seeker_instance_vars = (Moby52Vars *)moby->pvars;
     struct Moby     *target;
     Vec4             vel;
@@ -122,7 +125,7 @@ void seeker_update(struct Moby *moby) {
         moby->shadow_range = 0x17;
     }
     mode = seeker_state_dispatch_mode;
-    if (mode == 2) {
+    if (mode == SEEKER_DISPATCH_MODE_SKIP_STATE_UPDATE) {
         return;
     }
     switch (moby->state) {
