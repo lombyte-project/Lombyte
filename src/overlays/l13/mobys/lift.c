@@ -77,7 +77,7 @@ void lift_update(struct Moby *moby) {
         lift_vars->pulse = random_angle_radians();
         lift_vars->voice = -1;
         lift_vars->timer = 0;
-        moby->state = 4;
+        moby->state = LIFT_IDLE_AT_TOP;
         break;
     case LIFT_BLEND_TO_MOUNT_TRANSFORM: {
         float previous_mount_blend = lift_vars->blend;
@@ -124,7 +124,7 @@ void lift_update(struct Moby *moby) {
             set_camera_position(mount_position_work);
             set_camera_rotation(mount_transform_work);
         }
-        if (moby->state == 2)
+        if (moby->state == LIFT_MOVE_TO_TOP)
             target = lift_vars->top;
         else
             target = lift_vars->bottom;
@@ -136,10 +136,10 @@ void lift_update(struct Moby *moby) {
                                    D_0015ED6C * 40.0f);
         if (absolute_float(moby->pos.z - target) == 0.0f) {
             lift_vars->timer = scale_game_frames(0x46);
-            if (moby->state == 2)
-                moby->state = 6;
+            if (moby->state == LIFT_MOVE_TO_TOP)
+                moby->state = LIFT_WAIT_AT_TOP_FOR_HERO_TO_LEAVE;
             else
-                moby->state = 7;
+                moby->state = LIFT_WAIT_AT_BOTTOM_FOR_HERO_TO_LEAVE;
             if (moby->command != 0)
                 jet_end_mount(2);
         }
@@ -154,10 +154,10 @@ void lift_update(struct Moby *moby) {
             lift_vars->voice = -1;
         }
         if (hero.ground_moby != moby) {
-            if (moby->state == 7)
-                moby->state = 5;
+            if (moby->state == LIFT_WAIT_AT_BOTTOM_FOR_HERO_TO_LEAVE)
+                moby->state = LIFT_IDLE_AT_BOTTOM;
             else
-                moby->state = 4;
+                moby->state = LIFT_IDLE_AT_TOP;
         }
         break;
     case LIFT_IDLE_AT_TOP:
@@ -173,29 +173,29 @@ void lift_update(struct Moby *moby) {
         if (hero.ground_moby == moby && hero.air_frames.s == 0 &&
             vector_distance_xy(&hero.motion.pos, &moby->pos) < 0.5f) {
             moby->glow_color = 0x80208020;
-            if (moby->state == 5)
+            if (moby->state == LIFT_IDLE_AT_BOTTOM)
                 moby->command = 2;
             else
                 moby->command = 3;
-            moby->state = 1;
+            moby->state = LIFT_BLEND_TO_MOUNT_TRANSFORM;
             hero_set_state(0x72, 1);
             jet_mount(D_L13_001670C0, D_L13_001670C0 + 0x10, 1, 0, 0);
             lift_vars->blend = 0.0f;
             break;
         }
-        if (moby->state == 4) {
+        if (moby->state == LIFT_IDLE_AT_TOP) {
             float d = vector_distance_xy(&moby->pos, &hero.motion.pos);
             if (absolute_float(hero.ground_z.f - lift_vars->bottom) < 2.0f && d < 32.0f &&
                 d > 5.0f) {
                 moby->command = 0;
-                moby->state = 3;
+                moby->state = LIFT_MOVE_TO_BOTTOM;
                 lift_vars->speed = -(D_0015ED6C * 5.0f);
             }
-        } else if (moby->state == 5) {
+        } else if (moby->state == LIFT_IDLE_AT_BOTTOM) {
             float d = vector_distance_xy(&moby->pos, &hero.motion.pos);
             if (absolute_float(hero.ground_z.f - lift_vars->top) < 2.0f && d < 32.0f && d > 5.0f) {
                 moby->command = 0;
-                moby->state = 2;
+                moby->state = LIFT_MOVE_TO_TOP;
                 lift_vars->speed = D_0015ED6C * 5.0f;
             }
         }
