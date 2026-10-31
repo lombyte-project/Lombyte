@@ -110,7 +110,7 @@ void pokitaru_boat_update(struct Moby *moby) {
 
     qcopy(start_pos, &moby->pos);
     qcopy(start_rot, &moby->rot);
-    if (moby->state != 0) {
+    if (moby->state != POKITARU_BOAT_INITIALIZE) {
         moby->pos.z = boat_vars->height_e4;
     }
     update_pokitaru_boat_joint_effects(moby);
@@ -138,7 +138,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         boat_vars->path_c4 = path;
         qcopy(&moby->pos, (char *)path + 0x10);
         boat_vars->seg_d4 = 1;
-        moby->state = 1;
+        moby->state = POKITARU_BOAT_WAIT_FOR_ACTIVATION;
         for (part_angle_index = 0; part_angle_index < 4; part_angle_index++) {
             boat_vars->wobble_f0[part_angle_index] = random_angle_radians();
         }
@@ -158,7 +158,7 @@ void pokitaru_boat_update(struct Moby *moby) {
             qcopy(&moby->pos, (char *)path + n * 16 - 16);
             last = (float *)((char *)path + (n - 1) * 16);
             moby->rot.z = fast_arc_tan(last[4] - moby->pos.x, last[5] - moby->pos.y);
-            moby->state = 5;
+            moby->state = POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO;
         }
         break;
     case POKITARU_BOAT_FOLLOW_PATH: {
@@ -229,7 +229,7 @@ void pokitaru_boat_update(struct Moby *moby) {
                 }
                 boat_vars->slot_c8 = -1;
             }
-            moby->state = 3;
+            moby->state = POKITARU_BOAT_WAIT_FOR_GROUP_CLEAR;
         }
         approach_angle(&moby->rot.z,
                        fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y),
@@ -255,9 +255,9 @@ void pokitaru_boat_update(struct Moby *moby) {
         if (is_pokitaru_boat_target_group_clear(moby) != 0) {
             if (boat_vars->flag_b0 != 0) {
                 boat_vars->approach_d0 = 0.0f;
-                moby->state = 4;
+                moby->state = POKITARU_BOAT_RISE_ABOVE_PATH;
             } else {
-                moby->state = 5;
+                moby->state = POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO;
             }
         }
         break;
@@ -270,7 +270,7 @@ void pokitaru_boat_update(struct Moby *moby) {
                                    frame_time_sq,
                                    frame_time);
         if (target[2] + 5.9f <= moby->pos.z) {
-            moby->state = 5;
+            moby->state = POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO;
         }
         break;
     case POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO:
