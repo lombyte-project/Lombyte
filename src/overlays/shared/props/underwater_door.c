@@ -32,6 +32,9 @@ void underwater_door_update(struct Moby *moby) {
         DOOR_WAIT_FOR_STOP_VOLUME_EXIT = 5,
         DOOR_RETURN_TO_ORIGIN = 6
     };
+    enum {
+        DOOR_HOLD_AWAY_FROM_ORIGIN = 3
+    };
     MovingMobyVars *door_motion_data = (MovingMobyVars *)moby->pvars;
     Vec4            offset;
     Vec4            updated_door_position;
@@ -88,7 +91,7 @@ void underwater_door_update(struct Moby *moby) {
         if (!(scale * step / moby->pclass->scale < magnitude))
             return;
         if (door_motion_data->trigger != -1) {
-            moby->state = 3;
+            moby->state = DOOR_HOLD_AWAY_FROM_ORIGIN;
             return;
         }
         moby->state = DOOR_WAIT_FOR_STOP_VOLUME_EXIT;
