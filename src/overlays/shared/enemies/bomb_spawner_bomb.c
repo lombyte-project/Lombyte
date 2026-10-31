@@ -77,6 +77,9 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby,
                                          s32          oclass) __asm__("FUN_L03_002bec60");
 
 struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s32 oclass) {
+    enum {
+        SPAWNER_CHILD_STATE_INITIAL = 0
+    };
     Vec4         pos;
     Vec4        *spawn_position_source;
     Spawner     *spawner_data;
@@ -118,7 +121,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         found = 1;
         qcopy(&current_moby->pos, spawn_position_source);
         current_moby->pos.w = 0.0f;
-        current_moby->state = 0;
+        current_moby->state = SPAWNER_CHILD_STATE_INITIAL;
         current_moby->command = 0;
         spawned_moby_class = (SpawnClass *)current_moby->pclass;
         flags = spawned_moby_class->flags;
