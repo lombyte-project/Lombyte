@@ -127,6 +127,9 @@ void drawbridge_update(Moby *moby) {
         FADE_AFTER_DRAWBRIDGE_ANIMATION = 5,
         DRAWBRIDGE_COMPLETE = 6
     };
+    enum {
+        DRAWBRIDGE_MISSION_ALREADY_COMPLETE = 0xFF
+    };
     Vec_2F69D0 position, rotation, from_pos, from_rot, to_pos, to_rot;
     Data      *drawbridge_control_vars = (struct Data *)moby->pvars;
     float      previous_fade, blend;
@@ -135,7 +138,7 @@ void drawbridge_update(Moby *moby) {
     switch (moby->state) {
     case INITIALIZE_DRAWBRIDGE_SEGMENTS: {
         int status = visited52[moby->mission + (current_level_index << 4)];
-        if (status == 0xFF) {
+        if (status == DRAWBRIDGE_MISSION_ALREADY_COMPLETE) {
             moby->state = DRAWBRIDGE_COMPLETE;
             drawbridge_extension_gp = 20.0f;
             drawbridge_pitch_degrees_gp = 1000.0f;
