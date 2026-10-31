@@ -185,7 +185,7 @@ void mine_glove_update(struct Moby *moby) {
             (hero.state.current == 0x23 && hero.state_timer == scale_game_frames(0x10))) {
             allocate_hero_voice_for_entry(0x1A, 0);
             use_ammo(-1, 1);
-            moby->state = 3;
+            moby->state = MINE_GLOVE_RELEASE_HELD_MOBY;
         }
     }
     if (mine_glove_vars->held != 0 && !hero.item_use_locked) {
@@ -274,7 +274,7 @@ void mine_glove_update(struct Moby *moby) {
     case MINE_GLOVE_INITIALIZE:
         mine_glove_vars->held = 0;
         if (!(moby->anim_flags & 2))
-            moby->state = 1;
+            moby->state = MINE_GLOVE_WAIT_FOR_ANIMATION;
         else
             moby->state = 2;
     case MINE_GLOVE_WAIT_FOR_ANIMATION:
@@ -301,7 +301,7 @@ void mine_glove_update(struct Moby *moby) {
             mine_glove_vars->held = 0;
             mine_glove_vars->timer54 = scale_game_frames(10);
         }
-        moby->state = 4;
+        moby->state = MINE_GLOVE_POST_RELEASE_WAIT;
         mine_glove_vars->timer58 = scale_game_frames(0x14);
         break;
     case MINE_GLOVE_POST_RELEASE_WAIT:
@@ -309,7 +309,7 @@ void mine_glove_update(struct Moby *moby) {
             moby->state = 2;
         break;
     case MINE_GLOVE_BEGIN_HELD_MOBY_REMOVAL:
-        moby->state = 6;
+        moby->state = MINE_GLOVE_REMOVE_HELD_MOBY;
         break;
     case MINE_GLOVE_REMOVE_HELD_MOBY:
         if (mine_glove_vars->held != 0) {
