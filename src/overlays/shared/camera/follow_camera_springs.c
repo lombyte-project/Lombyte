@@ -1299,8 +1299,8 @@ void follow_camera_transition(O002e5730 *camera, void *input_offset) {
     compute_follow_camera_target_position(
         camera, input_offset, &target_position, attach_state->xc4);
     attach_mode = attach_state->xc4;
-    if (attach_mode == 3 || attach_mode == 5 || attach_mode == 6 || attach_mode == 7 ||
-        attach_mode == 1) {
+    if (attach_mode == CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY || attach_mode == CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION || attach_mode == CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY || attach_mode == CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY ||
+        attach_mode == CAM_ATTACH_HERO_POSITION_BASE) {
         x = follow_camera_position_transition_end_stiffness_gp +
             (follow_camera_position_default_stiffness_gp -
              follow_camera_position_transition_end_stiffness_gp) *
