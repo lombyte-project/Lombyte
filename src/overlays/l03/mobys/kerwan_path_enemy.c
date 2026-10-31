@@ -43,7 +43,7 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
                                              struct Moby *moby,
 
                                              struct Moby *target) {
-    KerwanPathEnemyVars *enemy_pvars = (KerwanPathEnemyVars *)moby->pvars;
+    enum { ENEMY_TURN_TO_HEADING = 0xC } ;KerwanPathEnemyVars *enemy_pvars = (KerwanPathEnemyVars *)moby->pvars;
     int                  linked_moby_index;
     float                heading_delta;
     unsigned char        previous_state;
@@ -72,7 +72,7 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
                 }
                 enemy_pvars->unk28C = desired_heading;
                 previous_state = moby->state;
-                moby->state = 0xC;
+                moby->state = ENEMY_TURN_TO_HEADING;
                 moby->command = previous_state;
                 return 1;
             }
