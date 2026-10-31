@@ -146,6 +146,9 @@ void test_dummy_update(unsigned char *moby) {
         TEST_DUMMY_KIND_PATH_MOVER = 1,
         TEST_DUMMY_KIND_SPRAYER = 2
     };
+    enum {
+        TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET = 2
+    };
     L16QuadVector    position_or_delta, position_or_direction, launch_velocity;
     L16HitDescriptor fx;
     L16DummyData    *dummy_data = ((L16DummyData *)MOBY(moby)->pvars);
@@ -232,13 +235,13 @@ void test_dummy_update(unsigned char *moby) {
                     FUN_L00_0025ff38(
                         12.0f, (char *)moby, dummy_data->target, 0, 0, p + 16, *(int *)p);
                 } else {
-                    dummy_data->mode = 2;
+                    dummy_data->mode = TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET;
                 }
             }
         }
         break;
     case TEST_DUMMY_STATE_THROW_AT_TARGET: /* thrower: launch the held object at the target, then face it or the next node */
-        if (dummy_data->mode == 2) {
+        if (dummy_data->mode == TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET) {
             qcopy(position_or_delta.f,
                   D_L16_001600EC_c + dummy_data->aim[dummy_data->node] * 0x80 + 0x30);
         } else {
@@ -351,13 +354,13 @@ void test_dummy_update(unsigned char *moby) {
                     FUN_L00_0025ff38(
                         12.0f, (char *)moby, dummy_data->target, 0, 0, p + 16, *(int *)p);
                 } else {
-                    dummy_data->mode = 2;
+                    dummy_data->mode = TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET;
                 }
             }
         }
         break;
     case TEST_DUMMY_STATE_SPRAY_FROM_CHILD: /* sprayer: face the target and emit from the child toward it */
-        if (dummy_data->mode != 2) {
+        if (dummy_data->mode != TEST_DUMMY_TARGET_MODE_NO_MOBY_TARGET) {
             position_or_delta.quad = *(u128 *)(moby + 16);
             move_test_dummy_toward_position_and_heading(
                 moby,
