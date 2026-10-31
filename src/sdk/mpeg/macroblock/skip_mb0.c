@@ -25,6 +25,11 @@ s32       _skipMB0(struct MpegDecoder   *decoder,
     enum {
         MPEG_PICTURE_CODING_TYPE_I = 1
     };
+    enum {
+        MPEG_MOTION_TYPE_FIELD = 1,
+        MPEG_PICTURE_CODING_TYPE_P = 2,
+        MPEG_MOTION_TYPE_FRAME = 2
+    };
     s32 buf_offset;
     s32 bottom_field;
     s32 ok;
@@ -33,16 +38,16 @@ s32       _skipMB0(struct MpegDecoder   *decoder,
     buf_offset = decoder->mb_buf_index * 0x140;
     *(s32 *)((u8 *)(((u8 *)decoder + (buf_offset))) + 0x6CC) = 1;
     decoder->dc_reset = 1;
-    if (decoder->picture_coding_type == 2) {
+    if (decoder->picture_coding_type == MPEG_PICTURE_CODING_TYPE_P) {
         skip_state->unk14 = 0;
         skip_state->unk10 = 0;
         skip_state->unk4 = 0;
         skip_state->unk0 = 0;
     }
     if (decoder->picture_structure == 3) {
-        *picture_structure_mode = 2;
+        *picture_structure_mode = MPEG_MOTION_TYPE_FRAME;
     } else {
-        *picture_structure_mode = 1;
+        *picture_structure_mode = MPEG_MOTION_TYPE_FIELD;
         bottom_field = decoder->picture_structure == 2;
         motion_reference->unk4 = bottom_field;
         motion_reference->unk0 = bottom_field;
