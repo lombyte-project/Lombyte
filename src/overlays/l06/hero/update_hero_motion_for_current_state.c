@@ -38,6 +38,9 @@ void apply_hero_ground_material_response(void) {
         HERO_GROUND_MATERIAL_MAGNETIC = 2,
         HERO_GROUND_MATERIAL_SINK_SURFACE = 0xD
     };
+    enum {
+        HERO_GROUND_MATERIAL_SLIP_SURFACE = 8
+    };
     struct Hero *hero_state = &hero;
     struct Hero *vehicle_response_check_hero;
     struct Hero *grounded_response_check_hero;
@@ -69,7 +72,7 @@ void apply_hero_ground_material_response(void) {
         struct Hero *gx = &hero;
         gx->selector_1 = 1;
     }
-    if (previous_ground_type == 8) {
+    if (previous_ground_type == HERO_GROUND_MATERIAL_SLIP_SURFACE) {
         struct Hero *gx = &hero;
         gx->on_slip_ground = 1;
     }
