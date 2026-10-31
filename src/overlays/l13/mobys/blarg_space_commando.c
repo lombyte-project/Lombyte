@@ -614,6 +614,9 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         BLARG_SPACE_COMMANDO_KNOCKBACK = 0xF,
         BLARG_SPACE_COMMANDO_DYING = 0x10
     };
+    enum {
+        TARGET_MODE_NO_ELIGIBLE_TARGET = 2
+    };
     struct WalkerVars_8d10 *blarg_space_commando_private_data =
         (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
@@ -716,12 +719,12 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
                 vector_distance_xy(&blarg_space_commando_private_data->home,
                                    &blarg_space_commando_private_data->target) ||
             absolute_float(moby->pos.z - blarg_space_commando_private_data->target.z) > 3.0f) {
-            blarg_space_commando_private_data->mode = 2;
+            blarg_space_commando_private_data->mode = TARGET_MODE_NO_ELIGIBLE_TARGET;
         }
         if (blarg_space_commando_private_data->target_moby != -1 &&
             is_point_inside_clip_volume(&blarg_space_commando_private_data->target,
                                         blarg_space_commando_private_data->target_moby) == 0) {
-            blarg_space_commando_private_data->mode = 2;
+            blarg_space_commando_private_data->mode = TARGET_MODE_NO_ELIGIBLE_TARGET;
         } else {
             blarg_space_commando_private_data->target_moby = -1;
         }
