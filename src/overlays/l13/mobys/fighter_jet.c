@@ -113,20 +113,20 @@ short D_L13_00161418 = 0x7f00;
 /* Sets the state of every live moby of class id whose state is not negative. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/mobyutil_00266128.c: func_L13_00266128), where it is exact; names translated to the US level program. */
 
-extern char *D_L13_0015FFE0;
+extern char *l13_moby_scan_inclusive_end __asm__("D_L13_0015FFE0");
 
 void jet_group_flag(int id, int state) __asm__("FUN_L13_00265170");
 
 void jet_group_flag(int id, int state) {
     char *moby = (char *)moby_base;
-    if ((unsigned long)D_L13_0015FFE0 >= (unsigned long)moby) {
+    if ((unsigned long)l13_moby_scan_inclusive_end >= (unsigned long)moby) {
         do {
             if (MOBY(moby)->oclass == id) {
                 if (moby[0x20] >= 0)
                     moby[0x20] = state;
             }
             moby += 0x100;
-        } while ((unsigned long)D_L13_0015FFE0 >= (unsigned long)moby);
+        } while ((unsigned long)l13_moby_scan_inclusive_end >= (unsigned long)moby);
     }
 }
 
@@ -141,7 +141,7 @@ void jet_group_switch(short *ids,
 
                       int copy_data_pointer) {
     char *moby;
-    for (moby = (char *)moby_base; moby <= D_L13_0015FFE0; moby += 0x100) {
+    for (moby = (char *)moby_base; moby <= l13_moby_scan_inclusive_end; moby += 0x100) {
         int id_index;
         for (id_index = 0; ids[id_index] != 0 && ids[id_index] < 0x800 && id_index < 0xE0;
              id_index++) {
