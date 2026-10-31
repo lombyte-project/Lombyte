@@ -121,7 +121,7 @@ void bolt_thief_update(struct Moby *moby) {
             moby->shadow_range = 0x17;
         }
     }
-    if (FUN_L00_0025a420(moby, 0x210000, 0) != 0 && moby->state != 8) {
+    if (FUN_L00_0025a420(moby, 0x210000, 0) != 0 && moby->state != BOLT_THIEF_KNOCKBACK) {
         int i;
 
         for (i = 0; i < 0x32; i++) {
@@ -150,7 +150,7 @@ void bolt_thief_update(struct Moby *moby) {
             0);
         bolt_thief_instance_vars->b67 = 0x78;
         FUN_L00_00257470(moby, 0, -1);
-        moby->state = 8;
+        moby->state = BOLT_THIEF_KNOCKBACK;
     }
     moby->hit_slot = 0xFF;
     switch (moby->state) {
@@ -168,7 +168,7 @@ void bolt_thief_update(struct Moby *moby) {
         bolt_thief_instance_vars->b29 = 0;
         moby->spawn_frame = *(u64 *)(*(char **)D_001413D0 + 0x38);
         clear_u64_value(&bolt_thief_instance_vars->v40);
-        moby->state = 1;
+        moby->state = BOLT_THIEF_WAIT_FOR_HERO_NEAR_TRIGGER;
         if (moby->prev_seq != 1) {
             FUN_00212f90(moby, 1, 0, 0);
         }
@@ -177,7 +177,7 @@ void bolt_thief_update(struct Moby *moby) {
         qcopy(&point, &l08_paths[bolt_thief_instance_vars->w220]->points[0]);
         if (fast_vec_dist(hero.motion.pos.f, &point) < 24.0f) {
             build_bolt_thief_target_list((char *)moby);
-            moby->state = 5;
+            moby->state = BOLT_THIEF_FOLLOW_PRIMARY_PATH_TO_EXIT;
             if (moby->prev_seq != 3) {
                 FUN_00212f90(moby, 3, 0, 6);
             }
@@ -198,7 +198,7 @@ void bolt_thief_update(struct Moby *moby) {
         path = follower->path;
         qcopy(&point, &path->points[next]);
         if (path->points[next].f[3] == 0.0f) {
-            moby->state = 3;
+            moby->state = BOLT_THIEF_WAIT_FOR_ANIMATION_BEFORE_PULLING_PICKUPS;
             if (moby->prev_seq != 2) {
                 FUN_00212f90(moby, 2, 0, 6);
             }
@@ -225,7 +225,7 @@ void bolt_thief_update(struct Moby *moby) {
                     other->state = 3;
                 }
             }
-            moby->state = 4;
+            moby->state = BOLT_THIEF_PULL_PICKUPS_TO_JOINT;
             if (moby->prev_seq != 6) {
                 FUN_00212f90(moby, 6, 0, 6);
             }
@@ -254,7 +254,7 @@ void bolt_thief_update(struct Moby *moby) {
             }
         }
         if (active_count == 0) {
-            moby->state = 5;
+            moby->state = BOLT_THIEF_FOLLOW_PRIMARY_PATH_TO_EXIT;
             if (moby->prev_seq != 3) {
                 FUN_00212f90(moby, 3, 0, 6);
             }
@@ -295,7 +295,7 @@ void bolt_thief_update(struct Moby *moby) {
         }
         if (follower->path->count - 1 == next) {
             if (bolt_thief_instance_vars->follow[1].path_id >= 0) {
-                moby->state = 6;
+                moby->state = BOLT_THIEF_FOLLOW_SECONDARY_PATH;
                 break;
             }
             mark_moby_for_removal(moby);
@@ -328,7 +328,7 @@ void bolt_thief_update(struct Moby *moby) {
             follower->point = next;
         }
         if (fast_vec_dist(hero.motion.pos.f, &moby->pos) > 19.0f) {
-            moby->state = 7;
+            moby->state = BOLT_THIEF_FACE_HERO;
         }
         break;
     }
@@ -349,7 +349,7 @@ void bolt_thief_update(struct Moby *moby) {
             follower = &bolt_thief_instance_vars->follow[1];
             next = (follower->point + follower->path->count + follower->direction) %
                    follower->path->count;
-            moby->state = 6;
+            moby->state = BOLT_THIEF_FOLLOW_SECONDARY_PATH;
             if (fast_vec_dist(hero_position, &follower->path->points[next]) < distance) {
                 follower->direction *= -1;
             }
