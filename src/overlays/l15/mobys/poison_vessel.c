@@ -170,7 +170,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
             if (((Tb *)D_L15_001744C0_2E9358)->f18 != 0 &&
                 get_moby_pvars_link(((Tb *)D_L15_001744C0_2E9358)->f18) != 0) {
                 data->target = (Moby_2E9358 *)((Tb *)D_L15_001744C0_2E9358)->f18;
-                moby->state = 1;
+                moby->state = POISON_VESSEL_FOLLOW_TARGET;
                 data->f8 = 0.0f;
                 moby->pos = ((Tb *)D_L15_001744C0_2E9358)->v20;
             } else if (((Tb *)D_L15_001744C0_2E9358)->f18 == D_001413D0_lui ||
@@ -203,7 +203,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
             }
         }
         if (follow_context == 0) {
-            moby->state = 0;
+            moby->state = POISON_VESSEL_FREE_FLIGHT;
             data->f8 = 0.0f;
             data->target = 0;
         }
