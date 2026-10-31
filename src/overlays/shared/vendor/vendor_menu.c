@@ -570,6 +570,9 @@ extern void  sce_gs_sync_v(s32) __asm__("FUN_00122298");
 void start_vendor_exit_cutscene(void) __asm__("FUN_L00_0029ad08");
 
 void start_vendor_exit_cutscene(void) {
+    enum {
+        VENDOR_MENU_EXIT_CUTSCENE = 3
+    };
     VendorMenu              *vendor_state;
     VendorMoby_29a6b0       *moby;
     s32                      index, exit_cutscene_id, offset;
@@ -584,7 +587,7 @@ void start_vendor_exit_cutscene(void) {
     vendor_state = &vendor_menu;
     D_L00_0015F5D8 = 1;
     ((VendorMoby_29a6b0 *)vendor_state->vendor_moby)->state = 1;
-    vendor_state->state = 3;
+    vendor_state->state = VENDOR_MENU_EXIT_CUTSCENE;
     vendor_state->frames = 0;
     cutscene_world_origin = (f32 *)((char *)vendor_state + 0xC0);
     transform_vector_by_basis(cutscene_world_origin,
