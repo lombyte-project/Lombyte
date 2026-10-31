@@ -133,7 +133,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         if (turret_moby->b53 != 0) {
             blend_moby_animation(turret_moby, 0, 0, 10);
         }
-        turret_moby->state = 1;
+        turret_moby->state = BLARG_TURRET_STATE_WAIT_FOR_TARGET;
         break;
     case BLARG_TURRET_STATE_WAIT_FOR_TARGET:
         target_yaw_scratch =
@@ -150,7 +150,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
                 blend_moby_animation(
                     turret_moby, 1, animation_start_frame, random_int_between(7, 13));
             }
-            turret_moby->state = 3;
+            turret_moby->state = BLARG_TURRET_STATE_TRACK_TARGET;
         }
         approach_angle(&turret_moby->rot.z,
                        data->f54,
@@ -165,7 +165,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
                 blend_moby_animation(turret_moby, 0, 0, random_int_between(7, 13));
             }
             data->f64 = 1.0f;
-            turret_moby->state = 5;
+            turret_moby->state = BLARG_TURRET_STATE_DESTRUCTION_DELAY;
         }
         break;
     case BLARG_TURRET_STATE_TRACK_TARGET:
@@ -180,7 +180,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
             if (turret_moby->b53 != 0) {
                 blend_moby_animation(turret_moby, 0, 0, random_int_between(7, 13));
             }
-            turret_moby->state = 1;
+            turret_moby->state = BLARG_TURRET_STATE_WAIT_FOR_TARGET;
         } else {
             float yaw_offset_limit_radians;
             approach_value(&data->f68, 20.0f, frame_time * 6.0f);
@@ -209,7 +209,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
                     blend_moby_animation(turret_moby, 0, 0, random_int_between(7, 13));
                 }
                 data->f64 = 1.0f;
-                turret_moby->state = 5;
+                turret_moby->state = BLARG_TURRET_STATE_DESTRUCTION_DELAY;
             }
         }
         break;
@@ -247,7 +247,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
                        frame_time * 25.132742f);
         data->f64 -= 1.0f;
         if (data->f64 <= 0.0f) {
-            turret_moby->state = 4;
+            turret_moby->state = BLARG_TURRET_STATE_DESTROY;
         }
         break;
     }
