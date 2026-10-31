@@ -884,6 +884,11 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 void process_helicopter_hits(struct Moby *moby) {
+    enum {
+        HELICOPTER_RECOIL = 6,
+        HELICOPTER_DEATH_EFFECTS = 7,
+        HELICOPTER_DEAD_WAIT_FOR_RESET = 0x40
+    };
     int   hit_reaction_status;
     float fv;
     int   hit_reaction_code;
@@ -895,15 +900,15 @@ void process_helicopter_hits(struct Moby *moby) {
     hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_reaction_code =
         hit_reaction(moby, hit_record, helicopter_vars + 0x20, 0, &hit_reaction_status, &fv, 0, 4);
-    if (hit_reaction_status != 1 && moby->state != 7 && moby->state != 0x40) {
+    if (hit_reaction_status != 1 && moby->state != HELICOPTER_DEATH_EFFECTS && moby->state != HELICOPTER_DEAD_WAIT_FOR_RESET) {
         float remaining_health = *(float *)(helicopter_vars + 0x20) - fv;
         *(float *)(helicopter_vars + 0x20) = remaining_health;
         if (hit_reaction_code == 1 || remaining_health <= 0.0f) {
-            moby->state = 7;
+            moby->state = HELICOPTER_DEATH_EFFECTS;
         } else if (hit_reaction_code != 0xB) {
             *(unsigned char *)(helicopter_vars + 0x67) = 0xB4;
             trooper_anim_update(moby, (short *)(helicopter_vars + 0x60));
-            if (*(float *)(hit_record + 0x1C) == 5627.925f && moby->state != 6) {
+            if (*(float *)(hit_record + 0x1C) == 5627.925f && moby->state != HELICOPTER_RECOIL) {
                 hit_away_heading = fast_arc_tan(moby->pos.x - *(float *)(hit_record + 0),
                                                 moby->pos.y - *(float *)(hit_record + 4));
                 relative_hit_heading = fast_subtract_rotations(hit_away_heading, moby->rot.z);
@@ -920,7 +925,7 @@ void process_helicopter_hits(struct Moby *moby) {
                 *(float *)(helicopter_vars + 0x170) = frame_time * 4.0f;
                 *(short *)(helicopter_vars + 0x16A) = scale_game_frames(0x3C);
                 moby->command = moby->state;
-                moby->state = 6;
+                moby->state = HELICOPTER_RECOIL;
             }
         }
     }
