@@ -169,8 +169,11 @@ void set_moby_position_and_refresh_removal_timer(struct Moby *moby, void *new_po
 void set_moby_state_two_data_and_timer(struct Moby *moby, void *src) __asm__("FUN_L11_00318e98");
 
 void set_moby_state_two_data_and_timer(struct Moby *moby, void *movement_step) {
+    enum {
+        ENERGY_SPHERE_MOVE_AND_DETONATE = 2
+    };
     char *moby_vars;
-    moby->state = 2;
+    moby->state = ENERGY_SPHERE_MOVE_AND_DETONATE;
     moby_vars = (char *)moby->pvars;
     qcopy(moby_vars, movement_step);
     *(int *)(moby_vars + 0x20) = scale_game_frames(0x3C);
