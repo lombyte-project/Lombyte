@@ -34,24 +34,24 @@ extern int point_in_path_xy(float *, float *, int) __asm__("FUN_L00_00259740");
 int check_descriptor_hero_trigger(char *moby) __asm__("FUN_L10_002f5a78");
 
 int check_descriptor_hero_trigger(char *moby) {
-    unsigned char *e = *(unsigned char **)(l10_descriptor_table + *(short *)(moby + 0x84) * 32 + 0x1C);
+    unsigned char *trigger_descriptor_record = *(unsigned char **)(l10_descriptor_table + *(short *)(moby + 0x84) * 32 + 0x1C);
 
-    if (*(int *)(e + 0x0C) >= 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(e + 0x0C)))
+    if (*(int *)(trigger_descriptor_record + 0x0C) >= 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(trigger_descriptor_record + 0x0C)))
             return 1;
-    } else if (*(int *)(e + 0x10) >= 0) {
-        if (test_point_in_transformed_unit_cylinder(&hero.motion.pos, *(int *)(e + 0x10)))
+    } else if (*(int *)(trigger_descriptor_record + 0x10) >= 0) {
+        if (test_point_in_transformed_unit_cylinder(&hero.motion.pos, *(int *)(trigger_descriptor_record + 0x10)))
             return 1;
-    } else if (*(int *)(e + 0x08) >= 0) {
-        if (test_point_in_transformed_unit_sphere((float *)(&hero.motion.pos), *(int *)(e + 0x08)))
+    } else if (*(int *)(trigger_descriptor_record + 0x08) >= 0) {
+        if (test_point_in_transformed_unit_sphere((float *)(&hero.motion.pos), *(int *)(trigger_descriptor_record + 0x08)))
             return 1;
-    } else if (*(int *)(e + 0x14) >= 0) {
-        int i = *(int *)(e + 0x14);
+    } else if (*(int *)(trigger_descriptor_record + 0x14) >= 0) {
+        int i = *(int *)(trigger_descriptor_record + 0x14);
         if (point_in_path_xy((float *)(&hero.motion.pos),
                              (float *)(((char *)l10_paths[i]) + 0x10),
                              *(int *)l10_paths[i]))
             return 1;
-    } else if (e[0x38] != 0 && e[0x39] == 0) {
+    } else if (trigger_descriptor_record[0x38] != 0 && trigger_descriptor_record[0x39] == 0) {
         return 1;
     }
     return 0;
