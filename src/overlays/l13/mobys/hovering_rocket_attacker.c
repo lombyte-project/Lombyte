@@ -382,7 +382,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
         HIT_REACTION_HIGH_INTERPOLATION_TARGET = 9,
         HIT_REACTION_HIGH_INTERPOLATION_TARGET_ALTERNATE = 10,
         HIT_REACTION_NO_HIT = 11
-    };
+    } ; enum { TARGET_SELECTION_NO_TARGET = 2};
     HoveringRocketAttackerVars *moby_data;
     char                       *hit_record;
     int                         hit_reaction_code;
@@ -541,7 +541,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
                                                    target_selection_point_table + 0x10,
                                                    *(int *)target_selection_point_table);
     }
-    if (target_selection_status != 2) {
+    if (target_selection_status != TARGET_SELECTION_NO_TARGET) {
         if (moby_data->unkD8 < vector_distance_xy(moby + 0x10, moby_data->unk70) ||
             8.0f < absolute_float(MOBY(moby)->pos.z - moby_data->unk70[2])) {
             moby_data->unkB4 = 2;
