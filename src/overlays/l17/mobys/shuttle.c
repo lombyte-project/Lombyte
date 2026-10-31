@@ -142,7 +142,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         shuttle_moby->update_dist = 0xFF;
         shuttle_moby->draw_dist = 0x80;
         shuttle_moby->spawn_frame = *(long *)(((char *)hero.moby) + 0x38);
-        shuttle_moby->state = 1;
+        shuttle_moby->state = SHUTTLE_STATE_WAIT_FOR_ACTIVATION;
         if (shuttle_moby->prev_seq != 2) {
             blend_moby_animation(shuttle_moby, 2, 0, 0);
         }
@@ -196,7 +196,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         if (shuttle_vars->go != 0) {
             shuttle_vars->go = 0;
             remove_help_message_for_selector(10);
-            shuttle_moby->state = 2;
+            shuttle_moby->state = SHUTTLE_STATE_TRAVEL;
             allocate_voice_for_target_entry(2, 0, (int)shuttle_moby);
             if (shuttle_moby->prev_seq != 0) {
                 blend_moby_animation(shuttle_moby, 0, 0, 0);
@@ -247,7 +247,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         if (update_shuttle_travel_and_camera(shuttle_moby, shuttle_vars->side)) {
             int ofs;
             int base;
-            shuttle_moby->state = 3;
+            shuttle_moby->state = SHUTTLE_STATE_RESET_AFTER_TRAVEL;
             shuttle_vars->wA4 = 0;
             ofs = shuttle_vars->cam[shuttle_vars->sel] << 7;
             base = (int)D_L17_001600EC;
@@ -271,7 +271,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         }
         break;
     case SHUTTLE_STATE_RESET_AFTER_TRAVEL:
-        shuttle_moby->state = 1;
+        shuttle_moby->state = SHUTTLE_STATE_WAIT_FOR_ACTIVATION;
         if (shuttle_moby->prev_seq != 2) {
             blend_moby_animation(shuttle_moby, 2, 0, scale_game_frames(30));
         }
