@@ -739,6 +739,9 @@ struct Moby *spawn_bolt_by_value(
         BOLT_VALUE_TWENTY = 20,
         BOLT_VALUE_FIFTY = 50
     };
+    enum {
+        BOLT_FALLING = 1
+    };
     f32          spin_axis[4] __attribute__((aligned(16)));
     f32          bolt_to_source_offset[4] __attribute__((aligned(16)));
     struct Moby *spawned_bolt;
@@ -783,7 +786,7 @@ struct Moby *spawn_bolt_by_value(
         spawned_bolt->update_dist = 0x40;
         spawned_bolt->draw_dist = 0x40;
         spawned_bolt->visible = 1;
-        spawned_bolt->state = 1;
+        spawned_bolt->state = BOLT_FALLING;
         spawned_bolt->scale = spawned_bolt->pclass->scale * scale;
         euler_rotation_basis(&spawned_bolt->rot_row0, &spawned_bolt->rot);
         if ((bolt_source->flags & 0x20) && (color = *(u8 **)(bolt_source->pvars + 0xC)) != 0)
