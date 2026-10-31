@@ -1491,6 +1491,10 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         NO_KNOCKBACK_HIT_RESPONSE = 12,
         ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE = 13
     };
+    enum {
+        ENEMY_KNOCKBACK_RECOVERY = 10,
+        ENEMY_DEATH_KNOCKBACK = 0xD
+    };
     float       hit_knockback_vector[4];
     int         kind;
     float       damage;
@@ -1514,7 +1518,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
     hit = find_moby_hit(moby, 0x330000, 0);
     hit_response_code =
         resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
-    if (hit != 0 && kind != 1 && moby->state != 0xD) {
+    if (hit != 0 && kind != 1 && moby->state != ENEMY_DEATH_KNOCKBACK) {
         hit_record_source_moby = *(char **)(hit + 0x20);
         if (hit_record_source_moby != 0) {
             if (hit_record_source_moby != (char *)hero.items[0].moby) {
@@ -1560,7 +1564,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             set_moby_animation(moby, 5, 5);
             moby_data->q.f50 = 14.0f;
             moby_data->q.f54 = 28.0f;
-            moby->state = 10;
+            moby->state = ENEMY_KNOCKBACK_RECOVERY;
             allocate_voice_for_target_entry(1, 0, (int)moby);
             break;
         case KNOCKBACK_WITHOUT_FACING_CHANGE_RESPONSE:
@@ -1584,7 +1588,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             trooper_start_knockback(angle, moby, (char *)moby_data + 0x70, 5, 5, 0);
             moby_data->q.f50 = 6.0f;
             moby_data->q.f54 = 13.0f;
-            moby->state = 10;
+            moby->state = ENEMY_KNOCKBACK_RECOVERY;
             allocate_voice_for_target_entry(1, 0, (int)moby);
             break;
         case ALTERNATE_ANIMATION_KNOCKBACK_RESPONSE:
@@ -1607,7 +1611,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             trooper_start_knockback(angle, moby, (char *)moby_data + 0x70, 6, 5, 2);
             moby_data->q.f50 = 5.0f;
             moby_data->q.f54 = 10.0f;
-            moby->state = 10;
+            moby->state = ENEMY_KNOCKBACK_RECOVERY;
             allocate_voice_for_target_entry(1, 0, (int)moby);
             break;
         case DEATH_KNOCKBACK_RESPONSE:
@@ -1631,7 +1635,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
             moby_data->b255 = 0;
             moby->flags &= 0xEFFF;
             moby_data->b67 = 0xFA;
-            moby->state = 0xD;
+            moby->state = ENEMY_DEATH_KNOCKBACK;
             allocate_voice_for_target_entry(3, 0, (int)moby);
             if (moby->anim != 7) {
                 blend_moby_animation(moby, 7, 0, scale_game_frames(6));
