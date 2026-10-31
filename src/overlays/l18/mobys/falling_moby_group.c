@@ -287,9 +287,12 @@ typedef struct L18VD_1cc8 {
 void reset_drek_boss_falling_moby_group(L18VM_1cc8 *moby) __asm__("FUN_L18_002f1cc8");
 
 void reset_drek_boss_falling_moby_group(L18VM_1cc8 *moby) {
+    enum {
+        FALLING_MOBY_GROUP_AWAIT_ACTIVATION = 1
+    };
     L18VD_1cc8 *data = moby->data;
     if (moby->class_id == 0x565) {
-        moby->state = 1;
+        moby->state = FALLING_MOBY_GROUP_AWAIT_ACTIVATION;
         data->field330 = 0;
         data->field344 = 0;
     }
