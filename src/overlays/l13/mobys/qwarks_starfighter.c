@@ -638,8 +638,8 @@ struct Moby_2EAE80 {
 };
 
 typedef struct {
-    float f0;
-    short h4;
+    float health;
+    short max_health;
     short h6;
 } Sub;
 
@@ -730,7 +730,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
         mode = 0;
         rf = 0;
         k6 = 6.0f;
-        step = (float)dd->h4 / k6;
+        step = (float)dd->max_health / k6;
         hi = (k6 - convert_integer_to_float(moby->bBC)) * step;
         if (moby->bBC >= 5) {
             hi = (k6 - convert_integer_to_float(moby->bBC - 1)) * step;
@@ -750,12 +750,12 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 if (r != 0 && moby->bBC == 7) {
                     r->f2C = r->f2C * 1.5f;
                 }
-                if (dd->f0 <= r->f2C) {
+                if (dd->health <= r->f2C) {
                     func_L13_002EAC18_2EAE80(moby, moby_data, dd, r);
                     mode = 3;
                     moby_data->first->bA4 = 0xFF;
                 } else {
-                    dd->f0 = dd->f0 - r->f2C;
+                    dd->health = dd->health - r->f2C;
                     moby_data->b67 = 0xFA;
                     mode = 1;
                     moby_data->sub.h6 = scale_game_frames(0);
@@ -773,7 +773,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                         v->f8C = 0;
                         v->f118 = 0;
                     }
-                } else if (dd->f0 < hi) {
+                } else if (dd->health < hi) {
                     int tv = D_L13_001D3478[moby->bBC - 1];
 
                     if (tv != -1) {
@@ -809,7 +809,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                         }
                         allocate_voice_for_target_entry(7, 0, moby);
                     }
-                } else if (dd->f0 < lo) {
+                } else if (dd->health < lo) {
                     moby_data->b148 = 1;
                 }
             }
@@ -842,12 +842,12 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
             if (r != 0 && moby->bBC == 7) {
                 r->f2C = r->f2C * 1.5f;
             }
-            if (dd->f0 <= r->f2C) {
+            if (dd->health <= r->f2C) {
                 func_L13_002EAC18_2EAE80(moby, moby_data, dd, r);
                 mode = 3;
                 moby_data->list[i]->bA4 = 0xFF;
             } else {
-                dd->f0 = dd->f0 - r->f2C;
+                dd->health = dd->health - r->f2C;
                 moby_data->b67 = 0xFA;
                 mode = 1;
                 moby_data->sub.h6 = scale_game_frames(0);
@@ -865,7 +865,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     v->f8C = 0;
                     v->f118 = 0;
                 }
-            } else if (dd->f0 < hi) {
+            } else if (dd->health < hi) {
                 int tv = D_L13_001D3478[moby->bBC - 1];
 
                 if (tv != -1) {
@@ -901,7 +901,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     }
                     allocate_voice_for_target_entry(7, 0, moby);
                 }
-            } else if (dd->f0 < lo) {
+            } else if (dd->health < lo) {
                 moby_data->b148 = 1;
             }
         }

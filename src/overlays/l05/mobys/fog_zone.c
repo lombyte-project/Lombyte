@@ -29,20 +29,20 @@ extern unsigned char l05_volume_blended_color_low_byte __asm__("D_L05_00161200")
 void fog_zone_update(struct Moby *moby) __asm__("FUN_L05_0030e1f8");
 
 typedef struct FogZoneVars {
-    f32 unk0;
-    f32 unk4;
-    f32 unk8;
-    f32 unkC;
-    s32 unk10;
-    f32 unk14;
-    f32 unk18;
-    s32 unk1C;
-    u8  unk20;
-    u8  unk21;
-    u8  unk22;
-    u8  unk23;
-    u8  unk24;
-    u8  unk25;
+    f32 saved_fog_448;
+    f32 saved_fog_450;
+    f32 saved_fog_44C;
+    f32 saved_fog_454;
+    s32 preset_fog_448;
+    f32 preset_fog_450;
+    f32 preset_fog_44C;
+    s32 preset_fog_454;
+    u8  saved_fog_444;
+    u8  saved_fog_445;
+    u8  saved_fog_446;
+    u8  preset_fog_444;
+    u8  preset_fog_445;
+    u8  preset_fog_446;
     u8  pad_26[0x2];
     s32 clip_volume_28;
     s32 clip_volume_2C;
@@ -67,26 +67,26 @@ void fog_zone_update(struct Moby *moby) {
     }
     switch (((unsigned char *)moby)[0x20]) {
     case FOG_ZONE_INITIALIZE:
-        fog_zone_vars->unk20 = D_L05_0015F444;
-        fog_zone_vars->unk21 = D_L05_0015F445;
-        fog_zone_vars->unk22 = D_L05_0015F446;
+        fog_zone_vars->saved_fog_444 = D_L05_0015F444;
+        fog_zone_vars->saved_fog_445 = D_L05_0015F445;
+        fog_zone_vars->saved_fog_446 = D_L05_0015F446;
         {
-            float f0 = D_L05_0015F448;
-            float f1 = D_L05_0015F44C;
-            float f2 = D_L05_0015F450;
-            float f3 = D_L05_0015F454;
-            fog_zone_vars->unk0 = f0;
-            fog_zone_vars->unk8 = f1;
-            fog_zone_vars->unk4 = f2;
-            fog_zone_vars->unkC = f3;
+            float fog_448 = D_L05_0015F448;
+            float fog_44C = D_L05_0015F44C;
+            float fog_450 = D_L05_0015F450;
+            float fog_454 = D_L05_0015F454;
+            fog_zone_vars->saved_fog_448 = fog_448;
+            fog_zone_vars->saved_fog_44C = fog_44C;
+            fog_zone_vars->saved_fog_450 = fog_450;
+            fog_zone_vars->saved_fog_454 = fog_454;
         }
-        fog_zone_vars->unk23 = 0x49;
-        fog_zone_vars->unk24 = 0x53;
-        fog_zone_vars->unk25 = 0xC;
-        fog_zone_vars->unk18 = 33792.0f;
-        fog_zone_vars->unk14 = 255.0f;
-        fog_zone_vars->unk10 = 0;
-        fog_zone_vars->unk1C = 0;
+        fog_zone_vars->preset_fog_444 = 0x49;
+        fog_zone_vars->preset_fog_445 = 0x53;
+        fog_zone_vars->preset_fog_446 = 0xC;
+        fog_zone_vars->preset_fog_44C = 33792.0f;
+        fog_zone_vars->preset_fog_450 = 255.0f;
+        fog_zone_vars->preset_fog_448 = 0;
+        fog_zone_vars->preset_fog_454 = 0;
         {
             int c = l05_volume_blended_color_low_byte +
                     (l05_volume_blended_color_lower_middle_byte << 8) +
@@ -99,36 +99,36 @@ void fog_zone_update(struct Moby *moby) {
         break;
     case FOG_ZONE_WAIT_TO_APPLY_PRESET:
         if (is_point_inside_clip_volume(&hero.motion.pos, fog_zone_vars->clip_volume_2C)) {
-            D_L05_0015F444 = fog_zone_vars->unk23;
-            D_L05_0015F445 = fog_zone_vars->unk24;
-            D_L05_0015F446 = fog_zone_vars->unk25;
+            D_L05_0015F444 = fog_zone_vars->preset_fog_444;
+            D_L05_0015F445 = fog_zone_vars->preset_fog_445;
+            D_L05_0015F446 = fog_zone_vars->preset_fog_446;
             {
-                float f0 = *(float *)&fog_zone_vars->unk10;
-                float f1 = fog_zone_vars->unk18;
-                float f2 = fog_zone_vars->unk14;
-                float f3 = *(float *)&fog_zone_vars->unk1C;
-                D_L05_0015F448 = f0;
-                D_L05_0015F44C = f1;
-                D_L05_0015F450 = f2;
-                D_L05_0015F454 = f3;
+                float fog_448 = *(float *)&fog_zone_vars->preset_fog_448;
+                float fog_44C = fog_zone_vars->preset_fog_44C;
+                float fog_450 = fog_zone_vars->preset_fog_450;
+                float fog_454 = *(float *)&fog_zone_vars->preset_fog_454;
+                D_L05_0015F448 = fog_448;
+                D_L05_0015F44C = fog_44C;
+                D_L05_0015F450 = fog_450;
+                D_L05_0015F454 = fog_454;
             }
             moby->state = 2;
         }
         break;
     case FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS:
         if (is_point_inside_clip_volume(&hero.motion.pos, fog_zone_vars->clip_volume_28)) {
-            D_L05_0015F444 = fog_zone_vars->unk20;
-            D_L05_0015F445 = fog_zone_vars->unk21;
-            D_L05_0015F446 = fog_zone_vars->unk22;
+            D_L05_0015F444 = fog_zone_vars->saved_fog_444;
+            D_L05_0015F445 = fog_zone_vars->saved_fog_445;
+            D_L05_0015F446 = fog_zone_vars->saved_fog_446;
             {
-                float f0 = fog_zone_vars->unk0;
-                float f1 = fog_zone_vars->unk8;
-                float f2 = fog_zone_vars->unk4;
-                float f3 = fog_zone_vars->unkC;
-                D_L05_0015F448 = f0;
-                D_L05_0015F44C = f1;
-                D_L05_0015F450 = f2;
-                D_L05_0015F454 = f3;
+                float fog_448 = fog_zone_vars->saved_fog_448;
+                float fog_44C = fog_zone_vars->saved_fog_44C;
+                float fog_450 = fog_zone_vars->saved_fog_450;
+                float fog_454 = fog_zone_vars->saved_fog_454;
+                D_L05_0015F448 = fog_448;
+                D_L05_0015F44C = fog_44C;
+                D_L05_0015F450 = fog_450;
+                D_L05_0015F454 = fog_454;
             }
             moby->state = 1;
         }
