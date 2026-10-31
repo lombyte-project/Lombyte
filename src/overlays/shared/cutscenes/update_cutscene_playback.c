@@ -1138,6 +1138,10 @@ extern void FUN_0022ca50(void);
 void update_slideshow(void) __asm__("FUN_L00_00299c48");
 
 void update_slideshow(void) {
+    enum {
+        SLIDESHOW_STATE_WAIT_FOR_TRANSITION = 0,
+        SLIDESHOW_STATE_TRANSITION = 1
+    };
     s32  skip_check;
     s32  i;
     s32 *src;
@@ -1153,7 +1157,7 @@ void update_slideshow(void) {
     if ((u8)D_0013D1D0[2] != 'A') {
         skip_check = 0;
     }
-    if (slideshow.state == 0) {
+    if (slideshow.state == SLIDESHOW_STATE_WAIT_FOR_TRANSITION) {
         if (slideshow.frame >= slideshow_frame_thresholds[slideshow.slide] - 0x24) {
             if (cd_read_active[0] != 0) {
                 update_audio_stream_until_idle(1);
@@ -1167,9 +1171,9 @@ void update_slideshow(void) {
                 goto end_show;
             }
             slideshow.timer = -1;
-            slideshow.state = 1;
+            slideshow.state = SLIDESHOW_STATE_TRANSITION;
         }
-    } else if (slideshow.state == 1) {
+    } else if (slideshow.state == SLIDESHOW_STATE_TRANSITION) {
         vu1_sync_chain(1);
         if (slideshow.timer < 0x20) {
             src = slideshow.src;
@@ -1197,7 +1201,7 @@ void update_slideshow(void) {
                     slideshow.frame = 0x32B4;
                 }
             }
-            slideshow.state = 0;
+            slideshow.state = SLIDESHOW_STATE_WAIT_FOR_TRANSITION;
             slideshow.timer = -1;
             slideshow.slide++;
             slide = slideshow.slide % 20;
