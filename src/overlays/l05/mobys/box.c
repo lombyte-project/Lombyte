@@ -32,7 +32,7 @@ void box_update(char *moby) {
                                             moby + 0x40,
                                             moby_data + 0x60,
                                             moby_data + 0x70);
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = BOX_UPDATE_TRANSFORM;
         }
         break;
     case BOX_UPDATE_TRANSFORM:
