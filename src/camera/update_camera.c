@@ -17,7 +17,7 @@ extern int           text_screen_active[] __asm__("D_001E6400");
 extern char          camera_shake_vectors[] __asm__("D_001870A0");
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
 extern void          refresh_camera_control_flags(void) __asm__("func_001ED940");
-extern void          start_camera_blend(void *) __asm__("func_001EC8A0");
+extern void          start_camera_blend(struct UpdateCam *) __asm__("func_001EC8A0");
 extern int           update_all_cameras(void) __asm__("func_001EC420");
 extern void          apply_camera_shake(void *, int) __asm__("func_001ED360");
 extern void          update_camera_underwater_flag(void) __asm__("func_001ED7F0");
@@ -42,8 +42,8 @@ void update_camera(void) {
         if (text_screen_active[0] != 0) {
             return;
         }
-        *(short *)cam_trans_state = 0;
-        cam_trans_state[2] = 0;
+        cam_trans_state.mode = 0;
+        cam_trans_state.kind = 0;
     }
     camera = &preview_camera;
     camera->frame_count++;

@@ -2,24 +2,6 @@
 #include "rnc/world/collision/surface_height_grid.h"
 #include "rnc/math/asm_helpers.h"
 
-typedef struct {
-    f32 samples[16][16];
-    f32 pad_400[0x20];
-    f32 bottom_edge[16];
-    f32 right_edge[16];
-    f32 pad_500[0x23];
-    f32 corner;
-    f32 pad_590[0xC];
-} SurfaceHeightLayer;
-
-typedef struct {
-    f32                x;
-    f32                y;
-    f32                z;
-    u8                 pad_C[0x44];
-    SurfaceHeightLayer layers[3];
-} SurfaceHeightTile;
-
 extern SurfaceHeightTile *surface_height_tiles __asm__("D_00161190");
 extern s32                surface_height_layer __asm__("D_001610E0") __attribute__((sda));
 

@@ -5,6 +5,7 @@
 #include "rnc/game/item_state.h"
 #include "rnc/rendering/texture/pack_image_descriptor.h"
 #include "rnc/sdk/libc/stdio/sprintf.h"
+#include "rnc/ui/text/text_region.h"
 
 extern char D_001602A0[];
 extern u8   ammo_count_decimal_format[] __asm__("D_001602B8");
@@ -66,8 +67,9 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
     }
     setup_gif_paging(0);
     pack_image_descriptor((s32 *)descriptor, image_descriptor_input);
-    *(s16 *)(descriptor + 0x10) = 0x10;
-    *(s16 *)(descriptor + 0x12) = 3;
+    ((struct TextRegion *)descriptor)->line_advance = 0x10;
+    ((struct TextRegion *)descriptor)->flags =
+        TEXT_REGION_CENTER_HORIZONTALLY | TEXT_REGION_CENTER_VERTICALLY;
     font_print_window_regular((s32 *)descriptor, (((u64)0x80FF << 0x10) | 0xA888), sp_slot, -1);
     do_gif_paging();
     return 2;
