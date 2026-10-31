@@ -13,7 +13,7 @@ s32 PowerOffCB(void) {
     D_001312E4[0] = 1;
     interrupt_state = DIntr();
     sceSifAddCmdHandler(0x80000012, D_00120960, 0);
-    if (interrupt_state != 0) {
+    if (interrupt_state != FALSE) {
         EnableInterrupts();
     }
     D_001312E4[0] = 0;
