@@ -997,7 +997,7 @@ void layered_scroll_effect_update(struct Moby *moby) {
                               1);
             layered_effect_color_tables_initialized_gp = 1;
         }
-        moby->state = 1;
+        moby->state = EFFECT_UPDATE_AND_QUEUE_DRAW;
         for (i = 0; i < 3; i++) {
             D_L11_001FF750[i].a = 0;
             D_L11_001FF750[i].b = 0;
