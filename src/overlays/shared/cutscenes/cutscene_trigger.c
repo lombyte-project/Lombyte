@@ -60,7 +60,7 @@ extern int  debug_print(void *, int, int) __asm__("FUN_001e93b0");
 
 extern s32      D_0015ED84;
 extern u8       D_0015EDB0;
-extern MobyList D_L01_0016CCE0;
+extern MobyList fx_cutscene __asm__("D_L01_0016CCE0");
 extern Effect   D_L01_0017C8C0;
 extern char     cutscene_camera_init_position_error_format[] __asm__("D_L01_0020B550");
 extern int      D_0015ED84; /* no foreign declaration */
@@ -74,11 +74,11 @@ void attach_cutscene_fixed_scale_manipulator(void) {
     s32 i;
 
     if (cutscene_mode == 2 && D_0015EDB0 != 0) {
-        for (i = 0; i < D_L01_0016CCE0.count; i++) {
-            int moby_type = D_L01_0016CCE0.list[i]->type;
+        for (i = 0; i < fx_cutscene.count; i++) {
+            int moby_type = fx_cutscene.list[i]->type;
 
             if ((moby_type == 0x398 || moby_type == 0x1BF) && D_L01_0017C8C0.active == 0) {
-                attach_manipulator(D_L01_0016CCE0.list[i], 0, &D_L01_0017C8C0);
+                attach_manipulator(fx_cutscene.list[i], 0, &D_L01_0017C8C0);
                 D_L01_0017C8C0.z = D_L01_0017C8C0.y = D_L01_0017C8C0.x = 2.1f;
             }
         }
