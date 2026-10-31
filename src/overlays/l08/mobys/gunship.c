@@ -332,6 +332,9 @@ void gunship_update(struct Moby *moby) {
         GUNSHIP_BEGIN_PRIMARY_PATH = 3,
         GUNSHIP_BREAK_APART_AND_REMOVE = 0x63
     };
+    enum {
+        GUNSHIP_PART_RELEASED = 1
+    };
     GunshipVars       *gunship_control_vars = (GunshipVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby       *target;
@@ -508,7 +511,7 @@ void gunship_update(struct Moby *moby) {
                 cart_burst(moby, &part->pos, -1, 3.0f, 13.0f);
                 fast_vec_sub(drift, &part->pos, &moby->pos);
                 fast_vec_normalize(drift, drift, frame_time * 5.0f);
-                part->state = 1;
+                part->state = GUNSHIP_PART_RELEASED;
                 gunship_control_vars->links[i].part = NULL;
             }
         }
