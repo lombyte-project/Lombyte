@@ -1762,9 +1762,9 @@ void fighter_jet_update(ShipMoby *moby) {
     if (moby != 0) {
         ship_vars = (ShipVars *)moby->vars;
         fast_dec_timer(&ship_vars->timerDC);
-        if (moby->state != 7 && moby->state != 1 && moby->state != 2) {
+        if (moby->state != FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY && moby->state != FIGHTER_JET_STATE_WAIT_FOR_BOARDING && moby->state != FIGHTER_JET_STATE_BOARDING_FADE) {
             hit = (ShipHit *)find_moby_hit(moby, 0x30001, 0);
-            if (hit != 0 && moby->state == 4) {
+            if (hit != 0 && moby->state == FIGHTER_JET_STATE_PILOTED_FLIGHT) {
                 struct Hero *g = &hero;
                 if (hit->damage < g->ship_hp) {
                     g->ship_hp -= hit->damage;
@@ -1799,7 +1799,7 @@ void fighter_jet_update(ShipMoby *moby) {
                         s->shake_frames = scale_game_frames(5);
                     }
                     g->ship_hp = 0.0f;
-                    moby->state = 7;
+                    moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                     ship_vars->hit_timer = scale_game_frames(30);
                     g->motion.pos.f[2] += 0.2f;
                     ((ShipCamera *)g->moby)->unk98 = 0;
@@ -1837,7 +1837,7 @@ void fighter_jet_update(ShipMoby *moby) {
         }
         switch (moby->state) {
         case FIGHTER_JET_STATE_INITIALIZE:
-            moby->state = 1;
+            moby->state = FIGHTER_JET_STATE_WAIT_FOR_BOARDING;
             ship_vars->b60 = 0;
             moby->scale = *(float *)(moby->pclass + 0x24);
             ship_vars->f20 = ship_vars->rot[0];
@@ -1862,7 +1862,7 @@ void fighter_jet_update(ShipMoby *moby) {
             ship_vars->timerF8 = 1;
             ship_vars->iE8 = 1;
             if (moby->bB0 != 0xFF && visited52[moby->bB0 + current_level_index * 16] == 0xFF) {
-                moby->state = 9;
+                moby->state = FIGHTER_JET_STATE_FADE_THEN_REMOVE;
             }
             if (ship_vars->i11C > 0) {
                 jet_group_state(ship_vars->i11C, 0, 0, 0);
@@ -1877,7 +1877,7 @@ void fighter_jet_update(ShipMoby *moby) {
                     FUN_00215130(7, 0x53E4) != 0 && (pad_pressed_words[0] & 0x10);
             if (board) {
                 remove_help_message_for_selector(7);
-                moby->state = 2;
+                moby->state = FIGHTER_JET_STATE_BOARDING_FADE;
                 ship_vars->i124 = -1;
             } else if (ship_vars->fade != 0.0f) {
                 FUN_00213ed8(&ship_vars->fade, 0.0f, frame_time * 4.0f);
@@ -1948,7 +1948,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 jet_camera_mode();
                 D_L17_0015F608 = 2;
                 update_fighter_jet_flight((FighterJetMoby *)moby, (FighterJetVars *)ship_vars);
-                moby->state = 4;
+                moby->state = FIGHTER_JET_STATE_PILOTED_FLIGHT;
             }
             break;
         case FIGHTER_JET_STATE_PILOTED_FLIGHT:
@@ -1962,7 +1962,7 @@ void fighter_jet_update(ShipMoby *moby) {
             update_fighter_jet_flight((FighterJetMoby *)moby, (FighterJetVars *)ship_vars);
             if (ship_vars->iE8 <= 0) {
                 ship_vars->timerF8 = D_L17_00162178;
-                moby->state = 8;
+                moby->state = FIGHTER_JET_STATE_VICTORY_EXIT;
             }
             if (ship_vars->fade != 0.0f) {
                 FUN_00213ed8(&ship_vars->fade, 0.0f, frame_time * 4.0f);
@@ -1971,7 +1971,7 @@ void fighter_jet_update(ShipMoby *moby) {
             {
                 struct Hero *g = &hero;
                 if (g->ship_flags & 1) {
-                    moby->state = 5;
+                    moby->state = FIGHTER_JET_STATE_DISMOUNT;
                 }
             }
             break;
@@ -2006,7 +2006,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 }
             }
             ship_vars->voice2 = -1;
-            moby->state = 1;
+            moby->state = FIGHTER_JET_STATE_WAIT_FOR_BOARDING;
             ship_vars->fade = 0.99f;
             fighter_jet_transition_fade_value = 0.99f;
             break;
@@ -2040,7 +2040,7 @@ void fighter_jet_update(ShipMoby *moby) {
                     }
                 }
                 ship_vars->voice2 = -1;
-                moby->state = 0;
+                moby->state = FIGHTER_JET_STATE_INITIALIZE;
             }
             break;
         case FIGHTER_JET_STATE_VICTORY_EXIT:
@@ -2102,7 +2102,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 }
                 ship_vars->voice2 = -1;
                 jet_reset_camera((&hero.motion.pos), &hero.motion.rot);
-                moby->state = 9;
+                moby->state = FIGHTER_JET_STATE_FADE_THEN_REMOVE;
             }
             break;
         case 10:
@@ -2134,11 +2134,11 @@ void fighter_jet_update(ShipMoby *moby) {
         if (moby->pos[2] > 1008.0f) {
             moby->pos[2] = 1008.0f;
         }
-        if (moby->state == 4) {
+        if (moby->state == FIGHTER_JET_STATE_PILOTED_FLIGHT) {
             qcopy_nc((&hero.motion.pos), moby->pos);
             qcopy_nc(&hero.motion.rot, ship_vars->rot);
         }
-        if (moby->state == 3 || moby->state == 4) {
+        if (moby->state == 3 || moby->state == FIGHTER_JET_STATE_PILOTED_FLIGHT) {
             emit_type_74_particles_from_moby_joints(moby, ship_vars);
         }
     }
