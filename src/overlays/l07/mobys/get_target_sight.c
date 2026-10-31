@@ -16,6 +16,11 @@ extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 int                get_target_sight(char *a, char *o, float best) __asm__("FUN_L07_002886d8");
 
 int get_target_sight(char *source_moby, char *sight_out, float best) {
+    enum {
+        TARGET_SIGHT_DEFAULT_HERO = 0,
+        TARGET_SIGHT_CANDIDATE_SELECTED = 1,
+        TARGET_SIGHT_HERO_EXCLUDED = 2
+    };
     struct Hero *hero_context = &hero_lui;
     char        *target_moby;
     char        *candidate_moby;
@@ -25,10 +30,10 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
     float        candidate_metric;
 
     target_moby = ((char *)hero_context->moby);
-    target_selection_status = 0;
+    target_selection_status = TARGET_SIGHT_DEFAULT_HERO;
     if (hero_context->state.control_mode == 0x18 || hero_context->state.current == 0x72) {
         target_moby = 0;
-        target_selection_status = 2;
+        target_selection_status = TARGET_SIGHT_HERO_EXCLUDED;
     }
     for (i = 1; i <= D_L07_001B08B0[0]; i++) {
         candidate_moby = level_mobys + (D_L07_001B08B0[i] << 8);
@@ -46,7 +51,7 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
         if (candidate_metric < best) {
             target_moby = candidate_moby;
             best = candidate_metric;
-            target_selection_status = 1;
+            target_selection_status = TARGET_SIGHT_CANDIDATE_SELECTED;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -65,7 +70,7 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
         if (candidate_metric < best) {
             target_moby = candidate_moby;
             best = candidate_metric;
-            target_selection_status = 1;
+            target_selection_status = TARGET_SIGHT_CANDIDATE_SELECTED;
         }
     }
     if (target_moby != 0) {
