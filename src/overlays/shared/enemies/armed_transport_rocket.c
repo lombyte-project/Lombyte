@@ -55,7 +55,7 @@ void armed_transport_rocket_update(char *m) __asm__("FUN_L16_002a0a98");
 
 /* Moby class 50 */
 void armed_transport_rocket_update(char *rocket_moby) {
-    float desired[4], next_position[4], delta[4], blend[4];
+    enum { ARMED_TRANSPORT_ROCKET_STATE_FLYING = 0 } ;float desired[4], next_position[4], delta[4], blend[4];
     char *rocket_data = ((char *)MOBY(rocket_moby)->pvars);
     void *remaining;
     float yaw, pitch;
@@ -64,7 +64,7 @@ void armed_transport_rocket_update(char *rocket_moby) {
         *(int *)(rocket_data + 0x34) = 1;
         trooper_play_sound(5, 0, (int)rocket_moby, 0x54C);
     }
-    if (MOBY(rocket_moby)->state != 0)
+    if (MOBY(rocket_moby)->state != ARMED_TRANSPORT_ROCKET_STATE_FLYING)
         return;
     spawn_rocket_trail_spark(rocket_moby);
     fast_vec_sub(delta, rocket_data + 0x10, &MOBY(rocket_moby)->pos);
@@ -92,7 +92,7 @@ void armed_transport_rocket_update(char *rocket_moby) {
     remaining = delta;
     if (collision_line(&MOBY(rocket_moby)->pos, next_position, 0, rocket_moby, 0) != 0 ||
         fast_vec_length(remaining) < *(float *)(rocket_data + 0x24)) {
-        if (hero.vehicle_mode == 2)
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK)
             play_entity_sound(
                 (int)rocket_moby, 2.0f, &MOBY(rocket_moby)->pos, 3, 2.0f, 1.0f, 0, 1, 0);
         trooper_play_sound(4, 0, (int)rocket_moby, 0x54C);
