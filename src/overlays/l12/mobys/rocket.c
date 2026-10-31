@@ -42,6 +42,9 @@ char *spawn_rocket(char *initial_velocity,
                    float nominal_speed,
 
                    float f2) {
+    enum {
+        ROCKET_STATE_FLYING = 1
+    };
     struct Moby *moby = (struct Moby *)create_moby(0x199);
     if (moby != 0) {
         char *rocket_vars;
@@ -50,7 +53,7 @@ char *spawn_rocket(char *initial_velocity,
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x7E;
         moby->visible = 1;
-        moby->state = 1;
+        moby->state = ROCKET_STATE_FLYING;
         qcopy(&moby->pos, pos);
         qcopy(rocket_vars, initial_velocity);
         moby->rot.z = fast_arc_tan(*(float *)rocket_vars, *(float *)(rocket_vars + 4));
