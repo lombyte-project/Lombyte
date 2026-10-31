@@ -284,7 +284,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         flag = 1;
         {
             S40 *camera_target = (S40 *)((u8 *)camera_moby->m + 0x40);
-            if (hero.vehicle_mode == 1) {
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
                 camera_target->fB0 = 0.25f;
                 follow_camera_set_height(1.5f, 0.003f);
             } else {
@@ -295,7 +295,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     }
     if (hero.state.control_mode == 0x10)
         camera_moby->m->fF0 = 0.25f;
-    if (hero.vehicle_mode == 1) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         if (camera_override_state->i0 == 0) {
             q = (S40 *)((u8 *)camera_moby->m + 0x40);
             follow_camera_set_distance(1, 3.0f, 0.003f);
@@ -306,7 +306,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         }
         *(f32 *)((u8 *)camera_moby->m + 0x20C) = 0.6f;
     }
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         if (camera_override_state->i10 < 2) {
             follow_camera_set_offset_scale(0, follow_camera_vehicle_offset_scale_gp, 0.005f);
             follow_camera_set_distance(1, follow_camera_vehicle_orbit_distance_gp, 0.003f);
