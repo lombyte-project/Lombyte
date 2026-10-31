@@ -223,10 +223,10 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
                 return;
             }
             qcopy(&moby->pos, &toad_paths[vars->pathIdx]->pts[0]);
-            moby->state = 1;
+            moby->state = VELDIN_ROBOT_STATE_WAIT_TO_FOLLOW_PATH;
             ELECTROID_ANIM(moby, 1, 5);
         } else {
-            moby->state = 3;
+            moby->state = VELDIN_ROBOT_STATE_FACE_TARGET;
             ELECTROID_ANIM(moby, 1, 5);
         }
         break;
@@ -239,7 +239,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
             }
         }
         if (vars->unk114 != 2) {
-            moby->state = 2;
+            moby->state = VELDIN_ROBOT_STATE_FOLLOW_PATH;
             ELECTROID_ANIM(moby, 9, scale_game_frames_s32(10));
         }
         break;
@@ -261,7 +261,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         if (fast_vec_length(&dir) < vars->speed + vars->speed) {
             vars->pathPt++;
             if (vars->pathPt == path->count) {
-                moby->state = 3;
+                moby->state = VELDIN_ROBOT_STATE_FACE_TARGET;
                 ELECTROID_ANIM(moby, 1, scale_game_frames_s32(10));
             }
         }
@@ -280,7 +280,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
             ELECTROID_ANIM(moby, random_integer_below(2) + 1, scale_game_frames_s32(20));
         }
         if (vars->unk114 != 2 && register_beam_slot(moby, 0, 0) != 0) {
-            moby->state = 4;
+            moby->state = VELDIN_ROBOT_STATE_WAIT_TO_START_COLLISION_PROBES;
             ELECTROID_ANIM(moby, 5, scale_game_frames_s32(10));
         }
         break;
@@ -292,7 +292,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
             12.566371f);
         if (moby->unk70 & 2) {
             vars->timer = 0;
-            moby->state = 5;
+            moby->state = VELDIN_ROBOT_STATE_PROCESS_COLLISION_PROBES;
             ELECTROID_ANIM(moby, 6, scale_game_frames_s32(10));
         }
         break;
@@ -335,14 +335,14 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         if (collision_line(&mtx[3], &probe, 0, moby, &query) != 0 && hit != 0 &&
             coll_hit.moby == (*(s32 *)&D_001413D0_lui)) {
             release_beam_slot_by_id(moby);
-            moby->state = 6;
+            moby->state = VELDIN_ROBOT_STATE_WAIT_TO_RETURN_TO_FACE_TARGET;
             ELECTROID_ANIM(moby, 7, scale_game_frames_s32(10));
         }
         if (collision_line(&mtx[3], &dir, 0, moby, &query) != 0) {
             qcopy(&dir, &coll_hit.point);
             if (hit != 0 && coll_hit.moby == (*(s32 *)&D_001413D0_lui)) {
                 release_beam_slot_by_id(moby);
-                moby->state = 6;
+                moby->state = VELDIN_ROBOT_STATE_WAIT_TO_RETURN_TO_FACE_TARGET;
                 ELECTROID_ANIM(moby, 7, scale_game_frames_s32(10));
             }
         }
@@ -350,7 +350,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         if (moby->unk70 & 2) {
             if (vars->timer++ == veldin_robot_beam_hit_frames) {
                 release_beam_slot_by_id(moby);
-                moby->state = 6;
+                moby->state = VELDIN_ROBOT_STATE_WAIT_TO_RETURN_TO_FACE_TARGET;
                 ELECTROID_ANIM(moby, 12, scale_game_frames_s32(10));
             }
         }
@@ -363,13 +363,13 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
             fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
             12.566371f);
         if (moby->unk70 & 2) {
-            moby->state = 3;
+            moby->state = VELDIN_ROBOT_STATE_FACE_TARGET;
             ELECTROID_ANIM(moby, 1, scale_game_frames_s32(10));
         }
         break;
     case VELDIN_ROBOT_STATE_DAMAGE_KNOCKBACK:
         if (step_moby_motion(moby, vars->unk70) & 0x140) {
-            moby->state = 3;
+            moby->state = VELDIN_ROBOT_STATE_FACE_TARGET;
             ELECTROID_ANIM(moby, 1, scale_game_frames_s32(10));
         }
         break;
