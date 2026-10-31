@@ -45,18 +45,22 @@ void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
 
 /* Moby class 384 */
 void water_reservoir_update(struct Moby *moby) {
+    enum {
+        WATER_RESERVOIR_STATE_INITIALIZE = 0,
+        WATER_RESERVOIR_STATE_ACTIVE = 1
+    };
     float *reservoir_state = (float *)moby->pvars;
     float  pos[4], offset0[4], offset1[4], pos_offset_delta[4], offset_pair_delta[4];
     float  fraction, frame_scale;
     int    scaled;
-    if (moby->state != 0) {
+    if (moby->state != WATER_RESERVOIR_STATE_INITIALIZE) {
         extern float D_L12_0015F3FC __attribute__((sda));
         frame_scale = D_L12_0015F3FC;
-        if (moby->state == 1)
+        if (moby->state == WATER_RESERVOIR_STATE_ACTIVE)
             goto active;
         goto update;
     }
-    moby->state = 1;
+    moby->state = WATER_RESERVOIR_STATE_ACTIVE;
     moby->command = 2;
     reservoir_state[0] = random_angle_radians();
     reservoir_state[2] = 5.0f;
