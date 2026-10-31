@@ -135,7 +135,7 @@ void beam_barrier_update(struct Moby *moby) {
         D_L06_00161E40[3] = 0x22;
         D_L06_00161E40[0] = 0;
         beam_barrier_control_vars->voice = -1;
-        moby->state = 1;
+        moby->state = BEAM_BARRIER_ACTIVE;
         moby->flags = moby->flags | 0x4000;
         return;
     }
@@ -257,7 +257,7 @@ void beam_barrier_update(struct Moby *moby) {
             if (!all_done)
                 return;
             moby->collision = 0;
-            moby->state = 2;
+            moby->state = BEAM_BARRIER_EMIT_SPARK_BURST;
             {
                 int voice = beam_barrier_control_vars->voice;
                 if (voice != -1) {
@@ -329,7 +329,7 @@ void beam_barrier_update(struct Moby *moby) {
             } while (spark >= 0);
             segment = next_segment;
         } while (segment < 9);
-        moby->state = 3;
+        moby->state = BEAM_BARRIER_REMOVE;
         return;
     }
     case BEAM_BARRIER_REMOVE:
