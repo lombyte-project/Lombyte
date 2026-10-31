@@ -2492,7 +2492,7 @@ extern short l18_drek_boss_scalar_acceleration_and_braking_gp __asm__("D_L18_001
 
 #include "rnc/overlay/l18/mobys/drek_final_boss_robot_data/update_drek_boss_state_dependent_scalars_3.h"
 
-extern float D_L18_001623DC_gp __asm__("D_L18_001623DC") __attribute__((sda));
+extern float l18_drek_boss_second_scalar_near_node_follow_target_gp __asm__("D_L18_001623DC") __attribute__((sda));
 
 #include "rnc/overlay/l18/mobys/drek_final_boss_robot_data/update_drek_boss_state_dependent_scalars_2.h"
 
@@ -2559,7 +2559,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                                    D_L18_001600EC + (*(int *)(boss_data + 0x344) << 7) + 0x30) <
                 28.0f) {
                 x = drek_boss_first_scalar_near_node_follow_target_gp;
-                y = D_L18_001623DC_gp;
+                y = l18_drek_boss_second_scalar_near_node_follow_target_gp;
             }
         }
     } else if (boss_state == 9 || boss_state == 6) {
