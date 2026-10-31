@@ -381,7 +381,10 @@ s32 test_hydrodisplacer_activation_flag(void) {
 
 /* Moby state 4: clears two globals, calls 002eac18(3); control mode 0x13: calls 002223f8(0, 1). */
 void end_hydrodisplacer_interaction(char *moby) {
-    if (MOBY(moby)->state == 4) {
+    enum {
+        HYDRODISPLACER_CAMERA_TRANSITION = 4
+    };
+    if (MOBY(moby)->state == HYDRODISPLACER_CAMERA_TRANSITION) {
         hydrodisplacer_camera_active = 0;
         *(int *)&D_L00_0015F3FC = 0;
         jet_end_mount(3);
