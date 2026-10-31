@@ -252,9 +252,13 @@ int request_floating_platform_tilt(struct Moby *platform_moby,
                                    int          tilt_delay_frames,
 
                                    int scaled_frame_count) {
+    enum {
+        STATE_WAIT_FOR_TILT_REQUEST = 1,
+        STATE_TILT_DELAY = 3
+    };
     int *platform_vars = (int *)platform_moby->pvars;
-    if (platform_moby->state == 1) {
-        platform_moby->state = 3;
+    if (platform_moby->state == STATE_WAIT_FOR_TILT_REQUEST) {
+        platform_moby->state = STATE_TILT_DELAY;
         platform_vars[0x7C / 4] = tilt_delay_frames;
         platform_vars[0x78 / 4] = scaled_frame_count;
         return 1;
