@@ -641,12 +641,16 @@ int update_moby_suck_cannon_state(struct Moby *a) __asm__("FUN_L18_002fcbb0");
 
 /* Method: holds the gadgebot in state 7 while the suck cannon pulls it, and puts it back to state 2 when it lets go. */
 int update_moby_suck_cannon_state(struct Moby *moby) {
+    enum {
+        GADGEBOT_WAIT_TO_APPROACH = 0x2,
+        GADGEBOT_SUCK_CANNON_SUCTION = 0x7
+    };
     int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result == 0) {
-        if (moby->state == 0x7)
-            moby->state = 0x2;
+        if (moby->state == GADGEBOT_SUCK_CANNON_SUCTION)
+            moby->state = GADGEBOT_WAIT_TO_APPROACH;
     } else {
-        moby->state = 0x7;
+        moby->state = GADGEBOT_SUCK_CANNON_SUCTION;
     }
     return suction_result;
 }
