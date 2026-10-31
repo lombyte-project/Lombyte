@@ -175,6 +175,9 @@ void doom_bot_update(struct Moby *moby) {
         DOOM_BOT_INITIAL_FALL = 14,
         DOOM_BOT_RESET_TO_INITIALIZE = 15
     };
+    enum {
+        MOBY_STATE_PENDING_REMOVAL = 0xFE
+    };
     OvlVec4       movement_and_detonation_vectors[4];
     float         clearance;
     DoomBotVars  *doom_bot_vars;
@@ -334,7 +337,7 @@ void doom_bot_update(struct Moby *moby) {
     case DOOM_BOT_MOVE_HIGH_TURN_RATE:
     case DOOM_BOT_MOVE_LOW_TURN_RATE: {
         target = doom_bot_vars->target_moby;
-        if (target && target->state != 0xFE && target->state != 0xFD) {
+        if (target && target->state != MOBY_STATE_PENDING_REMOVAL && target->state != 0xFD) {
             height = target->pos.z;
             aim = (AimInfo *)get_moby_target_info((char *)doom_bot_vars->target_moby);
             reach = speed;
