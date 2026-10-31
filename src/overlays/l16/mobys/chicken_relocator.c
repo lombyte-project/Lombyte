@@ -154,10 +154,14 @@ int is_moby_in_state_6(Level16VendorMoby *moby) {
 void request_target_reposition(struct Moby *moby) __asm__("FUN_L16_002e0de0");
 
 void request_target_reposition(struct Moby *moby) {
-    int state = 1;
+    enum {
+        TARGET_REPOSITION_STATE_REQUESTABLE = 1,
+        TARGET_REPOSITION_STATE_REQUESTED = 7
+    };
+    int state = TARGET_REPOSITION_STATE_REQUESTABLE;
     if (moby->state == state) {
         allocate_voice_for_target_entry(0, 0, moby);
-        state = 7;
+        state = TARGET_REPOSITION_STATE_REQUESTED;
         moby->state = state;
     }
 }
