@@ -989,6 +989,9 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
         ULTRAMECH_DEATH_EFFECTS = 10,
         ULTRAMECH_DEAD_WAIT_FOR_RESET = 0x40
     };
+    enum {
+        HIT_CLASSIFICATION_NO_DAMAGE = 1
+    };
     UMoby        *ultramech_moby = ultramech_instance;
     UData        *ultramech_vars = ultramech_moby->data;
     char         *slot = 0;
@@ -1026,7 +1029,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     }
     code = FUN_00249d60(ultramech_moby, slot, &ultramech_vars->f20, 0, &kind, &impact, 0, 4);
     if (slot != 0) {
-        if (kind != 1 && (state = ultramech_moby->state) != 10 && state != ULTRAMECH_DEAD_WAIT_FOR_RESET &&
+        if (kind != HIT_CLASSIFICATION_NO_DAMAGE && (state = ultramech_moby->state) != 10 && state != ULTRAMECH_DEAD_WAIT_FOR_RESET &&
             *(short *)(*(char **)(slot + 0x20) + 0xA6) != 0x350) {
             ultramech_vars->f20 -= impact;
             if (*(unsigned short *)(slot + 0x2A) == 0x100)
