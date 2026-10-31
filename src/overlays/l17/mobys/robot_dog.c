@@ -727,7 +727,7 @@ int cancel_suck_cannon_suction_and_set_state_12(struct Moby *moby) __asm__("FUN_
 
 int cancel_suck_cannon_suction_and_set_state_12(struct Moby *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
-    moby->state = 0xc;
+    moby->state = ROBOT_DOG_STATE_RECOVER_THEN_REINITIALIZE;
     return helper_result;
 }
 
