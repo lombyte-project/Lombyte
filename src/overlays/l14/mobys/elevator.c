@@ -93,7 +93,7 @@ void elevator_update(struct Moby *elevator_moby) {
     Vec4           delta;
     float          level;
 
-    if (elevator_moby->state != 0 && elevator_moby->command == 2 && elevator_vars->dir < 0.0f) {
+    if (elevator_moby->state != ELEVATOR_STATE_INITIALIZE && elevator_moby->command == 2 && elevator_vars->dir < 0.0f) {
         int *path = (int *)l14_paths[elevator_vars->path2];
         elevator_vars->dir = -elevator_vars->dir;
         elevator_vars->segment = *path - 2;
@@ -106,7 +106,7 @@ void elevator_update(struct Moby *elevator_moby) {
     case ELEVATOR_STATE_INITIALIZE: {
         u16 id;
         elevator_moby->command = 0;
-        elevator_moby->state = 1;
+        elevator_moby->state = ELEVATOR_STATE_WAIT_FOR_RIDER;
         initialize_elevator_path_state(elevator_moby);
         qcopy(&elevator_moby->pos, ((char *)l14_paths[elevator_vars->path]) + 0x10);
         qcopy(&elevator_moby->rot, elevator_vars->rot);
@@ -166,7 +166,7 @@ void elevator_update(struct Moby *elevator_moby) {
                 else
                     elevator_moby->command = 0;
             }
-            elevator_moby->state = 2;
+            elevator_moby->state = ELEVATOR_STATE_FOLLOW_PATH;
             elevator_vars->travelled = 0;
             elevator_vars->dir = -elevator_vars->dir;
         }
@@ -182,7 +182,7 @@ void elevator_update(struct Moby *elevator_moby) {
         }
         elevator_moby->glow_color = fast_tween_color(elevator_moby->glow_color, 0x80808040, 0.1f);
         if (advance_elevator_along_path(elevator_moby) != 0) {
-            elevator_moby->state = 3;
+            elevator_moby->state = ELEVATOR_STATE_SETTLE_AT_ENDPOINT;
             elevator_vars->level = elevator_vars->motor_volume;
         }
         rebuild_elevator_world_path((u8 *)elevator_moby);
@@ -216,18 +216,18 @@ void elevator_update(struct Moby *elevator_moby) {
             voice = allocate_voice_for_target_entry(1, 0, elevator_moby);
             if (voice >= 0)
                 vendor_volume(voice, elevator_vars->hum_volume / 3);
-            elevator_moby->state = 4;
+            elevator_moby->state = ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT;
             if (hero.ground_moby != elevator_moby)
-                elevator_moby->state = 1;
+                elevator_moby->state = ELEVATOR_STATE_WAIT_FOR_RIDER;
         }
         break;
     case ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT:
         update_elevator_idle_glow(elevator_moby);
         if (hero.ground_moby != elevator_moby)
-            elevator_moby->state = 1;
+            elevator_moby->state = ELEVATOR_STATE_WAIT_FOR_RIDER;
         break;
     }
-    if (elevator_moby->state != 2 && elevator_moby->state != 0) {
+    if (elevator_moby->state != ELEVATOR_STATE_FOLLOW_PATH && elevator_moby->state != ELEVATOR_STATE_INITIALIZE) {
         settle_elevator_at_path_endpoint(elevator_moby);
         if (hero.ground_moby == elevator_moby) {
             fast_vec_sub(&delta, &elevator_moby->pos, &previous_elevator_position);
