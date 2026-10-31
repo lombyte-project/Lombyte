@@ -23,7 +23,7 @@ void cutscene_camera_target_update(struct Moby *moby) {
     switch (moby->state) {
     case MOBY_INITIALIZE:
         moby->update_dist = 0xFF;
-        moby->state = 1;
+        moby->state = MOBY_CONDITIONAL_CAMERA_TARGET_UPDATE;
         break;
     case MOBY_CONDITIONAL_CAMERA_TARGET_UPDATE:
         if (D_L06_0015F5C4 == 2) {
