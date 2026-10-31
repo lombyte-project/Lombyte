@@ -1381,7 +1381,7 @@ s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
             y = alternate_y;
     }
     x = hud_element->x;
-    if (hero.vehicle_mode == 2)
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK)
         return hud_element->ret;
     if (hero.state.current == 50)
         return hud_element->ret;
