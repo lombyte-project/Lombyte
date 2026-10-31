@@ -935,6 +935,10 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
 int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) __asm__("FUN_L00_002ad410");
 
 int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
+    enum {
+        BOMB_STATE_HELD = 0,
+        THROW_LANDING_MODE_SKIP_LINKED_MOBY_MARKER = 2
+    };
     U910 position, velocity, previous, hero_position, offset, start;
     int  timer;
     int  object_hit;
@@ -946,7 +950,7 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
     if (D_L00_0015F5C4_002acbf0 != 0)
         return 0;
     qcopy(&previous, &thrown_moby->pos);
-    if (thrown_moby->state == 0) {
+    if (thrown_moby->state == BOMB_STATE_HELD) {
         position.f[0] =
             fast_cos(fast_add_rotations(-0.361968f, fast_arc_tan(hero.facing_x, hero.facing_y))) *
             0.859039f;
@@ -1065,7 +1069,7 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
         if (!FUN_L00_002603d0_2ad410(coll_hit.moby))
             goto return_zero;
     }
-    if (mode != 2 || !coll_hit.moby || !FUN_L00_002603d0_2ad410(coll_hit.moby))
+    if (mode != THROW_LANDING_MODE_SKIP_LINKED_MOBY_MARKER || !coll_hit.moby || !FUN_L00_002603d0_2ad410(coll_hit.moby))
         add_draw_callback(draw_bomb_landing_marker, thrown_moby);
     if (!object_hit && v->last_hit) {
         if (v->last_hit->state == 0xfe) {
