@@ -47,6 +47,7 @@ void glove_of_doom_update() __asm__("FUN_L00_002c7a58");
 void glow_particle_update() __asm__("FUN_L00_002acad8");
 void gold_bolt_update() __asm__("FUN_L01_00307ca0");
 void gold_devastator_missile_update() __asm__("FUN_L00_002b03a0");
+void ground_particle_scatter_update() __asm__("FUN_L08_00307cf0");
 void grow_and_fade_out_update() __asm__("FUN_L00_002d7f38");
 void helicopter_update() __asm__("FUN_L12_002ebea8");
 void helipack_update() __asm__("FUN_L00_002d37d0");
@@ -91,14 +92,13 @@ void platform_update() __asm__("FUN_L12_002e3ed8");
 void process_hoven_anklebiter_suck_cannon_suction() __asm__("FUN_L12_002e16b8");
 void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
-void remove_moby_when_near_hero() __asm__("FUN_L11_002cb790");
+void remove_when_near_hero_update() __asm__("FUN_L11_002cb790");
 void rocket_update() __asm__("FUN_L12_002ece00");
 void ryno_rocket_update() __asm__("FUN_L00_002cd1f0");
 void ryno_update() __asm__("FUN_L00_002cc608");
 void sandmouse_house_update() __asm__("FUN_L01_002f2b68");
 void sandmouse_projectile_update() __asm__("FUN_L01_0030c9a8");
 void sandmouse_update() __asm__("FUN_L01_0030df40");
-void scatter_ground_particles() __asm__("FUN_L08_00307cf0");
 void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
 void spawn_point_update() __asm__("FUN_L01_00300220");
 void store_hoven_anklebiter_in_suck_cannon() __asm__("FUN_L12_002e1758");
@@ -169,7 +169,7 @@ struct MobyClassUpdate moby_classes[140] __asm__("D_L12_0020CB80")
         {  15,                               bolt_update, default_moby_methods},
         {  16,                               bolt_update, default_moby_methods},
         {  19,                level_12_water_tile_update, default_moby_methods},
-        {  37,                remove_moby_when_near_hero, default_moby_methods},
+        {  37,              remove_when_near_hero_update, default_moby_methods},
         {  71,                             wrench_update, default_moby_methods},
         {  74,                               mine_update, default_moby_methods},
         { 112,                      glow_particle_update, default_moby_methods},
@@ -288,7 +288,7 @@ struct MobyClassUpdate moby_classes[140] __asm__("D_L12_0020CB80")
         {1322,                        noop_main_callback, default_moby_methods},
         {1345,               jittered_quad_layers_update, default_moby_methods},
         {1371,                    blarg_commander_update, default_moby_methods},
-        {1400,                  scatter_ground_particles, default_moby_methods},
+        {1400,            ground_particle_scatter_update, default_moby_methods},
         {1404,          clip_volume_scene_trigger_update, default_moby_methods},
         {1438,                    devestator_ammo_update, default_moby_methods},
         {1447,                    devestator_ammo_update, default_moby_methods},

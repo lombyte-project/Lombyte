@@ -27,7 +27,6 @@ void cancel_suck_cannon_suction_and_set_state_14() __asm__("FUN_L01_002efb98");
 void child_grid_controller_update() __asm__("FUN_L11_0030d800");
 void child_sets_controller_update() __asm__("FUN_L11_0030c788");
 void conditionally_set_camera_state_three() __asm__("FUN_L00_002ec7b0");
-void copy_pokitaru_pvar_to_hero() __asm__("FUN_L11_002f3350");
 void crate_update() __asm__("FUN_L00_002cf218");
 void damped_falling_moby_update() __asm__("FUN_L00_002cc210");
 void debris_update() __asm__("FUN_L00_002af5b8");
@@ -52,6 +51,7 @@ void gold_bolt_update() __asm__("FUN_L01_00307ca0");
 void gold_devastator_missile_update() __asm__("FUN_L00_002b03a0");
 void grow_and_fade_out_update() __asm__("FUN_L00_002d7f38");
 void helipack_update() __asm__("FUN_L00_002d37d0");
+void hero_path_constraint_trigger_update() __asm__("FUN_L11_002f3350");
 void homing_shot_update() __asm__("FUN_L00_002cb418");
 void hydrodisplacer_faucet_update() __asm__("FUN_L05_002f8080");
 void hydrodisplacer_update() __asm__("FUN_L00_002df9a0");
@@ -98,7 +98,7 @@ void psytcopus_update() __asm__("FUN_L11_00310180");
 void puffoid_update() __asm__("FUN_L11_00314318");
 void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
-void remove_moby_when_near_hero() __asm__("FUN_L11_002cb790");
+void remove_when_near_hero_update() __asm__("FUN_L11_002cb790");
 void resort_owner_update() __asm__("FUN_L11_002d0fa8");
 void ryno_rocket_update() __asm__("FUN_L00_002cd1f0");
 void ryno_update() __asm__("FUN_L00_002cc608");
@@ -192,7 +192,7 @@ struct MobyClassUpdate moby_classes[146] __asm__("D_L11_0021B900")
         {  15,                                         bolt_update, default_moby_methods},
         {  16,                                         bolt_update, default_moby_methods},
         {  23,                              pokitaru_pickup_update, default_moby_methods},
-        {  37,                          remove_moby_when_near_hero, default_moby_methods},
+        {  37,                        remove_when_near_hero_update, default_moby_methods},
         {  65,                     pokitaru_paired_rotation_update, default_moby_methods},
         {  71,                                       wrench_update, default_moby_methods},
         {  74,                                         mine_update, default_moby_methods},
@@ -244,7 +244,7 @@ struct MobyClassUpdate moby_classes[146] __asm__("D_L11_0021B900")
         { 357,                      nanotech_crate_fragment_update, default_moby_methods},
         { 358,                      nanotech_crate_fragment_update, default_moby_methods},
         { 359,                      nanotech_crate_fragment_update, default_moby_methods},
-        { 361,                          copy_pokitaru_pvar_to_hero, default_moby_methods},
+        { 361,                 hero_path_constraint_trigger_update, default_moby_methods},
         { 363,                      nanotech_crate_fragment_update, default_moby_methods},
         { 364,                      nanotech_crate_fragment_update, default_moby_methods},
         { 428,                          damped_falling_moby_update, default_moby_methods},

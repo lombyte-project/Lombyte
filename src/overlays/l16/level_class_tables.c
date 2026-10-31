@@ -39,6 +39,7 @@ void devestator_ammo_update() __asm__("FUN_L00_002c53c0");
 void doom_bot_spawner_update() __asm__("FUN_L00_002c89e8");
 void doom_bot_update() __asm__("FUN_L00_002bffa8");
 void door_update() __asm__("FUN_L16_002d59e0");
+void draw_only_moby_update() __asm__("FUN_L16_002e9df0");
 void drone_update() __asm__("FUN_L00_002ce358");
 void elevator_update() __asm__("FUN_L16_002e7f80");
 void follow_camera_setup() __asm__("FUN_L00_002e6d60");
@@ -77,7 +78,6 @@ void mine_glove_update() __asm__("FUN_L00_002c1ad0");
 void mine_update() __asm__("FUN_L00_002aa670");
 void moby_hold_state_if_grabbed() __asm__("FUN_L01_002f1c78");
 void moby_set_state_from_check() __asm__("FUN_L00_002cadc0");
-void moby_update_draw_only() __asm__("FUN_L16_002e9df0");
 void morphoray_chicken_update() __asm__("FUN_L00_002c97e0");
 void morphoray_update() __asm__("FUN_L00_002bc7e8");
 void nanotech_ball_update() __asm__("FUN_L00_002d89f0");
@@ -316,7 +316,7 @@ struct MobyClassUpdate moby_classes[152] __asm__("D_L16_001E8900")
         {1943,               reflection_mesh_trio_update, default_moby_methods},
         {1947,                    reflection_mesh_update, default_moby_methods},
         {1948,               reflection_mesh_pair_update, default_moby_methods},
-        {1952,                     moby_update_draw_only, default_moby_methods},
+        {1952,                     draw_only_moby_update, default_moby_methods},
         {1953,             reflection_mesh_trio_b_update, default_moby_methods},
         {  -1,                                         0, default_moby_methods},
 };

@@ -103,10 +103,10 @@ extern float func_002140F8_3091B0(float, float) __asm__("FUN_002132a8");
 extern void  func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN_L08_00272cb8");
 extern void  func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN_L08_0027f5f0");
 
-void scatter_ground_particles(Moby *moby) __asm__("FUN_L08_00307cf0");
+void ground_particle_scatter_update(Moby *moby) __asm__("FUN_L08_00307cf0");
 
 /* Moby class 1400 */
-void scatter_ground_particles(Moby *moby) {
+void ground_particle_scatter_update(Moby *moby) {
     enum {
         GROUND_PARTICLES_STATE_INITIALIZE = 0,
         GROUND_PARTICLES_STATE_SCATTER = 2

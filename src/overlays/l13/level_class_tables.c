@@ -52,7 +52,6 @@ void follow_camera_setup() __asm__("FUN_L00_002e6d60");
 void follow_camera_update() __asm__("FUN_L00_002e9c28");
 void forcefield_tower_update() __asm__("FUN_L13_002cefc0");
 void forcefield_update() __asm__("FUN_L13_002ed4a8");
-void forward_moby_hits_to_owner() __asm__("FUN_L13_0030c060");
 void gemlik_bobbing_pool_tile_update() __asm__("FUN_L13_00309e88");
 void gemlik_projectile_update() __asm__("FUN_L13_00306300");
 void gemlik_scene_controller_update() __asm__("FUN_L13_0030b628");
@@ -67,6 +66,7 @@ void grow_and_fade_out_update() __asm__("FUN_L00_002d7f38");
 void helipack_update() __asm__("FUN_L00_002d37d0");
 void help_hints_update() __asm__("FUN_L13_002f3778");
 void hero_trigger_volume_monitor_update() __asm__("FUN_L06_002f7930");
+void hit_proxy_update() __asm__("FUN_L13_0030c060");
 void homing_shot_update() __asm__("FUN_L00_002cb418");
 void hovering_rocket_attacker_update() __asm__("FUN_L13_002c25b8");
 void hydrodisplacer_update() __asm__("FUN_L00_002df9a0");
@@ -353,7 +353,7 @@ struct MobyClassUpdate moby_classes[189] __asm__("D_L13_001F5880")
         {1465,                   gold_weapon_case_update, default_moby_methods},
         {1558,             cutscene_camera_target_update, default_moby_methods},
         {1577,              tracked_group_watcher_update, default_moby_methods},
-        {1632,                forward_moby_hits_to_owner, default_moby_methods},
+        {1632,                          hit_proxy_update, default_moby_methods},
         {1634,             poison_vessel_fragment_update, default_moby_methods},
         {1733,                      tumbling_part_update, default_moby_methods},
         {1734,                      tumbling_part_update, default_moby_methods},

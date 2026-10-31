@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Scalar data read by src/overlays/shared/mobys/remove_moby_when_near_hero.c. */
+/* Scalar data read by src/overlays/shared/mobys/remove_when_near_hero_update.c. */
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern int   proximity_removal_frame_count __asm__("D_L11_0015F640");
 extern int   projectile_trail_color_start __asm__("D_L11_00161DC0");

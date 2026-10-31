@@ -38,6 +38,7 @@ void devestator_ammo_update() __asm__("FUN_L00_002c53c0");
 void doom_bot_spawner_update() __asm__("FUN_L00_002c89e8");
 void doom_bot_update() __asm__("FUN_L00_002bffa8");
 void door_update() __asm__("FUN_L17_002e87d8");
+void draw_only_moby_update() __asm__("FUN_L16_002e9df0");
 void dreks_fleet_turret_update() __asm__("FUN_L17_002cb310");
 void drone_flight_and_sparks_update() __asm__("FUN_L17_002e8e08");
 void drone_update() __asm__("FUN_L00_002ce358");
@@ -86,7 +87,6 @@ void mine_update() __asm__("FUN_L00_002aa670");
 void moby_rotation_group_update() __asm__("FUN_L06_002f4f00");
 void moby_set_state_from_check() __asm__("FUN_L00_002cadc0");
 void moby_spatial_trigger_update() __asm__("FUN_L05_002f5200");
-void moby_update_draw_only() __asm__("FUN_L16_002e9df0");
 void morphoray_chicken_update() __asm__("FUN_L00_002c97e0");
 void morphoray_update() __asm__("FUN_L00_002bc7e8");
 void nanotech_ball_update() __asm__("FUN_L00_002d89f0");
@@ -320,13 +320,13 @@ struct MobyClassUpdate moby_classes[163] __asm__("D_L17_001E7080")
         {1877,                        noop_main_callback, default_moby_methods},
         {1878,                      tumbling_part_update, default_moby_methods},
         {1900,                              decoy_update, default_moby_methods},
-        {1907,                     moby_update_draw_only, default_moby_methods},
-        {1908,                     moby_update_draw_only, default_moby_methods},
-        {1910,                     moby_update_draw_only, default_moby_methods},
-        {1911,                     moby_update_draw_only, default_moby_methods},
-        {1913,                     moby_update_draw_only, default_moby_methods},
+        {1907,                     draw_only_moby_update, default_moby_methods},
+        {1908,                     draw_only_moby_update, default_moby_methods},
+        {1910,                     draw_only_moby_update, default_moby_methods},
+        {1911,                     draw_only_moby_update, default_moby_methods},
+        {1913,                     draw_only_moby_update, default_moby_methods},
         {1917,                      tumbling_part_update, default_moby_methods},
-        {1918,                     moby_update_draw_only, default_moby_methods},
+        {1918,                     draw_only_moby_update, default_moby_methods},
         {1958,                    underwater_door_update, default_moby_methods},
         {  -1,                                         0, default_moby_methods},
 };

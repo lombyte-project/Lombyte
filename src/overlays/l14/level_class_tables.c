@@ -58,6 +58,7 @@ void glove_of_doom_update() __asm__("FUN_L00_002c7a58");
 void glow_particle_update() __asm__("FUN_L00_002acad8");
 void gold_bolt_update() __asm__("FUN_L01_00307ca0");
 void gold_devastator_missile_update() __asm__("FUN_L00_002b03a0");
+void ground_particle_scatter_update() __asm__("FUN_L08_00307cf0");
 void group_clear_trigger_update() __asm__("FUN_L14_003087c0");
 void grow_and_fade_out_update() __asm__("FUN_L00_002d7f38");
 void helipack_update() __asm__("FUN_L00_002d37d0");
@@ -103,6 +104,7 @@ void plasmabot_update() __asm__("FUN_L14_002b17d8");
 void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void qwark_oltanis_update() __asm__("FUN_L14_002fba20");
+void radial_particle_emitter_update() __asm__("FUN_L08_003085f0");
 void ribbon_effect_moby_update() __asm__("FUN_L14_002dee28");
 void rocket_strike_fighter_update() __asm__("FUN_L14_002fcbb0");
 void rocket_update() __asm__("FUN_L14_002fdbb8");
@@ -112,12 +114,10 @@ void sam_update() __asm__("FUN_L14_002fefe0");
 void sandmouse_house_update() __asm__("FUN_L01_002f2b68");
 void sandmouse_projectile_update() __asm__("FUN_L01_0030c9a8");
 void sandmouse_update() __asm__("FUN_L01_0030df40");
-void scatter_ground_particles() __asm__("FUN_L08_00307cf0");
 void scoutbot_update() __asm__("FUN_L08_002d2af0");
 void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
 void setup_path_camera() __asm__("FUN_L14_00314f00");
 void shuttle_update() __asm__("FUN_L14_002e7bd8");
-void spawn_moby_radial_particles() __asm__("FUN_L08_003085f0");
 void spawn_point_update() __asm__("FUN_L01_00300220");
 void spinning_moby_with_particle_trail_update() __asm__("FUN_L14_002de670");
 void suckcannon_update() __asm__("FUN_L00_002da790");
@@ -315,7 +315,7 @@ struct MobyClassUpdate moby_classes[154] __asm__("D_L14_001FD280")
         {1395,                   unfolding_column_update, default_moby_methods},
         {1396,                        noop_main_callback, default_moby_methods},
         {1397,             unfolding_column_piece_update, default_moby_methods},
-        {1400,                  scatter_ground_particles, default_moby_methods},
+        {1400,            ground_particle_scatter_update, default_moby_methods},
         {1416,                             button_update, default_moby_methods},
         {1417,                         flying_car_update, default_moby_methods},
         {1418,                      level_effects_update, default_moby_methods},
@@ -327,7 +327,7 @@ struct MobyClassUpdate moby_classes[154] __asm__("D_L14_001FD280")
         {1517,                      tumbling_part_update, default_moby_methods},
         {1518,                      tumbling_part_update, default_moby_methods},
         {1559,                group_clear_trigger_update, default_moby_methods},
-        {1629,               spawn_moby_radial_particles, default_moby_methods},
+        {1629,            radial_particle_emitter_update, default_moby_methods},
         {1633,               sandmouse_projectile_update, default_moby_methods},
         {1733,                      tumbling_part_update, default_moby_methods},
         {1734,                      tumbling_part_update, default_moby_methods},

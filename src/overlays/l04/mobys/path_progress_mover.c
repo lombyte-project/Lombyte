@@ -13,10 +13,10 @@
 extern float FUN_L00_00200260(float, float);
 
 extern char *D_L04_0015FFD0[] MACRO_ADDR;
-void interpolate_moby_and_linked_moby_positions_on_path(char *moby) __asm__("FUN_L04_002d6f68");
+void         path_progress_mover_update(char *moby) __asm__("FUN_L04_002d6f68");
 
 /* Moby class 617 */
-void interpolate_moby_and_linked_moby_positions_on_path(char *moby) {
+void path_progress_mover_update(char *moby) {
     int   *moby_vars = ((int *)MOBY(moby)->pvars);
     int   *path_data = ((int *)l04_paths[moby_vars[2]]);
     char  *moby_array_base = D_L04_0015FFD0[2];

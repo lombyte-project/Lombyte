@@ -5386,10 +5386,10 @@ void        add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 /* Registers the moby's draw callbacks, choosing by its four slot ids. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FE4B8), where it is exact; names translated to the US level program. */
-void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) __asm__("FUN_L06_002fd088");
+void dual_texture_mesh_update(char *moby) __asm__("FUN_L06_002fd088");
 
 /* Moby class 1062 */
-void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) {
+void dual_texture_mesh_update(char *moby) {
     int *draw_clip_volume_vars = ((int *)MOBY(moby)->pvars);
     int *clip_volume_index_cursor;
     int  i;

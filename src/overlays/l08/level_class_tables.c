@@ -56,6 +56,7 @@ void glove_of_doom_update() __asm__("FUN_L00_002c7a58");
 void glow_particle_update() __asm__("FUN_L00_002acad8");
 void gold_bolt_update() __asm__("FUN_L01_00307ca0");
 void gold_devastator_missile_update() __asm__("FUN_L00_002b03a0");
+void ground_particle_scatter_update() __asm__("FUN_L08_00307cf0");
 void grow_and_fade_out_update() __asm__("FUN_L00_002d7f38");
 void gunship_update() __asm__("FUN_L08_002e24e8");
 void heavy_gunship_update() __asm__("FUN_L08_002e9b70");
@@ -93,6 +94,7 @@ void path_following_moby_update() __asm__("FUN_L08_002de848");
 void pilots_helmet_update() __asm__("FUN_L00_002e03a0");
 void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
+void radial_particle_emitter_update() __asm__("FUN_L08_003085f0");
 void rail_hero_motion_update() __asm__("FUN_L01_002f6328");
 void red_plant_update() __asm__("FUN_L00_002e3ca8");
 void rocket_update() __asm__("FUN_L08_002dd3c0");
@@ -101,14 +103,12 @@ void ryno_update() __asm__("FUN_L00_002cc608");
 void sandmouse_house_update() __asm__("FUN_L01_002f2b68");
 void sandmouse_projectile_update() __asm__("FUN_L01_0030c9a8");
 void sandmouse_update() __asm__("FUN_L01_0030df40");
-void scatter_ground_particles() __asm__("FUN_L08_00307cf0");
 void scoutbot_update() __asm__("FUN_L08_002d2af0");
 void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
 void shattering_prop_update() __asm__("FUN_L08_0030bc00");
 void shrub_update() __asm__("FUN_L08_002e8cd0");
 void shuttle_update() __asm__("FUN_L08_002dbdb0");
 void smoke_trail_projectile_update() __asm__("FUN_L01_002eda00");
-void spawn_moby_radial_particles() __asm__("FUN_L08_003085f0");
 void spawn_point_update() __asm__("FUN_L01_00300220");
 void suckcannon_update() __asm__("FUN_L00_002da790");
 void swing_gate_update() __asm__("FUN_L08_002ea4c0");
@@ -335,12 +335,12 @@ struct MobyClassUpdate moby_classes[190] __asm__("D_L08_001FC900")
         {1290,                      pilots_helmet_update, default_moby_methods},
         {1292,                          fire_bolt_update, default_moby_methods},
         {1349,                         help_hints_update, default_moby_methods},
-        {1400,                  scatter_ground_particles, default_moby_methods},
+        {1400,            ground_particle_scatter_update, default_moby_methods},
         {1438,                    devestator_ammo_update, default_moby_methods},
         {1447,                    devestator_ammo_update, default_moby_methods},
         {1449,                    devestator_ammo_update, default_moby_methods},
         {1553,             cutscene_camera_target_update, default_moby_methods},
-        {1629,               spawn_moby_radial_particles, default_moby_methods},
+        {1629,            radial_particle_emitter_update, default_moby_methods},
         {1633,               sandmouse_projectile_update, default_moby_methods},
         {1641,                     effect_emitter_update, default_moby_methods},
         {1649,            batalia_textured_effect_update, default_moby_methods},
