@@ -117,11 +117,11 @@ typedef struct {
 extern char  D_L06_001678D0[];
 extern int   D_L06_0016A010[];
 extern short D_L06_00161EF0 __attribute__((sda));
-extern short D_L06_00161EF4 __attribute__((sda));
+extern short l06_alien_queen_movement_speed __asm__("D_L06_00161EF4") __attribute__((sda));
 f32          alien_queen_movement_acceleration_gp __asm__("D_L06_00161EFC") = 8.0f;
-extern short D_L06_00161F00 __attribute__((sda));
-extern short D_L06_00161F04 __attribute__((sda));
-extern short D_L06_00161F08 __attribute__((sda));
+extern short l06_alien_queen_attack_distance __asm__("D_L06_00161F00") __attribute__((sda));
+extern short l06_alien_queen_retreat_distance __asm__("D_L06_00161F04") __attribute__((sda));
+extern short l06_alien_queen_attack_heading_tolerance_degrees __asm__("D_L06_00161F08") __attribute__((sda));
 extern void  FUN_L06_002fa9c0_c(void *) __asm__("FUN_L06_002fa9c0");
 void         set_moby_list_state_18(int idx) __asm__("FUN_L06_002f9948");
 void         FUN_L06_002fb870(char *arg);
@@ -388,7 +388,7 @@ typedef struct AlienQueenVars {
 
 /* Moby class 1051 */
 void alien_queen_update(unsigned char *moby) {
-    AlienQueenVars *data = (AlienQueenVars *)MOBY(moby)->pvars;
+    enum { ALIEN_QUEEN_STATE_INITIALIZE = 0 , ALIEN_QUEEN_STATE_WAIT_TO_START_INTRO = 1 , ALIEN_QUEEN_STATE_INTRO = 2 , ALIEN_QUEEN_STATE_FIRST_RECOVERY_CAMERA = 3 , ALIEN_QUEEN_STATE_FROG_RECOVERY_ORBIT = 4 , ALIEN_QUEEN_STATE_SECOND_RECOVERY_CAMERA = 5 , ALIEN_QUEEN_STATE_GROUP_RECOVERY_ORBIT = 6 , ALIEN_QUEEN_STATE_WAIT_TO_APPROACH_TARGET = 7 , ALIEN_QUEEN_STATE_APPROACH_TARGET = 8 , ALIEN_QUEEN_STATE_ATTACK_WINDUP = 9 , ALIEN_QUEEN_STATE_ATTACK_HIT_QUERIES = 10 , ALIEN_QUEEN_STATE_TIMED_ORBIT = 12 , ALIEN_QUEEN_STATE_RETURN_HOME = 13 , ALIEN_QUEEN_STATE_DEATH = 14 , ALIEN_QUEEN_STATE_POST_DEATH = 15 } ;AlienQueenVars *alien_queen_update_vars = (AlienQueenVars *)MOBY(moby)->pvars;
     char           *target;
     float           step[4];
 
@@ -409,7 +409,7 @@ void alien_queen_update(unsigned char *moby) {
                                                         0x1EF);
     }
     switch ((unsigned char)moby[0x20]) {
-    case 0: {
+    case ALIEN_QUEEN_STATE_INITIALIZE: {
         int *path;
         data->health = 30.0f;
         data->max_health = 0x1E;
@@ -439,7 +439,7 @@ void alien_queen_update(unsigned char *moby) {
         moby[0x20] = 1;
         break;
     }
-    case 1:
+    case ALIEN_QUEEN_STATE_WAIT_TO_START_INTRO:
         if (data->unkB4 == 2)
             return;
         if (*(short *)(target + 0xA6) != 0)
@@ -463,7 +463,7 @@ void alien_queen_update(unsigned char *moby) {
         }
         func_L06_002FC578_q(moby);
         return;
-    case 2: {
+    case ALIEN_QUEEN_STATE_INTRO: {
         float gravity = frame_time_sq * 30.0f;
         MOBY(moby)->pos.z = MOBY(moby)->pos.z + data->z_velocity;
         data->z_velocity = data->z_velocity - gravity;
@@ -490,7 +490,7 @@ void alien_queen_update(unsigned char *moby) {
         }
         break;
     }
-    case 3:
+    case ALIEN_QUEEN_STATE_FIRST_RECOVERY_CAMERA:
         if ((unsigned char)moby[0x53] == 6 && MOBY(moby)->anim_time == 0.0f && (moby[0x70] & 2)) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(0x14));
             func_L06_002FC4C0_q(moby);
@@ -501,7 +501,7 @@ void alien_queen_update(unsigned char *moby) {
             return;
         }
         break;
-    case 5:
+    case ALIEN_QUEEN_STATE_SECOND_RECOVERY_CAMERA:
         if ((unsigned char)moby[0x53] == 6 && MOBY(moby)->anim_time == 0.0f && (moby[0x70] & 2)) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(0x14));
             clear_moby_list_state_18(data->state18_list);
@@ -511,9 +511,9 @@ void alien_queen_update(unsigned char *moby) {
             FUN_L06_002fbc30(moby);
         }
         break;
-    case 4:
+    case ALIEN_QUEEN_STATE_FROG_RECOVERY_ORBIT:
         func_L06_002FC4C0_q(moby);
-    case 6:
+    case ALIEN_QUEEN_STATE_GROUP_RECOVERY_ORBIT:
         func_L06_002FD0B8_q(moby);
         if (((unsigned char)moby[0x20] == 4 &&
              check_all_listed_frog_states_fe_fd_or_10(data->frog_list) != 0) ||
@@ -526,7 +526,7 @@ void alien_queen_update(unsigned char *moby) {
             }
         }
         return;
-    case 7:
+    case ALIEN_QUEEN_STATE_WAIT_TO_APPROACH_TARGET:
         if (data->unkB4 == 2)
             break;
         moby[0x20] = 8;
@@ -534,7 +534,7 @@ void alien_queen_update(unsigned char *moby) {
             break;
         blend_moby_animation(moby, 3, 0, scale_game_frames(0x14));
         return;
-    case 8: {
+    case ALIEN_QUEEN_STATE_APPROACH_TARGET: {
         float dist = vector_distance_xy(moby + 0x10, target + 0x10);
         float turn = fast_difference_between_rotations(
             MOBY(moby)->rot.z,
@@ -547,13 +547,13 @@ void alien_queen_update(unsigned char *moby) {
                        frame_time_sq * 6.2831855f,
                        frame_time_sq * 6.2831855f,
                        frame_time * 3.1415927f);
-        if (turn < 0.7853982f && *(float *)&D_L06_00161F00 < dist) {
+        if (turn < 0.7853982f && *(float *)&l06_alien_queen_attack_distance < dist) {
             approach_value(&data->unkE8,
-                           *(float *)&D_L06_00161EF4 * frame_time,
+                           *(float *)&l06_alien_queen_movement_speed * frame_time,
                            alien_queen_movement_acceleration_gp * frame_time_sq);
-        } else if (dist < *(float *)&D_L06_00161F04) {
+        } else if (dist < *(float *)&l06_alien_queen_retreat_distance) {
             approach_value(&data->unkE8,
-                           -(*(float *)&D_L06_00161EF4 * frame_time),
+                           -(*(float *)&l06_alien_queen_movement_speed * frame_time),
                            alien_queen_movement_acceleration_gp * frame_time_sq);
         } else {
             approach_value(&data->unkE8, 0.0f, frame_time_sq * 8.0f);
@@ -572,7 +572,7 @@ void alien_queen_update(unsigned char *moby) {
             moby[0x20] = 0xC;
             break;
         }
-        if (dist < *(float *)&D_L06_00161F00 && turn < *(float *)&D_L06_00161F08 * 0.017453292f) {
+        if (dist < *(float *)&l06_alien_queen_attack_distance && turn < *(float *)&l06_alien_queen_attack_heading_tolerance_degrees * 0.017453292f) {
             moby[0x20] = 9;
             moby[0xBC] = 7;
             if ((unsigned char)moby[0x53] != 4) {
@@ -582,7 +582,7 @@ void alien_queen_update(unsigned char *moby) {
         }
         break;
     }
-    case 12:
+    case ALIEN_QUEEN_STATE_TIMED_ORBIT:
         func_L06_002FD0B8_q(moby);
         if (fast_dec_timer(&data->timer_120) != 0) {
             data->timer_120 = scale_game_frames(0x4B0);
@@ -593,7 +593,7 @@ void alien_queen_update(unsigned char *moby) {
             }
         }
         return;
-    case 9:
+    case ALIEN_QUEEN_STATE_ATTACK_WINDUP:
         fast_dec_timer(&data->timer_120);
         approach_angle((float *)&MOBY(moby)->rot.z,
                        MOBY(moby)->rot.z,
@@ -609,9 +609,9 @@ void alien_queen_update(unsigned char *moby) {
             }
         }
         break;
-    case 10: {
+    case ALIEN_QUEEN_STATE_ATTACK_HIT_QUERIES: {
         QueenProbe probe;
-        float      buf[4];
+        float      hit_query_position[4];
         fast_dec_timer(&data->timer_120);
         if (1.0f < compute_interpolated_record_value(moby) &&
             compute_interpolated_record_value(moby) < 8.0f) {
@@ -625,20 +625,20 @@ void alien_queen_update(unsigned char *moby) {
             probe.dir[0] = fast_cos(MOBY(moby)->rot.z);
             probe.dir[1] = fast_sin(MOBY(moby)->rot.z);
             probe.dir[2] = 0.0f;
-            func_L00_00250800_q(moby, 0, buf);
-            func_L00_001F2BE8_q(buf, 0.5f, 0, moby, &probe);
-            func_L00_00250800_q(moby, 1, buf);
-            func_L00_001F2BE8_q(buf, 0.5f, 0, moby, &probe);
-            func_L00_00250800_q(moby, 2, buf);
-            func_L00_001F2BE8_q(buf, 0.5f, 0, moby, &probe);
-            func_L00_00250800_q(moby, 3, buf);
-            func_L00_001F2BE8_q(buf, 0.5f, 0, moby, &probe);
-            func_L00_00250800_q(moby, 4, buf);
-            func_L00_001F2BE8_q(buf, 0.5f, 0, moby, &probe);
-            func_L00_00250800_q(moby, 5, buf);
-            func_L00_001F2BE8_q(buf, 1.1f, 0, moby, &probe);
-            func_L00_00250800_q(moby, 6, buf);
-            func_L00_001F2BE8_q(buf, 1.1f, 0, moby, &probe);
+            func_L00_00250800_q(moby, 0, hit_query_position);
+            func_L00_001F2BE8_q(hit_query_position, 0.5f, 0, moby, &probe);
+            func_L00_00250800_q(moby, 1, hit_query_position);
+            func_L00_001F2BE8_q(hit_query_position, 0.5f, 0, moby, &probe);
+            func_L00_00250800_q(moby, 2, hit_query_position);
+            func_L00_001F2BE8_q(hit_query_position, 0.5f, 0, moby, &probe);
+            func_L00_00250800_q(moby, 3, hit_query_position);
+            func_L00_001F2BE8_q(hit_query_position, 0.5f, 0, moby, &probe);
+            func_L00_00250800_q(moby, 4, hit_query_position);
+            func_L00_001F2BE8_q(hit_query_position, 0.5f, 0, moby, &probe);
+            func_L00_00250800_q(moby, 5, hit_query_position);
+            func_L00_001F2BE8_q(hit_query_position, 1.1f, 0, moby, &probe);
+            func_L00_00250800_q(moby, 6, hit_query_position);
+            func_L00_001F2BE8_q(hit_query_position, 1.1f, 0, moby, &probe);
             return;
         }
         if (moby[0x70] & 2) {
@@ -657,7 +657,7 @@ void alien_queen_update(unsigned char *moby) {
             }
         }
         return;
-    case 13: {
+    case ALIEN_QUEEN_STATE_RETURN_HOME: {
         char *pos = (char *)moby + 0x10;
         char *home = data->unkC0;
         float dist = vector_distance_xy(pos, home);
@@ -674,7 +674,7 @@ void alien_queen_update(unsigned char *moby) {
         if (turn < 0.7853982f) {
             fast_vec_sub(step, home, pos);
             step[2] = 0.0f;
-            fast_vec_normalize(step, step, *(float *)&D_L06_00161EF4 * frame_time);
+            fast_vec_normalize(step, step, *(float *)&l06_alien_queen_movement_speed * frame_time);
             fast_vec_add(pos, pos, step);
             func_L00_00262DF0_q(data->path, pos, 1.0f, pos);
         }
@@ -691,7 +691,7 @@ void alien_queen_update(unsigned char *moby) {
         }
         break;
     }
-    case 14: {
+    case ALIEN_QUEEN_STATE_DEATH: {
         unsigned char *flag;
         menu_item_enabled_19_lui[4] = 1;
         data->unk110 = 0;
@@ -734,7 +734,7 @@ void alien_queen_update(unsigned char *moby) {
         queue_dialogue_message(0x53D6, -1);
         return;
     }
-    case 15: {
+    case ALIEN_QUEEN_STATE_POST_DEATH: {
         int   i;
         char *other = 0;
         for (i = 0; i < 0x30; i++) {
