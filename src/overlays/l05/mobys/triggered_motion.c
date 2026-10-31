@@ -43,7 +43,7 @@ void triggered_motion_update(char *moby) {
         MOBY_RETURN_TO_SAVED_POSITION = 4,
         MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE = 5,
         MOBY_SETTLE_AT_ZERO_MANIPULATOR_ANGLE = 6
-    };
+    } ; enum { MOBY_MOTION_SEQUENCE_COMPLETE = 7};
     TriggeredMotionVars *motion_and_manipulator_vars = (TriggeredMotionVars *)MOBY(moby)->pvars;
     float                target[4];
     float                delta[4];
@@ -116,7 +116,7 @@ void triggered_motion_update(char *moby) {
                 motion_and_manipulator_vars->unk64 *= -0.33f;
             } else if (motion_and_manipulator_vars->unk60 == end) {
                 if (MOBY(moby)->state == MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE)
-                    MOBY(moby)->state = 7;
+                    MOBY(moby)->state = MOBY_MOTION_SEQUENCE_COMPLETE;
                 else
                     MOBY(moby)->state = MOBY_MOVE_TO_OFFSET_POSITION;
             }
@@ -147,7 +147,7 @@ void triggered_motion_update(char *moby) {
             return;
         if (MOBY(moby)->state == MOBY_MOVE_TO_OFFSET_POSITION) {
             allocate_voice_for_target_entry(1, 0, moby);
-            MOBY(moby)->state = 7;
+            MOBY(moby)->state = MOBY_MOTION_SEQUENCE_COMPLETE;
             return;
         }
         MOBY(moby)->state = MOBY_SETTLE_AT_UPPER_MANIPULATOR_ANGLE;
