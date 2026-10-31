@@ -262,7 +262,7 @@ void update_weapon_hud_state(void) {
                                    draw_weapon_ammo_hud_panel,
                                    &weapon_ammo_counts[weapon_item_id],
                                    D_L00_001C40B0[weapon_item_id].hE);
-    } else if (k = -1, mode == 2) {
+    } else if (k = -1, mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         if (D_L00_0015F970 != k) {
             set_animation_parameter(D_L00_0015F970, 0);
             D_L00_0015F970 = k;
