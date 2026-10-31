@@ -243,6 +243,9 @@ extern CameraPresetRow *D_L05_0015EF50;
 void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) __asm__("FUN_L05_003296e0");
 
 void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
+    enum {
+        CAMERA_ORBIT_MODE_FOLLOW = 0
+    };
     CameraPreset *preset = D_L05_0015EF50[camera_to_reset->preset].preset;
     CameraOrbit  *orbit_state;
     CameraFocus  *focus;
@@ -276,7 +279,7 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     orbit->unk10 = 0.01f;
     orbit->unk14 = 0.2f;
     orbit->unk18 = 0;
-    orbit->mode = 0;
+    orbit->mode = CAMERA_ORBIT_MODE_FOLLOW;
     clear_u64_value(orbit);
     track = &camera_to_reset->orbit->track;
     clear_u64_value(track);
