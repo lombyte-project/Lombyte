@@ -36,7 +36,7 @@ void group_clear_trigger_update(struct Moby *moby) {
     switch (moby->state) {
     case MOBY_UPDATE_DISTANCE_INITIALIZE:
         moby->update_dist = 0xFF;
-        moby->state = 1;
+        moby->state = MOBY_UPDATE_CUTSCENE_TARGET;
         break;
     case MOBY_UPDATE_CUTSCENE_TARGET:
         if (D_L14_0015F5C4 == 2) {
