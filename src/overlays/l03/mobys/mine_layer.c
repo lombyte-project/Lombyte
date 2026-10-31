@@ -396,6 +396,10 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
         TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE = 5,
         TROOPER_DAMAGE_SHORT_KNOCKBACK_ALTERNATE = 6
     };
+    enum {
+        MINE_LAYER_KNOCKBACK_AND_RECOVER = 4,
+        MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION = 5
+    };
     TrooperVars *trooper_vars = (TrooperVars *)damaged_moby->pvars;
     TrooperHit  *hit_record;
     Vec4         at;
@@ -408,7 +412,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
     hit_record = trooper_find_hit(damaged_moby, 0x330000, 0);
     damage_response = resolve_moby_hit_response(
         damaged_moby, hit_record, &trooper_vars->health, 0, &hit, &dmg, 0, 4);
-    if (hit != 1 && damaged_moby->state != 5) {
+    if (hit != 1 && damaged_moby->state != MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION) {
         if (hit_record->source != NULL) {
             if (hit_record->source != hero.items[0].moby)
                 knockback_arc_angle = fast_arc_tan(damaged_moby->pos.x - hit_record->source->pos.x,
@@ -445,7 +449,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
                                     0);
             trooper_vars->kb_min = 5.0f;
             trooper_vars->kb_max = 10.0f;
-            damaged_moby->state = 4;
+            damaged_moby->state = MINE_LAYER_KNOCKBACK_AND_RECOVER;
             break;
         case TROOPER_DAMAGE_LONG_KNOCKBACK:
         case TROOPER_DAMAGE_LONG_KNOCKBACK_ALTERNATE:
@@ -468,7 +472,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
                                     0);
             trooper_vars->kb_min = 7.5f;
             trooper_vars->kb_max = 15.0f;
-            damaged_moby->state = 4;
+            damaged_moby->state = MINE_LAYER_KNOCKBACK_AND_RECOVER;
             break;
         case TROOPER_DAMAGE_LETHAL:
             trooper_vars->kb_speed =
@@ -492,7 +496,7 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
             trooper_vars->kb_max = 15.0f;
             damaged_moby->flags &= 0xEFFF;
             *((u8 *)trooper_vars + 0x67) = 0xFA;
-            damaged_moby->state = 5;
+            damaged_moby->state = MINE_LAYER_KNOCKBACK_UNTIL_EXPLOSION;
             break;
         }
         trooper_anim_update(damaged_moby, trooper_vars->anim);
