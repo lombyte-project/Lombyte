@@ -173,9 +173,9 @@ extern char D_0013E533[];
 extern int  select_moby_combat_target(char *, char *, float) __asm__("FUN_L00_0025fcb8");
 
 void update_homing_mine_spawner_target(struct Moby *spawner) {
-    HomingMineSpawnerVars *spawner_data = (HomingMineSpawnerVars *)spawner->pvars;
+    enum { HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS = 0 } ;HomingMineSpawnerVars *spawner_data = (HomingMineSpawnerVars *)spawner->pvars;
     char                  *pad;
-    if (spawner->state != 0) {
+    if (spawner->state != HOMING_MINE_SPAWNER_CLEAR_LINKED_MOBYS) {
         if (spawner_data->unk38 != 0) {
             spawner_data->timer_FE = scale_game_frames(0xB4);
         }
