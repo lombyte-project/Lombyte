@@ -486,7 +486,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         COLOR_UPDATE_WITHOUT_STATE_CHANGE_HIT_RESPONSE = 10,
         COLOR_EFFECT_ONLY_HIT_RESPONSE = 12,
         NO_REACTION_HIT_RESPONSE = 13
-    };
+    } ; enum { HIT_STATUS_SKIP_DAMAGE_AND_REACTION = 1 , BLARG_SHIP_STATE_HIT_REACTION = 7 , BLARG_SHIP_STATE_EXPLODE = 8};
     BlargShipVars *pvars = (BlargShipVars *)moby->pvars;
     char          *ship_hit_record = find_moby_hit(moby, 0x370000, 0);
     int            ship_hit_processing_status;
@@ -495,7 +495,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     dmg = 0.0f;
     hit_response_code = resolve_moby_hit_response(
         moby, ship_hit_record, &pvars->unk20, 5, &ship_hit_processing_status, &dmg, 0, 4);
-    if (ship_hit_record != 0 && ship_hit_processing_status != 1 && moby->state != 8) {
+    if (ship_hit_record != 0 && ship_hit_processing_status != HIT_STATUS_SKIP_DAMAGE_AND_REACTION && moby->state != BLARG_SHIP_STATE_EXPLODE) {
         if ((pvars->unk20 -= dmg) <= 0.0f) {
             hit_response_code = 1;
         }
@@ -512,7 +512,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         case LETHAL_HIT_RESPONSE:
             pvars->unkC7 = 0xFA;
             trooper_anim_update(moby, &pvars->anim_state);
-            moby->state = 8;
+            moby->state = BLARG_SHIP_STATE_EXPLODE;
             break;
         case NO_REACTION_HIT_RESPONSE:
             break;
@@ -522,13 +522,13 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
             trooper_anim_update(moby, &pvars->anim_state);
             blend_moby_animation(moby, 4, 0, scale_game_frames(6));
             moby->command = moby->state;
-            moby->state = 7;
+            moby->state = BLARG_SHIP_STATE_HIT_REACTION;
             break;
         }
     }
     moby->hit_slot = 0xFF;
     trooper_anim_finish(moby, &pvars->anim_state);
-    if (hero.vehicle_mode == 1) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         select_hero_or_gadgebot_target(101.0f, moby, &pvars->unk110);
         if (*(char **)&pvars->unk110 == 0) {
             pvars->unk114 = 2;
