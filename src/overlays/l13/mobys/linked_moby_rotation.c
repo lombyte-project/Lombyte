@@ -64,7 +64,7 @@ void linked_moby_rotation_update(struct Moby *moby) {
             allocate_voice_for_target_entry(rotation_vars->start_sound, 0, moby);
         }
         rotation_vars->progress = 0.0f;
-        moby->state = 2;
+        moby->state = ADVANCE_ROTATION;
         break;
     case ADVANCE_ROTATION:
         if (rotation_vars->linked_index != -1 &&
@@ -74,7 +74,7 @@ void linked_moby_rotation_update(struct Moby *moby) {
             if (rotation_vars->start_sound != -1) {
                 allocate_voice_for_target_entry(rotation_vars->start_sound, 0, moby);
             }
-            moby->state = 4;
+            moby->state = REVERSE_ROTATION;
             break;
         }
         {
@@ -95,7 +95,7 @@ void linked_moby_rotation_update(struct Moby *moby) {
             moby->rot.z = fast_add_rotations(rotation_vars->initial_rot[2],
                                              rotation_vars->angle[2] * radians);
             rotation_vars->progress = 1.0f;
-            moby->state = 3;
+            moby->state = HOLD_ROTATION_OFFSET;
             if (rotation_vars->end_sound != -1) {
                 allocate_voice_for_target_entry(rotation_vars->start_sound, 0, moby);
             }
@@ -113,7 +113,7 @@ void linked_moby_rotation_update(struct Moby *moby) {
         if (rotation_vars->start_sound != -1) {
             allocate_voice_for_target_entry(rotation_vars->start_sound, 0, moby);
         }
-        moby->state = 4;
+        moby->state = REVERSE_ROTATION;
         break;
     case REVERSE_ROTATION:
         if (rotation_vars->linked_index == -1 ||
@@ -123,7 +123,7 @@ void linked_moby_rotation_update(struct Moby *moby) {
             if (rotation_vars->start_sound != -1) {
                 allocate_voice_for_target_entry(rotation_vars->start_sound, 0, moby);
             }
-            moby->state = 2;
+            moby->state = ADVANCE_ROTATION;
         } else {
             int invalid_index = -1;
             radians = 0.017453292f;
@@ -145,7 +145,7 @@ void linked_moby_rotation_update(struct Moby *moby) {
             if (rotation_vars->start_sound != invalid_index) {
                 allocate_voice_for_target_entry(rotation_vars->end_sound, 0, moby);
             }
-            moby->state = 1;
+            moby->state = WAIT_TO_ADVANCE_ROTATION;
         }
         break;
     case 5:
