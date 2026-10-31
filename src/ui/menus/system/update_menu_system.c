@@ -41,6 +41,9 @@ void update_menu_system(void) {
         MENU_SYSTEM_STATE_PAGE_TRANSITION_PENDING = 1,
         MENU_SYSTEM_STATE_FINALIZE_CLOSE = 0x14
     };
+    enum {
+        MENU_SYSTEM_STATE_INITIALIZE_PREVIEW = 0
+    };
     s32                 i;
     s32                 j;
     s32                 k;
@@ -72,7 +75,7 @@ void update_menu_system(void) {
         game_mode = 0;
         return;
     }
-    if (menu_system.state == 0 || menu_system.state == 0x2D) {
+    if (menu_system.state == MENU_SYSTEM_STATE_INITIALIZE_PREVIEW || menu_system.state == 0x2D) {
         initialize_menu_preview_scene();
     }
     if (mode_freeze_flags & 1) {
