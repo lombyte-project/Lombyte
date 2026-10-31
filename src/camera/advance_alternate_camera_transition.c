@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/math/interpolation/cosine_interpolate.h"
 
@@ -79,8 +80,8 @@ int advance_alternate_camera_transition(char *target_camera, struct CameraOrbit 
     } else {
         qcopy(&focus_position, target_camera + 0x30);
         hero_state = &hero;
-        fast_vec_normalize(&forward_axis, (char *)hero_state->moby + 0xC0, 1.0f);
-        fast_vec_normalize(&vertical_axis, (char *)hero_state->moby + 0xE0, 1.0f);
+        fast_vec_normalize(&forward_axis, &hero_state->moby->rot_row0, 1.0f);
+        fast_vec_normalize(&vertical_axis, &hero_state->moby->rot_row2, 1.0f);
         orbit_angles.v[2] = 0.0f;
         orbit_angles.v[1] = 0.0f;
         orbit_angles.v[0] = 3.1415927f;
