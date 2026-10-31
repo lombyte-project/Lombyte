@@ -137,12 +137,16 @@ void puffoid_update(struct Moby *moby) {
         PUFFOID_PATH_ANIM_SPRAY_ATTACK = 6,
         PUFFOID_PATH_ANIM_EXIT_SPRAY_ATTACK = 7
     };
+    enum {
+        PUFFOID_START_MODE_WAIT_FOR_HOME_JUMP = 1,
+        PUFFOID_START_MODE_FOLLOW_PATH = 2
+    };
     CreatureVars_4318 *puffoid_vars = (CreatureVars_4318 *)moby->pvars;
     struct Moby       *target;
     float              pos[4];
     int                i;
 
-    if (moby->state != 0x14) {
+    if (moby->state != PUFFOID_STATE_WAIT_TO_RESUME_COMMAND) {
         puffoid_vars->unkC8 = 0;
         update_puffoid_damage_and_path_goal(moby);
     }
@@ -171,27 +175,27 @@ void puffoid_update(struct Moby *moby) {
         if (rand() & 1) {
             moby->flags |= 0x8000;
         }
-        if (puffoid_vars->mode == 2) {
-            moby->state = 0x13;
+        if (puffoid_vars->mode == PUFFOID_START_MODE_FOLLOW_PATH) {
+            moby->state = PUFFOID_STATE_FOLLOW_PATH;
             if (moby->prev_seq != 4) {
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             }
             qcopy(&moby->pos, (char *)l11_paths[puffoid_vars->path] + 0x10);
             puffoid_vars->point = 1;
-        } else if (puffoid_vars->mode == 1) {
-            moby->state = 1;
+        } else if (puffoid_vars->mode == PUFFOID_START_MODE_WAIT_FOR_HOME_JUMP) {
+            moby->state = PUFFOID_STATE_WAIT_FOR_HOME_JUMP;
             qcopy(&moby->pos, (char *)l11_paths[puffoid_vars->path] + 0x10);
             moby->pos.z -= 1.0f;
             qcopy(puffoid_vars->home, (char *)l11_paths[puffoid_vars->path] + 0x20);
         } else if (puffoid_vars->carrier >= 0) {
-            moby->state = 0xC;
+            moby->state = PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP;
             puffoid_vars->unk258 = random_float_between(-3.0f, 3.0f);
             moby->visible = 0;
             moby->collision = 0;
             moby->flags |= 1;
         } else {
             moby->pos.z = FUN_L00_00259710(&moby->pos);
-            moby->state = 2;
+            moby->state = PUFFOID_STATE_IDLE;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 5);
             }
@@ -209,7 +213,7 @@ void puffoid_update(struct Moby *moby) {
                        frame_time_sq * 8.726646f,
                        frame_time * 12.566371f);
         if (puffoid_vars->unk214 != 2 && random_integer_below(9) == 0) {
-            moby->state = 7;
+            moby->state = PUFFOID_STATE_JUMP_HOME;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 5);
             }
@@ -236,11 +240,11 @@ void puffoid_update(struct Moby *moby) {
             pos[2] += 1.0f;
             h = probe_ground_height(pos, 0, 0.5f);
             if (moby->pos.z < h) {
-                if (moby->state == 7) {
+                if (moby->state == PUFFOID_STATE_JUMP_HOME) {
                     moby->pos.z = h;
-                    moby->state = 2;
+                    moby->state = PUFFOID_STATE_IDLE;
                 } else {
-                    moby->state = 1;
+                    moby->state = PUFFOID_STATE_WAIT_FOR_HOME_JUMP;
                     moby->pos.z = h - 1.0f;
                 }
             }
@@ -252,7 +256,7 @@ void puffoid_update(struct Moby *moby) {
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
                 0.017453292f;
-            moby->state = 4;
+            moby->state = PUFFOID_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -264,7 +268,7 @@ void puffoid_update(struct Moby *moby) {
             puffoid_vars->unk260[1] = fast_sin(a) * wander_radius;
             puffoid_vars->unk260[2] = 0.0f;
             fast_vec_add(puffoid_vars->unk260, puffoid_vars->unk260, puffoid_vars->home);
-            moby->state = 3;
+            moby->state = PUFFOID_STATE_WANDER_NEAR_HOME;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -277,12 +281,12 @@ void puffoid_update(struct Moby *moby) {
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
                 0.017453292f;
-            moby->state = 4;
+            moby->state = PUFFOID_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
         } else if ((moby->anim_flags & 2) && random_integer_below(3) == 0) {
-            moby->state = 2;
+            moby->state = PUFFOID_STATE_IDLE;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
@@ -291,7 +295,7 @@ void puffoid_update(struct Moby *moby) {
     case PUFFOID_STATE_CHASE_TARGET:
         if ((moby->anim_flags & 2) && vector_distance_xy(&moby->pos, &target->pos) <
                                           puffoid_spray_target_distance_metric_threshold_gp) {
-            moby->state = 5;
+            moby->state = PUFFOID_STATE_SPRAY_ATTACK;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
             }
@@ -300,7 +304,7 @@ void puffoid_update(struct Moby *moby) {
                                                                 (float *)&target->pos);
         }
         if (puffoid_vars->unk214 == 2) {
-            moby->state = 6;
+            moby->state = PUFFOID_STATE_RETURN_HOME;
         }
         break;
     case PUFFOID_STATE_REPOSITION_AND_FACE_TARGET:
@@ -323,9 +327,9 @@ void puffoid_update(struct Moby *moby) {
         }
         if (moby->anim_flags & 2) {
             if (puffoid_vars->unk214 != 2) {
-                moby->state = 4;
+                moby->state = PUFFOID_STATE_CHASE_TARGET;
             } else if (puffoid_vars->unk244 == 0) {
-                moby->state = 6;
+                moby->state = PUFFOID_STATE_RETURN_HOME;
             }
         }
         break;
@@ -333,12 +337,12 @@ void puffoid_update(struct Moby *moby) {
         update_moby_target_heading_and_conditional_movement((char *)moby, (float *)&target->pos);
         if ((moby->anim_flags & 2) && puffoid_spray_target_distance_metric_threshold_gp <
                                           vector_distance_xy(&moby->pos, &target->pos)) {
-            moby->state = 4;
+            moby->state = PUFFOID_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
         } else if (puffoid_vars->unk214 == 2) {
-            moby->state = 6;
+            moby->state = PUFFOID_STATE_RETURN_HOME;
         }
         qcopy(pos, &moby->pos);
         pos[2] += 0.333f;
@@ -346,7 +350,7 @@ void puffoid_update(struct Moby *moby) {
         break;
     case PUFFOID_STATE_RETURN_HOME:
         if (vector_distance_xy(&moby->pos, puffoid_vars->home) < 1.0f) {
-            moby->state = 2;
+            moby->state = PUFFOID_STATE_IDLE;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
@@ -355,7 +359,7 @@ void puffoid_update(struct Moby *moby) {
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
                 0.017453292f;
-            moby->state = 4;
+            moby->state = PUFFOID_STATE_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -379,7 +383,7 @@ void puffoid_update(struct Moby *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            moby->state = 2;
+            moby->state = PUFFOID_STATE_IDLE;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
@@ -421,7 +425,7 @@ void puffoid_update(struct Moby *moby) {
                 dest[2] = 1.0f;
                 transform_vector_by_basis(dest, dest, &carrier_moby->rot_row0);
                 fast_vec_add(dest, dest, &carrier_moby->pos);
-                moby->state = 0xD;
+                moby->state = PUFFOID_STATE_CARRIER_JUMP;
                 if (moby->prev_seq != 1) {
                     blend_moby_animation(moby, 1, 0, 5);
                 }
@@ -455,7 +459,7 @@ void puffoid_update(struct Moby *moby) {
             pos[2] += 1.0f;
             if (moby->pos.z < probe_ground_height(pos, 0, 0.5f)) {
                 moby->anim_speed = 1.0f;
-                moby->state = 0xE;
+                moby->state = PUFFOID_STATE_CARRIER_IDLE;
             }
         }
         break;
@@ -472,7 +476,7 @@ void puffoid_update(struct Moby *moby) {
                 random_float_between(-puffoid_chase_heading_offset_limit_degrees_gp,
                                      puffoid_chase_heading_offset_limit_degrees_gp) *
                 0.017453292f;
-            moby->state = 0xF;
+            moby->state = PUFFOID_STATE_CARRIER_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
@@ -488,13 +492,13 @@ void puffoid_update(struct Moby *moby) {
         update_moby_target_heading_and_conditional_movement((char *)moby, (float *)&target->pos);
         if ((moby->anim_flags & 2) && vector_distance_xy(&moby->pos, &target->pos) <
                                           puffoid_spray_target_distance_metric_threshold_gp) {
-            moby->state = 0x10;
+            moby->state = PUFFOID_STATE_CARRIER_SPRAY_ATTACK;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(10));
             }
         }
         if (puffoid_vars->unk214 == 2) {
-            moby->state = 0xE;
+            moby->state = PUFFOID_STATE_CARRIER_IDLE;
         }
         break;
     case PUFFOID_STATE_CARRIER_SPRAY_ATTACK:
@@ -507,12 +511,12 @@ void puffoid_update(struct Moby *moby) {
         update_moby_target_heading_and_conditional_movement((char *)moby, (float *)&target->pos);
         if ((moby->anim_flags & 2) && puffoid_spray_target_distance_metric_threshold_gp <
                                           vector_distance_xy(&moby->pos, &target->pos)) {
-            moby->state = 0xF;
+            moby->state = PUFFOID_STATE_CARRIER_CHASE_TARGET;
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
         } else if (puffoid_vars->unk214 == 2) {
-            moby->state = 0xE;
+            moby->state = PUFFOID_STATE_CARRIER_IDLE;
         }
         qcopy(pos, &moby->pos);
         pos[2] += 0.333f;
@@ -538,7 +542,7 @@ void puffoid_update(struct Moby *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            moby->state = 0xE;
+            moby->state = PUFFOID_STATE_CARRIER_IDLE;
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
@@ -636,7 +640,7 @@ void puffoid_update(struct Moby *moby) {
         break;
     }
     if (puffoid_vars->smoke != 0.0f) {
-        if (moby->state == 9 || moby->state == 0xB || moby->state == 0x11 || moby->state == 0x12) {
+        if (moby->state == PUFFOID_STATE_KNOCKBACK || moby->state == PUFFOID_STATE_DEATH_KNOCKBACK || moby->state == PUFFOID_STATE_CARRIER_KNOCKBACK || moby->state == PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK) {
             for (i = 0; i < 3; i++) {
                 float vel[4];
                 float a;
