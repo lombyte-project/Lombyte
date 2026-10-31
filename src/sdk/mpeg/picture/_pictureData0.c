@@ -24,6 +24,9 @@ s32 _pictureData0(MpegDec *decoder) {
     enum {
         DECODE_STATUS_SLICE_DECODE_ERROR = 1
     };
+    enum {
+        DECODE_STATUS_SLICE_LOOKAHEAD_STOP = 3
+    };
     s32 decode_status;
     s32 mbs;
 
@@ -35,7 +38,7 @@ s32 _pictureData0(MpegDec *decoder) {
     }
     do {
         decode_status = _slice0(decoder, mbs);
-    } while (decode_status == DECODE_STATUS_SLICE_DECODE_ERROR || decode_status == 3);
+    } while (decode_status == DECODE_STATUS_SLICE_DECODE_ERROR || decode_status == DECODE_STATUS_SLICE_LOOKAHEAD_STOP);
     _waitIpuIdle(decoder);
     if (_waitBdecOut(decoder) == 0) {
         decode_status = DECODE_STATUS_ABORT_PICTURE;
