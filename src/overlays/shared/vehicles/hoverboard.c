@@ -22,8 +22,8 @@ extern unsigned short D_00141938 NOT_SDA;
 extern unsigned short D_00141C60 NOT_SDA;
 extern int                       D_L05_0015F6A8;
 
-extern int D_L05_0016190C __attribute__((sda));
-extern int D_L05_00161910 __attribute__((sda));
+extern int l05_hoverboard_effect_initial_color __asm__("D_L05_0016190C") __attribute__((sda));
+extern int l05_hoverboard_effect_color_endpoint __asm__("D_L05_00161910") __attribute__((sda));
 
 void hoverboard_update(unsigned char *moby) __asm__("FUN_L05_002f87a8");
 
@@ -96,19 +96,19 @@ void hoverboard_update(unsigned char *moby) {
         if ((unsigned char)MOBY(moby)->command == 0) {
             int size = random_int_between(scale_game_frames(10), scale_game_frames(13));
             spawn_effect(
-                position, effect_position, D_L05_0016190C, D_L05_00161910, size, 15, 15, 1);
+                position, effect_position, l05_hoverboard_effect_initial_color, l05_hoverboard_effect_color_endpoint, size, 15, 15, 1);
             MOBY(moby)->command = 0;
             return;
         }
         fast_vec_scale(second_position, delta, 0.920f);
         {
             int size = random_int_between(scale_game_frames(15), scale_game_frames(18));
-            spawn_effect(position, second_position, 0x5032f0d2, D_L05_00161910, size, 30, 20, 1);
+            spawn_effect(position, second_position, 0x5032f0d2, l05_hoverboard_effect_color_endpoint, size, 30, 20, 1);
         }
         {
             int size = random_int_between(scale_game_frames(8), scale_game_frames(17));
             FUN_L00_0026cbb0(
-                position, effect_position, D_L05_0016190C, D_L05_00161910, size, 1, 15000.0f);
+                position, effect_position, l05_hoverboard_effect_initial_color, l05_hoverboard_effect_color_endpoint, size, 1, 15000.0f);
         }
     }
     MOBY(moby)->command = 0;
