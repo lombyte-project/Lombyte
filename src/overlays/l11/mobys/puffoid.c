@@ -766,6 +766,9 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
         PUFFOID_STATE_CARRIER_KNOCKBACK = 0x11,
         PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 0x12
     };
+    enum {
+        HIT_PROCESSING_SKIP_DAMAGE_AND_REACTION = 1
+    };
     struct L11PatrolVars *patrol_vars = (struct L11PatrolVars *)moby->pvars;
     Vec4                  position_scratch;
     s32                   hit_processing_status;
@@ -800,7 +803,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     {
         s32 kind = resolve_moby_hit_response(
             moby, hit, &patrol_vars->hp, 0, &hit_processing_status, &dmg, 0, 4);
-        if (hit_processing_status != 1 && moby->state != PUFFOID_STATE_DEATH_KNOCKBACK) {
+        if (hit_processing_status != HIT_PROCESSING_SKIP_DAMAGE_AND_REACTION && moby->state != PUFFOID_STATE_DEATH_KNOCKBACK) {
             patrol_vars->hp -= dmg;
             if (hit->moby->oclass == 0x47) {
                 kind = HIT_RESPONSE_KNOCKBACK;
