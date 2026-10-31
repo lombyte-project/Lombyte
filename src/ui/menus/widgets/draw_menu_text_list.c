@@ -27,6 +27,11 @@ extern void *memset(void *, int, unsigned int);
 s32 draw_menu_text_list(struct MenuScreen *menu) __asm__("FUN_0021d4a8");
 
 s32 draw_menu_text_list(struct MenuScreen *menu) {
+    enum {
+        MENU_LIST_FONT_TEXTURE_NORMAL = 1,
+        MENU_LIST_FONT_TEXTURE_SMALL = 2,
+        MENU_LIST_FONT_TEXTURE_LARGE = 3
+    };
     s32                  font_size;
     s32                  font_kind;
     s32                  focused;
@@ -44,17 +49,17 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
     s32                  y;
 
     font_size = 12;
-    font_kind = 1;
+    font_kind = MENU_LIST_FONT_TEXTURE_NORMAL;
     font = normal_font_metrics;
     focused = menu_system.current->focus == menu;
     if (menu->data.list.flags & 4) {
         font_size = 14;
-        font_kind = 3;
+        font_kind = MENU_LIST_FONT_TEXTURE_LARGE;
         font = large_font_metrics;
     }
     if (menu->data.list.flags & 8) {
         font_size = 10;
-        font_kind = 2;
+        font_kind = MENU_LIST_FONT_TEXTURE_SMALL;
         font = small_font_metrics;
     }
     vu1_add_g_sregister(0x42, 0x44);
