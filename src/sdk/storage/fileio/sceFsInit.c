@@ -33,6 +33,10 @@ extern s32 SignalSema();
 extern s32 WaitSema();
 
 s32 sceFsInit(void) {
+    enum {
+        SIF_RPC_BIND_SUCCESS = 0,
+        SIF_RPC_CALL_SUCCESS = 0
+    };
     s32                  initialization_call_status, delay;
     struct SifFileSlot  *slot;
     struct UnalignedWord reply_word;
@@ -44,12 +48,12 @@ s32 sceFsInit(void) {
     initialization_call_status = DIntr();
     sceSifAddCmdHandler(0x80000011, (u32)_sceFs_Rcv_Intr, (u32)fs_receive_interrupt_handler_data);
     sceSifAddCmdHandler(0x80000013, (u32)invoke_sif_file_command_callback, (u32)callback_record);
-    if (initialization_call_status != 0) {
+    if (initialization_call_status != FALSE) {
         EnableInterrupts();
     }
     for (;;) {
         initialization_call_status = sceSifBindRpc(&fio_rpc_client, 0x80000001, 0);
-        if (initialization_call_status < 0) {
+        if (initialization_call_status < SIF_RPC_BIND_SUCCESS) {
             return -1;
         }
         if (fio_rpc_client.serve != 0) {
@@ -68,7 +72,7 @@ s32 sceFsInit(void) {
     fs_init_completion_buffer_addresses[1] = D_00157500 + 0x440;
     initialization_call_status = sceSifCallRpc(
         &fio_rpc_client, 0xFF, 0, fs_init_completion_buffer_addresses, 8, fio_rpc_result, 8, 0, 0);
-    if (initialization_call_status < 0) {
+    if (initialization_call_status < SIF_RPC_CALL_SUCCESS) {
         return (s32)0xFFFEFFFF;
     }
     *(struct UnalignedWord *)FsResetBuffer =
