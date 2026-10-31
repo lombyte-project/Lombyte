@@ -169,7 +169,7 @@ void reflection_mesh_update(struct Moby *moby) {
                     single_mesh_bounding_sphere_components[3] = vertex_to_center_distance;
             }
         }
-        moby->state = 1;
+        moby->state = SINGLE_MESH_RENDER_QUEUE_CALLBACK;
         moby->update_dist = moby->draw_dist = 255;
         break;
     }
