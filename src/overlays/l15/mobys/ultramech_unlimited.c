@@ -299,7 +299,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
     ultramech_vars = ultramech_moby->data;
     process_ultramech_hits_and_update_target(ultramech_moby);
     combat_target = ultramech_vars->target;
-    if (ultramech_moby->state != 0 && ultramech_moby->state != 0x40 && hero.vehicle_mode != 2) {
+    if (ultramech_moby->state != ULTRAMECH_INITIALIZE && ultramech_moby->state != ULTRAMECH_DEAD_WAIT_FOR_RESET && hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK) {
         ultramech_moby->w94 = 0;
         ultramech_moby->flags |= 0x41;
         idx = ultramech_vars->snd;
@@ -313,7 +313,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         ultramech_vars->snd = -1;
         ultramech_moby->flags &= 0xEFFF;
         ultramech_vars->b58 = 0;
-        ultramech_moby->state = 1;
+        ultramech_moby->state = ULTRAMECH_WAIT_FOR_ACTIVATION;
         return;
     }
     FUN_L00_00263ac8(2.5f, (int)ultramech_moby, 6, ultramech_vars->v200);
@@ -341,7 +341,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
             ultramech_vars->w1D4 = 1;
         if (ultramech_vars->path != -1)
             ultramech_moby->pos.q = D_L15_001B0AB0[ultramech_vars->path]->points[0].q;
-        ultramech_moby->state = 1;
+        ultramech_moby->state = ULTRAMECH_WAIT_FOR_ACTIVATION;
         if (ultramech_moby->anim != 0)
             blend_moby_animation(ultramech_moby, 0, 0, 5);
         break;
@@ -351,14 +351,14 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
             if (ultramech_vars->w1CC != -1 &&
                 count_active_moby_group_members(ultramech_vars->w1CC, 0x40))
                 break;
-            if (hero.vehicle_mode == 2) {
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
                 ultramech_moby->w94 = *(int *)(ultramech_moby->cls + 0x10);
                 ultramech_moby->flags = (ultramech_moby->flags & 0xFFBE) | 0x1000;
             }
         }
         if (ultramech_vars->w164 != 2 && ultramech_vars->path != -1) {
             struct Hero *pl = &hero;
-            if (pl->vehicle_mode == 2 && (ultramech_moby->flags & 0x1000)) {
+            if (pl->vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && (ultramech_moby->flags & 0x1000)) {
                 if (ultramech_vars->w1D0 != -1 &&
                     !point_in_path_xy(&pl->motion.pos,
                                       D_L15_001B0AB0[ultramech_vars->w1D0]->points,
@@ -368,7 +368,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                 } else {
                     LevelPath *path;
                     int        i;
-                    ultramech_moby->state = 2;
+                    ultramech_moby->state = ULTRAMECH_FOLLOW_ENTRY_PATH;
                     if (ultramech_moby->anim != 4)
                         blend_moby_animation(ultramech_moby, 4, 0, scale_game_frames(0x14));
                     path = D_L15_001B0AB0[ultramech_vars->path];
@@ -418,7 +418,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
             float z = probe_ground_height(&ultramech_moby->pos, 0, 0.5f);
             if (ultramech_moby->pos.f[2] < z)
                 ultramech_moby->pos.f[2] = z;
-            ultramech_moby->state = 4;
+            ultramech_moby->state = ULTRAMECH_AIM_AND_SELECT_ATTACK;
             ultramech_vars->timer = scale_game_frames(0xF);
             break;
         }
@@ -473,7 +473,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
             }
             if (ultramech_moby->pos.f[2] < z) {
                 ultramech_moby->pos.f[2] = z;
-                ultramech_moby->state = 4;
+                ultramech_moby->state = ULTRAMECH_AIM_AND_SELECT_ATTACK;
                 ultramech_vars->timer = scale_game_frames(0xF);
             }
         }
@@ -494,17 +494,17 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                 if (ultramech_vars->w1D8 == 0 &&
                     vector_distance_xy(&ultramech_moby->pos, &combat_target->pos) <
                         *(float *)&ultramech_approach_target_range_gp) {
-                    ultramech_moby->state = 7;
+                    ultramech_moby->state = ULTRAMECH_APPROACH_TARGET;
                     if (ultramech_moby->anim != 1)
                         blend_moby_animation(ultramech_moby, 1, 0, scale_game_frames(0xA));
                 } else if (ultramech_vars->w1D8 == 0 &&
                            vector_distance_xy(&ultramech_moby->pos, &combat_target->pos) <
                                *(float *)&ultramech_melee_range_gp) {
-                    ultramech_moby->state = 8;
+                    ultramech_moby->state = ULTRAMECH_MELEE_ATTACK;
                     if (ultramech_moby->anim != 2)
                         blend_moby_animation(ultramech_moby, 2, 0, scale_game_frames(0xA));
                 } else {
-                    ultramech_moby->state = 5;
+                    ultramech_moby->state = ULTRAMECH_FIRE_BURST;
                     if (ultramech_moby->anim != 6)
                         blend_moby_animation(ultramech_moby, 6, 0, scale_game_frames(0x14));
                     ultramech_vars->shots = 0;
@@ -555,7 +555,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                 emit_radial_particle_burst(ultramech_moby, &vector_or_hit_descriptor, 0);
                 ultramech_vars->shots++;
             } else if ((float)ultramech_vars->shots >= 6.0f && (ultramech_moby->animFlags & 2)) {
-                ultramech_moby->state = 6;
+                ultramech_moby->state = ULTRAMECH_WAIT_BETWEEN_BURSTS;
                 if (ultramech_moby->anim != 0)
                     blend_moby_animation(ultramech_moby, 0, 0, scale_game_frames(0xA));
                 ultramech_vars->timer =
@@ -563,19 +563,19 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
             } else if (ultramech_vars->w1D8 == 0 &&
                        vector_distance_xy(&ultramech_moby->pos, &combat_target->pos) <
                            *(float *)&ultramech_approach_target_range_gp) {
-                ultramech_moby->state = 7;
+                ultramech_moby->state = ULTRAMECH_APPROACH_TARGET;
                 if (ultramech_moby->anim != 1)
                     blend_moby_animation(ultramech_moby, 1, 0, scale_game_frames(0xA));
             } else if (ultramech_vars->w1D8 == 0 &&
                        vector_distance_xy(&ultramech_moby->pos, &combat_target->pos) <
                            *(float *)&ultramech_melee_range_gp) {
-                ultramech_moby->state = 8;
+                ultramech_moby->state = ULTRAMECH_MELEE_ATTACK;
                 if (ultramech_moby->anim != 2)
                     blend_moby_animation(ultramech_moby, 2, 0, scale_game_frames(0xA));
             } else if (ultramech_vars->w1D8 == 0 &&
                        vector_distance_xy(&ultramech_moby->pos, &combat_target->pos) > 10.0f &&
                        ultramech_vars->w1C8 != 0 && ultramech_vars->w1D4 == 0) {
-                ultramech_moby->state = 3;
+                ultramech_moby->state = ULTRAMECH_BALLISTIC_PATH_MOVE;
                 ultramech_vars->timer = 0;
                 ultramech_vars->side = (ultramech_vars->side + 1) & 1;
                 if (ultramech_moby->anim != 3)
@@ -598,7 +598,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                     -(*(float *)&ultramech_path_gravity_gp * frame_time_sq));
             }
         } else {
-            ultramech_moby->state = 4;
+            ultramech_moby->state = ULTRAMECH_AIM_AND_SELECT_ATTACK;
             if (ultramech_moby->anim != 0)
                 blend_moby_animation(ultramech_moby, 0, 0, scale_game_frames(0x14));
         }
@@ -619,7 +619,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                                                            ->idx[ultramech_vars->side]]
                                                 ->count -
                                             1) {
-                ultramech_moby->state = 3;
+                ultramech_moby->state = ULTRAMECH_BALLISTIC_PATH_MOVE;
                 ultramech_vars->timer = 0;
                 ultramech_vars->point++;
                 if (ultramech_moby->anim != 3)
@@ -641,13 +641,13 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                     *(float *)&ultramech_path_horizontal_speed_gp * frame_time,
                     -(*(float *)&ultramech_path_gravity_gp * frame_time_sq));
             } else if (fast_dec_timer(&ultramech_vars->timer)) {
-                ultramech_moby->state = 5;
+                ultramech_moby->state = ULTRAMECH_FIRE_BURST;
                 if (ultramech_moby->anim != 6)
                     blend_moby_animation(ultramech_moby, 6, 0, scale_game_frames(0x14));
                 ultramech_vars->shots = 0;
             }
         } else {
-            ultramech_moby->state = 4;
+            ultramech_moby->state = ULTRAMECH_AIM_AND_SELECT_ATTACK;
             if (ultramech_moby->anim != 0)
                 blend_moby_animation(ultramech_moby, 0, 0, scale_game_frames(0x14));
         }
@@ -660,12 +660,12 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                 ultramech_moby, &position_or_motion_vector, ultramech_vars->f1B8);
             if (vector_distance_xy(&ultramech_moby->pos, &combat_target->pos) <
                 *(float *)&ultramech_melee_range_gp) {
-                ultramech_moby->state = 8;
+                ultramech_moby->state = ULTRAMECH_MELEE_ATTACK;
                 if (ultramech_moby->anim != 2)
                     blend_moby_animation(ultramech_moby, 2, 0, scale_game_frames(0xA));
             }
         } else {
-            ultramech_moby->state = 4;
+            ultramech_moby->state = ULTRAMECH_AIM_AND_SELECT_ATTACK;
             if (ultramech_moby->anim != 0)
                 blend_moby_animation(ultramech_moby, 0, 0, scale_game_frames(0x14));
         }
@@ -693,7 +693,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                              D_L15_001B0AB0[ultramech_vars->side]->points,
                              D_L15_001B0AB0[ultramech_vars->side]->count)) {
             qcopy(&ultramech_moby->pos, &vector_or_hit_descriptor);
-            ultramech_moby->state = 4;
+            ultramech_moby->state = ULTRAMECH_AIM_AND_SELECT_ATTACK;
             if (ultramech_moby->anim != 0)
                 blend_moby_animation(ultramech_moby, 0, 0, scale_game_frames(0xC));
         } else {
@@ -717,7 +717,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                                                            ->idx[ultramech_vars->side]]
                                                 ->count -
                                             1) {
-                ultramech_moby->state = 3;
+                ultramech_moby->state = ULTRAMECH_BALLISTIC_PATH_MOVE;
                 ultramech_vars->timer = 0;
                 ultramech_vars->point++;
                 if (ultramech_moby->anim != 3)
@@ -740,7 +740,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                     -(*(float *)&ultramech_path_gravity_gp * frame_time_sq));
             } else if (*(float *)&ultramech_melee_range_gp <
                        vector_distance_xy(&ultramech_moby->pos, &combat_target->pos)) {
-                ultramech_moby->state = 4;
+                ultramech_moby->state = ULTRAMECH_AIM_AND_SELECT_ATTACK;
                 if (ultramech_moby->anim != 0)
                     blend_moby_animation(ultramech_moby, 0, 0, scale_game_frames(0x14));
             }
@@ -780,7 +780,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         }
         if ((r & 0x40) || (ultramech_vars->w1D8 != 0 && (ultramech_moby->animFlags & 2))) {
             if (ultramech_vars->w1D4 == 0) {
-                ultramech_moby->state = 3;
+                ultramech_moby->state = ULTRAMECH_BALLISTIC_PATH_MOVE;
                 ultramech_vars->timer = 0;
                 ultramech_vars->side = (ultramech_vars->side + 1) & 1;
                 qcopy(&vector_or_hit_descriptor,
@@ -802,7 +802,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                                      *(float *)&ultramech_path_horizontal_speed_gp * frame_time,
                                      -(*(float *)&ultramech_path_gravity_gp * frame_time_sq));
             } else {
-                ultramech_moby->state = 4;
+                ultramech_moby->state = ULTRAMECH_AIM_AND_SELECT_ATTACK;
                 if (ultramech_moby->anim != 0)
                     blend_moby_animation(ultramech_moby, 0, 0, scale_game_frames(0x14));
             }
@@ -842,7 +842,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
         FUN_L00_00263fd8(ultramech_moby, 0x64C, pp, rr, 0, 0, 0.0f, dd, dd, D_L15_0015F580);
     }
         spawn_moby_break_fragments(ultramech_moby, 0x7A9, 1, 0x7A9, 2, 4, 2);
-        ultramech_moby->state = 0x40;
+        ultramech_moby->state = ULTRAMECH_DEAD_WAIT_FOR_RESET;
         return;
     case ULTRAMECH_DEAD_WAIT_FOR_RESET:
         ultramech_moby->w94 = 0;
@@ -854,8 +854,8 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                  (((short)ultramech_moby->id >> 5) * 4 + (current_level_index << 8))) &=
             ~(1 << (ultramech_moby->id & 0x1F));
         D_L15_001BAAD0[(short)ultramech_moby->id >> 5] &= ~(1 << (ultramech_moby->id & 0x1F));
-        if (hero.vehicle_mode != 2)
-            ultramech_moby->state = 0;
+        if (hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK)
+            ultramech_moby->state = ULTRAMECH_INITIALIZE;
         break;
     }
     if (moving) {
@@ -904,7 +904,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
                                         : FUN_L00_00257b90(0x14, 0x1E)));
             }
         }
-    } else if (ultramech_moby->state > 1 && ultramech_moby->state != 0x40) {
+    } else if (ultramech_moby->state > ULTRAMECH_WAIT_FOR_ACTIVATION && ultramech_moby->state != ULTRAMECH_DEAD_WAIT_FOR_RESET) {
         float z;
         ultramech_vars->fE8 += frame_time_sq * 30.0f;
         ultramech_moby->pos.f[2] -= ultramech_vars->fE8 - 2.0f;
