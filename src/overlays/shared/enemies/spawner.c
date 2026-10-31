@@ -87,6 +87,9 @@ extern f32   frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 void process_spawner_hit_record(struct Moby *moby, char *spawner_vars) __asm__("FUN_L09_0030a9e8");
 
 void process_spawner_hit_record(struct Moby *moby, char *spawner_vars) {
+    enum {
+        SPAWNER_STATE_EXPLODE = 2
+    };
     char *moby_record;
     int   record_processing_status;
     float remaining_value;
@@ -102,7 +105,7 @@ void process_spawner_hit_record(struct Moby *moby, char *spawner_vars) {
             FUN_L00_0025d458_c(moby, spawner_vars + 0x60);
         } else {
             FUN_L00_00257470_c(moby, 0, -1);
-            moby->state = 2;
+            moby->state = SPAWNER_STATE_EXPLODE;
             spawner_vars[0x67] = 0x78;
             FUN_L00_0025d458_c(moby, spawner_vars + 0x60);
         }
