@@ -49,11 +49,14 @@ void update_circular_saw_engine_sound(struct Moby *moby) {
         CIRCULAR_SAW_ANIM_ALERT = 6,
         CIRCULAR_SAW_ANIM_ATTACK = 7
     };
+    enum {
+        CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED = 9
+    };
     EngineSoundVars *engine_sound_vars = (EngineSoundVars *)moby->pvars;
     f32              volume;
     f32              pitch;
 
-    if (moby->state != 9) {
+    if (moby->state != CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED) {
         if (voice_is_playing((long)moby, engine_sound_vars->voice) == 0 && moby->prev_seq < 8) {
             engine_sound_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
             engine_sound_vars->volume = convert_integer_to_float(0x400);
