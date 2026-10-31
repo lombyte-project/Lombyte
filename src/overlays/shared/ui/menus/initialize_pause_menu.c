@@ -724,6 +724,9 @@ extern void draw_menu_flashing_panel(int) __asm__("FUN_00223e28");
 void draw_pause_menu_pages(int transfer_only) __asm__("FUN_L00_002772c0");
 
 void draw_pause_menu_pages(int transfer_only) {
+    enum {
+        PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION = 0x14
+    };
     u128 corners[4];
     u128 pad[5];
     u128 box[2];
@@ -751,7 +754,7 @@ void draw_pause_menu_pages(int transfer_only) {
     }
     reset_gs_registers();
     emit_rgba_draw_packet(0, 0, 0, 0x30);
-    if (D_L00_001B9CF0.state == 0x14) {
+    if (D_L00_001B9CF0.state == PAUSE_MENU_STATE_RESTORE_GAMEPLAY_AND_DISPATCH_ACTION) {
         return;
     }
     vu1_add_g_sregister(0x47, 0x5360B);
