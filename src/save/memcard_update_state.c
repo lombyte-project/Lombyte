@@ -58,7 +58,7 @@ void memcard_update_state(void) {
             MC.cur = 0;
         }
         if (sceMcGetInfo(CARD.port, CARD.slot, &CARD.type, &CARD.free, &CARD.format) == 0) {
-            MC.state = 1;
+            MC.state = MEMCARD_PROCESS_INFO_RESULT;
         }
         break;
 
@@ -69,9 +69,9 @@ void memcard_update_state(void) {
             CARD.errors = -1;
         }
         if (++MC.cur < 1) {
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
         } else {
-            MC.state = 2;
+            MC.state = MEMCARD_DISPATCH_PENDING_OPERATION;
         }
         MC.busy = 0;
         break;
@@ -92,7 +92,7 @@ void memcard_update_state(void) {
         } else {
             if (++MC.cur >= 31) {
                 MC.cur = 0;
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
             }
         }
         MC.busy = 0;
@@ -101,12 +101,12 @@ void memcard_update_state(void) {
     case MEMCARD_REQUEST_FORMAT:
         if (CARD.format == 0) {
             if (SceMcFormat(CARD.port, CARD.slot) == 0) {
-                MC.state = 4;
+                MC.state = MEMCARD_PROCESS_FORMAT_RESULT;
             }
             break;
         }
         MC.busy = 0;
-        MC.state = 2;
+        MC.state = MEMCARD_DISPATCH_PENDING_OPERATION;
         break;
 
     case MEMCARD_PROCESS_FORMAT_RESULT:
@@ -114,7 +114,7 @@ void memcard_update_state(void) {
             MC.err = 1;
             MC.err_card = MC.cur;
         }
-        MC.state = 0;
+        MC.state = MEMCARD_QUERY_INFO;
         MC.cur = 0;
         MC.busy = 0;
         break;
@@ -122,12 +122,12 @@ void memcard_update_state(void) {
     case MEMCARD_REQUEST_UNFORMAT:
         if (CARD.format == 0) {
             if (SceMcUnformat(CARD.port, CARD.slot) == 0) {
-                MC.state = 6;
+                MC.state = MEMCARD_PROCESS_UNFORMAT_RESULT;
             }
             break;
         }
         MC.busy = 0;
-        MC.state = 2;
+        MC.state = MEMCARD_DISPATCH_PENDING_OPERATION;
         break;
 
     case MEMCARD_PROCESS_UNFORMAT_RESULT:
@@ -135,7 +135,7 @@ void memcard_update_state(void) {
             MC.err = 2;
             MC.err_card = MC.cur;
         }
-        MC.state = 0;
+        MC.state = MEMCARD_QUERY_INFO;
         MC.cur = 0;
         MC.busy = 0;
         break;
@@ -143,7 +143,7 @@ void memcard_update_state(void) {
     case MEMCARD_REQUEST_CHDIR:
         if (sceMcChdir(CARD.port, CARD.slot, D_0013D1D0, 0) == 0) {
             MC.sub = 0;
-            MC.state = 8;
+            MC.state = MEMCARD_PROBE_SAVE_HEADER;
         }
         break;
 
@@ -166,7 +166,7 @@ void memcard_update_state(void) {
                     MC.err = 4;
                     MC.err_card = MC.cur;
                 }
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
                 MC.busy = 0;
             }
@@ -197,7 +197,7 @@ void memcard_update_state(void) {
                 } else {
                     MC.err = 4;
                 }
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
             }
             MC.busy = 0;
@@ -225,7 +225,7 @@ void memcard_update_state(void) {
                 if (MC.result >= 0) {
                     MC.err = 0x2716;
                     if (sceMcClose(MC.fd) == 0) {
-                        MC.state = 0;
+                        MC.state = MEMCARD_QUERY_INFO;
                         MC.cur = 0;
                         MC.busy = 0;
                     }
@@ -242,7 +242,7 @@ void memcard_update_state(void) {
                 } else {
                     MC.err = 4;
                 }
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
                 MC.busy = 0;
             }
@@ -250,14 +250,14 @@ void memcard_update_state(void) {
         case MEMCARD_PROBE_REQUEST_CLOSE:
             if (sceMcClose(MC.fd) == 0) {
                 MC.busy = 0;
-                MC.state = 21;
+                MC.state = MEMCARD_BEGIN_SCAN_SAVE_INFO;
             }
             break;
         }
         break;
 
     case MEMCARD_BEGIN_CREATE_SAVE_DIRECTORY:
-        MC.state = 10;
+        MC.state = MEMCARD_CREATE_SAVE_DIRECTORY;
         MC.sub = 0;
         CARD.save_index = 0;
     case MEMCARD_CREATE_SAVE_DIRECTORY:
@@ -268,7 +268,7 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 7;
                 MC.err_card = MC.cur;
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
             }
             MC.busy = 0;
@@ -291,7 +291,7 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 0xD;
             }
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
@@ -377,7 +377,7 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 0xA;
                 MC.err_card = MC.cur;
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
                 MC.busy = 0;
             }
@@ -397,7 +397,7 @@ void memcard_update_state(void) {
             if (MC.result >= 0) {
                 MC.err = 0xB;
                 if (sceMcClose(MC.fd) == 0) {
-                    MC.state = 0;
+                    MC.state = MEMCARD_QUERY_INFO;
                     MC.cur = 0;
                     MC.busy = 0;
                 }
@@ -412,7 +412,7 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 0xD;
             }
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
@@ -424,7 +424,7 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 0xC;
                 MC.err_card = MC.cur;
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
             }
             MC.busy = 0;
@@ -439,7 +439,7 @@ void memcard_update_state(void) {
             break;
         case MEMCARD_CREATE_RESET_CARD_STATUS:
             MC.card[0].save_index = -1;
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.card[0].errors = 0;
             break;
@@ -447,7 +447,7 @@ void memcard_update_state(void) {
         break;
 
     case MEMCARD_BEGIN_DELETE_SAVE_DIRECTORY:
-        MC.state = 12;
+        MC.state = MEMCARD_DELETE_SAVE_DIRECTORY;
         MC.sub = 0;
         CARD.save_index = -2;
     case MEMCARD_DELETE_SAVE_DIRECTORY:
@@ -478,7 +478,7 @@ void memcard_update_state(void) {
                     } else {
                         MC.err = 0x12;
                     }
-                    MC.state = 0;
+                    MC.state = MEMCARD_QUERY_INFO;
                     MC.cur = 0;
                 }
                 MC.busy = 0;
@@ -510,7 +510,7 @@ void memcard_update_state(void) {
                     MC.err = 0x12;
                 }
             }
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
@@ -518,7 +518,7 @@ void memcard_update_state(void) {
         break;
 
     case MEMCARD_BEGIN_SCAN_SAVE_INFO:
-        MC.state = 22;
+        MC.state = MEMCARD_ADVANCE_SAVE_INFO_SCAN;
         CARD.scan_save_index = -1;
         MC.record_index = 0;
         break;
@@ -527,9 +527,9 @@ void memcard_update_state(void) {
         CARD.scan_save_index++;
         if (CARD.scan_save_index < 5) {
             MC.sub = 0;
-            MC.state = 23;
+            MC.state = MEMCARD_READ_SCANNED_SAVE_INFO;
         } else {
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
         }
@@ -537,19 +537,19 @@ void memcard_update_state(void) {
     case MEMCARD_BEGIN_READ_SAVE:
         if (CARD.save_index < 0) {
             MC.busy = 0;
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.err = 0x13;
             break;
         }
         MC.record_index = 0;
         MC.sub = 0;
-        MC.state = 14;
+        MC.state = MEMCARD_READ_SAVE;
     case MEMCARD_READ_SAVE:
     case MEMCARD_READ_SCANNED_SAVE_INFO:
         switch (MC.sub) {
         case MEMCARD_READ_SAVE_REQUEST_OPEN:
-            if (MC.state == 23) {
+            if (MC.state == MEMCARD_READ_SCANNED_SAVE_INFO) {
                 sprintf(name, D_0013D270, CARD.scan_save_index);
             } else {
                 sprintf(name, D_0013D270, CARD.save_index);
@@ -577,7 +577,7 @@ void memcard_update_state(void) {
                 } else {
                     MC.err = 0x1C;
                 }
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
             }
             MC.busy = 0;
@@ -598,7 +598,7 @@ void memcard_update_state(void) {
             if (MC.result >= 0) {
                 MC.err = 0x1B;
                 if (sceMcClose(MC.fd) == 0) {
-                    MC.state = 0;
+                    MC.state = MEMCARD_QUERY_INFO;
                     MC.cur = 0;
                     MC.busy = 0;
                 }
@@ -615,7 +615,7 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 0x1C;
             }
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
@@ -630,7 +630,7 @@ void memcard_update_state(void) {
             break;
         case MEMCARD_READ_SAVE_PROCESS_MAIN_DATA_READ_RESULT:
             if (MC.result == MC.size) {
-                if (MC.state == 23) {
+                if (MC.state == MEMCARD_READ_SCANNED_SAVE_INFO) {
                     memcard_restore_info(memcard_game_data_buffer, MC.cur, CARD.scan_save_index);
                     MC.sub = 8;
                 } else {
@@ -644,7 +644,7 @@ void memcard_update_state(void) {
             if (MC.result >= 0) {
                 MC.err = 0x1B;
                 if (sceMcClose(MC.fd) == 0) {
-                    MC.state = 0;
+                    MC.state = MEMCARD_QUERY_INFO;
                     MC.cur = 0;
                     MC.busy = 0;
                 }
@@ -661,7 +661,7 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 0x1C;
             }
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
@@ -690,7 +690,7 @@ void memcard_update_state(void) {
             if (MC.result >= 0) {
                 MC.err = 0x1B;
                 if (sceMcClose(MC.fd) == 0) {
-                    MC.state = 0;
+                    MC.state = MEMCARD_QUERY_INFO;
                     MC.cur = 0;
                     MC.busy = 0;
                 }
@@ -707,17 +707,17 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 0x1C;
             }
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
         case MEMCARD_READ_SAVE_REQUEST_CLOSE:
             if (sceMcClose(MC.fd) == 0) {
-                if (MC.state == 23) {
+                if (MC.state == MEMCARD_READ_SCANNED_SAVE_INFO) {
                     MC.busy = 0;
-                    MC.state = 22;
+                    MC.state = MEMCARD_ADVANCE_SAVE_INFO_SCAN;
                 } else {
-                    MC.state = 0;
+                    MC.state = MEMCARD_QUERY_INFO;
                     MC.cur = 0;
                 }
             }
@@ -728,20 +728,20 @@ void memcard_update_state(void) {
     case MEMCARD_BEGIN_UPDATE_SAVE:
         if (CARD.errors != 0) {
             MC.busy = 0;
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.err = 0x2717;
             break;
         }
         if (CARD.save_index < 0) {
             MC.busy = 0;
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.err = 0x1D;
             break;
         }
         MC.sub = 0;
-        MC.state = 16;
+        MC.state = MEMCARD_UPDATE_SAVE;
     case MEMCARD_UPDATE_SAVE:
         switch (MC.sub) {
         case MEMCARD_UPDATE_SAVE_REQUEST_OPEN:
@@ -769,7 +769,7 @@ void memcard_update_state(void) {
                 } else {
                     MC.err = 0x26;
                 }
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
             }
             MC.busy = 0;
@@ -783,7 +783,7 @@ void memcard_update_state(void) {
             if (MC.result >= 0) {
                 MC.sub = 4;
             } else {
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
                 MC.busy = 0;
             }
@@ -803,7 +803,7 @@ void memcard_update_state(void) {
             if (MC.result >= 0) {
                 MC.err = 0x25;
                 if (sceMcClose(MC.fd) == 0) {
-                    MC.state = 0;
+                    MC.state = MEMCARD_QUERY_INFO;
                     MC.cur = 0;
                     MC.busy = 0;
                 }
@@ -820,7 +820,7 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 0x26;
             }
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
@@ -837,7 +837,7 @@ void memcard_update_state(void) {
             if (MC.result >= 0) {
                 MC.sub = 8;
             } else {
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
                 MC.busy = 0;
             }
@@ -857,7 +857,7 @@ void memcard_update_state(void) {
             if (MC.result >= 0) {
                 MC.err = 0x25;
                 if (sceMcClose(MC.fd) == 0) {
-                    MC.state = 0;
+                    MC.state = MEMCARD_QUERY_INFO;
                     MC.cur = 0;
                     MC.busy = 0;
                 }
@@ -874,13 +874,13 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 0x1C;
             }
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
         case MEMCARD_UPDATE_SAVE_REQUEST_CLOSE:
             if (sceMcClose(MC.fd) == 0) {
-                MC.state = 0;
+                MC.state = MEMCARD_QUERY_INFO;
                 MC.cur = 0;
             }
             break;
@@ -914,21 +914,21 @@ void memcard_update_state(void) {
     case MEMCARD_BEGIN_WRITE_FULL_SAVE:
         if (CARD.errors != 0) {
             MC.busy = 0;
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.err = 0x2718;
             break;
         }
         if (CARD.save_index < 0) {
             MC.busy = 0;
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.err = 0x27;
             break;
         }
         MC.record_index = 0;
         MC.sub = 0;
-        MC.state = 20;
+        MC.state = MEMCARD_WRITE_FULL_SAVE;
     case MEMCARD_WRITE_FULL_SAVE:
         switch (MC.sub) {
         case MEMCARD_WRITE_FULL_SAVE_REQUEST_OPEN:
@@ -951,7 +951,7 @@ void memcard_update_state(void) {
             }
             MC.err = 0x2B;
             MC.err_card = MC.cur;
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
@@ -966,7 +966,7 @@ void memcard_update_state(void) {
             if (MC.result >= 0) {
                 MC.err = 0xB;
                 if (sceMcClose(MC.fd) == 0) {
-                    MC.state = 0;
+                    MC.state = MEMCARD_QUERY_INFO;
                     MC.cur = 0;
                     MC.busy = 0;
                 }
@@ -981,7 +981,7 @@ void memcard_update_state(void) {
             } else {
                 MC.err = 0x2D;
             }
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
@@ -990,7 +990,7 @@ void memcard_update_state(void) {
                 MC.err = 0x2C;
                 MC.err_card = MC.cur;
             }
-            MC.state = 0;
+            MC.state = MEMCARD_QUERY_INFO;
             MC.cur = 0;
             MC.busy = 0;
             break;
