@@ -364,6 +364,9 @@ int advance_moby_along_selected_path(struct Moby *moby,
                                      int          path_slot_index,
 
                                      int aim) {
+    enum {
+        STARFIGHTER_STATE_TRACTOR_BEAM = 5
+    };
     char *path = D_L13_001B07B0[*(int *)(&moby_data[path_slot_index << 2] + 0xB0)];
     float distance_from_previous_node, seg, segment_distance_shortfall, steering_blend_factor, yaw,
         pitch;
@@ -407,7 +410,7 @@ int advance_moby_along_selected_path(struct Moby *moby,
     yaw = fast_arc_tan(target_node_steering_vector[0], target_node_steering_vector[1]);
     pitch = -fast_arc_tan(vector_length_xy(target_node_steering_vector),
                           target_node_steering_vector[2]);
-    if (moby->state == 5) {
+    if (moby->state == STARFIGHTER_STATE_TRACTOR_BEAM) {
         struct Hero *hero_state = &hero;
         yaw = fast_arc_tan(hero_state->motion.pos.f[0] - moby->pos.x,
                            hero_state->motion.pos.f[1] - moby->pos.y);
