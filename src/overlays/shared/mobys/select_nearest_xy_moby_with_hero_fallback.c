@@ -21,6 +21,11 @@ int select_nearest_xy_moby_with_hero_fallback(char *comparison_reference,
                                               char *selection_output,
 
                                               float best) {
+    enum {
+        XY_SELECTION_HERO_FALLBACK = 0,
+        XY_SELECTION_CANDIDATE_SELECTED = 1,
+        XY_SELECTION_HERO_FALLBACK_DISABLED = 2
+    };
     struct Hero *hero = &hero_lui;
     char        *selected_moby;
     char        *candidate_moby;
@@ -30,10 +35,10 @@ int select_nearest_xy_moby_with_hero_fallback(char *comparison_reference,
     float        candidate_metric;
 
     selected_moby = ((char *)hero->moby);
-    selection_status = 0;
+    selection_status = XY_SELECTION_HERO_FALLBACK;
     if (hero->state.control_mode == 0x18 || hero->state.current == 0x72) {
         selected_moby = 0;
-        selection_status = 2;
+        selection_status = XY_SELECTION_HERO_FALLBACK_DISABLED;
     }
     for (i = 1; i <= D_L08_001B1030[0]; i++) {
         candidate_moby = D_L08_0015FFD8 + (D_L08_001B1030[i] << 8);
@@ -52,7 +57,7 @@ int select_nearest_xy_moby_with_hero_fallback(char *comparison_reference,
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
-            selection_status = 1;
+            selection_status = XY_SELECTION_CANDIDATE_SELECTED;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -72,7 +77,7 @@ int select_nearest_xy_moby_with_hero_fallback(char *comparison_reference,
         if (candidate_metric < best) {
             selected_moby = candidate_moby;
             best = candidate_metric;
-            selection_status = 1;
+            selection_status = XY_SELECTION_CANDIDATE_SELECTED;
         }
     }
     if (selected_moby != 0) {
