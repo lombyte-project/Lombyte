@@ -124,6 +124,9 @@ void prepare_scaled_table_with_byte_128(char *value_target) {
 void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) __asm__("FUN_L02_002a40f0");
 
 void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
+    enum {
+        TEXTURED_GRID_FOG_SOURCE_CAMERA = 1
+    };
     float        view_matrix[16];
     int         *view_setup_dma_packet;
     int         *cursor;
@@ -136,7 +139,7 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     textured_grid_saved_fog_far_distance = ((QuadCamera *)level02_camera_view_state)->f21C;
     textured_grid_saved_fog_near_intensity = ((QuadCamera *)level02_camera_view_state)->f228;
     textured_grid_saved_fog_far_intensity = ((QuadCamera *)level02_camera_view_state)->f22C;
-    if (textured_grid_fog_source_mode != 1) {
+    if (textured_grid_fog_source_mode != TEXTURED_GRID_FOG_SOURCE_CAMERA) {
         ((QuadCamera *)level02_camera_view_state)->f218 = draw_parameters->f20;
         ((QuadCamera *)level02_camera_view_state)->f21C = draw_parameters->f24;
         ((QuadCamera *)level02_camera_view_state)->f228 = draw_parameters->f28;
@@ -216,7 +219,7 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
     }
     TEXTURE_REGISTER = (TEXTURE_CURSOR >> 8) | 0x18100000 | 0x580000000;
     color = draw_parameters->c30 | draw_parameters->c31 << 8 | draw_parameters->c32 << 16;
-    if (textured_grid_fog_source_mode == 1) {
+    if (textured_grid_fog_source_mode == TEXTURED_GRID_FOG_SOURCE_CAMERA) {
         color = ((QuadCamera *)level02_camera_view_state)->c230 |
                 ((QuadCamera *)level02_camera_view_state)->c234 << 8 |
                 ((QuadCamera *)level02_camera_view_state)->c238 << 16;
