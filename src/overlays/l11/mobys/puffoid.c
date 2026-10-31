@@ -673,7 +673,7 @@ extern float puffoid_death_knockback_vertical_scale_gp __asm__("D_L11_001622DC")
 
 #include "rnc/overlay/l11/mobys/puffoid_data/update_puffoid_damage_and_path_goal.h"
 
-extern float D_L11_001622FC_gp __asm__("D_L11_001622FC") __attribute__((sda));
+extern float l11_puffoid_horizontal_speed_limit __asm__("D_L11_001622FC") __attribute__((sda));
 
 /* Private variables of the moby FUN_L11_00315968 updates (only the fields it uses). */
 struct L11PatrolVars {
@@ -761,7 +761,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     char                 *path;
 
     moby->scale = moby->pclass->scale * D_L11_001622CC;
-    patrol_vars->unk1A4 = D_L11_001622FC_gp * frame_time;
+    patrol_vars->unk1A4 = l11_puffoid_horizontal_speed_limit * frame_time;
     if (patrol_vars->carrier != -1 && moby->state != 0xB && moby->state != 9 &&
         moby->state != 0x12 && moby->state != 0x11 && moby->state != 0 && moby->state != 0xC &&
         moby->state != 0xD) {
@@ -927,7 +927,7 @@ void update_moby_target_heading_and_conditional_movement(char *moby, float *targ
     target_heading_or_record_value = compute_interpolated_record_value(moby);
     if (MOBY(moby)->seq == MOBY(moby)->prev_seq && 8.0f < target_heading_or_record_value &&
         target_heading_or_record_value < 22.0f) {
-        *(float *)(moby_vars + 0x1A4) = D_L11_001622FC_gp * frame_time;
+        *(float *)(moby_vars + 0x1A4) = l11_puffoid_horizontal_speed_limit * frame_time;
         planar_heading_vector[0] = fast_cos(MOBY(moby)->rot.z) * 2.0f;
         planar_heading_vector[1] = fast_sin(MOBY(moby)->rot.z) * 2.0f;
         *(int *)&planar_heading_vector[2] = 0;
