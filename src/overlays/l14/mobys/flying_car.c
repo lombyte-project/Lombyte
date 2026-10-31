@@ -333,6 +333,9 @@ extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025
 int update_flying_car_path_motion(struct Moby *moby) __asm__("FUN_L14_00307620");
 
 int update_flying_car_path_motion(struct Moby *moby) {
+    enum {
+        FLYING_CAR_WAIT_FOR_PATH_RESET = 3
+    };
     float pos[4];
     float delta[4];
     char *flying_car_data = (char *)moby->pvars;
@@ -351,7 +354,7 @@ int update_flying_car_path_motion(struct Moby *moby) {
     if ((*(short *)(flying_car_data + 0x8E) == 0 && end != 0) ||
         moby->pos.z <= flying_car_burst_height_threshold_gp) {
         cart_burst(moby, &moby->pos, 5.0f, 13.0f, -1);
-        moby->state = 3;
+        moby->state = FLYING_CAR_WAIT_FOR_PATH_RESET;
         moby->flags |= 0x41;
         moby->collision = 0;
         if (*(int *)(flying_car_data + 0xA0) >= 0) {
