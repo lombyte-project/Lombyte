@@ -331,10 +331,10 @@ typedef struct {
 extern VendorMenu vendor_menu __asm__("D_L00_001CA4C0");
 extern VendorSlot vendor_slots[4] __asm__("D_L00_00165E80");
 
-extern s32           D_L00_00161E18;
-extern s32           D_L00_00161E20;
+extern s32           l00_vendor_close_pending __asm__("D_L00_00161E18");
+extern s32           l00_vendor_opening_countdown_active __asm__("D_L00_00161E20");
 extern s32           D_L00_00161E24_29a6b0 __asm__("D_L00_00161E24");
-extern s32           D_L00_00161E30;
+extern s32           l00_vendor_previous_pressed_buttons __asm__("D_L00_00161E30");
 extern s32           D_L00_00161E34;
 extern unsigned char D_0013F350[];
 extern Vec4          D_L00_00180260_29a6b0 __asm__("D_L00_00180260");
@@ -392,9 +392,9 @@ void open_vendor_menu(void *vendor_moby_arg) {
     vendor_menu.unk44 = 0;
     vendor_menu.purchased_item = vendor_menu.title_text = vendor_menu.item_text = -1;
     vendor_menu.cursor = 0;
-    D_L00_00161E18 = 0;
-    D_L00_00161E20 = 0;
-    D_L00_00161E30 = 0;
+    l00_vendor_close_pending = 0;
+    l00_vendor_opening_countdown_active = 0;
+    l00_vendor_previous_pressed_buttons = 0;
     vendor_menu.purchase_state = 0;
     D_L00_00161E34 = 0;
     D_L00_00161E24_29a6b0 = 0;
@@ -981,7 +981,7 @@ void update_vendor_purchase(void) {
             }
         }
         if (controller_state.pressed_unmasked & 0x10) {
-            if (!(D_L00_00161E30 & 0x10)) {
+            if (!(l00_vendor_previous_pressed_buttons & 0x10)) {
                 vendor_menu.purchase_state = 3;
                 vendor_purchase_confirmed_gp = 0;
                 blend_moby_animation(&vendor_menu.menu_mobys[4],
@@ -993,7 +993,7 @@ void update_vendor_purchase(void) {
             }
         }
         if (controller_state.pressed_unmasked & 0x40) {
-            if (!(D_L00_00161E30 & 0x40)) {
+            if (!(l00_vendor_previous_pressed_buttons & 0x40)) {
                 vendor_menu.purchase_state = 3;
                 vendor_purchase_confirmed_gp = 1;
                 blend_moby_animation(&vendor_menu.menu_mobys[4],
@@ -1186,7 +1186,7 @@ void update_vendor_menu(void) {
                 vendor_menu.frames = 0;
                 FUN_00212f90(vendor_menu.vendor_moby, 3, 0, 8);
                 vendor_menu.vendor_moby->f58 = 1.0f;
-                D_L00_00161E20 = 1;
+                l00_vendor_opening_countdown_active = 1;
                 vendor_opening_countdown_frames = 8;
                 allocate_voice_for_target_entry(4, 0, vendor_menu.vendor_moby);
             }
@@ -1339,9 +1339,9 @@ void update_vendor_menu(void) {
                      &vendor_menu.menu_mobys[3].pos,
                      &position_contribution_scratch);
         vendor_menu.frames++;
-        if (vendor_menu.purchase_state == 0 && D_L00_00161E18 == 0) {
+        if (vendor_menu.purchase_state == 0 && l00_vendor_close_pending == 0) {
             if (vendor_menu.row_count < 8) {
-                if ((controller_state.pressed_unmasked & 0x2000) && !(D_L00_00161E30 & 0x2000)) {
+                if ((controller_state.pressed_unmasked & 0x2000) && !(l00_vendor_previous_pressed_buttons & 0x2000)) {
                     if (vendor_menu.cursor < vendor_menu.row_count - 1) {
                         D_L00_00161E38 = 1;
                         handle_vendor_auxiliary_moby_event(0);
@@ -1364,7 +1364,7 @@ void update_vendor_menu(void) {
                         }
                     }
                 }
-                if ((controller_state.pressed_unmasked & 0x8000) && !(D_L00_00161E30 & 0x8000)) {
+                if ((controller_state.pressed_unmasked & 0x8000) && !(l00_vendor_previous_pressed_buttons & 0x8000)) {
                     if (vendor_menu.cursor > 0) {
                         D_L00_00161E38 = 1;
                         handle_vendor_auxiliary_moby_event(0);
@@ -1388,7 +1388,7 @@ void update_vendor_menu(void) {
                     }
                 }
             } else {
-                if ((controller_state.pressed_unmasked & 0x2000) && !(D_L00_00161E30 & 0x2000)) {
+                if ((controller_state.pressed_unmasked & 0x2000) && !(l00_vendor_previous_pressed_buttons & 0x2000)) {
                     if (vendor_menu.scroll <= 0x38) {
                         D_L00_00161E38 = 1;
                         vendor_menu.scroll += 0x38;
@@ -1416,7 +1416,7 @@ void update_vendor_menu(void) {
                         }
                     }
                 }
-                if ((controller_state.pressed_unmasked & 0x8000) && !(D_L00_00161E30 & 0x8000)) {
+                if ((controller_state.pressed_unmasked & 0x8000) && !(l00_vendor_previous_pressed_buttons & 0x8000)) {
                     if (vendor_menu.scroll >= -0x38) {
                         D_L00_00161E38 = 1;
                         vendor_menu.scroll -= 0x38;
@@ -1445,27 +1445,27 @@ void update_vendor_menu(void) {
                     }
                 }
             }
-            if ((controller_state.pressed_unmasked & 0x40) && !(D_L00_00161E30 & 0x40) &&
+            if ((controller_state.pressed_unmasked & 0x40) && !(l00_vendor_previous_pressed_buttons & 0x40) &&
                 CUR_ITEM.state == 0) {
                 vendor_menu.purchase_state = 1;
                 allocate_voice_for_target_entry(0, 0, vendor_menu.vendor_moby);
             }
             if ((controller_state.pressed_unmasked & 0x10) && D_L00_0016118C == 0) {
                 vendor_close_delay_frames_remaining = 8;
-                D_L00_00161E18 = 1;
+                l00_vendor_close_pending = 1;
                 allocate_voice_for_target_entry(5, 0, vendor_menu.vendor_moby);
             }
         }
         update_vendor_purchase();
-        D_L00_00161E30 = controller_state.pressed_unmasked;
-        if (D_L00_00161E20 == 1) {
+        l00_vendor_previous_pressed_buttons = controller_state.pressed_unmasked;
+        if (l00_vendor_opening_countdown_active == 1) {
             if (vendor_opening_countdown_frames == 0) {
-                D_L00_00161E20 = 0;
+                l00_vendor_opening_countdown_active = 0;
             } else {
                 vendor_opening_countdown_frames--;
             }
         }
-        if (D_L00_00161E18 == 1) {
+        if (l00_vendor_close_pending == 1) {
             if (--vendor_close_delay_frames_remaining == 0) {
                 D_L00_0015F5D8 = 1;
                 select_level_vu_chain();
