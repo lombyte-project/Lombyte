@@ -140,7 +140,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         psytcopus_vars->unk2A = 6;
         psytcopus_vars->unk58 = truncate_float_to_s32(8.0f);
         psytcopus_vars->unk5A = truncate_float_to_s32(8.0f);
-        psytcopus->state = 3;
+        psytcopus->state = PSYTCOPUS_STATE_FACE_PLAYER;
         if (psytcopus->prev_seq != 0) {
             blend_moby_animation(psytcopus, 0, 0, scale_game_frames(10));
         }
@@ -149,7 +149,7 @@ void psytcopus_update(struct Moby *psytcopus) {
             qcopy(&psytcopus->pos, (char *)(s32 *)l11_paths[psytcopus_vars->unk134] + 0x10);
             break;
         }
-        psytcopus->state = 3;
+        psytcopus->state = PSYTCOPUS_STATE_FACE_PLAYER;
         if (psytcopus->prev_seq != 0) {
             blend_moby_animation(psytcopus, 0, 0, scale_game_frames(10));
         }
@@ -166,7 +166,7 @@ void psytcopus_update(struct Moby *psytcopus) {
                        frame_time * 6.2831855f);
     }
         if (psytcopus_vars->unk114 != 2) {
-            psytcopus->state = 4;
+            psytcopus->state = PSYTCOPUS_STATE_CREATE_PROJECTILE;
             if (psytcopus->prev_seq != 2) {
                 blend_moby_animation(psytcopus, 2, 0, scale_game_frames(10));
             }
@@ -193,7 +193,7 @@ void psytcopus_update(struct Moby *psytcopus) {
             break;
         }
         if (psytcopus->anim_flags & 2) {
-            psytcopus->state = 5;
+            psytcopus->state = PSYTCOPUS_STATE_FIRE_PROJECTILE;
             if (psytcopus->prev_seq != 3) {
                 blend_moby_animation(psytcopus, 3, 0, scale_game_frames(10));
             }
@@ -217,7 +217,7 @@ void psytcopus_update(struct Moby *psytcopus) {
             psytcopus_vars->unk160 = 0;
         }
         if (psytcopus->anim_flags & 2) {
-            psytcopus->state = 6;
+            psytcopus->state = PSYTCOPUS_STATE_ATTACK_RECOVERY;
             if (psytcopus->prev_seq != 4) {
                 blend_moby_animation(psytcopus, 4, 0, scale_game_frames(10));
             }
@@ -225,7 +225,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         break;
     case PSYTCOPUS_STATE_ATTACK_RECOVERY:
         if (psytcopus->anim_flags & 2) {
-            psytcopus->state = 3;
+            psytcopus->state = PSYTCOPUS_STATE_FACE_PLAYER;
             if (psytcopus->prev_seq != 0) {
                 blend_moby_animation(psytcopus, 0, 0, scale_game_frames(10));
             }
@@ -236,7 +236,7 @@ void psytcopus_update(struct Moby *psytcopus) {
         if (knockback_result_flags & 0x41) {
             path = (s32 *)l11_paths[psytcopus_vars->unk13C];
             if (FUN_L00_00259740_p(&psytcopus->pos, path + 4, *path) != 0) {
-                psytcopus->state = 3;
+                psytcopus->state = PSYTCOPUS_STATE_FACE_PLAYER;
                 if (psytcopus->prev_seq != 0) {
                     blend_moby_animation(psytcopus, 0, 0, scale_game_frames(10));
                 }
