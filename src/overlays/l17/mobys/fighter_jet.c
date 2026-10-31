@@ -1197,6 +1197,9 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby,
                                FighterJetVars *ship_vars) __asm__("FUN_L17_002ec360");
 
 void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_vars) {
+    enum {
+        FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY = 7
+    };
     sceVu0FVECTOR    pre_movement_ship_position;
     sceVu0FVECTOR    death_explosion_velocity;
     UQ_c4            movement_delta;
@@ -1544,7 +1547,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                                               1,
                                               -1,
                                               0);
-                        ship_moby->state = 7;
+                        ship_moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                     }
                     ship_vars->iDC = D_L17_0016215C;
                 }
@@ -1569,7 +1572,7 @@ void update_fighter_jet_flight(FighterJetMoby *ship_moby, FighterJetVars *ship_v
                                       -1,
                                       0);
                 ship_vars->s62 = l17_fighter_jet_collision_death_respawn_delay;
-                ship_moby->state = 7;
+                ship_moby->state = FIGHTER_JET_STATE_DEATH_RESPAWN_DELAY;
                 ship_moby->flags |= 0x41;
             }
         }
