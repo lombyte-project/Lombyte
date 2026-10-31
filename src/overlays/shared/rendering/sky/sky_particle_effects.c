@@ -464,6 +464,10 @@ extern u32        D_L00_00160500[2] __attribute__((sda));
 void render_three_shell_particle_sky(void) __asm__("FUN_L00_0028ac88");
 
 void render_three_shell_particle_sky(void) {
+    enum {
+        SKY_PARTICLE_PHASE_ORBIT = 0,
+        SKY_PARTICLE_RANDOM_COLOR = 1
+    };
     int          i, j;
     SkyParticle *particle;
     f32          a, polar_angle_radians;
@@ -477,7 +481,7 @@ void render_three_shell_particle_sky(void) {
             particle = &SKY->stars[i];
             if (i >= 0xF0) {
                 u16 *h;
-                particle->type = 0;
+                particle->type = SKY_PARTICLE_PHASE_ORBIT;
                 h = &particle->c.h.a;
                 h[0] = rand() >> 16;
                 h[1] = rand() >> 16;
@@ -486,7 +490,7 @@ void render_three_shell_particle_sky(void) {
                 particle->f1C = 0.18f;
                 particle->color = D_L00_00160500[(rand() >> 16) & 3];
             } else {
-                particle->type = 1;
+                particle->type = SKY_PARTICLE_RANDOM_COLOR;
                 particle->c.h.a = random_integer_below(0x100);
                 {
                     int random_high_half = rand() >> 16;
@@ -520,7 +524,7 @@ void render_three_shell_particle_sky(void) {
     }
     for (j = 0; j < SKY->count; j++) {
         particle = &SKY->stars[j];
-        if (particle->type == 0) {
+        if (particle->type == SKY_PARTICLE_PHASE_ORBIT) {
             u16 *h = &particle->c.h.a;
             h[0]++;
             h[1]++;
