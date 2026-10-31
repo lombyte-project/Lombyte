@@ -11,7 +11,7 @@ import struct
 from functools import lru_cache
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 RECORDS_DIR = ROOT / "config/us/overlays"
 ASM_DIR = RECORDS_DIR / "asm"
 CATALOGUE = ROOT / "config/us/levels/functions.tsv"
@@ -148,10 +148,10 @@ def read_compiler_data(path: Path = COMPILER_DATA) -> set[tuple[int, int, int]]:
 def write_compiler_data(rows, path: Path = COMPILER_DATA) -> None:
     if path == EXE_DATA:
         lines = ["# Copies of the executable's data in C that the levels hold, proven by",
-                 "# make overlays (scripts/overlay_exe_data.py, scripts/overlay_unit.py --write)."]
+                 "# make overlays (scripts/lib/overlay_exe_data.py, scripts/overlay-check.py --write)."]
     else:
         lines = ["# Switch tables and float literals the compiler makes from the C in",
-                 "# src/overlays, proven by make overlays (scripts/overlay_unit.py --write)."]
+                 "# src/overlays, proven by make overlays (scripts/overlay-check.py --write)."]
     lines += ["# level\taddress\tsize"]
     lines += [f"{level:02d}\t{address:08X}\t{size}" for level, address, size in sorted(rows)]
     path.write_text("\n".join(lines) + "\n")

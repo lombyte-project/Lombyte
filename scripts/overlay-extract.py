@@ -26,7 +26,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
 import rnc_overlays as ov  # noqa: E402
 
 WORK = ov.ROOT / "build/overlay-asm"

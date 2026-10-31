@@ -7,7 +7,7 @@ Markdown as one comment that later runs update in place.
 
 Usage::
 
-    python3 scripts/progress_comment.py BASE_REPORT HEAD_REPORT > comment.md
+    python3 scripts/progress-comment.py BASE_REPORT HEAD_REPORT > comment.md
 
 A missing base report (first run) is treated as empty.
 """

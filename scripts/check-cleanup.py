@@ -268,7 +268,7 @@ def check_c_file(rel: str, raw: str) -> list[Problem]:
         label = ASM_LABEL.match(text, m.start())
         if m.group(1) or not label or not LABEL_STRING.fullmatch(label.group(1)):
             # A fakematch (pin, barrier or small helper) marked in the 15 lines above,
-            # as scripts/rnc_units.py counts it.
+            # as scripts/lib/rnc_units.py counts it.
             if any("Fakematch:" in l for l in raw[:m.start()].split("\n")[-16:]):
                 continue
             snippet = text[m.start():m.start() + 60].split("\n")[0].strip()

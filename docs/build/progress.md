@@ -36,8 +36,8 @@ Any other asm (instructions, an empty memory barrier, `__asm__("" : "+r"(x))`,
 `.extern`, a register pin like `register int x asm("v1")`) without that
 comment keeps the function
 **pending** (C_FUZZY 99.99) even when the bytes match. The rule is
-`non_label_asm()` in `scripts/rnc_units.py` (copied in
-`scripts/generate_treemap.py`).
+`non_label_asm()` in `scripts/lib/rnc_units.py` (copied in
+`scripts/progress-map.py`).
 
 ## 100 % in objdiff is not exact
 
@@ -121,5 +121,5 @@ maintainers' builds (`fuzzy_scores.json` next to the report). Locally:
 
 ```sh
 make progress                         # after make elf, measures C_FUZZY too
-python3 scripts/generate_treemap.py   # map only, in build/progress/decomp_map.svg
+python3 scripts/progress-map.py   # map only, in build/progress/decomp_map.svg
 ```

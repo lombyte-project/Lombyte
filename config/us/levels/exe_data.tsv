@@ -1,5 +1,5 @@
 # Copies of the executable's data in C that the levels hold, proven by
-# make overlays (scripts/overlay_exe_data.py, scripts/overlay_unit.py --write).
+# make overlays (scripts/lib/overlay_exe_data.py, scripts/overlay-check.py --write).
 # level	address	size
 00	0015EF4C	4
 00	0015EF58	12

@@ -1,5 +1,5 @@
 # Switch tables and float literals the compiler makes from the C in
-# src/overlays, proven by make overlays (scripts/overlay_unit.py --write).
+# src/overlays, proven by make overlays (scripts/overlay-check.py --write).
 # level	address	size
 00	0015F708	4
 00	001E79B0	24

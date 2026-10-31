@@ -37,12 +37,12 @@ def load_module(name: str, path: Path):
 
 
 class TreemapClassificationTests(unittest.TestCase):
-    """generate_treemap.py must classify owners exactly as documented."""
+    """progress-map.py must classify owners exactly as documented."""
 
     @classmethod
     def setUpClass(cls):
         cls.treemap = load_module(
-            "rnc_generate_treemap", ROOT / "scripts" / "generate_treemap.py"
+            "rnc_generate_treemap", ROOT / "scripts" / "progress-map.py"
         )
 
     def _workspace(self, tmp: Path):
@@ -175,12 +175,12 @@ class TreemapClassificationTests(unittest.TestCase):
 
 
 class ProgressReportTests(unittest.TestCase):
-    """gen_progress_report.py must count only C_EXACT units as matched."""
+    """progress-report.py must count only C_EXACT units as matched."""
 
     @classmethod
     def setUpClass(cls):
         cls.report = load_module(
-            "rnc_gen_progress_report", ROOT / "scripts" / "gen_progress_report.py"
+            "rnc_gen_progress_report", ROOT / "scripts" / "progress-report.py"
         )
 
     def _repo(self, tmp: Path) -> Path:
@@ -334,7 +334,7 @@ class ProgressReportTests(unittest.TestCase):
     def test_promotion_shows_in_the_regenerated_report_and_comment(self):
         """CI regenerates the report from the tree; the PR comment lists a
         promoted function and C_FUZZY survives through fuzzy_scores.json."""
-        comment = load_module("rnc_progress_comment", ROOT / "scripts" / "progress_comment.py")
+        comment = load_module("rnc_progress_comment", ROOT / "scripts" / "progress-comment.py")
         with tempfile.TemporaryDirectory() as tmp:
             repo = self._repo(Path(tmp))
             base, head = repo / "base.json", repo / "head.json"
@@ -560,7 +560,7 @@ class DataDeclarationTests(unittest.TestCase):
 class OverlayDataSymbolCacheTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.proof = load_module("rnc_overlay_proof_cache", ROOT / "scripts/overlay_proof.py")
+        cls.proof = load_module("rnc_overlay_proof_cache", ROOT / "scripts/lib/overlay_proof.py")
 
     @staticmethod
     def _elf_bytes(symbols, data=b"\x01\x02\x03\x04"):
@@ -673,7 +673,7 @@ class OverlaySourceStateTests(unittest.TestCase):
     """overlay_units.source_state must count a C-named function bound to its label."""
 
     def test_named_definition_counts_as_its_label(self):
-        units = load_module("rnc_overlay_units", ROOT / "scripts" / "overlay_units.py")
+        units = load_module("rnc_overlay_units", ROOT / "scripts" / "lib" / "overlay_units.py")
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "src" / "overlays" / "l14").mkdir(parents=True)
@@ -698,8 +698,9 @@ class BaselineGuardTests(unittest.TestCase):
     """verify-baseline.sh must never delete a build/baseline it did not create."""
 
     def _run(self, checkout: Path) -> subprocess.CompletedProcess:
-        script = checkout / "verify-baseline.sh"
-        script.write_text((ROOT / "verify-baseline.sh").read_text())
+        (checkout / "scripts").mkdir(exist_ok=True)
+        script = checkout / "scripts" / "verify-baseline.sh"
+        script.write_text((ROOT / "scripts" / "verify-baseline.sh").read_text())
         return subprocess.run(
             ["bash", str(script)], capture_output=True, text=True, cwd=checkout
         )
@@ -861,9 +862,9 @@ class UnitListHelpersTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.units = load_module("rnc_units", ROOT / "scripts" / "rnc_units.py")
+        cls.units = load_module("rnc_units", ROOT / "scripts" / "lib" / "rnc_units.py")
         cls.treemap = load_module(
-            "rnc_generate_treemap", ROOT / "scripts" / "generate_treemap.py"
+            "rnc_generate_treemap", ROOT / "scripts" / "progress-map.py"
         )
 
     def test_parse_config_rows(self):
@@ -1811,8 +1812,8 @@ class NoGameDataTests(unittest.TestCase):
 
 class OverlayStageTests(unittest.TestCase):
     def setUp(self):
-        sys.path.insert(0, str(ROOT / "scripts"))
-        self.unit = load_module("overlay_unit", ROOT / "scripts/overlay_unit.py")
+        sys.path.insert(0, str(ROOT / "scripts" / "lib"))
+        self.unit = load_module("overlay_unit", ROOT / "scripts/lib/overlay_unit.py")
 
     def test_guarded_body_is_staged_and_other_stubs_dropped(self):
         text = textwrap.dedent("""\

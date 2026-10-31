@@ -50,7 +50,7 @@ function it holds once you know it (`lNN/gameplay/entities/sand_shark.c`);
 
 A function is exact when its C, compiled like retail (game compiler `cc1`,
 then `Ps2EeAs`) and placed at its address with every symbol resolved for that
-level, equals the level's code byte for byte (`scripts/overlay_proof.py`).
+level, equals the level's code byte for byte (`scripts/lib/overlay_proof.py`).
 Files in `OVERLAY_SN_UNITS` (top of `configure.py`) use SN's preprocessor and
 SN's `cc1` rebuilt from source
 ([patches/sn-2.95.2](../../patches/sn-2.95.2/README.md)) instead; add a file
@@ -82,14 +82,14 @@ literals, is checked too: each table word must point into the function at the
 place the level's table holds, and each literal must equal the level's bytes.
 `config/overlays/us/compiler_data.tsv` lists these places (level, address,
 size); `make overlays` fails when it is out of date, and
-`scripts/overlay_unit.py --write` rewrites it.
+`scripts/overlay-check.py --write` rewrites it.
 
 A level program also holds a copy of the executable's data, moved to other
 addresses. Where the executable's code reads a data object at A and the same
 function's copy in a level reads A + d, the level's bytes at A + d must equal
 the executable's (pointers moved the same way).
 `config/overlays/us/exe_data.tsv` lists the copies of executable data in C
-that pass (`scripts/overlay_exe_data.py`), so data put in C in the executable
+that pass (`scripts/lib/overlay_exe_data.py`), so data put in C in the executable
 counts in every level that holds it.
 
 ## Progress

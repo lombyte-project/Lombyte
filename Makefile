@@ -12,9 +12,9 @@
 
 check: ## Run the public CI checks locally (tests, script parse, progress report)
 	python3 scripts/test_public_tools.py -v
-	python3 -m py_compile scripts/*.py
-	python3 scripts/gen_progress_report.py
-	python3 scripts/generate_treemap.py
+	python3 -m py_compile scripts/*.py scripts/lib/*.py
+	python3 scripts/progress-report.py
+	python3 scripts/progress-map.py
 	@# Struct layout checks (src/check/*_layout_check.c), compiled with the EE compiler when present.
 	@cc=tools/compilers/game-compiler; if [ -x $$cc/cc1 ]; then \
 	  for f in $$(find src/check -name '*_layout_check.c' | sort); do \
@@ -25,16 +25,16 @@ format: ## Format the C sources the human-first way (scripts/format.py)
 	python3 scripts/format.py
 
 progress: ## After `make elf`: measure C_FUZZY and preview the report and map in build/progress/
-	.venv/bin/python scripts/gen_progress_report.py --workspace build/baseline
-	.venv/bin/python scripts/generate_treemap.py
+	.venv/bin/python scripts/progress-report.py --workspace build/baseline
+	.venv/bin/python scripts/progress-map.py
 
 elf: ## Rebuild the boot ELF byte-for-byte (full baseline + SHA gate)
-	./verify-baseline.sh
+	scripts/verify-baseline.sh
 	@ls -l build/baseline/config/us/build/SCUS_971.99
 
 overlays: ## Build src/overlays and prove every overlay function in C against retail (docs/build/overlays.md)
 	.venv/bin/python configure.py --overlays
-	.venv/bin/python scripts/overlay_unit.py
+	.venv/bin/python scripts/overlay-check.py
 
 iso: elf ## Patch the rebuilt boot ELF into a copy of the disc image
 	@iso="$$(ls dumps/*.iso 2>/dev/null | head -1)"; \

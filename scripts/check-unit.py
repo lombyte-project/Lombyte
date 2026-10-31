@@ -13,7 +13,7 @@ oracle while you iterate.
 
 This is the fast inner loop, not the acceptance gate: ``make elf`` stays
 authoritative.  It needs a baseline workspace built once with
-``./verify-baseline.sh`` (``build/baseline``) and writes
+``scripts/verify-baseline.sh`` (``build/baseline``) and writes
 only inside it.
 
 Usage examples:
@@ -32,7 +32,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
 import rnc_units  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -289,7 +289,7 @@ def print_result(result: dict) -> None:
                 f"({result['strict_match_percent']:.1f}%); the linked bytes are "
                 "equal, so the full-image gate decides."
             )
-        print("Run ./verify-baseline.sh for the authoritative full-image SHA gate.")
+        print("Run scripts/verify-baseline.sh for the authoritative full-image SHA gate.")
         return
     if result["ok"] and result["non_text_ok"] is False:
         print("Text matches; data/rodata differ — the full gate will fail.")
@@ -396,7 +396,7 @@ def main(argv=None) -> int:
         return error(f"refusing to write outside the workspace: {workspace_source}")
     if not workspace_source.is_file():
         return error(
-            f"{unit} is not part of {workspace}; re-run ./verify-baseline.sh "
+            f"{unit} is not part of {workspace}; re-run scripts/verify-baseline.sh "
             "after pulling the latest source"
         )
     ninja = find_ninja()

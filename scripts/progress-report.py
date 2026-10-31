@@ -47,11 +47,11 @@ files. No retail bytes are included.
 
 Usage::
 
-    python3 scripts/gen_progress_report.py
+    python3 scripts/progress-report.py
         write build/progress/report.json from the repository, reusing
         build/progress/fuzzy_scores.json; needs no toolchain or executable
-    python3 scripts/gen_progress_report.py --workspace build/baseline
-        after ./verify-baseline.sh: measure pending units and also write
+    python3 scripts/progress-report.py --workspace build/baseline
+        after scripts/verify-baseline.sh: measure pending units and also write
         build/progress/fuzzy_scores.json (the tooling; `make progress`)
 """
 
@@ -65,7 +65,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
 from rnc_units import (ADDR_SYMBOL_RE, INCLUDE_ASM_RE, classify_units, label_names,  # noqa: E402
                        main_vram_offset, parse_config_rows, source_symbol)
 from overlay_units import category_of, group_of, load_levels, overlay_functions  # noqa: E402

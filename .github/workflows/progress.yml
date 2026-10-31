@@ -74,8 +74,8 @@ jobs:
 
       - name: Generate the report and the map
         run: |
-          python3 scripts/gen_progress_report.py
-          python3 scripts/generate_treemap.py
+          python3 scripts/progress-report.py
+          python3 scripts/progress-map.py
 
       - name: Validate the report with objdiff
         run: |
@@ -96,7 +96,7 @@ jobs:
           else
             label="main"
           fi
-          python3 scripts/progress_comment.py build/progress-base/report.json \
+          python3 scripts/progress-comment.py build/progress-base/report.json \
             build/progress/report.json --base-label "$label" > build/progress/comment.md
           cat build/progress/comment.md >> "$GITHUB_STEP_SUMMARY"
 

@@ -11,7 +11,7 @@ A pending overlay function keeps its stub as the oracle and its C under
 
 The C is compiled on the game route (cc1, Ps2EeAs; build/overlays/build.ninja)
 and placed at the function's address in its level; it is exact when the
-bytes equal the level's text (scripts/overlay_proof.py).
+bytes equal the level's text (scripts/lib/overlay_proof.py).
 """
 from __future__ import annotations
 
@@ -211,7 +211,7 @@ def verify_all(write: bool = False) -> int:
             print(f"wrote {path.relative_to(ROOT)}")
         else:
             bad.append(f"{path.relative_to(ROOT)} is not what the C compiles to: "
-                       "run scripts/overlay_unit.py --write")
+                       "run scripts/overlay-check.py --write")
     for line in bad:
         print(line)
     if bad:

@@ -23,7 +23,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
 import rnc_units  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]

@@ -5,7 +5,7 @@ set -euo pipefail
 # build/baseline (recreated on every run). `make iso` patches the verified ELF
 # into a copy of your own disc image.
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BASELINE_ROOT="$PROJECT_ROOT/build/baseline"
 VENV="$PROJECT_ROOT/.venv"
 COMPILERS="$PROJECT_ROOT/tools/compilers"
@@ -31,6 +31,7 @@ mkdir -p "$BASELINE_ROOT"
 touch "$BASELINE_ROOT/.rnc-baseline-root"
 cp -a "$PROJECT_ROOT/configure.py" "$BASELINE_ROOT/configure.py"
 mkdir -p "$BASELINE_ROOT/scripts"
+cp "$PROJECT_ROOT/scripts/padless-asm.py" "$BASELINE_ROOT/scripts/padless-asm.py"
 mkdir -p "$BASELINE_ROOT/tools/objdiff"
 cp "$PROJECT_ROOT/tools/objdiff/objdiff-cli" "$BASELINE_ROOT/tools/objdiff/objdiff-cli"
 chmod +x "$BASELINE_ROOT/tools/objdiff/objdiff-cli"

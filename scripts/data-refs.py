@@ -55,7 +55,7 @@ import capstone
 from capstone.mips import MIPS_OP_IMM, MIPS_OP_MEM, MIPS_OP_REG
 from elftools.elf.elffile import ELFFile
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
 import rnc_units  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]

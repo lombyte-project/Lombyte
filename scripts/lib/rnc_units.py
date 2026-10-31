@@ -3,7 +3,7 @@
 
 No command-line interface; ``list-functions.py`` and ``check-unit.py`` import
 it.  The configured-unit row format (``- [0xADDR, c, owner]``) and the category
-file are the same contract as ``scripts/generate_treemap.py``, which keeps its
+file are the same contract as ``scripts/progress-map.py``, which keeps its
 own parser so it stays standalone.
 """
 
@@ -151,7 +151,7 @@ def unsafe_unit_name(name: str) -> bool:
 
 
 def default_workspace(repo: Path) -> Path:
-    """The ``build/baseline`` workspace that ``./verify-baseline.sh`` creates."""
+    """The ``build/baseline`` workspace that ``scripts/verify-baseline.sh`` creates."""
     return repo / "build" / "baseline"
 
 
@@ -182,13 +182,13 @@ def workspace_problem(workspace: Path, repo: Path | None = None) -> str | None:
             )
     if not (resolved / ".rnc-baseline-root").is_file():
         return (
-            f"{resolved} is not a baseline workspace; run ./verify-baseline.sh "
+            f"{resolved} is not a baseline workspace; run scripts/verify-baseline.sh "
             "once (or pass --workspace)"
         )
     project = resolved / "config" / "us"
     objdiff = resolved / "tools" / "objdiff" / "objdiff-cli"
     if not (project / "build.ninja").is_file() or not objdiff.is_file():
-        return f"{resolved} is incomplete; re-run ./verify-baseline.sh"
+        return f"{resolved} is incomplete; re-run scripts/verify-baseline.sh"
     return None
 
 
@@ -234,7 +234,7 @@ def non_label_asm(source: Path) -> bool:
 def classify_units(repo: Path) -> list[dict]:
     """Every configured C unit with category, source path and display name.
 
-    Categories follow scripts/generate_treemap.py: ``exact`` (matching C),
+    Categories follow scripts/progress-map.py: ``exact`` (matching C),
     ``asm`` (intentional low-level asm, excluded from the C goal) and
     ``pending`` (C still missing or not byte-exact).
     """

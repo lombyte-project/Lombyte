@@ -39,13 +39,13 @@ Layout
   when installed (``pip install squarify``), otherwise the bundled equivalent.
 
 Usage
-  python3 scripts/generate_treemap.py
-  python3 scripts/generate_treemap.py --min-bytes 512 --output /tmp/decomp_map.svg
+  python3 scripts/progress-map.py
+  python3 scripts/progress-map.py --min-bytes 512 --output /tmp/decomp_map.svg
 
   The map and its JSON are build output (``build/progress/``), not committed:
   the ``progress`` workflow regenerates them on every push to main and
   publishes them on the ``progress`` branch, which the README shows.
-  python3 scripts/generate_treemap.py --width 800 --height 400   # compact variant
+  python3 scripts/progress-map.py --width 800 --height 400   # compact variant
 """
 
 from __future__ import annotations
@@ -60,8 +60,14 @@ import subprocess
 from pathlib import Path
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gen_progress_report import data_totals, zero_level_data  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lib"))
+import importlib.util  # noqa: E402
+
+_spec = importlib.util.spec_from_file_location(
+    "progress_report", Path(__file__).resolve().parent / "progress-report.py")
+_report = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_report)
+data_totals, zero_level_data = _report.data_totals, _report.zero_level_data
 from overlay_units import category_of, load_levels, overlay_functions  # noqa: E402
 from progress_groups import (  # noqa: E402
     committed_function_scores,
@@ -1145,7 +1151,7 @@ def render_svg(
     lines.append(
         f'<text x="{width - margin_px}" y="{height - 8}" text-anchor="end" '
         f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}" opacity="0.85">'
-        f"generated {generated} &#183; scripts/generate_treemap.py</text>"
+        f"generated {generated} &#183; scripts/progress-map.py</text>"
     )
     lines.append("</svg>")
     return "\n".join(lines) + "\n", height
@@ -1392,7 +1398,7 @@ def main(argv=None) -> int:
     # executable alone is under "boot", as the drawer shows it.
     stats = {
         "schema": "rnc-public-progress-v3",
-        "source": "scripts/generate_treemap.py",
+        "source": "scripts/progress-map.py",
         **total_stats,
         "boot": boot,
         "overlays": overlays_stats,
