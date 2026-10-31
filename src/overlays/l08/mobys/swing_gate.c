@@ -40,7 +40,7 @@ void swing_gate_update(struct Moby *moby) __asm__("FUN_L08_002ea4c0");
 
 /* Moby classes 468, 469 */
 void swing_gate_update(struct Moby *moby) {
-    SwingGateVars *swing_gate_vars = (SwingGateVars *)moby->pvars;
+    enum { SWING_GATE_STATE_INITIALIZE = 0 , SWING_GATE_STATE_FOLLOW_DRIVER = 1 , SWING_GATE_STATE_OPEN_LATCHED = 2 } ;SwingGateVars *swing_gate_vars = (SwingGateVars *)moby->pvars;
     f32            progress = *(f32 *)D_L08_0015FFD8[swing_gate_vars->driver].pvars;
     Vec4           gate_rotation_matrix[4];
     Vec4           gate_position_offset;
@@ -55,12 +55,12 @@ void swing_gate_update(struct Moby *moby) {
         moby->visible = 1;
         moby->flags &= ~1;
     }
-    if (moby->state == 0) {
-        moby->state = 1;
+    if (moby->state == SWING_GATE_STATE_INITIALIZE) {
+        moby->state = SWING_GATE_STATE_FOLLOW_DRIVER;
         qcopy(&swing_gate_vars->home, &moby->pos);
         return;
     }
-    if (moby->state != 1)
+    if (moby->state != SWING_GATE_STATE_FOLLOW_DRIVER)
         return;
     yaw = fast_subtract_rotations(swing_gate_vars->open_deg * DEG_TO_RAD,
                                   swing_gate_vars->shut_deg * DEG_TO_RAD);
@@ -96,7 +96,7 @@ void swing_gate_update(struct Moby *moby) {
     fast_vec_add(&moby->pos, &swing_gate_vars->home, &gate_position_offset);
     if (progress == 1.0f && moby->oclass == 0x1D4) {
         D_0013D388[swing_gate_vars->flag + 0x30] = 1;
-        moby->state = 2;
+        moby->state = SWING_GATE_STATE_OPEN_LATCHED;
         allocate_voice_for_target_entry(1, 0, moby);
         if (moby->oclass == 0x1D4 && voice_is_playing(moby, swing_gate_vars->voice))
             release_voice_slot(swing_gate_vars->voice);
