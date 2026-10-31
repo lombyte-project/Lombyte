@@ -88,8 +88,8 @@ extern s32           allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern unsigned char D_0013F350[];
 s32                  FUN_L00_00203908(s32 a, s32 b);
 extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
-extern LvState       D_L11_001BBC30;
-extern LvState       D_L11_001BAFD0;
+extern LvState       l11_thruster_pack_lock_restore_state __asm__("D_L11_001BBC30");
+extern LvState       l11_thruster_pack_lock_activation_state __asm__("D_L11_001BAFD0");
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
 
 void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
@@ -109,7 +109,7 @@ void thruster_pack_lock_update(Lock *moby) {
         ((Stats *)(D_00141968_r))->best = 0;
         *(unsigned short *)(vars + 0x3E) |= 8;
         if (level == 0xB && moby->bB0 != 0xFF) {
-            if (D_L11_001BBC30.collected[(short)moby->uid] != 0 ||
+            if (l11_thruster_pack_lock_restore_state.collected[(short)moby->uid] != 0 ||
                 ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (level << 8))) >>
                   (moby->uid & 0x1F)) &
                  1)) {
@@ -129,13 +129,13 @@ void thruster_pack_lock_update(Lock *moby) {
             if (current_level_index == 0xB && moby->bB0 != 0xFF) {
                 int group;
                 int group_index;
-                D_L11_001BAFD0.collected[(short)moby->uid] = moby->bB0 + 2;
+                l11_thruster_pack_lock_activation_state.collected[(short)moby->uid] = moby->bB0 + 2;
                 group = moby->bB0;
                 group_index = group & 0xFF;
                 if (group == 0xFF ||
                     (D_L11_0015FD08_3102C8[group_index] != 0xFF &&
                      (visited52)[group_index + (current_level_index << 4)] == 0xFF)) {
-                    D_L11_001BBC30.collected[(short)moby->uid] = group + 2;
+                    l11_thruster_pack_lock_restore_state.collected[(short)moby->uid] = group + 2;
                 }
             }
             moby->state = 2;
