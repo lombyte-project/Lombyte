@@ -123,6 +123,11 @@ int        FUN_L00_0025ff38(char  *query_moby,
                             float *target_region_vertices,
 
                             int nv) {
+    enum {
+        FOLLOW_TARGET_STATUS_DEFAULT_HERO = 0,
+        FOLLOW_TARGET_STATUS_ALTERNATE_MOBY = 1,
+        FOLLOW_TARGET_STATUS_HERO_EXCLUDED = 2
+    };
     struct Hero *hero_data = &hero_lui;
     char        *selected_moby;
     char        *indexed_candidate;
@@ -135,22 +140,22 @@ int        FUN_L00_0025ff38(char  *query_moby,
     float        candidate_distance_score;
 
     selected_moby = (char *)hero_data->moby;
-    target_selection_status = 0;
+    target_selection_status = FOLLOW_TARGET_STATUS_DEFAULT_HERO;
     if (hero_data->state.control_mode == 0x18 || hero_data->state.current == 0x72) {
         selected_moby = 0;
-        target_selection_status = 2;
+        target_selection_status = FOLLOW_TARGET_STATUS_HERO_EXCLUDED;
     } else if (exclusion_list_bound > 0) {
         for (k = 0; k < exclusion_list_bound - 1; k++) {
             if (is_point_inside_clip_volume(&hero_lui.motion.pos, list[k]) != 0) {
                 selected_moby = 0;
-                target_selection_status = 2;
+                target_selection_status = FOLLOW_TARGET_STATUS_HERO_EXCLUDED;
                 break;
             }
         }
     } else if (target_region_vertices != 0 && nv > 0) {
         if (point_in_path_xy(&hero_lui.motion.pos, target_region_vertices, nv) == 0) {
             selected_moby = 0;
-            target_selection_status = 2;
+            target_selection_status = FOLLOW_TARGET_STATUS_HERO_EXCLUDED;
         }
     }
     for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
@@ -184,7 +189,7 @@ int        FUN_L00_0025ff38(char  *query_moby,
         }
         if (ok) {
             selected_moby = indexed_candidate;
-            target_selection_status = 1;
+            target_selection_status = FOLLOW_TARGET_STATUS_ALTERNATE_MOBY;
             best = candidate_distance_score;
         }
     }
@@ -218,7 +223,7 @@ int        FUN_L00_0025ff38(char  *query_moby,
         }
         if (ok) {
             selected_moby = listed_candidate;
-            target_selection_status = 1;
+            target_selection_status = FOLLOW_TARGET_STATUS_ALTERNATE_MOBY;
             best = candidate_distance_score;
         }
     }
