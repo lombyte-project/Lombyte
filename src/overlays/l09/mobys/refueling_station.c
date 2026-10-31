@@ -96,11 +96,14 @@ void handle_refueling_station_damage(struct Moby *moby,
         DAMAGE_RESULT_UNAVAILABLE = 0,
         DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11
     };
+    enum {
+        REFUELING_STATION_STATE_EXPLODE = 3
+    };
     VendorHitSource *damage_hit_record;
     struct Moby     *link;
     s32              hit;
 
-    if (moby->state != 3) {
+    if (moby->state != REFUELING_STATION_STATE_EXPLODE) {
         damage_hit_record = find_moby_hit(moby, 0x330000, 0);
         if (damage_hit_record != 0) {
             debug_print(D_L09_00208F90, moby->oclass, fptodp(damage_hit_record->damage));
@@ -136,7 +139,7 @@ void handle_refueling_station_damage(struct Moby *moby,
                 FUN_L00_00257470(moby, 0, -1);
                 refueling_station_vars->anim[7] = 0x78;
                 trooper_anim_update(moby, refueling_station_vars->anim);
-                moby->state = 3;
+                moby->state = REFUELING_STATION_STATE_EXPLODE;
             } else {
                 *health -= damage_hit_record->damage;
                 refueling_station_vars->anim[7] = 0xFA;
