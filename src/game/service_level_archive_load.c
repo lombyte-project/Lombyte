@@ -11,12 +11,6 @@
 #include "rnc/sdk/storage/cdvd/scecdbreak.h"
 #include "rnc/sdk/storage/cdvd/scecdsync.h"
 
-struct LevelArchiveDiscEntry {
-    u8  pad_0[0x12C8];
-    s32 start_sector;
-    s32 sector_count;
-};
-
 struct LevelArchiveHeader {
     u8  pad_0[8];
     s32 sound_bank_offset;
@@ -52,21 +46,19 @@ s32 service_level_archive_load(void) {
         START_SOUND_BANK_LOAD = 6,
         WAIT_FOR_SOUND_BANK_LOAD = 7
     };
-    s32                           stage;
-    u16                           next_stage;
-    s32                           retry_stage;
-    s32                           archive_start_or_bytes;
-    s32                           sound_aligned_bytes;
-    s32                           level_archive_sectors;
-    s32                           archive_start_or_sectors;
-    s32                           shared_start_sector;
-    u8                           *sound_archive_buffer;
-    u8                           *level_archive_buffer;
-    u8                           *shared_archive_buffer;
-    struct LevelArchiveDiscEntry *disc_entry;
-    struct LevelArchiveDiscEntry *next_disc_entry;
-    s32                           level_index;
-    struct LevelArchiveHeader    *shared_header;
+    s32                        stage;
+    u16                        next_stage;
+    s32                        retry_stage;
+    s32                        archive_start_or_bytes;
+    s32                        sound_aligned_bytes;
+    s32                        level_archive_sectors;
+    s32                        archive_start_or_sectors;
+    s32                        shared_start_sector;
+    u8                        *sound_archive_buffer;
+    u8                        *level_archive_buffer;
+    u8                        *shared_archive_buffer;
+    s32                        level_index;
+    struct LevelArchiveHeader *shared_header;
 
     level_index = ship_index[0] + 1;
     if (sceCdSync(1) != 0) {
@@ -102,8 +94,7 @@ s32 service_level_archive_load(void) {
         } else {
             sound_aligned_bytes = ((disc_table.sound_archive.size << 11) + 0xFFF) & 0xFFFFF000;
         }
-        disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&disc_table + level_index * 8);
-        level_archive_sectors = *(s32 *)((u8 *)&disc_table + level_index * 8 + 0x12CC);
+        level_archive_sectors = disc_table.level_archives[level_index].size;
         sound_archive_buffer = D_1FF8000 - sound_aligned_bytes;
         sound_aligned_bytes = ((level_archive_sectors << 11) + 0xFFF) & 0xFFFFF000;
         level_archive_buffer = sound_archive_buffer - sound_aligned_bytes;
@@ -120,10 +111,9 @@ s32 service_level_archive_load(void) {
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case LOAD_LEVEL_ARCHIVE:
-        next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&disc_table + level_index * 8);
         submit_audio_stream_io_request(level_archive_base,
-                                       *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12C8),
-                                       *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12CC));
+                                       disc_table.level_archives[level_index].sector,
+                                       disc_table.level_archives[level_index].size);
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case LOAD_SOUND_ARCHIVE:

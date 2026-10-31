@@ -3,8 +3,8 @@
 #include "rnc/game/level_object_states.h"
 
 int FUN_0020bd90(void) {
-    char *base = (char *)level_object_states;
-    if (*(int *)(base + 0x40C) != 0 && *(int *)(base + 0x3FC) != 0)
+    struct LevelObjectState *states = level_object_states;
+    if (states[0x40].state != 0 && states[0x3F].state != 0)
         return 1;
     return 0;
 }

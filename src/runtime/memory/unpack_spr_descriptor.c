@@ -1,15 +1,23 @@
+#include "types.h"
+
 /* Ported from rac1-decomp (src/core/001236F0.c, func_00123BA0). */
+/* Two counted byte runs, each copied out to its own destination. */
+struct SprDescriptor {
+    s32 first_count;
+    s32 second_count;
+    u8 *first_destination;  /* 0x08 */
+    u8 *second_destination; /* 0x0C */
+    u8  first_bytes[0x40];  /* 0x10 */
+    u8  second_bytes[1];    /* 0x50: second_count bytes */
+};
+
 /*
- * Unpack a scratchpad-resident descriptor: descriptor is forced into the SPR
- * window (| 0x20000000), then two counted byte runs are copied out of
- * it -- the one at +0x10 to the pointer at +0x8 for the count at +0x0,
- * and the one at +0x50 to the pointer at +0xC for the count at +0x4.
  * The counts are re-read from the descriptor on every iteration, so
  * they are written out in full rather than cached.
  *
  * The explicit zero-trip guard around each do/while is what makes this
  * match, and it is worth knowing why. Written as a plain `for`, the
- * source base (p + 0x10) is loop-invariant, so GCC hoists it ABOVE the
+ * source base (first_bytes) is loop-invariant, so GCC hoists it ABOVE the
  * guard; retail computes it BELOW, between the guard and the loop head.
  * That one position shifts the loop head by a word, which in turn costs
  * the alignment nop retail carries -- two instructions per loop, 16
@@ -20,31 +28,32 @@
 void unpack_spr_descriptor(void *descriptor) __asm__("FUN_001238a0");
 
 void unpack_spr_descriptor(void *descriptor) {
-    char          *scratchpad_descriptor = (char *)((unsigned int)descriptor | 0x20000000);
+    struct SprDescriptor *scratchpad_descriptor =
+        (struct SprDescriptor *)((unsigned int)descriptor | 0x20000000);
     unsigned char *inline_source_bytes;
     char          *destination;
     int            i;
 
-    if (*(int *)(scratchpad_descriptor + 0x0) != 0) {
-        destination = *(char **)(scratchpad_descriptor + 0x8);
+    if (scratchpad_descriptor->first_count != 0) {
+        destination = (char *)scratchpad_descriptor->first_destination;
         i = 0;
-        if (i < *(int *)(scratchpad_descriptor + 0x0)) {
-            inline_source_bytes = (unsigned char *)(scratchpad_descriptor + 0x10);
+        if (i < scratchpad_descriptor->first_count) {
+            inline_source_bytes = scratchpad_descriptor->first_bytes;
             do {
                 *destination++ = inline_source_bytes[i];
                 i++;
-            } while (i < *(int *)(scratchpad_descriptor + 0x0));
+            } while (i < scratchpad_descriptor->first_count);
         }
     }
-    if (*(int *)(scratchpad_descriptor + 0x4) != 0) {
-        destination = *(char **)(scratchpad_descriptor + 0xC);
+    if (scratchpad_descriptor->second_count != 0) {
+        destination = (char *)scratchpad_descriptor->second_destination;
         i = 0;
-        if (i < *(int *)(scratchpad_descriptor + 0x4)) {
-            inline_source_bytes = (unsigned char *)(scratchpad_descriptor + 0x50);
+        if (i < scratchpad_descriptor->second_count) {
+            inline_source_bytes = scratchpad_descriptor->second_bytes;
             do {
                 *destination++ = inline_source_bytes[i];
                 i++;
-            } while (i < *(int *)(scratchpad_descriptor + 0x4));
+            } while (i < scratchpad_descriptor->second_count);
         }
     }
 }

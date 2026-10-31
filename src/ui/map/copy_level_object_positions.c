@@ -2,27 +2,20 @@
 #include "rnc/game/level_object_states.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/globals.h"
+#include "rnc/mobys/moby.h"
 #include "rnc/ui/map/copy_level_object_positions.h"
-
-struct ObjectVector {
-    u8  pad_0[0x10];
-    f32 x;
-    f32 y;
-    u8  pad_18[0x30];
-    f32 z;
-};
 
 void copy_level_object_positions(void) __asm__("FUN_00208770");
 
 void copy_level_object_positions(void) {
-    s32                  index;
-    s32                  next_index;
-    s32                  start;
-    s32                  end;
-    u8                  *destination;
-    u8                  *source_base;
-    u8                 **source;
-    struct ObjectVector *source_object;
+    s32                      index;
+    s32                      next_index;
+    s32                      start;
+    s32                      end;
+    struct LevelObjectState *destination;
+    u8                      *source_base;
+    struct Moby            **source;
+    struct Moby             *source_object;
 
     index = current_level_index;
     if ((u32)index >= 0x13U) {
@@ -35,17 +28,17 @@ void copy_level_object_positions(void) {
         return;
     }
     source_base = ((u8 *)menu_action_messages);
-    destination = (u8 *)level_object_states + start * 0x10;
-    source = (u8 **)(source_base + start * 4);
+    destination = &level_object_states[start];
+    source = (struct Moby **)(source_base + start * 4);
     start = end - start;
     do {
-        source_object = (struct ObjectVector *)*source;
+        source_object = *source;
         if (source_object != 0) {
-            *(f32 *)(destination + 0x0) = source_object->x;
-            *(f32 *)(destination + 0x4) = source_object->y;
-            *(f32 *)(destination + 0x8) = source_object->z;
+            destination->x = source_object->pos.x;
+            destination->y = source_object->pos.y;
+            destination->z = source_object->rot.z;
         }
-        destination += 0x10;
+        destination++;
         start--;
         source++;
     } while (start != 0);
