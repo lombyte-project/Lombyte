@@ -543,16 +543,16 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     qcopy(dest, moby->pos);
     moby->f30 = 0x20;
     update_circular_saw_engine_sound((struct Moby *)moby);
-    if (moby->state == 1 || moby->state == 3) {
+    if (moby->state == CIRCULAR_SAW_STATE_IDLE || moby->state == CIRCULAR_SAW_STATE_CHASE_TARGET) {
         H_35F0 *h = (H_35F0 *)(((char *)((char *)&hero)));
         if (h->f240 == moby || fast_vec_dist(moby->pos, h->pos) < 1.5f) {
             blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
             data->f146 = scale_game_frames(0x3C);
-            moby->state = 7;
+            moby->state = CIRCULAR_SAW_STATE_MELEE_ATTACK;
         }
     }
     FUN_L00_001fefc8(&data->f14D);
-    if (moby->state != 8 && moby->state != 0) {
+    if (moby->state != CIRCULAR_SAW_STATE_DYING && moby->state != CIRCULAR_SAW_STATE_INITIALIZE) {
         int       unused_hit_reaction_output;
         float     dmg;
         Hit_35F0 *hit;
@@ -562,7 +562,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         dmg = 0.0f;
         hit = find_moby_hit(moby, 0x210000, 0);
         r = hit_reaction(moby, hit, &data->hp, 0, &unused_hit_reaction_output, &dmg, 0, 4);
-        if (hit != 0 && moby->state != 0 && data->f14D == 0) {
+        if (hit != 0 && moby->state != CIRCULAR_SAW_STATE_INITIALIZE && data->f14D == 0) {
             if (hit->att != 0) {
                 struct Hero *h = &hero;
                 if (hit->att != h->items[0].moby) {
@@ -609,7 +609,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 } else {
                     data->f13C = 10.0f / scale_time(15.0f);
                 }
-                moby->state = 6;
+                moby->state = CIRCULAR_SAW_STATE_HIT_RECOVERY;
                 moby->rot = fast_add_rotations(3.1415927f, ang);
                 data->fB7 = 0x78;
                 trooper_anim_update(moby, (short *)data->fB0);
@@ -633,7 +633,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     }
     data->f38 = 0;
     fast_dec_timer_s16(&data->f136);
-    if (moby->state == 7 && moby->f52 == 7 && hd > 15.0f && hd < 44.0f) {
+    if (moby->state == CIRCULAR_SAW_STATE_MELEE_ATTACK && moby->f52 == 7 && hd > 15.0f && hd < 44.0f) {
         int i;
         for (i = 0; i < 4; i++) {
             S_35F0  melee_hit_parameters;
@@ -656,7 +656,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             }
         }
     }
-    if (moby->state != 0 && data->f2E != 1) {
+    if (moby->state != CIRCULAR_SAW_STATE_INITIALIZE && data->f2E != 1) {
         int engine_voice_index = data->f238;
         if (engine_voice_index != -1) {
             char *e = (char *)((char *)&D_0013E550) + engine_voice_index * 0x70;
@@ -700,9 +700,9 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         data->f136 = 0;
         data->f144 = 0;
         if (data->f150 == -1) {
-            moby->state = 1;
+            moby->state = CIRCULAR_SAW_STATE_IDLE;
         } else {
-            moby->state = 4;
+            moby->state = CIRCULAR_SAW_STATE_FOLLOW_PATH;
         }
         break;
     }
@@ -737,13 +737,13 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                         check_circular_saw_melee_attack_spacing((char *)moby) != 0) {
                         blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                         data->f146 = scale_game_frames(0x3C);
-                        moby->state = 7;
+                        moby->state = CIRCULAR_SAW_STATE_MELEE_ATTACK;
                     } else if (flag ? target_distance < data->f140 * 2.0f
                                     : target_distance < data->f140) {
                         if (data->f146 == 0) {
                             blend_moby_animation(moby, (void *)1, 0, (void *)scale_game_frames(10));
                             data->f14C = 0;
-                            moby->state = 3;
+                            moby->state = CIRCULAR_SAW_STATE_CHASE_TARGET;
                         }
                     }
                 }
@@ -757,7 +757,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             data->f78 = -(frame_time * 7.668f);
         } else if (moby->f70 & 2) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(10));
-            moby->state = 1;
+            moby->state = CIRCULAR_SAW_STATE_IDLE;
         }
         break;
     case CIRCULAR_SAW_STATE_CHASE_TARGET:
@@ -772,13 +772,13 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 check_circular_saw_melee_attack_spacing((char *)moby) != 0) {
                 blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                 data->f146 = scale_game_frames(0x3C);
-                moby->state = 7;
+                moby->state = CIRCULAR_SAW_STATE_MELEE_ATTACK;
             }
         } else if (flag == 0) {
             qcopy(dest, data->f120);
             if (vector_distance_xy(moby->pos, data->f120) < 1.0f) {
                 blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(10));
-                moby->state = 1;
+                moby->state = CIRCULAR_SAW_STATE_IDLE;
             }
         }
         func_L00_002592B0_b((char *)moby,
@@ -809,13 +809,13 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                     check_circular_saw_melee_attack_spacing((char *)moby) != 0) {
                     blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                     data->f146 = scale_game_frames(0x3C);
-                    moby->state = 7;
+                    moby->state = CIRCULAR_SAW_STATE_MELEE_ATTACK;
                 } else if (flag ? target_distance < data->f140 * 2.0f
                                 : target_distance < data->f140) {
                     if (data->f146 == 0) {
                         blend_moby_animation(moby, (void *)1, 0, (void *)scale_game_frames(10));
                         data->f14C = 0;
-                        moby->state = 3;
+                        moby->state = CIRCULAR_SAW_STATE_CHASE_TARGET;
                     }
                 }
             }
@@ -836,7 +836,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             if (data->f146 == 0 && data->f160[i] != -1 &&
                 is_point_inside_clip_volume(moby->pos, data->f160[i]) != 0) {
                 data->f158 = data->f160[i];
-                moby->state = 5;
+                moby->state = CIRCULAR_SAW_STATE_POINT_ATTACK;
                 data->f15A = 0;
                 break;
             }
@@ -873,14 +873,14 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                     check_circular_saw_melee_attack_spacing((char *)moby) != 0) {
                     blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
                     data->f146 = scale_game_frames(0x3C);
-                    moby->state = 7;
+                    moby->state = CIRCULAR_SAW_STATE_MELEE_ATTACK;
                     data->f130 = 0.0f;
                 } else if (flag ? target_distance < data->f140 * 2.0f
                                 : target_distance < data->f140) {
                     if (data->f146 == 0) {
                         blend_moby_animation(moby, (void *)1, 0, (void *)scale_game_frames(10));
                         data->f14C = 0;
-                        moby->state = 3;
+                        moby->state = CIRCULAR_SAW_STATE_CHASE_TARGET;
                     }
                 }
             }
@@ -931,7 +931,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                     moby->rot,
                     fast_arc_tan(path->pts[data->f154][0] - moby->pos[0],
                                  path->pts[data->f154][1] - moby->pos[1])) < 0.17453292f) {
-                moby->state = 4;
+                moby->state = CIRCULAR_SAW_STATE_FOLLOW_PATH;
                 data->f146 = scale_game_frames(0xF0);
             }
             break;
@@ -945,7 +945,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         if (data->f146 == 0 && (hd > 44.0f || (moby->f70 & 2))) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(5));
             data->f146 = scale_game_frames(0x78);
-            moby->state = 1;
+            moby->state = CIRCULAR_SAW_STATE_IDLE;
             data->f14E |= 2;
         }
         func_L00_002592B0_b((char *)moby,
@@ -959,7 +959,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         if ((moby->f52 == 8 && compute_interpolated_record_value(moby) > 30.0f) ||
             (moby->f70 & 2)) {
             blend_moby_animation(moby, 0, 0, (void *)scale_game_frames(10));
-            moby->state = 1;
+            moby->state = CIRCULAR_SAW_STATE_IDLE;
             data->f146 = 0;
         }
         break;
@@ -972,7 +972,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         break;
     case CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED:
         if (FUN_L00_002dc9f0(moby, data->fC0) != 0) {
-            moby->state = 0;
+            moby->state = CIRCULAR_SAW_STATE_INITIALIZE;
             data->f1E8 = 0;
         }
         break;
@@ -988,10 +988,10 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             move_moby_xy_with_collision_constraints(moby, moby->pos, v, 1, 0.25f, 0.57f, 0.5f, 0.5235988f);
         }
     }
-    if (moby->state == 9) {
+    if (moby->state == CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED) {
         return;
     }
-    if (moby->state == 4) {
+    if (moby->state == CIRCULAR_SAW_STATE_FOLLOW_PATH) {
         V4_35F0 v;
         V4_35F0 np;
         {
@@ -1011,7 +1011,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 qcopy(moby->pos, np);
             }
         }
-    } else if (moby->state == 3) {
+    } else if (moby->state == CIRCULAR_SAW_STATE_CHASE_TARGET) {
         V4_35F0 v;
         V4_35F0 np;
         float   ang = fast_arc_tan(dest[0] - moby->pos[0], dest[1] - moby->pos[1]);
@@ -1063,7 +1063,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 data->f144 = scale_game_frames(0xF);
             }
         }
-    } else if (moby->state == 5 || (moby->state == 7 && moby->f52 == 7 && hd > 15.0f)) {
+    } else if (moby->state == CIRCULAR_SAW_STATE_POINT_ATTACK || (moby->state == CIRCULAR_SAW_STATE_MELEE_ATTACK && moby->f52 == 7 && hd > 15.0f)) {
         if (vector_distance_xy(moby->pos, dest) > frame_time * 2.0f) {
             V4_35F0 v;
             V4_35F0 np;
@@ -1084,7 +1084,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 }
             }
         }
-    } else if (moby->state != 6 && moby->state != 8) {
+    } else if (moby->state != CIRCULAR_SAW_STATE_HIT_RECOVERY && moby->state != CIRCULAR_SAW_STATE_DYING) {
         V4_35F0 v;
         {
             qcopy(v, moby->pos);
