@@ -185,10 +185,10 @@ void homing_rocket_update(struct Moby *rocket_moby) {
                 hit.oclass = rocket_moby->oclass;
                 record_moby_hit(level[6], &hit);
             }
-            rocket_moby->state = 2;
+            rocket_moby->state = ROCKET_BURST_AND_REMOVE;
         }
         if (fast_dec_timer(&rocket_vars->timer) != 0) {
-            rocket_moby->state = 2;
+            rocket_moby->state = ROCKET_BURST_AND_REMOVE;
         }
         break;
     case ROCKET_BURST_AND_REMOVE:
