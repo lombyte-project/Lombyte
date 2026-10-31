@@ -187,6 +187,9 @@ static inline void copy_vector3(f32 *dst, f32 *src) {
 void update_debug_camera(void) __asm__("FUN_L00_001f3aa0");
 
 void update_debug_camera(void) {
+    enum {
+        DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET = 2
+    };
     struct PadStateWords *pad;
     DebugMenuState       *menu;
     int                   moved;
@@ -382,7 +385,7 @@ void update_debug_camera(void) {
             copy_matrix3x4(l00_camera.unk350, r);
         }
     }
-    if (g_debug_menu.control_mode == 2 && l00_camera.unk180 != 0) {
+    if (g_debug_menu.control_mode == DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET && l00_camera.unk180 != 0) {
         target = (DebugCameraTarget *)l00_camera.unk180;
         qcopy(target->position, l00_camera.pos.f);
         qcopy(target->basis, l00_camera.unk350);
