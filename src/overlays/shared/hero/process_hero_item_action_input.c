@@ -415,7 +415,7 @@ s32 process_hero_item_action_input(void) {
     if (hero.item_use_locked != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) {
         return 0;
     }
-    if (hero.vehicle_mode != 0) {
+    if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
         return 0;
     }
     if (hero.items[0].moby == NULL) {
@@ -537,7 +537,7 @@ s32 process_hero_item_action_input(void) {
         break;
 
     case HERO_ITEM_CLASS_GATED_BUFFERED_ACTIVATE:
-        if (hero.vehicle_mode == 0 && can_select_hero_item_31() != 0) {
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT && can_select_hero_item_31() != 0) {
             if (pad_pressed_within(buttons, scale_game_frames(7), NULL) != 0 &&
                 D_00141660 == 0x1F && hero.items[0].moby->oclass == 0x1E3 &&
                 hero.vehicle_toggle_timer == 0) {
