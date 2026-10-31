@@ -90,7 +90,7 @@ void bubble_update(struct Moby *bubble_moby) {
         if (bubble_moby->pos.z < *bubble_vars->unk24) {
             fast_vec_scale(
                 bubble_vars, bubble_vars, *(float *)&bubble_surface_crossing_velocity_scale_gp);
-            bubble_moby->state = 2;
+            bubble_moby->state = BUBBLE_SHRINK_TO_REMOVAL;
             spawn_bubble_surface_effects((struct Moby *)bubble_moby, bubble_vars->unk24, 8, 4);
         }
         break;
