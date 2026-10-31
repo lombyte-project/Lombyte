@@ -276,6 +276,10 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
         HIT_REACTION_HURT_WITHOUT_STATE_CHANGE = 10,
         HIT_REACTION_NO_RESPONSE = 11
     };
+    enum {
+        PSYTCOPUS_STATE_KNOCKBACK = 7,
+        PSYTCOPUS_STATE_DEATH_KNOCKBACK = 8
+    };
     struct PokiPathVars *psytcopus_vars = (struct PokiPathVars *)psytcopus->pvars;
     Vec4f                projectile_and_hit_vector_scratch;
     int                  hits;
@@ -304,7 +308,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
     psytcopus_hit_record = find_moby_hit(psytcopus, 0x330000, 0);
     hit_reaction = resolve_moby_hit_response(
         psytcopus, psytcopus_hit_record, &psytcopus_vars->health, 0, &hits, &damage, 0, 4);
-    if (hits != 1 && psytcopus->state != 8) {
+    if (hits != 1 && psytcopus->state != PSYTCOPUS_STATE_DEATH_KNOCKBACK) {
         psytcopus_vars->health -= damage;
         if (psytcopus_vars->health <= 0.0f) {
             hit_reaction = 1;
@@ -343,7 +347,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
                                &psytcopus_vars->unk88,
                                &psytcopus_vars->unk8C);
             FUN_L00_0025c558_p(psytcopus, psytcopus_vars->unk70, 5, 1, 0, angle1);
-            psytcopus->state = 7;
+            psytcopus->state = PSYTCOPUS_STATE_KNOCKBACK;
             psytcopus_vars->unk67 = 0x78;
             if (psytcopus_vars->unk160 != 0) {
                 FUN_L00_002371e0_p(psytcopus_vars->unk160);
@@ -369,7 +373,7 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
                                &psytcopus_vars->unk88,
                                &psytcopus_vars->unk8C);
             FUN_L00_0025c558_p(psytcopus, psytcopus_vars->unk70, 6, 1, 0, angle2);
-            psytcopus->state = 8;
+            psytcopus->state = PSYTCOPUS_STATE_DEATH_KNOCKBACK;
             psytcopus_vars->unk67 = 0xF0;
             if (psytcopus_vars->unk160 != 0) {
                 FUN_L00_002371e0_p(psytcopus_vars->unk160);
