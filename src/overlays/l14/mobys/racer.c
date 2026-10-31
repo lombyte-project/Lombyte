@@ -116,6 +116,9 @@ void level14_racer_update(struct Moby *racer_moby) {
         RACER_STATE_FOLLOW_PATH = 5,
         RACER_STATE_WAIT_FOR_EXIT_VOLUME = 6
     };
+    enum {
+        RACE_PHASE_START_RACER_DELAYS = 0x14
+    };
     struct L14RacerVars *racer_vars = (struct L14RacerVars *)racer_moby->pvars;
     u8                   pos[16];
     f32                  spawned_object_planar_velocity[3];
@@ -144,7 +147,7 @@ void level14_racer_update(struct Moby *racer_moby) {
         attach_manipulator(racer_moby, 4, racer_vars->manips[2]);
         return;
     case RACER_STATE_WAIT_FOR_RACE_START:
-        if (race_state->phase == 0x14) {
+        if (race_state->phase == RACE_PHASE_START_RACER_DELAYS) {
             racer_vars->timer = scale_game_frames(racer_vars->delay);
             racer_moby->state = RACER_STATE_WAIT_FOR_START_DELAY;
         }
