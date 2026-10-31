@@ -37,7 +37,7 @@ void level_effects_update(struct Moby *moby) {
     };
     switch (moby->state) {
     case DRAW_CALLBACK_INITIALIZE:
-        moby->state = 1;
+        moby->state = DRAW_CALLBACK_ENQUEUE;
         moby->update_dist = 0xFF;
         break;
     case DRAW_CALLBACK_ENQUEUE:
