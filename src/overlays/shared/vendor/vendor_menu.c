@@ -672,6 +672,10 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
         VENDOR_ITEM_PURCHASE = 2,
         VENDOR_AMMO_PURCHASE = 3
     };
+    enum {
+        VENDOR_AUXILIARY_STATE_READY_REACTION = 10,
+        VENDOR_AUXILIARY_STATE_SELECTION_REACTION = 0xB
+    };
     char        *vendor_state_base;
     struct Moby *auxiliary_moby;
     int          auxiliary_moby_state;
@@ -696,7 +700,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
                     D_L00_00161194 = 0;
                     *(int *)(queued_dialogue_id) = (selection_variant_index * 3 + 2) * 6 +
                                                    *(int *)(vendor_state_base + 0x38) + 10000;
-                    auxiliary_moby->state = 0xB;
+                    auxiliary_moby->state = VENDOR_AUXILIARY_STATE_SELECTION_REACTION;
                 }
             }
         }
@@ -710,7 +714,7 @@ void handle_vendor_auxiliary_moby_event(int vendor_event) {
             ready_variant_index * 0x12 + *(int *)(vendor_state_base + 0x38) + 10000;
         if (auxiliary_moby->prev_seq != vendor_event)
             blend_moby_animation(auxiliary_moby, 1, 0, 10);
-        auxiliary_moby->state = 10;
+        auxiliary_moby->state = VENDOR_AUXILIARY_STATE_READY_REACTION;
         break;
     case VENDOR_ITEM_PURCHASE:
     case VENDOR_AMMO_PURCHASE:
