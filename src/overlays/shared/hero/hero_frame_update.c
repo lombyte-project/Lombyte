@@ -458,7 +458,7 @@ void update_hero_ledge_probe(void) {
     if (hero.ledge_probe_cooldown != 0)
         return;
     allowed = 0;
-    if (hero.vehicle_mode == 0) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
         if ((hero.state.control_mode == 4 &&
              (hero.past_jump_apex != 0 || hero.motion.velocity.f[2] < frame_time * 3.5f)) ||
             hero.state.control_mode == 2 || hero.state.current == 8 || hero.state.current == 0x1A ||
