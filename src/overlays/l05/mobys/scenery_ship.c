@@ -412,6 +412,9 @@ typedef struct Moby Moby;
 
 /* Builds 16 fading glow quads, then draws three ribbons of quads for each linked moby of class 0x4F in view. */
 void draw_group_scenery_ship_trails(struct Moby *moby) {
+    enum {
+        SCENERY_SHIP_FOLLOW_PATH = 1
+    };
     L05GlowPacket  packet[16];
     float          matrix[8];
     float          center[4];
@@ -458,7 +461,7 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
     list = D_L05_001ABCC0_7920[(unsigned char)((char)moby->group)];
     do {
         member = (struct Moby *)(((*list & 0x7fff) << 8) + (int)D_L05_0015FFD8);
-        if (member->oclass == 0x4f && member->state == 1) {
+        if (member->oclass == 0x4f && member->state == SCENERY_SHIP_FOLLOW_PATH) {
             scenery_ship_vars = (char *)member->pvars;
             qcopy_nc(center, &member->pos);
             center[3] = 20.0f;
