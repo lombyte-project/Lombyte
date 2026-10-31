@@ -15,7 +15,7 @@ void tick_space_transition(void) {
         fifty = 50;
         new_value = old_value + 1;
         D_0015EE24 = new_value;
-        if (((new_value % fifty) == 0) && (pal_mode != 0)) {
+        if (((new_value % fifty) == 0) && (pal_mode != FALSE)) {
             D_0015EE24 = old_value + 0xB;
         }
     }
