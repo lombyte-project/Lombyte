@@ -90,8 +90,8 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
             if (resource_index >= 5) {
                 resource_index = 4;
             }
-            if (memory_card_state.state < 3) {
-                if (memory_card_state.pending_state < 0) {
+            if (memory_card_state.state < MEMCARD_REQUEST_FORMAT) {
+                if (memory_card_state.pending_state < MEMCARD_QUERY_INFO) {
                     if (stream->data.stream.state == -1) {
                         stream->data.stream.state = 0;
                     }
