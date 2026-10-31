@@ -653,7 +653,7 @@ void update_hero_tilt(void) {
     int          effective_tilt_mode, current_hero_state, k;
     effective_tilt_mode = hero_state->gravity_mode;
     if (hero_state->unk1F8) {
-        effective_tilt_mode = 1;
+        effective_tilt_mode = HERO_TILT_APPLY_REFERENCE_ORIENTATION;
     }
     switch (effective_tilt_mode) {
     case HERO_TILT_RETURN_TO_ZERO:
@@ -665,8 +665,8 @@ void update_hero_tilt(void) {
         if (k == 0x11 || k == 0x15 || k == 0x16) {
             return;
         }
-        if (current_hero_state == 0x77 || current_hero_state == 0x31 ||
-            current_hero_state == 0x2D || current_hero_state == 0x2C) {
+        if (current_hero_state == HERO_STATE_FATAL_FALL || current_hero_state == HERO_STATE_VOICE_SLOT_CLEANUP_IDLE_EXIT ||
+            current_hero_state == HERO_STATE_ITEM_RELEASE_FALL || current_hero_state == HERO_STATE_GRAPPLE_SWING_ENTRY) {
             return;
         }
         tilt_targets[0] = 0.0f;
