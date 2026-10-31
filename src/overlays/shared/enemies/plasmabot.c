@@ -1316,13 +1316,16 @@ extern char *D_L14_0015FFD8;
 int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_moby) __asm__("FUN_L14_002b39a0");
 
 int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_moby) {
+    enum {
+        PLASMABOT_START_PATH_TRAVERSAL = 2
+    };
     unsigned short *moby_list_entry;
     if (*(volatile unsigned char *)(source_moby + 0x21) == 0xFF ||
         (moby_list_entry = (unsigned short *)D_L14_001ABF40[MOBY(source_moby)->group]) == 0)
         return 1;
     do {
         char *moby = D_L14_0015FFD8 + ((*moby_list_entry & 0x7FFF) << 8);
-        if (MOBY(moby)->oclass == 0x1C && MOBY(moby)->state == 2)
+        if (MOBY(moby)->oclass == 0x1C && MOBY(moby)->state == PLASMABOT_START_PATH_TRAVERSAL)
             return 0;
     } while ((short)*moby_list_entry++ >= 0);
     return 1;
