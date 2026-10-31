@@ -132,7 +132,7 @@ s32 volume_camera_swing_active(struct UpdateCam *swing_camera_record) {
 void volume_camera_swing(struct UpdateCam *cam) __asm__("FUN_L00_002ec988");
 
 void volume_camera_swing(struct UpdateCam *swing_camera_record) {
-    CameraVec          gravity_offset_or_yaw_direction;
+    enum { SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END = 1 , SWING_CAMERA_TYPE_ONE_FRAME_SWING = 3 , SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST = 4 , SWING_CAMERA_TYPE_SNAP_ON_ENTRY = 5 , SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END = 10 } ;CameraVec          gravity_offset_or_yaw_direction;
     SwingCameraParams *params;
     struct UpdateCam  *rec;
     Vec4f             *pos;
@@ -169,7 +169,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
                                       D_L00_00166DD8) >= 1.3962634f) {
         goto stop;
     }
-    if (params->l_buttons_end != 0 && params->type == 5 &&
+    if (params->l_buttons_end != 0 && params->type == SWING_CAMERA_TYPE_SNAP_ON_ENTRY &&
         (pad_held_words[0] & (PAD_L2 | PAD_L1))) {
     stop:
         if (params->timer != 0) {
@@ -188,7 +188,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
             FOLLOW_CAM_STATE(((struct UpdateCam *)camera_globals->unk180))->follow.lateral_damping;
     }
     /* One word over type and timer: type 5 on its first frame snaps the camera. */
-    if (*(s32 *)&params->type == 5) {
+    if (*(s32 *)&params->type == SWING_CAMERA_TYPE_SNAP_ON_ENTRY) {
         *(s32 *)&params->swing = 0;
         rec = current_follow_cam;
         rig = FOLLOW_CAM_STATE(rec);
@@ -229,7 +229,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
     at_end = 0;
     total = convert_integer_to_float(scale_game_frames(200));
     params->timer++;
-    if (params->type == 10) {
+    if (params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END) {
         set_follow_camera_blend_output_flags();
         FOLLOW_CAM_STATE(current_follow_cam)->tail.mode = 0x14D;
     }
@@ -237,7 +237,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         set_follow_camera_blend_output_flags();
         FOLLOW_CAM_STATE(current_follow_cam)->tail.mode = 2;
     }
-    if (params->type == 2 || params->type == 4) {
+    if (params->type == 2 || params->type == SWING_CAMERA_TYPE_RETAIN_ON_CAMERA_REQUEST) {
         {
             FollowCamFlags *ctl = &FOLLOW_CAM_STATE(current_follow_cam)->tail.ctl;
             ctl->flags |= 3;
@@ -247,7 +247,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
             params->timer = scale_game_frames(200);
         }
         FUN_L00_002e8620();
-    } else if (params->type == 1 || params->type == 7 || params->type == 10 || params->type == 9) {
+    } else if (params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END || params->type == 7 || params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END || params->type == 9) {
         /* Moving the left stick skips to the end of the swing. */
         struct PadState *pad = &controller_state;
         if (pad->analog[0] != 0.0f || pad->analog[1] != 0.0f) {
@@ -263,7 +263,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
             at_end = 0;
             params->timer = 1;
         }
-    } else if (params->type == 3) {
+    } else if (params->type == SWING_CAMERA_TYPE_ONE_FRAME_SWING) {
         total = convert_integer_to_float(scale_game_frames(1));
         if (params->timer > scale_game_frames(1)) {
             at_end = 1;
@@ -281,7 +281,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
         fast_sin(camera_descriptors[swing_camera_record->descriptor_index].yaw);
     *(s32 *)&gravity_offset_or_yaw_direction[2] = 0;
     swing = params->swing * 0.017453292f * (params->timer / total);
-    if ((params->type != 1 && params->type != 7 && params->type != 9) || at_end == 0) {
+    if ((params->type != SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END && params->type != 7 && params->type != 9) || at_end == 0) {
         set_follow_camera_angle_blend_from_direction(
             gravity_offset_or_yaw_direction, swing, params->pitch * 0.017453292f);
     }
@@ -341,7 +341,7 @@ void volume_camera_swing(struct UpdateCam *swing_camera_record) {
                         lateral_spring_blend_fraction);
         }
     }
-    if (params->type == 1 || params->type == 7 || params->type == 10) {
+    if (params->type == SWING_CAMERA_TYPE_SLIDE_RELEASE_ANGLE_AT_END || params->type == 7 || params->type == SWING_CAMERA_TYPE_SLIDE_KEEP_ANGLE_AT_END) {
         FUN_L00_002e8620();
         follow_camera_start_slide();
         follow_camera_set_up_spring(0.01f, 0.2f);
