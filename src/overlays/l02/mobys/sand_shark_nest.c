@@ -33,8 +33,11 @@ void launch_sand_shark(struct Moby *moby,
                        float       *direction) __asm__("FUN_L02_002d6118");
 
 void launch_sand_shark(struct Moby *moby, void *position, float *direction) {
+    enum {
+        SAND_SHARK_LAUNCHED = 0x1B
+    };
     char *sand_shark_vars = (char *)moby->pvars;
-    moby->state = 0x1B;
+    moby->state = SAND_SHARK_LAUNCHED;
     moby->flags &= 0xFFBE;
     if (moby->prev_seq != 0xB) {
         blend_moby_animation(moby, 0xB, 0, 1);
