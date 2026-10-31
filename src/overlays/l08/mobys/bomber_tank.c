@@ -138,6 +138,9 @@ void bomber_tank_update(Moby *moby) {
         BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE = 14,
         BOMBER_TANK_STATE_DAMAGED_FOLLOW_PATH = 99
     };
+    enum {
+        BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM = 2
+    };
     float           old_pos[4];
     float           old_rot[4];
     float           velocity[4];
@@ -242,7 +245,7 @@ void bomber_tank_update(Moby *moby) {
         break;
     case BOMBER_TANK_STATE_FOLLOW_PATH:
         advance_bomber_tank_along_path(moby, bomber_tank_update_vars->path);
-        if (bomber_tank_update_vars->mode != 2 &&
+        if (bomber_tank_update_vars->mode != BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM &&
             vector_distance_xy(&moby->pos, &target->pos) < 20.0f) {
             if (D_00141C38 == 0 && D_0013D4CB == 0) {
                 help_request(0x1F44, 0x5A);
@@ -254,7 +257,7 @@ void bomber_tank_update(Moby *moby) {
         break;
     case BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE:
         advance_bomber_tank_along_path(moby, bomber_tank_update_vars->path);
-        if (bomber_tank_update_vars->mode == 2 ||
+        if (bomber_tank_update_vars->mode == BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM ||
             vector_distance_xy(&moby->pos, &target->pos) > 22.0f) {
             moby->state = BOMBER_TANK_STATE_FOLLOW_PATH;
             if (moby->prev_seq != 1)
@@ -296,7 +299,7 @@ void bomber_tank_update(Moby *moby) {
             bomber_tank_update_vars->part_b->collision =
                 bomber_tank_update_vars->part_b->pclass->collision;
             moby->flags |= 0x1000;
-            if (bomber_tank_update_vars->mode != 2) {
+            if (bomber_tank_update_vars->mode != BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
                 moby->state = BOMBER_TANK_STATE_FOLLOW_PATH;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
@@ -304,7 +307,7 @@ void bomber_tank_update(Moby *moby) {
         }
         break;
     case BOMBER_TANK_STATE_SCATTER_GROUP_AND_ACTIVATE:
-        if (bomber_tank_update_vars->mode != 2) {
+        if (bomber_tank_update_vars->mode != BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
             unsigned char *event_flags;
             scatter_bomber_tank_linked_debris((char *)moby);
             event_flags = (unsigned char *)D_0013D388;
@@ -322,7 +325,7 @@ void bomber_tank_update(Moby *moby) {
             bomber_tank_update_vars->part_b->collision =
                 bomber_tank_update_vars->part_b->pclass->collision;
             moby->flags |= 0x1000;
-            if (bomber_tank_update_vars->mode != 2) {
+            if (bomber_tank_update_vars->mode != BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
                 moby->state = BOMBER_TANK_STATE_FOLLOW_PATH;
                 if (moby->prev_seq != 1)
                     blend_moby_animation(moby, 1, 0, scale_game_frames(10));
