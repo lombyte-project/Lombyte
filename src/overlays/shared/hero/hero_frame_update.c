@@ -1142,6 +1142,9 @@ extern CollisionHit HH __asm__("D_L01_001742C0") NOT_SDA;
 void update_hero_ground_contact_and_gravity(void) __asm__("FUN_L01_00232dc0");
 
 void update_hero_ground_contact_and_gravity(void) {
+    enum {
+        GROUND_MATERIAL_WATER = 0
+    };
     V collision_ray_end, ground_ray_start, ground_delta_or_angles, side_ray_start,
         unused_side_probe_point, side_hit_angles, normalized_side_hit_normal;
     f32 f;
@@ -1185,7 +1188,7 @@ void update_hero_ground_contact_and_gravity(void) {
     }
     hero.ground_sound_class = collision_sound_class;
     hero.ground_type = collision_hit_material();
-    if (hero.ground_type == 0) {
+    if (hero.ground_type == GROUND_MATERIAL_WATER) {
         hero.water_surface_z =
             resolve_camera_surface_height(D_L01_001742E0, (u8 *)&hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
@@ -1234,7 +1237,7 @@ void update_hero_ground_contact_and_gravity(void) {
         }
         if (hero.ground_distance < 0.02f) {
             hero.frames_off_ground.s = 0;
-            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == 1 ||
+            if (hero.ground_slope.f <= 0.87266463f || hero.gravity_mode == HERO_GRAVITY_OPPOSITE_GROUND_NORMAL ||
                 hero.state.control_mode == 0x16) {
                 hero.air_frames.s = 0;
                 hero.last_landed_moby = HH.moby;
