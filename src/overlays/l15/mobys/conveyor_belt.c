@@ -23,7 +23,7 @@ void conveyor_belt_update(struct Moby *moby) {
             char *frame_offset = conveyor_belt_private_data + 0x40;
             clear_u64_value(frame_offset);
             *(int *)(conveyor_belt_private_data + 0x9C) |= 4;
-            moby->state = 3;
+            moby->state = CONVEYOR_BELT_UPDATE_FRAME_OFFSET;
             break;
         }
         case CONVEYOR_BELT_UPDATE_FRAME_OFFSET:
