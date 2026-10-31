@@ -1152,6 +1152,9 @@ void update_vendor_menu(void) {
         VENDOR_PURCHASE_INACTIVE = 0,
         VENDOR_PURCHASE_INITIALIZE = 1
     };
+    enum {
+        VENDOR_ROW_PURCHASE_REQUEST_ENABLED = 0
+    };
     Vec4               position_scratch;
     Vec4               position_contribution_scratch;
     f32                camera_rotation_matrix[4][4];
@@ -1475,7 +1478,7 @@ void update_vendor_menu(void) {
                 }
             }
             if ((controller_state.pressed_unmasked & 0x40) && !(l00_vendor_previous_pressed_buttons & 0x40) &&
-                CUR_ITEM.state == 0) {
+                CUR_ITEM.state == VENDOR_ROW_PURCHASE_REQUEST_ENABLED) {
                 vendor_menu.purchase_state = VENDOR_PURCHASE_INITIALIZE;
                 allocate_voice_for_target_entry(0, 0, vendor_menu.vendor_moby);
             }
