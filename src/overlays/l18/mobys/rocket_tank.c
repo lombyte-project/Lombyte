@@ -264,6 +264,9 @@ extern void  func_L00_0025F4A8_alt(void *,
                                    int) __asm__("FUN_L00_0025e450");
 
 void update_rocket_tank_damage_and_aim(void *mv) {
+    enum {
+        HIT_REACTION_NO_DAMAGE = 1
+    };
     unsigned char *moby_bytes = mv;
     char          *tank_data = *(char **)(moby_bytes + 0x78);
     int            r;
@@ -278,7 +281,7 @@ void update_rocket_tank_damage_and_aim(void *mv) {
                  &damage_amount,
                  0,
                  4);
-    if (hit_reaction_status != 1 && moby_bytes[0x20] != 0) {
+    if (hit_reaction_status != HIT_REACTION_NO_DAMAGE && moby_bytes[0x20] != 0) {
         float remaining_health = *(float *)(tank_data + 0x20) - damage_amount;
         *(float *)(tank_data + 0x20) = remaining_health;
         if (remaining_health > 0.0f) {
