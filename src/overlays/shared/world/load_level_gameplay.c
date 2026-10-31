@@ -83,20 +83,20 @@ extern int  fptodp(float) __asm__("FUN_00120478");
 
 void print_moby_class_sizes(int *record, int n) __asm__("FUN_L00_00241788");
 
-void print_moby_class_sizes(int *record, int n) {
+void print_moby_class_sizes(int *moby_class_record_cursor, int moby_class_record_count) {
     MobyClassSize entries[512];
     int           i, j, k, done;
 
-    for (i = 0; i < n; i++, record += 8) {
-        entries[i].class_id = (float)record[1];
-        if (record[0] == 0) {
+    for (i = 0; i < moby_class_record_count; i++, moby_class_record_cursor += 8) {
+        entries[i].class_id = (float)moby_class_record_cursor[1];
+        if (moby_class_record_cursor[0] == 0) {
             entries[i].size = 0;
         } else {
-            if (record[8] != 0) {
-                entries[i].size = convert_integer_to_float(record[8] - record[0]) * 0.0009765625f;
+            if (moby_class_record_cursor[8] != 0) {
+                entries[i].size = convert_integer_to_float(moby_class_record_cursor[8] - moby_class_record_cursor[0]) * 0.0009765625f;
             } else {
                 entries[i].size =
-                    convert_integer_to_float(record[0x10] - record[0]) * 0.0009765625f;
+                    convert_integer_to_float(moby_class_record_cursor[0x10] - moby_class_record_cursor[0]) * 0.0009765625f;
             }
             entries[i + 1].class_id = -1.0f;
             entries[i + 1].size = 0;
@@ -104,7 +104,7 @@ void print_moby_class_sizes(int *record, int n) {
     }
     do {
         done = 1;
-        for (j = 0; j < n; j++) {
+        for (j = 0; j < moby_class_record_count; j++) {
             if (entries[j].size < entries[j + 1].size) {
                 float class_id = entries[j].class_id;
                 float size = entries[j].size;
@@ -116,7 +116,7 @@ void print_moby_class_sizes(int *record, int n) {
             }
         }
     } while (!done);
-    for (k = 0; k < n; k++) {
+    for (k = 0; k < moby_class_record_count; k++) {
         int class_id = truncate_float_to_s32(entries[k].class_id);
         debug_print(moby_class_size_format, class_id, fptodp(entries[k].size));
     }
