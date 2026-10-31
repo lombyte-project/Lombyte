@@ -210,6 +210,10 @@ void blaster_update(struct Moby *moby) __asm__("FUN_L00_002b49a8");
 
 /* Moby class 168 */
 void blaster_update(struct Moby *moby) {
+    enum {
+        BLASTER_STATE_UNINITIALIZED = 0,
+        BLASTER_STATE_INITIALIZED = 1
+    };
     BlasterVec     velocity;
     BlasterVec     aim_point;
     BlasterVec     launch;
@@ -232,8 +236,8 @@ void blaster_update(struct Moby *moby) {
     never = 0;
     pitch = 0.0f;
     blaster_vars = (BlasterVars *)moby->pvars;
-    if (moby->state == 0) {
-        moby->state = 1;
+    if (moby->state == BLASTER_STATE_UNINITIALIZED) {
+        moby->state = BLASTER_STATE_INITIALIZED;
         blaster_vars->light = -1;
         blaster_vars->glow = 0;
     }
