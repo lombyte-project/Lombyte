@@ -639,7 +639,7 @@ int generate_random_points_from_shape_entries(
                     case SHAPE_INLINE_CENTER_SPHERE:
                     case 1:
                     case SHAPE_INDEXED_CENTER_SPHERE: {
-                        if (type < 2) {
+                        if (type < SHAPE_INDEXED_CENTER_SPHERE) {
                             qcopy(&shape_anchor, (void *)((entry + 0x10)));
                             scale_vector(*(float *)(entity + 0x2c) * 0.0009765625f,
                                          &shape_anchor,
@@ -709,7 +709,7 @@ int generate_random_points_from_shape_entries(
         case 1:
         case SHAPE_INDEXED_CENTER_SPHERE: {
             float radius, extent;
-            if (type < 2) {
+            if (type < SHAPE_INDEXED_CENTER_SPHERE) {
                 qcopy(&shape_anchor, (void *)((entry + 0x10)));
                 FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &shape_anchor, &shape_anchor);
                 extent = shape_anchor.f[3] * *(float *)(entity + 0x2c);
