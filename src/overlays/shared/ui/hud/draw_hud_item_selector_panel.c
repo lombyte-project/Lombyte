@@ -921,7 +921,7 @@ typedef struct {
     short unk6;
 } HudCounter;
 
-extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
+extern s32 l00_hud_panel_visibility_counter_limit_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 
 void update_health_hud_animation_and_visibility(HudElem *hud_element) __asm__("FUN_L00_00239630");
 
@@ -970,9 +970,9 @@ void update_health_hud_animation_and_visibility(HudElem *hud_element) {
         hud_element->unk74 = hud_element->unk78;
     }
     if (hud_element->unk7C >= scale_game_frames(5)) {
-        if (*(int *)&D_L00_0015F7F0_gp > visibility_counters[0]) {
+        if (*(int *)&l00_hud_panel_visibility_counter_limit_gp > visibility_counters[0]) {
             visibility_counters[0]++;
-        } else if (visibility_counters[1] < *(int *)&D_L00_0015F7F0_gp) {
+        } else if (visibility_counters[1] < *(int *)&l00_hud_panel_visibility_counter_limit_gp) {
             visibility_counters[1]++;
         }
     } else {
@@ -1052,13 +1052,13 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     if (visibility_counters[0] == 0)
         goto out;
     ratio_x = convert_integer_to_float(visibility_counters[0]) /
-              convert_integer_to_float(D_L00_0015F7F0_gp);
+              convert_integer_to_float(l00_hud_panel_visibility_counter_limit_gp);
     if (1.0f < ratio_x)
         ratio_x = 1.0f;
     else if (ratio_x < 0.0f)
         ratio_x = 0.0f;
     ratio_y = convert_integer_to_float(visibility_counters[1]) /
-              convert_integer_to_float(D_L00_0015F7F0_gp);
+              convert_integer_to_float(l00_hud_panel_visibility_counter_limit_gp);
     if (1.0f < ratio_y)
         ratio_y = 1.0f;
     else if (ratio_y < 0.0f)
@@ -1329,7 +1329,7 @@ void update_hud_panel_visibility(u8 *hud_element) {
     u8 *visibility_counters = hud_element + 0x70;
     if (D_00141398) {
         s32 scaled_duration_frames = scale_game_frames(10);
-        s32 visibility_counter_limit = D_L00_0015F7F0_gp;
+        s32 visibility_counter_limit = l00_hud_panel_visibility_counter_limit_gp;
         *(s32 *)(hud_element + 0x7C) = scaled_duration_frames;
         if (hud_element[0x70] < visibility_counter_limit) {
             hud_element[0x70]++;
@@ -1390,13 +1390,13 @@ s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
         return hud_element->ret;
 
     open = convert_integer_to_float(visibility_counters[0]) /
-           convert_integer_to_float(D_L00_0015F7F0_gp);
+           convert_integer_to_float(l00_hud_panel_visibility_counter_limit_gp);
     if (1.0f < open)
         open = 1.0f;
     else if (open < 0.0f)
         open = 0.0f;
     text = convert_integer_to_float(visibility_counters[1]) /
-           convert_integer_to_float(D_L00_0015F7F0_gp);
+           convert_integer_to_float(l00_hud_panel_visibility_counter_limit_gp);
     if (1.0f < text)
         text = 1.0f;
     else if (text < 0.0f)
