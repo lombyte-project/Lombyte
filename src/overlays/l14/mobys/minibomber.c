@@ -1127,6 +1127,10 @@ void initialize_minibomber_path_following(struct Moby *moby) {
 void emit_minibomber_exhaust_puffs(struct Moby *moby) __asm__("FUN_L14_002b5dd8");
 
 void emit_minibomber_exhaust_puffs(struct Moby *moby) {
+    enum {
+        MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH = 2,
+        MINIBOMBER_STATE_DESTROY = 9
+    };
     float exhaust_position_offset[4];
     float pos[4];
     int   i;
@@ -1134,7 +1138,7 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
     int   signed_puff_value;
     int   life;
     float size;
-    if (moby->state < 2 || moby->state == 9)
+    if (moby->state < MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH || moby->state == MINIBOMBER_STATE_DESTROY)
         return;
     fast_vec_scale(exhaust_position_offset, &moby->rot_row0, -1.25f);
     fast_vec_add(pos, &moby->pos, exhaust_position_offset);
