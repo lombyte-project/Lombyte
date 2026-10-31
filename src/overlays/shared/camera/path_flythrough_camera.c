@@ -84,7 +84,7 @@ extern struct {
     char *source;
 } D_L10_00167100;
 
-extern VendorView_5f18 D_L10_0016CEC0;
+extern VendorView_5f18 l10_camera_view __asm__("D_L10_0016CEC0");
 
 void initialize_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L10_002f5b58");
 
@@ -117,7 +117,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     pos = &path_camera->pos;
     m1 = (Vec4f *)&path_camera->m1;
     m2 = (Vec4f *)&path_camera->m2;
-    stops->fov_end = fast_arc_tan(1.0f, D_L10_0016CEC0.tan_half_fov) * 2.0f;
+    stops->fov_end = fast_arc_tan(1.0f, l10_camera_view.tan_half_fov) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         char *path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
         int   i = 0;
@@ -256,7 +256,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
             run->started = 3;
             D_L10_0015F3FC = 1.0f;
             ang = stops->fov_end * 0.5f;
-            D_L10_0016CEC0.tan_half_fov = fast_sin(ang) / fast_cos(ang);
+            l10_camera_view.tan_half_fov = fast_sin(ang) / fast_cos(ang);
             update_view_context();
             *(u8 *)(rec + 0x39) = 1;
             D_L10_00167358 = 0.05f;
@@ -308,7 +308,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
                 total += *(float *)(path + (after * 16 + 0x1C));
             ang = cosine_interpolate(stops->fov[i], stops->fov[i + 1], sum / total) * 0.017453292f *
                   0.5f;
-            D_L10_0016CEC0.tan_half_fov = fast_sin(ang) / fast_cos(ang);
+            l10_camera_view.tan_half_fov = fast_sin(ang) / fast_cos(ang);
             update_view_context();
         }
     }
