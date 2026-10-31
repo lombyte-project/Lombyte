@@ -156,6 +156,29 @@ char *spawn_bombomatic_projectile(char *spawn_position,
     return spawned_moby;
 }
 
+typedef struct BombomaticVars {
+    u8  pad_0[0x20];
+    u8  unk20;
+    u8  pad_21[0x5];
+    s16 unk26;
+    u8  pad_28[0x38];
+    s16 anim_state;
+    u8  pad_62[0x5];
+    u8  unk67;
+    u8  pad_68[0x8];
+    u8  manipulator_70;
+    u8  pad_71[0xF];
+    u8  unk80;
+    u8  pad_81[0x2F];
+    s32 unkB0;
+    s32 unkB4;
+    s16 timer_B8;
+    s16 unkBA;
+    f32 unkBC;
+    f32 unkC0;
+    s32 unkC4;
+} BombomaticVars;
+
 /* Moby class 1041 */
 void bombomatic_update(char *moby) {
     enum {
@@ -177,11 +200,11 @@ void bombomatic_update(char *moby) {
         HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 0xA,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 0xB
     };
-    char *moby_data;
-    char *hit_info;
-    char *health_ptr;
-    int   ia;
-    int   hit_reaction_result;
+    BombomaticVars *moby_data;
+    char           *hit_info;
+    char           *health_ptr;
+    int             ia;
+    int             hit_reaction_result;
 
     float hit_damage;
     float tv;
@@ -197,7 +220,7 @@ void bombomatic_update(char *moby) {
     if (moby == 0) {
         return;
     }
-    moby_data = ((char *)MOBY(moby)->pvars);
+    moby_data = (BombomaticVars *)MOBY(moby)->pvars;
     if (((unsigned char *)moby)[0x31] != 0) {
         if (fast_vec_dist(moby + 0x10, D_L07_00166E40) < 27.0f) {
             FUN_L00_0025a120(moby);
@@ -208,7 +231,7 @@ void bombomatic_update(char *moby) {
         return;
     }
     hit_info = FUN_L00_0025a420(moby, 0x230000, 0);
-    health_ptr = moby_data + 0x20;
+    health_ptr = &moby_data->unk20;
     hit_reaction_result = resolve_moby_hit_response(moby, hit_info, health_ptr, 0, &ia, 0, 0, 4);
     switch (hit_reaction_result) {
     case HIT_REACTION_NONE:
@@ -302,57 +325,56 @@ void bombomatic_update(char *moby) {
         }
         tv -= hit_damage;
         *(float *)health_ptr = tv;
-        *(unsigned char *)(moby_data + 0x67) = 0xFA;
-        *(short *)(moby_data + 0x26) = scale_game_frames(60);
-        trooper_anim_update(moby, (short *)(moby_data + 0x60));
+        moby_data->unk67 = 0xFA;
+        moby_data->unk26 = scale_game_frames(60);
+        trooper_anim_update(moby, &moby_data->anim_state);
     }
 eb20:
     ((unsigned char *)moby)[0xA4] = 0xFF;
-    trooper_anim_finish(moby, moby_data + 0x60);
+    trooper_anim_finish(moby, &moby_data->anim_state);
     get_target_sight(moby, target_buffer, 20.0f);
     switch (((unsigned char *)moby)[0x20]) {
     case BOMBOMATIC_INITIALIZE: {
-        int initial_delay_frames = scale_game_frames(*(int *)(moby_data + 0xB0));
+        int initial_delay_frames = scale_game_frames(moby_data->unkB0);
         int random_initial_delay;
         int random_initial_delay_frames;
         random_initial_delay = random_int_between(0, 10);
         random_initial_delay_frames = scale_game_frames(random_initial_delay);
-        *(int *)(moby_data + 0xB4) =
-            D_L07_0015F5CC + initial_delay_frames + random_initial_delay_frames;
-        attach_manipulator(moby, 0, moby_data + 0x70);
-        *(int *)(moby_data + 0xC0) = 0;
+        moby_data->unkB4 = D_L07_0015F5CC + initial_delay_frames + random_initial_delay_frames;
+        attach_manipulator(moby, 0, &moby_data->manipulator_70);
+        *(int *)&moby_data->unkC0 = 0;
         allocate_voice_for_target_entry(0, 4, (int)moby);
         MOBY(moby)->state = 1;
-        *(int *)(moby_data + 0xC4) = 0;
+        moby_data->unkC4 = 0;
         break;
     }
     case BOMBOMATIC_WAIT_TO_LAUNCH: {
-        if (*(int *)(moby_data + 0xB4) <= D_L07_0015F5CC) {
+        if (moby_data->unkB4 <= D_L07_0015F5CC) {
             int r9 = scale_game_frames(0xB4);
-            *(int *)(moby_data + 0xB4) = D_L07_0015F5CC + r9;
-            *(short *)(moby_data + 0xB8) = 0;
-            *(float *)(moby_data + 0xBC) = random_angle_radians();
-            *(short *)(moby_data + 0xBA) = 0;
+            moby_data->unkB4 = D_L07_0015F5CC + r9;
+            moby_data->timer_B8 = 0;
+            moby_data->unkBC = random_angle_radians();
+            moby_data->unkBA = 0;
             MOBY(moby)->state = 2;
         }
         break;
     }
     case BOMBOMATIC_LAUNCH_BURST: {
         int i;
-        if (fast_dec_timer_s16(moby_data + 0xB8) != 0) {
-            *(short *)(moby_data + 0xB8) = scale_game_frames(7);
+        if (fast_dec_timer_s16(&moby_data->timer_B8) != 0) {
+            moby_data->timer_B8 = scale_game_frames(7);
             if (((unsigned char *)moby)[0x31] == 0) {
                 if (!(vector_distance_xy(moby + 0x10, D_L07_00166E40) < 90.0f &&
-                      (*(int *)(moby_data + 0xC4) & 1) != 0)) {
+                      (moby_data->unkC4 & 1) != 0)) {
                     if (!(vector_distance_xy(moby + 0x10, D_L07_00166E40) < 40.0f)) {
                         goto eeE4;
                     }
                 }
             }
-            *(int *)(moby_data + 0xC4) ^= 1;
+            moby_data->unkC4 ^= 1;
             if (vector_distance_xy(moby + 0x10, target_buffer) < 20.0f) {
-                *(float *)(moby_data + 0xBC) = fast_arc_tan(target_buffer[0] - MOBY(moby)->pos.x,
-                                                            target_buffer[1] - MOBY(moby)->pos.y);
+                moby_data->unkBC = fast_arc_tan(target_buffer[0] - MOBY(moby)->pos.x,
+                                                target_buffer[1] - MOBY(moby)->pos.y);
             }
             launch_work_vector[0] = random_float_between(3.0f, 11.0f);
             launch_work_vector[1] = random_float_between(-2.0f, 2.0f);
@@ -367,8 +389,7 @@ eb20:
                     FUN_L00_0024f7c8(moby, i, candidate_point_position);
                     f = fast_arc_tan(candidate_point_position[0] - MOBY(moby)->pos.x,
                                      candidate_point_position[1] - MOBY(moby)->pos.y);
-                    g = fast_subtract_rotations(*(float *)(moby_data + 0xBC),
-                                                D_0015ED6C_gp * 17.80235863f);
+                    g = fast_subtract_rotations(moby_data->unkBC, D_0015ED6C_gp * 17.80235863f);
                     f = fast_difference_between_rotations(f, g);
                     if (f < best) {
                         qcopy(vF0, candidate_point_position);
@@ -378,7 +399,7 @@ eb20:
                 qcopy(vA0, vF0);
             }
             qzero(launch_rotation);
-            launch_rotation[2] = *(float *)(moby_data + 0xBC);
+            launch_rotation[2] = moby_data->unkBC;
             euler_rotation_matrix(vB0, launch_rotation);
             transform_vector(launch_work_vector, launch_work_vector, vB0);
             fast_vec_normalize(debris_velocity, launch_work_vector, D_0015ED6C_gp * 7.0f);
@@ -386,14 +407,13 @@ eb20:
             debris_velocity[2] = FUN_L00_0025abf0(
                 vA0, launch_work_vector, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
             fast_vec_add(vA0, vA0, debris_velocity);
-            spawn_bombomatic_projectile(
-                vA0, debris_velocity, (int)moby, *(short *)(moby_data + 0xBA));
-            *(short *)(moby_data + 0xBA) = *(short *)(moby_data + 0xBA) + 1;
+            spawn_bombomatic_projectile(vA0, debris_velocity, (int)moby, moby_data->unkBA);
+            moby_data->unkBA = moby_data->unkBA + 1;
         }
     eeE4:
-        if (*(int *)(moby_data + 0xB4) <= D_L07_0015F5CC) {
+        if (moby_data->unkB4 <= D_L07_0015F5CC) {
             int r9 = scale_game_frames(0x78);
-            *(int *)(moby_data + 0xB4) = D_L07_0015F5CC + r9;
+            moby_data->unkB4 = D_L07_0015F5CC + r9;
             MOBY(moby)->state = 1;
         }
         break;
@@ -402,8 +422,8 @@ eb20:
 
     if (((unsigned char *)moby)[0x20] != 0) {
         float f = D_0015ED6C_gp * 17.80235863f;
-        float g = fast_add_rotations(*(float *)(moby_data + 0xC0), f);
-        *(float *)(moby_data + 0xC0) = g;
-        FUN_L00_001fff28(moby_data + 0x80, 2, g);
+        float g = fast_add_rotations(moby_data->unkC0, f);
+        moby_data->unkC0 = g;
+        FUN_L00_001fff28(&moby_data->unk80, 2, g);
     }
 }

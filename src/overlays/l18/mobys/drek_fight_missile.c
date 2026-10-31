@@ -96,9 +96,33 @@ extern int  func_0022ED80_2F0F78(int, int, int) __asm__("FUN_0022da68");
 
 void drek_fight_missile_update(struct Moby *moby) __asm__("FUN_L18_002efb88");
 
+typedef struct DrekFightMissileVars {
+    u8    pad_0[0x110];
+    u8    unk110;
+    u8    pad_111[0xF];
+    u8    unk120;
+    u8    pad_121[0x7];
+    f32   unk128;
+    u8    pad_12C[0x4];
+    f32   unk130[4];
+    u8    pad_140[0x4];
+    f32   unk144;
+    u8    pad_148[0x4];
+    s32   unk14C;
+    f32   unk150;
+    f32   unk154;
+    f32   unk158;
+    f32   unk15C;
+    s32   timer_160;
+    s16   unk164;
+    u8    pad_166[0x2];
+    f32   unk168;
+    void *unk16C;
+} DrekFightMissileVars;
+
 /* Moby class 1355 */
 void drek_fight_missile_update(struct Moby *moby) {
-    char *missile_vars = (char *)moby->pvars;
+    DrekFightMissileVars *missile_vars = (DrekFightMissileVars *)moby->pvars;
     if (moby->state != 4) {
         moby->rot.x = fast_add_rotations(moby->rot.x,
                                          *(float *)&l18_drek_missile_roll_rate_degrees_gp *
@@ -112,16 +136,16 @@ void drek_fight_missile_update(struct Moby *moby) {
     case DREK_MISSILE_INITIALIZE: {
         float wander_acceleration_scale = frame_time_macro[1];
         float initialization_frame_time = frame_time;
-        *(float *)(missile_vars + 0x158) = wander_acceleration_scale * 10.0f;
-        *(float *)(missile_vars + 0x154) = initialization_frame_time * 12.566371f;
-        *(float *)(missile_vars + 0x150) = wander_acceleration_scale * 3.1415927f;
-        *(float *)(missile_vars + 0x15C) = initialization_frame_time * 10.0f;
-        *(float *)(missile_vars + 0x168) = random_angle_radians();
+        missile_vars->unk158 = wander_acceleration_scale * 10.0f;
+        missile_vars->unk154 = initialization_frame_time * 12.566371f;
+        missile_vars->unk150 = wander_acceleration_scale * 3.1415927f;
+        missile_vars->unk15C = initialization_frame_time * 10.0f;
+        missile_vars->unk168 = random_angle_radians();
         moby->draw_dist = 0xFF;
-        qcopy(missile_vars + 0x120, &moby->pos);
-        *(float *)(missile_vars + 0x128) += 5.0f;
-        *(float *)(missile_vars + 0x128) = probe_ground_height(missile_vars + 0x120, 0, 0.5f);
-        select_drek_fight_missile_wander_target(moby, missile_vars + 0x110);
+        qcopy(&missile_vars->unk120, &moby->pos);
+        missile_vars->unk128 += 5.0f;
+        missile_vars->unk128 = probe_ground_height(&missile_vars->unk120, 0, 0.5f);
+        select_drek_fight_missile_wander_target(moby, &missile_vars->unk110);
         moby->state = 1;
         moby->flags |= 1;
         moby->visible = 0;
@@ -129,7 +153,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         break;
     }
     case DREK_MISSILE_WANDER: {
-        char *wander_target_position = missile_vars + 0x110;
+        char *wander_target_position = &missile_vars->unk110;
         if (update_drek_fight_missile_wander_movement(moby, (float *)wander_target_position)) {
             select_drek_fight_missile_wander_target(moby, wander_target_position);
         }
@@ -138,38 +162,38 @@ void drek_fight_missile_update(struct Moby *moby) {
             return;
         }
         moby->state = 3;
-        *(float *)(missile_vars + 0x130) =
+        missile_vars->unk130[0] =
             fast_cos(moby->rot.z) * (*(float *)&D_L18_00162214_gp * frame_time);
-        *(float *)(missile_vars + 0x134) =
+        missile_vars->unk130[1] =
             fast_sin(moby->rot.z) * (*(float *)&D_L18_00162214_gp * frame_time);
-        *(float *)(missile_vars + 0x138) = *(float *)(missile_vars + 0x144);
-        *(int *)(missile_vars + 0x14C) = 0;
+        missile_vars->unk130[2] = missile_vars->unk144;
+        missile_vars->unk14C = 0;
         break;
     }
     case DREK_MISSILE_DIVE: {
         float dive_movement_step[4];
         float ground_check_position[4];
-        fast_vec_sub(dive_movement_step, missile_vars + 0x120, &moby->pos);
+        fast_vec_sub(dive_movement_step, &missile_vars->unk120, &moby->pos);
         fast_vec_normalize(dive_movement_step,
                            dive_movement_step,
                            *(float *)&l18_drek_missile_dive_speed_gp * frame_time);
-        approach_value((float *)(missile_vars + 0x14C), 1.0f, frame_time);
+        approach_value((float *)&missile_vars->unk14C, 1.0f, frame_time);
         lerp_vector(dive_movement_step,
-                    missile_vars + 0x130,
+                    missile_vars->unk130,
                     dive_movement_step,
-                    *(float *)(missile_vars + 0x14C));
+                    *(float *)&missile_vars->unk14C);
         fast_vec_add(&moby->pos, &moby->pos, dive_movement_step);
         moby->rot.z = fast_arc_tan(dive_movement_step[0], dive_movement_step[1]);
         moby->rot.y = -fast_arc_tan(vector_length_xy(dive_movement_step), dive_movement_step[2]);
         fast_vec_normalize(ground_check_position, &moby->rot_row0, 1.0f);
         fast_vec_add(ground_check_position, ground_check_position, &moby->pos);
         update_drek_fight_missile_trail_and_queue_effects(moby);
-        if (ground_check_position[2] < *(float *)(missile_vars + 0x128)) {
+        if (ground_check_position[2] < missile_vars->unk128) {
             float minimum_missile_height;
             func_0022ED80_2F0F78(1, 0, (int)moby);
             moby->state = 4;
-            *(int *)(missile_vars + 0x160) = scale_game_frames(0x5A);
-            minimum_missile_height = *(float *)(missile_vars + 0x128) + 0.7f;
+            missile_vars->timer_160 = scale_game_frames(0x5A);
+            minimum_missile_height = missile_vars->unk128 + 0.7f;
             if (moby->pos.z < minimum_missile_height) {
                 moby->pos.z = minimum_missile_height;
             }
@@ -182,12 +206,12 @@ void drek_fight_missile_update(struct Moby *moby) {
             x = 0.87266463f;
         }
         step_angle_toward_target(&moby->rot.y, 0, x, frame_time * 12.566371f);
-        if (fast_dec_timer((int *)(missile_vars + 0x160))) {
+        if (fast_dec_timer(&missile_vars->timer_160)) {
             int   i;
             char *pos = &moby->pos;
             moby->state = 2;
-            *(short *)(missile_vars + 0x164) = 0;
-            spawn_explosion(*(void **)(missile_vars + 0x16C),
+            missile_vars->unk164 = 0;
+            spawn_explosion(missile_vars->unk16C,
                             D_L18_0015F580,
                             pos,
                             1.0f,
@@ -208,7 +232,7 @@ void drek_fight_missile_update(struct Moby *moby) {
             qcopy(pos, D_L18_001677C0);
             moby->pos.z += 20.0f;
             for (i = 0; (float)i < 4.0f; i++) {
-                qcopy(missile_vars + 0x10 + i * 16, pos);
+                qcopy((char *)missile_vars + 0x10 + i * 16, pos);
             }
         } else {
             update_drek_fight_missile_trail_and_queue_effects(moby);
