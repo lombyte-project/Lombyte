@@ -717,14 +717,14 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
 
 int          D_L12_0016183C = 0xa;
 int          D_L12_00161840 = 8;
-extern float D_L12_00161844 __attribute__((sda));
-extern float D_L12_00161848 __attribute__((sda));
-extern float D_L12_0016184C __attribute__((sda));
-extern float D_L12_00161850 __attribute__((sda));
-extern float D_L12_00161854 __attribute__((sda));
-extern float D_L12_00161858 __attribute__((sda));
-extern float D_L12_0016185C __attribute__((sda));
-extern float D_L12_00161860 __attribute__((sda));
+extern float l12_anklebiter_spark_burst_origin_jitter __asm__("D_L12_00161844") __attribute__((sda));
+extern float l12_anklebiter_spark_position_jitter __asm__("D_L12_00161848") __attribute__((sda));
+extern float l12_anklebiter_spark_velocity_jitter_scale __asm__("D_L12_0016184C") __attribute__((sda));
+extern float l12_anklebiter_spark_horizontal_speed_range_start __asm__("D_L12_00161850") __attribute__((sda));
+extern float l12_anklebiter_spark_horizontal_speed_range_end __asm__("D_L12_00161854") __attribute__((sda));
+extern float l12_anklebiter_spark_vertical_speed_range_start __asm__("D_L12_00161858") __attribute__((sda));
+extern float l12_anklebiter_spark_vertical_speed_range_end __asm__("D_L12_0016185C") __attribute__((sda));
+extern float l12_anklebiter_spark_downward_velocity_scale __asm__("D_L12_00161860") __attribute__((sda));
 extern float D_L12_00161864 __attribute__((sda));
 extern float D_L12_00161868 __attribute__((sda));
 int          D_L12_0016186C = 0x8000eeee;
@@ -733,7 +733,7 @@ int          D_L12_00161874 = 0x8000ff90;
 int          D_L12_00161878 = 0xffee;
 int          D_L12_0016187C = 0xa;
 int          D_L12_00161880 = 0x1e;
-extern int   D_L12_00161884 __attribute__((sda));
+extern int   l12_anklebiter_spark_random_time_base __asm__("D_L12_00161884") __attribute__((sda));
 extern void  add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -743,13 +743,13 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) __asm__("FUN_L12_002
 
 void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
     float  pos[4];
-    float  vel[4];
-    float  accel[4];
+    float  spark_launch_velocity[4];
+    float  gravity_adjusted_spark_velocity[4];
     float  push[4];
-    char  *vars;
+    char  *spark_moby_vars;
     int    count;
     float *pos_ptr;
-    void  *src;
+    void  *moby_position_source;
     int    i;
     int    j;
     float  angle;
@@ -763,47 +763,47 @@ void spawn_hoven_anklebiter_death_sparks(struct Moby *moby) {
     int    fade;
 
     count = D_L12_0016183C;
-    vars = (char *)moby->pvars;
+    spark_moby_vars = (char *)moby->pvars;
     if (moby->state == 15)
         count = truncate_float_to_s32((float)count * 1.5f);
     for (i = 0; i < count; i++) {
         pos_ptr = pos;
-        src = &moby->pos;
-        qcopy_nc(pos, src);
-        add_random_offset_to_vector_xyz(pos_ptr, D_L12_00161844);
+        moby_position_source = &moby->pos;
+        qcopy_nc(pos, moby_position_source);
+        add_random_offset_to_vector_xyz(pos_ptr, l12_anklebiter_spark_burst_origin_jitter);
         pos[2] += 0.55f;
         angle = random_angle_radians();
-        speed = random_float_between(D_L12_00161850, D_L12_00161854);
-        rise = random_float_between(D_L12_00161858, D_L12_0016185C);
+        speed = random_float_between(l12_anklebiter_spark_horizontal_speed_range_start, l12_anklebiter_spark_horizontal_speed_range_end);
+        rise = random_float_between(l12_anklebiter_spark_vertical_speed_range_start, l12_anklebiter_spark_vertical_speed_range_end);
         if (moby->state == 15) {
             speed *= 0.55f;
             rise *= 0.55f;
             pos[2] -= 0.2f;
         }
-        vel[0] = fast_cos(angle) * (speed * D_0015ED6C);
-        vel[1] = fast_sin(angle) * (speed * D_0015ED6C);
-        vel[2] = 0.0f + rise * D_0015ED6C;
-        fast_vec_scale(push, vars + 0x120, 0.5f);
+        spark_launch_velocity[0] = fast_cos(angle) * (speed * D_0015ED6C);
+        spark_launch_velocity[1] = fast_sin(angle) * (speed * D_0015ED6C);
+        spark_launch_velocity[2] = 0.0f + rise * D_0015ED6C;
+        fast_vec_scale(push, spark_moby_vars + 0x120, 0.5f);
         push[2] = 0.0f;
-        fast_vec_add(vel, vel, push);
-        qcopy(accel, vel);
-        accel[2] -= D_L12_00161860 * D_0015ED70 * (float)scale_game_frames(D_L12_00161880);
+        fast_vec_add(spark_launch_velocity, spark_launch_velocity, push);
+        qcopy(gravity_adjusted_spark_velocity, spark_launch_velocity);
+        gravity_adjusted_spark_velocity[2] -= l12_anklebiter_spark_downward_velocity_scale * D_0015ED70 * (float)scale_game_frames(D_L12_00161880);
         for (j = 0; j < D_L12_00161840; j++) {
             size = random_float_between(0.5f, 1.5f);
-            vel[3] = size * D_L12_00161864;
-            accel[3] = size * D_L12_00161868;
-            add_random_offset_to_vector_xyz(pos, D_L12_00161848);
-            add_random_offset_to_vector_xyz(accel, D_L12_0016184C * D_0015ED6C);
+            spark_launch_velocity[3] = size * D_L12_00161864;
+            gravity_adjusted_spark_velocity[3] = size * D_L12_00161868;
+            add_random_offset_to_vector_xyz(pos, l12_anklebiter_spark_position_jitter);
+            add_random_offset_to_vector_xyz(gravity_adjusted_spark_velocity, l12_anklebiter_spark_velocity_jitter_scale * D_0015ED6C);
             start_color =
                 fast_tween_color(D_L12_0016186C, D_L12_00161874, random_float_between(0.0f, 1.0f));
             end_color =
                 fast_tween_color(D_L12_00161870, D_L12_00161878, random_float_between(0.0f, 1.0f));
             life = scale_game_frames(D_L12_0016187C);
             fade = scale_game_frames(D_L12_00161880);
-            time_base = (float)D_L12_00161884;
+            time_base = (float)l12_anklebiter_spark_random_time_base;
             spawn_spark(pos,
-                        vel,
-                        accel,
+                        spark_launch_velocity,
+                        gravity_adjusted_spark_velocity,
                         start_color,
                         end_color,
                         life,
