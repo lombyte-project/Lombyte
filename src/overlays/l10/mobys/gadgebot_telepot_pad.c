@@ -67,6 +67,10 @@ void gadgebot_telepot_pad_update(char *moby) __asm__("FUN_L10_002be858");
 
 /* Moby classes 351, 1301 */
 void gadgebot_telepot_pad_update(char *moby) {
+    enum {
+        TELEPOT_PAD_STATE_UNINITIALIZED = 0,
+        TELEPOT_PAD_STATE_INITIALIZED = 1
+    };
     int   *telepot_pad_vars = ((int *)MOBY(moby)->pvars);
     float  position[4];
     float  velocity[4];
@@ -76,13 +80,13 @@ void gadgebot_telepot_pad_update(char *moby) {
     int    i;
     char  *hero_bytes;
     int    life;
-    if (MOBY(moby)->state == 0) {
+    if (MOBY(moby)->state == TELEPOT_PAD_STATE_UNINITIALIZED) {
         gadgebot_telepot_camera_effect_remaining_frames = 0;
         gadgebot_telepot_camera_spring_decay_frames_gp =
             func_001F9850_2BFBB8(gadgebot_telepot_camera_spring_decay_frames_gp);
         gadgebot_telepot_camera_effect_duration_frames_gp =
             func_001F9850_2BFBB8(gadgebot_telepot_camera_effect_duration_frames_gp);
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = TELEPOT_PAD_STATE_INITIALIZED;
     }
     hero_bytes = D_0013F350;
     if ((unsigned char)hero_bytes[0x20A4] == 1 && *telepot_pad_vars != -1 &&
