@@ -819,6 +819,10 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff97
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 void update_blarg_space_commando_beam(void *owner_moby) {
+    enum {
+        BEAM_SEGMENT_HIT_WITH_FADING_ENDPOINT = 0x10000,
+        BEAM_SEGMENT_HIT_WITH_FULL_WEIGHT_ENDPOINTS = 0x10001
+    };
     char    *moby = owner_moby;
     FanData *beam_state = ((FanData *)MOBY(moby)->pvars);
     int      frames;
@@ -848,7 +852,7 @@ void update_blarg_space_commando_beam(void *owner_moby) {
 
     for (i = 0; i < 16; i++) {
         char *entry;
-        if (hero.vehicle_mode == 1) {
+        if (hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
             step = (beam_point_horizontal_speed_gp * frame_time) * 0.5f;
         } else {
             step = beam_point_horizontal_speed_gp * frame_time;
@@ -886,9 +890,9 @@ void update_blarg_space_commando_beam(void *owner_moby) {
                 point[1] = fast_sin(MOBY(moby)->rot.z);
                 point[2] = 1.0f;
                 point[3] = 5627.925f;
-                hit_type = 0x10000;
+                hit_type = BEAM_SEGMENT_HIT_WITH_FADING_ENDPOINT;
                 if (1.0f <= *(float *)(entry + 0x23C) && 1.0f <= *(float *)(next_entry + 0x23C)) {
-                    hit_type = 0x10001;
+                    hit_type = BEAM_SEGMENT_HIT_WITH_FULL_WEIGHT_ENDPOINTS;
                 }
                 make_hit_descriptor(&shot, (struct Moby *)moby, hit_type, point, 1.0f);
                 shot.oclass = MOBY(moby)->oclass;
