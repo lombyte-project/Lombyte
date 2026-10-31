@@ -138,7 +138,7 @@ void reflection_mesh_trio_b_update(struct Moby *moby) {
                     current_mesh_sphere_components[3] = vertex_to_center_distance;
             }
         }
-        moby->state = 1;
+        moby->state = MESH_RENDER_QUEUE_CALLBACK;
         moby->update_dist = moby->draw_dist = 255;
         break;
     }
