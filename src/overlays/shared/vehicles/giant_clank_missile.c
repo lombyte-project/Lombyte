@@ -64,7 +64,7 @@ char *spawn_giant_clank_missile(void *owner,
 
 char *spawn_giant_clank_missile(
 
-    void *owner, void *pos, float fallback_yaw, float fallback_pitch, float target_height_offset, char *target_moby, float rz, float ry) {
+    void *firing_moby, void *spawn_position, float fallback_yaw, float fallback_pitch, float target_height_offset, char *target_moby, float rz, float ry) {
     char      *spawned_missile;
     char      *missile_spawn_data;
     BoltVector aim_direction_or_collision_start;
@@ -81,11 +81,11 @@ char *spawn_giant_clank_missile(
         *(float *)(spawned_missile + 0x44) = ry;
         if (target_moby == 0) {
             build_spherical_offset(&aim_direction_or_collision_start, D_0015ED6C * 20.0f, rz, ry);
-            auto_aim_position.q = *(Q_2aa998 *)pos;
-            target_moby = select_auto_aim_target_moby(owner, &auto_aim_position, &aim_direction_or_collision_start, &fallback_yaw, &fallback_pitch, &target_height_offset, 0.34906584f);
+            auto_aim_position.q = *(Q_2aa998 *)spawn_position;
+            target_moby = select_auto_aim_target_moby(firing_moby, &auto_aim_position, &aim_direction_or_collision_start, &fallback_yaw, &fallback_pitch, &target_height_offset, 0.34906584f);
         }
-        *(void **)(missile_spawn_data + 0x10) = owner;
-        qcopy(spawned_missile + 0x10, pos);
+        *(void **)(missile_spawn_data + 0x10) = firing_moby;
+        qcopy(spawned_missile + 0x10, spawn_position);
         *(float *)(missile_spawn_data + 0x34) = D_0015ED6C * 100.0f;
         *(int *)(missile_spawn_data + 0x38) = 1;
         *(int *)(missile_spawn_data + 0x24) = 0;
@@ -122,9 +122,9 @@ char *spawn_giant_clank_missile(
                 *(short *)(missile_spawn_data + 0x3C) = velocity_inheritance_frame_count;
             }
         }
-        aim_direction_or_collision_start.q = ((BoltOwner *)owner)->position.q;
-        aim_direction_or_collision_start.f[2] = ((float *)pos)[2];
-        if (FUN_001efa68(&aim_direction_or_collision_start, pos, 0, *(int *)(((char *)&D_001413D0)), 0) != 0) {
+        aim_direction_or_collision_start.q = ((BoltOwner *)firing_moby)->position.q;
+        aim_direction_or_collision_start.f[2] = ((float *)spawn_position)[2];
+        if (FUN_001efa68(&aim_direction_or_collision_start, spawn_position, 0, *(int *)(((char *)&D_001413D0)), 0) != 0) {
             spawned_missile[0xBC] = 1;
             qcopy(spawned_missile + 0x10, &D_L00_00173E60);
         }
