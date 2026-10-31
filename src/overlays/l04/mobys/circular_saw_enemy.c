@@ -1141,13 +1141,17 @@ int launch_circular_saw_enemy_from_suck_cannon(struct Moby *moby,
                                                int          launch_position_source,
 
                                                float launch_position_offset) {
+    enum {
+        CIRCULAR_SAW_STATE_IDLE = 1,
+        CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED = 0x9
+    };
     char *moby_callback_result = get_moby_suck_cannon_record(moby);
     int   hit_processing_result = launch_suck_cannon_projectile(
         moby, input_quad_address, launch_position_source, launch_position_offset);
     if (hit_processing_result != 0) {
-        moby->state = 0x9;
-    } else if ((unsigned char)moby->state == 0x9) {
-        moby->state = 1;
+        moby->state = CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED;
+    } else if ((unsigned char)moby->state == CIRCULAR_SAW_STATE_SUCK_CANNON_CONTROLLED) {
+        moby->state = CIRCULAR_SAW_STATE_IDLE;
     }
     if (*(short *)(moby_callback_result + 0x68) == 6) {
         allocate_voice_for_target_entry(1, 0, moby);
