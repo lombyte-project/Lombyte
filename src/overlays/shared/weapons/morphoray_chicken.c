@@ -233,6 +233,10 @@ void reset_morphoray_chicken_slot_defaults(char *morphoray_chicken_slot_record) 
 struct Moby *spawn_morphoray_chicken(State *source_state) __asm__("FUN_L00_002c9348");
 
 struct Moby *spawn_morphoray_chicken(State *source_state) {
+    enum {
+        CHICKEN_STATE_IDLE = 1,
+        CHICKEN_STATE_EMIT_FEATHERS = 5
+    };
     struct Moby *spawned_moby;
     Sub         *moby_vars;
     Loc          loc;
@@ -285,7 +289,7 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
         }
         spawned_moby->collision = ((Part *)spawned_moby->pclass)->unk10;
         allocate_voice_for_target_entry(1, 0, spawned_moby);
-        spawned_moby->state = 1;
+        spawned_moby->state = CHICKEN_STATE_IDLE;
         moby_vars->unk66 = 0;
         moby_vars->unk64 = FUN_L00_00257b90(scale_game_frames(0x78), scale_game_frames(0x12C));
         ground_height_pitch_and_variant_scratch = convert_integer_to_float(D_0013E520[0x15]);
@@ -312,7 +316,7 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
         previous_slot_moby = D_L00_001DD100[D_L00_00161854];
         if (previous_slot_moby != NULL && previous_slot_moby->oclass == 0x10E &&
             previous_slot_moby->state != 0xFE && previous_slot_moby->state != 0xFD) {
-            if (previous_slot_moby->state == 5) {
+            if (previous_slot_moby->state == CHICKEN_STATE_EMIT_FEATHERS) {
                 moby_vars->unk78 = yaw_cosine_scratch;
                 spawned_moby->flags &= ~0x20;
             } else if (!moby_vars->unk74) {
