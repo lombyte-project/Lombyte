@@ -47,7 +47,7 @@ char *spawn_homing_rocket(void        *heading_vector,
         qcopy(moby_vars, heading_vector);
         MOBY(spawned_moby)->rot.z = fast_arc_tan(*(float *)moby_vars, *(float *)(moby_vars + 4));
         *(int *)(moby_vars + 0x14) = scale_game_frames(timer_frames);
-        *(float *)(moby_vars + 0x18) = unread_value; /* update_homing_rocket never reads it */
+        *(float *)(moby_vars + 0x18) = unread_value; /* homing_rocket_update never reads it */
         *(float *)(moby_vars + 0x1C) = initial_heading;
         *(float *)(moby_vars + 0x24) = initial_speed;
         *(char **)(moby_vars + 0x10) = parent;
@@ -101,9 +101,10 @@ extern CollisionHit D_L03_00173F40;
 
 /* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */
 extern Vec4 D_0013F490_v __asm__("D_0013F490");
-void        update_homing_rocket(struct Moby *rocket_moby) __asm__("FUN_L03_002d43c8");
+void        homing_rocket_update(struct Moby *rocket_moby) __asm__("FUN_L03_002d43c8");
 
-void update_homing_rocket(struct Moby *rocket_moby) {
+/* Moby class 833 */
+void homing_rocket_update(struct Moby *rocket_moby) {
     enum {
         ROCKET_FLY = 1,
         ROCKET_BURST_AND_REMOVE = 2

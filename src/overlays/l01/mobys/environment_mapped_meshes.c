@@ -1401,9 +1401,10 @@ typedef struct {
 extern f32  frame_delta_time __asm__("D_0015ED7C");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
-void update_level01_environment_map_uv_scroll(ScrollMoby *moby) __asm__("FUN_L01_0030f208");
+void environment_map_scroll_update(ScrollMoby *moby) __asm__("FUN_L01_0030f208");
 
-void update_level01_environment_map_uv_scroll(ScrollMoby *moby) {
+/* Moby class 1848 */
+void environment_map_scroll_update(ScrollMoby *moby) {
     enum {
         UV_SCROLL_STATE_INITIALIZE = 0,
         UV_SCROLL_STATE_UPDATE_AND_QUEUE_DRAW = 1

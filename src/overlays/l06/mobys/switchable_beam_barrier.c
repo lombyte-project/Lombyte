@@ -43,7 +43,7 @@ extern float D_L06_001621F8 __attribute__((sda));
 
 extern float D_L06_00162208 __attribute__((sda));
 
-#include "rnc/overlay/l06/mobys/switchable_beam_barrier_data/update_switchable_beam_barrier.h"
+#include "rnc/overlay/l06/mobys/switchable_beam_barrier_data/switchable_beam_barrier_update.h"
 
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L06_00217300(void *);
@@ -53,9 +53,10 @@ void        test_moby_vector_stream_collision_lines(char *m) __asm__("FUN_L06_00
 void        draw_moby_vector_streams(char *m) __asm__("FUN_L06_00305170");
 extern void
      func_L00_00273F80_r(void *, void *, int, float, int, int, int) __asm__("FUN_L00_002730e0");
-void update_switchable_beam_barrier(char *moby) __asm__("FUN_L06_003049f8");
+void switchable_beam_barrier_update(char *moby) __asm__("FUN_L06_003049f8");
 
-void update_switchable_beam_barrier(char *moby) {
+/* Moby class 1123 */
+void switchable_beam_barrier_update(char *moby) {
     enum {
         INITIALIZE_VECTOR_STREAMS = 0,
         WAIT_FOR_LINKED_MOBY = 1,

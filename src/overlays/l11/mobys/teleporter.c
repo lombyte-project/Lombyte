@@ -45,6 +45,7 @@ float teleporter_parts_max_speed_gp __asm__("D_L11_00161918") = 32.0f;
  * open and moves the linked moby (or its fallback) along. */
 void teleporter_update(struct Moby *moby) __asm__("FUN_L11_002f2518");
 
+/* Moby class 318 */
 void teleporter_update(struct Moby *moby) {
     enum {
         TELEPORTER_INITIALIZE = 0,

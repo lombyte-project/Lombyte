@@ -22,6 +22,7 @@ extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 
 void underwater_door_update(struct Moby *moby) __asm__("FUN_L15_002bddb0");
 
+/* Moby classes 196, 197, 1958 */
 void underwater_door_update(struct Moby *moby) {
     enum {
         DOOR_INITIALIZE = 0,

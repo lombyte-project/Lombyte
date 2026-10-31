@@ -30,9 +30,10 @@ extern short cutscene_joint_trail_first_spawn_particle_value_gp __asm__("D_L18_0
     __attribute__((sda));
 extern short cutscene_joint_trail_second_spawn_particle_value_gp __asm__("D_L18_00162580")
     __attribute__((sda));
-void update_cutscene_joint_trail(CutsceneJointTrailMoby *moby) __asm__("FUN_L18_002fad28");
+void cutscene_joint_trail_update(CutsceneJointTrailMoby *moby) __asm__("FUN_L18_002fad28");
 
-void update_cutscene_joint_trail(CutsceneJointTrailMoby *moby) {
+/* Moby class 1799 */
+void cutscene_joint_trail_update(CutsceneJointTrailMoby *moby) {
     enum {
         INITIALIZE_TRAIL_EFFECT = 0,
         UPDATE_TRAIL_EFFECT = 1

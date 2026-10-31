@@ -248,9 +248,10 @@ void update_heavy_gunship_parts(struct Moby *parent_moby) {
     }
 }
 
-void update_heavy_gunship(struct Moby *moby) __asm__("FUN_L08_002e9b70");
+void heavy_gunship_update(struct Moby *moby) __asm__("FUN_L08_002e9b70");
 
-void update_heavy_gunship(struct Moby *moby) {
+/* Moby class 463 */
+void heavy_gunship_update(struct Moby *moby) {
     enum {
         HEAVY_GUNSHIP_INITIALIZE = 0,
         HEAVY_GUNSHIP_FOLLOW_PRIMARY_PATH = 1,

@@ -514,6 +514,7 @@ void destroy_decoy_on_selected_materials(void *moby) {
 
 void decoy_update(char *moby) __asm__("FUN_L00_002c4380");
 
+/* Moby classes 203, 1900 */
 void decoy_update(char *moby) {
     enum {
         DECOY_INITIALIZE = 0,

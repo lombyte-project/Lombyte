@@ -43,6 +43,7 @@ unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hoo
 
 void swingshot_hook_update(unsigned char *m) __asm__("FUN_L00_002c7070");
 
+/* Moby class 209 */
 void swingshot_hook_update(unsigned char *hook_moby) {
     enum {
         HOOK_INITIAL_ANIMATION = 0,

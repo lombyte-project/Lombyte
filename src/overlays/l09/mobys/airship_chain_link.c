@@ -176,6 +176,7 @@ extern void  spawn_explosion(void *,
 
 void airship_chain_link_update(Moby *m) __asm__("FUN_L09_00304360");
 
+/* Moby class 1181 */
 void airship_chain_link_update(Moby *m) {
     Data *d = (*(Data **)&m->pvars);
     float v20[4];
@@ -366,6 +367,7 @@ extern void effect_00304360(f32,
 
 void airship_chain_link_update(unsigned char *moby) __asm__("FUN_L09_00304360");
 
+/* Moby class 1181 */
 void airship_chain_link_update(unsigned char *moby) {
     unsigned char *data = *(unsigned char **)(moby + 0x78);
     unsigned char *link;

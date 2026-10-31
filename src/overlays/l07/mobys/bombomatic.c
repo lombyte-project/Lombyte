@@ -157,6 +157,7 @@ char *spawn_bombomatic_projectile(char *spawn_position,
     return spawned_moby;
 }
 
+/* Moby class 1041 */
 void bombomatic_update(char *moby) {
     enum {
         BOMBOMATIC_INITIALIZE = 0x0,

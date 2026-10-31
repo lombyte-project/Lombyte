@@ -26,9 +26,10 @@ void        FUN_L10_002eaa08_c(void  *pos,
                                float  height) __asm__("FUN_L10_002eaa08");
 extern void func_L10_002EBDC8_a01(float, void *, short *, short *) __asm__("FUN_L10_002eaa08");
 
-void update_configurable_particle_emitter(char *moby) __asm__("FUN_L10_002ea1f0");
+void configurable_particle_emitter_update(char *moby) __asm__("FUN_L10_002ea1f0");
 
-void update_configurable_particle_emitter(char *moby) {
+/* Moby class 1544 */
+void configurable_particle_emitter_update(char *moby) {
     enum {
         EFFECT_STATE_INITIALIZE = 0,
         EFFECT_STATE_EMIT_BURST_PARTICLES = 1,

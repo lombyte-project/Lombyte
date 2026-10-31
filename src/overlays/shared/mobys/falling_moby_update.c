@@ -8,9 +8,10 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002DF738), where it is exact; names translated to the US level program. */
 
-void update_falling_moby(char *moby) __asm__("FUN_L03_002de370");
+void falling_moby_update(char *moby) __asm__("FUN_L03_002de370");
 
-void update_falling_moby(char *moby) {
+/* Moby classes 1221, 1222 */
+void falling_moby_update(char *moby) {
     float unused_vector_add_argument[4];
     char *moby_data = ((char *)MOBY(moby)->pvars);
     *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - frame_time_sq * 9.8f;

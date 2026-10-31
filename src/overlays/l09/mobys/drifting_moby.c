@@ -10,9 +10,10 @@
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002F1390), where it is exact; names translated to the US level program. */
-void update_drifting_moby(struct Moby *moby) __asm__("FUN_L09_002f0040");
+void drifting_moby_update(struct Moby *moby) __asm__("FUN_L09_002f0040");
 
-void update_drifting_moby(struct Moby *moby) {
+/* Moby class 417 */
+void drifting_moby_update(struct Moby *moby) {
     char *drift_velocity = (char *)moby->pvars;
     fast_vec_add(&moby->pos, &moby->pos, drift_velocity);
     fast_vec_scale(drift_velocity, drift_velocity, 1.0f + frame_scale * -0.019999980926513672f);

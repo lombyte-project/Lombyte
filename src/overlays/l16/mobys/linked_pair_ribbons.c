@@ -27,9 +27,10 @@ extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void func_L16_002D0990_2D0870(void *) __asm__("FUN_L16_002cf5c8");
 extern int  allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
-void update_linked_pair_ribbons(struct Moby *moby) __asm__("FUN_L16_002cf4a8");
+void linked_pair_ribbons_update(struct Moby *moby) __asm__("FUN_L16_002cf4a8");
 
-void update_linked_pair_ribbons(struct Moby *moby) {
+/* Moby class 552 */
+void linked_pair_ribbons_update(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE_LINKED_PAIRS = 0,
         MOBY_STATE_UPDATE_DRAW_AND_SOUND = 1

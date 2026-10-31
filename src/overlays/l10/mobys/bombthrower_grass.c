@@ -75,6 +75,7 @@ int spawn_bombthrower_grass_projectile(int   firing_moby,
     return moby;
 }
 
+/* Moby class 939 */
 void bombthrower_grass_update(struct Moby *moby) {
     char *launch_timer = (char *)moby->pvars;
     float launch_offset[4];

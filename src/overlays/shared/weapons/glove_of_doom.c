@@ -279,6 +279,7 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby,
    picks a new one up when get_ammo allows. */
 void glove_of_doom_update(struct Moby *moby) __asm__("FUN_L00_002c7a58");
 
+/* Moby class 229 */
 void glove_of_doom_update(struct Moby *moby) {
     enum {
         GLOVE_INITIALIZE = 0,

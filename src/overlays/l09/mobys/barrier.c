@@ -92,6 +92,7 @@ char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class
     return moby;
 }
 
+/* Moby classes 1285-1288 */
 void barrier_update(Moby *moby) {
     BarrierData *barrier_vars = (*(BarrierData **)&moby->pvars);
     float        origin[4], center[4], piece_pos[4], piece_velocity[4], push[4];

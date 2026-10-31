@@ -93,9 +93,10 @@ typedef struct {
 extern float D_0015ED6C MACRO_ADDR;
 
 /* Breakable prop: when hit by moby 0x415 in state 8 or 0x452 in state 9 with hit kind 1.000123, scatters its shard count of pieces over its rotated extent, spawns debris and removes itself. */
-void update_breakable_prop(struct Moby *moby) __asm__("FUN_L07_00319f48");
+void breakable_prop_update(struct Moby *moby) __asm__("FUN_L07_00319f48");
 
-void update_breakable_prop(struct Moby *moby) {
+/* Moby classes 1113-1116 */
+void breakable_prop_update(struct Moby *moby) {
     BreakableVars *breakable_vars = (BreakableVars *)moby->pvars;
     MobyHit       *hit;
     Vec4f          ext, shard_position, shard_velocity;

@@ -216,6 +216,7 @@ extern void  trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250
 
 extern float fast_vec_dist(void *, void *);
 
+/* Moby class 1202 */
 void toxic_crab_update(Moby2E30F8 *m) {
     enum {
         TOXIC_CRAB_STATE_INITIALIZE = 0,

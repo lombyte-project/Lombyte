@@ -19,9 +19,10 @@ extern char            *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
 extern u8               level06_help_hint_variant_selector[] __asm__("D_0013D4CE");
 
 /* Level 6 help hints: shows the help messages for the area and records how often and when each was due. */
-void update_help_hints(struct Moby *moby) __asm__("FUN_L06_003083b0");
+void help_hints_update(struct Moby *moby) __asm__("FUN_L06_003083b0");
 
-void update_help_hints(struct Moby *moby) {
+/* Moby class 1348 */
+void help_hints_update(struct Moby *moby) {
     int         *help_hint_reference_indices = (int *)moby->pvars;
     struct Moby *indexed_moby;
     int          i;

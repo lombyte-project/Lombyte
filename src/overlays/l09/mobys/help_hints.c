@@ -18,9 +18,10 @@ extern int           D_0015EEA4;
 extern unsigned char D_0013D4C2_q[] __asm__("D_0013D4C2");
 extern unsigned char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
 extern unsigned char D_00141968_lui[] __asm__("D_00141968") NOT_SDA;
-void                 update_help_hints(struct Moby *moby) __asm__("FUN_L09_00300888");
+void                 help_hints_update(struct Moby *moby) __asm__("FUN_L09_00300888");
 
-void update_help_hints(struct Moby *moby) {
+/* Moby class 1000 */
+void help_hints_update(struct Moby *moby) {
     int            *clip_volume_index_ptr = (int *)moby->pvars;
     unsigned char  *item_unlock_flags;
     unsigned char  *frame_and_level_record;

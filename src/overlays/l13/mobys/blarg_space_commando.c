@@ -169,6 +169,7 @@ extern void func_L00_002592B0_309330(struct Moby *, float, float *, float, float
 
 void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L13_00307e98");
 
+/* Moby class 1262 */
 void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_SPACE_COMMANDO_INITIALIZE = 0,

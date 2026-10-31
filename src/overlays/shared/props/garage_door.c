@@ -18,6 +18,7 @@ extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 
 void garage_door_update(struct Moby *m) __asm__("FUN_L03_002dca30");
 
+/* Moby class 997 */
 void garage_door_update(struct Moby *door_moby) {
     enum {
         GARAGE_DOOR_WAITING_FOR_COLLECTION = 0,

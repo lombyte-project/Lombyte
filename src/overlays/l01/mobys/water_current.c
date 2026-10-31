@@ -36,6 +36,7 @@ extern s32 sample_path(LevelPath *, void *, f32 *, s32 *, s32, f32) __asm__("FUN
 
 void water_current_update(struct Moby *self) __asm__("FUN_L01_002f3120");
 
+/* Moby class 613 */
 void water_current_update(struct Moby *water_current_moby) {
     PathCarrierVars *water_current_vars;
     LevelPath       *path;

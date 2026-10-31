@@ -102,6 +102,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos,
    comes to rest (or its unk10 timer runs out), or fades out over unk28 frames when unk20 is set. */
 void rock_update(struct Moby *m) __asm__("FUN_L01_002f8718");
 
+/* Moby classes 200, 201, 205-207, 210, 696-698, 1806, 1807 */
 void rock_update(struct Moby *debris_moby) {
     DebrisVars *debris_vars = (DebrisVars *)debris_moby->pvars;
     Vec4        previous_position;

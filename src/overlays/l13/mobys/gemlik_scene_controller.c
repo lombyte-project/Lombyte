@@ -40,9 +40,10 @@ extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460"
 
 extern void initialize_moby_state_record(void *) __asm__("FUN_L00_0028e8a0");
 
-void update_gemlik_scene_controller(struct Moby *moby) __asm__("FUN_L13_0030b628");
+void gemlik_scene_controller_update(struct Moby *moby) __asm__("FUN_L13_0030b628");
 
-void update_gemlik_scene_controller(struct Moby *moby) {
+/* Moby class 1353 */
+void gemlik_scene_controller_update(struct Moby *moby) {
     enum {
         WAIT_TO_START_INITIAL_SCENE = 0,
         START_INITIAL_SCENE = 1,

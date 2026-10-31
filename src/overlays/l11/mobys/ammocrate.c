@@ -77,6 +77,7 @@ extern struct Moby *D_L11_00174858 NOT_SDA;
 /* Ship ammo / health pickup: falls and bounces, is pulled toward the hero's ship, and refills it on contact. */
 void ammocrate_update(struct Moby *m) __asm__("FUN_L11_0030f728");
 
+/* Moby classes 1218, 1220 */
 void ammocrate_update(struct Moby *pickup) {
     enum {
         AMMOCRATE_STATE_INITIALIZE = 0,

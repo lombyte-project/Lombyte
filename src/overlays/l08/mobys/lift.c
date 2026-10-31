@@ -11,9 +11,10 @@
 extern char *D_L08_0015FFD8_g __asm__("D_L08_0015FFD8");
 extern void  approach_value(char *, float, float) __asm__("FUN_00213ed8");
 
-void update_lift(char *moby) __asm__("FUN_L08_002ea398");
+void lift_update(char *moby) __asm__("FUN_L08_002ea398");
 
-void update_lift(char *moby) {
+/* Moby classes 467, 472 */
+void lift_update(char *moby) {
     enum {
         POSITION_BASELINE_INITIALIZE = 0,
         POSITION_FOLLOW_DRIVER = 1,

@@ -36,7 +36,7 @@ extern float D_L17_0016D3E4 NOT_SDA;
 
 /* The five backdrop quads: every per-quad table below is indexed by the
    k < 5 / i < 5 loops of draw_fleet_backdrop_quads and
-   update_fleet_backdrop_animation. */
+   fleet_backdrop_animation_update. */
 float backdrop_quad_side_lengths[5] __asm__("D_L17_001DDFF8") = {
     3.5e+03f, 4e+03f, 2e+03f, 3e+03f, 3.3e+03f};
 
@@ -181,9 +181,10 @@ float backdrop_quad_color_blend_rates[5] __asm__("D_L17_001DE070") = {
 
 extern float backdrop_heading_radius_numerator_addend_gp __asm__("D_L17_001623D4")
     __attribute__((sda));
-void update_fleet_backdrop_animation(struct Moby *moby) __asm__("FUN_L17_002f3848");
+void fleet_backdrop_animation_update(struct Moby *moby) __asm__("FUN_L17_002f3848");
 
-void update_fleet_backdrop_animation(struct Moby *moby) {
+/* Moby class 1772 */
+void fleet_backdrop_animation_update(struct Moby *moby) {
     char *moby_pvars = (char *)moby->pvars;
     float offset_accumulator[4];
     float pvar_angle_offset[4];

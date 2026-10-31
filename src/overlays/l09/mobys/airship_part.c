@@ -1,5 +1,5 @@
 /* Level 09 moby classes 0x49e-0x4a5: airship part, its spawner and the nearest-hull search. */
-/* Its own unit: it reads the spawn counter D_L09_001613C8 through gp, where update_help_hints in help_hints.c reads it through lui. */
+/* Its own unit: it reads the spawn counter D_L09_001613C8 through gp, where help_hints_update in help_hints.c reads it through lui. */
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/hero/hero.h"
@@ -101,7 +101,7 @@ extern float airship_part_initial_tumble_y_speed_limit_degrees_gp __asm__("D_L09
 extern float airship_hull_breakup_wait_x_rotation_speed_degrees_gp __asm__("D_L09_001613BC")
     __attribute__((sda));
 
-#include "rnc/overlay/l09/mobys/airship_part_data/update_airship_part.h"
+#include "rnc/overlay/l09/mobys/airship_part_data/airship_part_update.h"
 #include "rnc/globals.h"
 
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
@@ -172,9 +172,10 @@ char *find_nearest_moby_by_class(void *search_position, int type, float *nearest
 }
 
 /* Update for the airship parts (classes 0x49E-0x4A5): attach to the hull, ride it, then break off, tumble away and fall with smoke and sparks. */
-void update_airship_part(struct Moby *moby) __asm__("FUN_L09_002c26c8");
+void airship_part_update(struct Moby *moby) __asm__("FUN_L09_002c26c8");
 
-void update_airship_part(struct Moby *moby) {
+/* Moby classes 1182-1189 */
+void airship_part_update(struct Moby *moby) {
     enum {
         AIRSHIP_PART_STATE_INITIALIZE = 0,
         AIRSHIP_PART_STATE_WAIT_FOR_BREAKUP_COMMAND = 1,

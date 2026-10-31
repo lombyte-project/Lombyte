@@ -72,7 +72,7 @@ extern struct L14RaceState *race_state __asm__("D_L14_00167500") NOT_SDA;
 extern s32 level14_racer_start_interpolation_duration_frames_gp __asm__("D_L14_00161A2C")
     __attribute__((sda));
 
-#include "rnc/overlay/l14/mobys/racer_data/update_level14_racer.h"
+#include "rnc/overlay/l14/mobys/racer_data/level14_racer_update.h"
 
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
@@ -114,11 +114,12 @@ void advance_moby_along_path(struct Moby *m) __asm__("FUN_L14_002d7198");
 
 void update_moby_joint_visual_effects(struct Moby *m) __asm__("FUN_L14_002d7490");
 
-void update_level14_racer(struct Moby *racer_moby) __asm__("FUN_L14_002d5f40");
+void level14_racer_update(struct Moby *racer_moby) __asm__("FUN_L14_002d5f40");
 
-void update_level14_racer(struct Moby *m) __asm__("FUN_L14_002d5f40");
+void level14_racer_update(struct Moby *m) __asm__("FUN_L14_002d5f40");
 
-void update_level14_racer(struct Moby *racer_moby) {
+/* Moby class 211 */
+void level14_racer_update(struct Moby *racer_moby) {
     enum {
         RACER_STATE_INITIALIZE = 0,
         RACER_STATE_WAIT_FOR_RACE_START = 1,

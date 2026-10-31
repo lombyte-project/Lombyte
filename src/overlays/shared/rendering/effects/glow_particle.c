@@ -121,9 +121,10 @@ unsigned char *spawn_glow_particle(void *glow_source_moby,
     return moby;
 }
 
-void update_glow_particle(M_2acad8 *particle_moby) __asm__("FUN_L00_002acad8");
+void glow_particle_update(M_2acad8 *particle_moby) __asm__("FUN_L00_002acad8");
 
-void update_glow_particle(M_2acad8 *particle_moby) {
+/* Moby classes 112, 1192 */
+void glow_particle_update(M_2acad8 *particle_moby) {
     V_2acad8 *v = particle_moby->v;
     float     elapsed_lifetime_frames, total_lifetime_frames;
     int       n;

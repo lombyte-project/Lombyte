@@ -71,9 +71,10 @@ void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern L16SparkHit D_L16_001742C0_hit __asm__("D_L16_00174240");
 extern float       func_L00_0025CCF0_spark(void *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
 
-void update_homing_projectile(unsigned char *moby) __asm__("FUN_L16_002a3f38");
+void homing_projectile_update(unsigned char *moby) __asm__("FUN_L16_002a3f38");
 
-void update_homing_projectile(unsigned char *moby) {
+/* Moby class 1475 */
+void homing_projectile_update(unsigned char *moby) {
     enum {
         PROJECTILE_STATE_FLYING = 0,
         PROJECTILE_STATE_IMPACT = 1

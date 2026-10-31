@@ -19,7 +19,7 @@
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/mobys/moby.h"
 
-/* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
+/* Hoverboard girl (class record hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
  * Its two breast manipulators also carry the effect into cutscene instances. */
 typedef union {
@@ -116,7 +116,7 @@ extern void update_joint_animation(
 void update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *) __asm__("FUN_L05_00316990");
 void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *,
                                             HoverboardGirlState *) __asm__("FUN_L05_00316810");
-void update_hoverboard_girl(HoverboardGirlMoby *) __asm__("FUN_L05_00316ab8");
+void hoverboard_girl_update(HoverboardGirlMoby *) __asm__("FUN_L05_00316ab8");
 
 extern f32 frame_scale_sq __asm__("D_0015ED64");
 
@@ -190,9 +190,10 @@ void update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *girl) {
     }
 }
 
-void update_hoverboard_girl(HoverboardGirlMoby *moby) __asm__("FUN_L05_00316ab8");
+void hoverboard_girl_update(HoverboardGirlMoby *moby) __asm__("FUN_L05_00316ab8");
 
-void update_hoverboard_girl(HoverboardGirlMoby *moby) {
+/* Moby class 918 */
+void hoverboard_girl_update(HoverboardGirlMoby *moby) {
     enum {
         HOVERBOARD_GIRL_STATE_INITIALIZE = 0,
         HOVERBOARD_GIRL_STATE_UPDATE_DIALOGUE = 1,

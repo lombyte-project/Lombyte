@@ -173,6 +173,7 @@ char *spawn_gadgebot_spawn_container(char *spawning_gadgebot) {
 
 void gadgebot_spawn_container_update(unsigned char *moby) __asm__("FUN_L06_002d85a0");
 
+/* Moby class 302 */
 void gadgebot_spawn_container_update(unsigned char *moby) {
     enum {
         GADGEBOT_CONTAINER_ACTIVATE = 0,

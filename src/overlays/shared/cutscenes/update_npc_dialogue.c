@@ -147,7 +147,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) {
 
     if (hud_keep_visible(bolt_hud_item, 10)) {
         bolt_hud_item = queue_animation_update(
-            12, 0, initialize_numeric_hud_element, mine_blend_color, draw_hud_text_panel, 0, 0);
+            12, 0, initialize_numeric_hud_element, hud_counter_update, draw_hud_text_panel, 0, 0);
     }
     {
         /* a fresh block-local pointer (not `entry`) keeps retail's registers */

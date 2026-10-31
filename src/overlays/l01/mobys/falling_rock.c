@@ -126,6 +126,7 @@ void       apply_falling_rock_camera_overrides(Obj *obj) __asm__("FUN_L01_002f90
 
 void falling_rock_update(CapMoby *m) __asm__("FUN_L01_002f9080");
 
+/* Moby class 701 */
 void falling_rock_update(CapMoby *falling_rock) {
     enum {
         FALLING_ROCK_STATE_INITIALIZE = 0,

@@ -346,9 +346,10 @@ char *spawn_hero_drone(int previous_spawn_result, void *pos) {
     return spawned_moby;
 }
 
-void update_drone(struct Moby *updated_moby) __asm__("FUN_L00_002ce358");
+void drone_update(struct Moby *updated_moby) __asm__("FUN_L00_002ce358");
 
-void update_drone(struct Moby *updated_moby) {
+/* Moby class 479 */
+void drone_update(struct Moby *updated_moby) {
     DroneVars   *drone_vars = (DroneVars *)updated_moby->pvars;
     Vec4         collision_data[1], old_pos;
     Vec4         direction, rotated;

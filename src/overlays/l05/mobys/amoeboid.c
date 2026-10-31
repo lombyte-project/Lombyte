@@ -24,6 +24,7 @@ void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 void                amoeboid_update(struct Moby *m) __asm__("FUN_L05_002dac80");
 typedef struct Moby Moby;
 
+/* Moby class 133 */
 void amoeboid_update(struct Moby *moby) {
     enum {
         AMOEBOID_INITIALIZE = 0,

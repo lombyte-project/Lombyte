@@ -67,9 +67,10 @@ int spark_emitter_alpha_d_by_pass_parity[2] __asm__("D_L15_001614F0") = {1, 2};
 /* Level 15 moby update (class 78), three states: 0 picks the first state from the kill and save flags,
  * 1 sprays sixteen random sparks around the moby and parks its data vector, 2 counts down. */
 
-void update_linked_spark_emitter(unsigned char *moby) __asm__("FUN_L15_002a2bf0");
+void linked_spark_emitter_update(unsigned char *moby) __asm__("FUN_L15_002a2bf0");
 
-void update_linked_spark_emitter(unsigned char *moby) {
+/* Moby class 78 */
+void linked_spark_emitter_update(unsigned char *moby) {
     enum {
         INITIALIZE_EFFECT = 0,
         EMIT_SPARKS = 1,

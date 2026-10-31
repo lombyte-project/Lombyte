@@ -18,9 +18,10 @@ extern void queue_dialogue_message(int message_id,
 
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
-void update_group_clear_trigger(struct Moby *moby) __asm__("FUN_L14_003087c0");
+void group_clear_trigger_update(struct Moby *moby) __asm__("FUN_L14_003087c0");
 
-void update_group_clear_trigger(struct Moby *moby) {
+/* Moby class 1559 */
+void group_clear_trigger_update(struct Moby *moby) {
     enum {
         MOBY_UPDATE_DISTANCE_INITIALIZE = 0,
         MOBY_UPDATE_CUTSCENE_TARGET = 1

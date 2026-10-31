@@ -47,6 +47,7 @@ extern void func_L16_002E6B48_6908(void *) __asm__("FUN_L16_002e56e0");
 
 void grindrail_button_update(struct Moby *m) __asm__("FUN_L16_002e54a0");
 
+/* Moby class 1442 */
 void grindrail_button_update(struct Moby *button_moby) {
     enum {
         GRINDRAIL_BUTTON_INITIALIZE_GLOW_PHASE = 0,

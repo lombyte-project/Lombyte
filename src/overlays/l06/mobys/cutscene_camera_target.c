@@ -12,9 +12,10 @@ extern char level06_camera_target_update_data[] __asm__("D_L06_0016CFE0");
 extern int  D_L06_0015F5C4;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
-void update_cutscene_camera_target(struct Moby *moby) __asm__("FUN_L06_00309348");
+void cutscene_camera_target_update(struct Moby *moby) __asm__("FUN_L06_00309348");
 
-void update_cutscene_camera_target(struct Moby *moby) {
+/* Moby class 1551 */
+void cutscene_camera_target_update(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_CONDITIONAL_CAMERA_TARGET_UPDATE = 1

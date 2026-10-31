@@ -15,6 +15,7 @@ extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 void white_flower_update(struct Moby *m) __asm__("FUN_L02_002f1f60");
 
+/* Moby class 1819 */
 void white_flower_update(struct Moby *moby) {
     enum {
         WHITE_FLOWER_INITIALIZE = 0,

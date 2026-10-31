@@ -47,6 +47,7 @@ struct VoicePoolWindow {
 
 void door_half_update(struct Moby *self) __asm__("FUN_L01_002f4710");
 
+/* Moby class 665 */
 void door_half_update(struct Moby *door_half_moby) {
     enum {
         DOOR_HALF_STATE_INITIALIZE = 0,

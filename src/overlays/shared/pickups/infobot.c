@@ -311,6 +311,7 @@ static inline void measure_path(Path *path) {
 
 void infobot_update(struct Moby *moby) __asm__("FUN_L00_002d5de8");
 
+/* Moby class 750 */
 void infobot_update(struct Moby *moby) {
     enum {
         INFOBOT_INITIALIZE = 0,

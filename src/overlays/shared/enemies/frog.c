@@ -190,6 +190,7 @@ s32                D_L10_00161BD4 = 0;
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002E9AA8), where it is exact; names translated to the US level program. */
 void frog_update(unsigned char *moby) __asm__("FUN_L06_002e8678");
 
+/* Moby class 827 */
 void frog_update(unsigned char *moby) {
     float          A[4] __attribute__((aligned(16)));
     float          B[4] __attribute__((aligned(16)));

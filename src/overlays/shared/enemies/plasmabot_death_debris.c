@@ -50,9 +50,10 @@ FUN_L00_0026d000_de670(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FU
 extern f32 D_L14_00161B18 __attribute__((sda));
 extern f32 D_L14_00161B1C __attribute__((sda));
 extern f32 D_L14_00161B20 __attribute__((sda));
-void       update_spinning_moby_with_particle_trail(struct Moby *moby) __asm__("FUN_L14_002de670");
+void       plasmabot_death_debris_update(struct Moby *moby) __asm__("FUN_L14_002de670");
 
-void update_spinning_moby_with_particle_trail(struct Moby *moby) {
+/* Moby class 325 */
+void plasmabot_death_debris_update(struct Moby *moby) {
     f32 *velocity = (f32 *)moby->pvars;
     s32  i;
     s32  signed_particle_variation;

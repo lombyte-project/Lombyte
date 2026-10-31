@@ -38,6 +38,7 @@ extern void
      spawn_machinegun_turret_projectile(void *, void *, void *, int) __asm__("FUN_L07_0030b538");
 void machinegun_turret_update(unsigned char *moby) __asm__("FUN_L07_0031a250");
 
+/* Moby class 1126 */
 void machinegun_turret_update(unsigned char *moby) {
     enum {
         TURRET_INITIALIZE = 0,

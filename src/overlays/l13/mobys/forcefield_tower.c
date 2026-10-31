@@ -378,6 +378,7 @@ extern int linked_state_flags[] __asm__("D_L13_001847A8");
 
 void forcefield_tower_update(struct Moby *moby) __asm__("FUN_L13_002cefc0");
 
+/* Moby class 170 */
 void forcefield_tower_update(struct Moby *moby) {
     enum {
         TOWER_STATE_INITIALIZE = 0,

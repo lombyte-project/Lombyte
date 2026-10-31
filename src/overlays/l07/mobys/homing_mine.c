@@ -105,6 +105,7 @@ extern void             spawn_explosion(void *,
                                         int) __asm__("FUN_L00_0025e450");
 extern float D_0015ED6C MACRO_ADDR;
 
+/* Moby class 1110 */
 void homing_mine_update(struct Moby *moby) {
     enum {
         HOMING_MINE_INITIALIZE = 0,

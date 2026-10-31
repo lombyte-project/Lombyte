@@ -755,6 +755,7 @@ found:
     return 1;
 }
 
+/* Moby class 1059 */
 void sharkigator_update(unsigned char *moby) {
     enum {
         SHARKIGATOR_INITIALIZE = 0,

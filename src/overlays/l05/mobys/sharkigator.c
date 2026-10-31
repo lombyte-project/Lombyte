@@ -38,6 +38,7 @@ void                sharkigator_update(char *moby) __asm__("FUN_L05_002d1688");
 extern float        fast_vec_dist(void *, void *);
 typedef struct Hero Hero;
 
+/* Moby class 35 */
 void sharkigator_update(char *moby) {
     enum {
         SHARKIGATOR_INITIALIZE = 0,

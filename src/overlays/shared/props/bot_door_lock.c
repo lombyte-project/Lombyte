@@ -216,6 +216,7 @@ draw_number(void *, void *, int, unsigned int, int, int, int, float) __asm__("FU
 extern int level_mobys_q __asm__("D_L06_0015FFD8") __attribute__((sda));
 void       bot_door_lock_update(char *moby) __asm__("FUN_L06_00307d30");
 
+/* Moby class 1302 */
 void bot_door_lock_update(char *moby) {
     enum {
         BOT_DOOR_LOCK_STATE_INITIALIZE = 0,

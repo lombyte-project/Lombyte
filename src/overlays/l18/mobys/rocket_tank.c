@@ -83,6 +83,7 @@ extern void  func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
 void update_rocket_tank_damage_and_aim(void *mv) __asm__("FUN_L18_002f8050");
 
+/* Moby class 1454 */
 void rocket_tank_update(M1454 *moby) {
     enum {
         ROCKET_TANK_INITIALIZE = 0,

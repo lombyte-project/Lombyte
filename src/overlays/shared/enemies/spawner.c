@@ -121,6 +121,7 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
  * func_L09_0030BF88), where it is exact; this build has no 0.85 limit check before a spawn. */
 void spawner_update(char *moby) __asm__("FUN_L09_0030ab80");
 
+/* Moby class 1885 */
 void spawner_update(char *moby) {
     enum {
         SPAWNER_STATE_INITIALIZE = 0,

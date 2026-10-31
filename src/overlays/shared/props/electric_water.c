@@ -114,6 +114,7 @@ extern int   hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 
 void electric_water_update(struct Moby *moby) __asm__("FUN_L15_002d6810");
 
+/* Moby class 655 */
 void electric_water_update(struct Moby *moby) {
     enum {
         ELECTRIC_WATER_INITIALIZE = 0,

@@ -26,10 +26,11 @@ typedef struct {
 extern float fast_add_rotations(float, float);
 extern int   D_L11_0015FFD8;
 
-void update_link_triggered_moby_motion(struct Moby *moving_moby) __asm__("FUN_L11_0030e978");
+void link_triggered_moby_motion_update(struct Moby *moving_moby) __asm__("FUN_L11_0030e978");
 /* no foreign declaration */
 
-void update_link_triggered_moby_motion(struct Moby *moving_moby) {
+/* Moby class 1159 */
+void link_triggered_moby_motion_update(struct Moby *moving_moby) {
     enum {
         LINKED_MOTION_STATE_INITIALIZE = 0,
         LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER = 1,

@@ -255,6 +255,7 @@ extern void func_L12_002E4F18_2E51E8(void *, void *, void *, int, int) __asm__("
 
 void platform_update(Moby *moby) __asm__("FUN_L12_002e3ed8");
 
+/* Moby class 240 */
 void platform_update(Moby *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,

@@ -1,4 +1,4 @@
-/* Level 11 part of the ship rocket class (0x40A, updated by update_ship_rocket in shared/vehicles/ship_rocket.c): the spawner the jet fighter fires it with. */
+/* Level 11 part of the ship rocket class (0x40A, updated by ship_rocket_update in shared/vehicles/ship_rocket.c): the spawner the jet fighter fires it with. */
 #include "types.h"
 
 #include "rnc/hero/hero.h"

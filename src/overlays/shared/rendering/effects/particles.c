@@ -2072,7 +2072,7 @@ void update_gravity_ground_culled_particle(O_275320 *particle) {
 /* Update a particle following a parent moby with a scaled offset. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002763B0), where it is exact; names translated to the US level program. */
 
-extern int  mine_blend_color(float, int, int) __asm__("FUN_L00_002371e0");
+extern int  hud_counter_update(float, int, int) __asm__("FUN_L00_002371e0");
 extern void transform_vector_by_basis(void *, void *, void *);
 
 void update_damped_moby_relative_color_size_tween_particle(char *particle) __asm__("FUN_L00_00275510");
@@ -2119,10 +2119,10 @@ void update_damped_moby_relative_color_size_tween_particle(char *particle) {
     }
     particle[8] = particle[8] + 1;
     *(int *)(particle + 4) =
-        mine_blend_color((float)*(short *)(particle + 0xA) /
-                             convert_integer_to_float(*(int *)(appearance_parameters + 0xC)),
-                         *(int *)(appearance_parameters + 4),
-                         *(int *)appearance_parameters);
+        hud_counter_update((float)*(short *)(particle + 0xA) /
+                               convert_integer_to_float(*(int *)(appearance_parameters + 0xC)),
+                           *(int *)(appearance_parameters + 4),
+                           *(int *)appearance_parameters);
     if (fast_dec_timer_s16(particle + 0xA)) {
         free_effect_particle(particle);
     }

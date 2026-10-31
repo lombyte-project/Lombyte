@@ -107,9 +107,10 @@ void apply_spatial_trigger_to_moby_list(int unused_trigger_moby,
     }
 }
 
-void update_moby_spatial_trigger(struct Moby *trigger_moby) __asm__("FUN_L05_002f5200");
+void moby_spatial_trigger_update(struct Moby *trigger_moby) __asm__("FUN_L05_002f5200");
 
-void update_moby_spatial_trigger(struct Moby *trigger_moby) {
+/* Moby class 258 */
+void moby_spatial_trigger_update(struct Moby *trigger_moby) {
     TriggerVars *trigger_vars = (TriggerVars *)trigger_moby->pvars;
     Vec4         target;
     s32          inside;

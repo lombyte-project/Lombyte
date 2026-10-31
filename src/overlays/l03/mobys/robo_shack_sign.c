@@ -14,6 +14,7 @@ struct SpinnerVars {
 
 void robo_shack_sign_update(struct Moby *m) __asm__("FUN_L03_002d3e58");
 
+/* Moby class 825 */
 void robo_shack_sign_update(struct Moby *sign_moby) {
     Vec4                move;
     Vec4                oldRot;

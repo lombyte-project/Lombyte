@@ -138,7 +138,7 @@ extern void spawn_explosion(void *,
 extern f32  spring_turn(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
 
 /* Mine: holds at its goal, dives at the hero once it sees it and bursts on contact. */
-void                    update_mine(struct Moby *moby) __asm__("FUN_L07_003196e0");
+void                    diving_mine_update(struct Moby *moby) __asm__("FUN_L07_003196e0");
 extern float D_0015ED6C MACRO_ADDR;
 
 void mark_mine_for_removal(struct Moby *moby, MineSpawnerVars *spawner_vars) {
@@ -150,7 +150,8 @@ void mark_mine_for_removal(struct Moby *moby, MineSpawnerVars *spawner_vars) {
     mark_moby_for_removal(moby);
 }
 
-void update_mine(struct Moby *moby) {
+/* Moby class 1112 */
+void diving_mine_update(struct Moby *moby) {
     enum {
         MINE_INITIALIZE = 0,
         MINE_WAIT_AT_GOAL = 1,

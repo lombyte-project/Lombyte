@@ -29,9 +29,10 @@ typedef struct {
     s32 state;
 } VendorEventData;
 
-void update_help_hints(struct Moby *moby) __asm__("FUN_L08_00307540");
+void help_hints_update(struct Moby *moby) __asm__("FUN_L08_00307540");
 
-void update_help_hints(struct Moby *moby) {
+/* Moby class 1349 */
+void help_hints_update(struct Moby *moby) {
     enum {
         VENDOR_EVENT_WAIT_FOR_ARMING = 0,
         VENDOR_EVENT_ARMED = 1

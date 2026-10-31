@@ -33,13 +33,14 @@ extern char  D_0013E550[];
 
 /* Moves a moby along a path between its two ends, hidden while its gate byte is set. */
 extern unsigned char D_L07_0015FC88[] MACRO_ADDR;
-void       update_mission_gated_taxi_platform(struct Moby *moby) __asm__("FUN_L07_002cdb28");
+void       mission_gated_taxi_platform_update(struct Moby *moby) __asm__("FUN_L07_002cdb28");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 s32        allocate_voice_for_target_entry(s32   entry_index,
                                            s32   flags,
                                            void *target) __asm__("FUN_0022da68");
 
-void update_mission_gated_taxi_platform(struct Moby *moby) {
+/* Moby class 1474 */
+void mission_gated_taxi_platform_update(struct Moby *moby) {
     char *mission_gated_taxi_vars = (char *)moby->pvars;
     char *path;
     float orig[4], delta[4], path_segment_offset[4];

@@ -60,9 +60,10 @@ extern int   collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68
 extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void update_fire_bolt(char *fire_bolt) __asm__("FUN_L08_00307298");
+void fire_bolt_update(char *fire_bolt) __asm__("FUN_L08_00307298");
 
-void update_fire_bolt(char *fire_bolt) {
+/* Moby class 1292 */
+void fire_bolt_update(char *fire_bolt) {
     enum {
         FIRE_BOLT_STATE_FLYING = 1,
         FIRE_BOLT_STATE_BURST_AND_REMOVE = 2

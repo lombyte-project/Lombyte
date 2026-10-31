@@ -10,9 +10,10 @@ typedef struct Moby Moby;
 extern void          add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char l03_draw_callback_setup_byte_target[] __asm__("D_L03_001DC1A0");
 
-void update_moby_draw_callback(struct Moby *moby) __asm__("FUN_L03_002dc9b0");
+void moby_draw_callback_update(struct Moby *moby) __asm__("FUN_L03_002dc9b0");
 
-void update_moby_draw_callback(struct Moby *moby) {
+/* Moby class 994 */
+void moby_draw_callback_update(struct Moby *moby) {
     enum {
         DRAW_CALLBACK_INITIALIZE = 0,
         DRAW_CALLBACK_REGISTER = 1

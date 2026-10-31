@@ -46,6 +46,7 @@ spawn_debris_chunk(void *, void *, u32, f32, s32, f32, f32, f32, s32) __asm__("F
 /* One-shot burst: when hit, flags D_0013D39D, sprays 200 dust puffs and 50 sparks, then removes itself. */
 void rocks_update(struct Moby *moby) __asm__("FUN_L02_002e0720");
 
+/* Moby class 762 */
 void rocks_update(struct Moby *moby) {
     enum {
         ROCKS_INITIALIZE = 0,

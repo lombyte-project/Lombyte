@@ -2,9 +2,10 @@
 #include "types.h"
 #include "rnc/mobys/moby.h"
 
-void update_unfolding_column_piece(void *updated_moby) __asm__("FUN_L14_003061d8");
+void unfolding_column_piece_update(void *updated_moby) __asm__("FUN_L14_003061d8");
 
-void update_unfolding_column_piece(void *updated_moby) {
+/* Moby class 1397 */
+void unfolding_column_piece_update(void *updated_moby) {
     enum {
         MOBY_PVARS_INITIALIZE = 0
     };

@@ -58,11 +58,11 @@ extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("F
  * or on a hit. */
 extern int camera_secondary_mode_lui __asm__("D_001413D4") NOT_SDA;
 
-#include "rnc/overlay/l08/mobys/path_following_moby_data/update_path_following_moby.h"
+#include "rnc/overlay/l08/mobys/path_following_moby_data/path_following_moby_update.h"
 
 extern unsigned char D_0013D408[];
 extern void          FUN_L08_002dec90_c(char *m, char *pos) __asm__("FUN_L08_002dec90");
-void                 update_path_following_moby(char *moby) __asm__("FUN_L08_002de848");
+void                 path_following_moby_update(char *moby) __asm__("FUN_L08_002de848");
 
 /* Spawns a burst of particles at an offset from the moby, with random sizes and colours from level tuning values. */
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -98,7 +98,8 @@ int moby_motion_spark_initial_color_end_gp __asm__("D_L08_00161A78") = 0x6020a0c
 
 int moby_motion_spark_second_color_end_gp __asm__("D_L08_00161A80") = 0x20601020;
 
-void update_path_following_moby(char *moby) {
+/* Moby class 438 */
+void path_following_moby_update(char *moby) {
     enum {
         MOBY_STATE_INITIALIZE_PATH = 0,
         MOBY_STATE_FOLLOW_PATH = 1,

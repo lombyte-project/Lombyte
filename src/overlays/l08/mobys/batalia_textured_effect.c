@@ -210,9 +210,10 @@ advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_
 extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
 extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern int  func_001FA898_r(float) __asm__("FUN_001fa6d0");
-void        update_batalia_textured_effect(struct Moby *moby) __asm__("FUN_L08_003097b0");
+void        batalia_textured_effect_update(struct Moby *moby) __asm__("FUN_L08_003097b0");
 
-void update_batalia_textured_effect(struct Moby *moby) {
+/* Moby class 1649 */
+void batalia_textured_effect_update(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_ACTIVE = 1

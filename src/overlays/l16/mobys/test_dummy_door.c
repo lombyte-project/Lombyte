@@ -32,6 +32,7 @@ extern int   last_test_dummy_door_sound_request_frame_gp __asm__("D_L16_00161A88
     __attribute__((sda));
 void test_dummy_door_update(struct Moby *moby) __asm__("FUN_L16_002d5cb8");
 
+/* Moby class 650 */
 void test_dummy_door_update(struct Moby *moby) {
     enum {
         TEST_DUMMY_DOOR_STATE_INITIALIZE = 0,

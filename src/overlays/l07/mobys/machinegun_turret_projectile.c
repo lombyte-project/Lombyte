@@ -45,7 +45,7 @@ extern Vec4  D_L07_00173EE0;
 extern char  projectile_impact_reflection_normal[] __asm__("D_L07_00173F00");
 
 /* Bolt update: flies on, sparks out at the end of its range, bursts on impact, removes it out of bounds. */
-void         update_machinegun_turret_projectile(struct Moby *moby) __asm__("FUN_L07_0030b6a8");
+void         machinegun_turret_projectile_update(struct Moby *moby) __asm__("FUN_L07_0030b6a8");
 void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 s32          allocate_voice_for_target_entry(s32   entry_index,
@@ -89,7 +89,8 @@ unsigned char *spawn_machinegun_turret_projectile(void  *spawn_position,
     return spawned_moby;
 }
 
-void update_machinegun_turret_projectile(struct Moby *moby) {
+/* Moby class 880 */
+void machinegun_turret_projectile_update(struct Moby *moby) {
     BoltVars *bolt_vars = (BoltVars *)moby->pvars;
     Vec4      previous_projectile_position;
     Vec4      particle_motion_vector;

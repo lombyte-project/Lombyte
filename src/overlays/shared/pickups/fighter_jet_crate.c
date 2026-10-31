@@ -43,6 +43,7 @@ unsigned char *spawn_ship_pickup(char *position, int moby_class) {
 
 void ammocrate_update(char *moby) __asm__("FUN_L13_002e1cc8");
 
+/* Moby classes 224, 228 */
 void ammocrate_update(char *moby) {
     enum {
         SHIP_PICKUP_INITIALIZE = 0,

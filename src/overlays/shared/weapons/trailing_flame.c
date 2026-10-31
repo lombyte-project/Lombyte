@@ -52,9 +52,10 @@ u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) {
     return spawned_moby;
 }
 
-void update_linked_moby_scale_and_rotation(struct Moby *moby) __asm__("FUN_L00_002bb400");
+void trailing_flame_update(struct Moby *moby) __asm__("FUN_L00_002bb400");
 
-void update_linked_moby_scale_and_rotation(struct Moby *moby) {
+/* Moby class 179 */
+void trailing_flame_update(struct Moby *moby) {
     V_2bb400      *moby_vars = ((V_2bb400 *)moby->pvars);
     unsigned char *o = moby_vars->o;
     int            previous_angle, unwrapped_angle, angle_delta;

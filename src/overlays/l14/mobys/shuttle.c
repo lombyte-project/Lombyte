@@ -13,7 +13,7 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/game/unlock_planet.h"
-#include "rnc/overlay/shared/vehicles/gunship_follow_path.h"
+#include "rnc/overlay/shared/vehicles/gunship.h"
 #include "rnc/overlay/l14/mobys/shuttle_globals.h"
 
 typedef struct {
@@ -62,6 +62,7 @@ extern void FUN_L00_001fff28(void *, int, float);
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L14_002e7bd8");
 
+/* Moby class 557 */
 void shuttle_update(struct Moby *shuttle_moby) {
     L14LiftVars *shuttle_vars;
     Vec4         previous_shuttle_position;
@@ -116,7 +117,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         shuttle_vars->riding = 0;
         shuttle_vars->from = shuttle_vars->height;
     }
-    gunship_follow_path(shuttle_moby);
+    gunship_update(shuttle_moby);
     rider = &D_L14_0015FFD8_lift[shuttle_vars->rider];
     if (shuttle_vars->mode == 0x3039) {
         if (shuttle_vars->anchor != -1)

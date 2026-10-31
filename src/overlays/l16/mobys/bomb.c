@@ -84,9 +84,10 @@ extern void         spawn_explosion(void *,
                                     int) __asm__("FUN_L00_0025e450");
 extern L16SparkHitN D_L16_hitN __asm__("D_L16_00174240");
 
-void update_thrown_bomb(L16FallingMoby *moby) __asm__("FUN_L16_002c5eb0");
+void thrown_bomb_update(L16FallingMoby *moby) __asm__("FUN_L16_002c5eb0");
 
-void update_thrown_bomb(L16FallingMoby *moby) {
+/* Moby class 281 */
+void thrown_bomb_update(L16FallingMoby *moby) {
     enum {
         BOMB_STATE_MOVING = 1,
         BOMB_STATE_RESTING = 2,

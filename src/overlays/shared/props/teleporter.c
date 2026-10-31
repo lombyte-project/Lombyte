@@ -230,6 +230,7 @@ void activate_teleporter_and_record_state(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309FB0). */
 void teleporter_update(struct Moby *moby) __asm__("FUN_L01_00308bd8");
 
+/* Moby class 1135 */
 void teleporter_update(struct Moby *moby) {
     enum {
         TELEPORTER_INITIALIZE = 0,

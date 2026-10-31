@@ -188,6 +188,7 @@ void prepare_background_ship_2_joint_draw_data(char *moby) {
 /* Update for a ship moby: eases its attach point along a path, spawns effects and drives its state machine. */
 void background_ship_2_update(char *moby) __asm__("FUN_L02_002ece18");
 
+/* Moby classes 1213, 1973 */
 void background_ship_2_update(char *moby) {
     enum {
         BACKGROUND_SHIP_2_INITIALIZE = 0,

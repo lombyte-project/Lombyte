@@ -825,6 +825,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
 /* visibomb_missile update (moby class 172): drift, homing toward the target, arming countdown. */
 void visibomb_missile_update(struct Moby *m) __asm__("FUN_L00_002b6140");
 
+/* Moby class 172 */
 void visibomb_missile_update(struct Moby *missile_moby) {
     V_2b6140  v20;
     V_2b6140  k30;

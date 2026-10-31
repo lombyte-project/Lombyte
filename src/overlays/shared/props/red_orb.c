@@ -88,6 +88,7 @@ void enqueue_red_orb_group_draw_if_cache_changed(M09 *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E09A8), where it is exact; names translated to the US level program. */
 void red_orb_update(struct Moby *m) __asm__("FUN_L00_002df4f8");
 
+/* Moby class 1060 */
 void red_orb_update(struct Moby *moby) {
     enum {
         RED_ORB_STATE_INITIALIZE_PHASE = 0,

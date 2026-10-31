@@ -70,6 +70,7 @@ extern void attach_shared_manipulator_to_matching_class_moby(void *) __asm__("FU
 
 void edwina_update(L16WatchMoby *m) __asm__("FUN_L12_002eb570");
 
+/* Moby class 328 */
 void edwina_update(L16WatchMoby *moby) {
     enum {
         EDWINA_INITIALIZE = 0,

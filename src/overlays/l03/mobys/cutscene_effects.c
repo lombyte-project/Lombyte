@@ -21,9 +21,10 @@ struct L03Cutscene {
 extern struct L03Cutscene D_L03_0016C960;
 
 /* Starts the cutscene, then during mode 3 (frames 900-10000) emits two particle beams from the listed moby. */
-void update_kerwan_cutscene_effects(struct Moby *owner_moby) __asm__("FUN_L03_002e01d0");
+void kerwan_cutscene_effects_update(struct Moby *owner_moby) __asm__("FUN_L03_002e01d0");
 
-void update_kerwan_cutscene_effects(struct Moby *owner_moby) {
+/* Moby class 1548 */
+void kerwan_cutscene_effects_update(struct Moby *owner_moby) {
     enum {
         CUTSCENE_EFFECTS_INITIALIZE = 0,
         CUTSCENE_EFFECTS_UPDATE = 1

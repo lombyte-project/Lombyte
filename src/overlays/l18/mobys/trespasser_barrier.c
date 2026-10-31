@@ -45,9 +45,10 @@ void       draw_trespasser_barrier_quads(struct Moby *moby) __asm__("FUN_L18_002
 extern void draw_trespasser_barrier_quads(struct Moby *) __asm__("FUN_L18_002f1fd8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
-void update_trespasser_barrier(struct Moby *moby) __asm__("FUN_L18_002f1e68");
+void trespasser_barrier_update(struct Moby *moby) __asm__("FUN_L18_002f1e68");
 
-void update_trespasser_barrier(struct Moby *moby) {
+/* Moby class 1392 */
+void trespasser_barrier_update(struct Moby *moby) {
     enum {
         GLOW_INITIALIZE = 0,
         GLOW_ACTIVE = 1,

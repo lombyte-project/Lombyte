@@ -15,13 +15,14 @@ void draw_bounded_scroll_layers(void) __asm__("FUN_L01_002f6150");
 
 /* Draw callback: draws the class's two scroll layers. */
 void draw_bounded_scroll_layers(void) {
-    mine_blend_color();
+    hud_counter_update();
     update_and_draw_scrolling_overlay_layers(0x2, bounded_scroll_layers);
 }
 
-void update_bounded_scroll_layers(void *callback_argument) __asm__("FUN_L01_002f6180");
+void bounded_scroll_layers_update(void *callback_argument) __asm__("FUN_L01_002f6180");
 
-void update_bounded_scroll_layers(void *callback_argument) {
+/* Moby class 678 */
+void bounded_scroll_layers_update(void *callback_argument) {
     Vec4   bounding_sphere;
     Vec4   point_to_center;
     Vec4f *point_cursor;

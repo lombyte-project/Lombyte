@@ -123,9 +123,10 @@ struct Moby *spawn_turret_shot(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life
  * from the hero until the timer runs out) bursts into five sparks and a
  * flash, damages around the hit and is removed.
  */
-void update_turret_shot(struct Moby *projectile_moby) __asm__("FUN_L09_00307d68");
+void turret_shot_update(struct Moby *projectile_moby) __asm__("FUN_L09_00307d68");
 
-void update_turret_shot(struct Moby *projectile_moby) {
+/* Moby class 1258 */
+void turret_shot_update(struct Moby *projectile_moby) {
     OvlVec4         previous_projectile_position;
     CollisionProbe  pr;
     OvlVec4         push;

@@ -62,9 +62,10 @@ int                             next_lift_instance_index_gp __asm__("D_L18_00162
 float                           lift_texture_u_scroll_rate_gp __asm__("D_L18_0016230C") = 0.05f;
 extern unsigned char D_00141400 NOT_SDA;
 extern unsigned char D_0013D406 NOT_SDA;
-void update_lift_state_and_queue_draw(struct Moby *lift_moby) __asm__("FUN_L18_002f2310");
+void                            lift_update(struct Moby *lift_moby) __asm__("FUN_L18_002f2310");
 
-void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
+/* Moby class 1402 */
+void lift_update(struct Moby *lift_moby) {
     enum {
         LIFT_INITIALIZE = 0,
         LIFT_SELECT_INITIAL_HEIGHT = 1,

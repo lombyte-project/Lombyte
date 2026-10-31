@@ -122,6 +122,7 @@ extern float        fast_vec_dist(void *, void *);
 
 void darter_update(Moby *moby) __asm__("FUN_L10_002e01a8");
 
+/* Moby class 1199 */
 void darter_update(Moby *moby) {
     float        scratch[20];
     Vars_2e01a8 *vars = (Vars_2e01a8 *)moby->pvars;

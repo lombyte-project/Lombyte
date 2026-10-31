@@ -172,6 +172,7 @@ struct Bolt;
 
 void bolt_update(Bolt *obj) __asm__("FUN_L00_002a5dd8");
 
+/* Moby classes 13-16 */
 void bolt_update(Bolt *bolt_moby) {
     enum {
         BOLT_INITIALIZE = 0x0,

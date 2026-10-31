@@ -40,9 +40,10 @@
 /* UpdateMoby: on the first tick scales two data floats by 0.25 into the moby and sets its state. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4B50), where it is exact; names translated to the US level program. */
 
-void update_wall_button_blocker(struct Moby *moby) __asm__("FUN_L16_002e36e8");
+void wall_button_blocker_update(struct Moby *moby) __asm__("FUN_L16_002e36e8");
 
-void update_wall_button_blocker(struct Moby *moby) {
+/* Moby class 1387 */
+void wall_button_blocker_update(struct Moby *moby) {
     float *rotation_scale_data = (float *)moby->pvars;
     if (moby->state == 0) {
         fast_vec_normalize(&moby->rot_row1, &moby->rot_row1, rotation_scale_data[0] * 0.25f);

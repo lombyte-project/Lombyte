@@ -277,6 +277,7 @@ void         big_axebot_update(M_B7B0 *moby) __asm__("FUN_L04_002ba520");
 extern float fast_cos(float);
 extern float fast_sin(float);
 
+/* Moby class 217 */
 void big_axebot_update(M_B7B0 *moby) {
     enum {
         BIG_AXEBOT_STATE_INITIALIZE = 0,

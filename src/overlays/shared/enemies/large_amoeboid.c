@@ -156,6 +156,7 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 void large_amoeboid_update(unsigned char *moby) __asm__("FUN_L01_002edca0");
 
+/* Moby classes 572, 865, 866 */
 void large_amoeboid_update(unsigned char *moby) {
     enum {
         LARGE_AMOEBOID_INITIALIZE = 0,

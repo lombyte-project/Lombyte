@@ -9,6 +9,7 @@
 
 void red_plant_update(unsigned char *p) __asm__("FUN_L00_002e3ca8");
 
+/* Moby classes 492, 724, 725, 766, 767, 1781, 1782 */
 void red_plant_update(unsigned char *moby) {
     char *hero_position = (char *)&hero.motion.pos;
     if (fast_vec_dist(hero_position, moby + 0x10) < 1.0f) {

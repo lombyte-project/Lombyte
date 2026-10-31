@@ -246,6 +246,7 @@ get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00
 
 void crate_update(struct Moby *moby) __asm__("FUN_L00_002cf218");
 
+/* Moby classes 500-502, 505, 511 */
 void crate_update(struct Moby *moby) {
     enum {
         CRATE_STATE_INITIALIZE = 0,

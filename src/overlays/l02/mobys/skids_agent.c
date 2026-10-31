@@ -64,6 +64,7 @@ extern f32  approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed
  * record 50), a path-camera ride (3/4) that fades D_L02_0015F3FC in and out, then the shared head-tracking tail. */
 void skids_agent_update(struct Moby *moby) __asm__("FUN_L02_002e0dc0");
 
+/* Moby class 786 */
 void skids_agent_update(struct Moby *moby) {
     enum {
         SKIDS_AGENT_INITIALIZE = 0,

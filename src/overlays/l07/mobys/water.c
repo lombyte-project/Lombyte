@@ -140,6 +140,7 @@ f32 D_L07_001CA938[1] __attribute__((section(".data"))) = {0};
 
 int water_shared_byte_clear_enabled __asm__("D_L07_00161B38") = 0;
 
+/* Moby classes 902, 941, 943, 944, 948-955, 958, 961, 962, 967-971 */
 void water_update(Moby_30D8E8 *water_moby) {
     enum {
         WATER_INITIALIZE = 0,

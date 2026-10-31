@@ -37,9 +37,10 @@ typedef struct {
 extern char *D_L18_001600EC;
 extern char *create_nanotech_ball(void *vector) __asm__("FUN_L18_002e22c0");
 
-void update_grind_rail_junction(struct Moby *moby) __asm__("FUN_L18_002d62e8");
+void grind_rail_junction_update(struct Moby *moby) __asm__("FUN_L18_002d62e8");
 
-void update_grind_rail_junction(struct Moby *moby) {
+/* Moby class 582 */
+void grind_rail_junction_update(struct Moby *moby) {
     enum {
         STATE_INITIALIZE_PATH_PAIRS = 0,
         STATE_SELECT_NEARER_PATH = 1

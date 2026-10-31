@@ -45,9 +45,10 @@ typedef struct {
     unsigned short flags;
 } Level18VendorMobyShort;
 
-void update_inert_moby(Level18VendorMobyShort *moby) __asm__("FUN_L18_002f7ab0");
+void inert_moby_update(Level18VendorMobyShort *moby) __asm__("FUN_L18_002f7ab0");
 
-void update_inert_moby(Level18VendorMobyShort *moby) {
+/* Moby class 1432 */
+void inert_moby_update(Level18VendorMobyShort *moby) {
     if (moby->state == 0) {
         moby->state = 1;
         moby->flags |= 3;

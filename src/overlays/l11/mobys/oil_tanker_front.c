@@ -68,6 +68,7 @@ void distribute_group_blarg_ships_along_path(struct Moby *, int) __asm__("FUN_L1
 void         oil_tanker_front_update(struct Moby *moby) __asm__("FUN_L11_003172c0");
 extern float approach_value(float *p, float target, float maxstep);
 
+/* Moby class 1264 */
 void oil_tanker_front_update(struct Moby *moby) {
     enum {
         OIL_TANKER_INITIALIZE = 0,

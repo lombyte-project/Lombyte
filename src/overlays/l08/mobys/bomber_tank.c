@@ -126,9 +126,10 @@ typedef struct {
     f32   pitch; /* 0x178 */
 } BomberTankVars;
 
-void update_bomber_tank(Moby *moby) __asm__("FUN_L08_002d42d8");
+void bomber_tank_update(Moby *moby) __asm__("FUN_L08_002d42d8");
 
-void update_bomber_tank(Moby *moby) {
+/* Moby class 253 */
+void bomber_tank_update(Moby *moby) {
     enum {
         BOMBER_TANK_STATE_INITIALIZE = 0,
         BOMBER_TANK_STATE_FOLLOW_PATH_AND_FIRE = 3,

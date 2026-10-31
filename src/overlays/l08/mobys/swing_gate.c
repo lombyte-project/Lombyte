@@ -36,9 +36,10 @@ extern struct Moby *D_L08_0015FFD8;
 
 /* Swings the gate to its driver's progress, fading a creak in while it
  * moves and out when it stops, and latches its flag once fully open. */
-void update_swing_gate(struct Moby *moby) __asm__("FUN_L08_002ea4c0");
+void swing_gate_update(struct Moby *moby) __asm__("FUN_L08_002ea4c0");
 
-void update_swing_gate(struct Moby *moby) {
+/* Moby classes 468, 469 */
+void swing_gate_update(struct Moby *moby) {
     SwingGateVars *swing_gate_vars = (SwingGateVars *)moby->pvars;
     f32            progress = *(f32 *)D_L08_0015FFD8[swing_gate_vars->driver].pvars;
     Vec4           gate_rotation_matrix[4];

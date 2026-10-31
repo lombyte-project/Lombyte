@@ -50,9 +50,10 @@ extern void FUN_L16_002d6260_q(char *, void *, float *) __asm__("FUN_L16_002d626
 void        mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern char D_0013F3D0[] NOT_SDA;
-void        update_test_dummy_challenge(struct Moby *moby) __asm__("FUN_L16_002d5ef8");
+void        test_dummy_challenge_update(struct Moby *moby) __asm__("FUN_L16_002d5ef8");
 
-void update_test_dummy_challenge(struct Moby *moby) {
+/* Moby class 654 */
+void test_dummy_challenge_update(struct Moby *moby) {
     enum {
         SCENE_STATE_INITIALIZE = 0,
         SCENE_STATE_WAIT_FOR_TRIGGER = 1,

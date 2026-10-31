@@ -17,9 +17,10 @@ extern void  spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08
 /* While the player is within range, scatters spawned particles around the moby on a random disc. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309AB0), where it is exact; names translated to the US level program. */
 
-void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
+void radial_particle_emitter_update(char *moby) __asm__("FUN_L08_003085f0");
 
-void spawn_moby_radial_particles(char *moby) {
+/* Moby class 1629 */
+void radial_particle_emitter_update(char *moby) {
     float range_check_delta_or_spawn_position[4];
     float spawn_center_position[4];
     float reference_to_spawn_delta[4];

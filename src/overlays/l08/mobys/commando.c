@@ -108,6 +108,7 @@ extern void  FUN_L00_0025a120(void *);
 /* Watcher update, same routine as batalia_deserter_update with two more states and the joint pose copy. */
 void commando_update(WM *m) __asm__("FUN_L08_00302ce8");
 
+/* Moby class 1130 */
 void commando_update(WM *moby) {
     enum {
         COMMANDO_INITIALIZE = 0,

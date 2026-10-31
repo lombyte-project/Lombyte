@@ -195,9 +195,10 @@ s32 get_moby_data_plus_0x60(T6 *moby) {
     return 0;
 }
 
-void update_ground_melee_enemy(Moby *moby) __asm__("FUN_L09_002e27d8");
+void ground_melee_enemy_update(Moby *moby) __asm__("FUN_L09_002e27d8");
 
-void update_ground_melee_enemy(Moby *moby) {
+/* Moby class 193 */
+void ground_melee_enemy_update(Moby *moby) {
     enum {
         GROUND_ENEMY_STATE_INITIALIZE = 0,
         GROUND_ENEMY_STATE_IDLE = 1,

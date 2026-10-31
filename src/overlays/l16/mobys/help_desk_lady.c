@@ -108,6 +108,7 @@ extern L16WatchFlags  D_0013D355_watch __asm__("D_0013D24D");
 
 void help_desk_lady_update(L16WatchMoby *m) __asm__("FUN_L16_002e3190");
 
+/* Moby class 1377 */
 void help_desk_lady_update(L16WatchMoby *moby) {
     enum {
         HELP_DESK_INITIALIZE_DIALOGUE = 0,

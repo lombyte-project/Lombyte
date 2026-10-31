@@ -266,13 +266,14 @@ extern void  spawn_hoven_anklebiter_death_sparks(struct Moby *) __asm__("FUN_L12
 extern void func_L00_00263950_2E2EF0(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void func_L00_0025B178_2E2EF0(void *) __asm__("FUN_L00_0025a120");
 
-void update_hoven_anklebiter(AnklebiterMoby *moby) __asm__("FUN_L12_002e1be0");
+void hoven_anklebiter_update(AnklebiterMoby *moby) __asm__("FUN_L12_002e1be0");
 
 #include "rnc/overlay/level_globals.h"
 
 extern float fast_subtract_rotations(float, float);
 
-void update_hoven_anklebiter(AnklebiterMoby *moby) {
+/* Moby class 238 */
+void hoven_anklebiter_update(AnklebiterMoby *moby) {
     enum {
         ANKLEBITER_INITIALIZE = 0,
         ANKLEBITER_IDLE = 1,

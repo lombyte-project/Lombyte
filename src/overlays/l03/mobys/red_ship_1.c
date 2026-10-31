@@ -499,6 +499,7 @@ extern void report_29dba8(void *, int, int) __asm__("FUN_001e93b0");
 /* Train car update: keeps the cars of a group in step (stops them all when none can move), and on its
  * first frame snaps to the nearest path node and sets up the spline; then runs along the path spline,
  * steering, banking and spawning its hit/smoke effects; state 2 waits without a path, 3 waits a timer. */
+/* Moby classes 75, 115-120, 132, 795 */
 void red_ship_1_update(char *moby) {
     enum {
         RED_SHIP_INITIALIZE = 0,

@@ -466,6 +466,7 @@ float D_L18_00162170 = 0.3f;
 
 void gold_bolt_update(struct Moby *moby) __asm__("FUN_L01_00307ca0");
 
+/* Moby class 1134 */
 void gold_bolt_update(struct Moby *moby) {
     enum {
         GOLD_BOLT_INITIALIZE = 0,

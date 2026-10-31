@@ -225,6 +225,7 @@ void increment_metal_detector_collection_counter(unsigned char *moby) {
 
 void metal_detector_update(struct Moby *moby) __asm__("FUN_L00_002d2ee8");
 
+/* Moby class 585 */
 void metal_detector_update(struct Moby *moby) {
     enum {
         METAL_DETECTOR_INITIALIZE = 0,

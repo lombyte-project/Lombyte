@@ -76,6 +76,7 @@ extern f32  resolve_camera_surface_height(void *, s32) __asm__("FUN_002135f0");
 
 void water_lily_update(HoverMoby *m) __asm__("FUN_L01_002f8268");
 
+/* Moby class 695 */
 void water_lily_update(HoverMoby *water_lily) {
     enum {
         WATER_LILY_STATE_INITIALIZE = 0,

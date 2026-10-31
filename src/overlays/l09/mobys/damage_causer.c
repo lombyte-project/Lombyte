@@ -26,11 +26,12 @@ typedef struct {
 } CollisionState;
 
 extern CollisionState D_L09_00173FC0;
-void                  update_damage_causer(struct Moby *moby) __asm__("FUN_L09_00305a28");
+void                  damage_causer_update(struct Moby *moby) __asm__("FUN_L09_00305a28");
 
 extern s32 D_L09_0015F5CC NOT_SDA;
 
-void update_damage_causer(struct Moby *moby) {
+/* Moby class 1206 */
+void damage_causer_update(struct Moby *moby) {
     char *damage_causer_vars = (char *)moby->pvars;
     float sphere_query_workspace[24];
     int   i;

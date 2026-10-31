@@ -90,6 +90,7 @@ extern void update_seeker_damage_and_target(struct Moby *) __asm__("FUN_L09_002c
 
 void seeker_update(struct Moby *moby) __asm__("FUN_L09_002c5990");
 
+/* Moby class 52 */
 void seeker_update(struct Moby *moby) {
     enum {
         SEEKER_STATE_INITIALIZE = 0,

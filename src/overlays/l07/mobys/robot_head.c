@@ -18,6 +18,7 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 /* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
 void robot_head_update(char *self) __asm__("FUN_L07_0031f5b0");
 
+/* Moby classes 1663, 1677 */
 void robot_head_update(char *robot_head_moby) {
     enum {
         ROBOT_HEAD_INITIALIZE = 0,

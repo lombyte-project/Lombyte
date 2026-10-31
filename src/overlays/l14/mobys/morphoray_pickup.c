@@ -1,4 +1,4 @@
-/* Level 14 morphoray moby class: update, private state setup and particles. */
+/* Level 14 morphoray pickup (class record morphoray): update, private state setup and particles. */
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/math/asm_helpers.h"
@@ -46,14 +46,15 @@ extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
-void morphoray_update(struct Moby *moby) __asm__("FUN_L14_00305758");
+void morphoray_pickup_update(struct Moby *moby) __asm__("FUN_L14_00305758");
 
-void morphoray_update(struct Moby *moby) {
+/* Moby class 1354 */
+void morphoray_pickup_update(struct Moby *moby) {
     enum {
-        MORPHORAY_INITIALIZE = 0,
-        MORPHORAY_WAIT_FOR_HERO = 1,
-        MORPHORAY_WAIT_TO_REMOVE = 2,
-        MORPHORAY_APPROACH_ZERO_AND_REMOVE = 3
+        MORPHORAY_PICKUP_INITIALIZE = 0,
+        MORPHORAY_PICKUP_WAIT_FOR_HERO = 1,
+        MORPHORAY_PICKUP_WAIT_TO_REMOVE = 2,
+        MORPHORAY_PICKUP_APPROACH_ZERO_AND_REMOVE = 3
     };
     u8 *moby_bytes = (u8 *)moby;
     u8 *morphoray_pvars = (u8 *)moby->pvars;
@@ -61,7 +62,7 @@ void morphoray_update(struct Moby *moby) {
     u8  state = moby->state;
 
     switch (state) {
-    case MORPHORAY_INITIALIZE:
+    case MORPHORAY_PICKUP_INITIALIZE:
         if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
@@ -74,7 +75,7 @@ void morphoray_update(struct Moby *moby) {
         qcopy(morphoray_pvars, moby_bytes + 0x10);
         moby->state = 1;
         break;
-    case MORPHORAY_WAIT_FOR_HERO:
+    case MORPHORAY_PICKUP_WAIT_FOR_HERO:
         *(f32 *)(moby_bytes + 0x48) =
             fast_add_rotations(*(f32 *)(moby_bytes + 0x48), morphoray_yaw_step_gp);
         qcopy(moby_bytes + 0x10, morphoray_pvars);
@@ -95,7 +96,7 @@ void morphoray_update(struct Moby *moby) {
         start_scene(6);
         moby->state = 2;
         break;
-    case MORPHORAY_WAIT_TO_REMOVE:
+    case MORPHORAY_PICKUP_WAIT_TO_REMOVE:
         if (D_L14_0015F5C4 != state) {
             if (D_0014C050[moby->mission + current_level_index * 16] != 0xFF) {
                 jet_clear_persistent(moby->mission);
@@ -111,7 +112,7 @@ void morphoray_update(struct Moby *moby) {
         }
         *(u16 *)(moby_bytes + 0x34) |= 0x41;
         break;
-    case MORPHORAY_APPROACH_ZERO_AND_REMOVE:
+    case MORPHORAY_PICKUP_APPROACH_ZERO_AND_REMOVE:
         approach_value(
             (f32 *)(moby_bytes + 0x2c), 0.0f, *(f32 *)(*(u8 **)(moby_bytes + 0x24) + 0x24) * 0.02f);
         if (*(f32 *)(moby_bytes + 0x2c) == 0.0f)

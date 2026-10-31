@@ -25,6 +25,7 @@ float        absolute_float(float input) __asm__("func_001F99C0");
 
 void novalis_elevator_update(unsigned char *moby) __asm__("FUN_L01_002b9eb0");
 
+/* Moby classes 726, 1141 */
 void novalis_elevator_update(unsigned char *moby) {
     enum {
         NOVALIS_ELEVATOR_WAIT_AT_PATH_END = 0,

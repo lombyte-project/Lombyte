@@ -62,6 +62,7 @@ int   D_L17_00161DFC = 0x14;
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F86B8), where it is exact; names translated to the US level program. */
 void energy_sphere_holder_update(char *m) __asm__("FUN_L06_002f7288");
 
+/* Moby class 1038 */
 void energy_sphere_holder_update(char *holder_moby) {
     enum {
         ENERGY_SPHERE_HOLDER_INITIALIZE = 0,

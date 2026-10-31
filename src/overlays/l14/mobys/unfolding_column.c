@@ -74,9 +74,10 @@ int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 
 extern float interpolate_scalar_linear(float, float, float) __asm__("FUN_L00_0025b6a8");
 
-void update_unfolding_column(UnfoldingColumnMoby *moby) __asm__("FUN_L14_00305d28");
+void unfolding_column_update(UnfoldingColumnMoby *moby) __asm__("FUN_L14_00305d28");
 
-void update_unfolding_column(UnfoldingColumnMoby *moby) {
+/* Moby class 1395 */
+void unfolding_column_update(UnfoldingColumnMoby *moby) {
     enum {
         UNFOLDING_COLUMN_INITIALIZE = 0,
         UNFOLDING_COLUMN_WAIT_FOR_TRIGGER = 1,

@@ -122,6 +122,7 @@ extern float armed_transport_path_acceleration_coefficient_gp __asm__("D_L16_001
 
 void armed_transport_update(char *m) __asm__("FUN_L16_002e22d8");
 
+/* Moby class 1356 */
 void armed_transport_update(char *transport_moby) {
     enum {
         ARMED_TRANSPORT_STATE_INITIALIZE = 0,

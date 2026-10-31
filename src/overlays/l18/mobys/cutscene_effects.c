@@ -86,7 +86,7 @@ extern int deplanetizer_three_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624
 
 #include "rnc/overlay/l18/mobys/cutscene_effects_data/update_deplanetizer_gun_sequence_effects_2.h"
 /* First component of the vector passed at gp - 0x4720. */
-#include "rnc/overlay/l18/mobys/cutscene_effects_data/update_deplanetizer_gun_sequence_effects.h"
+#include "rnc/overlay/l18/mobys/cutscene_effects_data/deplanetizer_effects_update.h"
 
 extern int   D_L18_001617F4, D_L18_001617F8;
 extern float D_L18_0015ED60;
@@ -107,9 +107,10 @@ extern int deplanetizer_glow_alpha_ramp_start_frame_gp __asm__("D_L18_001624BC")
     __attribute__((sda));
 extern char deplanetizer_camera_rotation_basis[] __asm__("D_L18_001679D0");
 /* Preserve the state-4 frame conversion and the state-7 raw-frame arithmetic. */
-void update_deplanetizer_gun_sequence_effects(struct Moby *moby) __asm__("FUN_L18_002f88e8");
+void deplanetizer_effects_update(struct Moby *moby) __asm__("FUN_L18_002f88e8");
 
-void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
+/* Moby class 1563 */
+void deplanetizer_effects_update(struct Moby *moby) {
     enum {
         INITIALIZE_EFFECT_TIMING = 0,
         UPDATE_SEQUENCE_EFFECTS = 1

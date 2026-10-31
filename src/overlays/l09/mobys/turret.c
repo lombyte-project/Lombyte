@@ -87,6 +87,7 @@ extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern void  FUN_L00_001fff28(void *, int, float);
 void         turret_update(struct Moby *moby) __asm__("FUN_L09_00304c80");
 
+/* Moby class 1201 */
 void turret_update(struct Moby *moby) {
     enum {
         TURRET_STATE_INITIALIZE = 0,

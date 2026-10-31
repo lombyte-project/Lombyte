@@ -46,9 +46,10 @@ typedef float W[4] __attribute__((aligned(16)));
 extern char cutscene_state[] __asm__("D_L16_0016CC60");
 extern int  D_L16_0015F5C4;
 
-void update_cutscene_joint_trails(struct Moby *moby) __asm__("FUN_L16_002e7e00");
+void cutscene_joint_trails_update(struct Moby *moby) __asm__("FUN_L16_002e7e00");
 
-void update_cutscene_joint_trails(struct Moby *moby) {
+/* Moby class 1812 */
+void cutscene_joint_trails_update(struct Moby *moby) {
     enum {
         JOINT_TRAIL_INITIALIZE = 0,
         JOINT_TRAIL_EMIT = 1

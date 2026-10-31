@@ -547,11 +547,12 @@ typedef struct PVars {
     s32          child_count;
 } PVars;
 
-void         update_butterfly_swarm(struct Moby *moby) __asm__("FUN_L04_0029ecf8");
+void         butterfly_swarm_update(struct Moby *moby) __asm__("FUN_L04_0029ecf8");
 extern float fast_cos(float);
 extern float fast_sin(float);
 
-void update_butterfly_swarm(struct Moby *moby) {
+/* Moby class 86 */
+void butterfly_swarm_update(struct Moby *moby) {
     PVars        *swarm_controller_pvars = (PVars *)moby->pvars;
     struct Moby **children;
     struct Moby  *population_scan_moby;

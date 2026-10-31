@@ -148,6 +148,7 @@ extern f32           frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern s32           current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 void                 agnogg_ship_front_update(Moby_2FC140 *moby) __asm__("FUN_L01_002fad68");
 
+/* Moby classes 730, 731, 790 */
 void agnogg_ship_front_update(Moby_2FC140 *moby) {
     enum {
         AGNOGG_SHIP_INITIALIZE = 0,

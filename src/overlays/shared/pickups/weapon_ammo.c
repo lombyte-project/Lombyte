@@ -124,6 +124,7 @@ unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_am
    Animation states share one stack value; index reloads follow calls. */
 void devestator_ammo_update(struct Moby *m) __asm__("FUN_L00_002c53c0");
 
+/* Moby classes 204, 213, 214, 222, 223, 225, 226, 1006, 1438, 1447, 1449 */
 void devestator_ammo_update(struct Moby *pickup_moby) {
     enum {
         AMMO_PICKUP_INITIALIZE = 0,

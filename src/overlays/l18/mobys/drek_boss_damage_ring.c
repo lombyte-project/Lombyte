@@ -30,9 +30,10 @@ void        mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 #include "rnc/overlay/l18/mobys/drek_boss_damage_ring_globals.h"
 
 float class_274_ring_phase_rate_gp __asm__("D_L18_00161CA0") = 2.0f;
-void  update_drek_boss_damage_ring(struct Moby *moby) __asm__("FUN_L18_002dc260");
+void  drek_boss_damage_ring_update(struct Moby *moby) __asm__("FUN_L18_002dc260");
 
-void update_drek_boss_damage_ring(struct Moby *moby) {
+/* Moby class 628 */
+void drek_boss_damage_ring_update(struct Moby *moby) {
     char   hit_descriptor[0x30];
     float  hit_direction_vector[4];
     float *moby_vars = (float *)moby->pvars;

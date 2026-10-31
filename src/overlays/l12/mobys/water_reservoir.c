@@ -42,6 +42,7 @@ float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") = 6.0f;
 
 void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
 
+/* Moby class 384 */
 void water_reservoir_update(struct Moby *moby) {
     float *reservoir_state = (float *)moby->pvars;
     float  pos[4], offset0[4], offset1[4], pos_offset_delta[4], offset_pair_delta[4];

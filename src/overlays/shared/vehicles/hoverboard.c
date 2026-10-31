@@ -27,6 +27,7 @@ extern int D_L05_00161910 __attribute__((sda));
 
 void hoverboard_update(unsigned char *moby) __asm__("FUN_L05_002f87a8");
 
+/* Moby class 439 */
 void hoverboard_update(unsigned char *moby) {
     enum {
         HOVERBOARD_STATE_WAIT_FOR_PLAYER_APPROACH = 0,

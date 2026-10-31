@@ -61,9 +61,10 @@ spawn_moving_hero_relative_alpha_fade_particle(float        *pos,
                                                     float         scale) __asm__("FUN_L00_002730e0");
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 
-void update_fleet_rotating_radial_effect(char *moby) __asm__("FUN_L17_002d77f0");
+void fleet_rotating_radial_effect_update(char *moby) __asm__("FUN_L17_002d77f0");
 
-void update_fleet_rotating_radial_effect(char *moby) {
+/* Moby class 669 */
+void fleet_rotating_radial_effect_update(char *moby) {
     enum {
         RING_INITIALIZE = 0,
         RING_ROTATE_AND_DRAW = 1

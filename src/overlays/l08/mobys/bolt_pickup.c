@@ -65,7 +65,7 @@ extern float D_0015ED70;
 extern int   D_0015ED84;
 extern char *D_L08_0015FFD8;
 
-#include "rnc/overlay/l08/mobys/bolt_pickup_data/update_bolt_pickup.h"
+#include "rnc/overlay/l08/mobys/bolt_pickup_data/bolt_pickup_update.h"
 
 extern float bolt_pickup_collision_stop_speed_threshold_gp __asm__("D_L08_00161458")
     __attribute__((sda));
@@ -87,7 +87,7 @@ extern char  D_L08_001746D8_2B94B0[] __asm__("D_L08_00174658");
 extern int   D_L08_00174658_lui __asm__("D_L08_00174658") NOT_SDA;
 extern char  D_L08_00174700_2B94B0[] __asm__("D_L08_00174680");
 extern s32   level_bolts[] __asm__("D_0013DF38");
-void         update_bolt_pickup(Moby_2B94B0 *moby) __asm__("FUN_L08_002b82a0");
+void         bolt_pickup_update(Moby_2B94B0 *moby) __asm__("FUN_L08_002b82a0");
 
 extern int D_L08_0015F5CC;
 
@@ -106,7 +106,8 @@ void initialize_bolt_pickup(struct Moby *moby) {
     *(int *)(moby_vars + 0x24) = spawn_moby_offset_effect(moby);
 }
 
-void update_bolt_pickup(Moby_2B94B0 *moby) {
+/* Moby class 152 */
+void bolt_pickup_update(Moby_2B94B0 *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_PHYSICS_MOVEMENT = 1,

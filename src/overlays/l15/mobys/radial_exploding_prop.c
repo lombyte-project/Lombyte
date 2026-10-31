@@ -69,9 +69,10 @@ extern void *spawn_debris_chunk(void *, void *, int, float, int, float, float, f
 
 extern void *mine_debris(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 
-void update_radial_exploding_prop(struct Moby *moby) __asm__("FUN_L15_002a7880");
+void radial_exploding_prop_update(struct Moby *moby) __asm__("FUN_L15_002a7880");
 
-void update_radial_exploding_prop(struct Moby *moby) {
+/* Moby classes 148, 255 */
+void radial_exploding_prop_update(struct Moby *moby) {
     char *slot = 0;
     Vec   velocity, hit_direction_step, doubled_hit_direction_step, offset, debris_origin;
     u32   palette[4];

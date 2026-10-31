@@ -191,6 +191,7 @@ extern void  draw_swingshot_cable(struct Moby *) __asm__("FUN_L00_002c5dc8");
 
 void swingshot_update(Moby *m) __asm__("FUN_L00_002c6158");
 
+/* Moby class 208 */
 void swingshot_update(Moby *m) {
     V_2C74B8  v0;
     V_2C74B8  v10;
@@ -491,6 +492,7 @@ extern void  set_hero_animation(float, void *, s32) __asm__("FUN_L00_002323b8");
 
 void swingshot_update(u8 *m) __asm__("FUN_L00_002c6158");
 
+/* Moby class 208 */
 void swingshot_update(u8 *m) {
     u8     *vars;
     u8     *child;

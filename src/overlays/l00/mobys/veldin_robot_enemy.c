@@ -168,6 +168,7 @@ extern void update_veldin_robot_effects() __asm__("FUN_L00_002e1aa8");
 extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((sda));
 void       veldin_robot_enemy_update(ElectroidMoby *moby) __asm__("FUN_L00_002e0b88");
 
+/* Moby class 1440 */
 void veldin_robot_enemy_update(ElectroidMoby *moby) {
     enum {
         VELDIN_ROBOT_STATE_INITIALIZE = 0,

@@ -13,9 +13,10 @@ extern struct {
     int tbl[3];
 } D_L17_0016D160;
 
-void update_cutscene_camera_target(struct Moby *moby) __asm__("FUN_L17_002f2e78");
+void cutscene_camera_target_update(struct Moby *moby) __asm__("FUN_L17_002f2e78");
 
-void update_cutscene_camera_target(struct Moby *moby) {
+/* Moby class 1562 */
+void cutscene_camera_target_update(struct Moby *moby) {
     enum {
         MOBY_UPDATE_DISTANCE_INITIALIZE = 0,
         MOBY_GUARDED_TABLE_CALL = 1

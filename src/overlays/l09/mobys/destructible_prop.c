@@ -25,14 +25,15 @@ extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char *
 spawn_destructible_prop_wreck(char *owner, void *position, float angle) __asm__("FUN_L09_002ee380");
 extern void          trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-void                 update_destructible_prop(struct Moby *moby) __asm__("FUN_L09_002ee110");
+void                 destructible_prop_update(struct Moby *moby) __asm__("FUN_L09_002ee110");
 typedef unsigned int u128_ee380 __attribute__((mode(TI)));
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF6D0), where it is exact; names translated to the US level program. */
 char *
 spawn_destructible_prop_wreck(char *owner, void *position, float angle) __asm__("FUN_L09_002ee380");
 
-void update_destructible_prop(struct Moby *moby) {
+/* Moby class 279 */
+void destructible_prop_update(struct Moby *moby) {
     char *moby_vars_or_random_frames = (char *)moby->pvars;
     char *hit_record = find_moby_hit(moby, 0x10000, 0);
     Vx    v;

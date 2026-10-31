@@ -13,9 +13,10 @@ extern unsigned char l11_proximity_removal_flag[] __asm__("D_0013D389");
 extern char          D_L11_00179B18[];
 extern char          raritanium_acquired_text[] __asm__("D_L11_0021A900");
 
-void remove_moby_when_near_hero(char *moby) __asm__("FUN_L11_002cb790");
+void remove_when_near_hero_update(char *moby) __asm__("FUN_L11_002cb790");
 
-void remove_moby_when_near_hero(char *moby) {
+/* Moby class 37 */
+void remove_when_near_hero_update(char *moby) {
     if (fast_vec_dist(moby + 0x10, &hero.motion.pos) < 2.0f) {
         l11_proximity_removal_flag[0] = 1;
         FUN_00116248_b7(D_L11_00179B18, raritanium_acquired_text);

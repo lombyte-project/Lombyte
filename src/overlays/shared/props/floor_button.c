@@ -24,6 +24,7 @@ extern u8            D_0014C050[];
 
 void floor_button_update(struct Moby *moby) __asm__("FUN_L05_0030c5b0");
 
+/* Moby class 830 */
 void floor_button_update(struct Moby *moby) {
     s32  *vars = (s32 *)moby->pvars;
     s16   id;

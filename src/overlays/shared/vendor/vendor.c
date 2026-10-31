@@ -294,6 +294,7 @@ void draw_vendor_effects(char *vendor_effect_moby) {
 
 void vendor_update(P_2a57a8 *p) __asm__("FUN_L00_002a57a8");
 
+/* Moby class 11 */
 void vendor_update(P_2a57a8 *vendor_moby) {
     enum {
         VENDOR_INITIALIZE = 0,

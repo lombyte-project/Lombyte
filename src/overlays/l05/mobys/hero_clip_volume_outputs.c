@@ -16,9 +16,10 @@ extern int   D_L05_0015F5C4_macro[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 
 /* Two-state marker: arms the moby, then once its target is found copies the
  * target position and sets the bob height from the frame counter. */
-void update_hero_clip_volume_outputs(struct Moby *moby) __asm__("FUN_L05_00318a68");
+void hero_clip_volume_outputs_update(struct Moby *moby) __asm__("FUN_L05_00318a68");
 
-void update_hero_clip_volume_outputs(struct Moby *moby) {
+/* Moby class 982 */
+void hero_clip_volume_outputs_update(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_CHECK_HERO_VOLUME = 1

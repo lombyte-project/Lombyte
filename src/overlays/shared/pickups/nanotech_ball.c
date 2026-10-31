@@ -1244,6 +1244,7 @@ int is_nanotech_ball_target_line_clear(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002D9EA0), where it is exact; names translated to the US level program. */
 void nanotech_ball_update(Moby *moby) __asm__("FUN_L00_002d89f0");
 
+/* Moby class 806 */
 void nanotech_ball_update(Moby *moby) {
     enum {
         NANOTECH_BALL_STATE_INITIALIZE = 0,

@@ -164,6 +164,7 @@ extern L16ChallengePlayer D_0013E633_challenge __asm__("D_0013E533");
 
 void gadgetron_ceo_update(L16ChallengeMoby *m) __asm__("FUN_L16_002e6808");
 
+/* Moby class 1455 */
 void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
     enum {
         GADGETRON_CEO_INITIALIZE_DIALOGUE = 0,

@@ -17,9 +17,10 @@
 extern unsigned char D_0013D4E3[];
 void                 mark_moby_for_removal(struct Moby *obj) __asm__("FUN_0020c828");
 
-void update_pokitaru_pickup(struct Moby *moby) __asm__("FUN_L11_002cb668");
+void pokitaru_pickup_update(struct Moby *moby) __asm__("FUN_L11_002cb668");
 
-void update_pokitaru_pickup(struct Moby *moby) {
+/* Moby class 23 */
+void pokitaru_pickup_update(struct Moby *moby) {
     enum {
         PICKUP_INITIALIZE = 0,
         PICKUP_IDLE = 1,

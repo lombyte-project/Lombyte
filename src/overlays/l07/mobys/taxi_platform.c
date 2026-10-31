@@ -32,13 +32,14 @@ extern void  set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_0022763
 extern void  update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void  release_voice_slot(s32) __asm__("FUN_0022d798");
 extern char  D_0013E550[];
-void         update_taxi_platform(unsigned char *moby) __asm__("FUN_L07_002cd2b0");
+void         taxi_platform_update(unsigned char *moby) __asm__("FUN_L07_002cd2b0");
 extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 s32          allocate_voice_for_target_entry(s32   entry_index,
                                              s32   flags,
                                              void *target) __asm__("FUN_0022da68");
 
-void update_taxi_platform(unsigned char *moby) {
+/* Moby class 38 */
+void taxi_platform_update(unsigned char *moby) {
     char *taxi_platform_vars = ((char *)MOBY(moby)->pvars);
     char *path;
     float orig[4], delta[4], path_segment_offset[4];

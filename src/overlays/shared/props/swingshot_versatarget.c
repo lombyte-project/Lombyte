@@ -35,6 +35,7 @@ func_L00_0025CE58_f(float *, float, float *, float, float, float) __asm__("FUN_L
 
 void swingshot_versatarget_update(char *m) __asm__("FUN_L02_002e0450");
 
+/* Moby classes 758, 803 */
 void swingshot_versatarget_update(char *moby) {
     enum {
         VERSATARGET_STATE_INITIALIZE = 0,

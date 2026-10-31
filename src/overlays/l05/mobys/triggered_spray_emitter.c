@@ -46,11 +46,12 @@ extern struct Moby  *D_L05_0015FFD8;
 extern struct FloorRow *D_L05_001612D0;
 extern char             D_L05_0015F580_macro[] __asm__("D_L05_0015F580") MACRO_ADDR;
 
-#include "rnc/overlay/l05/mobys/triggered_particle_spray_emitter_data/update_triggered_particle_spray_emitter.h"
+#include "rnc/overlay/l05/mobys/triggered_spray_emitter_data/triggered_spray_emitter_update.h"
 
-void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
+void triggered_spray_emitter_update(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
 
-void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) {
+/* Moby class 855 */
+void triggered_spray_emitter_update(struct Moby *emitter_moby) {
     enum {
         EMITTER_INITIALIZE = 0,
         EMITTER_WAIT_FOR_TRIGGER = 1,

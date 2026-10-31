@@ -26,9 +26,10 @@ void        initialize_ribbon_effect_state(struct Moby *moby) __asm__("FUN_L14_0
 void        animate_ribbon_effect_paths(struct Moby *moby) __asm__("FUN_L14_002df138");
 void        register_hero_hit_in_clip_volume(struct Moby *moby) __asm__("FUN_L14_002dfc58");
 
-void update_ribbon_effect_moby(struct Moby *moby) __asm__("FUN_L14_002dee28");
+void ribbon_effect_moby_update(struct Moby *moby) __asm__("FUN_L14_002dee28");
 
-void update_ribbon_effect_moby(struct Moby *moby) {
+/* Moby class 386 */
+void ribbon_effect_moby_update(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_UPDATE = 1

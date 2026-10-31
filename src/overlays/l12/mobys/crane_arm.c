@@ -17,6 +17,7 @@ extern int FUN_L00_001fefc8(void *);
 
 void crane_arm_update(unsigned char *m) __asm__("FUN_L12_002ec1d0");
 
+/* Moby class 339 */
 void crane_arm_update(unsigned char *moby) {
     enum {
         CRANE_ARM_INITIALIZE = 0,

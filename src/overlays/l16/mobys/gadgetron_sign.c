@@ -42,6 +42,7 @@ extern float frame_time, D_0015EE70;
 
 void gadgetron_sign_update(struct Moby *moby) __asm__("FUN_L16_002e88d0");
 
+/* Moby class 1891 */
 void gadgetron_sign_update(struct Moby *moby) {
     enum {
         GADGETRON_SIGN_INITIALIZE = 0,

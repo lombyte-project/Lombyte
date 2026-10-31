@@ -17,11 +17,12 @@ extern void         start_scene(int) __asm__("FUN_L00_00298840");
 extern char scene_trigger_saved_hero_data[] __asm__("D_L12_0016CCF0");
 extern int  D_L12_0015F5C4;
 
-void update_clip_volume_scene_trigger(struct Moby *moby) __asm__("FUN_L12_003093c8");
+void clip_volume_scene_trigger_update(struct Moby *moby) __asm__("FUN_L12_003093c8");
 /* Vendor-counter moby update: once the shared block is ready, latch its data and copy two vectors. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030A7A8), where it is exact; names translated to the US level program. */
 
-void update_clip_volume_scene_trigger(struct Moby *moby) {
+/* Moby class 1404 */
+void clip_volume_scene_trigger_update(struct Moby *moby) {
     char *scene_trigger_config = (char *)moby->pvars;
     char *scene_trigger_latch_base;
     char *hero_position;

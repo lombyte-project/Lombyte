@@ -14,7 +14,7 @@
 #include "rnc/world/collision/collision_line.h"
 #include "sda.h"
 #include "rnc/overlay/shared/vehicles/giant_clank_missile_data/update_giant_clank_missile_2.h"
-#include "rnc/overlay/shared/vehicles/giant_clank_missile_data/update_giant_clank_missile.h"
+#include "rnc/overlay/shared/vehicles/giant_clank_missile_data/giant_clank_missile_update.h"
 
 typedef float V[4] __attribute__((aligned(16)));
 
@@ -272,9 +272,10 @@ extern char D_0013F350[];
 /* update of moby class 256: a homing missile that leads its target, trails smoke and explodes on contact */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029E8A0), where it is exact; names translated to the US level program. */
 
-void update_giant_clank_missile(M_29E8A0 *missile_moby) __asm__("FUN_L15_0029d6c0");
+void giant_clank_missile_update(M_29E8A0 *missile_moby) __asm__("FUN_L15_0029d6c0");
 
-void update_giant_clank_missile(M_29E8A0 *missile_moby) {
+/* Moby class 256 */
+void giant_clank_missile_update(M_29E8A0 *missile_moby) {
     Tbl_29E8A0 camera_blast_parameters;
     float      effect_bias_velocity[4];
     float      previous_position[4];

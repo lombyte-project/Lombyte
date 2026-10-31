@@ -38,7 +38,7 @@ extern float floating_ship_piece_sink_speed_gp __asm__("D_L09_00161DC8") __attri
 extern float floating_ship_piece_height_return_rate_gp __asm__("D_L09_00161DCC")
     __attribute__((sda));
 
-#include "rnc/overlay/l09/mobys/floating_ship_piece_data/update_floating_ship_piece.h"
+#include "rnc/overlay/l09/mobys/floating_ship_piece_data/floating_ship_piece_update.h"
 
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
@@ -46,9 +46,10 @@ extern void  func_001E9730_30A560() __asm__("FUN_001e93b0");
 extern int   func_001F9850_30A560(int) __asm__("FUN_001f96f8");
 extern float func_L00_0025CCF0_30A560(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern char D_L09_00209518_30A560[] __asm__("D_L09_00209228");
-void        update_floating_ship_piece(char *moby) __asm__("FUN_L09_003091b0");
+void        floating_ship_piece_update(char *moby) __asm__("FUN_L09_003091b0");
 
-void update_floating_ship_piece(char *moby) {
+/* Moby classes 1293, 1320 */
+void floating_ship_piece_update(char *moby) {
     enum {
         PLATFORM_STATE_INITIALIZE = 0,
         PLATFORM_STATE_WAIT_FOR_LINK_REMOVAL = 1,

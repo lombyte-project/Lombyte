@@ -32,9 +32,10 @@ extern s32     scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern u8     *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");
 
 /* Rocket launcher projectile update: drifts along its velocity, sheds particle trails and expires when its timer runs out. */
-void update_rocket_launcher_projectile(struct Moby *moby) __asm__("FUN_L02_002ebf20");
+void rocket_launcher_projectile_update(struct Moby *moby) __asm__("FUN_L02_002ebf20");
 
-void update_rocket_launcher_projectile(struct Moby *moby) {
+/* Moby class 1208 */
+void rocket_launcher_projectile_update(struct Moby *moby) {
     enum {
         PROJECTILE_STATE_REMOVE = 0,
         PROJECTILE_STATE_ACTIVE = 1

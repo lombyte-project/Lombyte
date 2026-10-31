@@ -56,6 +56,7 @@ extern float func_001F9C78_2F9A50(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 void platform_update(Moby *moby) __asm__("FUN_L09_002f86a0");
 
+/* Moby class 664 */
 void platform_update(Moby *moby) {
     PlatVars  *platform_vars = (*(PlatVars **)&moby->pvars);
     Vec_2F9A50 movement;

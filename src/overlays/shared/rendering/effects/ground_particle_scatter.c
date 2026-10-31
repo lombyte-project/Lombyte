@@ -73,7 +73,7 @@ void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_prese
               count_interpolation_start);
 }
 
-/* moby class 1400 update: steers the offset vectors from the mode, fans them out to the object over counted loops */
+/* Steers the offset vectors from the mode, fans them out to the object over counted loops */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_003091B0), where it is exact; names translated to the US level program. */
 
 extern char  D_L08_001675C0[];
@@ -103,9 +103,10 @@ extern float func_002140F8_3091B0(float, float) __asm__("FUN_002132a8");
 extern void  func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN_L08_00272cb8");
 extern void  func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN_L08_0027f5f0");
 
-void scatter_ground_particles(Moby *moby) __asm__("FUN_L08_00307cf0");
+void ground_particle_scatter_update(Moby *moby) __asm__("FUN_L08_00307cf0");
 
-void scatter_ground_particles(Moby *moby) {
+/* Moby class 1400 */
+void ground_particle_scatter_update(Moby *moby) {
     enum {
         GROUND_PARTICLES_STATE_INITIALIZE = 0,
         GROUND_PARTICLES_STATE_SCATTER = 2

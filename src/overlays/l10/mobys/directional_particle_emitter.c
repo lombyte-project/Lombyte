@@ -26,7 +26,7 @@ extern s32 directional_particle_color_range_end_gp __asm__("D_L10_00161EF4") __a
 extern f32 directional_particle_speed_range_end_gp __asm__("D_L10_00161EF8") __attribute__((sda));
 extern f32 directional_particle_speed_range_start_gp __asm__("D_L10_00161EFC") __attribute__((sda));
 
-#include "rnc/overlay/l10/mobys/directional_particle_emitter_data/update_directional_particle_emitter.h"
+#include "rnc/overlay/l10/mobys/directional_particle_emitter_data/directional_particle_emitter_update.h"
 
 extern s32 directional_particle_variant_threshold_percent_gp __asm__("D_L10_00161F04")
     __attribute__((sda));
@@ -36,9 +36,10 @@ extern s32            fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern unsigned char *spawn_gravity_floor_burst_particle(
     void *, void *, s32, f32, f32, f32, s32, s32, s32) __asm__("FUN_L00_002738e8");
 
-void update_directional_particle_emitter(struct Moby *moby) __asm__("FUN_L10_002e5be0");
+void directional_particle_emitter_update(struct Moby *moby) __asm__("FUN_L10_002e5be0");
 
-void update_directional_particle_emitter(struct Moby *moby) {
+/* Moby class 1240 */
+void directional_particle_emitter_update(struct Moby *moby) {
     f32  *pvars = (f32 *)moby->pvars;
     Vec4 *moby_position;
     s32   i = 0;

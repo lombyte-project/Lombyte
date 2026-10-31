@@ -142,6 +142,7 @@ int sample_random_transformed_point(int transform_index, float *sampled_point) {
 
 void bomb_spawner_update(struct Moby *moby) __asm__("FUN_L03_002bef68");
 
+/* Moby class 455 */
 void bomb_spawner_update(struct Moby *moby) {
     enum {
         SPAWNER_INITIALIZE = 0,

@@ -20,9 +20,10 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
-void update_sinking_platform(struct Moby *moby) __asm__("FUN_L10_00295c20");
+void sinking_platform_update(struct Moby *moby) __asm__("FUN_L10_00295c20");
 
-void update_sinking_platform(struct Moby *moby) {
+/* Moby class 1117 */
+void sinking_platform_update(struct Moby *moby) {
     enum {
         PLATFORM_STATE_INITIALIZE = 0,
         PLATFORM_STATE_BOBBING = 1,

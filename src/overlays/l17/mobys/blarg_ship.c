@@ -37,6 +37,7 @@ extern void           update_moby_path_transform(void *) __asm__("FUN_L11_0031a4
 float blarg_ship_firing_speed_gp __asm__("D_L17_001623E8") = 32.0f;
 void  blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
 
+/* Moby class 1843 */
 void blarg_ship_update(struct Moby *moby) {
     enum {
         BLARG_SHIP_INITIALIZE = 0,

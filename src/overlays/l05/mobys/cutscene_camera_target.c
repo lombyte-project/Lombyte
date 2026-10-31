@@ -20,9 +20,10 @@ typedef struct {
 
 extern G D_L05_0016CC60;
 
-void update_cutscene_camera_target(unsigned char *m) __asm__("FUN_L05_0031d5c8");
+void cutscene_camera_target_update(unsigned char *m) __asm__("FUN_L05_0031d5c8");
 
-void update_cutscene_camera_target(unsigned char *m) {
+/* Moby class 1550 */
+void cutscene_camera_target_update(unsigned char *m) {
     enum {
         INITIALIZE = 0,
         ARMED = 1

@@ -20,11 +20,12 @@ extern int   FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern void *spawn_splitting_effect_particle_with_collision_response_and_fade(
     char *a, char *b, unsigned char c, int d) __asm__("FUN_L00_0026fd28");
 
-void update_timed_effect_emitter(struct Moby *moby) __asm__("FUN_L10_002c7a20");
+void timed_effect_emitter_update(struct Moby *moby) __asm__("FUN_L10_002c7a20");
 
 extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
-void update_timed_effect_emitter(struct Moby *moby) {
+/* Moby class 702 */
+void timed_effect_emitter_update(struct Moby *moby) {
     enum {
         MOBY_STATE_WAIT_FOR_ACTIVATION = 0,
         MOBY_STATE_ACTIVE_WITH_SOUND = 1

@@ -65,9 +65,10 @@ extern Moby                     *D_L04_00160064_2E57F8 __asm__("D_L04_0015FFE4")
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 D_0015EEAC_macro __asm__("D_0015EEAC") MACRO_ADDR;
-void       update_help_hints(Moby *moby) __asm__("FUN_L04_002e4418");
+void       help_hints_update(Moby *moby) __asm__("FUN_L04_002e4418");
 
-void update_help_hints(Moby *moby) {
+/* Moby class 1343 */
+void help_hints_update(Moby *moby) {
     enum {
         TUTORIAL_TRIGGER_STATE_INITIALIZE = 0,
         TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS = 1

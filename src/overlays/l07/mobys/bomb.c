@@ -65,7 +65,7 @@ extern struct Moby *debris_target __asm__("D_L07_00173ED8") NOT_SDA;
 extern char         debris_far_point[] __asm__("D_L07_00166E40");
 
 /* Debris update: moves and spins it, bursts it on impact, removes it out of bounds. */
-void        update_bomb(struct Moby *moby) __asm__("FUN_L07_0030bbc8");
+void        bombomatic_bomb_update(struct Moby *moby) __asm__("FUN_L07_0030bbc8");
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -107,7 +107,8 @@ s32         allocate_voice_for_target_entry(s32   entry_index,
                                             s32   flags,
                                             void *target) __asm__("FUN_0022da68");
 
-void update_bomb(struct Moby *moby) {
+/* Moby class 882 */
+void bombomatic_bomb_update(struct Moby *moby) {
     Vec4f      *pos = &moby->pos;
     DebrisVars *debris_vars = (DebrisVars *)moby->pvars;
     Vec4        previous_debris_position;

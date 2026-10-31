@@ -493,6 +493,7 @@ Vec4 D_L00_001DBA10[4][5] = {0};
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B9AD8), where it is exact; names translated to the US level program. */
 void tesla_claw_update(struct Moby *m) __asm__("FUN_L00_002b87e0");
 
+/* Moby class 177 */
 void tesla_claw_update(struct Moby *tesla_claw_moby) {
     enum {
         TESLA_CLAW_STATE_INITIALIZE = 0,

@@ -21,9 +21,10 @@ extern void *spawn_spark_2ef430(void *, void *, int, int, float) __asm__("FUN_L0
 
 /* Per-frame update of a tumbling debris moby: moves and spins it under gravity, bounces it off what it hits, and
    bursts it into two sparks and removes it when its timer runs out or it leaves the area. */
-void update_tumbling_debris(struct Moby *moby) __asm__("FUN_L09_002ef430");
+void tumbling_debris_update(struct Moby *moby) __asm__("FUN_L09_002ef430");
 
-void update_tumbling_debris(struct Moby *moby) {
+/* Moby class 313 */
+void tumbling_debris_update(struct Moby *moby) {
     float  previous_debris_position[4];
     float  spark_velocity[4];
     float  random_spark_vector[4];

@@ -32,9 +32,10 @@ void         update_mine_detonation(unsigned char *moby) __asm__("FUN_L18_002d5f
 
 void update_mine_detonation(unsigned char *m) __asm__("FUN_L18_002d5f20");
 
-void update_mine(struct Moby *moby) __asm__("FUN_L18_002d5918");
+void moby_568_update(struct Moby *moby) __asm__("FUN_L18_002d5918");
 
-void update_mine(struct Moby *moby) {
+/* Moby class 568 */
+void moby_568_update(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_BALLISTIC_FLIGHT = 1,

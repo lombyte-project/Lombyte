@@ -296,6 +296,7 @@ void emit_object_offset_particle_burst(unsigned char *source_object) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B33E8), where it is exact; names translated to the US level program. */
 void devastator_update(struct Moby *m) __asm__("FUN_L00_002b2100");
 
+/* Moby class 157 */
 void devastator_update(struct Moby *devastator_moby) {
     Matrix3            rotation;
     Matrix4            inverse;

@@ -32,9 +32,10 @@ extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
 /* Burning debris: flies along its velocity leaving two smoke trails, sticks to the ground, and hurts what it hits. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002EEDD8), where it is exact; names translated to the US level program. */
 
-void update_smoke_trail_projectile(char *moby) __asm__("FUN_L01_002eda00");
+void smoke_trail_projectile_update(char *moby) __asm__("FUN_L01_002eda00");
 
-void update_smoke_trail_projectile(char *moby) {
+/* Moby class 567 */
+void smoke_trail_projectile_update(char *moby) {
     enum {
         MOVE_UNTIL_COLLISION_OR_TIMEOUT = 1,
         BURST_AND_REMOVE = 2

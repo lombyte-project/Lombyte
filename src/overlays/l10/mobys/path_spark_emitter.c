@@ -43,9 +43,10 @@ extern void
 func_L00_002633D8_f(float, float, void *, int *, float *, void *) __asm__("FUN_L00_00262360");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 
-void update_path_spark_emitter(struct Moby *moby) __asm__("FUN_L10_002d8d30");
+void path_spark_emitter_update(struct Moby *moby) __asm__("FUN_L10_002d8d30");
 
-void update_path_spark_emitter(struct Moby *moby) {
+/* Moby class 947 */
+void path_spark_emitter_update(struct Moby *moby) {
     enum {
         SPARK_STATE_WAIT_FOR_TIMER = 0,
         SPARK_STATE_TRAVERSE_PATH = 1

@@ -12,9 +12,10 @@ extern int D_L18_0015F5C4;
 
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 
-void update_moby_visibility_and_half_turn(struct Moby *moby) __asm__("FUN_L18_002fa640");
+void hidden_deplanetizer_gun_update(struct Moby *moby) __asm__("FUN_L18_002fa640");
 
-void update_moby_visibility_and_half_turn(struct Moby *moby) {
+/* Moby class 1568 */
+void hidden_deplanetizer_gun_update(struct Moby *moby) {
     enum {
         INITIALIZE_STATE_MACHINE = 0,
         WAIT_TO_HIDE_AND_TURN = 1,

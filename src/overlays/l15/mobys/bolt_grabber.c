@@ -27,6 +27,7 @@ extern short bolt_grabber_scale_multiplier_gp __asm__("D_L15_00162078") __attrib
 
 void bolt_grabber_update(struct Moby *m) __asm__("FUN_L15_002ea748");
 
+/* Moby class 1388 */
 void bolt_grabber_update(struct Moby *moby) {
     enum {
         BOLT_GRABBER_INITIALIZE = 0,

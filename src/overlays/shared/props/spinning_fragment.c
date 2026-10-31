@@ -16,9 +16,10 @@ f32 spinning_fragment_scale_factor_gp __asm__("D_L06_00162080") = 0.1f;
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
-void update_falling_spinning_moby(struct Moby *moby) __asm__("FUN_L06_00300b90");
+void falling_spinning_moby_update(struct Moby *moby) __asm__("FUN_L06_00300b90");
 
-void update_falling_spinning_moby(struct Moby *moby) {
+/* Moby classes 1085-1089 */
+void falling_spinning_moby_update(struct Moby *moby) {
     char *velocity_and_spin;
     float vertical_velocity_decrement = frame_time_sq * 15.0f;
     moby->scale = moby->pclass->scale * *(float *)&spinning_fragment_scale_factor_gp;

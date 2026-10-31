@@ -17,9 +17,10 @@ extern int D_L13_0015FFD8;
 
 extern int debug_print_alt() __asm__("FUN_001e93b0");
 
-void update_controller_linked_gate(struct Moby *moby) __asm__("FUN_L13_002f8a78");
+void controller_linked_gate_update(struct Moby *moby) __asm__("FUN_L13_002f8a78");
 
-void update_controller_linked_gate(struct Moby *moby) {
+/* Moby classes 674, 677, 680 */
+void controller_linked_gate_update(struct Moby *moby) {
     enum {
         GATE_STATE_INITIALIZE = 0,
         GATE_STATE_OPEN = 1,

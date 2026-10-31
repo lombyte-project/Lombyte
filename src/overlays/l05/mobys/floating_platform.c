@@ -29,6 +29,7 @@ extern int floating_platform_voice_interval_min_gp __asm__("D_L05_00161CE4") __a
 extern int floating_platform_voice_interval_max_gp __asm__("D_L05_00161CE8") __attribute__((sda));
 void       floating_platform_update(unsigned char *moby) __asm__("FUN_L05_0030bdd8");
 
+/* Moby class 810 */
 void floating_platform_update(unsigned char *moby) {
     enum {
         FLOATING_PLATFORM_INITIALIZE = 0,

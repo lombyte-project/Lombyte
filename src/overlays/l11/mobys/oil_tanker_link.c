@@ -50,11 +50,12 @@ extern void *func_L00_00265050_s(char *,
                                  float,
                                  float *) __asm__("FUN_L00_00263fd8");
 
-void update_oil_tanker_link_effects_and_destruction(struct Moby *moby) __asm__("FUN_L11_003181f0");
+void         oil_tanker_link_update(struct Moby *moby) __asm__("FUN_L11_003181f0");
 extern float D_L11_0015F580[];
 extern int   scale_game_frames(int);
 
-void update_oil_tanker_link_effects_and_destruction(struct Moby *moby) {
+/* Moby class 1265 */
+void oil_tanker_link_update(struct Moby *moby) {
     enum {
         TANKER_LINK_EMIT_EFFECT_AND_SAVE_POSITION = 0,
         TANKER_LINK_BURST_AND_HIDE = 1

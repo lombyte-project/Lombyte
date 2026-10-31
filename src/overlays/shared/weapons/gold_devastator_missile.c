@@ -588,6 +588,7 @@ void select_gold_devastator_missile_target(char *gold_missile_moby,
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002B1688), where it is exact; names translated to the US level program. */
 void gold_devastator_missile_update(M910 *m) __asm__("FUN_L00_002b03a0");
 
+/* Moby class 153 */
 void gold_devastator_missile_update(M910 *missile_moby) {
     B910             effect = l00_devastator_missile_camera_blast_parameters;
     B910             gold_effect = l00_gold_devastator_missile_camera_blast_parameters;

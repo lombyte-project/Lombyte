@@ -20,6 +20,7 @@ extern char D_L04_00173FE0[];
 /* Three-state motion update. The saved position is restored when the timer expires. */
 void leaf_update(struct Moby *moby) __asm__("FUN_L04_002d7e90");
 
+/* Moby class 642 */
 void leaf_update(struct Moby *moby) {
     enum {
         LEAF_INITIALIZE = 0,

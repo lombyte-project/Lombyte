@@ -87,6 +87,7 @@ extern void draw_elevator_rotating_rings(struct Moby *) __asm__("FUN_L16_002e84e
 
 void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L16_002e7f80");
 
+/* Moby class 1826 */
 void elevator_update(L16PlatformMoby *moby) {
     enum {
         ELEVATOR_INITIALIZE = 0,

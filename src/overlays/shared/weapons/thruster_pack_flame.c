@@ -863,9 +863,10 @@ char *spawn_thruster_pack_flame(int instance_index) {
     return spawned_moby;
 }
 
-void update_thruster_pack_flame(void *moby) __asm__("FUN_L00_002b4198");
+void thruster_pack_flame_update(void *moby) __asm__("FUN_L00_002b4198");
 
-void update_thruster_pack_flame(void *moby) {
+/* Moby class 167 */
+void thruster_pack_flame_update(void *moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_WAIT_FOR_BEAM = 1,

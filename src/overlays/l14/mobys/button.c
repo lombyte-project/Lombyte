@@ -19,6 +19,7 @@ extern u8 D_0014C050[];
 
 void button_update(struct Moby *moby) __asm__("FUN_L14_00306b78");
 
+/* Moby class 1416 */
 void button_update(struct Moby *moby) {
     enum {
         BUTTON_INITIALIZE = 0,

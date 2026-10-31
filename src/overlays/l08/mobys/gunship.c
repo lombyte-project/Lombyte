@@ -94,7 +94,7 @@ extern struct Moby *D_L08_0015FFD8_m __asm__("D_L08_0015FFD8");
 extern f32          scale_time(f32) __asm__("FUN_001f96b0");
 extern void         FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern void         FUN_L08_002e2250_u(struct Moby *) __asm__("FUN_L08_002e2250");
-void                update_gunship(struct Moby *moby) __asm__("FUN_L08_002e24e8");
+void                gunship_update(struct Moby *moby) __asm__("FUN_L08_002e24e8");
 
 void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, int pjoint) {
     unsigned char *child_moby = create_moby(oClass);
@@ -318,7 +318,8 @@ void process_gunship_part_hits(struct Moby *moby) {
         allocate_voice_for_target_entry(state, 0, moby);
 }
 
-void update_gunship(struct Moby *moby) {
+/* Moby class 444 */
+void gunship_update(struct Moby *moby) {
     enum {
         GUNSHIP_INITIALIZE = 0,
         GUNSHIP_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET = 1,

@@ -82,6 +82,15 @@ register that nothing set on that path (to keep it live) as
   until the name is proven.
 - **Renaming:** rename the function in its own file and in every caller,
   level code included (`grep -rn FUN_<addr> src include`).
+- **Moby updates:** a function that a level class table
+  (`lNN/level_class_tables.c`) lists as a class update is named after the
+  moby in the game (`tunnel_barrier_update`), or `moby_<class>_update` until
+  that is proven. The line right above its definition names its classes, in
+  decimal like the tables: `/* Moby class 1100 */`, `/* Moby classes 13-16 */`
+  (three or more in a row become a range), `/* Moby classes 75, 115-120, 795 */`.
+  A list too long for one line becomes
+  `/* Moby classes: 203, listed in the level class tables */`. Empty no-op
+  callbacks get none. `check-cleanup.py` checks this comment.
 - **Globals:** `D_<addr>` gets a C name plus a `__asm__("D_<addr>")` label.
   Use one spelling and declare it once, in a header.
 - **Locals and fields:** name them by what they hold (`count`, `next`), not by

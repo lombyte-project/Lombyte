@@ -49,6 +49,7 @@ extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L0
 
 void piston_platform_update(LiftMoby *m) __asm__("FUN_L01_002f95c0");
 
+/* Moby classes 703, 715 */
 void piston_platform_update(LiftMoby *piston_platform) {
     enum {
         PISTON_PLATFORM_MODE_WAIT_BEFORE_SUBTRACT_TRAVEL = 0,

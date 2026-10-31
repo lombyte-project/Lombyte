@@ -113,6 +113,7 @@ extern unsigned char D_0013DD47 NOT_SDA;
 void       qwarks_bouncer_update(WM_c *m) __asm__("FUN_L05_00317470");
 extern int scale_game_frames(int);
 
+/* Moby class 919 */
 void qwarks_bouncer_update(WM_c *bouncer_moby) {
     enum {
         QWARKS_BOUNCER_INITIALIZE = 0,

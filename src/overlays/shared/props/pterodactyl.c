@@ -33,6 +33,7 @@ float D_L18_00162574 = 2.0f;
 
 void pterodactyl_update(unsigned char *m) __asm__("FUN_L00_002e3a88");
 
+/* Moby class 1564 */
 void pterodactyl_update(unsigned char *moby) {
     enum {
         PTERODACTYL_INITIALIZE = 0,

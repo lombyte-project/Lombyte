@@ -576,6 +576,7 @@ void update_falling_asteroid(Moby *falling_rock) {
     }
 }
 
+/* Moby classes 263-267 */
 void asteroid_update(struct Moby *asteroid_moby) {
     Data_2ECC50 *moby_vars = (*(Data_2ECC50 **)&asteroid_moby->pvars);
     Path        *path;

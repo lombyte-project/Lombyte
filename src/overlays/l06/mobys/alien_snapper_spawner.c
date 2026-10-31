@@ -14,12 +14,13 @@ extern int    D_L06_0015FFD8;
 extern int    is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern short *D_L06_001ABFC0[];
 extern void   blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-void          update_alien_snapper_spawner(char *moby) __asm__("FUN_L06_002fda30");
+void          alien_snapper_spawner_update(char *moby) __asm__("FUN_L06_002fda30");
 
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_point_inside_clip_volume(void *, int);
 
-void update_alien_snapper_spawner(char *moby) {
+/* Moby class 1066 */
+void alien_snapper_spawner_update(char *moby) {
     enum {
         WAIT_FOR_HERO_IN_CLIP_VOLUME = 0,
         WAIT_FOR_ANIMATION_SIGNAL = 1,

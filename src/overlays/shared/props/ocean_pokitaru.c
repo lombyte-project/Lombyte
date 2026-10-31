@@ -319,6 +319,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
 
 void ocean_pokitaru_update(OceanMoby *moby) __asm__("FUN_L11_0030b358");
 
+/* Moby class 1111 */
 void ocean_pokitaru_update(OceanMoby *moby) {
     OceanVars *ocean_vars = moby->vars;
     float      camera_displacement[4];

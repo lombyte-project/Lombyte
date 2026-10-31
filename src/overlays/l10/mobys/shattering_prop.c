@@ -10,9 +10,10 @@
 /* UpdateMoby 1855: waits for a hit, then plays its sound, sheds bolts, shatters into class 0x742 fragments and deletes itself. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002ECAB0), where it is exact; names translated to the US level program. */
 
-void update_shattering_prop(struct Moby *moby) __asm__("FUN_L10_002eb6f0");
+void shattering_prop_update(struct Moby *moby) __asm__("FUN_L10_002eb6f0");
 
-void update_shattering_prop(struct Moby *moby) {
+/* Moby class 1855 */
+void shattering_prop_update(struct Moby *moby) {
     enum {
         HIT_RESPONSE_STATE_INITIALIZE = 0,
         HIT_RESPONSE_STATE_WAIT_FOR_HIT = 1,

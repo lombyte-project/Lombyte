@@ -8,7 +8,7 @@
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/props/group_rotator_data/update_moby_rotation_group_2.h"
-#include "rnc/overlay/shared/props/group_rotator_data/update_moby_rotation_group.h"
+#include "rnc/overlay/shared/props/group_rotator_data/moby_rotation_group_update.h"
 
 typedef struct Moby Moby;
 
@@ -40,9 +40,10 @@ float D_L17_00161DE0 = 3.109f;
 float D_L18_001620FC = 3.109f;
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F6330), where it is exact; names translated to the US level program. */
-void update_moby_rotation_group(Moby *moby) __asm__("FUN_L06_002f4f00");
+void moby_rotation_group_update(Moby *moby) __asm__("FUN_L06_002f4f00");
 
-void update_moby_rotation_group(Moby *moby) {
+/* Moby class 1021 */
+void moby_rotation_group_update(Moby *moby) {
     enum {
         SPAWN_CHILD_MOBYS = 0,
         INITIALIZE_BASE_TRANSFORM = 1,

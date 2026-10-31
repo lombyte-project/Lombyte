@@ -96,6 +96,7 @@ void build_bolt_thief_target_list(struct Moby *moby) {
     }
 }
 
+/* Moby class 452 */
 void bolt_thief_update(struct Moby *moby) {
     enum {
         BOLT_THIEF_INITIALIZE = 0,

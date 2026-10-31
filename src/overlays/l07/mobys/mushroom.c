@@ -16,6 +16,7 @@ void         mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 void         mushroom_update(char *self) __asm__("FUN_L07_0031f3d8");
 
+/* Moby class 1650 */
 void mushroom_update(char *mushroom_moby) {
     enum {
         MUSHROOM_INITIALIZE = 0,

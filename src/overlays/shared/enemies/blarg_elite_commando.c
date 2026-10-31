@@ -168,6 +168,7 @@ L16ParticleChoices D_L18_001F2710 = {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D40B8), where it is exact; names translated to the US level program. */
 void blarg_elite_commando_update(char *m) __asm__("FUN_L16_002d2cf0");
 
+/* Moby class 638 */
 void blarg_elite_commando_update(char *commando_moby) {
     enum {
         COMMANDO_STATE_INITIALIZE = 0,

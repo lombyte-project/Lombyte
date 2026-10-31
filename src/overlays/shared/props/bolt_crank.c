@@ -92,6 +92,7 @@ void set_novalis_bolt_crank_completion_flags(char *moby) {
 
 void bolt_crank_update(struct Moby *moby) __asm__("FUN_L01_002e0c68");
 
+/* Moby class 280 */
 void bolt_crank_update(struct Moby *moby) {
     BoltCrankVars *crank = (BoltCrankVars *)moby->pvars;
     float          matrix[16];

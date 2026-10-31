@@ -88,6 +88,7 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 /* Swivel turret update: waits a random time, turns to a random heading with a loop sound, then fires one shot with debris and fades its colour while the recoil animation plays. */
 void rocket_launcher_update(struct Moby *m) __asm__("FUN_L02_002df3d8");
 
+/* Moby class 733 */
 void rocket_launcher_update(struct Moby *moby) {
     enum {
         ROCKET_LAUNCHER_WAIT_BETWEEN_SHOTS = 0,

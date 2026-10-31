@@ -36,6 +36,7 @@ extern s32 D_L15_001BAAD0[];
 
 void underwater_ring_update(struct Moby *moby) __asm__("FUN_L15_002e5958");
 
+/* Moby class 1209 */
 void underwater_ring_update(struct Moby *moby) {
     VendorVars  *vars = (VendorVars *)moby->pvars;
     u8           delta[16];

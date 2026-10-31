@@ -344,9 +344,10 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
 
 /* Argument order as the chicken passes them: the order of their definitions changes the code. */
 
-void update_morphoray_chicken(Moby *chicken_moby) __asm__("FUN_L00_002c97e0");
+void morphoray_chicken_update(Moby *chicken_moby) __asm__("FUN_L00_002c97e0");
 
-void update_morphoray_chicken(Moby *chicken_moby) {
+/* Moby class 270 */
+void morphoray_chicken_update(Moby *chicken_moby) {
     enum {
         CHICKEN_STATE_INITIALIZE = 0,
         CHICKEN_STATE_IDLE = 1,

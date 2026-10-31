@@ -27,9 +27,10 @@ extern s32   projected_quad_bottom_left_uv_gp __asm__("D_L06_00162428") __attrib
 
 void draw_projected_fading_quad(char *moby) __asm__("FUN_L06_0030bfa8");
 
-void update_timed_sprite_effect(struct Moby *moby) __asm__("FUN_L06_0030be60");
+void timed_sprite_effect_update(struct Moby *moby) __asm__("FUN_L06_0030be60");
 
-void update_timed_sprite_effect(struct Moby *moby) {
+/* Moby class 1898 */
+void timed_sprite_effect_update(struct Moby *moby) {
     enum {
         SPRITE_EFFECT_STATE_REMOVE = 0,
         SPRITE_EFFECT_STATE_ANIMATE = 1

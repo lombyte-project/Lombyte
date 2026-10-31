@@ -24,9 +24,10 @@ void raise_unlock_sequence_mobys(struct Moby *moby) __asm__("FUN_L14_00305680");
 
 extern void raise_unlock_sequence_mobys(struct Moby *) __asm__("FUN_L14_00305680");
 
-void update_unlock_sequence_controller(struct Moby *moby) __asm__("FUN_L14_00305408");
+void unlock_sequence_controller_update(struct Moby *moby) __asm__("FUN_L14_00305408");
 
-void update_unlock_sequence_controller(struct Moby *moby) {
+/* Moby class 1352 */
+void unlock_sequence_controller_update(struct Moby *moby) {
     enum {
         UNLOCK_SEQUENCE_INITIALIZE = 0,
         UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER = 1,

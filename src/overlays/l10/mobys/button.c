@@ -37,6 +37,7 @@ extern void         FUN_L00_002502f0_u(void *, int, int, int) __asm__("FUN_L00_0
 /* Floor plate: lit and opening its door while a moby (other than class 0x3EF) rests on it, dark and closing it otherwise. */
 void button_update(struct Moby *m) __asm__("FUN_L10_002d92b8");
 
+/* Moby class 1031 */
 void button_update(struct Moby *moby) {
     FloorPlateVars *plate_vars = (FloorPlateVars *)moby->pvars;
     s32             pressed = 0;

@@ -96,6 +96,7 @@ unsigned char D_L17_00161E20 = 0x14;
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8EE8), where it is exact; names translated to the US level program. */
 void energy_sphere_update(struct Moby *m) __asm__("FUN_L06_002f7ab8");
 
+/* Moby class 1040 */
 void energy_sphere_update(struct Moby *sphere_moby) {
     enum {
         ENERGY_SPHERE_INITIALIZE = 0,

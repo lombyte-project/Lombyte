@@ -125,6 +125,7 @@ extern int func_L00_0025A8E8_2cf180(
 
 void test_dummy_update(unsigned char *m) __asm__("FUN_L16_002cddb8");
 
+/* Moby class 541 */
 void test_dummy_update(unsigned char *moby) {
     enum {
         TEST_DUMMY_STATE_INITIALIZE = 0,

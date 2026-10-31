@@ -72,6 +72,7 @@ extern char  extermibot_strike_flags_selector[] __asm__("D_001404A8");
 
 void extermibot_update(unsigned char *m) __asm__("FUN_L05_00301f48");
 
+/* Moby class 623 */
 void extermibot_update(unsigned char *moby) {
     enum {
         EXTERMIBOT_INITIALIZE = 0,

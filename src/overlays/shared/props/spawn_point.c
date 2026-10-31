@@ -40,6 +40,7 @@ extern unsigned char  D_0014C050[];
 
 void spawn_point_update(struct Moby *moby) __asm__("FUN_L01_00300220");
 
+/* Moby class 805 */
 void spawn_point_update(struct Moby *moby) {
     PickupVars *pickup_vars = (PickupVars *)moby->pvars;
     s32         armed = 0;

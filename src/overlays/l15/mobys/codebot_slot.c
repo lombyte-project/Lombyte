@@ -120,6 +120,7 @@ extern float scale_time(float) __asm__("FUN_L15_001f8648");
 
 void codebot_slot_update(struct Moby *moby) __asm__("FUN_L15_002ec030");
 
+/* Moby class 1430 */
 void codebot_slot_update(struct Moby *moby) {
     enum {
         CODEBOT_SLOT_INITIALIZE = 0,

@@ -63,6 +63,7 @@ extern char D_L02_00167440_ea8b0[] __asm__("D_L02_001673C0");
 
 void tresspasser_update(struct Moby *moby) __asm__("FUN_L02_002ea210");
 
+/* Moby classes 1005, 1016 */
 void tresspasser_update(struct Moby *moby) {
     char *data;
     int   which;

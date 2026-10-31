@@ -107,6 +107,7 @@ FUN_L00_0025ff38_p(struct Moby *, void *, int, int, void *, int, float) __asm__(
    spawns and fires a projectile (pvars 0x160) and dies by explosion or by reaching the end of its path. */
 void psytcopus_update(struct Moby *m) __asm__("FUN_L11_00310180");
 
+/* Moby class 1231 */
 void psytcopus_update(struct Moby *psytcopus) {
     enum {
         PSYTCOPUS_STATE_INITIALIZE = 0,

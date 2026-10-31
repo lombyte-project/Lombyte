@@ -192,9 +192,10 @@ extern float *reflection_mesh_trio_position_tables[] __asm__("D_L16_00161F00") _
 extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001DC600")
     __attribute__((section(".data")));
 
-void update_reflection_mesh_trio(struct Moby *moby) __asm__("FUN_L16_002e8e80");
+void reflection_mesh_trio_update(struct Moby *moby) __asm__("FUN_L16_002e8e80");
 
-void update_reflection_mesh_trio(struct Moby *moby) {
+/* Moby class 1943 */
+void reflection_mesh_trio_update(struct Moby *moby) {
     enum {
         MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
         MESH_RENDER_QUEUE_CALLBACK = 1

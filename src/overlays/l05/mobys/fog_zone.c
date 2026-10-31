@@ -26,9 +26,10 @@ extern unsigned char l05_volume_blended_color_high_byte __asm__("D_L05_00161203"
 extern unsigned char l05_volume_blended_color_lower_middle_byte __asm__("D_L05_00161201");
 extern unsigned char l05_volume_blended_color_low_byte __asm__("D_L05_00161200");
 
-void update_fog_zone(struct Moby *moby) __asm__("FUN_L05_0030e1f8");
+void fog_zone_update(struct Moby *moby) __asm__("FUN_L05_0030e1f8");
 
-void update_fog_zone(struct Moby *moby) {
+/* Moby class 841 */
+void fog_zone_update(struct Moby *moby) {
     enum {
         FOG_ZONE_INITIALIZE = 0,
         FOG_ZONE_WAIT_TO_APPLY_PRESET = 1,

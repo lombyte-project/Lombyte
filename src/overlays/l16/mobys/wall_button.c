@@ -41,6 +41,7 @@ extern void          set_wall_button_blocker_collision(void *, int) __asm__("FUN
 
 void wall_button_update(struct Moby *m) __asm__("FUN_L16_002cf198");
 
+/* Moby class 546 */
 void wall_button_update(struct Moby *moby) {
     enum {
         WALL_BUTTON_STATE_INITIALIZE = 0,

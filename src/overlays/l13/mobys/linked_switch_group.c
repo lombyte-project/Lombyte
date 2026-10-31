@@ -118,9 +118,10 @@ typedef struct {
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-void update_linked_switch_group(char *moby) __asm__("FUN_L13_002e4448");
+void linked_switch_group_update(char *moby) __asm__("FUN_L13_002e4448");
 
-void update_linked_switch_group(char *moby) {
+/* Moby class 231 */
+void linked_switch_group_update(char *moby) {
     enum {
         INITIALIZE_LINKED_GROUP = 0,
         MONITOR_LINKED_GROUP_HITS = 1,

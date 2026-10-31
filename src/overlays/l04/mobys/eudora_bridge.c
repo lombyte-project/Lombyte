@@ -34,6 +34,7 @@ extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN
 /* Follows a linked switch moby (class 0x118): mirrors its position value, loops a sound while it moves, plays a click at either end and swaps class 0x41C back to 0x1B0 when it reaches 1.0. */
 void eudora_bridge_update(struct Moby *m) __asm__("FUN_L04_002c6858");
 
+/* Moby classes 432, 1052 */
 void eudora_bridge_update(struct Moby *moby) {
     enum {
         EUDORA_BRIDGE_STATE_INITIALIZE = 0,

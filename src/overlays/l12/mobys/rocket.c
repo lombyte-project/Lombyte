@@ -113,6 +113,7 @@ extern void spawn_explosion(struct Moby *,
 /* Level 12 shot: flies with a smoke trail, damages the first moby it hits other than its owner, then pops. */
 void rocket_update(struct Moby *moby) __asm__("FUN_L12_002ece00");
 
+/* Moby class 409 */
 void rocket_update(struct Moby *moby) {
     enum {
         ROCKET_STATE_FLYING = 1,

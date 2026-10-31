@@ -160,6 +160,7 @@ void aim_throw_arc(V2c2488 *origin_position,
 /* Updates the grip, chooses a throw target, and handles the held moby states. */
 void bomb_glove_update(struct Moby *moby) __asm__("FUN_L00_002c26c8");
 
+/* Moby class 192 */
 void bomb_glove_update(struct Moby *moby) {
     enum {
         BOMB_GLOVE_INITIALIZE = 0,

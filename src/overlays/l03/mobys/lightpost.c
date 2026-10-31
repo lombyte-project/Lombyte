@@ -15,6 +15,7 @@ extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void lightpost_update(struct Moby *m) __asm__("FUN_L03_002e2948");
 
+/* Moby class 1827 */
 void lightpost_update(struct Moby *lightpost_moby) {
     enum {
         LIGHTPOST_INITIALIZE = 0,

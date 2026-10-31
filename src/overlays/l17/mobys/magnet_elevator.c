@@ -67,6 +67,7 @@ extern void  FUN_L17_002eea70_c(char *) __asm__("FUN_L17_002eea70");
 
 void magnet_elevator_update(struct Moby *moby) __asm__("FUN_L17_002ee2b0");
 
+/* Moby class 1380 */
 void magnet_elevator_update(struct Moby *moby) {
     enum {
         MAGNET_ELEVATOR_STATE_INITIALIZE = 0,

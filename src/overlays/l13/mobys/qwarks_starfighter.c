@@ -1589,9 +1589,10 @@ extern void func_L13_002E9F90_2(void *, void *) __asm__("FUN_L13_002e8b58");
 
 extern char D_0013E633_snd[] __asm__("D_0013E533");
 
-void update_qwarks_starfighter(Moby388 *moby) __asm__("FUN_L13_002eb098");
+void qwarks_starfighter_update(Moby388 *moby) __asm__("FUN_L13_002eb098");
 
-void update_qwarks_starfighter(Moby388 *moby) {
+/* Moby class 388 */
+void qwarks_starfighter_update(Moby388 *moby) {
     enum {
         STARFIGHTER_STATE_INITIALIZE = 0,
         STARFIGHTER_STATE_WAIT_FOR_HERO_SHIP = 1,

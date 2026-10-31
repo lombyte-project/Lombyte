@@ -5,9 +5,10 @@
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-void update_tracked_group_watcher(struct Moby *moby) __asm__("FUN_L13_0030be60");
+void tracked_group_watcher_update(struct Moby *moby) __asm__("FUN_L13_0030be60");
 
-void update_tracked_group_watcher(struct Moby *moby) {
+/* Moby class 1577 */
+void tracked_group_watcher_update(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     if (moby->state == 0) {
         int  *ids = moby_vars + 4;

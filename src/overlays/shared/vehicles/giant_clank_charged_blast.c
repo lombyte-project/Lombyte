@@ -252,9 +252,10 @@ extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 /* update of moby class 1523: charges up a screen fade and a light, then bursts into particles and deletes itself */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029FF90), where it is exact; names translated to the US level program. */
 
-void update_giant_clank_charged_blast(Moby29FF90 *moby) __asm__("FUN_L15_0029edb0");
+void giant_clank_charged_blast_update(Moby29FF90 *moby) __asm__("FUN_L15_0029edb0");
 
-void update_giant_clank_charged_blast(Moby29FF90 *moby) {
+/* Moby class 1523 */
+void giant_clank_charged_blast_update(Moby29FF90 *moby) {
     enum {
         CHARGING = 0,
         EXPANDING_BLAST = 1

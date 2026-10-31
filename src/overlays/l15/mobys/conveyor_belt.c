@@ -9,6 +9,7 @@ extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FU
 
 void conveyor_belt_update(struct Moby *moby) __asm__("FUN_L15_002e73c0");
 
+/* Moby class 1250 */
 void conveyor_belt_update(struct Moby *moby) {
     enum {
         CONVEYOR_BELT_INITIALIZE = 0,

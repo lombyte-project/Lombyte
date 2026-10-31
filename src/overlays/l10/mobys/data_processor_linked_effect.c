@@ -39,9 +39,10 @@ void                 render_data_processor_linked_effect(u8 *moby) __asm__("FUN_
 
 extern float data_processor_linked_effect_fade_duration_seconds_gp __asm__("D_L10_00161C98")
     __attribute__((sda));
-void update_data_processor_linked_effect(struct Moby *moby) __asm__("FUN_L10_002da2c8");
+void data_processor_linked_effect_update(struct Moby *moby) __asm__("FUN_L10_002da2c8");
 
-void update_data_processor_linked_effect(struct Moby *moby) {
+/* Moby class 1067 */
+void data_processor_linked_effect_update(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_ACTIVE_WITH_SOUND = 1,

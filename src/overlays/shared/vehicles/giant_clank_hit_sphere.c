@@ -54,9 +54,10 @@ extern void play_entity_sound(float, char *, char *, float, float, int, int, int
 /* update: scale and fade a moby, spawn an effect, delete it when done */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029FCB0), where it is exact; names translated to the US level program. */
 
-void update_giant_clank_hit_sphere(struct Moby *moby) __asm__("FUN_L15_0029ead0");
+void giant_clank_hit_sphere_update(struct Moby *moby) __asm__("FUN_L15_0029ead0");
 
-void update_giant_clank_hit_sphere(struct Moby *moby) {
+/* Moby class 1427 */
+void giant_clank_hit_sphere_update(struct Moby *moby) {
     char        *moby_class = moby->pclass;
     char        *state = (char *)moby->pvars;
     float        half_relative_scale = moby->scale / *(float *)(moby_class + 0x24) * 0.5f;

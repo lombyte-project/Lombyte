@@ -11,11 +11,12 @@
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002DB0E0), where it is exact; names translated to the US level program. */
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-void       update_alien_queen_slider(unsigned char *moby) __asm__("FUN_L06_002d9d10");
+void       alien_queen_slider_update(unsigned char *moby) __asm__("FUN_L06_002d9d10");
 
 #include "sda.h"
 
-void update_alien_queen_slider(unsigned char *moby) {
+/* Moby class 367 */
+void alien_queen_slider_update(unsigned char *moby) {
     enum {
         INITIALIZE_POSITION_ENDPOINTS = 0,
         INTERPOLATE_POSITION_TO_TARGET = 2

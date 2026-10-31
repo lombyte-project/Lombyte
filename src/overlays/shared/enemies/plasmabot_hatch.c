@@ -15,6 +15,7 @@ extern char              *D_L14_ffd0_e_macro[] __asm__("D_L14_0015FFD0") MACRO_A
 
 void plasmabot_hatch_update(struct Moby *moby) __asm__("FUN_L14_002d96e0");
 
+/* Moby class 250 */
 void plasmabot_hatch_update(struct Moby *moby) {
     enum {
         HATCH_WAIT_ACTIVATION = 0,

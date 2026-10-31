@@ -179,9 +179,10 @@ ret0:
 /* Six checked switch entries: state 5 shares the default state reset.
  * Case 2/3 shaped after rac1-decomp (nonmatching/shared/func_L00_002C9DC8.c). */
 
-void update_doom_bot_spawner(struct Moby *thrown_moby) __asm__("FUN_L00_002c89e8");
+void doom_bot_spawner_update(struct Moby *thrown_moby) __asm__("FUN_L00_002c89e8");
 
-void update_doom_bot_spawner(struct Moby *thrown_moby) {
+/* Moby class 230 */
+void doom_bot_spawner_update(struct Moby *thrown_moby) {
     enum {
         THROWN_MOBY_STATE_INITIALIZE = 0,
         THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE = 1,

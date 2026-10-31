@@ -103,6 +103,7 @@ extern int  func_L00_002594C8_o(void *, void *, void *, float, float, float, flo
 
 void blarg_trooper_update(struct Moby *moby) __asm__("FUN_L04_002c4850");
 
+/* Moby class 427 */
 void blarg_trooper_update(struct Moby *moby) {
     enum {
         BLARG_TROOPER_STATE_INITIALIZE = 0,

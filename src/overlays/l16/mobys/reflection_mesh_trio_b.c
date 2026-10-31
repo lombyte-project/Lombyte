@@ -74,9 +74,10 @@ extern u32 reflection_mesh_trio_b_colours_1[75] __asm__("D_L16_001E51A0"); /* 75
 extern u32 reflection_mesh_trio_b_colours_2[45] __asm__("D_L16_001E52D0"); /* 45 RGBA words, one per point */
 
 extern L16SingleSphere_2ea128 D_L16_001E5390[] NOT_SDA;
-void update_reflection_mesh_trio_b(struct Moby *moby) __asm__("FUN_L16_002ea128");
+void reflection_mesh_trio_b_update(struct Moby *moby) __asm__("FUN_L16_002ea128");
 
-void update_reflection_mesh_trio_b(struct Moby *moby) {
+/* Moby class 1953 */
+void reflection_mesh_trio_b_update(struct Moby *moby) {
     enum {
         MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
         MESH_RENDER_QUEUE_CALLBACK = 1
@@ -148,7 +149,7 @@ void update_reflection_mesh_trio_b(struct Moby *moby) {
 }
 
 /* Word 0x184 of the cutscene state (D_L16_0016CC60): the moby whose joints
-   update_cutscene_joint_trails draws trails from. */
+   cutscene_joint_trails_update draws trails from. */
 char *l16_cutscene_joint_trail_source_moby __asm__("D_L16_0016CDE4")
     __attribute__((section(".data"))) = 0;
 

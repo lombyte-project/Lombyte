@@ -31,6 +31,7 @@ extern char  D_0013E550[];
 extern s32   level_moby_killed[][64] __asm__("D_0014C190");
 void         elevator_update(unsigned char *moby) __asm__("FUN_L09_003033a0");
 
+/* Moby classes 1150, 1151 */
 void elevator_update(unsigned char *moby) {
     enum {
         ELEVATOR_STATE_AT_PATH_END = 0,

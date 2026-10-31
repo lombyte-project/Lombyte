@@ -20,9 +20,10 @@ extern char  D_0013D3E3_t[] __asm__("D_0013D3E3");
 extern float
 approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
-void update_link_triggered_moby_turn(struct Moby *turning_moby) __asm__("FUN_L11_0030f2a8");
+void link_triggered_moby_turn_update(struct Moby *turning_moby) __asm__("FUN_L11_0030f2a8");
 
-void update_link_triggered_moby_turn(struct Moby *turning_moby) {
+/* Moby class 1180 */
+void link_triggered_moby_turn_update(struct Moby *turning_moby) {
     enum {
         LINKED_TURN_STATE_INITIALIZE = 0,
         LINKED_TURN_STATE_WAIT_FOR_LINK = 1,

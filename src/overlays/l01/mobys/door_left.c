@@ -32,6 +32,7 @@ typedef struct {
 
 void door_left_update(HoverMoby *m) __asm__("FUN_L01_002fed68");
 
+/* Moby classes 768, 769 */
 void door_left_update(HoverMoby *door_moby) {
     enum {
         DOOR_INITIALIZE = 0,

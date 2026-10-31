@@ -78,6 +78,7 @@ typedef struct {
 
 void elevator_update(struct Moby *m) __asm__("FUN_L14_002ee8d8");
 
+/* Moby class 685 */
 void elevator_update(struct Moby *elevator_moby) {
     enum {
         ELEVATOR_STATE_INITIALIZE = 0,

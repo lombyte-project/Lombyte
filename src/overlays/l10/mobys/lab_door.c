@@ -52,6 +52,7 @@ extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b
 void       lab_door_update(unsigned char *m) __asm__("FUN_L10_002d90a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 
+/* Moby classes 1015, 1282 */
 void lab_door_update(unsigned char *door_moby) {
     enum {
         LAB_DOOR_STATE_INITIALIZE = 0,

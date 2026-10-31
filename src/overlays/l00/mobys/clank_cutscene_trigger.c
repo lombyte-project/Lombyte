@@ -312,6 +312,7 @@ extern void request_space_load(s32) __asm__("FUN_0022e188");
 
 void clank_cutscene_trigger_update(DoorMoby *m) __asm__("FUN_L00_002d9dc8");
 
+/* Moby class 834 */
 void clank_cutscene_trigger_update(DoorMoby *moby) {
     enum {
         CLANK_TRIGGER_INITIALIZE_DIALOGUE = 0,

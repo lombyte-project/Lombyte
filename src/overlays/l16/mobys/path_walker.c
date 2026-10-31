@@ -78,9 +78,10 @@ void        initialize_path_walker_group(struct Moby *moby) __asm__("FUN_L16_002
 extern void initialize_path_walker_group(struct Moby *) __asm__("FUN_L16_002e7ba0");
 extern void sample_camera_path(void *, f32, s32, void *, void *, s32) __asm__("func_00214E58");
 
-void update_path_walker(unsigned char *walker_moby) __asm__("FUN_L16_002e76b8");
+void path_walker_update(unsigned char *walker_moby) __asm__("FUN_L16_002e76b8");
 
-void update_path_walker(unsigned char *walker_moby) {
+/* Moby classes 1667-1671 */
+void path_walker_update(unsigned char *walker_moby) {
     enum {
         PATH_WALKER_INITIALIZE_GROUP = 0,
         PATH_WALKER_FOLLOW_PATH = 1

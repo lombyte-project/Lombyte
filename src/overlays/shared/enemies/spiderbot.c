@@ -69,6 +69,7 @@ void draw_spiderbot_effect_quad(char *moby) __asm__("FUN_L15_002a7628");
 
 void spiderbot_update(unsigned char *moby) __asm__("FUN_L15_002a6e68");
 
+/* Moby class 123 */
 void spiderbot_update(unsigned char *moby) {
     enum {
         SPIDERBOT_INITIALIZE = 0,

@@ -106,6 +106,7 @@ extern int   FUN_L00_002dc9f0_4318(struct Moby *, void *) __asm__("FUN_L00_002dc
    the target, jumps between path points, and smokes while it dies. */
 void puffoid_update(struct Moby *moby) __asm__("FUN_L11_00314318");
 
+/* Moby class 1246 */
 void puffoid_update(struct Moby *moby) {
     enum {
         PUFFOID_STATE_INITIALIZE = 0,

@@ -82,7 +82,7 @@ extern int   random_integer_below(int);
 extern int   scale_game_frames(int);
 extern float D_L18_0015F580_macro[] __asm__("D_L18_0015F580") MACRO_ADDR;
 
-#include "rnc/overlay/l18/mobys/falling_moby_group_data/update_linked_moby_group_transform_and_fall.h"
+#include "rnc/overlay/l18/mobys/falling_moby_group_data/falling_moby_group_update.h"
 
 extern void spawn_debris_chunk(
     void *, void *, unsigned int, int, float, float, float, float, int) __asm__("FUN_L01_002f8530");
@@ -90,9 +90,10 @@ extern void
 capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void remove_child_carrier_and_child(void *) __asm__("FUN_L18_002fa8e0");
 
-void update_linked_moby_group_transform_and_fall(struct Moby *moby) __asm__("FUN_L18_002f16f0");
+void falling_moby_group_update(struct Moby *moby) __asm__("FUN_L18_002f16f0");
 
-void update_linked_moby_group_transform_and_fall(struct Moby *moby) {
+/* Moby class 1381 */
+void falling_moby_group_update(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_APPROACH_TARGET_TRANSFORM = 2,

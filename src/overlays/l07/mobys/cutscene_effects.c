@@ -22,9 +22,10 @@ FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, floa
 extern char *func_L00_0026DEA0_c(void *, int, void *, int, float, float, float, float) __asm__("FUN_L00_0026d000");
 extern char D_L07_0016C960_c[] __asm__("D_L07_0016C8E0");
 
-void update_cutscene_effects(struct Moby *moby) __asm__("FUN_L07_0031eba8");
+void cutscene_effects_update(struct Moby *moby) __asm__("FUN_L07_0031eba8");
 
-void update_cutscene_effects(struct Moby *moby) {
+/* Moby class 1552 */
+void cutscene_effects_update(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_UPDATE = 1

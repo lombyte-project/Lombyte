@@ -22,9 +22,10 @@ extern char D_00141968_h[] __asm__("D_00141968");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 
-void update_help_hints(struct Moby *moby) __asm__("FUN_L12_002ed280");
+void help_hints_update(struct Moby *moby) __asm__("FUN_L12_002ed280");
 
-void update_help_hints(struct Moby *moby) {
+/* Moby class 422 */
+void help_hints_update(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     if (count_active_moby_group_members(moby_vars[3], -1) == 0) {
         unsigned char *dialogue_trigger_state = item_unlocked;

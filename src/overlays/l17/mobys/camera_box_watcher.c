@@ -42,9 +42,10 @@ set_follow_camera_angle_blend_from_position(int a, float x, float y) __asm__("FU
 extern char fleet_dwell_help_gate_value[] __asm__("D_00141D54");
 extern char fleet_clip_volume_help_suppression_flags[] __asm__("D_00141D7C");
 
-void update_fleet_camera_box_watcher(struct Moby *moby) __asm__("FUN_L17_002f26d0");
+void fleet_camera_box_watcher_update(struct Moby *moby) __asm__("FUN_L17_002f26d0");
 
-void update_fleet_camera_box_watcher(struct Moby *moby) {
+/* Moby class 1470 */
+void fleet_camera_box_watcher_update(struct Moby *moby) {
     enum {
         CAMERA_BOX_WATCHER_INITIALIZE = 0,
         CAMERA_BOX_WATCHER_MONITOR = 1,

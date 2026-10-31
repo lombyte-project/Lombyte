@@ -37,6 +37,7 @@ extern void collect_mobies_in_sphere(void *, s32, void *, void *, f32) __asm__("
 
 void fan_update(SwayMoby *m) __asm__("FUN_L01_002f9bf0");
 
+/* Moby class 705 */
 void fan_update(SwayMoby *fan_moby) {
     SwayVars *sway_vars;
     CollQuery collision_query;

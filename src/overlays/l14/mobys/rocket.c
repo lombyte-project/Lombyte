@@ -60,6 +60,7 @@ extern void spawn_rocket_exhaust_puffs(struct Moby *) __asm__("FUN_L14_002fded0"
 
 void rocket_update(struct Moby *moby) __asm__("FUN_L14_002fdbb8");
 
+/* Moby class 922 */
 void rocket_update(struct Moby *moby) {
     enum {
         ROCKET_STATE_INITIALIZE = 0,

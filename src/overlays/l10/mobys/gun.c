@@ -34,6 +34,7 @@ extern struct Moby *spawn_turret_shot(void *, void *, void *, int) __asm__("FUN_
 
 void gun_update(struct Moby *moby) __asm__("FUN_L10_002e8ab0");
 
+/* Moby class 1346 */
 void gun_update(struct Moby *moby) {
     Vars *gun_control = (Vars *)moby->pvars;
     int  *bits;

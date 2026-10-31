@@ -1,4 +1,4 @@
-/* Level 04 moby class 0x248: keeps a matrix of how far it moved since the last frame (update_moby_translation_delta_matrix). */
+/* Level 04 moby class 0x248: keeps a matrix of how far it moved since the last frame (translation_delta_matrix_update). */
 #include "types.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
@@ -10,9 +10,10 @@
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-void update_moby_translation_delta_matrix(char *moby) __asm__("FUN_L04_002d3580");
+void translation_delta_matrix_update(char *moby) __asm__("FUN_L04_002d3580");
 
-void update_moby_translation_delta_matrix(char *moby) {
+/* Moby class 584 */
+void translation_delta_matrix_update(char *moby) {
     char *moby_vars = ((char *)MOBY(moby)->pvars);
     float position_delta[4];
     fast_vec_sub(position_delta, moby + 0x10, moby_vars + 0xA0);

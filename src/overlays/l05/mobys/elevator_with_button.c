@@ -65,6 +65,7 @@ extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 extern int   scale_game_frames(int);
 
+/* Moby class 877 */
 void elevator_with_button_update(struct Moby *moby) {
     enum {
         ELEVATOR_INITIALIZE = 0,

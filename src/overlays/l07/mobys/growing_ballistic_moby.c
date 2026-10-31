@@ -101,7 +101,7 @@ extern void spawn_explosion(void *,
                             int,
                             int) __asm__("FUN_L00_0025e450");
 extern char *l07_collision_query_state[] __asm__("D_L07_00173ED0");
-void         update_growing_ballistic_moby(struct Moby *moby) __asm__("FUN_L07_0030e458");
+void         growing_ballistic_moby_update(struct Moby *moby) __asm__("FUN_L07_0030e458");
 s32          allocate_voice_for_target_entry(s32   entry_index,
                                              s32   flags,
                                              void *target) __asm__("FUN_0022da68");
@@ -129,7 +129,8 @@ spawn_growing_ballistic_moby(char *spawn_position, char *initial_velocity, int s
     return spawned_moby;
 }
 
-void update_growing_ballistic_moby(struct Moby *moby) {
+/* Moby class 1049 */
+void growing_ballistic_moby_update(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     float previous_position[4];
     qcopy(previous_position, &moby->pos);

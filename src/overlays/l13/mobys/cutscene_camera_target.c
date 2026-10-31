@@ -15,9 +15,10 @@ extern L13Action l13_cutscene_target_effect_controller __asm__("D_L13_0016CB60")
 
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
-void update_cutscene_camera_target(struct Moby *moby) __asm__("FUN_L13_0030bdf0");
+void cutscene_camera_target_update(struct Moby *moby) __asm__("FUN_L13_0030bdf0");
 
-void update_cutscene_camera_target(struct Moby *moby) {
+/* Moby class 1558 */
+void cutscene_camera_target_update(struct Moby *moby) {
     enum {
         INITIALIZE_UPDATE_DISTANCE = 0,
         UPDATE_CUTSCENE_CAMERA_TARGET = 1

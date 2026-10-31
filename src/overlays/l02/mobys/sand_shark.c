@@ -262,6 +262,7 @@ int D_L02_001619E8 = 0x306058;
 /* Aridia burrowing enemy: profiled with EE timer 0 around its state machine. */
 void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
 
+/* Moby class 580 */
 void sand_shark_update(struct Moby *moby) {
     enum {
         SAND_SHARK_INITIALIZE = 0,

@@ -51,6 +51,7 @@ extern s32 blarg_ship_destroyed_save_id_bits[] __asm__("D_L13_001BA7D0");
 
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L13_0030cdb8");
 
+/* Moby class 1805 */
 void blarg_ship_update(struct Moby *moby) {
     enum {
         BLARG_SHIP_ENTER_DAMAGE_HANDLING = 0,

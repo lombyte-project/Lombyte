@@ -13,9 +13,10 @@
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
 extern void
      spawn_effect_with_initial_motion(float *, float *, int, float) __asm__("FUN_L08_0027fe00");
-void update_effect_emitter(struct Moby *moby) __asm__("FUN_L08_00308c90");
+void effect_emitter_update(struct Moby *moby) __asm__("FUN_L08_00308c90");
 
-void update_effect_emitter(struct Moby *moby) {
+/* Moby class 1641 */
+void effect_emitter_update(struct Moby *moby) {
     char *effect_spawn_settings = (char *)moby->pvars;
     float effect_position[4];
     float rotation_basis[12];

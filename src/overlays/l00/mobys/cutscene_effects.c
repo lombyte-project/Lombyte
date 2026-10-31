@@ -49,9 +49,10 @@ extern Vec4      zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 extern FlockPart *
 spawn_puff(void *, s32, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_0026d000");
 
-void update_phase_effect_controller(FlockMoby *moby) __asm__("FUN_L00_002e3800");
+void phase_effect_controller_update(FlockMoby *moby) __asm__("FUN_L00_002e3800");
 
-void update_phase_effect_controller(FlockMoby *moby) {
+/* Moby class 1545 */
+void phase_effect_controller_update(FlockMoby *moby) {
     enum {
         FLOCK_EFFECT_STATE_INITIALIZE = 0,
         FLOCK_EFFECT_STATE_PROCESS_PHASE_EFFECTS = 1

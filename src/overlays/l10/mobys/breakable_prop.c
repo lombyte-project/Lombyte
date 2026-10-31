@@ -11,9 +11,10 @@
 
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
-void update_breakable_prop(struct Moby *moby) __asm__("FUN_L10_002eb7e0");
+void breakable_prop_update(struct Moby *moby) __asm__("FUN_L10_002eb7e0");
 
-void update_breakable_prop(struct Moby *moby) {
+/* Moby class 1856 */
+void breakable_prop_update(struct Moby *moby) {
     enum {
         HIT_RESPONSE_STATE_INITIALIZE = 0,
         HIT_RESPONSE_STATE_WAIT_FOR_HIT = 1,

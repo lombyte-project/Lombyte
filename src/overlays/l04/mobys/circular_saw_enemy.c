@@ -479,6 +479,7 @@ extern void func_L00_002592B0_b(
 
 void circular_saw_enemy_update(M_35F0 *moby) __asm__("FUN_L04_002c2270");
 
+/* Moby class 340 */
 void circular_saw_enemy_update(M_35F0 *moby) {
     enum {
         CIRCULAR_SAW_STATE_INITIALIZE = 0,

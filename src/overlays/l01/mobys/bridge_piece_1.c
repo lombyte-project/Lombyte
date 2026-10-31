@@ -48,6 +48,7 @@ extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 
 void bridge_piece_1_update(BurstMoby *self) __asm__("FUN_L01_002f9d80");
 
+/* Moby classes 709-711 */
 void bridge_piece_1_update(BurstMoby *bridge_piece_moby) {
     BurstTarget *hit_result;
     BurstColors  colors;

@@ -60,9 +60,10 @@ f32 D_L15_0016186C = 8.0f;
 f32 D_L16_0016176C = 8.0f;
 f32 D_L17_001617BC = 8.0f;
 
-void update_linked_moby_transform_and_lifetime(S_002d7f88 *self) __asm__("FUN_L00_002d7f88");
+void morphoray_target_effect_update(S_002d7f88 *self) __asm__("FUN_L00_002d7f88");
 
-void update_linked_moby_transform_and_lifetime(S_002d7f88 *follower_moby) {
+/* Moby class 804 */
+void morphoray_target_effect_update(S_002d7f88 *follower_moby) {
     D_002d7f88 *moby_data = follower_moby->p78;
     O_002d7f88 *o;
     void       *linked_moby_data;

@@ -50,9 +50,10 @@ extern short D_L11_00162414 __attribute__((sda));
 extern short bubble_shrink_effect_color_range_start_gp __asm__("D_L11_00162418")
     __attribute__((sda));
 extern short bubble_shrink_effect_color_range_end_gp __asm__("D_L11_0016241C") __attribute__((sda));
-void         update_bubble_motion_and_scale(struct Moby *bubble_moby) __asm__("FUN_L11_0031ab08");
+void         bubble_update(struct Moby *bubble_moby) __asm__("FUN_L11_0031ab08");
 
-void update_bubble_motion_and_scale(struct Moby *bubble_moby) {
+/* Moby class 1524 */
+void bubble_update(struct Moby *bubble_moby) {
     enum {
         BUBBLE_MOVE_UNTIL_SURFACE_CROSSING = 1,
         BUBBLE_SHRINK_TO_REMOVAL = 2

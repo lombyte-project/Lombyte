@@ -117,9 +117,10 @@ void draw_level16_visible_textured_batches(void) {
     }
 }
 
-void update_reflection_mesh_pair(struct Moby *moby) __asm__("FUN_L16_002e98e0");
+void reflection_mesh_pair_update(struct Moby *moby) __asm__("FUN_L16_002e98e0");
 
-void update_reflection_mesh_pair(struct Moby *moby) {
+/* Moby class 1948 */
+void reflection_mesh_pair_update(struct Moby *moby) {
     enum {
         TWO_MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
         TWO_MESH_RENDER_QUEUE_CALLBACK = 1

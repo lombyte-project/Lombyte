@@ -48,6 +48,7 @@ extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_002
 
 void upper_door_update(struct Moby *m) __asm__("FUN_L04_002e17d8");
 
+/* Moby classes 1101, 1102, 1531, 1532 */
 void upper_door_update(struct Moby *moby) {
     enum {
         UPPER_DOOR_INITIALIZE = 0,

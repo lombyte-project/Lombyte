@@ -13,9 +13,10 @@ int          FUN_001f96f8_2cc210(int) __asm__("FUN_001f96f8");
 extern float falling_moby_horizontal_velocity_scale_gp __asm__("D_L00_001618A8")
     __attribute__((sda));
 
-void update_damped_falling_moby(unsigned char *updated_moby) __asm__("FUN_L00_002cc210");
+void damped_falling_moby_update(unsigned char *updated_moby) __asm__("FUN_L00_002cc210");
 
-void update_damped_falling_moby(unsigned char *updated_moby) {
+/* Moby class 428 */
+void damped_falling_moby_update(unsigned char *updated_moby) {
     float *moby_vars = *(float **)(updated_moby + 0x78);
     float  sc;
     FUN_001f9a10_2cc210(updated_moby + 0x10, updated_moby + 0x10, moby_vars);

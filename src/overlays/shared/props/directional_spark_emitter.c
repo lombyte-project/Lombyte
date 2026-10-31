@@ -7,7 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/props/directional_spark_emitter_data/update_directional_spark_emitter_2.h"
-#include "rnc/overlay/shared/props/directional_spark_emitter_data/update_directional_spark_emitter.h"
+#include "rnc/overlay/shared/props/directional_spark_emitter_data/directional_spark_emitter_update.h"
 
 extern void
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
@@ -34,9 +34,10 @@ extern f32 spark_emitter_default_primary_spread_limit_gp __asm__("D_L08_00161FA4
 extern f32 spark_emitter_default_secondary_spread_limit_gp __asm__("D_L08_00161FA8")
     __attribute__((sda));
 
-void update_directional_spark_emitter(char *moby) __asm__("FUN_L08_002f5830");
+void directional_spark_emitter_update(char *moby) __asm__("FUN_L08_002f5830");
 
-void update_directional_spark_emitter(char *moby) {
+/* Moby class 648 */
+void directional_spark_emitter_update(char *moby) {
     f32 spark_motion_primary[4], spark_motion_secondary[4], spark_position[4],
         spark_motion_offset[4], spark_rotation_matrix[16];
     char *spark_data;

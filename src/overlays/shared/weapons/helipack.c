@@ -15,6 +15,7 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 
 void helipack_update(char *a) __asm__("FUN_L00_002d37d0");
 
+/* Moby class 607 */
 void helipack_update(char *moby) {
     if (*(int *)(D_0013E533 + 0x2EA1) == 8) {
         if (MOBY(moby)->prev_seq != 6) {

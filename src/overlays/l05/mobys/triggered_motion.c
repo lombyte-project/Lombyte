@@ -17,9 +17,10 @@ extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern void  FUN_L00_001fff28(void *, int, float);
 extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
-void update_triggered_moby_motion_and_manipulator_angle(char *moby) __asm__("FUN_L05_00316258");
+void triggered_motion_update(char *moby) __asm__("FUN_L05_00316258");
 
-void update_triggered_moby_motion_and_manipulator_angle(char *moby) {
+/* Moby class 893 */
+void triggered_motion_update(char *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_WAIT_FOR_TRIGGER = 1,

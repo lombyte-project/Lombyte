@@ -39,7 +39,7 @@ typedef struct {
 
 extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 
-#include "rnc/overlay/shared/enemies/bolt_thief_mine_data/update_bolt_thief_mine.h"
+#include "rnc/overlay/shared/enemies/bolt_thief_mine_data/bolt_thief_mine_update.h"
 
 extern float probe_ground_height(float, void *, int) __asm__("FUN_00213508");
 extern int   resolve_moby_hit_response(
@@ -64,9 +64,10 @@ extern void explode_ff640(struct Moby *,
                           int) __asm__("FUN_L00_0025e450");
 
 /* Floating mine: spins and pulses (and bobs in level 16); blows up on a hit and respawns once out of view. */
-void update_bolt_thief_mine(struct Moby *moby) __asm__("FUN_L14_002ff640");
+void bolt_thief_mine_update(struct Moby *moby) __asm__("FUN_L14_002ff640");
 
-void update_bolt_thief_mine(struct Moby *moby) {
+/* Moby class 933 */
+void bolt_thief_mine_update(struct Moby *moby) {
     enum {
         FLOAT_MINE_INITIALIZE = 0,
         FLOAT_MINE_ACTIVE = 1,

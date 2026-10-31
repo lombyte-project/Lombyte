@@ -86,7 +86,7 @@ extern float moby_spark_first_batch_spread_degrees_gp __asm__("D_L13_00161F50")
 extern float moby_spark_second_batch_spread_degrees_gp __asm__("D_L13_00161F54")
     __attribute__((sda));
 
-#include "rnc/overlay/l13/mobys/poison_vessel_fragment_data/update_poison_vessel_fragment.h"
+#include "rnc/overlay/l13/mobys/poison_vessel_fragment_data/poison_vessel_fragment_update.h"
 
 int moby_spark_first_batch_initial_word_gp __asm__("D_L13_00161F08") = 0x30108010;
 
@@ -101,9 +101,10 @@ typedef union {
     float   f[4];
 } L13EffectVector;
 
-void update_poison_vessel_fragment(struct Moby *moby) __asm__("FUN_L13_0030c3b8");
+void poison_vessel_fragment_update(struct Moby *moby) __asm__("FUN_L13_0030c3b8");
 
-void update_poison_vessel_fragment(struct Moby *moby) {
+/* Moby class 1634 */
+void poison_vessel_fragment_update(struct Moby *moby) {
     char           *motion_and_lifetime_vars = (char *)moby->pvars;
     L13EffectVector old_pos, position, velocity, acceleration, second_pos;
     float           angle, direction, amount;

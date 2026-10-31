@@ -30,6 +30,7 @@ approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_00
 /* Turns the moby from its spawn rotation to the goal angles once it is triggered (unkBC). */
 void rocket_door1_update(struct Moby *m) __asm__("FUN_L02_002df948");
 
+/* Moby classes 735, 736 */
 void rocket_door1_update(struct Moby *moby) {
     enum {
         ROCKET_DOOR1_INITIALIZE_ROTATION = 0,

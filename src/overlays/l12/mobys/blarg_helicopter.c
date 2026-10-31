@@ -117,6 +117,7 @@ void cache_consecutive_point_distances(int point_data_index) {
 
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
+/* Moby class 326 */
 void blarg_helicopter_update(struct Moby *moby) {
     enum {
         BLARG_HELICOPTER_INITIALIZE = 0,

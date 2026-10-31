@@ -81,9 +81,10 @@ extern void  func_L00_0025F4A8_alt(void *,
 /* Rocket moby update: steers the rocket toward its target, moves it with collision retries, then checks hits and range. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CE6A0), where it is exact; names translated to the US level program. */
 
-void update_ryno_rocket(char *m) __asm__("FUN_L00_002cd1f0");
+void ryno_rocket_update(char *m) __asm__("FUN_L00_002cd1f0");
 
-void update_ryno_rocket(char *rocket_moby) {
+/* Moby class 457 */
+void ryno_rocket_update(char *rocket_moby) {
     char *rocket_vars;
     char *target_moby;
     char *p;

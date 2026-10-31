@@ -691,7 +691,7 @@ void update_timed_hud_visibility(void) {
         D_L00_00161E04 = -1;
     } else if (D_L00_00161E04 == -1) {
         D_L00_00161E04 = queue_animation_update(
-            0xC, 0, initialize_numeric_hud_element, mine_blend_color, draw_hud_text_panel, 0, 0);
+            0xC, 0, initialize_numeric_hud_element, hud_counter_update, draw_hud_text_panel, 0, 0);
     } else {
         hud_keep_visible(D_L00_00161E04, 10);
     }

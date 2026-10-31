@@ -40,7 +40,7 @@ collect_mobies_in_sphere(void *, int, struct Moby *, void *, f32) __asm__("FUN_L
 extern void
 send_blast_hits(struct Moby *, void *, void *, int, int, int, int, int, f32, f32, f32) __asm__("FUN_L00_0025a9f8");
 extern s32  random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern int  mine_blend_color(int, int, f32) __asm__("FUN_L00_002371e0");
+extern int  hud_counter_update(int, int, f32) __asm__("FUN_L00_002371e0");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void mine_debris(void *, void *, int, int, f32, int, int) __asm__("FUN_L00_0026bed0");
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
@@ -48,9 +48,10 @@ extern void mine_spawn_drops(struct Moby *, void *) __asm__("FUN_L00_0025f800");
 
 /* l03 mine update: falls until it lands, sticks to or homes on its target, arms,
    and explodes on contact (debris, camera shake, blast) or shrinks away when old. */
-void update_mine(struct Moby *mine_moby) __asm__("FUN_L03_002cbea8");
+void mine_layer_mine_update(struct Moby *mine_moby) __asm__("FUN_L03_002cbea8");
 
-void update_mine(struct Moby *mine_moby) {
+/* Moby class 627 */
+void mine_layer_mine_update(struct Moby *mine_moby) {
     enum {
         MINE_IDLE = 0,
         MINE_FALL_UNTIL_LANDING = 1,
@@ -208,10 +209,10 @@ void update_mine(struct Moby *mine_moby) {
                         2);
                     break;
                 case MINE_DEBRIS_SPHERICAL_VELOCITY: {
-                    int debris_spawn_color =
-                        mine_blend_color(0x7F000000, 0x7F182030, random_float_between(0.25f, 1.0f));
+                    int debris_spawn_color = hud_counter_update(
+                        0x7F000000, 0x7F182030, random_float_between(0.25f, 1.0f));
                     int debris_grayscale_color =
-                        mine_blend_color(0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
+                        hud_counter_update(0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
 
                     build_spherical_offset(debris_velocity,
                                            random_float_between(0.0f, 1.0f) * frame_time,

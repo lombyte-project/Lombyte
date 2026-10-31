@@ -183,9 +183,11 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
     return spawned;
 }
 
-/* Drifts and bounces off walls (state 0), lands and spawns its child moby (1), then shrinks while the child grows (2). */
+void bomb_spawner_bomb_update(struct Moby *moby) __asm__("FUN_L03_002c4718");
 
-void FUN_L03_002c4718(struct Moby *moby) {
+/* Drifts and bounces off walls (state 0), lands and spawns its child moby (1), then shrinks while the child grows (2). */
+/* Moby class 545 */
+void bomb_spawner_bomb_update(struct Moby *moby) {
     float       *vars;
     Vec4        *pos;
     struct Moby *other;

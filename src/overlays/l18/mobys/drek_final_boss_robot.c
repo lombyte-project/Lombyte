@@ -425,6 +425,7 @@ extern void func_L00_0025F4A8_alt(void *,
 void drek_final_boss_robot_update(BossMoby *moby) __asm__("FUN_L18_002f2bf0");
 void spawn_drek_boss_firing_effects(char *moby, void *effect_position) __asm__("FUN_L18_002f76a0");
 
+/* Moby class 1422 */
 void drek_final_boss_robot_update(BossMoby *moby) {
     enum {
         DREK_BOSS_INITIALIZE = 0,

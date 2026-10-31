@@ -60,6 +60,7 @@ typedef struct {
 
 void enemy_fighter_update(struct Moby *moby) __asm__("FUN_L14_002fc0f0");
 
+/* Moby class 908 */
 void enemy_fighter_update(struct Moby *moby) {
     enum {
         ENEMY_FIGHTER_STATE_INITIALIZE = 0,

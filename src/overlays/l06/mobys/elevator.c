@@ -143,7 +143,7 @@ extern unsigned char D_0013D5DD_2FDA70[] __asm__("D_0013D4C6");
 extern unsigned char D_0013D4AF_2FDA70[] __asm__("D_0013D3A8");
 extern unsigned char D_0013D5CA_2FDA70[] __asm__("D_0013D4C6");
 extern char          D_0013A5E0_2FDA70[] __asm__("D_0013CAE4");
-void                 update_elevator(Moby_2FDA70 *moby) __asm__("FUN_L06_002fc640");
+void                 elevator_update(Moby_2FDA70 *moby) __asm__("FUN_L06_002fc640");
 
 void set_moby_and_links_to_states_2_and_3(char *moby) {
     char  *moby_data = ((char *)MOBY(moby)->pvars);
@@ -174,7 +174,8 @@ void set_moby_and_links_to_states_2_and_3(char *moby) {
     }
 }
 
-void update_elevator(Moby_2FDA70 *moby) {
+/* Moby class 1061 */
+void elevator_update(Moby_2FDA70 *moby) {
     enum {
         INITIALIZE_POSITION_AND_LINKED_MOBYS = 0,
         WAIT_FOR_INITIAL_HERO_ACTIVATION = 1,

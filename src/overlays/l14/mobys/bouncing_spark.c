@@ -83,9 +83,10 @@ extern void spawn_explosion(void *,
                             int,
                             int) __asm__("FUN_L00_0025e450");
 
-void update_bouncing_spark(struct Moby *spark_moby) __asm__("FUN_L14_00300e00");
+void bouncing_spark_update(struct Moby *spark_moby) __asm__("FUN_L14_00300e00");
 
-void update_bouncing_spark(struct Moby *spark_moby) {
+/* Moby class 1193 */
+void bouncing_spark_update(struct Moby *spark_moby) {
     enum {
         SPARK_COUNT_NEXT_BOUNCE = 0,
         SPARK_WAIT_FOR_DESCENT = 1,

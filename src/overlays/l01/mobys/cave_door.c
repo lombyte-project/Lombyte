@@ -18,6 +18,7 @@ extern struct Moby *D_L01_0015FFD8;
 
 void cave_door_update(struct Moby *self) __asm__("FUN_L01_002f4348");
 
+/* Moby class 641 */
 void cave_door_update(struct Moby *cave_door_moby) {
     enum {
         CAVE_DOOR_STATE_INITIALIZE = 0,

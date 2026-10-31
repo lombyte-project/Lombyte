@@ -77,9 +77,10 @@ void attach_cutscene_fixed_scale_manipulator(void) {
 /* Cutscene trigger: unless already seen, starts its camera sequence when the hero enters the volume (or it is
  * triggered), then ends it after its timer and re-arms. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FC988), where it is exact; names translated to the US level program. */
-void update_cutscene_trigger(char *moby) __asm__("FUN_L01_002fb5b0");
+void cutscene_trigger_update(char *moby) __asm__("FUN_L01_002fb5b0");
 
-void update_cutscene_trigger(char *moby) {
+/* Moby class 737 */
+void cutscene_trigger_update(char *moby) {
     enum {
         CUTSCENE_TRIGGER_INITIALIZE = 0,
         CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER = 1,

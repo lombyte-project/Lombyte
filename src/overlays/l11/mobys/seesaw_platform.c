@@ -39,6 +39,7 @@ struct L11TiltVars {
    his side, and a tilt past D_L11_00161F84 degrees knocks him into hero state 6. */
 void seesaw_platform_update(struct Moby *m) __asm__("FUN_L11_0030eb90");
 
+/* Moby class 1178 */
 void seesaw_platform_update(struct Moby *platform) {
     Vec4f               platform_translation_delta;
     Vec4f               rot;

@@ -15,6 +15,7 @@ extern float D_0015ED70_lui __asm__("D_0015ED70");
 
 void sandmouse_house_update(unsigned char *m) __asm__("FUN_L01_002f2b68");
 
+/* Moby class 604 */
 void sandmouse_house_update(unsigned char *moby) {
     enum {
         SANDMOUSE_HOUSE_INITIALIZE = 0,

@@ -26,9 +26,10 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 s32         allocate_voice_for_target_entry(s32   entry_index,
                                             s32   flags,
                                             void *target) __asm__("FUN_0022da68");
-void        update_hero_triggered_falling_platform(char *moby) __asm__("FUN_L07_00311bc8");
+void        hero_falling_platform_update(char *moby) __asm__("FUN_L07_00311bc8");
 
-void update_hero_triggered_falling_platform(char *moby) {
+/* Moby class 1080 */
+void hero_falling_platform_update(char *moby) {
     enum {
         LEAF_INITIALIZE = 0,
         LEAF_WAIT_FOR_HERO_CONTACT = 1,

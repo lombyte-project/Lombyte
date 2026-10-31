@@ -71,9 +71,10 @@ extern void debug_print(char *, int) __asm__("FUN_001e93b0");
 extern int  voice_is_playing(struct RailSpawnerMoby *, int) __asm__("FUN_L00_0028d8c0");
 extern int  FUN_L00_0028dc90(int, int, struct RailSpawnerMoby *, int);
 
-void update_path_mover_spawner(struct RailSpawnerMoby *moby) __asm__("FUN_L03_002db280");
+void path_mover_spawner_update(struct RailSpawnerMoby *moby) __asm__("FUN_L03_002db280");
 
-void update_path_mover_spawner(struct RailSpawnerMoby *moby) {
+/* Moby class 899 */
+void path_mover_spawner_update(struct RailSpawnerMoby *moby) {
     struct RailSpawnerVars *vars = moby->vars;
     LevelPath              *path;
     float                   spawn_distance;

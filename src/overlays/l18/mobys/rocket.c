@@ -42,9 +42,10 @@ void         spawn_rocket_trail_effects(void *mobyp, void *vec) __asm__("FUN_L18
 extern void  spawn_rocket_explosion(void *, void *) __asm__("FUN_L18_002d5610");
 void         draw_rocket_target_pulse_quad(struct Moby *m) __asm__("FUN_L18_002d5768");
 
-void update_rocket_moby(struct Moby *moby) __asm__("FUN_L18_002d5050");
+void rocket_moby_update(struct Moby *moby) __asm__("FUN_L18_002d5050");
 
-void update_rocket_moby(struct Moby *moby) {
+/* Moby class 564 */
+void rocket_moby_update(struct Moby *moby) {
     L18D *moby_vars = (L18D *)moby->pvars;
     float target_movement_step[4];
     float movement_step[4];

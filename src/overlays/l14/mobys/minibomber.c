@@ -259,6 +259,7 @@ extern void func_L00_0025F4A8_2B5938(void *,
 
 void minibomber_update(Moby_2B5938 *moby) __asm__("FUN_L14_002b46e8");
 
+/* Moby class 31 */
 void minibomber_update(Moby_2B5938 *moby) {
     enum {
         MINIBOMBER_STATE_INITIALIZE = 0,

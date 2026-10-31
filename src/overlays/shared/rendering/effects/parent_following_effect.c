@@ -13,9 +13,10 @@ void        mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 /* update: follow the parent, blend its color, scale by the wind factor */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002BC140), where it is exact; names translated to the US level program. */
 
-void update_parent_following_effect(char *moby) __asm__("FUN_L03_002bae48");
+void parent_following_effect_update(char *moby) __asm__("FUN_L03_002bae48");
 
-void update_parent_following_effect(char *moby) {
+/* Moby class 235 */
+void parent_following_effect_update(char *moby) {
     char *moby_pvars = ((char *)MOBY(moby)->pvars);
     float ratio;
     float accumulated_offset;

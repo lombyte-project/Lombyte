@@ -64,6 +64,7 @@ void         group_trigger_nearest(int moby_list_index) __asm__("FUN_L16_002e5d3
 
 void grindrail_barrier_update(struct Moby *m) __asm__("FUN_L16_002e5708");
 
+/* Moby classes 1443, 1890 */
 void grindrail_barrier_update(struct Moby *barrier_moby) {
     enum {
         GRINDRAIL_BARRIER_STATE_INITIALIZE = 0,

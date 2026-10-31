@@ -81,9 +81,10 @@ extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
 extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 
 extern Pair D_L08_00161E20[] MACRO_ADDR;
-void        update_layered_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f1548");
+void        layered_mesh_effect_update(struct Moby *moby) __asm__("FUN_L08_002f1548");
 
-void update_layered_mesh_effect(struct Moby *moby) {
+/* Moby class 600 */
+void layered_mesh_effect_update(struct Moby *moby) {
     enum {
         DRAW_ELEMENTS_INITIALIZE = 0,
         DRAW_ELEMENTS_UPDATE = 1

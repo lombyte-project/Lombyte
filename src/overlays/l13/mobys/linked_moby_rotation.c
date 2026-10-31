@@ -24,9 +24,10 @@ typedef struct Data {
     int   start_active;
 } Data;
 
-void update_linked_moby_rotation(struct Moby *moby) __asm__("FUN_L13_002c7f38");
+void linked_moby_rotation_update(struct Moby *moby) __asm__("FUN_L13_002c7f38");
 
-void update_linked_moby_rotation(struct Moby *moby) {
+/* Moby classes 127, 128, 159, 169 */
+void linked_moby_rotation_update(struct Moby *moby) {
     enum {
         INITIALIZE_ROTATION = 0,
         WAIT_TO_ADVANCE_ROTATION = 1,

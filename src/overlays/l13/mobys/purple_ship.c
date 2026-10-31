@@ -11,6 +11,7 @@ typedef struct {
 
 void purple_ship_update(Level13VendorMoby *moby) __asm__("FUN_L13_002f3750");
 
+/* Moby class 533 */
 void purple_ship_update(Level13VendorMoby *moby) {
     if (*(void **)(((char *)&level_render_state)) != moby) {
         moby->field94 = 0;

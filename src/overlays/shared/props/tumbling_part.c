@@ -1,4 +1,4 @@
-/* Shared moby class robot_arm (also the hoverboard and other parts): a broken-off part that tumbles, bounces and then explodes or fades out. */
+/* Shared tumbling part (class records robot_arm, the hoverboard and other parts): a broken-off part that tumbles, bounces and then explodes or fades out. */
 
 #include "types.h"
 #include "rnc/mobys/moby.h"
@@ -40,14 +40,15 @@ extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 
 /* Update of an effect-group moby: state machine over its life, then it steers a sprite along its path and bounces it off surfaces. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5238), where it is exact; names translated to the US level program. */
-void robot_arm_update(char *m) __asm__("FUN_L00_002e3d88");
+void tumbling_part_update(char *m) __asm__("FUN_L00_002e3d88");
 
-void robot_arm_update(char *moby) {
+/* Moby classes: 203, listed in the level class tables */
+void tumbling_part_update(char *moby) {
     enum {
-        ROBOT_ARM_REMOVE = 0,
-        ROBOT_ARM_WAIT_FOR_TIMER = 1,
-        ROBOT_ARM_SPAWN_EFFECT_AND_REMOVE = 2,
-        ROBOT_ARM_FADE_AND_REMOVE = 3
+        TUMBLING_PART_REMOVE = 0,
+        TUMBLING_PART_WAIT_FOR_TIMER = 1,
+        TUMBLING_PART_SPAWN_EFFECT_AND_REMOVE = 2,
+        TUMBLING_PART_FADE_AND_REMOVE = 3
     };
     char  *moby_data = ((char *)MOBY(moby)->pvars);
     float  effect_offset_or_world_position[4];
@@ -63,17 +64,17 @@ void robot_arm_update(char *moby) {
     float *collision_normal;
 
     switch (MOBY(moby)->state) {
-    case ROBOT_ARM_REMOVE:
+    case TUMBLING_PART_REMOVE:
         mark_moby_for_removal(moby);
         return;
-    case ROBOT_ARM_WAIT_FOR_TIMER:
+    case TUMBLING_PART_WAIT_FOR_TIMER:
         if (func_001F9908_r((int *)(moby_data + 0x30))) {
             moby[0x20] = (*(int *)(moby_data + 0x34) & 1) ? 3 : 2;
             *(int *)(moby_data + 0x30) = truncate_float_to_s32(scale_time(10.0f));
             return;
         }
         break;
-    case ROBOT_ARM_SPAWN_EFFECT_AND_REMOVE:
+    case TUMBLING_PART_SPAWN_EFFECT_AND_REMOVE:
         transform_vector_by_basis(effect_offset_or_world_position, moby_data + 0x20, moby + 0xC0);
         fast_vec_add(effect_offset_or_world_position, effect_offset_or_world_position, moby + 0x10);
         if (*(int *)(moby_data + 0x34) & 2) {
@@ -105,7 +106,7 @@ void robot_arm_update(char *moby) {
         }
         mark_moby_for_removal(moby);
         return;
-    case ROBOT_ARM_FADE_AND_REMOVE:
+    case TUMBLING_PART_FADE_AND_REMOVE:
         if (func_001F9908_r((int *)(moby_data + 0x30))) {
             mark_moby_for_removal(moby);
             return;

@@ -68,6 +68,7 @@ extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 
 void ultramech_scientist_update(struct Moby *moby) __asm__("FUN_L15_002ec760");
 
+/* Moby class 1446 */
 void ultramech_scientist_update(struct Moby *moby) {
     enum {
         ULTRAMECH_SCIENTIST_INITIALIZE = 0,

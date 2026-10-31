@@ -1761,6 +1761,7 @@ extern int try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void fighter_jet_update(Jet *m) __asm__("FUN_L13_002bb068");
 
+/* Moby class 69 */
 void fighter_jet_update(Jet *jet_moby) {
     enum {
         FIGHTER_JET_STATE_INITIALIZE = 0,

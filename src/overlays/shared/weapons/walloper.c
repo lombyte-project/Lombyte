@@ -726,6 +726,7 @@ V_2bc1a0 D_L18_001D09E0 = {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BC860), where it is exact; names translated to the US level program. */
 void walloper_update(char *m) __asm__("FUN_L00_002bb558");
 
+/* Moby class 180 */
 void walloper_update(char *walloper_moby) {
     enum {
         WALLOPER_STATE_INITIALIZE = 0,

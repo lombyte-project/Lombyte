@@ -22,9 +22,10 @@ extern void *spawn_spark_2ef9b0(void *, void *, int, int, float) __asm__("FUN_L0
 
 /* The heavier tumbling debris: as FUN_L09_002ef430, inside a 2..1021 box, with eight sparks; on a hit it either
    slows down or bounces off, shrinking, with a new random spin. */
-void update_shrinking_tumbling_debris(struct Moby *moby) __asm__("FUN_L09_002ef9b0");
+void shrinking_tumbling_debris_update(struct Moby *moby) __asm__("FUN_L09_002ef9b0");
 
-void update_shrinking_tumbling_debris(struct Moby *moby) {
+/* Moby classes 320, 321 */
+void shrinking_tumbling_debris_update(struct Moby *moby) {
     float  previous_debris_position[4];
     float  spark_velocity[4];
     float  random_spark_vector[4];

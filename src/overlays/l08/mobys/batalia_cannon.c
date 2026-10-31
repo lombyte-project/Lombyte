@@ -283,7 +283,7 @@ extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern char *func_L00_0026EBC0_2E16A0(char *, char *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void  snap_scripted_camera_to_pose(void) __asm__("FUN_L08_00313ba8");
 extern unsigned char    l08_cannon_hero_interaction_flags[] __asm__("D_0014095F");
-void                    update_batalia_cannon(Moby *moby) __asm__("FUN_L08_002e0328");
+void                    batalia_cannon_update(Moby *moby) __asm__("FUN_L08_002e0328");
 extern float D_0015ED70 MACRO_ADDR;
 
 int batalia_cannon_hud_alerted_target_colour __asm__("D_L08_00161AD4") = 0x600000ff;
@@ -723,7 +723,8 @@ int find_batalia_cannon_aim_target(struct Moby *moby) {
     return 0;
 }
 
-void update_batalia_cannon(Moby *moby) {
+/* Moby class 440 */
+void batalia_cannon_update(Moby *moby) {
     enum {
         CANNON_INITIALIZE = 0,
         CANNON_UNMOUNTED_IDLE = 4,

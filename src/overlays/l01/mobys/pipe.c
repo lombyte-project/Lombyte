@@ -27,6 +27,7 @@ extern int   scale_game_frames(int);
 
 void pipe_update(struct Moby *m) __asm__("FUN_L01_002ff860");
 
+/* Moby class 778 */
 void pipe_update(struct Moby *moby) {
     char *pipe_vars = (char *)moby->pvars;
     char *hit = find_moby_hit(moby, 0x10000, 0);

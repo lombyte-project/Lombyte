@@ -58,6 +58,7 @@ s32  is_value_within_interpolated_window(struct InterpolatedStateEntry *arg0,
 short D_L16_00161E48 = 0;
 void  chomper_update(struct Moby *m) __asm__("FUN_L16_002e5e08");
 
+/* Moby class 1445 */
 void chomper_update(struct Moby *chomper_moby) {
     enum {
         CHOMPER_INITIALIZE = 0,

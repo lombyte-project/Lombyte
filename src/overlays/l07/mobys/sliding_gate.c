@@ -27,9 +27,10 @@ struct L07MovingVars {
 
 extern struct Moby *D_L07_0015FFD8;
 
-void update_sliding_gate(struct Moby *moby) __asm__("FUN_L07_0031a9e8");
+void sliding_gate_update(struct Moby *moby) __asm__("FUN_L07_0031a9e8");
 
-void update_sliding_gate(struct Moby *moby) {
+/* Moby class 1128 */
+void sliding_gate_update(struct Moby *moby) {
     enum {
         MOVING_MOBY_INITIALIZE = 0,
         MOVING_MOBY_WAIT_AT_HOME = 1,

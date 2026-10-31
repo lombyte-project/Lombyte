@@ -47,9 +47,10 @@ f32        resolve_camera_surface_height(struct CameraProbePosition *position,
                                          s32 optional_output) __asm__("FUN_002135f0");
 extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
-void update_floating_mine(struct Moby *moby) __asm__("FUN_L17_002dc3f8");
+void floating_mine_update(struct Moby *moby) __asm__("FUN_L17_002dc3f8");
 
-void update_floating_mine(struct Moby *moby) {
+/* Moby class 835 */
+void floating_mine_update(struct Moby *moby) {
     enum {
         BOBBING_INITIALIZE = 0,
         BOBBING_UPDATE_AND_CHECK_CONTACT = 1

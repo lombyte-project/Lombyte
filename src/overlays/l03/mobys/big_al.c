@@ -79,6 +79,7 @@ extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90"
    its head toward the hero or random points while idle. */
 void big_al_update(struct Moby *m) __asm__("FUN_L03_002db558");
 
+/* Moby class 909 */
 void big_al_update(struct Moby *guide_moby) {
     enum {
         BIG_AL_INITIALIZE = 0,

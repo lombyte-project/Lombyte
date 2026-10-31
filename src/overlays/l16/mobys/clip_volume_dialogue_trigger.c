@@ -37,9 +37,10 @@
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/rendering/clip_volume.h"
 
-void update_clip_volume_dialogue_trigger(struct Moby *moby) __asm__("FUN_L16_002e7208");
+void clip_volume_dialogue_trigger_update(struct Moby *moby) __asm__("FUN_L16_002e7208");
 
-void update_clip_volume_dialogue_trigger(struct Moby *moby) {
+/* Moby class 1561 */
+void clip_volume_dialogue_trigger_update(struct Moby *moby) {
     enum {
         CLIP_TRIGGER_WAIT_FOR_ARMING = 0,
         CLIP_TRIGGER_CHECK_LATCH = 1

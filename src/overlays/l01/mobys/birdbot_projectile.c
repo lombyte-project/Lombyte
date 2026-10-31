@@ -228,9 +228,10 @@ extern s32  probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L0
 extern u8   D_L01_00167240[];
 extern u128 D_L01_001742E0;
 
-void update_birdbot_projectile(DropMoby *) __asm__("FUN_L01_002fa4c0");
+void birdbot_projectile_update(DropMoby *) __asm__("FUN_L01_002fa4c0");
 
-void update_birdbot_projectile(DropMoby *projectile) {
+/* Moby class 722 */
+void birdbot_projectile_update(DropMoby *projectile) {
     DropVars *projectile_vars;
     u128     *pos;
     Vec4      previous_position;

@@ -86,6 +86,7 @@ extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8
 extern void spawn_moving_resizing_height_snapped_alpha_fade_particle(
     void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 
+/* Moby class 1766 */
 void shuttle_update(struct Moby *moby) {
     enum {
         SHUTTLE_STATE_INITIALIZE = 0,

@@ -23,9 +23,10 @@ extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022d
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void  FUN_L00_00257470(void *, int, int);
 
-void update_breakable_prop(struct Moby *moby) __asm__("FUN_L16_002d6740");
+void breakable_prop_update(struct Moby *moby) __asm__("FUN_L16_002d6740");
 
-void update_breakable_prop(struct Moby *moby) {
+/* Moby class 800 */
+void breakable_prop_update(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_CHECK_HIT_FOR_REMOVAL = 1,

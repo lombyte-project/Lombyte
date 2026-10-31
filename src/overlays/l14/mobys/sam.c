@@ -110,6 +110,7 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void sam_update(L14WatchMoby *m) __asm__("FUN_L14_002fefe0");
 
+/* Moby class 924 */
 void sam_update(L14WatchMoby *moby) {
     enum {
         SAM_STATE_INITIALIZE = 0,

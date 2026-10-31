@@ -66,6 +66,7 @@ extern void  set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e868
 
 void gadgebot_telepot_pad_update(char *moby) __asm__("FUN_L10_002be858");
 
+/* Moby classes 351, 1301 */
 void gadgebot_telepot_pad_update(char *moby) {
     int   *telepot_pad_vars = ((int *)MOBY(moby)->pvars);
     float  position[4];

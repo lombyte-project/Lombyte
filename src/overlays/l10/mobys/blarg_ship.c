@@ -176,6 +176,7 @@ extern int           D_0015ED84;
 
 void blarg_ship_update(Ship_5E48 *m) __asm__("FUN_L10_002e4a88");
 
+/* Moby class 1229 */
 void blarg_ship_update(Ship_5E48 *ship) {
     enum {
         BLARG_SHIP_STATE_INITIALIZE = 0,

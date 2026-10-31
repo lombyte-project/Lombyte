@@ -133,6 +133,7 @@ void compute_mine_launch_velocity(float   *origin_position,
 /* Mine glove update: aims the glove and throws a mine at the target. */
 void mine_glove_update(struct Moby *moby) __asm__("FUN_L00_002c1ad0");
 
+/* Moby class 190 */
 void mine_glove_update(struct Moby *moby) {
     enum {
         MINE_GLOVE_INITIALIZE = 0,

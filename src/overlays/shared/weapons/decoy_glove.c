@@ -193,6 +193,7 @@ void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *posit
 
 void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
 
+/* Moby class 562 */
 void decoy_glove_update(unsigned char *moby) {
     enum {
         DECOY_GLOVE_INITIALIZE = 0,

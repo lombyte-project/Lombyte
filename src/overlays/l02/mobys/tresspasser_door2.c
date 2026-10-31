@@ -16,6 +16,7 @@ extern char D_L02_0015FFD8_c3 __asm__("D_L02_0015FFD8");
 
 void tresspasser_door2_update(struct Moby *moby) __asm__("FUN_L02_002e0138");
 
+/* Moby class 744 */
 void tresspasser_door2_update(struct Moby *moby) {
     enum {
         TRESSPASSER_DOOR2_CAPTURE_START_POSITION = 0,

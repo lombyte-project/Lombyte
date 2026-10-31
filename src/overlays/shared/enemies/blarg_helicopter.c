@@ -199,6 +199,7 @@ hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN
 
 void blarg_helicopter_update(HMob49 *moby) __asm__("FUN_L03_002cca00");
 
+/* Moby class 631 */
 void blarg_helicopter_update(HMob49 *moby) {
     enum {
         BLARG_HELICOPTER_INITIALIZE = 0,

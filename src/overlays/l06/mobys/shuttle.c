@@ -242,6 +242,7 @@ void begin_moby_linear_and_angular_motion(char *moby,
     qcopy(motion_vars + 0x10, angular_velocity);
 }
 
+/* Moby class 1109 */
 void shuttle_update(struct Moby *moby) {
     enum {
         INITIALIZE_SHUTTLE = 0,

@@ -61,9 +61,10 @@ advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
-void update_hovering_rocket_attacker(unsigned char *moby) __asm__("FUN_L13_002c25b8");
+void hovering_rocket_attacker_update(unsigned char *moby) __asm__("FUN_L13_002c25b8");
 
-void update_hovering_rocket_attacker(unsigned char *moby) {
+/* Moby class 101 */
+void hovering_rocket_attacker_update(unsigned char *moby) {
     enum {
         UPDATE_INITIALIZE = 0x0,
         TRACK_TARGET_BEFORE_ATTACK = 0x2,

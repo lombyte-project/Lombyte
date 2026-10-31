@@ -56,9 +56,10 @@ extern void spawn_explosion(void *,
 extern void spawn_debris_chunk(
     void *, void *, unsigned int, float, int, float, float, float, int) __asm__("FUN_L01_002f8530");
 
-void update_destructible_object(char *moby) __asm__("FUN_L10_002d9eb8");
+void destructible_object_update(char *moby) __asm__("FUN_L10_002d9eb8");
 
-void update_destructible_object(char *moby) {
+/* Moby class 1047 */
+void destructible_object_update(char *moby) {
     typedef union {
         u128  q;
         float f[4];

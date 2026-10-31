@@ -93,6 +93,7 @@ extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
 
 void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
 
+/* Moby class 1179 */
 void thruster_pack_lock_update(Lock *moby) {
     enum {
         THRUSTER_PACK_LOCK_STATE_INIT = 0,

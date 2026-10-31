@@ -13,6 +13,7 @@ float      escalator_acceleration_gp __asm__("D_L02_00161C1C") = 2.5f;
 
 void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");
 
+/* Moby classes 296, 652, 653 */
 void escalator_update(char *moby) {
     char *escalator_motion_state = ((char *)MOBY(moby)->pvars);
     float limit;

@@ -91,6 +91,7 @@ s32         D_L01_00161E90 = 5;
 
 void beehive_update(SpawnerMoby *m) __asm__("FUN_L01_003021b8");
 
+/* Moby class 815 */
 void beehive_update(SpawnerMoby *beehive_moby) {
     enum {
         BEEHIVE_INITIALIZE = 0,

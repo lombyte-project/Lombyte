@@ -41,9 +41,10 @@ extern char         D_L10_00174300[];
 extern OvlQuad      D_L10_00167240;
 extern struct Moby *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
-void update_height_adjusted_projectile(struct Moby *moby) __asm__("FUN_L10_002d7b80");
+void height_adjusted_projectile_update(struct Moby *moby) __asm__("FUN_L10_002d7b80");
 
-void update_height_adjusted_projectile(struct Moby *moby) {
+/* Moby class 859 */
+void height_adjusted_projectile_update(struct Moby *moby) {
     enum {
         HEIGHT_MODE_SKIP_ADJUSTMENT = 0,
         HEIGHT_MODE_APPROACH_FIXED_HEIGHT = 1,

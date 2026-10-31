@@ -127,6 +127,7 @@ extern void FUN_L06_002ff100_u(struct Moby *) __asm__("FUN_L06_002ff100");
 
 void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L06_002fdbd0");
 
+/* Moby class 1068 */
 void blarg_space_commando_update(struct Moby *moby) {
     enum {
         BLARG_COMMANDO_STATE_INITIALIZE = 0,

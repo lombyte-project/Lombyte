@@ -35,11 +35,12 @@ extern void vendor_spring(void *, void *, float, float, float, float) __asm__("F
 
 extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
 
-#include "rnc/overlay/l14/mobys/platform_data/update_tilting_platform.h"
+#include "rnc/overlay/l14/mobys/platform_data/tilting_platform_update.h"
 
-void update_tilting_platform(struct Moby *moby) __asm__("FUN_L14_002de1f8");
+void tilting_platform_update(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 
-void update_tilting_platform(struct Moby *moby) {
+/* Moby class 309 */
+void tilting_platform_update(struct Moby *moby) {
     char *tilting_platform_state = (char *)moby->pvars;
     void *rotation;
     u128  old_rotation;

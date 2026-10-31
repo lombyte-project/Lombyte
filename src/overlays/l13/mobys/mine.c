@@ -85,9 +85,10 @@ extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__(
 
 extern char *FUN_L00_0025a420(void *, int, int);
 
-void update_level_13_mine(ProjectileMoby *moby) __asm__("FUN_L13_002c2048");
+void level_13_mine_update(ProjectileMoby *moby) __asm__("FUN_L13_002c2048");
 
-void update_level_13_mine(ProjectileMoby *moby) {
+/* Moby class 83 */
+void level_13_mine_update(ProjectileMoby *moby) {
     char           *moby_data = (char *)moby->data;
     ProjectileVec4  steering_and_collision_vector;
     float           hitpos[12];

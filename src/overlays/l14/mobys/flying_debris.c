@@ -72,9 +72,10 @@ extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN
 
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 
-void update_flying_debris(struct Moby *moby) __asm__("FUN_L14_002bac78");
+void flying_debris_update(struct Moby *moby) __asm__("FUN_L14_002bac78");
 
-void update_flying_debris(struct Moby *moby) {
+/* Moby class 81 */
+void flying_debris_update(struct Moby *moby) {
     char  *debris_vars = (char *)moby->pvars;
     float  joint[4];
     float  ofs[4];

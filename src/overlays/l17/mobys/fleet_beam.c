@@ -71,9 +71,10 @@ extern void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 extern void transform_vector_by_basis(void *, void *, void *);
 
 extern char *D_L17_0015FFD0[] MACRO_ADDR;
-void         update_fleet_beam(struct Moby *beam_moby) __asm__("FUN_L17_002a8da0");
+void         fleet_beam_update(struct Moby *beam_moby) __asm__("FUN_L17_002a8da0");
 
-void update_fleet_beam(struct Moby *beam_moby) {
+/* Moby class 99 */
+void fleet_beam_update(struct Moby *beam_moby) {
     enum {
         BEAM_INITIALIZE = 0,
         BEAM_UPDATE_STATIONARY = 1,

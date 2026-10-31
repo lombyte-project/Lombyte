@@ -90,6 +90,7 @@ extern int D_L08_0015F5CC;
 extern f32  advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 
+/* Moby class 424 */
 void shuttle_update(struct Moby *moby) {
     enum {
         SHUTTLE_STATE_INITIALIZE = 0,

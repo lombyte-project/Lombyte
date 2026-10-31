@@ -510,6 +510,7 @@ int hoverboard_dummy_spray_initial_color_gp __asm__("D_L16_00161A08") =
     0x4f0090f0; /* RGBA, 0xAABBGGRR */
 void test_dummy_on_hoverboard_update(unsigned char *m) __asm__("FUN_L16_002d04a0");
 
+/* Moby class 556 */
 void test_dummy_on_hoverboard_update(unsigned char *moby) {
     enum {
         HOVERBOARD_DUMMY_STATE_INITIALIZE = 0,

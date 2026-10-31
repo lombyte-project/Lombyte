@@ -36,9 +36,10 @@ extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 
 void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
-void update_quartu_cutscene_trigger(struct Moby *moby) __asm__("FUN_L15_002eb4c0");
+void quartu_cutscene_trigger_update(struct Moby *moby) __asm__("FUN_L15_002eb4c0");
 
-void update_quartu_cutscene_trigger(struct Moby *moby) {
+/* Moby class 1419 */
+void quartu_cutscene_trigger_update(struct Moby *moby) {
     enum {
         CUTSCENE_TRIGGER_WAIT_FOR_CONDITIONS = 0,
         CUTSCENE_TRIGGER_START_SECOND_SCENE = 1,

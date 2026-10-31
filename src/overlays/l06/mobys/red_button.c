@@ -88,6 +88,7 @@ V6 l06_red_button_particle_second_color_palette __asm__("D_L06_002019B8") = {
     {0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}
 };
 
+/* Moby class 1118 */
 void red_button_update(struct Moby *moby) {
     enum {
         INITIALIZE_RED_BUTTON = 0,

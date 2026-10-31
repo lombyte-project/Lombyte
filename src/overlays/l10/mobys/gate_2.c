@@ -56,6 +56,7 @@ extern unsigned char D_0013DE4B_2EAD50[] __asm__("D_0013DD4C");
 
 void gate_2_update(GateMoby *m) __asm__("FUN_L10_002e9990");
 
+/* Moby class 1424 */
 void gate_2_update(GateMoby *moby) {
     GateVars     *vars = moby->vars;
     float         opening_offset[3];

@@ -65,6 +65,7 @@ extern void spawn_burst(float, void *, void *, int, int, int, int) __asm__("FUN_
 
 void construction_arm_update(struct Moby *moby) __asm__("FUN_L15_002c2938");
 
+/* Moby class 221 */
 void construction_arm_update(struct Moby *moby) {
     enum {
         CONSTRUCTION_ARM_INITIALIZE = 0,

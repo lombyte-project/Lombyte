@@ -24,6 +24,7 @@ extern void  spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
 
 void tall_shroom_update(TriggerMoby *obj) __asm__("FUN_L01_0030d0f0");
 
+/* Moby class 1813 */
 void tall_shroom_update(TriggerMoby *shroom_moby) {
     enum {
         TALL_SHROOM_STATE_INITIALIZE = 0,

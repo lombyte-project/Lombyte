@@ -12,9 +12,10 @@ extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 /* Watches the moby's two 32-entry trigger lists against the hero and fires the matching events. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8D60), where it is exact; names translated to the US level program. */
-void update_hero_trigger_volume_monitor(char *moby) __asm__("FUN_L06_002f7930");
+void respawn_volume_update(char *moby) __asm__("FUN_L06_002f7930");
 
-void update_hero_trigger_volume_monitor(char *moby) {
+/* Moby class 1039 */
+void respawn_volume_update(char *moby) {
     enum {
         INITIALIZE_TRIGGER_MONITOR = 0,
         CHECK_HERO_TRIGGER_VOLUMES = 1

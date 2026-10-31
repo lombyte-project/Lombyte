@@ -38,10 +38,11 @@ extern void clear_bit_grid_rectangle(int x, int y, int w, int h) __asm__("FUN_L0
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern int  memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void request_space_load(int) __asm__("FUN_0022e188");
-void        update_umbris_scene_progression(struct Moby *moby) __asm__("FUN_L07_002f5ba0");
+void        umbris_scene_progression_update(struct Moby *moby) __asm__("FUN_L07_002f5ba0");
 void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void update_umbris_scene_progression(struct Moby *moby) {
+/* Moby class 436 */
+void umbris_scene_progression_update(struct Moby *moby) {
     enum {
         CONTROLLER_WAIT_FOR_SCENE_IDLE = 0,
         CONTROLLER_START_INITIAL_SCENE = 1,
