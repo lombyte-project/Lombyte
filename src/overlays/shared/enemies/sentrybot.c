@@ -1554,7 +1554,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
         SENTRYBOT_FIRST_CHANNEL_BLEND_HIT_RESPONSE = 9,
         SENTRYBOT_FIRST_CHANNEL_BLEND_TARGET_HIT_RESPONSE = 10,
         SENTRYBOT_NO_KNOCKBACK_START_RESPONSE = 11
-    };
+    } ; enum { HIT_STATUS_SKIP_REACTION = 1};
     unsigned char *moby = sentrybot_moby;
     SentrybotVars *sentrybot_data = (SentrybotVars *)MOBY(moby)->pvars;
     char          *hit;
@@ -1577,7 +1577,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *sentrybot_moby, i
     impact = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
     code = resolve_moby_hit_response(moby, hit, &sentrybot_data->health, 0, &kind, &impact, 0, 4);
-    if (kind != 1 && MOBY(moby)->state != 0x17) {
+    if (kind != HIT_STATUS_SKIP_REACTION && MOBY(moby)->state != 0x17) {
         if ((unsigned char)D_001413F4[0] == 0)
             alert_visible_group_sentrybots(moby);
         sentrybot_data->health -= impact;
