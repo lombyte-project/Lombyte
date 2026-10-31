@@ -755,7 +755,7 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
     FUN_L00_00257024(((void *)hero_state_base->moby));
     apply_hero_and_item_scale_sequence();
     hero_state_base->unk22CC = initial_state;
-    if (vehicle_mode == 1) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         *(unsigned short *)&hero_state_base->health.unk22B0 =
             *(unsigned short *)&hero_state_base->health;
         hero_state_base->health.hp = hero_state_base->health.vehicle_mode_hp;
