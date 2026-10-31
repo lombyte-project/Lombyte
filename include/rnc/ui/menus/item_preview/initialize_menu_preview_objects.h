@@ -3,6 +3,8 @@
 
 #include "types.h"
 
-int initialize_menu_preview_objects(char *) __asm__("FUN_002240c8");
+struct MenuScreen;
+
+int initialize_menu_preview_objects(struct MenuScreen *) __asm__("FUN_002240c8");
 
 #endif /* LOMBYTE_RNC_UI_MENUS_ITEM_PREVIEW_INITIALIZE_MENU_PREVIEW_OBJECTS_H */

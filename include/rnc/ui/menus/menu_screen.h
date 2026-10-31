@@ -123,6 +123,18 @@ struct MenuPromptData {
     s32 buffer; /* 0x54: stream buffer */
 };
 
+/* Help text label (help_history_text_label): enter_menu_help_text starts
+   reading the help archive, update_menu_help_text_load swaps it in for the
+   current help text table and count, and restore_menu_help_text puts the
+   saved ones back. */
+struct MenuHelpTextData {
+    u8  pad_30[0x8];
+    s32 saved_text_count; /* 0x38 */
+    u8  pad_3C[0x14];
+    s32 load_state;       /* 0x50: 0 read, 1 reading, 2 loaded, 3 read not started */
+    s32 saved_text_table; /* 0x54 */
+};
+
 /* Timed text screen (the credits: update_timed_menu_sequence, draw_menu_text_box).
    Each phase shows one text id or a -1 terminated list of them in text;
    draw_menu_text_box scrolls a list up by scroll / 16 and sets list_done once
@@ -361,6 +373,7 @@ struct MenuScreen {
         struct MenuLabelData       label;   /* render_configured_text_label */
         struct MenuPromptData      prompt;  /* draw_prompt_box, enter_menu_prompt */
         struct MenuTimedTextData   timed;   /* update_timed_menu_sequence, draw_menu_text_box */
+        struct MenuHelpTextData    help;    /* enter_menu_help_text, update_menu_help_text_load */
     } data;                                 /* 0x30 */
 };
 

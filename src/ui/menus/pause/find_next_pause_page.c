@@ -3,47 +3,43 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 
-/* Pause page link walk: with reverse clear, follow arg0's +0x4C chain for
-   as long as the current page is skippable (bit 8 of its +0x30 flags
-   while menu_system.unk134 is set, or bit 4 while +0x138 is set), and if
-   it moved at all, make the page it stopped on current->pending_focus.
-   Each block reads menu_system through its own pointer local: the loop's
-   own copy is why GCSE leaves its +0x138 load in the loop (only +0x134,
+/* Each block reads menu_system through its own pointer local: the loop's
+   own copy is why GCSE leaves its unk138 load in the loop (only unk134,
    read first in the body, is hoisted by loop.c), and the last block's
    copy is retail's kept %hi. */
-int find_next_pause_page(char *page, int reverse) __asm__("FUN_0021b7a8");
+int find_next_pause_page(struct MenuScreen *grid, int reverse) __asm__("FUN_0021b7a8");
 
-int find_next_pause_page(char *page, int reverse) {
-    int ok = 0;
-    int found = 0;
+int find_next_pause_page(struct MenuScreen *grid, int reverse) {
+    int skip = 0;
+    int moved = 0;
 
     if (reverse != 0) {
         return 0;
     }
     {
         struct MenuSystem *g = &menu_system;
-        if (g->unk134 != 0 && (*(int *)(page + 0x30) & 8)) {
-            ok = 1;
+        if (g->unk134 != 0 && (grid->data.grid.flags & MENU_GRID_HIDDEN_WITH_UNK134)) {
+            skip = 1;
         }
-        if (g->unk138 != 0 && (*(int *)(page + 0x30) & 4)) {
-            ok = 1;
+        if (g->unk138 != 0 && (grid->data.grid.flags & MENU_GRID_HIDDEN_WITH_UNK138)) {
+            skip = 1;
         }
     }
-    while (ok) {
+    while (skip) {
         struct MenuSystem *g = &menu_system;
-        found = 1;
-        page = *(char **)(page + 0x4C);
-        ok = 0;
-        if (g->unk134 != 0 && (*(int *)(page + 0x30) & 8)) {
-            ok = 1;
+        moved = 1;
+        grid = grid->data.grid.up;
+        skip = 0;
+        if (g->unk134 != 0 && (grid->data.grid.flags & MENU_GRID_HIDDEN_WITH_UNK134)) {
+            skip = 1;
         }
-        if (g->unk138 != 0 && (*(int *)(page + 0x30) & 4)) {
-            ok = 1;
+        if (g->unk138 != 0 && (grid->data.grid.flags & MENU_GRID_HIDDEN_WITH_UNK138)) {
+            skip = 1;
         }
     }
-    if (found) {
+    if (moved) {
         struct MenuSystem *focus_menu_system = &menu_system;
-        focus_menu_system->current->pending_focus = (struct MenuScreen *)page;
+        focus_menu_system->current->pending_focus = grid;
     }
     return 0;
 }
