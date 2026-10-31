@@ -214,7 +214,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
     if (response_record->p34 != hero_moby_bytes) {
         return 0;
     }
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         if (!(response_record->i24 & 2)) {
             return 0;
         }
@@ -228,7 +228,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
         hero.unk5BE = 1;
         return 0;
     }
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         hero.vehicle_hp -= truncate_float_to_s32(response_record->f2C);
         if (hero.vehicle_hp < 0) {
             hero.vehicle_hp = 0;
