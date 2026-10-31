@@ -321,13 +321,17 @@ void ocean_pokitaru_update(OceanMoby *moby) __asm__("FUN_L11_0030b358");
 
 /* Moby class 1111 */
 void ocean_pokitaru_update(OceanMoby *moby) {
+    enum {
+        OCEAN_POKITARU_STATE_UNINITIALIZED = 0,
+        OCEAN_POKITARU_STATE_INITIALIZED = 1
+    };
     OceanVars *ocean_vars = moby->vars;
     float      camera_displacement[4];
     float      camera_wave_uv_delta[4];
     int        k;
 
-    if (moby->state == 0) {
-        moby->state = 1;
+    if (moby->state == OCEAN_POKITARU_STATE_UNINITIALIZED) {
+        moby->state = OCEAN_POKITARU_STATE_INITIALIZED;
         moby->f30 = 0xFF;
         for (k = 0; k < 2; k++) {
             wave_offset[k].u = 0.0f;
