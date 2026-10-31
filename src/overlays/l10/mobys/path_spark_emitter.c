@@ -79,7 +79,7 @@ void path_spark_emitter_update(struct Moby *moby) {
         }
         *(int *)(spark_vars + 0x10) = -1;
         if (func_001F9908_v(spark_vars + 8) != 0) {
-            moby->state = 1;
+            moby->state = SPARK_STATE_TRAVERSE_PATH;
             *(int *)(spark_vars + 4) = 0;
         }
         break;
@@ -127,7 +127,7 @@ void path_spark_emitter_update(struct Moby *moby) {
                 *(OvlQuad *)spark_path_position;
         }
         if (seg == *path - 1) {
-            moby->state = 0;
+            moby->state = SPARK_STATE_WAIT_FOR_TIMER;
             *(int *)(spark_vars + 8) = scale_game_frames(0x78);
         }
         break;
