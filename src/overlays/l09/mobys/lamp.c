@@ -25,13 +25,13 @@ void lamp_update(struct Moby *lamp_moby) {
     struct Moby *hit_moby = find_moby_hit(lamp_moby, 0x10000, 0);
     switch (lamp_moby->state) {
     case LAMP_STATE_INITIALIZE:
-        lamp_moby->state = 1;
+        lamp_moby->state = LAMP_STATE_WAIT_FOR_HIT;
         break;
     case LAMP_STATE_WAIT_FOR_HIT:
         if (hit_moby != 0 && hit_moby->scale > 0.0f)
             hit = 1;
         if (hit)
-            lamp_moby->state = 2;
+            lamp_moby->state = LAMP_STATE_REMOVAL_SEQUENCE;
         break;
     case LAMP_STATE_REMOVAL_SEQUENCE:
         allocate_voice_for_target_entry(0, 0, (int)lamp_moby);
