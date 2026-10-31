@@ -157,9 +157,9 @@ void update_hero_state_transitions(void) {
                    try_start_hero_weapon_fire_state() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
                 if (hero.items[0].switch_lock != 2 && item_selector_hud_activation_blocked == 0 &&
-                    (hero.item_use_locked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
-                    (hero.item_select_blocked == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
-                    (hero.vehicle_mode == 0 || hero.vehicle_mode == 3)) {
+                    (hero.item_use_locked == 0 || hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK || hero.unk1B2 != 0) &&
+                    (hero.item_select_blocked == 0 || hero.vehicle_mode == HERO_VEHICLE_MODE_CLANK || hero.unk1B2 != 0) &&
+                    (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT || hero.vehicle_mode == 3)) {
                     int id;
 
                     if (hero.quick_swap_tap_window != 0) {
@@ -222,7 +222,7 @@ void update_hero_state_transitions(void) {
                 }
             }
             if (fatal_fall_entry_z > hero.motion.pos.f[2] && hero.ground_distance > 2.0f &&
-                hero.vehicle_mode != 2 && hero.state.current != 0x77) {
+                hero.vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK && hero.state.current != 0x77) {
                 hero_set_state(0x77, 1);
             } else {
                 switch (hero.state.current) {
@@ -633,7 +633,7 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_LOOK:
-                    if (hero.vehicle_mode == 0) {
+                    if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
                                 if (hero.moby->prev_seq != 0xD) {
@@ -660,7 +660,7 @@ void update_hero_state_transitions(void) {
                             break;
                         }
                     }
-                    if (hero.vehicle_mode != 0) {
+                    if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT) {
                         request_hero_idle_state_for_vehicle_mode();
                         break;
                     }
@@ -972,7 +972,7 @@ void update_hero_state_transitions(void) {
                                 break;
                             }
                         }
-                        if (hero.vehicle_mode != 0 && frame_time * 2.7f <= hero.motion.speed_xy) {
+                        if (hero.vehicle_mode != HERO_VEHICLE_MODE_ON_FOOT && frame_time * 2.7f <= hero.motion.speed_xy) {
                             hero_set_state(0x66, 1);
                         }
                         break;
@@ -2096,7 +2096,7 @@ void update_hero_state_transitions(void) {
                     }
                     break;
                 case HERO_STATE_LOOK_RELEASE_WAIT:
-                    if (hero.vehicle_mode == 0) {
+                    if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
                             if (controller_state.held & 0xA) {
                                 if (hero.moby->prev_seq != 0xD) {
