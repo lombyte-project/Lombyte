@@ -949,7 +949,7 @@ extern char  D_L11_00162570[4] __attribute__((sda));
 extern char  layered_effect_sine_output_pair[] __asm__("D_L11_001FF758");
 extern float layered_effect_position_x_gp __asm__("D_L11_001624E8") __attribute__((sda));
 
-#include "rnc/overlay/l11/mobys/layered_scroll_effect_data/level11_layered_effect_and_queue_draw_update.h"
+#include "rnc/overlay/l11/mobys/layered_scroll_effect_data/layered_scroll_effect_update.h"
 
 extern int layered_effect_color_tables_initialized_gp __asm__("D_L11_0016252C")
     __attribute__((sda));
@@ -961,10 +961,10 @@ extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
 extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 
 extern unsigned char l11_layered_effect_texture_29_distance_fade_alpha __asm__("D_L11_00162590");
-void level11_layered_effect_and_queue_draw_update(struct Moby *moby) __asm__("FUN_L11_0031e2f0");
+void                 layered_scroll_effect_update(struct Moby *moby) __asm__("FUN_L11_0031e2f0");
 
 /* Moby class 1903 */
-void level11_layered_effect_and_queue_draw_update(struct Moby *moby) {
+void layered_scroll_effect_update(struct Moby *moby) {
     enum {
         EFFECT_INITIALIZE = 0,
         EFFECT_UPDATE_AND_QUEUE_DRAW = 1

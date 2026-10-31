@@ -18,10 +18,10 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern char camera_pos[] __asm__("D_L01_00167240");
 
 extern char point_light_slot_parameters[] __asm__("D_L01_00180740");
-void        moby_interpolated_point_light_update(u8 *moby) __asm__("FUN_L01_0030b618");
+void        flickering_point_light_update(u8 *moby) __asm__("FUN_L01_0030b618");
 
 /* Moby class 1504 */
-void moby_interpolated_point_light_update(u8 *moby) {
+void flickering_point_light_update(u8 *moby) {
     enum {
         EFFECT_STATE_INITIALIZE = 0,
         EFFECT_STATE_UPDATE = 1

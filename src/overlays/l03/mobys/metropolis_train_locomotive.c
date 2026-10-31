@@ -102,7 +102,7 @@ extern char *D_L03_0015FFD8_292890 __asm__("D_L03_0015FFD8");
 extern char  D_L03_001E2410[];
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern void debug_print(void *, int) __asm__("FUN_001e93b0");
-extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
+extern void gunship_update(char *) __asm__("FUN_L01_002f5168");
 
 typedef struct {
     char  p00[0x60];
@@ -173,7 +173,7 @@ void update_metropolis_train_motion(char *moby) {
         if (distance_margin_or_target_angle < 0.0f) {
             *(float *)(coupling_data + 0xFC) = 0.0f;
         }
-        gunship_follow_path(coupling);
+        gunship_update(coupling);
         build_spherical_offset(delta,
                                locomotive_state->fC8,
                                fast_add_rotations(MOBY(moby)->rot.z, 3.1415927f),
@@ -499,7 +499,7 @@ void metropolis_train_locomotive_update(char *moby) {
         place_metropolis_train(moby, start, 0.0f);
         cdata->i74 = train_engine_pvars->iA4;
         cdata->fFC = train_engine_pvars->fC0;
-        gunship_follow_path(coupling);
+        gunship_update(coupling);
         moby[0xBC] = 2;
         break;
     case TRAIN_POSITION_FOR_BOARDING:
@@ -621,7 +621,7 @@ void metropolis_train_locomotive_update(char *moby) {
         cdata->fF0 = 1.0f;
         train_engine_pvars->fC0 = 2.0f * train_engine_pvars->fC0;
         cdata->fFC = train_engine_pvars->fC0;
-        gunship_follow_path(coupling);
+        gunship_update(coupling);
         moby[0xBC] = 5;
         request_music_track(0, 8);
         break;

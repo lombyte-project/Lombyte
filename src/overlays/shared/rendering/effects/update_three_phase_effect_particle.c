@@ -257,7 +257,7 @@ typedef struct {
 } O00269a70;
 
 extern f32 D_0015ED60;
-s32        mine_blend_color(s32, s32, f32) __asm__("FUN_L00_002371e0");
+s32        hud_counter_update(s32, s32, f32) __asm__("FUN_L00_002371e0");
 void       free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 void       update_damped_effect_particle(O00269a70 *particle) __asm__("FUN_L00_00269a70");
 
@@ -269,7 +269,7 @@ void update_damped_effect_particle(O00269a70 *particle) {
     fast_vec_add(particle->p10, particle->p10, s);
     particle->x8++;
     particle->x4 =
-        mine_blend_color(s->x14, s->x10, particle->xa / convert_integer_to_float(s->x1c));
+        hud_counter_update(s->x14, s->x10, particle->xa / convert_integer_to_float(s->x1c));
     if (fast_dec_timer_s16(&particle->xa))
         free_effect_particle(particle);
 }
@@ -1219,7 +1219,7 @@ typedef union {
 extern float   D_0015ED70_26bca8 __asm__("D_0015ED70");
 extern int     D_L00_0015F5CC_26bca8 __asm__("D_L00_0015F5CC");
 void           FUN_L00_00267a08_26bca8(void *) __asm__("FUN_L00_00267a08");
-int            mine_blend_color(int, int, float) __asm__("FUN_L00_002371e0");
+int            hud_counter_update(int, int, float) __asm__("FUN_L00_002371e0");
 void           FUN_001f9a68_26bca8(void *, void *, float) __asm__("FUN_001f9a68");
 float          FUN_001f9af0_26bca8(void *) __asm__("FUN_001f9af0");
 void           FUN_001f9bf8_26bca8(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -1245,7 +1245,7 @@ void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(unsigned
     lifetime_size_scratch /= initial_lifetime_or_speed_scratch;
     *(float *)(particle + 0xC) = lifetime_size_scratch;
     lifetime_size_scratch = convert_integer_to_float(*(short *)(particle + 0xA));
-    *(int *)(particle + 4) = mine_blend_color(
+    *(int *)(particle + 4) = hud_counter_update(
         *(int *)(particle_data + 0x14),
         *(int *)(particle_data + 0x10),
         lifetime_size_scratch / convert_integer_to_float(*(short *)(particle_data + 0x18)));
@@ -1351,7 +1351,7 @@ typedef struct {
     float f1C;
 } Data;
 
-extern int mine_blend_color(int, int, float) __asm__("FUN_L00_002371e0");
+extern int hud_counter_update(int, int, float) __asm__("FUN_L00_002371e0");
 
 void update_fading_debris_particle_with_landing_spawn(Part *particle) __asm__("FUN_L00_0026c088");
 
@@ -1371,10 +1371,10 @@ void update_fading_debris_particle_with_landing_spawn(Part *particle) {
     }
     {
         float remaining_lifetime_float = convert_integer_to_float(particle->timer);
-        particle->col = mine_blend_color(particle_data->c14,
-                                         particle_data->c10,
-                                         remaining_lifetime_float /
-                                             convert_integer_to_float(particle_data->life));
+        particle->col = hud_counter_update(particle_data->c14,
+                                           particle_data->c10,
+                                           remaining_lifetime_float /
+                                               convert_integer_to_float(particle_data->life));
         alpha = particle->col >> 24;
         reference_distance_or_spawn_size = fast_vec_dist(particle->pos, D_L00_00166DC0);
         if (particle->timer < scale_game_frames(6))
@@ -1395,8 +1395,9 @@ void update_fading_debris_particle_with_landing_spawn(Part *particle) {
             if (k == 1) {
                 int spawn_initial_color, spawn_final_color, minimum_spawn_lifetime;
                 spawn_initial_color =
-                    mine_blend_color(0x7F000000, 0x7F182030, random_float_between(0.25f, 1.0f));
-                spawn_final_color = mine_blend_color(0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
+                    hud_counter_update(0x7F000000, 0x7F182030, random_float_between(0.25f, 1.0f));
+                spawn_final_color =
+                    hud_counter_update(0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
                 particle_data->vel[2] = 0;
                 reference_distance_or_spawn_size = random_float_between(200000.0f, 300000.0f);
                 minimum_spawn_lifetime = scale_game_frames(0x5A);
@@ -1729,10 +1730,10 @@ void update_shrinking_effect_particle_with_secondary_spawns(O_0026ccb0_0026ccb0 
         particle_position = &particle->p10;
         particle->xc =
             convert_integer_to_float(particle->xa) * s->x1c / convert_integer_to_float(s->x18);
-        particle->x4 = mine_blend_color(s->x14,
-                                        s->x10,
-                                        convert_integer_to_float(particle->xa) /
-                                            convert_integer_to_float(s->x18));
+        particle->x4 = hud_counter_update(s->x14,
+                                          s->x10,
+                                          convert_integer_to_float(particle->xa) /
+                                              convert_integer_to_float(s->x18));
         fast_vec_add(particle_position, particle_position, s);
         s->v[2] -= frame_scale_sq * 0.001f;
         qcopy(&updated_position_copy, particle_position);
@@ -3069,7 +3070,7 @@ void update_flag_controlled_pulsing_effect_particle(unsigned char *particle) {
         return;
     }
     if (particle_data->lim < angle_sine) {
-        *(int *)(particle + 4) = mine_blend_color(
+        *(int *)(particle + 4) = hud_counter_update(
             0, particle_data->arg, (angle_sine - particle_data->lim) / (1.0f - particle_data->lim));
     } else {
         *(int *)(particle + 4) = 0;
@@ -3099,7 +3100,7 @@ void update_offset_and_pulse_effect_particle(char *particle) {
     color_blend_peak_ticks = particle_data[5];
     k = *(short *)(particle + 0xA) - color_blend_peak_ticks;
     k = k < 0 ? -k : k;
-    *(int *)(particle + 4) = mine_blend_color(
+    *(int *)(particle + 4) = hud_counter_update(
         0, particle_data[4], (float)(color_blend_peak_ticks - k) / (float)color_blend_peak_ticks);
 }
 

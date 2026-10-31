@@ -84,7 +84,7 @@ void update_and_draw_scrolling_overlay_layers(s32, ScrollLayer *) __asm__("FUN_L
 void update_and_draw_level01_scrolling_layers(void) __asm__("FUN_L01_002f60f8");
 
 void update_and_draw_level01_scrolling_layers(void) {
-    mine_blend_color();
+    hud_counter_update();
     update_and_draw_scrolling_overlay_layers(8, l01_scrolling_overlay_layers);
 }
 

@@ -94,10 +94,10 @@ void draw_visibomb_outside_zone_overlay(struct Moby *moby) {
 
 /* While the camera is in mode 0x1D, counts the frames the class 0xAC moby spends outside every zone.
  * Entering a zone resets the count; past a random threshold FUN_L00_002b5b20 runs on that moby. */
-void target_outside_zone_timeout_update(struct Moby *moby) __asm__("FUN_L01_00302648");
+void visibomb_zone_timer_update(struct Moby *moby) __asm__("FUN_L01_00302648");
 
 /* Moby class 832 */
-void target_outside_zone_timeout_update(struct Moby *moby) {
+void visibomb_zone_timer_update(struct Moby *moby) {
     ZoneVars    *zone_vars = (ZoneVars *)moby->pvars;
     struct Moby *target_moby = 0;
     struct Moby *candidate_moby;

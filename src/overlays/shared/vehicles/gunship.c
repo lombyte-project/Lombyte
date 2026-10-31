@@ -12,7 +12,7 @@
 #include "rnc/overlay/level_path.h"
 #include "sda.h"
 #include "rnc/overlay/quad.h"
-#include "rnc/overlay/shared/vehicles/gunship_follow_path_data/gunship_follow_path.h"
+#include "rnc/overlay/shared/vehicles/gunship_data/gunship_update.h"
 
 struct DriftEmitter {
     s32 count; /* 0x00 */
@@ -190,10 +190,10 @@ void apply_gunship_path_position_offsets(char *moby, float *path_position) {
     }
 }
 
-void gunship_follow_path(struct Moby *m) __asm__("FUN_L01_002f5168");
+void gunship_update(struct Moby *m) __asm__("FUN_L01_002f5168");
 
 /* Moby class 845 */
-void gunship_follow_path(struct Moby *moby) {
+void gunship_update(struct Moby *moby) {
     enum {
         GUNSHIP_PATH_STATE_INITIALIZE = 0,
         GUNSHIP_PATH_STATE_FOLLOW_PATH = 1,
@@ -557,7 +557,7 @@ void gunship_follow_path(struct Moby *moby) {
                             0);
         }
     }
-    D_L01_00160770 = (void *)gunship_follow_path;
+    D_L01_00160770 = (void *)gunship_update;
     moby->hit_slot = 0xFF;
     if (v->unk13A == 0)
         return;

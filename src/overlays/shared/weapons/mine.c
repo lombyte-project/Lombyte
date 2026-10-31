@@ -42,7 +42,7 @@ extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int   collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int   FUN_L00_001f0d60(float, void *, int, void *);
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern int mine_blend_color(int, int, float) __asm__("FUN_L00_002371e0");
+extern int hud_counter_update(int, int, float) __asm__("FUN_L00_002371e0");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00258490(void *, void *, void *, float, float, float, float, int);
 extern int FUN_L00_00260400(void *, void *, void *, void *, void *, void *);
@@ -1228,12 +1228,13 @@ void mine_update(M910 *mine_moby) {
                                                                1);
                         }
                         for (l = 0; l < 20; l++) {
-                            int   c1 = mine_blend_color(0x7F000000,
-                                                      (0x7F << 24) | (cb << 16) | (cg << 8) | cr,
-                                                      random_float_between(0.25f, 1.0f));
-                            int   c2 = mine_blend_color(0,
-                                                      ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
-                                                      random_float_between(0.5f, 1.0f));
+                            int c1 = hud_counter_update(0x7F000000,
+                                                        (0x7F << 24) | (cb << 16) | (cg << 8) | cr,
+                                                        random_float_between(0.25f, 1.0f));
+                            int c2 =
+                                hud_counter_update(0,
+                                                   ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
+                                                   random_float_between(0.5f, 1.0f));
                             float sz;
                             int   life;
 
@@ -1340,10 +1341,10 @@ void mine_update(M910 *mine_moby) {
                                 break;
                             }
                             case MINE_DEBRIS_SPHERICAL_VELOCITY: {
-                                int c1 = mine_blend_color(
+                                int c1 = hud_counter_update(
                                     0x7F000000, 0x7F182030, random_float_between(0.25f, 1.0f));
-                                int c2 =
-                                    mine_blend_color(0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
+                                int c2 = hud_counter_update(
+                                    0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
                                 float sz;
                                 int   life;
 

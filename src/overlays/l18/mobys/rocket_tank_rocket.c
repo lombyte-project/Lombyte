@@ -60,10 +60,10 @@ extern void           FUN_L00_00257d78(float *, float, float);
 void                  mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char          *D_L18_001B2ADC_lui __asm__("D_L18_001B2ADC") NOT_SDA;
 
-void projectile_motion_collision_and_trail_update(char *moby) __asm__("FUN_L18_002a7220");
+void rocket_tank_rocket_update(char *moby) __asm__("FUN_L18_002a7220");
 
 /* Moby class 41 */
-void projectile_motion_collision_and_trail_update(char *moby) {
+void rocket_tank_rocket_update(char *moby) {
     float  next_position[4];
     char   hit_descriptor[0x30];
     float  hit_direction_vector[4];

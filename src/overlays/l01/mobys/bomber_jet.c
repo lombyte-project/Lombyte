@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/l01/hero/hero_set_state.h"
-#include "rnc/overlay/shared/vehicles/gunship_follow_path.h"
+#include "rnc/overlay/shared/vehicles/gunship.h"
 
 #include "rnc/overlay/level_path.h"
 #include "rnc/overlay/level_labels.h"
@@ -366,7 +366,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
         }
         if (gunship_vars->trigger_volume != -1) {
             if (bomber_jet_moby->state == 0) {
-                gunship_follow_path((char *)bomber_jet_moby);
+                gunship_update((char *)bomber_jet_moby);
             }
             if (gunship_vars->cutscene_timer == -1 &&
                 is_point_inside_clip_volume(&hero.motion.pos, gunship_vars->trigger_volume)) {
@@ -429,13 +429,13 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                         }
                     }
                 }
-                gunship_follow_path((char *)bomber_jet_moby);
+                gunship_update((char *)bomber_jet_moby);
             } else {
                 bomber_jet_moby->flags |= 0x41;
                 break;
             }
         } else {
-            gunship_follow_path((char *)bomber_jet_moby);
+            gunship_update((char *)bomber_jet_moby);
         }
         bomber_jet_moby->flags |= 0x1000;
         gunship_vars->b2B = 1;

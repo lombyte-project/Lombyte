@@ -144,7 +144,7 @@ extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern int   collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int   collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern int mine_blend_color(int, int, float) __asm__("FUN_L00_002371e0");
+extern int hud_counter_update(int, int, float) __asm__("FUN_L00_002371e0");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern unsigned       swap_packed_color_channels(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
 extern unsigned char *FUN_002141f8_cf(unsigned char *) __asm__("FUN_L00_002603d0");
@@ -1583,12 +1583,13 @@ void bomb_update(BombMoby *bomb_moby) {
                         }
                         for (j = 0; j < 20; j++) {
                             int shrinking_particle_primary_color =
-                                mine_blend_color(0x7F << 24,
-                                                 (0x7F << 24) | (cb << 16) | (cg << 8) | cr,
-                                                 random_float_between(0.25f, 1.0f));
-                            int   c1 = mine_blend_color(0,
-                                                      ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
-                                                      random_float_between(0.5f, 1.0f));
+                                hud_counter_update(0x7F << 24,
+                                                   (0x7F << 24) | (cb << 16) | (cg << 8) | cr,
+                                                   random_float_between(0.25f, 1.0f));
+                            int c1 =
+                                hud_counter_update(0,
+                                                   ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
+                                                   random_float_between(0.5f, 1.0f));
                             float sz;
                             int   life;
                             particle_work_vector.f[0] = random_float_between(-3.0f, 3.0f);

@@ -89,10 +89,10 @@ unsigned char *mine_camera_blast(unsigned char *blast_settings,
 /* Runs its state machine and eases its tracked values toward their targets */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D4EC0), where it is exact; names translated to the US level program. */
 
-void animated_point_light_moby_update(unsigned char *moby) __asm__("FUN_L00_002d3a10");
+void explosion_light_update(unsigned char *moby) __asm__("FUN_L00_002d3a10");
 
 /* Moby class 639 */
-void animated_point_light_moby_update(unsigned char *moby) {
+void explosion_light_update(unsigned char *moby) {
     unsigned char *animated_point_light_vars;
     Vx             tp;
     Vx             base_position;

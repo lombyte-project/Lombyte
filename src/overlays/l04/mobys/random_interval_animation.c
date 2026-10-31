@@ -8,11 +8,11 @@
 
 extern s32 rand();
 
-void        moby_random_interval_animation_update(struct Moby *moby) __asm__("FUN_L04_002a5a08");
+void        random_interval_animation_update(struct Moby *moby) __asm__("FUN_L04_002a5a08");
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 
 /* Moby class 161 */
-void moby_random_interval_animation_update(struct Moby *moby) {
+void random_interval_animation_update(struct Moby *moby) {
     int *animation_countdown;
     if (moby != 0) {
         moby->collision = 0;

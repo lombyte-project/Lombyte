@@ -3,6 +3,6 @@
 
 #include "types.h"
 
-void mine_blend_color(void) __asm__("FUN_L00_002371e0");
+void hud_counter_update(void) __asm__("FUN_L00_002371e0");
 
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_UI_HUD_HUD_KEEP_VISIBLE_H */

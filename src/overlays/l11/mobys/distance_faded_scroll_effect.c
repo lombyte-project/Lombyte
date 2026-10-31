@@ -5995,16 +5995,16 @@ extern PairB D_L11_00162628[] MACRO_ADDR;
 extern char  distance_faded_effect_sine_output_pair[] __asm__("D_L11_00217760");
 extern float distance_faded_effect_position_x_gp __asm__("D_L11_001625B8") __attribute__((sda));
 
-#include "rnc/overlay/l11/mobys/distance_faded_scroll_effect_data/level11_distance_faded_effect_and_queue_draw_update.h"
+#include "rnc/overlay/l11/mobys/distance_faded_scroll_effect_data/distance_faded_effect_update.h"
 
 extern int distance_faded_effect_color_tables_initialized_gp __asm__("D_L11_001625FC")
     __attribute__((sda));
 extern unsigned char D_L11_00162610_c __asm__("D_L11_00162610");
 
-void level11_distance_faded_effect_and_queue_draw_update(struct Moby *moby) __asm__("FUN_L11_0031f150");
+void distance_faded_effect_update(struct Moby *moby) __asm__("FUN_L11_0031f150");
 
 /* Moby class 1919 */
-void level11_distance_faded_effect_and_queue_draw_update(struct Moby *moby) {
+void distance_faded_effect_update(struct Moby *moby) {
     enum {
         EFFECT_INITIALIZE = 0,
         EFFECT_UPDATE_AND_QUEUE_DRAW = 1

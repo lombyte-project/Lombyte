@@ -17,7 +17,7 @@ void draw_rippling_scroll_layers(void) __asm__("FUN_L01_002feb28");
 
 /* Draw callback: draws the class's four scroll layers. */
 void draw_rippling_scroll_layers(void) {
-    mine_blend_color();
+    hud_counter_update();
     update_and_draw_scrolling_overlay_layers(0x4, rippling_scroll_layers);
 }
 

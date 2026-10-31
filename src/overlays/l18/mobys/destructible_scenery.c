@@ -52,10 +52,10 @@ extern float D_0013F3D0[4];
 extern u32 destructible_burst_first_colors[6] __asm__("D_L18_001F29A0");
 extern u32 destructible_burst_second_colors[6] __asm__("D_L18_001F29B8");
 
-void moby_hit_response_burst_and_ballistic_flight_update(struct Moby *moby) __asm__("FUN_L18_002e9768");
+void destructible_scenery_update(struct Moby *moby) __asm__("FUN_L18_002e9768");
 
 /* Moby classes 885, 888, 891, 892, 894, 900, 901, 936 */
-void moby_hit_response_burst_and_ballistic_flight_update(struct Moby *moby) {
+void destructible_scenery_update(struct Moby *moby) {
     enum {
         STATE_INITIALIZE = 0,
         STATE_WAIT_FOR_HIT = 1,

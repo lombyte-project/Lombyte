@@ -90,10 +90,10 @@ extern void create_type_31_part(void *, void *, void *, void *, int) __asm__("FU
 /* Update of moby class 848: a spark that homes on its target moby, sheds particles and an arc when close, and dies on a hit. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002D5B88), where it is exact; names translated to the US level program. */
 
-void homing_spark_projectile_update(Moby *moby) __asm__("FUN_L03_002d47c0");
+void helicopter_spark_update(Moby *moby) __asm__("FUN_L03_002d47c0");
 
 /* Moby class 848 */
-void homing_spark_projectile_update(Moby *moby) {
+void helicopter_spark_update(Moby *moby) {
     enum {
         SPARK_HOME_AND_EMIT = 1,
         SPARK_CLEANUP_AND_REMOVE = 2

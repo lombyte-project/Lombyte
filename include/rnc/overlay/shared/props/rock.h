@@ -7,7 +7,7 @@ struct Moby;
 
 void gold_bolt_update(struct Moby *) __asm__("FUN_L01_00307ca0");
 void spawn_point_update(struct Moby *) __asm__("FUN_L01_00300220");
-void target_outside_zone_timeout_update(struct Moby *) __asm__("FUN_L01_00302648");
+void visibomb_zone_timer_update(struct Moby *) __asm__("FUN_L01_00302648");
 void teleporter_update(struct Moby *) __asm__("FUN_L01_00308bd8");
 void *
 spawn_debris_chunk(void *, void *, u32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");

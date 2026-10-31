@@ -6,7 +6,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
-#include "rnc/overlay/shared/vehicles/gunship_follow_path.h"
+#include "rnc/overlay/shared/vehicles/gunship.h"
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
@@ -133,7 +133,7 @@ void fighter_jet_update(char *moby) {
     }
     if (((unsigned char *)moby)[0x20] == 0x65)
         return;
-    gunship_follow_path(moby);
+    gunship_update(moby);
     *(unsigned short *)(moby + 0x34) |= 0x1000;
     fighter_jet_vars[0x2B] = 1;
     fighter_jet_vars[0x2C] = 0x64;

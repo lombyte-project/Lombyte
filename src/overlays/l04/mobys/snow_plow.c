@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
-#include "rnc/overlay/shared/vehicles/gunship_follow_path.h"
+#include "rnc/overlay/shared/vehicles/gunship.h"
 #include "rnc/overlay/cuboid.h"
 #include "rnc/overlay/level_path.h"
 #include "rnc/overlay/l04/mobys/snow_plow_globals.h"
@@ -130,7 +130,7 @@ void snow_plow_update(struct Moby *moby) {
         *(int *)(snow_plow_vars + 0x178) = moby->draw_dist;
     }
     amount = 0.0f;
-    gunship_follow_path(moby);
+    gunship_update(moby);
     if (moby->oclass != 0x1e4) {
         fast_dec_timer_s16(snow_plow_vars + 0x14a);
         switch (*(unsigned char *)(snow_plow_vars + 0x149)) {

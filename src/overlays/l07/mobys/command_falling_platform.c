@@ -29,10 +29,10 @@ extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void
 reorient_position_about_pivot(void *, void *, void *, void *, void *) __asm__("FUN_L07_00288968");
-void command_triggered_falling_platform_update(char *moby) __asm__("FUN_L07_003112c8");
+void command_falling_platform_update(char *moby) __asm__("FUN_L07_003112c8");
 
 /* Moby class 1069 */
-void command_triggered_falling_platform_update(char *moby) {
+void command_falling_platform_update(char *moby) {
     enum {
         PLATFORM_INITIALIZE = 0,
         PLATFORM_COMMAND_GATED_SWAY = 1,
