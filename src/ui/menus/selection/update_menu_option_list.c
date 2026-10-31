@@ -53,12 +53,12 @@ s32 update_menu_option_list(struct MenuScreen *menu_screen) {
     if (controller_state.pressed_unmasked & PAD_CROSS) {
         allocate_voice_for_target_entry(0, 0x11, menu_screen->moby);
         if (menu_screen->data.options.list[menu_screen->data.options.selection].flags & 1) {
-            if (requested_video_mode != 0) {
+            if (requested_video_mode != FALSE) {
                 mode_freeze_init(6, menu_system.current);
             } else {
                 fade_to_black(4);
                 menu_screen->data.options.fade_timer = scale_game_frames(0x10);
-                requested_video_mode = requested_video_mode == 0;
+                requested_video_mode = requested_video_mode == FALSE;
             }
         } else if (menu_screen->data.options.list[menu_screen->data.options.selection].flag != 0) {
             *menu_screen->data.options.list[menu_screen->data.options.selection].flag =
