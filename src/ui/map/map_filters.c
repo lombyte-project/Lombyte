@@ -208,9 +208,9 @@ s32 map_filter_l07_0(s32 projected_x, s32 projected_y, f32 x, f32 y, f32 z) {
         }
         return 0;
     } else {
-        special_state = 0;
+        special_state = FALSE;
         if ((u32)(hero.state.control_mode - 0x11) < 2 || hero.base_condition == 1) {
-            special_state = 1;
+            special_state = TRUE;
         }
         if (special_state &&
             point_is_clockwise(projected_x, projected_y, 0x12B, 0xB8, 0x13A, 0xF2) &&
