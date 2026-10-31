@@ -535,7 +535,7 @@ void update_hero_timers_and_auxiliary_state(void) {
             }
         }
     }
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         fast_dec_timer_s16(&hero.vehicle_triangle_cooldown);
     }
     for (i = 0; i < 5; i++) {
@@ -567,7 +567,7 @@ void update_hero_timers_and_auxiliary_state(void) {
     hero.still_frames = 0;
 skip:
     update_hero_planar_distance_spring_motion();
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         transform_hero_local_offset_to_world(&hero.motion.body_center, 0.0f, 0.0f, 4.0f);
         hero.reach_distance = 15.0f;
         hero.reach_height = 3.0f;
