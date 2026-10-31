@@ -234,11 +234,14 @@ void compute_elevator_camera_pose(struct Moby *moby,
                                   float       *camera_position,
 
                                   float *camera_rotation) {
+    enum {
+        ELEVATOR_STATE_MOVE_TO_TOP = 2
+    };
     float          camera_offset_azimuth = moby->rot.z;
     float          horizontal_offset_radius = 2.5f;
     float          z = 1.5f;
     unsigned char *x;
-    if ((moby->command >= 2 && (moby->command & 1)) || (moby->state >= 2 && (moby->state & 1))) {
+    if ((moby->command >= 2 && (moby->command & 1)) || (moby->state >= ELEVATOR_STATE_MOVE_TO_TOP && (moby->state & 1))) {
         camera_offset_azimuth = fast_subtract_rotations(camera_offset_azimuth, 1.5707964f);
     } else {
         camera_offset_azimuth = fast_add_rotations(camera_offset_azimuth, 1.5707964f);
