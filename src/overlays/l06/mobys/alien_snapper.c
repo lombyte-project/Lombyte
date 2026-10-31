@@ -25,7 +25,7 @@ void transition_moby_group_state_1_to_2(char *group_source_moby) __asm__("FUN_L0
 
 /* angle from a moby to its owner, clamped to the gaps between obstacles in its list */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FAB28), where it is exact; names translated to the US level program. */
-extern char  *D_L06_0015FFD8;
+extern char  *level_mobys_q __asm__("D_L06_0015FFD8");
 extern char   D_0013E533[];
 extern short *D_L06_001ABFC0_p[] __asm__("D_L06_001ABFC0");
 extern short  alien_snapper_gap_angle_limit_degrees_gp __asm__("D_L06_00161ED8")
@@ -847,7 +847,7 @@ void transition_moby_group_state_1_to_2(char *group_source_moby) {
     if (table != 0) {
         short *moby_index_cursor = table;
         do {
-            char *moby = (char *)(((*moby_index_cursor & 0x7FFF) << 8) + (int)D_L06_0015FFD8);
+            char *moby = (char *)(((*moby_index_cursor & 0x7FFF) << 8) + (int)level_mobys_q);
             if ((unsigned char)moby[0x20] == 1) {
                 moby[0x20] = 2;
             }
@@ -881,12 +881,12 @@ float compute_alien_snapper_target_gap_angle(char *snapper_moby) {
     }
     do {
         int   listed_moby_index = *(unsigned short *)moby_index_cursor & 0x7FFF;
-        char *listed_moby = (char *)(listed_moby_index * 256 + (int)D_L06_0015FFD8);
+        char *listed_moby = (char *)(listed_moby_index * 256 + (int)level_mobys_q);
         if ((unsigned char)listed_moby[0x20] == 8 ||
             fast_vec_dist(listed_moby + 0x10, target_moby + 0x10) < owner_to_self_distance) {
-            float d = fast_arc_tan(*(float *)(D_L06_0015FFD8 + listed_moby_index * 256 + 0x10) -
+            float d = fast_arc_tan(*(float *)(level_mobys_q + listed_moby_index * 256 + 0x10) -
                                        *(float *)(target_moby + 0x10),
-                                   *(float *)(D_L06_0015FFD8 + listed_moby_index * 256 + 0x14) -
+                                   *(float *)(level_mobys_q + listed_moby_index * 256 + 0x14) -
                                        *(float *)(target_moby + 0x14));
             float listed_moby_angle_offset_radians =
                 fast_subtract_rotations(d, owner_to_self_angle_radians);
