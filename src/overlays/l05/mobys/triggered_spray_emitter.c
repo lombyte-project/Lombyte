@@ -57,6 +57,9 @@ void triggered_spray_emitter_update(struct Moby *emitter_moby) {
         EMITTER_WAIT_FOR_TRIGGER = 1,
         EMITTER_SPRAY_PARTICLES = 2
     };
+    enum {
+        EMITTER_INACTIVE = 3
+    };
     float               v[4];
     float               particle_velocity[4];
     float               u[4];
@@ -76,9 +79,9 @@ void triggered_spray_emitter_update(struct Moby *emitter_moby) {
     switch (state = emitter_moby->state) {
     case EMITTER_INITIALIZE:
         if (D_0014C050[current_level_index][emitter_moby->mission] != 0xFF) {
-            emitter_moby->state = 1;
+            emitter_moby->state = EMITTER_WAIT_FOR_TRIGGER;
         } else {
-            emitter_moby->state = 3;
+            emitter_moby->state = EMITTER_INACTIVE;
         }
         break;
     case EMITTER_WAIT_FOR_TRIGGER:
@@ -120,7 +123,7 @@ void triggered_spray_emitter_update(struct Moby *emitter_moby) {
         }
         floor = D_L05_001612D0[emitter_vars->floor].z;
         if (emitter_moby->pos.z < floor) {
-            emitter_moby->state = 3;
+            emitter_moby->state = EMITTER_INACTIVE;
         }
         for (i = 0; (float)i < spray_particle_count_limit_per_update_gp; i++) {
             big = 1;
