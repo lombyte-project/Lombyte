@@ -20,6 +20,11 @@ extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 void       apply_hero_ground_material_effects(void) __asm__("FUN_L05_00239fc0");
 
 void apply_hero_ground_material_effects(void) {
+    enum {
+        GROUND_MATERIAL_WATER = 0,
+        GROUND_MATERIAL_MAGNET = 2,
+        GROUND_MATERIAL_FIXED_SHALLOW_WATER = 14
+    };
     u8  save = hero.ground_sound_class;
     s16 saved_ground_type = hero.ground_type;
     f32 water_depth;
@@ -31,20 +36,20 @@ void apply_hero_ground_material_effects(void) {
     hero.unk308 = 0;
     if (saved_ground_type == -1)
         return;
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == GROUND_MATERIAL_MAGNET) {
         if (hero.frames_off_ground.s == 0 || hero.ground_distance < 0.3f) {
             hero.on_magnet_ground = 1;
-            if (hero.vehicle_mode == 0 && ((u8 *)hero.items[1].moby) != 0 &&
+            if (hero.vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT && ((u8 *)hero.items[1].moby) != 0 &&
                 *(s16 *)(((u8 *)hero.items[1].moby) + 0xA6) == 0xAD)
                 hero.unk308 = 1;
         }
     }
-    if (saved_ground_type == 14) {
+    if (saved_ground_type == GROUND_MATERIAL_FIXED_SHALLOW_WATER) {
         hero.base_condition = 1;
         hero.water_depth = 0.2f;
         hero.water_surface_z = hero.ground_z.f + 0.2f;
     }
-    if (saved_ground_type == 0) {
+    if (saved_ground_type == GROUND_MATERIAL_WATER) {
         water_depth = hero.water_surface_z - hero.ground_z.f;
         hero.water_depth = water_depth;
         if (water_depth < 0.85f && 0.25f < water_depth)
