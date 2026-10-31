@@ -171,9 +171,12 @@ void request_target_reposition(struct Moby *moby) {
 int get_target_reposition_status(char *moby_or_private_data) __asm__("FUN_L16_002e0e28");
 
 int get_target_reposition_status(char *moby_or_private_data) {
+    enum {
+        TARGET_REPOSITION_STATE_REQUESTED = 7
+    };
     unsigned char moby_state = moby_or_private_data[0x20];
     moby_or_private_data = *(char **)(moby_or_private_data + 0x78);
-    if (moby_state == 7 || moby_state == 8) {
+    if (moby_state == TARGET_REPOSITION_STATE_REQUESTED || moby_state == 8) {
         if (moby_state == 8 && *(float *)(moby_or_private_data + 0x34) > 0.2f) {
             return 2;
         }
