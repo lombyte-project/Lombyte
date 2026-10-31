@@ -199,7 +199,7 @@ extern void                 debug_point_5f18(void *, float) __asm__("FUN_001e93e
 void update_path_flythrough_camera(struct UpdateCam *cam) __asm__("FUN_L10_002f5f18");
 
 void update_path_flythrough_camera(struct UpdateCam *cam) {
-    float                dir[4];
+    float                initial_aim_or_previous_position[4];
     float                offset[4];
     float                point[4];
     float                look_point[4];
@@ -237,12 +237,12 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
                 offset[3] = 0.0f;
                 transform_vector_by_basis(offset, offset, l10_path_camera_anchor_offset_basis);
                 fast_vec_add(point, &anchor->pos, offset);
-                fast_vec_sub(dir, point, &cam->pos);
+                fast_vec_sub(initial_aim_or_previous_position, point, &cam->pos);
             } else {
-                fast_vec_sub(dir, look_path + 0x10, &cam->pos);
+                fast_vec_sub(initial_aim_or_previous_position, look_path + 0x10, &cam->pos);
             }
             fast_vec_scale(offset, D_0013F5E0_5f18, -1.0f);
-            fast_vec_normalize(&cam->m0, dir, 1.0f);
+            fast_vec_normalize(&cam->m0, initial_aim_or_previous_position, 1.0f);
             fast_vec_cross(&cam->m1, &cam->m0, offset);
             fast_vec_normalize(&cam->m1, &cam->m1, 1.0f);
             fast_vec_cross(&cam->m2, &cam->m1, &cam->m0);
@@ -275,7 +275,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
             l10_path_camera_transition_amount = 0.0f;
     }
     path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
-    qcopy(dir, &cam->pos);
+    qcopy(initial_aim_or_previous_position, &cam->pos);
     done = FUN_L00_0025d808(
         path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
     if (run->timer != 0) {
@@ -312,7 +312,7 @@ void update_path_flythrough_camera(struct UpdateCam *cam) {
             update_view_context();
         }
     }
-    run->dist += fast_vec_dist(dir, &cam->pos);
+    run->dist += fast_vec_dist(initial_aim_or_previous_position, &cam->pos);
     if (*(int *)(rec + 0x28) >= 0) {
         struct Moby *anchor = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
         float       *ofs = (float *)(rec + 0x2C);
