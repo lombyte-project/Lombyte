@@ -658,10 +658,10 @@ void ground_attached_update(M_2cfcb8 *moby) {
     V_2cfcb8  probe_up;
     V_2cfcb8  probe_down;
     M_2cfcb8 *member;
-    M_2cfcb8 *other;
+    M_2cfcb8 *later_group_member;
     Vars     *vars;
     Vars     *below_vars;
-    V_2cfcb8 *src1, *src2, *src3, *src4;
+    V_2cfcb8 *ungrouped_crate_position, *group_crate_probe_position, *stacked_crate_position, *stack_base_probe_position;
     R_2cfcb8 *route;
     s32       group, flags_before, i, member_flags;
     M_2cfcb8 *below;
@@ -683,9 +683,9 @@ void ground_attached_update(M_2cfcb8 *moby) {
         vars->hC4 = moby->hA8;
         vars->height = 1.0f;
         vars->flags = flags_before | 1;
-        src1 = &moby->pos;
-        qcopy(&probe_top, src1);
-        qcopy(&probe_bottom, src1);
+        ungrouped_crate_position = &moby->pos;
+        qcopy(&probe_top, ungrouped_crate_position);
+        qcopy(&probe_bottom, ungrouped_crate_position);
         probe_top.z += 0.5f;
         probe_bottom.z = 0.1f;
         if (FUN_001efa68_2cfcb8(&probe_top, &probe_bottom, 2, 0, 0) == 0) {
@@ -732,9 +732,9 @@ void ground_attached_update(M_2cfcb8 *moby) {
                 vars->hC4 = moby->hA8;
                 vars->height = 1.0f;
                 vars->flags = member_flags | 1;
-                src2 = &moby->pos;
-                qcopy(&probe_top, src2);
-                qcopy(&probe_bottom, src2);
+                group_crate_probe_position = &moby->pos;
+                qcopy(&probe_top, group_crate_probe_position);
+                qcopy(&probe_bottom, group_crate_probe_position);
                 probe_top.z += 0.5f;
                 probe_bottom.z = 0.1f;
                 if (FUN_001efa68_2cfcb8(&probe_top, &probe_bottom, 2, 0, 0) == 0) {
@@ -756,10 +756,10 @@ void ground_attached_update(M_2cfcb8 *moby) {
                     } else if (is_moby_in_class_range_500_to_540(
                                    (*(H_2cfcb8 *)&D_L00_00173E40).moby) != 0) {
                         vars->pA4 = (*(H_2cfcb8 *)&D_L00_00173E40).moby;
-                        src3 = &moby->pos;
+                        stacked_crate_position = &moby->pos;
                         below = (*(H_2cfcb8 *)&D_L00_00173E40).moby;
-                        qcopy(src3, &below->pos);
-                        FUN_001f9a10_2cfcb8(src3, src3, (u8 *)below + 0xE0);
+                        qcopy(stacked_crate_position, &below->pos);
+                        FUN_001f9a10_2cfcb8(stacked_crate_position, stacked_crate_position, (u8 *)below + 0xE0);
                         vars = (*(H_2cfcb8 *)&D_L00_00173E40).moby->vars;
                         if (is_moby_in_class_range_500_to_540(moby) != 0) {
                             vars->next_member = moby;
@@ -782,9 +782,9 @@ void ground_attached_update(M_2cfcb8 *moby) {
     while (member != 0) {
         vars = member->vars;
         if (is_moby_in_class_range_500_to_540(member) != 0 && vars->pA4 == 0) {
-            src4 = &member->pos;
-            qcopy(&probe_up, src4);
-            qcopy(&probe_down, src4);
+            stack_base_probe_position = &member->pos;
+            qcopy(&probe_up, stack_base_probe_position);
+            qcopy(&probe_down, stack_base_probe_position);
             probe_up.z += vars->height * 0.5f;
             probe_down.z = 0.1f;
             if (FUN_001efa68_2cfcb8(&probe_up, &probe_down, 2, moby, 0) != 0) {
@@ -852,12 +852,12 @@ void ground_attached_update(M_2cfcb8 *moby) {
     get_first_moby_in_group(&moby, group, 0, 0);
     while (moby != 0) {
         if (is_moby_in_class_range_500_to_540(moby) != 0) {
-            get_next_moby_in_group(&other, moby, 0, 0);
-            while (other != 0) {
-                if (is_moby_in_class_range_500_to_540(other) != 0) {
-                    fast_vec_dist(&moby->pos, &other->pos);
+            get_next_moby_in_group(&later_group_member, moby, 0, 0);
+            while (later_group_member != 0) {
+                if (is_moby_in_class_range_500_to_540(later_group_member) != 0) {
+                    fast_vec_dist(&moby->pos, &later_group_member->pos);
                 }
-                get_next_moby_in_group(&other, other, 0, 0);
+                get_next_moby_in_group(&later_group_member, later_group_member, 0, 0);
             }
         }
         get_next_moby_in_group(&moby, moby, 0, 0);
