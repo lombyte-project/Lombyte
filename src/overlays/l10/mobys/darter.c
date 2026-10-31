@@ -646,6 +646,9 @@ extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 #include "rnc/data_labels.h"
 
 void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
+    enum {
+        DARTER_STATE_DYING = 13
+    };
     MobyData   *class_1199_vars = ((struct MobyData *)moby->pvars);
     float       vector_scratch[4];
     float       transformed_offset[4];
@@ -660,7 +663,7 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
         class_1199_vars->f38 = 0;
     }
     fast_dec_timer(&class_1199_vars->f184);
-    if (moby->state != 13) {
+    if (moby->state != DARTER_STATE_DYING) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
         resolve_moby_hit_response(
             moby, hit_record, &class_1199_vars->f20, 5, &hit_processing_status, 0, 0, 4);
@@ -670,7 +673,7 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
-                moby->state = 13;
+                moby->state = DARTER_STATE_DYING;
                 class_1199_vars->f70 = D_0015ED70 * 26.0f;
                 class_1199_vars->f9D = 3;
                 class_1199_vars->f84 = 9;
