@@ -329,7 +329,7 @@ extern int   launch_first_idle_group_class_0772_moby(int    idx,
 extern int   count_group_gadgebots_not_in_state_8(int idx) __asm__("FUN_L18_002fc7e0");
 extern int   random_integer_below(int) __asm__("FUN_00213260");
 extern s32   allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
-extern short D_L18_00162378_gp __asm__("D_L18_00162378") __attribute__((sda));
+extern short l18_drek_boss_hero_follow_default_radius __asm__("D_L18_00162378") __attribute__((sda));
 extern short l18_drek_boss_scene_2_started_gp __asm__("D_L18_00162360") __attribute__((sda));
 extern short D_L18_00162390 __attribute__((sda));
 extern short l18_drek_boss_paired_transition_duration_frames_gp __asm__("D_L18_00162394")
@@ -1470,7 +1470,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         }
         if (vector_distance_xy(hero.motion.pos.f,
                                D_L18_001600EC + boss_data->f250[2] * 0x80 + 0x30) >
-            *(float *)&D_L18_00162378_gp + 5.8f) {
+            *(float *)&l18_drek_boss_hero_follow_default_radius + 5.8f) {
             fire = 1;
         }
         if (fire) {
@@ -2158,7 +2158,7 @@ int advance_drek_boss_planar_position_toward_target(char *moby,
 /* Moves a moby's follow distance toward a target, clamped to a range, then applies it. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7DC0), where it is exact; names translated to the US level program. */
 
-extern short D_L18_0016234C_gp __asm__("D_L18_0016234C") __attribute__((sda));
+extern short l18_drek_boss_hero_follow_target_distance __asm__("D_L18_0016234C") __attribute__((sda));
 extern void  FUN_L00_0025f730(void *a, float x);
 int          advance_drek_boss_planar_position_toward_target(char *moby,
                                                              float arg,
@@ -2180,15 +2180,15 @@ void update_drek_boss_hero_follow_movement(struct Moby *moby) {
         FUN_L00_0025f730(follow_target_position,
                          *(float *)&drek_boss_hero_follow_mode_0f_radius_gp);
     } else {
-        FUN_L00_0025f730(follow_target_position, *(float *)&D_L18_00162378_gp);
+        FUN_L00_0025f730(follow_target_position, *(float *)&l18_drek_boss_hero_follow_default_radius);
     }
     fast_vec_add(follow_target_position,
                  follow_target_position,
                  D_L18_001600EC + (*(int *)(moby_vars + 0x344) << 7) + 0x30);
     follow_speed_limit = hero.motion.speed_xy;
     follow_speed_limit +=
-        (vector_distance_xy(&moby->pos, follow_target_position) - *(float *)&D_L18_0016234C_gp) /
-        *(float *)&D_L18_0016234C_gp * (frame_time * 4.75f);
+        (vector_distance_xy(&moby->pos, follow_target_position) - *(float *)&l18_drek_boss_hero_follow_target_distance) /
+        *(float *)&l18_drek_boss_hero_follow_target_distance * (frame_time * 4.75f);
     hi = frame_time * 20.0f;
     lo = frame_time * 4.75f;
     if (follow_speed_limit > hi) {
@@ -2445,7 +2445,7 @@ int select_drek_boss_next_action(struct Moby *moby) {
                 float d = vector_distance_xy(D_0013E533 + 0xE9D,
                                              D_L18_001600EC +
                                                  *(int *)(boss_action_vars + 0x25C) * 128 + 0x30);
-                if (*(float *)&D_L18_00162378_gp + 2.0f < d)
+                if (*(float *)&l18_drek_boss_hero_follow_default_radius + 2.0f < d)
                     ok = 0;
             }
         }
