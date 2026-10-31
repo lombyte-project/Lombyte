@@ -634,7 +634,7 @@ extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 void process_blarg_helicopter_hits(struct Moby *moby) {
-    enum { BLARG_HELICOPTER_KNOCKBACK = 5 , BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET = 6 } ;int                  hit_processing_status;
+    enum { BLARG_HELICOPTER_KNOCKBACK = 5 , BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET = 6 } ; enum { HIT_PROCESSING_SKIP_HIT = 1} ;int                  hit_processing_status;
     float                fv;
     int                  hit_reaction_code;
     BlargHelicopterVars *blarg_helicopter_hit_vars;
@@ -645,7 +645,7 @@ void process_blarg_helicopter_hits(struct Moby *moby) {
     hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_reaction_code = hit_reaction(
         moby, hit_record, &blarg_helicopter_hit_vars->health, 0, &hit_processing_status, &fv, 0, 4);
-    if (hit_processing_status != 1 && moby->state != BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET &&
+    if (hit_processing_status != HIT_PROCESSING_SKIP_HIT && moby->state != BLARG_HELICOPTER_EXPLODE_AND_REMOVE_OR_RESET &&
         *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0xB8 &&
         *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x199) {
         float remaining_health;
