@@ -85,14 +85,14 @@ void construction_arm_update(struct Moby *moby) {
     int              animation, duration, minimum_effect_duration_frames;
     Vec4             origin, velocity, offset, sum;
 
-    if (moby->state != 6) {
+    if (moby->state != CONSTRUCTION_ARM_DESTROY) {
         slot = find_moby_hit(moby, 0x10000, 0);
         if (slot != 0 && *(float *)(slot + 0x2c) > 0.0f)
             hit = 1;
         if (hit)
-            moby->state = 6;
+            moby->state = CONSTRUCTION_ARM_DESTROY;
     }
-    if (moby->state != 0) {
+    if (moby->state != CONSTRUCTION_ARM_INITIALIZE) {
         arm_vars->facing = arm_vars->yaw;
         update_joint_animation(frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, moby, arm_vars, 0);
     }
@@ -103,7 +103,7 @@ void construction_arm_update(struct Moby *moby) {
                                  FUN_L15_001f8648(construction_arm_wait_time_max_gp * 60.0f)));
         *(int *)&arm_vars->yaw_velocity = arm_vars->side = *(int *)&arm_vars->yaw = 0;
         moby->update_dist = 0xff;
-        moby->state = 1;
+        moby->state = CONSTRUCTION_ARM_WAIT_TO_TURN;
         break;
     case CONSTRUCTION_ARM_WAIT_TO_TURN:
         if (fast_dec_timer_s16(&arm_vars->timer) &&
@@ -119,7 +119,7 @@ void construction_arm_update(struct Moby *moby) {
                     group_member_moby =
                         (struct Moby *)((*list & 0x7fff) * 0x100 + (int)l15_moby_array);
                     if ((signed char)group_member_moby->state >= 0 &&
-                        group_member_moby->oclass == moby->oclass && group_member_moby->state != 1)
+                        group_member_moby->oclass == moby->oclass && group_member_moby->state != CONSTRUCTION_ARM_WAIT_TO_TURN)
                         count++;
                 } while ((short)*list++ >= 0);
                 if (count != 0) {
@@ -129,7 +129,7 @@ void construction_arm_update(struct Moby *moby) {
             }
             if (ready) {
                 arm_vars->target_yaw = random_float_between(-0.20943952f, 0.20943952f);
-                moby->state = 2;
+                moby->state = CONSTRUCTION_ARM_TURN_TO_TARGET_YAW;
             }
         }
         break;
@@ -139,7 +139,7 @@ void construction_arm_update(struct Moby *moby) {
             animation = arm_vars->side;
             animation *= 2;
             blend_moby_animation(moby, animation + 1, 0, scale_game_frames(6));
-            moby->state = 3;
+            moby->state = CONSTRUCTION_ARM_WAIT_FOR_ENTRY_ANIMATION;
         }
         arm_vars->yaw = spring_turn(&arm_vars->yaw_velocity,
                                     arm_vars->yaw,
@@ -155,7 +155,7 @@ void construction_arm_update(struct Moby *moby) {
             animation *= 2;
             blend_moby_animation(moby, animation + 2, 0, scale_game_frames(3));
             arm_vars->direction = random_angle_radians();
-            moby->state = 4;
+            moby->state = CONSTRUCTION_ARM_WAIT_TO_START_EXIT_ANIMATION;
         }
         break;
     case CONSTRUCTION_ARM_WAIT_TO_START_EXIT_ANIMATION:
@@ -186,7 +186,7 @@ void construction_arm_update(struct Moby *moby) {
             animation = arm_vars->side;
             animation *= 2;
             blend_moby_animation(moby, animation + 3, 0, scale_game_frames(6));
-            moby->state = 5;
+            moby->state = CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION;
         }
         break;
     case CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION:
@@ -196,7 +196,7 @@ void construction_arm_update(struct Moby *moby) {
             arm_vars->timer = truncate_float_to_s32(random_float_between(minimum, maximum));
             duration = scale_game_frames(6);
             blend_moby_animation(moby, 0, 0, duration);
-            moby->state = 1;
+            moby->state = CONSTRUCTION_ARM_WAIT_TO_TURN;
         }
         break;
     case CONSTRUCTION_ARM_DESTROY:
