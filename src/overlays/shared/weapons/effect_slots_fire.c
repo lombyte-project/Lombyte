@@ -55,6 +55,9 @@ void effect_slots_fire(char  *slots,
                        float  distance) __asm__("FUN_L02_00264e70");
 
 void effect_slots_fire(char *slots, float *position, float *direction, float distance) {
+    enum {
+        EFFECT_SHOT_TRACKING_PHASE = 0
+    };
     float         origin[4] __attribute__((aligned(16)));
     float         end[4] __attribute__((aligned(16)));
     float         adjusted[4] __attribute__((aligned(16)));
@@ -73,7 +76,7 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
 
     {
         int phase = D_L02_0015F5CC & 3;
-        save_shot = phase == 0;
+        save_shot = phase == EFFECT_SHOT_TRACKING_PHASE;
     }
     qcopy(origin, position);
     fast_vec_normalize(adjusted, direction, distance + 0.75f);
