@@ -35,6 +35,11 @@ float       absolute_float(float input) __asm__("func_001F99C0");
 void resolve_hero_surface_reactions(void) __asm__("FUN_L14_0021dd30");
 
 void resolve_hero_surface_reactions(void) {
+    enum {
+        HERO_GROUND_TYPE_MAGNET = 2,
+        HERO_GROUND_TYPE_ICE = 7,
+        HERO_GROUND_TYPE_SINKING_SURFACE = 0xD
+    };
     struct Hero *hero_ptr;
     struct Hero *hero_data = &hero;
     int          keep = hero_data->ground_sound_class;
@@ -46,10 +51,10 @@ void resolve_hero_surface_reactions(void) {
     hero_data->unk308 = 0;
     if (saved_ground_type == -1)
         return;
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == HERO_GROUND_TYPE_MAGNET) {
         if (hero_data->frames_off_ground.s == 0 || hero_data->ground_distance < 0.3f) {
             hero_data->on_magnet_ground = 1;
-            if (hero_data->vehicle_mode == 0) {
+            if (hero_data->vehicle_mode == HERO_VEHICLE_MODE_ON_FOOT) {
                 char *item_moby_bytes = ((char *)hero_data->items[1].moby);
                 if (item_moby_bytes != 0 && *(short *)(item_moby_bytes + 0xA6) == 0xAD) {
                     hero_data->unk308 = 1;
@@ -72,15 +77,15 @@ void resolve_hero_surface_reactions(void) {
         struct Hero *q = &hero;
         q->selector_11 = 1;
     }
-    if (saved_ground_type == 2) {
+    if (saved_ground_type == HERO_GROUND_TYPE_MAGNET) {
         struct Hero *q = &hero;
         q->on_magnet_ground = 1;
     }
-    if (saved_ground_type == 7) {
+    if (saved_ground_type == HERO_GROUND_TYPE_ICE) {
         struct Hero *q = &hero;
         q->on_ice_ground = 1;
     }
-    if (saved_ground_type == 0xD) {
+    if (saved_ground_type == HERO_GROUND_TYPE_SINKING_SURFACE) {
         struct Hero *q = &hero;
         q->selector_13 = 1;
     }
