@@ -51,12 +51,16 @@ extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
 int store_hoven_anklebiter_in_suck_cannon(struct Moby *a) __asm__("FUN_L12_002e1758");
 
 int store_hoven_anklebiter_in_suck_cannon(struct Moby *carried_moby) {
+    enum {
+        ANKLEBITER_IDLE = 1,
+        ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 0x8
+    };
     int suck_cannon_store_result = store_moby_in_suck_cannon(carried_moby);
     if (suck_cannon_store_result == 0) {
-        if (carried_moby->state == 0x8)
-            carried_moby->state = 1;
+        if (carried_moby->state == ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME)
+            carried_moby->state = ANKLEBITER_IDLE;
     } else {
-        carried_moby->state = 0x8;
+        carried_moby->state = ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME;
     }
     return suck_cannon_store_result;
 }
