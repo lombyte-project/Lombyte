@@ -35,12 +35,12 @@ compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_
 
 void initialize_path_key_camera(struct UpdateCam *cam) __asm__("FUN_L14_003159d8");
 
-void initialize_path_key_camera(struct UpdateCam *cam) {
+void initialize_path_key_camera(struct UpdateCam *path_key_camera_object) {
     float        camera_placement_parameters[4];
     float        pad[4]; /* unused; keeps the frame layout */
     float        hero_look_direction[4];
     float        up[4];
-    char        *rec = *(char **)(l14_camera_preset_rows + cam->descriptor_index * 32 + 0x1C);
+    char        *rec = *(char **)(l14_camera_preset_rows + path_key_camera_object->descriptor_index * 32 + 0x1C);
     char        *path;
     LevelSpline *path_record_table;
     char        *camera_saved_state;
@@ -79,7 +79,7 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
         sum += *(float *)(path + i * 16 + 0x1C);
     }
     path_key_camera_rail_distances[2][i] = sum;
-    camera_saved_state = cam->saved_state;
+    camera_saved_state = path_key_camera_object->saved_state;
     *(int *)(camera_saved_state + 0x88) = 1;
     camera_state_block = (int *)(camera_saved_state + 0x88);
     camera_state_block[1] = 0;
@@ -87,13 +87,13 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
     camera_state_block[3] = 0;
     camera_state_block[4] = 0;
     D_L14_001624A8 = 1.0f;
-    camera_parameters = (float *)((char *)cam->saved_state + 0x60);
+    camera_parameters = (float *)((char *)path_key_camera_object->saved_state + 0x60);
     camera_parameters[0] = D_L14_001F6488_59d8[0] * 0.017453292f;
     camera_parameters[1] = D_L14_001F6488_59d8[1] * 0.017453292f;
     camera_parameters[2] = D_L14_001F6488_59d8[2];
     camera_parameters[3] = D_L14_001F6488_59d8[3] * 0.017453292f;
     camera_parameters[4] = D_L14_001F6488_59d8[4] * 0.017453292f;
-    camera_parameter_state_block = (int *)((char *)cam->saved_state + 0x74);
+    camera_parameter_state_block = (int *)((char *)path_key_camera_object->saved_state + 0x74);
     *camera_parameter_state_block = 0;
     camera_parameter_state_block[1] = 0;
     camera_parameter_state_block[2] = 0;
@@ -103,14 +103,14 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
     camera_placement_parameters[1] = camera_parameters[1];
     camera_placement_parameters[0] = hero_heading_radians;
     camera_placement_parameters[2] = camera_parameters[2];
-    compute_position_from_spherical_offset(&cam->pos, camera_placement_parameters, &hero.motion);
-    fast_vec_sub(hero_look_direction, &hero.motion, &cam->pos);
+    compute_position_from_spherical_offset(&path_key_camera_object->pos, camera_placement_parameters, &hero.motion);
+    fast_vec_sub(hero_look_direction, &hero.motion, &path_key_camera_object->pos);
     fast_vec_scale(up, &hero.gravity_dir, -1.5f);
     fast_vec_add(hero_look_direction, hero_look_direction, up);
-    fast_vec_normalize(&cam->m0, hero_look_direction, 1.0f);
-    fast_vec_cross(&cam->m1, &cam->m0, up);
-    fast_vec_normalize(&cam->m1, &cam->m1, 1.0f);
-    fast_vec_cross(&cam->m2, &cam->m1, &cam->m0);
+    fast_vec_normalize(&path_key_camera_object->m0, hero_look_direction, 1.0f);
+    fast_vec_cross(&path_key_camera_object->m1, &path_key_camera_object->m0, up);
+    fast_vec_normalize(&path_key_camera_object->m1, &path_key_camera_object->m1, 1.0f);
+    fast_vec_cross(&path_key_camera_object->m2, &path_key_camera_object->m1, &path_key_camera_object->m0);
     /* give every key without a duration (+0x44) the default 10000 */
     camera_key_default_cursor = (int *)&D_L14_001F6488_59d8[0x11];
     for (j = 38; j >= 0; j--) {
