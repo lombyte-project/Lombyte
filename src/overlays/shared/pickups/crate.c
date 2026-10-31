@@ -287,7 +287,7 @@ void crate_update(struct Moby *moby) {
     } else {
         coll->flags &= ~1;
     }
-    if (crate_vars->frameB4 != D_L00_0015F5CC_macro && moby->state != 0 &&
+    if (crate_vars->frameB4 != D_L00_0015F5CC_macro && moby->state != CRATE_STATE_INITIALIZE &&
         (crate_vars->flags & 0xC)) {
         update_crate_stack_motion(moby);
     }
@@ -305,12 +305,12 @@ void crate_update(struct Moby *moby) {
     case CRATE_STATE_INITIALIZE:
         clear_u64_value(&crate_vars->unk40);
         if (D_0015ED84 == 0x12 && moby->oclass == 0x1FF && crate_vars->unkC8 != 0) {
-            moby->state = 6;
+            moby->state = CRATE_STATE_WAIT_RESPAWN;
             moby->flags |= 0x41;
             moby->collision = 0;
             moby->flags &= ~0x1000;
         } else {
-            moby->state = 1;
+            moby->state = CRATE_STATE_PROCESS_HITS;
         }
         crate_vars->unkA8 = 0;
         if ((crate_vars->flags ^ 1) & 1) {
@@ -330,7 +330,7 @@ void crate_update(struct Moby *moby) {
              (hero.ground_moby == moby && hero.air_frames.s == 0) || hero.ledge_moby == (s32)moby ||
              touched)) {
             moby->command = 0;
-            moby->state = 5;
+            moby->state = CRATE_STATE_DETONATION_COUNTDOWN;
             break;
         }
         if (hit_contact == NULL || !(hit_contact->damage > 0.0f)) {
@@ -341,7 +341,7 @@ void crate_update(struct Moby *moby) {
             doHit = 0;
         }
         if (moby->oclass == 0x1F9) {
-            moby->state = 5;
+            moby->state = CRATE_STATE_DETONATION_COUNTDOWN;
             if (hit_contact->hit.s.flags & 0x20000) {
                 moby->command = 1;
             } else {
@@ -372,7 +372,7 @@ void crate_update(struct Moby *moby) {
                 moby->pclass = D_L00_00197300[moby->class_slot];
                 update_moby_animation_state(moby);
                 moby->unk72 = ((Part *)moby->pclass)->unkE;
-                moby->state = 2;
+                moby->state = CRATE_STATE_CLASS_CHANGE_COOLDOWN;
                 moby->command = scale_game_frames(15);
                 doHit = 0;
             }
@@ -399,7 +399,7 @@ void crate_update(struct Moby *moby) {
     case CRATE_STATE_CLASS_CHANGE_COOLDOWN:
         if (--moby->command == 0xFF) {
             moby->hit_slot = 0xFF;
-            moby->state = 1;
+            moby->state = CRATE_STATE_PROCESS_HITS;
         }
         break;
 
@@ -430,7 +430,7 @@ void crate_update(struct Moby *moby) {
             if (moby->unkB4 >= 2) {
                 moby->unkB4 = 1;
             }
-            moby->state = 6;
+            moby->state = CRATE_STATE_WAIT_RESPAWN;
             if (D_0015ED84 == 0x12) {
                 crate_vars->unkC9 = FUN_L00_00257b90(300, 720);
             } else {
@@ -452,7 +452,7 @@ void crate_update(struct Moby *moby) {
             break;
         }
         if (moby->group == 0xFF) {
-            moby->state = 1;
+            moby->state = CRATE_STATE_PROCESS_HITS;
             moby->visible = 1;
             moby->flags &= ~1;
             moby->collision = ((Part *)moby->pclass)->unk10;
@@ -489,7 +489,7 @@ void crate_update(struct Moby *moby) {
         get_first_moby_in_group(&it, moby->group, 0, 0);
         while (it != NULL) {
             if (moby != it && !(vector_distance_xy(&moby->pos, &it->pos) > 0.1f) &&
-                it->state == 1) {
+                it->state == CRATE_STATE_PROCESS_HITS) {
                 CrateVars *ipv = (CrateVars *)it->pvars;
 
                 if (ipv->rider == NULL) {
@@ -498,7 +498,7 @@ void crate_update(struct Moby *moby) {
                     ipv->rider = moby;
                     crate_vars->below = it;
                     crate_vars->rider = NULL;
-                    moby->state = 1;
+                    moby->state = CRATE_STATE_PROCESS_HITS;
                     moby->visible = 1;
                     moby->flags &= ~1;
                     moby->collision = ((Part *)moby->pclass)->unk10;
@@ -509,9 +509,9 @@ void crate_update(struct Moby *moby) {
             }
             get_next_moby_in_group(&it, it, 0, 0);
         }
-        if (moby->state != 1) {
+        if (moby->state != CRATE_STATE_PROCESS_HITS) {
             moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f);
-            moby->state = 1;
+            moby->state = CRATE_STATE_PROCESS_HITS;
             crate_vars->rider = NULL;
             crate_vars->below = NULL;
             moby->visible = 1;
@@ -549,7 +549,7 @@ void crate_update(struct Moby *moby) {
 
     case CRATE_STATE_REACTIVATION_DELAY:
         if (FUN_L00_001fefc8(&moby->command)) {
-            moby->state = 1;
+            moby->state = CRATE_STATE_PROCESS_HITS;
             moby->flags &= ~1;
         }
         break;
