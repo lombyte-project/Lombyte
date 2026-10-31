@@ -753,6 +753,19 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
         HIT_RESPONSE_NON_KNOCKBACK_REACTION_ALTERNATE = 10,
         HIT_RESPONSE_COOLDOWN_NO_KNOCKBACK = 11
     };
+    enum {
+        PUFFOID_STATE_INITIALIZE = 0,
+        PUFFOID_STATE_WAIT_FOR_HOME_JUMP = 1,
+        PUFFOID_STATE_IDLE = 2,
+        PUFFOID_STATE_WANDER_NEAR_HOME = 3,
+        PUFFOID_STATE_KNOCKBACK = 9,
+        PUFFOID_STATE_REPOSITION_AND_FACE_TARGET = 0xA,
+        PUFFOID_STATE_DEATH_KNOCKBACK = 0xB,
+        PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 0xC,
+        PUFFOID_STATE_CARRIER_JUMP = 0xD,
+        PUFFOID_STATE_CARRIER_KNOCKBACK = 0x11,
+        PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 0x12
+    };
     struct L11PatrolVars *patrol_vars = (struct L11PatrolVars *)moby->pvars;
     Vec4                  position_scratch;
     s32                   hit_processing_status;
@@ -762,15 +775,15 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
 
     moby->scale = moby->pclass->scale * D_L11_001622CC;
     patrol_vars->unk1A4 = l11_puffoid_horizontal_speed_limit * frame_time;
-    if (patrol_vars->carrier != -1 && moby->state != 0xB && moby->state != 9 &&
-        moby->state != 0x12 && moby->state != 0x11 && moby->state != 0 && moby->state != 0xC &&
-        moby->state != 0xD) {
+    if (patrol_vars->carrier != -1 && moby->state != PUFFOID_STATE_DEATH_KNOCKBACK && moby->state != PUFFOID_STATE_KNOCKBACK &&
+        moby->state != PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK && moby->state != PUFFOID_STATE_CARRIER_KNOCKBACK && moby->state != PUFFOID_STATE_INITIALIZE && moby->state != PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP &&
+        moby->state != PUFFOID_STATE_CARRIER_JUMP) {
         if (moby->pos.z < ((struct Moby *)D_L11_0015FFD8)[patrol_vars->carrier].pos.z + 0.5f) {
             spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_moby_for_removal(moby);
         }
     }
-    if (moby->state == 0xC && patrol_vars->carrier != -1) {
+    if (moby->state == PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP && patrol_vars->carrier != -1) {
         if (is_moby_in_state_five(&((struct Moby *)D_L11_0015FFD8)[patrol_vars->carrier]) != 0 &&
             moby->visible == 0) {
             mark_moby_for_removal(moby);
@@ -787,13 +800,13 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     {
         s32 kind = resolve_moby_hit_response(
             moby, hit, &patrol_vars->hp, 0, &hit_processing_status, &dmg, 0, 4);
-        if (hit_processing_status != 1 && moby->state != 0xB) {
+        if (hit_processing_status != 1 && moby->state != PUFFOID_STATE_DEATH_KNOCKBACK) {
             patrol_vars->hp -= dmg;
             if (hit->moby->oclass == 0x47) {
-                kind = 3;
+                kind = HIT_RESPONSE_KNOCKBACK;
             }
             if (patrol_vars->hp <= 0.0f) {
-                kind = 1;
+                kind = HIT_RESPONSE_DEATH;
             }
             patrol_vars->unk140 = truncate_float_to_s32(512.0f);
             patrol_vars->unk148 = 0.2f;
@@ -824,10 +837,10 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
                 trooper_knockback_arc(
                     &position_scratch, &yaw, &patrol_vars->unk138, &patrol_vars->unk13C);
                 trooper_start_knockback(moby, patrol_vars->unk120, 3, 1, 0, yaw);
-                if (moby->state < 0xC) {
-                    moby->state = 9;
+                if (moby->state < PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP) {
+                    moby->state = PUFFOID_STATE_KNOCKBACK;
                 } else {
-                    moby->state = 0x11;
+                    moby->state = PUFFOID_STATE_CARRIER_KNOCKBACK;
                 }
                 patrol_vars->unk117 = 0x78;
                 break;
@@ -846,10 +859,10 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
                 trooper_knockback_arc(
                     &position_scratch, &yaw, &patrol_vars->unk138, &patrol_vars->unk13C);
                 trooper_start_knockback(moby, patrol_vars->unk120, 3, 1, 0, yaw);
-                if (moby->state < 0xC) {
-                    moby->state = 0xB;
+                if (moby->state < PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP) {
+                    moby->state = PUFFOID_STATE_DEATH_KNOCKBACK;
                 } else {
-                    moby->state = 0x12;
+                    moby->state = PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK;
                 }
                 patrol_vars->unk117 = 0xF0;
                 FUN_L00_00257470(moby, 0, -1);
@@ -864,8 +877,8 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     moby->hit_slot = 0xFF;
     trooper_anim_finish(moby, patrol_vars->move);
     if (patrol_vars->timer != 0) {
-        if (moby->state == 2 || (moby->state == 3 && (moby->anim_flags & 2))) {
-            moby->state = 0xA;
+        if (moby->state == PUFFOID_STATE_IDLE || (moby->state == PUFFOID_STATE_WANDER_NEAR_HOME && (moby->anim_flags & 2))) {
+            moby->state = PUFFOID_STATE_REPOSITION_AND_FACE_TARGET;
             if (moby->prev_seq != 2) {
                 FUN_00212f90(moby, 2, 0, scale_game_frames(10));
             }
@@ -886,7 +899,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     if (FUN_L00_0025ff38(
             moby, &patrol_vars->goal, 0, 0, path + 0x10, *(s32 *)path, patrol_vars->reach) != 2) {
         Vec4f *goal_check_position;
-        if (moby->state == 1) {
+        if (moby->state == PUFFOID_STATE_WAIT_FOR_HOME_JUMP) {
             goal_check_position = (Vec4f *)((char *)l11_paths[patrol_vars->path2_index] + 0x20);
         } else {
             goal_check_position = &moby->pos;
