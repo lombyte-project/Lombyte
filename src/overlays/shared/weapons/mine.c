@@ -512,7 +512,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
 int predict_mine_impact(char *trajectory_state, char *moby, int mode) __asm__("FUN_L00_002aa2a8");
 
 int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
-    float trajectory_position[4];
+    enum { MINE_STATE_OWNER_ATTACHED = 0 } ;float trajectory_position[4];
     float B[4];
     float C[4];
     float box[4];
@@ -525,7 +525,7 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
     if (D_L00_0015F5C4_c != 0)
         return 0;
     qcopy(C, &MOBY(moby)->pos);
-    if (MOBY(moby)->state == 0) {
+    if (MOBY(moby)->state == MINE_STATE_OWNER_ATTACHED) {
         trajectory_position[0] =
             fast_cos(fast_add_rotations(
                 -0.36196801f,
