@@ -971,8 +971,14 @@ short count_group_puffoids_in_states_13_to_17(struct Moby *group_source_moby) {
 s32 is_moby_in_bob_target_exclusion_state(const u8 *moby) __asm__("FUN_L11_00316128");
 
 s32 is_moby_in_bob_target_exclusion_state(const u8 *moby) {
+    enum {
+        PUFFOID_STATE_DEATH_KNOCKBACK = 0xB,
+        PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP = 0xC,
+        PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK = 0x12,
+        PUFFOID_STATE_WAIT_TO_RESUME_COMMAND = 0x14
+    };
     u32 moby_state = moby[0x20];
-    if (moby_state == 0x14 || moby_state == 0xB || moby_state == 0x12 || moby_state == 0xC) {
+    if (moby_state == PUFFOID_STATE_WAIT_TO_RESUME_COMMAND || moby_state == PUFFOID_STATE_DEATH_KNOCKBACK || moby_state == PUFFOID_STATE_CARRIER_DEATH_KNOCKBACK || moby_state == PUFFOID_STATE_WAIT_FOR_CARRIER_JUMP) {
         return 1;
     }
     return 0;
