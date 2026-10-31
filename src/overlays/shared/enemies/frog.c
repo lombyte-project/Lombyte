@@ -590,6 +590,12 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         HIT_RESULT_REMOVE_OR_RESPAWN = 2,
         HIT_RESULT_NO_RESPONSE = 11
     };
+    enum {
+        FROG_TARGET_MODE_AUTOMATIC_TARGET = 0,
+        HIT_STATUS_DAMAGE_SUPPRESSED = 1,
+        FROG_TARGET_MODE_EXPLICIT_TARGET = 1,
+        FROG_TARGET_MODE_NO_PURSUIT_TARGET = 2
+    };
     struct RespawnVars *frog_state;
     struct MobyHit     *hit;
     int                 kind;
@@ -610,7 +616,7 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
     damage = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
     code = resolve_moby_hit_response(moby, hit, &frog_state->health, 0, &kind, &damage, 0, 4);
-    if (kind != 1 && moby->state != 0xE) {
+    if (kind != HIT_STATUS_DAMAGE_SUPPRESSED && moby->state != 0xE) {
         frog_state->health = frog_state->health - damage;
         if (frog_state->health <= 0.0f) {
             code = 1;
@@ -665,7 +671,7 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
     }
     if (frog_state->target_id != -1) {
         struct Moby *target = &D_L06_0015FFD8_e94f0[frog_state->target_id];
-        frog_state->target_mode = 1;
+        frog_state->target_mode = FROG_TARGET_MODE_EXPLICIT_TARGET;
         frog_state->target = target;
         qcopy(&frog_state->target_pos, &target->pos);
     } else if (D_001413F4_e94f0[0] == 1) {
@@ -673,16 +679,16 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
             select_hero_or_gadgebot_target(
                 (char *)moby, (char **)&frog_state->target, frog_state->range);
             if (frog_state->target == 0) {
-                frog_state->target_mode = 2;
+                frog_state->target_mode = FROG_TARGET_MODE_NO_PURSUIT_TARGET;
             } else {
                 int *path = D_L06_001B0C30[frog_state->path];
                 if (point_in_path_xy(&frog_state->target->pos, path + 4, *path) == 0 ||
                     (frog_state->target->oclass == 0x359 &&
                      2.0f < vector_distance_xy(&moby->pos, &frog_state->target->pos))) {
                     frog_state->target = 0;
-                    frog_state->target_mode = 2;
+                    frog_state->target_mode = FROG_TARGET_MODE_NO_PURSUIT_TARGET;
                 } else {
-                    frog_state->target_mode = 0;
+                    frog_state->target_mode = FROG_TARGET_MODE_AUTOMATIC_TARGET;
                 }
             }
         }
@@ -692,7 +698,7 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         if (activate_effect_l08(moby, goal, frog_state->range, 0, 0, path + 4, *path) != 2) {
             if (frog_state->range < vector_distance_xy(&frog_state->spawn_pos, goal) ||
                 3.0f < absolute_float(moby->pos.z - frog_state->target_pos.z)) {
-                frog_state->target_mode = 2;
+                frog_state->target_mode = FROG_TARGET_MODE_NO_PURSUIT_TARGET;
             }
         }
     }
