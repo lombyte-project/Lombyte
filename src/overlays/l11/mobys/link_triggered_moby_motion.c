@@ -69,7 +69,7 @@ void link_triggered_moby_motion_update(struct Moby *moving_moby) {
         moving_moby->scale = source_moby_class->scale * private_data->unkC;
         spawned_moby->scale = source_moby_class->scale * private_data->unkC;
         spawned_moby->state = 1;
-        moving_moby->state = 1;
+        moving_moby->state = LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER;
         break;
     case LINKED_MOTION_STATE_WAIT_FOR_LINK_TRIGGER:
         linked_moby = (struct Moby *)((private_data->unk8 << 8) + (int)D_L11_0015FFD8);
@@ -78,7 +78,7 @@ void link_triggered_moby_motion_update(struct Moby *moving_moby) {
         }
         if (linked_moby->oclass == 0x33E && linked_moby->command != 0) {
         go:
-            moving_moby->state = 2;
+            moving_moby->state = LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS;
             ((Rec57 *)(private_data->unk14 + (int)(alternate_item_available)))->f57 = 1;
             allocate_voice_for_target_entry(0, 0, moving_moby);
         }
