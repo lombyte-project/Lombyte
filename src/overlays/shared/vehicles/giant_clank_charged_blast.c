@@ -85,12 +85,15 @@ void set_giant_clank_charged_blast_position(void *unused_creation_arg, OvlQuad *
 void remove_giant_clank_charged_blast(void) __asm__("FUN_L00_002a9be0");
 
 void remove_giant_clank_charged_blast(void) {
+    enum {
+        GIANT_CLANK_CHARGED_BLAST_CHARGING = 0
+    };
     struct Moby *tracked_moby = *(char **)&D_L00_001613C8_gp;
     if (tracked_moby != 0) {
         if (tracked_moby->oclass == 0x5F3) {
             char *tracked_moby_vars;
             int   point_light_slot_index;
-            if (tracked_moby->state != 0)
+            if (tracked_moby->state != GIANT_CLANK_CHARGED_BLAST_CHARGING)
                 return;
             tracked_moby_vars = ((char *)tracked_moby->pvars);
             D_L00_0015F320 = 0;
