@@ -228,7 +228,7 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
     if (incoming_hit_record->p34 != hero_moby) {
         return 0;
     }
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         if (!(incoming_hit_record->i24 & 2)) {
             return 0;
         }
@@ -238,7 +238,7 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
     D_0013DF88[current_level_index]++;
     hero.damage_source_moby = (struct Moby *)incoming_hit_record->p20;
     D_0015EEA8++;
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         hero.vehicle_hp -= truncate_float_to_s32(incoming_hit_record->f2C);
         if (hero.vehicle_hp < 0) {
             hero.vehicle_hp = 0;
