@@ -46,7 +46,7 @@ extern char *select_auto_aim_target_moby(
     void *, void *, void *, float *, float *, float *, float) __asm__("FUN_L00_002630c8");
 extern char  D_0013F490[];
 extern void *D_001413D0;
-extern float D_L00_001613C4 __attribute__((sda));
+extern float l00_missile_spawn_scale_multiplier __asm__("D_L00_001613C4") __attribute__((sda));
 extern short D_L00_001B0770[];
 extern void  append_unique_moby_index(void *, short *, int) __asm__("FUN_L00_0025f780");
 
@@ -64,75 +64,75 @@ char *spawn_giant_clank_missile(void *owner,
 
 char *spawn_giant_clank_missile(
 
-    void *owner, void *pos, float a, float b, float c, char *tgt, float rz, float ry) {
-    char      *m;
-    char      *d;
-    BoltVector t;
-    BoltVector p;
-    m = (char *)create_moby(0x100);
-    if (m != 0) {
-        ((unsigned char *)m)[0x30] = 0xFF;
-        m[0x31] = 1;
-        m[0x20] = 0;
-        *(float *)(m + 0x2C) *= D_L00_001613C4;
-        *(short *)(m + 0x32) = 0xFF;
-        d = *(char **)(m + 0x78);
-        *(float *)(m + 0x48) = rz;
-        *(float *)(m + 0x44) = ry;
-        if (tgt == 0) {
-            build_spherical_offset(&t, D_0015ED6C * 20.0f, rz, ry);
-            p.q = *(Q_2aa998 *)pos;
-            tgt = select_auto_aim_target_moby(owner, &p, &t, &a, &b, &c, 0.34906584f);
+    void *owner, void *pos, float fallback_yaw, float fallback_pitch, float target_height_offset, char *target_moby, float rz, float ry) {
+    char      *spawned_missile;
+    char      *missile_spawn_data;
+    BoltVector aim_direction_or_collision_start;
+    BoltVector auto_aim_position;
+    spawned_missile = (char *)create_moby(0x100);
+    if (spawned_missile != 0) {
+        ((unsigned char *)spawned_missile)[0x30] = 0xFF;
+        spawned_missile[0x31] = 1;
+        spawned_missile[0x20] = 0;
+        *(float *)(spawned_missile + 0x2C) *= l00_missile_spawn_scale_multiplier;
+        *(short *)(spawned_missile + 0x32) = 0xFF;
+        missile_spawn_data = *(char **)(spawned_missile + 0x78);
+        *(float *)(spawned_missile + 0x48) = rz;
+        *(float *)(spawned_missile + 0x44) = ry;
+        if (target_moby == 0) {
+            build_spherical_offset(&aim_direction_or_collision_start, D_0015ED6C * 20.0f, rz, ry);
+            auto_aim_position.q = *(Q_2aa998 *)pos;
+            target_moby = select_auto_aim_target_moby(owner, &auto_aim_position, &aim_direction_or_collision_start, &fallback_yaw, &fallback_pitch, &target_height_offset, 0.34906584f);
         }
-        *(void **)(d + 0x10) = owner;
-        qcopy(m + 0x10, pos);
-        *(float *)(d + 0x34) = D_0015ED6C * 100.0f;
-        *(int *)(d + 0x38) = 1;
-        *(int *)(d + 0x24) = 0;
-        *(int *)(d + 0x28) = 0;
-        *(int *)(d + 0x20) = 0;
-        *(char **)(d + 0x18) = tgt;
-        if (tgt != 0) {
-            unsigned char *e = (unsigned char *)get_moby_target_info(tgt);
-            if (e != 0) {
-                *(unsigned short *)(e + 0x1E) |= 0x80;
-                if (e[0xB] != 0)
-                    *(int *)(d + 0x38) = 0;
-                if (e[0xC] != 0)
-                    *(float *)(d + 0x34) = (float)e[0xC] * D_0015ED6C;
+        *(void **)(missile_spawn_data + 0x10) = owner;
+        qcopy(spawned_missile + 0x10, pos);
+        *(float *)(missile_spawn_data + 0x34) = D_0015ED6C * 100.0f;
+        *(int *)(missile_spawn_data + 0x38) = 1;
+        *(int *)(missile_spawn_data + 0x24) = 0;
+        *(int *)(missile_spawn_data + 0x28) = 0;
+        *(int *)(missile_spawn_data + 0x20) = 0;
+        *(char **)(missile_spawn_data + 0x18) = target_moby;
+        if (target_moby != 0) {
+            unsigned char *target_aim_bounds = (unsigned char *)get_moby_target_info(target_moby);
+            if (target_aim_bounds != 0) {
+                *(unsigned short *)(target_aim_bounds + 0x1E) |= 0x80;
+                if (target_aim_bounds[0xB] != 0)
+                    *(int *)(missile_spawn_data + 0x38) = 0;
+                if (target_aim_bounds[0xC] != 0)
+                    *(float *)(missile_spawn_data + 0x34) = (float)target_aim_bounds[0xC] * D_0015ED6C;
             }
         }
-        *(float *)(d + 0x2C) = a;
-        *(float *)(d + 0x30) = b;
-        *(int *)(d + 0x14) = scale_game_frames(0x96);
-        if (tgt != 0) {
-            qcopy(d, tgt + 0x10);
-            *(float *)(d + 8) += c;
-            *(float *)(d + 0x1C) = c;
+        *(float *)(missile_spawn_data + 0x2C) = fallback_yaw;
+        *(float *)(missile_spawn_data + 0x30) = fallback_pitch;
+        *(int *)(missile_spawn_data + 0x14) = scale_game_frames(0x96);
+        if (target_moby != 0) {
+            qcopy(missile_spawn_data, target_moby + 0x10);
+            *(float *)(missile_spawn_data + 8) += target_height_offset;
+            *(float *)(missile_spawn_data + 0x1C) = target_height_offset;
         }
         {
-            int r;
+            int velocity_inheritance_frame_count;
             if (fast_vec_length((float *)(D_0013F490)) > D_0015ED6C * 0.1f) {
-                r = scale_game_frames(0x3C);
-                *(short *)(d + 0x3E) = r;
-                *(short *)(d + 0x3C) = r;
+                velocity_inheritance_frame_count = scale_game_frames(0x3C);
+                *(short *)(missile_spawn_data + 0x3E) = velocity_inheritance_frame_count;
+                *(short *)(missile_spawn_data + 0x3C) = velocity_inheritance_frame_count;
             } else {
-                r = scale_game_frames(1);
-                *(short *)(d + 0x3E) = r;
-                *(short *)(d + 0x3C) = r;
+                velocity_inheritance_frame_count = scale_game_frames(1);
+                *(short *)(missile_spawn_data + 0x3E) = velocity_inheritance_frame_count;
+                *(short *)(missile_spawn_data + 0x3C) = velocity_inheritance_frame_count;
             }
         }
-        t.q = ((BoltOwner *)owner)->position.q;
-        t.f[2] = ((float *)pos)[2];
-        if (FUN_001efa68(&t, pos, 0, *(int *)(((char *)&D_001413D0)), 0) != 0) {
-            m[0xBC] = 1;
-            qcopy(m + 0x10, &D_L00_00173E60);
+        aim_direction_or_collision_start.q = ((BoltOwner *)owner)->position.q;
+        aim_direction_or_collision_start.f[2] = ((float *)pos)[2];
+        if (FUN_001efa68(&aim_direction_or_collision_start, pos, 0, *(int *)(((char *)&D_001413D0)), 0) != 0) {
+            spawned_missile[0xBC] = 1;
+            qcopy(spawned_missile + 0x10, &D_L00_00173E60);
         }
-        update_entity(m);
-        append_unique_moby_index(m, D_L00_001B0770, 0x1F);
-        *(float *)(m + 0x2C) += *(float *)(m + 0x2C);
+        update_entity(spawned_missile);
+        append_unique_moby_index(spawned_missile, D_L00_001B0770, 0x1F);
+        *(float *)(spawned_missile + 0x2C) += *(float *)(spawned_missile + 0x2C);
     }
-    return m;
+    return spawned_missile;
 }
 
 short D_L01_001B0BF0 NOT_SDA = 0;
