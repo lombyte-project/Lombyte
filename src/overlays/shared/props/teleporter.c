@@ -578,11 +578,14 @@ void draw_moby_radius_ring(char *moby) {
 void hide_teleporter_and_children(L01Moby *moby) __asm__("FUN_L01_003097e8");
 
 void hide_teleporter_and_children(L01Moby *moby) {
+    enum {
+        TELEPORTER_VISIBILITY_HIDDEN = 0
+    };
     L01Moby **slots = moby->data->slots;
     int       i;
     moby->field94 = 0;
     moby->flags |= 1;
-    moby->state = 0;
+    moby->state = TELEPORTER_VISIBILITY_HIDDEN;
     for (i = 2; i >= 0; i--, slots++) {
         if (*slots != 0) {
             (*slots)->flags |= 1;
