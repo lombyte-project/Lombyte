@@ -16,6 +16,11 @@ extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 int select_moby_record_by_xy_distance(char *a, char *o, float best) __asm__("FUN_L04_00252e18");
 
 int select_moby_record_by_xy_distance(char *reference_object, char *output_record, float best) {
+    enum {
+        MOBY_SELECTION_HERO_FALLBACK = 0,
+        MOBY_SELECTION_NEARER_CANDIDATE = 1,
+        MOBY_SELECTION_NO_TARGET = 2
+    };
     struct Hero *hero = &hero_lui;
     char        *selected_moby;
     char        *candidate_moby;
@@ -25,10 +30,10 @@ int select_moby_record_by_xy_distance(char *reference_object, char *output_recor
     float        candidate_comparison_value;
 
     selected_moby = ((char *)hero->moby);
-    selection_status = 0;
+    selection_status = MOBY_SELECTION_HERO_FALLBACK;
     if (hero->state.control_mode == 0x18 || hero->state.current == 0x72) {
         selected_moby = 0;
-        selection_status = 2;
+        selection_status = MOBY_SELECTION_NO_TARGET;
     }
     for (i = 1; i <= D_L04_001B09B0[0]; i++) {
         candidate_moby = moby_array + (D_L04_001B09B0[i] << 8);
@@ -47,7 +52,7 @@ int select_moby_record_by_xy_distance(char *reference_object, char *output_recor
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;
-            selection_status = 1;
+            selection_status = MOBY_SELECTION_NEARER_CANDIDATE;
         }
     }
     for (j = 0; j < 20; j++) {
@@ -67,7 +72,7 @@ int select_moby_record_by_xy_distance(char *reference_object, char *output_recor
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;
-            selection_status = 1;
+            selection_status = MOBY_SELECTION_NEARER_CANDIDATE;
         }
     }
     if (selected_moby != 0) {
