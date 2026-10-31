@@ -472,8 +472,11 @@ void distribute_group_blarg_ships_along_path(struct Moby *moby, int table_index)
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003198F8), where it is exact; names translated to the US level program. */
 
 void start_oil_tanker_link_destruction(struct Moby *link_moby) {
+    enum {
+        OIL_TANKER_LINK_DESTRUCTION = 1
+    };
     char *link_vars = (char *)link_moby->pvars;
-    link_moby->state = 1;
+    link_moby->state = OIL_TANKER_LINK_DESTRUCTION;
     link_moby->collision = 0;
     fast_vec_sub(link_vars + 0x10, &link_moby->pos, link_vars);
     *(float *)(link_vars + 0x20) =
