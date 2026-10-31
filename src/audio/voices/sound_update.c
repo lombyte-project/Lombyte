@@ -145,7 +145,7 @@ s32 sound_update(void) {
     for (slot_index = 0; slot_index < 30; slot_index++) {
         {
             s32 state = voice_pool.voices[slot_index].state;
-            if (state != 7) {
+            if (state != VOICE_SLOT_START_QUEUED) {
                 if (voice_pool.voices[slot_index].handle == 0) {
                     continue;
                 }
@@ -172,7 +172,7 @@ s32 sound_update(void) {
         }
         {
             s32 state = voice_pool.voices[slot_index].state;
-            if (state == 4 || (state != 6 && owner_removed &&
+            if (state == VOICE_SLOT_STOP_REQUESTED || (state != VOICE_SLOT_STOP_PENDING && owner_removed &&
                                voice_pool.voices[slot_index].definition->source_state != 0)) {
                 voice_flags[slot_index] = 0x20;
                 continue;
@@ -180,7 +180,7 @@ s32 sound_update(void) {
         }
         if (game_mode != 0 && game_mode != 2 && game_mode != 6) {
             s32 state = voice_pool.voices[slot_index].state;
-            if (state != 7) {
+            if (state != VOICE_SLOT_START_QUEUED) {
                 voice_flags[slot_index] = 0x10;
                 continue;
             }
@@ -252,7 +252,7 @@ s32 sound_update(void) {
         }
         {
             s32 state = voice_pool.voices[slot_index].state;
-            if (state == 7) {
+            if (state == VOICE_SLOT_START_QUEUED) {
                 if ((game_mode != 0 && game_mode != 2) || boot_level_active != 0) {
                     continue;
                 }
@@ -342,7 +342,7 @@ s32 sound_update(void) {
         if (command_flags & 0x20) {
             {
                 s32 state = voice_pool.voices[slot_index].state;
-                if (state == 7) {
+                if (state == VOICE_SLOT_START_QUEUED) {
                     voice_pool.voices[slot_index].owner = NULL;
                     voice_pool.voices[slot_index].owner_context = 0;
                     voice_pool.voices[slot_index].state = 0;
@@ -378,7 +378,7 @@ s32 sound_update(void) {
             }
             {
                 s32 state = voice_pool.voices[slot_index].state;
-                if (state != 7) {
+                if (state != VOICE_SLOT_START_QUEUED) {
                     snd_set_sound_params_cb(handle,
                                             parameter_mask,
                                             voice_volumes[slot_index],
