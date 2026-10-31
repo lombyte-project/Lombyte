@@ -556,6 +556,9 @@ typedef struct RocketVars {
 } RocketVars;
 
 struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
+    enum {
+        ROCKET_STATE_APPROACH_TARGET_OFFSET = 1
+    };
     struct Moby *moby = create_moby(0x1B3);
     RocketVars  *projectile_vars;
     float       *reference;
@@ -576,7 +579,7 @@ struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float 
         scale *= rocket_scale_multiplier_gp;
         moby->update_dist = 0xFF;
         moby->visible = 1;
-        *(volatile u8 *)&moby->state = 1;
+        *(volatile u8 *)&moby->state = ROCKET_STATE_APPROACH_TARGET_OFFSET;
         moby->draw_dist = 0xFF;
         moby->scale = scale;
         set_moby_color(moby, rocket_color_red_gp, rocket_color_green_gp, rocket_color_blue_gp);
