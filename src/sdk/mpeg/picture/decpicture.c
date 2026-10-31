@@ -32,7 +32,7 @@ s32 _decPicture(struct MpegDecoderState *decoder) {
     s32                        decode_succeeded;
     struct MpegReferenceImage *reference;
 
-    if (decoder->picture_coding_type == 3 && decoder->second_field != 0) {
+    if (decoder->picture_coding_type == FRAME_PICTURE && decoder->second_field != 0) {
         _Error(decoder, odd_field_picture_count_error_message);
         decoder->second_field = 0;
     }
