@@ -244,9 +244,9 @@ void update_hero_aligned_camera_position(char *camera_object) {
     int          vehicle_mode;
     FUN_001f9bf8_002e9cc0(normalized_hero_up_axis, ((char *)hero_data->moby) + 0xE0, 1.0f);
     vehicle_mode = hero_data->vehicle_mode;
-    if (vehicle_mode == 2) {
+    if (vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         FUN_001f9a68_002e9cc0(camera_height_offset, normalized_hero_up_axis, 9.5f);
-    } else if (vehicle_mode == 1) {
+    } else if (vehicle_mode == HERO_VEHICLE_MODE_CLANK) {
         if (D_0015EDB3_002e9cc0) {
             FUN_001f9a68_002e9cc0(camera_height_offset, normalized_hero_up_axis, 1.2f);
         } else {
