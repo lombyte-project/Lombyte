@@ -56,7 +56,7 @@ void sinking_platform_update(struct Moby *moby) {
     float                position_delta[4];
     *(OvlQuad *)previous_position = *(OvlQuad *)&moby->pos;
     if (is_hero_on_moby(moby))
-        moby->state = 2;
+        moby->state = PLATFORM_STATE_SINKING_WITH_HERO;
     fast_dec_timer(&platform_vars->timer_BC);
     switch (moby->state) {
     case PLATFORM_STATE_INITIALIZE:
@@ -74,7 +74,7 @@ void sinking_platform_update(struct Moby *moby) {
             platform_vars->unkB0 =
                 frame_time * 1.5707964f + randf_sym(0.0f, bobbing_phase_jitter_limit);
         }
-        moby->state = 1;
+        moby->state = PLATFORM_STATE_BOBBING;
     case PLATFORM_STATE_BOBBING:
         *(int *)&platform_vars->unkA4 = 0;
         update_moby_vertical_oscillation(
@@ -94,7 +94,7 @@ void sinking_platform_update(struct Moby *moby) {
             platform_vars->unkA4 = sinking_step_lower_bound;
         moby->pos.z += platform_vars->unkA4;
         if (is_hero_on_moby(moby) == 0)
-            moby->state = 3;
+            moby->state = PLATFORM_STATE_RETURN_TO_ORIGINAL_HEIGHT;
         if (platform_vars->timer_BC <= 0) {
             allocate_voice_for_target_entry(0, 0, (int)moby);
             platform_vars->timer_BC = random_int_between(0x28, 0x3C);
@@ -124,7 +124,7 @@ void sinking_platform_update(struct Moby *moby) {
         moby->pos.z += platform_vars->unkA4;
         if (platform_vars->unkA0 <= moby->pos.z) {
             moby->pos.z = platform_vars->unkA0;
-            moby->state = 1;
+            moby->state = PLATFORM_STATE_BOBBING;
         }
         break;
     }
