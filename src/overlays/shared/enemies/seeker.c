@@ -439,6 +439,9 @@ void update_seeker_damage_and_target(Moby *moby) {
         SEEKER_STATE_FATAL_KNOCKBACK = 6,
         SEEKER_STATE_EXPLODE = 7
     };
+    enum {
+        SEEKER_TARGET_STATUS_LOST = 2
+    };
     char        hit_pos[16];
     int         hit;
     float       damage;
@@ -552,7 +555,7 @@ void update_seeker_damage_and_target(Moby *moby) {
             seeker_vars->reach = 24.0f;
             goal = seeker_vars->target;
             target_selection_status = func_L00_00260D30_2C73D0(moby, goal, 24.0f);
-            lost_state = 2;
+            lost_state = SEEKER_TARGET_STATUS_LOST;
         } else {
             Path *path;
             seeker_vars->reach = 12.0f;
@@ -560,7 +563,7 @@ void update_seeker_damage_and_target(Moby *moby) {
             goal = seeker_vars->target;
             target_selection_status =
                 activate_effect_l08(moby, goal, 12.0f, 0, 0, path->pts, path->count);
-            lost_state = 2;
+            lost_state = SEEKER_TARGET_STATUS_LOST;
         }
         if (target_selection_status != lost_state && seeker_vars->retreat == 0) {
             if (seeker_vars->reach < vector_distance_xy(&moby->pos, goal)) {
