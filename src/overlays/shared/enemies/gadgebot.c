@@ -1150,25 +1150,25 @@ float score_gadgebot_target_candidate(char *moby,
                                       char *b,
                                       int   target_kind) __asm__("FUN_L06_002f2148");
 
-float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) {
-    float r = vector_distance_xy(&MOBY(moby)->pos, b + 0x10);
+float score_gadgebot_target_candidate(char *moby, char *candidate_moby, int target_kind) {
+    float candidate_score = vector_distance_xy(&MOBY(moby)->pos, candidate_moby + 0x10);
     float t =
         fast_difference_between_rotations(l06_camera.yaw,
-                                          fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
-                                                       *(float *)(b + 0x14) - MOBY(moby)->pos.y));
+                                          fast_arc_tan(*(float *)(candidate_moby + 0x10) - MOBY(moby)->pos.x,
+                                                       *(float *)(candidate_moby + 0x14) - MOBY(moby)->pos.y));
     float u =
         fast_difference_between_rotations(MOBY(moby)->rot.z,
-                                          fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
-                                                       *(float *)(b + 0x14) - MOBY(moby)->pos.y));
-    r = r + u * 10.0f;
-    r = r + t * 3.0f;
-    if (((unsigned char *)b)[0x31] == 0) {
-        r += 10.0f;
+                                          fast_arc_tan(*(float *)(candidate_moby + 0x10) - MOBY(moby)->pos.x,
+                                                       *(float *)(candidate_moby + 0x14) - MOBY(moby)->pos.y));
+    candidate_score = candidate_score + u * 10.0f;
+    candidate_score = candidate_score + t * 3.0f;
+    if (((unsigned char *)candidate_moby)[0x31] == 0) {
+        candidate_score += 10.0f;
     }
     if (target_kind == 9) {
-        r += 100.0f;
+        candidate_score += 100.0f;
     }
-    return r;
+    return candidate_score;
 }
 
 /* Shared level-06/10 routine: gathers candidate mobies, scores them against the target list and writes the slot tables. */
