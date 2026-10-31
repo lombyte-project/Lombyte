@@ -136,7 +136,7 @@ void codebot_slot_update(struct Moby *moby) {
     float   angle;
     char   *effect;
     if (codebot_slot_private_data[3] != -1) {
-        if (moby->state != 0) {
+        if (moby->state != CODEBOT_SLOT_INITIALIZE) {
             fast_vec_sub(position_rotation_work_vector,
                          (char *)l15_moby_array + codebot_slot_private_data[3] * 0x100 + 0x10,
                          codebot_slot_private_data + 4);
@@ -156,11 +156,11 @@ void codebot_slot_update(struct Moby *moby) {
                        (char *)l15_banked_moby_save_bits) >>
                   (moby->save_id & 31) &
               1) != 0)) {
-            moby->state = 4;
+            moby->state = CODEBOT_SLOT_COMPLETED;
             break;
         }
         D_L15_00184AAC = 0;
-        moby->state = 1;
+        moby->state = CODEBOT_SLOT_WAIT_FOR_PROXIMITY;
         for (i = 0; i < 24; i++) {
             if (codebot_slot_private_data[i + 8] != -1)
                 set_moby_list_visibility(codebot_slot_private_data[i + 8], 0);
@@ -171,7 +171,7 @@ void codebot_slot_update(struct Moby *moby) {
         if (alternate_item_available[2] != 0 && vector_distance_xy(D_0013F3D0, &moby->pos) < 3.0f &&
             *((unsigned char *)D_0013F3D0 + 0x2024) == 0) {
             FUN_L15_002f78b8(codebot_slot_private_data[0]);
-            moby->state = 2;
+            moby->state = CODEBOT_SLOT_WAIT_TO_CREATE_EFFECT;
         }
         break;
     case CODEBOT_SLOT_WAIT_TO_CREATE_EFFECT:
@@ -196,7 +196,7 @@ void codebot_slot_update(struct Moby *moby) {
             set_race_camera(position_work_vector, position_rotation_work_vector, 0x72, 0);
             if (codebot_slot_private_data[8] != -1)
                 set_moby_list_visibility(codebot_slot_private_data[8], 1);
-            moby->state = 3;
+            moby->state = CODEBOT_SLOT_ANIMATE_EFFECT;
         }
         break;
     case CODEBOT_SLOT_ANIMATE_EFFECT:
@@ -223,7 +223,7 @@ void codebot_slot_update(struct Moby *moby) {
                     unsigned int *bits = &D_L15_001BAAD0[(short)moby->save_id >> 5];
                     *bits |= 1u << (moby->save_id & 31);
                 }
-                moby->state = 4;
+                moby->state = CODEBOT_SLOT_COMPLETED;
             }
         }
         break;
