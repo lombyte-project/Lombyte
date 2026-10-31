@@ -258,7 +258,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         INTERCEPTOR_STATE_REJOIN_PATROL = 6,
         INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL = 7,
         INTERCEPTOR_STATE_DEATH_FALL = 9
-    };
+    } ; enum { INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER = 8};
     BlargHeavyInterceptorVars *moby_vars = (BlargHeavyInterceptorVars *)moby->pvars;
     float                      vector_scratch[4];
     float                      secondary_vector_scratch[4];
@@ -272,7 +272,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         FUN_0020c828(moby);
         return;
     }
-    if (moby->state == 8) {
+    if (moby->state == INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER) {
         FUN_L14_002aed50_c618(moby);
         add_draw_callback(draw_blarg_heavy_interceptor_group_effects, moby);
         return;
@@ -289,7 +289,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         }
     }
     process_blarg_heavy_interceptor_hit_reactions(moby);
-    if (moby->state > 0 && moby->state < 7) {
+    if (moby->state > INTERCEPTOR_STATE_INITIALIZE && moby->state < INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL) {
         if (fast_vec_dist(&moby->pos, D_L14_001674C0) < 40.0f) {
             FUN_L00_0025a120(moby);
         }
@@ -302,7 +302,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
             moby->collision = 0;
             moby->update_dist = 0xFF;
-            moby->state = 8;
+            moby->state = INTERCEPTOR_STATE_GROUP_EFFECTS_CONTROLLER;
             moby_vars->unk58 = truncate_float_to_s32(17.0f);
             moby_vars->unk5A = truncate_float_to_s32(6.0f);
             moby_vars->group_member_count = count_moby_group_members(moby);
@@ -342,7 +342,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         attach_manipulator_c618(moby, 1, moby_vars->unk120);
         moby_vars->unk1C0[2] = moby_vars->unk1C0[1] = 0.0f;
         *(int *)&moby_vars->unk180[3] = 0;
-        moby->state = 1;
+        moby->state = INTERCEPTOR_STATE_PATROL_AND_SCAN;
         moby->command = 0;
         break;
     case INTERCEPTOR_STATE_PATROL_AND_SCAN: {
@@ -353,7 +353,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                            (blarg_heavy_interceptor_patrol_glow_green_gp << 8) |
                            blarg_heavy_interceptor_patrol_glow_red_gp;
         if (is_turret_group_activated_or_empty(moby_vars->turret_group)) {
-            moby->state = 3;
+            moby->state = INTERCEPTOR_STATE_TRACK_TARGET;
             moby_vars->timer_1F2 =
                 scale_game_frames(blarg_heavy_interceptor_target_tracking_duration_frames_gp);
         }
@@ -397,7 +397,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         }
         *(s32 *)&moby_vars->unk1D0[0] = -1;
         activate_waiting_turrets_in_group(moby_vars->turret_group);
-        moby->state = 3;
+        moby->state = INTERCEPTOR_STATE_TRACK_TARGET;
         moby_vars->timer_1F2 =
             scale_game_frames(blarg_heavy_interceptor_target_tracking_duration_frames_gp);
         break;
@@ -439,13 +439,13 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                 moby_vars->unk8C = 0.0f;
                 moby_vars->path_point = 0;
                 moby_vars->unk208 = 0;
-                moby->state = 4;
+                moby->state = INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY;
             }
         } else {
             moby_vars->path_point = 0;
             moby_vars->unk8C = 0.0f;
             moby_vars->unk208 = 0;
-            moby->state = 4;
+            moby->state = INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY;
         }
     case INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY:
         moby->glow_color = 0xFF000000 |
@@ -466,7 +466,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             moby_vars->flags |= 8;
             FUN_L14_002aea08_c618(moby);
         }
-        if (moby->state == 4) {
+        if (moby->state == INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY) {
             if (moby->prev_seq == 0) {
                 blend_moby_animation_c618(moby, 2, 0, 5);
             }
@@ -490,7 +490,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             if (try_retract_turret_group(moby_vars->turret_group)) {
                 LevelPath *p = l14_paths[moby_vars->patrol_path];
 
-                moby->state = 5;
+                moby->state = INTERCEPTOR_STATE_FOLLOW_RETURN_PATH;
                 moby_vars->path_point = p->count - 2;
                 moby_vars->unk8C = p->points[moby_vars->path_point].f[3];
                 moby_vars->unk208 = 0;
@@ -512,7 +512,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
             moby_vars->path_segment = near_seg;
             moby_vars->unk1C0[3] = near_t;
             moby_vars->unk200 = 0;
-            moby->state = 6;
+            moby->state = INTERCEPTOR_STATE_REJOIN_PATROL;
         }
         break;
     case INTERCEPTOR_STATE_REJOIN_PATROL: {
@@ -558,7 +558,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                   0.0f);
         update_blarg_heavy_interceptor_aim_transforms(moby, 0);
         if (fast_vec_dist(&moby->pos, vector_scratch) < 0.5f) {
-            moby->state = 1;
+            moby->state = INTERCEPTOR_STATE_PATROL_AND_SCAN;
         }
         FUN_L00_0025d808_c618(((int *)l14_paths[moby_vars->unk78]),
                               vector_scratch,
@@ -644,7 +644,7 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         moby_vars->yaw_drift = randf_sym(0.0f, 0.08726646f);
         moby->rot.x = fast_add_rotations(moby->rot.x, randf_sym(0.0f, 0.7853982f));
         moby->rot.y = fast_add_rotations(moby->rot.y, randf_sym(0.0f, 0.7853982f));
-        moby->state = 9;
+        moby->state = INTERCEPTOR_STATE_DEATH_FALL;
         FUN_L14_002aead8_c618(moby);
         return;
     }
@@ -747,17 +747,17 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
         return;
     }
     }
-    if ((s8)moby->state >= 0 && moby->prev_seq == 1) {
+    if ((s8)moby->state >= INTERCEPTOR_STATE_INITIALIZE && moby->prev_seq == 1) {
         if (moby->command == 1) {
             spawn_particles_at_shape_points(moby, D_L14_0015F580, 0xFFFF);
         }
     } else {
         moby->command = 0;
     }
-    if (moby->state == 1 && !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
+    if (moby->state == INTERCEPTOR_STATE_PATROL_AND_SCAN && !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
         *(s32 *)&moby_vars->unk1D0[0] = allocate_voice_c618(0, 4, moby);
     }
-    if ((moby->state == 3 || moby->state == 4) &&
+    if ((moby->state == INTERCEPTOR_STATE_TRACK_TARGET || moby->state == INTERCEPTOR_STATE_WAIT_FOR_GROUP_READY) &&
         !voice_is_playing(moby, *(s32 *)&moby_vars->unk1D0[0])) {
         *(s32 *)&moby_vars->unk1D0[0] = allocate_voice_c618(2, 4, moby);
     }
