@@ -385,6 +385,10 @@ extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 #include "rnc/data_labels.h"
 
 void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
+    enum {
+        SCREAMER_STATE_WAIT_FOR_ACTIVATION = 1,
+        SCREAMER_STATE_DEATH_KNOCKBACK = 11
+    };
     MobyData_2DFC38 *screamer_vars = (MobyData_2DFC38 *)moby->pvars;
     Hit_2DFC38      *hit_record;
     float            relative_offset[4];
@@ -399,7 +403,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
         screamer_vars->f38 = 0;
     }
     fast_dec_timer(&screamer_vars->f184);
-    if (moby->state != 11) {
+    if (moby->state != SCREAMER_STATE_DEATH_KNOCKBACK) {
         hit_record = (Hit_2DFC38 *)find_moby_hit(moby, 0x330000, 0);
         hit_update_2DFC38(
             moby, hit_record, &screamer_vars->f20, 5, &hit_processing_status, 0, 0, 4);
@@ -414,7 +418,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 5)
                     blend_moby_animation(moby, 5, 0, scale_game_frames(10));
-                moby->state = 11;
+                moby->state = SCREAMER_STATE_DEATH_KNOCKBACK;
                 screamer_vars->f70 = D_0015ED70 * 26.0f;
                 screamer_vars->f9D = 3;
                 screamer_vars->f74 = 0.0005f;
@@ -444,7 +448,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
         screamer_vars->f180 = 42.0f;
     else if (screamer_vars->f184 != 0)
         screamer_vars->f180 = screamer_vars->f178 + 6.0f;
-    else if (moby->state == 1)
+    else if (moby->state == SCREAMER_STATE_WAIT_FOR_ACTIVATION)
         screamer_vars->f180 = screamer_vars->f188;
     else
         screamer_vars->f180 = screamer_vars->f178;
@@ -461,11 +465,11 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
                 transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2])
                 screamer_vars->f104 = 2;
         }
-    } else if (moby->state == 1 && screamer_vars->f18C >= 0) {
+    } else if (moby->state == SCREAMER_STATE_WAIT_FOR_ACTIVATION && screamer_vars->f18C >= 0) {
         LevelPath *path = l10_paths[screamer_vars->f18C];
         target_selection_status = activate_effect_l08(
             screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
-    } else if (moby->state != 1 && screamer_vars->f17C >= 0) {
+    } else if (moby->state != SCREAMER_STATE_WAIT_FOR_ACTIVATION && screamer_vars->f17C >= 0) {
         LevelPath *path = l10_paths[screamer_vars->f17C];
         target_selection_status = activate_effect_l08(
             screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
