@@ -115,7 +115,7 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
     case CLIP_VOLUME_SEQUENCE_MONITOR_FOLLOWUP: {
         struct Hero *h = &hero;
         int          hero_current_state = h->state.current;
-        if (hero_current_state == 0x76 || hero_current_state == 0x32) {
+        if (hero_current_state == HERO_STATE_HURT_WITH_DISPLACEMENT_VELOCITY || hero_current_state == HERO_STATE_OPTIONAL_IDLE_ANIMATION) {
             pvars->unk6C = 0;
         } else if (is_point_inside_clip_volume(&h->motion.pos, pvars->unk64) ||
                    is_point_inside_clip_volume(&h->motion.pos, pvars->unk68)) {
@@ -167,7 +167,7 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
                        pvars->unk44);
             pvars->unk4C = 1;
         }
-        moby->state = 1;
+        moby->state = CAMERA_BOX_WATCHER_MONITOR;
         break;
     case CAMERA_BOX_WATCHER_MONITOR:
         pending_help_clip_volume_index = -1;
@@ -261,7 +261,7 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
             }
             if (fleet_help_request_gate_state[0] != 0 || fleet_help_request_gate_state[9] != -1) {
                 pvars->unk50 = 0;
-                moby->state = 2;
+                moby->state = CAMERA_BOX_WATCHER_ALIGN_FIRST_TARGET;
                 pvars->unk5C = scale_game_frames(0xB4);
                 hero_set_state(0x72, 0);
             }
@@ -278,7 +278,7 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
             *(float *)(D_L17_001600EC + ((pvars->unk44 << 7) + 0x34)) - *(float *)(cam + 0x144));
         if (fast_difference_between_rotations(*(float *)(cam + 0x158), target_heading) <
             0.034906585f) {
-            moby->state = 3;
+            moby->state = CAMERA_BOX_WATCHER_WAIT_AND_ALIGN_SECOND_TARGET;
             pvars->unk5C = scale_game_frames(0x3C);
         }
         break;
@@ -298,7 +298,7 @@ void fleet_camera_box_watcher_update(struct Moby *moby) {
                 0.034906585f) {
                 enter_hero_idle_state_for_current_vehicle_mode();
                 pvars->unk4C = 1;
-                moby->state = 1;
+                moby->state = CAMERA_BOX_WATCHER_MONITOR;
             }
         }
         break;
