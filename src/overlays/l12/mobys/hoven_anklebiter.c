@@ -71,11 +71,16 @@ int store_hoven_anklebiter_in_suck_cannon(struct Moby *carried_moby) {
 int cancel_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L12_002e17f8");
 
 int cancel_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) {
+    enum {
+        ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME = 8,
+        ANKLEBITER_DORMANT = 9,
+        ANKLEBITER_WAIT_FOR_LEAP_TRIGGER = 11
+    };
     int was_stored_in_suck_cannon = cancel_suck_cannon_suction(moby);
-    if (moby->state == 9 || moby->state == 11) {
+    if (moby->state == ANKLEBITER_DORMANT || moby->state == ANKLEBITER_WAIT_FOR_LEAP_TRIGGER) {
         return 0;
     }
-    moby->state = 8;
+    moby->state = ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME;
     return was_stored_in_suck_cannon;
 }
 
