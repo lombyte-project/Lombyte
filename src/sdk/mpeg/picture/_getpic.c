@@ -15,13 +15,16 @@ s32 _getpic(struct sceMpeg *mpeg) {
         MPEG_BIDIRECTIONAL_PICTURE = 3,
         MPEG_DC_INTRA_PICTURE = 4
     };
+    enum {
+        MPEG_DECODE_SCAN_NEXT_HEADER = 0
+    };
     s32                 image_addr;
     s32                 status;
     u32                 start_code;
     struct MpegDecoder *decoder;
 
     start_code = 1;
-    status = 0;
+    status = MPEG_DECODE_SCAN_NEXT_HEADER;
     decoder = mpeg->sys;
     image_addr = decoder->unkD8;
     decoder->is_end = 0;
