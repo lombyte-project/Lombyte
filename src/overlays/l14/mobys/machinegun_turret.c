@@ -231,7 +231,7 @@ void machinegun_turret_update(char *moby) {
     enum {
         TURRET_SPAWN_CENTER = 0,
         TURRET_SPAWN_UNNEGATED_OFFSET = 1
-    };
+    } ; enum { MOBY_SELECTION_NO_TARGET = 2};
     MachinegunTurretVars *machinegun_turret_private_vars;
     float                 target_point_scratch[4];
     float                 spawn_position[4];
@@ -270,10 +270,10 @@ void machinegun_turret_update(char *moby) {
         machinegun_turret_private_vars->unk76 = scaled_wait_frames_or_target_query_status;
         machinegun_turret_private_vars->unk8B = 0;
         if (machinegun_turret_private_vars->unk88 != 0) {
-            MOBY(moby)->state = 3;
+            MOBY(moby)->state = TURRET_STATE_WAIT_FOR_TARGET;
             machinegun_turret_private_vars->unk8A = 1;
         } else {
-            MOBY(moby)->state = 1;
+            MOBY(moby)->state = TURRET_STATE_WAIT_FOR_ACTIVATION;
             MOBY(moby)->pos.z = MOBY(moby)->pos.z - machinegun_turret_retraction_depth_gp;
             MOBY(moby)->collision = 0;
             machinegun_turret_private_vars->unk8A = 0;
@@ -289,7 +289,7 @@ void machinegun_turret_update(char *moby) {
         if (fast_dec_timer(&machinegun_turret_private_vars->timer) == 0) {
             return;
         }
-        MOBY(moby)->state = 2;
+        MOBY(moby)->state = TURRET_STATE_DEPLOY;
         machinegun_turret_private_vars->unk74 = func_001F9850_2B4E40(D_L14_0016150C);
         machinegun_turret_private_vars->unk78 =
             1.0f / func_001FA888_2B4E40(machinegun_turret_private_vars->unk74);
@@ -318,7 +318,7 @@ void machinegun_turret_update(char *moby) {
         }
         machinegun_turret_private_vars->unk76 =
             func_001F9850_2B4E40(machinegun_turret_target_wait_timeout_frames_gp);
-        MOBY(moby)->state = 3;
+        MOBY(moby)->state = TURRET_STATE_WAIT_FOR_TARGET;
         machinegun_turret_private_vars->unk74 = func_001F9850_2B4E40(60);
         MOBY(moby)->pos.z = machinegun_turret_private_vars->base_z;
         *(int *)&machinegun_turret_private_vars->unk8C = 0;
@@ -326,10 +326,10 @@ void machinegun_turret_update(char *moby) {
     case TURRET_STATE_WAIT_FOR_TARGET:
         scaled_wait_frames_or_target_query_status =
             select_moby_by_xy_distance(moby, (char *)target_point_scratch, 34.0f);
-        if (scaled_wait_frames_or_target_query_status != 2) {
+        if (scaled_wait_frames_or_target_query_status != MOBY_SELECTION_NO_TARGET) {
             if (is_point_inside_clip_volume(target_point_scratch,
                                             machinegun_turret_private_vars->unk90) != 0) {
-                MOBY(moby)->state = 4;
+                MOBY(moby)->state = TURRET_STATE_AIM_AND_FIRE;
                 set_moby_animation(moby, 3, 0);
                 machinegun_turret_private_vars->unk74 = func_001F9850_2B4E40(120);
                 machinegun_turret_private_vars->timer_9C = func_001F9850_2B4E40(20);
@@ -419,7 +419,7 @@ void machinegun_turret_update(char *moby) {
         scaled_wait_frames_or_target_query_status =
             select_moby_by_xy_distance(moby, (char *)target_query_result, 34.0f);
         target_missing_or_outside_waking_cuboid =
-            (scaled_wait_frames_or_target_query_status == 2 ||
+            (scaled_wait_frames_or_target_query_status == MOBY_SELECTION_NO_TARGET ||
              is_point_inside_clip_volume(target_query_result,
                                          machinegun_turret_private_vars->unk90) == 0);
         if (target_missing_or_outside_waking_cuboid == 0) {
@@ -464,7 +464,7 @@ void machinegun_turret_update(char *moby) {
             return;
         }
         MOBY(moby)->rot.z = machinegun_turret_private_vars->unk84;
-        MOBY(moby)->state = 1;
+        MOBY(moby)->state = TURRET_STATE_WAIT_FOR_ACTIVATION;
         machinegun_turret_private_vars->unk74 = func_001F9850_2B4E40(60);
         machinegun_turret_private_vars->unk88 = 0;
         machinegun_turret_private_vars->timer =
