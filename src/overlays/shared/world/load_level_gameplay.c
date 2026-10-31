@@ -501,6 +501,9 @@ extern s32           pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 extern s32           game_language __asm__("D_0015ED88") MACRO_ADDR;
 
 char *load_level_gameplay(int skip_gameplay_read) {
+    enum {
+        OCCLUSION_MODE_DISABLED = 0
+    };
     LevelHeader *hdr;
     char        *mem;
     float       *ship;
@@ -511,7 +514,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     hdr = D_L00_00173E00.f4;
     mem = D_L00_00173E00.f18;
     if (skip_gameplay_read == 0) {
-        if (pal_mode != 0) {
+        if (pal_mode != FALSE) {
             read_disc_sectors_and_wait(
                 mem, disc_table.sound_archive_alt.sector, disc_table.sound_archive_alt.size);
         } else {
@@ -527,7 +530,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     FillTransferWords(&l00_camera, 0, 0x3A0);
     FillTransferWords(D_L00_0018EB40, 0, 0x180);
     srand(0x4D2);
-    if (pal_mode != 0) {
+    if (pal_mode != FALSE) {
         if (frame_scale == 1.0f) {
             set_video_timing(1);
         }
@@ -1632,7 +1635,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         for (i = 0; i < D_L00_00160F50; i++) {
             D_L00_00160F4C[i].f3A = 0x7F80;
         }
-        g_debug_menu.occlusion_mode = 0;
+        g_debug_menu.occlusion_mode = OCCLUSION_MODE_DISABLED;
     }
     reset_draw_globals();
     initialize_hero();
