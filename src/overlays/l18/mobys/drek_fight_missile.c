@@ -122,8 +122,8 @@ typedef struct DrekFightMissileVars {
 
 /* Moby class 1355 */
 void drek_fight_missile_update(struct Moby *moby) {
-    DrekFightMissileVars *missile_vars = (DrekFightMissileVars *)moby->pvars;
-    if (moby->state != 4) {
+    enum { DREK_MISSILE_WAIT_FOR_ACTIVATION = 1 } ;DrekFightMissileVars *missile_vars = (DrekFightMissileVars *)moby->pvars;
+    if (moby->state != DREK_MISSILE_WAIT_TO_EXPLODE) {
         moby->rot.x = fast_add_rotations(moby->rot.x,
                                          *(float *)&l18_drek_missile_roll_rate_degrees_gp *
                                              DEG_TO_RAD * frame_time);
@@ -146,7 +146,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         missile_vars->unk128 += 5.0f;
         missile_vars->unk128 = probe_ground_height(&missile_vars->unk120, 0, 0.5f);
         select_drek_fight_missile_wander_target(moby, &missile_vars->unk110);
-        moby->state = 1;
+        moby->state = DREK_MISSILE_WAIT_FOR_ACTIVATION;
         moby->flags |= 1;
         moby->visible = 0;
         moby->collision = 0;
@@ -161,7 +161,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         if (random_integer_below(*(int *)&l18_drek_missile_wander_to_dive_random_bound_gp)) {
             return;
         }
-        moby->state = 3;
+        moby->state = DREK_MISSILE_DIVE;
         missile_vars->unk130[0] =
             fast_cos(moby->rot.z) * (*(float *)&l18_drek_missile_wander_horizontal_speed_gp * frame_time);
         missile_vars->unk130[1] =
@@ -191,7 +191,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         if (ground_check_position[2] < missile_vars->unk128) {
             float minimum_missile_height;
             func_0022ED80_2F0F78(1, 0, (int)moby);
-            moby->state = 4;
+            moby->state = DREK_MISSILE_WAIT_TO_EXPLODE;
             missile_vars->timer_160 = scale_game_frames(0x5A);
             minimum_missile_height = missile_vars->unk128 + 0.7f;
             if (moby->pos.z < minimum_missile_height) {
@@ -209,7 +209,7 @@ void drek_fight_missile_update(struct Moby *moby) {
         if (fast_dec_timer(&missile_vars->timer_160)) {
             int   i;
             char *pos = &moby->pos;
-            moby->state = 2;
+            moby->state = DREK_MISSILE_WANDER;
             missile_vars->unk164 = 0;
             spawn_explosion(missile_vars->unk16C,
                             D_L18_0015F580,
