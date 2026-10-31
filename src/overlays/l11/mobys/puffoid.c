@@ -81,7 +81,7 @@ extern float D_L11_001622CC __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/puffoid_data/puffoid_update.h"
 
-extern float D_L11_001622F0 __attribute__((sda));
+extern float l11_puffoid_jump_gravity __asm__("D_L11_001622F0") __attribute__((sda));
 extern void  update_puffoid_damage_and_path_goal(struct Moby *) __asm__("FUN_L11_00315968");
 extern void  update_moby_target_heading_and_conditional_movement(
      char *moby, float *target_position) __asm__("FUN_L11_00315f58");
@@ -200,11 +200,11 @@ void puffoid_update(struct Moby *moby) {
         break;
     case PUFFOID_STATE_WAIT_FOR_HOME_JUMP: {
         char *path = (char *)l11_paths[puffoid_vars->path];
-        float ang = fast_arc_tan(*(float *)(path + 0x20) - moby->pos.x,
+        float home_jump_heading = fast_arc_tan(*(float *)(path + 0x20) - moby->pos.x,
                                  *(float *)(path + 0x24) - moby->pos.y);
         approach_angle(&moby->rot.z,
                        &puffoid_vars->unk250,
-                       ang,
+                       home_jump_heading,
                        frame_time_sq * 8.726646f,
                        frame_time_sq * 8.726646f,
                        frame_time * 12.566371f);
@@ -222,14 +222,14 @@ void puffoid_update(struct Moby *moby) {
                                                    (char *)l11_paths[puffoid_vars->path] + 0x20,
                                                    0,
                                                    puffoid_jump_horizontal_speed_gp * frame_time,
-                                                   -(D_L11_001622F0 * frame_time_sq));
+                                                   -(l11_puffoid_jump_gravity * frame_time_sq));
         }
         break;
     }
     case PUFFOID_STATE_JUMP_HOME:
     case PUFFOID_STATE_JUMP_THEN_WAIT_FOR_HOME_JUMP:
         fast_vec_add(&moby->pos, &moby->pos, puffoid_vars->vel);
-        puffoid_vars->vel[2] -= D_L11_001622F0 * frame_time_sq;
+        puffoid_vars->vel[2] -= l11_puffoid_jump_gravity * frame_time_sq;
         if (puffoid_vars->vel[2] < 0.0f) {
             float h;
             qcopy(pos, &moby->pos);
@@ -310,11 +310,11 @@ void puffoid_update(struct Moby *moby) {
         fast_vec_add(pos, pos, &moby->pos);
         if (test_path_segment_strict_crossing(puffoid_vars->unk230, &moby->pos, pos)) {
             float *rz = &moby->rot.z;
-            float  ang = fast_arc_tan(puffoid_vars->target->pos.x - moby->pos.x,
+            float  target_facing_heading = fast_arc_tan(puffoid_vars->target->pos.x - moby->pos.x,
                                      puffoid_vars->target->pos.y - moby->pos.y);
             approach_angle(rz,
                            &puffoid_vars->unk250,
-                           ang,
+                           target_facing_heading,
                            frame_time_sq * 12.566371f,
                            frame_time_sq * 12.566371f,
                            frame_time * 12.566371f);
@@ -438,7 +438,7 @@ void puffoid_update(struct Moby *moby) {
                                     dest,
                                     0,
                                     puffoid_jump_horizontal_speed_gp * frame_time,
-                                    -(D_L11_001622F0 * frame_time_sq));
+                                    -(l11_puffoid_jump_gravity * frame_time_sq));
                 moby->rot.z = fast_arc_tan(puffoid_vars->vel[0], puffoid_vars->vel[1]);
             }
         }
@@ -449,7 +449,7 @@ void puffoid_update(struct Moby *moby) {
             (char *)((struct Moby *)(D_L11_0015FFD8_4318 + (puffoid_vars->carrier << 8)))->pvars;
         fast_vec_add(&moby->pos, &moby->pos, puffoid_vars->vel);
         fast_vec_add(&moby->pos, &moby->pos, cv + 0x70);
-        puffoid_vars->vel[2] -= D_L11_001622F0 * frame_time_sq;
+        puffoid_vars->vel[2] -= l11_puffoid_jump_gravity * frame_time_sq;
         if (puffoid_vars->vel[2] < 0.0f) {
             qcopy(pos, &moby->pos);
             pos[2] += 1.0f;
@@ -577,10 +577,10 @@ void puffoid_update(struct Moby *moby) {
         }
         {
             float *rz = &moby->rot.z;
-            float  ang = fast_arc_tan(pos[0] - moby->pos.x, pos[1] - moby->pos.y);
+            float  path_point_heading = fast_arc_tan(pos[0] - moby->pos.x, pos[1] - moby->pos.y);
             approach_angle(rz,
                            &puffoid_vars->unk250,
-                           ang,
+                           path_point_heading,
                            frame_time_sq * 12.566371f,
                            frame_time_sq * 12.566371f,
                            frame_time * 12.566371f);
