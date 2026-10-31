@@ -659,6 +659,10 @@ int begin_bolt_attraction(void *ov,
                           float attraction_yaw_angle,
 
                           float attraction_pitch_angle) {
+    enum {
+        BOLT_IDLE = 3,
+        BOLT_MOVE_TO_HERO = 4
+    };
     char *bolt_moby = ov;
     char *target_moby = tv;
     char *bolt_vars = ((char *)MOBY(bolt_moby)->pvars);
@@ -666,7 +670,7 @@ int begin_bolt_attraction(void *ov,
     float k;
     float attraction_geometry_scratch[3][4] __attribute__((aligned(16)));
 
-    if (MOBY(bolt_moby)->state == 4) {
+    if (MOBY(bolt_moby)->state == BOLT_MOVE_TO_HERO) {
         return 0;
     }
     sound_cooldown_frames = scale_game_frames(3);
@@ -681,7 +685,7 @@ int begin_bolt_attraction(void *ov,
         if (attraction_pitch_angle == 0.0f)
             attraction_pitch_angle = random_float_between(0.0f, 30.0f) * DEG_TO_RAD;
     }
-    if (MOBY(bolt_moby)->state == 3) {
+    if (MOBY(bolt_moby)->state == BOLT_IDLE) {
         euler_rotation_basis(attraction_geometry_scratch, bolt_vars + 0x10);
         fast_vec_normalize(bolt_vars + 0x20,
                            attraction_geometry_scratch[2],
@@ -702,7 +706,7 @@ int begin_bolt_attraction(void *ov,
             DEG_TO_RAD;
         build_quaternion_from_axis_angle(bolt_vars + 0x30, bolt_vars + 0x30, k * frame_time);
     }
-    MOBY(bolt_moby)->state = 4;
+    MOBY(bolt_moby)->state = BOLT_MOVE_TO_HERO;
     return 1;
 }
 
