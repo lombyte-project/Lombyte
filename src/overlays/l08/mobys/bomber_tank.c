@@ -419,6 +419,10 @@ extern int bomber_tank_part_3_destroyed_by_class_661_gp __asm__("D_L08_0015F5B8"
     __attribute__((sda));
 
 void update_bomber_tank_damage_and_aim(Moby *moby) {
+    enum {
+        BOMBER_TANK_STATE_INITIALIZE = 0,
+        BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM = 2
+    };
     Data       *bomber_tank_damage_and_aim_vars = (Data *)moby->pvars;
     Hit_2D5FA8 *source;
     Hit_2D5FA8 *part_a_source;
@@ -448,7 +452,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
     resolve_moby_hit_response(
         moby, source, &bomber_tank_damage_and_aim_vars->health, 0, &hit, &damage, 0, 4);
     one = 1;
-    if (hit != one && moby->state != 0) {
+    if (hit != one && moby->state != BOMBER_TANK_STATE_INITIALIZE) {
         bomber_tank_damage_and_aim_vars->health -= damage;
         if (damage != 0.0f)
             allocate_voice_for_target_entry(4, 0, moby);
@@ -671,7 +675,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                         ((Path *)l08_paths[bomber_tank_damage_and_aim_vars->path])->count);
     if (bomber_tank_damage_and_aim_vars->fF0 == 0)
         bomber_tank_damage_and_aim_vars->fF0 = *(int *)D_001413D0;
-    if (bomber_tank_damage_and_aim_vars->mode != 2) {
+    if (bomber_tank_damage_and_aim_vars->mode != BOMBER_TANK_MODE_INHIBIT_ACTIVATION_AND_TARGET_AIM) {
         float yaw, distance, pitch;
         fast_vec_sub(burst_position_or_aim_scratch,
                      bomber_tank_damage_and_aim_vars->target,
