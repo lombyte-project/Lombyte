@@ -81,7 +81,9 @@ typedef struct {
 extern void update_entity() __asm__("FUN_L00_00250df8");
 extern void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__("FUN_L00_0026daa0");
 
-BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
+BeamMoby *spawn_bomber_jet_beam(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) __asm__("FUN_L01_002f68a0");
+
+BeamMoby *spawn_bomber_jet_beam(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
     Vec4      position_copy;
     Vec4      direction_copy;
     Vec4      target_position_copy;
