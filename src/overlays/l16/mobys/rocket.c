@@ -172,7 +172,7 @@ void homing_projectile_update(unsigned char *moby) {
         {
             int impact_state;
             query.flags = 0x830000;
-            impact_state = 1;
+            impact_state = PROJECTILE_STATE_IMPACT;
             query.owner = moby;
             query.scale = 1.0f;
             query.active = impact_state;
