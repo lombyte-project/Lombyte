@@ -156,7 +156,7 @@ void linked_moby_hitbox_update(struct Moby *moby) {
         target = &D_L10_0015FFD8[linked_hitbox_vars->unk10];
     }
     if ((moby->mission == 0xff || visited52[moby->mission + (D_0015ED84 << 4)] != 0xff) &&
-        moby->state != 0) {
+        moby->state != LINKED_HITBOX_STATE_INITIALIZE) {
         int i;
         for (i = 0; i < 5; i++) {
             int *entry = slot + i * 2;
@@ -225,7 +225,7 @@ void linked_moby_hitbox_update(struct Moby *moby) {
             float now = *(float *)linked_hitbox_vars;
             float scale = moby->pclass->scale;
             float size = (now < initial ? initial * scale : now * scale);
-            moby->state = 1;
+            moby->state = LINKED_HITBOX_STATE_WAIT_FOR_LINKED_MOBIES;
             moby->scale = size;
         }
         break;
@@ -234,7 +234,7 @@ void linked_moby_hitbox_update(struct Moby *moby) {
             if (target != 0 && linked_hitbox_vars->unk16 != -1)
                 target->state = *(unsigned char *)&linked_hitbox_vars->unk16;
             linked_hitbox_vars->unk40 = linked_hitbox_vars->unkC;
-            moby->state = 2;
+            moby->state = LINKED_HITBOX_STATE_WAIT_FOR_TARGET_STATE_OR_TIMER;
         }
         spawn_linked_hitbox_contact_effects(moby, (HitBox *)linked_hitbox_vars);
         return;
@@ -248,10 +248,10 @@ void linked_moby_hitbox_update(struct Moby *moby) {
         }
         if ((linked_hitbox_vars->unk8 & 4) == 0 && target != 0 && linked_hitbox_vars->unk17 != -1 &&
             target->state == linked_hitbox_vars->unk17)
-            moby->state = 3;
+            moby->state = LINKED_HITBOX_STATE_REMOVE;
         if ((linked_hitbox_vars->unk8 & 8) == 0 &&
             FUN_001f9740_2c9c70(&linked_hitbox_vars->unk40) != 0)
-            moby->state = 3;
+            moby->state = LINKED_HITBOX_STATE_REMOVE;
         spawn_linked_hitbox_contact_effects(moby, (HitBox *)linked_hitbox_vars);
         return;
     case LINKED_HITBOX_STATE_REMOVE:
