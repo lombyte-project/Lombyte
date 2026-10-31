@@ -115,6 +115,10 @@ extern s32              FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s
 void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) __asm__("FUN_L01_00314e98");
 
 void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
+    enum {
+        CAMERA_PRESET_KIND_MAPPED_PATHS = 2,
+        CAMERA_PRESET_KIND_GRINDRAIL_PATH = 3
+    };
     Vec4           at;
     s32            seg;
     f32            path_fraction_or_length;
@@ -132,7 +136,7 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     focus = &destination_camera->orbit->focus;
     focus->dist = 1.5f;
     focus->state = 0;
-    if (preset->kind == 3) {
+    if (preset->kind == CAMERA_PRESET_KIND_GRINDRAIL_PATH) {
         focus->dist = 0.5f;
     }
     control = &destination_camera->control;
@@ -169,7 +173,7 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     blend->unk8 = 0;
     blend->unkC = 0;
     blend->unk10 = 1;
-    if (preset->kind == 2 && preset->ready == 0) {
+    if (preset->kind == CAMERA_PRESET_KIND_MAPPED_PATHS && preset->ready == 0) {
         track_path = ((CameraPath *)l01_paths[preset->track_path]);
         target_path = (CameraPath *)l01_splines[preset->target].path;
         preset_path = ((CameraPath *)l01_paths[preset->path]);
