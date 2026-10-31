@@ -71,7 +71,7 @@ void teleporter_update(struct Moby *moby) {
         TELEPORTER_OPEN_PARTS = 2,
         TELEPORTER_CONTRACT_RING = 3,
         TELEPORTER_RESET = 4
-    };
+    } ; enum { HERO_TARGET_POSE_INACTIVE = 0};
     TeleporterVars *teleporter_instance_vars = (TeleporterVars *)moby->pvars;
 
     switch (moby->state) {
@@ -153,7 +153,7 @@ void teleporter_update(struct Moby *moby) {
             if (teleport_transition_status == 2) {
                 teleporter_instance_vars->unk3C = 1.95f;
                 moby->state = TELEPORTER_CONTRACT_RING;
-            } else if (teleport_transition_status == 0) {
+            } else if (teleport_transition_status == HERO_TARGET_POSE_INACTIVE) {
                 moby->state = TELEPORTER_RESET;
             }
         }
