@@ -155,7 +155,7 @@ void rail_taxi_update(struct Moby *taxi_moby) {
         taxi_moby->draw_dist = 0;
         taxi_moby->update_dist = 0xFF;
         taxi_vars->route = -1;
-        taxi_moby->state = 1;
+        taxi_moby->state = TAXI_WAIT_FOR_ROUTE_TRIGGER;
         taxi_moby->collision = 0;
         if (l03_save_state.cleared[(s16)taxi_moby->save_id] != 0 ||
             (D_0014C190_257218[current_level_index][(s16)taxi_moby->save_id >> 5] >>
@@ -186,7 +186,7 @@ void rail_taxi_update(struct Moby *taxi_moby) {
                                                     route_path->points[1].f[1] - taxi_moby->pos.y);
                 }
                 taxi_moby->command = route_index;
-                taxi_moby->state = 2;
+                taxi_moby->state = TAXI_FOLLOW_OUTBOUND_PATH;
                 taxi_moby->draw_dist = 0x80;
                 taxi_vars->idx = 1;
                 taxi_vars->speed = rail_flyer_max_speed_gp * frame_time;
@@ -199,7 +199,7 @@ void rail_taxi_update(struct Moby *taxi_moby) {
         if (taxi_vars->out[taxi_moby->command] == -1 ||
             advance_moby_along_rail_path(
                 taxi_moby, taxi_vars->out[taxi_moby->command], &taxi_vars->snd)) {
-            taxi_moby->state = 3;
+            taxi_moby->state = TAXI_WAIT_FOR_RETURN_REQUEST;
             taxi_vars->unkE4 = -1;
         }
         break;
@@ -220,14 +220,14 @@ void rail_taxi_update(struct Moby *taxi_moby) {
             request_taxi_return_help_message(taxi_moby, taxi_vars->help[taxi_moby->command]);
             if ((((u32)pad_pressed_lui) & 0x10) && D_L03_0015F594 == 8) {
                 request_hero_target_pose(&taxi_moby->pos, taxi_moby->rot.z, 0);
-                taxi_moby->state = 4;
+                taxi_moby->state = TAXI_WAIT_FOR_RETURN_DEPARTURE;
                 taxi_vars->idx = 1;
             }
         }
         break;
     case TAXI_WAIT_FOR_RETURN_DEPARTURE:
         if (!get_hero_target_pose_status()) {
-            taxi_moby->state = 5;
+            taxi_moby->state = TAXI_FOLLOW_RETURN_PATH;
         }
         break;
     case TAXI_FOLLOW_RETURN_PATH:
@@ -237,7 +237,7 @@ void rail_taxi_update(struct Moby *taxi_moby) {
         }
         if (advance_moby_along_rail_path(
                 taxi_moby, taxi_vars->back[taxi_moby->command], &taxi_vars->snd)) {
-            taxi_moby->state = 6;
+            taxi_moby->state = TAXI_WAIT_FOR_HERO_TO_MOVE_AWAY;
         }
         break;
     case TAXI_WAIT_FOR_HERO_TO_MOVE_AWAY:
@@ -255,18 +255,18 @@ void rail_taxi_update(struct Moby *taxi_moby) {
                        frame_time * 12.566371f);
         if (taxi_vars->onward[taxi_moby->command] != -1 &&
             fast_vec_dist(&taxi_moby->pos, &hero.motion.pos) > 15.0f) {
-            taxi_moby->state = 7;
+            taxi_moby->state = TAXI_FOLLOW_ONWARD_PATH;
             taxi_vars->idx = 1;
         } else if (taxi_vars->onward[taxi_moby->command] == -1 &&
                    vector_distance_xy(&taxi_moby->pos, &hero.motion.pos) > 5.0f) {
-            taxi_moby->state = 1;
+            taxi_moby->state = TAXI_WAIT_FOR_ROUTE_TRIGGER;
         }
         break;
     case TAXI_FOLLOW_ONWARD_PATH:
         if (advance_moby_along_rail_path(
                 taxi_moby, taxi_vars->onward[taxi_moby->command], &taxi_vars->snd)) {
             taxi_moby->draw_dist = 0;
-            taxi_moby->state = 1;
+            taxi_moby->state = TAXI_WAIT_FOR_ROUTE_TRIGGER;
             taxi_moby->collision = 0;
         }
         break;
