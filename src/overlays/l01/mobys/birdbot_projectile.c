@@ -225,7 +225,7 @@ typedef struct {
 extern f32  scale_time(f32) __asm__("FUN_001f96b0");
 extern s32  collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 extern s32  probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-extern u8   D_L01_00167240[];
+extern u8   camera_pos[] __asm__("D_L01_00167240");
 extern u128 D_L01_001742E0;
 
 void birdbot_projectile_update(DropMoby *) __asm__("FUN_L01_002fa4c0");
@@ -256,7 +256,7 @@ void birdbot_projectile_update(DropMoby *projectile) {
     ((f32 *)&projectile_vars->vel)[2] -= (scaled_ten * zero + one) * 2.0f / scaled_ten_product;
     fast_vec_add(pos, pos, &projectile_vars->vel);
     if (projectile->pos.f[0] < zero || projectile->pos.f[1] < zero || projectile->pos.f[2] < zero ||
-        vector_distance_xy(pos, D_L01_00167240) > 64.0f) {
+        vector_distance_xy(pos, camera_pos) > 64.0f) {
         mark_moby_for_removal(projectile);
         return;
     }
