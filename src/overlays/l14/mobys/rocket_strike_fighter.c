@@ -269,6 +269,11 @@ extern f32 rocket_strike_fighter_exhaust_grey_puff_row0_offset_gp __asm__("D_L14
 #include "rnc/overlay/l14/mobys/rocket_strike_fighter_data/spawn_rocket_strike_fighter_exhaust.h"
 
 void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
+    enum {
+        ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE = 0,
+        ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS = 1,
+        ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN = 3
+    };
     Vec4     step;
     Vec4     pos;
     Vec4     common_exhaust_origin;
@@ -280,7 +285,7 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
     int      grey;
     float    size;
 
-    if (moby->state == 0 || moby->state == 3 || moby->state == 1)
+    if (moby->state == ROCKET_STRIKE_FIGHTER_STATE_INITIALIZE || moby->state == ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_RESPAWN || moby->state == ROCKET_STRIKE_FIGHTER_STATE_WAIT_FOR_MISSIONS)
         return;
     fast_vec_scale(&step, &moby->rot_row0, rocket_strike_fighter_exhaust_base_row0_offset_gp);
     fast_vec_add(&pos, &moby->pos, &step);
