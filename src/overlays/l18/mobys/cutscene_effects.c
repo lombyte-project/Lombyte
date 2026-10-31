@@ -137,7 +137,7 @@ void deplanetizer_effects_update(struct Moby *moby) {
         deplanetizer_three_quad_scale_ramp_start_frame_gp = 190;
         deplanetizer_three_quad_scale_ramp_end_frame_gp = 365;
         moby->update_dist = 255;
-        moby->state = 1;
+        moby->state = UPDATE_SEQUENCE_EFFECTS;
         return;
     case UPDATE_SEQUENCE_EFFECTS:
         break;
