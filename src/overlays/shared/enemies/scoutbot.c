@@ -416,7 +416,7 @@ void scoutbot_update(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
 void update_scoutbot_health_and_target(struct Moby *moby) {
-    ScoutbotVars *scoutbot_pvars = (ScoutbotVars *)moby->pvars;
+    enum { SCOUTBOT_STATE_EXPLODE_AND_REMOVE = 0x63 } ;ScoutbotVars *scoutbot_pvars = (ScoutbotVars *)moby->pvars;
     int           hit;
     float         dmg;
     int           hit_reaction_code;
@@ -430,7 +430,7 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
         if (hit_reaction_code < 12) {
             if (hit_reaction_code >= 0) {
                 FUN_L00_00257470(moby, 0, -1);
-                moby->state = 0x63;
+                moby->state = SCOUTBOT_STATE_EXPLODE_AND_REMOVE;
             }
         }
     }
