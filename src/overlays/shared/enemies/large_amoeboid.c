@@ -655,7 +655,7 @@ void large_amoeboid_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F0040), where it is exact; names translated to the US level program. */
 
 void process_amoeboid_hits_and_update_targeting(char *moby) {
-    V_2F0040           scratch_vector;
+    enum { LARGE_AMOEBOID_INITIALIZE = 0 , LARGE_AMOEBOID_PROCESS_KNOCKBACK = 8 } ;V_2F0040           scratch_vector;
     V_2F0040           line_test_endpoint;
     int                flag;
     float              amount;
@@ -719,7 +719,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     }
     resolve_moby_hit_response(moby, hit_record, &moby_vars->health, 0, &flag, &amount, 0, 4);
     if (flag != 1 && amount != 0.0f && MOBY(moby)->state != 0xB && MOBY(moby)->state != 0xA &&
-        MOBY(moby)->state != 8) {
+        MOBY(moby)->state != LARGE_AMOEBOID_PROCESS_KNOCKBACK) {
         size_multiplier = 0.8f;
         allocate_voice_for_target_entry(0, 0, moby);
         hit_decrement = 1.0f;
@@ -797,7 +797,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     }
     MOBY(moby)->hit_slot = 0xFF;
     removal_height_entry_index = moby_vars->unk258;
-    if (removal_height_entry_index != 0 && MOBY(moby)->state != 0 &&
+    if (removal_height_entry_index != 0 && MOBY(moby)->state != LARGE_AMOEBOID_INITIALIZE &&
         MOBY(moby)->pos.z < *(float *)(removal_height_entry_index * 0x1190 + pool_draw_tiles + 8)) {
         clear_u64_value(&scratch_vector);
         spawn_amoeboid_burst_sparks((unsigned char *)moby, (float *)&scratch_vector);
