@@ -360,7 +360,7 @@ void draw_dialog_text(void) {
         s32  matched_record_text_color;
         s32  unmatched_record_text_color;
         s32  best;
-        s32  record;
+        s32  race_score_reference;
         s32  unit;
         s32  rem;
         s32  per;
@@ -479,8 +479,8 @@ void draw_dialog_text(void) {
                 font_print_center(
                     0x100, freeze_stats_text + 0x30, unmatched_record_text_color, line, -1);
             }
-            record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
-            if (record != 0 && record == hero.race_score) {
+            race_score_reference = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
+            if (race_score_reference != 0 && race_score_reference == hero.race_score) {
                 sprintf(line, freeze_fmt_record_label, get_help_message_text(0x50A5));
                 font_print_center(
                     0x100, freeze_stats_text + 0x56, matched_record_text_color, line, -1);

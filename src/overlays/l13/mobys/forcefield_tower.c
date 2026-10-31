@@ -91,9 +91,9 @@ int set_voice_position(int index, const void *vector) __asm__("FUN_L13_002982e8"
 
 int set_voice_position(int index, const void *vector) {
     int                       offset = index * 0x70;
-    char                     *base = D_0013E533 + 0x1D;
-    char                     *vector_base = base + 0xA0;
-    Level13SoundEffectTarget *effect = (Level13SoundEffectTarget *)(base + offset);
+    char                     *voice_table = D_0013E533 + 0x1D;
+    char                     *vector_base = voice_table + 0xA0;
+    Level13SoundEffectTarget *effect = (Level13SoundEffectTarget *)(voice_table + offset);
     effect->flags |= 0x40;
     qcopy(vector_base + offset, vector);
     return 1;
@@ -272,7 +272,7 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
     float            position[4];
     float            velocity[4];
     int              link;
-    VoicePoolWindow *record;
+    VoicePoolWindow *voice_slot_record;
 
     if (moby->state != 2) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
@@ -340,9 +340,9 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
                     }
                     link = *(int *)(moby_data + 0x70);
                     if (link != -1) {
-                        record = (VoicePoolWindow *)((u8 *)&voice_pool + link * 0x70);
-                        if ((struct Moby *)record->voice.owner == moby &&
-                            record->voice.state != 0) {
+                        voice_slot_record = (VoicePoolWindow *)((u8 *)&voice_pool + link * 0x70);
+                        if ((struct Moby *)voice_slot_record->voice.owner == moby &&
+                            voice_slot_record->voice.state != 0) {
                             release_voice_slot(link);
                         }
                     }
@@ -390,7 +390,7 @@ void forcefield_tower_update(struct Moby *moby) {
         TOWER_DESTRUCTION_WAIT_FOR_POINT_3_EFFECT = 2
     };
     unsigned char *moby_bytes = (unsigned char *)moby;
-    int           *data = *(int **)(moby_bytes + 0x78);
+    int           *tower_vars = *(int **)(moby_bytes + 0x78);
     float          position[4];
     float          velocity[4];
     float          rotated[4];
@@ -409,12 +409,12 @@ void forcefield_tower_update(struct Moby *moby) {
         moby_bytes[0x20] = 1;
         if (moby_bytes[0x30] < *(short *)(moby_bytes + 0x32))
             moby_bytes[0x30] = moby_bytes[0x32];
-        data[0x70 / 4] = -1;
+        tower_vars[0x70 / 4] = -1;
         if ((*(int *)((char *)D_0014C190 + (current_level_index << 8) +
                       (((short)*(unsigned short *)(moby_bytes + 0xB2) >> 5) << 2)) >>
              (*(unsigned short *)(moby_bytes + 0xB2) & 31)) &
             1) {
-            linked_index = data[0x74 / 4];
+            linked_index = tower_vars[0x74 / 4];
             if (linked_index != -1)
                 linked_state_flags[linked_index] = 1;
             mark_moby_for_removal(moby);
@@ -427,23 +427,23 @@ void forcefield_tower_update(struct Moby *moby) {
         return;
     }
     case TOWER_STATE_ACTIVE: {
-        linked_index = data[0x74 / 4];
+        linked_index = tower_vars[0x74 / 4];
         if (linked_index != -1)
             linked_state_flags[linked_index] = 0;
-        if (data[0x70 / 4] == -1)
+        if (tower_vars[0x70 / 4] == -1)
             goto allocate_voice;
-        if (voice_is_playing(moby, data[0x70 / 4]))
+        if (voice_is_playing(moby, tower_vars[0x70 / 4]))
             goto voice_done;
-        if (data[0x70 / 4] != -1)
+        if (tower_vars[0x70 / 4] != -1)
             goto play_voice;
     allocate_voice:
-        data[0x70 / 4] = start_moby_voice(0, 4, moby);
-        if (data[0x70 / 4] == -1)
+        tower_vars[0x70 / 4] = start_moby_voice(0, 4, moby);
+        if (tower_vars[0x70 / 4] == -1)
             goto voice_done;
     play_voice:
         qzero(position);
         position[2] += 8.7f;
-        set_voice_position(data[0x70 / 4], position);
+        set_voice_position(tower_vars[0x70 / 4], position);
     voice_done:
         if (moby_bytes[0x31] != 0 && random_integer_below(9) == 0) {
             red = (FUN_001160d8() + 0x30) & 0x3F;
@@ -461,7 +461,7 @@ void forcefield_tower_update(struct Moby *moby) {
                            0.0f);
         }
         process_forcefield_tower_damage(
-            moby, (unsigned char *)data, (float *)((char *)data + 0x20));
+            moby, (unsigned char *)tower_vars, (float *)((char *)tower_vars + 0x20));
         return;
     }
     case TOWER_STATE_DESTRUCTION: {
@@ -532,7 +532,7 @@ void forcefield_tower_update(struct Moby *moby) {
             fast_vec_add(rotated, rotated, moby_bytes + 0x10);
             emit_forcefield_tower_destruction_effects(moby_bytes, rotated, 1);
         } while (i >= 0);
-        linked_index = data[0x74 / 4];
+        linked_index = tower_vars[0x74 / 4];
         if (linked_index != -1)
             linked_state_flags[linked_index] = 1;
         mark_moby_for_removal(moby);

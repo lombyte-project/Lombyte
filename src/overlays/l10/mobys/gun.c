@@ -35,7 +35,7 @@ extern struct Moby *spawn_turret_shot(void *, void *, void *, int) __asm__("FUN_
 void gun_update(struct Moby *moby) __asm__("FUN_L10_002e8ab0");
 
 void gun_update(struct Moby *moby) {
-    Vars *vars = (Vars *)moby->pvars;
+    Vars *gun_control = (Vars *)moby->pvars;
     int  *bits;
     float rotation[4];
     float position[4];
@@ -70,11 +70,11 @@ state_zero: {
         return;
     }
     {
-        if (vars->targets[0] == -1) {
+        if (gun_control->targets[0] == -1) {
             mark_moby_for_removal(moby);
             return;
         }
-        vars->turn_velocity = 0.0f;
+        gun_control->turn_velocity = 0.0f;
         moby->state = 1;
         return;
     }
@@ -97,9 +97,10 @@ state_two: {
     {
         struct Moby *candidate;
         candidate = 0;
-        if (vars->targets[0] != -1) {
+        if (gun_control->targets[0] != -1) {
             struct Moby *target;
-            target = (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (vars->targets[0] << 8));
+            target =
+                (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (gun_control->targets[0] << 8));
             candidate =
                 (target != 0 && target->state != 0xfe && target->state != 0xfd) ? target : 0;
         }
@@ -107,10 +108,10 @@ state_two: {
             struct Moby *target;
             target = candidate;
             if (candidate == 0) {
-                if (vars->targets[1] != -1) {
+                if (gun_control->targets[1] != -1) {
                     struct Moby *candidate;
-                    candidate =
-                        (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
+                    candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 +
+                                                (gun_control->targets[1] << 8));
                     if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
                         target = candidate;
                 }
@@ -120,8 +121,9 @@ state_two: {
         target = candidate;
     }
     if (target == 0) {
-        if (vars->targets[2] != -1) {
-            candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[2] << 8));
+        if (gun_control->targets[2] != -1) {
+            candidate =
+                (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (gun_control->targets[2] << 8));
             if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
                 target = candidate;
         }
@@ -129,7 +131,7 @@ state_two: {
     if (target != 0) {
         moby->rot.z = fast_add_rotations(moby->rot.z, 3.1415927f);
         angle = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
-        moby->rot.z = FUN_L00_00258110(&vars->turn_velocity,
+        moby->rot.z = FUN_L00_00258110(&gun_control->turn_velocity,
                                        moby->rot.z,
                                        angle,
                                        D_0015ED70 * 1.5707964f,
@@ -149,25 +151,25 @@ state_two: {
                              target->pos.z - position[2]));
             spawn_turret_shot(moby, position, rotation, scale_game_frames(30));
             if (target ==
-                (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (vars->targets[0] << 8)))
-                vars->targets[0] = -1;
-            else if (target ==
-                     (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (vars->targets[1] << 8)))
-                vars->targets[1] = -1;
+                (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (gun_control->targets[0] << 8)))
+                gun_control->targets[0] = -1;
+            else if (target == (struct Moby *)((char *)D_L10_0015FFD0_macro[2] +
+                                               (gun_control->targets[1] << 8)))
+                gun_control->targets[1] = -1;
             else
-                vars->targets[2] = -1;
+                gun_control->targets[2] = -1;
         }
         moby->rot.z = fast_add_rotations(moby->rot.z, 3.1415927f);
     } else {
         moby->state = 3;
-        if (vars->wake != -1) {
-            ((struct Moby *)((vars->wake << 8) + (int)D_L10_0015FFD8_8ab0))->state = 1;
-            vars->wake = -1;
+        if (gun_control->wake != -1) {
+            ((struct Moby *)((gun_control->wake << 8) + (int)D_L10_0015FFD8_8ab0))->state = 1;
+            gun_control->wake = -1;
         }
     }
-    if (vars->linked != -1) {
-        ((struct Moby *)((vars->linked << 8) + (int)D_L10_0015FFD8_8ab0))->command = 1;
-        vars->linked = -1;
+    if (gun_control->linked != -1) {
+        ((struct Moby *)((gun_control->linked << 8) + (int)D_L10_0015FFD8_8ab0))->command = 1;
+        gun_control->linked = -1;
     }
     return;
 }
@@ -176,9 +178,9 @@ state_three: {
     struct Moby   *target;
     struct Moby   *candidate;
     target = 0;
-    if (vars->targets[0] != -1) {
+    if (gun_control->targets[0] != -1) {
         struct Moby *candidate =
-            (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (vars->targets[0] << 8));
+            (struct Moby *)((char *)D_L10_0015FFD0_macro[2] + (gun_control->targets[0] << 8));
         if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
             target = candidate;
     }
@@ -188,9 +190,9 @@ state_three: {
         candidate = target;
         goto remove_candidate;
     }
-    if (vars->targets[1] == -1)
+    if (gun_control->targets[1] == -1)
         goto no_second_target;
-    candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
+    candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (gun_control->targets[1] << 8));
     if (candidate == 0 || candidate->state == 0xfe || candidate->state == 0xfd)
         goto no_second_target;
     goto remove_candidate;

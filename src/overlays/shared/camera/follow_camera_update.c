@@ -313,7 +313,7 @@ void follow_camera_build_view(u8 *camera) {
     u8 *view_blend_and_smoothing_state;
     u8 *reference_orbit_offset;
     u8 *tb;
-    u8 *base;
+    u8 *camera_reference_basis;
     u8 *side_axis;
     u8 *view_up_axis;
     u8 *side_axis_or_aim_position; /* scratch vector pointer: p + 0x10, later v4 */
@@ -329,7 +329,7 @@ void follow_camera_build_view(u8 *camera) {
     f32 view_direction[4];
     f32 adjusted_aim_position[4];
 
-    base = camera_view;
+    camera_reference_basis = camera_view;
     camera_state = *(u8 **)(camera + 0x70);
     follow_state_block = camera_state + 0x40;
     view_blend_and_smoothing_state = camera_state + 0x20;
@@ -342,7 +342,7 @@ void follow_camera_build_view(u8 *camera) {
         up = D_L00_00166E30;
     } else {
         up = D_L00_00166E30;
-        tb = base + 0x20;
+        tb = camera_reference_basis + 0x20;
         position_up_component = FUN_001f9ab0_2e9010(camera_state + 0x80, tb);
         FUN_001f9a68_2e9010(vector_scratch, tb, position_up_component);
         fast_vec_sub(projected_reference_position, camera_state + 0x80, vector_scratch);
@@ -501,9 +501,9 @@ void follow_camera_orbit(int camera_moby) {
     float tb[4];
     float x, bc, dot_product, reference_up_component, y, current_up_component, orbit_angle_scratch,
         i, yaw_rotation_sign, current_orbit_length;
-    char *base = D_L00_00166E10;
-    char *up = base + 0x20;
-    char *base2;
+    char *orbit_reference_basis = D_L00_00166E10;
+    char *up = orbit_reference_basis + 0x20;
+    char *clamp_reference_basis;
     char *fw;
     char *reference_orbit_offset = camera_state + 0x130;
     char *current_orbit_offset = camera_state + 0x140;
@@ -542,8 +542,8 @@ void follow_camera_orbit(int camera_moby) {
     fast_vec_cross(orbit_cross_scratch, projected_current_offset, up);
     yaw_rotation_sign =
         (fast_vec_dot(orbit_cross_scratch, projected_reference_offset) >= 0.0f) ? 1.0f : -1.0f;
-    base2 = D_L00_00166E10;
-    fw = base2 + 0x30;
+    clamp_reference_basis = D_L00_00166E10;
+    fw = clamp_reference_basis + 0x30;
     build_look_at_matrix(rotated_orbit_offset, projected_current_offset, up, x * yaw_rotation_sign);
     fast_vec_cross(orbit_cross_scratch, up, rotated_orbit_offset);
     build_look_at_matrix(rotated_orbit_offset, rotated_orbit_offset, orbit_cross_scratch, i);

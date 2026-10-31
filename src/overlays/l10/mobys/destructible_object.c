@@ -166,7 +166,7 @@ void update_destructible_object(char *moby) {
     }
 }
 
-char *spawn_fixed_height_destruction_moby(struct Moby *owner) {
+char *spawn_fixed_height_destruction_moby(struct Moby *destruction_source_moby) {
     char *moby = create_moby(0x462);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
@@ -174,16 +174,16 @@ char *spawn_fixed_height_destruction_moby(struct Moby *owner) {
         moby[0x31] = 1;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        MOBY(moby)->rot.z = owner->rot.z;
-        MOBY(moby)->spawn_frame = owner->spawn_frame;
-        qcopy(moby + 0x10, &owner->pos);
+        MOBY(moby)->rot.z = destruction_source_moby->rot.z;
+        MOBY(moby)->spawn_frame = destruction_source_moby->spawn_frame;
+        qcopy(moby + 0x10, &destruction_source_moby->pos);
         MOBY(moby)->pos.z = 59.0f;
         update_entity(moby);
     }
     return moby;
 }
 
-char *spawn_destruction_replacement_moby(struct Moby *owner) {
+char *spawn_destruction_replacement_moby(struct Moby *source_moby) {
     char *moby = create_moby(0x781);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
@@ -191,9 +191,9 @@ char *spawn_destruction_replacement_moby(struct Moby *owner) {
         moby[0x31] = 1;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        MOBY(moby)->rot.z = owner->rot.z;
-        MOBY(moby)->spawn_frame = owner->spawn_frame;
-        qcopy(moby + 0x10, &owner->pos);
+        MOBY(moby)->rot.z = source_moby->rot.z;
+        MOBY(moby)->spawn_frame = source_moby->spawn_frame;
+        qcopy(moby + 0x10, &source_moby->pos);
         MOBY(moby)->pos.z = 59.0f;
         update_entity(moby);
     }

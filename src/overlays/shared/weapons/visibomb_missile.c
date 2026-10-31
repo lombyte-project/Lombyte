@@ -524,15 +524,15 @@ void moby_save_globals_state(void *m_) __asm__("FUN_L00_002b56d0");
 void moby_save_globals_state(void *m_) {
     char *render_state_owner_moby = (char *)m_;
     char *render_state_backup_vars;
-    float f0, f1, f2, f3;
+    float saved_render_global_value, f1, f2, f3;
 
     render_state_backup_vars = ((char *)MOBY(render_state_owner_moby)->pvars);
-    f0 = D_L00_0015F448;
+    saved_render_global_value = D_L00_0015F448;
     f1 = D_L00_0015F44C;
     f2 = D_L00_0015F450;
     f3 = D_L00_0015F448_macro[3];
     visibomb_render_override_active = 1;
-    *(float *)(render_state_backup_vars + 0x30) = f0;
+    *(float *)(render_state_backup_vars + 0x30) = saved_render_global_value;
     *(float *)(render_state_backup_vars + 0x34) = f1;
     *(float *)(render_state_backup_vars + 0x38) = f2;
     *(float *)(render_state_backup_vars + 0x3C) = f3;
@@ -561,16 +561,16 @@ void moby_restore_globals_state(int m_, int flag) __asm__("FUN_L00_002b57f0");
 void moby_restore_globals_state(int m_, int flag) {
     struct Moby *render_restore_moby = (char *)m_;
     char        *render_restore_moby_vars;
-    float        f0, f1, f2, f3;
+    float        saved_render_value, f1, f2, f3;
     char        *background_color_source;
 
     render_restore_moby_vars = ((char *)render_restore_moby->pvars);
     visibomb_render_override_active = 0;
-    f0 = *(float *)(render_restore_moby_vars + 0x30);
+    saved_render_value = *(float *)(render_restore_moby_vars + 0x30);
     f1 = *(float *)(render_restore_moby_vars + 0x34);
     f2 = *(float *)(render_restore_moby_vars + 0x38);
     f3 = *(float *)(render_restore_moby_vars + 0x3C);
-    D_L00_0015F448 = f0;
+    D_L00_0015F448 = saved_render_value;
     D_L00_0015F44C = f1;
     D_L00_0015F450 = f2;
     D_L00_0015F448_macro[3] = f3;

@@ -394,7 +394,7 @@ extern u128_2133a8 D_L16_00174270[] NOT_SDA;
 s32                resolve_hero_position_collisions(s32 mode) __asm__("FUN_L16_00210b60");
 
 s32 resolve_hero_position_collisions(s32 mode) {
-    V_2133a8     old;
+    V_2133a8     pre_collision_position;
     V_2133a8     collision_position_offset;
     V_2133a8     resolved_position_delta;
     s32          mask;
@@ -404,7 +404,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     if (hero.collision_off_frames != 0) {
         return 1;
     }
-    qcopy(&old, &hero.motion.pos.q);
+    qcopy(&pre_collision_position, &hero.motion.pos.q);
     clear_u64_value(&collision_position_offset);
     if (hero.path_constrain_pending != 0) {
         FUN_L00_002347c0();
@@ -467,7 +467,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         hero.coll_hit_moby = ((u8 **)collision_output)[-6];
     }
     fast_vec_sub(&hero.motion.pos.q, &hero.motion.pos.q, &collision_position_offset);
-    fast_vec_sub(&resolved_position_delta, &hero.motion.pos.q, &old);
+    fast_vec_sub(&resolved_position_delta, &hero.motion.pos.q, &pre_collision_position);
     collision_extent_or_displacement_length = fast_vec_length(&resolved_position_delta);
     if (hero.capsule_radius * 1.5f < collision_extent_or_displacement_length) {
         if (mode == 0xF) {
@@ -485,7 +485,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
                 resolved_position_delta.f[2] = -512.0f;
             fast_vec_normalize(
                 &resolved_position_delta, &resolved_position_delta, hero.capsule_radius);
-            fast_vec_add(&hero.motion.pos.q, &old, &resolved_position_delta);
+            fast_vec_add(&hero.motion.pos.q, &pre_collision_position, &resolved_position_delta);
         }
         return -1;
     }
@@ -552,7 +552,7 @@ void integrate_hero_motion(void) __asm__("FUN_L16_00211098");
 
 void integrate_hero_motion(void) {
     V                  previous;
-    V                  work;
+    V                  motion_reference_vector;
     V                  plane;
     L16MovementPlayer *contact_player;
     L16MovementPlayer *motion_player;
@@ -616,9 +616,9 @@ void integrate_hero_motion(void) {
                 fast_vec_normalize(limited_velocity, limited_velocity, limit);
         }
     } else if (player->mode == 22) {
-        qcopy(work.f, position);
-        work.f[2] += 0.5f;
-        fast_vec_add(plane.f, work.f, (char *)position + 0x60);
+        qcopy(motion_reference_vector.f, position);
+        motion_reference_vector.f[2] += 0.5f;
+        fast_vec_add(plane.f, motion_reference_vector.f, (char *)position + 0x60);
         if (collision_line(position, plane.f, 2, 0, 0)) {
             char *hit = D_L16_00174258[0];
 
@@ -679,14 +679,14 @@ void integrate_hero_motion(void) {
     if (magnitude < 0.0f)
         magnitude = 0.0f;
     fast_vec_normalize(delta, velocity, magnitude);
-    qcopy(work.f, velocity);
-    gravity_flatten(work.f, work.f);
+    qcopy(motion_reference_vector.f, velocity);
+    gravity_flatten(motion_reference_vector.f, motion_reference_vector.f);
     gravity_flatten(horizontal, horizontal);
     fast_vec_normalize(horizontal, horizontal, 1.0f);
-    magnitude = fast_vec_dot(horizontal, work.f);
+    magnitude = fast_vec_dot(horizontal, motion_reference_vector.f);
     if (magnitude < 0.0f)
         magnitude = 0.0f;
-    fast_vec_normalize(horizontal, work.f, magnitude);
+    fast_vec_normalize(horizontal, motion_reference_vector.f, magnitude);
     qcopy(plane.f, velocity);
     set_gravity_relative_vector_length_xy(plane.f, plane.f, 0.0f);
     set_gravity_relative_vector_length_xy(vertical, vertical, 0.0f);
@@ -698,11 +698,11 @@ void integrate_hero_motion(void) {
     motion_player = (L16MovementPlayer *)((char *)delta - 0x110);
     motion_player->speed = fast_vec_length(delta);
     motion_player->horizontal_speed = vector_length_xy(delta);
-    work.q = *(OvlQuad *)delta;
-    motion_player->vertical_speed = forward_component(work.f);
+    motion_reference_vector.q = *(OvlQuad *)delta;
+    motion_player->vertical_speed = forward_component(motion_reference_vector.f);
     if (motion_player->vertical_speed < 0.0f)
         motion_player->vertical_speed = 0.0f;
-    qcopy(work.f, new_position);
+    qcopy(motion_reference_vector.f, new_position);
     contact = (float *)((char *)delta - 0x20);
     external = (float *)((char *)delta - 0x10);
     if (fast_vec_length(contact) > 0.0001f) {
@@ -717,7 +717,7 @@ void integrate_hero_motion(void) {
         fast_vec_sub(external, new_position, previous.f);
         correct_hero_ground_penetration();
     }
-    fast_vec_sub((char *)delta + 0x30, new_position, work.f);
+    fast_vec_sub((char *)delta + 0x30, new_position, motion_reference_vector.f);
     motion_player->frame_delta[3] = motion_player->contact[3];
     motion_player->contact[3] = 0.0f;
     fast_vec_sub(external, new_position, previous.f);

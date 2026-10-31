@@ -187,9 +187,9 @@ void taxi_update(struct Moby *moby) {
             D_0014C050[current_level_index][*(int *)(taxi_data + 0xBC)] == 0xFF) {
             char          *model = moby->pclass;
             unsigned short flags = moby->flags;
-            int            value = *(int *)(model + 0x10);
+            int            class_collision = *(int *)(model + 0x10);
             moby->visible = 1;
-            moby->collision = value;
+            moby->collision = class_collision;
             moby->flags = flags & 0xFFFE;
             moby->state = 1;
         }
@@ -230,22 +230,22 @@ enum TaxiStop {
 
 void initialize_taxi_stop_state(void *moby_v) {
     char *moby = moby_v;
-    char *data = ((char *)MOBY(moby)->pvars);
-    int  *list = (int *)(data + 0x80);
+    char *taxi_stop_vars = ((char *)MOBY(moby)->pvars);
+    int  *list = (int *)(taxi_stop_vars + 0x80);
     int   i;
     int   selected_pose_byte_offset;
     char *pose_table_base;
-    *(short *)(data + 0xB4) = -1;
+    *(short *)(taxi_stop_vars + 0xB4) = -1;
     for (i = 0; i < 5; i++) {
         if (fast_vec_dist(moby + 0x10, &l05_cuboids[list[i]].pos) < 1.0f) {
-            *(short *)(data + 0xB4) = i;
+            *(short *)(taxi_stop_vars + 0xB4) = i;
         }
     }
-    switch (*(short *)(data + 0xB4)) {
+    switch (*(short *)(taxi_stop_vars + 0xB4)) {
     case TAXI_BRANCHING_STOP: {
         int k = current_level_index << 4;
-        if (visited52[*(int *)(data + 0xB8) + k] != 0xFF &&
-            visited52[*(int *)(data + 0xBC) + k] != 0xFF) {
+        if (visited52[*(int *)(taxi_stop_vars + 0xB8) + k] != 0xFF &&
+            visited52[*(int *)(taxi_stop_vars + 0xBC) + k] != 0xFF) {
             moby[0x20] = 6;
             MOBY(moby)->flags = MOBY(moby)->flags | 1;
             moby[0x31] = 0;
@@ -274,12 +274,12 @@ void initialize_taxi_stop_state(void *moby_v) {
     }
     {
         int *selected = list;
-        selected += *(short *)(data + 0xB4);
+        selected += *(short *)(taxi_stop_vars + 0xB4);
         selected_pose_byte_offset = *selected << 7;
     }
     pose_table_base = (char *)l05_cuboids;
-    qcopy(data + 0x60, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
-    qcopy(data + 0x70, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
+    qcopy(taxi_stop_vars + 0x60, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
+    qcopy(taxi_stop_vars + 0x70, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
 }
 /* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
 

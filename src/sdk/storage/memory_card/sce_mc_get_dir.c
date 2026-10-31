@@ -21,7 +21,7 @@ extern s32                    sceSifWriteBackDCache();
 extern s32                    strncpy(s8 *, s8 *, s32);
 
 s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
-    s32          result;
+    s32          rpc_submission_status;
     s32          ret;
     register s32 path_arg = slot;
 
@@ -44,14 +44,14 @@ s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
         if (maxent >= 0) {
             sceSifWriteBackDCache(table, maxent << 6);
         }
-        result = sceSifCallRpc(
+        rpc_submission_status = sceSifCallRpc(
             &mc_rpc_client, MC_FUNC_GET_DIR, 1, &D_00159AB0, 0x414, mc_rpc_result, 4, 0, 0);
-        if (result == 0) {
+        if (rpc_submission_status == 0) {
             mc_current_func = MC_FUNC_GET_DIR;
         } else {
             SignalSema(mc_sema);
         }
-        ret = result;
+        ret = rpc_submission_status;
         /* Duplicate return node #12. Try simplifying control flow for better match */
         return ret;
     }

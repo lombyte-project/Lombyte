@@ -53,12 +53,13 @@ struct DpsubWork {
 };
 
 void dpsub(s64 minuend, s64 subtrahend) {
-    struct DpsubWork work;
+    struct DpsubWork subtraction_workspace;
 
-    work.unk60 = minuend;
-    work.unk68 = subtrahend;
-    __unpack_d(&work.unk60, &work);
-    __unpack_d(&work.unk68, &work.unk20);
-    work.unk24 ^= 1;
-    __pack_d(_fpadd_parts(&work, &work.unk20, &work.unk40));
+    subtraction_workspace.unk60 = minuend;
+    subtraction_workspace.unk68 = subtrahend;
+    __unpack_d(&subtraction_workspace.unk60, &subtraction_workspace);
+    __unpack_d(&subtraction_workspace.unk68, &subtraction_workspace.unk20);
+    subtraction_workspace.unk24 ^= 1;
+    __pack_d(_fpadd_parts(
+        &subtraction_workspace, &subtraction_workspace.unk20, &subtraction_workspace.unk40));
 }

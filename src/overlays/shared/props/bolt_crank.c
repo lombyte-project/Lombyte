@@ -100,7 +100,7 @@ void bolt_crank_update(struct Moby *moby) {
     float          offset[4], spring_pos;
     float          distance, yaw_diff, angle, old_angle, height_diff, max_speed, height, ground;
     int            save_id, area_clear;
-    struct Moby   *other;
+    struct Moby   *clearance_candidate_moby;
 
     if (crank == 0) {
         moby->rot.z = fast_add_rotations(moby->rot.z, frame_time * 6.2831855f);
@@ -151,10 +151,13 @@ void bolt_crank_update(struct Moby *moby) {
                                 area_clear = 1;
                                 crank->idle_frames = 0;
                                 bolt_crank_radial_correction_step_gp = 0.0f;
-                                for (other = (struct Moby *)D_L01_0015FFE4; other != 0;
-                                     other = other->next) {
-                                    if (other->flags & 0x1000) {
-                                        if (vector_distance_xy(&moby->pos, &other->pos) < 3.25f) {
+                                for (clearance_candidate_moby = (struct Moby *)D_L01_0015FFE4;
+                                     clearance_candidate_moby != 0;
+                                     clearance_candidate_moby = clearance_candidate_moby->next) {
+                                    if (clearance_candidate_moby->flags & 0x1000) {
+                                        if (vector_distance_xy(&moby->pos,
+                                                               &clearance_candidate_moby->pos) <
+                                            3.25f) {
                                             area_clear = 0;
                                             break;
                                         }

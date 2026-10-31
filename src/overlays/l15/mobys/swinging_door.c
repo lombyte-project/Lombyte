@@ -40,7 +40,7 @@ void update_swinging_door(struct Moby *moby) {
         SWINGING_DOOR_OPEN = 3,
         SWINGING_DOOR_CLOSING = 4
     };
-    DoorVars    *vars = (DoorVars *)moby->pvars;
+    DoorVars    *door_vars = (DoorVars *)moby->pvars;
     s32          open = 0;
     s32          close = 0;
     struct Moby *candidate_moby;
@@ -48,13 +48,13 @@ void update_swinging_door(struct Moby *moby) {
     f32          limit;
     f32          yaw;
 
-    if (vars->trigger == -1) {
+    if (door_vars->trigger == -1) {
         if (moby->state != 0) {
-            if (is_point_inside_clip_volume(&hero.motion.pos, vars->open_volume) ||
-                is_point_inside_clip_volume(D_L15_001673C0, vars->open_volume)) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, door_vars->open_volume) ||
+                is_point_inside_clip_volume(D_L15_001673C0, door_vars->open_volume)) {
                 open = 1;
-            } else if (!is_point_inside_clip_volume(&hero.motion.pos, vars->close_volume) &&
-                       !is_point_inside_clip_volume(D_L15_001673C0, vars->close_volume)) {
+            } else if (!is_point_inside_clip_volume(&hero.motion.pos, door_vars->close_volume) &&
+                       !is_point_inside_clip_volume(D_L15_001673C0, door_vars->close_volume)) {
                 close = 1;
             }
             for (candidate_moby = (struct Moby *)D_L15_0015FFE4; candidate_moby != 0;
@@ -62,16 +62,17 @@ void update_swinging_door(struct Moby *moby) {
                 if (get_moby_target_info(candidate_moby) == 0) {
                     continue;
                 }
-                if (is_point_inside_clip_volume(&candidate_moby->pos, vars->open_volume)) {
+                if (is_point_inside_clip_volume(&candidate_moby->pos, door_vars->open_volume)) {
                     open = 1;
-                } else if (!is_point_inside_clip_volume(&candidate_moby->pos, vars->close_volume)) {
+                } else if (!is_point_inside_clip_volume(&candidate_moby->pos,
+                                                        door_vars->close_volume)) {
                     close = 1;
                 }
             }
         }
     } else {
-        if (l15_moby_array[vars->trigger].oclass == 0x49B) {
-            open = l15_moby_array[vars->trigger].state == 2;
+        if (l15_moby_array[door_vars->trigger].oclass == 0x49B) {
+            open = l15_moby_array[door_vars->trigger].state == 2;
         }
     }
     if (open) {
@@ -79,63 +80,63 @@ void update_swinging_door(struct Moby *moby) {
     }
     switch (moby->state) {
     case SWINGING_DOOR_INITIALIZE:
-        if (vars->reverse) {
+        if (door_vars->reverse) {
             moby->flags |= 0x8000;
         }
         step = swinging_door_swing_angle_degrees_gp * DEG_TO_RAD;
-        if (!vars->reverse) {
+        if (!door_vars->reverse) {
             step = -step;
         }
         yaw = fast_add_rotations(moby->rot.z, step);
-        vars->swing = 0.0f;
-        vars->closed_yaw = yaw;
+        door_vars->swing = 0.0f;
+        door_vars->closed_yaw = yaw;
         moby->rot.z = yaw;
         moby->state = 1;
         break;
     case SWINGING_DOOR_CLOSED:
-        vars->swing = 0.0f;
-        moby->rot.z = vars->closed_yaw;
+        door_vars->swing = 0.0f;
+        moby->rot.z = door_vars->closed_yaw;
         if (open) {
             moby->state = 2;
-            vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
+            door_vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
         }
         break;
     case SWINGING_DOOR_OPENING:
-        vars->swing =
-            fast_add_rotations(vars->swing,
+        door_vars->swing =
+            fast_add_rotations(door_vars->swing,
                                swinging_door_swing_angle_degrees_gp /
                                    swinging_door_swing_duration_gp * DEG_TO_RAD * frame_time);
         limit = swinging_door_swing_angle_degrees_gp * DEG_TO_RAD;
-        if (vars->swing < limit) {
-            vars->swing = limit;
+        if (door_vars->swing < limit) {
+            door_vars->swing = limit;
             moby->state = 3;
         }
-        step = vars->swing;
-        if (vars->reverse) {
+        step = door_vars->swing;
+        if (door_vars->reverse) {
             step = -step;
         }
-        moby->rot.z = fast_add_rotations(vars->closed_yaw, step);
+        moby->rot.z = fast_add_rotations(door_vars->closed_yaw, step);
         break;
     case SWINGING_DOOR_OPEN:
         if (close) {
             moby->state = 4;
-            vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
+            door_vars->sound = allocate_voice_for_target_entry(0, 0, (int)moby);
         }
         break;
     case SWINGING_DOOR_CLOSING:
-        vars->swing =
-            fast_add_rotations(vars->swing,
+        door_vars->swing =
+            fast_add_rotations(door_vars->swing,
                                -(swinging_door_swing_angle_degrees_gp /
                                  swinging_door_swing_duration_gp * DEG_TO_RAD * frame_time));
-        if (0.0f < vars->swing) {
-            vars->swing = 0.0f;
+        if (0.0f < door_vars->swing) {
+            door_vars->swing = 0.0f;
             moby->state = 1;
         }
-        step = vars->swing;
-        if (vars->reverse) {
+        step = door_vars->swing;
+        if (door_vars->reverse) {
             step = -step;
         }
-        moby->rot.z = fast_add_rotations(vars->closed_yaw, step);
+        moby->rot.z = fast_add_rotations(door_vars->closed_yaw, step);
         if (open) {
             moby->state = 2;
         }

@@ -60,7 +60,7 @@ void update_gemlik_scene_controller(struct Moby *moby) {
         WAIT_TO_REMOVE_LINKED_MOBY = 13,
         FINALIZE_LINKED_MOBY_CLEANUP = 14
     };
-    int *data = (int *)moby->pvars;
+    int *scene_controller_vars = (int *)moby->pvars;
     switch (moby->state) {
     case WAIT_TO_START_INITIAL_SCENE:
         if (D_L13_0015F5C4 == 0)
@@ -84,13 +84,13 @@ void update_gemlik_scene_controller(struct Moby *moby) {
         break;
     case CHECK_CLIP_VOLUME_FOR_SCENE: {
         if (alternate_item_available[0x65] == 0) {
-            if (data[0] == -1)
+            if (scene_controller_vars[0] == -1)
                 goto set_state_4;
-            if (is_point_inside_clip_volume(D_0013F3D0, data[0]) == 0)
+            if (is_point_inside_clip_volume(D_0013F3D0, scene_controller_vars[0]) == 0)
                 goto after_state_4;
             alternate_item_available[0x65] = 1;
-            if (data[5] != -1) {
-                struct Moby *other = (struct Moby *)(moby_base + data[5] * 0x100);
+            if (scene_controller_vars[5] != -1) {
+                struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[5] * 0x100);
                 other->flags |= 0x41;
             }
             moby->state = 5;
@@ -102,8 +102,8 @@ void update_gemlik_scene_controller(struct Moby *moby) {
             moby->state = 7;
         }
     after_state_4:
-        if (moby->state != 4 && data[3] != -1) {
-            mark_moby_for_removal((char *)(moby_base + data[3] * 0x100));
+        if (moby->state != 4 && scene_controller_vars[3] != -1) {
+            mark_moby_for_removal((char *)(moby_base + scene_controller_vars[3] * 0x100));
         }
         break;
     }
@@ -112,13 +112,13 @@ void update_gemlik_scene_controller(struct Moby *moby) {
         char *entity;
         int   index;
         if (D_L13_0015F5C4 != 2) {
-            if (data[5] != -1) {
-                struct Moby *other = (struct Moby *)(moby_base + data[5] * 0x100);
+            if (scene_controller_vars[5] != -1) {
+                struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[5] * 0x100);
                 other->flags &= 0xffbe;
             }
-            index = data[2];
-            if (index != -1 && data[4] != -1) {
-                entity = (char *)(moby_base + data[4] * 0x100);
+            index = scene_controller_vars[2];
+            if (index != -1 && scene_controller_vars[4] != -1) {
+                entity = (char *)(moby_base + scene_controller_vars[4] * 0x100);
                 object = (char *)l13_cuboids;
                 index *= 0x80;
                 qcopy(entity + 0x10, &object[index + 0x30]);
@@ -140,23 +140,23 @@ void update_gemlik_scene_controller(struct Moby *moby) {
         char *object;
         if (alternate_item_available[0x66] == 0) {
             struct Moby *other;
-            if (data[5] == -1) {
+            if (scene_controller_vars[5] == -1) {
                 moby->state = 13;
                 break;
             }
-            other = (struct Moby *)(moby_base + data[5] * 0x100);
+            other = (struct Moby *)(moby_base + scene_controller_vars[5] * 0x100);
             if (other != 0 && other->oclass == 0x184 && other->state != 0xfe &&
                 other->state != 0xfd)
                 return;
-            if (data[4] != -1) {
-                struct Moby *other = (struct Moby *)(moby_base + data[4] * 0x100);
+            if (scene_controller_vars[4] != -1) {
+                struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[4] * 0x100);
                 other->flags |= 2;
             }
-            object = (char *)l13_cuboids + data[2] * 0x80;
+            object = (char *)l13_cuboids + scene_controller_vars[2] * 0x80;
             set_race_camera(object + 0x30, object + 0x70, 0x72, 1);
             alternate_item_available[0x66] = 1;
-            if (data[8] != -1) {
-                struct Moby *other = (struct Moby *)(moby_base + data[8] * 0x100);
+            if (scene_controller_vars[8] != -1) {
+                struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[8] * 0x100);
                 other->flags |= 0x41;
             }
             request_music_track(0, 5);
@@ -181,13 +181,13 @@ void update_gemlik_scene_controller(struct Moby *moby) {
         break;
     case WAIT_FOLLOWUP_SCENE: {
         if (D_L13_0015F5C4 != 2) {
-            if (data[4] != -1) {
-                struct Moby *other = (struct Moby *)(moby_base + data[4] * 0x100);
+            if (scene_controller_vars[4] != -1) {
+                struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[4] * 0x100);
                 other->flags &= 0xfffd;
             }
             unlock_planet(14);
-            if (data[8] != -1) {
-                struct Moby *other = (struct Moby *)(moby_base + data[8] * 0x100);
+            if (scene_controller_vars[8] != -1) {
+                struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[8] * 0x100);
                 other->flags &= 0xffbe;
                 initialize_moby_state_record(other);
                 D_0013E030.unk60 = 464.66f;
@@ -201,8 +201,8 @@ void update_gemlik_scene_controller(struct Moby *moby) {
         break;
     }
     case WAIT_LINKED_MOBY_REMOVAL_BEFORE_SAVE: {
-        if (data[4] != -1) {
-            struct Moby *other = (struct Moby *)(moby_base + data[4] * 0x100);
+        if (scene_controller_vars[4] != -1) {
+            struct Moby *other = (struct Moby *)(moby_base + scene_controller_vars[4] * 0x100);
             if (other != 0 && other->oclass == 0x45 && other->state != 0xfe && other->state != 0xfd)
                 return;
             memcard_save_data(0, -1);
@@ -216,10 +216,11 @@ void update_gemlik_scene_controller(struct Moby *moby) {
         moby->state = 13;
         break;
     case WAIT_TO_REMOVE_LINKED_MOBY:
-        if (data[4] != -1) {
-            if (D_L13_0015FC88[*(unsigned char *)(moby_base + data[4] * 0x100 + 0xb0)] == 0xff) {
-                if (data[8] != -1)
-                    mark_moby_for_removal((char *)(moby_base + data[8] * 0x100));
+        if (scene_controller_vars[4] != -1) {
+            if (D_L13_0015FC88[*(unsigned char *)(moby_base + scene_controller_vars[4] * 0x100 +
+                                                  0xb0)] == 0xff) {
+                if (scene_controller_vars[8] != -1)
+                    mark_moby_for_removal((char *)(moby_base + scene_controller_vars[8] * 0x100));
                 moby->state = 14;
             }
         } else {

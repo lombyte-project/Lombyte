@@ -316,9 +316,10 @@ void test_dummy_update(unsigned char *moby) {
         break;
     case TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE: { /* slider: turn toward the next node while the timer runs */
         float *yaw = (float *)&MOBY(moby)->rot.z;
-        int    next = dummy_data->node + dummy_data->step;
-        float  angle = fast_arc_tan(((float *)(path + (next << 4)))[4] - MOBY(moby)->pos.x,
-                                   ((float *)(path + (next << 4)))[5] - MOBY(moby)->pos.y);
+        int    next_path_node_index = dummy_data->node + dummy_data->step;
+        float  angle =
+            fast_arc_tan(((float *)(path + (next_path_node_index << 4)))[4] - MOBY(moby)->pos.x,
+                         ((float *)(path + (next_path_node_index << 4)))[5] - MOBY(moby)->pos.y);
         approach_angle(yaw,
                        &dummy_data->turn,
                        angle,
@@ -326,7 +327,7 @@ void test_dummy_update(unsigned char *moby) {
                        frame_time_sq * 12.566371f,
                        D_0015ED6C * 25.132742f);
         if (fast_dec_timer(&dummy_data->timer)) {
-            dummy_data->node = next;
+            dummy_data->node = next_path_node_index;
             if (moby[0x53] != 10) {
                 blend_moby_animation(moby, 10, 0, scale_game_frames(10));
             }
@@ -532,7 +533,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
     int         status;
     float       amount;
     L16HitData *hit_data;
-    char       *record;
+    char       *dummy_hit_record;
 
     if (hit_moby->state == 1) {
         return;
@@ -561,8 +562,8 @@ void update_test_dummy_damage_and_respawn(void *moby) {
         FUN_L16_002cee70_c((char *)hit_moby);
     }
     amount = 0.0f;
-    record = find_moby_hit(hit_moby, 0x330000, 0);
-    hit_reaction(hit_moby, record, &hit_data->health, 0, &status, &amount, 0, 4);
+    dummy_hit_record = find_moby_hit(hit_moby, 0x330000, 0);
+    hit_reaction(hit_moby, dummy_hit_record, &hit_data->health, 0, &status, &amount, 0, 4);
     if (status != 1 && hit_moby->state != 10 && hit_moby->state != 11) {
         hit_data->health -= amount;
         if (hit_data->health <= 0.0f) {
@@ -588,7 +589,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
             if (hit_moby->animation != 8) {
                 blend_moby_animation(hit_moby, 8, 2, 1);
             } else {
-                record = 0;
+                dummy_hit_record = 0;
             }
             hit_data->reaction_time = 120;
             trooper_anim_update(hit_moby, hit_data->reaction);
@@ -647,10 +648,10 @@ int move_test_dummy_toward_position_and_heading(char *moby, void *target_positio
     float movement_delta[4] __attribute__((aligned(16)));
     float speed;
     float distance_to_target;
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *test_dummy_motion_data = ((char *)MOBY(moby)->pvars);
     *(OvlQuad *)target_position_copy = *(OvlQuad *)target_position;
     approach_angle((float *)&MOBY(moby)->rot.z,
-                   (float *)(data + 0x100),
+                   (float *)(test_dummy_motion_data + 0x100),
                    angle,
                    frame_time_sq * 12.566371f,
                    frame_time_sq * 12.566371f,
@@ -663,11 +664,11 @@ int move_test_dummy_toward_position_and_heading(char *moby, void *target_positio
                                frame_time_sq * 12.0f,
                                D_0015ED6C * 6.0f,
                                &speed,
-                               (float *)(data + 0xFC));
-    fast_vec_normalize(movement_delta, movement_delta, *(float *)(data + 0xFC));
+                               (float *)(test_dummy_motion_data + 0xFC));
+    fast_vec_normalize(movement_delta, movement_delta, *(float *)(test_dummy_motion_data + 0xFC));
     fast_vec_add(moby + 0x10, moby + 0x10, movement_delta);
     if (distance_to_target < 0.05f) {
-        if (*(float *)(data + 0xFC) < 0.005f)
+        if (*(float *)(test_dummy_motion_data + 0xFC) < 0.005f)
             return 1;
         else
             return 0;
@@ -691,7 +692,7 @@ void update_test_dummy_group_glow_phases(struct Moby *moby) {
     short *group_entry;
     float  angle_increment;
     char  *group_moby;
-    char  *data;
+    char  *test_dummy_group_member_data;
     if (moby->group != 0xFF) {
         angle_increment = test_dummy_glow_phase_rate_degrees * DEG_TO_RAD * D_0015ED6C;
         group_entry = (short *)D_L16_001ABCC0_c2[moby->group];
@@ -701,10 +702,10 @@ void update_test_dummy_group_glow_phases(struct Moby *moby) {
                 (char *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) + (int)D_L16_0015FFD8);
             if (MOBY(group_moby)->oclass != 0x21D)
                 goto again;
-            data = ((char *)MOBY(group_moby)->pvars);
-            *(int *)(data + 0x118) = D_L16_0015F5CC;
-            *(float *)(data + 0x11C) =
-                fast_add_rotations(*(float *)(data + 0x11C), angle_increment);
+            test_dummy_group_member_data = ((char *)MOBY(group_moby)->pvars);
+            *(int *)(test_dummy_group_member_data + 0x118) = D_L16_0015F5CC;
+            *(float *)(test_dummy_group_member_data + 0x11C) = fast_add_rotations(
+                *(float *)(test_dummy_group_member_data + 0x11C), angle_increment);
         } while (*group_entry++ >= 0);
         add_draw_callback(draw_test_dummy_group_glows, moby);
     }

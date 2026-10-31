@@ -216,7 +216,7 @@ void ensure_drone_attached_particles(struct Moby *owner_moby) {
 char *select_nearest_drone_target(char *search_position, int *excl) __asm__("FUN_L00_002cdf28");
 
 char *select_nearest_drone_target(char *search_position, int *excl) {
-    char *result = 0;
+    char *nearest_target_moby = 0;
     char *candidate_moby;
     float best = 1e9f;
     float candidate_position_scratch[4];
@@ -296,10 +296,10 @@ char *select_nearest_drone_target(char *search_position, int *excl) {
         if (collision_line(
                 search_position, candidate_position_scratch, 6, (int)candidate_moby, 0) == 0) {
             best = search_to_candidate_distance;
-            result = candidate_moby;
+            nearest_target_moby = candidate_moby;
         }
     }
-    return result;
+    return nearest_target_moby;
 }
 
 /* Spawns moby 0x1DF at pos, aims it at the player and puts it in the first
@@ -355,7 +355,7 @@ void update_drone(struct Moby *updated_moby) {
     Vec4         target_pos, matrix[4];
     struct Moby *target;
     struct Moby *closest;
-    struct Moby *other;
+    struct Moby *selected_target_moby;
     f32          f, distance;
     s32          i, count, category, random, health;
     s32          state;
@@ -402,11 +402,12 @@ void update_drone(struct Moby *updated_moby) {
             }
             for (exclusion_clear_index = count; exclusion_clear_index < 9; exclusion_clear_index++)
                 ((DroneSlots *)&hero)->exclusions[exclusion_clear_index] = 0;
-            other = func_L00_002CF3D8_2CF808(&hero.motion, ((DroneSlots *)&hero)->exclusions);
-            if (other != 0) {
+            selected_target_moby =
+                func_L00_002CF3D8_2CF808(&hero.motion, ((DroneSlots *)&hero)->exclusions);
+            if (selected_target_moby != 0) {
                 char *h;
-                h = get_moby_target_info(other);
-                qcopy(&old_pos, &other->pos);
+                h = get_moby_target_info(selected_target_moby);
+                qcopy(&old_pos, &selected_target_moby->pos);
                 if (h != 0)
                     old_pos.f[2] += *(f32 *)(h + 0x10);
                 for (i = 0; i < 6; i++) {
@@ -426,10 +427,10 @@ void update_drone(struct Moby *updated_moby) {
                 if (closest != 0) {
                     DroneVars *assigned = (DroneVars *)closest->pvars;
                     char      *target_height_data;
-                    assigned->target = other;
-                    assigned->target_oclass = other->oclass;
-                    target_height_data = get_moby_target_info(other);
-                    qcopy(&old_pos, &other->pos);
+                    assigned->target = selected_target_moby;
+                    assigned->target_oclass = selected_target_moby->oclass;
+                    target_height_data = get_moby_target_info(selected_target_moby);
+                    qcopy(&old_pos, &selected_target_moby->pos);
                     if (target_height_data != 0)
                         old_pos.f[2] += *(f32 *)(target_height_data + 0x10);
                     qcopy(&assigned->offset, &old_pos);
@@ -443,13 +444,14 @@ void update_drone(struct Moby *updated_moby) {
         {
             s32 capacity = ((DroneSlots *)&hero)->ammo_used;
             s32 divisor = capacity ? capacity : 1;
-            s32 next = capacity + 1;
+            s32 pitch_index_modulus = capacity + 1;
             s32 counter = ((DroneSlots *)&hero)->counter;
-            if (next == 0)
-                next = 1;
+            if (pitch_index_modulus == 0)
+                pitch_index_modulus = 1;
             drone_vars->desired_yaw =
                 convert_integer_to_float(counter) / (f32)divisor * 6.2831855f - 3.1415927f;
-            drone_vars->pitch = (convert_integer_to_float((counter * (next / 5)) % next) /
+            drone_vars->pitch = (convert_integer_to_float((counter * (pitch_index_modulus / 5)) %
+                                                          pitch_index_modulus) /
                                      (f32)divisor * 6.2831855f -
                                  3.1415927f) *
                                 0.25f;

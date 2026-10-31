@@ -6,13 +6,13 @@ extern u32 hud_heap_base[4] __asm__("D_001940CC");
 void hud_heap_reset(void) __asm__("InitializeResourceEntry");
 
 void hud_heap_reset(void) {
-    u32              base;
-    struct HudState *entry;
+    u32              heap_start_address;
+    struct HudState *hud_state_ptr;
 
-    base = hud_heap_base[0];
-    entry = &hud_state;
-    entry->heap_cur = base;
-    entry->heap_end = base + 0x64000;
+    heap_start_address = hud_heap_base[0];
+    hud_state_ptr = &hud_state;
+    hud_state_ptr->heap_cur = heap_start_address;
+    hud_state_ptr->heap_end = heap_start_address + 0x64000;
 }
 
 /* Recovered original symbol name. */

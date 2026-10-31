@@ -61,7 +61,7 @@ void lieutenant_update(struct Moby *moby) {
     Vec4               pos;
     Vec4               rot;
     Vec4              *rotation_ptr;
-    struct VendorVars *vars = (struct VendorVars *)moby->pvars;
+    struct VendorVars *lieutenant_dialogue_vars = (struct VendorVars *)moby->pvars;
 
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L04_00166F40) < 30.0f) {
         FUN_L00_0025a120(moby);
@@ -77,18 +77,18 @@ void lieutenant_update(struct Moby *moby) {
             break;
         }
         moby->state = 1;
-        initialize_npc_dialogue(moby, vars);
+        initialize_npc_dialogue(moby, lieutenant_dialogue_vars);
         break;
     case LIEUTENANT_STATE_UPDATE_DIALOGUE:
-        if (FUN_00214720(&hero.motion.pos, vars->item))
-            vars->alpha = 255.0f;
+        if (FUN_00214720(&hero.motion.pos, lieutenant_dialogue_vars->item))
+            lieutenant_dialogue_vars->alpha = 255.0f;
         else
-            vars->alpha = 1.0f;
-        if (update_npc_dialogue(moby, vars))
+            lieutenant_dialogue_vars->alpha = 1.0f;
+        if (update_npc_dialogue(moby, lieutenant_dialogue_vars))
             moby->state = 2;
         break;
     case LIEUTENANT_STATE_UNLOCK_PLANET_AND_DISABLE:
-        if (vars->phase == 2) {
+        if (lieutenant_dialogue_vars->phase == 2) {
             unlock_planet(6);
             jet_clear_persistent(((struct VendorMobyView *)moby)->slot);
             fast_vec_normalize(&pos, &((struct VendorMobyView *)moby)->facing, 2.0f);
@@ -106,7 +106,7 @@ void lieutenant_update(struct Moby *moby) {
             break;
         }
         if (D_L04_0015F5C4 != 2)
-            update_npc_dialogue(moby, vars);
+            update_npc_dialogue(moby, lieutenant_dialogue_vars);
         break;
     case LIEUTENANT_STATE_DISABLED:
         moby->flags |= 0x41;

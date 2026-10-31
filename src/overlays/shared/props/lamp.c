@@ -107,12 +107,12 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     float  offset_a_x, offset_a_z, offset_b_x, offset_b_z;
     int    i, j, k;
     float *vertex_a, *vertex_b;
-    char  *vars = (char *)moby->pvars;
+    char  *moby_wobble_vars = (char *)moby->pvars;
 
     moby_point_position(moby, 0, position);
     clear_u64_value(rotation);
     rotation[2] = moby->rot.z;
-    rotation[1] = fast_sin(*(float *)(vars + 0x48)) * 0.5235988f + 0.5235988f;
+    rotation[1] = fast_sin(*(float *)(moby_wobble_vars + 0x48)) * 0.5235988f + 0.5235988f;
     side = matrix;
     euler_rotation_matrix(side, rotation);
     direction = matrix + 4;

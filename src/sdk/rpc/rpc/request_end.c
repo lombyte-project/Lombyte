@@ -33,9 +33,9 @@ struct sceSifClientData {
 extern s32 iSignalSema();
 extern s32 free_rpc_packet() __asm__("func_0011AD90");
 
-void _request_end(struct EndPkt *request, void *data) {
+void _request_end(struct EndPkt *request, void *unused_handler_data) {
     struct sceSifClientData *cd;
-    (void)data;
+    (void)unused_handler_data;
     if (request->cid == 0x8000000A)
         goto case_a;
     if ((u32)request->cid > 0x8000000AU)

@@ -4,8 +4,8 @@
 
 void music_transition_start_callback(int handle, long context) __asm__("FUN_00216a80");
 
-void music_transition_start_callback(int handle, long context) {
-    short *channel_state = (short *)(int)context;
+void music_transition_start_callback(int handle, long channel_state_address) {
+    short *channel_state = (short *)(int)channel_state_address;
     if (channel_state != 0) {
         *(int *)channel_state = handle;
         if (handle != 0) {

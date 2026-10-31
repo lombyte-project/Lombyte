@@ -42,29 +42,32 @@ void update_mine(struct Moby *moby) {
         STATE_APPROACH_NEARBY_TARGET = 3,
         STATE_WAIT_TO_RESUME_APPROACH = 4
     };
-    char *data = (char *)moby->pvars;
+    char *class_238_update_private_vars = (char *)moby->pvars;
     float settling_displacement_or_steering_increment[4];
     update_mine_detonation(moby);
     switch (moby->state) {
     case STATE_INITIALIZE:
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xEFFF;
-        *(void **)(data + 0xD0) = &D_L18_00161988;
-        *(float *)(data + 0x30) = 0.05f;
+        *(void **)(class_238_update_private_vars + 0xD0) = &D_L18_00161988;
+        *(float *)(class_238_update_private_vars + 0x30) = 0.05f;
         moby->state = 5;
         break;
     case STATE_BALLISTIC_FLIGHT:
-        fast_vec_add(&moby->pos, &moby->pos, data + 0x180);
-        *(float *)(data + 0x188) -= frame_time_sq * 10.0f;
-        if (moby->pos.z < *(float *)(data + 0x178)) {
-            moby->pos.z = *(float *)(data + 0x178);
+        fast_vec_add(&moby->pos, &moby->pos, class_238_update_private_vars + 0x180);
+        *(float *)(class_238_update_private_vars + 0x188) -= frame_time_sq * 10.0f;
+        if (moby->pos.z < *(float *)(class_238_update_private_vars + 0x178)) {
+            moby->pos.z = *(float *)(class_238_update_private_vars + 0x178);
             moby->state = 2;
-            *(float *)(data + 0x188) = -(D_L18_00161994 * 2.0f * frame_time);
+            *(float *)(class_238_update_private_vars + 0x188) =
+                -(D_L18_00161994 * 2.0f * frame_time);
         }
         break;
     case STATE_POST_FLIGHT_SETTLING: {
         float settling_motion_step =
-            approach_value((float *)(data + 0x188), 0.0f, D_L18_00161994 * 2.0f * frame_time_sq);
+            approach_value((float *)(class_238_update_private_vars + 0x188),
+                           0.0f,
+                           D_L18_00161994 * 2.0f * frame_time_sq);
         moby->rot.y += settling_motion_step;
         settling_displacement_or_steering_increment[0] =
             fast_cos(moby->rot.z) * settling_motion_step;
@@ -72,7 +75,7 @@ void update_mine(struct Moby *moby) {
             fast_sin(moby->rot.z) * settling_motion_step;
         settling_displacement_or_steering_increment[2] = 0.0f;
         fast_vec_add(&moby->pos, &moby->pos, settling_displacement_or_steering_increment);
-        if (*(float *)(data + 0x188) == 0.0f) {
+        if (*(float *)(class_238_update_private_vars + 0x188) == 0.0f) {
             if (moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, scale_game_frames(12));
             }
@@ -112,7 +115,7 @@ void update_mine(struct Moby *moby) {
                                          settling_displacement_or_steering_increment,
                                          horizontal_steering_increment_limit);
                 }
-                movement_step = data + 0x40;
+                movement_step = class_238_update_private_vars + 0x40;
                 fast_vec_add(
                     movement_step, movement_step, settling_displacement_or_steering_increment);
                 if (movement_step_limit < vector_length_xy(movement_step)) {
@@ -120,24 +123,25 @@ void update_mine(struct Moby *moby) {
                 }
                 FUN_L00_00258830((int)moby, (int)movement_step, 0.0f, 0.5f, 0.0f, 0);
                 fast_vec_sub(movement_step, &moby->pos, previous_position);
-                if (0.0f < *(float *)(data + 0x48)) {
-                    *(float *)(data + 0x48) = 0.0f;
-                } else if (*(float *)(data + 0x48) < -movement_step_limit) {
-                    *(float *)(data + 0x48) = -movement_step_limit;
+                if (0.0f < *(float *)(class_238_update_private_vars + 0x48)) {
+                    *(float *)(class_238_update_private_vars + 0x48) = 0.0f;
+                } else if (*(float *)(class_238_update_private_vars + 0x48) <
+                           -movement_step_limit) {
+                    *(float *)(class_238_update_private_vars + 0x48) = -movement_step_limit;
                 }
                 if (*(char **)(target_search_output + 0x40) != (char *)D_001413D0[0]) {
                     if (fast_vec_dist(*(char **)(target_search_output + 0x40) + 0x10, &moby->pos) <
                         2.0f) {
-                        *(int *)(data + 0x19C) = 1;
+                        *(int *)(class_238_update_private_vars + 0x19C) = 1;
                     }
                 }
             }
         }
         break;
     case STATE_WAIT_TO_RESUME_APPROACH:
-        if (FUN_L00_002dc9f0(moby, data + 0x110)) {
+        if (FUN_L00_002dc9f0(moby, class_238_update_private_vars + 0x110)) {
             moby->state = 3;
-            *(short *)(data + 0xC8) = 0;
+            *(short *)(class_238_update_private_vars + 0xC8) = 0;
         }
         break;
     }
@@ -199,18 +203,19 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
     char  *found = 0;
     short *moby_list_entry = (short *)D_L18_001AC240_lui[moby_list_index];
     char  *moby;
-    char  *data;
+    char  *class_238_private_vars;
     char  *d2;
     if (moby_list_entry == 0) {
         return 0;
     }
     {
-        char          *base = D_L18_0015FFD8_m;
+        char          *moby_instance_array_base = D_L18_0015FFD8_m;
         unsigned short encoded_moby_entry;
         do {
             encoded_moby_entry = *moby_list_entry;
             {
-                char *candidate_moby = base + ((encoded_moby_entry & 0x7FFF) << 8);
+                char *candidate_moby =
+                    moby_instance_array_base + ((encoded_moby_entry & 0x7FFF) << 8);
                 if (MOBY(candidate_moby)->oclass == 0x238) {
                     if (((unsigned char *)candidate_moby)[0x20] == 5) {
                         found = candidate_moby;
@@ -243,22 +248,25 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
                              vector_length_xy(adjusted_target_position) -
                                  *(float *)&mine_launch_pitch_and_setback_gp);
         fast_vec_add(adjusted_target_position, adjusted_target_position, launch_position);
-        data = ((char *)MOBY(moby)->pvars);
-        qcopy(data + 0x170, adjusted_target_position);
-        fast_vec_sub(data + 0x180, adjusted_target_position, launch_position);
-        *(int *)(data + 0x188) = 0;
-        fast_vec_normalize(data + 0x180, data + 0x180, horizontal_speed);
+        class_238_private_vars = ((char *)MOBY(moby)->pvars);
+        qcopy(class_238_private_vars + 0x170, adjusted_target_position);
+        fast_vec_sub(class_238_private_vars + 0x180, adjusted_target_position, launch_position);
+        *(int *)(class_238_private_vars + 0x188) = 0;
+        fast_vec_normalize(
+            class_238_private_vars + 0x180, class_238_private_vars + 0x180, horizontal_speed);
         ballistic_gravity_magnitude = frame_time_sq * 10.0f;
-        *(short *)(data + 0xC8) = 0;
-        *(float *)(data + 0x188) = FUN_L00_0025abf0_q(launch_position,
-                                                      adjusted_target_position,
-                                                      0,
-                                                      horizontal_speed,
-                                                      -ballistic_gravity_magnitude);
-        MOBY(moby)->rot.z = fast_arc_tan(*(float *)(data + 0x180), *(float *)(data + 0x184));
-        *(int *)(data + 0x194) = detonation_countdown;
-        *(int *)(data + 0x198) = launching_moby;
-        *(int *)(data + 0x19C) = 0;
+        *(short *)(class_238_private_vars + 0xC8) = 0;
+        *(float *)(class_238_private_vars + 0x188) =
+            FUN_L00_0025abf0_q(launch_position,
+                               adjusted_target_position,
+                               0,
+                               horizontal_speed,
+                               -ballistic_gravity_magnitude);
+        MOBY(moby)->rot.z = fast_arc_tan(*(float *)(class_238_private_vars + 0x180),
+                                         *(float *)(class_238_private_vars + 0x184));
+        *(int *)(class_238_private_vars + 0x194) = detonation_countdown;
+        *(int *)(class_238_private_vars + 0x198) = launching_moby;
+        *(int *)(class_238_private_vars + 0x19C) = 0;
         allocate_voice_for_target_entry(0, 0, (int)moby);
     }
     return moby;

@@ -15,7 +15,7 @@ extern struct E hud_chan_slots[] __asm__("D_00199B60");
 
 void set_animation_parameter(s32 anim_id, s32 value) __asm__("FUN_001ff570");
 
-void set_animation_parameter(s32 anim_id, s32 value) {
+void set_animation_parameter(s32 anim_id, s32 requested_parameter_value) {
     s32       i;
     struct E *e;
 
@@ -25,9 +25,9 @@ void set_animation_parameter(s32 anim_id, s32 value) {
         }
     }
     if (i < 13) {
-        hud_chan_slots[i].unk24 = value;
+        hud_chan_slots[i].unk24 = requested_parameter_value;
         if (hud_chan_slots[i].unk68 == 0) {
-            hud_chan_slots[i].unk4 = value;
+            hud_chan_slots[i].unk4 = requested_parameter_value;
         }
     }
 }

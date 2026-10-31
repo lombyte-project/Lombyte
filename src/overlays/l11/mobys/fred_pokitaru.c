@@ -74,7 +74,7 @@ void fred_pokitaru_update(struct Moby *moby) {
         FRED_POKITARU_CHECK_DIALOGUE = 1,
         FRED_POKITARU_WAIT_FOR_DIALOGUE_END = 2
     };
-    L16WatchScratch       scratch;
+    L16WatchScratch       sentry_look_tracking_vectors;
     struct PokSentryVars *moby_vars = (struct PokSentryVars *)moby->pvars;
     float                 rate;
     float                 head_rate;
@@ -117,10 +117,10 @@ void fred_pokitaru_update(struct Moby *moby) {
         if (D_0014C050[moby->mission + D_0015ED84 * 16] != 0xFF &&
             fast_vec_dist(hero.motion.pos.f, &moby->pos) < 4.0f &&
             absolute_float(hero.motion.pos.f[2] - moby->pos.z) < 4.0f) {
-            char *entry;
+            char *camera_reset_path_point;
             jet_clear_persistent(moby->mission);
-            entry = (char *)l11_cuboids + moby_vars->slot * 128;
-            jet_reset_camera(entry + 0x30, entry + 0x70);
+            camera_reset_path_point = (char *)l11_cuboids + moby_vars->slot * 128;
+            jet_reset_camera(camera_reset_path_point + 0x30, camera_reset_path_point + 0x70);
         }
         break;
     case FRED_POKITARU_WAIT_FOR_DIALOGUE_END:
@@ -168,22 +168,26 @@ void fred_pokitaru_update(struct Moby *moby) {
             fast_vec_add(moby_vars->target, moby_vars->target, &moby->pos);
         }
         if (moby_vars->moving_timer) {
-            qcopy(scratch.target, hero.motion.body_center.f);
+            qcopy(sentry_look_tracking_vectors.target, hero.motion.body_center.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, moby_vars->target);
+            qcopy(sentry_look_tracking_vectors.target, moby_vars->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, &moby->pos);
-        scratch.eye[2] += 1.0f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw =
-            fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->rot.z);
-        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
+        qcopy(sentry_look_tracking_vectors.eye, &moby->pos);
+        sentry_look_tracking_vectors.eye[2] += 1.0f;
+        fast_vec_sub(sentry_look_tracking_vectors.delta,
+                     sentry_look_tracking_vectors.target,
+                     sentry_look_tracking_vectors.eye);
+        yaw = fast_subtract_rotations(fast_arc_tan(sentry_look_tracking_vectors.delta[0],
+                                                   sentry_look_tracking_vectors.delta[1]),
+                                      moby->rot.z);
+        pitch = -fast_arc_tan(vector_length_xy(sentry_look_tracking_vectors.delta),
+                              sentry_look_tracking_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

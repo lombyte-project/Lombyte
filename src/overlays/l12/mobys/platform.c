@@ -162,7 +162,7 @@ void  compute_platform_target_tilt(struct Moby *moby,
                                    float       *out,
                                    int          on) __asm__("FUN_L12_002e3e28");
 
-void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
+void compute_platform_target_tilt(struct Moby *moby, float *target_tilt_angles, int on) {
     float inverse_yaw_angles[4];
     float reference_offset[4];
     float inverse_yaw_matrix[4];
@@ -175,11 +175,11 @@ void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
         euler_rotation_matrix(inverse_yaw_matrix, inverse_yaw_angles);
         transform_vector(reference_offset, reference_offset, inverse_yaw_matrix);
         offset_scale_divisor = platform_tilt_offset_divisor_gp;
-        out[1] = reference_offset[0] / offset_scale_divisor;
-        out[0] = -reference_offset[1] / offset_scale_divisor;
+        target_tilt_angles[1] = reference_offset[0] / offset_scale_divisor;
+        target_tilt_angles[0] = -reference_offset[1] / offset_scale_divisor;
     } else {
-        out[0] = 0;
-        out[1] = 0;
+        target_tilt_angles[0] = 0;
+        target_tilt_angles[1] = 0;
     }
 }
 /* Update of the Hoven flying platform (class 240): follows or eases along its path, bobs, falls, and reports its motion. */
@@ -280,63 +280,63 @@ void platform_update(Moby *moby) {
     float        angles[4];
     float        goal[4];
     float        to_goal[4];
-    Data_2E51E8 *data;
+    Data_2E51E8 *platform_vars;
 
-    data = (*(Data_2E51E8 **)&moby->pvars);
+    platform_vars = (*(Data_2E51E8 **)&moby->pvars);
     qcopy(oldPos, (*(float(*)[4]) & moby->pos));
     qcopy(oldRot, (*(float(*)[4]) & moby->rot));
-    if (moby->state != 0 && data->fFC != -1 &&
-        (signed char)(*(Moby **)&D_L12_0015FFD8_p)[data->fFC].state >= 0) {
+    if (moby->state != 0 && platform_vars->fFC != -1 &&
+        (signed char)(*(Moby **)&D_L12_0015FFD8_p)[platform_vars->fFC].state >= 0) {
         emit_platform_exhaust_effects((char *)moby);
         return;
     }
-    if (moby->state != 0 && data->fDC != -1 &&
-        count_active_moby_group_members(data->fDC, -1) != 0) {
+    if (moby->state != 0 && platform_vars->fDC != -1 &&
+        count_active_moby_group_members(platform_vars->fDC, -1) != 0) {
         emit_platform_exhaust_effects((char *)moby);
         return;
     }
     switch (moby->state) {
     case PLATFORM_INITIALIZE:
-        switch (data->kind) {
+        switch (platform_vars->kind) {
         case PLATFORM_KIND_FOLLOW_WAYPOINTS:
             (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
-            data->walk.path = ((Path *)l12_paths[data->walk.pathIdx]);
-            data->walk.idx = 0;
-            data->walk.dir = 1;
-            if (data->fD0 == 0.0f)
-                data->fD0 = 6.0f;
-            if (data->fD4 == 0.0f)
-                data->fD4 = 6.0f;
-            data->f3E |= 9;
-            clear_u64_value(data->vel);
+            platform_vars->walk.path = ((Path *)l12_paths[platform_vars->walk.pathIdx]);
+            platform_vars->walk.idx = 0;
+            platform_vars->walk.dir = 1;
+            if (platform_vars->fD0 == 0.0f)
+                platform_vars->fD0 = 6.0f;
+            if (platform_vars->fD4 == 0.0f)
+                platform_vars->fD4 = 6.0f;
+            platform_vars->f3E |= 9;
+            clear_u64_value(platform_vars->vel);
             moby->state = 7;
             break;
         case PLATFORM_KIND_OSCILLATE_BETWEEN_PATH_ENDPOINTS:
             (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
-            data->walk.path = ((Path *)l12_paths[data->walk.pathIdx]);
-            data->walk.idx = 0;
-            data->walk.dir = 1;
-            if (data->fD4 == 0.0f)
-                data->fD4 = 2.0f;
-            if (data->fD0 == 0.0f)
-                data->fD0 = 4.0f;
-            data->fD8 = random_angle_radians();
-            data->f3E |= 9;
-            clear_u64_value(data->vel);
+            platform_vars->walk.path = ((Path *)l12_paths[platform_vars->walk.pathIdx]);
+            platform_vars->walk.idx = 0;
+            platform_vars->walk.dir = 1;
+            if (platform_vars->fD4 == 0.0f)
+                platform_vars->fD4 = 2.0f;
+            if (platform_vars->fD0 == 0.0f)
+                platform_vars->fD0 = 4.0f;
+            platform_vars->fD8 = random_angle_radians();
+            platform_vars->f3E |= 9;
+            clear_u64_value(platform_vars->vel);
             moby->state = 2;
             break;
         case PLATFORM_KIND_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH:
             (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
             (*(float(*)[4]) & moby->rot)[1] = -1.5707964f;
             (*(float(*)[4]) & moby->rot)[2] = (*(float(*)[4]) & moby->rot)[2] + 3.1415927f;
-            data->walk.path = ((Path *)l12_paths[data->walk.pathIdx]);
-            data->walk.idx = 0;
-            data->walk.dir = 1;
-            if (data->fD4 == 0.0f)
-                data->fD4 = 8.0f;
-            if (data->fD0 == 0.0f)
-                data->fD0 = 8.0f;
-            clear_u64_value(data->vel);
+            platform_vars->walk.path = ((Path *)l12_paths[platform_vars->walk.pathIdx]);
+            platform_vars->walk.idx = 0;
+            platform_vars->walk.dir = 1;
+            if (platform_vars->fD4 == 0.0f)
+                platform_vars->fD4 = 8.0f;
+            if (platform_vars->fD0 == 0.0f)
+                platform_vars->fD0 = 8.0f;
+            clear_u64_value(platform_vars->vel);
             moby->state = 4;
             break;
         case PLATFORM_KIND_DISABLE_DRAWING_AND_COLLISION:
@@ -346,24 +346,24 @@ void platform_update(Moby *moby) {
             break;
         case PLATFORM_KIND_TRACK_REFERENCED_MOBY_HEIGHT:
             moby->state = 9;
-            data->fD4 = 4.0f;
-            data->fD0 = 4.0f;
-            data->f3E &= 0xFFFE;
+            platform_vars->fD4 = 4.0f;
+            platform_vars->fD0 = 4.0f;
+            platform_vars->f3E &= 0xFFFE;
             break;
         }
         break;
     case PLATFORM_FOLLOW_WAYPOINTS: {
-        Walk *w = &data->walk;
+        Walk *w = &platform_vars->walk;
         Path *path;
-        int   next;
+        int   next_waypoint_index;
         emit_platform_exhaust_effects((char *)moby);
         path = w->path;
-        next = (w->idx + path->n + w->dir) % path->n;
-        qcopy(goal, &path->nodes[next]);
-        if (fast_vec_dist((*(float(*)[4]) & moby->pos), &path->nodes[next]) < 0.5f) {
-            data->walk.idx = next;
-            if (data->walk.path->nodes[next].w != -1.0f) {
-                data->fD0 = data->walk.path->nodes[next].w;
+        next_waypoint_index = (w->idx + path->n + w->dir) % path->n;
+        qcopy(goal, &path->nodes[next_waypoint_index]);
+        if (fast_vec_dist((*(float(*)[4]) & moby->pos), &path->nodes[next_waypoint_index]) < 0.5f) {
+            platform_vars->walk.idx = next_waypoint_index;
+            if (platform_vars->walk.path->nodes[next_waypoint_index].w != -1.0f) {
+                platform_vars->fD0 = platform_vars->walk.path->nodes[next_waypoint_index].w;
             }
         }
         fast_vec_sub(to_goal, goal, (*(float(*)[4]) & moby->pos));
@@ -378,14 +378,14 @@ void platform_update(Moby *moby) {
         break;
     }
     case PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS: {
-        Path *path = data->walk.path;
+        Path *path = platform_vars->walk.path;
         float swing;
-        data->fD4 = 0.0f;
-        data->fD8 = fast_add_rotations(data->fD8, D_0015ED6C * 1.2217305f);
-        swing = fast_sin(data->fD8);
-        if (data->fD8 > 1.5707964f && data->fD8 < 3.1415927f)
+        platform_vars->fD4 = 0.0f;
+        platform_vars->fD8 = fast_add_rotations(platform_vars->fD8, D_0015ED6C * 1.2217305f);
+        swing = fast_sin(platform_vars->fD8);
+        if (platform_vars->fD8 > 1.5707964f && platform_vars->fD8 < 3.1415927f)
             swing = 2.0f - swing;
-        if (data->fD8 > -3.1415927f && data->fD8 < -1.5707964f)
+        if (platform_vars->fD8 > -3.1415927f && platform_vars->fD8 < -1.5707964f)
             swing = 2.0f - swing;
         swing = swing * 0.5f;
         swing = swing + 0.5f;
@@ -406,13 +406,13 @@ void platform_update(Moby *moby) {
         break;
     }
     case PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH: {
-        Path *path = data->walk.path;
+        Path *path = platform_vars->walk.path;
         float swing;
-        data->fD8 = fast_add_rotations(data->fD8, D_0015ED6C * 1.2217305f);
-        swing = fast_sin(data->fD8);
-        if (data->fD8 > 1.5707964f && data->fD8 < 3.1415927f)
+        platform_vars->fD8 = fast_add_rotations(platform_vars->fD8, D_0015ED6C * 1.2217305f);
+        swing = fast_sin(platform_vars->fD8);
+        if (platform_vars->fD8 > 1.5707964f && platform_vars->fD8 < 3.1415927f)
             swing = 2.0f - swing;
-        if (data->fD8 > -3.1415927f && data->fD8 < -1.5707964f)
+        if (platform_vars->fD8 > -3.1415927f && platform_vars->fD8 < -1.5707964f)
             swing = 2.0f - swing;
         swing = swing * 0.5f;
         swing = swing + 0.5f;
@@ -427,11 +427,11 @@ void platform_update(Moby *moby) {
     }
     case PLATFORM_WAIT_TO_RESUME_OSCILLATION:
         angles[2] = (*(float(*)[4]) & moby->rot)[2];
-        if (fast_dec_timer(&data->timer)) {
-            if (data->walk.dir == 1) {
-                data->walk.dir = 2;
+        if (fast_dec_timer(&platform_vars->timer)) {
+            if (platform_vars->walk.dir == 1) {
+                platform_vars->walk.dir = 2;
             } else {
-                data->walk.dir = 1;
+                platform_vars->walk.dir = 1;
             }
             moby->state = 2;
         }
@@ -444,35 +444,37 @@ void platform_update(Moby *moby) {
         }
         break;
     case PLATFORM_WAIT_TO_RESUME_FIXED_PITCH_OSCILLATION:
-        if (fast_dec_timer(&data->timer)) {
-            if (data->walk.dir == 1) {
-                data->walk.dir = 2;
+        if (fast_dec_timer(&platform_vars->timer)) {
+            if (platform_vars->walk.dir == 1) {
+                platform_vars->walk.dir = 2;
             } else {
-                data->walk.dir = 1;
+                platform_vars->walk.dir = 1;
             }
             moby->state = 4;
         }
-        if (data->walk.dir == 2) {
+        if (platform_vars->walk.dir == 2) {
             emit_platform_exhaust_effects((char *)moby);
         }
         qcopy(angles, (*(float(*)[4]) & moby->rot));
         func_L12_002E4F18_2E51E8(moby, angles, (*(float(*)[4]) & moby->pos), 0, 1);
         break;
     case PLATFORM_ACCELERATE_UPWARD_UNTIL_NOT_VISIBLE:
-        if (fast_vec_length(data->vel) < D_0015ED6C * 6.0f) {
-            data->vel[2] = data->vel[2] + D_0015ED70 * 6.0f;
+        if (fast_vec_length(platform_vars->vel) < D_0015ED6C * 6.0f) {
+            platform_vars->vel[2] = platform_vars->vel[2] + D_0015ED70 * 6.0f;
         }
-        fast_vec_add((*(float(*)[4]) & moby->pos), (*(float(*)[4]) & moby->pos), data->vel);
+        fast_vec_add(
+            (*(float(*)[4]) & moby->pos), (*(float(*)[4]) & moby->pos), platform_vars->vel);
         if (moby->visible == 0) {
             mark_moby_for_removal(moby);
         }
         break;
     case PLATFORM_FALL_AND_TUMBLE:
-        fast_vec_add((*(float(*)[4]) & moby->pos), (*(float(*)[4]) & moby->pos), data->vel);
+        fast_vec_add(
+            (*(float(*)[4]) & moby->pos), (*(float(*)[4]) & moby->pos), platform_vars->vel);
         if (FUN_L08_002025d0((*(float(*)[4]) & moby->pos), 0x600, 0, moby, 0) &&
-            data->walk.path == 0) {
+            platform_vars->walk.path == 0) {
             spawn_explosion(moby,
-                            data->vel,
+                            platform_vars->vel,
                             0,
                             2.0f,
                             0.0f,
@@ -492,13 +494,14 @@ void platform_update(Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        data->vel[2] = data->vel[2] - D_0015ED70 * 7.0f;
+        platform_vars->vel[2] = platform_vars->vel[2] - D_0015ED70 * 7.0f;
         (*(float(*)[4]) & moby->rot)[0] =
-            fast_add_rotations(data->fE8, (*(float(*)[4]) & moby->rot)[0]);
+            fast_add_rotations(platform_vars->fE8, (*(float(*)[4]) & moby->rot)[0]);
         (*(float(*)[4]) & moby->rot)[1] =
-            fast_add_rotations(data->fEC, (*(float(*)[4]) & moby->rot)[1]);
-        if (data->walk.path != 0 &&
-            vector_distance_xy((*(float(*)[4]) & moby->pos), &data->walk.path->nodes[0]) < 0.5f) {
+            fast_add_rotations(platform_vars->fEC, (*(float(*)[4]) & moby->rot)[1]);
+        if (platform_vars->walk.path != 0 &&
+            vector_distance_xy((*(float(*)[4]) & moby->pos), &platform_vars->walk.path->nodes[0]) <
+                0.5f) {
             moby->state = 0;
         }
         if ((*(float(*)[4]) & moby->pos)[2] < 0.0f) {
@@ -507,7 +510,7 @@ void platform_update(Moby *moby) {
         break;
     case PLATFORM_TRACK_REFERENCED_MOBY_HEIGHT: {
         Moby *height_reference_moby =
-            (Moby *)((char *)(*(Moby **)&D_L12_0015FFD8_p) + (data->fF0 << 8));
+            (Moby *)((char *)(*(Moby **)&D_L12_0015FFD8_p) + (platform_vars->fF0 << 8));
         qcopy(angles, (*(float(*)[4]) & moby->pos));
         angles[2] = (*(float(*)[4]) & height_reference_moby->pos)[2];
         clear_u64_value(goal);
@@ -525,5 +528,5 @@ void platform_update(Moby *moby) {
     }
     }
     fast_vec_sub(delta, (*(float(*)[4]) & moby->pos), oldPos);
-    update_entity_matrix(data->f60, delta, oldRot, (*(float(*)[4]) & moby->rot));
+    update_entity_matrix(platform_vars->f60, delta, oldRot, (*(float(*)[4]) & moby->rot));
 }

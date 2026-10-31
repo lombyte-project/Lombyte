@@ -136,7 +136,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
     unsigned int state;
     FxVec        position;
     FxVec        predicted;
-    float        value;
+    float        animated_alpha;
     float        magnitude;
     float        current;
     float        target;
@@ -188,7 +188,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
         int          elapsed;
         int          random;
         int          max_ammo;
-        value_ptr = &value;
+        value_ptr = &animated_alpha;
         *value_ptr = (float)pickup_moby->alpha;
         duration = FUN_001f96f8_2c53c0(30);
         approach_value(value_ptr, 128.0f, (float)(128 / duration));
@@ -296,7 +296,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
         int    random;
         int    idx;
         phase = D_L00_0015F5CC_macro % 60;
-        value = (float)pickup_moby->alpha;
+        animated_alpha = (float)pickup_moby->alpha;
         angle = (float)phase / 60.0f;
         angle = angle * 6.28318f;
         angle = angle - 3.14159f;
@@ -304,7 +304,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
         oscillation = oscillation * 5.0f;
         oscillation = oscillation + 5.0f;
         target = (float)(FUN_001fa6d0_2c53c0(oscillation) + 10);
-        value_ptr = &value;
+        value_ptr = &animated_alpha;
         random = FUN_001f96f8_2c53c0(30);
         approach_value(value_ptr, target, (float)(128 / random));
         pickup_moby->alpha = FUN_001fa6d0_2c53c0(*value_ptr);

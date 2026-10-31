@@ -18,34 +18,34 @@ void update_triggered_moby_yaw(struct Moby *moby) {
         MOBY_WAIT_FOR_TRIGGER = 1,
         MOBY_APPROACH_SAVED_YAW_OFFSET = 2
     };
-    int *data = (int *)moby->pvars;
+    int *yaw_control_vars = (int *)moby->pvars;
 
     switch (moby->state) {
     case MOBY_INITIALIZE_YAW:
-        if (data[0] != 0)
+        if (yaw_control_vars[0] != 0)
             moby->flags |= 0x8000;
         moby->state = 1;
-        *(float *)&data[3] = moby->rot.z;
-        if (data[0] != 0)
+        *(float *)&yaw_control_vars[3] = moby->rot.z;
+        if (yaw_control_vars[0] != 0)
             moby->rot.z = fast_subtract_rotations(moby->rot.z, 1.5707964f);
         else
             moby->rot.z = fast_add_rotations(moby->rot.z, 1.5707964f);
         /* fall through */
     case MOBY_WAIT_FOR_TRIGGER:
-        if (((unsigned char *)*(int *)&D_L05_0015FFD8)[data[2] * 256 + 0xBC] != 0) {
+        if (((unsigned char *)*(int *)&D_L05_0015FFD8)[yaw_control_vars[2] * 256 + 0xBC] != 0) {
             allocate_voice_for_target_entry(0, 0, moby);
             moby->state = 2;
         }
         break;
     case MOBY_APPROACH_SAVED_YAW_OFFSET: {
         float target;
-        if (data[0] != 0)
-            target = fast_subtract_rotations(*(float *)&data[3], 0.6981317f);
+        if (yaw_control_vars[0] != 0)
+            target = fast_subtract_rotations(*(float *)&yaw_control_vars[3], 0.6981317f);
         else
-            target = fast_add_rotations(*(float *)&data[3], 0.6981317f);
+            target = fast_add_rotations(*(float *)&yaw_control_vars[3], 0.6981317f);
         approach_angle(&moby->rot.z,
                        target,
-                       (float *)&data[1],
+                       (float *)&yaw_control_vars[1],
                        frame_time_sq * 12.566371f,
                        frame_time_sq * 12.566371f,
                        frame_time * 12.566371f);

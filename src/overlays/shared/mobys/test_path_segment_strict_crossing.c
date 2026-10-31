@@ -30,11 +30,11 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
     OvlVec4              direction;
     OvlVec4              axis;
     OvlVec4              origin;
-    OvlVec4              first;
-    OvlVec4              next;
+    OvlVec4              transformed_previous_point;
+    OvlVec4              transformed_current_point;
     OvlVec4             *previous;
     OvlVec4             *current;
-    SegmentPath_261968 **entry;
+    SegmentPath_261968 **path_slot;
     s32                  i;
     s32                  offset;
     f32                  crossing;
@@ -48,22 +48,25 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
     axis.f[0] = direction.f[1];
     axis.f[1] = -direction.f[0];
     clear_u64_value(&origin);
-    entry = &D_L00_001B04B0_261968[path_index];
+    path_slot = &D_L00_001B04B0_261968[path_index];
     origin.f[2] = 1.0f;
-    fast_vec_sub(&first, &(*entry)->points[0], start);
-    transform_vector_by_basis(&first, &first, &direction);
-    previous = &first;
-    current = &next;
-    if (i < (*entry)->count) {
+    fast_vec_sub(&transformed_previous_point, &(*path_slot)->points[0], start);
+    transform_vector_by_basis(&transformed_previous_point, &transformed_previous_point, &direction);
+    previous = &transformed_previous_point;
+    current = &transformed_current_point;
+    if (i < (*path_slot)->count) {
         offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(current, (OvlVec4 *)((u8 *)*entry + offset), start);
+            fast_vec_sub(current, (OvlVec4 *)((u8 *)*path_slot + offset), start);
             transform_vector_by_basis(current, current, &direction);
-            if (first.f[3] != zero || next.f[3] != zero) {
-                if (next.f[1] * first.f[1] < 0.0f) {
-                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - next.f[1]) * -next.f[1] +
-                               next.f[0];
+            if (transformed_previous_point.f[3] != zero || transformed_current_point.f[3] != zero) {
+                if (transformed_current_point.f[1] * transformed_previous_point.f[1] < 0.0f) {
+                    crossing =
+                        (transformed_previous_point.f[0] - transformed_current_point.f[0]) /
+                            (transformed_previous_point.f[1] - transformed_current_point.f[1]) *
+                            -transformed_current_point.f[1] +
+                        transformed_current_point.f[0];
                     if (crossing > 0.0f && crossing < 1.0f)
                         return 1;
                 }
@@ -71,7 +74,7 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
             qcopy(previous, current);
             i++;
             offset += 0x10;
-        } while (i < (*entry)->count);
+        } while (i < (*path_slot)->count);
     }
     return 0;
 }
@@ -173,7 +176,7 @@ s32 resolve_point_path_segment_xy_clearance(f32      distance,
                                             s32      path_index,
                                             OvlVec4 *point,
 
-                                            OvlVec4 *out) {
+                                            OvlVec4 *adjusted_point) {
     OvlVec4              difference;
     OvlVec4              scaled_difference;
     OvlVec4              working;
@@ -181,19 +184,21 @@ s32 resolve_point_path_segment_xy_clearance(f32      distance,
     OvlVec4              scaled_segment;
     OvlVec4              cross;
     OvlVec4              scaled_cross;
-    SegmentPath_261d78 **entry;
+    SegmentPath_261d78 **segment_path_slot;
     s32                  i;
     s32                  found;
 
     found = 0;
     qcopy_nc(&working, point);
     for (i = 0; i < D_L00_001B04B0_261d78[path_index]->count - 1; i++) {
-        entry = &D_L00_001B04B0_261d78[path_index];
-        if ((*entry)->points[i].f[3] == 0.0f && (*entry)->points[i + 1].f[3] == 0.0f)
+        segment_path_slot = &D_L00_001B04B0_261d78[path_index];
+        if ((*segment_path_slot)->points[i].f[3] == 0.0f &&
+            (*segment_path_slot)->points[i + 1].f[3] == 0.0f)
             continue;
-        fast_vec_sub(&difference, &working, &(*entry)->points[i]);
+        fast_vec_sub(&difference, &working, &(*segment_path_slot)->points[i]);
         difference.i[2] = 0;
-        fast_vec_sub(&segment, &(*entry)->points[i + 1], &(*entry)->points[i]);
+        fast_vec_sub(
+            &segment, &(*segment_path_slot)->points[i + 1], &(*segment_path_slot)->points[i]);
         segment.i[2] = 0;
         fast_vec_normalize(&scaled_segment, &segment, 1.0f);
         fast_vec_cross(&cross, &difference, &scaled_segment);
@@ -207,7 +212,7 @@ s32 resolve_point_path_segment_xy_clearance(f32      distance,
                     continue;
                 found = 1;
                 fast_vec_normalize(&scaled_difference, &difference, distance);
-                fast_vec_add(&working, &scaled_difference, &(*entry)->points[i]);
+                fast_vec_add(&working, &scaled_difference, &(*segment_path_slot)->points[i]);
                 working.f[2] = point->f[2];
             } else {
                 found = 1;
@@ -215,13 +220,13 @@ s32 resolve_point_path_segment_xy_clearance(f32      distance,
                 fast_vec_sub(&scaled_difference, &difference, &scaled_cross);
                 fast_vec_normalize(&scaled_difference, &scaled_difference, distance);
                 fast_vec_add(&scaled_difference, &scaled_difference, &scaled_cross);
-                fast_vec_add(&working, &scaled_difference, &(*entry)->points[i]);
+                fast_vec_add(&working, &scaled_difference, &(*segment_path_slot)->points[i]);
                 working.f[2] = point->f[2];
             }
         }
     }
     if (found)
-        qcopy(out, &working);
+        qcopy(adjusted_point, &working);
     return found;
 }
 
@@ -244,7 +249,7 @@ s32 resolve_point_path_segment_clearance(f32      distance,
                                          s32      path_index,
                                          OvlVec4 *point,
 
-                                         OvlVec4 *out) {
+                                         OvlVec4 *clearance_adjusted_point) {
     OvlVec4             difference;
     OvlVec4             scaled_difference;
     OvlVec4             working;
@@ -252,10 +257,10 @@ s32 resolve_point_path_segment_clearance(f32      distance,
     OvlVec4             scaled_segment;
     OvlVec4             cross;
     OvlVec4             scaled_cross;
-    SegmentPath_262030 *entry;
+    SegmentPath_262030 *segment_path;
     OvlVec4            *height_axis;
     OvlVec4            *current;
-    s32                 next;
+    s32                 next_point_index;
     s32                 i;
     s32                 offset;
     OvlVec4            *saved_out;
@@ -265,22 +270,22 @@ s32 resolve_point_path_segment_clearance(f32      distance,
     f32                 projection;
 
     found = 0;
-    saved_out = out;
+    saved_out = clearance_adjusted_point;
     qcopy(&working, point);
-    entry = D_L00_001B04B0_262030[path_index];
+    segment_path = D_L00_001B04B0_262030[path_index];
     offset = (s32) & (*(OvlVec4 *)D_0013F5E0);
     original_height = fast_vec_dot(&working, (OvlVec4 *)offset);
     i = 0;
-    if (entry->count - 1 > found) {
+    if (segment_path->count - 1 > found) {
         height_axis = (OvlVec4 *)offset;
         do {
             offset = i << 4;
-            next = i + 1;
-            if (((OvlVec4 *)((u8 *)entry + offset + 0x10))->f[3] != 0.0f ||
-                entry->points[next].f[3] != 0.0f) {
-                current = (OvlVec4 *)((u8 *)entry + (offset + 0x10));
+            next_point_index = i + 1;
+            if (((OvlVec4 *)((u8 *)segment_path + offset + 0x10))->f[3] != 0.0f ||
+                segment_path->points[next_point_index].f[3] != 0.0f) {
+                current = (OvlVec4 *)((u8 *)segment_path + (offset + 0x10));
                 fast_vec_sub(&difference, &working, current);
-                fast_vec_sub(&segment, (OvlVec4 *)((u8 *)entry + (offset + 0x20)), current);
+                fast_vec_sub(&segment, (OvlVec4 *)((u8 *)segment_path + (offset + 0x20)), current);
                 projection = fast_vec_dot(&difference, height_axis);
                 FUN_001ff500_262030(projection, &scaled_cross, height_axis);
                 fast_vec_sub(&difference, &difference, &scaled_cross);
@@ -311,8 +316,8 @@ s32 resolve_point_path_segment_clearance(f32      distance,
                 }
             }
         next_segment_262030:
-            i = next;
-        } while (i < entry->count - 1);
+            i = next_point_index;
+        } while (i < segment_path->count - 1);
     }
     if ((i = found)) {
         projection = fast_vec_dot(&working, &(*(OvlVec4 *)D_0013F5E0));

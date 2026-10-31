@@ -25,14 +25,14 @@ extern void *spawn_spark_2ef9b0(void *, void *, int, int, float) __asm__("FUN_L0
 void update_shrinking_tumbling_debris(struct Moby *moby) __asm__("FUN_L09_002ef9b0");
 
 void update_shrinking_tumbling_debris(struct Moby *moby) {
-    float  old[4];
+    float  previous_debris_position[4];
     float  spark_velocity[4];
     float  random_spark_vector[4];
     float *debris_vars = (float *)moby->pvars;
     float *pos = (float *)&moby->pos;
     int    i;
 
-    qcopy(old, pos);
+    qcopy(previous_debris_position, pos);
     fast_vec_add(pos, pos, debris_vars);
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f ||
         moby->pos.y > 1021.0f || moby->pos.z < 2.0f || moby->pos.z > 1021.0f ||
@@ -65,7 +65,7 @@ void update_shrinking_tumbling_debris(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (collision_line(old, pos, 2, moby, 0)) {
+    if (collision_line(previous_debris_position, pos, 2, moby, 0)) {
         if (collision_hit_material() == 1) {
             fast_vec_scale(debris_vars, debris_vars, 0.4f);
             debris_vars[4] *= 0.25f;

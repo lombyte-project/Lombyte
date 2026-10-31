@@ -62,8 +62,8 @@ f32 D_L17_001617BC = 8.0f;
 
 void update_linked_moby_transform_and_lifetime(S_002d7f88 *self) __asm__("FUN_L00_002d7f88");
 
-void update_linked_moby_transform_and_lifetime(S_002d7f88 *self) {
-    D_002d7f88 *moby_data = self->p78;
+void update_linked_moby_transform_and_lifetime(S_002d7f88 *follower_moby) {
+    D_002d7f88 *moby_data = follower_moby->p78;
     O_002d7f88 *o;
     void       *linked_moby_data;
     f32         scale_coefficient;
@@ -73,19 +73,20 @@ void update_linked_moby_transform_and_lifetime(S_002d7f88 *self) {
     o = moby_data->o;
     if (o == 0 || o->hA6 != 0xB9 || o->b20 == 0xFE || o->b20 == 0xFD) {
     kill:
-        mark_moby_for_removal(self);
+        mark_moby_for_removal(follower_moby);
         return;
     }
     linked_moby_data = o->p78;
-    clear_u64_value(self->v10);
-    self->f14 = -moby_data->f4;
-    transform_vector_by_basis(self->v10, self->v10, (u8 *)moby_data->o + 0xC0);
-    fast_vec_add(self->v10, self->v10, linked_moby_data);
-    qcopy(&self->q40, &moby_data->o->q40);
+    clear_u64_value(follower_moby->v10);
+    follower_moby->f14 = -moby_data->f4;
+    transform_vector_by_basis(follower_moby->v10, follower_moby->v10, (u8 *)moby_data->o + 0xC0);
+    fast_vec_add(follower_moby->v10, follower_moby->v10, linked_moby_data);
+    qcopy(&follower_moby->q40, &moby_data->o->q40);
     if (moby_data->f4 > D_L00_001616DC) {
-        self->b23 =
+        follower_moby->b23 =
             truncate_float_to_s32((1.0f - (moby_data->f4 - D_L00_001616DC) * 10.0f) * 127.0f);
     }
     scale_coefficient = moby_data->fC;
-    self->f2C = scale_coefficient * 0.1f + scale_coefficient * moby_data->f4 / D_L00_001616DC;
+    follower_moby->f2C =
+        scale_coefficient * 0.1f + scale_coefficient * moby_data->f4 / D_L00_001616DC;
 }

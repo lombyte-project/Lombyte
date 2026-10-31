@@ -7,7 +7,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/level_labels.h"
 
-extern struct Moby *D_L00_0015FFE4;
+extern struct Moby *suck_moby_list __asm__("D_L00_0015FFE4");
 extern void        *active_mobies[] __asm__("D_L00_001ABA00");
 extern void         FUN_L00_00250480(struct Moby *moby);
 
@@ -19,7 +19,7 @@ void link_and_update_all_mobys(void) {
     struct Moby *current;
 
     active_mobies[0] = 0;
-    D_L00_0015FFE4 = 0;
+    suck_moby_list = 0;
     moby = (struct Moby *)moby_table;
     last = 0;
     while (moby->state != 0xFF) {
@@ -27,7 +27,7 @@ void link_and_update_all_mobys(void) {
             if (last != 0) {
                 last->next = moby;
             } else {
-                D_L00_0015FFE4 = moby;
+                suck_moby_list = moby;
             }
             last = moby;
         }
@@ -37,7 +37,7 @@ void link_and_update_all_mobys(void) {
         last->next = 0;
     }
 
-    current = D_L00_0015FFE4;
+    current = suck_moby_list;
     while (current != 0) {
         if ((s8)current->state >= 0) {
             if (!(current->flags & 0x40)) {

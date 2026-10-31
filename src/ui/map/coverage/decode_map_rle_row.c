@@ -2,7 +2,7 @@
 
 void decode_map_rle_row(u8 *buf, s32 row, u8 *data, s16 *offsets) __asm__("FUN_00206860");
 
-void decode_map_rle_row(u8 *decoded_row_dst, s32 row, u8 *data, s16 *offsets) {
+void decode_map_rle_row(u8 *decoded_row_dst, s32 row, u8 *compressed_data_base, s16 *offsets) {
     u8  *decoded_row_cursor;
     u8  *compressed_row_start;
     s16 *op;
@@ -19,11 +19,11 @@ void decode_map_rle_row(u8 *decoded_row_dst, s32 row, u8 *data, s16 *offsets) {
     decoded_row_cursor = decoded_row_dst;
     half = 0;
     if (row != 0) {
-        compressed_row_start = data + offsets[row - 1];
+        compressed_row_start = compressed_data_base + offsets[row - 1];
     } else {
-        compressed_row_start = data + 0x200;
+        compressed_row_start = compressed_data_base + 0x200;
     }
-    run_count = ((data + offsets[row]) - compressed_row_start) * 2 / 3;
+    run_count = ((compressed_data_base + offsets[row]) - compressed_row_start) * 2 / 3;
     for (i = 0; i < run_count; i++) {
         k = i * 3;
         packed_run_src = compressed_row_start + (k >> 1);

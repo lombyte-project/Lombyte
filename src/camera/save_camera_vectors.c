@@ -10,13 +10,14 @@
 void save_camera_vectors(void) __asm__("FUN_001ec7f0");
 
 void save_camera_vectors(void) {
-    char *base = cam_trans_state;
-    if (*(unsigned char *)(base + 2) == 0) {
-        qcopy(base + 0xC0, base + 0x50);
-        if (*(unsigned char *)(base + 3) == 2) {
-            fast_vec_add(base + 0xC0, D_0013F490, base + 0xC0);
+    char *camera_transition_state = cam_trans_state;
+    if (*(unsigned char *)(camera_transition_state + 2) == 0) {
+        qcopy(camera_transition_state + 0xC0, camera_transition_state + 0x50);
+        if (*(unsigned char *)(camera_transition_state + 3) == 2) {
+            fast_vec_add(
+                camera_transition_state + 0xC0, D_0013F490, camera_transition_state + 0xC0);
         }
-        qcopy(base + 0xD0, base + 0x60);
+        qcopy(camera_transition_state + 0xD0, camera_transition_state + 0x60);
     }
 }
 

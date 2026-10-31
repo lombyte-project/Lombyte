@@ -401,7 +401,7 @@ void initialize_level_map_archive(void) {
     RenderArchiveState *state;
     int                 level;
     struct DiscFile    *file;
-    int                 heap_tag, first_size, second_size, scratch;
+    int                 heap_tag, first_size, second_size, archive_transfer_qwords;
     int                *archive, *archive_base;
     unsigned char      *level_data;
     int                 x, y, mask_buffer;
@@ -449,11 +449,11 @@ void initialize_level_map_archive(void) {
         heap_tag = (int)render_archive_source_file;
         archive_base = ((int **)&D_L00_00173E08)[0];
         archive = (int *)((int)archive_base + 0x9A800);
-        scratch = file->size << 7;
+        archive_transfer_qwords = file->size << 7;
         read_disc_sectors_and_wait(archive, file->sector, file->size);
-        state->file_handle =
-            stash_send_data((int)archive, scratch, 0x4800, (int)map_archive_stash_tag);
-        state->transfer_bytes = scratch;
+        state->file_handle = stash_send_data(
+            (int)archive, archive_transfer_qwords, 0x4800, (int)map_archive_stash_tag);
+        state->transfer_bytes = archive_transfer_qwords;
         fast_decompress((int)archive, (int)archive_base);
         archive = archive_base;
         first_size = archive[1] - archive[0];

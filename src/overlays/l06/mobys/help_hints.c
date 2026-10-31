@@ -22,24 +22,27 @@ extern u8               level06_help_hint_variant_selector[] __asm__("D_0013D4CE
 void update_help_hints(struct Moby *moby) __asm__("FUN_L06_003083b0");
 
 void update_help_hints(struct Moby *moby) {
-    int         *vars = (int *)moby->pvars;
+    int         *help_hint_reference_indices = (int *)moby->pvars;
     struct Moby *indexed_moby;
     int          i;
     int          j;
     int          elapsed;
-    if (help_records[0x2A].count == 0 && is_point_inside_clip_volume(&hero.motion.pos, vars[9])) {
+    if (help_records[0x2A].count == 0 &&
+        is_point_inside_clip_volume(&hero.motion.pos, help_hint_reference_indices[9])) {
         help_request(0x1773, 0x2A);
     }
     if (help_records[0x29].count == 0) {
         for (i = 0; i < 6; i++) {
-            if (vars[i] != -1 &&
-                ((struct Moby *)(D_L06_0015FFD8_83b0 + (vars[i] << 8)))->state != 1) {
+            if (help_hint_reference_indices[i] != -1 &&
+                ((struct Moby *)(D_L06_0015FFD8_83b0 + (help_hint_reference_indices[i] << 8)))
+                        ->state != 1) {
                 help_request(0x1772, 0x29);
             }
         }
     }
     if (help_records[0x2E].count == 0 || help_records[0x2F].count == 0) {
-        struct Moby *target = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[10] << 8));
+        struct Moby *target =
+            (struct Moby *)(D_L06_0015FFD8_83b0 + (help_hint_reference_indices[10] << 8));
         if (target == 0 || target->state == 0xFE || target->state == 0xFD) {
             if (level06_help_hint_variant_selector[0]) {
                 help_request(0x1777, 0x2E);
@@ -64,12 +67,14 @@ void update_help_hints(struct Moby *moby) {
             }
         }
     }
-    if (is_point_inside_clip_volume(&hero.motion.pos, vars[8]) &&
-        count_active_moby_group_members(vars[6], -1) == 0) {
+    if (is_point_inside_clip_volume(&hero.motion.pos, help_hint_reference_indices[8]) &&
+        count_active_moby_group_members(help_hint_reference_indices[6], -1) == 0) {
         for (j = 0; j < 6; j++) {
-            indexed_moby = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[j] << 8));
-            if (vars[j] != -1 && indexed_moby != 0 && indexed_moby->state != 0xFE &&
-                indexed_moby->state != 0xFD && indexed_moby->state != 1) {
+            indexed_moby =
+                (struct Moby *)(D_L06_0015FFD8_83b0 + (help_hint_reference_indices[j] << 8));
+            if (help_hint_reference_indices[j] != -1 && indexed_moby != 0 &&
+                indexed_moby->state != 0xFE && indexed_moby->state != 0xFD &&
+                indexed_moby->state != 1) {
                 if (help_records[0x28].count != 0) {
                     elapsed = scale_game_frames(D_0015EEA4) - help_records[0x28].unk2 * 600;
                     if ((int)(scale_game_frames(18) * 60.0f) < elapsed ||
@@ -95,8 +100,9 @@ void update_help_hints(struct Moby *moby) {
         }
     }
     if (alternate_item_available[0x25] == 0) {
-        struct Moby *trigger = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[11] << 8));
-        if (vars[11] != -1 && trigger->command != 0) {
+        struct Moby *trigger =
+            (struct Moby *)(D_L06_0015FFD8_83b0 + (help_hint_reference_indices[11] << 8));
+        if (help_hint_reference_indices[11] != -1 && trigger->command != 0) {
             alternate_item_available[0x25] = 1;
         }
     }

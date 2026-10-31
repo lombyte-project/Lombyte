@@ -133,12 +133,12 @@ void spawn_circular_saw_destruction_effects(struct Moby *moby) __asm__("FUN_L04_
 void spawn_circular_saw_destruction_effects(struct Moby *moby) {
     float explosion_position[4];
     float unused_destruction_effect_argument[4];
-    char *data = (char *)moby->pvars;
+    char *circular_saw_enemy_pvars = (char *)moby->pvars;
     int   engine_voice_index;
     int   invalid_voice_index;
 
     clear_u64_value(unused_destruction_effect_argument);
-    engine_voice_index = *(int *)(data + 0x238);
+    engine_voice_index = *(int *)(circular_saw_enemy_pvars + 0x238);
     if (engine_voice_index != -1) {
         char *voice_slot_window = (char *)&voice_pool + engine_voice_index * 0x70;
         if (*(char **)(voice_slot_window + 0x88) == moby) {
@@ -147,7 +147,7 @@ void spawn_circular_saw_destruction_effects(struct Moby *moby) {
         }
     }
     invalid_voice_index = -1;
-    *(int *)(data + 0x238) = invalid_voice_index;
+    *(int *)(circular_saw_enemy_pvars + 0x238) = invalid_voice_index;
     FUN_L00_00257470(moby, 0, -1);
     moby_point_position(moby, 5, explosion_position);
     func_L00_0025F4A8_alt(moby,
@@ -179,20 +179,20 @@ extern void  select_moby_combat_target(char *, float *, float) __asm__("FUN_L00_
 int check_circular_saw_melee_attack_spacing(struct Moby *moby) __asm__("FUN_L04_002c1e98");
 
 int check_circular_saw_melee_attack_spacing(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *circular_saw_pvars = (char *)moby->pvars;
     float target_selection_output[20];
     float target_distance;
     float target_selection_distance_limit;
     char *other_moby;
     int   flag = 0;
-    if (*(int *)(data + 0x38) != 0 || *(short *)(data + 0x136) != 0) {
+    if (*(int *)(circular_saw_pvars + 0x38) != 0 || *(short *)(circular_saw_pvars + 0x136) != 0) {
         flag = 1;
     }
     if (flag) {
-        float x = *(float *)(data + 0x140);
+        float x = *(float *)(circular_saw_pvars + 0x140);
         target_selection_distance_limit = x + x;
     } else {
-        target_selection_distance_limit = *(float *)(data + 0x140);
+        target_selection_distance_limit = *(float *)(circular_saw_pvars + 0x140);
     }
     select_moby_combat_target(moby, target_selection_output, target_selection_distance_limit);
     target_distance = vector_distance_xy((float *)&moby->pos, target_selection_output);
@@ -218,39 +218,44 @@ float compute_circular_saw_flock_steering(struct Moby *moby,
                                           void        *out,
                                           float        speed) __asm__("FUN_L04_002c1fb8");
 
-float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float speed) {
+float compute_circular_saw_flock_steering(struct Moby *moby,
+                                          void        *steering_point_output,
+
+                                          float speed) {
     float away[4];
     float target[4];
     float pad[4][4];
-    char *data = (char *)moby->pvars;
-    char *other;
+    char *circular_saw_flock_pvars = (char *)moby->pvars;
+    char *candidate_moby;
     float target_dist;
     float weight;
     int   is_closest;
     int   is_alert = 0;
-    if (*(int *)(data + 0x38) != 0 || *(short *)(data + 0x136) != 0)
+    if (*(int *)(circular_saw_flock_pvars + 0x38) != 0 ||
+        *(short *)(circular_saw_flock_pvars + 0x136) != 0)
         is_alert = 1;
     if (is_alert) {
-        speed = *(float *)(data + 0x140) + *(float *)(data + 0x140);
+        speed = *(float *)(circular_saw_flock_pvars + 0x140) +
+                *(float *)(circular_saw_flock_pvars + 0x140);
     } else {
-        speed = *(float *)(data + 0x140);
+        speed = *(float *)(circular_saw_flock_pvars + 0x140);
     }
     select_moby_combat_target(moby, target, speed);
     target_dist = vector_distance_xy((float *)&moby->pos, target);
-    clear_u64_value(out);
+    clear_u64_value(steering_point_output);
     is_closest = 1;
-    other = D_L04_0015FFE4;
+    candidate_moby = D_L04_0015FFE4;
     weight = 0.0f;
-    for (; other != 0; other = *(char **)(other + 0x28)) {
-        if (other == moby || *(short *)(other + 0xA6) != moby->oclass)
+    for (; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
+        if (candidate_moby == moby || *(short *)(candidate_moby + 0xA6) != moby->oclass)
             continue;
-        if (vector_distance_xy((float *)(other + 0x10), (float *)&moby->pos) < 3.0f) {
-            fast_vec_sub(away, &moby->pos, other + 0x10);
+        if (vector_distance_xy((float *)(candidate_moby + 0x10), (float *)&moby->pos) < 3.0f) {
+            fast_vec_sub(away, &moby->pos, candidate_moby + 0x10);
             fast_vec_scale(away, away, circular_saw_flock_separation_weight_gp);
-            fast_vec_add(out, out, away);
+            fast_vec_add(steering_point_output, steering_point_output, away);
             weight += circular_saw_flock_separation_weight_gp;
         }
-        if (vector_distance_xy((float *)(other + 0x10), target) < target_dist)
+        if (vector_distance_xy((float *)(candidate_moby + 0x10), target) < target_dist)
             is_closest = 0;
     }
     if (!is_closest) {
@@ -265,17 +270,18 @@ float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float sp
         }
         fast_vec_normalize(away, away, offset_dir * 10.0f);
         weight += 10.0f;
-        fast_vec_add(out, out, away);
-        fast_vec_scale(out, out, 1.0f / weight);
-        fast_vec_add(out, out, &moby->pos);
+        fast_vec_add(steering_point_output, steering_point_output, away);
+        fast_vec_scale(steering_point_output, steering_point_output, 1.0f / weight);
+        fast_vec_add(steering_point_output, steering_point_output, &moby->pos);
     } else {
-        qcopy(out, target);
+        qcopy(steering_point_output, target);
     }
-    if (vector_distance_xy((float *)&moby->pos, (float *)out) < 1.0f) {
-        qcopy(out, &moby->pos);
+    if (vector_distance_xy((float *)&moby->pos, (float *)steering_point_output) < 1.0f) {
+        qcopy(steering_point_output, &moby->pos);
         return fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
     }
-    return fast_arc_tan(((float *)out)[0] - moby->pos.x, ((float *)out)[1] - moby->pos.y);
+    return fast_arc_tan(((float *)steering_point_output)[0] - moby->pos.x,
+                        ((float *)steering_point_output)[1] - moby->pos.y);
 }
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");

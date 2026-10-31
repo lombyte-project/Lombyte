@@ -26,7 +26,7 @@ void update_ground_height_modulated_voice(char *moby) {
     float point[4];
     float radius[4];
     float axis[4];
-    char *data = *(char **)(moby + 8);
+    char *voice_playback_state = *(char **)(moby + 8);
     float angle = 0.0f;
     float fraction = angle;
     radius[0] = 4.0f;
@@ -55,19 +55,21 @@ void update_ground_height_modulated_voice(char *moby) {
         smoothed_below_reference_ground_fraction_gp = 0.0f;
     }
     {
-        char *slot = ((char *)&voice_pool) + *(int *)(data + 8) * 0x70;
+        char *slot = ((char *)&voice_pool) + *(int *)(voice_playback_state + 8) * 0x70;
         if (*(char **)(slot + 0x8C) == moby && ((unsigned char *)slot)[0x74] != 0) {
-            vendor_volume(
-                *(int *)(data + 8),
-                (int)((*(float *)(data + 4) + smoothed_below_reference_ground_fraction_gp) /
-                      (*(float *)(data + 4) + 1.0f) * 1024.0f));
+            vendor_volume(*(int *)(voice_playback_state + 8),
+                          (int)((*(float *)(voice_playback_state + 4) +
+                                 smoothed_below_reference_ground_fraction_gp) /
+                                (*(float *)(voice_playback_state + 4) + 1.0f) * 1024.0f));
         }
     }
-    qcopy_nc(((char *)&voice_pool) + 0x90 + *(int *)(data + 8) * 0x70, D_L08_001675C0);
+    qcopy_nc(((char *)&voice_pool) + 0x90 + *(int *)(voice_playback_state + 8) * 0x70,
+             D_L08_001675C0);
     {
-        char *slot = ((char *)&voice_pool) + *(int *)(data + 8) * 0x70;
+        char *slot = ((char *)&voice_pool) + *(int *)(voice_playback_state + 8) * 0x70;
         if (*(char **)(slot + 0x8C) != moby || ((unsigned char *)slot)[0x74] == 0) {
-            *(int *)(data + 8) = play_voice(*(int *)data, 0x15, (int)moby, 0x400);
+            *(int *)(voice_playback_state + 8) =
+                play_voice(*(int *)voice_playback_state, 0x15, (int)moby, 0x400);
         }
     }
 }

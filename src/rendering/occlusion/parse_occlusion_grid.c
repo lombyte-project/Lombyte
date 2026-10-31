@@ -6,7 +6,7 @@ int parse_occlusion_grid(int x, int y, int z) __asm__("FUN_001f2690");
 
 int parse_occlusion_grid(int x, int y, int z) {
     char           *grid = camera_visibility_grid;
-    char           *base = grid + *(int *)grid;
+    char           *visibility_masks = grid + *(int *)grid;
     unsigned short *axis_lookup = (unsigned short *)(grid + 4);
     int             cz, cy, cx;
 
@@ -31,7 +31,7 @@ int parse_occlusion_grid(int x, int y, int z) {
         return 0;
     if (axis_lookup[cx + 2] == 0xFFFF)
         return 0;
-    return (int)(base + axis_lookup[cx + 2] * 128);
+    return (int)(visibility_masks + axis_lookup[cx + 2] * 128);
 }
 
 extern __typeof__(parse_occlusion_grid) func_001F2690 __attribute__((alias("FUN_001f2690")));

@@ -25,10 +25,10 @@ s32 pick_idle_fidget(s32 *index) {
     s32               choices[20];
     Vec4              end;
     Vec4              start;
-    HeroTableEntry70 *entry;
+    HeroTableEntry70 *fidget_candidate;
     Vec4             *startp, *endp;
-    s32               i, item, count, j;
-    s32              *next;
+    s32               i, slot_zero_item_id, count, j;
+    s32              *choice_write_cursor;
     HeroTableEntry70 *table;
     f32               total, pick;
 
@@ -46,18 +46,18 @@ s32 pick_idle_fidget(s32 *index) {
     i = 0;
     startp = &start;
     endp = &end;
-    next = choices;
+    choice_write_cursor = choices;
     for (; i < 5; i++) {
         table = idle_fidgets;
-        entry = &table[i];
-        if (entry->duration_frames != 0)
+        fidget_candidate = &table[i];
+        if (fidget_candidate->duration_frames != 0)
             continue;
-        if (entry->interval == 0.0f)
+        if (fidget_candidate->interval == 0.0f)
             continue;
-        item = hero_slot_item_id(0);
-        if (entry->item_id != -1 && entry->item_id != item)
+        slot_zero_item_id = hero_slot_item_id(0);
+        if (fidget_candidate->item_id != -1 && fidget_candidate->item_id != slot_zero_item_id)
             continue;
-        if (entry->use_state_40 != 0 && hero.ground_moby != 0)
+        if (fidget_candidate->use_state_40 != 0 && hero.ground_moby != 0)
             continue;
         if (i == 3) {
             if (current_level_index != 12)
@@ -79,9 +79,9 @@ s32 pick_idle_fidget(s32 *index) {
             if (hero.health.hp >= 2)
                 continue;
         }
-        *next = i;
+        *choice_write_cursor = i;
         count++;
-        next++;
+        choice_write_cursor++;
     }
     if (count == 0)
         return 0;

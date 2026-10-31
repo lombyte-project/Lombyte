@@ -199,14 +199,14 @@ project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L
 float compute_ship_target_reticle_distance_squared(void *moby_v, void *o_v) {
     struct Moby *moby = moby_v;
     char        *target_moby = o_v;
-    char        *data = ((char *)moby->pvars);
+    char        *ship_reticle_vars = ((char *)moby->pvars);
     if (MOBY(target_moby)->visible != 0) {
         char target_projection_point[16];
         int  ax, ay, cx, cy;
         int  dx, dy, reticle_axis_limit;
         project_world_point_to_screen_pixels(target_moby + 0x10, &ax, &ay, 0);
-        dx = ax - *(int *)(data + 0xE0);
-        dy = ay - *(int *)(data + 0xE4);
+        dx = ax - *(int *)(ship_reticle_vars + 0xE0);
+        dy = ay - *(int *)(ship_reticle_vars + 0xE4);
         if (dx < 0)
             dx = -dx;
         if (dy < 0)
@@ -257,7 +257,7 @@ extern float D_L11_001677D0[];
 
 void update_ship_lock_on_target(void *self, char *moby) __asm__("FUN_L11_00311c80");
 
-void update_ship_lock_on_target(void *self, char *moby) {
+void update_ship_lock_on_target(void *lock_on_ship_moby, char *moby) {
     float          reference_rotation_copy[4] __attribute__((aligned(16)));
     float         *reference_rotation_source;
     unsigned char *current_target;
@@ -274,7 +274,7 @@ void update_ship_lock_on_target(void *self, char *moby) {
         }
         reference_rotation_source = D_L11_001677D0;
         qcopy(reference_rotation_copy, reference_rotation_source);
-        selected_target = select_ship_lock_on_target(self,
+        selected_target = select_ship_lock_on_target(lock_on_ship_moby,
                                                      moby,
                                                      reference_rotation_source - 4,
                                                      reference_rotation_copy,
@@ -354,7 +354,7 @@ void        draw_ship_hud(struct Moby *moby) __asm__("FUN_L11_00311d50");
 extern void draw_ship_hud();
 
 void draw_ship_hud(struct Moby *moby) {
-    ShipVars *vars = (ShipVars *)moby->pvars;
+    ShipVars *ship_hud_vars = (ShipVars *)moby->pvars;
     short    *list;
     void     *found[12];
     s32       sx;
@@ -376,7 +376,7 @@ void draw_ship_hud(struct Moby *moby) {
     s32       fill;
     s32       lo;
     s32       hi;
-    s32       entry;
+    s32       hp_bar_palette_index;
     s32       j;
 
     vu1_add_g_sregister(0x42, 0x8000000044);
@@ -403,7 +403,7 @@ void draw_ship_hud(struct Moby *moby) {
     vu1_add_g_sregister(0x42, 0x8000000048);
     get_effect_texture(0x3E); /* fetched, but nothing below draws with it */
 
-    list = D_L11_001AC240[vars->target_class];
+    list = D_L11_001AC240[ship_hud_vars->target_class];
     if (list != NULL) {
         do {
             /* D_L11_0015FFD8 holds the address of the level's moby array */
@@ -441,8 +441,8 @@ void draw_ship_hud(struct Moby *moby) {
         y += 0x12;
     }
 
-    rx = vars->reticle_x;
-    ry = vars->reticle_y;
+    rx = ship_hud_vars->reticle_x;
+    ry = ship_hud_vars->reticle_y;
     reticle_texture_tex0 = get_effect_texture(0x11);
     append_rotated_sprite_quad(rx,
                                ry,
@@ -489,12 +489,12 @@ void draw_ship_hud(struct Moby *moby) {
                                0.5f,
                                0.5f);
 
-    update_ship_lock_on_target(moby, (char *)vars);
-    if (vars->target != NULL) {
-        project_world_point_to_screen_pixels(&vars->target->pos, &sx, &sy, 0);
-        if (vars->lock_timer > lock_hold_frames) {
+    update_ship_lock_on_target(moby, (char *)ship_hud_vars);
+    if (ship_hud_vars->target != NULL) {
+        project_world_point_to_screen_pixels(&ship_hud_vars->target->pos, &sx, &sy, 0);
+        if (ship_hud_vars->lock_timer > lock_hold_frames) {
             remaining_lock_fade_fraction =
-                convert_integer_to_float(vars->lock_timer - lock_hold_frames) /
+                convert_integer_to_float(ship_hud_vars->lock_timer - lock_hold_frames) /
                 convert_integer_to_float(lock_fade_frames);
             fade = 2.0f * (1.0f - remaining_lock_fade_fraction);
             grow = remaining_lock_fade_fraction * 5.0f + 1.0f;
@@ -511,10 +511,10 @@ void draw_ship_hud(struct Moby *moby) {
                 0xFF,
                 0,
                 alpha);
-            vars->locked = NULL;
+            ship_hud_vars->locked = NULL;
         } else {
             blink = 0xFF;
-            if ((vars->lock_timer / scale_game_frames(0x14)) & 1) {
+            if ((ship_hud_vars->lock_timer / scale_game_frames(0x14)) & 1) {
                 blink = 0;
             }
             draw_quarter_turn_textured_quads(convert_integer_to_float(sx),
@@ -525,7 +525,7 @@ void draw_ship_hud(struct Moby *moby) {
                                              blink,
                                              0,
                                              0x60);
-            vars->locked = vars->target;
+            ship_hud_vars->locked = ship_hud_vars->target;
         }
     }
 
@@ -535,12 +535,12 @@ void draw_ship_hud(struct Moby *moby) {
         if (shown == 0) {
             help_request(0x2AFF, 0x58);
         } else if (shown < 2) {
-            vars->low_hp_frames++;
-            if (vars->low_hp_frames > scale_game_frames(1800)) {
+            ship_hud_vars->low_hp_frames++;
+            if (ship_hud_vars->low_hp_frames > scale_game_frames(1800)) {
                 help_request(0x2AFF, 0x58);
             }
         }
-    } else if (vars->low_hp_frames != 0) {
+    } else if (ship_hud_vars->low_hp_frames != 0) {
         if (help_records[0x58].count < 0xFFFF) {
             help_records[0x58].count++;
         }
@@ -549,16 +549,17 @@ void draw_ship_hud(struct Moby *moby) {
         }
         help_records[0x58].level_mask =
             help_records[0x58].level_mask | (1 << current_level_index) | 0x80000000;
-        vars->low_hp_frames = 0;
+        ship_hud_vars->low_hp_frames = 0;
     }
 
-    fast_dec_timer(&vars->ammo_hint_timer);
+    fast_dec_timer(&ship_hud_vars->ammo_hint_timer);
     if ((hero.ship_ammo < 5 && help_records[0x57].count == 0) ||
-        (hero.ship_ammo == 0 && help_records[0x57].count < 2 && vars->ammo_hint_timer == 0)) {
+        (hero.ship_ammo == 0 && help_records[0x57].count < 2 &&
+         ship_hud_vars->ammo_hint_timer == 0)) {
         help_request(0x2AFE, 0x57);
-        vars->ammo_hint_timer = scale_game_frames(1200);
+        ship_hud_vars->ammo_hint_timer = scale_game_frames(1200);
     }
-    if (help_records[0x56].count == 0 && vars->hint_frames++ > scale_game_frames(3600)) {
+    if (help_records[0x56].count == 0 && ship_hud_vars->hint_frames++ > scale_game_frames(3600)) {
         help_request(0x2AFD, 0x56);
     }
 
@@ -566,32 +567,33 @@ void draw_ship_hud(struct Moby *moby) {
         font_print_center_large(0x100, 0xC8, 0x80005080, get_help_message_text(0x523E), 0x11);
     }
 
-    step = hero.ship_hp - vars->shown_hp;
+    step = hero.ship_hp - ship_hud_vars->shown_hp;
     step *= 0.2f;
     size = absolute_float(step);
     if (size > 1.0f) {
         step /= size;
     }
-    vars->shown_hp += step;
-    fill = truncate_float_to_s32(vars->shown_hp * 251.0f / hero.ship_hp_max) + 2;
+    ship_hud_vars->shown_hp += step;
+    fill = truncate_float_to_s32(ship_hud_vars->shown_hp * 251.0f / hero.ship_hp_max) + 2;
     if (fill > 0xFD) {
         fill = 0xFD;
     }
     if (fill < 2) {
         fill = 2;
     }
-    lo = vars->hp_bar_fill <= fill ? vars->hp_bar_fill : fill;
-    hi = vars->hp_bar_fill < fill ? fill : vars->hp_bar_fill;
+    lo = ship_hud_vars->hp_bar_fill <= fill ? ship_hud_vars->hp_bar_fill : fill;
+    hi = ship_hud_vars->hp_bar_fill < fill ? fill : ship_hud_vars->hp_bar_fill;
     for (j = lo; j <= hi; j++) {
         /* CSM1 palette order: bits 3 and 4 of the entry swap */
-        entry = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
+        hp_bar_palette_index = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
         if (j < fill) {
-            hp_bar_palette.clut[entry] = ship_hp_bar_saved_palette[entry];
+            hp_bar_palette.clut[hp_bar_palette_index] =
+                ship_hp_bar_saved_palette[hp_bar_palette_index];
         } else {
-            hp_bar_palette.clut[entry] = 0x80000000;
+            hp_bar_palette.clut[hp_bar_palette_index] = 0x80000000;
         }
     }
-    vars->hp_bar_fill = fill;
+    ship_hud_vars->hp_bar_fill = fill;
 }
 
 extern int
@@ -856,7 +858,7 @@ void update_player_ship_flight(struct Moby   *ship_moby,
                                ShipVars_2838 *ship_vars) __asm__("FUN_L11_00312838");
 
 void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars) {
-    W4_2838          old;
+    W4_2838          ship_position_before_movement;
     W4_2838          death_explosion_velocity;
     UQ_2838          up;
     W4_2838          ship_movement_vector;
@@ -975,7 +977,7 @@ void update_player_ship_flight(struct Moby *ship_moby, ShipVars_2838 *ship_vars)
 
     build_spherical_offset(ship_movement_vector, ship_vars->speed, ship_vars->f38, -ship_vars->f34);
     fast_vec_normalize(ship_vars->v10, ship_movement_vector, 1.0f);
-    qcopy(old, &ship_moby->pos);
+    qcopy(ship_position_before_movement, &ship_moby->pos);
     fast_vec_add(&ship_moby->pos, &ship_moby->pos, ship_movement_vector);
     {
         float lo = D_L11_00161FF4_gp;

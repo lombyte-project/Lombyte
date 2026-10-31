@@ -26,15 +26,16 @@ void update_effects_draw_trigger(struct Moby *moby) {
         DRAW_CALLBACK_INITIALIZE = 0,
         DRAW_CALLBACK_CHECK_VOLUME_AND_REGISTER = 1
     };
-    char *data = (char *)moby->pvars;
+    char *draw_callback_vars = (char *)moby->pvars;
     switch (moby->state) {
     case DRAW_CALLBACK_INITIALIZE:
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
     case DRAW_CALLBACK_CHECK_VOLUME_AND_REGISTER: {
-        int value = *(int *)(data + 0xC);
-        if (value == -1 || is_point_inside_clip_volume(D_L12_00167240, value)) {
+        int clip_volume_index = *(int *)(draw_callback_vars + 0xC);
+        if (clip_volume_index == -1 ||
+            is_point_inside_clip_volume(D_L12_00167240, clip_volume_index)) {
             add_draw_callback((void *)draw_level_12_effects, moby);
         }
     } break;

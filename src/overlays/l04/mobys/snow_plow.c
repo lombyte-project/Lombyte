@@ -83,7 +83,7 @@ void snow_plow_update(struct Moby *moby) {
         SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ZERO = 0x20,
         SNOW_PLOW_CLASS_OFFSET_WITH_TARGET_VOICE_SELECTOR_ZERO = 0x59
     };
-    Vec4 old;
+    Vec4 update_start_position;
     Vec4 delta, *return_delta_ptr;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
     Vec4 sphere_pos;
@@ -102,15 +102,15 @@ void snow_plow_update(struct Moby *moby) {
         float        scale;
         int          zero;
     } sphere2;
-    char         *data = (char *)moby->pvars;
+    char         *snow_plow_vars = (char *)moby->pvars;
     unsigned char state = moby->state;
     int           i, *p, *path;
     float         amount, length, step, speed;
     int           timer;
-    qcopy(&old, &moby->pos);
-    if (!data)
+    qcopy(&update_start_position, &moby->pos);
+    if (!snow_plow_vars)
         return;
-    path = (int *)(data + 0x60);
+    path = (int *)(snow_plow_vars + 0x60);
     if (!state) {
         if (path[5] != -1) {
             int *p;
@@ -125,34 +125,34 @@ void snow_plow_update(struct Moby *moby) {
         }
         moby->draw_dist = 0x7f;
         moby->update_dist = 0xff;
-        *(float *)(data + 0x138) = *(float *)(data + 0xfc);
-        *(int *)(data + 0x178) = moby->draw_dist;
+        *(float *)(snow_plow_vars + 0x138) = *(float *)(snow_plow_vars + 0xfc);
+        *(int *)(snow_plow_vars + 0x178) = moby->draw_dist;
     }
     amount = 0.0f;
     gunship_follow_path(moby);
     if (moby->oclass != 0x1e4) {
-        fast_dec_timer_s16(data + 0x14a);
-        switch (*(unsigned char *)(data + 0x149)) {
+        fast_dec_timer_s16(snow_plow_vars + 0x14a);
+        switch (*(unsigned char *)(snow_plow_vars + 0x149)) {
         case SNOW_PLOW_SCAN_CLIP_VOLUMES: {
-            float length = *(float *)(data + 0xfc);
-            float target = *(float *)(data + 0x138);
+            float length = *(float *)(snow_plow_vars + 0xfc);
+            float target = *(float *)(snow_plow_vars + 0x138);
             if (length < target) {
-                *(float *)(data + 0xfc) = length + frame_time_sq * 20.0f;
-                if (target < *(float *)(data + 0xfc))
-                    *(float *)(data + 0xfc) = target;
+                *(float *)(snow_plow_vars + 0xfc) = length + frame_time_sq * 20.0f;
+                if (target < *(float *)(snow_plow_vars + 0xfc))
+                    *(float *)(snow_plow_vars + 0xfc) = target;
             }
-            p = (int *)(data + 0x150);
+            p = (int *)(snow_plow_vars + 0x150);
             i = 0;
             do {
-                if (*(short *)(data + 0x14a) == 0 && p[i] != -1 &&
+                if (*(short *)(snow_plow_vars + 0x14a) == 0 && p[i] != -1 &&
                     is_point_inside_clip_volume(&moby->pos, p[i])) {
-                    qcopy(data + 0x160, &moby->pos);
-                    *(unsigned char *)(data + 0x148) = *(unsigned char *)&p[i];
-                    *(unsigned char *)(data + 0x149) = 1;
-                    *(float *)(data + 0x14c) = moby->rot.z;
-                    *(int *)(data + 0x7c) = 0;
+                    qcopy(snow_plow_vars + 0x160, &moby->pos);
+                    *(unsigned char *)(snow_plow_vars + 0x148) = *(unsigned char *)&p[i];
+                    *(unsigned char *)(snow_plow_vars + 0x149) = 1;
+                    *(float *)(snow_plow_vars + 0x14c) = moby->rot.z;
+                    *(int *)(snow_plow_vars + 0x7c) = 0;
                     moby->state = 3;
-                    *(int *)(data + 0x11c) = scale_game_frames(36000);
+                    *(int *)(snow_plow_vars + 0x11c) = scale_game_frames(36000);
                     break;
                 }
                 ++i;
@@ -161,46 +161,48 @@ void snow_plow_update(struct Moby *moby) {
         }
         case SNOW_PLOW_MOVE_TO_CLIP_VOLUME:
             FUN_L00_00258278(moby,
-                             l04_cuboids[*(unsigned char *)(data + 0x148)].rot.z,
-                             data + 0x7c,
+                             l04_cuboids[*(unsigned char *)(snow_plow_vars + 0x148)].rot.z,
+                             snow_plow_vars + 0x7c,
                              frame_time_sq * 1.0471976f,
                              frame_time_sq * 3.1415927f,
                              frame_time * 3.1415927f);
-            if (vector_distance_xy(&moby->pos, &l04_cuboids[*(unsigned char *)(data + 0x148)].pos) <
+            if (vector_distance_xy(&moby->pos,
+                                   &l04_cuboids[*(unsigned char *)(snow_plow_vars + 0x148)].pos) <
                     1.0f &&
                 fast_difference_between_rotations(
-                    moby->rot.z, l04_cuboids[*(unsigned char *)(data + 0x148)].rot.z) <
+                    moby->rot.z, l04_cuboids[*(unsigned char *)(snow_plow_vars + 0x148)].rot.z) <
                     0.17453292f) {
-                *(unsigned char *)(data + 0x149) = 2;
-                *(short *)(data + 0x14a) = scale_game_frames(300);
+                *(unsigned char *)(snow_plow_vars + 0x149) = 2;
+                *(short *)(snow_plow_vars + 0x14a) = scale_game_frames(300);
             }
-            fast_vec_sub(&delta, &l04_cuboids[*(unsigned char *)(data + 0x148)].pos, &moby->pos);
+            fast_vec_sub(
+                &delta, &l04_cuboids[*(unsigned char *)(snow_plow_vars + 0x148)].pos, &moby->pos);
             fast_vec_normalize(&delta, &delta, frame_time * 3.0f);
             fast_vec_add(&moby->pos, &moby->pos, &delta);
             break;
         case SNOW_PLOW_WAIT_BEFORE_RETURN:
-            if (*(short *)(data + 0x14a) == 0) {
-                *(float *)(data + 0x7c) = amount;
-                *(unsigned char *)(data + 0x149) = 3;
+            if (*(short *)(snow_plow_vars + 0x14a) == 0) {
+                *(float *)(snow_plow_vars + 0x7c) = amount;
+                *(unsigned char *)(snow_plow_vars + 0x149) = 3;
             }
             break;
         case SNOW_PLOW_RETURN_TO_SAVED_TRANSFORM:
             FUN_L00_00258278(moby,
-                             *(float *)(data + 0x14c),
-                             data + 0x7c,
+                             *(float *)(snow_plow_vars + 0x14c),
+                             snow_plow_vars + 0x7c,
                              frame_time_sq * 1.0471976f,
                              frame_time_sq * 3.1415927f,
                              frame_time * 3.1415927f);
-            if (vector_distance_xy(&moby->pos, data + 0x160) < 1.0f &&
-                fast_difference_between_rotations(moby->rot.z, *(float *)(data + 0x14c)) <
+            if (vector_distance_xy(&moby->pos, snow_plow_vars + 0x160) < 1.0f &&
+                fast_difference_between_rotations(moby->rot.z, *(float *)(snow_plow_vars + 0x14c)) <
                     0.034906585f) {
-                *(unsigned char *)(data + 0x149) = 0;
-                *(short *)(data + 0x14a) = scale_game_frames(600);
-                *(float *)(data + 0xfc) = amount;
-                *(float *)(data + 0x7c) = amount;
-                *(int *)(data + 0x11c) = 0;
+                *(unsigned char *)(snow_plow_vars + 0x149) = 0;
+                *(short *)(snow_plow_vars + 0x14a) = scale_game_frames(600);
+                *(float *)(snow_plow_vars + 0xfc) = amount;
+                *(float *)(snow_plow_vars + 0x7c) = amount;
+                *(int *)(snow_plow_vars + 0x11c) = 0;
             }
-            fast_vec_sub(&delta, data + 0x160, &moby->pos);
+            fast_vec_sub(&delta, snow_plow_vars + 0x160, &moby->pos);
             length = fast_vec_length(&delta);
             step = frame_time * 3.0f;
             return_delta_ptr = &delta;
@@ -225,24 +227,24 @@ void snow_plow_update(struct Moby *moby) {
         case SNOW_PLOW_CLASS_OFFSET_WITH_FOUR_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ONE:
         case SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ZERO:
         case SNOW_PLOW_CLASS_OFFSET_WITH_TARGET_VOICE_SELECTOR_ZERO:
-            attach_manipulator((char *)moby, 0, data + 0x180);
-            *(int *)(data + 0x140) = 0;
+            attach_manipulator((char *)moby, 0, snow_plow_vars + 0x180);
+            *(int *)(snow_plow_vars + 0x140) = 0;
             break;
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS:
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
-            attach_manipulator((char *)moby, 0, data + 0x180);
-            *(int *)(data + 0x140) = 0;
-            attach_manipulator((char *)moby, 1, data + 0x1c0);
-            *(int *)(data + 0x144) = 0;
+            attach_manipulator((char *)moby, 0, snow_plow_vars + 0x180);
+            *(int *)(snow_plow_vars + 0x140) = 0;
+            attach_manipulator((char *)moby, 1, snow_plow_vars + 0x1c0);
+            *(int *)(snow_plow_vars + 0x144) = 0;
             break;
         }
     } else {
         switch ((short)(moby->oclass - 0x1d2)) {
         case SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ONE:
         case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY:
-            *(float *)(data + 0x140) =
-                fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
-            FUN_L00_001fff28(data + 0x190, 0, *(float *)(data + 0x140));
+            *(float *)(snow_plow_vars + 0x140) =
+                fast_add_rotations(*(float *)(snow_plow_vars + 0x140), frame_time * 12.566371f);
+            FUN_L00_001fff28(snow_plow_vars + 0x190, 0, *(float *)(snow_plow_vars + 0x140));
             break;
         case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_AND_TARGET_VOICE:
         case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE:
@@ -250,23 +252,24 @@ void snow_plow_update(struct Moby *moby) {
         case SNOW_PLOW_CLASS_OFFSET_WITH_FOUR_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ONE:
         case SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ZERO:
         case SNOW_PLOW_CLASS_OFFSET_WITH_TARGET_VOICE_SELECTOR_ZERO:
-            *(float *)(data + 0x140) =
-                fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
-            FUN_L00_001fff28(data + 0x190, 2, *(float *)(data + 0x140));
+            *(float *)(snow_plow_vars + 0x140) =
+                fast_add_rotations(*(float *)(snow_plow_vars + 0x140), frame_time * 12.566371f);
+            FUN_L00_001fff28(snow_plow_vars + 0x190, 2, *(float *)(snow_plow_vars + 0x140));
             break;
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS:
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
-            *(float *)(data + 0x140) =
-                fast_add_rotations(*(float *)(data + 0x140), frame_time * 12.566371f);
-            FUN_L00_001fff28(data + 0x190, 2, *(float *)(data + 0x140));
-            *(float *)(data + 0x144) =
-                fast_add_rotations(*(float *)(data + 0x144), frame_time * 12.566371f);
-            FUN_L00_001fff28(data + 0x1d0, 2, *(float *)(data + 0x144));
+            *(float *)(snow_plow_vars + 0x140) =
+                fast_add_rotations(*(float *)(snow_plow_vars + 0x140), frame_time * 12.566371f);
+            FUN_L00_001fff28(snow_plow_vars + 0x190, 2, *(float *)(snow_plow_vars + 0x140));
+            *(float *)(snow_plow_vars + 0x144) =
+                fast_add_rotations(*(float *)(snow_plow_vars + 0x144), frame_time * 12.566371f);
+            FUN_L00_001fff28(snow_plow_vars + 0x1d0, 2, *(float *)(snow_plow_vars + 0x144));
             break;
         }
     }
-    if (*(int *)(data + 0x17c) != -1) {
-        struct Moby *other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(data + 0x17c) << 8));
+    if (*(int *)(snow_plow_vars + 0x17c) != -1) {
+        struct Moby *other =
+            (struct Moby *)(D_L04_0015FFD8 + (*(int *)(snow_plow_vars + 0x17c) << 8));
         other->draw_dist = 0x7f;
         switch (moby->oclass) {
         case SNOW_PLOW_CLASS_WITH_QUARTER_TURN_LINKED_MOBY:
@@ -346,8 +349,8 @@ hit:
                 allocate_voice_for_target_entry(0, 0, moby);
             else if (moby->oclass != 0x1e6)
                 allocate_voice_for_target_entry(1, 0, moby);
-            *(int *)(data + 0x170) = scale_game_frames(600);
-            *(int *)(data + 0x174) = 1;
+            *(int *)(snow_plow_vars + 0x170) = scale_game_frames(600);
+            *(int *)(snow_plow_vars + 0x174) = 1;
             break;
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             sphere_pos.q = 0;
@@ -385,8 +388,8 @@ hit:
             clear_u64_value(&sphere2.vector);
             sphere2.zero = 0;
             collect_mobies_in_sphere(&moby->pos, 6.0f, 0x10, moby, &sphere2);
-            *(int *)(data + 0x170) = scale_game_frames(600);
-            *(int *)(data + 0x174) = 1;
+            *(int *)(snow_plow_vars + 0x170) = scale_game_frames(600);
+            *(int *)(snow_plow_vars + 0x174) = 1;
             break;
         }
         fast_vec_scale(&delta, &moby->rot_row0, frame_scale * 0.075f);
@@ -683,19 +686,19 @@ hit:
         }
     }
     moby->hit_slot = 0xff;
-    if (*(int *)(data + 0x174) == 0)
+    if (*(int *)(snow_plow_vars + 0x174) == 0)
         return;
-    if (fast_dec_timer((int *)(data + 0x170))) {
+    if (fast_dec_timer((int *)(snow_plow_vars + 0x170))) {
         char *camera = D_L04_00166E00;
         amount = fast_arc_tan(moby->pos.x - *(float *)(camera + 0x140),
                               moby->pos.y - *(float *)(camera + 0x144));
         if (1.5707964f < fast_difference_between_rotations(*(float *)(camera + 0x158), amount)) {
             moby->collision = moby->pclass->collision;
             moby->flags &= 0xffbe;
-            *(int *)(data + 0x174) = 0;
-            if (*(int *)(data + 0x17c) != -1) {
+            *(int *)(snow_plow_vars + 0x174) = 0;
+            if (*(int *)(snow_plow_vars + 0x17c) != -1) {
                 struct Moby *other =
-                    (struct Moby *)(D_L04_0015FFD8 + (*(int *)(data + 0x17c) << 8));
+                    (struct Moby *)(D_L04_0015FFD8 + (*(int *)(snow_plow_vars + 0x17c) << 8));
                 other->flags &= 0xffbe;
             }
             moby->flags |= 0x1000;
@@ -704,8 +707,9 @@ hit:
     }
     moby->collision = 0;
     moby->flags |= 0x41;
-    if (*(int *)(data + 0x17c) != -1) {
-        struct Moby *other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(data + 0x17c) << 8));
+    if (*(int *)(snow_plow_vars + 0x17c) != -1) {
+        struct Moby *other =
+            (struct Moby *)(D_L04_0015FFD8 + (*(int *)(snow_plow_vars + 0x17c) << 8));
         other->flags |= 0x41;
     }
     moby->flags &= 0xefff;

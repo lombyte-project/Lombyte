@@ -33,7 +33,7 @@ typedef struct {
 extern LightDef  point_lights[] __asm__("D_0019C1C0");
 extern LightSlot point_light_data[] __asm__("D_0019C3C0");
 extern Obj40    *D_00160E8C __attribute__((sda));
-extern s32       D_00160E90;
+extern s32       tfrag_render_record_count __asm__("D_00160E90");
 
 extern s32  FUN_001f9bb0(void *, void *);
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
@@ -88,7 +88,8 @@ void create_point_light(s32 i) {
             slot->tfrag_start = slot->tie_count;
             scale_vector(&sphere, &sphere, 1024.0f);
             object_record_cursor = D_00160E8C;
-            for (tfrag_index = 0; tfrag_index < D_00160E90; tfrag_index++, object_record_cursor++) {
+            for (tfrag_index = 0; tfrag_index < tfrag_render_record_count;
+                 tfrag_index++, object_record_cursor++) {
                 if (FUN_001f9bb0(&sphere, object_record_cursor)) {
                     *instance_index_cursor++ = tfrag_index;
                     v = object_record_cursor->lights;

@@ -157,54 +157,54 @@ void scoutbot_update(Moby *moby) {
         SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL = 7,
         SCOUTBOT_STATE_EXPLODE_AND_REMOVE = 0x63
     };
-    Data_3DF8 *data = (struct Data_3DF8 *)moby->pvars;
+    Data_3DF8 *scoutbot_instance_vars = (struct Data_3DF8 *)moby->pvars;
     float      target_pos[4];
     float      offset[4];
     float      shot_pos[4];
 
-    sound_3DF8(3.6f, moby, 2, data->sound_state);
+    sound_3DF8(3.6f, moby, 2, scoutbot_instance_vars->sound_state);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, hero_pos_3DF8) < 28.0f) {
         wake_3DF8(moby);
         moby->shadow_range = 0x16;
     }
     update_scoutbot_health_and_target((char *)moby);
-    data->current_target = data->target;
-    qcopy(target_pos, data->target_pos);
+    scoutbot_instance_vars->current_target = scoutbot_instance_vars->target;
+    qcopy(target_pos, scoutbot_instance_vars->target_pos);
     switch (moby->state) {
     case SCOUTBOT_STATE_INITIALIZE:
-        if (data->f21C == -1) {
+        if (scoutbot_instance_vars->f21C == -1) {
             mark_moby_for_removal(moby);
             return;
         }
         moby->flags |= 0x1000;
         moby->rot.z = random_angle_radians();
-        data->f200 = 4.0f;
-        data->f204 = random_angle_radians();
-        data->f208 = 0.5f;
-        clear_u64_value(data->vel);
-        data->f20C = frame_time * 2.0943952f;
-        data->b58 = truncate_float_to_s32(15.0f);
-        data->b5A = truncate_float_to_s32(9.6f);
-        data->pD0 = &D_L08_00161888;
+        scoutbot_instance_vars->f200 = 4.0f;
+        scoutbot_instance_vars->f204 = random_angle_radians();
+        scoutbot_instance_vars->f208 = 0.5f;
+        clear_u64_value(scoutbot_instance_vars->vel);
+        scoutbot_instance_vars->f20C = frame_time * 2.0943952f;
+        scoutbot_instance_vars->b58 = truncate_float_to_s32(15.0f);
+        scoutbot_instance_vars->b5A = truncate_float_to_s32(9.6f);
+        scoutbot_instance_vars->pD0 = &D_L08_00161888;
         if (moby->prev_seq != 0) {
             blend_moby_animation(moby, 0, 0, 0);
         }
         moby->state = 1;
-        qcopy(data->home, &moby->pos);
+        qcopy(scoutbot_instance_vars->home, &moby->pos);
         if (probe_ground_height(&moby->pos, 0, 0.5f) > moby->pos.z - 10.0f) {
-            data->home[2] = probe_ground_height(&moby->pos, 0, 0.5f);
-            data->near_ground = 1;
+            scoutbot_instance_vars->home[2] = probe_ground_height(&moby->pos, 0, 0.5f);
+            scoutbot_instance_vars->near_ground = 1;
         } else {
-            data->home[2] = moby->pos.z;
-            data->near_ground = 0;
+            scoutbot_instance_vars->home[2] = moby->pos.z;
+            scoutbot_instance_vars->near_ground = 0;
         }
-        qcopy(data->wander_goal, data->home);
-        data->b29 = 0;
+        qcopy(scoutbot_instance_vars->wander_goal, scoutbot_instance_vars->home);
+        scoutbot_instance_vars->b29 = 0;
         break;
     case SCOUTBOT_STATE_IDLE:
-        if (data->f1B4 != 2) {
-            data->f200 = 0.0f;
-            data->f208 = 0.1f;
+        if (scoutbot_instance_vars->f1B4 != 2) {
+            scoutbot_instance_vars->f200 = 0.0f;
+            scoutbot_instance_vars->f208 = 0.1f;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
@@ -216,7 +216,7 @@ void scoutbot_update(Moby *moby) {
             offset[0] = fast_cos(heading) * radius;
             offset[1] = fast_sin(heading) * radius;
             offset[2] = 0.0f;
-            fast_vec_add(data->wander_goal, data->home, offset);
+            fast_vec_add(scoutbot_instance_vars->wander_goal, scoutbot_instance_vars->home, offset);
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
@@ -224,15 +224,15 @@ void scoutbot_update(Moby *moby) {
         }
         break;
     case SCOUTBOT_STATE_MOVE_TO_WANDER_GOAL: {
-        float heading =
-            fast_arc_tan(data->wander_goal[0] - moby->pos.x, data->wander_goal[1] - moby->pos.y);
+        float heading = fast_arc_tan(scoutbot_instance_vars->wander_goal[0] - moby->pos.x,
+                                     scoutbot_instance_vars->wander_goal[1] - moby->pos.y);
 
-        turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
+        turn_3DF8(moby, heading, &scoutbot_instance_vars->yaw_speed, 0.01f, 0.3f, 0.05f);
         if (fast_difference_between_rotations(moby->rot.z, heading) < 0.7853982f) {
-            data->vel[0] += fast_cos(moby->rot.z) * (frame_time_sq * 12.0f);
-            data->vel[1] += fast_sin(moby->rot.z) * (frame_time_sq * 12.0f);
+            scoutbot_instance_vars->vel[0] += fast_cos(moby->rot.z) * (frame_time_sq * 12.0f);
+            scoutbot_instance_vars->vel[1] += fast_sin(moby->rot.z) * (frame_time_sq * 12.0f);
         }
-        if (vector_distance_xy(&moby->pos, data->wander_goal) < 0.5f) {
+        if (vector_distance_xy(&moby->pos, scoutbot_instance_vars->wander_goal) < 0.5f) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 3);
             }
@@ -243,19 +243,19 @@ void scoutbot_update(Moby *moby) {
     case SCOUTBOT_STATE_APPROACH_TARGET: {
         float heading = fast_arc_tan(target_pos[0] - moby->pos.x, target_pos[1] - moby->pos.y);
 
-        turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
+        turn_3DF8(moby, heading, &scoutbot_instance_vars->yaw_speed, 0.01f, 0.3f, 0.05f);
         if (fast_difference_between_rotations(moby->rot.z, heading) < 0.7853982f) {
-            data->vel[0] += fast_cos(moby->rot.z) * (frame_time_sq * 12.0f);
-            data->vel[1] += fast_sin(moby->rot.z) * (frame_time_sq * 12.0f);
+            scoutbot_instance_vars->vel[0] += fast_cos(moby->rot.z) * (frame_time_sq * 12.0f);
+            scoutbot_instance_vars->vel[1] += fast_sin(moby->rot.z) * (frame_time_sq * 12.0f);
         }
-        if (vector_distance_xy(&moby->pos, &data->current_target->pos) < 3.0f &&
-            absolute_float(data->current_target->pos.z - moby->pos.z) < 2.0f) {
-            data->voice = allocate_voice_for_target_entry(0, 0, moby);
+        if (vector_distance_xy(&moby->pos, &scoutbot_instance_vars->current_target->pos) < 3.0f &&
+            absolute_float(scoutbot_instance_vars->current_target->pos.z - moby->pos.z) < 2.0f) {
+            scoutbot_instance_vars->voice = allocate_voice_for_target_entry(0, 0, moby);
             moby->state = 6;
-        } else if (vector_distance_xy(target_pos, data->home) > 15.0f ||
-                   absolute_float(data->home[2] - target_pos[2]) > 4.0f) {
-            data->f200 = 4.0f;
-            data->f208 = 0.5f;
+        } else if (vector_distance_xy(target_pos, scoutbot_instance_vars->home) > 15.0f ||
+                   absolute_float(scoutbot_instance_vars->home[2] - target_pos[2]) > 4.0f) {
+            scoutbot_instance_vars->f200 = 4.0f;
+            scoutbot_instance_vars->f208 = 0.5f;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 6);
             }
@@ -264,17 +264,18 @@ void scoutbot_update(Moby *moby) {
         break;
     }
     case SCOUTBOT_STATE_RETURN_HOME: {
-        float heading = fast_arc_tan(data->home[0] - moby->pos.x, data->home[1] - moby->pos.y);
+        float heading = fast_arc_tan(scoutbot_instance_vars->home[0] - moby->pos.x,
+                                     scoutbot_instance_vars->home[1] - moby->pos.y);
 
-        data->f200 = 4.0f;
-        data->f208 = 0.5f;
-        turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
+        scoutbot_instance_vars->f200 = 4.0f;
+        scoutbot_instance_vars->f208 = 0.5f;
+        turn_3DF8(moby, heading, &scoutbot_instance_vars->yaw_speed, 0.01f, 0.3f, 0.05f);
         if (fast_difference_between_rotations(moby->rot.z, heading) < 0.7853982f) {
-            data->vel[0] += fast_cos(moby->rot.z) * (frame_time_sq * 12.0f);
-            data->vel[1] += fast_sin(moby->rot.z) * (frame_time_sq * 12.0f);
+            scoutbot_instance_vars->vel[0] += fast_cos(moby->rot.z) * (frame_time_sq * 12.0f);
+            scoutbot_instance_vars->vel[1] += fast_sin(moby->rot.z) * (frame_time_sq * 12.0f);
         }
-        if (vector_distance_xy(&moby->pos, data->home) < 1.0f &&
-            absolute_float(data->home[2] - moby->pos.z) >= 3.9f) {
+        if (vector_distance_xy(&moby->pos, scoutbot_instance_vars->home) < 1.0f &&
+            absolute_float(scoutbot_instance_vars->home[2] - moby->pos.z) >= 3.9f) {
             if (moby->prev_seq != 0) {
                 blend_moby_animation(moby, 0, 0, 3);
             }
@@ -286,33 +287,35 @@ void scoutbot_update(Moby *moby) {
         float heading = fast_arc_tan(target_pos[0] - moby->pos.x, target_pos[1] - moby->pos.y);
         float frame;
 
-        turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
+        turn_3DF8(moby, heading, &scoutbot_instance_vars->yaw_speed, 0.01f, 0.3f, 0.05f);
         frame = compute_interpolated_record_value(moby);
         if (moby->seq == moby->prev_seq && frame >= 9.0f && frame <= 14.0f) {
             float charge = (frame - 9.0f) / 5.0f;
             float spin;
 
-            data->glow_a[3] = charge / 3.0f;
-            data->glow_b[3] = (charge * 2.0f) / 3.0f;
+            scoutbot_instance_vars->glow_a[3] = charge / 3.0f;
+            scoutbot_instance_vars->glow_b[3] = (charge * 2.0f) / 3.0f;
             spin = random_angle_radians();
-            data->glow_a[1] = fast_sin(spin) * 0.25f * charge;
-            data->glow_a[2] = fast_cos(spin) * 0.25f * charge;
-            data->glow_b[1] = fast_sin(spin) * 0.25f * charge;
-            data->glow_b[2] = fast_cos(spin) * 0.25f * charge;
+            scoutbot_instance_vars->glow_a[1] = fast_sin(spin) * 0.25f * charge;
+            scoutbot_instance_vars->glow_a[2] = fast_cos(spin) * 0.25f * charge;
+            scoutbot_instance_vars->glow_b[1] = fast_sin(spin) * 0.25f * charge;
+            scoutbot_instance_vars->glow_b[2] = fast_cos(spin) * 0.25f * charge;
             add_draw_callback(draw_target_beam, moby);
         }
         if (is_value_within_interpolated_window(moby, 14.0f)) {
-            if (vector_distance_xy(&data->target->pos, &moby->pos) < 3.0f &&
-                absolute_float(data->current_target->pos.z - moby->pos.z) < 1.0f) {
+            if (vector_distance_xy(&scoutbot_instance_vars->target->pos, &moby->pos) < 3.0f &&
+                absolute_float(scoutbot_instance_vars->current_target->pos.z - moby->pos.z) <
+                    1.0f) {
                 offset[0] = fast_cos(moby->rot.z) * 0.2f;
                 offset[1] = fast_sin(moby->rot.z) * 0.2f;
                 offset[2] = 0.0f;
                 qcopy(shot_pos, target_pos);
                 shot_pos[2] += 0.75f;
-                spawn_nearby_effect(data->current_target, moby, 1, shot_pos, offset, 1.0f);
+                spawn_nearby_effect(
+                    scoutbot_instance_vars->current_target, moby, 1, shot_pos, offset, 1.0f);
             }
-            data->f200 = 4.0f;
-            data->f208 = 0.5f;
+            scoutbot_instance_vars->f200 = 4.0f;
+            scoutbot_instance_vars->f208 = 0.5f;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 3);
             }
@@ -323,8 +326,8 @@ void scoutbot_update(Moby *moby) {
     case SCOUTBOT_STATE_WAIT_FOR_VOICE: {
         float heading = fast_arc_tan(target_pos[0] - moby->pos.x, target_pos[1] - moby->pos.y);
 
-        turn_3DF8(moby, heading, &data->yaw_speed, 0.01f, 0.3f, 0.05f);
-        if (voice_is_playing(moby, data->voice) == 0) {
+        turn_3DF8(moby, heading, &scoutbot_instance_vars->yaw_speed, 0.01f, 0.3f, 0.05f);
+        if (voice_is_playing(moby, scoutbot_instance_vars->voice) == 0) {
             if (moby->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, 3);
             }
@@ -333,13 +336,13 @@ void scoutbot_update(Moby *moby) {
         break;
     }
     case 5:
-        if (FUN_L00_002dc9f0(moby, data->react)) {
-            data->f200 = 4.0f;
-            data->f208 = 0.5f;
+        if (FUN_L00_002dc9f0(moby, scoutbot_instance_vars->react)) {
+            scoutbot_instance_vars->f200 = 4.0f;
+            scoutbot_instance_vars->f208 = 0.5f;
             if (moby->prev_seq != 2) {
                 blend_moby_animation(moby, 2, 0, 3);
             }
-            data->hC8 = 0;
+            scoutbot_instance_vars->hC8 = 0;
         }
         break;
     case SCOUTBOT_STATE_EXPLODE_AND_REMOVE:
@@ -347,7 +350,7 @@ void scoutbot_update(Moby *moby) {
         offset[2] += 1.0f;
         allocate_voice_for_target_entry(1, 0, moby);
         explode_3DF8(moby,
-                     data->vel,
+                     scoutbot_instance_vars->vel,
                      offset,
                      0.0f,
                      0.0f,
@@ -375,7 +378,7 @@ void scoutbot_update(Moby *moby) {
             col = 0x7F2828A0;
         }
         moby->glow_color = colorlerp_3DF8(moby->glow_color, col, 0.1f);
-        moby_point_position(moby, 3, data->f220);
+        moby_point_position(moby, 3, scoutbot_instance_vars->f220);
         add_draw_callback(draw_scoutbot_glow_quad, moby);
     }
 }
@@ -384,16 +387,16 @@ void scoutbot_update(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
 void update_scoutbot_health_and_target(struct Moby *moby) {
-    char *data = ((char *)moby->pvars);
+    char *scoutbot_pvars = ((char *)moby->pvars);
     int   hit;
     float dmg;
     int   hit_reaction_code;
     dmg = 0.0f;
-    hit_reaction_code =
-        hit_reaction(moby, find_moby_hit(moby, 0x330000, 0), data + 0x20, 0, &hit, &dmg, 0, 4);
+    hit_reaction_code = hit_reaction(
+        moby, find_moby_hit(moby, 0x330000, 0), scoutbot_pvars + 0x20, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x63) {
-        *(float *)(data + 0x20) -= dmg;
-        if (*(float *)(data + 0x20) <= 0.0f)
+        *(float *)(scoutbot_pvars + 0x20) -= dmg;
+        if (*(float *)(scoutbot_pvars + 0x20) <= 0.0f)
             hit_reaction_code = 1;
         if (hit_reaction_code < 12) {
             if (hit_reaction_code >= 0) {
@@ -404,17 +407,19 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
     if (((unsigned char *)moby)[0x20] != 0 && ((unsigned char *)moby)[0x20] != 4) {
-        char *path = ((char *)l08_paths[*(int *)(data + 0x21C)]);
-        if (func_L00_00260FB0_f(moby, data + 0x170, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
-            if (14.0f < vector_distance_xy(data + 0x1C0, data + 0x170)) {
-                *(int *)(data + 0x1B4) = 2;
-            } else if (3.0f < absolute_float(*(float *)(data + 0x1C8) - *(float *)(data + 0x178))) {
-                *(int *)(data + 0x1B4) = 2;
+        char *path = ((char *)l08_paths[*(int *)(scoutbot_pvars + 0x21C)]);
+        if (func_L00_00260FB0_f(
+                moby, scoutbot_pvars + 0x170, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
+            if (14.0f < vector_distance_xy(scoutbot_pvars + 0x1C0, scoutbot_pvars + 0x170)) {
+                *(int *)(scoutbot_pvars + 0x1B4) = 2;
+            } else if (3.0f < absolute_float(*(float *)(scoutbot_pvars + 0x1C8) -
+                                             *(float *)(scoutbot_pvars + 0x178))) {
+                *(int *)(scoutbot_pvars + 0x1B4) = 2;
             }
         }
     }
-    if (*(int *)(data + 0x1B0) == 0) {
-        *(int *)(data + 0x1B0) = ((int)hero.moby);
+    if (*(int *)(scoutbot_pvars + 0x1B0) == 0) {
+        *(int *)(scoutbot_pvars + 0x1B0) = ((int)hero.moby);
     }
 }
 
@@ -554,8 +559,9 @@ void draw_target_beam(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5080), where it is exact; names translated to the US level program. */
 
 void update_scoutbot_movement(struct Moby *moby) {
-    char  *data = ((char *)moby->pvars);
-    float  movement_length = fast_vec_length((float *)(data + 0x40)) - frame_time_sq * 6.0f;
+    char *scoutbot_instance_state = ((char *)moby->pvars);
+    float movement_length =
+        fast_vec_length((float *)(scoutbot_instance_state + 0x40)) - frame_time_sq * 6.0f;
     float  movement_length_limit = frame_time * 3.0f;
     float  target_height;
     float  vertical_step;
@@ -566,15 +572,16 @@ void update_scoutbot_movement(struct Moby *moby) {
     } else if (movement_length < 0.0f) {
         movement_length = 0.0f;
     }
-    velocity_ptr = (float *)(data + 0x40);
+    velocity_ptr = (float *)(scoutbot_instance_state + 0x40);
     fast_vec_normalize(velocity_ptr, velocity_ptr, movement_length);
     fast_vec_add((float *)&moby->pos, (float *)&moby->pos, velocity_ptr);
-    *(float *)(data + 0x204) =
-        fast_add_rotations(*(float *)(data + 0x204), *(float *)(data + 0x20C));
-    target_height =
-        *(float *)(data + 0x1C8) + *(float *)(data + 0x208) * fast_sin(*(float *)(data + 0x204));
-    if (*(short *)(data + 0x216))
-        target_height += *(float *)(data + 0x200);
+    *(float *)(scoutbot_instance_state + 0x204) = fast_add_rotations(
+        *(float *)(scoutbot_instance_state + 0x204), *(float *)(scoutbot_instance_state + 0x20C));
+    target_height = *(float *)(scoutbot_instance_state + 0x1C8) +
+                    *(float *)(scoutbot_instance_state + 0x208) *
+                        fast_sin(*(float *)(scoutbot_instance_state + 0x204));
+    if (*(short *)(scoutbot_instance_state + 0x216))
+        target_height += *(float *)(scoutbot_instance_state + 0x200);
     vertical_step = target_height - moby->pos.z;
     {
         float vertical_step_limit = frame_time * 3.0f;
@@ -586,7 +593,7 @@ void update_scoutbot_movement(struct Moby *moby) {
                 vertical_step = vertical_step_limit;
         }
     }
-    *(float *)(data + 0x48) = vertical_step;
+    *(float *)(scoutbot_instance_state + 0x48) = vertical_step;
     qcopy(probe_position_or_correction, (float *)&moby->pos);
     probe_position_or_correction[2] += 0.5f;
     if (FUN_L08_002025d0(probe_position_or_correction, 0x190, 0, moby, 0)) {
@@ -609,7 +616,7 @@ void update_scoutbot_movement(struct Moby *moby) {
 void *enter_scoutbot_return_home_state(struct Moby *moby) __asm__("FUN_L08_002d4050");
 
 void *enter_scoutbot_return_home_state(struct Moby *moby) {
-    void *result = cancel_suck_cannon_suction(moby);
+    void *suction_cancel_status = cancel_suck_cannon_suction(moby);
     char *scoutbot_data = ((char *)moby->pvars);
     moby->state = 3;
     *(float *)(scoutbot_data + 0x200) = 4.0f;
@@ -618,11 +625,11 @@ void *enter_scoutbot_return_home_state(struct Moby *moby) {
         blend_moby_animation(moby, 2, 0, 3);
     }
     *(short *)(scoutbot_data + 0xC8) = 0;
-    return result;
+    return suction_cancel_status;
 }
 
 void draw_scoutbot_glow_quad(struct Moby *moby) {
-    char   *data = ((char *)moby->pvars);
+    char   *scoutbot_private_state = ((char *)moby->pvars);
     Pk      pk;
     float   up[4];
     float   M[4][4];
@@ -646,7 +653,7 @@ void draw_scoutbot_glow_quad(struct Moby *moby) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    qcopy(M[3], (float *)(data + 0x220));
+    qcopy(M[3], (float *)(scoutbot_private_state + 0x220));
     fast_vec_sub(M[0], D_L08_001675C0_lui, M[3]);
     fast_vec_normalize(M[0], M[0], 1.0f);
     fast_vec_cross(M[1], M[0], up);

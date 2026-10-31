@@ -8,11 +8,11 @@ void       snd_post_message(void) __asm__("FUN_0012e9a0");
 void snd_post_message(void) {
     s32 *batch_count;
     s32  active_batch_buffer_index;
-    u8  *base;
+    u8  *command_buffer_pointer_table;
 
     active_batch_buffer_index = snd_batch_index;
-    base = (u8 *)&snd_batch_command_buffers;
-    batch_count = *(s32 **)(base + (active_batch_buffer_index * 4));
+    command_buffer_pointer_table = (u8 *)&snd_batch_command_buffers;
+    batch_count = *(s32 **)(command_buffer_pointer_table + (active_batch_buffer_index * 4));
     *batch_count += 1;
     snd_flush_sound_commands(batch_count);
 }

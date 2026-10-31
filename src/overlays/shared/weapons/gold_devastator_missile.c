@@ -383,7 +383,7 @@ unsigned char *spawn_devastator_missile(unsigned char *owner,
                                         float          initial_yaw,
                                         float          initial_pitch) __asm__("FUN_L00_002afc70");
 
-unsigned char *spawn_devastator_missile(unsigned char *owner,
+unsigned char *spawn_devastator_missile(unsigned char *missile_source_moby,
                                         V_2afc70      *spawn_position,
                                         unsigned char *target_moby,
                                         float          guidance_yaw,
@@ -409,7 +409,7 @@ unsigned char *spawn_devastator_missile(unsigned char *owner,
         MOBY(missile_moby)->rot.z = initial_yaw;
         MOBY(missile_moby)->rot.y = initial_pitch;
         missile_moby[0x20] = 0;
-        *(unsigned char **)(missile_data + 0x10) = owner;
+        *(unsigned char **)(missile_data + 0x10) = missile_source_moby;
         qcopy(missile_moby + 0x10, spawn_position);
         default_desired_speed = frame_time * 20.0f;
         *(int *)(missile_data + 0x38) = 1;
@@ -446,8 +446,9 @@ unsigned char *spawn_devastator_missile(unsigned char *owner,
         turn_period = FUN_001f96f8_2afc70(frame_time * 0.1f < x ? 0x3C : 0xF);
         *(short *)(missile_data + 0x3E) = turn_period;
         *(short *)(missile_data + 0x3C) = turn_period;
-        if (owner != 0 && owner[0x20] != 0xFE && owner[0x20] != 0xFD) {
-            collision_start.q = ((V_2afc70 *)(owner + 0x10))->q;
+        if (missile_source_moby != 0 && missile_source_moby[0x20] != 0xFE &&
+            missile_source_moby[0x20] != 0xFD) {
+            collision_start.q = ((V_2afc70 *)(missile_source_moby + 0x10))->q;
         } else {
             qcopy(&collision_start, &hero_pos);
             collision_start.f[2] += 0.6f;
@@ -468,7 +469,10 @@ void select_gold_devastator_missile_target(char *self,
                                            O    *out,
                                            char *skip) __asm__("FUN_L00_002affa8");
 
-void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
+void select_gold_devastator_missile_target(char *gold_missile_moby,
+                                           O    *gold_missile_data,
+
+                                           char *skip) {
     VU    candidate_aim_position;
     VU    lv;
     char *candidate_moby;
@@ -482,8 +486,8 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
 
     i = 0;
     best = 10000.0f;
-    yaw = *(f32 *)(self + 0x48);
-    pitch = *(f32 *)(self + 0x44);
+    yaw = *(f32 *)(gold_missile_moby + 0x48);
+    pitch = *(f32 *)(gold_missile_moby + 0x44);
     candidate_moby = active_mobies[i];
     if (candidate_moby == 0)
         return;
@@ -494,7 +498,7 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
         if (candidate_moby == skip)
             goto next;
         qcopy(&candidate_aim_position, candidate_moby + 0x10);
-        spos = self + 0x10;
+        spos = gold_missile_moby + 0x10;
         opos = candidate_moby + 0x10;
         if (40.0f < fast_vec_dist(&candidate_aim_position, spos))
             goto next;
@@ -521,10 +525,10 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
             goto next;
         if (*(s16 *)(((char *)MOBY(candidate_moby)->pclass) + 0x46) != 5)
             goto next;
-        angh = fast_arc_tan(candidate_aim_position.f[0] - *(f32 *)(self + 0x10),
-                            candidate_aim_position.f[1] - *(f32 *)(self + 0x14));
+        angh = fast_arc_tan(candidate_aim_position.f[0] - *(f32 *)(gold_missile_moby + 0x10),
+                            candidate_aim_position.f[1] - *(f32 *)(gold_missile_moby + 0x14));
         angv = fast_arc_tan(vector_distance_xy(spos, &candidate_aim_position),
-                            candidate_aim_position.f[2] - *(f32 *)(self + 0x18));
+                            candidate_aim_position.f[2] - *(f32 *)(gold_missile_moby + 0x18));
         candidate_aim_distance = fast_vec_dist(spos, &candidate_aim_position);
         if (candidate_aim_distance < 2.5f) {
             char *hero_moby = *(char **)&hero_context->moby;
@@ -552,7 +556,7 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
             fast_arc_sin(aim_angle_limit_or_asin_numerator / candidate_aim_distance);
         }
         flag = 1;
-        if (FUN_001efa68_u(D_L00_00166DC0, &candidate_aim_position, 6, self, 0) != 0) {
+        if (FUN_001efa68_u(D_L00_00166DC0, &candidate_aim_position, 6, gold_missile_moby, 0) != 0) {
             s32 hit = D_L00_00173E40[6];
             if (hit == 0 || hit != (s32)candidate_moby)
                 flag = 0;
@@ -563,17 +567,17 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
             if (find_listed_moby_by_data_id(candidate_moby) != 0)
                 goto next;
             z = 0.5f;
-            out->owner = candidate_moby;
+            gold_missile_data->owner = candidate_moby;
             if (candidate_aim_record_address != 0)
                 z = *(f32 *)(candidate_aim_record_address + 0x10);
-            out->f2C = angh;
-            out->w38 = flag;
-            out->f30 = pitch;
-            out->w24 = 0;
-            out->w28 = 0;
-            out->w20 = 0;
-            qcopy(out, opos);
-            out->f1C = z;
+            gold_missile_data->f2C = angh;
+            gold_missile_data->w38 = flag;
+            gold_missile_data->f30 = pitch;
+            gold_missile_data->w24 = 0;
+            gold_missile_data->w28 = 0;
+            gold_missile_data->w20 = 0;
+            qcopy(gold_missile_data, opos);
+            gold_missile_data->f1C = z;
         }
     next:
         i++;

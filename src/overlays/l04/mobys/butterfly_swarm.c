@@ -84,7 +84,9 @@ void steer_child_moby(Moby **others,
                       Steer *steer,
                       float *params) __asm__("FUN_L04_001f30e0");
 
-void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *params) {
+void steer_child_moby(
+
+    Moby **others, int other_count, Moby *moby, Steer *steer, float *steering_settings) {
     Vec_1F3010 path_hit;
     Vec_1F3010 force;
     Vec_1F3010 uninitialized_point;
@@ -92,7 +94,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
     Vec_1F3010 ray_end;
     Vec_1F3010 surface_normal;
     PathEl    *path;
-    Moby      *other;
+    Moby      *repulsion_candidate;
     int        hit;
     Moby      *too_close;
     int        nearest_index;
@@ -121,7 +123,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             fast_vec_sub(&force, &path_hit, &moby->pos);
             length = fast_vec_length(&force);
             if (length != 0.0f) {
-                length = -params[2] / (length * length);
+                length = -steering_settings[2] / (length * length);
             } else {
                 length = -1000.0f;
             }
@@ -129,7 +131,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             fast_vec_sub(&force, &path_hit, &moby->pos);
             length = fast_vec_length(&force) + 3.0f;
             if (distance < length) {
-                length = length * (params[2] * length);
+                length = length * (steering_settings[2] * length);
             } else {
                 length = 10000.0f;
             }
@@ -137,13 +139,13 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
         fast_vec_normalize(&force, &force, length);
         fast_vec_add(steer, steer, &force);
     }
-    if (params[0] != 0.0f) {
-        fast_vec_normalize(&force, &steer->dir, params[0]);
+    if (steering_settings[0] != 0.0f) {
+        fast_vec_normalize(&force, &steer->dir, steering_settings[0]);
         fast_vec_add(steer, steer, &force);
     }
     if (steer->target == moby) {
         qcopy(&force, &steer->pos);
-        fast_vec_normalize(&force, &force, params[1]);
+        fast_vec_normalize(&force, &force, steering_settings[1]);
         fast_vec_add(steer, steer, &force);
     } else {
         if (steer->path != -1) {
@@ -180,7 +182,8 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             if (hit == 0) {
                 fast_vec_sub(&force, &force, &moby->pos);
                 length = fast_vec_length(&force);
-                fast_vec_normalize(&force, &force, length * (length * length * params[2]));
+                fast_vec_normalize(
+                    &force, &force, length * (length * length * steering_settings[2]));
                 fast_vec_add(steer, steer, &force);
             }
         }
@@ -188,7 +191,8 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             fast_vec_sub(&force, &steer->target->pos, &moby->pos);
             if (fast_vec_length(&force) < distance) {
                 length = fast_vec_length(&force);
-                fast_vec_normalize(&force, &force, length * (length * length * params[1]));
+                fast_vec_normalize(
+                    &force, &force, length * (length * length * steering_settings[1]));
                 fast_vec_add(steer, steer, &force);
             }
         }
@@ -198,33 +202,34 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
             force.z = steer->point->z - moby->pos.z;
             if (fast_vec_length(&force) < distance) {
                 length = fast_vec_length(&force);
-                fast_vec_normalize(&force, &force, length * (length * length * params[1]));
+                fast_vec_normalize(
+                    &force, &force, length * (length * length * steering_settings[1]));
                 fast_vec_add(steer, steer, &force);
             }
         }
         for (i = 0; i < other_count + 1; i++) {
             if (i < other_count) {
-                other = others[i];
+                repulsion_candidate = others[i];
             } else {
-                other = hero.moby;
+                repulsion_candidate = hero.moby;
             }
             class_index = 0;
-            if ((*(signed char *)&other->state) < 0 || moby == other) {
+            if ((*(signed char *)&repulsion_candidate->state) < 0 || moby == repulsion_candidate) {
                 continue;
             }
-            length = fast_vec_dist(&moby->pos, &other->pos);
+            length = fast_vec_dist(&moby->pos, &repulsion_candidate->pos);
             if (steer->near < length) {
                 continue;
             }
             do {
-                if (other->oclass == steer->classes[class_index]) {
+                if (repulsion_candidate->oclass == steer->classes[class_index]) {
                     break;
                 }
                 class_index++;
             } while (class_index < steer->count);
             if (class_index < steer->count) {
-                if (length < params[4]) {
-                    too_close = other;
+                if (length < steering_settings[4]) {
+                    too_close = repulsion_candidate;
                     break;
                 }
                 repulsion = length / steer->scale[class_index];
@@ -233,7 +238,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
                 } else {
                     repulsion = 1000.0f;
                 }
-                fast_vec_sub(&force, &moby->pos, &other->pos);
+                fast_vec_sub(&force, &moby->pos, &repulsion_candidate->pos);
                 fast_vec_normalize(&force, &force, repulsion);
                 fast_vec_add(steer, steer, &force);
             }
@@ -249,32 +254,34 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
                 qcopy(&surface_normal, &coll_hit.normal_x);
                 length = fast_arc_tan(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x));
                 set_vector_length_xy(&surface_normal, &surface_normal, 1.0f);
-                fast_vec_scale(&surface_normal, &surface_normal, params[3]);
+                fast_vec_scale(&surface_normal, &surface_normal, steering_settings[3]);
                 fast_vec_add(steer, steer, &surface_normal);
                 if (0.4f < length) {
-                    fast_vec_scale(
-                        &surface_normal, &surface_normal, params[3] * (length * 10000.0f));
+                    fast_vec_scale(&surface_normal,
+                                   &surface_normal,
+                                   steering_settings[3] * (length * 10000.0f));
                     fast_vec_add(steer, steer, &surface_normal);
                 }
                 if (0.2f < moby->pos.z - coll_hit.point.f[2]) {
-                    set_vector_length_xy(&surface_normal, &steer->pos, -(params[3] * 1000.0f));
+                    set_vector_length_xy(
+                        &surface_normal, &steer->pos, -(steering_settings[3] * 1000.0f));
                     fast_vec_add(steer, steer, &surface_normal);
                 }
             }
         }
     } else {
-        if (coll_sphere(params[4], &moby->pos, 4, moby) != 0) {
+        if (coll_sphere(steering_settings[4], &moby->pos, 4, moby) != 0) {
             fast_vec_sub(&force, D_L04_00173FF0, &moby->pos);
-            force.z = force.z + params[3];
-            fast_vec_normalize(&force, &force, params[3]);
+            force.z = force.z + steering_settings[3];
+            fast_vec_normalize(&force, &force, steering_settings[3]);
             fast_vec_add(steer, steer, &force);
         }
     }
     if (steer->f48 == 0.0f) {
-        set_vector_length_xy(steer, steer, params[6]);
+        set_vector_length_xy(steer, steer, steering_settings[6]);
         steer->vel.z = 0.0f;
     } else {
-        fast_vec_normalize(steer, steer, params[6]);
+        fast_vec_normalize(steer, steer, steering_settings[6]);
         steer->vel.z = steer->vel.z / steer->f48;
     }
     if (fast_dec_timer_s16(&steer->timer) != 0) {
@@ -291,9 +298,9 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
     if (too_close != 0) {
         fast_vec_sub(&force, &moby->pos, &too_close->pos);
         if (steer->f48 != 0.0f) {
-            fast_vec_normalize(steer, &force, params[6]);
+            fast_vec_normalize(steer, &force, steering_settings[6]);
         } else {
-            set_vector_length_xy(steer, &force, params[6]);
+            set_vector_length_xy(steer, &force, steering_settings[6]);
         }
     }
 }
@@ -415,7 +422,11 @@ int find_closest_polygon_edge_point(float *out,
                                     float *poly,
                                     int    vertex_count) __asm__("FUN_L04_0024c7d8");
 
-int find_closest_polygon_edge_point(float *out, float *query_point, float *poly, int vertex_count) {
+int find_closest_polygon_edge_point(float *closest_polygon_edge_point,
+                                    float *query_point,
+                                    float *poly,
+
+                                    int vertex_count) {
     float edge_closest_point[4];
     float edge_to_query_offset[4];
     float best;
@@ -431,7 +442,7 @@ int find_closest_polygon_edge_point(float *out, float *query_point, float *poly,
         distance_to_edge = fast_vec_length(edge_to_query_offset);
         if (i == 0 || distance_to_edge < best) {
             best = distance_to_edge;
-            qcopy(out, edge_closest_point);
+            qcopy(closest_polygon_edge_point, edge_closest_point);
         }
     }
     return has_positive_edge_cross;
@@ -469,20 +480,20 @@ s32 advance_moby_along_path(
     struct Moby *moby, PathPoints_eb20 *path, s32 i, s32 path_index_step, f32 advance_distance) {
     Vec4 seg;
     Vec4 rel;
-    s32  next;
+    s32  next_path_point_index;
     f32  segment_length;
     f32  along;
 
-    next = path_next_eb20(path, i, path_index_step);
-    fast_vec_sub(&seg, &path->point[next], &path->point[i]);
+    next_path_point_index = path_next_eb20(path, i, path_index_step);
+    fast_vec_sub(&seg, &path->point[next_path_point_index], &path->point[i]);
     segment_length = fast_vec_length(&seg);
     fast_vec_normalize(&seg, &seg, 1.0f);
     fast_vec_sub(&rel, &moby->pos, &path->point[i]);
     along = fast_vec_dot(&rel, &seg) + advance_distance;
     if (segment_length < along) {
-        i = next;
-        next = path_next_eb20(path, i, path_index_step);
-        fast_vec_sub(&seg, &path->point[next], &path->point[i]);
+        i = next_path_point_index;
+        next_path_point_index = path_next_eb20(path, i, path_index_step);
+        fast_vec_sub(&seg, &path->point[next_path_point_index], &path->point[i]);
         along = along - segment_length;
         fast_vec_normalize(&seg, &seg, 1.0f);
     }
@@ -541,9 +552,9 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 
 void update_butterfly_swarm(struct Moby *moby) {
-    PVars        *data = (PVars *)moby->pvars;
+    PVars        *swarm_controller_pvars = (PVars *)moby->pvars;
     struct Moby **children;
-    struct Moby  *other;
+    struct Moby  *population_scan_moby;
     f32           distance;
     f32           angle;
     f32           angle2;
@@ -555,53 +566,62 @@ void update_butterfly_swarm(struct Moby *moby) {
     if (swarm_motion_parameters_initialized_gp == 0) {
         f32 *effect_dest = D_L04_00166130;
         memset(effect, 0, 0x20);
-        effect[1] = convert_integer_to_float(data->child_count) * 2.073f;
+        effect[1] = convert_integer_to_float(swarm_controller_pvars->child_count) * 2.073f;
         effect[3] = 2.0f;
         effect[4] = 1.0f;
         effect[5] = 1.0f;
         swarm_motion_parameters_initialized_gp = 1;
         __builtin_memcpy(effect_dest, effect, 0x20);
     }
-    if (data->initialized == 0) {
-        qcopy(&data->origin, &moby->pos);
-        data->angle = 0.0f;
-    } else if (data->child_count == 0) {
-        for (other = (struct Moby *)D_L04_0015FFE4; other != 0; other = other->next) {
-            if ((s8)other->state >= 0 && other->oclass == 0x55) {
-                data->child_count++;
+    if (swarm_controller_pvars->initialized == 0) {
+        qcopy(&swarm_controller_pvars->origin, &moby->pos);
+        swarm_controller_pvars->angle = 0.0f;
+    } else if (swarm_controller_pvars->child_count == 0) {
+        for (population_scan_moby = (struct Moby *)D_L04_0015FFE4; population_scan_moby != 0;
+             population_scan_moby = population_scan_moby->next) {
+            if ((s8)population_scan_moby->state >= 0 && population_scan_moby->oclass == 0x55) {
+                swarm_controller_pvars->child_count++;
             }
         }
-        D_L04_00166130[1] = convert_integer_to_float(data->child_count) * 2.073f;
+        D_L04_00166130[1] = convert_integer_to_float(swarm_controller_pvars->child_count) * 2.073f;
     }
-    if (data->path_index == -1) {
-        data->angle = fast_add_rotations(data->angle, frame_scale * 0.0034906587f);
-        moby->pos.x = data->origin.x + data->radius * fast_cos(data->angle);
-        moby->pos.y = data->origin.y + data->radius * fast_sin(data->angle);
-    } else if (data->initialized != 0) {
+    if (swarm_controller_pvars->path_index == -1) {
+        swarm_controller_pvars->angle =
+            fast_add_rotations(swarm_controller_pvars->angle, frame_scale * 0.0034906587f);
+        moby->pos.x = swarm_controller_pvars->origin.x +
+                      swarm_controller_pvars->radius * fast_cos(swarm_controller_pvars->angle);
+        moby->pos.y = swarm_controller_pvars->origin.y +
+                      swarm_controller_pvars->radius * fast_sin(swarm_controller_pvars->angle);
+    } else if (swarm_controller_pvars->initialized != 0) {
         s32 i;
         distance = 10000.0f;
-        for (i = 0; i < data->count; i++) {
-            f32 child_distance = vector_distance_xy(&moby->pos, &data->children[i]->pos);
+        for (i = 0; i < swarm_controller_pvars->count; i++) {
+            f32 child_distance =
+                vector_distance_xy(&moby->pos, &swarm_controller_pvars->children[i]->pos);
             if (child_distance < distance)
                 distance = child_distance;
         }
         speed = 0.0f;
         if (distance < 3.0f)
             speed = 3.0f - distance;
-        data->direction = advance_moby_along_path(
-            moby, D_L04_001b0630[data->path_index], data->direction, 1, speed);
+        swarm_controller_pvars->direction =
+            advance_moby_along_path(moby,
+                                    D_L04_001b0630[swarm_controller_pvars->path_index],
+                                    swarm_controller_pvars->direction,
+                                    1,
+                                    speed);
     }
-    if (data->initialized == 0) {
+    if (swarm_controller_pvars->initialized == 0) {
         s32          i;
         struct Moby *child;
-        data->initialized = 1;
-        data->child_count = 0;
-        for (i = 0; i < data->count; i++) {
-            data->children[i] = 0;
+        swarm_controller_pvars->initialized = 1;
+        swarm_controller_pvars->child_count = 0;
+        for (i = 0; i < swarm_controller_pvars->count; i++) {
+            swarm_controller_pvars->children[i] = 0;
             child = create_moby(0x55);
             if (child != 0) {
                 SwarmPartVars *part = (SwarmPartVars *)child->pvars;
-                data->children[i] = child;
+                swarm_controller_pvars->children[i] = child;
                 child->update_dist = 0x7f;
                 child->draw_dist = 0x7f;
                 child->scale *= random_float_between(0.7f, 1.3f);
@@ -636,17 +656,18 @@ void update_butterfly_swarm(struct Moby *moby) {
     } else {
         s32          i;
         struct Moby *child;
-        for (i = 0; i < data->count; i++) {
+        for (i = 0; i < swarm_controller_pvars->count; i++) {
             void *part;
-            children = data->children;
+            children = swarm_controller_pvars->children;
             child = children[i];
             part = child->pvars;
-            D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale *
-                                ((child->anim_speed + 1.0f) * 0.5f) * 0.05f * frame_scale_sq *
-                                ((child->anim_speed + 1.0f) * 0.5f);
-            D_L04_00166130[7] = (((data->radius * 7.753f) / 1800.0f) * frame_scale) *
-                                ((child->anim_speed + 1.0f) * 0.5f);
-            steer_child_moby(children, data->count, child, part, D_L04_00166130);
+            D_L04_00166130[6] = ((swarm_controller_pvars->radius * 7.753f) / 1800.0f) *
+                                frame_scale * ((child->anim_speed + 1.0f) * 0.5f) * 0.05f *
+                                frame_scale_sq * ((child->anim_speed + 1.0f) * 0.5f);
+            D_L04_00166130[7] =
+                (((swarm_controller_pvars->radius * 7.753f) / 1800.0f) * frame_scale) *
+                ((child->anim_speed + 1.0f) * 0.5f);
+            steer_child_moby(children, swarm_controller_pvars->count, child, part, D_L04_00166130);
             update_moby_movement_with_sphere_collision(0.0f, child, part, D_L04_00166130);
         }
     }

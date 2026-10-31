@@ -46,9 +46,9 @@ void update_woodcut_bot_debris(M2e5178 *entity) {
         ENTITY_MOTION_STATE_DECAY_AND_REMOVE = 1
     };
     PV2e5178 *pv = entity->pv;
-    u128      old;
+    u128      previous_position;
     u128     *collision_normal;
-    qcopy(&old, entity->pos);
+    qcopy(&previous_position, entity->pos);
     pv->vel[2] -= frame_time_sq * 20.0f;
     fast_vec_add(entity->pos, entity->pos, pv->vel);
     entity->f40 = fast_add_rotations(entity->f40, pv->f20);

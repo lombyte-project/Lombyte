@@ -72,7 +72,7 @@ unsigned char *spawn_glow_particle(void *owner,
                                    int   alpha,
                                    float scale) __asm__("FUN_L00_002ac910");
 
-unsigned char *spawn_glow_particle(void *owner,
+unsigned char *spawn_glow_particle(void *glow_source_moby,
                                    void *spawn_position,
                                    void *initial_velocity,
                                    int   lifetime,
@@ -90,7 +90,7 @@ unsigned char *spawn_glow_particle(void *owner,
     moby = create_moby(0x70);
     if (moby) {
         Q_2ac910  rot_copy, random_initial_rotation;
-        V_2ac910 *data = ((V_2ac910 *)MOBY(moby)->pvars);
+        V_2ac910 *glow_particle_data = ((V_2ac910 *)MOBY(moby)->pvars);
         float     elapsed;
         random_initial_rotation.q = 0;
         random_initial_rotation.f[0] = random_float_between(-3.1415927f, 3.1415927f);
@@ -103,17 +103,19 @@ unsigned char *spawn_glow_particle(void *owner,
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         set_moby_color(moby, red, green, blue);
-        data->f18 = MOBY(moby)->scale * scale;
+        glow_particle_data->f18 = MOBY(moby)->scale * scale;
         *(int *)(moby + 0x2C) = 0;
-        data->o = owner;
+        glow_particle_data->o = glow_source_moby;
         qcopy(moby + 0x10, spawn_position);
-        qcopy(data, initial_velocity);
+        qcopy(glow_particle_data, initial_velocity);
         qcopy(moby + 0x40, &rot_copy);
-        data->n = lifetime;
-        data->h1c = *(unsigned short *)&data->n - FUN_001f96f8_2ac910(4);
-        elapsed = convert_integer_to_float(data->n - data->h1c);
-        MOBY(moby)->scale = elapsed * data->f18 / convert_integer_to_float(data->n);
-        data->h1e = alpha;
+        glow_particle_data->n = lifetime;
+        glow_particle_data->h1c =
+            *(unsigned short *)&glow_particle_data->n - FUN_001f96f8_2ac910(4);
+        elapsed = convert_integer_to_float(glow_particle_data->n - glow_particle_data->h1c);
+        MOBY(moby)->scale =
+            elapsed * glow_particle_data->f18 / convert_integer_to_float(glow_particle_data->n);
+        glow_particle_data->h1e = alpha;
         update_entity(moby);
     }
     return moby;
@@ -151,7 +153,7 @@ unsigned char *spawn_randomly_rotated_colored_moby(int           owner,
                                                    unsigned char alpha,
                                                    float         scale) __asm__("FUN_L00_002df808");
 
-unsigned char *spawn_randomly_rotated_colored_moby(int           owner,
+unsigned char *spawn_randomly_rotated_colored_moby(int           source_moby_address,
                                                    V_2df808     *position,
                                                    V_2df808     *vector,
                                                    int           flags,
@@ -162,11 +164,11 @@ unsigned char *spawn_randomly_rotated_colored_moby(int           owner,
 
                                                    float scale) {
     unsigned char *moby = FUN_L00_0024e838_2df808(0x4a8);
-    unsigned char *data;
+    unsigned char *spawned_moby_private_data;
     R_2df808       rotation_copy;
     R_2df808       rotation;
     if (moby != 0) {
-        data = ((unsigned char *)MOBY(moby)->pvars);
+        spawned_moby_private_data = ((unsigned char *)MOBY(moby)->pvars);
         rotation.q = 0;
         rotation.f[0] = FUN_L00_00257be8_2df808(-3.1415927f, 3.1415927f);
         rotation.f[1] = FUN_L00_00257be8_2df808(-3.1415927f, 3.1415927f);
@@ -178,15 +180,16 @@ unsigned char *spawn_randomly_rotated_colored_moby(int           owner,
         MOBY(moby)->draw_dist = 0xff;
         moby[0x31] = 1;
         set_moby_color(moby, red, green, blue);
-        *(float *)(data + 0x18) = MOBY(moby)->scale * scale;
+        *(float *)(spawned_moby_private_data + 0x18) = MOBY(moby)->scale * scale;
         *(int *)(moby + 0x2c) = 0;
-        *(int *)(data + 0x10) = owner;
+        *(int *)(spawned_moby_private_data + 0x10) = source_moby_address;
         qcopy(moby + 0x10, position);
-        qcopy(data, vector);
+        qcopy(spawned_moby_private_data, vector);
         qcopy(moby + 0x40, &rotation_copy);
-        *(unsigned short *)(data + 0x1e) = alpha;
-        *(int *)(data + 0x14) = flags;
-        *(unsigned short *)(data + 0x1c) = *(unsigned short *)(data + 0x14);
+        *(unsigned short *)(spawned_moby_private_data + 0x1e) = alpha;
+        *(int *)(spawned_moby_private_data + 0x14) = flags;
+        *(unsigned short *)(spawned_moby_private_data + 0x1c) =
+            *(unsigned short *)(spawned_moby_private_data + 0x14);
         update_entity(moby);
     }
     return moby;

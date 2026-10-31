@@ -263,7 +263,7 @@ void crate_update(struct Moby *moby) {
     s32          hitAngle;
     struct Moby *it;
     CrateVars   *crate_vars;
-    Contact     *other;
+    Contact     *hit_contact;
     Coll        *coll;
     s32          touched;
     s32          doHit;
@@ -291,13 +291,13 @@ void crate_update(struct Moby *moby) {
         update_crate_stack_motion(moby);
     }
     touched = 0;
-    other = find_moby_hit(moby, 0x1830000, 0);
-    if (other != NULL && other->hit.s.flags == 0x1000000) {
-        other = NULL;
+    hit_contact = find_moby_hit(moby, 0x1830000, 0);
+    if (hit_contact != NULL && hit_contact->hit.s.flags == 0x1000000) {
+        hit_contact = NULL;
         touched = 1;
     }
     if (moby->oclass >= 0x1FB && moby->oclass <= 0x1FD) {
-        resolve_moby_hit_response(moby, other, coll, 0, &hitKind, &hitB, &hitAngle, 4);
+        resolve_moby_hit_response(moby, hit_contact, coll, 0, &hitKind, &hitB, &hitAngle, 4);
     }
 
     switch (moby->state) {
@@ -332,16 +332,16 @@ void crate_update(struct Moby *moby) {
             moby->state = 5;
             break;
         }
-        if (other == NULL || !(other->damage > 0.0f)) {
+        if (hit_contact == NULL || !(hit_contact->damage > 0.0f)) {
             break;
         }
         doHit = 1;
-        if (moby->oclass == 0x1F6 && !(other->hit.s.flags & 0x20000)) {
+        if (moby->oclass == 0x1F6 && !(hit_contact->hit.s.flags & 0x20000)) {
             doHit = 0;
         }
         if (moby->oclass == 0x1F9) {
             moby->state = 5;
-            if (other->hit.s.flags & 0x20000) {
+            if (hit_contact->hit.s.flags & 0x20000) {
                 moby->command = 1;
             } else {
                 moby->command =
@@ -351,19 +351,19 @@ void crate_update(struct Moby *moby) {
             doHit = 0;
         }
         if (moby->oclass >= 0x1FB && moby->oclass <= 0x1FD) {
-            if (other->hit.s.flags & 0x20000) {
+            if (hit_contact->hit.s.flags & 0x20000) {
                 moby->oclass = 0x1FE;
             }
             if (hitKind == 3) {
                 moby->oclass = 0x1FE;
             }
-            if ((other->hit.bits & 0x0050000000000000LL) || hitAngle == 0xB4) {
-                s32 next = moby->oclass + 1;
+            if ((hit_contact->hit.bits & 0x0050000000000000LL) || hitAngle == 0xB4) {
+                s32 next_crate_class_id = moby->oclass + 1;
 
-                if (next >= 0x1FF) {
-                    next = 0x1FE;
+                if (next_crate_class_id >= 0x1FF) {
+                    next_crate_class_id = 0x1FE;
                 }
-                moby->oclass = next;
+                moby->oclass = next_crate_class_id;
             }
             if (moby->oclass != 0x1FE) {
                 moby->oclass++;
@@ -379,9 +379,9 @@ void crate_update(struct Moby *moby) {
         if (doHit == 0) {
             break;
         }
-        break_crate(moby, moby->oclass == 0x1F9, other);
-        if (crate_vars->unkC8 != 0 && other != NULL && other->hit.s.moby != NULL) {
-            s16 hit_moby_class_id = other->hit.s.moby->oclass;
+        break_crate(moby, moby->oclass == 0x1F9, hit_contact);
+        if (crate_vars->unkC8 != 0 && hit_contact != NULL && hit_contact->hit.s.moby != NULL) {
+            s16 hit_moby_class_id = hit_contact->hit.s.moby->oclass;
 
             if (hit_moby_class_id == 0x2CD || hit_moby_class_id == 0x22C) {
                 s16 saved = moby->unkB4;
@@ -525,7 +525,7 @@ void crate_update(struct Moby *moby) {
         if (moby->command == 0) {
             moby->command = scale_game_frames(60) * 3 - 1;
             crate_vars->unkB8 = moby->spawn_frame;
-        } else if (moby->command > scale_game_frames(15) && other != NULL) {
+        } else if (moby->command > scale_game_frames(15) && hit_contact != NULL) {
             moby->command = truncate_float_to_s32(scale_time(random_float_between(5.0f, 15.0f)));
         }
         if (moby->command % scale_game_frames(60) == scale_game_frames(60) - 3 ||
@@ -1019,9 +1019,9 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
     u8      *vars = (u8 *)moby->vars;
     V2d09b8  position, away, rotation, basis[3], launch, spawn_pos, spin;
     s32      kind;
-    M2d1428 *self;
+    M2d1428 *broken_crate_moby;
     s32      close, count, trail_count, particle, i, choice;
-    s32      first, second, first_color, second_color;
+    s32      random_range_lower_bound, random_range_upper_bound, first_color, second_color;
     f32      angle, distance, height, speed, rise;
     u32      colors[6], other_colors[6];
     void    *spawned;
@@ -1051,7 +1051,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
         *(u32 *)(*(u8 **)(*(u8 **)(vars + 0xA4) + 0x78) + 0xAC) |= 4;
     }
     /* Fakematch: the self copy and the two empty tests on angle give retail's spill slots. */
-    self = moby;
+    broken_crate_moby = moby;
     {
         s32 i;
         qcopy(&position, &moby->pos);
@@ -1167,7 +1167,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             spawn_crate_debris(moby, &launch, &spawn_pos, &spin, kind + 1, particle, 0.25f, 0.5f);
         }
     }
-    *(u32 *)((u8 *)self + 0x94) = 0;
+    *(u32 *)((u8 *)broken_crate_moby + 0x94) = 0;
     moby->state = 3;
     *(u16 *)((u8 *)moby + 0x34) |= 1;
     moby->bBC = FUN_001fef20_2d09b8(15);
@@ -1196,12 +1196,12 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
             rise = speed * frame_time - height * frame_time;
             effect = colors + random_integer_below(6);
             velocity = other_colors + random_integer_below(6);
-            first = FUN_001fef20_2d09b8(15);
-            second = FUN_001fef20_2d09b8(20);
-            first_color = random_int_between(first, second);
-            first = FUN_001fef20_2d09b8(25);
-            second = FUN_001fef20_2d09b8(30);
-            second_color = random_int_between(first, second);
+            random_range_lower_bound = FUN_001fef20_2d09b8(15);
+            random_range_upper_bound = FUN_001fef20_2d09b8(20);
+            first_color = random_int_between(random_range_lower_bound, random_range_upper_bound);
+            random_range_lower_bound = FUN_001fef20_2d09b8(25);
+            random_range_upper_bound = FUN_001fef20_2d09b8(30);
+            second_color = random_int_between(random_range_lower_bound, random_range_upper_bound);
             spawn_particle(&launch,
                            &spin,
                            *effect,

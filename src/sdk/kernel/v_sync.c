@@ -5,20 +5,20 @@ extern s32 DIntr();
 extern s32 EnableInterrupts();
 
 void VSync(void) {
-    s32 old;
+    s32 interrupts_were_enabled;
 
-    old = DIntr();
+    interrupts_were_enabled = DIntr();
     *(volatile u32 *)0x1000F000 = 4;
     CpuSync();
-    if (old != 0) {
+    if (interrupts_were_enabled != 0) {
         EnableInterrupts();
     }
     while ((*(volatile u32 *)0x1000F000 & 4) == 0) {
     }
-    old = DIntr();
+    interrupts_were_enabled = DIntr();
     *(volatile u32 *)0x1000F000 = 4;
     CpuSync();
-    if (old != 0) {
+    if (interrupts_were_enabled != 0) {
         EnableInterrupts();
     }
 }

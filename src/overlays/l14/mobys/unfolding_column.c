@@ -181,12 +181,12 @@ void update_unfolding_column(UnfoldingColumnMoby *moby) {
     }
 }
 
-u8 *create_unfolding_column_pivot(u8 *self) {
+u8 *create_unfolding_column_pivot(u8 *source_moby) {
     u8 *created_moby = create_moby(0x574);
 
     if (created_moby != 0) {
-        qcopy(created_moby + 0x10, self + 0x10);
-        qcopy(created_moby + 0x40, self + 0x40);
+        qcopy(created_moby + 0x10, source_moby + 0x10);
+        qcopy(created_moby + 0x40, source_moby + 0x40);
         created_moby[0x30] = 0x40;
         created_moby[0x20] = 0;
         MOBY(created_moby)->draw_dist = 0x40;

@@ -140,7 +140,7 @@ char *create_rocket_moby(float *rocket_spawn_position,
                          int kind) {
     char *moby = create_moby(0x234);
     if (moby != 0) {
-        char *data;
+        char *rocket_private_vars;
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
@@ -148,15 +148,15 @@ char *create_rocket_moby(float *rocket_spawn_position,
         set_moby_color(moby, 0xC0, 0xC0, 0xC0);
         MOBY(moby)->scale = MOBY(moby)->scale * rocket_spawn_scale_multiplier_gp;
         qcopy(moby + 0x10, rocket_spawn_position);
-        data = ((char *)MOBY(moby)->pvars);
-        qcopy(data, initial_movement_step);
-        qcopy(data + 0x10, target);
-        *(float *)(data + 0x24) = movement_rotation_z;
-        *(float *)(data + 0x28) = movement_rotation_y;
-        *(int *)(data + 0x2C) = 0;
-        *(int *)(data + 0x34) = frames;
-        *(int *)(data + 0x30) = frames >> 1;
-        *(int *)(data + 0x38) = kind;
+        rocket_private_vars = ((char *)MOBY(moby)->pvars);
+        qcopy(rocket_private_vars, initial_movement_step);
+        qcopy(rocket_private_vars + 0x10, target);
+        *(float *)(rocket_private_vars + 0x24) = movement_rotation_z;
+        *(float *)(rocket_private_vars + 0x28) = movement_rotation_y;
+        *(int *)(rocket_private_vars + 0x2C) = 0;
+        *(int *)(rocket_private_vars + 0x34) = frames;
+        *(int *)(rocket_private_vars + 0x30) = frames >> 1;
+        *(int *)(rocket_private_vars + 0x38) = kind;
         MOBY(moby)->rot.z = fast_arc_tan(initial_movement_step[0], initial_movement_step[1]);
         MOBY(moby)->rot.y =
             -fast_arc_tan(vector_length_xy(initial_movement_step), initial_movement_step[2]);

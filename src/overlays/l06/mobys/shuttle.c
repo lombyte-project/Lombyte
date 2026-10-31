@@ -750,7 +750,7 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
 
 /* Breaks the linked pieces apart: pushes each one out from their middle (smaller pieces faster), spins it and sheds dust. */
 void break_apart_shuttle_linked_mobys(struct Moby *moby) {
-    char        *vars = (char *)moby->pvars;
+    char        *shuttle_linkage_vars = (char *)moby->pvars;
     float        center[4];
     float        middle[4];
     float        push[4];
@@ -775,7 +775,7 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
                                         D_L06_00162110);
     largest = 0.0f;
     clear_u64_value(middle);
-    list = D_L06_001ABFC0_03b68[*(int *)(vars + 0xCC)];
+    list = D_L06_001ABFC0_03b68[*(int *)(shuttle_linkage_vars + 0xCC)];
     count = 0;
     do {
         id = *list & 0x7FFF;
@@ -789,7 +789,7 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
         }
     } while (*list++ >= 0);
     fast_vec_scale(middle, middle, 1.0f / convert_integer_to_float(count));
-    list = D_L06_001ABFC0_03b68[*(int *)(vars + 0xCC)];
+    list = D_L06_001ABFC0_03b68[*(int *)(shuttle_linkage_vars + 0xCC)];
     do {
         float speed;
         id = *list & 0x7FFF;
@@ -849,8 +849,8 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
 
 /* Marks every moby in the moby's list for removal; the list ends after its first negative entry. */
 void mark_shuttle_linked_mobys_for_removal(char *moby) {
-    char  *data = ((char *)MOBY(moby)->pvars);
-    short *moby_list_entry = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
+    char  *shuttle_link_vars = ((char *)MOBY(moby)->pvars);
+    short *moby_list_entry = D_L06_001ABFC0_c[*(int *)(shuttle_link_vars + 0xCC)];
     do {
         mark_moby_for_removal(D_L06_0015FFD8_u + ((*moby_list_entry & 0x7FFF) << 8));
     } while (*moby_list_entry++ >= 0);

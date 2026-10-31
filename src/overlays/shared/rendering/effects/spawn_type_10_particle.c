@@ -278,7 +278,11 @@ int select_list_point_toward_target(char *reference_object,
                                     char *pt,
                                     char *out) __asm__("FUN_L01_0028b5e0");
 
-int select_list_point_toward_target(char *reference_object, List *list, char *pt, char *out) {
+int select_list_point_toward_target(char *reference_object,
+                                    List *list,
+                                    char *pt,
+
+                                    char *selected_point) {
     int   nearest_reference_entry_index = -1;
     int   nearest_eligible_entry_index = -1;
     float best0 = 10000.0f;
@@ -302,17 +306,17 @@ int select_list_point_toward_target(char *reference_object, List *list, char *pt
     }
     if (nearest_eligible_entry_index != -1) {
         if (nearest_reference_entry_index == nearest_eligible_entry_index) {
-            qcopy(out, list->e[nearest_reference_entry_index]);
+            qcopy(selected_point, list->e[nearest_reference_entry_index]);
             return nearest_reference_entry_index;
         }
         if (nearest_reference_entry_index < nearest_eligible_entry_index) {
-            qcopy(out, list->e[nearest_reference_entry_index + 1]);
+            qcopy(selected_point, list->e[nearest_reference_entry_index + 1]);
             return nearest_reference_entry_index + 1;
         }
-        qcopy(out, list->e[nearest_reference_entry_index - 1]);
+        qcopy(selected_point, list->e[nearest_reference_entry_index - 1]);
         return nearest_reference_entry_index - 1;
     }
-    qcopy(out, pt);
+    qcopy(selected_point, pt);
     return -1;
 }
 
@@ -320,21 +324,21 @@ int select_list_point_toward_target(char *reference_object, List *list, char *pt
 void *get_path_node(void *descriptor, s32 index) __asm__("FUN_L01_0028b7b0");
 
 void *get_path_node(void *descriptor, s32 index) {
-    char *data;
+    char *path_storage_base;
     s32   last;
 
     if (*(s8 *)((char *)descriptor + 4) >= 0) {
         last = (s32)((u32) * *(s32 **)((char *)descriptor + 0x10) - 1);
-        data = *(char **)((char *)descriptor + 0x10);
+        path_storage_base = *(char **)((char *)descriptor + 0x10);
     } else {
-        data = *(char **)((char *)descriptor + 0x10);
+        path_storage_base = *(char **)((char *)descriptor + 0x10);
         last = 0;
     }
     if (index < 0)
-        return data + ((((u32)last + (u32)index) << 4) + 0x20);
+        return path_storage_base + ((((u32)last + (u32)index) << 4) + 0x20);
     if (index > last)
-        return data + (((u32)(index % (s32)((u32)last + 1)) << 4) + 0x10);
-    return data + (((u32)index << 4) + 0x10);
+        return path_storage_base + (((u32)(index % (s32)((u32)last + 1)) << 4) + 0x10);
+    return path_storage_base + (((u32)index << 4) + 0x10);
 }
 
 typedef struct {
@@ -365,16 +369,16 @@ int advance_path_node_index(char *path_descriptor) __asm__("FUN_L01_0028b878");
 
 int advance_path_node_index(char *path_descriptor) {
     int max = 0;
-    int next;
+    int next_node_index;
     if (path_descriptor[4] >= 0) {
         max = **(int **)(path_descriptor + 0x10) - 1;
     }
-    next = *(int *)path_descriptor + 1;
-    if (max < next) {
-        next %= max + 1;
+    next_node_index = *(int *)path_descriptor + 1;
+    if (max < next_node_index) {
+        next_node_index %= max + 1;
     }
-    *(int *)path_descriptor = next;
-    return next;
+    *(int *)path_descriptor = next_node_index;
+    return next_node_index;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C690), where it is exact; names translated to the US level program. */
@@ -389,7 +393,7 @@ void compute_path_node_tangent(void *out,
                                float tangent_tension,
                                float tangent_bias) __asm__("FUN_L01_0028b8c8");
 
-void compute_path_node_tangent(void *out,
+void compute_path_node_tangent(void *node_tangent,
                                int  *path_descriptor,
                                int   node_index_offset,
                                float tangent_tension,
@@ -426,9 +430,9 @@ void compute_path_node_tangent(void *out,
     delta_length_limit = delta_length_limit * 1.1f;
     blended_delta_length = fast_vec_length(blended_delta);
     if (delta_length_limit < blended_delta_length) {
-        fast_vec_normalize(out, blended_delta, delta_length_limit);
+        fast_vec_normalize(node_tangent, blended_delta, delta_length_limit);
     } else {
-        *(OvlQuad *)out = *(OvlQuad *)blended_delta;
+        *(OvlQuad *)node_tangent = *(OvlQuad *)blended_delta;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
@@ -441,7 +445,7 @@ void evaluate_cubic_hermite_segment(float segment_parameter,
                                     void *end_tangent) __asm__("FUN_L01_0028ba80");
 
 void evaluate_cubic_hermite_segment(float segment_parameter,
-                                    void *out,
+                                    void *evaluated_point,
                                     void *start_point,
                                     void *end_point,
                                     void *start_tangent,
@@ -453,13 +457,13 @@ void evaluate_cubic_hermite_segment(float segment_parameter,
     float three_times_t_squared = t_squared * 3.0f;
     float twice_t_cubed = t_cubed + t_cubed;
     float twice_t_squared = t_squared + t_squared;
-    fast_vec_scale(out, start_point, twice_t_cubed - three_times_t_squared + 1.0f);
+    fast_vec_scale(evaluated_point, start_point, twice_t_cubed - three_times_t_squared + 1.0f);
     fast_vec_scale(weighted_vector, start_tangent, t_cubed - twice_t_squared + segment_parameter);
-    fast_vec_add(out, out, weighted_vector);
+    fast_vec_add(evaluated_point, evaluated_point, weighted_vector);
     fast_vec_scale(weighted_vector, end_tangent, t_cubed - t_squared);
-    fast_vec_add(out, out, weighted_vector);
+    fast_vec_add(evaluated_point, evaluated_point, weighted_vector);
     fast_vec_scale(weighted_vector, end_point, three_times_t_squared - twice_t_cubed);
-    fast_vec_add(out, out, weighted_vector);
+    fast_vec_add(evaluated_point, evaluated_point, weighted_vector);
 }
 
 float compute_sampled_spline_path_lengths(float     tangent_tension,

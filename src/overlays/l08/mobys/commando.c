@@ -115,7 +115,7 @@ void commando_update(WM *moby) {
         COMMANDO_DIALOGUE_AFTER_REPOSITION = 2,
         COMMANDO_POST_DIALOGUE = 3
     };
-    L16WatchScratch scratch;
+    L16WatchScratch look_tracking_vectors;
     WD8            *commando_vars = (WD8 *)moby->data;
     float           rate;
     float           head_rate;
@@ -222,21 +222,25 @@ void commando_update(WM *moby) {
             fast_vec_add(commando_vars->target, commando_vars->target, moby->position);
         }
         if (commando_vars->moving_timer) {
-            qcopy(scratch.target, (char *)&D_0013E633_watch + 0xEED);
+            qcopy(look_tracking_vectors.target, (char *)&D_0013E633_watch + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, commando_vars->target);
+            qcopy(look_tracking_vectors.target, commando_vars->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, moby->position);
-        scratch.eye[2] += 1.0f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
+        qcopy(look_tracking_vectors.eye, moby->position);
+        look_tracking_vectors.eye[2] += 1.0f;
+        fast_vec_sub(
+            look_tracking_vectors.delta, look_tracking_vectors.target, look_tracking_vectors.eye);
+        yaw = fast_subtract_rotations(
+            fast_arc_tan(look_tracking_vectors.delta[0], look_tracking_vectors.delta[1]),
+            moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy(look_tracking_vectors.delta),
+                              look_tracking_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

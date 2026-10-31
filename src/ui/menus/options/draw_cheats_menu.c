@@ -35,7 +35,7 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) __asm__("FUN_00221030");
 s32 draw_cheats_menu(struct CheatsMenu *menu) {
     FontWindow             text_window;
     s16                    window_fields[12];
-    struct CheatMenuEntry *entry;
+    struct CheatMenuEntry *cheat_menu_entry;
     s32                    entry_count;
     s32                    entry_index;
     s32                    draw_index;
@@ -71,19 +71,20 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
     draw_index = 0;
     if (menu->entries[0].text_id != 0) {
         do {
-            entry = &menu->entries[draw_index];
+            cheat_menu_entry = &menu->entries[draw_index];
             color = entry_index == menu->selected_entry ? 0x8020FFFF : 0x80FFA888;
             enabled = 0;
-            if (entry->enabled_flag != 0) {
-                enabled = *entry->enabled_flag;
+            if (cheat_menu_entry->enabled_flag != 0) {
+                enabled = *cheat_menu_entry->enabled_flag;
             }
-            font_print_large(0xC, draw_y, color, get_help_message_text(entry->text_id), -1);
-            font_print_right(
-                menu->width - 0xC,
-                draw_y,
-                0x80FFA888,
-                get_help_message_text(enabled ? entry->enabled_text_id : entry->disabled_text_id),
-                -1);
+            font_print_large(
+                0xC, draw_y, color, get_help_message_text(cheat_menu_entry->text_id), -1);
+            font_print_right(menu->width - 0xC,
+                             draw_y,
+                             0x80FFA888,
+                             get_help_message_text(enabled ? cheat_menu_entry->enabled_text_id
+                                                           : cheat_menu_entry->disabled_text_id),
+                             -1);
             draw_y += line_spacing;
             draw_index++;
             entry_index++;

@@ -33,7 +33,7 @@ void gate_1_update(struct Moby *moby) __asm__("FUN_L10_002e9648");
 void activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
 
 void gate_1_update(struct Moby *moby) {
-    DoorVars      *vars = (DoorVars *)moby->pvars;
+    DoorVars      *gate_control = (DoorVars *)moby->pvars;
     unsigned short save_id;
 
     switch (moby->state) {
@@ -44,7 +44,7 @@ void gate_1_update(struct Moby *moby) {
             if (l10_save_state.cleared[(short)save_id] == 0 &&
                 ((D_0014C190_257218[current_level_index][(short)save_id >> 5] >> (save_id & 31)) &
                  1) == 0) {
-                vars->home_yaw = moby->rot.y;
+                gate_control->home_yaw = moby->rot.y;
                 moby->state = 1;
                 return;
             }
@@ -64,23 +64,23 @@ void gate_1_update(struct Moby *moby) {
             moby->state = 3;
             return;
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, vars->clip_volume) == 0 &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, gate_control->clip_volume) == 0 &&
             D_0013DD4C_e9648[0] == 0)
             return;
-        if (vars->unk0 <= 0 || vars->sound <= 0)
+        if (gate_control->unk0 <= 0 || gate_control->sound <= 0)
             return;
         save_id = moby->save_id;
         D_0014C190_257218[current_level_index][(short)save_id >> 5] |= 1 << (save_id & 31);
         save_id = moby->save_id;
         D_L10_001BA950[(short)save_id >> 5] |= 1 << (save_id & 31);
-        if (is_point_inside_clip_volume(&hero.motion.pos, vars->clip_volume))
-            activate_descriptor(vars->sound);
-        vars->timer = truncate_float_to_s32(FUN_L04_001f1978(90.0f));
+        if (is_point_inside_clip_volume(&hero.motion.pos, gate_control->clip_volume))
+            activate_descriptor(gate_control->sound);
+        gate_control->timer = truncate_float_to_s32(FUN_L04_001f1978(90.0f));
         moby->state = 2;
         return;
     case GATE_STATE_OPENING:
         moby->rot.y = fast_add_rotations(moby->rot.y, -1.3962634f / FUN_L04_001f1978(90.0f));
-        if (fast_dec_timer(&vars->timer))
+        if (fast_dec_timer(&gate_control->timer))
             moby->state = 3;
         return;
     case GATE_STATE_OPEN:

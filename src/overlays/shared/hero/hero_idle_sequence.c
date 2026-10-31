@@ -2167,8 +2167,9 @@ f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame,
             void *hero_moby = ((void *)hero_animation_state->moby);
             s32   animation_sequence_index = *(u8 *)((u8 *)hero_moby + 0x53);
             u8   *arr = *(u8 **)((u8 *)hero_moby + 0x24);
-            void *entry = *(void **)(arr + (animation_sequence_index << 2) + 0x48);
-            s32   sequence_wrap_count = *(u8 *)((u8 *)entry + 0x10);
+            void *current_animation_sequence =
+                *(void **)(arr + (animation_sequence_index << 2) + 0x48);
+            s32 sequence_wrap_count = *(u8 *)((u8 *)current_animation_sequence + 0x10);
             step = target_anim_frame + (rate * (f32)sequence_wrap_count - thresh);
         }
     }
@@ -2185,13 +2186,14 @@ f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame,
         {
             f32 target = frame_delta_scale * step;
             f32 speed = anim_speed_divisor * rate2;
-            f32 result = target / speed;
+            f32 target_anim_speed = target / speed;
 
             if (anim_speed_step == negone) {
-                anim_speed_owner->anim_speed = result;
+                anim_speed_owner->anim_speed = target_anim_speed;
                 return negone;
             }
-            return approach_value((f32 *)(&anim_speed_owner->anim_speed), result, anim_speed_step);
+            return approach_value(
+                (f32 *)(&anim_speed_owner->anim_speed), target_anim_speed, anim_speed_step);
         }
     }
 
@@ -2340,32 +2342,33 @@ extern void FUN_00254b58_002092c8(s32) __asm__("FUN_L00_00254b58");
    that are not 1.0 and the translations that differ from the bind pose. */
 void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 context) __asm__("FUN_L00_002092c8");
 
-void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 context) {
-    u64 *out;
+void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 pose_source_moby) {
+    u64 *packed_pose_write_cursor;
     s32  rotation_count;
     s32  scale_count;
     s32  translation_count;
     s32  i;
     s32  joint;
     s32  rotation_size;
-    u64  value;
+    u64  packed_joint_components;
 
-    if (context == 0)
-        context = (*(s32 *)D_001413D0);
-    out = (u64 *)(pose + 1);
-    FUN_00254b58_002092c8(context);
+    if (pose_source_moby == 0)
+        pose_source_moby = (*(s32 *)D_001413D0);
+    packed_pose_write_cursor = (u64 *)(pose + 1);
+    FUN_00254b58_002092c8(pose_source_moby);
     pose->root_rotation = PACKED_IDENTITY;
     rotation_count = 1;
     for (i = 1; joints[i] >= 0; i++) {
-        *out++ = pack_vector_s16((joints[i] << 6) + SPR_JOINT_ROTATION, 32768.0f);
+        *packed_pose_write_cursor++ =
+            pack_vector_s16((joints[i] << 6) + SPR_JOINT_ROTATION, 32768.0f);
         rotation_count++;
     }
     if (padding > 0) {
         s32 remaining = padding;
         do {
-            *out = PACKED_IDENTITY;
+            *packed_pose_write_cursor = PACKED_IDENTITY;
             remaining--;
-            out++;
+            packed_pose_write_cursor++;
             rotation_count++;
         } while (remaining != 0);
     }
@@ -2373,30 +2376,31 @@ void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 contex
     i = 1;
     rotation_size = rotation_count << 3;
     for (; joints[i] >= 0; i++) {
-        value = pack_vector_s16(SPR_JOINT_SCALE + (joints[i] << 6), 4096.0f);
-        if ((value & PACKED_XYZ_MASK) != PACKED_UNIT_SCALE) {
-            *out = value & PACKED_XYZ_MASK;
+        packed_joint_components = pack_vector_s16(SPR_JOINT_SCALE + (joints[i] << 6), 4096.0f);
+        if ((packed_joint_components & PACKED_XYZ_MASK) != PACKED_UNIT_SCALE) {
+            *packed_pose_write_cursor = packed_joint_components & PACKED_XYZ_MASK;
             scale_count++;
-            *(u16 *)((u8 *)out + 6) = i | 0x8000;
-            out++;
+            *(u16 *)((u8 *)packed_pose_write_cursor + 6) = i | 0x8000;
+            packed_pose_write_cursor++;
         }
     }
     translation_count = 0;
     for (joint = 1; joints[joint] >= 0; joint++) {
-        value = pack_vector_s16(SPR_JOINT_TRANSLATION + (joints[joint] << 6), 1.0f);
-        if ((value & PACKED_XYZ_MASK) !=
+        packed_joint_components =
+            pack_vector_s16(SPR_JOINT_TRANSLATION + (joints[joint] << 6), 1.0f);
+        if ((packed_joint_components & PACKED_XYZ_MASK) !=
             (pack_vector_s16(*(s32 *)(model + 0x18) + (joint << 4), 1.0f) & PACKED_XYZ_MASK)) {
-            *out = value & PACKED_XYZ_MASK;
+            *packed_pose_write_cursor = packed_joint_components & PACKED_XYZ_MASK;
             translation_count++;
-            *(u16 *)((u8 *)out + 6) = joint;
-            out++;
+            *(u16 *)((u8 *)packed_pose_write_cursor + 6) = joint;
+            packed_pose_write_cursor++;
         }
     }
-    if ((u32)out & 0xf)
-        *out++ = 0;
+    if ((u32)packed_pose_write_cursor & 0xf)
+        *packed_pose_write_cursor++ = 0;
     pose->translation_count = translation_count;
     pose->scale_offset = rotation_size;
-    pose->size = ((u8 *)out - (u8 *)&pose->root_rotation) >> 4;
+    pose->size = ((u8 *)packed_pose_write_cursor - (u8 *)&pose->root_rotation) >> 4;
     pose->scale_count = scale_count;
     pose->translation_offset = (rotation_count + scale_count) << 3;
     pose->unk2 = 0;
@@ -2644,22 +2648,23 @@ void emit_hero_timed_effects(void) {
     OvlQuad  hero_position_copy[1];
     OvlQuad  effect_vector[1];
     char    *hero_effect_timer_anchor;
-    char    *base;
+    char    *hero_effect_state_base;
     float    lateral_angle, spherical_offset_scale, planar_scale, alpha_fraction, theta, phi;
     int      frame_count, alpha, col, life, small_effect_sample, large_effect_sample, k;
     OvlQuad *pt;
     hero_effect_timer_anchor = D_0013F7EE;
     if (fast_dec_timer_s16(hero_effect_timer_anchor)) {
         qcopy(hero_position_copy, hero_effect_timer_anchor - 0x41E);
-        base = hero_effect_timer_anchor - 0x49E;
-        lateral_angle = fast_add_rotations(*(float *)(base + 0x98), 1.5707963705062866f);
+        hero_effect_state_base = hero_effect_timer_anchor - 0x49E;
+        lateral_angle =
+            fast_add_rotations(*(float *)(hero_effect_state_base + 0x98), 1.5707963705062866f);
         planar_scale = randf_sym(D_0015ED6C * 0.2f, D_0015ED6C * 0.7f);
         ((float *)effect_vector)[0] = fast_cos(lateral_angle) * planar_scale;
         ((float *)effect_vector)[1] = fast_sin(lateral_angle) * planar_scale;
         ((int *)effect_vector)[2] = 0;
         ((float *)effect_vector)[3] = frame_time_sq * -8.0f;
         spawn_color_decaying_effect_particle(hero_position_copy, effect_vector, 0);
-        *(short *)(base + 0x49E) = random_int_between(2, 3);
+        *(short *)(hero_effect_state_base + 0x49E) = random_int_between(2, 3);
     }
     if (!fast_dec_timer_s16(hero_effect_timer_anchor - 2))
         return;
@@ -2729,7 +2734,10 @@ s32 probe_hero_forward_collision(f32 *out,
                                  f32  probe_z_offset,
                                  f32  probe_end_radius) __asm__("FUN_L00_0020a240");
 
-s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_radius) {
+s32 probe_hero_forward_collision(f32 *hit_distance_xy_out,
+                                 f32  probe_z_offset,
+
+                                 f32 probe_end_radius) {
     G0020a240 *hero_state = (G0020a240 *)&hero;
     V0020a240  probe_start;
     V0020a240  probe_end;
@@ -2738,8 +2746,8 @@ s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_rad
         &probe_start, hero_state->f234 - 0.02f, 0.0f, probe_z_offset);
     transform_hero_polar_offset_to_world(&probe_end, probe_end_radius, 0.0f, probe_z_offset);
     if (collision_line(&probe_start, &probe_end, 2, 0, 0)) {
-        if (out != 0)
-            *out = vector_distance_xy(hero_state->v80, D_L00_00173E60);
+        if (hit_distance_xy_out != 0)
+            *hit_distance_xy_out = vector_distance_xy(hero_state->v80, D_L00_00173E60);
         return 1;
     }
     return 0;
@@ -2928,18 +2936,18 @@ extern float FUN_L00_00257c48(float lo, float hi);
 extern char  hero_idle_rotation_timers[] __asm__("D_001403B0");
 
 void update_hero_idle_random_rotation_targets(void) {
-    char *base = (char *)((char *)&D_0013F350_002062b0);
+    char *hero_base_or_ease_record_offset = (char *)((char *)&D_0013F350_002062b0);
     int  *motion_timers;
     char *hero_state_base;
     int   i, j;
     char *motion_ease_table;
 
-    if (*(int *)(base + 0x2084) != 0)
+    if (*(int *)(hero_base_or_ease_record_offset + 0x2084) != 0)
         return;
-    if (*(unsigned char *)(*(int *)(base + 0x2080) + 0x53) != 0)
+    if (*(unsigned char *)(*(int *)(hero_base_or_ease_record_offset + 0x2080) + 0x53) != 0)
         return;
-    motion_timers = (int *)(base + 0x1060);
-    hero_state_base = base;
+    motion_timers = (int *)(hero_base_or_ease_record_offset + 0x1060);
+    hero_state_base = hero_base_or_ease_record_offset;
     motion_ease_table = ((char *)hero_eases);
     for (i = 0; i < 4; i++) {
         char *motion_slot_base;
@@ -2961,13 +2969,14 @@ void update_hero_idle_random_rotation_targets(void) {
                 motion_timers[2] =
                     FUN_L00_00257b90(scale_game_frames(0x28), scale_game_frames(0x5A));
             } else {
-                float old, nw;
+                float previous_idle_rotation_angle, nw;
                 *(float *)(hero_state_base + i * 0x10 + 0x1024) =
                     random_float_between(-0.08726646f, 0.5235988f);
-                old = *(float *)(hero_state_base + i * 0x10 + 0x1028);
+                previous_idle_rotation_angle = *(float *)(hero_state_base + i * 0x10 + 0x1028);
                 nw = FUN_L00_00257c48(0.34906584f, 0.95993108f);
                 *(float *)(hero_state_base + i * 0x10 + 0x1028) = nw;
-                if ((old <= 0 && nw <= 0) || (old >= 0 && nw >= 0))
+                if ((previous_idle_rotation_angle <= 0 && nw <= 0) ||
+                    (previous_idle_rotation_angle >= 0 && nw >= 0))
                     *(float *)(hero_state_base + i * 0x10 + 0x1028) =
                         -*(float *)(hero_state_base + i * 0x10 + 0x1028);
                 motion_timers[i] =
@@ -2976,9 +2985,10 @@ void update_hero_idle_random_rotation_targets(void) {
         }
         motion_slot_base = hero_state_base + i * 0x10;
         j = i + 13;
-        base = (char *)(j * 0xB0);
+        hero_base_or_ease_record_offset = (char *)(j * 0xB0);
         {
-            char *motion_record_destination = motion_ease_table + (int)base;
+            char *motion_record_destination =
+                motion_ease_table + (int)hero_base_or_ease_record_offset;
             *(float *)(motion_record_destination + 0x68) = *(float *)(motion_slot_base + 0x1028);
             *(float *)(motion_record_destination + 0x64) = *(float *)(motion_slot_base + 0x1024);
         }
@@ -3005,7 +3015,7 @@ void update_hero_target_tracking(void) {
     float            bestPri, bestDist;
     float            aim_position_scratch[8];
     char            *secondary_position;
-    char            *info, *info2, *selected_moby;
+    char            *candidate_targeting_metadata, *selected_targeting_metadata, *selected_moby;
     struct HeroEase *manipulator_table;
     float            yaw_delta, pitch, s;
     int              mode = *(int *)(hero_control_mode_owner + 0x208C);
@@ -3021,11 +3031,12 @@ void update_hero_target_tracking(void) {
         bestPri = 0.0f;
         best = 0;
         for (i = 0; (candidate_moby = active_mobies[i]) != 0; i++) {
-            info = (char *)get_moby_target_info(candidate_moby);
-            if (info != 0) {
+            candidate_targeting_metadata = (char *)get_moby_target_info(candidate_moby);
+            if (candidate_targeting_metadata != 0) {
                 float candidate_distance, candidate_yaw_difference, sc, pri;
                 candidate_distance = vector_distance_xy(hero_pos + 0x0, candidate_moby + 0x10);
-                if ((float)*(unsigned char *)(info + 0x38) < candidate_distance)
+                if ((float)*(unsigned char *)(candidate_targeting_metadata + 0x38) <
+                    candidate_distance)
                     continue;
                 candidate_reference_hero_state = (char *)hero_pos - 0x80;
                 candidate_yaw_difference = fast_difference_between_rotations(
@@ -3047,7 +3058,7 @@ void update_hero_target_tracking(void) {
                     if (sc < 0.0f)
                         sc = 0.0f;
                 }
-                pri = (float)*(unsigned char *)(info + 0x39);
+                pri = (float)*(unsigned char *)(candidate_targeting_metadata + 0x39);
                 if (bestPri < pri)
                     goto upd;
                 if (sc < bestDist) {
@@ -3075,9 +3086,10 @@ void update_hero_target_tracking(void) {
     if (selected_moby == 0)
         return;
     qcopy(aim_position_scratch, selected_moby + 0x10);
-    info2 = (char *)get_moby_target_info(selected_moby);
-    if (info2 != 0)
-        aim_position_scratch[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
+    selected_targeting_metadata = (char *)get_moby_target_info(selected_moby);
+    if (selected_targeting_metadata != 0)
+        aim_position_scratch[2] +=
+            (float)*(unsigned char *)(selected_targeting_metadata + 0x3A) * 0.125f;
     transform_hero_local_offset_to_world(&aim_position_scratch[4], 0.3f, 0.0f, 0.85f);
     yaw_delta =
         fast_subtract_rotations(fast_arc_tan(aim_position_scratch[0] - aim_position_scratch[4],

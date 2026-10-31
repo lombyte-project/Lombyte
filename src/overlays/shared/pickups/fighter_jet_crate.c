@@ -53,7 +53,7 @@ void ammocrate_update(char *moby) {
         SHIP_PICKUP_COLLECTED_SHRINKING = 5,
         SHIP_PICKUP_REMOVE_OR_RESET = 6
     };
-    int  *vars = ((int *)MOBY(moby)->pvars);
+    int  *pickup_private_state = ((int *)MOBY(moby)->pvars);
     int   hero_moby = ((char *)hero.ship_moby);
     int   hit = 0;
     float distance = 100000.0f;
@@ -64,7 +64,7 @@ void ammocrate_update(char *moby) {
     float speed;
     switch ((unsigned char)moby[0x20]) {
     case SHIP_PICKUP_INITIALIZE:
-        if (*((unsigned char *)vars + 0xc) != 0) {
+        if (*((unsigned char *)pickup_private_state + 0xc) != 0) {
             MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
             moby[0x20] = 4;
             break;
@@ -77,25 +77,25 @@ void ammocrate_update(char *moby) {
         MOBY(moby)->scale = start_size * 0.1f;
         break;
     case SHIP_PICKUP_SELECT_ACTIVATION_GATE:
-        if (vars[0] != -1) {
+        if (pickup_private_state[0] != -1) {
             moby[0x20] = 2;
             break;
         }
         moby[0x20] = 3;
         break;
     case SHIP_PICKUP_WAIT_FOR_TARGET_STATE: {
-        int          target_index = vars[0];
+        int          target_index = pickup_private_state[0];
         int          target_base = (int)moby_base;
         struct Moby *target = (struct Moby *)(target_base + target_index * 0x100);
-        if (target != 0 && target->state != 0xfe && target->state != 0xfd && vars[1] != -1 &&
-            target->state != vars[1]) {
+        if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
+            pickup_private_state[1] != -1 && target->state != pickup_private_state[1]) {
             goto frame_tail;
         }
         moby[0x20] = 3;
         break;
     }
     case SHIP_PICKUP_WAIT_FOR_ACTIVATION_TIMER:
-        if (vars[2] == -1 || fast_dec_timer(vars + 4)) {
+        if (pickup_private_state[2] == -1 || fast_dec_timer(pickup_private_state + 4)) {
             moby[0x20] = 4;
         }
         if ((unsigned char)moby[0x20] != 4)
@@ -179,7 +179,7 @@ void ammocrate_update(char *moby) {
         break;
     }
     case SHIP_PICKUP_REMOVE_OR_RESET:
-        if (*((unsigned char *)vars + 0xd) == 0) {
+        if (*((unsigned char *)pickup_private_state + 0xd) == 0) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -187,13 +187,14 @@ void ammocrate_update(char *moby) {
         moby[0x31] = 0;
         MOBY(moby)->flags |= 1;
         MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * 0.1f;
-        vars[4] = vars[2];
+        pickup_private_state[4] = pickup_private_state[2];
         moby[0x20] = 1;
         break;
     }
 frame_tail:
     speed = frame_time;
-    update_moby_vertical_oscillation(0.7f, speed * 1.2217305f, moby, vars + 6, vars + 5);
+    update_moby_vertical_oscillation(
+        0.7f, speed * 1.2217305f, moby, pickup_private_state + 6, pickup_private_state + 5);
     if (MOBY(moby)->pos.x < 20.0f)
         MOBY(moby)->pos.x = 20.0f;
     if (1003.0f < MOBY(moby)->pos.x)

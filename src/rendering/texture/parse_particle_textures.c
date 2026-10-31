@@ -27,7 +27,7 @@ void parse_particle_textures(struct ParticleHdr *hdr,
                              s32                 count) __asm__("FUN_002026c8");
 
 void parse_particle_textures(struct ParticleHdr *hdr,
-                             s32                 base,
+                             s32                 range_page_base,
                              s32                *range_source_cursor,
 
                              s32 count) {
@@ -57,9 +57,9 @@ void parse_particle_textures(struct ParticleHdr *hdr,
     copy_memory_aligned(resident_lookup_payload, (u8 *)hdr + offset, size);
     particle_texture_range_count = 0;
     while (particle_texture_range_count < count) {
-        start_page = base + *range_source_cursor++;
+        start_page = range_page_base + *range_source_cursor++;
         start_offset = *range_source_cursor++;
-        end_page = base + *range_source_cursor++;
+        end_page = range_page_base + *range_source_cursor++;
         end_extent = *range_source_cursor++;
         resident_particle_texture_ranges[particle_texture_range_count].tex0 =
             (start_page << 4) + start_offset;

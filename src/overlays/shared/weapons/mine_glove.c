@@ -92,7 +92,7 @@ void compute_mine_launch_velocity(float   *origin_position,
 
 void compute_mine_launch_velocity(float   *origin_position,
                                   OvlQuad *target_position,
-                                  float   *out,
+                                  float   *launch_velocity,
                                   float    gravity,
                                   float    min_horizontal_distance,
 
@@ -125,9 +125,9 @@ void compute_mine_launch_velocity(float   *origin_position,
     if (half < launch_component_speed_squared)
         launch_component_speed_squared = half;
     launch_component_speed = FUN_001f9988_2c1928(launch_component_speed_squared);
-    out[0] = FUN_001f9dc8_2c1928(launch_heading) * launch_component_speed;
-    out[1] = FUN_001f9de0_2c1928(launch_heading) * launch_component_speed;
-    out[2] = launch_component_speed;
+    launch_velocity[0] = FUN_001f9dc8_2c1928(launch_heading) * launch_component_speed;
+    launch_velocity[1] = FUN_001f9de0_2c1928(launch_heading) * launch_component_speed;
+    launch_velocity[2] = launch_component_speed;
 }
 
 /* Mine glove update: aims the glove and throws a mine at the target. */
@@ -142,22 +142,22 @@ void mine_glove_update(struct Moby *moby) {
         MINE_GLOVE_BEGIN_HELD_MOBY_REMOVAL = 5,
         MINE_GLOVE_REMOVE_HELD_MOBY = 6
     };
-    GloveVars *vars;
+    GloveVars *mine_glove_vars;
     Vec4       saved, offset, rotatedOffset;
     Vec4       local[4];
     Vec4       pos, target;
     Vec4       basis[3];
     Vec4       matrix[4];
     Vec4       launch, arc, probe;
-    float     *out;
+    float     *held_mine_launch_velocity;
     float      angle, slope, horizontal, vertical, radius, root;
     s32        hit;
 
     if (moby == 0)
         return;
-    vars = (GloveVars *)moby->pvars;
-    if (vars->delay < 3) {
-        ++vars->delay;
+    mine_glove_vars = (GloveVars *)moby->pvars;
+    if (mine_glove_vars->delay < 3) {
+        ++mine_glove_vars->delay;
         return;
     }
     offset.q = 0;
@@ -165,19 +165,20 @@ void mine_glove_update(struct Moby *moby) {
     offset.f[2] = -0.02f;
     copy_matrix3x4(basis, l00_camera.unk0);
     transpose_rotation_matrix(matrix, basis);
-    if (vars == 0)
+    if (mine_glove_vars == 0)
         return;
     FUN_L00_0024f7c8(moby, 0, &saved);
     build_moby_bone_transform(moby, 0, local);
     transform_vector(&rotatedOffset, &offset, local);
-    fast_vec_add(&vars->grip, &saved, &rotatedOffset);
-    if (vars->held != 0)
-        vars->held->collision_disable = 1;
-    if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD)
-        vars->held = 0;
+    fast_vec_add(&mine_glove_vars->grip, &saved, &rotatedOffset);
+    if (mine_glove_vars->held != 0)
+        mine_glove_vars->held->collision_disable = 1;
+    if (mine_glove_vars->held == 0 || mine_glove_vars->held->state == 0xFE ||
+        mine_glove_vars->held->state == 0xFD)
+        mine_glove_vars->held = 0;
     if (hero.state.current == 1)
         hero_set_state(0x1E, 1);
-    if (fast_dec_timer(&vars->timer58) && !hero.item_use_locked) {
+    if (fast_dec_timer(&mine_glove_vars->timer58) && !hero.item_use_locked) {
         if ((hero.item_anim_active && hero.item_anim_frames == scale_game_frames(0x11)) ||
             ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1E &&
              get_ammo(-1)) ||
@@ -187,8 +188,8 @@ void mine_glove_update(struct Moby *moby) {
             moby->state = 3;
         }
     }
-    if (vars->held != 0 && !hero.item_use_locked) {
-        out = (float *)vars->held->pvars;
+    if (mine_glove_vars->held != 0 && !hero.item_use_locked) {
+        held_mine_launch_velocity = (float *)mine_glove_vars->held->pvars;
         arc.q = 0;
         arc.f[0] = frame_time_macro * (item_text_variant[0x11]
                                            ? ((controller_state.held & 5) ? 12.0f : 4.0f)
@@ -267,11 +268,11 @@ void mine_glove_update(struct Moby *moby) {
                                                    : ((controller_state.held & 5) ? 6.0f : 4.0f),
                            pos.f,
                            target.f,
-                           out);
+                           held_mine_launch_velocity);
     }
     switch (moby->state) {
     case MINE_GLOVE_INITIALIZE:
-        vars->held = 0;
+        mine_glove_vars->held = 0;
         if (!(moby->anim_flags & 2))
             moby->state = 1;
         else
@@ -281,8 +282,9 @@ void mine_glove_update(struct Moby *moby) {
             moby->state = 2;
         break;
     case MINE_GLOVE_RELEASE_HELD_MOBY:
-        if (vars->held != 0) {
-            initialize_moby_motion_at_position(&pos, vars->held, vars->held->pvars);
+        if (mine_glove_vars->held != 0) {
+            initialize_moby_motion_at_position(
+                &pos, mine_glove_vars->held, mine_glove_vars->held->pvars);
             if (((DeliveryStats_2c1ad0 *)item_usage)->deliveries <= 0xfffe)
                 ++((DeliveryStats_2c1ad0 *)item_usage)->deliveries;
             {
@@ -295,12 +297,12 @@ void mine_glove_update(struct Moby *moby) {
             ((DeliveryStats_2c1ad0 *)item_usage)->levels =
                 (((DeliveryStats_2c1ad0 *)item_usage)->levels | (1u << current_level_index_macro)) |
                 0x80000000;
-            append_unique_moby_index(vars->held, D_L00_001B07B0, 0x3F);
-            vars->held = 0;
-            vars->timer54 = scale_game_frames(10);
+            append_unique_moby_index(mine_glove_vars->held, D_L00_001B07B0, 0x3F);
+            mine_glove_vars->held = 0;
+            mine_glove_vars->timer54 = scale_game_frames(10);
         }
         moby->state = 4;
-        vars->timer58 = scale_game_frames(0x14);
+        mine_glove_vars->timer58 = scale_game_frames(0x14);
         break;
     case MINE_GLOVE_POST_RELEASE_WAIT:
         if (hero.state.current != 0x23 && !hero.item_anim_active)
@@ -310,17 +312,17 @@ void mine_glove_update(struct Moby *moby) {
         moby->state = 6;
         break;
     case MINE_GLOVE_REMOVE_HELD_MOBY:
-        if (vars->held != 0) {
-            mark_moby_for_removal(vars->held);
-            vars->held = 0;
+        if (mine_glove_vars->held != 0) {
+            mark_moby_for_removal(mine_glove_vars->held);
+            mine_glove_vars->held = 0;
         }
         break;
     }
-    fast_dec_timer(&vars->timer54);
-    if (vars->held != 0) {
-        qcopy(&vars->held->pos, &vars->grip);
-    } else if (vars->timer54 == 0 && get_ammo(-1)) {
+    fast_dec_timer(&mine_glove_vars->timer54);
+    if (mine_glove_vars->held != 0) {
+        qcopy(&mine_glove_vars->held->pos, &mine_glove_vars->grip);
+    } else if (mine_glove_vars->timer54 == 0 && get_ammo(-1)) {
         qzero(&launch);
-        vars->held = spawn_mine(moby, &vars->grip, &launch);
+        mine_glove_vars->held = spawn_mine(moby, &mine_glove_vars->grip, &launch);
     }
 }

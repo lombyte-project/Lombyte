@@ -983,7 +983,7 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002eb108")
 void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     unsigned int i = 0;
     unsigned int output_vertex_byte_offset = 0;
-    RingVars    *data = (RingVars *)moby->pvars;
+    RingVars    *ripple_phase_state = (RingVars *)moby->pvars;
     unsigned int scrolled_uv_vertex_index;
     int          j;
     int          k;
@@ -1000,9 +1000,9 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
     vu1_add_g_sregister(0x42, ((long)ripple_mesh_alpha_1_fix << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
-    data->prev = data->angle;
-    data->angle = fast_add_rotations(
-        data->angle,
+    ripple_phase_state->prev = ripple_phase_state->angle;
+    ripple_phase_state->angle = fast_add_rotations(
+        ripple_phase_state->angle,
         360.0f / multiply_global_factor_ed64(ripple_mesh_phase_advance_divisor_gp) * DEG_TO_RAD *
             frame_time);
     get_moby_color(moby, &r, &g, &b);
@@ -1018,7 +1018,7 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
         float  radius_remainder = FUN_L00_00200260(rad, ripple_mesh_radial_wavelength_gp);
         float  w =
             fast_normalize_angle(radius_remainder * 6.2831855f / ripple_mesh_radial_wavelength_gp);
-        float z = fast_sin(fast_add_rotations(w, data->angle));
+        float z = fast_sin(fast_add_rotations(w, ripple_phase_state->angle));
         output_vertex[0] = template_vertex[0] + moby->pos.x;
         *(float *)((char *)ripple_mesh_world_vertices + 4 + output_vertex_byte_offset) =
             template_vertex[1] + moby->pos.y;
@@ -1206,7 +1206,7 @@ float scaled_ripple_template_vertex_scale_gp __asm__("D_L15_00162200") = 0.5f;
 void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002edbe0");
 
 void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
-    RingVars_2edbe0 *data = (RingVars_2edbe0 *)moby->pvars;
+    RingVars_2edbe0 *scaled_ripple_phase_state = (RingVars_2edbe0 *)moby->pvars;
     unsigned int     i;
     unsigned int     uv_vertex_index;
     int              j;
@@ -1222,9 +1222,9 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     vu1_add_g_sregister(0x42, ((long)scaled_ripple_alpha_1_fix << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
-    data->prev = data->angle;
-    data->angle =
-        fast_add_rotations(data->angle,
+    scaled_ripple_phase_state->prev = scaled_ripple_phase_state->angle;
+    scaled_ripple_phase_state->angle =
+        fast_add_rotations(scaled_ripple_phase_state->angle,
                            360.0f / FUN_001f96b0_2edbe0(scaled_ripple_phase_advance_divisor_gp) *
                                0.017453292f * frame_time_macro);
     get_moby_color(moby, &r, &g, &b);
@@ -1237,7 +1237,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
         float  radius_remainder = FUN_L00_00200260_2edbe0(rad, scaled_ripple_radial_wavelength_gp);
         float  w = fast_normalize_angle(radius_remainder * 6.2831855f /
                                        scaled_ripple_radial_wavelength_gp);
-        float  z = fast_sin(fast_add_rotations(w, data->angle));
+        float  z = fast_sin(fast_add_rotations(w, scaled_ripple_phase_state->angle));
         scaled_ripple_world_vertices[i][0] =
             scaled_ripple_template_vertex_scale_gp * template_vertex[0] + moby->pos.x;
         scaled_ripple_world_vertices[i][1] =
@@ -1500,7 +1500,7 @@ float ripple_88_template_vertex_scale_gp __asm__("D_L15_00162270") = 1.1f;
 void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002edfc0");
 
 void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
-    RingVars_2edfc0 *data = (RingVars_2edfc0 *)moby->pvars;
+    RingVars_2edfc0 *ripple_88_phase_state = (RingVars_2edfc0 *)moby->pvars;
     unsigned int     i;
     unsigned int     uv_vertex_index;
     int              j;
@@ -1516,9 +1516,9 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
     vu1_add_g_sregister(0x42, ((long)ripple_88_alpha_1_fix << 32) | 0x44);
     vu1_add_g_sregister(8, 0);
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
-    data->prev = data->angle;
-    data->angle =
-        fast_add_rotations(data->angle,
+    ripple_88_phase_state->prev = ripple_88_phase_state->angle;
+    ripple_88_phase_state->angle =
+        fast_add_rotations(ripple_88_phase_state->angle,
                            360.0f / FUN_001f96b0_2edfc0(ripple_88_phase_advance_divisor_gp) *
                                0.017453292f * frame_time_macro);
     get_moby_color(moby, &r, &g, &b);
@@ -1531,7 +1531,7 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
         float  radius_remainder = FUN_L00_00200260_2edfc0(rad, ripple_88_radial_wavelength_gp);
         float  w =
             fast_normalize_angle(radius_remainder * 6.2831855f / ripple_88_radial_wavelength_gp);
-        float z = fast_sin(fast_add_rotations(w, data->angle));
+        float z = fast_sin(fast_add_rotations(w, ripple_88_phase_state->angle));
         ripple_88_world_vertices[i][0] =
             ripple_88_template_vertex_scale_gp * template_vertex[0] + moby->pos.x;
         ripple_88_world_vertices[i][1] =

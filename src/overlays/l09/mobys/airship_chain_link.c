@@ -66,7 +66,7 @@ void         FUN_L00_0025e450(f32   burst,
 
 extern s32 D_L09_0015F5CC NOT_SDA;
 
-char *find_nearby_chain_attachment(char *self, char *search_position, int bone) {
+char *find_nearby_chain_attachment(char *excluded_moby, char *search_position, int bone) {
     char *best = 0;
     float bestd = 1000000000.0f;
     char  query_position[16];
@@ -76,7 +76,7 @@ char *find_nearby_chain_attachment(char *self, char *search_position, int bone) 
     *(OvlQuad *)query_position = *(OvlQuad *)search_position;
     for (candidate_moby = D_L09_0015FFE4; candidate_moby != 0;
          candidate_moby = *(char **)(candidate_moby + 0x28)) {
-        if (candidate_moby == self)
+        if (candidate_moby == excluded_moby)
             continue;
         if (candidate_moby != 0 && *(unsigned char *)(candidate_moby + 0x20) != 0xFE &&
             *(unsigned char *)(candidate_moby + 0x20) != 0xFD) {

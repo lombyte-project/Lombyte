@@ -11,10 +11,11 @@ extern void snd_play_vag_stream_by_loc_ex_cb(
 void music_start_track_30000(s32 track, s32 flags, s32 volume) __asm__("FUN_002156d8");
 
 void music_start_track_30000(s32 track, s32 flags, s32 volume) {
-    s32 *entry;
+    s32 *dialogue_stream_location_entry;
 
-    entry = (s32 *)((u8 *)dialogue_stream_locations + (track * 4 + game_language * 600));
-    if (*entry != 0 && music_stream_state.secondary.handle == 0) {
+    dialogue_stream_location_entry =
+        (s32 *)((u8 *)dialogue_stream_locations + (track * 4 + game_language * 600));
+    if (*dialogue_stream_location_entry != 0 && music_stream_state.secondary.handle == 0) {
         *(u32 *)&music_stream_state.secondary.handle = 0xFFFFFFFF;
         music_stream_state.secondary.state = 1;
         music_stream_state.secondary.track = track;
@@ -23,7 +24,7 @@ void music_start_track_30000(s32 track, s32 flags, s32 volume) {
         music_stream_state.secondary.remaining_time = 48000;
         music_stream_state.secondary.volume = volume;
         music_stream_state.secondary.crossfade_enabled = 0;
-        snd_play_vag_stream_by_loc_ex_cb(*entry,
+        snd_play_vag_stream_by_loc_ex_cb(*dialogue_stream_location_entry,
                                          0,
                                          0,
                                          0,

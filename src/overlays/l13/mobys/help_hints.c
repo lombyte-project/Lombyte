@@ -22,14 +22,14 @@ extern char statistics_level_flags[] __asm__("D_00141CE4");
 void update_help_hints(struct Moby *moby) __asm__("FUN_L13_002f3778");
 
 void update_help_hints(struct Moby *moby) {
-    char          *data;
+    char          *linked_moby_volume_config;
     unsigned char *menu_item_enable_base;
     moby->update_dist = 0xFF;
-    data = (char *)moby->pvars;
+    linked_moby_volume_config = (char *)moby->pvars;
     if (help_request_state[0] == 0 && help_request_state[9] == -1) {
         unsigned int hero_control_mode = *(unsigned int *)(&hero.state.control_mode);
         if ((hero_control_mode < 2 || hero_control_mode == 9) ? D_L13_0015F5C4 == 0 : 0) {
-            int   linked_moby_index = *(int *)(data + 4);
+            int   linked_moby_index = *(int *)(linked_moby_volume_config + 4);
             char *linked_moby;
             if (linked_moby_index != -1) {
                 linked_moby = moby_base + (linked_moby_index << 8);
@@ -59,7 +59,8 @@ void update_help_hints(struct Moby *moby) {
                     0x80000000;
             } else {
             direct:
-                if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)data) != 0) {
+                if (is_point_inside_clip_volume(&hero.motion.pos,
+                                                *(int *)linked_moby_volume_config) != 0) {
                     if (*(int *)(((char *)&statistics_level_flags)) >= 0) {
                         help_request(0x32C8, 0x6F);
                     }
@@ -67,7 +68,8 @@ void update_help_hints(struct Moby *moby) {
             }
         }
     }
-    if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 8)) != 0) {
+    if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(linked_moby_volume_config + 8)) !=
+        0) {
         hero.vent_updraft = 0;
     } else {
         hero.vent_updraft = 1;

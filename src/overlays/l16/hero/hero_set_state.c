@@ -83,7 +83,7 @@ extern char level16_hero_jump_velocity_keys[] __asm__("D_L16_0017C380");
 extern char level16_hero_water_surface_jump_velocity_keys[] __asm__("D_L16_0017C3C0");
 
 int hero_set_state(int a, int b) {
-    int   old2088;
+    int   saved_state_step;
     char *moby;
     int   old20A7;
     float vec[4];
@@ -103,7 +103,7 @@ int hero_set_state(int a, int b) {
     }
     {
         struct Hero *p = &hero;
-        old2088 = p->state.step;
+        saved_state_step = p->state.step;
         moby = ((char *)p->moby);
         old20A7 = p->item_select_blocked;
         p->state.prev2 = p->state.prev;
@@ -461,7 +461,7 @@ int hero_set_state(int a, int b) {
             set_hero_animation(0x80, 0, (float)scale_game_frames(0xA));
         break;
     }
-    case 0x3E: {
+    case HERO_STATE_HOVERBOARD_MOVE_WITH_RAMP_LAUNCH: {
         struct Hero *p = &hero;
         p->state.control_mode = 0x15;
         p->unk2284 = 8;
@@ -1186,7 +1186,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
             p->state.current = p->state.prev;
-            p->state.step = old2088;
+            p->state.step = saved_state_step;
             p->state_timer = p->state.prev_timer;
             return 0;
         }

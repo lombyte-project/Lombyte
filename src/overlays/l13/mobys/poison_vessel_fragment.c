@@ -36,27 +36,28 @@ char *spawn_poison_vessel_fragment(void *position,
                                    int effect_mode) {
     unsigned char *moby = (unsigned char *)create_moby(0x662);
     if (moby != 0) {
-        char *data;
+        char *effect_moby_vars;
         float rotation_x_increment, dd;
-        data = ((char *)MOBY(moby)->pvars);
+        effect_moby_vars = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x23] = random_int_between(0x40, 0x80);
         set_moby_color(moby, 0x20, 0x60, 0x10);
         qcopy(moby + 0x10, position);
-        qcopy(data, initial_velocity);
+        qcopy(effect_moby_vars, initial_velocity);
         rotation_x_increment =
             random_float_between(frame_time * 6.2831855f, frame_time * 12.566371f);
         dd = frame_time;
-        *(float *)(data + 0x10) = rotation_x_increment;
-        *(float *)(data + 0x14) = random_float_between(dd * 6.2831855f, dd * 12.566371f);
-        *(short *)(data + 0x18) = duration_frames;
-        *(short *)(data + 0x1A) = duration_frames;
+        *(float *)(effect_moby_vars + 0x10) = rotation_x_increment;
+        *(float *)(effect_moby_vars + 0x14) =
+            random_float_between(dd * 6.2831855f, dd * 12.566371f);
+        *(short *)(effect_moby_vars + 0x18) = duration_frames;
+        *(short *)(effect_moby_vars + 0x1A) = duration_frames;
         if (effect_mode == 0) {
             MOBY(moby)->scale = MOBY(moby)->scale * random_float_between(0.5f, 0.75f);
         }
-        *(float *)(data + 0x1C) = MOBY(moby)->scale;
+        *(float *)(effect_moby_vars + 0x1C) = MOBY(moby)->scale;
         MOBY(moby)->scale = MOBY(moby)->scale * random_float_between(2.0f, 5.0f);
         moby[0xBC] = effect_mode;
         update_entity(moby);
@@ -103,7 +104,7 @@ typedef union {
 void update_poison_vessel_fragment(struct Moby *moby) __asm__("FUN_L13_0030c3b8");
 
 void update_poison_vessel_fragment(struct Moby *moby) {
-    char           *data = (char *)moby->pvars;
+    char           *motion_and_lifetime_vars = (char *)moby->pvars;
     L13EffectVector old_pos, position, velocity, acceleration, second_pos;
     float           angle, direction, amount;
     int             spark_frame_count, second_spark_frame_count, third_spark_frame_count;
@@ -126,12 +127,14 @@ void update_poison_vessel_fragment(struct Moby *moby) {
             angle = random_float_between(-moby_spark_first_batch_spread_degrees_gp,
                                          moby_spark_first_batch_spread_degrees_gp) *
                     0.017453292f;
-            direction =
-                fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)), angle);
+            direction = fast_add_rotations(fast_arc_tan(*(float *)motion_and_lifetime_vars,
+                                                        *(float *)(motion_and_lifetime_vars + 4)),
+                                           angle);
             acceleration.f[0] = fast_cos(direction) *
                                 (moby_spark_first_batch_horizontal_acceleration_gp * frame_time);
-            direction =
-                fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)), angle);
+            direction = fast_add_rotations(fast_arc_tan(*(float *)motion_and_lifetime_vars,
+                                                        *(float *)(motion_and_lifetime_vars + 4)),
+                                           angle);
             acceleration.f[1] = fast_sin(direction) *
                                 (moby_spark_first_batch_horizontal_acceleration_gp * frame_time);
             acceleration.f[2] = 0.0f;
@@ -177,12 +180,14 @@ void update_poison_vessel_fragment(struct Moby *moby) {
             angle = random_float_between(-moby_spark_second_batch_spread_degrees_gp,
                                          moby_spark_second_batch_spread_degrees_gp) *
                     amount;
-            direction =
-                fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)), angle);
+            direction = fast_add_rotations(fast_arc_tan(*(float *)motion_and_lifetime_vars,
+                                                        *(float *)(motion_and_lifetime_vars + 4)),
+                                           angle);
             acceleration.f[0] = fast_cos(direction) *
                                 (moby_spark_second_batch_horizontal_acceleration_gp * frame_time);
-            direction =
-                fast_add_rotations(fast_arc_tan(*(float *)data, *(float *)(data + 4)), angle);
+            direction = fast_add_rotations(fast_arc_tan(*(float *)motion_and_lifetime_vars,
+                                                        *(float *)(motion_and_lifetime_vars + 4)),
+                                           angle);
             acceleration.f[1] = fast_sin(direction) *
                                 (moby_spark_second_batch_horizontal_acceleration_gp * frame_time);
             acceleration.f[2] = 0.0f;
@@ -210,19 +215,19 @@ void update_poison_vessel_fragment(struct Moby *moby) {
                         -1);
         } while (i >= 0);
     }
-    moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x10));
-    moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x14));
-    fast_vec_add(&moby->pos, &moby->pos, data);
-    *(float *)(data + 8) -= D_0015ED70 * 14.6f;
+    moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(motion_and_lifetime_vars + 0x10));
+    moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(motion_and_lifetime_vars + 0x14));
+    fast_vec_add(&moby->pos, &moby->pos, motion_and_lifetime_vars);
+    *(float *)(motion_and_lifetime_vars + 8) -= D_0015ED70 * 14.6f;
     if (!(moby->pos.x < 0.0f) && !(moby->pos.y < 0.0f) && !(moby->pos.z < 0.0f)) {
-        short life = *(short *)(data + 0x18);
-        short duration = *(short *)(data + 0x1a);
+        short life = *(short *)(motion_and_lifetime_vars + 0x18);
+        short duration = *(short *)(motion_and_lifetime_vars + 0x1a);
         if (life < duration / 4) {
-            *(float *)((char *)moby + 0x2c) = *(float *)(data + 0x1c) *
-                                              convert_integer_to_float(life) /
-                                              convert_integer_to_float(*(short *)(data + 0x1a) / 4);
+            *(float *)((char *)moby + 0x2c) =
+                *(float *)(motion_and_lifetime_vars + 0x1c) * convert_integer_to_float(life) /
+                convert_integer_to_float(*(short *)(motion_and_lifetime_vars + 0x1a) / 4);
         }
-        if (fast_dec_timer_s16(data + 0x18) == 0)
+        if (fast_dec_timer_s16(motion_and_lifetime_vars + 0x18) == 0)
             goto collision;
     }
     FUN_0020c828(moby);

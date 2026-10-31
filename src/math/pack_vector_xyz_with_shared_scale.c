@@ -6,7 +6,7 @@ extern s32 fast_vector_to_packed_chars(void *) __asm__("FUN_001f9d68");
 
 void pack_vector_xyz_with_shared_scale(f32 *v, s32 *out) __asm__("FUN_00214a98");
 
-void pack_vector_xyz_with_shared_scale(f32 *source_vector, s32 *out) {
+void pack_vector_xyz_with_shared_scale(f32 *source_vector, s32 *packed_vector_destination) {
     f32 encoded_xyz_and_scale[4];
     f32 abs_x;
     f32 max_abs_xy_component;
@@ -32,7 +32,7 @@ void pack_vector_xyz_with_shared_scale(f32 *source_vector, s32 *out) {
     encoded_xyz_and_scale[0] = source_vector[0] * component_encode_scale + 127.0f;
     encoded_xyz_and_scale[1] = source_vector[1] * component_encode_scale + 127.0f;
     encoded_xyz_and_scale[2] = source_vector[2] * component_encode_scale + 127.0f;
-    *out = fast_vector_to_packed_chars(encoded_xyz_and_scale);
+    *packed_vector_destination = fast_vector_to_packed_chars(encoded_xyz_and_scale);
 }
 
 extern __typeof__(pack_vector_xyz_with_shared_scale) func_00214A98

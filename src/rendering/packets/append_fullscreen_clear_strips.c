@@ -23,7 +23,7 @@ extern struct ClearStripPacket *render_packet_cursor[1] __asm__("D_00160F00");
 void append_fullscreen_clear_strips(s64 color) __asm__("FUN_00227378");
 
 void append_fullscreen_clear_strips(s64 color) {
-    struct ClearStripPacket *base;
+    struct ClearStripPacket *clear_packet_start;
     struct ClearStripPacket *packet_cursor;
     s64                     *commands;
     volatile s64            *vertices; /* GIF packet words, written in order */
@@ -52,10 +52,10 @@ void append_fullscreen_clear_strips(s64 color) {
     render_packet_cursor[0]->address = 0;
     render_packet_cursor[0]->vif_command = 0;
     render_packet_cursor[0]->gif_control = (strip_count + 5) | 0x50000000;
-    base = render_packet_cursor[0];
-    packet_cursor = (struct ClearStripPacket *)((u8 *)base + 0x10);
+    clear_packet_start = render_packet_cursor[0];
+    packet_cursor = (struct ClearStripPacket *)((u8 *)clear_packet_start + 0x10);
     render_packet_cursor[0] = packet_cursor;
-    base->gif_tag = 0x1000000000000001;
+    clear_packet_start->gif_tag = 0x1000000000000001;
     commands = (s64 *)packet_cursor;
     commands[1] = 0xE;
     commands[2] = 0x3D801;
@@ -74,7 +74,7 @@ void append_fullscreen_clear_strips(s64 color) {
         left_x = negative_half_width + 0x8000;
         right_x = negative_half_width + 0x8200;
         packed_bottom_y = (s64)bottom_y << 16;
-        vertices = (volatile s64 *)((u8 *)base + 0x60);
+        vertices = (volatile s64 *)((u8 *)clear_packet_start + 0x60);
         do {
             *vertices++ = (s64)left_x | packed_top_y;
             *vertices++ = (s64)right_x | packed_bottom_y;

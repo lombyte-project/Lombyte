@@ -32,16 +32,16 @@ s32 sceMpegAddStrCallback(sceMpeg *mp, s32 strType, s32 ch, s32 func, s32 data) 
     u64          id;
     s32          count;
     s32          i;
-    s32          old;
+    s32          previous_callback;
 
-    old = 0;
+    previous_callback = 0;
     sys = mp->sys;
     cb = sys->callbacks;
     id = _type2id(strType, ch);
     count = sys->count;
     for (i = 0; i < count; i++) {
         if (id == cb[i].id) {
-            old = cb[i].func;
+            previous_callback = cb[i].func;
             break;
         }
     }
@@ -52,5 +52,5 @@ s32 sceMpegAddStrCallback(sceMpeg *mp, s32 strType, s32 ch, s32 func, s32 data) 
         cb[i].func = func;
         cb[i].type = D_00132ED8[strType].type;
     }
-    return old;
+    return previous_callback;
 }

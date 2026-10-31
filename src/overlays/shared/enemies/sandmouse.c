@@ -431,12 +431,12 @@ extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__(
 void draw_sandmouse_billboard_quads(struct Moby *moby) __asm__("FUN_L01_0030de68");
 
 void draw_sandmouse_billboard_quads(struct Moby *moby) {
-    char *data = ((char *)moby->pvars);
-    char *entry = data + 0x70;
+    char *sandmouse_instance_vars = ((char *)moby->pvars);
+    char *billboard_quad_position = sandmouse_instance_vars + 0x70;
     int   i;
     for (i = 1; i >= 0; i--) {
-        draw_offset_textured_effect_quad(entry, 0x2528AA28, 0.1f, 0.08f);
-        entry += 0x10;
+        draw_offset_textured_effect_quad(billboard_quad_position, 0x2528AA28, 0.1f, 0.08f);
+        billboard_quad_position += 0x10;
     }
 }
 /* Attach two effect entries and register their update callback. */
@@ -445,12 +445,12 @@ void draw_sandmouse_billboard_quads(struct Moby *moby) {
 void update_sandmouse_billboard_quads(struct Moby *moby) __asm__("FUN_L01_0030ded0");
 
 void update_sandmouse_billboard_quads(struct Moby *moby) {
-    char *data = ((char *)moby->pvars);
-    char *entry = data + 0x70;
+    char *sandmouse_instance_variables = ((char *)moby->pvars);
+    char *billboard_world_position = sandmouse_instance_variables + 0x70;
     int   i;
     for (i = 0; i < 2; i++) {
-        moby_point_position(moby, i + 3, entry);
-        entry += 0x10;
+        moby_point_position(moby, i + 3, billboard_world_position);
+        billboard_world_position += 0x10;
     }
     add_draw_callback(draw_sandmouse_billboard_quads, moby);
 }

@@ -110,7 +110,7 @@ s32 follow_path(s32     *ids,
                 OvlVec4 *start_position,
                 OvlVec4 *target,
 
-                OvlVec4 *out) {
+                OvlVec4 *path_goal_position) {
     OvlVec4 side;
     OvlVec4 left;
     OvlVec4 right;
@@ -164,12 +164,12 @@ s32 follow_path(s32     *ids,
                 }
             }
             if (best >= 0) {
-                qcopy(out, &path->pts[best]);
+                qcopy(path_goal_position, &path->pts[best]);
                 return 1;
             }
         }
         return 0;
     }
-    qcopy(out, target);
+    qcopy(path_goal_position, target);
     return 1;
 }

@@ -66,7 +66,7 @@ void enemy_fighter_update(struct Moby *moby) {
         ENEMY_FIGHTER_STATE_FOLLOW_PATH = 1,
         ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN = 2
     };
-    EnemyFighterVars *data = (EnemyFighterVars *)moby->pvars;
+    EnemyFighterVars *enemy_fighter_vars = (EnemyFighterVars *)moby->pvars;
     int               hit = find_moby_hit(moby, 0x800000, 0);
     int               index;
     int               path_index;
@@ -85,17 +85,18 @@ void enemy_fighter_update(struct Moby *moby) {
         cart_burst(5.0f, 13.0f, moby, &moby->pos, -1);
         moby->collision = 0;
         moby->flags |= 0x41;
-        index = data->sound;
+        index = enemy_fighter_vars->sound;
         if (index != -1) {
-            char *entry = ((char *)&voice_pool) + index * 0x70;
-            if (*(struct Moby **)(entry + 0x88) == moby && *(unsigned char *)(entry + 0x74) != 0)
+            char *voice_slot_entry = ((char *)&voice_pool) + index * 0x70;
+            if (*(struct Moby **)(voice_slot_entry + 0x88) == moby &&
+                *(unsigned char *)(voice_slot_entry + 0x74) != 0)
                 release_voice_slot(index);
         }
-        data->sound = -1;
+        enemy_fighter_vars->sound = -1;
     }
     switch (moby->state) {
     case ENEMY_FIGHTER_STATE_INITIALIZE:
-        path_index = data->path;
+        path_index = enemy_fighter_vars->path;
         if (path_index == -1) {
             debug_print(D_L14_001FCE10, moby->save_id);
             mark_moby_for_removal(moby);
@@ -110,31 +111,33 @@ void enemy_fighter_update(struct Moby *moby) {
         moby->state = 1;
         moby->update_dist = 0xff;
         moby->draw_dist = 0xff;
-        data->sound = -1;
-        data->timer = scale_game_frames(enemy_fighter_respawn_delay_frames_gp);
+        enemy_fighter_vars->sound = -1;
+        enemy_fighter_vars->timer = scale_game_frames(enemy_fighter_respawn_delay_frames_gp);
         break;
     case ENEMY_FIGHTER_STATE_FOLLOW_PATH:
         advance_enemy_fighter_along_flight_path(moby);
         break;
     case ENEMY_FIGHTER_STATE_WAIT_FOR_RESPAWN:
-        if (fast_dec_timer(&data->timer)) {
-            path = ((char *)l14_paths[data->path]);
+        if (fast_dec_timer(&enemy_fighter_vars->timer)) {
+            path = ((char *)l14_paths[enemy_fighter_vars->path]);
             moby->flags &= 0xffbe;
             moby->collision = moby->pclass->collision;
-            data->timer = scale_game_frames(enemy_fighter_respawn_delay_frames_gp);
+            enemy_fighter_vars->timer = scale_game_frames(enemy_fighter_respawn_delay_frames_gp);
             moby->state = 1;
-            data->segment = 0;
-            data->along = 0;
+            enemy_fighter_vars->segment = 0;
+            enemy_fighter_vars->along = 0;
             qcopy(&moby->pos, path + 0x10);
             moby->rot.z = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                        *(float *)(path + 0x24) - *(float *)(path + 0x14));
-            data->f80 = data->f84 = data->f88 = data->f70 = data->f74 = data->f78 = 0.0f;
+            enemy_fighter_vars->f80 = enemy_fighter_vars->f84 = enemy_fighter_vars->f88 =
+                enemy_fighter_vars->f70 = enemy_fighter_vars->f74 = enemy_fighter_vars->f78 = 0.0f;
         }
         break;
     }
     spawn_enemy_fighter_exhaust(moby);
-    if (moby->state != 0 && moby->state != 2 && voice_is_playing(moby, data->sound) == 0)
-        data->sound = allocate_voice_for_target_entry(0, 4, moby);
+    if (moby->state != 0 && moby->state != 2 &&
+        voice_is_playing(moby, enemy_fighter_vars->sound) == 0)
+        enemy_fighter_vars->sound = allocate_voice_for_target_entry(0, 4, moby);
 }
 
 #include "rnc/overlay/l14/mobys/enemy_fighter_data/spawn_enemy_fighter_exhaust.h"
@@ -146,7 +149,7 @@ extern int exhaust_ftoi(float) __asm__("FUN_001fa6d0");
 void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     Vec4     step;
     Vec4     pos;
-    Vec4     base;
+    Vec4     paired_exhaust_origin;
     L14Puff *puff;
     int      i;
     int      j;
@@ -161,7 +164,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     fast_vec_add(&pos, &emitter_moby->pos, &step);
     fast_vec_scale(&step, &emitter_moby->rot_row2, enemy_fighter_exhaust_base_row2_offset_gp);
     fast_vec_add(&pos, &pos, &step);
-    qcopy(&base, &pos);
+    qcopy(&paired_exhaust_origin, &pos);
     fast_vec_scale(&step, &emitter_moby->rot_row1, enemy_fighter_exhaust_paired_emitter_offset_gp);
     fast_vec_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
@@ -204,7 +207,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
         size -= 20000.0f;
     }
     fast_vec_scale(&step, &emitter_moby->rot_row1, enemy_fighter_exhaust_paired_emitter_offset_gp);
-    fast_vec_sub(&pos, &base, &step);
+    fast_vec_sub(&pos, &paired_exhaust_origin, &step);
     for (j = 0; j < 2; j++) {
         spin = random_integer_below(16);
         puff = spawn_puff(&pos,
@@ -249,18 +252,19 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
 void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
 
 void initialize_flight_path_state(struct Moby *moby) {
-    char  *data = (char *)moby->pvars;
-    float *path = (float *)l14_paths[*(int *)(data + 0x68)];
+    char  *flight_path_vars = (char *)moby->pvars;
+    float *path = (float *)l14_paths[*(int *)(flight_path_vars + 0x68)];
     int    i;
     for (i = 0; i < *(int *)path - 1; i++) {
         path[i * 4 + 7] = fast_vec_dist(&path[i * 4 + 4], &path[i * 4 + 8]);
     }
-    *(int *)(data + 0x60) = 0;
-    *(int *)(data + 0x64) = 0;
+    *(int *)(flight_path_vars + 0x60) = 0;
+    *(int *)(flight_path_vars + 0x64) = 0;
     qcopy(&moby->pos, path + 4);
     moby->rot.z = fast_arc_tan(path[8] - path[4], path[9] - path[5]);
-    *(float *)(data + 0x80) = *(float *)(data + 0x84) = *(float *)(data + 0x88) =
-        *(float *)(data + 0x70) = *(float *)(data + 0x74) = *(float *)(data + 0x78) = 0.0f;
+    *(float *)(flight_path_vars + 0x80) = *(float *)(flight_path_vars + 0x84) =
+        *(float *)(flight_path_vars + 0x88) = *(float *)(flight_path_vars + 0x70) =
+            *(float *)(flight_path_vars + 0x74) = *(float *)(flight_path_vars + 0x78) = 0.0f;
 }
 
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);

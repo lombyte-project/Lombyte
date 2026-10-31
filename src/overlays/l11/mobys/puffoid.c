@@ -754,7 +754,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     };
     struct L11PatrolVars *patrol_vars = (struct L11PatrolVars *)moby->pvars;
     Vec4                  position_scratch;
-    s32                   out;
+    s32                   hit_processing_status;
     float                 dmg;
     struct L11HitInfo    *hit;
     char                 *path;
@@ -784,8 +784,9 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     dmg = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
     {
-        s32 kind = resolve_moby_hit_response(moby, hit, &patrol_vars->hp, 0, &out, &dmg, 0, 4);
-        if (out != 1 && moby->state != 0xB) {
+        s32 kind = resolve_moby_hit_response(
+            moby, hit, &patrol_vars->hp, 0, &hit_processing_status, &dmg, 0, 4);
+        if (hit_processing_status != 1 && moby->state != 0xB) {
             patrol_vars->hp -= dmg;
             if (hit->moby->oclass == 0x47) {
                 kind = 3;
@@ -939,20 +940,21 @@ extern short *D_L11_001AC240[];
 /* Counts the listed mobys of class 0x4DE in states 13 to 17. */
 short count_group_puffoids_in_states_13_to_17(struct Moby *self) __asm__("FUN_L11_00316090");
 
-short count_group_puffoids_in_states_13_to_17(struct Moby *self) {
+short count_group_puffoids_in_states_13_to_17(struct Moby *group_source_moby) {
     unsigned short *moby_list_entry;
     short           matching_moby_count;
-    char           *base;
+    char           *level_moby_array_base;
 
-    if (self->group == 0xFF)
+    if (group_source_moby->group == 0xFF)
         return 0;
-    moby_list_entry = (unsigned short *)D_L11_001AC240[self->group];
+    moby_list_entry = (unsigned short *)D_L11_001AC240[group_source_moby->group];
     matching_moby_count = 0;
     if (moby_list_entry == 0)
         return 0;
-    base = D_L11_0015FFD8;
+    level_moby_array_base = D_L11_0015FFD8;
     for (;;) {
-        struct Moby *moby = (struct Moby *)(base + ((*moby_list_entry & 0x7FFF) << 8));
+        struct Moby *moby =
+            (struct Moby *)(level_moby_array_base + ((*moby_list_entry & 0x7FFF) << 8));
         if (moby->oclass == 0x4DE) {
             if (moby->state >= 13) {
                 if (moby->state < 18)

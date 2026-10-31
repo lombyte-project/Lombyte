@@ -65,9 +65,9 @@ extern void create_spark_particle(void *,
 
 void update_spark_particle_emitter(EmitterMoby *self) __asm__("FUN_L01_002bd100");
 
-void update_spark_particle_emitter(EmitterMoby *self) {
+void update_spark_particle_emitter(EmitterMoby *emitter_moby) {
     Emitter *emitter_vars;
-    EmitVec  out;
+    EmitVec  rotated_particle_velocity;
     EmitVec  position_scratch;
     EmitVec  emission_position_offset;
     union {
@@ -83,19 +83,19 @@ void update_spark_particle_emitter(EmitterMoby *self) {
     f32 size;
     s32 i;
 
-    emitter_vars = self->vars;
+    emitter_vars = emitter_moby->vars;
     if (current_level_index == 1) {
-        position_scratch.q = self->pos.q;
+        position_scratch.q = emitter_moby->pos.q;
         position_scratch.f[3] = 20.0f;
         if (fast_bsphere_check(&position_scratch, 240.0f) == -1) {
             return;
         }
     }
-    emitter_vars->owner = self;
+    emitter_vars->owner = emitter_moby;
     if (emitter_vars->timer <= 0) {
         emitter_vars->timer = emitter_vars->delay;
         for (i = 0; i < emitter_vars->count; i++) {
-            position_scratch.q = self->pos.q;
+            position_scratch.q = emitter_moby->pos.q;
             emission_position_offset.f[0] =
                 random_float_between(-emitter_vars->spread[0], emitter_vars->spread[0]);
             emission_position_offset.f[1] =
@@ -103,7 +103,7 @@ void update_spark_particle_emitter(EmitterMoby *self) {
             emission_position_offset.f[2] =
                 random_float_between(-emitter_vars->spread[2], emitter_vars->spread[2]);
             if (emitter_vars->flags & 0x2000) {
-                euler_rotation_matrix(&u.rot.m, self->rot);
+                euler_rotation_matrix(&u.rot.m, emitter_moby->rot);
                 transform_vector(&emission_position_offset, &emission_position_offset, &u.rot.m);
             }
             fast_vec_add(&position_scratch, &position_scratch, &emission_position_offset);
@@ -118,19 +118,19 @@ void update_spark_particle_emitter(EmitterMoby *self) {
                     random_float_between(-emitter_vars->vel_range[2], emitter_vars->vel_range[2]) *
                     3.1415927f / 180.0f;
                 if (emitter_vars->flags & 0x4000) {
-                    u.rot.ang.f[0] = fast_add_rotations(u.rot.ang.f[0], self->rot[0]);
-                    u.rot.ang.f[1] = fast_add_rotations(u.rot.ang.f[0], self->rot[1]);
-                    u.rot.ang.f[2] = fast_add_rotations(u.rot.ang.f[0], self->rot[2]);
+                    u.rot.ang.f[0] = fast_add_rotations(u.rot.ang.f[0], emitter_moby->rot[0]);
+                    u.rot.ang.f[1] = fast_add_rotations(u.rot.ang.f[0], emitter_moby->rot[1]);
+                    u.rot.ang.f[2] = fast_add_rotations(u.rot.ang.f[0], emitter_moby->rot[2]);
                 }
                 euler_rotation_matrix(&u.rot.m, &u.rot.ang);
-                transform_vector(&out, &emitter_vars->vel, &u.rot.m);
+                transform_vector(&rotated_particle_velocity, &emitter_vars->vel, &u.rot.m);
                 size = random_float_between(emitter_vars->size_min, emitter_vars->size_max);
                 create_spark_particle(
                     emitter_vars,
                     &position_scratch,
-                    out.f[0],
-                    out.f[1],
-                    out.f[2],
+                    rotated_particle_velocity.f[0],
+                    rotated_particle_velocity.f[1],
+                    rotated_particle_velocity.f[2],
                     size,
                     random_float_between(emitter_vars->life_min, emitter_vars->life_max),
                     emitter_vars->fade[0],
@@ -152,7 +152,7 @@ void update_spark_particle_emitter(EmitterMoby *self) {
                     random_float_between(emitter_vars->vel.f[2], emitter_vars->vel_range[2]) *
                     frame_scale;
                 if (emitter_vars->flags & 0x4000) {
-                    euler_rotation_matrix(&u.lin.m, self->rot);
+                    euler_rotation_matrix(&u.lin.m, emitter_moby->rot);
                     transform_vector(&u.lin.vel, &u.lin.vel, &u.lin.m);
                 }
                 size = random_float_between(emitter_vars->size_min, emitter_vars->size_max);

@@ -103,8 +103,9 @@ extern float D_L08_001675C0[];
 extern float FUN_L04_001f1978(float);
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern int   D_L08_001619AC_gp __asm__("D_L08_001619AC") __attribute__((sda));
-extern int   D_L08_001619D0_gp __asm__("D_L08_001619D0") __attribute__((sda));
-extern int   FUN_L00_00259028(char *m, char *p, float *pos, char *v);
+extern int   l08_bombthrower_fade_interpolation_divisor_gp __asm__("D_L08_001619D0")
+    __attribute__((sda));
+extern int FUN_L00_00259028(char *m, char *p, float *pos, char *v);
 extern int
 select_nearest_xy_moby_with_hero_fallback(void *, float, void *) __asm__("FUN_L08_0026a3d0");
 extern void FUN_L00_0025a120(void *);
@@ -149,7 +150,7 @@ char *select_blarg_bombthrower_waypoint(struct Moby *moby) {
     char        *candidate_moby;
     float        bestD, bestA;
     int          candidate_moby_index;
-    struct Hero *base;
+    struct Hero *hero_state;
     if (group_entry == 0)
         return 0;
     best = 0;
@@ -162,11 +163,11 @@ char *select_blarg_bombthrower_waypoint(struct Moby *moby) {
             float candidate_hero_heading_difference, candidate_distance, candidate_heading;
             candidate_heading = fast_arc_tan(MOBY(candidate_moby)->pos.x - moby->pos.x,
                                              MOBY(candidate_moby)->pos.y - moby->pos.y);
-            base = &hero;
+            hero_state = &hero;
             candidate_hero_heading_difference = fast_difference_between_rotations(
                 candidate_heading,
-                fast_arc_tan(base->motion.pos.f[0] - moby->pos.x,
-                             base->motion.pos.f[1] - moby->pos.y));
+                fast_arc_tan(hero_state->motion.pos.f[0] - moby->pos.x,
+                             hero_state->motion.pos.f[1] - moby->pos.y));
             candidate_distance = fast_vec_dist(&moby->pos, candidate_moby + 0x10);
             if (candidate_hero_heading_difference < 1.5707964f) {
                 if (bestA < candidate_hero_heading_difference) {
@@ -204,19 +205,19 @@ void blarg_bombthrower_update(struct Moby *moby) {
         BOMBTHROWER_STATE_FALL_RECOVERY = 0x5D,
         BOMBTHROWER_STATE_DYING = 0x63
     };
-    Data_DBF68  *vars = (Data_DBF68 *)moby->pvars;
+    Data_DBF68  *bombthrower_vars = (Data_DBF68 *)moby->pvars;
     Look         search;
     float        point[4];
     float        velocity[4];
     float        aim[4];
     int          hit;
     float        damage;
-    float        scratch;
+    float        bomb_flight_time;
     struct Moby *target;
     struct Moby *old_waypoint;
 
     damage = 0.0f;
-    func_L00_00264B40_x(moby, D_L08_001619AC_gp, 3.0f, vars->blk160);
+    func_L00_00264B40_x(moby, D_L08_001619AC_gp, 3.0f, bombthrower_vars->blk160);
     if (moby->visible != 0) {
         if (fast_vec_dist(&moby->pos, D_L08_001675C0) < 29.0f) {
             FUN_L00_0025a120(moby);
@@ -229,68 +230,71 @@ void blarg_bombthrower_update(struct Moby *moby) {
         moby->flags |= 0x400;
     }
     if (moby->state == 100) {
-        float duration = convert_integer_to_float(D_L08_001619D0_gp);
-        int   start_alpha = vars->s132;
+        float duration = convert_integer_to_float(l08_bombthrower_fade_interpolation_divisor_gp);
+        int   start_alpha = bombthrower_vars->s132;
         moby->alpha = truncate_float_to_s32(
             (float)start_alpha +
-            (float)-start_alpha * ((float)(D_L08_001619D0_gp - vars->s130) / duration));
+            (float)-start_alpha *
+                ((float)(l08_bombthrower_fade_interpolation_divisor_gp - bombthrower_vars->s130) /
+                 duration));
         spawn_moby_table_puff_pattern(moby);
         return;
     }
     resolve_moby_hit_response(
-        moby, find_moby_hit(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
+        moby, find_moby_hit(moby, 0x330000, 0), &bombthrower_vars->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 0x63) {
         moby->flags |= 0x1000;
-        vars->health -= damage;
-        if (0.0f < vars->health) {
+        bombthrower_vars->health -= damage;
+        if (0.0f < bombthrower_vars->health) {
             if (damage < 1.0f) {
-                vars->tint = 100;
+                bombthrower_vars->tint = 100;
             } else {
                 char *hero_bytes;
-                vars->f80 = frame_time_sq * 30.0f;
-                vars->f88 = frame_time * 5.0f;
-                vars->f8C = frame_time * 7.0f;
-                vars->i94 = 9;
-                vars->f84 = 0.0005f;
-                vars->bAD = 0;
+                bombthrower_vars->f80 = frame_time_sq * 30.0f;
+                bombthrower_vars->f88 = frame_time * 5.0f;
+                bombthrower_vars->f8C = frame_time * 7.0f;
+                bombthrower_vars->i94 = 9;
+                bombthrower_vars->f84 = 0.0005f;
+                bombthrower_vars->bAD = 0;
                 hero_bytes = (char *)&hero;
                 trooper_start_knockback(moby,
-                                        vars->blk70,
+                                        bombthrower_vars->blk70,
                                         fast_arc_tan(moby->pos.x - *(float *)(hero_bytes + 0x80),
                                                      moby->pos.y - *(float *)(hero_bytes + 0x84)),
                                         6,
                                         1,
                                         0);
-                vars->fC0 = 6.0f;
-                vars->fC4 = 10.0f;
-                vars->tint = 0x78;
+                bombthrower_vars->fC0 = 6.0f;
+                bombthrower_vars->fC4 = 10.0f;
+                bombthrower_vars->tint = 0x78;
                 moby->state = 0x5A;
             }
         } else {
             char *hero_bytes;
-            vars->i94 = 9;
-            vars->f84 = 0.0005f;
-            vars->f80 = frame_time_sq * 30.0f;
-            vars->f88 = l08_bombthrower_death_horizontal_knockback_speed_gp * frame_time;
-            vars->f8C = l08_bombthrower_death_vertical_knockback_speed_gp * frame_time;
-            vars->bAD = 0;
+            bombthrower_vars->i94 = 9;
+            bombthrower_vars->f84 = 0.0005f;
+            bombthrower_vars->f80 = frame_time_sq * 30.0f;
+            bombthrower_vars->f88 =
+                l08_bombthrower_death_horizontal_knockback_speed_gp * frame_time;
+            bombthrower_vars->f8C = l08_bombthrower_death_vertical_knockback_speed_gp * frame_time;
+            bombthrower_vars->bAD = 0;
             hero_bytes = (char *)&hero;
             trooper_start_knockback(moby,
-                                    vars->blk70,
+                                    bombthrower_vars->blk70,
                                     fast_arc_tan(moby->pos.x - *(float *)(hero_bytes + 0x80),
                                                  moby->pos.y - *(float *)(hero_bytes + 0x84)),
                                     9,
                                     1,
                                     0);
-            vars->fC0 = 6.0f;
-            vars->fC4 = 10.0f;
+            bombthrower_vars->fC0 = 6.0f;
+            bombthrower_vars->fC4 = 10.0f;
             explode_2D5FA8_c(moby, 0, -1);
-            vars->tint = 0xFA;
+            bombthrower_vars->tint = 0xFA;
             moby->state = 0x63;
             moby->flags &= 0xEFFF;
-            vars->waypoint->command = 0;
+            bombthrower_vars->waypoint->command = 0;
         }
-        trooper_anim_update(moby, vars->anim);
+        trooper_anim_update(moby, bombthrower_vars->anim);
     }
     moby->hit_slot = 0xFF;
     search.result = select_nearest_xy_moby_with_hero_fallback(moby, 16.0f, &search);
@@ -301,35 +305,37 @@ void blarg_bombthrower_update(struct Moby *moby) {
     switch (moby->state) {
     case BOMBTHROWER_STATE_INITIALIZE:
         moby->flags |= 0x1000;
-        vars->b29 = 1;
-        vars->health = 2.0f;
-        FUN_L01_0026d930(vars->blkD0);
-        vars->fDC = 2.0f;
-        vars->fD8 = 2.0f;
-        vars->f10C = 0.03f;
-        vars->f110 = 0.3f;
-        vars->f114 = 0.25f;
-        vars->fF4 = D_L08_00161978_gp * frame_time;
-        vars->b58 = truncate_float_to_s32(17.0f);
-        vars->b5A = truncate_float_to_s32(10.4f);
-        clear_u64_value(vars->v40);
-        vars->waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby);
-        vars->waypoint->command = 1;
-        vars->i128 = scale_game_frames(0xB4);
+        bombthrower_vars->b29 = 1;
+        bombthrower_vars->health = 2.0f;
+        FUN_L01_0026d930(bombthrower_vars->blkD0);
+        bombthrower_vars->fDC = 2.0f;
+        bombthrower_vars->fD8 = 2.0f;
+        bombthrower_vars->f10C = 0.03f;
+        bombthrower_vars->f110 = 0.3f;
+        bombthrower_vars->f114 = 0.25f;
+        bombthrower_vars->fF4 = D_L08_00161978_gp * frame_time;
+        bombthrower_vars->b58 = truncate_float_to_s32(17.0f);
+        bombthrower_vars->b5A = truncate_float_to_s32(10.4f);
+        clear_u64_value(bombthrower_vars->v40);
+        bombthrower_vars->waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby);
+        bombthrower_vars->waypoint->command = 1;
+        bombthrower_vars->i128 = scale_game_frames(0xB4);
         if (moby->prev_seq != 4) {
             FUN_00212f90(moby, 4, 0, 0);
         }
         moby->state = 1;
-        vars->i134 = scale_game_frames(0xF0);
+        bombthrower_vars->i134 = scale_game_frames(0xF0);
         break;
     case BOMBTHROWER_STATE_APPROACH_WAYPOINT:
-        FUN_L00_00259028(
-            (char *)moby, vars->blkD0, (float *)&vars->waypoint->pos, (char *)vars->v40);
-        if (fast_vec_dist(&moby->pos, &vars->waypoint->pos) < 3.0f) {
+        FUN_L00_00259028((char *)moby,
+                         bombthrower_vars->blkD0,
+                         (float *)&bombthrower_vars->waypoint->pos,
+                         (char *)bombthrower_vars->v40);
+        if (fast_vec_dist(&moby->pos, &bombthrower_vars->waypoint->pos) < 3.0f) {
             if (fast_difference_between_rotations(
                     moby->rot.z,
-                    fast_arc_tan(vars->waypoint->pos.x - moby->pos.x,
-                                 vars->waypoint->pos.y - moby->pos.y)) < 0.2617994f) {
+                    fast_arc_tan(bombthrower_vars->waypoint->pos.x - moby->pos.x,
+                                 bombthrower_vars->waypoint->pos.y - moby->pos.y)) < 0.2617994f) {
                 if (6.0f < vector_distance_xy(&moby->pos, &target->pos)) {
                     if (moby->prev_seq != 5) {
                         FUN_00212f90(moby, 5, 0, 10);
@@ -337,36 +343,39 @@ void blarg_bombthrower_update(struct Moby *moby) {
                     moby->state = 6;
                     break;
                 }
-                vars->i134 = scale_game_frames(0xF0);
+                bombthrower_vars->i134 = scale_game_frames(0xF0);
                 {
-                    struct Moby *old_waypoint = vars->waypoint;
+                    struct Moby *old_waypoint = bombthrower_vars->waypoint;
                     struct Moby *next_waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby);
-                    vars->waypoint = next_waypoint;
+                    bombthrower_vars->waypoint = next_waypoint;
                     if (next_waypoint == 0) {
-                        vars->waypoint = old_waypoint;
+                        bombthrower_vars->waypoint = old_waypoint;
                     }
                     old_waypoint->command = 0;
-                    vars->waypoint->command = 1;
+                    bombthrower_vars->waypoint->command = 1;
                 }
                 break;
             }
         }
-        if (fast_dec_timer(&vars->i134) != 0) {
-            old_waypoint = vars->waypoint;
-            if ((vars->waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby)) == 0) {
-                vars->waypoint = old_waypoint;
+        if (fast_dec_timer(&bombthrower_vars->i134) != 0) {
+            old_waypoint = bombthrower_vars->waypoint;
+            if ((bombthrower_vars->waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby)) ==
+                0) {
+                bombthrower_vars->waypoint = old_waypoint;
             }
             old_waypoint->command = 0;
-            vars->waypoint->command = 1;
-            vars->i134 = scale_game_frames(0xF0);
+            bombthrower_vars->waypoint->command = 1;
+            bombthrower_vars->i134 = scale_game_frames(0xF0);
         }
         break;
     case BOMBTHROWER_STATE_MOVE_ONTO_WAYPOINT:
-        FUN_L00_00259028(
-            (char *)moby, vars->blkD0, (float *)&vars->waypoint->pos, (char *)vars->v40);
+        FUN_L00_00259028((char *)moby,
+                         bombthrower_vars->blkD0,
+                         (float *)&bombthrower_vars->waypoint->pos,
+                         (char *)bombthrower_vars->v40);
         if (moby->anim_flags & 2) {
-            FUN_00212f90(vars->waypoint, 1, 0, scale_game_frames(6));
-            qcopy(&moby->pos, &vars->waypoint->pos);
+            FUN_00212f90(bombthrower_vars->waypoint, 1, 0, scale_game_frames(6));
+            qcopy(&moby->pos, &bombthrower_vars->waypoint->pos);
             moby->pos.z -= 0.1f;
             if (moby->prev_seq != 1) {
                 FUN_00212f90(moby, 1, 0, 10);
@@ -374,7 +383,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             moby->state = 3;
             moby->flags &= 0xEFFF;
             moby->rot.z = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
-            vars->i128 = scale_game_frames(0x78);
+            bombthrower_vars->i128 = scale_game_frames(0x78);
             moby->collision = 0;
         }
         break;
@@ -382,12 +391,12 @@ void blarg_bombthrower_update(struct Moby *moby) {
         float target_distance_xy = vector_distance_xy(&moby->pos, &target->pos);
         func_L00_002592B0_x(fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                             moby,
-                            vars->blk12C,
+                            bombthrower_vars->blk12C,
                             0.02f,
                             0.3f,
                             0.2f);
         if (target_distance_xy < 20.0f && 8.0f < target_distance_xy &&
-            fast_dec_timer(&vars->i128) != 0) {
+            fast_dec_timer(&bombthrower_vars->i128) != 0) {
             LevelCamera *cam = &l08_camera;
             if (fast_difference_between_rotations(
                     cam->yaw,
@@ -396,11 +405,11 @@ void blarg_bombthrower_update(struct Moby *moby) {
                 goto attack;
             }
         }
-        if (vars->i38 == 0 || !(0.5f < target_distance_xy)) {
+        if (bombthrower_vars->i38 == 0 || !(0.5f < target_distance_xy)) {
             break;
         }
     attack:
-        FUN_00212f90(vars->waypoint, 1, 0, scale_game_frames(6));
+        FUN_00212f90(bombthrower_vars->waypoint, 1, 0, scale_game_frames(6));
         if (moby->prev_seq != 2) {
             FUN_00212f90(moby, 2, 0, scale_game_frames(7));
         }
@@ -413,9 +422,10 @@ void blarg_bombthrower_update(struct Moby *moby) {
         point[0] = fast_cos(moby->rot.z) * 2.0f;
         point[1] = fast_sin(moby->rot.z) * 2.0f;
         point[2] = 0.0f;
-        fast_vec_add(point, point, &vars->waypoint->pos);
+        fast_vec_add(point, point, &bombthrower_vars->waypoint->pos);
         if (0.2f < vector_distance_xy(&moby->pos, point)) {
-            FUN_L00_00259028((char *)moby, vars->blkD0, point, (char *)vars->v40);
+            FUN_L00_00259028(
+                (char *)moby, bombthrower_vars->blkD0, point, (char *)bombthrower_vars->v40);
         }
         if (moby->anim_flags & 2) {
             LevelCamera *cam;
@@ -425,17 +435,18 @@ void blarg_bombthrower_update(struct Moby *moby) {
                      fast_difference_between_rotations(
                          cam->yaw,
                          fast_arc_tan(moby->pos.x - cam->pos.f[0], moby->pos.y - cam->pos.f[1])))) {
-                old_waypoint = vars->waypoint;
-                if ((vars->waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby)) == 0) {
-                    vars->waypoint = old_waypoint;
+                old_waypoint = bombthrower_vars->waypoint;
+                if ((bombthrower_vars->waypoint =
+                         (struct Moby *)FUN_L08_002daa10_c((char *)moby)) == 0) {
+                    bombthrower_vars->waypoint = old_waypoint;
                 }
                 old_waypoint->command = 0;
-                vars->waypoint->command = 1;
+                bombthrower_vars->waypoint->command = 1;
                 if (moby->prev_seq != 4) {
                     FUN_00212f90(moby, 4, 0, scale_game_frames(7));
                 }
                 moby->state = 1;
-                vars->i134 = scale_game_frames(0xF0);
+                bombthrower_vars->i134 = scale_game_frames(0xF0);
             } else {
                 if (moby->prev_seq != 3) {
                     FUN_00212f90(moby, 3, 0, scale_game_frames(6));
@@ -447,13 +458,13 @@ void blarg_bombthrower_update(struct Moby *moby) {
     case BOMBTHROWER_STATE_THROW_BOMB:
         func_L00_002592B0_x(fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                             moby,
-                            vars->blk12C,
+                            bombthrower_vars->blk12C,
                             0.02f,
                             0.3f,
                             0.2f);
         if (moby->seq == moby->prev_seq && FUN_0020c9e0(moby) == 19.0f) {
             float distance, time;
-            char *next;
+            char *spawned_bomb_moby;
             fast_vec_sub(aim, &target->pos, &moby->pos);
             aim[2] = 0.0f;
             distance = fast_vec_length(aim);
@@ -469,17 +480,19 @@ void blarg_bombthrower_update(struct Moby *moby) {
             moby_point_position(moby, 9, point);
             fast_vec_sub(velocity, &target->pos, point);
             set_vector_length_xy(velocity, velocity, time);
-            velocity[2] = FUN_L00_0025abf0(point, aim, &scratch, time, -(frame_time_sq * 15.0f));
-            next = spawn_bomb_with_velocity((int)moby, (char *)point, (char *)velocity);
-            vars->p124 = (struct Moby *)next;
-            if (next != 0) {
-                char *next_vars = *(char **)(next + 0x78);
+            velocity[2] =
+                FUN_L00_0025abf0(point, aim, &bomb_flight_time, time, -(frame_time_sq * 15.0f));
+            spawned_bomb_moby =
+                spawn_bomb_with_velocity((int)moby, (char *)point, (char *)velocity);
+            bombthrower_vars->p124 = (struct Moby *)spawned_bomb_moby;
+            if (spawned_bomb_moby != 0) {
+                char *next_vars = *(char **)(spawned_bomb_moby + 0x78);
                 *(int *)(next_vars + 0x20) = scale_game_frames(0xB4);
                 *(short *)(next_vars + 0xC) = scale_game_frames(10);
                 *(short *)(next_vars + 0xE) = scale_game_frames(10);
-                vars->p124->state = 1;
-                vars->p124->command |= 3;
-                vars->i128 = scale_game_frames(0xB4);
+                bombthrower_vars->p124->state = 1;
+                bombthrower_vars->p124->command |= 3;
+                bombthrower_vars->i128 = scale_game_frames(0xB4);
             }
             break;
         }
@@ -488,7 +501,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             if (moby->prev_seq != 4) {
                 FUN_00212f90(moby, 4, 0, 3);
             }
-            vars->i134 = scale_game_frames(0xF0);
+            bombthrower_vars->i134 = scale_game_frames(0xF0);
         }
         break;
     case BOMBTHROWER_STATE_WAIT_FOR_FALL_RECOVERY:
@@ -502,19 +515,20 @@ void blarg_bombthrower_update(struct Moby *moby) {
     case BOMBTHROWER_STATE_DAMAGE_KNOCKBACK:
     case BOMBTHROWER_STATE_MOTION_RECOVERY:
     case BOMBTHROWER_STATE_FALL_RECOVERY:
-        if (step_moby_motion(moby, vars->blk70) & 0x40) {
-            old_waypoint = vars->waypoint;
-            if ((vars->waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby)) == 0) {
-                vars->waypoint = old_waypoint;
+        if (step_moby_motion(moby, bombthrower_vars->blk70) & 0x40) {
+            old_waypoint = bombthrower_vars->waypoint;
+            if ((bombthrower_vars->waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby)) ==
+                0) {
+                bombthrower_vars->waypoint = old_waypoint;
             } else {
                 old_waypoint->command = 0;
-                vars->waypoint->command = 1;
+                bombthrower_vars->waypoint->command = 1;
             }
             if (moby->prev_seq != 4) {
                 FUN_00212f90(moby, 4, 0, 10);
             }
             moby->state = 1;
-            vars->i134 = scale_game_frames(0xF0);
+            bombthrower_vars->i134 = scale_game_frames(0xF0);
         }
         if (moby->pos.z < 5.0f) {
             mark_moby_for_removal(moby);
@@ -522,18 +536,18 @@ void blarg_bombthrower_update(struct Moby *moby) {
         }
         break;
     case BOMBTHROWER_STATE_DYING:
-        if (step_moby_motion(moby, vars->blk70) & 0x40) {
+        if (step_moby_motion(moby, bombthrower_vars->blk70) & 0x40) {
             moby->anim_speed = 0.0f;
             moby->state = 100;
             moby->collision = 0;
-            vars->s132 = 0x28;
-            vars->s130 = D_L08_001619D0_gp;
+            bombthrower_vars->s132 = 0x28;
+            bombthrower_vars->s130 = l08_bombthrower_fade_interpolation_divisor_gp;
             spawn_moby_table_puff_pattern(moby);
             mark_moby_for_removal(moby);
             return;
         }
         break;
     }
-    trooper_anim_finish(moby, vars->anim);
-    vars->i38 = 0;
+    trooper_anim_finish(moby, bombthrower_vars->anim);
+    bombthrower_vars->i38 = 0;
 }

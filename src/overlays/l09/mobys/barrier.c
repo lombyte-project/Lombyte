@@ -71,7 +71,7 @@ extern void  func_L00_0025F4A8_309688(void *,
                                       int) __asm__("FUN_L00_0025e450");
 void         barrier_update(Moby *moby) __asm__("FUN_L09_003082d8");
 
-char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) {
+char *spawn_barrier_replacement(struct Moby *source_moby, int spawned_moby_class) {
     char *moby = create_moby(spawned_moby_class);
     if (moby != 0) {
         unsigned char state;
@@ -80,20 +80,20 @@ char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) {
         *(short *)(moby + 0x32) = state;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        qcopy(moby + 0x10, &owner->pos);
-        qcopy(moby + 0x40, &owner->rot);
+        qcopy(moby + 0x10, &source_moby->pos);
+        qcopy(moby + 0x40, &source_moby->rot);
         moby[0xBC] = scale_game_frames(10);
         update_entity(moby);
         copy_hero_moby_field_38(moby);
-        *(float *)(moby + 0x2C) = owner->scale;
-        *(unsigned short *)(moby + 0x34) = owner->flags;
-        **(int **)(moby + 0x78) = *(int *)owner->pvars;
+        *(float *)(moby + 0x2C) = source_moby->scale;
+        *(unsigned short *)(moby + 0x34) = source_moby->flags;
+        **(int **)(moby + 0x78) = *(int *)source_moby->pvars;
     }
     return moby;
 }
 
 void barrier_update(Moby *moby) {
-    BarrierData *data = (*(BarrierData **)&moby->pvars);
+    BarrierData *barrier_vars = (*(BarrierData **)&moby->pvars);
     float        origin[4], center[4], piece_pos[4], piece_velocity[4], push[4];
     Hit_309688  *hit;
     int          has_next;
@@ -103,15 +103,15 @@ void barrier_update(Moby *moby) {
     float        scale;
 
     if (moby->state == 0) {
-        if (data->idx != -1)
-            ((Flags_309688 *)(alternate_item_available + data->idx))->f43 = 0;
+        if (barrier_vars->idx != -1)
+            ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->f43 = 0;
         moby->state = 1;
     }
     if (moby->mission != 0xFF) {
         int row = current_level_index * 16;
         if (visited52[moby->mission + row] == 0xFF) {
-            if (data->idx != -1)
-                ((Flags_309688 *)(alternate_item_available + data->idx))->f43 = 1;
+            if (barrier_vars->idx != -1)
+                ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->f43 = 1;
             mark_moby_for_removal(moby);
             return;
         }
@@ -187,8 +187,8 @@ void barrier_update(Moby *moby) {
                              -1,
                              0);
     if (moby->oclass == 0x508) {
-        if (data->idx != -1)
-            ((Flags_309688 *)(alternate_item_available + data->idx))->f43 = 1;
+        if (barrier_vars->idx != -1)
+            ((Flags_309688 *)(alternate_item_available + barrier_vars->idx))->f43 = 1;
     }
     if (moby->oclass == 0x508 || has_next)
         mark_moby_for_removal(moby);

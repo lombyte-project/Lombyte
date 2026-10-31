@@ -14,20 +14,20 @@ extern void UpdateTempTrackData(PictureHeaderContext *context,
 
 void PictureHeader(PictureHeaderContext *context) __asm__("_pictureHeader");
 
-void PictureHeader(PictureHeaderContext *context) {
-    int temporal_reference = _nextBit(context, 10);
+void PictureHeader(PictureHeaderContext *decoder_state) {
+    int temporal_reference = _nextBit(decoder_state, 10);
 
-    FIELD(int, context, 0x150) = _nextBit(context, 3);
-    _nextBit(context, 16);
-    if ((FIELD(unsigned int, context, 0x150) - 2) < 2) {
-        FIELD(int, context, 0x154) = _nextBit(context, 1);
-        FIELD(int, context, 0x158) = _nextBit(context, 3);
+    FIELD(int, decoder_state, 0x150) = _nextBit(decoder_state, 3);
+    _nextBit(decoder_state, 16);
+    if ((FIELD(unsigned int, decoder_state, 0x150) - 2) < 2) {
+        FIELD(int, decoder_state, 0x154) = _nextBit(decoder_state, 1);
+        FIELD(int, decoder_state, 0x158) = _nextBit(decoder_state, 3);
     }
-    if (FIELD(unsigned int, context, 0x150) == 3) {
-        FIELD(int, context, 0x15C) = _nextBit(context, 1);
-        FIELD(int, context, 0x160) = _nextBit(context, 3);
+    if (FIELD(unsigned int, decoder_state, 0x150) == 3) {
+        FIELD(int, decoder_state, 0x15C) = _nextBit(decoder_state, 1);
+        FIELD(int, decoder_state, 0x160) = _nextBit(decoder_state, 3);
     }
-    ExtraInfo(context);
-    _extensionAndUserData(context);
-    UpdateTempTrackData(context, temporal_reference);
+    ExtraInfo(decoder_state);
+    _extensionAndUserData(decoder_state);
+    UpdateTempTrackData(decoder_state, temporal_reference);
 }

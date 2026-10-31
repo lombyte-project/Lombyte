@@ -221,19 +221,20 @@ void decompress_and_relocate_vendor_moby_assets(void) __asm__("FUN_L00_0029a330"
 void decompress_and_relocate_vendor_moby_assets(void) {
     int   i;
     int  *entry_offset_cursor;
-    char *base;
+    char *moby_asset_table_container;
     int   compressed_source_address;
     compressed_source_address = vendor_menu_lui.unk18 + 0x80000;
     FlushCache(0);
     fast_decompress(compressed_source_address, vendor_menu_lui.unk18);
     FlushCache(0);
     entry_offset_cursor = (int *)vendor_menu_lui.unk18;
-    base = D_L00_00197300_lui[D_L00_00197BCC];
+    moby_asset_table_container = D_L00_00197300_lui[D_L00_00197BCC];
     for (i = 0; i < 16; i++) {
         int entry_offset = *entry_offset_cursor++;
         if (entry_offset) {
-            *(int *)(base + 0x48 + i * 4) = vendor_menu_lui.unk18 + entry_offset;
-            relocate_asset_entry_pointers(base, i);
+            *(int *)(moby_asset_table_container + 0x48 + i * 4) =
+                vendor_menu_lui.unk18 + entry_offset;
+            relocate_asset_entry_pointers(moby_asset_table_container, i);
         }
     }
 }
@@ -249,7 +250,7 @@ extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 void build_vendor_menu_rows(s32 skip_unflagged) __asm__("FUN_L00_0029a400");
 
 void build_vendor_menu_rows(s32 skip_unflagged) {
-    s32 count, i, j, value, item, k;
+    s32 count, i, j, stocked_item_entry, item, k;
 
     count = 0;
     if (D_0015EDD0_macro[0] != 0xFF) {
@@ -259,11 +260,11 @@ void build_vendor_menu_rows(s32 skip_unflagged) {
     }
     vendor_menu_lui.row_count = 0;
     for (i = 0; i < count; i++) {
-        value = D_0015EDD0_macro[i];
-        if (value == 0xFF)
+        stocked_item_entry = D_0015EDD0_macro[i];
+        if (stocked_item_entry == 0xFF)
             continue;
-        item = value & 0x3F;
-        if (value & 0x40) {
+        item = stocked_item_entry & 0x3F;
+        if (stocked_item_entry & 0x40) {
             s32 sound;
             if (D_L00_001C40B0[item].h8 == 0)
                 continue;
@@ -564,7 +565,7 @@ void start_vendor_exit_cutscene(void) __asm__("FUN_L00_0029ad08");
 void start_vendor_exit_cutscene(void) {
     VendorMenu              *vendor_state;
     VendorMoby_29a6b0       *moby;
-    s32                      index, item, offset;
+    s32                      index, exit_cutscene_id, offset;
     f32                     *cutscene_world_origin;
     struct MusicStreamState *state;
     s32                     *selected;
@@ -600,7 +601,7 @@ void start_vendor_exit_cutscene(void) {
     index = vendor_menu.purchased_item;
     D_L00_0016C860_lui.x58 = D_L00_00173E00[1] + offset;
     D_L00_0016C860_lui.x5c = D_L00_00173E00[2] + offset;
-    item = vendor_exit_cutscene_ids_by_item[index];
+    exit_cutscene_id = vendor_exit_cutscene_ids_by_item[index];
     D_L00_0015F3FC = 0;
     D_L00_0015F400 = 0;
     if (hero.items[0].item_id != 0 && index != hero.items[0].item_id)
@@ -609,7 +610,7 @@ void start_vendor_exit_cutscene(void) {
     if (hero.pending_item[0] == 0x18)
         hero.pending_item[0] = 0;
     select_world_object_resource_tables(item_defs[vendor_menu.purchased_item].cls, -1);
-    load_scene_chunks_with_fade(item);
+    load_scene_chunks_with_fade(exit_cutscene_id);
     state = &music_stream_state;
     state->queued_secondary_track = 0x2734;
     FUN_L00_002455c0(0);

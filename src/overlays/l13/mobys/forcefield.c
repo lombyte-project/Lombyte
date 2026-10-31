@@ -23,7 +23,7 @@ extern void *sphere_hits_ed158[] __asm__("D_L13_00178200");
 
 void spawn_forcefield_contact_effects(void *moby, void *data) __asm__("FUN_L13_002ed158");
 
-void spawn_forcefield_contact_effects(void *moby, void *data) {
+void spawn_forcefield_contact_effects(void *moby, void *forcefield_vars) {
     float  matrix[12];
     float  query[4];
     float  candidate_pos[4];
@@ -38,8 +38,9 @@ void spawn_forcefield_contact_effects(void *moby, void *data) {
     float  limit, tolerance, height_limit, height_tolerance;
 
     euler_rotation_basis(matrix, moby + 0x40);
-    max_size =
-        *(short *)(data + 10) < *(short *)(data + 8) ? *(short *)(data + 8) : *(short *)(data + 10);
+    max_size = *(short *)(forcefield_vars + 10) < *(short *)(forcefield_vars + 8)
+                   ? *(short *)(forcefield_vars + 8)
+                   : *(short *)(forcefield_vars + 10);
     radius = (float)max_size * 0.5f;
     qzero(query);
     query[2] = radius;
@@ -59,14 +60,14 @@ void spawn_forcefield_contact_effects(void *moby, void *data) {
         transpose_rotation_matrix(rotation_matrix, matrix);
         transform_vector(local_pos, candidate_pos, rotation_matrix);
         qcopy(probe, local_pos);
-        half_width = *(short *)(data + 8);
+        half_width = *(short *)(forcefield_vars + 8);
         limit = (float)half_width * 0.5f;
         tolerance = limit + 0.7f;
         if (probe[0] < -tolerance)
             probe[0] = (float)-half_width * 0.5f;
         else if (tolerance < probe[0])
             probe[0] = limit;
-        half_height = *(short *)(data + 10);
+        half_height = *(short *)(forcefield_vars + 10);
         height_limit = (float)half_height * 0.5f;
         height_tolerance = height_limit + 1.5f;
         if (probe[2] < -height_tolerance)

@@ -41,8 +41,10 @@ extern float                      FUN_001f96b0_c(float) __asm__("FUN_001f96b0");
 
 #include "rnc/overlay/l08/mobys/falling_debris_data/update_falling_debris_2.h"
 
-extern int D_L08_00161C04 __attribute__((sda));
-extern int D_L08_00161C08 __attribute__((sda));
+extern int l08_falling_debris_burst_initial_particle_word __asm__("D_L08_00161C04")
+    __attribute__((sda));
+extern int l08_falling_debris_burst_second_particle_word __asm__("D_L08_00161C08")
+    __attribute__((sda));
 
 #include "rnc/overlay/l08/mobys/falling_debris_data/update_falling_debris.h"
 
@@ -151,8 +153,8 @@ void update_falling_debris(Moby_2E2A38 *debris_moby) {
                 spawn_spark(particle_spawn_position,
                             particle_primary_vector,
                             particle_secondary_vector,
-                            D_L08_00161C04,
-                            D_L08_00161C08,
+                            l08_falling_debris_burst_initial_particle_word,
+                            l08_falling_debris_burst_second_particle_word,
                             burst_frame_count,
                             burst_secondary_frame_count,
                             burst_tertiary_frame_count,

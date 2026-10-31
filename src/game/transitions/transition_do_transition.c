@@ -82,7 +82,7 @@ void transition_do_transition(void) {
     s32               level;
     s32               wait;
     s32               i;
-    s32               old;
+    s32               saved_texture_allocation_start;
     s32               first_size;
     u32               alignment_mask = 0xFFFFFFF0;
     struct DiscTable *chunk_source_table;
@@ -206,10 +206,10 @@ void transition_do_transition(void) {
             fade_to_black(4);
             reset_vif1_gif();
             sceGsResetGraph(0, 1, pal_mode_macro != 0 ? 3 : 2, 0);
-            old = gs_texture_allocation_start;
+            saved_texture_allocation_start = gs_texture_allocation_start;
             sequence_macro = 1.0f;
             set_pal_mode();
-            gs_texture_allocation_start = old;
+            gs_texture_allocation_start = saved_texture_allocation_start;
         }
         vu1_sync_chain(1);
         sceGsSyncV(0);

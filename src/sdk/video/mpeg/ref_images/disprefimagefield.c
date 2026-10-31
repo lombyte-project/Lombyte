@@ -75,9 +75,9 @@ void PrepareMpegPictureFieldTransfers(
     struct MpegPictureBuffer      *second) __asm__("_dispRefImageField");
 
 void PrepareMpegPictureFieldTransfers(struct MpegFieldTransferState *state,
-                                      struct MpegPictureBuffer      *first,
+                                      struct MpegPictureBuffer      *first_field_ref_image,
 
-                                      struct MpegPictureBuffer *second) {
+                                      struct MpegPictureBuffer *second_field_ref_image) {
     s64                         first_flags, second_flags;
     s32                         timestamp;
     s32                         second_timestamp;
@@ -90,12 +90,12 @@ void PrepareMpegPictureFieldTransfers(struct MpegFieldTransferState *state,
     s32                         flags;
     flags = 0;
     if (state->picture_structure == 2) {
-        primary = first;
-        secondary = second;
+        primary = first_field_ref_image;
+        secondary = second_field_ref_image;
         flags = 0x40;
     } else {
-        primary = second;
-        secondary = first;
+        primary = second_field_ref_image;
+        secondary = first_field_ref_image;
     }
     transfer = state->transfer;
     _getPtsDtsFlags(state,
@@ -128,13 +128,14 @@ void PrepareMpegPictureFieldTransfers(struct MpegFieldTransferState *state,
     state->horizontal_offset1 = secondary->horizontal_offset1;
     state->vertical_offset0 = primary->vertical_offset0;
     state->vertical_offset1 = secondary->vertical_offset1;
-    if (_isOutSizeOK(state, first) && first->status == 1 && second->status == 1) {
-        first->macroblock_height *= 2;
+    if (_isOutSizeOK(state, first_field_ref_image) && first_field_ref_image->status == 1 &&
+        second_field_ref_image->status == 1) {
+        first_field_ref_image->macroblock_height *= 2;
         if (state->decoder_initialized)
-            _csc_storeRefImage(state, first);
+            _csc_storeRefImage(state, first_field_ref_image);
         else
-            _cpr8(state, first);
-        first->macroblock_height >>= 1;
+            _cpr8(state, first_field_ref_image);
+        first_field_ref_image->macroblock_height >>= 1;
         FinishMpegReferenceImage(state);
     }
 }

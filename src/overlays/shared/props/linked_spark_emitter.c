@@ -175,10 +175,10 @@ void update_linked_spark_emitter(unsigned char *moby) {
 }
 
 int draw_spark_emitter_effect_quads(unsigned char *moby) {
-    EffectQuad first, second;
+    EffectQuad uniform_color_quad, alternating_corner_color_quad;
     float      transform[12];
     float      position[4];
-    int       *data = ((int *)MOBY(moby)->pvars);
+    int       *spark_emitter_data = ((int *)MOBY(moby)->pvars);
     int        pass, corner, axis, component;
     float     *transformPointer;
     float     *firstUv1, *firstUv3, *secondUv0, *secondUv1;
@@ -191,53 +191,55 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
     copy_matrix_rotation(transform, moby + 0xc0);
     qcopy(position, moby + 0x10);
     position[3] = 1.0f;
-    first.texture = get_effect_texture(0x2c);
-    first.r80 = 0xff9000000260ULL;
-    first.r70 = 0;
-    second.texture = get_effect_texture(0x2c);
-    secondVertices = second.v;
-    firstUv = first.uv;
-    secondUv0 = second.uv[0];
-    firstUv1 = first.uv[1];
-    secondUv1 = second.uv[1];
-    secondUv2 = second.uv[2];
-    firstUv3 = first.uv[3];
-    secondUv3 = second.uv[3];
-    second.r70 = 0;
-    second.r80 = 0xff9000000260ULL;
-    second.col[3] = 0;
-    second.col[1] = 0;
+    uniform_color_quad.texture = get_effect_texture(0x2c);
+    uniform_color_quad.r80 = 0xff9000000260ULL;
+    uniform_color_quad.r70 = 0;
+    alternating_corner_color_quad.texture = get_effect_texture(0x2c);
+    secondVertices = alternating_corner_color_quad.v;
+    firstUv = uniform_color_quad.uv;
+    secondUv0 = alternating_corner_color_quad.uv[0];
+    firstUv1 = uniform_color_quad.uv[1];
+    secondUv1 = alternating_corner_color_quad.uv[1];
+    secondUv2 = alternating_corner_color_quad.uv[2];
+    firstUv3 = uniform_color_quad.uv[3];
+    secondUv3 = alternating_corner_color_quad.uv[3];
+    alternating_corner_color_quad.r70 = 0;
+    alternating_corner_color_quad.r80 = 0xff9000000260ULL;
+    alternating_corner_color_quad.col[3] = 0;
+    alternating_corner_color_quad.col[1] = 0;
     for (corner = 0; corner < 4; corner++) {
-        qcopy(first.v[corner], spark_emitter_first_quad_vertex_template[corner]);
+        qcopy(uniform_color_quad.v[corner], spark_emitter_first_quad_vertex_template[corner]);
         qcopy(secondVertices[corner], spark_emitter_second_quad_vertex_template[corner]);
     }
     for (pass = 0; pass < 6; pass = nextPass) {
         int parity = pass & 1;
-        first.alpha = (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
-                      ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
-                      ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
-                      ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
-                      0x8000000000ULL;
-        second.alpha = (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
-                       ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
-                       ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
-                       ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
-                       0x8000000000ULL;
-        if (data[5] != 0) {
-            second.col[2] =
-                fast_tween_color((float)data[5] / 60.0f, spark_emitter_pass_colors[pass], 0);
-            second.col[0] = second.col[2];
-            first.col[3] = second.col[2];
-            first.col[2] = second.col[2];
-            first.col[1] = second.col[2];
-            first.col[0] = second.col[2];
+        uniform_color_quad.alpha =
+            (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
+            ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
+            ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
+            ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
+            0x8000000000ULL;
+        alternating_corner_color_quad.alpha =
+            (unsigned long long)spark_emitter_alpha_a_by_pass_parity[parity] |
+            ((unsigned long long)spark_emitter_alpha_b_by_pass_parity[parity] << 2) |
+            ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
+            ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
+            0x8000000000ULL;
+        if (spark_emitter_data[5] != 0) {
+            alternating_corner_color_quad.col[2] = fast_tween_color(
+                (float)spark_emitter_data[5] / 60.0f, spark_emitter_pass_colors[pass], 0);
+            alternating_corner_color_quad.col[0] = alternating_corner_color_quad.col[2];
+            uniform_color_quad.col[3] = alternating_corner_color_quad.col[2];
+            uniform_color_quad.col[2] = alternating_corner_color_quad.col[2];
+            uniform_color_quad.col[1] = alternating_corner_color_quad.col[2];
+            uniform_color_quad.col[0] = alternating_corner_color_quad.col[2];
         } else {
-            second.col[2] = spark_emitter_pass_colors[pass];
-            second.col[0] = second.col[2];
-            first.col[3] = second.col[2];
-            first.col[2] = second.col[2];
-            first.col[1] = second.col[2];
-            first.col[0] = second.col[2];
+            alternating_corner_color_quad.col[2] = spark_emitter_pass_colors[pass];
+            alternating_corner_color_quad.col[0] = alternating_corner_color_quad.col[2];
+            uniform_color_quad.col[3] = alternating_corner_color_quad.col[2];
+            uniform_color_quad.col[2] = alternating_corner_color_quad.col[2];
+            uniform_color_quad.col[1] = alternating_corner_color_quad.col[2];
+            uniform_color_quad.col[0] = alternating_corner_color_quad.col[2];
         }
         corner = 0;
         passOffset = pass * 8;
@@ -247,10 +249,10 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
             float *frequency =
                 (float *)((char *)spark_emitter_uv_phase_divisors_by_pass + passOffset);
             int waveform = passOffset;
-            int base = corner * 8;
+            int base_uv_byte_offset = corner * 8;
             axis = 1;
             do {
-                int   limit, value;
+                int   limit, use_cosine;
                 float angle, delta;
                 float step;
                 float radians;
@@ -260,18 +262,18 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
                     convert_integer_to_float(spark_emitter_uv_phase_input % limit) / *frequency -
                     180.0f;
                 frequency++;
-                value = *(int *)((char *)spark_emitter_uv_cosine_flags_by_pass + waveform);
+                use_cosine = *(int *)((char *)spark_emitter_uv_cosine_flags_by_pass + waveform);
                 waveform += 4;
                 radians = 0.017453292f;
                 step = 0.125f;
-                if (value != 0) {
+                if (use_cosine != 0) {
                     angle = fast_cos(angle * radians);
                 } else {
                     angle = fast_sin(angle * radians);
                 }
                 delta = angle * step;
-                *uv++ = *(float *)((char *)spark_emitter_base_uvs + base) + delta;
-                base += 4;
+                *uv++ = *(float *)((char *)spark_emitter_base_uvs + base_uv_byte_offset) + delta;
+                base_uv_byte_offset += 4;
             } while (axis >= 0);
         }
         for (component = 0; component < 2; component++) {
@@ -282,10 +284,10 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
             secondUv3[component] = firstUv3[component] + step;
         }
         transformPointer = transform;
-        draw_geometry_quad(&first, transformPointer, 0);
+        draw_geometry_quad(&uniform_color_quad, transformPointer, 0);
         draw_geometry_quad(secondVertices, transformPointer, 0);
         for (corner = 0; corner < 4; corner++) {
-            first.v[corner][0] += 0.1f;
+            uniform_color_quad.v[corner][0] += 0.1f;
             secondVertices[corner][0] += 0.1f;
         }
     }

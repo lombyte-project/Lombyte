@@ -551,7 +551,7 @@ typedef struct {
 float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 float FUN_L00_0025abf0(float *start_position,
                        float *target_position,
-                       float *out,
+                       float *output_travel_time,
                        float  speed,
 
                        float vertical_acceleration) {
@@ -559,8 +559,8 @@ float FUN_L00_0025abf0(float *start_position,
     float travel_time;
     fast_vec_sub(&displacement, target_position, start_position);
     travel_time = vector_length_xy(&displacement) / speed;
-    if (out) {
-        *out = travel_time;
+    if (output_travel_time) {
+        *output_travel_time = travel_time;
     }
     if (travel_time == 0.0f) {
         return 0.0f;
@@ -592,7 +592,7 @@ int generate_random_points_from_shape_entries(float          density,
 
 int generate_random_points_from_shape_entries(
 
-    float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) {
+    float density, unsigned char *entity, int maximum, Vec4_25aca0 *generated_points, int mask) {
     enum HitShape {
         SHAPE_INLINE_CENTER_SPHERE = 0x0,
         SHAPE_INDEXED_CENTER_SPHERE = 0x2,
@@ -602,7 +602,7 @@ int generate_random_points_from_shape_entries(
 
     float          weights[20];
     unsigned char *entries[20];
-    Vec4_25aca0    first, second, third, fourth, fifth;
+    Vec4_25aca0    shape_anchor, second, third, fourth, fifth;
     unsigned char *list;
     unsigned char *entry;
     int            count, index, chosen, emitted, limit;
@@ -642,15 +642,18 @@ int generate_random_points_from_shape_entries(
                     case 1:
                     case SHAPE_INDEXED_CENTER_SPHERE: {
                         if (type < 2) {
-                            qcopy(&first, (void *)((entry + 0x10)));
-                            scale_vector(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
-                            radius = first.f[3];
+                            qcopy(&shape_anchor, (void *)((entry + 0x10)));
+                            scale_vector(*(float *)(entity + 0x2c) * 0.0009765625f,
+                                         &shape_anchor,
+                                         &shape_anchor);
+                            radius = shape_anchor.f[3];
                         } else {
-                            qcopy(&first, (void *)((0x70000000 + (*(int *)list << 4))));
+                            qcopy(&shape_anchor, (void *)((0x70000000 + (*(int *)list << 4))));
                             qcopy(&second, (void *)((entry + 0x10)));
-                            fast_vec_add(&first, &first, &second);
-                            FUN_001f9a68_25aca0(
-                                *(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
+                            fast_vec_add(&shape_anchor, &shape_anchor, &second);
+                            FUN_001f9a68_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f,
+                                                &shape_anchor,
+                                                &shape_anchor);
                             radius = *(float *)(entity + 0x2c);
                             radius = *(float *)(list + 8) * radius * 0.0009765625f;
                         }
@@ -659,9 +662,10 @@ int generate_random_points_from_shape_entries(
                     }
                     case SHAPE_XY_DISK_WITH_Z_EXTENT: {
                         float radius, extent;
-                        qcopy(&first, (void *)((entry + 0x10)));
-                        FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
-                        radius = first.f[3] * *(float *)(entity + 0x2c);
+                        qcopy(&shape_anchor, (void *)((entry + 0x10)));
+                        FUN_001f9a68_25aca0(
+                            *(float *)(entity + 0x2c), &shape_anchor, &shape_anchor);
+                        radius = shape_anchor.f[3] * *(float *)(entity + 0x2c);
                         radius *= 0.0009765625f;
                         extent = *(float *)list * (*(float *)(entity + 0x2c) * 0.0009765625f);
                         weights[count] = radius * 4.187743f * radius * radius +
@@ -670,12 +674,12 @@ int generate_random_points_from_shape_entries(
                     }
                     case SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET: {
                         FUN_001251e8_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f,
-                                            &first,
+                                            &shape_anchor,
                                             (void *)(0x70000000 + (*(short *)list << 4)));
                         FUN_001251e8_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f,
                                             &second,
                                             (void *)(0x70000000 + (*(short *)(list + 2) << 4)));
-                        fast_vec_sub(&third, &first, &second);
+                        fast_vec_sub(&third, &shape_anchor, &second);
                         radius = FUN_001f9af0_25aca0(&third);
                         extent = *(float *)(list + 8) * *(float *)(entity + 0x2c) * 0.0009765625f;
                         weights[count] = extent * 1.5707964f * extent * radius;
@@ -708,18 +712,18 @@ int generate_random_points_from_shape_entries(
         case SHAPE_INDEXED_CENTER_SPHERE: {
             float radius, extent;
             if (type < 2) {
-                qcopy(&first, (void *)((entry + 0x10)));
-                FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
-                extent = first.f[3] * *(float *)(entity + 0x2c);
+                qcopy(&shape_anchor, (void *)((entry + 0x10)));
+                FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &shape_anchor, &shape_anchor);
+                extent = shape_anchor.f[3] * *(float *)(entity + 0x2c);
             } else {
-                qcopy(&first, (void *)((0x70000000 + (*(int *)(entry + 4) << 4))));
+                qcopy(&shape_anchor, (void *)((0x70000000 + (*(int *)(entry + 4) << 4))));
                 qcopy(&second, (void *)((entry + 0x10)));
-                fast_vec_add(&first, &first, &second);
-                FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
+                fast_vec_add(&shape_anchor, &shape_anchor, &second);
+                FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &shape_anchor, &shape_anchor);
                 extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c);
             }
             extent *= 0.0009765625f;
-            divide_vector_xyz(1024.0f, &first, &first);
+            divide_vector_xyz(1024.0f, &shape_anchor, &shape_anchor);
             do {
                 second.f[0] = random_float_between(-extent, extent);
                 second.f[1] = random_float_between(-extent, extent);
@@ -728,19 +732,19 @@ int generate_random_points_from_shape_entries(
             /* Fakematch: the do-while (0) raises the loop-weighted refs of entity + 0x10,
              * &out[emitted] and entity + 0xc0 so global alloc gives &second the last saved register. */
             do {
-                fast_vec_add(&second, &second, &first);
+                fast_vec_add(&second, &second, &shape_anchor);
                 transform_vector_by_basis(&second, &second, entity + 0xc0);
-                fast_vec_add(&out[emitted], &second, entity + 0x10);
+                fast_vec_add(&generated_points[emitted], &second, entity + 0x10);
             } while (0);
             break;
         }
         case SHAPE_XY_DISK_WITH_Z_EXTENT: {
             float radius, extent, weight, random, angle;
-            qcopy(&first, (void *)((entry + 0x10)));
-            FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
-            radius = first.f[3] * *(float *)(entity + 0x2c);
+            qcopy(&shape_anchor, (void *)((entry + 0x10)));
+            FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &shape_anchor, &shape_anchor);
+            radius = shape_anchor.f[3] * *(float *)(entity + 0x2c);
             extent = *(float *)(entry + 4) * *(float *)(entity + 0x2c);
-            divide_vector_xyz(1024.0f, &first, &first);
+            divide_vector_xyz(1024.0f, &shape_anchor, &shape_anchor);
             radius *= 0.0009765625f;
             extent *= 0.0009765625f;
             weight = random_float_between(0.0f, radius * radius);
@@ -751,21 +755,22 @@ int generate_random_points_from_shape_entries(
             second.f[1] = FUN_001f9de0_25aca0(angle) * weight;
             second.f[2] = random;
             fast_vec_add(&second, &second, entity + 0x10);
-            fast_vec_add(&out[emitted], &first, &second);
+            fast_vec_add(&generated_points[emitted], &shape_anchor, &second);
             break;
         }
         case SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET: {
             float extent, weight;
             list = entry + 4;
-            FUN_001251e8_25aca0(
-                *(float *)(entity + 0x2c), &first, (void *)(0x70000000 + (*(short *)list << 4)));
+            FUN_001251e8_25aca0(*(float *)(entity + 0x2c),
+                                &shape_anchor,
+                                (void *)(0x70000000 + (*(short *)list << 4)));
             FUN_001251e8_25aca0(*(float *)(entity + 0x2c),
                                 &second,
                                 (void *)(0x70000000 + (*(short *)(list + 2) << 4)));
-            fast_vec_sub(&third, &second, &first);
+            fast_vec_sub(&third, &second, &shape_anchor);
             weight = random_float_between(0.0f, 1.0f);
             FUN_001f9a68_25aca0(weight, &third, &third);
-            fast_vec_add(&fourth, &third, &first);
+            fast_vec_add(&fourth, &third, &shape_anchor);
             divide_vector_xyz(1024.0f, &fourth, &fourth);
             extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c);
             extent = extent * 0.0009765625f;
@@ -776,7 +781,7 @@ int generate_random_points_from_shape_entries(
             } while (!(FUN_001f9af0_25aca0(&fifth) <= extent));
             fast_vec_add(&fifth, &fifth, &fourth);
             transform_vector_by_basis(&fifth, &fifth, entity + 0xc0);
-            fast_vec_add(&out[emitted], &fifth, entity + 0x10);
+            fast_vec_add(&generated_points[emitted], &fifth, entity + 0x10);
             break;
         }
         }

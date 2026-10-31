@@ -28,7 +28,7 @@ extern void     scePad2SetButtonOrder(u8 *profile, u8 *order);
 
 s32 scePad2GetButtonProfile(s32 socket, u8 *profile) {
     DbcCommandWord cmd;
-    s32            result;
+    s32            received_profile_byte_count;
     s32            profile_byte_count_or_error;
 
     if (D_0015B540[socket].linked == 0) {
@@ -40,10 +40,11 @@ s32 scePad2GetButtonProfile(s32 socket, u8 *profile) {
     cmd.bits.mode = 3;
     cmd.bits.cmd = 2;
     cmd.bits.ver = 1;
-    profile_byte_count_or_error = sceDbcReceiveData(socket, cmd.word, &result, profile);
+    profile_byte_count_or_error =
+        sceDbcReceiveData(socket, cmd.word, &received_profile_byte_count, profile);
     if (profile_byte_count_or_error >= 0) {
         scePad2SetButtonOrder(profile, (u8 *)&((Pad2Info *)D_0015B550)[socket]);
-        profile_byte_count_or_error = result;
+        profile_byte_count_or_error = received_profile_byte_count;
     }
     return profile_byte_count_or_error;
 }

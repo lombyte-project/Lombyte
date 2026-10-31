@@ -6,7 +6,7 @@
 
 s32 check_mission_condition(s16 kind, s32 value) __asm__("FUN_0020baf0");
 
-s32 check_mission_condition(s16 kind, s32 value) {
+s32 check_mission_condition(s16 kind, s32 condition_operand) {
     enum {
         MISSION_CONDITION_ALWAYS_TRUE = 0,
         MISSION_CONDITION_LEVEL_AVAILABLE = 1,
@@ -23,27 +23,27 @@ s32 check_mission_condition(s16 kind, s32 value) {
     case MISSION_CONDITION_ALWAYS_TRUE:
         return 1;
     case MISSION_CONDITION_LEVEL_AVAILABLE:
-        return level_available[value] != 0;
+        return level_available[condition_operand] != 0;
     case MISSION_CONDITION_ITEM_AVAILABLE:
-        return item_available[value] != 0;
+        return item_available[condition_operand] != 0;
     case MISSION_CONDITION_ITEM_ACQUIRED:
-        return items_acquired[value] != 0;
+        return items_acquired[condition_operand] != 0;
     case MISSION_CONDITION_UPGRADE_LEVEL_NONZERO:
-        if (value < 121) {
-            return level_object_states[value].state != 0;
+        if (condition_operand < 121) {
+            return level_object_states[condition_operand].state != 0;
         }
         break;
     case MISSION_CONDITION_UPGRADE_LEVEL_AT_LEAST_TWO:
-        if (value < 121) {
-            return level_object_states[value].state >= 2;
+        if (condition_operand < 121) {
+            return level_object_states[condition_operand].state >= 2;
         }
         break;
     case MISSION_CONDITION_ALTERNATE_ITEM_AVAILABLE:
-        return alternate_item_available[value] != 0;
+        return alternate_item_available[condition_operand] != 0;
     case MISSION_CONDITION_CALLBACK_NONZERO:
-        return ((s32(*)(void))value)() != 0;
+        return ((s32(*)(void))condition_operand)() != 0;
     case MISSION_CONDITION_GOLD_BOLT_COLLECTED:
-        return D_0014BEC0[(value & 0xFFFF) + (value >> 16) * 4] != 0;
+        return D_0014BEC0[(condition_operand & 0xFFFF) + (condition_operand >> 16) * 4] != 0;
     case MISSION_CONDITION_ALWAYS_FALSE:
         return 0;
     }

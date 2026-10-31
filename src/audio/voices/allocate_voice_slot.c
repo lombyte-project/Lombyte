@@ -32,7 +32,7 @@ s32 allocate_voice_slot(
     s32              pitch_bend_max;
     s32              pitch_bend_min;
     s32              slot_index;
-    s32              result;
+    s32              volume_or_slot_index;
     s32              slot_limit;
     s32              pitch_bend;
     s32              source_inactive;
@@ -44,14 +44,14 @@ s32 allocate_voice_slot(
     source_inactive = definition->source_state == 0;
     if ((flags & 4) == 0) {
         if ((source_inactive ^ 1) != 0) {
-            result = -1;
+            volume_or_slot_index = -1;
             goto return_result;
         }
         slot_limit = 0x1A;
         goto check_moby;
     } else {
         if (source_inactive) {
-            result = -1;
+            volume_or_slot_index = -1;
             goto return_result;
         }
         slot_limit = 0x1A;
@@ -113,14 +113,15 @@ calculate_volume:
         goto commit_if_audible;
     }
     volume_offset = slot_index * 0x70;
-    result = calculate_voice_volume((VoiceSlot *)(voice_volume_records + volume_offset),
-                                    (VoiceVector *)(voice_volume_records + volume_offset + 0x20));
+    volume_or_slot_index =
+        calculate_voice_volume((VoiceSlot *)(voice_volume_records + volume_offset),
+                               (VoiceVector *)(voice_volume_records + volume_offset + 0x20));
     goto check_calculated_volume;
 commit_if_audible:
-    result = volume;
+    volume_or_slot_index = volume;
 check_calculated_volume:
-    if (result < 0x20) {
-        result = -1;
+    if (volume_or_slot_index < 0x20) {
+        volume_or_slot_index = -1;
         goto return_result;
     }
     committed_slot = (VoicePoolWindow *)((u8 *)&voice_pool + slot_index * 0x70);
@@ -142,9 +143,9 @@ check_calculated_volume:
 allocation_failed:
     slot_index = -1;
 return_index:
-    result = slot_index;
+    volume_or_slot_index = slot_index;
 return_result:
-    return result;
+    return volume_or_slot_index;
 }
 
 extern __typeof__(allocate_voice_slot) func_0022D7F0 __attribute__((alias("FUN_0022d7f0")));

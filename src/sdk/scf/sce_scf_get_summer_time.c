@@ -11,19 +11,19 @@ struct OsdSummerConfig {
 };
 
 u8 sceScfGetSummerTime(void) {
-    struct OsdSummerConfig work;
-    u8                     result;
+    struct OsdSummerConfig osd_summer_config;
+    u8                     summer_time_setting;
 
     if (IsT10K() != 0) {
-        result = t10k_summer_time_setting[0];
+        summer_time_setting = t10k_summer_time_setting[0];
     } else {
-        GetOsdConfigParam(&work.config);
-        if (((work.config >> 13) & 7) == 0) {
-            result = 0;
+        GetOsdConfigParam(&osd_summer_config.config);
+        if (((osd_summer_config.config >> 13) & 7) == 0) {
+            summer_time_setting = 0;
         } else {
-            GetOsdConfigParam2(&work.summer, 1, 1);
-            result = (work.summer >> 4) & 1;
+            GetOsdConfigParam2(&osd_summer_config.summer, 1, 1);
+            summer_time_setting = (osd_summer_config.summer >> 4) & 1;
         }
     }
-    return result;
+    return summer_time_setting;
 }

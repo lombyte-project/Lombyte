@@ -154,11 +154,11 @@ char *spawn_radially_scattered_moby(void  *unused,
                                     void  *origin,
                                     float *direction) __asm__("FUN_L09_002efe48");
 
-char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity) {
+char *spawn_fading_asteroid_debris(struct Moby *debris_source_asteroid, float *inherited_velocity) {
     char *moby = create_moby(random_integer_below(4) + 0x107);
     if (moby != 0) {
         char *spawned_moby_vars = ((char *)MOBY(moby)->pvars);
-        char *owner_vars = (char *)owner->pvars;
+        char *owner_vars = (char *)debris_source_asteroid->pvars;
         char *dv;
         float reference_position_distance;
         *(float *)spawned_moby_vars = random_float_between(-2.0f, 2.0f);
@@ -175,7 +175,8 @@ char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity
         *(int *)(spawned_moby_vars + 0x4C) = 2;
         moby[0x23] = 0x7F;
         {
-            float spawned_scale = owner->scale * random_float_between(0.125f, 0.25f);
+            float spawned_scale =
+                debris_source_asteroid->scale * random_float_between(0.125f, 0.25f);
             MOBY(moby)->scale = spawned_scale;
             *(float *)(spawned_moby_vars + 0x50) = spawned_scale;
         }
@@ -250,7 +251,7 @@ char *spawn_falling_asteroid(void) {
 struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
     struct Moby *spawned_moby;
     PebbleVars  *ovars;
-    PebbleVars  *vars;
+    PebbleVars  *spawned_asteroid_vars;
     PebblePath  *path;
     f32          lateral_scatter_distance;
     Vec4         path_displacement;
@@ -259,13 +260,13 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
     spawned_moby = create_moby(random_integer_below(4) + 0x107);
     if (spawned_moby != 0) {
         ovars = (PebbleVars *)owner->pvars;
-        vars = (PebbleVars *)spawned_moby->pvars;
+        spawned_asteroid_vars = (PebbleVars *)spawned_moby->pvars;
         qcopy(&spawned_moby->pos, &owner->pos);
         ovars->count++;
-        vars->owner = owner;
-        vars->path = ovars->path;
-        vars->unk48 = 1;
-        vars->unk14 = 0;
+        spawned_asteroid_vars->owner = owner;
+        spawned_asteroid_vars->path = ovars->path;
+        spawned_asteroid_vars->unk48 = 1;
+        spawned_asteroid_vars->unk14 = 0;
         spawned_moby->command = 1;
         spawned_moby->visible = 1;
         spawned_moby->update_dist = 0xFF;
@@ -273,30 +274,31 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
         set_moby_color(spawned_moby, 0x80, 0x80, 0x80);
         spawned_moby->alpha = 0;
         spawned_moby->scale *= random_float_between(0.4f, 0.85f);
-        vars->spin_x = random_float_between(-0.0052359877f, 0.0052359877f);
-        vars->spin_y = random_float_between(-0.0052359877f, 0.0052359877f);
-        if (vars->path >= 0) {
-            path = ((PebblePath *)l09_paths[vars->path]);
+        spawned_asteroid_vars->spin_x = random_float_between(-0.0052359877f, 0.0052359877f);
+        spawned_asteroid_vars->spin_y = random_float_between(-0.0052359877f, 0.0052359877f);
+        if (spawned_asteroid_vars->path >= 0) {
+            path = ((PebblePath *)l09_paths[spawned_asteroid_vars->path]);
             lateral_scatter_distance = random_float_between(-30.0f, 30.0f);
             fast_vec_sub(
                 &path_displacement, &path->pts[path->count - 1], &path->pts[path->count - 2]);
             fast_vec_sub(&path_scatter_vector, &path->pts[1], &path->pts[0]);
             fast_vec_cross(&path_scatter_vector, &path_scatter_vector, &path_displacement);
             path_scatter_vector.f[2] = 0.0f;
-            fast_vec_normalize(vars, &path_scatter_vector, lateral_scatter_distance);
+            fast_vec_normalize(
+                spawned_asteroid_vars, &path_scatter_vector, lateral_scatter_distance);
             fast_vec_sub(&path_displacement, &path->pts[path->count - 1], &path->pts[0]);
             fast_vec_cross(&path_scatter_vector, &path_scatter_vector, &path_displacement);
             fast_vec_normalize(
                 &path_scatter_vector, &path_scatter_vector, random_float_between(0.0f, 5.0f));
-            fast_vec_add(vars, vars, &path_scatter_vector);
-            qcopy(&vars->start, &path->pts[0]);
-            qcopy(&vars->offset, &ovars->offset);
-            fast_vec_add(&spawned_moby->pos, &path->pts[0], vars);
+            fast_vec_add(spawned_asteroid_vars, spawned_asteroid_vars, &path_scatter_vector);
+            qcopy(&spawned_asteroid_vars->start, &path->pts[0]);
+            qcopy(&spawned_asteroid_vars->offset, &ovars->offset);
+            fast_vec_add(&spawned_moby->pos, &path->pts[0], spawned_asteroid_vars);
             fast_vec_add(&spawned_moby->pos, &spawned_moby->pos, D_L09_00166F40_2eaa50);
-            fast_vec_sub(&spawned_moby->pos, &spawned_moby->pos, &vars->offset);
-            vars->speed = lateral_scatter_distance / 20.0f + 10.0f;
+            fast_vec_sub(&spawned_moby->pos, &spawned_moby->pos, &spawned_asteroid_vars->offset);
+            spawned_asteroid_vars->speed = lateral_scatter_distance / 20.0f + 10.0f;
             spawned_moby->scale *= lateral_scatter_distance / 100.0f + 1.0f;
-            vars->speed *= frame_time;
+            spawned_asteroid_vars->speed *= frame_time;
         }
         update_entity(spawned_moby);
     }
@@ -703,7 +705,7 @@ char *spawn_radially_scattered_moby(
     char *moby = (char *)create_moby(0x1A1);
     if (moby != 0) {
         float pi = 3.1415927f;
-        char *data = (char *)MOBY(moby)->pvars;
+        char *spawned_velocity = (char *)MOBY(moby)->pvars;
         float angle = random_float_between(-3.1415927f, 3.1415927f);
         float radius = random_float_between(lower_radius, upper_radius);
         float heading = fast_arc_tan(direction[0], direction[1]);
@@ -716,17 +718,18 @@ char *spawn_radially_scattered_moby(
             float speed = frame_time;
             MOBY(moby)->pos.y = sine * radius;
             MOBY(moby)->pos.z = 0.0f;
-            fast_vec_normalize(data, &MOBY(moby)->pos, difference * speed);
+            fast_vec_normalize(spawned_velocity, &MOBY(moby)->pos, difference * speed);
         }
         gap = pi - difference;
         fast_vec_normalize(offset, direction, gap * gap * 0.25f * frame_time);
-        fast_vec_add(data, data, offset);
-        *(int *)(data + 8) = 0;
+        fast_vec_add(spawned_velocity, spawned_velocity, offset);
+        *(int *)(spawned_velocity + 8) = 0;
         fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, origin);
         fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
-        fast_vec_scale(data, data, 0.35f);
+        fast_vec_scale(spawned_velocity, spawned_velocity, 0.35f);
         MOBY(moby)->anim_speed *= 0.5f;
-        MOBY(moby)->rot.z = fast_arc_tan(*(float *)data, *(float *)(data + 4));
+        MOBY(moby)->rot.z =
+            fast_arc_tan(*(float *)spawned_velocity, *(float *)(spawned_velocity + 4));
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         MOBY(moby)->visible = 1;

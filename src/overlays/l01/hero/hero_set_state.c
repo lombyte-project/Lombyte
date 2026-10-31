@@ -69,7 +69,7 @@ extern char level_01_transform_trail_jump_velocity_keys[] __asm__("D_L01_0017C3A
 extern char level_01_water_surface_jump_velocity_keys[] __asm__("D_L01_0017C3E0");
 
 int l01_hero_set_state(int a, int b) {
-    int   old2088;
+    int   saved_state_step;
     char *moby;
     int   old20A7;
     {
@@ -88,7 +88,7 @@ int l01_hero_set_state(int a, int b) {
     }
     {
         struct Hero *p = &hero;
-        old2088 = p->state.step;
+        saved_state_step = p->state.step;
         moby = ((char *)p->moby);
         old20A7 = p->item_select_blocked;
         p->state.prev2 = p->state.prev;
@@ -808,7 +808,7 @@ int l01_hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
             p->state.current = p->state.prev;
-            p->state.step = old2088;
+            p->state.step = saved_state_step;
             p->state_timer = p->state.prev_timer;
             return 0;
         }
@@ -1617,16 +1617,16 @@ extern int            get_ammo(int) __asm__("FUN_L00_00233e98");
 int handle_hero_gadget_button(void) __asm__("FUN_L01_00240ed8");
 
 int handle_hero_gadget_button(void) {
-    int                    out0;
-    int                    out1;
-    int                    out2;
+    int                    wrench_button_history_age;
+    int                    item_animation_button_history_age;
+    int                    item_state_button_history_age;
     int                    saved;
     unsigned int           buttons;
     int                    frames;
     int                    window;
     struct Moby           *moby;
     HeroTableRow2C        *row;
-    struct HeldGadgetVars *vars;
+    struct HeldGadgetVars *equipped_gadget_vars;
 
     if (hero.item_use_locked != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1))
         return 0;
@@ -1644,7 +1644,8 @@ int handle_hero_gadget_button(void) {
         if ((unsigned int)hero.state.control_mode < 2 ||
             (hero.state.control_mode == 4 && hero.rail_land_frames != 0)) {
             if (hero.on_slip_ground == 0 &&
-                pad_pressed_within(buttons, scale_game_frames(7), &out0) != 0) {
+                pad_pressed_within(buttons, scale_game_frames(7), &wrench_button_history_age) !=
+                    0) {
                 moby = hero.items[0].moby;
                 if (moby != 0 && is_wrench_moby((char *)moby) != 0 && moby->state == 0) {
                     if ((controller_state.held & 0xa) != 0 ||
@@ -1728,7 +1729,7 @@ int handle_hero_gadget_button(void) {
             hero.state.control_mode == 4 || hero.state.control_mode == 5 ||
             hero.state.control_mode == 0xf || hero.state.current == 0x1e) {
             if (hero.items[0].moby != 0) {
-                vars = (struct HeldGadgetVars *)hero.items[0].moby->pvars;
+                equipped_gadget_vars = (struct HeldGadgetVars *)hero.items[0].moby->pvars;
                 if ((((controller_state.held & buttons) != 0 &&
                       scale_game_frames(5) < hero.items[0].ready_frames) ||
                      (controller_state.pressed & buttons) != 0) &&
@@ -1736,8 +1737,9 @@ int handle_hero_gadget_button(void) {
                     if (hero.item_anim_active == 0)
                         start_equipped_item_animation();
                 } else if ((controller_state.held & buttons) != 0 && get_ammo(-1) == 0 &&
-                           voice_is_playing(hero.items[0].moby, vars->voice) == 0) {
-                    vars->voice = allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
+                           voice_is_playing(hero.items[0].moby, equipped_gadget_vars->voice) == 0) {
+                    equipped_gadget_vars->voice =
+                        allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
                 }
             }
         }
@@ -1758,7 +1760,7 @@ int handle_hero_gadget_button(void) {
                 hold = hero.items[0].ready_frames;
                 if (hold < window)
                     window = hold;
-                if (pad_pressed_within(buttons, window, &out1) != 0 ||
+                if (pad_pressed_within(buttons, window, &item_animation_button_history_age) != 0 ||
                     ((controller_state.held & 0x20) != 0 && scale_game_frames(8) < hold &&
                      hold < scale_game_frames(0x11))) {
                     if (get_ammo(-1) != 0) {
@@ -1781,7 +1783,9 @@ int handle_hero_gadget_button(void) {
             if (hero.state.current != 1) {
                 int limit = scale_game_frames(10);
                 int hold = hero.items[0].ready_frames;
-                if (pad_pressed_within(buttons, hold < limit ? hold : limit, &out2) != 0 &&
+                if (pad_pressed_within(buttons,
+                                       hold < limit ? hold : limit,
+                                       &item_state_button_history_age) != 0 &&
                     hero.items[0].moby != 0) {
                     l01_hero_set_state(0x20, 1);
                     if (hero.items[0].moby != 0)

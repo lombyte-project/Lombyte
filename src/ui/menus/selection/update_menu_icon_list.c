@@ -37,10 +37,10 @@ int update_menu_icon_list(char *menu) {
     }
     {
         int pressed_buttons = controller_state.pressed_unmasked;
-        int old = *(int *)(menu + 0x3C);
+        int previous_cursor_index = *(int *)(menu + 0x3C);
 
-        if ((pressed_buttons & 0x1000) && old != 0) {
-            *(int *)(menu + 0x3C) = old - 1;
+        if ((pressed_buttons & 0x1000) && previous_cursor_index != 0) {
+            *(int *)(menu + 0x3C) = previous_cursor_index - 1;
         }
         if (pressed_buttons & 0x4000) {
             int c = *(int *)(menu + 0x3C) + 1;
@@ -48,7 +48,7 @@ int update_menu_icon_list(char *menu) {
                 *(int *)(menu + 0x3C) = c;
             }
         }
-        if (*(int *)(menu + 0x3C) != old) {
+        if (*(int *)(menu + 0x3C) != previous_cursor_index) {
             allocate_voice_for_target_entry(1, 0x11, *(int *)(menu + 0x14));
         }
     }

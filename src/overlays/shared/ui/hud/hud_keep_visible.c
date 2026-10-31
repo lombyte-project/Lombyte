@@ -122,11 +122,11 @@ void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_inde
 void initialize_numeric_hud_values_and_dimensions(HudElem *hud_element) __asm__("FUN_L00_00235c80");
 
 void initialize_numeric_hud_values_and_dimensions(HudElem *hud_element) {
-    int *value = hud_element->unk0C;
+    int *numeric_value_source = hud_element->unk0C;
     int  digits;
     int  decimal_quotient, flags, width;
-    if (value && !((int)value & 3)) {
-        hud_element->unk78 = *value;
+    if (numeric_value_source && !((int)numeric_value_source & 3)) {
+        hud_element->unk78 = *numeric_value_source;
         if (hud_element->unk08 < hud_element->unk78)
             hud_element->unk78 = hud_element->unk08;
         hud_element->unk74 = hud_element->unk78;
@@ -502,11 +502,11 @@ int draw_hud_stars(HudElem *element) {
         float limit0 = star_init_limit0_gp;
         float limit1 = star_init_limit1_gp;
         float limit2 = star_init_limit2_gp;
-        float first = limit0 * sixteen;
+        float first_band_inset_subpixels = limit0 * sixteen;
         limit0 = limit1 - limit0;
         limit2 = limit2 - limit1;
-        first_step[0] = first;
-        first_step[1] = first;
+        first_step[0] = first_band_inset_subpixels;
+        first_step[1] = first_band_inset_subpixels;
         limit0 = limit0 * sixteen;
         second_step[0] = limit0;
         second_step[1] = limit0;

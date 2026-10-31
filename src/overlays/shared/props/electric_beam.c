@@ -166,7 +166,7 @@ void start_electric_beam_pulse(char *moby) {
     ElectricBeamVars *beam = ((ElectricBeamVars *)MOBY(moby)->pvars);
     Vec4              path[32];
     Vec4              path_steps[32];
-    Vec4              work, delta;
+    Vec4              beam_geometry_scratch, delta;
     Vec4              matrix[4];
     LevelCuboid      *frame;
     float             length;
@@ -209,19 +209,19 @@ void start_electric_beam_pulse(char *moby) {
             qcopy(&beam->points[j], &path[j]);
             qcopy(&beam->point_steps[j], &path_steps[j]);
         } else {
-            fast_vec_add(&work, &path[j - 1], &path[j]);
-            fast_vec_add(&work, &work, &path[j + 1]);
-            fast_vec_scale(&beam->points[j], &work, 0.333f);
-            fast_vec_add(&work, &path_steps[j - 1], &path_steps[j]);
-            fast_vec_add(&work, &work, &path_steps[j + 1]);
-            fast_vec_scale(&beam->point_steps[j], &work, 0.333f);
+            fast_vec_add(&beam_geometry_scratch, &path[j - 1], &path[j]);
+            fast_vec_add(&beam_geometry_scratch, &beam_geometry_scratch, &path[j + 1]);
+            fast_vec_scale(&beam->points[j], &beam_geometry_scratch, 0.333f);
+            fast_vec_add(&beam_geometry_scratch, &path_steps[j - 1], &path_steps[j]);
+            fast_vec_add(&beam_geometry_scratch, &beam_geometry_scratch, &path_steps[j + 1]);
+            fast_vec_scale(&beam->point_steps[j], &beam_geometry_scratch, 0.333f);
         }
     }
 
     for (branch = 0; branch < 4; branch++) {
         int   start;
         float spread = electric_beam_displacement_radius_gp;
-        random_vector(&work, spread, spread);
+        random_vector(&beam_geometry_scratch, spread, spread);
         start = truncate_float_to_s32(
                     random_float_between((float)branch * 6.0f, (float)(branch + 1) * 6.0f)) +
                 4;
@@ -233,7 +233,8 @@ void start_electric_beam_pulse(char *moby) {
             random_vector(&beam->branch_steps[k][branch],
                           0.0f,
                           electric_beam_max_point_speed_gp * frame_time);
-            fast_vec_add(&beam->branches[k][branch], &beam->branches[k - 1][branch], &work);
+            fast_vec_add(
+                &beam->branches[k][branch], &beam->branches[k - 1][branch], &beam_geometry_scratch);
             fast_vec_add(&beam->branches[k][branch], &beam->branches[k][branch], &delta);
         }
     }
@@ -246,13 +247,13 @@ void start_electric_beam_pulse(char *moby) {
         qcopy(&matrix[3], &l14_cuboids[beam->frame].pos);
         for (point = 0; point < 32; point += 8) {
             int frames;
-            transform_vector(&work, &beam->points[point], matrix);
+            transform_vector(&beam_geometry_scratch, &beam->points[point], matrix);
             qcopy(&delta, &beam->point_steps[point]);
             delta.f[3] = electric_beam_spark_step_w_gp;
             color =
                 random_integer_below(2) ? D_L14_0016211C : electric_beam_branch_end_spark_color_gp;
             frames = scale_game_frames(random_integer_below(10) + 20);
-            spawn_spark(&work,
+            spawn_spark(&beam_geometry_scratch,
                         &delta,
                         &delta,
                         electric_beam_spark_initial_word_gp,
@@ -264,7 +265,7 @@ void start_electric_beam_pulse(char *moby) {
         }
         for (k = 0; k < 2; k++) {
             int frames, unused_color;
-            transform_vector(&work, &beam->branches[3][k], matrix);
+            transform_vector(&beam_geometry_scratch, &beam->branches[3][k], matrix);
             qcopy(&delta, &beam->branch_steps[3][k]);
             delta.f[3] = electric_beam_spark_step_w_gp;
             unused_color =
@@ -274,7 +275,7 @@ void start_electric_beam_pulse(char *moby) {
              * gcse (retail's dead color pick did), so &delta is reused from the spilled copy. */
             if (never)
                 continue;
-            spawn_spark(&work,
+            spawn_spark(&beam_geometry_scratch,
                         &delta,
                         &delta,
                         electric_beam_spark_initial_word_gp,
@@ -295,17 +296,17 @@ extern int electric_beam_final_color_gp __asm__("D_L14_001620F8") __attribute__(
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
 void update_electric_beam_animation(char *moby) {
-    char *vars = ((char *)MOBY(moby)->pvars);
+    char *beam_animation_state = ((char *)MOBY(moby)->pvars);
     char *beam_point, *src;
     u8   *indices;
     int   i, j, k, copy_i, next_i;
     float fraction;
 
-    if (*(s16 *)(vars + 0x12) != 0) {
-        *(s16 *)(vars + 0x12) = *(u16 *)(vars + 0x12) - 1;
-        indices = (u8 *)(vars + 0x18);
-        src = vars + 0x260;
-        beam_point = vars + 0x60;
+    if (*(s16 *)(beam_animation_state + 0x12) != 0) {
+        *(s16 *)(beam_animation_state + 0x12) = *(u16 *)(beam_animation_state + 0x12) - 1;
+        indices = (u8 *)(beam_animation_state + 0x18);
+        src = beam_animation_state + 0x260;
+        beam_point = beam_animation_state + 0x60;
         for (j = 22; j >= 0; j--) {
             fast_vec_add(beam_point, beam_point, src);
             beam_point += 0x10;
@@ -315,7 +316,7 @@ void update_electric_beam_animation(char *moby) {
         do {
             next_i = i + 1;
             for (k = 2; k >= 0; k--) {
-                char *row = vars + (i << 4) + (2 - k) * 0x40;
+                char *row = beam_animation_state + (i << 4) + (2 - k) * 0x40;
                 fast_vec_add(row + 0x460, row + 0x460, row + 0x560);
             }
             i = next_i;
@@ -325,27 +326,27 @@ void update_electric_beam_animation(char *moby) {
             indices = 0; /* End the saved index-base lifetime after the transfer. */
             copy_i = 0;
             do {
-                qcopy(vars + 0x420 + (copy_i << 4),
-                      (char *)(((u8)src[copy_i] << 4) + (int)vars) + 0x20);
+                qcopy(beam_animation_state + 0x420 + (copy_i << 4),
+                      (char *)(((u8)src[copy_i] << 4) + (int)beam_animation_state) + 0x20);
                 copy_i++;
             } while (copy_i < 4);
         }
     }
-    if (*(s16 *)(vars + 0x12) > electric_beam_color_transition_countdown_gp) {
-        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) -
+    if (*(s16 *)(beam_animation_state + 0x12) > electric_beam_color_transition_countdown_gp) {
+        fraction = convert_integer_to_float(*(s16 *)(beam_animation_state + 0x12) -
                                             electric_beam_color_transition_countdown_gp) /
-                   convert_integer_to_float(*(int *)(vars + 0x620) -
+                   convert_integer_to_float(*(int *)(beam_animation_state + 0x620) -
                                             electric_beam_color_transition_countdown_gp);
-        *(int *)(vars + 0x14) = fast_tween_color(
+        *(int *)(beam_animation_state + 0x14) = fast_tween_color(
             electric_beam_transition_color_gp, electric_beam_initial_color_gp, fraction);
-    } else if (*(s16 *)(vars + 0x12) > D_L14_001620C8) {
+    } else if (*(s16 *)(beam_animation_state + 0x12) > D_L14_001620C8) {
         fraction =
-            convert_integer_to_float(*(s16 *)(vars + 0x12) - D_L14_001620C8) /
+            convert_integer_to_float(*(s16 *)(beam_animation_state + 0x12) - D_L14_001620C8) /
             convert_integer_to_float(electric_beam_color_transition_countdown_gp - D_L14_001620C8);
-        *(int *)(vars + 0x14) = fast_tween_color(
+        *(int *)(beam_animation_state + 0x14) = fast_tween_color(
             electric_beam_final_color_gp, electric_beam_transition_color_gp, fraction);
     } else {
-        *(int *)(vars + 0x14) = 0;
+        *(int *)(beam_animation_state + 0x14) = 0;
     }
 }
 
@@ -387,7 +388,7 @@ void draw_electric_beam(char *moby) {
     float                   tangent[4] __attribute__((aligned(16)));
     u64                     texture;
     u64                     gs_state;
-    int                     branch, node, corner;
+    int                     branch, branch_segment_index, corner;
     int                     start_point;
     int                     k;
 
@@ -473,22 +474,24 @@ void draw_electric_beam(char *moby) {
             continue;
         if (start_point <= -1)
             continue;
-        for (node = 0; node < 3; node++) {
+        for (branch_segment_index = 0; branch_segment_index < 3; branch_segment_index++) {
             qcopy(prev_offset, offset);
-            if (node < 2) {
-                fast_vec_sub(
-                    tangent, &beam->branches[node][branch], &beam->branches[node + 2][branch]);
-                fast_vec_sub(view, &beam->branches[node + 1][branch], camera);
+            if (branch_segment_index < 2) {
+                fast_vec_sub(tangent,
+                             &beam->branches[branch_segment_index][branch],
+                             &beam->branches[branch_segment_index + 2][branch]);
+                fast_vec_sub(view, &beam->branches[branch_segment_index + 1][branch], camera);
                 fast_vec_cross(offset, view, tangent);
                 fast_vec_normalize(offset, offset, 0.1f);
             } else {
                 clear_u64_value(offset);
             }
-            if (node == 0)
+            if (branch_segment_index == 0)
                 qcopy(prev_offset, offset);
             for (corner = 0; corner < 4; corner++) {
                 if (corner < 2) {
-                    qcopy(&packet[0].vertices[corner], &beam->branches[node][branch]);
+                    qcopy(&packet[0].vertices[corner],
+                          &beam->branches[branch_segment_index][branch]);
                     if (corner & 1)
                         fast_vec_add(
                             &packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
@@ -496,7 +499,8 @@ void draw_electric_beam(char *moby) {
                         fast_vec_sub(
                             &packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
                 } else {
-                    qcopy(&packet[0].vertices[corner], &beam->branches[node + 1][branch]);
+                    qcopy(&packet[0].vertices[corner],
+                          &beam->branches[branch_segment_index + 1][branch]);
                     if (corner & 1)
                         fast_vec_add(
                             &packet[0].vertices[corner], &packet[0].vertices[corner], offset);
@@ -507,8 +511,10 @@ void draw_electric_beam(char *moby) {
                 /* Fakematch: 32 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
                 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 EMPTY_SCOPES_4 packet[0]
-                    .uv[corner][0] = electric_beam_base_uv[corner][0] +
-                                     convert_integer_to_float(node - node / 4 * 4) * 0.25f;
+                    .uv[corner][0] =
+                    electric_beam_base_uv[corner][0] +
+                    convert_integer_to_float(branch_segment_index - branch_segment_index / 4 * 4) *
+                        0.25f;
             }
             draw_geometry_quad(&packet[0], world, 0);
         }
@@ -530,11 +536,11 @@ typedef struct {
 extern u8 D_L14_00174560[];
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */
-void apply_electric_beam_damage(char *self) {
-    struct Moby    *beam_moby = (struct Moby *)self;
+void apply_electric_beam_damage(char *source_moby) {
+    struct Moby    *beam_moby = (struct Moby *)source_moby;
     D1224          *beam_vars = (D1224 *)beam_moby->pvars;
     ElectricBeamReq req;
-    Vec4 damage_push_direction, to_hero, base, end_a, end_b, from, to, beam_radius_offset;
+    Vec4 damage_push_direction, to_hero, beam_origin, end_a, end_b, from, to, beam_radius_offset;
     f32  dot, collision_offset_length;
 
     if (beam_vars->radius == 0.0f)
@@ -561,26 +567,26 @@ void apply_electric_beam_damage(char *self) {
         req.v[0] = damage_push_direction.f[0];
         req.v[1] = damage_push_direction.f[1];
     }
-    qcopy_nc(&base, &l14_cuboids[beam_vars->w0].pos);
+    qcopy_nc(&beam_origin, &l14_cuboids[beam_vars->w0].pos);
     if (beam_vars->s8) {
-        fast_vec_add(&end_a, &base, &l14_cuboids[beam_vars->w0].axes[1]);
-        if (collision_line(&base, &end_a, 0, beam_moby, 0)) {
-            fast_vec_sub(&from, D_L14_00174560, &base);
+        fast_vec_add(&end_a, &beam_origin, &l14_cuboids[beam_vars->w0].axes[1]);
+        if (collision_line(&beam_origin, &end_a, 0, beam_moby, 0)) {
+            fast_vec_sub(&from, D_L14_00174560, &beam_origin);
             collision_offset_length = fast_vec_length(&from);
             fast_vec_scale(&from, &from, collision_offset_length * 0.98f / collision_offset_length);
-            fast_vec_add(&beam_vars->end_a, &base, &from);
+            fast_vec_add(&beam_vars->end_a, &beam_origin, &from);
             beam_vars->s8 = 0;
         } else {
             qcopy(&beam_vars->end_a, &end_a);
         }
     }
     if (beam_vars->sA) {
-        fast_vec_sub(&end_b, &base, &l14_cuboids[beam_vars->w0].axes[1]);
-        if (collision_line(&base, &end_b, 0, beam_moby, 0)) {
-            fast_vec_sub(&from, D_L14_00174560, &base);
+        fast_vec_sub(&end_b, &beam_origin, &l14_cuboids[beam_vars->w0].axes[1]);
+        if (collision_line(&beam_origin, &end_b, 0, beam_moby, 0)) {
+            fast_vec_sub(&from, D_L14_00174560, &beam_origin);
             collision_offset_length = fast_vec_length(&from);
             fast_vec_scale(&from, &from, collision_offset_length * 0.98f / collision_offset_length);
-            fast_vec_add(&beam_vars->end_b, &base, &from);
+            fast_vec_add(&beam_vars->end_b, &beam_origin, &from);
             beam_vars->sA = 0;
         } else {
             qcopy(&beam_vars->end_b, &end_b);

@@ -8,8 +8,8 @@ struct TypeEntry {
 
 extern struct TypeEntry D_00132ED8[];
 
-u64 _type2id(s32 id, s32 value) {
-    u64 result = 0;
+u64 _type2id(s32 id, s32 channel) {
+    u64 callback_id = 0;
     s32 shift = 0;
 
     if ((u32)id < 10) {
@@ -24,7 +24,7 @@ u64 _type2id(s32 id, s32 value) {
             shift = 32;
             break;
         }
-        result = D_00132ED8[id].id | ((u64)value << shift);
+        callback_id = D_00132ED8[id].id | ((u64)channel << shift);
     }
-    return result;
+    return callback_id;
 }

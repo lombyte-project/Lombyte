@@ -165,7 +165,7 @@ extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
 extern Own  l00_pause_menu_default_page_owner __asm__("D_L00_001B2588");
 extern Own  D_L00_001B3518;
 extern Own  D_L00_001B6088;
-extern Own  D_L00_001B6B38;
+extern Own  l00_pause_menu_state_preserving_entry_page_owner __asm__("D_L00_001B6B38");
 extern Own  D_L00_001B86C8;
 
 #include "rnc/overlay/shared/ui/menus/initialize_pause_menu_globals.h"
@@ -195,7 +195,7 @@ void initialize_pause_menu(void) {
     struct GameState *state = &D_L00_001B9CF0;
     Own              *page;
     s32               small_buffers = 0;
-    s32               state_id, i, j, item_index, seq, texture_start, next;
+    s32               state_id, i, j, item_index, seq, texture_start, texture_region_end;
     s32              *slot;
 
     D_L00_00173E40_lui[4] |= 0x80000000;
@@ -221,7 +221,7 @@ void initialize_pause_menu(void) {
         state->unk8 = page;
         state->unk124 = 1;
     } else if (state_id == 0x23) {
-        page = &D_L00_001B6B38;
+        page = &l00_pause_menu_state_preserving_entry_page_owner;
         state->owner = page;
         state->unk8 = page;
     } else if (state_id == 0x2D) {
@@ -327,9 +327,9 @@ void initialize_pause_menu(void) {
     D_L00_001B9CF0.saved_texture_start = texture_start;
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
         D_L00_001841F0.unk240 = texture_start;
-        next = texture_start + 0x40000;
-        D_L00_001841F0.unk244 = next;
-        gs_texture_allocation_start = next + 0x400;
+        texture_region_end = texture_start + 0x40000;
+        D_L00_001841F0.unk244 = texture_region_end;
+        gs_texture_allocation_start = texture_region_end + 0x400;
         for (j = 0; j < 4; j++) {
             s32 start = gs_texture_allocation_start;
             D_L00_001841F0.texture_slots[j] = start;
@@ -795,7 +795,7 @@ void draw_pause_menu_pages(int transfer_only) {
             int   width, height, x, y;
             int   width_log2, height_log2, target_width, target_height;
             int   draw_result, u_start, v_start, u_end, v_end;
-            char *vars;
+            char *page_moby_data;
             if (moby == 0 || page_objects == 0 || page_objects[j] == 0) {
                 continue;
             }
@@ -819,11 +819,11 @@ void draw_pause_menu_pages(int transfer_only) {
                 (*(int (**)(char *))(page_objects[j] + 4))(page_objects[j]);
                 continue;
             }
-            vars = ((char *)MOBY(moby)->pvars);
-            x = *(int *)(vars + 0x50);
-            y = *(int *)(vars + 0x54);
-            width = *(int *)(vars + 0x58);
-            height = *(int *)(vars + 0x5C);
+            page_moby_data = ((char *)MOBY(moby)->pvars);
+            x = *(int *)(page_moby_data + 0x50);
+            y = *(int *)(page_moby_data + 0x54);
+            width = *(int *)(page_moby_data + 0x58);
+            height = *(int *)(page_moby_data + 0x5C);
             width_log2 = 7;
             while ((1 << width_log2) < width) {
                 width_log2++;

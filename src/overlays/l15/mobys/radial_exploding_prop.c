@@ -73,7 +73,7 @@ void update_radial_exploding_prop(struct Moby *moby) __asm__("FUN_L15_002a7880")
 
 void update_radial_exploding_prop(struct Moby *moby) {
     char *slot = 0;
-    Vec   velocity, first, second, offset, base;
+    Vec   velocity, hit_direction_step, doubled_hit_direction_step, offset, debris_origin;
     u32   palette[4];
     u32   colors[4];
     Vec   position;
@@ -88,12 +88,12 @@ void update_radial_exploding_prop(struct Moby *moby) {
         return;
 
     for (slot_index = 0; slot_index < 64; slot_index++) {
-        char *entry = D_L15_00178700 + slot_index * 0x40;
-        if (*(struct Moby **)(entry + 0x34) != moby)
+        char *radial_debris_hit_record = D_L15_00178700 + slot_index * 0x40;
+        if (*(struct Moby **)(radial_debris_hit_record + 0x34) != moby)
             continue;
-        if ((*(u32 *)(entry + 0x24) & 0x80000) == 0)
+        if ((*(u32 *)(radial_debris_hit_record + 0x24) & 0x80000) == 0)
             continue;
-        slot = entry;
+        slot = radial_debris_hit_record;
         break;
     }
     moby->hit_slot = 0xff;
@@ -101,16 +101,16 @@ void update_radial_exploding_prop(struct Moby *moby) {
         goto no_hit;
 
     __builtin_memcpy(palette, &destructible_radial_debris_color_palette, 16);
-    normalize_vector_xyz_7880(frame_time * 10.0f, &first, slot + 0x10);
-    scale_vector_xyz_7880(2.0f, &second, &first);
+    normalize_vector_xyz_7880(frame_time * 10.0f, &hit_direction_step, slot + 0x10);
+    scale_vector_xyz_7880(2.0f, &doubled_hit_direction_step, &hit_direction_step);
     if (fast_vec_length(slot) != 0.0f) {
-        base.q = *(u128 *)slot;
+        debris_origin.q = *(u128 *)slot;
     } else {
-        base.q = *(u128 *)&moby->pos;
-        base.f[2] += 6.0f;
+        debris_origin.q = *(u128 *)&moby->pos;
+        debris_origin.f[2] += 6.0f;
     }
 
-    base_position = &base;
+    base_position = &debris_origin;
     {
         float radius, angle;
         int   i = 0x18;
@@ -128,7 +128,7 @@ void update_radial_exploding_prop(struct Moby *moby) {
             fast_vec_sub(colors, base_position, &offset);
             velocity.q = *(u128 *)colors;
             normalize_vector_xyz_7880(frame_time * 5.0f, &velocity, &velocity);
-            add_vectors(colors, &velocity, &second);
+            add_vectors(colors, &velocity, &doubled_hit_direction_step);
             velocity.f[2] += frame_time * 3.0f;
             size = random_float_between(0.75f, 1.25f);
             scale_vector_xyz_7880(size, &velocity, &velocity);
@@ -149,7 +149,7 @@ void update_radial_exploding_prop(struct Moby *moby) {
         fast_vec_sub(colors, base_position, &offset);
         velocity.q = *(u128 *)colors;
         normalize_vector_xyz_7880(frame_time * 5.0f, &velocity, &velocity);
-        add_vectors(colors, &velocity, &second);
+        add_vectors(colors, &velocity, &doubled_hit_direction_step);
         velocity.f[2] += frame_time * 3.0f;
         size = random_float_between(0.75f, 1.25f);
         scale_vector_xyz_7880(size, &velocity, &velocity);
@@ -196,7 +196,7 @@ void update_radial_exploding_prop(struct Moby *moby) {
         fast_vec_sub(&position, base_position, &offset);
         velocity.q = position.q;
         normalize_vector_xyz_7880(frame_time * 5.0f, &velocity, &velocity);
-        add_vectors(&position, &velocity, &first);
+        add_vectors(&position, &velocity, &hit_direction_step);
         size = random_float_between(0.75f, 1.25f);
         scale_vector_xyz_7880(size, &velocity, &velocity);
         size = random_float_between(0.25f, 1.0f);

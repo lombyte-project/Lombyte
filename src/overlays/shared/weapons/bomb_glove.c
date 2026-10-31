@@ -107,7 +107,7 @@ void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, 
 
 void aim_throw_arc(V2c2488 *origin_position,
                    V2c2488 *target_position,
-                   f32     *out,
+                   f32     *throw_velocity,
                    f32      speed,
                    f32      unused,
 
@@ -140,10 +140,10 @@ void aim_throw_arc(V2c2488 *origin_position,
         effective_target_position.f[1] = u.f[1];
     }
     horizontal_speed = frame_time * 8.5f;
-    out[0] = fast_cos(launch_heading) * horizontal_speed;
-    out[1] = fast_sin(launch_heading) * horizontal_speed;
-    *(s32 *)&out[2] = 0;
-    out[2] =
+    throw_velocity[0] = fast_cos(launch_heading) * horizontal_speed;
+    throw_velocity[1] = fast_sin(launch_heading) * horizontal_speed;
+    *(s32 *)&throw_velocity[2] = 0;
+    throw_velocity[2] =
         FUN_L00_0025abf0(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
     if (pad_held_lui[0] & 5) {
         k = scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f;
@@ -152,8 +152,8 @@ void aim_throw_arc(V2c2488 *origin_position,
         k = 8.5f / horizontal_speed;
     }
     v = speed * k * 0.5f;
-    if (v < out[2]) {
-        out[2] = v;
+    if (v < throw_velocity[2]) {
+        throw_velocity[2] = v;
     }
 }
 
@@ -169,7 +169,7 @@ void bomb_glove_update(struct Moby *moby) {
         BOMB_GLOVE_BEGIN_HELD_MOBY_REMOVAL = 5,
         BOMB_GLOVE_REMOVE_HELD_MOBY = 6
     };
-    CarrierVars_2c26c8 *vars;
+    CarrierVars_2c26c8 *bomb_glove_vars;
     OvlVec4             local[4], saved, offset, rotatedOffset, pos, target, basis[3], matrix[4];
     OvlVec4             launch;
     union {
@@ -183,29 +183,30 @@ void bomb_glove_update(struct Moby *moby) {
 
     if (moby == 0)
         return;
-    vars = (CarrierVars_2c26c8 *)moby->pvars;
+    bomb_glove_vars = (CarrierVars_2c26c8 *)moby->pvars;
     offset.q = 0;
     offset.f[1] = -0.09f;
     offset.f[2] = -0.02f;
     copy_matrix3x4(basis, l00_camera_lui.unk0);
     transpose_rotation_matrix(matrix, basis);
-    if (vars == 0)
+    if (bomb_glove_vars == 0)
         return;
-    if (vars->delay < 3) {
-        ++vars->delay;
+    if (bomb_glove_vars->delay < 3) {
+        ++bomb_glove_vars->delay;
         return;
     }
     FUN_L00_0024f7c8((u8 *)moby, 0, &saved);
     build_moby_bone_transform(moby, 0, local);
     transform_vector(&rotatedOffset, &offset, local);
-    fast_vec_add(&vars->grip, &saved, &rotatedOffset);
-    if (vars->held != 0)
-        vars->held->collision_disable = 1;
-    if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD)
-        vars->held = 0;
+    fast_vec_add(&bomb_glove_vars->grip, &saved, &rotatedOffset);
+    if (bomb_glove_vars->held != 0)
+        bomb_glove_vars->held->collision_disable = 1;
+    if (bomb_glove_vars->held == 0 || bomb_glove_vars->held->state == 0xFE ||
+        bomb_glove_vars->held->state == 0xFD)
+        bomb_glove_vars->held = 0;
     if (hero.state.current == 1)
         hero_set_state(0x1E, 1);
-    if (fast_dec_timer(&vars->timer) && !hero.item_use_locked) {
+    if (fast_dec_timer(&bomb_glove_vars->timer) && !hero.item_use_locked) {
         if ((hero.item_anim_active && hero.item_anim_frames == scale_game_frames(0x11)) ||
             ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1E &&
              get_ammo(-1)) ||
@@ -215,9 +216,9 @@ void bomb_glove_update(struct Moby *moby) {
             moby->state = 3;
         }
     }
-    if (vars->held != 0) {
+    if (bomb_glove_vars->held != 0) {
         f32  best = 15.0f;
-        f32 *out = (f32 *)vars->held->pvars;
+        f32 *held_bomb_launch_velocity = (f32 *)bomb_glove_vars->held->pvars;
         launch.q = 0;
         launch.f[0] = 1.0f;
         transform_vector_by_basis(&launch, &launch, hero.basis);
@@ -293,15 +294,16 @@ void bomb_glove_update(struct Moby *moby) {
                 }
             }
         } else {
-            s32          entry = 0;
+            s32          throw_candidate_index = 0;
             struct Moby *candidate;
             hero.throw_target = 0;
-            while ((candidate = D_L00_001ABA00_lui[entry]) != 0) {
-                u8 *data = get_moby_target_info(candidate);
-                if ((s8)candidate->state >= 0 && data && (candidate->flags & 0x1000)) {
+            while ((candidate = D_L00_001ABA00_lui[throw_candidate_index]) != 0) {
+                u8 *candidate_aim_info = get_moby_target_info(candidate);
+                if ((s8)candidate->state >= 0 && candidate_aim_info &&
+                    (candidate->flags & 0x1000)) {
                     f32 candidateAngle, elevation, difference;
                     qcopy(&temporary.arc, &candidate->pos);
-                    temporary.arc.f[2] += *(f32 *)(data + 0x10);
+                    temporary.arc.f[2] += *(f32 *)(candidate_aim_info + 0x10);
                     distance = vector_distance(&pos, &temporary.arc);
                     candidateAngle =
                         fast_arc_tan(temporary.arc.f[0] - pos.f[0], temporary.arc.f[1] - pos.f[1]);
@@ -320,18 +322,23 @@ void bomb_glove_update(struct Moby *moby) {
                         qcopy(&target, &temporary.arc);
                     }
                 }
-                ++entry;
+                ++throw_candidate_index;
             }
         }
         gravity = frame_time_sq_macro * 11.0f;
         speed = (controller_state.held & 5)
                     ? scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f
                     : 8.5f;
-        aim_throw_arc((V2c2488 *)&pos, (V2c2488 *)&target, out, gravity, 0.00000999999975f, speed);
+        aim_throw_arc((V2c2488 *)&pos,
+                      (V2c2488 *)&target,
+                      held_bomb_launch_velocity,
+                      gravity,
+                      0.00000999999975f,
+                      speed);
     }
     switch (moby->state) {
     case BOMB_GLOVE_INITIALIZE:
-        vars->held = 0;
+        bomb_glove_vars->held = 0;
         if (!(moby->anim_flags & 2))
             moby->state = 1;
         else
@@ -341,10 +348,10 @@ void bomb_glove_update(struct Moby *moby) {
             moby->state = 2;
         break;
     case BOMB_GLOVE_RELEASE_HELD_MOBY:
-        if (vars->held == 0) {
-            vars->held = spawn_bomb(moby, &vars->grip);
+        if (bomb_glove_vars->held == 0) {
+            bomb_glove_vars->held = spawn_bomb(moby, &bomb_glove_vars->grip);
         } else {
-            launch_bomb(&pos, vars->held, vars->held->pvars);
+            launch_bomb(&pos, bomb_glove_vars->held, bomb_glove_vars->held->pvars);
             if (((DeliveryStats_2c26c8 *)item_usage)->deliveries <= 0xfffe)
                 ++((DeliveryStats_2c26c8 *)item_usage)->deliveries;
             {
@@ -357,9 +364,9 @@ void bomb_glove_update(struct Moby *moby) {
             ((DeliveryStats_2c26c8 *)item_usage)->levels =
                 (((DeliveryStats_2c26c8 *)item_usage)->levels | (1u << current_level_index)) |
                 0x80000000;
-            vars->held = 0;
+            bomb_glove_vars->held = 0;
             moby->state = 4;
-            vars->timer = scale_game_frames(0x14);
+            bomb_glove_vars->timer = scale_game_frames(0x14);
         }
         break;
     case BOMB_GLOVE_POST_RELEASE_WAIT:
@@ -371,12 +378,12 @@ void bomb_glove_update(struct Moby *moby) {
         break;
     case BOMB_GLOVE_REMOVE_HELD_MOBY:
         /* Retail reloads held after destruction before the common tail. */
-        if (vars->held != 0)
-            mark_moby_for_removal(vars->held);
+        if (bomb_glove_vars->held != 0)
+            mark_moby_for_removal(bomb_glove_vars->held);
         break;
     }
-    if (vars->held != 0)
-        qcopy(&vars->held->pos, &vars->grip);
+    if (bomb_glove_vars->held != 0)
+        qcopy(&bomb_glove_vars->held->pos, &bomb_glove_vars->grip);
     else if (get_ammo(-1) || hero.item_anim_active)
-        vars->held = spawn_bomb(moby, &vars->grip);
+        bomb_glove_vars->held = spawn_bomb(moby, &bomb_glove_vars->grip);
 }

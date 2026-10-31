@@ -69,22 +69,22 @@ unsigned char *spawn_fading_ring_effect(int   spawning_moby,
                                         float f4) {
     unsigned char *moby = (unsigned char *)create_moby(0x416);
     if (moby != 0) {
-        char *data;
+        char *spawned_moby_vars;
         char *distance_reference_position;
         char *distance_response_state;
-        data = ((char *)MOBY(moby)->pvars);
+        spawned_moby_vars = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         qcopy(moby + 0x10, spawn_position);
-        *(int *)(data + 0x14) = spawning_moby;
-        *(float *)(data + 4) = f1;
-        *(float *)(data + 0x10) = f2;
-        *(float *)(data + 0xC) = spawn_speed;
-        *(float *)data = f0;
-        *(float *)(data + 8) = f0;
-        *(int *)(data + 0x18) = b;
-        *(float *)(data + 0x1C) = f4;
+        *(int *)(spawned_moby_vars + 0x14) = spawning_moby;
+        *(float *)(spawned_moby_vars + 4) = f1;
+        *(float *)(spawned_moby_vars + 0x10) = f2;
+        *(float *)(spawned_moby_vars + 0xC) = spawn_speed;
+        *(float *)spawned_moby_vars = f0;
+        *(float *)(spawned_moby_vars + 8) = f0;
+        *(int *)(spawned_moby_vars + 0x18) = b;
+        *(float *)(spawned_moby_vars + 0x1C) = f4;
         MOBY(moby)->flags |= 0x200;
         distance_reference_position = D_L07_00166E40;
         distance_response_state = distance_reference_position - 0x140;
@@ -99,18 +99,18 @@ unsigned char *spawn_fading_ring_effect(int   spawning_moby,
 
 void draw_fading_ring_effect(struct Moby *moby) {
     char         packet[0x90] __attribute__((aligned(16)));
-    char         second[0x90] __attribute__((aligned(16)));
+    char         lower_ring_quad_packet[0x90] __attribute__((aligned(16)));
     char         phase_work[0x10] __attribute__((aligned(16)));
     unsigned int alpha = (unsigned int)moby->alpha / 5u;
     int          index = 0;
     unsigned int green = 0x80;
     float        band = 0.0f;
-    char        *data = ((char *)moby->pvars);
+    char        *ring_effect_vars = ((char *)moby->pvars);
     unsigned int green_step = (green / 11) & 0xFF;
     float        radius_threshold = 0.9f;
     float        inner_scale = 0.96f;
     float        pi = 3.1415927f;
-    *(long *)(packet + 0x78) = get_effect_texture(*(int *)(data + 0x18));
+    *(long *)(packet + 0x78) = get_effect_texture(*(int *)(ring_effect_vars + 0x18));
     *(long *)(packet + 0x80) = 0xFF9000000260L;
     *(long *)(packet + 0x70) = 4;
     *(long *)(packet + 0x88) = 0x8000000048L;
@@ -122,11 +122,11 @@ void draw_fading_ring_effect(struct Moby *moby) {
         *(int *)(packet + 0x48) = color;
         *(int *)(packet + 0x44) = color;
         *(int *)(packet + 0x40) = color;
-        if (*(float *)(data + 8) < radius_threshold)
-            radius = *(float *)(data + 8) * band;
+        if (*(float *)(ring_effect_vars + 8) < radius_threshold)
+            radius = *(float *)(ring_effect_vars + 8) * band;
         else
-            radius = *(float *)(data + 8) - band * radius_threshold;
-        side = (1.0f - band * 0.5f) * *(float *)(data + 0x10);
+            radius = *(float *)(ring_effect_vars + 8) - band * radius_threshold;
+        side = (1.0f - band * 0.5f) * *(float *)(ring_effect_vars + 0x10);
         ft = convert_integer_to_float(D_L07_0015F5CC);
         phase = split_float_fraction(phase_work, ft / (band * 40.0f + 40.0f));
         if ((index & 1) == 0)
@@ -153,9 +153,9 @@ void draw_fading_ring_effect(struct Moby *moby) {
         *(float *)(packet + 0x5C) = zero;
         *(float *)(packet + 0x08) = side + moby->pos.z;
         *(float *)(packet + 0x28) = moby->pos.z;
-        *(Pkt_0F0D0 *)second = *(Pkt_0F0D0 *)packet;
-        *(float *)(second + 0x18) = moby->pos.z - 5.0f;
-        *(float *)(second + 8) = *(float *)(second + 0x18);
+        *(Pkt_0F0D0 *)lower_ring_quad_packet = *(Pkt_0F0D0 *)packet;
+        *(float *)(lower_ring_quad_packet + 0x18) = moby->pos.z - 5.0f;
+        *(float *)(lower_ring_quad_packet + 8) = *(float *)(lower_ring_quad_packet + 0x18);
         angle = -2.8274336f;
         do {
             float x, y, rr;
@@ -173,13 +173,15 @@ void draw_fading_ring_effect(struct Moby *moby) {
             angle = angle + 0.31415927f;
             *(float *)(packet + 0x34) = moby->pos.y + radius * y;
             draw_geometry_quad(packet, 0, 1);
-            *(u128_0F0D0 *)(second + 0) = *(u128_0F0D0 *)(second + 0x10);
-            *(u128_0F0D0 *)(second + 0x20) = *(u128_0F0D0 *)(second + 0x30);
-            *(float *)(second + 0x30) = *(float *)(packet + 0x30);
-            *(float *)(second + 0x34) = *(float *)(packet + 0x34);
-            *(float *)(second + 0x10) = *(float *)(packet + 0x10);
-            *(float *)(second + 0x14) = *(float *)(packet + 0x14);
-            draw_geometry_quad(second, 0, 1);
+            *(u128_0F0D0 *)(lower_ring_quad_packet + 0) =
+                *(u128_0F0D0 *)(lower_ring_quad_packet + 0x10);
+            *(u128_0F0D0 *)(lower_ring_quad_packet + 0x20) =
+                *(u128_0F0D0 *)(lower_ring_quad_packet + 0x30);
+            *(float *)(lower_ring_quad_packet + 0x30) = *(float *)(packet + 0x30);
+            *(float *)(lower_ring_quad_packet + 0x34) = *(float *)(packet + 0x34);
+            *(float *)(lower_ring_quad_packet + 0x10) = *(float *)(packet + 0x10);
+            *(float *)(lower_ring_quad_packet + 0x14) = *(float *)(packet + 0x14);
+            draw_geometry_quad(lower_ring_quad_packet, 0, 1);
         } while (angle < pi);
         index++;
         band = band + 0.1f;

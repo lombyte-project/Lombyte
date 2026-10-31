@@ -9,19 +9,19 @@ s32 disable_dmac(s32 channel_index) __asm__("FUN_001190f8");
 
 s32 disable_dmac(s32 channel_index) {
     u32 status;
-    s32 result;
+    s32 dmac_disable_result;
 
     status = CpuReadStatus();
     status &= 0x10000;
     if (status != 0) {
         DIntr();
     }
-    result = _DisableDmac(channel_index);
+    dmac_disable_result = _DisableDmac(channel_index);
     CpuSync();
     if (status != 0) {
         EnableInterrupts();
     }
-    return result;
+    return dmac_disable_result;
 }
 
 /* Recovered original symbol name. */

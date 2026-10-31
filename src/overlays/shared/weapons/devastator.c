@@ -303,7 +303,7 @@ void devastator_update(struct Moby *devastator_moby) {
     Vec_2b2100         launch;
     Vec_2b2100         point;
     Vec_2b2100         probe;
-    Devastator_2b2100 *data = (Devastator_2b2100 *)devastator_moby->pvars;
+    Devastator_2b2100 *devastator_vars = (Devastator_2b2100 *)devastator_moby->pvars;
     struct Moby       *best;
     struct Moby       *candidate_moby;
     AimInfo           *aim_info;
@@ -319,15 +319,15 @@ void devastator_update(struct Moby *devastator_moby) {
     limit = 10000.0f;
     if ((unsigned char)devastator_moby->state == 0) {
         devastator_moby->state = 1;
-        data->light = -1;
-        data->glow = 0;
+        devastator_vars->light = -1;
+        devastator_vars->glow = 0;
     }
     copy_matrix3x4(&rotation, l00_camera.unk0);
     transpose_rotation_matrix(&inverse, &rotation);
-    fast_dec_timer(&data->cooldown);
-    if (fast_dec_timer(&data->target_timer) ||
-        (data->target && ((unsigned char)data->target->state & 0x80)))
-        data->target = 0;
+    fast_dec_timer(&devastator_vars->cooldown);
+    if (fast_dec_timer(&devastator_vars->target_timer) ||
+        (devastator_vars->target && ((unsigned char)devastator_vars->target->state & 0x80)))
+        devastator_vars->target = 0;
     if (hero.state.current == 1)
         hero_set_state_2b2100(30, 1);
     if (hero.state.current == 30 && (hero.moby->flags & 1) && !hero.item_use_locked) {
@@ -338,9 +338,9 @@ void devastator_update(struct Moby *devastator_moby) {
         if (collision_line(view_origin_2b2100, &launch, 0, (int)devastator_moby, 0)) {
             hit = (Hit_2b2100 *)coll_hit;
             if (hit->moby && (hit->moby->flags & 0x1000)) {
-                data->target = hit->moby;
-                data->target_timer = scale_game_frames(20);
-                data->target_height = hit->pos.f.z - data->target->pos.z;
+                devastator_vars->target = hit->moby;
+                devastator_vars->target_timer = scale_game_frames(20);
+                devastator_vars->target_height = hit->pos.f.z - devastator_vars->target->pos.z;
             }
         }
         suck_draw_reticle((int)devastator_moby,
@@ -354,11 +354,11 @@ void devastator_update(struct Moby *devastator_moby) {
                           -1,
                           90.0f,
                           4);
-        if (data->target && !data->cooldown && get_ammo(-1)) {
+        if (devastator_vars->target && !devastator_vars->cooldown && get_ammo(-1)) {
             float scaled_target_distance =
-                fast_vec_dist(view_origin_2b2100, &data->target->pos) / 100.0f;
-            qcopy(&point, &data->target->pos);
-            point.f.z += data->target_height;
+                fast_vec_dist(view_origin_2b2100, &devastator_vars->target->pos) / 100.0f;
+            qcopy(&point, &devastator_vars->target->pos);
+            point.f.z += devastator_vars->target_height;
             size = absolute_float(0.9f - scaled_target_distance * 0.57f);
             suck_draw_reticle(
                 (int)devastator_moby,
@@ -375,11 +375,11 @@ void devastator_update(struct Moby *devastator_moby) {
         }
     }
     if (hero.items[6].locked_on) {
-        data->target = hero.items[6].lock_target;
-        data->target_timer = scale_game_frames(20);
-        data->target_height = collision_hit_z - data->target->pos.z;
+        devastator_vars->target = hero.items[6].lock_target;
+        devastator_vars->target_timer = scale_game_frames(20);
+        devastator_vars->target_height = collision_hit_z - devastator_vars->target->pos.z;
     }
-    if (D_L00_0015F5C4 != 2 && !data->cooldown && !hero.item_use_locked &&
+    if (D_L00_0015F5C4 != 2 && !devastator_vars->cooldown && !hero.item_use_locked &&
         devastator_moby->seq < 2 && (controller_state.held & hero.items[0].button_mask) &&
         scale_game_frames(22) < hero.items[0].ready_frames) {
         velocity.q = 0;
@@ -408,8 +408,8 @@ void devastator_update(struct Moby *devastator_moby) {
                 launch.f.y += 0.3f;
                 transform_vector(&launch, &launch, &inverse);
                 fast_vec_add(&launch, &launch, view_origin_2b2100);
-                if (data->target)
-                    height = data->target_height;
+                if (devastator_vars->target)
+                    height = devastator_vars->target_height;
             } else {
                 moby_point_position(devastator_moby, 0, &launch);
                 i = 0;
@@ -477,7 +477,7 @@ void devastator_update(struct Moby *devastator_moby) {
                                         yaw = tyaw;
                                         if (!find_listed_moby_by_data_id(best)) {
                                             height = 0.5f;
-                                            data->target = best;
+                                            devastator_vars->target = best;
                                             if (aim_info)
                                                 height = aim_info->height;
                                         }
@@ -491,7 +491,7 @@ void devastator_update(struct Moby *devastator_moby) {
                 }
             }
             allocate_voice_for_target_entry(0, 0, (int)devastator_moby);
-            data->glow = scale_game_frames(5) + scale_game_frames(10);
+            devastator_vars->glow = scale_game_frames(5) + scale_game_frames(10);
             if (hero.state.current != 30)
                 emit_object_offset_particle_burst(devastator_moby);
             stats = (UsageStat_2b2100 *)usage_stats_2b2100;
@@ -503,19 +503,31 @@ void devastator_update(struct Moby *devastator_moby) {
             if (hero.unk22C8 == 1 && hero.state.current != 30) {
                 pitch = D_L00_0017ACF4_lui;
                 yaw = devastator_moby->rot.z;
-                aim_info = get_moby_target_info(data->target);
+                aim_info = get_moby_target_info(devastator_vars->target);
                 if (aim_info)
                     height = aim_info->height;
-                spawn_devastator_missile(
-                    devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
+                spawn_devastator_missile(devastator_moby,
+                                         &launch,
+                                         devastator_vars->target,
+                                         yaw,
+                                         pitch,
+                                         height,
+                                         yaw,
+                                         pitch);
             } else if (limit < 2.0f) {
-                aim_info = get_moby_target_info(data->target);
+                aim_info = get_moby_target_info(devastator_vars->target);
                 if (aim_info)
                     height = aim_info->height;
-                spawn_devastator_missile(
-                    devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
+                spawn_devastator_missile(devastator_moby,
+                                         &launch,
+                                         devastator_vars->target,
+                                         yaw,
+                                         pitch,
+                                         height,
+                                         yaw,
+                                         pitch);
             } else {
-                if (!data->target) {
+                if (!devastator_vars->target) {
                     if (best) {
                         limit = calculate_eased_step_sum(6);
                         qcopy(&point, &best->pos);
@@ -535,8 +547,14 @@ void devastator_update(struct Moby *devastator_moby) {
                         pitch0 -= hero.ground_pitch.f * 0.5f;
                     }
                 }
-                spawn_devastator_missile(
-                    devastator_moby, &launch, data->target, yaw, pitch, height, yaw0, pitch0);
+                spawn_devastator_missile(devastator_moby,
+                                         &launch,
+                                         devastator_vars->target,
+                                         yaw,
+                                         pitch,
+                                         height,
+                                         yaw0,
+                                         pitch0);
             }
             if (hero.state.control_mode == 0 ||
                 (hero.state.current == 2 && hero.stick_magnitude < 0.7f)) {
@@ -547,55 +565,58 @@ void devastator_update(struct Moby *devastator_moby) {
         } else {
             allocate_voice_for_target_entry(1, 0, (int)devastator_moby);
         }
-        data->cooldown = scale_game_frames(35);
+        devastator_vars->cooldown = scale_game_frames(35);
     }
-    if (devastator_moby->seq != 2 && data->glow > 0) {
-        if (data->glow > scale_game_frames(10)) {
-            muzzle_light_color_x = convert_integer_to_float(scale_game_frames(5) +
-                                                            scale_game_frames(10) - data->glow) /
-                                   (float)scale_game_frames(5);
-            muzzle_light_color_y = convert_integer_to_float(scale_game_frames(5) +
-                                                            scale_game_frames(10) - data->glow) *
-                                   0.8f / (float)scale_game_frames(5);
-            muzzle_light_color_z = convert_integer_to_float(scale_game_frames(5) +
-                                                            scale_game_frames(10) - data->glow) *
-                                   0.5f / (float)scale_game_frames(5);
+    if (devastator_moby->seq != 2 && devastator_vars->glow > 0) {
+        if (devastator_vars->glow > scale_game_frames(10)) {
+            muzzle_light_color_x =
+                convert_integer_to_float(scale_game_frames(5) + scale_game_frames(10) -
+                                         devastator_vars->glow) /
+                (float)scale_game_frames(5);
+            muzzle_light_color_y =
+                convert_integer_to_float(scale_game_frames(5) + scale_game_frames(10) -
+                                         devastator_vars->glow) *
+                0.8f / (float)scale_game_frames(5);
+            muzzle_light_color_z =
+                convert_integer_to_float(scale_game_frames(5) + scale_game_frames(10) -
+                                         devastator_vars->glow) *
+                0.5f / (float)scale_game_frames(5);
         } else {
             muzzle_light_color_x =
-                convert_integer_to_float(data->glow) / (float)scale_game_frames(10);
-            muzzle_light_color_y =
-                convert_integer_to_float(data->glow) * 0.8f / (float)scale_game_frames(10);
-            muzzle_light_color_z =
-                convert_integer_to_float(data->glow) * 0.5f / (float)scale_game_frames(10);
+                convert_integer_to_float(devastator_vars->glow) / (float)scale_game_frames(10);
+            muzzle_light_color_y = convert_integer_to_float(devastator_vars->glow) * 0.8f /
+                                   (float)scale_game_frames(10);
+            muzzle_light_color_z = convert_integer_to_float(devastator_vars->glow) * 0.5f /
+                                   (float)scale_game_frames(10);
         }
         moby_point_position(devastator_moby, 0, &velocity);
         velocity.f.x += fast_cos(fast_arc_tan(hero.facing_x, hero.facing_y));
         velocity.f.y += fast_sin(fast_arc_tan(hero.facing_x, hero.facing_y));
         velocity.f.z += 0.3f;
-        if (data->light == -1) {
-            data->light = allocate_colored_effect_slot(&velocity,
-                                                       7.0f,
-                                                       0.0f,
-                                                       muzzle_light_color_x,
-                                                       muzzle_light_color_y,
-                                                       muzzle_light_color_z);
+        if (devastator_vars->light == -1) {
+            devastator_vars->light = allocate_colored_effect_slot(&velocity,
+                                                                  7.0f,
+                                                                  0.0f,
+                                                                  muzzle_light_color_x,
+                                                                  muzzle_light_color_y,
+                                                                  muzzle_light_color_z);
         } else {
-            PointLight *muzzle_light = &point_lights[data->light];
+            PointLight *muzzle_light = &point_lights[devastator_vars->light];
             qcopy(&muzzle_light->position, &velocity);
             muzzle_light->position.f[3] = 7.0f;
             muzzle_light->color[0] = muzzle_light_color_x;
             muzzle_light->color[1] = muzzle_light_color_y;
             muzzle_light->color[2] = muzzle_light_color_z;
         }
-        fast_dec_timer_s16(&data->glow);
-    } else if (data->light != -1) {
-        release_point_light_slot(data->light);
-        data->light = -1;
-        data->glow = 0;
+        fast_dec_timer_s16(&devastator_vars->glow);
+    } else if (devastator_vars->light != -1) {
+        release_point_light_slot(devastator_vars->light);
+        devastator_vars->light = -1;
+        devastator_vars->glow = 0;
     }
     if (devastator_moby->prev_seq == 2) {
-        release_point_light_slot(data->light);
-        data->light = -1;
-        data->glow = 0;
+        release_point_light_slot(devastator_vars->light);
+        devastator_vars->light = -1;
+        devastator_vars->glow = 0;
     }
 }

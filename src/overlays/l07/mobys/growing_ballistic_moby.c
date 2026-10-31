@@ -100,7 +100,7 @@ extern void spawn_explosion(void *,
                             int,
                             int,
                             int) __asm__("FUN_L00_0025e450");
-extern char *D_L07_00173ED0[];
+extern char *l07_collision_query_state[] __asm__("D_L07_00173ED0");
 void         update_growing_ballistic_moby(struct Moby *moby) __asm__("FUN_L07_0030e458");
 s32          allocate_voice_for_target_entry(s32   entry_index,
                                              s32   flags,
@@ -111,16 +111,16 @@ char *
 spawn_growing_ballistic_moby(char *spawn_position, char *initial_velocity, int spawning_moby) {
     char *spawned_moby = create_moby(0x419);
     if (spawned_moby != 0) {
-        char *data;
+        char *spawned_moby_vars;
         MOBY(spawned_moby)->draw_dist = MOBY(spawned_moby)->update_dist = 0xFF;
         spawned_moby[0x31] = 1;
-        data = ((char *)MOBY(spawned_moby)->pvars);
+        spawned_moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         MOBY(spawned_moby)->rot.x = random_angle_radians();
         MOBY(spawned_moby)->rot.y = random_angle_radians();
         MOBY(spawned_moby)->rot.z = random_angle_radians();
         qcopy(spawned_moby + 0x10, spawn_position);
-        qcopy(data, initial_velocity);
-        *(int *)(data + 0x10) = spawning_moby;
+        qcopy(spawned_moby_vars, initial_velocity);
+        *(int *)(spawned_moby_vars + 0x10) = spawning_moby;
         spawned_moby[0x23] = 0x30;
         MOBY(spawned_moby)->flags |= 0x200;
         update_entity(spawned_moby);
@@ -148,7 +148,7 @@ void update_growing_ballistic_moby(struct Moby *moby) {
     }
     if (collision_line(previous_position, &moby->pos, 0, *(int *)(moby_data + 0x10), 0) != 0 ||
         func_L00_001F10E0_f(0.1f, &moby->pos, 0, *(int *)(moby_data + 0x10)) != 0) {
-        char *class_filter_moby = D_L07_00173ED0[2];
+        char *class_filter_moby = l07_collision_query_state[2];
         if (class_filter_moby == 0 ||
             (MOBY(class_filter_moby)->oclass != 0x415 && MOBY(class_filter_moby)->oclass != 0x419 &&
              MOBY(class_filter_moby)->oclass != 0x452)) {

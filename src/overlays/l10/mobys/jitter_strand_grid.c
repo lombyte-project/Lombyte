@@ -36,7 +36,7 @@ void update_jitter_strand_grid(struct Moby *moby) {
         JITTER_STRAND_GRID_STATE_INITIALIZE = 0,
         JITTER_STRAND_GRID_STATE_UPDATE = 1
     };
-    PlatformWaveVars *vars = (PlatformWaveVars *)moby->pvars;
+    PlatformWaveVars *jitter_strand_grid_vars = (PlatformWaveVars *)moby->pvars;
     Vec4              jitter[20][10];
 
     switch (moby->state) {
@@ -51,49 +51,51 @@ void update_jitter_strand_grid(struct Moby *moby) {
             int i;
             for (i = 0; i < 10; i++) {
                 int start = i * D_L10_00161D64 / 10;
-                vars->timers[0][i] = start;
-                vars->timers[1][i] = start + 11;
-                vars->timers[2][i] = start + 23;
-                vars->timers[3][i] = start + 34;
+                jitter_strand_grid_vars->timers[0][i] = start;
+                jitter_strand_grid_vars->timers[1][i] = start + 11;
+                jitter_strand_grid_vars->timers[2][i] = start + 23;
+                jitter_strand_grid_vars->timers[3][i] = start + 34;
             }
         }
         moby->state = 1;
         break;
     case JITTER_STRAND_GRID_STATE_UPDATE: {
-        int group, item, row;
+        int group, strand_column, row;
 
-        vars->phase += jitter_strand_phase_advance_rate_gp * frame_time;
-        if (vars->phase > 1.0f)
-            vars->phase -= 1.0f;
+        jitter_strand_grid_vars->phase += jitter_strand_phase_advance_rate_gp * frame_time;
+        if (jitter_strand_grid_vars->phase > 1.0f)
+            jitter_strand_grid_vars->phase -= 1.0f;
         for (group = 0; group < 4; group++) {
-            for (item = 0; item < 10; item++) {
-                if (fast_dec_timer(&vars->timers[group][item])) {
+            for (strand_column = 0; strand_column < 10; strand_column++) {
+                if (fast_dec_timer(&jitter_strand_grid_vars->timers[group][strand_column])) {
                     for (row = 0; row < 20; row++) {
-                        clear_u64_value(&vars->pos[group][row][item]);
-                        vars->pos[group][row][item].f[1] =
+                        clear_u64_value(&jitter_strand_grid_vars->pos[group][row][strand_column]);
+                        jitter_strand_grid_vars->pos[group][row][strand_column].f[1] =
                             row * (jitter_strand_row_y_span_gp / 20.0f) -
                             jitter_strand_row_y_span_gp * 0.5f;
-                        vars->pos[group][row][item].f[3] = 1.0f;
-                        random_vector(&jitter[row][item], 0.0f, D_L10_00161D54 * frame_time);
+                        jitter_strand_grid_vars->pos[group][row][strand_column].f[3] = 1.0f;
+                        random_vector(
+                            &jitter[row][strand_column], 0.0f, D_L10_00161D54 * frame_time);
                     }
                     for (row = 1; row < 19; row++) {
-                        fast_vec_add(&vars->vel[group][row][item],
-                                     &jitter[row - 1][item],
-                                     &jitter[row][item]);
-                        fast_vec_add(&vars->vel[group][row][item],
-                                     &vars->vel[group][row][item],
-                                     &jitter[row + 1][item]);
-                        fast_vec_scale(
-                            &vars->vel[group][row][item], &vars->vel[group][row][item], 0.333f);
+                        fast_vec_add(&jitter_strand_grid_vars->vel[group][row][strand_column],
+                                     &jitter[row - 1][strand_column],
+                                     &jitter[row][strand_column]);
+                        fast_vec_add(&jitter_strand_grid_vars->vel[group][row][strand_column],
+                                     &jitter_strand_grid_vars->vel[group][row][strand_column],
+                                     &jitter[row + 1][strand_column]);
+                        fast_vec_scale(&jitter_strand_grid_vars->vel[group][row][strand_column],
+                                       &jitter_strand_grid_vars->vel[group][row][strand_column],
+                                       0.333f);
                     }
-                    vars->timers[group][item] = D_L10_00161D64;
+                    jitter_strand_grid_vars->timers[group][strand_column] = D_L10_00161D64;
                 } else {
                     int k;
                     for (k = 1; k < 19; k++) {
                         int row = k;
-                        fast_vec_add(&vars->pos[group][row][item],
-                                     &vars->pos[group][row][item],
-                                     &vars->vel[group][row][item]);
+                        fast_vec_add(&jitter_strand_grid_vars->pos[group][row][strand_column],
+                                     &jitter_strand_grid_vars->pos[group][row][strand_column],
+                                     &jitter_strand_grid_vars->vel[group][row][strand_column]);
                     }
                 }
             }

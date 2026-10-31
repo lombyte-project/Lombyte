@@ -225,12 +225,12 @@ extern s32        FUN_L00_002667d0_c(void *) __asm__("FUN_L00_002667d0");
 s32               initialize_npc_dialogue(void *p, u8 *out_p) __asm__("FUN_L00_002668a0");
 
 s32 initialize_npc_dialogue(void *moby, u8 *out_p) {
-    Out002668a0       *out;
+    Out002668a0       *dialogue_trigger;
     s32                i;
     unsigned long long k;
     P002668a0         *dialogue_entries;
 
-    out = (Out002668a0 *)out_p;
+    dialogue_trigger = (Out002668a0 *)out_p;
     i = FUN_L00_002667d0_c(moby);
     if (i == -1) {
         return -1;
@@ -238,16 +238,17 @@ s32 initialize_npc_dialogue(void *moby, u8 *out_p) {
     if (l00_moby_dialogue_entry_lists[i] == 0) {
         return -1;
     }
-    out->f09 = 1;
-    out->f38 = D_L00_0015F5CC;
-    out->f04 = -1;
-    out->f36 = 0;
+    dialogue_trigger->f09 = 1;
+    dialogue_trigger->f38 = D_L00_0015F5CC;
+    dialogue_trigger->f04 = -1;
+    dialogue_trigger->f36 = 0;
     dialogue_entries = l00_moby_dialogue_entry_lists[i];
-    out->f3C = (u32)dialogue_entries;
+    dialogue_trigger->f3C = (u32)dialogue_entries;
     if (level_object_states[i].state != 0 && dialogue_entries->f08 == 0) {
-        out->f36 = dialogue_entries->f06;
+        dialogue_trigger->f36 = dialogue_entries->f06;
     }
-    out->f08 = ((u8 *)out->f3C)[out->f36 * 0x1C + (k = 0x10)] & 1;
+    dialogue_trigger->f08 =
+        ((u8 *)dialogue_trigger->f3C)[dialogue_trigger->f36 * 0x1C + (k = 0x10)] & 1;
     return i;
 }
 

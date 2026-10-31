@@ -65,7 +65,7 @@ extern char rocket_impact_effect_origin[] __asm__("D_L11_00174860");
 void update_ship_rocket(struct Moby *moby) __asm__("FUN_L11_003094f8");
 
 void update_ship_rocket(struct Moby *moby) {
-    Missile_94f8 *data = (Missile_94f8 *)moby->pvars;
+    Missile_94f8 *rocket_vars = (Missile_94f8 *)moby->pvars;
     Vec4f        *pos;
     Vec4          previous_pos, spray, offset, velocity, random;
     float         fraction;
@@ -80,7 +80,8 @@ void update_ship_rocket(struct Moby *moby) {
     random.f[2] = random_float_between(-1.0f, 1.0f);
     velocity.q = random.q;
     fast_vec_normalize(&velocity, &velocity, random_float_between(0.1f, 0.2f) * frame_time);
-    fast_vec_normalize(&offset, &data->step, -random_float_between(frame_time * 0.1f, frame_time));
+    fast_vec_normalize(
+        &offset, &rocket_vars->step, -random_float_between(frame_time * 0.1f, frame_time));
     fast_vec_add(&velocity, &velocity, &offset);
     FUN_L00_002712b8_94f8(&moby->pos,
                           &velocity,
@@ -97,8 +98,9 @@ void update_ship_rocket(struct Moby *moby) {
     for (fraction = 0.0f; fraction < 1.0f; fraction += 0.33333334f) {
         unsigned char *particle;
         fast_vec_normalize(&offset,
-                           &data->step,
-                           random_float_between(fraction, fraction + 0.33333334f) * data->speed);
+                           &rocket_vars->step,
+                           random_float_between(fraction, fraction + 0.33333334f) *
+                               rocket_vars->speed);
         fast_vec_add(&offset, &offset, &moby->pos);
         particle = FUN_L00_002712b8_94f8(&offset,
                                          &velocity,
@@ -125,40 +127,40 @@ void update_ship_rocket(struct Moby *moby) {
             &offset, &random, 0x4f007fff, 0x1fffffff, scale_game_frames(5), 1, 20000.0f);
     }
     pos = &moby->pos;
-    target = data->target;
+    target = rocket_vars->target;
     if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
-        fast_vec_dist(&data->target_pos, &target->pos) < 3.0f) {
-        moby->rot.z =
-            fast_arc_tan(data->target->pos.x - moby->pos.x, data->target->pos.y - moby->pos.y);
-        moby->rot.y = -fast_arc_tan(vector_distance_xy(pos, &data->target->pos),
-                                    data->target->pos.z - moby->pos.z);
-        qcopy(&data->target_pos, &data->target->pos);
+        fast_vec_dist(&rocket_vars->target_pos, &target->pos) < 3.0f) {
+        moby->rot.z = fast_arc_tan(rocket_vars->target->pos.x - moby->pos.x,
+                                   rocket_vars->target->pos.y - moby->pos.y);
+        moby->rot.y = -fast_arc_tan(vector_distance_xy(pos, &rocket_vars->target->pos),
+                                    rocket_vars->target->pos.z - moby->pos.z);
+        qcopy(&rocket_vars->target_pos, &rocket_vars->target->pos);
     } else {
         approach_angle(&moby->rot.z,
-                       &data->turn_speed,
+                       &rocket_vars->turn_speed,
                        moby->rot.z,
                        frame_time_sq * 251.32741f,
                        frame_time_sq * 251.32741f,
                        frame_time * 2513.2742f);
         approach_angle(&moby->rot.y,
-                       &data->turn_speed,
+                       &rocket_vars->turn_speed,
                        moby->rot.y,
                        frame_time_sq * 251.32741f,
                        frame_time_sq * 251.32741f,
                        frame_time * 2513.2742f);
-        data->target = 0;
+        rocket_vars->target = 0;
     }
-    build_spherical_offset(&data->step, data->speed, moby->rot.z, -moby->rot.y);
-    fast_vec_add(pos, pos, &data->step);
+    build_spherical_offset(&rocket_vars->step, rocket_vars->speed, moby->rot.z, -moby->rot.y);
+    fast_vec_add(pos, pos, &rocket_vars->step);
     if (moby->pos.x < 2.0f || 1021.0f < moby->pos.x || moby->pos.y < 2.0f ||
         1021.0f < moby->pos.y || moby->pos.z < 2.0f || 1021.0f < moby->pos.z) {
         mark_moby_for_removal(moby);
         return;
     }
     moby_point_position(moby, 1, &spray);
-    if (collision_line(&previous_pos, &spray, 0, data->collision, 0)) {
+    if (collision_line(&previous_pos, &spray, 0, rocket_vars->collision, 0)) {
         FUN_L00_0025e450_94f8(moby,
-                              data,
+                              rocket_vars,
                               rocket_impact_effect_origin,
                               2.0f,
                               10.0f,
@@ -178,6 +180,6 @@ void update_ship_rocket(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (fast_dec_timer(&data->timer))
+    if (fast_dec_timer(&rocket_vars->timer))
         mark_moby_for_removal(moby);
 }

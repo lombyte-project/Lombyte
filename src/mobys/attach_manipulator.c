@@ -26,7 +26,7 @@ void attach_manipulator(MobyAttachOwner *owner,
                         s32              slot_index,
                         Manipulator     *manip) __asm__("FUN_0020cb10");
 
-void attach_manipulator(MobyAttachOwner *owner, s32 slot_index, Manipulator *manip) {
+void attach_manipulator(MobyAttachOwner *source_moby, s32 slot_index, Manipulator *manip) {
     if (manip->unk1 == 0) {
         u8 *slot_record;
 
@@ -37,13 +37,14 @@ void attach_manipulator(MobyAttachOwner *owner, s32 slot_index, Manipulator *man
         manip->unk24 = 1.0f;
         manip->unk28 = 1.0f;
 
-        slot_record = *(u8 **)((u8 *)(*(s32 *)((u8 *)owner->unk24 + 0x1C) + manip->unk0 * 4) + 4);
+        slot_record =
+            *(u8 **)((u8 *)(*(s32 *)((u8 *)source_moby->unk24 + 0x1C) + manip->unk0 * 4) + 4);
         {
             u8 record_byte_offset = *slot_record;
             manip->unk4 = (void *)((slot_record[record_byte_offset + 4] << 6) + 0x70000000);
         }
-        manip->unk8 = owner->unk64;
-        owner->unk64 = manip;
+        manip->unk8 = source_moby->unk64;
+        source_moby->unk64 = manip;
     }
 }
 

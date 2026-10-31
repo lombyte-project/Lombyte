@@ -56,7 +56,7 @@ void append_billboard_batch(void) {
     f32              distance;
     f32              radius;
     s32              record_index;
-    BillboardRecord *record;
+    BillboardRecord *billboard_record;
     s64              color;
     s64              x;
     s32              y;
@@ -70,11 +70,11 @@ void append_billboard_batch(void) {
     vu1_add_g_sregister(0x42, 0x8000000048);
     for (record_index = 0; record_index < 16; record_index++) {
         records = billboard_records;
-        record = records + record_index;
-        if (record->active_count <= 0) {
+        billboard_record = records + record_index;
+        if (billboard_record->active_count <= 0) {
             continue;
         }
-        fast_vec_sub(&projected_position, record, camera_position);
+        fast_vec_sub(&projected_position, billboard_record, camera_position);
         projected_position.w = 1.0f;
         distance = fast_vec_length(&projected_position);
         fast_vec_scale(&projected_position, &projected_position, 1024.0f);
@@ -82,13 +82,13 @@ void append_billboard_batch(void) {
         multiply_vector_components(
             &clip_position, &projected_position, (char *)&view_context + 0x180);
         if (is_vector_outside_clip(&clip_position) != 0) {
-            fill_transfer_words(record, 0, 0x20);
+            fill_transfer_words(billboard_record, 0, 0x20);
             continue;
         }
         fast_vec_scale(&projected_position,
                        &projected_position,
                        view_context.projection_scale / projected_position.w);
-        color = (record->alpha << 24) | 0x808080;
+        color = (billboard_record->alpha << 24) | 0x808080;
         x = truncate_float_to_s32(projected_position.x * 16.0f) + 0x8000;
         y = truncate_float_to_s32(projected_position.y * 16.0f) + 0x8000;
         packed_position =
@@ -100,10 +100,11 @@ void append_billboard_batch(void) {
         } else if (distance < 2.0f) {
             distance = 2.0f;
         }
-        radius = record->radius_scale * (convert_integer_to_float(record->alpha + 16) * 0.015625f) *
+        radius = billboard_record->radius_scale *
+                 (convert_integer_to_float(billboard_record->alpha + 16) * 0.015625f) *
                  ((24.0f - distance) * 16.0f);
-        sine_offset = truncate_float_to_s32(radius * fast_sin(record->angle));
-        cosine_offset = truncate_float_to_s32(radius * fast_cos(record->angle));
+        sine_offset = truncate_float_to_s32(radius * fast_sin(billboard_record->angle));
+        cosine_offset = truncate_float_to_s32(radius * fast_cos(billboard_record->angle));
         render_packet_cursor.tag->tag = 0x10000009;
         render_packet_cursor.tag->addr = 0;
         render_packet_cursor.tag->vif0 = 0;

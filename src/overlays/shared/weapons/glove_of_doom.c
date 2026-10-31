@@ -122,7 +122,7 @@ void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position,
 
 void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position,
                                            V2c7320 *target_position,
-                                           f32     *out,
+                                           f32     *launch_velocity,
                                            f32      speed,
                                            f32      unused,
 
@@ -155,18 +155,19 @@ void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position,
         effective_target_position.f[1] = u.f[1];
     }
     horizontal_speed = frame_time * 8.5f;
-    out[0] = fast_cos(launch_heading) * horizontal_speed;
-    out[1] = fast_sin(launch_heading) * horizontal_speed;
-    *(s32 *)&out[2] = 0;
-    out[2] = fn_2c7320(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
+    launch_velocity[0] = fast_cos(launch_heading) * horizontal_speed;
+    launch_velocity[1] = fast_sin(launch_heading) * horizontal_speed;
+    *(s32 *)&launch_velocity[2] = 0;
+    launch_velocity[2] =
+        fn_2c7320(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
     if (pad_held[0] & 5) {
         k = 3.5f / horizontal_speed;
     } else {
         k = 2.5f / horizontal_speed;
     }
     v = speed * k * 0.5f;
-    if (v < out[2]) {
-        out[2] = v;
+    if (v < launch_velocity[2]) {
+        launch_velocity[2] = v;
     }
 }
 
@@ -176,13 +177,16 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby,
                                           CarrierVars *vars,
                                           OvlVec4     *grip) __asm__("FUN_L00_002c7548");
 
-void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip) {
+void compute_glove_of_doom_throw_velocity(struct Moby *moby,
+                                          CarrierVars *throw_carrier_vars,
+
+                                          OvlVec4 *grip) {
     Vec_2c7548   throw_origin;
     Mat3_2c7548  basis;
     Mat_2c7548   matrix;
     Vec_2c7548   direction, target, arc, saved, probe;
     struct Moby *held;
-    float       *out;
+    float       *held_throw_velocity;
     float        horizontal, radius, angle, vertical, slope, distance, root;
     int          hit;
     float        speed;
@@ -191,10 +195,10 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, 
     *(u128 *)pos = grip->q;
     copy_matrix3x4(basis, l00_camera.unk0);
     transpose_rotation_matrix(matrix, basis);
-    held = vars->held;
+    held = throw_carrier_vars->held;
     if (held == 0)
         return;
-    out = (float *)held->pvars;
+    held_throw_velocity = (float *)held->pvars;
     *(u128 *)direction = 0;
     direction[0] = 1.0f;
     transform_vector_by_basis(direction, direction, hero.basis);
@@ -265,7 +269,7 @@ void compute_glove_of_doom_throw_velocity(struct Moby *moby, CarrierVars *vars, 
     }
     FUN_L00_002c7320_2c7548(pos,
                             target,
-                            out,
+                            held_throw_velocity,
                             frame_time_sq_macro * 9.0f,
                             0.00000999999975f,
                             (controller_state.held & 5) ? 3.5f : 2.5f);
@@ -290,7 +294,7 @@ void glove_of_doom_update(struct Moby *moby) {
     OvlVec4      local;
     OvlVec4      grip_bone_transform[4];
     OvlVec4      grip;
-    CarrierVars *vars = (CarrierVars *)moby->pvars;
+    CarrierVars *glove_carrier_vars = (CarrierVars *)moby->pvars;
 
     offset.q = 0;
     offset.f[0] = 0.01f;
@@ -299,17 +303,18 @@ void glove_of_doom_update(struct Moby *moby) {
     moby_point_position((u8 *)moby, 0, &pos);
     build_moby_bone_transform(moby, 0, grip_bone_transform);
     transform_vector(&local, &offset, grip_bone_transform);
-    fast_vec_add(&vars->grip, &pos, &local);
-    if (vars->held != 0) {
-        vars->held->collision_disable = 1;
+    fast_vec_add(&glove_carrier_vars->grip, &pos, &local);
+    if (glove_carrier_vars->held != 0) {
+        glove_carrier_vars->held->collision_disable = 1;
     }
-    if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD) {
-        vars->held = 0;
+    if (glove_carrier_vars->held == 0 || glove_carrier_vars->held->state == 0xFE ||
+        glove_carrier_vars->held->state == 0xFD) {
+        glove_carrier_vars->held = 0;
     }
     if (hero.state.current == HERO_STATE_LOOK) {
         hero_set_state(0x1E, 1);
     }
-    if (fast_dec_timer(&vars->timer) && !hero.item_use_locked) {
+    if (fast_dec_timer(&glove_carrier_vars->timer) && !hero.item_use_locked) {
         if ((hero.item_anim_active && hero.item_anim_frames == scale_game_frames(0x11)) ||
             ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1E &&
              get_ammo(-1)) ||
@@ -319,11 +324,11 @@ void glove_of_doom_update(struct Moby *moby) {
             moby->state = 3;
         }
     }
-    grip.q = vars->grip.q;
-    compute_glove_of_doom_throw_velocity(moby, vars, &grip);
+    grip.q = glove_carrier_vars->grip.q;
+    compute_glove_of_doom_throw_velocity(moby, glove_carrier_vars, &grip);
     switch (moby->state) {
     case GLOVE_INITIALIZE:
-        vars->held = 0;
+        glove_carrier_vars->held = 0;
         if (moby->anim_flags & 2) {
             moby->state = 2;
         } else {
@@ -337,7 +342,7 @@ void glove_of_doom_update(struct Moby *moby) {
     case GLOVE_IDLE:
         break;
     case GLOVE_RELEASE_HELD_MOBY:
-        if (vars->held != 0) {
+        if (glove_carrier_vars->held != 0) {
             if (D_00141680.deliveries < 0xFFFF) {
                 D_00141680.deliveries++;
             }
@@ -345,14 +350,15 @@ void glove_of_doom_update(struct Moby *moby) {
                 D_00141680.unkA2 = scale_game_frames(D_0015EEA4) / 600;
             }
             D_00141680.levels = D_00141680.levels | (1 << current_level_index) | 0x80000000;
-            release_glove_of_doom_held_moby(
-                (void *)&vars->grip, (u8 *)vars->held, vars->held->pvars);
-            vars->held = 0;
+            release_glove_of_doom_held_moby((void *)&glove_carrier_vars->grip,
+                                            (u8 *)glove_carrier_vars->held,
+                                            glove_carrier_vars->held->pvars);
+            glove_carrier_vars->held = 0;
         } else {
             allocate_voice_for_target_entry(0, 0, moby);
         }
         moby->state = 4;
-        vars->timer = scale_game_frames(0x14);
+        glove_carrier_vars->timer = scale_game_frames(0x14);
         break;
     case GLOVE_POST_RELEASE_WAIT:
         if (hero.state.current != 0x23 && !hero.item_anim_active) {
@@ -365,12 +371,12 @@ void glove_of_doom_update(struct Moby *moby) {
     case GLOVE_SKIP_HELD_MOBY_SYNC_AND_SPAWN:
         return;
     }
-    if (vars->held != 0) {
-        qcopy(&vars->held->pos, &vars->grip);
+    if (glove_carrier_vars->held != 0) {
+        qcopy(&glove_carrier_vars->held->pos, &glove_carrier_vars->grip);
     } else if (get_ammo(-1)) {
         qzero(&grip);
-        vars->held = (struct Moby *)spawn_glove_of_doom_held_moby(
-            (int)moby, (void *)&vars->grip, (void *)&grip);
+        glove_carrier_vars->held = (struct Moby *)spawn_glove_of_doom_held_moby(
+            (int)moby, (void *)&glove_carrier_vars->grip, (void *)&grip);
     }
 }
 

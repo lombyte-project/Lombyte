@@ -8,7 +8,9 @@ extern void FlushCache(s32);
 extern s32  sceGsExecLoadImage(sceGsLoadImage *, u128 *);
 void        hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immediate) __asm__("FUN_00200b10");
 
-void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immediate) {
+void hud_send_texture(
+
+    u32 texture_source_address, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immediate) {
     sceGsLoadImage  local;
     sceGsLoadImage *li;
     struct DmaTag  *tag;
@@ -34,13 +36,13 @@ void hud_send_texture(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, s32 immedi
     sceGsSetDefLoadImage(li, dbp, dbw, psm, 0, 0, 1 << wlog, 1 << hlog);
     if (immediate == 0) {
         render_packet_cursor.tag->tag = qwc | 0x30000000;
-        render_packet_cursor.tag->addr = data;
+        render_packet_cursor.tag->addr = texture_source_address;
         render_packet_cursor.tag->vif0 = 0;
         render_packet_cursor.tag->vif1 = qwc | 0x50000000;
         render_packet_cursor.tag++;
     } else {
         FlushCache(0);
-        sceGsExecLoadImage(li, (u128 *)data);
+        sceGsExecLoadImage(li, (u128 *)texture_source_address);
     }
 }
 

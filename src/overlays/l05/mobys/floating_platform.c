@@ -34,7 +34,7 @@ void floating_platform_update(unsigned char *moby) {
         FLOATING_PLATFORM_INITIALIZE = 0,
         FLOATING_PLATFORM_UPDATE_ROCKING = 1
     };
-    char  *data = ((char *)MOBY(moby)->pvars);
+    char  *floating_platform_vars = ((char *)MOBY(moby)->pvars);
     float  previous_position[4];
     float  previous_rotation[4];
     float  position_delta[4];
@@ -45,17 +45,17 @@ void floating_platform_update(unsigned char *moby) {
     float  rotation_y_phase;
     switch (moby[0x20]) {
     case FLOATING_PLATFORM_INITIALIZE:
-        *(int *)(data + 0x78) = truncate_float_to_s32(
+        *(int *)(floating_platform_vars + 0x78) = truncate_float_to_s32(
             scale_time(random_float_between((float)floating_platform_voice_interval_min_gp,
                                             (float)floating_platform_voice_interval_max_gp)));
-        *(float *)(data + 0x60) = random_angle_radians();
-        *(float *)(data + 0x6C) = random_angle_radians();
+        *(float *)(floating_platform_vars + 0x60) = random_angle_radians();
+        *(float *)(floating_platform_vars + 0x6C) = random_angle_radians();
         moby[0x20] = 1;
         break;
     case FLOATING_PLATFORM_UPDATE_ROCKING:
-        if (fast_dec_timer((int *)(data + 0x78))) {
+        if (fast_dec_timer((int *)(floating_platform_vars + 0x78))) {
             allocate_voice_for_target_entry(0, 0, moby);
-            *(int *)(data + 0x78) = truncate_float_to_s32(
+            *(int *)(floating_platform_vars + 0x78) = truncate_float_to_s32(
                 scale_time(random_float_between((float)floating_platform_voice_interval_min_gp,
                                                 (float)floating_platform_voice_interval_max_gp)));
         }
@@ -64,18 +64,20 @@ void floating_platform_update(unsigned char *moby) {
         previous_rotation_ptr = previous_rotation;
         current_rotation = (char *)moby + 0x40;
         qcopy(previous_rotation_ptr, current_rotation);
-        rotation_y_phase = fast_add_rotations(*(float *)(data + 0x60),
+        rotation_y_phase = fast_add_rotations(*(float *)(floating_platform_vars + 0x60),
                                               floating_platform_rotation_y_phase_rate_degrees_gp *
                                                   DEG_TO_RAD * frame_time);
         k = floating_platform_rotation_x_phase_rate_degrees_gp * DEG_TO_RAD * frame_time;
-        *(float *)(data + 0x60) = rotation_y_phase;
-        *(float *)(data + 0x6C) = fast_add_rotations(*(float *)(data + 0x6C), k);
+        *(float *)(floating_platform_vars + 0x60) = rotation_y_phase;
+        *(float *)(floating_platform_vars + 0x6C) =
+            fast_add_rotations(*(float *)(floating_platform_vars + 0x6C), k);
         MOBY(moby)->rot.y = floating_platform_rotation_y_amplitude_degrees_gp * DEG_TO_RAD *
-                            fast_sin(*(float *)(data + 0x60));
+                            fast_sin(*(float *)(floating_platform_vars + 0x60));
         MOBY(moby)->rot.x = floating_platform_rotation_x_amplitude_degrees_gp * DEG_TO_RAD *
-                            fast_sin(*(float *)(data + 0x6C));
+                            fast_sin(*(float *)(floating_platform_vars + 0x6C));
         fast_vec_sub(position_delta, position, previous_position);
-        update_entity_matrix(data + 0x20, position_delta, previous_rotation_ptr, current_rotation);
+        update_entity_matrix(
+            floating_platform_vars + 0x20, position_delta, previous_rotation_ptr, current_rotation);
         break;
     }
 }

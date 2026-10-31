@@ -181,12 +181,12 @@ extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
 void update_enabled_item_tint_from_hero(void) __asm__("FUN_L15_00200788");
 
 void update_enabled_item_tint_from_hero(void) {
-    unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
-    int            index = *(int *)(base + 0x10B8);
+    unsigned char *hero_state_base = ((unsigned char *)&D_0013E533) + 0xE1D;
+    int            index = *(int *)(hero_state_base + 0x10B8);
     if (index >= 0 && *(D_0013E05A + 0x4C6 + index) != 0) {
-        int first = *(int *)(base + 0x1090);
-        if (first != 0) {
-            update_item_tint_from_hero(first, *(int *)(base + 0x2080));
+        int item_moby = *(int *)(hero_state_base + 0x1090);
+        if (item_moby != 0) {
+            update_item_tint_from_hero(item_moby, *(int *)(hero_state_base + 0x2080));
         }
     }
 }
@@ -199,28 +199,28 @@ extern void  update_moby_vertical_oscillation(float, float, char *, float *, flo
 void update_hero_bobbing_and_target_position(void) __asm__("FUN_L15_002007d8");
 
 void update_hero_bobbing_and_target_position(void) {
-    struct Hero *base = &hero;
-    if (base->state.current == 0x6B && base->hoverboard_airborne == 0) {
+    struct Hero *hero_instance = &hero;
+    if (hero_instance->state.current == 0x6B && hero_instance->hoverboard_airborne == 0) {
         char *position_target;
         float position_offset[4];
         float rotation_matrix[16];
         update_moby_vertical_oscillation(1.1f,
                                          frame_time * 5.2359877f,
-                                         ((char *)base->moby),
-                                         (float *)(&base->unk6A8),
-                                         (float *)(&base->unk6AC));
-        position_target = ((char *)base->hoverboard_moby);
+                                         ((char *)hero_instance->moby),
+                                         (float *)(&hero_instance->unk6A8),
+                                         (float *)(&hero_instance->unk6AC));
+        position_target = ((char *)hero_instance->hoverboard_moby);
         if (position_target != 0) {
             char *hero_moby;
-            hero_moby = ((char *)base->moby);
+            hero_moby = ((char *)hero_instance->moby);
             qcopy(position_target + 0x10, hero_moby + 0x10);
             *(u128 *)position_offset = 0;
             position_offset[2] = 0.21f;
             transform_vector_by_basis(position_offset, position_offset, hero_moby + 0xC0);
             euler_rotation_matrix(rotation_matrix, &D_L15_0017ACC0_lui);
             transform_vector(position_offset, position_offset, rotation_matrix);
-            fast_vec_add(((char *)base->hoverboard_moby) + 0x10,
-                         ((char *)base->hoverboard_moby) + 0x10,
+            fast_vec_add(((char *)hero_instance->hoverboard_moby) + 0x10,
+                         ((char *)hero_instance->hoverboard_moby) + 0x10,
                          position_offset);
         }
     }
@@ -237,16 +237,16 @@ extern int  hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 
 void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
-    unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
+    unsigned char *hero_state_for_vehicle_exit = ((unsigned char *)&D_0013E533) + 0xE1D;
     unsigned char *hero_state_bytes;
     int            flag_clear_target;
     void          *moby_to_remove;
     char          *restored_hero_moby;
-    if (base[0x20A4] == 2) {
-        int animation_parameter_value = *(short *)(base + 0x1634);
+    if (hero_state_for_vehicle_exit[0x20A4] == 2) {
+        int animation_parameter_value = *(short *)(hero_state_for_vehicle_exit + 0x1634);
         if (animation_parameter_value != -1) {
             set_animation_parameter(animation_parameter_value, 0);
-            *(short *)(base + 0x1634) = -1;
+            *(short *)(hero_state_for_vehicle_exit + 0x1634) = -1;
         }
     }
     reset_hero_easing_records();

@@ -32,22 +32,22 @@ void reset_selected_moby_to_current_placement(void *moby_v) __asm__("FUN_L05_003
 
 void reset_selected_moby_to_current_placement(void *moby_v) {
     struct Moby *moby = moby_v;
-    char        *data = ((char *)moby->pvars);
-    char        *spawn = func_L05_0031AAA8_19510(moby, *(short *)(data + 0xB6));
+    char        *taxi_vars = ((char *)moby->pvars);
+    char        *spawn = func_L05_0031AAA8_19510(moby, *(short *)(taxi_vars + 0xB6));
     char        *position;
     if (spawn != 0) {
         int   index;
-        char *slot = data;
-        char *entry;
+        char *slot = taxi_vars;
+        char *placement_table_base;
         position = spawn + 0x10;
-        slot += *(short *)(data + 0xB4) << 2;
+        slot += *(short *)(taxi_vars + 0xB4) << 2;
         index = *(int *)(slot + 0x80) << 7;
-        entry = (char *)l05_cuboids;
-        qcopy(position, (void *)(index + (int)entry + 0x30));
-        qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
+        placement_table_base = (char *)l05_cuboids;
+        qcopy(position, (void *)(index + (int)placement_table_base + 0x30));
+        qcopy(spawn + 0x40, (void *)(index + (int)placement_table_base + 0x70));
         initialize_taxi_stop_state(spawn);
     }
-    *(short *)(data + 0xB4) = *(unsigned short *)(data + 0xB6);
+    *(short *)(taxi_vars + 0xB4) = *(unsigned short *)(taxi_vars + 0xB6);
 }
 
 /* Finds the pool moby in this moby's class list whose data id at 0xB4 matches. */
@@ -58,18 +58,18 @@ char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby,
 char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby, int id) {
     unsigned short *moby_index_entry = D_L05_001ABCC0_9598[list_owner_moby[0x21]];
     char           *pool;
-    int             idx;
+    int             candidate_moby_pool_index;
     if (moby_index_entry != 0) {
         pool = D_L05_0015FFD8_9598;
         do {
-            idx = *moby_index_entry & 0x7FFF;
-            if (*(short *)(((M_9598 *)pool)[idx].data + 0xB4) == id)
+            candidate_moby_pool_index = *moby_index_entry & 0x7FFF;
+            if (*(short *)(((M_9598 *)pool)[candidate_moby_pool_index].data + 0xB4) == id)
                 goto found;
         } while ((short)*moby_index_entry++ >= 0);
     }
     return 0;
 found:
-    return (char *)&((M_9598 *)D_L05_0015FFD8_9598)[idx];
+    return (char *)&((M_9598 *)D_L05_0015FFD8_9598)[candidate_moby_pool_index];
 }
 
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
@@ -163,8 +163,8 @@ void apply_moby_position_and_rotation_wobble(char *moby) {
 void transform_moby_vector_table_to_world_space(char *moby) __asm__("FUN_L05_003198e8");
 
 void transform_moby_vector_table_to_world_space(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    int   vector_table_index = *(int *)(data + 0xDC);
+    char *moby_private_vars = ((char *)MOBY(moby)->pvars);
+    int   vector_table_index = *(int *)(moby_private_vars + 0xDC);
     if (vector_table_index != -1) {
         char *vector_table_entry = ((char *)l05_paths[vector_table_index]);
         if (*(int *)vector_table_entry == 7) {
@@ -180,7 +180,7 @@ void transform_moby_vector_table_to_world_space(char *moby) {
             }
             player_hero = &hero;
             *(unsigned short *)&player_hero->path_constrain_pending =
-                *(unsigned short *)(data + 0xDC);
+                *(unsigned short *)(moby_private_vars + 0xDC);
         }
     }
 }

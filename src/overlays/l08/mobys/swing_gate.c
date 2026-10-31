@@ -39,8 +39,8 @@ extern struct Moby *D_L08_0015FFD8;
 void update_swing_gate(struct Moby *moby) __asm__("FUN_L08_002ea4c0");
 
 void update_swing_gate(struct Moby *moby) {
-    SwingGateVars *vars = (SwingGateVars *)moby->pvars;
-    f32            progress = *(f32 *)D_L08_0015FFD8[vars->driver].pvars;
+    SwingGateVars *swing_gate_vars = (SwingGateVars *)moby->pvars;
+    f32            progress = *(f32 *)D_L08_0015FFD8[swing_gate_vars->driver].pvars;
     Vec4           gate_rotation_matrix[4];
     Vec4           gate_position_offset;
     f32            yaw;
@@ -56,44 +56,48 @@ void update_swing_gate(struct Moby *moby) {
     }
     if (moby->state == 0) {
         moby->state = 1;
-        qcopy(&vars->home, &moby->pos);
+        qcopy(&swing_gate_vars->home, &moby->pos);
         return;
     }
     if (moby->state != 1)
         return;
-    yaw = fast_subtract_rotations(vars->open_deg * DEG_TO_RAD, vars->shut_deg * DEG_TO_RAD);
-    yaw = fast_add_rotations(yaw * progress, vars->shut_deg * DEG_TO_RAD);
+    yaw = fast_subtract_rotations(swing_gate_vars->open_deg * DEG_TO_RAD,
+                                  swing_gate_vars->shut_deg * DEG_TO_RAD);
+    yaw = fast_add_rotations(yaw * progress, swing_gate_vars->shut_deg * DEG_TO_RAD);
     if (fast_difference_between_rotations(moby->rot.y, yaw) != 0.0f) {
         moby->rot.y = yaw;
         if (moby->oclass == 0x1D4) {
-            if (!voice_is_playing(moby, vars->voice)) {
-                vars->voice = allocate_voice_for_target_entry(0, 4, moby);
-                vendor_volume(vars->voice, 1);
-            } else if (((VoiceView *)(((char *)&voice_pool) + vars->voice * 0x70))->volume <
-                       0x400) {
-                vendor_volume(vars->voice,
-                              ((VoiceView *)(((char *)&voice_pool) + vars->voice * 0x70))->volume +
-                                  0x400 / scale_game_frames(60));
+            if (!voice_is_playing(moby, swing_gate_vars->voice)) {
+                swing_gate_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
+                vendor_volume(swing_gate_vars->voice, 1);
+            } else if (((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))
+                           ->volume < 0x400) {
+                vendor_volume(
+                    swing_gate_vars->voice,
+                    ((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))->volume +
+                        0x400 / scale_game_frames(60));
             }
         }
-    } else if (moby->oclass == 0x1D4 && voice_is_playing(moby, vars->voice)) {
-        if (((VoiceView *)(((char *)&voice_pool) + vars->voice * 0x70))->volume < 0x100) {
-            release_voice_slot(vars->voice);
-            vars->voice = -1;
+    } else if (moby->oclass == 0x1D4 && voice_is_playing(moby, swing_gate_vars->voice)) {
+        if (((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))->volume <
+            0x100) {
+            release_voice_slot(swing_gate_vars->voice);
+            swing_gate_vars->voice = -1;
         } else {
-            vendor_volume(vars->voice,
-                          ((VoiceView *)(((char *)&voice_pool) + vars->voice * 0x70))->volume -
-                              0x400 / scale_game_frames(60));
+            vendor_volume(
+                swing_gate_vars->voice,
+                ((VoiceView *)(((char *)&voice_pool) + swing_gate_vars->voice * 0x70))->volume -
+                    0x400 / scale_game_frames(60));
         }
     }
     euler_rotation_matrix(gate_rotation_matrix, &moby->rot);
     transform_vector(&gate_position_offset, &gate_position_offset, gate_rotation_matrix);
-    fast_vec_add(&moby->pos, &vars->home, &gate_position_offset);
+    fast_vec_add(&moby->pos, &swing_gate_vars->home, &gate_position_offset);
     if (progress == 1.0f && moby->oclass == 0x1D4) {
-        D_0013D388[vars->flag + 0x30] = 1;
+        D_0013D388[swing_gate_vars->flag + 0x30] = 1;
         moby->state = 2;
         allocate_voice_for_target_entry(1, 0, moby);
-        if (moby->oclass == 0x1D4 && voice_is_playing(moby, vars->voice))
-            release_voice_slot(vars->voice);
+        if (moby->oclass == 0x1D4 && voice_is_playing(moby, swing_gate_vars->voice))
+            release_voice_slot(swing_gate_vars->voice);
     }
 }

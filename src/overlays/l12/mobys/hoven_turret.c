@@ -34,14 +34,14 @@ void        update_hoven_turret_camera(struct Moby *moby) __asm__("FUN_L12_00303
 
 void update_hoven_turret_camera(struct Moby *moby) {
     float position_and_rotation[8];
-    char *data = (char *)moby->pvars;
+    char *turret_state = (char *)moby->pvars;
     snap_scripted_camera_to_pose(moby);
     transform_vector_by_basis(
         position_and_rotation, &hoven_turret_camera_local_offset, &moby->rot_row0);
     fast_vec_add(position_and_rotation, position_and_rotation, &moby->pos);
     set_camera_position(position_and_rotation);
     position_and_rotation[4] = 0;
-    position_and_rotation[5] = -*(float *)(data + 0x74);
+    position_and_rotation[5] = -*(float *)(turret_state + 0x74);
     position_and_rotation[6] = fast_add_rotations(1.5707964f, moby->rot.z);
     set_camera_rotation(position_and_rotation + 4);
 }
@@ -57,14 +57,14 @@ typedef struct {
 void update_hoven_turret_target_alignment_timer(void *moby) __asm__("FUN_L12_00303370");
 
 void update_hoven_turret_target_alignment_timer(void *moby) {
-    Data_303370 *data = (Data_303370 *)((struct Moby *)moby)->pvars;
+    Data_303370 *turret_alignment_state = (Data_303370 *)((struct Moby *)moby)->pvars;
     int          found = 0;
     int          i;
     Vec4         position;
 
     for (i = 0; i < 10; i++) {
-        if (data->targets[i] != -1) {
-            Moby *target = &D_L12_0015FFD8[data->targets[i]];
+        if (turret_alignment_state->targets[i] != -1) {
+            Moby *target = &D_L12_0015FFD8[turret_alignment_state->targets[i]];
             float yaw_limit;
             float pitch_limit;
             float yaw;
@@ -90,11 +90,11 @@ void update_hoven_turret_target_alignment_timer(void *moby) {
         }
     }
     if (!found) {
-        fast_dec_timer(&data->timer);
+        fast_dec_timer(&turret_alignment_state->timer);
     } else {
-        data->timer += 2;
-        if (scale_game_frames(30) < data->timer)
-            data->timer = scale_game_frames(30);
+        turret_alignment_state->timer += 2;
+        if (scale_game_frames(30) < turret_alignment_state->timer)
+            turret_alignment_state->timer = scale_game_frames(30);
     }
 }
 
@@ -213,7 +213,7 @@ void hoven_turret_update(struct Moby *moby) {
         HOVEN_TURRET_STATE_DESTRUCTION_EFFECTS = 7,
         HOVEN_TURRET_STATE_SAVE_DATA = 8
     };
-    Data_304920 *data = *(Data_304920 **)&moby->pvars;
+    Data_304920 *hoven_turret_state = *(Data_304920 **)&moby->pvars;
 
     ((Snd *)(D_0013E533 + 0x1D))->f6C = moby;
     switch (moby->state) {
@@ -223,33 +223,33 @@ void hoven_turret_update(struct Moby *moby) {
         if (visited52[moby->mission + (current_level_index << 4)] == 0xFF) {
             moby->state = 6;
         } else {
-            attach_manipulator(moby, 0, data);
+            attach_manipulator(moby, 0, hoven_turret_state);
             moby->state = 3;
-            data->f84 = 0xC8;
+            hoven_turret_state->f84 = 0xC8;
             moby->rot.y = 0.0f;
-            data->f70 = scale_game_frames(0x1E);
-            data->f72 = 0;
-            data->f78 = 0.0f;
-            data->f7C = 0.0f;
-            data->fA0 = moby->pos.z;
-            data->f98 = -1;
+            hoven_turret_state->f70 = scale_game_frames(0x1E);
+            hoven_turret_state->f72 = 0;
+            hoven_turret_state->f78 = 0.0f;
+            hoven_turret_state->f7C = 0.0f;
+            hoven_turret_state->fA0 = moby->pos.z;
+            hoven_turret_state->f98 = -1;
             moby->rot.z = 3.1415927f;
             ((Snd *)(D_0013E533 + 0x1D))->f6C = moby;
         }
         break;
     case HOVEN_TURRET_STATE_WAIT_FOR_BOARDING: {
         {
-            Vec_304920 out;
+            Vec_304920 turret_world_point;
 
-            moby_point_position(moby, 3, out);
+            moby_point_position(moby, 3, turret_world_point);
         }
         if (vector_distance_xy(((float *)&moby->pos),
                                ((Hero *)(D_0013E533 + 0xE1D))->motion.pos.f) < 7.0f ||
             ((Hero *)(D_0013E533 + 0xE1D))->ground_moby == moby) {
-            moby->pos.z = moby->pos.z + ((data->fA0 - 1.2f) - moby->pos.z) * 0.11f;
-            data->fA4 =
+            moby->pos.z = moby->pos.z + ((hoven_turret_state->fA0 - 1.2f) - moby->pos.z) * 0.11f;
+            hoven_turret_state->fA4 =
                 fast_add_rotations(
-                    data->fA4,
+                    hoven_turret_state->fA4,
                     fast_add_rotations(
                         fast_subtract_rotations(
                             fast_arc_tan(
@@ -259,14 +259,15 @@ void hoven_turret_update(struct Moby *moby) {
                         1.5707964f) *
                         0.01f) *
                 0.9f;
-            moby->rot.z = fast_add_rotations(moby->rot.z, data->fA4);
+            moby->rot.z = fast_add_rotations(moby->rot.z, hoven_turret_state->fA4);
         } else {
-            if (moby->pos.z < data->fA0) {
+            if (moby->pos.z < hoven_turret_state->fA0) {
                 moby->pos.z = moby->pos.z + D_0015ED6C_gp;
             } else {
-                moby->pos.z = data->fA0;
+                moby->pos.z = hoven_turret_state->fA0;
             }
-            if (((Hero *)(D_0013E533 + 0xE1D))->ground_moby != moby && data->f98 != -1) {
+            if (((Hero *)(D_0013E533 + 0xE1D))->ground_moby != moby &&
+                hoven_turret_state->f98 != -1) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
             }
         }
@@ -279,7 +280,7 @@ void hoven_turret_update(struct Moby *moby) {
                 }
                 hero_set_state(0x32, 1);
                 update_hoven_turret_camera((char *)moby);
-                data->f8C = 200.0f;
+                hoven_turret_state->f8C = 200.0f;
                 moby->hit_slot = 0xFF;
                 D_L12_00161F20++;
                 moby->state = 4;
@@ -296,40 +297,41 @@ void hoven_turret_update(struct Moby *moby) {
             add_draw_callback(draw_hoven_turret_hud, moby);
         }
         update_hoven_turret_target_alignment_timer(moby);
-        if (fast_dec_timer(&data->f90)) {
+        if (fast_dec_timer(&hoven_turret_state->f90)) {
             Hit_304920 *hit = (Hit_304920 *)FUN_L00_0025a420(moby, 0x10000, 0);
             if (hit != 0) {
-                data->f90 = scale_game_frames(4);
-                data->f8C = data->f8C - hit->f2C;
+                hoven_turret_state->f90 = scale_game_frames(4);
+                hoven_turret_state->f8C = hoven_turret_state->f8C - hit->f2C;
             }
             moby->hit_slot = 0xFF;
         }
         if (D_L12_00161F24 == 0) {
             if (((Hero *)(D_0013E533 + 0xE1D))->ship_flags & 1) {
-                if (data->f8C > 100.0f) {
+                if (hoven_turret_state->f8C > 100.0f) {
                     D_L12_00161F20--;
                 }
                 ((Hero *)(D_0013E533 + 0xE1D))->ship_flags = 0;
                 hero_respawn();
             }
-            if (data->f8C <= 0.0f) {
+            if (hoven_turret_state->f8C <= 0.0f) {
                 D_L12_00161F04 = 1;
-                data->fAC = scale_game_frames(0x78);
+                hoven_turret_state->fAC = scale_game_frames(0x78);
                 moby->state = 7;
                 break;
             }
         }
-        if (data->f94 != -1 &&
-            (signed char)((struct Moby *)((data->f94 << 8) + (*(int *)&D_L12_0015FFD8_gp)))->state <
-                0) {
+        if (hoven_turret_state->f94 != -1 &&
+            (signed char)((struct Moby *)((hoven_turret_state->f94 << 8) +
+                                          (*(int *)&D_L12_0015FFD8_gp)))
+                    ->state < 0) {
             if (D_L12_0015F5C4_macro == 2) {
-                if (data->b1 != 0) {
-                    detach_manipulator(moby, data);
+                if (hoven_turret_state->b1 != 0) {
+                    detach_manipulator(moby, hoven_turret_state);
                 }
                 if (moby->prev_seq != 0) {
                     set_moby_animation(moby, 0, 0);
                 }
-                moby->pos.z = data->fA0;
+                moby->pos.z = hoven_turret_state->fA0;
                 moby->rot.z = 3.1415927f;
             } else {
                 jet_clear_persistent(moby->mission);
@@ -369,60 +371,63 @@ void hoven_turret_update(struct Moby *moby) {
             }
             joy[1] = y;
             target_yaw_step = hoven_turret_yaw_input_rate * 0.017453292f * D_0015ED6C_gp * -joy[0];
-            if ((data->f7C >= 0.0f && data->f7C < target_yaw_step) ||
-                (data->f7C <= 0.0f && target_yaw_step < data->f7C)) {
-                approach_value(&data->f7C,
+            if ((hoven_turret_state->f7C >= 0.0f && hoven_turret_state->f7C < target_yaw_step) ||
+                (hoven_turret_state->f7C <= 0.0f && target_yaw_step < hoven_turret_state->f7C)) {
+                approach_value(&hoven_turret_state->f7C,
                                target_yaw_step,
                                hoven_turret_yaw_acceleration_rate * 0.017453292f *
                                    frame_time_sq_macro);
             } else {
-                approach_value(&data->f7C,
+                approach_value(&hoven_turret_state->f7C,
                                target_yaw_step,
                                hoven_turret_yaw_braking_rate * 0.017453292f * frame_time_sq_macro);
             }
-            moby->rot.z = fast_add_rotations(moby->rot.z, data->f7C);
+            moby->rot.z = fast_add_rotations(moby->rot.z, hoven_turret_state->f7C);
             target_pitch_step =
                 -(hoven_turret_pitch_input_rate * 0.017453292f * D_0015ED6C_gp) * -joy[1];
-            if ((data->f78 >= 0.0f && data->f78 < target_pitch_step) ||
-                (data->f78 <= 0.0f && target_pitch_step < data->f78)) {
-                approach_value(&data->f78,
+            if ((hoven_turret_state->f78 >= 0.0f && hoven_turret_state->f78 < target_pitch_step) ||
+                (hoven_turret_state->f78 <= 0.0f && target_pitch_step < hoven_turret_state->f78)) {
+                approach_value(&hoven_turret_state->f78,
                                target_pitch_step,
                                hoven_turret_pitch_acceleration_rate * 0.017453292f *
                                    frame_time_sq_macro);
             } else {
-                approach_value(&data->f78,
+                approach_value(&hoven_turret_state->f78,
                                target_pitch_step,
                                hoven_turret_pitch_braking_rate * 0.017453292f *
                                    frame_time_sq_macro);
             }
-            data->f74 = fast_add_rotations(data->f74, data->f78);
-            if (data->f74 > hoven_turret_pitch_max) {
-                data->f74 = hoven_turret_pitch_max;
+            hoven_turret_state->f74 =
+                fast_add_rotations(hoven_turret_state->f74, hoven_turret_state->f78);
+            if (hoven_turret_state->f74 > hoven_turret_pitch_max) {
+                hoven_turret_state->f74 = hoven_turret_pitch_max;
             }
-            if (data->f74 < hoven_turret_pitch_min) {
-                data->f74 = hoven_turret_pitch_min;
+            if (hoven_turret_state->f74 < hoven_turret_pitch_min) {
+                hoven_turret_state->f74 = hoven_turret_pitch_min;
             }
-            FUN_L00_001fff28(data->f10, 1, -data->f74);
+            FUN_L00_001fff28(hoven_turret_state->f10, 1, -hoven_turret_state->f74);
             if (moby->anim_flags & 2) {
                 blend_moby_animation(moby, 5, 0, 1);
             }
-            fast_dec_timer_s16(&data->f70);
-            if ((pad_held[0] & 0xA0) && data->f70 == 0) {
+            fast_dec_timer_s16(&hoven_turret_state->f70);
+            if ((pad_held[0] & 0xA0) && hoven_turret_state->f70 == 0) {
                 Vec_304920 firing_offset;
                 Vec_304920 muz;
                 float      yaw;
                 int        i;
 
-                blend_moby_animation(moby, data->f80 == 1 ? 4 : 3, 0, 1);
+                blend_moby_animation(moby, hoven_turret_state->f80 == 1 ? 4 : 3, 0, 1);
                 yaw = fast_add_rotations(moby->rot.z, 1.5707964f);
-                build_spherical_offset(
-                    firing_offset, hoven_turret_firing_offset_rate * D_0015ED6C_gp, yaw, data->f74);
-                if (data->f80 == 1) {
-                    data->f80 = 0;
+                build_spherical_offset(firing_offset,
+                                       hoven_turret_firing_offset_rate * D_0015ED6C_gp,
+                                       yaw,
+                                       hoven_turret_state->f74);
+                if (hoven_turret_state->f80 == 1) {
+                    hoven_turret_state->f80 = 0;
                     moby_point_position(moby, 2, muz);
                 } else {
                     moby_point_position(moby, 1, muz);
-                    data->f80 = 1;
+                    hoven_turret_state->f80 = 1;
                 }
                 fast_vec_add(muz, muz, firing_offset);
                 fast_vec_add(muz, muz, firing_offset);
@@ -433,7 +438,7 @@ void hoven_turret_update(struct Moby *moby) {
                 l12_camera.shake_frames = scale_game_frames(0xA);
                 l12_camera.shake2_amount = 0.03f;
                 l12_camera.shake2_frames = scale_game_frames(7);
-                data->f70 = scale_game_frames(0x14);
+                hoven_turret_state->f70 = scale_game_frames(0x14);
                 for (i = 0; i < 5; i++) {
                     Vec_304920 randomized_firing_direction;
                     Vec_304920 rnd;
@@ -474,7 +479,7 @@ void hoven_turret_update(struct Moby *moby) {
         break;
     case HOVEN_TURRET_STATE_DESTRUCTION_EFFECTS:
         add_draw_callback(draw_hoven_turret_destruction_fade, moby);
-        if (fast_dec_timer_s16(&data->fAE)) {
+        if (fast_dec_timer_s16(&hoven_turret_state->fAE)) {
             Vec_304920 explosion_position;
             float      randomized_view_offset_distance;
             float      randomized_view_yaw;
@@ -512,9 +517,9 @@ void hoven_turret_update(struct Moby *moby) {
                             0,
                             -1,
                             0);
-            data->fAE = scale_game_frames(random_int_between(5, 0xD));
+            hoven_turret_state->fAE = scale_game_frames(random_int_between(5, 0xD));
         }
-        if (fast_dec_timer_s16(&data->fAC)) {
+        if (fast_dec_timer_s16(&hoven_turret_state->fAC)) {
             hero_respawn();
         }
         break;
@@ -575,7 +580,7 @@ void draw_hoven_turret_hud(Moby *moby) {
     int   uv[4];
     long  xy[4];
     int   colors[4];
-    Data *data = *(Data **)&moby->pvars;
+    Data *hoven_turret_hud_state = *(Data **)&moby->pvars;
     long  texture;
     int   filled;
     int   color;
@@ -646,12 +651,13 @@ void draw_hoven_turret_hud(Moby *moby) {
     uv[1] = hoven_turret_hud_health_dial_vertex_1_uv;
     uv[2] = hoven_turret_hud_health_dial_vertex_2_uv;
     uv[3] = hoven_turret_hud_health_dial_vertex_3_uv;
-    if (data->f8C > 100.0f) {
-        color = fast_tween_color(0x6000FFFF, 0x6000FF00, (data->f8C - 100.0f) / 100.0f);
+    if (hoven_turret_hud_state->f8C > 100.0f) {
+        color = fast_tween_color(
+            0x6000FFFF, 0x6000FF00, (hoven_turret_hud_state->f8C - 100.0f) / 100.0f);
     } else {
-        color = fast_tween_color(0x600000FF, 0x6000FFFF, data->f8C / 100.0f);
+        color = fast_tween_color(0x600000FF, 0x6000FFFF, hoven_turret_hud_state->f8C / 100.0f);
     }
-    filled = truncate_float_to_s32((1.0f - data->f8C / 200.0f) * 32.0f);
+    filled = truncate_float_to_s32((1.0f - hoven_turret_hud_state->f8C / 200.0f) * 32.0f);
     dim_color = (color & 0xFFFFFF) + 0x20000000;
     for (j = 0; j < 32; j++) {
         float start_angle, end_angle;
@@ -705,16 +711,17 @@ void draw_hoven_turret_hud(Moby *moby) {
         xy[3] += (truncate_float_to_s32(*(float *)&hoven_turret_hud_gauge_center_x) << 4) + 0x8000;
         func_L02_0020BF88_3055F8(xy, uv, colors, texture, 1);
     }
-    if (scale_game_frames(0xF) < data->f88) {
-        color = fast_tween_color(0x5000FFFF,
-                                 0x500000FF,
-                                 convert_integer_to_float(data->f88 - scale_game_frames(0xF)) /
-                                     (float)scale_game_frames(0xF));
+    if (scale_game_frames(0xF) < hoven_turret_hud_state->f88) {
+        color = fast_tween_color(
+            0x5000FFFF,
+            0x500000FF,
+            convert_integer_to_float(hoven_turret_hud_state->f88 - scale_game_frames(0xF)) /
+                (float)scale_game_frames(0xF));
     } else {
-        color =
-            fast_tween_color(0x5000FF00,
-                             0x5000FFFF,
-                             convert_integer_to_float(data->f88) / (float)scale_game_frames(0xF));
+        color = fast_tween_color(0x5000FF00,
+                                 0x5000FFFF,
+                                 convert_integer_to_float(hoven_turret_hud_state->f88) /
+                                     (float)scale_game_frames(0xF));
     }
     uv[0] = hoven_turret_hud_orientation_indicator_vertex_0_uv;
     uv[1] = hoven_turret_hud_orientation_indicator_vertex_1_uv;
@@ -774,7 +781,7 @@ void draw_hoven_turret_hud(Moby *moby) {
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
-    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, 0.0f));
+    angle = fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, 0.0f));
     xy[0] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)
@@ -784,7 +791,8 @@ void draw_hoven_turret_hud(Moby *moby) {
         truncate_float_to_s32(fast_cos(angle) *
                               *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) +
         0x8000;
-    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, 1.5707964f));
+    angle =
+        fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, 1.5707964f));
     xy[1] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)
@@ -794,7 +802,8 @@ void draw_hoven_turret_hud(Moby *moby) {
         truncate_float_to_s32(fast_cos(angle) *
                               *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) +
         0x8000;
-    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, -1.5707964f));
+    angle =
+        fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, -1.5707964f));
     xy[2] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)
@@ -804,7 +813,8 @@ void draw_hoven_turret_hud(Moby *moby) {
         truncate_float_to_s32(fast_cos(angle) *
                               *(float *)&hoven_turret_hud_orientation_indicator_radius_x * 16.0f) +
         0x8000;
-    angle = fast_normalize_angle(fast_add_rotations(data->f74 * 8.0f, 3.1415927f));
+    angle =
+        fast_normalize_angle(fast_add_rotations(hoven_turret_hud_state->f74 * 8.0f, 3.1415927f));
     xy[3] += (u32)((truncate_float_to_s32(
                         fast_sin(angle) *
                         *(float *)&hoven_turret_hud_orientation_indicator_radius_y * 16.0f)

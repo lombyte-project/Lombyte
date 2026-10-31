@@ -34,7 +34,7 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
     s32                selected_item_id;
     s32                ammo;
     s32                entry_field;
-    struct ImageEntry *entry;
+    struct ImageEntry *selected_item_record;
     struct MenuScreen *grid;
     u8                *end_ptr;
 
@@ -45,11 +45,11 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
         return 0;
     }
     ammo = weapon_ammo_counts[selected_item_id];
-    entry = &D_001DFFB0[selected_item_id];
-    entry_field = (s32)entry->unkE;
+    selected_item_record = &D_001DFFB0[selected_item_id];
+    entry_field = (s32)selected_item_record->unkE;
     vu1_add_g_sregister(0x42, 0x44);
     vu1_add_g_sregister(0x47, 0xB);
-    if (entry->unk8 == 0) {
+    if (selected_item_record->unk8 == 0) {
         sprintf(sp_slot, get_help_message_text(0x4F52));
     } else {
         if (ammo < 0x3E8) {

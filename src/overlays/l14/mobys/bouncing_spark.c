@@ -93,7 +93,7 @@ void update_bouncing_spark(struct Moby *spark_moby) {
         SPARK_BURST_AND_REMOVE = 3
     };
     Spark_0e00 *spark_data = (Spark_0e00 *)spark_moby->pvars;
-    Vec4f       next;
+    Vec4f       predicted_position_or_fade_rgb;
     Vec4f       position_scratch;
     Vec4f       from;
     float       speed;
@@ -110,7 +110,7 @@ void update_bouncing_spark(struct Moby *spark_moby) {
     case SPARK_COUNT_NEXT_BOUNCE:
 
     case SPARK_WAIT_FOR_DESCENT: {
-        fast_vec_add(&next, &spark_moby->pos, &spark_data->vel);
+        fast_vec_add(&predicted_position_or_fade_rgb, &spark_moby->pos, &spark_data->vel);
         spark_data->vel.z -= spark_data->vel.w;
         if ((spark_moby->state == 1) && (spark_data->vel.z < 0.0f)) {
             spark_moby->state = 0;
@@ -124,7 +124,8 @@ void update_bouncing_spark(struct Moby *spark_moby) {
                 int   spin;
                 char *trail_particle;
                 *((u128 *)(&from)) = *((u128 *)(&spark_moby->pos));
-                interpolate_vector(&position_scratch, &from, &next, ((float)i) * third);
+                interpolate_vector(
+                    &position_scratch, &from, &predicted_position_or_fade_rgb, ((float)i) * third);
                 spin = random_integer_below(6);
                 if (random_integer_below(2) != 0) {
                     spin = -spin;
@@ -150,11 +151,12 @@ void update_bouncing_spark(struct Moby *spark_moby) {
                 }
             }
         }
-        if ((collision_line(&spark_moby->pos, &next, 0, spark_moby, 0) != 0) &&
+        if ((collision_line(&spark_moby->pos, &predicted_position_or_fade_rgb, 0, spark_moby, 0) !=
+             0) &&
             ((D_L14_00174540.owner == 0) || (D_L14_00174540.owner != spark_data->owner))) {
             qcopy(&spark_moby->pos, &D_L14_00174540.hit);
         } else {
-            qcopy(&spark_moby->pos, &next);
+            qcopy(&spark_moby->pos, &predicted_position_or_fade_rgb);
         }
         if (((coll_sphere(&spark_moby->pos, 0, spark_moby, spark_contact_clearance_gp) != 0) &&
              ((spark_moby->state == 0) || ((spark_moby->pos.z - D_L14_00174540.hit.z) < 0.0f))) &&
@@ -206,11 +208,15 @@ void update_bouncing_spark(struct Moby *spark_moby) {
         int   g;
         int   b;
         float min;
-        *((Rgb_0e00 *)(&next)) = l14_spark_rolling_fade_source_rgb;
+        *((Rgb_0e00 *)(&predicted_position_or_fade_rgb)) = l14_spark_rolling_fade_source_rgb;
         fade_fraction = ((float)spark_data->fade) * spark_data->fade_rate;
-        r = truncate_float_to_s32(((((Rgb_0e00 *)(&next))->r - 255.0f) * fade_fraction) + 255.0f);
-        g = truncate_float_to_s32(((((Rgb_0e00 *)(&next))->g - 0.0f) * fade_fraction) + 0.0f);
-        b = truncate_float_to_s32(((((Rgb_0e00 *)(&next))->b - 0.0f) * fade_fraction) + 0.0f);
+        r = truncate_float_to_s32(
+            ((((Rgb_0e00 *)(&predicted_position_or_fade_rgb))->r - 255.0f) * fade_fraction) +
+            255.0f);
+        g = truncate_float_to_s32(
+            ((((Rgb_0e00 *)(&predicted_position_or_fade_rgb))->g - 0.0f) * fade_fraction) + 0.0f);
+        b = truncate_float_to_s32(
+            ((((Rgb_0e00 *)(&predicted_position_or_fade_rgb))->b - 0.0f) * fade_fraction) + 0.0f);
         spark_moby->glow_color = 0xFF000000;
         spark_moby->glow_color = (((b << 16) | spark_moby->glow_color) | (g << 8)) | r;
         min = spark_minimum_speed_gp * frame_time;
@@ -278,7 +284,12 @@ char *create_bouncing_spark(int    owner,
 
 char *create_bouncing_spark(
 
-    int owner, float *spawn_position, float *initial_velocity, int fade_timer, float gravity) {
+    int    collision_exclusion_owner,
+    float *spawn_position,
+    float *initial_velocity,
+    int    fade_timer,
+
+    float gravity) {
     char          *moby = create_moby(0x4A9);
     float          initial_yaw, scaled_moby_value;
     unsigned short initial_trail_timer;
@@ -288,7 +299,7 @@ char *create_bouncing_spark(
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(int *)(spark_data + 0x24) = owner;
+        *(int *)(spark_data + 0x24) = collision_exclusion_owner;
         qcopy(moby + 0x10, spawn_position);
         qcopy(spark_data + 0x10, initial_velocity);
         initial_trail_timer = D_L14_0016208C;

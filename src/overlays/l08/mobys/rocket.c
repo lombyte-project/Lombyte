@@ -318,26 +318,30 @@ void update_rocket(M46 *moby) {
         return;
     case ROCKET_STATE_FOLLOW_ROUTE: {
         RouteState46 *route;
-        int           next;
+        int           next_route_waypoint_index;
         float         yaw;
         if (D_L08_0015F5C4_macro)
             return;
         route = (RouteState46 *)&data->waypoint;
-        next = (route->waypoint + route->path->count + route->direction) % route->path->count;
+        next_route_waypoint_index =
+            (route->waypoint + route->path->count + route->direction) % route->path->count;
         yaw =
-            fast_arc_tan(*(float *)((char *)route->path + (next << 4) + 0x10) - moby->position[0],
-                         *(float *)((char *)route->path + (next << 4) + 0x14) - moby->position[1]);
+            fast_arc_tan(*(float *)((char *)route->path + (next_route_waypoint_index << 4) + 0x10) -
+                             moby->position[0],
+                         *(float *)((char *)route->path + (next_route_waypoint_index << 4) + 0x14) -
+                             moby->position[1]);
         FUN_L00_00258278(moby, &data->yaw_velocity, yaw, 0.1f, 1.3f, 1.0f);
-        moby->rotation[1] = fast_arc_tan(vector_distance_xy(route->path->e[next], moby->position),
-                                         moby->position[2] - route->path->e[next][2]);
-        qcopy_nc(target, route->path->e[next]);
+        moby->rotation[1] = fast_arc_tan(
+            vector_distance_xy(route->path->e[next_route_waypoint_index], moby->position),
+            moby->position[2] - route->path->e[next_route_waypoint_index][2]);
+        qcopy_nc(target, route->path->e[next_route_waypoint_index]);
         if (route->waypoint != route->path->count - 1) {
             int life0, life1, size1;
             fast_vec_sub(delta, target, moby->position);
             fast_vec_normalize(delta, delta, rocket_route_speed_gp * D_0015ED6C);
             fast_vec_add(moby->position, moby->position, delta);
             if (fast_vec_dist(moby->position, target) < 0.5f)
-                route->waypoint = next;
+                route->waypoint = next_route_waypoint_index;
             *(Q46 *)effect = (Q46)0;
             effect[0] = random_float_between(-1.0f, 1.0f);
             effect[1] = random_float_between(-1.0f, 1.0f);
@@ -368,18 +372,18 @@ void update_rocket(M46 *moby) {
             short *link = D_L08_001AC040[moby->group];
             long   special = 0;
             int    index;
-            M46   *other;
+            M46   *rocket_linked_group_moby;
             if (!link)
                 return;
             index = *(unsigned short *)link & 0x7FFF;
-            other = (M46 *)(D_L08_0015FFD8_macro + (index << 8));
+            rocket_linked_group_moby = (M46 *)(D_L08_0015FFD8_macro + (index << 8));
             ((Persistent46 *)(D_0013D388 + data->persistent))->active = 1;
         linked_object:
-            if (other->state < 0x7F && other != moby) {
-                unsigned short linked_moby_class_id = other->class_id;
+            if (rocket_linked_group_moby->state < 0x7F && rocket_linked_group_moby != moby) {
+                unsigned short linked_moby_class_id = rocket_linked_group_moby->class_id;
                 if ((unsigned int)(linked_moby_class_id - 0x223) < 6) {
                     clear_u64_value(velocity_correction_or_effect_velocity);
-                    switch ((short)(other->class_id - 0x223)) {
+                    switch ((short)(rocket_linked_group_moby->class_id - 0x223)) {
                     case LINKED_CLASS_NEGATIVE_X_POSITIVE_Y_POSITIVE_Z_LAUNCH_OFFSET:
                         *(Q46 *)aux = (Q46)0;
                         aux[0] = -3.331f;
@@ -417,13 +421,13 @@ void update_rocket(M46 *moby) {
                         qcopy(effect, aux);
                         break;
                     }
-                    if (other->distance > 1500.0f)
-                        mark_moby_for_removal(other);
+                    if (rocket_linked_group_moby->distance > 1500.0f)
+                        mark_moby_for_removal(rocket_linked_group_moby);
                     else {
                         float  launch_yaw, center_yaw, min_frames, max_frames, angle_delta;
                         float *launch_offset;
                         fast_vec_sub(velocity_correction_or_effect_velocity,
-                                     other->position,
+                                     rocket_linked_group_moby->position,
                                      moby->position);
                         velocity_correction_or_effect_velocity[2] = 0.0f;
                         fast_vec_normalize(velocity_correction_or_effect_velocity,
@@ -431,7 +435,7 @@ void update_rocket(M46 *moby) {
                                            D_0015ED6C * 12.0f);
                         velocity_correction_or_effect_velocity[2] =
                             random_float_between(D_0015ED6C * 8.0f, D_0015ED6C * 12.0f);
-                        other->animation = 0;
+                        rocket_linked_group_moby->animation = 0;
                         launch_yaw = fast_arc_tan(velocity_correction_or_effect_velocity[0],
                                                   velocity_correction_or_effect_velocity[1]);
                         center_yaw = fast_arc_tan(l08_camera.pos.f[0] - moby->position[0],
@@ -446,7 +450,7 @@ void update_rocket(M46 *moby) {
                             max_frames = 90.0f;
                         }
                         initialize_moby_launch_motion(
-                            other,
+                            rocket_linked_group_moby,
                             (int)moby,
                             velocity_correction_or_effect_velocity,
                             launch_offset,
@@ -455,9 +459,9 @@ void update_rocket(M46 *moby) {
                 } else if ((short)linked_moby_class_id == 0x1A8) {
                     special = 1;
                     clear_u64_value(velocity_correction_or_effect_velocity);
-                    spawn_explosion(other,
+                    spawn_explosion(rocket_linked_group_moby,
                                     velocity_correction_or_effect_velocity,
-                                    other->position,
+                                    rocket_linked_group_moby->position,
                                     0.0f,
                                     0.0f,
                                     50,
@@ -473,12 +477,12 @@ void update_rocket(M46 *moby) {
                                     1,
                                     -1,
                                     0);
-                    mark_moby_for_removal(other);
+                    mark_moby_for_removal(rocket_linked_group_moby);
                 }
             }
             if (*link++ >= -1) {
                 index = *(unsigned short *)link & 0x7FFF;
-                other = (M46 *)(D_L08_0015FFD8_macro + (index << 8));
+                rocket_linked_group_moby = (M46 *)(D_L08_0015FFD8_macro + (index << 8));
                 goto linked_object;
             }
             if (special)
@@ -542,14 +546,14 @@ struct Moby *spawn_rocket(void        *pos,
 
 struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
     struct Moby *moby = create_moby(0x1B3);
-    char        *data;
+    char        *projectile_vars;
     float       *reference;
     float        distance;
     float        scale;
     struct Moby *target_copy = target;
     void        *velocity_copy = velocity;
     if (moby != 0) {
-        data = (char *)moby->pvars;
+        projectile_vars = (char *)moby->pvars;
         qcopy(&moby->pos, pos);
         reference = D_L08_001675C0;
         distance = vector_distance_xy(reference, &moby->pos);
@@ -565,11 +569,11 @@ struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float 
         moby->draw_dist = 0xFF;
         moby->scale = scale;
         set_moby_color(moby, rocket_color_red_gp, rocket_color_green_gp, rocket_color_blue_gp);
-        *(float *)(data + 0x40) = pitch;
-        *(float *)(data + 0x48) = 70.0f;
-        *(float *)(data + 0x44) = yaw;
-        *(struct Moby **)(data + 0x4C) = target_copy;
-        qcopy(data + 0x20, velocity_copy);
+        *(float *)(projectile_vars + 0x40) = pitch;
+        *(float *)(projectile_vars + 0x48) = 70.0f;
+        *(float *)(projectile_vars + 0x44) = yaw;
+        *(struct Moby **)(projectile_vars + 0x4C) = target_copy;
+        qcopy(projectile_vars + 0x20, velocity_copy);
         update_entity(moby);
     }
     return moby;
@@ -579,12 +583,12 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
     float spawn_position[4];
     float local_rotation_offset[4];
     float launch_velocity[4];
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *rocket_vars = ((char *)MOBY(moby)->pvars);
     int   i;
 
     if (flag) {
         spawn_explosion(moby,
-                        data + 0x20,
+                        rocket_vars + 0x20,
                         moby + 0x10,
                         0.0f,
                         0.0f,
@@ -603,7 +607,7 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
                         0);
     } else {
         spawn_explosion(moby,
-                        data + 0x20,
+                        rocket_vars + 0x20,
                         moby + 0x10,
                         0.0f,
                         0.0f,

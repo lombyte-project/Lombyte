@@ -59,15 +59,16 @@ void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
 void trooper_anim_update(void *a, S *s) __asm__("FUN_L00_0025d458");
 
 void trooper_anim_update(void *moby, S *animation_state) {
-    int old = animation_state->cur;
-    if (old == 0 || animation_state->flag != 0) {
+    int previous_timer_frames = animation_state->cur;
+    if (previous_timer_frames == 0 || animation_state->flag != 0) {
         animation_state->cur = scale_game_frames(animation_state->lo);
         animation_state->flag = 0;
-        if (old != 0) {
+        if (previous_timer_frames != 0) {
             int scaled_duration_frames = scale_game_frames(animation_state->lo);
             animation_state->cur = truncate_float_to_s32(
                 scaled_duration_frames *
-                (old / convert_integer_to_float(scale_game_frames(animation_state->hi))));
+                (previous_timer_frames /
+                 convert_integer_to_float(scale_game_frames(animation_state->hi))));
             if (animation_state->cur <= 0)
                 animation_state->cur = 1;
         } else {
@@ -177,7 +178,7 @@ typedef struct {
 
 // Moves DIST along a spline from segment *IDX at offset *T, updates both, and writes the point reached to OUT; 1 when an end was passed.
 int FUN_L00_0025d808(Spline *path,
-                     float  *out,
+                     float  *sampled_point,
                      int    *segment_index,
                      float  *segment_offset,
                      int     loop,
@@ -232,11 +233,11 @@ int FUN_L00_0025d808(Spline *path,
         }
     }
     i = *segment_index;
-    qcopy_nc(out, &path->pt[i]);
+    qcopy_nc(sampled_point, &path->pt[i]);
     if (i == path->n - 1 && !loop) {
         if (traversal_direction == -1) {
             *segment_index = 0;
-            qcopy_nc(out, &path->pt[0]);
+            qcopy_nc(sampled_point, &path->pt[0]);
             *segment_offset = 0.0f;
         }
         return 1;
@@ -247,7 +248,7 @@ int FUN_L00_0025d808(Spline *path,
     }
     fast_vec_sub(segment_delta, &path->pt[j], &path->pt[i]);
     fast_vec_normalize(segment_delta, segment_delta, *segment_offset);
-    fast_vec_add(out, out, segment_delta);
+    fast_vec_add(sampled_point, sampled_point, segment_delta);
     return crossed_path_boundary;
 }
 
@@ -280,7 +281,7 @@ float project_level_path_point_onto_segment(float   *out,
                                             OvlQuad *segment_start,
                                             OvlQuad *segment_end) __asm__("FUN_L00_0025db00");
 
-float project_level_path_point_onto_segment(float   *out,
+float project_level_path_point_onto_segment(float   *projected_point,
                                             float   *query_point,
                                             OvlQuad *segment_start,
 
@@ -301,10 +302,10 @@ float project_level_path_point_onto_segment(float   *out,
     set_vector_length_xy(planar_normal, planar_normal, 1.0f);
     k = -fast_vec_dot(planar_normal, planar_endpoint_copy) +
         (planar_normal[0] * query_point[0] + planar_normal[1] * query_point[1]);
-    out[0] = query_point[0] - k * planar_normal[0];
-    out[1] = query_point[1] - k * planar_normal[1];
-    *(int *)&out[2] = 0;
-    projected_point_components = out;
+    projected_point[0] = query_point[0] - k * planar_normal[0];
+    projected_point[1] = query_point[1] - k * planar_normal[1];
+    *(int *)&projected_point[2] = 0;
+    projected_point_components = projected_point;
     pa = (float *)segment_start;
     pb = (float *)segment_end;
     for (i = 0; i < 2; i++) {
@@ -313,15 +314,16 @@ float project_level_path_point_onto_segment(float   *out,
             break;
     }
     if (i < 2) {
-        if (vector_distance_xy(out, segment_start) < vector_distance_xy(out, segment_end)) {
-            qcopy(out, segment_start);
-            *(int *)&out[2] = 0;
+        if (vector_distance_xy(projected_point, segment_start) <
+            vector_distance_xy(projected_point, segment_end)) {
+            qcopy(projected_point, segment_start);
+            *(int *)&projected_point[2] = 0;
         } else {
-            qcopy(out, segment_end);
-            *(int *)&out[2] = 0;
+            qcopy(projected_point, segment_end);
+            *(int *)&projected_point[2] = 0;
         }
     }
-    return vector_distance_xy(query_point, out);
+    return vector_distance_xy(query_point, projected_point);
 }
 
 extern void  interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
@@ -336,7 +338,12 @@ float resolve_level_path_segment_point(
     OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
 float resolve_level_path_segment_point(
 
-    OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) {
+    OvlQuad *resolved_segment_point,
+    OvlQuad *query_point,
+    OvlQuad *segment_start,
+    OvlQuad *b,
+
+    float r) {
     OvlQuad segment_workspace[2];
     OvlQuad direction_copy[1];
     OvlQuad query_point_copy[1];
@@ -346,12 +353,13 @@ float resolve_level_path_segment_point(
     int     i;
     if (r > 0.0f && absolute_float(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
         absolute_float(((float *)query_point)[2] - ((float *)b)[2]) < r) {
-        planar_distance = project_level_path_point_onto_segment(out, query_point, segment_start, b);
-        r = vector_distance_xy(segment_start, out);
+        planar_distance = project_level_path_point_onto_segment(
+            resolved_segment_point, query_point, segment_start, b);
+        r = vector_distance_xy(segment_start, resolved_segment_point);
         segment_length_or_start_direction_dot = vector_distance_xy(segment_start, b);
         segment_workspace[0] = *segment_start;
         segment_workspace[1] = *b;
-        interpolate_vector(out,
+        interpolate_vector(resolved_segment_point,
                            &segment_workspace[0],
                            &segment_workspace[1],
                            r / segment_length_or_start_direction_dot);
@@ -363,15 +371,15 @@ float resolve_level_path_segment_point(
     qcopy(direction_copy, segment_workspace);
     negative_query_direction_dot = -fast_vec_dot(query_point, segment_workspace);
     segment_length_or_start_direction_dot = fast_vec_dot(&segment_workspace[1], direction_copy);
-    fast_vec_scale(out,
+    fast_vec_scale(resolved_segment_point,
                    segment_workspace,
                    -(negative_query_direction_dot + segment_length_or_start_direction_dot) /
                        fast_vec_dot(segment_workspace, direction_copy));
-    fast_vec_add(out, out, &segment_workspace[1]);
+    fast_vec_add(resolved_segment_point, resolved_segment_point, &segment_workspace[1]);
     i = 0;
     fb = (float *)b;
     fa = (float *)segment_start;
-    output_component = (float *)out;
+    output_component = (float *)resolved_segment_point;
     do {
         if (*output_component > *fa && *fb < *output_component)
             break;
@@ -383,14 +391,15 @@ float resolve_level_path_segment_point(
         output_component++;
     } while (i < 3);
     if (i < 3) {
-        if (fast_vec_dist(out, segment_start) < fast_vec_dist(out, b)) {
-            qcopy(out, segment_start);
+        if (fast_vec_dist(resolved_segment_point, segment_start) <
+            fast_vec_dist(resolved_segment_point, b)) {
+            qcopy(resolved_segment_point, segment_start);
         } else {
-            qcopy(out, b);
+            qcopy(resolved_segment_point, b);
         }
     }
     query_point_copy[0] = *query_point;
-    g[0] = *out;
+    g[0] = *resolved_segment_point;
     return FUN_L00_0025da70_c(query_point_copy, g, 0.0f);
 }
 
@@ -416,7 +425,7 @@ s32 FUN_L00_0025df68(s32     *path,
                      f32      step,
 
                      f32 height_tolerance) {
-    OvlQuad work[4];
+    OvlQuad path_search_points[4];
     s32     current = 0;
     s32     best_segment;
     s32     start, end, previous, count;
@@ -426,10 +435,11 @@ s32 FUN_L00_0025df68(s32     *path,
     f32     distance, previous_distance, next_distance;
     f32     expanded_limit;
 
-    qcopy(&work[0], path + 4);
-    work[1] = *point;
+    qcopy(&path_search_points[0], path + 4);
+    path_search_points[1] = *point;
     best_fraction = 0.0f;
-    distance = path_distance_25df68(&work[0], &work[1], height_tolerance);
+    distance =
+        path_distance_25df68(&path_search_points[0], &path_search_points[1], height_tolerance);
     best_segment = 0;
     if (*path == 0) {
         clear_u64_value(nearest);
@@ -438,9 +448,11 @@ s32 FUN_L00_0025df68(s32     *path,
 
     expanded_limit = step + limit;
     do {
-        crossed = sample_path(path, &work[0], &current, &current_fraction, step, wrap);
-        work[1] = *point;
-        next_distance = path_distance_25df68(&work[0], &work[1], height_tolerance);
+        crossed =
+            sample_path(path, &path_search_points[0], &current, &current_fraction, step, wrap);
+        path_search_points[1] = *point;
+        next_distance =
+            path_distance_25df68(&path_search_points[0], &path_search_points[1], height_tolerance);
         if (next_distance < distance) {
             distance = next_distance;
             best_segment = current;
@@ -452,17 +464,18 @@ s32 FUN_L00_0025df68(s32     *path,
 
     start = best_segment;
     current_fraction = best_fraction;
-    sample_path(path, &work[0], &start, &current_fraction, -step, wrap);
+    sample_path(path, &path_search_points[0], &start, &current_fraction, -step, wrap);
     current_fraction = best_fraction;
     end = best_segment;
-    sample_path(path, &work[0], &end, &current_fraction, step, wrap);
+    sample_path(path, &path_search_points[0], &end, &current_fraction, step, wrap);
     end = offset_path_index(path, end, 1, wrap);
     current = start;
     distance = 1000000000.0f;
     do {
-        work[1] = *(OvlQuad *)(path + 4 + current * 4);
-        work[2] = *point;
-        next_distance = path_distance_25df68(&work[1], &work[2], height_tolerance);
+        path_search_points[1] = *(OvlQuad *)(path + 4 + current * 4);
+        path_search_points[2] = *point;
+        next_distance =
+            path_distance_25df68(&path_search_points[1], &path_search_points[2], height_tolerance);
         if (next_distance < distance) {
             distance = next_distance;
             best_segment = current;
@@ -485,25 +498,25 @@ s32 FUN_L00_0025df68(s32     *path,
                                                     height_tolerance);
         *segment = previous;
         /* Retail reads the segment vertex before the projected point. */
-        work[1] = *(volatile OvlQuad *)(path + 4 + previous * 4);
-        work[2] = *(volatile OvlQuad *)nearest;
-        *fraction = path_distance_25df68(&work[1], &work[2], 0.0f);
+        path_search_points[1] = *(volatile OvlQuad *)(path + 4 + previous * 4);
+        path_search_points[2] = *(volatile OvlQuad *)nearest;
+        *fraction = path_distance_25df68(&path_search_points[1], &path_search_points[2], 0.0f);
         previous_distance = distance;
     }
     count = *path;
     if (best_segment < count - 1 || wrap) {
         next_distance = resolve_level_path_segment_point(
-            &work[1],
+            &path_search_points[1],
             point,
             (OvlQuad *)(path + 4 + best_segment * 4),
             (OvlQuad *)(path + 4 + ((best_segment + 1) % count) * 4),
             height_tolerance);
         if (next_distance < previous_distance) {
-            qcopy_nc(nearest, &work[1]);
+            qcopy_nc(nearest, &path_search_points[1]);
             *segment = best_segment;
-            work[2] = *(OvlQuad *)(path + 4 + best_segment * 4);
-            work[3] = *nearest;
-            *fraction = path_distance_25df68(&work[2], &work[3], 0.0f);
+            path_search_points[2] = *(OvlQuad *)(path + 4 + best_segment * 4);
+            path_search_points[3] = *nearest;
+            *fraction = path_distance_25df68(&path_search_points[2], &path_search_points[3], 0.0f);
         }
     }
     return 1;
@@ -514,13 +527,13 @@ extern f32 split_float_fraction(void *, f32) __asm__("FUN_L00_00200228");
 f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 
 f32 normalize_angle(f32 angle_radians) {
-    f32 out;
+    f32 shifted_angle_integral_turns;
     f32 x;
     f32 pi = 3.14159274f;
     f32 tp = 6.2831855f;
     x = angle_radians + pi;
     x /= tp;
-    x = split_float_fraction(&out, x);
+    x = split_float_fraction(&shifted_angle_integral_turns, x);
     x *= tp;
     return x - pi;
 }
@@ -931,7 +944,7 @@ typedef struct {
    spot is in view, the owner's sound unless it is dying, and a light flash of intensity `flash` (13 if negative). */
 void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) __asm__("FUN_L00_0025f090");
 
-void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float flash) {
+void cart_burst(u8 *burst_owner_moby, u128 *burst_position, int sound, float scale, float flash) {
     Vy10  particle_velocity;
     int   i;
     float sp, big;
@@ -954,8 +967,8 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
                        0,
                        sp * scale);
     }
-    if (owner != 0) {
-        spawn_glow_particle(owner,
+    if (burst_owner_moby != 0) {
+        spawn_glow_particle(burst_owner_moby,
                             burst_position,
                             &particle_velocity,
                             scale * 4.0f,
@@ -964,7 +977,7 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
                             0x40,
                             0,
                             0x30);
-        spawn_glow_particle(owner,
+        spawn_glow_particle(burst_owner_moby,
                             burst_position,
                             &particle_velocity,
                             scale * 3.0f,
@@ -983,8 +996,9 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
             l00_camera.shake_frames = scale_game_frames(0x14);
         }
     }
-    if (owner != 0 && owner[0x20] != 0xFE && owner[0x20] != 0xFD && sound != -1) {
-        allocate_voice_for_target_entry(sound, 0, owner);
+    if (burst_owner_moby != 0 && burst_owner_moby[0x20] != 0xFE && burst_owner_moby[0x20] != 0xFD &&
+        sound != -1) {
+        allocate_voice_for_target_entry(sound, 0, burst_owner_moby);
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
@@ -1007,7 +1021,7 @@ void spawn_color_swapped_explosion_burst(char *owner,
                                          char *pos,
                                          float scale,
                                          float flash) __asm__("FUN_L00_0025f3e8");
-void spawn_color_swapped_explosion_burst(char *owner,
+void spawn_color_swapped_explosion_burst(char *glow_owner_moby,
                                          char *effect_position,
                                          float scale,
 
@@ -1037,13 +1051,13 @@ void spawn_color_swapped_explosion_burst(char *owner,
             0,
             sp * scale);
     }
-    if (owner != 0) {
+    if (glow_owner_moby != 0) {
         rgb[0] = 0x7F;
         rgb[1] = 0x40;
         rgb[2] = 0;
         swap_color_channel_words(&rgb[0], &rgb[1], &rgb[2], 1);
         first_glow_scale = scale * 4.0f;
-        spawn_glow_particle(owner,
+        spawn_glow_particle(glow_owner_moby,
                             effect_position,
                             &zero_vec,
                             first_glow_scale,
@@ -1057,7 +1071,7 @@ void spawn_color_swapped_explosion_burst(char *owner,
         rgb[2] = 0;
         swap_color_channel_words(&rgb[0], &rgb[1], &rgb[2], 1);
         second_glow_scale = scale * 3.0f;
-        spawn_glow_particle(owner,
+        spawn_glow_particle(glow_owner_moby,
                             effect_position,
                             &zero_vec,
                             second_glow_scale,

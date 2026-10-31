@@ -10,15 +10,15 @@ extern u32 pad2_initialized[] __asm__("D_00132DD0");
 extern u8  D_0015B540[];
 
 s32 scePad2Init(void) {
-    struct Pad2StateEntry *entry;
+    struct Pad2StateEntry *pad2_socket_record;
 
     pad2_initialized[0] = 1;
-    entry = (struct Pad2StateEntry *)D_0015B540;
+    pad2_socket_record = (struct Pad2StateEntry *)D_0015B540;
     do {
-        entry->state = 0;
-        entry->request = 0;
-        entry->result = 0;
-        entry = (struct Pad2StateEntry *)((u8 *)entry + 0x330);
-    } while ((s32)entry < (s32)(D_0015B540 + 0x3300));
+        pad2_socket_record->state = 0;
+        pad2_socket_record->request = 0;
+        pad2_socket_record->result = 0;
+        pad2_socket_record = (struct Pad2StateEntry *)((u8 *)pad2_socket_record + 0x330);
+    } while ((s32)pad2_socket_record < (s32)(D_0015B540 + 0x3300));
     return 1;
 }

@@ -336,9 +336,9 @@ void taxi_update(struct Moby *moby) {
         int            k = current_level_index * 16;
         if (t[taxi_vars->item_a + k] == 0xFF || t[taxi_vars->item_b + k] == 0xFF) {
             unsigned short bits = moby->flags;
-            int            value = moby->pclass->collision;
+            int            class_collision = moby->pclass->collision;
             moby->visible = 1;
-            moby->collision = value;
+            moby->collision = class_collision;
             moby->flags = bits & 0xFFFE;
             moby->state = 1;
         }
@@ -466,10 +466,10 @@ found:
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void request_taxi_stop_prompt(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int   taxi_stop_index = *(short *)(data + 0xB4);
+    char *taxi_prompt_vars = (char *)moby->pvars;
+    int   taxi_stop_index = *(short *)(taxi_prompt_vars + 0xB4);
     if (moby->state == 5) {
-        taxi_stop_index = *(short *)(data + 0xB6);
+        taxi_stop_index = *(short *)(taxi_prompt_vars + 0xB6);
     }
     switch (taxi_stop_index) {
     case TAXI_STOP_RETURN_HUB:

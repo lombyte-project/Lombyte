@@ -26,7 +26,7 @@ extern s32 WaitSema();
 extern s32 SignalSema();
 
 void *get_iob(u32 slot_index) {
-    void *result;
+    void *file_slot;
 
     _sceFsIobSemaMK();
     WaitSema(fio_iob_sema);
@@ -34,7 +34,7 @@ void *get_iob(u32 slot_index) {
         SignalSema(fio_iob_sema);
         return 0;
     }
-    result = &fio_iob[slot_index];
+    file_slot = &fio_iob[slot_index];
     SignalSema(fio_iob_sema);
-    return result;
+    return file_slot;
 }

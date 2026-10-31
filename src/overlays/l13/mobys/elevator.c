@@ -67,7 +67,7 @@ void elevator_update(struct Moby *moby) {
         ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP = 6,
         ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM = 7
     };
-    LiftVars *vars = (LiftVars *)moby->pvars;
+    LiftVars *elevator_vars = (LiftVars *)moby->pvars;
     float     delta[4];
     float     rot[4];
     float     camera_position_scratch[4];
@@ -78,32 +78,36 @@ void elevator_update(struct Moby *moby) {
     qcopy(rot, &moby->rot);
     switch (moby->state) {
     case ELEVATOR_STATE_INITIALIZE:
-        vars->pulse = random_angle_radians();
-        vars->voice = -1;
+        elevator_vars->pulse = random_angle_radians();
+        elevator_vars->voice = -1;
         moby->state = 3;
         break;
     case ELEVATOR_STATE_BLEND_CAMERA: {
-        float old = vars->blend;
-        advance_accelerated_scalar(&vars->blend,
-                                   &vars->blend_speed,
+        float previous_camera_blend = elevator_vars->blend;
+        advance_accelerated_scalar(&elevator_vars->blend,
+                                   &elevator_vars->blend_speed,
                                    1.0f,
                                    D_0015ED70_2b39e0 * 4.0f,
                                    D_0015ED70_2b39e0 * 4.0f,
                                    frame_time * 4.0f);
-        if (vars->blend < 1.0f) {
-            float t = (1.0f - vars->blend) / (1.0f - old);
-            char *base;
+        if (elevator_vars->blend < 1.0f) {
+            float t = (1.0f - elevator_vars->blend) / (1.0f - previous_camera_blend);
+            char *camera_pose_base;
             compute_elevator_camera_pose(moby, camera_pose_scratch, blended_camera_rotation);
             fast_vec_sub(camera_position_scratch, D_L13_001670C0_2b39e0, camera_pose_scratch);
-            base = D_L13_001670C0_2b39e0 - 0x140;
+            camera_pose_base = D_L13_001670C0_2b39e0 - 0x140;
             fast_vec_scale(camera_position_scratch, camera_position_scratch, t);
             fast_vec_add(camera_pose_scratch, camera_pose_scratch, camera_position_scratch);
-            blended_camera_rotation[1] = fast_add_rotations(
-                fast_subtract_rotations(*(float *)(base + 0x154), blended_camera_rotation[1]) * t,
-                blended_camera_rotation[1]);
-            blended_camera_rotation[2] = fast_add_rotations(
-                fast_subtract_rotations(*(float *)(base + 0x158), blended_camera_rotation[2]) * t,
-                blended_camera_rotation[2]);
+            blended_camera_rotation[1] =
+                fast_add_rotations(fast_subtract_rotations(*(float *)(camera_pose_base + 0x154),
+                                                           blended_camera_rotation[1]) *
+                                       t,
+                                   blended_camera_rotation[1]);
+            blended_camera_rotation[2] =
+                fast_add_rotations(fast_subtract_rotations(*(float *)(camera_pose_base + 0x158),
+                                                           blended_camera_rotation[2]) *
+                                       t,
+                                   blended_camera_rotation[2]);
             set_camera_position(camera_pose_scratch);
             set_camera_rotation(blended_camera_rotation);
         } else {
@@ -116,8 +120,8 @@ void elevator_update(struct Moby *moby) {
     case ELEVATOR_STATE_MOVE_TO_TOP:
     case ELEVATOR_STATE_MOVE_TO_BOTTOM: {
         float target;
-        if (!voice_is_playing(moby, vars->voice)) {
-            vars->voice = allocate_voice_for_target_entry(0, 4, moby);
+        if (!voice_is_playing(moby, elevator_vars->voice)) {
+            elevator_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
         }
         if (moby->command != 0) {
             compute_elevator_camera_pose(moby, camera_position_scratch, camera_pose_scratch);
@@ -125,12 +129,12 @@ void elevator_update(struct Moby *moby) {
             set_camera_rotation(camera_pose_scratch);
         }
         if (moby->state == 2) {
-            target = vars->top;
+            target = elevator_vars->top;
         } else {
-            target = vars->bottom;
+            target = elevator_vars->bottom;
         }
         advance_accelerated_scalar(&moby->pos.z,
-                                   &vars->speed,
+                                   &elevator_vars->speed,
                                    target,
                                    D_0015ED70_2b39e0 * 8.0f,
                                    D_0015ED70_2b39e0 * 8.0f,
@@ -150,14 +154,14 @@ void elevator_update(struct Moby *moby) {
     }
     case ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_TOP:
     case ELEVATOR_STATE_WAIT_FOR_HERO_EXIT_AT_BOTTOM:
-        if (voice_is_playing(moby, vars->voice)) {
-            release_voice_slot(vars->voice);
-            vars->voice = -1;
+        if (voice_is_playing(moby, elevator_vars->voice)) {
+            release_voice_slot(elevator_vars->voice);
+            elevator_vars->voice = -1;
         }
         if (hero.ground_moby != moby || hero.air_frames.s != 0 ||
             vector_distance_xy(&hero.motion.pos, &moby->pos) > 0.5f) {
             u8 s = moby->state;
-            vars->armed = 0;
+            elevator_vars->armed = 0;
             if (s == 7) {
                 moby->state = 5;
             } else {
@@ -168,8 +172,8 @@ void elevator_update(struct Moby *moby) {
     case ELEVATOR_STATE_WAIT_AT_TOP:
     case ELEVATOR_STATE_WAIT_AT_BOTTOM: {
         int i;
-        vars->pulse = fast_add_rotations(vars->pulse, frame_time * 6.2831855f);
-        i = truncate_float_to_s32((fast_sin(vars->pulse) * 4.0f - 3.0f) * 128.0f);
+        elevator_vars->pulse = fast_add_rotations(elevator_vars->pulse, frame_time * 6.2831855f);
+        i = truncate_float_to_s32((fast_sin(elevator_vars->pulse) * 4.0f - 3.0f) * 128.0f);
         if (i > 0x80) {
             i = 0x80;
         } else if (i < 0x20) {
@@ -181,9 +185,9 @@ void elevator_update(struct Moby *moby) {
         }
         if (hero.ground_moby != moby || hero.air_frames.s != 0 ||
             vector_distance_xy(&hero.motion.pos, &moby->pos) > 1.1f) {
-            vars->armed = 1;
+            elevator_vars->armed = 1;
         }
-        if (vars->armed != 0 && hero.ground_moby == moby && hero.air_frames.s == 0 &&
+        if (elevator_vars->armed != 0 && hero.ground_moby == moby && hero.air_frames.s == 0 &&
             vector_distance_xy(&hero.motion.pos, &moby->pos) < 0.5f) {
             moby->glow_color = 0x80208020;
             if (moby->state == 5) {
@@ -194,30 +198,31 @@ void elevator_update(struct Moby *moby) {
             moby->state = 1;
             hero_set_state(0x72, 1);
             jet_mount(D_L13_001670C0_2b39e0, D_L13_001670C0_2b39e0 + 0x10, 1, 0, 0);
-            vars->blend = 0.0f;
+            elevator_vars->blend = 0.0f;
         } else if (moby->state == 4) {
             char *p = (char *)&hero.motion.pos;
             float d = vector_distance_xy(&moby->pos, p);
-            if (absolute_float(*(float *)(p + 0x258) - vars->bottom) < 2.0f && d < 32.0f &&
+            if (absolute_float(*(float *)(p + 0x258) - elevator_vars->bottom) < 2.0f && d < 32.0f &&
                 d > 5.0f) {
                 moby->command = 0;
                 moby->state = 3;
-                vars->speed = -(frame_time * 5.0f);
+                elevator_vars->speed = -(frame_time * 5.0f);
             }
         } else if (moby->state == 5) {
             char *p = (char *)&hero.motion.pos;
             float d = vector_distance_xy(&moby->pos, p);
-            if (absolute_float(*(float *)(p + 0x258) - vars->top) < 2.0f && d < 32.0f && d > 5.0f) {
+            if (absolute_float(*(float *)(p + 0x258) - elevator_vars->top) < 2.0f && d < 32.0f &&
+                d > 5.0f) {
                 moby->command = 0;
                 moby->state = 2;
-                vars->speed = frame_time * 5.0f;
+                elevator_vars->speed = frame_time * 5.0f;
             }
         }
         break;
     }
     }
     fast_vec_add(delta, delta, &moby->pos);
-    update_entity_matrix(vars->path, delta, rot, &moby->rot);
+    update_entity_matrix(elevator_vars->path, delta, rot, &moby->rot);
 }
 
 extern unsigned char D_0013E533[];

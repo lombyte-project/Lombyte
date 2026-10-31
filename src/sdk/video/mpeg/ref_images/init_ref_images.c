@@ -10,15 +10,15 @@ static inline void *UncAddr(void *val) {
  * once more (out6..8). The pointer arithmetic is load-bearing: on plain
  * integers gcc merges the three multiplies retail keeps separate. q is
  * computed just before its first use, for retail's register numbering. */
-void _initRefImages(unsigned int *out0,
-                    unsigned int *out1,
-                    unsigned int *out2,
-                    unsigned int *out3,
-                    unsigned int *out4,
-                    unsigned int *out5,
-                    unsigned int *out6,
-                    unsigned int *out7,
-                    unsigned int *out8,
+void _initRefImages(unsigned int *frame0_buffer_address,
+                    unsigned int *frame1_buffer_address,
+                    unsigned int *frame2_buffer_address,
+                    unsigned int *first_field0_buffer_address,
+                    unsigned int *first_field1_buffer_address,
+                    unsigned int *first_field2_buffer_address,
+                    unsigned int *second_field0_buffer_address,
+                    unsigned int *second_field1_buffer_address,
+                    unsigned int *second_field2_buffer_address,
                     void         *addr0,
                     void         *addr1,
                     void         *addr2,
@@ -27,16 +27,19 @@ void _initRefImages(unsigned int *out0,
                     int height) {
     int pixel_count_div_512;
 
-    *out0 = (unsigned int)UncAddr(addr0);
-    *out1 = (unsigned int)UncAddr(addr1);
-    *out2 = (unsigned int)UncAddr(addr2);
-    *out3 = (unsigned int)UncAddr(addr0);
-    *out4 = (unsigned int)UncAddr(addr1);
-    *out5 = (unsigned int)UncAddr(addr2);
+    *frame0_buffer_address = (unsigned int)UncAddr(addr0);
+    *frame1_buffer_address = (unsigned int)UncAddr(addr1);
+    *frame2_buffer_address = (unsigned int)UncAddr(addr2);
+    *first_field0_buffer_address = (unsigned int)UncAddr(addr0);
+    *first_field1_buffer_address = (unsigned int)UncAddr(addr1);
+    *first_field2_buffer_address = (unsigned int)UncAddr(addr2);
 
     pixel_count_div_512 = (width * height) / 512;
 
-    *out6 = (unsigned int)UncAddr((char *)addr0 + pixel_count_div_512 * 384);
-    *out7 = (unsigned int)UncAddr((char *)addr1 + pixel_count_div_512 * 384);
-    *out8 = (unsigned int)UncAddr((char *)addr2 + pixel_count_div_512 * 384);
+    *second_field0_buffer_address =
+        (unsigned int)UncAddr((char *)addr0 + pixel_count_div_512 * 384);
+    *second_field1_buffer_address =
+        (unsigned int)UncAddr((char *)addr1 + pixel_count_div_512 * 384);
+    *second_field2_buffer_address =
+        (unsigned int)UncAddr((char *)addr2 + pixel_count_div_512 * 384);
 }

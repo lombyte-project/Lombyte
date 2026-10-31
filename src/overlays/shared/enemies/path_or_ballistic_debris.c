@@ -67,7 +67,7 @@ extern f32 ballistic_debris_planar_damping_speed_threshold_gp __asm__("D_L14_001
 void update_path_or_ballistic_debris(struct Moby *moby) __asm__("FUN_L14_002dfd10");
 
 void update_path_or_ballistic_debris(struct Moby *moby) {
-    Data *data = (Data *)moby->pvars;
+    Data *debris_private_vars = (Data *)moby->pvars;
     Vec4  probe;
     f32   position_offset[4];
     f32  *velocity;
@@ -75,19 +75,24 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     f32   speed;
 
     if (moby->state == 0) {
-        points = l14_splines[data->path].path;
+        points = l14_splines[debris_private_vars->path].path;
         qcopy(&probe, &moby->pos);
-        sample_path(points, &moby->pos, &data->path_t, &data->path_u, 0, data->path_speed);
+        sample_path(points,
+                    &moby->pos,
+                    &debris_private_vars->path_t,
+                    &debris_private_vars->path_u,
+                    0,
+                    debris_private_vars->path_speed);
         fast_vec_sub(position_offset, &moby->pos, &probe);
-        data->offset_x = position_offset[0];
-        data->offset_y = position_offset[1];
+        debris_private_vars->offset_x = position_offset[0];
+        debris_private_vars->offset_y = position_offset[1];
         emit_debris_trail_particles(moby);
-        if (fast_dec_timer(&data->timer) == 0)
+        if (fast_dec_timer(&debris_private_vars->timer) == 0)
             return;
         fast_vec_normalize(position_offset, position_offset, 0.5f);
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.25f;
-        trooper_play_sound(1, 0, moby, data->owner->oclass);
+        trooper_play_sound(1, 0, moby, debris_private_vars->owner->oclass);
         spawn_explosion_dfd10(moby,
                               position_offset,
                               &probe,
@@ -110,20 +115,23 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    velocity = data->velocity;
+    velocity = debris_private_vars->velocity;
     fast_vec_add(&moby->pos, &moby->pos, velocity);
-    speed = absolute_float(data->velocity[0]);
+    speed = absolute_float(debris_private_vars->velocity[0]);
     if (ballistic_debris_planar_damping_speed_threshold_gp * frame_scale < speed)
-        data->velocity[0] *= (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
-    speed = absolute_float(data->velocity[1]);
+        debris_private_vars->velocity[0] *=
+            (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
+    speed = absolute_float(debris_private_vars->velocity[1]);
     if (ballistic_debris_planar_damping_speed_threshold_gp * frame_scale < speed)
-        data->velocity[1] *= (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
-    if (data->velocity[2] > 0.0f)
-        data->velocity[2] *= (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
-    data->velocity[2] -= ballistic_debris_gravity_gp * frame_scale_sq;
-    moby->rot.x = fast_add_rotations(moby->rot.x, data->spin_x);
-    moby->rot.y = fast_add_rotations(moby->rot.y, data->spin_y);
-    moby->rot.z = fast_add_rotations(moby->rot.z, data->spin_z);
+        debris_private_vars->velocity[1] *=
+            (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
+    if (debris_private_vars->velocity[2] > 0.0f)
+        debris_private_vars->velocity[2] *=
+            (ballistic_debris_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
+    debris_private_vars->velocity[2] -= ballistic_debris_gravity_gp * frame_scale_sq;
+    moby->rot.x = fast_add_rotations(moby->rot.x, debris_private_vars->spin_x);
+    moby->rot.y = fast_add_rotations(moby->rot.y, debris_private_vars->spin_y);
+    moby->rot.z = fast_add_rotations(moby->rot.z, debris_private_vars->spin_z);
     if (moby->pos.x < 2.0f || 1021.0f < moby->pos.x || moby->pos.y < 2.0f ||
         1021.0f < moby->pos.y || moby->pos.z < 2.0f || 1021.0f < moby->pos.z) {
         mark_moby_for_removal(moby);
@@ -131,8 +139,9 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     }
     fast_vec_normalize(position_offset, &moby->rot_row2, 0.52f);
     fast_vec_add(&probe, &moby->pos, position_offset);
-    if (fast_dec_timer(&data->timer) != 0 || coll_sphere(0.5f, &probe, 0, data->owner) != 0) {
-        trooper_play_sound(0, 0, moby, data->owner->oclass);
+    if (fast_dec_timer(&debris_private_vars->timer) != 0 ||
+        coll_sphere(0.5f, &probe, 0, debris_private_vars->owner) != 0) {
+        trooper_play_sound(0, 0, moby, debris_private_vars->owner->oclass);
         spawn_explosion_dfd10(moby,
                               velocity,
                               &moby->pos,
@@ -174,20 +183,20 @@ extern float ballistic_debris_z_velocity_range_end_gp __asm__("D_L14_00161B3C")
 unsigned char *
 spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
 
-unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) {
+unsigned char *spawn_path_or_ballistic_debris(char *debris_origin_moby, float *scale, int mode) {
     unsigned char *spawned_moby = create_moby(0x193);
     unsigned char *pos;
     if (spawned_moby != 0) {
         char *spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         float launch_vector_scratch[8];
         pos = spawned_moby + 0x10;
-        qcopy(pos, owner + 0x10);
-        MOBY(spawned_moby)->rot.z = *(float *)(owner + 0x48);
+        qcopy(pos, debris_origin_moby + 0x10);
+        MOBY(spawned_moby)->rot.z = *(float *)(debris_origin_moby + 0x48);
         spawned_moby[0x20] = mode;
         spawned_moby[0x30] = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
-        *(char **)spawned_vars = owner;
+        *(char **)spawned_vars = debris_origin_moby;
         if (spawned_moby[0x20] == 0) {
             int          index;
             LevelSpline *splines;
@@ -195,7 +204,7 @@ unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mod
             fields[1] = scale_game_frames(90);
             splines = l14_splines;
             *(float *)(spawned_vars + 8) = *scale * frame_time;
-            index = *(int *)(*(char **)(owner + 0x78) + 0x60);
+            index = *(int *)(*(char **)(debris_origin_moby + 0x78) + 0x60);
             fields[5] = 0;
             fields[3] = index;
             fields[4] = 0;

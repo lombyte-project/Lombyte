@@ -44,7 +44,7 @@ void update_grind_rail_junction(struct Moby *moby) {
         STATE_INITIALIZE_PATH_PAIRS = 0,
         STATE_SELECT_NEARER_PATH = 1
     };
-    PathJunctionVars *vars = (PathJunctionVars *)moby->pvars;
+    PathJunctionVars *path_junction_vars = (PathJunctionVars *)moby->pvars;
     s32               pair_or_node_index;
     s32               i;
     s32               j;
@@ -61,8 +61,8 @@ void update_grind_rail_junction(struct Moby *moby) {
                 if (l18_splines[i].bounds.f[3] == 0.0f) {
                     continue;
                 }
-                vars->pair[pair_or_node_index].first = &l18_splines[i];
-                vars->radius[pair_or_node_index].first = l18_splines[i].bounds.f[3];
+                path_junction_vars->pair[pair_or_node_index].first = &l18_splines[i];
+                path_junction_vars->radius[pair_or_node_index].first = l18_splines[i].bounds.f[3];
                 for (j = 0; j < path_link_count; j++) {
                     if (l18_splines[j].bounds.f[3] == 0.0f) {
                         continue;
@@ -70,8 +70,9 @@ void update_grind_rail_junction(struct Moby *moby) {
                     if (fast_vec_dist(
                             &l18_splines[i].path->points[0],
                             &l18_splines[j].path->points[l18_splines[j].path->count - 1]) < 0.5f) {
-                        vars->pair[pair_or_node_index].second = &l18_splines[j];
-                        vars->radius[pair_or_node_index].second = l18_splines[j].bounds.f[3];
+                        path_junction_vars->pair[pair_or_node_index].second = &l18_splines[j];
+                        path_junction_vars->radius[pair_or_node_index].second =
+                            l18_splines[j].bounds.f[3];
                         l18_splines[j].bounds.f[3] = 0.0f;
                         l18_splines[i].bounds.f[3] = 0.0f;
                         pair_or_node_index++;
@@ -81,26 +82,30 @@ void update_grind_rail_junction(struct Moby *moby) {
             }
         } while (pair_or_node_index < 4);
         for (pair_or_node_index = 0; pair_or_node_index < 2; pair_or_node_index++) {
-            create_nanotech_ball(D_L18_001600EC + vars->node[pair_or_node_index] * 0x80 + 0x30);
+            create_nanotech_ball(D_L18_001600EC +
+                                 path_junction_vars->node[pair_or_node_index] * 0x80 + 0x30);
         }
         break;
     case STATE_SELECT_NEARER_PATH:
         hero.rail_catch_grace = 5;
         for (k = 0; k < 4; k++) {
             if (hero.state.control_mode == 0xF &&
-                (hero.rail_spline == (s32)vars->pair[k].first->path ||
-                 hero.rail_spline == (s32)vars->pair[k].second->path)) {
+                (hero.rail_spline == (s32)path_junction_vars->pair[k].first->path ||
+                 hero.rail_spline == (s32)path_junction_vars->pair[k].second->path)) {
                 continue;
             }
-            near_first =
-                vector_distance_xy(&hero.motion.pos, &vars->pair[k].first->path->points[0]);
+            near_first = vector_distance_xy(&hero.motion.pos,
+                                            &path_junction_vars->pair[k].first->path->points[0]);
             if (near_first <
-                vector_distance_xy(&hero.motion.pos, &vars->pair[k].second->path->points[0])) {
-                vars->pair[k].first->bounds.f[3] = vars->radius[k].first;
-                vars->pair[k].second->bounds.f[3] = 0.0f;
+                vector_distance_xy(&hero.motion.pos,
+                                   &path_junction_vars->pair[k].second->path->points[0])) {
+                path_junction_vars->pair[k].first->bounds.f[3] =
+                    path_junction_vars->radius[k].first;
+                path_junction_vars->pair[k].second->bounds.f[3] = 0.0f;
             } else {
-                vars->pair[k].first->bounds.f[3] = 0.0f;
-                vars->pair[k].second->bounds.f[3] = vars->radius[k].second;
+                path_junction_vars->pair[k].first->bounds.f[3] = 0.0f;
+                path_junction_vars->pair[k].second->bounds.f[3] =
+                    path_junction_vars->radius[k].second;
             }
         }
         break;
@@ -114,10 +119,10 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 char *create_nanotech_ball(void *vector) {
     char *moby = create_moby(0x326);
     if (moby != 0) {
-        char *data = ((char *)MOBY(moby)->pvars);
+        char *class_326_private_vars = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0x40;
         moby[0x20] = 0;
-        *(char **)(data + 0x0C) = moby;
+        *(char **)(class_326_private_vars + 0x0C) = moby;
         MOBY(moby)->collision = 0;
         MOBY(moby)->flags |= 0x41;
         qcopy(moby + 0x10, vector);

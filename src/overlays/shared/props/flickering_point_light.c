@@ -29,15 +29,15 @@ void update_moby_interpolated_point_light(u8 *moby) {
     char   *effect_vars = ((char *)MOBY(moby)->pvars);
     s32     i;
     s32     current;
-    s32     next;
+    s32     point_index_offset;
     s32     slot;
     f32     elapsed;
     f32     active;
     f32     phase;
     f32     blend;
     f32     cutoff;
-    OvlQuad first;
-    OvlQuad second;
+    OvlQuad selected_or_zero_quad;
+    OvlQuad selected_or_blended_quad;
 
     switch (state) {
     case EFFECT_STATE_INITIALIZE:
@@ -87,8 +87,8 @@ void update_moby_interpolated_point_light(u8 *moby) {
             *(s32 *)(effect_vars + 0x74) = *(s32 *)(effect_vars + 0x78);
             *(s32 *)(effect_vars + 0x70) = current;
             *(s32 *)(effect_vars + 0x6c) = current;
-            next = random_int_between(1, *(s32 *)(effect_vars + 0x58) - 1);
-            i = (*(s32 *)(effect_vars + 0x78) + next) % *(s32 *)(effect_vars + 0x58);
+            point_index_offset = random_int_between(1, *(s32 *)(effect_vars + 0x58) - 1);
+            i = (*(s32 *)(effect_vars + 0x78) + point_index_offset) % *(s32 *)(effect_vars + 0x58);
             *(s32 *)(effect_vars + 0x7c) = *(s32 *)(effect_vars + 0x7c) == 0;
             *(s32 *)(effect_vars + 0x78) = i;
         }
@@ -102,22 +102,25 @@ void update_moby_interpolated_point_light(u8 *moby) {
         blend = fast_sin(blend);
 
         if (*(s32 *)(effect_vars + 0x7c) != 0) {
-            first = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x78)];
-            second = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x74)];
-            interpolate_vector(effect_vars + 0x40, &first, &second, blend);
+            selected_or_zero_quad = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x78)];
+            selected_or_blended_quad = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x74)];
+            interpolate_vector(
+                effect_vars + 0x40, &selected_or_zero_quad, &selected_or_blended_quad, blend);
         } else {
-            first = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x74)];
-            second = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x78)];
-            interpolate_vector(effect_vars + 0x40, &first, &second, blend);
+            selected_or_zero_quad = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x74)];
+            selected_or_blended_quad = ((OvlQuad *)effect_vars)[*(s32 *)(effect_vars + 0x78)];
+            interpolate_vector(
+                effect_vars + 0x40, &selected_or_zero_quad, &selected_or_blended_quad, blend);
         }
         cutoff = *(f32 *)(effect_vars + 0x5c) * 0.75f;
         {
             f32 denominator = *(f32 *)(effect_vars + 0x5c) - cutoff;
             if (cutoff < elapsed) {
                 f32 fade = (elapsed - cutoff) / denominator;
-                qzero(&first);
-                second = *(OvlQuad *)(effect_vars + 0x40);
-                interpolate_vector(effect_vars + 0x40, &second, &first, fade);
+                qzero(&selected_or_zero_quad);
+                selected_or_blended_quad = *(OvlQuad *)(effect_vars + 0x40);
+                interpolate_vector(
+                    effect_vars + 0x40, &selected_or_blended_quad, &selected_or_zero_quad, fade);
             }
         }
         slot = *(s32 *)(effect_vars + 0x68);

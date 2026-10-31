@@ -19,15 +19,15 @@ char *spawn_poison_vessel(void *unused, void *vector) __asm__("FUN_L15_002e7ed8"
 char *spawn_poison_vessel(void *unused, void *vector) {
     char *moby = create_moby(0x4E9);
     if (moby != 0) {
-        char *data = ((char *)MOBY(moby)->pvars);
+        char *poison_vessel_private_data = ((char *)MOBY(moby)->pvars);
         char *field;
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0x7F;
         moby[0x31] = 1;
         moby[0x20] = 0;
         moby[0xBC] = 0;
-        *(int *)(data + 0x10) = 0;
-        clear_u64_value(data);
+        *(int *)(poison_vessel_private_data + 0x10) = 0;
+        clear_u64_value(poison_vessel_private_data);
         qcopy(moby + 0x10, vector);
         field = ((char *)MOBY(moby)->pclass);
         MOBY(moby)->collision = *(int *)(field + 0x10);

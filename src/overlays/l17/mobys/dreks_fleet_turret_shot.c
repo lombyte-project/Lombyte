@@ -50,50 +50,50 @@ unsigned char *create_drone_flight_trail_record(char *position_source,
                                                 int   step) __asm__("FUN_L17_0026fdd0");
 
 unsigned char *create_drone_flight_trail_record(char *position_source, int mode, int step) {
-    unsigned char *record;
+    unsigned char *flight_trail_record;
     int            remaining_steps;
     if (mode)
         remaining_steps = 5 - step;
     else
         remaining_steps = 0xF - step;
     if (remaining_steps >= 0) {
-        record = create_part(0x50);
-        if (record != 0) {
-            qcopy(record + 0x10, position_source);
-            record[9] = truncate_float_to_s32(1.0f) + 0x70;
-            *(int *)(record + 0x20) = mode;
+        flight_trail_record = create_part(0x50);
+        if (flight_trail_record != 0) {
+            qcopy(flight_trail_record + 0x10, position_source);
+            flight_trail_record[9] = truncate_float_to_s32(1.0f) + 0x70;
+            *(int *)(flight_trail_record + 0x20) = mode;
             if (mode == 0) {
                 int d = 0xF - step;
-                *(int *)(record + 4) = 0x60FF3020;
-                record[3] = 0x48;
-                *(float *)(record + 0xC) = 630000.0f;
-                *(short *)(record + 0xA) = d;
+                *(int *)(flight_trail_record + 4) = 0x60FF3020;
+                flight_trail_record[3] = 0x48;
+                *(float *)(flight_trail_record + 0xC) = 630000.0f;
+                *(short *)(flight_trail_record + 0xA) = d;
                 if (step != 0) {
                     float a = convert_integer_to_float((short)d - 1);
-                    *(int *)(record + 4) =
-                        FUN_001fa6e0_q(0x603F1008,
-                                       *(int *)(record + 4),
-                                       a / convert_integer_to_float(*(short *)(record + 0xA)));
+                    *(int *)(flight_trail_record + 4) = FUN_001fa6e0_q(
+                        0x603F1008,
+                        *(int *)(flight_trail_record + 4),
+                        a / convert_integer_to_float(*(short *)(flight_trail_record + 0xA)));
                 }
             } else {
                 int d = 5 - step;
-                *(int *)(record + 4) = 0x80D0A080;
-                record[3] = 0x44;
-                *(float *)(record + 0xC) = 420000.0f;
-                *(short *)(record + 0xA) = d;
+                *(int *)(flight_trail_record + 4) = 0x80D0A080;
+                flight_trail_record[3] = 0x44;
+                *(float *)(flight_trail_record + 0xC) = 420000.0f;
+                *(short *)(flight_trail_record + 0xA) = d;
                 if (step != 0) {
                     float a = convert_integer_to_float((short)d - 1);
-                    *(int *)(record + 4) =
-                        FUN_001fa6e0_q(0x30FFFFFF,
-                                       *(int *)(record + 4),
-                                       a / convert_integer_to_float(*(short *)(record + 0xA)));
+                    *(int *)(flight_trail_record + 4) = FUN_001fa6e0_q(
+                        0x30FFFFFF,
+                        *(int *)(flight_trail_record + 4),
+                        a / convert_integer_to_float(*(short *)(flight_trail_record + 0xA)));
                 }
             }
-            record[1] = 0;
-            record[8] = random_integer_below(0xFF);
-            record[2] = *D_L17_001B2A54;
+            flight_trail_record[1] = 0;
+            flight_trail_record[8] = random_integer_below(0xFF);
+            flight_trail_record[2] = *D_L17_001B2A54;
         }
-        return record;
+        return flight_trail_record;
     }
     return 0;
 }

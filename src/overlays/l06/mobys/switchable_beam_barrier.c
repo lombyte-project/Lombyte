@@ -274,7 +274,7 @@ void draw_moby_vector_streams(char *moby) {
     float  scale_matrix[16];
     float  copy_transform_matrices[5][16];
     int    shared_helper_arguments[10];
-    char  *data;
+    char  *vector_stream_storage;
     float *transform_matrix_base;
     int   *sp;
     float *pp;
@@ -282,7 +282,7 @@ void draw_moby_vector_streams(char *moby) {
     float *mp;
     int    i;
     int    j;
-    data = ((char *)MOBY(moby)->pvars);
+    vector_stream_storage = ((char *)MOBY(moby)->pvars);
     euler_rotation_matrix(rotation_scale_matrix, (float *)&MOBY(moby)->rot);
     set_scale_matrix(scale_matrix, *(float *)&D_L06_00162208_gp);
     multiply_matrix(rotation_scale_matrix, rotation_scale_matrix, scale_matrix);
@@ -311,14 +311,14 @@ void draw_moby_vector_streams(char *moby) {
         pp += 16;
     }
     shared_helper_arguments[0] = D_L06_00162234;
-    shared_helper_arguments[2] = (int)(data + 0xF00);
+    shared_helper_arguments[2] = (int)(vector_stream_storage + 0xF00);
     shared_helper_arguments[1] = D_L06_00162238;
     shared_helper_arguments[3] = vector_stream_timer_threshold_color_gp;
     shared_helper_arguments[4] = vector_stream_cycle_boundary_color_gp;
     *(float *)&shared_helper_arguments[7] = vector_stream_texture_u_step_gp;
     *(float *)&shared_helper_arguments[8] = *(float *)&D_L06_001621F8_gp;
     shared_helper_arguments[5] = 0x1E;
-    shared_helper_arguments[6] = (int)data;
+    shared_helper_arguments[6] = (int)vector_stream_storage;
     pp = transform_matrix_base;
     for (j = 3; j >= 0; j--) {
         FUN_L06_00216b88(sp, pp);

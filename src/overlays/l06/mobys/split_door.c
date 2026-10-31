@@ -69,7 +69,7 @@ void update_split_door(char *moby) {
         ANIMATE_PAIR_WITH_TIMED_PHASES = 4,
         WAIT_FOR_RESET = 5
     };
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *pair_transform_vars = ((char *)MOBY(moby)->pvars);
     char *child;
     float position_offset[4];
     float parent_distance, child_distance;
@@ -83,76 +83,82 @@ void update_split_door(char *moby) {
 
     switch ((unsigned char)moby[0x20]) {
     case INITIALIZE_CHILD_AND_TRANSFORMS:
-        qcopy(data + 0x10, moby + 0x10);
-        qcopy(data + 0x20, moby + 0x40);
-        qcopy(data + 0x30, moby + 0xe0);
-        *(char **)(data + 0x40) = (char *)create_moby(0x41f);
-        *(unsigned short *)(*(char **)(data + 0x40) + 0x32) = 0x40;
-        (*(char **)(data + 0x40))[0x31] = 1;
-        *(long *)(*(char **)(data + 0x40) + 0x38) = ((long)MOBY(moby)->spawn_frame);
-        *(unsigned short *)(*(char **)(data + 0x40) + 0x34) = MOBY(moby)->flags;
-        child = *(char **)(data + 0x40) + 0x10;
+        qcopy(pair_transform_vars + 0x10, moby + 0x10);
+        qcopy(pair_transform_vars + 0x20, moby + 0x40);
+        qcopy(pair_transform_vars + 0x30, moby + 0xe0);
+        *(char **)(pair_transform_vars + 0x40) = (char *)create_moby(0x41f);
+        *(unsigned short *)(*(char **)(pair_transform_vars + 0x40) + 0x32) = 0x40;
+        (*(char **)(pair_transform_vars + 0x40))[0x31] = 1;
+        *(long *)(*(char **)(pair_transform_vars + 0x40) + 0x38) = ((long)MOBY(moby)->spawn_frame);
+        *(unsigned short *)(*(char **)(pair_transform_vars + 0x40) + 0x34) = MOBY(moby)->flags;
+        child = *(char **)(pair_transform_vars + 0x40) + 0x10;
         qcopy(child, moby + 0x10);
         qcopy(child + 0x30, moby + 0x40);
-        if (*(int *)data >= 0) {
+        if (*(int *)pair_transform_vars >= 0) {
             moby[0x20] = 1;
             return;
         }
-        if (*(int *)(data + 4) == 2) {
+        if (*(int *)(pair_transform_vars + 4) == 2) {
             moby[0x20] = 2;
             return;
         }
-        fast_vec_normalize(position_offset, data + 0x30, moby_pair_parent_fixed_distance_gp);
-        fast_vec_add(moby + 0x10, data + 0x10, position_offset);
-        fast_vec_normalize(position_offset, data + 0x30, -moby_pair_child_fixed_distance_gp);
-        fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, position_offset);
-        update_entity(*(char **)(data + 0x40));
+        fast_vec_normalize(
+            position_offset, pair_transform_vars + 0x30, moby_pair_parent_fixed_distance_gp);
+        fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
+        fast_vec_normalize(
+            position_offset, pair_transform_vars + 0x30, -moby_pair_child_fixed_distance_gp);
+        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10,
+                     pair_transform_vars + 0x10,
+                     position_offset);
+        update_entity(*(char **)(pair_transform_vars + 0x40));
         moby[0x20] = 5;
         return;
     case WAIT_FOR_HERO_IN_CLIP_VOLUME:
-        if (!is_point_inside_clip_volume(&hero.motion.pos, *(int *)data))
+        if (!is_point_inside_clip_volume(&hero.motion.pos, *(int *)pair_transform_vars))
             return;
-        if (*(int *)(data + 4) == 1) {
+        if (*(int *)(pair_transform_vars + 4) == 1) {
             moby[0x20] = 4;
-            *(int *)(data + 0x4c) = scale_game_frames(0x14);
+            *(int *)(pair_transform_vars + 0x4c) = scale_game_frames(0x14);
         } else if ((unsigned char)moby[0x21] != 0xff) {
             set_moby_list_state((unsigned char)moby[0x21], 3);
         } else {
             moby[0x20] = 3;
         }
-        allocate_voice_for_target_entry(0, 0, (int)*(char **)(data + 0x40));
+        allocate_voice_for_target_entry(0, 0, (int)*(char **)(pair_transform_vars + 0x40));
         return;
     case MOVE_PAIR_TO_FIXED_OFFSETS:
-        target_delta = fast_vec_dist(moby + 0x10, data + 0x10);
-        child = *(char **)(data + 0x40);
+        target_delta = fast_vec_dist(moby + 0x10, pair_transform_vars + 0x10);
+        child = *(char **)(pair_transform_vars + 0x40);
         parent_distance = target_delta;
-        child_distance = fast_vec_dist(child + 0x10, data + 0x10);
+        child_distance = fast_vec_dist(child + 0x10, pair_transform_vars + 0x10);
         FUN_00213f38(&parent_distance,
-                     &((float *)data)[2],
+                     &((float *)pair_transform_vars)[2],
                      moby_pair_parent_fixed_distance_gp,
                      frame_time_sq * 10.0f,
                      frame_time_sq * 20.0f,
                      frame_time * 5.0f);
         FUN_00213f38(&child_distance,
-                     &((float *)data)[0x11],
+                     &((float *)pair_transform_vars)[0x11],
                      moby_pair_child_fixed_distance_gp,
                      frame_time_sq * 10.0f,
                      frame_time_sq * 20.0f,
                      frame_time * 5.0f);
-        fast_vec_normalize(position_offset, data + 0x30, parent_distance);
-        fast_vec_add(moby + 0x10, data + 0x10, position_offset);
-        fast_vec_normalize(position_offset, data + 0x30, -child_distance);
-        fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, position_offset);
-        update_entity(*(char **)(data + 0x40));
+        fast_vec_normalize(position_offset, pair_transform_vars + 0x30, parent_distance);
+        fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
+        fast_vec_normalize(position_offset, pair_transform_vars + 0x30, -child_distance);
+        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10,
+                     pair_transform_vars + 0x10,
+                     position_offset);
+        update_entity(*(char **)(pair_transform_vars + 0x40));
         if (absolute_float(parent_distance - moby_pair_parent_fixed_distance_gp) < 0.01f &&
             absolute_float(child_distance - moby_pair_child_fixed_distance_gp) < 0.01f)
             moby[0x20] = 5;
         return;
     case ANIMATE_PAIR_WITH_TIMED_PHASES:
-        target_delta = fast_vec_dist(moby + 0x10, data + 0x10);
-        child = *(char **)(data + 0x40);
+        target_delta = fast_vec_dist(moby + 0x10, pair_transform_vars + 0x10);
+        child = *(char **)(pair_transform_vars + 0x40);
         phase_a = target_delta;
-        phase_b = fast_vec_dist(child + 0x10, data + 0x10);
+        phase_b = fast_vec_dist(child + 0x10, pair_transform_vars + 0x10);
         phase = (unsigned char)moby[0xbc];
         if (phase == 1)
             goto phase_one;
@@ -177,7 +183,7 @@ void update_split_door(char *moby) {
         goto phase_join;
     phase_one:
         target_rot_a = MOBY(moby)->rot.y;
-        target_rot_b = *(float *)(*(char **)(data + 0x40) + 0x44);
+        target_rot_b = *(float *)(*(char **)(pair_transform_vars + 0x40) + 0x44);
         target_a = phase_a;
         target_b = phase_b;
         acceleration = moby_pair_phase_distance_acceleration_gp;
@@ -208,38 +214,40 @@ void update_split_door(char *moby) {
                                  (float)moby_pair_phase_one_duration_max_frames_gp));
     phase_join:
         FUN_00213f38(&phase_a,
-                     &((float *)data)[2],
+                     &((float *)pair_transform_vars)[2],
                      target_a,
                      acceleration * frame_time_sq,
                      max_speed * frame_time_sq,
                      damping * frame_time);
         FUN_00213f38(&phase_b,
-                     &((float *)data)[0x11],
+                     &((float *)pair_transform_vars)[0x11],
                      target_b,
                      acceleration * frame_time_sq,
                      max_speed * frame_time_sq,
                      damping * frame_time);
         FUN_00213f38((float *)&MOBY(moby)->rot.y,
-                     &((float *)data)[3],
+                     &((float *)pair_transform_vars)[3],
                      target_rot_a,
                      rotation_acceleration * DEG_TO_RAD * frame_time_sq,
                      rotation_speed * DEG_TO_RAD * frame_time_sq,
                      rotation_damping * DEG_TO_RAD * frame_time);
-        FUN_00213f38((float *)(*(char **)(data + 0x40) + 0x44),
-                     &((float *)data)[0x12],
+        FUN_00213f38((float *)(*(char **)(pair_transform_vars + 0x40) + 0x44),
+                     &((float *)pair_transform_vars)[0x12],
                      target_rot_b,
                      rotation_acceleration * DEG_TO_RAD * frame_time_sq,
                      rotation_speed * DEG_TO_RAD * frame_time_sq,
                      rotation_damping * DEG_TO_RAD * frame_time);
-        fast_vec_normalize(position_offset, data + 0x30, phase_a);
-        fast_vec_add(moby + 0x10, data + 0x10, position_offset);
-        fast_vec_normalize(position_offset, data + 0x30, -phase_b);
-        fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, position_offset);
-        update_entity(*(char **)(data + 0x40));
-        if (!fast_dec_timer(data + 0x4c))
+        fast_vec_normalize(position_offset, pair_transform_vars + 0x30, phase_a);
+        fast_vec_add(moby + 0x10, pair_transform_vars + 0x10, position_offset);
+        fast_vec_normalize(position_offset, pair_transform_vars + 0x30, -phase_b);
+        fast_vec_add(*(char **)(pair_transform_vars + 0x40) + 0x10,
+                     pair_transform_vars + 0x10,
+                     position_offset);
+        update_entity(*(char **)(pair_transform_vars + 0x40));
+        if (!fast_dec_timer(pair_transform_vars + 0x4c))
             return;
         moby[0xbc] = next_phase;
-        *(int *)(data + 0x4c) = scale_game_frames(next_timer);
+        *(int *)(pair_transform_vars + 0x4c) = scale_game_frames(next_timer);
         target_delta = moby_pair_parent_phase_target_distance_gp;
         if (absolute_float(phase_a - target_delta) < 0.01f) {
             if (absolute_float(phase_b - moby_pair_child_phase_target_distance_gp) < 0.01f)
@@ -251,15 +259,15 @@ void update_split_door(char *moby) {
             return;
         moby[0xbc] = 0;
         moby[0x20] = 1;
-        qcopy(moby + 0x10, data + 0x10);
-        qcopy(moby + 0x40, data + 0x20);
-        child = *(char **)(data + 0x40) + 0x10;
+        qcopy(moby + 0x10, pair_transform_vars + 0x10);
+        qcopy(moby + 0x40, pair_transform_vars + 0x20);
+        child = *(char **)(pair_transform_vars + 0x40) + 0x10;
         qcopy(child, moby + 0x10);
         qcopy(child + 0x30, moby + 0x40);
-        *(volatile float *)(data + 0x48) = 0.0f;
-        *(volatile float *)(data + 8) = 0.0f;
-        *(volatile float *)(data + 0xc) = 0.0f;
-        *(volatile float *)(data + 0x44) = 0.0f;
+        *(volatile float *)(pair_transform_vars + 0x48) = 0.0f;
+        *(volatile float *)(pair_transform_vars + 8) = 0.0f;
+        *(volatile float *)(pair_transform_vars + 0xc) = 0.0f;
+        *(volatile float *)(pair_transform_vars + 0x44) = 0.0f;
         return;
     }
 }

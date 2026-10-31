@@ -183,18 +183,18 @@ void blarg_elite_commando_update(char *commando_moby) {
     };
     float  target[4], scratch_vector[4], delta[4];
     char  *commando_data = ((char *)MOBY(commando_moby)->pvars);
-    char  *source, *owner;
+    char  *source, *aim_target_moby;
     float  distance, angle;
     float *heading, *movement;
     int    ticks;
     int    owner_moby_class;
     update_blarg_elite_commando_damage_and_pursuit(commando_moby);
-    owner = *(char **)(commando_data + 0x110);
-    owner_moby_class = *(short *)(owner + 0xA6);
+    aim_target_moby = *(char **)(commando_data + 0x110);
+    owner_moby_class = *(short *)(aim_target_moby + 0xA6);
     if (owner_moby_class == 0 || owner_moby_class == 0x1A3) {
         qcopy(target, &hero.motion.near_ground_point);
     } else {
-        qcopy(target, owner + 0x10);
+        qcopy(target, aim_target_moby + 0x10);
     }
     if ((&big_head_cheat_enabled)[7])
         manipulator_set_scale(commando_data + 0x130, 2.5f);
@@ -479,14 +479,14 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         HIT_RESPONSE_DAMAGE_ANIMATION_ONLY = 10,
         HIT_RESPONSE_NO_REACTION = 11
     };
-    L16DamageScratch scratch;
+    L16DamageScratch damage_reaction;
     L16DamageData   *commando_data = (L16DamageData *)commando_moby->pvars;
     char            *hit;
     unsigned int     response;
     float            range;
     float            time_scale;
     commando_moby->scale = commando_moby->pclass->scale;
-    scratch.amount = 0.0f;
+    damage_reaction.amount = 0.0f;
     hit = find_moby_hit(commando_moby, 0x330000, 0);
     if (hit) {
         if (*(char **)(hit + 0x20)) {
@@ -494,14 +494,20 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             hit = *(short *)(source + 0xA6) != 0x31 ? hit : 0;
         }
     }
-    response = hit_reaction(
-        commando_moby, hit, &commando_data->health, 0, &scratch.status, &scratch.amount, 0, 4);
-    if (scratch.status != 1 && commando_moby->state != 9) {
+    response = hit_reaction(commando_moby,
+                            hit,
+                            &commando_data->health,
+                            0,
+                            &damage_reaction.status,
+                            &damage_reaction.amount,
+                            0,
+                            4);
+    if (damage_reaction.status != 1 && commando_moby->state != 9) {
         randomize_blarg_elite_commando_group_pursuit_timers(commando_moby, 0x12C, 0x168);
         if (hit && *(char **)(hit + 0x20) && *(short *)(*(char **)(hit + 0x20) + 0xA6) != 0x47) {
             commando_data->reward_hits = 0;
         }
-        commando_data->health -= scratch.amount;
+        commando_data->health -= damage_reaction.amount;
         if (commando_data->health <= 0.0f)
             response = 1;
         commando_data->sound_timer = truncate_float_to_s32(512.0f);
@@ -531,15 +537,15 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             {
                 float heading = fast_arc_tan(commando_moby->pos.x - *(float *)(source + 0x10),
                                              commando_moby->pos.y - *(float *)(source + 0x14));
-                scratch.vector = *(OvlQuad *)(hit + 0x10);
-                scratch.angle = heading;
+                damage_reaction.vector = *(OvlQuad *)(hit + 0x10);
+                damage_reaction.angle = heading;
             }
-            trooper_knockback_arc(&scratch.vector,
-                                  &scratch.angle,
+            trooper_knockback_arc(&damage_reaction.vector,
+                                  &damage_reaction.angle,
                                   &commando_data->forward_impulse,
                                   &commando_data->lateral_impulse);
             trooper_start_knockback(
-                scratch.angle, commando_moby, commando_data->knockback, 6, 1, 0);
+                damage_reaction.angle, commando_moby, commando_data->knockback, 6, 1, 0);
             commando_moby->state = 8;
             commando_data->animation = 0x78;
             break;
@@ -576,15 +582,15 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             {
                 float heading = fast_arc_tan(commando_moby->pos.x - *(float *)(source + 0x10),
                                              commando_moby->pos.y - *(float *)(source + 0x14));
-                scratch.vector = *(OvlQuad *)(hit + 0x10);
-                scratch.fatal_angle = heading;
+                damage_reaction.vector = *(OvlQuad *)(hit + 0x10);
+                damage_reaction.fatal_angle = heading;
             }
-            trooper_knockback_arc(&scratch.vector,
-                                  &scratch.fatal_angle,
+            trooper_knockback_arc(&damage_reaction.vector,
+                                  &damage_reaction.fatal_angle,
                                   &commando_data->forward_impulse,
                                   &commando_data->lateral_impulse);
             trooper_start_knockback(
-                scratch.fatal_angle, commando_moby, commando_data->knockback, 7, 1, 0);
+                damage_reaction.fatal_angle, commando_moby, commando_data->knockback, 7, 1, 0);
             commando_moby->state = 9;
             commando_data->animation = 0xF0;
             FUN_L00_00257470(commando_moby, 0, -1);
@@ -630,14 +636,14 @@ void set_blarg_elite_commando_parent_transform(char *moby,
                                                char *vector) __asm__("FUN_L16_002d3dc0");
 
 void set_blarg_elite_commando_parent_transform(char *moby,
-                                               void *owner,
+                                               void *parent_moby,
                                                void *position,
 
                                                char *vector) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    *(void **)(data + 0x2D0) = owner;
-    qcopy(data + 0x2C0, position);
-    *(float *)(data + 0x2CC) = *(float *)(vector + 8);
+    char *commando_data = ((char *)MOBY(moby)->pvars);
+    *(void **)(commando_data + 0x2D0) = parent_moby;
+    qcopy(commando_data + 0x2C0, position);
+    *(float *)(commando_data + 0x2CC) = *(float *)(vector + 8);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D51A8), where it is exact; names translated to the US level program. */
@@ -670,21 +676,21 @@ float advance_blarg_elite_commando_base_position(char  *moby,
                                                  float *target) __asm__("FUN_L16_002d3eb8");
 
 float advance_blarg_elite_commando_base_position(char *moby, float *target) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    char *base_position = data + 0x2C0;
+    char *commando_motion_data = ((char *)MOBY(moby)->pvars);
+    char *base_position = commando_motion_data + 0x2C0;
     float distance = fast_vec_dist(base_position, target);
     float acceleration_braking_step = frame_time_sq * 4.0f;
     int   zero[1];
     float movement_step[4];
     zero[0] = 0;
     advance_accelerated_scalar((float *)zero,
-                               (float *)(data + 0x2D4),
+                               (float *)(commando_motion_data + 0x2D4),
                                distance,
                                acceleration_braking_step,
                                acceleration_braking_step,
                                frame_time * 5.0f);
     fast_vec_sub(movement_step, target, base_position);
-    fast_vec_normalize(movement_step, movement_step, *(float *)(data + 0x2D4));
+    fast_vec_normalize(movement_step, movement_step, *(float *)(commando_motion_data + 0x2D4));
     fast_vec_add(base_position, base_position, movement_step);
     return distance;
 }
@@ -703,13 +709,13 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
         timer_data->timer = truncate_float_to_s32(
             func_001F9878_timer(random_float_between((float)lower, (float)upper)));
     } else {
-        L16GroupMoby *other;
+        L16GroupMoby *group_member_moby;
         group_entry = D_L16_001ABCC0[source_moby->group];
     next:
-        other = (L16GroupMoby *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) +
-                                 (int)D_L16_0015FFD8);
-        if (other->state >= 0) {
-            timer_data = other->data;
+        group_member_moby = (L16GroupMoby *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) +
+                                             (int)D_L16_0015FFD8);
+        if (group_member_moby->state >= 0) {
+            timer_data = group_member_moby->data;
             timer_data->timer = truncate_float_to_s32(
                 func_001F9878_timer(random_float_between((float)lower, (float)upper)));
         }
@@ -720,8 +726,9 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 void select_blarg_elite_commando_movement_animation(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    char *target = D_L16_001B0930[*(int *)(data + 0x120)] + (*(short *)(data + 0x300) << 4);
+    char *commando_path_state = ((char *)MOBY(moby)->pvars);
+    char *target = D_L16_001B0930[*(int *)(commando_path_state + 0x120)] +
+                   (*(short *)(commando_path_state + 0x300) << 4);
     float angle = fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                *(float *)(target + 0x14) - MOBY(moby)->pos.y);
     float delta = fast_subtract_rotations(angle, MOBY(moby)->rot.z);
@@ -752,7 +759,7 @@ void emit_blarg_elite_commando_death_particles(void *moby) __asm__("FUN_L16_002d
 
 void emit_blarg_elite_commando_death_particles(void *moby) {
     float              delta[4], velocity[4], position[4];
-    L16ParticleChoices first, second;
+    L16ParticleChoices first_particle_choices, second_particle_choices;
     float              distance, range, delay;
     int                count;
     void              *origin;
@@ -778,11 +785,11 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
             int  *first_choice, *second_choice, duration1, duration2;
             remaining--;
             sample = random_float_between(8.0f, 10.0f);
-            first = D_L16_001E8300;
-            second = D_L16_001E8318;
+            first_particle_choices = D_L16_001E8300;
+            second_particle_choices = D_L16_001E8318;
             delay = sample * frame_time - range * frame_time;
-            first_choice = &first.values[random_integer_below(6)];
-            second_choice = &second.values[random_integer_below(6)];
+            first_choice = &first_particle_choices.values[random_integer_below(6)];
+            second_choice = &second_particle_choices.values[random_integer_below(6)];
             {
                 int lo = scale_game_frames(15), hi = scale_game_frames(20);
                 duration1 = random_int_between(lo, hi);

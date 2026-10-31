@@ -13,9 +13,9 @@
 void update_drifting_moby(struct Moby *moby) __asm__("FUN_L09_002f0040");
 
 void update_drifting_moby(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    fast_vec_add(&moby->pos, &moby->pos, data);
-    fast_vec_scale(data, data, 1.0f + frame_scale * -0.019999980926513672f);
+    char *drift_velocity = (char *)moby->pvars;
+    fast_vec_add(&moby->pos, &moby->pos, drift_velocity);
+    fast_vec_scale(drift_velocity, drift_velocity, 1.0f + frame_scale * -0.019999980926513672f);
     if (moby->anim_flags & 2) {
         mark_moby_for_removal(moby);
     }

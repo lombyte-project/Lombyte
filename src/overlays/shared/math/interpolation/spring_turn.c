@@ -62,21 +62,21 @@ void interpolate_wrapped_rotations_cosine_eased(
     float *target_rotations,
     float  interpolation_fraction) __asm__("FUN_L00_00258050");
 
-void interpolate_wrapped_rotations_cosine_eased(float *out,
+void interpolate_wrapped_rotations_cosine_eased(float *interpolated_rotations_output,
                                                 float *start_rotations,
                                                 float *target_rotations,
 
                                                 float interpolation_fraction) {
     float cosine_ease_weight = (1.0f - fast_cos(interpolation_fraction * 3.1415927f)) * 0.5f;
-    out[0] = fast_add_rotations(start_rotations[0],
-                                fast_subtract_rotations(target_rotations[0], start_rotations[0]) *
-                                    cosine_ease_weight);
-    out[1] = fast_add_rotations(start_rotations[1],
-                                fast_subtract_rotations(target_rotations[1], start_rotations[1]) *
-                                    cosine_ease_weight);
-    out[2] = fast_add_rotations(start_rotations[2],
-                                fast_subtract_rotations(target_rotations[2], start_rotations[2]) *
-                                    cosine_ease_weight);
+    interpolated_rotations_output[0] = fast_add_rotations(
+        start_rotations[0],
+        fast_subtract_rotations(target_rotations[0], start_rotations[0]) * cosine_ease_weight);
+    interpolated_rotations_output[1] = fast_add_rotations(
+        start_rotations[1],
+        fast_subtract_rotations(target_rotations[1], start_rotations[1]) * cosine_ease_weight);
+    interpolated_rotations_output[2] = fast_add_rotations(
+        start_rotations[2],
+        fast_subtract_rotations(target_rotations[2], start_rotations[2]) * cosine_ease_weight);
 }
 
 float spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_00258110");
@@ -444,7 +444,12 @@ extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
 s32        FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f);
 
-s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Vec4 *out, f32 f) {
+s32 FUN_L00_00258b50(Obj  *moby,
+                     Ctl  *movement_control,
+                     void *target_position,
+                     Vec4 *movement_displacement_vector_output,
+
+                     f32 f) {
     Vec4  save;
     Vec4  displacement;
     Vec4  probe_or_direction;
@@ -560,7 +565,7 @@ done:
                 moby->pos.q = save.q;
             }
         }
-        qcopy(out, &displacement);
+        qcopy(movement_displacement_vector_output, &displacement);
     } else {
         if ((movement_control->i38 ^ 1) & 1)
             movement_control->f18 = frame_scale * -0.01f;
@@ -577,10 +582,10 @@ int  FUN_L00_00259028(unsigned char *moby,
                       char          *movement_control,
                       float         *target_position,
 
-                      void *out) {
+                      void *movement_displacement_output) {
     int   navigation_result_flags = 0;
     float target_heading, heading_error;
-    clear_u64_value(out);
+    clear_u64_value(movement_displacement_output);
     if (fast_vec_dist(moby + 0x10, target_position) < *(float *)(movement_control + 0x2C))
         navigation_result_flags = 4;
     target_heading = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
@@ -603,7 +608,7 @@ int  FUN_L00_00259028(unsigned char *moby,
         navigation_result_flags |= move_w(moby,
                                           movement_control,
                                           target_position,
-                                          out,
+                                          movement_displacement_output,
                                           (*(float *)(movement_control + 0x28) - heading_error) /
                                               *(float *)(movement_control + 0x28));
         if (0.1f < heading_error)
@@ -628,7 +633,7 @@ int get_first_moby_in_group(char **out,
                             int    include_sign_bit_set_entries,
                             int    require_sign_bit_set_entries) __asm__("FUN_L00_002591d0");
 
-int get_first_moby_in_group(char **out,
+int get_first_moby_in_group(char **first_moby_output,
                             int    moby_group_index,
                             int    include_sign_bit_set_entries,
 
@@ -638,10 +643,10 @@ int get_first_moby_in_group(char **out,
     int             entry_sign_bit_set;
     int             entry_index;
     if (moby_group_index < 0 || D_L00_0015FFF4 < moby_group_index) {
-        *out = 0;
+        *first_moby_output = 0;
         return -1;
     }
-    *out = 0;
+    *first_moby_output = 0;
     D_L00_00160114 = 0;
     entry_index_list = D_L00_001AB840_2591d0[moby_group_index];
     moby_group_entry_cursor = entry_index_list;
@@ -651,13 +656,13 @@ int get_first_moby_in_group(char **out,
     D_L00_00160110 = entry_index;
     entry_address = moby_table + (entry_index << 8);
     D_L00_00160114 = entry_address;
-    *out = entry_address;
+    *first_moby_output = entry_address;
     entry_sign_bit_set = (unsigned)(*(char *volatile *)&D_L00_00160114)[0x20] >> 31;
     if (!include_sign_bit_set_entries) {
         if (require_sign_bit_set_entries || entry_sign_bit_set)
-            return FUN_L00_002592b8_c(out, D_L00_00160114);
+            return FUN_L00_002592b8_c(first_moby_output, D_L00_00160114);
     } else if (require_sign_bit_set_entries && !entry_sign_bit_set)
-        return FUN_L00_002592b8_c(out, D_L00_00160114);
+        return FUN_L00_002592b8_c(first_moby_output, D_L00_00160114);
     return 0;
 }
 
@@ -671,14 +676,14 @@ int get_next_moby_in_group(char **out,
                            int    include_sign_bit_set_entries,
                            int    require_sign_bit_set_entries) __asm__("FUN_L00_002592b8");
 
-int get_next_moby_in_group(char **out,
+int get_next_moby_in_group(char **next_moby_output,
                            char  *target,
                            int    include_sign_bit_set_entries,
 
                            int require_sign_bit_set_entries) {
     int entry_sign_bit_set;
 
-    *out = 0;
+    *next_moby_output = 0;
     if (target != D_L00_00160114) {
         if (D_L00_0015FFF4 < *(unsigned char *)(target + 0x21)) {
             goto fail;
@@ -705,7 +710,7 @@ int get_next_moby_in_group(char **out,
         D_L00_0016010C++;
         D_L00_00160110 = *D_L00_0016010C & 0x7FFF;
         D_L00_00160114 = moby_table + (D_L00_00160110 << 8);
-        *out = D_L00_00160114;
+        *next_moby_output = D_L00_00160114;
         entry_sign_bit_set = *(signed char *)(D_L00_00160114 + 0x20) < 0;
         if ((include_sign_bit_set_entries == 0 && require_sign_bit_set_entries == 0 &&
              entry_sign_bit_set == 0) ||
@@ -714,7 +719,7 @@ int get_next_moby_in_group(char **out,
             return 0;
         }
     } while ((short)*D_L00_0016010C >= 0);
-    *out = 0;
+    *next_moby_output = 0;
     return -1;
 }
 
@@ -743,7 +748,7 @@ float calculate_triangular_corrected_scalar(
 
 float calculate_triangular_corrected_scalar(float *base_values,
                                             float *linear_term_values,
-                                            int   *out,
+                                            int   *truncated_ratio_output,
 
                                             float triangular_correction_coefficient) {
     int truncated_ratio =
@@ -753,8 +758,8 @@ float calculate_triangular_corrected_scalar(float *base_values,
         base_values[2] + linear_term_values[2] * truncated_ratio_float -
         convert_integer_to_float((truncated_ratio * truncated_ratio + truncated_ratio) >> 1) *
             triangular_correction_coefficient;
-    if (out) {
-        *out = truncated_ratio;
+    if (truncated_ratio_output) {
+        *truncated_ratio_output = truncated_ratio;
     }
     return corrected_scalar_value;
 }

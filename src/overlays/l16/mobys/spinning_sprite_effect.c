@@ -56,28 +56,28 @@ void update_spinning_sprite_effect(struct Moby *moby) {
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void initialize_spinning_sprite_effect(struct Moby *moby) {
-    char  *data = (char *)moby->pvars;
-    float *random_value_cursor = (float *)data;
+    char  *sprite_effect_data = (char *)moby->pvars;
+    float *random_value_cursor = (float *)sprite_effect_data;
     int   *frame_count_cursor;
     int    i;
     int    unscaled_frame_count;
     for (i = 3; i >= 0; i--, random_value_cursor++) {
         *random_value_cursor = (float)random_integer_below(0xFF);
     }
-    frame_count_cursor = (int *)(data + 0x20);
-    *(float *)(data + 0x10) = -1.0f;
-    *(float *)(data + 0x14) = -2.25f;
-    *(float *)(data + 0x18) = 1.25f;
-    *(float *)(data + 0x1C) = 2.5f;
+    frame_count_cursor = (int *)(sprite_effect_data + 0x20);
+    *(float *)(sprite_effect_data + 0x10) = -1.0f;
+    *(float *)(sprite_effect_data + 0x14) = -2.25f;
+    *(float *)(sprite_effect_data + 0x18) = 1.25f;
+    *(float *)(sprite_effect_data + 0x1C) = 2.5f;
     unscaled_frame_count = 0x3F;
     for (i = 3; i >= 0; i--, frame_count_cursor++) {
         *frame_count_cursor = scale_game_frames(unscaled_frame_count);
         unscaled_frame_count += 0x40;
     }
-    *(float *)(data + 0x30) = 3.5f;
-    *(float *)(data + 0x34) = 4.2f;
-    *(float *)(data + 0x3C) = 3.5f;
-    *(float *)(data + 0x38) = 4.2f;
+    *(float *)(sprite_effect_data + 0x30) = 3.5f;
+    *(float *)(sprite_effect_data + 0x34) = 4.2f;
+    *(float *)(sprite_effect_data + 0x3C) = 3.5f;
+    *(float *)(sprite_effect_data + 0x38) = 4.2f;
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CAA18), where it is exact; names translated to the US level program. */
 

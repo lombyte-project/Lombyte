@@ -51,21 +51,21 @@ void render_queued_rotated_sprites(void) {
         screen_center[0] = convert_integer_to_float(screen_extent.half_width);
         screen_center[1] = convert_integer_to_float(screen_extent.half_height);
         for (record_index = 0; record_index < rotated_sprite_queue.count; record_index++) {
-            QueuedRotatedSprite *record = &rotated_sprite_queue.records[record_index];
+            QueuedRotatedSprite *queued_sprite = &rotated_sprite_queue.records[record_index];
             s32                  resource_state;
 
-            if (record->resource == 0) {
+            if (queued_sprite->resource == 0) {
                 continue;
             }
-            resource_state = record->resource[0x20];
+            resource_state = queued_sprite->resource[0x20];
             if (resource_state == 0xFE) {
                 continue;
             }
             if (resource_state == 0xFD) {
                 continue;
             }
-            if (record->project_position != 0) {
-                project_to_screen(screen_position, record);
+            if (queued_sprite->project_position != 0) {
+                project_to_screen(screen_position, queued_sprite);
                 screen_position[0] =
                     (screen_position[0] - convert_integer_to_float(screen_extent.left)) * 0.0625f;
                 screen_position[1] =
@@ -73,7 +73,7 @@ void render_queued_rotated_sprites(void) {
             } else {
                 qcopy(screen_position, screen_center);
             }
-            spawn_particle_burst(record, screen_position[0], screen_position[1]);
+            spawn_particle_burst(queued_sprite, screen_position[0], screen_position[1]);
         }
         rotated_sprite_queue.count = 0;
     }

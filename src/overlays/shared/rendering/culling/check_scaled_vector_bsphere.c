@@ -10,7 +10,7 @@ extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 void check_scaled_vector_bsphere(char *vec, float scale) __asm__("FUN_L01_00275690");
 
 void check_scaled_vector_bsphere(char *culling_vector, float scale) {
-    char scratch[16];
-    scale_vector(scratch, culling_vector, 0.0009765625f);
-    fast_bsphere_check(scratch, scale);
+    char scaled_culling_vector[16];
+    scale_vector(scaled_culling_vector, culling_vector, 0.0009765625f);
+    fast_bsphere_check(scaled_culling_vector, scale);
 }

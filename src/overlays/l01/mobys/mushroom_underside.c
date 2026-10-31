@@ -7,11 +7,11 @@
 
 void mushroom_underside_update(void *self) __asm__("FUN_L01_00307c48");
 
-void mushroom_underside_update(void *self) {
+void mushroom_underside_update(void *mushroom_underside_moby) {
     u8 *hit;
 
-    hit = find_moby_hit(self, 0x10000, 0);
+    hit = find_moby_hit(mushroom_underside_moby, 0x10000, 0);
     if (hit != NULL && *(f32 *)(hit + 0x2C) > 0.0f) {
-        mark_moby_for_removal(self);
+        mark_moby_for_removal(mushroom_underside_moby);
     }
 }

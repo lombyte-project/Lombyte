@@ -330,7 +330,7 @@ void gadgebot_update(GbMoby *moby) {
         GADGEBOT_INTERACTION_SEARCH_TARGET = 0,
         GADGEBOT_INTERACTION_APPROACH_TARGET = 1
     };
-    float   out[4];
+    float   movement_displacement_output[4];
     float   raised_position_snapshot[4];
     float   save0[4];
     float   save1[4];
@@ -613,8 +613,11 @@ void gadgebot_update(GbMoby *moby) {
                     gadgebot_vars->ctl.unk24 = frame_time * 3.0f * 1.35f;
                 }
                 if (hero_distance > 0.8f) {
-                    flags =
-                        FUN_L00_00258b50(moby, &gadgebot_vars->ctl, hero.motion.pos.f, out, 1.0f);
+                    flags = FUN_L00_00258b50(moby,
+                                             &gadgebot_vars->ctl,
+                                             hero.motion.pos.f,
+                                             movement_displacement_output,
+                                             1.0f);
                 }
                 {
                     int ph = ((int)moby >> 8) % 8;
@@ -778,8 +781,11 @@ void gadgebot_update(GbMoby *moby) {
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);
                 gadgebot_vars->ctl.unk24 = frame_time * 4.5f;
-                if (FUN_L00_00258b50(
-                        moby, &gadgebot_vars->ctl, gadgebot_vars->target->pos, out, 1.0f) &
+                if (FUN_L00_00258b50(moby,
+                                     &gadgebot_vars->ctl,
+                                     gadgebot_vars->target->pos,
+                                     movement_displacement_output,
+                                     1.0f) &
                     0x20) {
                     moby->state = 4;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
@@ -888,7 +894,11 @@ void gadgebot_update(GbMoby *moby) {
                                  frame_scale_sq * 0.07f,
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);
-                if (FUN_L00_00258b50(moby, &gadgebot_vars->ctl, vector_and_hit_scratch, out, 1.0f) &
+                if (FUN_L00_00258b50(moby,
+                                     &gadgebot_vars->ctl,
+                                     vector_and_hit_scratch,
+                                     movement_displacement_output,
+                                     1.0f) &
                     0x20) {
                     moby->state = 4;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
@@ -1004,7 +1014,7 @@ void gadgebot_update(GbMoby *moby) {
         saved_control_f24 = gadgebot_vars->ctl.unk24;
         gadgebot_vars->ctl.unk10 = 0.0f;
         gadgebot_vars->ctl.unk24 = 0.0f;
-        FUN_L00_00258b50(moby, &gadgebot_vars->ctl, moby->pos, out, 1.0f);
+        FUN_L00_00258b50(moby, &gadgebot_vars->ctl, moby->pos, movement_displacement_output, 1.0f);
         gadgebot_vars->ctl.unk10 = saved_control_f10;
         gadgebot_vars->ctl.unk24 = saved_control_f24;
         moby->pos[2] = vector_and_hit_scratch[2];
@@ -1183,14 +1193,15 @@ void assign_gadgebot_attack_targets(void) {
 
     moby_count = 0;
     {
-        char *entry;
-        for (i = 0; (entry = (char *)D_L06_001AC180[i]) != 0; i++) {
-            if (*(short *)(entry + 0xA6) == 0x359 && ((unsigned char *)entry)[0x20] == 5 &&
-                ((unsigned char *)entry)[0xBC] != 2 && moby_count != 0x32) {
-                char *current_target = ((GbSlots *)PVARS(entry))->target;
+        char *gadgebot_candidate;
+        for (i = 0; (gadgebot_candidate = (char *)D_L06_001AC180[i]) != 0; i++) {
+            if (*(short *)(gadgebot_candidate + 0xA6) == 0x359 &&
+                ((unsigned char *)gadgebot_candidate)[0x20] == 5 &&
+                ((unsigned char *)gadgebot_candidate)[0xBC] != 2 && moby_count != 0x32) {
+                char *current_target = ((GbSlots *)PVARS(gadgebot_candidate))->target;
                 if (current_target == 0 || ((unsigned char *)current_target)[0x20] == 0xFE ||
                     ((unsigned char *)current_target)[0x20] == 0xFD) {
-                    mobys[moby_count++] = entry;
+                    mobys[moby_count++] = gadgebot_candidate;
                 }
             }
         }
@@ -1408,7 +1419,9 @@ void select_nearest_gadgebot_interaction_target(void *moby_arg) {
 int process_gadgebot_interaction_candidate(
     char *ctx, char *ow, char *moby, int flag, int *out) __asm__("FUN_L06_002f2c28");
 
-int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int flag, int *out) {
+int process_gadgebot_interaction_candidate(
+
+    char *ctx, char *ow, char *moby, int flag, int *interaction_status_out) {
     float candidate_position[4];
     float vB[4];
     float vA[4];
@@ -1523,7 +1536,7 @@ int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int 
         }
 
         *(char *)(ctx + 0x20) = 4;
-        *out = 1;
+        *interaction_status_out = 1;
         if (*(int *)(ow + 0x310) >= 2) {
             int  path_slot_index;
             int *ids = (int *)(ow + 0x1E0);
@@ -1551,7 +1564,7 @@ int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int 
             return 0;
         *(char *)(ctx + 0x20) = 8;
         *(int *)(ow + 0x304) = (int)moby;
-        *out = 2;
+        *interaction_status_out = 2;
         return 0;
     }
     return 0;
@@ -1567,7 +1580,7 @@ int process_gadgebot_interactions(char *moby, int flag) {
     char    *state;
     int      list_id;
     int     *cursor;
-    int      entry;
+    int      interaction_candidate_moby;
 
     state = ((char *)MOBY(moby)->pvars);
     iter.out = 0;
@@ -1581,13 +1594,14 @@ int process_gadgebot_interactions(char *moby, int flag) {
         }
     } else {
         cursor = D_L06_001AC180;
-        entry = *cursor;
-        while (entry != 0) {
+        interaction_candidate_moby = *cursor;
+        while (interaction_candidate_moby != 0) {
             moby_ref = &moby;
-            if (process_gadgebot_interaction_candidate(*moby_ref, state, entry, flag, &iter.out))
+            if (process_gadgebot_interaction_candidate(
+                    *moby_ref, state, interaction_candidate_moby, flag, &iter.out))
                 return iter.out;
             cursor++;
-            entry = *cursor;
+            interaction_candidate_moby = *cursor;
         }
     }
     return iter.out;
@@ -1603,10 +1617,11 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
         if (target != 0) {
             Q     hit_vector_copy;
             float base_angle = fast_arc_tan(*(float *)(target + 0x10), *(float *)(target + 0x14));
-            char *owner = *(char **)(target + 0x20);
+            char *hit_source_moby = *(char **)(target + 0x20);
             float knockback_angle;
             knockback_angle = base_angle;
-            if (owner != D_001413D0 && *(short *)(owner + 0xA6) != MOBY(moby)->oclass) {
+            if (hit_source_moby != D_001413D0 &&
+                *(short *)(hit_source_moby + 0xA6) != MOBY(moby)->oclass) {
                 int frames_sq = scale_game_frames(0x50);
                 frames_sq *= scale_game_frames(0x50);
                 state[0xBD] = 0;
@@ -1635,7 +1650,7 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4C00), where it is exact; names translated to the US level program. */
 void draw_gadgebot_group_glow_effects(char *owner) __asm__("FUN_L06_002f37d0");
 
-void draw_gadgebot_group_glow_effects(char *owner) {
+void draw_gadgebot_group_glow_effects(char *group_reference_moby) {
     int   list;
     float effect_scale = 0.057f;
     int   i;
@@ -1643,11 +1658,11 @@ void draw_gadgebot_group_glow_effects(char *owner) {
     char *effect_position;
     if (big_head_cheat_enabled_macro[3] != 0)
         effect_scale = 0.114f;
-    get_first_moby_in_group(&list, ((unsigned char *)owner)[0x21], 0, 0);
+    get_first_moby_in_group(&list, ((unsigned char *)group_reference_moby)[0x21], 0, 0);
     while (list != 0) {
         if (*(unsigned char *)(list + 0x31) != 0) {
             moby_vars = *(char **)(list + 0x78);
-            if (*(short *)(list + 0xA6) == *(short *)(owner + 0xA6)) {
+            if (*(short *)(list + 0xA6) == *(short *)(group_reference_moby + 0xA6)) {
                 effect_position = moby_vars + 0x140;
                 for (i = 2; i >= 0; i--) {
                     draw_offset_textured_effect_quad(

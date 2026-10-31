@@ -15,12 +15,12 @@ int collect_mission_ids(int *out,
                         int *nums,
                         int  use_selected_ids) __asm__("FUN_0020bc00");
 
-int collect_mission_ids(int *out, int *mask, int *nums, int use_selected_ids) {
+int collect_mission_ids(int *mission_ids, int *mask, int *nums, int use_selected_ids) {
     MissionNode *mission_node_cursor = mission_id_collection_node_source[0];
     int          count = 0;
     int          all = 1;
 
-    *out = 0;
+    *mission_ids = 0;
     if (mask != 0) {
         *mask = 0;
     }
@@ -38,11 +38,11 @@ int collect_mission_ids(int *out, int *mask, int *nums, int use_selected_ids) {
             all = 0;
         }
         if (!(f & 2) && t != 0 && !((f & 1) && t == 2)) {
-            out[count] = mission_node_cursor->id;
+            mission_ids[count] = mission_node_cursor->id;
             if (use_selected_ids != 0) {
-                out[count] = (mission_node_cursor->status == 2)
-                                 ? 0x523E
-                                 : mission_node_cursor->ids[mission_node_cursor->sel];
+                mission_ids[count] = (mission_node_cursor->status == 2)
+                                         ? 0x523E
+                                         : mission_node_cursor->ids[mission_node_cursor->sel];
             }
             if (mask != 0 && mission_node_cursor->status == 2) {
                 *mask |= 1 << count;

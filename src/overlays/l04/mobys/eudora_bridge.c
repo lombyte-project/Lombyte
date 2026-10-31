@@ -42,7 +42,7 @@ void eudora_bridge_update(struct Moby *moby) {
     };
     SwitchFollowerVars *switch_follower_vars = (SwitchFollowerVars *)moby->pvars;
     f32                 last = moby->anim_time;
-    struct Moby        *other;
+    struct Moby        *linked_switch_moby;
     f32                *linked_switch_travel;
     f32                 sampled_switch_travel;
 
@@ -71,10 +71,10 @@ void eudora_bridge_update(struct Moby *moby) {
     case EUDORA_BRIDGE_STATE_FOLLOW_LINKED_SWITCH:
         if (switch_follower_vars->link == -1)
             break;
-        other = (struct Moby *)(moby_array + (switch_follower_vars->link << 8));
-        if (other->oclass != 0x118)
+        linked_switch_moby = (struct Moby *)(moby_array + (switch_follower_vars->link << 8));
+        if (linked_switch_moby->oclass != 0x118)
             break;
-        linked_switch_travel = (f32 *)other->pvars;
+        linked_switch_travel = (f32 *)linked_switch_moby->pvars;
         sampled_switch_travel = *linked_switch_travel;
         moby->anim_time = sampled_switch_travel;
         if (sampled_switch_travel != last) {

@@ -115,74 +115,82 @@ void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, 
 }
 
 void spawn_gunship_parts(struct Moby *moby) {
-    TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
+    TargetBoardVars *gunship_part_link_vars = (TargetBoardVars *)moby->pvars;
     struct Moby     *child_moby;
     s32              i;
     s32              pjoint;
 
-    vars->slots[0].moby = moby;
-    vars->slots[0].anchor = 0;
-    vars->slots[0].joint = 0;
-    vars->slots[0].pjoint = 0;
-    vars->slots[3].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C1, 0, 2);
-    vars->slots[3].anchor = moby;
-    vars->slots[3].joint = 0;
-    vars->slots[3].pjoint = 2;
+    gunship_part_link_vars->slots[0].moby = moby;
+    gunship_part_link_vars->slots[0].anchor = 0;
+    gunship_part_link_vars->slots[0].joint = 0;
+    gunship_part_link_vars->slots[0].pjoint = 0;
+    gunship_part_link_vars->slots[3].moby =
+        spawn_joint_aligned_moby_part((char *)moby, 0x1C1, 0, 2);
+    gunship_part_link_vars->slots[3].anchor = moby;
+    gunship_part_link_vars->slots[3].joint = 0;
+    gunship_part_link_vars->slots[3].pjoint = 2;
     pjoint = 3;
-    vars->slots[1].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C2, 0, pjoint);
-    vars->slots[1].anchor = moby;
-    vars->slots[1].joint = 0;
-    vars->slots[1].pjoint = pjoint;
+    gunship_part_link_vars->slots[1].moby =
+        spawn_joint_aligned_moby_part((char *)moby, 0x1C2, 0, pjoint);
+    gunship_part_link_vars->slots[1].anchor = moby;
+    gunship_part_link_vars->slots[1].joint = 0;
+    gunship_part_link_vars->slots[1].pjoint = pjoint;
     child_moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C2, 0, 4);
-    vars->slots[2].moby = child_moby;
+    gunship_part_link_vars->slots[2].moby = child_moby;
     child_moby->flags |= 0x8000;
-    vars->slots[2].anchor = moby;
-    vars->slots[2].joint = 0;
-    vars->slots[2].pjoint = 4;
-    vars->slots[7].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C0, 0, 0);
-    vars->slots[7].anchor = moby;
-    vars->slots[7].joint = 0;
-    vars->slots[7].pjoint = 0;
-    vars->slots[8].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C0, 1, 1);
-    vars->slots[8].anchor = moby;
-    vars->slots[8].joint = 1;
-    vars->slots[8].pjoint = 1;
-    vars->slots[9].moby = spawn_joint_aligned_moby_part((char *)vars->slots[8].moby, 0x1C0, 1, 0);
-    vars->slots[9].anchor = vars->slots[8].moby;
-    vars->slots[9].joint = 1;
-    vars->slots[9].pjoint = 0;
-    vars->slots[5].moby = spawn_joint_aligned_moby_part((char *)vars->slots[9].moby, 0x1BD, 0, 0);
-    vars->slots[5].anchor = vars->slots[9].moby;
-    vars->slots[5].joint = 0;
-    vars->slots[5].pjoint = 0;
-    vars->slots[6].moby = spawn_joint_aligned_moby_part((char *)vars->slots[7].moby, 0x1BA, 1, 1);
-    vars->slots[6].anchor = vars->slots[7].moby;
-    vars->slots[6].joint = 1;
-    vars->slots[6].pjoint = 1;
-    vars->slots[4].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1B9, 0, 0);
-    vars->slots[4].anchor = vars->slots[6].moby;
-    vars->slots[4].joint = 0;
-    vars->slots[4].pjoint = 0;
+    gunship_part_link_vars->slots[2].anchor = moby;
+    gunship_part_link_vars->slots[2].joint = 0;
+    gunship_part_link_vars->slots[2].pjoint = 4;
+    gunship_part_link_vars->slots[7].moby =
+        spawn_joint_aligned_moby_part((char *)moby, 0x1C0, 0, 0);
+    gunship_part_link_vars->slots[7].anchor = moby;
+    gunship_part_link_vars->slots[7].joint = 0;
+    gunship_part_link_vars->slots[7].pjoint = 0;
+    gunship_part_link_vars->slots[8].moby =
+        spawn_joint_aligned_moby_part((char *)moby, 0x1C0, 1, 1);
+    gunship_part_link_vars->slots[8].anchor = moby;
+    gunship_part_link_vars->slots[8].joint = 1;
+    gunship_part_link_vars->slots[8].pjoint = 1;
+    gunship_part_link_vars->slots[9].moby =
+        spawn_joint_aligned_moby_part((char *)gunship_part_link_vars->slots[8].moby, 0x1C0, 1, 0);
+    gunship_part_link_vars->slots[9].anchor = gunship_part_link_vars->slots[8].moby;
+    gunship_part_link_vars->slots[9].joint = 1;
+    gunship_part_link_vars->slots[9].pjoint = 0;
+    gunship_part_link_vars->slots[5].moby =
+        spawn_joint_aligned_moby_part((char *)gunship_part_link_vars->slots[9].moby, 0x1BD, 0, 0);
+    gunship_part_link_vars->slots[5].anchor = gunship_part_link_vars->slots[9].moby;
+    gunship_part_link_vars->slots[5].joint = 0;
+    gunship_part_link_vars->slots[5].pjoint = 0;
+    gunship_part_link_vars->slots[6].moby =
+        spawn_joint_aligned_moby_part((char *)gunship_part_link_vars->slots[7].moby, 0x1BA, 1, 1);
+    gunship_part_link_vars->slots[6].anchor = gunship_part_link_vars->slots[7].moby;
+    gunship_part_link_vars->slots[6].joint = 1;
+    gunship_part_link_vars->slots[6].pjoint = 1;
+    gunship_part_link_vars->slots[4].moby =
+        spawn_joint_aligned_moby_part((char *)moby, 0x1B9, 0, 0);
+    gunship_part_link_vars->slots[4].anchor = gunship_part_link_vars->slots[6].moby;
+    gunship_part_link_vars->slots[4].joint = 0;
+    gunship_part_link_vars->slots[4].pjoint = 0;
     for (i = 0; i < 8; i++) {
-        vars->slots[10 + i].moby =
-            spawn_joint_aligned_moby_part((char *)vars->slots[7].moby, 0x1BB, 0, i + 2);
-        vars->slots[10 + i].anchor = vars->slots[7].moby;
-        vars->slots[10 + i].joint = 0;
-        vars->slots[10 + i].pjoint = i + 2;
+        gunship_part_link_vars->slots[10 + i].moby = spawn_joint_aligned_moby_part(
+            (char *)gunship_part_link_vars->slots[7].moby, 0x1BB, 0, i + 2);
+        gunship_part_link_vars->slots[10 + i].anchor = gunship_part_link_vars->slots[7].moby;
+        gunship_part_link_vars->slots[10 + i].joint = 0;
+        gunship_part_link_vars->slots[10 + i].pjoint = i + 2;
     }
     for (i = 0; i < 8; i++) {
-        vars->slots[18 + i].moby =
-            spawn_joint_aligned_moby_part((char *)vars->slots[8].moby, 0x1BB, 0, i + 2);
-        vars->slots[18 + i].anchor = vars->slots[8].moby;
-        vars->slots[18 + i].joint = 0;
-        vars->slots[18 + i].pjoint = i + 2;
+        gunship_part_link_vars->slots[18 + i].moby = spawn_joint_aligned_moby_part(
+            (char *)gunship_part_link_vars->slots[8].moby, 0x1BB, 0, i + 2);
+        gunship_part_link_vars->slots[18 + i].anchor = gunship_part_link_vars->slots[8].moby;
+        gunship_part_link_vars->slots[18 + i].joint = 0;
+        gunship_part_link_vars->slots[18 + i].pjoint = i + 2;
     }
     for (i = 0; i < 8; i++) {
-        vars->slots[26 + i].moby =
-            spawn_joint_aligned_moby_part((char *)vars->slots[9].moby, 0x1BB, 0, i + 2);
-        vars->slots[26 + i].anchor = vars->slots[9].moby;
-        vars->slots[26 + i].joint = 0;
-        vars->slots[26 + i].pjoint = i + 2;
+        gunship_part_link_vars->slots[26 + i].moby = spawn_joint_aligned_moby_part(
+            (char *)gunship_part_link_vars->slots[9].moby, 0x1BB, 0, i + 2);
+        gunship_part_link_vars->slots[26 + i].anchor = gunship_part_link_vars->slots[9].moby;
+        gunship_part_link_vars->slots[26 + i].joint = 0;
+        gunship_part_link_vars->slots[26 + i].pjoint = i + 2;
     }
 }
 
@@ -234,14 +242,14 @@ void update_linked_moby_parts(struct Moby *moby) {
 }
 
 void process_gunship_part_hits(struct Moby *moby) {
-    char *data = *(char **)((char *)moby + 0x78);
-    char *entries = data + 0x60;
+    char *gunship_instance_vars = *(char **)((char *)moby + 0x78);
+    char *entries = gunship_instance_vars + 0x60;
     char *part_entry_cursor = entries;
     int   i;
     int   score = 0;
     int   state = -1;
     int   chosen = 0;
-    char *base;
+    char *gunship_part_table;
     for (i = 0; i < 34; i++, part_entry_cursor += 16) {
         char *part_moby = *(char **)part_entry_cursor;
         if (part_moby != 0 && FUN_L00_0025a420(part_moby, 0x10000, 0) != 0) {
@@ -265,19 +273,20 @@ void process_gunship_part_hits(struct Moby *moby) {
             (*(unsigned char **)part_entry_cursor)[0xA4] = 0xFF;
         }
     }
-    *(short *)(data + 0x28C) += score;
-    if (*(short *)(data + 0x28C) >= 8) {
+    *(short *)(gunship_instance_vars + 0x28C) += score;
+    if (*(short *)(gunship_instance_vars + 0x28C) >= 8) {
         state = 0;
-        *(short *)(data + 0x28C) = *(short *)(data + 0x28C) % 8;
+        *(short *)(gunship_instance_vars + 0x28C) = *(short *)(gunship_instance_vars + 0x28C) % 8;
         if (chosen != 0) {
             int   off = chosen * 16;
             char *entry;
             char *v;
-            base = entries;
-            entry = base + off;
+            gunship_part_table = entries;
+            entry = gunship_part_table + off;
             v = *(char **)(*(char **)entry + 0x78);
             cart_burst(moby, *(char **)entry + 0x10, -1, 2.0f, 13.0f);
-            fast_vec_sub(v, *(char **)entry + 0x10, *(char **)(data + off + 0x64) + 0x10);
+            fast_vec_sub(
+                v, *(char **)entry + 0x10, *(char **)(gunship_instance_vars + off + 0x64) + 0x10);
             fast_vec_normalize(v, v, D_0015ED6C * 10.0f);
             (*(char **)entry)[0x20] = 1;
             *(char **)entry = 0;
@@ -288,12 +297,14 @@ void process_gunship_part_hits(struct Moby *moby) {
                 int   off = ((i + start) % 24 + 10) * 16;
                 char *entry;
                 char *v;
-                base = entries;
-                entry = base + off;
+                gunship_part_table = entries;
+                entry = gunship_part_table + off;
                 if (*(char **)entry != 0) {
                     v = *(char **)(*(char **)entry + 0x78);
                     cart_burst(moby, *(char **)entry + 0x10, -1, 2.0f, 13.0f);
-                    fast_vec_sub(v, *(char **)entry + 0x10, *(char **)(data + off + 0x64) + 0x10);
+                    fast_vec_sub(v,
+                                 *(char **)entry + 0x10,
+                                 *(char **)(gunship_instance_vars + off + 0x64) + 0x10);
                     fast_vec_normalize(v, v, D_0015ED6C * 10.0f);
                     (*(char **)entry)[0x20] = 1;
                     *(char **)entry = 0;
@@ -315,7 +326,7 @@ void update_gunship(struct Moby *moby) {
         GUNSHIP_BEGIN_PRIMARY_PATH = 3,
         GUNSHIP_BREAK_APART_AND_REMOVE = 0x63
     };
-    GunshipVars       *vars = (GunshipVars *)moby->pvars;
+    GunshipVars       *gunship_control_vars = (GunshipVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby       *target;
     struct Moby       *shot;
@@ -326,7 +337,7 @@ void update_gunship(struct Moby *moby) {
     Vec4               muzzle;
     Vec4               velocity;
     s32                waypoint;
-    s32                next;
+    s32                secondary_path_waypoint_index;
     s32                after;
     s32                i;
     s32                slot;
@@ -340,8 +351,8 @@ void update_gunship(struct Moby *moby) {
     if (gunship_updates_disabled_gp != 0) {
         return;
     }
-    if (!voice_is_playing(moby, vars->sound)) {
-        vars->sound = allocate_voice_for_target_entry(3, 4, moby);
+    if (!voice_is_playing(moby, gunship_control_vars->sound)) {
+        gunship_control_vars->sound = allocate_voice_for_target_entry(3, 4, moby);
     }
     switch (moby->state) {
     case GUNSHIP_INITIALIZE:
@@ -349,33 +360,37 @@ void update_gunship(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        vars->follow[0].path = l08_paths[vars->follow[0].path_id];
-        vars->follow[1].path = l08_paths[vars->follow[1].path_id];
-        vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
-        qcopy(&moby->pos, &vars->follow[1].path->points[0]);
+        gunship_control_vars->follow[0].path = l08_paths[gunship_control_vars->follow[0].path_id];
+        gunship_control_vars->follow[1].path = l08_paths[gunship_control_vars->follow[1].path_id];
+        gunship_control_vars->fire_timer =
+            truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
+        qcopy(&moby->pos, &gunship_control_vars->follow[1].path->points[0]);
         spawn_gunship_parts(moby);
         moby->state = 2;
-        moby->rot.z = fast_arc_tan(vars->follow[1].path->points[1].f[0] - moby->pos.x,
-                                   vars->follow[1].path->points[1].f[1] - moby->pos.y);
+        moby->rot.z =
+            fast_arc_tan(gunship_control_vars->follow[1].path->points[1].f[0] - moby->pos.x,
+                         gunship_control_vars->follow[1].path->points[1].f[1] - moby->pos.y);
         moby->flags |= 0x4000;
         break;
     case GUNSHIP_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET:
         waypoint =
-            (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) %
-            vars->follow[0].path->count;
-        target = &D_L08_0015FFD8_m[vars->target_index];
-        FUN_L00_00258278(moby,
-                         fast_arc_tan(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
-                                      vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
-                         &vars->turn_speed,
-                         0.004f,
-                         0.3f,
-                         0.02f);
+            (gunship_control_vars->follow[0].point + gunship_control_vars->follow[0].path->count +
+             gunship_control_vars->follow[0].direction) %
+            gunship_control_vars->follow[0].path->count;
+        target = &D_L08_0015FFD8_m[gunship_control_vars->target_index];
+        FUN_L00_00258278(
+            moby,
+            fast_arc_tan(gunship_control_vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
+                         gunship_control_vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
+            &gunship_control_vars->turn_speed,
+            0.004f,
+            0.3f,
+            0.02f);
         FUN_L08_002e2250_u(moby);
         update_linked_moby_parts(moby);
-        qcopy(&point, &vars->follow[0].path->points[waypoint]);
+        qcopy(&point, &gunship_control_vars->follow[0].path->points[waypoint]);
         if (fast_vec_dist(&moby->pos, &point) < 0.5f) {
-            vars->follow[0].point = waypoint;
+            gunship_control_vars->follow[0].point = waypoint;
         }
         fast_vec_sub(&step, &point, &moby->pos);
         if (fast_vec_length(&step) > gunship_path_speed_gp * frame_time) {
@@ -387,9 +402,9 @@ void update_gunship(struct Moby *moby) {
         }
         moby->command = 0;
         if (random_integer_below(0xFF) & 1) {
-            moby_point_position(vars->links[3].part, 1, &muzzle);
+            moby_point_position(gunship_control_vars->links[3].part, 1, &muzzle);
         } else {
-            moby_point_position(vars->links[4].part, 1, &muzzle);
+            moby_point_position(gunship_control_vars->links[4].part, 1, &muzzle);
         }
         pitch = random_float_between(0.17453292f, 0.5235988f);
         yaw = fast_add_rotations(
@@ -413,32 +428,36 @@ void update_gunship(struct Moby *moby) {
         }
         break;
     case GUNSHIP_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY:
-        follower = &vars->follow[1];
-        next = (follower->point + 1) % follower->path->count;
+        follower = &gunship_control_vars->follow[1];
+        secondary_path_waypoint_index = (follower->point + 1) % follower->path->count;
         after = (follower->point + 2) % follower->path->count;
-        heading = fast_arc_tan(
-            follower->path->points[next].f[0] - follower->path->points[follower->point].f[0],
-            follower->path->points[next].f[1] - follower->path->points[follower->point].f[1]);
-        next_heading =
-            fast_arc_tan(follower->path->points[after].f[0] - follower->path->points[next].f[0],
-                         follower->path->points[after].f[1] - follower->path->points[next].f[1]);
+        heading = fast_arc_tan(follower->path->points[secondary_path_waypoint_index].f[0] -
+                                   follower->path->points[follower->point].f[0],
+                               follower->path->points[secondary_path_waypoint_index].f[1] -
+                                   follower->path->points[follower->point].f[1]);
+        next_heading = fast_arc_tan(follower->path->points[after].f[0] -
+                                        follower->path->points[secondary_path_waypoint_index].f[0],
+                                    follower->path->points[after].f[1] -
+                                        follower->path->points[secondary_path_waypoint_index].f[1]);
         turn = fast_subtract_rotations(heading, next_heading);
-        distance = fast_vec_dist(&moby->pos, &follower->path->points[next]);
-        distance /=
-            fast_vec_dist(&follower->path->points[follower->point], &follower->path->points[next]);
+        distance =
+            fast_vec_dist(&moby->pos, &follower->path->points[secondary_path_waypoint_index]);
+        distance /= fast_vec_dist(&follower->path->points[follower->point],
+                                  &follower->path->points[secondary_path_waypoint_index]);
         /* the blended heading is computed but unused: the turn below steers towards the next point */
         fast_add_rotations(turn * distance, next_heading);
-        heading = fast_arc_tan(follower->path->points[next].f[0] - moby->pos.x,
-                               follower->path->points[next].f[1] - moby->pos.y);
+        heading =
+            fast_arc_tan(follower->path->points[secondary_path_waypoint_index].f[0] - moby->pos.x,
+                         follower->path->points[secondary_path_waypoint_index].f[1] - moby->pos.y);
         approach_angle(&moby->rot.z,
-                       &vars->turn_speed,
+                       &gunship_control_vars->turn_speed,
                        heading,
                        gunship_turn_acceleration_degrees_gp * DEG_TO_RAD * frame_time_sq,
                        gunship_turn_acceleration_degrees_gp * DEG_TO_RAD * frame_time_sq,
                        gunship_max_turn_speed_degrees_gp * DEG_TO_RAD * frame_time);
-        qcopy(&point, &follower->path->points[next]);
+        qcopy(&point, &follower->path->points[secondary_path_waypoint_index]);
         if (fast_vec_dist(&moby->pos, &point) < 0.5f) {
-            follower->point = next;
+            follower->point = secondary_path_waypoint_index;
         }
         fast_vec_sub(&step, &point, &moby->pos);
         if (fast_vec_length(&step) > gunship_path_speed_gp * frame_time) {
@@ -446,18 +465,19 @@ void update_gunship(struct Moby *moby) {
         }
         fast_vec_add(&moby->pos, &moby->pos, &step);
         update_linked_moby_parts(moby);
-        if (!fast_dec_timer(&vars->fire_timer)) {
+        if (!fast_dec_timer(&gunship_control_vars->fire_timer)) {
             break;
         }
-        vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
-        moby_point_position(vars->links[4].part, 1, &muzzle);
+        gunship_control_vars->fire_timer =
+            truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
+        moby_point_position(gunship_control_vars->links[4].part, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
         fast_vec_normalize(
             &velocity, &step, (gunship_path_speed_gp + gunship_path_speed_gp) * frame_time);
         bolt = spawn_rocket(&muzzle, NULL, &velocity, pitch, yaw);
         if (bolt != NULL) {
-            bolt->rot.z = vars->links[4].part->rot.z;
+            bolt->rot.z = gunship_control_vars->links[4].part->rot.z;
             bolt->state = 5;
             bolt->rot.y = 0.0f;
         }
@@ -466,7 +486,7 @@ void update_gunship(struct Moby *moby) {
         LevelPath *path;
 
         moby->state = 1;
-        path = vars->follow[0].path;
+        path = gunship_control_vars->follow[0].path;
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z =
             fast_arc_tan(path->points[1].f[0] - moby->pos.x, path->points[1].f[1] - moby->pos.y);
@@ -476,14 +496,14 @@ void update_gunship(struct Moby *moby) {
     }
     case GUNSHIP_BREAK_APART_AND_REMOVE:
         for (i = 1; i < 34; i++) {
-            struct Moby *part = vars->links[i].part;
+            struct Moby *part = gunship_control_vars->links[i].part;
             if (part != NULL) {
                 Vec4 *drift = (Vec4 *)part->pvars;
                 cart_burst(moby, &part->pos, -1, 3.0f, 13.0f);
                 fast_vec_sub(drift, &part->pos, &moby->pos);
                 fast_vec_normalize(drift, drift, frame_time * 5.0f);
                 part->state = 1;
-                vars->links[i].part = NULL;
+                gunship_control_vars->links[i].part = NULL;
             }
         }
         cart_burst(moby, &moby->pos, -1, 5.0f, 13.0f);

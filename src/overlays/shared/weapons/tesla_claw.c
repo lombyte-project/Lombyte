@@ -775,11 +775,11 @@ void initialize_tesla_claw_beam(struct Moby *moby) __asm__("FUN_L00_002b9310");
 void initialize_tesla_claw_beam(struct Moby *moby) {
     V2b9310 beam_endpoint_delta;
     V2b9310 step;
-    char   *data;
+    char   *tesla_claw_beam_vars;
     int     i;
     int     j;
 
-    data = ((char *)moby->pvars);
+    tesla_claw_beam_vars = ((char *)moby->pvars);
     if (tesla_beam_restart_pending_gp == 0) {
         return;
     }
@@ -787,9 +787,9 @@ void initialize_tesla_claw_beam(struct Moby *moby) {
     D_L00_0016167C = 0;
     tesla_beam_scaled_initial_frame_count = scale_game_frames(tesla_beam_initial_frame_count_gp);
     D_L00_001615F8 = 0x7F2020;
-    fast_vec_sub(&beam_endpoint_delta, data + 0x10, data);
+    fast_vec_sub(&beam_endpoint_delta, tesla_claw_beam_vars + 0x10, tesla_claw_beam_vars);
     fast_vec_normalize(&step, &beam_endpoint_delta, D_L00_00161594 / 20.0f);
-    qcopy(D_L00_001DB5C0, data);
+    qcopy(D_L00_001DB5C0, tesla_claw_beam_vars);
     for (i = 1; i < 20; i++) {
         fast_vec_add(&D_L00_001DB5C0[i], &l00_tesla_beam_previous_point_window[i], &step);
         D_L00_001DB840[i] = 0;

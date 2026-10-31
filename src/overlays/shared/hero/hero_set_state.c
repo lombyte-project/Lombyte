@@ -33,10 +33,10 @@ extern s32 coll_sphere(f32, Vec4 *, s32, s32) __asm__("FUN_L00_001f0d60");
 void update_hero_motion_and_collision_probes(void) __asm__("FUN_L00_00221310");
 
 void update_hero_motion_and_collision_probes(void) {
-    Vec4 first;
-    Vec4 second;
+    Vec4 line_probe_start;
+    Vec4 line_probe_end;
     Vec4 probe;
-    f32  base;
+    f32  line_probe_local_y_offset;
     f32  line_probe_hit_distance;
     f32  probe_local_x_offset;
     s32  hit;
@@ -63,16 +63,18 @@ void update_hero_motion_and_collision_probes(void) {
         hero.edge_ahead = 0;
         hero.edge_drop_depth = 0.0f;
         if (hero.grounded_frames != 0) {
-            base = hero.edge_drop_depth;
-            transform_hero_local_offset_to_world(&first, 1.1f, base, 1.0f);
-            transform_hero_local_offset_to_world(&second, 1.1f, base, -20.0f);
-            if (second.f[2] < 0.5f) {
-                second.f[2] = 0.5f;
+            line_probe_local_y_offset = hero.edge_drop_depth;
+            transform_hero_local_offset_to_world(
+                &line_probe_start, 1.1f, line_probe_local_y_offset, 1.0f);
+            transform_hero_local_offset_to_world(
+                &line_probe_end, 1.1f, line_probe_local_y_offset, -20.0f);
+            if (line_probe_end.f[2] < 0.5f) {
+                line_probe_end.f[2] = 0.5f;
             }
             line_probe_hit_distance = 20.0f;
-            hit = collision_line(&first, &second, 2, hero.moby, 0);
+            hit = collision_line(&line_probe_start, &line_probe_end, 2, hero.moby, 0);
             if (hit != 0) {
-                line_probe_hit_distance = fast_vec_dist(&first, &coll_hit.point);
+                line_probe_hit_distance = fast_vec_dist(&line_probe_start, &coll_hit.point);
                 if (!(3.0f < line_probe_hit_distance)) {
                     return;
                 }
@@ -436,7 +438,7 @@ void select_hero_grapple_swing_target(void) {
         OvlQuad q;
         f32     f[4];
     } v, w;
-    s32       out;
+    s32       target_rejected;
     M_221ee0 *candidate_moby;
     M_221ee0 *best;
     Q_221ee0 *q;
@@ -476,12 +478,12 @@ void select_hero_grapple_swing_target(void) {
         if (target_distance_override != 0.0f)
             max_target_distance = target_distance_override;
         target_score = score_hero_target_candidate(candidate_moby,
-                                                   &out,
+                                                   &target_rejected,
                                                    x,
                                                    max_target_distance,
                                                    target_angle_limit,
                                                    target_elevation_angle_limit);
-        if (out != 0)
+        if (target_rejected != 0)
             continue;
         if (candidate_moby->b31 == 0)
             target_score += 10.0f;
@@ -518,7 +520,7 @@ int select_hero_grapple_target(void) {
     float bestd, target_score, max_target_distance, target_angle_limit,
         target_elevation_angle_limit, x;
     int   k;
-    int   out;
+    int   grapple_candidate_rejected;
     float collision_start[4];
     float collision_end[4];
 
@@ -558,12 +560,12 @@ int select_hero_grapple_target(void) {
         if (*(float *)(candidate_data + 0x20) != 0.0f)
             max_target_distance = *(float *)(candidate_data + 0x20);
         target_score = score_hero_target_candidate(candidate_moby,
-                                                   &out,
+                                                   &grapple_candidate_rejected,
                                                    x,
                                                    max_target_distance,
                                                    target_angle_limit,
                                                    target_elevation_angle_limit);
-        if (out != 0)
+        if (grapple_candidate_rejected != 0)
             continue;
         gb += 0x80;
         if (vector_distance_xy(gb, candidate_moby + 0x10) < 4.0f)
@@ -675,14 +677,14 @@ extern int  hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char hero_velocity_profile_jump_keys[] __asm__("D_L00_0017BF20");
 
 int hero_set_state(int a, int b) {
-    int   old2088;
+    int   previous_state_step;
     char *moby;
     int   old20A7;
     union {
         unsigned int __attribute__((mode(TI))) q;
         V4_222B80                              v;
     } d;
-    V4_222B80 out;
+    V4_222B80 sampled_path_position;
     {
         struct Hero *p = &hero;
         if (p->state.control_mode == 0x14 && (a != 0x64 || b != 2))
@@ -699,7 +701,7 @@ int hero_set_state(int a, int b) {
     }
     {
         struct Hero *p = &hero;
-        old2088 = p->state.step;
+        previous_state_step = p->state.step;
         moby = ((char *)p->moby);
         old20A7 = p->item_select_blocked;
         p->state.prev2 = p->state.prev;
@@ -1477,9 +1479,13 @@ int hero_set_state(int a, int b) {
         p->unk5B8 = 0;
         p->unk5BC = 0;
         p->rail_jump_queued = 0;
-        sample_path(
-            p->rail_spline, (char *)&out, (char *)&i, (char *)&f, p->rail_spline_loops, 1.0f);
-        fast_vec_sub(&d.v, &out, &p->motion.pos);
+        sample_path(p->rail_spline,
+                    (char *)&sampled_path_position,
+                    (char *)&i,
+                    (char *)&f,
+                    p->rail_spline_loops,
+                    1.0f);
+        fast_vec_sub(&d.v, &sampled_path_position, &p->motion.pos);
         if (0.001f < fast_vec_length(&d.v)) {
             fast_vec_normalize(&d.v, &d.v, 1.0f);
             if (p->state.prev_control_mode != 0xF) {
@@ -1521,12 +1527,12 @@ int hero_set_state(int a, int b) {
         i = p->follow_path_segment;
         f = t;
         sample_path(((int)p->follow_path_spline),
-                    (char *)&out,
+                    (char *)&sampled_path_position,
                     (char *)&i,
                     (char *)&f,
                     p->rail_candidate_kind,
                     1.0f);
-        fast_vec_sub(&d.v, &out, &p->motion.pos);
+        fast_vec_sub(&d.v, &sampled_path_position, &p->motion.pos);
         if (0.001f < fast_vec_length(&d.v)) {
             fast_vec_normalize(&d.v, &d.v, 1.0f);
             p->follow_path_speed = fast_vec_dot(&p->motion.displacement, &d.v);
@@ -1686,7 +1692,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
             p->state.current = p->state.prev;
-            p->state.step = old2088;
+            p->state.step = previous_state_step;
             p->state_timer = p->state.prev_timer;
             return 0;
         }
@@ -3318,7 +3324,7 @@ extern s32 D_00141660 NOT_SDA;
 int                   process_hero_equipped_item_input(void) __asm__("FUN_L00_00227fa0");
 
 int process_hero_equipped_item_input(void) {
-    int out[3];
+    int item_press_age_frames[3];
     int start;
     int mask;
 
@@ -3346,7 +3352,7 @@ int process_hero_equipped_item_input(void) {
             if (D_0013F450_h228770.f12EA != 0) {
                 break;
             }
-            if (!pad_pressed_within(mask, scale_game_frames(7), &out[0])) {
+            if (!pad_pressed_within(mask, scale_game_frames(7), &item_press_age_frames[0])) {
                 break;
             }
             equipped_item_moby = D_0013F450_h228770.f1090;
@@ -3572,7 +3578,7 @@ int process_hero_equipped_item_input(void) {
             }
             t = scale_game_frames(7);
             n = D_0013F450_h228770.f10B0;
-            if (pad_pressed_within(mask, t <= n ? t : n, &out[1]) ||
+            if (pad_pressed_within(mask, t <= n ? t : n, &item_press_age_frames[1]) ||
                 ((controller_state.held & 0x20) && n > scale_game_frames(8) &&
                  n < scale_game_frames(0x11))) {
                 if (get_ammo(-1)) {
@@ -3598,7 +3604,7 @@ int process_hero_equipped_item_input(void) {
                 int t = scale_game_frames(0xA);
                 int n = D_0013F450_h228770.f10B0;
 
-                if (pad_pressed_within(mask, t <= n ? t : n, &out[2])) {
+                if (pad_pressed_within(mask, t <= n ? t : n, &item_press_age_frames[2])) {
                     if (D_0013F450_h228770.f1090 != 0) {
                         hero_set_state(0x20, 1);
                         if (D_0013F450_h228770.f1090 != 0) {

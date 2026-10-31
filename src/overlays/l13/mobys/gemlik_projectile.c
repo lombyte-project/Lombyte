@@ -95,7 +95,7 @@ extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 void update_gemlik_projectile(struct Moby *moby) __asm__("FUN_L13_00306300");
 
 void update_gemlik_projectile(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *projectile_vars = (char *)moby->pvars;
     struct {
         L13Vec_p old_pos;
         char     hit[48];
@@ -106,25 +106,25 @@ void update_gemlik_projectile(struct Moby *moby) {
     int                    i;
     int                    flags;
     int                    stationary;
-    unsigned char         *base;
+    unsigned char         *hero_bytes;
     char                  *ent;
     struct L13Ent00178480 *target_hit_entry;
 
     qcopy(&work.old_pos, &moby->pos);
-    fast_vec_add(&moby->pos, &moby->pos, data);
-    qcopy(&work.velocity, data);
+    fast_vec_add(&moby->pos, &moby->pos, projectile_vars);
+    qcopy(&work.velocity, projectile_vars);
     work.velocity.z = 0.0f;
     set_vector_length_xy(&work.velocity, &work.velocity, 1.0f);
     work.velocity.z = 1.0f;
     flags = 0x10001;
-    base = (unsigned char *)((char *)((char *)&hero));
-    if (base[0x1FF6] != 0 && *(float *)(data + 0xC) != 31337.6015625f &&
-        fast_vec_dist(&moby->pos, base + 0x80) < 2.0f) {
-        fast_vec_normalize(data, data, 0.5f);
-        fast_vec_sub(&moby->pos, &moby->pos, data);
-        qzero(data);
-        *(int *)(data + 0x2C) = 5;
-        *(float *)(data + 0xC) = 31337.6015625f;
+    hero_bytes = (unsigned char *)((char *)((char *)&hero));
+    if (hero_bytes[0x1FF6] != 0 && *(float *)(projectile_vars + 0xC) != 31337.6015625f &&
+        fast_vec_dist(&moby->pos, hero_bytes + 0x80) < 2.0f) {
+        fast_vec_normalize(projectile_vars, projectile_vars, 0.5f);
+        fast_vec_sub(&moby->pos, &moby->pos, projectile_vars);
+        qzero(projectile_vars);
+        *(int *)(projectile_vars + 0x2C) = 5;
+        *(float *)(projectile_vars + 0xC) = 31337.6015625f;
         for (i = 0; i < 6; i++) {
             unsigned char *hero_base = (unsigned char *)((char *)((char *)&hero));
             ent = ((char **)(hero_base + 0x2020))[i];
@@ -145,8 +145,9 @@ void update_gemlik_projectile(struct Moby *moby) {
                     l13_moby_hit_entries[(unsigned char)ent[0xA4]].s2A =
                         *(unsigned short *)((char *)moby + 0xA6);
                     {
-                        struct L13Ent00178480 *t = &l13_moby_hit_entries[(unsigned char)ent[0xA4]];
-                        t->i24 = hit_mask;
+                        struct L13Ent00178480 *matched_target_hit_entry =
+                            &l13_moby_hit_entries[(unsigned char)ent[0xA4]];
+                        matched_target_hit_entry->i24 = hit_mask;
                     }
                 }
                 break;
@@ -158,9 +159,10 @@ void update_gemlik_projectile(struct Moby *moby) {
     *(unsigned short *)(work.hit + 0x1A) = *(unsigned short *)((char *)moby + 0xA6);
     work.hit[0x18] = 1;
     work.hit[0x19] = 1;
-    stationary = *(int *)(data + 0x24) == 0;
-    if (*(float *)(data + 0x28) < vector_distance_xy(&moby->pos, data + 0x10) ||
-        fast_dec_timer(data + 0x2C) != 0) {
+    stationary = *(int *)(projectile_vars + 0x24) == 0;
+    if (*(float *)(projectile_vars + 0x28) <
+            vector_distance_xy(&moby->pos, projectile_vars + 0x10) ||
+        fast_dec_timer(projectile_vars + 0x2C) != 0) {
         if (moby->visible != 0) {
             int i;
             for (i = 0; i < 3; i++) {
@@ -182,7 +184,8 @@ void update_gemlik_projectile(struct Moby *moby) {
         }
         goto remove;
     }
-    if (collision_line(&work.old_pos, &moby->pos, stationary, *(void **)(data + 0x20), work.hit) ==
+    if (collision_line(
+            &work.old_pos, &moby->pos, stationary, *(void **)(projectile_vars + 0x20), work.hit) ==
         0)
         goto bounds;
     qcopy(&moby->pos, &coll_hit_1638.point);
@@ -194,7 +197,7 @@ void update_gemlik_projectile(struct Moby *moby) {
             work.random_direction.y = random_float_between(-1.0f, 1.0f);
             work.random_direction.z = random_float_between(-1.0f, 1.0f);
             *(OvlQuad_p *)&work.direction = *(OvlQuad_p *)&work.random_direction;
-            reflect_vector(&work.random_direction, data, &coll_hit_1638.normal_x);
+            reflect_vector(&work.random_direction, projectile_vars, &coll_hit_1638.normal_x);
             fast_vec_normalize(
                 &work.direction, &work.direction, fast_vec_length(&work.random_direction) * 0.5f);
             fast_vec_add(&work.direction, &work.random_direction, &work.direction);

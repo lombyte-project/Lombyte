@@ -218,7 +218,7 @@ build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN
 unsigned char *
 spawn_flying_debris(struct Moby *owner, float angle, char *posp) __asm__("FUN_L14_002bb310");
 
-unsigned char *spawn_flying_debris(struct Moby *owner, float angle, char *posp) {
+unsigned char *spawn_flying_debris(struct Moby *debris_source_moby, float angle, char *posp) {
     float          spawn_vector_scratch[12];
     unsigned char *spawned_moby;
     char          *spawned_vars;
@@ -236,7 +236,7 @@ unsigned char *spawn_flying_debris(struct Moby *owner, float angle, char *posp) 
         spawned_moby[0x30] = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
-        fast_vec_sub(launch_vector, spawn_position, &owner->pos);
+        fast_vec_sub(launch_vector, spawn_position, &debris_source_moby->pos);
         spawn_vector_scratch[6] = 0.0f;
         fast_vec_normalize(launch_vector,
                            launch_vector,
@@ -251,20 +251,20 @@ unsigned char *spawn_flying_debris(struct Moby *owner, float angle, char *posp) 
         *(float *)(spawned_vars + 0x18) = randf_sym(0.0f, 0.034906585f);
         *(float *)(spawned_vars + 0x1C) = randf_sym(0.0f, 0.034906585f);
         *(short *)(spawned_vars + 0x10) = scale_game_frames(200);
-        *(char **)(spawned_vars + 0x20) = owner;
+        *(char **)(spawned_vars + 0x20) = debris_source_moby;
         *(short *)(spawned_vars + 0x12) = -1;
         update_entity(spawned_moby);
     }
     return spawned_moby;
 }
 
-void remove_flying_debris(u8 *self) {
-    u8 *debris_vars = *(u8 **)(self + 0x78);
+void remove_flying_debris(u8 *debris_moby) {
+    u8 *debris_vars = *(u8 **)(debris_moby + 0x78);
     s16 light_index = *(s16 *)(debris_vars + 0x12);
 
     if (light_index != -1) {
         release_point_light_slot(light_index);
         *(s16 *)(debris_vars + 0x12) = -1;
     }
-    FUN_0020c828(self);
+    FUN_0020c828(debris_moby);
 }

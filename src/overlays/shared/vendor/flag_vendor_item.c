@@ -30,8 +30,9 @@ void flag_vendor_item(int slot) __asm__("FUN_L13_00316f48");
 
 void flag_vendor_item(int slot) {
     Level13VendorCurrentMoby *moby = D_L13_00167100;
-    Level13VendorRecord *record = (Level13VendorRecord *)(slot * 32 + (int)l13_vendor_item_records);
-    Level13VendorItem   *item = record->item;
+    Level13VendorRecord      *vendor_item_record =
+        (Level13VendorRecord *)(slot * 32 + (int)l13_vendor_item_records);
+    Level13VendorItem *item = vendor_item_record->item;
     if (moby->class_id == VENDOR_CLASS_ID)
         item->field39 = 1;
 }

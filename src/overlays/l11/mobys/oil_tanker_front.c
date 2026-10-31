@@ -417,13 +417,13 @@ void process_oil_tanker_damage_and_destruction(struct Moby *moby) {
 
 int collect_oil_tanker_chain_mobys(struct Moby *moby, void **out) __asm__("FUN_L11_00318050");
 
-int collect_oil_tanker_chain_mobys(struct Moby *moby, void **out) {
-    char *data = (char *)moby->pvars;
+int collect_oil_tanker_chain_mobys(struct Moby *moby, void **chain_mobys_output) {
+    char *tanker_chain_vars = (char *)moby->pvars;
     int   i;
-    int   count = *(int *)(data + 0x64) + 1;
-    out[0] = moby;
-    for (i = 0; i < *(int *)(data + 0x64); i++) {
-        out[i + 1] = ((void **)(data + 0x70))[i];
+    int   count = *(int *)(tanker_chain_vars + 0x64) + 1;
+    chain_mobys_output[0] = moby;
+    for (i = 0; i < *(int *)(tanker_chain_vars + 0x64); i++) {
+        chain_mobys_output[i + 1] = ((void **)(tanker_chain_vars + 0x70))[i];
     }
     return count;
 }
@@ -437,18 +437,18 @@ void distribute_group_blarg_ships_along_path(struct Moby *moby, int table_index)
     short offset = 0;
     short stride;
     char *table;
-    u16   entry;
+    u16   encoded_moby_list_entry;
     int   moby_array_index;
 
     if (list == 0)
         return;
     do {
-        entry = *list;
-        moby_array_index = entry & 0x7FFF;
+        encoded_moby_list_entry = *list;
+        moby_array_index = encoded_moby_list_entry & 0x7FFF;
         if (((struct Moby *)D_L11_0015FFD8)[moby_array_index].oclass == 0x527)
             count++;
         list++;
-    } while ((short)entry >= 0);
+    } while ((short)encoded_moby_list_entry >= 0);
 
     table = (char *)l11_paths[table_index];
     stride = *(int *)table / count;
@@ -458,12 +458,12 @@ void distribute_group_blarg_ships_along_path(struct Moby *moby, int table_index)
         moby_array_index = *list & 0x7FFF;
         group_moby = (struct Moby *)((moby_array_index << 8) + (u32)D_L11_0015FFD8);
         if (group_moby->oclass == 0x527) {
-            struct L11ChainVars *data = (struct L11ChainVars *)group_moby->pvars;
+            struct L11ChainVars *group_moby_chain_vars = (struct L11ChainVars *)group_moby->pvars;
             /* no memory clobber: lets the D_L11_0015FFD8 load be hoisted out of the loop as in retail */
             qcopy_nc(&group_moby->pos, table + offset * 16 + 0x10);
-            data->count = offset;
-            data->path_index = table_index;
-            data->point = 0;
+            group_moby_chain_vars->count = offset;
+            group_moby_chain_vars->path_index = table_index;
+            group_moby_chain_vars->point = 0;
             offset += stride;
         }
     } while (*(short *)list++ >= 0);

@@ -23,7 +23,7 @@ void spawn_owner_target_particle(int   color,
                                  u128 *target_position,
                                  char *owner) __asm__("FUN_L15_0025e2c0");
 
-void spawn_owner_target_particle(int color, u128 *target_position, char *owner) {
+void spawn_owner_target_particle(int color, u128 *target_position, char *particle_owner_moby) {
     Vec4           target;
     Vec4           step;
     u128           at;
@@ -36,7 +36,7 @@ void spawn_owner_target_particle(int color, u128 *target_position, char *owner) 
     particle = create_part(0x1F);
     if (particle != 0) {
         vector_scratch = &at;
-        from = owner + 0x10;
+        from = particle_owner_moby + 0x10;
         fast_vec_sub(vector_scratch, &target, from);
         step_vector = &step.q;
         *step_vector = *vector_scratch;
@@ -50,7 +50,7 @@ void spawn_owner_target_particle(int color, u128 *target_position, char *owner) 
         particle[3] = 0x44;
         particle[1] = 2;
         *(short *)(particle + 0xA) = scale_game_frames(owner_target_particle_frame_count_gp);
-        *(char **)(particle + 0x30) = owner;
+        *(char **)(particle + 0x30) = particle_owner_moby;
     }
 }
 
@@ -76,7 +76,7 @@ unsigned char *create_type_47_particle(void  *particle_position,
                                        int    g,
                                        int    h,
 
-                                       char *owner) {
+                                       char *particle_owner) {
     unsigned char *particle = create_part(0x47);
     if (particle != 0) {
         int  *packed_p_vector, *packed_c_vector;
@@ -101,7 +101,7 @@ unsigned char *create_type_47_particle(void  *particle_position,
         *(short *)(packed_p_vector + 4) = particle_frame_count;
         *(short *)((char *)packed_p_vector + 0x12) = g;
         *(short *)((char *)packed_p_vector + 0x14) = h;
-        packed_p_vector[6] = *(int *)(owner + 0x78);
+        packed_p_vector[6] = *(int *)(particle_owner + 0x78);
     }
     return particle;
 }

@@ -12,25 +12,25 @@
 void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 
 void add_moby_frames_for_group_proximity(char *moby) {
-    char        *data = ((char *)MOBY(moby)->pvars);
+    char        *proximity_moby_vars = ((char *)MOBY(moby)->pvars);
     struct Hero *player_hero = &hero;
     float        position_delta[4];
     char        *group_member_moby;
     char        *proximity_candidate_moby;
-    char        *other;
+    char        *player_hoverboard_moby;
     char        *od;
 
     if (player_hero->race_time_frames < scale_game_frames(0xB4)) {
         return;
     }
-    if (!fast_dec_timer((int *)(data + 0x264))) {
+    if (!fast_dec_timer((int *)(proximity_moby_vars + 0x264))) {
         return;
     }
-    other = ((char *)player_hero->hoverboard_moby);
-    if (!other) {
+    player_hoverboard_moby = ((char *)player_hero->hoverboard_moby);
+    if (!player_hoverboard_moby) {
         return;
     }
-    od = *(char **)(other + 0x78);
+    od = *(char **)(player_hoverboard_moby + 0x78);
     if (*(int *)(od + 0x44) != -1) {
         get_first_moby_in_group((int *)&group_member_moby, *(int *)(od + 0x44), 0, 0);
         while (group_member_moby) {
@@ -38,7 +38,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
                 float offset_test_position[4];
                 float m[16];
                 char *candidate_moby = group_member_moby;
-                qcopy(offset_test_position, data + 0x200);
+                qcopy(offset_test_position, proximity_moby_vars + 0x200);
                 offset_test_position[2] += 0.8f;
                 fast_vec_sub(position_delta, candidate_moby + 0x10, offset_test_position);
                 if (!(8.0f < fast_vec_length(position_delta))) {
@@ -48,8 +48,8 @@ void add_moby_frames_for_group_proximity(char *moby) {
                     if (absolute_float(position_delta[0]) < 0.5f &&
                         absolute_float(position_delta[1]) < 2.5f &&
                         absolute_float(position_delta[2]) < 2.5f) {
-                        *(unsigned short *)(data + 0x25A) += scale_game_frames(0x78);
-                        *(int *)(data + 0x264) = scale_game_frames(0x3C);
+                        *(unsigned short *)(proximity_moby_vars + 0x25A) += scale_game_frames(0x78);
+                        *(int *)(proximity_moby_vars + 0x264) = scale_game_frames(0x3C);
                     }
                 }
             }
@@ -61,7 +61,8 @@ void add_moby_frames_for_group_proximity(char *moby) {
         while (proximity_candidate_moby) {
             if (MOBY(proximity_candidate_moby)->oclass == 0x474) {
                 float m[16];
-                fast_vec_sub(position_delta, proximity_candidate_moby + 0x10, data + 0x200);
+                fast_vec_sub(
+                    position_delta, proximity_candidate_moby + 0x10, proximity_moby_vars + 0x200);
                 if (!(8.0f < fast_vec_length(position_delta))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, proximity_candidate_moby + 0xC0);
@@ -69,8 +70,8 @@ void add_moby_frames_for_group_proximity(char *moby) {
                     if (absolute_float(position_delta[0]) < 2.8f &&
                         absolute_float(position_delta[1]) < 1.4f &&
                         absolute_float(position_delta[2]) < 0.5f) {
-                        *(unsigned short *)(data + 0x25A) += scale_game_frames(0x78);
-                        *(int *)(data + 0x264) = scale_game_frames(0x3C);
+                        *(unsigned short *)(proximity_moby_vars + 0x25A) += scale_game_frames(0x78);
+                        *(int *)(proximity_moby_vars + 0x264) = scale_game_frames(0x3C);
                     }
                 }
             }

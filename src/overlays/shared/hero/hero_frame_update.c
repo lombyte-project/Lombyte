@@ -1332,7 +1332,7 @@ extern u128_233940 D_L01_001742F0[] NOT_SDA;
 s32 resolve_hero_position_with_collision_queries(s32 mode) __asm__("FUN_L01_00233940");
 
 s32 resolve_hero_position_with_collision_queries(s32 mode) {
-    V_233940     old;
+    V_233940     pre_collision_position;
     V_233940     collision_query_offset;
     V_233940     resolved_position_delta;
     s32          mask;
@@ -1342,7 +1342,7 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
     if (hero.collision_off_frames != 0) {
         return 1;
     }
-    qcopy(&old, &hero.motion.pos.q);
+    qcopy(&pre_collision_position, &hero.motion.pos.q);
     clear_u64_value(&collision_query_offset);
     if (hero.path_constrain_pending != 0) {
         f2347c0_233940();
@@ -1394,7 +1394,7 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
         hero.coll_hit_moby = ((u8 **)collision_result_position)[-6];
     }
     fast_vec_sub(&hero.motion.pos.q, &hero.motion.pos.q, &collision_query_offset);
-    fast_vec_sub(&resolved_position_delta, &hero.motion.pos.q, &old);
+    fast_vec_sub(&resolved_position_delta, &hero.motion.pos.q, &pre_collision_position);
     query_height_or_displacement_length = fast_vec_length(&resolved_position_delta);
     if (hero.capsule_radius * 1.5f < query_height_or_displacement_length) {
         if (mode == 0xF) {
@@ -1412,7 +1412,7 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
                 resolved_position_delta.f[2] = -512.0f;
             fast_vec_normalize(
                 &resolved_position_delta, &resolved_position_delta, hero.capsule_radius);
-            fast_vec_add(&hero.motion.pos.q, &old, &resolved_position_delta);
+            fast_vec_add(&hero.motion.pos.q, &pre_collision_position, &resolved_position_delta);
         }
         return -1;
     }

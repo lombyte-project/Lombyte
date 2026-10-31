@@ -64,10 +64,10 @@ void shuttle_update(struct Moby *m) __asm__("FUN_L14_002e7bd8");
 
 void shuttle_update(struct Moby *shuttle_moby) {
     L14LiftVars *shuttle_vars;
-    Vec4         old;
+    Vec4         previous_shuttle_position;
     Vec4         rot;
     Vec4         delta;
-    Vec4         base;
+    Vec4         rider_attachment_origin_or_hero_position;
     Vec4         rotated_rider_offset;
     f32          shuttle_rotation_matrix[16];
     struct Moby *rider;
@@ -100,7 +100,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
             r->flags |= 0x1000;
         }
     }
-    qcopy(&old, &shuttle_moby->pos);
+    qcopy(&previous_shuttle_position, &shuttle_moby->pos);
     qcopy(&rot, &shuttle_moby->rot);
     if (shuttle_moby->state == 0) {
         qcopy(&shuttle_moby->pos, ((char *)l14_paths[shuttle_vars->path]) + 0x10);
@@ -120,19 +120,20 @@ void shuttle_update(struct Moby *shuttle_moby) {
     rider = &D_L14_0015FFD8_lift[shuttle_vars->rider];
     if (shuttle_vars->mode == 0x3039) {
         if (shuttle_vars->anchor != -1)
-            moby_point_position(shuttle_moby, shuttle_vars->anchor, &base);
+            moby_point_position(
+                shuttle_moby, shuttle_vars->anchor, &rider_attachment_origin_or_hero_position);
         else
-            qcopy(&base, &shuttle_moby->pos);
+            qcopy(&rider_attachment_origin_or_hero_position, &shuttle_moby->pos);
         euler_rotation_matrix(shuttle_rotation_matrix, &shuttle_moby->rot);
         transform_vector(&rotated_rider_offset, shuttle_vars->offset, shuttle_rotation_matrix);
-        fast_vec_add(&rider->pos, &base, &rotated_rider_offset);
+        fast_vec_add(&rider->pos, &rider_attachment_origin_or_hero_position, &rotated_rider_offset);
     }
     if (shuttle_vars->sound == -1 ||
         (voice_is_playing(shuttle_moby, shuttle_vars->sound) == 0 && shuttle_vars->sound == -1))
         shuttle_vars->sound = allocate_voice_for_target_entry(0, 4, shuttle_moby);
     shuttle_vars->angle = fast_add_rotations(shuttle_vars->angle, 0.17453292f);
     FUN_L00_001fff28(shuttle_vars->wobble, 0, shuttle_vars->angle);
-    fast_vec_sub(&delta, &shuttle_moby->pos, &old);
+    fast_vec_sub(&delta, &shuttle_moby->pos, &previous_shuttle_position);
     update_entity_matrix(shuttle_vars->spring, &delta, &rot, &shuttle_moby->rot);
     if (hero.state.control_mode == 13 && hero.grapple_target == rider) {
         if (shuttle_vars->riding == 0) {
@@ -148,8 +149,8 @@ void shuttle_update(struct Moby *shuttle_moby) {
                 shuttle_vars->timer_inv = 1.0f / convert_integer_to_float(shuttle_vars->timer);
                 shuttle_vars->to = shuttle_vars->height;
             } else {
-                qcopy(&base, &hero.motion.pos);
-                fast_vec_sub(&delta, &rider->pos, &base);
+                qcopy(&rider_attachment_origin_or_hero_position, &hero.motion.pos);
+                fast_vec_sub(&delta, &rider->pos, &rider_attachment_origin_or_hero_position);
                 delta.f[2] = 0.0f;
                 horizontal_rider_correction_distance = fast_vec_length(&delta);
                 max = shuttle_horizontal_rider_correction_limit_scale_gp * frame_time;

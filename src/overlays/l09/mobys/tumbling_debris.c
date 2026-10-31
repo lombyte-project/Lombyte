@@ -24,14 +24,14 @@ extern void *spawn_spark_2ef430(void *, void *, int, int, float) __asm__("FUN_L0
 void update_tumbling_debris(struct Moby *moby) __asm__("FUN_L09_002ef430");
 
 void update_tumbling_debris(struct Moby *moby) {
-    float  old[4];
+    float  previous_debris_position[4];
     float  spark_velocity[4];
     float  random_spark_vector[4];
     float *debris_vars = (float *)moby->pvars;
     float *pos = (float *)&moby->pos;
     int    i;
 
-    qcopy(old, pos);
+    qcopy(previous_debris_position, pos);
     fast_vec_add(pos, pos, debris_vars);
     if (moby->pos.x < 0.0f || moby->pos.y < 0.0f || moby->pos.z < 0.0f ||
         vector_distance_xy(pos, D_L09_00166F40_2ef430) > 64.0f) {
@@ -63,7 +63,7 @@ void update_tumbling_debris(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (collision_line(old, pos, 2, moby, 0)) {
+    if (collision_line(previous_debris_position, pos, 2, moby, 0)) {
         reflect_vector(debris_vars, debris_vars, D_L09_00174000);
         fast_vec_scale(debris_vars, debris_vars, random_float_between(0.45f, 0.75f));
         if (fast_vec_length(debris_vars) < frame_time_sq * 10.0f) {

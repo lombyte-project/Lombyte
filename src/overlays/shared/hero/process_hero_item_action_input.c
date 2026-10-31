@@ -401,16 +401,16 @@ s32 process_hero_item_action_input(void) {
         HERO_ITEM_CLASS_GATED_BUFFERED_ACTIVATE = 31,
         HERO_ITEM_BUFFERED_ACTIVATE = 32
     };
-    s32                    out0;
-    s32                    out1;
-    s32                    out2;
+    s32                    wrench_press_age_frames;
+    s32                    timed_activation_press_age_frames;
+    s32                    voiced_activation_press_age_frames;
     s32                    saved;
     u32                    buttons;
     s32                    frames;
     s32                    window;
     struct Moby           *moby;
     HeroTableRow2C        *row;
-    struct HeldGadgetVars *vars;
+    struct HeldGadgetVars *held_gadget_voice_state;
 
     if (hero.item_use_locked != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) {
         return 0;
@@ -432,7 +432,7 @@ s32 process_hero_item_action_input(void) {
         if (hero.state.control_mode == 0 || hero.state.control_mode == 1 ||
             (hero.state.control_mode == 4 && hero.rail_land_frames != 0)) {
             if (hero.on_slip_ground == 0 &&
-                pad_pressed_within(buttons, scale_game_frames(7), &out0) != 0) {
+                pad_pressed_within(buttons, scale_game_frames(7), &wrench_press_age_frames) != 0) {
                 moby = hero.items[0].moby;
                 if (moby != NULL && is_wrench_moby(moby) != 0 && moby->state == 0) {
                     if ((controller_state.held & 0xA) ||
@@ -563,7 +563,7 @@ s32 process_hero_item_action_input(void) {
             hero.state.control_mode == 4 || hero.state.control_mode == 5 ||
             hero.state.control_mode == 0xF || hero.state.current == 0x1E) {
             if (hero.items[0].moby != NULL) {
-                vars = (struct HeldGadgetVars *)hero.items[0].moby->pvars;
+                held_gadget_voice_state = (struct HeldGadgetVars *)hero.items[0].moby->pvars;
                 if ((((controller_state.held & buttons) &&
                       scale_game_frames(5) < hero.items[0].ready_frames) ||
                      (controller_state.pressed & buttons)) &&
@@ -572,8 +572,10 @@ s32 process_hero_item_action_input(void) {
                         start_equipped_item_animation();
                     }
                 } else if ((controller_state.held & buttons) && get_ammo(-1) == 0 &&
-                           voice_is_playing(hero.items[0].moby, vars->voice) == 0) {
-                    vars->voice = allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
+                           voice_is_playing(hero.items[0].moby, held_gadget_voice_state->voice) ==
+                               0) {
+                    held_gadget_voice_state->voice =
+                        allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
                 }
             }
         }
@@ -597,7 +599,7 @@ s32 process_hero_item_action_input(void) {
                 if (hold < window) {
                     window = hold;
                 }
-                if (pad_pressed_within(buttons, window, &out1) != 0 ||
+                if (pad_pressed_within(buttons, window, &timed_activation_press_age_frames) != 0 ||
                     ((controller_state.held & 0x20) && scale_game_frames(8) < hold &&
                      hold < scale_game_frames(0x11))) {
                     if (get_ammo(-1) != 0) {
@@ -625,7 +627,9 @@ s32 process_hero_item_action_input(void) {
 
                 limit = scale_game_frames(0xA);
                 hold = hero.items[0].ready_frames;
-                if (pad_pressed_within(buttons, hold < limit ? hold : limit, &out2) != 0 &&
+                if (pad_pressed_within(buttons,
+                                       hold < limit ? hold : limit,
+                                       &voiced_activation_press_age_frames) != 0 &&
                     hero.items[0].moby != NULL) {
                     hero_set_state(0x20, 1);
                     if (hero.items[0].moby != NULL) {

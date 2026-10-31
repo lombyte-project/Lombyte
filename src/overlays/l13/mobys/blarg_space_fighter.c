@@ -267,18 +267,20 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 void predict_hero_vehicle_position(char *out, float scale) __asm__("FUN_L13_002c3f08");
 
-void predict_hero_vehicle_position(char *out, float scale) {
+void predict_hero_vehicle_position(char *predicted_hero_position, float scale) {
     char *x = D_0013E533 + 0xE1D;
     if (*(char **)(x + 0x15F0) == 0) {
-        qcopy(out, x + 0x80);
+        qcopy(predicted_hero_position, x + 0x80);
     } else {
         char *vehicle_data = *(char **)(*(char **)(x + 0x15F0) + 0x78);
         float a = fast_add_rotations(*(float *)(*(char **)(x + 0x15F0) + 0x48),
                                      *(float *)(vehicle_data + 0x90));
         float b = fast_add_rotations(*(float *)(*(char **)(x + 0x15F0) + 0x44),
                                      *(float *)(vehicle_data + 0x94));
-        build_spherical_offset(out, scale * *(float *)(vehicle_data + 0x64), a, -b);
-        fast_vec_add(out, out, *(char **)(x + 0x15F0) + 0x10);
+        build_spherical_offset(
+            predicted_hero_position, scale * *(float *)(vehicle_data + 0x64), a, -b);
+        fast_vec_add(
+            predicted_hero_position, predicted_hero_position, *(char **)(x + 0x15F0) + 0x10);
     }
 }
 
@@ -290,11 +292,14 @@ int update_blarg_space_fighter_path_following(struct Moby *moby,
                                               char        *vars,
                                               int          aim) __asm__("FUN_L13_002c3fc0");
 
-int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int aim) {
-    char *path = D_L13_001B07B0[*(int *)(vars + 0xA0)];
+int update_blarg_space_fighter_path_following(struct Moby *moby,
+                                              char        *blarg_space_fighter_data,
+
+                                              int aim) {
+    char *path = D_L13_001B07B0[*(int *)(blarg_space_fighter_data + 0xA0)];
     char *linked;
     char *veh;
-    int   result = 0;
+    int   path_wrapped = 0;
     int   point_count;
     int   forward;
     int   backward;
@@ -318,8 +323,8 @@ int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int
     }
     veh = *(char **)D_00140940;
     if (veh != 0 && *(short *)(veh + 0xA6) == 0x45) {
-        if (*(int *)(vars + 0xBC) != -1 &&
-            (linked = D_L13_0015FFD8 + (*(int *)(vars + 0xBC) << 8)) != 0 &&
+        if (*(int *)(blarg_space_fighter_data + 0xBC) != -1 &&
+            (linked = D_L13_0015FFD8 + (*(int *)(blarg_space_fighter_data + 0xBC) << 8)) != 0 &&
             (unsigned char)linked[0x20] != 0xFE && (unsigned char)linked[0x20] != 0xFD) {
             fast_vec_sub(point, veh + 0x10, linked + 0x10);
             fast_vec_scale(point, point, 0.5f);
@@ -329,8 +334,8 @@ int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int
             predict_hero_vehicle_position((char *)point, 140.0f);
         }
     } else {
-        if (*(int *)(vars + 0xBC) == -1 ||
-            (linked = D_L13_0015FFD8 + (*(int *)(vars + 0xBC) << 8)) == 0 ||
+        if (*(int *)(blarg_space_fighter_data + 0xBC) == -1 ||
+            (linked = D_L13_0015FFD8 + (*(int *)(blarg_space_fighter_data + 0xBC) << 8)) == 0 ||
             (unsigned char)linked[0x20] == 0xFE || (unsigned char)linked[0x20] == 0xFD) {
             qcopy(point, D_0013F3D0);
         } else {
@@ -338,7 +343,7 @@ int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int
         }
     }
     backward = select_blarg_space_fighter_path_point_by_distance(
-        (char *)point, (int *)path, *(short *)(vars + 0xB4), 0.0f);
+        (char *)point, (int *)path, *(short *)(blarg_space_fighter_data + 0xB4), 0.0f);
     forward = backward + 5;
     point_count = *(int *)path;
     if (forward >= point_count) {
@@ -357,7 +362,8 @@ int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int
         step = 1;
     } else {
         step = -1;
-        if (!(forward_distance < backward_distance) && *(signed char *)(vars + 0xD0) == 1) {
+        if (!(forward_distance < backward_distance) &&
+            *(signed char *)(blarg_space_fighter_data + 0xD0) == 1) {
             backward = forward;
             step = 1;
         }
@@ -368,7 +374,7 @@ int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int
         index = (index + step) % *(int *)path;
         scans++;
     }
-    backward = *(short *)(vars + 0xB4);
+    backward = *(short *)(blarg_space_fighter_data + 0xB4);
     if (backward < index) {
         direct_distance = index - backward;
         wrap_distance = *(int *)path - index + backward;
@@ -379,36 +385,38 @@ int update_blarg_space_fighter_path_following(struct Moby *moby, char *vars, int
         step = direct_distance < wrap_distance ? -1 : 1;
     }
     target_distance = fast_vec_dist(&moby->pos, path + 0x10 + index * 16);
-    if (step != *(signed char *)(vars + 0xD0)) {
-        if (fast_dec_timer_s16((short *)(vars + 0xD2)) != 0) {
+    if (step != *(signed char *)(blarg_space_fighter_data + 0xD0)) {
+        if (fast_dec_timer_s16((short *)(blarg_space_fighter_data + 0xD2)) != 0) {
             float speed = D_0015ED60_gp * -0.04000002f + 1.0f;
-            *(short *)(vars + 0xD2) = 10;
-            *(float *)(vars + 0xCC) = *(float *)(vars + 0xCC) * speed;
+            *(short *)(blarg_space_fighter_data + 0xD2) = 10;
+            *(float *)(blarg_space_fighter_data + 0xCC) =
+                *(float *)(blarg_space_fighter_data + 0xCC) * speed;
             distance = vector_distance_xy(&moby->pos, D_0013F3D0);
-            if ((*(float *)(vars + 0xCC) < D_0015ED60 * 0.1f) | (moby->visible == 0) |
-                (distance < 40.0f)) {
-                short old = *(short *)(vars + 0xB4);
-                *(signed char *)(vars + 0xD0) = step;
-                *(short *)(vars + 0xB4) = *(short *)(vars + 0xB6);
-                *(short *)(vars + 0xB6) = old;
+            if ((*(float *)(blarg_space_fighter_data + 0xCC) < D_0015ED60 * 0.1f) |
+                (moby->visible == 0) | (distance < 40.0f)) {
+                short old = *(short *)(blarg_space_fighter_data + 0xB4);
+                *(signed char *)(blarg_space_fighter_data + 0xD0) = step;
+                *(short *)(blarg_space_fighter_data + 0xB4) =
+                    *(short *)(blarg_space_fighter_data + 0xB6);
+                *(short *)(blarg_space_fighter_data + 0xB6) = old;
             }
             goto update_path;
         }
     }
-    if (step != *(signed char *)(vars + 0xD0)) {
+    if (step != *(signed char *)(blarg_space_fighter_data + 0xD0)) {
         goto update_path;
     }
     maximum = D_0015ED6C * 100.0f;
-    speed = *(float *)(vars + 0xCC);
+    speed = *(float *)(blarg_space_fighter_data + 0xCC);
     speed = speed + (target_distance / 60.0f - speed) * (D_0015ED60 * 0.07f);
-    *(float *)(vars + 0xCC) = speed;
+    *(float *)(blarg_space_fighter_data + 0xCC) = speed;
     if (maximum < speed) {
-        *(float *)(vars + 0xCC) = maximum;
+        *(float *)(blarg_space_fighter_data + 0xCC) = maximum;
     }
 update_path:
-    result = advance_blarg_space_fighter_along_path(moby, vars, aim);
+    path_wrapped = advance_blarg_space_fighter_along_path(moby, blarg_space_fighter_data, aim);
 done:
-    return result;
+    return path_wrapped;
 }
 
 typedef struct {

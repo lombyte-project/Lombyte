@@ -91,14 +91,14 @@ unsigned char *spawn_machinegun_turret_projectile(void  *spawn_position,
 
 void update_machinegun_turret_projectile(struct Moby *moby) {
     BoltVars *bolt_vars = (BoltVars *)moby->pvars;
-    Vec4      old;
+    Vec4      previous_projectile_position;
     Vec4      particle_motion_vector;
     Vec4      spark;
     int       pass;
     int       i;
     int       j;
 
-    qcopy(&old, &moby->pos);
+    qcopy(&previous_projectile_position, &moby->pos);
     fast_vec_add(&moby->pos, &moby->pos, &bolt_vars->vel);
     pass = bolt_vars->solid == 0;
     if (vector_distance_xy(&moby->pos, &bolt_vars->origin) > 30.0f) {
@@ -124,7 +124,8 @@ void update_machinegun_turret_projectile(struct Moby *moby) {
         return;
     }
     if ((moby->visible != 0 || vector_distance_xy(&moby->pos, &hero.motion.pos) < 30.0f) &&
-        collision_line(&old, &moby->pos, pass, bolt_vars->ignore, bolt_vars) != 0) {
+        collision_line(
+            &previous_projectile_position, &moby->pos, pass, bolt_vars->ignore, bolt_vars) != 0) {
         qcopy(&moby->pos, &D_L07_00173EE0);
         if (moby->visible != 0) {
             for (j = 0; j < 5; j++) {

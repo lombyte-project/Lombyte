@@ -408,20 +408,21 @@ extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void
 resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
 
-float move_gadgebot_toward_target(char *self, float *target_position_source) {
+float move_gadgebot_toward_target(char *gadgebot_moby, float *target_position_source) {
     QVec  target_position;
     float v[4];
     float movement_distance_scratch[4];
     float z = 0.0f;
     float movement_clearance = 0.5f;
-    char *moby_vars = *(char **)(self + 0x78);
+    char *moby_vars = *(char **)(gadgebot_moby + 0x78);
     float initial_target_distance_xy;
     *(u128 *)&target_position = *(u128 *)target_position_source;
     {
-        float d = fast_add_rotations(fast_arc_tan(target_position.v[0] - *(float *)(self + 0x10),
-                                                  target_position.v[1] - *(float *)(self + 0x14)),
-                                     *(float *)(moby_vars + 0x1EC));
-        approach_angle((float *)(self + 0x48),
+        float d = fast_add_rotations(
+            fast_arc_tan(target_position.v[0] - *(float *)(gadgebot_moby + 0x10),
+                         target_position.v[1] - *(float *)(gadgebot_moby + 0x14)),
+            *(float *)(moby_vars + 0x1EC));
+        approach_angle((float *)(gadgebot_moby + 0x48),
                        (float *)(moby_vars + 0x1E8),
                        d,
                        frame_time_sq * 6.2831855f,
@@ -429,19 +430,22 @@ float move_gadgebot_toward_target(char *self, float *target_position_source) {
                        frame_time * 6.2831855f);
     }
     movement_distance_scratch[0] = z;
-    initial_target_distance_xy = vector_distance_xy((float *)(self + 0x10), target_position.v);
+    initial_target_distance_xy =
+        vector_distance_xy((float *)(gadgebot_moby + 0x10), target_position.v);
     advance_accelerated_scalar(movement_distance_scratch,
                                (float *)(moby_vars + 0x1F0),
                                initial_target_distance_xy,
                                frame_time_sq * 6.0f,
                                frame_time_sq * 6.0f,
                                frame_time * 5.0f);
-    v[0] = fast_cos(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
-    v[1] = fast_sin(*(float *)(self + 0x48)) * *(float *)(moby_vars + 0x1F0);
+    v[0] = fast_cos(*(float *)(gadgebot_moby + 0x48)) * *(float *)(moby_vars + 0x1F0);
+    v[1] = fast_sin(*(float *)(gadgebot_moby + 0x48)) * *(float *)(moby_vars + 0x1F0);
     v[2] = -(frame_time + frame_time);
-    FUN_L00_00258830((int)self, (int)v, movement_clearance, movement_clearance, z, 0);
-    resolve_point_path_segment_xy_clearance(
-        movement_clearance, *(void **)(moby_vars + 0x1E0), self + 0x10, self + 0x10);
+    FUN_L00_00258830((int)gadgebot_moby, (int)v, movement_clearance, movement_clearance, z, 0);
+    resolve_point_path_segment_xy_clearance(movement_clearance,
+                                            *(void **)(moby_vars + 0x1E0),
+                                            gadgebot_moby + 0x10,
+                                            gadgebot_moby + 0x10);
     return initial_target_distance_xy;
 }
 
@@ -504,12 +508,13 @@ short count_group_gadgebots_not_in_state_8(int group_index) __asm__("FUN_L18_002
 short count_group_gadgebots_not_in_state_8(int group_index) {
     unsigned short *group_moby_entry = (unsigned short *)D_L18_001AC240[group_index];
     short           n = 0;
-    int             base;
+    int             moby_table_address;
     if (group_moby_entry == 0)
         return 0;
-    base = (int)D_L18_0015FFD8;
+    moby_table_address = (int)D_L18_0015FFD8;
     while (1) {
-        unsigned char *moby = (unsigned char *)(base + ((group_moby_entry[0] & 0x7FFF) << 8));
+        unsigned char *moby =
+            (unsigned char *)(moby_table_address + ((group_moby_entry[0] & 0x7FFF) << 8));
         if (MOBY(moby)->oclass == 0x772 && moby[0x20] != 8)
             n++;
         if ((short)*group_moby_entry++ < 0)
@@ -609,7 +614,7 @@ void draw_group_gadgebot_joint_glows(struct Moby *moby) {
     if (group_moby_entry != 0) {
         while (1) {
             unsigned char  *group_moby = D_L18_0015FFD8 + ((group_moby_entry[0] & 0x7FFF) << 8);
-            unsigned short *next = group_moby_entry + 1;
+            unsigned short *next_group_moby_entry = group_moby_entry + 1;
             if (MOBY(group_moby)->oclass == 0x772 && group_moby[0x20] != 0 &&
                 group_moby[0x20] < 6) {
                 int i;
@@ -623,7 +628,7 @@ void draw_group_gadgebot_joint_glows(struct Moby *moby) {
             }
             if (*(short *)group_moby_entry < 0)
                 break;
-            group_moby_entry = next;
+            group_moby_entry = next_group_moby_entry;
         }
     }
 }

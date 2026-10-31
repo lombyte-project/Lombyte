@@ -87,7 +87,7 @@ void elevator_update(struct Moby *elevator_moby) {
         ELEVATOR_STATE_WAIT_FOR_RIDER_EXIT = 4
     };
     L14VendorVars *elevator_vars = (L14VendorVars *)elevator_moby->pvars;
-    Vec4           old;
+    Vec4           previous_elevator_position;
     Vec4           rot;
     Vec4           delta;
     float          level;
@@ -99,7 +99,7 @@ void elevator_update(struct Moby *elevator_moby) {
         elevator_vars->along = *(float *)((char *)path + (elevator_vars->segment << 4) + 0x1C);
         elevator_moby->command = 1;
     }
-    qcopy(&old, &elevator_moby->pos);
+    qcopy(&previous_elevator_position, &elevator_moby->pos);
     qcopy(&rot, &elevator_moby->rot);
     switch (elevator_moby->state) {
     case ELEVATOR_STATE_INITIALIZE: {
@@ -185,7 +185,7 @@ void elevator_update(struct Moby *elevator_moby) {
             elevator_vars->level = elevator_vars->motor_volume;
         }
         rebuild_elevator_world_path((u8 *)elevator_moby);
-        fast_vec_sub(&delta, &elevator_moby->pos, &old);
+        fast_vec_sub(&delta, &elevator_moby->pos, &previous_elevator_position);
         update_entity_matrix(elevator_vars->spring, &delta, &rot, &elevator_moby->rot);
         break;
     case ELEVATOR_STATE_SETTLE_AT_ENDPOINT:
@@ -229,7 +229,7 @@ void elevator_update(struct Moby *elevator_moby) {
     if (elevator_moby->state != 2 && elevator_moby->state != 0) {
         settle_elevator_at_path_endpoint(elevator_moby);
         if (hero.ground_moby == elevator_moby) {
-            fast_vec_sub(&delta, &elevator_moby->pos, &old);
+            fast_vec_sub(&delta, &elevator_moby->pos, &previous_elevator_position);
             update_entity_matrix(elevator_vars->spring, &delta, &rot, &elevator_moby->rot);
         }
     }
@@ -239,7 +239,7 @@ void initialize_elevator_path_state(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     int  *path;
     int  *primary_path;
-    int  *first;
+    int  *primary_path_start_point;
     int   i;
 
     if (*(int *)(moby_vars + 0xA0) == -1) {
@@ -255,13 +255,13 @@ void initialize_elevator_path_state(struct Moby *moby) {
 
     *(float *)(moby_vars + 0xB4) = 0.0f;
     path = primary_path;
-    first = path + 4;
+    primary_path_start_point = path + 4;
     for (i = 0; i < *path - 1; i++) {
         ((f32 *)path)[i * 4 + 7] = fast_vec_dist(&path[i * 4 + 4], &path[i * 4 + 8]);
         *(float *)(moby_vars + 0xB4) += ((f32 *)path)[i * 4 + 7];
     }
     {
-        f32   len = fast_vec_dist(&((f32 *)primary_path)[i * 4 + 4], first);
+        f32   len = fast_vec_dist(&((f32 *)primary_path)[i * 4 + 4], primary_path_start_point);
         char *pt = (char *)primary_path + i * 16;
         *(f32 *)(pt + 0x1C) = len;
     }
@@ -408,11 +408,11 @@ f32 elevator_local_path_points[11][4] __asm__("D_L14_001E03B0") = {
 };
 
 void rebuild_elevator_world_path(u8 *moby) {
-    u8          *data = ((u8 *)MOBY(moby)->pvars);
-    u8          *local_path_point_cursor = (u8 *)elevator_local_path_points;
-    u8          *world_path_point_cursor = ((u8 *)l14_paths[*(s32 *)(data + 0x114)]) + 0x10;
-    s32          i = 10;
-    f32          one = 1.0f;
+    u8 *elevator_path_vars = ((u8 *)MOBY(moby)->pvars);
+    u8 *local_path_point_cursor = (u8 *)elevator_local_path_points;
+    u8 *world_path_point_cursor = ((u8 *)l14_paths[*(s32 *)(elevator_path_vars + 0x114)]) + 0x10;
+    s32 i = 10;
+    f32 one = 1.0f;
     struct Hero *x;
     do {
         transform_vector_by_basis(world_path_point_cursor, local_path_point_cursor, moby + 0xC0);
@@ -423,21 +423,22 @@ void rebuild_elevator_world_path(u8 *moby) {
         world_path_point_cursor += 0x10;
     } while (i >= 0);
     x = &hero;
-    x->path_constrain_pending = *(u16 *)(data + 0x114);
+    x->path_constrain_pending = *(u16 *)(elevator_path_vars + 0x114);
 }
 
 extern float fast_sin(float);
 
 void update_elevator_idle_glow(struct Moby *moby) {
-    char        *data = (char *)moby->pvars;
+    char        *elevator_glow_vars = (char *)moby->pvars;
     struct Hero *x = &hero;
     if (absolute_float(moby->pos.x - x->motion.pos.f[0]) > 40.0f ||
         absolute_float(moby->pos.y - x->motion.pos.f[1]) > 40.0f) {
         moby->glow_color = fast_tween_color(moby->glow_color, 0x80303030, 0.1f);
     } else {
         int   i, col;
-        float a = fast_add_rotations(*(float *)(data + 0x138), frame_time * 6.2831855f);
-        *(float *)(data + 0x138) = a;
+        float a =
+            fast_add_rotations(*(float *)(elevator_glow_vars + 0x138), frame_time * 6.2831855f);
+        *(float *)(elevator_glow_vars + 0x138) = a;
         i = func_001FA898_r((fast_sin(a) * 4.0f - 3.0f) * 128.0f);
         if (i > 0x80)
             i = 0x80;

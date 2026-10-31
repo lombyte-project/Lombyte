@@ -78,7 +78,13 @@ char *spawn_blarg_ship_rocket(float scale,
 
 char *spawn_blarg_ship_rocket(
 
-    float scale, void *initial_velocity, void *pos, int owner, int target, int timer_duration) {
+    float scale,
+    void *initial_velocity,
+    void *pos,
+    int   firing_moby,
+    int   target,
+
+    int timer_duration) {
     char *rocket = (char *)create_moby(0x333);
     char *shot_data;
     if (rocket) {
@@ -91,7 +97,7 @@ char *spawn_blarg_ship_rocket(
         qcopy(rocket + 0x10, pos);
         qcopy(shot_data, initial_velocity);
         *(int *)(shot_data + 0x18) = scale_game_frames(timer_duration);
-        *(int *)(shot_data + 0x10) = owner;
+        *(int *)(shot_data + 0x10) = firing_moby;
         *(int *)(shot_data + 0x14) = target;
         *(int *)(shot_data + 0x28) = 0;
         *(float *)(shot_data + 0x38) = fast_vec_dist(rocket + 0x10, &hero.motion.pos);

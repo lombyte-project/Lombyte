@@ -35,12 +35,12 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
                                              struct Moby *moby,
 
                                              struct Moby *target) {
-    char         *data = (char *)moby->pvars;
+    char         *enemy_pvars = (char *)moby->pvars;
     int           linked_moby_index;
     float         heading_delta;
     unsigned char previous_state;
     if (*(int *)&target->rot != 0) {
-        linked_moby_index = *(int *)(data + 0x264);
+        linked_moby_index = *(int *)(enemy_pvars + 0x264);
         if (linked_moby_index != -1) {
             char *linked_moby = (char *)(linked_moby_index << 8) + (int)*(char **)&D_L03_0015FFD8_u;
             if (MOBY(linked_moby)->oclass == 0x336) {
@@ -49,8 +49,8 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
             }
         }
         heading_delta = fast_subtract_rotations(desired_heading, moby->rot.z);
-        if (absolute_float(heading_delta) >= 0.7853982f && *(unsigned char *)(data + 0x263) == 0 &&
-            moby->prev_seq != 1) {
+        if (absolute_float(heading_delta) >= 0.7853982f &&
+            *(unsigned char *)(enemy_pvars + 0x263) == 0 && moby->prev_seq != 1) {
             goto go;
         }
         if (absolute_float(heading_delta) > 1.5707964f) {
@@ -62,7 +62,7 @@ int try_start_kerwan_path_enemy_heading_turn(float        desired_heading,
                 } else {
                     blend_moby_animation(moby, 9, 0, scale_game_frames(10));
                 }
-                *(float *)(data + 0x28C) = desired_heading;
+                *(float *)(enemy_pvars + 0x28C) = desired_heading;
                 previous_state = moby->state;
                 moby->state = 0xC;
                 moby->command = previous_state;
@@ -1303,30 +1303,34 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
     }
     if (moby_data->i280 != -1) {
         {
-            float        out[4];
-            Moby2C8398  *base;
-            Moby2C8398  *other;
+            float        transformed_rotation[4];
+            Moby2C8398  *moby_instances;
+            Moby2C8398  *supporting_moby;
             PathF2C8398 *pf;
             int          i;
-            *(OvlQuad *)out = 0;
-            base = D_L03_0015FFD8_m;
-            other = &base[moby_data->i280];
+            *(OvlQuad *)transformed_rotation = 0;
+            moby_instances = D_L03_0015FFD8_m;
+            supporting_moby = &moby_instances[moby_data->i280];
             pf = &moby_data->pf;
-            if ((short)other->cls == 0x335 || (short)other->cls == 0x4BA) {
+            if ((short)supporting_moby->cls == 0x335 || (short)supporting_moby->cls == 0x4BA) {
                 for (i = 0; i < *(int *)pf->path; i++) {
                     float path_node_rotation[4];
                     *(OvlQuad *)path_node_rotation = 0;
                     probe_ground_height_cf((int)m,
-                                           (char *)other,
+                                           (char *)supporting_moby,
                                            pf->path + 0x10 + i * 0x10,
                                            path_node_rotation,
                                            pf->path + 0x10 + i * 0x10,
                                            path_node_rotation);
                 }
             }
-            probe_ground_height_cf(
-                (int)m, (char *)other, (char *)m->pos, m->rot, (char *)m->pos, out);
-            m->rot[2] = out[2];
+            probe_ground_height_cf((int)m,
+                                   (char *)supporting_moby,
+                                   (char *)m->pos,
+                                   m->rot,
+                                   (char *)m->pos,
+                                   transformed_rotation);
+            m->rot[2] = transformed_rotation[2];
         }
     }
     if (!(m->state >= 0xB && m->state <= 0xE)) {
@@ -1481,8 +1485,8 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
     float       angle;
     Data2C8398 *moby_data;
     char       *hit;
-    char       *other;
-    int         result;
+    char       *hit_record_source_moby;
+    int         hit_response_code;
 
     damage = 0.0f;
     moby_data = moby->data;
@@ -1496,13 +1500,14 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         moby_data->f270 = moby_data->f26C + 5.0f;
     }
     hit = find_moby_hit(moby, 0x330000, 0);
-    result = resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
+    hit_response_code =
+        resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
     if (hit != 0 && kind != 1 && moby->state != 0xD) {
-        other = *(char **)(hit + 0x20);
-        if (other != 0) {
-            if (other != (char *)hero.items[0].moby) {
-                angle = fast_arc_tan(moby->pos[0] - *(float *)(other + 0x10),
-                                     moby->pos[1] - *(float *)(other + 0x14));
+        hit_record_source_moby = *(char **)(hit + 0x20);
+        if (hit_record_source_moby != 0) {
+            if (hit_record_source_moby != (char *)hero.items[0].moby) {
+                angle = fast_arc_tan(moby->pos[0] - *(float *)(hit_record_source_moby + 0x10),
+                                     moby->pos[1] - *(float *)(hit_record_source_moby + 0x14));
             } else {
                 angle = fast_arc_tan(moby->pos[0] - hero.motion.pos.f[0],
                                      moby->pos[1] - hero.motion.pos.f[1]);
@@ -1513,9 +1518,9 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         }
         moby_data->f20 -= damage;
         if (moby_data->f20 <= 0.0f) {
-            result = 1;
+            hit_response_code = 1;
         }
-        switch (result) {
+        switch (hit_response_code) {
         case NO_KNOCKBACK_HIT_RESPONSE:
         case ZERO_DAMAGE_NO_KNOCKBACK_RESPONSE:
             moby_data->b67 = 0x78;

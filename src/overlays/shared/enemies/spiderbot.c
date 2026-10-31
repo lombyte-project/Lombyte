@@ -76,19 +76,19 @@ void spiderbot_update(unsigned char *moby) {
         SPIDERBOT_ARC_OSCILLATION = 2,
         SPIDERBOT_LINEAR_OSCILLATION = 3
     };
-    float          old[4];
+    float          previous_moby_position[4];
     float          A[4];
     float          B[4];
     float          C[4];
     unsigned char *moby_data = ((unsigned char *)MOBY(moby)->pvars);
-    *(u128_2A8090 *)old = *(u128_2A8090 *)(moby + 0x10);
+    *(u128_2A8090 *)previous_moby_position = *(u128_2A8090 *)(moby + 0x10);
     {
         float D[4];
         float M[16];
         float T[4];
         switch (moby[0x20]) {
         case SPIDERBOT_INITIALIZE:
-            *(u128_2A8090 *)moby_data = *(u128_2A8090 *)old;
+            *(u128_2A8090 *)moby_data = *(u128_2A8090 *)previous_moby_position;
             MOBY(moby)->anim_speed = *(float *)(moby_data + 0x30) / 1.5f;
             *(float *)(moby_data + 0x28) = *(float *)(moby_data + 0x28) * 0.017453292f;
             if (*(int *)(moby_data + 0x20) == 0) {
@@ -203,7 +203,7 @@ void spiderbot_update(unsigned char *moby) {
         R.fC = 5627.9248f;
         R.b18 = 1;
         R.b19 = 1;
-        fast_vec_sub(T2, moby + 0x10, old);
+        fast_vec_sub(T2, moby + 0x10, previous_moby_position);
         *(u128_2A8090 *)C = *(u128_2A8090 *)T2;
         collision_line(moby + 0x10, A, 9, moby, &R);
         if (collision_line(moby + 0x10, A, 2, 0, 0)) {

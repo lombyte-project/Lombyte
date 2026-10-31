@@ -40,9 +40,9 @@ s32 _sceSifCmdIntrHdlr(void) {
     u128                   packet[7];
     SifCmdData            *cmd = &sif_cmd_data;
     volatile SifCmdHeader *header;
-    SifCmdHandlerEntry    *entry;
+    SifCmdHandlerEntry    *handler_table;
     SifCmdHandler          handler;
-    u128                  *buffer;
+    u128                  *receive_packet_cursor;
     s32 packet_count_or_handler_index; /* packet bytes, then quadwords, then handler index */
     s32 i;
 
@@ -54,28 +54,28 @@ s32 _sceSifCmdIntrHdlr(void) {
     }
     packet_count_or_handler_index = (packet_count_or_handler_index + 15) / 16;
     header->packet_size = 0;
-    buffer = (u128 *)header;
+    receive_packet_cursor = (u128 *)header;
     for (i = 0; i < packet_count_or_handler_index; i++) {
-        packet[i] = *buffer++;
+        packet[i] = *receive_packet_cursor++;
     }
     isceSifSetDChain();
     header = (volatile SifCmdHeader *)packet;
     if (header->command_id < 0) {
         packet_count_or_handler_index = header->command_id & 0x7fffffff;
         if (packet_count_or_handler_index < cmd->system_handler_count) {
-            entry = cmd->system_handlers;
-            handler = entry[packet_count_or_handler_index].handler;
+            handler_table = cmd->system_handlers;
+            handler = handler_table[packet_count_or_handler_index].handler;
             if (handler) {
-                handler(packet, entry[packet_count_or_handler_index].argument);
+                handler(packet, handler_table[packet_count_or_handler_index].argument);
             }
         }
     } else {
         packet_count_or_handler_index = header->command_id;
         if (packet_count_or_handler_index < cmd->user_handler_count) {
-            entry = cmd->user_handlers;
-            handler = entry[packet_count_or_handler_index].handler;
+            handler_table = cmd->user_handlers;
+            handler = handler_table[packet_count_or_handler_index].handler;
             if (handler) {
-                handler(packet, entry[packet_count_or_handler_index].argument);
+                handler(packet, handler_table[packet_count_or_handler_index].argument);
             }
         }
     }

@@ -11,17 +11,17 @@ void _extensionAndUserData(GroupOfPicturesContext *context) __asm__("_extensionA
 
 void _groupOfPicturesHeader(GroupOfPicturesContext *context) __asm__("_groupOfPicturesHeader");
 
-void _groupOfPicturesHeader(GroupOfPicturesContext *context) {
-    FIELD(int, context, 0xE8) = 0;
-    FIELD(int, context, 0x854) = 1;
-    FIELD(int, context, 0x84C) = FIELD(int, context, 0x850) + 1;
-    _nextBit(context, 1);
-    _nextBit(context, 5);
-    _nextBit(context, 6);
-    _nextBit(context, 1);
-    _nextBit(context, 6);
-    _nextBit(context, 6);
-    FIELD(int, context, 0x1A4) = _nextBit(context, 1);
-    FIELD(int, context, 0x1A8) = _nextBit(context, 1);
-    _extensionAndUserData(context);
+void _groupOfPicturesHeader(GroupOfPicturesContext *decoder_state) {
+    FIELD(int, decoder_state, 0xE8) = 0;
+    FIELD(int, decoder_state, 0x854) = 1;
+    FIELD(int, decoder_state, 0x84C) = FIELD(int, decoder_state, 0x850) + 1;
+    _nextBit(decoder_state, 1);
+    _nextBit(decoder_state, 5);
+    _nextBit(decoder_state, 6);
+    _nextBit(decoder_state, 1);
+    _nextBit(decoder_state, 6);
+    _nextBit(decoder_state, 6);
+    FIELD(int, decoder_state, 0x1A4) = _nextBit(decoder_state, 1);
+    FIELD(int, decoder_state, 0x1A8) = _nextBit(decoder_state, 1);
+    _extensionAndUserData(decoder_state);
 }

@@ -19,16 +19,16 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 void update_falling_spinning_moby(struct Moby *moby) __asm__("FUN_L06_00300b90");
 
 void update_falling_spinning_moby(struct Moby *moby) {
-    char *data;
+    char *velocity_and_spin;
     float vertical_velocity_decrement = frame_time_sq * 15.0f;
     moby->scale = moby->pclass->scale * *(float *)&spinning_fragment_scale_factor_gp;
-    data = (char *)moby->pvars;
-    *(float *)(data + 8) -= vertical_velocity_decrement;
-    fast_vec_add(&moby->pos.x, &moby->pos.x, (float *)data);
-    fast_vec_add(&moby->rot.x, &moby->rot.x, (float *)(data + 0x10));
-    moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x10));
-    moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x14));
-    moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x18));
+    velocity_and_spin = (char *)moby->pvars;
+    *(float *)(velocity_and_spin + 8) -= vertical_velocity_decrement;
+    fast_vec_add(&moby->pos.x, &moby->pos.x, (float *)velocity_and_spin);
+    fast_vec_add(&moby->rot.x, &moby->rot.x, (float *)(velocity_and_spin + 0x10));
+    moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(velocity_and_spin + 0x10));
+    moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(velocity_and_spin + 0x14));
+    moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(velocity_and_spin + 0x18));
     if (--moby->command == 0) {
         mark_moby_for_removal(moby);
     }

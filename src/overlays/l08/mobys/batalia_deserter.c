@@ -162,7 +162,7 @@ void batalia_deserter_update(WM *moby) {
         DESERTER_WAIT_FOR_PLAYER = 1,
         DESERTER_UPDATE_DIALOGUE = 2
     };
-    L16WatchScratch scratch;
+    L16WatchScratch deserter_look_vectors;
     WD8            *deserter_data = (WD8 *)moby->data;
     float           rate;
     float           head_rate;
@@ -247,22 +247,25 @@ void batalia_deserter_update(WM *moby) {
             fast_vec_add(deserter_data->target, deserter_data->target, moby->position);
         }
         if (deserter_data->moving_timer) {
-            qcopy(scratch.target, (char *)&D_0013E633_watch + 0xEED);
+            qcopy(deserter_look_vectors.target, (char *)&D_0013E633_watch + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, deserter_data->target);
+            qcopy(deserter_look_vectors.target, deserter_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, moby->position);
-        scratch.eye[2] += 1.0f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw =
-            fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), moby->yaw);
-        pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
+        qcopy(deserter_look_vectors.eye, moby->position);
+        deserter_look_vectors.eye[2] += 1.0f;
+        fast_vec_sub(
+            deserter_look_vectors.delta, deserter_look_vectors.target, deserter_look_vectors.eye);
+        yaw = fast_subtract_rotations(
+            FUN_001fa688_cf(deserter_look_vectors.delta[0], deserter_look_vectors.delta[1]),
+            moby->yaw);
+        pitch = -FUN_001fa688_cf(vector_length_xy(deserter_look_vectors.delta),
+                                 deserter_look_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

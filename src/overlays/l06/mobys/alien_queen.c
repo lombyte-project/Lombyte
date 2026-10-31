@@ -237,13 +237,13 @@ int activate_state_15_moby_at_position(void *m_, void *activation_position) {
 
 int check_all_listed_frog_states_fe_fd_or_10(int index) {
     unsigned short *moby_index_cursor = (unsigned short *)D_L06_001ABFC0[index];
-    char           *base;
+    char           *moby_array_base;
     char           *moby;
     if (moby_index_cursor == 0)
         return 1;
-    base = (char *)D_L06_0015FFD8_d;
+    moby_array_base = (char *)D_L06_0015FFD8_d;
     for (;;) {
-        moby = base + ((*moby_index_cursor & 0x7FFF) << 8);
+        moby = moby_array_base + ((*moby_index_cursor & 0x7FFF) << 8);
         if (moby != 0 && MOBY(moby)->oclass == 0x33B) {
             unsigned char moby_state = moby[0x20];
             if (moby_state != 0xFE) {
@@ -259,16 +259,16 @@ int check_all_listed_frog_states_fe_fd_or_10(int index) {
 }
 
 void set_moby_and_links_to_states_4_and_5(char *moby) {
-    char  *data = ((char *)MOBY(moby)->pvars);
+    char  *source_moby_vars = ((char *)MOBY(moby)->pvars);
     char **linked_moby_cursor;
     int    i;
     moby[0xBC] = 1;
     if ((unsigned char)moby[0x20] == 2) {
         allocate_voice_for_target_entry(0, 0, (int)moby);
         moby[0x20] = 4;
-        linked_moby_cursor = (char **)(data + 0x24);
-        *(int *)(data + 0x14) = 0;
-        *(int *)(data + 0x18) = 0;
+        linked_moby_cursor = (char **)(source_moby_vars + 0x24);
+        *(int *)(source_moby_vars + 0x14) = 0;
+        *(int *)(source_moby_vars + 0x18) = 0;
         for (i = 6; i >= 0; i--) {
             (*linked_moby_cursor++)[0x20] = 5;
         }
@@ -276,7 +276,7 @@ void set_moby_and_links_to_states_4_and_5(char *moby) {
 }
 
 void set_moby_and_links_to_states_8_and_9(char *moby) {
-    char  *data = ((char *)MOBY(moby)->pvars);
+    char  *parent_moby_vars = ((char *)MOBY(moby)->pvars);
     int    i;
     char **linked_moby_cursor;
     moby[0xBC] = 1;
@@ -288,8 +288,8 @@ void set_moby_and_links_to_states_8_and_9(char *moby) {
         fl &= 0xFFFE;
         moby[0x20] = 8;
         MOBY(moby)->flags = fl;
-        *(int *)(data + 0x18) = 0;
-        linked_moby_cursor = (char **)(data + 0x24);
+        *(int *)(parent_moby_vars + 0x18) = 0;
+        linked_moby_cursor = (char **)(parent_moby_vars + 0x24);
         for (i = 6; i >= 0; i--) {
             char *linked_moby = *linked_moby_cursor;
             linked_moby[0x20] = 9;
@@ -724,25 +724,28 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         REDUCED_DAMAGE_SOURCE_CLASS = 0x131,
         DAMAGE_BOOSTING_SOURCE_CLASS = 0x33B
     };
-    char *data;
+    char *alien_queen_hit_recovery_vars;
     char *hit;
-    int   out;
+    int   hit_status;
     float dmg;
     int   kind;
     int   timer;
     float hp;
     float recovery_hp;
     int  *path;
-    data = ((char *)MOBY(moby)->pvars);
+    alien_queen_hit_recovery_vars = ((char *)MOBY(moby)->pvars);
     if (MOBY(moby)->state == 0)
         return;
-    if ((unsigned int)(MOBY(moby)->state - 4) < 10 && *(int *)(data + 0x108) != -1)
-        D_L06_0014162A = *(short *)(data + 0x108);
-    *(int *)(data + 0x110) = truncate_float_to_s32(*(float *)(data + 0x20) * 16.0f);
+    if ((unsigned int)(MOBY(moby)->state - 4) < 10 &&
+        *(int *)(alien_queen_hit_recovery_vars + 0x108) != -1)
+        D_L06_0014162A = *(short *)(alien_queen_hit_recovery_vars + 0x108);
+    *(int *)(alien_queen_hit_recovery_vars + 0x110) =
+        truncate_float_to_s32(*(float *)(alien_queen_hit_recovery_vars + 0x20) * 16.0f);
     dmg = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
-    kind = resolve_moby_hit_response(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
-    if (out != 1 && (unsigned char)moby[0x20] != 14 && (unsigned char)moby[0x20] != 3 &&
+    kind = resolve_moby_hit_response(
+        moby, hit, alien_queen_hit_recovery_vars + 0x20, 0, &hit_status, &dmg, 0, 4);
+    if (hit_status != 1 && (unsigned char)moby[0x20] != 14 && (unsigned char)moby[0x20] != 3 &&
         (unsigned char)moby[0x20] != 5) {
         if (*(char **)(hit + 0x20) != 0) {
             int oclass = *(short *)(*(char **)(hit + 0x20) + 0xA6);
@@ -757,29 +760,31 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
                 break;
             }
         }
-        *(float *)(data + 0x20) -= dmg;
-        if (*(int *)(data + 0x170) == 0) {
-            if (scale_game_frames(10) <= *(int *)(data + 0x12C)) {
-                hp = *(float *)(data + 0x20);
+        *(float *)(alien_queen_hit_recovery_vars + 0x20) -= dmg;
+        if (*(int *)(alien_queen_hit_recovery_vars + 0x170) == 0) {
+            if (scale_game_frames(10) <= *(int *)(alien_queen_hit_recovery_vars + 0x12C)) {
+                hp = *(float *)(alien_queen_hit_recovery_vars + 0x20);
                 recovery_hp = 20.0f;
                 if (hp <= recovery_hp && hp + dmg > recovery_hp)
                     goto start_recovery;
             }
-            if (scale_game_frames(10) <= *(int *)(data + 0x12C)) {
-                hp = *(float *)(data + 0x20);
+            if (scale_game_frames(10) <= *(int *)(alien_queen_hit_recovery_vars + 0x12C)) {
+                hp = *(float *)(alien_queen_hit_recovery_vars + 0x20);
                 recovery_hp = 10.0f;
                 if (hp <= recovery_hp && hp + dmg > recovery_hp) {
                 start_recovery:
-                    *(float *)(data + 0x20) = recovery_hp;
-                    *(int *)(data + 0x170) = 1;
-                    *(float *)(data + 0x174) = recovery_hp;
-                    *(int *)(data + 0x12C) = scale_game_frames(30);
+                    *(float *)(alien_queen_hit_recovery_vars + 0x20) = recovery_hp;
+                    *(int *)(alien_queen_hit_recovery_vars + 0x170) = 1;
+                    *(float *)(alien_queen_hit_recovery_vars + 0x174) = recovery_hp;
+                    *(int *)(alien_queen_hit_recovery_vars + 0x12C) = scale_game_frames(30);
                 }
             }
-        } else if (*(float *)(data + 0x20) < *(float *)(data + 0x174)) {
-            *(float *)(data + 0x20) = *(float *)(data + 0x174);
+        } else if (*(float *)(alien_queen_hit_recovery_vars + 0x20) <
+                   *(float *)(alien_queen_hit_recovery_vars + 0x174)) {
+            *(float *)(alien_queen_hit_recovery_vars + 0x20) =
+                *(float *)(alien_queen_hit_recovery_vars + 0x174);
         }
-        if (*(float *)(data + 0x20) <= 0.0f)
+        if (*(float *)(alien_queen_hit_recovery_vars + 0x20) <= 0.0f)
             kind = 1;
         else if (kind == 1)
             kind = 5;
@@ -796,53 +801,55 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
         case HIT_RESPONSE_NONLETHAL_ANIMATION_MAINTENANCE:
         case HIT_RESPONSE_NONLETHAL_ANIMATION_FEEDBACK:
         case HIT_RESPONSE_NONLETHAL_ANIMATION_RESPONSE:
-            *(unsigned char *)(data + 0x67) = 200;
+            *(unsigned char *)(alien_queen_hit_recovery_vars + 0x67) = 200;
             break;
         case HIT_RESPONSE_DEATH:
         case HIT_RESPONSE_DEATH_SEQUENCE: {
             LevelCuboid *base;
-            if (*(int *)(data + 0x10C) != -1) {
-                set_animation_parameter(*(int *)(data + 0x10C), 0);
-                *(int *)(data + 0x10C) = -1;
+            if (*(int *)(alien_queen_hit_recovery_vars + 0x10C) != -1) {
+                set_animation_parameter(*(int *)(alien_queen_hit_recovery_vars + 0x10C), 0);
+                *(int *)(alien_queen_hit_recovery_vars + 0x10C) = -1;
             }
             moby[0x20] = 14;
             FUN_L00_00257470(moby, 0, -1);
-            base = &l06_cuboids[*(int *)(data + 0xF8)];
+            base = &l06_cuboids[*(int *)(alien_queen_hit_recovery_vars + 0xF8)];
             jet_reset_camera(&base->pos, &base->rot);
             MOBY(moby)->flags &= 0xEFFF;
             if ((unsigned char)moby[0x53] != 10)
                 FUN_00212f90(moby, 10, 0, scale_game_frames(10));
-            *(unsigned char *)(data + 0x67) = 0xFA;
+            *(unsigned char *)(alien_queen_hit_recovery_vars + 0x67) = 0xFA;
             break;
         }
         }
     hit_response_done:
-        trooper_anim_update(moby, data + 0x60);
+        trooper_anim_update(moby, alien_queen_hit_recovery_vars + 0x60);
     }
     MOBY(moby)->hit_slot = 0xFF;
-    trooper_anim_finish(moby, data + 0x60);
-    if ((data[0x2E] & 2) && (unsigned char)moby[0x20] != 15) {
-        if (*(int *)(data + 0x10C) != -1) {
-            set_animation_parameter(*(int *)(data + 0x10C), 0);
-            *(int *)(data + 0x10C) = -1;
+    trooper_anim_finish(moby, alien_queen_hit_recovery_vars + 0x60);
+    if ((alien_queen_hit_recovery_vars[0x2E] & 2) && (unsigned char)moby[0x20] != 15) {
+        if (*(int *)(alien_queen_hit_recovery_vars + 0x10C) != -1) {
+            set_animation_parameter(*(int *)(alien_queen_hit_recovery_vars + 0x10C), 0);
+            *(int *)(alien_queen_hit_recovery_vars + 0x10C) = -1;
         }
         moby[0x20] = 14;
         return;
     }
     if ((unsigned char)moby[0x20] >= 2 && D_L06_00140408 != 8 && (D_0013CAE0 & 0x20))
-        *(int *)(data + 0x178) = 1;
-    timer = *(int *)(data + 0x12C);
-    if (timer != 0 && *(int *)(data + 0x170) != 0) {
-        --*(int *)(data + 0x12C);
-        if (*(int *)(data + 0x12C) < scale_game_frames(10))
-            D_L06_0015F3FC = 1.0f - convert_integer_to_float(*(int *)(data + 0x12C)) /
-                                        scale_recovery_time(10.0f);
-        if (*(int *)(data + 0x12C) == 0 && (unsigned char)moby[0x20] != 1) {
-            if (*(float *)(data + 0x20) > 10.0f) {
-                *(float *)(data + 0x20) = 19.9f;
+        *(int *)(alien_queen_hit_recovery_vars + 0x178) = 1;
+    timer = *(int *)(alien_queen_hit_recovery_vars + 0x12C);
+    if (timer != 0 && *(int *)(alien_queen_hit_recovery_vars + 0x170) != 0) {
+        --*(int *)(alien_queen_hit_recovery_vars + 0x12C);
+        if (*(int *)(alien_queen_hit_recovery_vars + 0x12C) < scale_game_frames(10))
+            D_L06_0015F3FC =
+                1.0f - convert_integer_to_float(*(int *)(alien_queen_hit_recovery_vars + 0x12C)) /
+                           scale_recovery_time(10.0f);
+        if (*(int *)(alien_queen_hit_recovery_vars + 0x12C) == 0 &&
+            (unsigned char)moby[0x20] != 1) {
+            if (*(float *)(alien_queen_hit_recovery_vars + 0x20) > 10.0f) {
+                *(float *)(alien_queen_hit_recovery_vars + 0x20) = 19.9f;
                 moby[0x20] = 3;
-                *(int *)(data + 0x170) = 0;
-                qcopy(moby + 0x10, data + 0xC0);
+                *(int *)(alien_queen_hit_recovery_vars + 0x170) = 0;
+                qcopy(moby + 0x10, alien_queen_hit_recovery_vars + 0xC0);
                 MOBY(moby)->rot.z = fast_arc_tan(hero.motion.pos.f[0] - MOBY(moby)->pos.x,
                                                  hero.motion.pos.f[1] - MOBY(moby)->pos.y);
                 euler_rotation_basis(moby + 0xC0, moby + 0x40);
@@ -851,12 +858,12 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
                 FUN_L06_002fb148_recovery_high(moby);
             } else {
                 LevelCuboid *base;
-                *(float *)(data + 0x20) = 9.9f;
+                *(float *)(alien_queen_hit_recovery_vars + 0x20) = 9.9f;
                 moby[0x20] = 5;
-                *(int *)(data + 0x170) = 0;
-                base = &l06_cuboids[*(int *)(data + 0xF8)];
+                *(int *)(alien_queen_hit_recovery_vars + 0x170) = 0;
+                base = &l06_cuboids[*(int *)(alien_queen_hit_recovery_vars + 0xF8)];
                 set_race_camera(&base->pos, &base->rot, 0x72, 1);
-                qcopy(moby + 0x10, data + 0xC0);
+                qcopy(moby + 0x10, alien_queen_hit_recovery_vars + 0xC0);
                 MOBY(moby)->rot.z = fast_arc_tan(hero.motion.pos.f[0] - MOBY(moby)->pos.x,
                                                  hero.motion.pos.f[1] - MOBY(moby)->pos.y);
                 euler_rotation_basis(moby + 0xC0, moby + 0x40);
@@ -865,25 +872,29 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
                 FUN_L06_002fb148_recovery_low(moby);
             }
         }
-    } else if (*(int *)(data + 0x170) == 0) {
-        if (*(int *)(data + 0x12C) < scale_game_frames(10)) {
-            D_L06_0015F3FC = 1.0f - convert_integer_to_float(++*(int *)(data + 0x12C)) / 10.0f;
+    } else if (*(int *)(alien_queen_hit_recovery_vars + 0x170) == 0) {
+        if (*(int *)(alien_queen_hit_recovery_vars + 0x12C) < scale_game_frames(10)) {
+            D_L06_0015F3FC =
+                1.0f -
+                convert_integer_to_float(++*(int *)(alien_queen_hit_recovery_vars + 0x12C)) / 10.0f;
         }
     }
-    *(float *)(data + 0x128) =
-        fast_add_rotations(*(float *)(data + 0x128),
+    *(float *)(alien_queen_hit_recovery_vars + 0x128) =
+        fast_add_rotations(*(float *)(alien_queen_hit_recovery_vars + 0x128),
                            alien_queen_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
     MOBY(moby)->glow_color = fast_tween_color(
-        D_L06_00161F10, D_L06_00161F14, (fast_sin(*(float *)(data + 0x128)) + 1.0f) * 0.5f);
-    path = D_L06_001B0C30[*(int *)(data + 0xEC)];
-    FUN_L00_0025ff38(moby, data + 0x70, 0, 0, path + 4, *path, 255.0f);
-    if (*(int *)(data + 0xB0) == 0)
-        *(int *)(data + 0xB0) = D_L06_001413D0;
+        D_L06_00161F10,
+        D_L06_00161F14,
+        (fast_sin(*(float *)(alien_queen_hit_recovery_vars + 0x128)) + 1.0f) * 0.5f);
+    path = D_L06_001B0C30[*(int *)(alien_queen_hit_recovery_vars + 0xEC)];
+    FUN_L00_0025ff38(moby, alien_queen_hit_recovery_vars + 0x70, 0, 0, path + 4, *path, 255.0f);
+    if (*(int *)(alien_queen_hit_recovery_vars + 0xB0) == 0)
+        *(int *)(alien_queen_hit_recovery_vars + 0xB0) = D_L06_001413D0;
 }
 
 void activate_listed_state_15_mobys_at_raised_positions(char *moby) {
-    char  *data = ((char *)MOBY(moby)->pvars);
-    short *moby_index_list = D_L06_001ABFC0_c[*(int *)(data + 0xF0)];
+    char  *activation_source_moby_vars = ((char *)MOBY(moby)->pvars);
+    short *moby_index_list = D_L06_001ABFC0_c[*(int *)(activation_source_moby_vars + 0xF0)];
     short *moby_index_cursor;
     if (moby_index_list != 0) {
         moby_index_cursor = moby_index_list;
@@ -900,10 +911,10 @@ void activate_listed_state_15_mobys_at_raised_positions(char *moby) {
 
 void start_alien_queen_intro(char *moby) {
     float        output_position[4], output_rotation[4], moby_offset_vector[4];
-    char        *data = ((char *)MOBY(moby)->pvars);
-    LevelCuboid *base = &l06_cuboids[*(int *)(data + 0xF8)];
-    *(int *)(data + 0x118) = 0;
-    set_race_camera(&base->pos, &base->rot, 0x72, 0);
+    char        *alien_queen_vars = ((char *)MOBY(moby)->pvars);
+    LevelCuboid *hero_placement_node = &l06_cuboids[*(int *)(alien_queen_vars + 0xF8)];
+    *(int *)(alien_queen_vars + 0x118) = 0;
+    set_race_camera(&hero_placement_node->pos, &hero_placement_node->rot, 0x72, 0);
     qcopy(output_position, moby + 0x10);
     output_position[2] = hero.motion.pos.f[2] + 2.0f;
     fast_vec_normalize(moby_offset_vector, moby + 0xC0, 8.0f);
@@ -917,24 +928,24 @@ void start_alien_queen_intro(char *moby) {
     jet_mount(output_position, output_rotation, 1, 0, 0);
     set_camera_position(output_position);
     set_camera_rotation(output_rotation);
-    *D_L06_001B0FB0[*(int *)(data + 0xEC)] = 0;
+    *D_L06_001B0FB0[*(int *)(alien_queen_vars + 0xEC)] = 0;
 }
 
 int update_alien_queen_intro_camera(char *moby) {
     float output_position[4], output_rotation[4], moby_offset_position[4], hero_offset_position[4];
-    char *data;
+    char *alien_queen_state;
     char *pos;
     struct Hero *x;
     float        blend_acceleration_step;
-    data = ((char *)MOBY(moby)->pvars);
+    alien_queen_state = ((char *)MOBY(moby)->pvars);
     clear_u64_value(output_rotation);
     if (MOBY(moby)->prev_seq == 8) {
         qcopy(output_position, D_L06_00167540);
         pos = moby + 0x10;
     } else {
         blend_acceleration_step = *(float *)&frame_time_sq * 3.0f;
-        FUN_00213f38((float *)(data + 0x118),
-                     (float *)(data + 0x11C),
+        FUN_00213f38((float *)(alien_queen_state + 0x118),
+                     (float *)(alien_queen_state + 0x11C),
                      1.0f,
                      blend_acceleration_step,
                      blend_acceleration_step,
@@ -947,43 +958,45 @@ int update_alien_queen_intro_camera(char *moby) {
         fast_vec_add(hero_offset_position, hero_offset_position, &x->motion.pos);
         hero_offset_position[2] += 4.0f;
         pos = moby + 0x10;
-        lerp_vector(
-            output_position, moby_offset_position, hero_offset_position, *(float *)(data + 0x118));
+        lerp_vector(output_position,
+                    moby_offset_position,
+                    hero_offset_position,
+                    *(float *)(alien_queen_state + 0x118));
     }
     output_rotation[2] = fast_arc_tan(MOBY(moby)->pos.x - output_position[0],
                                       MOBY(moby)->pos.y - output_position[1]);
     output_rotation[1] = -fast_arc_tan(vector_distance_xy(output_position, pos),
                                        MOBY(moby)->pos.z - output_position[2]) -
-                         (1.0f - *(float *)(data + 0x118)) * 30.0f * DEG_TO_RAD;
+                         (1.0f - *(float *)(alien_queen_state + 0x118)) * 30.0f * DEG_TO_RAD;
     set_camera_position(output_position);
     set_camera_rotation(output_rotation);
-    if (*(float *)(data + 0x118) >= 1.0f && MOBY(moby)->prev_seq == 1)
+    if (*(float *)(alien_queen_state + 0x118) >= 1.0f && MOBY(moby)->prev_seq == 1)
         return 1;
     return 0;
 }
 
 void finish_alien_queen_intro(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *queen_vars = ((char *)MOBY(moby)->pvars);
     hero_set_state(HERO_STATE_IDLE, 0);
-    *D_L06_001B0C30[*(int *)(data + 0xEC)] = *(int *)(data + 0x114);
+    *D_L06_001B0C30[*(int *)(queen_vars + 0xEC)] = *(int *)(queen_vars + 0x114);
     jet_end_mount(2);
 }
 
 int update_alien_queen_first_recovery_camera(char *moby) {
     float output_position[4], output_rotation[4], moby_offset_position[4], hero_offset_position[4];
-    char *data;
+    char *queen_recovery_vars;
     char *pos;
     struct Hero *x;
     float        blend_acceleration_step;
-    data = ((char *)MOBY(moby)->pvars);
+    queen_recovery_vars = ((char *)MOBY(moby)->pvars);
     clear_u64_value(output_rotation);
     if (MOBY(moby)->prev_seq == 6) {
         qcopy(output_position, D_L06_00167540);
         pos = moby + 0x10;
     } else {
         blend_acceleration_step = frame_time_sq * 0.5f;
-        FUN_00213f38((float *)(data + 0x118),
-                     (float *)(data + 0x11C),
+        FUN_00213f38((float *)(queen_recovery_vars + 0x118),
+                     (float *)(queen_recovery_vars + 0x11C),
                      1.0f,
                      blend_acceleration_step,
                      blend_acceleration_step,
@@ -996,17 +1009,19 @@ int update_alien_queen_first_recovery_camera(char *moby) {
         fast_vec_add(hero_offset_position, hero_offset_position, &x->motion.pos);
         hero_offset_position[2] += 4.0f;
         pos = moby + 0x10;
-        lerp_vector(
-            output_position, moby_offset_position, hero_offset_position, *(float *)(data + 0x118));
+        lerp_vector(output_position,
+                    moby_offset_position,
+                    hero_offset_position,
+                    *(float *)(queen_recovery_vars + 0x118));
     }
     output_rotation[2] = fast_arc_tan(MOBY(moby)->pos.x - output_position[0],
                                       MOBY(moby)->pos.y - output_position[1]);
     output_rotation[1] = -fast_arc_tan(vector_distance_xy(output_position, pos),
                                        MOBY(moby)->pos.z - output_position[2]) -
-                         (1.0f - *(float *)(data + 0x118)) * 30.0f * DEG_TO_RAD;
+                         (1.0f - *(float *)(queen_recovery_vars + 0x118)) * 30.0f * DEG_TO_RAD;
     FUN_L06_00312a78(output_position);
     FUN_L06_00312ad0(output_rotation);
-    if (*(float *)(data + 0x118) >= 1.0f && MOBY(moby)->prev_seq == 1)
+    if (*(float *)(queen_recovery_vars + 0x118) >= 1.0f && MOBY(moby)->prev_seq == 1)
         return 1;
     return 0;
 }

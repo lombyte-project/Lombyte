@@ -88,9 +88,13 @@ extern void         spawn_explosion(void *,
 
 extern s32 D_L09_0015F5CC NOT_SDA;
 
-void handle_refueling_station_damage(struct Moby *moby, VendorVars *vars, f32 *health) {
+void handle_refueling_station_damage(struct Moby *moby,
+                                     VendorVars  *refueling_station_vars,
+
+                                     f32 *health) {
     enum {
-        DAMAGE_RESULT_UNAVAILABLE = 0
+        DAMAGE_RESULT_UNAVAILABLE = 0,
+        DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11
     };
     VendorHitSource *damage_hit_record;
     struct Moby     *link;
@@ -115,34 +119,34 @@ void handle_refueling_station_damage(struct Moby *moby, VendorVars *vars, f32 *h
         case 8:
         case 9:
         case 10:
-        case 11:
+        case DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE:
             break;
         }
         if (hit >= 2) {
             if (*health <= damage_hit_record->damage) {
                 *health = 0.0f;
                 moby->flags &= ~0x1000;
-                if (vars->link != -1) {
-                    link = &moby_list[vars->link];
+                if (refueling_station_vars->link != -1) {
+                    link = &moby_list[refueling_station_vars->link];
                     if (link != 0 && link->state != 0xFE && link->state != 0xFD &&
                         (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
                         link->command = 1;
                     }
                 }
                 FUN_L00_00257470(moby, 0, -1);
-                vars->anim[7] = 0x78;
-                trooper_anim_update(moby, vars->anim);
+                refueling_station_vars->anim[7] = 0x78;
+                trooper_anim_update(moby, refueling_station_vars->anim);
                 moby->state = 3;
             } else {
                 *health -= damage_hit_record->damage;
-                vars->anim[7] = 0xFA;
-                vars->hurt_timer = scale_game_frames(60);
-                trooper_anim_update(moby, vars->anim);
+                refueling_station_vars->anim[7] = 0xFA;
+                refueling_station_vars->hurt_timer = scale_game_frames(60);
+                trooper_anim_update(moby, refueling_station_vars->anim);
             }
         }
         moby->hit_slot = 0xFF;
     }
-    trooper_anim_finish(moby, vars->anim);
+    trooper_anim_finish(moby, refueling_station_vars->anim);
 }
 
 void refueling_station_update(struct Moby *moby) {

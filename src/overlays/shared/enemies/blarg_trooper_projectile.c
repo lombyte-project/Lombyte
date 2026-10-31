@@ -113,7 +113,7 @@ struct Moby *spawn_blarg_trooper_projectile(struct Moby *owner,
 
 struct Moby *spawn_blarg_trooper_projectile(struct Moby *owner, void *pos, void *dir, int life) {
     struct Moby *spawned_moby;
-    ShotVars    *vars;
+    ShotVars    *projectile_state;
     OvlQuad      pos_q;
     OvlQuad      dir_q;
     Vec4f       *position_copy = (Vec4f *)&pos_q;
@@ -123,8 +123,8 @@ struct Moby *spawn_blarg_trooper_projectile(struct Moby *owner, void *pos, void 
     dir_q = *(OvlQuad *)dir;
     spawned_moby = create_moby(0xB8);
     if (spawned_moby != 0) {
-        vars = (ShotVars *)spawned_moby->pvars;
-        vars->owner = owner;
+        projectile_state = (ShotVars *)spawned_moby->pvars;
+        projectile_state->owner = owner;
         spawned_moby->update_dist = 0xFF;
         spawned_moby->draw_dist = 0xFF;
         spawned_moby->visible = 1;
@@ -134,15 +134,15 @@ struct Moby *spawn_blarg_trooper_projectile(struct Moby *owner, void *pos, void 
         spawned_moby->rot.y = 0.0f;
         spawned_moby->rot.z = fast_arc_tan(direction_copy->x, direction_copy->y);
         qcopy(&spawned_moby->pos, position_copy);
-        qcopy(&vars->dir, direction_copy);
-        vars->spin =
+        qcopy(&projectile_state->dir, direction_copy);
+        projectile_state->spin =
             random_float_between(-(frame_time_macro * 1.5707964f), frame_time_macro * 1.5707964f);
-        vars->unk14 = 0;
-        vars->time = life;
-        vars->time_max = life;
-        vars->hero_dist = fast_vec_dist(&spawned_moby->pos, &hero.motion.pos);
-        vars->unk24 = 0;
-        vars->unk28 = 0;
+        projectile_state->unk14 = 0;
+        projectile_state->time = life;
+        projectile_state->time_max = life;
+        projectile_state->hero_dist = fast_vec_dist(&spawned_moby->pos, &hero.motion.pos);
+        projectile_state->unk24 = 0;
+        projectile_state->unk28 = 0;
         if (owner->oclass == 0xFF) {
             spawn_source_attached_fading_effect_particle(
                 spawned_moby, 0x2F7F4F4F, life * 5 / 4, -1, 100000.0f);
@@ -190,7 +190,7 @@ extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
 void update_blarg_trooper_projectile(struct Moby *moby) __asm__("FUN_L04_002af058");
 
 void update_blarg_trooper_projectile(struct Moby *moby) {
-    Vec4            old;
+    Vec4            previous_position;
     CollisionProbe  pr;
     Vec4            push;
     Vec4            random_vector;
@@ -206,7 +206,7 @@ void update_blarg_trooper_projectile(struct Moby *moby) {
     if (current_level_index == 12)
         range = 100.0f;
     hero_distance = fast_vec_dist(&moby->pos, &hero.motion.pos);
-    qcopy(&old, &moby->pos);
+    qcopy(&previous_position, &moby->pos);
     fast_vec_add(&moby->pos, &moby->pos, &v->dir);
     if (v->unk28 == 0 && v->unk24 != 0 && v->hero_dist < hero_distance && hero_distance < 3.0f) {
         allocate_voice_for_target_entry(0, 0, moby);
@@ -247,7 +247,7 @@ void update_blarg_trooper_projectile(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (collision_line(&old, &moby->pos, 0, v->owner, probe) == 0)
+    if (collision_line(&previous_position, &moby->pos, 0, v->owner, probe) == 0)
         return;
 
     qcopy(&moby->pos, &D_L04_00173FE0);

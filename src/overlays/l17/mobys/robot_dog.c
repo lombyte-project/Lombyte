@@ -682,18 +682,23 @@ int move_robot_dog_toward_position(struct Moby *moby,
                                    float        speed) __asm__("FUN_L17_002efd48");
 
 int move_robot_dog_toward_position(struct Moby *moby, float *target, float speed) {
-    char  *data;
+    char  *robot_dog_motion_vars;
     float *yaw = &moby->rot.z;
     float  target_yaw;
     float  turn;
     float  movement_delta[3];
-    data = (char *)moby->pvars;
+    robot_dog_motion_vars = (char *)moby->pvars;
     target_yaw = fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y);
     turn = frame_time_sq * 12.566371f;
-    approach_angle(yaw, (float *)(data + 0x1DC), target_yaw, turn, turn, frame_time * 7.3303828f);
-    approach_value((float *)(data + 0x1D8), speed, frame_time_sq * 13.0f);
-    movement_delta[0] = fast_cos(moby->rot.z) * *(float *)(data + 0x1D8);
-    movement_delta[1] = fast_sin(moby->rot.z) * *(float *)(data + 0x1D8);
+    approach_angle(yaw,
+                   (float *)(robot_dog_motion_vars + 0x1DC),
+                   target_yaw,
+                   turn,
+                   turn,
+                   frame_time * 7.3303828f);
+    approach_value((float *)(robot_dog_motion_vars + 0x1D8), speed, frame_time_sq * 13.0f);
+    movement_delta[0] = fast_cos(moby->rot.z) * *(float *)(robot_dog_motion_vars + 0x1D8);
+    movement_delta[1] = fast_sin(moby->rot.z) * *(float *)(robot_dog_motion_vars + 0x1D8);
     movement_delta[2] = -(frame_time * 0.5f);
     FUN_L00_00258830((int)moby, (int)movement_delta, 0.5f, 0.5f, 0.0f, 0);
     return vector_distance_xy(&moby->pos, target) < 0.2f;
@@ -706,17 +711,17 @@ extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 int enemy_stun_update(struct Moby *moby) __asm__("FUN_L17_002efea8");
 
 int enemy_stun_update(struct Moby *moby) {
-    int result = process_moby_suck_cannon_suction(moby);
-    if (result) {
+    int suction_status = process_moby_suck_cannon_suction(moby);
+    if (suction_status) {
         moby->state = 12;
     } else if (moby->state == 12) {
         moby->state = 6;
         if (moby->prev_seq != 7) {
-            int value = scale_game_frames(10);
-            blend_moby_animation(moby, 7, 0, value);
+            int animation_blend_frames = scale_game_frames(10);
+            blend_moby_animation(moby, 7, 0, animation_blend_frames);
         }
     }
-    return result;
+    return suction_status;
 }
 
 extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
@@ -781,7 +786,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 void       draw_three_moby_effect_quads(struct Moby *effect_owner) __asm__("FUN_L17_002f0448");
 
 void update_robot_dog_glow_effects(struct Moby *moby) {
-    char *data;
+    char *robot_dog_glow_vars;
     int   glow_pulse_period_frames;
     int   alpha;
     int   mode;
@@ -803,7 +808,7 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
         g = 0xB4;
         b = 0x14;
     }
-    data = (char *)moby->pvars;
+    robot_dog_glow_vars = (char *)moby->pvars;
     glow_pulse_period_frames = scale_game_frames(glow_pulse_period_frames);
     alpha = 0x80;
     mode = 0;
@@ -858,7 +863,7 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
         }
         moby->glow_color = fast_tween_color(moby->glow_color, color, 0.1f);
         for (i = 0; i < 3; i++) {
-            moby_point_position(moby, i + 1, data + 0x200 + i * 16);
+            moby_point_position(moby, i + 1, robot_dog_glow_vars + 0x200 + i * 16);
         }
         add_draw_callback(draw_three_moby_effect_quads, moby);
     }

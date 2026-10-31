@@ -45,19 +45,19 @@ void update_help_hints(struct Moby *moby) {
         TUTORIAL_HINT_STATE_INITIALIZE = 0,
         TUTORIAL_HINT_STATE_UPDATE = 1
     };
-    s32         *data;
+    s32         *tutorial_hint_vars;
     struct Moby *hint_candidate_moby;
     struct Moby *health_hint_candidate_moby;
     s32          usage_time_value;
 
-    data = (s32 *)moby->pvars;
-    fast_dec_timer(&data[6]);
+    tutorial_hint_vars = (s32 *)moby->pvars;
+    fast_dec_timer(&tutorial_hint_vars[6]);
     switch (moby->state) {
     case TUTORIAL_HINT_STATE_INITIALIZE:
-        data[5] = 0;
+        tutorial_hint_vars[5] = 0;
         moby->update_dist = 0xFF;
         moby->state = 1;
-        data[10] = 0;
+        tutorial_hint_vars[10] = 0;
         break;
     case TUTORIAL_HINT_STATE_UPDATE:
         if (level_frame_count < scale_game_frames(400) && usage_stats.stat[12].count != 0 &&
@@ -88,7 +88,7 @@ void update_help_hints(struct Moby *moby) {
                 help_request(0x3EA, 6);
             }
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[15]) &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[15]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
             help_state.state == 0 && help_state.cur == -1) {
             usage_time_value = scale_game_frames(D_0015EEA4_macro) - usage_stats.stat[9].unk2 * 600;
@@ -98,39 +98,41 @@ void update_help_hints(struct Moby *moby) {
                 help_request(0x3EF, 0x43);
             }
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[14]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
             D_L01_0015F68C < 3 && help_state.state == 0 && help_state.cur == -1 &&
             help_records[0x40].id == 0) {
             help_request(0x3EC, 0x40);
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[14]) &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[14]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) &&
             hero.state.current == 1 && D_L01_0015F688 == -1 && help_state.state == 0 &&
             help_state.cur == -1 && help_records[0x40].id != 0 && help_records[0x41].id == 0) {
             help_request(0x3ED, 0x41);
         }
-        if (help_records[0x42].id < 2 && is_point_inside_clip_volume(&hero.motion.pos, data[12]) &&
+        if (help_records[0x42].id < 2 &&
+            is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[12]) &&
             hero.state.prev == 0x3B && hero.state_timer == 0) {
             for (hint_candidate_moby = moby_list; hint_candidate_moby != 0;
                  hint_candidate_moby = hint_candidate_moby->next) {
                 if (hint_candidate_moby->oclass == 0x118 &&
                     fast_vec_dist(&hint_candidate_moby->pos, &hero.motion.pos) < 3.0f &&
                     *(f32 *)hint_candidate_moby->pvars != 1.0f) {
-                    data[13]++;
-                    if (data[13] == 3 || data[13] == 6) {
+                    tutorial_hint_vars[13]++;
+                    if (tutorial_hint_vars[13] == 3 || tutorial_hint_vars[13] == 6) {
                         help_request(0x3EE, 0x42);
                     }
                 }
             }
         }
-        if (hero.state.control_mode == 0x12 && data[10] == 0 && help_state.state == 0 &&
-            help_state.cur == -1 &&
-            (is_point_inside_clip_volume(&hero.motion.pos, data[8]) ||
-             is_point_inside_clip_volume(&hero.motion.pos, data[9]))) {
-            data[11]++;
-            if (is_point_inside_clip_volume(&hero.motion.pos, data[8]) &&
-                scale_game_frames(240) < data[11] && usage_stats.stat[22].count == 0) {
+        if (hero.state.control_mode == 0x12 && tutorial_hint_vars[10] == 0 &&
+            help_state.state == 0 && help_state.cur == -1 &&
+            (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[8]) ||
+             is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[9]))) {
+            tutorial_hint_vars[11]++;
+            if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[8]) &&
+                scale_game_frames(240) < tutorial_hint_vars[11] &&
+                usage_stats.stat[22].count == 0) {
                 help_request(0x3F0, 0x44);
                 if (usage_stats.stat[22].count < 0xFFFF) {
                     usage_stats.stat[22].count++;
@@ -141,8 +143,9 @@ void update_help_hints(struct Moby *moby) {
                 }
                 usage_stats.stat[22].level_mask =
                     usage_stats.stat[22].level_mask | (1 << current_level_index_macro) | 0x80000000;
-            } else if (is_point_inside_clip_volume(&hero.motion.pos, data[9]) &&
-                       scale_game_frames(360) < data[11] && usage_stats.stat[23].count == 0) {
+            } else if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_vars[9]) &&
+                       scale_game_frames(360) < tutorial_hint_vars[11] &&
+                       usage_stats.stat[23].count == 0) {
                 help_request(0x3F0, 0x44);
                 if (usage_stats.stat[23].count < 0xFFFF) {
                     usage_stats.stat[23].count++;
@@ -157,7 +160,7 @@ void update_help_hints(struct Moby *moby) {
         } else if (hero.state.control_mode == 0x11) {
             help_records[0x44].id = 0xFFFF;
         } else {
-            data[11] = 0;
+            tutorial_hint_vars[11] = 0;
         }
         for (health_hint_candidate_moby = moby_list; health_hint_candidate_moby != 0;
              health_hint_candidate_moby = health_hint_candidate_moby->next) {

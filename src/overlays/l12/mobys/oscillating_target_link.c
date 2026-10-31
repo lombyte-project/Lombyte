@@ -60,14 +60,14 @@ void draw_oscillating_target_link_strips(Moby *moby) {
     float        rotation_matrix[16];
     float        matrices[5][16];
     float        anchor[4];
-    Data_303CA8 *data;
+    Data_303CA8 *target_link_strip_state;
     float       *pos;
     float       *translation;
     float        fade;
     float        scroll;
     int          i, segment, uv_index, vertex, pass, ring;
 
-    data = *(Data_303CA8 **)&moby->pvars;
+    target_link_strip_state = *(Data_303CA8 **)&moby->pvars;
     euler_rotation_matrix(rotation_matrix, ((float *)&moby->rot));
     pos = ((float *)&moby->pos);
     translation = &matrices[0][12];
@@ -76,8 +76,8 @@ void draw_oscillating_target_link_strips(Moby *moby) {
 
         euler_rotation_matrix(matrix, oscillating_link_strip_transform_rotations[i]);
         multiply_matrix(matrix, rotation_matrix, matrix);
-        if (!(i & 1) && data->target != -1) {
-            qcopy(anchor, ((float *)&D_L12_0015FFD8[data->target].pos));
+        if (!(i & 1) && target_link_strip_state->target != -1) {
+            qcopy(anchor, ((float *)&D_L12_0015FFD8[target_link_strip_state->target].pos));
         } else {
             qcopy(anchor, pos);
         }
@@ -103,13 +103,13 @@ void draw_oscillating_target_link_strips(Moby *moby) {
         }
     }
     for (ring = 0; ring < 4; ring++) {
-        if (oscillating_link_strip_fade_pivot_ticks < data->phase[ring]) {
-            fade = convert_integer_to_float(data->phase[ring] -
+        if (oscillating_link_strip_fade_pivot_ticks < target_link_strip_state->phase[ring]) {
+            fade = convert_integer_to_float(target_link_strip_state->phase[ring] -
                                             oscillating_link_strip_fade_pivot_ticks) /
                    convert_integer_to_float(oscillating_link_strip_reset_ticks -
                                             oscillating_link_strip_fade_pivot_ticks);
         } else {
-            fade = 1.0f - convert_integer_to_float(data->phase[ring]) /
+            fade = 1.0f - convert_integer_to_float(target_link_strip_state->phase[ring]) /
                               convert_integer_to_float(oscillating_link_strip_fade_pivot_ticks);
         }
         quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] =
@@ -117,7 +117,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
                              oscillating_link_strip_fade_target_color,
                              fade);
         scroll = 0.0f;
-        for (segment = 0; segment < data->count - 1; segment++) {
+        for (segment = 0; segment < target_link_strip_state->count - 1; segment++) {
             scroll = scroll + oscillating_link_strip_segment_u_step_gp;
             if (1.0f < scroll) {
                 scroll = scroll - 1.0f;
@@ -129,7 +129,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
             for (vertex = 0; vertex < 4; vertex++) {
                 fast_vec_add(&quad[1].v[vertex * 4],
                              oscillating_link_strip_quad_vertex_offsets[vertex],
-                             data->ring[ring][segment + (vertex >> 1)]);
+                             target_link_strip_state->ring[ring][segment + (vertex >> 1)]);
             }
             for (pass = 0; pass < 2; pass++) {
                 func_L00_001FD1D8_303CA8(&quad[1], matrices[pass], 0);
@@ -148,7 +148,7 @@ extern void draw_oscillating_target_link_strips(struct Moby *) __asm__("FUN_L12_
 void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
 
 void update_oscillating_target_link_strips(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *oscillating_link_strip_state = (char *)moby->pvars;
     float cycle =
         oscillating_link_strip_scroll_phase_gp + oscillating_link_strip_scroll_rate_gp * frame_time;
     int strip;
@@ -160,22 +160,22 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
         int    i;
         float *points;
         float *intermediate;
-        if (fast_dec_timer((int *)(data + 0x2300 + strip * 4))) {
-            int   vector_count = *(int *)(data + 0x232c);
+        if (fast_dec_timer((int *)(oscillating_link_strip_state + 0x2300 + strip * 4))) {
+            int   vector_count = *(int *)(oscillating_link_strip_state + 0x232c);
             float intermediate_storage[vector_count][4];
-            char *timers = data + 0x2300;
+            char *timers = oscillating_link_strip_state + 0x2300;
             intermediate = &intermediate_storage[0][0];
             i = 0;
-            if (0 < *(int *)(data + 0x232c)) {
-                points = (float *)(data + strip * 0x460);
+            if (0 < *(int *)(oscillating_link_strip_state + 0x232c)) {
+                points = (float *)(oscillating_link_strip_state + strip * 0x460);
                 do {
                     float vector_count_float;
                     float length;
                     float index;
                     float rate;
                     clear_u64_value(points);
-                    vector_count_float = (float)*(int *)(data + 0x232c);
-                    length = *(float *)(data + 0x2324);
+                    vector_count_float = (float)*(int *)(oscillating_link_strip_state + 0x232c);
+                    length = *(float *)(oscillating_link_strip_state + 0x2324);
                     index = (float)i;
                     rate = oscillating_link_strip_random_delta_magnitude_rate_gp * frame_time;
                     points[3] = 1.0f;
@@ -183,11 +183,11 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
                     random_vector(intermediate + i * 4, 0.0f, rate);
                     points += 4;
                     i++;
-                } while (i < *(int *)(data + 0x232c));
+                } while (i < *(int *)(oscillating_link_strip_state + 0x232c));
             }
             count = 1;
-            if (count < *(int *)(data + 0x232c) - 1) {
-                points = (float *)(data + strip * 0x460 + 0x1190);
+            if (count < *(int *)(oscillating_link_strip_state + 0x232c) - 1) {
+                points = (float *)(oscillating_link_strip_state + strip * 0x460 + 0x1190);
                 do {
                     fast_vec_add(
                         points, intermediate_storage[count - 1], intermediate_storage[count]);
@@ -195,13 +195,14 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
                     fast_vec_scale(points, points, 0.333f);
                     count++;
                     points += 4;
-                } while (count < *(int *)(data + 0x232c) - 1);
+                } while (count < *(int *)(oscillating_link_strip_state + 0x232c) - 1);
             }
             *(int *)(timers + (strip << 2)) = oscillating_link_strip_reset_ticks;
         } else {
-            for (i = 1; i < *(int *)(data + 0x232c) - 1; i++) {
-                float *point = (float *)(data + strip * 0x460 + i * 16);
-                float *delta = (float *)(data + strip * 0x460 + 0x1190 + i * 16 - 16);
+            for (i = 1; i < *(int *)(oscillating_link_strip_state + 0x232c) - 1; i++) {
+                float *point = (float *)(oscillating_link_strip_state + strip * 0x460 + i * 16);
+                float *delta =
+                    (float *)(oscillating_link_strip_state + strip * 0x460 + 0x1190 + i * 16 - 16);
                 fast_vec_add(point, point, delta);
             }
         }
@@ -258,38 +259,44 @@ void update_oscillating_target_link(Moby *moby) {
     Vec4         start;
     Vec4         end;
     char         hit[0x30];
-    Data_304310 *data = *(Data_304310 **)&moby->pvars;
+    Data_304310 *oscillating_target_link_state = *(Data_304310 **)&moby->pvars;
     Row         *row;
     float        swing;
     float        half;
     int          target;
 
-    if (data->target == -1) {
+    if (oscillating_target_link_state->target == -1) {
         return;
     }
     switch (moby->state) {
     case TARGET_TRACKING_STATE_INITIALIZE:
         oscillating_link_strip_fade_pivot_ticks = 0x16;
         oscillating_link_strip_reset_ticks = 0x2D;
-        data->f231C = -1;
-        data->f2304 = 0xB;
-        data->f2308 = 0x17;
-        data->f230C = 0x22;
-        data->f2300 = 0;
+        oscillating_target_link_state->f231C = -1;
+        oscillating_target_link_state->f2304 = 0xB;
+        oscillating_target_link_state->f2308 = 0x17;
+        oscillating_target_link_state->f230C = 0x22;
+        oscillating_target_link_state->f2300 = 0;
         moby->state = 1;
         break;
     case TARGET_TRACKING_STATE_ACTIVE:
-        moby->rot.z = fast_arc_tan(D_L12_0015FFD8[data->target].pos.x - moby->pos.x,
-                                   D_L12_0015FFD8[data->target].pos.y - moby->pos.y);
-        data->dist = fast_vec_dist(((float *)&moby->pos),
-                                   (char *)D_L12_0015FFD8 + (data->target << 8) + 0x10);
-        data->angle = fast_add_rotations(data->angle, data->turn * 0.017453292f * D_0015ED6C);
-        row = ((Row *)l12_paths[data->row]);
-        swing = fast_sin(data->angle);
-        if (1.5707964f < data->angle && data->angle < 3.1415927f) {
+        moby->rot.z =
+            fast_arc_tan(D_L12_0015FFD8[oscillating_target_link_state->target].pos.x - moby->pos.x,
+                         D_L12_0015FFD8[oscillating_target_link_state->target].pos.y - moby->pos.y);
+        oscillating_target_link_state->dist = fast_vec_dist(
+            ((float *)&moby->pos),
+            (char *)D_L12_0015FFD8 + (oscillating_target_link_state->target << 8) + 0x10);
+        oscillating_target_link_state->angle =
+            fast_add_rotations(oscillating_target_link_state->angle,
+                               oscillating_target_link_state->turn * 0.017453292f * D_0015ED6C);
+        row = ((Row *)l12_paths[oscillating_target_link_state->row]);
+        swing = fast_sin(oscillating_target_link_state->angle);
+        if (1.5707964f < oscillating_target_link_state->angle &&
+            oscillating_target_link_state->angle < 3.1415927f) {
             swing = 2.0f - swing;
         }
-        if (-3.1415927f < data->angle && data->angle < -1.5707964f) {
+        if (-3.1415927f < oscillating_target_link_state->angle &&
+            oscillating_target_link_state->angle < -1.5707964f) {
             swing = 2.0f - swing;
         }
         half = 0.5f;
@@ -305,23 +312,27 @@ void update_oscillating_target_link(Moby *moby) {
         if (vector_distance_xy(((float *)&moby->pos), D_0013F4D0_304310) > 64.0f) {
             return;
         }
-        if (moby->visible == 0 && D_L12_0015FFD8[data->target].visible == 0) {
-            fast_vec_add(
-                &start, ((float *)&moby->pos), ((float *)&D_L12_0015FFD8[data->target].pos));
+        if (moby->visible == 0 &&
+            D_L12_0015FFD8[oscillating_target_link_state->target].visible == 0) {
+            fast_vec_add(&start,
+                         ((float *)&moby->pos),
+                         ((float *)&D_L12_0015FFD8[oscillating_target_link_state->target].pos));
             fast_vec_scale(&start, &start, half);
             start.f[3] = 16.0f;
             if (fast_bsphere_check(&start, 32.0f) == -1) {
                 return;
             }
         }
-        if (data->f2330 != -1 && is_point_inside_clip_volume(D_L12_00167240, data->f2330) != 0) {
+        if (oscillating_target_link_state->f2330 != -1 &&
+            is_point_inside_clip_volume(D_L12_00167240, oscillating_target_link_state->f2330) !=
+                0) {
             return;
         }
-        if (data->f2320 == 0) {
+        if (oscillating_target_link_state->f2320 == 0) {
             return;
         }
         func_L12_00304038_304310(moby);
-        target = data->target;
+        target = oscillating_target_link_state->target;
         if (target == -1) {
             return;
         }

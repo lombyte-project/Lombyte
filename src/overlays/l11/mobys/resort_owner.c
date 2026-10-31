@@ -662,13 +662,13 @@ struct TgtData {
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
 
-int try_update_resort_owner_path_target(struct Moby *moby, char *other) {
+int try_update_resort_owner_path_target(struct Moby *moby, char *requested_destination_position) {
     struct TgtData *moby_vars = (struct TgtData *)moby->pvars;
     int            *leg_path_ids = moby_vars->a;
     int *ent = (int *)l11_paths[*(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)))];
     int  path_ids[8];
     int  path_id_count;
-    if (point_in_path_xy(other, ent + 4, *ent) == 0)
+    if (point_in_path_xy(requested_destination_position, ent + 4, *ent) == 0)
         return 0;
     path_ids[0] = *(int *)((char *)leg_path_ids - (-(moby_vars->idx * 4)));
     path_id_count = 1;
@@ -691,7 +691,7 @@ int try_update_resort_owner_path_target(struct Moby *moby, char *other) {
                        path_id_count,
                        moby_vars->b[moby_vars->idx],
                        &moby->pos,
-                       other,
+                       requested_destination_position,
                        moby_vars->e,
                        0.2f) != 0;
 }
@@ -728,10 +728,10 @@ int classify_resort_owner_target_proximity(struct Moby *moby) {
             continue;
         do {
             int          offset = (*group_moby_entry & 0x7fff) << 8;
-            struct Moby *other = (struct Moby *)(offset + D_L11_0015FFD8);
-            if ((signed char)other->state >= 0) {
-                if (other->oclass != 0x4de ||
-                    is_moby_in_bob_target_exclusion_state((const u8 *)other) == 0) {
+            struct Moby *target_group_moby = (struct Moby *)(offset + D_L11_0015FFD8);
+            if ((signed char)target_group_moby->state >= 0) {
+                if (target_group_moby->oclass != 0x4de ||
+                    is_moby_in_bob_target_exclusion_state((const u8 *)target_group_moby) == 0) {
                     found = 1;
                     if (fast_vec_dist(&moby->pos,
                                       &((struct Moby *)(D_L11_0015FFD8 + offset))->pos) < 10.0f)
@@ -748,7 +748,7 @@ int classify_resort_owner_target_proximity(struct Moby *moby) {
 extern int   collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 
-int try_find_resort_owner_jump_target(struct Moby *moby, float *out) {
+int try_find_resort_owner_jump_target(struct Moby *moby, float *jump_target_position) {
     char *pvars = (char *)moby->pvars;
     int  *clip_volume_index_ptr = (int *)(pvars + 0xF8);
     int   i;
@@ -765,7 +765,7 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *out) {
     }
     if (found) {
         float *pos = &moby->pos.x;
-        fast_vec_sub(candidate_position, out, pos);
+        fast_vec_sub(candidate_position, jump_target_position, pos);
         if (fast_vec_length(candidate_position) > 4.0f)
             fast_vec_normalize(candidate_position, candidate_position, 4.0f);
         fast_vec_add(candidate_position, candidate_position, pos);
@@ -781,7 +781,7 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *out) {
                     candidate_position[2] = landing_ground_height + 0.15f;
                     if (collision_line(collision_start_position, candidate_position, 2, moby, 0)) {
                         candidate_position[2] = landing_ground_height;
-                        qcopy(out, candidate_position);
+                        qcopy(jump_target_position, candidate_position);
                         return 1;
                     }
                 }
@@ -805,7 +805,7 @@ typedef struct {
 
 /* Guard head update: in its watching states it turns its body and head toward the hero. */
 void update_resort_owner_look_tracking(WatcherMoby *moby) {
-    L16WatchScratch scratch;
+    L16WatchScratch resort_owner_look_vectors;
     WD11b          *moby_vars = (WD11b *)moby->data;
     float           rate;
     float           head_rate;
@@ -824,7 +824,7 @@ void update_resort_owner_look_tracking(WatcherMoby *moby) {
     case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
     case 16:
         tracking = 1;
-        qcopy(scratch.target, &hero.motion.pos);
+        qcopy(resort_owner_look_vectors.target, &hero.motion.pos);
         break;
     default:
         tracking = 0;
@@ -833,11 +833,16 @@ void update_resort_owner_look_tracking(WatcherMoby *moby) {
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, moby->position);
-        scratch.eye[2] += 1.0f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
+        qcopy(resort_owner_look_vectors.eye, moby->position);
+        resort_owner_look_vectors.eye[2] += 1.0f;
+        fast_vec_sub(resort_owner_look_vectors.delta,
+                     resort_owner_look_vectors.target,
+                     resort_owner_look_vectors.eye);
+        yaw = fast_subtract_rotations(
+            fast_arc_tan(resort_owner_look_vectors.delta[0], resort_owner_look_vectors.delta[1]),
+            moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy(resort_owner_look_vectors.delta),
+                              resort_owner_look_vectors.delta[2]);
         if (yaw > 1.2217305f)
             yaw = 1.2217305f;
         else if (yaw < -1.2217305f)
@@ -869,8 +874,8 @@ int try_activate_pokitaru_gate(struct Moby *moby) {
         return 0;
     current[0x20] = 2;
     if (((unsigned char *)current)[0x53]) {
-        int value = scale_game_frames(0x14);
-        blend_moby_animation(current, 0, 0, value);
+        int animation_blend_frames = scale_game_frames(0x14);
+        blend_moby_animation(current, 0, 0, animation_blend_frames);
     }
     return 1;
 }

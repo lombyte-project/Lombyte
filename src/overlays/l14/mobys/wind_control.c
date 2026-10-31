@@ -240,9 +240,9 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
     Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;
     float  spark_travel_direction[4];
     float  clip[4];
-    float  work[4];
+    float  spark_position_delta[4];
     float  ratio;
-    float  first;
+    float  spark_fade_fraction;
     int    in_clip;
     int    i;
     int    opacity;
@@ -265,15 +265,19 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
         } else {
             opacity = wind_spark_peak_alpha_gp;
             if (spark_vars->n380[i] - wind_spark_fade_in_frames_gp < spark_vars->n320[i]) {
-                first = convert_integer_to_float(spark_vars->n380[i] - spark_vars->n320[i]);
-                first = first / convert_integer_to_float(wind_spark_fade_in_frames_gp);
+                spark_fade_fraction =
+                    convert_integer_to_float(spark_vars->n380[i] - spark_vars->n320[i]);
+                spark_fade_fraction =
+                    spark_fade_fraction / convert_integer_to_float(wind_spark_fade_in_frames_gp);
             } else {
-                first = convert_integer_to_float(spark_vars->n320[i]);
-                first = first / convert_integer_to_float(spark_vars->n380[i] -
-                                                         wind_spark_fade_in_frames_gp);
+                spark_fade_fraction = convert_integer_to_float(spark_vars->n320[i]);
+                spark_fade_fraction =
+                    spark_fade_fraction /
+                    convert_integer_to_float(spark_vars->n380[i] - wind_spark_fade_in_frames_gp);
             }
             {
-                int spark_alpha = spark_float_to_integer(((float)opacity - 0.0f) * first + 0.0f);
+                int spark_alpha =
+                    spark_float_to_integer(((float)opacity - 0.0f) * spark_fade_fraction + 0.0f);
                 *shade = spark_alpha;
                 /* Fakematch: storing the shade again is a no-op that reload's cse drops; the
                  * extra uses rank `shade` above `m` for register allocation as in retail. */
@@ -281,8 +285,8 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
                     *shade = spark_alpha;
                 }
             }
-            fast_vec_scale(work, spark_travel_direction, spark_vars->f440[i]);
-            fast_vec_add(pos, pos, work);
+            fast_vec_scale(spark_position_delta, spark_travel_direction, spark_vars->f440[i]);
+            fast_vec_add(pos, pos, spark_position_delta);
             if (in_clip != 0 && absolute_float(pos[0] - l14_camera.pos.f[0]) < 8.0f &&
                 absolute_float(pos[1] - l14_camera.pos.f[1]) < 8.0f &&
                 fast_difference_between_rotations(wind_control_moby->rot.z, l14_camera.yaw) >

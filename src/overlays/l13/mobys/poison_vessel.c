@@ -47,7 +47,7 @@ extern char *spawn_randomly_rotated_colored_moby(void *,
 void spawn_poison_vessel_destruction_effects(struct Moby *moby,
                                              void        *vars) __asm__("FUN_L13_003073c8");
 
-void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *vars) {
+void spawn_poison_vessel_destruction_effects(struct Moby *moby, void *poison_vessel_private_data) {
     struct {
         OvlVec4 direction, velocity, axis, offset, pos, random_direction, random_vector;
     } work;
@@ -290,7 +290,7 @@ void poison_vessel_update(struct Moby *moby) {
         HIT_RESULT_STUN_KNOCKBACK = 3,
         HIT_RESULT_NO_REACTION = 11
     };
-    struct BlastVars *vars = (struct BlastVars *)moby->pvars;
+    struct BlastVars *poison_vessel_vars = (struct BlastVars *)moby->pvars;
     struct BlastHit  *hit;
     float            *health;
     void             *effects;
@@ -301,11 +301,11 @@ void poison_vessel_update(struct Moby *moby) {
 
     switch (moby->state) {
     case POISON_VESSEL_INTACT:
-        vars->hit = 0;
+        poison_vessel_vars->hit = 0;
         moby->rot.x *= 0.7f;
         moby->rot.y *= 0.7f;
         hit = find_moby_hit(moby, 0x330001, 0);
-        health = &vars->health;
+        health = &poison_vessel_vars->health;
         if (hit != 0) {
             debug_print(D_L13_001F5590, moby->oclass, (s16)moby->save_id, fptodp(hit->damage));
         }
@@ -319,23 +319,23 @@ void poison_vessel_update(struct Moby *moby) {
         case HIT_RESULT_NO_REACTION:
             break;
         }
-        effects = vars->effects;
+        effects = poison_vessel_vars->effects;
         if (kind >= 2) {
             if (*health <= hit->damage) {
                 *health = 0;
                 moby->flags &= 0xEFFF;
                 stop_moby_sound_7b10(moby, 0, -1);
-                vars->effect_level = 0x78;
+                poison_vessel_vars->effect_level = 0x78;
                 trooper_anim_update(moby, effects);
-                vars->timer = 0;
-                spawn_poison_vessel_destruction_effects(moby, vars);
+                poison_vessel_vars->timer = 0;
+                spawn_poison_vessel_destruction_effects(moby, poison_vessel_vars);
                 spawn_type_52_particle_near_moby(moby);
                 allocate_voice_for_target_entry(0, 0, (int)moby);
                 moby->state = 1;
             } else {
                 *health = *health - hit->damage;
-                vars->effect_level = 0xFA;
-                vars->effect_timer = scale_game_frames(0x3C);
+                poison_vessel_vars->effect_level = 0xFA;
+                poison_vessel_vars->effect_timer = scale_game_frames(0x3C);
                 trooper_anim_update(moby, effects);
                 moby->rot.x = random_float_between(-0.034906585f, 0.034906585f);
                 moby->rot.y = random_float_between(-0.034906585f, 0.034906585f);
@@ -350,7 +350,7 @@ void poison_vessel_update(struct Moby *moby) {
         hits = collect_mobies_in_sphere(
             interpolate_scalar_linear(poison_vessel_blast_start_radius_gp,
                                       poison_vessel_blast_end_radius_gp,
-                                      convert_integer_to_float(vars->timer) /
+                                      convert_integer_to_float(poison_vessel_vars->timer) /
                                           convert_integer_to_float(scale_game_frames(
                                               poison_vessel_blast_duration_frames_gp))),
             pos,
@@ -368,14 +368,15 @@ void poison_vessel_update(struct Moby *moby) {
                         poison_vessel_blast_damage_gp,
                         1.0f,
                         1.0f);
-        if (vars->timer > scale_time((float)poison_vessel_blast_duration_frames_gp * 0.5f)) {
+        if (poison_vessel_vars->timer >
+            scale_time((float)poison_vessel_blast_duration_frames_gp * 0.5f)) {
             moby->flags |= 0x41;
             spawn_type_52_particle_near_moby(moby);
         } else {
             moby->alpha = moby->alpha * 7 / 8;
         }
-        timer = vars->timer + 1;
-        vars->timer = timer;
+        timer = poison_vessel_vars->timer + 1;
+        poison_vessel_vars->timer = timer;
         if (scale_game_frames(poison_vessel_blast_duration_frames_gp) < timer) {
             spawn_type_52_particle_near_moby(moby);
             mark_moby_for_removal(moby);

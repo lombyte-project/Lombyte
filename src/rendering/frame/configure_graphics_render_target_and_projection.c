@@ -23,19 +23,19 @@ void configure_graphics_render_target_and_projection(s32 tw,
                                                      f32 scale) __asm__("FUN_001f7888");
 
 void configure_graphics_render_target_and_projection(s32 tw, s32 th, s32 fixed, f32 scale) {
-    s32 base;
+    s32 framebuffer_address;
 
     if (fixed != 0) {
-        base = fixed_render_target_framebuffer_page[0] << 13;
+        framebuffer_address = fixed_render_target_framebuffer_page[0] << 13;
     } else {
         s32 allocation_size_shift = tw + th;
         if (allocation_size_shift > 16) {
             allocation_size_shift = 16;
         }
-        base = gs_texture_allocation_base - (4 << allocation_size_shift);
-        base = (base >> 13) << 13;
+        framebuffer_address = gs_texture_allocation_base - (4 << allocation_size_shift);
+        framebuffer_address = (framebuffer_address >> 13) << 13;
     }
-    setup_render_target(tw, th, base);
+    setup_render_target(tw, th, framebuffer_address);
     configure_graphics_projection(1 << tw, 1 << th, scale, 0.0f, 524288.0f, 255.0f, 0.0f);
     if (fixed != 0) {
         vu1_add_g_sregister(0x47, 0);

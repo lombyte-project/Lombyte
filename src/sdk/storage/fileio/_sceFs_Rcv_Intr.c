@@ -61,7 +61,7 @@ void _sceFs_Rcv_Intr(s32 *command_packet) {
     } u;
     FsRcvRead *read_completion;
     u8        *pkt;
-    u8        *base;
+    u8        *completion_buffers_base;
     u8        *read_destination;
     u32       *bank = sif_file_completion_bank_index;
     s32        completion_bank_index;
@@ -72,8 +72,8 @@ void _sceFs_Rcv_Intr(s32 *command_packet) {
 
     completion_bank_index = D_0012FC98[0] != 0 ? command_packet[3] : 0;
     *bank = completion_bank_index;
-    base = D_00157500;
-    addr = (u32)base;
+    completion_buffers_base = D_00157500;
+    addr = (u32)completion_buffers_base;
     addr += (u32)completion_bank_index * 0x440;
     pkt = (u8 *)(addr | 0x20000000);
     packet_header = (FsRcvHead *)pkt;

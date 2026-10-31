@@ -118,7 +118,7 @@ char *
 
 spawn_projectile_moby(struct Moby *source_moby, void *spawn_position, float *projectile_direction) {
     char *moby;
-    char *data;
+    char *projectile_vars;
     moby = create_moby(0x4B8);
     if (moby != 0) {
         moby[0x31] = 1;
@@ -130,9 +130,9 @@ spawn_projectile_moby(struct Moby *source_moby, void *spawn_position, float *pro
         MOBY(moby)->rot.y =
             fast_arc_tan(vector_length_xy(projectile_direction), projectile_direction[2]);
         moby[0x20] = 1;
-        data = ((char *)MOBY(moby)->pvars);
-        qcopy(data, projectile_direction);
-        *(int *)(data + 0x10) = scale_game_frames(0x3C);
+        projectile_vars = ((char *)MOBY(moby)->pvars);
+        qcopy(projectile_vars, projectile_direction);
+        *(int *)(projectile_vars + 0x10) = scale_game_frames(0x3C);
     }
     return moby;
 }

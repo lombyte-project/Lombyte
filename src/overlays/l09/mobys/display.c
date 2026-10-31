@@ -97,7 +97,7 @@ void display_update(struct Moby *moby) {
     float pull[4];
     char *hit;
     int   replaced;
-    int   next;
+    int   replacement_moby_class;
     int   i;
     float spread;
     float falloff;
@@ -114,20 +114,20 @@ void display_update(struct Moby *moby) {
         return;
     }
     if (moby->oclass < 0x514) {
-        next = 0x512;
+        replacement_moby_class = 0x512;
         switch (moby->oclass) {
         case BREAKABLE_STACK_ANTEPENULTIMATE_CLASS:
-            next = 0x513;
+            replacement_moby_class = 0x513;
             break;
         case BREAKABLE_STACK_PENULTIMATE_CLASS:
             qcopy(center, &moby->pos);
             moby->pos.z += 4.0f;
             mark_moby_for_removal_cf(moby, 0, -1);
             qcopy(&moby->pos, center);
-            next = 0x514;
+            replacement_moby_class = 0x514;
             break;
         }
-        replaced = spawn_breakable_stack_replacement((char *)moby, next) != 0;
+        replaced = spawn_breakable_stack_replacement((char *)moby, replacement_moby_class) != 0;
     }
     moby->command = scale_game_frames(10);
     qcopy(top, &moby->pos);

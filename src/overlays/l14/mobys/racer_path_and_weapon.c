@@ -139,13 +139,13 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
     int             path_segment_index;
     float           nearest_segment_distance;
     unsigned short *moby_index_cursor = D_L14_001ABF40_6570[group_anchor_moby->group];
-    char          **out;
+    char          **racer_list_write_cursor;
     int             i;
     float           path_step_distance;
     if (moby_index_cursor == 0) {
         return;
     }
-    out = list;
+    racer_list_write_cursor = list;
     do {
         char *o = D_L14_0015FFD8_6570 + ((*moby_index_cursor & 0x7FFF) << 8);
         char *od = *(char **)(o + 0x78);
@@ -175,7 +175,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
             set_race_camera(
                 path + (path_segment_index * 16 + 0x10), hero_path_euler_rotation, 0x28, 0);
         }
-        *out++ = o;
+        *racer_list_write_cursor++ = o;
     } while ((short)*moby_index_cursor++ >= 0);
     for (i = 0; i < 3; i++) {
         char *o = list[i];
@@ -503,12 +503,12 @@ extern float D_L14_00161A30 __attribute__((sda));
 void         advance_moby_along_path(struct Moby *moby) __asm__("FUN_L14_002d7198");
 
 void advance_moby_along_path(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int   path_index = *(int *)(data + 0x60);
+    char *path_tracking_state = (char *)moby->pvars;
+    int   path_index = *(int *)(path_tracking_state + 0x60);
     sample_path((int)l14_splines[path_index].path,
                 &moby->pos,
-                data + 0x64,
-                data + 0x68,
+                path_tracking_state + 0x64,
+                path_tracking_state + 0x68,
                 0,
                 D_L14_00161A30 * frame_time);
 }

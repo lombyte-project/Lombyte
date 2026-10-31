@@ -46,7 +46,13 @@ void spawn_smoke_puff_trail_with_endpoint_bursts(void *owner,
 
 void spawn_smoke_puff_trail_with_endpoint_bursts(
 
-    void *owner, void *from, void *to, int count, float from_puff_scale, float to_puff_scale) {
+    void *unused_moby,
+    void *from,
+    void *to,
+    int   count,
+    float from_puff_scale,
+
+    float to_puff_scale) {
     Vec4      step;
     Vec4      at;
     Vec4      particle_spawn_velocity;

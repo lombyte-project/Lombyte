@@ -162,16 +162,16 @@ extern float plasmabot_debris_z_velocity_range_end_gp __asm__("D_L14_00161B14")
 
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
 
-unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
+unsigned char *spawn_plasmabot_death_debris(char *debris_source_moby, char *pos) {
     unsigned char *spawned_moby = create_moby(0x145);
     char          *spawned_vars;
     char          *hero_launch_reference;
     float          launch_vector_scratch[8];
     if (spawned_moby != 0) {
         spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
-        *(char **)(spawned_vars + 0x24) = owner;
+        *(char **)(spawned_vars + 0x24) = debris_source_moby;
         qcopy(spawned_moby + 0x10, pos);
-        MOBY(spawned_moby)->rot.z = *(float *)(owner + 0x48);
+        MOBY(spawned_moby)->rot.z = *(float *)(debris_source_moby + 0x48);
         spawned_moby[0x20] = 0;
         spawned_moby[0x30] = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;

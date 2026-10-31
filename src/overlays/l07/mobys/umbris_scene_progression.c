@@ -58,13 +58,14 @@ void update_umbris_scene_progression(struct Moby *moby) {
         CONTROLLER_CLEANUP_LINKED_MOBY = 12,
         CONTROLLER_DELETE_SELF = 13
     };
-    Class436Vars *data = (Class436Vars *)moby->pvars;
+    Class436Vars *scene_controller_vars = (Class436Vars *)moby->pvars;
     float         linked_moby_to_hero_offset[4];
 
     switch (moby->state) {
     case CONTROLLER_WAIT_FOR_SCENE_IDLE:
-        if (umbris_open_volume_triggered[0] != 0 && data->removed_moby != -1) {
-            mark_moby_for_removal(&((struct Moby *)level_mobys)[data->removed_moby]);
+        if (umbris_open_volume_triggered[0] != 0 && scene_controller_vars->removed_moby != -1) {
+            mark_moby_for_removal(
+                &((struct Moby *)level_mobys)[scene_controller_vars->removed_moby]);
         }
         if (scene_state == 0)
             moby->state = 1;
@@ -87,15 +88,18 @@ void update_umbris_scene_progression(struct Moby *moby) {
         break;
     case CONTROLLER_WAIT_FOR_OPEN_VOLUME:
         if (alternate_item_available[0x29] == 0) {
-            if (data->open_volume != -1) {
-                if (is_point_inside_clip_volume(&hero.motion.pos, data->open_volume) != 0) {
+            if (scene_controller_vars->open_volume != -1) {
+                if (is_point_inside_clip_volume(&hero.motion.pos,
+                                                scene_controller_vars->open_volume) != 0) {
                     alternate_item_available[0x29] = 1;
-                    if (data->moby_0c != -1) {
-                        struct Moby *e = &((struct Moby *)level_mobys)[data->moby_0c];
+                    if (scene_controller_vars->moby_0c != -1) {
+                        struct Moby *e =
+                            &((struct Moby *)level_mobys)[scene_controller_vars->moby_0c];
                         e->flags |= 0x41;
                     }
-                    if (data->moby_14 != -1) {
-                        struct Moby *e = &((struct Moby *)level_mobys)[data->moby_14];
+                    if (scene_controller_vars->moby_14 != -1) {
+                        struct Moby *e =
+                            &((struct Moby *)level_mobys)[scene_controller_vars->moby_14];
                         e->flags |= 0x41;
                     }
                     moby->state = 5;
@@ -107,15 +111,16 @@ void update_umbris_scene_progression(struct Moby *moby) {
         } else {
             moby->state = 7;
         }
-        if (moby->state != 4 && data->removed_moby != -1) {
-            mark_moby_for_removal(&((struct Moby *)level_mobys)[data->removed_moby]);
+        if (moby->state != 4 && scene_controller_vars->removed_moby != -1) {
+            mark_moby_for_removal(
+                &((struct Moby *)level_mobys)[scene_controller_vars->removed_moby]);
         }
         break;
     case CONTROLLER_WAIT_FOR_FIRST_OPEN_SCENE:
         if (scene_state == 2)
             break;
-        if (data->moby_0c != -1) {
-            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_0c];
+        if (scene_controller_vars->moby_0c != -1) {
+            struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_0c];
             e->flags |= 0x41;
         }
         moby->state = 6;
@@ -124,19 +129,21 @@ void update_umbris_scene_progression(struct Moby *moby) {
     case CONTROLLER_WAIT_FOR_SECOND_OPEN_SCENE:
         if (scene_state == 2)
             break;
-        if (data->points_18 != -1) {
-            set_race_camera(
-                &l07_cuboids[data->points_18].pos, &l07_cuboids[data->points_18].rot, 0, 1);
+        if (scene_controller_vars->points_18 != -1) {
+            set_race_camera(&l07_cuboids[scene_controller_vars->points_18].pos,
+                            &l07_cuboids[scene_controller_vars->points_18].rot,
+                            0,
+                            1);
         }
         moby->state = 7;
         break;
     case CONTROLLER_CLEAR_LINKED_MOBY_FLAGS:
-        if (data->moby_0c != -1) {
-            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_0c];
+        if (scene_controller_vars->moby_0c != -1) {
+            struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_0c];
             e->flags &= 0xFFBE;
         }
-        if (data->moby_14 != -1) {
-            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_14];
+        if (scene_controller_vars->moby_14 != -1) {
+            struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_14];
             e->flags &= 0xFFBE;
         }
         request_music_track(2, 4);
@@ -145,12 +152,14 @@ void update_umbris_scene_progression(struct Moby *moby) {
     case CONTROLLER_WAIT_FOR_FINISH_VOLUME:
         if (alternate_item_available[0x2A] == 0) {
             struct Moby *e;
-            if (data->moby_0c == -1 || (e = &((struct Moby *)level_mobys)[data->moby_0c]) == 0 ||
+            if (scene_controller_vars->moby_0c == -1 ||
+                (e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_0c]) == 0 ||
                 e->state == 0xFE || e->state == 0xFD) {
-                if (data->finish_volume != -1) {
-                    if (is_point_inside_clip_volume(&hero.motion.pos, data->finish_volume) != 0) {
-                        set_race_camera(&l07_cuboids[data->points_1c].pos,
-                                        &l07_cuboids[data->points_1c].rot,
+                if (scene_controller_vars->finish_volume != -1) {
+                    if (is_point_inside_clip_volume(&hero.motion.pos,
+                                                    scene_controller_vars->finish_volume) != 0) {
+                        set_race_camera(&l07_cuboids[scene_controller_vars->points_1c].pos,
+                                        &l07_cuboids[scene_controller_vars->points_1c].rot,
                                         0x72,
                                         1);
                         alternate_item_available[0x2A] = 1;
@@ -164,8 +173,8 @@ void update_umbris_scene_progression(struct Moby *moby) {
         } else {
             moby->state = 12;
         }
-        if (moby->state != 8 && data->moby_10 != -1) {
-            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_10];
+        if (moby->state != 8 && scene_controller_vars->moby_10 != -1) {
+            struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_10];
             e->flags |= 0x41;
         }
         break;
@@ -183,12 +192,14 @@ void update_umbris_scene_progression(struct Moby *moby) {
     case CONTROLLER_WAIT_FOR_FINAL_SCENE_AND_UNLOCK_PLANET:
         if (scene_state == 2)
             break;
-        if (data->points_1c != -1) {
-            set_race_camera(
-                &l07_cuboids[data->points_1c].pos, &l07_cuboids[data->points_1c].rot, 0, 1);
+        if (scene_controller_vars->points_1c != -1) {
+            set_race_camera(&l07_cuboids[scene_controller_vars->points_1c].pos,
+                            &l07_cuboids[scene_controller_vars->points_1c].rot,
+                            0,
+                            1);
         }
-        if (data->moby_10 != -1) {
-            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_10];
+        if (scene_controller_vars->moby_10 != -1) {
+            struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_10];
             fast_vec_sub(linked_moby_to_hero_offset, &hero.motion.pos, &e->pos);
             clamp_vector_length(linked_moby_to_hero_offset, linked_moby_to_hero_offset, 0.9f);
             fast_vec_add(&e->pos, &hero.motion.pos, linked_moby_to_hero_offset);
@@ -201,8 +212,8 @@ void update_umbris_scene_progression(struct Moby *moby) {
         moby->state = 12;
         break;
     case CONTROLLER_CLEANUP_LINKED_MOBY:
-        if (data->moby_10 != -1) {
-            struct Moby *e = &((struct Moby *)level_mobys)[data->moby_10];
+        if (scene_controller_vars->moby_10 != -1) {
+            struct Moby *e = &((struct Moby *)level_mobys)[scene_controller_vars->moby_10];
             if (e != 0 && e->state != 0xFE && e->state != 0xFD) {
                 mark_moby_for_removal(e);
             }

@@ -15,7 +15,7 @@ extern s32 _dispatchMpegCbNodata();
 extern s64 _waitIpuIdle64();
 
 s32 _nextBit(NextBitContext *ctx, s32 count) {
-    s32 result;
+    s32 consumed_bits;
     s32 counter;
     u32 word;
     counter = 0;
@@ -32,11 +32,11 @@ s32 _nextBit(NextBitContext *ctx, s32 count) {
         ctx->unk818 = IpuCommandTable[4];
         ctx->unk838 = (s32)(s64)_waitIpuIdle64(ctx);
     }
-    result = ((u32)ctx->unk838) >> (0x20 - count);
+    consumed_bits = ((u32)ctx->unk838) >> (0x20 - count);
     ctx->unk83C = 0x20;
     word = count | 0x40000000;
     *(volatile u32 *)0x10002000 = word;
     ctx->unk818 = IpuCommandTable[word >> 28];
     ctx->unk838 = (s32)(s64)_waitIpuIdle64(ctx);
-    return result;
+    return consumed_bits;
 }

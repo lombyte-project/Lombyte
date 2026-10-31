@@ -23,15 +23,16 @@ void compute_selected_world_matrices(char *transform_source,
                                      int   matrix_count,
                                      int   matrix_selection_indices,
 
-                                     M4 *out) {
+                                     M4 *world_matrices) {
     Mtx   rotation_matrix;
     float translation_scale = *(float *)(transform_source + 0x2C) * (1.0f / 1024.0f);
     int   i;
     copy_matrix_rotation(&rotation_matrix, transform_source + 0xC0);
-    get_moby_joint_matrices(transform_source, matrix_count, matrix_selection_indices, out);
+    get_moby_joint_matrices(
+        transform_source, matrix_count, matrix_selection_indices, world_matrices);
     for (i = 0; i < matrix_count; i++) {
-        multiply_matrix(&out[i], &rotation_matrix, &out[i]);
-        fast_vec_scale(out[i].t, out[i].t, translation_scale);
-        fast_vec_add(out[i].t, out[i].t, transform_source + 0x10);
+        multiply_matrix(&world_matrices[i], &rotation_matrix, &world_matrices[i]);
+        fast_vec_scale(world_matrices[i].t, world_matrices[i].t, translation_scale);
+        fast_vec_add(world_matrices[i].t, world_matrices[i].t, transform_source + 0x10);
     }
 }

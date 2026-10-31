@@ -32,53 +32,55 @@ void update_swing_gate(struct Moby *moby) {
         SWING_GATE_SWINGING = 3,
         SWING_GATE_RETURN_TO_ZERO = 4
     };
-    struct SwingGateVars *vars = (struct SwingGateVars *)moby->pvars;
+    struct SwingGateVars *gate_motion = (struct SwingGateVars *)moby->pvars;
     struct Moby          *target;
     float                 updated_y_rotation;
 
-    if (vars == 0)
+    if (gate_motion == 0)
         return;
     switch (moby->state) {
     case SWING_GATE_INITIALIZE:
         moby->rot.y = 0;
         moby->state = 1;
-        vars->vel = 0;
+        gate_motion->vel = 0;
         break;
     case SWING_GATE_WAIT_FOR_OPEN_CONDITION:
-        if (vars->target != -1 && (target = &D_L07_0015FFD8[vars->target]) != 0 &&
-            target->state != 0xFE && target->state != 0xFD && target->state != vars->openState)
+        if (gate_motion->target != -1 && (target = &D_L07_0015FFD8[gate_motion->target]) != 0 &&
+            target->state != 0xFE && target->state != 0xFD &&
+            target->state != gate_motion->openState)
             return;
-        vars->vel = vars->speed * frame_time;
-        moby->rot.y = vars->vel;
+        gate_motion->vel = gate_motion->speed * frame_time;
+        moby->rot.y = gate_motion->vel;
         allocate_voice_for_target_entry(0, 0, moby);
         moby->state = 3;
         break;
     case SWING_GATE_HOLD_ROTATION:
         break;
     case SWING_GATE_SWINGING:
-        vars->vel =
-            fast_add_rotations(vars->vel, fast_cos(moby->rot.y) * (vars->speed * frame_time));
-        moby->rot.y = fast_add_rotations(moby->rot.y, vars->vel);
-        vars->vel = vars->vel * vars->damp;
-        target = &D_L07_0015FFD8[vars->target];
+        gate_motion->vel = fast_add_rotations(
+            gate_motion->vel, fast_cos(moby->rot.y) * (gate_motion->speed * frame_time));
+        moby->rot.y = fast_add_rotations(moby->rot.y, gate_motion->vel);
+        gate_motion->vel = gate_motion->vel * gate_motion->damp;
+        target = &D_L07_0015FFD8[gate_motion->target];
         if (target == 0 || target->state == 0xFE || target->state == 0xFD)
             break;
-        if (target->state != vars->shutState)
+        if (target->state != gate_motion->shutState)
             return;
         moby->state = 4;
         break;
     case SWING_GATE_RETURN_TO_ZERO:
-        if (vars->target == -1 || (target = &D_L07_0015FFD8[vars->target]) == 0 ||
-            target->state == 0xFE || target->state == 0xFD || target->state == vars->openState) {
+        if (gate_motion->target == -1 || (target = &D_L07_0015FFD8[gate_motion->target]) == 0 ||
+            target->state == 0xFE || target->state == 0xFD ||
+            target->state == gate_motion->openState) {
             allocate_voice_for_target_entry(0, 0, moby);
             moby->state = 2;
             break;
         }
-        updated_y_rotation = fast_subtract_rotations(moby->rot.y, vars->rate);
+        updated_y_rotation = fast_subtract_rotations(moby->rot.y, gate_motion->rate);
         moby->rot.y = updated_y_rotation;
         if (0.0f < updated_y_rotation) {
             moby->rot.y = 0;
-            vars->vel = 0;
+            gate_motion->vel = 0;
             moby->state = 1;
         }
         break;

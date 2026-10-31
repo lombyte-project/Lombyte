@@ -26,15 +26,17 @@ extern short pool_wave_source_slot_index __asm__("D_L01_00161218") __attribute__
 extern short pool_wave_next_source_slot_index __asm__("D_L01_0016121C") __attribute__((sda));
 void         step_pool_wave_simulation(char *base, int record_count) __asm__("FUN_L01_002b7f30");
 
-void step_pool_wave_simulation(char *base, int record_count) {
+void step_pool_wave_simulation(char *pool_records_base, int record_count) {
     int i;
     for (i = 0; i < record_count; i++) {
-        char *current_record = base + i * 0x1190;
+        char *current_record = pool_records_base + i * 0x1190;
         if (*(unsigned short *)(current_record + 0x1E) != 0) {
             int source_slot_offset = *(int *)&pool_wave_source_slot_index * 0x5C0 + 0x50;
             FUN_L01_00261c10((char *)0x70000000, current_record + source_slot_offset);
-            FUN_L01_00262038(
-                (char *)0x70000000, i, *(int *)&pool_wave_next_source_slot_index, base);
+            FUN_L01_00262038((char *)0x70000000,
+                             i,
+                             *(int *)&pool_wave_next_source_slot_index,
+                             pool_records_base);
         }
     }
     {

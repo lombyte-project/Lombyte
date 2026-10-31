@@ -11,10 +11,10 @@ extern float scale_by_one_minus_random_squared(float) __asm__("FUN_L09_00277688"
 
 void generate_random_scaled_vector2(float *out, float scale) __asm__("FUN_L09_00277758");
 
-void generate_random_scaled_vector2(float *out, float scale) {
+void generate_random_scaled_vector2(float *output_vector, float scale) {
     float angle = random_angle_radians();
     float magnitude = scale_by_one_minus_random_squared(scale);
-    clear_u64_value(out);
-    out[0] = fast_cos(angle) * magnitude;
-    out[1] = fast_sin(angle) * magnitude;
+    clear_u64_value(output_vector);
+    output_vector[0] = fast_cos(angle) * magnitude;
+    output_vector[1] = fast_sin(angle) * magnitude;
 }

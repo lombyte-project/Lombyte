@@ -207,10 +207,11 @@ void update_camera_position_and_orientation(void *camera) {
 void update_camera_state_outside_clip_volume(char *moby) __asm__("FUN_L03_002ebde8");
 
 void update_camera_state_outside_clip_volume(char *moby) {
-    char *entry = (char *)((*(short *)(moby + 0x84) << 5) + D_L03_0015EF50);
-    char *sub = *(char **)(entry + 0x1C);
-    int   value = *(int *)(sub + 0xC);
-    if (value >= 0 && is_point_inside_clip_volume(D_0013E533 + 0xE9D, value) == 0) {
+    char *camera_table_entry = (char *)((*(short *)(moby + 0x84) << 5) + D_L03_0015EF50);
+    char *sub = *(char **)(camera_table_entry + 0x1C);
+    int   clip_volume_index = *(int *)(sub + 0xC);
+    if (clip_volume_index >= 0 &&
+        is_point_inside_clip_volume(D_0013E533 + 0xE9D, clip_volume_index) == 0) {
         *(short *)(moby + 0x7E) = 3;
     }
 }

@@ -334,7 +334,8 @@ extern short l18_drek_boss_scene_2_started_gp __asm__("D_L18_00162360") __attrib
 extern short D_L18_00162390 __attribute__((sda));
 extern short l18_drek_boss_paired_transition_duration_frames_gp __asm__("D_L18_00162394")
     __attribute__((sda));
-extern short D_L18_00162398 __attribute__((sda));
+extern short l18_drek_boss_paired_transition_frame_count_gp __asm__("D_L18_00162398")
+    __attribute__((sda));
 extern s32   D_L18_001623A0 __asm__("D_L18_001623A0");
 extern short l18_drek_boss_aimed_class_3d7_spawn_frame_count_gp __asm__("D_L18_0016239C")
     __attribute__((sda));
@@ -946,7 +947,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                                 second_rotation_angles,
                                 node_position_and_yaw,
                                 *(int *)&l18_drek_boss_paired_transition_duration_frames_gp,
-                                *(int *)&D_L18_00162398,
+                                *(int *)&l18_drek_boss_paired_transition_frame_count_gp,
                                 1);
         hero.pending_item[3] = 3;
         moby->f20 = 8;
@@ -2121,8 +2122,8 @@ int advance_drek_boss_planar_position_toward_target(char *moby,
                                                     float movement_speed_limit,
 
                                                     void *x) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    char *boss_position = data + 0x3C0;
+    char *boss_private_vars = ((char *)MOBY(moby)->pvars);
+    char *boss_position = boss_private_vars + 0x3C0;
     float planar_displacement[4];
     float distance_progress[4];
     float initialization_zero = 0.0f;
@@ -2140,11 +2141,12 @@ int advance_drek_boss_planar_position_toward_target(char *moby,
         acceleration_and_braking_step,
         movement_speed_limit,
         distance_progress,
-        (float *)(data + 0x374));
-    fast_vec_normalize(planar_displacement, planar_displacement, *(float *)(data + 0x374));
+        (float *)(boss_private_vars + 0x374));
+    fast_vec_normalize(
+        planar_displacement, planar_displacement, *(float *)(boss_private_vars + 0x374));
     fast_vec_add(boss_position, boss_position, planar_displacement);
     if (planar_target_distance < 0.1f) {
-        if (*(float *)(data + 0x374) < 0.1f) {
+        if (*(float *)(boss_private_vars + 0x374) < 0.1f) {
             return 1;
         }
         return 0;
@@ -2296,9 +2298,9 @@ extern short  drek_boss_platform_target_range_gp __asm__("D_L18_00162338") __att
 extern short  drek_boss_platform_tilt_frame_count_gp __asm__("D_L18_0016233C") __attribute__((sda));
 extern void   request_floating_platform_tilt(void *, int, int) __asm__("FUN_L18_002d8888");
 
-unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) {
-    char          *data = (char *)self->pvars;
-    short         *group_entry = D_L18_001AC240_c2[*(int *)(data + 0x398)];
+unsigned char *select_drek_boss_platform_firing_target(struct Moby *boss_moby) {
+    char          *boss_target_selection_vars = (char *)boss_moby->pvars;
+    short         *group_entry = D_L18_001AC240_c2[*(int *)(boss_target_selection_vars + 0x398)];
     unsigned char *best = 0;
     float          bestd = 1024.0f;
     float          candidate_displacement[4];
@@ -2312,7 +2314,7 @@ unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) {
         unsigned char *listed_moby =
             (unsigned char *)((int)group_moby_byte_offset + (int)D_L18_0015FFD8);
         if (MOBY(listed_moby)->oclass == 0x24B) {
-            char          *selection_origin = data + 0x3C0;
+            char          *selection_origin = boss_target_selection_vars + 0x3C0;
             unsigned char *candidate_moby;
             request_floating_platform_sink(listed_moby);
             candidate_moby = D_L18_0015FFD8 + group_moby_byte_offset;
@@ -2329,7 +2331,7 @@ unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) {
                     scale_game_frames(*(int *)&drek_boss_platform_tilt_frame_count_gp);
                 request_floating_platform_tilt(
                     in_range_moby, tilt_delay_frames, scaled_frame_count);
-                dot = fast_vec_dot(candidate_displacement, &self->rot_row0);
+                dot = fast_vec_dot(candidate_displacement, &boss_moby->rot_row0);
                 if (0.333f < dot) {
                     float candidate_distance = fast_vec_length(candidate_displacement);
                     if (candidate_distance < bestd) {
@@ -2404,8 +2406,8 @@ int select_drek_boss_next_action(struct Moby *moby) {
         BOSS_ACTION_CHOICE_TARGET_SIDE_GROUND_POINTS = 4,
         BOSS_ACTION_CHOICE_FOLLOW_HERO = 5
     };
-    char *data = (char *)moby->pvars;
-    int   state = *(int *)(data + 0x350);
+    char *boss_action_vars = (char *)moby->pvars;
+    int   state = *(int *)(boss_action_vars + 0x350);
     int   tries = 0;
     int   boss_action_choice_index;
     int   ok;
@@ -2432,21 +2434,22 @@ int select_drek_boss_next_action(struct Moby *moby) {
             break;
         }
         ok = *(short *)((char *)drek_boss_action_eligibility_by_phase +
-                        boss_action_choice_index * 2 + *(int *)(data + 0x34C) * 12);
-        if (state == *(int *)(data + 0x350))
+                        boss_action_choice_index * 2 + *(int *)(boss_action_vars + 0x34C) * 12);
+        if (state == *(int *)(boss_action_vars + 0x350))
             ok = 0;
         if (state == 0x13) {
-            if (*(int *)(data + 0x364) != 0) {
+            if (*(int *)(boss_action_vars + 0x364) != 0) {
                 ok = 0;
             } else {
                 float d = vector_distance_xy(D_0013E533 + 0xE9D,
-                                             D_L18_001600EC + *(int *)(data + 0x25C) * 128 + 0x30);
+                                             D_L18_001600EC +
+                                                 *(int *)(boss_action_vars + 0x25C) * 128 + 0x30);
                 if (*(float *)&D_L18_00162378_gp + 2.0f < d)
                     ok = 0;
             }
         }
         if (state == 0x11) {
-            if (*(int *)(data + 0x350) == 0xE)
+            if (*(int *)(boss_action_vars + 0x350) == 0xE)
                 ok = 0;
         }
         if (ok != 0)

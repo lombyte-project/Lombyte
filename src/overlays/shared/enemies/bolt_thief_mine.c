@@ -72,7 +72,7 @@ void update_bolt_thief_mine(struct Moby *moby) {
         FLOAT_MINE_ACTIVE = 1,
         FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN = 2
     };
-    FloatMineVars *vars = (FloatMineVars *)moby->pvars;
+    FloatMineVars *floating_mine_private_vars = (FloatMineVars *)moby->pvars;
     union {
         HitInfo info;
         float   sphere[4];
@@ -86,24 +86,25 @@ void update_bolt_thief_mine(struct Moby *moby) {
 
     switch (moby->state) {
     case FLOAT_MINE_INITIALIZE:
-        vars->rest_z = -1.0f;
-        if (vars->link == 0) {
+        floating_mine_private_vars->rest_z = -1.0f;
+        if (floating_mine_private_vars->link == 0) {
             moby->pos.z = probe_ground_height(0.5f, &moby->pos, 0) + 0.7f;
-            vars->spin[0] = random_float_between(0.010471975f, 0.020943951f);
-            vars->spin[1] = random_float_between(0.006981317f, 0.013962634f);
-            vars->spin[2] = random_float_between(0.0034906585f, 0.006981317f);
+            floating_mine_private_vars->spin[0] = random_float_between(0.010471975f, 0.020943951f);
+            floating_mine_private_vars->spin[1] = random_float_between(0.006981317f, 0.013962634f);
+            floating_mine_private_vars->spin[2] = random_float_between(0.0034906585f, 0.006981317f);
             moby->state = 1;
-        } else if ((s8)vars->link->state < 0) {
+        } else if ((s8)floating_mine_private_vars->link->state < 0) {
             moby->state = 1;
         }
         break;
     case FLOAT_MINE_ACTIVE: {
         if (current_level_index == 16) {
-            if (vars->rest_z < 0.0f)
-                vars->rest_z = probe_ground_height(0.5f, &moby->pos, 0) + 0.7f;
+            if (floating_mine_private_vars->rest_z < 0.0f)
+                floating_mine_private_vars->rest_z =
+                    probe_ground_height(0.5f, &moby->pos, 0) + 0.7f;
             vendor_spring(&moby->pos.z,
-                          &vars->z_speed,
-                          vars->rest_z,
+                          &floating_mine_private_vars->z_speed,
+                          floating_mine_private_vars->rest_z,
                           frame_scale_sq * 0.03f,
                           frame_scale_sq * 0.3f,
                           0.0f);
@@ -185,15 +186,16 @@ void update_bolt_thief_mine(struct Moby *moby) {
         break;
     }
     }
-    vars->phase = fast_add_rotations(vars->phase, floating_mine_glow_phase_step_gp);
-    glow_pulse_sine = fast_sin(vars->phase);
+    floating_mine_private_vars->phase =
+        fast_add_rotations(floating_mine_private_vars->phase, floating_mine_glow_phase_step_gp);
+    glow_pulse_sine = fast_sin(floating_mine_private_vars->phase);
     glow_red_intensity = truncate_float_to_s32(glow_pulse_sine * 48.0f) + 0xCF;
     glow_green_blue_intensity = truncate_float_to_s32(glow_pulse_sine * 32.0f) + 0x30;
     moby->glow_color = glow_green_blue_intensity << 16 |
                        (0xFF000000 | glow_green_blue_intensity << 8) | glow_red_intensity;
-    moby->rot.x = fast_add_rotations(moby->rot.x, vars->spin[0]);
-    moby->rot.y = fast_add_rotations(moby->rot.y, vars->spin[1]);
-    moby->rot.z = fast_add_rotations(moby->rot.z, vars->spin[2]);
+    moby->rot.x = fast_add_rotations(moby->rot.x, floating_mine_private_vars->spin[0]);
+    moby->rot.y = fast_add_rotations(moby->rot.y, floating_mine_private_vars->spin[1]);
+    moby->rot.z = fast_add_rotations(moby->rot.z, floating_mine_private_vars->spin[2]);
 }
 
 /* Spawns moby class 0x3A5 at the given position, owned by owner, with three randomised angle values. */
@@ -202,11 +204,11 @@ void update_bolt_thief_mine(struct Moby *moby) {
 unsigned char *spawn_bolt_thief_mine(unsigned char *owner,
                                      char          *spawn_position) __asm__("FUN_L14_002ffaf8");
 
-unsigned char *spawn_bolt_thief_mine(unsigned char *owner, char *spawn_position) {
+unsigned char *spawn_bolt_thief_mine(unsigned char *spawning_moby, char *spawn_position) {
     unsigned char *spawned_moby = create_moby(0x3A5);
     if (spawned_moby != 0) {
         char *spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
-        *(unsigned char **)spawned_vars = owner;
+        *(unsigned char **)spawned_vars = spawning_moby;
         *(int *)(spawned_vars + 8) = 0;
         *(int *)(spawned_vars + 0xC) = 0;
         *(float *)(spawned_vars + 4) = -1.0f;
@@ -214,7 +216,7 @@ unsigned char *spawn_bolt_thief_mine(unsigned char *owner, char *spawn_position)
         *(float *)(spawned_vars + 0x14) = random_float_between(0.00698131695f, 0.0139626339f);
         *(float *)(spawned_vars + 0x18) = random_float_between(0.00349065848f, 0.00698131695f);
         qcopy(spawned_moby + 0x10, spawn_position);
-        MOBY(spawned_moby)->rot.z = *(float *)(owner + 0x48);
+        MOBY(spawned_moby)->rot.z = *(float *)(spawning_moby + 0x48);
         spawned_moby[0x20] = 0;
         spawned_moby[0x30] = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;

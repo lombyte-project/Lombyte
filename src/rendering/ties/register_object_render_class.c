@@ -26,7 +26,7 @@ void register_object_render_class(ObjectRenderClass               *render_class,
     s32                              record_index;
     s32                              packed_normals;
     ObjectRenderRecord              *records;
-    ObjectRenderRecord              *record;
+    ObjectRenderRecord              *render_record;
     MaterialMap                     *slot_materials;
     s32                              material_index;
     s32                              draw_high;
@@ -80,13 +80,13 @@ void register_object_render_class(ObjectRenderClass               *render_class,
     slot_materials = &object_render_class_material_maps[object_render_class_slot_by_id[class_id]];
     qcopy(slot_materials, material_map);
 
-    for (record_index = 0, record = records; record_index < render_class->record_count;
-         record_index++, record++) {
-        draw_high = record->tex1.w[0];
+    for (record_index = 0, render_record = records; record_index < render_class->record_count;
+         record_index++, render_record++) {
+        draw_high = render_record->tex1.w[0];
         material_index = slot_materials->b[record_index];
-        draw_shift = record->tex1.w[1];
-        material_base = record->clamp.w[0];
-        material_shift = record->clamp.w[1];
+        draw_shift = render_record->tex1.w[1];
+        material_base = render_record->clamp.w[0];
+        material_shift = render_record->clamp.w[1];
 
         if (textures != 0) {
             s32 width_units_64;
@@ -127,11 +127,11 @@ void register_object_render_class(ObjectRenderClass               *render_class,
             clamp_word =
                 (u64)material_base | ((u64)material_shift << 2) | ((u64)material_index << 24);
 
-            record->tex0.d = tex0_word;
-            record->tex1.d = tex1_word;
-            record->mip.d = mip_word;
-            record->clamp.d = clamp_word;
-            record->end = 0;
+            render_record->tex0.d = tex0_word;
+            render_record->tex1.d = tex1_word;
+            render_record->mip.d = mip_word;
+            render_record->clamp.d = clamp_word;
+            render_record->end = 0;
         } else {
             u64 draw_bits;
             u64 template_draw_word;
@@ -145,11 +145,11 @@ void register_object_render_class(ObjectRenderClass               *render_class,
             template_draw_word = (template_tex1 & 0x1C) | draw_bits | ((u64)draw_high << 32);
             template_clamp_word =
                 (u64)material_base | ((u64)material_shift << 2) | ((u64)material_index << 24);
-            record->tex0.d = template_tex0;
-            record->tex1.d = template_draw_word;
-            record->mip.d = template_mip;
-            record->clamp.d = template_clamp_word;
-            record->end = 0;
+            render_record->tex0.d = template_tex0;
+            render_record->tex1.d = template_draw_word;
+            render_record->mip.d = template_mip;
+            render_record->clamp.d = template_clamp_word;
+            render_record->end = 0;
         }
     }
 }

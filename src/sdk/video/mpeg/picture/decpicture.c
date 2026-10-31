@@ -29,7 +29,7 @@ s32 _decPicture(struct MpegDecoderState *decoder) {
     enum {
         FRAME_PICTURE = 3
     };
-    s32                        result;
+    s32                        decode_succeeded;
     struct MpegReferenceImage *reference;
 
     if (decoder->picture_coding_type == 3 && decoder->second_field != 0) {
@@ -51,9 +51,9 @@ s32 _decPicture(struct MpegDecoderState *decoder) {
         _Error(decoder, unknown_picture_structure_error_message);
         break;
     }
-    result = _pictureData0(decoder);
-    if (result != 0) {
+    decode_succeeded = _pictureData0(decoder);
+    if (decode_succeeded != 0) {
         reference->decoded = 1;
     }
-    return result;
+    return decode_succeeded;
 }

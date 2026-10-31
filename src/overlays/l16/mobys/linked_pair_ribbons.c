@@ -34,26 +34,26 @@ void update_linked_pair_ribbons(struct Moby *moby) {
         MOBY_STATE_INITIALIZE_LINKED_PAIRS = 0,
         MOBY_STATE_UPDATE_DRAW_AND_SOUND = 1
     };
-    int *data = (int *)moby->pvars;
+    int *linked_pair_effect_data = (int *)moby->pvars;
     if ((moby->flags & 2) == 0) {
         unsigned char state = moby->state;
         switch (state) {
         case MOBY_STATE_INITIALIZE_LINKED_PAIRS:
-            if (data[0] == 0) {
+            if (linked_pair_effect_data[0] == 0) {
                 func_L16_002D0990_2D0870(moby);
                 moby->state = 1;
             }
             break;
         case MOBY_STATE_UPDATE_DRAW_AND_SOUND:
             if (is_linked_pair_ribbon_enabled(moby) != 0) {
-                data[2] = state;
+                linked_pair_effect_data[2] = state;
                 add_draw_callback(FUN_L16_002cf7a8_u, moby);
-                if (voice_is_playing(moby, data[3]) == 0) {
-                    data[3] = allocate_voice_for_target_entry(0, 4, moby);
+                if (voice_is_playing(moby, linked_pair_effect_data[3]) == 0) {
+                    linked_pair_effect_data[3] = allocate_voice_for_target_entry(0, 4, moby);
                 }
-            } else if (data[2] != 0) {
-                int voice_slot_index = data[3];
-                data[2] = 0;
+            } else if (linked_pair_effect_data[2] != 0) {
+                int voice_slot_index = linked_pair_effect_data[3];
+                linked_pair_effect_data[2] = 0;
                 if (voice_slot_index != -1) {
                     char *voice_entry_base = D_0013E533 + 0x1D + voice_slot_index * 0x70;
                     if (*(char **)(voice_entry_base + 0x88) == moby &&
@@ -61,7 +61,7 @@ void update_linked_pair_ribbons(struct Moby *moby) {
                         release_voice_slot(voice_slot_index);
                     }
                 }
-                data[3] = -1;
+                linked_pair_effect_data[3] = -1;
             }
             break;
         }
@@ -80,14 +80,15 @@ void initialize_linked_pair_group(struct Moby *moby) {
     short *group_entry = D_L16_001ABCC0_c[moby->group];
     if (group_entry != 0) {
         do {
-            char *other = D_L16_0015FFD8 + (((unsigned short)*group_entry & 0x7FFF) << 8);
-            if (*(short *)(other + 0xA6) == 0x228) {
-                int *data;
-                if (moby != other) {
-                    *(unsigned short *)(other + 0x34) |= 2;
+            char *linked_pair_group_member_moby =
+                D_L16_0015FFD8 + (((unsigned short)*group_entry & 0x7FFF) << 8);
+            if (*(short *)(linked_pair_group_member_moby + 0xA6) == 0x228) {
+                int *linked_partner_slot;
+                if (moby != linked_pair_group_member_moby) {
+                    *(unsigned short *)(linked_pair_group_member_moby + 0x34) |= 2;
                 }
-                data = *(int **)(other + 0x78);
-                *data = FUN_L16_002cf678_u(other);
+                linked_partner_slot = *(int **)(linked_pair_group_member_moby + 0x78);
+                *linked_partner_slot = FUN_L16_002cf678_u(linked_pair_group_member_moby);
             }
         } while (*group_entry++ >= 0);
     }
@@ -125,9 +126,9 @@ int is_linked_pair_ribbon_enabled(void *mv) {
     if (group_entry == 0)
         return 1;
     for (;;) {
-        unsigned char *other = D_L16_0015FFD8 + ((*group_entry & 0x7FFF) << 8);
-        if (*(short *)(other + 0xA6) == 0x222) {
-            if (other[0xBC] != 0)
+        unsigned char *group_member_moby = D_L16_0015FFD8 + ((*group_entry & 0x7FFF) << 8);
+        if (*(short *)(group_member_moby + 0xA6) == 0x222) {
+            if (group_member_moby[0xBC] != 0)
                 return 0;
         }
         if ((short)*group_entry++ < 0)
@@ -150,13 +151,13 @@ void draw_linked_pair_group_ribbons(struct Moby *moby) {
         do {
             char *group_moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
             if (MOBY(group_moby)->oclass == 0x228) {
-                char *data = ((char *)MOBY(group_moby)->pvars);
+                char *linked_pair_data = ((char *)MOBY(group_moby)->pvars);
                 int   generation = D_L16_0015F5CC;
-                if (*(int *)(data + 4) != generation) {
-                    char *partner = *(char **)data;
+                if (*(int *)(linked_pair_data + 4) != generation) {
+                    char *partner = *(char **)linked_pair_data;
                     if (partner) {
                         char *otherData = *(char **)(partner + 0x78);
-                        *(int *)(data + 4) = generation;
+                        *(int *)(linked_pair_data + 4) = generation;
                         *(int *)(otherData + 4) = generation;
                         draw_linked_pair_ribbons(group_moby, partner);
                     }

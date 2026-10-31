@@ -10,11 +10,11 @@ void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) __asm__("FUN_001f
 /* Uploads the image pages of one HUD bank to GS memory, from the depth buffer
    address up, and records each page's block offset. Bank 0's pages are
    linked first when the bank file is not linked yet. */
-void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) {
+void hud_send_resident_bank(s32 bank, s32 bank_source_address, s32 immediate) {
     struct HudTexCounts *counts;
     s32                  address;
     s32                  bank_offset;
-    s32                  first;
+    s32                  first_image_page_index;
     s32                  end;
     s32                  i;
     s32                  page;
@@ -23,15 +23,15 @@ void hud_send_resident_bank(s32 bank, s32 base, s32 immediate) {
     s32                  size;
 
     if (hud_state.header.counts->loaded[bank] == 0) {
-        link_hud_bank(0, base);
+        link_hud_bank(0, bank_source_address);
         address = depth_buffer_address;
     } else {
         address = depth_buffer_address;
     }
     counts = hud_state.header.counts;
     bank_offset = bank << 2;
-    first = bank == 0 ? 0 : counts->ends[bank - 1];
-    i = first;
+    first_image_page_index = bank == 0 ? 0 : counts->ends[bank - 1];
+    i = first_image_page_index;
     end = *(s32 *)((u8 *)hud_state.header.counts + bank_offset + 0x34); /* ends[bank] */
     for (; i < end; i++) {
         page = address >> 8;

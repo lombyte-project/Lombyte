@@ -135,7 +135,7 @@ unsigned char *spawn_crate_debris(unsigned char *owner,
                                   float          lo,
                                   float          hi) __asm__("FUN_L00_002af8b0");
 
-unsigned char *spawn_crate_debris(unsigned char *owner,
+unsigned char *spawn_crate_debris(unsigned char *debris_source_moby,
                                   void          *initial_velocity,
                                   void          *spawn_position,
                                   void          *initial_rotation,
@@ -148,11 +148,11 @@ unsigned char *spawn_crate_debris(unsigned char *owner,
     if (debris_moby) {
         V_2af8b0 *debris_data = ((V_2af8b0 *)MOBY(debris_moby)->pvars);
         float     scale_multiplier;
-        debris_data->o = owner;
+        debris_data->o = debris_source_moby;
         debris_moby[0x30] = 0xFF;
         MOBY(debris_moby)->draw_dist = 0x7E;
         debris_moby[0x31] = 1;
-        MOBY(debris_moby)->spawn_frame = *(long *)(owner + 0x38);
+        MOBY(debris_moby)->spawn_frame = *(long *)(debris_source_moby + 0x38);
         debris_moby[0x20] = 0;
         MOBY(debris_moby)->rot.x = random_angle_radians();
         MOBY(debris_moby)->rot.y = random_angle_radians();
@@ -189,9 +189,9 @@ void nanotech_crate_fragment_update(M_2afa48 *fragment_moby) {
         NANOTECH_CRATE_FRAGMENT_FADING = 1
     };
     PV   *pv = fragment_moby->pv;
-    u128  old;
+    u128  pre_motion_position;
     u128 *hit_normal;
-    qcopy(&old, fragment_moby->pos);
+    qcopy(&pre_motion_position, fragment_moby->pos);
     pv->vel[2] -= frame_time_sq * 20.0f;
     fast_vec_add(fragment_moby->pos, fragment_moby->pos, pv->vel);
     fragment_moby->f40 = fast_add_rotations(fragment_moby->f40, pv->f20);

@@ -211,7 +211,7 @@ extern float path_walker_particle_target_scalar_scale_gp __asm__("D_L16_00161EA8
 void emit_path_walker_particle(unsigned char *source_moby, void *previous_position) {
     float input[4];
     float offset[4];
-    float out[4];
+    float movement_velocity[4];
     float velocity[4];
     float random_offset_angle, second_random_offset_angle, size, movement_distance, final_size;
     *(OvlQuad *)input = *(OvlQuad *)previous_position;
@@ -222,7 +222,7 @@ void emit_path_walker_particle(unsigned char *source_moby, void *previous_positi
     if (!(fast_vec_dist(source_moby + 0x10, D_L16_001671C0) < 75.0f))
         return;
     movement_distance = fast_vec_dist(source_moby + 0x10, input);
-    fast_vec_scale(out,
+    fast_vec_scale(movement_velocity,
                    source_moby + 0xC0,
                    path_walker_particle_movement_velocity_scale_gp * movement_distance);
     size = path_walker_particle_random_velocity_scale_gp;
@@ -232,7 +232,7 @@ void emit_path_walker_particle(unsigned char *source_moby, void *previous_positi
     random_offset_angle = random_angle_radians();
     second_random_offset_angle = random_angle_radians();
     build_spherical_offset(velocity, size, random_offset_angle, second_random_offset_angle);
-    fast_vec_add(velocity, velocity, out);
+    fast_vec_add(velocity, velocity, movement_velocity);
     final_size = path_walker_particle_target_scalar_scale_gp;
     final_size *= 210000.0f;
     func_L00_0026DD70_emit(
@@ -281,7 +281,7 @@ void initialize_path_walker_group(struct Moby *moby) {
     rank = count;
     for (i = 0; i < count; i++) {
         unsigned char *current;
-        L16WalkerData *data;
+        L16WalkerData *selected_walker_data;
         unsigned short flags;
 
         if (i == count - 1) {
@@ -305,17 +305,17 @@ void initialize_path_walker_group(struct Moby *moby) {
         *(float *)(current + 0x2C) *= path_walker_initial_scale_multiplier;
         *(int *)(current + 0x94) = 0;
         *(unsigned short *)(current + 0x32) = flags;
-        data = *(L16WalkerData **)(current + 0x78);
-        data->parameter = (float)rank * (period / convert_integer_to_float(count));
-        data->owner = previous;
-        data->period = period;
+        selected_walker_data = *(L16WalkerData **)(current + 0x78);
+        selected_walker_data->parameter = (float)rank * (period / convert_integer_to_float(count));
+        selected_walker_data->owner = previous;
+        selected_walker_data->period = period;
         previous = current;
-        data->height_step = random_float_between(path_walker_height_range_start_gp,
-                                                 path_walker_height_range_end_gp);
-        data->speed =
+        selected_walker_data->height_step = random_float_between(path_walker_height_range_start_gp,
+                                                                 path_walker_height_range_end_gp);
+        selected_walker_data->speed =
             random_float_between(path_walker_speed_range_start_gp, path_walker_speed_range_end_gp) *
             frame_time;
-        data->target_speed = data->speed;
+        selected_walker_data->target_speed = selected_walker_data->speed;
         current[0x20] = 1;
         rank--;
     }

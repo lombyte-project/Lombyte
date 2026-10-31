@@ -182,10 +182,10 @@ void destroy_decoy_with_particles(unsigned char *moby) {
 
 u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) __asm__("FUN_L00_002c35c0");
 
-u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
+u8 *spawn_decoy(s32 owner_moby, u128 *position, u128 *other_position) {
     u8 *flags = item_text_variant;
     u8 *spawned_moby;
-    u8 *data;
+    u8 *decoy_vars;
     u8 *candidate;
     s32 i;
     s32 best_value;
@@ -197,35 +197,36 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
         spawned_moby[0x30] = 0xff;
         *(u16 *)(spawned_moby + 0x32) = 0xff;
         spawned_moby[0x31] = 1;
-        data = *(u8 **)(spawned_moby + 0x78);
+        decoy_vars = *(u8 **)(spawned_moby + 0x78);
         spawned_moby[0x20] = 0;
         qcopy(spawned_moby + 0x10, position);
-        qcopy(data + 0x10, other_position);
+        qcopy(decoy_vars + 0x10, other_position);
         speed = frame_scale * -0.5f;
-        *(s32 *)(data + 0x40) = value;
-        *(u16 *)(data + 0x44) = 0;
-        *(s32 *)(data + 0x54) = 0;
+        *(s32 *)(decoy_vars + 0x40) = owner_moby;
+        *(u16 *)(decoy_vars + 0x44) = 0;
+        *(s32 *)(decoy_vars + 0x54) = 0;
         *(f32 *)(spawned_moby + 0x2c) =
             *(f32 *)(*(u8 **)(spawned_moby + 0x24) + 0x24) * (speed + 1.0f);
-        *(f32 *)(data + 0x48) = (scale_ticks(flags[0x19]) + 1.0f) * 4.0f;
+        *(f32 *)(decoy_vars + 0x48) = (scale_ticks(flags[0x19]) + 1.0f) * 4.0f;
         if (spawned_moby[0x53] != 0)
             blend_moby_animation(spawned_moby, 0, 0, scale_game_frames(0));
         *(s32 *)(spawned_moby + 0x94) = 0;
         *(s32 *)(spawned_moby + 0x98) = -1;
         *(f32 *)(spawned_moby + 0x48) = random_float_between(-3.14159274f, 3.14159274f);
-        *(s32 *)(data + 0x58) = 0;
-        *(s32 *)(data + 0x5c) = 0;
+        *(s32 *)(decoy_vars + 0x58) = 0;
+        *(s32 *)(decoy_vars + 0x5c) = 0;
         while (D_L00_001B0830_lui[0] >= 6) {
             candidate = 0;
             best_value = 0;
             for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
-                u8 *entry = (u8 *)(moby_table + (D_L00_001B0830_lui[i] << 8));
-                if (entry != 0 &&
-                    (*(s16 *)(entry + 0xa6) == 0xcb || *(s16 *)(entry + 0xa6) == 0x76c) &&
-                    entry[0x20] < 5) {
-                    current_value = *(s32 *)(*(u8 **)(entry + 0x78) + 0x54);
+                u8 *listed_moby = (u8 *)(moby_table + (D_L00_001B0830_lui[i] << 8));
+                if (listed_moby != 0 &&
+                    (*(s16 *)(listed_moby + 0xa6) == 0xcb ||
+                     *(s16 *)(listed_moby + 0xa6) == 0x76c) &&
+                    listed_moby[0x20] < 5) {
+                    current_value = *(s32 *)(*(u8 **)(listed_moby + 0x78) + 0x54);
                     if (best_value <= current_value) {
-                        candidate = entry;
+                        candidate = listed_moby;
                         best_value = current_value;
                     }
                 }
@@ -237,12 +238,12 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
         }
         update_entity(spawned_moby);
         copy_hero_moby_field_38(spawned_moby);
-        *(u16 *)data = 0;
-        data[8] = 0;
-        data[9] = 0;
-        data[7] = 0x80;
-        *(u16 *)(data + 0x0c) = 4;
-        *(u16 *)(data + 0x0e) = 0xf;
+        *(u16 *)decoy_vars = 0;
+        decoy_vars[8] = 0;
+        decoy_vars[9] = 0;
+        decoy_vars[7] = 0x80;
+        *(u16 *)(decoy_vars + 0x0c) = 4;
+        *(u16 *)(decoy_vars + 0x0e) = 0xf;
         append_unique_moby_index(spawned_moby, D_L00_001B0830_lui, 0x1f);
         if (hero.unk20A5 != 0 || hero.unk20AF != 0)
             *(u16 *)(spawned_moby + 0x34) |= 0x41;
@@ -440,8 +441,8 @@ ret0:
 
 void update_decoy_proximity_motion(S_2c40a0 *self) __asm__("FUN_L00_002c40a0");
 
-void update_decoy_proximity_motion(S_2c40a0 *self) {
-    O_2c40a0 *moby_vars = self->p78;
+void update_decoy_proximity_motion(S_2c40a0 *decoy_moby) {
+    O_2c40a0 *moby_vars = decoy_moby->p78;
     P_2c40a0 *P = (P_2c40a0 *)&hero;
     s16       proximity_response_gate = P->h1E2;
     f32       horizontal_displacement[4];
@@ -449,13 +450,13 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
     if (moby_vars->i68 == 0) {
         if (proximity_response_gate == 0)
             return;
-        if (!(FUN_001f9b80_2c40a0(P->v80, self->v10) < 1.0f))
+        if (!(FUN_001f9b80_2c40a0(P->v80, decoy_moby->v10) < 1.0f))
             return;
-        if (!(FUN_001f99c0_2c40a0(P->f88 - self->f18) < 1.3f))
+        if (!(FUN_001f99c0_2c40a0(P->f88 - decoy_moby->f18) < 1.3f))
             return;
         moby_vars->i68 = 1;
     }
-    FUN_001f9a28_2c40a0(horizontal_displacement, self->v10, P->v80);
+    FUN_001f9a28_2c40a0(horizontal_displacement, decoy_moby->v10, P->v80);
     horizontal_displacement[2] = 0.0f;
     horizontal_separation_error = FUN_001f9b20_2c40a0(horizontal_displacement) - 1.4f;
     if (horizontal_separation_error > 0.0f)
@@ -469,7 +470,8 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
                   frame_scale_sq * 0.3f,
                   frame_time * 4.0f);
     if (horizontal_separation_error == 0.0f && moby_vars->f60 == 0.0f) {
-        if (FUN_001f99c0_2c40a0(self->f18 - probe_ground_height(self->v10, 0, 0.5f)) < 0.02f)
+        if (FUN_001f99c0_2c40a0(decoy_moby->f18 - probe_ground_height(decoy_moby->v10, 0, 0.5f)) <
+            0.02f)
             moby_vars->i68 = 0;
     }
     horizontal_separation_distance = FUN_001f9af0_2c40a0(horizontal_displacement);
@@ -477,17 +479,17 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
         moby_vars->f60 = horizontal_separation_distance;
     if (moby_vars->f60 < horizontal_separation_distance)
         FUN_001f9bf8_2c40a0(horizontal_displacement, horizontal_displacement, moby_vars->f60);
-    FUN_L00_00258830_2c40a0(self, horizontal_displacement, 0.5f, 0.4f, 0.0f, 0);
-    ground_height = probe_ground_height(self->v10, 0, 0.5f);
-    if (self->f18 < ground_height) {
-        self->f18 = ground_height;
+    FUN_L00_00258830_2c40a0(decoy_moby, horizontal_displacement, 0.5f, 0.4f, 0.0f, 0);
+    ground_height = probe_ground_height(decoy_moby->v10, 0, 0.5f);
+    if (decoy_moby->f18 < ground_height) {
+        decoy_moby->f18 = ground_height;
         moby_vars->f64 = 0.0f;
         return;
     }
     moby_vars->f64 -= frame_time_sq * 24.0f;
-    self->f18 += moby_vars->f64;
-    if (self->f18 < ground_height)
-        self->f18 = ground_height;
+    decoy_moby->f18 += moby_vars->f64;
+    if (decoy_moby->f18 < ground_height)
+        decoy_moby->f18 = ground_height;
 }
 
 /* Calls FUN_L00_002c3440 on m for collision_hit_material results 0, 1, 3, 8, 11, 12 and 13. */
@@ -524,7 +526,7 @@ void decoy_update(char *moby) {
         DECOY_RESET_TO_INITIALIZE = 7
     };
     int   active = ((unsigned char *)&D_0013E533)[6];
-    char *vars = *(char **)(moby + 0x78);
+    char *decoy_instance_vars = *(char **)(moby + 0x78);
     char *target;
     float position_effect_and_normal_scratch[4] __attribute__((aligned(16)));
     struct {
@@ -557,30 +559,32 @@ void decoy_update(char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    ++*(int *)(vars + 0x54);
+    ++*(int *)(decoy_instance_vars + 0x54);
     if (hero.unk20A5 != 0 && (u8)moby[0x20] < 2)
         *(u16 *)(moby + 0x34) |= 0x41;
     else
         *(u16 *)(moby + 0x34) &= 0xffbe;
-    if (*(short *)(*(char **)(vars + 0x40) + 0xa6) == 0x232 && *(short *)(vars + 0x46) == 0 &&
-        FUN_001ff3d8_2c4380(vars + 0x10) > 0.0f) {
+    if (*(short *)(*(char **)(decoy_instance_vars + 0x40) + 0xa6) == 0x232 &&
+        *(short *)(decoy_instance_vars + 0x46) == 0 &&
+        FUN_001ff3d8_2c4380(decoy_instance_vars + 0x10) > 0.0f) {
         if (hero.ground_moby == 0 || !FUN_L00_002603d0((int)hero.ground_moby))
-            predict_thrown_moby_landing((ThrowVars *)vars, (struct Moby *)moby, 1);
-        else if (!predict_thrown_moby_landing((ThrowVars *)vars, (struct Moby *)moby, 0))
-            predict_thrown_moby_landing((ThrowVars *)vars, (struct Moby *)moby, 2);
+            predict_thrown_moby_landing((ThrowVars *)decoy_instance_vars, (struct Moby *)moby, 1);
+        else if (!predict_thrown_moby_landing(
+                     (ThrowVars *)decoy_instance_vars, (struct Moby *)moby, 0))
+            predict_thrown_moby_landing((ThrowVars *)decoy_instance_vars, (struct Moby *)moby, 2);
     }
     switch ((u8)moby[0x20]) {
     case DECOY_INITIALIZE:
         moby[0x20] = 1;
-        *(short *)(vars + 0x44) = 0;
+        *(short *)(decoy_instance_vars + 0x44) = 0;
         *(int *)(moby + 0x98) = -1;
-        *(short *)(vars + 0x6c) = 0;
-        vars[0x6e] = 0;
+        *(short *)(decoy_instance_vars + 0x6c) = 0;
+        decoy_instance_vars[0x6e] = 0;
         break;
     case DECOY_HELD: {
         char *target;
-        *(short *)(vars + 0x44) = 0;
-        target = *(char **)(vars + 0x40);
+        *(short *)(decoy_instance_vars + 0x44) = 0;
+        target = *(char **)(decoy_instance_vars + 0x40);
         if (target && (((u8)target[0x20] & 0xf0) != 0xf0) && hero.items[0].moby &&
             *(short *)((char *)hero.items[0].moby + 0xa6) == 0x232)
             return;
@@ -592,7 +596,7 @@ void decoy_update(char *moby) {
         if (*(float *)(moby + 0x2c) < *(float *)(*(char **)(moby + 0x24) + 0x24))
             *(float *)(moby + 0x2c) += frame_scale * 0.02f;
         qcopy(position_effect_and_normal_scratch, moby + 0x10);
-        *(float *)(vars + 0x18) -= frame_time_sq * 9.0f;
+        *(float *)(decoy_instance_vars + 0x18) -= frame_time_sq * 9.0f;
         for (i = 1; i <= D_L00_001B0830_lui[0]; ++i) {
             char *target;
             ids = D_L00_001B0830_lui + i;
@@ -605,51 +609,56 @@ void decoy_update(char *moby) {
                 len = FUN_001ff3d8_2c4380(scratch.w);
                 if (len < 1.8f) {
                     FUN_001ff300_2c4380((1.8f - len) * 0.015f, scratch.w, scratch.w);
-                    FUN_001ff278_2c4380(vars + 0x10, vars + 0x10, scratch.w);
+                    FUN_001ff278_2c4380(
+                        decoy_instance_vars + 0x10, decoy_instance_vars + 0x10, scratch.w);
                 }
             }
         }
         if (hero.state.current == 0x1e)
             *(int *)((char *)hero.moby + 0x94) = 0;
-        hit = FUN_L00_00258830(moby, vars + 0x10, 0.2f, 0.2f, 0.0f, 0);
+        hit = FUN_L00_00258830(moby, decoy_instance_vars + 0x10, 0.2f, 0.2f, 0.0f, 0);
         if (hit & 1) {
             qcopy(scratch.w, moby + 0x10);
             scratch.w[2] += 0.2f;
             if (coll_sphere(scratch.w, 0.23f, 0, moby)) {
-                if (*(float *)(vars + 0x18) < 0.0f) {
+                if (*(float *)(decoy_instance_vars + 0x18) < 0.0f) {
                     float len;
                     FUN_001ff2a8_2c4380(scratch.x, moby + 0x10, &hero.motion.pos);
                     scratch.x[2] = 0.0f;
                     len = FUN_001ff3d8_2c4380(scratch.x);
                     if (len < 1.8f) {
                         FUN_001ff300_2c4380((1.8f - len) * 0.015f, scratch.x, scratch.x);
-                        FUN_001ff278_2c4380(vars + 0x10, vars + 0x10, scratch.x);
+                        FUN_001ff278_2c4380(
+                            decoy_instance_vars + 0x10, decoy_instance_vars + 0x10, scratch.x);
                     }
                 }
-                reflect_vector(vars + 0x10, vars + 0x10, &coll_hit.normal_x);
+                reflect_vector(
+                    decoy_instance_vars + 0x10, decoy_instance_vars + 0x10, &coll_hit.normal_x);
                 if (coll_hit.moby != 0 && coll_hit.unk1C <= 0)
-                    FUN_001ff300_2c4380(1.05f, vars + 0x10, vars + 0x10);
+                    FUN_001ff300_2c4380(
+                        1.05f, decoy_instance_vars + 0x10, decoy_instance_vars + 0x10);
                 else
-                    FUN_001ff300_2c4380(0.2f, vars + 0x10, vars + 0x10);
+                    FUN_001ff300_2c4380(
+                        0.2f, decoy_instance_vars + 0x10, decoy_instance_vars + 0x10);
                 rate = 0.01f;
-                len = FUN_001ff3d8_2c4380(vars + 0x10);
+                len = FUN_001ff3d8_2c4380(decoy_instance_vars + 0x10);
                 if (len < frame_scale * rate ||
                     (hero.ground_moby && FUN_L00_002603d0((int)hero.ground_moby) &&
-                     FUN_001ff3d8_2c4380(vars + 0x10) <
+                     FUN_001ff3d8_2c4380(decoy_instance_vars + 0x10) <
                          frame_scale * rate + FUN_001ff3d8_2c4380(&hero.motion.displacement))) {
                     angle = FUN_001ff8b0_2c4380(coll_hit.normal_z,
                                                 FUN_001ff408_2c4380(&coll_hit.normal_x));
                     if (angle < 0.61086524f) {
-                        ++*(short *)(vars + 0x44);
+                        ++*(short *)(decoy_instance_vars + 0x44);
                         if (coll_hit.moby == 0 || coll_hit.unk1C > 0 ||
-                            *(short *)(vars + 0x44) > FUN_001fef20_2c4380(240)) {
+                            *(short *)(decoy_instance_vars + 0x44) > FUN_001fef20_2c4380(240)) {
                             if (((u8 *)moby)[0x53] != 1)
                                 blend_moby_animation(moby, 1, 0, FUN_001fef20_2c4380(10));
                             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
                             *(int *)(moby + 0x98) = 0;
-                            qzero(vars + 0x10);
+                            qzero(decoy_instance_vars + 0x10);
                             moby[0x20] = 3;
-                            *(short *)(vars + 0x44) = FUN_001fef20_2c4380(600);
+                            *(short *)(decoy_instance_vars + 0x44) = FUN_001fef20_2c4380(600);
                             *(float *)(moby + 0x18) = coll_hit.point.f[2];
                             qcopy(scratch.x, &coll_hit.normal_x);
                             cos_angle = FUN_001ff7e8_2c4380(*(float *)(moby + 0x48));
@@ -659,32 +668,32 @@ void decoy_update(char *moby) {
                             sin_angle = FUN_001ff800_2c4380(*(float *)(moby + 0x48));
                             rotated_normal[1] = scratch.x[1] * cos_angle - scratch.x[0] * sin_angle;
                             rotated_normal[2] = scratch.x[2];
-                            *(float *)(vars + 0x4c) = -FUN_001ff8b0_2c4380(
+                            *(float *)(decoy_instance_vars + 0x4c) = -FUN_001ff8b0_2c4380(
                                 FUN_001ff1e0_2c4380(rotated_normal[0] * rotated_normal[0] +
                                                     rotated_normal[2] * rotated_normal[2]),
                                 rotated_normal[1]);
-                            *(float *)(vars + 0x50) =
+                            *(float *)(decoy_instance_vars + 0x50) =
                                 FUN_001ff8b0_2c4380(rotated_normal[2], rotated_normal[0]);
                             rate = 0.1f;
-                            *(float *)(moby + 0x40) =
-                                FUN_002000e8_2c4380(*(float *)(moby + 0x40),
-                                                    FUN_00200130_2c4380(*(float *)(vars + 0x4c),
-                                                                        *(float *)(moby + 0x40)) *
-                                                        (frame_scale * rate));
-                            *(float *)(moby + 0x44) =
-                                FUN_002000e8_2c4380(*(float *)(moby + 0x44),
-                                                    FUN_00200130_2c4380(*(float *)(vars + 0x50),
-                                                                        *(float *)(moby + 0x44)) *
-                                                        (frame_scale * rate));
+                            *(float *)(moby + 0x40) = FUN_002000e8_2c4380(
+                                *(float *)(moby + 0x40),
+                                FUN_00200130_2c4380(*(float *)(decoy_instance_vars + 0x4c),
+                                                    *(float *)(moby + 0x40)) *
+                                    (frame_scale * rate));
+                            *(float *)(moby + 0x44) = FUN_002000e8_2c4380(
+                                *(float *)(moby + 0x44),
+                                FUN_00200130_2c4380(*(float *)(decoy_instance_vars + 0x50),
+                                                    *(float *)(moby + 0x44)) *
+                                    (frame_scale * rate));
                         }
                     }
                 }
                 destroy_decoy_on_selected_materials(moby);
-                if (fast_subtract_rotations_cf(vars + 0x6f))
+                if (fast_subtract_rotations_cf(decoy_instance_vars + 0x6f))
                     allocate_voice_for_target_entry(0, 0, moby),
-                        vars[0x6f] = FUN_001fef20_2c4380(20);
+                        decoy_instance_vars[0x6f] = FUN_001fef20_2c4380(20);
                 else
-                    add_random_offset_to_vector_xyz(frame_time, vars + 0x10);
+                    add_random_offset_to_vector_xyz(frame_time, decoy_instance_vars + 0x10);
             }
         }
         if (hero.state.current == 0x1e) {
@@ -697,38 +706,39 @@ void decoy_update(char *moby) {
         hit = FUN_L00_0025a420(moby, 0x30001, 0);
         *(float *)(moby + 0x40) = FUN_002000e8_2c4380(
             *(float *)(moby + 0x40),
-            FUN_00200130_2c4380(*(float *)(vars + 0x4c), *(float *)(moby + 0x40)) *
+            FUN_00200130_2c4380(*(float *)(decoy_instance_vars + 0x4c), *(float *)(moby + 0x40)) *
                 (frame_scale * 0.1f));
         *(float *)(moby + 0x44) = FUN_002000e8_2c4380(
             *(float *)(moby + 0x44),
-            FUN_00200130_2c4380(*(float *)(vars + 0x50), *(float *)(moby + 0x44)) *
+            FUN_00200130_2c4380(*(float *)(decoy_instance_vars + 0x50), *(float *)(moby + 0x44)) *
                 (frame_scale * 0.1f));
         update_decoy_proximity_motion((S_2c40a0 *)moby);
-        FUN_001fef68_2c4380(vars + 0x5c);
-        fast_dec_timer_s16(vars + 0x6c);
+        FUN_001fef68_2c4380(decoy_instance_vars + 0x5c);
+        fast_dec_timer_s16(decoy_instance_vars + 0x6c);
         if (hit) {
             target = (char *)hit;
-            if (*(int *)(target + 0x20) != *(int *)(vars + 0x58) || *(int *)(vars + 0x5c) <= 0) {
-                *(int *)(vars + 0x58) = *(int *)(target + 0x20);
-                *(int *)(vars + 0x5c) = FUN_001fef20_2c4380(30);
+            if (*(int *)(target + 0x20) != *(int *)(decoy_instance_vars + 0x58) ||
+                *(int *)(decoy_instance_vars + 0x5c) <= 0) {
+                *(int *)(decoy_instance_vars + 0x58) = *(int *)(target + 0x20);
+                *(int *)(decoy_instance_vars + 0x5c) = FUN_001fef20_2c4380(30);
                 /* Fakematch: the empty loop keeps the timer read below the cooldown store. */
                 do {
                 } while (0);
-                if (*(short *)(vars + 0x6c) == 0) {
+                if (*(short *)(decoy_instance_vars + 0x6c) == 0) {
                     if (*(u16 *)(target + 0x28) == 0x101 &&
-                        ((*(u64 *)(vars + 0x68) & 0xffffff00000000ULL) == 0)) {
-                        *(short *)(vars + 0x6c) = FUN_001fef20_2c4380(100);
-                        vars[0x6e] = 1;
+                        ((*(u64 *)(decoy_instance_vars + 0x68) & 0xffffff00000000ULL) == 0)) {
+                        *(short *)(decoy_instance_vars + 0x6c) = FUN_001fef20_2c4380(100);
+                        decoy_instance_vars[0x6e] = 1;
                     } else
-                        vars[0x6e] = 0;
+                        decoy_instance_vars[0x6e] = 0;
                     allocate_voice_for_target_entry(0, 0, moby);
                     {
                         float len = *(float *)(target + 0x2c);
-                        ((u8 *)vars)[7] = 0xfa;
-                        *(float *)(vars + 0x48) -= len;
+                        ((u8 *)decoy_instance_vars)[7] = 0xfa;
+                        *(float *)(decoy_instance_vars + 0x48) -= len;
                     }
-                    trooper_anim_update(moby, vars);
-                    if (*(float *)(vars + 0x48) < 0.0f) {
+                    trooper_anim_update(moby, decoy_instance_vars);
+                    if (*(float *)(decoy_instance_vars + 0x48) < 0.0f) {
                         *(OvlQuad *)scratch.w = 0;
                         scratch.w[0] = frame_scale * 0.5f;
                         scratch.w[2] = frame_scale * 0.7f;
@@ -770,7 +780,7 @@ void decoy_update(char *moby) {
             }
         }
         ((u8 *)moby)[0xa4] = 0xff;
-        trooper_anim_finish(moby, vars);
+        trooper_anim_finish(moby, decoy_instance_vars);
         if (moby[0x70] & 2) {
             if (((u8 *)moby)[0x53] != 2)
                 blend_moby_animation(moby, 2, 0, FUN_001fef20_2c4380(10));
@@ -781,12 +791,12 @@ void decoy_update(char *moby) {
             if (len != 0.0f) {
                 destroy_decoy_on_selected_materials(moby);
                 if (len + 0.02f < *(float *)(moby + 0x18)) {
-                    *(float *)(vars + 0x18) -= frame_time_sq * 9.8f;
-                    FUN_001ff278_2c4380(moby + 0x10, moby + 0x10, vars + 0x10);
+                    *(float *)(decoy_instance_vars + 0x18) -= frame_time_sq * 9.8f;
+                    FUN_001ff278_2c4380(moby + 0x10, moby + 0x10, decoy_instance_vars + 0x10);
                     len = probe_ground_height(moby + 0x10, 0, 0.5f);
                     if (*(float *)(moby + 0x18) < len) {
                         *(float *)(moby + 0x18) = len;
-                        qzero(vars + 0x10);
+                        qzero(decoy_instance_vars + 0x10);
                         qcopy(position_effect_and_normal_scratch, &coll_hit.normal_x);
                         cos_angle = FUN_001ff7e8_2c4380(*(float *)(moby + 0x48));
                         sin_angle = FUN_001ff800_2c4380(*(float *)(moby + 0x48));
@@ -797,14 +807,15 @@ void decoy_update(char *moby) {
                         scratch.w[1] = position_effect_and_normal_scratch[1] * cos_angle -
                                        position_effect_and_normal_scratch[0] * sin_angle;
                         scratch.w[2] = position_effect_and_normal_scratch[2];
-                        *(float *)(vars + 0x4c) =
+                        *(float *)(decoy_instance_vars + 0x4c) =
                             -FUN_001ff8b0_2c4380(FUN_001ff1e0_2c4380(scratch.w[0] * scratch.w[0] +
                                                                      scratch.w[2] * scratch.w[2]),
                                                  scratch.w[1]);
-                        *(float *)(vars + 0x50) = FUN_001ff8b0_2c4380(scratch.w[2], scratch.w[0]);
+                        *(float *)(decoy_instance_vars + 0x50) =
+                            FUN_001ff8b0_2c4380(scratch.w[2], scratch.w[0]);
                     }
                 } else
-                    qzero(vars + 0x10);
+                    qzero(decoy_instance_vars + 0x10);
                 if (coll_hit.moby)
                     FUN_L00_00260400(
                         moby, coll_hit.moby, moby + 0x10, moby + 0x40, moby + 0x10, moby + 0x40);
@@ -812,7 +823,7 @@ void decoy_update(char *moby) {
         } else {
             if (*(float *)(moby + 0x2c) < *(float *)(*(char **)(moby + 0x24) + 0x24))
                 *(float *)(moby + 0x2c) += frame_scale * 0.02f;
-            if (fast_dec_timer_s16(vars + 0x44)) {
+            if (fast_dec_timer_s16(decoy_instance_vars + 0x44)) {
                 if (((u8 *)moby)[0x53])
                     blend_moby_animation(moby, 0, 0, FUN_001fef20_2c4380(60));
                 mine_spawn_drops(moby, D_L00_001B0830_lui);
@@ -827,7 +838,7 @@ void decoy_update(char *moby) {
                 moby, coll_hit.moby, moby + 0x10, moby + 0x40, moby + 0x10, moby + 0x40);
         if (moby[0x70] & 2)
             *(int *)(moby + 0x58) = 0;
-        if (fast_dec_timer_s16(vars + 0x44) || (moby[0x70] & 2))
+        if (fast_dec_timer_s16(decoy_instance_vars + 0x44) || (moby[0x70] & 2))
             moby[0x20] = 6;
         break;
     case DECOY_SHRINK_FOR_REMOVAL: {

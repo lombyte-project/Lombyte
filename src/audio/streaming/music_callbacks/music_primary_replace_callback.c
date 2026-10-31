@@ -4,13 +4,13 @@
 
 void music_primary_replace_callback(int result, long context) __asm__("FUN_00216ad0");
 
-void music_primary_replace_callback(int result, long context) {
-    short *channel_state = (short *)(int)context;
+void music_primary_replace_callback(int callback_result, long channel_state_address) {
+    short *channel_state = (short *)(int)channel_state_address;
     if (channel_state != 0) {
-        if (result < 0) {
-            *(int *)channel_state = result;
+        if (callback_result < 0) {
+            *(int *)channel_state = callback_result;
         }
-        if (result != 0) {
+        if (callback_result != 0) {
             if (channel_state[5] == 9) {
                 channel_state[5] = 4;
                 if (channel_state[8] != 0) {

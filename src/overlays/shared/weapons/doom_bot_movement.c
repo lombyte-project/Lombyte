@@ -269,7 +269,9 @@ char *select_class5_target_or_hero(
 
 char *
 
-select_class5_target_or_hero(char *self, float *position, float *angles, int unused, int mode) {
+select_class5_target_or_hero(
+
+    char *reference_moby, float *position, float *angles, int unused, int mode) {
     char *candidate;
     char *best = 0;
     float target[4] __attribute__((aligned(16)));
@@ -298,7 +300,8 @@ select_class5_target_or_hero(char *self, float *position, float *angles, int unu
             angles[1], fast_arc_tan(distance, target[2] - position[2]));
         heightError *= heightError;
         if (checkCollision) {
-            if (8.0f < FUN_001f99c0(*(float *)(candidate + 0x18) - *(float *)(self + 0x18)))
+            if (8.0f <
+                FUN_001f99c0(*(float *)(candidate + 0x18) - *(float *)(reference_moby + 0x18)))
                 valid = 1;
             else
                 valid = FUN_001efa68_2bed90(position, target, 6, candidate, 0) != 0;
@@ -308,7 +311,7 @@ select_class5_target_or_hero(char *self, float *position, float *angles, int unu
         if (mode != 0 || !valid) {
             bonus = 0.0f;
             score = fast_vec_dist(position, target);
-            if (*(float *)(candidate + 0x18) - *(float *)(self + 0x18) > 3.25f)
+            if (*(float *)(candidate + 0x18) - *(float *)(reference_moby + 0x18) > 3.25f)
                 score += 15.0f;
             if (valid)
                 bonus = 5.0f;
@@ -323,7 +326,7 @@ select_class5_target_or_hero(char *self, float *position, float *angles, int unu
     }
     if (best == 0) {
         char *playerPosition = D_0013F3D0;
-        if (vector_distance(self + 0x10, playerPosition) > 3.2f)
+        if (vector_distance(reference_moby + 0x10, playerPosition) > 3.2f)
             best = *(char **)(playerPosition + 0x2000);
     }
     return best;
@@ -344,7 +347,7 @@ f32 select_moby_heading_by_collision_probes(
 f32 select_moby_heading_by_collision_probes(Mob *moby,
                                             VU  *probe_origin,
                                             f32 *target_position,
-                                            f32 *out,
+                                            f32 *probe_distance_score_out,
                                             f32  probe_heading,
                                             f32  arc,
                                             f32  step,
@@ -374,7 +377,7 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
     bestDist = 0.0f;
     x = moby->p78;
     bestDiff = 6.2831855f;
-    *out = bestDist;
+    *probe_distance_score_out = bestDist;
     if (target_position != 0) {
         preferred_heading =
             FUN_001f9e90_c(target_position[0] - moby->f10, target_position[1] - moby->f14);
@@ -397,19 +400,19 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
         if (probe_moby_landing_height(&probe_end, moby) != 0.0f) {
             best = preferred_heading;
             bestDist = horizontal_probe_distance;
-            *out = horizontal_probe_distance;
+            *probe_distance_score_out = horizontal_probe_distance;
         }
     } else {
         if (coll_hit_moby == x->p38 || (coll_hit_moby != 0 && coll_hit_moby->pclass != 0 &&
                                         coll_hit_moby->pclass->type == 5)) {
-            *out = 100.0f;
+            *probe_distance_score_out = 100.0f;
             return preferred_heading;
         }
         best = preferred_heading;
         bestDist = fast_vec_dist(&probe_start, &D_L00_00173E60);
         bestDiff = 0.0f;
-        if (*out < bestDist) {
-            *out = bestDist;
+        if (*probe_distance_score_out < bestDist) {
+            *probe_distance_score_out = bestDist;
         }
     }
 
@@ -429,8 +432,8 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
                     bestDiff = sweep_heading_error;
                     best = arc;
                     bestDist = horizontal_probe_distance;
-                    if (*out < horizontal_probe_distance) {
-                        *out = horizontal_probe_distance;
+                    if (*probe_distance_score_out < horizontal_probe_distance) {
+                        *probe_distance_score_out = horizontal_probe_distance;
                     }
                 }
             }
@@ -438,7 +441,7 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
             if ((*(XD *)D_L00_00173E40).unk18 == x->p38 ||
                 ((*(XD *)D_L00_00173E40).unk18 != 0 && (*(XD *)D_L00_00173E40).unk18->p24 != 0 &&
                  (*(XD *)D_L00_00173E40).unk18->p24->h46 == 5)) {
-                *out = 100.0f;
+                *probe_distance_score_out = 100.0f;
                 return arc;
             }
             hit_distance = fast_vec_dist(&probe_start, &D_L00_00173E60);
@@ -446,8 +449,8 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
                 best = arc;
                 bestDist = hit_distance;
                 bestDiff = fast_difference_between_rotations(best, preferred_heading);
-                if (*out < hit_distance) {
-                    *out = hit_distance;
+                if (*probe_distance_score_out < hit_distance) {
+                    *probe_distance_score_out = hit_distance;
                 }
             } else if (hit_distance == bestDist) {
                 sweep_heading_error = fast_difference_between_rotations(arc, preferred_heading);
@@ -455,8 +458,8 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
                     bestDiff = sweep_heading_error;
                     best = arc;
                     bestDist = hit_distance;
-                    if (*out < hit_distance) {
-                        *out = hit_distance;
+                    if (*probe_distance_score_out < hit_distance) {
+                        *probe_distance_score_out = hit_distance;
                     }
                 }
             }
@@ -528,26 +531,38 @@ void initialize_moby_hop_trajectory(unsigned char *m,
                                     unsigned char *o,
                                     u128          *src) __asm__("FUN_L00_002bf8b0");
 
-void initialize_moby_hop_trajectory(unsigned char *m, unsigned char *o, u128 *src) {
-    float s, t, r, lim;
+void initialize_moby_hop_trajectory(unsigned char *hopping_moby,
+                                    unsigned char *hop_trajectory,
+
+                                    u128 *landing_position) {
+    float squared_horizontal_distance, uncapped_horizontal_speed, uncapped_vertical_launch_speed,
+        vertical_launch_speed_limit;
 #define F2BF(p, x) (*(float *)((p) + (x)))
-    *(int *)(o + 0x30) = 0;
-    qcopy(o, src);
-    s = vector_distance(m + 0x10, o);
-    s = s * s;
-    t = F2BF(o, 0x1C) * 35.0f * F2BF(o, 0x20) / (FUN_001f99c0(F2BF(o, 8) - F2BF(m, 0x18)) + 1.0f) *
-        (s + 0.25f);
-    F2BF(o, 0x14) = t;
-    if (F2BF(o, 0x20) < t)
-        F2BF(o, 0x14) = F2BF(o, 0x20);
-    F2BF(o, 0x18) = fast_arc_tan(F2BF(o, 0) - F2BF(m, 0x10), F2BF(o, 4) - F2BF(m, 0x14));
-    r = FUN_L00_0025abf0(m + 0x10, o, 0, F2BF(o, 0x14), -F2BF(o, 0x1C));
-    lim = frame_time * 7.0f;
-    F2BF(o, 0x10) = r;
-    if (lim < r)
-        F2BF(o, 0x10) = lim;
-    o[0x2F] = 0;
-    F2BF(o, 0x14) = F2BF(o, 0x14) * (r / F2BF(o, 0x10));
+    *(int *)(hop_trajectory + 0x30) = 0;
+    qcopy(hop_trajectory, landing_position);
+    squared_horizontal_distance = vector_distance(hopping_moby + 0x10, hop_trajectory);
+    squared_horizontal_distance = squared_horizontal_distance * squared_horizontal_distance;
+    uncapped_horizontal_speed =
+        F2BF(hop_trajectory, 0x1C) * 35.0f * F2BF(hop_trajectory, 0x20) /
+        (FUN_001f99c0(F2BF(hop_trajectory, 8) - F2BF(hopping_moby, 0x18)) + 1.0f) *
+        (squared_horizontal_distance + 0.25f);
+    F2BF(hop_trajectory, 0x14) = uncapped_horizontal_speed;
+    if (F2BF(hop_trajectory, 0x20) < uncapped_horizontal_speed)
+        F2BF(hop_trajectory, 0x14) = F2BF(hop_trajectory, 0x20);
+    F2BF(hop_trajectory, 0x18) = fast_arc_tan(F2BF(hop_trajectory, 0) - F2BF(hopping_moby, 0x10),
+                                              F2BF(hop_trajectory, 4) - F2BF(hopping_moby, 0x14));
+    uncapped_vertical_launch_speed = FUN_L00_0025abf0(hopping_moby + 0x10,
+                                                      hop_trajectory,
+                                                      0,
+                                                      F2BF(hop_trajectory, 0x14),
+                                                      -F2BF(hop_trajectory, 0x1C));
+    vertical_launch_speed_limit = frame_time * 7.0f;
+    F2BF(hop_trajectory, 0x10) = uncapped_vertical_launch_speed;
+    if (vertical_launch_speed_limit < uncapped_vertical_launch_speed)
+        F2BF(hop_trajectory, 0x10) = vertical_launch_speed_limit;
+    hop_trajectory[0x2F] = 0;
+    F2BF(hop_trajectory, 0x14) =
+        F2BF(hop_trajectory, 0x14) * (uncapped_vertical_launch_speed / F2BF(hop_trajectory, 0x10));
 }
 
 /* Tries a hop of the moby toward q: probes the ground at the landing point and the path to it, and sets the jump

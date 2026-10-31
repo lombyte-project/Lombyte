@@ -43,7 +43,7 @@ float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") = 6.0f;
 void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
 
 void water_reservoir_update(struct Moby *moby) {
-    float *data = (float *)moby->pvars;
+    float *reservoir_state = (float *)moby->pvars;
     float  pos[4], offset0[4], offset1[4], pos_offset_delta[4], offset_pair_delta[4];
     float  fraction, frame_scale;
     int    scaled;
@@ -56,29 +56,29 @@ void water_reservoir_update(struct Moby *moby) {
     }
     moby->state = 1;
     moby->command = 2;
-    data[0] = random_angle_radians();
-    data[2] = 5.0f;
+    reservoir_state[0] = random_angle_radians();
+    reservoir_state[2] = 5.0f;
     goto frame_active;
 active:
     if (moby->command & 8) {
         moby->command = 1;
-        *(int *)&data[1] = scale_game_frames(water_reservoir_transition_frames);
+        *(int *)&reservoir_state[1] = scale_game_frames(water_reservoir_transition_frames);
     } else if (moby->command & 4) {
         moby->command = 2;
-        *(int *)&data[1] = scale_game_frames(water_reservoir_transition_frames);
+        *(int *)&reservoir_state[1] = scale_game_frames(water_reservoir_transition_frames);
     }
-    data[0] = fast_add_rotations(data[0],
-                                 water_reservoir_angle_rate_degrees_gp * 0.017453292f * frame_time);
+    reservoir_state[0] = fast_add_rotations(
+        reservoir_state[0], water_reservoir_angle_rate_degrees_gp * 0.017453292f * frame_time);
 frame_active:
     frame_scale = D_L12_0015F3FC;
 update:
     if (frame_scale == 0.0f) {
-        if (fast_dec_timer((int *)&data[1]) == 0) {
+        if (fast_dec_timer((int *)&reservoir_state[1]) == 0) {
             if (moby->command & 1) {
-                fraction = 1.0f - convert_integer_to_float(*(int *)&data[1]) /
+                fraction = 1.0f - convert_integer_to_float(*(int *)&reservoir_state[1]) /
                                       convert_integer_to_float(water_reservoir_transition_frames);
             } else {
-                fraction = convert_integer_to_float(*(int *)&data[1]) /
+                fraction = convert_integer_to_float(*(int *)&reservoir_state[1]) /
                            convert_integer_to_float(water_reservoir_transition_frames);
             }
             if (random_float_between(0.0f, 1.0f) < fraction) {
@@ -119,10 +119,12 @@ update:
                             D_L12_001619F8);
             }
         }
-        if ((moby->command & 1) && *(int *)&data[1] == 0) {
-            approach_value(-1.0f, water_reservoir_height_approach_rate_gp * frame_time, &data[2]);
+        if ((moby->command & 1) && *(int *)&reservoir_state[1] == 0) {
+            approach_value(
+                -1.0f, water_reservoir_height_approach_rate_gp * frame_time, &reservoir_state[2]);
         } else if (moby->command & 2) {
-            approach_value(3.0f, water_reservoir_height_approach_rate_gp * frame_time, &data[2]);
+            approach_value(
+                3.0f, water_reservoir_height_approach_rate_gp * frame_time, &reservoir_state[2]);
         }
     }
     add_draw_callback(draw_water_reservoir, moby);
@@ -154,7 +156,7 @@ extern short water_reservoir_segment_cosine_scale_gp __asm__("D_L12_00161A24") _
 extern void  draw_geometry_quad(void *, void *, int);
 
 void draw_water_reservoir(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *water_reservoir_vars = (char *)moby->pvars;
     Quad  quad;
     float rotation_matrix[12];
     float pos[4];
@@ -162,15 +164,15 @@ void draw_water_reservoir(struct Moby *moby) {
     int   i, col;
     copy_matrix_rotation(rotation_matrix, &moby->rot_row0);
     qcopy(pos, &moby->pos);
-    pos[2] = pos[2] + *(float *)(data + 8);
+    pos[2] = pos[2] + *(float *)(water_reservoir_vars + 8);
     pos[3] = 1.0f;
     quad.g[1] = get_effect_texture(0x10);
     quad.g[0] = 0;
     quad.g[2] = 0xFF9000000260UL;
     quad.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) | ((long)D_L12_00161A14 << 4) |
                 ((long)D_L12_00161A18 << 6) | (0x8000L << 24);
-    col =
-        fast_tween_color(D_L12_00161A1C, D_L12_00161A20, (fast_sin(*(float *)data) + 1.0f) * 0.5f);
+    col = fast_tween_color(
+        D_L12_00161A1C, D_L12_00161A20, (fast_sin(*(float *)water_reservoir_vars) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
         quad.uv[i * 2] = 0.5f;
         *(&quad.uv[i * 2] + 1) = 0.5f;

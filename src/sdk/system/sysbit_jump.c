@@ -17,16 +17,16 @@ extern void _sysbitFlush(SysbitState *ctx, s32 amount);
 void _sysbitJump(SysbitState *ctx, s32 bits) {
     s64 total;
     u32 offset;
-    u32 pointer;
+    u32 unwrapped_byte_pointer;
 
     ctx->bits = 0;
     ctx->cnt = 0;
     total = (ctx->total = (bits * 8) + ctx->total);
     offset = (u32)(total >> 3);
-    pointer = ctx->field8 + offset;
-    offset = pointer;
-    ctx->bit_pointer = pointer;
-    if (pointer >= ctx->limit) {
+    unwrapped_byte_pointer = ctx->field8 + offset;
+    offset = unwrapped_byte_pointer;
+    ctx->bit_pointer = unwrapped_byte_pointer;
+    if (unwrapped_byte_pointer >= ctx->limit) {
         ctx->bit_pointer = offset - ctx->wrap_base;
     }
     _sysbitFlush(ctx, 0);

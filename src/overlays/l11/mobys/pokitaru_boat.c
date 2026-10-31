@@ -330,7 +330,7 @@ struct DataA500 {
 
 void update_pokitaru_boat_joint_effects(struct Moby *moby) {
     struct DataA500 *moby_vars = (struct DataA500 *)moby->pvars;
-    float            base[4];
+    float            joint_world_position[4];
     float            pos[4];
     float            initial_velocity[4];
     float            speed;
@@ -360,12 +360,12 @@ void update_pokitaru_boat_joint_effects(struct Moby *moby) {
     if (!(moby->pos.z < 224.5f))
         return;
     for (j = 0; j < 4; j++) {
-        moby_point_position(moby, j, base);
+        moby_point_position(moby, j, joint_world_position);
         iterations_per_joint = moby->state == 1 ? 1 : 2;
         for (k = 0; k < iterations_per_joint; k++) {
-            pos[0] = base[0] + randf_sym(0.0f, 0.3f);
-            pos[1] = base[1] + randf_sym(0.0f, 0.3f);
-            pos[2] = base[2] + randf_sym(0.0f, 0.3f);
+            pos[0] = joint_world_position[0] + randf_sym(0.0f, 0.3f);
+            pos[1] = joint_world_position[1] + randf_sym(0.0f, 0.3f);
+            pos[2] = joint_world_position[2] + randf_sym(0.0f, 0.3f);
             heading = fast_add_rotations(moby->rot.z, randf_sym(0.0f, 0.122173049f) + 3.1415927f);
             speed = random_float_between(2.0f, 5.0f) * frame_time;
             if (moby->state == 1)

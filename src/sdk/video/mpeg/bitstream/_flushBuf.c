@@ -35,31 +35,31 @@ typedef struct FlushBufContext {
 extern s32 _dispatchMpegCbNodata();
 extern s64 _waitIpuIdle64();
 
-void _flushBuf(FlushBufContext *context, s32 bit_count) {
-    s32 value;
+void _flushBuf(FlushBufContext *decoder_state, s32 bit_count) {
+    s32 bits_to_advance;
     s32 counter;
     u32 command;
     s32 table_value;
     s32 index;
     s64 idle_result;
 
-    value = bit_count;
+    bits_to_advance = bit_count;
     counter = 0;
     if ((*(volatile u32 *)0x10002010 & 0x80004000) == 0x80000000) {
         do {
             if (counter++ >= 0x1389) {
-                _dispatchMpegCbNodata(context->unk858);
+                _dispatchMpegCbNodata(decoder_state->unk858);
                 counter = 0;
             }
         } while ((*(volatile u32 *)0x10002010 & 0x80004000) == 0x80000000);
     }
 
-    command = value | 0x40000000;
+    command = bits_to_advance | 0x40000000;
     *(volatile u32 *)0x10002000 = command;
     index = command >> 0x1C;
     table_value = IpuCommandTable[index];
-    context->unk818 = table_value;
-    idle_result = _waitIpuIdle64(context, &IpuCommandTable[index]);
-    context->unk838 = (s32)idle_result;
-    context->unk83C = 0x20;
+    decoder_state->unk818 = table_value;
+    idle_result = _waitIpuIdle64(decoder_state, &IpuCommandTable[index]);
+    decoder_state->unk838 = (s32)idle_result;
+    decoder_state->unk83C = 0x20;
 }

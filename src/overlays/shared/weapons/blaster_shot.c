@@ -122,17 +122,17 @@ char *spawn_homing_shot(char *owner,
 
 char *spawn_homing_shot(
 
-    char *owner, char *spawn_pos, char *target, float vx, float vy, float yaw, float pitch) {
+    char *firing_moby, char *spawn_pos, char *target, float vx, float vy, float yaw, float pitch) {
     float          start_position[4];
     float          probe[4];
     float          direction[4];
     float          scaled[4];
     float          spark[4];
     unsigned char *moby;
-    char          *vars;
+    char          *homing_shot_vars;
     char          *trail;
     unsigned char *variant;
-    int            result;
+    int            collision_hit_lifetime_min_and_alpha_scratch;
     int            timer;
     int            lifetime;
     int            i;
@@ -147,42 +147,44 @@ char *spawn_homing_shot(
     *(w128 *)start_position = *(w128 *)spawn_pos;
     moby = create_moby(0x131);
     if (moby != 0) {
-        vars = *(char **)(moby + 0x78);
-        *(char **)(vars + 0x20) = owner;
+        homing_shot_vars = *(char **)(moby + 0x78);
+        *(char **)(homing_shot_vars + 0x20) = firing_moby;
         moby[0x30] = 0x7F;
         *(short *)(moby + 0x32) = 0x7F;
         moby[0x31] = 1;
-        *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
+        *(long *)(moby + 0x38) = *(long *)(firing_moby + 0x38);
         *(float *)(moby + 0x40) = D_L00_00161890_gp;
         *(float *)(moby + 0x44) = fast_add_rotations(pitch, (&D_L00_00161890_gp)[1]);
         *(float *)(moby + 0x48) = yaw;
         qcopy(moby + 0x10, start);
         if (target != 0) {
             int bounds;
-            qcopy(vars, target + 0x10);
+            qcopy(homing_shot_vars, target + 0x10);
             bounds = (int)get_moby_target_info(target);
             if (bounds != 0) {
-                *(float *)(vars + 0x8) = *(float *)(vars + 0x8) + *(float *)(bounds + 0x10);
+                *(float *)(homing_shot_vars + 0x8) =
+                    *(float *)(homing_shot_vars + 0x8) + *(float *)(bounds + 0x10);
             } else {
-                *(float *)(vars + 0x8) = *(float *)(vars + 0x8) + 0.5f;
+                *(float *)(homing_shot_vars + 0x8) = *(float *)(homing_shot_vars + 0x8) + 0.5f;
             }
         } else {
-            clear_u64_value(vars);
+            clear_u64_value(homing_shot_vars);
         }
-        *(float *)(vars + 0x18) = vx;
-        *(float *)(vars + 0x1C) = vy;
-        *(int *)(vars + 0x10) = 0;
-        *(int *)(vars + 0x14) = 0;
+        *(float *)(homing_shot_vars + 0x18) = vx;
+        *(float *)(homing_shot_vars + 0x1C) = vy;
+        *(int *)(homing_shot_vars + 0x10) = 0;
+        *(int *)(homing_shot_vars + 0x14) = 0;
         timer = scale_game_frames(0x23);
         variant = item_text_variant;
         timer = timer + variant[0xF] * 10;
-        *(int *)(vars + 0x28) = 0;
-        *(short *)(vars + 0x24) = timer;
-        *(short *)(vars + 0x26) = timer;
-        *(w128 *)probe = *(w128 *)(owner + 0x10);
+        *(int *)(homing_shot_vars + 0x28) = 0;
+        *(short *)(homing_shot_vars + 0x24) = timer;
+        *(short *)(homing_shot_vars + 0x26) = timer;
+        *(w128 *)probe = *(w128 *)(firing_moby + 0x10);
         probe[2] = start[2];
-        result = collision_line(probe, start, 0, (int)owner, 0);
-        if (result != 0) {
+        collision_hit_lifetime_min_and_alpha_scratch =
+            collision_line(probe, start, 0, (int)firing_moby, 0);
+        if (collision_hit_lifetime_min_and_alpha_scratch != 0) {
             build_spherical_offset(
                 direction, D_0015ED6C * 40.0f, *(float *)(moby + 0x48), -*(float *)(moby + 0x44));
             qcopy(moby + 0x10, collision_hit_point);
@@ -201,9 +203,9 @@ char *spawn_homing_shot(
                 add_vector_xyz(spark, spark, start);
                 fast_vec_normalize(
                     spark, spark, random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
-                result = scale_game_frames(10);
+                collision_hit_lifetime_min_and_alpha_scratch = scale_game_frames(10);
                 timer = scale_game_frames(15);
-                lifetime = random_int_between(result, timer);
+                lifetime = random_int_between(collision_hit_lifetime_min_and_alpha_scratch, timer);
                 FUN_L00_0026dd20(moby + 0x10, (char *)spark, 0x7F2F4F6F, lifetime, 30000.0f);
             } while (sparks >= 0);
             variant = item_text_variant;
@@ -212,8 +214,8 @@ char *spawn_homing_shot(
                 mark_moby_for_removal(moby);
                 return 0;
             }
-            *(int *)(vars + 0x28) = *(int *)(vars + 0x28) + 1;
-            if (variant[0xF] + 5 < *(int *)(vars + 0x28)) {
+            *(int *)(homing_shot_vars + 0x28) = *(int *)(homing_shot_vars + 0x28) + 1;
+            if (variant[0xF] + 5 < *(int *)(homing_shot_vars + 0x28)) {
                 FUN_L00_002cbcc0_c(moby, 1);
                 mark_moby_for_removal(moby);
                 return 0;
@@ -224,8 +226,11 @@ char *spawn_homing_shot(
             *(float *)(moby + 0x44) = -fast_arc_tan(length, direction[2]);
             return moby;
         } else {
-            spawn_source_attached_fading_effect_particle(
-                moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, homing_shot_attached_particle_size);
+            spawn_source_attached_fading_effect_particle(moby,
+                                                         0x2F4F7F7F,
+                                                         *(short *)(homing_shot_vars + 0x24),
+                                                         -1,
+                                                         homing_shot_attached_particle_size);
             for (i = 0; i < 17; i++) {
                 trail =
                     (char *)spawn_random_size_rotated_particle(moby + 0x10, &zero_vector, 1, 0.0f);
@@ -238,11 +243,13 @@ char *spawn_homing_shot(
                     *(float *)(trail + 0xC) =
                         *(float *)(trail + 0xC) +
                         (homing_shot_trail_size_blend_target - *(float *)(trail + 0xC)) * blend;
-                    result = truncate_float_to_s32(blend * -64.0f + 128.0f);
-                    *(int *)(trail + 4) = (result << 24) | 0xFFFFFF;
-                    ((int *)(vars + 0x2C))[i] = (int)trail;
+                    collision_hit_lifetime_min_and_alpha_scratch =
+                        truncate_float_to_s32(blend * -64.0f + 128.0f);
+                    *(int *)(trail + 4) =
+                        (collision_hit_lifetime_min_and_alpha_scratch << 24) | 0xFFFFFF;
+                    ((int *)(homing_shot_vars + 0x2C))[i] = (int)trail;
                 } else {
-                    ((int *)(vars + 0x2C))[i] = 0;
+                    ((int *)(homing_shot_vars + 0x2C))[i] = 0;
                 }
             }
         }
@@ -263,7 +270,7 @@ void update_homing_shot(Moby *shot_moby) {
     Vec4A     vector_scratch;
     Vec4A     spark_and_pushout_scratch;
     Vec4A     spark_velocity;
-    ShotVars *vars;
+    ShotVars *shot_vars;
     float     yaw;
     float     pitch;
     float     speed;
@@ -272,42 +279,44 @@ void update_homing_shot(Moby *shot_moby) {
     int       j;
     int       left;
 
-    vars = *(ShotVars **)&shot_moby->pvars;
+    shot_vars = *(ShotVars **)&shot_moby->pvars;
     shot_moby->rot.y = fast_add_rotations(shot_moby->rot.y, -homing_shot_pitch_bias[0]);
-    if (fast_vec_length(vars) < 0.1f) {
-        if (vars->timer < scale_game_frames(0x23) - scale_game_frames(1) && vars->bounces == 0) {
-            yaw = vars->rest_yaw;
-            pitch = vars->rest_pitch;
+    if (fast_vec_length(shot_vars) < 0.1f) {
+        if (shot_vars->timer < scale_game_frames(0x23) - scale_game_frames(1) &&
+            shot_vars->bounces == 0) {
+            yaw = shot_vars->rest_yaw;
+            pitch = shot_vars->rest_pitch;
         } else {
             yaw = shot_moby->rot.z;
             pitch = shot_moby->rot.y;
         }
     } else {
-        yaw = fast_arc_tan(vars->target_x - shot_moby->pos.x, vars->target_y - shot_moby->pos.y);
-        pitch = -fast_arc_tan(vector_distance_xy((Vec4A *)&shot_moby->pos, vars),
-                              vars->target_z - shot_moby->pos.z);
+        yaw = fast_arc_tan(shot_vars->target_x - shot_moby->pos.x,
+                           shot_vars->target_y - shot_moby->pos.y);
+        pitch = -fast_arc_tan(vector_distance_xy((Vec4A *)&shot_moby->pos, shot_vars),
+                              shot_vars->target_z - shot_moby->pos.z);
     }
-    if (fast_vec_length(vars) < 0.1f) {
-        shot_moby->rot.z = spring_turn(&vars->yaw_rate,
+    if (fast_vec_length(shot_vars) < 0.1f) {
+        shot_moby->rot.z = spring_turn(&shot_vars->yaw_rate,
                                        shot_moby->rot.z,
                                        yaw,
                                        D_0015ED70_lui * 6.2831855f,
                                        D_0015ED70_lui * 3.1415927f,
                                        D_0015ED6C_lui * 6.2831855f);
-        shot_moby->rot.y = spring_turn(&vars->pitch_rate,
+        shot_moby->rot.y = spring_turn(&shot_vars->pitch_rate,
                                        shot_moby->rot.y,
                                        pitch,
                                        D_0015ED70_lui * 6.2831855f,
                                        D_0015ED70_lui * 3.1415927f,
                                        D_0015ED6C_lui * 6.2831855f);
     } else {
-        shot_moby->rot.z = spring_turn(&vars->yaw_rate,
+        shot_moby->rot.z = spring_turn(&shot_vars->yaw_rate,
                                        shot_moby->rot.z,
                                        yaw,
                                        D_0015ED70_lui * 6.2831855f,
                                        D_0015ED70_lui * 3.1415927f,
                                        D_0015ED6C_lui * 4.712389f);
-        shot_moby->rot.y = spring_turn(&vars->pitch_rate,
+        shot_moby->rot.y = spring_turn(&shot_vars->pitch_rate,
                                        shot_moby->rot.y,
                                        pitch,
                                        D_0015ED70_lui * 6.2831855f,
@@ -334,15 +343,15 @@ void update_homing_shot(Moby *shot_moby) {
     query.b19 = 1;
     query.dir.w = 5627.9248f;
     query.oclass = shot_moby->oclass;
-    if (fast_dec_timer_s16(&vars->timer) != 0) {
+    if (fast_dec_timer_s16(&shot_vars->timer) != 0) {
         FUN_L00_002cbcc0_2cb418(shot_moby, 0);
         mark_moby_for_removal(shot_moby);
         return;
     }
-    if (collide_line_2cb418(&start, (Vec4A *)&shot_moby->pos, 0, vars->ignore, &query) != 0) {
+    if (collide_line_2cb418(&start, (Vec4A *)&shot_moby->pos, 0, shot_vars->ignore, &query) != 0) {
         if (FUN_001f0b58_2cb418() == 0) {
-            if (vars->timer > scale_game_frames(3)) {
-                vars->timer = scale_game_frames(3);
+            if (shot_vars->timer > scale_game_frames(3)) {
+                shot_vars->timer = scale_game_frames(3);
             }
         } else {
             qcopy((Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60));
@@ -373,7 +382,7 @@ void update_homing_shot(Moby *shot_moby) {
                 mark_moby_for_removal(shot_moby);
                 return;
             }
-            vars->bounces++;
+            shot_vars->bounces++;
             switch (FUN_001f0b58_2cb418()) {
             case 0:
             case 1:
@@ -382,10 +391,10 @@ void update_homing_shot(Moby *shot_moby) {
             case 7:
             case 11:
             case 13:
-                vars->bounces = 1000;
+                shot_vars->bounces = 1000;
                 break;
             }
-            if (item_text_variant[15] + 5 < vars->bounces) {
+            if (item_text_variant[15] + 5 < shot_vars->bounces) {
                 FUN_L00_002cbcc0_2cb418(shot_moby, 1);
                 mark_moby_for_removal(shot_moby);
                 return;
@@ -393,8 +402,8 @@ void update_homing_shot(Moby *shot_moby) {
             reflect_vector(&vector_scratch, &step, ((char *)D_L00_00173E60) + 0x20);
             shot_moby->rot.z = fast_arc_tan(vector_scratch.x, vector_scratch.y);
             shot_moby->rot.y = -fast_arc_tan(vector_length_xy(&vector_scratch), vector_scratch.z);
-            vars->yaw_rate = 0.0f;
-            vars->pitch_rate = 0.0f;
+            shot_vars->yaw_rate = 0.0f;
+            shot_vars->pitch_rate = 0.0f;
             fast_vec_normalize(&spark_and_pushout_scratch, ((char *)D_L00_00173E60) + 0x20, 0.05f);
             add_vector_xyz_2cb418(
                 (Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60), &spark_and_pushout_scratch);
@@ -405,7 +414,7 @@ void update_homing_shot(Moby *shot_moby) {
         }
     }
     shot_moby->rot.y = fast_add_rotations(shot_moby->rot.y, D_L00_00161890[1]);
-    left = vars->life - vars->timer;
+    left = shot_vars->life - shot_vars->timer;
     if (left < scale_game_frames(13)) {
         speed = convert_integer_to_float(left);
         speed = speed / convert_integer_to_float(scale_game_frames(13));
@@ -416,11 +425,11 @@ void update_homing_shot(Moby *shot_moby) {
     fast_vec_sub(&step, &start, (Vec4A *)&shot_moby->pos);
     fast_vec_normalize(&step, &step, speed);
     qcopy(&vector_scratch, (Vec4A *)&shot_moby->pos);
-    if (vars->follower != 0) {
-        qcopy((Vec4A *)&vars->follower->pos, &vector_scratch);
+    if (shot_vars->follower != 0) {
+        qcopy((Vec4A *)&shot_vars->follower->pos, &vector_scratch);
     }
     for (j = 0; j < 16; j++) {
-        Moby *trail_moby = vars->trail[j];
+        Moby *trail_moby = shot_vars->trail[j];
         if (trail_moby != 0) {
             add_vector_xyz_2cb418((Vec4A *)&trail_moby->pos, &vector_scratch, &step);
             qcopy(&vector_scratch, (Vec4A *)&trail_moby->pos);

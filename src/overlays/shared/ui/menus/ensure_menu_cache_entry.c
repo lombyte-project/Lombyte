@@ -42,10 +42,10 @@ s32 ensure_menu_cache_entry(s32 key) {
     s32            i;
     s32            victim;
     s32            miss;
-    s32           *entry;
+    s32           *scan_entry_key;
     s32           *times;
-    MenuCacheQuad *base;
-    MenuCacheQuad *other;
+    MenuCacheQuad *slot_zero_entry;
+    MenuCacheQuad *selected_cache_entry;
     MenuCacheQuad  selected_entry_copy;
 
     if (!D_L00_001841F0_lui.enabled) {
@@ -56,17 +56,17 @@ s32 ensure_menu_cache_entry(s32 key) {
     i = 0;
     if (D_L00_001841F0_lui.entries[0].key != key) {
         times = &D_L00_001841F0_lui.entries[0].last_used;
-        entry = &D_L00_001841F0_lui.entries[0].key;
+        scan_entry_key = &D_L00_001841F0_lui.entries[0].key;
         /* Fakematch: the outer do-while (0) and the miss++/miss-- below give
          * retail's registers. */
         do {
             do {
-                if (entry[1] < times[victim * 4]) {
+                if (scan_entry_key[1] < times[victim * 4]) {
                     victim = i;
                 }
                 ++i;
-                entry += 4;
-            } while (i < 8 && *entry != key);
+                scan_entry_key += 4;
+            } while (i < 8 && *scan_entry_key != key);
         } while (0);
     }
     if (i == 8) {
@@ -79,14 +79,14 @@ s32 ensure_menu_cache_entry(s32 key) {
         miss = 1;
     }
     if (i != 0) {
-        base = (MenuCacheQuad *)&D_L00_001841F0_lui.entries[0];
-        other = base + i;
-        selected_entry_copy = *other;
+        slot_zero_entry = (MenuCacheQuad *)&D_L00_001841F0_lui.entries[0];
+        selected_cache_entry = slot_zero_entry + i;
+        selected_entry_copy = *selected_cache_entry;
         /* Fakematch: see the loop above. */
         miss++;
         miss--;
-        *other = *base;
-        *base = selected_entry_copy;
+        *selected_cache_entry = *slot_zero_entry;
+        *slot_zero_entry = selected_entry_copy;
     }
     D_L00_001841F0_lui.entries[0].last_used = D_L00_0015F3F8;
     return miss;

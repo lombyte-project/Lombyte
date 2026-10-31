@@ -25,7 +25,7 @@ extern s32                     sceSifCallRpc();
 extern s32                     sceSifWriteBackDCache();
 
 s32 sceMcGetInfo(s32 port, s32 slot, s32 type, s32 free_blocks, s32 format) {
-    s32 result;
+    s32 rpc_dispatch_result;
 
     if (mc_rpc_client.serve == 0) {
         return -0x64;
@@ -55,19 +55,19 @@ s32 sceMcGetInfo(s32 port, s32 slot, s32 type, s32 free_blocks, s32 format) {
     D_00159A2C[0] = free_blocks;
     D_00159A30[0] = (u32)format;
     sceSifWriteBackDCache(D_00159F00, 0xC0);
-    result = sceSifCallRpc(&mc_rpc_client,
-                           MC_FUNC_GET_INFO,
-                           1,
-                           &D_00159A80,
-                           0x30,
-                           mc_rpc_result,
-                           4,
-                           D_00123D10,
-                           D_00159F00);
-    if (result == 0) {
+    rpc_dispatch_result = sceSifCallRpc(&mc_rpc_client,
+                                        MC_FUNC_GET_INFO,
+                                        1,
+                                        &D_00159A80,
+                                        0x30,
+                                        mc_rpc_result,
+                                        4,
+                                        D_00123D10,
+                                        D_00159F00);
+    if (rpc_dispatch_result == 0) {
         mc_current_func = MC_FUNC_GET_INFO;
     } else {
         SignalSema(mc_sema);
     }
-    return result;
+    return rpc_dispatch_result;
 }

@@ -124,15 +124,15 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 int sample_random_transformed_point(int transform_index, float *out) __asm__("FUN_L03_002beba0");
 
-int sample_random_transformed_point(int transform_index, float *out) {
+int sample_random_transformed_point(int transform_index, float *sampled_point) {
     char *selected_transform;
     if (transform_index != -1) {
         selected_transform = (char *)l03_cuboids + transform_index * 128;
-        out[0] = random_float_between(-1.0f, 1.0f);
-        out[1] = random_float_between(-1.0f, 1.0f);
-        out[2] = random_float_between(-1.0f, 1.0f);
-        transform_vector_by_basis(out, out, selected_transform);
-        fast_vec_add(out, out, selected_transform + 0x30);
+        sampled_point[0] = random_float_between(-1.0f, 1.0f);
+        sampled_point[1] = random_float_between(-1.0f, 1.0f);
+        sampled_point[2] = random_float_between(-1.0f, 1.0f);
+        transform_vector_by_basis(sampled_point, sampled_point, selected_transform);
+        fast_vec_add(sampled_point, sampled_point, selected_transform + 0x30);
         return 0;
     }
     return 1;
@@ -553,13 +553,13 @@ void bomb_spawner_update(struct Moby *moby) {
 
 char *spawn_class_221_moby(
 
-    char *owner, float *pos, float *launch_velocity, short ang, int spawn_options) {
+    char *spawning_moby, float *pos, float *launch_velocity, short ang, int spawn_options) {
     char *spawned_moby;
     char *moby_pvars;
     spawned_moby = create_moby(0x221);
     if (spawned_moby != 0) {
         moby_pvars = ((char *)MOBY(spawned_moby)->pvars);
-        *(char **)(moby_pvars + 0x10) = owner;
+        *(char **)(moby_pvars + 0x10) = spawning_moby;
         qcopy(spawned_moby + 0x10, pos);
         qcopy(moby_pvars, launch_velocity);
         MOBY(spawned_moby)->rot.x = random_float_between(-3.1415927f, 3.1415927f);

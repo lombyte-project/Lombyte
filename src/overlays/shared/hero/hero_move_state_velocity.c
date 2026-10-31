@@ -225,7 +225,7 @@ char *find_best_hero_heading_target(float, float, float, float) __asm__("FUN_L00
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void  update_hero_target_heading(float a, float b, float c) __asm__("FUN_L00_00214ed8");
 
-void update_hero_target_heading(float a, float b, float c) {
+void update_hero_target_heading(float range_limit, float b, float elevation_angle_limit) {
     struct Hero *g = &hero;
     float        r;
     char        *heading_target;
@@ -238,7 +238,7 @@ void update_hero_target_heading(float a, float b, float c) {
         g->heading_locked = 1;
         g->melee_target = 0;
     }
-    heading_target = find_best_hero_heading_target(a, r, b, c);
+    heading_target = find_best_hero_heading_target(range_limit, r, b, elevation_angle_limit);
     if (heading_target != 0 && (g->melee_target == 0 || g->heading_locked != 0)) {
         g->attack_target_yaw = fast_arc_tan(*(float *)(heading_target + 0x10) - g->motion.pos.f[0],
                                             *(float *)(heading_target + 0x14) - g->motion.pos.f[1]);
@@ -450,7 +450,7 @@ void                    transform_vector(void *, void *, void *) __asm__("FUN_00
 float                   square_root(float) __asm__("FUN_001f9988");
 void compute_rotated_vector_angles(Vec4 *input_vector, float *out) __asm__("FUN_L00_00216078");
 
-void compute_rotated_vector_angles(Vec4 *input_vector, float *out) {
+void compute_rotated_vector_angles(Vec4 *input_vector, float *output_angles) {
     Vec4  rotation_matrix[4];
     Vec4  transposed_rotation_matrix[4];
     Vec4  transformed_vector;
@@ -459,10 +459,10 @@ void compute_rotated_vector_angles(Vec4 *input_vector, float *out) {
     euler_rotation_matrix(rotation_matrix, D_001413D0 + 0x40);
     transpose_rotation_matrix(transposed_rotation_matrix, rotation_matrix);
     transform_vector(tp, tp, transposed_rotation_matrix);
-    out[0] = fast_arc_tan(square_root(transformed_vector.f[0] * transformed_vector.f[0] +
-                                      transformed_vector.f[2] * transformed_vector.f[2]),
-                          transformed_vector.f[1]);
-    out[1] = -fast_arc_tan(transformed_vector.f[2], transformed_vector.f[0]);
+    output_angles[0] = fast_arc_tan(square_root(transformed_vector.f[0] * transformed_vector.f[0] +
+                                                transformed_vector.f[2] * transformed_vector.f[2]),
+                                    transformed_vector.f[1]);
+    output_angles[1] = -fast_arc_tan(transformed_vector.f[2], transformed_vector.f[0]);
 }
 
 typedef struct {
@@ -941,11 +941,11 @@ void release_voice_slot_cf(int voice_slot_index, int a, int b) {
 void help_queue_add(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 
 void help_queue_add(s32 voice_entry_index, s32 voice_delay_timer, s32 voice_allocation_argument) {
-    struct Hero *base;
+    struct Hero *hero_state;
     s16         *current_slot;
     s32          slots_examined = 0;
-    base = &hero;
-    current_slot = (s16 *)(&base->unk21D8[0]);
+    hero_state = &hero;
+    current_slot = (s16 *)(&hero_state->unk21D8[0]);
     do {
         slots_examined = slots_examined + 1;
         if (current_slot[0] == 0) {
@@ -1173,7 +1173,7 @@ void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
 
 void spawn_hero_radial_particle_burst(void) {
     V_217450 randomized_position[1];
-    V_217450 out;
+    V_217450 particle_initial_vector;
     int      scaled_frame_count;
     int      i;
     char    *position_source;
@@ -1198,11 +1198,12 @@ void spawn_hero_radial_particle_burst(void) {
         azimuth_angle = random_angle_radians();
         elevation_angle = random_float_between(0.34906584f, 1.3962634f);
         r = random_float_between(0.05f, *(float *)(g + 0x234) + 0.2f);
-        build_spherical_offset(&out, vector_magnitude, azimuth_angle, elevation_angle);
+        build_spherical_offset(
+            &particle_initial_vector, vector_magnitude, azimuth_angle, elevation_angle);
         randomized_position[0].f[0] += FUN_001f9dc8_217450(azimuth_angle) * r;
         randomized_position[0].f[1] += FUN_001f9de0_217450(azimuth_angle) * r;
         spawn_effect(randomized_position,
-                     &out,
+                     &particle_initial_vector,
                      0x7000C0F0,
                      0x70F0,
                      scaled_frame_count,
@@ -1251,7 +1252,7 @@ void launch_hero_wrench(void) {
     f32          cam_mat[12];
     f32          out_mat[16];
     struct Moby *target;
-    struct Moby *item;
+    struct Moby *equipped_wrench_moby;
     ThrowPvars  *tpv;
     ThrowPvars  *launched_item_vars;
     s32          aimed;
@@ -1278,16 +1279,16 @@ void launch_hero_wrench(void) {
             hero.aim_pitch = fast_add_rotations(-l00_camera.pitch, 0.12217305f);
         }
     }
-    item = hero.items[0].moby;
-    if (!is_wrench_moby(item)) {
+    equipped_wrench_moby = hero.items[0].moby;
+    if (!is_wrench_moby(equipped_wrench_moby)) {
         return;
     }
     hero.items[0].thrown = 1;
     if (aimed) {
         allocate_hero_voice_for_entry(0x1B, 0);
     }
-    item->state = 10;
-    launched_item_vars = (ThrowPvars *)item->pvars;
+    equipped_wrench_moby->state = 10;
+    launched_item_vars = (ThrowPvars *)equipped_wrench_moby->pvars;
     if (hero.wall_probe_distance < 1.2f && 0.6632251f < hero.wall_normal_pitch &&
         !hero.wall_probe_moby_in_class_range) {
         launched_item_vars->unk76 = 1;
@@ -1310,13 +1311,13 @@ void launch_hero_wrench(void) {
         multiply_matrix3x3(item_rotation_matrix, &hero.moby->rot_row0, item_rotation_matrix);
     }
     copy_matrix_rotation(out_mat, item_rotation_matrix);
-    matrix_to_euler(out_mat, &item->rot);
+    matrix_to_euler(out_mat, &equipped_wrench_moby->rot);
     launched_item_vars->unk64 = 0;
     launched_item_vars->unk60 = frame_time * 23.0f;
-    initialize_moby_transform_history(item, hero.unk17B0);
+    initialize_moby_transform_history(equipped_wrench_moby, hero.unk17B0);
     create_moby_transform_history_entry(hero.unk17B0, 0x30, 3);
     create_moby_transform_history_entry(hero.unk17B0, 0x17, 5);
-    blend_moby_animation(item, 6, 0, scale_game_frames(5));
+    blend_moby_animation(equipped_wrench_moby, 6, 0, scale_game_frames(5));
 }
 
 f32 D_L01_0017AC14[1] __attribute__((section(".data"))) = {0};

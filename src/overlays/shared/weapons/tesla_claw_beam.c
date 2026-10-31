@@ -926,8 +926,8 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
     Vec4          differences[5];
     WalloperBeam *beam_state = ((WalloperBeam *)beam_owner_moby->pvars);
     int           i;
-    struct Moby  *best = 0, *second = 0, *candidate, **list;
-    char         *data;
+    struct Moby  *best = 0, *secondary_beam_target_candidate = 0, *candidate, **list;
+    char         *beam_target_aim_metadata;
     float         best_score = 0.0f, second_score = 0.0f;
     int           enabled = (u8)D_0013E533[0];
     float         spacing = D_L00_00161594 / 20.0f;
@@ -1000,12 +1000,12 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
                         (D_L00_00161594 - distance_w16) / D_L00_00161594;
                 if (best_score < score) {
                     second_score = best_score;
-                    second = best;
+                    secondary_beam_target_candidate = best;
                     best_score = score;
                     best = candidate;
                 } else if (second_score < score) {
                     second_score = score;
-                    second = candidate;
+                    secondary_beam_target_candidate = candidate;
                 }
             next_candidate:;
             }
@@ -1013,35 +1013,35 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
     }
     if (best) {
         if (beam_state->target)
-            second = best;
+            secondary_beam_target_candidate = best;
         else {
             beam_state->target = best;
             beam_state->target_timer = 0;
             FUN_0022da68(1, 0, beam_owner_moby);
         }
     }
-    if (second && enabled) {
+    if (secondary_beam_target_candidate && enabled) {
         distance_w17 = fast_vec_dist(beam_state, &best->pos);
         if (distance_w17 < D_L00_00161594) {
-            angle = fast_vec_dist(&best->pos, &second->pos);
+            angle = fast_vec_dist(&best->pos, &secondary_beam_target_candidate->pos);
             if (distance_w17 + angle < D_L00_00161594) {
-                beam_state->second_target = second;
+                beam_state->second_target = secondary_beam_target_candidate;
                 beam_state->second_timer = 0;
             }
         }
     }
     primary_distance = 0.0f;
     if (beam_state->target) {
-        data = (char *)get_moby_target_info(beam_state->target);
+        beam_target_aim_metadata = (char *)get_moby_target_info(beam_state->target);
         qcopy(&target0, &beam_state->target->pos);
-        target0.f[2] += *(float *)(data + 0x10);
+        target0.f[2] += *(float *)(beam_target_aim_metadata + 0x10);
         primary_distance = fast_vec_dist(beam_state, &target0);
         spacing = primary_distance * 0.05f;
     }
     if (beam_state->second_target) {
-        data = (char *)get_moby_target_info(beam_state->second_target);
+        beam_target_aim_metadata = (char *)get_moby_target_info(beam_state->second_target);
         qcopy(&target1, &beam_state->second_target->pos);
-        target1.f[2] += *(float *)(data + 0x10);
+        target1.f[2] += *(float *)(beam_target_aim_metadata + 0x10);
         spacing = (fast_vec_dist(&target0, &target1) + primary_distance) * 0.05f;
     }
     if (enabled)

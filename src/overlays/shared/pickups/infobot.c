@@ -661,7 +661,7 @@ void initialize_moby_particle_effect(O002d6bf0 *moby) {
 void update_infobot_particle_effect(char *moby) __asm__("FUN_L00_002d6cd0");
 
 void update_infobot_particle_effect(char *moby) {
-    P_2d6cd0 *vars = ((P_2d6cd0 *)MOBY(moby)->pvars);
+    P_2d6cd0 *infobot_particle_state = ((P_2d6cd0 *)MOBY(moby)->pvars);
     union {
         OvlQuad q;
         float   f[4];
@@ -683,23 +683,30 @@ void update_infobot_particle_effect(char *moby) {
     v.f[2] -= 0.333000004f;
     for (i = 0; i < 4; i++) {
         {
-            float unwrapped_particle_byte_value = vars->a[i] + vars->b[i];
-            vars->a[i] = unwrapped_particle_byte_value;
+            float unwrapped_particle_byte_value =
+                infobot_particle_state->a[i] + infobot_particle_state->b[i];
+            infobot_particle_state->a[i] = unwrapped_particle_byte_value;
             if (255.0f <= unwrapped_particle_byte_value) {
-                vars->a[i] = unwrapped_particle_byte_value - 255.0f;
+                infobot_particle_state->a[i] = unwrapped_particle_byte_value - 255.0f;
             } else if (unwrapped_particle_byte_value <= 0.0f) {
-                vars->a[i] = unwrapped_particle_byte_value + 255.0f;
+                infobot_particle_state->a[i] = unwrapped_particle_byte_value + 255.0f;
             }
         }
-        if (fast_dec_timer(&vars->c[i])) {
-            vars->c[i] = scale_game_frames(0xFF);
+        if (fast_dec_timer(&infobot_particle_state->c[i])) {
+            infobot_particle_state->c[i] = scale_game_frames(0xFF);
         }
-        f = convert_integer_to_float(scale_game_frames(0xFF) - vars->c[i]);
+        f = convert_integer_to_float(scale_game_frames(0xFF) - infobot_particle_state->c[i]);
         f = f / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - f));
         if (D_15F5C4_2d6cd0 != 2) {
-            FUN_L00_00272f68(
-                d, col, truncate_float_to_s32(vars->a[i]) & 0xFF, 0x35, 1, 2, 0, vars->d[i]);
+            FUN_L00_00272f68(d,
+                             col,
+                             truncate_float_to_s32(infobot_particle_state->a[i]) & 0xFF,
+                             0x35,
+                             1,
+                             2,
+                             0,
+                             infobot_particle_state->d[i]);
         }
         fast_vec_add(d, d, particle_position_step);
     }

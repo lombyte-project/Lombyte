@@ -16,7 +16,7 @@ s32 update_menu_option_list(struct MenuScreen *m) __asm__("FUN_00220e28");
 
 s32 update_menu_option_list(struct MenuScreen *menu_screen) {
     s32 active;
-    s32 old;
+    s32 previous_selection;
     s32 remaining_fade_frames;
     s32 capped_fade_frames;
 
@@ -42,9 +42,9 @@ s32 update_menu_option_list(struct MenuScreen *menu_screen) {
             return -1;
         }
     }
-    old = menu_screen->data.options.selection;
-    if ((controller_state.pressed_unmasked & PAD_UP) && old != 0) {
-        menu_screen->data.options.selection = old - 1;
+    previous_selection = menu_screen->data.options.selection;
+    if ((controller_state.pressed_unmasked & PAD_UP) && previous_selection != 0) {
+        menu_screen->data.options.selection = previous_selection - 1;
     }
     if ((controller_state.pressed_unmasked & PAD_DOWN) &&
         menu_screen->data.options.list[menu_screen->data.options.selection + 1].unk0 != 0) {
@@ -65,7 +65,7 @@ s32 update_menu_option_list(struct MenuScreen *menu_screen) {
                 *menu_screen->data.options.list[menu_screen->data.options.selection].flag == 0;
         }
     }
-    if (menu_screen->data.options.selection != old) {
+    if (menu_screen->data.options.selection != previous_selection) {
         allocate_voice_for_target_entry(1, 0x11, menu_screen->moby);
     }
     return 0;

@@ -44,7 +44,7 @@ void smooth_and_clamp_value_pair(float *out,
                                  float *smoothed_values,
                                  float  step) __asm__("FUN_L05_00237488");
 
-void smooth_and_clamp_value_pair(float *out, float *smoothed_values, float step) {
+void smooth_and_clamp_value_pair(float *clamped_values, float *smoothed_values, float step) {
     char *target_values_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     float target_values[2];
     target_values[0] = -*(float *)(target_values_base + 0x1D20);
@@ -54,13 +54,13 @@ void smooth_and_clamp_value_pair(float *out, float *smoothed_values, float step)
         smoothed_values[2] = 1.0f;
     if (smoothed_values[2] < -1.0f)
         smoothed_values[2] = -1.0f;
-    out[0] = smoothed_values[2];
+    clamped_values[0] = smoothed_values[2];
     approach_value(smoothed_values + 1, target_values[1], step);
     if (smoothed_values[1] > 1.0f)
         smoothed_values[1] = 1.0f;
     if (smoothed_values[1] < -1.0f)
         smoothed_values[1] = -1.0f;
-    out[1] = smoothed_values[1];
+    clamped_values[1] = smoothed_values[1];
 }
 
 #include "sda.h"
@@ -68,20 +68,20 @@ void smooth_and_clamp_value_pair(float *out, float *smoothed_values, float step)
 
 int hero_anim_tilt_lookup(int id, float *out) __asm__("FUN_L05_0023b378");
 
-int hero_anim_tilt_lookup(int id, float *out) {
-    *out = 0.0f;
+int hero_anim_tilt_lookup(int id, float *out_tilt_radians) {
+    *out_tilt_radians = 0.0f;
     if (hero.state.control_mode == 0x16 && hero.race_ammo &&
         (unsigned)(*(unsigned char *)(((char *)hero.moby) + 0x53) - 0x69) < 4)
         return 1;
     switch (id) {
     case 0x37:
-        *out = -0.95993108f; /* -55 degrees */
+        *out_tilt_radians = -0.95993108f; /* -55 degrees */
         return 1;
     case 0x1C:
     case 0x1D:
     case 0x1F:
         if (25.0f < hero.anim_frame)
-            *out = -1.30899692f; /* -75 degrees */
+            *out_tilt_radians = -1.30899692f; /* -75 degrees */
         return 1;
     case 0x31:
     case 0x32:
@@ -1236,8 +1236,8 @@ void process_hero_race_object_interactions(void) __asm__("FUN_L05_00253b48");
 void process_hero_race_object_interactions(void) {
     u8 *state;
     u8 *moby;
-    u8 *first;
-    u8 *second;
+    u8 *boost_trigger_moby;
+    u8 *ground_boost_trigger_moby;
     u8 *third;
     f32 delta[4];
     f32 matrix[16];
@@ -1248,25 +1248,25 @@ void process_hero_race_object_interactions(void) {
         return;
     state = *(u8 **)(hero.hoverboard_moby + 0x78);
     if (*(s32 *)(state + 0x44) != -1) {
-        get_first_moby_in_group((void **)&first, *(s32 *)(state + 0x44), 0, 0);
-        if (first != 0) {
+        get_first_moby_in_group((void **)&boost_trigger_moby, *(s32 *)(state + 0x44), 0, 0);
+        if (boost_trigger_moby != 0) {
             do {
-                if (*(s16 *)(first + 0xA6) == 0x473 &&
-                    fast_subtract_rotations_cf(first + 0xBC) != 0) {
-                    fast_vec_sub(delta, first + 0x10, &hero.motion.body_center);
+                if (*(s16 *)(boost_trigger_moby + 0xA6) == 0x473 &&
+                    fast_subtract_rotations_cf(boost_trigger_moby + 0xBC) != 0) {
+                    fast_vec_sub(delta, boost_trigger_moby + 0x10, &hero.motion.body_center);
                     set_identity_matrix(matrix);
-                    transpose_rotation_matrix(matrix, first + 0xC0);
+                    transpose_rotation_matrix(matrix, boost_trigger_moby + 0xC0);
                     transform_vector(delta, delta, matrix);
                     if (absolute_float(delta[0]) < 0.5f && absolute_float(delta[1]) < 2.9f &&
                         absolute_float(delta[2]) < 2.9f) {
-                        hero.boost_pad_timer += **(s32 **)(first + 0x78);
-                        first[0xBC] = scale_game_frames(0x3C);
+                        hero.boost_pad_timer += **(s32 **)(boost_trigger_moby + 0x78);
+                        boost_trigger_moby[0xBC] = scale_game_frames(0x3C);
                         if (hero.hoverboard_moby != 0)
                             allocate_voice_for_target_entry(1, 0, hero.hoverboard_moby);
                     }
                 }
-                get_next_moby_in_group((void **)&first, first, 0, 0);
-            } while (first != 0);
+                get_next_moby_in_group((void **)&boost_trigger_moby, boost_trigger_moby, 0, 0);
+            } while (boost_trigger_moby != 0);
         }
     }
     count = scale_game_frames(0x32);
@@ -1281,30 +1281,33 @@ void process_hero_race_object_interactions(void) {
         green = 0xFF;
     if (*(s32 *)(state + 0x48) != -1) {
         if (hero.hoverboard_airborne == 0) {
-            get_first_moby_in_group((void **)&second, *(s32 *)(state + 0x48), 0, 0);
-            if (second != 0) {
+            get_first_moby_in_group(
+                (void **)&ground_boost_trigger_moby, *(s32 *)(state + 0x48), 0, 0);
+            if (ground_boost_trigger_moby != 0) {
                 u32 color = (blue << 16) | (0x80000000U | (green << 8)) | red;
                 do {
-                    if (*(s16 *)(second + 0xA6) == 0x474) {
-                        *(u16 *)(second + 0x34) |= 0x10;
-                        *(u32 *)(second + 0x90) = color;
-                        if (fast_subtract_rotations_cf(second + 0xBC) != 0) {
-                            fast_vec_sub(delta, second + 0x10, &hero.motion.pos);
+                    if (*(s16 *)(ground_boost_trigger_moby + 0xA6) == 0x474) {
+                        *(u16 *)(ground_boost_trigger_moby + 0x34) |= 0x10;
+                        *(u32 *)(ground_boost_trigger_moby + 0x90) = color;
+                        if (fast_subtract_rotations_cf(ground_boost_trigger_moby + 0xBC) != 0) {
+                            fast_vec_sub(delta, ground_boost_trigger_moby + 0x10, &hero.motion.pos);
                             set_identity_matrix(matrix);
-                            transpose_rotation_matrix(matrix, second + 0xC0);
+                            transpose_rotation_matrix(matrix, ground_boost_trigger_moby + 0xC0);
                             transform_vector(delta, delta, matrix);
                             if (absolute_float(delta[0]) < 2.8f &&
                                 absolute_float(delta[1]) < 1.25f &&
                                 absolute_float(delta[2]) < 1.5f) {
-                                hero.boost_pad_timer += **(s32 **)(second + 0x78);
-                                second[0xBC] = scale_game_frames(0x3C);
+                                hero.boost_pad_timer +=
+                                    **(s32 **)(ground_boost_trigger_moby + 0x78);
+                                ground_boost_trigger_moby[0xBC] = scale_game_frames(0x3C);
                                 if (hero.hoverboard_moby != 0)
                                     allocate_voice_for_target_entry(1, 0, hero.hoverboard_moby);
                             }
                         }
                     }
-                    get_next_moby_in_group((void **)&second, second, 0, 0);
-                } while (second != 0);
+                    get_next_moby_in_group(
+                        (void **)&ground_boost_trigger_moby, ground_boost_trigger_moby, 0, 0);
+                } while (ground_boost_trigger_moby != 0);
             }
         }
     }
@@ -1379,12 +1382,12 @@ void update_hero_hoverboard_trick_score(void) {
     for (i = 0; i < 3; i++) {
         float *spin = &TALLY->spin[i];
         if (absolute_float(*spin) > 3.3161256f) {
-            float value = *spin;
-            if (value > 0.0f) {
-                *spin = value - 6.2831855f;
+            float spin_angle = *spin;
+            if (spin_angle > 0.0f) {
+                *spin = spin_angle - 6.2831855f;
                 TALLY->spin_count[i]++;
             } else {
-                *spin = value + 6.2831855f;
+                *spin = spin_angle + 6.2831855f;
                 TALLY->spin_count[i]++;
             }
         }
@@ -1425,7 +1428,7 @@ extern char D_0013F3D0[];
 void compute_hero_hoverboard_respawn_transform(float *out,
                                                float *out_rotation) __asm__("FUN_L05_00254358");
 
-void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) {
+void compute_hero_hoverboard_respawn_transform(float *out_position, float *out_rotation) {
     char        *hero_base = (char *)((char *)((char *)&hero));
     struct Moby *path_owner_moby = *(char **)(hero_base + 0x86C);
     char        *path;
@@ -1434,7 +1437,7 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
     float        ground_probe_position[4] __attribute__((aligned(16)));
 
     if (path_owner_moby == 0) {
-        qcopy(out, hero_base + 0x80);
+        qcopy(out_position, hero_base + 0x80);
         qcopy(out_rotation, hero_base + 0x90);
         return;
     }
@@ -1449,8 +1452,8 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
             fast_arc_tan(*(float *)(candidate_path_record + 0x10) - *(float *)(hero_bytes + 0x80),
                          *(float *)(candidate_path_record + 0x14) - *(float *)(hero_bytes + 0x84));
         int   path_count_plus_two = *(int *)path + 2;
-        int   next = (i + path_count_plus_two) % *(int *)path;
-        char *lookahead_path_record = path + next * 16;
+        int   lookahead_path_index = (i + path_count_plus_two) % *(int *)path;
+        char *lookahead_path_record = path + lookahead_path_index * 16;
         if (fast_difference_between_rotations(
                 angle,
                 fast_arc_tan(*(float *)(lookahead_path_record + 0x10) -
@@ -1480,10 +1483,10 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
         }
     next_point:;
     }
-    qcopy(out, path + best * 16 + 0x10);
-    qcopy(ground_probe_position, out);
+    qcopy(out_position, path + best * 16 + 0x10);
+    qcopy(ground_probe_position, out_position);
     ground_probe_position[2] += 2.0f;
-    out[2] = probe_ground_height(ground_probe_position, 0, 0.5f);
+    out_position[2] = probe_ground_height(ground_probe_position, 0, 0.5f);
     clear_u64_value(out_rotation);
     {
         float *selected_path_record = (float *)(path + best * 16);

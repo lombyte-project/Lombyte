@@ -57,7 +57,7 @@ extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, 
 void platform_update(Moby *moby) __asm__("FUN_L09_002f86a0");
 
 void platform_update(Moby *moby) {
-    PlatVars  *data = (*(PlatVars **)&moby->pvars);
+    PlatVars  *platform_vars = (*(PlatVars **)&moby->pvars);
     Vec_2F9A50 movement;
     Vec_2F9A50 old_rot;
     Vec_2F9A50 hero_offset;
@@ -70,45 +70,45 @@ void platform_update(Moby *moby) {
 
     fast_vec_scale(&movement, &(*(Vec_2F9A50 *)&moby->pos), -1.0f);
     qcopy(&old_rot, &(*(Vec_2F9A50 *)&moby->rot));
-    sink_level = data->baseZ - 0.25f;
+    sink_level = platform_vars->baseZ - 0.25f;
     old_z = (*(Vec_2F9A50 *)&moby->pos).z;
-    if (data->init == 0) {
-        qcopy(&data->ang, &(*(Vec_2F9A50 *)&moby->rot));
-        qzero(&data->angvel);
+    if (platform_vars->init == 0) {
+        qcopy(&platform_vars->ang, &(*(Vec_2F9A50 *)&moby->rot));
+        qzero(&platform_vars->angvel);
         (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z - 0.3f;
-        data->init = 1;
-        data->baseZ = (*(Vec_2F9A50 *)&moby->pos).z;
+        platform_vars->init = 1;
+        platform_vars->baseZ = (*(Vec_2F9A50 *)&moby->pos).z;
     }
     if (hero.air_frames.s == 0 && ((int)hero.ground_moby) == (int)moby) {
-        if (data->timer == 0) {
+        if (platform_vars->timer == 0) {
             allocate_voice_for_target_entry(0, 0, moby);
         }
-        if (data->timer < func_001F9850_2F9A50(30)) {
-            data->timer = func_001F9850_2F9A50(30);
+        if (platform_vars->timer < func_001F9850_2F9A50(30)) {
+            platform_vars->timer = func_001F9850_2F9A50(30);
         }
     }
-    if (data->timer != 0) {
+    if (platform_vars->timer != 0) {
         float side_dot, front_dot, pitch_target;
         float deg_to_rad;
-        fast_dec_timer(&data->timer);
+        fast_dec_timer(&platform_vars->timer);
         fast_vec_sub(&hero_offset, ((unsigned char *)&hero + 0x80), &(*(Vec_2F9A50 *)&moby->pos));
         deg_to_rad = 0.01745329238474369f;
         side_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->rot_row0));
         front_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->rot_row1));
         tilt = platform_hero_offset_tilt_gain_gp;
         pitch_target = tilt * side_dot;
-        *(u128 *)&old_angles = *(u128 *)&data->ang;
+        *(u128 *)&old_angles = *(u128 *)&platform_vars->ang;
         *(u128 *)&old_pos = *(u128 *)&moby->pos;
-        func_L00_0025CCF0_2F9A50(&data->ang.x,
+        func_L00_0025CCF0_2F9A50(&platform_vars->ang.x,
                                  -tilt * front_dot,
-                                 &data->angvel.x,
+                                 &platform_vars->angvel.x,
                                  0,
                                  platform_active_tilt_error_gain_gp * deg_to_rad * D_0015ED70,
                                  platform_active_tilt_velocity_damping_gp * frame_scale_sq,
                                  platform_active_tilt_velocity_limit_gp * deg_to_rad * frame_time);
-        func_L00_0025CCF0_2F9A50(&data->ang.y,
+        func_L00_0025CCF0_2F9A50(&platform_vars->ang.y,
                                  pitch_target,
-                                 &data->angvel.y,
+                                 &platform_vars->angvel.y,
                                  0,
                                  platform_active_tilt_error_gain_gp * deg_to_rad * D_0015ED70,
                                  platform_active_tilt_velocity_damping_gp * frame_scale_sq,
@@ -122,46 +122,48 @@ void platform_update(Moby *moby) {
                                       &carried_pos,
                                       &(*(Vec_2F9A50 *)&moby->pos),
                                       &old_angles,
-                                      &data->ang);
+                                      &platform_vars->ang);
         fast_vec_sub((unsigned char *)&hero + 0xF0, &carried_pos, ((unsigned char *)&hero + 0x80));
         hero.motion.platform_delta.f[2] =
             hero.motion.platform_delta.f[2] + ((*(Vec_2F9A50 *)&moby->pos).z - old_pos.z);
     } else {
         float deg_to_rad = 0.01745329238474369f;
-        func_L00_0025CCF0_2F9A50(&data->ang.x,
+        func_L00_0025CCF0_2F9A50(&platform_vars->ang.x,
                                  0.0f,
-                                 &data->angvel.x,
+                                 &platform_vars->angvel.x,
                                  0,
                                  platform_return_tilt_error_gain_gp * deg_to_rad * D_0015ED70,
                                  platform_return_tilt_velocity_damping_gp * frame_scale_sq,
                                  platform_return_tilt_velocity_limit_gp * deg_to_rad * frame_time);
-        func_L00_0025CCF0_2F9A50(&data->ang.y,
+        func_L00_0025CCF0_2F9A50(&platform_vars->ang.y,
                                  0.0f,
-                                 &data->angvel.y,
+                                 &platform_vars->angvel.y,
                                  0,
                                  platform_return_tilt_error_gain_gp * deg_to_rad * D_0015ED70,
                                  platform_return_tilt_velocity_damping_gp * frame_scale_sq,
                                  platform_return_tilt_velocity_limit_gp * deg_to_rad * frame_time);
-        (*(Vec_2F9A50 *)&moby->pos).z =
-            (*(Vec_2F9A50 *)&moby->pos).z + platform_height_return_gain_gp * frame_time *
-                                                (data->baseZ - (*(Vec_2F9A50 *)&moby->pos).z);
-        if (data->baseZ < (*(Vec_2F9A50 *)&moby->pos).z) {
-            (*(Vec_2F9A50 *)&moby->pos).z = data->baseZ;
+        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z +
+                                        platform_height_return_gain_gp * frame_time *
+                                            (platform_vars->baseZ - (*(Vec_2F9A50 *)&moby->pos).z);
+        if (platform_vars->baseZ < (*(Vec_2F9A50 *)&moby->pos).z) {
+            (*(Vec_2F9A50 *)&moby->pos).z = platform_vars->baseZ;
         }
         if (old_z < sink_level && sink_level <= (*(Vec_2F9A50 *)&moby->pos).z) {
             allocate_voice_for_target_entry(2, 0, moby);
         }
     }
     update_moby_vertical_oscillation(
-        0.14f, frame_time * 0.5235987901687622f, moby, &data->f98, &data->f9C);
+        0.14f, frame_time * 0.5235987901687622f, moby, &platform_vars->f98, &platform_vars->f9C);
     update_moby_rotation_oscillation(moby,
-                                     &data->f90,
-                                     &data->f94,
+                                     &platform_vars->f90,
+                                     &platform_vars->f94,
                                      0.0872664600610733f,
                                      frame_time * 0.3141592741012573f,
                                      frame_time * 0.48869219422340393f);
-    (*(Vec_2F9A50 *)&moby->rot).x = fast_add_rotations(data->ang.x, (*(Vec_2F9A50 *)&moby->rot).x);
-    (*(Vec_2F9A50 *)&moby->rot).y = fast_add_rotations(data->ang.y, (*(Vec_2F9A50 *)&moby->rot).y);
+    (*(Vec_2F9A50 *)&moby->rot).x =
+        fast_add_rotations(platform_vars->ang.x, (*(Vec_2F9A50 *)&moby->rot).x);
+    (*(Vec_2F9A50 *)&moby->rot).y =
+        fast_add_rotations(platform_vars->ang.y, (*(Vec_2F9A50 *)&moby->rot).y);
     fast_vec_add(&movement, &movement, &(*(Vec_2F9A50 *)&moby->pos));
-    update_entity_matrix(data->f20, &movement, &old_rot, &(*(Vec_2F9A50 *)&moby->rot));
+    update_entity_matrix(platform_vars->f20, &movement, &old_rot, &(*(Vec_2F9A50 *)&moby->rot));
 }

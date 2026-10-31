@@ -383,7 +383,7 @@ s32              FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");
 
 unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
 
-unsigned char *spawn_mine(int owner, OvlQuad *spawn_position) {
+unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
     unsigned char *mine_moby = create_moby(0x4A);
     if (mine_moby) {
         unsigned char *mine_vars = ((unsigned char *)MOBY(mine_moby)->pvars);
@@ -392,7 +392,7 @@ unsigned char *spawn_mine(int owner, OvlQuad *spawn_position) {
         mine_moby[0x31] = 1;
         MOBY(mine_moby)->scale = MOBY(mine_moby)->scale * 0.5f;
         mine_moby[0x20] = 0;
-        *(int *)(mine_vars + 0x30) = owner;
+        *(int *)(mine_vars + 0x30) = mine_owner_moby;
         *(short *)(mine_vars + 0x36) = 0;
         *(int *)(mine_vars + 0x78) = 0;
         qcopy(mine_moby + 0x10, spawn_position);
@@ -429,7 +429,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
                                         void     *base_motion_vector) __asm__("FUN_L00_002aa008");
 
 void initialize_moby_motion_at_position(V_2aa008 *requested_position,
-                                        N_2aa008 *self,
+                                        N_2aa008 *initialized_moby,
 
                                         void *base_motion_vector) {
     V_2aa008     random_offset;
@@ -443,12 +443,12 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     s32          bestv;
     V_2aa008    *k;
     vector_scratch.q = 0;
-    moby_vars = self->p78;
+    moby_vars = initialized_moby->p78;
     vector_scratch.f[0] = random_float_between(-1.0f, 1.0f);
     vector_scratch.f[1] = random_float_between(-1.0f, 1.0f);
     vector_scratch.f[2] = random_float_between(-1.0f, 1.0f);
-    self->b20 = 1;
-    self->f2C = self->f2C / 0.65f;
+    initialized_moby->b20 = 1;
+    initialized_moby->f2C = initialized_moby->f2C / 0.65f;
     random_offset.q = vector_scratch.q;
     fast_vec_normalize(&random_offset,
                        &random_offset,
@@ -465,8 +465,8 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     for (scanned_moby = D_L00_0015FFE4_2aa008; scanned_moby; scanned_moby = scanned_moby->p28) {
         if (scanned_moby->b20 != 0xFE)
             if (scanned_moby->b20 != 0xFD)
-                if (scanned_moby->hA6 == self->hA6)
-                    if (scanned_moby != self) {
+                if (scanned_moby->hA6 == initialized_moby->hA6)
+                    if (scanned_moby != initialized_moby) {
                         if (best == 0 || ((D_2aa008 *)scanned_moby->p78)->i5C < bestv) {
                             bestv = ((D_2aa008 *)scanned_moby->p78)->i5C;
                             best = scanned_moby;
@@ -476,14 +476,14 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     }
     if (count >= 8)
         ((D_2aa008 *)best->p78)->i5C = -1;
-    qcopy(&self->v10, requested_position);
+    qcopy(&initialized_moby->v10, requested_position);
     vector_scratch.q = ((Q_2aa008 *)hero.moby)->v10.q;
     vector_scratch.f[2] = requested_position->f[2];
     if (collision_line(&vector_scratch, requested_position, 0, hero.moby, 0)) {
         k = D_L00_00173E60_2aa008;
-        qcopy(&self->v10, &k[0]);
+        qcopy(&initialized_moby->v10, &k[0]);
         fast_vec_normalize(&collision_position_offset, &k[2], frame_time_sq * 9.7f);
-        fast_vec_add(&self->v10, &self->v10, &collision_position_offset);
+        fast_vec_add(&initialized_moby->v10, &initialized_moby->v10, &collision_position_offset);
         reflect_vector(moby_vars, moby_vars, &k[2]);
         fast_vec_scale(moby_vars, moby_vars, 0.6f);
     }
@@ -499,10 +499,10 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
     float C[4];
     float box[4];
     int   x;
-    char *base = D_0013F350;
+    char *hero_state = D_0013F350;
     int   i;
     char *owner_moby_vars;
-    if (*(int *)(base + 0x2084) == 0x72)
+    if (*(int *)(hero_state + 0x2084) == 0x72)
         return 0;
     if (D_L00_0015F5C4_c != 0)
         return 0;
@@ -510,19 +510,21 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
     if (MOBY(moby)->state == 0) {
         trajectory_position[0] =
             fast_cos(fast_add_rotations(
-                -0.36196801f, fast_arc_tan(*(float *)(base + 0x670), *(float *)(base + 0x674)))) *
+                -0.36196801f,
+                fast_arc_tan(*(float *)(hero_state + 0x670), *(float *)(hero_state + 0x674)))) *
             0.859039f;
         trajectory_position[1] =
             fast_sin(fast_add_rotations(
-                -0.36196801f, fast_arc_tan(*(float *)(base + 0x670), *(float *)(base + 0x674)))) *
+                -0.36196801f,
+                fast_arc_tan(*(float *)(hero_state + 0x670), *(float *)(hero_state + 0x674)))) *
             0.859039f;
         *(int *)&trajectory_position[2] = 0;
-        fast_vec_add(trajectory_position, trajectory_position, base + 0x80);
+        fast_vec_add(trajectory_position, trajectory_position, hero_state + 0x80);
         trajectory_position[2] = trajectory_position[2] + 0.49082f;
         qcopy(B, trajectory_state);
-        if (*(int *)(base + 0x2FC) != 0 &&
-            FUN_L00_002603d0_u((void *)*(int *)(base + 0x2FC)) != 0 && mode != 0) {
-            fast_vec_add(B, B, base + 0x100);
+        if (*(int *)(hero_state + 0x2FC) != 0 &&
+            FUN_L00_002603d0_u((void *)*(int *)(hero_state + 0x2FC)) != 0 && mode != 0) {
+            fast_vec_add(B, B, hero_state + 0x100);
         }
         x = scale_game_frames(0x78);
     } else {
@@ -538,8 +540,8 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         }
     }
     {
-        char *base2 = D_0013F350;
-        char *hero_moby = *(char **)(base2 + 0x2080);
+        char *collision_hero_state = D_0013F350;
+        char *hero_moby = *(char **)(collision_hero_state + 0x2080);
         *(u128 *)box = *(u128 *)(hero_moby + 0x10);
         box[2] = trajectory_position[2];
         if (FUN_001efa68(box, trajectory_position, 0x10, (int)hero_moby, 0) != 0) {
@@ -601,18 +603,18 @@ void mine_update(M910 *mine_moby) {
     B910  camera_blast_parameters = l00_mine_camera_blast_parameters;
     B910  alternate_camera_blast_parameters = l00_mine_alternate_camera_blast_parameters;
     U910  collision_response_velocity;
-    U910  old;
+    U910  mine_pre_motion_position;
     U910  up;
     W910 *v;
     M910 *hd;
     int   mine_state_snapshot;
 
     hd = 0;
-    old.q = 0;
+    mine_pre_motion_position.q = 0;
     up.q = 0;
-    old.f[2] = frame_time + frame_time;
+    mine_pre_motion_position.f[2] = frame_time + frame_time;
     up.f[2] = 1.0f;
-    collision_response_velocity.q = old.q;
+    collision_response_velocity.q = mine_pre_motion_position.q;
     v = mine_moby->v;
     if ((hero.unk20A5 != 0 || hero.unk20AF != 0) && mine_moby->state == 0) {
         mine_moby->flags |= 0x41;
@@ -666,7 +668,7 @@ void mine_update(M910 *mine_moby) {
             float gz;
 
             mine_moby->flags &= 0xFEFF;
-            qcopy(&old, &mine_moby->pos);
+            qcopy(&mine_pre_motion_position, &mine_moby->pos);
             if (!(mine_state_snapshot & 4)) {
                 fast_vec_add(&mine_moby->pos, &mine_moby->pos, v);
                 if (v->h50 == 0) {
@@ -703,7 +705,9 @@ void mine_update(M910 *mine_moby) {
             }
             mine_moby->pos.f[2] -= v->f6C * fast_sin(v->f70) * k;
             if (!(mine_moby->state & 4) &&
-                collision_line(&old, &mine_moby->pos, 0x10, (int)mine_moby, (int)&q) != 0) {
+                collision_line(
+                    &mine_pre_motion_position, &mine_moby->pos, 0x10, (int)mine_moby, (int)&q) !=
+                    0) {
                 if (v->h50 == 0 && collision_hit_material() == 0 && v->vel.f[2] < 0.0f) {
                     V910 t;
                     V910 n;
@@ -1006,7 +1010,7 @@ void mine_update(M910 *mine_moby) {
                 if (mine_moby->state & 4) {
                     V910 t;
                     {
-                        fast_vec_sub(t, &mine_moby->pos, &old);
+                        fast_vec_sub(t, &mine_moby->pos, &mine_pre_motion_position);
                         v->vel.q = *(OvlQuad *)t;
                     }
                 }

@@ -196,14 +196,14 @@ s32 allocate_voice_for_target_entry(s32   entry_index,
                                     void *target) __asm__("FUN_0022da68");
 
 void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *rocket_launcher_private_vars = (char *)moby->pvars;
     float distance;
     int   sound_a, sound_b, gain_a, gain_b;
-    if (*(float *)(data + 0x10) >= 0.0f) {
+    if (*(float *)(rocket_launcher_private_vars + 0x10) >= 0.0f) {
         distance = fast_vec_dist(D_L02_001673C0, &moby->pos);
-        *(float *)(data + 0x10) +=
+        *(float *)(rocket_launcher_private_vars + 0x10) +=
             *(float *)&rocket_launcher_shot_sound_distance_threshold_rate_gp * D_0015ED6C;
-        if (distance < *(float *)(data + 0x10) && D_001413D4 != 0x72) {
+        if (distance < *(float *)(rocket_launcher_private_vars + 0x10) && D_001413D4 != 0x72) {
             sound_a = allocate_voice_for_target_entry(0, 0x10, (int)moby);
             sound_b = allocate_voice_for_target_entry(1, 0x10, (int)moby);
             gain_a = truncate_float_to_s32(
@@ -227,7 +227,7 @@ void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) {
                 gain_b = 0;
             FUN_L02_0028d618(sound_a, gain_a);
             FUN_L02_0028d618(sound_b, gain_b);
-            *(float *)(data + 0x10) = -1.0f;
+            *(float *)(rocket_launcher_private_vars + 0x10) = -1.0f;
         }
     }
 }

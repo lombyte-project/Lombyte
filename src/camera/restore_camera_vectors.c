@@ -8,10 +8,10 @@
 void restore_camera_vectors(void) __asm__("FUN_001ec868");
 
 void restore_camera_vectors(void) {
-    char *base = cam_trans_state;
-    if (*(unsigned char *)(base + 2) != 0) {
-        qcopy(base + 0x50, base + 0xC0);
-        qcopy(base + 0x60, base + 0xD0);
+    char *camera_transition_state = cam_trans_state;
+    if (*(unsigned char *)(camera_transition_state + 2) != 0) {
+        qcopy(camera_transition_state + 0x50, camera_transition_state + 0xC0);
+        qcopy(camera_transition_state + 0x60, camera_transition_state + 0xD0);
     }
 }
 

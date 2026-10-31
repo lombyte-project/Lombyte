@@ -115,17 +115,17 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 char *
 spawn_drek_boss_electric_ball(void *owner, void *vector, int value) __asm__("FUN_L18_002ea0f0");
 
-char *spawn_drek_boss_electric_ball(void *owner, void *vector, int value) {
+char *spawn_drek_boss_electric_ball(void *spawning_moby, void *vector, int value) {
     char *moby = create_moby(0x3D7);
     if (moby != 0) {
-        char *data;
+        char *class_3d7_private_vars;
         ((unsigned char *)moby)[0x30] = 0xFF;
         qcopy(moby + 0x10, vector);
-        data = ((char *)MOBY(moby)->pvars);
-        *(void **)(data + 0x20) = owner;
-        *(int *)(data + 0x28) = 5;
-        *(int *)(data + 0x34) = value;
-        *(int *)(data + 0x24) = 0;
+        class_3d7_private_vars = ((char *)MOBY(moby)->pvars);
+        *(void **)(class_3d7_private_vars + 0x20) = spawning_moby;
+        *(int *)(class_3d7_private_vars + 0x28) = 5;
+        *(int *)(class_3d7_private_vars + 0x34) = value;
+        *(int *)(class_3d7_private_vars + 0x24) = 0;
     }
     return moby;
 }
@@ -141,14 +141,14 @@ void refresh_moby_position_and_activate(struct Moby *moby,
 void refresh_moby_position_and_activate(
 
     struct Moby *moby, void *moby_position, void *position, int active, float speed) {
-    char *data = (char *)moby->pvars;
+    char *refreshed_moby_private_vars = (char *)moby->pvars;
     qcopy(&moby->pos, moby_position);
-    *(int *)(data + 0x28) = scale_game_frames(5);
-    *(float *)(data + 0x24) = speed;
+    *(int *)(refreshed_moby_private_vars + 0x28) = scale_game_frames(5);
+    *(float *)(refreshed_moby_private_vars + 0x24) = speed;
     if (active && moby->state == 0) {
         moby->state = 1;
-        *(int *)(data + 0x28) = 0;
-        qcopy(data, position);
+        *(int *)(refreshed_moby_private_vars + 0x28) = 0;
+        qcopy(refreshed_moby_private_vars, position);
     }
 }
 
@@ -707,7 +707,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
     V_ec290       scratch_vectors[10];
     V_ec290       side_arc_segment_offsets[5];
     unsigned char flag = *(unsigned char *)D_0013E533;
-    char         *data = *(char **)((char *)moby + 0x78);
+    char         *electric_bolt_private_vars = *(char **)((char *)moby + 0x78);
     float         scale;
     int           i;
     int           k;
@@ -720,13 +720,13 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
         *(float *)&D_L18_00162010, *(float *)&secondary_bolt_orbit_phase_decrement_gp);
     *(float *)&D_L18_00162024 = fast_add_rotations(*(float *)&D_L18_00162024,
                                                    *(float *)&secondary_bolt_z_phase_increment_gp);
-    scale = fast_vec_dist((char *)moby + 0x10, data + 0x10) * 0.05f;
+    scale = fast_vec_dist((char *)moby + 0x10, electric_bolt_private_vars + 0x10) * 0.05f;
     if (flag) {
         *(int *)&D_L18_00162054_gp = 0x7F2040;
     } else {
         *(int *)&D_L18_00162054_gp = 0x7F2020;
     }
-    fast_vec_sub(&scratch_vectors[0], data + 0x10, (char *)moby + 0x10);
+    fast_vec_sub(&scratch_vectors[0], electric_bolt_private_vars + 0x10, (char *)moby + 0x10);
     fast_vec_normalize(&scratch_vectors[0], &scratch_vectors[0], 1.0f);
     fast_vec_cross(&scratch_vectors[1], &scratch_vectors[0], D_0013F5E0);
     build_look_at_matrix(
@@ -772,7 +772,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
         }
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] + primary_bolt_z_offset;
         fast_vec_sub(&scratch_vectors[1], &D_L18_001D9D00[0][i], &D_L18_001D9CF0[i]);
-        fast_vec_sub(&scratch_vectors[5], data + 0x10, &D_L18_001D9D00[0][i]);
+        fast_vec_sub(&scratch_vectors[5], electric_bolt_private_vars + 0x10, &D_L18_001D9D00[0][i]);
         arc_endpoint_distance = fast_vec_length(&scratch_vectors[5]);
         if (arc_endpoint_distance != 0.0f) {
             float endpoint_direction_blend_weight;
@@ -836,7 +836,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
             qcopy(&scratch_vectors[8], (char *)moby + 0x10);
             side_arc_scale = 0.4f;
         } else {
-            qcopy(&scratch_vectors[8], data + 0x10);
+            qcopy(&scratch_vectors[8], electric_bolt_private_vars + 0x10);
             side_arc_scale = 0.5f;
         }
         if (fast_dec_timer_s16(D_L18_001620B8 + k)) {
@@ -940,7 +940,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
     if (random_integer_below(2))
         r = -r;
     rotation_angle_or_particle_scale = random_float_between(0.15f, 3.0f);
-    spawn_ec290(data + 0x10,
+    spawn_ec290(electric_bolt_private_vars + 0x10,
                 scale_game_frames(12),
                 rotation_angle_or_particle_scale * 0.1f,
                 rotation_angle_or_particle_scale,

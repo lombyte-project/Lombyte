@@ -15,8 +15,8 @@ s32 snd_init_vag_streaming_ex(s32 configuration_word_0,
                               s32 configuration_word_2,
 
                               s32 configuration_word_3) {
-    s32 args[4];
-    s32 result;
+    s32 configuration_payload[4];
+    s32 command_result;
 
     if (snd_cd_stream_active == 1) {
         return 0;
@@ -26,13 +26,13 @@ s32 snd_init_vag_streaming_ex(s32 configuration_word_0,
         }
     }
     snd_stream_safe_cd_sync(0);
-    args[0] = configuration_word_0;
-    args[1] = configuration_word_1;
-    args[2] = configuration_word_2;
-    args[3] = configuration_word_3;
-    result = snd_send_iop_command_and_wait(0x2A, 0x10, args);
-    snd_cd_stream_active = result;
-    return result;
+    configuration_payload[0] = configuration_word_0;
+    configuration_payload[1] = configuration_word_1;
+    configuration_payload[2] = configuration_word_2;
+    configuration_payload[3] = configuration_word_3;
+    command_result = snd_send_iop_command_and_wait(0x2A, 0x10, configuration_payload);
+    snd_cd_stream_active = command_result;
+    return command_result;
 }
 
 extern __typeof__(snd_init_vag_streaming_ex) func_0012EB20 __attribute__((alias("FUN_0012eb20")));

@@ -1459,7 +1459,7 @@ void update_hero_motion_for_current_state(void) {
         }
         {
             f32 a = fast_add_rotations(hero.motion.rot.f[2], -1.5707964f);
-            f32 old;
+            f32 previous_swing_radius;
             f32 d;
             vD0.f[0] = fast_cos(a) * 0.15f;
             vD0.f[1] = fast_sin(a) * 0.15f;
@@ -1474,14 +1474,14 @@ void update_hero_motion_for_current_state(void) {
                          &((struct MobyView *)hero.swing_target_moby)->u10.v10,
                          &vC0);
             FUN_001f9a28_c(&hero.motion.velocity, &position_or_delta_scratch, &vD0);
-            old = hero.unk9A4;
+            previous_swing_radius = hero.unk9A4;
             vendor_spring(&hero.unk9A4,
                           &hero.swing_length_vel,
                           hero.unk9A0,
                           hero.swing_rope_spring_k,
                           hero.unk9C8,
                           hero.swing_rope_max_speed);
-            d = hero.unk9A4 - old;
+            d = hero.unk9A4 - previous_swing_radius;
             if (fast_vec_length(&vC0) > hero.unk9A4) {
                 fast_vec_normalize(&vC0, &vC0, d);
                 fast_vec_add(&hero.motion.pos, &hero.motion.pos, &vC0);

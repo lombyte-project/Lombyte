@@ -25,7 +25,7 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
     s32                  next_column_count;
     s32                  next_columns;
     struct MenuScreen   *next;
-    struct MenuGridCell *entry;
+    struct MenuGridCell *selected_cell;
     s32                  slot;
 
     if (menu_system.current->focus != grid) {
@@ -149,13 +149,13 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
     }
 
     if ((controller_state.pressed_unmasked & 0x40) && ((grid->data.grid.flags ^ 1) & 1)) {
-        entry = &grid->data.grid.cells[grid->data.grid.selected_cell];
-        if (entry->id != 0 && item_available[entry->id] != 0) {
-            slot = menu_item_info[entry->id].slot;
+        selected_cell = &grid->data.grid.cells[grid->data.grid.selected_cell];
+        if (selected_cell->id != 0 && item_available[selected_cell->id] != 0) {
+            slot = menu_item_info[selected_cell->id].slot;
             allocate_voice_for_target_entry(0, 0x11, grid->moby);
-            if (menu_system.equipped[slot] == entry->id && slot != 0 && slot != 3) {
+            if (menu_system.equipped[slot] == selected_cell->id && slot != 0 && slot != 3) {
                 menu_system.equipped[slot] = 0;
-            } else if (entry->id == 0x18) {
+            } else if (selected_cell->id == 0x18) {
                 if (noop_callback_p(0x18) != 0 && menu_system.state == 3) {
                     next_columns = noop_callback_p(0x18);
                     hero.unk1FF5 = 1;
@@ -166,7 +166,7 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
                     hero.ammo_capacity = total;
                 }
             } else {
-                menu_system.equipped[slot] = entry->id;
+                menu_system.equipped[slot] = selected_cell->id;
             }
         } else {
             allocate_voice_for_target_entry(2, 0x11, grid->moby);

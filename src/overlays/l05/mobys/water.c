@@ -390,7 +390,7 @@ extern int D_L05_0015FFD8;
 extern short *D_L05_001ABCC0[];
 
 void synchronize_group_water_heights(char *moby) {
-    char  *data = ((char *)MOBY(moby)->pvars);
+    char  *source_water_vars = ((char *)MOBY(moby)->pvars);
     short *group_member_list = D_L05_001ABCC0[MOBY(moby)->group];
     char(*base)[256] = (char(*)[256])D_L05_0015FFD8;
     do {
@@ -400,12 +400,12 @@ void synchronize_group_water_heights(char *moby) {
             char      *linked_water_data = ((char *)MOBY(linked_water_moby)->pvars);
             WaterGrid *water_record;
             float      linked_water_height;
-            if (*(int *)(data + 0xC) != 0 ||
-                *(float *)(linked_water_data + 4) == *(float *)(data + 4)) {
+            if (*(int *)(source_water_vars + 0xC) != 0 ||
+                *(float *)(linked_water_data + 4) == *(float *)(source_water_vars + 4)) {
                 linked_water_height = MOBY(moby)->pos.z;
             } else {
-                linked_water_height =
-                    *(float *)(linked_water_data + 4) + (MOBY(moby)->pos.z - *(float *)(data + 4));
+                linked_water_height = *(float *)(linked_water_data + 4) +
+                                      (MOBY(moby)->pos.z - *(float *)(source_water_vars + 4));
             }
             MOBY(linked_water_moby)->pos.z = linked_water_height;
             water_record = &l05_water_grids[*(int *)(linked_water_data + 0x14)];

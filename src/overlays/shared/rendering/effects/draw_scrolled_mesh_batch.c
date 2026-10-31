@@ -127,7 +127,12 @@ void advance_wrapped_sine_pair(float *out,
 
 void advance_wrapped_sine_pair(
 
-    float *out, float *ph, float first_phase_rate, float second_phase_rate, float scale) {
+    float *scaled_sine_pair,
+    float *ph,
+    float  first_phase_rate,
+    float  second_phase_rate,
+
+    float scale) {
     ph[0] += first_phase_rate * frame_delta_time;
     if (ph[0] > 1.0f) {
         ph[0] -= 2.0f;
@@ -142,8 +147,8 @@ void advance_wrapped_sine_pair(
     if (ph[1] < -1.0f) {
         ph[1] += 2.0f;
     }
-    out[0] = fast_sin(ph[0] * 3.1415927f) * scale;
-    out[1] = fast_sin(ph[1] * 3.1415927f) * scale;
+    scaled_sine_pair[0] = fast_sin(ph[0] * 3.1415927f) * scale;
+    scaled_sine_pair[1] = fast_sin(ph[1] * 3.1415927f) * scale;
 }
 
 void advance_scroll_offsets(int scroll_pair_index) __asm__("FUN_L08_002f12a0");

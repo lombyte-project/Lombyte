@@ -20,10 +20,10 @@ s32 read_cd_stream_sectors(struct CdStream *stream,
                            s32 is_async) {
     u8  readcmd[0x10];
     s32 blocks;
-    s32 result;
+    s32 returned_byte_count;
 
     blocks = size >> 11;
-    result = 0;
+    returned_byte_count = 0;
     readcmd[0] = 0x64;
     readcmd[1] = 0;
     readcmd[2] = 0;
@@ -31,9 +31,9 @@ s32 read_cd_stream_sectors(struct CdStream *stream,
     if (is_async == 0) {
         stream->unk4 += blocks;
         sceCdSync(0);
-        result = size;
+        returned_byte_count = size;
     }
-    return result;
+    return returned_byte_count;
 }
 
 extern __typeof__(read_cd_stream_sectors) func_0023BA60 __attribute__((alias("FUN_0023ba60")));

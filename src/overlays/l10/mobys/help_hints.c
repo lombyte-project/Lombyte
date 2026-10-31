@@ -80,12 +80,12 @@ void update_help_hints(Moby *moby) {
         HELP_MESSAGE_STATE_INITIALIZE = 0,
         HELP_MESSAGE_STATE_CHECK_CONDITIONS = 1
     };
-    EvData *data = (EvData *)((int *)moby->pvars);
-    Moby   *other;
+    EvData *conditional_help_config = (EvData *)((int *)moby->pvars);
+    Moby   *conditional_help_list_moby;
     int     any_active;
     int     elapsed;
 
-    if (is_point_inside_clip_volume(D_0013F3D0_r, data->f1C)) {
+    if (is_point_inside_clip_volume(D_0013F3D0_r, conditional_help_config->f1C)) {
         hero_inside_conditional_help_volume = 1;
     } else {
         hero_inside_conditional_help_volume = 0;
@@ -96,13 +96,13 @@ void update_help_hints(Moby *moby) {
         moby->state = 1;
         break;
     case HELP_MESSAGE_STATE_CHECK_CONDITIONS:
-        if (is_point_inside_clip_volume(D_0013F3D0_r, data->f0) != 0 &&
+        if (is_point_inside_clip_volume(D_0013F3D0_r, conditional_help_config->f0) != 0 &&
             (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9) &&
             ((Msg *)D_L10_00179890)->f0 == 0 && ((Msg *)D_L10_00179890)->f24 == -1 &&
             *(unsigned short *)(l10_help_message_2710_gate) == 0) {
             help_request(0x2710, 0x35);
         }
-        if (is_point_inside_clip_volume(D_0013F3D0_r, data->f4) != 0 &&
+        if (is_point_inside_clip_volume(D_0013F3D0_r, conditional_help_config->f4) != 0 &&
             (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9) &&
             ((Msg *)D_L10_00179890)->f0 == 0 && ((Msg *)D_L10_00179890)->f24 == -1) {
             if (((Flags_2E9978 *)(alternate_item_available))->f4 == 0) {
@@ -120,35 +120,40 @@ void update_help_hints(Moby *moby) {
             *(unsigned short *)(l10_help_message_2711_gate) == 0) {
             help_request(0x2711, 0x36);
         }
-        if (is_point_inside_clip_volume(D_0013F3D0_r, data->f8) != 0 &&
+        if (is_point_inside_clip_volume(D_0013F3D0_r, conditional_help_config->f8) != 0 &&
             (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9) &&
             D_0013D4CB[0] == 0 && ((Msg *)D_L10_00179890)->f0 == 0 &&
             ((Msg *)D_L10_00179890)->f24 == -1 && *(unsigned short *)(D_00141C48) == 0) {
             help_request(0x2715, 0x5C);
         }
         any_active = 0;
-        for (other = l10_conditional_help_moby_list_head; other != 0; other = other->next) {
-            if (other->oclass == 0x359 && other->state != 1)
+        for (conditional_help_list_moby = l10_conditional_help_moby_list_head;
+             conditional_help_list_moby != 0;
+             conditional_help_list_moby = conditional_help_list_moby->next) {
+            if (conditional_help_list_moby->oclass == 0x359 &&
+                conditional_help_list_moby->state != 1)
                 any_active = 1;
         }
         if (any_active == 0)
             break;
-        if (data->f10 != -1 &&
-            vector_distance_xy(D_0013F3D0_r, &D_L10_0015FFD0_macro[2][data->f10].pos) < 15.0f &&
-            data->f14 != -1 &&
-            vector_distance_xy(D_0013F3D0_r, &D_L10_0015FFD0_macro[2][data->f14].pos) < 15.0f &&
+        if (conditional_help_config->f10 != -1 &&
+            vector_distance_xy(
+                D_0013F3D0_r, &D_L10_0015FFD0_macro[2][conditional_help_config->f10].pos) < 15.0f &&
+            conditional_help_config->f14 != -1 &&
+            vector_distance_xy(
+                D_0013F3D0_r, &D_L10_0015FFD0_macro[2][conditional_help_config->f14].pos) < 15.0f &&
             *(unsigned short *)(l10_help_message_2717_gate) == 0) {
             help_request(0x2717, 0x6A);
         }
         if (any_active == 0)
             break;
-        if (is_point_inside_clip_volume(D_0013F3D0_r, data->f18) == 0)
+        if (is_point_inside_clip_volume(D_0013F3D0_r, conditional_help_config->f18) == 0)
             break;
-        if (data->f20 == -1)
+        if (conditional_help_config->f20 == -1)
             break;
-        if (D_L10_0015FFD8_c2[data->f20].oclass != 0x3F7)
+        if (D_L10_0015FFD8_c2[conditional_help_config->f20].oclass != 0x3F7)
             break;
-        if (D_L10_0015FFD8_c2[data->f20].state == 4)
+        if (D_L10_0015FFD8_c2[conditional_help_config->f20].state == 4)
             break;
         if (((Save_2E9978 *)(D_00141968_r))->f358 != 0) {
             elapsed =

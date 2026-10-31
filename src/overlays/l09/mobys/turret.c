@@ -100,19 +100,19 @@ void turret_update(struct Moby *moby) {
     Vec4        muzzle;
     Vec4        firing_vector_or_camera_rotation;
     Vec4        rnd;
-    TurretVars *vars;
+    TurretVars *turret_vars;
     TurretBeam *beam;
     float       stick_magnitude;
     float       stick_y;
     int         beam_frame_count;
     int         i;
 
-    vars = (TurretVars *)moby->pvars;
+    turret_vars = (TurretVars *)moby->pvars;
     moby->flags &= ~4;
     moby_point_position(moby, 3, &seat);
     seat.f[2] += 0.4f;
     if (moby->state >= 4) {
-        if (fast_dec_timer_s16(&vars->mount_delay) != 0 && moby->command == 1 &&
+        if (fast_dec_timer_s16(&turret_vars->mount_delay) != 0 && moby->command == 1 &&
             hero.state.control_mode != 0x14 && hero.state.control_mode != 7 &&
             hero.state.current != 0x3D) {
             qcopy(&hero.motion.pos, &seat);
@@ -131,7 +131,7 @@ void turret_update(struct Moby *moby) {
                 blend_moby_animation(moby, 0, 0, 1);
             } else {
                 if (moby->state != 5) {
-                    vars->dismount_delay = 2;
+                    turret_vars->dismount_delay = 2;
                     jet_mount(&moby->pos, &moby->rot, 0, 0, 0);
                     if (moby->prev_seq != 5) {
                         blend_moby_animation(moby, 5, 0, scale_game_frames(5));
@@ -142,37 +142,37 @@ void turret_update(struct Moby *moby) {
         } else if (moby->command == 2) {
             if (fast_vec_dist(&seat, &hero.moby->pos) > 1.2f || hero.ground_moby != moby) {
                 moby->command = 0;
-                vars->mount_delay = scale_game_frames(60);
+                turret_vars->mount_delay = scale_game_frames(60);
             }
         } else if (hero.state.control_mode != 0x14 && hero.state.control_mode != 7 &&
                    hero.state.current != 0x3D && hero.ground_moby == moby &&
-                   fast_vec_dist(&seat, &hero.moby->pos) < 1.2f && vars->mount_delay == 0) {
+                   fast_vec_dist(&seat, &hero.moby->pos) < 1.2f && turret_vars->mount_delay == 0) {
             moby->command = 1;
             hero_set_state(0x32, 1);
         }
     }
     switch (moby->state) {
     case TURRET_STATE_INITIALIZE:
-        attach_manipulator(moby, 0, vars);
+        attach_manipulator(moby, 0, turret_vars);
         work_vector.q = *(u128 *)&moby->pos;
         spawn_turret_base(moby, &work_vector);
         moby->state = 4;
-        vars->rest_z = moby->pos.z;
-        vars->pitch = 0.0f;
+        turret_vars->rest_z = moby->pos.z;
+        turret_vars->pitch = 0.0f;
         moby->rot.z = 0.0f;
-        vars->beam = -1;
-        vars->mount_delay = 0;
-        vars->unk48 = 0;
-        vars->unk4C = 0;
-        vars->unk40 = 0;
+        turret_vars->beam = -1;
+        turret_vars->mount_delay = 0;
+        turret_vars->unk48 = 0;
+        turret_vars->unk4C = 0;
+        turret_vars->unk40 = 0;
         sound_probe_ignore[0] = moby;
         return;
     case TURRET_STATE_IDLE:
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 4.0f || hero.ground_moby == moby) {
-            moby->pos.z += ((vars->rest_z - 1.0f) - moby->pos.z) * 0.11f;
-            vars->yaw_speed =
+            moby->pos.z += ((turret_vars->rest_z - 1.0f) - moby->pos.z) * 0.11f;
+            turret_vars->yaw_speed =
                 fast_add_rotations(
-                    vars->yaw_speed,
+                    turret_vars->yaw_speed,
                     fast_add_rotations(
                         fast_subtract_rotations(fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x,
                                                              hero.motion.pos.f[1] - moby->pos.y),
@@ -180,20 +180,20 @@ void turret_update(struct Moby *moby) {
                         1.5707964f) *
                         0.01f) *
                 0.9f;
-            moby->rot.z = fast_add_rotations(moby->rot.z, vars->yaw_speed);
+            moby->rot.z = fast_add_rotations(moby->rot.z, turret_vars->yaw_speed);
             transform_vector_by_basis(&work_vector, turret_beam_local_offset_gp, &moby->rot_row0);
             fast_vec_add(&work_vector, &work_vector, &seat);
-            if (vars->beam == -1) {
-                vars->beam_frames = 0;
-                vars->beam =
+            if (turret_vars->beam == -1) {
+                turret_vars->beam_frames = 0;
+                turret_vars->beam =
                     allocate_colored_effect_slot(&work_vector, 0.4f, 0.0f, 4.0f, 4.0f, 4.0f);
                 allocate_voice_for_target_entry(1, 0, moby);
             } else {
-                beam = &l09_turret_beam_light_slots[vars->beam];
+                beam = &l09_turret_beam_light_slots[turret_vars->beam];
                 beam->pos[0] = work_vector.f[0];
                 beam->pos[1] = work_vector.f[1];
                 beam->pos[2] = work_vector.f[2];
-                beam_frame_count = ++vars->beam_frames;
+                beam_frame_count = ++turret_vars->beam_frames;
                 if (beam_frame_count > 40 || !(beam_frame_count & 4)) {
                     beam->size = 4.0f;
                     beam->alpha = 0.4f;
@@ -205,24 +205,24 @@ void turret_update(struct Moby *moby) {
                 }
             }
         } else {
-            if (moby->pos.z < vars->rest_z) {
+            if (moby->pos.z < turret_vars->rest_z) {
                 moby->pos.z += frame_time;
             } else {
-                moby->pos.z = vars->rest_z;
+                moby->pos.z = turret_vars->rest_z;
             }
-            if (hero.ground_moby != moby && vars->beam != -1) {
+            if (hero.ground_moby != moby && turret_vars->beam != -1) {
                 allocate_voice_for_target_entry(2, 0, moby);
-                release_point_light_slot(vars->beam);
-                vars->beam = -1;
+                release_point_light_slot(turret_vars->beam);
+                turret_vars->beam = -1;
             }
         }
         break;
     case TURRET_STATE_MOUNTED:
         sound_probe_ignore[0] = moby;
-        if (moby->pos.z < vars->rest_z) {
+        if (moby->pos.z < turret_vars->rest_z) {
             moby->pos.z += frame_time;
         } else {
-            moby->pos.z = vars->rest_z;
+            moby->pos.z = turret_vars->rest_z;
         }
         work_vector.f[0] = hero.stick_x;
         stick_y = -hero.stick_y;
@@ -234,29 +234,29 @@ void turret_update(struct Moby *moby) {
         if (stick_magnitude > 1.0f) {
             divide_vector_xyz(&work_vector, &work_vector, stick_magnitude);
         }
-        vars->yaw_speed += frame_time_sq * 3.1415927f * -work_vector.f[0];
-        vars->pitch_speed += frame_time_sq * 0.7853982f * -work_vector.f[1];
-        moby->rot.z = fast_add_rotations(moby->rot.z, vars->yaw_speed);
-        vars->pitch = fast_add_rotations(vars->pitch, vars->pitch_speed);
-        if (vars->pitch < -0.5235988f) {
-            vars->pitch = -0.5235988f;
-            vars->pitch_speed = 0.0f;
-        } else if (vars->pitch > 0.5235988f) {
-            vars->pitch = 0.5235988f;
-            vars->pitch_speed = 0.0f;
+        turret_vars->yaw_speed += frame_time_sq * 3.1415927f * -work_vector.f[0];
+        turret_vars->pitch_speed += frame_time_sq * 0.7853982f * -work_vector.f[1];
+        moby->rot.z = fast_add_rotations(moby->rot.z, turret_vars->yaw_speed);
+        turret_vars->pitch = fast_add_rotations(turret_vars->pitch, turret_vars->pitch_speed);
+        if (turret_vars->pitch < -0.5235988f) {
+            turret_vars->pitch = -0.5235988f;
+            turret_vars->pitch_speed = 0.0f;
+        } else if (turret_vars->pitch > 0.5235988f) {
+            turret_vars->pitch = 0.5235988f;
+            turret_vars->pitch_speed = 0.0f;
         }
-        vars->yaw_speed *= 0.97f;
-        vars->pitch_speed *= 0.97f;
-        FUN_L00_001fff28(&vars->aim, 1, -vars->pitch);
+        turret_vars->yaw_speed *= 0.97f;
+        turret_vars->pitch_speed *= 0.97f;
+        FUN_L00_001fff28(&turret_vars->aim, 1, -turret_vars->pitch);
         if (controller_state.held & 0x20) {
             if (controller_state.pressed & 0x20) {
-                blend_moby_animation(moby, vars->barrel == 0 ? 4 : 3, 0, 1);
+                blend_moby_animation(moby, turret_vars->barrel == 0 ? 4 : 3, 0, 1);
             } else if (moby->seq == 3) {
                 if (absolute_float(compute_interpolated_record_value(moby) - 1.0f) <= 0.25f) {
                     build_spherical_offset(&shot,
                                            frame_time * 60.0f,
                                            fast_add_rotations(1.5707964f, moby->rot.z),
-                                           vars->pitch);
+                                           turret_vars->pitch);
                     moby_point_position(moby, 1, &muzzle);
                     spawn_turret_shot(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
@@ -264,7 +264,7 @@ void turret_update(struct Moby *moby) {
                     l09_turret_shot_response_state.unk168 = scale_game_frames(10);
                     l09_turret_shot_response_state.unk170 = 0.03f;
                     l09_turret_shot_response_state.unk178 = scale_game_frames(7);
-                    vars->barrel = 0;
+                    turret_vars->barrel = 0;
                     for (i = 0; i < 5; i++) {
                         rnd.q = 0;
                         rnd.f[0] = random_float_between(-1.0f, 1.0f);
@@ -303,7 +303,7 @@ void turret_update(struct Moby *moby) {
                     build_spherical_offset(&shot,
                                            frame_time * 60.0f,
                                            fast_add_rotations(1.5707964f, moby->rot.z),
-                                           vars->pitch);
+                                           turret_vars->pitch);
                     moby_point_position(moby, 2, &muzzle);
                     spawn_turret_shot(moby, &muzzle, &shot, scale_game_frames(90));
                     allocate_voice_for_target_entry(0, 0, moby);
@@ -311,7 +311,7 @@ void turret_update(struct Moby *moby) {
                     l09_turret_shot_response_state.unk168 = scale_game_frames(10);
                     l09_turret_shot_response_state.unk170 = 0.03f;
                     l09_turret_shot_response_state.unk178 = scale_game_frames(7);
-                    vars->barrel = 1;
+                    turret_vars->barrel = 1;
                     for (i = 0; i < 5; i++) {
                         rnd.q = 0;
                         rnd.f[0] = random_float_between(-1.0f, 1.0f);
@@ -349,7 +349,7 @@ void turret_update(struct Moby *moby) {
         } else if (moby->prev_seq != 5 && (moby->anim_flags & 2)) {
             blend_moby_animation(moby, 5, 0, 1);
         }
-        if (fast_dec_timer_s16(&vars->dismount_delay) != 0) {
+        if (fast_dec_timer_s16(&turret_vars->dismount_delay) != 0) {
             update_entity(moby);
             moby->flags |= 4;
             snap_scripted_camera_to_pose();
@@ -357,12 +357,12 @@ void turret_update(struct Moby *moby) {
             build_spherical_offset(&shot,
                                    turret_camera_offset_length_gp,
                                    fast_add_rotations(1.5707964f, moby->rot.z),
-                                   vars->pitch);
+                                   turret_vars->pitch);
             shot.f[2] += turret_camera_z_offset_gp;
             fast_vec_add(&muzzle, &work_vector, &shot);
             set_camera_position(&muzzle);
             firing_vector_or_camera_rotation.f[0] = 0.0f;
-            firing_vector_or_camera_rotation.f[1] = -vars->pitch;
+            firing_vector_or_camera_rotation.f[1] = -turret_vars->pitch;
             firing_vector_or_camera_rotation.f[2] = fast_add_rotations(1.5707964f, moby->rot.z);
             set_camera_rotation(&firing_vector_or_camera_rotation);
         }

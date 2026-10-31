@@ -28,11 +28,11 @@ void floating_platform_update(char *moby) {
         FLOATING_PLATFORM_INITIALIZE = 0,
         FLOATING_PLATFORM_UPDATE_MOTION = 1
     };
-    float old[4];
+    float previous_position[4];
     float delta[4];
-    char *data = ((char *)MOBY(moby)->pvars);
-    qcopy(old, moby + 0x10);
-    if (data == 0) {
+    char *platform_vars = ((char *)MOBY(moby)->pvars);
+    qcopy(previous_position, moby + 0x10);
+    if (platform_vars == 0) {
         mark_moby_for_removal(moby);
         return;
     }
@@ -41,11 +41,11 @@ void floating_platform_update(char *moby) {
         int i;
         MOBY(moby)->anim_speed = random_float_between(0.5f, 0.8f);
         moby[0x20] = 1;
-        *(float *)(data + 0x220) = MOBY(moby)->pos.z + 15.0f;
+        *(float *)(platform_vars + 0x220) = MOBY(moby)->pos.z + 15.0f;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(data + 0x3E) = 0xD;
+        *(short *)(platform_vars + 0x3E) = 0xD;
         for (i = 0; i < 3; i++) {
-            ((float *)(data + 0x224))[i] = random_angle_radians();
+            ((float *)(platform_vars + 0x224))[i] = random_angle_radians();
         }
         break;
     }
@@ -56,31 +56,31 @@ void floating_platform_update(char *moby) {
                     0.75f;
         int i;
         for (i = 0; i < 3; i++) {
-            float *ring_angle_ptr = (float *)(data + 0x224) + i;
+            float *ring_angle_ptr = (float *)(platform_vars + 0x224) + i;
             float  ring_angle = fast_add_rotations(
                 *ring_angle_ptr,
                 *(float *)&floating_platform_ring_rotation_rate_degrees * DEG_TO_RAD * frame_time);
             float joint_animation_frame_scale = frame_scale_sq;
             *ring_angle_ptr = ring_angle;
-            *(float *)(data + 0x108 + i * 0x80) = ring_angle;
+            *(float *)(platform_vars + 0x108 + i * 0x80) = ring_angle;
             update_joint_animation(moby,
-                                   data + 0xA0 + i * 0x80,
+                                   platform_vars + 0xA0 + i * 0x80,
                                    i,
                                    joint_animation_frame_scale * 0.03f,
                                    joint_animation_frame_scale * 0.3f);
         }
-        if (*(int *)(data + 0x230) != -1) {
-            char *linked_moby = D_L04_0015FFD8 + (*(int *)(data + 0x230) << 8);
+        if (*(int *)(platform_vars + 0x230) != -1) {
+            char *linked_moby = D_L04_0015FFD8 + (*(int *)(platform_vars + 0x230) << 8);
             if (MOBY(linked_moby)->oclass == 0x118) {
                 height_offset = *((float *)MOBY(linked_moby)->pvars) * 15.0f;
             }
         } else {
             height_offset = 15.0f;
         }
-        MOBY(moby)->pos.z = *(float *)(data + 0x220) + bob - height_offset;
+        MOBY(moby)->pos.z = *(float *)(platform_vars + 0x220) + bob - height_offset;
         break;
     }
     }
-    fast_vec_sub(delta, moby + 0x10, old);
-    update_entity_matrix(data + 0x60, delta, moby + 0x40, moby + 0x40);
+    fast_vec_sub(delta, moby + 0x10, previous_position);
+    update_entity_matrix(platform_vars + 0x60, delta, moby + 0x40, moby + 0x40);
 }

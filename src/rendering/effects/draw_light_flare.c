@@ -29,7 +29,7 @@ void draw_light_flare(char *object) __asm__("FUN_0022df40");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 
-void draw_light_flare(char *object) {
+void draw_light_flare(char *flare_object) {
     float     scaled_position[4];
     FlareQuad quad;
     float     scaled_position_copy[4];
@@ -38,7 +38,7 @@ void draw_light_flare(char *object) {
     int       corner_index;
 
     alpha = 0;
-    scale_vector(scaled_position, object, 1.0f / 1024.0f);
+    scale_vector(scaled_position, flare_object, 1.0f / 1024.0f);
     if (FUN_001fa820(scaled_position, &alpha, 32.0f) < 0) {
         return;
     }
@@ -54,10 +54,10 @@ void draw_light_flare(char *object) {
     quad.gs_state[3] = 0x8000000044;
     quad.gs_state[0] = 0;
     fast_mem_copy(quad.texture_coordinates, unit_quad_texture_coordinates, 0x20);
-    fast_vec_scale(scaled_position_copy, object, 1.0f / 1024.0f);
-    depth = *(float *)(object + 0x18) + 0.1f;
+    fast_vec_scale(scaled_position_copy, flare_object, 1.0f / 1024.0f);
+    depth = *(float *)(flare_object + 0x18) + 0.1f;
     if (game_mode_macro == 6) {
-        depth = probe_ground_height(object + 0x10, 0, 0.5f) + 0.1f;
+        depth = probe_ground_height(flare_object + 0x10, 0, 0.5f) + 0.1f;
     }
     for (corner_index = 0; corner_index < 4; corner_index++) {
         float *vertex_position;
@@ -67,8 +67,8 @@ void draw_light_flare(char *object) {
         transform_vector_by_basis(
             vertex_position,
             light_flare_corner_offsets[level_render_state.content_variant][corner_index],
-            object + 0xC0);
-        fast_vec_add(vertex_position, vertex_position, object + 0x10);
+            flare_object + 0xC0);
+        fast_vec_add(vertex_position, vertex_position, flare_object + 0x10);
         vertex_position[2] = depth;
     }
     draw_geometry_quad(&quad, 0, 0);

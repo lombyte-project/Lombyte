@@ -191,8 +191,8 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
         THROWN_MOBY_STATE_RESET_TO_INITIALIZE = 5
     };
     Vec4         next_pos, start, end, probe;
-    ThrowVars   *vars;
-    struct Moby *other;
+    ThrowVars   *spawner_throw_vars;
+    struct Moby *population_scan_moby;
     s32          live_count;
     s32          settled;
     s32          settled_frames;
@@ -204,8 +204,8 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
 
     if (!thrown_moby)
         return;
-    vars = (ThrowVars *)thrown_moby->pvars;
-    if (!vars)
+    spawner_throw_vars = (ThrowVars *)thrown_moby->pvars;
+    if (!spawner_throw_vars)
         return;
     if (thrown_moby->pos.x < 2.0f || 1021.0f < thrown_moby->pos.x || thrown_moby->pos.y < 2.0f ||
         1021.0f < thrown_moby->pos.y || thrown_moby->pos.z < 2.0f || 1021.0f < thrown_moby->pos.z)
@@ -214,33 +214,35 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
         thrown_moby->flags |= 0x41;
     else
         thrown_moby->flags &= 0xffbe;
-    if (vars->holder->oclass == 0xe5 && vars->unk46 == 0 && fast_vec_length(vars) > 0.0f) {
+    if (spawner_throw_vars->holder->oclass == 0xe5 && spawner_throw_vars->unk46 == 0 &&
+        fast_vec_length(spawner_throw_vars) > 0.0f) {
         if (!hero.ground_moby || !FUN_L00_002603d0((char *)hero.ground_moby))
-            predict_doom_bot_spawner_landing(vars, thrown_moby, 1);
-        else if (!predict_doom_bot_spawner_landing(vars, thrown_moby, 0))
-            predict_doom_bot_spawner_landing(vars, thrown_moby, 2);
+            predict_doom_bot_spawner_landing(spawner_throw_vars, thrown_moby, 1);
+        else if (!predict_doom_bot_spawner_landing(spawner_throw_vars, thrown_moby, 0))
+            predict_doom_bot_spawner_landing(spawner_throw_vars, thrown_moby, 2);
     }
     switch (thrown_moby->state) {
     case THROWN_MOBY_STATE_INITIALIZE:
         thrown_moby->state = 1;
-        vars->effect_timer = scale_game_frames(4);
-        vars->timer = 0;
-        vars->spawn_count = 0;
+        spawner_throw_vars->effect_timer = scale_game_frames(4);
+        spawner_throw_vars->timer = 0;
+        spawner_throw_vars->spawn_count = 0;
         break;
     case THROWN_MOBY_STATE_GROW_TO_QUARTER_SCALE: {
-        vars->timer = 0;
+        spawner_throw_vars->timer = 0;
         {
             f32 class_scale = thrown_moby->pclass->scale;
             if (thrown_moby->scale < class_scale * 0.25f)
                 thrown_moby->scale = thrown_moby->scale + class_scale * (frame_scale * 0.05f);
         }
-        if (fast_dec_timer(&vars->effect_timer)) {
-            vars->effect_timer = scale_game_frames(4);
+        if (fast_dec_timer(&spawner_throw_vars->effect_timer)) {
+            spawner_throw_vars->effect_timer = scale_game_frames(4);
             if (!hero.unk20A5)
                 spawn_moby_bound_effect_particle(thrown_moby);
         }
-        if (!hero.vehicle_mode && vars->holder && (vars->holder->state & 0xf0) != 0xf0 &&
-            hero.items[0].moby && hero.items[0].moby->oclass == 0xe5)
+        if (!hero.vehicle_mode && spawner_throw_vars->holder &&
+            (spawner_throw_vars->holder->state & 0xf0) != 0xf0 && hero.items[0].moby &&
+            hero.items[0].moby->oclass == 0xe5)
             return;
         goto remove;
     }
@@ -256,12 +258,12 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
                 thrown_moby->scale =
                     thrown_moby->scale + class_scale * (frame_scale * 0.05f) * size;
         }
-        if (fast_dec_timer(&vars->effect_timer)) {
-            vars->effect_timer = scale_game_frames(4);
+        if (fast_dec_timer(&spawner_throw_vars->effect_timer)) {
+            spawner_throw_vars->effect_timer = scale_game_frames(4);
             spawn_moby_bound_effect_particle(thrown_moby);
         }
-        vars->vel.f[2] -= frame_time_sq * 9.0f;
-        fast_vec_add(&next_pos, &thrown_moby->pos, vars);
+        spawner_throw_vars->vel.f[2] -= frame_time_sq * 9.0f;
+        fast_vec_add(&next_pos, &thrown_moby->pos, spawner_throw_vars);
         carry = (u8 *)&hero.motion.platform_carry;
         add_vectors(&probe, &thrown_moby->pos, carry);
         qcopy_nc(&start, &thrown_moby->pos);
@@ -279,9 +281,9 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
             thrown_moby->pos.z -= size * 0.2f;
             collision_point += 0x10;
             rest_speed = 0.01f;
-            reflect_vector(vars, vars, collision_point);
-            fast_vec_scale(vars, vars, half);
-            speed = fast_vec_length(vars);
+            reflect_vector(spawner_throw_vars, spawner_throw_vars, collision_point);
+            fast_vec_scale(spawner_throw_vars, spawner_throw_vars, half);
+            speed = fast_vec_length(spawner_throw_vars);
             if (speed < frame_scale * rest_speed)
                 goto settle;
         } else {
@@ -294,30 +296,30 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
                 (frame_scale * 0.15f * thrown_moby->scale) / thrown_moby->pclass->scale;
             collision_point += 0x20;
             rest_speed = 0.01f;
-            reflect_vector(vars, vars, collision_point);
-            fast_vec_scale(vars, vars, half);
-            speed = fast_vec_length(vars);
+            reflect_vector(spawner_throw_vars, spawner_throw_vars, collision_point);
+            fast_vec_scale(spawner_throw_vars, spawner_throw_vars, half);
+            speed = fast_vec_length(spawner_throw_vars);
             if (speed < frame_scale * rest_speed)
                 goto settle;
         }
         if (player->ground_moby) {
             if (FUN_L00_002603d0((char *)player->ground_moby)) {
-                speed = fast_vec_length(vars);
+                speed = fast_vec_length(spawner_throw_vars);
                 if (speed < frame_scale * rest_speed + fast_vec_length(carry - 0x40)) {
                 settle:
-                    settled = (u16)vars->timer + 1;
-                    vars->timer = settled;
+                    settled = (u16)spawner_throw_vars->timer + 1;
+                    spawner_throw_vars->timer = settled;
                     if (!coll_hit.moby || coll_hit.unk1C > 0 ||
                         (settled_frames = (s16)settled, scale_game_frames(240) < settled_frames)) {
                         thrown_moby->state = 3;
-                        vars->timer = 0;
+                        spawner_throw_vars->timer = 0;
                     }
                 }
             }
             if (hero.ground_moby && FUN_L00_002603d0((char *)hero.ground_moby))
-                fast_vec_add(vars, vars, &hero.motion.displacement);
+                fast_vec_add(spawner_throw_vars, spawner_throw_vars, &hero.motion.displacement);
         }
-        fast_vec_add(&thrown_moby->pos, &thrown_moby->pos, vars);
+        fast_vec_add(&thrown_moby->pos, &thrown_moby->pos, spawner_throw_vars);
         spawn_moby_collision_particles(thrown_moby);
         break;
     collision_miss:
@@ -336,42 +338,44 @@ void update_doom_bot_spawner(struct Moby *thrown_moby) {
                              &thrown_moby->rot,
                              collision_point,
                              &thrown_moby->rot);
-        if (fast_dec_timer_s16(&vars->timer)) {
+        if (fast_dec_timer_s16(&spawner_throw_vars->timer)) {
             live_count = 0;
-            for (other = (struct Moby *)D_L00_0015FFE4; other; other = other->next) {
-                if (other->oclass == 0xba) {
+            for (population_scan_moby = (struct Moby *)D_L00_0015FFE4; population_scan_moby;
+                 population_scan_moby = population_scan_moby->next) {
+                if (population_scan_moby->oclass == 0xba) {
                     /* Fakematch: dead `last = other` (see `never`). */
-                    if ((other->state & 0xf0) != 0xf0) {
+                    if ((population_scan_moby->state & 0xf0) != 0xf0) {
                         live_count++;
-                        last = other;
+                        last = population_scan_moby;
                     }
                 }
             }
             /* Fakematch: keeps `last` alive until cse2 folds this to nothing. */
             live_count += (s32)last & never;
             if (live_count >= 8) {
-                vars->timer = scale_game_frames(15);
+                spawner_throw_vars->timer = scale_game_frames(15);
             } else {
-                start.f[0] = fast_cos((f32)vars->spawn_count * 6.2831855f * 0.25f);
+                start.f[0] = fast_cos((f32)spawner_throw_vars->spawn_count * 6.2831855f * 0.25f);
                 start.f[0] = frame_scale * 0.05f * start.f[0];
-                start.f[1] = fast_sin((f32)vars->spawn_count * 6.2831855f * 0.25f);
+                start.f[1] = fast_sin((f32)spawner_throw_vars->spawn_count * 6.2831855f * 0.25f);
                 start.f[2] = frame_scale * 0.02f;
                 start.f[1] = frame_scale * 0.05f * start.f[1];
                 if (hero.ground_moby && FUN_L00_002603d0((char *)hero.ground_moby))
                     fast_vec_add(&start, &start, &hero.motion.displacement);
                 fast_vec_add(&next_pos, &start, &thrown_moby->pos);
-                spawn_doom_bot(vars->holder, &next_pos, &start);
-                vars->timer = scale_game_frames(8);
+                spawn_doom_bot(spawner_throw_vars->holder, &next_pos, &start);
+                spawner_throw_vars->timer = scale_game_frames(8);
                 {
-                    s32 spawned = vars->spawn_count + 1;
-                    vars->spawn_count = spawned;
+                    s32 spawned = spawner_throw_vars->spawn_count + 1;
+                    spawner_throw_vars->spawn_count = spawned;
                     if (spawned > 3)
                         thrown_moby->state = 4;
                 }
             }
         }
-        if (vars->spawn_count < 2 && fast_dec_timer(&vars->effect_timer)) {
-            vars->effect_timer = scale_game_frames(4);
+        if (spawner_throw_vars->spawn_count < 2 &&
+            fast_dec_timer(&spawner_throw_vars->effect_timer)) {
+            spawner_throw_vars->effect_timer = scale_game_frames(4);
             spawn_moby_bound_effect_particle(thrown_moby);
         }
         break;

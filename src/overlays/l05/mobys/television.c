@@ -19,14 +19,14 @@ void television_update(struct Moby *moby) {
         TELEVISION_UPDATE_BOBBING = 1
     };
     float bobbing_phase;
-    char *data = (char *)moby->pvars;
+    char *television_bobbing_state = (char *)moby->pvars;
     int   visibility_control_mode;
     moby->scale = moby->pclass->scale * *(float *)&television_scale_multiplier_gp;
     switch (moby->state) {
     case TELEVISION_INITIALIZE:
         moby->state = 1;
-        *(float *)data = random_angle_radians();
-        *(float *)(data + 4) = moby->pos.z;
+        *(float *)television_bobbing_state = random_angle_radians();
+        *(float *)(television_bobbing_state + 4) = moby->pos.z;
         break;
     case TELEVISION_UPDATE_BOBBING:
         visibility_control_mode = D_L05_0015F5C4;
@@ -37,9 +37,10 @@ void television_update(struct Moby *moby) {
             moby->visible = 1;
             moby->flags &= 0xFFFE;
         }
-        bobbing_phase = fast_add_rotations(*(float *)data, frame_time * 0.87266463f);
-        *(float *)data = bobbing_phase;
-        moby->pos.z = *(float *)(data + 4) + fast_sin(bobbing_phase);
+        bobbing_phase =
+            fast_add_rotations(*(float *)television_bobbing_state, frame_time * 0.87266463f);
+        *(float *)television_bobbing_state = bobbing_phase;
+        moby->pos.z = *(float *)(television_bobbing_state + 4) + fast_sin(bobbing_phase);
         break;
     }
 }

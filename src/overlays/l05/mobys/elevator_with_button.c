@@ -76,7 +76,7 @@ void elevator_with_button_update(struct Moby *moby) {
         ELEVATOR_WAIT_TO_RETURN_FROM_TOP = 6,
         ELEVATOR_WAIT_TO_RETURN_FROM_BOTTOM = 7
     };
-    LiftVars *vars = (LiftVars *)moby->pvars;
+    LiftVars *elevator_vars = (LiftVars *)moby->pvars;
     Vec4      delta;
     Vec4      rot;
     Vec4      eye;
@@ -91,16 +91,16 @@ void elevator_with_button_update(struct Moby *moby) {
     qcopy(&rot, &moby->rot);
     switch (moby->state) {
     case ELEVATOR_INITIALIZE:
-        vars->phase = random_angle_radians();
-        vars->sound = -1;
-        vars->base_yaw = moby->rot.z;
+        elevator_vars->phase = random_angle_radians();
+        elevator_vars->sound = -1;
+        elevator_vars->base_yaw = moby->rot.z;
         moby->state = 3;
         break;
     case ELEVATOR_FADE_BEFORE_CAMERA_MOUNT:
-        D_0014162A = vars->marker;
-        approach_value(&vars->fade, 1.0f, 0.133f);
-        elevator_camera_transition_fade = vars->fade;
-        if (vars->fade == 1.0f) {
+        D_0014162A = elevator_vars->marker;
+        approach_value(&elevator_vars->fade, 1.0f, 0.133f);
+        elevator_camera_transition_fade = elevator_vars->fade;
+        if (elevator_vars->fade == 1.0f) {
             lift_camera_view(moby, &eye, &look);
             jet_mount(&eye, &look, 1, 0, 0);
             moby->state = moby->command;
@@ -109,17 +109,17 @@ void elevator_with_button_update(struct Moby *moby) {
         break;
     case ELEVATOR_MOVE_TO_TOP:
     case ELEVATOR_MOVE_TO_BOTTOM:
-        if (!voice_is_playing(moby, vars->sound)) {
-            vars->sound = allocate_voice_for_target_entry(0, 4, moby);
+        if (!voice_is_playing(moby, elevator_vars->sound)) {
+            elevator_vars->sound = allocate_voice_for_target_entry(0, 4, moby);
         }
         if (moby->command) {
-            D_0014162A = vars->marker;
-            approach_value(&vars->fade, 0.0f, 0.133f);
-            elevator_camera_transition_fade = vars->fade;
+            D_0014162A = elevator_vars->marker;
+            approach_value(&elevator_vars->fade, 0.0f, 0.133f);
+            elevator_camera_transition_fade = elevator_vars->fade;
             lift_camera_view(moby, &eye, &look);
             set_camera_position(&eye);
             set_camera_rotation(&look);
-            scale = 1.0f / (vars->top - vars->bottom);
+            scale = 1.0f / (elevator_vars->top - elevator_vars->bottom);
             progress_speed_limit = frame_time * (moby->command ? 6.0f : 16.0f) * scale;
             max_speed = frame_time_sq * (moby->command ? 6.0f : 16.0f) * scale;
         } else {
@@ -127,26 +127,33 @@ void elevator_with_button_update(struct Moby *moby) {
             max_speed = frame_time_sq;
         }
         target = moby->state == 2 ? 1.0f : 0.0f;
-        advance_accelerated_scalar(
-            &vars->progress, &vars->speed, target, max_speed, max_speed, progress_speed_limit);
-        moby->pos.z = (vars->top - vars->bottom) * vars->progress + vars->bottom;
-        moby->rot.z =
-            fast_subtract_rotations(l05_cuboids[vars->pose].rot.z, vars->base_yaw) * vars->progress;
-        moby->rot.z = fast_add_rotations(moby->rot.z, vars->base_yaw);
-        if (absolute_float(vars->progress - target) < 0.01f) {
-            vars->timer = scale_game_frames(120);
-            if (vars->sound != -1) {
+        advance_accelerated_scalar(&elevator_vars->progress,
+                                   &elevator_vars->speed,
+                                   target,
+                                   max_speed,
+                                   max_speed,
+                                   progress_speed_limit);
+        moby->pos.z = (elevator_vars->top - elevator_vars->bottom) * elevator_vars->progress +
+                      elevator_vars->bottom;
+        moby->rot.z = fast_subtract_rotations(l05_cuboids[elevator_vars->pose].rot.z,
+                                              elevator_vars->base_yaw) *
+                      elevator_vars->progress;
+        moby->rot.z = fast_add_rotations(moby->rot.z, elevator_vars->base_yaw);
+        if (absolute_float(elevator_vars->progress - target) < 0.01f) {
+            elevator_vars->timer = scale_game_frames(120);
+            if (elevator_vars->sound != -1) {
                 LiftVoiceWindow *window =
-                    (LiftVoiceWindow *)((u8 *)&voice_pool + vars->sound * sizeof(LiftVoice));
+                    (LiftVoiceWindow *)((u8 *)&voice_pool +
+                                        elevator_vars->sound * sizeof(LiftVoice));
                 if (window->voice.owner == moby && window->voice.state != 0) {
-                    release_voice_slot(vars->sound);
+                    release_voice_slot(elevator_vars->sound);
                 }
             }
-            vars->sound = -1;
-            if (vars->speed > 0.00125f) {
-                vars->speed = 0.00125f;
-            } else if (vars->speed < -0.00125f) {
-                vars->speed = -0.00125f;
+            elevator_vars->sound = -1;
+            if (elevator_vars->speed > 0.00125f) {
+                elevator_vars->speed = 0.00125f;
+            } else if (elevator_vars->speed < -0.00125f) {
+                elevator_vars->speed = -0.00125f;
             }
             if (moby->command) {
                 if (moby->state == 2) {
@@ -165,13 +172,13 @@ void elevator_with_button_update(struct Moby *moby) {
         break;
     case ELEVATOR_WAIT_TO_RETURN_FROM_TOP:
     case ELEVATOR_WAIT_TO_RETURN_FROM_BOTTOM:
-        if (voice_is_playing(moby, vars->sound)) {
-            release_voice_slot(vars->sound);
-            vars->sound = -1;
+        if (voice_is_playing(moby, elevator_vars->sound)) {
+            release_voice_slot(elevator_vars->sound);
+            elevator_vars->sound = -1;
         }
-        if (vars->timer > scale_game_frames(30) ||
+        if (elevator_vars->timer > scale_game_frames(30) ||
             vector_distance_xy(&hero.motion.pos, &moby->pos) > 0.5f) {
-            fast_dec_timer(&vars->timer);
+            fast_dec_timer(&elevator_vars->timer);
         }
         if (hero.ground_moby != moby) {
             jet_end_mount(1);
@@ -182,11 +189,11 @@ void elevator_with_button_update(struct Moby *moby) {
             }
             break;
         }
-        if (vars->timer != 0) {
+        if (elevator_vars->timer != 0) {
             break;
         }
-        vars->phase = fast_add_rotations(vars->phase, frame_time * 6.2831855f);
-        level = truncate_float_to_s32((fast_sin(vars->phase) * 4.0f - 3.0f) * 128.0f);
+        elevator_vars->phase = fast_add_rotations(elevator_vars->phase, frame_time * 6.2831855f);
+        level = truncate_float_to_s32((fast_sin(elevator_vars->phase) * 4.0f - 3.0f) * 128.0f);
         if (level > 0x80) {
             level = 0x80;
         } else if (level < 0x20) {
@@ -206,8 +213,8 @@ void elevator_with_button_update(struct Moby *moby) {
         break;
     case ELEVATOR_WAIT_AT_TOP:
     case ELEVATOR_WAIT_AT_BOTTOM:
-        vars->phase = fast_add_rotations(vars->phase, frame_time * 6.2831855f);
-        level = truncate_float_to_s32((fast_sin(vars->phase) * 4.0f - 3.0f) * 128.0f);
+        elevator_vars->phase = fast_add_rotations(elevator_vars->phase, frame_time * 6.2831855f);
+        level = truncate_float_to_s32((fast_sin(elevator_vars->phase) * 4.0f - 3.0f) * 128.0f);
         if (level > 0x80) {
             level = 0x80;
         } else if (level < 0x20) {
@@ -217,7 +224,7 @@ void elevator_with_button_update(struct Moby *moby) {
         if (hero.ground_moby == moby && hero.air_frames.s == 0 &&
             vector_distance_xy(&hero.motion.pos, &moby->pos) < 0.5f) {
             allocate_voice_for_target_entry(1, 0, moby);
-            if (vars->marker != -1) {
+            if (elevator_vars->marker != -1) {
                 place_marker_ring(moby);
             }
             moby->glow_color = 0x80208020;
@@ -227,17 +234,18 @@ void elevator_with_button_update(struct Moby *moby) {
                 moby->command = 3;
             }
             moby->state = 1;
-            vars->fade = 0.0f;
+            elevator_vars->fade = 0.0f;
         } else if (moby->state == 4) {
             f32 dist = vector_distance_xy(&moby->pos, &hero.motion.pos);
-            if (absolute_float(hero.ground_z.f - vars->bottom) < 2.0f && dist < 32.0f &&
+            if (absolute_float(hero.ground_z.f - elevator_vars->bottom) < 2.0f && dist < 32.0f &&
                 dist > 5.0f) {
                 moby->command = 0;
                 moby->state = 3;
             }
         } else if (moby->state == 5) {
             f32 dist = vector_distance_xy(&moby->pos, &hero.motion.pos);
-            if (absolute_float(hero.ground_z.f - vars->top) < 2.0f && dist < 32.0f && dist > 5.0f) {
+            if (absolute_float(hero.ground_z.f - elevator_vars->top) < 2.0f && dist < 32.0f &&
+                dist > 5.0f) {
                 moby->command = 0;
                 moby->state = 2;
             }
@@ -245,7 +253,7 @@ void elevator_with_button_update(struct Moby *moby) {
         break;
     }
     fast_vec_add(&delta, &delta, &moby->pos);
-    FUN_L00_00260738(vars->rider, &delta, &rot, &moby->rot);
+    FUN_L00_00260738(elevator_vars->rider, &delta, &rot, &moby->rot);
 }
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003173A8), where it is exact; names translated to the US level program. */
@@ -270,8 +278,8 @@ void FUN_L05_00315ee0(char *lift_moby, char *camera_position, char *camera_rotat
 
 void FUN_L05_00315f70(char *moby) {
     int   i = 0;
-    char *data = ((char *)MOBY(moby)->pvars);
-    char *tab = ((char *)l05_paths[*(int *)(data + 0x68)]);
+    char *lift_vars = ((char *)MOBY(moby)->pvars);
+    char *tab = ((char *)l05_paths[*(int *)(lift_vars + 0x68)]);
     float ring_point_angle = 0.0f;
     float step = 6.28318f / (float)(*(int *)tab - 1);
     for (; i < *(int *)tab; i++) {

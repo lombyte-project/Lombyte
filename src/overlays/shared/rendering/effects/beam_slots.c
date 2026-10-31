@@ -349,15 +349,15 @@ void update_slot_panes_and_effects(int unused, int beam) {
     if (beam_slot_state[beam] == 2) {
         beam_slot_state[beam] = 3;
         for (i = 0; i < 20; i++) {
-            Pt *first = &beam_strands[strand].points[i];
-            Pt *second = &beam_strands[next_strand].points[i];
+            Pt *sine_strand_point = &beam_strands[strand].points[i];
+            Pt *noisy_strand_point = &beam_strands[next_strand].points[i];
 
-            first->x = step * (float)i;
-            first->y = first->z = 0.0f;
-            first->w = 1.0f;
-            second->x = step * (float)i;
-            second->y = second->z = 0.0f;
-            second->w = 1.0f;
+            sine_strand_point->x = step * (float)i;
+            sine_strand_point->y = sine_strand_point->z = 0.0f;
+            sine_strand_point->w = 1.0f;
+            noisy_strand_point->x = step * (float)i;
+            noisy_strand_point->y = noisy_strand_point->z = 0.0f;
+            noisy_strand_point->w = 1.0f;
         }
     }
     beam_amplitude_phase[beam] = func_001FA748_2E3700(beam_amplitude_phase[beam], 0.17453292f);

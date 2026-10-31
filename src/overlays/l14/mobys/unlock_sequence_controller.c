@@ -83,13 +83,13 @@ extern unsigned short *D_L14_001ABF40[];
 
 void save_and_lower_unlock_sequence_mobys(struct Moby *moby) {
     unsigned short *moby_id_cursor = D_L14_001ABF40[*(int *)moby->pvars];
-    float          *out;
+    float          *saved_moby_height_write_cursor;
     if (moby_id_cursor != 0) {
-        int base = D_L14_0015FFD8;
-        out = unlock_sequence_saved_moby_heights;
+        int moby_array_base = D_L14_0015FFD8;
+        saved_moby_height_write_cursor = unlock_sequence_saved_moby_heights;
         do {
-            float *target_moby = (float *)(base + ((*moby_id_cursor & 0x7FFF) << 8));
-            *out++ = target_moby[6];
+            float *target_moby = (float *)(moby_array_base + ((*moby_id_cursor & 0x7FFF) << 8));
+            *saved_moby_height_write_cursor++ = target_moby[6];
             target_moby[6] -= 20.0f;
             *(unsigned short *)((char *)target_moby + 0x34) |= 0x41;
         } while (*(short *)moby_id_cursor++ >= 0);
@@ -103,17 +103,17 @@ void raise_unlock_sequence_mobys(struct Moby *moby) {
     short *moby_id_cursor = (short *)D_L14_001ABF40[unlock_sequence_data[0]];
     float  height_blend_factor;
     float *saved_height_cursor;
-    char  *base;
+    char  *level_moby_array;
     float  x;
     if (moby_id_cursor == 0) {
         return;
     }
     x = convert_integer_to_float(unlock_sequence_data[1]) * ((float *)unlock_sequence_data)[2];
     height_blend_factor = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, 1.0f - x);
-    base = D_L14_0015FFD8;
+    level_moby_array = D_L14_0015FFD8;
     saved_height_cursor = unlock_sequence_saved_moby_heights;
     do {
-        char *target_moby = base + ((*(unsigned short *)moby_id_cursor & 0x7FFF) << 8);
+        char *target_moby = level_moby_array + ((*(unsigned short *)moby_id_cursor & 0x7FFF) << 8);
         float saved_height = *saved_height_cursor++;
         float lo = saved_height - 20.0f;
         MOBY(target_moby)->flags &= 0xFFBE;

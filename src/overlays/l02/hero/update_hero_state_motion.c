@@ -564,7 +564,7 @@ extern u128_222270 D_L02_00174470[] NOT_SDA;
 s32                resolve_hero_position_collisions(s32 mode) __asm__("FUN_L02_00222270");
 
 s32 resolve_hero_position_collisions(s32 mode) {
-    V_222270     old;
+    V_222270     pre_collision_position;
     V_222270     collision_probe_offset;
     V_222270     corrected_displacement;
     s32          mask;
@@ -574,7 +574,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     if (hero.collision_off_frames != 0) {
         return 1;
     }
-    qcopy(&old, &hero.motion.pos.q);
+    qcopy(&pre_collision_position, &hero.motion.pos.q);
     clear_u64_value(&collision_probe_offset);
     if (hero.path_constrain_pending != 0) {
         f2347c0_222270();
@@ -623,7 +623,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         hero.coll_hit_moby = ((s32 *)collision_response_data)[-6];
     }
     fast_vec_sub(&hero.motion.pos.q, &hero.motion.pos.q, &collision_probe_offset);
-    fast_vec_sub(&corrected_displacement, &hero.motion.pos.q, &old);
+    fast_vec_sub(&corrected_displacement, &hero.motion.pos.q, &pre_collision_position);
     probe_height_or_displacement_length = fast_vec_length(&corrected_displacement);
     if (hero.capsule_radius * 1.5f < probe_height_or_displacement_length) {
         if (mode == 0xF) {
@@ -641,7 +641,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
                 corrected_displacement.f[2] = -512.0f;
             fast_vec_normalize(
                 &corrected_displacement, &corrected_displacement, hero.capsule_radius);
-            fast_vec_add(&hero.motion.pos.q, &old, &corrected_displacement);
+            fast_vec_add(&hero.motion.pos.q, &pre_collision_position, &corrected_displacement);
         }
         return -1;
     }

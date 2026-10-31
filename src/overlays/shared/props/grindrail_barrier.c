@@ -123,7 +123,7 @@ void draw_grindrail_barrier_effect(char *barrier_moby) __asm__("FUN_L16_002e58d8
 void draw_grindrail_barrier_effect(char *barrier_moby) {
     RingQuad  quad;
     float     transform[4][4], rotation[4];
-    RingData *data = ((RingData *)MOBY(barrier_moby)->pvars);
+    RingData *barrier_effect_state = ((RingData *)MOBY(barrier_moby)->pvars);
     float     scale =
         MOBY(barrier_moby)->scale / *(float *)(((char *)MOBY(barrier_moby)->pclass) + 0x24);
     float *u, *v;
@@ -154,10 +154,10 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
             fast_vec_scale(quad.position[k], quad.position[k], scale);
         }
     }
-    angles = data->cardinal_angles;
+    angles = barrier_effect_state->cardinal_angles;
     angle_step = 6.2831855f / convert_integer_to_float(*(int *)&grindrail_barrier_ring_quad_count);
     phase_step = 3.0f / convert_integer_to_float(*(int *)&grindrail_barrier_ring_quad_count);
-    phase = data->phase;
+    phase = barrier_effect_state->phase;
     while (phase < 0.0f)
         phase += 1.0f;
     while (phase > 1.0f)
@@ -165,7 +165,7 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
     for (i = 0; i < *(int *)&grindrail_barrier_ring_quad_count;) {
         float blend;
         int   color, j;
-        rotation[0] = fast_add_rotations(data->yaw, (float)i * angle_step);
+        rotation[0] = fast_add_rotations(barrier_effect_state->yaw, (float)i * angle_step);
         euler_rotation_basis(transform, rotation);
         if (phase > 0.5f)
             blend = (-phase + 1.0f) + (-phase + 1.0f);

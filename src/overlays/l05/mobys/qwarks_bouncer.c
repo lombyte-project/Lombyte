@@ -118,7 +118,7 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
         QWARKS_BOUNCER_INITIALIZE = 0,
         QWARKS_BOUNCER_UPDATE_DIALOGUE = 1
     };
-    L16WatchScratch_c scratch;
+    L16WatchScratch_c bouncer_look_vectors;
     WD2              *bouncer_data = (WD2 *)bouncer_moby->data;
     float             rate;
     float             head_rate;
@@ -194,22 +194,25 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
             fast_vec_add(bouncer_data->target, bouncer_data->target, bouncer_moby->position);
         }
         if (bouncer_data->moving_timer) {
-            qcopy(scratch.target, (char *)&D_0013E633_watch_c + 0xEED);
+            qcopy(bouncer_look_vectors.target, (char *)&D_0013E633_watch_c + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, bouncer_data->target);
+            qcopy(bouncer_look_vectors.target, bouncer_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, bouncer_moby->position);
-        scratch.eye[2] += 1.0f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations_c(fast_arc_tan(scratch.delta[0], scratch.delta[1]),
-                                        bouncer_moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy_c(scratch.delta), scratch.delta[2]);
+        qcopy(bouncer_look_vectors.eye, bouncer_moby->position);
+        bouncer_look_vectors.eye[2] += 1.0f;
+        fast_vec_sub(
+            bouncer_look_vectors.delta, bouncer_look_vectors.target, bouncer_look_vectors.eye);
+        yaw = fast_subtract_rotations_c(
+            fast_arc_tan(bouncer_look_vectors.delta[0], bouncer_look_vectors.delta[1]),
+            bouncer_moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy_c(bouncer_look_vectors.delta),
+                              bouncer_look_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

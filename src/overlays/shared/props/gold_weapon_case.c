@@ -45,7 +45,7 @@ void gold_weapon_case_update(struct Moby *moby) {
         GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END = 4
     };
     SaleVars  *sale_vars = (SaleVars *)moby->pvars;
-    s32        item;
+    s32        purchased_item_id;
     ItemPrice *price;
 
     if (sale_vars != 0 && sale_vars->slot != -1 && ((sale_vars->slot ^ 1) & 1) &&
@@ -70,10 +70,10 @@ void gold_weapon_case_update(struct Moby *moby) {
         if (sale_vars->result == 2) {
             item_text_variant[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] = 1;
             moby->state = 4;
-            item = gold_weapon_case_item_ids_by_slot[sale_vars->slot];
-            price = &l01_gold_weapon_case_item_prices[item];
+            purchased_item_id = gold_weapon_case_item_ids_by_slot[sale_vars->slot];
+            price = &l01_gold_weapon_case_item_prices[purchased_item_id];
             current_bolt_count -= price->bolts;
-            initialize_vendor_screen(moby, item, price);
+            initialize_vendor_screen(moby, purchased_item_id, price);
         }
         break;
     case GOLD_WEAPON_CASE_IDLE: /* sold out or done: idle */

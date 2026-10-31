@@ -21,7 +21,7 @@ void configure_graphics_projection(s32 viewport_width,
                                    f32 fog_near_intensity,
 
                                    f32 fog_far_intensity) {
-    struct View *context = &view_context;
+    struct View *projection_view = &view_context;
     s32          half_width = viewport_width >> 1;
     s32          half_height = viewport_height >> 1;
     f32          projection_half_height;
@@ -34,18 +34,18 @@ void configure_graphics_projection(s32 viewport_width,
     screen_extent.top = (0x800 - half_height) << 4;
     screen_extent.right = (half_width + 0x800) << 4;
     screen_extent.bottom = (half_height + 0x800) << 4;
-    context->fov.f[0] = horizontal_fov;
-    context->near_clip = 32.0f;
-    context->far_clip = 524288.0f;
-    context->half_width = convert_integer_to_float(viewport_width) * 0.5f;
+    projection_view->fov.f[0] = horizontal_fov;
+    projection_view->near_clip = 32.0f;
+    projection_view->far_clip = 524288.0f;
+    projection_view->half_width = convert_integer_to_float(viewport_width) * 0.5f;
     projection_half_height = convert_integer_to_float(viewport_height) * 0.5f;
-    context->half_height = projection_half_height;
-    context->scr_x = context->half_width * 4.0f;
-    context->scr_y = projection_half_height * 4.0f;
-    context->fog_near_dist = fog_near_distance;
-    context->fog_far_dist = fog_far_distance;
-    context->fog_near_int = fog_near_intensity;
-    context->fog_far_int = fog_far_intensity;
+    projection_view->half_height = projection_half_height;
+    projection_view->scr_x = projection_view->half_width * 4.0f;
+    projection_view->scr_y = projection_half_height * 4.0f;
+    projection_view->fog_near_dist = fog_near_distance;
+    projection_view->fog_far_dist = fog_far_distance;
+    projection_view->fog_near_int = fog_near_intensity;
+    projection_view->fog_far_int = fog_far_intensity;
     update_view_context();
 }
 

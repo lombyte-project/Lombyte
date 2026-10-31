@@ -172,7 +172,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         GADGETRON_CEO_MONITOR_CHALLENGE_EVENTS = 3,
         GADGETRON_CEO_WAIT_TO_SAVE = 4
     };
-    L16ChallengeScratch     scratch;
+    L16ChallengeScratch     ceo_gaze_vectors;
     L16ChallengeData       *ceo_data = ceo_moby->data;
     L16ChallengeActivation *activation = (L16ChallengeActivation *)ceo_data->activation;
     float                   rate, head_rate;
@@ -351,22 +351,22 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
             fast_vec_add(ceo_data->target, ceo_data->target, ceo_moby->position);
         }
         if (ceo_data->moving_timer) {
-            qcopy(scratch.target, (char *)&D_0013E633_challenge + 0xEED);
+            qcopy(ceo_gaze_vectors.target, (char *)&D_0013E633_challenge + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, ceo_data->target);
+            qcopy(ceo_gaze_vectors.target, ceo_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, ceo_moby->position);
-        scratch.eye[2] += 1.0f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]),
-                                      ceo_moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
+        qcopy(ceo_gaze_vectors.eye, ceo_moby->position);
+        ceo_gaze_vectors.eye[2] += 1.0f;
+        fast_vec_sub(ceo_gaze_vectors.delta, ceo_gaze_vectors.target, ceo_gaze_vectors.eye);
+        yaw = fast_subtract_rotations(
+            fast_arc_tan(ceo_gaze_vectors.delta[0], ceo_gaze_vectors.delta[1]), ceo_moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy(ceo_gaze_vectors.delta), ceo_gaze_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)
@@ -393,14 +393,14 @@ extern void request_music_track(int, int) __asm__("FUN_L01_0027a248");
 extern void jet_group_state(int, int, int, int) __asm__("FUN_L13_002650a8");
 
 void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int  *group_index_entry = (int *)(data + 0x60);
+    char *ceo_environment_group_data = (char *)moby->pvars;
+    int  *group_index_entry = (int *)(ceo_environment_group_data + 0x60);
     int   i;
     for (i = 15; i >= 0; i--) {
         jet_group_state(*group_index_entry, 1, 1, 1);
         group_index_entry++;
     }
-    group_index_entry = (int *)(data + 0xA0);
+    group_index_entry = (int *)(ceo_environment_group_data + 0xA0);
     for (i = 7; i >= 0; i--) {
         jet_group_state(*group_index_entry, 0, 0, 0);
         group_index_entry++;
@@ -412,15 +412,15 @@ void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E85E0), where it is exact; names translated to the US level program. */
 
 void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *ceo_environment_data = (char *)moby->pvars;
     int  *group_index_entry;
     int   i;
-    group_index_entry = (int *)(data + 0x60);
+    group_index_entry = (int *)(ceo_environment_data + 0x60);
     for (i = 15; i >= 0; i--) {
         jet_group_state(group_index_entry[0], 0, 0, 0);
         group_index_entry++;
     }
-    group_index_entry = (int *)(data + 0xA0);
+    group_index_entry = (int *)(ceo_environment_data + 0xA0);
     for (i = 7; i >= 0; i--) {
         jet_group_state(group_index_entry[0], 1, 1, 0);
         group_index_entry++;

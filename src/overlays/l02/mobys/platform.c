@@ -18,9 +18,9 @@ void platform_update(struct Moby *moby) __asm__("FUN_L02_002ddc00");
 void platform_update(struct Moby *moby) {
     char  zero[16];
     char  previous_rotation[16];
-    char *data = (char *)moby->pvars;
+    char *platform_vars = (char *)moby->pvars;
     qzero(zero);
     qcopy(previous_rotation, &moby->rot);
     moby->rot.z = fast_add_rotations(moby->rot.z, D_0015ED6C * 0.08726646f);
-    update_entity_matrix(data + 0x20, zero, previous_rotation, &moby->rot);
+    update_entity_matrix(platform_vars + 0x20, zero, previous_rotation, &moby->rot);
 }

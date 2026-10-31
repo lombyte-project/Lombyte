@@ -156,21 +156,22 @@ void select_moby_context(int state) __asm__("FUN_L00_00235668");
 void select_moby_context(int state) {
     int oldState = l00_active_moby_context_selector;
     if (state != oldState) {
-        int old70, old74, old78, old7C, oldDC, oldE0, oldE8;
+        int saved_inactive_moby_array_start, saved_inactive_loaded_moby_end,
+            saved_inactive_moby_pool_last_slot, old7C, oldDC, oldE0, oldE8;
         oldDC = (int)moby_table;
-        old70 = l00_inactive_moby_array_start;
+        saved_inactive_moby_array_start = l00_inactive_moby_array_start;
         l00_inactive_moby_array_start = oldDC;
         oldDC = D_L00_0015FFDC;
-        old74 = l00_inactive_loaded_moby_end;
+        saved_inactive_loaded_moby_end = l00_inactive_loaded_moby_end;
         l00_inactive_loaded_moby_end = oldDC;
         oldDC = D_L00_0015FFE0;
-        old78 = l00_inactive_moby_pool_last_slot;
+        saved_inactive_moby_pool_last_slot = l00_inactive_moby_pool_last_slot;
         oldE8 = l00_active_moby_pool_end;
         old7C = l00_inactive_moby_pool_end;
         l00_active_moby_context_selector = oldState ^ 1;
-        *(u8 *volatile *)&moby_table = (u8 *)old70;
-        D_L00_0015FFDC = old74;
-        D_L00_0015FFE0 = old78;
+        *(u8 *volatile *)&moby_table = (u8 *)saved_inactive_moby_array_start;
+        D_L00_0015FFDC = saved_inactive_loaded_moby_end;
+        D_L00_0015FFE0 = saved_inactive_moby_pool_last_slot;
         l00_inactive_moby_pool_last_slot = oldDC;
         l00_active_moby_pool_end = old7C;
         l00_inactive_moby_pool_end = oldE8;

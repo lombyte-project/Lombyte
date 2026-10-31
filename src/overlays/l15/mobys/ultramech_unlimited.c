@@ -63,7 +63,10 @@ int select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_002
 float compute_ultramech_flocking_steering_point(
     void *m_, void *out, float target_search_range) __asm__("FUN_L15_002cf110");
 
-float compute_ultramech_flocking_steering_point(void *m_, void *out, float target_search_range) {
+float compute_ultramech_flocking_steering_point(void *m_,
+                                                void *steering_point,
+
+                                                float target_search_range) {
     char *moby = m_;
     float steering_offset[4];
     float target_position[4];
@@ -75,7 +78,7 @@ float compute_ultramech_flocking_steering_point(void *m_, void *out, float targe
     char *other_moby;
     select_moby_combat_target(moby, target_position, target_search_range);
     target_distance = vector_distance_xy(moby + 0x10, target_position);
-    clear_u64_value(out);
+    clear_u64_value(steering_point);
     for (other_moby = D_L15_0015FFE4; other_moby != 0;
          other_moby = ((char *)MOBY(other_moby)->next)) {
         if (other_moby == moby)
@@ -86,7 +89,7 @@ float compute_ultramech_flocking_steering_point(void *m_, void *out, float targe
             wsum += 6.0f;
             fast_vec_sub(steering_offset, moby + 0x10, other_moby + 0x10);
             scale_vector_xyz(steering_offset, steering_offset, 6.0f);
-            fast_vec_add(out, out, steering_offset);
+            fast_vec_add(steering_point, steering_point, steering_offset);
         }
         if (vector_distance_xy(other_moby + 0x10, target_position) < target_distance)
             clear = 0;
@@ -102,19 +105,19 @@ float compute_ultramech_flocking_steering_point(void *m_, void *out, float targe
         }
         wsum += 10.0f;
         normalize_vector_xyz(steering_offset, steering_offset, k * 10.0f);
-        fast_vec_add(out, out, steering_offset);
-        scale_vector_xyz(out, out, 1.0f / wsum);
-        fast_vec_add(out, out, moby + 0x10);
+        fast_vec_add(steering_point, steering_point, steering_offset);
+        scale_vector_xyz(steering_point, steering_point, 1.0f / wsum);
+        fast_vec_add(steering_point, steering_point, moby + 0x10);
     } else {
-        qcopy(out, target_position);
+        qcopy(steering_point, target_position);
     }
-    if (vector_distance_xy(moby + 0x10, out) < 1.0f) {
-        qcopy(out, moby + 0x10);
+    if (vector_distance_xy(moby + 0x10, steering_point) < 1.0f) {
+        qcopy(steering_point, moby + 0x10);
         return fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
                             target_position[1] - MOBY(moby)->pos.y);
     }
-    return fast_arc_tan(((float *)out)[0] - MOBY(moby)->pos.x,
-                        ((float *)out)[1] - MOBY(moby)->pos.y);
+    return fast_arc_tan(((float *)steering_point)[0] - MOBY(moby)->pos.x,
+                        ((float *)steering_point)[1] - MOBY(moby)->pos.y);
 }
 
 typedef struct UData UData;
@@ -998,17 +1001,17 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
     impact = 0.0f;
     ultramech_vars->w1C8 = 0;
     for (i = 0; i < 64; i++) {
-        char *entry = D_00178700 + i * 0x40;
-        if (*(UMoby **)(entry + 0x34) == ultramech_moby) {
-            unsigned int flags = *(unsigned int *)(entry + 0x24);
+        char *candidate_hit_record = D_00178700 + i * 0x40;
+        if (*(UMoby **)(candidate_hit_record + 0x34) == ultramech_moby) {
+            unsigned int flags = *(unsigned int *)(candidate_hit_record + 0x24);
             if (flags & 0xA0000) {
-                if (*(int *)(entry + 0x20) == D_001413D0) {
+                if (*(int *)(candidate_hit_record + 0x20) == D_001413D0) {
                     if (!(flags & 0x80000)) {
-                        *(int *)(entry + 0x34) = 0;
+                        *(int *)(candidate_hit_record + 0x34) = 0;
                         continue;
                     }
                 }
-                slot = entry;
+                slot = candidate_hit_record;
                 break;
             }
         }

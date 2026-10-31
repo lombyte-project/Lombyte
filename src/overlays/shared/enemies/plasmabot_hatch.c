@@ -26,7 +26,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
         HATCH_WAIT_RESET_DELAY = 6,
         HATCH_WAIT_RESET_ANIMATION = 7
     };
-    char *data = (char *)moby->pvars;
+    char *hatch_private_vars = (char *)moby->pvars;
     if (hero.vehicle_mode == 2) {
         moby->collision = 0;
     } else {
@@ -34,13 +34,13 @@ void plasmabot_hatch_update(struct Moby *moby) {
     }
     switch (moby->state) {
     case HATCH_WAIT_ACTIVATION:
-        if (*(s32 *)data != 0 && *(s16 *)(D_L14_00167500 + 0x86) == 0x14) {
+        if (*(s32 *)hatch_private_vars != 0 && *(s16 *)(D_L14_00167500 + 0x86) == 0x14) {
             moby->state = 1;
-            *(s32 *)(data + 8) = scale_game_frames(*(s32 *)(data + 4));
+            *(s32 *)(hatch_private_vars + 8) = scale_game_frames(*(s32 *)(hatch_private_vars + 4));
         }
         break;
     case HATCH_WAIT_ACTIVATION_DELAY:
-        if (fast_dec_timer(data + 8) != 0) {
+        if (fast_dec_timer(hatch_private_vars + 8) != 0) {
             moby->state = 2;
             set_moby_animation(moby, 1, 0);
         }
@@ -66,7 +66,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
         }
         break;
     case HATCH_WAIT_RESET_DELAY:
-        if (fast_dec_timer(data + 8) != 0) {
+        if (fast_dec_timer(hatch_private_vars + 8) != 0) {
             set_moby_animation(moby, 3, 0);
             moby->state = 7;
         }
@@ -103,7 +103,7 @@ int refresh_plasmabot_hatch_reset_delay(int i) __asm__("FUN_L14_002d9870");
 
 int refresh_plasmabot_hatch_reset_delay(int i) {
     struct Moby *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
-    int         *data = ((int *)moby->pvars);
+    int         *hatch_vars = ((int *)moby->pvars);
     int          hatch_reset_delay_active = 0;
     if (moby->state == 0) {
         moby->state = 5;
@@ -111,6 +111,6 @@ int refresh_plasmabot_hatch_reset_delay(int i) {
     } else {
         hatch_reset_delay_active = moby->state == 6;
     }
-    data[2] = scale_game_frames(0x3C);
+    hatch_vars[2] = scale_game_frames(0x3C);
     return hatch_reset_delay_active;
 }

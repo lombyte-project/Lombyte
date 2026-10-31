@@ -167,7 +167,7 @@ WaterGrid l13_water_grids[22] __asm__("D_L13_001D9BC0") = {
      0, {0}},
 };
 
-extern Light_9e88 D_L13_001CAB80;
+extern Light_9e88 l13_gemlik_pool_tile_settings __asm__("D_L13_001CAB80");
 
 extern float D_L13_001801C0[];
 
@@ -189,9 +189,9 @@ extern float D_L13_00161210;
 
 extern float D_L13_00161214;
 
-extern void *D_L13_001612D0;
+extern void *l13_gemlik_pool_tiles __asm__("D_L13_001612D0");
 
-extern void *D_L13_001612D4;
+extern void *l13_gemlik_pool_binding_records __asm__("D_L13_001612D4");
 
 /* The tile whose mask is replaced by gemlik_pool_override_tile_visible_subtiles; -1: none. */
 int gemlik_pool_override_tile_index __asm__("D_L13_00161EF0") = -1;
@@ -252,7 +252,7 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             pool_init_tiles(l13_water_grids, 22);
             pool_set_scale(1.0f);
             moby->update_dist = 0xFF;
-            tile_lighting = &D_L13_001CAB80;
+            tile_lighting = &l13_gemlik_pool_tile_settings;
             tile_lighting->f00 = 16.0f;
             tile_lighting->f04 = 16.0f;
             tile_lighting->f08 = -8.0f;
@@ -274,8 +274,8 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             D_L13_0016120C = 32768.0f;
             D_L13_00161210 = 255.0f;
             D_L13_00161214 = 48.0f;
-            D_L13_001612D0 = l13_water_grids;
-            D_L13_001612D4 = tb;
+            l13_gemlik_pool_tiles = l13_water_grids;
+            l13_gemlik_pool_binding_records = tb;
             D_L13_00161208 = 0;
             for (i = 0; i < 22; i++) {
                 pool_bind_tile(&l13_water_grids[i], tb + i * 16);
@@ -311,8 +311,8 @@ void update_gemlik_bobbing_pool_tile(struct Moby *moby) {
             hero_context->state.current != 0x7C)
             bobbing_platform_vars->angle =
                 fast_add_rotations(bobbing_platform_vars->angle, bobbing_platform_vars->speed);
-        l13_water_grids[bobbing_platform_vars->idx].alpha_2_fix = D_L13_001CAB80.c3C;
-        l13_water_grids[bobbing_platform_vars->idx].alpha_1_fix = D_L13_001CAB80.c3D;
+        l13_water_grids[bobbing_platform_vars->idx].alpha_2_fix = l13_gemlik_pool_tile_settings.c3C;
+        l13_water_grids[bobbing_platform_vars->idx].alpha_1_fix = l13_gemlik_pool_tile_settings.c3D;
         if (random_integer_below(200) == 0) {
             float x =
                 l13_water_grids[bobbing_platform_vars->idx].x + random_float_between(-4.0f, 4.0f);

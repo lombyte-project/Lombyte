@@ -392,20 +392,20 @@ void blarg_ship_update(Ship_5E48 *ship) {
             break;
         goto del;
     case BLARG_SHIP_STATE_HIT_REACTION: {
-        unsigned char next;
+        unsigned char pre_hit_state;
         if (ship->b52 != 4)
             break;
         if (!(ship->b70 & 2))
             break;
-        next = ship->bBC;
-        if (next == 4) {
+        pre_hit_state = ship->bBC;
+        if (pre_hit_state == 4) {
             blend_moby_animation(ship, 3, 0, scale_game_frames(10));
             ship->f58 = blarg_ship_firing_animation_speed_gp;
-            ship->state = next;
+            ship->state = pre_hit_state;
             d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f160 * 60.0f));
-        } else if (next == 6) {
+        } else if (pre_hit_state == 6) {
             blend_moby_animation(ship, 2, 0, scale_game_frames(10));
-            ship->state = next;
+            ship->state = pre_hit_state;
         } else {
             blend_moby_animation(ship, 2, 0, scale_game_frames(10));
             ship->state = 5;
@@ -469,17 +469,18 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
         NO_REACTION_HIT_RESPONSE = 13
     };
     unsigned char *pvars = moby->pvars;
-    char          *info = find_moby_hit(moby, 0x370000, 0);
-    int            out;
+    char          *ship_hit_record = find_moby_hit(moby, 0x370000, 0);
+    int            ship_hit_processing_status;
     float          dmg;
     int            hit_response_code;
     dmg = 0.0f;
-    hit_response_code = resolve_moby_hit_response(moby, info, pvars + 0x20, 5, &out, &dmg, 0, 4);
-    if (info != 0 && out != 1 && moby->state != 8) {
+    hit_response_code = resolve_moby_hit_response(
+        moby, ship_hit_record, pvars + 0x20, 5, &ship_hit_processing_status, &dmg, 0, 4);
+    if (ship_hit_record != 0 && ship_hit_processing_status != 1 && moby->state != 8) {
         if ((*(float *)(pvars + 0x20) -= dmg) <= 0.0f) {
             hit_response_code = 1;
         }
-        if (*(int *)(info + 0x24) & 0x40000) {
+        if (*(int *)(ship_hit_record + 0x24) & 0x40000) {
             hit_response_code = 1;
         }
         switch (hit_response_code) {

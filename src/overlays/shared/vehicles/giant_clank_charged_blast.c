@@ -88,14 +88,14 @@ void remove_giant_clank_charged_blast(void) {
     struct Moby *tracked_moby = *(char **)&D_L00_001613C8_gp;
     if (tracked_moby != 0) {
         if (tracked_moby->oclass == 0x5F3) {
-            char *data;
+            char *tracked_moby_vars;
             int   point_light_slot_index;
             if (tracked_moby->state != 0)
                 return;
-            data = ((char *)tracked_moby->pvars);
+            tracked_moby_vars = ((char *)tracked_moby->pvars);
             D_L00_0015F320 = 0;
             D_L00_0015F330 = 0;
-            point_light_slot_index = *(short *)(data + 0x2C);
+            point_light_slot_index = *(short *)(tracked_moby_vars + 0x2C);
             if (point_light_slot_index != -1)
                 release_point_light_slot(point_light_slot_index);
             mark_moby_for_removal(*(char **)&D_L00_001613C8_gp);

@@ -51,7 +51,12 @@ void compute_level16_reflection_map_coordinates(int    point_count,
 
 void compute_level16_reflection_map_coordinates(
 
-    int point_count, Vec3 *direction_vectors, Vec3 *point_positions, int unused, float *out) {
+    int   point_count,
+    Vec3 *direction_vectors,
+    Vec3 *point_positions,
+    int   unused,
+
+    float *reflection_map_coordinates) {
     int   i;
     float relative_direction[4];
     float point_position[4];
@@ -83,8 +88,10 @@ void compute_level16_reflection_map_coordinates(
         reflection_projection_scratch[2] = reflection_projection_scratch[2] + 1.0f;
         projection_denominator = fast_vec_length(reflection_projection_scratch);
         projection_denominator = projection_denominator + projection_denominator;
-        out[i * 2] = (reflection_projection_scratch[0] / projection_denominator + 0.5f) * 2.0f;
-        out[i * 2 + 1] = (reflection_projection_scratch[1] / projection_denominator + 0.5f) * 2.0f;
+        reflection_map_coordinates[i * 2] =
+            (reflection_projection_scratch[0] / projection_denominator + 0.5f) * 2.0f;
+        reflection_map_coordinates[i * 2 + 1] =
+            (reflection_projection_scratch[1] / projection_denominator + 0.5f) * 2.0f;
     }
 }
 
@@ -195,7 +202,7 @@ void update_reflection_mesh_trio(struct Moby *moby) {
     int    i, j;
     float  maxx, maxy, maxz, minx, miny, minz;
     float  vertex_position[4];
-    float *out;
+    float *mesh_bounding_sphere_components;
     float *verts;
     int    count;
     switch (moby->state) {
@@ -226,8 +233,8 @@ void update_reflection_mesh_trio(struct Moby *moby) {
                 }
             }
             {
-                L16SingleSphere_2e8e80 *base = D_L16_00161F60_bounds_2e8e80;
-                L16SingleSphere_2e8e80 *sphere = base + i;
+                L16SingleSphere_2e8e80 *mesh_bounding_spheres = D_L16_00161F60_bounds_2e8e80;
+                L16SingleSphere_2e8e80 *sphere = mesh_bounding_spheres + i;
                 sphere->radius = 0.0f;
                 sphere->x = (maxx + minx) * 0.5f;
                 sphere->y = (maxy + miny) * 0.5f;
@@ -235,13 +242,14 @@ void update_reflection_mesh_trio(struct Moby *moby) {
             }
             for (j = 0; j < reflection_mesh_trio_vertex_counts[i]; j++) {
                 float vertex_to_center_distance;
-                out = (float *)(D_L16_00161F60_bounds_2e8e80 + i);
+                mesh_bounding_sphere_components = (float *)(D_L16_00161F60_bounds_2e8e80 + i);
                 vertex_position[0] = ((float **)reflection_mesh_trio_position_tables)[i][j * 3 + 0];
                 vertex_position[1] = ((float **)reflection_mesh_trio_position_tables)[i][j * 3 + 1];
                 vertex_position[2] = ((float **)reflection_mesh_trio_position_tables)[i][j * 3 + 2];
-                vertex_to_center_distance = fast_vec_dist(vertex_position, out);
-                if (vertex_to_center_distance > out[3])
-                    out[3] = vertex_to_center_distance;
+                vertex_to_center_distance =
+                    fast_vec_dist(vertex_position, mesh_bounding_sphere_components);
+                if (vertex_to_center_distance > mesh_bounding_sphere_components[3])
+                    mesh_bounding_sphere_components[3] = vertex_to_center_distance;
             }
         }
         moby->state = 1;

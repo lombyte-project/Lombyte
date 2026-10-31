@@ -19,13 +19,13 @@ extern s32              D_001312FC[];
 extern s32              D_00131300[];
 extern s32              D_00131304[];
 extern s32              D_00131308[];
-extern s32              D_0013130C[];
-extern s32              D_00131310[];
-extern char             D_00152F50[];
-extern char             D_00152F70[];
+extern s32              cd_init_rpc_bind_state[] __asm__("D_0013130C");
+extern s32              cd_initialization_count[] __asm__("D_00131310");
+extern char             cd_init_bind_error_format[] __asm__("D_00152F50");
+extern char             cd_exit_message[] __asm__("D_00152F70");
 extern s32              D_00159750[];
-extern sceSifClientData D_00159968;
-extern s32              D_001599C0[];
+extern sceSifClientData cd_init_rpc_client __asm__("D_00159968");
+extern s32              cd_init_mode_request[] __asm__("D_001599C0");
 
 extern s32  GetThreadId(void);
 extern s32  PowerOffCB(void);
@@ -47,53 +47,65 @@ extern void sceSifInitRpc(u32 mode);
 extern void sceSifWriteBackDCache(void *addr, s32 size);
 
 int sceCdInit(int init_mode) {
-    int ret;
+    enum {
+        CD_INIT_SHUTDOWN = 5
+    };
+    int compatibility_result;
     int bind_result;
     int delay;
     int reply_status;
     int first_version;
     int second_version;
-    int owner;
+    int initializing_thread_id;
     u8 *receive_buffer;
 
     if (sceCdSyncS(1) != 0) {
         return 0;
     }
     sceSifInitRpc(0);
-    owner = GetThreadId();
+    initializing_thread_id = GetThreadId();
     *(volatile s32 *)D_001312E4 = 1;
-    *(volatile s32 *)D_00159750 = owner;
+    *(volatile s32 *)D_00159750 = initializing_thread_id;
     {
         s32 *p0 = D_00131300, *p1 = D_001312F8, *p2 = D_00131308, *p3 = D_00131304,
-            *p6 = D_0013130C, *p4 = D_001312FC, *p5 = D_001312F4;
+            *init_rpc_bind_state_ptr = cd_init_rpc_bind_state,
+            *power_event_handler_state_ptr = D_001312FC, *p5 = D_001312F4;
         /* Fakematch: retail keeps the -1 in $a0. */
         register int m __asm__("$4") = -1;
-        *p4 = m;
+        *power_event_handler_state_ptr = m;
         *p0 = m;
         *p1 = m;
         *p2 = m;
         *p3 = m;
         *p5 = 0;
-        D_00131310[0]++;
-        *p6 = m;
+        cd_initialization_count[0]++;
+        *init_rpc_bind_state_ptr = m;
     }
     while (1) {
-        bind_result = sceSifBindRpc(&D_00159968, 0x80000592, 0);
+        bind_result = sceSifBindRpc(&cd_init_rpc_client, 0x80000592, 0);
         if (bind_result < 0) {
             if (cd_debug > 0) {
-                scePrintf(D_00152F50, bind_result, D_00131310[0]);
+                scePrintf(cd_init_bind_error_format, bind_result, cd_initialization_count[0]);
             }
             delay = 0x100000;
             while (delay-- != 0) {
             }
             continue;
         }
-        if (D_00159968.server != 0) {
-            D_001599C0[0] = init_mode;
-            D_0013130C[0] = 0;
-            sceSifWriteBackDCache(D_001599C0, 4);
+        if (cd_init_rpc_client.server != 0) {
+            cd_init_mode_request[0] = init_mode;
+            cd_init_rpc_bind_state[0] = 0;
+            sceSifWriteBackDCache(cd_init_mode_request, 4);
             receive_buffer = cd_scmd_result;
-            if (sceSifCallRpc(&D_00159968, 0, 0, D_001599C0, 4, receive_buffer, 0x10, 0, 0) < 0) {
+            if (sceSifCallRpc(&cd_init_rpc_client,
+                              0,
+                              0,
+                              cd_init_mode_request,
+                              4,
+                              receive_buffer,
+                              0x10,
+                              0,
+                              0) < 0) {
                 *(volatile s32 *)D_001312E4 = 0;
                 return 0;
             }
@@ -108,13 +120,13 @@ int sceCdInit(int init_mode) {
     first_version = *(s32 *)((u32)(receive_buffer + 4) | 0x20000000);
     second_version = *(s32 *)((u32)(receive_buffer + 8) | 0x20000000);
     reply_status = *(s32 *)((u32)(receive_buffer + 0xC) | 0x20000000);
-    ret = 1;
+    compatibility_result = 1;
     if (reply_status == 0xFF) {
     } else if (reply_status == 0xFE) {
-        cd_debug = ret;
+        cd_debug = compatibility_result;
     } else {
         if (first_version / 256 < 2 || second_version / 256 < 2) {
-            ret = 2;
+            compatibility_result = 2;
         }
     }
     *(volatile s32 *)D_001312E4 = 0;
@@ -122,9 +134,9 @@ int sceCdInit(int init_mode) {
     case 0:
     case 1:
         break;
-    case 5:
+    case CD_INIT_SHUTDOWN:
         if (cd_debug > 0) {
-            scePrintf(D_00152F70);
+            scePrintf(cd_exit_message);
         }
         cdvd_exit();
         cd_ncmd_sema = -1;
@@ -135,5 +147,5 @@ int sceCdInit(int init_mode) {
     cmd_sem_init();
     PowerOffCB();
 done:
-    return ret;
+    return compatibility_result;
 }

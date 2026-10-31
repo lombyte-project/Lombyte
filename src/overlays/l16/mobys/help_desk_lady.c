@@ -114,7 +114,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
         HELP_DESK_POLL_DIALOGUE = 1,
         HELP_DESK_REQUEST_HELP_AND_SAVE = 2
     };
-    L16WatchScratch scratch;
+    L16WatchScratch gaze_vectors;
     L16WatchData   *watch_data = moby->data;
     L16WatchFlags  *flags;
     float           rate;
@@ -193,21 +193,22 @@ void help_desk_lady_update(L16WatchMoby *moby) {
             fast_vec_add(watch_data->target, watch_data->target, moby->position);
         }
         if (watch_data->moving_timer) {
-            qcopy(scratch.target, (char *)&D_0013E533 + 0xEED);
+            qcopy(gaze_vectors.target, (char *)&D_0013E533 + 0xEED);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, watch_data->target);
+            qcopy(gaze_vectors.target, watch_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, moby->position);
-        scratch.eye[2] += 1.5f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
+        qcopy(gaze_vectors.eye, moby->position);
+        gaze_vectors.eye[2] += 1.5f;
+        fast_vec_sub(gaze_vectors.delta, gaze_vectors.target, gaze_vectors.eye);
+        yaw = fast_subtract_rotations(fast_arc_tan(gaze_vectors.delta[0], gaze_vectors.delta[1]),
+                                      moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy(gaze_vectors.delta), gaze_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

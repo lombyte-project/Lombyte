@@ -164,12 +164,12 @@ void helicopter_update(char *moby) {
             int   step = *(char *)(path_state + 4);
             int   node_count = *(int *)tbl;
             int   previous_node_index = (current_node_index + node_count - step) % node_count;
-            int   next = (current_node_index + node_count + step) % node_count;
+            int   next_node_index = (current_node_index + node_count + step) % node_count;
             float segment_heading_delta;
             float segment_heading_delta_per_distance;
             qcopy(A, tbl + previous_node_index * 16 + 0x10);
             qcopy(B, tbl + current_node_index * 16 + 0x10);
-            qcopy(C, tbl + next * 16 + 0x10);
+            qcopy(C, tbl + next_node_index * 16 + 0x10);
             fast_vec_sub(A, B, A);
             fast_vec_sub(B, C, B);
             segment_heading_delta = fast_arc_tan(A[0], A[1]);
@@ -183,9 +183,9 @@ void helicopter_update(char *moby) {
                     helicopter_rotation_smoothing_divisor_gp);
             if (fast_vec_dist(moby + 0x10, C) < helicopter_path_speed_gp * D_0015ED6C) {
                 char *path;
-                *(int *)(moby_vars + 0x60) = next;
+                *(int *)(moby_vars + 0x60) = next_node_index;
                 path = *(char **)(path_state + 0x10);
-                if (next == *(int *)path - 1) {
+                if (next_node_index == *(int *)path - 1) {
                     qcopy((moby + 0x10), path + 0x10);
                 }
             }

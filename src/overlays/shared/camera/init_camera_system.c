@@ -189,7 +189,7 @@ void setup_level_cameras(void) {
     char        *camera_system_state_alias;
     char        *q;
     char        *normalized_hero_vector;
-    struct Hero *base;
+    struct Hero *hero_state;
     int          i;
     int          k;
 
@@ -202,19 +202,19 @@ void setup_level_cameras(void) {
         level_camera_present_flags[k] = 0;
     }
     camera_system_state_alias = (char *)&l00_camera;
-    base = &hero;
+    hero_state = &hero;
     q = camera_system_state_alias + 0x190;
     normalized_hero_vector = camera_system_state_alias + 0x1B0;
     *(int *)(camera_system_state_alias + 0x184) = 0;
     *(short *)(camera_system_state_alias + 0x270) = 0;
-    fast_vec_normalize(normalized_hero_vector, (char *)(((int)base->moby) + 0xE0), 1.0f);
+    fast_vec_normalize(normalized_hero_vector, (char *)(((int)hero_state->moby) + 0xE0), 1.0f);
     qcopy(camera_system_state_alias + 0x1C0, normalized_hero_vector);
     qcopy(camera_system_state_alias + 0x1D0, normalized_hero_vector);
     clear_u64_value(camera_system_state_alias + 0x1E0);
-    qcopy(camera_system_state_alias + 0x1F0, &base->motion.pos);
+    qcopy(camera_system_state_alias + 0x1F0, &hero_state->motion.pos);
     {
-        float hero_rotation_z = base->motion.rot.f[2];
-        float hero_position_z = base->motion.pos.f[2];
+        float hero_rotation_z = hero_state->motion.rot.f[2];
+        float hero_position_z = hero_state->motion.pos.f[2];
         *(int *)(q + 0xC4) = 0;
         *(int *)(q + 0xCC) = 0;
         *(int *)(q + 0xC0) = 0;

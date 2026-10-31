@@ -225,9 +225,9 @@ void taxi_update(struct Moby *moby) {
         if (D_0013D4E1) {
             char          *model = moby->pclass;
             unsigned short flags = moby->flags;
-            int            value = *(int *)(model + 0x10);
+            int            taxi_model_collision = *(int *)(model + 0x10);
             moby->visible = 1;
-            moby->collision = value;
+            moby->collision = taxi_model_collision;
             moby->flags = flags & 0xFFFE;
             moby->state = 1;
         }
@@ -261,19 +261,19 @@ extern char *D_L16_001601AC_slots_e4900 __asm__("D_L16_001600EC");
 
 void initialize_taxi_stop_state(void *moby_v) {
     char *moby = moby_v;
-    char *data = ((char *)MOBY(moby)->pvars);
-    int  *list = (int *)(data + 0x80);
+    char *taxi_stop_data = ((char *)MOBY(moby)->pvars);
+    int  *list = (int *)(taxi_stop_data + 0x80);
     int   i;
     int   selected_pose_byte_offset;
     char *pose_table_base;
-    *(short *)(data + 0xAC) = -1;
+    *(short *)(taxi_stop_data + 0xAC) = -1;
     for (i = 0; i < 3; i++) {
         if (fast_vec_dist(moby + 0x10, D_L16_001601AC_slots_e4900 + (list[i] << 7) + 0x30) < 1.0f) {
-            *(short *)(data + 0xAC) = i;
+            *(short *)(taxi_stop_data + 0xAC) = i;
         }
     }
     {
-        if (item_available[0x21] != 0 || *(short *)(data + 0xAC) == 2) {
+        if (item_available[0x21] != 0 || *(short *)(taxi_stop_data + 0xAC) == 2) {
             int model_collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
             moby[0x31] = 1;
             MOBY(moby)->collision = model_collision;
@@ -288,12 +288,12 @@ void initialize_taxi_stop_state(void *moby_v) {
     }
     {
         int *selected = list;
-        selected += *(short *)(data + 0xAC);
+        selected += *(short *)(taxi_stop_data + 0xAC);
         selected_pose_byte_offset = *selected << 7;
     }
     pose_table_base = D_L16_001601AC_slots_e4900;
-    qcopy(data + 0x60, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
-    qcopy(data + 0x70, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
+    qcopy(taxi_stop_data + 0x60, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
+    qcopy(taxi_stop_data + 0x70, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
 }
 
 extern char *D_L16_001B0930[];
@@ -343,22 +343,22 @@ void transfer_moby_placement_to_linked_moby(void *moby_v) __asm__("FUN_L16_002e4
 
 void transfer_moby_placement_to_linked_moby(void *moby_v) {
     struct Moby *moby = moby_v;
-    char        *data = ((char *)moby->pvars);
-    char        *spawn = find_group_moby_by_data_id(moby, *(short *)(data + 0xae));
+    char        *source_moby_pvars = ((char *)moby->pvars);
+    char        *spawn = find_group_moby_by_data_id(moby, *(short *)(source_moby_pvars + 0xae));
     char        *position;
     if (spawn != 0) {
         int   index;
-        char *slot = data;
-        char *entry;
+        char *slot = source_moby_pvars;
+        char *placement_table_base;
         position = spawn + 0x10;
-        slot += *(short *)(data + 0xac) << 2;
+        slot += *(short *)(source_moby_pvars + 0xac) << 2;
         index = *(int *)(slot + 0x80) << 7;
-        entry = D_L16_001601AC_m_19510;
-        qcopy(position, (void *)(index + (int)entry + 0x30));
-        qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
+        placement_table_base = D_L16_001601AC_m_19510;
+        qcopy(position, (void *)(index + (int)placement_table_base + 0x30));
+        qcopy(spawn + 0x40, (void *)(index + (int)placement_table_base + 0x70));
         initialize_taxi_stop_state(spawn);
     }
-    *(short *)(data + 0xac) = *(unsigned short *)(data + 0xae);
+    *(short *)(source_moby_pvars + 0xac) = *(unsigned short *)(source_moby_pvars + 0xae);
 }
 
 /* Finds the listed moby whose data id at 0xAC matches, or returns null. */
@@ -480,8 +480,8 @@ extern char table_entry_source_vectors[] __asm__("D_L16_001D96E0");
 void transform_moby_table_entry_vectors(struct Moby *moby) __asm__("FUN_L16_002e4f30");
 
 void transform_moby_table_entry_vectors(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int   table_entry_index = *(int *)(data + 0xa0);
+    char *moby_pvars = (char *)moby->pvars;
+    int   table_entry_index = *(int *)(moby_pvars + 0xa0);
     if (table_entry_index != -1) {
         char *table_entry = D_L16_001B0930[table_entry_index];
         if (*(int *)table_entry == 7) {
@@ -495,7 +495,7 @@ void transform_moby_table_entry_vectors(struct Moby *moby) {
             }
             hero_state = &hero;
             *(unsigned short *)&hero_state->path_constrain_pending =
-                *(unsigned short *)(data + 0xa0);
+                *(unsigned short *)(moby_pvars + 0xa0);
         }
     }
 }

@@ -13,7 +13,8 @@ s32 sceSifLoadModuleBuffer(s32         iop_address,
                            const char *arguments) __asm__("InvokeIopStatus");
 
 s32 sceSifLoadModuleBuffer(s32 iop_address, s32 arguments_length, const char *arguments) {
-    s32 result;
+    s32 discarded_load_result;
 
-    return _sceSifLoadModuleBuffer(iop_address, arguments_length, arguments, &result);
+    return _sceSifLoadModuleBuffer(
+        iop_address, arguments_length, arguments, &discarded_load_result);
 }

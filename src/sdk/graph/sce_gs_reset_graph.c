@@ -7,7 +7,7 @@ extern s32  RemoveIntcHandler();
 extern s32  disable_intc() __asm__("func_00119028");
 extern void SetGsCrt(s32, s32, s32);
 
-void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {
+void sceGsResetGraph(s16 mode, s16 inter, s16 video_output_mode, s16 ff) {
     enum {
         GS_RESET_AND_CONFIGURE_VIDEO = 0,
         GS_UPDATE_VIDEO_MODE = 5
@@ -19,7 +19,7 @@ void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {
         gp = sceGsGetGParam();
         *(volatile u64 *)0x12001000 = 0x200;
         gp->sceGsInterMode = inter;
-        gp->sceGsOutMode = out;
+        gp->sceGsOutMode = video_output_mode;
         gp->sceGsVersion = (s16)((*(volatile u64 *)0x12001000 >> 16) & 0xFF);
         GsPutIMR(0xFF00);
         gp->sceGsFFMode = (ff != 0);
@@ -29,7 +29,7 @@ void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {
             gp->sceGsVSCfunc = 0;
             gp->sceGsVSCid = 0;
         }
-        SetGsCrt(inter & 1, out & 0xFF, ff & 1);
+        SetGsCrt(inter & 1, video_output_mode & 0xFF, ff & 1);
         break;
     case 1:
         *(volatile u64 *)0x12001000 = 0x100;
@@ -38,9 +38,9 @@ void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {
         gp = sceGsGetGParam();
         gp->sceGsFFMode = (ff != 0);
         gp->sceGsInterMode = inter;
-        gp->sceGsOutMode = out;
+        gp->sceGsOutMode = video_output_mode;
         gp->sceGsVersion = (s16)((*(volatile u64 *)0x12001000 >> 16) & 0xFF);
-        SetGsCrt(inter & 1, out & 0xFF, ff & 1);
+        SetGsCrt(inter & 1, video_output_mode & 0xFF, ff & 1);
         break;
     }
 }

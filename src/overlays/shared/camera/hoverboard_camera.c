@@ -480,7 +480,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     V_32B1F8      rel;
     V_32B1F8      lateral;
     V_32B1F8      radial;
-    V_32B1F8      base;
+    V_32B1F8      camera_position_before_height;
     V_32B1F8      goal;
     V_32B1F8      offset;
     V_32B1F8      probe;
@@ -512,9 +512,9 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
         fast_vec_normalize(&offset, &focus_state->axis, along);
         fast_vec_sub(&lateral, &rel, &offset);
         fast_vec_normalize(&radial, &lateral, spring->dist);
-        fast_vec_add(&base, &focus, &radial);
+        fast_vec_add(&camera_position_before_height, &focus, &radial);
         fast_vec_normalize(&offset, &focus_state->axis, spring->height);
-        fast_vec_add(&goal, &base, &offset);
+        fast_vec_add(&goal, &camera_position_before_height, &offset);
         fast_vec_add(&goal, &goal, &orbit->bias);
         camera->pos.x = cam_interp_values(
             camera->pos.x, goal.x, &orbit->vel[0], orbit->k10, orbit->k14, orbit->k18);
@@ -663,14 +663,14 @@ extern void reset_hero_follow_camera_from_preset(Camera *) __asm__("FUN_L05_0032
 extern char *D_L05_00167204 NOT_SDA;
 void reset_camera_from_source_transform(char *out) __asm__("FUN_L05_0032a6e0");
 
-void reset_camera_from_source_transform(char *out) {
+void reset_camera_from_source_transform(char *destination_camera) {
     char *source_camera_transform = D_L05_00167204;
-    qcopy(out + 0x30, source_camera_transform + 0x30);
-    qcopy(out, source_camera_transform);
-    qcopy(out + 0x10, source_camera_transform + 0x10);
-    qcopy(out + 0x20, source_camera_transform + 0x20);
-    extract_matrix_rotation_quaternion(out + 0x40, out);
-    reset_hero_follow_camera_from_preset((Camera *)out);
+    qcopy(destination_camera + 0x30, source_camera_transform + 0x30);
+    qcopy(destination_camera, source_camera_transform);
+    qcopy(destination_camera + 0x10, source_camera_transform + 0x10);
+    qcopy(destination_camera + 0x20, source_camera_transform + 0x20);
+    extract_matrix_rotation_quaternion(destination_camera + 0x40, destination_camera);
+    reset_hero_follow_camera_from_preset((Camera *)destination_camera);
 }
 
 float                D_L16_00162198 = 2.0f;

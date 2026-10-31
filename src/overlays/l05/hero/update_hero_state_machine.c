@@ -213,13 +213,13 @@ void update_hero_state_machine(void) {
                 if (hero.quick_swap_tap_window == 0) {
                     hero.quick_swap_tap_window = scale_game_frames(0x14);
                 } else {
-                    int base = D_0015ED8C;
-                    int next = base;
+                    int default_quick_swap_item_id = D_0015ED8C;
+                    int next = default_quick_swap_item_id;
                     int equipped_item_id = hero.items[0].item_id;
                     if (equipped_item_id == 8) {
                         next = D_00141660;
                     }
-                    if (next != 0 && equipped_item_id != base) {
+                    if (next != 0 && equipped_item_id != default_quick_swap_item_id) {
                         if (usage_stats.stat[31].count < 0xFFFF) {
                             usage_stats.stat[31].count++;
                         }
@@ -1324,7 +1324,7 @@ void update_hero_state_machine(void) {
                         }
                     }
                     if (hero.air_frames.s == 0) {
-                        int first;
+                        int landed_without_ground_moby;
                         int one;
 
                         request_hero_voice_if_enabled(hero.ground_sound_class, 0, 1);
@@ -1339,13 +1339,13 @@ void update_hero_state_machine(void) {
                             hero_set_state(HERO_STATE_DYING, 1);
                             break;
                         }
-                        first = hero.ground_moby == 0;
+                        landed_without_ground_moby = hero.ground_moby == 0;
                         one = 1;
                         if (!(scale_game_frames(0x5A) > hero.state_timer)) {
                             if (hero_set_state(HERO_STATE_IDLE, 0)) {
                                 set_hero_animation(0xC, 4, scale_game_frames(6));
                             }
-                            if (first) {
+                            if (landed_without_ground_moby) {
                                 hero.move_lock_timer = scale_game_frames(0x16);
                             }
                             configure_hero_point_effect_emission(0.022f, 0.004f, 0xA, 4, 0, 1);
@@ -1361,7 +1361,7 @@ void update_hero_state_machine(void) {
                             if (hero.state.prev == 0x2D) {
                                 hero.move_lock_timer = scale_game_frames(0xA);
                             }
-                            if (first) {
+                            if (landed_without_ground_moby) {
                                 if (scale_game_frames(0x32) < hero.state_timer) {
                                     hero.move_lock_timer = scale_game_frames(0x12);
                                 }

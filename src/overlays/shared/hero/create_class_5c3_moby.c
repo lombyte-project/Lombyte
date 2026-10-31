@@ -12,7 +12,7 @@ char *create_class_5c3_moby(int   owner,
                             float initial_rotation_z,
                             float initial_rotation_y) __asm__("FUN_L05_002d4168");
 
-char *create_class_5c3_moby(int   owner,
+char *create_class_5c3_moby(int   source_item_moby,
                             char *initial_position,
                             int   arg,
                             float initial_rotation_z,
@@ -27,7 +27,7 @@ char *create_class_5c3_moby(int   owner,
         MOBY(moby)->rot.z = initial_rotation_z;
         MOBY(moby)->rot.y = initial_rotation_y;
         moby[0x20] = 0;
-        *(int *)moby_vars = owner;
+        *(int *)moby_vars = source_item_moby;
         qcopy(moby + 0x10, initial_position);
         *(float *)(moby_vars + 0x10) = frame_time * 30.0f * 0.7f;
         *(int *)(moby_vars + 8) = arg;

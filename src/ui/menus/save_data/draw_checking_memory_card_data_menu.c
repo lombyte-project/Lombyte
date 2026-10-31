@@ -32,11 +32,11 @@ s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) __asm__("FUN_00
 s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) {
     FontWindow           text_window;
     s16                  window_fields[12];
-    struct MenuGridCell *entry;
+    struct MenuGridCell *selected_grid_cell;
     char                *text;
     s32                  state = menu->data.stream.state;
     u64                  texture;
-    s32                  first;
+    s32                  uses_first_texture_buffer;
 
     if (state < 2) {
         if (!(menu->data.stream.flags & 0x100)) {
@@ -76,13 +76,15 @@ s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) {
         goto done;
     }
     if (menu->data.stream.flags & 4) {
-        first = state < 4;
-        entry =
-            &menu_system.current->focus->data.grid.cells[menu->data.stream.loaded_entry[first ^ 1]];
-        if (entry->kind == 0 && item_available[entry->id] == 0) {
+        uses_first_texture_buffer = state < 4;
+        selected_grid_cell =
+            &menu_system.current->focus->data.grid
+                 .cells[menu->data.stream.loaded_entry[uses_first_texture_buffer ^ 1]];
+        if (selected_grid_cell->kind == 0 && item_available[selected_grid_cell->id] == 0) {
             return 1;
         }
-        if (entry->kind == 1 && alternate_item_available[entry->id] == 0) {
+        if (selected_grid_cell->kind == 1 &&
+            alternate_item_available[selected_grid_cell->id] == 0) {
             return 1;
         }
     }

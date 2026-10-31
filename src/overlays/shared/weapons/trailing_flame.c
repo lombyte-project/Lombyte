@@ -57,7 +57,7 @@ void update_linked_moby_scale_and_rotation(struct Moby *moby) __asm__("FUN_L00_0
 void update_linked_moby_scale_and_rotation(struct Moby *moby) {
     V_2bb400      *moby_vars = ((V_2bb400 *)moby->pvars);
     unsigned char *o = moby_vars->o;
-    int            old, unwrapped_angle, angle_delta;
+    int            previous_angle, unwrapped_angle, angle_delta;
     if (o[0x20] == 0 || (o[0x20] & 0xF0) == 0xF0) {
         mark_moby_for_removal(moby);
         return;
@@ -69,16 +69,16 @@ void update_linked_moby_scale_and_rotation(struct Moby *moby) {
     if (hero.items[0].ready_frames < scale_game_frames(0x19)) {
         moby->flags |= 0x41;
     }
-    old = moby_vars->ang;
+    previous_angle = moby_vars->ang;
     angle_delta = -0xC0;
-    unwrapped_angle = old + angle_delta;
+    unwrapped_angle = previous_angle + angle_delta;
     moby_vars->ang = unwrapped_angle;
     if (unwrapped_angle > 0x1000) {
         angle_delta = -0x10C0;
-        moby_vars->ang = old + angle_delta;
+        moby_vars->ang = previous_angle + angle_delta;
     } else if (unwrapped_angle < 0) {
         angle_delta = 0xF40;
-        moby_vars->ang = old + angle_delta;
+        moby_vars->ang = previous_angle + angle_delta;
     }
     offset_moby_class_point_pairs(((void *)moby->pclass), 0, angle_delta);
     moby->scale = *(float *)(((char *)moby->pclass) + 0x24) * moby_vars->fC *

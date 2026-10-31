@@ -67,7 +67,7 @@ extern void  set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e868
 void gadgebot_telepot_pad_update(char *moby) __asm__("FUN_L10_002be858");
 
 void gadgebot_telepot_pad_update(char *moby) {
-    int   *data = ((int *)MOBY(moby)->pvars);
+    int   *telepot_pad_vars = ((int *)MOBY(moby)->pvars);
     float  position[4];
     float  velocity[4];
     float  offset_buffer[4];
@@ -85,7 +85,7 @@ void gadgebot_telepot_pad_update(char *moby) {
         MOBY(moby)->state = 1;
     }
     hero_bytes = D_0013F350;
-    if ((unsigned char)hero_bytes[0x20A4] == 1 && *data != -1 &&
+    if ((unsigned char)hero_bytes[0x20A4] == 1 && *telepot_pad_vars != -1 &&
         func_001F9D48_2BFBB8(moby + 0x10, hero_bytes + 0x80) < 0.5f) {
         offset = offset_buffer;
         i = 9;
@@ -117,7 +117,7 @@ void gadgebot_telepot_pad_update(char *moby) {
         } while (i >= 0);
         func_0022ED80_2BFBB8(0, 0, (int)moby);
         {
-            int   moby_offset = *data << 8;
+            int   moby_offset = *telepot_pad_vars << 8;
             char *effect = (*(char **)&D_L10_0015FFD8) + moby_offset;
             func_L00_00217718_2BFBB8(effect + 0x10, effect + 0x40, 0x43, 0);
         }
@@ -152,7 +152,8 @@ void gadgebot_telepot_pad_update(char *moby) {
                 func_001F9FA8_2BFBB8(func_00214158_2BFBB8()) * func_002140F8_2BFBB8(0.0f, 0.5f);
             velocity[2] = 0.0f;
             velocity[2] += func_002140F8_2BFBB8(0.0f, 0.5f);
-            add_vectors(offset, velocity, (*(char **)&D_L10_0015FFD8) + (*data << 8) + 0x10);
+            add_vectors(
+                offset, velocity, (*(char **)&D_L10_0015FFD8) + (*telepot_pad_vars << 8) + 0x10);
             func_L00_001FF4B0_2BFBB8(position, position, func_002140F8_2BFBB8(0.0f, D_0015ED6C));
             position[2] = func_002140F8_2BFBB8(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = func_001F9850_2BFBB8(func_L00_00258BC8_2BFBB8(15, 30));
@@ -165,7 +166,7 @@ void gadgebot_telepot_pad_update(char *moby) {
                 velocity, life, size_scaled, size, color, 0, spin, position, D_0015ED70 * 15.0f);
         } while (i >= 0);
     }
-    if (D_L10_0015F5CC % func_001F9850_2BFBB8(0x3c) == 0 && *data != -1) {
+    if (D_L10_0015F5CC % func_001F9850_2BFBB8(0x3c) == 0 && *telepot_pad_vars != -1) {
         for (i = 0; i < func_001FA898_2BFBB8(16.0f); i++) {
             char *effect;
             *(Q_2BFBB8 *)position = *(Q_2BFBB8 *)&MOBY(moby)->pos;

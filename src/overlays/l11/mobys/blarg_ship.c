@@ -27,16 +27,16 @@ spawn_moby_with_random_yaw(void *position, void *vector, int id) __asm__("FUN_L1
 char *spawn_moby_with_random_yaw(void *position, void *vector, int id) {
     char *moby = create_moby(id);
     if (moby != 0) {
-        char *data;
+        char *spawned_moby_vars;
         float angle;
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
         moby[0xBC] = 0;
-        data = ((char *)MOBY(moby)->pvars);
+        spawned_moby_vars = ((char *)MOBY(moby)->pvars);
         qcopy(moby + 0x10, position);
-        qcopy(data + 0x10, vector);
+        qcopy(spawned_moby_vars + 0x10, vector);
         angle = random_angle_radians();
         *(int *)(moby + 0x40) = 0;
         MOBY(moby)->rot.z = angle;
@@ -329,9 +329,10 @@ short count_listed_blarg_ships_in_state_5(int moby_list_index) {
     short *moby_list_entry = D_L11_001AC240[moby_list_index];
     short  found = 0;
     short  n = 0;
-    char  *base = D_L11_0015FFD8;
+    char  *moby_array_base = D_L11_0015FFD8;
     do {
-        unsigned char *moby = (unsigned char *)(((moby_list_entry[0] & 0x7FFF) << 8) + (int)base);
+        unsigned char *moby =
+            (unsigned char *)(((moby_list_entry[0] & 0x7FFF) << 8) + (int)moby_array_base);
         if (MOBY(moby)->oclass == 0x527 && moby[0x20] == 5) {
             found = ++n;
         }

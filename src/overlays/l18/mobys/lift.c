@@ -295,7 +295,7 @@ void draw_lift_25_quad_mesh(struct Moby *moby) {
     float         uv[4][2];
     unsigned long pkt[4];
     float         height_offset_transform[4][4];
-    char         *data = (char *)moby->pvars;
+    char         *lift_private_vars = (char *)moby->pvars;
     int           i;
     int           j;
 
@@ -308,7 +308,7 @@ void draw_lift_25_quad_mesh(struct Moby *moby) {
     pkt[2] = 0xFF9000000260;
     pkt[0] = 0;
     set_identity_matrix(height_offset_transform);
-    height_offset_transform[3][2] = moby->pos.z - *(float *)data;
+    height_offset_transform[3][2] = moby->pos.z - *(float *)lift_private_vars;
     colors[3] = (*(int *)&lift_mesh_quad_color_gp);
     colors[2] = (*(int *)&lift_mesh_quad_color_gp);
     colors[1] = (*(int *)&lift_mesh_quad_color_gp);
@@ -439,7 +439,7 @@ void draw_lift_38_quad_mesh(struct Moby *moby) {
     float         uv[4][2];
     unsigned long pkt[4];
     float         height_offset_transform[4][4];
-    char         *data = (char *)moby->pvars;
+    char         *lift_mesh_private_vars = (char *)moby->pvars;
     int           i;
     int           j;
 
@@ -452,7 +452,7 @@ void draw_lift_38_quad_mesh(struct Moby *moby) {
     pkt[2] = 0xFF9000000260;
     pkt[0] = 0;
     set_identity_matrix(height_offset_transform);
-    height_offset_transform[3][2] = moby->pos.z - *(float *)data;
+    height_offset_transform[3][2] = moby->pos.z - *(float *)lift_mesh_private_vars;
     colors[3] = (*(int *)&lift_mesh_quad_color_gp);
     colors[2] = (*(int *)&lift_mesh_quad_color_gp);
     colors[1] = (*(int *)&lift_mesh_quad_color_gp);
@@ -543,7 +543,7 @@ void draw_lift_22_quad_mesh(struct Moby *moby) {
     float         uv[4][2];
     unsigned long pkt[4];
     float         height_offset_transform[4][4];
-    char         *data = (char *)moby->pvars;
+    char         *lift_draw_private_vars = (char *)moby->pvars;
     int           i;
     int           j;
 
@@ -556,7 +556,7 @@ void draw_lift_22_quad_mesh(struct Moby *moby) {
     pkt[2] = 0xFF9000000260;
     pkt[0] = 0;
     set_identity_matrix(height_offset_transform);
-    height_offset_transform[3][2] = moby->pos.z - *(float *)data;
+    height_offset_transform[3][2] = moby->pos.z - *(float *)lift_draw_private_vars;
     colors[3] = (*(int *)&lift_mesh_quad_color_gp);
     colors[2] = (*(int *)&lift_mesh_quad_color_gp);
     colors[1] = (*(int *)&lift_mesh_quad_color_gp);

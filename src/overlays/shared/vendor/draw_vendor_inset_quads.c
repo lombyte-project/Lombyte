@@ -126,8 +126,8 @@ void                     draw_vendor_purchase_panel(void *moby) __asm__("FUN_L00
 void draw_vendor_purchase_panel(void *moby) {
     OvlQuad first_edge[1];
     OvlQuad second_edge[1];
-    OvlQuad base[1];
-    OvlQuad out[3];
+    OvlQuad inset_panel_corner[1];
+    OvlQuad transformed_panel_vertices[3];
     I3      ids;
     OvlQuad inset_offset[1];
     OvlQuad quad_corners[4];
@@ -136,21 +136,21 @@ void draw_vendor_purchase_panel(void *moby) {
     int     x, y, panel_screen_x, panel_screen_y;
     float   untrimmed_edge_length;
     ids = D_L00_00161178;
-    FUN_0020cd48_29fcd0(moby, 3, &ids, out);
-    qcopy(base, out);
-    fast_vec_sub(first_edge, &out[1], out);
-    fast_vec_sub(second_edge, &out[2], out);
+    FUN_0020cd48_29fcd0(moby, 3, &ids, transformed_panel_vertices);
+    qcopy(inset_panel_corner, transformed_panel_vertices);
+    fast_vec_sub(first_edge, &transformed_panel_vertices[1], transformed_panel_vertices);
+    fast_vec_sub(second_edge, &transformed_panel_vertices[2], transformed_panel_vertices);
     untrimmed_edge_length = fast_vec_length(first_edge);
     fast_vec_normalize(inset_offset, first_edge, 0.03f);
-    fast_vec_add(base, base, inset_offset);
+    fast_vec_add(inset_panel_corner, inset_panel_corner, inset_offset);
     fast_vec_normalize(first_edge, first_edge, untrimmed_edge_length - 0.06f);
     untrimmed_edge_length = fast_vec_length(second_edge);
     fast_vec_normalize(inset_offset, second_edge, 0.04f);
-    fast_vec_add(base, base, inset_offset);
+    fast_vec_add(inset_panel_corner, inset_panel_corner, inset_offset);
     fast_vec_normalize(second_edge, second_edge, untrimmed_edge_length - 0.04f);
-    qcopy(&quad_corners[0], base);
-    fast_vec_add(&quad_corners[1], base, first_edge);
-    fast_vec_add(&quad_corners[2], base, second_edge);
+    qcopy(&quad_corners[0], inset_panel_corner);
+    fast_vec_add(&quad_corners[1], inset_panel_corner, first_edge);
+    fast_vec_add(&quad_corners[2], inset_panel_corner, second_edge);
     fast_vec_add(&quad_corners[3], &quad_corners[2], first_edge);
     bounds_first_corner = quad_corners[0];
     bounds_opposite_corner = quad_corners[3];
@@ -331,7 +331,7 @@ void draw_vendor_screen(void) __asm__("FUN_L00_002a02b0");
 
 void draw_vendor_screen(void) {
     VendorMenu *e;
-    A02b0_tab  *g;
+    A02b0_tab  *selected_item_render_entry;
 #define p (&vendor_menu)
 
     if (D_L00_0015F5D8 != 0) {
@@ -365,11 +365,11 @@ void draw_vendor_screen(void) {
         if (p->mode != 0) {
             qcopy(&p->look, &D_L00_00166DD0[0]);
             {
-                u128 *s = &D_L00_00166DD0[32];
-                D_L00_00165F80[0] = s[0];
-                D_L00_00165F80[1] = s[1];
-                D_L00_00165F80[2] = s[2];
-                qzero(s);
+                u128 *camera_basis_vectors = &D_L00_00166DD0[32];
+                D_L00_00165F80[0] = camera_basis_vectors[0];
+                D_L00_00165F80[1] = camera_basis_vectors[1];
+                D_L00_00165F80[2] = camera_basis_vectors[2];
+                qzero(camera_basis_vectors);
             }
             qzero(camera_lateral_axis);
             qzero(D_L00_00166FF0);
@@ -423,8 +423,8 @@ void draw_vendor_screen(void) {
     stash_moby_class_dists();
     if (D_L00_00161E38 == 0 && p->mode == 0) {
         if (p->rows[p->cursor].is_ammo == 1) {
-            g = &D_L00_001C8FF0[p->rows[p->cursor].item];
-            if (g->f30 != 0) {
+            selected_item_render_entry = &D_L00_001C8FF0[p->rows[p->cursor].item];
+            if (selected_item_render_entry->f30 != 0) {
                 draw_moby_list(((u8 *)p->menu_mobys) + 0x200, 1);
             }
         } else {

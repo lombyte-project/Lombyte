@@ -570,7 +570,7 @@ void update_breakable_window(char *moby) {
         BLEND_CAMERA_TO_HERO = 3,
         WAIT_FOR_NEARBY_HERO = 4
     };
-    int  *data = ((int *)MOBY(moby)->pvars);
+    int  *camera_sequence_and_draw_vars = ((int *)MOBY(moby)->pvars);
     float camera_position[4], camera_setup_rotation_or_position_target[4], from[4], target[4],
         offset[4];
     int base;
@@ -579,31 +579,33 @@ void update_breakable_window(char *moby) {
         *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * camera_sequence_moby_scale_multiplier_gp;
     switch ((unsigned char)moby[0x20]) {
     case INITIALIZE_DRAW_SELECTION:
-        data[1] = 1;
+        camera_sequence_and_draw_vars[1] = 1;
         moby[0x20] = 1;
         break;
     case WAIT_FOR_LINKED_MOBY_TRIGGER:
-        if ((data[2] < 0 || (unsigned char)D_L06_0015FFD8_ffcb0[(data[2] << 8) + 0xbc] == 0) &&
-            data[8] != -1) {
+        if ((camera_sequence_and_draw_vars[2] < 0 ||
+             (unsigned char)D_L06_0015FFD8_ffcb0[(camera_sequence_and_draw_vars[2] << 8) + 0xbc] ==
+                 0) &&
+            camera_sequence_and_draw_vars[8] != -1) {
             break;
         }
         if (vector_distance_xy(moby + 0x10, D_0013F3D0) < 32.0f) {
             moby[0x20] = 2;
-            data[9] = scale_game_frames(30);
+            camera_sequence_and_draw_vars[9] = scale_game_frames(30);
         } else {
             spawn_moby_breakup_effect(moby);
             moby[0x20] = 4;
         }
         break;
     case WAIT_CAMERA_START_DELAY:
-        if (fast_dec_timer(data + 9)) {
+        if (fast_dec_timer(camera_sequence_and_draw_vars + 9)) {
             {
                 int state;
                 int base;
                 moby[0x20] = 3;
                 scripted_camera_sequence_active = 1;
                 D_L06_0015F408 = 0x12;
-                state = data[5];
+                state = camera_sequence_and_draw_vars[5];
                 state <<= 7;
                 base = (int)l06_cuboids;
                 qcopy(camera_position, (void *)(state + base + 0x30));
@@ -621,10 +623,10 @@ void update_breakable_window(char *moby) {
                 int   base;
                 int   state;
                 float facing;
-                data[6] = 0;
+                camera_sequence_and_draw_vars[6] = 0;
                 {
                     int base;
-                    base = data[4];
+                    base = camera_sequence_and_draw_vars[4];
                     base <<= 7;
                     base += (int)l06_cuboids;
                     facing = fast_arc_tan(MOBY(moby)->pos.x - *(float *)(base + 0x30),
@@ -632,54 +634,56 @@ void update_breakable_window(char *moby) {
                 }
                 {
                     int state;
-                    state = data[4];
+                    state = camera_sequence_and_draw_vars[4];
                     state <<= 7;
                     base = (int)l06_cuboids;
                     *(float *)(state + base + 0x78) = facing;
                 }
-                state = data[4];
+                state = camera_sequence_and_draw_vars[4];
                 state <<= 7;
                 set_race_camera(
                     (void *)(base + state + 0x30), (void *)(base + state + 0x70), 0x72, 0);
             }
         }
-        if (data[9] < camera_sequence_scalar_ramp_duration_frames_gp)
-            D_L06_0015F3FC = 1.0f - convert_integer_to_float(data[9]) /
+        if (camera_sequence_and_draw_vars[9] < camera_sequence_scalar_ramp_duration_frames_gp)
+            D_L06_0015F3FC = 1.0f - convert_integer_to_float(camera_sequence_and_draw_vars[9]) /
                                         (float)camera_sequence_scalar_ramp_duration_frames_gp;
         break;
     case BLEND_CAMERA_TO_HERO:
-        if (data[9] < camera_sequence_scalar_ramp_duration_frames_gp) {
-            data[9]++;
-            D_L06_0015F3FC = 1.0f - convert_integer_to_float(data[9]) /
+        if (camera_sequence_and_draw_vars[9] < camera_sequence_scalar_ramp_duration_frames_gp) {
+            camera_sequence_and_draw_vars[9]++;
+            D_L06_0015F3FC = 1.0f - convert_integer_to_float(camera_sequence_and_draw_vars[9]) /
                                         (float)camera_sequence_scalar_ramp_duration_frames_gp;
         }
         /* This field holds float bits; retail completes only on an ordered >= comparison. */
-        if (*(float *)(data + 6) >= 0.99999f) {
+        if (*(float *)(camera_sequence_and_draw_vars + 6) >= 0.99999f) {
             moby[0x20] = 5;
             hero_set_state(0, 0);
             FUN_L06_00312ce8(2);
             scripted_camera_sequence_active = 0;
         } else {
-            if (*(float *)(data + 6) >= 0.05f && data[3] >= 0) {
+            if (*(float *)(camera_sequence_and_draw_vars + 6) >= 0.05f &&
+                camera_sequence_and_draw_vars[3] >= 0) {
                 {
                     int state;
                     int base;
-                    state = data[3];
+                    state = camera_sequence_and_draw_vars[3];
                     state <<= 7;
                     base = (int)l06_cuboids;
                     qcopy((void *)(state + base + 0x30), D_0013F3D0);
                     *(float *)(state + base + 0x38) -= 0.5f;
                 }
-                data[3] = -1;
+                camera_sequence_and_draw_vars[3] = -1;
             }
-            if (data[1] == 1 &&
-                vector_distance_xy(moby + 0x10, D_L06_0015FFD8_ffcb0 + (data[8] << 8) + 0x10) >
-                    0.1f) {
+            if (camera_sequence_and_draw_vars[1] == 1 &&
+                vector_distance_xy(moby + 0x10,
+                                   D_L06_0015FFD8_ffcb0 + (camera_sequence_and_draw_vars[8] << 8) +
+                                       0x10) > 0.1f) {
                 allocate_voice_for_target_entry(0, 0, moby);
                 spawn_moby_breakup_effect(moby);
             }
-            advance_accelerated_scalar((float *)(data + 6),
-                                       (float *)(data + 7),
+            advance_accelerated_scalar((float *)(camera_sequence_and_draw_vars + 6),
+                                       (float *)(camera_sequence_and_draw_vars + 7),
                                        1.0f,
                                        frame_time_sq,
                                        frame_time_sq,
@@ -687,7 +691,7 @@ void update_breakable_window(char *moby) {
             {
                 int state;
                 int base;
-                state = data[5];
+                state = camera_sequence_and_draw_vars[5];
                 state <<= 7;
                 base = (int)l06_cuboids;
                 qcopy(camera_position, (void *)(state + base + 0x30));
@@ -706,31 +710,31 @@ void update_breakable_window(char *moby) {
             lerp_vector(camera_position,
                         camera_position,
                         camera_setup_rotation_or_position_target,
-                        *(float *)(data + 6));
-            lerp_vector(from, from, target, *(float *)(data + 6));
+                        *(float *)(camera_sequence_and_draw_vars + 6));
+            lerp_vector(from, from, target, *(float *)(camera_sequence_and_draw_vars + 6));
             set_camera_position(camera_position);
             set_camera_rotation(from);
         }
         break;
     case WAIT_FOR_NEARBY_HERO:
         if (vector_distance_xy(moby + 0x10, D_0013F3D0) < 16.0f) {
-            state = data[3];
+            state = camera_sequence_and_draw_vars[3];
             state <<= 7;
             base = (int)l06_cuboids;
             qcopy((void *)(state + base + 0x30), D_0013F3D0);
             *(float *)(state + base + 0x38) -= 0.5f;
-            data[3] = -1;
+            camera_sequence_and_draw_vars[3] = -1;
             moby[0x20] = 5;
         }
         break;
     }
-    if (data[1] != 0) {
-        if (data[0] != 0)
+    if (camera_sequence_and_draw_vars[1] != 0) {
+        if (camera_sequence_and_draw_vars[0] != 0)
             FUN_L06_00210fc8((int)effect_quad_draw_single, moby);
         else
             FUN_L06_00210fc8((int)FUN_L06_00300958, moby);
     } else {
-        if (data[0] != 0)
+        if (camera_sequence_and_draw_vars[0] != 0)
             FUN_L06_00210fc8((int)draw_backdrop_mesh, moby);
         else
             FUN_L06_00210fc8((int)FUN_L06_00300588, moby);

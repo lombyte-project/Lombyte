@@ -17,16 +17,16 @@ extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_racer_child(char *owner) __asm__("FUN_L05_002f8718");
 
-char *spawn_racer_child(char *owner) {
+char *spawn_racer_child(char *racer_moby) {
     char *moby = create_moby(0x1B7);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 2;
-        qcopy(moby + 0x10, owner + 0x10);
-        qcopy(moby + 0x40, owner + 0x40);
-        MOBY(moby)->spawn_frame = *(unsigned long *)(owner + 0x38);
+        qcopy(moby + 0x10, racer_moby + 0x10);
+        qcopy(moby + 0x40, racer_moby + 0x40);
+        MOBY(moby)->spawn_frame = *(unsigned long *)(racer_moby + 0x38);
         update_entity(moby);
     }
     return moby;
@@ -39,16 +39,18 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void copy_racer_path_node(char *moby, int path_node_index, float *out) __asm__("FUN_L05_00306d30");
 
-void copy_racer_path_node(char *moby, int path_node_index, float *out) {
+void copy_racer_path_node(char *moby, int path_node_index, float *output_path_node) {
     char *path = *(char **)(((char *)MOBY(moby)->pvars) + 0x244);
     float next_path_node[4];
     float perpendicular_heading;
-    qcopy(out, path + 0x10 + path_node_index * 16);
+    qcopy(output_path_node, path + 0x10 + path_node_index * 16);
     qcopy(next_path_node, path + 0x10 + ((path_node_index + 1) % *(int *)path) * 16);
-    perpendicular_heading = fast_add_rotations(
-        fast_arc_tan(next_path_node[0] - out[0], next_path_node[1] - out[1]), 1.5707964f);
-    out[0] = out[0] + fast_cos(perpendicular_heading) * 0.0f;
-    out[1] = out[1] + fast_sin(perpendicular_heading) * 0.0f;
+    perpendicular_heading =
+        fast_add_rotations(fast_arc_tan(next_path_node[0] - output_path_node[0],
+                                        next_path_node[1] - output_path_node[1]),
+                           1.5707964f);
+    output_path_node[0] = output_path_node[0] + fast_cos(perpendicular_heading) * 0.0f;
+    output_path_node[1] = output_path_node[1] + fast_sin(perpendicular_heading) * 0.0f;
 }
 
 extern int   offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
@@ -99,7 +101,7 @@ void advance_racer_path_node(char *patrol_moby) {
     heading = fast_arc_tan(target[0] - moby->position[0], target[1] - moby->position[1]);
     for (;;) {
         L16PatrolPath *path;
-        L16PatrolPath *base;
+        L16PatrolPath *racer_base_path;
 
         copy_racer_path_node((char *)moby, patrol_data->node, target);
         distance = vector_distance_xy(target, patrol_data->position);
@@ -110,13 +112,13 @@ void advance_racer_path_node(char *patrol_moby) {
         }
         path = patrol_data->path;
         patrol_data->node = (patrol_data->node + 1) % path->count;
-        base = (L16PatrolPath *)l05_paths[patrol_data->base_path];
-        if (path != base) {
+        racer_base_path = (L16PatrolPath *)l05_paths[patrol_data->base_path];
+        if (path != racer_base_path) {
             /* At the last node of a branch: back to the base path, five nodes past its nearest one. */
             if (patrol_data->node == path->count - 1) {
-                patrol_data->path = base;
+                patrol_data->path = racer_base_path;
                 patrol_data->node =
-                    select_point_index_by_distance(patrol_data->position, base, 0.0f);
+                    select_point_index_by_distance(patrol_data->position, racer_base_path, 0.0f);
                 patrol_data->node =
                     offset_path_index((char *)patrol_data->path, patrol_data->node, 5, 1);
             }
@@ -183,28 +185,31 @@ void blend_racer_and_child_animations(char *moby,
                                       int   frame_index,
 
                                       int blend_frames) {
-    char *data;
+    char *racer_vars;
     char *child;
     float ratio;
     float child_frame_index;
     float max;
     int   child_animation_index;
     blend_moby_animation(moby, animation_index, frame_index, blend_frames);
-    data = ((char *)MOBY(moby)->pvars);
-    child = *(char **)(data + 0x268);
+    racer_vars = ((char *)MOBY(moby)->pvars);
+    child = *(char **)(racer_vars + 0x268);
     if (child != 0) {
         ratio = *(float *)(child + 0x5C) / *(float *)(moby + 0x5C);
         child_animation_index = map_racer_animation_to_child_index(animation_index);
         child_frame_index = (float)frame_index * ratio;
-        max = (float)*(unsigned char *)(*(char **)(*(char **)(*(char **)(data + 0x268) + 0x24) -
-                                                   (-(child_animation_index * 4)) + 0x48) +
-                                        0x10);
+        max =
+            (float)*(unsigned char *)(*(char **)(*(char **)(*(char **)(racer_vars + 0x268) + 0x24) -
+                                                 (-(child_animation_index * 4)) + 0x48) +
+                                      0x10);
         if (max < child_frame_index)
             child_frame_index = max;
         else if (child_frame_index < 0.0f)
             child_frame_index = 0.0f;
-        blend_moby_animation(
-            *(char **)(data + 0x268), child_animation_index, (int)child_frame_index, blend_frames);
+        blend_moby_animation(*(char **)(racer_vars + 0x268),
+                             child_animation_index,
+                             (int)child_frame_index,
+                             blend_frames);
     }
 }
 
@@ -404,7 +409,7 @@ void skid_mcmarx_update(Moby *moby) {
     float step[4];
     float probe[4];
     float push[4];
-    Data *data = (Data *)*(void **)&moby->pvars;
+    Data *racer_instance_vars = (Data *)*(void **)&moby->pvars;
 
     if (moby->visible != 0 && fast_vec_dist(((float *)&moby->pos), D_L05_001671C0) < 29.0f) {
         FUN_L00_0025a120(moby);
@@ -416,19 +421,21 @@ void skid_mcmarx_update(Moby *moby) {
 
         moby->update_dist = 0x18;
         moby->flags |= 0x41;
-        path = (Path *)l05_paths[data->path_id];
-        data->path = path;
+        path = (Path *)l05_paths[racer_instance_vars->path_id];
+        racer_instance_vars->path = path;
         copy_racer_path_node((char *)moby, 0, path_point);
         qcopy(((float *)&moby->pos), path_point);
-        qcopy(data->pos, ((float *)&moby->pos));
+        qcopy(racer_instance_vars->pos, ((float *)&moby->pos));
         moby->rot.x = 0.0f;
         moby->rot.y = 0.0f;
         moby->rot.z = fast_arc_tan(path->points[1].x - path->points[0].x,
                                    path->points[1].y - path->points[0].y);
-        data->cruise_speed =
-            D_0015ED6C_gp * 17.0f + (float)data->racer_index * (D_0015ED6C_gp * 1.55f);
-        data->launch_speed =
-            D_0015ED6C_gp * 24.0f + (float)data->racer_index * (D_0015ED6C_gp * 1.55f);
+        racer_instance_vars->cruise_speed =
+            D_0015ED6C_gp * 17.0f +
+            (float)racer_instance_vars->racer_index * (D_0015ED6C_gp * 1.55f);
+        racer_instance_vars->launch_speed =
+            D_0015ED6C_gp * 24.0f +
+            (float)racer_instance_vars->racer_index * (D_0015ED6C_gp * 1.55f);
         if (((unsigned char *)alternate_item_available)[0] == 0) {
             float handicap = (float)(D_0015EE38_macro - 4);
 
@@ -439,10 +446,10 @@ void skid_mcmarx_update(Moby *moby) {
             if (handicap < 0.77f) {
                 handicap = 0.77f;
             }
-            data->cruise_speed *= handicap;
-            data->launch_speed *= handicap;
+            racer_instance_vars->cruise_speed *= handicap;
+            racer_instance_vars->launch_speed *= handicap;
         }
-        data->bob_phase = random_angle_radians();
+        racer_instance_vars->bob_phase = random_angle_radians();
         moby->state = 1;
         break;
     }
@@ -450,25 +457,25 @@ void skid_mcmarx_update(Moby *moby) {
         if (*(int *)(((char *)&D_001413DC)) == 0x16) {
             moby->update_dist = 0xFF;
             moby->flags &= ~0x41;
-            data->point_index = 0;
-            data->launch_timer = scale_game_frames(0xB4);
-            data->vertical_speed = 0.0f;
-            data->yaw_speed = 0.0f;
-            data->jump_frames = 0;
-            data->f264 = 0;
-            data->speed = 0.0f;
-            if (data->child == 0) {
+            racer_instance_vars->point_index = 0;
+            racer_instance_vars->launch_timer = scale_game_frames(0xB4);
+            racer_instance_vars->vertical_speed = 0.0f;
+            racer_instance_vars->yaw_speed = 0.0f;
+            racer_instance_vars->jump_frames = 0;
+            racer_instance_vars->f264 = 0;
+            racer_instance_vars->speed = 0.0f;
+            if (racer_instance_vars->child == 0) {
                 Moby *child = (Moby *)spawn_racer_child((char *)moby);
 
-                data->child = child;
+                racer_instance_vars->child = child;
                 if (child != 0) {
                     ((ChildData *)*(void **)&child->pvars)->f50 = 1;
                 }
             }
-            if (data->racer_index % 2 == 1) {
+            if (racer_instance_vars->racer_index % 2 == 1) {
                 moby->flags |= 0x8000;
-                if (data->child != 0) {
-                    data->child->flags |= 0x8000;
+                if (racer_instance_vars->child != 0) {
+                    racer_instance_vars->child->flags |= 0x8000;
                 }
             }
             moby->state = 2;
@@ -490,100 +497,113 @@ void skid_mcmarx_update(Moby *moby) {
             advance_racer_path_node((char *)moby);
             add_moby_frames_for_group_proximity((char *)moby);
             start_racer_branch_jump((char *)moby);
-            if (data->jump_frames != 0) {
-                data->jump_frames++;
-                if (data->jump_frames < scale_game_frames(0x11)) {
+            if (racer_instance_vars->jump_frames != 0) {
+                racer_instance_vars->jump_frames++;
+                if (racer_instance_vars->jump_frames < scale_game_frames(0x11)) {
                     float path_length = 0.0f;
                     float air_time;
                     float jump_speed;
                     int   i;
-                    int   next;
+                    int   next_path_node_index;
 
-                    for (i = data->point_index; i < data->jump_point; i = next) {
-                        next = offset_path_index((char *)data->path, i, 1, 1);
-                        path_length += vector_distance_xy((float(*)[4])data->path + (i + 1),
-                                                          (float(*)[4])data->path + (next + 1));
+                    for (i = racer_instance_vars->point_index; i < racer_instance_vars->jump_point;
+                         i = next_path_node_index) {
+                        next_path_node_index =
+                            offset_path_index((char *)racer_instance_vars->path, i, 1, 1);
+                        path_length += vector_distance_xy(
+                            (float(*)[4])racer_instance_vars->path + (i + 1),
+                            (float(*)[4])racer_instance_vars->path + (next_path_node_index + 1));
                     }
-                    air_time = path_length / data->speed;
-                    jump_speed = (data->path->points[data->jump_point].z -
-                                  data->path->points[data->point_index].z) /
-                                     air_time +
-                                 frame_time_sq_macro * 21.0f * air_time * 0.5f;
-                    if (data->vertical_speed < 0.0f) {
-                        data->vertical_speed = 0.0f;
+                    air_time = path_length / racer_instance_vars->speed;
+                    jump_speed =
+                        (racer_instance_vars->path->points[racer_instance_vars->jump_point].z -
+                         racer_instance_vars->path->points[racer_instance_vars->point_index].z) /
+                            air_time +
+                        frame_time_sq_macro * 21.0f * air_time * 0.5f;
+                    if (racer_instance_vars->vertical_speed < 0.0f) {
+                        racer_instance_vars->vertical_speed = 0.0f;
                     }
-                    approach_value(&data->vertical_speed, jump_speed, frame_time_sq_macro * 110.0f);
+                    approach_value(&racer_instance_vars->vertical_speed,
+                                   jump_speed,
+                                   frame_time_sq_macro * 110.0f);
                 }
             }
             FUN_L05_00307570_c((unsigned char *)moby);
-            copy_racer_path_node((char *)moby, data->point_index, path_point);
+            copy_racer_path_node((char *)moby, racer_instance_vars->point_index, path_point);
             spring_angle(&moby->rot.z,
                          fast_arc_tan(path_point[0] - moby->pos.x, path_point[1] - moby->pos.y),
-                         &data->yaw_speed,
+                         &racer_instance_vars->yaw_speed,
                          0,
                          frame_scale_sq_macro * 0.035f,
                          frame_scale_sq_macro * 0.3f,
                          D_0015ED6C_gp * 6.981317f);
-            if (data->pos[2] < path_point[2] - 5.0f) {
-                data->pos[2] = path_point[2];
+            if (racer_instance_vars->pos[2] < path_point[2] - 5.0f) {
+                racer_instance_vars->pos[2] = path_point[2];
             }
-            step[0] = fast_cos(moby->rot.z) * data->speed;
-            step[1] = fast_sin(moby->rot.z) * data->speed;
+            step[0] = fast_cos(moby->rot.z) * racer_instance_vars->speed;
+            step[1] = fast_sin(moby->rot.z) * racer_instance_vars->speed;
             step[2] = 0.0f;
-            fast_vec_add(data->pos, data->pos, step);
+            fast_vec_add(racer_instance_vars->pos, racer_instance_vars->pos, step);
             fast_vec_scale(probe, step, 4.0f);
-            fast_vec_add(probe, probe, data->pos);
+            fast_vec_add(probe, probe, racer_instance_vars->pos);
             hit_count = func_L00_001F2BE8_308D68(probe, 0, moby, 0, 1.0f);
             if (hit_count != 0) {
                 fast_vec_scale(push, step, 7.0f);
                 for (j = 0; j < hit_count; j++) {
                     if (is_moby_in_class_range_500_to_540(D_L05_00178300[j]) != 0) {
-                        spawn_nearby_effect(
-                            (void *)D_L05_00178300[j], (int)moby, 0x30000, data->pos, push, 1.0f);
+                        spawn_nearby_effect((void *)D_L05_00178300[j],
+                                            (int)moby,
+                                            0x30000,
+                                            racer_instance_vars->pos,
+                                            push,
+                                            1.0f);
                     }
                 }
             }
-            ground = probe_ground_height(data->pos, 0, 0.5f);
-            height_above_ground = data->pos[2] - ground;
-            if (height_above_ground > 0.0f || data->vertical_speed > 0.0f) {
-                data->vertical_speed -= frame_time_sq_macro * 21.0f;
+            ground = probe_ground_height(racer_instance_vars->pos, 0, 0.5f);
+            height_above_ground = racer_instance_vars->pos[2] - ground;
+            if (height_above_ground > 0.0f || racer_instance_vars->vertical_speed > 0.0f) {
+                racer_instance_vars->vertical_speed -= frame_time_sq_macro * 21.0f;
             } else if (absolute_float(height_above_ground) < 0.5f) {
-                data->vertical_speed = 0.0f;
-                data->pos[2] = ground;
-                data->jump_frames = 0;
+                racer_instance_vars->vertical_speed = 0.0f;
+                racer_instance_vars->pos[2] = ground;
+                racer_instance_vars->jump_frames = 0;
             }
-            data->pos[2] += data->vertical_speed;
-            if (fast_dec_timer_s16(&data->launch_timer) != 0) {
-                float target = data->cruise_speed;
+            racer_instance_vars->pos[2] += racer_instance_vars->vertical_speed;
+            if (fast_dec_timer_s16(&racer_instance_vars->launch_timer) != 0) {
+                float target = racer_instance_vars->cruise_speed;
                 Hero *hero;
 
-                if (ground < data->pos[2]) {
+                if (ground < racer_instance_vars->pos[2]) {
                     target = D_0015ED6C_gp * 19.0f;
                 }
                 hero = (Hero *)(((char *)&D_0013F350));
                 if (hero->race_time_frames < scale_game_frames(0x2BC)) {
                     target += D_0015ED6C_gp * 3.0f;
                 }
-                if (hero->race_rank[data->racer_index] < hero->race_position) {
+                if (hero->race_rank[racer_instance_vars->racer_index] < hero->race_position) {
                     target -= D_0015ED6C_gp * 1.5f;
                 } else {
                     target += D_0015ED6C_gp;
                 }
-                if (target < data->speed) {
-                    approach_value(&data->speed, target, frame_time_sq_macro * 7.0f);
+                if (target < racer_instance_vars->speed) {
+                    approach_value(&racer_instance_vars->speed, target, frame_time_sq_macro * 7.0f);
                 } else {
-                    approach_value(&data->speed, target, frame_time_sq_macro * 15.0f);
+                    approach_value(
+                        &racer_instance_vars->speed, target, frame_time_sq_macro * 15.0f);
                 }
             } else {
-                approach_value(&data->speed, data->launch_speed, frame_time_sq_macro * 20.0f);
+                approach_value(&racer_instance_vars->speed,
+                               racer_instance_vars->launch_speed,
+                               frame_time_sq_macro * 20.0f);
             }
-            if (height_above_ground < 0.2f && data->vertical_speed < 0.0f) {
-                data->pos[2] = ground;
-                data->jump_frames = 0;
+            if (height_above_ground < 0.2f && racer_instance_vars->vertical_speed < 0.0f) {
+                racer_instance_vars->pos[2] = ground;
+                racer_instance_vars->jump_frames = 0;
             }
-            manipulator_set_scale(&data->m[3], 3.0f);
+            manipulator_set_scale(&racer_instance_vars->m[3], 3.0f);
             max_turn = D_0015ED6C_gp * 2.6179938f;
-            turn = data->yaw_speed;
+            turn = racer_instance_vars->yaw_speed;
             if (max_turn < turn) {
                 turn = max_turn;
             } else {
@@ -595,42 +615,43 @@ void skid_mcmarx_update(Moby *moby) {
             if (moby->flags & 0x8000) {
                 turn = -turn;
             }
-            data->m[3].f68 = turn * 30.0f;
-            data->m[0].f68 = turn * 20.0f;
-            data->m[2].f68 = turn * 50.0f;
-            data->m[1].f64 = turn * 40.0f;
+            racer_instance_vars->m[3].f68 = turn * 30.0f;
+            racer_instance_vars->m[0].f68 = turn * 20.0f;
+            racer_instance_vars->m[2].f68 = turn * 50.0f;
+            racer_instance_vars->m[1].f64 = turn * 40.0f;
             FUN_L00_002628d8((char *)moby,
-                             (char *)&data->m[3],
+                             (char *)&racer_instance_vars->m[3],
                              3,
                              frame_scale_sq_macro * 0.02f,
                              frame_scale_sq_macro * 0.3f);
             FUN_L00_002628d8((char *)moby,
-                             (char *)data,
+                             (char *)racer_instance_vars,
                              0,
                              frame_scale_sq_macro * 0.02f,
                              frame_scale_sq_macro * 0.3f);
             FUN_L00_002628d8((char *)moby,
-                             (char *)&data->m[2],
+                             (char *)&racer_instance_vars->m[2],
                              1,
                              frame_scale_sq_macro * 0.02f,
                              frame_scale_sq_macro * 0.3f);
             FUN_L00_002628d8((char *)moby,
-                             (char *)&data->m[1],
+                             (char *)&racer_instance_vars->m[1],
                              2,
                              frame_scale_sq_macro * 0.015f,
                              frame_scale_sq_macro * 0.3f);
-            qcopy(((float *)&moby->pos), data->pos);
+            qcopy(((float *)&moby->pos), racer_instance_vars->pos);
             moby->pos.z += 0.25f;
-            data->bob_phase = fast_add_rotations(data->bob_phase, D_0015ED6C_gp * 6.108652f);
-            moby->pos.z += fast_sin(data->bob_phase) * 0.08f;
-            if (data->child != 0) {
+            racer_instance_vars->bob_phase =
+                fast_add_rotations(racer_instance_vars->bob_phase, D_0015ED6C_gp * 6.108652f);
+            moby->pos.z += fast_sin(racer_instance_vars->bob_phase) * 0.08f;
+            if (racer_instance_vars->child != 0) {
                 Moby *child;
 
-                *(long *)&data->child->spawn_frame = *(long *)&moby->spawn_frame;
-                child = data->child;
+                *(long *)&racer_instance_vars->child->spawn_frame = *(long *)&moby->spawn_frame;
+                child = racer_instance_vars->child;
                 qcopy(((float *)&child->pos), ((float *)&moby->pos));
                 qcopy(((float *)&child->rot), ((float *)&moby->rot));
-                if (data->launch_timer != 0) {
+                if (racer_instance_vars->launch_timer != 0) {
                     child->command = 1;
                 }
             }

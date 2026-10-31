@@ -33,30 +33,30 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
                                             float max_speed) {
     unsigned char *moby = (unsigned char *)create_moby(0x52);
     if (moby != 0) {
-        char *data = ((char *)MOBY(moby)->pvars);
+        char *homing_rocket_vars = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(char **)(data + 0x24) = target;
-        *(char **)(data + 0x20) = owner_moby;
+        *(char **)(homing_rocket_vars + 0x24) = target;
+        *(char **)(homing_rocket_vars + 0x20) = owner_moby;
         qcopy(moby + 0x10, rocket_spawn_position);
         qcopy(moby + 0x40, initial_rotation);
         {
             float *sp = &scale;
-            *(float *)(data + 0x2C) = *sp;
+            *(float *)(homing_rocket_vars + 0x2C) = *sp;
         }
-        *(float *)(data + 0x38) = max_speed;
-        *(int *)(data + 0x28) = initial_expiry_countdown;
-        *(int *)(data + 0x30) = 0;
-        *(int *)(data + 0x34) = 0;
-        qcopy(data, ((char *)MOBY(owner_moby)->pvars) + 0xC0);
+        *(float *)(homing_rocket_vars + 0x38) = max_speed;
+        *(int *)(homing_rocket_vars + 0x28) = initial_expiry_countdown;
+        *(int *)(homing_rocket_vars + 0x30) = 0;
+        *(int *)(homing_rocket_vars + 0x34) = 0;
+        qcopy(homing_rocket_vars, ((char *)MOBY(owner_moby)->pvars) + 0xC0);
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
-        fast_vec_add(moby + 0x10, moby + 0x10, data);
-        if (*(char **)(data + 0x24) != 0) {
-            qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
+        fast_vec_add(moby + 0x10, moby + 0x10, homing_rocket_vars);
+        if (*(char **)(homing_rocket_vars + 0x24) != 0) {
+            qcopy(homing_rocket_vars + 0x10, *(char **)(homing_rocket_vars + 0x24) + 0x10);
         }
         MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
         update_entity(moby);
@@ -165,7 +165,7 @@ void update_level_13_homing_rocket(ProjectileMoby *m) __asm__("FUN_L13_002c1528"
 
 void update_level_13_homing_rocket(ProjectileMoby *rocket_moby) {
     Rocket        *rocket_data = rocket_moby->data;
-    ProjectileVec4 old;
+    ProjectileVec4 previous_rocket_position;
     ProjectileVec4 hitpos;
     ProjectileVec4 scratch_vector;
     ProjectileVec4 particle_initial_velocity;
@@ -175,7 +175,7 @@ void update_level_13_homing_rocket(ProjectileMoby *rocket_moby) {
     float          yaw;
     float          pitch;
 
-    qcopy(&old, &rocket_moby->pos);
+    qcopy(&previous_rocket_position, &rocket_moby->pos);
     rocket_moby->scale += (rocket_moby->cls->scale - rocket_moby->scale) * 0.1f;
     hit = (Hit_2C27B0 *)find_moby_hit(rocket_moby, 0xA30000, 0);
     if (hit != 0 && hit->owner != 0 && hit->owner->cls_id != 0x52) {
@@ -343,7 +343,7 @@ void update_level_13_homing_rocket(ProjectileMoby *rocket_moby) {
         return;
     }
     moby_point_position(rocket_moby, 1, &hitpos);
-    if (collision_line(&old, &hitpos, 0, rocket_moby, 0) != 0) {
+    if (collision_line(&previous_rocket_position, &hitpos, 0, rocket_moby, 0) != 0) {
         ProjectileMoby *o = D_L13_00174158;
         if (o == 0 ||
             (o != rocket_data->owner && o->cls_id != 0x504 && o->cls_id != 0x534 &&

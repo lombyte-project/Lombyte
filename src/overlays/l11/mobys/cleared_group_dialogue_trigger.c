@@ -16,10 +16,11 @@ extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10")
 void update_moby_list_empty_dialogue_trigger(struct Moby *moby) __asm__("FUN_L11_0031aa80");
 
 void update_moby_list_empty_dialogue_trigger(struct Moby *moby) {
-    int *data = (int *)moby->pvars;
-    if (data[0] == -1) {
+    int *dialogue_trigger_vars = (int *)moby->pvars;
+    if (dialogue_trigger_vars[0] == -1) {
         mark_moby_for_removal(moby);
-    } else if (data[1] != -1 && count_active_moby_group_members(data[1], -1) == 0) {
+    } else if (dialogue_trigger_vars[1] != -1 &&
+               count_active_moby_group_members(dialogue_trigger_vars[1], -1) == 0) {
         unsigned char *dialogue_latch_base = item_unlocked;
         if (dialogue_latch_base[0x13] == 0) {
             dialogue_latch_base[0x13] = 1;

@@ -55,17 +55,17 @@ static _CONST char blanks[PADSIZE] = {
 static _CONST char zeroes[PADSIZE] = {
     '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'};
 
-s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
-    register char        *fmt;   /* format string */
-    register int          ch;    /* character from fmt */
-    register int          n, m;  /* handy integers (short term usage) */
-    register char        *cp;    /* handy char pointer (short term usage) */
-    register RncStdioIov *iovp;  /* for PRINT macro */
-    register int          flags; /* flags as above */
-    int                   ret;   /* return value accumulator */
-    int                   width; /* width from format (%8d), or 0 */
-    int                   prec;  /* precision from format (%.3d), or -1 */
-    char                  sign;  /* sign prefix (' ', '+', '-', or \0) */
+s32 _vfprintf_r(RncReent *reentrancy_state, RncFile *fp, const char *fmt0, va_list ap) {
+    register char        *fmt;               /* format string */
+    register int          ch;                /* character from fmt */
+    register int          n, m;              /* handy integers (short term usage) */
+    register char        *cp;                /* handy char pointer (short term usage) */
+    register RncStdioIov *iovp;              /* for PRINT macro */
+    register int          flags;             /* flags as above */
+    int                   output_byte_count; /* return value accumulator */
+    int                   width;             /* width from format (%8d), or 0 */
+    int                   prec;              /* precision from format (%.3d), or -1 */
+    char                  sign;              /* sign prefix (' ', '+', '-', or \0) */
     s32                   wc;
     char                 *decimal_point = *get_state_resource_wrapper();
     char                  softsign;  /* temporary negative sign for floats */
@@ -86,11 +86,11 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
     int   size;   /* size of converted field or string */
     char *xdigs;  /* digits for [xX] conversion */
 #define NIOV 8
-    RncStdioUio uio;       /* output information: summary */
-    RncStdioIov iov[NIOV]; /* ... and individual io vectors */
-    char        buf[BUF];  /* space for %c, %[diouxX], %[eEfgG] */
-    char        ox[2];     /* space for 0x hex-prefix */
-    int         state = 0; /* mbtowc calls from library must not change state */
+    RncStdioUio uio;                    /* output information: summary */
+    RncStdioIov iov[NIOV];              /* ... and individual io vectors */
+    char        conversion_buffer[BUF]; /* space for %c, %[diouxX], %[eEfgG] */
+    char        ox[2];                  /* space for 0x hex-prefix */
+    int         state = 0;              /* mbtowc calls from library must not change state */
 
     /*
 	 * Choose PADSIZE to trade efficiency vs. size.  If larger printf
@@ -156,7 +156,7 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
     uio.uio_iov = iovp = iov;
     uio.uio_resid = 0;
     uio.uio_iovcnt = 0;
-    ret = 0;
+    output_byte_count = 0;
 
     /*
 	 * Scan the format for conversions (`%' character).
@@ -172,7 +172,7 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
         }
         if ((m = fmt - cp) != 0) {
             PRINT(cp, m);
-            ret += m;
+            output_byte_count += m;
         }
         if (n <= 0)
             goto done;
@@ -272,7 +272,7 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
             flags |= QUADINT;
             goto rflag;
         case 'c':
-            *(cp = buf) = va_arg(ap, int);
+            *(cp = conversion_buffer) = va_arg(ap, int);
             size = 1;
             sign = '\0';
             break;
@@ -328,7 +328,7 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
             }
 
             flags |= FPT;
-            cp = cvt(data, _double, prec, flags, &softsign, &expt, ch, &ndig);
+            cp = cvt(reentrancy_state, _double, prec, flags, &softsign, &expt, ch, &ndig);
             if (ch == 'g' || ch == 'G') {
                 if (expt <= -4 || expt > prec)
                     ch = (ch == 'g') ? 'e' : 'E';
@@ -360,11 +360,11 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
             break;
         case 'n':
             if (flags & LONGINT)
-                *va_ptr(ap, s64 *) = ret;
+                *va_ptr(ap, s64 *) = output_byte_count;
             else if (flags & SHORTINT)
-                *va_ptr(ap, short *) = ret;
+                *va_ptr(ap, short *) = output_byte_count;
             else
-                *va_ptr(ap, int *) = ret;
+                *va_ptr(ap, int *) = output_byte_count;
             continue; /* no output */
         case 'O':
             flags |= LONGINT;
@@ -400,10 +400,10 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
 				 * NUL in the first `prec' characters, and
 				 * strlen() will go further.
 				 */
-                char *p = memchr(cp, 0, prec);
+                char *string_terminator = memchr(cp, 0, prec);
 
-                if (p != NULL) {
-                    size = p - cp;
+                if (string_terminator != NULL) {
+                    size = string_terminator - cp;
                     if (size > prec)
                         size = prec;
                 } else
@@ -448,7 +448,7 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
 			 * explicit precision of zero is no characters.''
 			 *	-- ANSI X3J11
 			 */
-            cp = buf + BUF;
+            cp = conversion_buffer + BUF;
             if (_uquad != 0 || prec != 0) {
                 /*
 				 * Unsigned mod is hard, and unsigned mod
@@ -488,14 +488,14 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
                     goto skipsize;
                 }
             }
-            size = buf + BUF - cp;
+            size = conversion_buffer + BUF - cp;
         skipsize:
             break;
         default: /* "%?" prints ?, unless ? is NUL */
             if (ch == '\0')
                 goto done;
             /* pretend it was %c with argument ch */
-            cp = buf;
+            cp = conversion_buffer;
             *cp = ch;
             size = 1;
             sign = '\0';
@@ -593,13 +593,13 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap) {
             PAD(width - realsz, blanks);
 
         /* finally, adjust ret */
-        ret += width > realsz ? width : realsz;
+        output_byte_count += width > realsz ? width : realsz;
 
         FLUSH(); /* copy out the I/O vectors */
     }
 done:
     FLUSH();
 error:
-    return (__sferror(fp) ? EOF : ret);
+    return (__sferror(fp) ? EOF : output_byte_count);
     /* NOTREACHED */
 }

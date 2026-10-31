@@ -60,7 +60,7 @@ int render_configured_text_label(struct MenuScreen *label) {
     int                  remaining_frames;
     int                  visible_height;
     int                  text_extent;
-    struct MenuGridCell *entry;
+    struct MenuGridCell *selected_grid_cell;
     u8                  *availability_table;
     int                  item_id;
     int                  id;
@@ -103,13 +103,13 @@ int render_configured_text_label(struct MenuScreen *label) {
     } else if (selector_flags & 0x100) {
         struct MenuScreen *page = menu_system.current->focus;
         value_index = page->data.grid.selected_cell;
-        entry = &page->data.grid.cells[value_index];
-        if (entry->kind == 0) {
+        selected_grid_cell = &page->data.grid.cells[value_index];
+        if (selected_grid_cell->kind == 0) {
             availability_table = item_available;
-            id = availability_table[entry->id];
+            id = availability_table[selected_grid_cell->id];
         } else {
             availability_table = alternate_item_available;
-            id = availability_table[entry->id];
+            id = availability_table[selected_grid_cell->id];
         }
         if (id == 0) {
             value_index = -1;

@@ -41,7 +41,7 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
     s32 dest;
     s32 c_dest;
     s32 a_dest;
-    s32 next;
+    s32 next_tile_index;
 
     if (shell->count == 0) {
         return;
@@ -66,11 +66,12 @@ void sky_draw_shell_gouraud(struct Shell *shell) {
             dma_to_spr_sync();
         }
 
-        next = i + 1;
+        next_tile_index = i + 1;
         D_00160410 = 1 - D_00160410;
-        if (next < shell->count && visibility[next] == 1) {
-            WriteDmaChannelRegisters(
-                shell->tiles[next].address, shell->tiles[next].unkE >> 4, D_00160408[D_00160410]);
+        if (next_tile_index < shell->count && visibility[next_tile_index] == 1) {
+            WriteDmaChannelRegisters(shell->tiles[next_tile_index].address,
+                                     shell->tiles[next_tile_index].unkE >> 4,
+                                     D_00160408[D_00160410]);
         }
 
         if (visibility[i] == 1) {

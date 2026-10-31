@@ -32,10 +32,10 @@ void synchronize_linked_moby_heights(char *moby) __asm__("FUN_L11_0030e690");
 
 void synchronize_linked_moby_heights(char *moby) {
     short *moby_index_cursor = D_L11_001AC240[MOBY(moby)->group];
-    int    base = D_L11_0015FFD8;
+    int    moby_array_base = D_L11_0015FFD8;
     do {
         int        i = (*moby_index_cursor & 0x7FFF) * 256;
-        char      *linked_moby = (char *)(i + base);
+        char      *linked_moby = (char *)(i + moby_array_base);
         WaterGrid *grid;
         MOBY(linked_moby)->pos.z = MOBY(moby)->pos.z;
         grid = &l11_water_grids[*(int *)(((char *)MOBY(linked_moby)->pvars) + 4)];
@@ -588,9 +588,9 @@ int draw_linked_moby_trails(struct Moby *moby) {
     short    *list, *next_list;
     int i, j, segment, side, slot, more, next_segment, next_side, own_class, other_class, visible,
         half, corner;
-    float base, blend;
+    float frame_color_blend_offset, blend;
     long  skip;
-    char *other, *trail;
+    char *trail_moby, *trail;
     int   never = 0;
 
     if (moby->group == 0xFF) {
@@ -609,7 +609,7 @@ int draw_linked_moby_trails(struct Moby *moby) {
         quad->packet[2] = 0xFF9000000260L;
         quad->packet[0] = 0;
         quad->packet[3] = 0x8000000048L;
-        base =
+        frame_color_blend_offset =
             convert_integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_gp * 4.0f);
         for (j = 0; j < 4; j++) {
             half = (j >> 1) - 1;
@@ -617,7 +617,8 @@ int draw_linked_moby_trails(struct Moby *moby) {
                 ((float(*)[2])trail_quad_texture_coordinates)[j][0];
             quads[i].texture_coordinates[j][1] =
                 ((float(*)[2])trail_quad_texture_coordinates)[j][1];
-            blend = convert_integer_to_float(i - half) / *(float *)&D_L11_001623F0_gp + base;
+            blend = convert_integer_to_float(i - half) / *(float *)&D_L11_001623F0_gp +
+                    frame_color_blend_offset;
             if (1.0f < blend) {
                 blend = 1.0f;
             } else if (blend < 0.0f) {
@@ -640,10 +641,10 @@ int draw_linked_moby_trails(struct Moby *moby) {
             draw_geometry_quad(0, 0, 0);
         }
         skip = 1;
-        other = (char *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
-        other_class = *(short *)(other + 0xA6);
+        trail_moby = (char *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
+        other_class = *(short *)(trail_moby + 0xA6);
         own_class = moby->oclass;
-        visible = *(unsigned char *)(other + 0x31);
+        visible = *(unsigned char *)(trail_moby + 0x31);
         if ((other_class ^ own_class) == 0) {
             skip = 0;
         }
@@ -651,7 +652,7 @@ int draw_linked_moby_trails(struct Moby *moby) {
             skip = 1;
         }
         if (!skip) {
-            trail = *(char **)(other + 0x78);
+            trail = *(char **)(trail_moby + 0x78);
             segment = 0;
             if (*(int *)(trail + 0x2C0) > 0) {
                 do {
@@ -735,7 +736,7 @@ void update_moby_hit_stats_and_state(char *moby) __asm__("FUN_L11_0031a1c0");
 
 void update_moby_hit_stats_and_state(char *moby) {
     char        *moby_vars = ((char *)MOBY(moby)->pvars);
-    char        *info = find_moby_hit(moby, 0x330000, 0);
+    char        *hit_record = find_moby_hit(moby, 0x330000, 0);
     struct Hero *player_hero;
     ((unsigned char *)moby)[0xA4] = 0xFF;
     player_hero = &hero;
@@ -744,7 +745,7 @@ void update_moby_hit_stats_and_state(char *moby) {
     } else {
         MOBY(moby)->flags |= 0x1000;
     }
-    if (info != 0) {
+    if (hit_record != 0) {
         char *collection_stats_base = (char *)D_00141968;
         int   next_moby_state;
         int   current_moby_state;
@@ -758,8 +759,8 @@ void update_moby_hit_stats_and_state(char *moby) {
         }
         *(int *)(collection_stats_base + 0x157EC) =
             *(int *)(collection_stats_base + 0x157EC) | (1 << current_level_index) | 0x80000000;
-        if (current_level_index == 0xB && *(char **)(info + 0x20) != 0 &&
-            *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
+        if (current_level_index == 0xB && *(char **)(hit_record + 0x20) != 0 &&
+            *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0xAC) {
             if (++level_11_class_ac_hit_count >= 3 && item_unlocked[0x12] == 0) {
                 item_unlocked[0x12] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);

@@ -9,7 +9,7 @@ extern void advance_damped_scalar_velocity(
     float *ptr, float rate, float b, float c, float limit) __asm__("FUN_L00_0025b798");
 
 float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
-float vendor_spring(float *value,
+float vendor_spring(float *current_value,
                     float *velocity,
                     float  target_value,
                     float  error_gain,
@@ -18,12 +18,12 @@ float vendor_spring(float *value,
                     float eps) {
     float next_value, remaining_error;
     advance_damped_scalar_velocity(
-        velocity, target_value - *value, error_gain, damping_coefficient, eps);
-    next_value = *value + *velocity;
+        velocity, target_value - *current_value, error_gain, damping_coefficient, eps);
+    next_value = *current_value + *velocity;
     remaining_error = target_value - next_value;
-    *value = next_value;
+    *current_value = next_value;
     if (absolute_float(remaining_error) < eps * 0.01f) {
-        *value = target_value;
+        *current_value = target_value;
         *(int *)velocity = 0;
         return *velocity;
     }

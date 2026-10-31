@@ -14,9 +14,9 @@ void update_linked_turning_moby(struct Moby *moby) __asm__("FUN_L15_002e46b0");
 void update_linked_turning_moby(struct Moby *moby) {
     int linked_moby_index = *(int *)moby->pvars;
     if (linked_moby_index != -1) {
-        char *other = (char *)(linked_moby_index * 256 + (int)l15_moby_array);
-        char *linked_moby_vars = *(char **)(other + 0x78);
-        int   linked_moby_state = (unsigned char)other[0x20];
+        char *linked_moby = (char *)(linked_moby_index * 256 + (int)l15_moby_array);
+        char *linked_moby_vars = *(char **)(linked_moby + 0x78);
+        int   linked_moby_state = (unsigned char)linked_moby[0x20];
         float step;
         if (linked_moby_state == 2) {
             step = *(float *)&linked_state_yaw_rate_degrees_gp * DEG_TO_RAD * frame_time;

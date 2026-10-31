@@ -5,12 +5,12 @@ extern s32 _InitTLB();
 extern s32 InitTLB32MB();
 
 s32 InitTLB(void) {
-    s32 result;
+    s32 tlb_init_result;
 
     if (GetMemorySize() == 0x2000000) {
-        result = InitTLB32MB();
+        tlb_init_result = InitTLB32MB();
     } else {
-        result = _InitTLB();
+        tlb_init_result = _InitTLB();
     }
-    return result;
+    return tlb_init_result;
 }

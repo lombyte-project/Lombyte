@@ -168,7 +168,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
         PLUMBER_SCRIPTED_HANDOFF = 2,
         PLUMBER_SAVE_AND_REMOVE = 5
     };
-    L14WatchScratch scratch;
+    L14WatchScratch look_tracking_vectors;
     L14WatchData   *watch_data = (L14WatchData *)moby->data;
     float           rate;
     float           head_rate;
@@ -244,21 +244,25 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
             fast_vec_add(watch_data->target, watch_data->target, moby->position);
         }
         if (watch_data->moving_timer) {
-            qcopy(scratch.target, hero.motion.body_center.f);
+            qcopy(look_tracking_vectors.target, hero.motion.body_center.f);
             rate = 0.03f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, watch_data->target);
+            qcopy(look_tracking_vectors.target, watch_data->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, moby->position);
-        scratch.eye[2] += 1.0f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
+        qcopy(look_tracking_vectors.eye, moby->position);
+        look_tracking_vectors.eye[2] += 1.0f;
+        fast_vec_sub(
+            look_tracking_vectors.delta, look_tracking_vectors.target, look_tracking_vectors.eye);
+        yaw = fast_subtract_rotations(
+            fast_arc_tan(look_tracking_vectors.delta[0], look_tracking_vectors.delta[1]),
+            moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy(look_tracking_vectors.delta),
+                              look_tracking_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

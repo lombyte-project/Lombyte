@@ -92,19 +92,20 @@ extern L05Fields_0013D4C0 item_available __asm__("D_0013D4C0");
 void update_help_hints(struct Moby *moby) __asm__("FUN_L05_0031bf40");
 
 void update_help_hints(struct Moby *moby) {
-    int *data = ((int *)moby->pvars);
+    int *gameplay_event_pvars = ((int *)moby->pvars);
     int  value, elapsed, limit;
     moby->update_dist = 0xff;
 
-    if (is_point_inside_clip_volume(D_0013F3D0, data[20])) {
-        if (*(int *)(D_0013F3D0 + 0x200c) == 0x12 && data[26]++ > scale_game_frames(0x168)) {
+    if (is_point_inside_clip_volume(D_0013F3D0, gameplay_event_pvars[20])) {
+        if (*(int *)(D_0013F3D0 + 0x200c) == 0x12 &&
+            gameplay_event_pvars[26]++ > scale_game_frames(0x168)) {
             if ((unsigned int)(D_00141B8C & (1 << gameplay_event_level_index)) < 1)
                 help_request(0x3f0, 0x44);
         } else if (D_001413DC == 0x11 || menu_item_enabled_1) {
             D_00141B88 = 0xffff;
         }
     }
-    if (is_point_inside_clip_volume(D_0013F3D0, data[16])) {
+    if (is_point_inside_clip_volume(D_0013F3D0, gameplay_event_pvars[16])) {
         elapsed = scale_game_frames(gameplay_event_frame_count) - usage_stats.stat[9].unk2 * 600;
         limit = (int)((float)scale_game_frames(0xe10) * 60.0f);
         if (limit < elapsed && (unsigned int)(D_00141BAC & (1 << gameplay_event_level_index)) < 1)
@@ -119,7 +120,7 @@ void update_help_hints(struct Moby *moby) {
         usage_stats.stat[29].count = 0;
     }
     if (!D_0013D4D6) {
-        if (is_point_inside_clip_volume(D_0013F3D0, data[9]) && !D_0013F64C) {
+        if (is_point_inside_clip_volume(D_0013F3D0, gameplay_event_pvars[9]) && !D_0013F64C) {
             elapsed = scale_game_frames(gameplay_event_frame_count) - D_00141A82 * 600;
             limit = (int)((float)scale_game_frames(18) * 60.0f);
             if (limit < elapsed || D_00141A82 * 600 == 0)
@@ -132,7 +133,7 @@ void update_help_hints(struct Moby *moby) {
         }
     }
     if (D_0013D4D6) {
-        if (is_point_inside_clip_volume(D_0013F3D0, data[9]) && !D_0013F64C) {
+        if (is_point_inside_clip_volume(D_0013F3D0, gameplay_event_pvars[9]) && !D_0013F64C) {
             if (D_00141A88 != 0) {
                 elapsed = scale_game_frames(gameplay_event_frame_count) - D_00141A8A * 600;
                 limit = (int)((float)scale_game_frames(18) * 60.0f);
@@ -155,14 +156,15 @@ void update_help_hints(struct Moby *moby) {
             D_00141A88 = -1;
     }
     if (D_00141A98 < 2) {
-        if (D_0014C050[data[8] + gameplay_event_level_index * 16] == 0xff) {
+        if (D_0014C050[gameplay_event_pvars[8] + gameplay_event_level_index * 16] == 0xff) {
             if (D_00141A90 < 0xffff)
                 D_00141A90 = D_00141A90 + 1;
             value = scale_game_frames(gameplay_event_frame_count) / 600;
             if (D_00141A92 < value)
                 D_00141A92 = scale_game_frames(gameplay_event_frame_count) / 600;
             D_00141A94 = D_00141A94 | (1 << gameplay_event_level_index) | 0x80000000;
-        } else if (D_0014EE90[data[8]] > 2 && is_point_inside_clip_volume(D_0013F3D0, data[11])) {
+        } else if (D_0014EE90[gameplay_event_pvars[8]] > 2 &&
+                   is_point_inside_clip_volume(D_0013F3D0, gameplay_event_pvars[11])) {
             elapsed = scale_game_frames(gameplay_event_frame_count) - D_001417A2 * 600;
             if (scale_game_frames(18000) < elapsed) {
                 elapsed = scale_game_frames(gameplay_event_frame_count) - D_0014179A * 600;
@@ -184,8 +186,9 @@ void update_help_hints(struct Moby *moby) {
     if (D_0013D388 && D_00141A78 == 0 && D_001413DC == 0x16)
         help_request(0x1389, 0x22);
     if (D_00141C58 == 0) {
-        if (hero.state.current == 10 && (is_point_inside_clip_volume(&hero.motion.pos, data[13]) ||
-                                         is_point_inside_clip_volume(&hero.motion.pos, data[14]))) {
+        if (hero.state.current == 10 &&
+            (is_point_inside_clip_volume(&hero.motion.pos, gameplay_event_pvars[13]) ||
+             is_point_inside_clip_volume(&hero.motion.pos, gameplay_event_pvars[14]))) {
             if (D_00141C58 < 0xffff)
                 D_00141C58 = D_00141C58 + 1;
             value = scale_game_frames(gameplay_event_frame_count) / 600;
@@ -194,27 +197,29 @@ void update_help_hints(struct Moby *moby) {
             D_00141C5C = D_00141C5C | (1 << gameplay_event_level_index) | 0x80000000;
         }
         if (hero.state.control_mode == 0x12) {
-            if (is_point_inside_clip_volume(data + 4, data[13]) ||
-                is_point_inside_clip_volume(data + 4, data[14])) {
-                clear_u64_value(data + 4);
-                data[24]++;
+            if (is_point_inside_clip_volume(gameplay_event_pvars + 4, gameplay_event_pvars[13]) ||
+                is_point_inside_clip_volume(gameplay_event_pvars + 4, gameplay_event_pvars[14])) {
+                clear_u64_value(gameplay_event_pvars + 4);
+                gameplay_event_pvars[24]++;
             }
-        } else if (data[24] > 1 && (is_point_inside_clip_volume(&hero.motion.pos, data[13]) ||
-                                    is_point_inside_clip_volume(&hero.motion.pos, data[14])))
+        } else if (gameplay_event_pvars[24] > 1 &&
+                   (is_point_inside_clip_volume(&hero.motion.pos, gameplay_event_pvars[13]) ||
+                    is_point_inside_clip_volume(&hero.motion.pos, gameplay_event_pvars[14])))
             help_request(0x138e, 0x5e);
     }
     if (!usage_stats.stat[18].count && !D_00141BB8 && D_0013D4CF &&
-        is_point_inside_clip_volume(D_0013F3D0, data[18]) && D_0013D464 >= 20)
+        is_point_inside_clip_volume(D_0013F3D0, gameplay_event_pvars[18]) && D_0013D464 >= 20)
         help_request(20000, 0x4a);
-    value = data[21];
-    if (value != -1 && D_0014C050[data[22] + gameplay_event_level_index * 16] == 0xff &&
-        D_0014C050[data[8] + gameplay_event_level_index * 16] == 0xff &&
+    value = gameplay_event_pvars[21];
+    if (value != -1 &&
+        D_0014C050[gameplay_event_pvars[22] + gameplay_event_level_index * 16] == 0xff &&
+        D_0014C050[gameplay_event_pvars[8] + gameplay_event_level_index * 16] == 0xff &&
         (frame_number < 5 || (D_0013F64C && (*(short *)(D_0013F64C + 0xa6) == 0x3e6 ||
                                              *(short *)(D_0013F64C + 0xa6) == 0x33e)))) {
         collect_moby_and_clear_path_keys((void *)(D_L05_0015FFD8 + value * 256));
-        data[21] = -1;
+        gameplay_event_pvars[21] = -1;
     }
-    qcopy(data, D_0013F3D0);
+    qcopy(gameplay_event_pvars, D_0013F3D0);
     if (!D_0013F65E)
-        qcopy(data + 4, D_0013F3D0);
+        qcopy(gameplay_event_pvars + 4, D_0013F3D0);
 }

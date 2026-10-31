@@ -49,7 +49,7 @@ extern float D_L05_00161A98 __attribute__((sda));
 
 extern float extermibot_spark_paired_frame_count_min_gp __asm__("D_L05_00161AB0")
     __attribute__((sda));
-extern float D_L05_00161AB4 __attribute__((sda));
+extern float l05_extermibot_spark_timing_min_frames __asm__("D_L05_00161AB4") __attribute__((sda));
 
 #include "rnc/overlay/l05/mobys/extermibot_data/extermibot_update.h"
 
@@ -92,7 +92,7 @@ void extermibot_update(unsigned char *moby) {
     char          *moby_data = ((char *)MOBY(moby)->pvars);
     char          *target_moby;
     float          path_goal_or_facing_vector[4];
-    float          out[4];
+    float          movement_displacement_or_spark_vector_or_strike_position[4];
     float          hit[4];
     float          spark_spawn_position[4];
     int            i;
@@ -226,7 +226,11 @@ void extermibot_update(unsigned char *moby) {
             path_goal_or_facing_vector[0] = fast_cos(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[1] = fast_sin(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[2] = 0.0f;
-            FUN_L00_00258b50(moby, moby_data + 0xD0, path_goal_or_facing_vector, out, 1.0f);
+            FUN_L00_00258b50(moby,
+                             moby_data + 0xD0,
+                             path_goal_or_facing_vector,
+                             movement_displacement_or_spark_vector_or_strike_position,
+                             1.0f);
             resolve_point_path_segment_xy_clearance(
                 *(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
@@ -259,7 +263,11 @@ void extermibot_update(unsigned char *moby) {
             path_goal_or_facing_vector[0] = fast_cos(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[1] = fast_sin(MOBY(moby)->rot.z) * 2.0f;
             path_goal_or_facing_vector[2] = 0.0f;
-            FUN_L00_00258b50(moby, moby_data + 0xD0, path_goal_or_facing_vector, out, 1.0f);
+            FUN_L00_00258b50(moby,
+                             moby_data + 0xD0,
+                             path_goal_or_facing_vector,
+                             movement_displacement_or_spark_vector_or_strike_position,
+                             1.0f);
             resolve_point_path_segment_xy_clearance(
                 *(int *)(moby_data + 0x2C0), moby_position, moby_position, (D_L05_00161A98) * 0.4f);
         }
@@ -370,8 +378,9 @@ void extermibot_update(unsigned char *moby) {
                 fast_sin(a) * (extermibot_spark_facing_xy_scale_gp * D_0015ED6C);
             path_goal_or_facing_vector[2] = 0.0f;
             path_goal_or_facing_vector[3] = extermibot_spark_facing_vector_w_gp;
-            out[2] = 0.0f;
-            out[3] = extermibot_spark_random_vector_w_gp;
+            movement_displacement_or_spark_vector_or_strike_position[2] = 0.0f;
+            movement_displacement_or_spark_vector_or_strike_position[3] =
+                extermibot_spark_random_vector_w_gp;
             FUN_L00_0024f7c8(moby, 0, hit);
             for (i = 0x1D; i >= 0; i--) {
                 int c1, c2;
@@ -379,10 +388,13 @@ void extermibot_update(unsigned char *moby) {
                 spark_spawn_position[0] += random_float_between(-0.065f, 0.065f);
                 spark_spawn_position[1] += random_float_between(-0.065f, 0.065f);
                 spark_spawn_position[2] += random_float_between(-0.065f, 0.065f);
-                out[0] = random_float_between(-D_0015ED6C, D_0015ED6C);
-                out[1] = random_float_between(-D_0015ED6C, D_0015ED6C);
-                out[2] = random_float_between(-(extermibot_spark_random_z_scale_gp * D_0015ED6C),
-                                              extermibot_spark_random_z_scale_gp * D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[0] =
+                    random_float_between(-D_0015ED6C, D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[1] =
+                    random_float_between(-D_0015ED6C, D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[2] =
+                    random_float_between(-(extermibot_spark_random_z_scale_gp * D_0015ED6C),
+                                         extermibot_spark_random_z_scale_gp * D_0015ED6C);
                 c1 = truncate_float_to_s32(FUN_L04_001f1978(
                     random_float_between(extermibot_spark_lifetime_min_frames_gp,
                                          extermibot_spark_lifetime_min_frames_gp * 2.0f)));
@@ -391,27 +403,32 @@ void extermibot_update(unsigned char *moby) {
                                          extermibot_spark_paired_frame_count_min_gp * 1.2f)));
                 spawn_spark_c(spark_spawn_position,
                               path_goal_or_facing_vector,
-                              out,
+                              movement_displacement_or_spark_vector_or_strike_position,
                               extermibot_primary_spark_initial_color_gp,
                               extermibot_primary_spark_paired_color_gp,
                               c1,
                               c2,
-                              truncate_float_to_s32(FUN_L04_001f1978(
-                                  random_float_between(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))),
+                              truncate_float_to_s32(FUN_L04_001f1978(random_float_between(
+                                  l05_extermibot_spark_timing_min_frames,
+                                  l05_extermibot_spark_timing_min_frames * 1.2f))),
                               -1);
             }
             path_goal_or_facing_vector[3] = extermibot_spark_facing_vector_w_gp * 0.1f;
-            out[3] = extermibot_spark_random_vector_w_gp * 0.1f;
+            movement_displacement_or_spark_vector_or_strike_position[3] =
+                extermibot_spark_random_vector_w_gp * 0.1f;
             for (j = 0x1D; j >= 0; j--) {
                 int c1, c2;
                 qcopy(spark_spawn_position, hit);
                 spark_spawn_position[0] += random_float_between(-0.065f, 0.065f);
                 spark_spawn_position[1] += random_float_between(-0.065f, 0.065f);
                 spark_spawn_position[2] += random_float_between(-0.065f, 0.065f);
-                out[0] = random_float_between(-D_0015ED6C, D_0015ED6C);
-                out[1] = random_float_between(-D_0015ED6C, D_0015ED6C);
-                out[2] = random_float_between(-(extermibot_spark_random_z_scale_gp * D_0015ED6C),
-                                              extermibot_spark_random_z_scale_gp * D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[0] =
+                    random_float_between(-D_0015ED6C, D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[1] =
+                    random_float_between(-D_0015ED6C, D_0015ED6C);
+                movement_displacement_or_spark_vector_or_strike_position[2] =
+                    random_float_between(-(extermibot_spark_random_z_scale_gp * D_0015ED6C),
+                                         extermibot_spark_random_z_scale_gp * D_0015ED6C);
                 c1 = truncate_float_to_s32(FUN_L04_001f1978(
                     random_float_between(extermibot_spark_lifetime_min_frames_gp,
                                          extermibot_spark_lifetime_min_frames_gp * 2.0f)));
@@ -420,13 +437,14 @@ void extermibot_update(unsigned char *moby) {
                                          extermibot_spark_paired_frame_count_min_gp * 1.2f)));
                 spawn_spark_c(spark_spawn_position,
                               path_goal_or_facing_vector,
-                              out,
+                              movement_displacement_or_spark_vector_or_strike_position,
                               extermibot_secondary_spark_initial_color_gp,
                               extermibot_secondary_spark_paired_color_gp,
                               c1,
                               c2,
-                              truncate_float_to_s32(FUN_L04_001f1978(
-                                  random_float_between(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))),
+                              truncate_float_to_s32(FUN_L04_001f1978(random_float_between(
+                                  l05_extermibot_spark_timing_min_frames,
+                                  l05_extermibot_spark_timing_min_frames * 1.2f))),
                               -1);
             }
         }
@@ -445,13 +463,13 @@ void extermibot_update(unsigned char *moby) {
             path_goal_or_facing_vector[1] = fast_sin(MOBY(moby)->rot.z);
             path_goal_or_facing_vector[2] = 0.0f;
             path_goal_or_facing_vector[3] = 5627.9248f;
-            qcopy(out, target_moby + 0x10);
-            out[2] += 0.75f;
+            qcopy(movement_displacement_or_spark_vector_or_strike_position, target_moby + 0x10);
+            movement_displacement_or_spark_vector_or_strike_position[2] += 0.75f;
             spawn_nearby_effect(
                 target_moby,
                 (int)moby,
                 *(int *)(((char *)&extermibot_strike_flags_selector)) != 6 ? 0x10001 : 0x10000,
-                out,
+                movement_displacement_or_spark_vector_or_strike_position,
                 path_goal_or_facing_vector,
                 1.0f);
         }
@@ -900,9 +918,9 @@ extern f32 FUN_L05_00304058_u(s32, void *, void *, f32) __asm__("FUN_L05_0030405
    when it drifts off the path. */
 void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) __asm__("FUN_L05_00303b08");
 
-void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) {
+void move_extermibot_along_path(struct Moby *moby, s32 destination_position, f32 side) {
     PathWalkerVars *walker_vars = (PathWalkerVars *)moby->pvars;
-    Vec4f           facing_direction, out, goal;
+    Vec4f           facing_direction, movement_displacement, goal;
     f32             offset_heading;
     f32             distance_to_goal;
 
@@ -911,7 +929,7 @@ void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) {
                         1,
                         walker_vars->path_pos,
                         &moby->pos,
-                        node,
+                        destination_position,
                         &walker_vars->goal,
                         D_L05_00161A98_gp * 0.4f) == 0)
             walker_vars->mode = 2;
@@ -946,7 +964,7 @@ void move_extermibot_along_path(struct Moby *moby, s32 node, f32 side) {
     facing_direction.x = fast_cos(moby->rot.z) * 2.0f;
     facing_direction.y = fast_sin(moby->rot.z) * 2.0f;
     facing_direction.z = 0.0f;
-    FUN_L00_00258b50(moby, walker_vars->move, &facing_direction, &out, 1.0f);
+    FUN_L00_00258b50(moby, walker_vars->move, &facing_direction, &movement_displacement, 1.0f);
     if (walker_vars->stuck_timer == 0) {
         if (FUN_L05_00304058_u(
                 walker_vars->path, &moby->pos, &moby->pos, D_L05_00161A98_gp * 0.4f) > 2.0f)
@@ -987,7 +1005,7 @@ extern short *D_L05_001AC040_03f80[] __asm__("D_L05_001ABCC0");
 extern short  D_L05_00160098_03f80 __asm__("D_L05_0015FFD8");
 char *find_nearest_extermibot_group_target(char *self, int group_index) __asm__("FUN_L05_00303f80");
 
-char *find_nearest_extermibot_group_target(char *self, int group_index) {
+char *find_nearest_extermibot_group_target(char *search_origin_moby, int group_index) {
     short *list = D_L05_001AC040_03f80[group_index];
     float  best = 120.0f;
     char  *nearest_moby = 0;
@@ -1000,7 +1018,7 @@ char *find_nearest_extermibot_group_target(char *self, int group_index) {
             if (D_L05_0015FFD8_7920[i].flags & 0x1000) {
                 if (D_L05_0015FFD8_7920[i].state < 0x7F) {
                     float candidate_distance =
-                        fast_vec_dist(&D_L05_0015FFD8_7920[i].pos, self + 0x10);
+                        fast_vec_dist(&D_L05_0015FFD8_7920[i].pos, search_origin_moby + 0x10);
                     if (candidate_distance < best) {
                         best = candidate_distance;
                         nearest_moby = *(char **)&D_L05_00160098_03f80 + (i << 8);

@@ -15,7 +15,7 @@ extern s32   sceSifCallRpc();
 extern void *memcpy();
 
 s32 sceCdReadClock(u64 *clock) {
-    u32 result;
+    u32 rpc_response_result;
 
     if (cd_check_scmd(0xF) == 0) {
         return 0;
@@ -31,7 +31,7 @@ s32 sceCdReadClock(u64 *clock) {
     if (cd_debug > 0) {
         scePrintf(cd_read_clock_after_copy_debug_message);
     }
-    result = *(u32 *)((u32)cd_scmd_result | 0x20000000);
+    rpc_response_result = *(u32 *)((u32)cd_scmd_result | 0x20000000);
     SignalSema(cd_scmd_sema);
-    return result;
+    return rpc_response_result;
 }

@@ -58,13 +58,13 @@ typedef struct {
 
 void draw_timed_text(LevelTextEntry *entry, s32 frame) __asm__("FUN_L00_001fcca0");
 
-void draw_timed_text(LevelTextEntry *entry, s32 frame) {
-    int            start = entry->start;
-    int            end = start + entry->duration;
+void draw_timed_text(LevelTextEntry *timed_text_entry, s32 frame) {
+    int            start = timed_text_entry->start;
+    int            end = start + timed_text_entry->duration;
     float          scale, alpha;
     unsigned char *source;
-    char           buffer[256];
-    char          *out;
+    char           formatted_text[256];
+    char          *text_write_cursor;
     int            y;
     int            k;
 
@@ -90,51 +90,53 @@ void draw_timed_text(LevelTextEntry *entry, s32 frame) {
         if (alpha < 0.0f)
             alpha = 0.0f;
     }
-    source = (unsigned char *)get_help_message_text(entry->text_id);
-    if (entry->separator_mode == 1) {
-        out = buffer;
+    source = (unsigned char *)get_help_message_text(timed_text_entry->text_id);
+    if (timed_text_entry->separator_mode == 1) {
+        text_write_cursor = formatted_text;
     joined_text:
         while (*source != 0) {
             if (*source == 1) {
-                *out++ = ' ';
-                *out++ = '-';
-                *out++ = ' ';
+                *text_write_cursor++ = ' ';
+                *text_write_cursor++ = '-';
+                *text_write_cursor++ = ' ';
                 while (*source == 1)
                     source++;
                 if (*source != 0)
                     goto joined_text;
-                out -= 3;
+                text_write_cursor -= 3;
             } else {
-                *out++ = *source++;
+                *text_write_cursor++ = *source++;
             }
         }
         {
-            int x = entry->x;
-            int line_y = entry->y;
-            int mode = entry->mode;
-            *out = 0;
-            draw_timed_text_line(x, line_y, mode, scale, alpha, buffer);
+            int x = timed_text_entry->x;
+            int line_y = timed_text_entry->y;
+            int mode = timed_text_entry->mode;
+            *text_write_cursor = 0;
+            draw_timed_text_line(x, line_y, mode, scale, alpha, formatted_text);
         }
     } else {
-        out = buffer;
-        y = entry->y;
+        text_write_cursor = formatted_text;
+        y = timed_text_entry->y;
         while (*source != 0) {
             if (*source == 1) {
-                *out = 0;
-                draw_timed_text_line(entry->x, y, entry->mode, scale, alpha, buffer);
+                *text_write_cursor = 0;
+                draw_timed_text_line(
+                    timed_text_entry->x, y, timed_text_entry->mode, scale, alpha, formatted_text);
                 y += 26;
-                out = buffer;
+                text_write_cursor = formatted_text;
                 while (*source == 1)
                     source++;
                 if (*source == 0)
                     break;
             } else {
-                *out++ = *source++;
+                *text_write_cursor++ = *source++;
             }
         }
-        if (out > buffer) {
-            *out = 0;
-            draw_timed_text_line(entry->x, y, entry->mode, scale, alpha, buffer);
+        if (text_write_cursor > formatted_text) {
+            *text_write_cursor = 0;
+            draw_timed_text_line(
+                timed_text_entry->x, y, timed_text_entry->mode, scale, alpha, formatted_text);
         }
     }
 }

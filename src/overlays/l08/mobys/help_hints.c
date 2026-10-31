@@ -36,21 +36,21 @@ void update_help_hints(struct Moby *moby) {
         VENDOR_EVENT_WAIT_FOR_ARMING = 0,
         VENDOR_EVENT_ARMED = 1
     };
-    VendorEventData *data = *(VendorEventData **)((char *)moby + 0x78);
+    VendorEventData *event_trigger_data = *(VendorEventData **)((char *)moby + 0x78);
     s32              elapsed;
     s32              time;
     f32              volume[4];
 
-    switch (data->state) {
+    switch (event_trigger_data->state) {
     case VENDOR_EVENT_WAIT_FOR_ARMING:
-        if (is_point_inside_clip_volume(&hero.motion.pos, data->third) &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->third) &&
             hero.state.control_mode == 15)
-            data->state = 1;
+            event_trigger_data->state = 1;
         break;
     case VENDOR_EVENT_ARMED:
         if (hero.state.current == 0x42) {
-            data->state = 0;
-        } else if (is_point_inside_clip_volume(&hero.motion.pos, data->fourth) &&
+            event_trigger_data->state = 0;
+        } else if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->fourth) &&
                    item_unlocked[11] == 0) {
             item_unlocked[11] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
@@ -59,7 +59,7 @@ void update_help_hints(struct Moby *moby) {
         break;
     }
     if (item_available[29] == 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, data->first)) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->first)) {
             elapsed = scale_game_frames(D_0015EEA4) - help_records[48].best * 600;
             if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed ||
                 help_records[48].best * 600 == 0) {
@@ -72,7 +72,7 @@ void update_help_hints(struct Moby *moby) {
         }
     }
     if (item_available[29] != 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, data->first) &&
+        if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->first) &&
             alternate_item_available[47] == 0) {
             if (help_records[49].count != 0) {
                 elapsed = scale_game_frames(D_0015EEA4) - help_records[49].best * 600;
@@ -95,7 +95,8 @@ void update_help_hints(struct Moby *moby) {
         }
     }
     if (item_available[28] == 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, data->second) && D_0013DD4A != 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->second) &&
+            D_0013DD4A != 0) {
             elapsed = scale_game_frames(D_0015EEA4) - help_records[50].best * 600;
             if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed ||
                 help_records[50].best * 600 == 0) {
@@ -109,7 +110,8 @@ void update_help_hints(struct Moby *moby) {
         }
     }
     if (item_available[28] != 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, data->second) && D_0013DD4A != 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, event_trigger_data->second) &&
+            D_0013DD4A != 0) {
             if (help_records[112].count != 0) {
                 elapsed = scale_game_frames(D_0015EEA4) - help_records[112].best * 600;
                 if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed ||

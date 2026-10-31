@@ -93,14 +93,14 @@ extern char level17_hero_water_surface_jump_velocity_keys[] __asm__("D_L17_0017C
 extern char level17_hero_trail_jump_velocity_keys[] __asm__("D_L17_0017C820");
 
 int hero_set_state(int a, int b) {
-    int   old2088;
+    int   previous_state_step;
     char *moby;
     int   old20A7;
     union {
         unsigned int __attribute__((mode(TI))) q;
         V4_21ED38                              v;
     } d;
-    V4_21ED38 out;
+    V4_21ED38 sampled_path_position;
     {
         struct Hero *p = &hero;
         if (p->state.control_mode == 0x14 && (a != 0x64 || b != 2))
@@ -117,7 +117,7 @@ int hero_set_state(int a, int b) {
     }
     {
         struct Hero *p = &hero;
-        old2088 = p->state.step;
+        previous_state_step = p->state.step;
         moby = ((char *)p->moby);
         old20A7 = p->item_select_blocked;
         p->state.prev2 = p->state.prev;
@@ -893,9 +893,13 @@ int hero_set_state(int a, int b) {
         p->unk5B8 = 0;
         p->unk5BC = 0;
         p->rail_jump_queued = 0;
-        sample_path(
-            p->rail_spline, (char *)&out, (char *)&i, (char *)&f, p->rail_spline_loops, 1.0f);
-        fast_vec_sub(&d.v, &out, &p->motion.pos);
+        sample_path(p->rail_spline,
+                    (char *)&sampled_path_position,
+                    (char *)&i,
+                    (char *)&f,
+                    p->rail_spline_loops,
+                    1.0f);
+        fast_vec_sub(&d.v, &sampled_path_position, &p->motion.pos);
         if (0.001f < fast_vec_length(&d.v)) {
             fast_vec_normalize(&d.v, &d.v, 1.0f);
             if (p->state.prev_control_mode != 0xF) {
@@ -937,12 +941,12 @@ int hero_set_state(int a, int b) {
         i = p->follow_path_segment;
         f = t;
         sample_path(((int)p->follow_path_spline),
-                    (char *)&out,
+                    (char *)&sampled_path_position,
                     (char *)&i,
                     (char *)&f,
                     p->rail_candidate_kind,
                     1.0f);
-        fast_vec_sub(&d.v, &out, &p->motion.pos);
+        fast_vec_sub(&d.v, &sampled_path_position, &p->motion.pos);
         if (0.001f < fast_vec_length(&d.v)) {
             fast_vec_normalize(&d.v, &d.v, 1.0f);
             p->follow_path_speed = fast_vec_dot(&p->motion.displacement, &d.v);
@@ -1102,7 +1106,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
             p->state.current = p->state.prev;
-            p->state.step = old2088;
+            p->state.step = previous_state_step;
             p->state_timer = p->state.prev_timer;
             return 0;
         }

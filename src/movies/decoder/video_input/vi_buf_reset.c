@@ -7,28 +7,31 @@ extern void sc_tag2(u128 *, u32, s32, s32) __asm__("func_0023BC20");
 extern void set_d4_chcr(s32) __asm__("FUN_0023bbb0");
 s32         vi_buf_reset(struct ViBuf *f) __asm__("FUN_0023bcc0");
 
-s32 vi_buf_reset(struct ViBuf *buffer) {
+s32 vi_buf_reset(struct ViBuf *video_input_buffer) {
     s32 i;
 
-    buffer->is_active = 1;
-    buffer->dma_start = 0;
-    buffer->dma_n = 0;
-    buffer->read_bytes = 0;
-    buffer->count_ts = 0;
-    buffer->wt_ts = 0;
-    for (i = 0; i < buffer->n_ts; i++) {
-        buffer->ts[i].pts = -1;
-        buffer->ts[i].dts = -1;
-        buffer->ts[i].pos = 0;
-        buffer->ts[i].len = 0;
+    video_input_buffer->is_active = 1;
+    video_input_buffer->dma_start = 0;
+    video_input_buffer->dma_n = 0;
+    video_input_buffer->read_bytes = 0;
+    video_input_buffer->count_ts = 0;
+    video_input_buffer->wt_ts = 0;
+    for (i = 0; i < video_input_buffer->n_ts; i++) {
+        video_input_buffer->ts[i].pts = -1;
+        video_input_buffer->ts[i].dts = -1;
+        video_input_buffer->ts[i].pos = 0;
+        video_input_buffer->ts[i].len = 0;
     }
-    for (i = 0; i < buffer->n; i++) {
-        sc_tag2(buffer->tag + i, DMA_ADDR((i << 11) + (u32)buffer->data), 3, 0x80);
+    for (i = 0; i < video_input_buffer->n; i++) {
+        sc_tag2(video_input_buffer->tag + i,
+                DMA_ADDR((i << 11) + (u32)video_input_buffer->data),
+                3,
+                0x80);
     }
-    sc_tag2(buffer->tag + i, DMA_ADDR(buffer->tag), 2, 0);
+    sc_tag2(video_input_buffer->tag + i, DMA_ADDR(video_input_buffer->tag), 2, 0);
     DPUT(0x1000B420, 0);
-    DPUT(0x1000B410, DMA_ADDR(buffer->data));
-    DPUT(0x1000B430, DMA_ADDR(buffer->tag));
+    DPUT(0x1000B410, DMA_ADDR(video_input_buffer->data));
+    DPUT(0x1000B430, DMA_ADDR(video_input_buffer->tag));
     set_d4_chcr(5);
     return 1;
 }

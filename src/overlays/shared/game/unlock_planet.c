@@ -246,7 +246,7 @@ int           FUN_L00_00260400(int    unused_subject_object,
                                void  *input_rotation,
                                float *output_position,
 
-                               void *out) {
+                               void *output_rotation) {
     M4_260400 basis_rotation_matrix, composed_rotation_matrix;
     char     *transform_record = FUN_L00_002603d0_c(reference_object);
     if (transform_record == 0)
@@ -258,7 +258,7 @@ int           FUN_L00_00260400(int    unused_subject_object,
     fast_vec_add(output_position, output_position, reference_object + 0x10);
     euler_rotation_matrix(composed_rotation_matrix, input_rotation);
     multiply_matrix(composed_rotation_matrix, basis_rotation_matrix, composed_rotation_matrix);
-    matrix_to_euler(composed_rotation_matrix, out);
+    matrix_to_euler(composed_rotation_matrix, output_rotation);
     return 1;
 }
 
@@ -345,7 +345,7 @@ int convert_pose_to_reference_local(int    x,
 typedef float M4[16] __attribute__((aligned(16)));
 
 void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) __asm__("FUN_L00_00260738");
-void update_entity_matrix(char    *out,
+void update_entity_matrix(char    *pose_delta_output,
                           OvlQuad *position_delta,
                           void    *previous_rotation,
 
@@ -357,8 +357,8 @@ void update_entity_matrix(char    *out,
     euler_rotation_matrix(current_rotation_matrix, current_rotation);
     multiply_matrix(
         relative_rotation_matrix, transposed_previous_rotation_matrix, current_rotation_matrix);
-    matrix_to_euler(relative_rotation_matrix, out);
-    qcopy(out + 0x10, position_delta);
+    matrix_to_euler(relative_rotation_matrix, pose_delta_output);
+    qcopy(pose_delta_output + 0x10, position_delta);
 }
 
 extern u8  level_available[] __asm__("D_0013DD40");

@@ -8,7 +8,7 @@
    multiply). The 16-byte copy of vec is qcopy's lq/sq. */
 void rotate_vector_by_quaternion(void *out, void *vec, void *quat) __asm__("FUN_00214800");
 
-void rotate_vector_by_quaternion(void *out, void *source_vector, void *quat) {
+void rotate_vector_by_quaternion(void *output_vector, void *source_vector, void *quat) {
     float quat_conj[4];
     float vec_w0[4];
     float rotated_partial[4];
@@ -18,7 +18,7 @@ void rotate_vector_by_quaternion(void *out, void *source_vector, void *quat) {
     qcopy(vec_w0, source_vector);
     vec_w0[3] = 0.0f;
     multiply_quaternions(rotated_partial, quat, vec_w0);
-    multiply_quaternions(out, rotated_partial, quat_conj);
+    multiply_quaternions(output_vector, rotated_partial, quat_conj);
 }
 
 extern __typeof__(rotate_vector_by_quaternion) func_00214800 __attribute__((alias("FUN_00214800")));

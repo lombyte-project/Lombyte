@@ -9,7 +9,7 @@ void draw_boot_image(u32 image_address) __asm__("FUN_002012b8");
 
 void draw_boot_image(u32 image_address) {
     struct DmaTag *tag;
-    struct DmaTag *next;
+    struct DmaTag *image_transfer_tag;
     u64           *register_words;
     s32            remaining_rows;
     s32            destination_block;
@@ -30,7 +30,7 @@ void draw_boot_image(u32 image_address) {
         render_packet_cursor.tag->vif0 = 0;
         render_packet_cursor.tag->vif1 = 0x50000006;
         tag = render_packet_cursor.tag;
-        next = tag + 7;
+        image_transfer_tag = tag + 7;
         render_packet_cursor.tag = tag + 1;
         register_words = (u64 *)(tag + 1);
         register_words[0] = 0x4000000000000001;
@@ -46,7 +46,7 @@ void draw_boot_image(u32 image_address) {
         image_quadword_count = upload_rows << 7;
         register_words[10] = ((u64)image_quadword_count) | 0x0800000000008000;
         register_words[11] = 0;
-        render_packet_cursor.tag = next;
+        render_packet_cursor.tag = image_transfer_tag;
         render_packet_cursor.tag->tag = image_quadword_count | 0x30000000;
         render_packet_cursor.tag->addr = image_address;
         {

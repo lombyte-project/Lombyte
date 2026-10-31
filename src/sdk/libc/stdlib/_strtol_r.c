@@ -41,7 +41,7 @@ extern u64 __muldi3(u64, u64);
 #define isalpha(c) ((D_00152201[(c)] & (_U | _L)) != 0)
 #define isupper(c) ((D_00152201[(c)] & _U) != 0)
 
-s64 _strtol_r(_reent *rptr, const s8 *nptr, s8 **endptr, s32 base) {
+s64 _strtol_r(_reent *rptr, const s8 *nptr, s8 **endptr, s32 radix) {
     register const s8 *s = nptr;
     register u64       acc;
     register s32       c;
@@ -57,17 +57,17 @@ s64 _strtol_r(_reent *rptr, const s8 *nptr, s8 **endptr, s32 base) {
     } else if (c == '+') {
         c = *s++;
     }
-    if ((base == 0 || base == 16) && c == '0' && (*s == 'x' || *s == 'X')) {
+    if ((radix == 0 || radix == 16) && c == '0' && (*s == 'x' || *s == 'X')) {
         c = s[1];
         s += 2;
-        base = 16;
+        radix = 16;
     }
-    if (base == 0) {
-        base = c == '0' ? 8 : 10;
+    if (radix == 0) {
+        radix = c == '0' ? 8 : 10;
     }
     cutoff = neg ? -(u64)0x8000000000000000LL : (u64)0x7FFFFFFFFFFFFFFFLL;
-    cutlim = (s32)(cutoff % (u64)base);
-    cutoff /= (u64)base;
+    cutlim = (s32)(cutoff % (u64)radix);
+    cutoff /= (u64)radix;
     for (acc = 0, any = 0;; c = *s++) {
         if (isdigit(c)) {
             c -= '0';
@@ -76,14 +76,14 @@ s64 _strtol_r(_reent *rptr, const s8 *nptr, s8 **endptr, s32 base) {
         } else {
             break;
         }
-        if (c >= base) {
+        if (c >= radix) {
             break;
         }
         if (any < 0 || acc > cutoff || (acc == cutoff && c > cutlim)) {
             any = -1;
         } else {
             any = 1;
-            acc *= (u64)base;
+            acc *= (u64)radix;
             acc += (u64)c;
         }
     }

@@ -9,7 +9,7 @@ extern void snd_play_vag_stream_by_loc_ex_cb(
 void music_preseek_track(s32 track, s32 track_flags, s32 volume) __asm__("FUN_00215b68");
 
 void music_preseek_track(s32 track, s32 track_flags, s32 volume) {
-    volatile s32 *entry;
+    volatile s32 *track_location_entry;
     s64           stream_location;
     u8           *disc_table_base;
     s32           track_location_table_byte_offset;
@@ -17,8 +17,8 @@ void music_preseek_track(s32 track, s32 track_flags, s32 volume) {
     if (music_stream_state.primary.handle == 0) {
         disc_table_base = (u8 *)&disc_table;
         track_location_table_byte_offset = 0x2AA8;
-        entry = (s32 *)(disc_table_base + track_location_table_byte_offset) + track;
-        if (*entry != 0) {
+        track_location_entry = (s32 *)(disc_table_base + track_location_table_byte_offset) + track;
+        if (*track_location_entry != 0) {
             *(u32 *)&music_stream_state.primary.handle = 0xFFFFFFFF;
             music_stream_state.primary.state = 1;
             music_stream_state.primary.track = track;
@@ -27,7 +27,7 @@ void music_preseek_track(s32 track, s32 track_flags, s32 volume) {
             music_stream_state.primary.remaining_time = 0xBB80;
             music_stream_state.primary.volume = volume;
             music_stream_state.primary.crossfade_enabled = 0;
-            stream_location = *entry;
+            stream_location = *track_location_entry;
             snd_play_vag_stream_by_loc_ex_cb(
                 stream_location,
                 0,

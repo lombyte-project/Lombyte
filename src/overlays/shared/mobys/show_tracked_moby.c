@@ -12,10 +12,10 @@
 void show_tracked_moby(void) __asm__("FUN_L01_002a2480");
 
 void show_tracked_moby(void) {
-    char *first = *(char **)((char *)&level_render_state);
-    if (first != 0) {
+    char *tracked_moby = *(char **)((char *)&level_render_state);
+    if (tracked_moby != 0) {
         char *moby;
-        *(unsigned short *)(first + 0x34) &= 0xfffc;
+        *(unsigned short *)(tracked_moby + 0x34) &= 0xfffc;
         moby = *(char **)((char *)&level_render_state);
         MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
     }

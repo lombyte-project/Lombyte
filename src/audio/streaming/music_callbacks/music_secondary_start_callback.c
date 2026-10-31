@@ -4,8 +4,8 @@
 extern void music_start_track_by_id(s32, s32, s32) __asm__("func_00215970");
 void        music_secondary_start_callback(u32 handle, s64 context) __asm__("FUN_002169c0");
 
-void music_secondary_start_callback(u32 handle, s64 context) {
-    struct MusicStreamChannel *channel = (struct MusicStreamChannel *)(s32)context;
+void music_secondary_start_callback(u32 handle, s64 channel_context) {
+    struct MusicStreamChannel *channel = (struct MusicStreamChannel *)(s32)channel_context;
 
     if (channel != 0) {
         channel->handle = handle;

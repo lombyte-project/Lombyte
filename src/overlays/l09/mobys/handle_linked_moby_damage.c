@@ -36,7 +36,10 @@ void                handle_linked_moby_damage(struct Moby *moby,
 typedef struct Moby Moby;
 extern Moby        *moby_list __asm__("D_L09_0015FFD8");
 
-void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health) {
+void handle_linked_moby_damage(struct Moby *moby,
+                               VendorVars2 *linked_moby_damage_vars,
+
+                               f32 *health) {
     enum {
         DAMAGE_RESULT_UNAVAILABLE = 0,
         DAMAGE_RESULT_NO_HIT_OR_SUPPRESSED_RESPONSE = 11
@@ -71,16 +74,16 @@ void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health
             if (*health <= damage_hit_record->damage) {
                 *health = 0.0f;
                 moby->flags &= ~0x1000;
-                if (vars->link != -1) {
-                    link = &moby_list[vars->link];
+                if (linked_moby_damage_vars->link != -1) {
+                    link = &moby_list[linked_moby_damage_vars->link];
                     if (link != 0 && link->state != 0xFE && link->state != 0xFD &&
                         (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
                         link->command = 1;
                     }
                 }
                 /* Retail checks the 0x64 link but indexes with the 0x60 one. */
-                if (vars->link2 != -1) {
-                    link = &moby_list[vars->link];
+                if (linked_moby_damage_vars->link2 != -1) {
+                    link = &moby_list[linked_moby_damage_vars->link];
                     if (link != 0 && link->state != 0xFE && link->state != 0xFD &&
                         (link->oclass == 0x494 || link->oclass == 0x49D || link->oclass == 0x4A0)) {
                         link->command = 1;
@@ -90,7 +93,7 @@ void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health
                 moby->state = 3;
             } else {
                 *health -= damage_hit_record->damage;
-                vars->hurt_timer = scale_game_frames(60);
+                linked_moby_damage_vars->hurt_timer = scale_game_frames(60);
             }
         }
         moby->hit_slot = 0xFF;

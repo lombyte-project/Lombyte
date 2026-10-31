@@ -26,115 +26,133 @@ void           draw_bot_door_lock_glow(struct Moby *moby) __asm__("FUN_L06_00307
 
 void draw_bot_door_lock_glow(struct Moby *moby) {
     struct GeometryQuad quad;
-    OvlVec4             result[4];
+    OvlVec4             rotated_quad_corners[4];
     float               rotation[4];
     float               matrix[12];
-    OvlVec4             pos[4];
+    OvlVec4             expanding_quad_local_corners[4];
     OvlVec4             corners[4];
     int                 i;
-    OvlVec4            *pos0, *pos1, *pos2, *pos3;
-    OvlVec4            *result0, *result1, *result2, *result3;
-    float              *data = ((float *)moby->pvars);
+    OvlVec4            *expanding_quad_local_corner_0, *expanding_quad_local_corner_1,
+        *expanding_quad_local_corner_2, *expanding_quad_local_corner_3;
+    OvlVec4 *rotated_quad_corner_0, *rotated_quad_corner_1, *rotated_quad_corner_2,
+        *rotated_quad_corner_3;
+    float *bot_door_lock_private_data = ((float *)moby->pvars);
     rotation[0] = 0.0f;
     rotation[1] = 0.0f;
     rotation[2] = l06_camera.yaw;
     euler_rotation_basis(matrix, rotation);
-    data[7] += 0.01f;
-    if (1.0f < data[7])
-        data[7] -= 1.0f;
+    bot_door_lock_private_data[7] += 0.01f;
+    if (1.0f < bot_door_lock_private_data[7])
+        bot_door_lock_private_data[7] -= 1.0f;
     quad.texture_state = 1;
     quad.primitive = 0x4000000044ULL;
     quad.reserved.value = 0;
     quad.texture = get_effect_texture(0x18);
-    result0 = &result[0];
-    result1 = &result[1];
-    result2 = &result[2];
-    result3 = &result[3];
-    pos0 = &pos[0];
-    pos1 = &pos[1];
-    pos2 = &pos[2];
-    pos3 = &pos[3];
+    rotated_quad_corner_0 = &rotated_quad_corners[0];
+    rotated_quad_corner_1 = &rotated_quad_corners[1];
+    rotated_quad_corner_2 = &rotated_quad_corners[2];
+    rotated_quad_corner_3 = &rotated_quad_corners[3];
+    expanding_quad_local_corner_0 = &expanding_quad_local_corners[0];
+    expanding_quad_local_corner_1 = &expanding_quad_local_corners[1];
+    expanding_quad_local_corner_2 = &expanding_quad_local_corners[2];
+    expanding_quad_local_corner_3 = &expanding_quad_local_corners[3];
     for (i = 0; i < 4; i++) {
-        transform_vector_by_basis(result0, &D_L06_001fe8d0[D_L06_001fe9d0[i][0]], matrix);
-        transform_vector_by_basis(result1, &D_L06_001fe8d0[D_L06_001fe9d0[i][1]], matrix);
-        transform_vector_by_basis(result2, &D_L06_001fe8d0[D_L06_001fe9d0[i][2]], matrix);
-        transform_vector_by_basis(result3, &D_L06_001fe8d0[D_L06_001fe9d0[i][3]], matrix);
-        quad.positions[0].f[0] = moby->pos.x + result[0].f[0] * data[9];
-        quad.positions[0].f[1] = moby->pos.y + result[0].f[1] * data[9];
-        quad.positions[0].f[2] = moby->pos.z + result[0].f[2];
-        quad.positions[1].f[0] = moby->pos.x + result[1].f[0] * data[9];
-        quad.positions[1].f[1] = moby->pos.y + result[1].f[1] * data[9];
-        quad.positions[1].f[2] = moby->pos.z + result[1].f[2];
-        quad.positions[2].f[0] = moby->pos.x + result[2].f[0] * data[9];
-        quad.positions[2].f[1] = moby->pos.y + result[2].f[1] * data[9];
-        quad.positions[2].f[2] = moby->pos.z + result[2].f[2];
-        quad.positions[3].f[0] = moby->pos.x + result[3].f[0] * data[9];
-        quad.positions[3].f[1] = moby->pos.y + result[3].f[1] * data[9];
-        quad.positions[3].f[2] = moby->pos.z + result[3].f[2];
+        transform_vector_by_basis(
+            rotated_quad_corner_0, &D_L06_001fe8d0[D_L06_001fe9d0[i][0]], matrix);
+        transform_vector_by_basis(
+            rotated_quad_corner_1, &D_L06_001fe8d0[D_L06_001fe9d0[i][1]], matrix);
+        transform_vector_by_basis(
+            rotated_quad_corner_2, &D_L06_001fe8d0[D_L06_001fe9d0[i][2]], matrix);
+        transform_vector_by_basis(
+            rotated_quad_corner_3, &D_L06_001fe8d0[D_L06_001fe9d0[i][3]], matrix);
+        quad.positions[0].f[0] =
+            moby->pos.x + rotated_quad_corners[0].f[0] * bot_door_lock_private_data[9];
+        quad.positions[0].f[1] =
+            moby->pos.y + rotated_quad_corners[0].f[1] * bot_door_lock_private_data[9];
+        quad.positions[0].f[2] = moby->pos.z + rotated_quad_corners[0].f[2];
+        quad.positions[1].f[0] =
+            moby->pos.x + rotated_quad_corners[1].f[0] * bot_door_lock_private_data[9];
+        quad.positions[1].f[1] =
+            moby->pos.y + rotated_quad_corners[1].f[1] * bot_door_lock_private_data[9];
+        quad.positions[1].f[2] = moby->pos.z + rotated_quad_corners[1].f[2];
+        quad.positions[2].f[0] =
+            moby->pos.x + rotated_quad_corners[2].f[0] * bot_door_lock_private_data[9];
+        quad.positions[2].f[1] =
+            moby->pos.y + rotated_quad_corners[2].f[1] * bot_door_lock_private_data[9];
+        quad.positions[2].f[2] = moby->pos.z + rotated_quad_corners[2].f[2];
+        quad.positions[3].f[0] =
+            moby->pos.x + rotated_quad_corners[3].f[0] * bot_door_lock_private_data[9];
+        quad.positions[3].f[1] =
+            moby->pos.y + rotated_quad_corners[3].f[1] * bot_door_lock_private_data[9];
+        quad.positions[3].f[2] = moby->pos.z + rotated_quad_corners[3].f[2];
         quad.colors[0] = D_L06_001fe9a8[D_L06_001fe9d0[i][0]];
         quad.colors[1] = D_L06_001fe9a8[D_L06_001fe9d0[i][1]];
         quad.colors[2] = D_L06_001fe9a8[D_L06_001fe9d0[i][2]];
         quad.colors[3] = D_L06_001fe9a8[D_L06_001fe9d0[i][3]];
         quad.texture_coordinates[0][0] = D_L06_001fe960[D_L06_001fe9d0[i][0]][0];
-        quad.texture_coordinates[0][1] = D_L06_001fe960[D_L06_001fe9d0[i][0]][1] + data[7];
+        quad.texture_coordinates[0][1] =
+            D_L06_001fe960[D_L06_001fe9d0[i][0]][1] + bot_door_lock_private_data[7];
         quad.texture_coordinates[1][0] = D_L06_001fe960[D_L06_001fe9d0[i][1]][0];
-        quad.texture_coordinates[1][1] = D_L06_001fe960[D_L06_001fe9d0[i][1]][1] + data[7];
+        quad.texture_coordinates[1][1] =
+            D_L06_001fe960[D_L06_001fe9d0[i][1]][1] + bot_door_lock_private_data[7];
         quad.texture_coordinates[2][0] = D_L06_001fe960[D_L06_001fe9d0[i][2]][0];
-        quad.texture_coordinates[2][1] = D_L06_001fe960[D_L06_001fe9d0[i][2]][1] + data[7];
+        quad.texture_coordinates[2][1] =
+            D_L06_001fe960[D_L06_001fe9d0[i][2]][1] + bot_door_lock_private_data[7];
         quad.texture_coordinates[3][0] = D_L06_001fe960[D_L06_001fe9d0[i][3]][0];
-        quad.texture_coordinates[3][1] = D_L06_001fe960[D_L06_001fe9d0[i][3]][1] + data[7];
+        quad.texture_coordinates[3][1] =
+            D_L06_001fe960[D_L06_001fe9d0[i][3]][1] + bot_door_lock_private_data[7];
         draw_geometry_quad(&quad, 0, 1);
     }
     quad.texture = get_effect_texture(0x1b);
-    data[8] += 0.01f;
-    if (1.0f < data[8])
-        data[8] = 0.0f;
+    bot_door_lock_private_data[8] += 0.01f;
+    if (1.0f < bot_door_lock_private_data[8])
+        bot_door_lock_private_data[8] = 0.0f;
     {
         /* Fakematch: local-alloc swaps the registers of 1.4f and 1.1f; pin them. */
         register float scale __asm__("$f5") = 1.4f;
         register float offset __asm__("$f4") = 1.1f;
         corners[0].q = 0;
-        corners[0].f[0] = -data[8] * 1.2f * data[9];
-        corners[0].f[1] = -data[8] * 1.2f * data[9];
-        corners[0].f[2] = data[8] * scale + offset;
+        corners[0].f[0] = -bot_door_lock_private_data[8] * 1.2f * bot_door_lock_private_data[9];
+        corners[0].f[1] = -bot_door_lock_private_data[8] * 1.2f * bot_door_lock_private_data[9];
+        corners[0].f[2] = bot_door_lock_private_data[8] * scale + offset;
         corners[1].q = 0;
-        corners[1].f[0] = data[8] * 1.2f * data[9];
-        corners[1].f[1] = -data[8] * 1.2f * data[9];
-        corners[1].f[2] = data[8] * scale + offset - 0.2f;
+        corners[1].f[0] = bot_door_lock_private_data[8] * 1.2f * bot_door_lock_private_data[9];
+        corners[1].f[1] = -bot_door_lock_private_data[8] * 1.2f * bot_door_lock_private_data[9];
+        corners[1].f[2] = bot_door_lock_private_data[8] * scale + offset - 0.2f;
         corners[2].q = 0;
-        corners[2].f[0] = -data[8] * 1.2f * data[9];
-        corners[2].f[1] = data[8] * 1.2f * data[9];
-        corners[2].f[2] = data[8] * scale + offset;
+        corners[2].f[0] = -bot_door_lock_private_data[8] * 1.2f * bot_door_lock_private_data[9];
+        corners[2].f[1] = bot_door_lock_private_data[8] * 1.2f * bot_door_lock_private_data[9];
+        corners[2].f[2] = bot_door_lock_private_data[8] * scale + offset;
         corners[3].q = 0;
-        corners[3].f[0] = data[8] * 1.2f * data[9];
-        corners[3].f[1] = data[8] * 1.2f * data[9];
-        corners[3].f[2] = data[8] * scale + offset - 0.2f;
+        corners[3].f[0] = bot_door_lock_private_data[8] * 1.2f * bot_door_lock_private_data[9];
+        corners[3].f[1] = bot_door_lock_private_data[8] * 1.2f * bot_door_lock_private_data[9];
+        corners[3].f[2] = bot_door_lock_private_data[8] * scale + offset - 0.2f;
     }
-    pos[0].q = corners[0].q;
-    pos[3].q = corners[3].q;
-    pos[1].q = corners[1].q;
-    pos[2].q = corners[2].q;
+    expanding_quad_local_corners[0].q = corners[0].q;
+    expanding_quad_local_corners[3].q = corners[3].q;
+    expanding_quad_local_corners[1].q = corners[1].q;
+    expanding_quad_local_corners[2].q = corners[2].q;
     rotation[2] = l06_camera.yaw;
     rotation[0] = 0.0f;
     rotation[1] = 0.0f;
     euler_rotation_basis(matrix, rotation);
-    transform_vector_by_basis(result0, pos0, matrix);
-    transform_vector_by_basis(result1, pos1, matrix);
-    transform_vector_by_basis(result2, pos2, matrix);
-    transform_vector_by_basis(result3, pos3, matrix);
-    quad.positions[0].f[0] = moby->pos.x + result[0].f[0];
-    quad.positions[0].f[1] = moby->pos.y + result[0].f[1];
-    quad.positions[0].f[2] = moby->pos.z + result[0].f[2];
-    quad.positions[1].f[0] = moby->pos.x + result[1].f[0];
-    quad.positions[1].f[1] = moby->pos.y + result[1].f[1];
-    quad.positions[1].f[2] = moby->pos.z + result[1].f[2];
-    quad.positions[2].f[0] = moby->pos.x + result[2].f[0];
-    quad.positions[2].f[1] = moby->pos.y + result[2].f[1];
-    quad.positions[2].f[2] = moby->pos.z + result[2].f[2];
-    quad.positions[3].f[0] = moby->pos.x + result[3].f[0];
-    quad.positions[3].f[1] = moby->pos.y + result[3].f[1];
-    quad.positions[3].f[2] = moby->pos.z + result[3].f[2];
-    quad.colors[0] = ((u32)(int)((1.0f - data[8]) * 128.0f) << 24) | 0x808080;
+    transform_vector_by_basis(rotated_quad_corner_0, expanding_quad_local_corner_0, matrix);
+    transform_vector_by_basis(rotated_quad_corner_1, expanding_quad_local_corner_1, matrix);
+    transform_vector_by_basis(rotated_quad_corner_2, expanding_quad_local_corner_2, matrix);
+    transform_vector_by_basis(rotated_quad_corner_3, expanding_quad_local_corner_3, matrix);
+    quad.positions[0].f[0] = moby->pos.x + rotated_quad_corners[0].f[0];
+    quad.positions[0].f[1] = moby->pos.y + rotated_quad_corners[0].f[1];
+    quad.positions[0].f[2] = moby->pos.z + rotated_quad_corners[0].f[2];
+    quad.positions[1].f[0] = moby->pos.x + rotated_quad_corners[1].f[0];
+    quad.positions[1].f[1] = moby->pos.y + rotated_quad_corners[1].f[1];
+    quad.positions[1].f[2] = moby->pos.z + rotated_quad_corners[1].f[2];
+    quad.positions[2].f[0] = moby->pos.x + rotated_quad_corners[2].f[0];
+    quad.positions[2].f[1] = moby->pos.y + rotated_quad_corners[2].f[1];
+    quad.positions[2].f[2] = moby->pos.z + rotated_quad_corners[2].f[2];
+    quad.positions[3].f[0] = moby->pos.x + rotated_quad_corners[3].f[0];
+    quad.positions[3].f[1] = moby->pos.y + rotated_quad_corners[3].f[1];
+    quad.positions[3].f[2] = moby->pos.z + rotated_quad_corners[3].f[2];
+    quad.colors[0] = ((u32)(int)((1.0f - bot_door_lock_private_data[8]) * 128.0f) << 24) | 0x808080;
     quad.colors[3] = quad.colors[2] = quad.colors[1] = quad.colors[0];
     quad.texture_coordinates[0][0] = 0.0f;
     quad.texture_coordinates[0][1] = 0.0f;
@@ -204,52 +222,56 @@ void bot_door_lock_update(char *moby) {
         BOT_DOOR_LOCK_STATE_ACTIVE = 1,
         BOT_DOOR_LOCK_STATE_SHRINK_EFFECT = 2
     };
-    float       *data = ((float *)MOBY(moby)->pvars);
-    int         *idata = (int *)data;
+    float       *bot_door_lock_data = ((float *)MOBY(moby)->pvars);
+    int         *idata = (int *)bot_door_lock_data;
     float        number_anchor_position[4];
     float        offset[3];
-    float        result[4];
+    float        number_position_sum[4];
     float        angle;
-    int          value;
+    int          number_color_pulse_delta;
     unsigned int color;
     unsigned int color_channels;
     int          i;
 
-    if (*(int *)data == -1)
+    if (*(int *)bot_door_lock_data == -1)
         return;
-    data[10] = fast_add_rotations(
-        data[10], (360.0f / bot_door_lock_color_pulse_period_gp) * 0.017453292f * frame_time);
+    bot_door_lock_data[10] = fast_add_rotations(bot_door_lock_data[10],
+                                                (360.0f / bot_door_lock_color_pulse_period_gp) *
+                                                    0.017453292f * frame_time);
     MOBY(moby)->glow_color =
-        fast_tween_color((fast_cos(data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
+        fast_tween_color((fast_cos(bot_door_lock_data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
     switch ((unsigned char)moby[0x20]) {
     case BOT_DOOR_LOCK_STATE_INITIALIZE:
         idata[5] = idata[4];
-        data[6] = random_angle_radians();
-        data[10] = random_angle_radians();
+        bot_door_lock_data[6] = random_angle_radians();
+        bot_door_lock_data[10] = random_angle_radians();
         moby[0x20] = 1;
-        data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
+        bot_door_lock_data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
         return;
     case BOT_DOOR_LOCK_STATE_ACTIVE:
         *(OvlQuad *)number_anchor_position = *(OvlQuad *)&MOBY(moby)->pos;
         number_anchor_position[2] += 2.75f;
         if (fast_vec_dist(D_L06_00167540, moby + 0x10) < 32.0f) {
-            data[9] += frame_time + frame_time;
-            if (bot_door_lock_max_effect_horizontal_scale_gp < data[9])
-                data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
+            bot_door_lock_data[9] += frame_time + frame_time;
+            if (bot_door_lock_max_effect_horizontal_scale_gp < bot_door_lock_data[9])
+                bot_door_lock_data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
         } else if (36.0f < fast_vec_dist(D_L06_00167540, moby + 0x10)) {
-            data[9] -= frame_time + frame_time;
-            if (data[9] < 0.0f)
-                data[9] = 0.0f;
+            bot_door_lock_data[9] -= frame_time + frame_time;
+            if (bot_door_lock_data[9] < 0.0f)
+                bot_door_lock_data[9] = 0.0f;
         }
-        if (0.0f < data[9]) {
+        if (0.0f < bot_door_lock_data[9]) {
             add_draw_callback((int)draw_bot_door_lock_glow, (int)moby);
-            data[6] = fast_add_rotations(
-                data[6], (360.0f / bot_door_lock_number_bob_period_gp) * 0.017453292f * frame_time);
-            number_anchor_position[2] += bot_door_lock_number_bob_amplitude_gp * fast_cos(data[6]);
-            value = truncate_float_to_s32(bot_door_lock_number_color_pulse_amplitude_gp *
-                                          fast_cos(data[10]));
-            color_channels = (value / 2 + 120) * 0x100 | 0x20000000U;
-            color = (value / 3 + 13) * 0x10000 | color_channels | (value + 150U);
+            bot_door_lock_data[6] = fast_add_rotations(
+                bot_door_lock_data[6],
+                (360.0f / bot_door_lock_number_bob_period_gp) * 0.017453292f * frame_time);
+            number_anchor_position[2] +=
+                bot_door_lock_number_bob_amplitude_gp * fast_cos(bot_door_lock_data[6]);
+            number_color_pulse_delta = truncate_float_to_s32(
+                bot_door_lock_number_color_pulse_amplitude_gp * fast_cos(bot_door_lock_data[10]));
+            color_channels = (number_color_pulse_delta / 2 + 120) * 0x100 | 0x20000000U;
+            color = (number_color_pulse_delta / 3 + 13) * 0x10000 | color_channels |
+                    (number_color_pulse_delta + 150U);
             if (D_001413F4 == 1) {
                 if (idata[5] < 10) {
                     draw_number(
@@ -261,14 +283,14 @@ void bot_door_lock_update(char *moby) {
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[1] = fast_sin(angle) * 0.15f;
                         offset[2] = 0.0f;
-                        add_vectors(result, offset, number_anchor_position);
+                        add_vectors(number_position_sum, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[0] = fast_cos(angle) * -0.4f;
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[1] = fast_sin(angle) * -0.4f;
                         offset[2] = 0.0f;
-                        add_vectors(result, offset, number_anchor_position);
+                        add_vectors(number_position_sum, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                     } else {
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
@@ -276,14 +298,14 @@ void bot_door_lock_update(char *moby) {
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[1] = fast_sin(angle) * -0.4f;
                         offset[2] = 0.0f;
-                        add_vectors(result, offset, number_anchor_position);
+                        add_vectors(number_position_sum, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[0] = fast_cos(angle) * 0.15f;
                         angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[1] = fast_sin(angle) * 0.15f;
                         offset[2] = 0.0f;
-                        add_vectors(result, offset, number_anchor_position);
+                        add_vectors(number_position_sum, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                     }
                 }
@@ -300,10 +322,10 @@ void bot_door_lock_update(char *moby) {
         }
         break;
     case BOT_DOOR_LOCK_STATE_SHRINK_EFFECT:
-        data[9] -= frame_time + frame_time;
-        if (data[9] < 0.0f)
-            data[9] = 0.0f;
-        if (0.0f < data[9])
+        bot_door_lock_data[9] -= frame_time + frame_time;
+        if (bot_door_lock_data[9] < 0.0f)
+            bot_door_lock_data[9] = 0.0f;
+        if (0.0f < bot_door_lock_data[9])
             add_draw_callback((int)draw_bot_door_lock_glow, (int)moby);
         return;
     default:

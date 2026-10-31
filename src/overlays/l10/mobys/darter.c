@@ -625,7 +625,7 @@ extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 #include "rnc/data_labels.h"
 
 void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
-    MobyData   *data = ((struct MobyData *)moby->pvars);
+    MobyData   *class_1199_vars = ((struct MobyData *)moby->pvars);
     float       vector_scratch[4];
     float       transformed_offset[4];
     int         hit_processing_status;
@@ -633,27 +633,29 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
     Hit_2E2B80 *hit_record;
     int         target_selection_status;
 
-    if (data->f38 != 0) {
-        data->f184 = truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
-        data->f38 = 0;
+    if (class_1199_vars->f38 != 0) {
+        class_1199_vars->f184 =
+            truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
+        class_1199_vars->f38 = 0;
     }
-    fast_dec_timer(&data->f184);
+    fast_dec_timer(&class_1199_vars->f184);
     if (moby->state != 13) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
-        resolve_moby_hit_response(moby, hit_record, &data->f20, 5, &hit_processing_status, 0, 0, 4);
+        resolve_moby_hit_response(
+            moby, hit_record, &class_1199_vars->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0 && hit_record->moby->oclass != moby->oclass) {
-            if (data->f20 <= hit_record->f2C) {
-                data->f20 = 0.0f;
+            if (class_1199_vars->f20 <= hit_record->f2C) {
+                class_1199_vars->f20 = 0.0f;
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
                 moby->state = 13;
-                data->f70 = D_0015ED70 * 26.0f;
-                data->f9D = 3;
-                data->f84 = 9;
-                data->f74 = 0.0005f;
-                data->f78 = D_0015ED6C * 7.0f;
-                data->f7C = D_0015ED6C * 10.0f;
+                class_1199_vars->f70 = D_0015ED70 * 26.0f;
+                class_1199_vars->f9D = 3;
+                class_1199_vars->f84 = 9;
+                class_1199_vars->f74 = 0.0005f;
+                class_1199_vars->f78 = D_0015ED6C * 7.0f;
+                class_1199_vars->f7C = D_0015ED6C * 10.0f;
                 allocate_voice_for_target_entry(2, 0, moby);
                 if (hit_record->f30 & 1) {
                     knockback_angle = fast_arc_tan(hit_record->f10[0], hit_record->f10[1]);
@@ -662,71 +664,73 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
                         fast_arc_tan(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
                 }
                 *(OvlQuad *)vector_scratch = *(OvlQuad *)hit_record->f10;
-                trooper_knockback_arc(vector_scratch, &knockback_angle, &data->f78, &data->f7C);
-                trooper_start_knockback(moby, data->f60, knockback_angle, 4, 1, 0);
-                data->f117 = 0x78;
-                trooper_anim_update(moby, data->f110);
+                trooper_knockback_arc(
+                    vector_scratch, &knockback_angle, &class_1199_vars->f78, &class_1199_vars->f7C);
+                trooper_start_knockback(moby, class_1199_vars->f60, knockback_angle, 4, 1, 0);
+                class_1199_vars->f117 = 0x78;
+                trooper_anim_update(moby, class_1199_vars->f110);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
-                data->f20 = data->f20 - hit_record->f2C;
-                data->f117 = 0xFA;
-                data->f26 = scale_game_frames(60);
-                trooper_anim_update(moby, data->f110);
+                class_1199_vars->f20 = class_1199_vars->f20 - hit_record->f2C;
+                class_1199_vars->f117 = 0xFA;
+                class_1199_vars->f26 = scale_game_frames(60);
+                trooper_anim_update(moby, class_1199_vars->f110);
             }
         }
         moby->hit_slot = 0xFF;
     }
-    trooper_anim_finish(moby, data->f110);
-    if (data->f174 == 2) {
-        data->f180 = 42.0f;
-    } else if (data->f184 != 0) {
-        data->f180 = data->f178 + 6.0f;
+    trooper_anim_finish(moby, class_1199_vars->f110);
+    if (class_1199_vars->f174 == 2) {
+        class_1199_vars->f180 = 42.0f;
+    } else if (class_1199_vars->f184 != 0) {
+        class_1199_vars->f180 = class_1199_vars->f178 + 6.0f;
     } else if (moby->state == 1) {
-        data->f180 = data->f188;
+        class_1199_vars->f180 = class_1199_vars->f188;
     } else {
-        data->f180 = data->f178;
+        class_1199_vars->f180 = class_1199_vars->f178;
     }
-    if (data->f174 == 2) {
-        target_selection_status = ahead_f(data->f180, moby, data->fC0);
+    if (class_1199_vars->f174 == 2) {
+        target_selection_status = ahead_f(class_1199_vars->f180, moby, class_1199_vars->fC0);
         if (target_selection_status != 2) {
-            LevelCuboid *bp = &l10_cuboids[data->f194];
+            LevelCuboid *bp = &l10_cuboids[class_1199_vars->f194];
             fast_vec_sub(vector_scratch, D_0013F3D0, &bp->pos);
             vector_scratch[3] = 0.0f;
             transform_vector_by_basis(transformed_offset, vector_scratch, bp->to_local);
             if (transformed_offset[0] <= -1.0f || 1.0f <= transformed_offset[0] ||
                 transformed_offset[1] <= -1.0f || 1.0f <= transformed_offset[1] ||
                 transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2]) {
-                data->f104 = 2;
+                class_1199_vars->f104 = 2;
             }
         }
-    } else if (moby->state == 1 && data->f18C >= 0) {
-        target_selection_status = activate_effect_l08(data->f180,
+    } else if (moby->state == 1 && class_1199_vars->f18C >= 0) {
+        target_selection_status = activate_effect_l08(class_1199_vars->f180,
                                                       moby,
-                                                      data->fC0,
+                                                      class_1199_vars->fC0,
                                                       0,
                                                       0,
-                                                      l10_paths[data->f18C]->points,
-                                                      l10_paths[data->f18C]->count);
-    } else if (moby->state != 1 && data->f17C >= 0) {
-        target_selection_status = activate_effect_l08(data->f180,
+                                                      l10_paths[class_1199_vars->f18C]->points,
+                                                      l10_paths[class_1199_vars->f18C]->count);
+    } else if (moby->state != 1 && class_1199_vars->f17C >= 0) {
+        target_selection_status = activate_effect_l08(class_1199_vars->f180,
                                                       moby,
-                                                      data->fC0,
+                                                      class_1199_vars->fC0,
                                                       0,
                                                       0,
-                                                      l10_paths[data->f17C]->points,
-                                                      l10_paths[data->f17C]->count);
+                                                      l10_paths[class_1199_vars->f17C]->points,
+                                                      l10_paths[class_1199_vars->f17C]->count);
     } else {
-        target_selection_status = ahead_f(data->f180, moby, data->fC0);
+        target_selection_status = ahead_f(class_1199_vars->f180, moby, class_1199_vars->fC0);
     }
     if (target_selection_status != 2) {
-        if (data->f180 < vector_distance_xy(data->f130, data->fC0)) {
-            data->f104 = 2;
+        if (class_1199_vars->f180 <
+            vector_distance_xy(class_1199_vars->f130, class_1199_vars->fC0)) {
+            class_1199_vars->f104 = 2;
         } else if (moby->visible == 0) {
-            data->f104 = 2;
+            class_1199_vars->f104 = 2;
         }
     }
-    if (data->f100 == 0) {
-        data->f100 = D_001413D0[0];
+    if (class_1199_vars->f100 == 0) {
+        class_1199_vars->f100 = D_001413D0[0];
     }
 }
 

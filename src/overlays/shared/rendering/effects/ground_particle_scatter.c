@@ -113,7 +113,7 @@ void scatter_ground_particles(Moby *moby) {
 
     V_3091B0 pt;
     V_3091B0 dv;
-    V_3091B0 base;
+    V_3091B0 scatter_pass_center_position;
     V_3091B0 origin_delta_or_spawn_vector;
     V_3091B0 par;
     int      flag;
@@ -175,15 +175,16 @@ void scatter_ground_particles(Moby *moby) {
             randomize_ground_particle_scatter_parameters(flag);
         fast_vec_sub(&dv, D_L08_00167640_3091B0, &moby_data->v30);
         D_L08_00160250 = *(u128_3091B0 *)&dv;
-        *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
+        *(u128_3091B0 *)&scatter_pass_center_position = *(u128_3091B0 *)D_L08_00167640_3091B0;
         pass_attempt_count = ground_particle_scatter_base_attempt_count;
-        fast_add_rotations_cf(&base,
-                              &base,
+        fast_add_rotations_cf(&scatter_pass_center_position,
+                              &scatter_pass_center_position,
                               16.0f,
                               ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f158,
                               ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f154);
-        base.z = ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
-                 ground_particle_scatter_reference_height_offset_gp;
+        scatter_pass_center_position.z =
+            ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
+            ground_particle_scatter_reference_height_offset_gp;
         if (pass_attempt_count > 0) {
             V_3091B0 *po = &origin_delta_or_spawn_vector;
             remaining_pass_attempts = pass_attempt_count;
@@ -191,7 +192,7 @@ void scatter_ground_particles(Moby *moby) {
                 float origin_distance_xy;
                 float t;
                 float u;
-                *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
+                *(u128_3091B0 *)&pt = *(u128_3091B0 *)&scatter_pass_center_position;
                 w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w *
                     func_002140F8_3091B0(0.0f, ground_particle_scatter_xy_offset_random_range_gp);
@@ -249,9 +250,10 @@ void scatter_ground_particles(Moby *moby) {
             } while (--remaining_pass_attempts != 0);
         }
         pass_attempt_count = (int)((float)pass_attempt_count * 1.4f);
-        *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-        base.z = ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
-                 ground_particle_scatter_reference_height_offset_gp;
+        *(u128_3091B0 *)&scatter_pass_center_position = *(u128_3091B0 *)D_L08_00167640_3091B0;
+        scatter_pass_center_position.z =
+            ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
+            ground_particle_scatter_reference_height_offset_gp;
         if (pass_attempt_count > 0) {
             float negative_spread = -spread;
             remaining_pass_attempts = pass_attempt_count;
@@ -263,7 +265,7 @@ void scatter_ground_particles(Moby *moby) {
                 u = func_002140F8_3091B0(negative_spread, spread);
                 t = hi * frame_time;
                 *(int *)&origin_delta_or_spawn_vector.w = 0;
-                *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
+                *(u128_3091B0 *)&pt = *(u128_3091B0 *)&scatter_pass_center_position;
                 origin_delta_or_spawn_vector.y = ground_particle_scatter_spawn_vector_y_bias + u;
                 origin_delta_or_spawn_vector.z = -t;
                 w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
@@ -295,19 +297,20 @@ void scatter_ground_particles(Moby *moby) {
             int sign;
             int h;
             w = 30.0f;
-            *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-            fast_add_rotations_cf(&base,
-                                  &base,
+            *(u128_3091B0 *)&scatter_pass_center_position = *(u128_3091B0 *)D_L08_00167640_3091B0;
+            fast_add_rotations_cf(&scatter_pass_center_position,
+                                  &scatter_pass_center_position,
                                   w,
                                   ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f158,
                                   ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f154);
             sign = pass_attempt_count >> 31;
-            base.z = ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
-                     ground_particle_scatter_reference_height_offset_gp;
+            scatter_pass_center_position.z =
+                ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
+                ground_particle_scatter_reference_height_offset_gp;
             if (pass_attempt_count > 0) {
                 remaining_pass_attempts = pass_attempt_count;
                 do {
-                    *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
+                    *(u128_3091B0 *)&pt = *(u128_3091B0 *)&scatter_pass_center_position;
                     w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 30.0f);
                     pt.x += w;
@@ -317,19 +320,20 @@ void scatter_ground_particles(Moby *moby) {
                     spawn_ground_contact_effect_particle(&pt);
                 } while (--remaining_pass_attempts != 0);
             }
-            *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-            fast_add_rotations_cf(&base,
-                                  &base,
+            *(u128_3091B0 *)&scatter_pass_center_position = *(u128_3091B0 *)D_L08_00167640_3091B0;
+            fast_add_rotations_cf(&scatter_pass_center_position,
+                                  &scatter_pass_center_position,
                                   4.0f,
                                   ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f158,
                                   ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->f154);
-            base.z = ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
-                     ground_particle_scatter_reference_height_offset_gp;
+            scatter_pass_center_position.z =
+                ((GroundScatterCamera *)(D_L08_00167640_3091B0 - 0x140))->reference_height +
+                ground_particle_scatter_reference_height_offset_gp;
             h = (pass_attempt_count - sign) >> 1;
             if (h > 0) {
                 remaining_pass_attempts = h;
                 do {
-                    *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
+                    *(u128_3091B0 *)&pt = *(u128_3091B0 *)&scatter_pass_center_position;
                     w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 8.0f);
                     pt.x += w;

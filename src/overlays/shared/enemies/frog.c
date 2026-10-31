@@ -540,16 +540,16 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         HIT_RESULT_REMOVE_OR_RESPAWN = 2,
         HIT_RESULT_NO_RESPONSE = 11
     };
-    struct RespawnVars *vars;
+    struct RespawnVars *frog_state;
     struct MobyHit     *hit;
     int                 kind;
     float               damage;
     int                 code;
 
-    vars = (struct RespawnVars *)moby->pvars;
-    vars->spin = moby->rot_row2.z * 0.25f;
-    if (vars->carried != 0) {
-        hit = find_moby_hit(vars->carried, 0x330000, 0);
+    frog_state = (struct RespawnVars *)moby->pvars;
+    frog_state->spin = moby->rot_row2.z * 0.25f;
+    if (frog_state->carried != 0) {
+        hit = find_moby_hit(frog_state->carried, 0x330000, 0);
         if (hit != 0 && (hit->source == 0 || hit->source->oclass != 0xAF)) {
             spawn_moby_directional_spark_bursts(moby, (Vec4 *)D_L06_0015F580);
             destroy_frog_child_moby(moby);
@@ -559,10 +559,10 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
     }
     damage = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
-    code = resolve_moby_hit_response(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
+    code = resolve_moby_hit_response(moby, hit, &frog_state->health, 0, &kind, &damage, 0, 4);
     if (kind != 1 && moby->state != 0xE) {
-        vars->health = vars->health - damage;
-        if (vars->health <= 0.0f) {
+        frog_state->health = frog_state->health - damage;
+        if (frog_state->health <= 0.0f) {
             code = 1;
         }
         switch (code) {
@@ -570,22 +570,22 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         case HIT_RESULT_REMOVE_OR_RESPAWN:
             mark_moby_for_removal_cf(moby, 0, -1);
             spawn_moby_directional_spark_bursts(moby, (Vec4 *)&hit->pos);
-            if (vars->sparks_pending == 1) {
+            if (frog_state->sparks_pending == 1) {
                 spawn_moby_death_effect_burst((char *)moby);
-                vars->sparks_pending = 0;
+                frog_state->sparks_pending = 0;
             }
             allocate_voice_for_target_entry(3, 0, (int)moby);
-            if (vars->carried != 0) {
+            if (frog_state->carried != 0) {
                 destroy_frog_child_moby(moby);
             }
-            if (vars->lives == 0) {
+            if (frog_state->lives == 0) {
             remove:
                 mark_moby_for_removal(moby);
                 return;
             }
-            vars->lives = vars->lives - 1;
-            vars->health = vars->max_health;
-            qcopy(&moby->pos, &vars->spawn_pos);
+            frog_state->lives = frog_state->lives - 1;
+            frog_state->health = frog_state->max_health;
+            qcopy(&moby->pos, &frog_state->spawn_pos);
             moby->state = 0xF;
             moby->collision = 0;
             moby->flags = (moby->flags & 0xEFFF) | 0x41;
@@ -597,55 +597,57 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         }
     }
     moby->hit_slot = 0xFF;
-    vars->glow_phase = fast_add_rotations(
-        vars->glow_phase, frog_glow_phase_rate_degrees_gp * 0.017453292f * D_0015ED6C);
+    frog_state->glow_phase = fast_add_rotations(
+        frog_state->glow_phase, frog_glow_phase_rate_degrees_gp * 0.017453292f * D_0015ED6C);
     moby->glow_color = fast_tween_color(frog_glow_color_start_gp,
                                         frog_glow_color_end_gp,
-                                        (fast_sin(vars->glow_phase) + 1.0f) * 0.5f);
-    if (vars->new_blink != 0) {
-        vars->blink_timer = truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
-        vars->new_blink = 0;
+                                        (fast_sin(frog_state->glow_phase) + 1.0f) * 0.5f);
+    if (frog_state->new_blink != 0) {
+        frog_state->blink_timer =
+            truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
+        frog_state->new_blink = 0;
     }
-    fast_dec_timer_s16(&vars->blink_timer);
-    if (vars->blink_timer != 0) {
-        vars->range = vars->base_range + 6.0f;
+    fast_dec_timer_s16(&frog_state->blink_timer);
+    if (frog_state->blink_timer != 0) {
+        frog_state->range = frog_state->base_range + 6.0f;
     } else {
-        vars->range = vars->base_range;
+        frog_state->range = frog_state->base_range;
     }
-    if (vars->target_id != -1) {
-        struct Moby *target = &D_L06_0015FFD8_e94f0[vars->target_id];
-        vars->target_mode = 1;
-        vars->target = target;
-        qcopy(&vars->target_pos, &target->pos);
+    if (frog_state->target_id != -1) {
+        struct Moby *target = &D_L06_0015FFD8_e94f0[frog_state->target_id];
+        frog_state->target_mode = 1;
+        frog_state->target = target;
+        qcopy(&frog_state->target_pos, &target->pos);
     } else if (D_001413F4_e94f0[0] == 1) {
-        if (level_frame_count % 8 == vars->frame_slot) {
-            select_hero_or_gadgebot_target((char *)moby, (char **)&vars->target, vars->range);
-            if (vars->target == 0) {
-                vars->target_mode = 2;
+        if (level_frame_count % 8 == frog_state->frame_slot) {
+            select_hero_or_gadgebot_target(
+                (char *)moby, (char **)&frog_state->target, frog_state->range);
+            if (frog_state->target == 0) {
+                frog_state->target_mode = 2;
             } else {
-                int *path = D_L06_001B0C30[vars->path];
-                if (point_in_path_xy(&vars->target->pos, path + 4, *path) == 0 ||
-                    (vars->target->oclass == 0x359 &&
-                     2.0f < vector_distance_xy(&moby->pos, &vars->target->pos))) {
-                    vars->target = 0;
-                    vars->target_mode = 2;
+                int *path = D_L06_001B0C30[frog_state->path];
+                if (point_in_path_xy(&frog_state->target->pos, path + 4, *path) == 0 ||
+                    (frog_state->target->oclass == 0x359 &&
+                     2.0f < vector_distance_xy(&moby->pos, &frog_state->target->pos))) {
+                    frog_state->target = 0;
+                    frog_state->target_mode = 2;
                 } else {
-                    vars->target_mode = 0;
+                    frog_state->target_mode = 0;
                 }
             }
         }
     } else {
-        Vec4f *goal = &vars->target_pos;
-        int   *path = D_L06_001B0C30[vars->path];
-        if (activate_effect_l08(moby, goal, vars->range, 0, 0, path + 4, *path) != 2) {
-            if (vars->range < vector_distance_xy(&vars->spawn_pos, goal) ||
-                3.0f < absolute_float(moby->pos.z - vars->target_pos.z)) {
-                vars->target_mode = 2;
+        Vec4f *goal = &frog_state->target_pos;
+        int   *path = D_L06_001B0C30[frog_state->path];
+        if (activate_effect_l08(moby, goal, frog_state->range, 0, 0, path + 4, *path) != 2) {
+            if (frog_state->range < vector_distance_xy(&frog_state->spawn_pos, goal) ||
+                3.0f < absolute_float(moby->pos.z - frog_state->target_pos.z)) {
+                frog_state->target_mode = 2;
             }
         }
     }
-    if (vars->target == 0) {
-        vars->target = D_001413D0_lui;
+    if (frog_state->target == 0) {
+        frog_state->target = D_001413D0_lui;
     }
 }
 
@@ -694,7 +696,7 @@ void move_frog_with_collision_resolution(float  scale,
 
 void move_frog_with_collision_resolution(
 
-    float scale, float threshold, char *moby, float *out, int follow_path) {
+    float scale, float threshold, char *moby, float *movement_displacement, int follow_path) {
     extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
     float      start[4];
     float      end[4];
@@ -704,13 +706,14 @@ void move_frog_with_collision_resolution(
 
     fast_vec_normalize(forward, moby + 0xE0, scale);
     fast_vec_normalize(backward, forward, -D_0015ED6C);
-    fast_vec_add(out, out, backward);
+    fast_vec_add(movement_displacement, movement_displacement, backward);
     qcopy(start, moby + 0x10);
     fast_vec_add(start, start, forward);
-    fast_vec_add(moby + 0x10, moby + 0x10, out);
+    fast_vec_add(moby + 0x10, moby + 0x10, movement_displacement);
     fast_vec_add(end, moby + 0x10, forward);
 
-    if (threshold < fast_vec_length(out) && collision_line(start, end, 0, moby, 0) != 0) {
+    if (threshold < fast_vec_length(movement_displacement) &&
+        collision_line(start, end, 0, moby, 0) != 0) {
         qcopy(end, &D_L06_001745E0);
         fast_vec_sub(moby + 0x10, end, forward);
     }
@@ -734,11 +737,11 @@ void destroy_frog_child_moby(struct Moby *moby) {
     float debris_velocity[4];
     float pos[4];
     float offset[4];
-    u8   *vars;
+    u8   *frog_vars;
     int   i;
     int   j;
 
-    vars = moby->pvars;
+    frog_vars = moby->pvars;
     allocate_voice_for_target_entry(4, 0, (int)moby);
     qcopy(origin, &moby->pos);
     origin[2] = origin[2] + 0.5f;
@@ -751,8 +754,14 @@ void destroy_frog_child_moby(struct Moby *moby) {
         *(u128 *)pos = *(u128 *)offset;
         fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
-        spawn_crate_debris(
-            *(void **)(vars + 0x20C), debris_velocity, pos, D_L06_0015F580, 0x165, 0, 0.3f, 0.6f);
+        spawn_crate_debris(*(void **)(frog_vars + 0x20C),
+                           debris_velocity,
+                           pos,
+                           D_L06_0015F580,
+                           0x165,
+                           0,
+                           0.3f,
+                           0.6f);
     }
     for (j = 7; j >= 0; j--) {
         float speed = random_float_between(1.0f, 4.0f) * frame_time;
@@ -763,7 +772,7 @@ void destroy_frog_child_moby(struct Moby *moby) {
         *(u128 *)pos = *(u128 *)offset;
         fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
-        spawn_crate_debris(*(void **)(vars + 0x20C),
+        spawn_crate_debris(*(void **)(frog_vars + 0x20C),
                            debris_velocity,
                            pos,
                            D_L06_0015F580,
@@ -772,8 +781,8 @@ void destroy_frog_child_moby(struct Moby *moby) {
                            0.5f,
                            0.7f);
     }
-    mark_moby_for_removal(*(void **)(vars + 0x20C));
-    *(int *)(vars + 0x20C) = 0;
+    mark_moby_for_removal(*(void **)(frog_vars + 0x20C));
+    *(int *)(frog_vars + 0x20C) = 0;
 }
 
 /* Throws D_L06_00161C18 bursts of sparks from around the moby: each burst gets a random heading, speed and rise on top
@@ -902,7 +911,9 @@ int update_moby_grab_state(struct Moby *moby) {
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EBAD8), where it is exact; names translated to the US level program. */
-int FUN_L06_002ea6a8(unsigned char *moby) {
+int update_moby_suck_cannon_storage_state(unsigned char *moby) __asm__("FUN_L06_002ea6a8");
+
+int update_moby_suck_cannon_storage_state(unsigned char *moby) {
     int suck_cannon_store_result = store_moby_in_suck_cannon(moby);
     if (suck_cannon_store_result != 0) {
         if (moby[0x20] != 0x10) {
@@ -943,7 +954,13 @@ void consider_moby_target_candidate(char  *moby,
 
 void consider_moby_target_candidate(
 
-    char *moby, char *current_target, char *candidate_moby, int *out, float *best, float thresh) {
+    char  *moby,
+    char  *current_target,
+    char  *candidate_moby,
+    int   *best_target_out,
+    float *best,
+
+    float thresh) {
     float candidate_distance = vector_distance_xy(moby + 0x10, candidate_moby + 0x10);
     if (!(thresh < candidate_distance)) {
         float ang = fast_arc_tan(MOBY(candidate_moby)->pos.x - MOBY(moby)->pos.x,
@@ -954,7 +971,7 @@ void consider_moby_target_candidate(
             candidate_score -= 2.0f;
         }
         if (candidate_score < *best) {
-            *out = (int)candidate_moby;
+            *best_target_out = (int)candidate_moby;
             *best = candidate_score;
         }
     }

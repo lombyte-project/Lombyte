@@ -57,7 +57,7 @@ void blarg_ship_update(struct Moby *moby) {
         BLARG_SHIP_HANDLE_DAMAGE = 1,
         BLARG_SHIP_EXPLODE = 2
     };
-    char   *data;
+    char   *blarg_ship_vars;
     void   *hit;
     OvlVec4 vector;
     char    hit_buffer[16];
@@ -67,9 +67,9 @@ void blarg_ship_update(struct Moby *moby) {
         FUN_0020c828(moby);
         return;
     }
-    data = (char *)moby->pvars;
+    blarg_ship_vars = (char *)moby->pvars;
     hit = find_moby_hit(moby, 0x10000, 0);
-    resolve_moby_hit_response(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
+    resolve_moby_hit_response(moby, hit, blarg_ship_vars + 0x20, 0, hit_buffer, 0, 0, 4);
     switch (moby->state) {
     case BLARG_SHIP_ENTER_DAMAGE_HANDLING:
         moby->state = 1;
@@ -77,16 +77,16 @@ void blarg_ship_update(struct Moby *moby) {
     case BLARG_SHIP_HANDLE_DAMAGE:
         if (hit != 0) {
             float cost = *(float *)((char *)hit + 0x2c);
-            if (*(float *)(data + 0x20) < cost) {
+            if (*(float *)(blarg_ship_vars + 0x20) < cost) {
                 moby->state = 2;
             } else {
-                ((unsigned char *)data)[0x67] = 0xfa;
-                *(float *)(data + 0x20) -= cost;
-                trooper_anim_update(moby, data + 0x60);
+                ((unsigned char *)blarg_ship_vars)[0x67] = 0xfa;
+                *(float *)(blarg_ship_vars + 0x20) -= cost;
+                trooper_anim_update(moby, blarg_ship_vars + 0x60);
             }
             moby->hit_slot = 0xff;
         }
-        trooper_anim_finish(moby, data + 0x60);
+        trooper_anim_finish(moby, blarg_ship_vars + 0x60);
         break;
     case BLARG_SHIP_EXPLODE: {
         void *pos;

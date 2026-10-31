@@ -78,16 +78,16 @@ typedef struct {
 void bolt_thief_update(struct Moby *moby) __asm__("FUN_L08_002e2df0");
 
 void build_bolt_thief_target_list(struct Moby *moby) {
-    char  *data = (char *)moby->pvars;
+    char  *bolt_thief_vars = (char *)moby->pvars;
     int    oclass = 0x279;
-    char  *base = D_L08_0015FFD8;
-    int   *ids = (int *)(data + 0x130);
-    char **output = (char **)(data + 0x158);
+    char  *moby_array_base = D_L08_0015FFD8;
+    int   *ids = (int *)(bolt_thief_vars + 0x130);
+    char **output = (char **)(bolt_thief_vars + 0x158);
     int    i = 9;
     for (;;) {
-        char *other = (char *)((*ids << 8) + (unsigned int)base);
-        if (*(short *)(other + 0xA6) == oclass) {
-            *output++ = other;
+        char *candidate_target_moby = (char *)((*ids << 8) + (unsigned int)moby_array_base);
+        if (*(short *)(candidate_target_moby + 0xA6) == oclass) {
+            *output++ = candidate_target_moby;
         }
         --i;
         if (i < 0)
@@ -110,10 +110,10 @@ void bolt_thief_update(struct Moby *moby) {
     };
     Vec4           point;
     Vec4           step;
-    BoltThiefVars *data;
+    BoltThiefVars *bolt_thief_instance_vars;
 
-    data = moby->pvars;
-    FUN_L00_00263ac8(2.5f, moby, 1, data->x260);
+    bolt_thief_instance_vars = moby->pvars;
+    FUN_L00_00263ac8(2.5f, moby, 1, bolt_thief_instance_vars->x260);
     if (moby->visible != 0) {
         if (fast_vec_dist(&moby->pos, D_L08_001675C0) < 29.0f) {
             FUN_L00_0025a120(moby);
@@ -124,7 +124,7 @@ void bolt_thief_update(struct Moby *moby) {
         int i;
 
         for (i = 0; i < 0x32; i++) {
-            struct Moby *other = data->list[i];
+            struct Moby *other = bolt_thief_instance_vars->list[i];
 
             if (other != 0 && other->state == 3) {
                 other->state = 1;
@@ -133,45 +133,47 @@ void bolt_thief_update(struct Moby *moby) {
         {
             float speed8 = D_0015ED6C * 8.0f;
             float speed10 = D_0015ED6C * 10.0f;
-            data->f80 = 0.008f;
-            data->f84 = 0.0005f;
-            data->w94 = 1;
-            data->f88 = speed8;
-            data->f8C = speed10;
-            data->bAD = 0;
+            bolt_thief_instance_vars->f80 = 0.008f;
+            bolt_thief_instance_vars->f84 = 0.0005f;
+            bolt_thief_instance_vars->w94 = 1;
+            bolt_thief_instance_vars->f88 = speed8;
+            bolt_thief_instance_vars->f8C = speed10;
+            bolt_thief_instance_vars->bAD = 0;
         }
         trooper_start_knockback(
             moby,
-            data->x70,
+            bolt_thief_instance_vars->x70,
             fast_arc_tan(moby->pos.x - hero.motion.pos.f[0], moby->pos.y - hero.motion.pos.f[1]),
             4,
             1,
             0);
-        data->b67 = 0x78;
+        bolt_thief_instance_vars->b67 = 0x78;
         FUN_L00_00257470(moby, 0, -1);
         moby->state = 8;
     }
     moby->hit_slot = 0xFF;
     switch (moby->state) {
     case BOLT_THIEF_INITIALIZE:
-        data->follow[0].path = l08_paths[data->follow[0].path_id];
-        qcopy(&moby->pos, &data->follow[0].path->points[0]);
-        data->follow[0].point = 1;
-        if (data->follow[1].path_id >= 0) {
-            data->follow[1].path = l08_paths[data->follow[1].path_id];
-            data->follow[1].point = 1;
+        bolt_thief_instance_vars->follow[0].path =
+            l08_paths[bolt_thief_instance_vars->follow[0].path_id];
+        qcopy(&moby->pos, &bolt_thief_instance_vars->follow[0].path->points[0]);
+        bolt_thief_instance_vars->follow[0].point = 1;
+        if (bolt_thief_instance_vars->follow[1].path_id >= 0) {
+            bolt_thief_instance_vars->follow[1].path =
+                l08_paths[bolt_thief_instance_vars->follow[1].path_id];
+            bolt_thief_instance_vars->follow[1].point = 1;
         }
         moby->flags |= 0x1000;
-        data->b29 = 0;
+        bolt_thief_instance_vars->b29 = 0;
         moby->spawn_frame = *(u64 *)(*(char **)D_001413D0 + 0x38);
-        clear_u64_value(&data->v40);
+        clear_u64_value(&bolt_thief_instance_vars->v40);
         moby->state = 1;
         if (moby->prev_seq != 1) {
             FUN_00212f90(moby, 1, 0, 0);
         }
         break;
     case BOLT_THIEF_WAIT_FOR_HERO_NEAR_TRIGGER:
-        qcopy(&point, &l08_paths[data->w220]->points[0]);
+        qcopy(&point, &l08_paths[bolt_thief_instance_vars->w220]->points[0]);
         if (fast_vec_dist(hero.motion.pos.f, &point) < 24.0f) {
             build_bolt_thief_target_list((char *)moby);
             moby->state = 5;
@@ -186,12 +188,12 @@ void bolt_thief_update(struct Moby *moby) {
         int                next;
         float              heading;
 
-        follower = &data->follow[0];
+        follower = &bolt_thief_instance_vars->follow[0];
         next =
             (follower->point + follower->path->count + follower->direction) % follower->path->count;
         heading = fast_arc_tan(follower->path->points[next].f[0] - moby->pos.x,
                                follower->path->points[next].f[1] - moby->pos.y);
-        FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
+        FUN_L00_00258278(moby, heading, &bolt_thief_instance_vars->f224, 0.01f, 0.3f, 0.1f);
         path = follower->path;
         qcopy(&point, &path->points[next]);
         if (path->points[next].f[3] == 0.0f) {
@@ -216,7 +218,7 @@ void bolt_thief_update(struct Moby *moby) {
 
             build_bolt_thief_target_list((char *)moby);
             for (i = 0; i < 0x32; i++) {
-                struct Moby *other = data->list[i];
+                struct Moby *other = bolt_thief_instance_vars->list[i];
 
                 if (other != 0 && (signed char)other->state >= 0) {
                     other->state = 3;
@@ -235,7 +237,7 @@ void bolt_thief_update(struct Moby *moby) {
 
         active_count = 0;
         for (i = 0; i < 0x32; i++) {
-            struct Moby *other = data->list[i];
+            struct Moby *other = bolt_thief_instance_vars->list[i];
 
             if (other != 0 && (signed char)other->state >= 0) {
                 moby_point_position(moby, 0, &step);
@@ -245,8 +247,8 @@ void bolt_thief_update(struct Moby *moby) {
                 fast_vec_add(&other->pos, &other->pos, &point);
                 if (fast_vec_length(&point) < 2.0f * D_0015ED6C) {
                     other->state = 4;
-                    data->list[i] = 0;
-                    data->w22C++;
+                    bolt_thief_instance_vars->list[i] = 0;
+                    bolt_thief_instance_vars->w22C++;
                 }
             }
         }
@@ -265,24 +267,24 @@ void bolt_thief_update(struct Moby *moby) {
         int                i;
         float              heading;
 
-        follower = &data->follow[0];
+        follower = &bolt_thief_instance_vars->follow[0];
         found = 0;
         next =
             (follower->point + follower->path->count + follower->direction) % follower->path->count;
         heading = fast_arc_tan(follower->path->points[next].f[0] - moby->pos.x,
                                follower->path->points[next].f[1] - moby->pos.y);
-        FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
+        FUN_L00_00258278(moby, heading, &bolt_thief_instance_vars->f224, 0.01f, 0.3f, 0.1f);
         qcopy(&point, &follower->path->points[next]);
         for (i = 0; i < 0x32; i++) {
-            struct Moby *other = data->list[i];
+            struct Moby *other = bolt_thief_instance_vars->list[i];
 
             if (other != 0 && (signed char)other->state >= 0) {
                 if (vector_distance_xy(&moby->pos, &other->pos) < 6.0f) {
                     if (moby->prev_seq != 6) {
                         FUN_00212f90(moby, 6, 0, scale_game_frames(0x14));
                     }
-                    begin_bolt_attraction(data->list[i], moby, 0.0f, 0.0f);
-                    data->list[i] = 0;
+                    begin_bolt_attraction(bolt_thief_instance_vars->list[i], moby, 0.0f, 0.0f);
+                    bolt_thief_instance_vars->list[i] = 0;
                 }
                 found = 1;
             }
@@ -291,7 +293,7 @@ void bolt_thief_update(struct Moby *moby) {
             FUN_00212f90(moby, 3, 0, scale_game_frames(0x14));
         }
         if (follower->path->count - 1 == next) {
-            if (data->follow[1].path_id >= 0) {
+            if (bolt_thief_instance_vars->follow[1].path_id >= 0) {
                 moby->state = 6;
                 break;
             }
@@ -311,12 +313,12 @@ void bolt_thief_update(struct Moby *moby) {
         int                next;
         float              heading;
 
-        follower = &data->follow[1];
+        follower = &bolt_thief_instance_vars->follow[1];
         next =
             (follower->point + follower->path->count + follower->direction) % follower->path->count;
         heading = fast_arc_tan(follower->path->points[next].f[0] - moby->pos.x,
                                follower->path->points[next].f[1] - moby->pos.y);
-        FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
+        FUN_L00_00258278(moby, heading, &bolt_thief_instance_vars->f224, 0.01f, 0.3f, 0.1f);
         qcopy(&point, &follower->path->points[next]);
         fast_vec_sub(&step, &point, &moby->pos);
         fast_vec_normalize(&step, &step, bolt_thief_waypoint_speed_gp * D_0015ED6C);
@@ -337,13 +339,13 @@ void bolt_thief_update(struct Moby *moby) {
         heading =
             fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
         hero_position = hero.motion.pos.f;
-        FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
+        FUN_L00_00258278(moby, heading, &bolt_thief_instance_vars->f224, 0.01f, 0.3f, 0.1f);
         distance = fast_vec_dist(hero_position, &moby->pos);
         if (distance < 17.0f || find_listed_moby_by_data_id(moby) != 0) {
             SwarmPathFollower *follower;
             int                next;
 
-            follower = &data->follow[1];
+            follower = &bolt_thief_instance_vars->follow[1];
             next = (follower->point + follower->path->count + follower->direction) %
                    follower->path->count;
             moby->state = 6;
@@ -354,7 +356,7 @@ void bolt_thief_update(struct Moby *moby) {
         break;
     }
     case BOLT_THIEF_KNOCKBACK:
-        if (step_moby_motion(moby, data->x70) & 3) {
+        if (step_moby_motion(moby, bolt_thief_instance_vars->x70) & 3) {
             cart_burst(moby, &moby->pos, -1, 1.0f, 13.0f);
             mark_moby_for_removal(moby);
             return;
@@ -365,5 +367,5 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     }
-    trooper_anim_finish(moby, data->x60);
+    trooper_anim_finish(moby, bolt_thief_instance_vars->x60);
 }

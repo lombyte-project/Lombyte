@@ -100,7 +100,7 @@ void update_beam_barrier(struct Moby *moby) {
         BEAM_BARRIER_EMIT_SPARK_BURST = 2,
         BEAM_BARRIER_REMOVE = 3
     };
-    struct BarrierVars *vars = (struct BarrierVars *)moby->pvars;
+    struct BarrierVars *beam_barrier_control_vars = (struct BarrierVars *)moby->pvars;
     unsigned char       state = moby->state;
     struct {
         float matrix[4][4];
@@ -133,15 +133,15 @@ void update_beam_barrier(struct Moby *moby) {
         D_L06_00161E40[2] = 0x17;
         D_L06_00161E40[3] = 0x22;
         D_L06_00161E40[0] = 0;
-        vars->voice = -1;
+        beam_barrier_control_vars->voice = -1;
         moby->state = 1;
         moby->flags = moby->flags | 0x4000;
         return;
     }
     case BEAM_BARRIER_ACTIVE: {
-        fast_dec_timer_s16(&vars->touch_timer);
-        if (voice_is_playing(moby, vars->voice) == 0)
-            vars->voice =
+        fast_dec_timer_s16(&beam_barrier_control_vars->touch_timer);
+        if (voice_is_playing(moby, beam_barrier_control_vars->voice) == 0)
+            beam_barrier_control_vars->voice =
                 ((int (*)(int, int, int))allocate_voice_for_target_entry)(0, 4, (int)moby);
         {
             cursor = (float *)&moby->pos;
@@ -151,7 +151,7 @@ void update_beam_barrier(struct Moby *moby) {
         }
         if (distance < 48.0f) {
             step = frame_time_macro;
-            cursor = &vars->fade;
+            cursor = &beam_barrier_control_vars->fade;
             approach_value(cursor, 1.0f, step + step);
             work.matrix[2][0] = fast_cos(moby->rot.z) * 0.5f;
             work.matrix[2][1] = fast_sin(moby->rot.z) * 0.5f;
@@ -170,11 +170,11 @@ void update_beam_barrier(struct Moby *moby) {
             fast_vec_sub(work.matrix[1], work.matrix[1], work.matrix[3]);
             make_hit_descriptor(work.shared.local[0], moby, 0x10001, 5.0f, work.matrix[2]);
             collision_line(work.matrix[0], work.matrix[1], 0, moby, work.shared.local[0]);
-            if (D_00141968[43].count == 0 && vars->touch_timer == 0 &&
+            if (D_00141968[43].count == 0 && beam_barrier_control_vars->touch_timer == 0 &&
                 D_L06_001745D8 == (GbMoby *)hero.moby) {
-                short touches = vars->touches + 1;
-                vars->touches = touches;
-                vars->touch_timer = scale_game_frames(30);
+                short touches = beam_barrier_control_vars->touches + 1;
+                beam_barrier_control_vars->touches = touches;
+                beam_barrier_control_vars->touch_timer = scale_game_frames(30);
             }
             yaw = fast_add_rotations(moby->rot.z, 3.1415927f);
             work.matrix[2][0] = fast_cos(yaw) * 0.5f;
@@ -195,11 +195,11 @@ void update_beam_barrier(struct Moby *moby) {
             fast_vec_sub(work.matrix[1], work.matrix[1], work.matrix[3]);
             make_hit_descriptor(work.shared.local[0], moby, 0x10001, 5.0f, work.matrix[2]);
             collision_line(work.matrix[0], work.matrix[1], 0, moby, work.shared.local[0]);
-            if (D_00141968[43].count == 0 && vars->touch_timer == 0 &&
+            if (D_00141968[43].count == 0 && beam_barrier_control_vars->touch_timer == 0 &&
                 D_L06_001745D8 == (GbMoby *)hero.moby) {
-                short touches = vars->touches + 1;
-                vars->touches = touches;
-                vars->touch_timer = scale_game_frames(30);
+                short touches = beam_barrier_control_vars->touches + 1;
+                beam_barrier_control_vars->touches = touches;
+                beam_barrier_control_vars->touch_timer = scale_game_frames(30);
             }
             if (hero.coll_hit_moby == (u8 *)moby) {
                 fast_vec_sub(work.shared.collision.delta, &hero.motion.pos, pos);
@@ -209,28 +209,29 @@ void update_beam_barrier(struct Moby *moby) {
                 else
                     fast_vec_normalize(work.shared.local[0], &moby->rot_row0, -1.0f);
                 record_moby_hit(hero.moby, work.shared.local[0]);
-                if (D_00141968[43].count == 0 && vars->touch_timer == 0) {
-                    short touches = vars->touches + 1;
-                    vars->touches = touches;
-                    vars->touch_timer = scale_game_frames(30);
+                if (D_00141968[43].count == 0 && beam_barrier_control_vars->touch_timer == 0) {
+                    short touches = beam_barrier_control_vars->touches + 1;
+                    beam_barrier_control_vars->touches = touches;
+                    beam_barrier_control_vars->touch_timer = scale_game_frames(30);
                 }
             }
         } else {
-            approach_value(&vars->fade, 0.0f, (step = frame_time_macro) + step);
+            approach_value(
+                &beam_barrier_control_vars->fade, 0.0f, (step = frame_time_macro) + step);
         }
-        if (vars->fade != 0.0f)
+        if (beam_barrier_control_vars->fade != 0.0f)
             add_draw_callback((s32)draw_beam_barrier_segments, (s32)moby);
         if (D_00141968[43].count == 0) {
-            if (vars->touch_timer == 0) {
+            if (beam_barrier_control_vars->touch_timer == 0) {
                 char *hit = find_moby_hit(moby, 0x330000, 0);
                 if (hit != 0) {
-                    short touches = vars->touches + 1;
-                    vars->touches = touches;
-                    vars->touch_timer = scale_game_frames(30);
+                    short touches = beam_barrier_control_vars->touches + 1;
+                    beam_barrier_control_vars->touches = touches;
+                    beam_barrier_control_vars->touch_timer = scale_game_frames(30);
                 }
             }
             moby->hit_slot = 0xFF;
-            if (vars->touches >= 3)
+            if (beam_barrier_control_vars->touches >= 3)
                 help_request(0x1774, 0x2B);
         }
         {
@@ -239,7 +240,7 @@ void update_beam_barrier(struct Moby *moby) {
             char *moby_table = D_L06_0015FFD8;
             int   link;
             for (link = 0; link < 4; link++) {
-                int index = vars->links[link];
+                int index = beam_barrier_control_vars->links[link];
                 if (index >= 0) {
                     struct Moby *linked = (struct Moby *)(moby_table + index * 256);
                     if (linked->oclass == 0x516) {
@@ -257,13 +258,13 @@ void update_beam_barrier(struct Moby *moby) {
             moby->collision = 0;
             moby->state = 2;
             {
-                int voice = vars->voice;
+                int voice = beam_barrier_control_vars->voice;
                 if (voice != -1) {
                     if ((struct Moby *)voice_pool.voices[voice].owner == moby &&
                         voice_pool.voices[voice].state != 0)
                         release_voice_slot(voice);
                 }
-                vars->voice = -1;
+                beam_barrier_control_vars->voice = -1;
             }
             allocate_voice_for_target_entry(1, 0, (int)moby);
             if (count_usage) {
@@ -363,8 +364,8 @@ void draw_beam_barrier_segments(char *moby) {
     float        yaw_matrix[16];
     float        segment_matrix[9][16];
     float        offset[4];
-    int          params[9];
-    char        *data = ((char *)MOBY(moby)->pvars);
+    int          beam_segment_draw_params[9];
+    char        *beam_barrier_vars = ((char *)MOBY(moby)->pvars);
     float       *matrix;
     float       *rotation;
     float       *offset_src;
@@ -372,7 +373,7 @@ void draw_beam_barrier_segments(char *moby) {
     float       *first_matrix;
     int         *segment_params;
     unsigned int color;
-    int          first, second, fourth;
+    int          strand_cycle_duration_frames, strand_color_transition_threshold_frames, fourth;
     int         *points, *sequence;
     float        seventh, eighth;
     int          i;
@@ -390,7 +391,7 @@ void draw_beam_barrier_segments(char *moby) {
                             0x8000000000L);
     font_queue_vu_state();
     first_matrix = segment_matrix[0];
-    segment_params = params;
+    segment_params = beam_segment_draw_params;
     rotation = D_L06_001DB060;
     offset_src = D_L06_001DAFD0;
     translation = segment_matrix[0] + 12;
@@ -406,23 +407,24 @@ void draw_beam_barrier_segments(char *moby) {
         matrix += 16;
         translation += 16;
     }
-    color = fast_tween_color(D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(data + 0x18));
-    first = D_L06_00161E50;
+    color = fast_tween_color(
+        D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(beam_barrier_vars + 0x18));
+    strand_cycle_duration_frames = D_L06_00161E50;
     points = (int *)D_L06_001DB0F0;
-    second = D_L06_00161E54;
+    strand_color_transition_threshold_frames = D_L06_00161E54;
     fourth = D_L06_00161DF4;
     seventh = beam_barrier_texture_u_step_gp;
     eighth = D_L06_00161DFC;
     sequence = D_L06_00161E40;
-    params[0] = first;
-    params[2] = (int)sequence;
-    params[1] = second;
-    params[3] = color;
-    params[4] = fourth;
-    *(float *)&params[7] = seventh;
-    *(float *)&params[8] = eighth;
-    params[5] = 0x1E;
-    params[6] = (int)points;
+    beam_segment_draw_params[0] = strand_cycle_duration_frames;
+    beam_segment_draw_params[2] = (int)sequence;
+    beam_segment_draw_params[1] = strand_color_transition_threshold_frames;
+    beam_segment_draw_params[3] = color;
+    beam_segment_draw_params[4] = fourth;
+    *(float *)&beam_segment_draw_params[7] = seventh;
+    *(float *)&beam_segment_draw_params[8] = eighth;
+    beam_segment_draw_params[5] = 0x1E;
+    beam_segment_draw_params[6] = (int)points;
     matrix = first_matrix;
     for (j = 8; j >= 0; j--) {
         FUN_L06_00216b88(segment_params, matrix);

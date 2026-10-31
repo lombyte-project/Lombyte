@@ -220,8 +220,8 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
         moby->position.component[2] = probe_ground_height(0.5f, &moby->position, 0);
         if (level_object_states[16].state == 0 || level_object_states[17].state == 0) {
             HoverboardRaceEntry **entries = race_entries;
-            s32                   entry = get_dialogue_entry(moby);
-            entries[entry]->state = 13;
+            s32                   dialogue_entry_index = get_dialogue_entry(moby);
+            entries[dialogue_entry_index]->state = 13;
         }
         state->dialogue_name = race_girl_name;
         moby->state = 1;

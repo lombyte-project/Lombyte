@@ -201,30 +201,30 @@ void update_mine_group(struct Moby *moby) {
         HIT_REACTION_ALTERNATE_HIT_ANIMATION_RESPONSE = 0xA,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 0xB
     };
-    char  *data;
+    char  *boltcrate_pvars;
     char  *path;
     float *remaining;
     int    count;
     int    current;
     int    child;
     int    i;
-    int    first;
-    int    next;
+    int    child_placement_segment_index;
+    int    child_placement_segment_distance;
     float  distance;
     float  position[4];
     char  *limit;
-    int    result;
+    int    hit_response_code;
 
     if (!moby)
         return;
-    data = (char *)moby->pvars;
-    if (!data)
+    boltcrate_pvars = (char *)moby->pvars;
+    if (!boltcrate_pvars)
         return;
-    remaining = (float *)(data + 0x20);
-    if (*(unsigned char *)(data + 0x94)) {
+    remaining = (float *)(boltcrate_pvars + 0x20);
+    if (*(unsigned char *)(boltcrate_pvars + 0x94)) {
         limit = find_moby_hit(moby, 0x230000, 0);
-        result = resolve_moby_hit_response(moby, limit, remaining, 0, &count, 0, 0, 4);
-        switch ((unsigned)result) {
+        hit_response_code = resolve_moby_hit_response(moby, limit, remaining, 0, &count, 0, 0, 4);
+        switch ((unsigned)hit_response_code) {
         case HIT_REACTION_NONE:
         case HIT_REACTION_START_KNOCKBACK:
         case HIT_REACTION_KNOCKBACK_RESPONSE:
@@ -245,7 +245,7 @@ void update_mine_group(struct Moby *moby) {
             float step = *(float *)(limit + 0x2c);
             if (*remaining <= step) {
                 *remaining = 0.0f;
-                set_moby_list_state(*(int *)(data + 0x74), 3);
+                set_moby_list_state(*(int *)(boltcrate_pvars + 0x74), 3);
                 clear_u64_value(position);
                 spawn_explosion(moby,
                                 position,
@@ -269,75 +269,85 @@ void update_mine_group(struct Moby *moby) {
                 return;
             }
             *remaining -= step;
-            *(unsigned char *)(data + 0x67) = 0xfa;
-            *(short *)(data + 0x26) = scale_game_frames(0x3c);
-            trooper_anim_update(moby, (short *)(data + 0x60));
+            *(unsigned char *)(boltcrate_pvars + 0x67) = 0xfa;
+            *(short *)(boltcrate_pvars + 0x26) = scale_game_frames(0x3c);
+            trooper_anim_update(moby, (short *)(boltcrate_pvars + 0x60));
         }
         moby->hit_slot = 0xff;
     }
-    trooper_anim_finish(moby, data + 0x60);
-    if (*(int *)(data + 0x70) == -1)
+    trooper_anim_finish(moby, boltcrate_pvars + 0x60);
+    if (*(int *)(boltcrate_pvars + 0x70) == -1)
         return;
-    path = D_L07_001B0530[*(int *)(data + 0x70)];
+    path = D_L07_001B0530[*(int *)(boltcrate_pvars + 0x70)];
     switch (moby->state) {
     case INITIALIZE_PATH_CHILDREN: {
         int j;
         int placed, follower;
         current = 0;
-        next = 0;
+        child_placement_segment_distance = 0;
         qcopy(position, path + 0x10);
         for (j = 0; j < *(int *)path; j++) {
             int offset = j * 16;
             *(float *)(path + offset + 0x1c) =
                 fast_vec_dist(path + 0x10 + j * 16, path + 0x10 + ((j + 1) % *(int *)path) * 16);
         }
-        if (get_first_moby_in_group(&current, *(int *)(data + 0x74), 1, 0)) {
-            debug_print(mine_group_not_found_message, *(int *)(data + 0x74));
+        if (get_first_moby_in_group(&current, *(int *)(boltcrate_pvars + 0x74), 1, 0)) {
+            debug_print(mine_group_not_found_message, *(int *)(boltcrate_pvars + 0x74));
             return;
         }
-        first = *(int *)(data + 0x90) = select_point_index_by_distance(&moby->pos, path, 0.0f);
+        child_placement_segment_index = *(int *)(boltcrate_pvars + 0x90) =
+            select_point_index_by_distance(&moby->pos, path, 0.0f);
         placed = 0;
-        if (0 < ((MineGroupView *)data)->child_count)
+        if (0 < ((MineGroupView *)boltcrate_pvars)->child_count)
             do {
                 follower = *(int *)(current + 0x78);
                 *(int *)(follower + 0xa0) = (int)moby;
                 qcopy((void *)(current + 0x10), position);
                 qcopy((void *)(follower + 0x80), position);
                 qcopy((void *)(follower + 0x70), position);
-                ((MineSegmentView *)follower)->segment = first;
-                ((MineSegmentView *)follower)->next_segment = first + 1;
+                ((MineSegmentView *)follower)->segment = child_placement_segment_index;
+                ((MineSegmentView *)follower)->next_segment = child_placement_segment_index + 1;
                 if (get_next_moby_in_group(&current, current, 1, 0)) {
-                    int child_count = *(int *)(data + 0x78);
+                    int child_count = *(int *)(boltcrate_pvars + 0x78);
                     if (placed < child_count - 1) {
-                        debug_print(D_L07_00211580, placed + 1, *(int *)(data + 0x74), child_count);
+                        debug_print(D_L07_00211580,
+                                    placed + 1,
+                                    *(int *)(boltcrate_pvars + 0x74),
+                                    child_count);
                     } else if (placed == child_count - 1) {
-                        debug_print(
-                            mine_group_extra_mines_message, *(int *)(data + 0x74), child_count);
+                        debug_print(mine_group_extra_mines_message,
+                                    *(int *)(boltcrate_pvars + 0x74),
+                                    child_count);
                     }
-                    *(int *)(data + 0x78) = placed + 1;
+                    *(int *)(boltcrate_pvars + 0x78) = placed + 1;
                     break;
                 }
-                sample_path(path, position, &first, (float *)&next, *(float *)(data + 0x80), 1);
+                sample_path(path,
+                            position,
+                            &child_placement_segment_index,
+                            (float *)&child_placement_segment_distance,
+                            *(float *)(boltcrate_pvars + 0x80),
+                            1);
                 placed++;
-            } while (placed < *(int *)(data + 0x78));
-        if (!*(unsigned char *)(data + 0x94)) {
+            } while (placed < *(int *)(boltcrate_pvars + 0x78));
+        if (!*(unsigned char *)(boltcrate_pvars + 0x94)) {
             moby->collision = 0;
             moby->flags &= 0xefff;
         }
-        if (!*(unsigned char *)(data + 0x95))
+        if (!*(unsigned char *)(boltcrate_pvars + 0x95))
             moby->flags |= 1;
         moby->state = 1;
         break;
     }
     case ADVANCE_PATH_CHILDREN: {
         int cursor = 0;
-        get_first_moby_in_group(&cursor, ((MineGroupView *)data)->group, 1, 0);
-        for (i = 0; i < *(int *)(data + 0x78); i++) {
+        get_first_moby_in_group(&cursor, ((MineGroupView *)boltcrate_pvars)->group, 1, 0);
+        for (i = 0; i < *(int *)(boltcrate_pvars + 0x78); i++) {
             child = *(int *)(cursor + 0x78);
             {
                 float segment_distance =
                     fast_vec_dist((char *)child + 0x80, path + 0x10 + *(int *)(child + 0x90) * 16);
-                float step = *(float *)(data + 0x7c) * frame_time;
+                float step = *(float *)(boltcrate_pvars + 0x7c) * frame_time;
                 distance = segment_distance;
                 sample_path(
                     path, (char *)child + 0x80, (int *)((char *)child + 0x90), &distance, step, 1);
@@ -345,11 +355,11 @@ void update_mine_group(struct Moby *moby) {
             *(int *)(child + 0x94) = *(int *)(child + 0x90) + 1;
             if (cursor == 0 || *(unsigned char *)(cursor + 0x20) == 0xfe ||
                 *(unsigned char *)(cursor + 0x20) == 0xfd) {
-                if (*(int *)(data + 0x84) != -1) {
+                if (*(int *)(boltcrate_pvars + 0x84) != -1) {
                     fast_vec_sub((char *)child + 0x60, (char *)child + 0x80, (char *)cursor + 0x10);
                     qcopy((void *)(cursor + 0x10), (void *)(child + 0x80));
                     if (fast_dec_timer((int *)(child + 0x98)) &&
-                        *(int *)(child + 0x90) == *(int *)(data + 0x90))
+                        *(int *)(child + 0x90) == *(int *)(boltcrate_pvars + 0x90))
                         reset_moby_from_class_defaults((struct Moby *)cursor);
                 }
             }

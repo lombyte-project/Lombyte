@@ -4,8 +4,8 @@ extern void SysbitFlush(void *value, int count) __asm__("_sysbitFlush");
 
 int SysbitMarker(void *value) __asm__("_sysbitMarker");
 
-int SysbitMarker(void *value) {
-    int result = peek_bits(value, 1);
-    SysbitFlush(value, 1);
-    return result;
+int SysbitMarker(void *bitstream) {
+    int marker_bit = peek_bits(bitstream, 1);
+    SysbitFlush(bitstream, 1);
+    return marker_bit;
 }

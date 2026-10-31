@@ -35,7 +35,7 @@ typedef union {
 extern s8 *
 _dtoa_r(struct _reent *ptr, f64 _d, s32 mode, s32 ndigits, s32 *decpt, s32 *sign, s8 **rve);
 
-static s8 *cvt(struct _reent *data,
+static s8 *cvt(struct _reent *reentrancy_state,
                f64            value,
                s32            ndigits,
                s32            flags,
@@ -63,7 +63,7 @@ static s8 *cvt(struct _reent *data,
     } else {
         *sign = '\000';
     }
-    digits = _dtoa_r(data, value, mode, ndigits, decpt, &dsgn, &rve);
+    digits = _dtoa_r(reentrancy_state, value, mode, ndigits, decpt, &dsgn, &rve);
     if ((ch != 'g' && ch != 'G') || (flags & ALT)) {
         bp = digits + ndigits;
         if (ch == 'f') {

@@ -36,7 +36,7 @@ extern s32 sample_path(LevelPath *, void *, f32 *, s32 *, s32, f32) __asm__("FUN
 
 void water_current_update(struct Moby *self) __asm__("FUN_L01_002f3120");
 
-void water_current_update(struct Moby *self) {
+void water_current_update(struct Moby *water_current_moby) {
     PathCarrierVars *water_current_vars;
     LevelPath       *path;
     Vec4             nearest;
@@ -52,7 +52,7 @@ void water_current_update(struct Moby *self) {
     f32              cap;
     s32              i;
 
-    water_current_vars = (PathCarrierVars *)self->pvars;
+    water_current_vars = (PathCarrierVars *)water_current_moby->pvars;
     if (water_current_vars == NULL || water_current_vars->path == -1) {
         return;
     }
@@ -64,7 +64,7 @@ void water_current_update(struct Moby *self) {
             path->points[i].f[3] = fast_vec_dist(&path->points[i], &path->points[i + 1]);
         }
         path->points[i].f[3] = fast_vec_dist(&path->points[i], &path->points[0]);
-        self->update_dist = 0xFF;
+        water_current_moby->update_dist = 0xFF;
     }
 
     if ((u32)(hero.state.control_mode - 0x11) >= 2 && hero.state.prev_control_mode != 0x11 &&

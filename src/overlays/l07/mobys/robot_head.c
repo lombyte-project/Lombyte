@@ -18,54 +18,54 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 /* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
 void robot_head_update(char *self) __asm__("FUN_L07_0031f5b0");
 
-void robot_head_update(char *self) {
+void robot_head_update(char *robot_head_moby) {
     enum {
         ROBOT_HEAD_INITIALIZE = 0,
         ROBOT_HEAD_WAIT_FOR_HIT = 1,
         ROBOT_HEAD_SPAWN_AND_REMOVE = 2
     };
     int   flag = 0;
-    char *hit_moby = find_moby_hit(self, 0x10000, 0);
-    switch (((unsigned char *)self)[0x20]) {
+    char *hit_moby = find_moby_hit(robot_head_moby, 0x10000, 0);
+    switch (((unsigned char *)robot_head_moby)[0x20]) {
     case ROBOT_HEAD_INITIALIZE:
-        self[0x20] = 1;
+        robot_head_moby[0x20] = 1;
         break;
     case ROBOT_HEAD_WAIT_FOR_HIT:
         if (hit_moby != 0 && MOBY(hit_moby)->scale > 0.0f) {
             flag = 1;
         }
         if (flag) {
-            self[0x20] = 2;
+            robot_head_moby[0x20] = 2;
         }
         break;
     case ROBOT_HEAD_SPAWN_AND_REMOVE: {
         char *spawned_moby;
-        allocate_voice_for_target_entry(0, 0, (int)self);
-        spawn_proximity_gated_bolts(self);
-        FUN_L00_00263fd8(self,
+        allocate_voice_for_target_entry(0, 0, (int)robot_head_moby);
+        spawn_proximity_gated_bolts(robot_head_moby);
+        FUN_L00_00263fd8(robot_head_moby,
                          0x68e,
-                         self + 0x10,
-                         self + 0x40,
+                         robot_head_moby + 0x10,
+                         robot_head_moby + 0x40,
                          0,
                          0,
                          0.0f,
                          D_L07_0015F580,
                          D_L07_0015F580,
                          D_L07_0015F580);
-        FUN_L00_00263fd8(self,
+        FUN_L00_00263fd8(robot_head_moby,
                          0x68f,
-                         self + 0x10,
-                         self + 0x40,
+                         robot_head_moby + 0x10,
+                         robot_head_moby + 0x40,
                          0,
                          0,
                          0.0f,
                          D_L07_0015F580,
                          D_L07_0015F580,
                          D_L07_0015F580);
-        FUN_L00_00263fd8(self,
+        FUN_L00_00263fd8(robot_head_moby,
                          0x690,
-                         self + 0x10,
-                         self + 0x40,
+                         robot_head_moby + 0x10,
+                         robot_head_moby + 0x40,
                          0,
                          0,
                          0.0f,
@@ -76,12 +76,12 @@ void robot_head_update(char *self) {
         if (spawned_moby != 0) {
             spawned_moby[0x31] = 1;
             MOBY(spawned_moby)->draw_dist = 0xFF;
-            qcopy(spawned_moby + 0x10, self + 0x10);
-            qcopy(spawned_moby + 0x40, self + 0x40);
-            MOBY(spawned_moby)->spawn_frame = *(long *)(self + 0x38);
+            qcopy(spawned_moby + 0x10, robot_head_moby + 0x10);
+            qcopy(spawned_moby + 0x40, robot_head_moby + 0x40);
+            MOBY(spawned_moby)->spawn_frame = *(long *)(robot_head_moby + 0x38);
             update_entity(spawned_moby);
         }
-        mark_moby_for_removal(self);
+        mark_moby_for_removal(robot_head_moby);
         break;
     }
     }

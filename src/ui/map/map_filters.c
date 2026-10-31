@@ -481,11 +481,11 @@ int map_filter_l08_2(int   reveal_test_selector,
    separate FUN_002075e8, which no caller uses. */
 int map_filter_l08_3(int frame, float unused0, float unused1, float value) __asm__("func_00207580");
 
-int map_filter_l08_3(int frame, float unused0, float unused1, float value) {
+int map_filter_l08_3(int frame, float unused0, float unused1, float reveal_test_value) {
     if (frame < 0xE0) {
-        return (value >= 42.0f && value <= 43.0f) ? 1 : 0;
+        return (reveal_test_value >= 42.0f && reveal_test_value <= 43.0f) ? 1 : 0;
     }
-    return (value >= 39.0f) ? 1 : 0;
+    return (reveal_test_value >= 39.0f) ? 1 : 0;
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00207E28). */

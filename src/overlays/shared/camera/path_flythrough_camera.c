@@ -123,7 +123,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
         if (i < *(int *)path) {
             f32 *stop_fov = fov;
             s16 *stop_seg = stops->seg;
-            int  next;
+            int  next_path_point_index;
             do {
                 int offset = i * 16;
                 f32 angle = *(f32 *)(path + offset + 0x1C);
@@ -136,16 +136,17 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
                     stop_fov++;
                     stop_seg++;
                 }
-                next = i + 1;
-                length = fast_vec_dist(&((Vec4f *)(path + 0x10))[i],
-                                       &((Vec4f *)(path + 0x10))[next % *(int *)path]);
+                next_path_point_index = i + 1;
+                length =
+                    fast_vec_dist(&((Vec4f *)(path + 0x10))[i],
+                                  &((Vec4f *)(path + 0x10))[next_path_point_index % *(int *)path]);
                 {
                     char *point = path + i * 16;
                     *(f32 *)(point + 0x1C) = length;
                 }
                 if (i < *(int *)path - 1)
                     run->path_length += length;
-                i = next;
+                i = next_path_point_index;
             } while (i < *(int *)path);
         }
     }

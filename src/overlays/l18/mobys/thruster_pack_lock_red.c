@@ -56,14 +56,14 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         STATE_WAIT_FOR_DEPRESSION_TRIGGER = 4,
         STATE_SETTLE_DEPRESSED_HEIGHT = 5
     };
-    char *data = (char *)moby->pvars;
+    char *thruster_pack_lock_red_private_vars = (char *)moby->pvars;
     int   index;
 
     switch (moby->state) {
     case STATE_INITIALIZE:
-        *(float *)(data + 0x64) = moby->pos.z;
-        *(unsigned short *)(data + 0x3E) |= 8;
-        if (*(int *)(data + 0x60) != 0) {
+        *(float *)(thruster_pack_lock_red_private_vars + 0x64) = moby->pos.z;
+        *(unsigned short *)(thruster_pack_lock_red_private_vars + 0x3E) |= 8;
+        if (*(int *)(thruster_pack_lock_red_private_vars + 0x60) != 0) {
             moby->state = 1;
             moby->scale = *(float *)((char *)moby->pclass + 0x24) *
                           l18_thruster_pack_lock_red_scale_multiplier;
@@ -74,8 +74,8 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
     case STATE_APPROACH_CONFIGURED_HEIGHT:
     case STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT:
         advance_accelerated_scalar(&moby->pos.z,
-                                   (float *)(data + 0x68),
-                                   *(float *)(data + 0x64) +
+                                   (float *)(thruster_pack_lock_red_private_vars + 0x68),
+                                   *(float *)(thruster_pack_lock_red_private_vars + 0x64) +
                                        l18_thruster_pack_lock_red_approach_height_offset,
                                    frame_time_sq * 20.0f,
                                    frame_time_sq * 40.0f,
@@ -84,8 +84,8 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
     case STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER:
         advance_accelerated_scalar(
             &moby->pos.z,
-            (float *)(data + 0x68),
-            *(float *)(data + 0x64) +
+            (float *)(thruster_pack_lock_red_private_vars + 0x68),
+            *(float *)(thruster_pack_lock_red_private_vars + 0x64) +
                 l18_thruster_pack_lock_red_grounded_trigger_wait_height_offset,
             frame_time_sq * 5.0f,
             frame_time_sq * 10.0f,
@@ -93,16 +93,18 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
             moby->state = 3;
             allocate_voice_for_target_entry(0, 0, (int)moby);
-            index = *(int *)(data + 0x70);
+            index = *(int *)(thruster_pack_lock_red_private_vars + 0x70);
             if (index != -1) {
-                unsigned char *entry = (unsigned char *)((char *)&voice_pool) + index * 0x70;
-                if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
+                unsigned char *voice_slot_record =
+                    (unsigned char *)((char *)&voice_pool) + index * 0x70;
+                if (*(struct Moby **)(voice_slot_record + 0x88) == moby &&
+                    voice_slot_record[0x74] != 0)
                     release_voice_slot(index);
             }
-            *(int *)(data + 0x70) = -1;
+            *(int *)(thruster_pack_lock_red_private_vars + 0x70) = -1;
         } else if (hero.state.current != 0x72) {
             enqueue_callback_list_1_overlay(draw_pulsing_timer_hud, moby);
-            if (fast_dec_timer((int *)(data + 0x6C)) != 0)
+            if (fast_dec_timer((int *)(thruster_pack_lock_red_private_vars + 0x6C)) != 0)
                 D_L18_00162390 = 1;
         }
         break;
@@ -138,7 +140,9 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         }
         break;
     case STATE_SETTLE_DEPRESSED_HEIGHT:
-        if (approach_value((float *)&moby->pos.z, *(float *)(data + 0x64) - 1.5f, 0.15f) != 0.0f)
+        if (approach_value((float *)&moby->pos.z,
+                           *(float *)(thruster_pack_lock_red_private_vars + 0x64) - 1.5f,
+                           0.15f) != 0.0f)
             return;
         moby->state = 6;
         break;
@@ -151,14 +155,14 @@ s32        allocate_voice_for_group_entry(s32 arg0, s32 arg1, s32 arg2) __asm__(
 
 void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) __asm__("FUN_L18_002d7f68");
 
-void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) {
-    char *data = (char *)moby->pvars;
+void request_thruster_pack_lock_red_wait(struct Moby *moby, int wait_duration_frames) {
+    char *red_lock_vars = (char *)moby->pvars;
     if (moby->state != 2) {
         moby->state = 2;
-        *(int *)(data + 0x6C) = value;
+        *(int *)(red_lock_vars + 0x6C) = wait_duration_frames;
     }
-    if (!voice_is_playing(moby, *(int *)(data + 0x70))) {
-        *(int *)(data + 0x70) = allocate_voice_for_group_entry(0x12, 0, moby);
+    if (!voice_is_playing(moby, *(int *)(red_lock_vars + 0x70))) {
+        *(int *)(red_lock_vars + 0x70) = allocate_voice_for_group_entry(0x12, 0, moby);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D93C0), where it is exact; names translated to the US level program. */
@@ -166,11 +170,11 @@ void request_thruster_pack_lock_red_wait(struct Moby *moby, int value) {
 void end_thruster_pack_lock_red_wait(struct Moby *moby) __asm__("FUN_L18_002d7fd0");
 
 void end_thruster_pack_lock_red_wait(struct Moby *moby) {
-    int *data = (int *)moby->pvars;
+    int *red_lock_private_vars = (int *)moby->pvars;
     if (moby->state == 2) {
         int voice_slot_index;
         moby->state = 3;
-        voice_slot_index = data[0x70 / 4];
+        voice_slot_index = red_lock_private_vars[0x70 / 4];
         if (voice_slot_index != -1) {
             unsigned char *voice_slot_entry =
                 (unsigned char *)((char *)&voice_pool) + voice_slot_index * 0x70;
@@ -178,7 +182,7 @@ void end_thruster_pack_lock_red_wait(struct Moby *moby) {
                 release_voice_slot(voice_slot_index);
             }
         }
-        data[0x70 / 4] = -1;
+        red_lock_private_vars[0x70 / 4] = -1;
     }
 }
 
@@ -186,12 +190,12 @@ void end_thruster_pack_lock_red_wait(struct Moby *moby) {
 int poll_moby_state_and_rearm(struct Moby *moby) __asm__("FUN_L18_002d8050");
 
 int poll_moby_state_and_rearm(struct Moby *moby) {
-    int *data = (int *)moby->pvars;
+    int *moby_private_vars = (int *)moby->pvars;
     if (moby->state == 3) {
         moby->state = 1;
         return 1;
     }
-    if (moby->state == 2 && data[0x6C / 4] == 0) {
+    if (moby->state == 2 && moby_private_vars[0x6C / 4] == 0) {
         return -1;
     }
     return 0;
@@ -215,7 +219,7 @@ void draw_pulsing_timer_hud(struct Moby *moby) __asm__("FUN_L18_002d8098");
 
 void draw_pulsing_timer_hud(struct Moby *moby) {
     char  timer_text[8];
-    char *data = (char *)moby->pvars;
+    char *timer_state = (char *)moby->pvars;
     float color_blend_factor;
     int   col;
 
@@ -233,14 +237,15 @@ void draw_pulsing_timer_hud(struct Moby *moby) {
     }
     col = fast_tween_color(timer_color_dim, timer_color_bright, color_blend_factor);
     timer_text[0] = 0x30;
-    timer_text[1] = *(int *)(data + 0x6c) / scale_game_frames(0xE10) + 0x30;
+    timer_text[1] = *(int *)(timer_state + 0x6c) / scale_game_frames(0xE10) + 0x30;
     timer_text[2] = 0x3A;
     timer_text[3] =
-        *(int *)(data + 0x6c) % scale_game_frames(0xE10) / scale_game_frames(0x258) + 0x30;
+        *(int *)(timer_state + 0x6c) % scale_game_frames(0xE10) / scale_game_frames(0x258) + 0x30;
     timer_text[4] =
-        *(int *)(data + 0x6c) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
+        *(int *)(timer_state + 0x6c) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
     timer_text[5] = 0x3A;
-    timer_text[6] = *(int *)(data + 0x6c) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
+    timer_text[6] =
+        *(int *)(timer_state + 0x6c) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
     timer_text[7] = truncate_float_to_s32((float)random_integer_below(10)) + 0x30;
     font_print_center_large(timer_text_x, timer_text_y, col, (int)timer_text, 8);
 }

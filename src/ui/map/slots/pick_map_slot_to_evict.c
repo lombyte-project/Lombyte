@@ -9,7 +9,7 @@ s32 pick_map_slot_to_evict(s32 unused_arg0, s32 unused_arg1) __asm__("FUN_002052
 
 s32 pick_map_slot_to_evict(s32 unused_arg0, s32 unused_arg1) {
     s64 max;
-    s32 base;
+    s32 selected_level_lookup_result;
     s64 delta;
     s32 best;
     s32 i;
@@ -26,8 +26,8 @@ s32 pick_map_slot_to_evict(s32 unused_arg0, s32 unused_arg1) {
             }
         }
     }
-    base = find_id_in_terminated_table(level_map_selection.level);
-    if (base == -1) {
+    selected_level_lookup_result = find_id_in_terminated_table(level_map_selection.level);
+    if (selected_level_lookup_result == -1) {
         return 1;
     }
     for (i = 0; i < 5; i++) {
@@ -36,7 +36,8 @@ s32 pick_map_slot_to_evict(s32 unused_arg0, s32 unused_arg1) {
             if (slot_id == -1) {
                 return i;
             }
-            delta = SubtractIntegerWithClamp(find_id_in_terminated_table(slot_id & 0xFF) - base);
+            delta = SubtractIntegerWithClamp(find_id_in_terminated_table(slot_id & 0xFF) -
+                                             selected_level_lookup_result);
             if (max < delta) {
                 max = delta;
                 best = i;

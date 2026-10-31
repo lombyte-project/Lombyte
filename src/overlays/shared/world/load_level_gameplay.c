@@ -923,7 +923,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         int   n2;
         int   count = 0;
         int   n;
-        char *next;
+        char *next_moby_record;
         int   i;
 
         n = *(int *)p;
@@ -943,7 +943,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             unsigned char vis = 0xFE;
             int           skip = 0;
 
-            next = p + ((*(int *)p >> 2) << 2);
+            next_moby_record = p + ((*(int *)p >> 2) << 2);
             p += 4;
             mission = *(int *)p;
             p += 4;
@@ -1083,7 +1083,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 }
                 count++;
             }
-            p = next;
+            p = next_moby_record;
         }
         D_L00_0015FFDC = moby_table + count;
         D_L00_0015FFDC->f20 = 0xFF;
@@ -1804,7 +1804,7 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
     Load244110 *ld = &D_L00_00173E00_244110;
     s32        *core_header = ld->f4;
     s32        *level_file_base = D_0015EE48.file;
-    char       *base;
+    char       *decompressed_level_asset_base;
     s32         used;
     char       *sound_reference_cursor;
     char       *free;
@@ -1836,7 +1836,7 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
 
     if (full)
         load_hud_banks();
-    base = ld->f14;
+    decompressed_level_asset_base = ld->f14;
     if (full) {
         fast_mem_copy(
             core_header, (char *)(level_file_base[4] + (s32)level_file_base), level_file_base[5]);
@@ -1847,8 +1847,9 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
                               (char *)core_header + core_header[1]);
         saved_sound_bank_handle = sound_bank_handle;
         flush_cache(0);
-        used = fast_decompress((char *)(level_file_base[0x14] + (s32)level_file_base), base);
-        D_L00_0015F40C = (s32)(base + core_header[0x18]);
+        used = fast_decompress((char *)(level_file_base[0x14] + (s32)level_file_base),
+                               decompressed_level_asset_base);
+        D_L00_0015F40C = (s32)(decompressed_level_asset_base + core_header[0x18]);
 
         level_texture_128x128_descriptor[0] =
             GS_TEX0((gs_texture_allocation_base + core_header[0x24]) >> 8,
@@ -1925,19 +1926,22 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
                 D_L00_0015F40C + shrub_texture_refs[shrub_texture_ref_index].offset +
                 (log2dim(shrub_texture_refs[shrub_texture_ref_index].kind) << 28);
 
-        initialize_tfrag_render_data(base + core_header[2], (char *)core_header + core_header[0xD]);
+        initialize_tfrag_render_data(decompressed_level_asset_base + core_header[2],
+                                     (char *)core_header + core_header[0xD]);
         if (core_header[3])
-            D_L00_0015F600_244110 = base + core_header[3];
+            D_L00_0015F600_244110 = decompressed_level_asset_base + core_header[3];
         else
             D_L00_0015F600_244110 = 0;
         if (core_header[4])
-            relocate_sky_definition(base + core_header[4]);
+            relocate_sky_definition(decompressed_level_asset_base + core_header[4]);
         else
             D_L00_0016051C = 0;
-        resolve_level_asset_block_pointers(base + core_header[5]);
+        resolve_level_asset_block_pointers(decompressed_level_asset_base + core_header[5]);
         for (i = 0, class_entry_cursor = (char *)core_header + core_header[7]; i < core_header[6];
              i++, class_entry_cursor += 0x20)
-            register_moby_class(*(s32 *)class_entry_cursor ? base + *(s32 *)class_entry_cursor : 0,
+            register_moby_class(*(s32 *)class_entry_cursor
+                                    ? decompressed_level_asset_base + *(s32 *)class_entry_cursor
+                                    : 0,
                                 (char *)core_header + core_header[0xF],
                                 class_entry_cursor + 0x10,
                                 *(s32 *)(class_entry_cursor + 4));
@@ -1946,7 +1950,8 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
              sq < D_L00_00197300[0]->seq_count;
              sq++, sequence_offset_cursor += 4) {
             if (*(s32 *)sequence_offset_cursor) {
-                D_L00_00197300[0]->seqs[sq] = base + *(s32 *)sequence_offset_cursor;
+                D_L00_00197300[0]->seqs[sq] =
+                    decompressed_level_asset_base + *(s32 *)sequence_offset_cursor;
                 relocate_asset_entry_pointers(D_L00_00197300[0], sq);
             }
         }
@@ -1959,17 +1964,18 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
             moby_reference_class_ids[moby_class_reference_index] =
                 *(s32 *)(moby_class_reference_cursor + 4);
             moby_reference_data_bases[moby_class_reference_index] =
-                base + *(s32 *)moby_class_reference_cursor;
+                decompressed_level_asset_base + *(s32 *)moby_class_reference_cursor;
             D_L00_001AFC80[moby_class_reference_index] = *(s32 *)(moby_class_reference_cursor + 8);
             {
-                s32 o = D_L00_00197BC0[*(s32 *)(moby_class_reference_cursor + 4)] * 32 + 0x10;
+                s32 moby_texture_slot_map_offset =
+                    D_L00_00197BC0[*(s32 *)(moby_class_reference_cursor + 4)] * 32 + 0x10;
                 qcopy(&l00_moby_reference_texture_slot_maps[moby_class_reference_index],
-                      (char *)core_header + core_header[7] + o);
+                      (char *)core_header + core_header[7] + moby_texture_slot_map_offset);
             }
         }
         for (i = 0, class_entry_cursor = (char *)core_header + core_header[9]; i < core_header[8];
              i++, class_entry_cursor += 0x20)
-            register_object_render_class(base + *(s32 *)class_entry_cursor,
+            register_object_render_class(decompressed_level_asset_base + *(s32 *)class_entry_cursor,
                                          (char *)core_header + core_header[0x11],
                                          class_entry_cursor + 0x10,
                                          *(s32 *)(class_entry_cursor + 4));
@@ -1977,22 +1983,22 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         for (i = 0, class_entry_cursor = (char *)core_header + core_header[0xB];
              i < core_header[0xA];
              i++, class_entry_cursor += 0x30)
-            register_shrub_render_class(base + *(s32 *)class_entry_cursor,
+            register_shrub_render_class(decompressed_level_asset_base + *(s32 *)class_entry_cursor,
                                         (char *)core_header + core_header[0x13],
                                         class_entry_cursor + 0x10,
                                         class_entry_cursor + 0x20,
                                         *(s32 *)(class_entry_cursor + 4));
-        effect_texture_data_base = base + core_header[0x1A];
+        effect_texture_data_base = decompressed_level_asset_base + core_header[0x1A];
         unpack_point_records((char *)core_header + core_header[0x17], core_header[0x16]);
         if (core_header[0x28]) {
-            relocate_counted_pointer_table(base + core_header[0x28]);
+            relocate_counted_pointer_table(decompressed_level_asset_base + core_header[0x28]);
         } else {
             D_L00_0015F438 = 0;
             D_L00_0015F43C = 0;
             D_L00_0015F440 = 0;
         }
         if (core_header[0x29]) {
-            load_two_int_two_float_header(base + core_header[0x29]);
+            load_two_int_two_float_header(decompressed_level_asset_base + core_header[0x29]);
         } else {
             D_L00_0015FC98 = 0;
             D_L00_0015FC9C = 0;
@@ -2001,11 +2007,11 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
             D_L00_0015FCA8 = 0;
         }
         if (core_header[0x2A])
-            D_L00_0015F604 = base + core_header[0x2A];
+            D_L00_0015F604 = decompressed_level_asset_base + core_header[0x2A];
         else
             D_L00_0015F604 = 0;
         {
-            char *x1 = base + core_header[0x19];
+            char *x1 = decompressed_level_asset_base + core_header[0x19];
             char *x2 = (char *)core_header + core_header[0x15];
             parse_particle_textures(
                 (char *)core_header + core_header[0x1B], x1, x2, core_header[0x14]);
@@ -2013,7 +2019,7 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
 
         sound_table_base = (char *)core_header + core_header[0x1C];
         span = (Span244110 *)sound_table_base;
-        free = (char *)((u32)(base + used + 0x3F) & ~0x3F);
+        free = (char *)((u32)(decompressed_level_asset_base + used + 0x3F) & ~0x3F);
         sound_slot_count = span->count;
         D_L00_0015F5F4 = (Slot244110 *)free;
         D_L00_0015F5F0 = sound_slot_count;

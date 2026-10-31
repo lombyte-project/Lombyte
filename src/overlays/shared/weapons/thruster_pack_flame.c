@@ -609,7 +609,7 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) __asm__("FUN_L00_002
 void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     Quad          pk;
     Vec4A_2b3628  mtx[4];
-    Vec4A_2b3628  out[2];
+    Vec4A_2b3628  child_joint_positions[2];
     Ids           ids;
     Vec4A_2b3628  up;
     Vec4A_2b3628  beam_quad_transform[4];
@@ -619,8 +619,8 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     Vec4A_2b3628  billboard_up_axis;
     Vec4A_2b3628  billboard_origin;
     Vec4A_2b3628  ribbon_vertex_position;
-    Data_2b3628  *data = (Data_2b3628 *)beam_moby->pvars;
-    Child_2b3628 *child = data->child;
+    Data_2b3628  *beam_effect_vars = (Data_2b3628 *)beam_moby->pvars;
+    Child_2b3628 *child = beam_effect_vars->child;
     int           i;
 
     if (child == 0 || child->cls != 0x260) {
@@ -629,16 +629,16 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     pk.tag[2] = 0xFF9000000260;
     pk.tag[3] = 0x8000000048;
     pk.tag[0] = 0;
-    if (data->f4 != 0) {
+    if (beam_effect_vars->f4 != 0) {
         ids = D_L00_00161488;
-        transform_scaled_vertex_batch(child, 2, &ids, out);
+        transform_scaled_vertex_batch(child, 2, &ids, child_joint_positions);
     } else {
         ids = D_L00_00161490;
-        transform_scaled_vertex_batch(child, 2, &ids, out);
+        transform_scaled_vertex_batch(child, 2, &ids, child_joint_positions);
     }
     *(Q_2b3628 *)&up = 0;
     up.y = 1.0f;
-    fast_vec_sub(&mtx[2], &out[0], &out[1]);
+    fast_vec_sub(&mtx[2], &child_joint_positions[0], &child_joint_positions[1]);
     fast_vec_normalize(&mtx[2], &mtx[2], 1.0f);
     mtx[2].w = 0.0f;
     fast_vec_cross(&mtx[0], &up, &mtx[2]);
@@ -646,7 +646,7 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     mtx[0].w = 0.0f;
     fast_vec_cross(&mtx[1], &mtx[2], &mtx[0]);
     mtx[1].w = 0.0f;
-    qcopy(&mtx[3], &out[1]);
+    qcopy(&mtx[3], &child_joint_positions[1]);
     mtx[3].w = 1.0f;
     qcopy(&beam_moby->rot_row0, &mtx[0]);
     qcopy(&beam_moby->rot_row1, &mtx[1]);
@@ -662,10 +662,10 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     for (i = 0; i < 4; i++) {
         pk.col[i] = 0x80808080;
         if (i == 0 || i == 2) {
-            fast_vec_scale(pk.pos[i], D_L00_001DA9E0[i], data->f2C);
+            fast_vec_scale(pk.pos[i], D_L00_001DA9E0[i], beam_effect_vars->f2C);
         } else {
             float *v = pk.pos[i];
-            fast_vec_scale(v, D_L00_001DA9E0[i], data->f2C);
+            fast_vec_scale(v, D_L00_001DA9E0[i], beam_effect_vars->f2C);
             v[2] -= random_float_between(0.0f, 0.1f);
         }
         pk.uv[i][0] = D_L00_001DAA60[i][0];
@@ -674,10 +674,10 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     draw_geometry_quad(&pk, beam_quad_transform, 0);
     for (i = 0; i < 4; i++) {
         if (i == 0 || i == 2) {
-            fast_vec_scale(pk.pos[i], D_L00_001DAA20[i], data->f2C);
+            fast_vec_scale(pk.pos[i], D_L00_001DAA20[i], beam_effect_vars->f2C);
         } else {
             float *v = pk.pos[i];
-            fast_vec_scale(v, D_L00_001DAA20[i], data->f2C);
+            fast_vec_scale(v, D_L00_001DAA20[i], beam_effect_vars->f2C);
             v[2] -= random_float_between(0.0f, 0.1f);
         }
     }
@@ -703,7 +703,7 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     vu1_add_g_sregister(0x4A, 0);
     font_queue_vu_state();
     for (i = 0; i < 0xC4; i++) {
-        fast_vec_scale(&ribbon_vertex_position, D_L00_001D9470[i], data->f20);
+        fast_vec_scale(&ribbon_vertex_position, D_L00_001D9470[i], beam_effect_vars->f20);
         transform_vector(&ribbon_vertex_position, &ribbon_vertex_position, mtx);
         D_L00_001DAA80[i].x = ribbon_vertex_position.x;
         D_L00_001DAA80[i].y = ribbon_vertex_position.y;

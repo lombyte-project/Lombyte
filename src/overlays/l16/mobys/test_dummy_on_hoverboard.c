@@ -35,8 +35,11 @@ void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby,
                                      int                        index,
                                      void                      *out) __asm__("FUN_L16_002cf9d0");
 
-void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby, int index, void *out) {
-    qcopy(out, moby->data->vectors + index * 16 + 16);
+void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby,
+                                     int                        index,
+
+                                     void *path_node_destination) {
+    qcopy(path_node_destination, moby->data->vectors + index * 16 + 16);
 }
 
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
@@ -100,7 +103,7 @@ void advance_hoverboard_dummy_path_node(char *patrol_moby) {
     heading = fast_arc_tan(target[0] - moby->position[0], target[1] - moby->position[1]);
     for (;;) {
         L16PatrolPath *path;
-        L16PatrolPath *base;
+        L16PatrolPath *base_patrol_path;
 
         copy_hoverboard_dummy_path_node(
             (Level16VendorVectorMoby_c *)moby, patrol_data->node, target);
@@ -112,13 +115,13 @@ void advance_hoverboard_dummy_path_node(char *patrol_moby) {
         }
         path = patrol_data->path;
         patrol_data->node = (patrol_data->node + 1) % path->count;
-        base = (L16PatrolPath *)D_L16_001B0930[patrol_data->base_path];
-        if (path != base) {
+        base_patrol_path = (L16PatrolPath *)D_L16_001B0930[patrol_data->base_path];
+        if (path != base_patrol_path) {
             /* At the last node of a branch: back to the base path, five nodes past its nearest one. */
             if (patrol_data->node == path->count - 1) {
-                patrol_data->path = base;
+                patrol_data->path = base_patrol_path;
                 patrol_data->node =
-                    select_point_index_by_distance(patrol_data->position, base, 0.0f);
+                    select_point_index_by_distance(patrol_data->position, base_patrol_path, 0.0f);
                 patrol_data->node =
                     offset_path_index((char *)patrol_data->path, patrol_data->node, 5, 1);
             }
@@ -143,25 +146,25 @@ void advance_hoverboard_dummy_path_node(char *patrol_moby) {
 void collect_hoverboard_dummy_boosts(struct Moby *moby) __asm__("FUN_L16_002cfc00");
 
 void collect_hoverboard_dummy_boosts(struct Moby *moby) {
-    char        *data = (char *)moby->pvars;
+    char        *moby_pvars = (char *)moby->pvars;
     struct Hero *hero_state = &hero;
     float        displacement_vector[4];
     char        *enumerated_moby;
     char        *group_candidate_moby;
-    char        *other;
+    char        *hero_hoverboard_moby;
     char        *od;
 
     if (hero_state->race_time_frames < scale_game_frames(0xB4)) {
         return;
     }
-    if (!fast_dec_timer((int *)(data + 0x2DC))) {
+    if (!fast_dec_timer((int *)(moby_pvars + 0x2DC))) {
         return;
     }
-    other = ((char *)hero_state->hoverboard_moby);
-    if (!other) {
+    hero_hoverboard_moby = ((char *)hero_state->hoverboard_moby);
+    if (!hero_hoverboard_moby) {
         return;
     }
-    od = *(char **)(other + 0x78);
+    od = *(char **)(hero_hoverboard_moby + 0x78);
     if (*(int *)(od + 0x44) != -1) {
         get_first_moby_in_group((int *)&enumerated_moby, *(int *)(od + 0x44), 0, 0);
         while (enumerated_moby) {
@@ -169,7 +172,7 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
                 float adjusted_position[4];
                 float m[16];
                 char *candidate_moby = enumerated_moby;
-                qcopy(adjusted_position, data + 0x260);
+                qcopy(adjusted_position, moby_pvars + 0x260);
                 adjusted_position[2] += 0.8f;
                 fast_vec_sub(displacement_vector, candidate_moby + 0x10, adjusted_position);
                 if (!(8.0f < fast_vec_length(displacement_vector))) {
@@ -179,8 +182,8 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
                     if (absolute_float(displacement_vector[0]) < 0.5f &&
                         absolute_float(displacement_vector[1]) < 2.5f &&
                         absolute_float(displacement_vector[2]) < 2.5f) {
-                        *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
-                        *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
+                        *(unsigned short *)(moby_pvars + 0x2F6) += scale_game_frames(0x78);
+                        *(int *)(moby_pvars + 0x2DC) = scale_game_frames(0x3C);
                     }
                 }
             }
@@ -192,7 +195,7 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
         while (group_candidate_moby) {
             if (MOBY(group_candidate_moby)->oclass == 0x474) {
                 float m[16];
-                fast_vec_sub(displacement_vector, group_candidate_moby + 0x10, data + 0x260);
+                fast_vec_sub(displacement_vector, group_candidate_moby + 0x10, moby_pvars + 0x260);
                 if (!(8.0f < fast_vec_length(displacement_vector))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, group_candidate_moby + 0xC0);
@@ -200,8 +203,8 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
                     if (absolute_float(displacement_vector[0]) < 2.8f &&
                         absolute_float(displacement_vector[1]) < 1.4f &&
                         absolute_float(displacement_vector[2]) < 0.5f) {
-                        *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
-                        *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
+                        *(unsigned short *)(moby_pvars + 0x2F6) += scale_game_frames(0x78);
+                        *(int *)(moby_pvars + 0x2DC) = scale_game_frames(0x3C);
                     }
                 }
             }
@@ -213,10 +216,10 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
 void prepare_hoverboard_dummy_path_jump(struct Moby *moby) __asm__("FUN_L16_002cff48");
 
 void prepare_hoverboard_dummy_path_jump(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    if (*(float *)(data + 0x2C8) <= 0.0f) {
-        int   path_node_index = *(short *)(data + 0x2F4);
-        char *tab = *(char **)(data + 0x2C0);
+    char *hoverboard_dummy_path_jump_data = (char *)moby->pvars;
+    if (*(float *)(hoverboard_dummy_path_jump_data + 0x2C8) <= 0.0f) {
+        int   path_node_index = *(short *)(hoverboard_dummy_path_jump_data + 0x2F4);
+        char *tab = *(char **)(hoverboard_dummy_path_jump_data + 0x2C0);
         int   path_node_byte_offset = path_node_index * 16;
         if (*(float *)(tab + path_node_byte_offset + 0x1C) == 1.0f) {
             while (1) {
@@ -224,12 +227,14 @@ void prepare_hoverboard_dummy_path_jump(struct Moby *moby) {
                 if (*(float *)(tab + path_node_byte_offset + 0x1C) == 2.0f)
                     break;
                 path_node_index = offset_path_index(tab, path_node_index, 1, 1);
-                tab = *(char **)(data + 0x2C0);
+                tab = *(char **)(hoverboard_dummy_path_jump_data + 0x2C0);
                 path_node_byte_offset = path_node_index * 16;
             }
-            *(short *)(data + 0x2F0) = path_node_index;
-            qcopy(data + 0x270, *(char **)(data + 0x2C0) + (short)path_node_index * 16 + 0x10);
-            *(int *)(data + 0x2E4) = 1;
+            *(short *)(hoverboard_dummy_path_jump_data + 0x2F0) = path_node_index;
+            qcopy(hoverboard_dummy_path_jump_data + 0x270,
+                  *(char **)(hoverboard_dummy_path_jump_data + 0x2C0) +
+                      (short)path_node_index * 16 + 0x10);
+            *(int *)(hoverboard_dummy_path_jump_data + 0x2E4) = 1;
         }
     }
 }
@@ -296,13 +301,13 @@ void update_hoverboard_dummy_jump_animation_and_pitch(L16LeapMoby_u *leap_moby) 
     L16LeapData_u *leap_data = leap_moby->data;
     pitch = 0.0f;
     if (leap_data->timer == 0) {
-        int   next;
+        int   next_path_node_byte_offset;
         float distance;
-        next = offset_path_index(leap_data->path, leap_data->node, 1, 1) * 16;
+        next_path_node_byte_offset = offset_path_index(leap_data->path, leap_data->node, 1, 1) * 16;
         distance = vector_distance_xy(leap_data->path + (leap_data->node * 16 + 0x10),
-                                      leap_data->path + (next + 0x10));
+                                      leap_data->path + (next_path_node_byte_offset + 0x10));
         pitch = fast_arc_tan(distance,
-                             *(float *)(leap_data->path + next + 0x18) -
+                             *(float *)(leap_data->path + next_path_node_byte_offset + 0x18) -
                                  ((L16LeapPath *)leap_data->path)->points[leap_data->node][2]);
     }
     spring_angle(&leap_moby->pitch,
@@ -516,7 +521,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
         dust[4];
     char *hoverboard_dummy_data = ((char *)MOBY(moby)->pvars);
     char *hero_base;
-    int   i, nearby_moby_count, next;
+    int   i, nearby_moby_count, next_jump_path_node_index;
     /* One mask for both collision calls. Held in a local it is one more instruction when GCSE sizes its
        expression table, and that size orders the stack slots of the cached addresses (sp+0x90..0xC4):
        with the literal at both calls every one of those slots is rotated by three. */
@@ -654,10 +659,12 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
                 while (i < *(short *)(hoverboard_dummy_data + 0x2F0)) {
                     char *path;
 
-                    next = offset_path_index(*(char **)(hoverboard_dummy_data + 0x2C0), i, 1, 1);
+                    next_jump_path_node_index =
+                        offset_path_index(*(char **)(hoverboard_dummy_data + 0x2C0), i, 1, 1);
                     path = *(char **)(hoverboard_dummy_data + 0x2C0);
-                    distance += vector_distance_xy(path + (i * 16 + 16), path + (next * 16 + 16));
-                    i = next;
+                    distance += vector_distance_xy(path + (i * 16 + 16),
+                                                   path + (next_jump_path_node_index * 16 + 16));
+                    i = next_jump_path_node_index;
                 }
                 {
                     short last = *(short *)(hoverboard_dummy_data + 0x2F0);

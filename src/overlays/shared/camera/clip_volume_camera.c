@@ -77,26 +77,26 @@ void smooth_transform_orientation_toward_hero(char *transform_state) __asm__("FU
 void smooth_transform_orientation_toward_hero(char *transform_state) {
     float  position[4] __attribute__((aligned(16)));
     float  direction[4] __attribute__((aligned(16)));
-    char  *data = *(char **)(transform_state + 0x70);
-    float *height = (float *)(data + 0x10);
-    char  *result;
+    char  *orientation_spring_state = *(char **)(transform_state + 0x70);
+    float *height = (float *)(orientation_spring_state + 0x10);
+    char  *saved_direction;
     float  angle, rotation_scale;
     qcopy(position, hero.motion.pos.f);
     position[2] += height[19];
-    result = transform_state + 0x40;
+    saved_direction = transform_state + 0x40;
     fast_vec_sub(direction, position, transform_state + 0x30);
     fast_vec_normalize(direction, direction, 1.0f);
     angle = fast_arc_sin(fast_vec_dot(direction, transform_state));
-    rotation_scale = rope_spring_turn(data,
+    rotation_scale = rope_spring_turn(orientation_spring_state,
                                       0.0f,
                                       1.57079637f - angle,
-                                      *(float *)(data + 4),
-                                      *(float *)(data + 8),
-                                      *(float *)(data + 12));
+                                      *(float *)(orientation_spring_state + 4),
+                                      *(float *)(orientation_spring_state + 8),
+                                      *(float *)(orientation_spring_state + 12));
     rotate_vector_by_scaled_angle_between_vectors(
-        rotation_scale, (float *)transform_state, (float *)result, direction, 1);
-    fast_vec_normalize(result, transform_state, 1.0f);
-    qcopy(transform_state, result);
+        rotation_scale, (float *)transform_state, (float *)saved_direction, direction, 1);
+    fast_vec_normalize(saved_direction, transform_state, 1.0f);
+    qcopy(transform_state, saved_direction);
     fast_vec_cross(transform_state + 0x10, transform_state, transform_basis_reference_vector);
     fast_vec_normalize(transform_state + 0x10, transform_state + 0x10, 1.0f);
     fast_vec_cross(transform_state + 0x20, transform_state + 0x10, transform_state);
@@ -106,8 +106,9 @@ int evaluate_clip_volume_candidate(char *candidate_object,
                                    char *comparison_object) __asm__("FUN_L03_002e8870");
 
 int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_object) {
-    char *entry = (char *)(D_L03_0015EF50 + (*(short *)(candidate_object + 0x84) << 5));
-    char *sub = *(char **)(entry + 0x1C);
+    char *candidate_level_table_entry =
+        (char *)(D_L03_0015EF50 + (*(short *)(candidate_object + 0x84) << 5));
+    char *sub = *(char **)(candidate_level_table_entry + 0x1C);
     char *global_state_base;
     int   five;
     if (*(int *)(candidate_object + 0x74) != 4)
@@ -134,8 +135,8 @@ int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_obje
 void set_transform_state_three_when_outside_clip_volume(char *moby) __asm__("FUN_L03_002e8980");
 
 void set_transform_state_three_when_outside_clip_volume(char *moby) {
-    char *entry = (char *)(D_L03_0015EF50 + (*(short *)(moby + 0x84) << 5));
-    char *sub = *(char **)(entry + 0x1C);
+    char *level_table_entry = (char *)(D_L03_0015EF50 + (*(short *)(moby + 0x84) << 5));
+    char *sub = *(char **)(level_table_entry + 0x1C);
     if (*(int *)(moby + 0x74) == 4) {
         if (is_point_inside_clip_volume(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) == 0) {
             *(short *)(moby + 0x7E) = 3;

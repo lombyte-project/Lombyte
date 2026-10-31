@@ -6,15 +6,15 @@
 
 /* libmpeg motion compensation: queues the forward/backward reference
    fetch of one macroblock (luma and chroma) for the IPU/DMA stage. */
-extern MpegMcFunc D_00132E30[];
-extern MpegMcFunc D_00132E50[];
+extern MpegMcFunc mpeg_luma_mc_functions[] __asm__("D_00132E30");
+extern MpegMcFunc mpeg_chroma_mc_functions[] __asm__("D_00132E50");
 
-void _getRef0(struct MpegDecoder  *d,
+void _getRef0(struct MpegDecoder  *decoder,
               struct MpegRefImage *ref,
               int                  sfield,
               int                  dfield,
               int                  yofs,
-              int                  h,
+              int                  luma_height,
               int                  bx,
               int                  by,
               int                  dx,
@@ -25,15 +25,15 @@ void _getRef0(struct MpegDecoder  *d,
     struct MpegMcFetch *fl;
     struct MpegMcFetch *fc;
     u8                 *mc;
-    int                 n, x, y, mbx, mby, ly, lx, v, base, code, mb;
-    int                 cmvx, cmvy, ch, cmbx, cmby;
-    int                 xh, yh, cyo, o0, o1;
-    u8                 *data;
+    int fetch_index, x, y, mbx, mby, ly, lx, first_span_rows, fetch_scratch_base, code, mb;
+    int cmvx, cmvy, ch, cmbx, cmby;
+    int xh, yh, cyo, luma_first_span_offset, luma_second_span_offset;
+    u8 *data;
 
-    n = d->mb_buf[d->mb_buf_index].fetch_count;
-    mc = d->mc_work;
-    fl = &d->mb_buf[d->mb_buf_index].luma[n];
-    fc = &d->mb_buf[d->mb_buf_index].chroma[n];
+    fetch_index = decoder->mb_buf[decoder->mb_buf_index].fetch_count;
+    mc = decoder->mc_work;
+    fl = &decoder->mb_buf[decoder->mb_buf_index].luma[fetch_index];
+    fc = &decoder->mb_buf[decoder->mb_buf_index].chroma[fetch_index];
 
     x = (dx >> 1) + bx;
     if (fieldpred) {
@@ -50,35 +50,35 @@ void _getRef0(struct MpegDecoder  *d,
     yh = dy & 1;
     xh = dx & 1;
     if (yh) {
-        if (ly + (h << fieldpred) >= 16) {
-            v = (16 >> fieldpred) - (ly >> fieldpred) - 1;
-            fl->n0 = v;
-            fl->n1 = h - v;
+        if (ly + (luma_height << fieldpred) >= 16) {
+            first_span_rows = (16 >> fieldpred) - (ly >> fieldpred) - 1;
+            fl->n0 = first_span_rows;
+            fl->n1 = luma_height - first_span_rows;
         } else {
-            fl->n0 = h;
+            fl->n0 = luma_height;
             fl->n1 = 0;
         }
     } else {
-        if (ly + (h << fieldpred) >= 17) {
-            v = (16 >> fieldpred) - (ly >> fieldpred);
-            fl->n0 = v;
-            fl->n1 = h - v;
+        if (ly + (luma_height << fieldpred) >= 17) {
+            first_span_rows = (16 >> fieldpred) - (ly >> fieldpred);
+            fl->n0 = first_span_rows;
+            fl->n1 = luma_height - first_span_rows;
         } else {
-            fl->n0 = h;
+            fl->n0 = luma_height;
             fl->n1 = 0;
         }
     }
-    base = d->mb_buf[d->mb_buf_index].spr_base + n * 0x600;
+    fetch_scratch_base = decoder->mb_buf[decoder->mb_buf_index].spr_base + fetch_index * 0x600;
     cmvx = dx / 2;
-    o0 = ly << 4;
-    fl->p0 = (u8 *)(base + o0);
-    o1 = o0 + 0x300;
-    fl->p1 = (u8 *)(base + o1);
+    luma_first_span_offset = ly << 4;
+    fl->p0 = (u8 *)(fetch_scratch_base + luma_first_span_offset);
+    luma_second_span_offset = luma_first_span_offset + 0x300;
+    fl->p1 = (u8 *)(fetch_scratch_base + luma_second_span_offset);
     fl->step = 16 << fieldpred;
     cmvy = dy / 2;
     code = (avg << 2) | (xh << 1) | yh;
 
-    ch = h >> 1;
+    ch = luma_height >> 1;
     x = (cmvx >> 1) + (bx >> 1);
     cyo = yofs >> 1;
     if (fieldpred) {
@@ -95,36 +95,40 @@ void _getRef0(struct MpegDecoder  *d,
     ly = y - (cmby << 3);
     if (yh) {
         if (ly + (ch << fieldpred) >= 8) {
-            v = (8 >> fieldpred) - (ly >> fieldpred) - 1;
-            fc->n0 = v;
-            fc->n1 = ch - v;
+            first_span_rows = (8 >> fieldpred) - (ly >> fieldpred) - 1;
+            fc->n0 = first_span_rows;
+            fc->n1 = ch - first_span_rows;
         } else {
             fc->n0 = ch;
             fc->n1 = 0;
         }
     } else {
         if (ly + (ch << fieldpred) >= 9) {
-            v = (8 >> fieldpred) - (ly >> fieldpred);
-            fc->n0 = v;
-            fc->n1 = ch - v;
+            first_span_rows = (8 >> fieldpred) - (ly >> fieldpred);
+            fc->n0 = first_span_rows;
+            fc->n1 = ch - first_span_rows;
         } else {
             fc->n0 = ch;
             fc->n1 = 0;
         }
     }
     fc->step = 8 << fieldpred;
-    d->mb_buf[d->mb_buf_index].luma_func[n] = D_00132E30[code];
+    decoder->mb_buf[decoder->mb_buf_index].luma_func[fetch_index] = mpeg_luma_mc_functions[code];
     data = ref->data;
     {
-        int c0 = (ly << 3) + 0x100;
-        int c1 = (ly << 3) + 0x400;
-        u8 *dst0 = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + base + c0);
-        u8 *dst1 = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + base + c1);
-        fc->p1 = dst1;
-        fc->p0 = dst0;
+        int chroma_first_span_offset = (ly << 3) + 0x100;
+        int chroma_second_span_offset = (ly << 3) + 0x400;
+        u8 *chroma_first_span_data = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 +
+                                            fetch_scratch_base + chroma_first_span_offset);
+        u8 *chroma_second_span_data = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 +
+                                             fetch_scratch_base + chroma_second_span_offset);
+        fc->p1 = chroma_second_span_data;
+        fc->p0 = chroma_first_span_data;
     }
-    d->mb_buf[d->mb_buf_index].luma_ref[n] = data + mb * 0x180;
-    d->mb_buf[d->mb_buf_index].chroma_ref[n] = data + (mb + ref->mb_height) * 0x180;
-    d->mb_buf[d->mb_buf_index].chroma_func[n] = D_00132E50[(avg << 2) | (xh << 1) | yh];
-    d->mb_buf[d->mb_buf_index].fetch_count++;
+    decoder->mb_buf[decoder->mb_buf_index].luma_ref[fetch_index] = data + mb * 0x180;
+    decoder->mb_buf[decoder->mb_buf_index].chroma_ref[fetch_index] =
+        data + (mb + ref->mb_height) * 0x180;
+    decoder->mb_buf[decoder->mb_buf_index].chroma_func[fetch_index] =
+        mpeg_chroma_mc_functions[(avg << 2) | (xh << 1) | yh];
+    decoder->mb_buf[decoder->mb_buf_index].fetch_count++;
 }

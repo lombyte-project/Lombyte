@@ -27,7 +27,7 @@ struct PreviewMoby *create_menu_preview_moby(s32 oclass) __asm__("FUN_00225490")
 
 struct PreviewMoby *create_menu_preview_moby(s32 oclass) {
     struct PreviewMoby *moby;
-    struct PreviewMoby *result;
+    struct PreviewMoby *preview_moby;
     u8                  unset = 0xFF;
     if (resident_class_slot_by_id[oclass] == unset)
         return 0;
@@ -44,9 +44,9 @@ struct PreviewMoby *create_menu_preview_moby(s32 oclass) {
                 moby->state_73 = 0x18;
             }
         }
-        result = moby;
+        preview_moby = moby;
     }
-    return result;
+    return preview_moby;
 }
 
 extern struct PreviewMoby *func_00225490(s32 oclass) __attribute__((alias("FUN_00225490")));
