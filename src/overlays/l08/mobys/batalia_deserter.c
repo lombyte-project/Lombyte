@@ -186,14 +186,14 @@ void batalia_deserter_update(WM *moby) {
         }
         deserter_data->f2C = 4.0f;
         deserter_data->p40 = (void *)batalia_deserter_name_text;
-        moby->state = 1;
+        moby->state = DESERTER_WAIT_FOR_PLAYER;
         if (deserter_data->i64 >= 0)
             initialize_npc_dialogue(moby, (char *)deserter_data + 0x20);
         break;
     case DESERTER_WAIT_FOR_PLAYER:
         if (vector_distance(moby->position, (char *)&D_0013E633_watch + 0xE9D) < 8.0f) {
             jet_clear_persistent(((unsigned char *)moby)[0xB0]);
-            moby->state = 2;
+            moby->state = DESERTER_UPDATE_DIALOGUE;
         }
         break;
     case DESERTER_UPDATE_DIALOGUE:
