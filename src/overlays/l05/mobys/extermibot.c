@@ -1104,7 +1104,7 @@ f32 push_point_from_path(s32   path_index,
 
 f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance) {
     PathVec      *point = input;
-    PathVec      *out = output;
+    PathVec      *adjusted_position_output = output;
     PathVec       difference;
     PathVec       scaled_difference;
     PathVec       working;
@@ -1112,7 +1112,7 @@ f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance
     PathVec       scaled_segment;
     PathVec       cross;
     PathVec       scaled_cross;
-    SegmentPath **entry;
+    SegmentPath **path_table_slot;
     s32           i;
     s32           found;
     f32           best = 512.0f;
@@ -1120,12 +1120,12 @@ f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance
     found = 0;
     qcopy_nc(&working, point);
     for (i = 0; i < ((SegmentPath *)l05_paths[path_index])->count - 1; i++) {
-        entry = ((SegmentPath **)&l05_paths[path_index]);
-        if ((*entry)->points[i].f[3] == 0.0f && (*entry)->points[i + 1].f[3] == 0.0f)
+        path_table_slot = ((SegmentPath **)&l05_paths[path_index]);
+        if ((*path_table_slot)->points[i].f[3] == 0.0f && (*path_table_slot)->points[i + 1].f[3] == 0.0f)
             continue;
-        func_001F9BF0_3054B0(&difference, &working, &(*entry)->points[i]);
+        func_001F9BF0_3054B0(&difference, &working, &(*path_table_slot)->points[i]);
         difference.i[2] = 0;
-        func_001F9BF0_3054B0(&segment, &(*entry)->points[i + 1], &(*entry)->points[i]);
+        func_001F9BF0_3054B0(&segment, &(*path_table_slot)->points[i + 1], &(*path_table_slot)->points[i]);
         segment.i[2] = 0;
         func_L00_001FF4B0_3054B0(&scaled_segment, &segment, 1.0f);
         func_001F9CA0_3054B0(&cross, &difference, &scaled_segment);
@@ -1144,7 +1144,7 @@ f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance
                     continue;
                 found = 1;
                 func_L00_001FF4B0_3054B0(&scaled_difference, &difference, distance);
-                func_001F9BD8_3054B0(&working, &scaled_difference, &(*entry)->points[i]);
+                func_001F9BD8_3054B0(&working, &scaled_difference, &(*path_table_slot)->points[i]);
                 working.f[2] = point->f[2];
             } else {
                 found = 1;
@@ -1152,12 +1152,12 @@ f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance
                 func_001F9BF0_3054B0(&scaled_difference, &difference, &scaled_cross);
                 func_L00_001FF4B0_3054B0(&scaled_difference, &scaled_difference, distance);
                 func_001F9BD8_3054B0(&scaled_difference, &scaled_difference, &scaled_cross);
-                func_001F9BD8_3054B0(&working, &scaled_difference, &(*entry)->points[i]);
+                func_001F9BD8_3054B0(&working, &scaled_difference, &(*path_table_slot)->points[i]);
                 working.f[2] = point->f[2];
             }
         }
     }
     if (found)
-        qcopy(out, &working);
+        qcopy(adjusted_position_output, &working);
     return best;
 }
