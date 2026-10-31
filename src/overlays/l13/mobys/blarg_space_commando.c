@@ -609,6 +609,11 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         GROUND_MATERIAL_KILLS_WALKER_WITH_EXPLOSION = 11,
         GROUND_MATERIAL_EXPLODES_WALKER = 13
     };
+    enum {
+        HIT_STATUS_SKIP_DAMAGE_PROCESSING = 1,
+        BLARG_SPACE_COMMANDO_KNOCKBACK = 0xF,
+        BLARG_SPACE_COMMANDO_DYING = 0x10
+    };
     struct WalkerVars_8d10 *blarg_space_commando_private_data =
         (struct WalkerVars_8d10 *)moby->pvars;
     char *hit;
@@ -631,7 +636,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
     hit = find_moby_hit(moby, 0x330000, 0);
     code = resolve_moby_hit_response(
         moby, hit, &blarg_space_commando_private_data->health, 0, &kind, &damage, 0, 4);
-    if (kind != 1 && moby->state != 0x10) {
+    if (kind != HIT_STATUS_SKIP_DAMAGE_PROCESSING && moby->state != BLARG_SPACE_COMMANDO_DYING) {
         if (hit != 0 && *(struct Moby **)(hit + 0x20) != 0 &&
             (*(struct Moby **)(hit + 0x20))->oclass == 0x4EE) {
             damage = 0.0f;
@@ -654,7 +659,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
         case 8:
         case 9:
         case 10:
-            moby->state = 0xF;
+            moby->state = BLARG_SPACE_COMMANDO_KNOCKBACK;
             blarg_space_commando_private_data->stun_timer = scale_game_frames(0x3C);
             blarg_space_commando_private_data->knock_up =
                 blarg_space_commando_stun_horizontal_knockback_speed * frame_time;
@@ -672,7 +677,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
             break;
         case HIT_RESULT_DEATH:
         case HIT_RESULT_DYING_KNOCKBACK:
-            moby->state = 0x10;
+            moby->state = BLARG_SPACE_COMMANDO_DYING;
             moby->flags &= ~0x1000;
             blarg_space_commando_private_data->knock_up =
                 blarg_space_commando_dying_horizontal_knockback_speed * frame_time;
@@ -756,7 +761,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
             mark_moby_for_removal(moby);
             return;
         default:
-            if (moby->state < 0xF) {
+            if (moby->state < BLARG_SPACE_COMMANDO_KNOCKBACK) {
                 if (fast_arc_tan(coll_hit_1638.normal_z,
                                  vector_length_xy(&coll_hit_1638.normal_x)) > 0.6981317f) {
                     fast_vec_normalize(&push, &coll_hit_1638.normal_x, 0.05f);
@@ -776,7 +781,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
             break;
         }
     } else {
-        if (moby->state < 0xF) {
+        if (moby->state < BLARG_SPACE_COMMANDO_KNOCKBACK) {
             blarg_space_commando_private_data->fall_speed -= frame_time_sq * 9.8f;
             moby->pos.z += blarg_space_commando_private_data->fall_speed;
         }
