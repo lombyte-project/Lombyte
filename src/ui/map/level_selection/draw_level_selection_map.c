@@ -78,7 +78,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
         }
         marker_x = level_map_markers[level_index].x;
         marker_y = level_map_markers[level_index].y;
-        if (pal_mode != 0) {
+        if (pal_mode != FALSE) {
             marker_y = marker_y * 0x1C0 / 0x1A0;
         }
         if (availability == 3 ||
