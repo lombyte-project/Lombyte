@@ -28,7 +28,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
         HATCH_WAIT_RESET_ANIMATION = 7
     };
     char *hatch_private_vars = (char *)moby->pvars;
-    if (hero.vehicle_mode == 2) {
+    if (hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK) {
         moby->collision = 0;
     } else {
         moby->collision = moby->pclass->collision;
@@ -36,45 +36,45 @@ void plasmabot_hatch_update(struct Moby *moby) {
     switch (moby->state) {
     case HATCH_WAIT_ACTIVATION:
         if (*(s32 *)hatch_private_vars != 0 && *(s16 *)(D_L14_00167500 + 0x86) == 0x14) {
-            moby->state = 1;
+            moby->state = HATCH_WAIT_ACTIVATION_DELAY;
             *(s32 *)(hatch_private_vars + 8) = scale_game_frames(*(s32 *)(hatch_private_vars + 4));
         }
         break;
     case HATCH_WAIT_ACTIVATION_DELAY:
         if (fast_dec_timer(hatch_private_vars + 8) != 0) {
-            moby->state = 2;
+            moby->state = HATCH_WAIT_ACTIVATION_ANIMATION;
             set_moby_animation(moby, 1, 0);
         }
         break;
     case HATCH_WAIT_ACTIVATION_ANIMATION:
         if ((moby->anim_flags & 2) != 0) {
-            moby->state = 3;
+            moby->state = HATCH_WAIT_ACTIVATION_GATE_CLEAR;
             set_moby_animation(moby, 2, 0);
         }
         break;
     case HATCH_WAIT_ACTIVATION_GATE_CLEAR:
         if (*(s16 *)(D_L14_00167500 + 0x86) != 0x14) {
             set_moby_animation(moby, 0, 0);
-            moby->state = 4;
+            moby->state = HATCH_IDLE_AFTER_ACTIVATION_GATE_CLEAR;
         }
         break;
     case HATCH_IDLE_AFTER_ACTIVATION_GATE_CLEAR:
         break;
     case HATCH_WAIT_ANIMATION_BEFORE_RESET_DELAY:
         if ((moby->anim_flags & 2) != 0) {
-            moby->state = 6;
+            moby->state = HATCH_WAIT_RESET_DELAY;
             set_moby_animation(moby, 2, 0);
         }
         break;
     case HATCH_WAIT_RESET_DELAY:
         if (fast_dec_timer(hatch_private_vars + 8) != 0) {
             set_moby_animation(moby, 3, 0);
-            moby->state = 7;
+            moby->state = HATCH_WAIT_RESET_ANIMATION;
         }
         break;
     case HATCH_WAIT_RESET_ANIMATION:
         if ((moby->anim_flags & 2) != 0) {
-            moby->state = 0;
+            moby->state = HATCH_WAIT_ACTIVATION;
             set_moby_animation(moby, 0, 0);
         }
         break;
