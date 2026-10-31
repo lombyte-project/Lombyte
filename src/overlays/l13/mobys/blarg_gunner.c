@@ -64,6 +64,9 @@ extern void copy_hero_moby_field_38(struct Moby *moby) __asm__("FUN_L00_0025d1b8
 struct Moby *spawn_blarg_turret_child(struct Moby *parent) __asm__("FUN_L13_002b4958");
 
 struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
+    enum {
+        BLARG_GUNNER_STATE_INITIALIZE = 0
+    };
     struct Moby *child_moby;
     Vars        *child_vars;
 
@@ -77,7 +80,7 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
         child_moby->draw_dist = child_vars->parent->draw_dist;
         child_moby->visible = 1;
         child_moby->flags |= 0x20;
-        child_moby->state = 0;
+        child_moby->state = BLARG_GUNNER_STATE_INITIALIZE;
         child_moby->command = 0;
         qcopy(&child_moby->pos, &child_vars->parent->pos);
         child_moby->scale = child_moby->pclass->scale * parent->scale / parent->pclass->scale;
