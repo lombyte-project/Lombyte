@@ -214,7 +214,7 @@ void handle_pause_input(void) {
         return;
     }
     area = current_level_index;
-    if (area == 15 && level_timer >= 8 && hero.vehicle_mode == 2 && HELD &&
+    if (area == 15 && level_timer >= 8 && hero.vehicle_mode == HERO_VEHICLE_MODE_GIANT_CLANK && HELD &&
         hero.state.current != 0x72) {
         if (D_L00_00166E00->h86 == 0x13)
             return;
