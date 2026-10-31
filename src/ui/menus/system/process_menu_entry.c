@@ -115,7 +115,7 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
     }
     menu_entry_context[5] = current_menu_entry->unk0;
     kind = current_menu_entry->unk8;
-    if (kind == 6) {
+    if (kind == MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET) {
         sfx = menu_bolt_threshold_thousands_separators;
         strcpy(SCRATCH, get_help_message_text(current_menu_entry->unk0));
         substring_match = FindSubstring(SCRATCH, help_text_integer_placeholder);
