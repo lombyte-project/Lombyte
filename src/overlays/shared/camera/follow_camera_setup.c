@@ -1311,7 +1311,7 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
                         accumulated_radial_adjustment_distance,
                         spd)) {
                     found = 1;
-                    if (hero_state->vehicle_mode != 2 &&
+                    if (hero_state->vehicle_mode != HERO_VEHICLE_MODE_GIANT_CLANK &&
                         absolute_float(D_0013CA40_lui[0]) > 0.05f) {
                         fast_vec_sub(position_delta, step, save);
                         fast_vec_normalize(position_delta, position_delta, 1.0f);
