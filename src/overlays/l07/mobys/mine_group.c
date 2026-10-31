@@ -356,7 +356,7 @@ void mine_group_update(struct Moby *moby) {
         }
         if (!boltcrate_pvars->unk95)
             moby->flags |= 1;
-        moby->state = 1;
+        moby->state = ADVANCE_PATH_CHILDREN;
         break;
     }
     case ADVANCE_PATH_CHILDREN: {
