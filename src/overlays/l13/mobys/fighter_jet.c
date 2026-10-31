@@ -1216,6 +1216,10 @@ extern void update_view_context(void) __asm__("FUN_001f2d98");
 void update_fighter_jet_flight(void *moby_arg, void *data_arg) __asm__("FUN_L13_002ba178");
 
 void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
+    enum {
+        FIGHTER_JET_STATE_MOUNT_PLAYER = 2,
+        FIGHTER_JET_STATE_STOP_DEATH_SOUNDS = 6
+    };
     FlightMoby *moby = moby_arg;
     FlightData *jet_flight_state = data_arg;
     FlightVec   old_pos;
@@ -1441,7 +1445,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
         camera.v.rot[2] = 0.65f;
         *(u128 *)camera_offsets[0] = *(u128 *)camera.v.pos;
         *(u128 *)camera_offsets[1] = *(u128 *)camera.v.rot;
-        if (moby->state == 2) {
+        if (moby->state == FIGHTER_JET_STATE_MOUNT_PLAYER) {
             jet_flight_state->camera_offset_x = camera_offsets[jet_flight_state->camera_mode][0];
             jet_flight_state->camera_offset_y = camera_offsets[jet_flight_state->camera_mode][1];
             jet_flight_state->camera_offset_z = camera_offsets[jet_flight_state->camera_mode][2];
@@ -1479,7 +1483,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
             fast_subtract_rotations(fast_add_rotations(jet_flight_state->pitch, 0.09817477f),
                                     jet_flight_state->steer_y * (frame_scale_gp * 0.012271847f));
         camera.v.rot[2] = jet_flight_state->yaw;
-        if (moby->state == 2) {
+        if (moby->state == FIGHTER_JET_STATE_MOUNT_PLAYER) {
             qcopy(&jet_flight_state->camera_roll, camera.v.rot);
         } else {
             spring_angle((char *)&jet_flight_state->camera_roll,
@@ -1574,7 +1578,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
                                         -1,
                                         0);
                         jet_flight_state->death_timer = scale_game_frames(240);
-                        moby->state = 6;
+                        moby->state = FIGHTER_JET_STATE_STOP_DEATH_SOUNDS;
                     }
                     jet_flight_state->hit_cooldown = scale_game_frames(10);
                 }
@@ -1600,7 +1604,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
                                 0);
                 moby->flags |= 0x41;
                 jet_flight_state->death_timer = scale_game_frames(240);
-                moby->state = 6;
+                moby->state = FIGHTER_JET_STATE_STOP_DEATH_SOUNDS;
             }
         }
     }
