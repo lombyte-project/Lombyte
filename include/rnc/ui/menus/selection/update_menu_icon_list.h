@@ -3,6 +3,8 @@
 
 #include "types.h"
 
-int update_menu_icon_list(char *) __asm__("FUN_00219e10");
+struct MenuScreen;
+
+int update_menu_icon_list(struct MenuScreen *) __asm__("FUN_00219e10");
 
 #endif /* LOMBYTE_RNC_UI_MENUS_SELECTION_UPDATE_MENU_ICON_LIST_H */

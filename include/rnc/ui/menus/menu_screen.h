@@ -96,7 +96,8 @@ struct MenuIconListData {
     u8               pad_44[0x4];
     struct MenuIcon *list; /* 0x48 */
     u8               pad_4C[0x10];
-    s32              first_y; /* 0x5C: y of the first icon, 0x260 per icon */
+    s32              first_y;     /* 0x5C: y of the first icon, 0x260 per icon */
+    s32              first_shown; /* 0x60: first icon in view, kept around cursor */
 };
 
 /* Save slot screen (saving_data_menu, saving_data_menu2, loading_data_menu,
@@ -458,7 +459,7 @@ struct MenuStreamScreen {
 struct MenuIconListScreen {
     struct MenuScreenHead   head;
     struct MenuIconListData icons;
-    u8                      pad_60[0x8];
+    u8                      pad_64[0x4];
 }; /* size 0x68 */
 
 /* Map screens: draw_map_screen, draw_map_screen_overlay, draw_map_screen_layers. */

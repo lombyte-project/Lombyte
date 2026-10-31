@@ -106,7 +106,11 @@ s32 draw_save_slot_list(SaveMenu *menu) {
                 draw_hud_sprite(get_icon_frame(0x754F, 0xF), 4, y, 0x10, 0x10, 0x80);
                 font_print_small(0x16, y, color, text, -1);
                 y += 0x10;
-                sprintf(text, save_slot_hex_triplet_format, slot->b16, slot->b15, slot->b17);
+                sprintf(text,
+                        save_slot_hex_triplet_format,
+                        slot->saved_at.month,
+                        slot->saved_at.day,
+                        slot->saved_at.year);
                 draw_hud_sprite(get_icon_frame(0xE99E, 2), 4, y, 0x10, 0x10, 0x80);
                 font_print_small(0x16, y, color, text, -1);
                 y += 0x10;

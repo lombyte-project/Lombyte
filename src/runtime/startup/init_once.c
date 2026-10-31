@@ -54,6 +54,18 @@ extern s32  vu0_load_micro_program() __asm__("func_002334D8");
 extern s32  vu1_init_chain() __asm__("func_002335D0");
 void        init_once(void) __asm__("FUN_00201650");
 
+/* The boot archive as decompress_wad unpacks it: the IRX modules to load,
+   each as an offset from the archive start and a size. */
+struct BootIrxModule {
+    u32 offset;
+    u32 size;
+};
+
+struct BootArchive {
+    u8                   pad_00[0x70];
+    struct BootIrxModule irx_modules[10]; /* 0x70 */
+};
+
 void init_once(void) {
     enum {
         SYSTEM_LANGUAGE_GAME_FALLBACK = 1,
@@ -62,12 +74,12 @@ void init_once(void) {
         SYSTEM_LANGUAGE_GAME_COLUMN_THREE = 4,
         SYSTEM_LANGUAGE_GAME_COLUMN_FIVE = 5
     };
-    u8   disc_sector_and_image_descriptor_buffer[0x800];
-    s32  lang;
-    u32  aligned_memory_base;
-    u32  decompressed_archive_base;
-    s32 *compressed_archive_buffer;
-    s32  flag;
+    u8                  disc_sector_and_image_descriptor_buffer[0x800];
+    s32                 lang;
+    u32                 aligned_memory_base;
+    struct BootArchive *boot_archive;
+    s32                *compressed_archive_buffer;
+    s32                 flag;
 
     reset_vif1_gif();
     sceDmaReset(1);
@@ -99,32 +111,32 @@ void init_once(void) {
     vu0_load_micro_program(vu0_micro_program);
     load_disc_sectors_into_global_buffer();
     aligned_memory_base = (u32)D_24135F & 0xFFFFC000;
-    decompressed_archive_base = aligned_memory_base + 0x2C0000;
+    boot_archive = (struct BootArchive *)(aligned_memory_base + 0x2C0000);
     compressed_archive_buffer = (s32 *)(D_1FF8000 - (disc_table.unk12C0.size << 0xB));
     wad_get_sectors(disc_table.unk12C0.sector, disc_table.unk12C0.size, compressed_archive_buffer);
     FlushCache(0);
-    decompress_wad(compressed_archive_buffer, decompressed_archive_base);
+    decompress_wad(compressed_archive_buffer, boot_archive);
     FlushCache(0);
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x70) + decompressed_archive_base,
-                    *(u32 *)(decompressed_archive_base + 0x74));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x78) + decompressed_archive_base,
-                    *(u32 *)(decompressed_archive_base + 0x7C));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x80) + decompressed_archive_base,
-                    *(u32 *)(decompressed_archive_base + 0x84));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x88) + decompressed_archive_base,
-                    *(u32 *)(decompressed_archive_base + 0x8C));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x90) + decompressed_archive_base,
-                    *(u32 *)(decompressed_archive_base + 0x94));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x98) + decompressed_archive_base,
-                    *(u32 *)(decompressed_archive_base + 0x9C));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0x98) + decompressed_archive_base,
-                    *(u32 *)(decompressed_archive_base + 0x9C));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0xA8) + decompressed_archive_base,
-                    *(u32 *)(decompressed_archive_base + 0xAC));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0xB0) + decompressed_archive_base,
-                    *(u32 *)(decompressed_archive_base + 0xB4));
-    load_irx_module(*(u32 *)(decompressed_archive_base + 0xA0) + decompressed_archive_base,
-                    *(u32 *)(decompressed_archive_base + 0xA4));
+    load_irx_module(boot_archive->irx_modules[0].offset + (u32)boot_archive,
+                    boot_archive->irx_modules[0].size);
+    load_irx_module(boot_archive->irx_modules[1].offset + (u32)boot_archive,
+                    boot_archive->irx_modules[1].size);
+    load_irx_module(boot_archive->irx_modules[2].offset + (u32)boot_archive,
+                    boot_archive->irx_modules[2].size);
+    load_irx_module(boot_archive->irx_modules[3].offset + (u32)boot_archive,
+                    boot_archive->irx_modules[3].size);
+    load_irx_module(boot_archive->irx_modules[4].offset + (u32)boot_archive,
+                    boot_archive->irx_modules[4].size);
+    load_irx_module(boot_archive->irx_modules[5].offset + (u32)boot_archive,
+                    boot_archive->irx_modules[5].size);
+    load_irx_module(boot_archive->irx_modules[5].offset + (u32)boot_archive,
+                    boot_archive->irx_modules[5].size);
+    load_irx_module(boot_archive->irx_modules[7].offset + (u32)boot_archive,
+                    boot_archive->irx_modules[7].size);
+    load_irx_module(boot_archive->irx_modules[8].offset + (u32)boot_archive,
+                    boot_archive->irx_modules[8].size);
+    load_irx_module(boot_archive->irx_modules[6].offset + (u32)boot_archive,
+                    boot_archive->irx_modules[6].size);
     DebugPrint(loaded_irx_modules_message);
     sceCdDiskReady(0);
     init_pads();

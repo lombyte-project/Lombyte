@@ -50,21 +50,17 @@ s32 saving_data_menu(struct MenuScreen *menu) {
                     mode_freeze_init(3, menu_system.current);
                     goto block_46;
                 }
-                *((s32 *)((((u8 *)&memory_card_state) +
-                           (memory_card_state.card[0].save_index * 0x1C)) +
-                          0x24)) = (s32)current_bolt_count;
-                *((s32 *)((((u8 *)&memory_card_state) +
-                           (memory_card_state.card[0].save_index * 0x1C)) +
-                          0x20)) = (s32)current_level_index;
-                *((s32 *)((((u8 *)&memory_card_state) +
-                           (memory_card_state.card[0].save_index * 0x1C)) +
-                          0x2C)) = (s32)D_0015EE24;
-                *((Unaligned64 *)((((u8 *)&memory_card_state) +
-                                   (memory_card_state.card[0].save_index * 0x1C)) +
-                                  0x30)) = D_0015EE98[0];
-                *((s32 *)((((u8 *)&memory_card_state) +
-                           (memory_card_state.card[0].save_index * 0x1C)) +
-                          0x28)) = (s32)alternate_animation_sequence;
+                memory_card_state.card[0].entries[memory_card_state.card[0].save_index].bolts =
+                    (s32)current_bolt_count;
+                memory_card_state.card[0].entries[memory_card_state.card[0].save_index].id =
+                    (s32)current_level_index;
+                memory_card_state.card[0].entries[memory_card_state.card[0].save_index].time =
+                    (s32)D_0015EE24;
+                *(Unaligned64 *)&memory_card_state.card[0]
+                     .entries[memory_card_state.card[0].save_index]
+                     .saved_at = D_0015EE98[0];
+                memory_card_state.card[0].entries[memory_card_state.card[0].save_index].count =
+                    (s32)alternate_animation_sequence;
                 goto block_13;
             }
             return 0;

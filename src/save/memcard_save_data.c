@@ -5,7 +5,6 @@
 #include "rnc/sdk/scf/sce_scf_get_local_timefrom_rtc.h"
 #include "rnc/sdk/storage/cdvd/scecdreadclock.h"
 
-extern char D_0013D290[];
 extern int  memcard_prepare_data(void *dst, int i, int *table) __asm__("func_0020AD78");
 extern void save_map_coverage(void *) __asm__("func_00207B08");
 extern char D_0015EE98[] MACRO_ADDR;
@@ -18,90 +17,80 @@ extern char D_00141EC0[];
 
 extern int D_0015EE24 MACRO_ADDR;
 extern int            alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
-/* memcard_save_data(slot, flags): starts the save (sceCdReadClock/sceScfGetLocalTimefromRTC
-   on D_0015EE98, copy_level_object_positions, save_map_coverage on the D_00141EC0 page for
-   D_0015ED84). With no valid card slot (D_0013D290+0xC8, its record's
-   +0x14) it returns whether `slot` is 0. Otherwise it ORs `slot` into the
-   pending mask (+0xFC); unless nothing is pending, a save is running
-   (+0xDC >= 3) or a result is waiting (+0xE4 >= 0), it stamps +0xD0 with
-   D_0015ED84 (temporarily switching D_0015ED84 to `flags` and setting that
-   level_visit_state byte), fills entry e[+0x14] (four globals and the 8-byte
-   name), serialises both tables (memcard_prepare_data), restores the byte and
-   D_0015ED84, and sets result 0xF. Returns whether the result is 0xF.
-   D_0015EE98 is MACRO_ADDR (retail rebuilds its address at each use), the
-   name field is reached from a `q + 0x30` base, and each block reads
-   D_0013D290 through its own `char *` local (retail keeps only the %hi). */
+/* D_0015EE98 is MACRO_ADDR (retail rebuilds its address at each use), the
+   clock is copied from a base taken before the entry index is scaled, and
+   each block reads memory_card_state through its own local (retail keeps
+   only the %hi). */
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
 extern s32 current_bolt_count_macro __asm__("D_0015ED98") MACRO_ADDR;
 
 int memcard_save_data(int slot, int flags) {
-    unsigned char saved;
+    unsigned char saved_visit_state;
 
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
     copy_level_object_positions();
     save_map_coverage(D_00141EC0 + (current_level_index << 11));
     {
-        char *memory_card_control = D_0013D290;
-        int   active = *(int *)(memory_card_control + 0xC0);
-        int   mask;
+        struct MemoryCardState *card_state = &memory_card_state;
+        int                     active = card_state->active_card;
+        int                     mask;
 
-        if (active == -1 || *(int *)(memory_card_control + active * 0xB8 + 0x14) < 0) {
+        if (active == -1 || card_state->card[active].save_index < 0) {
             return slot == 0;
         }
-        mask = *(int *)(memory_card_control + 0xF4) | slot;
-        *(int *)(memory_card_control + 0xF4) = mask;
+        mask = card_state->unkF4 | slot;
+        card_state->unkF4 = mask;
         if (mask == 0) {
             goto done;
         }
         if (slot == 0) {
             mode_freeze_flags |= 0x200;
         }
-        if (*(int *)(memory_card_control + 0xD4) >= 3) {
+        if (card_state->state >= 3) {
             goto done;
         }
-        if (*(int *)(memory_card_control + 0xDC) >= 0) {
+        if (card_state->pending_state >= 0) {
             goto done;
         }
-        *(int *)(memory_card_control + 0xC8) = current_level_index;
-        saved = 0;
+        card_state->record_index = current_level_index;
+        saved_visit_state = 0;
         if (flags >= 0) {
             current_level_index = flags;
-            saved = level_visit_state[flags];
-            if (saved == 0) {
+            saved_visit_state = level_visit_state[flags];
+            if (saved_visit_state == 0) {
                 level_visit_state[flags] = 1;
             }
         }
     }
     {
-        char *memory_card_state = D_0013D290;
-        char *names = memory_card_state + 0x30;
+        struct MemoryCardState     *card_state = &memory_card_state;
+        struct MemoryCardSaveClock *saved_clocks = &card_state->card[0].entries[0].saved_at;
 
-        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x24) =
+        card_state->card[0].entries[card_state->card[0].save_index].bolts =
             current_bolt_count_macro;
-        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x20) =
-            current_level_index;
-        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x2C) = D_0015EE24;
-        memcpy(names + *(int *)(memory_card_state + 0x14) * 0x1C, D_0015EE98, 8);
-        *(int *)(memory_card_state + *(int *)(memory_card_state + 0x14) * 0x1C + 0x28) =
+        card_state->card[0].entries[card_state->card[0].save_index].id = current_level_index;
+        card_state->card[0].entries[card_state->card[0].save_index].time = D_0015EE24;
+        memcpy((u8 *)saved_clocks +
+                   card_state->card[0].save_index * sizeof(struct MemoryCardSaveEntry),
+               D_0015EE98,
+               8);
+        card_state->card[0].entries[card_state->card[0].save_index].count =
             alternate_animation_sequence_macro;
         memcard_prepare_data(memcard_game_data_buffer, 0, mc_gamedata);
-        memcard_prepare_data(
-            memcard_level_data_buffer, *(int *)(memory_card_state + 0xC8), mc_leveldata);
+        memcard_prepare_data(memcard_level_data_buffer, card_state->record_index, mc_leveldata);
         if (flags >= 0) {
-            level_visit_state[current_level_index] = saved;
-            current_level_index = *(int *)(memory_card_state + 0xC8);
+            level_visit_state[current_level_index] = saved_visit_state;
+            current_level_index = card_state->record_index;
         }
-        if (*(int *)(memory_card_state + 0xDC) < 0) {
-            *(int *)(memory_card_state + 0xDC) = 0xF;
-            *(int *)(memory_card_state + 0xE0) = *(int *)(memory_card_state + 0xC0);
+        if (card_state->pending_state < 0) {
+            card_state->pending_state = 0xF;
+            card_state->pending_card = card_state->active_card;
         }
     }
-done: {
-    char *memory_card_status_base = D_0013D290;
-    return *(int *)(memory_card_status_base + 0xDC) == 0xF;
-}
+done:
+    return memory_card_state.pending_state == 0xF;
 }
 
 extern __typeof__(memcard_save_data) func_0020B178 __attribute__((alias("FUN_0020b178")));

@@ -66,15 +66,15 @@ s32 saving_data_menu2(struct MenuScreen *w) {
             mode_freeze_init(3, menu_system.current);
             return 0;
         }
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x24) =
+        memory_card_state.card[0].entries[memory_card_state.card[0].save_index].bolts =
             current_bolt_count;
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x20) =
+        memory_card_state.card[0].entries[memory_card_state.card[0].save_index].id =
             current_level_index;
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x2C) =
-            D_0015EE24;
-        *(Unaligned64 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C +
-                         0x30) = D_0015EE98[0];
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x28) =
+        memory_card_state.card[0].entries[memory_card_state.card[0].save_index].time = D_0015EE24;
+        *(Unaligned64 *)&memory_card_state.card[0]
+             .entries[memory_card_state.card[0].save_index]
+             .saved_at = D_0015EE98[0];
+        memory_card_state.card[0].entries[memory_card_state.card[0].save_index].count =
             alternate_animation_sequence;
         request_space_load(0);
         D_0013E05A[0] = 1;

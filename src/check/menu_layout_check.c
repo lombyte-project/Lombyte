@@ -67,6 +67,7 @@ CHECK(MenuScreen, grid_cells, data.grid.cells, 0x48);
 CHECK(MenuScreen, grid_right, data.grid.right, 0x58);
 CHECK(MenuScreen, icons_list, data.icons.list, 0x48);
 CHECK(MenuScreen, icons_first_y, data.icons.first_y, 0x5C);
+CHECK(MenuScreen, icons_first_shown, data.icons.first_shown, 0x60);
 CHECK(MenuScreen, save_slot, data.save.slot, 0x40);
 CHECK(MenuScreen, save_step, data.save.step, 0x4C);
 CHECK(MenuScreen, prompt_buffer, data.prompt.buffer, 0x54);
