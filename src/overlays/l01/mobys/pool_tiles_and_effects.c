@@ -281,7 +281,7 @@ void pool_tiles_and_effects_update(struct Moby *moby) {
     volumes = (s32 *)moby->pvars;
     switch (moby->state) {
     case POOL_INITIALIZE:
-        moby->state = 1;
+        moby->state = POOL_UPDATE_TILES_AND_EFFECTS;
         moby->update_dist = 0xFF;
         moby->pos.z = moby->pos.z + 0.5f;
         pool_init_tiles(pool_tiles, 21);
