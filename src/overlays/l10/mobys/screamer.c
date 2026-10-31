@@ -495,6 +495,9 @@ void activate_waiting_moby_group_members(struct Moby *moby) {
     enum {
         MOBY_GROUP_MEMBER_WAITING_FOR_ACTIVATION = 1
     };
+    enum {
+        MOBY_GROUP_MEMBER_ACTIVATE = 2
+    };
     short *group_entry;
     if (moby->group != 0xFF) {
         group_entry = moby_group_member_lists[moby->group];
@@ -505,7 +508,7 @@ void activate_waiting_moby_group_members(struct Moby *moby) {
                     (struct Moby *)((*(unsigned short *)group_entry & 0x7FFF) * 256 +
                                     (int)moby_array_base);
                 if (listed_entity->state == MOBY_GROUP_MEMBER_WAITING_FOR_ACTIVATION)
-                    listed_entity->state = 2;
+                    listed_entity->state = MOBY_GROUP_MEMBER_ACTIVATE;
             } while (*group_entry++ >= 0);
         }
     }
