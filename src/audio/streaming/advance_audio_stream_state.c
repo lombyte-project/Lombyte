@@ -34,10 +34,13 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
         AUDIO_STREAM_START_SECOND_READ = 2,
         AUDIO_STREAM_WAIT_SECOND_READ = 3
     };
+    enum {
+        CD_READ_STATE_IDLE = 0
+    };
 
     switch (stream->unk44) {
     case AUDIO_STREAM_START_FIRST_READ:
-        if (stream->unk48 == 0 || music_stream_state.read_state != 0) {
+        if (stream->unk48 == 0 || music_stream_state.read_state != CD_READ_STATE_IDLE) {
             break;
         }
         if (disc_table.unk2C8[game_language].size == 0) {
@@ -52,12 +55,12 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
         }
         break;
     case AUDIO_STREAM_WAIT_FIRST_READ:
-        if (music_stream_state.read_state == 0) {
+        if (music_stream_state.read_state == CD_READ_STATE_IDLE) {
             stream->unk44 = 2;
         }
         break;
     case AUDIO_STREAM_START_SECOND_READ:
-        if (stream->unk4C == 0 || music_stream_state.read_state != 0) {
+        if (stream->unk4C == 0 || music_stream_state.read_state != CD_READ_STATE_IDLE) {
             break;
         }
         if (disc_table.unk2F8[game_language].size == 0) {
@@ -72,7 +75,7 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
         }
         break;
     case AUDIO_STREAM_WAIT_SECOND_READ:
-        if (music_stream_state.read_state == 0) {
+        if (music_stream_state.read_state == CD_READ_STATE_IDLE) {
             stream->unk44 = 4;
         }
         break;
