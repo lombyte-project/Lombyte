@@ -155,13 +155,17 @@ extern s32 D_001403E0[];
 int get_hero_easing_moby_by_kind(int ease_kind) __asm__("FUN_L00_00205110");
 
 int get_hero_easing_moby_by_kind(int ease_kind) {
+    enum {
+        HERO_EASE_KIND_SLOT_THREE_SECONDARY_MOBY = 1,
+        HERO_EASE_KIND_SLOT_ZERO_PRIMARY_MOBY = 5
+    };
     if (ease_kind == 0 || ease_kind == 2 || ease_kind == 3 || ease_kind == 4) {
         return D_001413D0[0];
     }
-    if (ease_kind == 1) {
+    if (ease_kind == HERO_EASE_KIND_SLOT_THREE_SECONDARY_MOBY) {
         return hero_slot_three_secondary_moby[0];
     }
-    if (ease_kind == 5) {
+    if (ease_kind == HERO_EASE_KIND_SLOT_ZERO_PRIMARY_MOBY) {
         return D_001403E0[0];
     }
     return 0;
