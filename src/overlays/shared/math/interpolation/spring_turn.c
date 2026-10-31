@@ -321,7 +321,7 @@ int move_moby_with_step_collision(char *moby,
     Vs    raised_position;
     Vs    probe_end;
     Vs    scaled_displacement;
-    int   result = 0;
+    int   movement_collision_result_flags = 0;
     int   coll_flags = (flags * 2) & 0x20;
     char *movement_position = &MOBY(moby)->pos;
     int   i;
@@ -337,7 +337,7 @@ int move_moby_with_step_collision(char *moby,
         probe_end.a[2] += step_height;
         if (collision_line(&raised_position, &probe_end, coll_flags, (int)moby, 0)) {
             fast_vec_sub(movement_position, (char *)&D_94C8_60, &scaled_displacement);
-            result = 1;
+            movement_collision_result_flags = 1;
             MOBY(moby)->pos.z -= step_height;
         }
     }
@@ -346,7 +346,7 @@ int move_moby_with_step_collision(char *moby,
         raised_position.a[2] += step_height;
         if (func_L00_001F10E0_l(&raised_position, radius, coll_flags | 4, moby)) {
             qcopy(collision_position, &coll_hit_position);
-            result |= 1;
+            movement_collision_result_flags |= 1;
             MOBY(moby)->pos.z -= step_height;
         } else {
             break;
@@ -359,21 +359,21 @@ int move_moby_with_step_collision(char *moby,
     probe_end.a[2] = radius - 0.05f;
     if (collision_line(&raised_position, &probe_end, coll_flags | 2, (int)moby, 0)) {
         if (D_L00_00173E40[7] > 0) {
-            float g;
-            result |= 2;
-            g = fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48),
+            float ground_normal_angle_or_hit_height;
+            movement_collision_result_flags |= 2;
+            ground_normal_angle_or_hit_height = fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48),
                              vector_length_xy((char *)D_L00_00173E40 + 0x40));
-            if (g > 0.5f) {
-                result |= 4;
+            if (ground_normal_angle_or_hit_height > 0.5f) {
+                movement_collision_result_flags |= 4;
             }
-            g = *(float *)((char *)D_L00_00173E40 + 0x28);
-            if (radius < g) {
-                MOBY(moby)->pos.z += (g - radius) * 0.3f;
+            ground_normal_angle_or_hit_height = *(float *)((char *)D_L00_00173E40 + 0x28);
+            if (radius < ground_normal_angle_or_hit_height) {
+                MOBY(moby)->pos.z += (ground_normal_angle_or_hit_height - radius) * 0.3f;
             }
         }
     }
     fast_vec_sub(velocity, collision_position, &original_position);
-    return result;
+    return movement_collision_result_flags;
 }
 
 /* move_moby_with_step_collision as this caller passes it: the moby and velocity as ints. */
