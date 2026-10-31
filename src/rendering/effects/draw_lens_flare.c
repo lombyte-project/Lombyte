@@ -18,6 +18,10 @@
 void draw_lens_flare(void) __asm__("FUN_001edc50");
 
 void draw_lens_flare(void) {
+    enum {
+        LENS_FLARE_STATE_INACTIVE = 0,
+        LENS_FLARE_STATE_ACTIVE = 1
+    };
     f32 scr[4];
     f32 ctr[4];
     f32 screen_center_delta[4];
@@ -36,8 +40,8 @@ void draw_lens_flare(void) {
     s32 x;
     s32 y;
 
-    if (effect_ribbon.state != 1 || (effect_ribbon.moby->flags & 0x80)) {
-        effect_ribbon.state = 0;
+    if (effect_ribbon.state != LENS_FLARE_STATE_ACTIVE || (effect_ribbon.moby->flags & 0x80)) {
+        effect_ribbon.state = LENS_FLARE_STATE_INACTIVE;
         return;
     }
     if (effect_ribbon.intensity <= 0.0f) {
