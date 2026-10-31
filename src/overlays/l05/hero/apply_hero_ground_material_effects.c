@@ -172,6 +172,10 @@ void update_hero_ground_contact(void) {
     enum {
         GROUND_MATERIAL_SINK_TRIGGER = 0xD
     };
+    enum {
+        GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH = 3,
+        GROUND_MATERIAL_SINK_SURFACE_CONTACT_BYPASS = 0xB
+    };
     V shared_probe_endpoint, ground_probe_endpoint, ground_vector_scratch, side_probe_endpoint,
         unused_probe_vector, hit_normal_angles, normalized_hit_normal;
     f32 f;
@@ -239,7 +243,7 @@ void update_hero_ground_contact(void) {
             goto d1;
         }
     }
-    if (hero.ground_type == 3) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_SURFACE_PROBE_THROUGH) {
         hero.sink_surface_z = D_L05_00174268;
         ground_probe_endpoint.f[2] = D_L05_00174268 - 0.01f;
         if (collision_line(&ground_probe_endpoint, &shared_probe_endpoint, 4, (s32)hero.moby, 0) ==
@@ -247,7 +251,7 @@ void update_hero_ground_contact(void) {
             goto d1;
         }
     }
-    if (hero.ground_type == 0xB) {
+    if (hero.ground_type == GROUND_MATERIAL_SINK_SURFACE_CONTACT_BYPASS) {
         hero.sink_surface_z = D_L05_00174268;
         goto d1;
     }
