@@ -198,7 +198,7 @@ void countdown_sequence_update(unsigned char *moby) {
         ADVANCE_CAMERA_ALONG_PATH = 3,
         UPDATE_POST_PATH_TIMED_EVENTS = 4,
         RAMP_SHARED_VALUE_AFTER_DELAY = 5
-    };
+    } ; enum { DIALOGUE_PHASE_READY_TO_CONTINUE = 3};
     CountdownSequenceVars *moby_vars = (CountdownSequenceVars *)MOBY(moby)->pvars;
     float                  va[4] __attribute__((aligned(16)));
     float                  vc[4] __attribute__((aligned(16)));
@@ -234,7 +234,7 @@ void countdown_sequence_update(unsigned char *moby) {
         moby[0x20] = 3;
         moby_vars->unkB0 = 1;
         request_music_track(6, 9);
-        if (*(short *)dialogue_playback_phase == 3)
+        if (*(short *)dialogue_playback_phase == DIALOGUE_PHASE_READY_TO_CONTINUE)
             continue_audio_stream_if_ready();
         set_moby_list_state_17(moby_vars->unk10);
         set_moby_list_state_15(moby_vars->unk14);
@@ -305,7 +305,7 @@ void countdown_sequence_update(unsigned char *moby) {
         char *q;
         x = scale_game_frames(0x708);
         if (moby_vars->timer_B4 == x) {
-            if (*(short *)dialogue_playback_phase == 3)
+            if (*(short *)dialogue_playback_phase == DIALOGUE_PHASE_READY_TO_CONTINUE)
                 continue_audio_stream_if_ready();
         } else {
             x = scale_game_frames(900);
@@ -313,7 +313,7 @@ void countdown_sequence_update(unsigned char *moby) {
                 select_localized_moby_voice_line((struct Moby *)moby, 2);
             else {
                 x = scale_game_frames(300);
-                if (moby_vars->timer_B4 == x && *(short *)dialogue_playback_phase == 3)
+                if (moby_vars->timer_B4 == x && *(short *)dialogue_playback_phase == DIALOGUE_PHASE_READY_TO_CONTINUE)
                     continue_audio_stream_if_ready();
             }
         }
