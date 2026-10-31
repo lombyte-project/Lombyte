@@ -1191,16 +1191,20 @@ void request_batalia_cannon_mount(struct Moby *command_target_moby) {
 /* Puts the cannon's platform moby back in state 1, leaving with mode 3 (targets cleared, mode 1)
  * or 4 (cannon destroyed, mode 0); mode -1 respawns the hero instead. */
 void set_batalia_cannon_platform_mode(u8 *platform, s32 mode) {
+    enum {
+        CANNON_PLATFORM_CANNON_DESTROYED = 0,
+        CANNON_PLATFORM_TARGETS_CLEARED = 1
+    };
     u8 *payload;
 
     platform[0x20] = 1;
     payload = *(u8 **)(platform + 0x78);
     switch (mode) {
-    case 1:
+    case CANNON_PLATFORM_TARGETS_CLEARED:
         payload[8] = 1;
         *(s16 *)(payload + 0x36) = 3;
         break;
-    case 0:
+    case CANNON_PLATFORM_CANNON_DESTROYED:
         payload[8] = 1;
         *(s16 *)(payload + 0x36) = 4;
         break;
