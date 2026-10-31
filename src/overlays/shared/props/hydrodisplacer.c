@@ -151,11 +151,11 @@ void hydrodisplacer_update(Moby *moby) {
     switch (moby->state) {
     case HYDRODISPLACER_INITIALIZE:
         allocate_voice_for_target_entry(0, 0, moby);
-        moby->state = 1;
+        moby->state = HYDRODISPLACER_WAIT_FOR_ANIMATION_FLAG;
         break;
     case HYDRODISPLACER_WAIT_FOR_ANIMATION_FLAG:
         if (moby->anim_flags & 2) {
-            moby->state = 2;
+            moby->state = HYDRODISPLACER_WAIT_FOR_ACTIVATION;
         }
         break;
     case HYDRODISPLACER_WAIT_FOR_ACTIVATION:
@@ -171,7 +171,7 @@ void hydrodisplacer_update(Moby *moby) {
         if (func_L00_002E1790_2E0E50(moby) == 0 || (unsigned int)hero.state.control_mode >= 2) {
             break;
         }
-        moby->state = 3;
+        moby->state = HYDRODISPLACER_WAIT_FOR_HERO_FLAG;
         hero_set_state(0x38, 0);
         if (hero.hydro_tank_full != 0) {
             set_hero_animation(0x83, 0, func_001F9850_2E0E50(6));
@@ -205,7 +205,7 @@ void hydrodisplacer_update(Moby *moby) {
         }
         if (platform[1] != -1 && platform[2] != -1) {
             moby->command = 0;
-            moby->state = 4;
+            moby->state = HYDRODISPLACER_CAMERA_TRANSITION;
             hydrodisplacer_interaction_state->f10 = 0.0f;
             jet_mount(g_debug_camera.position, g_debug_camera.angles, 1, 0, 0);
             if (hero.hydro_tank_full != 0) {
@@ -217,7 +217,7 @@ void hydrodisplacer_update(Moby *moby) {
             }
             break;
         }
-        moby->state = 5;
+        moby->state = HYDRODISPLACER_WAIT_FOR_TIMER;
         hydrodisplacer_interaction_state->i0 =
             func_001FA898_2E0E50(scale_time(hydrodisplacer_tank_fill_time_macro));
         if (hero.hydro_tank_full == 0) {
@@ -311,7 +311,7 @@ void hydrodisplacer_update(Moby *moby) {
                 approach_value(&fade_level_macro, 0.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
             }
-            moby->state = 2;
+            moby->state = HYDRODISPLACER_WAIT_FOR_ACTIVATION;
             hero_set_state(0x3A, 0);
             if (hero.hydro_tank_full != 0) {
                 set_hero_animation(0x48, 0, func_001F9850_2E0E50(6));
@@ -327,7 +327,7 @@ void hydrodisplacer_update(Moby *moby) {
             break;
         }
         end_hydrodisplacer_interaction(moby);
-        moby->state = 2;
+        moby->state = HYDRODISPLACER_WAIT_FOR_ACTIVATION;
         break;
     }
 }
