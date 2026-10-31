@@ -204,9 +204,9 @@ void test_dummy_update(unsigned char *moby) {
             dummy_data->timer = scale_game_frames(30);
             dummy_data->node = 1;
             dummy_data->step = 1;
-            if (dummy_data->kind == 0) {
+            if (dummy_data->kind == TEST_DUMMY_KIND_THROWER) {
                 moby[0x20] = 3;
-            } else if (dummy_data->kind == 1) {
+            } else if (dummy_data->kind == TEST_DUMMY_KIND_PATH_MOVER) {
                 moby[0x20] = 5;
             } else {
                 moby[0x20] = 7;
