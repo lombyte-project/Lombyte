@@ -46,7 +46,7 @@ void cutscene_joint_trail_update(CutsceneJointTrailMoby *moby) {
     switch (moby->state) {
     case INITIALIZE_TRAIL_EFFECT:
         moby->update_dist = 0xFF;
-        moby->state = 1;
+        moby->state = UPDATE_TRAIL_EFFECT;
         break;
     case UPDATE_TRAIL_EFFECT:
         if (D_L18_0015F5C4 == 2) {
