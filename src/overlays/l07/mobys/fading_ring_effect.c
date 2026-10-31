@@ -42,7 +42,7 @@ unsigned char *spawn_fading_ring_effect(int   a,
                                         float f0,
                                         float f1,
                                         float f2,
-                                        float f3,
+                                        float spawn_speed,
                                         float f4) __asm__("FUN_L07_0030dbb0");
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F0D0), where it is exact; names translated to the US level program. */

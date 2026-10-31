@@ -220,18 +220,18 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void set_moby_animation_c(void *, s32, s32) __asm__("func_00212ED8");
 
 int advance_minibomber_along_path(struct Moby *moby,
-                                  char        *a1,
-                                  int          a2,
-                                  int          a3,
+                                  char        *path,
+                                  int          segment_index_address,
+                                  int          segment_distance_address,
                                   float       *v,
                                   float       *vel,
-                                  float        f12,
-                                  float        f13,
-                                  float        f14,
-                                  float        f15,
-                                  float        f16,
-                                  float        f17,
-                                  float        f18) __asm__("FUN_L14_002b5730");
+                                  float        path_step_distance,
+                                  float        position_error_gain,
+                                  float        position_velocity_damping,
+                                  float        position_snap_threshold_scale,
+                                  float        heading_error_gain,
+                                  float        heading_velocity_damping,
+                                  float        heading_velocity_limit) __asm__("FUN_L14_002b5730");
 
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 
@@ -814,13 +814,13 @@ int advance_minibomber_along_path(struct Moby *moby,
                                   int          segment_distance_address,
                                   float       *position_easing_velocity,
                                   float       *heading_easing_velocity,
-                                  float        f12,
-                                  float        f13,
-                                  float        f14,
-                                  float        f15,
-                                  float        f16,
-                                  float        f17,
-                                  float        f18) __asm__("FUN_L14_002b5730");
+                                  float        path_step_distance,
+                                  float        position_error_gain,
+                                  float        position_velocity_damping,
+                                  float        position_snap_threshold_scale,
+                                  float        heading_error_gain,
+                                  float        heading_velocity_damping,
+                                  float        heading_velocity_limit) __asm__("FUN_L14_002b5730");
 
 int advance_minibomber_along_path(struct Moby *moby,
                                   char        *path,

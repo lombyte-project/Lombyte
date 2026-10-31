@@ -112,7 +112,11 @@ char *spawn_asteroid_fragment(char *parent_asteroid,
     return moby;
 }
 
-char *spawn_asteroid_fragment(char *owner, char *pos, char *vec, int a3, float f) __asm__("FUN_L13_002e1140");
+char *spawn_asteroid_fragment(char *owner,
+                              char *pos,
+                              char *vec,
+                              int   remaining_split_count,
+                              float f) __asm__("FUN_L13_002e1140");
 
 extern char D_L13_00160680[] MACRO_ADDR;
 

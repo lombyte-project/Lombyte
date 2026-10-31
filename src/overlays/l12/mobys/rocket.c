@@ -31,7 +31,7 @@ char *spawn_rocket(char *initial_velocity,
                    int   owner,
                    int   seed,
                    float yaw,
-                   float f1,
+                   float nominal_speed,
                    float f2) __asm__("FUN_L12_002ecce8");
 
 char *spawn_rocket(char *initial_velocity,

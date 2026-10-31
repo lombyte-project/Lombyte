@@ -761,8 +761,8 @@ extern char D_0013C940[];
 
 int select_fighter_jet_target_and_draw_indicators(int   a,
                                                   char *p,
-                                                  char *a2,
-                                                  void *a3,
+                                                  char *radar_origin_position,
+                                                  void *radar_rotation,
                                                   float f0,
                                                   float f1,
                                                   float f2,

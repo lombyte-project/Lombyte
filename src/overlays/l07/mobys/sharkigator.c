@@ -314,7 +314,11 @@ int         update_sharkigator_horizontal_velocity_by_heading(char *moby,
                                                               float vmax,
                                                               float vmin) __asm__("FUN_L07_0030f1e0");
 void        handle_sharkigator_hit(struct Moby *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
-void advance_sharkigator_swim_movement(char *a, char *b, float f12, float f13, float f14) __asm__("FUN_L07_0030f0f8");
+void        advance_sharkigator_swim_movement(char *a,
+                                              char *b,
+                                              float acceleration_step,
+                                              float braking_step,
+                                              float maximum_speed) __asm__("FUN_L07_0030f0f8");
 void        handle_sharkigator_contact_attack(struct Moby *moby,
                                               char        *obj,
                                               int          state,
