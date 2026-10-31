@@ -402,6 +402,9 @@ void helicopter_update(struct Moby *moby) {
     enum {
         HELICOPTER_GOAL_UNAVAILABLE = 2
     };
+    enum {
+        HELICOPTER_GOAL_DEFAULT_TARGET = 0
+    };
     Vec4            previous_pos;
     HelicopterGoal  goal;
     Vec4            move;
@@ -436,7 +439,7 @@ void helicopter_update(struct Moby *moby) {
         return;
     }
     process_helicopter_hits(moby);
-    goal.status = 0;
+    goal.status = HELICOPTER_GOAL_DEFAULT_TARGET;
     if (moby->state == HELICOPTER_WAIT_FOR_ACTIVATION) {
         helicopter_instance_vars->range = helicopter_instance_vars->wake_range;
         goto near;
