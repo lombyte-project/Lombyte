@@ -256,7 +256,7 @@ extern void       *
 FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
 void *spawn_big_axebot_axe(char *source_moby, char *spawn_position) __asm__("FUN_L04_002d34d8");
 extern void *random_integer_below_cf(void *, int, unsigned int) __asm__("FUN_001153fc");
-extern void  FUN_L00_001fff28(void *, int, float);
+extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void  FUN_L00_00257470(void *, int, int);
 extern void  leg_walker_update(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
 extern void  FUN_L00_0025a120(void *);
@@ -901,8 +901,8 @@ void big_axebot_update(M_B7B0 *moby) {
     }
     data->f408 *= 0.96f;
     fast_dec_timer(&data->f448);
-    FUN_L00_001fff28(vector_quaternion_scratch, 1, data->f408);
-    FUN_L00_001fff28(data->m120.q, 2, 0.0f);
+    build_axis_rotation_quaternion(vector_quaternion_scratch, 1, data->f408);
+    build_axis_rotation_quaternion(data->m120.q, 2, 0.0f);
     multiply_quaternions(data->m120.q, data->m120.q, vector_quaternion_scratch);
     if (moby->state != 8) {
         data->f401 = moby->state;
@@ -934,7 +934,7 @@ void big_axebot_update(M_B7B0 *moby) {
             data->f428 = fast_add_rotations(data->f428, fast_subtract_rotations(moby->rot[2], rot));
             build_moby_bone_transform((char *)moby, 0xC, (char *)bone_transform);
             matrix_to_euler(bone_transform, bone_euler_angles);
-            FUN_L00_001fff28(q, 2, fast_subtract_rotations(target_yaw, data->f428));
+            build_axis_rotation_quaternion(q, 2, fast_subtract_rotations(target_yaw, data->f428));
             data->f428 = target_yaw;
             multiply_quaternions(data->m160.q, data->m160.q, q);
         }

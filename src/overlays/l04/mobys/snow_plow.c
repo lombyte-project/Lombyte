@@ -29,7 +29,7 @@ extern int  snow_plow_hit_count_gp __asm__("D_L04_0015EDF8") __attribute__((sda)
 extern void debug_print() __asm__("FUN_001e93b0");
 extern void FUN_L00_00258278(void *, float, void *, float, float, float);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
@@ -275,7 +275,7 @@ void snow_plow_update(struct Moby *moby) {
         case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY:
             snow_plow_vars->unk140 =
                 fast_add_rotations(snow_plow_vars->unk140, frame_time * 12.566371f);
-            FUN_L00_001fff28(&snow_plow_vars->unk190, 0, snow_plow_vars->unk140);
+            build_axis_rotation_quaternion(&snow_plow_vars->unk190, 0, snow_plow_vars->unk140);
             break;
         case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_AND_TARGET_VOICE:
         case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPHERE_QUERY_WITHOUT_TARGET_VOICE:
@@ -285,16 +285,16 @@ void snow_plow_update(struct Moby *moby) {
         case SNOW_PLOW_CLASS_OFFSET_WITH_TARGET_VOICE_SELECTOR_ZERO:
             snow_plow_vars->unk140 =
                 fast_add_rotations(snow_plow_vars->unk140, frame_time * 12.566371f);
-            FUN_L00_001fff28(&snow_plow_vars->unk190, 2, snow_plow_vars->unk140);
+            build_axis_rotation_quaternion(&snow_plow_vars->unk190, 2, snow_plow_vars->unk140);
             break;
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS:
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             snow_plow_vars->unk140 =
                 fast_add_rotations(snow_plow_vars->unk140, frame_time * 12.566371f);
-            FUN_L00_001fff28(&snow_plow_vars->unk190, 2, snow_plow_vars->unk140);
+            build_axis_rotation_quaternion(&snow_plow_vars->unk190, 2, snow_plow_vars->unk140);
             snow_plow_vars->unk144 =
                 fast_add_rotations(snow_plow_vars->unk144, frame_time * 12.566371f);
-            FUN_L00_001fff28(&snow_plow_vars->unk1D0, 2, snow_plow_vars->unk144);
+            build_axis_rotation_quaternion(&snow_plow_vars->unk1D0, 2, snow_plow_vars->unk144);
             break;
         }
     }

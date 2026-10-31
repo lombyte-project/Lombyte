@@ -159,7 +159,7 @@ extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_00161F24 MACRO_ADDR;
 extern int                random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int                hero_set_state(int, int) __asm__("FUN_L12_002400d0");
-extern void               FUN_L00_001fff28(void *, int, float);
+extern void               build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void               hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void               set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void               moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -406,7 +406,7 @@ void hoven_turret_update(struct Moby *moby) {
             if (hoven_turret_state->f74 < hoven_turret_pitch_min) {
                 hoven_turret_state->f74 = hoven_turret_pitch_min;
             }
-            FUN_L00_001fff28(hoven_turret_state->f10, 1, -hoven_turret_state->f74);
+            build_axis_rotation_quaternion(hoven_turret_state->f10, 1, -hoven_turret_state->f74);
             if (moby->anim_flags & 2) {
                 blend_moby_animation(moby, 5, 0, 1);
             }

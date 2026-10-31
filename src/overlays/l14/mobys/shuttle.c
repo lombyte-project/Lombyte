@@ -57,7 +57,7 @@ extern f32 shuttle_horizontal_rider_correction_limit_scale_gp __asm__("D_L14_001
 
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L14_002e7bd8");
 
@@ -132,7 +132,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
         (voice_is_playing(shuttle_moby, shuttle_vars->sound) == 0 && shuttle_vars->sound == -1))
         shuttle_vars->sound = allocate_voice_for_target_entry(0, 4, shuttle_moby);
     shuttle_vars->angle = fast_add_rotations(shuttle_vars->angle, 0.17453292f);
-    FUN_L00_001fff28(shuttle_vars->wobble, 0, shuttle_vars->angle);
+    build_axis_rotation_quaternion(shuttle_vars->wobble, 0, shuttle_vars->angle);
     fast_vec_sub(&delta, &shuttle_moby->pos, &previous_shuttle_position);
     update_entity_matrix(shuttle_vars->spring, &delta, &rot, &shuttle_moby->rot);
     if (hero.state.control_mode == 13 && hero.grapple_target == rider) {

@@ -105,7 +105,7 @@ extern int FUN_L00_001f2868_c618(float, void *, int, void *, void *) __asm__("FU
 
 extern int FUN_001efa68_c618(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 extern f32 ease_c618(f32 *pos, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 
@@ -484,8 +484,8 @@ void blarg_heavy_interceptor_update(struct Moby *moby) {
                 if (absolute_float(moby_vars->unk1B0[3]) < 0.0001f) {
                     moby_vars->unk1B0[3] = 0.0f;
                 }
-                FUN_L00_001fff28(moby_vars->unkF0, 2, moby_vars->unk1B0[3]);
-                FUN_L00_001fff28(moby_vars->unk130, 1, moby_vars->unk1C0[0]);
+                build_axis_rotation_quaternion(moby_vars->unkF0, 2, moby_vars->unk1B0[3]);
+                build_axis_rotation_quaternion(moby_vars->unk130, 1, moby_vars->unk1C0[0]);
             }
             if (try_retract_turret_group(moby_vars->turret_group)) {
                 LevelPath *p = l14_paths[moby_vars->patrol_path];
@@ -1782,10 +1782,10 @@ int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
                            1.0f);
         rotation_angle = fast_subtract_rotations(
             fast_arc_tan(half_span_vector[0], half_span_vector[1]), moby->rot.z);
-        FUN_L00_001fff28(blarg_heavy_interceptor_private_vars->unkF0, 2, rotation_angle);
+        build_axis_rotation_quaternion(blarg_heavy_interceptor_private_vars->unkF0, 2, rotation_angle);
         blarg_heavy_interceptor_private_vars->unk1B0[3] = rotation_angle;
         rotation_angle = -fast_arc_tan(vector_length_xy(half_span_vector), half_span_vector[2]);
-        FUN_L00_001fff28(blarg_heavy_interceptor_private_vars->unk130, 1, rotation_angle);
+        build_axis_rotation_quaternion(blarg_heavy_interceptor_private_vars->unk130, 1, rotation_angle);
         blarg_heavy_interceptor_private_vars->unk1C0[0] = rotation_angle;
         qcopy(blarg_heavy_interceptor_private_vars->unk90,
               blarg_heavy_interceptor_private_vars->unk170);

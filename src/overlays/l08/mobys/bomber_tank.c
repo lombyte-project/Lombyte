@@ -709,8 +709,8 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                         D_0015ED70 * 12.566371f,
                         D_0015ED6C_lui * 9.424778f);
     }
-    rotation_2D5FA8(burst_position_or_aim_scratch, 1, bomber_tank_damage_and_aim_vars->pitch);
-    rotation_2D5FA8(bomber_tank_damage_and_aim_vars->f110, 2, bomber_tank_damage_and_aim_vars->yaw);
+    build_axis_rotation_quaternion(burst_position_or_aim_scratch, 1, bomber_tank_damage_and_aim_vars->pitch);
+    build_axis_rotation_quaternion(bomber_tank_damage_and_aim_vars->f110, 2, bomber_tank_damage_and_aim_vars->yaw);
     multiply_quaternions(bomber_tank_damage_and_aim_vars->f110,
                          burst_position_or_aim_scratch,
                          bomber_tank_damage_and_aim_vars->f110);

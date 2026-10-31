@@ -374,7 +374,7 @@ extern struct Moby *spawn_homing_spark_projectile(
 
 extern void FUN_L00_0025a120(void *);
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 
@@ -838,10 +838,10 @@ void helicopter_update(struct Moby *moby) {
                         frame_time_sq * 3.1415927f,
                         frame_time_sq * 6.2831855f,
                         frame_time * 1.5707964f);
-        FUN_L00_001fff28(helicopter_instance_vars->turret_yaw_joint + 0x10,
+        build_axis_rotation_quaternion(helicopter_instance_vars->turret_yaw_joint + 0x10,
                          2,
                          helicopter_instance_vars->turret_yaw);
-        FUN_L00_001fff28(helicopter_instance_vars->turret_pitch_joint + 0x10,
+        build_axis_rotation_quaternion(helicopter_instance_vars->turret_pitch_joint + 0x10,
                          2,
                          helicopter_instance_vars->turret_pitch);
         helicopter_instance_vars->shot = 0;
@@ -867,10 +867,10 @@ void helicopter_update(struct Moby *moby) {
                         frame_time_sq * 3.1415927f,
                         frame_time_sq * 6.2831855f,
                         frame_time * 1.5707964f);
-        FUN_L00_001fff28(helicopter_instance_vars->turret_yaw_joint + 0x10,
+        build_axis_rotation_quaternion(helicopter_instance_vars->turret_yaw_joint + 0x10,
                          2,
                          helicopter_instance_vars->turret_yaw);
-        FUN_L00_001fff28(helicopter_instance_vars->turret_pitch_joint + 0x10,
+        build_axis_rotation_quaternion(helicopter_instance_vars->turret_pitch_joint + 0x10,
                          2,
                          helicopter_instance_vars->turret_pitch);
     }

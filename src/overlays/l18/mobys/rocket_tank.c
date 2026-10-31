@@ -241,7 +241,7 @@ extern void *FUN_L00_00257470_cf(char  *src,
                                  float *v10,
                                  float *v11,
                                  float *v12) __asm__("FUN_L00_00263fd8");
-extern void  FUN_L00_001fff28(void *, int, float);
+extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void  mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void  func_L00_0025F4A8_alt(void *,
@@ -388,8 +388,8 @@ void update_rocket_tank_damage_and_aim(void *mv) {
                        frame_time_sq * 12.566371f,
                        frame_time * 9.424778f);
     }
-    FUN_L00_001fff28(explosion_and_aim_scratch, 1, *(float *)(tank_data + 0x118));
-    FUN_L00_001fff28(
+    build_axis_rotation_quaternion(explosion_and_aim_scratch, 1, *(float *)(tank_data + 0x118));
+    build_axis_rotation_quaternion(
         tank_data + 0xD0,
         2,
         fast_subtract_rotations(*(float *)(tank_data + 0x110), *(float *)(moby_bytes + 0x48)));

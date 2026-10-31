@@ -172,7 +172,7 @@ void emit_woodcut_bot_death_effects(void *moby) {
 
 extern float D_L04_0015F580[] MACRO_ADDR;
 extern void  attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
-extern void  FUN_L00_001fff28(void *, int, float);
+extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void
 collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
@@ -969,8 +969,8 @@ void woodcut_bot_update(WBMoby *m) {
             FUN_L00_00258490(m, pos, recoil_scratch, 1, 0.25f, 1.0f, 0.75f, 0.87266463f);
         }
         d->f3C8 *= 0.96f;
-        FUN_L00_001fff28(recoil_scratch, 1, d->f3C8);
-        FUN_L00_001fff28(d->f130, 2, 0.0f);
+        build_axis_rotation_quaternion(recoil_scratch, 1, d->f3C8);
+        build_axis_rotation_quaternion(d->f130, 2, 0.0f);
         multiply_quaternions(d->f130, d->f130, recoil_scratch);
         if (m->state != 9)
             d->f3C1 = m->state;

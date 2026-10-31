@@ -275,7 +275,7 @@ int D_L14_00161A3C = 0x8c;
 extern char D_L14_001809C0[];
 extern char D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
 extern void vendor_spring(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void register_beam_slot(struct Moby *, int, int) __asm__("FUN_L00_002e1f28");
 extern int
 set_beam_origin_transform_and_endpoint(struct Moby *, void *, void *) __asm__("FUN_L00_002e2190");
@@ -406,7 +406,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             }
             turn = (turn - 0.0f) * blend + 0.0f;
         }
-        FUN_L00_001fff28(&moby_data->unk150, 2, turn);
+        build_axis_rotation_quaternion(&moby_data->unk150, 2, turn);
         moby_point_position(racer_moby, 4, &joint_transform_and_aim_vectors[2]);
         *(u128_67e8 *)&joint_transform_and_aim_vectors[3] = 0;
         joint_transform_and_aim_vectors[3].z = 1.0f;
@@ -522,7 +522,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
     } else if (target_yaw_offset < -1.2217305f) {
         target_yaw_offset = -1.2217305f;
     }
-    FUN_L00_001fff28(&moby_data->unk110, 2, target_yaw_offset);
+    build_axis_rotation_quaternion(&moby_data->unk110, 2, target_yaw_offset);
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
 

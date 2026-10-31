@@ -1747,7 +1747,7 @@ void animate_hero_slot4_and_slot5_visuals(void) {
             if (!hero.unk1D90.attached)
                 attach_manipulator(slot5_moby, 0, &hero.unk1D90);
             else
-                rotation_2D5FA8(&hero.unk1D90.quat, 0, hero.unk22F0);
+                build_axis_rotation_quaternion(&hero.unk1D90.quat, 0, hero.unk22F0);
         }
     }
 }

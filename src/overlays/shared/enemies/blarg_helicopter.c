@@ -450,8 +450,8 @@ void blarg_helicopter_update(HMob49 *moby) {
                                           D_0015ED70 * 3.1415927f,
                                           D_0015ED70 * 6.2831855f,
                                           D_0015ED6C * 1.5707964f);
-            rotation_2D5FA8(data->gun_yaw_matrix + 4, 2, data->gun_yaw);
-            rotation_2D5FA8(data->gun_pitch_matrix + 4, 2, data->gun_pitch);
+            build_axis_rotation_quaternion(data->gun_yaw_matrix + 4, 2, data->gun_yaw);
+            build_axis_rotation_quaternion(data->gun_pitch_matrix + 4, 2, data->gun_pitch);
             data->projectile = 0;
         } else {
             moby_point_position(moby, 0, helicopter_update_scratch.movement);
@@ -480,8 +480,8 @@ void blarg_helicopter_update(HMob49 *moby) {
                                           D_0015ED70 * 3.1415927f,
                                           D_0015ED70 * 6.2831855f,
                                           D_0015ED6C * 1.5707964f);
-            rotation_2D5FA8(data->gun_yaw_matrix + 4, 2, data->gun_yaw);
-            rotation_2D5FA8(data->gun_pitch_matrix + 4, 2, data->gun_pitch);
+            build_axis_rotation_quaternion(data->gun_yaw_matrix + 4, 2, data->gun_yaw);
+            build_axis_rotation_quaternion(data->gun_pitch_matrix + 4, 2, data->gun_pitch);
         }
         if (point > 0 && point < route->path->count - 1) {
             float node_distance = vector_distance_xy(&route->path->points[point],

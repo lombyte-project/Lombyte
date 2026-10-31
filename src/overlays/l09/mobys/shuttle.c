@@ -20,7 +20,7 @@ extern char D_0013E550[];
 #include "rnc/mobys/moby.h"
 
 extern int  D_L09_0015F5CC;
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
@@ -308,7 +308,7 @@ int advance_shuttle_along_path(struct Moby *moby) {
         shuttle_path_state->yaw_offset = 0.0f;
     shuttle_path_state->spin =
         fast_add_rotations(shuttle_path_state->spin, shuttle_path_state->speed);
-    FUN_L00_001fff28(shuttle_path_state->unk70, 0, shuttle_path_state->spin);
+    build_axis_rotation_quaternion(shuttle_path_state->unk70, 0, shuttle_path_state->spin);
     if (vector_distance_xy(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
         vector_distance_xy(&moby->pos, &path->node[0]) > 8.0f && !random_integer_below(7)) {
         qcopy(&puff, &moby->pos);

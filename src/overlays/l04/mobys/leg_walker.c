@@ -347,11 +347,11 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
         rig->legs[i].yaw = fast_add_rotations(rig->legs[i].upper_turn, base_yaw);
         rig->legs[i].yaw = fast_add_rotations(rig->legs[i].lower_turn, rig->legs[i].yaw);
         if (rig->legs[i].manip_b.attached)
-            rotation_2D5FA8(rig->legs[i].manip_b.rot, 2, rig->legs[i].upper_turn);
+            build_axis_rotation_quaternion(rig->legs[i].manip_b.rot, 2, rig->legs[i].upper_turn);
         if (rig->legs[i].manip_a.attached) {
-            rotation_2D5FA8(rig->legs[i].manip_a.rot, 2, rig->legs[i].lower_turn);
+            build_axis_rotation_quaternion(rig->legs[i].manip_a.rot, 2, rig->legs[i].lower_turn);
             if (flags & mask) {
-                rotation_2D5FA8(tilt, 0, -moby->rot.x);
+                build_axis_rotation_quaternion(tilt, 0, -moby->rot.x);
                 multiply_quaternions(rig->legs[i].manip_a.rot, rig->legs[i].manip_a.rot, tilt);
             }
         }

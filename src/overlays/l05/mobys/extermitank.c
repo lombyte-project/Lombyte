@@ -78,7 +78,7 @@ extern float extermitank_secondary_particle_vector_a_spread_degrees_gp __asm__("
     __attribute__((sda));
 extern short D_L05_00161B78 __attribute__((sda));
 extern float D_L05_00161B7C __attribute__((sda));
-extern void  FUN_L00_001fff28(void *, int, float);
+extern void  build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void  mark_moby_for_removal_c3(void *) __asm__("func_0020C828");
 void         handle_extermitank_hits_and_sync_children(char *moby) __asm__("FUN_L05_00305178");
 void         process_extermitank_particle_hits(char *m) __asm__("FUN_L05_00305898");
@@ -307,8 +307,8 @@ void extermitank_update(unsigned char *moby) {
             step_angle_toward_target(
                 &extermitank_vars->unk198, 0, 0.0f, D_0015ED6C_gp * 1.5707964f);
         }
-        FUN_L00_001fff28(extermitank_vars->unk140, 1, extermitank_vars->unk198);
-        FUN_L00_001fff28(extermitank_vars->unk100,
+        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->unk198);
+        build_axis_rotation_quaternion(extermitank_vars->unk100,
                          2,
                          fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
         break;
@@ -480,8 +480,8 @@ void extermitank_update(unsigned char *moby) {
             step_angle_toward_target(
                 &extermitank_vars->unk198, 0, 0.08726646f, D_0015ED6C_gp * 1.5707964f);
         }
-        FUN_L00_001fff28(extermitank_vars->unk140, 1, extermitank_vars->unk198);
-        FUN_L00_001fff28(extermitank_vars->unk100,
+        build_axis_rotation_quaternion(extermitank_vars->unk140, 1, extermitank_vars->unk198);
+        build_axis_rotation_quaternion(extermitank_vars->unk100,
                          2,
                          fast_subtract_rotations(extermitank_vars->unk194, MOBY(moby)->rot.z));
         break;

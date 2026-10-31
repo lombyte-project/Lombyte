@@ -28,7 +28,7 @@ extern void FUN_L00_0025a120(void *);
 
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 extern char D_L14_001674C0[];
 
@@ -465,7 +465,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             d->f104,
             (float)d->f102 /
                 convert_integer_to_float(scale_game_frames(minibomber_aim_return_duration_frames)));
-        FUN_L00_001fff28(d->f120, 2, blended_aim_angle);
+        build_axis_rotation_quaternion(d->f120, 2, blended_aim_angle);
         if (vector_distance_xy(moby->pos, d->fB0->pos) <
             minibomber_path_traversal_trigger_distance) {
             if (d->f10C == 0) {
@@ -545,7 +545,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             d->f104,
             (float)d->f102 /
                 convert_integer_to_float(scale_game_frames(minibomber_bomb_aim_duration_frames)));
-        FUN_L00_001fff28(d->f120, 2, blended_aim_angle);
+        build_axis_rotation_quaternion(d->f120, 2, blended_aim_angle);
         if (moby->f53 == 2) {
             moby->state = 4;
             d->f102 = scale_game_frames(minibomber_aim_return_duration_frames);
@@ -560,7 +560,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         if (is_value_within_interpolated_window(moby, 3.0f) != 0) {
             PathNode *q;
             n = (float)scale_game_frames(minibomber_bomb_flight_duration_frames);
-            FUN_L00_001fff28(d->f120, 2, d->f104);
+            build_axis_rotation_quaternion(d->f120, 2, d->f104);
             moby_point_position(moby, 1, v);
             fast_vec_sub(v + 4, ((PathNode *)l14_paths[d->fD8]) + (d->f100 + 1), v);
             v[6] = 0.0f;

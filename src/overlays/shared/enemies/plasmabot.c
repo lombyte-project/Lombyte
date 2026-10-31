@@ -188,7 +188,7 @@ void scale_and_apply_plasmabot_planar_velocity(char *moby) {
 /* steers the pitch angle of a moby toward a target and updates the joint */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4A00), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 void update_plasmabot_aim_joint_rotation(char *moby, float x) __asm__("FUN_L14_002b37b0");
 
@@ -210,7 +210,7 @@ void update_plasmabot_aim_joint_rotation(char *moby, float x) {
                        k,
                        frame_time * 6.2831854820251465f);
     }
-    FUN_L00_001fff28(&moby_vars->unk130, 2, *(float *)&moby_vars->unk270);
+    build_axis_rotation_quaternion(&moby_vars->unk130, 2, *(float *)&moby_vars->unk270);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4AE0), where it is exact; names translated to the US level program. */
 
@@ -1257,7 +1257,7 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
                                  yaw_easing_coefficient,
                                  frame_time * 6.2831854820251465f);
     }
-    FUN_L00_001fff28(&state->unk170, 2, state->unk268);
+    build_axis_rotation_quaternion(&state->unk170, 2, state->unk268);
     if (flag) {
         float        owner_aim_position[4];
         float        owner_aim_offset[4];
@@ -1281,7 +1281,7 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
                                  frame_time_sq * 12.566370964050293f,
                                  frame_time * 6.2831854820251465f);
         cp = pitch_quaternion;
-        FUN_L00_001fff28(cp, 1, *(float *)&state->unk280);
+        build_axis_rotation_quaternion(cp, 1, *(float *)&state->unk280);
         multiply_quaternions(&state->unk170, &state->unk170, cp);
     }
     return fast_difference_between_rotations(turn, state->unk268);

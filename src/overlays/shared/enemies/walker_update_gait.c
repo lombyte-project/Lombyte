@@ -47,7 +47,7 @@ int walker_gait_mask(float *gait_record, float interval_value) {
     return result_mask;
 }
 
-void FUN_L00_001fff28(void *, s32, f32);
+void build_axis_rotation_quaternion(void *, s32, f32) __asm__("FUN_L00_001fff28");
 void reset_walker_gait_helpers(u8 *gait_data) __asm__("FUN_L00_002a1538");
 
 void reset_walker_gait_helpers(u8 *gait_data) {
@@ -57,9 +57,9 @@ void reset_walker_gait_helpers(u8 *gait_data) {
     for (i = 0; i < 2; i++) {
         u8 *gait_region_base = gait_data + i * 0xB0;
         if (gait_region_base[0x161] != 0)
-            FUN_L00_001fff28(gait_helper_record_base + i * 0xB0, 2, 0.0f);
+            build_axis_rotation_quaternion(gait_helper_record_base + i * 0xB0, 2, 0.0f);
         if (gait_region_base[0x121] != 0)
-            FUN_L00_001fff28(gait_helper_record_130_base + i * 0xB0, 2, 0.0f);
+            build_axis_rotation_quaternion(gait_helper_record_130_base + i * 0xB0, 2, 0.0f);
         *(s32 *)(gait_region_base + 0x104) = 0;
         *(s32 *)(gait_region_base + 0xFC) = 0;
     }

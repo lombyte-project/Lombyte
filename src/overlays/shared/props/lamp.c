@@ -32,7 +32,7 @@ typedef struct {
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 void        draw_moby_wobble_quads(struct Moby *moby) __asm__("FUN_L05_0030c220");
 
 extern void draw_moby_wobble_quads(struct Moby *m) __asm__("FUN_L05_0030c220");
@@ -92,7 +92,7 @@ void moby_wobble_update(unsigned char *moby) {
         MOBY(moby)->rot.z = fast_add_rotations(wobble_vars->unk40, fast_sin(wobble_phase) * k);
         wobble_phase = fast_add_rotations(wobble_vars->unk48, wobble_vars->unk50);
         wobble_vars->unk48 = wobble_phase;
-        FUN_L00_001fff28(&wobble_vars->unk10, 1, fast_sin(wobble_phase) * k + k);
+        build_axis_rotation_quaternion(&wobble_vars->unk10, 1, fast_sin(wobble_phase) * k + k);
         break;
     }
     }

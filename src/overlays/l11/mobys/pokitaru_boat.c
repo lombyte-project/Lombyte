@@ -313,7 +313,7 @@ void pokitaru_boat_update(struct Moby *moby) {
     update_entity_matrix(boat_vars->ctl60, delta, start_rot, &moby->rot);
 }
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void FUN_L00_0026f080(float *, float *, float, float);
 
 struct PartA500 {
@@ -351,7 +351,7 @@ void update_pokitaru_boat_joint_effects(struct Moby *moby) {
             step = frame_time * 2.6179938f;
         if (((u8 *)moby_vars)[i * 0x40 + 0x101]) {
             moby_vars->angle[i] = fast_add_rotations(moby_vars->angle[i], step);
-            FUN_L00_001fff28(moby_vars->parts[i].joint, 0, moby_vars->angle[i]);
+            build_axis_rotation_quaternion(moby_vars->parts[i].joint, 0, moby_vars->angle[i]);
         }
     }
     if (vector_distance_xy(&moby->pos, camera_pos_b358) > 38.0f)

@@ -293,16 +293,16 @@ typedef struct {
     int a[4];
 } Vk __attribute__((aligned(16)));
 
-extern void FUN_L00_001fff28(void *, int, float);
+extern void build_axis_rotation_quaternion(void *, int, float) __asm__("FUN_L00_001fff28");
 
 void build_quaternion_from_axis_rotations(void  *output_quaternion,
                                           float *axis_rotation_angles) __asm__("FUN_L00_00259f50");
 
 void build_quaternion_from_axis_rotations(void *output_quaternion, float *axis_rotation_angles) {
     Vk z_axis_quaternion, y_axis_quaternion, x_axis_quaternion;
-    FUN_L00_001fff28(&x_axis_quaternion, 0, axis_rotation_angles[0]);
-    FUN_L00_001fff28(&y_axis_quaternion, 1, axis_rotation_angles[1]);
-    FUN_L00_001fff28(&z_axis_quaternion, 2, axis_rotation_angles[2]);
+    build_axis_rotation_quaternion(&x_axis_quaternion, 0, axis_rotation_angles[0]);
+    build_axis_rotation_quaternion(&y_axis_quaternion, 1, axis_rotation_angles[1]);
+    build_axis_rotation_quaternion(&z_axis_quaternion, 2, axis_rotation_angles[2]);
     multiply_quaternions(output_quaternion, &x_axis_quaternion, &y_axis_quaternion);
     multiply_quaternions(output_quaternion, output_quaternion, &z_axis_quaternion);
 }
