@@ -38,24 +38,27 @@ void rising_gate_update(struct Moby *gate_moby) {
         GATE_WAIT_FOR_TRIGGER = 1,
         GATE_RAISE_AND_SWING = 2
     };
+    enum {
+        GATE_YAW_ALIGNED = 3
+    };
     struct GateVars *gate_vars = (struct GateVars *)gate_moby->pvars;
     struct Moby     *trigger_moby;
 
     switch (gate_moby->state) {
     case GATE_INITIALIZE:
         gate_vars->topZ = gate_moby->pos.z + 1.0f;
-        gate_moby->state = 1;
+        gate_moby->state = GATE_WAIT_FOR_TRIGGER;
         gate_moby->pos.z -= 8.0f;
         break;
     case GATE_WAIT_FOR_TRIGGER:
         trigger_moby = (struct Moby *)((gate_vars->trigger << 8) + gate_mobys_314eb0);
         if (trigger_moby->command == 1) {
-            gate_moby->state = 2;
+            gate_moby->state = GATE_RAISE_AND_SWING;
             break;
         }
         if (trigger_moby->command == 2) {
             gate_moby->pos.z = gate_vars->topZ;
-            gate_moby->state = 3;
+            gate_moby->state = GATE_YAW_ALIGNED;
             gate_moby->rot.y = 0.0f;
         }
         break;
@@ -80,7 +83,7 @@ void rising_gate_update(struct Moby *gate_moby) {
                              gate_swing_deceleration_gp * 0.017453292f * frame_time_sq,
                              gate_swing_max_speed_gp * 0.017453292f * frame_time);
             if (gate_moby->rot.y == 0.0f)
-                gate_moby->state = 3;
+                gate_moby->state = GATE_YAW_ALIGNED;
         } else if (gate_vars->swingTimer == 1 && gate_moby->oclass == 0x354) {
             allocate_voice_for_target_entry(0, 0, gate_moby);
         }
