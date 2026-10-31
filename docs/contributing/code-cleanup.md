@@ -122,7 +122,12 @@ register that nothing set on that path (to keep it live) as
 
 **Enums**
 
-- Reuse the shared definitions in [enum scope and shared definitions](../game/enum-layout.md).
+- Shared enums live in their subsystem's header: hero states, vehicle and
+  gravity modes in `rnc/hero/hero_state.h`, moby class IDs in
+  `rnc/mobys/moby_class_id.h`, camera modes in `rnc/camera/camera_modes.h`,
+  GS pixel formats in `rnc/rendering/pixel_format.h`, memory card operations
+  in `rnc/save/memory_card_state.h`, text layout flags in
+  `rnc/ui/text/text_region.h`.
 - Constants used by several C files belong in the owning subsystem's header.
   Constants shared only by functions in one C file stay at file scope; a private
   callback's selector stays local.

@@ -7,7 +7,7 @@ Everything below that (SDK, `core.*`, resident code) stays. `$gp` is 0x166C00
 in every level. Level code is about 3.2 MB and counts toward C_EXACT
 ([progress.md](progress.md)).
 
-How to work on it: [CONTRIBUTING.md](../../CONTRIBUTING.md#level-overlays).
+How to work on it: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Files
 

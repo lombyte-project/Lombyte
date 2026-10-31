@@ -7,7 +7,7 @@ counted; the DVP blobs inside the executable are rebuilt as raw data.
 | Metric      | Meaning                                                          |
 | :---------- | :--------------------------------------------------------------- |
 | **C_EXACT** | the function compiles from C to the same bytes as retail          |
-| **C_FUZZY** | a pending function's C is close to retail but does not match yet |
+| **C_FUZZY** | a function's C is close to retail but does not match           |
 
 A file with several functions counts each one, split at the retail labels its
 source binds them to (`__asm__("FUN_…")`).
@@ -59,9 +59,10 @@ faithful, and code written in assembly by hand (syscall stubs, code using
 `$at` or trapping `add`). Code that only needs `ei`, `di`, `sync`, `mfc0` or
 `syscall` is not on the list; it is C with the `include/kernel.h` macros.
 
-`check-unit.py` refuses these units, and they have **no `#else` C body**: such
-a body could never be checked, so it would be a perfect place for a wrong one
-to hide.
+`check-unit.py` refuses these units, and they have **no C body**: such a body
+could never be checked, so it would be a perfect place for a wrong one to hide.
+They build from listings made at build time from your own
+`config/us/SCUS_971.99` into `config/us/expected/asm/` (not in Git).
 
 ## Data
 
@@ -82,13 +83,6 @@ Data counts as matched when C defines it and a check covers it:
 
 `decomp_map.json` also has `bytes_matching_c_zero`: the part of the matched
 data that is zeros.
-
-## Oracles
-
-Units not in C yet are built from assembly or raw machine code (_oracles_)
-so the executable still matches. They are made at build time from your own
-`config/us/SCUS_971.99` into `config/us/expected/asm/` (not in Git). Matching
-C replaces them over time.
 
 ## Compiler flags
 

@@ -17,9 +17,9 @@
 
 - A file is named after the function it holds (`ui/map/coverage/save_map_coverage.c`);
   `fun_<address>.c` means the function is not understood yet.
-- `assembly/` holds units that build from the retail assembly (the oracle),
-  under the same subsystem names. `assembly/textbin/` units come from raw-word
-  segments; the oracle tooling finds them by that prefix.
+- `assembly/` holds the hand-written assembly units, under the same subsystem
+  names. `assembly/textbin/` units come from raw-word segments; the build finds
+  them by that prefix.
 - `overlays/` holds the level code, built by `make overlays` and not linked
   into the boot executable ([docs/build/overlays.md](../docs/build/overlays.md)):
   - `shared/`: code every level carries, grouped like the boot tree plus
