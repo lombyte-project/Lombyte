@@ -628,6 +628,9 @@ void wrench_update(WrenchMoby *wrench_moby) {
         WRENCH_THROW_OUTBOUND = 10,
         WRENCH_THROW_RETURNING = 11
     };
+    enum {
+        HERO_WRENCH_STATUS_THROWN = 2
+    };
     WrenchVars   *wrench_vars = wrench_moby->data;
     WrenchScratch wrench_collision_scratch;
     WrenchHero   *player = wrench_hero();
@@ -897,7 +900,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
             WrenchHero *control_player = (WrenchHero *)(control - 0x17B0);
             update_moby_transform_history(control, 0);
             wrench_moby->parent = control_player->moby;
-            control_player->wrench_state = 2;
+            control_player->wrench_state = HERO_WRENCH_STATUS_THROWN;
             if (wrench_moby->state == WRENCH_THROW_OUTBOUND && control_player->thrown_sound == -1)
                 control_player->thrown_sound =
                     allocate_voice_for_target_entry(14, 4, control_player->moby);
