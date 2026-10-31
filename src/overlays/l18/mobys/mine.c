@@ -404,10 +404,13 @@ extern int store_moby_in_suck_cannon(struct Moby *) __asm__("FUN_L00_002dbb20");
 int moby_hold_state_while_active(struct Moby *moby) __asm__("FUN_L18_002d6190");
 
 int moby_hold_state_while_active(struct Moby *moby) {
+    enum {
+        STATE_WAIT_TO_RESUME_APPROACH = 4
+    };
     int active = store_moby_in_suck_cannon(moby);
     if (active != 0) {
-        moby->state = 4;
-    } else if (moby->state == 4) {
+        moby->state = STATE_WAIT_TO_RESUME_APPROACH;
+    } else if (moby->state == STATE_WAIT_TO_RESUME_APPROACH) {
         moby->state = moby->command;
     }
     return active;
